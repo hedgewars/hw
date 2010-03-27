@@ -2447,7 +2447,7 @@ if ((Gear^.State and gstCollision) <> 0) then begin //hit
         exit;
         end;
 
-    Gear^.SoundChannel:= LoopSound(sndPickhammer);
+    Gear^.SoundChannel:= LoopSound(sndDrillRocket);
     Gear^.doStep:= @doStepDrillDrilling;
     dec(Gear^.Timer)
     end
