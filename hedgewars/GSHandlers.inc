@@ -234,7 +234,12 @@ if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_02.QWordValue) and
     (not isFalling) then
     Gear^.State:= Gear^.State and not gstMoving
 else
-    Gear^.State:= Gear^.State or      gstMoving
+    Gear^.State:= Gear^.State or      gstMoving;
+
+if ((Gear^.Damage <> 0) or ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving))) then
+    if ((Gear^.dX.QWordValue > _0_1.QWordValue)
+    or  (Gear^.dY.QWordValue > _0_1.QWordValue)) then
+        PlaySound(Gear^.ImpactSound);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -320,11 +325,6 @@ if Gear^.Kind = gtHellishBomb then
         if (Gear^.State and gstCollision) = 0 then
             AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtEvilTrace, 0, _0, _0, 0);
     end;
-
-if (Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving) then
-    if (hwAbs(Gear^.dX) > _0_1) or
-       (hwAbs(Gear^.dY) > _0_1) then
-        PlaySound(sndGrenadeImpact)
 end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMolotov(Gear: PGear);
@@ -456,7 +456,7 @@ if not Gear^.dY.isNegative then
          begin
          Gear^.Active:= false;
          exit
-         end else if Gear^.dY < - _0_03 then PlaySound(sndGraveImpact)
+         end else if Gear^.dY < - _0_03 then PlaySound(Gear^.ImpactSound)
       end;
 
 Gear^.Y:= Gear^.Y + Gear^.dY;
@@ -1351,7 +1351,7 @@ if ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
         inc(Gear^.Damage, hwRound(Gear^.dY * -_50))
     else if Gear^.dX.isNegative and (Gear^.dX < -_0_03) and TestCollisionXwithGear(Gear, -1) then
         inc(Gear^.Damage, hwRound(Gear^.dX * -_50));
-    if Gear^.Damage <> 0 then PlaySound(sndGrenadeImpact);
+	
     doStepFallingGear(Gear);
     CalcRotationDirAngle(Gear);
     CheckGearDrowning(Gear)
@@ -1470,10 +1470,7 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
         Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
         if Gear^.dY > - _0_001 then Gear^.dY:= _0
             else if Gear^.dY < - _0_03 then
-                if Gear^.Kind = gtExplosives then
-                    PlaySound(sndGrenadeImpact)
-                else
-                    PlaySound(sndGraveImpact);
+                PlaySound(Gear^.ImpactSound);
         end;
     //if Gear^.dY > - _0_001 then Gear^.dY:= _0
     CheckGearDrowning(Gear);

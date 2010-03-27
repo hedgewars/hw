@@ -113,7 +113,8 @@ type
             sndHomerun, sndMolotov, sndCover, sndUhOh, sndOops,
             sndNooo, sndHello, sndRopeShot, sndRopeAttach, sndRopeRelease,
             sndSwitchHog, sndVictory, sndSniperReload, sndSteps, sndLowGravity,
-            sndDroplet1, sndDroplet2, sndDroplet3);
+				sndHellishImpact,
+            sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3);
 
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -817,6 +818,8 @@ const
             (FileName:         'sniperreload.ogg'; Path: ptSounds),// sndSniperReload
             (FileName:                'steps.ogg'; Path: ptSounds),// sndSteps
             (FileName:           'lowgravity.ogg'; Path: ptSounds),// sndLowGravity
+				(FileName:             'hellishimpact.ogg'; Path: ptSounds), // sndHellishImpact
+            (FileName:             'melonimpact.ogg'; Path: ptSounds), // sndMelonImpact
             (FileName:             'Droplet1.ogg'; Path: ptSounds),// sndDroplet1
             (FileName:             'Droplet2.ogg'; Path: ptSounds),// sndDroplet2
             (FileName:             'Droplet3.ogg'; Path: ptSounds) // sndDroplet3

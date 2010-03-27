@@ -57,6 +57,7 @@ type
             IntersectGear: PGear;
             FlightTime: Longword;
             uid: Longword;
+            ImpactSound: TSound;
             SoundChannel: LongInt
         end;
 
@@ -246,6 +247,7 @@ gear^.Z:= cUsualZ;
 gear^.FlightTime:= 0;
 gear^.uid:= Counter;
 gear^.SoundChannel:= -1;
+gear^.ImpactSound:= sndNone;
 
 if CurrentTeam <> nil then
     begin
@@ -256,6 +258,7 @@ if CurrentTeam <> nil then
 case Kind of
    gtAmmo_Bomb,
  gtClusterBomb: begin
+                gear^.ImpactSound:= sndGrenadeImpact;
                 gear^.AdvBounce:= 1;
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_6;
@@ -264,6 +267,7 @@ case Kind of
                 if gear^.Timer = 0 then gear^.Timer:= 3000
                 end;
   gtWatermelon: begin
+                gear^.ImpactSound:= sndMelonImpact;
                 gear^.AdvBounce:= 1;
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_8;
@@ -287,6 +291,7 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Z:= 2002;
                 end;
        gtGrave: begin
+                gear^.ImpactSound:= sndGraveImpact;
                 gear^.Radius:= 10;
                 gear^.Elasticity:= _0_6;
                 end;
@@ -329,10 +334,12 @@ gtAmmo_Grenade: begin // bazooka
                     gear^.Timer:= cMinesTime*1;
                 end;
         gtCase: begin
+                gear^.ImpactSound:= sndGraveImpact;
                 gear^.Radius:= 16;
                 gear^.Elasticity:= _0_3
                 end;
   gtExplosives: begin
+                gear^.ImpactSound:= sndGrenadeImpact;
                 gear^.Radius:= 16;
                 gear^.Elasticity:= _0_4;
                 gear^.Friction:= _0_995;
@@ -404,6 +411,7 @@ gtAmmo_Grenade: begin // bazooka
                 if not dX.isNegative then gear^.Angle:= 1 else gear^.Angle:= 3
                 end;
  gtHellishBomb: begin
+                gear^.ImpactSound:= sndHellishImpact;
                 gear^.AdvBounce:= 1;
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_5;
@@ -416,6 +424,7 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Radius:= 4
                 end;
         gtBall: begin
+                gear^.ImpactSound:= sndGrenadeImpact;
                 gear^.AdvBounce:= 1;
                 gear^.Radius:= 5;
                 gear^.Tag:= random(8);
