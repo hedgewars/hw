@@ -128,8 +128,8 @@ var
     TextureList : PTexture;
 
     ScreenFade : TScreenFade;
-    ScreenFadeValue : Longword;
-    ScreenFadeSpeed : Longword;
+    ScreenFadeValue : LongInt;
+    ScreenFadeSpeed : LongInt;
 
 
 procedure initModule;

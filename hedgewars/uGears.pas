@@ -449,13 +449,13 @@ gtAmmo_Grenade: begin // bazooka
        gtBirdy: begin
                 gear^.Radius:= 16; // todo: check
                 gear^.Timer:= 500;
-				        gear^.Health := 2000;
+                gear^.Health := 2000;
                 gear^.FlightTime := 2;
                 end;
 gtBigExplosion: begin
                 gear^.Angle:= random(360);
                 end;
-		 gtEgg: begin 
+         gtEgg: begin 
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_6;
                 gear^.Friction:= _0_96;
@@ -1703,7 +1703,7 @@ while Gear<>nil do
                     DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -4 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
                     glColor4f(1, 1, 1, 1);
                     end;
-			   gtEgg: DrawRotated(sprEgg, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+             gtEgg: DrawRotatedTextureF(SpritesData[sprEgg].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 16, 16, Gear^.DirAngle);
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(hwRound(Gear^.X) + 8 + WorldDx, hwRound(Gear^.Y) + 8 + WorldDy, Gear^.Tex);
       Gear:= Gear^.NextGear

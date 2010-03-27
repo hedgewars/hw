@@ -1359,7 +1359,7 @@ if ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
         inc(Gear^.Damage, hwRound(Gear^.dY * -_50))
     else if Gear^.dX.isNegative and (Gear^.dX < -_0_03) and TestCollisionXwithGear(Gear, -1) then
         inc(Gear^.Damage, hwRound(Gear^.dX * -_50));
-	
+    
     doStepFallingGear(Gear);
     CalcRotationDirAngle(Gear);
     CheckGearDrowning(Gear)
@@ -2794,10 +2794,10 @@ if (GameTicks and $3F) = 0 then
 
 if (HHGear^.Message and gm_Attack <> 0) then begin
         HHGear^.Message := HHGear^.Message and not gm_Attack;
-		if Gear^.FlightTime > 0 then begin
-			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtEgg, 0, Gear^.dX * _0_5, Gear^.dY, 0);
-			dec(Gear^.FlightTime)
-		end;
+        if Gear^.FlightTime > 0 then begin
+            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + 32, gtEgg, 0, Gear^.dX * _0_5, Gear^.dY, 0);
+            dec(Gear^.FlightTime)
+        end;
 end;
 
 if HHGear^.Message and (gm_Up or gm_Precise or gm_Left or gm_Right) <> 0 then Gear^.State:= Gear^.State and not gsttmpFlag;
@@ -2910,16 +2910,30 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepEggWork(Gear: PGear);
+var vg: PVisualGear;
+     i: LongInt;
 begin
-	AllInactive:= false;
-	Gear^.dX:= Gear^.dX;
-	doStepFallingGear(Gear);
-	if (Gear^.State and gstCollision) <> 0 then
-	begin
-		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 40, EXPLAutoSound + EXPLPoisoned);
-		DeleteGear(Gear);
-		exit
-	end;
-	if (GameTicks and $3F) = 0 then
-		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0)
+    AllInactive:= false;
+    Gear^.dX:= Gear^.dX;
+    doStepFallingGear(Gear);
+    CheckGearDrowning(Gear);
+    CalcRotationDirAngle(Gear);
+
+    if (Gear^.State and gstCollision) <> 0 then
+    begin
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, EXPLPoisoned or EXPLNoGfx);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, EXPLPoisoned or EXPLNoGfx);
+        PlaySound(sndEggBreak);
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg);
+        vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg);
+        if vg <> nil then vg^.Frame:= 2;
+
+    for i:= 10 downto 0 do begin
+        vg := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 3 + Random(6), vgtDust);
+        if vg <> nil then vg^.dX := vg^.dX + (Gear^.dX / 5);
+        end;
+
+        DeleteGear(Gear);
+        exit
+    end;
 end;

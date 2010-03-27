@@ -176,6 +176,21 @@ if Gear^.FrameTicks <= Steps then
     else dec(Gear^.FrameTicks, Steps)
 end;
 
+procedure doStepEgg(Gear: PVisualGear; Steps: Longword);
+begin
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
+
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+Gear^.dY:= Gear^.dY + cGravity * Steps;
+
+Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
+
+if Gear^.FrameTicks <= Steps then
+    DeleteVisualGear(Gear)
+else
+    dec(Gear^.FrameTicks, Steps)
+end;
+
 procedure doStepFire(Gear: PVisualGear; Steps: Longword);
 begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
@@ -470,7 +485,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepSplash,
             @doStepDroplet,
             @doStepSmokeRing,
-            @doStepBeeTrace
+            @doStepBeeTrace,
+            @doStepEgg
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -544,6 +560,16 @@ with gear^ do
                 dy.isNegative:= random(2) = 0;
                 FrameTicks:= 650 + random(250);
                 Frame:= random(8)
+                end;
+         vgtEgg: begin
+                t:= random(1024);
+                sp:= _0_001 * (random(85) + 95);
+                dx:= AngleSin(t) * sp;
+                dx.isNegative:= random(2) = 0;
+                dy:= AngleCos(t) * sp;
+                dy.isNegative:= random(2) = 0;
+                FrameTicks:= 650 + random(250);
+                Frame:= 1
                 end;
         vgtShell: FrameTicks:= 500;
     vgtSmallDamageTag: begin
@@ -738,6 +764,13 @@ case Layer of
                             if Gear^.FrameTicks < 250 then
                                 glColor4f(1, 1, 1, Gear^.FrameTicks / 250);
                             DrawRotatedF(sprShell, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                            if Gear^.FrameTicks < 250 then
+                                glColor4f(1, 1, 1, 1);
+                            end;
+                  vgtEgg: begin
+                            if Gear^.FrameTicks < 250 then
+                                glColor4f(1, 1, 1, Gear^.FrameTicks / 250);
+                            DrawRotatedF(sprEgg, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                             if Gear^.FrameTicks < 250 then
                                 glColor4f(1, 1, 1, 1);
                             end;
