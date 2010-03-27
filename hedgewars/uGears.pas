@@ -185,7 +185,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepCase,
             @doStepBirdy,
             @doStepBigExplosion,
-			@doStepEggWork
+            @doStepEggWork
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -449,7 +449,7 @@ gtAmmo_Grenade: begin // bazooka
        gtBirdy: begin
                 gear^.Radius:= 16; // todo: check
                 gear^.Timer:= 500;
-				gear^.Health := 2000;
+				        gear^.Health := 2000;
                 gear^.FlightTime := 2;
                 end;
 gtBigExplosion: begin
@@ -459,7 +459,6 @@ gtBigExplosion: begin
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_6;
                 gear^.Friction:= _0_96;
-                gear^.RenderTimer:= true;
                 if gear^.Timer = 0 then gear^.Timer:= 3000
                 end;
      end;
@@ -1690,7 +1689,7 @@ while Gear<>nil do
                     DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -4 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
                     glColor4f(1, 1, 1, 1);
                     end;
-			   gtEgg: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+			   gtEgg: DrawRotated(sprEgg, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(hwRound(Gear^.X) + 8 + WorldDx, hwRound(Gear^.Y) + 8 + WorldDy, Gear^.Tex);
       Gear:= Gear^.NextGear
