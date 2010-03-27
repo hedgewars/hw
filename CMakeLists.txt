@@ -17,7 +17,9 @@ IF(version_suffix MATCHES "-dev")
 			MESSAGE(STATUS "Builing revision ${Project_WC_REVISION}")
 			set(version_suffix ".${Project_WC_REVISION}")
 			#truncate to numbers only - trying to fix a problem described in http://www.hedgewars.org/node/2019
-			STRING(REGEX REPLACE "^\\.(\\d+)" "\\1" version_suffix ${version_suffix})
+			STRING(REGEX REPLACE "^\\.(\\d+)" ".\\1" version_suffix ${version_suffix})
+			# screw whole suffix if there's no number
+			STRING(REGEX REPLACE "^\\.([a-z]+.*)" "-dev" version_suffix ${version_suffix})
 		ENDIF(Subversion_FOUND)
 	ENDIF()
 ELSE()
