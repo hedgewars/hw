@@ -2909,7 +2909,7 @@ begin
 	doStepFallingGear(Gear);
 	if (Gear^.State and gstCollision) <> 0 then
 	begin
-		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
+		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 40, EXPLAutoSound + EXPLPoisoned);
 		DeleteGear(Gear);
 		exit
 	end;

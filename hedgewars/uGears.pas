@@ -580,27 +580,32 @@ var Gear: PGear;
        i: LongWord;
     flag: Boolean;
 begin
-Gear:= GearsList;
+	Gear:= GearsList;
 
-while Gear <> nil do
-    begin
-    if Gear^.Kind = gtHedgehog then
-        begin
-        inc(Gear^.Damage, min(cHealthDecrease, max(0,Gear^.Health - 1 - Gear^.Damage)));
-        if PHedgehog(Gear^.Hedgehog)^.King then
-            begin
-            flag:= false;
-            team:= PHedgehog(Gear^.Hedgehog)^.Team;
-            for i:= 0 to Pred(team^.HedgehogsNumber) do
-                if (team^.Hedgehogs[i].Gear <> nil) and 
-                   (not team^.Hedgehogs[i].King) and 
-                   (team^.Hedgehogs[i].Gear^.Health > team^.Hedgehogs[i].Gear^.Damage) then flag:= true;
-            if not flag then inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)))
-            end
-        end;
+	while Gear <> nil do
+	begin
+		if Gear^.Kind = gtHedgehog then
+			begin
+        if PHedgehog(Gear^.Hedgehog)^.Poisoned then
+          inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)));
+				inc(Gear^.Damage, min(cHealthDecrease, max(0,Gear^.Health - 1 - Gear^.Damage)));
+				if PHedgehog(Gear^.Hedgehog)^.King then
+				begin
+					flag:= false;
+					team:= PHedgehog(Gear^.Hedgehog)^.Team;
+					for i:= 0 to Pred(team^.HedgehogsNumber) do
+						if (team^.Hedgehogs[i].Gear <> nil) and 
+							(not team^.Hedgehogs[i].King) and 
+							(team^.Hedgehogs[i].Gear^.Health > team^.Hedgehogs[i].Gear^.Damage) 
+						then begin
+								flag:= true;
+						end;
+					if not flag then inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)))
+				end;
+			end;
 
-    Gear:= Gear^.NextGear
-    end;
+		Gear:= Gear^.NextGear
+	end;
 end;
 
 procedure ProcessGears;
@@ -1815,8 +1820,12 @@ while Gear <> nil do
                                     Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
                                 Gear^.Active:= true;
                                 FollowGear:= Gear
-                                end
-                            end
+														end;
+
+													if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) then
+														PHedgehog(Gear^.Hedgehog)^.Poisoned := true;
+							end;
+
                         end;
                 gtGrave: begin
 // Run the calcs only once we know we have a type that will need damage
