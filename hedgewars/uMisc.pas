@@ -38,6 +38,7 @@ var
     isSEBackup      : boolean;
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
+    isFirstFrame    : boolean;
 
     fastUntilLag    : boolean;
 
@@ -125,6 +126,10 @@ var
     TargetPoint : TPoint;
 
     TextureList : PTexture;
+
+    ScreenFade : TScreenFade;
+    ScreenFadeValue : Longword;
+    ScreenFadeSpeed : Longword;
 
 
 procedure initModule;
@@ -554,6 +559,11 @@ var p: Pointer;
 begin
 playSound(sndShutter);
 
+// flash
+ScreenFade:= sfFromWhite;
+ScreenFadeValue:= sfMax;
+ScreenFadeSpeed:= 5;
+
 size:= cScreenWidth * cScreenHeight * 3;
 p:= GetMem(size);
 
@@ -715,6 +725,7 @@ begin
     isInMultiShoot  := false;
     isSpeed         := false;
     fastUntilLag    := false;
+    isFirstFrame    := true;
     cVSyncInUse     := true;    
     isSoundEnabled  := true;
     isSEBackup      := true;
@@ -735,6 +746,8 @@ begin
     cHasFocus       := true;
     cInactDelay     := 1250;
     cAltDamage      := true;
+
+    ScreenFade      := sfNone;
 {$IFDEF DEBUGFILE}
 {$I-}
 {$IFDEF IPHONEOS}

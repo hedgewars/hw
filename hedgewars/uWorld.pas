@@ -139,6 +139,11 @@ g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
 if cDamagePercent <> 100 then
     g:= AddGoal(g, gfAny, gidDamageModifier, cDamagePercent);
 
+// fade in
+ScreenFade:= sfFromBlack;
+ScreenFadeValue:= sfMax;
+ScreenFadeSpeed:= 1;
+
 // modified mine timers?
 if cMinesTime <> 3000 then
     begin
@@ -163,7 +168,7 @@ prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
 WorldDx:=  - (LAND_WIDTH div 2) + cScreenWidth div 2;
 WorldDy:=  - (LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
-AMxShift:= 210
+AMxShift:= 210;
 end;
 
 procedure ShowAmmoMenu;
@@ -525,9 +530,9 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     begin
     with PHedgehog(CurrentHedgehog)^ do
         begin
-        if (Ammo^[CurSlot, CurAmmo].AmmoType = amBee) then
-            DrawRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
-        else
+//        if (Ammo^[CurSlot, CurAmmo].AmmoType = amBee) then
+//            DrawRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+//        else
             DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
         end;
     end;
@@ -725,7 +730,7 @@ DrawChat;
 if fastUntilLag then DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
 
-if missionTimer <> 0 then
+if not isFirstFrame and (missionTimer <> 0) then
     begin
     if missionTimer > 0 then dec(missionTimer, Lag);
     if missionTimer < 0 then missionTimer:= 0; // avoid subtracting below 0
@@ -815,9 +820,39 @@ if isCursorVisible then
    DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
    end;
 
-
 glDisable(GL_TEXTURE_2D);
-glDisable(GL_BLEND)
+
+if ScreenFade <> sfNone then
+    begin
+    if not isFirstFrame then
+        case ScreenFade of
+            sfToBlack, sfToWhite:     if ScreenFadeValue + Lag * ScreenFadeSpeed < sfMax then
+                                          inc(ScreenFadeValue, Lag * ScreenFadeSpeed)
+                                      else
+                                          ScreenFade:= sfNone;
+            sfFromBlack, sfFromWhite: if ScreenFadeValue - Lag * ScreenFadeSpeed > 0 then
+                                          dec(ScreenFadeValue, Lag * ScreenFadeSpeed)
+                                      else
+                                          ScreenFade:= sfNone;
+            end;
+    if ScreenFade <> sfNone then
+        begin
+        case ScreenFade of
+            sfToBlack, sfFromBlack: glColor4f(0, 0, 0, ScreenFadeValue / 1000);
+            sfToWhite, sfFromWhite: glColor4f(1, 1, 1, ScreenFadeValue / 1000);
+            end;
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex3f(-cScreenWidth, cScreenHeight, 0);
+        glVertex3f(-cScreenWidth, 0, 0);
+        glVertex3f(cScreenWidth, 0, 0);
+        glVertex3f(cScreenWidth, cScreenHeight, 0);
+        glEnd;
+        glColor4f(1, 1, 1, 1)
+        end
+    end;
+
+glDisable(GL_BLEND);
+isFirstFrame:= false
 end;
 
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);

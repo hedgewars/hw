@@ -694,7 +694,9 @@ case Gear^.Kind of
     gtATStartGame: begin
                    AllInactive:= false;
                    if Gear^.Timer = 0 then
+                      begin
                       AddCaption(trmsg[sidStartFight], cWhiteColor, capgrpGameState);
+                      end
                    end;
  gtATSmoothWindCh: begin
                    if Gear^.Timer = 0 then
@@ -706,6 +708,12 @@ case Gear^.Kind of
                    end;
    gtATFinishGame: begin
                    AllInactive:= false;
+                   if Gear^.Timer = 1000 then
+                      begin
+                      ScreenFade:= sfToBlack;
+                      ScreenFadeValue:= 0;
+                      ScreenFadeSpeed:= 1;
+                      end;
                    if Gear^.Timer = 0 then
                       begin
                       SendIPC('N');
