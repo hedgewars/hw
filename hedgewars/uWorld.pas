@@ -530,9 +530,9 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     begin
     with PHedgehog(CurrentHedgehog)^ do
         begin
-//        if (Ammo^[CurSlot, CurAmmo].AmmoType = amBee) then
-//            DrawRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
-//        else
+        if (Ammo^[CurSlot, CurAmmo].AmmoType = amBee) then
+            DrawRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+        else
             DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
         end;
     end;

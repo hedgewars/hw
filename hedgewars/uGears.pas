@@ -1247,7 +1247,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
                                   cWaterLine+WorldDy,
                                   LongInt(leftX)+WorldDx)
                 end;
-//            amBee: DrawRotated(sprHandBee, hx, hy, hwSign(Gear^.dX), aangle);
+            //amBee: DrawRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
+            amBee: DrawRotatedF(sprHandBee, hx, hy, 0, hwSign(Gear^.dX), aangle);
         end;
 
         case amt of

@@ -76,7 +76,7 @@ type
             sprAmTeleport, sprSplash, sprDroplet, sprBirdy, sprHandCake, sprHandConstruction,
             sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
-            sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg);
+            sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee);
 
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
             gtGrave, gtBee, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -726,7 +726,11 @@ const
             (FileName:  'BeeTrace'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprBeeTrace
             (FileName:  'Egg'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  8; Height: 8; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprEgg
+            Width:  8; Height: 8; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprEgg
+            (FileName:  'TargetBee'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprTargetBee
+            (FileName:  'amBee'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprHandBee
             );
 
     Wavez: array [TWave] of record
