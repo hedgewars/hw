@@ -55,7 +55,7 @@ type PHHAmmo = ^THHAmmo;
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
             Timer: Longword;
-            Poisoned: boolean;
+            Effects: Array[THogEffect] of boolean;
             end;
 
     TTeam = record
@@ -365,7 +365,7 @@ for t:= 0 to Pred(TeamsCount) do
           begin
           Hedgehogs[0].King:= true;
           Hedgehogs[0].Hat:= 'crown';
-					Hedgehogs[0].Poisoned := false;
+          Hedgehogs[0].Effects[hePoisoned] := false;
           h:= Hedgehogs[0].Gear^.Health;
           Hedgehogs[0].Gear^.Health:= hwRound(int2hwFloat(th)*_0_375);
           if Hedgehogs[0].Gear^.Health > h then

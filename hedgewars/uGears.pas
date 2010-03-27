@@ -585,7 +585,7 @@ begin
 	begin
 		if Gear^.Kind = gtHedgehog then
 			begin
-            if PHedgehog(Gear^.Hedgehog)^.Poisoned then
+            if PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] then
                 inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)));
             inc(Gear^.Damage, min(cHealthDecrease, max(0,Gear^.Health - 1 - Gear^.Damage)));
             if PHedgehog(Gear^.Hedgehog)^.King then
@@ -917,6 +917,14 @@ HatVisible:= false;
 
 sx:= hwRound(Gear^.X) + 1 + WorldDx;
 sy:= hwRound(Gear^.Y) - 3 + WorldDy;
+
+if HH^.Effects[hePoisoned] then
+    begin
+    glColor4f(0.25, 1, 0, 0.25);
+    DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
+    glColor4f(1, 1, 1, 1)
+    end;
+
 if ((Gear^.State and gstWinner) <> 0) and
    ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtPickHammer)) then
     begin
@@ -1247,8 +1255,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                                   cWaterLine+WorldDy,
                                   LongInt(leftX)+WorldDx)
                 end;
-            //amBee: DrawRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
-            amBee: DrawRotatedF(sprHandBee, hx, hy, 0, hwSign(Gear^.dX), aangle);
+            amBee: DrawRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
         end;
 
         case amt of
@@ -1427,6 +1434,13 @@ with HH^ do
             if (Gear^.State and gstHHThinking) <> 0 then
                 DrawSprite(sprQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, (RealTicks shr 9) mod 8)
         end
+    end;
+
+if HH^.Effects[hePoisoned] then
+    begin
+    glColor4f(0.25, 1, 0, 0.5);
+    DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 1.5, 0, 0, sx, sy, 0, 1, 22, 22, 360 - (RealTicks shr 37) mod 360);
+    glColor4f(1, 1, 1, 1)
     end;
 
 if Gear^.Invulnerable then
@@ -1819,11 +1833,10 @@ while Gear <> nil do
                                     Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
                                 Gear^.Active:= true;
                                 FollowGear:= Gear
-														end;
-
-													if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) then
-														PHedgehog(Gear^.Hedgehog)^.Poisoned := true;
-							end;
+                                end;
+                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) then
+                                PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] := true;
+                            end;
 
                         end;
                 gtGrave: begin

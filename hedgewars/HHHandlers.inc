@@ -336,7 +336,7 @@ case Gear^.Pos of
                     end;
      posCaseHealth: begin
                     inc(HH^.Health, Gear^.Health);
-										PHedgehog(HH^.Hedgehog)^.Poisoned := false;
+                    PHedgehog(HH^.Hedgehog)^.Effects[hePoisoned] := false;
                     str(Gear^.Health, s);
                     s:= '+' + s;
                     AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);

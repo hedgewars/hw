@@ -172,6 +172,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             PrevTexture, NextTexture: PTexture;
             end;
 
+    THogEffect = (heInvulnerable, hePoisoned);
+
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
 const sfMax = 1000;
 
