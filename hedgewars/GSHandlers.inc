@@ -239,7 +239,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBomb(Gear: PGear);
-var i: LongInt;
+var i, x, y: LongInt;
     dX, dY: hwFloat;
     Fire: PGear;
 begin
@@ -269,32 +269,39 @@ if Gear^.Timer = 0 then
         gtAmmo_Bomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
              gtBall: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 40, EXPLAutoSound);
         gtClusterBomb: begin
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
+                x:= hwRound(Gear^.X);
+                y:= hwRound(Gear^.Y);
+                doMakeExplosion(x, y, 20, EXPLAutoSound);
                 for i:= 0 to 4 do
                     begin
                     dX:= rndSign(GetRandom * _0_1);
                     dY:= (GetRandom - _3) * _0_08;
-                    AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 25);
+                    AddGear(x, y, gtCluster, 0, dX, dY, 25);
                     end
                 end;
         gtWatermelon: begin
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 75, EXPLAutoSound);
+                x:= hwRound(Gear^.X);
+                y:= hwRound(Gear^.Y);
+                doMakeExplosion(x, y, 75, EXPLAutoSound);
                 for i:= 0 to 5 do
                     begin
                     dX:= rndSign(GetRandom * _0_1);
                     dY:= (GetRandom - _1_5) * _0_3;
-                    AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMelonPiece, 0, dX, dY, 75)^.DirAngle:= i * 60;
+                    AddGear(x, y, gtMelonPiece, 0, dX, dY, 75)^.DirAngle:= i * 60;
                     end
                 end;
         gtHellishBomb: begin
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 90, EXPLAutoSound);
+                x:= hwRound(Gear^.X);
+                y:= hwRound(Gear^.Y);
+                doMakeExplosion(x, y, 90, EXPLAutoSound);
+                
                 for i:= 0 to 127 do
                     begin
                     dX:= AngleCos(i * 16) * _0_5 * (GetRandom + _1);
                     dY:= AngleSin(i * 16) * _0_5 * (GetRandom + _1);
-                    Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
+                    Fire:= AddGear(x, y, gtFlame, 0, dX, dY, 0);
                     if i mod 2 = 0 then Fire^.State:= Fire^.State or gsttmpFlag;
-                    Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
+                    Fire:= AddGear(x, y, gtFlame, 0, dX, -dY, 0);
                     if i mod 2 <> 0 then Fire^.State:= Fire^.State or gsttmpFlag;
                     end
                 end;
