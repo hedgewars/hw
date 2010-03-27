@@ -265,16 +265,13 @@
 							<array>
 								<string>29B97314FDCFA39411CA2CEA</string>
 								<string>080E96DDFE201D6D7F000001</string>
-								<string>6179886C114AA4B900BA94A9</string>
-								<string>29B97317FDCFA39411CA2CEA</string>
-								<string>6100DB1711544E8400F455E0</string>
 								<string>1C37FBAC04509CD000000102</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>5</integer>
+									<integer>7</integer>
 									<integer>2</integer>
 									<integer>0</integer>
 								</array>
@@ -315,7 +312,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>uKeys.pas</string>
+								<string>PopupMenuViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -323,11 +320,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>uKeys.pas</string>
+										<string>PopupMenuViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>61CE25C2115E7CE10098C467</string>
+										<string>61CE264D115E89B50098C467</string>
 										<key>history</key>
 										<array>
 											<string>6179889C114AA5BD00BA94A9</string>
@@ -361,7 +358,6 @@
 											<string>611FD96611551E8000C2203D</string>
 											<string>611FDAC41155B77500C2203D</string>
 											<string>611FDADF1155B83200C2203D</string>
-											<string>611FDB471155BCE500C2203D</string>
 											<string>611FDB481155BCE500C2203D</string>
 											<string>611FDB6B1155C0B300C2203D</string>
 											<string>611FDB6C1155C0B300C2203D</string>
@@ -391,7 +387,6 @@
 											<string>61CE24DC115E641F0098C467</string>
 											<string>61CE24E0115E648D0098C467</string>
 											<string>61CE24FB115E72A80098C467</string>
-											<string>61CE24FD115E72A80098C467</string>
 											<string>61CE24FE115E72A80098C467</string>
 											<string>61CE2514115E74CC0098C467</string>
 											<string>61CE2515115E74CC0098C467</string>
@@ -402,7 +397,8 @@
 											<string>61CE2578115E78900098C467</string>
 											<string>61CE25B4115E7C940098C467</string>
 											<string>61CE25B5115E7C940098C467</string>
-											<string>61CE25C1115E7CE10098C467</string>
+											<string>61CE260E115E84070098C467</string>
+											<string>61CE260F115E84070098C467</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -602,6 +598,10 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>61CE25E8115E7EB80098C467</string>
+		<string>61CE25D2115E7D3B0098C467</string>
+		<string>1C78EAAD065D492600B07095</string>
+		<string>1CD10A99069EF8BA00B06720</string>
 		<string>61798848114AA42600BA94A9</string>
 		<string>/Users/vittorio/hedgewars/trunk/project_files/HedgewarsMobile/HedgewarsMobile.xcodeproj</string>
 	</array>
@@ -807,13 +807,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>61CE23CB115E45EF0098C467</string>
+				<string>61CE25CA115E7D3B0098C467</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>61CE23CC115E45EF0098C467</string>
-				<string>61CE23CD115E45EF0098C467</string>
-				<string>61CE23CE115E45EF0098C467</string>
-				<string>61CE23CF115E45EF0098C467</string>
-				<string>61CE23D0115E45EF0098C467</string>
+				<string>61CE25CB115E7D3B0098C467</string>
+				<string>61CE25CC115E7D3B0098C467</string>
+				<string>61CE25CD115E7D3B0098C467</string>
+				<string>61CE25CE115E7D3B0098C467</string>
+				<string>61CE25CF115E7D3B0098C467</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -954,7 +954,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {656, 344}}</string>
 								<key>RubberWindowFrame</key>
-								<string>711 352 656 385 0 0 1920 1178 </string>
+								<string>1296 355 656 385 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXDebugCLIModule</string>
@@ -977,13 +977,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>61CE23D1115E45EF0098C467</string>
+				<string>61CE25D0115E7D3B0098C467</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.consoleV3</string>
 			<key>WindowString</key>
-			<string>711 352 656 385 0 0 1920 1178 </string>
+			<string>1296 355 656 385 0 0 1920 1178 </string>
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>

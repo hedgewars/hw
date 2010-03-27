@@ -10,8 +10,10 @@
 #import "SettingsViewController.h"
 
 @interface MainMenuViewController : UIViewController {
-
+    UIView *cover;
 }
+
+@property (nonatomic,retain) UIView *cover;
 
 -(void) appear;
 -(void) disappear;

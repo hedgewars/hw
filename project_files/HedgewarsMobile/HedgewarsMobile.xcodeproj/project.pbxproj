@@ -199,11 +199,11 @@
 		61CE2504115E73210098C467 /* PopupMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61CE2502115E73210098C467 /* PopupMenuViewController.xib */; };
 		61CE250D115E749A0098C467 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE250C115E749A0098C467 /* OverlayViewController.m */; };
 		61CE2511115E74C90098C467 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61CE2510115E74C90098C467 /* OverlayViewController.xib */; };
+		61CE25C3115E7D1D0098C467 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */; };
 		61E2F06911567CC7002D33C1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61E2F06811567CC7002D33C1 /* CoreGraphics.framework */; };
 		61FA761F115DA0DB00DA6ED0 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */; };
 		61FA7647115DA6A300DA6ED0 /* SplitViewRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7645115DA6A300DA6ED0 /* SplitViewRootController.m */; };
 		61FA765D115DAACC00DA6ED0 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */; };
-		61FA7668115DAB1B00DA6ED0 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */; };
 		61FA7669115DAB1B00DA6ED0 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61FA7667115DAB1B00DA6ED0 /* DetailViewController.xib */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
@@ -1153,9 +1153,9 @@
 				61FA761F115DA0DB00DA6ED0 /* MainMenuViewController.m in Sources */,
 				61FA7647115DA6A300DA6ED0 /* SplitViewRootController.m in Sources */,
 				61FA765D115DAACC00DA6ED0 /* MasterViewController.m in Sources */,
-				61FA7668115DAB1B00DA6ED0 /* DetailViewController.m in Sources */,
 				61CE24EE115E71C20098C467 /* OverlayViewController.m in Sources */,
 				61CE24EF115E71C20098C467 /* PopupMenuViewController.m in Sources */,
+				61CE25C3115E7D1D0098C467 /* DetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

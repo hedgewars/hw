@@ -52,13 +52,15 @@ int main (int argc, char *argv[]) {
 }
 
 -(id) init {
-	self = [super init];
-	self.uiwindow = nil;
-	self.window = NULL;
-	self.viewController = nil;
-    self.overlayController = nil;
-    isInGame = NO;
-	return self;
+	if (self = [super init]){
+        self.uiwindow = nil;
+        self.window = NULL;
+        self.viewController = nil;
+        self.overlayController = nil;
+        isInGame = NO;
+        return self;
+    } else 
+        return nil;
 }
 
 -(void) dealloc {

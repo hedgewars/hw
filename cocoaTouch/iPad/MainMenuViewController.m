@@ -18,6 +18,7 @@
 
 
 @implementation MainMenuViewController
+@synthesize cover;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
 	return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
@@ -95,9 +96,19 @@
 	[UIView setAnimationDuration:1];
 	self.view.alpha = 1;
 	[UIView commitAnimations];
+    
+    // this is a silly way to hide the sdl contex that remained active
+    if (nil == cover) {
+        cover= [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        cover.backgroundColor = [UIColor blackColor];
+    }
+    [[SDLUIKitDelegate sharedAppDelegate].uiwindow insertSubview:cover belowSubview:self.view];
 }
 
 -(void) disappear {
+    if (nil != cover)
+        [cover release];
+    
     [UIView beginAnimations:@"removing main controller" context:NULL];
 	[UIView setAnimationDuration:1];
 	self.view.alpha = 0;

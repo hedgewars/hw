@@ -6,6 +6,7 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
+#import "SDL_uikitappdelegate.h"
 #import "PopupMenuViewController.h"
 #import "PascalImports.h"
 
@@ -95,6 +96,7 @@
             break;
         case 1:
 			HW_chat();
+            //SDL_iPhoneKeyboardShow([SDLUIKitDelegate sharedAppDelegate].window);
             break;
         case 2:
 			actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
