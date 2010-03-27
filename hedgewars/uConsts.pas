@@ -839,7 +839,7 @@ const
             (FileName:             'Droplet2.ogg'; Path: ptSounds),// sndDroplet2
             (FileName:             'Droplet3.ogg'; Path: ptSounds),// sndDroplet3
             (FileName:                  'egg.ogg'; Path: ptSounds),// sndEggBreak
-            (FileName:             'drillgun.ogg'; Path: ptSounds),// sndDrillRocket
+            (FileName:           'pickhammer.ogg'; Path: ptSounds),// sndDrillRocket
             (FileName:          'PoisonCough.ogg'; Path: ptVoices),// sndPoisonCough
             (FileName:           'PoisonMoan.ogg'; Path: ptVoices),// sndPoisonMoan
             (FileName:             'BirdyLay.ogg'; Path: ptSounds),// sndBirdyLay
