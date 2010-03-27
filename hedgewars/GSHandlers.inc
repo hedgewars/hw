@@ -1924,7 +1924,6 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
         playSound(sndWarp)
         end;
 TargetPoint.X:= NoPointX;
-
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

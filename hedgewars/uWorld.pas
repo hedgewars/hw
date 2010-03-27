@@ -288,7 +288,7 @@ end;
 
 procedure MoveCamera; forward;
 
-procedure DrawWater(Alpha: byte);
+procedure DrawWater(Alpha: byte; OffsetY: LongInt);
 var VertexBuffer: array [0..3] of TVertex2f;
     r: TSDL_Rect;
     lw, lh: GLfloat;
@@ -301,7 +301,7 @@ WaterColorArray[3].a := Alpha;
 lw:= cScreenWidth / cScaleFactor;
 lh:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 + 16;
 // Water
-r.y:= WorldDy + cWaterLine;
+r.y:= OffsetY + WorldDy + cWaterLine;
 if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine then
     begin
     if r.y < 0 then r.y:= 0;
@@ -468,15 +468,16 @@ if not cReducedQuality then
 
 // Waves
 offsetY:= 10 * min(0, -145 - screenBottom);
-DrawWaves( 1,  0 + WorldDx div 32, - cWaveHeight + offsetY div 35, 0.25);
+DrawWater(255, offsetY div 35);
+DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 0.25);
 DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 0.19);
-DrawWaves( 1,  75 + WorldDx div 19, - cWaveHeight + offsetY div 45, 0.14);
+DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 0.14);
 DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 0.09);
 
 
 DrawLand(WorldDx, WorldDy);
 
-DrawWater(255);
+DrawWater(255, 0);
 
 // Attack bar
 if CurrentTeam <> nil then
@@ -506,19 +507,30 @@ DrawGears;
 
 DrawVisualGears(2);
 
-DrawWater(cWaterOpacity);
+DrawWater(cWaterOpacity, 0);
 
 // Waves
-DrawWaves( 1, 25 + WorldDx div 9, - cWaveHeight, 0.05);
-DrawWaves(-1, 50 + WorldDx div 6, 1 - cWaveHeight - offsetY div 40, 0.03);
-DrawWaves( 1, 75 + WorldDx div 4, 3- cWaveHeight - offsetY div 20, 0.01);
-DrawWaves( -1, 25 + WorldDx div 3, 5 - cWaveHeight - offsetY div 10, 0);
+DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 0.05);
+//DrawWater(cWaterOpacity, - offsetY div 40);
+DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 0.03);
+DrawWater(cWaterOpacity, - offsetY div 20);
+DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 0.01);
+DrawWater(cWaterOpacity, - offsetY div 10);
+DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
 
 
 {$WARNINGS OFF}
 // Target
-if TargetPoint.X <> NoPointX then
-    DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> nil) then
+    begin
+    with PHedgehog(CurrentHedgehog)^ do
+        begin
+        if (Ammo^[CurSlot, CurAmmo].AmmoType = amBee) then
+            DrawRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+        else
+            DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+        end;
+    end;
 {$WARNINGS ON}
 
 {$IFDEF IPHONEOS}
