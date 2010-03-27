@@ -29,7 +29,7 @@
 #import "GameSetup.h"
 #import "PascalImports.h"
 #import "MainMenuViewController.h"
-#import "overlayViewController.h"
+#import "OverlayViewController.h"
 
 #ifdef main
 #undef main
@@ -77,7 +77,7 @@ int main (int argc, char *argv[]) {
 	[setup release];
     
     // overlay with controls, become visible after 2 seconds
-    overlayController = [[overlayViewController alloc] initWithNibName:@"overlayViewController" bundle:nil];
+    overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
     [uiwindow addSubview:overlayController.view];
     [overlayController release];
 
@@ -100,8 +100,9 @@ int main (int argc, char *argv[]) {
 
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
-	[application setStatusBarHidden:YES animated:NO];
-	[application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];  
+	//[application setStatusBarHidden:YES animated:NO];
+    [application setStatusBarHidden:YES withAnimation:NO];
+    [application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];  
 		
 	self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	self.uiwindow.backgroundColor = [UIColor blackColor];

@@ -6,10 +6,10 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "popupMenuViewController.h"
+#import "PopupMenuViewController.h"
 #import "PascalImports.h"
 
-@implementation popupMenuViewController
+@implementation PopupMenuViewController
 @synthesize menuTable, menuList;
 
 /*
@@ -47,7 +47,11 @@
 -(void) viewDidLoad {
     isPaused = NO;
     menuTable.allowsSelection = YES;
-    menuList = [[NSArray alloc] initWithObjects:NSLocalizedString(@"Pause Game", @""), NSLocalizedString(@"Chat", @""), NSLocalizedString(@"End Game", @""),nil];
+    menuList = [[NSArray alloc] initWithObjects:
+                NSLocalizedString(@"Pause Game", @""),
+                NSLocalizedString(@"Chat", @""),
+                NSLocalizedString(@"End Game", @""),
+                nil];
     [super viewDidLoad];
 }
 

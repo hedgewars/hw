@@ -159,7 +159,7 @@
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>popupMenuViewController</string>
+					<string>PopupMenuViewController</string>
 					<boolean value="NO"/>
 					<string>UIResponder</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -189,7 +189,7 @@
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
-					<string key="className">popupMenuViewController</string>
+					<string key="className">PopupMenuViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">menuTable</string>
@@ -197,7 +197,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">../../cocoaTouch/popupMenuViewController.h</string>
+						<string key="minorKey">../../cocoaTouch/iPad/PopupMenuViewController.h</string>
 					</object>
 				</object>
 			</object>

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface popupMenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate> {
+@interface PopupMenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate> {
     UITableView *menuTable;
     NSArray *menuList;
     BOOL isPaused;

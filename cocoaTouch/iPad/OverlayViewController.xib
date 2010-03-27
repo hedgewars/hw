@@ -619,9 +619,9 @@
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>overlayViewController</string>
+					<string>OverlayViewController</string>
 					<string>UIResponder</string>
-					<string>{{-49, 273}, {1024, 768}}</string>
+					<string>{{0, 273}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -655,7 +655,7 @@
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
-					<string key="className">overlayViewController</string>
+					<string key="className">OverlayViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<object class="NSMutableDictionary" key="actions">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -674,7 +674,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">../../cocoaTouch/overlayViewController.h</string>
+						<string key="minorKey">../../cocoaTouch/iPad/OverlayViewController.h</string>
 					</object>
 				</object>
 			</object>

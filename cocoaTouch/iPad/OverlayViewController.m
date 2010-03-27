@@ -6,14 +6,14 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "overlayViewController.h"
+#import "OverlayViewController.h"
 #import "SDL_uikitappdelegate.h"
 #import "PascalImports.h"
 #import "CGPointUtils.h"
 #import "SDL_mouse.h"
-#import "popupMenuViewController.h"
+#import "PopupMenuViewController.h"
 
-@implementation overlayViewController
+@implementation OverlayViewController
 @synthesize dimTimer, menuPopover;
 
 
@@ -154,7 +154,7 @@
 
 // show up a popover containing a popupMenuViewController; we hook it with setPopoverContentSize
 -(IBAction) showPopover{
-    popupMenuViewController *popupMenu = [[popupMenuViewController alloc] initWithNibName:@"popupMenuViewController" bundle:nil];
+    PopupMenuViewController *popupMenu = [[PopupMenuViewController alloc] initWithNibName:@"PopupMenuViewController" bundle:nil];
     
     menuPopover = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
     [menuPopover setPopoverContentSize:CGSizeMake(220, 170) animated:YES];

@@ -89,7 +89,6 @@
 		6100DAB9115446B000F455E0 /* TeamEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798878114AA4D000BA94A9 /* TeamEditViewController.m */; };
 		6100DABA115446B000F455E0 /* TeamMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179887B114AA4D000BA94A9 /* TeamMenuViewController.m */; };
 		6100DABB115446B000F455E0 /* GameSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798888114AA4E600BA94A9 /* GameSetup.m */; };
-		6100DABC115446B000F455E0 /* overlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179939E1150226700BA94A9 /* overlayViewController.m */; };
 		6100DABE115446B000F455E0 /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798A13114AB65600BA94A9 /* libSDL_ttf.a */; };
 		6100DABF115446B000F455E0 /* libSDL_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617989BB114AB47500BA94A9 /* libSDL_net.a */; };
 		6100DAC0115446B000F455E0 /* libSDLiPhoneOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */; };
@@ -111,8 +110,6 @@
 		611FD9CC1155A28C00C2203D /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
 		611FD9D01155A40700C2203D /* NetworkPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CF1155A40700C2203D /* NetworkPlay.png */; };
 		611FD9D21155A41000C2203D /* Multiplayer.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9D11155A41000C2203D /* Multiplayer.png */; };
-		611FDB3C1155BB9E00C2203D /* overlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FDB3B1155BB9E00C2203D /* overlayViewController.xib */; };
-		611FDB5E1155BDE400C2203D /* overlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FDB5D1155BDE400C2203D /* overlayViewController.xib */; };
 		611FDB641155BFFF00C2203D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FDB631155BFFF00C2203D /* Default.png */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
@@ -194,11 +191,14 @@
 		6179936C11501D3D00BA94A9 /* arrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936811501D3D00BA94A9 /* arrowLeft.png */; };
 		6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936911501D3D00BA94A9 /* arrowRight.png */; };
 		6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936A11501D3D00BA94A9 /* arrowUp.png */; };
-		617993A01150226700BA94A9 /* overlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179939E1150226700BA94A9 /* overlayViewController.m */; };
 		617995321150403800BA94A9 /* joyPush.png in Resources */ = {isa = PBXBuildFile; fileRef = 617995311150403800BA94A9 /* joyPush.png */; };
-		618AFBEF115BE8AE003D411B /* popupMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618AFBEE115BE8AE003D411B /* popupMenuViewController.m */; };
-		618AFBF1115BE8B6003D411B /* popupMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 618AFBF0115BE8B6003D411B /* popupMenuViewController.xib */; };
 		61C0838A11567C83005D474F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C0838911567C83005D474F /* CoreGraphics.framework */; };
+		61CE24EE115E71C20098C467 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE24EB115E71C20098C467 /* OverlayViewController.m */; };
+		61CE24EF115E71C20098C467 /* PopupMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE24ED115E71C20098C467 /* PopupMenuViewController.m */; };
+		61CE2503115E73210098C467 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61CE2501115E73210098C467 /* OverlayViewController.xib */; };
+		61CE2504115E73210098C467 /* PopupMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61CE2502115E73210098C467 /* PopupMenuViewController.xib */; };
+		61CE250D115E749A0098C467 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE250C115E749A0098C467 /* OverlayViewController.m */; };
+		61CE2511115E74C90098C467 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61CE2510115E74C90098C467 /* OverlayViewController.xib */; };
 		61E2F06911567CC7002D33C1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61E2F06811567CC7002D33C1 /* CoreGraphics.framework */; };
 		61FA761F115DA0DB00DA6ED0 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */; };
 		61FA7647115DA6A300DA6ED0 /* SplitViewRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7645115DA6A300DA6ED0 /* SplitViewRootController.m */; };
@@ -290,8 +290,6 @@
 		611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HedgewarsTitle.png; path = ../../QTfrontend/res/HedgewarsTitle.png; sourceTree = SOURCE_ROOT; };
 		611FD9CF1155A40700C2203D /* NetworkPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = NetworkPlay.png; path = ../../QTfrontend/res/NetworkPlay.png; sourceTree = SOURCE_ROOT; };
 		611FD9D11155A41000C2203D /* Multiplayer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Multiplayer.png; path = ../../QTfrontend/res/Multiplayer.png; sourceTree = SOURCE_ROOT; };
-		611FDB3B1155BB9E00C2203D /* overlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = overlayViewController.xib; path = ../../cocoaTouch/iPad/overlayViewController.xib; sourceTree = SOURCE_ROOT; };
-		611FDB5D1155BDE400C2203D /* overlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = overlayViewController.xib; path = ../../cocoaTouch/overlayViewController.xib; sourceTree = SOURCE_ROOT; };
 		611FDB631155BFFF00C2203D /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../../cocoaTouch/iPad/Default.png; sourceTree = SOURCE_ROOT; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -390,13 +388,17 @@
 		6179936811501D3D00BA94A9 /* arrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowLeft.png; path = ../../cocoaTouch/resources/arrowLeft.png; sourceTree = SOURCE_ROOT; };
 		6179936911501D3D00BA94A9 /* arrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowRight.png; path = ../../cocoaTouch/resources/arrowRight.png; sourceTree = SOURCE_ROOT; };
 		6179936A11501D3D00BA94A9 /* arrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowUp.png; path = ../../cocoaTouch/resources/arrowUp.png; sourceTree = SOURCE_ROOT; };
-		6179939D1150226700BA94A9 /* overlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = overlayViewController.h; path = ../../cocoaTouch/overlayViewController.h; sourceTree = SOURCE_ROOT; };
-		6179939E1150226700BA94A9 /* overlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = overlayViewController.m; path = ../../cocoaTouch/overlayViewController.m; sourceTree = SOURCE_ROOT; };
 		617995311150403800BA94A9 /* joyPush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyPush.png; path = ../../cocoaTouch/resources/joyPush.png; sourceTree = SOURCE_ROOT; };
-		618AFBED115BE8AE003D411B /* popupMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = popupMenuViewController.h; path = ../../cocoaTouch/popupMenuViewController.h; sourceTree = SOURCE_ROOT; };
-		618AFBEE115BE8AE003D411B /* popupMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = popupMenuViewController.m; path = ../../cocoaTouch/popupMenuViewController.m; sourceTree = SOURCE_ROOT; };
-		618AFBF0115BE8B6003D411B /* popupMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = popupMenuViewController.xib; path = ../../cocoaTouch/iPad/popupMenuViewController.xib; sourceTree = SOURCE_ROOT; };
 		61C0838911567C83005D474F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		61CE24EA115E71C20098C467 /* OverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OverlayViewController.h; path = ../../cocoaTouch/iPad/OverlayViewController.h; sourceTree = SOURCE_ROOT; };
+		61CE24EB115E71C20098C467 /* OverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OverlayViewController.m; path = ../../cocoaTouch/iPad/OverlayViewController.m; sourceTree = SOURCE_ROOT; };
+		61CE24EC115E71C20098C467 /* PopupMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopupMenuViewController.h; path = ../../cocoaTouch/iPad/PopupMenuViewController.h; sourceTree = SOURCE_ROOT; };
+		61CE24ED115E71C20098C467 /* PopupMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopupMenuViewController.m; path = ../../cocoaTouch/iPad/PopupMenuViewController.m; sourceTree = SOURCE_ROOT; };
+		61CE2501115E73210098C467 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = ../../cocoaTouch/iPad/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
+		61CE2502115E73210098C467 /* PopupMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = PopupMenuViewController.xib; path = ../../cocoaTouch/iPad/PopupMenuViewController.xib; sourceTree = SOURCE_ROOT; };
+		61CE250B115E749A0098C467 /* OverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OverlayViewController.h; path = ../../cocoaTouch/OverlayViewController.h; sourceTree = SOURCE_ROOT; };
+		61CE250C115E749A0098C467 /* OverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OverlayViewController.m; path = ../../cocoaTouch/OverlayViewController.m; sourceTree = SOURCE_ROOT; };
+		61CE2510115E74C90098C467 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = ../../cocoaTouch/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
 		61E2F06811567CC7002D33C1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61FA761D115DA0DB00DA6ED0 /* MainMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainMenuViewController.h; path = ../../cocoaTouch/iPad/MainMenuViewController.h; sourceTree = SOURCE_ROOT; };
 		61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainMenuViewController.m; path = ../../cocoaTouch/iPad/MainMenuViewController.m; sourceTree = SOURCE_ROOT; };
@@ -554,16 +556,12 @@
 		6100DAD4115446B000F455E0 /* Resources-iPad */ = {
 			isa = PBXGroup;
 			children = (
+				61CE2509115E74260098C467 /* XIB */,
 				611FDB631155BFFF00C2203D /* Default.png */,
 				611FD9C81155A1F200C2203D /* Background.png */,
 				611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */,
 				611FD9D11155A41000C2203D /* Multiplayer.png */,
 				611FD9CF1155A40700C2203D /* NetworkPlay.png */,
-				61FA7667115DAB1B00DA6ED0 /* DetailViewController.xib */,
-				611FD990115590E700C2203D /* MainMenuViewController.xib */,
-				611FD992115590E700C2203D /* SettingsViewController.xib */,
-				611FDB3B1155BB9E00C2203D /* overlayViewController.xib */,
-				618AFBF0115BE8B6003D411B /* popupMenuViewController.xib */,
 			);
 			name = "Resources-iPad";
 			sourceTree = "<group>";
@@ -571,12 +569,12 @@
 		6100DB1711544E8400F455E0 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
+				61CE2510115E74C90098C467 /* OverlayViewController.xib */,
 				61798870114AA4D000BA94A9 /* MainMenuViewController.xib */,
 				61798873114AA4D000BA94A9 /* SchemeEditViewController.xib */,
 				61798876114AA4D000BA94A9 /* SettingsViewController.xib */,
 				61798879114AA4D000BA94A9 /* TeamEditViewController.xib */,
 				6179887C114AA4D000BA94A9 /* TeamMenuViewController.xib */,
-				611FDB5D1155BDE400C2203D /* overlayViewController.xib */,
 			);
 			name = XIB;
 			path = Classes;
@@ -606,6 +604,8 @@
 				61798878114AA4D000BA94A9 /* TeamEditViewController.m */,
 				6179887A114AA4D000BA94A9 /* TeamMenuViewController.h */,
 				6179887B114AA4D000BA94A9 /* TeamMenuViewController.m */,
+				61CE250B115E749A0098C467 /* OverlayViewController.h */,
+				61CE250C115E749A0098C467 /* OverlayViewController.m */,
 			);
 			name = "iPhone Frontend";
 			sourceTree = "<group>";
@@ -692,6 +692,18 @@
 			name = buttons;
 			sourceTree = "<group>";
 		};
+		61CE2509115E74260098C467 /* XIB */ = {
+			isa = PBXGroup;
+			children = (
+				61FA7667115DAB1B00DA6ED0 /* DetailViewController.xib */,
+				611FD990115590E700C2203D /* MainMenuViewController.xib */,
+				611FD992115590E700C2203D /* SettingsViewController.xib */,
+				61CE2501115E73210098C467 /* OverlayViewController.xib */,
+				61CE2502115E73210098C467 /* PopupMenuViewController.xib */,
+			);
+			name = XIB;
+			sourceTree = "<group>";
+		};
 		61FA7620115DA0EA00DA6ED0 /* iPad Frontend */ = {
 			isa = PBXGroup;
 			children = (
@@ -711,10 +723,10 @@
 		61FA766A115DAB2A00DA6ED0 /* Overlay */ = {
 			isa = PBXGroup;
 			children = (
-				618AFBED115BE8AE003D411B /* popupMenuViewController.h */,
-				618AFBEE115BE8AE003D411B /* popupMenuViewController.m */,
-				6179939D1150226700BA94A9 /* overlayViewController.h */,
-				6179939E1150226700BA94A9 /* overlayViewController.m */,
+				61CE24EA115E71C20098C467 /* OverlayViewController.h */,
+				61CE24EB115E71C20098C467 /* OverlayViewController.m */,
+				61CE24EC115E71C20098C467 /* PopupMenuViewController.h */,
+				61CE24ED115E71C20098C467 /* PopupMenuViewController.m */,
 			);
 			name = Overlay;
 			sourceTree = "<group>";
@@ -920,7 +932,7 @@
 				6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */,
 				6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */,
 				617995321150403800BA94A9 /* joyPush.png in Resources */,
-				611FDB5E1155BDE400C2203D /* overlayViewController.xib in Resources */,
+				61CE2511115E74C90098C467 /* OverlayViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -954,10 +966,10 @@
 				611FD9CC1155A28C00C2203D /* HedgewarsTitle.png in Resources */,
 				611FD9D01155A40700C2203D /* NetworkPlay.png in Resources */,
 				611FD9D21155A41000C2203D /* Multiplayer.png in Resources */,
-				611FDB3C1155BB9E00C2203D /* overlayViewController.xib in Resources */,
 				611FDB641155BFFF00C2203D /* Default.png in Resources */,
-				618AFBF1115BE8B6003D411B /* popupMenuViewController.xib in Resources */,
 				61FA7669115DAB1B00DA6ED0 /* DetailViewController.xib in Resources */,
+				61CE2503115E73210098C467 /* OverlayViewController.xib in Resources */,
+				61CE2504115E73210098C467 /* PopupMenuViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1086,7 +1098,7 @@
 				61798883114AA4D000BA94A9 /* TeamEditViewController.m in Sources */,
 				61798885114AA4D000BA94A9 /* TeamMenuViewController.m in Sources */,
 				61798889114AA4E600BA94A9 /* GameSetup.m in Sources */,
-				617993A01150226700BA94A9 /* overlayViewController.m in Sources */,
+				61CE250D115E749A0098C467 /* OverlayViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1138,12 +1150,12 @@
 				6100DAB9115446B000F455E0 /* TeamEditViewController.m in Sources */,
 				6100DABA115446B000F455E0 /* TeamMenuViewController.m in Sources */,
 				6100DABB115446B000F455E0 /* GameSetup.m in Sources */,
-				6100DABC115446B000F455E0 /* overlayViewController.m in Sources */,
-				618AFBEF115BE8AE003D411B /* popupMenuViewController.m in Sources */,
 				61FA761F115DA0DB00DA6ED0 /* MainMenuViewController.m in Sources */,
 				61FA7647115DA6A300DA6ED0 /* SplitViewRootController.m in Sources */,
 				61FA765D115DAACC00DA6ED0 /* MasterViewController.m in Sources */,
 				61FA7668115DAB1B00DA6ED0 /* DetailViewController.m in Sources */,
+				61CE24EE115E71C20098C467 /* OverlayViewController.m in Sources */,
+				61CE24EF115E71C20098C467 /* PopupMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
