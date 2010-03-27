@@ -314,7 +314,10 @@ with Hedgehog do
             Gear^.State:= Gear^.State and not gstHHChooseTarget;
             isCursorVisible:= false
             end;
-        ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0
+        if (CurAmmoGear <> nil) and ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0) then
+            ShowCrosshair:= (CurAmmoGear^.Ammo^.Propz and ammoprop_NoCrossHair) = 0
+        else
+            ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0;
         end
     end
 end;
