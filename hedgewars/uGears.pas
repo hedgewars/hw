@@ -636,6 +636,12 @@ while t <> nil do
     begin
     Gear:= t;
     t:= Gear^.NextGear;
+    if (((GameTicks + Gear^.UID * 100) mod 1000) = 0) and (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog <> nil) and (PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned]) and (getRandom(100) = 0) then
+        if getRandom(2) = 0 then
+            PlaySound(sndPoisonCough, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
+        else
+            PlaySound(sndPoisonMoan, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+
     if Gear^.Active then
         begin
         if Gear^.RenderTimer and (Gear^.Timer > 500) and ((Gear^.Timer mod 1000) = 0) then

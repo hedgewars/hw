@@ -802,25 +802,6 @@ if SoundTimerTicks >= 50 then
 if GameState = gsConfirm then
     DrawCentered(0, (cScreenHeight shr 1), ConfirmTexture);
 
-SetScale(zoom);
-
-// Cursor
-if isCursorVisible then
-   begin
-   if not bShowAmmoMenu then
-     with CurrentHedgehog^ do
-       if (Gear^.State and gstHHChooseTarget) <> 0 then
-         begin
-         i:= Ammo^[CurSlot, CurAmmo].Pos;
-         with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
-           if PosCount > 1 then
-              DrawSprite(PosSprite, CursorPoint.X - (SpritesData[PosSprite].Width shr 1),
-                                    cScreenHeight - CursorPoint.Y - (SpritesData[PosSprite].Height shr 1),
-                                    i);
-         end;
-   DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
-   end;
-
 glDisable(GL_TEXTURE_2D);
 
 if ScreenFade <> sfNone then
@@ -830,11 +811,11 @@ if ScreenFade <> sfNone then
             sfToBlack, sfToWhite:     if ScreenFadeValue + Lag * ScreenFadeSpeed < sfMax then
                                           inc(ScreenFadeValue, Lag * ScreenFadeSpeed)
                                       else
-                                          ScreenFade:= sfNone;
+                                          ScreenFadeValue:= sfMax;
             sfFromBlack, sfFromWhite: if ScreenFadeValue - Lag * ScreenFadeSpeed > 0 then
                                           dec(ScreenFadeValue, Lag * ScreenFadeSpeed)
                                       else
-                                          ScreenFade:= sfNone;
+                                          ScreenFadeValue:= 0;
             end;
     if ScreenFade <> sfNone then
         begin
@@ -858,10 +839,32 @@ if ScreenFade <> sfNone then
         glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
         glDisableClientState(GL_VERTEX_ARRAY);
          
-        glColor4f(1, 1, 1, 1)
+        glColor4f(1, 1, 1, 1);
+        if not isFirstFrame and ((ScreenFadeValue = 0) or (ScreenFadeValue = sfMax)) then ScreenFade:= sfNone
         end
     end;
 
+SetScale(zoom);
+glEnable(GL_TEXTURE_2D);
+
+// Cursor
+if isCursorVisible then
+   begin
+   if not bShowAmmoMenu then
+     with CurrentHedgehog^ do
+       if (Gear^.State and gstHHChooseTarget) <> 0 then
+         begin
+         i:= Ammo^[CurSlot, CurAmmo].Pos;
+         with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
+           if PosCount > 1 then
+              DrawSprite(PosSprite, CursorPoint.X - (SpritesData[PosSprite].Width shr 1),
+                                    cScreenHeight - CursorPoint.Y - (SpritesData[PosSprite].Height shr 1),
+                                    i);
+         end;
+   DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
+   end;
+
+glDisable(GL_TEXTURE_2D);
 glDisable(GL_BLEND);
 isFirstFrame:= false
 end;

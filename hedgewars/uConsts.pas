@@ -114,7 +114,8 @@ type
             sndNooo, sndHello, sndRopeShot, sndRopeAttach, sndRopeRelease,
             sndSwitchHog, sndVictory, sndSniperReload, sndSteps, sndLowGravity,
             sndHellishImpact1, sndHellishImpact2, sndHellishImpact3, sndHellishImpact4,
-            sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket);
+            sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket,
+            sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle);
 
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -838,7 +839,11 @@ const
             (FileName:             'Droplet2.ogg'; Path: ptSounds),// sndDroplet2
             (FileName:             'Droplet3.ogg'; Path: ptSounds),// sndDroplet3
             (FileName:                         ''; Path: ptSounds),// sndEggBreak
-            (FileName:             'drillgun.ogg'; Path: ptSounds) // sndDrillRocket
+            (FileName:             'drillgun.ogg'; Path: ptSounds),// sndDrillRocket
+            (FileName:          'PoisonCough.ogg'; Path: ptVoices),// sndPoisonCough
+            (FileName:           'PoisonMoan.ogg'; Path: ptVoices),// sndPoisonMoan
+            (FileName:             'BirdyLay.ogg'; Path: ptSounds),// sndBirdyLay
+            (FileName:              'Whistle.ogg'; Path: ptSounds) // sndWhistle
             );
 
     Ammoz: array [TAmmoType] of record

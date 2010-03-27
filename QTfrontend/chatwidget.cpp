@@ -84,16 +84,22 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     mainLayout.addWidget(chatNicks, 0, 1);
 
     acInfo = new QAction(QAction::tr("Info"), chatNicks);
+    acInfo->setIcon(QIcon(":/res/info.png"));
     connect(acInfo, SIGNAL(triggered(bool)), this, SLOT(onInfo()));
     acKick = new QAction(QAction::tr("Kick"), chatNicks);
+    acKick->setIcon(QIcon(":/res/kick.png"));
     connect(acKick, SIGNAL(triggered(bool)), this, SLOT(onKick()));
     acBan = new QAction(QAction::tr("Ban"), chatNicks);
+    acBan->setIcon(QIcon(":/res/ban.png"));
     connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onBan()));
     acFollow = new QAction(QAction::tr("Follow"), chatNicks);
+    acFollow->setIcon(QIcon(":/res/follow.png"));
     connect(acFollow, SIGNAL(triggered(bool)), this, SLOT(onFollow()));
     acIgnore = new QAction(QAction::tr("Ignore"), chatNicks);
+    acIgnore->setIcon(QIcon(":/res/ignore.png"));
     connect(acIgnore, SIGNAL(triggered(bool)), this, SLOT(onIgnore()));
     acFriend = new QAction(QAction::tr("Add friend"), chatNicks);
+    acFriend->setIcon(QIcon(":/res/addfriend.png"));
     connect(acFriend, SIGNAL(triggered(bool)), this, SLOT(onFriend()));
 
     chatNicks->insertAction(0, acInfo);
@@ -341,14 +347,26 @@ void HWChatWidget::chatNickSelected(int index)
 
     // update context menu labels according to possible action
     if(ignoreList.contains(item->text(), Qt::CaseInsensitive))
+    {
         acIgnore->setText(QAction::tr("Unignore"));
+        acIgnore->setIcon(QIcon(":/res/unignore.png"));
+    }
     else
+    {
         acIgnore->setText(QAction::tr("Ignore"));
+        acIgnore->setIcon(QIcon(":/res/ignore.png"));
+    }
 
     if(friendsList.contains(item->text(), Qt::CaseInsensitive))
+    {
         acFriend->setText(QAction::tr("Remove friend"));
+        acFriend->setIcon(QIcon(":/res/remfriend.png"));
+    }
     else
+    {
         acFriend->setText(QAction::tr("Add friend"));
+        acFriend->setIcon(QIcon(":/res/addfriend.png"));
+    }
 }
 
 void HWChatWidget::setShowReady(bool s)

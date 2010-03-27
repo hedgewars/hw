@@ -2808,6 +2808,7 @@ if (HHGear^.Message and gm_Attack <> 0) then begin
         HHGear^.Message := HHGear^.Message and not gm_Attack;
         if Gear^.FlightTime > 0 then begin
             AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + 32, gtEgg, 0, Gear^.dX * _0_5, Gear^.dY, 0);
+            PlaySound(sndBirdyLay);
             dec(Gear^.FlightTime)
         end;
 end;
