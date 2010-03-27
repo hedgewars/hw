@@ -11,12 +11,14 @@
 
 @interface overlayViewController : UIViewController <UIActionSheetDelegate> {
     NSTimer *dimTimer;
+    UIPopoverController* menuPopover;
     
     CGFloat initialDistanceForPinching;
     CGPoint gestureStartPoint;
 }
 
 @property (nonatomic,retain) NSTimer *dimTimer;
+@property (nonatomic,retain) UIPopoverController* menuPopover;
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;

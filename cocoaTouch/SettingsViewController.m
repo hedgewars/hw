@@ -88,7 +88,7 @@
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 // makes the keyboard go away when background is tapped
@@ -138,6 +138,7 @@
 
 -(void) returnMainView {
 	[self flushData];
+    //[self dismissModalViewControllerAnimated:YES]
 
 	[UIView beginAnimations:@"Get Back" context:NULL];
 	[UIView setAnimationDuration:1];

@@ -439,6 +439,7 @@ var i, t: LongInt;
     highlight: Boolean;
     offset, offsetX, offsetY, screenBottom: LongInt;
     scale: GLfloat;
+    VertexBuffer: array [0..3] of TVertex2f;
 begin
 if ZoomValue < zoom then
     begin
@@ -841,12 +842,22 @@ if ScreenFade <> sfNone then
             sfToBlack, sfFromBlack: glColor4f(0, 0, 0, ScreenFadeValue / 1000);
             sfToWhite, sfFromWhite: glColor4f(1, 1, 1, ScreenFadeValue / 1000);
             end;
-        glBegin(GL_TRIANGLE_FAN);
-        glVertex3f(-cScreenWidth, cScreenHeight, 0);
-        glVertex3f(-cScreenWidth, 0, 0);
-        glVertex3f(cScreenWidth, 0, 0);
-        glVertex3f(cScreenWidth, cScreenHeight, 0);
-        glEnd;
+        
+        glDisable(GL_TEXTURE_2D);
+        VertexBuffer[0].X:= -cScreenWidth;
+        VertexBuffer[0].Y:= cScreenHeight;
+        VertexBuffer[1].X:= -cScreenWidth;
+        VertexBuffer[1].Y:= 0;
+        VertexBuffer[2].X:= cScreenWidth;
+        VertexBuffer[2].Y:= 0;
+        VertexBuffer[3].X:= cScreenWidth;
+        VertexBuffer[3].Y:= cScreenHeight;
+         
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+        glDisableClientState(GL_VERTEX_ARRAY);
+         
         glColor4f(1, 1, 1, 1)
         end
     end;

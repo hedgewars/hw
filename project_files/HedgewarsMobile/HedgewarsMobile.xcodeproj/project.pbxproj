@@ -84,7 +84,6 @@
 		6100DAB2115446B000F455E0 /* IMG.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798859114AA48A00BA94A9 /* IMG.c */; };
 		6100DAB3115446B000F455E0 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798864114AA4AA00BA94A9 /* SDL_uikitappdelegate.m */; };
 		6100DAB5115446B000F455E0 /* SDL_uikitwindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798868114AA4AA00BA94A9 /* SDL_uikitwindow.m */; };
-		6100DAB6115446B000F455E0 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179886F114AA4D000BA94A9 /* MainMenuViewController.m */; };
 		6100DAB7115446B000F455E0 /* SchemeEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798872114AA4D000BA94A9 /* SchemeEditViewController.m */; };
 		6100DAB8115446B000F455E0 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798875114AA4D000BA94A9 /* SettingsViewController.m */; };
 		6100DAB9115446B000F455E0 /* TeamEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798878114AA4D000BA94A9 /* TeamEditViewController.m */; };
@@ -201,6 +200,11 @@
 		618AFBF1115BE8B6003D411B /* popupMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 618AFBF0115BE8B6003D411B /* popupMenuViewController.xib */; };
 		61C0838A11567C83005D474F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C0838911567C83005D474F /* CoreGraphics.framework */; };
 		61E2F06911567CC7002D33C1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61E2F06811567CC7002D33C1 /* CoreGraphics.framework */; };
+		61FA761F115DA0DB00DA6ED0 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */; };
+		61FA7647115DA6A300DA6ED0 /* SplitViewRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7645115DA6A300DA6ED0 /* SplitViewRootController.m */; };
+		61FA765D115DAACC00DA6ED0 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */; };
+		61FA7668115DAB1B00DA6ED0 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */; };
+		61FA7669115DAB1B00DA6ED0 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61FA7667115DAB1B00DA6ED0 /* DetailViewController.xib */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
 
@@ -394,6 +398,15 @@
 		618AFBF0115BE8B6003D411B /* popupMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = popupMenuViewController.xib; path = ../../cocoaTouch/iPad/popupMenuViewController.xib; sourceTree = SOURCE_ROOT; };
 		61C0838911567C83005D474F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61E2F06811567CC7002D33C1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		61FA761D115DA0DB00DA6ED0 /* MainMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainMenuViewController.h; path = ../../cocoaTouch/iPad/MainMenuViewController.h; sourceTree = SOURCE_ROOT; };
+		61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainMenuViewController.m; path = ../../cocoaTouch/iPad/MainMenuViewController.m; sourceTree = SOURCE_ROOT; };
+		61FA7644115DA6A300DA6ED0 /* SplitViewRootController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SplitViewRootController.h; path = ../../cocoaTouch/iPad/SplitViewRootController.h; sourceTree = SOURCE_ROOT; };
+		61FA7645115DA6A300DA6ED0 /* SplitViewRootController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SplitViewRootController.m; path = ../../cocoaTouch/iPad/SplitViewRootController.m; sourceTree = SOURCE_ROOT; };
+		61FA765A115DAACC00DA6ED0 /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MasterViewController.h; path = ../../cocoaTouch/iPad/MasterViewController.h; sourceTree = SOURCE_ROOT; };
+		61FA765B115DAACC00DA6ED0 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MasterViewController.m; path = ../../cocoaTouch/iPad/MasterViewController.m; sourceTree = SOURCE_ROOT; };
+		61FA7665115DAB1B00DA6ED0 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DetailViewController.h; path = ../../cocoaTouch/iPad/DetailViewController.h; sourceTree = SOURCE_ROOT; };
+		61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DetailViewController.m; path = ../../cocoaTouch/iPad/DetailViewController.m; sourceTree = SOURCE_ROOT; };
+		61FA7667115DAB1B00DA6ED0 /* DetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = DetailViewController.xib; path = ../../cocoaTouch/iPad/DetailViewController.xib; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -453,12 +466,9 @@
 			children = (
 				61798887114AA4E600BA94A9 /* GameSetup.h */,
 				61798888114AA4E600BA94A9 /* GameSetup.m */,
-				6179886C114AA4B900BA94A9 /* Frontend */,
+				61FA7620115DA0EA00DA6ED0 /* iPad Frontend */,
+				6179886C114AA4B900BA94A9 /* iPhone Frontend */,
 				61798860114AA49D00BA94A9 /* SDLOverrides */,
-				6179939D1150226700BA94A9 /* overlayViewController.h */,
-				6179939E1150226700BA94A9 /* overlayViewController.m */,
-				618AFBED115BE8AE003D411B /* popupMenuViewController.h */,
-				618AFBEE115BE8AE003D411B /* popupMenuViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -549,6 +559,7 @@
 				611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */,
 				611FD9D11155A41000C2203D /* Multiplayer.png */,
 				611FD9CF1155A40700C2203D /* NetworkPlay.png */,
+				61FA7667115DAB1B00DA6ED0 /* DetailViewController.xib */,
 				611FD990115590E700C2203D /* MainMenuViewController.xib */,
 				611FD992115590E700C2203D /* SettingsViewController.xib */,
 				611FDB3B1155BB9E00C2203D /* overlayViewController.xib */,
@@ -582,7 +593,7 @@
 			name = SDLOverrides;
 			sourceTree = "<group>";
 		};
-		6179886C114AA4B900BA94A9 /* Frontend */ = {
+		6179886C114AA4B900BA94A9 /* iPhone Frontend */ = {
 			isa = PBXGroup;
 			children = (
 				6179886E114AA4D000BA94A9 /* MainMenuViewController.h */,
@@ -596,7 +607,7 @@
 				6179887A114AA4D000BA94A9 /* TeamMenuViewController.h */,
 				6179887B114AA4D000BA94A9 /* TeamMenuViewController.m */,
 			);
-			name = Frontend;
+			name = "iPhone Frontend";
 			sourceTree = "<group>";
 		};
 		61798892114AA56300BA94A9 /* inc */ = {
@@ -679,6 +690,33 @@
 				61798A2A114ADD2600BA94A9 /* storeButton.png */,
 			);
 			name = buttons;
+			sourceTree = "<group>";
+		};
+		61FA7620115DA0EA00DA6ED0 /* iPad Frontend */ = {
+			isa = PBXGroup;
+			children = (
+				61FA766A115DAB2A00DA6ED0 /* Overlay */,
+				61FA761D115DA0DB00DA6ED0 /* MainMenuViewController.h */,
+				61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */,
+				61FA7644115DA6A300DA6ED0 /* SplitViewRootController.h */,
+				61FA7645115DA6A300DA6ED0 /* SplitViewRootController.m */,
+				61FA765A115DAACC00DA6ED0 /* MasterViewController.h */,
+				61FA765B115DAACC00DA6ED0 /* MasterViewController.m */,
+				61FA7665115DAB1B00DA6ED0 /* DetailViewController.h */,
+				61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */,
+			);
+			name = "iPad Frontend";
+			sourceTree = "<group>";
+		};
+		61FA766A115DAB2A00DA6ED0 /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				618AFBED115BE8AE003D411B /* popupMenuViewController.h */,
+				618AFBEE115BE8AE003D411B /* popupMenuViewController.m */,
+				6179939D1150226700BA94A9 /* overlayViewController.h */,
+				6179939E1150226700BA94A9 /* overlayViewController.m */,
+			);
+			name = Overlay;
 			sourceTree = "<group>";
 		};
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
@@ -919,6 +957,7 @@
 				611FDB3C1155BB9E00C2203D /* overlayViewController.xib in Resources */,
 				611FDB641155BFFF00C2203D /* Default.png in Resources */,
 				618AFBF1115BE8B6003D411B /* popupMenuViewController.xib in Resources */,
+				61FA7669115DAB1B00DA6ED0 /* DetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1094,7 +1133,6 @@
 				6100DAB2115446B000F455E0 /* IMG.c in Sources */,
 				6100DAB3115446B000F455E0 /* SDL_uikitappdelegate.m in Sources */,
 				6100DAB5115446B000F455E0 /* SDL_uikitwindow.m in Sources */,
-				6100DAB6115446B000F455E0 /* MainMenuViewController.m in Sources */,
 				6100DAB7115446B000F455E0 /* SchemeEditViewController.m in Sources */,
 				6100DAB8115446B000F455E0 /* SettingsViewController.m in Sources */,
 				6100DAB9115446B000F455E0 /* TeamEditViewController.m in Sources */,
@@ -1102,6 +1140,10 @@
 				6100DABB115446B000F455E0 /* GameSetup.m in Sources */,
 				6100DABC115446B000F455E0 /* overlayViewController.m in Sources */,
 				618AFBEF115BE8AE003D411B /* popupMenuViewController.m in Sources */,
+				61FA761F115DA0DB00DA6ED0 /* MainMenuViewController.m in Sources */,
+				61FA7647115DA6A300DA6ED0 /* SplitViewRootController.m in Sources */,
+				61FA765D115DAACC00DA6ED0 /* MasterViewController.m in Sources */,
+				61FA7668115DAB1B00DA6ED0 /* DetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

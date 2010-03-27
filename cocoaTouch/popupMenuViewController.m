@@ -115,8 +115,10 @@
 }
 
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
-	if ([actionSheet cancelButtonIndex] != buttonIndex)
-	    HW_terminate(NO);
+	if ([actionSheet cancelButtonIndex] != buttonIndex) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissPopover"  object:nil];
+        HW_terminate(NO);
+    }
 	else
         if (!isPaused) 
             HW_pause();		

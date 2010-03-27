@@ -10,7 +10,7 @@
 
 
 @interface popupMenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate> {
-	UITableView *menuTable;
+    UITableView *menuTable;
     NSArray *menuList;
     BOOL isPaused;
 }

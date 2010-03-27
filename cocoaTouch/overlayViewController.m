@@ -11,11 +11,10 @@
 #import "PascalImports.h"
 #import "CGPointUtils.h"
 #import "SDL_mouse.h"
-#import "SettingsViewController.h"
 #import "popupMenuViewController.h"
 
 @implementation overlayViewController
-@synthesize dimTimer;
+@synthesize dimTimer, menuPopover;
 
 
 -(void) didReceiveMemoryWarning {
@@ -39,8 +38,11 @@
                                         userInfo:nil
                                          repeats:YES];
     
+    // add timer too runloop, otherwise it doesn't work
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
-    
+    // listen for dismissal of the popover (see below)x
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissPopover) name:@"dismissPopover" object:nil];
+    // present the overlay after 2 seconds
     [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(showMenuAfterwards) userInfo:nil repeats:NO];
 }
 
@@ -53,6 +55,7 @@
 }
 
 -(void) dealloc {
+    [menuPopover release];
     // dimTimer is autoreleased
     [super dealloc];
 }
@@ -141,6 +144,7 @@
     }
 }
 
+// present a further check before closing game
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
 	if ([actionSheet cancelButtonIndex] != buttonIndex)
 	    HW_terminate(NO);
@@ -148,29 +152,34 @@
             HW_pause();		
 }
 
+// show up a popover containing a popupMenuViewController; we hook it with setPopoverContentSize
 -(IBAction) showPopover{
     popupMenuViewController *popupMenu = [[popupMenuViewController alloc] initWithNibName:@"popupMenuViewController" bundle:nil];
-    UIPopoverController* aPopover = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
-    [aPopover setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
+    
+    menuPopover = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
+    [menuPopover setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
 
     /*UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     button.frame= CGRectMake(960, 0, 64, 64);
     button.titleLabel.text=@"UUUUUUUF";
     [self.view addSubview:button];*/
     
-    [aPopover presentPopoverFromRect:CGRectMake(960, 0, 220, 32) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+    [menuPopover presentPopoverFromRect:CGRectMake(960, 0, 220, 32) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
     //UIBarButtonItem *sender = [[useless items] objectAtIndex:1];
     //[self.popoverController presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
 }
 
+// because of the actionSheet, the popOver might not get dismissed, so we do it manually (through a NSNotification system, see above)
+-(void) dismissPopover {
+    if (menuPopover.popoverVisible) 
+        [menuPopover dismissPopoverAnimated:YES];
+}
 
 #pragma mark -
-#pragma mark Custom SDL_UIView input handling
 #define kMinimumPinchDelta      50
 #define kMinimumGestureLength	10
 #define kMaximumVariance        3
 
-// we override default touch input to implement our own gestures
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	NSArray *twoTouches;
 	UITouch *touch = [touches anyObject];
@@ -271,7 +280,6 @@
 			break;
 	}
 }
-
 
 
 @end
