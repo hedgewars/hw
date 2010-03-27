@@ -949,7 +949,7 @@ if (Gear^.State and gstLoser) <> 0 then
 if (Gear^.State and gstHHDriven) <> 0 then
     begin
     if ((Gear^.State and gstHHThinking) = 0) and
-       ShowCrosshair and
+       (ShowCrosshair or ((CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtRope))) and
        ((Gear^.State and (gstAttacked or gstAnimation)) = 0) then
         begin
 (* These calculations are a little complex for a few reasons:
