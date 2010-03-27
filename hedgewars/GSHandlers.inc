@@ -236,10 +236,9 @@ if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_02.QWordValue) and
 else
     Gear^.State:= Gear^.State or      gstMoving;
 
-if ((Gear^.Damage <> 0) or ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving))) then
-    if ((Gear^.dX.QWordValue > _0_1.QWordValue)
-    or  (Gear^.dY.QWordValue > _0_1.QWordValue)) then
-        PlaySound(Gear^.ImpactSound);
+if ((Gear^.Damage <> 0) or ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving))) and
+   ((Gear^.dX.QWordValue > _0_1.QWordValue) or (Gear^.dY.QWordValue > _0_1.QWordValue)) then
+   PlaySound(Gear^.ImpactSound);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -319,7 +318,20 @@ CalcRotationDirAngle(Gear);
 
 if Gear^.Kind = gtHellishBomb then
     begin
-    if Gear^.Timer = 3000 then PlaySound(sndHellish);
+    if (Gear^.Timer > 3000) and ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving)) and
+       ((Gear^.dX.QWordValue > _0_1.QWordValue) or (Gear^.dY.QWordValue > _0_1.QWordValue)) then
+        case random(4) of
+            0: Gear^.ImpactSound:= sndHellishImpact1;
+            1: Gear^.ImpactSound:= sndHellishImpact2;
+            2: Gear^.ImpactSound:= sndHellishImpact3;
+            3: Gear^.ImpactSound:= sndHellishImpact4
+        end;
+
+    if Gear^.Timer = 3000 then
+        begin
+        PlaySound(sndHellish);
+        Gear^.ImpactSound:= sndNone
+        end;
 
     if (GameTicks and $3F) = 0 then
         if (Gear^.State and gstCollision) = 0 then

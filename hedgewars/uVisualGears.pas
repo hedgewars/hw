@@ -691,7 +691,7 @@ procedure KickFlakes(Radius, X, Y: LongInt);
 var Gear, t: PVisualGear;
     dmg: LongInt;
 begin
-if (vobCount = 0) or (vobCount > 200) then exit;
+if (vobCount = 0) or (vobCount > 200) or cReducedQuality then exit;
 t:= VisualGearsList;
 while t <> nil do
       begin

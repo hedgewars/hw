@@ -411,7 +411,12 @@ gtAmmo_Grenade: begin // bazooka
                 if not dX.isNegative then gear^.Angle:= 1 else gear^.Angle:= 3
                 end;
  gtHellishBomb: begin
-                gear^.ImpactSound:= sndHellishImpact;
+                case random(4) of
+                    0: gear^.ImpactSound:= sndHellishImpact1;
+                    1: gear^.ImpactSound:= sndHellishImpact2;
+                    2: gear^.ImpactSound:= sndHellishImpact3;
+                    3: gear^.ImpactSound:= sndHellishImpact4
+                end;
                 gear^.AdvBounce:= 1;
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_5;

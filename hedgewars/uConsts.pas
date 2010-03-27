@@ -93,8 +93,7 @@ type
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
-            vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace,
-            vgtEgg);
+            vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg);
 
     TGearsType = set of TGearType;
 
@@ -114,8 +113,8 @@ type
             sndHomerun, sndMolotov, sndCover, sndUhOh, sndOops,
             sndNooo, sndHello, sndRopeShot, sndRopeAttach, sndRopeRelease,
             sndSwitchHog, sndVictory, sndSniperReload, sndSteps, sndLowGravity,
-            sndHellishImpact, sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3,
-            sndEggBreak);
+            sndHellishImpact1, sndHellishImpact2, sndHellishImpact3, sndHellishImpact4,
+            sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak);
 
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -830,7 +829,10 @@ const
             (FileName:         'sniperreload.ogg'; Path: ptSounds),// sndSniperReload
             (FileName:                'steps.ogg'; Path: ptSounds),// sndSteps
             (FileName:           'lowgravity.ogg'; Path: ptSounds),// sndLowGravity
-            (FileName:        'hellishimpact.ogg'; Path: ptSounds),// sndHellishImpact
+            (FileName:           'hell_growl.ogg'; Path: ptSounds),// sndHellishImpact1
+            (FileName:            'hell_ooff.ogg'; Path: ptSounds),// sndHellishImpact2
+            (FileName:              'hell_ow.ogg'; Path: ptSounds),// sndHellishImpact3
+            (FileName:             'hell_ugh.ogg'; Path: ptSounds),// sndHellishImpact4
             (FileName:          'melonimpact.ogg'; Path: ptSounds),// sndMelonImpact
             (FileName:             'Droplet1.ogg'; Path: ptSounds),// sndDroplet1
             (FileName:             'Droplet2.ogg'; Path: ptSounds),// sndDroplet2
