@@ -89,7 +89,9 @@ end;
 
 // ==================================================================
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
+var sign: hwFloat;
 begin
+sign:= _1;
 with Gear^ do
     begin
     inc(FrameTicks, Steps);
@@ -108,10 +110,12 @@ with Gear^ do
        (hwRound(Y) <= (LAND_HEIGHT + 75)) and 
        (Timer > 0) and (Timer-Steps > 0) then
         begin
-        tdX:= tdX - _0_005*Steps;
-        tdY:= tdY - _0_005*Steps;
-        if tdX < _0 then tdX:= _0;
-        if tdY < _0 then tdY:= _0;
+        sign.isNegative:=tdX.isNegative;
+        tdX:= tdX - _0_005*Steps*sign;
+        if (sign.isNegative and (tdX > _0)) or (not sign.isNegative and (tdX < _0)) then tdX:= _0;
+        sign.isNegative:=tdY.isNegative;
+        tdY:= tdY - _0_005*Steps*sign;
+        if (sign.isNegative and (tdY > _0)) or (not sign.isNegative and (tdY < _0)) then tdY:= _0;
         dec(Timer, Steps)
         end
     else
@@ -669,11 +673,11 @@ while t <> nil do
       if Gear^.Kind = vgtFlake then
           begin
           // Damage calc from doMakeExplosion
-          dmg:= min(100,Radius*2  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y))));
+          dmg:= min(100,Radius  + cHHRadius div 2 - (hwRound(hwAbs(Gear^.X - int2hwFloat(X))+hwAbs(Gear^.Y - int2hwFloat(Y))) div 5));
           if dmg > 1 then
               begin
-              Gear^.tdX:= Gear^.dX + SignAs(_0_01 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
-              Gear^.tdY:= Gear^.dY + SignAs(_0_01 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
+              Gear^.tdX:= SignAs(_0_02 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
+              Gear^.tdY:= SignAs(_0_02 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
               Gear^.Timer:= 200
               end
           end;

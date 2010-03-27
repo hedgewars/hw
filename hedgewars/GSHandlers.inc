@@ -1612,8 +1612,8 @@ if not TestCollisionYwithGear(Gear, 1) then
                 AmmoShove(Gear, 4, 100);
                 Gear^.Radius:= 1;
                 doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4, EXPLNoDamage);
-                if Random(100) > 90 then
-                  for i:= 0 to Random(3) do
+                if ((GameTicks and $7) = 0) and (Random(2) = 0) then
+                  for i:= 1 to Random(2)+1 do
                     AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 2, vgtSmoke);
                 if Gear^.Health > 0 then dec(Gear^.Health);
                 Gear^.Timer:= 450 - Gear^.Tag * 8
@@ -1634,8 +1634,8 @@ if not TestCollisionYwithGear(Gear, 1) then
         end;
 if Gear^.Health = 0 then begin
   if (Gear^.State and gsttmpFlag) = 0 then begin
-    if Random(100) > 80 then begin
-      for i:= 0 to Random(3) do begin
+    if ((GameTicks and $3) = 0) and (Random(1) = 0) then begin
+      for i:= 1 to Random(2)+1 do begin
         AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 2, vgtSmoke);
       end;
     end;
