@@ -2905,7 +2905,7 @@ end;
 procedure doStepEggWork(Gear: PGear);
 begin
 	AllInactive:= false;
-	Gear^.dX:= Gear^.dX + cWindSpeed;
+	Gear^.dX:= Gear^.dX;
 	doStepFallingGear(Gear);
 	if (Gear^.State and gstCollision) <> 0 then
 	begin
