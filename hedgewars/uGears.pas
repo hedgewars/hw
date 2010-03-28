@@ -560,6 +560,7 @@ while Gear <> nil do
             if (PHedgehog(Gear^.Hedgehog)^.Team = CurrentTeam) and
                (Gear^.Damage <> Gear^.Karma) and
                 not PHedgehog(Gear^.Hedgehog)^.King and
+                not PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] and
                 not SuddenDeathDmg then
                 Gear^.State:= Gear^.State or gstLoser;
 
