@@ -115,7 +115,7 @@ type
             sndSwitchHog, sndVictory, sndSniperReload, sndSteps, sndLowGravity,
             sndHellishImpact1, sndHellishImpact2, sndHellishImpact3, sndHellishImpact4,
             sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket,
-            sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle);
+            sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle, sndBeeWater);
 
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -843,7 +843,8 @@ const
             (FileName:          'PoisonCough.ogg'; Path: ptVoices),// sndPoisonCough
             (FileName:           'PoisonMoan.ogg'; Path: ptVoices),// sndPoisonMoan
             (FileName:             'BirdyLay.ogg'; Path: ptSounds),// sndBirdyLay
-            (FileName:              'Whistle.ogg'; Path: ptSounds) // sndWhistle
+            (FileName:              'Whistle.ogg'; Path: ptSounds),// sndWhistle
+            (FileName:             'beewater.ogg'; Path: ptSounds) // sndBeeWater
             );
 
     Ammoz: array [TAmmoType] of record

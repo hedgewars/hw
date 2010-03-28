@@ -472,8 +472,31 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBeeWork(Gear: PGear);
 var t: hwFloat;
+    nuw: boolean;
+const uw: boolean = false;
 begin
 AllInactive:= false;
+nuw:= (cWaterLine < hwRound(Gear^.Y) + Gear^.Radius);
+if nuw and not uw then
+    begin
+    AddVisualGear(hwRound(Gear^.X), cWaterLine, vgtSplash);
+    AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
+    AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
+    AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
+    AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
+    StopSound(Gear^.SoundChannel);
+    Gear^.SoundChannel:= LoopSound(sndBeeWater);
+    uw:= nuw
+    end
+else if not nuw and uw then
+    begin
+    AddVisualGear(hwRound(Gear^.X), cWaterLine, vgtSplash);
+    StopSound(Gear^.SoundChannel);
+    Gear^.SoundChannel:= LoopSound(sndBee);
+    uw:= nuw
+    end;
+
+
 t:= Distance(Gear^.dX, Gear^.dY);
 Gear^.dX:= Gear^.Elasticity * (Gear^.dX + _0_000004 * (TargetPoint.X - hwRound(Gear^.X)));
 Gear^.dY:= Gear^.Elasticity * (Gear^.dY + _0_000004 * (TargetPoint.Y - hwRound(Gear^.Y)));
