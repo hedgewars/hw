@@ -1,10 +1,10 @@
 ; Spanish locale
-; Revision 3059
+; Revision 3174
 
 00:00=Granada
 00:01=Granada de frag.
 00:02=Bazuca
-00:03=OVNI
+00:03=Abejorro
 00:04=Escopeta
 00:05=Taladro
 00:06=Pasar
@@ -42,6 +42,7 @@
 00:38=Rifle francotirador
 00:39=Platillo volante
 00:40=Cóctel molotov
+00:41=Pajarraco
 
 01:00=¡Luchad!
 01:01=Empate
@@ -53,8 +54,8 @@
 01:07=%1 restante
 01:08=Combustible
 01:09=Sincronizando...
-01:10=Activar esta herramienta no hará que acabe tu turno.
-01:11=Este arma o herramienta todavía no está disponible.
+01:10=Activar esta herramienta no hará que tu turno acabe.
+01:11=Esta herramienta o arma todavía no está disponible.
 
 ; Eventos
 ; El erizo (%1) ha muerto
@@ -407,7 +408,7 @@
 04:00=Ataca a tus enemigos usando una sencilla granada.|Explotará una vez el temporizador llegue a cero.|1-5: ajustar temporizador.|Atacar: mantener presionado para lanzar más lejos.
 04:01=Ataca a tus enemigos usando una granada de fragmentación.|Se fragmentará en metralla explosiva|una vez el temporizador llegue a cero.|1-5: ajustar temporizador.|Atacar: mantener presionado para lanzar más lejos.
 04:02=Ataca a tus enemigos usando un proyectil balístico.|¡Atención al viento, modificará su trayectoria!|Atacar: mantener presionado para lanzar más lejos.
-04:03=Lanza un misil guiado que buscará el objetivo marcado.|No dispares a máxima potencia para mejorar su precisión.|Ratón: seleccionar objetivo.|Atacar: mantener presionado para lanzar más lejos.
+04:03=Lanza un abejorro explosivo que buscará el objetivo marcado.|No dispares a máxima potencia para mejorar su precisión.|Ratón: seleccionar objetivo.|Atacar: mantener presionado para lanzar más lejos.
 04:04=Ataca a tus enemigos usando una escopeta de dos cañones.|Las balas se dispersan, así que no necesitarás|un tiro directo para herir a tus oponentes.|Atacar: abrir fuego (dos tiros).
 04:05=¡Ve bajo tierra! Usa el martillo neumático para excavar|un pozo en el suelo y alcanzar otras áreas.|Atacar: empezar o terminar de cavar.
 04:06=¿Aburrido? ¿Sin posibilidad de atacar? ¿Racionas tu munición?|¡No hay problema! ¡Adelante, pasa esta turno, gallina!|Atacar: pasa este turno sin hacer nada.
@@ -444,7 +445,8 @@
 04:37=No le temas a la luz del día. Sólo durará un turno, pero|te permitirá absorber la fuerza vital de tus enemigos|cuando les ataques.|Atacar: activar.
 04:38=El rifle de francotirador puede ser el arma más destructiva|de todo tu arsenal, pero es muy inefectiva en distancias cortas.|El daño infligido es proporcional a la distancia respecto del objetivo.|Atacar: abrir fuego (un disparo).
 04:39=Vuela hasta otras partes del mapa usando un platillo volante.|Puede ser complicado de controlar, pero conseguirás llegar|a sitios que nunca hubieras imaginado accesibles.|Atacar: activar.|Cursores: acelerar en esa dirección (un golpe cada vez).
-04:40=Levanta un muro de fuego usando esta botella|llena de (en breve, ardiendo) líquido inflamable.|Atacar: mantener presionado para lanzar más lejos.
+04:40=Alza un muro de fuego usando esta botella|llena de (en breve, ardiendo) líquido inflamable.|Atacar: mantener presionado para lanzar más lejos.
+04:41=¡Demostrando que lo natural puede ser mejor|que lo artificial, Golondrino puede no sólo|transportar tu erizo como el platillo volante,|sino también lanzar huevos envenenados a tus enemigos!|Atacar: activar y lanzar huevos.|Cursores: aletear en esa dirección.
 
 ; Game goal strings
 05:00=Modos de juego
