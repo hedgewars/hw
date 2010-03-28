@@ -194,7 +194,16 @@ with Gear^,
                     amJetpack: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtJetpack, 0, _0, _0, 0);
                     amBirdy: begin
                              PlaySound(sndWhistle);
-                             CurAmmoGear:= AddGear(hwRound(X), hwRound(Y) - 120, gtBirdy, 0, _0, _0, 0)
+                             if Gear^.dX.isNegative then
+                                begin
+                                CurAmmoGear:= AddGear(hwRound(X), hwRound(Y) - 32, gtBirdy, 0,  int2hwFloat(LAND_WIDTH + 1024 - hwRound(X)), int2hwFloat(-256), 0);
+                                CurAmmoGear^.Tag:= -1;
+                                end
+                             else
+                                begin
+                                CurAmmoGear:= AddGear(hwRound(X), hwRound(Y) - 32, gtBirdy, 0, int2hwFloat(-LAND_WIDTH - 1024 + hwRound(X)), int2hwFloat(-256), 0);
+                                CurAmmoGear^.Tag:= 1;
+                                end;
                              end;
                       amLowGravity: begin
                                     PlaySound(sndLowGravity);

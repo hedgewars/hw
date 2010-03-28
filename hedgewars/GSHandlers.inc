@@ -2781,16 +2781,17 @@ with HHGear^ do
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepBirdyVanish(Gear: PGear);
+procedure doStepBirdyDisappear(Gear: PGear);
 begin
+AllInactive:= false;
 Gear^.Pos:= 0;
-if Gear^.Timer < 500 then
+if Gear^.Timer < 2000 then
     inc(Gear^.Timer, 1)
 else
     begin
     DeleteGear(Gear);
-    AfterAttack
-    end
+    AfterAttack;
+    end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2873,7 +2874,23 @@ if  (Gear^.Health = 0)
         Active:= true;
         State:= State or gstMoving
         end;
-    Gear^.doStep:= @doStepBirdyVanish;
+    if Gear^.Tag = -1 then
+        begin
+        Gear^.dX:= Gear^.X + int2hwFloat(LAND_WIDTH + 1024);
+        Gear^.dY:= int2hwFloat(256);
+        Gear^.X:= int2hwFloat(-LAND_WIDTH -1024);
+        Gear^.Y:= Gear^.Y + int2hwFloat(-256);
+        end
+    else
+        begin
+        Gear^.dX:= Gear^.X - int2hwFloat(LAND_WIDTH + 1024);
+        Gear^.dY:= int2hwFloat(256);
+        Gear^.X:= int2hwFloat(+LAND_WIDTH +1024);
+        Gear^.Y:= Gear^.Y + int2hwFloat(-256);
+        end;
+    Gear^.State:= Gear^.State or gstAnimation or gstTmpFlag;
+    Gear^.Timer:= 0;
+    Gear^.doStep:= @doStepBirdyDisappear;
     isCursorVisible:= false;
     end
 end;
@@ -2887,7 +2904,7 @@ if Gear^.Timer > 0 then
     dec(Gear^.Timer, 1)
 else if CurrentHedgehog = nil then
     begin
-    Gear^.doStep:= @doStepBirdyVanish;
+    DeleteGear(Gear);
     exit
     end;
 HHGear:= CurrentHedgehog^.Gear;
@@ -2904,11 +2921,27 @@ else if Gear^.Timer = 0 then
     end
 end;
 
+procedure doStepBirdyAppear(Gear: PGear);
+begin
+Gear^.Pos:= 0;
+if Gear^.Timer < 2000 then
+    inc(Gear^.Timer, 1)
+else
+    begin
+    Gear^.Timer:= 500;
+    Gear^.dX:= _0;
+    Gear^.dY:= _0;
+    Gear^.State:=  Gear^.State and not gstAnimation;
+    Gear^.doStep:= @doStepBirdyDescend;
+    end
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBirdy(Gear: PGear);
 var HHGear: PGear;
 begin
-Gear^.doStep:= @doStepBirdyDescend;
+gear^.State:=  gear^.State or gstAnimation and not gstTmpFlag;
+Gear^.doStep:= @doStepBirdyAppear;
 if CurrentHedgehog = nil then
     begin
     DeleteGear(Gear);

@@ -457,7 +457,7 @@ gtAmmo_Grenade: begin // bazooka
                 end;
        gtBirdy: begin
                 gear^.Radius:= 16; // todo: check
-                gear^.Timer:= 500;
+                gear^.Timer:= 0;
                 gear^.Health := 2000;
                 gear^.FlightTime := 2;
                 end;
@@ -1713,7 +1713,17 @@ while Gear<>nil do
       gtMelonPiece: DrawRotatedf(sprWatermelon, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 1, 0, Gear^.DirAngle);
      gtHellishBomb: DrawRotated(sprHellishBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
       gtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
-           gtBirdy: DrawTextureF(SpritesData[sprBirdy].Texture, 1 - Gear^.Timer / 500, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+           gtBirdy: begin
+                    if Gear^.State and gstAnimation = gstAnimation then
+                        begin
+                        if Gear^.State and gstTmpFlag = 0 then // Appearing
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, hwRound(Gear^.X) + WorldDx + hwRound(Gear^.dX) - trunc(hwRound(Gear^.dX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1)), hwRound(Gear^.Y) + WorldDy + hwRound(Gear^.dY) - trunc(hwRound(Gear^.dY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75)
+                        else // Disappearing
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, hwRound(Gear^.X) + WorldDx + hwRound(Gear^.dX) - trunc(hwRound(Gear^.dX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1))), hwRound(Gear^.Y) + WorldDy + hwRound(Gear^.dY) - trunc(-hwRound(Gear^.dY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) + hwRound(Gear^.dY)), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                        end
+                    else
+                        DrawTextureF(SpritesData[sprBirdy].Texture, 1, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                    end;
     gtBigExplosion: begin
                     glColor4f(1, 1, 1, 1.0 * (power(2, -5 * (Gear^.Timer-200)/200)));
                     DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -4 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
