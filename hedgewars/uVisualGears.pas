@@ -759,6 +759,13 @@ case Layer of
                     vgtSmoke: DrawSprite(sprSmoke, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                     vgtSmokeWhite: DrawSprite(sprSmokeWhite, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                     vgtDust: DrawSprite(sprDust, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+                    vgtFeather: begin
+                            if Gear^.FrameTicks < 250 then
+                                glColor4f(1, 1, 1, Gear^.FrameTicks / 250);
+                            DrawRotatedF(sprFeather, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                            if Gear^.FrameTicks < 250 then
+                                glColor4f(1, 1, 1, 1);
+                            end;
                 end;
         Gear:= Gear^.NextGear
         end;
@@ -813,13 +820,6 @@ case Layer of
                             glColor4f(1, 1, 1, Gear^.alpha);
                             DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);
                             glColor4f(1, 1, 1, 1);
-                            end;
-                 vgtFeather: begin
-                            if Gear^.FrameTicks < 250 then
-                                glColor4f(1, 1, 1, Gear^.FrameTicks / 250);
-                            DrawRotatedF(sprFeather, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                            if Gear^.FrameTicks < 250 then
-                                glColor4f(1, 1, 1, 1);
                             end;
             end;
         case Gear^.Kind of
