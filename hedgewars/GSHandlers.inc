@@ -2833,6 +2833,8 @@ if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
 if Gear^.Health < 0 then Gear^.Health:= 0;
 if (GameTicks and $3F) = 0 then
        begin
+       if Gear^.Timer < 500 then
+         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFeather);
        if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
        Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
        end;

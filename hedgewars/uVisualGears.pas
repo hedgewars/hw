@@ -344,6 +344,20 @@ else
     end;
 end;
 
+procedure doStepFeather(Gear: PVisualGear; Steps: Longword);
+begin
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
+
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+Gear^.dY:= Gear^.dY + cGravity * Steps;
+
+Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
+
+if Gear^.FrameTicks <= Steps then
+    DeleteVisualGear(Gear)
+else
+    dec(Gear^.FrameTicks, Steps)
+end;
 ////////////////////////////////////////////////////////////////////////////////
 const cSorterWorkTime = 640;
 var thexchar: array[0..cMaxTeams] of
@@ -486,7 +500,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepDroplet,
             @doStepSmokeRing,
             @doStepBeeTrace,
-            @doStepEgg
+            @doStepEgg,
+            @doStepFeather
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -649,6 +664,16 @@ with gear^ do
                 alpha:= 1;
                 angle:= random(360);
                 end;
+     vgtFeather: begin
+                t:= random(1024);
+                sp:= _0_001 * (random(85) + 95);
+                dx:= AngleSin(t) * sp;
+                dx.isNegative:= random(2) = 0;
+                dy:= AngleCos(t) * sp;
+                dy.isNegative:= random(2) = 0;
+                FrameTicks:= 650 + random(250);
+                Frame:= 1
+                end;
         end;
 
 if VisualGearsList <> nil then
@@ -788,6 +813,13 @@ case Layer of
                             glColor4f(1, 1, 1, Gear^.alpha);
                             DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);
                             glColor4f(1, 1, 1, 1);
+                            end;
+                 vgtFeather: begin
+                            if Gear^.FrameTicks < 250 then
+                                glColor4f(1, 1, 1, Gear^.FrameTicks / 250);
+                            DrawRotatedF(sprFeather, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                            if Gear^.FrameTicks < 250 then
+                                glColor4f(1, 1, 1, 1);
                             end;
             end;
         case Gear^.Kind of
