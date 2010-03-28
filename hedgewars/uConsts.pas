@@ -1507,7 +1507,7 @@ const
                 Pos: 0;
                 AmmoType: amBallgun;
                 AttackVoice: sndNone);
-            Slot: 2;
+            Slot: 4;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1579,7 +1579,7 @@ const
                     Pos: 0;
                     AmmoType: amExtraDamage;
                     AttackVoice: sndNone);
-            Slot: 0;
+            Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1679,7 +1679,7 @@ const
                     Pos: 0;
                     AmmoType: amVampiric;
                     AttackVoice: sndNone);
-            Slot: 8;
+            Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
