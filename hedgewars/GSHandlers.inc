@@ -23,19 +23,22 @@ begin
     gi:= GearsList;
     while gi <> nil do
         begin
-        d:= r - hwRound(Distance(gi^.X - x, gi^.Y - y));
-        if (d > 1) and (gi^.Kind = gtHedgehog) and not gi^.Invulnerable and (GetRandom(2) = 0) then
+        if (gi^.Kind = gtHedgehog) then
             begin
-            if (CurrentHedgehog^.Gear = gi) then
-                PlaySound(sndOops, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
-            else
+            d:= r - hwRound(Distance(gi^.X - x, gi^.Y - y));
+            if (d > 1) and not gi^.Invulnerable and (GetRandom(2) = 0) then
                 begin
-                if (gi^.State and gstMoving) = 0 then
-                    gi^.State:= gi^.State or gstLoser;
-                if d > r div 2 then
-                    PlaySound(sndNooo, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
+                if (CurrentHedgehog^.Gear = gi) then
+                    PlaySound(sndOops, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
                 else
-                    PlaySound(sndUhOh, PHedgehog(gi^.Hedgehog)^.Team^.voicepack);
+                    begin
+                    if (gi^.State and gstMoving) = 0 then
+                        gi^.State:= gi^.State or gstLoser;
+                    if d > r div 2 then
+                        PlaySound(sndNooo, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
+                    else
+                        PlaySound(sndUhOh, PHedgehog(gi^.Hedgehog)^.Team^.voicepack);
+                    end;
                 end;
             end;
         gi:= gi^.NextGear
@@ -138,7 +141,7 @@ end;
 procedure CalcRotationDirAngle(Gear: PGear);
 var dAngle: real;
 begin
-dAngle:= (hwAbs(Gear^.dX) + hwAbs(Gear^.dY)).QWordValue / $80000000;
+dAngle:= (Gear^.dX.QWordValue + Gear^.dY.QWordValue) / $80000000;
 if not Gear^.dX.isNegative then
     Gear^.DirAngle:= Gear^.DirAngle + dAngle
 else
@@ -333,7 +336,7 @@ if Gear^.Kind = gtHellishBomb then
 end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMolotov(Gear: PGear);
-var i: LongInt;
+var i, gX, gY: LongInt;
     dX, dY: hwFloat;
     Fire: PGear;
 begin
@@ -344,17 +347,19 @@ begin
 
     if (Gear^.State and gstCollision) <> 0 then begin
         PlaySound(sndMolotov);
+        gX:= hwRound(Gear^.X);
+        gY:= hwRound(Gear^.Y);
         //doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5, EXPLAutoSound);
         for i:= 0 to 20 do begin
                 dX:= AngleCos(i * 2) * ((_0_1*(i div 5))) * (GetRandom + _1);
                 dY:= AngleSin(i * 8) * _0_5 * (GetRandom + _1);
-                Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
+                Fire:= AddGear(gX, gY, gtFlame, 0, dX, dY, 0);
                 Fire^.State:= Fire^.State or gsttmpFlag;
-                Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
+                Fire:= AddGear(gX, gY, gtFlame, 0, dX, -dY, 0);
                 Fire^.State:= Fire^.State or gsttmpFlag;
-                Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, -dX, dY, 0);
+                Fire:= AddGear(gX, gY, gtFlame, 0, -dX, dY, 0);
                 Fire^.State:= Fire^.State or gsttmpFlag;
-                Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, -dX, -dY, 0);
+                Fire:= AddGear(gX, gY, gtFlame, 0, -dX, -dY, 0);
                 Fire^.State:= Fire^.State or gsttmpFlag;
         end;
         DeleteGear(Gear);
@@ -472,25 +477,28 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBeeWork(Gear: PGear);
 var t: hwFloat;
+    gX,gY: LongInt;
     nuw: boolean;
 const uw: boolean = false;
 begin
 AllInactive:= false;
+gX:= hwRound(Gear^.X);
+gY:= hwRound(Gear^.Y);
 nuw:= (cWaterLine < hwRound(Gear^.Y) + Gear^.Radius);
 if nuw and not uw then
     begin
-    AddVisualGear(hwRound(Gear^.X), cWaterLine, vgtSplash);
-    AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
-    AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
-    AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
-    AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
+    AddVisualGear(gX, cWaterLine, vgtSplash);
+    AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
+    AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
+    AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
+    AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
     StopSound(Gear^.SoundChannel);
     Gear^.SoundChannel:= LoopSound(sndBeeWater);
     uw:= nuw
     end
 else if not nuw and uw then
     begin
-    AddVisualGear(hwRound(Gear^.X), cWaterLine, vgtSplash);
+    AddVisualGear(gX, cWaterLine, vgtSplash);
     StopSound(Gear^.SoundChannel);
     Gear^.SoundChannel:= LoopSound(sndBee);
     uw:= nuw
@@ -498,8 +506,8 @@ else if not nuw and uw then
 
 
 t:= Distance(Gear^.dX, Gear^.dY);
-Gear^.dX:= Gear^.Elasticity * (Gear^.dX + _0_000004 * (TargetPoint.X - hwRound(Gear^.X)));
-Gear^.dY:= Gear^.Elasticity * (Gear^.dY + _0_000004 * (TargetPoint.Y - hwRound(Gear^.Y)));
+Gear^.dX:= Gear^.Elasticity * (Gear^.dX + _0_000004 * (TargetPoint.X - gX));
+Gear^.dY:= Gear^.Elasticity * (Gear^.dY + _0_000004 * (TargetPoint.Y - gY));
 
 t:= t / Distance(Gear^.dX, Gear^.dY);
 Gear^.dX:= Gear^.dX * t;
@@ -1390,7 +1398,7 @@ if ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
     
     doStepFallingGear(Gear);
     CalcRotationDirAngle(Gear);
-    CheckGearDrowning(Gear)
+    //CheckGearDrowning(Gear)
     end
 else 
     begin
@@ -1604,17 +1612,18 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFlame(Gear: PGear);
 var i: Integer;
+gX,gY: LongInt;
 begin
     if (Gear^.State and gsttmpFlag) = 0 then AllInactive:= false;
 
 if not TestCollisionYwithGear(Gear, 1) then
     begin
     AllInactive:= false;
-    if hwAbs(Gear^.dX) > _0_01 then
+    if Gear^.dX.QWordValue > _0_01.QWordValue then
         Gear^.dX:= Gear^.dX * _0_995;
-     if (Gear^.State and gsttmpFlag) <> 0 then Gear^.dY:= Gear^.dY + _2*cGravity else
     Gear^.dY:= Gear^.dY + cGravity;
-    if hwAbs(Gear^.dY) > _0_2 then Gear^.dY:= Gear^.dY * _0_995;
+    if (Gear^.State and gsttmpFlag) <> 0 then Gear^.dY:= Gear^.dY + cGravity;
+    if Gear^.dY.QWordValue > _0_2.QWordValue then Gear^.dY:= Gear^.dY * _0_995;
 
     if (Gear^.State and gsttmpFlag) <> 0 then Gear^.X:= Gear^.X + Gear^.dX else
     Gear^.X:= Gear^.X + Gear^.dX + cWindSpeed * 640;
@@ -1622,8 +1631,9 @@ if not TestCollisionYwithGear(Gear, 1) then
 
     if (hwRound(Gear^.Y) > cWaterLine) then
         begin
+        gX:= hwRound(Gear^.X);
         for i:= 0 to 3 do
-            AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), cWaterLine - 16 + Random(16), vgtSteam);
+            AddVisualGear(gX - 16 + Random(32), cWaterLine - 16 + Random(16), vgtSteam);
         PlaySound(sndVaporize);
         DeleteGear(Gear);
         exit
@@ -1646,21 +1656,23 @@ if not TestCollisionYwithGear(Gear, 1) then
                 begin
                 Gear^.Radius:= 9;
                 AmmoShove(Gear, 4, 100);
+                gX:= hwRound(Gear^.X);
+                gY:= hwRound(Gear^.Y);
                 Gear^.Radius:= 1;
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4, EXPLNoDamage);
+                doMakeExplosion(gX, gY, 4, EXPLNoDamage);
                 if ((GameTicks and $7) = 0) and (Random(2) = 0) then
                   for i:= 1 to Random(2)+1 do
-                    AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 2, vgtSmoke);
+                    AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
                 if Gear^.Health > 0 then dec(Gear^.Health);
                 Gear^.Timer:= 450 - Gear^.Tag * 8
                 end
                 else begin
 // Modified fire
                 if ((GameTicks and $7FF) = 0) and ((GameFlags and gfSolidLand) = 0) then begin
-                    DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4);
+                    DrawExplosion(gX, gY, 4);
                     
                     for i:= 0 to Random(3) do
-                      AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 2, vgtSmoke);
+                      AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
                 end;
                 // This one is interesting.  I think I understand the purpose, but I wonder if a bit more fuzzy of kicking could be done with getrandom.
                 Gear^.Timer:= 100 - Gear^.Tag * 3;
@@ -1669,15 +1681,17 @@ if not TestCollisionYwithGear(Gear, 1) then
             end
         end;
 if Gear^.Health = 0 then begin
+  gX:= hwRound(Gear^.X);
+  gY:= hwRound(Gear^.Y);
   if (Gear^.State and gsttmpFlag) = 0 then begin
     if ((GameTicks and $3) = 0) and (Random(1) = 0) then begin
       for i:= 1 to Random(2)+1 do begin
-        AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 2, vgtSmoke);
+        AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
       end;
     end;
   end else begin
     for i:= 0 to Random(3) do begin
-      AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 2, vgtSmoke);
+      AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
     end;
   end;
   
@@ -2473,17 +2487,20 @@ end;
 procedure doStepBallgunWork(Gear: PGear);
 var HHGear: PGear;
     rx, ry: hwFloat;
+    gX, gY: LongInt;
 begin
     AllInactive:= false;
     dec(Gear^.Timer);
     HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
     HedgehogChAngle(HHGear);
+    gX:= hwRound(Gear^.X);
+    gY:= hwRound(Gear^.Y);
     if (Gear^.Timer mod 100) = 0 then
         begin
         rx:= rndSign(getRandom * _0_1);
         ry:= rndSign(getRandom * _0_1);
 
-        AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtBall, 0,
+        AddGear(gx, gy, gtBall, 0,
                 SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx,
                 AngleCos(HHGear^.Angle) * ( - _0_8) + ry,
                 0);
@@ -2929,11 +2946,14 @@ end;
 
 procedure doStepBigExplosion(Gear: PGear);
 var i: LongWord;
+gX,gY: LongInt;
 begin
-AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeRing);
-for i:= 0 to 46 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFire);
-for i:= 0 to 15 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart);
-for i:= 0 to 15 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart2);
+gX:= hwRound(Gear^.X);
+gY:= hwRound(Gear^.Y);
+AddVisualGear(gX, gY, vgtSmokeRing);
+for i:= 0 to 46 do AddVisualGear(gX, gY, vgtFire);
+for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart);
+for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart2);
 Gear^.doStep:= @doStepBigExplosionWork
 end;
 
@@ -2945,7 +2965,7 @@ begin
     AllInactive:= false;
     Gear^.dX:= Gear^.dX;
     doStepFallingGear(Gear);
-    CheckGearDrowning(Gear);
+//    CheckGearDrowning(Gear); // already checked for in doStepFallingGear
     CalcRotationDirAngle(Gear);
 
     if (Gear^.State and gstCollision) <> 0 then
