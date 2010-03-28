@@ -2025,7 +2025,8 @@ const LargeTemplates: array[0..19] of Longword =
         28, 29, 30, 31, 32, 33, 34, 35, 37, 38
       );
 const CavernTemplates: array[0..4] of Longword = (36, 2, 3, 21, 29);
-const WackyTemplates: array[0..4] of Longword = (37, 38, 39, 40, 41);
+//const WackyTemplates: array[0..4] of Longword = (37, 38, 39, 40, 41);
+const WackyTemplates: array[0..2] of Longword = (37, 38, 41);
 
 implementation
 
