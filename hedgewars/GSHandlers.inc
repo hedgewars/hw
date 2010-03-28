@@ -2790,7 +2790,6 @@ if Gear^.Timer < 2000 then
 else
     begin
     DeleteGear(Gear);
-    AfterAttack;
     end;
 end;
 
