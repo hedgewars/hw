@@ -984,7 +984,8 @@ while Land[cellsize div 2 + cellsize + off_y, x] = fg_color do
 FillLand(x+1, cellsize div 2 + cellsize + off_y);
 
 MaxHedgehogs:= 32;
-hasGirders:= false;
+if (GameFlags and gfDisableGirders) <> 0 then hasGirders:= false
+else hasGirders := true;
 leftX:= 0;
 rightX:= playWidth;
 topY:= off_y;

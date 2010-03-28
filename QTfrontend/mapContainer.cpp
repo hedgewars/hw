@@ -113,13 +113,15 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     connect(CB_TemplateFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(templateFilterChanged(int)));
 
-    maze_size_label = new QLabel("Size", this);
+    maze_size_label = new QLabel("Tunnel size", this);
     mainLayout.addWidget(maze_size_label, 2, 0);
     maze_size_label->hide();
     maze_size_selection = new QComboBox(this);
     maze_size_selection->addItem(tr("Small"), 0);
     maze_size_selection->addItem(tr("Medium"), 1);
     maze_size_selection->addItem(tr("Large"), 2);
+    maze_size_selection->setCurrentIndex(1);
+    maze_size = 1;
     mainLayout.addWidget(maze_size_selection, 2, 1);
     maze_size_selection->hide();
     connect(maze_size_selection, SIGNAL(currentIndexChanged(int)), this, SLOT(setMaze_size(int)));
@@ -218,7 +220,7 @@ void HWMapContainer::mapChanged(int index)
         CB_TemplateFilter->hide();
         maze_size_label->show();
         maze_size_selection->show();
-        emit mapChanged("+rnd+");
+        emit mapChanged("+maze+");
         emit mapgenChanged(mapgen);
         emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
         break;
@@ -284,13 +286,18 @@ void HWMapContainer::changeImage()
 void HWMapContainer::themeSelected(int currentRow)
 {
     QString theme = Themes->at(currentRow);
-    QList<QVariant> mapInfo;
-    mapInfo.push_back(QString("+rnd+"));
-    mapInfo.push_back(theme);
-    mapInfo.push_back(18);
-    mapInfo.push_back(false);
-    chooseMap->setItemData(0, mapInfo);
-    chooseMap->setItemData(1, mapInfo);
+    QList<QVariant> mapInfoRegular;
+    mapInfoRegular.push_back(QString("+rnd+"));
+    mapInfoRegular.push_back(theme);
+    mapInfoRegular.push_back(18);
+    mapInfoRegular.push_back(false);
+    chooseMap->setItemData(0, mapInfoRegular);
+    QList<QVariant> mapInfoMaze;
+    mapInfoMaze.push_back(QString("+maze+"));
+    mapInfoMaze.push_back(theme);
+    mapInfoMaze.push_back(18);
+    mapInfoMaze.push_back(false);
+    chooseMap->setItemData(1, mapInfoMaze);
     gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(theme)));
     emit themeChanged(theme);
 }
@@ -340,7 +347,7 @@ void HWMapContainer::setSeed(const QString & seed)
 
 void HWMapContainer::setMap(const QString & map)
 {
-    if(map == "+rnd+")
+    if(map == "+rnd+" || map == "+maze+")
     {
         changeImage();
         return;
@@ -411,8 +418,8 @@ int HWMapContainer::get_maze_size(void) const
 void HWMapContainer::setMaze_size(int size)
 {
     maze_size = size;
+    maze_size_selection->setCurrentIndex(size);
     emit maze_sizeChanged(size);
-//    emit mapChanged("+rnd+");
     changeImage();
 }
 
@@ -420,6 +427,5 @@ void HWMapContainer::setMapgen(MapGenerator m)
 {
     mapgen = m;
     emit mapgenChanged(m);
-//    emit mapChanged("+rnd+");
     changeImage();
 }

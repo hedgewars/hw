@@ -1044,7 +1044,11 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         item->setToolTip(tr("%1 is the host. He may adjust settings and start the game.").arg(list[i + 4]));
         roomsList->setItem(r, 3, item);
 
-        if(list[i + 5].compare("+rnd+"))
+        if(list[i + 5] == "+rnd+")
+            item = new QTableWidgetItem(tr("Random Map")); // selected map (is randomized)
+        else if (list[i+5] == "+maze+")
+            item = new QTableWidgetItem(tr("Random Maze"));
+        else
         {
             item = new QTableWidgetItem(list[i + 5]); // selected map
             
@@ -1053,8 +1057,6 @@ void PageRoomsList::setRoomsList(const QStringList & list)
             if(!mapList->contains(list[i + 5]))
                 item->setForeground(QBrush(QColor(255, 0, 0)));
         }
-        else
-            item = new QTableWidgetItem(tr("Random Map")); // selected map (is randomized)
         
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setToolTip(tr("Games may be played on precreated or randomized maps."));
