@@ -653,7 +653,7 @@ procedure GenMaze;
 const small_cell_size = 128;
     medium_cell_size = 192;
     large_cell_size = 256;
-    braidness = 25;
+    braidness = 10;
     maze_inverted = false; //false makes more sense for now
 
 var x, y: Longint;
@@ -754,17 +754,29 @@ end;
 
 end;
 procedure add_vertex(x, y: Longint);
+var tmp_x, tmp_y: Longint;
 begin
-writelntoconsole('add_vertex('+inttostr(x)+', '+inttostr(y)+')');
 if x = NTPX then
 begin
-    pa.ar[num_vertices].x := NTPX;
-    pa.ar[num_vertices].y := 0;
+    if pa.ar[num_vertices - 6].x = NTPX then
+    begin
+        num_vertices := num_vertices - 6;
+    end
+    else
+    begin
+        pa.ar[num_vertices].x := NTPX;
+        pa.ar[num_vertices].y := 0;
+    end
 end
 else
 begin
-    pa.ar[num_vertices].x := x*cellsize;
-    pa.ar[num_vertices].y := y*cellsize + off_y;
+    if x mod 2 = 0 then tmp_x := cellsize
+    else tmp_x := cellsize * 2 div 3;
+    if y mod 2 = 0 then tmp_y := cellsize
+    else tmp_y := cellsize * 2 div 3;
+
+    pa.ar[num_vertices].x := (x-1)*cellsize + tmp_x;
+    pa.ar[num_vertices].y := (y-1)*cellsize + tmp_y + off_y;
 end;
 num_vertices := num_vertices + 1;
 end;
@@ -960,16 +972,16 @@ pa.count := num_vertices;
 RandomizePoints(pa);
 BezierizeEdge(pa, _0_25);
 RandomizePoints(pa);
-BezierizeEdge(pa, _0_5);
+BezierizeEdge(pa, _0_25);
 
 DrawEdge(pa, 0);
 
-for x := 0 to num_cells_x - 1 do
-    for y := 0 to num_cells_y - 1 do
-        if maze[x, y] then begin
-            FillLand(cellsize div 2 + cellsize * x, cellsize div 2 + cellsize * y + off_y);
-            break;
-        end;
+x := 0;
+while Land[cellsize div 2 + cellsize + off_y, x] = bg_color do
+    x := x + 1;
+while Land[cellsize div 2 + cellsize + off_y, x] = fg_color do
+    x := x + 1;
+FillLand(x+1, cellsize div 2 + cellsize + off_y);
 
 MaxHedgehogs:= 32;
 hasGirders:= false;

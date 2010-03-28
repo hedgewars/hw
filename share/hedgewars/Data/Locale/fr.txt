@@ -3,7 +3,7 @@
 00:00=Grenade
 00:01=Grenade à fragments
 00:02=Bazooka
-00:03=Abeille Autoguidé
+00:03=Abeille Missile
 00:04=Fusil
 00:05=Marteau-piqueur
 00:06=Passer
