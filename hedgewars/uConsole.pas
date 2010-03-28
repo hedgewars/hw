@@ -235,6 +235,8 @@ begin
     RegisterVariable('theme'   , vtCommand, @chSetTheme     , false);
     RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
     RegisterVariable('template_filter', vtLongInt, @cTemplateFilter, false);
+    RegisterVariable('mapgen'  , vtLongInt, @cMapGen        , false);
+    RegisterVariable('maze_size',vtLongInt, @cMazeSize      , false);
     RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
     RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
     RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);

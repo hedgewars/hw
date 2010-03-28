@@ -27,10 +27,12 @@ HWMap::~HWMap()
 {
 }
 
-void HWMap::getImage(std::string seed, int filter)
+void HWMap::getImage(std::string seed, int filter, MapGenerator mapgen, int maze_size)
 {
     m_seed = seed;
     templateFilter = filter;
+    m_mapgen = mapgen;
+    m_maze_size = maze_size;
     Start();
 }
 
@@ -59,5 +61,7 @@ void HWMap::SendToClientFirst()
 {
     SendIPC(QString("eseed %1").arg(m_seed.c_str()).toLatin1());
     SendIPC(QString("e$template_filter %1").arg(templateFilter).toLatin1());
+    SendIPC(QString("e$mapgen %1").arg(m_mapgen).toLatin1());
+    SendIPC(QString("e$maze_size %1").arg(m_maze_size).toLatin1());
     SendIPC("!");
 }

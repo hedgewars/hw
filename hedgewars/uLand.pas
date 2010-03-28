@@ -41,6 +41,13 @@ var Land: TCollisionArray;
     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
     LandBackSurface: PSDL_Surface;
 
+type direction = record x, y: integer; end;
+var DIR_N: direction = (x: 0; y: -1);
+var DIR_E: direction = (x: 1; y: 0);
+var DIR_S: direction = (x: 0; y: 1);
+var DIR_W: direction = (x: -1; y: 0);
+var DIR_NONE: direction = (x: 0; y: 0);
+
 procedure initModule;
 procedure freeModule;
 procedure GenMap;
@@ -50,6 +57,11 @@ function  LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
 uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uAmmos, uLandTexture;
+
+operator=(const a, b: direction) c: Boolean;
+begin
+    c := (a.x = b.x) and (a.y = b.y);
+end;
 
 type TPixAr = record
               Count: Longword;
@@ -637,11 +649,344 @@ if SDL_MustLock(Surface) then
     SDL_UnlockSurface(Surface);
 end;
 
+procedure GenMaze;
+const small_cell_size = 128;
+    medium_cell_size = 192;
+    large_cell_size = 256;
+    braidness = 25;
+    maze_inverted = false; //false makes more sense for now
+
+var x, y: Longint;
+    bg_color, fg_color: Longint;
+    cellsize: LongInt; //selected by the user in the gui
+    seen_cells_x, seen_cells_y: Longint; //number of cells that can be visited by the generator, that is every second cell in x and y direction. the cells between there are walls that will be removed when we move from one cell to another
+    start_x, start_y: Longint; //first visited cell, must be between 0 and seen_cells_x/y - 1 inclusive
+    num_edges_x, num_edges_y: Longint; //number of resulting edges that need to be vertexificated
+    num_cells_x, num_cells_y: Longint; //actual number of cells, depending on cell size
+    seen_list: array of array of Boolean;
+    xwalls: array of array of Boolean;
+    ywalls: array of array of Boolean;
+    x_edge_list: array of array of Boolean;
+    y_edge_list: array of array of Boolean;
+    maze: array of array of Boolean;
+    pa: TPixAr;
+    num_vertices: Longint;
+    off_y: LongInt;
+
+function is_cell_seen(x: Longint; y: Longint): Boolean;
+begin
+if (x < 0) or (x >= seen_cells_x) or (y < 0) or (y >= seen_cells_y) then
+    is_cell_seen := true
+else
+    is_cell_seen := seen_list[x, y];
+end;
+
+function is_x_edge(x, y: Longint): Boolean;
+begin
+if (x < 0) or (x > num_edges_x) or (y < 0) or (y > num_cells_y) then
+    is_x_edge := false
+else
+    is_x_edge := x_edge_list[x, y];
+end;
+
+function is_y_edge(x, y: Longint): Boolean;
+begin
+if (x < 0) or (x > num_cells_x) or (y < 0) or (y > num_edges_y) then
+    is_y_edge := false
+else
+    is_y_edge := y_edge_list[x, y];
+end;
+
+procedure see_cell(x: Longint; y: Longint);
+var dir: direction;
+    tries: Longint;
+begin
+seen_list[x, y] := true;
+case GetRandom(4) of
+    0: dir := DIR_N;
+    1: dir := DIR_E;
+    2: dir := DIR_S;
+    3: dir := DIR_W;
+end;
+tries := 0;
+while (tries < 5) do
+begin
+    if is_cell_seen(x + dir.x, y + dir.y) then
+    begin
+        //we have already seen the target cell, decide if we should remove the wall anyway
+        //(or put a wall there if maze_inverted, but we're not doing that right now)
+        if not maze_inverted and (GetRandom(braidness) = 0) then
+        //or just warn that inverted+braid+indestructable terrain != good idea
+        begin
+            case dir.x of
+                -1: if x > 0 then ywalls[x-1, y] := false;
+                1: if x < seen_cells_x - 1 then ywalls[x, y] := false;
+            end;
+            case dir.y of
+                -1: if y > 0 then xwalls[x, y-1] := false;
+                1: if y < seen_cells_y - 1 then xwalls[x, y] := false;
+            end;
+        end;
+        if dir = DIR_N then //TODO might want to randomize that
+            dir := DIR_E
+        else if dir = DIR_E then
+            dir := DIR_S
+        else if dir = DIR_S then
+            dir := DIR_W
+        else
+            dir := DIR_N;
+    end
+    else //cell wasn't seen yet, go there
+    begin
+        case dir.y of
+            -1: xwalls[x, y-1] := false;
+            1: xwalls[x, y] := false;
+        end;
+        case dir.x of
+            -1: ywalls[x-1, y] := false;
+            1: ywalls[x, y] := false;
+        end;
+        see_cell(x + dir.x, y + dir.y);
+    end;
+
+    tries := tries + 1;
+end;
+
+end;
+procedure add_vertex(x, y: Longint);
+begin
+writelntoconsole('add_vertex('+inttostr(x)+', '+inttostr(y)+')');
+if x = NTPX then
+begin
+    pa.ar[num_vertices].x := NTPX;
+    pa.ar[num_vertices].y := 0;
+end
+else
+begin
+    pa.ar[num_vertices].x := x*cellsize;
+    pa.ar[num_vertices].y := y*cellsize + off_y;
+end;
+num_vertices := num_vertices + 1;
+end;
+
+procedure add_edge(x, y: Longint; dir: direction);
+var i: integer;
+begin
+if dir = DIR_N then
+begin
+    dir := DIR_W
+end
+else if dir = DIR_E then
+begin
+    dir := DIR_N
+end
+else if dir = DIR_S then
+begin
+    dir := DIR_E
+end
+else
+begin
+    dir := DIR_S;
+end;
+
+for i := 0 to 3 do
+begin
+        if dir = DIR_N then
+            dir := DIR_E
+        else if dir = DIR_E then
+            dir := DIR_S
+        else if dir = DIR_S then
+            dir := DIR_W
+        else
+            dir := DIR_N;
+
+    if (dir = DIR_N) and is_x_edge(x, y) then
+        begin
+            x_edge_list[x, y] := false;
+            add_vertex(x+1, y);
+            add_edge(x, y-1, DIR_N);
+            break;
+        end;
+
+    if (dir = DIR_E) and is_y_edge(x+1, y) then
+        begin
+            y_edge_list[x+1, y] := false;
+            add_vertex(x+2, y+1);
+            add_edge(x+1, y, DIR_E);
+            break;
+        end;
+
+    if (dir = DIR_S) and is_x_edge(x, y+1) then
+        begin
+            x_edge_list[x, y+1] := false;
+            add_vertex(x+1, y+2);
+            add_edge(x, y+1, DIR_S);
+            break;
+        end;
+
+    if (dir = DIR_W) and is_y_edge(x, y) then
+        begin
+            y_edge_list[x, y] := false;
+            add_vertex(x, y+1);
+            add_edge(x-1, y, DIR_W);
+            break;
+        end;
+end;
+
+end;
+
+begin
+case cMazeSize of
+    0: cellsize := small_cell_size;
+    1: cellsize := medium_cell_size;
+    2: cellsize := large_cell_size;
+end;
+
+num_cells_x := LAND_WIDTH div cellsize;
+if num_cells_x mod 2 = 0 then num_cells_x := num_cells_x - 1; //needs to be odd
+num_cells_y := LAND_HEIGHT div cellsize;
+if num_cells_y mod 2 = 0 then num_cells_y := num_cells_y - 1;
+num_edges_x := num_cells_x - 1;
+num_edges_y := num_cells_y - 1;
+seen_cells_x := num_cells_x div 2;
+seen_cells_y := num_cells_y div 2;
+
+SetLength(seen_list, seen_cells_x, seen_cells_y);
+SetLength(xwalls, seen_cells_x, seen_cells_y - 1);
+SetLength(ywalls, seen_cells_x - 1, seen_cells_y);
+SetLength(x_edge_list, num_edges_x, num_cells_y);
+SetLength(y_edge_list, num_cells_x, num_edges_y);
+SetLength(maze, num_cells_x, num_cells_y);
+
+num_vertices := 0;
+
+(*
+TODO - Inverted maze
+if maze_inverted then
+begin
+    bg_color := 0;
+    fg_color := COLOR_LAND;
+end
+else
+begin*)
+    bg_color := COLOR_LAND;
+    fg_color := 0;
+//end;
+
+playHeight := num_cells_y * cellsize;
+playWidth := num_cells_x * cellsize;
+off_y := LAND_HEIGHT - playHeight;
+
+for x := 0 to playWidth do
+    for y := 0 to off_y - 1 do
+        Land[y, x] := fg_color;
+
+for x := 0 to playWidth do
+    for y := off_y to LAND_HEIGHT - 1 do
+        Land[y, x] := bg_color;
+
+for y := 0 to num_cells_y - 1 do
+    for x := 0 to num_cells_x - 1 do
+        maze[x, y] := false;
+
+start_x := GetRandom(seen_cells_x);
+start_y := GetRandom(seen_cells_y);
+
+for x := 0 to seen_cells_x - 1 do
+    for y := 0 to seen_cells_y - 2 do
+        xwalls[x, y] := true;
+
+for x := 0 to seen_cells_x - 2 do
+    for y := 0 to seen_cells_y - 1 do
+        ywalls[x, y] := true;
+
+for x := 0 to seen_cells_x - 1 do
+    for y := 0 to seen_cells_y - 1 do
+        seen_list[x, y] := false;
+
+for x := 0 to num_edges_x - 1 do
+    for y := 0 to num_cells_y - 1 do
+        x_edge_list[x, y] := false;
+
+for x := 0 to num_cells_x - 1 do
+    for y := 0 to num_edges_y - 1 do
+        y_edge_list[x, y] := false;
+
+see_cell(start_x, start_y);
+
+for x := 0 to seen_cells_x - 1 do
+    for y := 0 to seen_cells_y - 1 do
+        if seen_list[x, y] then
+            maze[(x+1)*2-1, (y+1)*2-1] := true;
+
+for x := 0 to seen_cells_x - 1 do
+    for y := 0 to seen_cells_y - 2 do
+        if not xwalls[x, y] then
+            maze[x*2 + 1, y*2 + 2] := true;
+
+
+for x := 0 to seen_cells_x - 2 do
+     for y := 0 to seen_cells_y - 1 do
+        if not ywalls[x, y] then
+            maze[x*2 + 2, y*2 + 1] := true;
+
+for x := 0 to num_edges_x - 1 do
+    for y := 0 to num_cells_y - 1 do
+        if maze[x, y] xor maze[x+1, y] then
+            x_edge_list[x, y] := true
+        else
+            x_edge_list[x, y] := false;
+
+for x := 0 to num_cells_x - 1 do
+    for y := 0 to num_edges_y - 1 do
+        if maze[x, y] xor maze[x, y+1] then
+            y_edge_list[x, y] := true
+        else
+            y_edge_list[x, y] := false;
+
+for x := 0 to num_edges_x - 1 do
+    for y := 0 to num_cells_y - 1 do
+        if x_edge_list[x, y] then
+        begin
+            x_edge_list[x, y] := false;
+            add_vertex(x+1, y+1);
+            add_vertex(x+1, y);
+            add_edge(x, y-1, DIR_N);
+            add_vertex(NTPX, 0);
+        end;
+
+pa.count := num_vertices;
+
+RandomizePoints(pa);
+BezierizeEdge(pa, _0_25);
+RandomizePoints(pa);
+BezierizeEdge(pa, _0_5);
+
+DrawEdge(pa, 0);
+
+for x := 0 to num_cells_x - 1 do
+    for y := 0 to num_cells_y - 1 do
+        if maze[x, y] then begin
+            FillLand(cellsize div 2 + cellsize * x, cellsize div 2 + cellsize * y + off_y);
+            break;
+        end;
+
+MaxHedgehogs:= 32;
+hasGirders:= false;
+leftX:= 0;
+rightX:= playWidth;
+topY:= off_y;
+hasBorder := true;
+end;
+
 procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
 begin
     WriteLnToConsole('Generating land...');
-    GenBlank(EdgeTemplates[SelectTemplate]);
+    case cMapGen of
+        0: GenBlank(EdgeTemplates[SelectTemplate]);
+        1: GenMaze;
+    end;
     AddProgress();
 
     tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, 0);
@@ -838,7 +1183,10 @@ var x, y, xx, yy, t, bit: LongInt;
     Preview: TPreview;
 begin
 WriteLnToConsole('Generating preview...');
-GenBlank(EdgeTemplates[SelectTemplate]);
+case cMapGen of
+    0: GenBlank(EdgeTemplates[SelectTemplate]);
+    1: GenMaze;
+end;
 
 for y:= 0 to 127 do
     for x:= 0 to 31 do

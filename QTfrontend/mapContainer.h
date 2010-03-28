@@ -45,6 +45,8 @@ class HWMapContainer : public QWidget
   QString getCurrentTheme() const;
   int     getCurrentHHLimit() const;
   quint32 getTemplateFilter() const;
+  MapGenerator get_mapgen(void) const;
+  int get_maze_size(void) const;
   bool getCurrentIsMission() const;
 
  public slots:
@@ -53,13 +55,16 @@ class HWMapContainer : public QWidget
   void setMap(const QString & map);
   void setTheme(const QString & theme);
   void setTemplateFilter(int);
+  void setMapgen(MapGenerator m);
+  void setMaze_size(int size);
 
  signals:
   void seedChanged(const QString & seed);
   void mapChanged(const QString & map);
   void themeChanged(const QString & theme);
   void newTemplateFilter(int filter);
-
+  void mapgenChanged(MapGenerator m);
+  void maze_sizeChanged(int s);
 
  private slots:
   void setImage(const QImage newImage);
@@ -87,6 +92,10 @@ class HWMapContainer : public QWidget
   QPixmap hhSmall;
   QLabel* lblFilter;
   QComboBox* CB_TemplateFilter;
+  QLabel *maze_size_label;
+  QComboBox *maze_size_selection;
+  MapGenerator mapgen;
+  int maze_size;
 
   void loadMap(int index);
 };

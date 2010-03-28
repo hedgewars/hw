@@ -63,6 +63,8 @@ private slots:
     void themeChanged(const QString &);
     void schemeChanged(int);
     void jumpToWeapons();
+    void mapgenChanged(MapGenerator m);
+    void maze_sizeChanged(int s);
 
 private:
     QGridLayout mainLayout;

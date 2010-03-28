@@ -80,6 +80,8 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 
     connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));
     connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
+    connect(pMapContainer, SIGNAL(mapgenChanged(MapGenerator)), this, SLOT(mapgenChanged(MapGenerator)));
+    connect(pMapContainer, SIGNAL(maze_sizeChanged(int)), this, SLOT(maze_sizeChanged(int)));
     connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
     connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
 }
@@ -153,6 +155,8 @@ QStringList GameCFGWidget::getFullConfig() const
     sl.append(QString("e$minedudpct %1").arg(schemeData(24).toInt()));
     sl.append(QString("e$explosives %1").arg(schemeData(25).toInt()));
     sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
+    sl.append(QString("e$mapgen %1").arg(pMapContainer->get_mapgen()));
+    sl.append(QString("e$maze_size %1").arg(pMapContainer->get_maze_size()));
 
     QString currentMap = pMapContainer->getCurrentMap();
     if (currentMap.size() > 0)
@@ -193,6 +197,9 @@ void GameCFGWidget::fullNetConfig()
 
     schemeChanged(GameSchemes->currentIndex());
 
+    mapgenChanged(pMapContainer->get_mapgen());
+    maze_sizeChanged(pMapContainer->get_maze_size());
+
     // map must be the last
     QString map = pMapContainer->getCurrentMap();
     if (map.size())
@@ -218,6 +225,14 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
         if (param == "TEMPLATE") {
             pMapContainer->setTemplateFilter(value.toUInt());
+            return;
+        }
+        if (param == "MAPGEN") {
+            pMapContainer->setMapgen((MapGenerator)value.toUInt());
+            return;
+        }
+        if (param == "MAZE_SIZE") {
+            pMapContainer->setMaze_size(value.toUInt());
             return;
         }
     }
@@ -283,6 +298,16 @@ void GameCFGWidget::schemeChanged(int value)
         sl << schemeData(i).toString();
 
     emit paramChanged("SCHEME", sl);
+}
+
+void GameCFGWidget::mapgenChanged(MapGenerator m)
+{
+    emit paramChanged("MAPGEN", QStringList(QString::number(m)));
+}
+
+void GameCFGWidget::maze_sizeChanged(int s)
+{
+    emit paramChanged("MAZE_SIZE", QStringList(QString::number(s)));
 }
 
 void GameCFGWidget::resendSchemeData()

@@ -27,6 +27,12 @@
 
 #include <string>
 
+enum MapGenerator
+{
+    MAPGEN_REGULAR,
+    MAPGEN_MAZE,
+};
+
 class HWMap : public TCPBase
 {
   Q_OBJECT
@@ -34,7 +40,7 @@ class HWMap : public TCPBase
  public:
   HWMap();
   virtual ~HWMap();
-  void getImage(std::string seed, int templateFilter);
+  void getImage(std::string seed, int templateFilter, MapGenerator mapgen, int maze_size);
 
  protected:
   virtual QStringList setArguments();
@@ -48,6 +54,8 @@ class HWMap : public TCPBase
  private:
   std::string m_seed;
   int templateFilter;
+  MapGenerator m_mapgen;
+  int m_maze_size;
 
  private slots:
 };
