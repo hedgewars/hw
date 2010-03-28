@@ -2891,7 +2891,9 @@ if  (Gear^.Health = 0)
     Gear^.State:= Gear^.State or gstAnimation or gstTmpFlag;
     Gear^.Timer:= 0;
     Gear^.doStep:= @doStepBirdyDisappear;
+    CurAmmoGear:= nil;
     isCursorVisible:= false;
+    AfterAttack;
     end
 end;
 
@@ -2899,12 +2901,12 @@ end;
 procedure doStepBirdyDescend(Gear: PGear);
 var HHGear: PGear;
 begin
-AllInactive:= false;
 if Gear^.Timer > 0 then
     dec(Gear^.Timer, 1)
 else if CurrentHedgehog = nil then
     begin
     DeleteGear(Gear);
+    AfterAttack;
     exit
     end;
 HHGear:= CurrentHedgehog^.Gear;
