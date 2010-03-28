@@ -19,16 +19,18 @@
    version="1.1"
    inkscape:version="0.47 r22583"
    sodipodi:docname="mushroom2.svg">
+  <title
+     id="title3642">Mushroom2</title>
   <sodipodi:namedview
      id="base"
-     pagecolor="#ffffff"
+     pagecolor="#000000"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="52.719821"
-     inkscape:cy="94.550865"
+     inkscape:zoom="22.627417"
+     inkscape:cx="20.486075"
+     inkscape:cy="67.807685"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -276,8 +278,28 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Mushroom2</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Carlos Vives B.</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g

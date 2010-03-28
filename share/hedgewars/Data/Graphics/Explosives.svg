@@ -19,8 +19,10 @@
    inkscape:export-filename="/mnt/y/src/hedge/trunk/share/hedgewars/Data/Graphics/Explosives.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
+  <title
+     id="title4728">Explosives</title>
   <sodipodi:namedview
-     pagecolor="#ffffff"
+     pagecolor="#2b2111"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -32,13 +34,13 @@
      inkscape:window-height="692"
      id="namedview4"
      showgrid="false"
-     inkscape:zoom="1"
-     inkscape:cx="154.333"
-     inkscape:cy="779.42841"
-     inkscape:window-x="486"
-     inkscape:window-y="47"
+     inkscape:zoom="5.6568542"
+     inkscape:cx="9.252177"
+     inkscape:cy="946.00019"
+     inkscape:window-x="160"
+     inkscape:window-y="96"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg2"
+     inkscape:current-layer="g3688"
      inkscape:object-paths="true" />
   <metadata
      id="metadata8">
@@ -48,8 +50,28 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Explosives</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Carlos Vives B.</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <defs
