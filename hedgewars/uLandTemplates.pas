@@ -1454,9 +1454,104 @@ const Template40Points: array[0..7] of TSDL_Rect =
       (
        (x: 512; y:    0)
       );
+// Many islands
+const Template41Points: array[0..86] of TSDL_Rect =
+      (
+       (x:   95; y: 500; w:   1; h:   1),
+       (x:  100; y: 275; w:  25; h: 100),
+       (x:  325; y: 275; w:  25; h: 100),
+       (x:  330; y: 500; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x:  725; y: 125; w:   1; h:   1),
+       (x:  725; y:  25; w:   5; h:  25),
+       (x:  825; y:  35; w:   5; h:  10),
+       (x:  825; y: 135; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 1150; y: 550; w:  25; h:  50),
+       (x: 1250; y: 300; w:  25; h:  50),
+       (x: 1350; y: 300; w:  25; h:  50),
+       (x: 1400; y: 575; w:  25; h:  50),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x:  525; y:1050; w:  50; h:  50),
+       (x:  700; y: 800; w: 100; h: 150),
+       (x:  950; y: 900; w: 100; h: 150),
+       (x: 1100; y:1100; w:  50; h:  50),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x:  175; y:1500; w:   1; h:   1),
+       (x:  210; y:1400; w:   5; h:  25),
+       (x:  240; y:1400; w:   5; h:  25),
+       (x:  275; y:1510; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x:  450; y:1850; w: 100; h: 100),
+       (x:  600; y:1750; w: 100; h: 100),
+       (x:  750; y:1750; w: 100; h: 100),
+       (x:  950; y:1950; w: 100; h: 100),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 1075; y:1450; w:   1; h:   1),
+       (x: 1110; y:1300; w:   5; h:  25),
+       (x: 1140; y:1300; w:   5; h:  25),
+       (x: 1175; y:1430; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 1600; y:1250; w:  25; h: 100),
+       (x: 1700; y:1150; w:  25; h: 100),
+       (x: 1850; y: 500; w:  50; h: 100),
+       (x: 1950; y: 550; w:  50; h: 150),
+       (x: 2250; y:1150; w:  25; h: 100),
+       (x: 2350; y:1250; w:  25; h: 100),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 1750; y:2047; w:   1; h:   1),
+       (x: 1900; y:1870; w:  50; h:  50),
+       (x: 2050; y:1870; w:  50; h:  50),
+       (x: 2175; y:2047; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 2500; y:1700; w:   1; h:   1),
+       (x: 2575; y:1500; w:  10; h:  50),
+       (x: 2650; y:1500; w:  10; h:  50),
+       (x: 2700; y:1690; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 2000; y: 125; w:   1; h:   1),
+       (x: 2050; y:  50; w:  25; h:  25),
+       (x: 2100; y:  50; w:  25; h:  25),
+       (x: 2150; y: 150; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 2600; y: 250; w:  25; h: 100),
+       (x: 2750; y: 400; w:  50; h:  50),
+       (x: 2900; y: 525; w:  50; h:  50),
+       (x: 3150; y: 550; w:  50; h: 100),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 2800; y:1150; w:   1; h:   1),
+       (x: 2840; y: 950; w:  25; h:  25),
+       (x: 2880; y: 950; w:  25; h:  25),
+       (x: 2900; y:1150; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 3075; y:2047; w:   1; h:   1),
+       (x: 3325; y:1700; w:  50; h: 100),
+       (x: 3475; y:1700; w:  50; h: 100),
+       (x: 3625; y:2047; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 3200; y:1450; w:   1; h:   1),
+       (x: 3240; y:1350; w:  25; h:  25),
+       (x: 3280; y:1350; w:  25; h:  25),
+       (x: 3300; y:1450; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 3500; y:1050; w:  25; h:  50),
+       (x: 3650; y: 600; w:  50; h: 100),
+       (x: 3800; y: 600; w:  50; h: 100),
+       (x: 3900; y:1000; w:  25; h:  50),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 3800; y: 200; w:  25; h:  50),
+       (x: 3875; y: 100; w:  50; h:  50),
+       (x: 3925; y:  50; w:  50; h:  25),
+       (x: 4050; y: 125; w:  25; h:  50),
+       (x: NTPX; y:   0; w:   1; h:   1)
+      );
+      Template41FPoints: array[0..0] of TPoint =
+      (
+       (x: 2047; y:    0)
+      );
 
 ////////////////////////////////////////////////////////////////////////
-const EdgeTemplates: array[0..40] of TEdgeTemplate =
+const EdgeTemplates: array[0..41] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -1908,6 +2003,17 @@ const EdgeTemplates: array[0..40] of TEdgeTemplate =
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: false;
         MaxHedgehogs: 8;
+       ),
+       (BasePoints: @Template41Points;
+        BasePointsCount: Succ(High(Template41Points));
+        FillPoints: @Template40FPoints;
+        FillPointsCount: Succ(High(Template41FPoints));
+        BezierizeCount: 3;
+        RandPassesCount: 3;
+        TemplateHeight: 2048; TemplateWidth: 4096;
+        canMirror: true; canFlip: true; isNegative: false; canInvert: false;
+        hasGirders: true;
+        MaxHedgehogs: 48;
        )
       );
 const SmallTemplates: array[0..1] of Longword = ( 39, 40 );
@@ -1919,7 +2025,7 @@ const LargeTemplates: array[0..19] of Longword =
         28, 29, 30, 31, 32, 33, 34, 35, 37, 38
       );
 const CavernTemplates: array[0..4] of Longword = (36, 2, 3, 21, 29);
-const WackyTemplates: array[0..3] of Longword = (37, 38, 39, 40);
+const WackyTemplates: array[0..4] of Longword = (37, 38, 39, 40, 41);
 
 implementation
 
