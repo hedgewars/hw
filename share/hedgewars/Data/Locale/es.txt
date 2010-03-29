@@ -1,5 +1,5 @@
 ; Spanish locale
-; Revision 3174
+; Revision 3205
 
 00:00=Granada
 00:01=Granada de frag.
@@ -42,7 +42,7 @@
 00:38=Rifle francotirador
 00:39=Platillo volante
 00:40=Cóctel molotov
-00:41=Pajarraco
+00:41=Golondrino
 
 01:00=¡Luchad!
 01:01=Empate

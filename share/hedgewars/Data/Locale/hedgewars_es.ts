@@ -142,7 +142,7 @@
     </message>
     <message>
         <source>Tunnel size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño del túnel</translation>
     </message>
 </context>
 <context>
@@ -341,19 +341,19 @@ o elige otro nick:</translation>
     </message>
     <message>
         <source>Delete team</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar equipo</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuevo set de armas</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar set de armas</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar set de armas</translation>
     </message>
 </context>
 <context>
@@ -435,7 +435,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Random Map</source>
-        <translation>Mapa aleatorio</translation>
+        <translation>Terreno aleatorio</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
@@ -473,7 +473,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished"></translation>
+        <translation>Laberinto aleatorio</translation>
     </message>
 </context>
 <context>
@@ -703,7 +703,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     <name>QComboBox</name>
     <message>
         <source>generated map...</source>
-        <translation>mapa generado...</translation>
+        <translation>Terreno aleatorio...</translation>
     </message>
     <message>
         <source>Human</source>
@@ -719,11 +719,11 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>generated maze...</source>
-        <translation type="unfinished"></translation>
+        <translation>Laberinto aleatorio...</translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation>Misión</translation>
     </message>
 </context>
 <context>
@@ -918,11 +918,13 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translation>Esta es una versión experimental del juego y puede no ser compatible con otras versiones del mismo,
+así como carecer de algunas funcionalidades o simplemente funcionar mal. 
+¡Úsalo bajo tu propia responsalibidad!</translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation type="unfinished"></translation>
+        <translation>Explosivos</translation>
     </message>
 </context>
 <context>
