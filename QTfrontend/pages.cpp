@@ -418,8 +418,6 @@ PageOptions::PageOptions(QWidget* parent) :
             BtnDeleteTeam->setIconSize(pmDelete.size());
             BtnDeleteTeam->setIcon(pmDelete);
             BtnDeleteTeam->setMaximumWidth(pmDelete.width() + 6);
-            BtnDeleteTeam->setEnabled(false);
-            BtnDeleteTeam->setVisible(false); // hide for now
             GBTlayout->addWidget(BtnDeleteTeam, 0, 3);
 
             gbTBLayout->addWidget(teamsBox, 0, 0);

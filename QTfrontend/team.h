@@ -55,6 +55,7 @@ class HWTeam
         QColor teamColor;
 
         bool LoadFromFile();
+        bool DeleteFile();
         bool SaveToFile();
         void SetToPage(HWForm * hwform);
         void GetFromPage(HWForm * hwform);

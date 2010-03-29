@@ -137,6 +137,7 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageOptions->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageOptions->BtnNewTeam, SIGNAL(clicked()), this, SLOT(NewTeam()));
     connect(ui.pageOptions->BtnEditTeam, SIGNAL(clicked()), this, SLOT(EditTeam()));
+    connect(ui.pageOptions->BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(DeleteTeam()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), config, SLOT(SaveOptions()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), this, SLOT(GoBack()));
 
@@ -415,6 +416,9 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) {
         QStringList tmNames = config->GetTeamsList();
         TeamSelWidget* curTeamSelWidget;
+        ui.pageOptions->BtnNewTeam->setEnabled(false);
+        ui.pageOptions->BtnEditTeam->setEnabled(false);
+        ui.pageOptions->BtnDeleteTeam->setEnabled(false);
 
         if(id == ID_PAGE_MULTIPLAYER) {
           curTeamSelWidget = ui.pageMultiplayer->teamsSelect;
@@ -445,12 +449,20 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         ui.pageGameStats->renderStats();
     }
 
+    if(id == ID_PAGE_MAIN)
+    {
+        ui.pageOptions->BtnNewTeam->setEnabled(true);
+        ui.pageOptions->BtnEditTeam->setEnabled(true);
+        ui.pageOptions->BtnDeleteTeam->setEnabled(true);
+    }
+
     // load and save ignore/friends lists
-    if(lastid == ID_PAGE_MULTIPLAYER || lastid == ID_PAGE_NETGAME) // leaving a room
+    if(lastid == ID_PAGE_NETGAME) // leaving a room
         ui.pageNetGame->pChatWidget->saveLists(ui.pageOptions->editNetNick->text());
     else if(lastid == ID_PAGE_ROOMSLIST) // leaving the lobby
         ui.pageRoomsList->chatWidget->saveLists(ui.pageOptions->editNetNick->text());
-    if(id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) // joining a room
+
+    if(id == ID_PAGE_NETGAME) // joining a room
         ui.pageNetGame->pChatWidget->loadLists(ui.pageOptions->editNetNick->text());
     else if(id == ID_PAGE_ROOMSLIST) // joining the lobby
         ui.pageRoomsList->chatWidget->loadLists(ui.pageOptions->editNetNick->text());
@@ -545,6 +557,15 @@ void HWForm::EditTeam()
     editedTeam->LoadFromFile();
     editedTeam->SetToPage(this);
     GoToPage(ID_PAGE_SETUP_TEAM);
+}
+
+void HWForm::DeleteTeam()
+{
+    editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
+    editedTeam->DeleteFile();
+
+    // Remove from lists
+    ui.pageOptions->CBTeamName->removeItem(ui.pageOptions->CBTeamName->currentIndex());
 }
 
 void HWForm::RandomNames()

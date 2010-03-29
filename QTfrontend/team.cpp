@@ -180,6 +180,18 @@ bool HWTeam::LoadFromFile()
     return true;
 }
 
+bool HWTeam::DeleteFile()
+{
+    if(m_isNetTeam)
+        return false;
+
+    QFile cfgfile(cfgdir->absolutePath() + "/" + TeamName + ".cfg");
+    cfgfile.remove();
+
+        
+    return true;
+}
+
 bool HWTeam::SaveToFile()
 {
     if (OldTeamName != TeamName)
