@@ -141,6 +141,10 @@
         <source>Wacky</source>
         <translation>Odjechane</translation>
     </message>
+    <message>
+        <source>Tunnel size</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -332,11 +336,27 @@ bądź wybierz inny nick:</translation>
     </message>
     <message>
         <source>Weapons set</source>
-        <translation type="unfinished">Zestaw broni</translation>
+        <translation type="obsolete">Zestaw broni</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Edycja</translation>
+        <translation type="obsolete">Edycja</translation>
+    </message>
+    <message>
+        <source>Delete team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon scheme</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -455,6 +475,10 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     <message>
         <source>Please select room from the list</source>
         <translation>Wybierz pokój z listy</translation>
+    </message>
+    <message>
+        <source>Random Maze</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -698,6 +722,14 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
         <source>(System default)</source>
         <translation type="unfinished">(Domyślny)</translation>
     </message>
+    <message>
+        <source>generated maze...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -887,6 +919,15 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     <message>
         <source>Restart game to apply</source>
         <translation type="unfinished">Zrestartuj grę by wprowadzić zmiany</translation>
+    </message>
+    <message>
+        <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
+Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Explosives</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -140,6 +140,10 @@
         <source>Wacky</source>
         <translation>Wacky</translation>
     </message>
+    <message>
+        <source>Tunnel size</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -467,6 +471,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>Please select room from the list</source>
         <translation>Please select room from the list</translation>
     </message>
+    <message>
+        <source>Random Maze</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageScheme</name>
@@ -709,6 +717,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>Mission</source>
         <translation>Mission</translation>
     </message>
+    <message>
+        <source>generated maze...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -902,6 +914,11 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Explosives</source>
         <translation>Explosives</translation>
+    </message>
+    <message>
+        <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
+Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

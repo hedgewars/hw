@@ -140,6 +140,10 @@
         <source>Wacky</source>
         <translation>Verrückt</translation>
     </message>
+    <message>
+        <source>Tunnel size</source>
+        <translation>Tunnelgröße</translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -468,6 +472,10 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
         <source>Please select room from the list</source>
         <translation>Bitte einen Raum aus der Liste auswählen</translation>
     </message>
+    <message>
+        <source>Random Maze</source>
+        <translation>Zufallslabyrinth</translation>
+    </message>
 </context>
 <context>
     <name>PageScheme</name>
@@ -696,7 +704,7 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     <name>QComboBox</name>
     <message>
         <source>generated map...</source>
-        <translation>Generierte Karte...</translation>
+        <translation>Generierte Karte ...</translation>
     </message>
     <message>
         <source>Human</source>
@@ -713,6 +721,10 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     <message>
         <source>Mission</source>
         <translation>Mission</translation>
+    </message>
+    <message>
+        <source>generated maze...</source>
+        <translation>Generiertes Labyrinth ...</translation>
     </message>
 </context>
 <context>
@@ -907,6 +919,12 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     <message>
         <source>Explosives</source>
         <translation>Pulverfässer</translation>
+    </message>
+    <message>
+        <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
+Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation>Diese SVN-Kopie ist noch in Entwicklung und sie ist mit anderen Versionen vielleicht nicht kompatibel.
+Einige Dinge könnten nicht funktionieren oder unvollständig sein. Benutzung auf eigene Gefahr!</translation>
     </message>
 </context>
 <context>

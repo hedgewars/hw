@@ -113,7 +113,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     connect(CB_TemplateFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(templateFilterChanged(int)));
 
-    maze_size_label = new QLabel("Tunnel size", this);
+    maze_size_label = new QLabel(tr("Tunnel size"), this);
     mainLayout.addWidget(maze_size_label, 2, 0);
     maze_size_label->hide();
     maze_size_selection = new QComboBox(this);

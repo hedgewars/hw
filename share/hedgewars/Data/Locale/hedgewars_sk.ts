@@ -141,6 +141,10 @@
         <source>Wacky</source>
         <translation>Pojašená</translation>
     </message>
+    <message>
+        <source>Tunnel size</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -332,11 +336,27 @@ si vyberte inú prezývku:</translation>
     </message>
     <message>
         <source>Weapons set</source>
-        <translation>Sada zbraní</translation>
+        <translation type="obsolete">Sada zbraní</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Úpravy</translation>
+        <translation type="obsolete">Úpravy</translation>
+    </message>
+    <message>
+        <source>Delete team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon scheme</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -455,6 +475,10 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     <message>
         <source>Please select room from the list</source>
         <translation>Prosím vyberte miestnosť zo zoznamu</translation>
+    </message>
+    <message>
+        <source>Random Maze</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -698,6 +722,14 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
         <source>(System default)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>generated maze...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -886,6 +918,15 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     </message>
     <message>
         <source>Restart game to apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
+Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Explosives</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

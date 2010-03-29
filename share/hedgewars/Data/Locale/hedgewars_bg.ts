@@ -140,6 +140,10 @@
         <source>Wacky</source>
         <translation>Щура</translation>
     </message>
+    <message>
+        <source>Tunnel size</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -326,11 +330,27 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Weapons set</source>
-        <translation>Оръжия</translation>
+        <translation type="obsolete">Оръжия</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Редактиране</translation>
+        <translation type="obsolete">Редактиране</translation>
+    </message>
+    <message>
+        <source>Delete team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon scheme</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -445,6 +465,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Please select room from the list</source>
         <translation>Моля изберете стая от списъка</translation>
+    </message>
+    <message>
+        <source>Random Maze</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -684,6 +708,14 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>(System default)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>generated maze...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -872,6 +904,15 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Restart game to apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
+Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Explosives</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -140,6 +140,10 @@
         <source>Themes</source>
         <translation>Teemat</translation>
     </message>
+    <message>
+        <source>Tunnel size</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -329,11 +333,27 @@ tai valitse toinen nimimerkki:</translation>
     </message>
     <message>
         <source>Weapons set</source>
-        <translation>Uusi asesetti</translation>
+        <translation type="obsolete">Uusi asesetti</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Muokkaa</translation>
+        <translation type="obsolete">Muokkaa</translation>
+    </message>
+    <message>
+        <source>Delete team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon scheme</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -450,6 +470,10 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
     <message>
         <source>Please select room from the list</source>
         <translation>Ole hyvä ja valitse huone listalta</translation>
+    </message>
+    <message>
+        <source>Random Maze</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -693,6 +717,14 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
         <source>(System default)</source>
         <translation>(Järjestelmän oletus)</translation>
     </message>
+    <message>
+        <source>generated maze...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -882,6 +914,15 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
     <message>
         <source>Restart game to apply</source>
         <translation>Käynnistä peli uudelleen ottaaksesi muutokset käyttöön</translation>
+    </message>
+    <message>
+        <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
+Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Explosives</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

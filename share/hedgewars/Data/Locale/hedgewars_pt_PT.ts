@@ -36,8 +36,8 @@
         <source>Illegal ammo scheme</source>
         <translation>Esquema de armas inválido</translation>
     </message>
-	<message>
-		<source>Edit weapons</source>
+    <message>
+        <source>Edit weapons</source>
         <translation>Editar armas</translation>
     </message>
 </context>
@@ -139,6 +139,10 @@
     <message>
         <source>Wacky</source>
         <translation>Invulgar</translation>
+    </message>
+    <message>
+        <source>Tunnel size</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -467,6 +471,10 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <source>Please select room from the list</source>
         <translation>Seleccione uma sala da lista</translation>
     </message>
+    <message>
+        <source>Random Maze</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageScheme</name>
@@ -709,6 +717,10 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <source>Mission</source>
         <translation>Missão</translation>
     </message>
+    <message>
+        <source>generated maze...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -902,6 +914,11 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <message>
         <source>Explosives</source>
         <translation>Explosivos</translation>
+    </message>
+    <message>
+        <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
+Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1510,7 +1527,7 @@ ouriços</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eliminar</translation>
     </message>
     <message>
         <source>Numpad 0</source>
