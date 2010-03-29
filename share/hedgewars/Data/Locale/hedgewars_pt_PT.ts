@@ -90,10 +90,6 @@
 <context>
     <name>HWGame</name>
     <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Erro ao ler o ficheiro de configuração de treino</translation>
-    </message>
-    <message>
         <source>en.txt</source>
         <translation>pt_PT.txt</translation>
     </message>
@@ -330,14 +326,6 @@ ou escolha outro nome de utilizador:</translation>
     <message>
         <source>Edit team</source>
         <translation>Editar equipa</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Esquema de armas</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Editar</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -727,10 +715,6 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <message>
         <source>Team Members</source>
         <translation>Membros de equipa</translation>
-    </message>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">Equipa</translation>
     </message>
     <message>
         <source>Fort</source>

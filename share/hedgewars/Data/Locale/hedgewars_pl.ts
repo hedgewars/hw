@@ -16,7 +16,7 @@
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Co %1 turę</numerusform>
             <numerusform>Co %1 tury</numerusform>
             <numerusform>Co %1 tur</numerusform>
@@ -46,19 +46,19 @@
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished">%1 *** %2 został usunięty z listy ignorowanych</translation>
+        <translation>%1 *** %2 został usunięty z listy ignorowanych</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="unfinished">%1 *** %2 został dodany do listy ignorowanych</translation>
+        <translation>%1 *** %2 został dodany do listy ignorowanych</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished">%1 *** %2 został usunięty z listy przyjaciół</translation>
+        <translation>%1 *** %2 został usunięty z listy przyjaciół</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="unfinished">%1 *** %2 został dodany do listy przyjaciół</translation>
+        <translation>%1 *** %2 został dodany do listy przyjaciół</translation>
     </message>
 </context>
 <context>
@@ -91,10 +91,6 @@
 <context>
     <name>HWGame</name>
     <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Błąd podczas przetwarzania pliku konfiguracyjnego treningu</translation>
-    </message>
-    <message>
         <source>en.txt</source>
         <translation>pl.txt</translation>
     </message>
@@ -123,15 +119,15 @@
     </message>
     <message>
         <source>Small</source>
-        <translation>Małe</translation>
+        <translation type="unfinished">Małe</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Średnie</translation>
+        <translation type="unfinished">Średnie</translation>
     </message>
     <message>
         <source>Large</source>
-        <translation>Duże</translation>
+        <translation type="unfinished">Duże</translation>
     </message>
     <message>
         <source>Cavern</source>
@@ -143,7 +139,7 @@
     </message>
     <message>
         <source>Tunnel size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tunele</translation>
     </message>
 </context>
 <context>
@@ -335,28 +331,20 @@ bądź wybierz inny nick:</translation>
         <translation>Edycja drużyny</translation>
     </message>
     <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Zestaw broni</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Edycja</translation>
-    </message>
-    <message>
         <source>Delete team</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń drużynę</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nowy schemat uzbrojenia</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Edytuj schemat uzbrojenia</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń schemat uzbrojenia</translation>
     </message>
 </context>
 <context>
@@ -478,7 +466,7 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Losowy labirynt</translation>
     </message>
 </context>
 <context>
@@ -680,10 +668,6 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
         <translation>Dodaj czas i datę do nazwy pliku</translation>
     </message>
     <message>
-        <source>Frontend effects (requires restart)</source>
-        <translation type="obsolete">Efekty w menu (wymaga restartu)</translation>
-    </message>
-    <message>
         <source>Reduced quality</source>
         <translation type="unfinished">Obniż jakość</translation>
     </message>
@@ -724,19 +708,15 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>generated maze...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">wygenerowany labirynt</translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Misja</translation>
     </message>
 </context>
 <context>
     <name>QGroupBox</name>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">Drużyna</translation>
-    </message>
     <message>
         <source>Team Members</source>
         <translation>Członkowie drużyny</translation>
@@ -923,11 +903,12 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ta wersja jest w fazie produkcji i może nie być kompatybilna z innymi wersjami gry.
+Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne ryzyko!</translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mat. wybuchowe</translation>
     </message>
 </context>
 <context>

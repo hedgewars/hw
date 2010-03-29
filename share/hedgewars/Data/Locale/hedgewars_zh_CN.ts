@@ -96,10 +96,6 @@
         <source>Cannot open demofile %1</source>
         <translation>DEMO %1 打不开</translation>
     </message>
-    <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">训练设置文件无法读取</translation>
-    </message>
 </context>
 <context>
     <name>HWMapContainer</name>
@@ -327,14 +323,6 @@ or pick another nickname:</source>
     <message>
         <source>Edit team</source>
         <translation>修改队伍设定</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">新武器设定</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">修改当前武器设定</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -670,10 +658,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <translation>记录名称中包含具体时间日期</translation>
     </message>
     <message>
-        <source>Frontend effects (requires restart)</source>
-        <translation type="obsolete">界面效果（需要重新启动游戏）</translation>
-    </message>
-    <message>
         <source>Reduced quality</source>
         <translation type="unfinished">降低显示效果</translation>
     </message>
@@ -726,10 +710,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Team Members</source>
         <translation>成员</translation>
-    </message>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">队伍</translation>
     </message>
     <message>
         <source>Fort</source>

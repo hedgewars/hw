@@ -90,10 +90,6 @@
 <context>
     <name>HWGame</name>
     <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Fehler beim Einlesen der Trainings-Konfigurationsdatei</translation>
-    </message>
-    <message>
         <source>en.txt</source>
         <translation>de.txt</translation>
     </message>
@@ -331,14 +327,6 @@ wähle einen anderen Spitznamen:</translation>
     <message>
         <source>Edit team</source>
         <translation>Team bearbeiten</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Waffen-Set</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Bearbeiten</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -676,10 +664,6 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
         <translation>Beim Start nach neuen Versionen suchen</translation>
     </message>
     <message>
-        <source>Frontend effects (requires restart)</source>
-        <translation type="obsolete">Frontendeffekte (erfordert Neustart)</translation>
-    </message>
-    <message>
         <source>Reduced quality</source>
         <translation>Niedrige Qualität</translation>
     </message>
@@ -729,10 +713,6 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
 </context>
 <context>
     <name>QGroupBox</name>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">Team</translation>
-    </message>
     <message>
         <source>Team Members</source>
         <translation>Teammitglieder</translation>

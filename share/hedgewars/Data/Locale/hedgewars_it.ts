@@ -90,10 +90,6 @@
 <context>
     <name>HWGame</name>
     <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Errore durante la lettura del file di configurazione dell&apos;allenamento</translation>
-    </message>
-    <message>
         <source>en.txt</source>
         <translation>it.txt</translation>
     </message>
@@ -330,14 +326,6 @@ o scegli un altro nickname:</translation>
     <message>
         <source>Edit team</source>
         <translation>Modifica squadra</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Set di armi</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Modifica</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -675,10 +663,6 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
         <translation>Concatena data e ora di registrazione al nome file</translation>
     </message>
     <message>
-        <source>Frontend effects (requires restart)</source>
-        <translation type="obsolete">Effetti del Frontend (richiede riavvio)</translation>
-    </message>
-    <message>
         <source>Reduced quality</source>
         <translation>Qualità ridotta</translation>
     </message>
@@ -728,10 +712,6 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
 </context>
 <context>
     <name>QGroupBox</name>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">Squadra</translation>
-    </message>
     <message>
         <source>Team Members</source>
         <translation>Membri della squadra</translation>

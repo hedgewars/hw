@@ -97,10 +97,6 @@
         <source>Cannot open demofile %1</source>
         <translation>Не може да се отвори демо файл %1</translation>
     </message>
-    <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Грешка при четене на тренировъчния файл</translation>
-    </message>
 </context>
 <context>
     <name>HWMapContainer</name>
@@ -327,14 +323,6 @@ or pick another nickname:</source>
     <message>
         <source>Edit team</source>
         <translation>Редактиране на отбора</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Оръжия</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Редактиране</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -730,10 +718,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Team Members</source>
         <translation>Членове на отбора</translation>
-    </message>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">Отбор</translation>
     </message>
     <message>
         <source>Fort</source>

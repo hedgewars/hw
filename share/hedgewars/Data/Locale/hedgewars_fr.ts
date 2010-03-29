@@ -97,10 +97,6 @@
         <source>Cannot open demofile %1</source>
         <translation>Erreur lors de l&apos;ouverture du fichier de démonstration %1</translation>
     </message>
-    <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Erreur lors de l&apos;ouverture du fichier de configuration d&apos;entraînement</translation>
-    </message>
 </context>
 <context>
     <name>HWMapContainer</name>
@@ -330,14 +326,6 @@ ou choisir un nouveau pseudo:</translation>
     <message>
         <source>Edit team</source>
         <translation>Éditer l&apos;Équipe</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Nouveau set d&apos;armes</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Éditer</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -675,10 +663,6 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
         <translation>Vérifiez la présence de mises à jour au démarrage</translation>
     </message>
     <message>
-        <source>Frontend effects (requires restart)</source>
-        <translation type="obsolete">Effets de l&apos;interface (nécessite de relancer le jeu)</translation>
-    </message>
-    <message>
         <source>Reduced quality</source>
         <translation>Qualité réduite</translation>
     </message>
@@ -731,10 +715,6 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     <message>
         <source>Team Members</source>
         <translation>Membres de l&apos;équipe</translation>
-    </message>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">Équipe</translation>
     </message>
     <message>
         <source>Fort</source>

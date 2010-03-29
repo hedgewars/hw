@@ -91,10 +91,6 @@
 <context>
     <name>HWGame</name>
     <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Chyba počas čítania konfiguračného súboru pre tréning</translation>
-    </message>
-    <message>
         <source>en.txt</source>
         <translation>sk.txt</translation>
     </message>
@@ -333,14 +329,6 @@ si vyberte inú prezývku:</translation>
     <message>
         <source>Edit team</source>
         <translation>Upraviť team</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Sada zbraní</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Úpravy</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -680,10 +668,6 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
         <translation>Pripojiť dátum a čas k súboru so záznamom</translation>
     </message>
     <message>
-        <source>Frontend effects (requires restart)</source>
-        <translation type="obsolete">Efekty frontendu (vyžaduje reštart)</translation>
-    </message>
-    <message>
         <source>Reduced quality</source>
         <translation>Znížená kvalita</translation>
     </message>
@@ -733,10 +717,6 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
 </context>
 <context>
     <name>QGroupBox</name>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">Team</translation>
-    </message>
     <message>
         <source>Team Members</source>
         <translation>Členovia teamu</translation>

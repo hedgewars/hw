@@ -90,10 +90,6 @@
 <context>
     <name>HWGame</name>
     <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Virhe luettaessa harjoituksen asetustiedostoa</translation>
-    </message>
-    <message>
         <source>en.txt</source>
         <translation>fi.txt</translation>
     </message>
@@ -330,14 +326,6 @@ tai valitse toinen nimimerkki:</translation>
     <message>
         <source>Edit team</source>
         <translation>Muokkaa joukkuetta</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Uusi asesetti</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Muokkaa</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -675,10 +663,6 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
         <translation>Lisää päivämäärä ja aika nauhoitusten tiedostonimeen</translation>
     </message>
     <message>
-        <source>Frontend effects (requires restart)</source>
-        <translation type="obsolete">Käyttöliittymätehosteet (vaatii uudelleenkäynnistyksen)</translation>
-    </message>
-    <message>
         <source>Reduced quality</source>
         <translation>Huononnettu laatu</translation>
     </message>
@@ -731,10 +715,6 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
     <message>
         <source>Team Members</source>
         <translation>Joukkueen jäsenet</translation>
-    </message>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">Joukkue</translation>
     </message>
     <message>
         <source>Fort</source>

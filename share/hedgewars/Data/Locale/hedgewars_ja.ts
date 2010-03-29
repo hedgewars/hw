@@ -89,10 +89,6 @@
 <context>
     <name>HWGame</name>
     <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Error reading training config file</translation>
-    </message>
-    <message>
         <source>en.txt</source>
         <translation>ja.txt</translation>
     </message>
@@ -324,14 +320,6 @@ or pick another nickname:</source>
     <message>
         <source>Edit team</source>
         <translation>チーム編集</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">兵器セット</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">編集</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -717,10 +705,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Team Members</source>
         <translation>チーム　メンバーズ</translation>
-    </message>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">チーム</translation>
     </message>
     <message>
         <source>Fort</source>

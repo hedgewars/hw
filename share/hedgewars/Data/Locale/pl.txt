@@ -3,7 +3,7 @@
 00:00=Granat
 00:01=Granat odłamkowy
 00:02=Bazooka
-00:03=UFO
+00:03=Pszczoła
 00:04=Strzelba
 00:05=Młot pneumatyczny
 00:06=Pomiń turę
@@ -41,6 +41,7 @@
 00:38=Karabin Snajperski
 00:39=Latający Talerz
 00:40=Koktajl Mołotowa
+00:41=Ptaszek
 
 01:00=Walczmy!
 01:01=Remis
@@ -368,7 +369,7 @@
 03:00=Granat czasowy
 03:01=Granat czasowy
 03:02=Pocisk
-03:03=Pocisk samonaprawadzający
+03:03=Bzyku, bzyk!
 03:04=Strzelba (kilka strzałów)
 03:05=Narzędzie wiertnicze
 03:06=Akcja
@@ -406,11 +407,12 @@
 03:38=Karabin (kilka strzałów)
 03:39=Środek transportu
 03:40=Płonący granat
+03:41=Wielki fan Wróbla Ćwirka
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy czas detonatora wyniesie zero.|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
 04:01=Atakuj przeciwników granatem odłamkowym.|Rozpadnie się on na kilka odłamków gdy jego czas|wyniesie zero.|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
 04:02=Atakuj przeciwników pociskiem balistycznym,|który jest podatny na wiatr.|Atak: Przytrzymaj by strzelić z większą siłą
-04:03=Odpal bombę kierowaną, która przechwyci|zaznaczony cel. By zwiększyć precyzję nie|strzelaj pełną mocą|Kursor: Wybierz cel|Atak: Przytrzymaj by strzelić z większą siłą
+04:03=Wypuść zdenerwowaną pszczołe, która "użądli"|zaznaczony cel. By zwiększyć precyzję nie|strzelaj pełną mocą|Kursor: Wybierz cel|Atak: Przytrzymaj by strzelić z większą siłą
 04:04=Atakuj przeciwników strzelbą z dwoma strzałami.|Działa obszarowo, więc nie musisz dokładnie|celować by zranić przeciwników.|Atak: Strzel (kilka razy)
 04:05=Schowaj się pod ziemię! Użyj młota pneumatycznego|do wywiercenia dziury w podłożu i dostania się do|innych miejsc.|Attack: Zacznij/Zakończ kopać 
 04:06=Znudzony? Brak motywacji do ataku? Oszczędzasz broń?|No problemo! Po prostu pomiń turę, tchórzu!|Atak: Pomiń turę bez walki
@@ -448,6 +450,8 @@
 04:38=Karabin snajperski może stać się najbardziej niszczycielską|bronią w twoim arsenale. Jednakże jest bardzo nieskuteczny|na małe odległości. Obrażenia zwiększają się wraz z odległością.|Atak: Strzel (dwa strzały)
 04:39=Leć do innych części mapy uzywjąc spodka.|To ciężkie do opanowania narzędzie, może przenieść Ciebie|w prawie każdą pozycje na polu bitwy.|Atak: Aktywuj|Góra/Lewo/Prawo: Wyznacz lot w odpowiednim kierunku
 04:40=Wznieć ogień używając koktajlu z łatwopalnym płynem.|Atak: Przytrzymaj by rzucić z większą siłą
+04:41=Natura może być na równi z technologią!|Ptaszek uniesie Ciebie ponad ziemię oraz|zrzuci jajka w przeciwników|Atak: Atywacja ptaka i zrzucanie jajek|Góra/Lewo/Prawo: Leć w wybranym kierunku
+
 ; Game goal strings
 05:00=Ustawienia gry
 05:01=Obowiązują następujące zasady:

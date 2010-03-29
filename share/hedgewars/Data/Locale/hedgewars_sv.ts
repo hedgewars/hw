@@ -90,10 +90,6 @@
 <context>
     <name>HWGame</name>
     <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Fel uppstod vid läsning av konfigurationsfil</translation>
-    </message>
-    <message>
         <source>en.txt</source>
         <translation>sv.txt</translation>
     </message>
@@ -327,14 +323,6 @@ or pick another nickname:</source>
     <message>
         <source>Edit team</source>
         <translation>Redigera lag</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Vapenuppsättning</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Redigera</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -719,10 +707,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
 </context>
 <context>
     <name>QGroupBox</name>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">Lag</translation>
-    </message>
     <message>
         <source>Team Members</source>
         <translation>Lagmedlemmar</translation>

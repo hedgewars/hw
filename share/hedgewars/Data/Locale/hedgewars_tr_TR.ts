@@ -89,10 +89,6 @@
 <context>
     <name>HWGame</name>
     <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Eğitim ayar dosyasını okuma hatası</translation>
-    </message>
-    <message>
         <source>en.txt</source>
         <translation>tr.txt</translation>
     </message>
@@ -324,14 +320,6 @@ or pick another nickname:</source>
     <message>
         <source>Edit team</source>
         <translation>Takımı düzenle</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Silah Seti</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Düzenle</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -717,10 +705,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Team Members</source>
         <translation>Takım Üyeleri</translation>
-    </message>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">Takım</translation>
     </message>
     <message>
         <source>Fort</source>

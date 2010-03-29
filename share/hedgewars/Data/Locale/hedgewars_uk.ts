@@ -98,10 +98,6 @@
         <source>Cannot open demofile %1</source>
         <translation>Не можу відкрити демо %1</translation>
     </message>
-    <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Помилка при читанні файлу конфігурації тренування</translation>
-    </message>
 </context>
 <context>
     <name>HWMapContainer</name>
@@ -333,14 +329,6 @@ or pick another nickname:</source>
     <message>
         <source>Edit team</source>
         <translation>Редагувати команду</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Набір зброї</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Редагувати</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -680,10 +668,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <translation type="unfinished">Перевірити наявність оновлень при старті</translation>
     </message>
     <message>
-        <source>Frontend effects (requires restart)</source>
-        <translation type="obsolete">Ігрові ефекти (потрібний перезапуск)</translation>
-    </message>
-    <message>
         <source>Reduced quality</source>
         <translation type="unfinished">Зниження якості</translation>
     </message>
@@ -736,10 +720,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Team Members</source>
         <translation>Склад команди</translation>
-    </message>
-    <message>
-        <source>Team</source>
-        <translation type="obsolete">Команда</translation>
     </message>
     <message>
         <source>Fort</source>
