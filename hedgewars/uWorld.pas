@@ -403,7 +403,7 @@ if (SpritesData[sprL].Texture = nil) or (SpritesData[sprR].Texture = nil) then
     dec(i, w * (sw div w + 1));
     repeat
         DrawSprite(spr, i, WorldDy + LAND_HEIGHT - SpritesData[spr].Height - OffsetY, 0);
-        inc(i, w - 1)
+        inc(i, w)
     until i > sw
     end else
     begin
@@ -417,14 +417,14 @@ if (SpritesData[sprL].Texture = nil) or (SpritesData[sprR].Texture = nil) then
     while i >= -sw - SpritesData[sprL].Width do
         begin
         DrawSprite(sprL, i, WorldDy + LAND_HEIGHT - SpritesData[sprL].Height - OffsetY, 0);
-        dec(i, SpritesData[sprL].Width - 1);
+        dec(i, SpritesData[sprL].Width);
         end;
         
     i:= Shift + w;
     while i <= sw do
         begin
         DrawSprite(sprR, i, WorldDy + LAND_HEIGHT - SpritesData[sprR].Height - OffsetY, 0);
-        inc(i, SpritesData[sprR].Width - 1)
+        inc(i, SpritesData[sprR].Width)
         end
     end
 end;
