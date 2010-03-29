@@ -122,7 +122,9 @@ void HWGame::SendQuickConfig()
     team2->difficulty = 4;
     team2->teamColor = *color2;
     team2->numHedgehogs = 4;
-    namegen.TeamRandomNames(team2,TRUE);
+	do
+        namegen.TeamRandomNames(team2,TRUE);
+	while(!team2->TeamName.compare(team1->TeamName));
     HWProto::addStringListToBuffer(teamscfg,
             team2->TeamGameConfig(100));
 
