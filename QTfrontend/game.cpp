@@ -124,7 +124,7 @@ void HWGame::SendQuickConfig()
     team2->numHedgehogs = 4;
 	do
         namegen.TeamRandomNames(team2,TRUE);
-	while(!team2->TeamName.compare(team1->TeamName));
+	while(!team2->TeamName.compare(team1->TeamName) || !team2->HHHat[0].compare(team1->HHHat[0]));
     HWProto::addStringListToBuffer(teamscfg,
             team2->TeamGameConfig(100));
 
