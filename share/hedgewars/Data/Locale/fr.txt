@@ -41,6 +41,7 @@
 00:38=Fusil de sniper
 00:39=Soucoupe Volante
 00:40=Cocktail Molotov
+00:41=Piaf
 
 01:00=C'est parti !
 01:01=Round ex-aequo
@@ -352,6 +353,7 @@
 03:38=Fusil (à coups multiples) 
 03:39=Moyen de transport 
 03:40=Grenade incendiaire 
+03:41=Un supporter enragé de Squawks
 
 ; Weapon Descriptions (use | as line breaks) 
 04:00=Attaquez vos ennemis en utilisant une simple grenade.|Elle explosera une fois que le compte à rebours atteindra zéro.|1-5: Lancez le minuteur de la grenade|Attaque : maintenez pour la lancer avec plus de force 
@@ -395,6 +397,7 @@
 04:38= Le fusil à lunettes peut être une de armes les plus dévastatrices|de tout votre arsenal, toutefois il est totalement inefficace|en combat rapproché. Les dommages qu'il cause augmentent suivant|la distance de la cible.|Attaque : Tirez (deux fois) 
 04:39=Volez vers d'autres secteurs de la carte en utilisant une soucoupe|volante. Ce moyen de transport pas facile à dompter est capable de vous|emporter vers presque tous les lieux du champ de bataille|Attaque : Activer|Haut/Gauche/Droite : appliquez la force dans une direction 
 04:40=Mettez le feu à un territoire en utilisant cette bouteille remplie|de liquide inflammable.|Attaque : maintenez pour tirer avec plus de force 
+04:41=Une arme naturelle qui peut suffire à dégommer même la soucoupe|volante.  Le piaf peut transporter votre hérisson et|balancer de soeufs sur vos ennemis !|Attaque : Activez et larguez des oeufs|Haut/Gauche/Droite: voltigez vers une direction.
 
 ; Game goal strings 
 05:00=Modes de jeu 
