@@ -21,12 +21,7 @@
 unit uConsts;
 interface
 
-uses    SDLh, uFloat, uLocale,
-{$IFDEF GLES11}
-    gles11;
-{$ELSE}
-    GL;
-{$ENDIF}
+uses    SDLh, uFloat, uLocale, GLunit;
 
 
 {$INCLUDE "config.inc"}

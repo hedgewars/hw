@@ -318,11 +318,8 @@ begin
 
     MainLoop();
     OnDestroy();
-    if alsoShutdownFrontend then
-    begin
-        alsoShutdownFrontend:= false;
-        halt;
-    end;
+{$IFDEF HWLIBRARY}freeEverything();{$ENDIF}
+    if alsoShutdownFrontend then halt;
 end;
 
 procedure initEverything;

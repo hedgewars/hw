@@ -27,12 +27,7 @@ procedure DrawLand(dX, dY: LongInt);
 procedure FreeLand;
 
 implementation
-uses uMisc, uLand, uStore, uConsts,
-{$IFDEF GLES11}
-    gles11;
-{$ELSE}
-    GL;
-{$ENDIF}
+uses uMisc, uLand, uStore, uConsts, GLunit;
 
 
 const TEXSIZE = 256;

@@ -21,12 +21,7 @@
 unit uMisc;
 interface
 
-uses    SDLh, uConsts, uFloat,
-{$IFDEF GLES11}
-    gles11;
-{$ELSE}
-    GL;
-{$ENDIF}
+uses    SDLh, uConsts, uFloat, GLunit;
 
 var
     isCursorVisible : boolean;

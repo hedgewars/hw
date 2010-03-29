@@ -20,12 +20,7 @@
 
 unit uVisualGears;
 interface
-uses SDLh, uConsts, uFloat, Math,
-{$IFDEF GLES11}
-    gles11;
-{$ELSE}
-    GL;
-{$ENDIF}
+uses SDLh, uConsts, uFloat, Math, GLunit;
 
 type PVisualGear = ^TVisualGear;
     TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);

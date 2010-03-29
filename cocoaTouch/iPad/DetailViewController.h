@@ -9,10 +9,13 @@
 #import <UIKit/UIKit.h>
 
 
-@interface DetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate>  {
+@interface DetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource,
+                    UINavigationBarDelegate, UIPopoverControllerDelegate, UISplitViewControllerDelegate>  {
     UIPopoverController *popoverController;
     UINavigationBar *navigationBar;
-    
+    NSArray *optionList;
+	UITableView * table;
+
     id detailItem;
     UILabel *test;
 }
@@ -21,6 +24,8 @@
 @property (nonatomic, retain) IBOutlet UINavigationBar *navigationBar;
 @property (nonatomic, retain) IBOutlet UILabel *test;
 @property (nonatomic, retain) id detailItem;
+@property (nonatomic, retain) NSArray *optionList;
+@property (nonatomic, retain) IBOutlet UITableView *table;
 
 -(IBAction) dismissSplitView;
 

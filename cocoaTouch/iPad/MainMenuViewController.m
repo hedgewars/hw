@@ -97,12 +97,7 @@
 	self.view.alpha = 1;
 	[UIView commitAnimations];
     
-    // this is a silly way to hide the sdl contex that remained active
-    if (nil == cover) {
-        cover= [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        cover.backgroundColor = [UIColor blackColor];
-    }
-    [[SDLUIKitDelegate sharedAppDelegate].uiwindow insertSubview:cover belowSubview:self.view];
+    [NSTimer scheduledTimerWithTimeInterval:0.7 target:self selector:@selector(hideBehind) userInfo:nil repeats:NO];
 }
 
 -(void) disappear {
@@ -116,6 +111,15 @@
     
     [self retain];
     [self.view removeFromSuperview];
+}
+
+// this is a silly way to hide the sdl contex that remained active
+-(void) hideBehind {
+    if (nil == cover) {
+        cover= [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        cover.backgroundColor = [UIColor blackColor];
+    }
+    [[SDLUIKitDelegate sharedAppDelegate].uiwindow insertSubview:cover belowSubview:self.view];
 }
 
 #pragma mark -

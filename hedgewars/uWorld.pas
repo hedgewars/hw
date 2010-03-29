@@ -47,12 +47,7 @@ procedure HideMission;
 procedure ShakeCamera(amount: LongWord);
 
 implementation
-uses    uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand,
-{$IFDEF GLES11}
-    gles11;
-{$ELSE}
-    GL;
-{$ENDIF}
+uses    uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand, GLunit;
 
 type TCaptionStr = record
                    Tex: PTexture;

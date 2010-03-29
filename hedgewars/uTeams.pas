@@ -20,13 +20,7 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, uLand,
-{$IFDEF GLES11}
-    gles11,
-{$ELSE}
-    GL,
-{$ENDIF}
-    uSound;
+uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, uLand, GLunit, uSound;
 
 type PHHAmmo = ^THHAmmo;
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;

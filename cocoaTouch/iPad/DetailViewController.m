@@ -10,7 +10,7 @@
 
 
 @implementation DetailViewController
-@synthesize navigationBar, popoverController, detailItem, test;
+@synthesize navigationBar, popoverController, detailItem, test, optionList,table;
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -26,6 +26,11 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+        optionList = [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""),
+                                                  NSLocalizedString(@"Teams",@""),
+                                                  NSLocalizedString(@"Weapons",@""),
+                                                  NSLocalizedString(@"Schemes",@""),
+                                                  nil];
 }
 
 
@@ -45,11 +50,37 @@
 
 
 - (void)dealloc {
+    [optionList release];
     [navigationBar release];
     [popoverController release];
     [detailItem release];
     [super dealloc];
 }
+
+#pragma mark -
+#pragma mark Table view data source
+
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [optionList count];
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell.textLabel.text = [optionList objectAtIndex:[indexPath row]];
+    }
+    
+    return cell;
+}
+
 #pragma mark -
 #pragma mark Managing the popover controller
 

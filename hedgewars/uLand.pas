@@ -20,12 +20,7 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat, uConsts,
-{$IFDEF GLES11}
-    gles11;
-{$ELSE}
-    GL;
-{$ENDIF}
+uses SDLh, uLandTemplates, uFloat, uConsts, GLunit;
 
 type TLandArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of LongWord;
     TCollisionArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Word;

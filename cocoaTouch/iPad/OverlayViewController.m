@@ -183,7 +183,8 @@
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	NSArray *twoTouches;
 	UITouch *touch = [touches anyObject];
-	
+	int width = [[UIScreen mainScreen] bounds].size.width;
+    
 	switch ([touches count]) {
 		case 1:
 			gestureStartPoint = [touch locationInView:self.view];
@@ -192,7 +193,7 @@
 				case 1:
 					NSLog(@"X:%d Y:%d", (int)gestureStartPoint.x, (int)gestureStartPoint.y );
 					SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
-							      (int)gestureStartPoint.y, 320 - (int)gestureStartPoint.x);
+							      (int)gestureStartPoint.y, width - (int)gestureStartPoint.x);
 					HW_click();
 					break;
 				case 2:
@@ -235,13 +236,14 @@
 	NSArray *twoTouches;
 	CGPoint currentPosition;
 	UITouch *touch = [touches anyObject];
+	int width = [[UIScreen mainScreen] bounds].size.width;
 
 	switch ([touches count]) {
 		case 1:
 			currentPosition = [touch locationInView:self.view];
 			// panning
 			SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
-							(int)gestureStartPoint.y, 320 - (int)gestureStartPoint.x);
+							(int)gestureStartPoint.y, width - (int)gestureStartPoint.x);
 			// remember that we have x and y inverted
 			/* temporarily disabling hog movements for camera panning testing
 			CGFloat vertDiff = gestureStartPoint.x - currentPosition.x;

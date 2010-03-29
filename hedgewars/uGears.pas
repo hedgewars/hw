@@ -96,12 +96,7 @@ procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics,
-    uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, 
-{$IFDEF GLES11}
-    gles11;
-{$ELSE}
-    GL;
-{$ENDIF}
+    uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit;
 
 const MAXROPEPOINTS = 384;
 var RopePoints: record

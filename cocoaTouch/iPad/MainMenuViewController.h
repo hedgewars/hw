@@ -17,6 +17,7 @@
 
 -(void) appear;
 -(void) disappear;
+-(void) hideBehind;
 
 -(IBAction) switchViews:(id)sender;
 @end

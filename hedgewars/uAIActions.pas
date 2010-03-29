@@ -22,7 +22,7 @@ unit uAIActions;
 interface
 uses uGears, uFloat;
 
-const MAXACTIONS = 96;
+const MAXACTIONS     = 96;
       aia_none       = 0;
       aia_Left       = 1;
       aia_Right      = 2;

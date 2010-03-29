@@ -20,12 +20,7 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, uTeams, SDLh, uFloat,
-{$IFDEF GLES11}
-    gles11;
-{$ELSE}
-    GL, GLext;
-{$ENDIF}
+uses sysutils, uConsts, uTeams, SDLh, uFloat, GLunit;
 
 
 var PixelFormat: PSDL_PixelFormat;

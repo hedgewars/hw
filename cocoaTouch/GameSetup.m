@@ -10,6 +10,8 @@
 #import "SDL_uikitappdelegate.h"
 #import "SDL_net.h"
 #import "PascalImports.h"
+#include <sys/types.h>
+#include <sys/sysctl.h>
 
 #define BUFFER_SIZE 256
 
@@ -246,12 +248,32 @@
 #pragma mark -
 #pragma mark Setting methods
 -(const char **)getSettings {
-	const char **gameArgs = (const char**) malloc(sizeof(char*) * 6);
 	NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
 	NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     NSString *wSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.width];
     NSString *hSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.height];
+	const char **gameArgs = (const char**) malloc(sizeof(char*) * 8);
+
+    /*
+    size_t size;
+    // Set 'oldp' parameter to NULL to get the size of the data returned so we can allocate appropriate amount of space
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0); 
+    char *name = malloc(size);
+    // Get the platform name
+    sysctlbyname("hw.machine", name, &size, NULL, 0);
+    NSString *machine = [[NSString alloc] initWithUTF8String:name];
+    free(name);
+    
+   	const char **gameArgs = (const char**) malloc(sizeof(char*) * 9);
+
+    // if the machine is less than iphone 3gs or less than ipod touch 3g use reduced graphics (land array)
+    if ([machine hasPrefix:@"iPhone1"] || ([machine hasPrefix:@"iPod"] && ([machine hasSuffix:@"1,1"] || [machine hasSuffix:@"2,1"])))
+        gameArgs[8] = "1";
+    else
+        gameArgs[8] = "0";
+    [machine release];
+    */
     
 	gameArgs[0] = [[systemSettings objectForKey:@"username"] UTF8String];	//UserNick
 	gameArgs[1] = [ipcString UTF8String];                                   //ipcPort
