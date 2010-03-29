@@ -2796,7 +2796,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBirdyFly(Gear: PGear);
 var HHGear: PGear;
-    fuel: LongInt;
+    fuel, i: LongInt;
     move: hwFloat;
 begin
 HHGear:= CurrentHedgehog^.Gear;
@@ -2831,10 +2831,11 @@ if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
     end;
 
 if Gear^.Health < 0 then Gear^.Health:= 0;
-if (GameTicks and $3F) = 0 then
+if (GameTicks and $7F) = 0 then
        begin
-       if Gear^.Health < 500 then
-         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFeather);
+       if Gear^.Health < 1000 then
+            for i:= ((1000-Gear^.Health) div 250) downto 0 do
+                AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFeather);
        if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
        Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
        end;
@@ -2873,21 +2874,12 @@ if  (Gear^.Health = 0)
         Active:= true;
         State:= State or gstMoving
         end;
-    if Gear^.Tag = -1 then
-        begin
-        Gear^.dX:= Gear^.X + int2hwFloat(LAND_WIDTH + 1024);
-        Gear^.dY:= int2hwFloat(256);
-        Gear^.X:= int2hwFloat(-LAND_WIDTH -1024);
-        Gear^.Y:= Gear^.Y + int2hwFloat(-256);
-        end
-    else
-        begin
-        Gear^.dX:= Gear^.X - int2hwFloat(LAND_WIDTH + 1024);
-        Gear^.dY:= int2hwFloat(256);
-        Gear^.X:= int2hwFloat(+LAND_WIDTH +1024);
-        Gear^.Y:= Gear^.Y + int2hwFloat(-256);
-        end;
     Gear^.State:= Gear^.State or gstAnimation or gstTmpFlag;
+    if HHGear^.dY < _0 then
+        begin
+        Gear^.dX:= HHGear^.dX;
+        Gear^.dY:= HHGear^.dY;
+        end;
     Gear^.Timer:= 0;
     Gear^.doStep:= @doStepBirdyDisappear;
     CurAmmoGear:= nil;

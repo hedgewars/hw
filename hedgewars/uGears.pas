@@ -1611,6 +1611,7 @@ end;
 procedure DrawGears;
 var Gear, HHGear: PGear;
     i: Longword;
+    startX, endX, startY, endY: LongInt;
 begin
 Gear:= GearsList;
 while Gear<>nil do
@@ -1717,9 +1718,27 @@ while Gear<>nil do
                     if Gear^.State and gstAnimation = gstAnimation then
                         begin
                         if Gear^.State and gstTmpFlag = 0 then // Appearing
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, hwRound(Gear^.X) + WorldDx + hwRound(Gear^.dX) - trunc(hwRound(Gear^.dX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1)), hwRound(Gear^.Y) + WorldDy + hwRound(Gear^.dY) - trunc(hwRound(Gear^.dY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75)
+                            begin
+                            endX:= hwRound(Gear^.X);
+                            endY:= hwRound(Gear^.Y);
+                            if Gear^.Tag < 0 then
+                                startX:= max(LAND_WIDTH + 1024, endX + 2048)
+                            else
+                                startX:= max(-LAND_WIDTH - 1024, endX - 2048);
+                            startY:= endY - 256;
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + trunc((endX - startX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1)), startY + WorldDy + trunc((endY - startY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                            end
                         else // Disappearing
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, hwRound(Gear^.X) + WorldDx + hwRound(Gear^.dX) - trunc(hwRound(Gear^.dX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1))), hwRound(Gear^.Y) + WorldDy + hwRound(Gear^.dY) - trunc(-hwRound(Gear^.dY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) + hwRound(Gear^.dY)), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                            begin
+                            startX:= hwRound(Gear^.X);
+                            startY:= hwRound(Gear^.Y);
+                            if Gear^.Tag > 0 then
+                                endX:= max(LAND_WIDTH + 1024, startX + 2048)
+                            else
+                                endX:= max(-LAND_WIDTH - 1024, startX - 2048);
+                            endY:= startY + 256;
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + trunc((endX - startX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1))) + hwRound(Gear^.dX * Gear^.Timer), startY + WorldDy + trunc((endY - startY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) - (endY - startY)) + hwRound(Gear^.dY * Gear^.Timer), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                            end;
                         end
                     else
                         DrawTextureF(SpritesData[sprBirdy].Texture, 1, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
