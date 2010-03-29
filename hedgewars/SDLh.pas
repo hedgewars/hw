@@ -683,6 +683,9 @@ function  SDL_JoystickGetHat(joy: PSDL_Joystick; hat: LongInt): Byte; cdecl; ext
 function  SDL_JoystickGetButton(joy: PSDL_Joystick; button: LongInt): Byte; cdecl; external SDLLibName;
 procedure SDL_JoystickClose(joy: PSDL_Joystick); cdecl; external SDLLibName;
 
+function SDL_putenv(const text: PChar): LongInt; cdecl; external SDLLibName;
+function SDL_getenv(const text: PChar): PChar; cdecl; external SDLLibName;
+
 (*  SDL_TTF  *)
 function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
 procedure TTF_Quit; cdecl; external SDL_TTFLibName;

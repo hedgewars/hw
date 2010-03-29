@@ -28,7 +28,8 @@ interface
 {$ELSE}
 program hwengine;
 {$ENDIF}
-uses    SDLh in 'SDLh.pas',
+uses
+    SDLh in 'SDLh.pas',
     uConsts in 'uConsts.pas',
     uGame in 'uGame.pas',
     uMisc in 'uMisc.pas',
@@ -266,7 +267,10 @@ begin
     SDLTry(TTF_Init() <> -1, true);
     WriteLnToConsole(msgOK);
 
+    s:= SDL_getenv('SDL_VIDEO_CENTERED');
+    SDL_putenv('SDL_VIDEO_CENTERED=1');
     ShowMainWindow();
+    SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));
 
     AddProgress();
 
