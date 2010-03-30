@@ -42,7 +42,7 @@
 00:38=Rifle francotirador
 00:39=Platillo volante
 00:40=Cóctel molotov
-00:41=Golondrino
+00:41=Birdy
 
 01:00=¡Luchad!
 01:01=Empate
@@ -403,6 +403,7 @@
 03:38=Arma de fuego (disparo único)
 03:39=Herramienta de transporte
 03:40=Bomba incendiaria
+03:41=Amigo chillón
 
 ; Descripciones de armamento ( líneas delimitadas con | )
 04:00=Ataca a tus enemigos usando una sencilla granada.|Explotará una vez el temporizador llegue a cero.|1-5: ajustar temporizador.|Atacar: mantener presionado para lanzar más lejos.
@@ -446,7 +447,7 @@
 04:38=El rifle de francotirador puede ser el arma más destructiva|de todo tu arsenal, pero es muy inefectiva en distancias cortas.|El daño infligido es proporcional a la distancia respecto del objetivo.|Atacar: abrir fuego (un disparo).
 04:39=Vuela hasta otras partes del mapa usando un platillo volante.|Puede ser complicado de controlar, pero conseguirás llegar|a sitios que nunca hubieras imaginado accesibles.|Atacar: activar.|Cursores: acelerar en esa dirección (un golpe cada vez).
 04:40=Alza un muro de fuego usando esta botella|llena de (en breve, ardiendo) líquido inflamable.|Atacar: mantener presionado para lanzar más lejos.
-04:41=¡Demostrando que lo natural puede ser mejor|que lo artificial, Golondrino puede no sólo|transportar tu erizo como el platillo volante,|sino también lanzar huevos envenenados a tus enemigos!|Atacar: activar y lanzar huevos.|Cursores: aletear en esa dirección.
+04:41=¡Demostrando que lo natural puede ser mejor|que lo artificial, Birdy puede no sólo|transportar tu erizo como el platillo volante,|sino también lanzar huevos envenenados a tus enemigos!|Atacar: activar y lanzar huevos.|Cursores: aletear en esa dirección.
 
 ; Game goal strings
 05:00=Modos de juego
