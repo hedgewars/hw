@@ -22,7 +22,7 @@
 
 -(void) engineProtocol;
 -(void) startThread: (NSString *)selector;
--(int) sendToEngine: (NSString *)string;
+-(int)  sendToEngine: (NSString *)string;
 -(void) sendTeamData:(NSDictionary *)teamData;
 -(const char **)getSettings;
 @end
