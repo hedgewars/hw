@@ -136,7 +136,31 @@
         <translation>曲折</translation>
     </message>
     <message>
-        <source>Tunnel size</source>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Small tunnels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Medium tunnels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Large tunnels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Small floating islands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Medium floating islands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Large floating islands</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -36,12 +36,11 @@ var Land: TCollisionArray;
     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
     LandBackSurface: PSDL_Surface;
 
-type direction = record x, y: integer; end;
-var DIR_N: direction = (x: 0; y: -1);
-var DIR_E: direction = (x: 1; y: 0);
-var DIR_S: direction = (x: 0; y: 1);
-var DIR_W: direction = (x: -1; y: 0);
-var DIR_NONE: direction = (x: 0; y: 0);
+type direction = record x, y: Longint; end;
+const DIR_N: direction = (x: 0; y: -1);
+    DIR_E: direction = (x: 1; y: 0);
+    DIR_S: direction = (x: 0; y: 1);
+    DIR_W: direction = (x: -1; y: 0);
 
 procedure initModule;
 procedure freeModule;
@@ -649,16 +648,13 @@ const small_cell_size = 128;
     medium_cell_size = 192;
     large_cell_size = 256;
     braidness = 10;
-    maze_inverted = false; //false makes more sense for now
 
 var x, y: Longint;
-    bg_color, fg_color: Longint;
     cellsize: LongInt; //selected by the user in the gui
     seen_cells_x, seen_cells_y: Longint; //number of cells that can be visited by the generator, that is every second cell in x and y direction. the cells between there are walls that will be removed when we move from one cell to another
-    start_x, start_y: Longint; //first visited cell, must be between 0 and seen_cells_x/y - 1 inclusive
     num_edges_x, num_edges_y: Longint; //number of resulting edges that need to be vertexificated
     num_cells_x, num_cells_y: Longint; //actual number of cells, depending on cell size
-    seen_list: array of array of Boolean;
+    seen_list: array of array of Longint;
     xwalls: array of array of Boolean;
     ywalls: array of array of Boolean;
     x_edge_list: array of array of Boolean;
@@ -667,13 +663,21 @@ var x, y: Longint;
     pa: TPixAr;
     num_vertices: Longint;
     off_y: LongInt;
+    num_steps: Longint;
+    current_step: Longint;
+    step_done: array of Boolean;
+    done: Boolean;
+    last_cell: array of record x, y: Longint; end;
+    came_from: array of array of record x, y: Longint; end;
+    came_from_pos: array of Longint;
+    maze_inverted: Boolean;
 
-function is_cell_seen(x: Longint; y: Longint): Boolean;
+function when_seen(x: Longint; y: Longint): Longint;
 begin
 if (x < 0) or (x >= seen_cells_x) or (y < 0) or (y >= seen_cells_y) then
-    is_cell_seen := true
+    when_seen := current_step
 else
-    is_cell_seen := seen_list[x, y];
+    when_seen := seen_list[x, y];
 end;
 
 function is_x_edge(x, y: Longint): Boolean;
@@ -692,11 +696,17 @@ else
     is_y_edge := y_edge_list[x, y];
 end;
 
-procedure see_cell(x: Longint; y: Longint);
+procedure see_cell;
 var dir: direction;
     tries: Longint;
+    x, y: Longint;
+    found_cell: Boolean;
+    next_dir_clockwise: Boolean;
+
 begin
-seen_list[x, y] := true;
+x := last_cell[current_step].x;
+y := last_cell[current_step].y;
+seen_list[x, y] := current_step;
 case GetRandom(4) of
     0: dir := DIR_N;
     1: dir := DIR_E;
@@ -704,14 +714,18 @@ case GetRandom(4) of
     3: dir := DIR_W;
 end;
 tries := 0;
-while (tries < 5) do
+found_cell := false;
+if getrandom(2) = 1 then next_dir_clockwise := true
+else next_dir_clockwise := false;
+
+while (tries < 5) and not found_cell do
 begin
-    if is_cell_seen(x + dir.x, y + dir.y) then
+    if when_seen(x + dir.x, y + dir.y) = current_step then //we're seeing ourselves, try another direction
     begin
         //we have already seen the target cell, decide if we should remove the wall anyway
         //(or put a wall there if maze_inverted, but we're not doing that right now)
         if not maze_inverted and (GetRandom(braidness) = 0) then
-        //or just warn that inverted+braid+indestructable terrain != good idea
+        //or just warn that inverted+braid+indestructible terrain != good idea
         begin
             case dir.x of
                 -1: if x > 0 then ywalls[x-1, y] := false;
@@ -722,16 +736,30 @@ begin
                 1: if y < seen_cells_y - 1 then xwalls[x, y] := false;
             end;
         end;
-        if dir = DIR_N then //TODO might want to randomize that
-            dir := DIR_E
-        else if dir = DIR_E then
-            dir := DIR_S
-        else if dir = DIR_S then
-            dir := DIR_W
+        if next_dir_clockwise then
+        begin
+            if dir = DIR_N then
+                dir := DIR_E
+            else if dir = DIR_E then
+                dir := DIR_S
+            else if dir = DIR_S then
+                dir := DIR_W
+            else
+                dir := DIR_N;
+        end
         else
-            dir := DIR_N;
+        begin
+            if dir = DIR_N then
+                dir := DIR_W
+            else if dir = DIR_E then
+                dir := DIR_N
+            else if dir = DIR_S then
+                dir := DIR_E
+            else
+                dir := DIR_S;
+        end
     end
-    else //cell wasn't seen yet, go there
+    else if when_seen(x + dir.x, y + dir.y) = -1 then //cell wasn't seen yet, go there
     begin
         case dir.y of
             -1: xwalls[x, y-1] := false;
@@ -741,13 +769,31 @@ begin
             -1: ywalls[x-1, y] := false;
             1: ywalls[x, y] := false;
         end;
-        see_cell(x + dir.x, y + dir.y);
+        last_cell[current_step].x := x+dir.x;
+        last_cell[current_step].y := y+dir.y;
+        came_from_pos[current_step] := came_from_pos[current_step] + 1;
+        came_from[current_step, came_from_pos[current_step]].x := x;
+        came_from[current_step, came_from_pos[current_step]].y := y;
+        found_cell := true;
+    end
+    else //we're seeing someone else, quit
+    begin
+        step_done[current_step] := true;
+        found_cell := true;
     end;
 
     tries := tries + 1;
 end;
-
+if not found_cell then
+begin
+    last_cell[current_step].x := came_from[current_step, came_from_pos[current_step]].x;
+    last_cell[current_step].y := came_from[current_step, came_from_pos[current_step]].y;
+    came_from_pos[current_step] := came_from_pos[current_step] - 1;
+    if came_from_pos[current_step] >= 0 then see_cell
+    else step_done[current_step] := true;
 end;
+end;
+
 procedure add_vertex(x, y: Longint);
 var tmp_x, tmp_y: Longint;
 begin
@@ -765,9 +811,9 @@ begin
 end
 else
 begin
-    if x mod 2 = 0 then tmp_x := cellsize
+    if maze_inverted or (x mod 2 = 0) then tmp_x := cellsize
     else tmp_x := cellsize * 2 div 3;
-    if y mod 2 = 0 then tmp_y := cellsize
+    if maze_inverted or (y mod 2 = 0) then tmp_y := cellsize
     else tmp_y := cellsize * 2 div 3;
 
     pa.ar[num_vertices].x := (x-1)*cellsize + tmp_x;
@@ -777,7 +823,7 @@ num_vertices := num_vertices + 1;
 end;
 
 procedure add_edge(x, y: Longint; dir: direction);
-var i: integer;
+var i: Longint;
 begin
 if dir = DIR_N then
 begin
@@ -844,9 +890,30 @@ end;
 
 begin
 case cMazeSize of
-    0: cellsize := small_cell_size;
-    1: cellsize := medium_cell_size;
-    2: cellsize := large_cell_size;
+    0: begin
+        cellsize := small_cell_size;
+        maze_inverted := false;
+    end;
+    1: begin
+        cellsize := medium_cell_size;
+        maze_inverted := false;
+    end;
+    2: begin
+        cellsize := large_cell_size;
+        maze_inverted := false;
+    end;
+    3: begin
+        cellsize := small_cell_size;
+        maze_inverted := true;
+    end;
+    4: begin
+        cellsize := medium_cell_size;
+        maze_inverted := true;
+    end;
+    5: begin
+        cellsize := large_cell_size;
+        maze_inverted := true;
+    end;
 end;
 
 num_cells_x := LAND_WIDTH div cellsize;
@@ -858,6 +925,20 @@ num_edges_y := num_cells_y - 1;
 seen_cells_x := num_cells_x div 2;
 seen_cells_y := num_cells_y div 2;
 
+if maze_inverted then
+    num_steps := 3 //TODO randomize, between 3 and 5?
+else
+    num_steps := 1;
+SetLength(step_done, num_steps);
+SetLength(last_cell, num_steps);
+SetLength(came_from_pos, num_steps);
+SetLength(came_from, num_steps, num_cells_x*num_cells_y);
+done := false;
+for current_step := 0 to num_steps - 1 do
+    step_done[current_step] := false;
+    came_from_pos[current_step] := 0;
+current_step := 0;
+
 SetLength(seen_list, seen_cells_x, seen_cells_y);
 SetLength(xwalls, seen_cells_x, seen_cells_y - 1);
 SetLength(ywalls, seen_cells_x - 1, seen_cells_y);
@@ -867,37 +948,21 @@ SetLength(maze, num_cells_x, num_cells_y);
 
 num_vertices := 0;
 
-(*
-TODO - Inverted maze
-if maze_inverted then
-begin
-    bg_color := 0;
-    fg_color := COLOR_LAND;
-end
-else
-begin*)
-    bg_color := COLOR_LAND;
-    fg_color := 0;
-//end;
-
 playHeight := num_cells_y * cellsize;
 playWidth := num_cells_x * cellsize;
 off_y := LAND_HEIGHT - playHeight;
 
 for x := 0 to playWidth do
     for y := 0 to off_y - 1 do
-        Land[y, x] := fg_color;
+        Land[y, x] := 0;
 
 for x := 0 to playWidth do
     for y := off_y to LAND_HEIGHT - 1 do
-        Land[y, x] := bg_color;
+        Land[y, x] := COLOR_LAND;
 
 for y := 0 to num_cells_y - 1 do
     for x := 0 to num_cells_x - 1 do
         maze[x, y] := false;
-
-start_x := GetRandom(seen_cells_x);
-start_y := GetRandom(seen_cells_y);
 
 for x := 0 to seen_cells_x - 1 do
     for y := 0 to seen_cells_y - 2 do
@@ -909,7 +974,7 @@ for x := 0 to seen_cells_x - 2 do
 
 for x := 0 to seen_cells_x - 1 do
     for y := 0 to seen_cells_y - 1 do
-        seen_list[x, y] := false;
+        seen_list[x, y] := -1;
 
 for x := 0 to num_edges_x - 1 do
     for y := 0 to num_cells_y - 1 do
@@ -919,11 +984,29 @@ for x := 0 to num_cells_x - 1 do
     for y := 0 to num_edges_y - 1 do
         y_edge_list[x, y] := false;
 
-see_cell(start_x, start_y);
+for current_step := 0 to num_steps-1 do
+begin
+    x := GetRandom(seen_cells_x - 1) div num_steps;
+    last_cell[current_step].x := x + current_step * seen_cells_x div num_steps;
+    last_cell[current_step].y := GetRandom(seen_cells_y);
+end;
+
+while not done do
+begin
+    done := true;
+    for current_step := 0 to num_steps-1 do
+    begin
+        if not step_done[current_step] then
+        begin
+            see_cell;
+            done := false;
+        end;
+    end;
+end;
 
 for x := 0 to seen_cells_x - 1 do
     for y := 0 to seen_cells_y - 1 do
-        if seen_list[x, y] then
+        if seen_list[x, y] > -1 then
             maze[(x+1)*2-1, (y+1)*2-1] := true;
 
 for x := 0 to seen_cells_x - 1 do
@@ -971,12 +1054,17 @@ BezierizeEdge(pa, _0_25);
 
 DrawEdge(pa, 0);
 
-x := 0;
-while Land[cellsize div 2 + cellsize + off_y, x] = bg_color do
-    x := x + 1;
-while Land[cellsize div 2 + cellsize + off_y, x] = fg_color do
-    x := x + 1;
-FillLand(x+1, cellsize div 2 + cellsize + off_y);
+if maze_inverted then
+    FillLand(1, 1+off_y)
+else
+begin
+    x := 0;
+    while Land[cellsize div 2 + cellsize + off_y, x] = COLOR_LAND do
+        x := x + 1;
+    while Land[cellsize div 2 + cellsize + off_y, x] = 0 do
+        x := x + 1;
+    FillLand(x+1, cellsize div 2 + cellsize + off_y);
+end;
 
 MaxHedgehogs:= 32;
 if (GameFlags and gfDisableGirders) <> 0 then hasGirders:= false
@@ -984,7 +1072,7 @@ else hasGirders := true;
 leftX:= 0;
 rightX:= playWidth;
 topY:= off_y;
-hasBorder := true;
+hasBorder := false;
 end;
 
 procedure GenLandSurface;

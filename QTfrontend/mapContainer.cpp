@@ -113,13 +113,16 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     connect(CB_TemplateFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(templateFilterChanged(int)));
 
-    maze_size_label = new QLabel(tr("Tunnel size"), this);
+    maze_size_label = new QLabel(tr("Type"), this);
     mainLayout.addWidget(maze_size_label, 2, 0);
     maze_size_label->hide();
     maze_size_selection = new QComboBox(this);
-    maze_size_selection->addItem(tr("Small"), 0);
-    maze_size_selection->addItem(tr("Medium"), 1);
-    maze_size_selection->addItem(tr("Large"), 2);
+    maze_size_selection->addItem(tr("Small tunnels"), 0);
+    maze_size_selection->addItem(tr("Medium tunnels"), 1);
+    maze_size_selection->addItem(tr("Large tunnels"), 2);
+    maze_size_selection->addItem(tr("Small floating islands"), 3);
+    maze_size_selection->addItem(tr("Medium floating islands"), 4);
+    maze_size_selection->addItem(tr("Large floating islands"), 5);
     maze_size_selection->setCurrentIndex(1);
     maze_size = 1;
     mainLayout.addWidget(maze_size_selection, 2, 1);

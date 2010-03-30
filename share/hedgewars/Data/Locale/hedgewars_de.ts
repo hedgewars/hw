@@ -138,7 +138,35 @@
     </message>
     <message>
         <source>Tunnel size</source>
-        <translation>Tunnelgröße</translation>
+        <translation type="obsolete">Tunnelgröße</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Typ</translation>
+    </message>
+    <message>
+        <source>Small tunnels</source>
+        <translation>Kleine Tunnel</translation>
+    </message>
+    <message>
+        <source>Medium tunnels</source>
+        <translation>Mittlere Tunnel</translation>
+    </message>
+    <message>
+        <source>Large tunnels</source>
+        <translation>Große Tunnel</translation>
+    </message>
+    <message>
+        <source>Small floating islands</source>
+        <translation>Kleine schwebende Inseln</translation>
+    </message>
+    <message>
+        <source>Medium floating islands</source>
+        <translation>Mittlere schwebende Inseln</translation>
+    </message>
+    <message>
+        <source>Large floating islands</source>
+        <translation>Große schwebende Inseln</translation>
     </message>
 </context>
 <context>
