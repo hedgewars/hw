@@ -556,6 +556,7 @@ ScriptSetInteger('CaseFreq', cCaseFactor);
 ScriptSetInteger('LandAdds', cLandAdditions);
 ScriptSetInteger('Explosives', cExplosives);
 ScriptSetInteger('Delay', cInactDelay);
+ScriptSetInteger('SuddenDeathTurns', cSuddenDTurns);
 ScriptSetString('Map', '');
 ScriptSetString('Theme', '');
 
@@ -574,6 +575,7 @@ ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
 ParseCommand('$landadds ' + ScriptGetString('LandAdds'), true);
 ParseCommand('$explosives ' + ScriptGetString('Explosives'), true);
 ParseCommand('$delay ' + ScriptGetString('Delay'), true);
+ParseCommand('$sd_turns ' + ScriptGetString('SuddenDeathTurns'), true);
 if ScriptGetString('Map') <> '' then
     ParseCommand('map ' + ScriptGetString('Map'), true);
 if ScriptGetString('Theme') <> '' then

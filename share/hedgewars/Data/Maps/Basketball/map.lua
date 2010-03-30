@@ -65,6 +65,7 @@ function onGameInit()
 	LandAdds = 0
 	Explosives = 0
 	Delay = 500
+	SuddenDeathTurns = 99999 -- "disable" sudden death
 end
 
 function onGameStart()
