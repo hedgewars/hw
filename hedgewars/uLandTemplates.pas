@@ -2006,7 +2006,7 @@ const EdgeTemplates: array[0..41] of TEdgeTemplate =
        ),
        (BasePoints: @Template41Points;
         BasePointsCount: Succ(High(Template41Points));
-        FillPoints: @Template40FPoints;
+        FillPoints: @Template41FPoints;
         FillPointsCount: Succ(High(Template41FPoints));
         BezierizeCount: 3;
         RandPassesCount: 5;
