@@ -310,7 +310,7 @@ end;
 procedure PickUp(HH, Gear: PGear);
 var s: shortstring;
     a: TAmmoType;
-    i: Integer;
+    i: LongInt;
     vga: PVisualGear;
 begin
 Gear^.Message:= gm_Destroy;

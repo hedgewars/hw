@@ -98,8 +98,8 @@ var
     bWaterRising    : Boolean;
 
     ShowCrosshair   : boolean;
-    CursorMovementX : Integer;
-    CursorMovementY : Integer;
+    CursorMovementX : LongInt;
+    CursorMovementY : LongInt;
     cDrownSpeed : hwFloat;
     cMaxWindSpeed   : hwFloat;
     cWindSpeed  : hwFloat;
@@ -133,7 +133,7 @@ procedure initModule;
 procedure freeModule;
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: ansistring; c: char);
-procedure movecursor(dx, dy: Integer);
+procedure movecursor(dx, dy: LongInt);
 function  hwSign(r: hwFloat): LongInt;
 function  Min(a, b: LongInt): LongInt;
 function  Max(a, b: LongInt): LongInt;
@@ -199,7 +199,7 @@ if i > 0 then
     end else b:= '';
 end;
 
-procedure movecursor(dx, dy: Integer);
+procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
 begin
 if (dx = 0) and (dy = 0) then exit;

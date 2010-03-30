@@ -1611,8 +1611,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFlame(Gear: PGear);
-var i: Integer;
-gX,gY: LongInt;
+var gX,gY,i: LongInt;
 begin
     if (Gear^.State and gsttmpFlag) = 0 then AllInactive:= false;
 

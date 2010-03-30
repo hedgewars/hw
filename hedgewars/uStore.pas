@@ -64,7 +64,7 @@ function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFo
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);
 //procedure rotateSurface(Surface: PSDL_Surface);
 procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary since width/height are read only in SDL
-procedure copyToXY(src, dest: PSDL_Surface; destX, destY: Integer);
+procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt);
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
@@ -83,7 +83,7 @@ uses uMisc, uConsole, uLand, uLocale, uWorld{$IFDEF IPHONEOS}, PascalExports{$EN
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
 var HHTexture: PTexture;
-    MaxTextureSize: Integer;
+    MaxTextureSize: LongInt;
     cGPUVendor: TGPUVendor;
 
 procedure Tint(r, g, b, a: Single);
@@ -1304,7 +1304,7 @@ else
            end;
 end;
 
-procedure copyToXY(src, dest: PSDL_Surface; destX, destY: Integer);
+procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt);
 var srcX, srcY, i, j, maxDest: LongInt;
     srcPixels, destPixels: PLongWordArray;
 begin
