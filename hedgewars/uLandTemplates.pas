@@ -2009,7 +2009,7 @@ const EdgeTemplates: array[0..41] of TEdgeTemplate =
         FillPoints: @Template40FPoints;
         FillPointsCount: Succ(High(Template41FPoints));
         BezierizeCount: 3;
-        RandPassesCount: 3;
+        RandPassesCount: 5;
         TemplateHeight: 2048; TemplateWidth: 4096;
         canMirror: true; canFlip: true; isNegative: false; canInvert: false;
         hasGirders: true;
