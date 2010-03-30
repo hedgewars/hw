@@ -37,10 +37,13 @@
 
 -(void) viewDidLoad {
 	[NSThread detachNewThreadSelector:@selector(checkFirstRun) toTarget:self withObject:nil];
-	
-	char *ver="test";
-	//HW_versionInfo(NULL, &ver);
-	self.versionLabel.text = [[NSString stringWithUTF8String:ver] autorelease];
+	/*
+	char *ver;
+	HW_versionInfo(NULL, &ver);
+    NSString *versionNumber = [[NSString alloc] initWithCString:ver];
+	self.versionLabel.text = versionNumber;
+    [versionNumber release];
+    */
 	[super viewDidLoad];
 }
 

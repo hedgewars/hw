@@ -23,32 +23,6 @@
 	if (self = [super init]) {
     	srandom(time(NULL));
         ipcPort = (random() % 64541) + 1025;
-    
-        NSDictionary *hogA1 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Snow Leopard",@"hogname",@"NoHat",@"hat",nil];
-        NSDictionary *hogA2 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Leopard",@"hogname",@"NoHat",@"hat",nil];
-        NSArray *hedgehogs1 = [[NSArray alloc] initWithObjects:hogA1,hogA2,nil];
-        [hogA1 release];
-        [hogA2 release];
-        NSDictionary *firstTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",@"System Cats",@"teamname",
-                                   @"star",@"grave",@"Earth",@"fort",@"Classic",@"voicepack",@"hedgewars",@"flag",hedgehogs1,@"hedgehogs",
-                                   @"93919294221991210322351110012010000002111040400044140044464564444477477611221114440000000000000205500000040007004000000000213111103121111111231141111111111111112111",
-                                   @"ammostore",nil];
-        [hedgehogs1 release];
-        
-        NSDictionary *hogB1 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Raichu",@"hogname",@"Bunny",@"hat",nil];
-        NSDictionary *hogB2 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Pikachu",@"hogname",@"Bunny",@"hat",nil];
-        NSArray *hedgehogs2 = [[NSArray alloc] initWithObjects:hogB1,hogB2,nil];
-        [hogB1 release];
-        [hogB2 release];
-        NSDictionary *secondTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4100897",@"color",@"0",@"hash",@"Poke-MAN",@"teamname",
-                                    @"Badger",@"grave",@"UFO",@"fort",@"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs2,@"hedgehogs",
-                                    @"93919294221991210322351110012010000002111040400044140044464564444477477611221114440000000000000205500000040007004000000000213111103121111111231141111111111111112111",
-                                    @"ammostore",nil];
-        [hedgehogs2 release];
-        
-        teams = [[NSArray alloc] initWithObjects: firstTeam, secondTeam, nil];
-        [firstTeam release];
-        [secondTeam release];
         
         NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
         systemSettings = [[NSDictionary alloc] initWithContentsOfFile:filePath]; //should check it exists
@@ -71,13 +45,53 @@
 }
 
 -(int) sendToEngine: (NSString *)string {
-	Uint8 length = [string length];
+	unsigned char length = [string length];
 	
 	SDLNet_TCP_Send(csd, &length , 1);
 	return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
--(void) sendTeamData:(NSDictionary *)teamData {
+-(void) initTeam:(NSArray *)teamLists {
+    teams = [[NSMutableArray alloc] initWithObjects:nil];
+    
+    for (NSString *teamString in teamLists) {
+        //NSString *teamFile = [[NSString alloc] initWithFormat:@"%@.plist", teamString];
+        
+        //NSDictionary *theTeam = [[NSDictionary alloc] initWithContentsOfFile:filePath];
+        //[teams addObject:theTeam];
+        //[theTeam release];
+    }
+    
+    NSDictionary *hogA1 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Snow Leopard",@"hogname",@"NoHat",@"hat",nil];
+    NSDictionary *hogA2 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Leopard",@"hogname",@"NoHat",@"hat",nil];
+    NSArray *hedgehogs1 = [[NSArray alloc] initWithObjects:hogA1,hogA2,nil];
+    [hogA1 release];
+    [hogA2 release];
+    NSDictionary *firstTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",@"System Cats",@"teamname",
+                               @"star",@"grave",@"Earth",@"fort",@"Classic",@"voicepack",@"hedgewars",@"flag",hedgehogs1,@"hedgehogs",
+                               @"93919294221991210322351110012010000002111040400044140044464564444477477611221114440000000000000205500000040007004000000000213111103121111111231141111111111111112111",
+                               @"ammostore",nil];
+    [hedgehogs1 release];
+    [teams addObject:firstTeam];
+    [firstTeam release];
+    
+    NSDictionary *hogB1 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Raichu",@"hogname",@"Bunny",@"hat",nil];
+    NSDictionary *hogB2 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Pikachu",@"hogname",@"Bunny",@"hat",nil];
+    NSArray *hedgehogs2 = [[NSArray alloc] initWithObjects:hogB1,hogB2,nil];
+    [hogB1 release];
+    [hogB2 release];
+    NSDictionary *secondTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4100897",@"color",@"0",@"hash",@"Poke-MAN",@"teamname",
+                                @"Badger",@"grave",@"UFO",@"fort",@"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs2,@"hedgehogs",
+                                @"93919294221991210322351110012010000002111040400044140044464564444477477611221114440000000000000205500000040007004000000000213111103121111111231141111111111111112111",
+                                @"ammostore",nil];
+    [hedgehogs2 release];
+    [teams addObject:secondTeam];
+    [secondTeam release];
+}
+
+-(void) sendTeamData:(NSDictionary *)teamData withPlayingHogs:(int) playingHogs{
+    int i;
+    
     NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"eaddteam %@ %@ %@", [teamData objectForKey:@"hash"], [teamData objectForKey:@"color"], [teamData objectForKey:@"teamname"]];
     [self sendToEngine: teamHashColorAndName];
     [teamHashColorAndName release];
@@ -99,7 +113,9 @@
     [flag release];
     
     NSArray *hogs = [teamData objectForKey:@"hedgehogs"];
-    for (NSDictionary *hog in hogs) {
+    for (i = 0; i < playingHogs; i++) {
+        NSDictionary *hog = [hogs objectAtIndex:i];
+        
         NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %@ %@", [hog objectForKey:@"level"], [hog objectForKey:@"health"], [hog objectForKey:@"hogname"]];
         [self sendToEngine: hogLevelHealthAndName];
         [hogLevelHealthAndName release];
@@ -160,7 +176,11 @@
 			
 			if ('C' == buffer[0]) {
 				NSLog(@"engineProtocol - sending game config");
-				
+                
+				NSArray *teamlist = [[NSArray alloc] initWithObjects:@"this",@"is",@"test",nil];
+                [self initTeam:teamlist];
+                [teamlist release];
+                
 				// send config data data
 				/*
 				seed is arbitrary string
@@ -191,7 +211,7 @@
 				[self sendToEngine:@"etheme Compost"];
 				
                 for (NSDictionary *teamData in teams) {
-                    [self sendTeamData:teamData];
+                    [self sendTeamData:teamData withPlayingHogs:2];
                     NSLog(@"teamData sent");
                 }
 								
@@ -228,7 +248,7 @@
 						sscanf(buffer, "%*s %d", &eProto);
 						short int netProto;
 						char *versionStr;
-						/*
+						
                         HW_versionInfo(&netProto, &versionStr);
 						if (netProto == eProto) {
 							NSLog(@"Setting protocol version %d (%s)", eProto, versionStr);
@@ -236,7 +256,7 @@
 							NSLog(@"ERROR - wrong protocol number: [%s] - expecting %d", buffer, eProto);
 							clientQuit = YES;
 						}
-                        */
+                        
 						break;
 					case 'i':
 						switch (buffer[1]) {

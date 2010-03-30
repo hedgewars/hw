@@ -11,7 +11,7 @@
 
 @interface GameSetup : NSObject {
 	NSDictionary *systemSettings;
-	NSArray *teams;
+	NSMutableArray *teams;
     
 	NSInteger ipcPort;
 	TCPsocket sd, csd; // Socket descriptor, Client socket descriptor
@@ -23,7 +23,9 @@
 -(void) engineProtocol;
 -(void) startThread: (NSString *)selector;
 -(int)  sendToEngine: (NSString *)string;
--(void) sendTeamData:(NSDictionary *)teamData;
--(const char **)getSettings;
-@end
+-(void) sendTeamData:(NSDictionary *)teamData withPlayingHogs:(int) playingHogs;
+-(void) initTeam:(NSArray *)teamLists;
 
+-(const char **)getSettings;
+
+@end

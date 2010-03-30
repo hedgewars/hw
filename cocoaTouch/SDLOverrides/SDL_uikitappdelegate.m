@@ -103,7 +103,7 @@ int main (int argc, char *argv[]) {
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
 	//[application setStatusBarHidden:YES animated:NO];
-    [application setStatusBarHidden:YES withAnimation:NO];
+    //[application setStatusBarHidden:YES withAnimation:NO];
     [application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];  
 		
 	self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
