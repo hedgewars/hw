@@ -591,7 +591,13 @@ begin
 		if Gear^.Kind = gtHedgehog then
 			begin
             if PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] then
+                begin
                 inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)));
+                if getRandom(2) = 0 then
+                    PlaySound(sndPoisonCough, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
+                else
+                    PlaySound(sndPoisonMoan, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+                end;
             inc(Gear^.Damage, min(cHealthDecrease, max(0,Gear^.Health - 1 - Gear^.Damage)));
             if PHedgehog(Gear^.Hedgehog)^.King then
                 begin
@@ -636,11 +642,6 @@ while t <> nil do
     begin
     Gear:= t;
     t:= Gear^.NextGear;
-    if (((GameTicks + Gear^.UID * 100) mod 1000) = 0) and (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog <> nil) and (PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned]) and (getRandom(100) = 0) then
-        if getRandom(2) = 0 then
-            PlaySound(sndPoisonCough, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
-        else
-            PlaySound(sndPoisonMoan, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 
     if Gear^.Active then
         begin

@@ -2830,14 +2830,9 @@ if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
     end;
 
 if Gear^.Health < 0 then Gear^.Health:= 0;
-if (GameTicks and $7F) = 0 then
-       begin
-       if Gear^.Health < 1000 then
-            for i:= ((1000-Gear^.Health) div 250) downto 0 do
-                AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFeather);
-       if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
-       Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
-       end;
+if ((GameTicks and $FF) = 0) and (Gear^.Health < 500) then
+    for i:= ((500-Gear^.Health) div 250) downto 0 do
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFeather);
 
 if (HHGear^.Message and gm_Attack <> 0) then begin
         HHGear^.Message := HHGear^.Message and not gm_Attack;

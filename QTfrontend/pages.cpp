@@ -40,6 +40,7 @@
 #include <QDataWidgetMapper>
 
 
+#include "ammoSchemeModel.h"
 #include "pages.h"
 #include "sdlkeys.h"
 #include "hwconsts.h"
@@ -1432,9 +1433,10 @@ void PageScheme::deleteRow()
 
 void PageScheme::schemeSelected(int n)
 {
-    gbGameModes->setEnabled(n >= 5); // FIXME: derive number from model
-    gbBasicSettings->setEnabled(n >= 5);
-    LE_name->setEnabled(n >= 5);
+    int c = ((AmmoSchemeModel*)mapper->model())->numberOfDefaultSchemes;
+    gbGameModes->setEnabled(n >= c);
+    gbBasicSettings->setEnabled(n >= c);
+    LE_name->setEnabled(n >= c);
 }
 
 /////////////////////////////////////////////////

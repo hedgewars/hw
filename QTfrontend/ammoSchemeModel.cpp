@@ -53,16 +53,19 @@ QList<QVariant> defaultScheme = QList<QVariant>()
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
     QAbstractTableModel(parent),
-    numberOfDefaultSchemes(4),
     fileConfig(fileName, QSettings::IniFormat)
 {
     QStringList predefSchemesNames;
     predefSchemesNames
         << "Default"
-        << "Pro mode"
+        << "Pro Mode"
         << "Shoppa"
         << "Basketball"
-        << "Minefield";
+        << "Minefield"
+        << "Barrel Mayhem"
+        << "Tunnel Hogs";
+
+    numberOfDefaultSchemes = predefSchemesNames.size();
 
     spNames = QStringList()
         << "name"             //  0
@@ -213,11 +216,73 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(0)             // explosives     25
         ;
 
+    QList<QVariant> barrelmayhem;
+    barrelmayhem
+        << predefSchemesNames[5]   // name           0
+        << QVariant(false)         // fortsmode      1
+        << QVariant(false)         // team divide    2
+        << QVariant(false)         // solid land     3
+        << QVariant(false)         // border         4
+        << QVariant(false)         // low gravity    5
+        << QVariant(false)         // laser sight    6
+        << QVariant(false)         // invulnerable   7
+        << QVariant(false)         // add mines      8
+        << QVariant(false)         // vampiric       9
+        << QVariant(false)         // karma          10
+        << QVariant(false)         // artillery      11
+        << QVariant(true)          // random order   12
+        << QVariant(false)         // king           13
+        << QVariant(false)         // place hog      14
+        << QVariant(true)          // shared ammo    15
+        << QVariant(false)         //disable girders 16
+        << QVariant(100)           // damage modfier 17
+        << QVariant(30)            // turn time      18
+        << QVariant(100)           // init health    19
+        << QVariant(15)            // sudden death   20
+        << QVariant(0)             // case prob      21
+        << QVariant(0)             // mines time     22
+        << QVariant(0)             // landadds       23
+        << QVariant(0)             // mine dud pct   24
+        << QVariant(80)            // explosives     25
+        ;
+
+    QList<QVariant> tunnelhogs;
+    tunnelhogs
+        << predefSchemesNames[6]   // name           0
+        << QVariant(false)         // fortsmode      1
+        << QVariant(false)         // team divide    2
+        << QVariant(false)         // solid land     3
+        << QVariant(true)          // border         4
+        << QVariant(false)         // low gravity    5
+        << QVariant(false)         // laser sight    6
+        << QVariant(false)         // invulnerable   7
+        << QVariant(true)          // add mines      8
+        << QVariant(false)         // vampiric       9
+        << QVariant(false)         // karma          10
+        << QVariant(false)         // artillery      11
+        << QVariant(true)          // random order   12
+        << QVariant(false)         // king           13
+        << QVariant(false)         // place hog      14
+        << QVariant(true)          // shared ammo    15
+        << QVariant(true)          //disable girders 16
+        << QVariant(100)           // damage modfier 17
+        << QVariant(30)            // turn time      18
+        << QVariant(100)           // init health    19
+        << QVariant(15)            // sudden death   20
+        << QVariant(5)             // case prob      21
+        << QVariant(3)             // mines time     22
+        << QVariant(10)            // landadds       23
+        << QVariant(10)            // mine dud pct   24
+        << QVariant(10)            // explosives     25
+        ;
+
     schemes.append(defaultScheme);
     schemes.append(proMode);
     schemes.append(shoppa);
     schemes.append(basketball);
     schemes.append(minefield);
+    schemes.append(barrelmayhem);
+    schemes.append(tunnelhogs);
 
 
     int size = fileConfig.beginReadArray("schemes");

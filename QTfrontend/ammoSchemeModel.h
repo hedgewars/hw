@@ -40,7 +40,7 @@ public:
     bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
     QVariant data(const QModelIndex &index, int role) const;
 
-    const int numberOfDefaultSchemes;
+    int numberOfDefaultSchemes;
 
 public slots:
     void Save();
