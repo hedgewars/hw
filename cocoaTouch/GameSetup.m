@@ -17,19 +17,48 @@
 
 @implementation GameSetup
 
-@synthesize systemSettings;
+@synthesize systemSettings, teams;
 
 -(id) init {
-	self = [super init];
-	srandom(time(NULL));
-	ipcPort = (random() % 64541) + 1025;
-		
-	NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
-	systemSettings = [[NSDictionary alloc] initWithContentsOfFile:filePath]; //should check it exists
-	return self;
+	if (self = [super init]) {
+    	srandom(time(NULL));
+        ipcPort = (random() % 64541) + 1025;
+    
+        NSDictionary *hogA1 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Snow Leopard",@"hogname",@"NoHat",@"hat",nil];
+        NSDictionary *hogA2 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Leopard",@"hogname",@"NoHat",@"hat",nil];
+        NSArray *hedgehogs1 = [[NSArray alloc] initWithObjects:hogA1,hogA2,nil];
+        [hogA1 release];
+        [hogA2 release];
+        NSDictionary *firstTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",@"System Cats",@"teamname",
+                                   @"star",@"grave",@"Earth",@"fort",@"Classic",@"voicepack",@"hedgewars",@"flag",hedgehogs1,@"hedgehogs",
+                                   @"93919294221991210322351110012010000002111040400044140044464564444477477611221114440000000000000205500000040007004000000000213111103121111111231141111111111111112111",
+                                   @"ammostore",nil];
+        [hedgehogs1 release];
+        
+        NSDictionary *hogB1 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Raichu",@"hogname",@"Bunny",@"hat",nil];
+        NSDictionary *hogB2 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Pikachu",@"hogname",@"Bunny",@"hat",nil];
+        NSArray *hedgehogs2 = [[NSArray alloc] initWithObjects:hogB1,hogB2,nil];
+        [hogB1 release];
+        [hogB2 release];
+        NSDictionary *secondTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4100897",@"color",@"0",@"hash",@"Poke-MAN",@"teamname",
+                                    @"Badger",@"grave",@"UFO",@"fort",@"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs2,@"hedgehogs",
+                                    @"93919294221991210322351110012010000002111040400044140044464564444477477611221114440000000000000205500000040007004000000000213111103121111111231141111111111111112111",
+                                    @"ammostore",nil];
+        [hedgehogs2 release];
+        
+        teams = [[NSArray alloc] initWithObjects: firstTeam, secondTeam, nil];
+        [firstTeam release];
+        [secondTeam release];
+        
+        NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
+        systemSettings = [[NSDictionary alloc] initWithContentsOfFile:filePath]; //should check it exists
+        return self;
+    } else
+        return nil;
 }
 
 -(void) dealloc {
+    [teams release];
     [systemSettings release];
 	[super dealloc];
 }
@@ -46,6 +75,43 @@
 	
 	SDLNet_TCP_Send(csd, &length , 1);
 	return SDLNet_TCP_Send(csd, [string UTF8String], length);
+}
+
+-(void) sendTeamData:(NSDictionary *)teamData {
+    NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"eaddteam %@ %@ %@", [teamData objectForKey:@"hash"], [teamData objectForKey:@"color"], [teamData objectForKey:@"teamname"]];
+    [self sendToEngine: teamHashColorAndName];
+    [teamHashColorAndName release];
+    
+    NSString *grave = [[NSString alloc] initWithFormat:@"egrave %@", [teamData objectForKey:@"grave"]];
+    [self sendToEngine: grave];
+    [grave release];
+    
+    NSString *fort = [[NSString alloc] initWithFormat:@"efort %@", [teamData objectForKey:@"fort"]];
+    [self sendToEngine: fort];
+    [fort release];
+    
+    NSString *voicepack = [[NSString alloc] initWithFormat:@"evoicepack %@", [teamData objectForKey:@"voicepack"]];
+    [self sendToEngine: voicepack];
+    [voicepack release];
+    
+    NSString *flag = [[NSString alloc] initWithFormat:@"eflag %@", [teamData objectForKey:@"flag"]];
+    [self sendToEngine: flag];
+    [flag release];
+    
+    NSArray *hogs = [teamData objectForKey:@"hedgehogs"];
+    for (NSDictionary *hog in hogs) {
+        NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %@ %@", [hog objectForKey:@"level"], [hog objectForKey:@"health"], [hog objectForKey:@"hogname"]];
+        [self sendToEngine: hogLevelHealthAndName];
+        [hogLevelHealthAndName release];
+        
+        NSString *hogHat = [[NSString alloc] initWithFormat:@"ehat %@", [hog objectForKey:@"hat"]];
+        [self sendToEngine: hogHat];
+        [hogHat release];
+    }
+    
+    NSString *ammostore = [[NSString alloc] initWithFormat:@"eammstore %@", [teamData objectForKey:@"ammostore"]];
+    [self sendToEngine: ammostore];
+    [ammostore release];
 }
 
 -(void) engineProtocol {
@@ -124,53 +190,12 @@
 				// theme info
 				[self sendToEngine:@"etheme Compost"];
 				
-				// team 1 info
-				[self sendToEngine:@"eaddteam 0 4421353 System Cats"];
-				
-				// team 1 grave info
-				[self sendToEngine:@"egrave star"];
-				
-				// team 1 fort info
-				[self sendToEngine:@"efort Earth"];
+                for (NSDictionary *teamData in teams) {
+                    [self sendTeamData:teamData];
+                    NSLog(@"teamData sent");
+                }
 								
-				// team 1 voicepack info
-				[self sendToEngine:@"evoicepack Classic"];
-				
-				// team 1 flag
-				[self sendToEngine:@"eflag hedgewars"];
-
-				// team 1 binds (skipped)			
-				// team 1 members info
-				[self sendToEngine:@"eaddhh 0 100 Snow Leopard"];
-				[self sendToEngine:@"ehat NoHat"];
-
-				// team 1 ammostore
-				[self sendToEngine:@"eammstore 93919294221991210322351110012010000002111040400044140044464564444477477611221114440000000000000205500000040007004000000000213111103121111111231141111111111111112111"];
-				
-				// team 2 info
-				[self sendToEngine:@"eaddteam 0 4100897 Poke-MAN"];
-				
-				// team 2 grave info
-				[self sendToEngine:@"egrave Badger"];
-				
-				// team 2 fort info
-				[self sendToEngine:@"efort UFO"];
-				
-				// team 2 voicepack info
-				[self sendToEngine:@"evoicepack Classic"];
-
-				// team 2 flag
-				[self sendToEngine:@"eflag hedgewars"];
-
-				// team 2 binds (skipped)
-				// team 2 members info
-				[self sendToEngine:@"eaddhh 0 100 Raichu"];
-				[self sendToEngine:@"ehat Bunny"];
-
-				// team 2 ammostore
-				[self sendToEngine:@"eammstore 93919294221991210322351110012010000002111040400044140044464564444477477611221114440000000000000205500000040007004000000000213111103121111111231141111111111111112111"];
-				
-				clientQuit = NO;
+			clientQuit = NO;
 			} else {
 				NSLog(@"engineProtocolThread - wrong message or client closed connection");
 				clientQuit = YES;
