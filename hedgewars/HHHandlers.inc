@@ -327,7 +327,7 @@ case Gear^.Pos of
                       or (PHedgehog(HH^.Hedgehog)^.Team^.Clan^.ClanIndex = LocalClan)
                       or (GameType = gmtDemo)  then
                         begin
-                        s:= trammo[Ammoz[a].NameId] + '(+' + IntToStr(Ammoz[a].NumberInCase) + ')';
+                        s:= trammo[Ammoz[a].NameId] + ' (+' + IntToStr(Ammoz[a].NumberInCase) + ')';
                         AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
 
                         // show ammo icon
