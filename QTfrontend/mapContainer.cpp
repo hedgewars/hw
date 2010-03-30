@@ -365,7 +365,7 @@ void HWMapContainer::setMap(const QString & map)
 
     int id = 0;
     for(int i = 0; i < chooseMap->count(); i++)
-        if(chooseMap->itemData(i).toList()[0].toString() == map)
+        if(!chooseMap->itemData(i).isNull() && chooseMap->itemData(i).toList()[0].toString() == map)
         {
             id = i;
             break;
