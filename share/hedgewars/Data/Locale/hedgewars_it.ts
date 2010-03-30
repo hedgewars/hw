@@ -45,19 +45,19 @@
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 è stato rimosso dalla tua lista ignorati</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 è stato aggiunto alla tua lista ignorati</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 è stato rimosso dalla tua lista amici</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 è stato aggiunto alla tua lista amici</translation>
     </message>
 </context>
 <context>
@@ -137,32 +137,8 @@
         <translation>Stramba</translation>
     </message>
     <message>
-        <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Small tunnels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Medium tunnels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Small floating islands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Medium floating islands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Large floating islands</source>
-        <translation type="unfinished"></translation>
+        <source>Tunnel size</source>
+        <translation>Grandezza Tunnel</translation>
     </message>
 </context>
 <context>
@@ -353,19 +329,19 @@ o scegli un altro nickname:</translation>
     </message>
     <message>
         <source>Delete team</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina team</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuovo schema armi</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica schema armi</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina schema armi</translation>
     </message>
 </context>
 <context>
@@ -485,7 +461,7 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished"></translation>
+        <translation>Labirinto Casuale</translation>
     </message>
 </context>
 <context>
@@ -552,23 +528,23 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;ordine di gioco è casuale invece che nell&apos;ordine della stanza.</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioca con un Re. Se il Re muore la tua squadra perderà.</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation type="unfinished"></translation>
+        <translation>Piazza a turno i tuoi ricci prima dell&apos;inizio della partita.</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le munizioni sono condivise tra tutti i team che hanno lo stesso colore.</translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Disabilita le travi nella generazione di mappe casuali.</translation>
     </message>
 </context>
 <context>
@@ -633,23 +609,23 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     </message>
     <message>
         <source>Follow</source>
-        <translation type="unfinished"></translation>
+        <translation>Segui</translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignora</translation>
     </message>
     <message>
         <source>Add friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi amico</translation>
     </message>
     <message>
         <source>Unignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Togli ignora</translation>
     </message>
     <message>
         <source>Remove friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimuovi amico</translation>
     </message>
 </context>
 <context>
@@ -692,19 +668,19 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra suggerimenti nel menu armi</translation>
     </message>
     <message>
         <source>Enable frontend sounds</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita suoni nel frontend</translation>
     </message>
     <message>
         <source>Enable frontend music</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita la musica nel frontend</translation>
     </message>
     <message>
         <source>Frontend effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Effetti nel frontend</translation>
     </message>
 </context>
 <context>
@@ -723,15 +699,15 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     </message>
     <message>
         <source>(System default)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Default di sistema)</translation>
     </message>
     <message>
         <source>generated maze...</source>
-        <translation type="unfinished"></translation>
+        <translation>labirinto generato...</translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation>Missione</translation>
     </message>
 </context>
 <context>
@@ -778,11 +754,11 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     </message>
     <message>
         <source>Team Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Impostazioni dei Team</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Varie</translation>
     </message>
 </context>
 <context>
@@ -889,44 +865,45 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>% Mine Difettose</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Grave</source>
-        <translation type="unfinished"></translation>
+        <translation>Tomba</translation>
     </message>
     <message>
         <source>Flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandiera</translation>
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Voce</translation>
     </message>
     <message>
         <source>Locale</source>
-        <translation type="unfinished"></translation>
+        <translation>Locale</translation>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Riavvia il gioco per applicare</translation>
     </message>
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translation>Questa versione SVN è &apos;work in progress&apos; e può non essere compatibile con le altre versioni del gioco.
+Alcune feature potrebbero essere incomplete o non funzionanti. Usatela a vostro rischio!</translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation type="unfinished"></translation>
+        <translation>Esplosivi</translation>
     </message>
 </context>
 <context>
@@ -1069,7 +1046,7 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Random Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Team Casuale</translation>
     </message>
 </context>
 <context>
@@ -1115,11 +1092,11 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Ammo in boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Munizioni nelle casse</translation>
     </message>
     <message>
         <source>Delays</source>
-        <translation type="unfinished"></translation>
+        <translation>Ritardi</translation>
     </message>
 </context>
 <context>
@@ -1185,23 +1162,23 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Random Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordine Casuale</translation>
     </message>
     <message>
         <source>King</source>
-        <translation type="unfinished"></translation>
+        <translation>Re</translation>
     </message>
     <message>
         <source>Place Hedgehogs</source>
-        <translation type="unfinished"></translation>
+        <translation>Posiziona Ricci</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation>Munizioni Condivise</translation>
     </message>
     <message>
         <source>Disable Girders</source>
-        <translation type="unfinished"></translation>
+        <translation>Disabilita Travi</translation>
     </message>
 </context>
 <context>
@@ -1743,27 +1720,27 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Grilletto sinistro</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Grilletto destro</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Leva destra (Giu)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>Leva destra (Su)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Leva destra (Destra)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Leva destra (Sinistra)</translation>
     </message>
     <message>
         <source>DPad</source>
