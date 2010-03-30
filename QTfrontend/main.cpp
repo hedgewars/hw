@@ -104,6 +104,10 @@ int main(int argc, char *argv[]) {
                 "background-color: rgba(13, 5, 68, 70%);"
             "}"
 
+            "QComboBox::separator {"
+                "border: solid; border-width: 3px; border-color: #ffcc00;"
+            "}"
+
             "QPushButton, QListWidget, QTableView, QLineEdit, QHeaderView, "
             "QTextBrowser, QSpinBox, QToolBox, QComboBox, "
             "QComboBox QAbstractItemView, IconedGroupBox, "

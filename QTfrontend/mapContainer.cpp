@@ -63,6 +63,9 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     chooseMap->addItem(QComboBox::tr("generated map..."));
     chooseMap->addItem(QComboBox::tr("generated maze..."));
+    chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
+
+    int missionindex = chooseMap->count();
     for (int i = 0; i < mapList->size(); ++i) {
         QString map = (*mapList)[i];
         QFile mapCfgFile(
@@ -88,10 +91,14 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
             else
                 mapInfo.push_back(18);
             mapInfo.push_back(mapLuaFile.exists());
-            chooseMap->addItem(mapLuaFile.exists() ? (QComboBox::tr("Mission") + ": " + map) : map, mapInfo);
+            if(mapLuaFile.exists())
+                chooseMap->insertItem(missionindex++, QComboBox::tr("Mission") + ": " + map, mapInfo);
+            else
+                chooseMap->addItem(map, mapInfo);
             mapCfgFile.close();
         }
     }
+    chooseMap->insertSeparator(missionindex); // separator between missions and maps
 
     connect(chooseMap, SIGNAL(currentIndexChanged(int)), this, SLOT(mapChanged(int)));
     mainLayout.addWidget(chooseMap, 1, 1);

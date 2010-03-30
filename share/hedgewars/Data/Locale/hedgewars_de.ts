@@ -716,7 +716,7 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     <name>QComboBox</name>
     <message>
         <source>generated map...</source>
-        <translation>Generierte Karte ...</translation>
+        <translation>Zufallskarte...</translation>
     </message>
     <message>
         <source>Human</source>
@@ -736,7 +736,7 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     </message>
     <message>
         <source>generated maze...</source>
-        <translation>Generiertes Labyrinth ...</translation>
+        <translation>Zufallslabyrinth...</translation>
     </message>
 </context>
 <context>

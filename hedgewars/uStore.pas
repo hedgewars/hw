@@ -355,7 +355,7 @@ for fi:= Low(THWFont) to High(THWFont) do
     with Fontz[fi] do
         begin
         s:= Pathz[ptFonts] + '/' + Name;
-        WriteToConsole(msgLoading + s + '... ');
+        WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
         Handle:= TTF_OpenFont(Str2PChar(s), Height);
         SDLTry(Handle <> nil, true);
         TTF_SetFontStyle(Handle, style);
