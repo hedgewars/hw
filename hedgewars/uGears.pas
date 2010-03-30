@@ -58,7 +58,7 @@ type
             FlightTime: Longword;
             uid: Longword;
             ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
-            nImpactSounds: ShortInt; // count of ImpactSounds
+            nImpactSounds: Word; // count of ImpactSounds
             SoundChannel: LongInt
         end;
 

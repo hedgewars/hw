@@ -242,7 +242,7 @@ else
 if (Gear^.nImpactSounds > 0) then
     if ((Gear^.Damage <> 0) or ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving))) and
        ((Gear^.dX.QWordValue > _0_1.QWordValue) or (Gear^.dY.QWordValue > _0_1.QWordValue)) then
-        PlaySound(TSound(ord(Gear^.ImpactSound) + GetRandom(Gear^.nImpactSounds)));
+        PlaySound(TSound(ord(Gear^.ImpactSound) + LongInt(GetRandom(Gear^.nImpactSounds))));
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
