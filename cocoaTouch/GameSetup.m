@@ -14,6 +14,7 @@
 #include <sys/sysctl.h>
 
 #define BUFFER_SIZE 256
+#define debug(format, ...) CFShow([NSString stringWithFormat:format, ## __VA_ARGS__]);
 
 @implementation GameSetup
 
@@ -29,6 +30,10 @@
         return self;
     } else
         return nil;
+}
+
+-(NSString *)description {
+    return [NSString stringWithFormat:@"ipcport: %d\nsockets: %d,%d\n teams: %@\n systemSettings: %@",ipcPort,sd,csd,teams,systemSettings];
 }
 
 -(void) dealloc {

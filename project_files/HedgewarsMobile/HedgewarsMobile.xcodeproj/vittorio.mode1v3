@@ -229,6 +229,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -272,7 +274,8 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>1</integer>
+									<integer>4</integer>
+									<integer>2</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -312,7 +315,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>uLandTexture.pas</string>
+								<string>uKeys.pas</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -320,11 +323,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>uLandTexture.pas</string>
+										<string>uKeys.pas</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>6156E8321162CD7F00FF6486</string>
+										<string>61697BBB11634AA000CCDF37</string>
 										<key>history</key>
 										<array>
 											<string>6179889D114AA5BD00BA94A9</string>
@@ -405,12 +408,12 @@
 											<string>61CCBFDB1161833800833FE8</string>
 											<string>61CCBFDC1161833800833FE8</string>
 											<string>61CCBFDD1161833800833FE8</string>
-											<string>6166BD931162C46400172C3A</string>
-											<string>61AB99EA1162CC3100B1CF7E</string>
 											<string>61AB99EB1162CC3100B1CF7E</string>
 											<string>61AB99EC1162CC3100B1CF7E</string>
 											<string>6156E8311162CD7F00FF6486</string>
-											<string>61CCBF811161657400833FE8</string>
+											<string>61697B9E1163478A00CCDF37</string>
+											<string>61697BB611634A2400CCDF37</string>
+											<string>61697BB711634A2400CCDF37</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -422,18 +425,16 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {593, 28}}</string>
+								<string>{{0, 0}, {593, 93}}</string>
 								<key>RubberWindowFrame</key>
 								<string>844 455 801 617 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>28pt</string>
+							<string>93pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -444,14 +445,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 33}, {593, 543}}</string>
+								<string>{{0, 98}, {593, 478}}</string>
 								<key>RubberWindowFrame</key>
 								<string>844 455 801 617 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
 							<key>Proportion</key>
-							<string>543pt</string>
+							<string>478pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
@@ -470,9 +471,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>6156E8331162CD7F00FF6486</string>
+				<string>61697BA11163478A00CCDF37</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>6156E8341162CD7F00FF6486</string>
+				<string>61697BA21163478A00CCDF37</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -610,8 +611,8 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>61697BA31163478A00CCDF37</string>
 		<string>61798848114AA42600BA94A9</string>
-		<string>61AB99F31162CC3100B1CF7E</string>
 		<string>/Users/vittorio/hedgewars/trunk/project_files/HedgewarsMobile/HedgewarsMobile.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -631,12 +632,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>uKeys.pas</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -692,7 +695,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>61798848114AA42600BA94A9</string>
-				<string>6156E8351162CD7F00FF6486</string>
+				<string>61697B9B1163477E00CCDF37</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

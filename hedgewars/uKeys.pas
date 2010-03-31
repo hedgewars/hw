@@ -102,8 +102,8 @@ end;
 procedure ProcessKbd;
 var  i, j, k: LongInt;
      s: shortstring;
-     pkbd: PByteArray;
      Trusted: boolean;
+{$IFNDEF IPHONEOS}pkbd: PByteArray;{$ENDIF}
 begin
 hideAmmoMenu:= false;
 Trusted:= (CurrentTeam <> nil)
@@ -115,9 +115,11 @@ Trusted:= (CurrentTeam <> nil)
 movecursor(5 * CursorMovementX, 5 * CursorMovementY);
 
 k:= SDL_GetMouseState(nil, nil);
-pkbd:= SDL_GetKeyState(@j);
 
-{$IFNDEF IPHONEOS}
+{$IFDEF IPHONEOS}
+SDL_GetKeyState(@j);
+{$ELSE}
+pkbd:= SDL_GetKeyState(@j);
 for i:= 6 to pred(j) do // first 6 will be overwritten
     tkbdn[i]:= pkbd^[i];
 {$ENDIF}
@@ -187,11 +189,11 @@ end;
 
 procedure ResetKbd;
 var i, j, k, t: LongInt;
-    pkbd: PByteArray;
+{$IFNDEF IPHONEOS}pkbd: PByteArray;{$ENDIF}
 begin
 
 k:= SDL_GetMouseState(nil, nil);
-pkbd:= SDL_GetKeyState(@j);
+{$IFNDEF IPHONEOS}pkbd:={$ENDIF}SDL_GetKeyState(@j);
 
 TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(j) + ')', true);
 

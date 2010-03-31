@@ -59,6 +59,8 @@
  * Fixed several memory leaks
  + Lots of other bug fixes and additions we already forgot during this huge release
  + Updated translation
+ + PowerPC architecture supported
+ * Reduced memory footprint and leakage
 
 0.9.11 -> 0.9.12:
  + Zoom
