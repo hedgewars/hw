@@ -216,7 +216,7 @@ if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
 else if (Gear^.AdvBounce=1) and TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) then collH:= -hwSign(Gear^.dX);
 
 //if Gear^.AdvBounce and (collV <>0) and (collH <> 0) and (hwSqr(tdX) + hwSqr(tdY) > _0_08) then
-if (Gear^.AdvBounce=1) and (collV <>0) and (collH <> 0) and ((tdX.QWordValue + tdY.QWordValue) > _0_2.QWordValue) then
+if (Gear^.AdvBounce=1) and (collV <>0) and (collH <> 0) and ((collV=-1) or ((tdX.QWordValue + tdY.QWordValue) > _0_2.QWordValue)) then
     begin
     Gear^.dX:= tdY*Gear^.Elasticity*Gear^.Friction;
     Gear^.dY:= tdX*Gear^.Elasticity;//*Gear^.Friction;
