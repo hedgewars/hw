@@ -38,6 +38,7 @@ procedure ReleaseSound;
 procedure SoundLoad;
 procedure PlaySound(snd: TSound);
 procedure PlaySound(snd: TSound; voicepack: PVoicepack);
+procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 function LoopSound(snd: TSound): LongInt;
 function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
 procedure PlayMusic;
@@ -162,12 +163,20 @@ end;
 
 procedure PlaySound(snd: TSound);
 begin
-    PlaySound(snd, nil);
+    PlaySound(snd, nil, false);
 end;
 
 procedure PlaySound(snd: TSound; voicepack: PVoicepack);
 begin
+    PlaySound(snd, voicepack, false);
+end;
+
+procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
+begin
 if (not isSoundEnabled) or fastUntilLag then exit;
+
+if keepPlaying and (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
+    exit;
 
 if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
     lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], 0, -1)
