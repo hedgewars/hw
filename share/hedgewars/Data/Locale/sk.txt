@@ -1,4 +1,4 @@
-﻿; Slovak locale
+; Slovak locale
 
 00:00=Granát
 00:01=Trieštivý granát
@@ -40,7 +40,7 @@
 00:37=Režim vampíra
 00:38=Ostreľovačka
 00:39=Flying Saucer
-00:40=Molotov Cocktail
+00:40=Molotovov koktejl
 
 01:00=Do boja!
 01:01=Remíza
@@ -66,5 +66,5 @@
 02:02=Ozbrojení a pripravení!
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
-02:10=A bird, a plane, ...
-02:10=That one is out!
+02:10=Vták, lietadlo, ...
+02:10=A je z kola von!
