@@ -2,6 +2,42 @@
 * bugfixes
 
 
+0.9.12 -> 0.9.13:
+ + speed optimisations
+ + many new hats, hats visible while using rope and blowtorch
+ + Exploding barrels
+ + AI uses new weapons, aware of fire, can fight in artillery mode
+ + New options in ammo editing - crate probability, turns to use
+ + option of semi-opaque hog name tags to avoid fail when land is hidden by name
+ + new British voicepack
+ + notification sound when people join your room
+ + contextual help when using weapons menu
+ + 3d effect for waves
+ + fade effect when starting/stopping game
+ + new game modes - place hedgehog, king mode, randomise starts, allies share ammo, disable girders
+ + shift + direction to turn without moving
+ + view ammo menu when not your turn
+ + new font for CJK text and better CJK detection
+ + dud mines
+ + team flags
+ + visual effects: dust on fall impact, smoke, shotgun shells, blink team name on start of turn, hogs pulling weapons out, falling flakes kicked by explosion and more
+ + hogs react to throwing grenades / dynamite and when near them 
+ + graphic of crate contents when picking up weapon/utility
+ + walk sound for hedgehogs
+ + UFO changed to homing bee
+ + splashes/droplets when things fall in the water
+ + 45 degree bounce when throwing grenades
+ + new bounce sounds
+ + information on game rules when starting game
+ + knockball map (scripted map)
+ + lua scripting
+ + Birdy weapon and poisoning effect
+ + maze generator for new random maps
+ + new crazy map template
+ + new Olympics, Desert themes, visual updates to many other themes
+ + Background texture for land for a 3d effect on explosions
+ * many bug fixes
+
 0.9.11 -> 0.9.12:
  + Zoom
  + New weapons: flying saucer, molotov cocktail
