@@ -36,6 +36,11 @@
  + new crazy map template
  + new Olympics, Desert themes, visual updates to many other themes
  + Background texture for land for a 3d effect on explosions
+ + frontend able to delete teams
+ + ignore/friends lists in frontend
+ + possibility to 'follow' other players into their room
+ + alt weapon preview on rope, parachute
+ + updated options in frontend: independent toggles for frontend/game sound/music, select locale
  * many bug fixes
 
 0.9.11 -> 0.9.12:
