@@ -74,7 +74,7 @@ About::About(QWidget * parent) :
             "Frontend improvements: Martin Minarik &lt;<a href=\"mailto:ttsmj@pokec.sk\">ttsmj@pokec.sk</a>&gt;<br>"
             "Frontend improvements: Kristian Lehmann &lt;<a href=\"mailto:email@thexception.net\">email@thexception.net</a>&gt;<br>"
             "Mac OS X port, OpenAL wrapper library: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;<br>"
-            "Gamepad support and additional effects: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@googlemail.com\">mario.liebisch@googlemail.com</a>&gt;"
+            "Gamepad and Lua integration, misc effects: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@googlemail.com\">mario.liebisch@googlemail.com</a>&gt;"
             "</p><h2>" +
 
             QLabel::tr("Art:") + "</h2>"
@@ -112,7 +112,7 @@ About::About(QWidget * parent) :
             "English: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
             "Finnish: Nina Kuisma &lt;<a href=\"mailto:ninnnu@gmail.com\">ninnnu@gmail.com</a>&gt;<br>"
             "French: Antoine Turmel &lt;<a href=\"mailto:geekshadow@gmail.com\">geekshadow@gmail.com</a>&gt;<br>"
-            "German: Peter Hüwe &lt;<a href=\"mailto:PeterHuewe@gmx.de\">PeterHuewe@gmx.de</a>&gt;<br>"
+            "German: Peter Hüwe &lt;<a href=\"mailto:PeterHuewe@gmx.de\">PeterHuewe@gmx.de</a>&gt;, Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@googlemail.com\">mario.liebisch@googlemail.com</a>&gt;<br>"
             "Italian: Luca Bonora &lt;<a href=\"mailto:bonora.luca@gmail.com\">bonora.luca@gmail.com</a>&gt;<br>"
             "Japanese: ADAM Etienne &lt;<a href=\"mailto:etienne.adam@gmail.com\">etienne.adam@gmail.com</a>&gt;<br>"
             "Polish: Maciej Mroziński &lt;<a href=\"mailto:mynick2@o2.pl\">mynick2@o2.pl</a>&gt;, Wojciech Latkowski &lt;<a href=\"mailto:magik_15l@poczta.fm\">magik_15l@poczta.fm</a>&gt;, Maciej Górny<br>"
