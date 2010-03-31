@@ -16,9 +16,9 @@
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Var %1 tur</numerusform>
+            <numerusform>Var %1 tur</numerusform>
         </translation>
     </message>
 </context>
@@ -45,7 +45,7 @@
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 har tagits bort från din ignoreringslista</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
@@ -53,7 +53,7 @@
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 har tagits bort från din kompislista</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
@@ -138,31 +138,31 @@
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Små tunnlar</translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Medelstora tunnlar</translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Stora tunnlar</translation>
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Små flytande öar</translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Medelstora flytande öar</translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Stora flytande öar</translation>
     </message>
 </context>
 <context>
@@ -204,30 +204,33 @@
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ditt smeknamn (%1) är
+registrerat på Hedgewars.org
+Var god ange ditt lösenord
+eller välj ett annat smeknamn</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 har gått med i rummet</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 har gått med</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 har lämnat (%3)</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 har lämnat</translation>
     </message>
 </context>
 <context>
@@ -245,11 +248,11 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Set message</source>
-        <translation type="unfinished"></translation>
+        <translation>Ställ in meddelande</translation>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Töm användarcache</translation>
     </message>
 </context>
 <context>
@@ -278,16 +281,16 @@ or pick another nickname:</source>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Det bästa dödande skottet skjöts av &lt;b&gt;%1&lt;/b&gt; som dödade &lt;b&gt;%2&lt;/b&gt; igelkott i samma slag.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Det bästa dödande skottet skjöts av &lt;b&gt;%1&lt;/b&gt; som dödade &lt;b&gt;%2&lt;/b&gt; igelkottar i samma slag.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gtTotalt &lt;b&gt;%1&lt;/b&gt; igelkott dödades denna omgång.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gtTotalt &lt;b&gt;%1&lt;/b&gt; igelkottar dödades denna omgång.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -429,16 +432,18 @@ or pick another nickname:</source>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Detta rum är i lobbyläge.
+Du kan gå in och börja spela när spelet börjar.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Detta rum genomför ett spel.
+Du kan gå in och se på men du måste vänta tills spelet är slut för att själv kunna börja spela.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 är ägaren. Han kan ändra inställningar och starta spelet.</translation>
     </message>
     <message>
         <source>Random Map</source>
@@ -446,28 +451,28 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Spel kan spelas på fördefinierade eller slumpade kartor.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="unfinished"></translation>
+        <translation>Spelöversikten ställer in allmäna inställningar som tid per person, Sudden Death eller Vampyrism.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vapenöversikten ställer in tillgängliga vapen och deras ammunitionsantal.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Det är %1 klient uppkopplad till detta rum.</numerusform>
+            <numerusform>Det är %1 klienter uppkopplade till detta rum.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Det är %1 deltagande lag i detta rum.</numerusform>
+            <numerusform>Det är %1 deltagande lag i detta rum.</numerusform>
         </translation>
     </message>
     <message>
@@ -480,7 +485,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished"></translation>
+        <translation>Slumpad labyrint</translation>
     </message>
 </context>
 <context>
@@ -499,15 +504,15 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation type="unfinished"></translation>
+        <translation>Få 80% av skadan du gör tillbaka i liv</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation type="unfinished"></translation>
+        <translation>Dela dina fienders smärta och skada</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
-        <translation type="unfinished"></translation>
+        <translation>Dina igelkottar kan inte röra sig, din artilleriskicklighet ställs på prov</translation>
     </message>
     <message>
         <source>Random</source>
@@ -519,19 +524,19 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation type="unfinished"></translation>
+        <translation>Skydda ditt fort och förstör motståndarens, två lag max!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation type="unfinished"></translation>
+        <translation>Lag startar på motsatta sidor av terrängen, två lag max!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
-        <translation type="unfinished"></translation>
+        <translation>Land kan inte förstöras!</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägger till en oförstörbar kant runt terrängen</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -539,19 +544,19 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Assisted aiming with laser sight</source>
-        <translation type="unfinished"></translation>
+        <translation>Förenklad siktesmöjlighet med lasersikte</translation>
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla igelkottar har ett personligt skydd</translation>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation type="unfinished"></translation>
+        <translation>Turordning av spelet är slumpvald istället för rumordning.</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation type="unfinished"></translation>
+        <translation>Spela med en kung. Om han dör så dör din sida.</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
@@ -559,11 +564,11 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ammunition är delad mellan alla lag med samma färg.</translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avaktivera balkar när slumpade kartor genereras.</translation>
     </message>
 </context>
 <context>
@@ -628,7 +633,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Follow</source>
-        <translation type="unfinished"></translation>
+        <translation>Följ</translation>
     </message>
     <message>
         <source>Ignore</source>
@@ -636,7 +641,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Add friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till vän</translation>
     </message>
     <message>
         <source>Unignore</source>
@@ -644,7 +649,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Remove friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort vän</translation>
     </message>
 </context>
 <context>
@@ -679,15 +684,15 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Check for updates at startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök efter uppdatering vid programstart</translation>
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Minskad kvalité</translation>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa hjälp i ammunitionsmenyn</translation>
     </message>
     <message>
         <source>Enable frontend sounds</source>
@@ -765,19 +770,19 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Game Modifiers</source>
-        <translation type="unfinished"></translation>
+        <translation>Spellägen</translation>
     </message>
     <message>
         <source>Basic Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Allmäna inställningar</translation>
     </message>
     <message>
         <source>Team Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Laginställningar</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Diverse</translation>
     </message>
 </context>
 <context>
@@ -848,7 +853,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Damage Modifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Skadeinställning procentuellt</translation>
     </message>
     <message>
         <source>Turn Time</source>
@@ -860,7 +865,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Sudden Death Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Turordningar till Sudden Death</translation>
     </message>
     <message>
         <source>Mines Time</source>
@@ -876,11 +881,11 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Crate Drops</source>
-        <translation type="unfinished"></translation>
+        <translation>Lådfall</translation>
     </message>
     <message>
         <source>Game scheme</source>
-        <translation type="unfinished">Spelupplägg</translation>
+        <translation>Spelupplägg</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
@@ -904,24 +909,25 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Röst</translation>
     </message>
     <message>
         <source>Locale</source>
-        <translation type="unfinished"></translation>
+        <translation>Plats</translation>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta om spelet för att verkställa</translation>
     </message>
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translation>Detta SVN-bygge är &apos;under utveckling&apos; och kanske inte är kompatibel med andra versioner av spelet.
+Det kan finnas buggar eller ofullständiga funktioner. Använd på egen risk!</translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation type="unfinished"></translation>
+        <translation>Bombtunnor</translation>
     </message>
 </context>
 <context>
@@ -1071,7 +1077,7 @@ Var god kontrollera din installation</translation>
     <name>QTableWidget</name>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn på rum</translation>
     </message>
     <message>
         <source>C</source>
@@ -1083,7 +1089,7 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation>Ägare</translation>
     </message>
     <message>
         <source>Map</source>
@@ -1102,19 +1108,19 @@ Var god kontrollera din installation</translation>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Vapenset</translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Sannorlikheter</translation>
     </message>
     <message>
         <source>Ammo in boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ammunition i lådor</translation>
     </message>
     <message>
         <source>Delays</source>
-        <translation type="unfinished"></translation>
+        <translation>Fördröjning</translation>
     </message>
 </context>
 <context>
@@ -1148,7 +1154,7 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Fort Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortläge</translation>
     </message>
     <message>
         <source>Divide Teams</source>
@@ -1160,11 +1166,11 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Add Border</source>
-        <translation type="unfinished">Lägg till kant</translation>
+        <translation>Lägg till kant</translation>
     </message>
     <message>
         <source>Low Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Låg gravitation</translation>
     </message>
     <message>
         <source>Laser Sight</source>
@@ -1172,11 +1178,11 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Invulnerable</source>
-        <translation type="unfinished"></translation>
+        <translation>Osårbar</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till minor</translation>
     </message>
     <message>
         <source>Random Order</source>
@@ -1348,22 +1354,22 @@ info</source>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ zoom</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished"></translation>
+        <translation>Långhopp</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished"></translation>
+        <translation>Högt hopp</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Basic controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Allmäna kontroller</translation>
     </message>
     <message>
         <source>Weapon controls</source>
@@ -1386,27 +1392,27 @@ info</source>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished"></translation>
+        <translation>Undvik hål och hinder genom att hoppa:</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd ditt valda vapen eller använd ett verktyg:</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj ett vapen eller ett mål med pilen:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation type="unfinished"></translation>
+        <translation>Byt din nuvarande aktiva igelkott (om möjligt):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj ett vapen eller verktyg:</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ställ in bombtimer och tidsinställda vapen:</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
@@ -1414,11 +1420,11 @@ info</source>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation type="unfinished"></translation>
+        <translation>Flytta pilen eller kameran utan att använda musen:</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra kamerans zoomnivå:</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
@@ -1426,30 +1432,30 @@ info</source>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa, fortsätt eller avsluta ditt spel:</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra spelvolym medans du spelar:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sätt på/av helskärmsläge:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta en skärmbild:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sätt på/av etiketter över igelkottar:</translation>
     </message>
 </context>
 <context>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished"></translation>
+        <translation type="Axel"></translation>
     </message>
     <message>
         <source>(Up)</source>
@@ -1465,11 +1471,11 @@ info</source>
     </message>
     <message>
         <source>(Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Vänster)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Höger)</translation>
     </message>
     <message>
         <source>Button</source>
@@ -1481,15 +1487,15 @@ info</source>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänster musknapp</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished"></translation>
+        <translation>Mus: Mittenknapp</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished"></translation>
+        <translation>Höger musknapp</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
@@ -1501,99 +1507,99 @@ info</source>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished"></translation>
+        <translation>backsteg</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabb</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Clear</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished"></translation>
+        <translation>Return</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pause</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="unfinished"></translation>
+        <translation>Escape</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Mellanslag</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Delete</translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad .</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad /</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad *</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad -</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad +</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Retur</translation>
     </message>
     <message>
         <source>Equals</source>
@@ -1609,75 +1615,75 @@ info</source>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Höger</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänster</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished"></translation>
+        <translation>Insert</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>Home</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>End</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="unfinished"></translation>
+        <translation>Page up</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="unfinished"></translation>
+        <translation>Page down</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Num lock</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Caps lock</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Scroll lock</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Höger shift</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänster shift</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Höger Ctrl</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänster Ctrl</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt Gr</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Höger metaknapp</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänster metaknapp</translation>
     </message>
     <message>
         <source>A button</source>
@@ -1713,55 +1719,55 @@ info</source>
     </message>
     <message>
         <source>Left stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänster styrpinne</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Höger styrpinne</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänster styrpinne (Höger)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänster styrpinne (Vänster)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänster styrpinne (Ned)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänster styrpinne (Upp)</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Vänster avtryckare</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Höger avtryckare</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Höger styrpinne (Ned)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>Höger styrpinne (Upp)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Höger styrpinne (Höger)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Höger styrpinne (Vänster)</translation>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
+        <translation>Styrkors</translation>
     </message>
 </context>
 </TS>
