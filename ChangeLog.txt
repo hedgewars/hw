@@ -54,7 +54,7 @@
  + Support for long localized strings (longer than 255 bytes)
  + Xfire support (shows nickname, server and room name in player info)
  * Fixed showing two cursors in some situations
- * Drill gun's sound will now stop even after drilling right into water
+ * Drill rocket's sound will now stop even after drilling right into water
  * Properly unload SDL_mixer's support libraries on engine shutdown
  * Fixed several memory leaks
  + Lots of other bug fixes and additions we already forgot during this huge release
