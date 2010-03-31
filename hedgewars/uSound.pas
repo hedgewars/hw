@@ -37,6 +37,7 @@ procedure InitSound;
 procedure ReleaseSound;
 procedure SoundLoad;
 procedure PlaySound(snd: TSound);
+procedure PlaySound(snd: TSound; keepPlaying: boolean);
 procedure PlaySound(snd: TSound; voicepack: PVoicepack);
 procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 function LoopSound(snd: TSound): LongInt;
@@ -164,6 +165,11 @@ end;
 procedure PlaySound(snd: TSound);
 begin
     PlaySound(snd, nil, false);
+end;
+
+procedure PlaySound(snd: TSound; keepPlaying: boolean);
+begin
+    PlaySound(snd, nil, keepPlaying);
 end;
 
 procedure PlaySound(snd: TSound; voicepack: PVoicepack);
