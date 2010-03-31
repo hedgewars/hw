@@ -1,47 +1,60 @@
 + features
 * bugfixes
 
-
 0.9.12 -> 0.9.13:
- + speed optimisations
- + many new hats, hats visible while using rope and blowtorch
- + Exploding barrels
- + AI uses new weapons, aware of fire, can fight in artillery mode
- + New options in ammo editing - crate probability, turns to use
- + option of semi-opaque hog name tags to avoid fail when land is hidden by name
- + new British voicepack
- + notification sound when people join your room
- + contextual help when using weapons menu
- + 3d effect for waves
- + fade effect when starting/stopping game
- + new game modes - place hedgehog, king mode, randomise starts, allies share ammo, disable girders
- + shift + direction to turn without moving
- + view ammo menu when not your turn
- + new font for CJK text and better CJK detection
- + dud mines
- + team flags
- + visual effects: dust on fall impact, smoke, shotgun shells, blink team name on start of turn, hogs pulling weapons out, falling flakes kicked by explosion and more
- + hogs react to throwing grenades / dynamite and when near them 
- + graphic of crate contents when picking up weapon/utility
- + walk sound for hedgehogs
- + UFO changed to homing bee
- + splashes/droplets when things fall in the water
- + 45 degree bounce when throwing grenades
- + new bounce sounds
- + information on game rules when starting game
- + knockball map (scripted map)
- + lua scripting
- + Birdy weapon and poisoning effect
- + maze generator for new random maps
- + new crazy map template
- + new Olympics, Desert themes, visual updates to many other themes
- + Background texture for land for a 3d effect on explosions
- + frontend able to delete teams
- + ignore/friends lists in frontend
- + possibility to 'follow' other players into their room
- + alt weapon preview on rope, parachute
- + updated options in frontend: independent toggles for frontend/game sound/music, select locale
- * many bug fixes
+ + Speed optimizations
+ + New weapon: Birdy (carries your hog and lets you throw poisonous eggs at your foes)
+ + Hats are visible while using rope and blowtorch
+ + Explosive barrels
+ + AI is able to handle artillery mode as well as new weapons
+ + Weapon schemes now include crate probability as well as delays
+ + Optional semi transparent labels for hogs to avoid hidden gaps
+ + New voicepack: British
+ + New frontend sounds
+ + Frontend now allows you to add player names to either your friends or ignore list and join their current rooms (follow)
+ + Optional tooltips explaining weapons in weapons menu
+ + 3D effect for waves
+ + Game now fades in/out at the start and end of a round
+ + Flashlight effect when taking screenshots
+ + Holding 'precise' key now allows hogs to change direction without moving
+ + New game modes: place hedgehogs, king mode, randomized starting order, shared ammo, no girders
+ + Improved CJK text handling and detection
+ + Dud mines
+ + Reserved hats for donators (reservation time is limited; they'll be useable by everyone some months later)
+ + Added team flags (pick your country or your favorite 'fun' flag)
+ + Active team's name blinking on round start
+ + Hogs might react to thrown grenades or explosives and panic
+ + Popup effects visualizing collected weapons
+ + New visual effects (dust, smoke, gun shells)
+ + Replaced the UFO with the Homing Bee
+ + View ammo menu even while other player's turn
+ + Preview alternate weapon while using another one (e.g. parachute, rope and flying saucer)
+ + Splashes and droplets once objects fall into water
+ + 45 degree bounce for grenades
+ + New bounce sounds for most objects
+ + Several new sounds for hedgehogs including walking animation and some emotes
+ + Show special game rules at round's start
+ + Support for Lua scripts (used for tutorials as well as 'mission' maps)
+ + Changed Basketball map to be a mission including scoreboards
+ + Added Knockball mission
+ + New crazy map template
+ + New random map generator supporting maze type maps
+ + New game schemes: Barrel Mayhem, Tunnel Hogs
+ + New weapon scheme: Tunnel Hogs
+ + New themes: Olympics, Desert
+ + Lots of other updates to other themes
+ + Background textures for destroyed land simulating depth (on random maps only)
+ + Many new hats
+ + Additional effects
+ + Icon for hwengine under windows
+ + Delete old teams using the frontend
+ + Support for long localized strings (longer than 255 bytes)
+ * Fixed showing two cursors in some situations
+ * Drill gun's sound will now stop even after drilling right into water
+ * Properly unload SDL_mixer's support libraries on engine shutdown
+ * Fixed several memory leaks
+ + Lots of other bug fixes and additions we already forgot during this huge release
+ + Updated translation
 
 0.9.11 -> 0.9.12:
  + Zoom
