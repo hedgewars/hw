@@ -846,17 +846,17 @@ glEnable(GL_TEXTURE_2D);
 if isCursorVisible then
    begin
    if not bShowAmmoMenu then
+     begin
      with CurrentHedgehog^ do
        if (Gear^.State and gstHHChooseTarget) <> 0 then
          begin
          i:= Ammo^[CurSlot, CurAmmo].Pos;
          with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
            if PosCount > 1 then
-              DrawSprite(PosSprite, CursorPoint.X - (SpritesData[PosSprite].Width shr 1),
-                                    cScreenHeight - CursorPoint.Y - (SpritesData[PosSprite].Height shr 1),
-                                    i);
+             DrawSprite(PosSprite, CursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - CursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
          end;
-   DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
+     DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
+     end
    end;
 
 glDisable(GL_TEXTURE_2D);
