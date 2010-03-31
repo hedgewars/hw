@@ -427,7 +427,7 @@ ou escolha outro nome de utilizador:</translation>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation>Nome da Sala</translation>
+        <translation>Nome da Sala:</translation>
     </message>
     <message>
         <source>This game is in lobby.
