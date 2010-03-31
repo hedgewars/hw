@@ -23,6 +23,8 @@
  + Reserved hats for donators (reservation time is limited; they'll be useable by everyone some months later)
  + Added team flags (pick your country or your favorite 'fun' flag)
  + Active team's name blinking on round start
+ + Team chat for spectators
+ + New explosion graphics with screen shakes for huge explosions
  + Hogs might react to thrown grenades or explosives and panic
  + Popup effects visualizing collected weapons
  + New visual effects (dust, smoke, gun shells)
@@ -44,11 +46,13 @@
  + New themes: Olympics, Desert
  + Lots of other updates to other themes
  + Background textures for destroyed land simulating depth (on random maps only)
+ + New target cursors
  + Many new hats
  + Additional effects
  + Icon for hwengine under windows
  + Delete old teams using the frontend
  + Support for long localized strings (longer than 255 bytes)
+ + Xfire support (shows nickname, server and room name in player info)
  * Fixed showing two cursors in some situations
  * Drill gun's sound will now stop even after drilling right into water
  * Properly unload SDL_mixer's support libraries on engine shutdown
