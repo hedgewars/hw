@@ -68,7 +68,7 @@ var ctx: TSHA1Context;
     s: shortstring;
 begin
 SHA1Init(ctx);
-SHA1UpdateLongwords(ctx, @Land, sizeof(Land) div 4);
+SHA1UpdateLongwords(ctx, @Land, sizeof(Land));
 dig:= SHA1Final(ctx);
 s:='M{'+inttostr(dig[0])+':'
        +inttostr(dig[1])+':'
