@@ -17,7 +17,7 @@ ENDIF(WIN32)
 
 if(WIN32)
 	SET_TARGET_PROPERTIES(lua PROPERTIES PREFIX "")
-	install(TARGETS lua DESTINATION ${target_dir})
+	install(TARGETS lua RUNTIME DESTINATION ${target_dir})
 endif(WIN32)
 
 
