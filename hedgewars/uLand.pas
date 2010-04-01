@@ -249,6 +249,7 @@ while i < LongInt(opa.Count) do
        inc(i, 2);
        StartLoop:= i;
        pa.ar[pa.Count].X:= NTPX;
+       pa.ar[pa.Count].Y:= 0;
        inc(pa.Count);
        end else inc(i)
 end;
