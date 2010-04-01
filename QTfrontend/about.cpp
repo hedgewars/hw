@@ -76,7 +76,7 @@ About::About(QWidget * parent) :
             "Mac OS X/iPhone port, OpenGL-ES conversion: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;<br>"
             "Gamepad and Lua integration, misc effects: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@googlemail.com\">mario.liebisch@googlemail.com</a>&gt;<br>"
             "Many engine improvements and graphics: Carlos Vives &lt;<a href=\"mailto:mail@carlosvives.es\">mail@carlosvives.es</a>&gt;<br>"
-            "Don't ask: Sheepluva &lt;<a href=\"mailto:sheepluva@ercatec.net\">sheepluva@ercatec.net</a>&gt;<br>"
+            "Don't ask: Richard Karolyi &lt;<a href=\"mailto:sheepluva@ercatec.net\">sheepluva@ercatec.net</a>&gt;<br>"
             "Maze maps: Henning K&uuml;hn &lt;<a href=\"mailto:prg@cooco.de\">prg@cooco.de</a>&gt;"
             "</p><h2>" +
 
