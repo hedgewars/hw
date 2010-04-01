@@ -920,9 +920,9 @@ case cMazeSize of
 end;
 
 num_cells_x := LAND_WIDTH div cellsize;
-if num_cells_x mod 2 = 0 then num_cells_x := num_cells_x - 1; //needs to be odd
+if not odd(num_cells_x) then num_cells_x := num_cells_x - 1; //needs to be odd
 num_cells_y := LAND_HEIGHT div cellsize;
-if num_cells_y mod 2 = 0 then num_cells_y := num_cells_y - 1;
+if not odd(num_cells_y) then num_cells_y := num_cells_y - 1;
 num_edges_x := num_cells_x - 1;
 num_edges_y := num_cells_y - 1;
 seen_cells_x := num_cells_x div 2;

@@ -12,11 +12,11 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation>Nunca</translation>
+        <translation type="obsolete">Nunca</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>Todos os turnos</numerusform>
             <numerusform>Cada %1 turnos</numerusform>
         </translation>
@@ -1487,287 +1487,287 @@ ouriços</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation>Rato: Botão esquerdo</translation>
+        <translation type="obsolete">Rato: Botão esquerdo</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation>Rato: Botão do meio</translation>
+        <translation type="obsolete">Rato: Botão do meio</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation>Rato: Botão direito</translation>
+        <translation type="obsolete">Rato: Botão direito</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation>Rato: Roda para cima</translation>
+        <translation type="obsolete">Rato: Roda para cima</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation>Rato: Roda para baixo</translation>
+        <translation type="obsolete">Rato: Roda para baixo</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation>Retrocesso (backspace)</translation>
+        <translation type="obsolete">Retrocesso (backspace)</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation>Tabulação</translation>
+        <translation type="obsolete">Tabulação</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Clear</translation>
+        <translation type="obsolete">Clear</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation>Return</translation>
+        <translation type="obsolete">Return</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation>Pause</translation>
+        <translation type="obsolete">Pause</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation>Escape</translation>
+        <translation type="obsolete">Escape</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation>Espaço</translation>
+        <translation type="obsolete">Espaço</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Delete</translation>
+        <translation type="obsolete">Delete</translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation>Numpad 0</translation>
+        <translation type="obsolete">Numpad 0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation>Numpad 1</translation>
+        <translation type="obsolete">Numpad 1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation>Numpad 2</translation>
+        <translation type="obsolete">Numpad 2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation>Numpad 3</translation>
+        <translation type="obsolete">Numpad 3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation>Numpad 4</translation>
+        <translation type="obsolete">Numpad 4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation>Numpad 5</translation>
+        <translation type="obsolete">Numpad 5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation>Numpad 6</translation>
+        <translation type="obsolete">Numpad 6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation>Numpad 7</translation>
+        <translation type="obsolete">Numpad 7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation>Numpad 8</translation>
+        <translation type="obsolete">Numpad 8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation>Numpad 9</translation>
+        <translation type="obsolete">Numpad 9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation>Numpad .</translation>
+        <translation type="obsolete">Numpad .</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation>Numpad /</translation>
+        <translation type="obsolete">Numpad /</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation>Numpad *</translation>
+        <translation type="obsolete">Numpad *</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation>Numpad -</translation>
+        <translation type="obsolete">Numpad -</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation>Numpad +</translation>
+        <translation type="obsolete">Numpad +</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation>Enter</translation>
+        <translation type="obsolete">Enter</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation>Igual</translation>
+        <translation type="obsolete">Igual</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Cima</translation>
+        <translation type="obsolete">Cima</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Baixo</translation>
+        <translation type="obsolete">Baixo</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Direita</translation>
+        <translation type="obsolete">Direita</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Esquerda</translation>
+        <translation type="obsolete">Esquerda</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation>Insert</translation>
+        <translation type="obsolete">Insert</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation>Home</translation>
+        <translation type="obsolete">Home</translation>
     </message>
     <message>
         <source>End</source>
-        <translation>End</translation>
+        <translation type="obsolete">End</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation>Page uo</translation>
+        <translation type="obsolete">Page uo</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation>Page down</translation>
+        <translation type="obsolete">Page down</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation>Num lock</translation>
+        <translation type="obsolete">Num lock</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation>Caps lock</translation>
+        <translation type="obsolete">Caps lock</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation>Scroll lock</translation>
+        <translation type="obsolete">Scroll lock</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation>Shift direito</translation>
+        <translation type="obsolete">Shift direito</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation>Shift esquerdo</translation>
+        <translation type="obsolete">Shift esquerdo</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation>Ctrl direito</translation>
+        <translation type="obsolete">Ctrl direito</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation>Ctrl esquerdo</translation>
+        <translation type="obsolete">Ctrl esquerdo</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation>Alt direito</translation>
+        <translation type="obsolete">Alt direito</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation>Alt esquerdo</translation>
+        <translation type="obsolete">Alt esquerdo</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation>Meta direito</translation>
+        <translation type="obsolete">Meta direito</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation>Meta esquerdo</translation>
+        <translation type="obsolete">Meta esquerdo</translation>
     </message>
     <message>
         <source>A button</source>
-        <translation>A</translation>
+        <translation type="obsolete">A</translation>
     </message>
     <message>
         <source>B button</source>
-        <translation>B</translation>
+        <translation type="obsolete">B</translation>
     </message>
     <message>
         <source>X button</source>
-        <translation>X</translation>
+        <translation type="obsolete">X</translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation>Y</translation>
+        <translation type="obsolete">Y</translation>
     </message>
     <message>
         <source>LB button</source>
-        <translation>LB</translation>
+        <translation type="obsolete">LB</translation>
     </message>
     <message>
         <source>RB button</source>
-        <translation>RB</translation>
+        <translation type="obsolete">RB</translation>
     </message>
     <message>
         <source>Back button</source>
-        <translation>Back</translation>
+        <translation type="obsolete">Back</translation>
     </message>
     <message>
         <source>Start button</source>
-        <translation>Start</translation>
+        <translation type="obsolete">Start</translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation>Stick esquerdo</translation>
+        <translation type="obsolete">Stick esquerdo</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation>Stick direito</translation>
+        <translation type="obsolete">Stick direito</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation>Stick esquerdo (Direita)</translation>
+        <translation type="obsolete">Stick esquerdo (Direita)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation>Stick esquerdo (Esquerda)</translation>
+        <translation type="obsolete">Stick esquerdo (Esquerda)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation>Stick esquerdo (Baixo)</translation>
+        <translation type="obsolete">Stick esquerdo (Baixo)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation>Stick esquerdo (Cima)</translation>
+        <translation type="obsolete">Stick esquerdo (Cima)</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation>Gatilho esquerdo</translation>
+        <translation type="obsolete">Gatilho esquerdo</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation>Gatilho direito</translation>
+        <translation type="obsolete">Gatilho direito</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation>Stick direito (Baixo)</translation>
+        <translation type="obsolete">Stick direito (Baixo)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation>Stick direito (Cima)</translation>
+        <translation type="obsolete">Stick direito (Cima)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation>Stick direito (Direita)</translation>
+        <translation type="obsolete">Stick direito (Direita)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation>Stick direito (Esquerda)</translation>
+        <translation type="obsolete">Stick direito (Esquerda)</translation>
     </message>
     <message>
         <source>DPad</source>
-        <translation>DPad</translation>
+        <translation type="obsolete">DPad</translation>
     </message>
 </context>
 </TS>

@@ -12,11 +12,11 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation>Ei koskaan</translation>
+        <translation type="obsolete">Ei koskaan</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>Joka vuorolla</numerusform>
             <numerusform>Joka %1:s vuoro</numerusform>
         </translation>
@@ -1486,288 +1486,284 @@ tiedot</translation>
         <translation>Näppäimistö</translation>
     </message>
     <message>
-        <source>Mouse: Left button</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Mouse: Middle button</source>
-        <translation>Hiiri: Keskinappi</translation>
+        <translation type="obsolete">Hiiri: Keskinappi</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation>Hiiri: Oikea nappi</translation>
+        <translation type="obsolete">Hiiri: Oikea nappi</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation>Hiiri: Rulla ylös</translation>
+        <translation type="obsolete">Hiiri: Rulla ylös</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation>Hiiri: Rulla alas</translation>
+        <translation type="obsolete">Hiiri: Rulla alas</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation>Askelapalutin</translation>
+        <translation type="obsolete">Askelapalutin</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation>Sarkain</translation>
+        <translation type="obsolete">Sarkain</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Tyhjennä</translation>
+        <translation type="obsolete">Tyhjennä</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation>Rivinvaihto</translation>
+        <translation type="obsolete">Rivinvaihto</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation>Tauko</translation>
+        <translation type="obsolete">Tauko</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation>Esc-näppäin</translation>
+        <translation type="obsolete">Esc-näppäin</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation>Välilyönti</translation>
+        <translation type="obsolete">Välilyönti</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Poistonäppäin</translation>
+        <translation type="obsolete">Poistonäppäin</translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation>Numpad 0</translation>
+        <translation type="obsolete">Numpad 0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation>Numpad 1</translation>
+        <translation type="obsolete">Numpad 1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation>Numpad 2</translation>
+        <translation type="obsolete">Numpad 2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation>Numpad 3</translation>
+        <translation type="obsolete">Numpad 3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation>Numpad 4</translation>
+        <translation type="obsolete">Numpad 4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation>Numpad 5</translation>
+        <translation type="obsolete">Numpad 5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation>Numpad 6</translation>
+        <translation type="obsolete">Numpad 6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation>Numpad 7</translation>
+        <translation type="obsolete">Numpad 7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation>Numpad 8</translation>
+        <translation type="obsolete">Numpad 8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation>Numpad 9</translation>
+        <translation type="obsolete">Numpad 9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation>Numpad .</translation>
+        <translation type="obsolete">Numpad .</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation>Numpad /</translation>
+        <translation type="obsolete">Numpad /</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation>Numpad *</translation>
+        <translation type="obsolete">Numpad *</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation>Numpad -</translation>
+        <translation type="obsolete">Numpad -</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation>Numpad +</translation>
+        <translation type="obsolete">Numpad +</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation>Rivinvaihto</translation>
+        <translation type="obsolete">Rivinvaihto</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation>=</translation>
+        <translation type="obsolete">=</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Ylös</translation>
+        <translation type="obsolete">Ylös</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Alas</translation>
+        <translation type="obsolete">Alas</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Oikea</translation>
+        <translation type="obsolete">Oikea</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Vasen</translation>
+        <translation type="obsolete">Vasen</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation>Lisää-nappi</translation>
+        <translation type="obsolete">Lisää-nappi</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation>Home-nappi</translation>
+        <translation type="obsolete">Home-nappi</translation>
     </message>
     <message>
         <source>End</source>
-        <translation>End-nappi</translation>
+        <translation type="obsolete">End-nappi</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation>Sivu ylös</translation>
+        <translation type="obsolete">Sivu ylös</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation>Sivu alas</translation>
+        <translation type="obsolete">Sivu alas</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation>Num lock</translation>
+        <translation type="obsolete">Num lock</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation>Caps lock</translation>
+        <translation type="obsolete">Caps lock</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation>Scroll lock</translation>
+        <translation type="obsolete">Scroll lock</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation>Oikea vaihtonäppäin</translation>
+        <translation type="obsolete">Oikea vaihtonäppäin</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation>Vasen vaihtonäppäin</translation>
+        <translation type="obsolete">Vasen vaihtonäppäin</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation>Oikea ctrl</translation>
+        <translation type="obsolete">Oikea ctrl</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation>Vasen ctrl</translation>
+        <translation type="obsolete">Vasen ctrl</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation>Oikea alt</translation>
+        <translation type="obsolete">Oikea alt</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation>Vasen alt</translation>
+        <translation type="obsolete">Vasen alt</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation>Oikea meta</translation>
+        <translation type="obsolete">Oikea meta</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation>Vasen meta</translation>
+        <translation type="obsolete">Vasen meta</translation>
     </message>
     <message>
         <source>A button</source>
-        <translation>A-painike</translation>
+        <translation type="obsolete">A-painike</translation>
     </message>
     <message>
         <source>B button</source>
-        <translation>B-painike</translation>
+        <translation type="obsolete">B-painike</translation>
     </message>
     <message>
         <source>X button</source>
-        <translation>X-painike</translation>
+        <translation type="obsolete">X-painike</translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation>Y-painike</translation>
+        <translation type="obsolete">Y-painike</translation>
     </message>
     <message>
         <source>LB button</source>
-        <translation>LB-painike</translation>
+        <translation type="obsolete">LB-painike</translation>
     </message>
     <message>
         <source>RB button</source>
-        <translation>RB-painike</translation>
+        <translation type="obsolete">RB-painike</translation>
     </message>
     <message>
         <source>Back button</source>
-        <translation>Paluu-painike</translation>
+        <translation type="obsolete">Paluu-painike</translation>
     </message>
     <message>
         <source>Start button</source>
-        <translation>Start-painike</translation>
+        <translation type="obsolete">Start-painike</translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation>Vasen tikku</translation>
+        <translation type="obsolete">Vasen tikku</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation>Oikea tikku</translation>
+        <translation type="obsolete">Oikea tikku</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation>Vasen tikku (Oikea)</translation>
+        <translation type="obsolete">Vasen tikku (Oikea)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation>Vasen tikku (Vasen)</translation>
+        <translation type="obsolete">Vasen tikku (Vasen)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation>Vasen tikku (Alas)</translation>
+        <translation type="obsolete">Vasen tikku (Alas)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation>Vasen tikku (ylös)</translation>
+        <translation type="obsolete">Vasen tikku (ylös)</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation>Vasen liipasin</translation>
+        <translation type="obsolete">Vasen liipasin</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation>Oikea liipasin</translation>
+        <translation type="obsolete">Oikea liipasin</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation>Oikea tikku (Alas)</translation>
+        <translation type="obsolete">Oikea tikku (Alas)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation>Oikea tikku (Ylös)</translation>
+        <translation type="obsolete">Oikea tikku (Ylös)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation>Oikea tikku (Oikea)</translation>
+        <translation type="obsolete">Oikea tikku (Oikea)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation>Oikea tikku (Vasen)</translation>
+        <translation type="obsolete">Oikea tikku (Vasen)</translation>
     </message>
     <message>
         <source>DPad</source>
-        <translation>DPad</translation>
+        <translation type="obsolete">DPad</translation>
     </message>
 </context>
 </TS>

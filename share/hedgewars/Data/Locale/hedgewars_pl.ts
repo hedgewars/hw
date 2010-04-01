@@ -12,11 +12,11 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation>Nigdy</translation>
+        <translation type="obsolete">Nigdy</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>Co %1 turę</numerusform>
             <numerusform>Co %1 tury</numerusform>
             <numerusform>Co %1 tur</numerusform>
@@ -1496,287 +1496,83 @@ info</source>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished">Mysz: Lewy przycisk</translation>
+        <translation type="obsolete">Mysz: Lewy przycisk</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished">Mysz: Środkowy przycisk</translation>
+        <translation type="obsolete">Mysz: Środkowy przycisk</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished">Mysz: Prawy przycisk</translation>
+        <translation type="obsolete">Mysz: Prawy przycisk</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="unfinished">Mysz: Kółko w górę</translation>
+        <translation type="obsolete">Mysz: Kółko w górę</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="unfinished">Mysz:Kółko w dół</translation>
-    </message>
-    <message>
-        <source>Backspace</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Return</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Escape</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Mysz:Kółko w dół</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished">Spacja</translation>
+        <translation type="obsolete">Spacja</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Delete</translation>
-    </message>
-    <message>
-        <source>Numpad 0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 9</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad .</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad /</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad *</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad -</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad +</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Delete</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished">Znak równości</translation>
+        <translation type="obsolete">Znak równości</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished">Strzałka w górę</translation>
+        <translation type="obsolete">Strzałka w górę</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished">Strzałka w dół</translation>
+        <translation type="obsolete">Strzałka w dół</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished">Strzałka w prawo</translation>
+        <translation type="obsolete">Strzałka w prawo</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished">Strzałka w lewo</translation>
-    </message>
-    <message>
-        <source>Insert</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Num lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Caps lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scroll lock</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Strzałka w lewo</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="unfinished">Prawy shift</translation>
+        <translation type="obsolete">Prawy shift</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="unfinished">Lewy Shift</translation>
+        <translation type="obsolete">Lewy Shift</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="unfinished">Prawy ctrl</translation>
+        <translation type="obsolete">Prawy ctrl</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="unfinished">Lewy ctrl</translation>
+        <translation type="obsolete">Lewy ctrl</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="unfinished">Prawy Alt</translation>
+        <translation type="obsolete">Prawy Alt</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="unfinished">Lewy Alt</translation>
+        <translation type="obsolete">Lewy Alt</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="unfinished">Prawy kl. WIN</translation>
+        <translation type="obsolete">Prawy kl. WIN</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="unfinished">Lewy kl. WIN</translation>
-    </message>
-    <message>
-        <source>A button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>B button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>X button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Y button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>LB button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RB button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Back button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left trigger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right trigger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>DPad</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Lewy kl. WIN</translation>
     </message>
 </context>
 </TS>

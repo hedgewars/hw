@@ -12,11 +12,11 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation>Никогда</translation>
+        <translation type="obsolete">Никогда</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>Каждый %1 ход</numerusform>
             <numerusform>Каждые %1 хода</numerusform>
             <numerusform>Каждые %1 ходов</numerusform>
@@ -139,31 +139,31 @@
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Маленькие туннели</translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Средние туннели</translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Большие туннели</translation>
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Маленькие островки</translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Средние островки</translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Большие островки</translation>
     </message>
 </context>
 <context>
@@ -356,19 +356,19 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Delete team</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить команду</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая схема оружия</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактировать схему оружия</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить схему оружия</translation>
     </message>
 </context>
 <context>
@@ -490,7 +490,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайный лабиринт</translation>
     </message>
 </context>
 <context>
@@ -732,11 +732,11 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>generated maze...</source>
-        <translation type="unfinished"></translation>
+        <translation>случайный лабиринт...</translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation>Миссия</translation>
     </message>
 </context>
 <context>
@@ -927,11 +927,12 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translation>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
+Some features might be broken or incomplete. Use at your own risk!</translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation type="unfinished"></translation>
+        <translation>Взрывчатка</translation>
     </message>
 </context>
 <context>
@@ -1401,11 +1402,11 @@ info</source>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Выстрел из выбранного оружия или активация утилиты:</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбор оружия или цели под курсором:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
@@ -1413,7 +1414,7 @@ info</source>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Подбор оружия или утилиты:</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
@@ -1425,7 +1426,7 @@ info</source>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation type="unfinished"></translation>
+        <translation>Перемещение курсора или камеры без использования мыши:</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
@@ -1433,11 +1434,11 @@ info</source>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation type="unfinished"></translation>
+        <translation>Разговор с командой или всеми участниками:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation type="unfinished"></translation>
+        <translation>Пауза, продолжение или выход из игры:</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
@@ -1445,7 +1446,7 @@ info</source>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключение полноэкранного режима:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
@@ -1492,287 +1493,95 @@ info</source>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation>Мышь: Левая кнопка</translation>
+        <translation type="obsolete">Мышь: Левая кнопка</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation>Мышь: Средняя кнопка</translation>
+        <translation type="obsolete">Мышь: Средняя кнопка</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation>Мышь: Правая кнопка</translation>
+        <translation type="obsolete">Мышь: Правая кнопка</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation>Мышь: Колесо вверх</translation>
+        <translation type="obsolete">Мышь: Колесо вверх</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation>Мышь: Колесо вниз</translation>
+        <translation type="obsolete">Мышь: Колесо вниз</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation>Забой</translation>
+        <translation type="obsolete">Забой</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation>Tab</translation>
+        <translation type="obsolete">Tab</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Очистить</translation>
+        <translation type="obsolete">Очистить</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation>Return</translation>
+        <translation type="obsolete">Return</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation>Пауза</translation>
+        <translation type="obsolete">Пауза</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation>Escape</translation>
+        <translation type="obsolete">Escape</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation>Пробел</translation>
+        <translation type="obsolete">Пробел</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Delete</translation>
-    </message>
-    <message>
-        <source>Numpad 0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 9</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad .</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad /</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad *</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad -</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad +</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Equals</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Delete</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Вверх</translation>
+        <translation type="obsolete">Вверх</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Вниз</translation>
+        <translation type="obsolete">Вниз</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Вправо</translation>
+        <translation type="obsolete">Вправо</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Влево</translation>
-    </message>
-    <message>
-        <source>Insert</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Num lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Caps lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scroll lock</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Влево</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation>Правый shift</translation>
+        <translation type="obsolete">Правый shift</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation>Левый shift</translation>
+        <translation type="obsolete">Левый shift</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation>Правый ctrl</translation>
+        <translation type="obsolete">Правый ctrl</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation>Левый ctrl</translation>
+        <translation type="obsolete">Левый ctrl</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation>Правый alt</translation>
+        <translation type="obsolete">Правый alt</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation>Левый alt</translation>
-    </message>
-    <message>
-        <source>Right meta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left meta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>B button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>X button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Y button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>LB button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RB button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Back button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left trigger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right trigger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>DPad</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Левый alt</translation>
     </message>
 </context>
 </TS>
