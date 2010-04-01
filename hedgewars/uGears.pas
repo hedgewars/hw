@@ -1212,13 +1212,20 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
     if ((Gear^.State and gstAnimation) <> 0) then
         begin
-        DrawRotatedF(Wavez[TWave(Gear^.Tag)].Sprite,
-                sx,
-                sy,
-                Gear^.Pos,
-                hwSign(Gear^.dX),
-                0.0);
-        defaultPos:= false
+        if (TWave(Gear^.Tag) < Low(TWave)) or (TWave(Gear^.Tag) > High(TWave)) then
+            begin
+            Gear^.State:= Gear^.State and not gstAnimation;
+            end
+        else
+            begin
+            DrawRotatedF(Wavez[TWave(Gear^.Tag)].Sprite,
+                    sx,
+                    sy,
+                    Gear^.Pos,
+                    hwSign(Gear^.dX),
+                    0.0);
+            defaultPos:= false
+            end
         end
     else
     if ((Gear^.State and gstAttacked) = 0) then
