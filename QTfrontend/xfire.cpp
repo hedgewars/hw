@@ -17,6 +17,7 @@
  */
 
 #include <string>
+#include <cstring>
 #include <stdio.h>
 
 #include "xfire.h"
