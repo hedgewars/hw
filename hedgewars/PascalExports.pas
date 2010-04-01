@@ -21,10 +21,11 @@ implementation
 
 {$IFDEF HWLIBRARY}
 // retrieve protocol information
-procedure HW_versionInfo(netProto: PShortInt; versionStr: PString); cdecl; export;
+procedure HW_versionInfo(netProto: PShortInt; versionStr: Ppchar); cdecl; export;
 begin
+// http://bugs.freepascal.org/view.php?id=16156
     if netProto <> nil then netProto^:= cNetProtoVersion;
-    if versionStr <> nil then versionStr^:= shortstring(cVersionString);
+    if versionStr <> nil then versionStr^:= cVersionString;
 end;
 
 procedure HW_click; cdecl; export;
