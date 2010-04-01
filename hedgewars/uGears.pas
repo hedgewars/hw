@@ -1464,7 +1464,7 @@ if HH^.Effects[hePoisoned] then
 
 if Gear^.Invulnerable then
     begin
-    glColor4f(1, 1, 1, 0.25 + abs(1 - ((RealTicks div 2) mod 1500) / 750));
+    glColor4f(1, 1, 1, 0.25 + abs(1 - ((RealTicks div 2 + Gear^.uid * 491) mod 1500) / 750));
     DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
     glColor4f(1, 1, 1, 1);
     end;
