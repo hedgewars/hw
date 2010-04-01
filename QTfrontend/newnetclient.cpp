@@ -453,10 +453,17 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     }
 
     if (lst[0] == "ASKPASSWORD") {
+        bool ok = false;
         int passLength = config->value("net/passwordlength", 0).toInt();
         QString hash = config->value("net/passwordhash", "").toString();
-        QString password = QInputDialog::getText(0, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password\nor pick another nickname:").arg(mynick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'));
-
+        QString password = QInputDialog::getText(0, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password\nor pick another nickname:").arg(mynick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'), &ok);
+        
+        if (!ok) {
+            Disconnect();
+            emit Disconnected();
+            return;
+        }
+        
         if (!passLength || password!=QString(passLength, '\0')) {
             hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
             config->setValue("net/passwordhash", hash);
