@@ -36,7 +36,7 @@ var Land: TCollisionArray;
     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
     LandBackSurface: PSDL_Surface;
 
-type direction = record x, y: Longint; end;
+type direction = record x, y: LongInt; end;
 const DIR_N: direction = (x: 0; y: -1);
     DIR_E: direction = (x: 1; y: 0);
     DIR_S: direction = (x: 0; y: 1);
@@ -652,30 +652,30 @@ const small_cell_size = 128;
     large_cell_size = 256;
     braidness = 10;
 
-var x, y: Longint;
+var x, y: LongInt;
     cellsize: LongInt; //selected by the user in the gui
-    seen_cells_x, seen_cells_y: Longint; //number of cells that can be visited by the generator, that is every second cell in x and y direction. the cells between there are walls that will be removed when we move from one cell to another
-    num_edges_x, num_edges_y: Longint; //number of resulting edges that need to be vertexificated
-    num_cells_x, num_cells_y: Longint; //actual number of cells, depending on cell size
-    seen_list: array of array of Longint;
+    seen_cells_x, seen_cells_y: LongInt; //number of cells that can be visited by the generator, that is every second cell in x and y direction. the cells between there are walls that will be removed when we move from one cell to another
+    num_edges_x, num_edges_y: LongInt; //number of resulting edges that need to be vertexificated
+    num_cells_x, num_cells_y: LongInt; //actual number of cells, depending on cell size
+    seen_list: array of array of LongInt;
     xwalls: array of array of Boolean;
     ywalls: array of array of Boolean;
     x_edge_list: array of array of Boolean;
     y_edge_list: array of array of Boolean;
     maze: array of array of Boolean;
     pa: TPixAr;
-    num_vertices: Longint;
+    num_vertices: LongInt;
     off_y: LongInt;
-    num_steps: Longint;
-    current_step: Longint;
+    num_steps: LongInt;
+    current_step: LongInt;
     step_done: array of Boolean;
     done: Boolean;
-    last_cell: array of record x, y: Longint; end;
-    came_from: array of array of record x, y: Longint; end;
-    came_from_pos: array of Longint;
+    last_cell: array of record x, y: LongInt; end;
+    came_from: array of array of record x, y: LongInt; end;
+    came_from_pos: array of LongInt;
     maze_inverted: Boolean;
 
-function when_seen(x: Longint; y: Longint): Longint;
+function when_seen(x: LongInt; y: LongInt): LongInt;
 begin
 if (x < 0) or (x >= seen_cells_x) or (y < 0) or (y >= seen_cells_y) then
     when_seen := current_step
@@ -683,7 +683,7 @@ else
     when_seen := seen_list[x, y];
 end;
 
-function is_x_edge(x, y: Longint): Boolean;
+function is_x_edge(x, y: LongInt): Boolean;
 begin
 if (x < 0) or (x > num_edges_x) or (y < 0) or (y > num_cells_y) then
     is_x_edge := false
@@ -691,7 +691,7 @@ else
     is_x_edge := x_edge_list[x, y];
 end;
 
-function is_y_edge(x, y: Longint): Boolean;
+function is_y_edge(x, y: LongInt): Boolean;
 begin
 if (x < 0) or (x > num_cells_x) or (y < 0) or (y > num_edges_y) then
     is_y_edge := false
@@ -701,8 +701,8 @@ end;
 
 procedure see_cell;
 var dir: direction;
-    tries: Longint;
-    x, y: Longint;
+    tries: LongInt;
+    x, y: LongInt;
     found_cell: Boolean;
     next_dir_clockwise: Boolean;
 
@@ -797,8 +797,8 @@ begin
 end;
 end;
 
-procedure add_vertex(x, y: Longint);
-var tmp_x, tmp_y: Longint;
+procedure add_vertex(x, y: LongInt);
+var tmp_x, tmp_y: LongInt;
 begin
 if x = NTPX then
 begin
@@ -825,8 +825,8 @@ end;
 num_vertices := num_vertices + 1;
 end;
 
-procedure add_edge(x, y: Longint; dir: direction);
-var i: Longint;
+procedure add_edge(x, y: LongInt; dir: direction);
+var i: LongInt;
 begin
 if dir = DIR_N then
 begin
@@ -989,7 +989,7 @@ for x := 0 to num_cells_x - 1 do
 
 for current_step := 0 to num_steps-1 do
 begin
-    x := GetRandom(seen_cells_x - 1) div num_steps;
+    x := GetRandom(seen_cells_x - 1) div LongWord(num_steps);
     last_cell[current_step].x := x + current_step * seen_cells_x div num_steps;
     last_cell[current_step].y := GetRandom(seen_cells_y);
 end;
