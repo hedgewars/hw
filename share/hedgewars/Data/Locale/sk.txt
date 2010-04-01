@@ -3,7 +3,7 @@
 00:00=Granát
 00:01=Trieštivý granát
 00:02=Bazuka
-00:03=UFO
+00:03=Navádzaná včela
 00:04=Brokovnica
 00:05=Zbíjačka
 00:06=Preskočiť
@@ -39,8 +39,9 @@
 00:36=Laserové zameriavanie
 00:37=Režim vampíra
 00:38=Ostreľovačka
-00:39=Flying Saucer
+00:39=Lietajúci tanier
 00:40=Molotovov koktejl
+00:41=Vtáčisko
 
 01:00=Do boja!
 01:01=Remíza
@@ -51,19 +52,76 @@
 01:06=Rýchla smrť!
 01:07=%1 Ostáva
 01:08=Palivo
+01:09=Synchronizujem...
+01:10=Použitím tohto nástroja neukončí váš ťah!
+01:11=Táto zbraň alebo nástroj zatiaľ nie je dostupný!
 
 ; Správy o udalostiach
 ; Ježko (%1) zomrel
 02:00=%1 otrčil kopytá!
 02:00=%1 uvidel svetlo na konci tunela!
-02:00=%1 toto nečakal!
+02:00=%1 toto naozaj nečakal!
+02:00=%1 s týmto fakt nepočítal!
 ; Ježko (%1) sa utopil
 02:01=%1 sa hrá na ponorku!
 02:01=%1 napodobnil Titanik!
 02:01=%1 pláve ako sekera!
+02:01=%1 sa šiel okúpať!
+02:01=Vyzerá, že %1 mal veľký smäd!
 ; Zápas začína
 02:02=Do boja!
 02:02=Ozbrojení a pripravení!
+02:02=Veľa štastia
+02:02=Príjemnú zábavu
+; Nová krabica so zdravím
+02:05=Doktora!
+02:05=Prvá pomoc z nebies!
+02:05=Balíček prvej pomoci pre vás
+02:05=Náplasť na vaše bolesti
+02:05=Odporúčané dávkovanie: všetko, čo nájdete
+02:05=Zásielka v núdzi
+02:05=Zásoby!
+; Nová krabica so zbraňou
+02:06=Ďalšie zbrane!
+02:06=Posily!
+02:06=Zaujímalo by ma, čo je vnútri
+02:06=Zásoby!
+02:06=Darček!
+02:06=Špeciálna zásielka!
+02:06=Dobrotky!
+02:06=Letecká pošta!
+02:06=Úplné nové hračky!
+; Nová krabica s nástrojom
+02:07=Tento nástroj sa hodí...
+02:07=Nástroje!
+02:07=Ďalšie nástroje!
+02:07=Nástroje pre vás!
+02:07=Toto by mohlo byť užitočné!
+02:07=Oh, táto krabica je ale ťažká
+; Ježko (%1) preskočil kolo
+02:08=%1 je tak stráááášne nudný...
+02:08=%1 je neuveriteľne lenivý
+02:08=%1 to vzdal
+02:08=%1 je naozaj lenivý
+02:08=%1 potrebuje väčšiu motiváciu
+02:08=%1 je pacifista
+02:08=%1 si neverí
+02:08=%1 je zbabelec
+02:08=%1 čaká na rýchlu smrť
+02:08=%1 nie je bitkárom
+02:08=Sklamal si ma, %1
+02:08=%1 má lepšie veci na práci
+02:08=%1 zaspal
+; Ježko (%1) ublížil len sebe
+02:09=%1 by sa mal naučiť mieriť
+02:09=%1 sa zjavne nemá rád
+02:09=%1 je masochista
+02:09=To bol mizerný zásah, %1
+02:09=Najhorší. Zásah. Vôbec.
+02:09=To bolo dosť hlúpe, %1
+02:09=%1 je pomýlený
+02:09=%1 je nešikovný
+02:09=Aké trápne!
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
 02:10=Vták, lietadlo, ...
