@@ -18,21 +18,21 @@ local goal = {
 	["en"] = "Bat your opponents through the|baskets and out of the map!",
 	["de"] = "Schlage deine Widersacher durch|die Körbe und aus der Karte hinaus!",
 	["es"] = "¡Batea a tus oponentes fuera del mapa a través de la canasta!",
-	["pl"] = "Spałuj swoich przekiwników|wyrzucając ich przez kosz, za mapę!"
+	["pl"] = "Uderzaj swoich przekiwników|wyrzucając przez kosz, poza mapę!"
 	}
 
 local scored = {
 	["en"] = " scored a point!",
 	["de"] = " erhält einen Punkt!",
 	["es"] = " anotó un tanto!",
-	["pl"] = " zdobył punkt!"
+	["pl"] = " zdobyła punkt!"
 	}
 
 local failed = {
 	["en"] = " scored a penalty!",
 	["de"] = " erhält eine Strafe!",
 	["es"] = " anotó una falta!",
-	["pl"] = " zdobył punkt karny!"
+	["pl"] = " zdobyła punkt karny!"
 	}
 
 	local sscore = {

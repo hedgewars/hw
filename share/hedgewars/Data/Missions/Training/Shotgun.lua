@@ -53,7 +53,7 @@ local success = {
 	["en"] = "Congratulations! You've eliminated all targets|within the allowed time frame.",
 	["de"] = "Gratulation! Du hast alle Ziele innerhalb der|verfügbaren Zeit ausgeschaltet.",
 	["es"] = "¡Felicidades! Has destruido todos los objectivos|dentro del tiempo establecido.",
-	["pl"] = "Gratulacje! Zniszczyłeś przed czasem wszystkie cele.",
+	["pl"] = "Gratulacje! Zniszczyłeś wszystkie cele przed upłynięciem czasu.",
 	["pt_PT"] = "Parabéns! Eliminaste todos os alvos|dentro do tempo limite."
 	}
 
