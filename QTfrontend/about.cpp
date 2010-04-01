@@ -73,8 +73,11 @@ About::About(QWidget * parent) :
             "Mine number and time game settings: David A. Cuadrado &lt;<a href=\"mailto:krawek@gmail.com\">krawek@gmail.com</a>&gt;<br>"
             "Frontend improvements: Martin Minarik &lt;<a href=\"mailto:ttsmj@pokec.sk\">ttsmj@pokec.sk</a>&gt;<br>"
             "Frontend improvements: Kristian Lehmann &lt;<a href=\"mailto:email@thexception.net\">email@thexception.net</a>&gt;<br>"
-            "Mac OS X port, OpenAL wrapper library: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;<br>"
-            "Gamepad and Lua integration, misc effects: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@googlemail.com\">mario.liebisch@googlemail.com</a>&gt;"
+            "Mac OS X/iPhone port, OpenGL-ES conversion: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;<br>"
+            "Gamepad and Lua integration, misc effects: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@googlemail.com\">mario.liebisch@googlemail.com</a>&gt;<br>"
+            "Many engine improvements and graphics: Carlos Vives &lt;<a href=\"mailto:mail@carlosvives.es\">mail@carlosvives.es</a>&gt;<br>"
+            "Don't ask: Sheepluva &lt;<a href=\"mailto:sheepluva@ercatec.net\">sheepluva@ercatec.net</a>&gt;<br>"
+            "Maze maps: Henning K&uuml;hn &lt;<a href=\"mailto:prg@cooco.de\">prg@cooco.de</a>&gt;"
             "</p><h2>" +
 
             QLabel::tr("Art:") + "</h2>"

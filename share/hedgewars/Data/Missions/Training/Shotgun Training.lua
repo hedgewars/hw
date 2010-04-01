@@ -18,7 +18,8 @@
 local caption = {
 	["en"] = "Bazooka Training",
 	["de"] = "Bazooka-Training",
-	["es"] = "Entrenamiento con escopeta"
+	["es"] = "Entrenamiento con escopeta",
+	["pl"] = "Trening strzelecki",
 	-- To add other languages, just add lines similar to the
 	-- existing ones - don't forget the trailing ","!
 	}
@@ -26,37 +27,43 @@ local caption = {
 local subcaption = {
 	["en"] = "Aiming Practice",
 	["de"] = "Zielübung",
-	["es"] = "Practica tu puntería"
+	["es"] = "Practica tu puntería",
+	["pl"] = "Potrenuj celność"
 	}
 
 local goal = {
 	["en"] = "Eliminate all targets before your time runs out.|You have unlimited ammo for this mission.",
 	["de"] = "Eliminiere alle Ziele bevor die Zeit ausläuft.|Du hast in dieser Mission unbegrenzte Munition.",
-	["es"] = "Destruye todos los objetivos antes de que se agote el tiempo.|La munición en esta misión es ilimitada."
+	["es"] = "Destruye todos los objetivos antes de que se agote el tiempo.|La munición en esta misión es ilimitada.",
+	["pl"] = "Zniszcz wszystkie cele zanim upłynie czas.|W tej misji masz nieskończoną ilość amunicji."
 	}
 
 local timeout = {
 	["en"] = "Oh no! Time's up! Just try again.",
 	["de"] = "Oh nein! Die Zeit ist um! Versuche es nochmal.",
-	["es"] = "¡Oh, no, se te acabó el tiempo! ¿Por qué no lo intentas de nuevo?"
+	["es"] = "¡Oh, no, se te acabó el tiempo! ¿Por qué no lo intentas de nuevo?",
+	["pl"] = "Ajajaj! Koniec czasu! Spróbuj jeszcze raz."
 	}
 
 local success = {
 	["en"] = "Congratulations! You've eliminated all targets|within the allowed time frame.",
 	["de"] = "Gratulation! Du hast alle Ziele innerhalb der|verfügbaren Zeit ausgeschaltet.",
-	["es"] = "¡Felicidades! Has destruido todos los objectivos|dentro del tiempo establecido."
+	["es"] = "¡Felicidades! Has destruido todos los objectivos|dentro del tiempo establecido.",
+	["pl"] = "Gratulacje! Zniszczyłeś przed czasem wszystkie cele."
 	}
 
 local teamname = {
 	["en"] = "Shotgun Team",
 	["de"] = "Die Knalltüten",
-	["es"] = "Escopeteros"
+	["es"] = "Escopeteros",
+	["pl"] = "Shotgun Team",
 	}
 
 local hogname = {
 	["en"] = "Hunter",
 	["de"] = "Jäger",
-	["es"] = "Cazador"
+	["es"] = "Cazador",
+	["en"] = "Strzelec",
 	}
 
 -- To handle missing texts we define a small wrapper function that

@@ -64,7 +64,7 @@
 02:00=%1 macha na pożegnanie!
 02:00=%1 odszedł to piękniejszego świata!
 02:00=%1 spotkał stwórcę!
-02:00=%1 nie może dłużej wytrzymać!
+02:00=%1 już dłużej nie wytrzyma!
 02:00=%1 skończył służbę!
 02:00=%1 poświęcił się dla ogółu!
 02:00=%1 zrezygnował z trudu życia!
@@ -118,14 +118,14 @@
 02:01=%1 robi za łódź podwodną!
 02:01=%1 udaje Titanica!
 02:01=%1 pływa jak kamień!
-02:01=%1 unosi się na wodzie tak jak cegła!
+02:01=%1 unosi się na wodzie jak cegła!
 02:01=%1 zwiedza dno
 02:01=%1 robi bul, bul, bul...
 02:01=%1 skacze na deskę
 02:01=%1 zapomniał o rękawkach
 02:01=%1 powinien brać lekcje pływania
 02:01=%1 zostawił w domu deskę do pływania.
-02:01=%1 własnie się umył
+02:01=%1 się umył!
 02:01=%1 jest już przemoczony
 02:01=%1 zapomniał o kamizelce ratunkowej
 02:01=%1 idzie się popluskać
@@ -145,9 +145,9 @@
 02:01=Nie uwierzysz ile ich jest tam na dole!
 02:01=%1 podnosi poziom oceanu
 02:01=%1 nie zapisał się do marynarki.
-02:01=%1 pokazuje swoje wyobrażenie martwej ryby...
+02:01=%1 robi za śniętą rybę...
 02:01=Przynajmmniej nie utonąłeś w muszli klozetowej, %1
-02:01=Sonic nie umiał pływać więc ty także %1
+02:01=Sonic nie umiał pływać więc ty także, %1
 02:01=%1 chce zagrać delfina Ecco 
 02:01=%1 szuka rybek do akwarium!
 02:01=%1 znalazł Atlantydę!
@@ -234,7 +234,7 @@
 02:05=Zbierz-mnie!
 02:05=Zbierz to!
 02:05=Zdrowa przekąska!
-02:05=Lekarstwo na ból
+02:05=Środek przeciwbólowy
 02:05=Dawkowanie: ile tylko znajdziesz!
 02:05=Ważna przesyłka
 02:05=Zapasy!
@@ -247,14 +247,13 @@
 ; New ammo crate
 02:06=Więcej broni!
 02:06=Posiłki!
-02:06=Może tu będzie kop z półobrotu?
 02:06=Ciekawe jaka broń się tam kryje?
 02:06=Zapasy!
 02:06=Co może być w środku?
 02:06=W Hedgewars święta są zdecydowanie wcześniej!
 02:06=Prezent!
 02:06=Przesyłka specjalna!
-02:06=Zabawki zniszczenia spadły z nieba
+02:06=Narzędzia zniszczenia spadły z nieba
 02:06=Uwaga! Zawartość jest delikatna!!!
 02:06=Zbierz lub rozwal, wybór należy do Ciebie.
 02:06=Coś dobrego!
@@ -268,6 +267,7 @@
 02:06=Nowe, błyszczące zabawki!
 02:06=Tajemnicza skrzynia!
 02:06=KABUM! KABUM! KABUM!
+02:06=Skrzynka pełna niespodzianek
 ; New utility crate
 02:07=Czas na narzędzia!
 02:07=To może się przydać...
@@ -322,6 +322,7 @@
 02:08=%1 usnął
 02:08=NIE SPAĆ!!! ZWIEDZAĆ!!!
 02:08=%1 stracił kontakt z bazą...
+02:08=Co za leń...
 ; Hog (%1) hurts himself only
 02:09=%1 powinien potrenować celowanie!
 02:09=%1 najwidoczniej nienawidzi samego siebie..
@@ -356,15 +357,17 @@
 02:09=ŻENUA!!!
 02:09=Jestem pewny, że nikt nie widział %1
 02:09=%1 powinien przejrzeć podręcznik walki na froncie...
-02:09=Wiesz co %1? Twoja broń z pewnością była uszkodzona!
+02:09=Wiesz co %1? Ktoś ci popsuł giwerę!
 02:09=Nie ma takiego strzelania!!!
 02:09=%1 miał ciężki weekend.
+02:09=KHY! KHY! KHY...
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
 02:10=To ptak? To samolot?
 02:10=Ten jeż wypił Red Bulla.
 02:10=Małysz idzie w odstawkę!
 02:10=Iiii Leciiii...
+02:10=Bzziuuuuu!
 ; Weapon Categories
 03:00=Granat czasowy
 03:01=Granat czasowy
