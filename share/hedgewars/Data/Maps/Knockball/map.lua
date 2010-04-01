@@ -48,6 +48,8 @@ local score = {[0] = 0, [1] = 0, [2] = 0, [3] = 0, [4] = 0, [5] = 0}
 
 local ball = nil
 
+local started = false
+
 function onGameInit()
 	GameFlags = gfSolidLand + gfInvulnerable + gfDivideTeams
 	TurnTime = 20000
@@ -59,7 +61,8 @@ function onGameInit()
 end
 
 function onGameStart()
-	ShowMission(loc(caption), loc(subcaption), loc(goal), -amBaseballBat, 0);
+	ShowMission(loc(caption), loc(subcaption), loc(goal), -amBaseballBat, 0)
+	started = true
 end
 
 function onGameTick()
@@ -84,20 +87,24 @@ function onGearAdd(gear)
 end
 
 function onGearDelete(gear)
+	if not started then
+		return
 	if gear == ball then
 		ball = nil
 	elseif (GetGearType(gear) == gtHedgehog) and CurrentHedgehog ~= nil then
 		local clan = GetHogClan(CurrentHedgehog)
 		local s
-		if GetHogClan(CurrentHedgehog) ~= GetHogClan(gear) then
-			score[clan] = score[clan] + 1
-			s = string.format(loc(scored), GetHogName(gear), clan + 1)
-		else
-			score[clan] = score[clan] - 1
-			s = string.format(loc(failed), GetHogName(gear), clan + 1)
+		if clan ~= nil then
+			if GetHogClan(CurrentHedgehog) ~= GetHogClan(gear) then
+				score[clan] = score[clan] + 1
+				s = string.format(loc(scored), GetHogName(gear), clan + 1)
+			else
+				score[clan] = score[clan] - 1
+				s = string.format(loc(failed), GetHogName(gear), clan + 1)
+			end
+			s = s .. " " .. score[0]
+			for i = 1, ClansCount - 1 do s = s .. " - " .. score[i] end
+			ShowMission(loc(caption), loc(subcaption), s, -amBaseballBat, 0)
 		end
-		s = s .. " " .. score[0]
-		for i = 1, ClansCount - 1 do s = s .. " - " .. score[i] end
-		ShowMission(loc(caption), loc(subcaption), s, -amBaseballBat, 0)
 	end
 end

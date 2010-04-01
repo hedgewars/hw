@@ -1022,6 +1022,7 @@ begin
     prevPoint.X:= 0;
     prevPoint.Y:= 0;
     missionTimer:= 0;
+    missionTex:= nil;
     
     FillChar(Captions, sizeof(Captions), 0)
 end;

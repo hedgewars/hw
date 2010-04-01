@@ -66,6 +66,8 @@ end
 
 local score = {[0] = 0, [1] = 0, [2] = 0, [3] = 0, [4] = 0, [5] = 0}
 
+local started = false
+
 function onGameInit()
 	GameFlags = gfSolidLand + gfBorder + gfInvulnerable + gfLowGravity
 	TurnTime = 20000
@@ -78,6 +80,7 @@ end
 
 function onGameStart()
 	ShowMission(loc(caption), loc(subcaption), loc(goal), -amBaseballBat, 0);
+	started = true
 end
 
 function onGameTick()
@@ -92,6 +95,8 @@ function onGearAdd(gear)
 end
 
 function onGearDelete(gear)
+	if not started then
+		return
 	if (GetGearType(gear) == gtHedgehog) and CurrentHedgehog ~= nil then
 		local clan = GetHogClan(CurrentHedgehog)
 		local s = GetHogName(gear) .. " " .. loc(drowning) .. "|" .. loc(team) .. " " .. (clan + 1) .. " "
