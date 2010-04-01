@@ -508,8 +508,9 @@ const cEdge = 55;
 var radz: array[0..Pred(cMaxEdgePoints)] of LongInt;
     i, k, dist, px, py: LongInt;
 begin
-radz[0]:= 0;
 for i:= 0 to Pred(pa.Count) do
+  begin
+  radz[i]:= 0;
   with pa.ar[i] do
     if x <> NTPX then
       begin
@@ -523,6 +524,7 @@ for i:= 0 to Pred(pa.Count) do
           radz[i]:= Max(0, Min(dist - radz[k] - cMinDist, radz[i]))
         end
       end;
+  end;
 
 for i:= 0 to Pred(pa.Count) do
   with pa.ar[i] do
