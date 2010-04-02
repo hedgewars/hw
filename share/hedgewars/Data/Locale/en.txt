@@ -429,7 +429,7 @@
 04:19=Used at the right moment teleportation can|be more powerful than almost all weapons as|it allows you to save hogs from dangerous|situations within seconds.|Cursor: Select target region
 04:20=Allows you to play the current turn with|a different hog.|Attack: Enable switching hogs
 04:21=Shoot a grenade-like projectile that will|release multiple bombs upon impact.|Attack: Shoot at full power
-04:22=Not just for Indiana Jones! The whip is an|useful weapon in many situations. Especially|when you'd like to shove someone off a cliff.|Attack: Strike everything in front of you
+04:22=Not just for Indiana Jones! The whip is a|useful weapon in many situations. Especially|when you'd like to shove someone off a cliff.|Attack: Strike everything in front of you
 04:23=If you have nothing to lose, this might be|quite handy. Sacrifice your hog by launching|him into a specific direction hurting everything|on his way and exploding at the end.|Attack: Launch the devastating and deadly attack
 04:24=Happy Birthday! Launch this cake, let it walk right|next to your enemies and let them have an explosive|party. The cake is able to pass almost all terrain|but he might detonate earlier this way.|Attack: Start the cake or let it stop and explode
 04:25=Use this disguise kit to get your enemies to jump|towards your hog (and into some gap or hole).|Attack: Use the kit and try to seduce another hog
