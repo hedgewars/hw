@@ -2182,7 +2182,7 @@ if not shoppa and ((GameFlags and gfInvulnerable) = 0) and ((aTot+uTot)<>0) then
 else t:= GetRandom(aTot+uTot);
 
     
-if not shoppa and ((GameFlags and gfInvulnerable) = 0) and (t<h) then
+if t<h then
     begin
     FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
     FollowGear^.Health:= 25;
