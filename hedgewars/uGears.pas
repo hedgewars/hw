@@ -2170,16 +2170,21 @@ for i:= Low(TAmmoType) to High(TAmmoType) do
 
 t:=0;
 a:=aTot;
-h:= 0;
+h:= 1;
 // FIXME - shoppa is TEMPORARY REMOVE WHEN CRATE PROBABILITY ALLOWS DISABLING OF HEALTH CRATES
 // Preserving health crate distribution of 35% until that happens
-if not shoppa and ((GameFlags and gfInvulnerable) = 0) and ((aTot+uTot)<>0) then 
-    begin
-    h:= 3500;
-    t:= GetRandom(10000);
-    a:= 6500*aTot div (aTot+uTot)
-    end
-else t:= GetRandom(aTot+uTot);
+if (aTot+uTot) <> 0 then
+    if not shoppa and ((GameFlags and gfInvulnerable) = 0) then 
+        begin
+        h:= 3500;
+        t:= GetRandom(10000);
+        a:= 6500*aTot div (aTot+uTot)
+        end
+    else 
+        begin
+        t:= GetRandom(aTot+uTot);
+        h:= 0
+        end;
 
     
 if t<h then
