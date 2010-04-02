@@ -592,7 +592,7 @@ begin
 			begin
             if PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] then
                 begin
-                inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)));
+                inc(Gear^.Damage, min(ModifyDamage(5,Gear), max(0,Gear^.Health - 1 - Gear^.Damage)));
                 if getRandom(2) = 0 then
                     PlaySound(sndPoisonCough, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
                 else
