@@ -111,6 +111,8 @@
 		611FD9D01155A40700C2203D /* NetworkPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CF1155A40700C2203D /* NetworkPlay.png */; };
 		611FD9D21155A41000C2203D /* Multiplayer.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9D11155A41000C2203D /* Multiplayer.png */; };
 		611FDB641155BFFF00C2203D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FDB631155BFFF00C2203D /* Default.png */; };
+		615F159E1166216A002444F2 /* TeamSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */; };
+		615F15AE116628CC002444F2 /* SingleTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
 		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
@@ -196,7 +198,6 @@
 		61CE24EE115E71C20098C467 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE24EB115E71C20098C467 /* OverlayViewController.m */; };
 		61CE24EF115E71C20098C467 /* PopupMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE24ED115E71C20098C467 /* PopupMenuViewController.m */; };
 		61CE2503115E73210098C467 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61CE2501115E73210098C467 /* OverlayViewController.xib */; };
-		61CE2504115E73210098C467 /* PopupMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61CE2502115E73210098C467 /* PopupMenuViewController.xib */; };
 		61CE250D115E749A0098C467 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE250C115E749A0098C467 /* OverlayViewController.m */; };
 		61CE2511115E74C90098C467 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61CE2510115E74C90098C467 /* OverlayViewController.xib */; };
 		61CE25C3115E7D1D0098C467 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */; };
@@ -204,7 +205,6 @@
 		61FA761F115DA0DB00DA6ED0 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */; };
 		61FA7647115DA6A300DA6ED0 /* SplitViewRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7645115DA6A300DA6ED0 /* SplitViewRootController.m */; };
 		61FA765D115DAACC00DA6ED0 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */; };
-		61FA7669115DAB1B00DA6ED0 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61FA7667115DAB1B00DA6ED0 /* DetailViewController.xib */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
 
@@ -291,6 +291,10 @@
 		611FD9CF1155A40700C2203D /* NetworkPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = NetworkPlay.png; path = ../../QTfrontend/res/NetworkPlay.png; sourceTree = SOURCE_ROOT; };
 		611FD9D11155A41000C2203D /* Multiplayer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Multiplayer.png; path = ../../QTfrontend/res/Multiplayer.png; sourceTree = SOURCE_ROOT; };
 		611FDB631155BFFF00C2203D /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../../cocoaTouch/iPad/Default.png; sourceTree = SOURCE_ROOT; };
+		615F159C1166216A002444F2 /* TeamSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TeamSettingsViewController.h; path = ../../cocoaTouch/iPad/TeamSettingsViewController.h; sourceTree = SOURCE_ROOT; };
+		615F159D1166216A002444F2 /* TeamSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TeamSettingsViewController.m; path = ../../cocoaTouch/iPad/TeamSettingsViewController.m; sourceTree = SOURCE_ROOT; };
+		615F15AC116628CC002444F2 /* SingleTeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleTeamViewController.h; path = ../../cocoaTouch/iPad/SingleTeamViewController.h; sourceTree = SOURCE_ROOT; };
+		615F15AD116628CC002444F2 /* SingleTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingleTeamViewController.m; path = ../../cocoaTouch/iPad/SingleTeamViewController.m; sourceTree = SOURCE_ROOT; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E5114AA34C00BA94A9 /* HHHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = HHHandlers.inc; path = ../../hedgewars/HHHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -395,7 +399,6 @@
 		61CE24EC115E71C20098C467 /* PopupMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopupMenuViewController.h; path = ../../cocoaTouch/iPad/PopupMenuViewController.h; sourceTree = SOURCE_ROOT; };
 		61CE24ED115E71C20098C467 /* PopupMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopupMenuViewController.m; path = ../../cocoaTouch/iPad/PopupMenuViewController.m; sourceTree = SOURCE_ROOT; };
 		61CE2501115E73210098C467 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = ../../cocoaTouch/iPad/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
-		61CE2502115E73210098C467 /* PopupMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = PopupMenuViewController.xib; path = ../../cocoaTouch/iPad/PopupMenuViewController.xib; sourceTree = SOURCE_ROOT; };
 		61CE250B115E749A0098C467 /* OverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OverlayViewController.h; path = ../../cocoaTouch/OverlayViewController.h; sourceTree = SOURCE_ROOT; };
 		61CE250C115E749A0098C467 /* OverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OverlayViewController.m; path = ../../cocoaTouch/OverlayViewController.m; sourceTree = SOURCE_ROOT; };
 		61CE2510115E74C90098C467 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = ../../cocoaTouch/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -408,7 +411,6 @@
 		61FA765B115DAACC00DA6ED0 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MasterViewController.m; path = ../../cocoaTouch/iPad/MasterViewController.m; sourceTree = SOURCE_ROOT; };
 		61FA7665115DAB1B00DA6ED0 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DetailViewController.h; path = ../../cocoaTouch/iPad/DetailViewController.h; sourceTree = SOURCE_ROOT; };
 		61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DetailViewController.m; path = ../../cocoaTouch/iPad/DetailViewController.m; sourceTree = SOURCE_ROOT; };
-		61FA7667115DAB1B00DA6ED0 /* DetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = DetailViewController.xib; path = ../../cocoaTouch/iPad/DetailViewController.xib; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -580,6 +582,21 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		615F159B11662108002444F2 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				61FA765A115DAACC00DA6ED0 /* MasterViewController.h */,
+				61FA765B115DAACC00DA6ED0 /* MasterViewController.m */,
+				61FA7665115DAB1B00DA6ED0 /* DetailViewController.h */,
+				61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */,
+				615F15AC116628CC002444F2 /* SingleTeamViewController.h */,
+				615F15AD116628CC002444F2 /* SingleTeamViewController.m */,
+				615F159C1166216A002444F2 /* TeamSettingsViewController.h */,
+				615F159D1166216A002444F2 /* TeamSettingsViewController.m */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 		61798860114AA49D00BA94A9 /* SDLOverrides */ = {
 			isa = PBXGroup;
 			children = (
@@ -695,11 +712,9 @@
 		61CE2509115E74260098C467 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
-				61FA7667115DAB1B00DA6ED0 /* DetailViewController.xib */,
 				611FD990115590E700C2203D /* MainMenuViewController.xib */,
 				611FD992115590E700C2203D /* SettingsViewController.xib */,
 				61CE2501115E73210098C467 /* OverlayViewController.xib */,
-				61CE2502115E73210098C467 /* PopupMenuViewController.xib */,
 			);
 			name = XIB;
 			sourceTree = "<group>";
@@ -707,15 +722,12 @@
 		61FA7620115DA0EA00DA6ED0 /* iPad Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				615F159B11662108002444F2 /* Settings */,
 				61FA766A115DAB2A00DA6ED0 /* Overlay */,
 				61FA761D115DA0DB00DA6ED0 /* MainMenuViewController.h */,
 				61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */,
 				61FA7644115DA6A300DA6ED0 /* SplitViewRootController.h */,
 				61FA7645115DA6A300DA6ED0 /* SplitViewRootController.m */,
-				61FA765A115DAACC00DA6ED0 /* MasterViewController.h */,
-				61FA765B115DAACC00DA6ED0 /* MasterViewController.m */,
-				61FA7665115DAB1B00DA6ED0 /* DetailViewController.h */,
-				61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */,
 			);
 			name = "iPad Frontend";
 			sourceTree = "<group>";
@@ -967,9 +979,7 @@
 				611FD9D01155A40700C2203D /* NetworkPlay.png in Resources */,
 				611FD9D21155A41000C2203D /* Multiplayer.png in Resources */,
 				611FDB641155BFFF00C2203D /* Default.png in Resources */,
-				61FA7669115DAB1B00DA6ED0 /* DetailViewController.xib in Resources */,
 				61CE2503115E73210098C467 /* OverlayViewController.xib in Resources */,
-				61CE2504115E73210098C467 /* PopupMenuViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1156,6 +1166,8 @@
 				61CE24EE115E71C20098C467 /* OverlayViewController.m in Sources */,
 				61CE24EF115E71C20098C467 /* PopupMenuViewController.m in Sources */,
 				61CE25C3115E7D1D0098C467 /* DetailViewController.m in Sources */,
+				615F159E1166216A002444F2 /* TeamSettingsViewController.m in Sources */,
+				615F15AE116628CC002444F2 /* SingleTeamViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

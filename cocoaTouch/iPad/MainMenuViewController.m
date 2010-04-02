@@ -30,13 +30,19 @@
 }
 
 - (void)dealloc {
+    [cover release];
 	[super dealloc];
+}
+
+-(void) viewDidUnload {
+    self.cover = nil;
+	[super viewDidUnload];
 }
 
 -(void) viewDidLoad {
     // initialize some files the first time we load the game
 	[NSThread detachNewThreadSelector:@selector(checkFirstRun) toTarget:self withObject:nil];
-    // listet to request to remove the modalviewcontroller
+    // listen to request to remove the modalviewcontroller
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissModalViewController) name: @"dismissModalView" object:nil];
 
 	[super viewDidLoad];

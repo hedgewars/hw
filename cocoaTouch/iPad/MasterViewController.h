@@ -19,4 +19,6 @@
 @property (nonatomic, retain) IBOutlet DetailViewController *detailViewController;
 @property (nonatomic, retain) NSArray *optionList;
 
+-(IBAction) dismissSplitView;
+
 @end

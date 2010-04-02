@@ -23,7 +23,8 @@
                                                   NSLocalizedString(@"Weapons",@""),
                                                   NSLocalizedString(@"Schemes",@""),
                                                   nil];
-    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:0 target:self action:@selector(dismissSplitView)];
+
     // Uncomment the following line to preserve selection between presentations.
     //self.clearsSelectionOnViewWillAppear = NO;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
@@ -118,6 +119,9 @@
     [super dealloc];
 }
 
+-(IBAction) dismissSplitView {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
+}
 
 @end
 

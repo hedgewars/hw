@@ -9,12 +9,10 @@
 #import <UIKit/UIKit.h>
 
 
-@interface PopupMenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate> {
-    UITableView *menuTable;
+@interface PopupMenuViewController : UITableViewController <UIActionSheetDelegate> {
     NSArray *menuList;
     BOOL isPaused;
 }
-@property (nonatomic,retain) IBOutlet UITableView * menuTable;
 @property (nonatomic,retain) NSArray *menuList;
 
 @end

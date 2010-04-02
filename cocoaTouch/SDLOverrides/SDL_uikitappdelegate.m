@@ -124,7 +124,7 @@ int main (int argc, char *argv[]) {
 	SDL_SendQuit();
     if (isInGame) {
         HW_terminate(YES);
-        // hack to prevent automatic termination.  See SDL_uikitevents.m for details
+        // hack to prevent automatic termination. See SDL_uikitevents.m for details
         longjmp(*(jump_env()), 1);
     }
 }

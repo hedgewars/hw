@@ -11,31 +11,13 @@
 #import "PascalImports.h"
 
 @implementation PopupMenuViewController
-@synthesize menuTable, menuList;
-
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        // Custom initialization
-    }
-    return self;
-}
-*/
-
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-*/
+@synthesize menuList;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Overriden to allow any orientation.
     return YES;
 }
-
 
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -44,10 +26,11 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
-
 -(void) viewDidLoad {
     isPaused = NO;
-    menuTable.allowsSelection = YES;
+    self.tableView.allowsSelection = YES;
+    self.tableView.alwaysBounceVertical = YES;
+    self.tableView.delaysContentTouches = NO;
     menuList = [[NSArray alloc] initWithObjects:
                 NSLocalizedString(@"Pause Game", @""),
                 NSLocalizedString(@"Chat", @""),
@@ -59,12 +42,11 @@
 
 -(void) dealloc {
     [menuList release];
-    [menuTable release];
     [super dealloc];
 }
 
 #pragma mark -
-#pragma mark TableView Methods
+#pragma mark tableView methods
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
 	return 1;
 }
@@ -80,8 +62,8 @@
     if (nil == cell) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:cellIdentifier] autorelease];
-        cell.textLabel.text = [menuList objectAtIndex:[indexPath row]];
 	}
+    cell.textLabel.text = [menuList objectAtIndex:[indexPath row]];
 	
 	return cell;
 }
@@ -102,7 +84,7 @@
 			actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
                                                       delegate:self
                                              cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
-                                        destructiveButtonTitle:NSLocalizedString(@"As sure as I can be!", @"")
+                                        destructiveButtonTitle:NSLocalizedString(@"Of course!", @"")
                                              otherButtonTitles:nil];
             [actionSheet showInView:self.view];
             [actionSheet release];
@@ -120,6 +102,8 @@
     [aTableView deselectRowAtIndexPath: indexPath animated:YES];
 }
 
+#pragma mark -
+#pragma mark actionSheet methods
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
 	if ([actionSheet cancelButtonIndex] != buttonIndex) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissPopover"  object:nil];

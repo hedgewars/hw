@@ -52,6 +52,9 @@
 
 -(void) viewDidUnload {
 	[dimTimer invalidate];
+    self.dimTimer = nil;
+    menuPopover = nil;
+    [super viewDidUnload];
 }
 
 -(void) dealloc {
@@ -93,7 +96,6 @@
 // issue certain action based on the tag of the button 
 -(IBAction) buttonPressed:(id) sender {
     [self activateOverlay];
-    UIActionSheet *actionSheet;
     UIButton *theButton = (UIButton *)sender;
     
     switch (theButton.tag) {
@@ -119,23 +121,6 @@
             HW_backjump();
             break;
         case 7:
-            HW_pause();
-            break;
-        case 8:
-            HW_chat();
-            break;
-        case 9:
-            actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
-                                                      delegate:self
-                                             cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
-                                        destructiveButtonTitle:NSLocalizedString(@"As sure as I can be!", @"")
-                                             otherButtonTitles:nil];
-            [actionSheet showInView:self.view];
-            [actionSheet release];
-
-            HW_pause();
-	    break;
-        case 10:
             HW_tab();
             break;
         default:
@@ -154,19 +139,12 @@
 
 // show up a popover containing a popupMenuViewController; we hook it with setPopoverContentSize
 -(IBAction) showPopover{
-    PopupMenuViewController *popupMenu = [[PopupMenuViewController alloc] initWithNibName:@"PopupMenuViewController" bundle:nil];
+    PopupMenuViewController *popupMenu = [[PopupMenuViewController alloc] init];
     
     menuPopover = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
     [menuPopover setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
 
-    /*UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button.frame= CGRectMake(960, 0, 64, 64);
-    button.titleLabel.text=@"UUUUUUUF";
-    [self.view addSubview:button];*/
-    
     [menuPopover presentPopoverFromRect:CGRectMake(960, 0, 220, 32) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
-    //UIBarButtonItem *sender = [[useless items] objectAtIndex:1];
-    //[self.popoverController presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
 }
 
 // because of the actionSheet, the popOver might not get dismissed, so we do it manually (through a NSNotification system, see above)
@@ -176,6 +154,8 @@
 }
 
 #pragma mark -
+#pragma mark Custom touch event handling
+
 #define kMinimumPinchDelta      50
 #define kMinimumGestureLength	10
 #define kMaximumVariance        3

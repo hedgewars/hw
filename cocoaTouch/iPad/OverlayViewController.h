@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface OverlayViewController : UIViewController <UIActionSheetDelegate> {
+@interface OverlayViewController : UIViewController {
     NSTimer *dimTimer;
     UIPopoverController* menuPopover;
     
