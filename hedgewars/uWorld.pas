@@ -166,8 +166,8 @@ prevPoint.Y:= cScreenHeight div 2;
 WorldDx:=  - (LAND_WIDTH div 2) + cScreenWidth div 2;
 WorldDy:=  - (LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 AMxShift:= 210;
-SkyOffset:= (10 * min(0, -145 - (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine))) div 35;
-HorizontOffset:= (10 * min(0, -145 - (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine))) div 55;
+SkyOffset:= 0;
+HorizontOffset:= 0;
 end;
 
 procedure ShowAmmoMenu;
@@ -436,7 +436,7 @@ var i, t: LongInt;
     grp: TCapGroup;
     s: string[15];
     highlight: Boolean;
-    offset, offsetX, offsetY: LongInt;
+    offset, offsetX, offsetY, ScreenBottom: LongInt;
     scale: GLfloat;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
@@ -451,12 +451,6 @@ if ZoomValue > zoom then
     if ZoomValue < zoom then zoom:= ZoomValue
     end;
 
-offsetY:= 10 * min(0, -145 - (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine));
-
-//SkyOffset:= offsetY div 35 + cWaveHeight;
-HorizontOffset:= offsetY div 35 + cWaveHeight;
-SkyOffset:= HorizontOffset;
-
 // Sky
 glClear(GL_COLOR_BUFFER_BIT);
 glEnable(GL_BLEND);
@@ -468,20 +462,29 @@ if not isPaused then MoveCamera;
 
 if not cReducedQuality then
     begin
+    // Offsets relative to camera - spare them to wimpier cpus, no bg or flakes for them anyway
+    ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
+    offsetY:= 10 * min(0, -145 - ScreenBottom);
+    SkyOffset:= offsetY div 35 + cWaveHeight;
+    HorizontOffset:= SkyOffset;
+    if ScreenBottom > SkyOffset then
+        HorizontOffset:= HorizontOffset + ((ScreenBottom-SkyOffset) div 20);
+
     // background
     DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, SkyOffset);
     DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
 
     DrawVisualGears(0);
-    end;
-
-// Waves
-DrawWater(255, SkyOffset); 
-DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 0.25);
-DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 0.19);
-DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 0.14);
-DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 0.09);
-
+    
+    // Waves
+    DrawWater(255, SkyOffset); 
+    DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 0.25);
+    DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 0.19);
+    DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 0.14);
+    DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 0.09);
+    end
+else
+    DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)), 0);
 
 DrawLand(WorldDx, WorldDy);
 
@@ -519,12 +522,18 @@ DrawWater(cWaterOpacity, 0);
 
 // Waves
 DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 0.05);
-//DrawWater(cWaterOpacity, - offsetY div 40);
-DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 0.03);
-DrawWater(cWaterOpacity, - offsetY div 20);
-DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 0.01);
-DrawWater(cWaterOpacity, - offsetY div 10);
-DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
+
+if not cReducedQuality then
+    begin
+    //DrawWater(cWaterOpacity, - offsetY div 40);
+    DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 0.03);
+    DrawWater(cWaterOpacity, - offsetY div 20);
+    DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 0.01);
+    DrawWater(cWaterOpacity, - offsetY div 10);
+    DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
+    end
+else
+    DrawWaves(-1, 50, - (cWaveHeight shr 1), 0);
 
 
 {$WARNINGS OFF}
