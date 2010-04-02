@@ -292,8 +292,8 @@ or pick another nickname:</source>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>
             <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёж был убит за этот поединок.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёжа были убиты за этот поединок.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёжей были убиты за этот поединок.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ежа были убиты за этот поединок.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ежей были убиты за этот поединок.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
