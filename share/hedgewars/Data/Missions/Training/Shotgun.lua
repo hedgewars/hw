@@ -69,7 +69,7 @@ local hogname = {
 	["en"] = "Hunter",
 	["de"] = "Jäger",
 	["es"] = "Cazador",
-	["en"] = "Strzelec",
+	["pl"] = "Strzelec",
 	["pt_PT"] = "Comando"
 	}
 
