@@ -5,7 +5,8 @@ local caption = {
 	["de"] = "Hedgewars-Basketball",
 	["es"] = "Hedgewars-Baloncesto",
 	["pl"] = "Hedgewars-Koszykówka",
-	["pt_PT"] = "Hedgewars-Basketball"
+	["pt_PT"] = "Hedgewars-Basketball",
+	["sk"] = "Hedgewars-Basketbal"
 	}
 
 local subcaption = {
@@ -13,7 +14,8 @@ local subcaption = {
 	["de"] = "Kein-so-Freundschaftsspiel",
 	["es"] = "Partido no-tan-amistoso",
 	["pl"] = "Mecz Nie-Taki-Towarzyski",
-	["pt_PT"] = "Partida não muito amigável"
+	["pt_PT"] = "Partida não muito amigável",
+	["sk"] = "Nie tak celkom priateľský zápas"
 	}
 
 local goal = {
@@ -21,7 +23,8 @@ local goal = {
 	["de"] = "Schlage deine Widersacher durch|die Körbe und aus der Karte hinaus!",
 	["es"] = "¡Batea a tus oponentes fuera del mapa a través de la canasta!",
 	["pl"] = "Uderzaj swoich przekiwników|wyrzucając przez kosz, poza mapę!",
-	["pt_PT"] = "Bate os teus adversarios|fora do mapa acertando com eles no cesto!"
+	["pt_PT"] = "Bate os teus adversarios|fora do mapa acertando com eles no cesto!",
+	["sk"] = "Odpálkujte vašich súperov do koša|a von z mapy!"
 	}
 
 local scored = {
@@ -29,7 +32,8 @@ local scored = {
 	["de"] = " erhält einen Punkt!",
 	["es"] = " anotó un tanto!",
 	["pl"] = " zdobyła punkt!",
-	["pt_PT"] = " marca um cesto!"
+	["pt_PT"] = " marca um cesto!",
+	["sk"] = " skóruje!"
 	}
 
 local failed = {
@@ -37,7 +41,8 @@ local failed = {
 	["de"] = " erhält eine Strafe!",
 	["es"] = " anotó una falta!",
 	["pl"] = " zdobyła punkt karny!",
-	["pt_PT"] = " perde um ponto!"
+	["pt_PT"] = " perde um ponto!",
+	["sk"] = " dostáva trestný bod!"
 	}
 
 	local sscore = {
@@ -45,14 +50,16 @@ local failed = {
 	["de"] = "Punktestand",
 	["es"] = "Puntuación",
 	["pl"] = "Punktacja",
-	["pt_PT"] = "Pontuação"
+	["pt_PT"] = "Pontuação",
+	["sk"] = "Skóre"
 	}
 
 local team = {
 	["en"] = "Team",
 	["es"] = "Equipo",
 	["pl"] = "Drużyna",
-	["pt_PT"] = "Equipa"
+	["pt_PT"] = "Equipa",
+	["sk"] = "Tím"
 	}
 
 local drowning = {
@@ -60,7 +67,8 @@ local drowning = {
 	["de"] = "ist draußen und",
 	["es"] = "cayó y",
 	["pl"] = "jest wyautowany i",
-	["pt_PT"] = "está fora e"
+	["pt_PT"] = "está fora e",
+	["sk"] = "je mimo hru a"
 	}
 
 local function loc(text)

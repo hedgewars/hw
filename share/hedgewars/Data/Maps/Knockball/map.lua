@@ -5,7 +5,8 @@ local caption = {
 	["de"] = "Hedgewars-Knockball",
 	["es"] = "Hedgewars-Knockball",
 	["pl"] = "Hedgewars-Knockball",
-	["pt_PT"] = "Hedgewars-Knockball"
+	["pt_PT"] = "Hedgewars-Knockball",
+	["sk"] = "Hedgewars-Knockball"
 	}
 
 local subcaption = {
@@ -13,7 +14,8 @@ local subcaption = {
 	["de"] = "Kein-so-Freundschaftsspiel",
 	["es"] = "Partido no-tan-amistoso",
 	["pl"] = "Mecz Nie-Taki-Towarzyski",
-	["pt_PT"] = "Partida não muito amigável"
+	["pt_PT"] = "Partida não muito amigável",
+	["sk"] = "Nie tak celkom priateľký zápas"
 	}
 
 local goal = {
@@ -21,7 +23,8 @@ local goal = {
 	["de"] = "Schlage Bälle auf deine Widersacher|und lass sie ins Meer fallen!",
 	["es"] = "¡Batea pelotas hacia tus enemigos|y hazlos caer al agua!",
 	["pl"] = "Uderzaj piłkami w swoich przeciwników|i strącaj ich do wody!",
-	["pt_PT"] = "Bate bolas contra os teus|enimigos e empurra-os ao mar!"
+	["pt_PT"] = "Bate bolas contra os teus|enimigos e empurra-os ao mar!",
+	["sk"] = "Loptami triafajte vašich nepriateľov|a zhoďte ich tak do mora!"
 	}
 
 local scored = {
@@ -29,7 +32,8 @@ local scored = {
 	["de"] = "%s ist draußen und Team %d|erhält einen Punkt!| |Punktestand:",
 	["es"] = "¡%s cayó y Equipo %d|anotó un tanto!| |Puntuación:",
 	["pl"] = "%s utonął i drużyna %d|zdobyła punkt!| |Punktacja:",
-	["pt_PT"] = "%s está fora e a equipa %d|soma um ponto!| |Pontuação:"
+	["pt_PT"] = "%s está fora e a equipa %d|soma um ponto!| |Pontuação:",
+	["sk"] = "%s je mimo hru a tím %d|získal bod!| |Skóre:"
 	}
 
 local failed = {
@@ -37,7 +41,8 @@ local failed = {
 	["de"] = "%s ist draußen und Team %d|erhält eine Strafe!| |Punktestand:",
 	["es"] = "¡%s cayó y Equipo %d|anotó una falta!| |Puntuación:",
 	["pl"] = "%s utonął i drużyna %d|dostała punkt karny!| |Punktacja:",
-	["pt_PT"] = "%s está fora e a equipa %d|perde um ponto!| |Pontuação:"
+	["pt_PT"] = "%s está fora e a equipa %d|perde um ponto!| |Pontuação:",
+	["sk"] = "%s je mimo hru a tím %d|dostal trestný bod!| |Skóre:",
 	}
 
 local function loc(text)
