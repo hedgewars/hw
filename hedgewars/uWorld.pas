@@ -453,8 +453,9 @@ if ZoomValue > zoom then
 
 offsetY:= 10 * min(0, -145 - (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine));
 
-SkyOffset:= offsetY div 35;
-HorizontOffset:= offsetY div 55;
+//SkyOffset:= offsetY div 35 + cWaveHeight;
+HorizontOffset:= offsetY div 35 + cWaveHeight;
+SkyOffset:= HorizontOffset;
 
 // Sky
 glClear(GL_COLOR_BUFFER_BIT);
