@@ -89,6 +89,7 @@ end
 function onGearDelete(gear)
 	if not started then
 		return
+	end
 	if gear == ball then
 		ball = nil
 	elseif (GetGearType(gear) == gtHedgehog) and CurrentHedgehog ~= nil then

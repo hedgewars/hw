@@ -97,6 +97,7 @@ end
 function onGearDelete(gear)
 	if not started then
 		return
+	end
 	if (GetGearType(gear) == gtHedgehog) and CurrentHedgehog ~= nil then
 		local clan = GetHogClan(CurrentHedgehog)
 		local s = GetHogName(gear) .. " " .. loc(drowning) .. "|" .. loc(team) .. " " .. (clan + 1) .. " "
