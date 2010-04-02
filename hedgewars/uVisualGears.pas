@@ -334,8 +334,8 @@ inc(Gear^.Timer, Steps);
 if Gear^.Timer >= Gear^.FrameTicks then DeleteVisualGear(Gear)
 else
     begin
-    Gear^.scale := 1.25 * (-power(2, -7 * Int(Gear^.Timer)/Gear^.FrameTicks) + 1) + 0.4;
-    Gear^.alpha := 1.0 * (power(2, -3 * (Gear^.Timer - 350)/350));
+    Gear^.scale := 1.25 * (-power(2, -10 * Int(Gear^.Timer)/Gear^.FrameTicks) + 1) + 0.4;
+    Gear^.alpha := -1.0 * (power(Gear^.Timer/350, 4) - 1);
     end;
 end;
 

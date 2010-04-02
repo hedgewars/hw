@@ -1747,8 +1747,8 @@ while Gear<>nil do
                         DrawTextureF(SpritesData[sprBirdy].Texture, 1, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                     end;
     gtBigExplosion: begin
-                    glColor4f(1, 1, 1, 1.0 * (power(2, -5 * (Gear^.Timer-200)/200)));
-                    DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -4 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
+                    glColor4f(1, 1, 1, -1.0 * (power(Gear^.Timer/250, 4) - 1));
+                    DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
                     glColor4f(1, 1, 1, 1);
                     end;
              gtEgg: DrawRotatedTextureF(SpritesData[sprEgg].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 16, 16, Gear^.DirAngle);
