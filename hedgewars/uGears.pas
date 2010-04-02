@@ -2151,77 +2151,87 @@ CountGears:= count;
 end;
 
 procedure SpawnBoxOfSmth;
-var t: LongInt;
+var t, aTot, uTot, a, h: LongInt;
     i: TAmmoType;
 begin
 if (PlacingHogs) or
    (cCaseFactor = 0) or
    (CountGears(gtCase) >= 5) or
-   (getrandom(cCaseFactor) <> 0) then exit;
+   (GetRandom(cCaseFactor) <> 0) then exit;
 
 FollowGear:= nil;
+aTot:= 0;
+uTot:= 0;
+for i:= Low(TAmmoType) to High(TAmmoType) do
+    if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+        inc(aTot, Ammoz[i].Probability)
+    else
+        inc(uTot, Ammoz[i].Probability);
 
-t:= getrandom(20);
+t:=0;
+a:=aTot;
+h:= 0;
+// FIXME - shoppa is TEMPORARY REMOVE WHEN CRATE PROBABILITY ALLOWS DISABLING OF HEALTH CRATES
+// Preserving health crate distribution of 35% until that happens
+if not shoppa and ((GameFlags and gfInvulnerable) = 0) and ((aTot+uTot)<>0) then 
+    begin
+    h:= 3500;
+    t:= GetRandom(10000);
+    a:= 6500*aTot div (aTot+uTot)
+    end
+else t:= GetRandom(aTot+uTot);
 
-// FIXME - shoppa is TEMPORARY REMOVE WHEN CRATE PROBABILITY ALLOWS DISABLING OF HEALTH CRATES                               
-// avoid health crates if all hogs are invulnerable                                                                          
-if (t < 13) and (shoppa or ((GameFlags and gfInvulnerable) <> 0)) then t:= t * 13 div 20 + 7;                                
     
-//case getrandom(20) of
-case t of
-     0..6: begin
+if not shoppa and ((GameFlags and gfInvulnerable) = 0) and (t<h) then
+    begin
+    FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
+    FollowGear^.Health:= 25;
+    FollowGear^.Pos:= posCaseHealth;
+    AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpGameState);
+    end
+else if (t<a+h) then
+    begin
+    t:= aTot;
+    if (t > 0) then
+        begin
         FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
-        FollowGear^.Health:= 25;
-        FollowGear^.Pos:= posCaseHealth;
-        AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpGameState);
-        end;
-     7..13: begin
-        t:= 0;
-        for i:= Low(TAmmoType) to High(TAmmoType) do
-            if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
-                inc(t, Ammoz[i].Probability);
-        if (t > 0) then
-            begin
-            FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
-            t:= GetRandom(t);
-            i:= Low(TAmmoType);
-            if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
-                dec(t, Ammoz[i].Probability);
-            while t >= 0 do
-              begin
-              inc(i);
-              if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
-                  dec(t, Ammoz[i].Probability)
-              end;
-            FollowGear^.Pos:= posCaseAmmo;
-            FollowGear^.State:= Longword(i);
-            AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpGameState);
-            end
-        end;
-     14..19: begin
-        t:= 0;
-        for i:= Low(TAmmoType) to High(TAmmoType) do
-            if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
-                inc(t, Ammoz[i].Probability);
-        if (t > 0) then
-            begin
-            FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
-            t:= GetRandom(t);
-            i:= Low(TAmmoType);
-            if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
-                dec(t, Ammoz[i].Probability);
-            while t >= 0 do
-              begin
-              inc(i);
-              if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
-                  dec(t, Ammoz[i].Probability)
-              end;
-            FollowGear^.Pos:= posCaseUtility;
-            FollowGear^.State:= Longword(i);
-            AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpGameState);
-            end
-        end;
-     end;
+        t:= GetRandom(t);
+        i:= Low(TAmmoType);
+        if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+            dec(t, Ammoz[i].Probability);
+        while t >= 0 do
+          begin
+          inc(i);
+          if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+              dec(t, Ammoz[i].Probability)
+          end;
+        FollowGear^.Pos:= posCaseAmmo;
+        FollowGear^.State:= Longword(i);
+        AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpGameState);
+        end
+    end
+else
+    begin
+    t:= uTot;
+    if (t > 0) then
+        begin
+        FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
+        t:= GetRandom(t);
+        i:= Low(TAmmoType);
+        if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
+            dec(t, Ammoz[i].Probability);
+        while t >= 0 do
+          begin
+          inc(i);
+          if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
+              dec(t, Ammoz[i].Probability)
+          end;
+        FollowGear^.Pos:= posCaseUtility;
+        FollowGear^.State:= Longword(i);
+        AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpGameState);
+        end
+    end;
+
 // handles case of no ammo or utility crates - considered also placing booleans in uAmmos and altering probabilities
 if (FollowGear <> nil) then
     begin
