@@ -2161,13 +2161,11 @@ if (PlacingHogs) or
 
 FollowGear:= nil;
 
-if shoppa then  // FIXME -  TEMPORARY  REMOVE WHEN CRATE PROBABILITY IS ADDED, INCLUDING DISABLING OF HEALTH CRATES
-    t:= 7
-else
-    t:= getrandom(20);
+t:= getrandom(20);
 
-// avoid health crates if all hogs are invulnerable
-if (t < 13) and ((GameFlags and gfInvulnerable) <> 0) then t:= t * 13 div 20 + 7;
+// FIXME - shoppa is TEMPORARY REMOVE WHEN CRATE PROBABILITY ALLOWS DISABLING OF HEALTH CRATES                               
+// avoid health crates if all hogs are invulnerable                                                                          
+if (t < 13) and (shoppa or ((GameFlags and gfInvulnerable) <> 0)) then t:= t * 13 div 20 + 7;                                
     
 //case getrandom(20) of
 case t of

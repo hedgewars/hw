@@ -82,7 +82,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 end;
 
 procedure AddAmmoStore(s: shortstring);
-const probability: array [0..8] of LongWord = (0,20,30,60,100,150,200,400,600);
+const probability: array [0..8] of LongWord = (0,20,30,60,100,200,400,600,800);
 var cnt: Longword;
     a: TAmmoType;
     ammos: TAmmoCounts;
