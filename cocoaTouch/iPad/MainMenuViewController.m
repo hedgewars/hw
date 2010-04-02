@@ -11,11 +11,6 @@
 #import "PascalImports.h"
 #import "SplitViewRootController.h"
 
-// in case we don't want SDL_mixer...
-//#import "SoundEffect.h"	
-//SoundEffect *erasingSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Erase" ofType:@"caf"]];
-//SoundEffect *selectSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Select" ofType:@"caf"]];
-
 
 @implementation MainMenuViewController
 @synthesize cover;
@@ -43,7 +38,10 @@
     // initialize some files the first time we load the game
 	[NSThread detachNewThreadSelector:@selector(checkFirstRun) toTarget:self withObject:nil];
     // listen to request to remove the modalviewcontroller
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissModalViewController) name: @"dismissModalView" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dismissModalViewController)
+                                                 name: @"dismissModalView" 
+                                               object:nil];
 
 	[super viewDidLoad];
 }
@@ -59,7 +57,7 @@
 		NSLog(@"First time run, creating settings files");
 		
 		// show a popup with an indicator to make the user wait
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"One-time Preferences Configuration",@"")
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Please wait",@"")
                                                         message:nil
                                                        delegate:nil
                                               cancelButtonTitle:nil
@@ -67,12 +65,40 @@
 		[alert show];
 		[alert release];
 
-		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] 
+                                              initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 		indicator.center = CGPointMake(alert.bounds.size.width / 2, alert.bounds.size.height - 50);
 		[indicator startAnimating];
 		[alert addSubview:indicator];
 		[indicator release];
 		
+        // create Default Team.plist
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"Teams/"];
+		[[NSFileManager defaultManager] createDirectoryAtPath:teamsDirectory 
+                                  withIntermediateDirectories:NO 
+                                                   attributes:nil 
+                                                        error:NULL];
+
+        NSMutableArray *hedgehogs = [[NSMutableArray alloc] init];
+
+        for (int i = 0; i < 8; i++) {
+            NSString *hogName = [[NSString alloc] initWithFormat:@"hedgehog %d",i];
+            NSDictionary *hog = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",
+                                 hogName,@"hogname",@"NoHat",@"hat",nil];
+            [hogName release];
+            [hedgehogs addObject:hog];
+            [hog release];
+        }
+        
+        NSDictionary *defaultTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",
+                                     @"Default Team",@"teamname",@"Statue",@"grave",@"Plane",@"fort",
+                                     @"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs,@"hedgehogs",nil];
+        [hedgehogs release];
+        NSString *defaultTeamFile = [teamsDirectory stringByAppendingString:@"Default Team.plist"];
+        [defaultTeam writeToFile:defaultTeamFile atomically:YES];
+        [defaultTeam release];
+        
 		// create settings.plist
 		NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
 	
@@ -86,7 +112,8 @@
 		[saveDict release];
 		
 		// create other files
-		
+        
+        // ok let the user take control
 		[alert dismissWithClickedButtonIndex:0 animated:YES];
 	}
 	[pool release];

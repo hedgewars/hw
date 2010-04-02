@@ -18,7 +18,8 @@
     self.title =@"First";
     NSMutableArray *array= [[NSMutableArray alloc] init];
 
-    TeamSettingsViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] initWithStyle:UITableViewStylePlain];
+    TeamSettingsViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] 
+                                                              initWithStyle:UITableViewStyleGrouped];
     teamSettingsViewController.title =NSLocalizedString(@"Teams",@"");
     [array addObject:teamSettingsViewController];
     [teamSettingsViewController release];

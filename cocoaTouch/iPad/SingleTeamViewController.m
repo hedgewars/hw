@@ -10,25 +10,11 @@
 
 
 @implementation SingleTeamViewController
-
-
-#pragma mark -
-#pragma mark Initialization
-
-/*
-- (id)initWithStyle:(UITableViewStyle)style {
-    // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-    if ((self = [super initWithStyle:style])) {
-    }
-    return self;
-}
-*/
+@synthesize secondaryItems;
 
 
 #pragma mark -
 #pragma mark View lifecycle
-
-/*
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -37,8 +23,18 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:
+                             NSLocalizedString(@"Color",@""),
+                             NSLocalizedString(@"Grave",@""),
+                             NSLocalizedString(@"Voice",@""),
+                             NSLocalizedString(@"Fort",@""),
+                             NSLocalizedString(@"Flag",@""),
+                             NSLocalizedString(@"Level",@""),nil];
+    self.secondaryItems = array;
+    [array release];
 }
-*/
+
 
 /*
 - (void)viewWillAppear:(BOOL)animated {
@@ -62,9 +58,9 @@
 */
 
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Override to allow orientations other than the default portrait orientation.
-    return YES;
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 
@@ -88,7 +84,7 @@
             rows = 8;
             break;
         case 2:
-            rows = 5;
+            rows = 6;
             break;
         default:
             break;
@@ -98,7 +94,7 @@
 
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"Cell";
     
@@ -107,7 +103,13 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    // Configure the cell...
+    switch ([indexPath section]) {
+        case 2:
+            cell.textLabel.text = [self.secondaryItems objectAtIndex:[indexPath row]];
+            break;
+        default:
+            break;
+    }
     
     return cell;
 }
@@ -156,7 +158,7 @@
 #pragma mark -
 #pragma mark Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Navigation logic may go here. Create and push another view controller.
 	/*
 	 <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
@@ -171,20 +173,22 @@
 #pragma mark -
 #pragma mark Memory management
 
-- (void)didReceiveMemoryWarning {
+-(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
+-(void) viewDidUnload {
+    self.secondaryItems = nil;
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
 }
 
 
-- (void)dealloc {
+-(void) dealloc {
+    [secondaryItems release];
     [super dealloc];
 }
 

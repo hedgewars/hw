@@ -10,7 +10,8 @@
 
 
 @interface SingleTeamViewController : UITableViewController {
-
+    NSArray *secondaryItems;
 }
 
+@property (nonatomic,retain) NSArray *secondaryItems;
 @end

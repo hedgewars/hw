@@ -16,11 +16,17 @@
 #pragma mark View lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSArray *array = [[NSArray alloc] initWithObjects:@"Toy Story", @"A Bug's Life", @"Toy Story 2", 
-                      @"Monsters, Inc.",@"Finding Nemo", @"The Incredibles", @"Cars", @"Ratatouille", 
-                      @"WALL-E", @"Up", @"Toy Story 3", @"Cars 2", @"The Bear and the Bow", @"Newt", nil];
-    self.list = array;
-    [array release];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"Teams/"];
+    
+    NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:teamsDirectory
+                                                                            error:NULL];
+    //NSArray *array = [[NSArray alloc] initWithObjects:@"Toy Story", @"A Bug's Life", @"Toy Story 2", 
+    //                  @"Monsters, Inc.",@"Finding Nemo", @"The Incredibles", @"Cars", @"Ratatouille", 
+    //                  @"WALL-E", @"Up", @"Toy Story 3", @"Cars 2", @"The Bear and the Bow", @"Newt", nil];
+    self.list = contents;
+   
     // Uncomment the following line to preserve selection between presentations.
     self.clearsSelectionOnViewWillAppear = NO;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
@@ -59,11 +65,11 @@
     }
     
     NSUInteger row = [indexPath row]; 
-    NSString *rowString = [list objectAtIndex:row]; 
+    NSString *rowString = [[list objectAtIndex:row] stringByDeletingPathExtension]; 
     cell.textLabel.text = rowString; 
-    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     //cell.imageView.image = [UIImage imageNamed:@"Default.png"];
-    [rowString release];
+    //[rowString release];
     
     return cell;
 }
@@ -113,7 +119,22 @@
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+ if (childController == nil) {
+        childController = [[SingleTeamViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    }
+    
+    NSInteger row = [indexPath row];
+    NSString *selectedMovie = [[list objectAtIndex:row] stringByDeletingPathExtension];
+    NSString *detailMessage = [[NSString alloc] initWithFormat:@"you pressed the button for %@", selectedMovie];
 
+    childController.title = selectedMovie;
+    [detailMessage release];
+    [self.navigationController pushViewController:childController animated:YES];
+
+}
+
+/*
+-(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Hey, do you see the disclosure button?" 
                                                     message:@"If you're trying to drill down, touch that instead" 
                                                    delegate:nil
@@ -122,24 +143,7 @@
     [alert show];
     [alert release];
 }
-
--(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    if (childController == nil) {
-        childController = [[SingleTeamViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        //childController = [[DisclosureDetailController alloc] initWithNibName:@"DisclosureDatailController" bundle:nil];
-    }
-    
-    NSInteger row = [indexPath row];
-    NSString *selectedMovie = [list objectAtIndex:row];
-    NSString *detailMessage = [[NSString alloc] initWithFormat:@"you pressed the button for %@", selectedMovie];
-    //self.childController.message = detailMessage;
-    childController.title = selectedMovie;
-    [detailMessage release];
-    [self.navigationController pushViewController:childController animated:YES];
-
-    //[childController viewWillAppear:YES];
-}
-
+*/
 
 #pragma mark -
 #pragma mark Memory management
