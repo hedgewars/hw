@@ -104,6 +104,7 @@ int main (int argc, char *argv[]) {
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
 	//[application setStatusBarHidden:YES animated:NO];
     //[application setStatusBarHidden:YES withAnimation:NO];
+    [application setStatusBarHidden:YES];
     [application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];  
 		
 	self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

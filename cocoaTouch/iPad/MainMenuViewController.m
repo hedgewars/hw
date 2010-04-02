@@ -167,7 +167,7 @@
             break;
         case 2:
             // for now this controller is just to simplify code management
-            splitViewController = [[SplitViewRootController alloc] init];
+            splitViewController = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
             splitViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentModalViewController:splitViewController animated:YES];
             break;

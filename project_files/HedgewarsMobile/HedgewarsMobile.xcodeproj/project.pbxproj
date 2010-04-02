@@ -113,6 +113,8 @@
 		611FDB641155BFFF00C2203D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FDB631155BFFF00C2203D /* Default.png */; };
 		615F159E1166216A002444F2 /* TeamSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */; };
 		615F15AE116628CC002444F2 /* SingleTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */; };
+		615F16DC11668358002444F2 /* HogHatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615F16DB11668358002444F2 /* HogHatViewController.m */; };
+		615F19861166A6AB002444F2 /* untitled.m in Sources */ = {isa = PBXBuildFile; fileRef = 615F19851166A6AB002444F2 /* untitled.m */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
 		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
@@ -295,6 +297,10 @@
 		615F159D1166216A002444F2 /* TeamSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TeamSettingsViewController.m; path = ../../cocoaTouch/iPad/TeamSettingsViewController.m; sourceTree = SOURCE_ROOT; };
 		615F15AC116628CC002444F2 /* SingleTeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleTeamViewController.h; path = ../../cocoaTouch/iPad/SingleTeamViewController.h; sourceTree = SOURCE_ROOT; };
 		615F15AD116628CC002444F2 /* SingleTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingleTeamViewController.m; path = ../../cocoaTouch/iPad/SingleTeamViewController.m; sourceTree = SOURCE_ROOT; };
+		615F16DA11668358002444F2 /* HogHatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HogHatViewController.h; path = ../../cocoaTouch/iPad/HogHatViewController.h; sourceTree = SOURCE_ROOT; };
+		615F16DB11668358002444F2 /* HogHatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HogHatViewController.m; path = ../../cocoaTouch/iPad/HogHatViewController.m; sourceTree = SOURCE_ROOT; };
+		615F19841166A6AB002444F2 /* untitled.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = untitled.h; sourceTree = "<group>"; };
+		615F19851166A6AB002444F2 /* untitled.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = untitled.m; sourceTree = "<group>"; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E5114AA34C00BA94A9 /* HHHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = HHHandlers.inc; path = ../../hedgewars/HHHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -497,6 +503,8 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				6100DAD4115446B000F455E0 /* Resources-iPad */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				615F19841166A6AB002444F2 /* untitled.h */,
+				615F19851166A6AB002444F2 /* untitled.m */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -593,6 +601,8 @@
 				615F15AD116628CC002444F2 /* SingleTeamViewController.m */,
 				615F159C1166216A002444F2 /* TeamSettingsViewController.h */,
 				615F159D1166216A002444F2 /* TeamSettingsViewController.m */,
+				615F16DA11668358002444F2 /* HogHatViewController.h */,
+				615F16DB11668358002444F2 /* HogHatViewController.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1023,7 +1033,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${PROJECT_DIR}/build/HedgewarsMobile.build/Debug-iphonesimulator/iHedgewars.build/DerivedSources-normal/\nrm -r i386/\nln -sf ../../HedgewarsMobile.build/DerivedSources-normal/i386/ i386\ncd ${PROJECT_DIR}\n\n#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/*\nrm -rf ${PROJECT_DIR}/Data/Music/*\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/*\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/*\n\n#delete all forts\nrm -rf ${PROJECT_DIR}/Data/Forts/*\n";
+			shellScript = "cd ${PROJECT_DIR}/build/HedgewarsMobile.build/Debug-iphonesimulator/iHedgewars.build/DerivedSources-normal/\nrm -fr i386/\nln -sf ../../HedgewarsMobile.build/DerivedSources-normal/i386/ i386\ncd ${PROJECT_DIR}\n\n#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/\nrm -rf ${PROJECT_DIR}/Data/Music/\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all forts\nrm -rf ${PROJECT_DIR}/Data/Forts/\n\n#delete all forts\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
+			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1168,6 +1179,8 @@
 				61CE25C3115E7D1D0098C467 /* DetailViewController.m in Sources */,
 				615F159E1166216A002444F2 /* TeamSettingsViewController.m in Sources */,
 				615F15AE116628CC002444F2 /* SingleTeamViewController.m in Sources */,
+				615F16DC11668358002444F2 /* HogHatViewController.m in Sources */,
+				615F19861166A6AB002444F2 /* untitled.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

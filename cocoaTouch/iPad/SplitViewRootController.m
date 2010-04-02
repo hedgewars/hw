@@ -29,6 +29,8 @@
 -(void) viewDidLoad {
     // init every possible controller
     splitViewController = [[UISplitViewController alloc] init];
+    CGRect screensize = [[UIScreen mainScreen] bounds];
+    splitViewController.view.frame = CGRectMake(0, 0, screensize.size.height, screensize.size.width);
     masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
     detailViewController = [[DetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
     

@@ -1,55 +1,74 @@
 //
-//  TeamSettingsViewController.m
+//  HogHatViewController.m
 //  HedgewarsMobile
 //
 //  Created by Vittorio on 02/04/10.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "TeamSettingsViewController.h"
-#import "SingleTeamViewController.h"
+#import "HogHatViewController.h"
 
-@implementation TeamSettingsViewController
-@synthesize list;
+
+@implementation HogHatViewController
+@synthesize hatList, hog;
 
 #pragma mark -
 #pragma mark View lifecycle
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"Teams/"];
-    
-    NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:teamsDirectory
-                                                                            error:NULL];
-    self.list = contents;
-   
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+    //NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *hatPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Hats/"];
+    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:hatPath
+                                                                         error:NULL];
+    self.hatList = array;
+    //NSLog(@"%@", hatList);
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.title = [hog objectForKey:@"hogname"];
+    [self.tableView reloadData];
+}
+
+/*
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+}
+*/
+/*
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+}
+*/
+/*
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+}
+*/
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Override to allow orientations other than the default portrait orientation.
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    return YES;
 }
 
 
 #pragma mark -
 #pragma mark Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
-    return 1;
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return 2;
 }
 
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
-    return [list count];
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSInteger rows;
+    if (0 == section) 
+        rows = 1;
+    else
+        rows = [self.hatList count];
+    return rows;
 }
-
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -61,12 +80,10 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    NSUInteger row = [indexPath row]; 
-    NSString *rowString = [[list objectAtIndex:row] stringByDeletingPathExtension]; 
-    cell.textLabel.text = rowString; 
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    //cell.imageView.image = [UIImage imageNamed:@"Default.png"];
-    //[rowString release];
+    if (0 == [indexPath section]) 
+        cell.textLabel.text = [hog objectForKey:@"hogname"];
+    else
+        cell.textLabel.text = [[hatList objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
     
     return cell;
 }
@@ -114,31 +131,18 @@
 
 #pragma mark -
 #pragma mark Table view delegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (1 == [indexPath section]) {
-        if (childController == nil) {
-            childController = [[SingleTeamViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        }
-        
-        NSInteger row = [indexPath row];
-        NSString *selectedTeam = [[list objectAtIndex:row] stringByDeletingPathExtension];
-        
-        childController.teamName = selectedTeam;
-        [self.navigationController pushViewController:childController animated:YES];
-    }
+    // Navigation logic may go here. Create and push another view controller.
+	/*
+	 <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+     // ...
+     // Pass the selected object to the new view controller.
+	 [self.navigationController pushViewController:detailViewController animated:YES];
+	 [detailViewController release];
+	 */
 }
 
-/*
--(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Hey, do you see the disclosure button?" 
-                                                    message:@"If you're trying to drill down, touch that instead" 
-                                                   delegate:nil
-                                          cancelButtonTitle:@"Won't happen again"
-                                          otherButtonTitles:nil];
-    [alert show];
-    [alert release];
-}
-*/
 
 #pragma mark -
 #pragma mark Memory management
@@ -150,17 +154,18 @@
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-/*
 - (void)viewDidUnload {
+    [super viewDidUnload];
+    self.hatList = nil;
+    self.hog = nil;
     // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
     // For example: self.myOutlet = nil;
 }
-*/
+
 
 - (void)dealloc {
-    [list release];
-    if (nil != childController)
-        [childController release];
+    [hog release];
+    [hatList release];
     [super dealloc];
 }
 
