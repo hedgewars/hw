@@ -4,55 +4,63 @@ local caption = {
 	["en"] = "Hedgewars-Basketball",
 	["de"] = "Hedgewars-Basketball",
 	["es"] = "Hedgewars-Baloncesto",
-	["pl"] = "Hedgewars-Koszykówka"
+	["pl"] = "Hedgewars-Koszykówka",
+	["pt_PT"] = "Hedgewars-Basketball"
 	}
 
 local subcaption = {
 	["en"] = "Not So Friendly Match",
 	["de"] = "Kein-so-Freundschaftsspiel",
 	["es"] = "Partido no-tan-amistoso",
-	["pl"] = "Mecz Nie-Taki-Towarzyski"
+	["pl"] = "Mecz Nie-Taki-Towarzyski",
+	["pt_PT"] = "Partida não muito amigável"
 	}
 
 local goal = {
 	["en"] = "Bat your opponents through the|baskets and out of the map!",
 	["de"] = "Schlage deine Widersacher durch|die Körbe und aus der Karte hinaus!",
 	["es"] = "¡Batea a tus oponentes fuera del mapa a través de la canasta!",
-	["pl"] = "Uderzaj swoich przekiwników|wyrzucając przez kosz, poza mapę!"
+	["pl"] = "Uderzaj swoich przekiwników|wyrzucając przez kosz, poza mapę!",
+	["pt_PT"] = "Bate os teus adversarios|fora do mapa acertando com eles no cesto!"
 	}
 
 local scored = {
 	["en"] = " scored a point!",
 	["de"] = " erhält einen Punkt!",
 	["es"] = " anotó un tanto!",
-	["pl"] = " zdobyła punkt!"
+	["pl"] = " zdobyła punkt!",
+	["pt_PT"] = " marca um cesto!"
 	}
 
 local failed = {
 	["en"] = " scored a penalty!",
 	["de"] = " erhält eine Strafe!",
 	["es"] = " anotó una falta!",
-	["pl"] = " zdobyła punkt karny!"
+	["pl"] = " zdobyła punkt karny!",
+	["pt_PT"] = " perde um ponto!"
 	}
 
 	local sscore = {
 	["en"] = "Score",
 	["de"] = "Punktestand",
 	["es"] = "Puntuación",
-	["pl"] = "Punktacja"
+	["pl"] = "Punktacja",
+	["pt_PT"] = "Pontuação"
 	}
 
 local team = {
 	["en"] = "Team",
 	["es"] = "Equipo",
-	["pl"] = "Drużyna"
+	["pl"] = "Drużyna",
+	["pt_PT"] = "Equipa"
 	}
 
 local drowning = {
 	["en"] = "is out and",
 	["de"] = "ist draußen und",
 	["es"] = "cayó y",
-	["en"] = "jest wyautowany i",
+	["pl"] = "jest wyautowany i",
+	["pt_PT"] = "está fora e"
 	}
 
 local function loc(text)
