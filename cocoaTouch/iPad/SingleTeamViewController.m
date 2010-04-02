@@ -10,7 +10,7 @@
 
 
 @implementation SingleTeamViewController
-@synthesize secondaryItems;
+@synthesize hogsList, secondaryItems;
 
 
 #pragma mark -
@@ -18,11 +18,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    
     // Uncomment the following line to preserve selection between presentations.
-    self.clearsSelectionOnViewWillAppear = NO;
+    //self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@Teams/%@.plist",[paths objectAtIndex:0],self.title];
+    NSDictionary *teamDict = [[NSDictionary alloc] initWithContentsOfFile: teamFile];
+    [teamFile release];
+    self.hogsList = [teamDict objectForKey:@"hedgehogs"];
+    [teamDict release];
     
     NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:
                              NSLocalizedString(@"Color",@""),
@@ -66,7 +73,6 @@
 
 #pragma mark -
 #pragma mark Table view data source
-
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
     return 3;
@@ -103,9 +109,16 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
+    NSInteger row = [indexPath row];
     switch ([indexPath section]) {
+        case 0:
+            cell.textLabel.text = self.title;
+            break;
+        case 1:
+            cell.textLabel.text = [[self.hogsList objectAtIndex:row] objectForKey:@"hogname"];
+            break;
         case 2:
-            cell.textLabel.text = [self.secondaryItems objectAtIndex:[indexPath row]];
+            cell.textLabel.text = [self.secondaryItems objectAtIndex:row];
             break;
         default:
             break;
@@ -181,13 +194,13 @@
 }
 
 -(void) viewDidUnload {
+    self.hogsList = nil;
     self.secondaryItems = nil;
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
 }
 
 
 -(void) dealloc {
+    [hogsList release];
     [secondaryItems release];
     [super dealloc];
 }

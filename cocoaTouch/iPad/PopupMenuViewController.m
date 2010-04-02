@@ -96,23 +96,20 @@
 			NSLog(@"Warning: unset case value in section!");
 			break;
     }
-}
-
--(void) tableView:(UITableView *)aTableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [aTableView deselectRowAtIndexPath: indexPath animated:YES];
+    
+    [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark -
 #pragma mark actionSheet methods
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
 	if ([actionSheet cancelButtonIndex] != buttonIndex) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissPopover"  object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissPopover" object:nil];
         HW_terminate(NO);
     }
 	else
         if (!isPaused) 
             HW_pause();		
 }
-
 
 @end

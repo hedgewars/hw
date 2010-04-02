@@ -13,14 +13,13 @@
 @synthesize popoverController, detailItem, controllers;
 
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     self.title =@"First";
     NSMutableArray *array= [[NSMutableArray alloc] init];
 
     TeamSettingsViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] 
                                                               initWithStyle:UITableViewStyleGrouped];
-    teamSettingsViewController.title =NSLocalizedString(@"Teams",@"");
+    teamSettingsViewController.title = NSLocalizedString(@"Teams",@"");
     [array addObject:teamSettingsViewController];
     [teamSettingsViewController release];
     

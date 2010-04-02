@@ -10,8 +10,10 @@
 
 
 @interface SingleTeamViewController : UITableViewController {
+    NSArray *hogsList;
     NSArray *secondaryItems;
 }
 
+@property (nonatomic,retain) NSArray *hogsList;
 @property (nonatomic,retain) NSArray *secondaryItems;
 @end

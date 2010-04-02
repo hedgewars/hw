@@ -233,6 +233,50 @@
 			615F165811663FA7002444F2 /* PBXTextBookmark */ = 615F165811663FA7002444F2 /* PBXTextBookmark */;
 			615F165911663FA7002444F2 /* PBXTextBookmark */ = 615F165911663FA7002444F2 /* PBXTextBookmark */;
 			615F165A11663FA7002444F2 /* PBXTextBookmark */ = 615F165A11663FA7002444F2 /* PBXTextBookmark */;
+			615F165C1166404E002444F2 /* PBXTextBookmark */ = 615F165C1166404E002444F2 /* PBXTextBookmark */;
+			615F165D1166404E002444F2 /* PBXTextBookmark */ = 615F165D1166404E002444F2 /* PBXTextBookmark */;
+			615F165E1166404E002444F2 /* PBXTextBookmark */ = 615F165E1166404E002444F2 /* PBXTextBookmark */;
+			615F165F1166404E002444F2 /* PBXTextBookmark */ = 615F165F1166404E002444F2 /* PBXTextBookmark */;
+			615F16601166404E002444F2 /* PBXTextBookmark */ = 615F16601166404E002444F2 /* PBXTextBookmark */;
+			615F16631166410C002444F2 /* PBXTextBookmark */ = 615F16631166410C002444F2 /* PBXTextBookmark */;
+			615F16641166410C002444F2 /* PBXTextBookmark */ = 615F16641166410C002444F2 /* PBXTextBookmark */;
+			615F16651166410C002444F2 /* PBXTextBookmark */ = 615F16651166410C002444F2 /* PBXTextBookmark */;
+			615F166D11664B1A002444F2 /* PBXBookmark */ = 615F166D11664B1A002444F2 /* PBXBookmark */;
+			615F166E11664BE1002444F2 /* PBXTextBookmark */ = 615F166E11664BE1002444F2 /* PBXTextBookmark */;
+			615F166F11664BE1002444F2 /* PBXTextBookmark */ = 615F166F11664BE1002444F2 /* PBXTextBookmark */;
+			615F167011664BE1002444F2 /* PBXTextBookmark */ = 615F167011664BE1002444F2 /* PBXTextBookmark */;
+			615F167311664BE1002444F2 /* PBXTextBookmark */ = 615F167311664BE1002444F2 /* PBXTextBookmark */;
+			615F167411664BE1002444F2 /* PBXTextBookmark */ = 615F167411664BE1002444F2 /* PBXTextBookmark */;
+			615F167511664BE1002444F2 /* PBXTextBookmark */ = 615F167511664BE1002444F2 /* PBXTextBookmark */;
+			615F167811664BE1002444F2 /* PBXTextBookmark */ = 615F167811664BE1002444F2 /* PBXTextBookmark */;
+			615F167B11664C53002444F2 /* PBXTextBookmark */ = 615F167B11664C53002444F2 /* PBXTextBookmark */;
+			615F167C11664C53002444F2 /* PBXTextBookmark */ = 615F167C11664C53002444F2 /* PBXTextBookmark */;
+			615F167D11664C53002444F2 /* PBXTextBookmark */ = 615F167D11664C53002444F2 /* PBXTextBookmark */;
+			615F168111664CA7002444F2 /* PBXBookmark */ = 615F168111664CA7002444F2 /* PBXBookmark */;
+			615F168411664CBC002444F2 /* PBXTextBookmark */ = 615F168411664CBC002444F2 /* PBXTextBookmark */;
+			615F168511664CBC002444F2 /* PBXTextBookmark */ = 615F168511664CBC002444F2 /* PBXTextBookmark */;
+			615F168811664CBC002444F2 /* PBXTextBookmark */ = 615F168811664CBC002444F2 /* PBXTextBookmark */;
+			615F168911664CBC002444F2 /* PBXTextBookmark */ = 615F168911664CBC002444F2 /* PBXTextBookmark */;
+			615F168E11664D4D002444F2 /* PBXTextBookmark */ = 615F168E11664D4D002444F2 /* PBXTextBookmark */;
+			615F168F11664D4D002444F2 /* PBXTextBookmark */ = 615F168F11664D4D002444F2 /* PBXTextBookmark */;
+			615F169011664D4D002444F2 /* PBXTextBookmark */ = 615F169011664D4D002444F2 /* PBXTextBookmark */;
+			615F169111664D4D002444F2 /* PBXTextBookmark */ = 615F169111664D4D002444F2 /* PBXTextBookmark */;
+			615F169711664D77002444F2 /* PBXTextBookmark */ = 615F169711664D77002444F2 /* PBXTextBookmark */;
+			615F169811664D77002444F2 /* PBXTextBookmark */ = 615F169811664D77002444F2 /* PBXTextBookmark */;
+			615F169911664D77002444F2 /* PBXTextBookmark */ = 615F169911664D77002444F2 /* PBXTextBookmark */;
+			615F169A11664D77002444F2 /* PBXTextBookmark */ = 615F169A11664D77002444F2 /* PBXTextBookmark */;
+			615F169E11664E64002444F2 /* PBXTextBookmark */ = 615F169E11664E64002444F2 /* PBXTextBookmark */;
+			615F169F11664E64002444F2 /* PBXTextBookmark */ = 615F169F11664E64002444F2 /* PBXTextBookmark */;
+			615F16A011664E64002444F2 /* PBXTextBookmark */ = 615F16A011664E64002444F2 /* PBXTextBookmark */;
+			615F16A111664E64002444F2 /* PBXTextBookmark */ = 615F16A111664E64002444F2 /* PBXTextBookmark */;
+			615F16A611664EE8002444F2 /* PBXTextBookmark */ = 615F16A611664EE8002444F2 /* PBXTextBookmark */;
+			615F16A711664EE8002444F2 /* PBXTextBookmark */ = 615F16A711664EE8002444F2 /* PBXTextBookmark */;
+			615F16A811664EE8002444F2 /* PBXTextBookmark */ = 615F16A811664EE8002444F2 /* PBXTextBookmark */;
+			615F16A911664EE8002444F2 /* PBXTextBookmark */ = 615F16A911664EE8002444F2 /* PBXTextBookmark */;
+			615F16AF11664FD9002444F2 /* PBXTextBookmark */ = 615F16AF11664FD9002444F2 /* PBXTextBookmark */;
+			615F16B011664FD9002444F2 /* PBXTextBookmark */ = 615F16B011664FD9002444F2 /* PBXTextBookmark */;
+			615F16B111664FD9002444F2 /* PBXTextBookmark */ = 615F16B111664FD9002444F2 /* PBXTextBookmark */;
+			615F16B211664FD9002444F2 /* PBXTextBookmark */ = 615F16B211664FD9002444F2 /* PBXTextBookmark */;
 			61697B9E1163478A00CCDF37 = 61697B9E1163478A00CCDF37 /* PBXTextBookmark */;
 			6179889D114AA5BD00BA94A9 = 6179889D114AA5BD00BA94A9 /* PBXTextBookmark */;
 			61799342114B297000BA94A9 = 61799342114B297000BA94A9 /* PBXBookmark */;
@@ -908,7 +952,7 @@
 		fRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */;
 		name = "DetailViewController.m: 76";
 		rLen = 0;
-		rLoc = 2343;
+		rLoc = 2250;
 		rType = 0;
 		vrLen = 1890;
 		vrLoc = 1075;
@@ -948,7 +992,7 @@
 		fRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */;
 		name = "DetailViewController.m: 74";
 		rLen = 0;
-		rLoc = 2274;
+		rLoc = 2181;
 		rType = 0;
 		vrLen = 1859;
 		vrLoc = 1075;
@@ -962,10 +1006,10 @@
 	};
 	615F159D1166216A002444F2 /* TeamSettingsViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1048, 2353}}";
-			sepNavSelRange = "{4418, 23}";
-			sepNavVisRange = "{4168, 1535}";
-			sepNavWindowFrame = "{{610, 162}, {895, 693}}";
+			sepNavIntBoundsRect = "{{0, 0}, {908, 2145}}";
+			sepNavSelRange = "{397, 189}";
+			sepNavVisRange = "{341, 1592}";
+			sepNavWindowFrame = "{{665, 212}, {895, 693}}";
 		};
 	};
 	615F15AB1166270F002444F2 /* PBXBookmark */ = {
@@ -975,16 +1019,16 @@
 	615F15AC116628CC002444F2 /* SingleTeamViewController.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {836, 565}}";
-			sepNavSelRange = "{330, 0}";
-			sepNavVisRange = "{0, 336}";
+			sepNavSelRange = "{338, 0}";
+			sepNavVisRange = "{0, 407}";
 		};
 	};
 	615F15AD116628CC002444F2 /* SingleTeamViewController.m */ = {
 		uiCtxt = {
-			sepNavFolds = "{\n    c =     (\n                {\n            l = DetailViewController;\n            r = \"{4606, 24}\";\n            s = 1;\n        },\n                {\n            l = DetailViewController;\n            r = \"{4657, 24}\";\n            s = 1;\n        },\n                {\n            l = \"Nib name\";\n            r = \"{4707, 12}\";\n            s = 1;\n        }\n    );\n    r = \"{0, 5464}\";\n    s = 0;\n}";
-			sepNavIntBoundsRect = "{{0, 0}, {908, 2613}}";
-			sepNavSelRange = "{2835, 0}";
-			sepNavVisRange = "{2372, 159}";
+			sepNavFolds = "{\n    c =     (\n                {\n            l = DetailViewController;\n            r = \"{5267, 24}\";\n            s = 1;\n        },\n                {\n            l = DetailViewController;\n            r = \"{5318, 24}\";\n            s = 1;\n        },\n                {\n            l = \"Nib name\";\n            r = \"{5368, 12}\";\n            s = 1;\n        }\n    );\n    r = \"{0, 6042}\";\n    s = 0;\n}";
+			sepNavIntBoundsRect = "{{0, 0}, {1048, 2769}}";
+			sepNavSelRange = "{3523, 0}";
+			sepNavVisRange = "{2777, 1199}";
 			sepNavWindowFrame = "{{153, 354}, {895, 693}}";
 		};
 	};
@@ -1067,7 +1111,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 26";
 		rLen = 0;
-		rLoc = 1254;
+		rLoc = 939;
 		rType = 0;
 		vrLen = 309;
 		vrLoc = 744;
@@ -1097,7 +1141,7 @@
 		fRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */;
 		name = "DetailViewController.m: 21";
 		rLen = 0;
-		rLoc = 615;
+		rLoc = 521;
 		rType = 0;
 		vrLen = 2232;
 		vrLoc = 2115;
@@ -1107,7 +1151,7 @@
 		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
 		name = "SingleTeamViewController.m: 80";
 		rLen = 0;
-		rLoc = 1957;
+		rLoc = 2382;
 		rType = 0;
 		vrLen = 1581;
 		vrLoc = 2112;
@@ -1187,7 +1231,7 @@
 		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
 		name = "SingleTeamViewController.m: 109";
 		rLen = 0;
-		rLoc = 2835;
+		rLoc = 3297;
 		rType = 0;
 		vrLen = 174;
 		vrLoc = 2436;
@@ -1207,7 +1251,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 26";
 		rLen = 0;
-		rLoc = 1254;
+		rLoc = 939;
 		rType = 0;
 		vrLen = 309;
 		vrLoc = 744;
@@ -1217,7 +1261,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 26";
 		rLen = 0;
-		rLoc = 1254;
+		rLoc = 939;
 		rType = 0;
 		vrLen = 307;
 		vrLoc = 744;
@@ -1237,7 +1281,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 64";
 		rLen = 0;
-		rLoc = 2731;
+		rLoc = 2416;
 		rType = 0;
 		vrLen = 1514;
 		vrLoc = 1485;
@@ -1257,7 +1301,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 135";
 		rLen = 0;
-		rLoc = 5433;
+		rLoc = 4974;
 		rType = 0;
 		vrLen = 728;
 		vrLoc = 4484;
@@ -1267,7 +1311,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 135";
 		rLen = 0;
-		rLoc = 5433;
+		rLoc = 4974;
 		rType = 0;
 		vrLen = 836;
 		vrLoc = 4371;
@@ -1277,7 +1321,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 26";
 		rLen = 0;
-		rLoc = 1254;
+		rLoc = 939;
 		rType = 0;
 		vrLen = 307;
 		vrLoc = 744;
@@ -1287,7 +1331,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 139";
 		rLen = 0;
-		rLoc = 5433;
+		rLoc = 4974;
 		rType = 0;
 		vrLen = 1615;
 		vrLoc = 3731;
@@ -1307,7 +1351,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 26";
 		rLen = 0;
-		rLoc = 1254;
+		rLoc = 939;
 		rType = 0;
 		vrLen = 309;
 		vrLoc = 744;
@@ -1317,7 +1361,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 26";
 		rLen = 0;
-		rLoc = 1254;
+		rLoc = 939;
 		rType = 0;
 		vrLen = 307;
 		vrLoc = 744;
@@ -1327,7 +1371,7 @@
 		fRef = 615F15AC116628CC002444F2 /* SingleTeamViewController.h */;
 		name = "SingleTeamViewController.h: 16";
 		rLen = 0;
-		rLoc = 330;
+		rLoc = 347;
 		rType = 0;
 		vrLen = 336;
 		vrLoc = 0;
@@ -1337,7 +1381,7 @@
 		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
 		name = "SingleTeamViewController.m: 31";
 		rLen = 0;
-		rLoc = 310;
+		rLoc = 320;
 		rType = 0;
 		vrLen = 988;
 		vrLoc = 194;
@@ -1347,7 +1391,7 @@
 		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
 		name = "SingleTeamViewController.m: 121";
 		rLen = 0;
-		rLoc = 2973;
+		rLoc = 3634;
 		rType = 0;
 		vrLen = 1167;
 		vrLoc = 2342;
@@ -1357,7 +1401,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 139";
 		rLen = 0;
-		rLoc = 5433;
+		rLoc = 4974;
 		rType = 0;
 		vrLen = 1692;
 		vrLoc = 3731;
@@ -1367,7 +1411,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 124";
 		rLen = 0;
-		rLoc = 4698;
+		rLoc = 4269;
 		rType = 0;
 		vrLen = 1518;
 		vrLoc = 3731;
@@ -1391,7 +1435,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 30";
 		rLen = 0;
-		rLoc = 1254;
+		rLoc = 939;
 		rType = 0;
 		vrLen = 404;
 		vrLoc = 393;
@@ -1401,7 +1445,7 @@
 		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
 		name = "SingleTeamViewController.m: 104";
 		rLen = 0;
-		rLoc = 2835;
+		rLoc = 3297;
 		rType = 0;
 		vrLen = 251;
 		vrLoc = 2360;
@@ -1411,7 +1455,7 @@
 		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
 		name = "SingleTeamViewController.m: 105";
 		rLen = 0;
-		rLoc = 2835;
+		rLoc = 3297;
 		rType = 0;
 		vrLen = 159;
 		vrLoc = 2372;
@@ -1421,7 +1465,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 29";
 		rLen = 0;
-		rLoc = 1125;
+		rLoc = 807;
 		rType = 0;
 		vrLen = 1814;
 		vrLoc = 56;
@@ -1451,7 +1495,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 144";
 		rLen = 0;
-		rLoc = 5433;
+		rLoc = 4974;
 		rType = 0;
 		vrLen = 867;
 		vrLoc = 4534;
@@ -1461,7 +1505,7 @@
 		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
 		name = "SingleTeamViewController.m: 105";
 		rLen = 0;
-		rLoc = 2835;
+		rLoc = 3297;
 		rType = 0;
 		vrLen = 159;
 		vrLoc = 2372;
@@ -1471,7 +1515,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 30";
 		rLen = 0;
-		rLoc = 1130;
+		rLoc = 812;
 		rType = 0;
 		vrLen = 1794;
 		vrLoc = 56;
@@ -1501,7 +1545,7 @@
 		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
 		name = "SingleTeamViewController.m: 105";
 		rLen = 0;
-		rLoc = 2835;
+		rLoc = 3297;
 		rType = 0;
 		vrLen = 159;
 		vrLoc = 2372;
@@ -1511,7 +1555,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 68";
 		rLen = 0;
-		rLoc = 2622;
+		rLoc = 2307;
 		rType = 0;
 		vrLen = 1556;
 		vrLoc = 2033;
@@ -1541,7 +1585,7 @@
 		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
 		name = "SingleTeamViewController.m: 105";
 		rLen = 0;
-		rLoc = 2835;
+		rLoc = 3297;
 		rType = 0;
 		vrLen = 159;
 		vrLoc = 2372;
@@ -1551,7 +1595,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 72";
 		rLen = 0;
-		rLoc = 2805;
+		rLoc = 2490;
 		rType = 0;
 		vrLen = 1558;
 		vrLoc = 2033;
@@ -1581,7 +1625,7 @@
 		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
 		name = "SingleTeamViewController.m: 105";
 		rLen = 0;
-		rLoc = 2835;
+		rLoc = 3297;
 		rType = 0;
 		vrLen = 159;
 		vrLoc = 2372;
@@ -1591,7 +1635,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 127";
 		rLen = 0;
-		rLoc = 4578;
+		rLoc = 4262;
 		rType = 0;
 		vrLen = 1535;
 		vrLoc = 4168;
@@ -1625,7 +1669,7 @@
 		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
 		name = "SingleTeamViewController.m: 105";
 		rLen = 0;
-		rLoc = 2835;
+		rLoc = 3297;
 		rType = 0;
 		vrLen = 159;
 		vrLoc = 2372;
@@ -1645,7 +1689,7 @@
 		fRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */;
 		name = "DetailViewController.m: 21";
 		rLen = 0;
-		rLoc = 564;
+		rLoc = 470;
 		rType = 0;
 		vrLen = 1464;
 		vrLoc = 0;
@@ -1655,7 +1699,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 123";
 		rLen = 23;
-		rLoc = 4418;
+		rLoc = 4103;
 		rType = 0;
 		vrLen = 1535;
 		vrLoc = 4168;
@@ -1665,7 +1709,7 @@
 		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
 		name = "TeamSettingsViewController.m: 123";
 		rLen = 23;
-		rLoc = 4418;
+		rLoc = 4103;
 		rType = 0;
 		vrLen = 1535;
 		vrLoc = 4168;
@@ -1689,6 +1733,434 @@
 		rType = 0;
 		vrLen = 3225;
 		vrLoc = 1444;
+	};
+	615F165C1166404E002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */;
+		name = "DetailViewController.m: 13";
+		rLen = 0;
+		rLoc = 267;
+		rType = 0;
+		vrLen = 135;
+		vrLoc = 190;
+	};
+	615F165D1166404E002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */;
+		name = "DetailViewController.m: 16";
+		rLen = 0;
+		rLoc = 325;
+		rType = 0;
+		vrLen = 1489;
+		vrLoc = 0;
+	};
+	615F165E1166404E002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
+		name = "TeamSettingsViewController.m: 123";
+		rLen = 23;
+		rLoc = 4103;
+		rType = 0;
+		vrLen = 1559;
+		vrLoc = 4168;
+	};
+	615F165F1166404E002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */;
+		name = "MainMenuViewController.m: 78";
+		rLen = 13;
+		rLoc = 2918;
+		rType = 0;
+		vrLen = 3017;
+		vrLoc = 1557;
+	};
+	615F16601166404E002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61798888114AA4E600BA94A9 /* GameSetup.m */;
+		name = "GameSetup.m: 88";
+		rLen = 0;
+		rLoc = 3450;
+		rType = 0;
+		vrLen = 3377;
+		vrLoc = 1444;
+	};
+	615F16631166410C002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */;
+		name = "DetailViewController.m: 13";
+		rLen = 0;
+		rLoc = 267;
+		rType = 0;
+		vrLen = 133;
+		vrLoc = 190;
+	};
+	615F16641166410C002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
+		name = "TeamSettingsViewController.m: 28";
+		rLen = 0;
+		rLoc = 896;
+		rType = 0;
+		vrLen = 1682;
+		vrLoc = 341;
+	};
+	615F16651166410C002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61798888114AA4E600BA94A9 /* GameSetup.m */;
+		name = "GameSetup.m: 88";
+		rLen = 0;
+		rLoc = 3450;
+		rType = 0;
+		vrLen = 3225;
+		vrLoc = 1444;
+	};
+	615F166D11664B1A002444F2 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
+	};
+	615F166E11664BE1002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */;
+		name = "DetailViewController.m: 13";
+		rLen = 0;
+		rLoc = 267;
+		rType = 0;
+		vrLen = 135;
+		vrLoc = 190;
+	};
+	615F166F11664BE1002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA7665115DAB1B00DA6ED0 /* DetailViewController.h */;
+		name = "DetailViewController.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 124;
+		vrLoc = 53;
+	};
+	615F167011664BE1002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */;
+		name = "MasterViewController.m: 43";
+		rLen = 0;
+		rLoc = 1543;
+		rType = 0;
+		vrLen = 202;
+		vrLoc = 1685;
+	};
+	615F167311664BE1002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F15AC116628CC002444F2 /* SingleTeamViewController.h */;
+		name = "SingleTeamViewController.h: 17";
+		rLen = 0;
+		rLoc = 338;
+		rType = 0;
+		vrLen = 407;
+		vrLoc = 0;
+	};
+	615F167411664BE1002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
+		name = "SingleTeamViewController.m: 31";
+		rLen = 0;
+		rLoc = 1011;
+		rType = 0;
+		vrLen = 1513;
+		vrLoc = 0;
+	};
+	615F167511664BE1002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
+		name = "SingleTeamViewController.m: 13";
+		rLen = 0;
+		rLoc = 259;
+		rType = 0;
+		vrLen = 1523;
+		vrLoc = 0;
+	};
+	615F167811664BE1002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
+		name = "TeamSettingsViewController.m: 20";
+		rLen = 189;
+		rLoc = 397;
+		rType = 0;
+		vrLen = 1705;
+		vrLoc = 341;
+	};
+	615F167B11664C53002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */;
+		name = "MasterViewController.m: 43";
+		rLen = 0;
+		rLoc = 1543;
+		rType = 0;
+		vrLen = 155;
+		vrLoc = 1685;
+	};
+	615F167C11664C53002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
+		name = "SingleTeamViewController.m: 118";
+		rLen = 0;
+		rLoc = 3523;
+		rType = 0;
+		vrLen = 1252;
+		vrLoc = 2661;
+	};
+	615F167D11664C53002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
+		name = "TeamSettingsViewController.m: 20";
+		rLen = 189;
+		rLoc = 397;
+		rType = 0;
+		vrLen = 1592;
+		vrLoc = 341;
+	};
+	615F168111664CA7002444F2 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */;
+	};
+	615F168411664CBC002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */;
+		name = "MasterViewController.m: 43";
+		rLen = 0;
+		rLoc = 1543;
+		rType = 0;
+		vrLen = 155;
+		vrLoc = 1685;
+	};
+	615F168511664CBC002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
+		name = "SingleTeamViewController.m: 33";
+		rLen = 0;
+		rLoc = 1073;
+		rType = 0;
+		vrLen = 1599;
+		vrLoc = 0;
+	};
+	615F168811664CBC002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */;
+		name = "MainMenuViewController.m: 96";
+		rLen = 9;
+		rLoc = 3989;
+		rType = 0;
+		vrLen = 2854;
+		vrLoc = 1720;
+	};
+	615F168911664CBC002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
+		name = "TeamSettingsViewController.m: 20";
+		rLen = 189;
+		rLoc = 397;
+		rType = 0;
+		vrLen = 1592;
+		vrLoc = 341;
+	};
+	615F168E11664D4D002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */;
+		name = "MasterViewController.m: 43";
+		rLen = 0;
+		rLoc = 1543;
+		rType = 0;
+		vrLen = 155;
+		vrLoc = 1685;
+	};
+	615F168F11664D4D002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
+		name = "SingleTeamViewController.m: 32";
+		rLen = 0;
+		rLoc = 1068;
+		rType = 0;
+		vrLen = 1575;
+		vrLoc = 156;
+	};
+	615F169011664D4D002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */;
+		name = "MainMenuViewController.m: 96";
+		rLen = 9;
+		rLoc = 3989;
+		rType = 0;
+		vrLen = 2854;
+		vrLoc = 1720;
+	};
+	615F169111664D4D002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
+		name = "TeamSettingsViewController.m: 20";
+		rLen = 189;
+		rLoc = 397;
+		rType = 0;
+		vrLen = 1592;
+		vrLoc = 341;
+	};
+	615F169711664D77002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */;
+		name = "MasterViewController.m: 43";
+		rLen = 0;
+		rLoc = 1543;
+		rType = 0;
+		vrLen = 155;
+		vrLoc = 1685;
+	};
+	615F169811664D77002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
+		name = "SingleTeamViewController.m: 118";
+		rLen = 0;
+		rLoc = 3442;
+		rType = 0;
+		vrLen = 1450;
+		vrLoc = 2845;
+	};
+	615F169911664D77002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */;
+		name = "MainMenuViewController.m: 96";
+		rLen = 9;
+		rLoc = 3989;
+		rType = 0;
+		vrLen = 2854;
+		vrLoc = 1720;
+	};
+	615F169A11664D77002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
+		name = "TeamSettingsViewController.m: 20";
+		rLen = 189;
+		rLoc = 397;
+		rType = 0;
+		vrLen = 1592;
+		vrLoc = 341;
+	};
+	615F169E11664E64002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */;
+		name = "MasterViewController.m: 43";
+		rLen = 0;
+		rLoc = 1543;
+		rType = 0;
+		vrLen = 155;
+		vrLoc = 1685;
+	};
+	615F169F11664E64002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
+		name = "SingleTeamViewController.m: 34";
+		rLen = 0;
+		rLoc = 1097;
+		rType = 0;
+		vrLen = 1638;
+		vrLoc = 0;
+	};
+	615F16A011664E64002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */;
+		name = "MainMenuViewController.m: 96";
+		rLen = 9;
+		rLoc = 3989;
+		rType = 0;
+		vrLen = 2854;
+		vrLoc = 1720;
+	};
+	615F16A111664E64002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
+		name = "TeamSettingsViewController.m: 20";
+		rLen = 189;
+		rLoc = 397;
+		rType = 0;
+		vrLen = 1592;
+		vrLoc = 341;
+	};
+	615F16A611664EE8002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */;
+		name = "MasterViewController.m: 43";
+		rLen = 0;
+		rLoc = 1543;
+		rType = 0;
+		vrLen = 155;
+		vrLoc = 1685;
+	};
+	615F16A711664EE8002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
+		name = "SingleTeamViewController.m: 34";
+		rLen = 0;
+		rLoc = 1097;
+		rType = 0;
+		vrLen = 1644;
+		vrLoc = 0;
+	};
+	615F16A811664EE8002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */;
+		name = "MainMenuViewController.m: 96";
+		rLen = 9;
+		rLoc = 3989;
+		rType = 0;
+		vrLen = 2854;
+		vrLoc = 1720;
+	};
+	615F16A911664EE8002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
+		name = "TeamSettingsViewController.m: 20";
+		rLen = 189;
+		rLoc = 397;
+		rType = 0;
+		vrLen = 1592;
+		vrLoc = 341;
+	};
+	615F16AF11664FD9002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */;
+		name = "MasterViewController.m: 43";
+		rLen = 0;
+		rLoc = 1543;
+		rType = 0;
+		vrLen = 155;
+		vrLoc = 1685;
+	};
+	615F16B011664FD9002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */;
+		name = "SingleTeamViewController.m: 118";
+		rLen = 0;
+		rLoc = 3523;
+		rType = 0;
+		vrLen = 1199;
+		vrLoc = 2777;
+	};
+	615F16B111664FD9002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */;
+		name = "MainMenuViewController.m: 96";
+		rLen = 9;
+		rLoc = 3989;
+		rType = 0;
+		vrLen = 2854;
+		vrLoc = 1720;
+	};
+	615F16B211664FD9002444F2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */;
+		name = "TeamSettingsViewController.m: 20";
+		rLen = 189;
+		rLoc = 397;
+		rType = 0;
+		vrLen = 1592;
+		vrLoc = 341;
 	};
 	61697B9E1163478A00CCDF37 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -2234,9 +2706,9 @@
 	};
 	61798888114AA4E600BA94A9 /* GameSetup.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1412, 4446}}";
-			sepNavSelRange = "{3450, 0}";
-			sepNavVisRange = "{1444, 3225}";
+			sepNavIntBoundsRect = "{{0, 0}, {1412, 4667}}";
+			sepNavSelRange = "{630, 0}";
+			sepNavVisRange = "{0, 1506}";
 			sepNavWindowFrame = "{{760, 256}, {1079, 870}}";
 		};
 	};
@@ -2553,17 +3025,17 @@
 	};
 	61CE24EC115E71C20098C467 /* PopupMenuViewController.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {532, 260}}";
+			sepNavIntBoundsRect = "{{0, 0}, {838, 564}}";
 			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 93}";
+			sepNavVisRange = "{0, 365}";
 			sepNavWindowFrame = "{{530, 457}, {897, 692}}";
 		};
 	};
 	61CE24ED115E71C20098C467 /* PopupMenuViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {532, 1612}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 159}";
+			sepNavIntBoundsRect = "{{0, 0}, {838, 1534}}";
+			sepNavSelRange = "{3509, 0}";
+			sepNavVisRange = "{1105, 1225}";
 			sepNavWindowFrame = "{{530, 457}, {897, 692}}";
 		};
 	};
@@ -2651,10 +3123,10 @@
 	};
 	61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {868, 2405}}";
-			sepNavSelRange = "{2918, 13}";
-			sepNavVisRange = "{1557, 2922}";
-			sepNavWindowFrame = "{{815, 219}, {927, 845}}";
+			sepNavIntBoundsRect = "{{0, 0}, {868, 2353}}";
+			sepNavSelRange = "{3989, 9}";
+			sepNavVisRange = "{1720, 2854}";
+			sepNavWindowFrame = "{{681, 203}, {927, 845}}";
 		};
 	};
 	61FA7644115DA6A300DA6ED0 /* SplitViewRootController.h */ = {
@@ -2683,25 +3155,25 @@
 	};
 	61FA765B115DAACC00DA6ED0 /* MasterViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1048, 1664}}";
-			sepNavSelRange = "{3057, 0}";
-			sepNavVisRange = "{2239, 2059}";
+			sepNavIntBoundsRect = "{{0, 0}, {1048, 1638}}";
+			sepNavSelRange = "{1543, 0}";
+			sepNavVisRange = "{1685, 155}";
 			sepNavWindowFrame = "{{92, 210}, {927, 845}}";
 		};
 	};
 	61FA7665115DAB1B00DA6ED0 /* DetailViewController.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {868, 717}}";
-			sepNavSelRange = "{365, 1}";
-			sepNavVisRange = "{0, 565}";
+			sepNavIntBoundsRect = "{{0, 0}, {838, 312}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{53, 124}";
 			sepNavWindowFrame = "{{364, 237}, {927, 845}}";
 		};
 	};
 	61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {868, 1885}}";
-			sepNavSelRange = "{564, 0}";
-			sepNavVisRange = "{0, 1464}";
+			sepNavIntBoundsRect = "{{0, 0}, {691, 1768}}";
+			sepNavSelRange = "{267, 0}";
+			sepNavVisRange = "{190, 135}";
 			sepNavWindowFrame = "{{543, 159}, {927, 845}}";
 		};
 	};

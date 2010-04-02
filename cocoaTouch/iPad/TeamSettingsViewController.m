@@ -22,13 +22,10 @@
     
     NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:teamsDirectory
                                                                             error:NULL];
-    //NSArray *array = [[NSArray alloc] initWithObjects:@"Toy Story", @"A Bug's Life", @"Toy Story 2", 
-    //                  @"Monsters, Inc.",@"Finding Nemo", @"The Incredibles", @"Cars", @"Ratatouille", 
-    //                  @"WALL-E", @"Up", @"Toy Story 3", @"Cars 2", @"The Bear and the Bow", @"Newt", nil];
     self.list = contents;
    
     // Uncomment the following line to preserve selection between presentations.
-    self.clearsSelectionOnViewWillAppear = NO;
+    // self.clearsSelectionOnViewWillAppear = NO;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
@@ -124,11 +121,9 @@
     }
     
     NSInteger row = [indexPath row];
-    NSString *selectedMovie = [[list objectAtIndex:row] stringByDeletingPathExtension];
-    NSString *detailMessage = [[NSString alloc] initWithFormat:@"you pressed the button for %@", selectedMovie];
+    NSString *selectedTeam = [[list objectAtIndex:row] stringByDeletingPathExtension];
 
-    childController.title = selectedMovie;
-    [detailMessage release];
+    childController.title = selectedTeam;
     [self.navigationController pushViewController:childController animated:YES];
 
 }
