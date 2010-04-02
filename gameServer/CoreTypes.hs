@@ -130,6 +130,7 @@ data ServerInfo =
         isDedicated :: Bool,
         serverMessage :: String,
         serverMessageForOldVersions :: String,
+        latestReleaseVersion :: Word16,
         listenPort :: PortNumber,
         nextRoomID :: Int,
         dbHost :: String,
@@ -150,6 +151,7 @@ newServerInfo = (
         "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
         "<font color=yellow><h3>Hedgewars 0.9.12 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
         46631
+        30
         0
         ""
         ""

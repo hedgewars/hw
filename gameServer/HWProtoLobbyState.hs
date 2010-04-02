@@ -6,6 +6,7 @@ import qualified Data.IntSet as IntSet
 import qualified Data.Foldable as Foldable
 import Maybe
 import Data.List
+import Data.Word
 --------------------------------------
 import CoreTypes
 import Actions
@@ -29,7 +30,7 @@ handleCmd_lobby clID clients rooms ["LIST"] =
         protocol = clientProto client
         client = clients IntMap.! clID
         roomInfo room
-            | clientProto client < 28 = [
+            | clientProto client < 30 = [
                 name room,
                 show (playersIn room) ++ "(" ++ show (length $ teams room) ++ ")",
                 show $ gameinprogress room
@@ -152,11 +153,21 @@ handleCmd_lobby clID clients rooms ["BAN", banNick] =
         client = clients IntMap.! clID
 
 
-handleCmd_lobby clID clients rooms ["SET_SERVER_MESSAGE", newMessage] =
+handleCmd_lobby clID clients rooms ["SET_SERVER_MESSAGE", "NEW", newMessage] =
         [ModifyServerInfo (\si -> si{serverMessage = newMessage}) | isAdministrator client]
     where
         client = clients IntMap.! clID
 
+handleCmd_lobby clID clients rooms ["SET_SERVER_MESSAGE", "OLD", newMessage] =
+        [ModifyServerInfo (\si -> si{serverMessageForOldVersions = newMessage}) | isAdministrator client]
+    where
+        client = clients IntMap.! clID
+
+handleCmd_lobby clID clients rooms ["SET_RELEASE_PROTOCOL_NUMBER", protoNum] =
+    [ModifyServerInfo (\si -> si{latestReleaseVersion = fromJust readNum}) | isAdministrator client && isJust readNum]
+    where
+        client = clients IntMap.! clID
+        readNum = maybeRead protoNum :: Maybe Word16
 
 handleCmd_lobby clID clients rooms ["CLEAR_ACCOUNTS_CACHE"] =
         [ClearAccountsCache | isAdministrator client]
