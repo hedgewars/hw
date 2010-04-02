@@ -391,6 +391,8 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Z:= cCurrHHZ
                 end;
       gtTarget: begin
+                gear^.ImpactSound:= sndGrenadeImpact;
+                gear^.nImpactSounds:= 1;
                 gear^.Radius:= 10;
                 gear^.Elasticity:= _0_3;
                 gear^.Timer:= 0

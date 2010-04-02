@@ -423,6 +423,7 @@ begin
 end;
 
 function lc_addhog(L : Plua_State) : LongInt; Cdecl;
+var temp: ShortString;
 begin
     if lua_gettop(L) <> 4 then
         begin
@@ -431,8 +432,9 @@ begin
         end
     else
         begin
+        temp:= lua_tostring(L, 4);
         ParseCommand('addhh ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 3) + ' ' + lua_tostring(L, 1), true);
-        ParseCommand('hat ' + lua_tostring(L, 4), true);
+        ParseCommand('hat ' + temp, true);
         lua_pushinteger(L, CurrentHedgehog^.Gear^.uid);
         end;
     lc_addhog:= 1;
