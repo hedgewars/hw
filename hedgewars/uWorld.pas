@@ -32,6 +32,8 @@ var FollowGear: PGear;
     WaterColor, DeepWaterColor: TSDL_Color;
     WorldDx: LongInt;
     WorldDy: LongInt;
+    SkyOffset: LongInt;
+    HorizontOffset: LongInt;
 {$IFDEF COUNTTICKS}
     cntTicks: LongWord;
 {$ENDIF}
@@ -164,6 +166,8 @@ prevPoint.Y:= cScreenHeight div 2;
 WorldDx:=  - (LAND_WIDTH div 2) + cScreenWidth div 2;
 WorldDy:=  - (LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 AMxShift:= 210;
+SkyOffset:= (10 * min(0, -145 - (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine))) div 35;
+HorizontOffset:= (10 * min(0, -145 - (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine))) div 55;
 end;
 
 procedure ShowAmmoMenu;
@@ -397,28 +401,28 @@ if (SpritesData[sprL].Texture = nil) or (SpritesData[sprR].Texture = nil) then
     if i > 0 then dec(i, w);
     dec(i, w * (sw div w + 1));
     repeat
-        DrawSprite(spr, i, WorldDy + LAND_HEIGHT - SpritesData[spr].Height - OffsetY, 0);
+        DrawSprite(spr, i, WorldDy + LAND_HEIGHT + OffsetY - SpritesData[spr].Height, 0);
         inc(i, w)
     until i > sw
     end else
     begin
     w:= SpritesData[spr].Width;
     dec(Shift, w div 2);
-    DrawSprite(spr, Shift, WorldDy + LAND_HEIGHT - SpritesData[spr].Height - OffsetY, 0);
+    DrawSprite(spr, Shift, WorldDy + LAND_HEIGHT + OffsetY - SpritesData[spr].Height, 0);
 
     sw:= round(cScreenWidth / cScaleFactor);
     
     i:= Shift - SpritesData[sprL].Width;
     while i >= -sw - SpritesData[sprL].Width do
         begin
-        DrawSprite(sprL, i, WorldDy + LAND_HEIGHT - SpritesData[sprL].Height - OffsetY, 0);
+        DrawSprite(sprL, i, WorldDy + LAND_HEIGHT + OffsetY - SpritesData[sprL].Height, 0);
         dec(i, SpritesData[sprL].Width);
         end;
         
     i:= Shift + w;
     while i <= sw do
         begin
-        DrawSprite(sprR, i, WorldDy + LAND_HEIGHT - SpritesData[sprR].Height - OffsetY, 0);
+        DrawSprite(sprR, i, WorldDy + LAND_HEIGHT + OffsetY - SpritesData[sprR].Height, 0);
         inc(i, SpritesData[sprR].Width)
         end
     end
@@ -432,7 +436,7 @@ var i, t: LongInt;
     grp: TCapGroup;
     s: string[15];
     highlight: Boolean;
-    offset, offsetX, offsetY, screenBottom: LongInt;
+    offset, offsetX, offsetY: LongInt;
     scale: GLfloat;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
@@ -447,7 +451,10 @@ if ZoomValue > zoom then
     if ZoomValue < zoom then zoom:= ZoomValue
     end;
 
-screenBottom:= WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine;
+offsetY:= 10 * min(0, -145 - (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine));
+
+SkyOffset:= offsetY div 35;
+HorizontOffset:= offsetY div 55;
 
 // Sky
 glClear(GL_COLOR_BUFFER_BIT);
@@ -461,15 +468,14 @@ if not isPaused then MoveCamera;
 if not cReducedQuality then
     begin
     // background
-    DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, 0);
-    DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5,  - cWaveHeight - screenBottom div 10);
+    DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, SkyOffset);
+    DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
 
     DrawVisualGears(0);
     end;
 
 // Waves
-offsetY:= 10 * min(0, -145 - screenBottom);
-DrawWater(255, offsetY div 35);
+DrawWater(255, SkyOffset); 
 DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 0.25);
 DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 0.19);
 DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 0.14);
