@@ -651,7 +651,7 @@ end;
 
 
 procedure initModule;
-{$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}
+{$IFDEF DEBUGFILE}var i: LongInt;{$ENDIF}
 begin
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
     cMaxWindSpeed.QWordValue:= 2147484;     // 0.0005
