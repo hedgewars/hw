@@ -260,27 +260,27 @@ o elige otro nick:</translation>
     </message>
     <message>
         <source>Fetch data</source>
-        <translation type="unfinished"></translation>
+        <translation>Obtener datos</translation>
     </message>
     <message>
         <source>Server message for latest version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mensaje del servidor para la última versión:</translation>
     </message>
     <message>
         <source>Server message for previous versions:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mensaje del servidor para versiones anteriores:</translation>
     </message>
     <message>
         <source>Latest version protocol number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Número de protocolo de la última versión:</translation>
     </message>
     <message>
         <source>MOTD preview:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista previa del MOTD:</translation>
     </message>
     <message>
         <source>Set data</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar datos</translation>
     </message>
 </context>
 <context>
@@ -564,43 +564,43 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Añade un borde indestructible alrededor del campo de juego</translation>
+        <translation>Añade un borde indestructible alrededor del campo de juego.</translation>
     </message>
     <message>
         <source>Lower gravity</source>
-        <translation>Baja gravedad</translation>
+        <translation>Baja gravedad.</translation>
     </message>
     <message>
         <source>Assisted aiming with laser sight</source>
-        <translation>Una mira láser que te ayudará a apuntar</translation>
+        <translation>Una mira láser que te ayudará a apuntar.</translation>
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
-        <translation>Todos los erizos tienen un campo de fuerza personal que los protege</translation>
+        <translation>Todos los erizos tienen un campo de fuerza personal que los protege.</translation>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation>El orden de los equipos en la partida es aleatorio en lugar de tal como se muestran en la sala</translation>
+        <translation>El orden de los equipos en la partida es aleatorio en lugar de tal como se muestran en la sala.</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation>El primero erizo del equipo es el Rey. Tu equipo pierde el juego si el rey muere, así que protégelo</translation>
+        <translation>El primero erizo del equipo es el Rey. Tu equipo pierde el juego si el rey muere, así que protégelo.</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation>Los jugadores posicionan a mano su erizos por turnos antes de empezar a jugar</translation>
+        <translation>Los jugadores posicionan a mano su erizos por turnos antes de empezar a jugar.</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation>La munición se comparte entre los equipos de una misma facción</translation>
+        <translation>La munición se comparte entre los equipos de una misma facción.</translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation>Deshabilita las vigas en los mapas generados aleatoriamente</translation>
+        <translation>Deshabilita las vigas en los mapas generados aleatoriamente.</translation>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Deshabilita los objetos en el terreno en los mapas generados aleatoriamente.</translation>
     </message>
 </context>
 <context>
@@ -1239,7 +1239,7 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Disable Land Objects</source>
-        <translation type="unfinished"></translation>
+        <translation>Deshabilitar decoraciones</translation>
     </message>
 </context>
 <context>
