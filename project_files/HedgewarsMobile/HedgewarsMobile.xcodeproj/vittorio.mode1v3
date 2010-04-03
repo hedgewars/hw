@@ -202,46 +202,6 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>612FA4571166B907001625AE</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>HogHatViewController.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>612FA4581166B907001625AE</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>HogHatViewController.m</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>612FA4591166B907001625AE</string>
-						<key>history</key>
-						<array>
-							<string>612FA4541166B8D0001625AE</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {895, 596}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>669 307 895 637 0 0 1920 1178 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
 				<string>615F167111664BE1002444F2</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>SingleTeamViewController.m</string>
@@ -256,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>612FA45A1166B907001625AE</string>
+						<string>612FA5281166ECE4001625AE</string>
 						<key>history</key>
 						<array>
 							<string>615F17D511668C5A002444F2</string>
@@ -359,7 +319,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>16</integer>
+									<integer>14</integer>
 									<integer>6</integer>
 									<integer>5</integer>
 									<integer>2</integer>
@@ -414,7 +374,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>612FA4561166B907001625AE</string>
+										<string>612FA5271166ECE4001625AE</string>
 										<key>history</key>
 										<array>
 											<string>6179889D114AA5BD00BA94A9</string>
@@ -741,15 +701,14 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>612FA4531166B814001625AE</string>
+		<string>612FA4571166B907001625AE</string>
 		<string>612FA4491166B7D9001625AE</string>
 		<string>612FA43E1166B787001625AE</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>61798848114AA42600BA94A9</string>
+		<string>/Users/vittorio/hedgewars/trunk/project_files/HedgewarsMobile/HedgewarsMobile.xcodeproj</string>
 		<string>615F167111664BE1002444F2</string>
 		<string>1C78EAAD065D492600B07095</string>
-		<string>/Users/vittorio/hedgewars/trunk/project_files/HedgewarsMobile/HedgewarsMobile.xcodeproj</string>
-		<string>612FA4571166B907001625AE</string>
 	</array>
 	<key>WindowString</key>
 	<string>242 382 801 617 0 0 1920 1178 </string>

@@ -80,10 +80,27 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    if (0 == [indexPath section]) 
+    if (0 == [indexPath section]) {
         cell.textLabel.text = [hog objectForKey:@"hogname"];
-    else
+        cell.imageView.image = nil;
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    } else {
         cell.textLabel.text = [[hatList objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
+        if ([cell.textLabel.text isEqualToString:[hog objectForKey:@"hat"]]) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        
+        NSString *hatsPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Hats/"];
+        NSString *hatFile = [hatsPath stringByAppendingString:[hatList objectAtIndex:[indexPath row]]];
+        UIImage *image = [UIImage imageWithContentsOfFile: hatFile];
+
+        CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
+        CGImageRef cgImgage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
+        cell.imageView.image = [UIImage imageWithCGImage: cgImgage];
+        CGImageRelease(cgImgage);
+    }
     
     return cell;
 }

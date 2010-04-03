@@ -167,13 +167,15 @@
 #pragma mark Table view delegate
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (nil == hogChildController) {
-        hogChildController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    }
+    if (1 == [indexPath section]) {
+        if (nil == hogChildController) {
+            hogChildController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        }
     
-    hogChildController.hog = [hogsList objectAtIndex:[indexPath row]];
-    //NSLog(@"%@",hogChildController.hog);
-    [self.navigationController pushViewController:hogChildController animated:YES];
+        hogChildController.hog = [hogsList objectAtIndex:[indexPath row]];
+        //NSLog(@"%@",hogChildController.hog);
+        [self.navigationController pushViewController:hogChildController animated:YES];
+    }
 }
 
 

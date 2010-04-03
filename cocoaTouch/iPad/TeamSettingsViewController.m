@@ -115,17 +115,15 @@
 #pragma mark -
 #pragma mark Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (1 == [indexPath section]) {
-        if (childController == nil) {
-            childController = [[SingleTeamViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        }
-        
-        NSInteger row = [indexPath row];
-        NSString *selectedTeam = [[list objectAtIndex:row] stringByDeletingPathExtension];
-        
-        childController.teamName = selectedTeam;
-        [self.navigationController pushViewController:childController animated:YES];
+    if (childController == nil) {
+        childController = [[SingleTeamViewController alloc] initWithStyle:UITableViewStyleGrouped];
     }
+    
+    NSInteger row = [indexPath row];
+    NSString *selectedTeam = [[list objectAtIndex:row] stringByDeletingPathExtension];
+    
+    childController.teamName = selectedTeam;
+    [self.navigationController pushViewController:childController animated:YES];
 }
 
 /*
