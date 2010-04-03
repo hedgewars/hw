@@ -205,7 +205,6 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"\\\\.cxx$"
 	"\\\\.db$"
 	"\\\\.dof$"
-	"\\\\.cmake$"
 	"\\\\.layout$"
 	"\\\\.zip$"
 	"\\\\.gz$"
