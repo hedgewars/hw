@@ -127,7 +127,7 @@
 02:01=%1 devia ter ido à natação
 02:01=%1 deixou a prancha em casa
 02:01=%1 está lavadinho
-02:01=%1 é um ouriço bem encharcado
+02:01=%1 está encharcado até aos ossos
 02:01=%1 esqueceu-se do salva-vidas
 02:01=%1 faz splish splash splish
 02:01=%1 está a dormir com os peixinhos
@@ -315,7 +315,7 @@
 02:08=%1 não se queria alistar no exército sequer
 02:08=Pára de nos fazer perder tempo, %1
 02:08=Estou desapontado contigo %1
-02:08=Vá lá, tu consegues fazer melhor que isso %1
+02:08=Vá lá, consegues fazer melhor que isso %1
 02:08=A vontade de %1 foi-se
 02:08=%1 tem coisas melhores para fazer
 02:08=%1 está cheio de medo
