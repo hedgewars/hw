@@ -18,6 +18,7 @@
 local caption = {
 	["en"] = "Sniper Training",
 	["de"] = "Scharfschützen-Training",
+	["es"] = "Entrenamiento con rifle francotirador",
 	["pl"] = "Trening Snajperski",
 	["pt_PT"] = "Treino com Sniper"
 	-- To add other languages, just add lines similar to the
@@ -59,13 +60,14 @@ local success = {
 local teamname = {
 	["en"] = "Sniperz",
 	["de"] = "Heckenschützen",
+	["es"] = "Fusileros",
 	["pl"] = "Snajperzy"
 	}
 
 local hogname = {
 	["en"] = "Hunter",
 	["de"] = "Jäger",
-	["es"] = "Cazador",
+	["es"] = "Francotirador",
 	["pl"] = "Strzelec",
 	["pt_PT"] = "Comando"
 	}
@@ -107,8 +109,8 @@ local last_hit_time = 0
 function spawnTarget(x, y)
 	-- add a new target gear
 	target = AddGear(x, y, gtTarget, 0, 0, 0, 0)
-    -- have the camera move to the target so the player knows where it is
-    FollowGear(target)
+	-- have the camera move to the target so the player knows where it is
+	FollowGear(target)
 end
 
 function blowUp(x, y)
@@ -175,17 +177,17 @@ end
 -- You shouldn't try to calculate too complicated
 -- code here as this might slow down your game.
 function onGameTick()
-    if game_lost then
-        return
-    end
-    -- after a target is destroyed, show hog, then target
-    if (target ~= nil) and (TurnTimeLeft + 1300 < last_hit_time) then
-        -- move camera to the target
-        FollowGear(target)
-    elseif TurnTimeLeft + 300 < last_hit_time then
-        -- move camera to the hog
-        FollowGear(player)
-    end
+	if game_lost then
+		return
+	end
+	-- after a target is destroyed, show hog, then target
+	if (target ~= nil) and (TurnTimeLeft + 1300 < last_hit_time) then
+		-- move camera to the target
+		FollowGear(target)
+	elseif TurnTimeLeft + 300 < last_hit_time then
+		-- move camera to the hog
+		FollowGear(player)
+	end
 	-- If time's up, set the game to be lost.
 	-- We actually check the time to be "1 ms" as it
 	-- will be at "0 ms" right at the start of the game.
@@ -231,130 +233,130 @@ end
 -- We use it to count the number of targets destroyed.
 function onGearDelete(gear)
     
-    if GetGearType(gear) == gtCase then
-        game_lost = true
-        return
-    end
+	if GetGearType(gear) == gtCase then
+		game_lost = true
+		return
+	end
 	
 	if (GetGearType(gear) == gtTarget) then
-        -- remember when the target was hit for adjusting the camera
-        last_hit_time = TurnTimeLeft
+		-- remember when the target was hit for adjusting the camera
+		last_hit_time = TurnTimeLeft
 		-- Add one point to our score/counter
 		score = score + 1
 		-- If we haven't reached the goal ...
 		if score < score_goal then
 			-- ... spawn another target.
-            if score == 1 then
-                spawnTarget(1520,1350)
-            elseif score == 2 then
-                spawnTarget(1730,1040)
-            elseif score == 3 then
-                spawnTarget(2080,780)
-            elseif score == 4 then
-                blowUp(1730,1226)
-                blowUp(1440,1595)
-                blowUp(1527,1575)
-                blowUp(1614,1595)
-                blowUp(1420,1675)
-                blowUp(1527,1675)
-                blowUp(1634,1675)
-                blowUp(1440,1755)
-                blowUp(1527,1775)
-                blowUp(1614,1755)
-                spawnTarget(1527,1667)
-            elseif score == 5 then
-                spawnTarget(1527,1667)
-            elseif score == 6 then
-                spawnTarget(2175,1300)
-            elseif score == 7 then
-                spawnTarget(2250,940)
-            elseif score == 8 then
-                spawnTarget(2665,1540)
-            elseif score == 9 then
-                spawnTarget(3040,1160)
-            elseif score == 10 then
-                spawnTarget(2930,1500)
-            elseif score == 11 then
-                spawnTarget(700,720)
-            elseif score == 12 then
-                blowUp(914,1222)
-                blowUp(1050,1222)
-                blowUp(1160,1008)
-                blowUp(1160,1093)
-                blowUp(1160,1188)
-                blowUp(375,911)
-                blowUp(510,911)
-                blowUp(640,911)
-                blowUp(780,911)
-                blowUp(920,911)
-                blowUp(1060,913)
-                blowUp(1198,913)
-                spawnTarget(1200,730)
-            elseif score == 13 then
-                spawnTarget(1200,830)
-            elseif score == 14 then
-                spawnTarget(1430,450)
-            elseif score == 15 then
-                spawnTarget(796,240)
-            elseif score == 16 then
-                spawnTarget(300,10)
-            elseif score == 17 then
-                spawnTarget(2080,820)
-            elseif score == 18 then
-                blowUp(2110,920)
-                blowUp(2210,920)
-                blowUp(2200,305)
-                blowUp(2300,305)
-                blowUp(2300,400)
-                blowUp(2300,500)
-                blowUp(2300,600)
-                blowUp(2300,700)
-                blowUp(2300,800)
-                blowUp(2300,900)
-                blowUp(2401,305)
-                blowUp(2532,305)
-                blowUp(2663,305)
-                spawnTarget(2300,760)
-            elseif score == 19 then
-                spawnTarget(2300,760)
-            elseif score == 20 then
-                spawnTarget(2738,190)
-            elseif score == 21 then
-                spawnTarget(2590,-100)
-            elseif score == 22 then
-                blowUp(2790,305)
-                blowUp(2930,305)
-                blowUp(3060,305)
-                blowUp(3190,305)
-                blowUp(3310,305)
-                blowUp(3393,613)
-                blowUp(2805,370)
-                blowUp(2805,500)
-                blowUp(2805,630)
-                blowUp(2805,760)
-                blowUp(2805,890)
-                blowUp(2700,890)
-                blowUp(3258,370)
-                blowUp(3258,475)
-                blowUp(3264,575)
-                spawnTarget(3230,240)
-            elseif score == 23 then
-                spawnTarget(3230,290)
-            elseif score == 24 then
-                spawnTarget(3670,250)
-            elseif score == 25 then
-                spawnTarget(2620,-100)
-            elseif score == 26 then
-                spawnTarget(2870,300)
-            elseif score == 27 then
-                spawnTarget(3850,900)
-            elseif score == 28 then
-                spawnTarget(3780,300)
-            elseif score == 29 then
-                spawnTarget(3670,0)
-            elseif score == 30 then
-                spawnTarget(3480,1200)
-            end
+			if score == 1 then
+				spawnTarget(1520,1350)
+			elseif score == 2 then
+				spawnTarget(1730,1040)
+			elseif score == 3 then
+				spawnTarget(2080,780)
+			elseif score == 4 then
+				blowUp(1730,1226)
+				blowUp(1440,1595)
+				blowUp(1527,1575)
+				blowUp(1614,1595)
+				blowUp(1420,1675)
+				blowUp(1527,1675)
+				blowUp(1634,1675)
+				blowUp(1440,1755)
+				blowUp(1527,1775)
+				blowUp(1614,1755)
+				spawnTarget(1527,1667)
+			elseif score == 5 then
+				spawnTarget(1527,1667)
+			elseif score == 6 then
+				spawnTarget(2175,1300)
+			elseif score == 7 then
+				spawnTarget(2250,940)
+			elseif score == 8 then
+				spawnTarget(2665,1540)
+			elseif score == 9 then
+				spawnTarget(3040,1160)
+			elseif score == 10 then
+				spawnTarget(2930,1500)
+			elseif score == 11 then
+				spawnTarget(700,720)
+			elseif score == 12 then
+				blowUp(914,1222)
+				blowUp(1050,1222)
+				blowUp(1160,1008)
+				blowUp(1160,1093)
+				blowUp(1160,1188)
+				blowUp(375,911)
+				blowUp(510,911)
+				blowUp(640,911)
+				blowUp(780,911)
+				blowUp(920,911)
+				blowUp(1060,913)
+				blowUp(1198,913)
+				spawnTarget(1200,730)
+			elseif score == 13 then
+				spawnTarget(1200,830)
+			elseif score == 14 then
+				spawnTarget(1430,450)
+			elseif score == 15 then
+				spawnTarget(796,240)
+			elseif score == 16 then
+				spawnTarget(300,10)
+			elseif score == 17 then
+				spawnTarget(2080,820)
+			elseif score == 18 then
+				blowUp(2110,920)
+				blowUp(2210,920)
+				blowUp(2200,305)
+				blowUp(2300,305)
+				blowUp(2300,400)
+				blowUp(2300,500)
+				blowUp(2300,600)
+				blowUp(2300,700)
+				blowUp(2300,800)
+				blowUp(2300,900)
+				blowUp(2401,305)
+				blowUp(2532,305)
+				blowUp(2663,305)
+				spawnTarget(2300,760)
+			elseif score == 19 then
+				spawnTarget(2300,760)
+			elseif score == 20 then
+				spawnTarget(2738,190)
+			elseif score == 21 then
+				spawnTarget(2590,-100)
+			elseif score == 22 then
+				blowUp(2790,305)
+				blowUp(2930,305)
+				blowUp(3060,305)
+				blowUp(3190,305)
+				blowUp(3310,305)
+				blowUp(3393,613)
+				blowUp(2805,370)
+				blowUp(2805,500)
+				blowUp(2805,630)
+				blowUp(2805,760)
+				blowUp(2805,890)
+				blowUp(2700,890)
+				blowUp(3258,370)
+				blowUp(3258,475)
+				blowUp(3264,575)
+				spawnTarget(3230,240)
+			elseif score == 23 then
+				spawnTarget(3230,290)
+			elseif score == 24 then
+				spawnTarget(3670,250)
+			elseif score == 25 then
+				spawnTarget(2620,-100)
+			elseif score == 26 then
+				spawnTarget(2870,300)
+			elseif score == 27 then
+				spawnTarget(3850,900)
+			elseif score == 28 then
+				spawnTarget(3780,300)
+			elseif score == 29 then
+				spawnTarget(3670,0)
+			elseif score == 30 then
+				spawnTarget(3480,1200)
+			end
 		else
 			if not game_lost then
 			-- Otherwise show that the goal was accomplished

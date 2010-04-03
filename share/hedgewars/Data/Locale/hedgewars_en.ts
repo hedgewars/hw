@@ -12,11 +12,11 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="obsolete">Never</translation>
+        <translation>Never</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="obsolete">
+        <translation>
             <numerusform>Each turn</numerusform>
             <numerusform>Every %1 turns</numerusform>
         </translation>
@@ -138,31 +138,31 @@
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -485,7 +485,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -731,7 +731,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>generated maze...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -926,7 +926,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1455,39 +1455,319 @@ info</translation>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Button</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">Delete</translation>
+        <translation>Delete</translation>
+    </message>
+    <message>
+        <source>Mouse: Left button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse: Middle button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse: Right button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse: Wheel up</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse: Wheel down</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Backspace</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Tab</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Escape</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Space</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 0</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 4</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 5</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 6</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 7</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 8</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 9</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad .</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad /</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad *</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad -</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad +</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Enter</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Equals</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Home</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>End</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Page up</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Page down</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Num lock</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Caps lock</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Scroll lock</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right shift</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left shift</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right ctrl</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left ctrl</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right alt</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left alt</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right meta</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left meta</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>A button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>B button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>X button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Y button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>LB button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>RB button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Back button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Start button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Right)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Left)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Down)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Up)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left trigger</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right trigger</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Down)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Up)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Right)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Left)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>DPad</source>
+        <translation></translation>
     </message>
 </context>
 </TS>

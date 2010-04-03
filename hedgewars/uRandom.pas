@@ -77,12 +77,7 @@ end;
 
 function GetRandom(m: LongWord): LongWord;
 begin
-if m = 0 then
-    begin
-    WriteLnToConsole('Warning: GetRandom(0) not defined');
-    GetRandom:= 0;
-    exit
-    end;
+TryDo((m > 0),'GetRandom(0) called! Please report this to the developers!',true);
 GetNext;
 GetRandom:= GetNext mod m
 end;

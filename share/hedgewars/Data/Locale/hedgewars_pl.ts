@@ -12,11 +12,11 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="obsolete">Nigdy</translation>
+        <translation>Nigdy</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="obsolete">
+        <translation>
             <numerusform>Co %1 turę</numerusform>
             <numerusform>Co %1 tury</numerusform>
             <numerusform>Co %1 tur</numerusform>
@@ -119,15 +119,15 @@
     </message>
     <message>
         <source>Small</source>
-        <translation type="unfinished">Małe</translation>
+        <translation>Małe</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished">Średnie</translation>
+        <translation>Średnie</translation>
     </message>
     <message>
         <source>Large</source>
-        <translation type="unfinished">Duże</translation>
+        <translation>Duże</translation>
     </message>
     <message>
         <source>Cavern</source>
@@ -143,31 +143,31 @@
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation type="unfinished">Małe tunele</translation>
+        <translation>Małe tunele</translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation type="unfinished">Średnie tunele</translation>
+        <translation>Średnie tunele</translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished">Duże tunele</translation>
+        <translation>Duże tunele</translation>
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation type="unfinished">Małe wyspy</translation>
+        <translation>Małe wyspy</translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation type="unfinished">Średnie wyspy</translation>
+        <translation>Średnie wyspy</translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation type="unfinished">Duże wyspy</translation>
+        <translation>Duże wyspy</translation>
     </message>
 </context>
 <context>
@@ -216,26 +216,26 @@
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation type="unfinished">Twój nick %1 jest
+        <translation>Twój nick %1 jest
 zarejestrowany na Hedgewars.org
 Proszę podać twoje hasło 
 bądź wybierz inny nick:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation type="unfinished">%1 *** %2 dołączył do pokoju</translation>
+        <translation>%1 *** %2 dołączył do pokoju</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation type="unfinished">%1 *** %2 dołączył </translation>
+        <translation>%1 *** %2 dołączył </translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
-        <translation type="unfinished">%1 *** %2 wyszedł (%3)</translation>
+        <translation>%1 *** %2 wyszedł (%3)</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
-        <translation type="unfinished">%1 *** %2 wyszedł</translation>
+        <translation>%1 *** %2 wyszedł</translation>
     </message>
 </context>
 <context>
@@ -249,15 +249,39 @@ bądź wybierz inny nick:</translation>
     <name>PageAdmin</name>
     <message>
         <source>Server message:</source>
-        <translation type="unfinished">Wiadomość od serwera:</translation>
+        <translation>Wiadomość od serwera:</translation>
     </message>
     <message>
         <source>Set message</source>
-        <translation type="unfinished">Ustaw wiadomość</translation>
+        <translation>Ustaw wiadomość</translation>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
-        <translation type="unfinished">Wyczyść pamięć podręczną</translation>
+        <translation>Wyczyść pamięć podręczną</translation>
+    </message>
+    <message>
+        <source>Fetch data</source>
+        <translation type="obsolete">Pobierz dane</translation>
+    </message>
+    <message>
+        <source>Server message for latest version:</source>
+        <translation type="obsolete">Wiadomość dla najnowszej wersji gry:</translation>
+    </message>
+    <message>
+        <source>Server message for previous versions:</source>
+        <translation type="obsolete">Wiadomość dla poprzednich wersji gry:</translation>
+    </message>
+    <message>
+        <source>Latest version protocol number:</source>
+        <translation type="obsolete">Ostatni nr. wersji protokołu:</translation>
+    </message>
+    <message>
+        <source>MOTD preview:</source>
+        <translation type="obsolete">Podgląd wiadomości:</translation>
+    </message>
+    <message>
+        <source>Set data</source>
+        <translation type="obsolete">Zapisz</translation>
     </message>
 </context>
 <context>
@@ -282,11 +306,11 @@ bądź wybierz inny nick:</translation>
     <name>PageGameStats</name>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Odznaczenie za najlepszy strzał przyznano &lt;b&gt;%1&lt;/b&gt;, zadał(a) on(a) &lt;b&gt;%2&lt;/b&gt; punktów obrażeń.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Odznaczenie za najlepszy strzał przyznano &lt;b&gt;%1&lt;/b&gt;, zadał(a) on(a) &lt;b&gt;%2&lt;/b&gt; punktów obrażeń.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;p&gt;Najlepszym zabójcą jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabiciami w przeciągu tury.&lt;/p&gt;</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
@@ -294,7 +318,7 @@ bądź wybierz inny nick:</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeży zostało zabitych w tej walce.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeży zostało zabitych w tej walce.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeży zostało zabitych w tej walce.&lt;/p&gt;</numerusform>
@@ -334,7 +358,7 @@ bądź wybierz inny nick:</translation>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
-        <translation type="unfinished">Kontrola</translation>
+        <translation>Kontrola</translation>
     </message>
 </context>
 <context>
@@ -360,19 +384,19 @@ bądź wybierz inny nick:</translation>
     </message>
     <message>
         <source>Delete team</source>
-        <translation type="unfinished">Usuń drużynę</translation>
+        <translation>Usuń drużynę</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation type="unfinished">Nowy schemat uzbrojenia</translation>
+        <translation>Nowy schemat uzbrojenia</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation type="unfinished">Edytuj schemat uzbrojenia</translation>
+        <translation>Edytuj schemat uzbrojenia</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation type="unfinished">Usuń schemat uzbrojenia</translation>
+        <translation>Usuń schemat uzbrojenia</translation>
     </message>
 </context>
 <context>
@@ -430,47 +454,47 @@ bądź wybierz inny nick:</translation>
     </message>
     <message>
         <source>Admin features</source>
-        <translation type="unfinished">Ustawienia admina</translation>
+        <translation>Ustawienia admina</translation>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation type="unfinished">Nazwa pokoju:</translation>
+        <translation>Nazwa pokoju:</translation>
     </message>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished">Ta gra jest w poczekalni.
+        <translation>Ta gra jest w poczekalni.
 Możesz dołączyć i zacząć grać gdy gra się rozpocznie.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished">Ta gra jest w toku.
+        <translation>Ta gra jest w toku.
 Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż gra się skończy.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished">%1 jest właścicielem. Może on zmienić ustawienia i rozpocząć grę.</translation>
+        <translation>%1 jest właścicielem. Może on zmienić ustawienia i rozpocząć grę.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished">Losowa mapa</translation>
+        <translation>Losowa mapa</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="unfinished">Gry mogą być rozgrywane na losowych lub uprzednio stworznych mapach.</translation>
+        <translation>Gry mogą być rozgrywane na losowych lub uprzednio stworznych mapach.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="unfinished">Schemat określa ustawnienia i preferencje takie jak Czas trwania tury, Nagłą śmierć lub Wampiryzm.</translation>
+        <translation>Schemat określa ustawnienia i preferencje takie jak Czas trwania tury, Nagłą śmierć lub Wampiryzm.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="unfinished">Schemat uzbrojenia określa dostępną broń oraz ilość amunicji.</translation>
+        <translation>Schemat uzbrojenia określa dostępną broń oraz ilość amunicji.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Do tego pokoju jest podłączony %1 gracz.</numerusform>
             <numerusform>Do tego pokoju jest podłączonych %1 graczy.</numerusform>
             <numerusform>Do tego pokoju jest podłączonych %1 graczy.</numerusform>
@@ -478,7 +502,7 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>W tym pokoju uczestniczy %1 drużyna.</numerusform>
             <numerusform>W tym pokoju uczestniczą %1 drużyny.</numerusform>
             <numerusform>W tym pokoju uczestniczą %1 drużyny.</numerusform>
@@ -494,7 +518,7 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished">Losowy labirynt</translation>
+        <translation>Losowy labirynt</translation>
     </message>
 </context>
 <context>
@@ -509,19 +533,19 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation type="unfinished">Broń swojego fortu i zniszcz przeciwników. Maksymalnie dwa kolory drużyn!</translation>
+        <translation>Broń swojego fortu i zniszcz przeciwników. Maksymalnie dwa kolory drużyn!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation type="unfinished">Drużyny rozpoczną grę na przeciwległych stronach mapy. Maksymalnie dwa kolory drużyn!</translation>
+        <translation>Drużyny rozpoczną grę na przeciwległych stronach mapy. Maksymalnie dwa kolory drużyn!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
-        <translation type="unfinished">Podłoże jest niezniszczalne!</translation>
+        <translation>Podłoże jest niezniszczalne!</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation type="unfinished">Dodaje niezniszczalną ramkę dookoła terenu</translation>
+        <translation>Dodaje niezniszczalną ramkę dookoła terenu</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -533,51 +557,51 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
-        <translation type="unfinished">Wszystkie jeże posiadają osobiste pole siłowe</translation>
+        <translation>Wszystkie jeże posiadają osobiste pole siłowe</translation>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation type="unfinished">Dodaj miny</translation>
+        <translation>Dodaj miny</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation type="unfinished">Odzyskaj 80% życia z zadanych obrażeń</translation>
+        <translation>Odzyskaj 80% życia z zadanych obrażeń</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation type="unfinished">Współdziel ból uderzeń ze swoim przeciwnikiem. Współdziel także obrażenia</translation>
+        <translation>Współdziel ból uderzeń ze swoim przeciwnikiem. Współdziel także obrażenia</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
-        <translation type="unfinished">Twoje jeże nie mogą się poruszać, więc przetestuj swoje strzeleckie umiejętności</translation>
+        <translation>Twoje jeże nie mogą się poruszać, więc przetestuj swoje strzeleckie umiejętności</translation>
     </message>
     <message>
         <source>Random</source>
-        <translation type="unfinished">Losowo</translation>
+        <translation>Losowo</translation>
     </message>
     <message>
         <source>Seconds</source>
-        <translation type="unfinished">Sekundy</translation>
+        <translation>Sekundy</translation>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation type="unfinished">Kolejność gry jest losowa zamiast kolejności wg. listy graczy.</translation>
+        <translation>Kolejność gry jest losowa zamiast kolejności wg. listy graczy.</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation type="unfinished">Graj z Królem. Lecz jeśłi on umrze, twoja drużyna przegrywa.</translation>
+        <translation>Graj z Królem. Lecz jeśłi on umrze, twoja drużyna przegrywa.</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation type="unfinished">Rozmieść swoje jeże przed rozpoczęciem gry.</translation>
+        <translation>Rozmieść swoje jeże przed rozpoczęciem gry.</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation type="unfinished">Amunicja jest wspólna dla graczy tej samej drużyny.</translation>
+        <translation>Amunicja jest wspólna dla graczy tej samej drużyny.</translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation type="unfinished">Wyłącz mosty przy tworzeniu losowych map.</translation>
+        <translation>Wyłącz mosty przy tworzeniu losowych map.</translation>
     </message>
 </context>
 <context>
@@ -595,23 +619,23 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     <name>PageSinglePlayer</name>
     <message>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation type="unfinished">Szybka gra (szybka gra przeciwko komputerowi, ustawienia są wybierane za ciebie)</translation>
+        <translation>Szybka gra (szybka gra przeciwko komputerowi, ustawienia są wybierane za ciebie)</translation>
     </message>
     <message>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="unfinished">Gra wieloosobowa (graj z komputerem lub na zmianę ze znajomymi)</translation>
+        <translation>Gra wieloosobowa (graj z komputerem lub na zmianę ze znajomymi)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="unfinished">Trening (sprawdź swoje umiejętności podczas misji treningowych). W PRODUKCJI</translation>
+        <translation>Trening (sprawdź swoje umiejętności podczas misji treningowych). W PRODUKCJI</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
-        <translation type="unfinished">Dema (zobacz nagrane dema)</translation>
+        <translation>Dema (zobacz nagrane dema)</translation>
     </message>
     <message>
         <source>Load (Load a previously saved game)</source>
-        <translation type="unfinished">Wczytaj grę (wczytaj poprzednio zapisaną grę)</translation>
+        <translation>Wczytaj grę (wczytaj poprzednio zapisaną grę)</translation>
     </message>
 </context>
 <context>
@@ -622,11 +646,11 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Start</translation>
+        <translation>Start</translation>
     </message>
     <message>
         <source>Restrict Joins</source>
-        <translation type="unfinished">Zabroń dołączania</translation>
+        <translation>Zabroń dołączania</translation>
     </message>
     <message>
         <source>Restrict Team Additions</source>
@@ -642,23 +666,23 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Follow</source>
-        <translation type="unfinished">Śledź</translation>
+        <translation>Śledź</translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished">Ignoruj</translation>
+        <translation>Ignoruj</translation>
     </message>
     <message>
         <source>Add friend</source>
-        <translation type="unfinished">Dodaj przyjaciela</translation>
+        <translation>Dodaj przyjaciela</translation>
     </message>
     <message>
         <source>Unignore</source>
-        <translation type="unfinished">Przestań ignorować</translation>
+        <translation>Przestań ignorować</translation>
     </message>
     <message>
         <source>Remove friend</source>
-        <translation type="unfinished">Usuń przyjaciela</translation>
+        <translation>Usuń przyjaciela</translation>
     </message>
 </context>
 <context>
@@ -681,7 +705,7 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Alternative damage show</source>
-        <translation type="unfinished">Inny sposób wyświetlania obrażeń</translation>
+        <translation>Inny sposób wyświetlania obrażeń</translation>
     </message>
     <message>
         <source>Enable music</source>
@@ -697,23 +721,23 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation type="unfinished">Obniż jakość</translation>
+        <translation>Obniż jakość</translation>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished">Pokaż opisy broni</translation>
+        <translation>Pokaż opisy broni</translation>
     </message>
     <message>
         <source>Enable frontend sounds</source>
-        <translation type="unfinished">Włącz dźwięki w menu</translation>
+        <translation>Włącz dźwięki w menu</translation>
     </message>
     <message>
         <source>Enable frontend music</source>
-        <translation type="unfinished">Włącz muzykę w menu</translation>
+        <translation>Włącz muzykę w menu</translation>
     </message>
     <message>
         <source>Frontend effects</source>
-        <translation type="unfinished">Efekty w menu</translation>
+        <translation>Efekty w menu</translation>
     </message>
 </context>
 <context>
@@ -732,15 +756,15 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>(System default)</source>
-        <translation type="unfinished">(Domyślny)</translation>
+        <translation>(Domyślny)</translation>
     </message>
     <message>
         <source>generated maze...</source>
-        <translation type="unfinished">wygenerowany labirynt</translation>
+        <translation>wygenerowany labirynt...</translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished">Misja</translation>
+        <translation>Misja</translation>
     </message>
 </context>
 <context>
@@ -787,11 +811,11 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Team Settings</source>
-        <translation type="unfinished">Ustawienia drużyn</translation>
+        <translation>Ustawienia drużyn</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished">Różne</translation>
+        <translation>Różne</translation>
     </message>
 </context>
 <context>
@@ -854,7 +878,7 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Sounds:</source>
-        <translation type="unfinished">Dźwięki:</translation>
+        <translation>Dźwięki:</translation>
     </message>
     <message>
         <source>Initial sound volume</source>
@@ -862,7 +886,7 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Damage Modifier</source>
-        <translation type="unfinished">Modyfikator obrażeń</translation>
+        <translation>Modyfikator obrażeń</translation>
     </message>
     <message>
         <source>Turn Time</source>
@@ -870,7 +894,7 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Initial Health</source>
-        <translation type="unfinished">Ilość punktów życia</translation>
+        <translation>Ilość punktów życia</translation>
     </message>
     <message>
         <source>Sudden Death Timeout</source>
@@ -882,68 +906,68 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Crate Drops</source>
-        <translation type="unfinished">Zrzuty skrzyń</translation>
+        <translation>Zrzuty skrzyń</translation>
     </message>
     <message>
         <source>Game scheme</source>
-        <translation type="unfinished">Ustawienia gry</translation>
+        <translation>Ustawienia gry</translation>
     </message>
     <message>
         <source>Mines Time</source>
-        <translation type="unfinished">Czas detonacji min</translation>
+        <translation>Czas detonacji min</translation>
     </message>
     <message>
         <source>Mines</source>
-        <translation type="unfinished">Ilość min</translation>
+        <translation>Ilość min</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation type="unfinished">% niewybuchów</translation>
+        <translation>% niewybuchów</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nazwa</translation>
+        <translation>Nazwa</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <source>Grave</source>
-        <translation type="unfinished">Nagrobek</translation>
+        <translation>Nagrobek</translation>
     </message>
     <message>
         <source>Flag</source>
-        <translation type="unfinished">Flaga</translation>
+        <translation>Flaga</translation>
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished">Głos</translation>
+        <translation>Głos</translation>
     </message>
     <message>
         <source>Locale</source>
-        <translation type="unfinished">Język</translation>
+        <translation>Język</translation>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation type="unfinished">Zrestartuj grę by wprowadzić zmiany</translation>
+        <translation>Zrestartuj grę by wprowadzić zmiany</translation>
     </message>
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished">Ta wersja jest w fazie produkcji i może nie być kompatybilna z innymi wersjami gry.
+        <translation>Ta wersja jest w fazie produkcji i może nie być kompatybilna z innymi wersjami gry.
 Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne ryzyko!</translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation type="unfinished">Mat. wybuchowe</translation>
+        <translation>Mat. wybuchowe</translation>
     </message>
 </context>
 <context>
     <name>QLineEdit</name>
     <message>
         <source>unnamed</source>
-        <translation type="unfinished">nienazwany</translation>
+        <translation>nienazwany</translation>
     </message>
 </context>
 <context>
@@ -977,26 +1001,26 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Uzbrojenie</translation>
+        <translation>Uzbrojenie</translation>
     </message>
     <message>
         <source>Can not edit default weapon set</source>
-        <translation type="unfinished">Nie można zmienić domyślnego zestawu uzbrojenia</translation>
+        <translation>Nie można zmienić domyślnego zestawu uzbrojenia</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation type="unfinished">Nie można usunąć domyślnego zestawu uzbrojenia</translation>
+        <translation>Nie można usunąć domyślnego zestawu uzbrojenia</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
-        <translation type="unfinished">Czy naprawdę usunąć ten zestaw uzbrojenia?</translation>
+        <translation>Czy naprawdę usunąć ten zestaw uzbrojenia?</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Błąd</translation>
+        <translation>Błąd</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
@@ -1008,7 +1032,7 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Nick</translation>
+        <translation>Nick</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>
@@ -1019,7 +1043,7 @@ Sprawdź poprawność instalacji</translation>
     <name>QPushButton</name>
     <message>
         <source>Go!</source>
-        <translation type="unfinished">Start!</translation>
+        <translation>Start!</translation>
     </message>
     <message>
         <source>default</source>
@@ -1051,7 +1075,7 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Start</translation>
+        <translation>Start</translation>
     </message>
     <message>
         <source>Play demo</source>
@@ -1079,57 +1103,57 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Random Team</source>
-        <translation type="unfinished">Losowa Drużyna</translation>
+        <translation>Losowa Drużyna</translation>
     </message>
 </context>
 <context>
     <name>QTableWidget</name>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished">Nazwa pokoju</translation>
+        <translation>Nazwa pokoju</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished">Kli</translation>
+        <translation>Kli</translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished">Druż</translation>
+        <translation>Druż</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished">Właśc</translation>
+        <translation>Właśc</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">Mapa</translation>
+        <translation>Mapa</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished">Schemat</translation>
+        <translation>Schemat</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Uzbrojenie</translation>
+        <translation>Uzbrojenie</translation>
     </message>
 </context>
 <context>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation type="unfinished">Amunicja</translation>
+        <translation>Amunicja</translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation type="unfinished">Prawdobodobieństwo</translation>
+        <translation>Prawdobodobieństwo</translation>
     </message>
     <message>
         <source>Ammo in boxes</source>
-        <translation type="unfinished">Amunicja w skrzyniach</translation>
+        <translation>Amunicja w skrzyniach</translation>
     </message>
     <message>
         <source>Delays</source>
-        <translation type="unfinished">Opóźnienie</translation>
+        <translation>Opóźnienie</translation>
     </message>
 </context>
 <context>
@@ -1151,15 +1175,15 @@ Sprawdź poprawność instalacji</translation>
     <name>ToggleButtonWidget</name>
     <message>
         <source>Vampirism</source>
-        <translation type="unfinished">Wampiryzm</translation>
+        <translation>Wampiryzm</translation>
     </message>
     <message>
         <source>Karma</source>
-        <translation type="unfinished">Karma</translation>
+        <translation>Karma</translation>
     </message>
     <message>
         <source>Artillery</source>
-        <translation type="unfinished">Artyleria</translation>
+        <translation>Artyleria</translation>
     </message>
     <message>
         <source>Fort Mode</source>
@@ -1195,23 +1219,23 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Random Order</source>
-        <translation type="unfinished">Losowa kolejność</translation>
+        <translation>Losowa kolejność</translation>
     </message>
     <message>
         <source>King</source>
-        <translation type="unfinished">Król</translation>
+        <translation>Król</translation>
     </message>
     <message>
         <source>Place Hedgehogs</source>
-        <translation type="unfinished">Rozmieść jeże</translation>
+        <translation>Rozmieść jeże</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
-        <translation type="unfinished">Wspólna amunicja</translation>
+        <translation>Wspólna amunicja</translation>
     </message>
     <message>
         <source>Disable Girders</source>
-        <translation type="unfinished">Wyłącz mosty</translation>
+        <translation>Wyłącz mosty</translation>
     </message>
 </context>
 <context>
@@ -1238,11 +1262,11 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>put</source>
-        <translation type="unfinished">połóż</translation>
+        <translation>połóż</translation>
     </message>
     <message>
         <source>switch</source>
-        <translation type="unfinished">przełącz</translation>
+        <translation>przełącz</translation>
     </message>
     <message>
         <source>find hedgehog</source>
@@ -1250,7 +1274,7 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>ammo menu</source>
-        <translation type="unfinished">okno amunicji</translation>
+        <translation>okno amunicji</translation>
     </message>
     <message>
         <source>slot 1</source>
@@ -1331,7 +1355,7 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <source>hedgehogs
 info</source>
-        <translation type="unfinished">opisy jeży</translation>
+        <translation>opisy jeży</translation>
     </message>
     <message>
         <source>quit</source>
@@ -1355,109 +1379,109 @@ info</source>
     </message>
     <message>
         <source>zoom in</source>
-        <translation type="unfinished">przybliż</translation>
+        <translation>przybliż</translation>
     </message>
     <message>
         <source>zoom out</source>
-        <translation type="unfinished">oddal</translation>
+        <translation>oddal</translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished">zeruj przybliżenie</translation>
+        <translation>zeruj przybliżenie</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished">daleki skok</translation>
+        <translation>daleki skok</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished">wysoki skok</translation>
+        <translation>wysoki skok</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Basic controls</source>
-        <translation type="unfinished">Podstawowe</translation>
+        <translation>Podstawowe sterowanie</translation>
     </message>
     <message>
         <source>Weapon controls</source>
-        <translation type="unfinished">Broń</translation>
+        <translation>Broń</translation>
     </message>
     <message>
         <source>Camera and cursor controls</source>
-        <translation type="unfinished">Kamera i kursor</translation>
+        <translation>Kamera i kursor</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Inne</translation>
+        <translation>Inne</translation>
     </message>
 </context>
 <context>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation type="unfinished">Poruszanie się jeżem i strzelanie:</translation>
+        <translation>Poruszanie się jeżem i strzelanie:</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished">Omiń dziury i przeszkody, skacząc:</translation>
+        <translation>Omiń dziury i przeszkody, skacząc:</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished">Wystrzel z broni lub użyj narzędzi:</translation>
+        <translation>Wystrzel z broni lub użyj narzędzi:</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished">Wybierz broń lub cel za pomocą kursora:</translation>
+        <translation>Wybierz broń lub cel za pomocą kursora:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation type="unfinished">Zmień swojego aktywnego jeża (jeśli możliwe):</translation>
+        <translation>Zmień swojego aktywnego jeża (jeśli możliwe):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation type="unfinished">Zbierz broń lub narzędzie:</translation>
+        <translation>Zbierz broń lub narzędzie:</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished">Ustaw licznich w bombach i broniach z zapalnikiem:</translation>
+        <translation>Ustaw licznich w bombach i broniach z zapalnikiem:</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation type="unfinished">Ustaw kamerę na aktywnym jeżu:</translation>
+        <translation>Ustaw kamerę na aktywnym jeżu:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation type="unfinished">Przesuń kursor bądź kamerę bez użycia myszki:</translation>
+        <translation>Przesuń kursor bądź kamerę bez użycia myszki:</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation type="unfinished">Zmień poziom przybliżenia:</translation>
+        <translation>Zmień poziom przybliżenia:</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation type="unfinished">Porozmawiaj z drużyną bądź wszystkimi graczami:</translation>
+        <translation>Porozmawiaj z drużyną bądź wszystkimi graczami:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation type="unfinished">Wstrzymaj, kontynuuj lub opuść grę:</translation>
+        <translation>Wstrzymaj, kontynuuj lub opuść grę:</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation type="unfinished">Zmień głośność w czasie gry:</translation>
+        <translation>Zmień głośność w czasie gry:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation type="unfinished">Przełącz do pełnego ekranu:</translation>
+        <translation>Przełącz do pełnego ekranu:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation type="unfinished">Zrób zrzut ekranu:</translation>
+        <translation>Zrób zrzut ekranu:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation type="unfinished">Zmień szczegółowość opisów nad jeżami:</translation>
+        <translation>Zmień szczegółowość opisów nad jeżami:</translation>
     </message>
 </context>
 <context>
@@ -1492,87 +1516,291 @@ info</source>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="unfinished">Klawiatura</translation>
+        <translation>Klawiatura</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="obsolete">Mysz: Lewy przycisk</translation>
+        <translation>Mysz: Lewy przycisk</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="obsolete">Mysz: Środkowy przycisk</translation>
+        <translation>Mysz: Środkowy przycisk</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="obsolete">Mysz: Prawy przycisk</translation>
+        <translation>Mysz: Prawy przycisk</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="obsolete">Mysz: Kółko w górę</translation>
+        <translation>Mysz: Kółko w górę</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="obsolete">Mysz:Kółko w dół</translation>
+        <translation>Mysz:Kółko w dół</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="obsolete">Spacja</translation>
+        <translation>Spacja</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">Delete</translation>
+        <translation>Delete</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="obsolete">Znak równości</translation>
+        <translation>Znak równości</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="obsolete">Strzałka w górę</translation>
+        <translation>Strzałka w górę</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="obsolete">Strzałka w dół</translation>
+        <translation>Strzałka w dół</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="obsolete">Strzałka w prawo</translation>
+        <translation>Strzałka w prawo</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="obsolete">Strzałka w lewo</translation>
+        <translation>Strzałka w lewo</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="obsolete">Prawy shift</translation>
+        <translation>Prawy shift</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="obsolete">Lewy Shift</translation>
+        <translation>Lewy Shift</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="obsolete">Prawy ctrl</translation>
+        <translation>Prawy ctrl</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="obsolete">Lewy ctrl</translation>
+        <translation>Lewy ctrl</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="obsolete">Prawy Alt</translation>
+        <translation>Prawy Alt</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="obsolete">Lewy Alt</translation>
+        <translation>Lewy Alt</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="obsolete">Prawy kl. WIN</translation>
+        <translation>Prawy kl. WIN</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="obsolete">Lewy kl. WIN</translation>
+        <translation>Lewy kl. WIN</translation>
+    </message>
+    <message>
+        <source>Backspace</source>
+        <translation>Backspace</translation>
+    </message>
+    <message>
+        <source>Tab</source>
+        <translation>Tab</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Clear</translation>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation>Return</translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation>Pause</translation>
+    </message>
+    <message>
+        <source>Escape</source>
+        <translation>Escape</translation>
+    </message>
+    <message>
+        <source>Numpad 0</source>
+        <translation>Kl. Num. 0</translation>
+    </message>
+    <message>
+        <source>Numpad 1</source>
+        <translation>Kl. Num. 1</translation>
+    </message>
+    <message>
+        <source>Numpad 2</source>
+        <translation>Kl. Num. 2</translation>
+    </message>
+    <message>
+        <source>Numpad 3</source>
+        <translation>Kl. Num. 3</translation>
+    </message>
+    <message>
+        <source>Numpad 4</source>
+        <translation>Kl. Num. 4</translation>
+    </message>
+    <message>
+        <source>Numpad 5</source>
+        <translation>Kl. Num. 5</translation>
+    </message>
+    <message>
+        <source>Numpad 6</source>
+        <translation>Kl. Num. 6</translation>
+    </message>
+    <message>
+        <source>Numpad 7</source>
+        <translation>Kl. Num. 7</translation>
+    </message>
+    <message>
+        <source>Numpad 8</source>
+        <translation>Kl. Num. 8</translation>
+    </message>
+    <message>
+        <source>Numpad 9</source>
+        <translation>Kl. Num. 9</translation>
+    </message>
+    <message>
+        <source>Numpad .</source>
+        <translation>Kl. Num. .</translation>
+    </message>
+    <message>
+        <source>Numpad /</source>
+        <translation>Kl. Num. /</translation>
+    </message>
+    <message>
+        <source>Numpad *</source>
+        <translation>Kl. Num. *</translation>
+    </message>
+    <message>
+        <source>Numpad -</source>
+        <translation>Kl. Num. -</translation>
+    </message>
+    <message>
+        <source>Numpad +</source>
+        <translation>Kl. Num.+</translation>
+    </message>
+    <message>
+        <source>Enter</source>
+        <translation>Enter</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>Insert</translation>
+    </message>
+    <message>
+        <source>Home</source>
+        <translation>Home</translation>
+    </message>
+    <message>
+        <source>End</source>
+        <translation>End</translation>
+    </message>
+    <message>
+        <source>Page up</source>
+        <translation>Page Up</translation>
+    </message>
+    <message>
+        <source>Page down</source>
+        <translation>Page down</translation>
+    </message>
+    <message>
+        <source>Num lock</source>
+        <translation>Num Lock</translation>
+    </message>
+    <message>
+        <source>Caps lock</source>
+        <translation>Caps lock</translation>
+    </message>
+    <message>
+        <source>Scroll lock</source>
+        <translation>Scroll lock</translation>
+    </message>
+    <message>
+        <source>A button</source>
+        <translation>Przycisk A</translation>
+    </message>
+    <message>
+        <source>B button</source>
+        <translation>Przycisk B</translation>
+    </message>
+    <message>
+        <source>X button</source>
+        <translation>Przycisk X</translation>
+    </message>
+    <message>
+        <source>Y button</source>
+        <translation>Przycisk Y</translation>
+    </message>
+    <message>
+        <source>LB button</source>
+        <translation>Przycisk LB</translation>
+    </message>
+    <message>
+        <source>RB button</source>
+        <translation>Przycisk RB</translation>
+    </message>
+    <message>
+        <source>Back button</source>
+        <translation>Przycisk Back</translation>
+    </message>
+    <message>
+        <source>Start button</source>
+        <translation>Przycisk Start</translation>
+    </message>
+    <message>
+        <source>Left stick</source>
+        <translation>Lewy grzybek</translation>
+    </message>
+    <message>
+        <source>Right stick</source>
+        <translation>Prawy grzybek</translation>
+    </message>
+    <message>
+        <source>Left stick (Right)</source>
+        <translation>Lewy grzybek (Prawo)</translation>
+    </message>
+    <message>
+        <source>Left stick (Left)</source>
+        <translation>Lewy grzybek (Lewo)</translation>
+    </message>
+    <message>
+        <source>Left stick (Down)</source>
+        <translation>Lewy grzybek (Dół)</translation>
+    </message>
+    <message>
+        <source>Left stick (Up)</source>
+        <translation>Lewy grzybek (Góra)</translation>
+    </message>
+    <message>
+        <source>Left trigger</source>
+        <translation>Lewy spust</translation>
+    </message>
+    <message>
+        <source>Right trigger</source>
+        <translation>Prawy spust</translation>
+    </message>
+    <message>
+        <source>Right stick (Down)</source>
+        <translation>Prawy grzybek (Dół)</translation>
+    </message>
+    <message>
+        <source>Right stick (Up)</source>
+        <translation>Prawy grzybek (Góra)</translation>
+    </message>
+    <message>
+        <source>Right stick (Right)</source>
+        <translation>Prawy grzybek (Prawo)</translation>
+    </message>
+    <message>
+        <source>Right stick (Left)</source>
+        <translation>Prawy grzybek (Lewo)</translation>
+    </message>
+    <message>
+        <source>DPad</source>
+        <translation>Krzyżak</translation>
     </message>
 </context>
 </TS>

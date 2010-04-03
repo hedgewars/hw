@@ -12,11 +12,11 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="obsolete">Nie</translation>
+        <translation>Nie</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="obsolete">
+        <translation>
             <numerusform>Jede Runde</numerusform>
             <numerusform>Jede %1. Runde</numerusform>
         </translation>
@@ -1493,287 +1493,287 @@ Statistik</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="obsolete">Maus: Linke Taste</translation>
+        <translation>Maus: Linke Taste</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="obsolete">Maus: Mittlere Taste</translation>
+        <translation>Maus: Mittlere Taste</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="obsolete">Maus: Rechte Taste</translation>
+        <translation>Maus: Rechte Taste</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="obsolete">Maus: Mausrad hoch</translation>
+        <translation>Maus: Mausrad hoch</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="obsolete">Maus: Mausrad runter</translation>
+        <translation>Maus: Mausrad runter</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="obsolete">Rückstelltaste</translation>
+        <translation>Rückstelltaste</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="obsolete">Tabulator</translation>
+        <translation>Tabulator</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="obsolete">Clear</translation>
+        <translation>Clear</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="obsolete">Eingabetaste</translation>
+        <translation>Eingabetaste</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="obsolete">Pause</translation>
+        <translation>Pause</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="obsolete">Escape</translation>
+        <translation>Escape</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="obsolete">Leertaste</translation>
+        <translation>Leertaste</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">Entf</translation>
+        <translation>Entf</translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation type="obsolete">Ziffernblock 0</translation>
+        <translation>Ziffernblock 0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation type="obsolete">Ziffernblock 1</translation>
+        <translation>Ziffernblock 1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation type="obsolete">Ziffernblock 2</translation>
+        <translation>Ziffernblock 2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation type="obsolete">Ziffernblock 3</translation>
+        <translation>Ziffernblock 3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation type="obsolete">Ziffernblock 4</translation>
+        <translation>Ziffernblock 4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation type="obsolete">Ziffernblock 5</translation>
+        <translation>Ziffernblock 5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation type="obsolete">Ziffernblock 6</translation>
+        <translation>Ziffernblock 6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation type="obsolete">Ziffernblock 7</translation>
+        <translation>Ziffernblock 7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation type="obsolete">Ziffernblock 8</translation>
+        <translation>Ziffernblock 8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation type="obsolete">Ziffernblock 9</translation>
+        <translation>Ziffernblock 9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation type="obsolete">Ziffernblock ,</translation>
+        <translation>Ziffernblock ,</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation type="obsolete">Ziffernblock /</translation>
+        <translation>Ziffernblock /</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation type="obsolete">Ziffernblock *</translation>
+        <translation>Ziffernblock *</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation type="obsolete">Ziffernblock -</translation>
+        <translation>Ziffernblock -</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation type="obsolete">Ziffernblock +</translation>
+        <translation>Ziffernblock +</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="obsolete">Enter</translation>
+        <translation>Enter</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="obsolete">Gleich</translation>
+        <translation>Gleich</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="obsolete">Hoch</translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="obsolete">Runter</translation>
+        <translation>Runter</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="obsolete">Rechts</translation>
+        <translation>Rechts</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="obsolete">Links</translation>
+        <translation>Links</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="obsolete">Einfg</translation>
+        <translation>Einfg</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="obsolete">Pos1</translation>
+        <translation>Pos1</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="obsolete">Ende</translation>
+        <translation>Ende</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="obsolete">Bild hoch</translation>
+        <translation>Bild hoch</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="obsolete">Bild runter</translation>
+        <translation>Bild runter</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation type="obsolete">Numlock</translation>
+        <translation>Numlock</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="obsolete">Feststelltaste</translation>
+        <translation>Feststelltaste</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="obsolete">Rollen</translation>
+        <translation>Rollen</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="obsolete">Rechte Umschalttaste</translation>
+        <translation>Rechte Umschalttaste</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="obsolete">Linke Umschalttaste</translation>
+        <translation>Linke Umschalttaste</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="obsolete">Strg rechts</translation>
+        <translation>Strg rechts</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="obsolete">Strg links</translation>
+        <translation>Strg links</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="obsolete">Alt rechts</translation>
+        <translation>Alt rechts</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="obsolete">Alt links</translation>
+        <translation>Alt links</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="obsolete">Meta rechts</translation>
+        <translation>Meta rechts</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="obsolete">Meta links</translation>
+        <translation>Meta links</translation>
     </message>
     <message>
         <source>A button</source>
-        <translation type="obsolete">A-Taste</translation>
+        <translation>A-Taste</translation>
     </message>
     <message>
         <source>B button</source>
-        <translation type="obsolete">B-Taste</translation>
+        <translation>B-Taste</translation>
     </message>
     <message>
         <source>X button</source>
-        <translation type="obsolete">X-Taste</translation>
+        <translation>X-Taste</translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation type="obsolete">Y-Taste</translation>
+        <translation>Y-Taste</translation>
     </message>
     <message>
         <source>LB button</source>
-        <translation type="obsolete">Linke Schultertaste</translation>
+        <translation>Linke Schultertaste</translation>
     </message>
     <message>
         <source>RB button</source>
-        <translation type="obsolete">Rechte Schultertaste</translation>
+        <translation>Rechte Schultertaste</translation>
     </message>
     <message>
         <source>Back button</source>
-        <translation type="obsolete">Zurück-Taste</translation>
+        <translation>Zurück-Taste</translation>
     </message>
     <message>
         <source>Start button</source>
-        <translation type="obsolete">Start-Taste</translation>
+        <translation>Start-Taste</translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation type="obsolete">Linker Analogstick</translation>
+        <translation>Linker Analogstick</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation type="obsolete">Rechter Analogstick</translation>
+        <translation>Rechter Analogstick</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation type="obsolete">Linker Analogstick (Rechts)</translation>
+        <translation>Linker Analogstick (Rechts)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation type="obsolete">Linker Analogstick (Links)</translation>
+        <translation>Linker Analogstick (Links)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation type="obsolete">Linker Analogstick (Runter)</translation>
+        <translation>Linker Analogstick (Runter)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation type="obsolete">Linker Analogstick (Hoch)</translation>
+        <translation>Linker Analogstick (Hoch)</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="obsolete">Linker Auslöser</translation>
+        <translation>Linker Auslöser</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="obsolete">Rechter Auslöser</translation>
+        <translation>Rechter Auslöser</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation type="obsolete">Rechter Analogstick (Runter)</translation>
+        <translation>Rechter Analogstick (Runter)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation type="obsolete">Rechter Analogstick (Hoch)</translation>
+        <translation>Rechter Analogstick (Hoch)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation type="obsolete">Rechter Analogstick (Rechts)</translation>
+        <translation>Rechter Analogstick (Rechts)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation type="obsolete">Rechter Analogstick (Links)</translation>
+        <translation>Rechter Analogstick (Links)</translation>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="obsolete">Steuerkreuz</translation>
+        <translation>Steuerkreuz</translation>
     </message>
 </context>
 </TS>

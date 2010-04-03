@@ -374,7 +374,7 @@ PageOptions::PageOptions(QWidget* parent) :
     pageLayout->setColumnStretch(1, 100);
     pageLayout->setColumnStretch(2, 100);
     pageLayout->setRowStretch(0, 0);
-    pageLayout->setRowStretch(1, 100);
+    //pageLayout->setRowStretch(1, 100);
     pageLayout->setRowStretch(2, 0);
     pageLayout->setContentsMargins(7, 7, 7, 0);
     pageLayout->setSpacing(0);
@@ -433,9 +433,9 @@ PageOptions::PageOptions(QWidget* parent) :
 
             IconedGroupBox* groupWeapons = new IconedGroupBox(this);
             //groupWeapons->setContentTopPadding(0);
-            groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            //groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             groupWeapons->setIcon(QIcon(":/res/weaponsicon.png"));
-            //groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             groupWeapons->setTitle(QGroupBox::tr("Weapons"));
             QGridLayout * WeaponsLayout = new QGridLayout(groupWeapons);
 
@@ -530,7 +530,7 @@ PageOptions::PageOptions(QWidget* parent) :
             AGGroupBox = new IconedGroupBox(this);
             //AGGroupBox->setContentTopPadding(0);
             AGGroupBox->setIcon(QIcon(":/res/graphicsicon.png"));
-            AGGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+            //AGGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
             AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
 
             QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
@@ -555,7 +555,7 @@ PageOptions::PageOptions(QWidget* parent) :
             QFrame * hr = new QFrame(AGGroupBox);
             hr->setFrameStyle(QFrame::HLine);
             hr->setLineWidth(3);
-            hr->setFixedHeight(12);
+            hr->setFixedHeight(10);
             GBAlayout->addWidget(hr);
 
             QLabel * resolution = new QLabel(AGGroupBox);
@@ -577,7 +577,7 @@ PageOptions::PageOptions(QWidget* parent) :
             hr = new QFrame(AGGroupBox);
             hr->setFrameStyle(QFrame::HLine);
             hr->setLineWidth(3);
-            hr->setFixedHeight(12);
+            hr->setFixedHeight(10);
             GBAlayout->addWidget(hr);
 
             QHBoxLayout * GBAvollayout = new QHBoxLayout(0);
@@ -601,7 +601,7 @@ PageOptions::PageOptions(QWidget* parent) :
             hr = new QFrame(AGGroupBox);
             hr->setFrameStyle(QFrame::HLine);
             hr->setLineWidth(3);
-            hr->setFixedHeight(12);
+            hr->setFixedHeight(10);
             GBAlayout->addWidget(hr);
 
             QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
@@ -619,11 +619,12 @@ PageOptions::PageOptions(QWidget* parent) :
             hr = new QFrame(AGGroupBox);
             hr->setFrameStyle(QFrame::HLine);
             hr->setLineWidth(3);
-            hr->setFixedHeight(12);
+            hr->setFixedHeight(10);
             GBAlayout->addWidget(hr);
 
                 QLabel *restartNote = new QLabel(this);
             restartNote->setText(QString("* ") + QLabel::tr("Restart game to apply"));
+            restartNote->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
             GBAlayout->addWidget(restartNote);
 
             gbTBLayout->addWidget(AGGroupBox, 0, 1, 3, 1);

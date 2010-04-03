@@ -82,7 +82,7 @@ HWForm::HWForm(QWidget *parent)
     playerHash = QString(QCryptographicHash::hash(gameSettings->value("net/nick","").toString().toLatin1(), QCryptographicHash::Md5).toHex());
 
     ui.setupUi(this);
-    setMinimumSize(800, 600);
+    setMinimumSize(760, 580);
 
     CustomizePalettes();
     

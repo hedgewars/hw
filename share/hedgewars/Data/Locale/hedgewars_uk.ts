@@ -5,45 +5,60 @@
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
-        <translation type="unfinished">Нова</translation>
+        <translation>Нова</translation>
+    </message>
+</context>
+<context>
+    <name>FreqSpinBox</name>
+    <message>
+        <source>Never</source>
+        <translation></translation>
+    </message>
+    <message numerus="yes">
+        <source>Every %1 turn</source>
+        <translation>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation type="unfinished">Редагувати зброю</translation>
+        <translation>Редагувати зброю</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Помилка</translation>
+        <translation>Помилка</translation>
     </message>
     <message>
         <source>Illegal ammo scheme</source>
-        <translation type="unfinished">Неможлива схема баєприпасів</translation>
+        <translation>Неможлива схема баєприпасів</translation>
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation type="unfinished">Редагувати схему</translation>
+        <translation>Редагувати схему</translation>
     </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -66,7 +81,7 @@
     </message>
     <message>
         <source>new</source>
-        <translation type="unfinished">Нова</translation>
+        <translation>Нова</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
@@ -96,59 +111,59 @@
     </message>
     <message>
         <source>Filter</source>
-        <translation type="unfinished">Фільтр</translation>
+        <translation>Фільтр</translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished">Всі</translation>
+        <translation>Всі</translation>
     </message>
     <message>
         <source>Small</source>
-        <translation type="unfinished">Малі</translation>
+        <translation>Малі</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished">Середні</translation>
+        <translation>Середні</translation>
     </message>
     <message>
         <source>Large</source>
-        <translation type="unfinished">Великі</translation>
+        <translation>Великі</translation>
     </message>
     <message>
         <source>Cavern</source>
-        <translation type="unfinished">Печери</translation>
+        <translation>Печери</translation>
     </message>
     <message>
         <source>Wacky</source>
-        <translation type="unfinished">Інші</translation>
+        <translation>Інші</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -178,45 +193,45 @@
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation type="unfinished">Закрийте конфлікти: </translation>
+        <translation>Закрийте конфлікти: </translation>
     </message>
     <message>
         <source>Room destroyed</source>
-        <translation type="unfinished">Кімнату закрито</translation>
+        <translation>Кімнату закрито</translation>
     </message>
     <message>
         <source>You got kicked</source>
-        <translation type="unfinished">Вас вигнали</translation>
+        <translation>Вас вигнали</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Пароль</translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation type="unfinished">Ваше ім&apos;я %1 вже
+        <translation>Ваше ім&apos;я %1 вже
 зареєстроване на Hedgewars.org
 Будь ласка введіть ваш пароль
 або змініть ім&apos;я:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation type="unfinished">%1 *** %2 увійшов до кімнати</translation>
+        <translation>%1 *** %2 увійшов до кімнати</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation type="unfinished">%1 *** %2 приєднався</translation>
+        <translation>%1 *** %2 приєднався</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
-        <translation type="unfinished">%1 *** %2 від&apos;єднаний (%3)</translation>
+        <translation>%1 *** %2 від&apos;єднаний (%3)</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
-        <translation type="unfinished">%1 *** %2 від&apos;єднаний</translation>
+        <translation>%1 *** %2 від&apos;єднаний</translation>
     </message>
 </context>
 <context>
@@ -230,44 +245,44 @@ or pick another nickname:</source>
     <name>PageAdmin</name>
     <message>
         <source>Server message:</source>
-        <translation type="unfinished">Повідомлення сервера:</translation>
+        <translation>Повідомлення сервера:</translation>
     </message>
     <message>
         <source>Set message</source>
-        <translation type="unfinished">Відправити повідомлення</translation>
+        <translation>Відправити повідомлення</translation>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
-        <translation type="unfinished">Відкрити кеш акаунтів</translation>
+        <translation>Відкрити кеш акаунтів</translation>
     </message>
 </context>
 <context>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished">Під&apos;єднання</translation>
+        <translation>Під&apos;єднання</translation>
     </message>
 </context>
 <context>
     <name>PageEditTeam</name>
     <message>
         <source>General</source>
-        <translation type="unfinished">Головний</translation>
+        <translation>Головний</translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation type="unfinished">Розширений</translation>
+        <translation>Розширений</translation>
     </message>
 </context>
 <context>
     <name>PageGameStats</name>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Нагороду за кращий постріл отримує &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; пунктами урону.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Нагороду за кращий постріл отримує &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; пунктами урону.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
@@ -275,7 +290,7 @@ or pick another nickname:</source>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
@@ -286,11 +301,11 @@ or pick another nickname:</source>
     <name>PageMain</name>
     <message>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation type="unfinished">Локальна гра (Грати на одному комп&apos;ютері)</translation>
+        <translation>Локальна гра (Грати на одному комп&apos;ютері)</translation>
     </message>
     <message>
         <source>Network Game (Play a game across a network)</source>
-        <translation type="unfinished">Мережна гра (Грати по мережі)</translation>
+        <translation>Мережна гра (Грати по мережі)</translation>
     </message>
 </context>
 <context>
@@ -315,18 +330,18 @@ or pick another nickname:</source>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
-        <translation type="unfinished">Контроль</translation>
+        <translation>Контроль</translation>
     </message>
 </context>
 <context>
     <name>PageNetType</name>
     <message>
         <source>LAN game</source>
-        <translation type="unfinished">Локальна гра</translation>
+        <translation>Локальна гра</translation>
     </message>
     <message>
         <source>Official server</source>
-        <translation type="unfinished">Офіційний сервер</translation>
+        <translation>Офіційний сервер</translation>
     </message>
 </context>
 <context>
@@ -341,19 +356,19 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Delete team</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -391,67 +406,67 @@ or pick another nickname:</source>
     <name>PageRoomsList</name>
     <message>
         <source>Create</source>
-        <translation type="unfinished">Створити</translation>
+        <translation>Створити</translation>
     </message>
     <message>
         <source>Join</source>
-        <translation type="unfinished">Приєднатися</translation>
+        <translation>Приєднатися</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished">Оновити</translation>
+        <translation>Оновити</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Помилка</translation>
+        <translation>Помилка</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
     <message>
         <source>Admin features</source>
-        <translation type="unfinished">Функції для адміністраторів</translation>
+        <translation>Функції для адміністраторів</translation>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation type="unfinished">І&apos;мя кімнати:</translation>
+        <translation>І&apos;мя кімнати:</translation>
     </message>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished">Ця гра скоро почнеться.
+        <translation>Ця гра скоро почнеться.
 Ви можете приєднатися і почати грати після старту.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished">Ця гра вже триває.
+        <translation>Ця гра вже триває.
 Ви маєте почекати поки гра закінчиться, і лише потім грати в неї.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished">%1 - це хост. Він може змінювати налаштування і початок гри</translation>
+        <translation>%1 - це хост. Він може змінювати налаштування і початок гри</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished">Випадкова карта</translation>
+        <translation>Випадкова карта</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="unfinished">Грати можна на обраних або випадкових картах.</translation>
+        <translation>Грати можна на обраних або випадкових картах.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="unfinished">Схема гри визначає загальні (час гри, час до смерті, вампіризм...)</translation>
+        <translation>Схема гри визначає загальні (час гри, час до смерті, вампіризм...)</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="unfinished">Схема зброї визначає наявну зброю та боєприпаси зброї</translation>
+        <translation>Схема зброї визначає наявну зброю та боєприпаси зброї</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
@@ -459,7 +474,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform></numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
@@ -475,90 +490,90 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>PageScheme</name>
     <message>
         <source>New</source>
-        <translation type="unfinished">Новий</translation>
+        <translation>Новий</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation type="unfinished">Увімкнути випадкові міни</translation>
+        <translation>Увімкнути випадкові міни</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation type="unfinished">Отримання 80% здоров&apos;я, яке втратив противник</translation>
+        <translation>Отримання 80% здоров&apos;я, яке втратив противник</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation type="unfinished">Нанесення вашим їжакам пошкодження, коли вони наносять удар іншим</translation>
+        <translation>Нанесення вашим їжакам пошкодження, коли вони наносять удар іншим</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
-        <translation type="unfinished">Ваш їжак не в змозі рухатися, використайте навички артилериста</translation>
+        <translation>Ваш їжак не в змозі рухатися, використайте навички артилериста</translation>
     </message>
     <message>
         <source>Random</source>
-        <translation type="unfinished">Випадково</translation>
+        <translation>Випадково</translation>
     </message>
     <message>
         <source>Seconds</source>
-        <translation type="unfinished">Секунд</translation>
+        <translation>Секунд</translation>
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation type="unfinished">Захистіть вашу фортецю і знищіть противника, дві команди максимум!</translation>
+        <translation>Захистіть вашу фортецю і знищіть противника, дві команди максимум!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation type="unfinished">Команд розташовані на протилежних сторонах мапи, дві команди максимум!</translation>
+        <translation>Команд розташовані на протилежних сторонах мапи, дві команди максимум!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
-        <translation type="unfinished">Земля не може бути знищена!</translation>
+        <translation>Земля не може бути знищена!</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation type="unfinished">Додати незнищенний кордон навколо місцевості</translation>
+        <translation>Додати незнищенний кордон навколо місцевості</translation>
     </message>
     <message>
         <source>Lower gravity</source>
-        <translation type="unfinished">Слабка гравітація</translation>
+        <translation>Слабка гравітація</translation>
     </message>
     <message>
         <source>Assisted aiming with laser sight</source>
-        <translation type="unfinished">Завжди використовувати лазерний приціл</translation>
+        <translation>Завжди використовувати лазерний приціл</translation>
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
-        <translation type="unfinished">Всі їжаки мають невразливість</translation>
+        <translation>Всі їжаки мають невразливість</translation>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -576,70 +591,70 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <name>PageSinglePlayer</name>
     <message>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation type="unfinished">Проста гра (швидка гра проти комп&apos;ютера, налаштування за замовчуванням)</translation>
+        <translation>Проста гра (швидка гра проти комп&apos;ютера, налаштування за замовчуванням)</translation>
     </message>
     <message>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="unfinished">Мультиплеєр (гра проти ваших друзів, або проти A.I.)</translation>
+        <translation>Мультиплеєр (гра проти ваших друзів, або проти A.I.)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="unfinished">Режим навчання (практика в цілому ряді навчальних місій). В РОЗРОБЦІ</translation>
+        <translation>Режим навчання (практика в цілому ряді навчальних місій). В РОЗРОБЦІ</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
-        <translation type="unfinished">Демки (дивитись записані демо-відео)</translation>
+        <translation>Демки (дивитись записані демо-відео)</translation>
     </message>
     <message>
         <source>Load (Load a previously saved game)</source>
-        <translation type="unfinished">Завантаження (Завантажити попередньо збережені ігри)</translation>
+        <translation>Завантаження (Завантажити попередньо збережені ігри)</translation>
     </message>
 </context>
 <context>
     <name>QAction</name>
     <message>
         <source>Kick</source>
-        <translation type="unfinished">Кікнути</translation>
+        <translation>Кікнути</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Старт</translation>
+        <translation>Старт</translation>
     </message>
     <message>
         <source>Restrict Joins</source>
-        <translation type="unfinished">Обмежити З&apos;єднання</translation>
+        <translation>Обмежити З&apos;єднання</translation>
     </message>
     <message>
         <source>Restrict Team Additions</source>
-        <translation type="unfinished">Обмежити додавання команд</translation>
+        <translation>Обмежити додавання команд</translation>
     </message>
     <message>
         <source>Info</source>
-        <translation type="unfinished">Інформація</translation>
+        <translation>Інформація</translation>
     </message>
     <message>
         <source>Ban</source>
-        <translation type="unfinished">Забанити</translation>
+        <translation>Забанити</translation>
     </message>
     <message>
         <source>Follow</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Add friend</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Unignore</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Remove friend</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -670,31 +685,31 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Append date and time to record file name</source>
-        <translation type="unfinished">Додавати дату і час в записані файли</translation>
+        <translation>Додавати дату і час в записані файли</translation>
     </message>
     <message>
         <source>Check for updates at startup</source>
-        <translation type="unfinished">Перевірити наявність оновлень при старті</translation>
+        <translation>Перевірити наявність оновлень при старті</translation>
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation type="unfinished">Зниження якості</translation>
+        <translation>Зниження якості</translation>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Enable frontend sounds</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Enable frontend music</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Frontend effects</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -709,19 +724,19 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Level</source>
-        <translation type="unfinished">Рівень</translation>
+        <translation>Рівень</translation>
     </message>
     <message>
         <source>(System default)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>generated maze...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -760,19 +775,19 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Game Modifiers</source>
-        <translation type="unfinished">Налаштування гри</translation>
+        <translation>Налаштування гри</translation>
     </message>
     <message>
         <source>Basic Settings</source>
-        <translation type="unfinished">Основні параметри</translation>
+        <translation>Основні параметри</translation>
     </message>
     <message>
         <source>Team Settings</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -839,84 +854,84 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Initial sound volume</source>
-        <translation type="unfinished">Початкова гучність звуку</translation>
+        <translation>Початкова гучність звуку</translation>
     </message>
     <message>
         <source>Damage Modifier</source>
-        <translation type="unfinished">Налаштування пошкодження</translation>
+        <translation>Налаштування пошкодження</translation>
     </message>
     <message>
         <source>Turn Time</source>
-        <translation type="unfinished">Час кроку</translation>
+        <translation>Час кроку</translation>
     </message>
     <message>
         <source>Initial Health</source>
-        <translation type="unfinished">Встановлення здоров&apos;я</translation>
+        <translation>Встановлення здоров&apos;я</translation>
     </message>
     <message>
         <source>Sudden Death Timeout</source>
-        <translation type="unfinished">Час до смерті</translation>
+        <translation>Час до смерті</translation>
     </message>
     <message>
         <source>Mines Time</source>
-        <translation type="unfinished">Таймер мін</translation>
+        <translation>Таймер мін</translation>
     </message>
     <message>
         <source>Mines</source>
-        <translation type="unfinished">Кількість мін</translation>
+        <translation>Кількість мін</translation>
     </message>
     <message>
         <source>Scheme Name:</source>
-        <translation type="unfinished">Ім&apos;я схеми:</translation>
+        <translation>Ім&apos;я схеми:</translation>
     </message>
     <message>
         <source>Crate Drops</source>
-        <translation type="unfinished">Кількість подарунків</translation>
+        <translation>Кількість подарунків</translation>
     </message>
     <message>
         <source>Game scheme</source>
-        <translation type="unfinished">Налаштування гри</translation>
+        <translation>Налаштування гри</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Grave</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Flag</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Locale</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -930,7 +945,7 @@ Some features might be broken or incomplete. Use at your own risk!</source>
     <name>QMainWindow</name>
     <message>
         <source>Hedgewars %1</source>
-        <translation type="unfinished">Hedgewars %1</translation>
+        <translation>Hedgewars %1</translation>
     </message>
 </context>
 <context>
@@ -988,7 +1003,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Ім&apos;я</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>
@@ -1055,61 +1070,61 @@ Please check your installation</source>
     </message>
     <message>
         <source>Ready</source>
-        <translation type="unfinished">Готовий</translation>
+        <translation>Готовий</translation>
     </message>
     <message>
         <source>Random Team</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>QTableWidget</name>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished">Ім&apos;я кімнати</translation>
+        <translation>Ім&apos;я кімнати</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished">Власник</translation>
+        <translation>Власник</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">Мапа</translation>
+        <translation>Мапа</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished">Правила</translation>
+        <translation>Правила</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Зброя</translation>
+        <translation>Зброя</translation>
     </message>
 </context>
 <context>
     <name>SelWeaponWidget</name>
     <message>
         <source>Probabilities</source>
-        <translation type="unfinished">Вірогідність</translation>
+        <translation>Вірогідність</translation>
     </message>
     <message>
         <source>Weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ammo in boxes</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Delays</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1131,67 +1146,67 @@ Please check your installation</source>
     <name>ToggleButtonWidget</name>
     <message>
         <source>Vampirism</source>
-        <translation type="unfinished">Вампіризм</translation>
+        <translation>Вампіризм</translation>
     </message>
     <message>
         <source>Karma</source>
-        <translation type="unfinished">Карма</translation>
+        <translation>Карма</translation>
     </message>
     <message>
         <source>Artillery</source>
-        <translation type="unfinished">Артилерія</translation>
+        <translation>Артилерія</translation>
     </message>
     <message>
         <source>Fort Mode</source>
-        <translation type="unfinished">Форт Мод</translation>
+        <translation>Форт Мод</translation>
     </message>
     <message>
         <source>Divide Teams</source>
-        <translation type="unfinished">Розділення Команд</translation>
+        <translation>Розділення Команд</translation>
     </message>
     <message>
         <source>Solid Land</source>
-        <translation type="unfinished">Щільний грунт</translation>
+        <translation>Щільний грунт</translation>
     </message>
     <message>
         <source>Add Border</source>
-        <translation type="unfinished">Додати кордони</translation>
+        <translation>Додати кордони</translation>
     </message>
     <message>
         <source>Low Gravity</source>
-        <translation type="unfinished">Слабка гравітація</translation>
+        <translation>Слабка гравітація</translation>
     </message>
     <message>
         <source>Laser Sight</source>
-        <translation type="unfinished">Лазерний приціл</translation>
+        <translation>Лазерний приціл</translation>
     </message>
     <message>
         <source>Invulnerable</source>
-        <translation type="unfinished">Безсмертя</translation>
+        <translation>Безсмертя</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation type="unfinished">Додати міни</translation>
+        <translation>Додати міни</translation>
     </message>
     <message>
         <source>Random Order</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>King</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Place Hedgehogs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Disable Girders</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1332,152 +1347,432 @@ info</source>
     </message>
     <message>
         <source>precise aim</source>
-        <translation type="unfinished">точна мета</translation>
+        <translation>точна мета</translation>
     </message>
     <message>
         <source>zoom in</source>
-        <translation type="unfinished">збільшити</translation>
+        <translation>збільшити</translation>
     </message>
     <message>
         <source>zoom out</source>
-        <translation type="unfinished">зменшити</translation>
+        <translation>зменшити</translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished">скидання зуму</translation>
+        <translation>скидання зуму</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished">стрибок у довжину</translation>
+        <translation>стрибок у довжину</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished">стрибок у висоту</translation>
+        <translation>стрибок у висоту</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Basic controls</source>
-        <translation type="unfinished">Основні елементи управління</translation>
+        <translation>Основні елементи управління</translation>
     </message>
     <message>
         <source>Weapon controls</source>
-        <translation type="unfinished">Контроль зброї</translation>
+        <translation>Контроль зброї</translation>
     </message>
     <message>
         <source>Camera and cursor controls</source>
-        <translation type="unfinished">Контроль камери і курсору</translation>
+        <translation>Контроль камери і курсору</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Інше</translation>
+        <translation>Інше</translation>
     </message>
 </context>
 <context>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation type="unfinished">Перемістити ваших їжаків</translation>
+        <translation>Перемістити ваших їжаків</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished">Подолання прогалин і перешкод, перепригнувши їх</translation>
+        <translation>Подолання прогалин і перешкод, перепригнувши їх</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished">Вогонь з обраної вами зброї</translation>
+        <translation>Вогонь з обраної вами зброї</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished">Обрати зброю або об&apos;єкт, що знаходиться під курсором</translation>
+        <translation>Обрати зброю або об&apos;єкт, що знаходиться під курсором</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation type="unfinished">Оберати іншого їжака (якщо можливо)</translation>
+        <translation>Оберати іншого їжака (якщо можливо)</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation type="unfinished">Змінити зброю</translation>
+        <translation>Змінити зброю</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished">Встановити таймер на бомбі</translation>
+        <translation>Встановити таймер на бомбі</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation type="unfinished">Перемістити камеру до активного їжака:</translation>
+        <translation>Перемістити камеру до активного їжака:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation type="unfinished">Перемістити курсор або камеру без використання миші:</translation>
+        <translation>Перемістити курсор або камеру без використання миші:</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation type="unfinished">Приблизити або віддалити камеру</translation>
+        <translation>Приблизити або віддалити камеру</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation type="unfinished">Поговорити з вашою командою або іншими учасниками</translation>
+        <translation>Поговорити з вашою командою або іншими учасниками</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation type="unfinished">Пауза, продовжити або залишити гру:</translation>
+        <translation>Пауза, продовжити або залишити гру:</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation type="unfinished">Змінити гучність звуку під час гри:</translation>
+        <translation>Змінити гучність звуку під час гри:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation type="unfinished">Увімкнути повноекранний режим:</translation>
+        <translation>Увімкнути повноекранний режим:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation type="unfinished">Зробити знімок гри:</translation>
+        <translation>Зробити знімок гри:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation type="unfinished">Увімкрути надписи над їжаками</translation>
+        <translation>Увімкрути надписи над їжаками</translation>
     </message>
 </context>
 <context>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished">Axis</translation>
+        <translation>Axis</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation type="unfinished">(Вгору)</translation>
+        <translation>(Вгору)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation type="unfinished">(Вниз)</translation>
+        <translation>(Вниз)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished">Капелюх</translation>
+        <translation>Капелюх</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation type="unfinished">(Вліво)</translation>
+        <translation>(Вліво)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation type="unfinished">(Вправо)</translation>
+        <translation>(Вправо)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation type="unfinished">Кнопка</translation>
+        <translation>Кнопка</translation>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="unfinished">Клавіатура</translation>
+        <translation>Клавіатура</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">Видалити</translation>
+        <translation>Видалити</translation>
+    </message>
+    <message>
+        <source>Mouse: Left button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse: Middle button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse: Right button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse: Wheel up</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse: Wheel down</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Backspace</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Tab</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Escape</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Space</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 0</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 4</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 5</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 6</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 7</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 8</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad 9</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad .</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad /</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad *</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad -</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Numpad +</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Enter</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Equals</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Home</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>End</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Page up</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Page down</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Num lock</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Caps lock</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Scroll lock</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right shift</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left shift</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right ctrl</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left ctrl</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right alt</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left alt</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right meta</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left meta</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>A button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>B button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>X button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Y button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>LB button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>RB button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Back button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Start button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Right)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Left)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Down)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Up)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left trigger</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right trigger</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Down)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Up)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Right)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Left)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>DPad</source>
+        <translation></translation>
     </message>
 </context>
 </TS>

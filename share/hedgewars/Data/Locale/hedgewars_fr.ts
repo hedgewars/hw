@@ -12,11 +12,11 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="obsolete">Jamais</translation>
+        <translation>Jamais</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="obsolete">
+        <translation>
             <numerusform>Chaque tour</numerusform>
             <numerusform>Tous les %1 tours</numerusform>
         </translation>
@@ -45,19 +45,19 @@
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -138,31 +138,31 @@
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -353,19 +353,19 @@ ou choisir un nouveau pseudo:</translation>
     </message>
     <message>
         <source>Delete team</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -485,7 +485,7 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -552,23 +552,23 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -633,23 +633,23 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     </message>
     <message>
         <source>Follow</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Add friend</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Unignore</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Remove friend</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -692,19 +692,19 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Enable frontend sounds</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Enable frontend music</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Frontend effects</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -723,15 +723,15 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     </message>
     <message>
         <source>(System default)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>generated maze...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -778,11 +778,11 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     </message>
     <message>
         <source>Team Settings</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -889,44 +889,44 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Grave</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Flag</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Locale</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1069,7 +1069,7 @@ Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <source>Random Team</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1115,11 +1115,11 @@ Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <source>Ammo in boxes</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Delays</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1185,23 +1185,23 @@ Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <source>Random Order</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>King</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Place Hedgehogs</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Disable Girders</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1468,7 +1468,7 @@ zoom</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished">Bouton directionnel</translation>
+        <translation>Bouton directionnel</translation>
     </message>
     <message>
         <source>(Left)</source>
@@ -1488,283 +1488,287 @@ zoom</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="obsolete">Souris: Bouton gauche</translation>
+        <translation>Souris: Bouton gauche</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="obsolete">Souris: Bouton central</translation>
+        <translation>Souris: Bouton central</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="obsolete">Souris: Bouton droit</translation>
+        <translation>Souris: Bouton droit</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="obsolete">Souris: Molette vers le haut</translation>
+        <translation>Souris: Molette vers le haut</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="obsolete">Souris: Molette vers le bas</translation>
+        <translation>Souris: Molette vers le bas</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="obsolete">Backspace</translation>
+        <translation>Backspace</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="obsolete">Tabulation</translation>
+        <translation>Tabulation</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="obsolete">Entrée</translation>
+        <translation>Entrée</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="obsolete">Pause</translation>
+        <translation>Pause</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="obsolete">Échap</translation>
+        <translation>Échap</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="obsolete">Espace</translation>
+        <translation>Espace</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">Supprimer</translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation type="obsolete">Pavé numérique 0</translation>
+        <translation>Pavé numérique 0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation type="obsolete">Pavé numérique 1</translation>
+        <translation>Pavé numérique 1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation type="obsolete">Pavé numérique 2</translation>
+        <translation>Pavé numérique 2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation type="obsolete">Pavé numérique 3</translation>
+        <translation>Pavé numérique 3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation type="obsolete">Pavé numérique 4</translation>
+        <translation>Pavé numérique 4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation type="obsolete">Pavé numérique 5</translation>
+        <translation>Pavé numérique 5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation type="obsolete">Pavé numérique 6</translation>
+        <translation>Pavé numérique 6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation type="obsolete">Pavé numérique 7</translation>
+        <translation>Pavé numérique 7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation type="obsolete">Pavé numérique 8</translation>
+        <translation>Pavé numérique 8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation type="obsolete">Pavé numérique 9</translation>
+        <translation>Pavé numérique 9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation type="obsolete">Pavé numérique .</translation>
+        <translation>Pavé numérique .</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation type="obsolete">Pavé numérique /</translation>
+        <translation>Pavé numérique /</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation type="obsolete">Pavé numérique *</translation>
+        <translation>Pavé numérique *</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation type="obsolete">Pavé numérique -</translation>
+        <translation>Pavé numérique -</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation type="obsolete">Pavé numérique +</translation>
+        <translation>Pavé numérique +</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="obsolete">Pavé numérique entrée</translation>
+        <translation>Pavé numérique entrée</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="obsolete">Égale</translation>
+        <translation>Égale</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="obsolete">Haut</translation>
+        <translation>Haut</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="obsolete">Bas</translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="obsolete">Droite</translation>
+        <translation>Droite</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="obsolete">Gauche</translation>
+        <translation>Gauche</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="obsolete">Insérer</translation>
+        <translation>Insérer</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="obsolete">Origine</translation>
+        <translation>Origine</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="obsolete">Fin</translation>
+        <translation>Fin</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="obsolete">Page précédente</translation>
+        <translation>Page précédente</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="obsolete">Page suivante</translation>
+        <translation>Page suivante</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation type="obsolete">Verr. num</translation>
+        <translation>Verr. num</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="obsolete">Verr. maj</translation>
+        <translation>Verr. maj</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="obsolete">Arrêt défil</translation>
+        <translation>Arrêt défil</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="obsolete">Maj droit</translation>
+        <translation>Maj droit</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="obsolete">Maj gauche</translation>
+        <translation>Maj gauche</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="obsolete">Ctrl droite</translation>
+        <translation>Ctrl droite</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="obsolete">Ctrl gauche</translation>
+        <translation>Ctrl gauche</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="obsolete">Alt droite</translation>
+        <translation>Alt droite</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="obsolete">Alt gauche</translation>
+        <translation>Alt gauche</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="obsolete">Meta droite</translation>
+        <translation>Meta droite</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="obsolete">Meta gauche</translation>
+        <translation>Meta gauche</translation>
     </message>
     <message>
         <source>A button</source>
-        <translation type="obsolete">Bouton A</translation>
+        <translation>Bouton A</translation>
     </message>
     <message>
         <source>B button</source>
-        <translation type="obsolete">Bouton B</translation>
+        <translation>Bouton B</translation>
     </message>
     <message>
         <source>X button</source>
-        <translation type="obsolete">Bouton X</translation>
+        <translation>Bouton X</translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation type="obsolete">Bouton Y</translation>
+        <translation>Bouton Y</translation>
     </message>
     <message>
         <source>LB button</source>
-        <translation type="obsolete">Bouton LB</translation>
+        <translation>Bouton LB</translation>
     </message>
     <message>
         <source>RB button</source>
-        <translation type="obsolete">Bouton RB</translation>
+        <translation>Bouton RB</translation>
     </message>
     <message>
         <source>Back button</source>
-        <translation type="obsolete">Bouton retour</translation>
+        <translation>Bouton retour</translation>
     </message>
     <message>
         <source>Start button</source>
-        <translation type="obsolete">Bouton démarrer</translation>
+        <translation>Bouton démarrer</translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation type="obsolete">Stick gauche</translation>
+        <translation>Stick gauche</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation type="obsolete">Stick droit</translation>
+        <translation>Stick droit</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation type="obsolete">Stick gauche (Droite)</translation>
+        <translation>Stick gauche (Droite)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation type="obsolete">Stick gauche (Gauche)</translation>
+        <translation>Stick gauche (Gauche)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation type="obsolete">Stick gauche (Bas)</translation>
+        <translation>Stick gauche (Bas)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation type="obsolete">Stick gauche (Haut)</translation>
+        <translation>Stick gauche (Haut)</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="obsolete">Gâchette gauche</translation>
+        <translation>Gâchette gauche</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="obsolete">Gâchette droite</translation>
+        <translation>Gâchette droite</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation type="obsolete">Stick droit (Bas)</translation>
+        <translation>Stick droit (Bas)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation type="obsolete">Stick droit (Haut)</translation>
+        <translation>Stick droit (Haut)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation type="obsolete">Stick droit (Droite)</translation>
+        <translation>Stick droit (Droite)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation type="obsolete">Stick droit (Gauche)</translation>
+        <translation>Stick droit (Gauche)</translation>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="obsolete">DPad</translation>
+        <translation>DPad</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation></translation>
     </message>
 </context>
 </TS>

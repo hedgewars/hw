@@ -12,11 +12,11 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="obsolete">從不</translation>
+        <translation>從不</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="obsolete">
+        <translation>
             <numerusform>每 %1 個回合</numerusform>
         </translation>
     </message>
@@ -25,7 +25,7 @@
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation type="unfinished">改變武器設置</translation>
+        <translation>改變武器設置</translation>
     </message>
     <message>
         <source>Error</source>
@@ -37,26 +37,26 @@
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation type="unfinished">修改遊戲設置</translation>
+        <translation>修改遊戲設置</translation>
     </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -137,31 +137,31 @@
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -280,13 +280,13 @@ or pick another nickname:</source>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;p&gt;最佳殺手是&lt;b&gt;%1&lt;/b&gt;单回合擊殺刺蝟數&lt;b&gt;%2&lt;/b&gt;&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;p&gt;本輪總共有&lt;b&gt;%1&lt;/b&gt;只刺蝟被擊殺&lt;/p&gt;</numerusform>
         </translation>
     </message>
@@ -350,19 +350,19 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Delete team</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -424,27 +424,27 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation type="unfinished">房間名：</translation>
+        <translation>房間名：</translation>
     </message>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished">遊戲正在等待中。
+        <translation>遊戲正在等待中。
 您可以加入等待遊戲開始。</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished">遊戲正在進行中。
+        <translation>遊戲正在進行中。
 您可以加入觀戰但必須等遊戲結束才能參與遊戲。</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished">%1是房主，他可以調整設置、開始遊戲。</translation>
+        <translation>%1是房主，他可以調整設置、開始遊戲。</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished">隨機地圖</translation>
+        <translation>隨機地圖</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
@@ -452,21 +452,21 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="unfinished">遊戲設置包括一般選項例如回合時間，突然死亡或吸血模式。</translation>
+        <translation>遊戲設置包括一般選項例如回合時間，突然死亡或吸血模式。</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="unfinished">武器設置包括可以選用的武器和彈藥數量。</translation>
+        <translation>武器設置包括可以選用的武器和彈藥數量。</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>有%1個用戶端連接到這個房間。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>有%1個隊伍加入這個房間。</numerusform>
         </translation>
     </message>
@@ -480,7 +480,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -559,11 +559,11 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -632,26 +632,26 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Add friend</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Unignore</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Remove friend</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>QCheckBox</name>
     <message>
         <source>Enable sound</source>
-        <translation type="unfinished">開啟遊戲音效</translation>
+        <translation>開啟遊戲音效</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -671,7 +671,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Enable music</source>
-        <translation type="unfinished">開啟遊戲音樂</translation>
+        <translation>開啟遊戲音樂</translation>
     </message>
     <message>
         <source>Append date and time to record file name</source>
@@ -683,23 +683,23 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation type="unfinished">降低顯示效果</translation>
+        <translation>降低顯示效果</translation>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished">顯示武器提示訊息</translation>
+        <translation>顯示武器提示訊息</translation>
     </message>
     <message>
         <source>Enable frontend sounds</source>
-        <translation type="unfinished">啟用菜單音效</translation>
+        <translation>啟用菜單音效</translation>
     </message>
     <message>
         <source>Enable frontend music</source>
-        <translation type="unfinished">啟用菜單音樂</translation>
+        <translation>啟用菜單音樂</translation>
     </message>
     <message>
         <source>Frontend effects</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -718,15 +718,15 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>(System default)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>generated maze...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -773,11 +773,11 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Team Settings</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -884,44 +884,44 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Grave</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Flag</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Locale</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -993,11 +993,11 @@ Please check your installation</source>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">匿稱</translation>
+        <translation>匿稱</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>
-        <translation type="unfinished">請輸入您的匿稱</translation>
+        <translation>請輸入您的匿稱</translation>
     </message>
 </context>
 <context>
@@ -1064,57 +1064,57 @@ Please check your installation</source>
     </message>
     <message>
         <source>Random Team</source>
-        <translation type="unfinished">隨機隊伍分配</translation>
+        <translation>隨機隊伍分配</translation>
     </message>
 </context>
 <context>
     <name>QTableWidget</name>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished">房間名</translation>
+        <translation>房間名</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished">人數</translation>
+        <translation>人數</translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished">隊伍</translation>
+        <translation>隊伍</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished">創建者</translation>
+        <translation>創建者</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">地圖</translation>
+        <translation>地圖</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished">規則</translation>
+        <translation>規則</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">武器</translation>
+        <translation>武器</translation>
     </message>
 </context>
 <context>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation type="unfinished">武器設置</translation>
+        <translation>武器設置</translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation type="unfinished">幾率</translation>
+        <translation>幾率</translation>
     </message>
     <message>
         <source>Ammo in boxes</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Delays</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1180,23 +1180,23 @@ Please check your installation</source>
     </message>
     <message>
         <source>Random Order</source>
-        <translation type="unfinished">隨機順序</translation>
+        <translation>隨機順序</translation>
     </message>
     <message>
         <source>King</source>
-        <translation type="unfinished">國王模式</translation>
+        <translation>國王模式</translation>
     </message>
     <message>
         <source>Place Hedgehogs</source>
-        <translation type="unfinished">手動放置</translation>
+        <translation>手動放置</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Disable Girders</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1341,344 +1341,428 @@ info</source>
     </message>
     <message>
         <source>zoom in</source>
-        <translation type="unfinished">放大</translation>
+        <translation>放大</translation>
     </message>
     <message>
         <source>zoom out</source>
-        <translation type="unfinished">縮小</translation>
+        <translation>縮小</translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished">重置</translation>
+        <translation>重置</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished">跳遠</translation>
+        <translation>跳遠</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished">跳高</translation>
+        <translation>跳高</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Basic controls</source>
-        <translation type="unfinished">基本控制</translation>
+        <translation>基本控制</translation>
     </message>
     <message>
         <source>Weapon controls</source>
-        <translation type="unfinished">武器控制</translation>
+        <translation>武器控制</translation>
     </message>
     <message>
         <source>Camera and cursor controls</source>
-        <translation type="unfinished">鏡頭和遊標控制</translation>
+        <translation>鏡頭和遊標控制</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">其他</translation>
+        <translation>其他</translation>
     </message>
 </context>
 <context>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation type="unfinished">移動、瞄準：</translation>
+        <translation>移動、瞄準：</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished">越過障礙：</translation>
+        <translation>越過障礙：</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished">開火、使用物品：</translation>
+        <translation>開火、使用物品：</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished">選取武器、目的地：</translation>
+        <translation>選取武器、目的地：</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation type="unfinished">切換刺蝟（如果可用）：</translation>
+        <translation>切換刺蝟（如果可用）：</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation type="unfinished">選取武器、物品：</translation>
+        <translation>選取武器、物品：</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished">設置定時炸彈等武器時間：</translation>
+        <translation>設置定時炸彈等武器時間：</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation type="unfinished">移動鏡頭到選中刺蝟：</translation>
+        <translation>移動鏡頭到選中刺蝟：</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation type="unfinished">不用滑鼠移動遊標或鏡頭：</translation>
+        <translation>不用滑鼠移動遊標或鏡頭：</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation type="unfinished">調整鏡頭放大倍數：</translation>
+        <translation>調整鏡頭放大倍數：</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation type="unfinished">同隊友或全部參與者對話：</translation>
+        <translation>同隊友或全部參與者對話：</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation type="unfinished">暫停、繼續或離開遊戲：</translation>
+        <translation>暫停、繼續或離開遊戲：</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation type="unfinished">調整遊戲時音量：</translation>
+        <translation>調整遊戲時音量：</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation type="unfinished">全屏模式：</translation>
+        <translation>全屏模式：</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation type="unfinished">截圖：</translation>
+        <translation>截圖：</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation type="unfinished">切換刺蝟標籤顯示方式：</translation>
+        <translation>切換刺蝟標籤顯示方式：</translation>
     </message>
 </context>
 <context>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished">軸</translation>
+        <translation>軸</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation type="unfinished">上</translation>
+        <translation>上</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation type="unfinished">下</translation>
+        <translation>下</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished">帽子</translation>
+        <translation>帽子</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation type="unfinished">左</translation>
+        <translation>左</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation type="unfinished">右</translation>
+        <translation>右</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation type="unfinished">按鍵</translation>
+        <translation>按鍵</translation>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="unfinished">鍵盤</translation>
+        <translation>鍵盤</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="obsolete">滑鼠：左鍵</translation>
+        <translation>滑鼠：左鍵</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="obsolete">滑鼠：中鍵</translation>
+        <translation>滑鼠：中鍵</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="obsolete">滑鼠：右鍵</translation>
+        <translation>滑鼠：右鍵</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="obsolete">滑鼠滾輪：向上</translation>
+        <translation>滑鼠滾輪：向上</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="obsolete">滑鼠滾輪：向下</translation>
+        <translation>滑鼠滾輪：向下</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="obsolete">倒退鍵</translation>
+        <translation>倒退鍵</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="obsolete">製錶鍵</translation>
+        <translation>製錶鍵</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="obsolete">清除</translation>
+        <translation>清除</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="obsolete">返回</translation>
+        <translation>返回</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="obsolete">暫停鍵</translation>
+        <translation>暫停鍵</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="obsolete">逸出鍵</translation>
+        <translation>逸出鍵</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="obsolete">空白鍵</translation>
+        <translation>空白鍵</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">刪除鍵</translation>
+        <translation>刪除鍵</translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation type="obsolete">小鍵盤0</translation>
+        <translation>小鍵盤0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation type="obsolete">小鍵盤1</translation>
+        <translation>小鍵盤1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation type="obsolete">小鍵盤2</translation>
+        <translation>小鍵盤2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation type="obsolete">小鍵盤3</translation>
+        <translation>小鍵盤3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation type="obsolete">小鍵盤4</translation>
+        <translation>小鍵盤4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation type="obsolete">小鍵盤5</translation>
+        <translation>小鍵盤5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation type="obsolete">小鍵盤6</translation>
+        <translation>小鍵盤6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation type="obsolete">小鍵盤7</translation>
+        <translation>小鍵盤7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation type="obsolete">小鍵盤8</translation>
+        <translation>小鍵盤8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation type="obsolete">小鍵盤9</translation>
+        <translation>小鍵盤9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation type="obsolete">小鍵盤.</translation>
+        <translation>小鍵盤.</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation type="obsolete">小鍵盤/</translation>
+        <translation>小鍵盤/</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation type="obsolete">小鍵盤*</translation>
+        <translation>小鍵盤*</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation type="obsolete">小鍵盤-</translation>
+        <translation>小鍵盤-</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation type="obsolete">小鍵盤+</translation>
+        <translation>小鍵盤+</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="obsolete">回車鍵</translation>
+        <translation>回車鍵</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="obsolete">等於</translation>
+        <translation>等於</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="obsolete">上</translation>
+        <translation>上</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="obsolete">下</translation>
+        <translation>下</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="obsolete">右</translation>
+        <translation>右</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="obsolete">左</translation>
+        <translation>左</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="obsolete">插入鍵</translation>
+        <translation>插入鍵</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="obsolete">Home鍵</translation>
+        <translation>Home鍵</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="obsolete">End鍵</translation>
+        <translation>End鍵</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="obsolete">向上翻頁鍵</translation>
+        <translation>向上翻頁鍵</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="obsolete">向下翻頁鍵</translation>
+        <translation>向下翻頁鍵</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation type="obsolete">小鍵盤數位鎖</translation>
+        <translation>小鍵盤數位鎖</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="obsolete">大小寫切換鍵</translation>
+        <translation>大小寫切換鍵</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="obsolete">Scroll Lock鍵</translation>
+        <translation>Scroll Lock鍵</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="obsolete">右Shift鍵</translation>
+        <translation>右Shift鍵</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="obsolete">左Shift鍵</translation>
+        <translation>左Shift鍵</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="obsolete">右Ctrl鍵</translation>
+        <translation>右Ctrl鍵</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="obsolete">左Ctrl鍵</translation>
+        <translation>左Ctrl鍵</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="obsolete">右Alt鍵</translation>
+        <translation>右Alt鍵</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="obsolete">左Alt鍵</translation>
+        <translation>左Alt鍵</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="obsolete">右meta鍵</translation>
+        <translation>右meta鍵</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="obsolete">左meta鍵</translation>
+        <translation>左meta鍵</translation>
+    </message>
+    <message>
+        <source>A button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>B button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>X button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Y button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>LB button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>RB button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Back button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Start button</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Right)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Left)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Down)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left stick (Up)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Left trigger</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right trigger</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Down)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Up)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Right)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Right stick (Left)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>DPad</source>
+        <translation></translation>
     </message>
 </context>
 </TS>
