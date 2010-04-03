@@ -257,27 +257,27 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Fetch data</source>
-        <translation type="unfinished"></translation>
+        <translation>Получить данные</translation>
     </message>
     <message>
         <source>Server message for latest version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Сообщение сервера для последней версии клиента:</translation>
     </message>
     <message>
         <source>Server message for previous versions:</source>
-        <translation type="unfinished"></translation>
+        <translation>Сообщение сервера для предыдущих версий клиента:</translation>
     </message>
     <message>
         <source>Latest version protocol number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Номер протокола последнего релиза:</translation>
     </message>
     <message>
         <source>MOTD preview:</source>
-        <translation type="unfinished"></translation>
+        <translation>Предпросмотр сообщения сервера:</translation>
     </message>
     <message>
         <source>Set data</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить данные</translation>
     </message>
 </context>
 <context>
@@ -601,7 +601,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отключить добавляемые объекты на генерируемых картах.</translation>
     </message>
 </context>
 <context>
@@ -1677,7 +1677,7 @@ info</source>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Ввод</translation>
     </message>
     <message>
         <source>Equals</source>
