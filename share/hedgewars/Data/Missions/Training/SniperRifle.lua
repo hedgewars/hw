@@ -17,7 +17,8 @@
 
 local caption = {
 	["en"] = "Sniper Training",
-	["de"] = "Scharfschützen-Training"
+	["de"] = "Scharfschützen-Training",
+	["pt_PT"] = "Treino com Sniper"
 	-- To add other languages, just add lines similar to the
 	-- existing ones - don't forget the trailing ","!
 	}
@@ -192,7 +193,6 @@ function onGameTick()
 		ShowMission(loc(caption), loc(subcaption), loc(timeout), -amSkip, 0);
 		-- How about killing our poor hog due to his poor performance?
 		SetHealth(player, 0);
-        TurnTimeLeft = 0
 		-- Just to be sure set the goal time to 1 ms
 		time_goal = 1
 	end
