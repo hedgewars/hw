@@ -107,6 +107,8 @@ protoNumber2ver 27 = "0.9.11"
 protoNumber2ver 28 = "0.9.12-dev"
 protoNumber2ver 29 = "0.9.12"
 protoNumber2ver 30 = "0.9.13-dev"
+protoNumber2ver 31 = "0.9.13"
+protoNumber2ver 32 = "0.9.14-dev"
 protoNumber2ver _ = "Unknown"
 
 askFromConsole :: String -> IO String
