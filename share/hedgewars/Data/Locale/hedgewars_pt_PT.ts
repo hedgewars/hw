@@ -1233,7 +1233,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Disable Land Objects</source>
-        <translation type="unfinished"></translation>
+        <translation>Desactivar Objectos no Terreno</translation>
     </message>
 </context>
 <context>
