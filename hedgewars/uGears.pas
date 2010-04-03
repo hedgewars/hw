@@ -1307,7 +1307,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 0);
 
             HatVisible:= true;
-            with HH^ do
+            (* with HH^ do
                 if (HatTex <> nil)
                 and (HatVisibility > 0) then
                     DrawTextureF(HatTex,
@@ -1317,7 +1317,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                         0,
                         hwSign(Gear^.dX),
                         32,
-                        32);
+                        32); *)
         end;
 
         case amt of
