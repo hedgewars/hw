@@ -1459,29 +1459,75 @@ PageAdmin::PageAdmin(QWidget* parent) :
 {
     QGridLayout * pageLayout = new QGridLayout(this);
 
-    QLabel * lblSM = new QLabel(this);
-    lblSM->setText(tr("Server message:"));
-    pageLayout->addWidget(lblSM, 0, 0);
+    // 0
+    pbAsk = addButton(tr("Fetch data"), pageLayout, 0, 0, 1, 3);
+    connect(pbAsk, SIGNAL(clicked()), this, SIGNAL(askServerVars()));
+    
+    // 1
+    QLabel * lblSMN = new QLabel(this);
+    lblSMN->setText(tr("Server message for latest version:"));
+    pageLayout->addWidget(lblSMN, 1, 0);
 
-    leServerMessage = new QLineEdit(this);
-    pageLayout->addWidget(leServerMessage, 0, 1);
+    leServerMessageNew = new QLineEdit(this);
+    pageLayout->addWidget(leServerMessageNew, 1, 1);
 
-    pbSetSM = addButton(tr("Set message"), pageLayout, 0, 2);
-    pbClearAccountsCache = addButton(tr("Clear Accounts Cache"), pageLayout, 1, 0);
+    // 2
+    QLabel * lblSMO = new QLabel(this);
+    lblSMO->setText(tr("Server message for previous versions:"));
+    pageLayout->addWidget(lblSMO, 2, 0);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
+    leServerMessageOld = new QLineEdit(this);
+    pageLayout->addWidget(leServerMessageOld, 2, 1);
+
+    // 3
+    QLabel * lblP = new QLabel(this);
+    lblP->setText(tr("Latest version protocol number:"));
+    pageLayout->addWidget(lblP, 3, 0);
+
+    sbProtocol = new QSpinBox(this);
+    pageLayout->addWidget(sbProtocol, 3, 1);
+
+    // 4
+    QLabel * lblPreview = new QLabel(this);
+    lblPreview->setText(tr("MOTD preview:"));
+    pageLayout->addWidget(lblPreview, 4, 0);
+
+    tb = new QTextBrowser(this);
+    pageLayout->addWidget(tb, 4, 1, 1, 2);
+    connect(leServerMessageNew, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
+    connect(leServerMessageOld, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
+    
+    // 5
+    pbClearAccountsCache = addButton(tr("Clear Accounts Cache"), pageLayout, 5, 0);
+    
+    // 6
+    pbSetSM = addButton(tr("Set data"), pageLayout, 6, 0, 1, 3);
+
+    // 7
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 7, 0, true);
 
     connect(pbSetSM, SIGNAL(clicked()), this, SLOT(smChanged()));
 }
 
 void PageAdmin::smChanged()
 {
-    emit setServerMessage(leServerMessage->text());
+    emit setServerMessageNew(leServerMessageNew->text());
+    emit setServerMessageOld(leServerMessageOld->text());
+    emit setProtocol(sbProtocol->value());
 }
 
-void PageAdmin::serverMessage(const QString & str)
+void PageAdmin::serverMessageNew(const QString & str)
 {
-    leServerMessage->setText(str);
+    leServerMessageNew->setText(str);
+}
+
+void PageAdmin::serverMessageOld(const QString & str)
+{
+    leServerMessageOld->setText(str);
+}
+void PageAdmin::protocol(int proto)
+{
+    sbProtocol->setValue(proto);
 }
 
 /////////////////////////////////////////////////

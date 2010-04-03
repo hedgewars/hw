@@ -22,6 +22,7 @@ data Action =
     | AnswerSameClan [String]
     | AnswerLobby [String]
     | SendServerMessage
+    | SendServerVars
     | RoomAddThisClient Int -- roomID
     | RoomRemoveThisClient String
     | RemoveTeam String
@@ -118,10 +119,21 @@ processAction (clID, serverInfo, clients, rooms) SendServerMessage = do
     return (clID, serverInfo, clients, rooms)
     where
         client = clients ! clID
-        message = if clientProto client < 29 then
-            serverMessageForOldVersions
+        message si = if clientProto client < latestReleaseVersion si then
+            serverMessageForOldVersions si
             else
-            serverMessage
+            serverMessage si
+
+processAction (clID, serverInfo, clients, rooms) SendServerVars = do
+    writeChan (sendChan $ clients ! clID) ("SERVER_VARS" : vars)
+    return (clID, serverInfo, clients, rooms)
+    where
+        client = clients ! clID
+        vars = [
+            "MOTD_NEW", serverMessage serverInfo, 
+            "MOTD_OLD", serverMessageForOldVersions serverInfo, 
+            "LATEST_PROTO", show $ latestReleaseVersion serverInfo
+            ]
 
 
 processAction (clID, serverInfo, clients, rooms) (ProtocolError msg) = do

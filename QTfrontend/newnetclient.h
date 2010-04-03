@@ -118,6 +118,9 @@ class HWNewNet : public QObject
 
   void roomsList(const QStringList&);
   void serverMessage(const QString &);
+  void serverMessageNew(const QString &);
+  void serverMessageOld(const QString &);
+  void latestProtocolVar(int);
 
   void setReadyStatus(const QString & nick, bool isReady);
   void setMyReadyStatus(bool isReady);
@@ -135,8 +138,10 @@ class HWNewNet : public QObject
   void onTeamColorChanged(const HWTeam& team);
   void onParamChanged(const QString & param, const QStringList & value);
 
-  void newServerMessage(const QString &);
-
+  void setServerMessageNew(const QString &);
+  void setServerMessageOld(const QString &);
+  void setLatestProtocolVar(int proto);
+  void askServerVars();
 
   void JoinRoom(const QString & room);
   void CreateRoom(const QString & room);

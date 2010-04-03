@@ -744,8 +744,13 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
         ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
 
 // admin stuff
-    connect(hwnet, SIGNAL(serverMessage(const QString&)), ui.pageAdmin, SLOT(serverMessage(const QString &)));
-    connect(ui.pageAdmin, SIGNAL(setServerMessage(const QString&)), hwnet, SLOT(newServerMessage(const QString &)));
+    connect(hwnet, SIGNAL(serverMessageNew(const QString&)), ui.pageAdmin, SLOT(serverMessageNew(const QString &)));
+    connect(hwnet, SIGNAL(serverMessageOld(const QString&)), ui.pageAdmin, SLOT(serverMessageOld(const QString &)));
+    connect(hwnet, SIGNAL(latestProtocolVar(int)), ui.pageAdmin, SLOT(protocol(int)));
+    connect(ui.pageAdmin, SIGNAL(setServerMessageNew(const QString&)), hwnet, SLOT(setServerMessageNew(const QString &)));
+    connect(ui.pageAdmin, SIGNAL(setServerMessageOld(const QString&)), hwnet, SLOT(setServerMessageOld(const QString &)));
+    connect(ui.pageAdmin, SIGNAL(setProtocol(int)), hwnet, SLOT(setLatestProtocolVar(int)));
+    connect(ui.pageAdmin, SIGNAL(askServerVars()), hwnet, SLOT(askServerVars()));
     connect(ui.pageAdmin->pbClearAccountsCache, SIGNAL(clicked()), hwnet, SLOT(clearAccountsCache()));
 
 // disconnect

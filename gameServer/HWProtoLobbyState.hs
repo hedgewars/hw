@@ -153,21 +153,28 @@ handleCmd_lobby clID clients rooms ["BAN", banNick] =
         client = clients IntMap.! clID
 
 
-handleCmd_lobby clID clients rooms ["SET_SERVER_MESSAGE", "NEW", newMessage] =
+
+handleCmd_lobby clID clients rooms ["SET_SERVER_VAR", "MOTD_NEW", newMessage] =
         [ModifyServerInfo (\si -> si{serverMessage = newMessage}) | isAdministrator client]
     where
         client = clients IntMap.! clID
 
-handleCmd_lobby clID clients rooms ["SET_SERVER_MESSAGE", "OLD", newMessage] =
+handleCmd_lobby clID clients rooms ["SET_SERVER_VAR", "MOTD_OLD", newMessage] =
         [ModifyServerInfo (\si -> si{serverMessageForOldVersions = newMessage}) | isAdministrator client]
     where
         client = clients IntMap.! clID
 
-handleCmd_lobby clID clients rooms ["SET_RELEASE_PROTOCOL_NUMBER", protoNum] =
+handleCmd_lobby clID clients rooms ["SET_SERVER_VAR", "LATEST_PROTO", protoNum] =
     [ModifyServerInfo (\si -> si{latestReleaseVersion = fromJust readNum}) | isAdministrator client && isJust readNum]
     where
         client = clients IntMap.! clID
         readNum = maybeRead protoNum :: Maybe Word16
+
+handleCmd_lobby clID clients rooms ["GET_SERVER_VAR"] =
+    [SendServerVars | isAdministrator client]
+    where
+        client = clients IntMap.! clID
+
 
 handleCmd_lobby clID clients rooms ["CLEAR_ACCOUNTS_CACHE"] =
         [ClearAccountsCache | isAdministrator client]

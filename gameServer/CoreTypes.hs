@@ -150,8 +150,8 @@ newServerInfo = (
         True
         "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
         "<font color=yellow><h3>Hedgewars 0.9.12 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
+        31
         46631
-        30
         0
         ""
         ""

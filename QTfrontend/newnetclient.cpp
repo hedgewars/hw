@@ -153,7 +153,7 @@ void HWNewNet::RawSendNet(const QString & str)
 
 void HWNewNet::RawSendNet(const QByteArray & buf)
 {
-//  qDebug() << "Client: " << QString(buf).split("\n");
+  //qDebug() << "Client: " << QString(buf).split("\n");
     NetSocket.write(buf);
     NetSocket.write("\n\n", 2);
 }
@@ -202,7 +202,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 
 void HWNewNet::ParseCmd(const QStringList & lst)
 {
-//  qDebug() << "Server: " << lst;
+  //qDebug() << "Server: " << lst;
 
     if(!lst.size())
     {
@@ -294,6 +294,21 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             emit chatStringLobby(tmp.join("\n").prepend('\x01'));
         else
             emit chatStringFromNet(tmp.join("\n").prepend('\x01'));
+        return;
+    }
+
+    if (lst[0] == "SERVER_VARS") {
+        QStringList tmp = lst;
+        tmp.removeFirst();
+        while (tmp.size() >= 2)
+        {
+            if(tmp[0] == "MOTD_NEW") emit serverMessageNew(tmp[1]);
+            else if(tmp[0] == "MOTD_OLD") emit serverMessageOld(tmp[1]);
+            else if(tmp[0] == "LATEST_PROTO") emit latestProtocolVar(tmp[1].toInt());
+                
+            tmp.removeFirst();
+            tmp.removeFirst();
+        }
         return;
     }
 
@@ -718,7 +733,22 @@ bool HWNewNet::isInRoom()
     return netClientState > 2;
 }
 
-void HWNewNet::newServerMessage(const QString & msg)
+void HWNewNet::setServerMessageNew(const QString & msg)
 {
-    RawSendNet(QString("SET_SERVER_MESSAGE%1%2").arg(delimeter).arg(msg));
+    RawSendNet(QString("SET_SERVER_VAR%1MOTD_NEW%1%2").arg(delimeter).arg(msg));
+}
+
+void HWNewNet::setServerMessageOld(const QString & msg)
+{
+    RawSendNet(QString("SET_SERVER_VAR%1MOTD_OLD%1%2").arg(delimeter).arg(msg));
+}
+
+void HWNewNet::setLatestProtocolVar(int proto)
+{
+    RawSendNet(QString("SET_SERVER_VAR%1LATEST_PROTO%1%2").arg(delimeter).arg(proto));
+}
+
+void HWNewNet::askServerVars()
+{
+    RawSendNet(QString("GET_SERVER_VAR"));    
 }

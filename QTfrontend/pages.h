@@ -479,17 +479,26 @@ public:
     QPushButton * pbClearAccountsCache;
 
 private:
-    QLineEdit * leServerMessage;
+    QLineEdit * leServerMessageNew;
+    QLineEdit * leServerMessageOld;
     QPushButton * pbSetSM;
+    QPushButton * pbAsk;
+    QSpinBox * sbProtocol;
+    QTextBrowser * tb;
 
 private slots:
     void smChanged();
 
 public slots:
-    void serverMessage(const QString & str);
+    void serverMessageNew(const QString & str);
+    void serverMessageOld(const QString & str);
+    void protocol(int proto);
 
 signals:
-    void setServerMessage(const QString & str);
+    void setServerMessageNew(const QString & str);
+    void setServerMessageOld(const QString & str);
+    void setProtocol(int proto);
+    void askServerVars();
 };
 
 
