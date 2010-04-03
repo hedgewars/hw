@@ -138,31 +138,31 @@
     </message>
     <message>
         <source>Type</source>
-        <translation>Tyyppi</translation>
+        <translation type="unfinished">Tyyppi</translation>
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -244,15 +244,39 @@ tai valitse toinen nimimerkki:</translation>
     <name>PageAdmin</name>
     <message>
         <source>Server message:</source>
-        <translation>Palvelimen viesti:</translation>
+        <translation type="obsolete">Palvelimen viesti:</translation>
     </message>
     <message>
         <source>Set message</source>
-        <translation>Aseta viesti</translation>
+        <translation type="obsolete">Aseta viesti</translation>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
         <translation>Tyhjennä käyttäjätili-välimuisti</translation>
+    </message>
+    <message>
+        <source>Fetch data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for latest version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for previous versions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Latest version protocol number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MOTD preview:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set data</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -353,19 +377,19 @@ tai valitse toinen nimimerkki:</translation>
     </message>
     <message>
         <source>Delete team</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -485,7 +509,7 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
     </message>
     <message>
         <source>Random Maze</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -727,11 +751,11 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
     </message>
     <message>
         <source>generated maze...</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mission</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -922,11 +946,11 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1767,7 +1791,7 @@ tiedot</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

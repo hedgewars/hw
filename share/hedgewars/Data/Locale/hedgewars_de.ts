@@ -249,15 +249,39 @@ wähle einen anderen Spitznamen:</translation>
     <name>PageAdmin</name>
     <message>
         <source>Server message:</source>
-        <translation>Servernachricht:</translation>
+        <translation type="obsolete">Servernachricht:</translation>
     </message>
     <message>
         <source>Set message</source>
-        <translation>Servernachricht festlegen</translation>
+        <translation type="obsolete">Servernachricht festlegen</translation>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
         <translation>Zwischenspeicher leeren</translation>
+    </message>
+    <message>
+        <source>Fetch data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for latest version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for previous versions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Latest version protocol number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MOTD preview:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set data</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

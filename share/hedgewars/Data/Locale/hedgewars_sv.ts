@@ -244,15 +244,39 @@ eller välj ett annat smeknamn</translation>
     <name>PageAdmin</name>
     <message>
         <source>Server message:</source>
-        <translation>Servermeddelande</translation>
+        <translation type="obsolete">Servermeddelande</translation>
     </message>
     <message>
         <source>Set message</source>
-        <translation>Ställ in meddelande</translation>
+        <translation type="obsolete">Ställ in meddelande</translation>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
         <translation>Töm användarcache</translation>
+    </message>
+    <message>
+        <source>Fetch data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for latest version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for previous versions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Latest version protocol number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MOTD preview:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set data</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -244,15 +244,39 @@ ou escolha outro nome de utilizador:</translation>
     <name>PageAdmin</name>
     <message>
         <source>Server message:</source>
-        <translation>Mensagem do servidor:</translation>
+        <translation type="obsolete">Mensagem do servidor:</translation>
     </message>
     <message>
         <source>Set message</source>
-        <translation>Definir mensagem</translation>
+        <translation type="obsolete">Definir mensagem</translation>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
         <translation>Limpar a cache das contas</translation>
+    </message>
+    <message>
+        <source>Fetch data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for latest version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for previous versions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Latest version protocol number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MOTD preview:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set data</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -926,7 +950,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

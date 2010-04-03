@@ -248,15 +248,39 @@ o elige otro nick:</translation>
     <name>PageAdmin</name>
     <message>
         <source>Server message:</source>
-        <translation>Mensaje del servidor:</translation>
+        <translation type="obsolete">Mensaje del servidor:</translation>
     </message>
     <message>
         <source>Set message</source>
-        <translation>Establecer mensaje</translation>
+        <translation type="obsolete">Establecer mensaje</translation>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
         <translation>Vaciar caché de cuentas</translation>
+    </message>
+    <message>
+        <source>Fetch data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for latest version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for previous versions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Latest version protocol number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MOTD preview:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set data</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -664,7 +688,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Enable sound</source>
-        <translation>Habilitar sonido</translation>
+        <translation>Habilitar sonidos del juego</translation>
     </message>
     <message>
         <source>Show FPS</source>
@@ -676,7 +700,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Enable music</source>
-        <translation>Habilitar música</translation>
+        <translation>Habilitar música del juego</translation>
     </message>
     <message>
         <source>Frontend fullscreen</source>

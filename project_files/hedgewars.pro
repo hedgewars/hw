@@ -32,7 +32,7 @@ HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h \
 	../QTfrontend/team.h ../QTfrontend/teamselect.h \
 	../QTfrontend/teamselhelper.h ../QTfrontend/togglebutton.h \
 	../QTfrontend/ui_hwform.h ../QTfrontend/vertScrollArea.h \
-	../QTfrontend/weaponItem.h ../QTFrontend/xfire.h
+	../QTfrontend/weaponItem.h ../QTfrontend/xfire.h
 
 SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/about.cpp ../QTfrontend/ammoSchemeModel.cpp \

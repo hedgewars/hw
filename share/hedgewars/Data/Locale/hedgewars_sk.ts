@@ -245,15 +245,39 @@ si vyberte inú prezývku:</translation>
     <name>PageAdmin</name>
     <message>
         <source>Server message:</source>
-        <translation>Správa serveru:</translation>
+        <translation type="obsolete">Správa serveru:</translation>
     </message>
     <message>
         <source>Set message</source>
-        <translation>Nastaviť správu</translation>
+        <translation type="obsolete">Nastaviť správu</translation>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
         <translation>Vymazať vyrovnávaciu pamäť účtov</translation>
+    </message>
+    <message>
+        <source>Fetch data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for latest version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server message for previous versions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Latest version protocol number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MOTD preview:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set data</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1745,35 +1769,35 @@ ježkov</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

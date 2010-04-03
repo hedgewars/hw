@@ -249,11 +249,11 @@ bądź wybierz inny nick:</translation>
     <name>PageAdmin</name>
     <message>
         <source>Server message:</source>
-        <translation>Wiadomość od serwera:</translation>
+        <translation type="obsolete">Wiadomość od serwera:</translation>
     </message>
     <message>
         <source>Set message</source>
-        <translation>Ustaw wiadomość</translation>
+        <translation type="obsolete">Ustaw wiadomość</translation>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
@@ -261,27 +261,27 @@ bądź wybierz inny nick:</translation>
     </message>
     <message>
         <source>Fetch data</source>
-        <translation type="obsolete">Pobierz dane</translation>
+        <translation>Pobierz dane</translation>
     </message>
     <message>
         <source>Server message for latest version:</source>
-        <translation type="obsolete">Wiadomość dla najnowszej wersji gry:</translation>
+        <translation>Wiadomość dla najnowszej wersji gry:</translation>
     </message>
     <message>
         <source>Server message for previous versions:</source>
-        <translation type="obsolete">Wiadomość dla poprzednich wersji gry:</translation>
+        <translation>Wiadomość dla poprzednich wersji gry:</translation>
     </message>
     <message>
         <source>Latest version protocol number:</source>
-        <translation type="obsolete">Ostatni nr. wersji protokołu:</translation>
+        <translation>Ostatni nr. wersji protokołu:</translation>
     </message>
     <message>
         <source>MOTD preview:</source>
-        <translation type="obsolete">Podgląd wiadomości:</translation>
+        <translation>Podgląd wiadomości:</translation>
     </message>
     <message>
         <source>Set data</source>
-        <translation type="obsolete">Zapisz</translation>
+        <translation>Zapisz</translation>
     </message>
 </context>
 <context>
@@ -306,11 +306,11 @@ bądź wybierz inny nick:</translation>
     <name>PageGameStats</name>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Odznaczenie za najlepszy strzał przyznano &lt;b&gt;%1&lt;/b&gt;, zadał(a) on(a) &lt;b&gt;%2&lt;/b&gt; punktów obrażeń.&lt;/p&gt;</translation>
+        <translation type="unfinished">&lt;p&gt;Odznaczenie za najlepszy strzał przyznano &lt;b&gt;%1&lt;/b&gt;, zadał(a) on(a) &lt;b&gt;%2&lt;/b&gt; punktów obrażeń.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>&lt;p&gt;Najlepszym zabójcą jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabiciami w przeciągu tury.&lt;/p&gt;</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
@@ -318,7 +318,7 @@ bądź wybierz inny nick:</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation>
+        <translation type="unfinished">
             <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeży zostało zabitych w tej walce.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeży zostało zabitych w tej walce.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeży zostało zabitych w tej walce.&lt;/p&gt;</numerusform>
@@ -358,7 +358,7 @@ bądź wybierz inny nick:</translation>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
-        <translation>Kontrola</translation>
+        <translation type="unfinished">Kontrola</translation>
     </message>
 </context>
 <context>
