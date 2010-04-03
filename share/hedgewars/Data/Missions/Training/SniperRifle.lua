@@ -18,6 +18,7 @@
 local caption = {
 	["en"] = "Sniper Training",
 	["de"] = "Scharfschützen-Training",
+	["pl"] = "Trening Snajperski",
 	["pt_PT"] = "Treino com Sniper"
 	-- To add other languages, just add lines similar to the
 	-- existing ones - don't forget the trailing ","!
@@ -57,7 +58,8 @@ local success = {
 
 local teamname = {
 	["en"] = "Sniperz",
-	["de"] = "Heckenschützen"
+	["de"] = "Heckenschützen",
+	["pl"] = "Snajperzy"
 	}
 
 local hogname = {

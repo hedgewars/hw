@@ -105,7 +105,7 @@
 02:00=A vida de %1 foi curta
 02:00=%1 desligou-se da Matrix
 02:00=%1 passou à história
-02:00=%1 'tá morto que nem uma pedra
+02:00=%1 está morto que nem uma pedra
 02:00=%1 foi-se
 02:00=%1 expirou
 02:00=Despojado da vida, %1 descansa em paz
@@ -126,18 +126,18 @@
 02:01=%1 esqueceu-se do insuflável
 02:01=%1 devia ter ido à natação
 02:01=%1 deixou a prancha em casa
-02:01=%1 'tá lavadinho
-02:01=%1 é um ouriço empapado
+02:01=%1 está lavadinho
+02:01=%1 é um ouriço bem encharcado
 02:01=%1 esqueceu-se do salva-vidas
 02:01=%1 faz splish splash splish
-02:01=%1 'tá a dormir com os peixinhos
+02:01=%1 está a dormir com os peixinhos
 02:01=%1 nunca gostou de aquários
 02:01=%1 disse que tinha sede
 02:01=O mar reclama %1
 02:01=%1 está perdido no mar
 02:01=%1 devia ter trazido o equipamento de mergulho
 02:01=%1 vai ter um funeral no mar
-02:01=%1 pensa profundamente fundo
+02:01=%1 está com aquela sensação de se estar a afundar
 02:01=%1 pratica costas
 02:01=%1 vai à procura do Titanic
 02:01=%1 não é Jesus
@@ -156,30 +156,30 @@
 02:01=O teu pato insuflável ficou triste, %1
 02:01=%1 devia ter comprado uma mota aquática
 02:01=%1 não gosta de desportos náuticos
-02:01=%1 vai ser um profissional de bolhas
+02:01=%1 adora ver bolhinhas
 02:01=%1 não aterrou na jangada
 02:01=%1 acha que a água salgada faz bem à pele
 02:01=%1 põe água salgada nas feridas
 02:01=%1 caiu da prancha
 02:01=%1 tomou um banhito
-02:01=%1 'tá todo molhado
-02:01=%1 lavou as penas
+02:01=%1 está todo molhado
+02:01=%1 foi lavar os espinhos
 02:01=%1 agora vive no Pérola Negra
 
 ; Round starts
 02:02=Vamos lutar!
 02:02=Armado e preparado!
-02:02='Tamos preparados para rambar!
+02:02=Preparem-se para uma ronda de estrondo!
 02:02=Que venham eles!
 02:02=Vamos começar a festa
-02:02=O último ouriço a estar de pé vence
+02:02=O último ouriço de pé vence
 02:02=Bora bora bora!
 02:02=Vamos rockar!
 02:02=Vamos esmagar!
 02:02=Está a começar...
 02:02=Isto é o início de algo grande
 02:02=Bem-vindo ao Hedgewars
-02:02=Bem vindo à linha da frente
+02:02=Bem-vindo à linha da frente
 02:02=Esmaga os teus inimigos!
 02:02=Que ganhe o melhor ouriço
 02:02=Vencer ou morrer
@@ -210,8 +210,8 @@
 02:02=Luta com fair-play
 02:02=Luta porcamente
 02:02=Luta com honra
-02:02=Não cedas
-02:02=Nunca desistas
+02:02=Não desistas
+02:02=Nunca te rendas
 02:02=Rebenta-os e empilha-os
 02:02=Que comece a festa explosiva!
 02:02=Espero que estejas pronto para a rixa!
@@ -219,7 +219,7 @@
 02:02=Os ouriços avançam!
 02:02=Vai haver tiros e bombas e socos nas trombas!
 02:02=Não temas!
-02:02=Sê bravo e conquista
+02:02=Sê corajoso e conquista
 
 ; Round ends (win; unused atm)
 02:03=...
@@ -237,8 +237,8 @@
 02:05=Ligaduras frescas!
 02:05=Isto irá fazer-te sentir melhor
 02:05=Um Hi-Potion! Ups, jogo errado
-02:05=Um "agarra-me-já"!
-02:05=Agarra isso
+02:05=Um "agarra-me já"!
+02:05=Agarra-o
 02:05=Um lanche rico em energia
 02:05=Um remédio para as dores
 02:05=Dosagem Recomendada: quantas mais melhor!
@@ -276,7 +276,7 @@
 02:07=Utilidades!
 02:07=Utilize esta caixa
 02:07=Cuidado aí em baixo
-02:07=Mais utilidades!
+02:07=Mais ferramentas!
 02:07=Ferramentas para ti!
 02:07=Isto poderá ser bom!
 02:07=Use com cabeça
@@ -306,19 +306,19 @@
 02:08=%1 decide que a melhor coisa que pode fazer é... nada
 02:08=%1 é um mariquinhas
 02:08=Cócórócócó, %1 é uma galinha
-02:08=%1 'tá meio amarelo
+02:08=%1 está meio amarelo
 02:08=%1 é um cobardolas!
 02:08=%1 fica à espera da morte súbita
-02:08=%1 não gosta de luta
+02:08=%1 não gosta de violência
 02:08=%1 está à procura do sentido da vida
 02:08=%1 não valia grande coisa de qualquer maneira
 02:08=%1 não se queria alistar no exército sequer
 02:08=Pára de nos fazer perder tempo, %1
 02:08=Estou desapontado contigo %1
-02:08=Vá lá, consegues fazer melhor que isso %1
+02:08=Vá lá, tu consegues fazer melhor que isso %1
 02:08=A vontade de %1 foi-se
 02:08=%1 tem coisas melhores para fazer
-02:08=%1 tá cheio de medo
+02:08=%1 está cheio de medo
 02:08=%1 adormeceu
 
 ; Hog (%1) hurts himself only
@@ -329,7 +329,7 @@
 02:09=%1 estava a segurar a arma ao contrário
 02:09=%1 é um pouco sádico
 02:09=%1 é masoquista
-02:09=%1 não possui auto-preservação
+02:09=%1 não possui qualquer instinto de auto preservação
 02:09=%1 misturou tudo
 02:09=%1 fez asneira
 02:09=Que jogada infeliz %1
@@ -342,7 +342,7 @@
 02:09=%1 ajuda o inimigo
 02:09=Isso foi mesmo estúpido %1
 02:09=%1 vive pelo ditado "sem dor, não há ganho"
-02:09=%1 está confuso
+02:09=%1 está um pouco confuso
 02:09=%1 magoa-se na sua confusão
 02:09=%1 tem um dom para se humilhar
 02:09=%1 é um desastrado!
@@ -353,8 +353,8 @@
 02:09=%1 fez de propósito... completamente
 02:09=Não digo a ninguém se não disseres %1
 02:09=Que vergonha!
-02:09=Tenho a certeza que ninguém viu isso %1
-02:09=%1 precisa de reler o manual
+02:09=Tenho a certeza que ninguém reparou %1
+02:09=%1 precisa de rever o manual
 02:09=A arma de %1 funcionou mal obviamente
 
 ; Hog shot an home run (using the bat and another hog)
