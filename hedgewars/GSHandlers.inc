@@ -957,7 +957,7 @@ if ((HHGear^.State and gstHHDriven) = 0)
     begin
     DeleteGear(Gear);
     isCursorVisible:= false;
-    ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^);
+    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
     exit
     end;
 
@@ -1778,7 +1778,7 @@ if TestCollisionYwithGear(HHGear, 1)
         end;
     DeleteGear(Gear);
     isCursorVisible:= false;
-    ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^);
+    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
     exit
     end;
 
@@ -2753,7 +2753,7 @@ if  (Gear^.Health = 0)
         end;
     DeleteGear(Gear);
     isCursorVisible:= false;
-    ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^);
+    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
 //    if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
 //    Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
     //AddCaption(trmsg[sidFuel]+': '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
