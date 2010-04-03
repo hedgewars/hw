@@ -105,6 +105,8 @@ PageMain::PageMain(QWidget* parent) :
     //pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
     BtnExit = addButton(":/res/Exit.png", pageLayout, 4, 0, 1, 1, true);
+    BtnExit->setFixedHeight(BtnSetup->height());
+    BtnExit->setStyleSheet("QPushButton{margin-top: 2px;}");
 }
 
 PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
@@ -121,6 +123,8 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     BtnTeamDiscard = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
     BtnTeamSave = addButton(":/res/Save.png", pageLayout, 1, 2, true);;
     BtnTeamSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
+    BtnTeamDiscard->setFixedHeight(BtnTeamSave->height());
+    BtnTeamDiscard->setStyleSheet("QPushButton{margin-top: 31px;}");
 
     QHBoxLayout * page1Layout = new QHBoxLayout(page1);
     page1Layout->setAlignment(Qt::AlignTop);
@@ -629,6 +633,9 @@ PageOptions::PageOptions(QWidget* parent) :
     BtnSaveOptions->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
 
     BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
+    BtnBack->setFixedHeight(BtnSaveOptions->height());
+    BtnBack->setFixedWidth(BtnBack->width()+2);
+    BtnBack->setStyleSheet("QPushButton{margin: 22px 0 9px 2px;}");
 }
 
 PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
@@ -879,6 +886,8 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
     BtnLoad = addButton(":/res/Save.png", bottomLine, 2, true);
     BtnLoad->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
     BtnLoad->setToolTip(tr("Load (Load a previously saved game)"));
+    BtnBack->setFixedHeight(BtnLoad->height());
+    BtnBack->setStyleSheet("QPushButton{margin-top: 31px;}");
 }
 
 PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
@@ -887,6 +896,8 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 2);
     pageLayout->setColumnStretch(2, 1);
+    pageLayout->setRowStretch(0, 1);
+    pageLayout->setRowStretch(2, 1);
 
     CBSelect = new QComboBox(this);
 
@@ -903,7 +914,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     BtnStartTrain->setText(QPushButton::tr("Go!"));
     pageLayout->addWidget(BtnStartTrain, 1, 2);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
 }
 
 PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
@@ -918,7 +929,9 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
     BtnDefault = addButton(tr("Default"), pageLayout, 1, 1);
     BtnDelete = addButton(tr("Delete"), pageLayout, 1, 2);
     BtnSave = addButton(":/res/Save.png", pageLayout, 1, 3, true);
-    BtnSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
+    BtnSave->setStyleSheet("QPushButton{margin: 24px 0px 0px 0px;}");
+    BtnBack->setFixedHeight(BtnSave->height());
+    BtnBack->setStyleSheet("QPushButton{margin-top: 31px;}");
 
     connect(BtnDefault, SIGNAL(clicked()), pWeapons, SLOT(setDefault()));
     connect(BtnSave, SIGNAL(clicked()), pWeapons, SLOT(save()));
