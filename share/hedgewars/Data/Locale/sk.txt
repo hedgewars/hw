@@ -58,21 +58,56 @@
 
 ; Správy o udalostiach
 ; Ježko (%1) zomrel
-02:00=%1 otrčil kopytá!
-02:00=%1 uvidel svetlo na konci tunela!
-02:00=%1 toto naozaj nečakal!
-02:00=%1 s týmto fakt nepočítal!
+02:00=%1 otrčil kopytá
+02:00=%1 uvidel svetlo na konci tunela
+02:00=%1 toto naozaj nečakal
+02:00=%1 s týmto fakt nepočítal
+02:00=%1 zamával na rozlúčku
+02:00=%1, nech ti je zem ľahká!
+02:00=%1 už vonia kvietky odspodu
+02:00=%1 navždy ostane v našich srdciach
+02:00=%1 už nie je medzi nami
+02:00=%1 nás navždy opustil
+02:00=%1 mal chabé zdravie
+02:00=%1 mal smolu
+02:00=%1 sa stretne so svojim Stvoriteľom
+02:00=%1 je ex-ježko
+02:00=%1 to nezvládol
+02:00=%1 vedel, že to bola samovražená misia
+02:00=%1 vyexpiroval
+02:00=Zbohom %1, sotva sme ťa poznali!
+02:00=%1 je už za riekou Styx
+02:00=Škoda, že %1 nemá ešte jeden život
+02:00=%1 odišiel za lepším
 ; Ježko (%1) sa utopil
 02:01=%1 sa hrá na ponorku!
 02:01=%1 napodobnil Titanik!
 02:01=%1 pláve ako sekera!
 02:01=%1 sa šiel okúpať!
 02:01=Vyzerá, že %1 mal veľký smäd!
+02:01=%1 mal chodiť na kurz plávania!
+02:01=%1 si mal vziať neoprén!
+02:01=%1 sa stratil v mori!
+02:01=%1 nevie chodiť po vode!
+02:01=%1 hovorí "Glo-glo-glo-glo.."
+02:01=%1 nemá rád vodné športy
+02:01=%1 sa chystá preskúmať dno oceána
 ; Zápas začína
 02:02=Do boja!
 02:02=Ozbrojení a pripravení!
 02:02=Veľa štastia
 02:02=Príjemnú zábavu
+02:02=Poďme na to!
+02:02=Takto to začína..
+02:02=Nech vyhrá ten lepší
+02:02=Bez boja sa nevzdáme!
+02:02=Víťazstvo alebo smrť
+02:02=Teraz to roztočíme
+02:02=Zničte nepriateľa!
+02:02=Ukážme im to!
+02:02=Dajme im na frak!
+02:02=Nikdy sa nevzdávaj
+02:02=Bojuj čestne!
 ; Nová krabica so zdravím
 02:05=Doktora!
 02:05=Prvá pomoc z nebies!
@@ -81,6 +116,8 @@
 02:05=Odporúčané dávkovanie: všetko, čo nájdete
 02:05=Zásielka v núdzi
 02:05=Zásoby!
+02:05=Po tomto sa budete cítiť lepšie!
+02:05=Na zdravie!
 ; Nová krabica so zbraňou
 02:06=Ďalšie zbrane!
 02:06=Posily!
@@ -98,6 +135,7 @@
 02:07=Nástroje pre vás!
 02:07=Toto by mohlo byť užitočné!
 02:07=Oh, táto krabica je ale ťažká
+02:07=Používajte rozvážne
 ; Ježko (%1) preskočil kolo
 02:08=%1 je tak stráááášne nudný...
 02:08=%1 je neuveriteľne lenivý
@@ -121,7 +159,9 @@
 02:09=To bolo dosť hlúpe, %1
 02:09=%1 je pomýlený
 02:09=%1 je nešikovný
-02:09=Aké trápne!
+02:09=To je trapas!
+02:09=%1 to teraz súperovi ukázal!
+02:09=Nykto nie je dokonalí!
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
 02:10=Vták, lietadlo, ...
