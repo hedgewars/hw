@@ -36,7 +36,7 @@ procedure DumpBuffer;
 
 implementation
 {$IFDEF DEBUGFILE}
-uses uMisc;
+uses uMisc, uConsole;
 {$ENDIF}
 var cirbuf: array[0..63] of Longword;
     n: byte;
@@ -77,6 +77,12 @@ end;
 
 function GetRandom(m: LongWord): LongWord;
 begin
+if m = 0 then
+    begin
+    WriteLnToConsole('Warning: GetRandom(0) not defined');
+    GetRandom:= 0;
+    exit
+    end;
 GetNext;
 GetRandom:= GetNext mod m
 end;
