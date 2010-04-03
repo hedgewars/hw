@@ -594,6 +594,10 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
         <source>Disable girders when generating random maps.</source>
         <translation>Avaktivera balkar när slumpade kartor genereras.</translation>
     </message>
+    <message>
+        <source>Disable land objects when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1227,6 +1231,10 @@ Var god kontrollera din installation</translation>
     <message>
         <source>Disable Girders</source>
         <translation>Avaktivera balkar</translation>
+    </message>
+    <message>
+        <source>Disable Land Objects</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

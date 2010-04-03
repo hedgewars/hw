@@ -1270,7 +1270,10 @@ if hasBorder then
 
 if (GameFlags and gfDisableGirders) <> 0 then hasGirders:= false;
 
-if ((GameFlags and gfForts) = 0) and (Pathz[ptMapCurrent] = '') then AddObjects;
+if ((GameFlags and gfForts) = 0)
+    and ((GameFlags and gfDisableLandObjects) = 0)
+    and (Pathz[ptMapCurrent] = '')
+    then AddObjects;
 
 FreeLandObjects;
 

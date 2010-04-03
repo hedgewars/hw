@@ -599,6 +599,10 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
         <source>Disable girders when generating random maps.</source>
         <translation>Platziere keine Bauträger auf Zufallskarten.</translation>
     </message>
+    <message>
+        <source>Disable land objects when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1232,6 +1236,10 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <source>Disable Girders</source>
         <translation>Keine Bauträger</translation>
+    </message>
+    <message>
+        <source>Disable Land Objects</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

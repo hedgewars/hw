@@ -594,6 +594,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>Disable girders when generating random maps.</source>
         <translation>Disable girders when generating random maps.</translation>
     </message>
+    <message>
+        <source>Disable land objects when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1226,6 +1230,10 @@ Please check your installation</translation>
     <message>
         <source>Disable Girders</source>
         <translation>Disable Girders</translation>
+    </message>
+    <message>
+        <source>Disable Land Objects</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

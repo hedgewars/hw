@@ -1236,7 +1236,11 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders.png");
     TBW_disablegirders->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Girders") + "</b>:<br />" + tr("Disable girders when generating random maps."));
     glGMLayout->addWidget(TBW_disablegirders,3,3,1,1);
-    
+
+    TBW_disablelandobjects = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableLandObjects.png");
+    TBW_disablelandobjects->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Land Objects") + "</b>:<br />" + tr("Disable land objects when generating random maps."));
+    glGMLayout->addWidget(TBW_disablelandobjects,4,0,1,1);
+
     // Right
     QLabel * l;
 
@@ -1419,15 +1423,16 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(TBW_placehog, 14);
     mapper->addMapping(TBW_sharedammo, 15);
     mapper->addMapping(TBW_disablegirders, 16);
-    mapper->addMapping(SB_DamageModifier, 17);
-    mapper->addMapping(SB_TurnTime, 18);
-    mapper->addMapping(SB_InitHealth, 19);
-    mapper->addMapping(SB_SuddenDeath, 20);
-    mapper->addMapping(SB_CaseProb, 21);
-    mapper->addMapping(SB_MinesTime, 22);
-    mapper->addMapping(SB_Mines, 23);
-    mapper->addMapping(SB_MineDuds, 24);
-    mapper->addMapping(SB_Explosives, 25);
+    mapper->addMapping(TBW_disablelandobjects, 17);
+    mapper->addMapping(SB_DamageModifier, 18);
+    mapper->addMapping(SB_TurnTime, 19);
+    mapper->addMapping(SB_InitHealth, 20);
+    mapper->addMapping(SB_SuddenDeath, 21);
+    mapper->addMapping(SB_CaseProb, 22);
+    mapper->addMapping(SB_MinesTime, 23);
+    mapper->addMapping(SB_Mines, 24);
+    mapper->addMapping(SB_MineDuds, 25);
+    mapper->addMapping(SB_Explosives, 26);
 
     mapper->toFirst();
 }

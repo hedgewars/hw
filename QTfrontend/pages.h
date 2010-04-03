@@ -446,6 +446,7 @@ private:
     ToggleButtonWidget * TBW_placehog;
     ToggleButtonWidget * TBW_sharedammo;
     ToggleButtonWidget * TBW_disablegirders;
+    ToggleButtonWidget * TBW_disablelandobjects;
 
     QSpinBox * SB_DamageModifier;
     QSpinBox * SB_TurnTime;

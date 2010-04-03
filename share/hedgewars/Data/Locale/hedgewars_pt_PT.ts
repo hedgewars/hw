@@ -594,6 +594,10 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <source>Disable girders when generating random maps.</source>
         <translation>Desactivar vigas em mapas gerados aleatoriamente.</translation>
     </message>
+    <message>
+        <source>Disable land objects when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1226,6 +1230,10 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>Disable Girders</source>
         <translation>Desactivar Vigas</translation>
+    </message>
+    <message>
+        <source>Disable Land Objects</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

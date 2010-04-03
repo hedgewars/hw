@@ -594,6 +594,10 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
         <source>Disable girders when generating random maps.</source>
         <translation>Kytke palkit pois päältä satunnaisissa kartoissa.</translation>
     </message>
+    <message>
+        <source>Disable land objects when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1226,6 +1230,10 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <source>Disable Girders</source>
         <translation>Ei palkkeja</translation>
+    </message>
+    <message>
+        <source>Disable Land Objects</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

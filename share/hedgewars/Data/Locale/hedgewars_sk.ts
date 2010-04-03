@@ -599,6 +599,10 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
         <source>Disable girders when generating random maps.</source>
         <translation>Zakázať trámy pri generovaní náhodných máp.</translation>
     </message>
+    <message>
+        <source>Disable land objects when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1232,6 +1236,10 @@ Skontrolujte si vašu inštaláciu</translation>
     <message>
         <source>Disable Girders</source>
         <translation>Vypnúť trámy</translation>
+    </message>
+    <message>
+        <source>Disable Land Objects</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

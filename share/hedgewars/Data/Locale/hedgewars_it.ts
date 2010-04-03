@@ -598,6 +598,10 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
         <source>Disable girders when generating random maps.</source>
         <translation>Disabilita le travi nella generazione di mappe casuali.</translation>
     </message>
+    <message>
+        <source>Disable land objects when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1231,6 +1235,10 @@ Controllare la propria installazione</translation>
     <message>
         <source>Disable Girders</source>
         <translation>Disabilita Travi</translation>
+    </message>
+    <message>
+        <source>Disable Land Objects</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

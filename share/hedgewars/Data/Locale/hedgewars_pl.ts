@@ -603,6 +603,10 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
         <source>Disable girders when generating random maps.</source>
         <translation>Wyłącz mosty przy tworzeniu losowych map.</translation>
     </message>
+    <message>
+        <source>Disable land objects when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1236,6 +1240,10 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <source>Disable Girders</source>
         <translation>Wyłącz mosty</translation>
+    </message>
+    <message>
+        <source>Disable Land Objects</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

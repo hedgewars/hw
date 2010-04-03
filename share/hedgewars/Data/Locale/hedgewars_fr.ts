@@ -594,6 +594,10 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
         <source>Disable girders when generating random maps.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Disable land objects when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1225,6 +1229,10 @@ Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <source>Disable Girders</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable Land Objects</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
