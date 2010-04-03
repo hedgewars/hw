@@ -30,7 +30,7 @@ handleCmd_lobby clID clients rooms ["LIST"] =
         protocol = clientProto client
         client = clients IntMap.! clID
         roomInfo room
-            | clientProto client < 30 = [
+            | clientProto client < 28 = [
                 name room,
                 show (playersIn room) ++ "(" ++ show (length $ teams room) ++ ")",
                 show $ gameinprogress room
