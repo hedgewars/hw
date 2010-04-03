@@ -140,7 +140,7 @@ quint32 GameCFGWidget::getGameFlags() const
 
 quint32 GameCFGWidget::getInitHealth() const
 {
-    return schemeData(19).toInt();
+    return schemeData(20).toInt();
 }
 
 QStringList GameCFGWidget::getFullConfig() const
