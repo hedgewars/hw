@@ -1549,9 +1549,31 @@ const Template41Points: array[0..86] of TSDL_Rect =
       (
        (x: 2047; y:    0)
       );
+// 2 tiny islands
+const Template42Points: array[0..13] of TSDL_Rect =
+      (
+       (x:   90; y: 520; w:   1; h:   1),
+       (x:   90; y:  50; w:  10; h:  50),
+       (x:  170; y: 200; w:  10; h:  50),
+       (x:  270; y: 350; w:  10; h:  50),
+       (x:  350; y: 150; w:  10; h:  50),
+       (x:  350; y: 520; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 1170; y: 520; w:   1; h:   1),
+       (x: 1170; y: 150; w:  10; h:  50),
+       (x: 1250; y: 350; w:  10; h:  50),
+       (x: 1350; y: 200; w:  10; h:  50),
+       (x: 1430; y:  50; w:  10; h:  50),
+       (x: 1430; y: 520; w:   1; h:   1),
+       (x: NTPX; y:   0; w:   1; h:   1)
+      );
+      Template42FPoints: array[0..0] of TPoint =
+      (
+       (x: 512; y:    0)
+      );
 
 ////////////////////////////////////////////////////////////////////////
-const EdgeTemplates: array[0..41] of TEdgeTemplate =
+const EdgeTemplates: array[0..42] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -2014,9 +2036,20 @@ const EdgeTemplates: array[0..41] of TEdgeTemplate =
         canMirror: true; canFlip: true; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgehogs: 48;
+       ),
+       (BasePoints: @Template42Points;
+        BasePointsCount: Succ(High(Template42Points));
+        FillPoints: @Template42FPoints;
+        FillPointsCount: Succ(High(Template42FPoints));
+        BezierizeCount: 3;
+        RandPassesCount: 3;
+        TemplateHeight: 512; TemplateWidth: 1536;
+        canMirror: true; canFlip: false; isNegative: false; canInvert: false;
+        hasGirders: false;
+        MaxHedgehogs: 8;
        )
       );
-const SmallTemplates: array[0..1] of Longword = ( 39, 40 );
+const SmallTemplates: array[0..2] of Longword = ( 39, 40, 42 );
 const MediumTemplates: array[0..17] of Longword =
       ( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 );
 const LargeTemplates: array[0..19] of Longword =
