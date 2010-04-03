@@ -7,7 +7,7 @@ IF(COMMAND cmake_policy)
 ENDIF(COMMAND cmake_policy)
 
 #detect subversion revision (if present)
-set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
+#set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
 IF(version_suffix MATCHES "-dev")
 	set(HW_DEV true)
 	IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.svn) 
@@ -152,7 +152,7 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-set(HEDGEWARS_PROTO_VER 30)
+set(HEDGEWARS_PROTO_VER 31)
 
 if(WITH_SERVER)
 	set(HAVE_NETSERVER true)
