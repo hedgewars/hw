@@ -742,7 +742,7 @@ DrawChat;
 if fastUntilLag then DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
 
-if not isFirstFrame and (missionTimer <> 0) then
+if not isFirstFrame and ((missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm)) then
     begin
     if missionTimer > 0 then dec(missionTimer, Lag);
     if missionTimer < 0 then missionTimer:= 0; // avoid subtracting below 0
