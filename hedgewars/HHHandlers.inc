@@ -110,7 +110,7 @@ with Gear^,
         ((State and (gstAttacked or gstHHChooseTarget)) = 0) and
         (((State and gstMoving) = 0) or
             // Allow attacks while moving on ammo with AltAttack
-            ((CurAmmoGear <> nil) and ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0)) or
+            ((CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0)) or
             ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackInMove) <> 0)) and
         ((TargetPoint.X <> NoPointX) or ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NeedTarget) = 0)) then
         begin
@@ -226,6 +226,7 @@ with Gear^,
            and (((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_AltUse) = 0){check for dropping ammo from rope} then
            begin
            CurAmmoGear^.Ammo:= @(Ammo^[CurSlot, CurAmmo]);
+           CurAmmoGear^.AmmoType:= CurAmmoGear^.Ammo^.AmmoType;
            Message:= Message or gm_Attack;
            CurAmmoGear^.Message:= Message
            end else begin
@@ -663,7 +664,7 @@ if (CurAmmoGear = nil) then
         Attack(Gear) // should be before others to avoid desync with '/put' msg and changing weapon msgs
     else
 else with PHedgehog(Gear^.Hedgehog)^ do
-     if ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0)
+     if ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0)
         and ((Gear^.Message and gm_LJump) <> 0)
         and (((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_AltUse) <> 0) then
         begin
@@ -672,7 +673,7 @@ else with PHedgehog(Gear^.Hedgehog)^ do
         end;
 
 if (CurAmmoGear = nil)
-    or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0) then
+    or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) then
     begin
     if ((Gear^.Message and gm_Slot) <> 0) then
         begin

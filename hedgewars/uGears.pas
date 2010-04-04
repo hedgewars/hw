@@ -33,6 +33,7 @@ type
             Invulnerable: Boolean;
             RenderTimer: Boolean;
             Ammo : PAmmo;
+            AmmoType : TAmmoType;  // Used to track AmmoType at time of Gear creation, since Ammo can be reassigned
             State : Longword;
             X : hwFloat;
             Y : hwFloat;
