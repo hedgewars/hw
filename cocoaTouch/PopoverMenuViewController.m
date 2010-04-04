@@ -7,10 +7,10 @@
 //
 
 #import "SDL_uikitappdelegate.h"
-#import "PopupMenuViewController.h"
+#import "PopoverMenuViewController.h"
 #import "PascalImports.h"
 
-@implementation PopupMenuViewController
+@implementation PopoverMenuViewController
 @synthesize menuList;
 
 

@@ -79,7 +79,11 @@ int main (int argc, char *argv[]) {
 	[setup release];
     
     // overlay with controls, become visible after 2 seconds
-    overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController-iPad" bundle:nil];
+    else
+        overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController-iPhone" bundle:nil];
+
     [uiwindow addSubview:overlayController.view];
     [overlayController release];
 
@@ -110,7 +114,10 @@ int main (int argc, char *argv[]) {
 	self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	self.uiwindow.backgroundColor = [UIColor blackColor];
 	
-	self.viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController" bundle:nil];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        self.viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
+    else
+        self.viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPhone" bundle:nil];
 	[uiwindow addSubview:viewController.view];
     [viewController release];
 	

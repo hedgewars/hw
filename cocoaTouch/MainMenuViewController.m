@@ -9,16 +9,11 @@
 #import "MainMenuViewController.h"
 #import "SDL_uikitappdelegate.h"
 #import "PascalImports.h"
-
-// in case we don't want SDL_mixer...
-//#import "SoundEffect.h"	
-//SoundEffect *erasingSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Erase" ofType:@"caf"]];
-//SoundEffect *selectSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Select" ofType:@"caf"]];
+#import "SplitViewRootController.h"
 
 
 @implementation MainMenuViewController
-
-@synthesize versionLabel, settingsViewController, mainView;
+@synthesize cover, versionLabel;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
 	return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
@@ -26,49 +21,43 @@
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
+    self.cover = nil;
+    self.versionLabel = nil;
 	[super didReceiveMemoryWarning];
-	
-	// Release any cached data, images, etc that aren't in use.
-	if (nil == self.settingsViewController.view.superview) {
-		self.settingsViewController = nil;
-		[settingsViewController release];
-	}
+}
+
+- (void)dealloc {
+    [versionLabel release];
+    [cover release];
+	[super dealloc];
+}
+
+-(void) viewDidUnload {
+    self.cover = nil;
+	[super viewDidUnload];
 }
 
 -(void) viewDidLoad {
-    [NSThread detachNewThreadSelector:@selector(checkFirstRun) toTarget:self withObject:nil];
-	
+    
     char *ver;
     HW_versionInfo(NULL, &ver);
     NSString *versionNumber = [[NSString alloc] initWithCString:ver];
     self.versionLabel.text = versionNumber;
     [versionNumber release];
-    
-    [super viewDidLoad];
+
+    // initialize some files the first time we load the game
+	[NSThread detachNewThreadSelector:@selector(checkFirstRun) toTarget:self withObject:nil];
+    // listen to request to remove the modalviewcontroller
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dismissModalViewController)
+                                                 name: @"dismissModalView" 
+                                               object:nil];
+
+	[super viewDidLoad];
 }
 
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	self.versionLabel = nil;
-}
-
-- (void)dealloc {
-	[versionLabel release];
-	[settingsViewController release];
-	[super dealloc];
-}
-
-// disable the buttons when to prevent launching twice the game
--(void) viewWillDisappear:(BOOL)animated {
-	self.mainView.userInteractionEnabled = NO;
-	[super viewWillDisappear:animated];
-}
-
--(void) viewDidAppear:(BOOL)animated {
-	self.mainView.userInteractionEnabled = YES;
-	[super viewDidAppear:animated];
-}
-
+// this is called to verify whether it's the first time the app is launched
+// if it is it blocks user interaction with an alertView until files are created
 -(void) checkFirstRun {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
@@ -78,20 +67,48 @@
 		NSLog(@"First time run, creating settings files");
 		
 		// show a popup with an indicator to make the user wait
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"One-time Preferences Configuration",@"")
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Please wait",@"")
                                                         message:nil
                                                        delegate:nil
                                               cancelButtonTitle:nil
                                               otherButtonTitles:nil];
 		[alert show];
-		
+		[alert release];
+
 		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] 
-						      initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+                                              initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 		indicator.center = CGPointMake(alert.bounds.size.width / 2, alert.bounds.size.height - 50);
 		[indicator startAnimating];
 		[alert addSubview:indicator];
 		[indicator release];
 		
+        // create Default Team.plist
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"Teams/"];
+		[[NSFileManager defaultManager] createDirectoryAtPath:teamsDirectory 
+                                  withIntermediateDirectories:NO 
+                                                   attributes:nil 
+                                                        error:NULL];
+
+        NSMutableArray *hedgehogs = [[NSMutableArray alloc] init];
+
+        for (int i = 0; i < 8; i++) {
+            NSString *hogName = [[NSString alloc] initWithFormat:@"hedgehog %d",i];
+            NSDictionary *hog = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",
+                                 hogName,@"hogname",@"NoHat",@"hat",nil];
+            [hogName release];
+            [hedgehogs addObject:hog];
+            [hog release];
+        }
+        
+        NSDictionary *defaultTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",
+                                     @"Default Team",@"teamname",@"Statue",@"grave",@"Plane",@"fort",
+                                     @"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs,@"hedgehogs",nil];
+        [hedgehogs release];
+        NSString *defaultTeamFile = [teamsDirectory stringByAppendingString:@"Default Team.plist"];
+        [defaultTeam writeToFile:defaultTeamFile atomically:YES];
+        [defaultTeam release];
+        
 		// create settings.plist
 		NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
 	
@@ -105,15 +122,15 @@
 		[saveDict release];
 		
 		// create other files
-		
-		// memory cleanup
+        
+        // ok let the user take control
 		[alert dismissWithClickedButtonIndex:0 animated:YES];
-		[alert release];
 	}
 	[pool release];
 	[NSThread exit];
 }
 
+#pragma mark -
 -(void) appear {
     [[SDLUIKitDelegate sharedAppDelegate].uiwindow addSubview:self.view];
     [self release];
@@ -122,9 +139,14 @@
 	[UIView setAnimationDuration:1];
 	self.view.alpha = 1;
 	[UIView commitAnimations];
+    
+    [NSTimer scheduledTimerWithTimeInterval:0.7 target:self selector:@selector(hideBehind) userInfo:nil repeats:NO];
 }
 
 -(void) disappear {
+    if (nil != cover)
+        [cover release];
+    
     [UIView beginAnimations:@"removing main controller" context:NULL];
 	[UIView setAnimationDuration:1];
 	self.view.alpha = 0;
@@ -134,43 +156,45 @@
     [self.view removeFromSuperview];
 }
 
+// this is a silly way to hide the sdl contex that remained active
+-(void) hideBehind {
+    if (nil == cover) {
+        cover= [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        cover.backgroundColor = [UIColor blackColor];
+    }
+    [[SDLUIKitDelegate sharedAppDelegate].uiwindow insertSubview:cover belowSubview:self.view];
+}
+
 #pragma mark -
-#pragma mark Action buttons
--(IBAction) startPlaying {
-	[[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
+-(IBAction) switchViews:(id) sender {
+    UIButton *button = (UIButton *)sender;
+    SplitViewRootController *splitViewController;
+    UIAlertView *alert;
+    
+    switch (button.tag) {
+        case 0:
+            [[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
+            break;
+        case 2:
+            // for now this controller is just to simplify code management
+            splitViewController = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
+            splitViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            [self presentModalViewController:splitViewController animated:YES];
+            break;
+        default:
+            alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
+                                               message:@"Sorry, this feature is not yet implemented"
+                                              delegate:nil
+                                     cancelButtonTitle:@"Well, don't worry"
+                                     otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+            break;
+    }
 }
 
--(IBAction) notYetImplemented {
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
-                                                    message:@"Sorry, this feature is not yet implemented"
-                                                   delegate:nil
-                                          cancelButtonTitle:@"Well, don't worry"
-                                          otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-}
-
--(IBAction) switchViews:(id)sender {
-	// view not displayed or not created
-	if (nil == self.settingsViewController.view.superview) {
-		// view not created
-		if (nil == self.settingsViewController) {
-			SettingsViewController *controller = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
-			self.settingsViewController = controller;
-			[controller release];
-		}
-		self.settingsViewController.view.frame = CGRectMake(0, -257, 480, 278);
-		self.settingsViewController.parentView = self.mainView;
-
-		[UIView beginAnimations:@"Settings SwitchView" context:NULL];
-		[UIView setAnimationDuration:1];
-
-		self.settingsViewController.view.frame = CGRectMake(0, 21, 480, 278);
-		self.mainView.frame = CGRectMake(0, 299, 480, 278);
-		[UIView commitAnimations];
-		
-		[self.view insertSubview:settingsViewController.view atIndex:0];
-	}
+-(void) dismissModalViewController {
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 @end

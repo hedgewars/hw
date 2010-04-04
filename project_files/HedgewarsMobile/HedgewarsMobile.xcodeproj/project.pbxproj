@@ -25,96 +25,6 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
-		6100DA77115446B000F455E0 /* backgroundBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A1E114ADD2600BA94A9 /* backgroundBottom.png */; };
-		6100DA78115446B000F455E0 /* backgroundCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A1F114ADD2600BA94A9 /* backgroundCenter.png */; };
-		6100DA79115446B000F455E0 /* backgroundLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A20114ADD2600BA94A9 /* backgroundLeft.png */; };
-		6100DA7A115446B000F455E0 /* backgroundRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A21114ADD2600BA94A9 /* backgroundRight.png */; };
-		6100DA7B115446B000F455E0 /* backgroundTop.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A22114ADD2600BA94A9 /* backgroundTop.png */; };
-		6100DA7C115446B000F455E0 /* borderBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A23114ADD2600BA94A9 /* borderBottom.png */; };
-		6100DA7D115446B000F455E0 /* borderTop.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A24114ADD2600BA94A9 /* borderTop.png */; };
-		6100DA7F115446B000F455E0 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A26114ADD2600BA94A9 /* Icon.png */; };
-		6100DA80115446B000F455E0 /* networkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A27114ADD2600BA94A9 /* networkButton.png */; };
-		6100DA81115446B000F455E0 /* playButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A28114ADD2600BA94A9 /* playButton.png */; };
-		6100DA82115446B000F455E0 /* settingsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A29114ADD2600BA94A9 /* settingsButton.png */; };
-		6100DA83115446B000F455E0 /* storeButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A2A114ADD2600BA94A9 /* storeButton.png */; };
-		6100DA84115446B000F455E0 /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A2B114ADD2600BA94A9 /* title.png */; };
-		6100DA85115446B000F455E0 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 61798A5E114AE08600BA94A9 /* Data */; };
-		6100DA86115446B000F455E0 /* menuCorner.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179934E114BD5AB00BA94A9 /* menuCorner.png */; };
-		6100DA87115446B000F455E0 /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936711501D3D00BA94A9 /* arrowDown.png */; };
-		6100DA88115446B000F455E0 /* arrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936811501D3D00BA94A9 /* arrowLeft.png */; };
-		6100DA89115446B000F455E0 /* arrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936911501D3D00BA94A9 /* arrowRight.png */; };
-		6100DA8A115446B000F455E0 /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936A11501D3D00BA94A9 /* arrowUp.png */; };
-		6100DA8C115446B000F455E0 /* joyPush.png in Resources */ = {isa = PBXBuildFile; fileRef = 617995311150403800BA94A9 /* joyPush.png */; };
-		6100DA8E115446B000F455E0 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
-		6100DA8F115446B000F455E0 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
-		6100DA90115446B000F455E0 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
-		6100DA91115446B000F455E0 /* SDLh.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987ED114AA34C00BA94A9 /* SDLh.pas */; };
-		6100DA92115446B000F455E0 /* uAI.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F1114AA34C00BA94A9 /* uAI.pas */; };
-		6100DA93115446B000F455E0 /* uAIActions.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F2114AA34C00BA94A9 /* uAIActions.pas */; };
-		6100DA94115446B000F455E0 /* uAIAmmoTests.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F3114AA34C00BA94A9 /* uAIAmmoTests.pas */; };
-		6100DA95115446B000F455E0 /* uAIMisc.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F4114AA34C00BA94A9 /* uAIMisc.pas */; };
-		6100DA96115446B000F455E0 /* uAmmos.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F5114AA34C00BA94A9 /* uAmmos.pas */; };
-		6100DA97115446B000F455E0 /* uChat.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F6114AA34C00BA94A9 /* uChat.pas */; };
-		6100DA98115446B000F455E0 /* uCollisions.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F7114AA34C00BA94A9 /* uCollisions.pas */; };
-		6100DA99115446B000F455E0 /* uConsole.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F8114AA34C00BA94A9 /* uConsole.pas */; };
-		6100DA9A115446B000F455E0 /* uConsts.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F9114AA34C00BA94A9 /* uConsts.pas */; };
-		6100DA9B115446B000F455E0 /* uFloat.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FA114AA34C00BA94A9 /* uFloat.pas */; };
-		6100DA9C115446B000F455E0 /* uGame.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FB114AA34C00BA94A9 /* uGame.pas */; };
-		6100DA9D115446B000F455E0 /* uGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FC114AA34C00BA94A9 /* uGears.pas */; };
-		6100DA9E115446B000F455E0 /* uIO.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FD114AA34C00BA94A9 /* uIO.pas */; };
-		6100DA9F115446B000F455E0 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
-		6100DAA0115446B000F455E0 /* uLand.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FF114AA34C00BA94A9 /* uLand.pas */; };
-		6100DAA1115446B000F455E0 /* uLandGraphics.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798800114AA34C00BA94A9 /* uLandGraphics.pas */; };
-		6100DAA2115446B000F455E0 /* uLandObjects.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798801114AA34C00BA94A9 /* uLandObjects.pas */; };
-		6100DAA3115446B000F455E0 /* uLandTemplates.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798802114AA34C00BA94A9 /* uLandTemplates.pas */; };
-		6100DAA4115446B000F455E0 /* uLandTexture.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798803114AA34C00BA94A9 /* uLandTexture.pas */; };
-		6100DAA5115446B000F455E0 /* uLocale.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798804114AA34C00BA94A9 /* uLocale.pas */; };
-		6100DAA6115446B000F455E0 /* uMisc.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798805114AA34C00BA94A9 /* uMisc.pas */; };
-		6100DAA7115446B000F455E0 /* uRandom.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798806114AA34C00BA94A9 /* uRandom.pas */; };
-		6100DAA8115446B000F455E0 /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798807114AA34C00BA94A9 /* uScript.pas */; };
-		6100DAA9115446B000F455E0 /* uSHA.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798808114AA34C00BA94A9 /* uSHA.pas */; };
-		6100DAAA115446B000F455E0 /* uSound.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798809114AA34C00BA94A9 /* uSound.pas */; };
-		6100DAAB115446B000F455E0 /* uStats.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880A114AA34C00BA94A9 /* uStats.pas */; };
-		6100DAAC115446B000F455E0 /* uStore.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880B114AA34C00BA94A9 /* uStore.pas */; };
-		6100DAAD115446B000F455E0 /* uTeams.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880C114AA34C00BA94A9 /* uTeams.pas */; };
-		6100DAAE115446B000F455E0 /* uVisualGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880E114AA34C00BA94A9 /* uVisualGears.pas */; };
-		6100DAAF115446B000F455E0 /* uWorld.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880F114AA34C00BA94A9 /* uWorld.pas */; };
-		6100DAB0115446B000F455E0 /* CGPointUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798856114AA48A00BA94A9 /* CGPointUtils.c */; };
-		6100DAB1115446B000F455E0 /* IMG_png.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798858114AA48A00BA94A9 /* IMG_png.c */; };
-		6100DAB2115446B000F455E0 /* IMG.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798859114AA48A00BA94A9 /* IMG.c */; };
-		6100DAB3115446B000F455E0 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798864114AA4AA00BA94A9 /* SDL_uikitappdelegate.m */; };
-		6100DAB5115446B000F455E0 /* SDL_uikitwindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798868114AA4AA00BA94A9 /* SDL_uikitwindow.m */; };
-		6100DAB7115446B000F455E0 /* SchemeEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798872114AA4D000BA94A9 /* SchemeEditViewController.m */; };
-		6100DAB8115446B000F455E0 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798875114AA4D000BA94A9 /* SettingsViewController.m */; };
-		6100DAB9115446B000F455E0 /* TeamEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798878114AA4D000BA94A9 /* TeamEditViewController.m */; };
-		6100DABA115446B000F455E0 /* TeamMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179887B114AA4D000BA94A9 /* TeamMenuViewController.m */; };
-		6100DABB115446B000F455E0 /* GameSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798888114AA4E600BA94A9 /* GameSetup.m */; };
-		6100DABE115446B000F455E0 /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798A13114AB65600BA94A9 /* libSDL_ttf.a */; };
-		6100DABF115446B000F455E0 /* libSDL_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617989BB114AB47500BA94A9 /* libSDL_net.a */; };
-		6100DAC0115446B000F455E0 /* libSDLiPhoneOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */; };
-		6100DAC1115446B000F455E0 /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798993114AB3FA00BA94A9 /* libSDL_mixer.a */; };
-		6100DAC2115446B000F455E0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
-		6100DAC3115446B000F455E0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
-		6100DAC4115446B000F455E0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
-		6100DAC5115446B000F455E0 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
-		6100DAC6115446B000F455E0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
-		6100DAC7115446B000F455E0 /* libfreetype_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798916114AAF2100BA94A9 /* libfreetype_arm.a */; };
-		6100DAC8115446B000F455E0 /* libfreetype_x86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798917114AAF2100BA94A9 /* libfreetype_x86.a */; };
-		6100DAC9115446B000F455E0 /* libpng_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798918114AAF2100BA94A9 /* libpng_arm.a */; };
-		6100DACA115446B000F455E0 /* libpng_x86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798919114AAF2100BA94A9 /* libpng_x86.a */; };
-		6100DACB115446B000F455E0 /* libvorbis_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6179891A114AAF2100BA94A9 /* libvorbis_arm.a */; };
-		6100DACC115446B000F455E0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798934114AB25F00BA94A9 /* AudioToolbox.framework */; };
-		611FD993115590E700C2203D /* MainMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FD990115590E700C2203D /* MainMenuViewController.xib */; };
-		611FD995115590E700C2203D /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FD992115590E700C2203D /* SettingsViewController.xib */; };
-		611FD9C91155A1F200C2203D /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9C81155A1F200C2203D /* Background.png */; };
-		611FD9CC1155A28C00C2203D /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
-		611FD9D01155A40700C2203D /* NetworkPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CF1155A40700C2203D /* NetworkPlay.png */; };
-		611FD9D21155A41000C2203D /* Multiplayer.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9D11155A41000C2203D /* Multiplayer.png */; };
-		611FDB641155BFFF00C2203D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FDB631155BFFF00C2203D /* Default.png */; };
-		615F159E1166216A002444F2 /* TeamSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615F159D1166216A002444F2 /* TeamSettingsViewController.m */; };
-		615F15AE116628CC002444F2 /* SingleTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615F15AD116628CC002444F2 /* SingleTeamViewController.m */; };
-		615F16DC11668358002444F2 /* HogHatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615F16DB11668358002444F2 /* HogHatViewController.m */; };
-		615F19861166A6AB002444F2 /* untitled.m in Sources */ = {isa = PBXBuildFile; fileRef = 615F19851166A6AB002444F2 /* untitled.m */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
 		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
@@ -155,15 +65,6 @@
 		61798869114AA4AA00BA94A9 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798864114AA4AA00BA94A9 /* SDL_uikitappdelegate.m */; };
 		6179886B114AA4AA00BA94A9 /* SDL_uikitwindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798868114AA4AA00BA94A9 /* SDL_uikitwindow.m */; };
 		6179887D114AA4D000BA94A9 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179886F114AA4D000BA94A9 /* MainMenuViewController.m */; };
-		6179887E114AA4D000BA94A9 /* MainMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61798870114AA4D000BA94A9 /* MainMenuViewController.xib */; };
-		6179887F114AA4D000BA94A9 /* SchemeEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798872114AA4D000BA94A9 /* SchemeEditViewController.m */; };
-		61798880114AA4D000BA94A9 /* SchemeEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61798873114AA4D000BA94A9 /* SchemeEditViewController.xib */; };
-		61798881114AA4D000BA94A9 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798875114AA4D000BA94A9 /* SettingsViewController.m */; };
-		61798882114AA4D000BA94A9 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61798876114AA4D000BA94A9 /* SettingsViewController.xib */; };
-		61798883114AA4D000BA94A9 /* TeamEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798878114AA4D000BA94A9 /* TeamEditViewController.m */; };
-		61798884114AA4D000BA94A9 /* TeamEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61798879114AA4D000BA94A9 /* TeamEditViewController.xib */; };
-		61798885114AA4D000BA94A9 /* TeamMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179887B114AA4D000BA94A9 /* TeamMenuViewController.m */; };
-		61798886114AA4D000BA94A9 /* TeamMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6179887C114AA4D000BA94A9 /* TeamMenuViewController.xib */; };
 		61798889114AA4E600BA94A9 /* GameSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798888114AA4E600BA94A9 /* GameSetup.m */; };
 		617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */; };
 		6179891B114AAF2100BA94A9 /* libfreetype_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798916114AAF2100BA94A9 /* libfreetype_arm.a */; };
@@ -196,31 +97,28 @@
 		6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936911501D3D00BA94A9 /* arrowRight.png */; };
 		6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936A11501D3D00BA94A9 /* arrowUp.png */; };
 		617995321150403800BA94A9 /* joyPush.png in Resources */ = {isa = PBXBuildFile; fileRef = 617995311150403800BA94A9 /* joyPush.png */; };
-		61C0838A11567C83005D474F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C0838911567C83005D474F /* CoreGraphics.framework */; };
-		61CE24EE115E71C20098C467 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE24EB115E71C20098C467 /* OverlayViewController.m */; };
-		61CE24EF115E71C20098C467 /* PopupMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE24ED115E71C20098C467 /* PopupMenuViewController.m */; };
-		61CE2503115E73210098C467 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61CE2501115E73210098C467 /* OverlayViewController.xib */; };
+		61A118431168367200359010 /* OverlayViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61A118421168367200359010 /* OverlayViewController-iPhone.xib */; };
+		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; };
+		61A118CA11683C7600359010 /* MainMenuViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */; };
+		61A118CC11683C7A00359010 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61A118CB11683C7A00359010 /* MainMenuViewController-iPhone.xib */; };
+		61A118D211683CD100359010 /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9C81155A1F200C2203D /* Background.png */; };
+		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
+		61A118D411683CD100359010 /* Multiplayer.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9D11155A41000C2203D /* Multiplayer.png */; };
+		61A118D511683CD100359010 /* NetworkPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CF1155A40700C2203D /* NetworkPlay.png */; };
+		61A118DF11683D1F00359010 /* OverlayViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61A118401168366200359010 /* OverlayViewController-iPad.xib */; };
+		61A11A4E1168D13600359010 /* PopoverMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11A4D1168D13600359010 /* PopoverMenuViewController.m */; };
+		61A11AC11168D8B600359010 /* SplitViewRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AC01168D8B600359010 /* SplitViewRootController.m */; };
+		61A11AC91168DA9400359010 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AC81168DA9400359010 /* MasterViewController.m */; };
+		61A11ACF1168DB1B00359010 /* TeamSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11ACE1168DB1B00359010 /* TeamSettingsViewController.m */; };
+		61A11AD61168DB3700359010 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AD51168DB3700359010 /* DetailViewController.m */; };
+		61A11AE11168DC6E00359010 /* SingleTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AE01168DC6E00359010 /* SingleTeamViewController.m */; };
+		61A11AE41168DC9400359010 /* HogHatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AE31168DC9400359010 /* HogHatViewController.m */; };
+		61A11B591169234900359010 /* Default-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61A11B581169234900359010 /* Default-iPad.png */; };
 		61CE250D115E749A0098C467 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE250C115E749A0098C467 /* OverlayViewController.m */; };
-		61CE2511115E74C90098C467 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61CE2510115E74C90098C467 /* OverlayViewController.xib */; };
-		61CE25C3115E7D1D0098C467 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */; };
-		61E2F06911567CC7002D33C1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61E2F06811567CC7002D33C1 /* CoreGraphics.framework */; };
-		61FA761F115DA0DB00DA6ED0 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */; };
-		61FA7647115DA6A300DA6ED0 /* SplitViewRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA7645115DA6A300DA6ED0 /* SplitViewRootController.m */; };
-		61FA765D115DAACC00DA6ED0 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FA765B115DAACC00DA6ED0 /* MasterViewController.m */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
-		6100DACE115446B000F455E0 /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			fileType = sourcecode.pascal;
-			isEditable = 1;
-			outputFiles = (
-				"$(DERIVED_SOURCES_DIR)-$(CURRENT_VARIANT)/$(CURRENT_ARCH)/$(INPUT_FILE_BASE).s",
-			);
-			script = "#!/bin/bash\n\n# Xcode's up-to-date checks are overzealous for us: a different SDK does not necessarily\n# mean we recompile all sources, because we do not have different units for different SDK\n# versions yet (and even if we did, not necessarily all files would be recompiled)...\n\ndestdir=\"${DERIVED_SOURCES_DIR}-${CURRENT_VARIANT}/${CURRENT_ARCH}\"\nif [ ! -f \"$destdir/compilefailed\" ]; then\n  # check whether the assembler code is newer than the source code\n  if [ \"$destdir/${INPUT_FILE_BASE}.s\" -nt \"$INPUT_FILE_PATH\" ]; then\n    # in this case we're ok, just touch the assembler file to avoid us getting here again next time\n    echo Updating assembler time stamp of \"$destdir/${INPUT_FILE_BASE}.s\"\n    touch \"$destdir/${INPUT_FILE_BASE}.s\"\n    exit 0\n  fi\n\n  echo File not found or not up-to-date: $destdir/${INPUT_FILE_BASE}.s\n  echo \"$INPUT_FILE_PATH:1: error: 1: \\\"$INPUT_FILE_PATH\\\" was not (re)compiled. If it is no longer used, please remove it from the \\\"Compile Sources\\\" phase of the \\\"$TARGETNAME\\\" target.\"\n  exit 1\nfi";
-		};
 		9283015B0F10E46D00CC5A3C /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
@@ -234,13 +132,6 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
-		6100DA70115446B000F455E0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 928301160F10CAFC00CC5A3C;
-			remoteInfo = fpc;
-		};
 		617988D9114AAA3900BA94A9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */;
@@ -285,22 +176,10 @@
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* HedgewarsMobile_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HedgewarsMobile_Prefix.pch; sourceTree = "<group>"; };
-		6100DAD2115446B000F455E0 /* iHedgewars.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iHedgewars.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		611FD990115590E700C2203D /* MainMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainMenuViewController.xib; path = ../../cocoaTouch/iPad/MainMenuViewController.xib; sourceTree = SOURCE_ROOT; };
-		611FD992115590E700C2203D /* SettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsViewController.xib; path = ../../cocoaTouch/iPad/SettingsViewController.xib; sourceTree = SOURCE_ROOT; };
 		611FD9C81155A1F200C2203D /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Background.png; path = ../../QTfrontend/res/Background.png; sourceTree = SOURCE_ROOT; };
 		611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HedgewarsTitle.png; path = ../../QTfrontend/res/HedgewarsTitle.png; sourceTree = SOURCE_ROOT; };
 		611FD9CF1155A40700C2203D /* NetworkPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = NetworkPlay.png; path = ../../QTfrontend/res/NetworkPlay.png; sourceTree = SOURCE_ROOT; };
 		611FD9D11155A41000C2203D /* Multiplayer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Multiplayer.png; path = ../../QTfrontend/res/Multiplayer.png; sourceTree = SOURCE_ROOT; };
-		611FDB631155BFFF00C2203D /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../../cocoaTouch/iPad/Default.png; sourceTree = SOURCE_ROOT; };
-		615F159C1166216A002444F2 /* TeamSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TeamSettingsViewController.h; path = ../../cocoaTouch/iPad/TeamSettingsViewController.h; sourceTree = SOURCE_ROOT; };
-		615F159D1166216A002444F2 /* TeamSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TeamSettingsViewController.m; path = ../../cocoaTouch/iPad/TeamSettingsViewController.m; sourceTree = SOURCE_ROOT; };
-		615F15AC116628CC002444F2 /* SingleTeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleTeamViewController.h; path = ../../cocoaTouch/iPad/SingleTeamViewController.h; sourceTree = SOURCE_ROOT; };
-		615F15AD116628CC002444F2 /* SingleTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingleTeamViewController.m; path = ../../cocoaTouch/iPad/SingleTeamViewController.m; sourceTree = SOURCE_ROOT; };
-		615F16DA11668358002444F2 /* HogHatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HogHatViewController.h; path = ../../cocoaTouch/iPad/HogHatViewController.h; sourceTree = SOURCE_ROOT; };
-		615F16DB11668358002444F2 /* HogHatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HogHatViewController.m; path = ../../cocoaTouch/iPad/HogHatViewController.m; sourceTree = SOURCE_ROOT; };
-		615F19841166A6AB002444F2 /* untitled.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = untitled.h; sourceTree = "<group>"; };
-		615F19851166A6AB002444F2 /* untitled.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = untitled.m; sourceTree = "<group>"; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E5114AA34C00BA94A9 /* HHHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = HHHandlers.inc; path = ../../hedgewars/HHHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -353,19 +232,6 @@
 		61798868114AA4AA00BA94A9 /* SDL_uikitwindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDL_uikitwindow.m; path = ../../cocoaTouch/SDLOverrides/SDL_uikitwindow.m; sourceTree = SOURCE_ROOT; };
 		6179886E114AA4D000BA94A9 /* MainMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainMenuViewController.h; path = ../../cocoaTouch/MainMenuViewController.h; sourceTree = SOURCE_ROOT; };
 		6179886F114AA4D000BA94A9 /* MainMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainMenuViewController.m; path = ../../cocoaTouch/MainMenuViewController.m; sourceTree = SOURCE_ROOT; };
-		61798870114AA4D000BA94A9 /* MainMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainMenuViewController.xib; path = ../../cocoaTouch/MainMenuViewController.xib; sourceTree = SOURCE_ROOT; };
-		61798871114AA4D000BA94A9 /* SchemeEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SchemeEditViewController.h; path = ../../cocoaTouch/SchemeEditViewController.h; sourceTree = SOURCE_ROOT; };
-		61798872114AA4D000BA94A9 /* SchemeEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SchemeEditViewController.m; path = ../../cocoaTouch/SchemeEditViewController.m; sourceTree = SOURCE_ROOT; };
-		61798873114AA4D000BA94A9 /* SchemeEditViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SchemeEditViewController.xib; path = ../../cocoaTouch/SchemeEditViewController.xib; sourceTree = SOURCE_ROOT; };
-		61798874114AA4D000BA94A9 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsViewController.h; path = ../../cocoaTouch/SettingsViewController.h; sourceTree = SOURCE_ROOT; };
-		61798875114AA4D000BA94A9 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsViewController.m; path = ../../cocoaTouch/SettingsViewController.m; sourceTree = SOURCE_ROOT; };
-		61798876114AA4D000BA94A9 /* SettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsViewController.xib; path = ../../cocoaTouch/SettingsViewController.xib; sourceTree = SOURCE_ROOT; };
-		61798877114AA4D000BA94A9 /* TeamEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TeamEditViewController.h; path = ../../cocoaTouch/TeamEditViewController.h; sourceTree = SOURCE_ROOT; };
-		61798878114AA4D000BA94A9 /* TeamEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TeamEditViewController.m; path = ../../cocoaTouch/TeamEditViewController.m; sourceTree = SOURCE_ROOT; };
-		61798879114AA4D000BA94A9 /* TeamEditViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TeamEditViewController.xib; path = ../../cocoaTouch/TeamEditViewController.xib; sourceTree = SOURCE_ROOT; };
-		6179887A114AA4D000BA94A9 /* TeamMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TeamMenuViewController.h; path = ../../cocoaTouch/TeamMenuViewController.h; sourceTree = SOURCE_ROOT; };
-		6179887B114AA4D000BA94A9 /* TeamMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TeamMenuViewController.m; path = ../../cocoaTouch/TeamMenuViewController.m; sourceTree = SOURCE_ROOT; };
-		6179887C114AA4D000BA94A9 /* TeamMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TeamMenuViewController.xib; path = ../../cocoaTouch/TeamMenuViewController.xib; sourceTree = SOURCE_ROOT; };
 		61798887114AA4E600BA94A9 /* GameSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameSetup.h; path = ../../cocoaTouch/GameSetup.h; sourceTree = SOURCE_ROOT; };
 		61798888114AA4E600BA94A9 /* GameSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameSetup.m; path = ../../cocoaTouch/GameSetup.m; sourceTree = SOURCE_ROOT; };
 		617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDLiPhoneOS.xcodeproj; path = "../../../Library/SDL-1.3/SDL/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -399,24 +265,28 @@
 		6179936911501D3D00BA94A9 /* arrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowRight.png; path = ../../cocoaTouch/resources/arrowRight.png; sourceTree = SOURCE_ROOT; };
 		6179936A11501D3D00BA94A9 /* arrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowUp.png; path = ../../cocoaTouch/resources/arrowUp.png; sourceTree = SOURCE_ROOT; };
 		617995311150403800BA94A9 /* joyPush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyPush.png; path = ../../cocoaTouch/resources/joyPush.png; sourceTree = SOURCE_ROOT; };
-		61C0838911567C83005D474F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		61CE24EA115E71C20098C467 /* OverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OverlayViewController.h; path = ../../cocoaTouch/iPad/OverlayViewController.h; sourceTree = SOURCE_ROOT; };
-		61CE24EB115E71C20098C467 /* OverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OverlayViewController.m; path = ../../cocoaTouch/iPad/OverlayViewController.m; sourceTree = SOURCE_ROOT; };
-		61CE24EC115E71C20098C467 /* PopupMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopupMenuViewController.h; path = ../../cocoaTouch/iPad/PopupMenuViewController.h; sourceTree = SOURCE_ROOT; };
-		61CE24ED115E71C20098C467 /* PopupMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopupMenuViewController.m; path = ../../cocoaTouch/iPad/PopupMenuViewController.m; sourceTree = SOURCE_ROOT; };
-		61CE2501115E73210098C467 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = ../../cocoaTouch/iPad/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
+		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		61A118401168366200359010 /* OverlayViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "OverlayViewController-iPad.xib"; path = "../../cocoaTouch/xib/OverlayViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
+		61A118421168367200359010 /* OverlayViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "OverlayViewController-iPhone.xib"; path = "../../cocoaTouch/xib/OverlayViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
+		61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainMenuViewController-iPad.xib"; path = "../../cocoaTouch/xib/MainMenuViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
+		61A118CB11683C7A00359010 /* MainMenuViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainMenuViewController-iPhone.xib"; path = "../../cocoaTouch/xib/MainMenuViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
+		61A11A4C1168D13600359010 /* PopoverMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopoverMenuViewController.h; path = ../../cocoaTouch/PopoverMenuViewController.h; sourceTree = SOURCE_ROOT; };
+		61A11A4D1168D13600359010 /* PopoverMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PopoverMenuViewController.m; path = ../../cocoaTouch/PopoverMenuViewController.m; sourceTree = SOURCE_ROOT; };
+		61A11ABF1168D8B600359010 /* SplitViewRootController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SplitViewRootController.h; path = ../../cocoaTouch/SplitViewRootController.h; sourceTree = SOURCE_ROOT; };
+		61A11AC01168D8B600359010 /* SplitViewRootController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SplitViewRootController.m; path = ../../cocoaTouch/SplitViewRootController.m; sourceTree = SOURCE_ROOT; };
+		61A11AC71168DA9400359010 /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MasterViewController.h; path = ../../cocoaTouch/MasterViewController.h; sourceTree = SOURCE_ROOT; };
+		61A11AC81168DA9400359010 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MasterViewController.m; path = ../../cocoaTouch/MasterViewController.m; sourceTree = SOURCE_ROOT; };
+		61A11ACD1168DB1B00359010 /* TeamSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TeamSettingsViewController.h; path = ../../cocoaTouch/TeamSettingsViewController.h; sourceTree = SOURCE_ROOT; };
+		61A11ACE1168DB1B00359010 /* TeamSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TeamSettingsViewController.m; path = ../../cocoaTouch/TeamSettingsViewController.m; sourceTree = SOURCE_ROOT; };
+		61A11AD41168DB3700359010 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DetailViewController.h; path = ../../cocoaTouch/DetailViewController.h; sourceTree = SOURCE_ROOT; };
+		61A11AD51168DB3700359010 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DetailViewController.m; path = ../../cocoaTouch/DetailViewController.m; sourceTree = SOURCE_ROOT; };
+		61A11ADF1168DC6E00359010 /* SingleTeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleTeamViewController.h; path = ../../cocoaTouch/SingleTeamViewController.h; sourceTree = SOURCE_ROOT; };
+		61A11AE01168DC6E00359010 /* SingleTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingleTeamViewController.m; path = ../../cocoaTouch/SingleTeamViewController.m; sourceTree = SOURCE_ROOT; };
+		61A11AE21168DC9400359010 /* HogHatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HogHatViewController.h; path = ../../cocoaTouch/HogHatViewController.h; sourceTree = SOURCE_ROOT; };
+		61A11AE31168DC9400359010 /* HogHatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HogHatViewController.m; path = ../../cocoaTouch/HogHatViewController.m; sourceTree = SOURCE_ROOT; };
+		61A11B581169234900359010 /* Default-iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iPad.png"; path = "../../cocoaTouch/resources/Default-iPad.png"; sourceTree = SOURCE_ROOT; };
 		61CE250B115E749A0098C467 /* OverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OverlayViewController.h; path = ../../cocoaTouch/OverlayViewController.h; sourceTree = SOURCE_ROOT; };
 		61CE250C115E749A0098C467 /* OverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OverlayViewController.m; path = ../../cocoaTouch/OverlayViewController.m; sourceTree = SOURCE_ROOT; };
-		61CE2510115E74C90098C467 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = ../../cocoaTouch/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
-		61E2F06811567CC7002D33C1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		61FA761D115DA0DB00DA6ED0 /* MainMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainMenuViewController.h; path = ../../cocoaTouch/iPad/MainMenuViewController.h; sourceTree = SOURCE_ROOT; };
-		61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainMenuViewController.m; path = ../../cocoaTouch/iPad/MainMenuViewController.m; sourceTree = SOURCE_ROOT; };
-		61FA7644115DA6A300DA6ED0 /* SplitViewRootController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SplitViewRootController.h; path = ../../cocoaTouch/iPad/SplitViewRootController.h; sourceTree = SOURCE_ROOT; };
-		61FA7645115DA6A300DA6ED0 /* SplitViewRootController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SplitViewRootController.m; path = ../../cocoaTouch/iPad/SplitViewRootController.m; sourceTree = SOURCE_ROOT; };
-		61FA765A115DAACC00DA6ED0 /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MasterViewController.h; path = ../../cocoaTouch/iPad/MasterViewController.h; sourceTree = SOURCE_ROOT; };
-		61FA765B115DAACC00DA6ED0 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MasterViewController.m; path = ../../cocoaTouch/iPad/MasterViewController.m; sourceTree = SOURCE_ROOT; };
-		61FA7665115DAB1B00DA6ED0 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DetailViewController.h; path = ../../cocoaTouch/iPad/DetailViewController.h; sourceTree = SOURCE_ROOT; };
-		61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DetailViewController.m; path = ../../cocoaTouch/iPad/DetailViewController.m; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -426,6 +296,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */,
 				61798A14114AB65C00BA94A9 /* libSDL_ttf.a in Frameworks */,
 				617989BE114AB47A00BA94A9 /* libSDL_net.a in Frameworks */,
 				617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */,
@@ -441,30 +312,6 @@
 				6179891E114AAF2100BA94A9 /* libpng_x86.a in Frameworks */,
 				6179891F114AAF2100BA94A9 /* libvorbis_arm.a in Frameworks */,
 				61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */,
-				61C0838A11567C83005D474F /* CoreGraphics.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6100DABD115446B000F455E0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6100DABE115446B000F455E0 /* libSDL_ttf.a in Frameworks */,
-				6100DABF115446B000F455E0 /* libSDL_net.a in Frameworks */,
-				6100DAC0115446B000F455E0 /* libSDLiPhoneOS.a in Frameworks */,
-				6100DAC1115446B000F455E0 /* libSDL_mixer.a in Frameworks */,
-				6100DAC2115446B000F455E0 /* libfpc.a in Frameworks */,
-				6100DAC3115446B000F455E0 /* Foundation.framework in Frameworks */,
-				6100DAC4115446B000F455E0 /* UIKit.framework in Frameworks */,
-				6100DAC5115446B000F455E0 /* OpenGLES.framework in Frameworks */,
-				6100DAC6115446B000F455E0 /* QuartzCore.framework in Frameworks */,
-				6100DAC7115446B000F455E0 /* libfreetype_arm.a in Frameworks */,
-				6100DAC8115446B000F455E0 /* libfreetype_x86.a in Frameworks */,
-				6100DAC9115446B000F455E0 /* libpng_arm.a in Frameworks */,
-				6100DACA115446B000F455E0 /* libpng_x86.a in Frameworks */,
-				6100DACB115446B000F455E0 /* libvorbis_arm.a in Frameworks */,
-				6100DACC115446B000F455E0 /* AudioToolbox.framework in Frameworks */,
-				61E2F06911567CC7002D33C1 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,11 +321,10 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				61798860114AA49D00BA94A9 /* SDLOverrides */,
+				61A118481168371400359010 /* Frontend */,
 				61798887114AA4E600BA94A9 /* GameSetup.h */,
 				61798888114AA4E600BA94A9 /* GameSetup.m */,
-				61FA7620115DA0EA00DA6ED0 /* iPad Frontend */,
-				6179886C114AA4B900BA94A9 /* iPhone Frontend */,
-				61798860114AA49D00BA94A9 /* SDLOverrides */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -488,7 +334,6 @@
 			children = (
 				1D6058910D05DD3D006BFB54 /* HedgewarsMobile.app */,
 				928301170F10CAFC00CC5A3C /* libfpc.a */,
-				6100DAD2115446B000F455E0 /* iHedgewars.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -503,8 +348,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				6100DAD4115446B000F455E0 /* Resources-iPad */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				615F19841166A6AB002444F2 /* untitled.h */,
-				615F19851166A6AB002444F2 /* untitled.m */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -543,22 +386,21 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */,
+				617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */,
 				617989B3114AB47500BA94A9 /* SDL_net.xcodeproj */,
 				6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */,
-				617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */,
-				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
-				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
-				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
-				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */,
 				61798934114AB25F00BA94A9 /* AudioToolbox.framework */,
+				61A117FE1168322700359010 /* CoreGraphics.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
+				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				61798916114AAF2100BA94A9 /* libfreetype_arm.a */,
 				61798917114AAF2100BA94A9 /* libfreetype_x86.a */,
 				61798918114AAF2100BA94A9 /* libpng_arm.a */,
 				61798919114AAF2100BA94A9 /* libpng_x86.a */,
 				6179891A114AAF2100BA94A9 /* libvorbis_arm.a */,
-				61C0838911567C83005D474F /* CoreGraphics.framework */,
-				61E2F06811567CC7002D33C1 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -567,7 +409,7 @@
 			isa = PBXGroup;
 			children = (
 				61CE2509115E74260098C467 /* XIB */,
-				611FDB631155BFFF00C2203D /* Default.png */,
+				61A11B581169234900359010 /* Default-iPad.png */,
 				611FD9C81155A1F200C2203D /* Background.png */,
 				611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */,
 				611FD9D11155A41000C2203D /* Multiplayer.png */,
@@ -579,32 +421,11 @@
 		6100DB1711544E8400F455E0 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
-				61CE2510115E74C90098C467 /* OverlayViewController.xib */,
-				61798870114AA4D000BA94A9 /* MainMenuViewController.xib */,
-				61798873114AA4D000BA94A9 /* SchemeEditViewController.xib */,
-				61798876114AA4D000BA94A9 /* SettingsViewController.xib */,
-				61798879114AA4D000BA94A9 /* TeamEditViewController.xib */,
-				6179887C114AA4D000BA94A9 /* TeamMenuViewController.xib */,
+				61A118CB11683C7A00359010 /* MainMenuViewController-iPhone.xib */,
+				61A118421168367200359010 /* OverlayViewController-iPhone.xib */,
 			);
 			name = XIB;
 			path = Classes;
-			sourceTree = "<group>";
-		};
-		615F159B11662108002444F2 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				61FA765A115DAACC00DA6ED0 /* MasterViewController.h */,
-				61FA765B115DAACC00DA6ED0 /* MasterViewController.m */,
-				61FA7665115DAB1B00DA6ED0 /* DetailViewController.h */,
-				61FA7666115DAB1B00DA6ED0 /* DetailViewController.m */,
-				615F15AC116628CC002444F2 /* SingleTeamViewController.h */,
-				615F15AD116628CC002444F2 /* SingleTeamViewController.m */,
-				615F159C1166216A002444F2 /* TeamSettingsViewController.h */,
-				615F159D1166216A002444F2 /* TeamSettingsViewController.m */,
-				615F16DA11668358002444F2 /* HogHatViewController.h */,
-				615F16DB11668358002444F2 /* HogHatViewController.m */,
-			);
-			name = Settings;
 			sourceTree = "<group>";
 		};
 		61798860114AA49D00BA94A9 /* SDLOverrides */ = {
@@ -616,25 +437,6 @@
 				61798868114AA4AA00BA94A9 /* SDL_uikitwindow.m */,
 			);
 			name = SDLOverrides;
-			sourceTree = "<group>";
-		};
-		6179886C114AA4B900BA94A9 /* iPhone Frontend */ = {
-			isa = PBXGroup;
-			children = (
-				6179886E114AA4D000BA94A9 /* MainMenuViewController.h */,
-				6179886F114AA4D000BA94A9 /* MainMenuViewController.m */,
-				61798871114AA4D000BA94A9 /* SchemeEditViewController.h */,
-				61798872114AA4D000BA94A9 /* SchemeEditViewController.m */,
-				61798874114AA4D000BA94A9 /* SettingsViewController.h */,
-				61798875114AA4D000BA94A9 /* SettingsViewController.m */,
-				61798877114AA4D000BA94A9 /* TeamEditViewController.h */,
-				61798878114AA4D000BA94A9 /* TeamEditViewController.m */,
-				6179887A114AA4D000BA94A9 /* TeamMenuViewController.h */,
-				6179887B114AA4D000BA94A9 /* TeamMenuViewController.m */,
-				61CE250B115E749A0098C467 /* OverlayViewController.h */,
-				61CE250C115E749A0098C467 /* OverlayViewController.m */,
-			);
-			name = "iPhone Frontend";
 			sourceTree = "<group>";
 		};
 		61798892114AA56300BA94A9 /* inc */ = {
@@ -719,38 +521,54 @@
 			name = buttons;
 			sourceTree = "<group>";
 		};
+		61A118481168371400359010 /* Frontend */ = {
+			isa = PBXGroup;
+			children = (
+				61A11AC31168DA2B00359010 /* Settings */,
+				6179886E114AA4D000BA94A9 /* MainMenuViewController.h */,
+				6179886F114AA4D000BA94A9 /* MainMenuViewController.m */,
+				61CE250B115E749A0098C467 /* OverlayViewController.h */,
+				61CE250C115E749A0098C467 /* OverlayViewController.m */,
+				61A11A4C1168D13600359010 /* PopoverMenuViewController.h */,
+				61A11A4D1168D13600359010 /* PopoverMenuViewController.m */,
+			);
+			name = Frontend;
+			sourceTree = "<group>";
+		};
+		61A11AC31168DA2B00359010 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				61A11ABF1168D8B600359010 /* SplitViewRootController.h */,
+				61A11AC01168D8B600359010 /* SplitViewRootController.m */,
+				61A11AC71168DA9400359010 /* MasterViewController.h */,
+				61A11AC81168DA9400359010 /* MasterViewController.m */,
+				61A11AD41168DB3700359010 /* DetailViewController.h */,
+				61A11AD51168DB3700359010 /* DetailViewController.m */,
+				61A11AD01168DB1F00359010 /* Teams */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		61A11AD01168DB1F00359010 /* Teams */ = {
+			isa = PBXGroup;
+			children = (
+				61A11ACD1168DB1B00359010 /* TeamSettingsViewController.h */,
+				61A11ACE1168DB1B00359010 /* TeamSettingsViewController.m */,
+				61A11ADF1168DC6E00359010 /* SingleTeamViewController.h */,
+				61A11AE01168DC6E00359010 /* SingleTeamViewController.m */,
+				61A11AE21168DC9400359010 /* HogHatViewController.h */,
+				61A11AE31168DC9400359010 /* HogHatViewController.m */,
+			);
+			name = Teams;
+			sourceTree = "<group>";
+		};
 		61CE2509115E74260098C467 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
-				611FD990115590E700C2203D /* MainMenuViewController.xib */,
-				611FD992115590E700C2203D /* SettingsViewController.xib */,
-				61CE2501115E73210098C467 /* OverlayViewController.xib */,
+				61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */,
+				61A118401168366200359010 /* OverlayViewController-iPad.xib */,
 			);
 			name = XIB;
-			sourceTree = "<group>";
-		};
-		61FA7620115DA0EA00DA6ED0 /* iPad Frontend */ = {
-			isa = PBXGroup;
-			children = (
-				615F159B11662108002444F2 /* Settings */,
-				61FA766A115DAB2A00DA6ED0 /* Overlay */,
-				61FA761D115DA0DB00DA6ED0 /* MainMenuViewController.h */,
-				61FA761E115DA0DB00DA6ED0 /* MainMenuViewController.m */,
-				61FA7644115DA6A300DA6ED0 /* SplitViewRootController.h */,
-				61FA7645115DA6A300DA6ED0 /* SplitViewRootController.m */,
-			);
-			name = "iPad Frontend";
-			sourceTree = "<group>";
-		};
-		61FA766A115DAB2A00DA6ED0 /* Overlay */ = {
-			isa = PBXGroup;
-			children = (
-				61CE24EA115E71C20098C467 /* OverlayViewController.h */,
-				61CE24EB115E71C20098C467 /* OverlayViewController.m */,
-				61CE24EC115E71C20098C467 /* PopupMenuViewController.h */,
-				61CE24ED115E71C20098C467 /* PopupMenuViewController.m */,
-			);
-			name = Overlay;
 			sourceTree = "<group>";
 		};
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
@@ -818,26 +636,6 @@
 			productReference = 1D6058910D05DD3D006BFB54 /* HedgewarsMobile.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6100DA6E115446B000F455E0 /* iHedgewars */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6100DACF115446B000F455E0 /* Build configuration list for PBXNativeTarget "iHedgewars" */;
-			buildPhases = (
-				6100DA71115446B000F455E0 /* Resources */,
-				6100DA8D115446B000F455E0 /* Sources */,
-				6100DABD115446B000F455E0 /* Frameworks */,
-				6100DACD115446B000F455E0 /* ShellScript */,
-			);
-			buildRules = (
-				6100DACE115446B000F455E0 /* PBXBuildRule */,
-			);
-			dependencies = (
-				6100DA6F115446B000F455E0 /* PBXTargetDependency */,
-			);
-			name = iHedgewars;
-			productName = HedgewarsMobile;
-			productReference = 6100DAD2115446B000F455E0 /* iHedgewars.app */;
-			productType = "com.apple.product-type.application";
-		};
 		928301160F10CAFC00CC5A3C /* fpc */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9283011C0F10CB4B00CC5A3C /* Build configuration list for PBXNativeTarget "fpc" */;
@@ -859,6 +657,9 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "HedgewarsMobile" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
@@ -887,7 +688,6 @@
 				1D6058900D05DD3D006BFB54 /* HedgewarsMobile */,
 				928301160F10CAFC00CC5A3C /* fpc */,
 				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
-				6100DA6E115446B000F455E0 /* iHedgewars */,
 			);
 		};
 /* End PBXProject section */
@@ -928,11 +728,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6179887E114AA4D000BA94A9 /* MainMenuViewController.xib in Resources */,
-				61798880114AA4D000BA94A9 /* SchemeEditViewController.xib in Resources */,
-				61798882114AA4D000BA94A9 /* SettingsViewController.xib in Resources */,
-				61798884114AA4D000BA94A9 /* TeamEditViewController.xib in Resources */,
-				61798886114AA4D000BA94A9 /* TeamMenuViewController.xib in Resources */,
+				61A118DF11683D1F00359010 /* OverlayViewController-iPad.xib in Resources */,
+				61A118D211683CD100359010 /* Background.png in Resources */,
+				61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */,
+				61A118D411683CD100359010 /* Multiplayer.png in Resources */,
+				61A118D511683CD100359010 /* NetworkPlay.png in Resources */,
 				61798A2C114ADD2600BA94A9 /* backgroundBottom.png in Resources */,
 				61798A2D114ADD2600BA94A9 /* backgroundCenter.png in Resources */,
 				61798A2E114ADD2600BA94A9 /* backgroundLeft.png in Resources */,
@@ -954,61 +754,16 @@
 				6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */,
 				6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */,
 				617995321150403800BA94A9 /* joyPush.png in Resources */,
-				61CE2511115E74C90098C467 /* OverlayViewController.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6100DA71115446B000F455E0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6100DA77115446B000F455E0 /* backgroundBottom.png in Resources */,
-				6100DA78115446B000F455E0 /* backgroundCenter.png in Resources */,
-				6100DA79115446B000F455E0 /* backgroundLeft.png in Resources */,
-				6100DA7A115446B000F455E0 /* backgroundRight.png in Resources */,
-				6100DA7B115446B000F455E0 /* backgroundTop.png in Resources */,
-				6100DA7C115446B000F455E0 /* borderBottom.png in Resources */,
-				6100DA7D115446B000F455E0 /* borderTop.png in Resources */,
-				6100DA7F115446B000F455E0 /* Icon.png in Resources */,
-				6100DA80115446B000F455E0 /* networkButton.png in Resources */,
-				6100DA81115446B000F455E0 /* playButton.png in Resources */,
-				6100DA82115446B000F455E0 /* settingsButton.png in Resources */,
-				6100DA83115446B000F455E0 /* storeButton.png in Resources */,
-				6100DA84115446B000F455E0 /* title.png in Resources */,
-				6100DA85115446B000F455E0 /* Data in Resources */,
-				6100DA86115446B000F455E0 /* menuCorner.png in Resources */,
-				6100DA87115446B000F455E0 /* arrowDown.png in Resources */,
-				6100DA88115446B000F455E0 /* arrowLeft.png in Resources */,
-				6100DA89115446B000F455E0 /* arrowRight.png in Resources */,
-				6100DA8A115446B000F455E0 /* arrowUp.png in Resources */,
-				6100DA8C115446B000F455E0 /* joyPush.png in Resources */,
-				611FD993115590E700C2203D /* MainMenuViewController.xib in Resources */,
-				611FD995115590E700C2203D /* SettingsViewController.xib in Resources */,
-				611FD9C91155A1F200C2203D /* Background.png in Resources */,
-				611FD9CC1155A28C00C2203D /* HedgewarsTitle.png in Resources */,
-				611FD9D01155A40700C2203D /* NetworkPlay.png in Resources */,
-				611FD9D21155A41000C2203D /* Multiplayer.png in Resources */,
-				611FDB641155BFFF00C2203D /* Default.png in Resources */,
-				61CE2503115E73210098C467 /* OverlayViewController.xib in Resources */,
+				61A118431168367200359010 /* OverlayViewController-iPhone.xib in Resources */,
+				61A118CA11683C7600359010 /* MainMenuViewController-iPad.xib in Resources */,
+				61A118CC11683C7A00359010 /* MainMenuViewController-iPhone.xib in Resources */,
+				61A11B591169234900359010 /* Default-iPad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6100DACD115446B000F455E0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export CODESIGN_ALLOCATE=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ]; then\n\t${PROJECT_DIR}/gen_entitlements.py \"com.kodahedge.${PRODUCT_NAME:identifier}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\n\tcodesign -f -s \"iPhone developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\"\nfi";
-		};
 		61798A54114ADD5E00BA94A9 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1033,7 +788,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${PROJECT_DIR}/build/HedgewarsMobile.build/Debug-iphonesimulator/iHedgewars.build/DerivedSources-normal/\nrm -fr i386/\nln -sf ../../HedgewarsMobile.build/DerivedSources-normal/i386/ i386\ncd ${PROJECT_DIR}\n\n#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/\nrm -rf ${PROJECT_DIR}/Data/Music/\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all forts\nrm -rf ${PROJECT_DIR}/Data/Forts/\n\n#delete all forts\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
+			shellScript = "#cd ${PROJECT_DIR}/build/HedgewarsMobile.build/Debug-iphonesimulator/iHedgewars.build/DerivedSources-normal/\n#rm -fr i386/\n#ln -sf ../../HedgewarsMobile.build/DerivedSources-normal/i386/ i386\n#cd ${PROJECT_DIR}\n\n#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/\nrm -rf ${PROJECT_DIR}/Data/Music/\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all forts\nrm -rf ${PROJECT_DIR}/Data/Forts/\n\n#delete all forts\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -1114,84 +869,21 @@
 				61798869114AA4AA00BA94A9 /* SDL_uikitappdelegate.m in Sources */,
 				6179886B114AA4AA00BA94A9 /* SDL_uikitwindow.m in Sources */,
 				6179887D114AA4D000BA94A9 /* MainMenuViewController.m in Sources */,
-				6179887F114AA4D000BA94A9 /* SchemeEditViewController.m in Sources */,
-				61798881114AA4D000BA94A9 /* SettingsViewController.m in Sources */,
-				61798883114AA4D000BA94A9 /* TeamEditViewController.m in Sources */,
-				61798885114AA4D000BA94A9 /* TeamMenuViewController.m in Sources */,
 				61798889114AA4E600BA94A9 /* GameSetup.m in Sources */,
 				61CE250D115E749A0098C467 /* OverlayViewController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6100DA8D115446B000F455E0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6100DA8E115446B000F455E0 /* hwengine.pas in Sources */,
-				6100DA8F115446B000F455E0 /* hwLibrary.pas in Sources */,
-				6100DA90115446B000F455E0 /* PascalExports.pas in Sources */,
-				6100DA91115446B000F455E0 /* SDLh.pas in Sources */,
-				6100DA92115446B000F455E0 /* uAI.pas in Sources */,
-				6100DA93115446B000F455E0 /* uAIActions.pas in Sources */,
-				6100DA94115446B000F455E0 /* uAIAmmoTests.pas in Sources */,
-				6100DA95115446B000F455E0 /* uAIMisc.pas in Sources */,
-				6100DA96115446B000F455E0 /* uAmmos.pas in Sources */,
-				6100DA97115446B000F455E0 /* uChat.pas in Sources */,
-				6100DA98115446B000F455E0 /* uCollisions.pas in Sources */,
-				6100DA99115446B000F455E0 /* uConsole.pas in Sources */,
-				6100DA9A115446B000F455E0 /* uConsts.pas in Sources */,
-				6100DA9B115446B000F455E0 /* uFloat.pas in Sources */,
-				6100DA9C115446B000F455E0 /* uGame.pas in Sources */,
-				6100DA9D115446B000F455E0 /* uGears.pas in Sources */,
-				6100DA9E115446B000F455E0 /* uIO.pas in Sources */,
-				6100DA9F115446B000F455E0 /* uKeys.pas in Sources */,
-				6100DAA0115446B000F455E0 /* uLand.pas in Sources */,
-				6100DAA1115446B000F455E0 /* uLandGraphics.pas in Sources */,
-				6100DAA2115446B000F455E0 /* uLandObjects.pas in Sources */,
-				6100DAA3115446B000F455E0 /* uLandTemplates.pas in Sources */,
-				6100DAA4115446B000F455E0 /* uLandTexture.pas in Sources */,
-				6100DAA5115446B000F455E0 /* uLocale.pas in Sources */,
-				6100DAA6115446B000F455E0 /* uMisc.pas in Sources */,
-				6100DAA7115446B000F455E0 /* uRandom.pas in Sources */,
-				6100DAA8115446B000F455E0 /* uScript.pas in Sources */,
-				6100DAA9115446B000F455E0 /* uSHA.pas in Sources */,
-				6100DAAA115446B000F455E0 /* uSound.pas in Sources */,
-				6100DAAB115446B000F455E0 /* uStats.pas in Sources */,
-				6100DAAC115446B000F455E0 /* uStore.pas in Sources */,
-				6100DAAD115446B000F455E0 /* uTeams.pas in Sources */,
-				6100DAAE115446B000F455E0 /* uVisualGears.pas in Sources */,
-				6100DAAF115446B000F455E0 /* uWorld.pas in Sources */,
-				6100DAB0115446B000F455E0 /* CGPointUtils.c in Sources */,
-				6100DAB1115446B000F455E0 /* IMG_png.c in Sources */,
-				6100DAB2115446B000F455E0 /* IMG.c in Sources */,
-				6100DAB3115446B000F455E0 /* SDL_uikitappdelegate.m in Sources */,
-				6100DAB5115446B000F455E0 /* SDL_uikitwindow.m in Sources */,
-				6100DAB7115446B000F455E0 /* SchemeEditViewController.m in Sources */,
-				6100DAB8115446B000F455E0 /* SettingsViewController.m in Sources */,
-				6100DAB9115446B000F455E0 /* TeamEditViewController.m in Sources */,
-				6100DABA115446B000F455E0 /* TeamMenuViewController.m in Sources */,
-				6100DABB115446B000F455E0 /* GameSetup.m in Sources */,
-				61FA761F115DA0DB00DA6ED0 /* MainMenuViewController.m in Sources */,
-				61FA7647115DA6A300DA6ED0 /* SplitViewRootController.m in Sources */,
-				61FA765D115DAACC00DA6ED0 /* MasterViewController.m in Sources */,
-				61CE24EE115E71C20098C467 /* OverlayViewController.m in Sources */,
-				61CE24EF115E71C20098C467 /* PopupMenuViewController.m in Sources */,
-				61CE25C3115E7D1D0098C467 /* DetailViewController.m in Sources */,
-				615F159E1166216A002444F2 /* TeamSettingsViewController.m in Sources */,
-				615F15AE116628CC002444F2 /* SingleTeamViewController.m in Sources */,
-				615F16DC11668358002444F2 /* HogHatViewController.m in Sources */,
-				615F19861166A6AB002444F2 /* untitled.m in Sources */,
+				61A11A4E1168D13600359010 /* PopoverMenuViewController.m in Sources */,
+				61A11AC11168D8B600359010 /* SplitViewRootController.m in Sources */,
+				61A11AC91168DA9400359010 /* MasterViewController.m in Sources */,
+				61A11ACF1168DB1B00359010 /* TeamSettingsViewController.m in Sources */,
+				61A11AD61168DB3700359010 /* DetailViewController.m in Sources */,
+				61A11AE11168DC6E00359010 /* SingleTeamViewController.m in Sources */,
+				61A11AE41168DC9400359010 /* HogHatViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		6100DA6F115446B000F455E0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 928301160F10CAFC00CC5A3C /* fpc */;
-			targetProxy = 6100DA70115446B000F455E0 /* PBXContainerItemProxy */;
-		};
 		9283015A0F10E41300CC5A3C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 928301160F10CAFC00CC5A3C /* fpc */;
@@ -1215,7 +907,7 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = HedgewarsMobile;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1233,38 +925,6 @@
 				);
 				PRODUCT_NAME = HedgewarsMobile;
 				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		6100DAD0115446B000F455E0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = HedgewarsMobile_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
-				PRODUCT_NAME = iHedgewars;
-				SDKROOT = iphoneos3.2;
-				TARGETED_DEVICE_FAMILY = 2;
-			};
-			name = Debug;
-		};
-		6100DAD1115446B000F455E0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = HedgewarsMobile_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
-				PRODUCT_NAME = iHedgewars;
-				SDKROOT = iphonesimulator3.2;
-				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
@@ -1317,7 +977,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
@@ -1345,7 +1005,8 @@
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator3.0;
+				SDKROOT = iphonesimulator3.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1382,6 +1043,7 @@
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1393,15 +1055,6 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		6100DACF115446B000F455E0 /* Build configuration list for PBXNativeTarget "iHedgewars" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6100DAD0115446B000F455E0 /* Debug */,
-				6100DAD1115446B000F455E0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -8,16 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
-
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_3_2
 @interface DetailViewController : UITableViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate> {
-    UIPopoverController *popoverController;
+#else
+@interface DetailViewController : UITableViewController {
+#endif
+    id popoverController;
     NSArray *controllers;
-
-    id detailItem;
 }
 
-@property (nonatomic, retain) UIPopoverController *popoverController;
-@property (nonatomic, retain) id detailItem;
+// used in iphone version
+-(IBAction) dismissSplitView;
+
+@property (nonatomic, retain) id popoverController;
 @property (nonatomic, retain) NSArray * controllers;
 
 @end

@@ -10,19 +10,16 @@
 #import "SettingsViewController.h"
 
 @interface MainMenuViewController : UIViewController {
-	UILabel *versionLabel;
-	UIView *mainView;
-	SettingsViewController *settingsViewController;
+    UIView *cover;
+    UILabel *versionLabel;
 }
 
-@property (nonatomic, retain) IBOutlet UILabel *versionLabel;
-@property (nonatomic, retain) IBOutlet UIView *mainView;
-@property (nonatomic, retain) SettingsViewController *settingsViewController;
+@property (nonatomic,retain) UIView *cover;
+@property (nonatomic,retain) IBOutlet UILabel *versionLabel;
 
 -(void) appear;
 -(void) disappear;
+-(void) hideBehind;
 
--(IBAction) startPlaying;
--(IBAction) notYetImplemented;
-//-(IBAction) switchViews:(id)sender;
+-(IBAction) switchViews:(id)sender;
 @end

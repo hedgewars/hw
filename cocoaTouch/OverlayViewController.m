@@ -11,10 +11,10 @@
 #import "PascalImports.h"
 #import "CGPointUtils.h"
 #import "SDL_mouse.h"
-#import "PopupMenuViewController.h"
+#import "PopoverMenuViewController.h"
 
 @implementation OverlayViewController
-@synthesize dimTimer;
+@synthesize dimTimer, menuPopover;
 
 
 -(void) didReceiveMemoryWarning {
@@ -52,9 +52,13 @@
 
 -(void) viewDidUnload {
 	[dimTimer invalidate];
+    self.dimTimer = nil;
+    menuPopover = nil;
+    [super viewDidUnload];
 }
 
 -(void) dealloc {
+    [menuPopover release];
     // dimTimer is autoreleased
     [super dealloc];
 }
@@ -92,7 +96,6 @@
 // issue certain action based on the tag of the button 
 -(IBAction) buttonPressed:(id) sender {
     [self activateOverlay];
-    UIActionSheet *actionSheet;
     UIButton *theButton = (UIButton *)sender;
     
     switch (theButton.tag) {
@@ -118,23 +121,6 @@
             HW_backjump();
             break;
         case 7:
-            HW_pause();
-            break;
-        case 8:
-            HW_chat();
-            break;
-        case 9:
-            actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
-                                                      delegate:self
-                                             cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
-                                        destructiveButtonTitle:NSLocalizedString(@"As sure as I can be!", @"")
-                                             otherButtonTitles:nil];
-            [actionSheet showInView:self.view];
-            [actionSheet release];
-
-            HW_pause();
-	    break;
-        case 10:
             HW_tab();
             break;
         default:
@@ -143,7 +129,42 @@
     }
 }
 
+// present a further check before closing game
+-(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
+	if ([actionSheet cancelButtonIndex] != buttonIndex)
+	    HW_terminate(NO);
+	else
+        HW_pause();		
+}
+
+// show up a popover containing a popupMenuViewController; we hook it with setPopoverContentSize
+-(IBAction) showPopover{
+    PopoverMenuViewController *popupMenu = [[PopoverMenuViewController alloc] init];
+    popoverVisible = YES;
+    Class popoverController = NSClassFromString(@"UIPopoverController");
+    if (popoverController) {
+#ifdef __IPHONE_3_2
+        menuPopover = [[popoverController alloc] initWithContentViewController:popupMenu];
+        [menuPopover setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
+        
+        [menuPopover presentPopoverFromRect:CGRectMake(960, 0, 220, 32) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+#endif
+    } else {
+        //iphone stuff
+    }
+}
+
+// because of the actionSheet, the popover might not get dismissed, so we do it manually (through a NSNotification system, see above)
+// are we sure about this?
+-(void) dismissPopover {
+    /*if (popoverVisible) 
+        [menuPopover dismissPopoverAnimated:YES];
+    popoverVisible = NO;*/
+}
+
 #pragma mark -
+#pragma mark Custom touch event handling
+
 #define kMinimumPinchDelta      50
 #define kMinimumGestureLength	10
 #define kMaximumVariance        3
@@ -151,7 +172,8 @@
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	NSArray *twoTouches;
 	UITouch *touch = [touches anyObject];
-	
+	int width = [[UIScreen mainScreen] bounds].size.width;
+    
 	switch ([touches count]) {
 		case 1:
 			gestureStartPoint = [touch locationInView:self.view];
@@ -160,7 +182,7 @@
 				case 1:
 					NSLog(@"X:%d Y:%d", (int)gestureStartPoint.x, (int)gestureStartPoint.y );
 					SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
-							      (int)gestureStartPoint.y, 320 - (int)gestureStartPoint.x);
+							      (int)gestureStartPoint.y, width - (int)gestureStartPoint.x);
 					HW_click();
 					break;
 				case 2:
@@ -203,13 +225,14 @@
 	NSArray *twoTouches;
 	CGPoint currentPosition;
 	UITouch *touch = [touches anyObject];
+	int width = [[UIScreen mainScreen] bounds].size.width;
 
 	switch ([touches count]) {
 		case 1:
 			currentPosition = [touch locationInView:self.view];
 			// panning
 			SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
-							(int)gestureStartPoint.y, 320 - (int)gestureStartPoint.x);
+							(int)gestureStartPoint.y, width - (int)gestureStartPoint.x);
 			// remember that we have x and y inverted
 			/* temporarily disabling hog movements for camera panning testing
 			CGFloat vertDiff = gestureStartPoint.x - currentPosition.x;

@@ -8,6 +8,7 @@
 
 #import "MasterViewController.h"
 #import "DetailViewController.h"
+#import "TeamSettingsViewController.h"
 
 @implementation MasterViewController
 @synthesize detailViewController, optionList;
@@ -93,14 +94,14 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	/*
-	DetailViewController *detailViewController = [[DetailViewController alloc] initWithNibName:@"DetailViewController" bundle:nil];
-    // Pass the selected object to the new view controller.
-	[self.navigationController pushViewController:detailViewController animated:YES];
-	[detailViewController release];
-	*/
-    detailViewController.detailItem = [[NSString alloc] initWithFormat:@"%d", [indexPath row]];
+    
+    [detailViewController.navigationController popToRootViewControllerAnimated:NO];
+    TeamSettingsViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] 
+                                                              initWithStyle:UITableViewStyleGrouped];
+    teamSettingsViewController.title = [optionList objectAtIndex:[indexPath row]];
+    teamSettingsViewController.navigationItem.hidesBackButton = YES;
+
+    [detailViewController.navigationController pushViewController: teamSettingsViewController animated:YES];
 }
 
 

@@ -8,13 +8,18 @@
 
 #import "DetailViewController.h"
 #import "TeamSettingsViewController.h"
+#import "SDL_uikitappdelegate.h"
 
 @implementation DetailViewController
-@synthesize popoverController, detailItem, controllers;
+@synthesize popoverController, controllers;
 
 
 - (void)viewDidLoad {
-    self.title =@"First";
+    self.title = NSLocalizedString(@"Settings",@"");
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:0 target:self action:@selector(dismissSplitView)];
+
     NSMutableArray *array= [[NSMutableArray alloc] init];
 
     TeamSettingsViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] 
@@ -39,14 +44,12 @@
 - (void)viewDidUnload {
     self.controllers = nil;
     self.popoverController = nil;
-    self.detailItem = nil;
     [super viewDidUnload];
 }
 
 - (void)dealloc {
     [controllers release];
     [popoverController release];
-    [detailItem release];
     [super dealloc];
 }
 
@@ -85,6 +88,7 @@
     [self.navigationController pushViewController:nextController animated:YES];
 }
 
+/*
 #pragma mark -
 #pragma mark Managing the popover controller
 // When setting the detail item, update the view and dismiss the popover controller if it's showing.
@@ -99,13 +103,15 @@
 		//test.text=(NSString*) detailItem;
     }
 
-    if (popoverController != nil) {
-        [popoverController dismissPopoverAnimated:YES];
-    }        
+  //  if (popoverController != nil) {
+  //      [popoverController dismissPopoverAnimated:YES];
+  //  }        
 }
+*/
 
 #pragma mark -
 #pragma mark Split view support
+#ifdef __IPHONE_3_2
 -(void) splitViewController:(UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
     barButtonItem.title = @"Master List";
   //  [navigationBar.topItem setLeftBarButtonItem:barButtonItem animated:YES];
@@ -117,12 +123,16 @@
   //  [navigationBar.topItem setLeftBarButtonItem:nil animated:YES];
     self.popoverController = nil;
 }
-
+#endif
 #pragma mark -
 #pragma mark Rotation support
 // Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+}
+
+-(IBAction) dismissSplitView {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
 }
 
 @end

@@ -11,12 +11,12 @@
 @class MasterViewController;
 @class DetailViewController;
 @interface SplitViewRootController : UIViewController {
-    UISplitViewController *splitViewController;
+    id splitViewRootController; //UISplitViewController
     MasterViewController *masterViewController;
     DetailViewController *detailViewController;
 }
 
-@property (nonatomic,retain) IBOutlet UISplitViewController *splitViewController;
+@property (nonatomic,retain) IBOutlet id splitViewRootController;
 @property (nonatomic,retain) IBOutlet MasterViewController *masterViewController;
 @property (nonatomic,retain) IBOutlet DetailViewController *detailViewController;
 @end
