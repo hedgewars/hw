@@ -7,6 +7,7 @@ To compile and install you need:
  - SDL_image >= 1.2
  - SDL_ttf >= 2.0
  - CMake >= 2.6.0
+ - Lua >= 5.1.0
 For server:
  - Glasgow Haskell Compiler 6.10
  - dataenc package
