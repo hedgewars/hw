@@ -1070,7 +1070,7 @@ Gear^.dY:= mdY;
     nx:= ropeDx * len;
     ny:= ropeDy * len;
 
-    len:= Gear^.Elasticity - _0_3x70;
+    len:= Gear^.Elasticity - _5;
     while len > _3 do
             begin
             lx:= hwRound(Gear^.X + mdX * len);
@@ -1108,13 +1108,23 @@ if not haveDivided then
         begin
         tx:= RopePoints.ar[Pred(RopePoints.Count)].X;
         ty:= RopePoints.ar[Pred(RopePoints.Count)].Y;
-        if RopePoints.ar[Pred(RopePoints.Count)].b xor ((tx - Gear^.X) * (ty - HHGear^.Y) > (tx - HHGear^.X) * (ty - Gear^.Y)) then
+        mdX:= tx - Gear^.X;
+        mdY:= ty - Gear^.Y;
+        if RopePoints.ar[Pred(RopePoints.Count)].b xor (mdX * (ty - HHGear^.Y) > (tx - HHGear^.X) * mdY) then
             begin
             dec(RopePoints.Count);
             Gear^.X:= RopePoints.ar[RopePoints.Count].X;
             Gear^.Y:= RopePoints.ar[RopePoints.Count].Y;
             Gear^.Elasticity:= Gear^.Elasticity + RopePoints.ar[RopePoints.Count].dLen;
-            Gear^.Friction:= Gear^.Friction + RopePoints.ar[RopePoints.Count].dLen
+            Gear^.Friction:= Gear^.Friction + RopePoints.ar[RopePoints.Count].dLen;
+
+            // restore hog position
+            len:= _1 / Distance(mdX, mdY);
+            mdX:= mdX * len; 
+            mdY:= mdY * len;
+
+            HHGear^.X:= Gear^.X - mdX * Gear^.Elasticity;
+            HHGear^.Y:= Gear^.Y - mdY * Gear^.Elasticity;
             end
         end;
 
