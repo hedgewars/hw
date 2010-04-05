@@ -2957,8 +2957,6 @@ else
 Gear^.Pos:= 0;
 AllInactive:= false;
 FollowGear:= HHGear;
-OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
 with HHGear^ do
     begin
     State:= State and not gstAttacking;
