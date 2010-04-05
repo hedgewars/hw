@@ -7,7 +7,7 @@ IF(COMMAND cmake_policy)
 ENDIF(COMMAND cmake_policy)
 
 #detect subversion revision (if present)
-#set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
+set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
 IF(version_suffix MATCHES "-dev")
 	set(HW_DEV true)
 	IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.svn) 
