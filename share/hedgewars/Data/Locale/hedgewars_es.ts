@@ -483,7 +483,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation>Los modos de juego definen opciones generales y preferencias como el tiempo de las rondas, muerte súbida o vampirismo.</translation>
+        <translation>Los modos de juego definen opciones generales y preferencias como el tiempo de las rondas, muerte súbita o vampirismo.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
