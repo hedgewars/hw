@@ -84,7 +84,7 @@
 		
         // create Default Team.plist
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"Teams/"];
+        NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"/Teams/"];
 		[[NSFileManager defaultManager] createDirectoryAtPath:teamsDirectory 
                                   withIntermediateDirectories:NO 
                                                    attributes:nil 

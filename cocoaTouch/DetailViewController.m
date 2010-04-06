@@ -25,6 +25,7 @@
     TeamSettingsViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] 
                                                               initWithStyle:UITableViewStyleGrouped];
     teamSettingsViewController.title = NSLocalizedString(@"Teams",@"");
+
     [array addObject:teamSettingsViewController];
     [teamSettingsViewController release];
     

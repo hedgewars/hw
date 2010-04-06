@@ -39,7 +39,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@Teams/%@.plist",[paths objectAtIndex:0],self.teamName];
+    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/Teams/%@.plist",[paths objectAtIndex:0],self.teamName];
     NSDictionary *teamDict = [[NSDictionary alloc] initWithContentsOfFile:teamFile];
     [teamFile release];
     

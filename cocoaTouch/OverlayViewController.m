@@ -14,19 +14,20 @@
 #import "PopoverMenuViewController.h"
 
 @implementation OverlayViewController
-@synthesize dimTimer, menuPopover;
+@synthesize dimTimer, popoverController, popupMenu;
 
 
 -(void) didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-	
+
 	// Release any cached data, images, etc that aren't in use.
 }
 
 -(void) viewDidLoad {
+    isPopoverVisible = NO;
     self.view.alpha = 0;
-    
+
     // needed for rotation to work on os < 3.2
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
     self.view.transform = CGAffineTransformRotate(self.view.transform, (M_PI/2.0));
@@ -52,13 +53,15 @@
 
 -(void) viewDidUnload {
 	[dimTimer invalidate];
-    self.dimTimer = nil;
-    menuPopover = nil;
+	self.dimTimer = nil;
+    self.popoverController = nil;
+    self.popupMenu = nil;
     [super viewDidUnload];
 }
 
 -(void) dealloc {
-    [menuPopover release];
+    [popupMenu release];
+    [popoverController release];
     // dimTimer is autoreleased
     [super dealloc];
 }
@@ -96,6 +99,9 @@
 // issue certain action based on the tag of the button 
 -(IBAction) buttonPressed:(id) sender {
     [self activateOverlay];
+    if (isPopoverVisible) {
+        [self dismissPopover];
+    }
     UIButton *theButton = (UIButton *)sender;
     
     switch (theButton.tag) {
@@ -123,6 +129,9 @@
         case 7:
             HW_tab();
             break;
+        case 10:
+            [self showPopover];
+            break;
         default:
             NSLog(@"Nope");
             break;
@@ -138,29 +147,60 @@
 }
 
 // show up a popover containing a popupMenuViewController; we hook it with setPopoverContentSize
+// on iphone instead just use the tableViewController directly (and implement manually all animations)
 -(IBAction) showPopover{
-    PopoverMenuViewController *popupMenu = [[PopoverMenuViewController alloc] init];
-    popoverVisible = YES;
-    Class popoverController = NSClassFromString(@"UIPopoverController");
-    if (popoverController) {
+    isPopoverVisible = YES;
+    Class popoverControllerClass = NSClassFromString(@"UIPopoverController");
+    if (popoverControllerClass) {
 #ifdef __IPHONE_3_2
-        menuPopover = [[popoverController alloc] initWithContentViewController:popupMenu];
-        [menuPopover setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
+        popupMenu = [[PopoverMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        popoverController = [[popoverControllerClass alloc] initWithContentViewController:popupMenu];
+        [popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
+        [popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
         
-        [menuPopover presentPopoverFromRect:CGRectMake(960, 0, 220, 32) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+        [popoverController presentPopoverFromRect:CGRectMake(960, 0, 220, 32)
+                                           inView:self.view
+                         permittedArrowDirections:UIPopoverArrowDirectionUp 
+                                         animated:YES];
 #endif
     } else {
-        //iphone stuff
+        popupMenu = [[PopoverMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        popupMenu.view.backgroundColor = [UIColor clearColor];
+        popupMenu.view.frame = CGRectMake(480, 0, 200, 170);
+        [self.view addSubview:popupMenu.view];
+
+        [UIView beginAnimations:@"showing popover" context:NULL];
+        [UIView setAnimationDuration:0.35];
+        popupMenu.view.frame = CGRectMake(280, 0, 200, 170);
+        [UIView commitAnimations];
+    }
+    popupMenu.tableView.scrollEnabled = NO;
+}
+
+// on ipad just dismiss it, on iphone transtion on the right
+-(void) dismissPopover {
+    if (YES == isPopoverVisible) {
+        isPopoverVisible = NO;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+#ifdef __IPHONE_3_2
+            [popoverController dismissPopoverAnimated:YES];
+#endif
+        } else {
+            [UIView beginAnimations:@"hiding popover" context:NULL];
+            [UIView setAnimationDuration:0.35];
+            popupMenu.view.frame = CGRectMake(480, 0, 200, 170);
+            [UIView commitAnimations];
+        
+            [popupMenu.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.35];
+            [popupMenu performSelector:@selector(release) withObject:nil afterDelay:0.35];
+            
+            //[dimTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2.7]];
+        }
+        [self buttonReleased:nil];
     }
 }
 
-// because of the actionSheet, the popover might not get dismissed, so we do it manually (through a NSNotification system, see above)
-// are we sure about this?
--(void) dismissPopover {
-    /*if (popoverVisible) 
-        [menuPopover dismissPopoverAnimated:YES];
-    popoverVisible = NO;*/
-}
 
 #pragma mark -
 #pragma mark Custom touch event handling
@@ -174,6 +214,10 @@
 	UITouch *touch = [touches anyObject];
 	int width = [[UIScreen mainScreen] bounds].size.width;
     
+    if (isPopoverVisible) {
+        [self dismissPopover];
+    }
+        
 	switch ([touches count]) {
 		case 1:
 			gestureStartPoint = [touch locationInView:self.view];

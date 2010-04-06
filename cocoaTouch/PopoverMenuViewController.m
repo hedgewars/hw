@@ -15,15 +15,13 @@
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Overriden to allow any orientation.
-    return YES;
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
+    self.menuList = nil;
 }
 
 -(void) viewDidLoad {
@@ -81,6 +79,14 @@
             //SDL_iPhoneKeyboardShow([SDLUIKitDelegate sharedAppDelegate].window);
             break;
         case 2:
+            // expand the view (and table) so that the actionsheet can be selected on the iPhone
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+                [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+                [UIView beginAnimations:@"table width more" context:NULL];
+                [UIView setAnimationDuration:0.2];
+                self.view.frame = CGRectMake(0, 0, 480, 320);
+                [UIView commitAnimations];
+            }
 			actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
                                                       delegate:self
                                              cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
@@ -103,6 +109,13 @@
 #pragma mark -
 #pragma mark actionSheet methods
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        [UIView beginAnimations:@"table width less" context:NULL];
+        [UIView setAnimationDuration:0.2];
+        self.view.frame = CGRectMake(280, 0, 200, 170);
+        [UIView commitAnimations];
+    }
+    
 	if ([actionSheet cancelButtonIndex] != buttonIndex) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissPopover" object:nil];
         HW_terminate(NO);

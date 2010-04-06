@@ -55,7 +55,6 @@
     } else {
         detailedNavController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
         [self.view addSubview:detailedNavController.view];
-        //[detailedNavController release];
     }
 
     [super viewDidLoad];

@@ -10,7 +10,7 @@
 
 
 @implementation HogHatViewController
-@synthesize hatList, hog;
+@synthesize hatList, hatSprites, hog;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -24,13 +24,32 @@
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:hatPath
                                                                          error:NULL];
     self.hatList = array;
+    NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[hatList count]];
+    for (int i=0; i< [hatList count]; i++) {
+        NSString *hatFile = [hatPath stringByAppendingString:[hatList objectAtIndex:i]];
+        
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
+        CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
+        CGImageRef cgImgage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
+        [image release];
+        
+        UIImage *hatSprite = [[UIImage alloc] initWithCGImage:cgImgage];
+        [spriteArray addObject:hatSprite];
+        CGImageRelease(cgImgage);
+        [hatSprite release];
+    }
+    self.hatSprites = spriteArray;
+    [spriteArray release];
     //NSLog(@"%@", hatList);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.title = [hog objectForKey:@"hogname"];
+    // this updates the hog name and its hat
     [self.tableView reloadData];
+    // this moves the tableview to the top
+    [self.tableView setContentOffset:CGPointMake(0, 0) animated:NO];
 }
 
 /*
@@ -92,14 +111,7 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
         
-        NSString *hatsPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Hats/"];
-        NSString *hatFile = [hatsPath stringByAppendingString:[hatList objectAtIndex:[indexPath row]]];
-        UIImage *image = [UIImage imageWithContentsOfFile: hatFile];
-
-        CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
-        CGImageRef cgImgage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
-        cell.imageView.image = [UIImage imageWithCGImage: cgImgage];
-        CGImageRelease(cgImgage);
+        cell.imageView.image = [hatSprites objectAtIndex:[indexPath row]];
     }
     
     return cell;

@@ -16,14 +16,15 @@
 #pragma mark View lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"Teams/"];
+    NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"/Teams/"];
     
     NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:teamsDirectory
                                                                             error:NULL];
     self.list = contents;
-   
+    NSLog(@"%@\n%@", teamsDirectory, contents);
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
