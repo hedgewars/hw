@@ -308,6 +308,35 @@ if Gear^.Timer = 1 then
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepHedgehogGone(Gear: PGear);
+const frametime = 65;
+      timertime = frametime * 11;
+begin
+if PHedgehog(Gear^.Hedgehog)^.Unplaced then exit;
+if Gear^.Timer > 1 then
+    begin
+    AllInactive:= false;
+    dec(Gear^.Timer);
+    if (Gear^.Timer mod frametime) = 0 then inc(Gear^.Pos)
+    end else
+if Gear^.Timer = 1 then
+    begin
+    DeleteGear(Gear);
+    SetAllToActive
+    end else // Gear^.Timer = 0
+    begin
+    AllInactive:= false;
+    Gear^.Z:= cCurrHHZ;
+    RemoveGearFromList(Gear);
+    InsertGearToList(Gear);
+    PlaySound(sndByeBye, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+    PlaySound(sndWarp);
+    Gear^.Pos:= 0;
+    Gear^.Timer:= timertime
+    end
+end;
+
+////////////////////////////////////////////////////////////////////////////////
 procedure PickUp(HH, Gear: PGear);
 var s: shortstring;
     a: TAmmoType;
@@ -755,14 +784,24 @@ if (Gear^.Health = 0) then
     if PrvInactive then
         begin
         Gear^.Timer:= 0;
-        Gear^.State:= Gear^.State or gstHHDeath;
-        Gear^.doStep:= @doStepHedgehogDead;
         FollowGear:= Gear;
         PrvInactive:= false;
         AllInactive:= false;
 
-        // Death message
-        AddCaption(Format(GetEventString(eidDied), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
+        if not PHedgehog(Gear^.Hedgehog)^.Team^.hasGone then
+            begin
+            Gear^.State:= Gear^.State or gstHHDeath;
+            Gear^.doStep:= @doStepHedgehogDead;
+            // Death message
+            AddCaption(Format(GetEventString(eidDied), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
+            end
+        else
+            begin
+            Gear^.State:= Gear^.State or gstHHGone;
+            Gear^.doStep:= @doStepHedgehogGone;
+            // Gone message
+            AddCaption(Format(GetEventString(eidGone), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
+            end
         end;
     exit
     end;

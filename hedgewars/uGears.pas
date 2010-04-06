@@ -925,6 +925,11 @@ if (Gear^.State and gstHHDeath) <> 0 then
     begin
     DrawSprite(sprHHDeath, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 26 + WorldDy, Gear^.Pos);
     exit
+    end
+else if (Gear^.State and gstHHGone) <> 0 then
+    begin
+    DrawRotatedF(sprTeleport, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy, Gear^.Pos, hwSign(Gear^.dX), 0);
+    exit
     end;
 
 defaultPos:= true;

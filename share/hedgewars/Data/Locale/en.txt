@@ -362,6 +362,12 @@
 02:10=A bird, a plane, ...
 02:10=That one is out!
 
+; Hog (%1) has to leave (team is gone)
+02:11=%1 has to go to bed!
+02:11=%1 seems too busy to play
+02:11=Beam him up, Scotty!
+02:11=%1 has to go
+
 ; Weapon Categories
 03:00=Timed Grenade
 03:01=Timed Grenade

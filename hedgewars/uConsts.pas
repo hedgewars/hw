@@ -345,6 +345,7 @@ const
     gstWait           = $00020000;
     gstNotKickable    = $00040000;
     gstLoser          = $00080000;
+    gstHHGone         = $00100000;
 
     gm_Left   = $00000001;
     gm_Right  = $00000002;

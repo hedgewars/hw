@@ -1,4 +1,4 @@
-; German locale
+﻿; German locale
 
 00:00=Granate
 00:01=Splittergranate
@@ -159,6 +159,12 @@
 02:10=Home Run!
 02:10=Ein Vogel, ein Flugzeug, ...
 02:10=Der verleiht Flügel!
+
+; Hog (%1) has to leave (team is gone)
+02:11=%1 muss ins Bett!
+02:11=%1 scheint zu beschäftigt zu sein
+02:11=Beam ihn hoch, Scotty!
+02:11=%1 muss weg
 
 ; Weapon Categories
 03:00=Zeitzünder-Granate
