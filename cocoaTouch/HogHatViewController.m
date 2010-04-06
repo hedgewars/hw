@@ -10,23 +10,22 @@
 
 
 @implementation HogHatViewController
-@synthesize hatList, hatSprites, hog;
+@synthesize teamDictionary, hatArray, hatSprites, lastIndexPath, selectedHog;
 
 #pragma mark -
 #pragma mark View lifecycle
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    //NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    // load all the hat file names and store them into hatArray
     NSString *hatPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Hats/"];
-    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:hatPath
-                                                                         error:NULL];
-    self.hatList = array;
-    NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[hatList count]];
-    for (int i=0; i< [hatList count]; i++) {
-        NSString *hatFile = [hatPath stringByAppendingString:[hatList objectAtIndex:i]];
+    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:hatPath error:NULL];
+    self.hatArray = array;
+    
+    // load all the hat images from the previous array but save only the first sprite and store it in hatSprites
+    NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[hatArray count]];
+    for (int i=0; i< [hatArray count]; i++) {
+        NSString *hatFile = [hatPath stringByAppendingString:[hatArray objectAtIndex:i]];
         
         UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
         CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
@@ -40,12 +39,12 @@
     }
     self.hatSprites = spriteArray;
     [spriteArray release];
-    //NSLog(@"%@", hatList);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.title = [hog objectForKey:@"hogname"];
+    self.title = [[[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog] objectForKey:@"hogname"];
+
     // this updates the hog name and its hat
     [self.tableView reloadData];
     // this moves the tableview to the top
@@ -69,8 +68,7 @@
 */
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Override to allow orientations other than the default portrait orientation.
-    return YES;
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 
@@ -85,7 +83,7 @@
     if (0 == section) 
         rows = 1;
     else
-        rows = [self.hatList count];
+        rows = [self.hatArray count];
     return rows;
 }
 
@@ -99,14 +97,16 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
+    NSDictionary *hog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
     if (0 == [indexPath section]) {
-        cell.textLabel.text = [hog objectForKey:@"hogname"];
+        cell.textLabel.text = self.title;
         cell.imageView.image = nil;
         cell.accessoryType = UITableViewCellAccessoryNone;
     } else {
-        cell.textLabel.text = [[hatList objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
+        cell.textLabel.text = [[hatArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
         if ([cell.textLabel.text isEqualToString:[hog objectForKey:@"hat"]]) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            self.lastIndexPath = indexPath;
         } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
@@ -161,40 +161,53 @@
 #pragma mark -
 #pragma mark Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	/*
-	 <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-	 [self.navigationController pushViewController:detailViewController animated:YES];
-	 [detailViewController release];
-	 */
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (1 == [indexPath section]) {
+        int newRow = [indexPath row];
+        int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+        
+        if (newRow != oldRow) {
+            // if the two selected rows differ update data on the hog dictionary and reload table content
+            NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
+
+            NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
+            [newHog setObject:[[hatArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"hat"];
+            [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:selectedHog withObject:newHog];
+            [newHog release];
+            
+            // tell our boss to write this new stuff on disk
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
+            [self.tableView reloadData];
+
+            self.lastIndexPath = indexPath;
+            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        } 
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
 }
 
 
 #pragma mark -
 #pragma mark Memory management
-
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
 - (void)viewDidUnload {
     [super viewDidUnload];
-    self.hatList = nil;
-    self.hog = nil;
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
+    self.lastIndexPath = nil;
+    self.hatSprites = nil;
+    self.teamDictionary = nil;
+    self.hatArray = nil;
 }
 
-
 - (void)dealloc {
-    [hog release];
-    [hatList release];
+    [hatArray release];
+    [teamDictionary release];
+    [hatSprites release];
+    [lastIndexPath release];
     [super dealloc];
 }
 

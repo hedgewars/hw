@@ -23,7 +23,7 @@
     NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:teamsDirectory
                                                                             error:NULL];
     self.list = contents;
-    NSLog(@"%@\n%@", teamsDirectory, contents);
+    //NSLog(@"%@\n%@", teamsDirectory, contents);
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -32,25 +32,21 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Override to allow orientations other than the default portrait orientation.
     return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 
 #pragma mark -
 #pragma mark Table view data source
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
     return 1;
 }
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     return [list count];
 }
-
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -66,8 +62,6 @@
     NSString *rowString = [[list objectAtIndex:row] stringByDeletingPathExtension]; 
     cell.textLabel.text = rowString; 
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    //cell.imageView.image = [UIImage imageNamed:@"Default.png"];
-    //[rowString release];
     
     return cell;
 }
@@ -123,7 +117,7 @@
     NSInteger row = [indexPath row];
     NSString *selectedTeam = [[list objectAtIndex:row] stringByDeletingPathExtension];
     
-    childController.teamName = selectedTeam;
+    childController.title = selectedTeam;
     [self.navigationController pushViewController:childController animated:YES];
 }
 
@@ -149,12 +143,10 @@
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-/*
 - (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
+    self.list = nil;
 }
-*/
+
 
 - (void)dealloc {
     [list release];

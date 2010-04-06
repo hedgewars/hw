@@ -72,6 +72,7 @@
                                                        delegate:nil
                                               cancelButtonTitle:nil
                                               otherButtonTitles:nil];
+		[alert show];
 
 		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] 
                                               initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -79,7 +80,6 @@
 		[indicator startAnimating];
 		[alert addSubview:indicator];
 		[indicator release];
-		[alert show];
 		[alert release];
 		
         // create Default Team.plist

@@ -10,7 +10,7 @@
 #import "HogHatViewController.h"
 
 @implementation SingleTeamViewController
-@synthesize hogsList, hatList, secondaryItems, teamName;
+@synthesize teamDictionary, hatArray, secondaryItems;
 
 
 #pragma mark -
@@ -33,28 +33,30 @@
                              NSLocalizedString(@"Level",@""),nil];
     self.secondaryItems = array;
     [array release];
-}
-
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
     
     // load data about the team and extract info
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/Teams/%@.plist",[paths objectAtIndex:0],self.teamName];
-    NSDictionary *teamDict = [[NSDictionary alloc] initWithContentsOfFile:teamFile];
+    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/Teams/%@.plist",[paths objectAtIndex:0],self.title];
+    NSMutableDictionary *teamDict = [[NSMutableDictionary alloc] initWithContentsOfFile:teamFile];
     [teamFile release];
-    
-    // grab the hog list
-    self.hogsList = [teamDict objectForKey:@"hedgehogs"];
-    // grab the name of the team
-    self.teamName = [teamDict objectForKey:@"teamname"];
-    self.title = self.teamName;
+    self.teamDictionary = teamDict;
     [teamDict release];
+
+    // listen if any childController modifies the plist and write it if needed
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setWriteNeeded) name:@"setWriteNeedTeams" object:nil];
+    isWriteNeeded = NO;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    // grab the name of the team
+    self.title = [self.teamDictionary objectForKey:@"teamname"];
     
     // load the images of the hat for aach hog
-    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[self.hogsList count]];
-    for (NSDictionary *hog in self.hogsList) {
+    NSArray *hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
+    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[hogArray count]];
+    for (NSDictionary *hog in hogArray) {
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/Data/Graphics/Hats/%@.png",[[NSBundle mainBundle] resourcePath],[hog objectForKey:@"hat"]];
 
         UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
@@ -67,8 +69,10 @@
         CGImageRelease(cgImgage);
         [hatSprite release];
     }
-    self.hatList = array;
+    self.hatArray = array;
     [array release];
+    
+    [self.tableView reloadData];
 }
 
 /*
@@ -76,11 +80,25 @@
     [super viewDidAppear:animated];
 }
 */
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+
+-(void) setWriteNeeded {
+    isWriteNeeded = YES;
 }
-*/
+
+// write to disk the team dictionary
+-(void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+
+    if (isWriteNeeded) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/Teams/%@.plist",[paths objectAtIndex:0],self.title];
+        [self.teamDictionary writeToFile: teamFile atomically:YES];
+        [teamFile release];
+
+        isWriteNeeded = NO;
+    }
+}
+
 /*
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
@@ -124,19 +142,22 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                        reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+    NSArray *hogArray;
     NSInteger row = [indexPath row];
     switch ([indexPath section]) {
         case 0:
-            cell.textLabel.text = teamName;
+            cell.textLabel.text = self.title;
+            cell.imageView.image = nil;
             break;
         case 1:
-            cell.textLabel.text = [[self.hogsList objectAtIndex:row] objectForKey:@"hogname"];
+            hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
+            cell.textLabel.text = [[hogArray objectAtIndex:row] objectForKey:@"hogname"];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.imageView.image = [self.hatList objectAtIndex:row];
+            cell.imageView.image = [self.hatArray objectAtIndex:row];
             break;
         case 2:
             cell.textLabel.text = [self.secondaryItems objectAtIndex:row];
+            cell.imageView.image = nil;
             break;
         default:
             break;
@@ -188,15 +209,16 @@
 
 #pragma mark -
 #pragma mark Table view delegate
-
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (1 == [indexPath section]) {
         if (nil == hogChildController) {
             hogChildController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
         }
-    
-        hogChildController.hog = [hogsList objectAtIndex:[indexPath row]];
-        //NSLog(@"%@",hogChildController.hog);
+        
+        // cache the dictionary file of the team, so that other controllers can modify it
+        hogChildController.teamDictionary = self.teamDictionary;
+        hogChildController.selectedHog = [indexPath row];
+
         [self.navigationController pushViewController:hogChildController animated:YES];
     }
 }
@@ -204,7 +226,6 @@
 
 #pragma mark -
 #pragma mark Memory management
-
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
@@ -212,16 +233,17 @@
 }
 
 -(void) viewDidUnload {
-    self.hogsList = nil;
+    self.hatArray = nil;
     self.secondaryItems = nil;
-    self.teamName = nil;
+    self.teamDictionary = nil;
+    [super viewDidUnload];
 }
 
 
 -(void) dealloc {
     [secondaryItems release];
-    [hogsList release];
-    [teamName release];
+    [hatArray release];
+    [teamDictionary release];
     [super dealloc];
 }
 

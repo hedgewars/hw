@@ -10,13 +10,18 @@
 
 
 @interface HogHatViewController : UITableViewController {
-    NSArray *hatList;
+    NSDictionary *teamDictionary;
+    NSInteger selectedHog;
+    
+    NSArray *hatArray;
     NSArray *hatSprites;
-    NSDictionary *hog;
+    NSIndexPath *lastIndexPath;
 }
 
-@property (nonatomic,retain) NSArray *hatList;
+@property (nonatomic,retain) NSDictionary * teamDictionary;
+@property (nonatomic) NSInteger selectedHog;
+@property (nonatomic,retain) NSArray *hatArray;
 @property (nonatomic,retain) NSArray *hatSprites;
-@property (nonatomic,retain) NSDictionary *hog;
+@property (nonatomic,retain) NSIndexPath *lastIndexPath;
 
 @end

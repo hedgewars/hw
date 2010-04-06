@@ -10,17 +10,15 @@
 
 @class HogHatViewController;
 @interface SingleTeamViewController : UITableViewController {
-    NSArray *hogsList;
-    NSArray *hatList;
+    NSMutableDictionary *teamDictionary;
+    NSArray *hatArray;
     NSArray *secondaryItems;
     
-    NSString *teamName;
-    
+    BOOL isWriteNeeded;
     HogHatViewController *hogChildController;
 }
 
-@property (nonatomic,retain) NSArray *hogsList;
-@property (nonatomic,retain) NSArray *hatList;
+@property (nonatomic,retain) NSMutableDictionary *teamDictionary;
+@property (nonatomic,retain) NSArray *hatArray;
 @property (nonatomic,retain) NSArray *secondaryItems;
-@property (nonatomic,retain) NSString *teamName;
 @end
