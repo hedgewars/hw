@@ -1230,7 +1230,7 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amMineStrike;
-                AttackVoice: sndNone);
+                AttackVoice: sndIncoming);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1467,7 +1467,7 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amNapalm;
-                AttackVoice: sndNone);
+                AttackVoice: sndIncoming);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
