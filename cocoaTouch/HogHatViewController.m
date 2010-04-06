@@ -49,7 +49,7 @@
     // this updates the hog name and its hat
     [self.tableView reloadData];
     // this moves the tableview to the top
-    [self.tableView setContentOffset:CGPointMake(0, 0) animated:NO];
+    [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
 
 /*

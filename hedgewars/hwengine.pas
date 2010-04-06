@@ -244,8 +244,8 @@ begin
 
     UserNick:= gameArgs[0];
     val(gameArgs[1], ipcPort);
-    isSoundEnabled:= false;//gameArgs[2] = '1';
-    isMusicEnabled:= false;//gameArgs[3] = '1';
+    isSoundEnabled:= gameArgs[2] = '1';
+    isMusicEnabled:= gameArgs[3] = '1';
     cLocaleFName:= gameArgs[4];
     cAltDamage:= gameArgs[5] = '1';
     val(gameArgs[6], cScreenHeight);

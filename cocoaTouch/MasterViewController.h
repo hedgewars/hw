@@ -14,10 +14,12 @@
 @interface MasterViewController : UITableViewController {
     DetailViewController *detailViewController;
     NSArray *optionList;
+    NSArray *controllers;
 }
 
-@property (nonatomic, retain) IBOutlet DetailViewController *detailViewController;
+@property (nonatomic, retain) DetailViewController *detailViewController;
 @property (nonatomic, retain) NSArray *optionList;
+@property (nonatomic, retain) NSArray *controllers;
 
 -(IBAction) dismissSplitView;
 

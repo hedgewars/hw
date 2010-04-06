@@ -7,8 +7,9 @@
 //
 
 #import "DetailViewController.h"
-#import "TeamSettingsViewController.h"
 #import "SDL_uikitappdelegate.h"
+#import "TeamSettingsViewController.h"
+#import "GeneralSettingsViewController.h"
 
 @implementation DetailViewController
 @synthesize popoverController, controllers;
@@ -22,10 +23,15 @@
 
     NSMutableArray *array= [[NSMutableArray alloc] init];
 
+    GeneralSettingsViewController *generalSettingsViewController = [[GeneralSettingsViewController alloc]
+                                                                    initWithStyle:UITableViewStyleGrouped];
+    generalSettingsViewController.title = NSLocalizedString(@"General",@"");
+    [array addObject:generalSettingsViewController];
+    [generalSettingsViewController release];
+    
     TeamSettingsViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] 
                                                               initWithStyle:UITableViewStyleGrouped];
     teamSettingsViewController.title = NSLocalizedString(@"Teams",@"");
-
     [array addObject:teamSettingsViewController];
     [teamSettingsViewController release];
     

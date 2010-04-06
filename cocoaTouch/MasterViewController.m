@@ -8,10 +8,11 @@
 
 #import "MasterViewController.h"
 #import "DetailViewController.h"
+#import "GeneralSettingsViewController.h"
 #import "TeamSettingsViewController.h"
 
 @implementation MasterViewController
-@synthesize detailViewController, optionList;
+@synthesize detailViewController, optionList, controllers;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -24,8 +25,28 @@
                                                   NSLocalizedString(@"Weapons",@""),
                                                   NSLocalizedString(@"Schemes",@""),
                                                   nil];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:0 target:self action:@selector(dismissSplitView)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:0
+                                                                                          target:self
+                                                                                          action:@selector(dismissSplitView)];
 
+    NSMutableArray *array= [[NSMutableArray alloc] init];
+
+    GeneralSettingsViewController *generalSettingsViewController = [[GeneralSettingsViewController alloc]
+                                                                    initWithStyle:UITableViewStyleGrouped];
+    generalSettingsViewController.title = NSLocalizedString(@"General",@"");
+    generalSettingsViewController.navigationItem.hidesBackButton = YES;
+    [array addObject:generalSettingsViewController];
+    [generalSettingsViewController release];
+    
+    TeamSettingsViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] 
+                                                              initWithStyle:UITableViewStyleGrouped];
+    teamSettingsViewController.title = NSLocalizedString(@"Teams",@"");
+    teamSettingsViewController.navigationItem.hidesBackButton = YES;
+    [array addObject:teamSettingsViewController];
+    [teamSettingsViewController release];
+    
+    self.controllers = array;
+    [array release];
     // Uncomment the following line to preserve selection between presentations.
     //self.clearsSelectionOnViewWillAppear = NO;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
@@ -96,12 +117,10 @@
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [detailViewController.navigationController popToRootViewControllerAnimated:NO];
-    TeamSettingsViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] 
-                                                              initWithStyle:UITableViewStyleGrouped];
-    teamSettingsViewController.title = [optionList objectAtIndex:[indexPath row]];
-    teamSettingsViewController.navigationItem.hidesBackButton = YES;
 
-    [detailViewController.navigationController pushViewController: teamSettingsViewController animated:YES];
+    NSInteger row = [indexPath row];
+    UITableViewController *nextController = [self.controllers objectAtIndex:row];
+    [detailViewController.navigationController pushViewController:nextController animated:YES];
 }
 
 

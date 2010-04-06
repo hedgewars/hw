@@ -11,13 +11,16 @@
 @class HogHatViewController;
 @interface SingleTeamViewController : UITableViewController {
     NSArray *hogsList;
+    NSArray *hatList;
     NSArray *secondaryItems;
+    
     NSString *teamName;
     
     HogHatViewController *hogChildController;
 }
 
 @property (nonatomic,retain) NSArray *hogsList;
+@property (nonatomic,retain) NSArray *hatList;
 @property (nonatomic,retain) NSArray *secondaryItems;
 @property (nonatomic,retain) NSString *teamName;
 @end

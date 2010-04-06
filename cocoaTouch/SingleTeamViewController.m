@@ -10,7 +10,7 @@
 #import "HogHatViewController.h"
 
 @implementation SingleTeamViewController
-@synthesize hogsList, secondaryItems, teamName;
+@synthesize hogsList, hatList, secondaryItems, teamName;
 
 
 #pragma mark -
@@ -38,15 +38,37 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    // load data about the team and extract info
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/Teams/%@.plist",[paths objectAtIndex:0],self.teamName];
     NSDictionary *teamDict = [[NSDictionary alloc] initWithContentsOfFile:teamFile];
     [teamFile release];
     
+    // grab the hog list
     self.hogsList = [teamDict objectForKey:@"hedgehogs"];
+    // grab the name of the team
     self.teamName = [teamDict objectForKey:@"teamname"];
+    self.title = self.teamName;
     [teamDict release];
-    self.title = teamName;
+    
+    // load the images of the hat for aach hog
+    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[self.hogsList count]];
+    for (NSDictionary *hog in self.hogsList) {
+        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/Data/Graphics/Hats/%@.png",[[NSBundle mainBundle] resourcePath],[hog objectForKey:@"hat"]];
+
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
+        CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
+        CGImageRef cgImgage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
+        [image release];
+        
+        UIImage *hatSprite = [[UIImage alloc] initWithCGImage:cgImgage];
+        [array addObject:hatSprite];
+        CGImageRelease(cgImgage);
+        [hatSprite release];
+    }
+    self.hatList = array;
+    [array release];
 }
 
 /*
@@ -77,7 +99,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger rows;
+    NSInteger rows = 0;
     switch (section) {
         case 0:
             rows = 1;
@@ -111,6 +133,7 @@
         case 1:
             cell.textLabel.text = [[self.hogsList objectAtIndex:row] objectForKey:@"hogname"];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.imageView.image = [self.hatList objectAtIndex:row];
             break;
         case 2:
             cell.textLabel.text = [self.secondaryItems objectAtIndex:row];

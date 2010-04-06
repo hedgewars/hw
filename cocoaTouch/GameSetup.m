@@ -325,7 +325,16 @@
     [machine release];
     */
     
-	gameArgs[0] = [[systemSettings objectForKey:@"username"] UTF8String];	//UserNick
+    // prevents using an empty nickname
+    NSString *username;
+    NSString *originalUsername = [systemSettings objectForKey:@"username"];
+    if ([originalUsername isEqualToString:@""]) {
+        username = [[NSString alloc] initWithFormat:@"MobileUser-%@",ipcString];
+    } else {
+        username = [[NSString alloc] initWithString:originalUsername];
+    }
+    
+	gameArgs[0] = [username UTF8String];                                    //UserNick
 	gameArgs[1] = [ipcString UTF8String];                                   //ipcPort
 	gameArgs[2] = [[systemSettings objectForKey:@"sounds"] UTF8String];     //isSoundEnabled
 	gameArgs[3] = [[systemSettings objectForKey:@"music"] UTF8String];      //isMusicEnabled
@@ -338,6 +347,7 @@
     [hSize release];
 	[localeString release];
 	[ipcString release];
+    [username release];
 	return gameArgs;
 }
 

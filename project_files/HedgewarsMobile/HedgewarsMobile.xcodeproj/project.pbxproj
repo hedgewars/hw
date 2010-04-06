@@ -25,6 +25,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		611B0AA1116B626E00112153 /* GeneralSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611B0AA0116B626E00112153 /* GeneralSettingsViewController.m */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
 		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
@@ -176,6 +177,8 @@
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* HedgewarsMobile_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HedgewarsMobile_Prefix.pch; sourceTree = "<group>"; };
+		611B0A9F116B626E00112153 /* GeneralSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeneralSettingsViewController.h; path = ../../cocoaTouch/GeneralSettingsViewController.h; sourceTree = SOURCE_ROOT; };
+		611B0AA0116B626E00112153 /* GeneralSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeneralSettingsViewController.m; path = ../../cocoaTouch/GeneralSettingsViewController.m; sourceTree = SOURCE_ROOT; };
 		611FD9C81155A1F200C2203D /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Background.png; path = ../../QTfrontend/res/Background.png; sourceTree = SOURCE_ROOT; };
 		611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HedgewarsTitle.png; path = ../../QTfrontend/res/HedgewarsTitle.png; sourceTree = SOURCE_ROOT; };
 		611FD9CF1155A40700C2203D /* NetworkPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = NetworkPlay.png; path = ../../QTfrontend/res/NetworkPlay.png; sourceTree = SOURCE_ROOT; };
@@ -428,6 +431,15 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		611B0A94116B621600112153 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				611B0A9F116B626E00112153 /* GeneralSettingsViewController.h */,
+				611B0AA0116B626E00112153 /* GeneralSettingsViewController.m */,
+			);
+			name = General;
+			sourceTree = "<group>";
+		};
 		61798860114AA49D00BA94A9 /* SDLOverrides */ = {
 			isa = PBXGroup;
 			children = (
@@ -544,6 +556,7 @@
 				61A11AC81168DA9400359010 /* MasterViewController.m */,
 				61A11AD41168DB3700359010 /* DetailViewController.h */,
 				61A11AD51168DB3700359010 /* DetailViewController.m */,
+				611B0A94116B621600112153 /* General */,
 				61A11AD01168DB1F00359010 /* Teams */,
 			);
 			name = Settings;
@@ -788,7 +801,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#cd ${PROJECT_DIR}/build/HedgewarsMobile.build/Debug-iphonesimulator/iHedgewars.build/DerivedSources-normal/\n#rm -fr i386/\n#ln -sf ../../HedgewarsMobile.build/DerivedSources-normal/i386/ i386\n#cd ${PROJECT_DIR}\n\n#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/\nrm -rf ${PROJECT_DIR}/Data/Music/\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all forts\nrm -rf ${PROJECT_DIR}/Data/Forts/\n\n#delete all forts\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
+			shellScript = "#cd ${PROJECT_DIR}/build/HedgewarsMobile.build/Debug-iphonesimulator/iHedgewars.build/DerivedSources-normal/\n#rm -fr i386/\n#ln -sf ../../HedgewarsMobile.build/DerivedSources-normal/i386/ i386\n#cd ${PROJECT_DIR}\n\n#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/\nrm -rf ${PROJECT_DIR}/Data/Music/\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all forts\nrm -rf ${PROJECT_DIR}/Data/Forts/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -878,6 +891,7 @@
 				61A11AD61168DB3700359010 /* DetailViewController.m in Sources */,
 				61A11AE11168DC6E00359010 /* SingleTeamViewController.m in Sources */,
 				61A11AE41168DC9400359010 /* HogHatViewController.m in Sources */,
+				611B0AA1116B626E00112153 /* GeneralSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

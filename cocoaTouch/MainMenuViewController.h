@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SettingsViewController.h"
 
 @interface MainMenuViewController : UIViewController {
     UIView *cover;

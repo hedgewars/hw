@@ -55,6 +55,7 @@
     } else {
         detailedNavController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
         [self.view addSubview:detailedNavController.view];
+        // TODO: we are leaking here!!!
     }
 
     [super viewDidLoad];
