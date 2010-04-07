@@ -12,23 +12,24 @@
 #import "TeamSettingsViewController.h"
 
 @implementation MasterViewController
-@synthesize detailViewController, optionList, controllers;
+@synthesize detailViewController, optionList, controllers, lastIndexPath;
 
 #pragma mark -
 #pragma mark View lifecycle
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // the list of selectable controllers
     optionList = [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""),
                                                   NSLocalizedString(@"Teams",@""),
                                                   NSLocalizedString(@"Weapons",@""),
                                                   NSLocalizedString(@"Schemes",@""),
                                                   nil];
+    // the "Done" button on top left
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:0
                                                                                           target:self
                                                                                           action:@selector(dismissSplitView)];
-
+    // list of allocated viewcontrollers (same in DetailViewController)
     NSMutableArray *array= [[NSMutableArray alloc] init];
 
     GeneralSettingsViewController *generalSettingsViewController = [[GeneralSettingsViewController alloc]
@@ -47,10 +48,6 @@
     
     self.controllers = array;
     [array release];
-    // Uncomment the following line to preserve selection between presentations.
-    //self.clearsSelectionOnViewWillAppear = NO;
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    //self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -115,12 +112,18 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    int newRow = [indexPath row];
+    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : 0;
     
-    [detailViewController.navigationController popToRootViewControllerAnimated:NO];
-
-    NSInteger row = [indexPath row];
-    UITableViewController *nextController = [self.controllers objectAtIndex:row];
-    [detailViewController.navigationController pushViewController:nextController animated:YES];
+    if (newRow != oldRow) {
+        [detailViewController.navigationController popToRootViewControllerAnimated:NO];
+        
+        UITableViewController *nextController = [self.controllers objectAtIndex:[indexPath row]];
+        [detailViewController.navigationController pushViewController:nextController animated:YES];
+        self.lastIndexPath = indexPath;
+        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
@@ -129,7 +132,6 @@
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 

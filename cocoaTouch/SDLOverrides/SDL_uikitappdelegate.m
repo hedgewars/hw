@@ -35,7 +35,17 @@
 #undef main
 #endif
 
+#define VALGRIND "/opt/valgrind/bin/valgrind"
+
 int main (int argc, char *argv[]) {
+#ifdef VALGRIND_REXEC
+    // Using the valgrind build config, rexec ourself in valgrind
+    // from http://landonf.bikemonkey.org/code/iphone/iPhone_Simulator_Valgrind.20081224.html
+    if (argc < 2 || (argc >= 2 && strcmp(argv[1], "-valgrind") != 0)) {
+        execl(VALGRIND, VALGRIND, "--leak-check=full", "--show-reachable=yes", argv[0], "-valgrind", NULL);
+    }
+#endif
+
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	int retVal = UIApplicationMain(argc, argv, nil, @"SDLUIKitDelegate");
 	[pool release];
@@ -43,7 +53,7 @@ int main (int argc, char *argv[]) {
 }
 
 @implementation SDLUIKitDelegate
-@synthesize uiwindow, window, viewController, overlayController;
+@synthesize uiwindow, window, viewController;
 
 // convenience method
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -56,7 +66,6 @@ int main (int argc, char *argv[]) {
         self.uiwindow = nil;
         self.window = NULL;
         self.viewController = nil;
-        self.overlayController = nil;
         isInGame = NO;
         return self;
     } else 
@@ -78,6 +87,7 @@ int main (int argc, char *argv[]) {
 	const char **gameArgs = [setup getSettings];
 	[setup release];
     
+    OverlayViewController *overlayController;
     // overlay with controls, become visible after 2 seconds
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController-iPad" bundle:nil];

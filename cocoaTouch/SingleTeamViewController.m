@@ -60,6 +60,7 @@
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/Data/Graphics/Hats/%@.png",[[NSBundle mainBundle] resourcePath],[hog objectForKey:@"hat"]];
 
         UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
+        [hatFile release];
         CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
         CGImageRef cgImgage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
         [image release];

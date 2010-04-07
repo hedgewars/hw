@@ -15,11 +15,13 @@
     DetailViewController *detailViewController;
     NSArray *optionList;
     NSArray *controllers;
+    NSIndexPath *lastIndexPath;
 }
 
 @property (nonatomic, retain) DetailViewController *detailViewController;
 @property (nonatomic, retain) NSArray *optionList;
 @property (nonatomic, retain) NSArray *controllers;
+@property (nonatomic, retain) NSIndexPath *lastIndexPath;
 
 -(IBAction) dismissSplitView;
 

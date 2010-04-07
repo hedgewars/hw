@@ -17,10 +17,8 @@
 
 - (void)viewDidLoad {
     self.title = NSLocalizedString(@"Settings",@"");
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:0 target:self action:@selector(dismissSplitView)];
 
+    // allocate controllers and store them into the array
     NSMutableArray *array= [[NSMutableArray alloc] init];
 
     GeneralSettingsViewController *generalSettingsViewController = [[GeneralSettingsViewController alloc]
@@ -37,14 +35,22 @@
     
     self.controllers = array;
     [array release];
-        
+    
+    // on ipad make the general setting the first view, on iphone add the "Done" button on top left
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        UITableViewController *nextController = [self.controllers objectAtIndex:0];
+        nextController.navigationItem.hidesBackButton = YES;
+        [self.navigationController pushViewController:nextController animated:NO];
+    } else {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:0 target:self action:@selector(dismissSplitView)];
+    }
+
     [super viewDidLoad];
 }
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-
     // Release any cached data, images, etc that aren't in use.
 }
 
@@ -131,6 +137,7 @@
     self.popoverController = nil;
 }
 #endif
+
 #pragma mark -
 #pragma mark Rotation support
 // Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.

@@ -30,14 +30,12 @@
 	SDL_Window *window;
 	UIWindow *uiwindow;
 	MainMenuViewController *viewController;
-    OverlayViewController *overlayController;
     BOOL isInGame;
 }
 
 @property (readwrite, assign) SDL_Window *window;
 @property (readwrite, retain) UIWindow *uiwindow;
 @property (nonatomic, retain) MainMenuViewController *viewController;
-@property (nonatomic, retain) OverlayViewController *overlayController;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(NSString *)dataFilePath:(NSString *)fileName;

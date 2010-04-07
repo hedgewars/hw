@@ -25,9 +25,10 @@
     // load all the hat images from the previous array but save only the first sprite and store it in hatSprites
     NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[hatArray count]];
     for (int i=0; i< [hatArray count]; i++) {
-        NSString *hatFile = [hatPath stringByAppendingString:[hatArray objectAtIndex:i]];
+        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/Data/Graphics/Hats/%@",[[NSBundle mainBundle] resourcePath],[hatArray objectAtIndex:i]];
         
         UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
+        [hatFile release];
         CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
         CGImageRef cgImgage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
         [image release];
