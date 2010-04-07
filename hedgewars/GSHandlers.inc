@@ -982,7 +982,7 @@ if (Gear^.Message and gm_Attack) <> 0 then
     Gear^.Friction:= _450;
     Gear^.Elasticity:= _0;
     Gear^.State:= Gear^.State and not gsttmpflag;
-    Gear^.doStep:= @doStepRope
+    Gear^.doStep:= @doStepRope;
     end
 end;
 
@@ -1021,6 +1021,7 @@ HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 if ((HHGear^.State and gstHHDriven) = 0)
     or (CheckGearDrowning(HHGear)) then
     begin
+    PlaySound(sndRopeRelease);
     DeleteMe;
     exit
     end;
@@ -1159,10 +1160,13 @@ if len > _0_8 then
 if (Gear^.Message and gm_Attack) <> 0 then
     if (Gear^.State and gsttmpFlag) <> 0 then
         with PHedgehog(Gear^.Hedgehog)^ do
+            begin
+            PlaySound(sndRopeRelease);
             if Ammo^[CurSlot, CurAmmo].AmmoType <> amParachute then
                 WaitCollision
             else
                 DeleteMe
+            end
     else
 else
     if (Gear^.State and gsttmpFlag) = 0 then
@@ -1223,6 +1227,7 @@ if (HHGear^.State and gstMoving) <> 0 then
             Gear^.Y:= Gear^.Y + ty;
             Gear^.Elasticity:= tt;
             Gear^.doStep:= @doStepRopeWork;
+            PlaySound(sndRopeAttach);
             with HHGear^ do State:= State and not (gstAttacking or gstHHJumping or gstHHHJump);
 
             RemoveFromAmmo;
@@ -1244,6 +1249,7 @@ if (Gear^.State and gstCollision) <> 0 then
     else
         begin
         Gear^.doStep:= @doStepRopeWork;
+        PlaySound(sndRopeAttach);
         with HHGear^ do State:= State and not (gstAttacking or gstHHJumping or gstHHHJump);
 
         RemoveFromAmmo;
@@ -1269,7 +1275,8 @@ procedure doStepRope(Gear: PGear);
 begin
 Gear^.dX:= - Gear^.dX;
 Gear^.dY:= - Gear^.dY;
-Gear^.doStep:= @doStepRopeAttach
+Gear^.doStep:= @doStepRopeAttach;
+PlaySound(sndRopeShot)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

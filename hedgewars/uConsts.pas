@@ -823,9 +823,9 @@ const
             (FileName:                 'Oops.ogg'; Path: ptVoices),// sndOops
             (FileName:                 'Nooo.ogg'; Path: ptVoices),// sndNooo
             (FileName:                'Hello.ogg'; Path: ptVoices),// sndHello
-            (FileName:                         ''; Path: ptSounds),// sndRopeShot
-            (FileName:                         ''; Path: ptSounds),// sndRopeAttach
-            (FileName:                         ''; Path: ptSounds),// sndRopeRelease
+            (FileName:             'ropeshot.ogg'; Path: ptSounds),// sndRopeShot
+            (FileName:           'ropeattach.ogg'; Path: ptSounds),// sndRopeAttach
+            (FileName:          'roperelease.ogg'; Path: ptSounds),// sndRopeRelease
             (FileName:            'switchhog.ogg'; Path: ptSounds),// sndSwitchHog
             (FileName:              'victory.ogg'; Path: ptVoices),// sndVictory
             (FileName:         'sniperreload.ogg'; Path: ptSounds),// sndSniperReload
