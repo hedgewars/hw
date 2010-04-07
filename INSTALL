@@ -1,6 +1,6 @@
 To compile and install you need:
  - Qt >= 4.4
- - FreePascal >= 2.2.0
+ - FreePascal >= 2.2.4
  - SDL >= 1.2.5
  - SDL_net >= 1.2.5
  - SDL_mixer >= 1.2

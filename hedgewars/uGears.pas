@@ -1833,6 +1833,7 @@ end;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);
 var Gear: PGear;
     dmg, dmgRadius, dmgBase: LongInt;
+    fX, fY: hwFloat;
 begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
@@ -1850,6 +1851,8 @@ if (Mask and EXPLAllDamageInRadius) = 0 then
 else
     dmgRadius:= Radius;
 dmgBase:= dmgRadius + cHHRadius div 2;
+fX:= int2hwFloat(X);
+fY:= int2hwFloat(Y);
 Gear:= GearsList;
 while Gear <> nil do
     begin
@@ -1866,8 +1869,8 @@ while Gear <> nil do
                 gtFlame,
                 gtExplosives: begin
 // Run the calcs only once we know we have a type that will need damage
-                        if hwRound(hwAbs(Gear^.X-int2hwFloat(X))+hwAbs(Gear^.Y-int2hwFloat(Y))) < dmgBase then
-                            dmg:= dmgBase - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+                        if hwRound(hwAbs(Gear^.X-fX)+hwAbs(Gear^.Y-fY)) < dmgBase then
+                            dmg:= dmgBase - hwRound(Distance(Gear^.X - fX, Gear^.Y - fY));
                         if dmg > 1 then
                             begin
                             dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
@@ -1882,8 +1885,8 @@ while Gear <> nil do
                             if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
                                 begin
                                 DeleteCI(Gear);
-                                Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
-                                Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
+                                Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - fX);
+                                Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - fY);
                                 Gear^.State:= (Gear^.State or gstMoving) and (not gstLoser);
                                 if not Gear^.Invulnerable then
                                     Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
@@ -1897,8 +1900,8 @@ while Gear <> nil do
                         end;
                 gtGrave: begin
 // Run the calcs only once we know we have a type that will need damage
-                        if hwRound(hwAbs(Gear^.X-int2hwFloat(X))+hwAbs(Gear^.Y-int2hwFloat(Y))) < dmgBase then
-                            dmg:= dmgBase - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+                        if hwRound(hwAbs(Gear^.X-fX)+hwAbs(Gear^.Y-fY)) < dmgBase then
+                            dmg:= dmgBase - hwRound(Distance(Gear^.X - fX, Gear^.Y - fY));
                         if dmg > 1 then
                             begin
                             dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
