@@ -89,7 +89,7 @@ int main (int argc, char *argv[]) {
     
     OverlayViewController *overlayController;
     // overlay with controls, become visible after 2 seconds
-    overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController-iPhone" bundle:nil];
+    overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
     
     [uiwindow addSubview:overlayController.view];
     [overlayController release];
