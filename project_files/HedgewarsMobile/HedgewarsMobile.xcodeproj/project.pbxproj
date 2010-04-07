@@ -992,7 +992,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -dLOWRES";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;

@@ -11,7 +11,7 @@
 #import "DetailViewController.h"
 
 @implementation SplitViewRootController
-@synthesize splitViewRootController, masterViewController, detailViewController;
+@synthesize detailViewController;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -27,44 +27,58 @@
 // load the view programmatically; we need a splitViewController that handles a MasterViewController 
 // (which is just a UITableViewController) and a DetailViewController where we present options
 -(void) viewDidLoad {
-    UINavigationController *detailedNavController;
-    detailViewController = [[DetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    self.detailViewController = [[DetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
+     [detailViewController release];
+           NSLog(@"%d", [detailViewController retainCount]);
 
-    Class splitViewController = NSClassFromString(@"UISplitViewController");
-    if (splitViewController) {
-        splitViewRootController = [[splitViewController alloc] init];
+    UINavigationController *detailedNavController = [[UINavigationController alloc] initWithRootViewController:self.detailViewController];
+            NSLog(@"%d", [detailViewController retainCount]);
+
+    [detailViewController release];
+            NSLog(@"%d", [detailViewController retainCount]);
+
+    id splitViewRootController;
+    
+    Class splitViewControllerClass = NSClassFromString(@"UISplitViewController");
+    if (splitViewControllerClass) {
+        splitViewRootController = [[splitViewControllerClass alloc] init];
         CGRect screensize = [[UIScreen mainScreen] bounds];
         [[splitViewRootController view] setFrame:CGRectMake(0, 0, screensize.size.height, screensize.size.width)];
-        masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
+        MasterViewController *masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
         
         UINavigationController *mainNavController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
-        detailedNavController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
-        
-        // set attributes
-        masterViewController.detailViewController = detailViewController;
+    
+        masterViewController.detailViewController = self.detailViewController;
+                NSLog(@"%d", [detailViewController retainCount]);
+
+        [masterViewController release];
+
         [splitViewRootController setViewControllers:[NSArray arrayWithObjects: mainNavController, detailedNavController, nil]];
         [mainNavController release];
         [detailedNavController release];
         
-        [splitViewRootController setDelegate: detailViewController];
-        
+        [splitViewRootController setDelegate: self.detailViewController];
+        [detailViewController release];
+                NSLog(@"%d", [detailViewController retainCount]);
+
         // add view to main controller
         [self.view addSubview:[splitViewRootController view]];
-        [detailViewController release];
-        [masterViewController release];
+        //[splitViewRootController release];
+
     } else {
-        detailedNavController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
         [self.view addSubview:detailedNavController.view];
-        // TODO: we are leaking here!!!
     }
+
 
     [super viewDidLoad];
 }
-
+         
+-(void) viewDidUnload {
+    [super viewDidUnload];
+    self.detailViewController = nil;
+}
 -(void) dealloc {
     [detailViewController release];
-    [masterViewController release];
-    [splitViewRootController release];
     [super dealloc];
 }
 

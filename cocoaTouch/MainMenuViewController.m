@@ -38,21 +38,23 @@
 }
 
 -(void) viewDidLoad {
-    
     char *ver;
     HW_versionInfo(NULL, &ver);
     NSString *versionNumber = [[NSString alloc] initWithCString:ver];
     self.versionLabel.text = versionNumber;
     [versionNumber release];
 
-    // initialize some files the first time we load the game
-	[NSThread detachNewThreadSelector:@selector(checkFirstRun) toTarget:self withObject:nil];
     // listen to request to remove the modalviewcontroller
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(dismissModalViewController)
                                                  name: @"dismissModalView" 
                                                object:nil];
-
+    
+    // initialize some files the first time we load the game
+    NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
+	if (!([[NSFileManager defaultManager] fileExistsAtPath:filePath])) 
+        [NSThread detachNewThreadSelector:@selector(checkFirstRun) toTarget:self withObject:nil];
+    
 	[super viewDidLoad];
 }
 
@@ -60,72 +62,69 @@
 // if it is it blocks user interaction with an alertView until files are created
 -(void) checkFirstRun {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"First time run, creating settings files");
+    
+    // show a popup with an indicator to make the user wait
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Please wait",@"")
+                                                    message:nil
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:nil];
+    [alert show];
+    
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] 
+                                          initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    indicator.center = CGPointMake(alert.bounds.size.width / 2, alert.bounds.size.height - 50);
+    [indicator startAnimating];
+    [alert addSubview:indicator];
+    [indicator release];
+    [alert release];
+    
+    // create Default Team.plist
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"/Teams/"];
+    [[NSFileManager defaultManager] createDirectoryAtPath:teamsDirectory 
+                              withIntermediateDirectories:NO 
+                                               attributes:nil 
+                                                    error:NULL];
+    
+    NSMutableArray *hedgehogs = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < 8; i++) {
+        NSString *hogName = [[NSString alloc] initWithFormat:@"hedgehog %d",i];
+        NSDictionary *hog = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",
+                             hogName,@"hogname",@"NoHat",@"hat",nil];
+        [hogName release];
+        [hedgehogs addObject:hog];
+        [hog release];
+    }
+    
+    NSDictionary *defaultTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",
+                                 @"Default Team",@"teamname",@"Statue",@"grave",@"Plane",@"fort",
+                                 @"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs,@"hedgehogs",nil];
+    [hedgehogs release];
+    NSString *defaultTeamFile = [teamsDirectory stringByAppendingString:@"Default Team.plist"];
+    [defaultTeam writeToFile:defaultTeamFile atomically:YES];
+    [defaultTeam release];
+    
+    // create settings.plist
+    NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
 	
-	NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
-	if (!([[NSFileManager defaultManager] fileExistsAtPath:filePath])) {
-		// file not present, means that also other files are absent
-		NSLog(@"First time run, creating settings files");
-		
-		// show a popup with an indicator to make the user wait
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Please wait",@"")
-                                                        message:nil
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:nil];
-		[alert show];
+    [saveDict setObject:@"" forKey:@"username"];
+    [saveDict setObject:@"" forKey:@"password"];
+    [saveDict setObject:@"1" forKey:@"music"];
+    [saveDict setObject:@"1" forKey:@"sounds"];
+    [saveDict setObject:@"0" forKey:@"alternate"];
 
-		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] 
-                                              initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-		indicator.center = CGPointMake(alert.bounds.size.width / 2, alert.bounds.size.height - 50);
-		[indicator startAnimating];
-		[alert addSubview:indicator];
-		[indicator release];
-		[alert release];
-		
-        // create Default Team.plist
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"/Teams/"];
-		[[NSFileManager defaultManager] createDirectoryAtPath:teamsDirectory 
-                                  withIntermediateDirectories:NO 
-                                                   attributes:nil 
-                                                        error:NULL];
+    NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
+    [saveDict writeToFile:filePath atomically:YES];
+    [saveDict release];
+    
+    // create other files
+    
+    // ok let the user take control
+    [alert dismissWithClickedButtonIndex:0 animated:YES];
 
-        NSMutableArray *hedgehogs = [[NSMutableArray alloc] init];
-
-        for (int i = 0; i < 8; i++) {
-            NSString *hogName = [[NSString alloc] initWithFormat:@"hedgehog %d",i];
-            NSDictionary *hog = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",
-                                 hogName,@"hogname",@"NoHat",@"hat",nil];
-            [hogName release];
-            [hedgehogs addObject:hog];
-            [hog release];
-        }
-        
-        NSDictionary *defaultTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",
-                                     @"Default Team",@"teamname",@"Statue",@"grave",@"Plane",@"fort",
-                                     @"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs,@"hedgehogs",nil];
-        [hedgehogs release];
-        NSString *defaultTeamFile = [teamsDirectory stringByAppendingString:@"Default Team.plist"];
-        [defaultTeam writeToFile:defaultTeamFile atomically:YES];
-        [defaultTeam release];
-        
-		// create settings.plist
-		NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
-	
-		[saveDict setObject:@"" forKey:@"username"];
-		[saveDict setObject:@"" forKey:@"password"];
-		[saveDict setObject:@"1" forKey:@"music"];
-		[saveDict setObject:@"1" forKey:@"sounds"];
-		[saveDict setObject:@"0" forKey:@"alternate"];
-	
-		[saveDict writeToFile:filePath atomically:YES];
-		[saveDict release];
-		
-		// create other files
-        
-        // ok let the user take control
-		[alert dismissWithClickedButtonIndex:0 animated:YES];
-	}
 	[pool release];
 	[NSThread exit];
 }

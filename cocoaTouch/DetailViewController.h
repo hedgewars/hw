@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_3_2
+#ifdef __IPHONE_3_2
 @interface DetailViewController : UITableViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate> {
 #else
 @interface DetailViewController : UITableViewController {
