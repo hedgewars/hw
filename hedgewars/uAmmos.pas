@@ -344,7 +344,11 @@ for i:= 0 to Pred(StoreCnt) do
         begin
         for a:= 0 to cMaxSlotAmmoIndex do
             with StoresList[i]^[slot, a] do
-                if (Propz and ammoprop_NotBorder) <> 0 then Count:= 0;
+                if (Propz and ammoprop_NotBorder) <> 0 then 
+                    begin
+                    Count:= 0;
+                    InitialCount:= 0
+                    end;
 
         PackAmmo(StoresList[i], slot)
         end;
