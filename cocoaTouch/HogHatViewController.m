@@ -184,6 +184,7 @@
             [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
         } 
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

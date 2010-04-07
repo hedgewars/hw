@@ -31,7 +31,8 @@
     // needed for rotation to work on os < 3.2
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
     self.view.transform = CGAffineTransformRotate(self.view.transform, (M_PI/2.0));
-
+    self.view.frame = [[UIScreen mainScreen] applicationFrame];
+    
     dimTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
                                           target:self

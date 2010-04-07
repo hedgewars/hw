@@ -27,6 +27,8 @@
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
 		611B0AA1116B626E00112153 /* GeneralSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611B0AA0116B626E00112153 /* GeneralSettingsViewController.m */; };
 		6122CD01116BECCA002648E9 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6122CD00116BECCA002648E9 /* Default-Landscape.png */; };
+		6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6151347D116C2803001F16D1 /* Icon-iPad.png */; };
+		615134B1116C2C5F001F16D1 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 615134B0116C2C5F001F16D1 /* OverlayViewController.xib */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
 		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
@@ -99,7 +101,6 @@
 		6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936911501D3D00BA94A9 /* arrowRight.png */; };
 		6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936A11501D3D00BA94A9 /* arrowUp.png */; };
 		617995321150403800BA94A9 /* joyPush.png in Resources */ = {isa = PBXBuildFile; fileRef = 617995311150403800BA94A9 /* joyPush.png */; };
-		61A118431168367200359010 /* OverlayViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61A118421168367200359010 /* OverlayViewController-iPhone.xib */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; };
 		61A118CA11683C7600359010 /* MainMenuViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */; };
 		61A118CC11683C7A00359010 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61A118CB11683C7A00359010 /* MainMenuViewController-iPhone.xib */; };
@@ -107,7 +108,6 @@
 		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
 		61A118D411683CD100359010 /* Multiplayer.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9D11155A41000C2203D /* Multiplayer.png */; };
 		61A118D511683CD100359010 /* NetworkPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CF1155A40700C2203D /* NetworkPlay.png */; };
-		61A118DF11683D1F00359010 /* OverlayViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61A118401168366200359010 /* OverlayViewController-iPad.xib */; };
 		61A11A4E1168D13600359010 /* PopoverMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11A4D1168D13600359010 /* PopoverMenuViewController.m */; };
 		61A11AC11168D8B600359010 /* SplitViewRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AC01168D8B600359010 /* SplitViewRootController.m */; };
 		61A11AC91168DA9400359010 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AC81168DA9400359010 /* MasterViewController.m */; };
@@ -184,6 +184,8 @@
 		611FD9CF1155A40700C2203D /* NetworkPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = NetworkPlay.png; path = ../../QTfrontend/res/NetworkPlay.png; sourceTree = SOURCE_ROOT; };
 		611FD9D11155A41000C2203D /* Multiplayer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Multiplayer.png; path = ../../QTfrontend/res/Multiplayer.png; sourceTree = SOURCE_ROOT; };
 		6122CD00116BECCA002648E9 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "../../cocoaTouch/resources/Default-Landscape.png"; sourceTree = SOURCE_ROOT; };
+		6151347D116C2803001F16D1 /* Icon-iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-iPad.png"; path = "../../cocoaTouch/resources/Icon-iPad.png"; sourceTree = SOURCE_ROOT; };
+		615134B0116C2C5F001F16D1 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = ../../cocoaTouch/xib/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E5114AA34C00BA94A9 /* HHHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = HHHandlers.inc; path = ../../hedgewars/HHHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -270,8 +272,6 @@
 		6179936A11501D3D00BA94A9 /* arrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowUp.png; path = ../../cocoaTouch/resources/arrowUp.png; sourceTree = SOURCE_ROOT; };
 		617995311150403800BA94A9 /* joyPush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyPush.png; path = ../../cocoaTouch/resources/joyPush.png; sourceTree = SOURCE_ROOT; };
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		61A118401168366200359010 /* OverlayViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "OverlayViewController-iPad.xib"; path = "../../cocoaTouch/xib/OverlayViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
-		61A118421168367200359010 /* OverlayViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "OverlayViewController-iPhone.xib"; path = "../../cocoaTouch/xib/OverlayViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
 		61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainMenuViewController-iPad.xib"; path = "../../cocoaTouch/xib/MainMenuViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
 		61A118CB11683C7A00359010 /* MainMenuViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainMenuViewController-iPhone.xib"; path = "../../cocoaTouch/xib/MainMenuViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
 		61A11A4C1168D13600359010 /* PopoverMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopoverMenuViewController.h; path = ../../cocoaTouch/PopoverMenuViewController.h; sourceTree = SOURCE_ROOT; };
@@ -411,6 +411,7 @@
 		6100DAD4115446B000F455E0 /* Resources-iPad */ = {
 			isa = PBXGroup;
 			children = (
+				6151347D116C2803001F16D1 /* Icon-iPad.png */,
 				6122CD00116BECCA002648E9 /* Default-Landscape.png */,
 				61CE2509115E74260098C467 /* XIB */,
 				611FD9C81155A1F200C2203D /* Background.png */,
@@ -424,8 +425,8 @@
 		6100DB1711544E8400F455E0 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
+				615134B0116C2C5F001F16D1 /* OverlayViewController.xib */,
 				61A118CB11683C7A00359010 /* MainMenuViewController-iPhone.xib */,
-				61A118421168367200359010 /* OverlayViewController-iPhone.xib */,
 			);
 			name = XIB;
 			path = Classes;
@@ -579,7 +580,6 @@
 			isa = PBXGroup;
 			children = (
 				61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */,
-				61A118401168366200359010 /* OverlayViewController-iPad.xib */,
 			);
 			name = XIB;
 			sourceTree = "<group>";
@@ -741,7 +741,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61A118DF11683D1F00359010 /* OverlayViewController-iPad.xib in Resources */,
 				61A118D211683CD100359010 /* Background.png in Resources */,
 				61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */,
 				61A118D411683CD100359010 /* Multiplayer.png in Resources */,
@@ -767,10 +766,11 @@
 				6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */,
 				6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */,
 				617995321150403800BA94A9 /* joyPush.png in Resources */,
-				61A118431168367200359010 /* OverlayViewController-iPhone.xib in Resources */,
 				61A118CA11683C7600359010 /* MainMenuViewController-iPad.xib in Resources */,
 				61A118CC11683C7A00359010 /* MainMenuViewController-iPhone.xib in Resources */,
 				6122CD01116BECCA002648E9 /* Default-Landscape.png in Resources */,
+				6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */,
+				615134B1116C2C5F001F16D1 /* OverlayViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -994,7 +994,7 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -dLOWRES";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -1030,7 +1030,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "Don't Code Sign";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -dLOWRES";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;

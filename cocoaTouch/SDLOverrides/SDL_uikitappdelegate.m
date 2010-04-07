@@ -89,11 +89,8 @@ int main (int argc, char *argv[]) {
     
     OverlayViewController *overlayController;
     // overlay with controls, become visible after 2 seconds
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController-iPad" bundle:nil];
-    else
-        overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController-iPhone" bundle:nil];
-
+    overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController-iPhone" bundle:nil];
+    
     [uiwindow addSubview:overlayController.view];
     [overlayController release];
 

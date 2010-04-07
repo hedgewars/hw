@@ -151,9 +151,8 @@
 	[UIView setAnimationDuration:1];
 	self.view.alpha = 0;
 	[UIView commitAnimations];
-    
     [self retain];
-    [self.view removeFromSuperview];
+    //[self.view removeFromSuperview];
 }
 
 // this is a silly way to hide the sdl contex that remained active
