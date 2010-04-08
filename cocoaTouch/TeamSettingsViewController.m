@@ -10,47 +10,109 @@
 #import "SingleTeamViewController.h"
 
 @implementation TeamSettingsViewController
-@synthesize list;
+@synthesize listOfTeams;
+
+
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+}
 
 #pragma mark -
 #pragma mark View lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit",@"from the team navigation")
+                                                                   style:UIBarButtonItemStyleBordered
+                                                                  target:self
+                                                                  action:@selector(toggleEdit:)];
+    self.navigationItem.rightBarButtonItem = editButton;
+    [editButton release];
+    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"/Teams/"];
     
-    NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:teamsDirectory
-                                                                            error:NULL];
-    self.list = contents;
-    //NSLog(@"%@\n%@", teamsDirectory, contents);
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:teamsDirectory error:NULL];
+    NSMutableArray *array = [[NSMutableArray alloc] initWithArray: contentsOfDir copyItems:YES];
+    self.listOfTeams = array;
+    [array release];
+    NSLog(@"files: %@", self.listOfTeams);
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+// modifies the navigation bar to add the "Add" and "Done" buttons
+-(void) toggleEdit:(id) sender {
+    BOOL isEditing = self.tableView.editing;
+    [self.tableView setEditing:!isEditing animated:YES];
+    
+    if (isEditing) {
+        [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"Edit",@"from the team navigation")];
+        [self.navigationItem.rightBarButtonItem setStyle: UIBarButtonItemStyleBordered];
+        self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
+    } else {
+        [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"Done",@"from the team navigation")];
+        [self.navigationItem.rightBarButtonItem setStyle:UIBarButtonItemStyleDone];
+        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Add",@"from the team navigation")
+                                                                      style:UIBarButtonItemStyleBordered
+                                                                     target:self
+                                                                     action:@selector(addTeam:)];
+        self.navigationItem.leftBarButtonItem = addButton;
+        [addButton release];
+    }
 }
 
+// add a team file with default values and updates the table
+-(void) addTeam:(id) sender {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"/Teams/"];
+    [[NSFileManager defaultManager] createDirectoryAtPath:teamsDirectory 
+                              withIntermediateDirectories:NO 
+                                               attributes:nil 
+                                                    error:NULL];
+    
+    NSMutableArray *hedgehogs = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < 8; i++) {
+        NSString *hogName = [[NSString alloc] initWithFormat:@"hedgehog %d",i];
+        NSDictionary *hog = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",
+                             hogName,@"hogname",@"NoHat",@"hat",nil];
+        [hogName release];
+        [hedgehogs addObject:hog];
+        [hog release];
+    }
+    
+    NSString *fileName = [[NSString alloc] initWithFormat:@"Default Team %u.plist", [self.listOfTeams count]];
+
+    NSDictionary *defaultTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",
+                                 [fileName stringByDeletingPathExtension],@"teamname",@"Statue",@"grave",@"Plane",@"fort",
+                                 @"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs,@"hedgehogs",nil];
+    [hedgehogs release];
+    
+    NSString *defaultTeamFile = [[NSString alloc] initWithFormat:@"%@/%@",teamsDirectory, fileName];
+    [defaultTeam writeToFile:defaultTeamFile atomically:YES];
+    [defaultTeamFile release];    
+    [defaultTeam release];
+    
+    [self.listOfTeams addObject:fileName];
+    [fileName release];
+    
+    [self.tableView reloadData];
+    
+}
 
 #pragma mark -
 #pragma mark Table view data source
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [list count];
+    return [listOfTeams count];
 }
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -59,22 +121,26 @@
     }
     
     NSUInteger row = [indexPath row]; 
-    NSString *rowString = [[list objectAtIndex:row] stringByDeletingPathExtension]; 
+    NSString *rowString = [[listOfTeams objectAtIndex:row] stringByDeletingPathExtension]; 
     cell.textLabel.text = rowString; 
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
 }
 
+// delete the row and the file
+-(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger row = [indexPath row];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/Teams/%@",[paths objectAtIndex:0],[self.listOfTeams objectAtIndex:row]];
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    [[NSFileManager defaultManager] removeItemAtPath:teamFile error:NULL];
+    [teamFile release];
+    
+    [self.listOfTeams removeObjectAtIndex:row];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
-*/
-
 
 /*
 // Override to support editing the table view.
@@ -90,13 +156,11 @@
 }
 */
 
-
 /*
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
 }
 */
-
 
 /*
 // Override to support conditional rearranging of the table view.
@@ -115,9 +179,19 @@
     }
     
     NSInteger row = [indexPath row];
-    NSString *selectedTeam = [[list objectAtIndex:row] stringByDeletingPathExtension];
+    NSString *selectedTeamFile = [listOfTeams objectAtIndex:row];
+    NSLog(@"%@",selectedTeamFile);
     
-    childController.title = selectedTeam;
+        // load data about the team and extract info
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/Teams/%@",[paths objectAtIndex:0],selectedTeamFile];
+    NSMutableDictionary *teamDict = [[NSMutableDictionary alloc] initWithContentsOfFile:teamFile];
+    [teamFile release];
+    childController.teamDictionary = teamDict;
+    [teamDict release];
+    
+    // this must be set so childController can load the correct plist
+    //childController.title = [[listOfTeams objectAtIndex:row] stringByDeletingPathExtension];
     [self.navigationController pushViewController:childController animated:YES];
 }
 
@@ -135,23 +209,20 @@
 
 #pragma mark -
 #pragma mark Memory management
-
-- (void)didReceiveMemoryWarning {
+-(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
-    self.list = nil;
+-(void) viewDidUnload {
+    self.listOfTeams = nil;
 }
 
-
-- (void)dealloc {
-    [list release];
-    if (nil != childController)
-        [childController release];
+-(void) dealloc {
+    [listOfTeams release];
+    [childController release];
     [super dealloc];
 }
 

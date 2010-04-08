@@ -29,13 +29,8 @@
 -(void) viewDidLoad {
     self.detailViewController = [[DetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
      [detailViewController release];
-           NSLog(@"%d", [detailViewController retainCount]);
-
     UINavigationController *detailedNavController = [[UINavigationController alloc] initWithRootViewController:self.detailViewController];
-            NSLog(@"%d", [detailViewController retainCount]);
-
     [detailViewController release];
-            NSLog(@"%d", [detailViewController retainCount]);
 
     id splitViewRootController;
     

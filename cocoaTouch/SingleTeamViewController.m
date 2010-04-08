@@ -34,13 +34,7 @@
     self.secondaryItems = array;
     [array release];
     
-    // load data about the team and extract info
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/Teams/%@.plist",[paths objectAtIndex:0],self.title];
-    NSMutableDictionary *teamDict = [[NSMutableDictionary alloc] initWithContentsOfFile:teamFile];
-    [teamFile release];
-    self.teamDictionary = teamDict;
-    [teamDict release];
+
 
     // listen if any childController modifies the plist and write it if needed
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setWriteNeeded) name:@"setWriteNeedTeams" object:nil];
@@ -49,8 +43,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-    // grab the name of the team
+    
     self.title = [self.teamDictionary objectForKey:@"teamname"];
     
     // load the images of the hat for aach hog
@@ -73,6 +66,7 @@
     self.hatArray = array;
     [array release];
     
+    [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
     [self.tableView reloadData];
 }
 

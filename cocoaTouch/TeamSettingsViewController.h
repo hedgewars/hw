@@ -10,9 +10,10 @@
 @class SingleTeamViewController;
 
 @interface TeamSettingsViewController : UITableViewController {
-    NSArray	*list;
+    NSMutableArray *listOfTeams;
     SingleTeamViewController *childController;
 }
-@property (nonatomic, retain) NSArray *list;
+
+@property (nonatomic, retain) NSMutableArray *listOfTeams;
 
 @end
