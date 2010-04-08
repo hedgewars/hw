@@ -425,6 +425,12 @@ PageOptions::PageOptions(QWidget* parent) :
             BtnDeleteTeam->setMaximumWidth(pmDelete.width() + 6);
             GBTlayout->addWidget(BtnDeleteTeam, 0, 3);
 
+            LblNoEditTeam = new QLabel(teamsBox);
+            LblNoEditTeam->setText(tr("You can't edit teams from team selection. Go back to main menu to add, edit or delete teams."));
+            LblNoEditTeam->setWordWrap(true);
+            LblNoEditTeam->setVisible(false);
+            GBTlayout->addWidget(LblNoEditTeam, 0, 0);
+
             gbTBLayout->addWidget(teamsBox, 0, 0);
         }
 

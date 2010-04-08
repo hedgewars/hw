@@ -416,9 +416,11 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) {
         QStringList tmNames = config->GetTeamsList();
         TeamSelWidget* curTeamSelWidget;
-        ui.pageOptions->BtnNewTeam->setEnabled(false);
-        ui.pageOptions->BtnEditTeam->setEnabled(false);
-        ui.pageOptions->BtnDeleteTeam->setEnabled(false);
+        ui.pageOptions->BtnNewTeam->setVisible(false);
+        ui.pageOptions->BtnEditTeam->setVisible(false);
+        ui.pageOptions->BtnDeleteTeam->setVisible(false);
+        ui.pageOptions->CBTeamName->setVisible(false);
+        ui.pageOptions->LblNoEditTeam->setVisible(true);
 
         if(id == ID_PAGE_MULTIPLAYER) {
           curTeamSelWidget = ui.pageMultiplayer->teamsSelect;
@@ -451,9 +453,11 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 
     if(id == ID_PAGE_MAIN)
     {
-        ui.pageOptions->BtnNewTeam->setEnabled(true);
-        ui.pageOptions->BtnEditTeam->setEnabled(true);
-        ui.pageOptions->BtnDeleteTeam->setEnabled(true);
+        ui.pageOptions->BtnNewTeam->setVisible(true);
+        ui.pageOptions->BtnEditTeam->setVisible(true);
+        ui.pageOptions->BtnDeleteTeam->setVisible(true);
+        ui.pageOptions->CBTeamName->setVisible(true);
+        ui.pageOptions->LblNoEditTeam->setVisible(false);
     }
 
     // load and save ignore/friends lists
