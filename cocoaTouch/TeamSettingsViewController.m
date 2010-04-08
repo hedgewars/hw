@@ -8,6 +8,7 @@
 
 #import "TeamSettingsViewController.h"
 #import "SingleTeamViewController.h"
+#import "CommodityFunctions.h"
 
 @implementation TeamSettingsViewController
 @synthesize listOfTeams;
@@ -62,52 +63,23 @@
 
 // add a team file with default values and updates the table
 -(void) addTeam:(id) sender {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"/Teams/"];
-    [[NSFileManager defaultManager] createDirectoryAtPath:teamsDirectory 
-                              withIntermediateDirectories:NO 
-                                               attributes:nil 
-                                                    error:NULL];
-    
-    NSMutableArray *hedgehogs = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < 8; i++) {
-        NSString *hogName = [[NSString alloc] initWithFormat:@"hedgehog %d",i];
-        NSDictionary *hog = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",
-                             hogName,@"hogname",@"NoHat",@"hat",nil];
-        [hogName release];
-        [hedgehogs addObject:hog];
-        [hog release];
-    }
-    
     NSString *fileName = [[NSString alloc] initWithFormat:@"Default Team %u.plist", [self.listOfTeams count]];
-
-    NSDictionary *defaultTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",
-                                 [fileName stringByDeletingPathExtension],@"teamname",@"Statue",@"grave",@"Plane",@"fort",
-                                 @"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs,@"hedgehogs",nil];
-    [hedgehogs release];
     
-    NSString *defaultTeamFile = [[NSString alloc] initWithFormat:@"%@/%@",teamsDirectory, fileName];
-    [defaultTeam writeToFile:defaultTeamFile atomically:YES];
-    [defaultTeamFile release];    
-    [defaultTeam release];
+    createTeamNamed([fileName stringByDeletingPathExtension]);
     
     [self.listOfTeams addObject:fileName];
     [fileName release];
     
     [self.tableView reloadData];
-    
 }
 
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
     return 1;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
     return [listOfTeams count];
 }
 
@@ -182,7 +154,7 @@
     NSString *selectedTeamFile = [listOfTeams objectAtIndex:row];
     NSLog(@"%@",selectedTeamFile);
     
-        // load data about the team and extract info
+    // load data about the team and extract info
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/Teams/%@",[paths objectAtIndex:0],selectedTeamFile];
     NSMutableDictionary *teamDict = [[NSMutableDictionary alloc] initWithContentsOfFile:teamFile];
@@ -190,6 +162,8 @@
     childController.teamDictionary = teamDict;
     [teamDict release];
     
+    [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
+
     // this must be set so childController can load the correct plist
     //childController.title = [[listOfTeams objectAtIndex:row] stringByDeletingPathExtension];
     [self.navigationController pushViewController:childController animated:YES];

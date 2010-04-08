@@ -7,10 +7,16 @@
 //
 
 #import "HogHatViewController.h"
+#import "CommodityFunctions.h"
 
 
 @implementation HogHatViewController
 @synthesize teamDictionary, hatArray, hatSprites, lastIndexPath, selectedHog;
+
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+}
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -18,14 +24,14 @@
     [super viewDidLoad];
 
     // load all the hat file names and store them into hatArray
-    NSString *hatPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Hats/"];
-    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:hatPath error:NULL];
+    NSString *hatsDirectory = HATS_DIRECTORY();
+    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:hatsDirectory error:NULL];
     self.hatArray = array;
     
     // load all the hat images from the previous array but save only the first sprite and store it in hatSprites
     NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[hatArray count]];
-    for (int i=0; i< [hatArray count]; i++) {
-        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/Data/Graphics/Hats/%@",[[NSBundle mainBundle] resourcePath],[hatArray objectAtIndex:i]];
+    for (int i=0; i < [hatArray count]; i++) {
+        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", hatsDirectory,[hatArray objectAtIndex:i]];
         
         UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
         [hatFile release];
@@ -68,10 +74,6 @@
 }
 */
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
-}
-
 
 #pragma mark -
 #pragma mark Table view data source
@@ -98,7 +100,7 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    NSDictionary *hog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
+    NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
     if (0 == [indexPath section]) {
         cell.textLabel.text = self.title;
         cell.imageView.image = nil;
@@ -161,7 +163,6 @@
 
 #pragma mark -
 #pragma mark Table view delegate
-
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (1 == [indexPath section]) {
         int newRow = [indexPath row];

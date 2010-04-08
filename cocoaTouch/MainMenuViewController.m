@@ -10,7 +10,7 @@
 #import "SDL_uikitappdelegate.h"
 #import "PascalImports.h"
 #import "SplitViewRootController.h"
-
+#import "CommodityFunctions.h"
 
 @implementation MainMenuViewController
 @synthesize cover, versionLabel;
@@ -80,32 +80,8 @@
     [indicator release];
     [alert release];
     
-    // create Default Team.plist
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"/Teams/"];
-    [[NSFileManager defaultManager] createDirectoryAtPath:teamsDirectory 
-                              withIntermediateDirectories:NO 
-                                               attributes:nil 
-                                                    error:NULL];
-    
-    NSMutableArray *hedgehogs = [[NSMutableArray alloc] init];
-    
-    for (int i = 0; i < 8; i++) {
-        NSString *hogName = [[NSString alloc] initWithFormat:@"hedgehog %d",i];
-        NSDictionary *hog = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",
-                             hogName,@"hogname",@"NoHat",@"hat",nil];
-        [hogName release];
-        [hedgehogs addObject:hog];
-        [hog release];
-    }
-    
-    NSDictionary *defaultTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",
-                                 @"Default Team",@"teamname",@"Statue",@"grave",@"Plane",@"fort",
-                                 @"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs,@"hedgehogs",nil];
-    [hedgehogs release];
-    NSString *defaultTeamFile = [teamsDirectory stringByAppendingString:@"Default Team.plist"];
-    [defaultTeam writeToFile:defaultTeamFile atomically:YES];
-    [defaultTeam release];
+    // create a team
+    createTeamNamed(@"Default Team");
     
     // create settings.plist
     NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
@@ -118,8 +94,7 @@
 
     NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
     [saveDict writeToFile:filePath atomically:YES];
-    [saveDict release];
-    
+    [saveDict release];    
     // create other files
     
     // ok let the user take control
