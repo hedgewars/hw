@@ -29,6 +29,7 @@
 		6122CD01116BECCA002648E9 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6122CD00116BECCA002648E9 /* Default-Landscape.png */; };
 		6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6151347D116C2803001F16D1 /* Icon-iPad.png */; };
 		615134B1116C2C5F001F16D1 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 615134B0116C2C5F001F16D1 /* OverlayViewController.xib */; };
+		6157F7FC116F466F005E4A26 /* HogNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6157F7FB116F466F005E4A26 /* HogNameViewController.m */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
 		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
@@ -190,6 +191,8 @@
 		6122CD00116BECCA002648E9 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "../../cocoaTouch/resources/Default-Landscape.png"; sourceTree = SOURCE_ROOT; };
 		6151347D116C2803001F16D1 /* Icon-iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-iPad.png"; path = "../../cocoaTouch/resources/Icon-iPad.png"; sourceTree = SOURCE_ROOT; };
 		615134B0116C2C5F001F16D1 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = ../../cocoaTouch/xib/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
+		6157F7FA116F466F005E4A26 /* HogNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HogNameViewController.h; path = ../../cocoaTouch/HogNameViewController.h; sourceTree = SOURCE_ROOT; };
+		6157F7FB116F466F005E4A26 /* HogNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HogNameViewController.m; path = ../../cocoaTouch/HogNameViewController.m; sourceTree = SOURCE_ROOT; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E5114AA34C00BA94A9 /* HHHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = HHHandlers.inc; path = ../../hedgewars/HHHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -550,6 +553,17 @@
 			name = buttons;
 			sourceTree = "<group>";
 		};
+		6188FE09116F67C7004F3690 /* Hogs */ = {
+			isa = PBXGroup;
+			children = (
+				61A11AE21168DC9400359010 /* HogHatViewController.h */,
+				61A11AE31168DC9400359010 /* HogHatViewController.m */,
+				6157F7FA116F466F005E4A26 /* HogNameViewController.h */,
+				6157F7FB116F466F005E4A26 /* HogNameViewController.m */,
+			);
+			name = Hogs;
+			sourceTree = "<group>";
+		};
 		61A118481168371400359010 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
@@ -586,8 +600,7 @@
 				61A11ACE1168DB1B00359010 /* TeamSettingsViewController.m */,
 				61A11ADF1168DC6E00359010 /* SingleTeamViewController.h */,
 				61A11AE01168DC6E00359010 /* SingleTeamViewController.m */,
-				61A11AE21168DC9400359010 /* HogHatViewController.h */,
-				61A11AE31168DC9400359010 /* HogHatViewController.m */,
+				6188FE09116F67C7004F3690 /* Hogs */,
 				619C5230116E4E800049FD84 /* FlagsViewController.h */,
 				619C5231116E4E810049FD84 /* FlagsViewController.m */,
 				619C533C116E70050049FD84 /* FortsViewController.h */,
@@ -916,6 +929,7 @@
 				619C5232116E4E810049FD84 /* FlagsViewController.m in Sources */,
 				619C533E116E70050049FD84 /* FortsViewController.m in Sources */,
 				619C58AB116E752A0049FD84 /* UIImageScale.m in Sources */,
+				6157F7FC116F466F005E4A26 /* HogNameViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

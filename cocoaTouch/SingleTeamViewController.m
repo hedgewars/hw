@@ -7,24 +7,86 @@
 //
 
 #import "SingleTeamViewController.h"
+//#import "HogNameViewController.h"
 #import "HogHatViewController.h"
 #import "FlagsViewController.h"
 #import "FortsViewController.h"
 #import "CommodityFunctions.h"
 
 @implementation SingleTeamViewController
-@synthesize teamDictionary, hatArray, secondaryItems, secondaryControllers;
+@synthesize teamDictionary, hatArray, secondaryItems, secondaryControllers, textFieldBeingEdited;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
+
+#pragma mark -
+#pragma mark textfield methods
+// return to previous table
+-(void) cancel:(id) sender {
+    if (textFieldBeingEdited != nil)
+        [self.textFieldBeingEdited resignFirstResponder];
+}
+
+// set the new value
+-(void) save:(id) sender {
+    if (textFieldBeingEdited != nil) {
+        //replace the old value with the new one
+        NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
+        NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
+        [newHog setObject:textFieldBeingEdited.text forKey:@"hogname"];
+        [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:selectedHog withObject:newHog];
+        [newHog release];
+        
+        isWriteNeeded = YES;
+        [self.textFieldBeingEdited resignFirstResponder];
+    }
+}
+
+// the textfield is being modified, update the navigation controller
+-(void) textFieldDidBeginEditing:(UITextField *)aTextField{
+    self.textFieldBeingEdited = aTextField;
+    selectedHog = aTextField.tag;
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel",@"from the hog name table")
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(cancel:)];
+    self.navigationItem.leftBarButtonItem = cancelButton;
+    [cancelButton release];
+    
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save",@"from the hog name table")
+                                                                     style:UIBarButtonItemStyleDone
+                                                                    target:self
+                                                                    action:@selector(save:)];
+    self.navigationItem.rightBarButtonItem = saveButton;
+    [saveButton release];
+}
+
+// the textfield has been modified, check for empty strings and restore original navigation bar
+-(void) textFieldDidEndEditing:(UITextField *)aTextField{
+    if ([textFieldBeingEdited.text length] == 0) 
+        textFieldBeingEdited.text = [NSString stringWithFormat:@"hedgehog %d",textFieldBeingEdited.tag];
+
+    self.textFieldBeingEdited = nil;
+    self.navigationItem.rightBarButtonItem = self.navigationItem.backBarButtonItem;
+    self.navigationItem.leftBarButtonItem = nil;
+}
+
+// limit the size of the field to 64 characters like in original frontend
+-(BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    int limit = 64;
+    return !([textField.text length] > limit && [string length] > range.length);
+}
+
+
 #pragma mark -
 #pragma mark View lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
    
+    // labels for the entries
     NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:
                              NSLocalizedString(@"Grave",@""),
                              NSLocalizedString(@"Voice",@""),
@@ -56,7 +118,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    // load data about the team and extract info
+    // load data about the team and write if there has been a change
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),self.title];
     if (isWriteNeeded) {
         [self.teamDictionary writeToFile:teamFile atomically:YES];
@@ -67,7 +129,6 @@
 	NSMutableDictionary *teamDict = [[NSMutableDictionary alloc] initWithContentsOfFile:teamFile];
     self.teamDictionary = teamDict;
     [teamDict release];
-    
 	[teamFile release];
         
     // load the images of the hat for aach hog
@@ -93,6 +154,7 @@
     [self.tableView reloadData];
 }
 
+// write on file if there has been a change
 -(void) viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	
@@ -105,6 +167,7 @@
 
 	[teamFile release];
 }
+
 // needed by other classes to warn about a user change
 -(void) setWriteNeeded {
     isWriteNeeded = YES;
@@ -141,8 +204,21 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                        reuseIdentifier:CellIdentifier] autorelease];
+        if ([indexPath section] == 1) {
+            // create a uitextfield for each row, expand it to take the maximum size
+            UITextField *aTextField = [[UITextField alloc] 
+                                       initWithFrame:CGRectMake(42, 12, (cell.frame.size.width + cell.frame.size.width/3) - 42, 25)];
+            aTextField.clearsOnBeginEditing = NO;
+            aTextField.returnKeyType = UIReturnKeyDone;
+            aTextField.adjustsFontSizeToFitWidth = YES;
+            aTextField.delegate = self;
+            aTextField.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 2];
+            aTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+            [aTextField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
+            [cell.contentView addSubview:aTextField];
+            [aTextField release];
+        }
     }
-
 
     NSArray *hogArray;
     NSInteger row = [indexPath row];
@@ -154,8 +230,18 @@
             break;
         case 1:
             hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
-            cell.textLabel.text = [[hogArray objectAtIndex:row] objectForKey:@"hogname"];
+
             cell.imageView.image = [self.hatArray objectAtIndex:row];
+            
+            for (UIView *oneView in cell.contentView.subviews) {
+                if ([oneView isMemberOfClass:[UITextField class]]) {
+                    // we find the uitextfied and we'll use its tag to understand which one is being edited
+                    UITextField *textFieldFound = (UITextField *)oneView;
+                    textFieldFound.text = [[hogArray objectAtIndex:row] objectForKey:@"hogname"];
+                    textFieldFound.tag = row;
+                }
+            }
+
             cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
             break;
         case 2:
@@ -179,62 +265,32 @@
 }
 
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
- forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
     UITableViewController *nextController;
     if (1 == [indexPath section]) {
-        //TODO: hog name pref, causes segfault
+        UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
+        for (UIView *oneView in cell.contentView.subviews) {
+            if ([oneView isMemberOfClass:[UITextField class]]) {
+                textFieldBeingEdited = (UITextField *)oneView;
+                textFieldBeingEdited.tag = row;
+                [textFieldBeingEdited becomeFirstResponder];
+            }
+        }
+        [aTableView deselectRowAtIndexPath:indexPath animated:NO];
     }
     if (2 == [indexPath section]) {
         //TODO: this part should be rewrittend with lazy loading instead of an array of controllers
         nextController = [secondaryControllers objectAtIndex:row%2 ];              //TODO: fix the objectAtIndex
         nextController.title = [secondaryItems objectAtIndex:row];
         [nextController setTeamDictionary:teamDictionary];
+        [self.navigationController pushViewController:nextController animated:YES];
     }
-    [self.navigationController pushViewController:nextController animated:YES];
 }
 
+// action to perform when you want to change a hog hat
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     if (nil == hogChildController) {
         hogChildController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
@@ -257,18 +313,22 @@
 }
 
 -(void) viewDidUnload {
-    self.secondaryControllers = nil;
-    self.secondaryItems = nil;
-    self.hatArray = nil;
     self.teamDictionary = nil;
+    self.textFieldBeingEdited = nil;
+    self.hatArray = nil;
+    self.secondaryItems = nil;
+    self.secondaryControllers = nil;
+    hogChildController = nil;
     [super viewDidUnload];
 }
 
 -(void) dealloc {
-    [secondaryControllers release];
-    [secondaryItems release];
-    [hatArray release];
     [teamDictionary release];
+    [textFieldBeingEdited release];
+    [hatArray release];
+    [secondaryItems release];
+    [secondaryControllers release];
+    [hogChildController release];
     [super dealloc];
 }
 
