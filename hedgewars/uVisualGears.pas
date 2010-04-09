@@ -801,7 +801,7 @@ case Layer of
                             if Gear^.FrameTicks < 250 then
                                 glColor4f(1, 1, 1, 1);
                             end;
-                vgtSplash: DrawSprite(sprSplash, hwRound(Gear^.X) + WorldDx - 64, hwRound(Gear^.Y) + WorldDy - 72, 19 - (Gear^.FrameTicks div 37));
+                vgtSplash: DrawSprite(sprSplash, hwRound(Gear^.X) + WorldDx - 40, hwRound(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
                 vgtDroplet: DrawSprite(sprDroplet, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                vgtBeeTrace: begin
                             if Gear^.FrameTicks < 250 then

@@ -692,7 +692,7 @@ const
             (FileName: 'amTeleport'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprAmTeleport
             (FileName: 'Splash'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
-            Width:  128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprSplash
+            Width:  80; Height: 50; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprSplash
             (FileName: 'Droplet'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprDroplet
             (FileName: 'Birdy'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
