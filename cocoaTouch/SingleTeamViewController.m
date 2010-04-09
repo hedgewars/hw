@@ -38,12 +38,10 @@
     NSMutableArray *controllersArray = [[NSMutableArray alloc] initWithCapacity:[secondaryItems count]];
     
     FlagsViewController *flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    flagsViewController.teamDictionary = self.teamDictionary;
     [controllersArray addObject:flagsViewController];
     [flagsViewController release];
     
     FortsViewController *fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    fortsViewController.teamDictionary = self.teamDictionary;
     [controllersArray addObject:fortsViewController];
     [fortsViewController release];
     
@@ -58,13 +56,25 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.title = [self.teamDictionary objectForKey:@"teamname"];
+    // load data about the team and extract info
+    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),self.title];
+    if (isWriteNeeded) {
+        [self.teamDictionary writeToFile:teamFile atomically:YES];
+        NSLog(@"writing: %@",teamDictionary);
+        isWriteNeeded = NO;
+    }
     
+	NSMutableDictionary *teamDict = [[NSMutableDictionary alloc] initWithContentsOfFile:teamFile];
+    self.teamDictionary = teamDict;
+    [teamDict release];
+    
+	[teamFile release];
+        
     // load the images of the hat for aach hog
     NSArray *hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[hogArray count]];
     for (NSDictionary *hog in hogArray) {
-        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@.png", HATS_DIRECTORY(), [hog objectForKey:@"hat"]];
+        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@.png",HATS_DIRECTORY(),[hog objectForKey:@"hat"]];
 
         UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
         [hatFile release];
@@ -83,24 +93,22 @@
     [self.tableView reloadData];
 }
 
+-(void) viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	
+	NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),self.title];
+    if (isWriteNeeded) {
+        [self.teamDictionary writeToFile:teamFile atomically:YES];
+        NSLog(@"writing: %@",teamDictionary);
+        isWriteNeeded = NO;
+    }
+
+	[teamFile release];
+}
 // needed by other classes to warn about a user change
 -(void) setWriteNeeded {
     isWriteNeeded = YES;
 }
-
-// write to disk the team dictionary
--(void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-
-    if (isWriteNeeded) {
-        NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),self.title];
-        [self.teamDictionary writeToFile:teamFile atomically:YES];
-        [teamFile release];
-        NSLog(@"writing: %@",teamDictionary);
-        isWriteNeeded = NO;
-    }
-}
-
 
 #pragma mark -
 #pragma mark Table view data source
@@ -135,7 +143,6 @@
                                        reuseIdentifier:CellIdentifier] autorelease];
     }
 
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
     NSArray *hogArray;
     NSInteger row = [indexPath row];
@@ -143,14 +150,17 @@
         case 0:
             cell.textLabel.text = self.title;
             cell.imageView.image = nil;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         case 1:
             hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
             cell.textLabel.text = [[hogArray objectAtIndex:row] objectForKey:@"hogname"];
             cell.imageView.image = [self.hatArray objectAtIndex:row];
+            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
             break;
         case 2:
             cell.textLabel.text = [self.secondaryItems objectAtIndex:row];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             switch (row) {
                 case 3: // flags
                     cell.imageView.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png",
@@ -177,10 +187,10 @@
 }
 */
 
-
 /*
 // Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+ forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
@@ -191,7 +201,6 @@
     }   
 }
 */
-
 
 /*
 // Override to support rearranging the table view.
@@ -215,22 +224,27 @@
     NSInteger row = [indexPath row];
     UITableViewController *nextController;
     if (1 == [indexPath section]) {
-        if (nil == hogChildController) {
-            hogChildController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        }
-        
-        // cache the dictionary file of the team, so that other controllers can modify it
-        hogChildController.teamDictionary = self.teamDictionary;
-        hogChildController.selectedHog = row;
-
-        nextController = hogChildController;
+        //TODO: hog name pref, causes segfault
     }
     if (2 == [indexPath section]) {
         //TODO: this part should be rewrittend with lazy loading instead of an array of controllers
         nextController = [secondaryControllers objectAtIndex:row%2 ];              //TODO: fix the objectAtIndex
         nextController.title = [secondaryItems objectAtIndex:row];
+        [nextController setTeamDictionary:teamDictionary];
     }
     [self.navigationController pushViewController:nextController animated:YES];
+}
+
+-(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    if (nil == hogChildController) {
+        hogChildController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    }
+    
+    // cache the dictionary file of the team, so that other controllers can modify it
+    hogChildController.teamDictionary = self.teamDictionary;
+    hogChildController.selectedHog = [indexPath row];
+    
+    [self.navigationController pushViewController:hogChildController animated:YES];
 }
 
 

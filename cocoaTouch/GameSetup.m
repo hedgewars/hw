@@ -251,7 +251,7 @@
 						break;
 					case 'e':
 						sscanf(buffer, "%*s %d", &eProto);
-						short int netProto;
+						short int netProto = 0;
 						char *versionStr;
 						
                         HW_versionInfo(&netProto, &versionStr);

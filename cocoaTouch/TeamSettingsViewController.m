@@ -154,14 +154,7 @@
     NSString *selectedTeamFile = [listOfTeams objectAtIndex:row];
     NSLog(@"%@",selectedTeamFile);
     
-    // load data about the team and extract info
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/Teams/%@",[paths objectAtIndex:0],selectedTeamFile];
-    NSMutableDictionary *teamDict = [[NSMutableDictionary alloc] initWithContentsOfFile:teamFile];
-    [teamFile release];
-    childController.teamDictionary = teamDict;
-    [teamDict release];
-    
+    childController.title = [selectedTeamFile stringByDeletingPathExtension];
     [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
     // this must be set so childController can load the correct plist

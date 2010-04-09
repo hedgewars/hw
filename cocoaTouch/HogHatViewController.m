@@ -78,16 +78,11 @@
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 1;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger rows;
-    if (0 == section) 
-        rows = 1;
-    else
-        rows = [self.hatArray count];
-    return rows;
+    return [self.hatArray count];
 }
 
 // Customize the appearance of table view cells.
@@ -101,22 +96,18 @@
     }
     
     NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
-    if (0 == [indexPath section]) {
-        cell.textLabel.text = self.title;
-        cell.imageView.image = nil;
-        cell.accessoryType = UITableViewCellAccessoryNone;
-    } else {
-        cell.textLabel.text = [[hatArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
-        if ([cell.textLabel.text isEqualToString:[hog objectForKey:@"hat"]]) {
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            self.lastIndexPath = indexPath;
-        } else {
-            cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        
-        cell.imageView.image = [hatSprites objectAtIndex:[indexPath row]];
-    }
     
+    NSString *hat = [[hatArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
+    cell.textLabel.text = hat;
+    cell.imageView.image = [hatSprites objectAtIndex:[indexPath row]];
+    
+    if ([hat isEqualToString:[hog objectForKey:@"hat"]]) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        self.lastIndexPath = indexPath;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+
     return cell;
 }
 
@@ -164,29 +155,27 @@
 #pragma mark -
 #pragma mark Table view delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (1 == [indexPath section]) {
-        int newRow = [indexPath row];
-        int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+    int newRow = [indexPath row];
+    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+    
+    if (newRow != oldRow) {
+        // if the two selected rows differ update data on the hog dictionary and reload table content
+        NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
         
-        if (newRow != oldRow) {
-            // if the two selected rows differ update data on the hog dictionary and reload table content
-            NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
-
-            NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
-            [newHog setObject:[[hatArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"hat"];
-            [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:selectedHog withObject:newHog];
-            [newHog release];
-            
-            // tell our boss to write this new stuff on disk
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-            [self.tableView reloadData];
-
-            self.lastIndexPath = indexPath;
-            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-        } 
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+        NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
+        [newHog setObject:[[hatArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"hat"];
+        [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:selectedHog withObject:newHog];
+        [newHog release];
+        
+        // tell our boss to write this new stuff on disk
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
+        [self.tableView reloadData];
+        
+        self.lastIndexPath = indexPath;
+        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    } 
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
