@@ -85,12 +85,12 @@
     
     // create settings.plist
     NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
-	
+
     [saveDict setObject:@"" forKey:@"username"];
     [saveDict setObject:@"" forKey:@"password"];
-    [saveDict setObject:@"1" forKey:@"music"];
-    [saveDict setObject:@"1" forKey:@"sounds"];
-    [saveDict setObject:@"0" forKey:@"alternate"];
+    [saveDict setObject:[NSNumber numberWithBool:YES] forKey:@"music"];
+    [saveDict setObject:[NSNumber numberWithBool:YES] forKey:@"sound"];
+    [saveDict setObject:[NSNumber numberWithBool:NO] forKey:@"alternate"];
 
     NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
     [saveDict writeToFile:filePath atomically:YES];

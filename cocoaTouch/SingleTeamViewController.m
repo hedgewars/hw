@@ -33,16 +33,17 @@
 
 // set the new value
 -(BOOL) save:(id) sender {
+    NSInteger index = textFieldBeingEdited.tag;
     if (textFieldBeingEdited != nil) {
-        if (TEAMNAME_TAG == selectedHog) {
+        if (TEAMNAME_TAG == index) {
             NSLog(@"%@", textFieldBeingEdited.text);
             [self.teamDictionary setObject:textFieldBeingEdited.text forKey:@"teamname"];
         } else {
             //replace the old value with the new one
-            NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
+            NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:index];
             NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
             [newHog setObject:textFieldBeingEdited.text forKey:@"hogname"];
-            [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:selectedHog withObject:newHog];
+            [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:index withObject:newHog];
             [newHog release];
         }
         
@@ -56,7 +57,7 @@
 // the textfield is being modified, update the navigation controller
 -(void) textFieldDidBeginEditing:(UITextField *)aTextField{   
     self.textFieldBeingEdited = aTextField;
-    selectedHog = aTextField.tag;
+
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel",@"from the hog name table")
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
@@ -82,7 +83,7 @@
     if ([textFieldBeingEdited.text length] == 0) 
         textFieldBeingEdited.text = [NSString stringWithFormat:@"hedgehog %d",textFieldBeingEdited.tag];
 
-    //self.textFieldBeingEdited = nil;
+    self.textFieldBeingEdited = nil;
     self.navigationItem.rightBarButtonItem = self.navigationItem.backBarButtonItem;
     self.navigationItem.leftBarButtonItem = nil;
 }
@@ -254,6 +255,7 @@
             aTextField.returnKeyType = UIReturnKeyDone;
             aTextField.adjustsFontSizeToFitWidth = YES;
             aTextField.delegate = self;
+            aTextField.tag = [indexPath row];
             aTextField.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 2];
             aTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
             [aTextField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
@@ -287,7 +289,6 @@
                     // we find the uitextfied and we'll use its tag to understand which one is being edited
                     UITextField *textFieldFound = (UITextField *)oneView;
                     textFieldFound.text = [[hogArray objectAtIndex:row] objectForKey:@"hogname"];
-                    textFieldFound.tag = row;
                 }
             }
 
@@ -333,7 +334,6 @@
             for (UIView *oneView in cell.contentView.subviews) {
                 if ([oneView isMemberOfClass:[UITextField class]]) {
                     textFieldBeingEdited = (UITextField *)oneView;
-                    textFieldBeingEdited.tag = row;
                     [textFieldBeingEdited becomeFirstResponder];
                 }
             }

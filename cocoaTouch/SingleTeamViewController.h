@@ -13,7 +13,6 @@
     NSMutableDictionary *teamDictionary;
     
     UITextField *textFieldBeingEdited;
-    NSInteger selectedHog;
     NSString *teamName;
     NSArray *hatArray;
     

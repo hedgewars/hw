@@ -10,123 +10,140 @@
 #import "SDL_uikitappdelegate.h"
 
 @implementation GeneralSettingsViewController
-@synthesize dataDict, username, password, musicSwitch, soundSwitch, altDamageSwitch;
+@synthesize settingsDictionary, textFieldBeingEdited, musicSwitch, soundSwitch, altDamageSwitch;
 
--(void) dealloc {
-    [dataDict release];
-	[username release];
-	[password release];
-	[musicSwitch release];
-	[soundSwitch release];
-	[altDamageSwitch release];
-	[super dealloc];
-}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 #pragma mark -
+#pragma mark textfield methods
+// return to previous table
+-(void) cancel:(id) sender {
+    if (textFieldBeingEdited != nil)
+        [self.textFieldBeingEdited resignFirstResponder];
+}
+
+// set the new value
+-(BOOL) save:(id) sender {
+    if (textFieldBeingEdited != nil) {
+        if (textFieldBeingEdited.tag == 0) {
+            [self.settingsDictionary setObject:textFieldBeingEdited.text forKey:@"username"];
+        } else {
+            [self.settingsDictionary setObject:textFieldBeingEdited.text forKey:@"password"];
+        }
+        
+        isWriteNeeded = YES;
+        [self.textFieldBeingEdited resignFirstResponder];
+        return YES;
+    }
+    return NO;
+}
+
+// the textfield is being modified, update the navigation controller
+-(void) textFieldDidBeginEditing:(UITextField *)aTextField{   
+    self.textFieldBeingEdited = aTextField;
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel",@"from the settings table")
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(cancel:)];
+    self.navigationItem.leftBarButtonItem = cancelButton;
+    [cancelButton release];
+    
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save",@"from the settings table")
+                                                                     style:UIBarButtonItemStyleDone
+                                                                    target:self
+                                                                    action:@selector(save:)];
+    self.navigationItem.rightBarButtonItem = saveButton;
+    [saveButton release];
+}
+
+// we save every time a textfield is edited, so we don't risk to update only the hogs or only the temname 
+-(BOOL) textFieldShouldEndEditing:(UITextField *)aTextField {
+    return [self save:nil];
+}
+
+// the textfield has been modified, check for empty strings and restore original navigation bar
+-(void) textFieldDidEndEditing:(UITextField *)aTextField{
+    self.textFieldBeingEdited = nil;
+    self.navigationItem.rightBarButtonItem = self.navigationItem.backBarButtonItem;
+    self.navigationItem.leftBarButtonItem = nil;
+}
+
+// limit the size of the field to 64 characters like in original frontend
+-(BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    int limit = 64;
+    return !([textField.text length] > limit && [string length] > range.length);
+}
+
+
+#pragma mark -
 #pragma mark View Lifecycle
 -(void) viewDidLoad {
+	[super viewDidLoad];
     self.musicSwitch = [[UISwitch alloc] init];
 	self.soundSwitch = [[UISwitch alloc] init];
 	self.altDamageSwitch = [[UISwitch alloc] init];
-	[self.soundSwitch addTarget:self action:@selector(sameValueSwitch) forControlEvents:UIControlEventValueChanged];
-	[self.musicSwitch addTarget:self action:@selector(checkValueSwitch) forControlEvents:UIControlEventValueChanged];
-    
+	[self.soundSwitch addTarget:self action:@selector(alsoTurnOffMusic:) forControlEvents:UIControlEventValueChanged];
+	[self.musicSwitch addTarget:self action:@selector(dontTurnOnMusic:) forControlEvents:UIControlEventValueChanged];
+	[self.altDamageSwitch addTarget:self action:@selector(justUpdateDictionary:) forControlEvents:UIControlEventValueChanged];
+
     NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
-    NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:filePath];
-    self.dataDict = dictionary;
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+    self.settingsDictionary = dictionary;
     [dictionary release];
-	[super viewDidLoad];
 }
 
--(void) viewDidUnload {
-    self.dataDict = nil;
-	self.username = nil;
-	self.password = nil;
-	self.musicSwitch = nil;
-	self.soundSwitch = nil;
-	self.altDamageSwitch = nil;
-	[super viewDidUnload];
-}
+
 
 -(void) viewWillAppear:(BOOL)animated {
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
+    isWriteNeeded = NO;
     
-    username = [NSString stringWithString:[dataDict objectForKey:@"username"]];
-    password = [NSString stringWithString:[dataDict objectForKey:@"password"]];   
+    musicSwitch.on = [[settingsDictionary objectForKey:@"music"] boolValue];
+    soundSwitch.on = [[settingsDictionary objectForKey:@"sound"] boolValue];
+    altDamageSwitch.on = [[settingsDictionary objectForKey:@"alternate"] boolValue];
     
-    if (1 == [[dataDict objectForKey:@"music"] intValue]) {
-        musicSwitch.on = YES;
-    } else {
-        musicSwitch.on = NO;
-    }
-    if (1 == [[dataDict objectForKey:@"sounds"] intValue]) {
-        soundSwitch.on = YES;
-    } else {
-        soundSwitch.on = NO;
-    }
-    if (1 == [[dataDict objectForKey:@"alternate"] intValue]) {
-        altDamageSwitch.on = YES;
-    } else {
-        altDamageSwitch.on = NO;
-    }
-
     [super viewWillAppear:animated];
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-	NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
-	NSString *tmpMus = (musicSwitch.on) ? @"1" : @"0";
-	NSString *tmpEff = (soundSwitch.on) ? @"1" : @"0";
-	NSString *tmpAlt = (altDamageSwitch.on) ? @"1" : @"0";
-	 
-	[saveDict setObject:username forKey:@"username"];
-	[saveDict setObject:password forKey:@"password"];
-	[saveDict setObject:tmpMus forKey:@"music"];
-	[saveDict setObject:tmpEff forKey:@"sounds"];
-	[saveDict setObject:tmpAlt forKey:@"alternate"];
-	
-    if (![dataDict isEqualToDictionary:saveDict]) {
+    if (isWriteNeeded) {
        	NSLog(@"writing preferences to file");
-        [saveDict writeToFile:[[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"] atomically:YES];
-        // this will also relase the previous dictionary
-        self.dataDict = saveDict;
+        [self.settingsDictionary writeToFile:[[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"] atomically:YES];
+        isWriteNeeded = NO;
     }
-	[saveDict release];
 }
 
 #pragma mark -
-// set music off when sound is turned off
--(void) sameValueSwitch {
+// if the sound system is off, turn off also the background music 
+-(void) alsoTurnOffMusic:(id) sender {
+    [self.settingsDictionary setObject:[NSNumber numberWithBool:soundSwitch.on] forKey:@"sound"];
 	if (YES == self.musicSwitch.on) {
 		[musicSwitch setOn:NO animated:YES];
+        [self.settingsDictionary setObject:[NSNumber numberWithBool:musicSwitch.on] forKey:@"music"];
 	}
+    isWriteNeeded = YES;
 }
 
-// don't enable music when sound is off
--(void) checkValueSwitch {
+// if the sound system is off, don't enable background music 
+-(void) dontTurnOnMusic:(id) sender {
 	if (NO == self.soundSwitch.on) {
-		[musicSwitch setOn:!musicSwitch.on animated:YES];
-	}
+		[musicSwitch setOn:NO animated:YES];
+	} else {
+        [self.settingsDictionary setObject:[NSNumber numberWithBool:musicSwitch.on] forKey:@"music"];
+        isWriteNeeded = YES;
+    }
 }
 
-/*
-// makes the keyboard go away when background is tapped
--(IBAction) backgroundTap: (id)sender {
-//	[username resignFirstResponder];
-//	[password resignFirstResponder];
+-(void) justUpdateDictionary:(id) sender {
+    UISwitch *theSwitch = (UISwitch *)sender;
+    [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];
+    isWriteNeeded = YES;
 }
-
-// makes the keyboard go away when "Done" is tapped
--(IBAction) textFieldDoneEditing: (id)sender {
-	[sender resignFirstResponder];
-}
-*/
 
 /*
 #pragma mark -
@@ -187,63 +204,73 @@
 			return 1;
 			break;
 		default:
-			NSLog(@"Warning: unset case value for numberOfRowsInSection!");
 			break;
 	}
 	return 0;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *cellIdentifier1 = @"systemSettingsCell1";
-	static NSString *cellIdentifier2 = @"systemSettingsCell2";
-	
-	UITableViewCell *cell = nil;
-	
-	switch ([indexPath section]) {
-		case kNetworkFields:
-            cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier1];
-            if (nil == cell) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
-                                           reuseIdentifier:cellIdentifier1] autorelease];
-            }
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	static NSString *cellIdentifier = @"systemSettingsCell";
+	NSInteger row = [indexPath row];
+    NSInteger section = [indexPath section];
+    
+	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (nil == cell) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+        if (section == kNetworkFields) {
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(-15, 10, 100, 25)];
+            label.textAlignment = UITextAlignmentRight;
+            label.backgroundColor = [UIColor clearColor];
+            label.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 2];
+            if (row == 0) 
+                label.text = NSLocalizedString(@"Nickname","from the settings table");
+            else 
+                label.text = NSLocalizedString(@"Password","from the settings table");
+            [cell.contentView addSubview:label];
+            [label release];
             
-			switch ([indexPath row]) {
+            UITextField *aTextField = [[UITextField alloc] initWithFrame:
+                                       CGRectMake(110, 12, (cell.frame.size.width + cell.frame.size.width/3) - 90, 25)];
+            aTextField.clearsOnBeginEditing = NO;
+            aTextField.returnKeyType = UIReturnKeyDone;
+            aTextField.adjustsFontSizeToFitWidth = YES;
+            aTextField.delegate = self;
+            aTextField.tag = row;
+            aTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+            [aTextField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
+            [cell.contentView addSubview:aTextField];
+            [aTextField release];
+        }
+    }
+    
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.imageView.image = nil;
+    
+    UITextField *aTextField;
+    switch (section) {
+        case kNetworkFields:
+            for (UIView *oneView in cell.contentView.subviews) 
+                if ([oneView isMemberOfClass:[UITextField class]]) 
+                    aTextField = (UITextField *)oneView;
+
+            switch (row) {
 				case 0:                    
-					cell.textLabel.text = NSLocalizedString(@"Nickname", @"");
-                    if ([username isEqualToString:@""]) {
-                        cell.detailTextLabel.text = @"insert username...";
-                        cell.detailTextLabel.font = [UIFont italicSystemFontOfSize:[UIFont systemFontSize]];
-                        cell.detailTextLabel.textColor = [UIColor grayColor];
-                    } else {
-                        cell.detailTextLabel.text = username;
-                    }
+                    aTextField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"");
+                    aTextField.text = [self.settingsDictionary objectForKey:@"username"];
 					break;
 				case 1:                    
-					cell.textLabel.text = NSLocalizedString(@"Password", @"");
-                    if ([password isEqualToString:@""]) {
-                        cell.detailTextLabel.text = @"insert password...";
-                        cell.detailTextLabel.font = [UIFont italicSystemFontOfSize:[UIFont systemFontSize]];
-                        cell.detailTextLabel.textColor = [UIColor grayColor];
-                    } else {
-                        cell.detailTextLabel.text = @"••••••••";
-                    }
+                    aTextField.placeholder = NSLocalizedString(@"Insert your password",@"");
+                    aTextField.text = [self.settingsDictionary objectForKey:@"password"];
+                    aTextField.secureTextEntry = YES;
 					break;
 				default:
-					NSLog(@"Warning: unset case value in kNetworkFields section!");
 					break;
 			}
 			break;
             
 		case kAudioFields:
-            cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier2];
-            if (nil == cell) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:cellIdentifier2] autorelease];
-            }
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-			switch ([indexPath row]) {
+			switch (row) {
 				case 0:
 					cell.textLabel.text = NSLocalizedString(@"Sound", @"");
 					cell.accessoryView = soundSwitch;
@@ -253,18 +280,11 @@
 					cell.accessoryView = musicSwitch;
 					break;
 				default:
-					NSLog(@"Warning: unset case value in kAudioFields section!");
 					break;
 			}
-            // this makes the row not selectable
 			break;
             
 		case kOtherFields:
-            cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier2];
-            if (nil == cell) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:cellIdentifier2] autorelease];
-            }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
 			cell.accessoryView = altDamageSwitch;
@@ -335,5 +355,50 @@
 	return 57.0;
 }
 */
+
+
+#pragma mark -
+#pragma mark Table view delegate
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell;
+    if (kNetworkFields == [indexPath section]) {
+        cell = [aTableView cellForRowAtIndexPath:indexPath];
+        for (UIView *oneView in cell.contentView.subviews) {
+            if ([oneView isMemberOfClass:[UITextField class]]) {
+                textFieldBeingEdited = (UITextField *)oneView;
+                [textFieldBeingEdited becomeFirstResponder];
+            }
+        }
+        [aTableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
+}
+
+
+#pragma mark -
+#pragma mark Memory management
+-(void) didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    // Relinquish ownership any cached data, images, etc that aren't in use.
+}
+
+-(void) viewDidUnload {
+    self.settingsDictionary = nil;
+	self.textFieldBeingEdited = nil;
+	self.musicSwitch = nil;
+	self.soundSwitch = nil;
+	self.altDamageSwitch = nil;
+	[super viewDidUnload];
+}
+
+-(void) dealloc {
+    [settingsDictionary release];
+	[textFieldBeingEdited release];
+	[musicSwitch release];
+	[soundSwitch release];
+	[altDamageSwitch release];
+	[super dealloc];
+}
+
 
 @end

@@ -9,18 +9,17 @@
 #import <UIKit/UIKit.h>
 
 
-@interface GeneralSettingsViewController : UITableViewController <UIActionSheetDelegate> {
-    NSDictionary *dataDict;
-	NSString *username;
-	NSString *password;
+@interface GeneralSettingsViewController : UITableViewController <UITextFieldDelegate> {
+    NSMutableDictionary *settingsDictionary;
+	UITextField *textFieldBeingEdited;
 	UISwitch *musicSwitch;
 	UISwitch *soundSwitch;
 	UISwitch *altDamageSwitch;
+    BOOL isWriteNeeded;
 }
 
-@property (nonatomic, retain) NSDictionary *dataDict;
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) NSString *password;
+@property (nonatomic, retain) NSMutableDictionary *settingsDictionary;
+@property (nonatomic, retain) UITextField *textFieldBeingEdited;;
 @property (nonatomic, retain) UISwitch *musicSwitch;
 @property (nonatomic, retain) UISwitch *soundSwitch;
 @property (nonatomic, retain) UISwitch *altDamageSwitch;

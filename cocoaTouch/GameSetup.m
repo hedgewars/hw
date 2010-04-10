@@ -336,10 +336,10 @@
     
 	gameArgs[0] = [username UTF8String];                                    //UserNick
 	gameArgs[1] = [ipcString UTF8String];                                   //ipcPort
-	gameArgs[2] = [[systemSettings objectForKey:@"sounds"] UTF8String];     //isSoundEnabled
-	gameArgs[3] = [[systemSettings objectForKey:@"music"] UTF8String];      //isMusicEnabled
+	gameArgs[2] = [[[systemSettings objectForKey:@"sounds"] stringValue] UTF8String];     //isSoundEnabled
+	gameArgs[3] = [[[systemSettings objectForKey:@"music"] stringValue] UTF8String];      //isMusicEnabled
 	gameArgs[4] = [localeString UTF8String];                                //cLocaleFName
-	gameArgs[5] = [[systemSettings objectForKey:@"alternate"] UTF8String];	//cAltDamage
+	gameArgs[5] = [[[systemSettings objectForKey:@"alternate"] stringValue] UTF8String];	//cAltDamage
 	gameArgs[6] = [wSize UTF8String];                                       //cScreenHeight
     gameArgs[7] = [hSize UTF8String];                                       //cScreenWidth
     

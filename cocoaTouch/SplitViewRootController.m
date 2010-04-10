@@ -44,7 +44,6 @@
         UINavigationController *mainNavController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
     
         masterViewController.detailViewController = self.detailViewController;
-                NSLog(@"%d", [detailViewController retainCount]);
 
         [masterViewController release];
 
@@ -54,7 +53,6 @@
         
         [splitViewRootController setDelegate: self.detailViewController];
         [detailViewController release];
-                NSLog(@"%d", [detailViewController retainCount]);
 
         // add view to main controller
         [self.view addSubview:[splitViewRootController view]];
