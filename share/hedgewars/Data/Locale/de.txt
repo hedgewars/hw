@@ -1,4 +1,4 @@
-﻿; German locale
+; German locale
 
 00:00=Granate
 00:01=Splittergranate
@@ -57,6 +57,8 @@
 01:11=Waffe oder Werkzeug noch nicht verfügbar!
 01:10=Benutzung beendet nicht die eigene Runde!
 01:11=Waffe oder Werkzeug noch nicht verfügbar!
+01:12=Letzte Runde bis zum Sudden Death!
+01:13=%1 Runden bis zum Sudden Death!
 
 ; Event messages
 ; Hog (%1) died

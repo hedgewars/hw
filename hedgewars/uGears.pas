@@ -625,6 +625,8 @@ const delay: LongWord = 0;
             stAfterDelay, stChWin, stWater, stChWin2, stHealth,
             stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
+    i: LongInt;
+    s: shortstring;
 begin
 PrvInactive:= AllInactive;
 AllInactive:= true;
@@ -697,7 +699,7 @@ case step of
             end;
     stWater: if (not bBetweenTurns) and (not isInMultiShoot) then
                 begin
-                if TotalRounds = cSuddenDTurns + 2 then bWaterRising:= true;
+                if TotalRounds = cSuddenDTurns + 1 then bWaterRising:= true;
 
                 if bWaterRising then
                 AddGear(0, 0, gtWaterUp, 0, _0, _0, 0);
@@ -709,13 +711,21 @@ case step of
             inc(step)
             end;
     stHealth: begin
-            if (TotalRounds = cSuddenDTurns) and (cHealthDecrease = 0) then
+            if (TotalRounds = cSuddenDTurns - 1) and (cHealthDecrease = 0) then
                 begin
                 cHealthDecrease:= 5;
                 AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                 playSound(sndSuddenDeath)
+                end
+            else if (TotalRounds < cSuddenDTurns - 1) then
+                begin
+                i:= cSuddenDTurns - TotalRounds - 1;
+                s:= inttostr(i);
+                if i = 1 then
+                    AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
+                else if i in [2, 5, 10, 15, 20, 25, 50, 100] then
+                    AddCaption(Format(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
                 end;
-
             if bBetweenTurns
                 or isInMultiShoot
                 or (TotalRounds = -1) then inc(step)
@@ -2203,7 +2213,7 @@ if t<h then
     FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
     FollowGear^.Health:= 25;
     FollowGear^.Pos:= posCaseHealth;
-    AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpGameState);
+    AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
     end
 else if (t<a+h) then
     begin
@@ -2223,7 +2233,7 @@ else if (t<a+h) then
           end;
         FollowGear^.Pos:= posCaseAmmo;
         FollowGear^.State:= Longword(i);
-        AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpGameState);
+        AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
         end
     end
 else
@@ -2244,7 +2254,7 @@ else
           end;
         FollowGear^.Pos:= posCaseUtility;
         FollowGear^.State:= Longword(i);
-        AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpGameState);
+        AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
         end
     end;
 
