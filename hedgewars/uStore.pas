@@ -1107,14 +1107,17 @@ function glLoadExtension(extension : shortstring) : boolean;
 begin
 {$IFDEF IPHONEOS}
     glLoadExtension:= false;
+{$IFDEF DEBUGFILE}
+    AddFileLog('OpenGL - "' + extension + '" skipped')
+{$ENDIF}
 {$ELSE}
     glLoadExtension:= glext_LoadExtension(extension);
-{$ENDIF}
 {$IFDEF DEBUGFILE}
     if not glLoadExtension then
         AddFileLog('OpenGL - "' + extension + '" failed to load')
     else
         AddFileLog('OpenGL - "' + extension + '" loaded');
+{$ENDIF}
 {$ENDIF}
 end;
 

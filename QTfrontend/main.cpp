@@ -28,6 +28,10 @@
 #include "hwform.h"
 #include "hwconsts.h"
 
+#ifdef _WIN32
+#include <Shlobj.h>
+#endif
+
 bool checkForDir(const QString & dir)
 {
     QDir tmpdir;
@@ -307,13 +311,38 @@ int main(int argc, char *argv[]) {
         {
             checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Demos");
             checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Saves");
+            checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Teams");
         }
         cfgdir->cd("Library/Application Support/Hedgewars");
+#elif defined _WIN32
+        char path[1024];
+        if(!SHGetFolderPathA(0, CSIDL_PERSONAL, NULL, 0, path))
+        {
+            cfgdir->cd(path);
+            if (checkForDir(cfgdir->absolutePath() + "/Hedgewars"))
+            {
+                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Demos");
+                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Saves");
+                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Teams");
+            }
+            cfgdir->cd("Hedgewars");
+        }
+        else
+        {
+            if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
+            {
+                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
+                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
+                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Teams");
+            }
+            cfgdir->cd(".hedgewars");
+        }
 #else
         if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
         {
             checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
             checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
+            checkForDir(cfgdir->absolutePath() + "/.hedgewars/Teams");
         }
         cfgdir->cd(".hedgewars");
 #endif
@@ -324,6 +353,7 @@ int main(int argc, char *argv[]) {
         {
             checkForDir(cfgdir->absolutePath() + "/Demos");
             checkForDir(cfgdir->absolutePath() + "/Saves");
+            checkForDir(cfgdir->absolutePath() + "/Teams");
         }
     }
 
