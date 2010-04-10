@@ -7,14 +7,15 @@
 //
 
 #import "SingleTeamViewController.h"
-//#import "HogNameViewController.h"
 #import "HogHatViewController.h"
 #import "FlagsViewController.h"
 #import "FortsViewController.h"
 #import "CommodityFunctions.h"
 
+#define TEAMNAME_TAG 1234
+
 @implementation SingleTeamViewController
-@synthesize teamDictionary, hatArray, secondaryItems, secondaryControllers, textFieldBeingEdited;
+@synthesize teamDictionary, hatArray, secondaryItems, secondaryControllers, textFieldBeingEdited, teamName;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -31,22 +32,29 @@
 }
 
 // set the new value
--(void) save:(id) sender {
+-(BOOL) save:(id) sender {
     if (textFieldBeingEdited != nil) {
-        //replace the old value with the new one
-        NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
-        NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
-        [newHog setObject:textFieldBeingEdited.text forKey:@"hogname"];
-        [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:selectedHog withObject:newHog];
-        [newHog release];
+        if (TEAMNAME_TAG == selectedHog) {
+            NSLog(@"%@", textFieldBeingEdited.text);
+            [self.teamDictionary setObject:textFieldBeingEdited.text forKey:@"teamname"];
+        } else {
+            //replace the old value with the new one
+            NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
+            NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
+            [newHog setObject:textFieldBeingEdited.text forKey:@"hogname"];
+            [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:selectedHog withObject:newHog];
+            [newHog release];
+        }
         
         isWriteNeeded = YES;
         [self.textFieldBeingEdited resignFirstResponder];
+        return YES;
     }
+    return NO;
 }
 
 // the textfield is being modified, update the navigation controller
--(void) textFieldDidBeginEditing:(UITextField *)aTextField{
+-(void) textFieldDidBeginEditing:(UITextField *)aTextField{   
     self.textFieldBeingEdited = aTextField;
     selectedHog = aTextField.tag;
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel",@"from the hog name table")
@@ -64,12 +72,17 @@
     [saveButton release];
 }
 
+// we save every time a textfield is edited, so we don't risk to update only the hogs or only the temname 
+-(BOOL) textFieldShouldEndEditing:(UITextField *)aTextField {
+    return [self save:nil];
+}
+
 // the textfield has been modified, check for empty strings and restore original navigation bar
 -(void) textFieldDidEndEditing:(UITextField *)aTextField{
     if ([textFieldBeingEdited.text length] == 0) 
         textFieldBeingEdited.text = [NSString stringWithFormat:@"hedgehog %d",textFieldBeingEdited.tag];
 
-    self.textFieldBeingEdited = nil;
+    //self.textFieldBeingEdited = nil;
     self.navigationItem.rightBarButtonItem = self.navigationItem.backBarButtonItem;
     self.navigationItem.leftBarButtonItem = nil;
 }
@@ -119,19 +132,27 @@
     [super viewWillAppear:animated];
     
     // load data about the team and write if there has been a change
-    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),self.title];
-    if (isWriteNeeded) {
-        [self.teamDictionary writeToFile:teamFile atomically:YES];
-        NSLog(@"writing: %@",teamDictionary);
-        isWriteNeeded = NO;
-    }
+    if (isWriteNeeded) 
+        [self writeFile];
     
+    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),self.title];
 	NSMutableDictionary *teamDict = [[NSMutableDictionary alloc] initWithContentsOfFile:teamFile];
     self.teamDictionary = teamDict;
     [teamDict release];
 	[teamFile release];
-        
+    
+    self.teamName = self.title;
+    
     // load the images of the hat for aach hog
+    NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
+    UIImage *normalHogImage = [[UIImage alloc] initWithContentsOfFile:normalHogFile];
+    [normalHogFile release];
+    CGRect hogSpriteArea = CGRectMake(96, 0, 32, 32);
+    CGImageRef cgImg = CGImageCreateWithImageInRect([normalHogImage CGImage], hogSpriteArea);
+    [normalHogImage release];
+    UIImage *normalHogSprite = [[UIImage alloc] initWithCGImage:cgImg];
+    CGImageRelease(cgImg);
+    
     NSArray *hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[hogArray count]];
     for (NSDictionary *hog in hogArray) {
@@ -144,10 +165,12 @@
         [image release];
         
         UIImage *hatSprite = [[UIImage alloc] initWithCGImage:cgImgage];
-        [array addObject:hatSprite];
         CGImageRelease(cgImgage);
+        
+        [array addObject:mergeTwoImages(normalHogSprite, hatSprite)];
         [hatSprite release];
     }
+    [normalHogSprite release];
     self.hatArray = array;
     [array release];
     
@@ -157,20 +180,32 @@
 // write on file if there has been a change
 -(void) viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	
-	NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),self.title];
-    if (isWriteNeeded) {
-        [self.teamDictionary writeToFile:teamFile atomically:YES];
-        NSLog(@"writing: %@",teamDictionary);
-        isWriteNeeded = NO;
-    }
-
-	[teamFile release];
+    if (isWriteNeeded) 
+        [self writeFile];        
 }
 
 // needed by other classes to warn about a user change
 -(void) setWriteNeeded {
     isWriteNeeded = YES;
+}
+
+-(void) writeFile {
+    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),self.title];
+
+    NSString *newTeamName = [self.teamDictionary objectForKey:@"teamname"];
+    if (![newTeamName isEqualToString:self.teamName]) {
+        //delete old
+        [[NSFileManager defaultManager] removeItemAtPath:teamFile error:NULL];
+        [teamFile release];
+        self.title = newTeamName;
+        self.teamName = newTeamName;
+        teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),newTeamName];
+    }
+    
+    [self.teamDictionary writeToFile:teamFile atomically:YES];
+    NSLog(@"writing: %@",teamDictionary);
+    isWriteNeeded = NO;
+	[teamFile release];
 }
 
 #pragma mark -
@@ -204,10 +239,17 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                        reuseIdentifier:CellIdentifier] autorelease];
-        if ([indexPath section] == 1) {
+        if ([indexPath section] != 2) {
             // create a uitextfield for each row, expand it to take the maximum size
-            UITextField *aTextField = [[UITextField alloc] 
-                                       initWithFrame:CGRectMake(42, 12, (cell.frame.size.width + cell.frame.size.width/3) - 42, 25)];
+            UITextField *aTextField;
+            if ([indexPath section] == 1) {
+                aTextField = [[UITextField alloc] 
+                              initWithFrame:CGRectMake(42, 12, (cell.frame.size.width + cell.frame.size.width/3) - 42, 25)];
+            } else {
+                aTextField = [[UITextField alloc] 
+                              initWithFrame:CGRectMake(5, 12, (cell.frame.size.width + cell.frame.size.width/3) - 42, 25)];
+            }
+            
             aTextField.clearsOnBeginEditing = NO;
             aTextField.returnKeyType = UIReturnKeyDone;
             aTextField.adjustsFontSizeToFitWidth = YES;
@@ -224,9 +266,16 @@
     NSInteger row = [indexPath row];
     switch ([indexPath section]) {
         case 0:
-            cell.textLabel.text = self.title;
             cell.imageView.image = nil;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            for (UIView *oneView in cell.contentView.subviews) {
+                if ([oneView isMemberOfClass:[UITextField class]]) {
+                    // we find the uitextfied and we'll use its tag to understand which one is being edited
+                    UITextField *textFieldFound = (UITextField *)oneView;
+                    textFieldFound.text = [self.teamDictionary objectForKey:@"teamname"];
+                    textFieldFound.tag = TEAMNAME_TAG;
+                }
+            }            
             break;
         case 1:
             hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
@@ -270,23 +319,26 @@
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
     UITableViewController *nextController;
-    if (1 == [indexPath section]) {
-        UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
-        for (UIView *oneView in cell.contentView.subviews) {
-            if ([oneView isMemberOfClass:[UITextField class]]) {
-                textFieldBeingEdited = (UITextField *)oneView;
-                textFieldBeingEdited.tag = row;
-                [textFieldBeingEdited becomeFirstResponder];
+    UITableViewCell *cell;
+    switch ([indexPath section]) {
+        case 2:
+            //TODO: this part should be rewrittend with lazy loading instead of an array of controllers
+            nextController = [secondaryControllers objectAtIndex:row%2 ];              //TODO: fix the objectAtIndex
+            nextController.title = [secondaryItems objectAtIndex:row];
+            [nextController setTeamDictionary:teamDictionary];
+            [self.navigationController pushViewController:nextController animated:YES];
+            break;            
+        default:
+            cell = [aTableView cellForRowAtIndexPath:indexPath];
+            for (UIView *oneView in cell.contentView.subviews) {
+                if ([oneView isMemberOfClass:[UITextField class]]) {
+                    textFieldBeingEdited = (UITextField *)oneView;
+                    textFieldBeingEdited.tag = row;
+                    [textFieldBeingEdited becomeFirstResponder];
+                }
             }
-        }
-        [aTableView deselectRowAtIndexPath:indexPath animated:NO];
-    }
-    if (2 == [indexPath section]) {
-        //TODO: this part should be rewrittend with lazy loading instead of an array of controllers
-        nextController = [secondaryControllers objectAtIndex:row%2 ];              //TODO: fix the objectAtIndex
-        nextController.title = [secondaryItems objectAtIndex:row];
-        [nextController setTeamDictionary:teamDictionary];
-        [self.navigationController pushViewController:nextController animated:YES];
+            [aTableView deselectRowAtIndexPath:indexPath animated:NO];
+            break;
     }
 }
 
@@ -315,6 +367,7 @@
 -(void) viewDidUnload {
     self.teamDictionary = nil;
     self.textFieldBeingEdited = nil;
+    self.teamName = nil;
     self.hatArray = nil;
     self.secondaryItems = nil;
     self.secondaryControllers = nil;
@@ -325,6 +378,7 @@
 -(void) dealloc {
     [teamDictionary release];
     [textFieldBeingEdited release];
+    [teamName release];
     [hatArray release];
     [secondaryItems release];
     [secondaryControllers release];

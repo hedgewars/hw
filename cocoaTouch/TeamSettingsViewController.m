@@ -20,7 +20,8 @@
 
 #pragma mark -
 #pragma mark View lifecycle
-- (void)viewDidLoad {
+// add an edit button
+-(void) viewDidLoad {
     [super viewDidLoad];
 
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit",@"from the team navigation")
@@ -29,14 +30,18 @@
                                                                   action:@selector(toggleEdit:)];
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
+}
+
+// load the list of teams in the teams directory
+-(void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *teamsDirectory = [[paths objectAtIndex:0] stringByAppendingString:@"/Teams/"];
-    
-    NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:teamsDirectory error:NULL];
+    NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray: contentsOfDir copyItems:YES];
     self.listOfTeams = array;
     [array release];
+    
+    [self.tableView reloadData];
     NSLog(@"files: %@", self.listOfTeams);
 }
 
@@ -104,9 +109,7 @@
 -(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger row = [indexPath row];
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/Teams/%@",[paths objectAtIndex:0],[self.listOfTeams objectAtIndex:row]];
-
+    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@",TEAMS_DIRECTORY(),[self.listOfTeams objectAtIndex:row]];
     [[NSFileManager defaultManager] removeItemAtPath:teamFile error:NULL];
     [teamFile release];
     
@@ -128,24 +131,10 @@
 }
 */
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 
 #pragma mark -
 #pragma mark Table view delegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (childController == nil) {
         childController = [[SingleTeamViewController alloc] initWithStyle:UITableViewStyleGrouped];
     }
@@ -154,37 +143,26 @@
     NSString *selectedTeamFile = [listOfTeams objectAtIndex:row];
     NSLog(@"%@",selectedTeamFile);
     
+    // this must be set so childController can load the correct plist
     childController.title = [selectedTeamFile stringByDeletingPathExtension];
     [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
-    // this must be set so childController can load the correct plist
-    //childController.title = [[listOfTeams objectAtIndex:row] stringByDeletingPathExtension];
     [self.navigationController pushViewController:childController animated:YES];
 }
 
-/*
--(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"Hey, do you see the disclosure button?" 
-                                                    message:@"If you're trying to drill down, touch that instead" 
-                                                   delegate:nil
-                                          cancelButtonTitle:@"Won't happen again"
-                                          otherButtonTitles:nil];
-    [alert show];
-    [alert release];
-}
-*/
 
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
 -(void) viewDidUnload {
     self.listOfTeams = nil;
+    childController = nil;
+    [super viewDidUnload];
 }
 
 -(void) dealloc {

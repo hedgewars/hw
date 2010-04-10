@@ -41,3 +41,12 @@ void createTeamNamed (NSString *nameWithoutExt) {
     [teamFile release];
     [theTeam release];
 }
+
+UIImage *mergeTwoImages (UIImage *firstImage, UIImage *secondImage) {
+    UIGraphicsBeginImageContext(firstImage.size);
+    [firstImage drawAtPoint:CGPointMake(0,0)];
+    [secondImage drawAtPoint:CGPointMake(0,-4)];
+    UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return resultImage; // autoreleased
+}

@@ -14,6 +14,7 @@
     
     UITextField *textFieldBeingEdited;
     NSInteger selectedHog;
+    NSString *teamName;
     NSArray *hatArray;
     
     NSArray *secondaryItems;
@@ -25,7 +26,12 @@
 
 @property (nonatomic,retain) NSMutableDictionary *teamDictionary;
 @property (nonatomic,retain) UITextField *textFieldBeingEdited;
+@property (nonatomic,retain) NSString *teamName;
 @property (nonatomic,retain) NSArray *hatArray;
 @property (nonatomic,retain) NSArray *secondaryItems;
 @property (nonatomic,retain) NSArray *secondaryControllers;
+
+-(void) writeFile;
+-(void) setWriteNeeded;
+
 @end
