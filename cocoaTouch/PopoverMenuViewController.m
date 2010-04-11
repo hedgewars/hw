@@ -14,9 +14,10 @@
 @synthesize menuList;
 
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+	return rotationManager(interfaceOrientation);
 }
+
 
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.

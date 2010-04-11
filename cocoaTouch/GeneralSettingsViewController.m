@@ -7,15 +7,16 @@
 //
 
 #import "GeneralSettingsViewController.h"
-#import "SDL_uikitappdelegate.h"
+#import "CommodityFunctions.h"
 
 @implementation GeneralSettingsViewController
 @synthesize settingsDictionary, textFieldBeingEdited, musicSwitch, soundSwitch, altDamageSwitch;
 
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+	return rotationManager(interfaceOrientation);
 }
+
 
 #pragma mark -
 #pragma mark textfield methods
@@ -88,14 +89,11 @@
 	[self.soundSwitch addTarget:self action:@selector(alsoTurnOffMusic:) forControlEvents:UIControlEventValueChanged];
 	[self.musicSwitch addTarget:self action:@selector(dontTurnOnMusic:) forControlEvents:UIControlEventValueChanged];
 	[self.altDamageSwitch addTarget:self action:@selector(justUpdateDictionary:) forControlEvents:UIControlEventValueChanged];
-
-    NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
     self.settingsDictionary = dictionary;
     [dictionary release];
 }
-
-
 
 -(void) viewWillAppear:(BOOL)animated {
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
@@ -113,7 +111,7 @@
     
     if (isWriteNeeded) {
        	NSLog(@"writing preferences to file");
-        [self.settingsDictionary writeToFile:[[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"] atomically:YES];
+        [self.settingsDictionary writeToFile:SETTINGS_FILE() atomically:YES];
         isWriteNeeded = NO;
     }
 }

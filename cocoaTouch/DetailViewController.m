@@ -10,10 +10,15 @@
 #import "SDL_uikitappdelegate.h"
 #import "TeamSettingsViewController.h"
 #import "GeneralSettingsViewController.h"
+#import "CommodityFunctions.h"
 
 @implementation DetailViewController
 @synthesize popoverController, controllers;
 
+
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+	return rotationManager(interfaceOrientation);
+}
 
 - (void)viewDidLoad {
     self.title = NSLocalizedString(@"Settings",@"");
@@ -125,25 +130,18 @@
 #pragma mark -
 #pragma mark Split view support
 #ifdef __IPHONE_3_2
--(void) splitViewController:(UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
+-(void) splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)pc {
     barButtonItem.title = @"Master List";
-  //  [navigationBar.topItem setLeftBarButtonItem:barButtonItem animated:YES];
+    [self.navigationController.navigationBar.topItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.popoverController = pc;
 }
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
 -(void) splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-  //  [navigationBar.topItem setLeftBarButtonItem:nil animated:YES];
+    [self.navigationController.navigationBar.topItem setLeftBarButtonItem:nil animated:YES];
     self.popoverController = nil;
 }
 #endif
-
-#pragma mark -
-#pragma mark Rotation support
-// Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
-}
 
 -(IBAction) dismissSplitView {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];

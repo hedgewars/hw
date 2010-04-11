@@ -7,7 +7,7 @@
 //
 
 #import "CommodityFunctions.h"
-
+#import "SDL_uikitappdelegate.h"
 
 void createTeamNamed (NSString *nameWithoutExt) {
     NSString *teamsDirectory = TEAMS_DIRECTORY();
@@ -49,4 +49,12 @@ UIImage *mergeTwoImages (UIImage *firstImage, UIImage *secondImage) {
     UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return resultImage; // autoreleased
+}
+
+BOOL rotationManager (UIInterfaceOrientation interfaceOrientation) {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    else
+        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+
 }

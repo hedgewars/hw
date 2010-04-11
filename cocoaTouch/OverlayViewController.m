@@ -12,15 +12,20 @@
 #import "CGPointUtils.h"
 #import "SDL_mouse.h"
 #import "PopoverMenuViewController.h"
+#import "CommodityFunctions.h"
 
 @implementation OverlayViewController
 @synthesize dimTimer, popoverController, popupMenu;
 
 
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+	return rotationManager(interfaceOrientation);
+}
+
+
 -(void) didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-
 	// Release any cached data, images, etc that aren't in use.
 }
 
@@ -46,10 +51,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissPopover) name:@"dismissPopover" object:nil];
     // present the overlay after 2 seconds
     [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(showMenuAfterwards) userInfo:nil repeats:NO];
-}
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 -(void) viewDidUnload {

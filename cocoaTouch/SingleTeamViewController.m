@@ -18,8 +18,8 @@
 @synthesize teamDictionary, hatArray, secondaryItems, secondaryControllers, textFieldBeingEdited, teamName;
 
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+	return rotationManager(interfaceOrientation);
 }
 
 

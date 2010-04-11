@@ -10,6 +10,8 @@
 
 #define MAX_HOGS 8
 
+#define SETTINGS_FILE()         [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
+                                 objectAtIndex:0] stringByAppendingString:@"/settings.plist"]
 #define TEAMS_DIRECTORY()       [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
                                  objectAtIndex:0] stringByAppendingString:@"/Teams/"]
 #define GRAPHICS_DIRECTORY()    [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/"]
@@ -19,3 +21,4 @@
 
 void createTeamNamed (NSString *nameWithoutExt);
 UIImage *mergeTwoImages (UIImage *firstImage, UIImage *secondImage);
+BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);

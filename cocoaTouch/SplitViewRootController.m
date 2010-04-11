@@ -9,13 +9,14 @@
 #import "SplitViewRootController.h"
 #import "MasterViewController.h"
 #import "DetailViewController.h"
+#import "CommodityFunctions.h"
 
 @implementation SplitViewRootController
 @synthesize detailViewController;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    return rotationManager(interfaceOrientation);
 }
 
 -(void) didReceiveMemoryWarning {
@@ -28,7 +29,7 @@
 // (which is just a UITableViewController) and a DetailViewController where we present options
 -(void) viewDidLoad {
     self.detailViewController = [[DetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
-     [detailViewController release];
+    [detailViewController release];
     UINavigationController *detailedNavController = [[UINavigationController alloc] initWithRootViewController:self.detailViewController];
     [detailViewController release];
 
@@ -51,7 +52,7 @@
         [mainNavController release];
         [detailedNavController release];
         
-        [splitViewRootController setDelegate: self.detailViewController];
+        [splitViewRootController setDelegate:self.detailViewController];
         [detailViewController release];
 
         // add view to main controller

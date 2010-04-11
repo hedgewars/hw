@@ -6,12 +6,14 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
 #import "GameSetup.h"
 #import "SDL_uikitappdelegate.h"
 #import "SDL_net.h"
 #import "PascalImports.h"
-#include <sys/types.h>
-#include <sys/sysctl.h>
+#import "CommodityFunctions.h"
 
 #define BUFFER_SIZE 256
 #define debug(format, ...) CFShow([NSString stringWithFormat:format, ## __VA_ARGS__]);
@@ -25,8 +27,7 @@
     	srandom(time(NULL));
         ipcPort = (random() % 64541) + 1025;
         
-        NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
-        systemSettings = [[NSDictionary alloc] initWithContentsOfFile:filePath]; //should check it exists
+        systemSettings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()]; //should check it exists
         return self;
     } else
         return nil;
@@ -328,20 +329,20 @@
     // prevents using an empty nickname
     NSString *username;
     NSString *originalUsername = [systemSettings objectForKey:@"username"];
-    if ([originalUsername isEqualToString:@""]) {
+    if ([originalUsername length] == 0) {
         username = [[NSString alloc] initWithFormat:@"MobileUser-%@",ipcString];
     } else {
         username = [[NSString alloc] initWithString:originalUsername];
     }
     
-	gameArgs[0] = [username UTF8String];                                    //UserNick
-	gameArgs[1] = [ipcString UTF8String];                                   //ipcPort
-	gameArgs[2] = [[[systemSettings objectForKey:@"sounds"] stringValue] UTF8String];     //isSoundEnabled
-	gameArgs[3] = [[[systemSettings objectForKey:@"music"] stringValue] UTF8String];      //isMusicEnabled
-	gameArgs[4] = [localeString UTF8String];                                //cLocaleFName
+	gameArgs[0] = [username UTF8String];                                                    //UserNick
+	gameArgs[1] = [ipcString UTF8String];                                                   //ipcPort
+	gameArgs[2] = [[[systemSettings objectForKey:@"sound"] stringValue] UTF8String];        //isSoundEnabled
+	gameArgs[3] = [[[systemSettings objectForKey:@"music"] stringValue] UTF8String];        //isMusicEnabled
+	gameArgs[4] = [localeString UTF8String];                                                //cLocaleFName
 	gameArgs[5] = [[[systemSettings objectForKey:@"alternate"] stringValue] UTF8String];	//cAltDamage
-	gameArgs[6] = [wSize UTF8String];                                       //cScreenHeight
-    gameArgs[7] = [hSize UTF8String];                                       //cScreenWidth
+	gameArgs[6] = [wSize UTF8String];                                                       //cScreenHeight
+    gameArgs[7] = [hSize UTF8String];                                                       //cScreenWidth
     
     [wSize release];
     [hSize release];

@@ -10,9 +10,16 @@
 #import "DetailViewController.h"
 #import "GeneralSettingsViewController.h"
 #import "TeamSettingsViewController.h"
+#import "CommodityFunctions.h"
 
 @implementation MasterViewController
 @synthesize detailViewController, optionList, controllers, lastIndexPath;
+
+
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+	return rotationManager(interfaceOrientation);
+}
+
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -49,11 +56,6 @@
     self.controllers = array;
     [array release];
 }
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
-}
-
 
 #pragma mark -
 #pragma mark Table view data source

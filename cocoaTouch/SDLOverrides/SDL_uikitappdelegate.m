@@ -73,6 +73,7 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) dealloc {
+    [viewController release];
 	[uiwindow release];
 	[super dealloc];
 }
@@ -102,13 +103,6 @@ int main (int argc, char *argv[]) {
     [overlayController.view removeFromSuperview];
     
     [viewController appear];
-}
-
-// get a path-to-file string
--(NSString *)dataFilePath:(NSString *)fileName {
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex:0];
-	return [documentsDirectory stringByAppendingPathComponent:fileName];
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
@@ -145,13 +139,13 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationWillResignActive:(UIApplication *)application {
-	NSLog(@"%@", NSStringFromSelector(_cmd));
+	//NSLog(@"%@", NSStringFromSelector(_cmd));
     if (isInGame) HW_pause();
 	//SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
 }
 
 -(void) applicationDidBecomeActive:(UIApplication *)application {
-	NSLog(@"%@", NSStringFromSelector(_cmd));
+	//NSLog(@"%@", NSStringFromSelector(_cmd));
     if (isInGame) HW_pause();
 	//SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_RESTORED, 0, 0);
 }

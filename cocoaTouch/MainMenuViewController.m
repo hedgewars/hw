@@ -16,13 +16,11 @@
 @synthesize cover, versionLabel;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
-	return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+	return rotationManager(interfaceOrientation);
 }
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
-    self.cover = nil;
-    self.versionLabel = nil;
 	[super didReceiveMemoryWarning];
 }
 
@@ -34,6 +32,7 @@
 
 -(void) viewDidUnload {
     self.cover = nil;
+    self.versionLabel = nil;
 	[super viewDidUnload];
 }
 
@@ -51,8 +50,7 @@
                                                object:nil];
     
     // initialize some files the first time we load the game
-    NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
-	if (!([[NSFileManager defaultManager] fileExistsAtPath:filePath])) 
+	if (!([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()])) 
         [NSThread detachNewThreadSelector:@selector(checkFirstRun) toTarget:self withObject:nil];
     
 	[super viewDidLoad];
@@ -62,7 +60,7 @@
 // if it is it blocks user interaction with an alertView until files are created
 -(void) checkFirstRun {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"First time run, creating settings files");
+    NSLog(@"First time run, creating settings files at %@", SETTINGS_FILE());
     
     // show a popup with an indicator to make the user wait
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Please wait",@"")
@@ -92,10 +90,8 @@
     [saveDict setObject:[NSNumber numberWithBool:YES] forKey:@"sound"];
     [saveDict setObject:[NSNumber numberWithBool:NO] forKey:@"alternate"];
 
-    NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
-    [saveDict writeToFile:filePath atomically:YES];
+    [saveDict writeToFile:SETTINGS_FILE() atomically:YES];
     [saveDict release];    
-    // create other files
     
     // ok let the user take control
     [alert dismissWithClickedButtonIndex:0 animated:YES];

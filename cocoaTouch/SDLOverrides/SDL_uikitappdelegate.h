@@ -38,7 +38,6 @@
 @property (nonatomic, retain) MainMenuViewController *viewController;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
--(NSString *)dataFilePath:(NSString *)fileName;
 -(void) startSDLgame;
 
 @end
