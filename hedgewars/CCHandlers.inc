@@ -251,7 +251,7 @@ end;
 
 procedure chLeft_p(var s: shortstring);
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('L');
 with CurrentHedgehog^.Gear^ do
@@ -268,7 +268,7 @@ end;
 
 procedure chRight_p(var s: shortstring);
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('R');
 with CurrentHedgehog^.Gear^ do
@@ -285,7 +285,7 @@ end;
 
 procedure chUp_p(var s: shortstring);
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('U');
 with CurrentHedgehog^.Gear^ do
@@ -302,7 +302,7 @@ end;
 
 procedure chDown_p(var s: shortstring);
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('D');
 with CurrentHedgehog^.Gear^ do
@@ -319,7 +319,7 @@ end;
 
 procedure chPrecise_p(var s: shortstring);
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('Z');
 with CurrentHedgehog^.Gear^ do
@@ -336,7 +336,7 @@ end;
 
 procedure chLJump(var s: shortstring);
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('j');
 with CurrentHedgehog^.Gear^ do
@@ -345,7 +345,7 @@ end;
 
 procedure chHJump(var s: shortstring);
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('J');
 with CurrentHedgehog^.Gear^ do
@@ -354,7 +354,7 @@ end;
 
 procedure chAttack_p(var s: shortstring);
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
@@ -381,7 +381,7 @@ end;
 
 procedure chSwitch(var s: shortstring);
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('S');
 with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_Switch
@@ -508,7 +508,7 @@ end;
 
 procedure chNewGrave;
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 
 if not CurrentTeam^.ExtDriven then SendIPC('g');
 
@@ -517,7 +517,7 @@ end;
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
     begin
     bSelected:= true;
@@ -707,7 +707,7 @@ end;
 
 procedure chFindhh(var s: shortstring);
 begin
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= true;
 FollowGear:= CurrentHedgehog^.Gear
 end;
