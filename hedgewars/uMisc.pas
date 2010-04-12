@@ -133,6 +133,9 @@ procedure initModule;
 procedure freeModule;
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: ansistring; c: char);
+function EnumToStr(const en : TGearType) : shortstring; overload;
+function EnumToStr(const en : TSound) : shortstring; overload;
+function EnumToStr(const en : TAmmoType) : shortstring; overload;
 procedure movecursor(dx, dy: LongInt);
 function  hwSign(r: hwFloat): LongInt;
 function  Min(a, b: LongInt): LongInt;
@@ -167,7 +170,7 @@ procedure MakeScreenshot(filename: shortstring);
 {$ENDIF}
 
 implementation
-uses Math, uConsole, uStore, uIO, uRandom, uSound;
+uses Math, uConsole, uStore, uIO, uRandom, uSound, typinfo;
 
 var KBnum: Longword;
 {$IFDEF DEBUGFILE}
@@ -197,6 +200,21 @@ if i > 0 then
     b:= copy(a, i + 1, Length(a) - i);
     setlength(a, Pred(i));
     end else b:= '';
+end;
+
+function EnumToStr(const en : TGearType) : shortstring; overload;
+begin
+EnumToStr:= GetEnumName(TypeInfo(TGearType), ord(en))
+end;
+
+function EnumToStr(const en : TSound) : shortstring; overload;
+begin
+EnumToStr:= GetEnumName(TypeInfo(TSound), ord(en))
+end;
+
+function EnumToStr(const en : TAmmoType) : shortstring; overload;
+begin
+EnumToStr:= GetEnumName(TypeInfo(TAmmoType), ord(en))
 end;
 
 procedure movecursor(dx, dy: LongInt);

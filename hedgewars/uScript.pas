@@ -50,8 +50,7 @@ uses LuaPas in 'LuaPas.pas',
     uAmmos,
     uSound,
     uTeams,
-    uKeys,
-    typinfo;
+    uKeys;
     
 var luaState : Plua_State;
     ScriptAmmoStore : shortstring;
@@ -715,23 +714,6 @@ for i:= 0 to Pred(TeamsCount) do
     AddAmmoStore(ScriptAmmoStore);
 end;
 
-// small helper functions making registering enums a lot easier
-function str(const en : TGearType) : shortstring; overload;
-begin
-str:= GetEnumName(TypeInfo(TGearType), ord(en))
-end;
-
-function str(const en : TSound) : shortstring; overload;
-begin
-str:= GetEnumName(TypeInfo(TSound), ord(en))
-end;
-
-function str(const en : TAmmoType) : shortstring; overload;
-begin
-str:= GetEnumName(TypeInfo(TAmmoType), ord(en))
-end;
-///////////////////
-
 procedure initModule;
 var at : TGearType;
     am : TAmmoType;
@@ -773,15 +755,15 @@ ScriptSetInteger('gfExplosives', gfExplosives);
 
 // register gear types
 for at:= Low(TGearType) to High(TGearType) do
-    ScriptSetInteger(str(at), ord(at));
+    ScriptSetInteger(EnumToStr(at), ord(at));
 
 // register sounds
 for st:= Low(TSound) to High(TSound) do
-    ScriptSetInteger(str(st), ord(st));
+    ScriptSetInteger(EnumToStr(st), ord(st));
 
 // register ammo types
 for am:= Low(TAmmoType) to High(TAmmoType) do
-    ScriptSetInteger(str(am), ord(am));
+    ScriptSetInteger(EnumToStr(am), ord(am));
     
 // register functions
 lua_register(luaState, 'AddGear', @lc_addgear);

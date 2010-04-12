@@ -225,7 +225,7 @@ var gear: PGear;
 begin
 inc(Counter);
 {$IFDEF DEBUGFILE}
-AddFileLog('AddGear: #' + inttostr(Counter) + ' (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + inttostr(ord(Kind)));
+AddFileLog('AddGear: #' + inttostr(Counter) + ' (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
 {$ENDIF}
 
 New(gear);
@@ -528,7 +528,7 @@ if Gear^.Kind = gtHedgehog then
         RecountTeamHealth(team)
         end;
 {$IFDEF DEBUGFILE}
-with Gear^ do AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + inttostr(ord(Kind)));
+with Gear^ do AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
 {$ENDIF}
 
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
