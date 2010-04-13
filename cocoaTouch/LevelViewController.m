@@ -6,7 +6,7 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "HogHatViewController.h"
+#import "LevelViewController.h"
 #import "CommodityFunctions.h"
 
 
@@ -25,11 +25,11 @@
     [super viewDidLoad];
 
     NSArray *array = [[NSArray alloc] initWithObjects:
-                             NSLocalizedString(@"Human",@""),
-                             NSLocalizedString(@"Weaky",@""),
-                             NSLocalizedString(@"Average",@""),
-                             NSLocalizedString(@"Bully",@""),
-                             NSLocalizedString(@"Aggressive",@""),nil]
+                      NSLocalizedString(@"Human",@""),
+                      NSLocalizedString(@"Weaky",@""),
+                      NSLocalizedString(@"Average",@""),
+                      NSLocalizedString(@"Bully",@""),
+                      NSLocalizedString(@"Aggressive",@""),nil];
     self.levelArray = array;
     [array release];
 /*
@@ -81,25 +81,25 @@
 }
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
+    NSInteger row = [indexPath row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    cell.textLabel.text = [[levelArray objectAtIndex:[indexPath row]] stringValue];
-    NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:0]
-    if ([cell.textLabel.text isEqualToString:[[hog objectForKey:@"level"]] stringValue]) {
+    cell.textLabel.text = [levelArray objectAtIndex:row];
+    NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:0];
+    if ([[hog objectForKey:@"level"] intValue] == row) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.lastIndexPath = indexPath;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
-    cell.imageView.image = [levelSprites objectAtIndex:[indexPath row]]:
+    cell.imageView.image = [levelSprites objectAtIndex:row];
     return cell;
 }
 
@@ -151,11 +151,11 @@
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     
     if (newRow != oldRow) {
-	NSMutableArray *hogs = [teamDictionary objectForKey:@"hedgehogs"];
-
-	for (NSDictionary *hog in hogs) {
-		[hog setObject:[NSNumber numberWithInt:newRow] forKey:@"level"];
-	}
+        NSMutableArray *hogs = [teamDictionary objectForKey:@"hedgehogs"];
+        
+        for (NSMutableDictionary *hog in hogs) {
+            [hog setObject:[NSNumber numberWithInt:newRow] forKey:@"level"];
+        }
         
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
@@ -163,7 +163,7 @@
         
         self.lastIndexPath = indexPath;
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-     
+    }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -171,13 +171,13 @@
 
 #pragma mark -
 #pragma mark Memory management
-- (void)didReceiveMemoryWarning {
+-(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
+-(void) viewDidUnload {
     [super viewDidUnload];
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
@@ -185,7 +185,7 @@
     self.levelSprites = nil;
 }
 
-- (void)dealloc {
+-(void) dealloc {
     [levelArray release];
     [levelSprites release];
     [teamDictionary release];

@@ -11,17 +11,16 @@
 
 
 @interface VoicesViewController : UITableViewController {
-    NSDictionary *teamDictionary;
+    NSMutableDictionary *teamDictionary;
     
     NSArray *voiceArray;
     NSIndexPath *lastIndexPath;
 
-    Mix_Music *musicBeingPlayed;
+    Mix_Chunk *voiceBeingPlayed;
 }
 
-@property (nonatomic,retain) NSDictionary *teamDictionary;
+@property (nonatomic,retain) NSMutableDictionary *teamDictionary;
 @property (nonatomic,retain) NSArray *voiceArray;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
-@property (nonatomic,retain) Mix_Music *musicBeingPlayed;
 
 @end

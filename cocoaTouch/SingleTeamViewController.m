@@ -8,14 +8,17 @@
 
 #import "SingleTeamViewController.h"
 #import "HogHatViewController.h"
-#import "FlagsViewController.h"
+#import "GravesViewController.h"
+#import "VoicesViewController.h"
 #import "FortsViewController.h"
+#import "FlagsViewController.h"
+#import "LevelViewController.h"
 #import "CommodityFunctions.h"
 
 #define TEAMNAME_TAG 1234
 
 @implementation SingleTeamViewController
-@synthesize teamDictionary, hatArray, secondaryItems, secondaryControllers, textFieldBeingEdited, teamName;
+@synthesize teamDictionary, hatArray, secondaryItems, textFieldBeingEdited, teamName;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -34,17 +37,14 @@
 // set the new value
 -(BOOL) save:(id) sender {
     NSInteger index = textFieldBeingEdited.tag;
+    
     if (textFieldBeingEdited != nil) {
         if (TEAMNAME_TAG == index) {
-            NSLog(@"%@", textFieldBeingEdited.text);
             [self.teamDictionary setObject:textFieldBeingEdited.text forKey:@"teamname"];
         } else {
-            //replace the old value with the new one
-            NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:index];
-            NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
-            [newHog setObject:textFieldBeingEdited.text forKey:@"hogname"];
-            [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:index withObject:newHog];
-            [newHog release];
+            //replace the old value with the new one            
+            NSMutableDictionary *hog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:index];
+            [hog setObject:textFieldBeingEdited.text forKey:@"hogname"];
         }
         
         isWriteNeeded = YES;
@@ -97,39 +97,25 @@
 
 #pragma mark -
 #pragma mark View lifecycle
-- (void)viewDidLoad {
+-(void) viewDidLoad {
     [super viewDidLoad];
-   
+    
     // labels for the entries
     NSArray *array = [[NSArray alloc] initWithObjects:
-                             NSLocalizedString(@"Grave",@""),
-                             NSLocalizedString(@"Voice",@""),
-                             NSLocalizedString(@"Fort",@""),
-                             NSLocalizedString(@"Flag",@""),
-                             NSLocalizedString(@"Level",@""),nil];
+                      NSLocalizedString(@"Grave",@""),
+                      NSLocalizedString(@"Voice",@""),
+                      NSLocalizedString(@"Fort",@""),
+                      NSLocalizedString(@"Flag",@""),
+                      NSLocalizedString(@"Level",@""),nil];
     self.secondaryItems = array;
     [array release];
-    
-    // insert controllers here
-    NSMutableArray *controllersArray = [[NSMutableArray alloc] initWithCapacity:[secondaryItems count]];
-    
-    FlagsViewController *flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    [controllersArray addObject:flagsViewController];
-    [flagsViewController release];
-    
-    FortsViewController *fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    [controllersArray addObject:fortsViewController];
-    [fortsViewController release];
-    
-    self.secondaryControllers = controllersArray;
-    [controllersArray release];
 
     // listen if any childController modifies the plist and write it if needed
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setWriteNeeded) name:@"setWriteNeedTeams" object:nil];
     isWriteNeeded = NO;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+-(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     // load data about the team and write if there has been a change
@@ -181,10 +167,17 @@
 // write on file if there has been a change
 -(void) viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
+
+    // end the editing of the current field
+    if (textFieldBeingEdited != nil) {
+        [self save:nil];
+    }
+    
     if (isWriteNeeded) 
         [self writeFile];        
 }
 
+#pragma mark -
 // needed by other classes to warn about a user change
 -(void) setWriteNeeded {
     isWriteNeeded = YES;
@@ -234,40 +227,36 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier0 = @"Cell0";
+    static NSString *CellIdentifier1 = @"Cell1";
+    static NSString *CellIdentifier2 = @"Cell2";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-                                       reuseIdentifier:CellIdentifier] autorelease];
-        if ([indexPath section] != 2) {
-            // create a uitextfield for each row, expand it to take the maximum size
-            UITextField *aTextField;
-            if ([indexPath section] == 1) {
-                aTextField = [[UITextField alloc] 
-                              initWithFrame:CGRectMake(42, 12, (cell.frame.size.width + cell.frame.size.width/3) - 42, 25)];
-            } else {
-                aTextField = [[UITextField alloc] 
-                              initWithFrame:CGRectMake(5, 12, (cell.frame.size.width + cell.frame.size.width/3) - 42, 25)];
-            }
-            
-            aTextField.clearsOnBeginEditing = NO;
-            aTextField.returnKeyType = UIReturnKeyDone;
-            aTextField.adjustsFontSizeToFitWidth = YES;
-            aTextField.delegate = self;
-            aTextField.tag = [indexPath row];
-            aTextField.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 2];
-            aTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
-            [aTextField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
-            [cell.contentView addSubview:aTextField];
-            [aTextField release];
-        }
-    }
-
     NSArray *hogArray;
+    UITableViewCell *cell;
     NSInteger row = [indexPath row];
+    
     switch ([indexPath section]) {
         case 0:
+            
+            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier0];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                               reuseIdentifier:CellIdentifier0] autorelease];
+                // create a uitextfield for each row, expand it to take the maximum size
+                UITextField *aTextField = [[UITextField alloc] 
+                                           initWithFrame:CGRectMake(5, 12, (cell.frame.size.width + cell.frame.size.width/3) - 42, 25)];
+                aTextField.clearsOnBeginEditing = NO;
+                aTextField.returnKeyType = UIReturnKeyDone;
+                aTextField.adjustsFontSizeToFitWidth = YES;
+                aTextField.delegate = self;
+                aTextField.tag = [indexPath row];
+                aTextField.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 2];
+                aTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+                [aTextField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
+                [cell.contentView addSubview:aTextField];
+                [aTextField release];
+            }
+            
             cell.imageView.image = nil;
             cell.accessoryType = UITableViewCellAccessoryNone;
             for (UIView *oneView in cell.contentView.subviews) {
@@ -280,8 +269,28 @@
             }            
             break;
         case 1:
+            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier1];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                               reuseIdentifier:CellIdentifier1] autorelease];
+                
+                // create a uitextfield for each row, expand it to take the maximum size
+                UITextField *aTextField = [[UITextField alloc] 
+                                           initWithFrame:CGRectMake(42, 12, (cell.frame.size.width + cell.frame.size.width/3) - 42, 25)];
+                aTextField.clearsOnBeginEditing = NO;
+                aTextField.returnKeyType = UIReturnKeyDone;
+                aTextField.adjustsFontSizeToFitWidth = YES;
+                aTextField.delegate = self;
+                aTextField.tag = [indexPath row];
+                aTextField.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 2];
+                aTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+                [aTextField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
+                [cell.contentView addSubview:aTextField];
+                [aTextField release];
+            }
+            
             hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
-
+            
             cell.imageView.image = [self.hatArray objectAtIndex:row];
             
             for (UIView *oneView in cell.contentView.subviews) {
@@ -291,10 +300,16 @@
                     textFieldFound.text = [[hogArray objectAtIndex:row] objectForKey:@"hogname"];
                 }
             }
-
+            
             cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
             break;
         case 2:
+            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                               reuseIdentifier:CellIdentifier2] autorelease];
+            }
+            
             cell.textLabel.text = [self.secondaryItems objectAtIndex:row];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             switch (row) {
@@ -307,8 +322,6 @@
                     break;
             }
             break;
-        default:
-            break;
     }
     
     return cell;
@@ -319,16 +332,49 @@
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
+    NSInteger section = [indexPath section];
     UITableViewController *nextController;
     UITableViewCell *cell;
-    switch ([indexPath section]) {
-        case 2:
-            //TODO: this part should be rewrittend with lazy loading instead of an array of controllers
-            nextController = [secondaryControllers objectAtIndex:row%2 ];              //TODO: fix the objectAtIndex
+    
+    switch (section) {
+        case 2: //secondary items
+            switch (row) {
+                case 0: // grave
+                    if (nil == gravesViewController)
+                        gravesViewController = [[GravesViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    
+                    nextController = gravesViewController;
+                    break;
+                case 1: // voice
+                    if (nil == voicesViewController)
+                        voicesViewController = [[VoicesViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    
+                    nextController = voicesViewController;                    
+                    break;
+                case 2: // fort
+                    if (nil == fortsViewController)
+                        fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    
+                    nextController = fortsViewController;
+                    break;
+                case 3: // flag
+                    if (nil == flagsViewController) 
+                        flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    
+                    nextController = flagsViewController;
+                    break;
+                case 4: // level
+                    if (nil == levelViewController)
+                        levelViewController = [[LevelViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    
+                    nextController = levelViewController;
+                    break;
+            }
+            
             nextController.title = [secondaryItems objectAtIndex:row];
             [nextController setTeamDictionary:teamDictionary];
             [self.navigationController pushViewController:nextController animated:YES];
-            break;            
+            break;
         default:
             cell = [aTableView cellForRowAtIndexPath:indexPath];
             for (UIView *oneView in cell.contentView.subviews) {
@@ -340,19 +386,20 @@
             [aTableView deselectRowAtIndexPath:indexPath animated:NO];
             break;
     }
+
 }
 
 // action to perform when you want to change a hog hat
--(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    if (nil == hogChildController) {
-        hogChildController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
+-(void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    if (nil == hogHatViewController) {
+        hogHatViewController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
     }
     
     // cache the dictionary file of the team, so that other controllers can modify it
-    hogChildController.teamDictionary = self.teamDictionary;
-    hogChildController.selectedHog = [indexPath row];
+    hogHatViewController.teamDictionary = self.teamDictionary;
+    hogHatViewController.selectedHog = [indexPath row];
     
-    [self.navigationController pushViewController:hogChildController animated:YES];
+    [self.navigationController pushViewController:hogHatViewController animated:YES];
 }
 
 
@@ -370,8 +417,10 @@
     self.teamName = nil;
     self.hatArray = nil;
     self.secondaryItems = nil;
-    self.secondaryControllers = nil;
-    hogChildController = nil;
+    hogHatViewController = nil;
+    flagsViewController = nil;
+    fortsViewController = nil;
+    gravesViewController = nil;
     [super viewDidUnload];
 }
 
@@ -381,8 +430,10 @@
     [teamName release];
     [hatArray release];
     [secondaryItems release];
-    [secondaryControllers release];
-    [hogChildController release];
+    [hogHatViewController release];
+    [fortsViewController release];
+    [gravesViewController release];
+    [flagsViewController release];
     [super dealloc];
 }
 

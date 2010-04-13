@@ -101,6 +101,9 @@
 		6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936911501D3D00BA94A9 /* arrowRight.png */; };
 		6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936A11501D3D00BA94A9 /* arrowUp.png */; };
 		617995321150403800BA94A9 /* joyPush.png in Resources */ = {isa = PBXBuildFile; fileRef = 617995311150403800BA94A9 /* joyPush.png */; };
+		618BE5931175126900F22556 /* LevelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618BE5921175126900F22556 /* LevelViewController.m */; };
+		618BE60311751F4F00F22556 /* GravesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618BE60211751F4F00F22556 /* GravesViewController.m */; };
+		618BE6A3117527CD00F22556 /* VoicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618BE6A2117527CD00F22556 /* VoicesViewController.m */; };
 		619C51BF116E40FC0049FD84 /* CommodityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C51BE116E40FC0049FD84 /* CommodityFunctions.m */; };
 		619C5232116E4E810049FD84 /* FlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C5231116E4E810049FD84 /* FlagsViewController.m */; };
 		619C533E116E70050049FD84 /* FortsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C533D116E70050049FD84 /* FortsViewController.m */; };
@@ -275,6 +278,12 @@
 		6179936911501D3D00BA94A9 /* arrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowRight.png; path = ../../cocoaTouch/resources/arrowRight.png; sourceTree = SOURCE_ROOT; };
 		6179936A11501D3D00BA94A9 /* arrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowUp.png; path = ../../cocoaTouch/resources/arrowUp.png; sourceTree = SOURCE_ROOT; };
 		617995311150403800BA94A9 /* joyPush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyPush.png; path = ../../cocoaTouch/resources/joyPush.png; sourceTree = SOURCE_ROOT; };
+		618BE5911175126900F22556 /* LevelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LevelViewController.h; path = ../../cocoaTouch/LevelViewController.h; sourceTree = SOURCE_ROOT; };
+		618BE5921175126900F22556 /* LevelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LevelViewController.m; path = ../../cocoaTouch/LevelViewController.m; sourceTree = SOURCE_ROOT; };
+		618BE60111751F4F00F22556 /* GravesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GravesViewController.h; path = ../../cocoaTouch/GravesViewController.h; sourceTree = SOURCE_ROOT; };
+		618BE60211751F4F00F22556 /* GravesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GravesViewController.m; path = ../../cocoaTouch/GravesViewController.m; sourceTree = SOURCE_ROOT; };
+		618BE6A1117527CD00F22556 /* VoicesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VoicesViewController.h; path = ../../cocoaTouch/VoicesViewController.h; sourceTree = SOURCE_ROOT; };
+		618BE6A2117527CD00F22556 /* VoicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VoicesViewController.m; path = ../../cocoaTouch/VoicesViewController.m; sourceTree = SOURCE_ROOT; };
 		619C51BD116E40FC0049FD84 /* CommodityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommodityFunctions.h; path = ../../cocoaTouch/otherSrc/CommodityFunctions.h; sourceTree = SOURCE_ROOT; };
 		619C51BE116E40FC0049FD84 /* CommodityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommodityFunctions.m; path = ../../cocoaTouch/otherSrc/CommodityFunctions.m; sourceTree = SOURCE_ROOT; };
 		619C5230116E4E800049FD84 /* FlagsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlagsViewController.h; path = ../../cocoaTouch/FlagsViewController.h; sourceTree = SOURCE_ROOT; };
@@ -448,13 +457,15 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		611B0A94116B621600112153 /* General */ = {
+		611B0A94116B621600112153 /* first level */ = {
 			isa = PBXGroup;
 			children = (
 				611B0A9F116B626E00112153 /* GeneralSettingsViewController.h */,
 				611B0AA0116B626E00112153 /* GeneralSettingsViewController.m */,
+				61A11ACD1168DB1B00359010 /* TeamSettingsViewController.h */,
+				61A11ACE1168DB1B00359010 /* TeamSettingsViewController.m */,
 			);
-			name = General;
+			name = "first level";
 			sourceTree = "<group>";
 		};
 		61798860114AA49D00BA94A9 /* SDLOverrides */ = {
@@ -550,6 +561,25 @@
 			name = buttons;
 			sourceTree = "<group>";
 		};
+		618BE596117512A300F22556 /* third level */ = {
+			isa = PBXGroup;
+			children = (
+				61A11AE21168DC9400359010 /* HogHatViewController.h */,
+				61A11AE31168DC9400359010 /* HogHatViewController.m */,
+				618BE60111751F4F00F22556 /* GravesViewController.h */,
+				618BE60211751F4F00F22556 /* GravesViewController.m */,
+				618BE6A1117527CD00F22556 /* VoicesViewController.h */,
+				618BE6A2117527CD00F22556 /* VoicesViewController.m */,
+				619C533C116E70050049FD84 /* FortsViewController.h */,
+				619C533D116E70050049FD84 /* FortsViewController.m */,
+				619C5230116E4E800049FD84 /* FlagsViewController.h */,
+				619C5231116E4E810049FD84 /* FlagsViewController.m */,
+				618BE5911175126900F22556 /* LevelViewController.h */,
+				618BE5921175126900F22556 /* LevelViewController.m */,
+			);
+			name = "third level";
+			sourceTree = "<group>";
+		};
 		61A118481168371400359010 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
@@ -573,27 +603,20 @@
 				61A11AC81168DA9400359010 /* MasterViewController.m */,
 				61A11AD41168DB3700359010 /* DetailViewController.h */,
 				61A11AD51168DB3700359010 /* DetailViewController.m */,
-				611B0A94116B621600112153 /* General */,
-				61A11AD01168DB1F00359010 /* Teams */,
+				611B0A94116B621600112153 /* first level */,
+				61A11AD01168DB1F00359010 /* second level */,
+				618BE596117512A300F22556 /* third level */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
 		};
-		61A11AD01168DB1F00359010 /* Teams */ = {
+		61A11AD01168DB1F00359010 /* second level */ = {
 			isa = PBXGroup;
 			children = (
-				61A11ACD1168DB1B00359010 /* TeamSettingsViewController.h */,
-				61A11ACE1168DB1B00359010 /* TeamSettingsViewController.m */,
 				61A11ADF1168DC6E00359010 /* SingleTeamViewController.h */,
 				61A11AE01168DC6E00359010 /* SingleTeamViewController.m */,
-				61A11AE21168DC9400359010 /* HogHatViewController.h */,
-				61A11AE31168DC9400359010 /* HogHatViewController.m */,
-				619C5230116E4E800049FD84 /* FlagsViewController.h */,
-				619C5231116E4E810049FD84 /* FlagsViewController.m */,
-				619C533C116E70050049FD84 /* FortsViewController.h */,
-				619C533D116E70050049FD84 /* FortsViewController.m */,
 			);
-			name = Teams;
+			name = "second level";
 			sourceTree = "<group>";
 		};
 		61CE2509115E74260098C467 /* XIB */ = {
@@ -821,7 +844,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/\nrm -rf ${PROJECT_DIR}/Data/Music/\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
+			shellScript = "#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\n#rm -rf ${PROJECT_DIR}/Data/Sounds/\n#rm -rf ${PROJECT_DIR}/Data/Music/\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -916,6 +939,9 @@
 				619C5232116E4E810049FD84 /* FlagsViewController.m in Sources */,
 				619C533E116E70050049FD84 /* FortsViewController.m in Sources */,
 				619C58AB116E752A0049FD84 /* UIImageScale.m in Sources */,
+				618BE5931175126900F22556 /* LevelViewController.m in Sources */,
+				618BE60311751F4F00F22556 /* GravesViewController.m in Sources */,
+				618BE6A3117527CD00F22556 /* VoicesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1036,6 +1062,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
 					"\"$(SRCROOT)/../../../Library/lpng141\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -1072,6 +1099,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
 					"\"$(SRCROOT)/../../../Library/lpng141\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lz",

@@ -29,7 +29,27 @@
 	// Release any cached data, images, etc that aren't in use.
 }
 
+/*
+- (void)didRotate:(NSNotification *)notification {	
+	if (orientation == UIDeviceOrientationLandscapeLeft) {
+	}
+    if (orientation == UIDeviceOrientationLandscapeRight) {
+    }
+	if (orientation == UIDeviceOrientationPortrait) {
+	}
+    if (orientation == UIDeviceOrientationPortrait) {
+	}
+}
+*/
+
 -(void) viewDidLoad {
+    /*
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];	
+    [[NSNotificationCenter defaultCenter] addObserver:self
+							selector:@selector(didRotate:)
+							name:UIDeviceOrientationDidChangeNotification
+							object:nil];
+    */
     isPopoverVisible = NO;
     self.view.alpha = 0;
 

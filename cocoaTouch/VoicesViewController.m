@@ -6,12 +6,12 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "HogHatViewController.h"
+#import "VoicesViewController.h"
 #import "CommodityFunctions.h"
 
 
 @implementation VoicesViewController
-@synthesize teamDictionary, voiceArray, lastIndexPath, musicBeingPlayed;
+@synthesize teamDictionary, voiceArray, lastIndexPath;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -26,12 +26,11 @@
     srandom(time(NULL));
 
     Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 1024);
-    musicBeingPlayed = NULL;
+    voiceBeingPlayed = NULL;
 
     // load all the voices names and store them into voiceArray
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VOICES_DIRECTORY() error:NULL];
     self.voiceArray = array;
-    [array release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -49,10 +48,10 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    if(musicBeingPlayed != NULL) {
-	Mix_HaltMusic();
-	Mix_FreeMusic(musicBeingPlayed);
-	musicBeingPlayed = NULL;
+    if(voiceBeingPlayed != NULL) {
+        Mix_HaltChannel(-1);
+        Mix_FreeChunk(voiceBeingPlayed);
+        voiceBeingPlayed = NULL;
     }
 }
 
@@ -135,16 +134,22 @@
     return YES;
 }
 */
-
+-(void) allowSelection {
+    self.tableView.allowsSelection = YES;
+}
 
 #pragma mark -
 #pragma mark Table view delegate
-- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     
+    // avoid a crash in sdl_mixer
+    self.tableView.allowsSelection = NO;
+    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(allowSelection) userInfo:nil repeats:NO];
+    
     if (newRow != oldRow) {
-	[teamDictionary setObject:[voiceArray objectAtIndex:newRow] forKey:@"voicepack"];
+        [teamDictionary setObject:[voiceArray objectAtIndex:newRow] forKey:@"voicepack"];
         
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
@@ -154,30 +159,31 @@
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     } 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    if(musicBeingPlayed != NULL) {
-	Mix_HaltMusic();
-	Mix_FreeMusic(musicBeingPlayed);
-	musicBeingPlayed = NULL;
+    
+    if (voiceBeingPlayed != NULL) {
+        Mix_HaltChannel(-1);
+        Mix_FreeChunk(voiceBeingPlayed);
+        voiceBeingPlayed = NULL;
     }
+    
     // the keyword static prevents re-initialization of the variable
-    NSString *voiceDir = [[NSString alloc] initWithFormat:@"%@/%@/",VOICES_DIRECTORY(),[voiceArray objectAtIndex:newRow];
+    NSString *voiceDir = [[NSString alloc] initWithFormat:@"%@/%@/",VOICES_DIRECTORY(),[voiceArray objectAtIndex:newRow]];
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:voiceDir error:NULL];
-
+    
     int index = random() % [array count];
     
-    music = Mix_LoadMUS([[voiceDir stringByAppendingString:[array objectAtIndex:index]] UTF8String]);
-    [array release];
+    voiceBeingPlayed = Mix_LoadWAV([[voiceDir stringByAppendingString:[array objectAtIndex:index]] UTF8String]);
     [voiceDir release];
+    Mix_PlayChannel(-1, voiceBeingPlayed, 0);    
 }
 
 
 #pragma mark -
 #pragma mark Memory management
 - (void)didReceiveMemoryWarning {
-    Mix_HaltMusic();
-    Mix_FreeMusic(musicBeingPlayed);
-    musicBeingPlayed = NULL;
+    Mix_HaltChannel(-1);
+    Mix_FreeChunk(voiceBeingPlayed);
+    voiceBeingPlayed = NULL;
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
@@ -187,14 +193,13 @@
     [super viewDidUnload];
 
     Mix_CloseAudio();
-    self.musicBeingPlayed = NULL;
+    voiceBeingPlayed = NULL;
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
     self.voiceArray = nil;
 }
 
 - (void)dealloc {
-    [musicBeingPlayed release];
     [voiceArray release];
     [teamDictionary release];
     [lastIndexPath release];

@@ -9,6 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @class HogHatViewController;
+@class GravesViewController;
+@class VoicesViewController;
+@class FortsViewController;
+@class FlagsViewController;
+@class LevelViewController;
 @interface SingleTeamViewController : UITableViewController <UITextFieldDelegate> {
     NSMutableDictionary *teamDictionary;
     
@@ -17,10 +22,14 @@
     NSArray *hatArray;
     
     NSArray *secondaryItems;
-    NSArray *secondaryControllers;
     BOOL isWriteNeeded;
     
-    HogHatViewController *hogChildController;
+    HogHatViewController *hogHatViewController;
+    GravesViewController *gravesViewController;
+    VoicesViewController *voicesViewController;
+    FortsViewController *fortsViewController;
+    FlagsViewController *flagsViewController;
+    LevelViewController *levelViewController;
 }
 
 @property (nonatomic,retain) NSMutableDictionary *teamDictionary;
@@ -28,7 +37,6 @@
 @property (nonatomic,retain) NSString *teamName;
 @property (nonatomic,retain) NSArray *hatArray;
 @property (nonatomic,retain) NSArray *secondaryItems;
-@property (nonatomic,retain) NSArray *secondaryControllers;
 
 -(void) writeFile;
 -(void) setWriteNeeded;

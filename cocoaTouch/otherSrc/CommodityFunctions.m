@@ -42,10 +42,10 @@ void createTeamNamed (NSString *nameWithoutExt) {
     [theTeam release];
 }
 
-UIImage *mergeTwoImages (UIImage *firstImage, UIImage *secondImage) {
+UIImage *mergeHogHatSprites (UIImage *firstImage, UIImage *secondImage) {
     UIGraphicsBeginImageContext(firstImage.size);
     [firstImage drawAtPoint:CGPointMake(0,0)];
-    [secondImage drawAtPoint:CGPointMake(0,-4)];
+    [secondImage drawAtPoint:CGPointMake(0,-5)];
     UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return resultImage; // autoreleased

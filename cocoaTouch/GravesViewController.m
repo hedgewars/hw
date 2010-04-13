@@ -6,7 +6,7 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "HogHatViewController.h"
+#import "GravesViewController.h"
 #import "CommodityFunctions.h"
 
 
@@ -27,15 +27,23 @@
     // load all the voices names and store them into voiceArray
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:GRAVES_DIRECTORY() error:NULL];
     self.graveArray = array;
-    [array release];
-
-    NSMutableArray *sprites = [[NSMutableArray alloc] initWithCapacity:[graveArray count];
+    
+    NSMutableArray *sprites = [[NSMutableArray alloc] initWithCapacity:[graveArray count]];
     for (NSString *graveName in graveArray) {
-	NSString *gravePath = [[NSString alloc] initWithFormat@"%@/%@",GRAVES_DIRECTORY(),graveName];
-	UIImage *image = [[UIImage alloc] initWithContentsOfFile:gravePath];
-	[gravePath release];
-	[sprites addObject:image];
-	[image release];
+        NSString *gravePath = [[NSString alloc] initWithFormat:@"%@/%@",GRAVES_DIRECTORY(),graveName];
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:gravePath];
+        [gravePath release];
+        
+        // because we also have multi frame graves, let's take the first one only
+        if (image.size.height > 32) {
+            CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
+            CGImageRef cgImage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
+            [image release];
+            image = [[UIImage alloc] initWithCGImage:cgImage];
+            CGImageRelease(cgImage);
+        }
+        [sprites addObject:image];
+        [image release];
     }
     self.graveSprites = sprites;
     [sprites release];
@@ -88,14 +96,14 @@
     NSString *grave = [[graveArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
     cell.textLabel.text = grave;
     
-    if ([grave isEqualToString:[hog objectForKey:@"grave"]]) {
+    if ([grave isEqualToString:[teamDictionary objectForKey:@"grave"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.lastIndexPath = indexPath;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
-    cell.imageView.image = [spriteArray objectAtIndex:[indexPath row]]:
+    cell.imageView.image = [graveSprites objectAtIndex:[indexPath row]];
     return cell;
 }
 
@@ -147,7 +155,7 @@
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     
     if (newRow != oldRow) {
-	[teamDictionary setObject:[graveArray objectAtIndex:newRow] forKey:@"grave"];
+        [teamDictionary setObject:[[graveArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"grave"];
         
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
@@ -155,7 +163,7 @@
         
         self.lastIndexPath = indexPath;
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-     
+    }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -174,11 +182,11 @@
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
     self.graveArray = nil;
-    self.spriteArray = nil;
+    self.graveSprites = nil;
 }
 
 - (void)dealloc {
-    [spriteArray release];
+    [graveSprites release];
     [graveArray release];
     [teamDictionary release];
     [lastIndexPath release];

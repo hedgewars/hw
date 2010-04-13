@@ -9,6 +9,7 @@
 #import "SDL_uikitappdelegate.h"
 #import "PopoverMenuViewController.h"
 #import "PascalImports.h"
+#import "CommodityFunctions.h"
 
 @implementation PopoverMenuViewController
 @synthesize menuList;

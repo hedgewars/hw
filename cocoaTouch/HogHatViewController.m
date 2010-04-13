@@ -28,22 +28,21 @@
     NSString *hatsDirectory = HATS_DIRECTORY();
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:hatsDirectory error:NULL];
     self.hatArray = array;
-    [array release];
-
+    
     // load all the hat images from the previous array but save only the first sprite and store it in hatSprites
     NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[hatArray count]];
-    for (int i=0; i < [hatArray count]; i++) {
-        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", hatsDirectory,[hatArray objectAtIndex:i]];
+    for (NSString *hat in hatArray) {
+        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", hatsDirectory,hat];
         
         UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
         [hatFile release];
         CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
-        CGImageRef cgImgage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
+        CGImageRef cgImage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
         [image release];
         
-        UIImage *hatSprite = [[UIImage alloc] initWithCGImage:cgImgage];
+        UIImage *hatSprite = [[UIImage alloc] initWithCGImage:cgImage];
         [spriteArray addObject:hatSprite];
-        CGImageRelease(cgImgage);
+        CGImageRelease(cgImage);
         [hatSprite release];
     }
     self.hatSprites = spriteArray;
