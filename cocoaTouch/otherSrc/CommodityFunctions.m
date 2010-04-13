@@ -23,7 +23,7 @@ void createTeamNamed (NSString *nameWithoutExt) {
     
     for (int i = 0; i < MAX_HOGS; i++) {
         NSString *hogName = [[NSString alloc] initWithFormat:@"hedgehog %d",i];
-        NSDictionary *hog = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health", @"0",@"level",
+	NSDictionary *hog = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health", [NSNumber numberWithInt:0],@"level",
                              hogName,@"hogname", @"NoHat",@"hat", nil];
         [hogName release];
         [hedgehogs addObject:hog];

@@ -10,8 +10,8 @@
 #import "CommodityFunctions.h"
 
 
-@implementation HogHatViewController
-@synthesize teamDictionary, hatArray, hatSprites, lastIndexPath, selectedHog;
+@implementation GravesViewController
+@synthesize teamDictionary, graveArray, graveSprites, lastIndexPath;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -24,38 +24,26 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    // load all the hat file names and store them into hatArray
-    NSString *hatsDirectory = HATS_DIRECTORY();
-    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:hatsDirectory error:NULL];
-    self.hatArray = array;
+    // load all the voices names and store them into voiceArray
+    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:GRAVES_DIRECTORY() error:NULL];
+    self.graveArray = array;
     [array release];
 
-    // load all the hat images from the previous array but save only the first sprite and store it in hatSprites
-    NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[hatArray count]];
-    for (int i=0; i < [hatArray count]; i++) {
-        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", hatsDirectory,[hatArray objectAtIndex:i]];
-        
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
-        [hatFile release];
-        CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
-        CGImageRef cgImgage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
-        [image release];
-        
-        UIImage *hatSprite = [[UIImage alloc] initWithCGImage:cgImgage];
-        [spriteArray addObject:hatSprite];
-        CGImageRelease(cgImgage);
-        [hatSprite release];
+    NSMutableArray *sprites = [[NSMutableArray alloc] initWithCapacity:[graveArray count];
+    for (NSString *graveName in graveArray) {
+	NSString *gravePath = [[NSString alloc] initWithFormat@"%@/%@",GRAVES_DIRECTORY(),graveName];
+	UIImage *image = [[UIImage alloc] initWithContentsOfFile:gravePath];
+	[gravePath release];
+	[sprites addObject:image];
+	[image release];
     }
-    self.hatSprites = spriteArray;
-    [spriteArray release];
+    self.graveSprites = sprites;
+    [sprites release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.title = [[[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog] objectForKey:@"hogname"];
-
-    // this updates the hog name and its hat
-    [self.tableView reloadData];
+    
     // this moves the tableview to the top
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
@@ -84,7 +72,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.hatArray count];
+    return [self.graveArray count];
 }
 
 // Customize the appearance of table view cells.
@@ -97,19 +85,17 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
+    NSString *grave = [[graveArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
+    cell.textLabel.text = grave;
     
-    NSString *hat = [[hatArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
-    cell.textLabel.text = hat;
-    cell.imageView.image = [hatSprites objectAtIndex:[indexPath row]];
-    
-    if ([hat isEqualToString:[hog objectForKey:@"hat"]]) {
+    if ([grave isEqualToString:[hog objectForKey:@"grave"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.lastIndexPath = indexPath;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
-
+    
+    cell.imageView.image = [spriteArray objectAtIndex:[indexPath row]]:
     return cell;
 }
 
@@ -161,14 +147,7 @@
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     
     if (newRow != oldRow) {
-        // if the two selected rows differ update data on the hog dictionary and reload table content
-	// TODO: maybe this section could be cleaned up
-        NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
-        
-        NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
-        [newHog setObject:[[hatArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"hat"];
-        [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:selectedHog withObject:newHog];
-        [newHog release];
+	[teamDictionary setObject:[graveArray objectAtIndex:newRow] forKey:@"grave"];
         
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
@@ -176,7 +155,7 @@
         
         self.lastIndexPath = indexPath;
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-    } 
+     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -193,15 +172,15 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
     self.lastIndexPath = nil;
-    self.hatSprites = nil;
     self.teamDictionary = nil;
-    self.hatArray = nil;
+    self.graveArray = nil;
+    self.spriteArray = nil;
 }
 
 - (void)dealloc {
-    [hatArray release];
+    [spriteArray release];
+    [graveArray release];
     [teamDictionary release];
-    [hatSprites release];
     [lastIndexPath release];
     [super dealloc];
 }

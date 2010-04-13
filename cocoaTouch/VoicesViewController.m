@@ -10,8 +10,8 @@
 #import "CommodityFunctions.h"
 
 
-@implementation HogHatViewController
-@synthesize teamDictionary, hatArray, hatSprites, lastIndexPath, selectedHog;
+@implementation VoicesViewController
+@synthesize teamDictionary, voiceArray, lastIndexPath, musicBeingPlayed;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -23,39 +23,20 @@
 #pragma mark View lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
+    srandom(time(NULL));
 
-    // load all the hat file names and store them into hatArray
-    NSString *hatsDirectory = HATS_DIRECTORY();
-    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:hatsDirectory error:NULL];
-    self.hatArray = array;
+    Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 1024);
+    musicBeingPlayed = NULL;
+
+    // load all the voices names and store them into voiceArray
+    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VOICES_DIRECTORY() error:NULL];
+    self.voiceArray = array;
     [array release];
-
-    // load all the hat images from the previous array but save only the first sprite and store it in hatSprites
-    NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[hatArray count]];
-    for (int i=0; i < [hatArray count]; i++) {
-        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", hatsDirectory,[hatArray objectAtIndex:i]];
-        
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
-        [hatFile release];
-        CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
-        CGImageRef cgImgage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
-        [image release];
-        
-        UIImage *hatSprite = [[UIImage alloc] initWithCGImage:cgImgage];
-        [spriteArray addObject:hatSprite];
-        CGImageRelease(cgImgage);
-        [hatSprite release];
-    }
-    self.hatSprites = spriteArray;
-    [spriteArray release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.title = [[[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog] objectForKey:@"hogname"];
-
-    // this updates the hog name and its hat
-    [self.tableView reloadData];
+    
     // this moves the tableview to the top
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
@@ -65,11 +46,16 @@
     [super viewDidAppear:animated];
 }
 */
-/*
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    if(musicBeingPlayed != NULL) {
+	Mix_HaltMusic();
+	Mix_FreeMusic(musicBeingPlayed);
+	musicBeingPlayed = NULL;
+    }
 }
-*/
+
 /*
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
@@ -84,7 +70,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.hatArray count];
+    return [self.voiceArray count];
 }
 
 // Customize the appearance of table view cells.
@@ -97,13 +83,10 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
+    NSString *voice = [[voiceArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
+    cell.textLabel.text = voice;
     
-    NSString *hat = [[hatArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
-    cell.textLabel.text = hat;
-    cell.imageView.image = [hatSprites objectAtIndex:[indexPath row]];
-    
-    if ([hat isEqualToString:[hog objectForKey:@"hat"]]) {
+    if ([voice isEqualToString:[teamDictionary objectForKey:@"voicepack"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.lastIndexPath = indexPath;
     } else {
@@ -161,14 +144,7 @@
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     
     if (newRow != oldRow) {
-        // if the two selected rows differ update data on the hog dictionary and reload table content
-	// TODO: maybe this section could be cleaned up
-        NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
-        
-        NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
-        [newHog setObject:[[hatArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"hat"];
-        [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:selectedHog withObject:newHog];
-        [newHog release];
+	[teamDictionary setObject:[voiceArray objectAtIndex:newRow] forKey:@"voicepack"];
         
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
@@ -178,13 +154,30 @@
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     } 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self.navigationController popViewControllerAnimated:YES];
+
+    if(musicBeingPlayed != NULL) {
+	Mix_HaltMusic();
+	Mix_FreeMusic(musicBeingPlayed);
+	musicBeingPlayed = NULL;
+    }
+    // the keyword static prevents re-initialization of the variable
+    NSString *voiceDir = [[NSString alloc] initWithFormat:@"%@/%@/",VOICES_DIRECTORY(),[voiceArray objectAtIndex:newRow];
+    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:voiceDir error:NULL];
+
+    int index = random() % [array count];
+    
+    music = Mix_LoadMUS([[voiceDir stringByAppendingString:[array objectAtIndex:index]] UTF8String]);
+    [array release];
+    [voiceDir release];
 }
 
 
 #pragma mark -
 #pragma mark Memory management
 - (void)didReceiveMemoryWarning {
+    Mix_HaltMusic();
+    Mix_FreeMusic(musicBeingPlayed);
+    musicBeingPlayed = NULL;
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
@@ -192,20 +185,23 @@
 
 - (void)viewDidUnload {
     [super viewDidUnload];
+
+    Mix_CloseAudio();
+    self.musicBeingPlayed = NULL;
     self.lastIndexPath = nil;
-    self.hatSprites = nil;
     self.teamDictionary = nil;
-    self.hatArray = nil;
+    self.voiceArray = nil;
 }
 
 - (void)dealloc {
-    [hatArray release];
+    [musicBeingPlayed release];
+    [voiceArray release];
     [teamDictionary release];
-    [hatSprites release];
     [lastIndexPath release];
     [super dealloc];
 }
 
 
 @end
+
 

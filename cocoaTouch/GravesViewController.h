@@ -9,19 +9,17 @@
 #import <UIKit/UIKit.h>
 
 
-@interface HogHatViewController : UITableViewController {
+@interface GravesViewController : UITableViewController {
     NSDictionary *teamDictionary;
-    NSInteger selectedHog;
     
-    NSArray *hatArray;
-    NSArray *hatSprites;
+    NSArray *graveArray;
+    NSArray *graveSprites;
     NSIndexPath *lastIndexPath;
 }
 
 @property (nonatomic,retain) NSDictionary *teamDictionary;
-@property (nonatomic) NSInteger selectedHog;
-@property (nonatomic,retain) NSArray *hatArray;
-@property (nonatomic,retain) NSArray *hatSprites;
+@property (nonatomic,retain) NSArray *graveArray;
+@property (nonatomic,retain) NSArray *graveSprites;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
 
 @end

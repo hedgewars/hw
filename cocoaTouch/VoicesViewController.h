@@ -7,21 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SDL_mixer.h"
 
 
-@interface HogHatViewController : UITableViewController {
+@interface VoicesViewController : UITableViewController {
     NSDictionary *teamDictionary;
-    NSInteger selectedHog;
     
-    NSArray *hatArray;
-    NSArray *hatSprites;
+    NSArray *voiceArray;
     NSIndexPath *lastIndexPath;
+
+    Mix_Music *musicBeingPlayed;
 }
 
 @property (nonatomic,retain) NSDictionary *teamDictionary;
-@property (nonatomic) NSInteger selectedHog;
-@property (nonatomic,retain) NSArray *hatArray;
-@property (nonatomic,retain) NSArray *hatSprites;
+@property (nonatomic,retain) NSArray *voiceArray;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
+@property (nonatomic,retain) Mix_Music *musicBeingPlayed;
 
 @end

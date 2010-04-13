@@ -101,7 +101,7 @@
     [super viewDidLoad];
    
     // labels for the entries
-    NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:
+    NSArray *array = [[NSArray alloc] initWithObjects:
                              NSLocalizedString(@"Grave",@""),
                              NSLocalizedString(@"Voice",@""),
                              NSLocalizedString(@"Fort",@""),
@@ -168,7 +168,7 @@
         UIImage *hatSprite = [[UIImage alloc] initWithCGImage:cgImgage];
         CGImageRelease(cgImgage);
         
-        [array addObject:mergeTwoImages(normalHogSprite, hatSprite)];
+        [array addObject:mergeHogHatSprites(normalHogSprite, hatSprite)];
         [hatSprite release];
     }
     [normalHogSprite release];

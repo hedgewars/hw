@@ -9,19 +9,17 @@
 #import <UIKit/UIKit.h>
 
 
-@interface HogHatViewController : UITableViewController {
+@interface LevelViewController : UITableViewController {
     NSDictionary *teamDictionary;
-    NSInteger selectedHog;
     
-    NSArray *hatArray;
-    NSArray *hatSprites;
+    NSArray *levelArray;
+    NSArray *levelSprites;
     NSIndexPath *lastIndexPath;
 }
 
 @property (nonatomic,retain) NSDictionary *teamDictionary;
-@property (nonatomic) NSInteger selectedHog;
-@property (nonatomic,retain) NSArray *hatArray;
-@property (nonatomic,retain) NSArray *hatSprites;
+@property (nonatomic,retain) NSArray *levelArray;
+@property (nonatomic,retain) NSArray *levelSprites;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
 
 @end
