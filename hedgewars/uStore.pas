@@ -1310,6 +1310,7 @@ end;
 procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt);
 var srcX, srcY, i, j, maxDest: LongInt;
     srcPixels, destPixels: PLongWordArray;
+    r0, g0, b0, a0, r1, g1, b1, a1: Byte;
 begin
 maxDest:= (dest^.pitch div 4) * dest^.h;
 srcPixels:= src^.pixels;
@@ -1320,8 +1321,12 @@ for srcX:= 0 to src^.w - 1 do
       begin
       i:= (destY + srcY) * (dest^.pitch div 4) + destX + srcX;
       j:= srcY * (src^.pitch div 4) + srcX;
-      // basic skip of transparent pixels - cleverness would be to do true alpha
-      if (i < maxDest) and (AMask and srcPixels^[j] <> 0) then destPixels^[i]:= srcPixels^[j];
+      if (i < maxDest) and (srcPixels^[j] and AMask <> 0) then
+         begin
+         SDL_GetRGBA(destPixels^[i], dest^.format, @r0, @g0, @b0, @a0);
+         SDL_GetRGBA(srcPixels^[j], src^.format, @r1, @g1, @b1, @a1);
+         destPixels^[i]:= SDL_MapRGBA(dest^.format, (r0 * (255 - a1) + r1 * a1) div 255, (g0 * (255 - a1) + g1 * a1) div 255, (b0 * (255 - a1) + b1 * a1) div 255, (a0 * (255 - a1) + a1 * a1) div 255);
+         end;
       end;
 end;
 

@@ -617,6 +617,7 @@ procedure SDL_UpdateRect(Screen: PSDL_Surface; x, y: LongInt; w, h: Longword); c
 function  SDL_Flip(Screen: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 
 procedure SDL_GetRGB(pixel: Longword; fmt: PSDL_PixelFormat; r, g, b: PByte); cdecl; external SDLLibName;
+procedure SDL_GetRGBA(pixel: Longword; fmt: PSDL_PixelFormat; r, g, b, a: PByte); cdecl; external SDLLibName;
 function  SDL_MapRGB(format: PSDL_PixelFormat; r, g, b: Byte): Longword; cdecl; external SDLLibName;
 function  SDL_MapRGBA(format: PSDL_PixelFormat; r, g, b, a: Byte): Longword; cdecl; external SDLLibName;
 
