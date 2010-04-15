@@ -3026,3 +3026,25 @@ begin
         exit
     end;
 end;
+
+procedure doStepPortal(Gear: PGear);
+begin
+(*
+A portal will have a few things it does.
+1) At first, it will move through the air until it collides with a surface. Once it does, it will stop.  At this point we might try a check to verify there is enough terrain for it to be spawned against, and delete. Or we could just let it kinda stick out for now.
+
+2) From then on, if doStepPortal is called and a gear of a radius less than or equal to the portal is within X pixels of the portal (we could also check on moving toward the portal I guess, depends how accurate this needs to be) the portal will then locate the first other portal of the opposite type (there should only be one other one), and move that gear's X/Y to that other portal's location, and modify dX/dY to be relative to that other portal's orientation relative to this portal's orientation.  This might require some tweaking with offsets of a few pixels to avoid getting gears stuck in land.
+
+3) At end of turn, all gtPortal will be deleted.
+
+*)
+end;
+procedure doStepPortalGun(Gear: PGear);
+begin
+(*
+Ok. Here's where I plan to go with this.
+1) Restrict portal gun to X shots.
+2) If on first shot, delete all existing gtPortal
+3) On any other shot, delete any existing portals of type X%2, and spawn a new portal of type X%2 oriented at angle 180° from the portal gun.  It might possibly be worth linking portals with a Gear reference, to save time on scanning through the Gear list every time we need a portal.
+*)
+end;

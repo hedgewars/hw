@@ -182,7 +182,9 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepCase,
             @doStepBirdy,
             @doStepBigExplosion,
-            @doStepEggWork
+            @doStepEggWork,
+            @doStepPortal,
+            @doStepPortalGun
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -467,6 +469,12 @@ gtBigExplosion: begin
                 gear^.Elasticity:= _0_6;
                 gear^.Friction:= _0_96;
                 if gear^.Timer = 0 then gear^.Timer:= 3000
+                end;
+      gtPortal: begin
+                gear^.ImpactSound:= sndMelonImpact;
+                gear^.nImpactSounds:= 1;
+                gear^.AdvBounce:= 0;
+                gear^.Radius:= 16;
                 end;
      end;
 InsertGearToList(gear);

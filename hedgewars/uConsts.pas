@@ -84,7 +84,7 @@ type
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
             gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, 
-            gtBigExplosion, gtEgg);
+            gtBigExplosion, gtEgg, gtPortal, gtPortalGun);
 
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
@@ -120,7 +120,7 @@ type
             amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
             amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
-            amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy);
+            amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun);
 
     THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
 
@@ -1770,6 +1770,28 @@ const
                 AttackVoice: sndNone);
             Slot: 7;
             TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater),
+            (NameId: sidPortalGun;
+            NameTex: nil;
+            Probability: 20;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoRoundEndHint or
+                          ammoprop_DontHold or
+                          ammoprop_Utility;
+                Count: 1;
+                InitialCount: 1;
+                NumPerTurn: 3;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amPortalGun;
+                AttackVoice: sndNone);
+            Slot: 2;
+            TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
