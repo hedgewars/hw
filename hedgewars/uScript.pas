@@ -53,12 +53,15 @@ uses LuaPas in 'LuaPas.pas',
     uKeys;
     
 var luaState : Plua_State;
-    ScriptAmmoStore : shortstring;
+    ScriptAmmoLoadout : shortstring;
+    ScriptAmmoProbability : shortstring;
+    ScriptAmmoDelay : shortstring;
+    ScriptAmmoReinforcement : shortstring;
     ScriptLoaded : boolean;
     
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
-procedure ScriptSetAmmo(ammo : TAmmoType; count, propability, delay: Byte); forward;
+procedure ScriptSetAmmo(ammo : TAmmoType; count, propability, delay, reinforcement: Byte); forward;
 
 // wrapped calls //
 
@@ -482,11 +485,11 @@ end;
 
 function lc_setammo(L : Plua_State) : LongInt; Cdecl;
 begin
-    if lua_gettop(L) <> 4 then
+    if lua_gettop(L) <> 5 then
         WriteLnToConsole('LUA: Wrong number of parameters passed to SetAmmo!')
     else
         begin
-        ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4));
+        ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
         end;
     lc_setammo:= 0
 end;
@@ -693,25 +696,38 @@ begin
 // reset ammostore (quite unclean, but works?)
 uAmmos.freeModule;
 uAmmos.initModule;
-ScriptAmmoStore:= '';
+ScriptAmmoLoadout:= '';
+ScriptAmmoDelay:= '';
+ScriptAmmoProbability:= '';
+ScriptAmmoReinforcement:= '';
 for i:=1 to ord(High(TAmmoType)) do
-    ScriptAmmoStore:= ScriptAmmoStore + '0000';
+    begin
+    ScriptAmmoLoadout:= ScriptAmmoLoadout + '0';
+    ScriptAmmoProbability:= ScriptAmmoProbability + '0';
+    ScriptAmmoDelay:= ScriptAmmoDelay + '0';
+    ScriptAmmoReinforcement:= ScriptAmmoReinforcement + '0';
+    end;
 end;
 
-procedure ScriptSetAmmo(ammo : TAmmoType; count, propability, delay: Byte);
+procedure ScriptSetAmmo(ammo : TAmmoType; count, propability, delay, reinforcement: Byte);
 begin
-if (ord(ammo) < 1) or (count > 9) or (count < 0) or (propability < 0) or (propability > 8) or (delay < 0) or (delay > 9)then
+if (ord(ammo) < 1) or (count > 9) or (count < 0) or (propability < 0) or (propability > 8) or (delay < 0) or (delay > 9) or (reinforcement < 0) or (reinforcement > 8) then
     exit;
-ScriptAmmoStore[ord(ammo)]:= inttostr(count)[1];
-ScriptAmmoStore[ord(ammo) + ord(high(TAmmoType))]:= inttostr(propability)[1];
-ScriptAmmoStore[ord(ammo) + 2 * ord(high(TAmmoType))]:= inttostr(delay)[1];
+ScriptAmmoLoadout[ord(ammo)]:= inttostr(count)[1];
+ScriptAmmoProbability[ord(ammo)]:= inttostr(propability)[1];
+ScriptAmmoDelay[ord(ammo)]:= inttostr(delay)[1];
+ScriptAmmoReinforcement[ord(ammo)]:= inttostr(reinforcement)[1];
 end;
 
 procedure ScriptApplyAmmoStore;
 var i : LongInt;
 begin
+SetAmmoLoadout(ScriptAmmoLoadout);
+SetAmmoProbability(ScriptAmmoProbability);
+SetAmmoDelay(ScriptAmmoDelay);
+SetAmmoReinforcement(ScriptAmmoReinforcement);
 for i:= 0 to Pred(TeamsCount) do
-    AddAmmoStore(ScriptAmmoStore);
+    AddAmmoStore;
 end;
 
 procedure initModule;

@@ -103,8 +103,8 @@ function onGameTick()
 end
 
 function onAmmoStoreInit()
-	SetAmmo(amBaseballBat, 9, 0, 0)
-	SetAmmo(amSkip, 9, 0, 0)
+	SetAmmo(amBaseballBat, 9, 0, 0, 0)
+	SetAmmo(amSkip, 9, 0, 0, 0)
 end
 
 function onGearAdd(gear)

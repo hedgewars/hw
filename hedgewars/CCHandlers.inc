@@ -191,9 +191,29 @@ val(y, t);
 CurrentHedgehog^.Gear^.Y:= int2hwFloat(t)
 end;
 
+procedure chSetAmmoLoadout(var descr: shortstring);
+begin
+SetAmmoLoadout(descr)
+end;
+
+procedure chSetAmmoDelay(var descr: shortstring);
+begin
+SetAmmoDelay(descr)
+end;
+
+procedure chSetAmmoProbability(var descr: shortstring);
+begin
+SetAmmoProbability(descr)
+end;
+
+procedure chSetAmmoReinforcement(var descr: shortstring);
+begin
+SetAmmoReinforcement(descr)
+end;
+
 procedure chAddAmmoStore(var descr: shortstring);
 begin
-AddAmmoStore(descr)
+AddAmmoStore
 end;
 
 procedure chBind(var id: shortstring);

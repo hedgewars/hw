@@ -86,7 +86,11 @@ void HWGame::commonConfig()
         {
             HWProto::addStringListToBuffer(buf,
                 (*it).TeamGameConfig(gamecfg->getInitHealth()));
-            HWProto::addStringToBuffer(buf, QString("eammstore %1").arg(ammostr));
+            HWProto::addStringToBuffer(buf, QString("eammloadt %1").arg(ammostr.mid(0, cAmmoNumber)));
+            HWProto::addStringToBuffer(buf, QString("eammprob %1").arg(ammostr.mid(cAmmoNumber, cAmmoNumber)));
+            HWProto::addStringToBuffer(buf, QString("eammdelay %1").arg(ammostr.mid(2 * cAmmoNumber, cAmmoNumber)));
+            HWProto::addStringToBuffer(buf, QString("eammreinf %1").arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
+            HWProto::addStringToBuffer(buf, QString("eammstore"));
         }
     }
     RawSendIPC(buf);
@@ -128,8 +132,12 @@ void HWGame::SendQuickConfig()
     HWProto::addStringListToBuffer(teamscfg,
             team2->TeamGameConfig(100));
 
-    HWProto::addStringToBuffer(teamscfg, "eammstore " + *cDefaultAmmoStore);
-    HWProto::addStringToBuffer(teamscfg, "eammstore " + *cDefaultAmmoStore);
+    HWProto::addStringToBuffer(teamscfg, QString("eammloadt %1").arg(cDefaultAmmoStore->mid(0, cAmmoNumber)));
+    HWProto::addStringToBuffer(teamscfg, QString("eammprob %1").arg(cDefaultAmmoStore->mid(cAmmoNumber, cAmmoNumber)));
+    HWProto::addStringToBuffer(teamscfg, QString("eammdelay %1").arg(cDefaultAmmoStore->mid(2 * cAmmoNumber, cAmmoNumber)));
+    HWProto::addStringToBuffer(teamscfg, QString("eammreinf %1").arg(cDefaultAmmoStore->mid(3 * cAmmoNumber, cAmmoNumber)));
+    HWProto::addStringToBuffer(teamscfg, QString("eammstore"));
+    HWProto::addStringToBuffer(teamscfg, QString("eammstore"));
     RawSendIPC(teamscfg);
 }
 

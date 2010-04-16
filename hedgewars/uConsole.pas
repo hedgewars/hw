@@ -255,6 +255,10 @@ begin
     RegisterVariable('addhh'   , vtCommand, @chAddHH        , false);
     RegisterVariable('hat'     , vtCommand, @chSetHat       , false);
     RegisterVariable('hhcoords', vtCommand, @chSetHHCoords  , false);
+    RegisterVariable('ammloadt', vtCommand, @chSetAmmoLoadout, false);
+    RegisterVariable('ammdelay', vtCommand, @chSetAmmoDelay, false);
+    RegisterVariable('ammprob',  vtCommand, @chSetAmmoProbability, false);
+    RegisterVariable('ammreinf', vtCommand, @chSetAmmoReinforcement, false);
     RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
     RegisterVariable('quit'    , vtCommand, @chQuit         , true );
     RegisterVariable('confirm' , vtCommand, @chConfirm      , true );

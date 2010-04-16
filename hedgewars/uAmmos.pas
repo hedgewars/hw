@@ -25,7 +25,11 @@ uses uConsts, uTeams, uStats;
 procedure initModule;
 procedure freeModule;
 
-procedure AddAmmoStore(s: shortstring);
+procedure AddAmmoStore;
+procedure SetAmmoLoadout(s: shortstring);
+procedure SetAmmoProbability(s: shortstring);
+procedure SetAmmoDelay(s: shortstring);
+procedure SetAmmoReinforcement(s: shortstring);
 procedure AssignStores;
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
@@ -47,6 +51,7 @@ uses uMisc, uGears, uWorld, uLocale, uConsole;
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
     StoreCnt: Longword;
+    ammoLoadout, ammoProbability, ammoDelay, ammoReinforcement: shortstring;
 
 procedure FillAmmoStore(Ammo: PHHAmmo; var cnts: TAmmoCounts);
 var mi: array[0..cMaxSlotIndex] of byte;
@@ -81,17 +86,17 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     end
 end;
 
-procedure AddAmmoStore(s: shortstring);
+procedure AddAmmoStore;
 const probability: array [0..8] of LongWord = (0,20,30,60,100,200,400,600,800);
 var cnt: Longword;
     a: TAmmoType;
     ammos: TAmmoCounts;
     substr: shortstring; // TEMPORARY
 begin
-TryDo(byte(s[0]) = byte(ord(High(TAmmoType))) * 4, 'Invalid ammo scheme (incompatible frontend; got: ' + inttostr(byte(s[0]) div 4) + ', expected: ' + inttostr(ord(High(TAmmoType))) + ')', true);
+TryDo((byte(ammoLoadout[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoProbability[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoDelay[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoReinforcement[0]) = byte(ord(High(TAmmoType)))), 'Incomplete or missing ammo scheme set (incompatible frontend or demo/save?)', true);
 
 // FIXME - TEMPORARY hardcoded check on shoppa pending creation of crate *type* probability editor
-substr:= Copy(s,1,15);
+substr:= Copy(ammoLoadout,1,15);
 if (substr = '000000990000009') or 
    (substr = '000000990000000') then
     shoppa:= true;
@@ -105,11 +110,11 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
     if a <> amNothing then
         begin
-        Ammoz[a].Probability:= probability[byte(s[ord(a) + ord(High(TAmmoType))]) - byte('0')];
-        Ammoz[a].SkipTurns:= (byte(s[ord(a) + ord(High(TAmmoType)) + ord(High(TAmmoType))]) - byte('0'));
-        Ammoz[a].NumberInCase:= (byte(s[ord(a) + ord(High(TAmmoType)) + ord(High(TAmmoType)) + ord(High(TAmmoType))]) - byte('0'));
+        Ammoz[a].Probability:= probability[byte(ammoProbability[ord(a)]) - byte('0')];
+        Ammoz[a].SkipTurns:= (byte(ammoDelay[ord(a)]) - byte('0'));
+        Ammoz[a].NumberInCase:= (byte(ammoReinforcement[ord(a)]) - byte('0'));
         if (TrainingFlags and tfIgnoreDelays) <> 0 then Ammoz[a].SkipTurns:= 0;
-        cnt:= byte(s[ord(a)]) - byte('0');
+        cnt:= byte(ammoLoadout[ord(a)]) - byte('0');
         // avoid things we already have infinite number
         if cnt = 9 then
             begin
@@ -357,6 +362,26 @@ for t:= Low(TAmmoType) to High(TAmmoType) do
     if (Ammoz[t].Ammo.Propz and ammoprop_NotBorder) <> 0 then Ammoz[t].Probability:= 0
 end;
 
+procedure SetAmmoLoadout(s: shortstring);
+begin
+    ammoLoadout:= s;
+end;
+
+procedure SetAmmoProbability(s: shortstring);
+begin
+    ammoProbability:= s;
+end;
+
+procedure SetAmmoDelay(s: shortstring);
+begin
+    ammoDelay:= s;
+end;
+
+procedure SetAmmoReinforcement(s: shortstring);
+begin
+    ammoReinforcement:= s;
+end;
+
 // Restore indefinitely disabled weapons and initial weapon counts.  Only used for hog placement right now
 procedure ResetWeapons;
 var i, slot, a: Longword;
@@ -378,7 +403,11 @@ end;
 procedure initModule;
 begin
     shoppa:= false;
-    StoreCnt:= 0
+    StoreCnt:= 0;
+    ammoLoadout:= '';
+    ammoProbability:= '';
+    ammoDelay:= '';
+    ammoReinforcement:= ''
 end;
 
 procedure freeModule;

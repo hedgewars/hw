@@ -209,7 +209,7 @@ end
 -- to request the available ammo and probabilities
 function onAmmoStoreInit()
 	-- add an unlimited supply of bazooka ammo
-	SetAmmo(amBazooka, 9, 0, 0)
+	SetAmmo(amBazooka, 9, 0, 0, 0)
 end
 
 -- This function is called when a new gear is added.

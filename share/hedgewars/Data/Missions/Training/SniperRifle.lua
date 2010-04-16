@@ -220,7 +220,7 @@ end
 -- to request the available ammo and probabilities
 function onAmmoStoreInit()
 	-- add an unlimited supply of shotgun ammo
-	SetAmmo(amSniperRifle, 9, 0, 0)
+	SetAmmo(amSniperRifle, 9, 0, 0, 0)
 end
 
 -- This function is called when a new gear is added.
