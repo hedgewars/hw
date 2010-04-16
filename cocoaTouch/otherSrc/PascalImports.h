@@ -43,6 +43,11 @@ extern "C" {
 	void HW_tab(void);
 	void HW_pause(void);
     
+	void HW_cursorUp(int);
+	void HW_cursorDown(int);
+	void HW_cursorLeft(int);
+	void HW_cursorRight(int);
+    
     void HW_terminate(BOOL);
 	
 #ifdef __cplusplus

@@ -228,28 +228,27 @@
 #pragma mark Custom touch event handling
 
 #define kMinimumPinchDelta      50
-#define kMinimumGestureLength	10
-#define kMaximumVariance        3
+
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	NSArray *twoTouches;
 	UITouch *touch = [touches anyObject];
-	int width = [[UIScreen mainScreen] bounds].size.width;
     
     if (isPopoverVisible) {
         [self dismissPopover];
     }
+    
+    gestureStartPoint = [touch locationInView:self.view];
         
 	switch ([touches count]) {
 		case 1:
-			gestureStartPoint = [touch locationInView:self.view];
 			initialDistanceForPinching = 0;
 			switch ([touch tapCount]) {
 				case 1:
 					NSLog(@"X:%d Y:%d", (int)gestureStartPoint.x, (int)gestureStartPoint.y );
-					SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
-							      (int)gestureStartPoint.y, width - (int)gestureStartPoint.x);
-					HW_click();
+					//SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
+					//		      (int)gestureStartPoint.y, width - (int)gestureStartPoint.x);
+					//HW_click();
 					break;
 				case 2:
 					HW_ammoMenu();
@@ -264,6 +263,8 @@
 			}
 			
 			// pinching
+            gestureStartPoint.x = 0;
+            gestureStartPoint.y = 0;
 			twoTouches = [touches allObjects];
 			UITouch *first = [twoTouches objectAtIndex:0];
 			UITouch *second = [twoTouches objectAtIndex:1];
@@ -277,45 +278,59 @@
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	initialDistanceForPinching = 0;
-	gestureStartPoint.x = 0;
-	gestureStartPoint.y = 0;
 	HW_allKeysUp();
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-	// this can happen if the user puts more than 5 touches on the screen at once, or perhaps in other circumstances.
+	// this can happen if the user puts more than 5 touches on the screen at once, or perhaps in other circumstances
 	[self touchesEnded:touches withEvent:event];
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    int minimumGestureLength;
+    int logCoeff;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        minimumGestureLength =	5;
+        logCoeff = 19;
+    } else {
+        minimumGestureLength =	3;
+        logCoeff = 3;
+    }
+    
 	NSArray *twoTouches;
 	CGPoint currentPosition;
 	UITouch *touch = [touches anyObject];
-	int width = [[UIScreen mainScreen] bounds].size.width;
 
 	switch ([touches count]) {
 		case 1:
 			currentPosition = [touch locationInView:self.view];
 			// panning
-			SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
-							(int)gestureStartPoint.y, width - (int)gestureStartPoint.x);
-			// remember that we have x and y inverted
-			/* temporarily disabling hog movements for camera panning testing
-			CGFloat vertDiff = gestureStartPoint.x - currentPosition.x;
-			CGFloat horizDiff = gestureStartPoint.y - currentPosition.y;
-			CGFloat deltaX = fabsf(vertDiff);
-			CGFloat deltaY = fabsf(horizDiff);
+			CGFloat deltaX = fabsf(gestureStartPoint.x - currentPosition.x);
+			CGFloat deltaY = fabsf(gestureStartPoint.y - currentPosition.y);
 			
-			if (deltaY >= kMinimumGestureLength && deltaX <= kMaximumVariance) {
-				NSLog(@"Horizontal swipe detected, begX:%f curX:%f", gestureStartPoint.x, currentPosition.x);
-				if (horizDiff > 0) HW_walkLeft();
-				else HW_walkRight();
-			} else if (deltaX >= kMinimumGestureLength && deltaY <= kMaximumVariance){
-				NSLog(@"Vertical swipe detected, begY:%f curY:%f", gestureStartPoint.y, currentPosition.y);
-				if (vertDiff < 0) HW_aimUp();
-				else HW_aimDown();
-			}
-			*/
+            if (deltaX >= minimumGestureLength) {
+                NSLog(@"Horizontal swipe detected, deltaX: %f deltaY: %f",deltaX, deltaY);
+                if (currentPosition.x > gestureStartPoint.x ) {
+                    NSLog(@"Right movement");
+                    HW_cursorRight(logCoeff*log(deltaX));
+                } else {
+                    NSLog(@"Left movement");
+                    HW_cursorLeft(logCoeff*log(deltaX));
+                }
+
+            } 
+            if (deltaY >= minimumGestureLength) {
+                NSLog(@"Horizontal swipe detected, deltaX: %f deltaY: %f",deltaX, deltaY);
+                if (currentPosition.y < gestureStartPoint.y ) {
+                    NSLog(@"Up movement");
+                    HW_cursorUp(logCoeff*log(deltaY));
+                } else {
+                    HW_cursorDown(logCoeff*log(deltaY));
+                    NSLog(@"Down movement");
+                }            
+            }
+
 			break;
 		case 2:
 			twoTouches = [touches allObjects];

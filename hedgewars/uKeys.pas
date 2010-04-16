@@ -60,6 +60,7 @@ var hideAmmoMenu: boolean;
 
     DefaultBinds, CurrentBinds: TBinds;
 
+    coeff: LongInt;
 {$IFDEF IPHONEOS}
     leftClick: boolean;
     middleClick: boolean;
@@ -80,6 +81,11 @@ var hideAmmoMenu: boolean;
     switchAction: boolean;
 
     theJoystick: PSDL_Joystick;
+    
+    cursorUp: boolean;
+    cursorDown: boolean;
+    cursorLeft: boolean;
+    cursorRight: boolean;
     
 procedure setiPhoneBinds;
 {$ENDIF}
@@ -112,7 +118,7 @@ Trusted:= (CurrentTeam <> nil)
 
 // move cursor/camera
 // TODO: Scale on screen dimensions and/or axis value (game controller)?
-movecursor(5 * CursorMovementX, 5 * CursorMovementY);
+movecursor(coeff * CursorMovementX, coeff * CursorMovementY);
 
 k:= SDL_GetMouseState(nil, nil);
 
@@ -326,7 +332,6 @@ DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomin';
 DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
 
 
-
 DefaultBinds[ 1]:= '/put';
 DefaultBinds[ 3]:= 'ammomenu';
 DefaultBinds[ 8]:= 'hjump';
@@ -340,6 +345,10 @@ DefaultBinds[25]:= '+left';
 DefaultBinds[26]:= '+right';
 DefaultBinds[44]:= 'chat';
 DefaultBinds[55]:= 'pause';
+DefaultBinds[66]:= '+cur_u';
+DefaultBinds[67]:= '+cur_d';
+DefaultBinds[68]:= '+cur_l';
+DefaultBinds[69]:= '+cur_r';
 {$ELSE}
 DefaultBinds[KeyNameToCode('up')]:= '+up';
 DefaultBinds[KeyNameToCode('down')]:= '+down';
@@ -382,6 +391,11 @@ begin
     tkbdn[44]:= ord(chatAction);
     tkbdn[55]:= ord(pauseAction);
     //tkbdn[100]:= ord(switchAction);
+    
+    tkbdn[66]:= ord(cursorUp);
+    tkbdn[67]:= ord(cursorDown);
+    tkbdn[68]:= ord(cursorLeft);
+    tkbdn[69]:= ord(cursorRight);
     
     leftClick:= false;
     middleClick:= false;
@@ -494,25 +508,38 @@ procedure initModule;
 begin
     wheelUp:= false;
     wheelDown:= false;
+    coeff:= 5;
 {$IFDEF IPHONEOS}
     // this function is called by HW_allKeysUp so be careful
+    
+    // mouse emulation
     leftClick:= false;
     middleClick:= false;
     rightClick:= false;
 
+    // arrow key emulation
     upKey:= false;
     downKey:= false;
     rightKey:= false;
     leftKey:= false;
 
+    // action key emulation
     backspaceKey:= false;
     spaceKey:= false;
     enterKey:= false;
     tabKey:= false;
-    
+
+    // other key emulation
     chatAction:= false;
     pauseAction:= false;
     switchAction:= false;
+
+    // cursor emulation
+    cursorUp:= false;
+    cursorDown:= false;
+    cursorLeft:= false;
+    cursorRight:= false;
+    
 {$ENDIF}
 end;
 

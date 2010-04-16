@@ -109,13 +109,28 @@ begin
     pauseAction:= true;
 end;
 
-procedure HW_whereIsHog; cdecl; export;
-//var Xcoord, Ycoord: LongInt;
+procedure HW_cursorUp(coefficient:LongInt); cdecl; export;
 begin
-    //Xcoord:= Gear^.dX + WorldDx;
-    WriteLnToConsole('HW - hog is at x: ' + ' y:');
+    coeff:= coefficient;
+    cursorUp:= true;
+end;
 
-    exit
+procedure HW_cursorDown(coefficient:LongInt); cdecl; export;
+begin
+    coeff:= coefficient;
+    cursorDown:= true;
+end;
+
+procedure HW_cursorLeft(coefficient:LongInt); cdecl; export;
+begin
+    coeff:= coefficient;
+    cursorLeft:= true;
+end;
+
+procedure HW_cursorRight(coefficient:LongInt); cdecl; export;
+begin
+    coeff:= coefficient;
+    cursorRight:= true;
 end;
 
 procedure HW_terminate(closeFrontend: boolean); cdecl; export;

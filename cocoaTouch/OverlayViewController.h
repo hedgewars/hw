@@ -18,8 +18,8 @@
     id popoverController;
 #endif
     PopoverMenuViewController *popupMenu;
-
     BOOL isPopoverVisible;
+    
     CGFloat initialDistanceForPinching;
     CGPoint gestureStartPoint;
 }
