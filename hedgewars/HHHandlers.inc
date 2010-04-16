@@ -205,7 +205,10 @@ with Gear^,
                       amExtraTime: TurnTimeLeft:= TurnTimeLeft + 30000;
                       amLaserSight: cLaserSighting:= true;
                       amVampiric: cVampiric:= true;
-                      amPiano: FollowGear:= AddGear(TargetPoint.X, 0, gtPiano, 0, _0, _0, 0);
+                      amPiano: begin
+                               FollowGear:= AddGear(TargetPoint.X, 0, gtPiano, 0, _0, _0, 0);
+                               PauseMusic
+                               end;
                   end;
 
         uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);

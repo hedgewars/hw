@@ -3054,7 +3054,26 @@ var r0, r1: LongInt;
 begin
 AllInactive:= false;
 doStepFallingGear(Gear);
-if (Gear^.State and gstCollision) <> 0 then
+if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and ((CurrentHedgehog^.Gear^.Message and gm_Slot) <> 0) then
+    begin
+    case CurrentHedgehog^.Gear^.MsgParam of
+        0: PlaySound(sndPiano0);
+        1: PlaySound(sndPiano1);
+        2: PlaySound(sndPiano2);
+        3: PlaySound(sndPiano3);
+        4: PlaySound(sndPiano4);
+        5: PlaySound(sndPiano5);
+        6: PlaySound(sndPiano6);
+        7: PlaySound(sndPiano7);
+        else PlaySound(sndPiano8);
+        end;
+    CurrentHedgehog^.Gear^.MsgParam:= 0;
+    CurrentHedgehog^.Gear^.Message:= CurrentHedgehog^.Gear^.Message and not gm_Slot;
+    end;
+
+if (Gear^.State and gstDrowning) <> 0 then
+    ResumeMusic
+else if (Gear^.State and gstCollision) <> 0 then
     begin
     r0:= GetRandom(21);
     r1:= GetRandom(21);
