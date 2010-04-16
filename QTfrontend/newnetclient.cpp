@@ -122,9 +122,9 @@ void HWNewNet::AddTeam(const HWTeam & team)
     for(int i = 0; i < 8; ++i)
     {
         cmd.append(delimeter);
-        cmd.append(team.HHName[i]);
+        cmd.append(team.Hedgehogs[i].Name);
         cmd.append(delimeter);
-        cmd.append(team.HHHat[i]);
+        cmd.append(team.Hedgehogs[i].Hat);
     }
     RawSendNet(cmd);
 }

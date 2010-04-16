@@ -32,7 +32,8 @@ HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h \
 	../QTfrontend/team.h ../QTfrontend/teamselect.h \
 	../QTfrontend/teamselhelper.h ../QTfrontend/togglebutton.h \
 	../QTfrontend/ui_hwform.h ../QTfrontend/vertScrollArea.h \
-	../QTfrontend/weaponItem.h ../QTfrontend/xfire.h
+	../QTfrontend/weaponItem.h ../QTfrontend/xfire.h \
+	../QTfrontend/achievements.h
 
 SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/about.cpp ../QTfrontend/ammoSchemeModel.cpp \
@@ -55,6 +56,7 @@ SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/teamselect.cpp ../QTfrontend/teamselhelper.cpp \
 	../QTfrontend/togglebutton.cpp ../QTfrontend/ui_hwform.cpp \
 	../QTfrontend/vertScrollArea.cpp ../QTfrontend/weaponItem.cpp \
+	../QTfrontend/achievements.cpp
 
 win32 {
 SOURCES += ../QTfrontend/xfire.cpp

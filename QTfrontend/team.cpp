@@ -38,8 +38,8 @@ HWTeam::HWTeam(const QString & teamname) :
     OldTeamName = TeamName;
     for (int i = 0; i < 8; i++)
     {
-        HHName[i].sprintf("hedgehog %d", i);
-        HHHat[i] = "NoHat";
+        Hedgehogs[i].Name.sprintf("hedgehog %d", i);
+        Hedgehogs[i].Hat = "NoHat";
     }
     Grave = "Statue";
     Fort = "Plane";
@@ -67,11 +67,11 @@ HWTeam::HWTeam(const QStringList& strLst) :
     difficulty = strLst[6].toUInt();
     for(int i = 0; i < 8; i++)
     {
-        HHName[i]=strLst[i * 2 + 7];
-        HHHat[i]=strLst[i * 2 + 8];
+        Hedgehogs[i].Name=strLst[i * 2 + 7];
+        Hedgehogs[i].Hat=strLst[i * 2 + 8];
 // Somehow claymore managed an empty hat.  Until we figure out how, this should avoid a repeat
 // Checking net teams is probably pointless, but can't hurt.
-        if (HHHat[i].length() == 0) HHHat[i] = "NoHat"; 
+        if (Hedgehogs[i].Hat.length() == 0) Hedgehogs[i].Hat = "NoHat"; 
     }
 }
 
@@ -83,8 +83,8 @@ HWTeam::HWTeam() :
     TeamName = QString("Team");
     for (int i = 0; i < 8; i++)
     {
-        HHName[i].sprintf("hedgehog %d", i);
-        HHHat[i] = "NoHat";
+        Hedgehogs[i].Name.sprintf("hedgehog %d", i);
+        Hedgehogs[i].Hat = "NoHat";
     }
 
     Grave = QString("Simple"); // default
@@ -113,15 +113,20 @@ bool HWTeam::LoadFromFile()
     for(int i = 0; i < 8; i++)
     {
         QString hh = QString("Hedgehog%1/").arg(i);
-        HHName[i] = teamfile.value(hh + "Name", QString("hedgehog %1").arg(i)).toString();
-        HHHat[i] = teamfile.value(hh + "Hat", "NoHat").toString();
-        //teamfile.setValue(hh + "Kills", 0);
-        //teamfile.setValue(hh + "Deaths", 0);
-        //teamfile.setValue(hh + "Rounds", 0);
-        //teamfile.setValue(hh + "Suicides", 0);
+        Hedgehogs[i].Name = teamfile.value(hh + "Name", QString("hedgehog %1").arg(i)).toString();
+        Hedgehogs[i].Hat = teamfile.value(hh + "Hat", "NoHat").toString();
+        Hedgehogs[i].Rounds = teamfile.value(hh + "Rounds", 0).toInt();
+        Hedgehogs[i].Kills = teamfile.value(hh + "Kills", 0).toInt();
+        Hedgehogs[i].Deaths = teamfile.value(hh + "Deaths", 0).toInt();
+        Hedgehogs[i].Suicides = teamfile.value(hh + "Suicides", 0).toInt();
     }
     for(int i = 0; i < BINDS_NUMBER; i++)
         binds[i].action = teamfile.value(QString("Binds/%1").arg(binds[i].strbind), cbinds[i].action).toString();
+    for(int i = 0; i < MAX_ACHIEVEMENTS; i++)
+        if(achievements[i][0][0])
+            AchievementProgress[i] = teamfile.value(QString("Achievements/%1").arg(achievements[i][0]), 0).toUInt();
+        else
+            break;
     return true;
 }
 
@@ -153,15 +158,20 @@ bool HWTeam::SaveToFile()
     for(int i = 0; i < 8; i++)
     {
         QString hh = QString("Hedgehog%1/").arg(i);
-        teamfile.setValue(hh + "Name", HHName[i]);
-        teamfile.setValue(hh + "Hat", HHHat[i]);
-        teamfile.setValue(hh + "Kills", 0);
-        teamfile.setValue(hh + "Deaths", 0);
-        teamfile.setValue(hh + "Rounds", 0);
-        teamfile.setValue(hh + "Suicides", 0);
+        teamfile.setValue(hh + "Name", Hedgehogs[i].Name);
+        teamfile.setValue(hh + "Hat", Hedgehogs[i].Hat);
+        teamfile.setValue(hh + "Rounds", Hedgehogs[i].Rounds);
+        teamfile.setValue(hh + "Kills", Hedgehogs[i].Kills);
+        teamfile.setValue(hh + "Deaths", Hedgehogs[i].Deaths);
+        teamfile.setValue(hh + "Suicides", Hedgehogs[i].Suicides);
     }
     for(int i = 0; i < BINDS_NUMBER; i++)
         teamfile.setValue(QString("Binds/%1").arg(binds[i].strbind), binds[i].action);
+    for(int i = 0; i < MAX_ACHIEVEMENTS; i++)
+        if(achievements[i][0][0])
+            teamfile.setValue(QString("Achievements/%1").arg(achievements[i][0]), AchievementProgress[i]);
+        else
+            break;
     return true;
 }
 
@@ -171,11 +181,11 @@ void HWTeam::SetToPage(HWForm * hwform)
     hwform->ui.pageEditTeam->CBTeamLvl->setCurrentIndex(difficulty);
     for(int i = 0; i < 8; i++)
     {
-         hwform->ui.pageEditTeam->HHNameEdit[i]->setText(HHName[i]);
-         if (HHHat[i].startsWith("Reserved"))
-            hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData("Reserved "+HHHat[i].remove(0,40), Qt::DisplayRole));
+         hwform->ui.pageEditTeam->HHNameEdit[i]->setText(Hedgehogs[i].Name);
+         if (Hedgehogs[i].Hat.startsWith("Reserved"))
+            hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData("Reserved "+Hedgehogs[i].Hat.remove(0,40), Qt::DisplayRole));
          else
-            hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData(HHHat[i], Qt::DisplayRole));
+            hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData(Hedgehogs[i].Hat, Qt::DisplayRole));
     }
     hwform->ui.pageEditTeam->CBGrave->setCurrentIndex(hwform->ui.pageEditTeam->CBGrave->findText(Grave));
     hwform->ui.pageEditTeam->CBFlag->setCurrentIndex(hwform->ui.pageEditTeam->CBFlag->findText(Flag));
@@ -196,11 +206,11 @@ void HWTeam::GetFromPage(HWForm * hwform)
     difficulty = hwform->ui.pageEditTeam->CBTeamLvl->currentIndex();
     for(int i = 0; i < 8; i++)
     {
-        HHName[i] = hwform->ui.pageEditTeam->HHNameEdit[i]->text();
+        Hedgehogs[i].Name = hwform->ui.pageEditTeam->HHNameEdit[i]->text();
         if (hwform->ui.pageEditTeam->HHHats[i]->currentText().startsWith("Reserved"))
-            HHHat[i] = "Reserved"+playerHash+hwform->ui.pageEditTeam->HHHats[i]->currentText().remove(0,9);
+            Hedgehogs[i].Hat = "Reserved"+playerHash+hwform->ui.pageEditTeam->HHHats[i]->currentText().remove(0,9);
         else
-            HHHat[i] = hwform->ui.pageEditTeam->HHHats[i]->currentText();
+            Hedgehogs[i].Hat = hwform->ui.pageEditTeam->HHHats[i]->currentText();
     }
 
     Grave = hwform->ui.pageEditTeam->CBGrave->currentText();
@@ -238,9 +248,9 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
       sl.push_back(QString("eaddhh %1 %2 %3")
                .arg(QString::number(difficulty),
                 QString::number(InitHealth),
-                HHName[t]));
+                Hedgehogs[t].Name));
       sl.push_back(QString("ehat %1")
-               .arg(HHHat[t]));
+               .arg(Hedgehogs[t].Hat));
     }
     return sl;
 }

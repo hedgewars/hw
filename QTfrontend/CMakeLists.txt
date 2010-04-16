@@ -87,6 +87,7 @@ set(	hwfr_src
 	ammoSchemeModel.cpp
 	togglebutton.cpp
 	bgwidget.cpp
+	achievements.cpp
 	)
 
 #xfire integration

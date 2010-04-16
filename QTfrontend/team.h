@@ -23,12 +23,20 @@
 #include <QColor>
 #include <QString>
 #include "binds.h"
+#include "achievements.h"
 
 class HWForm;
 class GameUIConfig;
 
 class HWTeamConstructException
 {
+};
+
+struct HWHog
+{
+    QString Name;
+    QString Hat;
+    int Rounds, Kills, Deaths, Suicides;
 };
 
 class HWTeam
@@ -41,13 +49,13 @@ class HWTeam
         bool isNetTeam() const;
 
         QString TeamName;
-        QString HHName[8];
-        QString HHHat[8];
         QString Grave;
         QString Fort;
         QString Flag;
         QString Voicepack;
         QString Owner;
+        HWHog Hedgehogs[8];
+        unsigned int AchievementProgress[MAX_ACHIEVEMENTS];
         unsigned int difficulty;
         BindAction binds[BINDS_NUMBER];
 

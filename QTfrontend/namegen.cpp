@@ -62,7 +62,7 @@ void HWNamegen::TeamRandomNames(HWTeam*& team, const bool changeteamname)
         for(int i = 0; i < 8; i++)
         {
             if ((TypesHatnames[kind].size()) > 0){
-                team->HHHat[i] = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
+                team->Hedgehogs[i].Hat = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
             }
             RandomNameByHat(team,i);
         }
@@ -75,12 +75,12 @@ void HWNamegen::TeamRandomNames(HWTeam*& team, const bool changeteamname)
 void HWNamegen::RandomNameByHat(HWTeam*& team, const int &i)
 {
     QStringList Dictionaries;
-    HatCfgLoad(team->HHHat[i],Dictionaries);
+    HatCfgLoad(team->Hedgehogs[i].Hat,Dictionaries);
 
     QStringList Dictionary;
     DictLoad(Dictionaries[rand()%(Dictionaries.size())],Dictionary);
 
-    team->HHName[i] = Dictionary[rand()%(Dictionary.size())];
+    team->Hedgehogs[i].Name = Dictionary[rand()%(Dictionary.size())];
 }
 
 void HWNamegen::DictLoad(const QString filename, QStringList &list)
