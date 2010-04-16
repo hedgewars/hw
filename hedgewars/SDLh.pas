@@ -27,6 +27,7 @@ interface
 {$IFDEF FREEBSD}
   {$DEFINE UNIX}
 {$ENDIF}
+// UNIX is already defined in Darwin
 
 {$IFDEF UNIX}
   {$IFNDEF DARWIN}
@@ -104,27 +105,36 @@ const
     SDL_BUTTON_WHEELDOWN = 5;
         
 {*begin SDL_Event binding*}
+
+{$IFDEF SDL13}
+    SDL_FIRSTEVENT = 0;
+    SDL_QUITEV = $100;
+    SDL_WINDOWEVENT = $200;
+    SDL_SYSWMEVENT = $201;
+    SDL_KEYDOWN = $300;
+    SDL_KEYUP = $301;
+    SDL_TEXTEDITING = $302;
+    SDL_TEXTINPUT = $303;
+    SDL_MOUSEMOTION  = $400;
+    SDL_MOUSEBUTTONDOWN = $401;
+    SDL_MOUSEBUTTONUP = $402;
+    SDL_MOUSEWHEEL = $403;
+    SDL_PROXIMITYIN = $500;
+    SDL_PROXIMITYOUT = $501;
+    SDL_JOYAXISMOTION = $600;
+    SDL_JOYBALLMOTION = $601;
+    SDL_JOYHATMOTION = $602;
+    SDL_JOYBUTTONDOWN = $603;
+    SDL_JOYBUTTONUP = $604;
+    SDL_USEREVENT = $8000;
+    SDL_LASTEVENT = $FFFF;
+{$ELSE}
     SDL_NOEVENT = 0;
+    SDL_ACTIVEEVENT = 1;
     SDL_KEYDOWN = 2;
     SDL_KEYUP = 3;
-{$IFDEF SDL13}
-        SDL_WINDOWEVENT = 1;
-        SDL_TEXTINPUT = 4;
-        SDL_TEXTEDITING = 5;
-    SDL_MOUSEMOTION  = 6;
-        SDL_MOUSEBUTTONDOWN = 7;
-    SDL_MOUSEBUTTONUP   = 8;
-        SDL_MOUSEWHEEL = 9;
-    SDL_JOYAXISMOTION = 10;
-    SDL_JOYBALLMOTION = 11;
-    SDL_JOYHATMOTION = 12;
-    SDL_JOYBUTTONDOWN = 13;
-    SDL_JOYBUTTONUP = 14;
-    SDL_QUITEV = 15;
-{$ELSE}
-        SDL_ACTIVEEVENT = 1;
     SDL_MOUSEMOTION  = 4;
-        SDL_MOUSEBUTTONDOWN = 5;
+    SDL_MOUSEBUTTONDOWN = 5;
     SDL_MOUSEBUTTONUP   = 6;
     SDL_JOYAXISMOTION = 7;
     SDL_JOYBALLMOTION = 8;
@@ -331,16 +341,17 @@ type
     PSDL_Texture = pointer;
     
     TSDL_WindowEvent = record
-        type_: byte;
-        gain: byte;
-        state: byte;
+        type_: LongInt;
         windowID: LongInt;
+        event: byte;
+        padding1, padding2, padding3: byte;
         data1, data2: LongInt;
         end;
 
 // implement SDL_TextEditingEvent + SDL_TextInputEvent for sdl13
 {$ELSE}
-    //these two are present in sdl1.3 but only for backward compatibility
+    // these two are present in sdl1.3 but only for backward compatibility
+    // and in 1.3 type_ is LongInt, not byte
     TSDL_ActiveEvent = record
         type_: byte;
         gain: byte;
@@ -354,49 +365,59 @@ type
 {$ENDIF}
 
     TSDL_MouseMotionEvent = record
-        type_: byte;
         which: byte;
         state: byte;
 {$IFDEF SDL13}
+        type_: LongInt;
         windowID: LongInt;
-        x, y, xrel, yrel : LongInt;
+        padding1, padding2: byte;
+        x, y, z, xrel, yrel : LongInt;
         pressure, pressure_max, pressure_min,
         rotation, tilt, cursor: LongInt; 
 {$ELSE}
+        type_: byte;
         x, y, xrel, yrel : word;
 {$ENDIF}
         end;
 
     TSDL_KeyboardEvent = record
-        type_: Byte;
 {$IFDEF SDL13}
+        type_: LongInt;
         windowID: LongInt;
+        padding1, padding2: byte;
+{$ELSE}
+        type_: byte;
 {$ENDIF}
-        which: Byte;
-        state: Byte;
+        which: byte;
+        state: byte;
         keysym: TSDL_KeySym;
         end;
 
     TSDL_MouseButtonEvent = record
-        _type,
         which,
         button,
         state: byte;
 {$IFDEF SDL13}
+        _type: LongInt;
         windowID: LongInt;
         x, y: LongInt;
+        padding1: byte;
 {$ELSE}
+        _type: byteM
         x, y: word;
 {$ENDIF}
         end;
 
 {$IFDEF SDL13}
     TSDL_MouseWheelEvent = record
-        type_: Byte;
+        type_: LongInt;
         windowID: LongInt;
         which: Byte;
         x, y: LongInt;
+        padding1, padding2, padding3: byte;
         end;
+        
+    // implement SDL_ProximityEvent
 {$ENDIF}
 
     TSDL_JoyAxisEvent = record
@@ -411,39 +432,53 @@ type
         end;
             
     TSDL_JoyBallEvent = record
-        type_: Byte;
         which: Byte;
         ball: Byte;
 {$IFDEF SDL13}
+        type_: LongInt;
         xrel, yrel: LongInt;
 {$ELSE}
+        type_: Byte;
         xrel, yrel: word;
 {$ENDIF}
         end;
 
     TSDL_JoyHatEvent = record
+{$IFDEF SDL13}
+        type_: LongInt;
+{$ELSE}
         type_: Byte;
+{$ENDIF}
         which: Byte;
         hat: Byte;
         value: Byte;
         end;
     
     TSDL_JoyButtonEvent = record
+{$IFDEF SDL13}
+        type_: LongInt;
+{$ELSE}
         type_: Byte;
+{$ENDIF}
         which: Byte;
         button: Byte;
         state: Byte;
         end;
 
     TSDL_QuitEvent = record
-                type_: Byte;
-                end;
+{$IFDEF SDL13}
+        type_: LongInt;
+{$ELSE}
+        type_: Byte;
+{$ENDIF}
+        end;
 
     PSDL_Event = ^TSDL_Event;
     TSDL_Event = record
         case Byte of
-            SDL_NOEVENT: (type_: byte);
 {$IFDEF SDL13}
+            SDL_FIRSTEVENT: (type_: byte);
+            SDL_QUITEV: (quit: TSDL_QuitEvent);
             SDL_WINDOWEVENT: (active: TSDL_WindowEvent);
             SDL_KEYDOWN,
             SDL_KEYUP: (key: TSDL_KeyboardEvent);
@@ -458,8 +493,8 @@ type
             SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
             SDL_JOYBUTTONDOWN,
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
-            SDL_QUITEV: (quit: TSDL_QuitEvent);
 {$ELSE}
+            SDL_NOEVENT: (type_: byte);
             SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
             SDL_KEYDOWN,
             SDL_KEYUP: (key: TSDL_KeyboardEvent);

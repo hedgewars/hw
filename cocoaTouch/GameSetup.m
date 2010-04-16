@@ -73,10 +73,10 @@
     NSArray *hedgehogs1 = [[NSArray alloc] initWithObjects:hogA1,hogA2,nil];
     [hogA1 release];
     [hogA2 release];
+
     NSDictionary *firstTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",@"System Cats",@"teamname",
                                @"star",@"grave",@"Earth",@"fort",@"Classic",@"voicepack",@"hedgewars",@"flag",hedgehogs1,@"hedgehogs",
-                               @"93919294221991210322351110012010000002111040400044140044464564444477477611221114440000000000000205500000040007004000000000213111103121111111231141111111111111112111",
-                               @"ammostore",nil];
+                               nil];
     [hedgehogs1 release];
     [teams addObject:firstTeam];
     [firstTeam release];
@@ -88,8 +88,7 @@
     [hogB2 release];
     NSDictionary *secondTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4100897",@"color",@"0",@"hash",@"Poke-MAN",@"teamname",
                                 @"Badger",@"grave",@"UFO",@"fort",@"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs2,@"hedgehogs",
-                                @"93919294221991210322351110012010000002111040400044140044464564444477477611221114440000000000000205500000040007004000000000213111103121111111231141111111111111112111",
-                                @"ammostore",nil];
+                                nil];
     [hedgehogs2 release];
     [teams addObject:secondTeam];
     [secondTeam release];
@@ -129,11 +128,31 @@
         NSString *hogHat = [[NSString alloc] initWithFormat:@"ehat %@", [hog objectForKey:@"hat"]];
         [self sendToEngine: hogHat];
         [hogHat release];
-    }
+    }         
+}
+
+-(void) sendAmmoData:(NSDictionary *)ammoData {
+    NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@", [ammoData objectForKey:@"ammostore_initialqt"]];
+    [self sendToEngine: ammloadt];
+    [ammloadt release];
     
-    NSString *ammostore = [[NSString alloc] initWithFormat:@"eammstore %@", [teamData objectForKey:@"ammostore"]];
-    [self sendToEngine: ammostore];
-    [ammostore release];
+    NSString *ammdelay = [[NSString alloc] initWithFormat:@"eammprob %@", [ammoData objectForKey:@"ammostore_probability"]];
+    [self sendToEngine: ammdelay];
+    [ammdelay release];
+    
+    NSString *ammprob = [[NSString alloc] initWithFormat:@"eammdelay %@", [ammoData objectForKey:@"ammostore_delay"]];
+    [self sendToEngine: ammprob];
+    [ammprob release];
+    
+    NSString *ammreinf = [[NSString alloc] initWithFormat:@"eammreinf %@", [ammoData objectForKey:@"ammostore_crate"]];
+    [self sendToEngine: ammreinf];
+    [ammreinf release];
+    
+    // sent twice so it applies to both teams
+    NSString *ammstore = [[NSString alloc] initWithString:@"eammstore"];
+    [self sendToEngine: ammstore];
+    [self sendToEngine: ammstore];
+    [ammstore release];
 }
 
 -(void) engineProtocol {
@@ -220,7 +239,15 @@
                     [self sendTeamData:teamData withPlayingHogs:2];
                     NSLog(@"teamData sent");
                 }
-								
+                
+                NSDictionary *ammoData = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                          @"939192942219912103223511100120100000021110",@"ammostore_initialqt",
+                                          @"040504054160065554655446477657666666615550",@"ammostore_probability",
+                                          @"000000000000020550000004000700400000000020",@"ammostore_delay",
+                                          @"131111031211111112311411111111111111121110",@"ammostore_crate", nil];
+                [self sendAmmoData: ammoData];
+                [ammoData release];
+                
 			clientQuit = NO;
 			} else {
 				NSLog(@"engineProtocolThread - wrong message or client closed connection");
