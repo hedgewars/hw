@@ -584,12 +584,12 @@ p:= GetMem(size);
 
 // update header information and file name
 {$IFNDEF WIN32}
-filename:= ParamStr(1) + '/' + filename + '.tga';
+filename:= ParamStr(1) + '/Screenshots/' + filename + '.tga';
 
 head[6]:= cScreenWidth;
 head[7]:= cScreenHeight;
 {$ELSE}
-filename:= ParamStr(1) + '/' + filename + '.bmp';
+filename:= ParamStr(1) + '/Screenshots/' + filename + '.bmp';
 
 head[$02]:= (size + 54) and $ff;
 head[$03]:= ((size + 54) shr 8) and $ff;

@@ -3048,3 +3048,21 @@ Ok. Here's where I plan to go with this.
 3) On any other shot, delete any existing portals of type X%2, and spawn a new portal of type X%2 oriented at angle 180° from the portal gun.  It might possibly be worth linking portals with a Gear reference, to save time on scanning through the Gear list every time we need a portal.
 *)
 end;
+
+procedure doStepPiano(Gear: PGear);
+var r0, r1: LongInt;
+begin
+AllInactive:= false;
+doStepFallingGear(Gear);
+if (Gear^.State and gstCollision) <> 0 then
+    begin
+    r0:= GetRandom(21);
+    r1:= GetRandom(21);
+    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, EXPLAutoSound);
+    doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, EXPLAutoSound);
+    doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, EXPLAutoSound);
+    Gear^.dY:= -_1;
+    end
+else
+    Gear^.dY += cGravity * 2; // let it fall faster so itdoesn't take too long for the whole attack
+end;

@@ -72,7 +72,7 @@ type
             sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee, 
-            sprFeather);
+            sprFeather, sprPiano);
 
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
             gtGrave, gtBee, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -84,7 +84,7 @@ type
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
             gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, 
-            gtBigExplosion, gtEgg, gtPortal, gtPortalGun);
+            gtBigExplosion, gtEgg, gtPortal, gtPortalGun, gtPiano);
 
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
@@ -120,7 +120,8 @@ type
             amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
             amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
-            amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun);
+            amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun,
+            amPiano);
 
     THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
 
@@ -734,7 +735,9 @@ const
             (FileName:  'amBee'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprHandBee
             (FileName:  'Feather'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  15; Height: 25; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprFeather
+            Width:  15; Height: 25; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprFeather
+            (FileName:  'Piano'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprPiano
             );
 
     Wavez: array [TWave] of record
@@ -1796,6 +1799,30 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater),
+            (NameId: sidPiano;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoCrosshair or
+                            ammoprop_NeedTarget or
+                            ammoprop_AttackingPut or
+                            ammoprop_DontHold or
+                            ammoprop_NotBorder;
+                Count: 1;
+                InitialCount: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amPiano;
+                AttackVoice: sndIncoming);
+            Slot: 5;
+            TimeAfterTurn: 0;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 7;
             PosCount: 1;
             PosSprite: sprWater)
             );

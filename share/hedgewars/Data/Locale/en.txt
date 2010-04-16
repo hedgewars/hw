@@ -42,7 +42,8 @@
 00:39=Flying Saucer
 00:40=Molotov Cocktail
 00:41=Birdy
-00:42=Portal Gun
+00:42=Portable Portal Device
+00:43=Piano Strike
 
 01:00=Let's fight!
 01:01=Round draw
@@ -414,6 +415,9 @@
 03:39=Transport Utility
 03:40=Incinerating Grenade
 03:41=Huge fan of Squawks
+03:42=I'm making a note here...
+; the misspelled "Beethoven" is intentional (-> to beat)
+03:43=Performing Beathoven's deadly sonata
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
@@ -458,6 +462,8 @@
 04:39=Fly to other parts of the map using the flying|saucer. This hard to master utility is able to|take you to almost any position on the battlefield.|Attack: Activate|Up/Left/Right: Apply force in one direction|Long Jump: Drop grenades or similar weapons
 04:40=Set some ground on fire using this bottle filled|with (soon to be) burning liquid.|Attack: Hold to shoot with more power
 04:41=The evidence nature might even top the flying|saucer. Birdy can carry your hog around and|drop eggs on your enemies!|Attack: Activate and drop eggs|Up/Left/Right: Flap in one direction
+04:42=HUGE SUCCESS| | |(but missing texts!)
+04:43=(missing text)
 
 ; Game goal strings
 05:00=Game Modes

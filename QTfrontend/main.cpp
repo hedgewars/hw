@@ -311,6 +311,7 @@ int main(int argc, char *argv[]) {
         {
             checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Demos");
             checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Saves");
+            checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Screenshots");
             checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Teams");
         }
         cfgdir->cd("Library/Application Support/Hedgewars");
@@ -323,6 +324,7 @@ int main(int argc, char *argv[]) {
             {
                 checkForDir(cfgdir->absolutePath() + "/Hedgewars/Demos");
                 checkForDir(cfgdir->absolutePath() + "/Hedgewars/Saves");
+                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Screenshots");
                 checkForDir(cfgdir->absolutePath() + "/Hedgewars/Teams");
             }
             cfgdir->cd("Hedgewars");
@@ -333,6 +335,7 @@ int main(int argc, char *argv[]) {
             {
                 checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
                 checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
+                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Screenshots");
                 checkForDir(cfgdir->absolutePath() + "/.hedgewars/Teams");
             }
             cfgdir->cd(".hedgewars");
@@ -342,6 +345,7 @@ int main(int argc, char *argv[]) {
         {
             checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
             checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
+            checkForDir(cfgdir->absolutePath() + "/.hedgewars/Screenshots");
             checkForDir(cfgdir->absolutePath() + "/.hedgewars/Teams");
         }
         cfgdir->cd(".hedgewars");
@@ -353,6 +357,7 @@ int main(int argc, char *argv[]) {
         {
             checkForDir(cfgdir->absolutePath() + "/Demos");
             checkForDir(cfgdir->absolutePath() + "/Saves");
+            checkForDir(cfgdir->absolutePath() + "/Screenshots");
             checkForDir(cfgdir->absolutePath() + "/Teams");
         }
     }

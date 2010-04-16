@@ -184,7 +184,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepBigExplosion,
             @doStepEggWork,
             @doStepPortal,
-            @doStepPortalGun
+            @doStepPortalGun,
+            @doStepPiano
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -475,6 +476,9 @@ gtBigExplosion: begin
                 gear^.nImpactSounds:= 1;
                 gear^.AdvBounce:= 0;
                 gear^.Radius:= 16;
+                end;
+       gtPiano: begin
+                gear^.Radius:= 32
                 end;
      end;
 InsertGearToList(gear);
@@ -1778,6 +1782,16 @@ while Gear<>nil do
                     glColor4f(1, 1, 1, 1);
                     end;
              gtEgg: DrawRotatedTextureF(SpritesData[sprEgg].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 16, 16, Gear^.DirAngle);
+           gtPiano: begin
+                    if (Gear^.State and gstDrowning) = 0 then
+                        begin
+                        glColor4f(1, 1, 1, 0.0625);
+                        for i:= 8 downto 1 do
+                            DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy - hwRound(Gear^.dY * 4 * i), 0, 1, 128, 128, 0);
+                        glColor4f(1, 1, 1, 1)
+                        end;
+                    DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 128, 128, 0);
+                    end;
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(hwRound(Gear^.X) + 8 + WorldDx, hwRound(Gear^.Y) + 8 + WorldDy, Gear^.Tex);
       Gear:= Gear^.NextGear
