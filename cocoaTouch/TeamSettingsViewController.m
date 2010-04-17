@@ -76,6 +76,9 @@
     [self.listOfTeams addObject:fileName];
     [fileName release];
     
+    // order the array alphabetically, so teams will keep their position
+    [self.listOfTeams sortUsingSelector:@selector(compare:)];
+    
     [self.tableView reloadData];
 }
 

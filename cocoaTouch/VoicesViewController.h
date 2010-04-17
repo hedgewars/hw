@@ -1,5 +1,5 @@
 //
-//  HogHatViewController.h
+//  VoicesViewController.h
 //  HedgewarsMobile
 //
 //  Created by Vittorio on 02/04/10.

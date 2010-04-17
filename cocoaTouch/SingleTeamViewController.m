@@ -14,6 +14,7 @@
 #import "FlagsViewController.h"
 #import "LevelViewController.h"
 #import "CommodityFunctions.h"
+#import "UIImageExtra.h"
 
 #define TEAMNAME_TAG 1234
 
@@ -132,29 +133,18 @@
     
     // load the images of the hat for aach hog
     NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
-    UIImage *normalHogImage = [[UIImage alloc] initWithContentsOfFile:normalHogFile];
+    UIImage *normalHogSprite = [[UIImage alloc] initWithContentsOfFile:normalHogFile andCutAt:CGRectMake(96, 0, 32, 32)];
     [normalHogFile release];
-    CGRect hogSpriteArea = CGRectMake(96, 0, 32, 32);
-    CGImageRef cgImg = CGImageCreateWithImageInRect([normalHogImage CGImage], hogSpriteArea);
-    [normalHogImage release];
-    UIImage *normalHogSprite = [[UIImage alloc] initWithCGImage:cgImg];
-    CGImageRelease(cgImg);
     
     NSArray *hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[hogArray count]];
     for (NSDictionary *hog in hogArray) {
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@.png",HATS_DIRECTORY(),[hog objectForKey:@"hat"]];
 
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
-        [hatFile release];
-        CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
-        CGImageRef cgImgage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
-        [image release];
+        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile:hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
+        [hatFile release];        
         
-        UIImage *hatSprite = [[UIImage alloc] initWithCGImage:cgImgage];
-        CGImageRelease(cgImgage);
-        
-        [array addObject:mergeHogHatSprites(normalHogSprite, hatSprite)];
+        [array addObject:[normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, -5)]];
         [hatSprite release];
     }
     [normalHogSprite release];
@@ -234,6 +224,7 @@
     NSArray *hogArray;
     UITableViewCell *cell;
     NSInteger row = [indexPath row];
+    UIImage *accessoryImage;
     
     switch ([indexPath section]) {
         case 0:
@@ -313,9 +304,33 @@
             cell.textLabel.text = [self.secondaryItems objectAtIndex:row];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             switch (row) {
+                case 0: // grave
+                    accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png",
+                                                                              GRAVES_DIRECTORY(),[teamDictionary objectForKey:@"grave"]]
+                                                                    andCutAt:CGRectMake(0,0,32,32)];
+                    cell.imageView.image = accessoryImage;
+                    [accessoryImage release];
+                    break;
+                case 2: // fort
+                    accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@L.png",
+                                                                              FORTS_DIRECTORY(),[teamDictionary objectForKey:@"fort"]]];
+                    cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(42, 42)];
+                    [accessoryImage release];
+                    break;
+                    
                 case 3: // flags
-                    cell.imageView.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png",
-                                                                             FLAGS_DIRECTORY(),[teamDictionary objectForKey:@"flag"]]];
+                    accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png",
+                                                                              FLAGS_DIRECTORY(),[teamDictionary objectForKey:@"flag"]]];
+                    cell.imageView.image = accessoryImage;
+                    [accessoryImage release];
+                    break;
+                case 4: // level
+                    accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%d.png",
+                                                                              BOTLEVELS_DIRECTORY(),[[[[teamDictionary objectForKey:@"hedgehogs"]
+                                                                                                      objectAtIndex:0] objectForKey:@"level"]
+                                                                                                     intValue]]];
+                    cell.imageView.image = accessoryImage;
+                    [accessoryImage release];
                     break;
                 default:
                     cell.imageView.image = nil;
@@ -336,55 +351,52 @@
     UITableViewController *nextController;
     UITableViewCell *cell;
     
-    switch (section) {
-        case 2: //secondary items
-            switch (row) {
-                case 0: // grave
-                    if (nil == gravesViewController)
-                        gravesViewController = [[GravesViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                    
-                    nextController = gravesViewController;
-                    break;
-                case 1: // voice
-                    if (nil == voicesViewController)
-                        voicesViewController = [[VoicesViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                    
-                    nextController = voicesViewController;                    
-                    break;
-                case 2: // fort
-                    if (nil == fortsViewController)
-                        fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                    
-                    nextController = fortsViewController;
-                    break;
-                case 3: // flag
-                    if (nil == flagsViewController) 
-                        flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                    
-                    nextController = flagsViewController;
-                    break;
-                case 4: // level
-                    if (nil == levelViewController)
-                        levelViewController = [[LevelViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                    
-                    nextController = levelViewController;
-                    break;
+    if (2 == section) {
+        switch (row) {
+            case 0: // grave
+                if (nil == gravesViewController)
+                    gravesViewController = [[GravesViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                
+                nextController = gravesViewController;
+                break;
+            case 1: // voice
+                if (nil == voicesViewController)
+                    voicesViewController = [[VoicesViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                
+                nextController = voicesViewController;                    
+                break;
+            case 2: // fort
+                if (nil == fortsViewController)
+                    fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                
+                nextController = fortsViewController;
+                break;
+            case 3: // flag
+                if (nil == flagsViewController) 
+                    flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                
+                nextController = flagsViewController;
+                break;
+            case 4: // level
+                if (nil == levelViewController)
+                    levelViewController = [[LevelViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                
+                nextController = levelViewController;
+                break;
+        }
+        
+        nextController.title = [secondaryItems objectAtIndex:row];
+        [nextController setTeamDictionary:teamDictionary];
+        [self.navigationController pushViewController:nextController animated:YES];
+    } else {
+        cell = [aTableView cellForRowAtIndexPath:indexPath];
+        for (UIView *oneView in cell.contentView.subviews) {
+            if ([oneView isMemberOfClass:[UITextField class]]) {
+                textFieldBeingEdited = (UITextField *)oneView;
+                [textFieldBeingEdited becomeFirstResponder];
             }
-            
-            nextController.title = [secondaryItems objectAtIndex:row];
-            [nextController setTeamDictionary:teamDictionary];
-            [self.navigationController pushViewController:nextController animated:YES];
-            break;
-        default:
-            cell = [aTableView cellForRowAtIndexPath:indexPath];
-            for (UIView *oneView in cell.contentView.subviews) {
-                if ([oneView isMemberOfClass:[UITextField class]]) {
-                    textFieldBeingEdited = (UITextField *)oneView;
-                    [textFieldBeingEdited becomeFirstResponder];
-                }
-            }
-            [aTableView deselectRowAtIndexPath:indexPath animated:NO];
-            break;
+        }
+        [aTableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 
 }
@@ -421,6 +433,7 @@
     flagsViewController = nil;
     fortsViewController = nil;
     gravesViewController = nil;
+    levelViewController = nil;
     [super viewDidUnload];
 }
 
@@ -434,6 +447,7 @@
     [fortsViewController release];
     [gravesViewController release];
     [flagsViewController release];
+    [levelViewController release];
     [super dealloc];
 }
 

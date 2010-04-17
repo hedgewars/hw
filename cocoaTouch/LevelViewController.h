@@ -1,5 +1,5 @@
 //
-//  HogHatViewController.h
+//  LevelViewController.h
 //  HedgewarsMobile
 //
 //  Created by Vittorio on 02/04/10.

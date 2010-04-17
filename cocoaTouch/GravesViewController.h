@@ -1,5 +1,5 @@
 //
-//  HogHatViewController.h
+//  GravesViewController.h
 //  HedgewarsMobile
 //
 //  Created by Vittorio on 02/04/10.

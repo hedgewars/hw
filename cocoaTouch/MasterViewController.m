@@ -118,14 +118,14 @@
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : 0;
     
     if (newRow != oldRow) {
+        [self.tableView deselectRowAtIndexPath:lastIndexPath animated:YES];
         [detailViewController.navigationController popToRootViewControllerAnimated:NO];
         
         UITableViewController *nextController = [self.controllers objectAtIndex:[indexPath row]];
-        [detailViewController.navigationController pushViewController:nextController animated:YES];
+        [detailViewController.navigationController pushViewController:nextController animated:NO];
         self.lastIndexPath = indexPath;
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 

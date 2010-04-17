@@ -8,7 +8,7 @@
 
 #import "HogHatViewController.h"
 #import "CommodityFunctions.h"
-
+#import "UIImageExtra.h"
 
 @implementation HogHatViewController
 @synthesize teamDictionary, hatArray, hatSprites, lastIndexPath, selectedHog;
@@ -33,16 +33,9 @@
     NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[hatArray count]];
     for (NSString *hat in hatArray) {
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", hatsDirectory,hat];
-        
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile: hatFile];
+        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
         [hatFile release];
-        CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
-        CGImageRef cgImage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
-        [image release];
-        
-        UIImage *hatSprite = [[UIImage alloc] initWithCGImage:cgImage];
         [spriteArray addObject:hatSprite];
-        CGImageRelease(cgImage);
         [hatSprite release];
     }
     self.hatSprites = spriteArray;

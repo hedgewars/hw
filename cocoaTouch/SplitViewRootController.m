@@ -38,8 +38,9 @@
     Class splitViewControllerClass = NSClassFromString(@"UISplitViewController");
     if (splitViewControllerClass) {
         splitViewRootController = [[splitViewControllerClass alloc] init];
-        CGRect screensize = [[UIScreen mainScreen] bounds];
-        [[splitViewRootController view] setFrame:CGRectMake(0, 0, screensize.size.height, screensize.size.width)];
+        //[[splitViewRootController view] setAutoresizingMask: UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+
+        [[splitViewRootController view] setFrame:CGRectMake(0, 0, 1024, 1024)]; // yeah it's funny
         MasterViewController *masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
         
         UINavigationController *mainNavController = [[UINavigationController alloc] initWithRootViewController:masterViewController];

@@ -101,13 +101,13 @@
 		6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936911501D3D00BA94A9 /* arrowRight.png */; };
 		6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936A11501D3D00BA94A9 /* arrowUp.png */; };
 		617995321150403800BA94A9 /* joyPush.png in Resources */ = {isa = PBXBuildFile; fileRef = 617995311150403800BA94A9 /* joyPush.png */; };
+		6184DEA311795DBD00AF6EFA /* UIImageExtra.m in Sources */ = {isa = PBXBuildFile; fileRef = 6184DEA211795DBD00AF6EFA /* UIImageExtra.m */; };
 		618BE5931175126900F22556 /* LevelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618BE5921175126900F22556 /* LevelViewController.m */; };
 		618BE60311751F4F00F22556 /* GravesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618BE60211751F4F00F22556 /* GravesViewController.m */; };
 		618BE6A3117527CD00F22556 /* VoicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618BE6A2117527CD00F22556 /* VoicesViewController.m */; };
 		619C51BF116E40FC0049FD84 /* CommodityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C51BE116E40FC0049FD84 /* CommodityFunctions.m */; };
 		619C5232116E4E810049FD84 /* FlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C5231116E4E810049FD84 /* FlagsViewController.m */; };
 		619C533E116E70050049FD84 /* FortsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C533D116E70050049FD84 /* FortsViewController.m */; };
-		619C58AB116E752A0049FD84 /* UIImageScale.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C58AA116E752A0049FD84 /* UIImageScale.m */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; };
 		61A118CA11683C7600359010 /* MainMenuViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */; };
 		61A118CC11683C7A00359010 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61A118CB11683C7A00359010 /* MainMenuViewController-iPhone.xib */; };
@@ -278,6 +278,8 @@
 		6179936911501D3D00BA94A9 /* arrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowRight.png; path = ../../cocoaTouch/resources/arrowRight.png; sourceTree = SOURCE_ROOT; };
 		6179936A11501D3D00BA94A9 /* arrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowUp.png; path = ../../cocoaTouch/resources/arrowUp.png; sourceTree = SOURCE_ROOT; };
 		617995311150403800BA94A9 /* joyPush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyPush.png; path = ../../cocoaTouch/resources/joyPush.png; sourceTree = SOURCE_ROOT; };
+		6184DEA111795DBD00AF6EFA /* UIImageExtra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImageExtra.h; path = ../../cocoaTouch/otherSrc/UIImageExtra.h; sourceTree = SOURCE_ROOT; };
+		6184DEA211795DBD00AF6EFA /* UIImageExtra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImageExtra.m; path = ../../cocoaTouch/otherSrc/UIImageExtra.m; sourceTree = SOURCE_ROOT; };
 		618BE5911175126900F22556 /* LevelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LevelViewController.h; path = ../../cocoaTouch/LevelViewController.h; sourceTree = SOURCE_ROOT; };
 		618BE5921175126900F22556 /* LevelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LevelViewController.m; path = ../../cocoaTouch/LevelViewController.m; sourceTree = SOURCE_ROOT; };
 		618BE60111751F4F00F22556 /* GravesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GravesViewController.h; path = ../../cocoaTouch/GravesViewController.h; sourceTree = SOURCE_ROOT; };
@@ -290,8 +292,6 @@
 		619C5231116E4E810049FD84 /* FlagsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlagsViewController.m; path = ../../cocoaTouch/FlagsViewController.m; sourceTree = SOURCE_ROOT; };
 		619C533C116E70050049FD84 /* FortsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FortsViewController.h; path = ../../cocoaTouch/FortsViewController.h; sourceTree = SOURCE_ROOT; };
 		619C533D116E70050049FD84 /* FortsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FortsViewController.m; path = ../../cocoaTouch/FortsViewController.m; sourceTree = SOURCE_ROOT; };
-		619C58A9116E752A0049FD84 /* UIImageScale.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImageScale.h; path = ../../cocoaTouch/otherSrc/UIImageScale.h; sourceTree = SOURCE_ROOT; };
-		619C58AA116E752A0049FD84 /* UIImageScale.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImageScale.m; path = ../../cocoaTouch/otherSrc/UIImageScale.m; sourceTree = SOURCE_ROOT; };
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainMenuViewController-iPad.xib"; path = "../../cocoaTouch/xib/MainMenuViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
 		61A118CB11683C7A00359010 /* MainMenuViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainMenuViewController-iPhone.xib"; path = "../../cocoaTouch/xib/MainMenuViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
@@ -379,6 +379,8 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				6184DEA111795DBD00AF6EFA /* UIImageExtra.h */,
+				6184DEA211795DBD00AF6EFA /* UIImageExtra.m */,
 				61798857114AA48A00BA94A9 /* CGPointUtils.h */,
 				61798856114AA48A00BA94A9 /* CGPointUtils.c */,
 				619C51BD116E40FC0049FD84 /* CommodityFunctions.h */,
@@ -388,8 +390,6 @@
 				61798858114AA48A00BA94A9 /* IMG_png.c */,
 				6179885A114AA48A00BA94A9 /* PascalImports.h */,
 				32CA4F630368D1EE00C91783 /* HedgewarsMobile_Prefix.pch */,
-				619C58A9116E752A0049FD84 /* UIImageScale.h */,
-				619C58AA116E752A0049FD84 /* UIImageScale.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -844,7 +844,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\n#rm -rf ${PROJECT_DIR}/Data/Sounds/\n#rm -rf ${PROJECT_DIR}/Data/Music/\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
+			shellScript = "#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\n#rm -rf ${PROJECT_DIR}/Data/Sounds/\n#rm -rf ${PROJECT_DIR}/Data/Music/\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -938,10 +938,10 @@
 				619C51BF116E40FC0049FD84 /* CommodityFunctions.m in Sources */,
 				619C5232116E4E810049FD84 /* FlagsViewController.m in Sources */,
 				619C533E116E70050049FD84 /* FortsViewController.m in Sources */,
-				619C58AB116E752A0049FD84 /* UIImageScale.m in Sources */,
 				618BE5931175126900F22556 /* LevelViewController.m in Sources */,
 				618BE60311751F4F00F22556 /* GravesViewController.m in Sources */,
 				618BE6A3117527CD00F22556 /* VoicesViewController.m in Sources */,
+				6184DEA311795DBD00AF6EFA /* UIImageExtra.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

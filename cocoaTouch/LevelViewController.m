@@ -1,5 +1,5 @@
 //
-//  HogHatViewController.m
+//  LevelViewController.m
 //  HedgewarsMobile
 //
 //  Created by Vittorio on 02/04/10.
@@ -26,24 +26,26 @@
 
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Human",@""),
-                      NSLocalizedString(@"Weaky",@""),
-                      NSLocalizedString(@"Average",@""),
+                      NSLocalizedString(@"Brutal",@""),
+                      NSLocalizedString(@"Aggressive",@""),
                       NSLocalizedString(@"Bully",@""),
-                      NSLocalizedString(@"Aggressive",@""),nil];
+                      NSLocalizedString(@"Average",@""),
+                      NSLocalizedString(@"Weaky",@""),
+                      nil];
     self.levelArray = array;
     [array release];
-/*
-    NSMutableArray *sprites = [[NSMutableArray alloc] initWithCapacity:[graveArray count];
-    for (NSString *graveName in graveArray) {
-	NSString *gravePath = [[NSString alloc] initWithFormat@"%@/%@",GRAVES_DIRECTORY(),graveName];
-	UIImage *image = [[UIImage alloc] initWithContentsOfFile:gravePath];
-	[gravePath release];
-	[sprites addObject:image];
-	[image release];
+
+    NSMutableArray *sprites = [[NSMutableArray alloc] initWithCapacity:[levelArray count]];
+    for (int i = 0; i < [levelArray count]; i++) {
+        NSString *botlevelPath = [[NSString alloc] initWithFormat:@"%@/%d.png",BOTLEVELS_DIRECTORY(),i];
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:botlevelPath];
+        [botlevelPath release];
+        [sprites addObject:image];
+        [image release];
     }
-    self.graveSprites = sprites;
+    self.levelSprites = sprites;
     [sprites release];
-*/
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {

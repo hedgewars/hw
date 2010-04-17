@@ -1,5 +1,5 @@
 //
-//  HogHatViewController.m
+//  GravesViewController.m
 //  HedgewarsMobile
 //
 //  Created by Vittorio on 02/04/10.
@@ -8,7 +8,7 @@
 
 #import "GravesViewController.h"
 #import "CommodityFunctions.h"
-
+#import "UIImageExtra.h"
 
 @implementation GravesViewController
 @synthesize teamDictionary, graveArray, graveSprites, lastIndexPath;
@@ -31,19 +31,12 @@
     NSMutableArray *sprites = [[NSMutableArray alloc] initWithCapacity:[graveArray count]];
     for (NSString *graveName in graveArray) {
         NSString *gravePath = [[NSString alloc] initWithFormat:@"%@/%@",GRAVES_DIRECTORY(),graveName];
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile:gravePath];
-        [gravePath release];
-        
         // because we also have multi frame graves, let's take the first one only
-        if (image.size.height > 32) {
-            CGRect firstSpriteArea = CGRectMake(0, 0, 32, 32);
-            CGImageRef cgImage = CGImageCreateWithImageInRect([image CGImage], firstSpriteArea);
-            [image release];
-            image = [[UIImage alloc] initWithCGImage:cgImage];
-            CGImageRelease(cgImage);
-        }
-        [sprites addObject:image];
-        [image release];
+        UIImage *graveSprite = [[UIImage alloc] initWithContentsOfFile:gravePath andCutAt:CGRectMake(0, 0, 32, 32)];
+        [gravePath release];        
+
+        [sprites addObject:graveSprite];
+        [graveSprite release];
     }
     self.graveSprites = sprites;
     [sprites release];

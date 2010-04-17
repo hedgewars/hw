@@ -36,19 +36,10 @@ void createTeamNamed (NSString *nameWithoutExt) {
     [hedgehogs release];
     
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", teamsDirectory, nameWithoutExt];
-    NSLog(@"%@",teamFile);
+
     [theTeam writeToFile:teamFile atomically:YES];
     [teamFile release];
     [theTeam release];
-}
-
-UIImage *mergeHogHatSprites (UIImage *firstImage, UIImage *secondImage) {
-    UIGraphicsBeginImageContext(firstImage.size);
-    [firstImage drawAtPoint:CGPointMake(0,0)];
-    [secondImage drawAtPoint:CGPointMake(0,-5)];
-    UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return resultImage; // autoreleased
 }
 
 BOOL rotationManager (UIInterfaceOrientation interfaceOrientation) {

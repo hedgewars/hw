@@ -1,5 +1,5 @@
 //
-//  FlagsViewController.m
+//  FortsViewController.m
 //  HedgewarsMobile
 //
 //  Created by Vittorio on 08/04/10.
@@ -8,7 +8,7 @@
 
 #import "FortsViewController.h"
 #import "CommodityFunctions.h"
-#import "UIImageScale.h"
+#import "UIImageExtra.h"
 
 @implementation FortsViewController
 @synthesize teamDictionary, fortArray, fortSprites, lastIndexPath;
