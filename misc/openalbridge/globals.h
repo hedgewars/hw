@@ -106,47 +106,47 @@
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
-        
-        /*data type for WAV header*/
+    
+    /*data type for WAV header*/
 #pragma pack(1)
-        typedef struct _WAV_header_t {
-                uint32_t ChunkID;
-                uint32_t ChunkSize;
-                uint32_t Format;
-                uint32_t Subchunk1ID;
-                uint32_t Subchunk1Size;
-                uint16_t AudioFormat;
-                uint16_t NumChannels;
-                uint32_t SampleRate;
-                uint32_t ByteRate;
-                uint16_t BlockAlign;
-                uint16_t BitsPerSample;
-                uint32_t Subchunk2ID;
-                uint32_t Subchunk2Size;
-        } WAV_header_t;
+    typedef struct _WAV_header_t {
+        uint32_t ChunkID;
+        uint32_t ChunkSize;
+        uint32_t Format;
+        uint32_t Subchunk1ID;
+        uint32_t Subchunk1Size;
+        uint16_t AudioFormat;
+        uint16_t NumChannels;
+        uint32_t SampleRate;
+        uint32_t ByteRate;
+        uint16_t BlockAlign;
+        uint16_t BitsPerSample;
+        uint32_t Subchunk2ID;
+        uint32_t Subchunk2Size;
+    } WAV_header_t;
 #pragma pack()
-        
-        /*data type for passing data between threads*/
+    
+    /*data type for passing data between threads*/
 #pragma pack(1)
-        typedef struct _fade_t {
-                uint32_t index;
-                uint16_t quantity;
-        } fade_t;
+    typedef struct _fade_t {
+        uint32_t index;
+        uint16_t quantity;
+    } fade_t;
 #pragma pack()
-        
-        
-        /*file format defines*/
+    
+    
+    /*file format defines*/
 #define OGG_FILE_FORMAT 0x4F676753
 #define WAV_FILE_FORMAT 0x52494646
 #define WAV_HEADER_SUBCHUNK2ID 0x64617461
-        
-        
-        /*other defines*/
+    
+    
+    /*other defines*/
 #define FADE_IN  0
 #define FADE_OUT 1
-        
-        char *prog;
-        
+    
+    char *prog;
+    
 #ifdef __CPLUSPLUS
 }
 #endif

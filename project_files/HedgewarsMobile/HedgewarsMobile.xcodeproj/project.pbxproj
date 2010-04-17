@@ -122,6 +122,18 @@
 		61A11AD61168DB3700359010 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AD51168DB3700359010 /* DetailViewController.m */; };
 		61A11AE11168DC6E00359010 /* SingleTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AE01168DC6E00359010 /* SingleTeamViewController.m */; };
 		61A11AE41168DC9400359010 /* HogHatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AE31168DC9400359010 /* HogHatViewController.m */; };
+		61C325431179A336001E70B1 /* errlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 61C325391179A336001E70B1 /* errlib.c */; };
+		61C325441179A336001E70B1 /* errlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C3253A1179A336001E70B1 /* errlib.h */; };
+		61C325451179A336001E70B1 /* globals.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C3253B1179A336001E70B1 /* globals.h */; };
+		61C325461179A336001E70B1 /* loaders.c in Sources */ = {isa = PBXBuildFile; fileRef = 61C3253C1179A336001E70B1 /* loaders.c */; };
+		61C325471179A336001E70B1 /* loaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C3253D1179A336001E70B1 /* loaders.h */; };
+		61C325481179A336001E70B1 /* openalbridge.c in Sources */ = {isa = PBXBuildFile; fileRef = 61C3253E1179A336001E70B1 /* openalbridge.c */; };
+		61C325491179A336001E70B1 /* openalbridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C325401179A336001E70B1 /* openalbridge.h */; };
+		61C3254A1179A336001E70B1 /* wrappers.c in Sources */ = {isa = PBXBuildFile; fileRef = 61C325411179A336001E70B1 /* wrappers.c */; };
+		61C3254B1179A336001E70B1 /* wrappers.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C325421179A336001E70B1 /* wrappers.h */; };
+		61C3255B1179A384001E70B1 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3255A1179A384001E70B1 /* OpenAL.framework */; };
+		61C325901179A732001E70B1 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3255A1179A384001E70B1 /* OpenAL.framework */; };
+		61C325A31179A7AD001E70B1 /* libopenalbridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3251D1179A300001E70B1 /* libopenalbridge.a */; };
 		61CE250D115E749A0098C467 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE250C115E749A0098C467 /* OverlayViewController.m */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
@@ -167,6 +179,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = BE48FD6E07AFA17000BB41DA;
 			remoteInfo = "Static Library";
+		};
+		61C325201179A30E001E70B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 61C3251C1179A300001E70B1 /* openalbridge */;
+			remoteInfo = openalbridge;
 		};
 		928301590F10E41300CC5A3C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -309,6 +328,17 @@
 		61A11AE01168DC6E00359010 /* SingleTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingleTeamViewController.m; path = ../../cocoaTouch/SingleTeamViewController.m; sourceTree = SOURCE_ROOT; };
 		61A11AE21168DC9400359010 /* HogHatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HogHatViewController.h; path = ../../cocoaTouch/HogHatViewController.h; sourceTree = SOURCE_ROOT; };
 		61A11AE31168DC9400359010 /* HogHatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HogHatViewController.m; path = ../../cocoaTouch/HogHatViewController.m; sourceTree = SOURCE_ROOT; };
+		61C3251D1179A300001E70B1 /* libopenalbridge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libopenalbridge.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		61C325391179A336001E70B1 /* errlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = errlib.c; path = ../../misc/openalbridge/errlib.c; sourceTree = SOURCE_ROOT; };
+		61C3253A1179A336001E70B1 /* errlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = errlib.h; path = ../../misc/openalbridge/errlib.h; sourceTree = SOURCE_ROOT; };
+		61C3253B1179A336001E70B1 /* globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = globals.h; path = ../../misc/openalbridge/globals.h; sourceTree = SOURCE_ROOT; };
+		61C3253C1179A336001E70B1 /* loaders.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = loaders.c; path = ../../misc/openalbridge/loaders.c; sourceTree = SOURCE_ROOT; };
+		61C3253D1179A336001E70B1 /* loaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = loaders.h; path = ../../misc/openalbridge/loaders.h; sourceTree = SOURCE_ROOT; };
+		61C3253E1179A336001E70B1 /* openalbridge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = openalbridge.c; path = ../../misc/openalbridge/openalbridge.c; sourceTree = SOURCE_ROOT; };
+		61C325401179A336001E70B1 /* openalbridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = openalbridge.h; path = ../../misc/openalbridge/openalbridge.h; sourceTree = SOURCE_ROOT; };
+		61C325411179A336001E70B1 /* wrappers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = wrappers.c; path = ../../misc/openalbridge/wrappers.c; sourceTree = SOURCE_ROOT; };
+		61C325421179A336001E70B1 /* wrappers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wrappers.h; path = ../../misc/openalbridge/wrappers.h; sourceTree = SOURCE_ROOT; };
+		61C3255A1179A384001E70B1 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		61CE250B115E749A0098C467 /* OverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OverlayViewController.h; path = ../../cocoaTouch/OverlayViewController.h; sourceTree = SOURCE_ROOT; };
 		61CE250C115E749A0098C467 /* OverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OverlayViewController.m; path = ../../cocoaTouch/OverlayViewController.m; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -320,12 +350,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61C325901179A732001E70B1 /* OpenAL.framework in Frameworks */,
 				61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */,
 				61798A14114AB65C00BA94A9 /* libSDL_ttf.a in Frameworks */,
 				617989BE114AB47A00BA94A9 /* libSDL_net.a in Frameworks */,
 				617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */,
 				61798996114AB3FF00BA94A9 /* libSDL_mixer.a in Frameworks */,
 				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
+				61C325A31179A7AD001E70B1 /* libopenalbridge.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
@@ -336,6 +368,14 @@
 				6179891E114AAF2100BA94A9 /* libpng_x86.a in Frameworks */,
 				6179891F114AAF2100BA94A9 /* libvorbis_arm.a in Frameworks */,
 				61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61C3251B1179A300001E70B1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61C3255B1179A384001E70B1 /* OpenAL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,6 +398,7 @@
 			children = (
 				1D6058910D05DD3D006BFB54 /* HedgewarsMobile.app */,
 				928301170F10CAFC00CC5A3C /* libfpc.a */,
+				61C3251D1179A300001E70B1 /* libopenalbridge.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -379,6 +420,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61C325371179A325001E70B1 /* openalbridge */,
 				6184DEA111795DBD00AF6EFA /* UIImageExtra.h */,
 				6184DEA211795DBD00AF6EFA /* UIImageExtra.m */,
 				61798857114AA48A00BA94A9 /* CGPointUtils.h */,
@@ -424,6 +466,7 @@
 				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
 				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				61C3255A1179A384001E70B1 /* OpenAL.framework */,
 				61798916114AAF2100BA94A9 /* libfreetype_arm.a */,
 				61798917114AAF2100BA94A9 /* libfreetype_x86.a */,
 				61798918114AAF2100BA94A9 /* libpng_arm.a */,
@@ -619,6 +662,22 @@
 			name = "second level";
 			sourceTree = "<group>";
 		};
+		61C325371179A325001E70B1 /* openalbridge */ = {
+			isa = PBXGroup;
+			children = (
+				61C325391179A336001E70B1 /* errlib.c */,
+				61C3253A1179A336001E70B1 /* errlib.h */,
+				61C3253B1179A336001E70B1 /* globals.h */,
+				61C3253C1179A336001E70B1 /* loaders.c */,
+				61C3253D1179A336001E70B1 /* loaders.h */,
+				61C3253E1179A336001E70B1 /* openalbridge.c */,
+				61C325401179A336001E70B1 /* openalbridge.h */,
+				61C325411179A336001E70B1 /* wrappers.c */,
+				61C325421179A336001E70B1 /* wrappers.h */,
+			);
+			name = openalbridge;
+			sourceTree = "<group>";
+		};
 		61CE2509115E74260098C467 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
@@ -671,6 +730,21 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		61C325191179A300001E70B1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61C325441179A336001E70B1 /* errlib.h in Headers */,
+				61C325451179A336001E70B1 /* globals.h in Headers */,
+				61C325471179A336001E70B1 /* loaders.h in Headers */,
+				61C325491179A336001E70B1 /* openalbridge.h in Headers */,
+				61C3254B1179A336001E70B1 /* wrappers.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		1D6058900D05DD3D006BFB54 /* HedgewarsMobile */ = {
 			isa = PBXNativeTarget;
@@ -685,12 +759,30 @@
 				9283015B0F10E46D00CC5A3C /* PBXBuildRule */,
 			);
 			dependencies = (
+				61C325211179A30E001E70B1 /* PBXTargetDependency */,
 				9283015A0F10E41300CC5A3C /* PBXTargetDependency */,
 			);
 			name = HedgewarsMobile;
 			productName = HedgewarsMobile;
 			productReference = 1D6058910D05DD3D006BFB54 /* HedgewarsMobile.app */;
 			productType = "com.apple.product-type.application";
+		};
+		61C3251C1179A300001E70B1 /* openalbridge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61C325351179A314001E70B1 /* Build configuration list for PBXNativeTarget "openalbridge" */;
+			buildPhases = (
+				61C325191179A300001E70B1 /* Headers */,
+				61C3251A1179A300001E70B1 /* Sources */,
+				61C3251B1179A300001E70B1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = openalbridge;
+			productName = openalbridge;
+			productReference = 61C3251D1179A300001E70B1 /* libopenalbridge.a */;
+			productType = "com.apple.product-type.library.static";
 		};
 		928301160F10CAFC00CC5A3C /* fpc */ = {
 			isa = PBXNativeTarget;
@@ -744,6 +836,7 @@
 				1D6058900D05DD3D006BFB54 /* HedgewarsMobile */,
 				928301160F10CAFC00CC5A3C /* fpc */,
 				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
+				61C3251C1179A300001E70B1 /* openalbridge */,
 			);
 		};
 /* End PBXProject section */
@@ -945,9 +1038,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		61C3251A1179A300001E70B1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61C325431179A336001E70B1 /* errlib.c in Sources */,
+				61C325461179A336001E70B1 /* loaders.c in Sources */,
+				61C325481179A336001E70B1 /* openalbridge.c in Sources */,
+				61C3254A1179A336001E70B1 /* wrappers.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		61C325211179A30E001E70B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 61C3251C1179A300001E70B1 /* openalbridge */;
+			targetProxy = 61C325201179A30E001E70B1 /* PBXContainerItemProxy */;
+		};
 		9283015A0F10E41300CC5A3C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 928301160F10CAFC00CC5A3C /* fpc */;
@@ -1013,6 +1122,53 @@
 			};
 			name = Release;
 		};
+		61C3251E1179A300001E70B1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
+					"\"$(SRCROOT)/../../../Library/lpng141\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
+					"\"$(SRCROOT)/../../../Library/libvorbis-1.3.1/include\"",
+					"\"$(SRCROOT)/../../../Library/libogg-1.2.0/include\"",
+				);
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = openalbridge;
+			};
+			name = Debug;
+		};
+		61C3251F1179A300001E70B1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = (
+					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
+					"\"$(SRCROOT)/../../../Library/lpng141\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
+					"\"$(SRCROOT)/../../../Library/libvorbis-1.3.1/include\"",
+					"\"$(SRCROOT)/../../../Library/libogg-1.2.0/include\"",
+				);
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = openalbridge;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		928301180F10CAFD00CC5A3C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1058,6 +1214,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
 					"\"$(SRCROOT)/../../../Library/lpng141\"",
@@ -1095,6 +1252,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
 					"\"$(SRCROOT)/../../../Library/lpng141\"",
@@ -1130,6 +1288,15 @@
 			buildConfigurations = (
 				6179928C114AE0C800BA94A9 /* Debug */,
 				6179928D114AE0C800BA94A9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61C325351179A314001E70B1 /* Build configuration list for PBXNativeTarget "openalbridge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61C3251E1179A300001E70B1 /* Debug */,
+				61C3251F1179A300001E70B1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

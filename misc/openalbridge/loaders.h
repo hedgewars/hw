@@ -16,26 +16,21 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef _OALB_WRAPPERS_H
-#define _OALB_WRAPPERS_H
+#ifndef _OALB_LOADERS_H
+#define _OALB_LOADERS_H
 
 #include "globals.h"
 
 
 #ifdef __CPLUSPLUS
 extern "C" {
-#endif
+#endif 
         
-        void *Malloc (size_t nbytes);
-        void *Realloc (void *aptr, size_t nbytes);
-        FILE *Fopen (const char *fname, char *mode);
-        ALint AlGetError (const char *str);
-        ALint AlGetError2 (const char *str, int num);
-        void *helper_fadein (void *tmp);
-        void *helper_fadeout (void *tmp); 
+        int load_wavpcm     (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
+        int load_oggvorbis  (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
         
 #ifdef __CPLUSPLUS
 }
 #endif
 
-#endif /*_OALB_WRAPPERS_H*/
+#endif /*_OALB_LOADERS_H*/

@@ -17,7 +17,8 @@
  */
 
 #include "loaders.h"
-
+#include "wrappers.h"
+#include "vorbis/vorbisfile.h"
 
 #ifdef __CPLUSPLUS
 extern "C" {

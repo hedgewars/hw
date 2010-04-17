@@ -8,6 +8,7 @@
 
 #import "VoicesViewController.h"
 #import "CommodityFunctions.h"
+#import "openalbridge.h"
 
 
 @implementation VoicesViewController
@@ -25,8 +26,8 @@
     [super viewDidLoad];
     srandom(time(NULL));
 
-    Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 1024);
-    voiceBeingPlayed = NULL;
+    openal_init("Hedgewars", 0, 3);
+    voiceBeingPlayed = -1;
 
     // load all the voices names and store them into voiceArray
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VOICES_DIRECTORY() error:NULL];
@@ -48,10 +49,9 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    if(voiceBeingPlayed != NULL) {
-        Mix_HaltChannel(-1);
-        Mix_FreeChunk(voiceBeingPlayed);
-        voiceBeingPlayed = NULL;
+    if(voiceBeingPlayed >= 0) {
+        openal_freesound(voiceBeingPlayed);
+        voiceBeingPlayed = -1;
     }
 }
 
@@ -134,19 +134,12 @@
     return YES;
 }
 */
--(void) allowSelection {
-    self.tableView.allowsSelection = YES;
-}
 
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    
-    // avoid a crash in sdl_mixer
-    self.tableView.allowsSelection = NO;
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(allowSelection) userInfo:nil repeats:NO];
     
     if (newRow != oldRow) {
         [teamDictionary setObject:[voiceArray objectAtIndex:newRow] forKey:@"voicepack"];
@@ -160,10 +153,10 @@
     } 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (voiceBeingPlayed != NULL) {
-        Mix_HaltChannel(-1);
-        Mix_FreeChunk(voiceBeingPlayed);
-        voiceBeingPlayed = NULL;
+    if (voiceBeingPlayed >= 0) {
+        openal_stopsound(voiceBeingPlayed);
+        openal_freesound(voiceBeingPlayed);
+        voiceBeingPlayed = -1;
     }
     
     // the keyword static prevents re-initialization of the variable
@@ -172,18 +165,18 @@
     
     int index = random() % [array count];
     
-    voiceBeingPlayed = Mix_LoadWAV([[voiceDir stringByAppendingString:[array objectAtIndex:index]] UTF8String]);
+    voiceBeingPlayed = openal_loadfile([[voiceDir stringByAppendingString:[array objectAtIndex:index]] UTF8String]);
     [voiceDir release];
-    Mix_PlayChannel(-1, voiceBeingPlayed, 0);    
+    openal_playsound(voiceBeingPlayed);    
 }
 
 
 #pragma mark -
 #pragma mark Memory management
 - (void)didReceiveMemoryWarning {
-    Mix_HaltChannel(-1);
-    Mix_FreeChunk(voiceBeingPlayed);
-    voiceBeingPlayed = NULL;
+    openal_stopsound(voiceBeingPlayed);
+    openal_freesound(voiceBeingPlayed);
+    voiceBeingPlayed = -1;
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
@@ -192,8 +185,8 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
 
-    Mix_CloseAudio();
-    voiceBeingPlayed = NULL;
+    openal_close();
+    voiceBeingPlayed = -1;
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
     self.voiceArray = nil;

@@ -16,15 +16,15 @@
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
-        
-        extern int daemon_proc;
-        
-        void err_msg (const char *fmt, ...);
-        void err_quit (const char *fmt, ...);
-        void err_ret (const char *fmt, ...);
-        void err_sys (const char *fmt, ...);
-        void err_dump (const char *fmt, ...);
-        
+    
+    extern int daemon_proc;
+    
+    void err_msg (const char *fmt, ...);
+    void err_quit (const char *fmt, ...);
+    void err_ret (const char *fmt, ...);
+    void err_sys (const char *fmt, ...);
+    void err_dump (const char *fmt, ...);
+    
 #ifdef __CPLUSPLUS
 }
 #endif
@@ -34,7 +34,7 @@ extern "C" {
 /*
  suggested error string ( PROG ) LEVEL - TEXT : ERRNO
  
-            errno?  closeprog? log level 
+ errno?  closeprog? log level 
  err_msg      no       no       LOG_INFO 
  err_quit     no     exit(1)    LOG_ERR 
  err_ret      si       no       LOG_INFO 
