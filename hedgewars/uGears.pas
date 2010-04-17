@@ -817,7 +817,7 @@ begin
     SpeechText:= ''; // in case it has not been consumed
 
     if (GameFlags and gfLowGravity) = 0 then
-        cGravity:= cMaxWindSpeed;
+        cGravity:= cMaxWindSpeed * 2;
 
     if (GameFlags and gfVampiric) = 0 then
         cVampiric:= false;
@@ -1842,7 +1842,7 @@ if ((GameFlags and gfForts) = 0) then
     end;
 
 if (GameFlags and gfLowGravity) <> 0 then
-    cGravity:= cMaxWindSpeed / 2;
+    cGravity:= cMaxWindSpeed;
 
 if (GameFlags and gfVampiric) <> 0 then
     cVampiric:= true;

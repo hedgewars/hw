@@ -198,7 +198,7 @@ with Gear^,
                              end;
                       amLowGravity: begin
                                     PlaySound(sndLowGravity);
-                                    cGravity:= cMaxWindSpeed / 2
+                                    cGravity:= cMaxWindSpeed
                                     end;
                       amExtraDamage: cDamageModifier:= _1_5;
                       amInvulnerable: Invulnerable:= true;

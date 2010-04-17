@@ -1802,8 +1802,8 @@ if TestCollisionYwithGear(HHGear, 1)
 if not TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
     HHGear^.X:= HHGear^.X + cWindSpeed * 200;
 
-if (Gear^.Message and gm_Left) <> 0 then HHGear^.X:= HHGear^.X - cMaxWindSpeed * 40
-else if (Gear^.Message and gm_Right) <> 0 then HHGear^.X:= HHGear^.X + cMaxWindSpeed * 40;
+if (Gear^.Message and gm_Left) <> 0 then HHGear^.X:= HHGear^.X - cMaxWindSpeed * 80
+else if (Gear^.Message and gm_Right) <> 0 then HHGear^.X:= HHGear^.X + cMaxWindSpeed * 80;
 if (Gear^.Message and gm_Up) <> 0 then HHGear^.Y:= HHGear^.Y - cGravity * 40
 else if (Gear^.Message and gm_Down) <> 0 then HHGear^.Y:= HHGear^.Y + cGravity * 40;
 

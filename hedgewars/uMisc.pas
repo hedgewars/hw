@@ -672,9 +672,9 @@ procedure initModule;
 {$IFDEF DEBUGFILE}{$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}{$ENDIF}
 begin
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
-    cMaxWindSpeed.QWordValue:= 2147484;     // 0.0005
+    cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
     cWindSpeed.QWordValue   := 429496;      // 0.0001
-    cGravity                := cMaxWindSpeed;
+    cGravity                := cMaxWindSpeed * 2;
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
     TextureList             := nil;
