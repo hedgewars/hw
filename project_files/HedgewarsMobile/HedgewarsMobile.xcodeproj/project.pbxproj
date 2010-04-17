@@ -184,7 +184,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 61C3251C1179A300001E70B1 /* openalbridge */;
+			remoteGlobalIDString = 61C3251C1179A300001E70B1;
 			remoteInfo = openalbridge;
 		};
 		928301590F10E41300CC5A3C /* PBXContainerItemProxy */ = {

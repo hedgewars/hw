@@ -403,7 +403,7 @@ type
         x, y: LongInt;
         padding1: byte;
 {$ELSE}
-        _type: byteM
+        _type: byte;
         x, y: word;
 {$ENDIF}
         end;
