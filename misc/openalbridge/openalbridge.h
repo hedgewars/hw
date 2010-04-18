@@ -23,24 +23,24 @@
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
-        
-        char   openal_init              (char* programname, char usehardware, unsigned int memorysize);
-        char   openal_close             (void);
-        char   openal_ready             (void);
-        int    openal_loadfile          (const char *filename);
-        char   openal_toggleloop        (unsigned int index);
-        char   openal_setposition       (unsigned int index, float x, float y, float z);
-        char   openal_setvolume         (unsigned int index, unsigned char percentage);
-        char   openal_setglobalvolume   (unsigned char percentage);
-        char   openal_togglemute        (void);
-        char   openal_fadeout           (unsigned int index, unsigned short int quantity);
-        char   openal_fadein            (unsigned int index, unsigned short int quantity);
-        char   openal_fade              (unsigned int index, unsigned short int quantity, char direction);
-        char   openal_playsound         (unsigned int index);	
-        char   openal_pausesound        (unsigned int index);
-        char   openal_stopsound         (unsigned int index);
-        char   openal_freesound         (unsigned int index);
-        
+    
+    char   openal_init              (char* programname, char usehardware, unsigned int memorysize);
+    char   openal_close             (void);
+    char   openal_ready             (void);
+    int    openal_loadfile          (const char *filename);
+    char   openal_toggleloop        (unsigned int index);
+    char   openal_setposition       (unsigned int index, float x, float y, float z);
+    char   openal_setvolume         (unsigned int index, unsigned char percentage);
+    char   openal_setglobalvolume   (unsigned char percentage);
+    char   openal_togglemute        (void);
+    char   openal_fadeout           (unsigned int index, unsigned short int quantity);
+    char   openal_fadein            (unsigned int index, unsigned short int quantity);
+    char   openal_fade              (unsigned int index, unsigned short int quantity, char direction);
+    char   openal_playsound         (unsigned int index);	
+    char   openal_pausesound        (unsigned int index);
+    char   openal_stopsound         (unsigned int index);
+    char   openal_freesound         (unsigned int index);
+    
 #ifdef __CPLUSPLUS
 }
 #endif

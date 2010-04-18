@@ -3083,5 +3083,5 @@ else if (Gear^.State and gstCollision) <> 0 then
     Gear^.dY:= -_1;
     end
 else
-    Gear^.dY += cGravity * 2; // let it fall faster so itdoesn't take too long for the whole attack
+    Gear^.dY:= Gear^.dY + cGravity * 2; // let it fall faster so itdoesn't take too long for the whole attack
 end;

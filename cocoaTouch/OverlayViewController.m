@@ -312,22 +312,18 @@
             if (deltaX >= minimumGestureLength) {
                 NSLog(@"Horizontal swipe detected, deltaX: %f deltaY: %f",deltaX, deltaY);
                 if (currentPosition.x > gestureStartPoint.x ) {
-                    NSLog(@"Right movement");
-                    HW_cursorRight(logCoeff*log(deltaX));
-                } else {
-                    NSLog(@"Left movement");
                     HW_cursorLeft(logCoeff*log(deltaX));
+                } else {
+                    HW_cursorRight(logCoeff*log(deltaX));
                 }
 
             } 
             if (deltaY >= minimumGestureLength) {
                 NSLog(@"Horizontal swipe detected, deltaX: %f deltaY: %f",deltaX, deltaY);
                 if (currentPosition.y < gestureStartPoint.y ) {
-                    NSLog(@"Up movement");
-                    HW_cursorUp(logCoeff*log(deltaY));
-                } else {
                     HW_cursorDown(logCoeff*log(deltaY));
-                    NSLog(@"Down movement");
+                } else {
+                    HW_cursorUp(logCoeff*log(deltaY));
                 }            
             }
 

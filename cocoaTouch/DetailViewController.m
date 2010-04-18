@@ -8,12 +8,14 @@
 
 #import "DetailViewController.h"
 #import "SDL_uikitappdelegate.h"
-#import "TeamSettingsViewController.h"
 #import "GeneralSettingsViewController.h"
+#import "TeamSettingsViewController.h"
+#import "WeaponSettingsViewController.h"
+#import "SchemeSettingsViewController.h"
 #import "CommodityFunctions.h"
 
 @implementation DetailViewController
-@synthesize popoverController, controllers;
+@synthesize popoverController, controllerNames;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -24,52 +26,29 @@
     self.title = NSLocalizedString(@"Settings",@"");
 
     // allocate controllers and store them into the array
-    NSMutableArray *array= [[NSMutableArray alloc] init];
-
-    GeneralSettingsViewController *generalSettingsViewController = [[GeneralSettingsViewController alloc]
-                                                                    initWithStyle:UITableViewStyleGrouped];
-    generalSettingsViewController.title = NSLocalizedString(@"General",@"");
-    [array addObject:generalSettingsViewController];
-    [generalSettingsViewController release];
-    
-    TeamSettingsViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] 
-                                                              initWithStyle:UITableViewStyleGrouped];
-    teamSettingsViewController.title = NSLocalizedString(@"Teams",@"");
-    [array addObject:teamSettingsViewController];
-    [teamSettingsViewController release];
-    
-    self.controllers = array;
+    NSArray *array= [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""), 
+                                                     NSLocalizedString(@"Teams",@""),
+                                                     NSLocalizedString(@"Weapons",@""),
+                                                     NSLocalizedString(@"Schemes",@""),
+                                                     nil];
+    self.controllerNames = array;
     [array release];
     
     // on ipad make the general setting the first view, on iphone add the "Done" button on top left
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        UITableViewController *nextController = [self.controllers objectAtIndex:0];
-        nextController.navigationItem.hidesBackButton = YES;
-        [self.navigationController pushViewController:nextController animated:NO];
+        
+        // show some stuff
+        
+        //[self.navigationController pushViewController:nextController animated:NO];
     } else {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:0 target:self action:@selector(dismissSplitView)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                              target:self
+                                                                                              action:@selector(dismissSplitView)];
     }
 
     [super viewDidLoad];
 }
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-    self.controllers = nil;
-    self.popoverController = nil;
-    [super viewDidUnload];
-}
-
-- (void)dealloc {
-    [controllers release];
-    [popoverController release];
-    [super dealloc];
-}
 
 #pragma mark -
 #pragma mark Table view data source
@@ -78,7 +57,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [controllers count];
+    return [controllerNames count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -91,9 +70,8 @@
     }
     
     NSInteger row = [indexPath row];
-    UITableViewController *controller = [controllers objectAtIndex:row];
     
-    cell.textLabel.text = controller.title;
+    cell.textLabel.text = [controllerNames objectAtIndex:row];
     cell.imageView.image = [UIImage imageNamed:@"Icon.png"];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
@@ -102,7 +80,32 @@
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
-    UITableViewController *nextController = [self.controllers objectAtIndex:row];
+    UIViewController *nextController;
+    
+    switch (row) {
+        case 0:
+            if (nil == generalSettingsViewController)
+                generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            nextController = generalSettingsViewController;
+            break;
+        case 1:
+            if (nil == teamSettingsViewController)
+                teamSettingsViewController = [[TeamSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            nextController = teamSettingsViewController;
+            break;
+        case 2:
+            if (nil == weaponSettingsViewController)
+                weaponSettingsViewController = [[WeaponSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            nextController = weaponSettingsViewController;
+            break;
+        case 3:
+            if (nil == schemeSettingsViewController)
+                schemeSettingsViewController = [[SchemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            nextController = schemeSettingsViewController;
+            break;
+    }
+    
+    nextController.title = [controllerNames objectAtIndex:row];
     [self.navigationController pushViewController:nextController animated:YES];
 }
 
@@ -147,4 +150,30 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
 }
 
+
+-(void) didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    // Release any cached data, images, etc that aren't in use.
+}
+
+-(void) viewDidUnload {
+    self.controllerNames = nil;
+    self.popoverController = nil;
+    generalSettingsViewController = nil;
+    teamSettingsViewController = nil;
+    weaponSettingsViewController = nil;
+    schemeSettingsViewController = nil;
+    [super viewDidUnload];
+}
+
+-(void) dealloc {
+    [controllerNames release];
+    [popoverController release];
+    [generalSettingsViewController release];
+    [teamSettingsViewController release];
+    [weaponSettingsViewController release];
+    [schemeSettingsViewController release];
+    [super dealloc];
+}
 @end

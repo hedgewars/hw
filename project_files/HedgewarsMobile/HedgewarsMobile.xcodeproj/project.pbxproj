@@ -26,7 +26,14 @@
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
 		611B0AA1116B626E00112153 /* GeneralSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611B0AA0116B626E00112153 /* GeneralSettingsViewController.m */; };
+		611E127D117BACC60044B62F /* GameConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611E127C117BACC60044B62F /* GameConfigViewController-iPad.xib */; };
+		611E127F117BACCD0044B62F /* GameConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611E127E117BACCD0044B62F /* GameConfigViewController-iPhone.xib */; };
+		611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */; };
+		611E1316117BBE5A0044B62F /* WeaponSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611E1315117BBE5A0044B62F /* WeaponSettingsViewController.m */; };
+		611E1319117BBE700044B62F /* SchemeSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611E1318117BBE700044B62F /* SchemeSettingsViewController.m */; };
 		6122CD01116BECCA002648E9 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6122CD00116BECCA002648E9 /* Default-Landscape.png */; };
+		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
+		61370676117B32EF004EE44A /* GameConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61370674117B32EF004EE44A /* GameConfigViewController.m */; };
 		6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6151347D116C2803001F16D1 /* Icon-iPad.png */; };
 		615134B1116C2C5F001F16D1 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 615134B0116C2C5F001F16D1 /* OverlayViewController.xib */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
@@ -205,11 +212,21 @@
 		32CA4F630368D1EE00C91783 /* HedgewarsMobile_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HedgewarsMobile_Prefix.pch; sourceTree = "<group>"; };
 		611B0A9F116B626E00112153 /* GeneralSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GeneralSettingsViewController.h; path = ../../cocoaTouch/GeneralSettingsViewController.h; sourceTree = SOURCE_ROOT; };
 		611B0AA0116B626E00112153 /* GeneralSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GeneralSettingsViewController.m; path = ../../cocoaTouch/GeneralSettingsViewController.m; sourceTree = SOURCE_ROOT; };
+		611E127C117BACC60044B62F /* GameConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "GameConfigViewController-iPad.xib"; path = "../../cocoaTouch/xib/GameConfigViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
+		611E127E117BACCD0044B62F /* GameConfigViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "GameConfigViewController-iPhone.xib"; path = "../../cocoaTouch/xib/GameConfigViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
+		611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Development.plist"; sourceTree = "<group>"; };
+		611E1314117BBE5A0044B62F /* WeaponSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeaponSettingsViewController.h; path = ../../cocoaTouch/WeaponSettingsViewController.h; sourceTree = SOURCE_ROOT; };
+		611E1315117BBE5A0044B62F /* WeaponSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeaponSettingsViewController.m; path = ../../cocoaTouch/WeaponSettingsViewController.m; sourceTree = SOURCE_ROOT; };
+		611E1317117BBE700044B62F /* SchemeSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SchemeSettingsViewController.h; path = ../../cocoaTouch/SchemeSettingsViewController.h; sourceTree = SOURCE_ROOT; };
+		611E1318117BBE700044B62F /* SchemeSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SchemeSettingsViewController.m; path = ../../cocoaTouch/SchemeSettingsViewController.m; sourceTree = SOURCE_ROOT; };
 		611FD9C81155A1F200C2203D /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Background.png; path = ../../QTfrontend/res/Background.png; sourceTree = SOURCE_ROOT; };
 		611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HedgewarsTitle.png; path = ../../QTfrontend/res/HedgewarsTitle.png; sourceTree = SOURCE_ROOT; };
 		611FD9CF1155A40700C2203D /* NetworkPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = NetworkPlay.png; path = ../../QTfrontend/res/NetworkPlay.png; sourceTree = SOURCE_ROOT; };
 		611FD9D11155A41000C2203D /* Multiplayer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Multiplayer.png; path = ../../QTfrontend/res/Multiplayer.png; sourceTree = SOURCE_ROOT; };
 		6122CD00116BECCA002648E9 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "../../cocoaTouch/resources/Default-Landscape.png"; sourceTree = SOURCE_ROOT; };
+		61370652117B1D50004EE44A /* Entitlements-Distribution.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Distribution.plist"; sourceTree = "<group>"; };
+		61370673117B32EF004EE44A /* GameConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameConfigViewController.h; path = ../../cocoaTouch/GameConfigViewController.h; sourceTree = SOURCE_ROOT; };
+		61370674117B32EF004EE44A /* GameConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameConfigViewController.m; path = ../../cocoaTouch/GameConfigViewController.m; sourceTree = SOURCE_ROOT; };
 		6151347D116C2803001F16D1 /* Icon-iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-iPad.png"; path = "../../cocoaTouch/resources/Icon-iPad.png"; sourceTree = SOURCE_ROOT; };
 		615134B0116C2C5F001F16D1 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = ../../cocoaTouch/xib/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -413,6 +430,8 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				6100DAD4115446B000F455E0 /* Resources-iPad */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				61370652117B1D50004EE44A /* Entitlements-Distribution.plist */,
+				611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -493,6 +512,7 @@
 		6100DB1711544E8400F455E0 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
+				611E127E117BACCD0044B62F /* GameConfigViewController-iPhone.xib */,
 				615134B0116C2C5F001F16D1 /* OverlayViewController.xib */,
 				61A118CB11683C7A00359010 /* MainMenuViewController-iPhone.xib */,
 			);
@@ -507,8 +527,21 @@
 				611B0AA0116B626E00112153 /* GeneralSettingsViewController.m */,
 				61A11ACD1168DB1B00359010 /* TeamSettingsViewController.h */,
 				61A11ACE1168DB1B00359010 /* TeamSettingsViewController.m */,
+				611E1314117BBE5A0044B62F /* WeaponSettingsViewController.h */,
+				611E1315117BBE5A0044B62F /* WeaponSettingsViewController.m */,
+				611E1317117BBE700044B62F /* SchemeSettingsViewController.h */,
+				611E1318117BBE700044B62F /* SchemeSettingsViewController.m */,
 			);
 			name = "first level";
+			sourceTree = "<group>";
+		};
+		61370672117B32A3004EE44A /* Game Config */ = {
+			isa = PBXGroup;
+			children = (
+				61370673117B32EF004EE44A /* GameConfigViewController.h */,
+				61370674117B32EF004EE44A /* GameConfigViewController.m */,
+			);
+			name = "Game Config";
 			sourceTree = "<group>";
 		};
 		61798860114AA49D00BA94A9 /* SDLOverrides */ = {
@@ -626,6 +659,7 @@
 		61A118481168371400359010 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				61370672117B32A3004EE44A /* Game Config */,
 				61A11AC31168DA2B00359010 /* Settings */,
 				6179886E114AA4D000BA94A9 /* MainMenuViewController.h */,
 				6179886F114AA4D000BA94A9 /* MainMenuViewController.m */,
@@ -681,6 +715,7 @@
 		61CE2509115E74260098C467 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
+				611E127C117BACC60044B62F /* GameConfigViewController-iPad.xib */,
 				61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */,
 			);
 			name = XIB;
@@ -753,7 +788,6 @@
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
-				61798A54114ADD5E00BA94A9 /* ShellScript */,
 			);
 			buildRules = (
 				9283015B0F10E46D00CC5A3C /* PBXBuildRule */,
@@ -835,8 +869,8 @@
 			targets = (
 				1D6058900D05DD3D006BFB54 /* HedgewarsMobile */,
 				928301160F10CAFC00CC5A3C /* fpc */,
-				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
 				61C3251C1179A300001E70B1 /* openalbridge */,
+				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
 			);
 		};
 /* End PBXProject section */
@@ -907,25 +941,16 @@
 				6122CD01116BECCA002648E9 /* Default-Landscape.png in Resources */,
 				6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */,
 				615134B1116C2C5F001F16D1 /* OverlayViewController.xib in Resources */,
+				61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */,
+				611E127D117BACC60044B62F /* GameConfigViewController-iPad.xib in Resources */,
+				611E127F117BACCD0044B62F /* GameConfigViewController-iPhone.xib in Resources */,
+				611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		61798A54114ADD5E00BA94A9 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export CODESIGN_ALLOCATE=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ]; then\n\t${PROJECT_DIR}/gen_entitlements.py \"com.kodahedge.${PRODUCT_NAME:identifier}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\n\tcodesign -f -s \"iPhone developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\"\nfi";
-		};
 		6179928A114AE0C800BA94A9 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -937,7 +962,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\n#rm -rf ${PROJECT_DIR}/Data/Sounds/\n#rm -rf ${PROJECT_DIR}/Data/Music/\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
+			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels/.svn*\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete some voices\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/{British,Mobster,Pirate,Robot,Russian,Singer,Surfer}\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -1035,6 +1060,9 @@
 				618BE60311751F4F00F22556 /* GravesViewController.m in Sources */,
 				618BE6A3117527CD00F22556 /* VoicesViewController.m in Sources */,
 				6184DEA311795DBD00AF6EFA /* UIImageExtra.m in Sources */,
+				61370676117B32EF004EE44A /* GameConfigViewController.m in Sources */,
+				611E1316117BBE5A0044B62F /* WeaponSettingsViewController.m in Sources */,
+				611E1319117BBE700044B62F /* SchemeSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1088,6 +1116,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = "Entitlements-Development.plist";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = HedgewarsMobile_Prefix.pch;
@@ -1097,9 +1127,120 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = HedgewarsMobile;
-				TARGETED_DEVICE_FAMILY = 1;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
+		};
+		6137064B117B1CB3004EE44A /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vittorio Giovara";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -dLOWRES";
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
+				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
+				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs  -Cfvfpv2";
+				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_FAST_MATH = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
+					"\"$(SRCROOT)/../../../Library/lpng141\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-lz",
+					"-Wl,-no_order_inits",
+				);
+				PREBINDING = NO;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4ABEE8D8-80C1-4CBA-BEAD-95A4349896AA";
+				SDKROOT = iphoneos3.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Distribution;
+		};
+		6137064C117B1CB3004EE44A /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vittorio Giovara";
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = HedgewarsMobile_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				PRODUCT_NAME = HedgewarsMobile;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0CD03A6D-BC86-4124-B76B-03D836E163D1";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Distribution;
+		};
+		6137064D117B1CB3004EE44A /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = fpc;
+				ZERO_LINK = NO;
+			};
+			name = Distribution;
+		};
+		6137064E117B1CB3004EE44A /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = (
+					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
+					"\"$(SRCROOT)/../../../Library/lpng141\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
+					"\"$(SRCROOT)/../../../Library/libvorbis-1.3.1/include\"",
+					"\"$(SRCROOT)/../../../Library/libogg-1.2.0/include\"",
+				);
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = openalbridge;
+				ZERO_LINK = NO;
+			};
+			name = Distribution;
+		};
+		6137064F117B1CB3004EE44A /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = UpdateDataFolder;
+				ZERO_LINK = NO;
+			};
+			name = Distribution;
 		};
 		6179928C114AE0C800BA94A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1198,7 +1339,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -dLOWRES";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
@@ -1221,13 +1363,14 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator3.2;
+				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1235,9 +1378,9 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "Don't Code Sign";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -dLOWRES";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
@@ -1259,14 +1402,16 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos3.0;
+				PROVISIONING_PROFILE = "BD0C39CA-87BA-4276-A9A3-B3ABC838763E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BD0C39CA-87BA-4276-A9A3-B3ABC838763E";
+				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1279,6 +1424,7 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
+				6137064C117B1CB3004EE44A /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1288,6 +1434,7 @@
 			buildConfigurations = (
 				6179928C114AE0C800BA94A9 /* Debug */,
 				6179928D114AE0C800BA94A9 /* Release */,
+				6137064F117B1CB3004EE44A /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1297,6 +1444,7 @@
 			buildConfigurations = (
 				61C3251E1179A300001E70B1 /* Debug */,
 				61C3251F1179A300001E70B1 /* Release */,
+				6137064E117B1CB3004EE44A /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1306,6 +1454,7 @@
 			buildConfigurations = (
 				928301180F10CAFD00CC5A3C /* Debug */,
 				928301190F10CAFD00CC5A3C /* Release */,
+				6137064D117B1CB3004EE44A /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1315,6 +1464,7 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
+				6137064B117B1CB3004EE44A /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

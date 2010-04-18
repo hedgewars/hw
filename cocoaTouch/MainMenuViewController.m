@@ -9,6 +9,7 @@
 #import "MainMenuViewController.h"
 #import "SDL_uikitappdelegate.h"
 #import "PascalImports.h"
+#import "GameConfigViewController.h"
 #import "SplitViewRootController.h"
 #import "CommodityFunctions.h"
 
@@ -22,18 +23,6 @@
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
 	[super didReceiveMemoryWarning];
-}
-
-- (void)dealloc {
-    [versionLabel release];
-    [cover release];
-	[super dealloc];
-}
-
--(void) viewDidUnload {
-    self.cover = nil;
-    self.versionLabel = nil;
-	[super viewDidUnload];
 }
 
 -(void) viewDidLoad {
@@ -137,18 +126,34 @@
 #pragma mark -
 -(IBAction) switchViews:(id) sender {
     UIButton *button = (UIButton *)sender;
-    SplitViewRootController *splitViewController;
     UIAlertView *alert;
+    NSString *configNibName;
     
     switch (button.tag) {
         case 0:
-            [[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
+            if (nil == gameConfigViewController) {
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                    configNibName = @"GameConfigViewController-iPad";
+                else
+                    configNibName = @"GameConfigViewController-iPhone";
+
+                gameConfigViewController = [[GameConfigViewController alloc] initWithNibName:configNibName
+                                                                                      bundle:nil];
+#ifdef __IPHONE_3_2
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                    gameConfigViewController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+#endif
+            }
+            
+            [self presentModalViewController:gameConfigViewController animated:YES];    
             break;
         case 2:
-            // for now this controller is just to simplify code management
-            splitViewController = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
-            splitViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-            [self presentModalViewController:splitViewController animated:YES];
+            if (nil == splitRootViewController) {
+                splitRootViewController = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
+                splitRootViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            }
+            
+            [self presentModalViewController:splitRootViewController animated:YES];
             break;
         default:
             alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
@@ -162,8 +167,26 @@
     }
 }
 
+// allows child controllers to return to the main controller
 -(void) dismissModalViewController {
     [self dismissModalViewControllerAnimated:YES];
+}
+
+
+-(void) viewDidUnload {
+    self.cover = nil;
+    self.versionLabel = nil;
+    gameConfigViewController = nil;
+    splitRootViewController = nil;
+	[super viewDidUnload];
+}
+
+-(void) dealloc {
+    [versionLabel release];
+    [cover release];
+    [splitRootViewController release];
+    [gameConfigViewController release];
+	[super dealloc];
 }
 
 @end

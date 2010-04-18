@@ -93,7 +93,7 @@ extern "C" {
         }
         
         if (usehardware == AL_TRUE) {
-             default_device = alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
+            default_device = alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
             device = alcOpenDevice(default_device);
         } else
             device = alcOpenDevice("Generic Software");
@@ -512,6 +512,7 @@ extern "C" {
             return AL_FALSE;
         }
         globalindex--;
+        // most likely should do other stuff
         
         alGetError();  /* clear any AL errors beforehand */
         

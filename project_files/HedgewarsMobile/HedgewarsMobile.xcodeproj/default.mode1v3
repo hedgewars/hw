@@ -266,22 +266,18 @@
 								<string>29B97314FDCFA39411CA2CEA</string>
 								<string>080E96DDFE201D6D7F000001</string>
 								<string>61A118481168371400359010</string>
-								<string>61A11AC31168DA2B00359010</string>
-								<string>611B0A94116B621600112153</string>
-								<string>61A11AD01168DB1F00359010</string>
-								<string>618BE596117512A300F22556</string>
 								<string>29B97317FDCFA39411CA2CEA</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>41</integer>
+									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 530}, {248, 558}}</string>
+							<string>{{0, 0}, {248, 558}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -300,7 +296,7 @@
 							<real>248</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>301 523 801 617 0 0 1920 1178 </string>
+						<string>156 479 801 617 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -311,14 +307,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>oalTouchAppDelegate.m</string>
+								<string>SDLh.pas</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -326,11 +320,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>oalTouchAppDelegate.m</string>
+										<string>SDLh.pas</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>61C326621179EA92001E70B1</string>
+										<string>61C3266E117A15C8001E70B1</string>
 										<key>history</key>
 										<array>
 											<string>6179889D114AA5BD00BA94A9</string>
@@ -378,7 +372,6 @@
 											<string>61430D3D1165551600E2C62D</string>
 											<string>615F1316116561BE002444F2</string>
 											<string>615F134D11656569002444F2</string>
-											<string>615F147F11659AC5002444F2</string>
 											<string>615F198C1166A71E002444F2</string>
 											<string>615F198E1166A71E002444F2</string>
 											<string>61CEDB60116ACBBB0067BAFC</string>
@@ -534,7 +527,8 @@
 											<string>61C325691179A3A0001E70B1</string>
 											<string>61C325DD1179A993001E70B1</string>
 											<string>61C326361179B0A5001E70B1</string>
-											<string>61C326391179B0A5001E70B1</string>
+											<string>61C3266D117A15C8001E70B1</string>
+											<string>615F147F11659AC5002444F2</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -548,7 +542,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {531, 222}}</string>
 								<key>RubberWindowFrame</key>
-								<string>301 523 801 617 0 0 1920 1178 </string>
+								<string>156 479 801 617 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -556,6 +550,8 @@
 							<string>222pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -568,7 +564,7 @@
 								<key>Frame</key>
 								<string>{{0, 227}, {531, 349}}</string>
 								<key>RubberWindowFrame</key>
-								<string>301 523 801 617 0 0 1920 1178 </string>
+								<string>156 479 801 617 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -736,7 +732,7 @@
 		<string>/Users/vittorio/hedgewars/trunk/project_files/HedgewarsMobile/HedgewarsMobile.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>301 523 801 617 0 0 1920 1178 </string>
+	<string>156 479 801 617 0 0 1920 1178 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

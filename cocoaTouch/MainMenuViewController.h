@@ -8,9 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class SplitViewRootController;
+@class GameConfigViewController;
+
 @interface MainMenuViewController : UIViewController {
     UIView *cover;
     UILabel *versionLabel;
+    SplitViewRootController *splitRootViewController;
+    GameConfigViewController *gameConfigViewController;
 }
 
 @property (nonatomic,retain) UIView *cover;
