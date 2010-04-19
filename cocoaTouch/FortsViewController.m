@@ -52,6 +52,9 @@
     }
     self.fortSprites = spriteArray;
     [spriteArray release];
+    
+    // statically set row height instead of using delegate method for performance reasons
+    self.tableView.rowHeight = 200;
 }
 
 
@@ -174,9 +177,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(CGFloat) tableView:(UITableView *)atableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 200;
-}
 
 #pragma mark -
 #pragma mark Memory management

@@ -428,7 +428,6 @@
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
-				6100DAD4115446B000F455E0 /* Resources-iPad */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				61370652117B1D50004EE44A /* Entitlements-Distribution.plist */,
 				611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */,
@@ -458,6 +457,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6100DAD4115446B000F455E0 /* Resources-iPad */,
 				6100DB1711544E8400F455E0 /* XIB */,
 				6179937011501D5800BA94A9 /* buttons */,
 				6179936F11501D4100BA94A9 /* back panels */,
@@ -500,7 +500,6 @@
 			children = (
 				6151347D116C2803001F16D1 /* Icon-iPad.png */,
 				6122CD00116BECCA002648E9 /* Default-Landscape.png */,
-				61CE2509115E74260098C467 /* XIB */,
 				611FD9C81155A1F200C2203D /* Background.png */,
 				611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */,
 				611FD9D11155A41000C2203D /* Multiplayer.png */,
@@ -512,6 +511,8 @@
 		6100DB1711544E8400F455E0 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
+				611E127C117BACC60044B62F /* GameConfigViewController-iPad.xib */,
+				61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */,
 				611E127E117BACCD0044B62F /* GameConfigViewController-iPhone.xib */,
 				615134B0116C2C5F001F16D1 /* OverlayViewController.xib */,
 				61A118CB11683C7A00359010 /* MainMenuViewController-iPhone.xib */,
@@ -710,15 +711,6 @@
 				61C325421179A336001E70B1 /* wrappers.h */,
 			);
 			name = openalbridge;
-			sourceTree = "<group>";
-		};
-		61CE2509115E74260098C467 /* XIB */ = {
-			isa = PBXGroup;
-			children = (
-				611E127C117BACC60044B62F /* GameConfigViewController-iPad.xib */,
-				61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */,
-			);
-			name = XIB;
 			sourceTree = "<group>";
 		};
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
@@ -1136,8 +1128,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vittorio Giovara";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -dLOWRES";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
@@ -1167,7 +1160,7 @@
 				);
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4ABEE8D8-80C1-4CBA-BEAD-95A4349896AA";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1179,7 +1172,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vittorio Giovara";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = HedgewarsMobile_Prefix.pch;
@@ -1189,7 +1182,7 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = HedgewarsMobile;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0CD03A6D-BC86-4124-B76B-03D836E163D1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Distribution;

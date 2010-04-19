@@ -22,7 +22,7 @@
 	return rotationManager(interfaceOrientation);
 }
 
-- (void)viewDidLoad {
+-(void) viewDidLoad {
     self.title = NSLocalizedString(@"Settings",@"");
 
     // allocate controllers and store them into the array
@@ -37,7 +37,13 @@
     // on ipad make the general setting the first view, on iphone add the "Done" button on top left
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         
-        // show some stuff
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(112, 112, 480, 320)];
+        label.text = @"Press the buttons on the left";
+        label.font = [UIFont systemFontOfSize:20];
+        label.textAlignment = UITextAlignmentCenter;
+        [self.view addSubview:label];
+        [label release];
+        
         
         //[self.navigationController pushViewController:nextController animated:NO];
     } else {
@@ -53,7 +59,11 @@
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    // don't display 
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        return 0;
+    else
+        return 1;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -78,6 +88,8 @@
     return cell;
 }
 
+#pragma mark -
+#pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
     UIViewController *nextController;

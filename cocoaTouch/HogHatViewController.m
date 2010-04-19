@@ -29,15 +29,20 @@
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:hatsDirectory error:NULL];
     self.hatArray = array;
     
+    NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
+    UIImage *normalHogSprite = [[UIImage alloc] initWithContentsOfFile:normalHogFile andCutAt:CGRectMake(96, 0, 32, 32)];
+    [normalHogFile release];
+    
     // load all the hat images from the previous array but save only the first sprite and store it in hatSprites
     NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[hatArray count]];
     for (NSString *hat in hatArray) {
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", hatsDirectory,hat];
         UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
         [hatFile release];
-        [spriteArray addObject:hatSprite];
+        [spriteArray addObject:[normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, -5)]];
         [hatSprite release];
     }
+    [normalHogSprite release];
     self.hatSprites = spriteArray;
     [spriteArray release];
 }

@@ -23,14 +23,11 @@
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    self.menuList = nil;
 }
 
 -(void) viewDidLoad {
     isPaused = NO;
-    self.tableView.allowsSelection = YES;
-    self.tableView.alwaysBounceVertical = YES;
-    self.tableView.delaysContentTouches = NO;
+
     menuList = [[NSArray alloc] initWithObjects:
                 NSLocalizedString(@"Pause Game", @""),
                 NSLocalizedString(@"Chat", @""),

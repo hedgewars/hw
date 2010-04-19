@@ -10,17 +10,23 @@
 
 
 @class DetailViewController;
+@class GeneralSettingsViewController;
+@class TeamSettingsViewController;
+@class WeaponSettingsViewController;
+@class SchemeSettingsViewController;
 
 @interface MasterViewController : UITableViewController {
     DetailViewController *detailViewController;
-    NSArray *optionList;
-    NSArray *controllers;
+    NSArray *controllerNames;
     NSIndexPath *lastIndexPath;
+    GeneralSettingsViewController *generalSettingsViewController;
+    TeamSettingsViewController *teamSettingsViewController;
+    WeaponSettingsViewController *weaponSettingsViewController;
+    SchemeSettingsViewController *schemeSettingsViewController;
 }
 
 @property (nonatomic, retain) DetailViewController *detailViewController;
-@property (nonatomic, retain) NSArray *optionList;
-@property (nonatomic, retain) NSArray *controllers;
+@property (nonatomic, retain) NSArray *controllerNames;
 @property (nonatomic, retain) NSIndexPath *lastIndexPath;
 
 -(IBAction) dismissSplitView;

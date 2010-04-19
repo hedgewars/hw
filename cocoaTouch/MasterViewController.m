@@ -10,10 +10,12 @@
 #import "DetailViewController.h"
 #import "GeneralSettingsViewController.h"
 #import "TeamSettingsViewController.h"
+#import "WeaponSettingsViewController.h"
+#import "SchemeSettingsViewController.h"
 #import "CommodityFunctions.h"
 
 @implementation MasterViewController
-@synthesize detailViewController, optionList, controllers, lastIndexPath;
+@synthesize detailViewController, controllerNames, lastIndexPath;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -27,34 +29,15 @@
     [super viewDidLoad];
     
     // the list of selectable controllers
-    optionList = [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""),
-                                                  NSLocalizedString(@"Teams",@""),
-                                                  NSLocalizedString(@"Weapons",@""),
-                                                  NSLocalizedString(@"Schemes",@""),
-                                                  nil];
+    controllerNames = [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""),
+                                                       NSLocalizedString(@"Teams",@""),
+                                                       NSLocalizedString(@"Weapons",@""),
+                                                       NSLocalizedString(@"Schemes",@""),
+                                                       nil];
     // the "Done" button on top left
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:0
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                           target:self
                                                                                           action:@selector(dismissSplitView)];
-    // list of allocated viewcontrollers (same in DetailViewController)
-    NSMutableArray *array= [[NSMutableArray alloc] init];
-
-    GeneralSettingsViewController *generalSettingsViewController = [[GeneralSettingsViewController alloc]
-                                                                    initWithStyle:UITableViewStyleGrouped];
-    generalSettingsViewController.title = NSLocalizedString(@"General",@"");
-    generalSettingsViewController.navigationItem.hidesBackButton = YES;
-    [array addObject:generalSettingsViewController];
-    [generalSettingsViewController release];
-    
-    TeamSettingsViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] 
-                                                              initWithStyle:UITableViewStyleGrouped];
-    teamSettingsViewController.title = NSLocalizedString(@"Teams",@"");
-    teamSettingsViewController.navigationItem.hidesBackButton = YES;
-    [array addObject:teamSettingsViewController];
-    [teamSettingsViewController release];
-    
-    self.controllers = array;
-    [array release];
 }
 
 #pragma mark -
@@ -64,11 +47,9 @@
     return 1;
 }
 
-
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [optionList count];
+    return [controllerNames count];
 }
-
 
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -77,7 +58,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        cell.textLabel.text = [optionList objectAtIndex:[indexPath row]];
+        cell.textLabel.text = [controllerNames objectAtIndex:[indexPath row]];
     }
     
     return cell;
@@ -115,13 +96,38 @@
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
-    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : 0;
+    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+    UIViewController *nextController;
     
     if (newRow != oldRow) {
         [self.tableView deselectRowAtIndexPath:lastIndexPath animated:YES];
         [detailViewController.navigationController popToRootViewControllerAnimated:NO];
         
-        UITableViewController *nextController = [self.controllers objectAtIndex:[indexPath row]];
+        switch (newRow) {
+            case 0:
+                if (nil == generalSettingsViewController)
+                    generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                nextController = generalSettingsViewController;
+                break;
+            case 1:
+                if (nil == teamSettingsViewController)
+                    teamSettingsViewController = [[TeamSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                nextController = teamSettingsViewController;
+                break;
+            case 2:
+                if (nil == weaponSettingsViewController)
+                    weaponSettingsViewController = [[WeaponSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                nextController = weaponSettingsViewController;
+                break;
+            case 3:
+                if (nil == schemeSettingsViewController)
+                    schemeSettingsViewController = [[SchemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                nextController = schemeSettingsViewController;
+                break;
+        }
+        
+        nextController.navigationItem.hidesBackButton = YES;
+        nextController.title = [controllerNames objectAtIndex:newRow];
         [detailViewController.navigationController pushViewController:nextController animated:NO];
         self.lastIndexPath = indexPath;
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
@@ -137,9 +143,25 @@
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)dealloc {
-    [optionList release];
+-(void) viewDidUnload {
+    self.detailViewController = nil;
+    self.controllerNames = nil;
+    self.lastIndexPath = nil;
+    generalSettingsViewController = nil;
+    teamSettingsViewController = nil;
+    weaponSettingsViewController = nil;
+    schemeSettingsViewController = nil;
+    [super viewDidUnload];
+}
+
+-(void) dealloc {
+    [controllerNames release];
     [detailViewController release];
+    [lastIndexPath release];
+    [generalSettingsViewController release];
+    [teamSettingsViewController release];
+    [weaponSettingsViewController release];
+    [schemeSettingsViewController release];
     [super dealloc];
 }
 

@@ -67,21 +67,28 @@
     
     // add timer too runloop, otherwise it doesn't work
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
-    // listen for dismissal of the popover (see below)x
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissPopover) name:@"dismissPopover" object:nil];
+    
+    // listen for dismissal of the popover (see below)
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dismissPopover)
+                                                 name:@"dismissPopover"
+                                               object:nil];
     // present the overlay after 2 seconds
-    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(showMenuAfterwards) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:2
+                                     target:self
+                                   selector:@selector(showMenuAfterwards)
+                                   userInfo:nil
+                                    repeats:NO];
 }
 
 -(void) viewDidUnload {
-	[dimTimer invalidate];
-	self.dimTimer = nil;
     self.popoverController = nil;
     self.popupMenu = nil;
     [super viewDidUnload];
 }
 
 -(void) dealloc {
+	[dimTimer invalidate];
     [popupMenu release];
     [popoverController release];
     // dimTimer is autoreleased
