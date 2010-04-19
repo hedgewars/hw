@@ -140,11 +140,6 @@ extern "C" {
 #define WAV_FILE_FORMAT 0x52494646
 #define WAV_HEADER_SUBCHUNK2ID 0x64617461
     
-    
-    /*other defines*/
-#define FADE_IN  0
-#define FADE_OUT 1
-    
     char *prog;
     
 #ifdef __CPLUSPLUS

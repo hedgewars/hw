@@ -154,7 +154,7 @@ extern "C" {
         /*ogg handle*/
         FILE *oggFile;
         /*stream handle*/
-        OggVorbis_File  oggStream; 
+        OggVorbis_File oggStream; 
         /*some formatting data*/
         vorbis_info *vorbisInfo; 
         /*length of the decoded data*/
@@ -173,7 +173,7 @@ extern "C" {
             errno = EINVAL;
             err_ret("(%s) ERROR - ov_fopen() failed with %X", prog, result);
             ov_clear(&oggStream);
-            return AL_FALSE;
+            return -1;
         }
         
         /*load OGG header and determine the decoded data size*/
@@ -209,7 +209,7 @@ extern "C" {
                 errno = EILSEQ;
                 err_ret("(%s) ERROR - wrong OGG header [channel %d]", prog, vorbisInfo->channels);
                 ov_clear(&oggStream);
-                return AL_FALSE;
+                return -1;
             }
         }
         
@@ -231,19 +231,19 @@ extern "C" {
                     errno = EILSEQ;
                     err_ret("(%s) ERROR - End of file from OGG stream", prog);
                     ov_clear(&oggStream);
-                    return AL_FALSE;
+                    return -1;
                 }
             }
         }
         
         /*set the last fields*/
         *bitsize = size;
-        *freq    = vorbisInfo->rate;
+        *freq = vorbisInfo->rate;
         
-        /*cleaning time*/
+        /*cleaning time (ov_clear also closes file handler)*/
         ov_clear(&oggStream);
-        
-        return AL_TRUE;
+
+        return 0;
     }
     
 #ifdef __CPLUSPLUS

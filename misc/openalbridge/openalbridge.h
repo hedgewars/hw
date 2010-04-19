@@ -24,23 +24,52 @@
 extern "C" {
 #endif 
     
-    char   openal_init              (char* programname, char usehardware, unsigned int memorysize);
-    char   openal_close             (void);
-    char   openal_ready             (void);
-    int    openal_loadfile          (const char *filename);
-    char   openal_toggleloop        (unsigned int index);
-    char   openal_setposition       (unsigned int index, float x, float y, float z);
-    char   openal_setvolume         (unsigned int index, unsigned char percentage);
-    char   openal_setglobalvolume   (unsigned char percentage);
-    char   openal_togglemute        (void);
-    char   openal_fadeout           (unsigned int index, unsigned short int quantity);
-    char   openal_fadein            (unsigned int index, unsigned short int quantity);
-    char   openal_fade              (unsigned int index, unsigned short int quantity, char direction);
-    char   openal_playsound         (unsigned int index);	
-    char   openal_pausesound        (unsigned int index);
-    char   openal_stopsound         (unsigned int index);
-    char   openal_freesound         (unsigned int index);
-    
+    // init audio context and allocate memory
+    char openal_init              (char usehardware, int memorysize);
+
+    // close audio subsytem and free memory
+    void openal_close             (void);
+
+    // check if openal_init has been called
+    char openal_ready             (void);
+
+    // load an audio file into memory and map it to abuffer
+    int  openal_loadfile          (const char *filename);
+
+    // play, pause, stop a single sound source
+    void openal_playsound         (unsigned int index);	
+    void openal_pausesound        (unsigned int index);
+    void openal_stopsound         (unsigned int index);
+
+    // play a sound and set whether it should loop or not (0/1)
+    void openal_playsound_loop    (unsigned int index, char loops);
+
+    // stop a sound and free the associated buffer
+    void openal_stopsound_free    (unsigned int index, char freesource);
+
+    void openal_freesound         (unsigned int index);
+
+    // set or unset the looping property for a sound source
+    void openal_toggleloop        (unsigned int index);
+
+    // set position and volume of a sound source
+    void openal_setposition       (unsigned int index, float x, float y, float z);
+    void openal_setvolume         (unsigned int index, float gain);
+
+    // set volume for all sounds (gain interval is [0-1])
+    void openal_setglobalvolume   (float gain);
+
+    // mute or unmute all sounds    
+    void openal_togglemute        (void);
+
+    // fade effect, 
+    void openal_fadeout           (unsigned int index, unsigned short int quantity);
+    void openal_fadein            (unsigned int index, unsigned short int quantity);
+    void openal_fade              (unsigned int index, unsigned short int quantity, char direction);
+
+#define AL_FADE_IN 1
+#define AL_FADE_OUT -1
+
 #ifdef __CPLUSPLUS
 }
 #endif
