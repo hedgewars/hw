@@ -121,7 +121,7 @@ bool HWTeam::LoadFromFile()
         Hedgehogs[i].Suicides = teamfile.value(hh + "Suicides", 0).toInt();
     }
     for(int i = 0; i < BINDS_NUMBER; i++)
-        binds[i].action = teamfile.value(QString("Binds/%1").arg(binds[i].strbind), cbinds[i].action).toString();
+        binds[i].strbind = teamfile.value(QString("Binds/%1").arg(binds[i].action), cbinds[i].strbind).toString();
     for(int i = 0; i < MAX_ACHIEVEMENTS; i++)
         if(achievements[i][0][0])
             AchievementProgress[i] = teamfile.value(QString("Achievements/%1").arg(achievements[i][0]), 0).toUInt();
@@ -166,7 +166,7 @@ bool HWTeam::SaveToFile()
         teamfile.setValue(hh + "Suicides", Hedgehogs[i].Suicides);
     }
     for(int i = 0; i < BINDS_NUMBER; i++)
-        teamfile.setValue(QString("Binds/%1").arg(binds[i].strbind), binds[i].action);
+        teamfile.setValue(QString("Binds/%1").arg(binds[i].action), binds[i].strbind);
     for(int i = 0; i < MAX_ACHIEVEMENTS; i++)
         if(achievements[i][0][0])
             teamfile.setValue(QString("Achievements/%1").arg(achievements[i][0]), AchievementProgress[i]);

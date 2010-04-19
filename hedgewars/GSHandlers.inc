@@ -65,7 +65,8 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
        Gear^.dY.isNegative:= true;
        Gear^.dY:= Gear^.dY * skipDecay;
        Gear^.dX:= Gear^.dX * skipDecay;
-       CheckGearDrowning:= false
+       CheckGearDrowning:= false;
+       PlaySound(sndSkip)
        end
     else
         begin
@@ -78,9 +79,9 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
             begin
             Gear^.State:= Gear^.State and (not gstHHDriven);
             AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
-            end
+            end;
+        PlaySound(sndSplash)
         end;
-    PlaySound(sndSplash);
     
     if not cReducedQuality then 
         begin
@@ -98,7 +99,7 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
             end
         end;
     end
-    else
+else
     CheckGearDrowning:= false
 end;
 
@@ -178,6 +179,13 @@ collV:= 0;
 collH:= 0;
 tdX:= Gear^.dX;
 tdY:= Gear^.dY;
+
+// might need some testing/adjustments - just to avoid projectiles to fly forever (accelerated by wind/skips)
+if (hwRound(Gear^.X) < LAND_WIDTH div -2) or (hwRound(Gear^.X) > LAND_WIDTH * 3 div 2) then
+    begin
+    Gear^.State:= Gear^.State or gstCollision;
+    exit
+    end;
 
 if Gear^.dY.isNegative then
     begin
