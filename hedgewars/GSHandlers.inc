@@ -3053,7 +3053,6 @@ procedure doStepPiano(Gear: PGear);
 var r0, r1: LongInt;
 begin
 AllInactive:= false;
-doStepFallingGear(Gear);
 if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and ((CurrentHedgehog^.Gear^.Message and gm_Slot) <> 0) then
     begin
     case CurrentHedgehog^.Gear^.MsgParam of
@@ -3071,6 +3070,16 @@ if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and ((CurrentHedg
     CurrentHedgehog^.Gear^.Message:= CurrentHedgehog^.Gear^.Message and not gm_Slot;
     end;
 
+if ((Gear^.Pos = 3) and ((GameFlags and gfSolidLand) <> 0)) or (Gear^.Pos = 20) then // bounce up to 20 times (3 times on gameflagged solid land) before dropping past landscape
+    begin
+    Gear^.dY:= Gear^.dY + cGravity * 3;
+    Gear^.Y:= Gear^.Y + Gear^.dY;
+    CheckGearDrowning(Gear);
+    exit
+    end;
+
+doStepFallingGear(Gear);
+
 if (Gear^.State and gstDrowning) <> 0 then
     ResumeMusic
 else if (Gear^.State and gstCollision) <> 0 then
@@ -3081,6 +3090,7 @@ else if (Gear^.State and gstCollision) <> 0 then
     doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, EXPLAutoSound);
     doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, EXPLAutoSound);
     Gear^.dY:= -_1;
+    Gear^.Pos:= Gear^.Pos + 1;
     end
 else
     Gear^.dY:= Gear^.dY + cGravity * 2; // let it fall faster so itdoesn't take too long for the whole attack
