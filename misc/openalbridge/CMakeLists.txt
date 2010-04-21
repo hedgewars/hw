@@ -14,11 +14,11 @@ set(openal_src
 #build a static library for human systems
 set (build_type STATIC)
 
-#visualstudio and windows in general doesn't like static linking, so we're building the library in shared mode
+#visualstudio and windows in general don't like static linking, so we're building the library in shared mode
 if(WIN32)
 #workaround for visualstudio (wants headers in the source list)
 	set(openal_src
-		openalbridge.h loaders.h wrappers.h globals.h oggvorbis.h errlib.h ${openal_src}
+		openalbridge.h openalbridge_t.h loaders.h wrappers.h globals.h oggvorbis.h errlib.h ${openal_src}
 	)
 #deps for the shared library
 	link_libraries(${VORBISFILE_LIBRARY})

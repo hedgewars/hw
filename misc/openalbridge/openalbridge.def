@@ -4,14 +4,17 @@ EXPORTS
 	openal_close
 	openal_ready
 	openal_loadfile
+	openal_playsound	
+	openal_pausesound
+	openal_stopsound
+	openal_playsound_loop
+	openal_stopsound_free
+	openal_freesound
 	openal_toggleloop
 	openal_setvolume
 	openal_setglobalvolume
 	openal_togglemute
-	openal_fadeout
-	openal_fadein
 	openal_fade
-	openal_playsound	
-	openal_pausesound
-	openal_stopsound
+	openal_fadein
+	openal_fadeout
 

@@ -21,21 +21,9 @@
 
 #include "globals.h"
 
-
-#ifdef __CPLUSPLUS
-extern "C" {
-#endif
-    
-    void *Malloc (size_t nbytes);
-    void *Realloc (void *aptr, size_t nbytes);
-    FILE *Fopen (const char *fname, char *mode);
-    ALint AlGetError (const char *str);
-    ALint AlGetError2 (const char *str, int num);
-    void *helper_fadein (void *tmp);
-    void *helper_fadeout (void *tmp); 
-    
-#ifdef __CPLUSPLUS
-}
-#endif
+void *Malloc (size_t nbytes);
+void *Realloc (void *aptr, size_t nbytes);
+FILE *Fopen (const char *fname, char *mode);
+void helper_fade (void *tmp);
 
 #endif /*_OALB_WRAPPERS_H*/

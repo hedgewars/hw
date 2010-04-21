@@ -19,13 +19,14 @@
 #ifndef _OALB_INTERFACE_H
 #define _OALB_INTERFACE_H
 
+#include "openalbridge_t.h"
 
 #ifdef __CPLUSPLUS
 extern "C" {
-#endif 
-    
+#endif
+
     // init audio context and allocate memory
-    char openal_init              (char usehardware, int memorysize);
+    int openal_init               (int memorysize);
 
     // close audio subsytem and free memory
     void openal_close             (void);
@@ -37,7 +38,7 @@ extern "C" {
     int  openal_loadfile          (const char *filename);
 
     // play, pause, stop a single sound source
-    void openal_playsound         (unsigned int index);	
+    void openal_playsound         (unsigned int index);
     void openal_pausesound        (unsigned int index);
     void openal_stopsound         (unsigned int index);
 
@@ -59,16 +60,14 @@ extern "C" {
     // set volume for all sounds (gain interval is [0-1])
     void openal_setglobalvolume   (float gain);
 
-    // mute or unmute all sounds    
+    // mute or unmute all sounds
     void openal_togglemute        (void);
 
-    // fade effect, 
-    void openal_fadeout           (unsigned int index, unsigned short int quantity);
+    // fade effect,
+    void openal_fade              (unsigned int index, unsigned short int quantity, al_fade_t direction);
     void openal_fadein            (unsigned int index, unsigned short int quantity);
-    void openal_fade              (unsigned int index, unsigned short int quantity, char direction);
+    void openal_fadeout           (unsigned int index, unsigned short int quantity);
 
-#define AL_FADE_IN 1
-#define AL_FADE_OUT -1
 
 #ifdef __CPLUSPLUS
 }
