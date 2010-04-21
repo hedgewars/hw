@@ -40,7 +40,6 @@ extern "C" {
         /*Initialize an OpenAL contex and allocate memory space for data and buffers*/
         ALCcontext *context;
         ALCdevice *device;
-        const ALCchar *default_device;
         
         prog = "OpenAL subsystem";
 
@@ -130,7 +129,7 @@ extern "C" {
         
         err_msg("(%s) INFO - closed", prog);
         
-        return AL_TRUE;
+        return;
     }
     
     ALboolean openal_ready(void) {

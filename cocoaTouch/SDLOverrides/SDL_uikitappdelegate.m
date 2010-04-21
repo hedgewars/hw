@@ -53,7 +53,7 @@ int main (int argc, char *argv[]) {
 }
 
 @implementation SDLUIKitDelegate
-@synthesize uiwindow, window, viewController;
+@synthesize uiwindow, window;
 
 // convenience method
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -65,7 +65,7 @@ int main (int argc, char *argv[]) {
 	if (self = [super init]){
         self.uiwindow = nil;
         self.window = NULL;
-        self.viewController = nil;
+        viewController = nil;
         isInGame = NO;
         return self;
     } else 
@@ -73,6 +73,7 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) dealloc {
+    SDL_DestroyWindow(self.window);
     [viewController release];
 	[uiwindow release];
 	[super dealloc];
@@ -111,16 +112,15 @@ int main (int argc, char *argv[]) {
     //[application setStatusBarHidden:YES withAnimation:NO];
     [application setStatusBarHidden:YES];
     [application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];  
-		
+    
 	self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	self.uiwindow.backgroundColor = [UIColor blackColor];
 	
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        self.viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
+        viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
     else
-        self.viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPhone" bundle:nil];
+        viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPhone" bundle:nil];
 	[uiwindow addSubview:viewController.view];
-    [viewController release];
 	
 	// Set working directory to resource path
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];

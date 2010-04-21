@@ -29,13 +29,13 @@
 @interface SDLUIKitDelegate:NSObject <UIApplicationDelegate> {
 	SDL_Window *window;
 	UIWindow *uiwindow;
+
 	MainMenuViewController *viewController;
     BOOL isInGame;
 }
 
 @property (readwrite, assign) SDL_Window *window;
 @property (readwrite, retain) UIWindow *uiwindow;
-@property (nonatomic, retain) MainMenuViewController *viewController;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(void) startSDLgame;

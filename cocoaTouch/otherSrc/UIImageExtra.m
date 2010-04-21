@@ -31,7 +31,11 @@
 
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint {
     // create a contex of size of the background image
-    UIGraphicsBeginImageContext(self.size);
+    return [self mergeWith:secondImage atPoint:secondImagePoint atSize:self.size];
+}
+
+-(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint atSize:(CGSize) resultingSize {
+    UIGraphicsBeginImageContext(resultingSize);
     
     // drav the background image
     [self drawAtPoint:CGPointMake(0,0)];

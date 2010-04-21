@@ -32,6 +32,10 @@
 		611E1316117BBE5A0044B62F /* WeaponSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611E1315117BBE5A0044B62F /* WeaponSettingsViewController.m */; };
 		611E1319117BBE700044B62F /* SchemeSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611E1318117BBE700044B62F /* SchemeSettingsViewController.m */; };
 		6122CD01116BECCA002648E9 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6122CD00116BECCA002648E9 /* Default-Landscape.png */; };
+		61272334117DF764005B90CF /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272333117DF752005B90CF /* libSDL_image.a */; };
+		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
+		61272424117E17CF005B90CF /* TeamConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61272423117E17CF005B90CF /* TeamConfigViewController.m */; };
+		612724D3117E28AF005B90CF /* HogButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 612724D2117E28AF005B90CF /* HogButtonView.m */; };
 		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
 		61370676117B32EF004EE44A /* GameConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61370674117B32EF004EE44A /* GameConfigViewController.m */; };
 		6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6151347D116C2803001F16D1 /* Icon-iPad.png */; };
@@ -71,8 +75,6 @@
 		6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880E114AA34C00BA94A9 /* uVisualGears.pas */; };
 		6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880F114AA34C00BA94A9 /* uWorld.pas */; };
 		6179885C114AA48A00BA94A9 /* CGPointUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798856114AA48A00BA94A9 /* CGPointUtils.c */; };
-		6179885D114AA48A00BA94A9 /* IMG_png.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798858114AA48A00BA94A9 /* IMG_png.c */; };
-		6179885E114AA48A00BA94A9 /* IMG.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798859114AA48A00BA94A9 /* IMG.c */; };
 		61798869114AA4AA00BA94A9 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798864114AA4AA00BA94A9 /* SDL_uikitappdelegate.m */; };
 		6179886B114AA4AA00BA94A9 /* SDL_uikitwindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798868114AA4AA00BA94A9 /* SDL_uikitwindow.m */; };
 		6179887D114AA4D000BA94A9 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179886F114AA4D000BA94A9 /* MainMenuViewController.m */; };
@@ -80,8 +82,6 @@
 		617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */; };
 		6179891B114AAF2100BA94A9 /* libfreetype_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798916114AAF2100BA94A9 /* libfreetype_arm.a */; };
 		6179891C114AAF2100BA94A9 /* libfreetype_x86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798917114AAF2100BA94A9 /* libfreetype_x86.a */; };
-		6179891D114AAF2100BA94A9 /* libpng_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798918114AAF2100BA94A9 /* libpng_arm.a */; };
-		6179891E114AAF2100BA94A9 /* libpng_x86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798919114AAF2100BA94A9 /* libpng_x86.a */; };
 		6179891F114AAF2100BA94A9 /* libvorbis_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6179891A114AAF2100BA94A9 /* libvorbis_arm.a */; };
 		61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798934114AB25F00BA94A9 /* AudioToolbox.framework */; };
 		61798996114AB3FF00BA94A9 /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798993114AB3FA00BA94A9 /* libSDL_mixer.a */; };
@@ -142,6 +142,7 @@
 		61C325901179A732001E70B1 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3255A1179A384001E70B1 /* OpenAL.framework */; };
 		61C325A31179A7AD001E70B1 /* libopenalbridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3251D1179A300001E70B1 /* libopenalbridge.a */; };
 		61CE250D115E749A0098C467 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CE250C115E749A0098C467 /* OverlayViewController.m */; };
+		61CF4971117E702F00BF05B7 /* SquareButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CF4970117E702F00BF05B7 /* SquareButtonView.m */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
 
@@ -159,6 +160,13 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
+		61272332117DF752005B90CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6127232E117DF752005B90CF /* SDL_image.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BE1FA74107AF4C45004B6283;
+			remoteInfo = "Static Library";
+		};
 		617988D9114AAA3900BA94A9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */;
@@ -224,6 +232,12 @@
 		611FD9CF1155A40700C2203D /* NetworkPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = NetworkPlay.png; path = ../../QTfrontend/res/NetworkPlay.png; sourceTree = SOURCE_ROOT; };
 		611FD9D11155A41000C2203D /* Multiplayer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Multiplayer.png; path = ../../QTfrontend/res/Multiplayer.png; sourceTree = SOURCE_ROOT; };
 		6122CD00116BECCA002648E9 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "../../cocoaTouch/resources/Default-Landscape.png"; sourceTree = SOURCE_ROOT; };
+		6127232E117DF752005B90CF /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = "../../../Library/SDL-1.3/SDL_image/Xcode_iPhone/SDL_image.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		61272338117DF778005B90CF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		61272422117E17CF005B90CF /* TeamConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TeamConfigViewController.h; path = ../../cocoaTouch/TeamConfigViewController.h; sourceTree = SOURCE_ROOT; };
+		61272423117E17CF005B90CF /* TeamConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TeamConfigViewController.m; path = ../../cocoaTouch/TeamConfigViewController.m; sourceTree = SOURCE_ROOT; };
+		612724D1117E28AF005B90CF /* HogButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HogButtonView.h; path = ../../cocoaTouch/otherSrc/HogButtonView.h; sourceTree = SOURCE_ROOT; };
+		612724D2117E28AF005B90CF /* HogButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HogButtonView.m; path = ../../cocoaTouch/otherSrc/HogButtonView.m; sourceTree = SOURCE_ROOT; };
 		61370652117B1D50004EE44A /* Entitlements-Distribution.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Distribution.plist"; sourceTree = "<group>"; };
 		61370673117B32EF004EE44A /* GameConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameConfigViewController.h; path = ../../cocoaTouch/GameConfigViewController.h; sourceTree = SOURCE_ROOT; };
 		61370674117B32EF004EE44A /* GameConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameConfigViewController.m; path = ../../cocoaTouch/GameConfigViewController.m; sourceTree = SOURCE_ROOT; };
@@ -271,10 +285,7 @@
 		61798852114AA44900BA94A9 /* config.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = config.inc; path = ../../hedgewars/config.inc; sourceTree = SOURCE_ROOT; };
 		61798856114AA48A00BA94A9 /* CGPointUtils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CGPointUtils.c; path = ../../cocoaTouch/otherSrc/CGPointUtils.c; sourceTree = SOURCE_ROOT; };
 		61798857114AA48A00BA94A9 /* CGPointUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGPointUtils.h; path = ../../cocoaTouch/otherSrc/CGPointUtils.h; sourceTree = SOURCE_ROOT; };
-		61798858114AA48A00BA94A9 /* IMG_png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = IMG_png.c; path = ../../cocoaTouch/otherSrc/IMG_png.c; sourceTree = SOURCE_ROOT; };
-		61798859114AA48A00BA94A9 /* IMG.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = IMG.c; path = ../../cocoaTouch/otherSrc/IMG.c; sourceTree = SOURCE_ROOT; };
 		6179885A114AA48A00BA94A9 /* PascalImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PascalImports.h; path = ../../cocoaTouch/otherSrc/PascalImports.h; sourceTree = SOURCE_ROOT; };
-		6179885B114AA48A00BA94A9 /* SDL_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_image.h; path = ../../cocoaTouch/otherSrc/SDL_image.h; sourceTree = SOURCE_ROOT; };
 		61798863114AA4AA00BA94A9 /* SDL_uikitappdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_uikitappdelegate.h; path = ../../cocoaTouch/SDLOverrides/SDL_uikitappdelegate.h; sourceTree = SOURCE_ROOT; };
 		61798864114AA4AA00BA94A9 /* SDL_uikitappdelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDL_uikitappdelegate.m; path = ../../cocoaTouch/SDLOverrides/SDL_uikitappdelegate.m; sourceTree = SOURCE_ROOT; };
 		61798867114AA4AA00BA94A9 /* SDL_uikitwindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_uikitwindow.h; path = ../../cocoaTouch/SDLOverrides/SDL_uikitwindow.h; sourceTree = SOURCE_ROOT; };
@@ -286,8 +297,6 @@
 		617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDLiPhoneOS.xcodeproj; path = "../../../Library/SDL-1.3/SDL/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61798916114AAF2100BA94A9 /* libfreetype_arm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfreetype_arm.a; sourceTree = "<group>"; };
 		61798917114AAF2100BA94A9 /* libfreetype_x86.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfreetype_x86.a; sourceTree = "<group>"; };
-		61798918114AAF2100BA94A9 /* libpng_arm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpng_arm.a; sourceTree = "<group>"; };
-		61798919114AAF2100BA94A9 /* libpng_x86.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpng_x86.a; sourceTree = "<group>"; };
 		6179891A114AAF2100BA94A9 /* libvorbis_arm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libvorbis_arm.a; sourceTree = "<group>"; };
 		61798934114AB25F00BA94A9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = "../../../Library/SDL-1.3/SDL_mixer/Xcode-iPhoneOS/SDL_mixer.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -358,6 +367,8 @@
 		61C3255A1179A384001E70B1 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		61CE250B115E749A0098C467 /* OverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OverlayViewController.h; path = ../../cocoaTouch/OverlayViewController.h; sourceTree = SOURCE_ROOT; };
 		61CE250C115E749A0098C467 /* OverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OverlayViewController.m; path = ../../cocoaTouch/OverlayViewController.m; sourceTree = SOURCE_ROOT; };
+		61CF496F117E702F00BF05B7 /* SquareButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SquareButtonView.h; path = ../../cocoaTouch/otherSrc/SquareButtonView.h; sourceTree = SOURCE_ROOT; };
+		61CF4970117E702F00BF05B7 /* SquareButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SquareButtonView.m; path = ../../cocoaTouch/otherSrc/SquareButtonView.m; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -367,6 +378,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61272334117DF764005B90CF /* libSDL_image.a in Frameworks */,
 				61C325901179A732001E70B1 /* OpenAL.framework in Frameworks */,
 				61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */,
 				61798A14114AB65C00BA94A9 /* libSDL_ttf.a in Frameworks */,
@@ -381,10 +393,9 @@
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
 				6179891B114AAF2100BA94A9 /* libfreetype_arm.a in Frameworks */,
 				6179891C114AAF2100BA94A9 /* libfreetype_x86.a in Frameworks */,
-				6179891D114AAF2100BA94A9 /* libpng_arm.a in Frameworks */,
-				6179891E114AAF2100BA94A9 /* libpng_x86.a in Frameworks */,
 				6179891F114AAF2100BA94A9 /* libvorbis_arm.a in Frameworks */,
 				61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */,
+				61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,15 +450,16 @@
 			isa = PBXGroup;
 			children = (
 				61C325371179A325001E70B1 /* openalbridge */,
+				612724D1117E28AF005B90CF /* HogButtonView.h */,
+				612724D2117E28AF005B90CF /* HogButtonView.m */,
+				61CF496F117E702F00BF05B7 /* SquareButtonView.h */,
+				61CF4970117E702F00BF05B7 /* SquareButtonView.m */,
 				6184DEA111795DBD00AF6EFA /* UIImageExtra.h */,
 				6184DEA211795DBD00AF6EFA /* UIImageExtra.m */,
 				61798857114AA48A00BA94A9 /* CGPointUtils.h */,
 				61798856114AA48A00BA94A9 /* CGPointUtils.c */,
 				619C51BD116E40FC0049FD84 /* CommodityFunctions.h */,
 				619C51BE116E40FC0049FD84 /* CommodityFunctions.m */,
-				6179885B114AA48A00BA94A9 /* SDL_image.h */,
-				61798859114AA48A00BA94A9 /* IMG.c */,
-				61798858114AA48A00BA94A9 /* IMG_png.c */,
 				6179885A114AA48A00BA94A9 /* PascalImports.h */,
 				32CA4F630368D1EE00C91783 /* HedgewarsMobile_Prefix.pch */,
 			);
@@ -475,6 +487,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6127232E117DF752005B90CF /* SDL_image.xcodeproj */,
 				617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */,
 				617989B3114AB47500BA94A9 /* SDL_net.xcodeproj */,
 				6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */,
@@ -488,9 +501,8 @@
 				61C3255A1179A384001E70B1 /* OpenAL.framework */,
 				61798916114AAF2100BA94A9 /* libfreetype_arm.a */,
 				61798917114AAF2100BA94A9 /* libfreetype_x86.a */,
-				61798918114AAF2100BA94A9 /* libpng_arm.a */,
-				61798919114AAF2100BA94A9 /* libpng_x86.a */,
 				6179891A114AAF2100BA94A9 /* libvorbis_arm.a */,
+				61272338117DF778005B90CF /* MobileCoreServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -536,11 +548,21 @@
 			name = "first level";
 			sourceTree = "<group>";
 		};
+		6127232F117DF752005B90CF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				61272333117DF752005B90CF /* libSDL_image.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		61370672117B32A3004EE44A /* Game Config */ = {
 			isa = PBXGroup;
 			children = (
 				61370673117B32EF004EE44A /* GameConfigViewController.h */,
 				61370674117B32EF004EE44A /* GameConfigViewController.m */,
+				61272422117E17CF005B90CF /* TeamConfigViewController.h */,
+				61272423117E17CF005B90CF /* TeamConfigViewController.m */,
 			);
 			name = "Game Config";
 			sourceTree = "<group>";
@@ -841,6 +863,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 6127232F117DF752005B90CF /* Products */;
+					ProjectRef = 6127232E117DF752005B90CF /* SDL_image.xcodeproj */;
+				},
+				{
 					ProductGroup = 6179898C114AB3FA00BA94A9 /* Products */;
 					ProjectRef = 6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */;
 				},
@@ -868,6 +894,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		61272333117DF752005B90CF /* libSDL_image.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL_image.a;
+			remoteRef = 61272332117DF752005B90CF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -954,7 +987,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels/.svn*\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete some voices\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/{British,Mobster,Pirate,Robot,Russian,Singer,Surfer}\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
+			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels/.svn*\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete some voices\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/{Classic,British,Mobster,Pirate,Robot,Russian,Singer,Surfer}\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -1030,8 +1063,6 @@
 				6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */,
 				6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */,
 				6179885C114AA48A00BA94A9 /* CGPointUtils.c in Sources */,
-				6179885D114AA48A00BA94A9 /* IMG_png.c in Sources */,
-				6179885E114AA48A00BA94A9 /* IMG.c in Sources */,
 				61798869114AA4AA00BA94A9 /* SDL_uikitappdelegate.m in Sources */,
 				6179886B114AA4AA00BA94A9 /* SDL_uikitwindow.m in Sources */,
 				6179887D114AA4D000BA94A9 /* MainMenuViewController.m in Sources */,
@@ -1055,6 +1086,9 @@
 				61370676117B32EF004EE44A /* GameConfigViewController.m in Sources */,
 				611E1316117BBE5A0044B62F /* WeaponSettingsViewController.m in Sources */,
 				611E1319117BBE700044B62F /* SchemeSettingsViewController.m in Sources */,
+				61272424117E17CF005B90CF /* TeamConfigViewController.m in Sources */,
+				612724D3117E28AF005B90CF /* HogButtonView.m in Sources */,
+				61CF4971117E702F00BF05B7 /* SquareButtonView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1334,12 +1368,12 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = stabs;
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -dLOWRES";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -O- -gl -gw2 -gs -godwarfsets -gt -ghttt -Xs-";
+				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -O- -gl -gw2 -gs -gt -ghttt -Xs-";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = full;

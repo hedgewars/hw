@@ -60,11 +60,6 @@
     [saveButton release];
 }
 
-// we save every time a textfield is edited, so we don't risk to update only the hogs or only the temname 
--(BOOL) textFieldShouldEndEditing:(UITextField *)aTextField {
-    return [self save:nil];
-}
-
 // the textfield has been modified, check for empty strings and restore original navigation bar
 -(void) textFieldDidEndEditing:(UITextField *)aTextField{
     self.textFieldBeingEdited = nil;

@@ -38,7 +38,7 @@
     [super viewWillAppear:animated];
     
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
-    NSMutableArray *array = [[NSMutableArray alloc] initWithArray: contentsOfDir copyItems:YES];
+    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:contentsOfDir copyItems:YES];
     self.listOfTeams = array;
     [array release];
     

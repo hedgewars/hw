@@ -9,17 +9,18 @@
 #import "GameConfigViewController.h"
 #import "SDL_uikitappdelegate.h"
 #import "CommodityFunctions.h"
+#import "TeamConfigViewController.h"
 
 @implementation GameConfigViewController
-@synthesize availableTeamsTableView, backButton, weaponsButton, schemesButton, mapButton, randomButton, startButton;
+@synthesize availableTeamsTableView, weaponsButton, schemesButton, mapButton, randomButton, startButton;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
-
 -(IBAction) buttonPressed:(id) sender {
+    // works even if it's not actually a button
     UIButton *theButton = (UIButton *)sender;
     switch (theButton.tag) {
         case 0:
@@ -39,8 +40,12 @@
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    self.view.frame = CGRectMake(0, 0, 1024, 1024);
+-(void) viewDidLoad {
+    teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    activeController = teamConfigViewController;
+    
+    [self.view insertSubview:teamConfigViewController.view atIndex:0];
+    
     [super viewDidLoad];
 }
 
@@ -52,8 +57,9 @@
 
 
 -(void) viewDidUnload {
+    activeController = nil;
+    teamConfigViewController = nil;
     self.availableTeamsTableView = nil;
-    self.backButton = nil;
     self.weaponsButton = nil;
     self.schemesButton = nil;
     self.mapButton = nil;
@@ -64,8 +70,9 @@
 
 
 -(void) dealloc {
+    [activeController release];
+    [teamConfigViewController release];
     [availableTeamsTableView release];
-    [backButton release];
     [weaponsButton release];
     [schemesButton release];
     [mapButton release];
@@ -74,5 +81,24 @@
     [super dealloc];
 }
 
+-(void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [activeController viewWillAppear:animated];
+}
+
+-(void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [activeController viewWillDisappear:animated];
+}
+
+-(void) viewDidAppear:(BOOL)animated {
+    [super viewDidLoad];
+    [activeController viewDidAppear:animated];
+}
+
+-(void) viewDidDisappear:(BOOL)animated {
+    [super viewDidUnload];
+    [activeController viewDidDisappear:animated];
+}
 
 @end

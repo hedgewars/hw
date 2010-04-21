@@ -8,24 +8,26 @@
 
 #import <UIKit/UIKit.h>
 
+@class TeamConfigViewController;
 
 @interface GameConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
     UITableView *availableTeamsTableView;
-    UIButton *backButton;
     UIButton *mapButton;
     UIButton *randomButton;
     UIButton *weaponsButton;
     UIButton *schemesButton;
-    UIButton *startButton;
+    UIBarButtonItem *startButton;
+    
+    UIViewController *activeController;
+    TeamConfigViewController *teamConfigViewController;
 }
 
 @property (nonatomic,retain) IBOutlet UITableView *availableTeamsTableView;
-@property (nonatomic,retain) IBOutlet UIButton *backButton;
 @property (nonatomic,retain) IBOutlet UIButton *weaponsButton;
 @property (nonatomic,retain) IBOutlet UIButton *schemesButton;
 @property (nonatomic,retain) IBOutlet UIButton *mapButton;
 @property (nonatomic,retain) IBOutlet UIButton *randomButton;
-@property (nonatomic,retain) IBOutlet UIButton *startButton;
+@property (nonatomic,retain) IBOutlet UIBarButtonItem *startButton;
 
 -(IBAction) buttonPressed:(id) sender;
 

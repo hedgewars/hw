@@ -13,6 +13,7 @@
  
 -(UIImage *)scaleToSize:(CGSize) size;
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint;
+-(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint atSize:(CGSize) resultingSize;
 -(id) initWithContentsOfFile:(NSString *)path andCutAt:(CGRect) rect;
 
 @end
