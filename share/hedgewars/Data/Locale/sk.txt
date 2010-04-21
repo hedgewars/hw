@@ -55,6 +55,8 @@
 01:09=Synchronizujem...
 01:10=Použitím tohto nástroja neskončí váš ťah!
 01:11=Táto zbraň alebo nástroj zatiaľ nie je dostupný!
+01:12=Posledné kolo pred Rýchlou smrťou!
+01:13=Ešte %1 kolá do Rýchlej smrti!
 
 ; Správy o udalostiach
 ; Ježko (%1) zomrel
@@ -70,11 +72,13 @@
 02:00=%1 nás navždy opustil
 02:00=%1 mal chabé zdravie
 02:00=%1 mal smolu
+02:00=%1 mal jednoducho smolu
 02:00=%1 sa stretne so svojim Stvoriteľom
 02:00=%1 je ex-ježko
 02:00=%1 to nezvládol
-02:00=%1 vedel, že to bola samovražená misia
+02:00=%1 vedel, že to bola samovražedná misia
 02:00=%1 vyexpiroval
+02:00=%1 tušil, že to neskončí dobre
 02:00=Zbohom %1, sotva sme ťa poznali!
 02:00=%1 je už za riekou Styx
 02:00=Škoda, že %1 nemá ešte jeden život
@@ -92,6 +96,7 @@
 02:01=%1 hovorí "Glo-glo-glo-glo.."
 02:01=%1 nemá rád vodné športy
 02:01=%1 sa chystá preskúmať dno oceána
+02:01=%1 má rád potápanie
 ; Zápas začína
 02:02=Do boja!
 02:02=Ozbrojení a pripravení!
@@ -116,7 +121,7 @@
 02:05=Odporúčané dávkovanie: všetko, čo nájdete
 02:05=Zásielka v núdzi
 02:05=Zásoby!
-02:05=Po tomto sa budete cítiť lepšie!
+02:05=Po tomto sa určite budete cítiť lepšie!
 02:05=Na zdravie!
 ; Nová krabica so zbraňou
 02:06=Ďalšie zbrane!
@@ -166,6 +171,11 @@
 02:10=Home Run!
 02:10=Vták, lietadlo, ...
 02:10=A je z kola von!
+
+; Ježko (%1) musí odísť (team skončil)
+02:11=%1 musí už ísť spať!
+02:11=Vyzerá, že %1 nemá čas na hru
+02:11=%1 musí už ísť
 
 ; Kategórie zbraní
 03:00=Časovaný granát
