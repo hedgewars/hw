@@ -92,7 +92,7 @@
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
-    UIViewController *nextController;
+    UIViewController *nextController = nil;
     
     switch (row) {
         case 0:

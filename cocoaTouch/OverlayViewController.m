@@ -15,7 +15,7 @@
 #import "CommodityFunctions.h"
 
 @implementation OverlayViewController
-@synthesize dimTimer, popoverController, popupMenu;
+@synthesize popoverController, popupMenu;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -294,14 +294,14 @@
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    int minimumGestureLength;
+    CGFloat minimumGestureLength;
     int logCoeff;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        minimumGestureLength =	5;
+        minimumGestureLength = 5.0f;
         logCoeff = 19;
     } else {
-        minimumGestureLength =	3;
+        minimumGestureLength = 3.0f;
         logCoeff = 3;
     }
     
@@ -318,7 +318,7 @@
 			
             if (deltaX >= minimumGestureLength) {
                 NSLog(@"Horizontal swipe detected, deltaX: %f deltaY: %f",deltaX, deltaY);
-                if (currentPosition.x > gestureStartPoint.x ) {
+                if (currentPosition.x > gestureStartPoint.x) {
                     HW_cursorLeft(logCoeff*log(deltaX));
                 } else {
                     HW_cursorRight(logCoeff*log(deltaX));
@@ -327,7 +327,7 @@
             } 
             if (deltaY >= minimumGestureLength) {
                 NSLog(@"Horizontal swipe detected, deltaX: %f deltaY: %f",deltaX, deltaY);
-                if (currentPosition.y < gestureStartPoint.y ) {
+                if (currentPosition.y < gestureStartPoint.y) {
                     HW_cursorDown(logCoeff*log(deltaY));
                 } else {
                     HW_cursorUp(logCoeff*log(deltaY));

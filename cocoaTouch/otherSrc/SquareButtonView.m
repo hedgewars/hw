@@ -12,14 +12,21 @@
 #import "QuartzCore/QuartzCore.h"
 
 @implementation SquareButtonView
-@synthesize colorArray;
+@synthesize colorArray, selectedColor, ownerDictionary;
 
 -(id) initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         colorIndex = -1;
-        
+        selectedColor = 0;
+
         // list of allowed colors
-        NSArray *colors = [[NSArray alloc] initWithObjects:[NSNumber numberWithUnsignedInt:4421353], [NSNumber numberWithInt:4100897], nil];
+        NSArray *colors = [[NSArray alloc] initWithObjects: [NSNumber numberWithUnsignedInt:4421353],    // bluette
+                                                            [NSNumber numberWithUnsignedInt:4100897],    // greeeen
+                                                            [NSNumber numberWithUnsignedInt:10632635],   // violett
+                                                            [NSNumber numberWithUnsignedInt:16749353],   // oranngy
+                                                            [NSNumber numberWithUnsignedInt:14483456],   // reddish
+                                                            [NSNumber numberWithUnsignedInt:7566195],    // graaaay
+                                                            nil];
         self.colorArray = colors;
         [colors release];
 
@@ -42,31 +49,42 @@
     colorIndex++;
     if (colorIndex >= [colorArray count])
         colorIndex = 0;
-    
+
     NSUInteger color = [[self.colorArray objectAtIndex:colorIndex] unsignedIntValue];
-    selectedColor = color;
+    [self selectColor:color];
     
-    UIGraphicsBeginImageContext(self.frame.size);	
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetRGBFillColor(context, ((color & 0x00FF0000) >> 16)/255.0f, ((color & 0x0000FF00) >> 8)/255.0f, (color & 0x000000FF)/255.0f, 1.0f);
-    CGContextFillRect(context, CGRectMake(1.1, 1.1, self.frame.size.width-2.2, self.frame.size.height-2.2));
-    
-    UIImageView *resultingImage = [[UIImageView alloc] initWithImage: UIGraphicsGetImageFromCurrentImageContext()];
-    UIGraphicsEndImageContext();
-    
-    [self setImage:resultingImage.image forState:UIControlStateNormal];
-    [resultingImage release];
+    [ownerDictionary setObject:[NSNumber numberWithInt:color] forKey:@"color"];
+}
+
+-(void) selectColor:(NSUInteger) color {
+    if (color != selectedColor) {
+        selectedColor = color;
+        
+        UIGraphicsBeginImageContext(self.frame.size);	
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetRGBFillColor(context, ((color & 0x00FF0000) >> 16)/255.0f,
+                                          ((color & 0x0000FF00) >> 8)/255.0f,
+                                           (color & 0x000000FF)/255.0f,
+                                            1.0f);
+        CGContextFillRect(context, CGRectMake(1.1, 1.1, self.frame.size.width-2.2, self.frame.size.height-2.2));
+        
+        UIImageView *resultingImage = [[UIImageView alloc] initWithImage: UIGraphicsGetImageFromCurrentImageContext()];
+        UIGraphicsEndImageContext();
+        
+        [self setImage:resultingImage.image forState:UIControlStateNormal];
+        [resultingImage release];
+        
+    }
     /*  
     self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f 
                                            green:((color & 0x0000FF00) >> 8)/255.0f 
                                             blue: (color & 0x000000FF)/255.0f 
                                            alpha:1.0f];
     */
-    NSLog(@"index:%d, color:%d, %@",colorIndex, color, self.backgroundColor);
 }
 
-
 -(void) dealloc {
+    [ownerDictionary release];
     [colorArray release];
     [super dealloc];
 }

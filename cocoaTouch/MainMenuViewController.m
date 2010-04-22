@@ -65,7 +65,6 @@
     [indicator startAnimating];
     [alert addSubview:indicator];
     [indicator release];
-    [alert release];
     
     // create a team
     createTeamNamed(@"Default Team");
@@ -84,6 +83,7 @@
     
     // ok let the user take control
     [alert dismissWithClickedButtonIndex:0 animated:YES];
+    [alert release];
 
 	[pool release];
 	[NSThread exit];

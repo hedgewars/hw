@@ -12,12 +12,14 @@
 @interface HogButtonView : UIButton {
     NSInteger numberOfHogs;
     UIImage *singleHog;
+    NSMutableDictionary *ownerDictionary;
 }
 
 @property (nonatomic,retain) UIImage *singleHog;
+@property (nonatomic) NSInteger numberOfHogs;
+@property (nonatomic,retain) NSMutableDictionary *ownerDictionary;
 
--(void) drawManyHogs;
-
--(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+-(void) drawManyHogs:(NSInteger) hogs;
+-(void) addOne;
 
 @end

@@ -217,13 +217,12 @@
     static NSString *CellIdentifier2 = @"Cell2";
     
     NSArray *hogArray;
-    UITableViewCell *cell;
+    UITableViewCell *cell = nil;
     NSInteger row = [indexPath row];
     UIImage *accessoryImage;
     
     switch ([indexPath section]) {
         case 0:
-            
             cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier0];
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 

@@ -11,11 +11,10 @@
 #import "UIImageExtra.h"
 
 @implementation HogButtonView
-@synthesize singleHog;
+@synthesize singleHog, numberOfHogs, ownerDictionary;
 
 -(id) initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-        numberOfHogs = 4;
         self.backgroundColor = [UIColor clearColor];
         
         NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
@@ -24,49 +23,42 @@
         
         self.singleHog = normalHogSprite;
         [normalHogSprite release];
-        
-        [self drawManyHogs];
+        [self addTarget:self action:@selector(addOne) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
 }
 
--(void) drawManyHogs {
-    UIImage *teamHogs = [[UIImage alloc] init];
-    for (int i = 0; i < numberOfHogs; i++) {
-        teamHogs = [singleHog mergeWith:teamHogs
-                                atPoint:CGPointMake(8, 0) 
-                                 atSize:CGSizeMake(88, 32)];
-    }
-    [self setImage:teamHogs forState:UIControlStateNormal];
+-(void) addOne {
+    self.highlighted = NO;
+    NSInteger number = self.numberOfHogs;
+    number++;
+    [self drawManyHogs:number];
 }
 
--(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [touches anyObject];
-    
-	switch ([touch tapCount]) {
-		case 1:
-            if (numberOfHogs < MAX_HOGS) {
-                numberOfHogs++;
-            } else {
+-(void) drawManyHogs:(NSInteger) hogs {
+    if (numberOfHogs != hogs) {
+        if (hogs <= MAX_HOGS && hogs >= 1)
+            numberOfHogs = hogs;
+        else {
+            if (hogs > MAX_HOGS)
                 numberOfHogs = 1;
-            }
-			break;
-		case 2:
-            if (numberOfHogs > 2) {
-                numberOfHogs--;
-                numberOfHogs--;
-            } else {
+            else
                 numberOfHogs = MAX_HOGS;
-            }
-            break;
-		default:
-			break;
-	}
-    NSLog(@"numberOfHogs: %d", numberOfHogs);
-    [self drawManyHogs];
+        }
+        [ownerDictionary setObject:[NSNumber numberWithInt:numberOfHogs] forKey:@"number"];
+        
+        UIImage *teamHogs = [[[UIImage alloc] init] autorelease];
+        for (int i = 0; i < numberOfHogs; i++) {
+            teamHogs = [singleHog mergeWith:teamHogs
+                                    atPoint:CGPointMake(8, 0) 
+                                     atSize:CGSizeMake(88, 32)];
+        }
+        [self setImage:teamHogs forState:UIControlStateNormal];
+    }
 }
 
 -(void) dealloc {
+    [ownerDictionary release];
     [singleHog release];
     [super dealloc];
 }

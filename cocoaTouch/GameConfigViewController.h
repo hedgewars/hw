@@ -30,5 +30,5 @@
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *startButton;
 
 -(IBAction) buttonPressed:(id) sender;
-
+-(void) startGame;
 @end

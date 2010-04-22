@@ -12,10 +12,11 @@
 #import "SquareButtonView.h"
 
 @implementation TeamConfigViewController
-@synthesize listOfTeams;
+@synthesize listOfTeams, listOfSelectedTeams;
 
 #define NUMBERBUTTON_TAG 123456
 #define SQUAREBUTTON_TAG 654321
+#define LABEL_TAG        456123
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -27,15 +28,27 @@
 }
 
 
-
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    unsigned int colors[6] = { 4421353, 4100897, 10632635, 16749353, 14483456, 7566195 };
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
-    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:contentsOfDir copyItems:YES];
+    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[contentsOfDir count]];
+    for (int i = 0; i < [contentsOfDir count]; i++) {
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                                                  [contentsOfDir objectAtIndex:i],@"team",
+                                                                  [NSNumber numberWithInt:4],@"number",
+                                                                  [NSNumber numberWithInt:colors[i%6]],@"color",nil];
+        [array addObject:dict];
+        [dict release];
+    }
     self.listOfTeams = array;
     [array release];
     
+    NSMutableArray *emptyArray = [[NSMutableArray alloc] initWithObjects:nil];
+    self.listOfSelectedTeams = emptyArray;
+    [emptyArray release];
+
     [self.tableView reloadData];
     NSLog(@"%@",listOfTeams);
 }
@@ -65,35 +78,74 @@
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [listOfTeams count];
+    if (section == 0)
+        return [listOfSelectedTeams count] ;
+    else
+        return [listOfTeams count];
 }
 
+-(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 0)
+        return NSLocalizedString(@"Playing Teams",@"");
+    else
+        return NSLocalizedString(@"Available Teams",@"");
+}
 
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier0 = @"Cell0";
+    static NSString *CellIdentifier1 = @"Cell1";
+    NSInteger section = [indexPath section];
+    UITableViewCell *cell;
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    if (section == 0) {
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier0];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
+
+            UIButton *numberButton = [[HogButtonView alloc] initWithFrame:CGRectMake(12, 5, 88, 32)];
+            numberButton.tag = NUMBERBUTTON_TAG;
+            [cell addSubview:numberButton];
+            [numberButton release];
+            
+            SquareButtonView *squareButton = [[SquareButtonView alloc] initWithFrame:CGRectMake(12+88+7, 5, 36, 36)];
+            squareButton.tag = SQUAREBUTTON_TAG;
+            [cell addSubview:squareButton];
+            [squareButton release];
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12+88+7+36+7, 10, 250, 25)];
+            label.textAlignment = UITextAlignmentLeft;
+            label.backgroundColor = [UIColor clearColor];
+            label.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 2];
+            label.tag = LABEL_TAG;
+            [cell.contentView addSubview:label];
+            [label release];
+        }
         
-        UIButton *numberButton = [[HogButtonView alloc] initWithFrame:CGRectMake(12, 5, 88, 32)];
-        numberButton.tag = NUMBERBUTTON_TAG;
-        [cell addSubview:numberButton];
-        [numberButton release];
+        NSMutableDictionary *selectedRow = [listOfSelectedTeams objectAtIndex:[indexPath row]];
         
-        SquareButtonView *squareButton = [[SquareButtonView alloc] initWithFrame:CGRectMake(12+88+7, 5, 36, 36)];
-        squareButton.tag = SQUAREBUTTON_TAG;
-        [cell addSubview:squareButton];
-        [squareButton release];
+        UILabel *cellLabel = (UILabel *)[cell viewWithTag:LABEL_TAG];
+        cellLabel.text = [[selectedRow objectForKey:@"team"] stringByDeletingPathExtension];
+        
+        HogButtonView *numberButton = (HogButtonView *)[cell viewWithTag:NUMBERBUTTON_TAG];
+        [numberButton drawManyHogs:[[selectedRow objectForKey:@"number"] intValue]];
+        numberButton.ownerDictionary = selectedRow;
+        
+        SquareButtonView *squareButton = (SquareButtonView *)[cell viewWithTag:SQUAREBUTTON_TAG];
+        [squareButton selectColor:[[selectedRow objectForKey:@"color"] intValue]];
+        squareButton.ownerDictionary = selectedRow;
+    } else {
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier1];
+        if (cell == nil) 
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
+        
+        cell.textLabel.text = [[[listOfTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
     }
-    
-    cell.textLabel.text = [[listOfTeams objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
-    
+
     return cell;
 }
 
@@ -128,7 +180,6 @@
 }
 */
 
-
 /*
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -137,25 +188,25 @@
 }
 */
 
-
 #pragma mark -
 #pragma mark Table view delegate
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSInteger row = [indexPath row];
+    NSInteger section = [indexPath section];
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	/*
-	 <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-	 [self.navigationController pushViewController:detailViewController animated:YES];
-	 [detailViewController release];
-	 */
+    if (section == 0) {
+        [self.listOfTeams addObject:[self.listOfSelectedTeams objectAtIndex:row]];
+        [self.listOfSelectedTeams removeObjectAtIndex:row];
+    } else {
+        [self.listOfSelectedTeams addObject:[self.listOfTeams objectAtIndex:row]];
+        [self.listOfTeams removeObjectAtIndex:row];      
+    }
+    [self.tableView reloadData];
 }
 
 
 #pragma mark -
 #pragma mark Memory management
-
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];

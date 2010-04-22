@@ -27,19 +27,29 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
             break;
         case 1:
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
-            [self performSelector:@selector(startSDLgame)
+            [self performSelector:@selector(startGame)
                        withObject:nil
-                       afterDelay:0.4];
+                       afterDelay:0.25];
             break;
     }
 }
 
--(void) startSDLgame {
-    [[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
+-(void) startGame {
+    if ([teamConfigViewController.listOfSelectedTeams count] < 2) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too few teams playing",@"")
+                                                        message:NSLocalizedString(@"You need to select at least two teams to play a Game",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    } else {
+        [teamConfigViewController.listOfSelectedTeams writeToFile:GAMECONFIG_FILE() atomically:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
+        [[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
+    }
 }
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 -(void) viewDidLoad {
     teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
     activeController = teamConfigViewController;

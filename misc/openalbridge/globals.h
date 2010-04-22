@@ -21,23 +21,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <stdarg.h>
-#include <string.h>
-#include <errno.h>
+#include "al.h"
 
 #ifndef _WIN32
 #include <pthread.h>
 #include <syslog.h>
 #else
 #include <process.h>
-#define syslog(x,y) fprintf(stderr,y)
-#define LOG_INFO 6
-#define LOG_ERR 3
 #endif
-
-#include "al.h"
-#include "errlib.h"
 
 
 // control debug verbosity
@@ -83,9 +74,9 @@
 #ifdef HAVE_BYTESWAP_H
 #include <byteswap.h>
 #else
-#define bswap_16(x)	((((x) & 0xFF00) >> 8) | (((x) & 0x00FF) << 8))
-#define bswap_32(x)	((((x) & 0xFF000000) >> 24) | (((x) & 0x00FF0000) >> 8)  | \
-(((x) & 0x0000FF00) << 8)  | (((x) & 0x000000FF) << 24) )
+#define bswap_16(x)	(((x & 0xFF00) >> 8) | ((x & 0x00FF) << 8))
+#define bswap_32(x)	(((x & 0xFF000000) >> 24) | (((x) & 0x00FF0000) >> 8)  | \
+                     ((x & 0x0000FF00) << 8)  | (((x) & 0x000000FF) << 24) )
 #endif /* HAVE_BYTESWAP_H */
 
 /* swap numbers accordingly to architecture automatically */
@@ -102,10 +93,9 @@
 #endif
 
 /*file format defines*/
-#define OGG_FILE_FORMAT 0x4F676753
-#define WAV_FILE_FORMAT 0x52494646
-#define WAV_HEADER_SUBCHUNK2ID 0x64617461
+#define OGG_FILE_FORMAT         0x4F676753
+#define WAV_FILE_FORMAT         0x52494646
+#define WAV_HEADER_SUBCHUNK2ID  0x64617461
 
-char *prog = "OpenAL subsystem";
 
 #endif /*_OALB_GLOBALS_H*/

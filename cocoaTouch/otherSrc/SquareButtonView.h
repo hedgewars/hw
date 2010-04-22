@@ -13,10 +13,14 @@
     NSInteger colorIndex;
     NSUInteger selectedColor;
     NSArray *colorArray;
+    NSMutableDictionary *ownerDictionary;
 }
 
 @property (nonatomic,retain) NSArray *colorArray;
+@property (nonatomic) NSUInteger selectedColor;
+@property (nonatomic,retain) NSMutableDictionary *ownerDictionary;
 
 -(void) nextColor;
+-(void) selectColor:(NSUInteger) color;
 
 @end

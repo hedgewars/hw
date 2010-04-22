@@ -97,7 +97,7 @@
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    UIViewController *nextController;
+    UIViewController *nextController = nil;
     
     if (newRow != oldRow) {
         [self.tableView deselectRowAtIndexPath:lastIndexPath animated:YES];

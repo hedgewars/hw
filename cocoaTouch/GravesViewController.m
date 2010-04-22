@@ -143,7 +143,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
-- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     

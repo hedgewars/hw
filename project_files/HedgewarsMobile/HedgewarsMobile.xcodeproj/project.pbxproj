@@ -129,8 +129,7 @@
 		61A11AD61168DB3700359010 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AD51168DB3700359010 /* DetailViewController.m */; };
 		61A11AE11168DC6E00359010 /* SingleTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AE01168DC6E00359010 /* SingleTeamViewController.m */; };
 		61A11AE41168DC9400359010 /* HogHatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AE31168DC9400359010 /* HogHatViewController.m */; };
-		61C325431179A336001E70B1 /* errlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 61C325391179A336001E70B1 /* errlib.c */; };
-		61C325441179A336001E70B1 /* errlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C3253A1179A336001E70B1 /* errlib.h */; };
+		61AA7ACA117FCC8200FDDD4D /* openalbridge_t.h in Headers */ = {isa = PBXBuildFile; fileRef = 61AA7AC9117FCC8200FDDD4D /* openalbridge_t.h */; };
 		61C325451179A336001E70B1 /* globals.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C3253B1179A336001E70B1 /* globals.h */; };
 		61C325461179A336001E70B1 /* loaders.c in Sources */ = {isa = PBXBuildFile; fileRef = 61C3253C1179A336001E70B1 /* loaders.c */; };
 		61C325471179A336001E70B1 /* loaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C3253D1179A336001E70B1 /* loaders.h */; };
@@ -354,9 +353,8 @@
 		61A11AE01168DC6E00359010 /* SingleTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingleTeamViewController.m; path = ../../cocoaTouch/SingleTeamViewController.m; sourceTree = SOURCE_ROOT; };
 		61A11AE21168DC9400359010 /* HogHatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HogHatViewController.h; path = ../../cocoaTouch/HogHatViewController.h; sourceTree = SOURCE_ROOT; };
 		61A11AE31168DC9400359010 /* HogHatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HogHatViewController.m; path = ../../cocoaTouch/HogHatViewController.m; sourceTree = SOURCE_ROOT; };
+		61AA7AC9117FCC8200FDDD4D /* openalbridge_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = openalbridge_t.h; path = ../../misc/openalbridge/openalbridge_t.h; sourceTree = SOURCE_ROOT; };
 		61C3251D1179A300001E70B1 /* libopenalbridge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libopenalbridge.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		61C325391179A336001E70B1 /* errlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = errlib.c; path = ../../misc/openalbridge/errlib.c; sourceTree = SOURCE_ROOT; };
-		61C3253A1179A336001E70B1 /* errlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = errlib.h; path = ../../misc/openalbridge/errlib.h; sourceTree = SOURCE_ROOT; };
 		61C3253B1179A336001E70B1 /* globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = globals.h; path = ../../misc/openalbridge/globals.h; sourceTree = SOURCE_ROOT; };
 		61C3253C1179A336001E70B1 /* loaders.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = loaders.c; path = ../../misc/openalbridge/loaders.c; sourceTree = SOURCE_ROOT; };
 		61C3253D1179A336001E70B1 /* loaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = loaders.h; path = ../../misc/openalbridge/loaders.h; sourceTree = SOURCE_ROOT; };
@@ -722,8 +720,7 @@
 		61C325371179A325001E70B1 /* openalbridge */ = {
 			isa = PBXGroup;
 			children = (
-				61C325391179A336001E70B1 /* errlib.c */,
-				61C3253A1179A336001E70B1 /* errlib.h */,
+				61AA7AC9117FCC8200FDDD4D /* openalbridge_t.h */,
 				61C3253B1179A336001E70B1 /* globals.h */,
 				61C3253C1179A336001E70B1 /* loaders.c */,
 				61C3253D1179A336001E70B1 /* loaders.h */,
@@ -784,11 +781,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61C325441179A336001E70B1 /* errlib.h in Headers */,
 				61C325451179A336001E70B1 /* globals.h in Headers */,
 				61C325471179A336001E70B1 /* loaders.h in Headers */,
 				61C325491179A336001E70B1 /* openalbridge.h in Headers */,
 				61C3254B1179A336001E70B1 /* wrappers.h in Headers */,
+				61AA7ACA117FCC8200FDDD4D /* openalbridge_t.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1096,7 +1093,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61C325431179A336001E70B1 /* errlib.c in Sources */,
 				61C325461179A336001E70B1 /* loaders.c in Sources */,
 				61C325481179A336001E70B1 /* openalbridge.c in Sources */,
 				61C3254A1179A336001E70B1 /* wrappers.c in Sources */,

@@ -20,25 +20,25 @@
 
 @implementation GameSetup
 
-@synthesize systemSettings, teams;
+@synthesize systemSettings, teamsConfig;
 
 -(id) init {
 	if (self = [super init]) {
     	srandom(time(NULL));
         ipcPort = (random() % 64541) + 1025;
         
-        systemSettings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()]; //should check it exists
-        return self;
-    } else
-        return nil;
+        self.systemSettings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()]; //should check it exists
+        self.teamsConfig = [[NSArray alloc] initWithContentsOfFile:GAMECONFIG_FILE()];
+    } 
+    return self;
 }
 
 -(NSString *)description {
-    return [NSString stringWithFormat:@"ipcport: %d\nsockets: %d,%d\n teams: %@\n systemSettings: %@",ipcPort,sd,csd,teams,systemSettings];
+    return [NSString stringWithFormat:@"ipcport: %d\nsockets: %d,%d\n teams: %@\n systemSettings: %@",ipcPort,sd,csd,teamsConfig,systemSettings];
 }
 
 -(void) dealloc {
-    [teams release];
+    [teamsConfig release];
     [systemSettings release];
 	[super dealloc];
 }
@@ -57,47 +57,12 @@
 	return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
--(void) initTeam:(NSArray *)teamLists {
-    teams = [[NSMutableArray alloc] initWithObjects:nil];
+-(void) sendTeamData:(NSString *)fileName withPlayingHogs:(NSInteger) playingHogs ofColor:(NSNumber *)color{    
+    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@", TEAMS_DIRECTORY(), fileName];
+    NSDictionary *teamData = [[NSDictionary alloc] initWithContentsOfFile:teamFile];
+    [teamFile release];
     
-    for (NSString *teamString in teamLists) {
-        //NSString *teamFile = [[NSString alloc] initWithFormat:@"%@.plist", teamString];
-        
-        //NSDictionary *theTeam = [[NSDictionary alloc] initWithContentsOfFile:filePath];
-        //[teams addObject:theTeam];
-        //[theTeam release];
-    }
-    
-    NSDictionary *hogA1 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Snow Leopard",@"hogname",@"NoHat",@"hat",nil];
-    NSDictionary *hogA2 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Leopard",@"hogname",@"NoHat",@"hat",nil];
-    NSArray *hedgehogs1 = [[NSArray alloc] initWithObjects:hogA1,hogA2,nil];
-    [hogA1 release];
-    [hogA2 release];
-
-    NSDictionary *firstTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4421353",@"color",@"0",@"hash",@"System Cats",@"teamname",
-                               @"star",@"grave",@"Earth",@"fort",@"Classic",@"voicepack",@"hedgewars",@"flag",hedgehogs1,@"hedgehogs",
-                               nil];
-    [hedgehogs1 release];
-    [teams addObject:firstTeam];
-    [firstTeam release];
-    
-    NSDictionary *hogB1 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Raichu",@"hogname",@"Bunny",@"hat",nil];
-    NSDictionary *hogB2 = [[NSDictionary alloc] initWithObjectsAndKeys:@"100",@"health",@"0",@"level",@"Pikachu",@"hogname",@"Bunny",@"hat",nil];
-    NSArray *hedgehogs2 = [[NSArray alloc] initWithObjects:hogB1,hogB2,nil];
-    [hogB1 release];
-    [hogB2 release];
-    NSDictionary *secondTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"4100897",@"color",@"0",@"hash",@"Poke-MAN",@"teamname",
-                                @"Badger",@"grave",@"UFO",@"fort",@"Default",@"voicepack",@"hedgewars",@"flag",hedgehogs2,@"hedgehogs",
-                                nil];
-    [hedgehogs2 release];
-    [teams addObject:secondTeam];
-    [secondTeam release];
-}
-
--(void) sendTeamData:(NSDictionary *)teamData withPlayingHogs:(int) playingHogs{
-    int i;
-    
-    NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"eaddteam %@ %@ %@", [teamData objectForKey:@"hash"], [teamData objectForKey:@"color"], [teamData objectForKey:@"teamname"]];
+    NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"eaddteam %@ %@ %@", [teamData objectForKey:@"hash"], [color stringValue], [teamData objectForKey:@"teamname"]];
     [self sendToEngine: teamHashColorAndName];
     [teamHashColorAndName release];
     
@@ -118,7 +83,7 @@
     [flag release];
     
     NSArray *hogs = [teamData objectForKey:@"hedgehogs"];
-    for (i = 0; i < playingHogs; i++) {
+    for (int i = 0; i < playingHogs; i++) {
         NSDictionary *hog = [hogs objectAtIndex:i];
         
         NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %@ %@", [hog objectForKey:@"level"], [hog objectForKey:@"health"], [hog objectForKey:@"hogname"]];
@@ -128,10 +93,12 @@
         NSString *hogHat = [[NSString alloc] initWithFormat:@"ehat %@", [hog objectForKey:@"hat"]];
         [self sendToEngine: hogHat];
         [hogHat release];
-    }         
+    }
+    
+    [teamData release];
 }
 
--(void) sendAmmoData:(NSDictionary *)ammoData {
+-(void) sendAmmoData:(NSDictionary *)ammoData forTeams: (NSInteger)numberPlaying {
     NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@", [ammoData objectForKey:@"ammostore_initialqt"]];
     [self sendToEngine: ammloadt];
     [ammloadt release];
@@ -150,8 +117,8 @@
     
     // sent twice so it applies to both teams
     NSString *ammstore = [[NSString alloc] initWithString:@"eammstore"];
-    [self sendToEngine: ammstore];
-    [self sendToEngine: ammstore];
+    for (int i = 0; i < numberPlaying; i++)
+        [self sendToEngine: ammstore];
     [ammstore release];
 }
 
@@ -202,10 +169,6 @@
 			if ('C' == buffer[0]) {
 				NSLog(@"engineProtocol - sending game config");
                 
-				NSArray *teamlist = [[NSArray alloc] initWithObjects:@"this",@"is",@"test",nil];
-                [self initTeam:teamlist];
-                [teamlist release];
-                
 				// send config data data
 				/*
 				seed is arbitrary string
@@ -235,8 +198,10 @@
 				// theme info
 				[self sendToEngine:@"etheme Compost"];
 				
-                for (NSDictionary *teamData in teams) {
-                    [self sendTeamData:teamData withPlayingHogs:2];
+                for (NSDictionary *teamData in self.teamsConfig) {
+                    [self sendTeamData:[teamData objectForKey:@"team"] 
+                       withPlayingHogs:[[teamData objectForKey:@"number"] intValue]
+                               ofColor:[teamData objectForKey:@"color"]];
                     NSLog(@"teamData sent");
                 }
                 
@@ -245,10 +210,10 @@
                                           @"0405040541600655546554464776576666666155501",@"ammostore_probability",
                                           @"0000000000000205500000040007004000000000200",@"ammostore_delay",
                                           @"1311110312111111123114111111111111111211101",@"ammostore_crate", nil];
-                [self sendAmmoData: ammoData];
+                [self sendAmmoData:ammoData forTeams:[self.teamsConfig count]];
                 [ammoData release];
                 
-			clientQuit = NO;
+                clientQuit = NO;
 			} else {
 				NSLog(@"engineProtocolThread - wrong message or client closed connection");
 				clientQuit = YES;
@@ -355,7 +320,7 @@
     
     // prevents using an empty nickname
     NSString *username;
-    NSString *originalUsername = [systemSettings objectForKey:@"username"];
+    NSString *originalUsername = [self.systemSettings objectForKey:@"username"];
     if ([originalUsername length] == 0) {
         username = [[NSString alloc] initWithFormat:@"MobileUser-%@",ipcString];
     } else {
@@ -364,10 +329,10 @@
     
 	gameArgs[0] = [username UTF8String];                                                    //UserNick
 	gameArgs[1] = [ipcString UTF8String];                                                   //ipcPort
-	gameArgs[2] = [[[systemSettings objectForKey:@"sound"] stringValue] UTF8String];        //isSoundEnabled
-	gameArgs[3] = [[[systemSettings objectForKey:@"music"] stringValue] UTF8String];        //isMusicEnabled
+	gameArgs[2] = [[[self.systemSettings objectForKey:@"sound"] stringValue] UTF8String];        //isSoundEnabled
+	gameArgs[3] = [[[self.systemSettings objectForKey:@"music"] stringValue] UTF8String];        //isMusicEnabled
 	gameArgs[4] = [localeString UTF8String];                                                //cLocaleFName
-	gameArgs[5] = [[[systemSettings objectForKey:@"alternate"] stringValue] UTF8String];	//cAltDamage
+	gameArgs[5] = [[[self.systemSettings objectForKey:@"alternate"] stringValue] UTF8String];	//cAltDamage
 	gameArgs[6] = [wSize UTF8String];                                                       //cScreenHeight
     gameArgs[7] = [hSize UTF8String];                                                       //cScreenWidth
     

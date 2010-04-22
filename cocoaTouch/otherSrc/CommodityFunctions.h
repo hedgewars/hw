@@ -13,6 +13,8 @@
 
 #define SETTINGS_FILE()         [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
                                  objectAtIndex:0] stringByAppendingString:@"/settings.plist"]
+#define GAMECONFIG_FILE()       [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
+                                 objectAtIndex:0] stringByAppendingString:@"/gameconfig.plist"]
 
 #define TEAMS_DIRECTORY()       [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
                                  objectAtIndex:0] stringByAppendingString:@"/Teams/"]

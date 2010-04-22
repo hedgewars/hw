@@ -24,9 +24,11 @@ extern ALint *Sources;
 void *Malloc (size_t nbytes) {
     void *aptr;
 
-    if ((aptr = malloc(nbytes)) == NULL)
-        err_dump("(%s) FATAL - not enough memory");
-
+    if ((aptr = malloc(nbytes)) == NULL) {
+        fprintf(stderr,"(Bridge Fatal Error) - not enough memory");
+        abort();
+    }
+    
     return aptr;
 }
 
@@ -34,8 +36,10 @@ void *Malloc (size_t nbytes) {
 void *Realloc (void *aptr, size_t nbytes) {
     aptr = realloc(aptr, nbytes);
 
-    if (aptr == NULL)
-        err_dump("(%s) FATAL - not enough memory");
+    if (aptr == NULL) {
+        fprintf(stderr,"(Bridge Fatal Error) - not enough memory");
+        abort();
+    }
 
     return aptr;
 }
@@ -46,7 +50,7 @@ FILE *Fopen (const char *fname, char *mode)	{
 
     fp = fopen(fname,mode);
     if (fp == NULL)
-        err_ret("(%s) ERROR - can't open file %s in mode '%s'", prog, fname, mode);
+        fprintf(stderr,"(Bridge Error) - can't open file %s in mode '%s'", fname, mode);
 
     return fp;
 }
@@ -97,7 +101,7 @@ void helper_fade(void *tmp) {
         }
 
         if (AL_NO_ERROR != alGetError())
-            err_msg("(%s) WARN - Failed to set fade-out effect",prog);
+            fprintf(stderr,"(Bridge Warning) - Failed to set fade-out effect");
 
         // stop that sound and reset its volume
         alSourceStop (Sources[index]);
@@ -105,7 +109,7 @@ void helper_fade(void *tmp) {
     }
 
     if (AL_NO_ERROR != alGetError())
-        err_msg("(%s) WARN - Failed to set fade effect",prog);
+        fprintf(stderr,"(Bridge Warning) - Failed to set fade effect");
 
 #ifndef _WIN32
     pthread_exit(NULL);

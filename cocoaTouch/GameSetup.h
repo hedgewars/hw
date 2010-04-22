@@ -11,20 +11,20 @@
 
 @interface GameSetup : NSObject {
 	NSDictionary *systemSettings;
-	NSMutableArray *teams;
+    NSArray *teamsConfig;
     
 	NSInteger ipcPort;
 	TCPsocket sd, csd; // Socket descriptor, Client socket descriptor
 }
 
 @property (nonatomic, retain) NSDictionary *systemSettings;
-@property (nonatomic, retain) NSArray *teams;
+@property (nonatomic, retain) NSArray *teamsConfig;
 
 -(void) engineProtocol;
 -(void) startThread: (NSString *)selector;
 -(int)  sendToEngine: (NSString *)string;
--(void) sendTeamData:(NSDictionary *)teamData withPlayingHogs:(int) playingHogs;
--(void) initTeam:(NSArray *)teamLists;
+-(void) sendTeamData:(NSString *)fileName withPlayingHogs:(NSInteger) playingHogs ofColor:(NSNumber *)color;
+-(void) sendAmmoData:(NSDictionary *)ammoData forTeams: (NSInteger)numberPlaying;
 
 -(const char **)getSettings;
 

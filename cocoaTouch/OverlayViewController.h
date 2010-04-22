@@ -24,7 +24,6 @@
     CGPoint gestureStartPoint;
 }
 
-@property (nonatomic,retain) NSTimer *dimTimer;
 @property (nonatomic,retain) id popoverController;
 @property (nonatomic,retain) PopoverMenuViewController *popupMenu;
 
