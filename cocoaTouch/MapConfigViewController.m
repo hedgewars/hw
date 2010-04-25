@@ -107,7 +107,7 @@
     for (int x = 0; x < 32*128; x++) {
         unsigned char byte = map[x];
         for (int z = 0; z < 8; z++) {
-            // select the color
+            // select the color based on the rightmost bit
             if ((byte & 0x00000001) != 0)
                 CGContextSetRGBFillColor(context, 0.5, 0.5, 0.7, 1.0);
             else
@@ -126,8 +126,12 @@
     UIGraphicsPopContext();
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-
+    
+    // set the image in the button
+    [self.previewButton setImage:image forState:UIControlStateNormal];
+    
     /*
+    // http://developer.apple.com/mac/library/qa/qa2001/qa1037.html
     CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceGray();
     CGContextRef bitmapImage = CGBitmapContextCreate(mapExp, 128, 32, 8, 128, colorspace, kCGImageAlphaNone);
     CGColorSpaceRelease(colorspace);
@@ -136,9 +140,6 @@
     UIImage *previewImage = [[UIImage alloc] initWithCGImage:previewCGImage];
     CGImageRelease(previewCGImage);
     */
-    
-    // set the image in the button
-    [self.previewButton setImage:image forState:UIControlStateNormal];
 }
 
 #pragma mark -

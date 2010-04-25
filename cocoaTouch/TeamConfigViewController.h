@@ -12,7 +12,6 @@
 @interface TeamConfigViewController : UITableViewController {
     NSMutableArray *listOfTeams;
     NSMutableArray *listOfSelectedTeams;
-    NSIndexPath *lastIndexPath;
 }
 
 @property (nonatomic, retain) NSMutableArray *listOfTeams;
