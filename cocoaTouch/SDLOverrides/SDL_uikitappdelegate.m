@@ -123,7 +123,7 @@ int main (int argc, char *argv[]) {
 	[uiwindow addSubview:viewController.view];
 	
 	// Set working directory to resource path
-	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];
+	[[NSFileManager defaultManager] changeCurrentDirectoryPath:[[NSBundle mainBundle] resourcePath]];
 
 	[uiwindow makeKeyAndVisible];
 	[uiwindow layoutSubviews];

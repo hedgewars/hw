@@ -64,7 +64,6 @@
         [self.view addSubview:detailedNavController.view];
     }
 
-
     [super viewDidLoad];
 }
          

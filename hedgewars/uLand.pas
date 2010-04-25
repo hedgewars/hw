@@ -723,10 +723,10 @@ else next_dir_clockwise := false;
 
 while (tries < 5) and not found_cell do
 begin
-    if when_seen(x + dir.x, y + dir.y) = current_step then //we're seeing ourselves, try another direction
+    if when_seen(x + dir.x, y + dir.y) = current_step then //we are seeing ourselves, try another direction
     begin
         //we have already seen the target cell, decide if we should remove the wall anyway
-        //(or put a wall there if maze_inverted, but we're not doing that right now)
+        //(or put a wall there if maze_inverted, but we are not doing that right now)
         if not maze_inverted and (GetRandom(braidness) = 0) then
         //or just warn that inverted+braid+indestructible terrain != good idea
         begin
@@ -762,7 +762,7 @@ begin
                 dir := DIR_S;
         end
     end
-    else if when_seen(x + dir.x, y + dir.y) = -1 then //cell wasn't seen yet, go there
+    else if when_seen(x + dir.x, y + dir.y) = -1 then //cell was not seen yet, go there
     begin
         case dir.y of
             -1: xwalls[x, y-1] := false;
@@ -779,7 +779,7 @@ begin
         came_from[current_step, came_from_pos[current_step]].y := y;
         found_cell := true;
     end
-    else //we're seeing someone else, quit
+    else //we are seeing someone else, quit
     begin
         step_done[current_step] := true;
         found_cell := true;
@@ -1284,26 +1284,28 @@ function GenPreview: TPreview;
 var x, y, xx, yy, t, bit: LongInt;
     Preview: TPreview;
 begin
-WriteLnToConsole('Generating preview...');
-case cMapGen of
-    0: GenBlank(EdgeTemplates[SelectTemplate]);
-    1: GenMaze;
-end;
+    WriteLnToConsole('Generating preview...');
+    case cMapGen of
+        0: GenBlank(EdgeTemplates[SelectTemplate]);
+        1: GenMaze;
+    end;
 
-for y:= 0 to 127 do
-    for x:= 0 to 31 do
+    for y:= 0 to 127 do
+        for x:= 0 to 31 do
         begin
-        Preview[y, x]:= 0;
-        for bit:= 0 to 7 do
+            Preview[y, x]:= 0;
+            for bit:= 0 to 7 do
             begin
-            t:= 0;
-            for yy:= y * (LAND_HEIGHT div 128) to y * (LAND_HEIGHT div 128) + 7 do
-                for xx:= x * (LAND_WIDTH div 32) + bit * 8 to x * (LAND_WIDTH div 32) + bit * 8 + 7 do
-                    if Land[yy, xx] <> 0 then inc(t);
-            if t > 8 then Preview[y, x]:= Preview[y, x] or ($80 shr bit)
-            end
+                t:= 0;
+                for yy:= y * (LAND_HEIGHT div 128) to y * (LAND_HEIGHT div 128) + 7 do
+                    for xx:= x * (LAND_WIDTH div 32) + bit * 8 to x * (LAND_WIDTH div 32) + bit * 8 + 7 do
+                        if Land[yy, xx] <> 0 then inc(t);
+                if t > 8 then
+                    Preview[y, x]:= Preview[y, x] or ($80 shr bit);
+            end;
         end;
-GenPreview:= Preview
+
+    GenPreview:= Preview
 end;
 
 procedure initModule;

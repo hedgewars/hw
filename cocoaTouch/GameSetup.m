@@ -20,25 +20,30 @@
 
 @implementation GameSetup
 
-@synthesize systemSettings, teamsConfig;
+@synthesize systemSettings, gameConfig;
 
 -(id) init {
 	if (self = [super init]) {
     	srandom(time(NULL));
-        ipcPort = (random() % 64541) + 1025;
+        ipcPort = randomPort();
         
-        self.systemSettings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()]; //should check it exists
-        self.teamsConfig = [[NSArray alloc] initWithContentsOfFile:GAMECONFIG_FILE()];
+        NSDictionary *dictSett = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()]; //should check it exists
+        self.systemSettings = dictSett;
+        [dictSett release];
+        
+        NSDictionary *dictGame = [[NSDictionary alloc] initWithContentsOfFile:GAMECONFIG_FILE()];
+        self.gameConfig = dictGame;
+        [dictGame release];
     } 
     return self;
 }
 
 -(NSString *)description {
-    return [NSString stringWithFormat:@"ipcport: %d\nsockets: %d,%d\n teams: %@\n systemSettings: %@",ipcPort,sd,csd,teamsConfig,systemSettings];
+    return [NSString stringWithFormat:@"ipcport: %d\nsockets: %d,%d\n teams: %@\n systemSettings: %@",ipcPort,sd,csd,gameConfig,systemSettings];
 }
 
 -(void) dealloc {
-    [teamsConfig release];
+    [gameConfig release];
     [systemSettings release];
 	[super dealloc];
 }
@@ -130,26 +135,27 @@
 	char buffer[BUFFER_SIZE], string[BUFFER_SIZE];
 	Uint8 msgSize;
 	Uint16 gameTicks;
-	
+
+    serverQuit = NO;
+
 	if (SDLNet_Init() < 0) {
 		NSLog(@"SDLNet_Init: %s", SDLNet_GetError());
-		exit(EXIT_FAILURE);
+        serverQuit = YES;
 	}
 	
 	/* Resolving the host using NULL make network interface to listen */
 	if (SDLNet_ResolveHost(&ip, NULL, ipcPort) < 0) {
 		NSLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
-		exit(EXIT_FAILURE);
+        serverQuit = YES;
 	}
 	
 	/* Open a connection with the IP provided (listen on the host's port) */
 	if (!(sd = SDLNet_TCP_Open(&ip))) {
 		NSLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), ipcPort);
-		exit(EXIT_FAILURE);
+        serverQuit = YES;
 	}
 	
 	NSLog(@"engineProtocol - Waiting for a client on port %d", ipcPort);
-	serverQuit = NO;
 	while (!serverQuit) {
 		
 		/* This check the sd if there is a pending connection.
@@ -175,13 +181,12 @@
 				addteam <32charsMD5hash> <color> <team name>
 				addhh <level> <health> <hedgehog name>
 				  <level> is 0 for human, 1-5 for bots (5 is the most stupid)
-				ammostore is one byte/number for each ammocount then one for each probability or so
 				*/
 				// local game
 				[self sendToEngine:@"TL"];
 				
 				// seed info
-				[self sendToEngine:@"eseed {232c1b42-7d39-4ee6-adf8-4240e1f1efb8}"];
+				[self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
 				
 				// various flags
 				[self sendToEngine:@"e$gmflags 256"]; 
@@ -198,7 +203,8 @@
 				// theme info
 				[self sendToEngine:@"etheme Compost"];
 				
-                for (NSDictionary *teamData in self.teamsConfig) {
+                NSArray *teamsConfig = [self.gameConfig objectForKey:@"teams_list"];
+                for (NSDictionary *teamData in teamsConfig) {
                     [self sendTeamData:[teamData objectForKey:@"team"] 
                        withPlayingHogs:[[teamData objectForKey:@"number"] intValue]
                                ofColor:[teamData objectForKey:@"color"]];
@@ -210,7 +216,7 @@
                                           @"0405040541600655546554464776576666666155501",@"ammostore_probability",
                                           @"0000000000000205500000040007004000000000200",@"ammostore_delay",
                                           @"1311110312111111123114111111111111111211101",@"ammostore_crate", nil];
-                [self sendAmmoData:ammoData forTeams:[self.teamsConfig count]];
+                [self sendAmmoData:ammoData forTeams:[teamsConfig count]];
                 [ammoData release];
                 
                 clientQuit = NO;

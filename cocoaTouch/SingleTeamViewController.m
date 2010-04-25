@@ -342,7 +342,7 @@
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
-    UITableViewController *nextController;
+    UITableViewController *nextController = nil;
     UITableViewCell *cell;
     
     if (2 == section) {

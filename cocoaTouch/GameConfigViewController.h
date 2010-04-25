@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class TeamConfigViewController;
+@class MapConfigViewController;
 
 @interface GameConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
     UITableView *availableTeamsTableView;
@@ -19,6 +20,7 @@
     UIBarButtonItem *startButton;
     
     UIViewController *activeController;
+    MapConfigViewController *mapConfigViewController;
     TeamConfigViewController *teamConfigViewController;
 }
 
@@ -30,5 +32,7 @@
 @property (nonatomic,retain) IBOutlet UIBarButtonItem *startButton;
 
 -(IBAction) buttonPressed:(id) sender;
+-(IBAction) segmentPressed:(id) sender;
 -(void) startGame;
+
 @end

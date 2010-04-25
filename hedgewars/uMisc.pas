@@ -661,9 +661,9 @@ begin
 endian:= independent;
 {$ELSE}
 endian:= (((independent and $FF000000) shr 24) or
-    ((independent and $00FF0000) shr 8) or
-    ((independent and $0000FF00) shl 8) or
-    ((independent and $000000FF) shl 24))
+          ((independent and $00FF0000) shr 8) or
+          ((independent and $0000FF00) shl 8) or
+          ((independent and $000000FF) shl 24))
 {$ENDIF}
 end;
 

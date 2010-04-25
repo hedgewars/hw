@@ -9,6 +9,7 @@
 #import "GameConfigViewController.h"
 #import "SDL_uikitappdelegate.h"
 #import "CommodityFunctions.h"
+#import "MapConfigViewController.h"
 #import "TeamConfigViewController.h"
 
 @implementation GameConfigViewController
@@ -24,39 +25,96 @@
     UIButton *theButton = (UIButton *)sender;
     switch (theButton.tag) {
         case 0:
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
+            [[self parentViewController] dismissModalViewControllerAnimated:YES];
             break;
         case 1:
             [self performSelector:@selector(startGame)
                        withObject:nil
                        afterDelay:0.25];
             break;
+
     }
 }
 
+-(IBAction) segmentPressed:(id) sender {
+    UISegmentedControl *theSegment = (UISegmentedControl *)sender;
+    NSLog(@"%d", theSegment.selectedSegmentIndex);
+    switch (theSegment.selectedSegmentIndex) {
+        case 0:
+            // this init here is just aestetic as this controller was already set up in viewDidLoad
+            if (mapConfigViewController == nil) {
+                mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
+                [mapConfigViewController viewWillAppear:NO];  
+            }
+            activeController = mapConfigViewController;
+            break;
+        case 1:
+            if (teamConfigViewController == nil) {
+                teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                // this message is compulsory otherwise the team table won't be loaded at all
+                [teamConfigViewController viewWillAppear:NO];  
+            }
+            activeController = teamConfigViewController;
+            break;
+        case 2:
+            
+            break;
+    }
+    
+    [self.view addSubview:activeController.view];
+}
+
 -(void) startGame {
+    // play only if there is more than one team
     if ([teamConfigViewController.listOfSelectedTeams count] < 2) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too few teams playing",@"")
-                                                        message:NSLocalizedString(@"You need to select at least two teams to play a Game",@"")
+                                                        message:NSLocalizedString(@"You need to select at least two teams to play a game",@"")
                                                        delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];
         [alert show];
         [alert release];
-    } else {
-        [teamConfigViewController.listOfSelectedTeams writeToFile:GAMECONFIG_FILE() atomically:YES];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
-        [[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
+        return;
     }
+    
+    // play if there's room for enough hogs in the selected map
+    int hogs = 0;
+    for (NSDictionary *teamData in teamConfigViewController.listOfSelectedTeams)
+        hogs += [[teamData objectForKey:@"number"] intValue];
+
+    if (hogs > mapConfigViewController.maxHogs) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many hogs",@"")
+                                                        message:NSLocalizedString(@"The map you selected is too small for that many hogs",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        return;
+    } 
+    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:mapConfigViewController.seedCommand,@"seed_command",
+                                                                      teamConfigViewController.listOfSelectedTeams,@"teams_list",nil];
+    [dict writeToFile:GAMECONFIG_FILE() atomically:YES];
+    [dict release];
+    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+    [[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
 }
 
 -(void) viewDidLoad {
-    teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    activeController = teamConfigViewController;
+    mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
+    activeController = mapConfigViewController;
     
-    [self.view insertSubview:teamConfigViewController.view atIndex:0];
+    [self.view insertSubview:mapConfigViewController.view atIndex:0];
     
     [super viewDidLoad];
+}
+
+-(void) viewWillAppear:(BOOL)animated {
+    [mapConfigViewController viewWillAppear:animated];
+    [teamConfigViewController viewWillAppear:animated];
+    // ADD other controllers here
+     
+    [super viewWillAppear:animated];
 }
 
 -(void) didReceiveMemoryWarning {
@@ -67,7 +125,9 @@
 
 
 -(void) viewDidUnload {
+    NSLog(@"unloading");
     activeController = nil;
+    mapConfigViewController = nil;
     teamConfigViewController = nil;
     self.availableTeamsTableView = nil;
     self.weaponsButton = nil;
@@ -81,6 +141,7 @@
 
 -(void) dealloc {
     [activeController release];
+    [mapConfigViewController release];
     [teamConfigViewController release];
     [availableTeamsTableView release];
     [weaponsButton release];
@@ -89,26 +150,6 @@
     [randomButton release];
     [startButton release];
     [super dealloc];
-}
-
--(void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [activeController viewWillAppear:animated];
-}
-
--(void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [activeController viewWillDisappear:animated];
-}
-
--(void) viewDidAppear:(BOOL)animated {
-    [super viewDidLoad];
-    [activeController viewDidAppear:animated];
-}
-
--(void) viewDidDisappear:(BOOL)animated {
-    [super viewDidUnload];
-    [activeController viewDidDisappear:animated];
 }
 
 @end

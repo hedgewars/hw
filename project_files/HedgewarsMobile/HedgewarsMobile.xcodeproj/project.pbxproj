@@ -40,6 +40,7 @@
 		61370676117B32EF004EE44A /* GameConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61370674117B32EF004EE44A /* GameConfigViewController.m */; };
 		6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6151347D116C2803001F16D1 /* Icon-iPad.png */; };
 		615134B1116C2C5F001F16D1 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 615134B0116C2C5F001F16D1 /* OverlayViewController.xib */; };
+		615A92911183E31C006CA772 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 615A92901183E31C006CA772 /* MapConfigViewController-iPhone.xib */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
 		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
@@ -130,6 +131,7 @@
 		61A11AE11168DC6E00359010 /* SingleTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AE01168DC6E00359010 /* SingleTeamViewController.m */; };
 		61A11AE41168DC9400359010 /* HogHatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A11AE31168DC9400359010 /* HogHatViewController.m */; };
 		61AA7ACA117FCC8200FDDD4D /* openalbridge_t.h in Headers */ = {isa = PBXBuildFile; fileRef = 61AA7AC9117FCC8200FDDD4D /* openalbridge_t.h */; };
+		61B22E0F1180FBF400B2FCE0 /* MapConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B22E0D1180FBF400B2FCE0 /* MapConfigViewController.m */; };
 		61C325451179A336001E70B1 /* globals.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C3253B1179A336001E70B1 /* globals.h */; };
 		61C325461179A336001E70B1 /* loaders.c in Sources */ = {isa = PBXBuildFile; fileRef = 61C3253C1179A336001E70B1 /* loaders.c */; };
 		61C325471179A336001E70B1 /* loaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C3253D1179A336001E70B1 /* loaders.h */; };
@@ -242,6 +244,7 @@
 		61370674117B32EF004EE44A /* GameConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameConfigViewController.m; path = ../../cocoaTouch/GameConfigViewController.m; sourceTree = SOURCE_ROOT; };
 		6151347D116C2803001F16D1 /* Icon-iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-iPad.png"; path = "../../cocoaTouch/resources/Icon-iPad.png"; sourceTree = SOURCE_ROOT; };
 		615134B0116C2C5F001F16D1 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = ../../cocoaTouch/xib/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
+		615A92901183E31C006CA772 /* MapConfigViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapConfigViewController-iPhone.xib"; path = "../../cocoaTouch/xib/MapConfigViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E5114AA34C00BA94A9 /* HHHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = HHHandlers.inc; path = ../../hedgewars/HHHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -354,6 +357,8 @@
 		61A11AE21168DC9400359010 /* HogHatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HogHatViewController.h; path = ../../cocoaTouch/HogHatViewController.h; sourceTree = SOURCE_ROOT; };
 		61A11AE31168DC9400359010 /* HogHatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HogHatViewController.m; path = ../../cocoaTouch/HogHatViewController.m; sourceTree = SOURCE_ROOT; };
 		61AA7AC9117FCC8200FDDD4D /* openalbridge_t.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = openalbridge_t.h; path = ../../misc/openalbridge/openalbridge_t.h; sourceTree = SOURCE_ROOT; };
+		61B22E0C1180FBF400B2FCE0 /* MapConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapConfigViewController.h; path = ../../cocoaTouch/MapConfigViewController.h; sourceTree = SOURCE_ROOT; };
+		61B22E0D1180FBF400B2FCE0 /* MapConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapConfigViewController.m; path = ../../cocoaTouch/MapConfigViewController.m; sourceTree = SOURCE_ROOT; };
 		61C3251D1179A300001E70B1 /* libopenalbridge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libopenalbridge.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		61C3253B1179A336001E70B1 /* globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = globals.h; path = ../../misc/openalbridge/globals.h; sourceTree = SOURCE_ROOT; };
 		61C3253C1179A336001E70B1 /* loaders.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = loaders.c; path = ../../misc/openalbridge/loaders.c; sourceTree = SOURCE_ROOT; };
@@ -521,6 +526,7 @@
 		6100DB1711544E8400F455E0 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
+				615A92901183E31C006CA772 /* MapConfigViewController-iPhone.xib */,
 				611E127C117BACC60044B62F /* GameConfigViewController-iPad.xib */,
 				61A118C911683C7600359010 /* MainMenuViewController-iPad.xib */,
 				611E127E117BACCD0044B62F /* GameConfigViewController-iPhone.xib */,
@@ -559,6 +565,8 @@
 			children = (
 				61370673117B32EF004EE44A /* GameConfigViewController.h */,
 				61370674117B32EF004EE44A /* GameConfigViewController.m */,
+				61B22E0C1180FBF400B2FCE0 /* MapConfigViewController.h */,
+				61B22E0D1180FBF400B2FCE0 /* MapConfigViewController.m */,
 				61272422117E17CF005B90CF /* TeamConfigViewController.h */,
 				61272423117E17CF005B90CF /* TeamConfigViewController.m */,
 			);
@@ -967,6 +975,7 @@
 				611E127D117BACC60044B62F /* GameConfigViewController-iPad.xib in Resources */,
 				611E127F117BACCD0044B62F /* GameConfigViewController-iPhone.xib in Resources */,
 				611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */,
+				615A92911183E31C006CA772 /* MapConfigViewController-iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1086,6 +1095,7 @@
 				61272424117E17CF005B90CF /* TeamConfigViewController.m in Sources */,
 				612724D3117E28AF005B90CF /* HogButtonView.m in Sources */,
 				61CF4971117E702F00BF05B7 /* SquareButtonView.m in Sources */,
+				61B22E0F1180FBF400B2FCE0 /* MapConfigViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1161,7 +1171,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -dLOWRES";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -1365,7 +1375,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				DEBUG_INFORMATION_FORMAT = stabs;
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -dLOWRES";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -1404,7 +1414,7 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -dLOWRES";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;

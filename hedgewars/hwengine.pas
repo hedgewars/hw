@@ -324,6 +324,8 @@ end;
 
 procedure initEverything;
 begin
+    Randomize();
+
     uConsts.initModule;
     uMisc.initModule;
     uConsole.initModule;    // MUST happen after uMisc
@@ -395,21 +397,27 @@ begin
 end;
 
 /////////////////////////
-procedure GenLandPreview;
+procedure GenLandPreview{$IFDEF IPHONEOS}(port: LongInt){$ENDIF}; {$IFDEF HWLIBRARY}cdecl; export;{$ENDIF}
 var Preview: TPreview;
-    h: byte;
 begin
+{$IFDEF IPHONEOS}
+    initEverything();
+    WriteLnToConsole('Preview connecting on port ' + inttostr(port));
+    ipcPort:= port;
+{$ENDIF}
     InitIPC;
     IPCWaitPongEvent;
     TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
-    Preview:= GenPreview;
+    Preview:= GenPreview();
     WriteLnToConsole('Sending preview...');
     SendIPCRaw(@Preview, sizeof(Preview));
-    h:= MaxHedgehogs;
-    SendIPCRaw(@h, sizeof(h));
+    SendIPCRaw(@MaxHedgehogs, sizeof(byte));
     WriteLnToConsole('Preview sent, disconnect');
     CloseIPC();
+{$IFDEF IPHONEOS}
+    freeEverything();
+{$ENDIF}
 end;
 
 {$IFNDEF HWLIBRARY}
@@ -580,7 +588,6 @@ begin
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
     
     GetParams();
-    Randomize();
 
     if GameType = gmtLandPreview then GenLandPreview()
     else if GameType = gmtSyntax then DisplayUsage()

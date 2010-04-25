@@ -49,3 +49,9 @@ BOOL rotationManager (UIInterfaceOrientation interfaceOrientation) {
         return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 
 }
+
+NSInteger randomPort() {
+    return (random() % 64541) + 1025;
+}
+
+

@@ -27,7 +27,6 @@
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
 }
 
-
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
@@ -50,7 +49,6 @@
     [emptyArray release];
 
     [self.tableView reloadData];
-    NSLog(@"%@",listOfTeams);
 }
 
 /*
@@ -68,7 +66,6 @@
     [super viewDidDisappear:animated];
 }
 */
-
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
