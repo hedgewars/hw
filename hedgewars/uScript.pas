@@ -484,13 +484,15 @@ begin
 end;
 
 function lc_setammo(L : Plua_State) : LongInt; Cdecl;
+var np: LongInt;
 begin
-    if lua_gettop(L) <> 5 then
+    np:= lua_gettop(L);
+    if (np < 4) or (np > 5) then
         WriteLnToConsole('LUA: Wrong number of parameters passed to SetAmmo!')
+    else if np = 4 then
+        ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), 1)
     else
-        begin
         ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
-        end;
     lc_setammo:= 0
 end;
 ///////////////////
