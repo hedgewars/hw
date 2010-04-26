@@ -38,7 +38,7 @@
 
 -(IBAction) segmentPressed:(id) sender {
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
-    NSLog(@"%d", theSegment.selectedSegmentIndex);
+
     switch (theSegment.selectedSegmentIndex) {
         case 0:
             // this init here is just aestetic as this controller was already set up in viewDidLoad
@@ -91,8 +91,11 @@
         [alert show];
         [alert release];
         return;
-    } 
+    }
     NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:mapConfigViewController.seedCommand,@"seed_command",
+                                                                      mapConfigViewController.templateFilterCommand,@"templatefilter_command",
+                                                                      mapConfigViewController.mapGenCommand,@"mapgen_command",
+                                                                      mapConfigViewController.mazeSizeCommand,@"mazesize_command",
                                                                       teamConfigViewController.listOfSelectedTeams,@"teams_list",nil];
     [dict writeToFile:GAMECONFIG_FILE() atomically:YES];
     [dict release];
@@ -104,7 +107,7 @@
     mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
     activeController = mapConfigViewController;
     
-    [self.view insertSubview:mapConfigViewController.view atIndex:0];
+    [self.view addSubview:mapConfigViewController.view];
     
     [super viewDidLoad];
 }

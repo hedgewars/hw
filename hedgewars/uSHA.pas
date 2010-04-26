@@ -122,41 +122,43 @@ end;
 procedure SHA1UpdateLongwords(var Context: TSHA1Context; Buf: PLongwordArray; Length: LongWord);
 var i: Longword;
 begin
-for i:= 0 to Pred(Length div 4) do
+    for i:= 0 to Pred(Length div 4) do
     begin
-    SDLNet_Write32(Buf^[i], @Context.Buf[Context.CurrLength]);
-    inc(Context.CurrLength, 4);
-    if Context.CurrLength = 64 then
-       begin
-       SHA1Hash(Context);
-       inc(Context.Length, 512);
-       Context.CurrLength:= 0
-       end
+        SDLNet_Write32(Buf^[i], @Context.Buf[Context.CurrLength]);
+        inc(Context.CurrLength, 4);
+        if Context.CurrLength = 64 then
+        begin
+            SHA1Hash(Context);
+            inc(Context.Length, 512);
+            Context.CurrLength:= 0
+        end
     end
 end;
 
 function  SHA1Final(Context: TSHA1Context): TSHA1Digest;
 var i: LongWord;
 begin
-Context.Length:= Context.Length + Context.CurrLength shl 3;
-Context.Buf[Context.CurrLength]:= $80;
-inc(Context.CurrLength);
+    Context.Length:= Context.Length + Context.CurrLength shl 3;
+    Context.Buf[Context.CurrLength]:= $80;
+    inc(Context.CurrLength);
 
-if Context.CurrLength > 56 then
-   begin
-   FillChar(Context.Buf[Context.CurrLength], 64 - Context.CurrLength, 0);
-   Context.CurrLength:= 64;
-   SHA1Hash(Context);
-   Context.CurrLength:=0
-   end;
+    if Context.CurrLength > 56 then
+    begin
+        FillChar(Context.Buf[Context.CurrLength], 64 - Context.CurrLength, 0);
+        Context.CurrLength:= 64;
+        SHA1Hash(Context);
+        Context.CurrLength:=0
+    end;
 
-FillChar(Context.Buf[Context.CurrLength], 56 - Context.CurrLength, 0);
+    FillChar(Context.Buf[Context.CurrLength], 56 - Context.CurrLength, 0);
 
-for i:= 56 to 63 do
-    Context.Buf[i] := (Context.Length shr ((63 - i) * 8)) and $FF;
-SHA1Hash(Context);
-for i:= 0 to 4 do SHA1Final[i]:= Context.H[i];
-FillChar(Context, sizeof(Context), 0)
+    for i:= 56 to 63 do
+        Context.Buf[i] := (Context.Length shr ((63 - i) * 8)) and $FF;
+    SHA1Hash(Context);
+    for i:= 0 to 4 do
+        SHA1Final[i]:= Context.H[i];
+    
+    FillChar(Context, sizeof(Context), 0)
 end;
 
 end.

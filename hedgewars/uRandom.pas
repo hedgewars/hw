@@ -99,6 +99,7 @@ end;
 procedure initModule;
 begin
     n:= 54;
+    FillChar(cirbuf, 64*sizeof(Longword), 0);
 end;
 
 procedure freeModule;

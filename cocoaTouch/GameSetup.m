@@ -198,7 +198,9 @@
 				[self sendToEngine:@"e$casefreq 5"];
 
 				// dimension of the map
-				[self sendToEngine:@"e$template_filter 1"];
+				[self sendToEngine:[self.gameConfig objectForKey:@"templatefilter_command"]];
+				[self sendToEngine:[self.gameConfig objectForKey:@"mapgen_command"]];
+				[self sendToEngine:[self.gameConfig objectForKey:@"mazesize_command"]];
 								
 				// theme info
 				[self sendToEngine:@"etheme Compost"];
@@ -290,6 +292,8 @@
 	SDLNet_TCP_Close(sd);
 	SDLNet_Quit();
 
+    [[NSFileManager defaultManager] removeItemAtPath:GAMECONFIG_FILE() error:NULL];
+    
 	[pool release];
 	[NSThread exit];
 }
@@ -302,7 +306,7 @@
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     NSString *wSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.width];
     NSString *hSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.height];
-	const char **gameArgs = (const char**) malloc(sizeof(char*) * 8);
+	const char **gameArgs = (const char**) malloc(sizeof(char *) * 8);
 
     /*
     size_t size;
@@ -333,14 +337,14 @@
         username = [[NSString alloc] initWithString:originalUsername];
     }
     
-	gameArgs[0] = [username UTF8String];                                                    //UserNick
-	gameArgs[1] = [ipcString UTF8String];                                                   //ipcPort
-	gameArgs[2] = [[[self.systemSettings objectForKey:@"sound"] stringValue] UTF8String];        //isSoundEnabled
-	gameArgs[3] = [[[self.systemSettings objectForKey:@"music"] stringValue] UTF8String];        //isMusicEnabled
-	gameArgs[4] = [localeString UTF8String];                                                //cLocaleFName
+	gameArgs[0] = [username UTF8String];                                                        //UserNick
+	gameArgs[1] = [ipcString UTF8String];                                                       //ipcPort
+	gameArgs[2] = [[[self.systemSettings objectForKey:@"sound"] stringValue] UTF8String];       //isSoundEnabled
+	gameArgs[3] = [[[self.systemSettings objectForKey:@"music"] stringValue] UTF8String];       //isMusicEnabled
+	gameArgs[4] = [localeString UTF8String];                                                    //cLocaleFName
 	gameArgs[5] = [[[self.systemSettings objectForKey:@"alternate"] stringValue] UTF8String];	//cAltDamage
-	gameArgs[6] = [wSize UTF8String];                                                       //cScreenHeight
-    gameArgs[7] = [hSize UTF8String];                                                       //cScreenWidth
+	gameArgs[6] = [wSize UTF8String];                                                           //cScreenHeight
+    gameArgs[7] = [hSize UTF8String];                                                           //cScreenWidth
     
     [wSize release];
     [hSize release];

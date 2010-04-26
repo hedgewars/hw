@@ -35,6 +35,7 @@ var Land: TCollisionArray;
     isMap: boolean;  
     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
     LandBackSurface: PSDL_Surface;
+    digest: shortstring;
 
 type direction = record x, y: LongInt; end;
 const DIR_N: direction = (x: 0; y: -1);
@@ -80,15 +81,14 @@ SendIPCRaw(@s[0], Length(s) + 1)
 end;
 
 procedure CheckLandDigest(s: shortstring);
-const digest: shortstring = '';
 begin
 {$IFDEF DEBUGFILE}
-AddFileLog('CheckLandDigest: ' + s);
+    AddFileLog('CheckLandDigest: ' + s + ' digest : ' + digest);
 {$ENDIF}
-if digest = '' then
-   digest:= s
-else
-   TryDo(s = digest, 'Different maps generated, sorry', true)
+    if digest = '' then
+        digest:= s
+    else
+        TryDo(s = digest, 'Different maps generated, sorry', true);
 end;
 
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
@@ -1311,6 +1311,7 @@ end;
 procedure initModule;
 begin
     LandBackSurface:= nil;
+    digest:= '';
     FillChar(LandPixels, sizeof(TLandArray), 0);
 end;
 

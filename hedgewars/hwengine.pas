@@ -349,7 +349,7 @@ begin
     //uLandTexture does not need initialization
     //uLocale does not need initialization
     uRandom.initModule; 
-    //uSHA does not need initialization
+    //uSHA is initialized internally
     uSound.initModule;
     uStats.initModule;
     uStore.initModule;
@@ -391,7 +391,7 @@ begin
     uConsole.freeModule;
     uConsts.freeModule;         //stub
     uScript.freeModule;
-// uMisc closes the debug log.
+    // uMisc closes the debug log.
     uMisc.freeModule;
 
 end;
