@@ -639,16 +639,24 @@ end;
 
 function TestTeleport(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var
-  i: longword;
+  i, failNum: longword;
 begin
   FillBonuses(true, [gtCase]);
   if bonuses.Count = 0 then
     TestTeleport := BadTurn
   else begin
-	i := random(bonuses.Count);
-	ap.AttackPutX := bonuses.ar[i].X;
-	ap.AttackPutY := bonuses.ar[i].Y - 50;
-	TestTeleport := 0;
+	failNum := 0;
+    repeat 
+		i := random(bonuses.Count);
+		inc(failNum);
+	until(not TestColl(bonuses.ar[i].X, bonuses.ar[i].Y - cHHRadius - bonuses.ar[i].Radius, cHHRadius) or (failNum = bonuses.Count*2));
+	if failNum < bonuses.Count*2 then begin
+	  ap.AttackPutX := bonuses.ar[i].X;
+	  ap.AttackPutY := bonuses.ar[i].Y - cHHRadius - bonuses.ar[i].Radius;
+	  TestTeleport := 0;
+	end
+    else
+	  TestTeleport := BadTurn;
   end;
 end;
 
