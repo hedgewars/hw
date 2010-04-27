@@ -41,6 +41,7 @@ function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttac
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestTeleport(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
     TAmmoTest = record
@@ -70,7 +71,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amMineStrike
             (proc: nil;              flags: 0), // amBlowTorch
             (proc: nil;              flags: 0), // amGirder
-            (proc: nil;              flags: amtest_OnTurn), // amTeleport
+            (proc: @TestTeleport;    flags: amtest_OnTurn), // amTeleport
             (proc: nil;              flags: 0), // amSwitch
             (proc: @TestMortar;      flags: 0), // amMortar
             (proc: nil;              flags: 0), // amKamikaze
@@ -633,6 +634,22 @@ for i:= 0 to 3 do
 
 if valueResult <= 0 then valueResult:= BadTurn;
 TestAirAttack:= valueResult;
+end;
+
+
+function TestTeleport(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+var
+  i: longword;
+begin
+  FillBonuses(true, [gtCase]);
+  if bonuses.Count = 0 then
+    TestTeleport := BadTurn
+  else begin
+	i := random(bonuses.Count);
+	ap.AttackPutX := bonuses.ar[i].X;
+	ap.AttackPutY := bonuses.ar[i].Y - 50;
+	TestTeleport := 0;
+  end;
 end;
 
 end.
