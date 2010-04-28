@@ -642,8 +642,15 @@ var
   i, failNum: longword;
 begin
   FillBonuses(true, [gtCase]);
-  if bonuses.Count = 0 then
-    TestTeleport := BadTurn
+  if bonuses.Count = 0 then begin
+    if Me^.Health <= 100  then begin
+      ap.AttackPutX := Targ.X;
+      ap.AttackPutY := topY + cHHRadius*2;
+      TestTeleport := Targ.Y - topY;
+    end
+    else
+      TestTeleport := BadTurn;
+  end
   else begin
 	failNum := 0;
     repeat 
