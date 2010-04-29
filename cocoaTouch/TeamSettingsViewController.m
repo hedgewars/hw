@@ -43,7 +43,6 @@
     [array release];
     
     [self.tableView reloadData];
-    NSLog(@"files: %@", self.listOfTeams);
 }
 
 // modifies the navigation bar to add the "Add" and "Done" buttons

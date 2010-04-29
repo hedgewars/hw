@@ -24,10 +24,10 @@
 
 -(id) init {
 	if (self = [super init]) {
-    	srandom(time(NULL));
         ipcPort = randomPort();
         
-        NSDictionary *dictSett = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()]; //should check it exists
+        // should check they exist and throw and exection if not
+        NSDictionary *dictSett = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
         self.systemSettings = dictSett;
         [dictSett release];
         
@@ -50,11 +50,13 @@
 
 #pragma mark -
 #pragma mark Thread/Network relevant code
+// select one of GameSetup method and execute it in a seprate thread
 -(void) startThread: (NSString *) selector {
 	SEL usage = NSSelectorFromString(selector);
 	[NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
 }
 
+// wrapper that computes the length of the message and then sends the command string
 -(int) sendToEngine: (NSString *)string {
 	unsigned char length = [string length];
 	
@@ -62,6 +64,7 @@
 	return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
+// unpacks team data from the team.plist to a sequence of commands for engine
 -(void) sendTeamData:(NSString *)fileName withPlayingHogs:(NSInteger) playingHogs ofColor:(NSNumber *)color{    
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@", TEAMS_DIRECTORY(), fileName];
     NSDictionary *teamData = [[NSDictionary alloc] initWithContentsOfFile:teamFile];
@@ -103,6 +106,7 @@
     [teamData release];
 }
 
+// unpacks ammodata from the ammo.plist to a sequence of commands for engine
 -(void) sendAmmoData:(NSDictionary *)ammoData forTeams: (NSInteger)numberPlaying {
     NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@", [ammoData objectForKey:@"ammostore_initialqt"]];
     [self sendToEngine: ammloadt];
@@ -127,6 +131,7 @@
     [ammstore release];
 }
 
+// method that handles net setup with engine and keeps connection alive
 -(void) engineProtocol {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	IPaddress ip;
@@ -143,13 +148,13 @@
         serverQuit = YES;
 	}
 	
-	/* Resolving the host using NULL make network interface to listen */
+	// Resolving the host using NULL make network interface to listen
 	if (SDLNet_ResolveHost(&ip, NULL, ipcPort) < 0) {
 		NSLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         serverQuit = YES;
 	}
 	
-	/* Open a connection with the IP provided (listen on the host's port) */
+	// Open a connection with the IP provided (listen on the host's port) 
 	if (!(sd = SDLNet_TCP_Open(&ip))) {
 		NSLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), ipcPort);
         serverQuit = YES;
@@ -158,18 +163,19 @@
 	NSLog(@"engineProtocol - Waiting for a client on port %d", ipcPort);
 	while (!serverQuit) {
 		
-		/* This check the sd if there is a pending connection.
-		 * If there is one, accept that, and open a new socket for communicating */
+		// This check the sd if there is a pending connection.
+        // If there is one, accept that, and open a new socket for communicating
 		csd = SDLNet_TCP_Accept(sd);
 		if (NULL != csd) {
-			
+			// Now we can communicate with the client using csd socket
+			// sd will remain opened waiting other connections
 			NSLog(@"engineProtocol - Client found");
 			
 			//first byte of the command alwayas contain the size of the command
 			SDLNet_TCP_Recv(csd, &msgSize, sizeof(Uint8));
 			
 			SDLNet_TCP_Recv(csd, buffer, msgSize);
-			gameTicks = SDLNet_Read16(&buffer[msgSize - 2]);
+			gameTicks = SDLNet_Read16 (&buffer[msgSize - 2]);
 			//NSLog(@"engineProtocol - %d: received [%s]", gameTicks, buffer);
 			
 			if ('C' == buffer[0]) {
@@ -189,28 +195,29 @@
 				[self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
 				
 				// various flags
-				[self sendToEngine:@"e$gmflags 256"]; 
+				[self sendToEngine:@"e$gmflags 8448"]; 
 				[self sendToEngine:@"e$damagepct 100"];
 				[self sendToEngine:@"e$turntime 45000"];
 				[self sendToEngine:@"e$minestime 3000"];
 				[self sendToEngine:@"e$landadds 4"];
 				[self sendToEngine:@"e$sd_turns 15"];
 				[self sendToEngine:@"e$casefreq 5"];
+				[self sendToEngine:@"e$explosives 2"];
+				[self sendToEngine:@"e$minedudpct 0"];
 
 				// dimension of the map
 				[self sendToEngine:[self.gameConfig objectForKey:@"templatefilter_command"]];
 				[self sendToEngine:[self.gameConfig objectForKey:@"mapgen_command"]];
 				[self sendToEngine:[self.gameConfig objectForKey:@"mazesize_command"]];
-								
+
 				// theme info
-				[self sendToEngine:@"etheme Compost"];
+				[self sendToEngine:[self.gameConfig objectForKey:@"theme_command"]];
 				
                 NSArray *teamsConfig = [self.gameConfig objectForKey:@"teams_list"];
                 for (NSDictionary *teamData in teamsConfig) {
                     [self sendTeamData:[teamData objectForKey:@"team"] 
                        withPlayingHogs:[[teamData objectForKey:@"number"] intValue]
                                ofColor:[teamData objectForKey:@"color"]];
-                    NSLog(@"teamData sent");
                 }
                 
                 NSDictionary *ammoData = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -228,8 +235,6 @@
 			}
 			
 			while (!clientQuit){
-				/* Now we can communicate with the client using csd socket
-				 * sd will remain opened waiting other connections */
 				msgSize = 0;
 				memset(buffer, 0, BUFFER_SIZE);
 				memset(string, 0, BUFFER_SIZE);
@@ -300,6 +305,7 @@
 
 #pragma mark -
 #pragma mark Setting methods
+// returns an array of c-strings that are read by engine at startup
 -(const char **)getSettings {
 	NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
 	NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
@@ -331,11 +337,10 @@
     // prevents using an empty nickname
     NSString *username;
     NSString *originalUsername = [self.systemSettings objectForKey:@"username"];
-    if ([originalUsername length] == 0) {
+    if ([originalUsername length] == 0)
         username = [[NSString alloc] initWithFormat:@"MobileUser-%@",ipcString];
-    } else {
+    else
         username = [[NSString alloc] initWithString:originalUsername];
-    }
     
 	gameArgs[0] = [username UTF8String];                                                        //UserNick
 	gameArgs[1] = [ipcString UTF8String];                                                       //ipcPort

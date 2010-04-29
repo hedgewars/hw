@@ -96,6 +96,7 @@
                                                                       mapConfigViewController.templateFilterCommand,@"templatefilter_command",
                                                                       mapConfigViewController.mapGenCommand,@"mapgen_command",
                                                                       mapConfigViewController.mazeSizeCommand,@"mazesize_command",
+                                                                      mapConfigViewController.themeCommand,@"theme_command",
                                                                       teamConfigViewController.listOfSelectedTeams,@"teams_list",nil];
     [dict writeToFile:GAMECONFIG_FILE() atomically:YES];
     [dict release];
@@ -118,6 +119,12 @@
     // ADD other controllers here
      
     [super viewWillAppear:animated];
+}
+
+-(void) viewDidAppear:(BOOL)animated {
+    [mapConfigViewController viewDidAppear:animated];
+    [teamConfigViewController viewDidAppear:animated];
+    [super viewDidAppear:animated];
 }
 
 -(void) didReceiveMemoryWarning {

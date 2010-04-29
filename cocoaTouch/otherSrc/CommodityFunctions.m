@@ -50,8 +50,20 @@ BOOL rotationManager (UIInterfaceOrientation interfaceOrientation) {
 
 }
 
-NSInteger randomPort() {
-    return (random() % 64541) + 1025;
+NSInteger randomPort () {
+    srandom(time(NULL));
+    return (random() % 64511) + 1024;
 }
+
+void popError (const char *title, const char *message) {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithUTF8String:title]
+                                                    message:[NSString stringWithUTF8String:message]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"Ok"
+                                          otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+}
+    
 
 
