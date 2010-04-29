@@ -80,6 +80,7 @@ type PHHAmmo = ^THHAmmo;
 
     TClan = record
             Color: Longword;
+            RColor: Longword; // color with reversed byte order
             Teams: array[0..Pred(cMaxTeams)] of PTeam;
             TeamsNumber: Longword;
             CurrTeam: LongWord;
@@ -111,6 +112,7 @@ procedure RestoreTeamsFromSave;
 function  CheckForWin: boolean;
 procedure TeamGone(s: shortstring);
 procedure TeamGoneEffect(var Team: TTeam);
+function GetTeamStatString(p: PTeam): shortstring;
 
 implementation
 uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uChat;
@@ -312,7 +314,8 @@ if c < 0 then
    with team^.Clan^ do
         begin
         ClanIndex:= Pred(ClansCount);
-        Color:= TeamColor
+        Color:= TeamColor;
+        RColor:= $FF000000 or ((Color shr 16) and $FF) or ((Color shl 16) and $00FF0000) or (Color and $0000FF00)
         end
    end else
    begin
@@ -456,6 +459,13 @@ with Team do
                 Gear^.Invulnerable:= false;
                 Gear^.Damage:= Gear^.Health
                 end
+end;
+
+function GetTeamStatString(p: PTeam): shortstring;
+var s: ansistring;
+begin
+    s:= p^.TeamName + ':' + inttostr(p^.TeamHealth) + ':';
+    GetTeamStatString:= s;
 end;
 
 procedure initModule;
