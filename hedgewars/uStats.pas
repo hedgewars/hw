@@ -193,6 +193,8 @@ mskcnt:= 0;
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
+        if not ExtDriven then
+            SendStat(siTeamStats, GetTeamStatString(TeamsArray[t]));
         for i:= 0 to cMaxHHIndex do
             begin
             if Hedgehogs[i].stats.MaxStepDamageGiven > msd then

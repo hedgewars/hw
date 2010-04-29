@@ -91,7 +91,7 @@ var HHTexture: PTexture;
 {$IFNDEF IPHONEOS}
 procedure Tint(r, g, b, a: Byte); inline;
 begin
-Tint((a shl 24) or (b shl 16) or (g shl 8) or r);
+Tint((a shl 24) or (r shl 16) or (g shl 8) or b);
 end;
 
 procedure Tint(c: Longword); inline;
@@ -116,7 +116,7 @@ procedure Tint(c: Longword); inline;
 begin
 if c = lastTint then
     exit;
-Tint(c and $FF, (c shr 8) and $FF, (c shr 16) and $FF, (c shr 24) and $FF);
+Tint((c shr 16) and $FF, (c shr 8) and $FF, c and $FF, (c shr 24) and $FF);
 lastTint:= c;
 end;
 {$ENDIF}

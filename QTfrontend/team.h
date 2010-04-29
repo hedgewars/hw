@@ -54,6 +54,8 @@ class HWTeam
         QString Flag;
         QString Voicepack;
         QString Owner;
+        int Rounds;
+        int Wins;
         HWHog Hedgehogs[8];
         unsigned int AchievementProgress[MAX_ACHIEVEMENTS];
         unsigned int difficulty;
@@ -65,6 +67,7 @@ class HWTeam
         bool LoadFromFile();
         bool DeleteFile();
         bool SaveToFile();
+        bool FileExists();
         void SetToPage(HWForm * hwform);
         void GetFromPage(HWForm * hwform);
         QStringList TeamGameConfig(quint32 InitHealth) const;

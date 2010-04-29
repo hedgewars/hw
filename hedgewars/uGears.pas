@@ -962,7 +962,7 @@ sy:= hwRound(Gear^.Y) - 3 + WorldDy;
 
 if HH^.Effects[hePoisoned] then
     begin
-    Tint($4000FF40);
+    Tint($4040FF00);
     DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
     Tint($FFFFFFFF)
     end;
@@ -1047,7 +1047,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
                 glLineWidth(1.0);
 
-                Tint($C00000FF);
+                Tint($C0FF0000);
                 VertexBuffer[0].X:= hx + WorldDx;
                 VertexBuffer[0].Y:= hy + WorldDy;
                 VertexBuffer[1].X:= tx + WorldDx;
@@ -1487,13 +1487,13 @@ with HH^ do
 
 if HH^.Effects[hePoisoned] then
     begin
-    Tint($8000FF40);
+    Tint($8040FF00);
     DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 1.5, 0, 0, sx, sy, 0, 1, 22, 22, 360 - (RealTicks shr 37) mod 360);
     end;
 
 if Gear^.Invulnerable then
     begin
-    Tint($FF, $FF, $FF, max($40, floor($FF * abs(1 - 2 * ((RealTicks div 2 + Gear^.uid * 491) mod 1500) / 750))));
+    Tint($FF, $FF, $FF, max($40, floor($FF * abs(1 - ((RealTicks div 2 + Gear^.uid * 491) mod 1500) / 750))));
     DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
     end;
 if cVampiric and

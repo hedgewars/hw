@@ -80,7 +80,6 @@ type PHHAmmo = ^THHAmmo;
 
     TClan = record
             Color: Longword;
-            RColor: Longword; // color with reversed byte order
             Teams: array[0..Pred(cMaxTeams)] of PTeam;
             TeamsNumber: Longword;
             CurrTeam: LongWord;
@@ -315,7 +314,6 @@ if c < 0 then
         begin
         ClanIndex:= Pred(ClansCount);
         Color:= TeamColor;
-        RColor:= $FF000000 or ((Color shr 16) and $FF) or ((Color shl 16) and $00FF0000) or (Color and $0000FF00)
         end
    end else
    begin

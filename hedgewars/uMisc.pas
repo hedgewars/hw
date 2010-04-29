@@ -345,7 +345,7 @@ r:= SignAs(cLittle, r)
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = 'rDkKH';
+const stc: array [TStatInfoType] of char = 'rDkKHT';
 var buf: shortstring;
 begin
 buf:= 'i' + stc[sit] + s;

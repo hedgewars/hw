@@ -21,6 +21,7 @@
 #include <QGraphicsScene>
 
 #include "statsPage.h"
+#include "team.h"
 
 FitGraphicsView::FitGraphicsView(QWidget* parent) : QGraphicsView(parent)
 {
@@ -122,6 +123,19 @@ void PageGameStats::GameStats(char type, const QString & info)
             quint32 hp = info.mid(i + 1).toUInt();
             healthPoints[clan].append(hp);
             break;
+        }
+        case 'T': { // local team stats
+            //AddStatText("<p>local team: " + info + "</p>");
+            QStringList infol = info.split(":");
+            HWTeam team(infol[0]);
+            if(team.FileExists()) // do some better test to avoid influence from scripted/predefined teams?
+            {
+                team.LoadFromFile();
+                team.Rounds++;
+                if(infol[1].toInt() > 0) // might require some better test for winning condition (or changed flag) ... WIP!
+                    team.Wins++; // should draws count as wins?
+                //team.SaveToFile(); // don't save yet
+            }
         }
     }
 }

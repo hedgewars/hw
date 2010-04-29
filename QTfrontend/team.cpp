@@ -50,6 +50,8 @@ HWTeam::HWTeam(const QString & teamname) :
         binds[i].action = cbinds[i].action;
         binds[i].strbind = cbinds[i].strbind;
     }
+    Rounds = 0;
+    Wins = 0;
 }
 
 HWTeam::HWTeam(const QStringList& strLst) :
@@ -73,6 +75,8 @@ HWTeam::HWTeam(const QStringList& strLst) :
 // Checking net teams is probably pointless, but can't hurt.
         if (Hedgehogs[i].Hat.length() == 0) Hedgehogs[i].Hat = "NoHat"; 
     }
+    Rounds = 0;
+    Wins = 0;
 }
 
 HWTeam::HWTeam() :
@@ -97,6 +101,8 @@ HWTeam::HWTeam() :
         binds[i].action = cbinds[i].action;
         binds[i].strbind = cbinds[i].strbind;
     }
+    Rounds = 0;
+    Wins = 0;
 }
 
 
@@ -110,6 +116,8 @@ bool HWTeam::LoadFromFile()
     Voicepack = teamfile.value("Team/Voicepack", "Default").toString();
     Flag = teamfile.value("Team/Flag", "hedgewars").toString();
     difficulty = teamfile.value("Team/Difficulty", 0).toInt();
+    Rounds = teamfile.value("Team/Rounds", 0).toInt();
+    Wins = teamfile.value("Team/Wins", 0).toInt();
     for(int i = 0; i < 8; i++)
     {
         QString hh = QString("Hedgehog%1/").arg(i);
@@ -128,6 +136,12 @@ bool HWTeam::LoadFromFile()
         else
             break;
     return true;
+}
+
+bool HWTeam::FileExists()
+{
+    QFile f(cfgdir->absolutePath() + "/Teams/" + TeamName + ".ini");
+    return f.exists();
 }
 
 bool HWTeam::DeleteFile()
@@ -155,6 +169,8 @@ bool HWTeam::SaveToFile()
     teamfile.setValue("Team/Voicepack", Voicepack);
     teamfile.setValue("Team/Flag", Flag);
     teamfile.setValue("Team/Difficulty", difficulty);
+    teamfile.setValue("Team/Rounds", Rounds);
+    teamfile.setValue("Team/Wins", Wins);
     for(int i = 0; i < 8; i++)
     {
         QString hh = QString("Hedgehog%1/").arg(i);
