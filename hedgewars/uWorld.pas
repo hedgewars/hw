@@ -652,7 +652,7 @@ for t:= 0 to Pred(TeamsCount) do
       highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
       
       if highlight then
-         Tint(Clan^.Color);
+         Tint(Clan^.RColor);
 
       // draw name
       DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY, NameTagTex);
