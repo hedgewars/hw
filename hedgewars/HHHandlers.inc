@@ -169,11 +169,12 @@ with Gear^,
                                  PlaySound(sndBaseballBat) // TODO: Only play if something is hit?
                                  end;
                     amParachute: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtParachute, 0, _0, _0, 0);
+                    // we save Ammo^[CurSlot, CurAmmo].Pos (in this case: cursor direction) by using it as (otherwise irrelevant) X value of the new gear.
                     amAirAttack: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 0, _0, _0, 0);
                    amMineStrike: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 1, _0, _0, 0);
                     amBlowTorch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBlowTorch, 0, SignAs(_0_5, dX), _0, 0);
                        amGirder: CurAmmoGear:= AddGear(0, 0, gtGirder, Ammo^[CurSlot, CurAmmo].Pos, _0, _0, 0);
-                     amTeleport: CurAmmoGear:= AddGear(0, 0, gtTeleport, 0, _0, _0, 0);
+                     amTeleport: CurAmmoGear:= AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtTeleport, 0, _0, _0, 0);
                        amSwitch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtSwitcher, 0, _0, _0, 0);
                        amMortar: begin
                 playSound(sndMortar);

@@ -1992,6 +1992,10 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
         DeleteCI(HHGear);
         SetAllHHToActive;
         Gear^.doStep:= @doStepTeleportAnim;
+        // copy old HH position and direction to Gear (because we need them for drawing the vanishing hog)
+        Gear^.dX:= HHGear^.dX;
+         // retrieve the cursor direction (it was previously copied to X so it doesn't get lost)
+         HHGear^.dX.isNegative := (Gear^.X.QWordValue <> 0);
         Gear^.X:= HHGear^.X;
         Gear^.Y:= HHGear^.Y;
         HHGear^.X:= int2hwFloat(TargetPoint.X);
