@@ -19,7 +19,7 @@
 #define TEAMNAME_TAG 1234
 
 @implementation SingleTeamViewController
-@synthesize teamDictionary, hatArray, secondaryItems, textFieldBeingEdited, teamName;
+@synthesize teamDictionary, normalHogSprite, secondaryItems, textFieldBeingEdited, teamName;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -106,6 +106,13 @@
     self.secondaryItems = array;
     [array release];
 
+    // load the base hog image, drawing will occure in cellForRow...
+    NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
+    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:normalHogFile andCutAt:CGRectMake(96, 0, 32, 32)];
+    [normalHogFile release];
+    self.normalHogSprite = hogSprite;
+    [hogSprite release];
+    
     // listen if any childController modifies the plist and write it if needed
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setWriteNeeded) name:@"setWriteNeedTeams" object:nil];
     isWriteNeeded = NO;
@@ -125,26 +132,6 @@
 	[teamFile release];
     
     self.teamName = self.title;
-    
-    // load the images of the hat for aach hog
-    NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
-    UIImage *normalHogSprite = [[UIImage alloc] initWithContentsOfFile:normalHogFile andCutAt:CGRectMake(96, 0, 32, 32)];
-    [normalHogFile release];
-    
-    NSArray *hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
-    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[hogArray count]];
-    for (NSDictionary *hog in hogArray) {
-        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@.png",HATS_DIRECTORY(),[hog objectForKey:@"hat"]];
-
-        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile:hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
-        [hatFile release];        
-        
-        [array addObject:[normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, -5)]];
-        [hatSprite release];
-    }
-    [normalHogSprite release];
-    self.hatArray = array;
-    [array release];
     
     [self.tableView reloadData];
 }
@@ -276,8 +263,12 @@
             
             hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
             
-            cell.imageView.image = [self.hatArray objectAtIndex:row];
-            
+            NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@.png", HATS_DIRECTORY(), [[hogArray objectAtIndex:row] objectForKey:@"hat"]];
+            UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
+            [hatFile release];
+            cell.imageView.image = [self.normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, -5)];
+            [hatSprite release];
+                        
             for (UIView *oneView in cell.contentView.subviews) {
                 if ([oneView isMemberOfClass:[UITextField class]]) {
                     // we find the uitextfied and we'll use its tag to understand which one is being edited
@@ -421,7 +412,7 @@
     self.teamDictionary = nil;
     self.textFieldBeingEdited = nil;
     self.teamName = nil;
-    self.hatArray = nil;
+    self.normalHogSprite = nil;
     self.secondaryItems = nil;
     hogHatViewController = nil;
     flagsViewController = nil;
@@ -435,7 +426,7 @@
     [teamDictionary release];
     [textFieldBeingEdited release];
     [teamName release];
-    [hatArray release];
+    [normalHogSprite release];
     [secondaryItems release];
     [hogHatViewController release];
     [fortsViewController release];

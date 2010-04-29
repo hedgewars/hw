@@ -11,7 +11,7 @@
 #import "UIImageExtra.h"
 
 @implementation GravesViewController
-@synthesize teamDictionary, graveArray, graveSprites, lastIndexPath;
+@synthesize teamDictionary, graveArray, lastIndexPath;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -21,49 +21,19 @@
 
 #pragma mark -
 #pragma mark View lifecycle
-- (void)viewDidLoad {
+-(void) viewDidLoad {
     [super viewDidLoad];
 
-    // load all the voices names and store them into voiceArray
-    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:GRAVES_DIRECTORY() error:NULL];
-    self.graveArray = array;
-    
-    NSMutableArray *sprites = [[NSMutableArray alloc] initWithCapacity:[graveArray count]];
-    for (NSString *graveName in graveArray) {
-        NSString *gravePath = [[NSString alloc] initWithFormat:@"%@/%@",GRAVES_DIRECTORY(),graveName];
-        // because we also have multi frame graves, let's take the first one only
-        UIImage *graveSprite = [[UIImage alloc] initWithContentsOfFile:gravePath andCutAt:CGRectMake(0, 0, 32, 32)];
-        [gravePath release];        
-
-        [sprites addObject:graveSprite];
-        [graveSprite release];
-    }
-    self.graveSprites = sprites;
-    [sprites release];
+    // load all the grave names and store them into graveArray
+    self.graveArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:GRAVES_DIRECTORY() error:NULL];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+-(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    [self.tableView reloadData];
     // this moves the tableview to the top
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
-
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
 
 
 #pragma mark -
@@ -77,7 +47,7 @@
 }
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"Cell";
     
@@ -85,8 +55,8 @@
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     
-    NSString *grave = [[graveArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
-    cell.textLabel.text = grave;
+    NSString *grave = [graveArray objectAtIndex:[indexPath row]];
+    cell.textLabel.text = [grave stringByDeletingPathExtension];
     
     if ([grave isEqualToString:[teamDictionary objectForKey:@"grave"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -94,50 +64,16 @@
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
+
+    NSString *graveFilePath = [[NSString alloc] initWithFormat:@"%@/%@",GRAVES_DIRECTORY(),grave];
+    // because we also have multi frame graves, let's take the first one only
+    UIImage *graveSprite = [[UIImage alloc] initWithContentsOfFile:graveFilePath andCutAt:CGRectMake(0, 0, 32, 32)];
+    [graveFilePath release];        
+    cell.imageView.image = graveSprite;
+    [graveSprite release];
     
-    cell.imageView.image = [graveSprites objectAtIndex:[indexPath row]];
     return cell;
 }
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 
 #pragma mark -
@@ -151,12 +87,15 @@
         
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-        [self.tableView reloadData];
         
+        UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
+        newCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
+        oldCell.accessoryType = UITableViewCellAccessoryNone;
         self.lastIndexPath = indexPath;
-        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [aTableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -174,11 +113,9 @@
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
     self.graveArray = nil;
-    self.graveSprites = nil;
 }
 
 - (void)dealloc {
-    [graveSprites release];
     [graveArray release];
     [teamDictionary release];
     [lastIndexPath release];

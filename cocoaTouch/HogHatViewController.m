@@ -11,7 +11,7 @@
 #import "UIImageExtra.h"
 
 @implementation HogHatViewController
-@synthesize teamDictionary, hatArray, hatSprites, lastIndexPath, selectedHog;
+@synthesize teamDictionary, hatArray, normalHogSprite, lastIndexPath, selectedHog;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -29,22 +29,12 @@
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:hatsDirectory error:NULL];
     self.hatArray = array;
     
+    // load the base hog image, drawing will occure in cellForRow...
     NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
-    UIImage *normalHogSprite = [[UIImage alloc] initWithContentsOfFile:normalHogFile andCutAt:CGRectMake(96, 0, 32, 32)];
+    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:normalHogFile andCutAt:CGRectMake(96, 0, 32, 32)];
     [normalHogFile release];
-    
-    // load all the hat images from the previous array but save only the first sprite and store it in hatSprites
-    NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[hatArray count]];
-    for (NSString *hat in hatArray) {
-        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", hatsDirectory,hat];
-        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
-        [hatFile release];
-        [spriteArray addObject:[normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, -5)]];
-        [hatSprite release];
-    }
-    [normalHogSprite release];
-    self.hatSprites = spriteArray;
-    [spriteArray release];
+    self.normalHogSprite = hogSprite;
+    [hogSprite release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -56,22 +46,6 @@
     // this moves the tableview to the top
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
-
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
 
 
 #pragma mark -
@@ -90,16 +64,19 @@
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
+    if (cell == nil) 
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
     
     NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
+    NSString *hat = [hatArray objectAtIndex:[indexPath row]];
+    cell.textLabel.text = [hat stringByDeletingPathExtension];
     
-    NSString *hat = [[hatArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
-    cell.textLabel.text = hat;
-    cell.imageView.image = [hatSprites objectAtIndex:[indexPath row]];
-    
+    NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
+    UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
+    [hatFile release];
+    cell.imageView.image = [self.normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, -5)];
+    [hatSprite release];
+        
     if ([hat isEqualToString:[hog objectForKey:@"hat"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.lastIndexPath = indexPath;
@@ -111,46 +88,6 @@
 }
 
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-
 #pragma mark -
 #pragma mark Table view delegate
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -159,7 +96,7 @@
     
     if (newRow != oldRow) {
         // if the two selected rows differ update data on the hog dictionary and reload table content
-	// TODO: maybe this section could be cleaned up
+        // TODO: maybe this section could be cleaned up
         NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
         
         NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
@@ -169,12 +106,15 @@
         
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-        [self.tableView reloadData];
         
+        UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
+        newCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
+        oldCell.accessoryType = UITableViewCellAccessoryNone;
         self.lastIndexPath = indexPath;
-        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     } 
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [aTableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -190,7 +130,7 @@
 - (void)viewDidUnload {
     [super viewDidUnload];
     self.lastIndexPath = nil;
-    self.hatSprites = nil;
+    self.normalHogSprite = nil;
     self.teamDictionary = nil;
     self.hatArray = nil;
 }
@@ -198,7 +138,7 @@
 - (void)dealloc {
     [hatArray release];
     [teamDictionary release];
-    [hatSprites release];
+    [normalHogSprite release];
     [lastIndexPath release];
     [super dealloc];
 }

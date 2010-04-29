@@ -13,13 +13,11 @@
     NSMutableDictionary *teamDictionary;
     
     NSArray *graveArray;
-    NSArray *graveSprites;
     NSIndexPath *lastIndexPath;
 }
 
 @property (nonatomic,retain) NSMutableDictionary *teamDictionary;
 @property (nonatomic,retain) NSArray *graveArray;
-@property (nonatomic,retain) NSArray *graveSprites;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
 
 @end

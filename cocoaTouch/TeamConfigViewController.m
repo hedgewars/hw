@@ -25,12 +25,14 @@
     
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
+    self.tableView.backgroundColor = [UIColor redColor];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    unsigned int colors[6] = { 4421353, 4100897, 10632635, 16749353, 14483456, 7566195 };
+    // integer representation of various color (defined in SquareButtonView)
+    NSUInteger colors[6] = { 4421353, 4100897, 10632635, 16749353, 14483456, 7566195 };
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[contentsOfDir count]];
     for (int i = 0; i < [contentsOfDir count]; i++) {
@@ -50,22 +52,6 @@
 
     [self.tableView reloadData];
 }
-
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -93,14 +79,14 @@
 }
 
 // Customize the appearance of table view cells.
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier0 = @"Cell0";
     static NSString *CellIdentifier1 = @"Cell1";
     NSInteger section = [indexPath section];
     UITableViewCell *cell;
     
     if (section == 0) {
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier0];
+        cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
 
@@ -136,7 +122,7 @@
         [squareButton selectColor:[[selectedRow objectForKey:@"color"] intValue]];
         squareButton.ownerDictionary = selectedRow;
     } else {
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier1];
+        cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
         if (cell == nil) 
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
         
@@ -187,7 +173,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
 
@@ -198,7 +184,7 @@
         [self.listOfSelectedTeams addObject:[self.listOfTeams objectAtIndex:row]];
         [self.listOfTeams removeObjectAtIndex:row];      
     }
-    [self.tableView reloadData];
+    [aTableView reloadData];
 }
 
 
@@ -216,7 +202,7 @@
 
 
 -(void) dealloc {
-    [listOfTeams release];
+    [self.listOfTeams release];
     [super dealloc];
 }
 

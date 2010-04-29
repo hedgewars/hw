@@ -11,25 +11,12 @@
 @class TeamConfigViewController;
 @class MapConfigViewController;
 
-@interface GameConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-    UITableView *availableTeamsTableView;
-    UIButton *mapButton;
-    UIButton *randomButton;
-    UIButton *weaponsButton;
-    UIButton *schemesButton;
-    UIBarButtonItem *startButton;
-    
+@interface GameConfigViewController : UIViewController {    
     UIViewController *activeController;
     MapConfigViewController *mapConfigViewController;
     TeamConfigViewController *teamConfigViewController;
 }
 
-@property (nonatomic,retain) IBOutlet UITableView *availableTeamsTableView;
-@property (nonatomic,retain) IBOutlet UIButton *weaponsButton;
-@property (nonatomic,retain) IBOutlet UIButton *schemesButton;
-@property (nonatomic,retain) IBOutlet UIButton *mapButton;
-@property (nonatomic,retain) IBOutlet UIButton *randomButton;
-@property (nonatomic,retain) IBOutlet UIBarButtonItem *startButton;
 
 -(IBAction) buttonPressed:(id) sender;
 -(IBAction) segmentPressed:(id) sender;

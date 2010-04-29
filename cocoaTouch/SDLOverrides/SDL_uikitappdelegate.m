@@ -30,6 +30,7 @@
 #import "PascalImports.h"
 #import "MainMenuViewController.h"
 #import "OverlayViewController.h"
+#import "CommodityFunctions.h"
 
 #ifdef main
 #undef main
@@ -121,7 +122,7 @@ int main (int argc, char *argv[]) {
     else
         viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPhone" bundle:nil];
 	[uiwindow addSubview:viewController.view];
-	
+    
 	// Set working directory to resource path
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath:[[NSBundle mainBundle] resourcePath]];
 

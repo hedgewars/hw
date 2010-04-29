@@ -34,3 +34,12 @@ BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);
 NSInteger randomPort ();
 void popError (const char *title, const char *message);
 
+
+#ifndef __IPHONE_3_2	// if iPhoneOS is 3.2 or greater then __IPHONE_3_2 will be defined
+typedef enum {
+    UIUserInterfaceIdiomPhone,           // iPhone and iPod touch style UI
+    UIUserInterfaceIdiomPad,             // iPad style UI
+} UIUserInterfaceIdiom;
+#define UI_USER_INTERFACE_IDIOM() UIUserInterfaceIdiomPhone
+#endif // ifndef __IPHONE_3_2
+

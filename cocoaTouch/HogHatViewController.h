@@ -14,14 +14,14 @@
     NSInteger selectedHog;
     
     NSArray *hatArray;
-    NSArray *hatSprites;
+    UIImage *normalHogSprite;
     NSIndexPath *lastIndexPath;
 }
 
 @property (nonatomic,retain) NSDictionary *teamDictionary;
 @property (nonatomic) NSInteger selectedHog;
 @property (nonatomic,retain) NSArray *hatArray;
-@property (nonatomic,retain) NSArray *hatSprites;
+@property (nonatomic,retain) UIImage *normalHogSprite;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
 
 @end

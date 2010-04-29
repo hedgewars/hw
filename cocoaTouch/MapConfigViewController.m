@@ -35,10 +35,8 @@
 
 -(void) engineProtocol:(NSInteger) port {
 	IPaddress ip;
-	BOOL clientQuit, serverQuit;
-
-    serverQuit = NO;
-    clientQuit =NO;
+	BOOL serverQuit = NO;
+    
 	if (SDLNet_Init() < 0) {
 		NSLog(@"SDLNet_Init: %s", SDLNet_GetError());
         serverQuit = YES;
@@ -94,7 +92,7 @@
 
     // draw the buffer (1 pixel per component, 0= transparent 1= color)
     int xc = 0;
-    int yc = 0;
+    int yc = -1;
     UIGraphicsBeginImageContext(CGSizeMake(256,128));      
     CGContextRef context = UIGraphicsGetCurrentContext();       
     UIGraphicsPushContext(context);  
@@ -407,14 +405,15 @@
     self.mapGenCommand = mapgen;
     [self updatePreview];
     
-    // nice animation for updating the table when needed
-    if (((oldPage == 0 || oldPage == 2) && newPage == 1) ||
-        (oldPage == 1 && (newPage == 0 || newPage == 2))) {
-        [UIView beginAnimations:@"moving out table" context:NULL];
-        self.tableView.frame = CGRectMake(480, 0, 185, 276);
-        [UIView commitAnimations];
-        [self performSelector:@selector(moveTable) withObject:nil afterDelay:0.2];
-    }
+    // nice animation for updating the table when appropriate (on iphone)
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        if (((oldPage == 0 || oldPage == 2) && newPage == 1) ||
+            (oldPage == 1 && (newPage == 0 || newPage == 2))) {
+            [UIView beginAnimations:@"moving out table" context:NULL];
+            self.tableView.frame = CGRectMake(480, 0, 185, 276);
+            [UIView commitAnimations];
+            [self performSelector:@selector(moveTable) withObject:nil afterDelay:0.2];
+        }
     oldPage = newPage;
 }
 
@@ -457,6 +456,7 @@
     self.templateFilterCommand = @"e$template_filter 0";
     self.mazeSizeCommand = @"e$maze_size 0";
     self.mapGenCommand = @"e$mapgen 0";
+    self.lastIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
     oldValue = 5;
     oldPage = 0;

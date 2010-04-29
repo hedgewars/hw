@@ -13,13 +13,12 @@
     NSDictionary *teamDictionary;
 
     NSArray *fortArray;
-    NSArray *fortSprites;
-    
+//    NSArray *fortSprites;
     NSIndexPath *lastIndexPath;
 }
 
 @property (nonatomic,retain) NSDictionary * teamDictionary;
 @property (nonatomic,retain) NSArray *fortArray;
-@property (nonatomic,retain) NSArray *fortSprites;
+//@property (nonatomic,retain) NSArray *fortSprites;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
 @end

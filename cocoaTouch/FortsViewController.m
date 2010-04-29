@@ -11,7 +11,7 @@
 #import "UIImageExtra.h"
 
 @implementation FortsViewController
-@synthesize teamDictionary, fortArray, fortSprites, lastIndexPath;
+@synthesize teamDictionary, fortArray, lastIndexPath;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -21,11 +21,10 @@
 
 #pragma mark -
 #pragma mark View lifecycle
-- (void)viewDidLoad {
+-(void) viewDidLoad {
     [super viewDidLoad];
 
-    NSString *fortsDirectory = FORTS_DIRECTORY();
-    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath: fortsDirectory error:NULL];
+    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:FORTS_DIRECTORY() error:NULL];
     NSMutableArray *filteredContents = [[NSMutableArray alloc] initWithCapacity:([directoryContents count] / 2)];
     // we need to remove the double entries and the L.png suffix
     for (int i = 0; i < [directoryContents count]; i++) {
@@ -35,12 +34,10 @@
             [filteredContents addObject:correctName];
         } 
     }
-    
     self.fortArray = filteredContents;
     [filteredContents release];
     
-    //NSLog(@"%@",fortArray);
-    
+    /*
     // this creates a scaled down version of the image
     NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[fortArray count]];
     for (NSString *fortName in fortArray) {
@@ -52,6 +49,7 @@
     }
     self.fortSprites = spriteArray;
     [spriteArray release];
+    */
     
     // statically set row height instead of using delegate method for performance reasons
     self.tableView.rowHeight = 200;
@@ -64,36 +62,19 @@
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
 
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
-
 
 #pragma mark -
 #pragma mark Table view data source
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [fortArray count];
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.fortArray count];
 }
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -102,8 +83,17 @@
                                        reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    cell.imageView.image = [fortSprites objectAtIndex:[indexPath row]];
-    cell.textLabel.text = [fortArray objectAtIndex:[indexPath row]];
+    NSString *fortName = [fortArray objectAtIndex:[indexPath row]];
+    cell.textLabel.text = fortName;
+    
+    // this creates a scaled down version of the image
+    // TODO: create preview files, scaling is way too slow!
+    NSString *fortFile = [[NSString alloc] initWithFormat:@"%@/%@L.png", FORTS_DIRECTORY(), fortName];
+    UIImage *fortSprite = [[UIImage alloc] initWithContentsOfFile:fortFile];
+    [fortFile release];
+    cell.imageView.image = [fortSprite scaleToSize:CGSizeMake(196,196)];
+    [fortSprite release];
+    
     cell.detailTextLabel.text = @"Insert funny description here";
     if ([cell.textLabel.text isEqualToString:[self.teamDictionary objectForKey:@"fort"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -116,49 +106,9 @@
 }
 
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)atableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     
@@ -168,12 +118,15 @@
 
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-        [self.tableView reloadData];
-
+        
+        UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
+        newCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
+        oldCell.accessoryType = UITableViewCellAccessoryNone;
         self.lastIndexPath = indexPath;
-        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [aTableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -190,7 +143,7 @@
     self.teamDictionary = nil;
     self.lastIndexPath = nil;
     self.fortArray = nil;
-    self.fortSprites = nil;
+//    self.fortSprites = nil;
     [super viewDidUnload];
 }
 
@@ -199,7 +152,7 @@
     [teamDictionary release];
     [lastIndexPath release];
     [fortArray release];
-    [fortSprites release];
+//    [fortSprites release];
     [super dealloc];
 }
 

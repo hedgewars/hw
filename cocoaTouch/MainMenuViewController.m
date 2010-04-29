@@ -131,7 +131,7 @@
     
     switch (button.tag) {
         case 0:
-            if (nil == gameConfigViewController) {
+            if (1) { // bug in UIModalTransitionStylePartialCurl?
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                     configNibName = @"GameConfigViewController-iPad";
                 else
@@ -145,7 +145,7 @@
 #endif
             }
             
-            [self presentModalViewController:gameConfigViewController animated:YES];    
+            [self presentModalViewController:gameConfigViewController animated:YES];
             break;
         case 2:
             if (nil == splitRootViewController) {

@@ -34,43 +34,14 @@
                       nil];
     self.levelArray = array;
     [array release];
-
-    NSMutableArray *sprites = [[NSMutableArray alloc] initWithCapacity:[levelArray count]];
-    for (int i = 0; i < [levelArray count]; i++) {
-        NSString *botlevelPath = [[NSString alloc] initWithFormat:@"%@/%d.png",BOTLEVELS_DIRECTORY(),i];
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile:botlevelPath];
-        [botlevelPath release];
-        [sprites addObject:image];
-        [image release];
-    }
-    self.levelSprites = sprites;
-    [sprites release];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    [self.tableView reloadData];
     // this moves the tableview to the top
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
-
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
-
 
 #pragma mark -
 #pragma mark Table view data source
@@ -101,7 +72,12 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
-    cell.imageView.image = [levelSprites objectAtIndex:row];
+    NSString *botlevelPath = [[NSString alloc] initWithFormat:@"%@/%d.png",BOTLEVELS_DIRECTORY(),row];
+    UIImage *levelImage = [[UIImage alloc] initWithContentsOfFile:botlevelPath];
+    [botlevelPath release];
+    cell.imageView.image = levelImage;
+    [levelImage release];
+
     return cell;
 }
 

@@ -12,7 +12,6 @@
 #import "CommodityFunctions.h"
 
 @implementation SplitViewRootController
-@synthesize detailViewController;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -28,24 +27,26 @@
 // load the view programmatically; we need a splitViewController that handles a MasterViewController 
 // (which is just a UITableViewController) and a DetailViewController where we present options
 -(void) viewDidLoad {
-    self.detailViewController = [[DetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    [detailViewController release];
-    UINavigationController *detailedNavController = [[UINavigationController alloc] initWithRootViewController:self.detailViewController];
+    detailViewController = [[DetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController *detailedNavController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
     [detailViewController release];
 
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        self.view.frame = CGRectMake(0, 0, 1024, 768);
+    
     id splitViewRootController;
     
     Class splitViewControllerClass = NSClassFromString(@"UISplitViewController");
     if (splitViewControllerClass) {
         splitViewRootController = [[splitViewControllerClass alloc] init];
         //[[splitViewRootController view] setAutoresizingMask: UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
-
-        [[splitViewRootController view] setFrame:CGRectMake(0, 0, 1024, 1024)]; // yeah it's funny
+        
+        [[splitViewRootController view] setFrame:CGRectMake(0, 0, 1024, 768)];
         MasterViewController *masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
         
         UINavigationController *mainNavController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
     
-        masterViewController.detailViewController = self.detailViewController;
+        masterViewController.detailViewController = detailViewController;
 
         [masterViewController release];
 
@@ -53,13 +54,11 @@
         [mainNavController release];
         [detailedNavController release];
         
-        [splitViewRootController setDelegate:self.detailViewController];
+        [splitViewRootController setDelegate:detailViewController];
         [detailViewController release];
 
         // add view to main controller
         [self.view addSubview:[splitViewRootController view]];
-        //[splitViewRootController release];
-
     } else {
         [self.view addSubview:detailedNavController.view];
     }
@@ -68,9 +67,10 @@
 }
          
 -(void) viewDidUnload {
+    detailViewController = nil;
     [super viewDidUnload];
-    self.detailViewController = nil;
 }
+
 -(void) dealloc {
     [detailViewController release];
     [super dealloc];

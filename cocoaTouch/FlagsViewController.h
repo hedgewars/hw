@@ -12,14 +12,12 @@
 @interface FlagsViewController : UITableViewController {
     NSDictionary *teamDictionary;
 
-    NSArray *flagArray;
-    NSArray *flagSprites;
-    
+    NSArray *flagArray;    
     NSIndexPath *lastIndexPath;
 }
 
 @property (nonatomic,retain) NSDictionary * teamDictionary;
 @property (nonatomic,retain) NSArray *flagArray;
-@property (nonatomic,retain) NSArray *flagSprites;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
+
 @end

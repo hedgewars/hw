@@ -13,6 +13,4 @@
     DetailViewController *detailViewController;
 }
 
-@property (nonatomic,retain) DetailViewController *detailViewController;
-
 @end

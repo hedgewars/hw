@@ -44,7 +44,6 @@
         [self.view addSubview:label];
         [label release];
         
-        
         //[self.navigationController pushViewController:nextController animated:NO];
     } else {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone

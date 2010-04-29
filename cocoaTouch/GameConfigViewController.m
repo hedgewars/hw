@@ -13,7 +13,6 @@
 #import "TeamConfigViewController.h"
 
 @implementation GameConfigViewController
-@synthesize availableTeamsTableView, weaponsButton, schemesButton, mapButton, randomButton, startButton;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -105,7 +104,14 @@
 }
 
 -(void) viewDidLoad {
-    mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
+        teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStylePlain];
+        teamConfigViewController.view.frame = CGRectMake(0, 224, 300, 500);
+        teamConfigViewController.view.backgroundColor = [UIColor clearColor];
+        [mapConfigViewController.view addSubview:teamConfigViewController.view];
+    } else
+        mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
     activeController = mapConfigViewController;
     
     [self.view addSubview:mapConfigViewController.view];
@@ -139,12 +145,6 @@
     activeController = nil;
     mapConfigViewController = nil;
     teamConfigViewController = nil;
-    self.availableTeamsTableView = nil;
-    self.weaponsButton = nil;
-    self.schemesButton = nil;
-    self.mapButton = nil;
-    self.randomButton = nil;
-    self.startButton = nil;
     [super viewDidUnload];
 }
 
@@ -153,12 +153,6 @@
     [activeController release];
     [mapConfigViewController release];
     [teamConfigViewController release];
-    [availableTeamsTableView release];
-    [weaponsButton release];
-    [schemesButton release];
-    [mapButton release];
-    [randomButton release];
-    [startButton release];
     [super dealloc];
 }
 

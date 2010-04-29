@@ -6,8 +6,6 @@
 	<string>English</string>
 	<key>CFBundleDisplayName</key>
 	<string>${PRODUCT_NAME}</string>
-	<key>CFBundleDocumentTypes</key>
-	<array/>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
@@ -16,7 +14,7 @@
 		<string>Icon-iPad.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
-	<string>org.hedgewars.${PRODUCT_NAME:identifier}</string>
+	<string>org.hedgewars.mobile</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

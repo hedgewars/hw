@@ -19,7 +19,7 @@
     
     UITextField *textFieldBeingEdited;
     NSString *teamName;
-    NSArray *hatArray;
+    UIImage *normalHogSprite;
     
     NSArray *secondaryItems;
     BOOL isWriteNeeded;
@@ -35,7 +35,7 @@
 @property (nonatomic,retain) NSMutableDictionary *teamDictionary;
 @property (nonatomic,retain) UITextField *textFieldBeingEdited;
 @property (nonatomic,retain) NSString *teamName;
-@property (nonatomic,retain) NSArray *hatArray;
+@property (nonatomic,retain) UIImage *normalHogSprite;
 @property (nonatomic,retain) NSArray *secondaryItems;
 
 -(void) writeFile;
