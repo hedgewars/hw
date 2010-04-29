@@ -335,7 +335,8 @@ if Gear^.Timer >= Gear^.FrameTicks then DeleteVisualGear(Gear)
 else
     begin
     Gear^.scale := 1.25 * (-power(2, -10 * Int(Gear^.Timer)/Gear^.FrameTicks) + 1) + 0.4;
-    Gear^.alpha := -1.0 * (power(Gear^.Timer/350, 4) - 1);
+    Gear^.alpha := 1 - power(Gear^.Timer / 350, 4);
+    if Gear^.alpha < 0 then Gear^.alpha:= 0;
     end;
 end;
 
@@ -755,11 +756,11 @@ case Layer of
                     vgtSmokeWhite: DrawSprite(sprSmokeWhite, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                     vgtDust: DrawSprite(sprDust, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                     vgtFeather: begin
-                            if Gear^.FrameTicks < 250 then
-                                glColor4f(1, 1, 1, Gear^.FrameTicks / 250);
+                            if Gear^.FrameTicks < 255 then
+                                Tint($FF, $FF, $FF, Gear^.FrameTicks);
                             DrawRotatedF(sprFeather, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                            if Gear^.FrameTicks < 250 then
-                                glColor4f(1, 1, 1, 1);
+                            if Gear^.FrameTicks < 255 then
+                                Tint($FFFFFFFF);
                             end;
                 end;
         Gear:= Gear^.NextGear
@@ -774,47 +775,47 @@ case Layer of
                 vgtBubble: DrawSprite(sprBubbles, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
                 vgtSteam: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
                 vgtAmmo: begin
-                        glColor4f(1, 1, 1, Gear^.alpha);
+                        Tint($FF, $FF, $FF, floor(Gear^.alpha * $FF));
                         DrawTextureF(ropeIconTex, Gear^.scale, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 32, 32);
                         DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
-                        glColor4f(1, 1, 1, 1);
+                        Tint($FFFFFFFF);
                         end;
                 vgtHealth:  begin
                             case Gear^.Frame div 10 of
-                                0:glColor4f(0, 1, 0, Gear^.FrameTicks / 1000);
-                                1:glColor4f(1, 0, 0, Gear^.FrameTicks / 1000);
+                                0:Tint(0, $FF, 0, floor(Gear^.FrameTicks * $FF / 1000));
+                                1:Tint($FF, 0, 0, floor(Gear^.FrameTicks * $FF / 1000));
                             end;
                             DrawSprite(sprHealth, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, 0);
-                            glColor4f(1, 1, 1, 1);
+                            Tint($FFFFFFFF);
                             end;
                 vgtShell: begin
-                            if Gear^.FrameTicks < 250 then
-                                glColor4f(1, 1, 1, Gear^.FrameTicks / 250);
+                            if Gear^.FrameTicks < $FF then
+                                Tint($FF, $FF, $FF, Gear^.FrameTicks);
                             DrawRotatedF(sprShell, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                            if Gear^.FrameTicks < 250 then
-                                glColor4f(1, 1, 1, 1);
+                            if Gear^.FrameTicks < $FF then
+                                Tint($FFFFFFFF);
                             end;
                   vgtEgg: begin
-                            if Gear^.FrameTicks < 250 then
-                                glColor4f(1, 1, 1, Gear^.FrameTicks / 250);
+                            if Gear^.FrameTicks < $FF then
+                                Tint($FF, $FF, $FF, Gear^.FrameTicks);
                             DrawRotatedF(sprEgg, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                            if Gear^.FrameTicks < 250 then
-                                glColor4f(1, 1, 1, 1);
+                            if Gear^.FrameTicks < $FF then
+                                Tint($FFFFFFFF);
                             end;
                 vgtSplash: DrawSprite(sprSplash, hwRound(Gear^.X) + WorldDx - 40, hwRound(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
                 vgtDroplet: DrawSprite(sprDroplet, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                vgtBeeTrace: begin
-                            if Gear^.FrameTicks < 250 then
-                                glColor4f(1, 1, 1, Gear^.FrameTicks / 500)
+                            if Gear^.FrameTicks < $FF then
+                                Tint($FF, $FF, $FF, Gear^.FrameTicks div 2)
                             else
-                                glColor4f(1, 1, 1, 0.5);
+                                Tint($80FFFFFF);
                             DrawRotatedF(sprBeeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, (RealTicks shr 4) mod cMaxAngle);
-                            glColor4f(1, 1, 1, 1);
+                            Tint($FFFFFFFF);
                             end;
                 vgtSmokeRing: begin
-                            glColor4f(1, 1, 1, Gear^.alpha);
+                            Tint($FF, $FF, $FF, floor(Gear^.alpha * $FF));
                             DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);
-                            glColor4f(1, 1, 1, 1);
+                            Tint($FFFFFFFF);
                             end;
             end;
         case Gear^.Kind of

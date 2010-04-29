@@ -75,7 +75,8 @@ function RenderHelpWindow(caption, subcaption, description, extra: ansistring; e
 procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
-procedure Tint(r, g, b, a: Single);
+procedure Tint(r, g, b, a: Byte); inline;
+procedure Tint(c: Longword); inline;
 
 implementation
 uses uMisc, uConsole, uLand, uLocale, uWorld{$IFDEF IPHONEOS}, PascalExports{$ENDIF};
@@ -85,11 +86,40 @@ type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 var HHTexture: PTexture;
     MaxTextureSize: LongInt;
     cGPUVendor: TGPUVendor;
+    lastTint: Longword;
 
-procedure Tint(r, g, b, a: Single);
+{$IFNDEF IPHONEOS}
+procedure Tint(r, g, b, a: Byte); inline;
 begin
-glColor4f(r, g, b, a);
+Tint((a shl 24) or (b shl 16) or (g shl 8) or r);
 end;
+
+procedure Tint(c: Longword); inline;
+begin
+if c = lastTint then
+    exit;
+glColor4ubv(@c);
+lastTint:= c;
+end;
+{$ELSE}
+procedure Tint(r, g, b, a: Byte); inline;
+var nc: Longword;
+begin
+nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
+if nc = lastTint then
+    exit;
+glColor4ub(r, g, b, a);
+lastTint:= nc;
+end;
+
+procedure Tint(c: Longword); inline;
+begin
+if c = lastTint then
+    exit;
+Tint(c and $FF, (c shr 8) and $FF, (c shr 16) and $FF, (c shr 24) and $FF);
+lastTint:= c;
+end;
+{$ENDIF}
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 var r: TSDL_Rect;
@@ -543,7 +573,8 @@ else
 glTranslatef(Dir*OffsetX, OffsetY, 0);
 glScalef(Scale, Scale, 1);
 
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+// Any reason for this call? And why only in t direction, not s?
+//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 if Dir < 0 then
     hw:= w div -2
@@ -758,9 +789,6 @@ glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 glDisableClientState(GL_VERTEX_ARRAY);
 
-
-glColor4f(1,1,1,1);
-
 glPopMatrix
 end;
 
@@ -769,7 +797,7 @@ var VertexBuffer: array [0..3] of TVertex2f;
 begin
 glDisable(GL_TEXTURE_2D);
 
-glColor4ub(0, 0, 0, 127);
+Tint($80000000);
 
 VertexBuffer[0].X:= r.x;
 VertexBuffer[0].Y:= r.y;
@@ -785,7 +813,7 @@ glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 glDisableClientState(GL_VERTEX_ARRAY);
 
-glColor4f(1, 1, 1, 1);
+Tint($FFFFFFFF);
 glEnable(GL_TEXTURE_2D)
 end;
 
@@ -1125,19 +1153,18 @@ procedure SetupOpenGL;
 var vendor: shortstring;
 begin
 {$IFDEF IPHONEOS}
-//these are good performance savers, perhaps we could enable them by default
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0); // no double buffering
     SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
-    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-    //SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 {$ENDIF}
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0); // no depth buffer
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0); // no alpha channel required
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 16); // buffer has to be 16 bit only
+    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); // try to prefer hardware rendering
 
 {$IFNDEF SDL13}
 // this attribute is default in 1.3 and must be enabled in MacOSX
@@ -1204,6 +1231,12 @@ begin
     // enable alpha blending
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // disable/lower perspective correction (won't need it anyway)
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+    // disable dithering
+    glDisable(GL_DITHER);
+    // enable 2d textures by default
+    glEnable(GL_TEXTURE_2D);
 end;
 
 procedure SetScale(f: GLfloat);
@@ -1217,9 +1250,10 @@ begin
     // leave immediately if scale factor did not change
     if f = cScaleFactor then exit;
 
-    if f = scale then glPopMatrix   // "return" to default scaling
+    if f = scale then
+        glPopMatrix   // "return" to default scaling
     else                // other scaling
-    begin
+        begin
         glPushMatrix;       // save default scaling
         glLoadIdentity;
 {$IFDEF IPHONEOS}
@@ -1227,7 +1261,7 @@ begin
 {$ENDIF}
         glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
         glTranslatef(0, -cScreenHeight / 2, 0);
-    end;
+        end;
 
     cScaleFactor:= f;
 end;
@@ -1252,7 +1286,6 @@ begin
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
 
     glClear(GL_COLOR_BUFFER_BIT);
-    glEnable(GL_TEXTURE_2D);
     if Step < numsquares then r.x:= 0
     else r.x:= squaresize;
     
@@ -1262,7 +1295,6 @@ begin
     
     DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
 
-    glDisable(GL_TEXTURE_2D);
     SDL_GL_SwapBuffers();
 {$IFDEF SDL13}
     SDL_RenderPresent();

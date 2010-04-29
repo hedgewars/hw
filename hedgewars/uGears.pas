@@ -962,9 +962,9 @@ sy:= hwRound(Gear^.Y) - 3 + WorldDy;
 
 if HH^.Effects[hePoisoned] then
     begin
-    glColor4f(0.25, 1, 0, 0.25);
+    Tint($4000FF40);
     DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
-    glColor4f(1, 1, 1, 1)
+    Tint($FFFFFFFF)
     end;
 
 if ((Gear^.State and gstWinner) <> 0) and
@@ -1047,7 +1047,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
                 glLineWidth(1.0);
 
-                glColor4ub($FF, $00, $00, $C0);
+                Tint($C00000FF);
                 VertexBuffer[0].X:= hx + WorldDx;
                 VertexBuffer[0].Y:= hy + WorldDy;
                 VertexBuffer[1].X:= tx + WorldDx;
@@ -1056,7 +1056,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 glEnableClientState(GL_VERTEX_ARRAY);
                 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
                 glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
-                glColor4f(1, 1, 1, 1);
+                Tint($FFFFFFFF);
                 glEnable(GL_TEXTURE_2D);
                 glDisable(GL_LINE_SMOOTH);
                 end;
@@ -1454,7 +1454,7 @@ with HH^ do
         begin
         t:= hwRound(Gear^.Y) - cHHRadius - 12 + WorldDy;
         if (cTagsMask and htTransparent) <> 0 then
-            glColor4f(1, 1, 1, 0.5);
+            Tint($80FFFFFF);
         if ((cTagsMask and htHealth) <> 0) then
             begin
             dec(t, HealthTagTex^.h + 2);
@@ -1471,7 +1471,7 @@ with HH^ do
             DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTagTex)
             end;
         if (cTagsMask and htTransparent) <> 0 then
-            glColor4f(1, 1, 1, 1)
+            Tint($FFFFFFFF)
         end;
     if (Gear^.State and gstHHDriven) <> 0 then // Current hedgehog
         begin
@@ -1487,25 +1487,23 @@ with HH^ do
 
 if HH^.Effects[hePoisoned] then
     begin
-    glColor4f(0.25, 1, 0, 0.5);
+    Tint($8000FF40);
     DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 1.5, 0, 0, sx, sy, 0, 1, 22, 22, 360 - (RealTicks shr 37) mod 360);
-    glColor4f(1, 1, 1, 1)
     end;
 
 if Gear^.Invulnerable then
     begin
-    glColor4f(1, 1, 1, 0.25 + abs(1 - ((RealTicks div 2 + Gear^.uid * 491) mod 1500) / 750));
+    Tint($FF, $FF, $FF, max($40, floor($FF * abs(1 - 2 * ((RealTicks div 2 + Gear^.uid * 491) mod 1500) / 750))));
     DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
-    glColor4f(1, 1, 1, 1);
     end;
 if cVampiric and
    (CurrentHedgehog^.Gear <> nil) and
    (CurrentHedgehog^.Gear = Gear) then
     begin
-    glColor4f(1, 1, 1, 0.25 + abs(1 - (RealTicks mod 1500) / 750));
+    Tint($FF, $FF, $FF, max($40, floor($FF * abs(1 - (RealTicks mod 1500) / 750))));
     DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
-    glColor4f(1, 1, 1, 1);
     end;
+    Tint($FFFFFFFF)
 end;
 
 procedure DrawRopeLinesRQ(Gear: PGear);
@@ -1529,12 +1527,12 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 
     glLineWidth(4.0);
 
-    glColor4f(0.8, 0.8, 0.8, 1);
+    Tint($FFC0C0C0);
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, @RopePoints.rounded[0]);
     glDrawArrays(GL_LINE_STRIP, 0, RopePoints.Count + 2);
-    glColor4f(1, 1, 1, 1);
+    Tint($FFFFFFFF);
 
     glPopMatrix;
 
@@ -1733,9 +1731,9 @@ while Gear<>nil do
                     end;
         gtSwitcher: DrawSprite(sprSwitch, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 56 + WorldDy, (GameTicks shr 6) mod 12);
           gtTarget: begin
-                    glColor4f(1, 1, 1, Gear^.Timer / 1000);
+                    Tint($FF, $FF, $FF, floor($FF * Gear^.Timer / 1000));
                     DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
-                    glColor4f(1, 1, 1, 1);
+                    Tint($FFFFFFFF);
                     end;
           gtMortar: DrawRotated(sprMortar, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
           gtCake: if Gear^.Pos = 6 then
@@ -1777,18 +1775,18 @@ while Gear<>nil do
                         DrawTextureF(SpritesData[sprBirdy].Texture, 1, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                     end;
     gtBigExplosion: begin
-                    glColor4f(1, 1, 1, -1.0 * (power(Gear^.Timer/250, 4) - 1));
+                    Tint($FF, $FF, $FF, floor($FF * (1 - power(Gear^.Timer / 250, 4))));
                     DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
-                    glColor4f(1, 1, 1, 1);
+                    Tint($FFFFFFFF);
                     end;
              gtEgg: DrawRotatedTextureF(SpritesData[sprEgg].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 16, 16, Gear^.DirAngle);
            gtPiano: begin
                     if (Gear^.State and gstDrowning) = 0 then
                         begin
-                        glColor4f(1, 1, 1, 0.0625);
+                        Tint($10FFFFFF);
                         for i:= 8 downto 1 do
                             DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy - hwRound(Gear^.dY * 4 * i), 0, 1, 128, 128, 0);
-                        glColor4f(1, 1, 1, 1)
+                        Tint($FFFFFFFF)
                         end;
                     DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 128, 128, 0);
                     end;

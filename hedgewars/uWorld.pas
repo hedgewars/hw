@@ -331,23 +331,23 @@ if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterL
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
 
-    glColor4f(1, 1, 1, 1); // disable coloring
+    glColor4ub($FF, $FF, $FF, $FF); // disable coloring
     glEnable(GL_TEXTURE_2D)
     end
 end;
 
-procedure DrawWaves(Dir, dX, dY: LongInt; Tint: GLfloat);
+procedure DrawWaves(Dir, dX, dY: LongInt; tnt: Byte);
 var VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
     lw, waves, shift: GLfloat;
 begin
 lw:= cScreenWidth / cScaleFactor;
 waves:= lw * 2 / cWaveWidth;
 
-glColor4f(
-      (Tint * WaterColorArray[2].r / 255) + (1-Tint)
-    , (Tint * WaterColorArray[2].g / 255) + (1-Tint)
-    , (Tint * WaterColorArray[2].b / 255) + (1-Tint)
-    , 1
+Tint(
+      (tnt * WaterColorArray[2].r div 255) + (255-tnt)
+    , (tnt * WaterColorArray[2].g div 255) + (255-tnt)
+    , (tnt * WaterColorArray[2].b div 255) + (255-tnt)
+    , 255
 );
 
 glBindTexture(GL_TEXTURE_2D, SpritesData[sprWater].Texture^.id);
@@ -380,8 +380,7 @@ glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 glDisableClientState(GL_VERTEX_ARRAY);
-glColor4f(1, 1, 1, 1);
-
+Tint($FFFFFFFF);
 
 {for i:= -1 to cWaterSprCount do
     DrawSprite(sprWater,
@@ -453,8 +452,6 @@ if ZoomValue > zoom then
 
 // Sky
 glClear(GL_COLOR_BUFFER_BIT);
-glEnable(GL_BLEND);
-glEnable(GL_TEXTURE_2D);
 //glPushMatrix;
 //glScalef(1.0, 1.0, 1.0);
 
@@ -478,10 +475,10 @@ if not cReducedQuality then
     
     // Waves
     DrawWater(255, SkyOffset); 
-    DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 0.25);
-    DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 0.19);
-    DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 0.14);
-    DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 0.09);
+    DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 64);
+    DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 48);
+    DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 32);
+    DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 24);
     end
 else
     DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)), 0);
@@ -521,14 +518,14 @@ DrawVisualGears(2);
 DrawWater(cWaterOpacity, 0);
 
 // Waves
-DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 0.05);
+DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
 
 if not cReducedQuality then
     begin
     //DrawWater(cWaterOpacity, - offsetY div 40);
-    DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 0.03);
+    DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 8);
     DrawWater(cWaterOpacity, - offsetY div 20);
-    DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 0.01);
+    DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 2);
     DrawWater(cWaterOpacity, - offsetY div 10);
     DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
     end
@@ -655,7 +652,7 @@ for t:= 0 to Pred(TeamsCount) do
       highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
       
       if highlight then
-         glColor4f(((Clan^.Color shr 16) and $ff) / $ff, ((Clan^.Color shr 8) and $ff) / $ff, (Clan^.Color and $ff) / $ff, 1);
+         Tint(Clan^.Color);
 
       // draw name
       DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY, NameTagTex);
@@ -678,7 +675,7 @@ for t:= 0 to Pred(TeamsCount) do
       // this approach should be faster than drawing all borders one by one tinted or not
       if highlight then
          begin
-         glColor4f(1, 1, 1, 1);
+         Tint($FFFFFFFF);
 
          // draw name
          r.x:= 2;
@@ -813,8 +810,6 @@ if SoundTimerTicks >= 50 then
 if GameState = gsConfirm then
     DrawCentered(0, (cScreenHeight shr 1), ConfirmTexture);
 
-glDisable(GL_TEXTURE_2D);
-
 if ScreenFade <> sfNone then
     begin
     if not isFirstFrame then
@@ -831,11 +826,10 @@ if ScreenFade <> sfNone then
     if ScreenFade <> sfNone then
         begin
         case ScreenFade of
-            sfToBlack, sfFromBlack: glColor4f(0, 0, 0, ScreenFadeValue / 1000);
-            sfToWhite, sfFromWhite: glColor4f(1, 1, 1, ScreenFadeValue / 1000);
+            sfToBlack, sfFromBlack: Tint(0, 0, 0, ScreenFadeValue * 255 div 1000);
+            sfToWhite, sfFromWhite: Tint($FF, $FF, $FF, ScreenFadeValue * 255 div 1000);
             end;
         
-        glDisable(GL_TEXTURE_2D);
         VertexBuffer[0].X:= -cScreenWidth;
         VertexBuffer[0].Y:= cScreenHeight;
         VertexBuffer[1].X:= -cScreenWidth;
@@ -845,18 +839,18 @@ if ScreenFade <> sfNone then
         VertexBuffer[3].X:= cScreenWidth;
         VertexBuffer[3].Y:= cScreenHeight;
          
+        glDisable(GL_TEXTURE_2D);
         glEnableClientState(GL_VERTEX_ARRAY);
         glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
         glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
         glDisableClientState(GL_VERTEX_ARRAY);
-         
-        glColor4f(1, 1, 1, 1);
+        glEnable(GL_TEXTURE_2D);
+        Tint($FFFFFFFF);
         if not isFirstFrame and ((ScreenFadeValue = 0) or (ScreenFadeValue = sfMax)) then ScreenFade:= sfNone
         end
     end;
 
 SetScale(zoom);
-glEnable(GL_TEXTURE_2D);
 
 // Cursor
 if isCursorVisible then
@@ -874,9 +868,6 @@ if isCursorVisible then
      DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
      end
    end;
-
-glDisable(GL_TEXTURE_2D);
-glDisable(GL_BLEND);
 isFirstFrame:= false
 end;
 
