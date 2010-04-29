@@ -25,7 +25,6 @@
     
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-    self.tableView.backgroundColor = [UIColor redColor];
 }
 
 -(void) viewWillAppear:(BOOL)animated {

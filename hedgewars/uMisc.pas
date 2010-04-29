@@ -768,7 +768,8 @@ begin
 {$IFDEF DEBUGFILE}
 {$I-}
 {$IFDEF IPHONEOS}
-    f:= stderr;
+    Assign(f,'../Documents/debug.txt');
+    Rewrite(f);
 {$ELSE}
     if ParamStr(1) <> '' then
         begin

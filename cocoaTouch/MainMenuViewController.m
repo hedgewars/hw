@@ -128,6 +128,7 @@
     UIButton *button = (UIButton *)sender;
     UIAlertView *alert;
     NSString *configNibName;
+    NSString *debugStr;
     
     switch (button.tag) {
         case 0:
@@ -154,6 +155,21 @@
             }
             
             [self presentModalViewController:splitRootViewController animated:YES];
+            break;
+        case 3:
+            debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
+            UITextView *scroll = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
+            scroll.text = debugStr;
+            [debugStr release];
+            scroll.editable = NO;
+            
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [btn addTarget:scroll action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
+            btn.backgroundColor = [UIColor blackColor];
+            btn.frame = CGRectMake(self.view.frame.size.height-70, 0, 70, 70);
+            [scroll addSubview:btn];
+            [self.view addSubview:scroll];
+            [scroll release];
             break;
         default:
             alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
