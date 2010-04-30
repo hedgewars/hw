@@ -185,7 +185,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepEggWork,
             @doStepPortal,
             @doStepPortalGun,
-            @doStepPiano
+            @doStepPiano,
+            @doStepBomb
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -257,8 +258,9 @@ if CurrentTeam <> nil then
     end;
 
 case Kind of
-   gtAmmo_Bomb,
- gtClusterBomb: begin
+     gtAmmo_Bomb,
+     gtClusterBomb,
+     gtGasBomb: begin
                 gear^.ImpactSound:= sndGrenadeImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.AdvBounce:= 1;
@@ -1649,6 +1651,7 @@ while Gear<>nil do
     begin
     case Gear^.Kind of
        gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+       gtGasBomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
     gtMolotov: DrawRotated(sprMolotov, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
 
        gtRCPlane: begin

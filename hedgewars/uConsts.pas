@@ -84,7 +84,7 @@ type
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
             gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, 
-            gtBigExplosion, gtEgg, gtPortal, gtPortalGun, gtPiano);
+            gtBigExplosion, gtEgg, gtPortal, gtPortalGun, gtPiano, gtGasBomb);
 
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
@@ -123,7 +123,7 @@ type
             amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun,
-            amPiano);
+            amPiano, amGasBomb);
 
     THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
 
@@ -1835,6 +1835,26 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 7;
+            PosCount: 1;
+            PosSprite: sprWater),
+            (NameId: sidGasBomb;
+            NameTex: nil;
+            Probability: 0;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
+                Count: AMMO_INFINITE;
+                InitialCount: AMMO_INFINITE;
+                NumPerTurn: 0;
+                Timer: 3000;
+                Pos: 0;
+                AmmoType: amGasBomb;
+                AttackVoice: sndCover);
+            Slot: 1;
+            TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater)
             );

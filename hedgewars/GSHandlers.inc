@@ -270,6 +270,7 @@ if Gear^.Timer = 1000 then // might need adjustments
         gtClusterBomb: makeHogsWorry(Gear^.X, Gear^.Y, 20);
         gtWatermelon: makeHogsWorry(Gear^.X, Gear^.Y, 75);
         gtHellishBomb: makeHogsWorry(Gear^.X, Gear^.Y, 90);
+        gtGasBomb: makeHogsWorry(Gear^.X, Gear^.Y, 50);
     end;
 
 if (Gear^.Kind = gtBall) and ((Gear^.State and gstTmpFlag) <> 0) then
@@ -321,6 +322,7 @@ if Gear^.Timer = 0 then
                     if i mod 2 <> 0 then Fire^.State:= Fire^.State or gsttmpFlag;
                     end
                 end;
+		gtGasBomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound or EXPLPoisoned);
         end;
     DeleteGear(Gear);
     exit
