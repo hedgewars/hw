@@ -73,7 +73,7 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
         CheckGearDrowning:= true;
         Gear^.State:= gstDrowning;
         Gear^.RenderTimer:= false;
-        if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot) and (Gear^.Kind <> gtDEagleShot) then
+        if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot) and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
           Gear^.doStep:= @doStepDrowningGear;
         if Gear^.Kind = gtHedgehog then
             begin
@@ -3108,4 +3108,142 @@ else if (Gear^.State and gstCollision) <> 0 then
     end
 else
     Gear^.dY:= Gear^.dY + cGravity * 2; // let it fall faster so itdoesn't take too long for the whole attack
+end;
+
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepSineGunShotWork(Gear: PGear);
+var x, y, rX, rY, t, tmp, initHealth: LongWord;
+    oX, oY, ldX, ldY, sdX, sdY, sine, lx, ly, amp: hwFloat;
+    justCollided: boolean;
+begin
+AllInactive:= false;
+initHealth:= Gear^.Health;
+lX:= Gear^.X;
+lY:= Gear^.Y;
+ldX:= Gear^.dX;
+ldY:= Gear^.dY;
+sdy:= _0_5/Distance(Gear^.dX,Gear^.dY);
+ldX:= ldX * sdy;
+ldY:= ldY * sdy;
+sdY:= hwAbs(ldX) + hwAbs(ldY);
+sdX:= _1 - hwAbs(ldX/sdY);
+sdY:= _1 - hwAbs(ldY/sdY);
+if (ldX.isNegative = ldY.isNegative) then sdY:= -sdY;
+
+// initial angle depends on current GameTicks
+t:= GameTicks mod 4096;
+
+
+// used for a work-around detection of area that is within land array, but outside borders
+justCollided:= false;
+
+repeat
+    lX:= lX + ldX;
+    lY:= lY + ldY;
+    oX:= Gear^.X;
+    oY:= Gear^.Y;
+    rX:= hwRound(oX);
+    rY:= hwRound(oY);
+    tmp:= t mod 4096;
+    amp:= _128 * (_1 - hwSqr(int2hwFloat(Gear^.Health)/initHealth));
+    sine:= amp * AngleSin(tmp mod 2048);
+    sine.isNegative:= (tmp < 2048);
+    inc(t,Gear^.Health div 313);
+    Gear^.X:= lX + (sine * sdX);
+    Gear^.Y:= ly + (sine * sdY);
+    Gear^.dX:= Gear^.X - oX;
+    Gear^.dY:= Gear^.Y - oY;
+    
+    x:= hwRound(Gear^.X);
+    y:= hwRound(Gear^.Y);
+    
+    // if borders are on, stop outside land array
+    if hasBorder and (((x and LAND_WIDTH_MASK) <> 0) or ((y and LAND_HEIGHT_MASK) <> 0)) then
+            begin
+            Gear^.Damage:= 0;
+            Gear^.Health:= 0;
+            end
+    else
+        begin
+        if (rY <= cWaterLine) or (y <= cWaterLine) then
+            begin
+            if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
+                and (Land[y, x] <> 0) then
+                    begin
+                    if justCollided then
+                        begin
+                        Gear^.Damage:= 0;
+                        Gear^.Health:= 0;
+                        end
+                    else
+                        begin
+                        inc(Gear^.Damage,3);
+                        justCollided:= true;
+                        end;
+                    end
+                else
+                    justCollided:= false;
+
+        // kick nearby hogs, dig tunnel and add some fire
+        // if at least 5 collisions occured
+        if Gear^.Damage > 0 then
+            begin
+            DrawExplosion(rX,rY,Gear^.Radius);
+            
+            // kick nearby hogs
+            AmmoShove(Gear, 35, 50);
+            
+            dec(Gear^.Health, Gear^.Damage);
+            Gear^.Damage:= 0;
+            
+            // add some fire to the tunnel
+            if getRandom(6) = 0 then
+                AddGear(x-Gear^.Radius+getRandom(2*Gear^.Radius), y-getRandom(Gear^.Radius+1), gtFlame, gsttmpFlag, _0, _0, 0);
+            end;
+
+        if getRandom(100) = 0 then
+            AddGear(x, y, gtSmokeTrace, 0, _0, _0, 0);
+        
+        end
+        // if underwater get additional damage
+        else dec(Gear^.Health, 5);
+    end;
+
+    dec(Gear^.Health);
+    
+    // decrease bullet size towards the end
+    if (Gear^.Radius > 4) then begin 
+        if (Gear^.Health <= (initHealth div 3)) then dec(Gear^.Radius) end
+    else if (Gear^.Radius > 3) then begin
+        if (Gear^.Health <= (initHealth div 4)) then dec(Gear^.Radius) end
+    else if (Gear^.Radius > 2) then begin
+        if (Gear^.Health <= (initHealth div 5)) then dec(Gear^.Radius) end
+    else if (Gear^.Radius > 1) then begin
+        if (Gear^.Health <= (initHealth div 6)) then dec(Gear^.Radius) end;
+
+until (Gear^.Health <= 0);
+
+DeleteGear(Gear);
+AfterAttack;
+end;
+
+procedure doStepSineGunShot(Gear: PGear);
+var HHGear: PGear;
+begin
+PlaySound(sndSineGun);
+
+
+// push the shooting Hedgehog back
+HHGear:= CurrentHedgehog^.Gear;
+Gear^.dX.isNegative:= not Gear^.dX.isNegative;
+Gear^.dY.isNegative:= not Gear^.dY.isNegative;
+HHGear^.dX:= Gear^.dX;
+HHGear^.dY:= Gear^.dY;
+AmmoShove(Gear, 0, 80);
+Gear^.dX.isNegative:= not Gear^.dX.isNegative;
+Gear^.dY.isNegative:= not Gear^.dY.isNegative;
+
+Gear^.doStep:= @doStepSineGunShotWork
+
 end;

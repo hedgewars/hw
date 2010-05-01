@@ -186,7 +186,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepPortal,
             @doStepPortalGun,
             @doStepPiano,
-            @doStepBomb
+            @doStepBomb,
+            @doStepSineGunShot
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -481,6 +482,10 @@ gtBigExplosion: begin
                 end;
        gtPiano: begin
                 gear^.Radius:= 32
+                end;
+ gtSineGunShot: begin
+                gear^.Radius:= 5;
+                gear^.Health:= 6000;
                 end;
      end;
 InsertGearToList(gear);
@@ -1280,6 +1285,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
             amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
             amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
             amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
+            amSineGun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
             amSniperRifle: DrawRotatedF(sprSniperRifle, hx, hy, 0, hwSign(Gear^.dX), aangle);
             amBlowTorch: DrawRotated(sprHandBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
             amCake: DrawRotated(sprHandCake, hx, hy, hwSign(Gear^.dX), aangle);

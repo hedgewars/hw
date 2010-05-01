@@ -72,8 +72,9 @@ type
             sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee, 
-            sprFeather, sprPiano);
-
+            sprFeather, sprPiano, sprHandSineGun);
+    
+    // Gears that interact with other Gears and/or Land
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
             gtGrave, gtBee, gtShotgunShot, gtPickHammer, gtRope, // 8
             gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite, // 14
@@ -84,8 +85,9 @@ type
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
             gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, 
-            gtBigExplosion, gtEgg, gtPortal, gtPortalGun, gtPiano, gtGasBomb);
+            gtBigExplosion, gtEgg, gtPortal, gtPortalGun, gtPiano, gtGasBomb, gtSineGunShot);
 
+    // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
@@ -114,7 +116,7 @@ type
             sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket,
             sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle, sndBeeWater,
             sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7, sndPiano8,
-            sndSkip);
+            sndSkip, sndSineGun);
 
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -123,7 +125,7 @@ type
             amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun,
-            amPiano, amGasBomb);
+            amPiano, amGasBomb, amSineGun);
 
     THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
 
@@ -739,7 +741,9 @@ const
             (FileName:  'Feather'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  15; Height: 25; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprFeather
             (FileName:  'Piano'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprPiano
+            Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprPiano
+            (FileName:  'amSineGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprHandSineGun
             );
 
     Wavez: array [TWave] of record
@@ -860,7 +864,8 @@ const
             (FileName:                  'egg.ogg'; Path: ptSounds),// sndPiano6
             (FileName:                  'egg.ogg'; Path: ptSounds),// sndPiano7
             (FileName:                  'egg.ogg'; Path: ptSounds),// sndPiano8
-            (FileName:                 'skip.ogg'; Path: ptSounds) // sndSkip
+            (FileName:                 'skip.ogg'; Path: ptSounds),// sndSkip
+            (FileName:          'shotgunfire.ogg'; Path: ptSounds) // sndSineGun
             );
 
     Ammoz: array [TAmmoType] of record
@@ -896,6 +901,8 @@ const
             SkipTurns: 9999;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Grenade
             (NameId: sidGrenade;
             NameTex: nil;
             Probability: 0;
@@ -916,6 +923,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// ClusterBomb
             (NameId: sidClusterBomb;
             NameTex: nil;
             Probability: 100;
@@ -936,6 +945,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Bazooka
             (NameId: sidBazooka;
             NameTex: nil;
             Probability: 0;
@@ -956,6 +967,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Bee
             (NameId: sidBee;
             NameTex: nil;
             Probability: 100;
@@ -976,6 +989,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Shotgun
             (NameId: sidShotgun;
             NameTex: nil;
             Probability: 0;
@@ -996,6 +1011,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// PickHammer
             (NameId: sidPickHammer;
             NameTex: nil;
             Probability: 0;
@@ -1016,6 +1033,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Skip
             (NameId: sidSkip;
             NameTex: nil;
             Probability: 0;
@@ -1036,6 +1055,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Rope
             (NameId: sidRope;
             NameTex: nil;
             Probability: 100;
@@ -1060,6 +1081,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Mine
             (NameId: sidMine;
             NameTex: nil;
             Probability: 100;
@@ -1080,6 +1103,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// DEagle
             (NameId: sidDEagle;
             NameTex: nil;
             Probability: 20;
@@ -1100,6 +1125,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Dynamite
             (NameId: sidDynamite;
             NameTex: nil;
             Probability: 100;
@@ -1120,6 +1147,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// FirePunch
             (NameId: sidFirePunch;
             NameTex: nil;
             Probability: 0;
@@ -1140,6 +1169,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Whip
             (NameId: sidWhip;
             NameTex: nil;
             Probability: 0;
@@ -1160,6 +1191,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// BaseballBat
             (NameId: sidBaseballBat;
             NameTex: nil;
             Probability: 100;
@@ -1180,6 +1213,8 @@ const
             SkipTurns: 2;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Parachute
             (NameId: sidParachute;
             NameTex: nil;
             Probability: 100;
@@ -1206,6 +1241,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// AirAttack
             (NameId: sidAirAttack;
             NameTex: nil;
             Probability: 100;
@@ -1230,6 +1267,8 @@ const
             SkipTurns: 5;
             PosCount: 2;
             PosSprite: sprAmAirplane),
+
+// MineStrike
             (NameId: sidMineStrike;
             NameTex: nil;
             Probability: 200;
@@ -1254,6 +1293,8 @@ const
             SkipTurns: 5;
             PosCount: 2;
             PosSprite: sprAmAirplane),
+
+// BlowTorch
             (NameId: sidBlowTorch;
             NameTex: nil;
             Probability: 100;
@@ -1274,6 +1315,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Girder
             (NameId: sidGirder;
             NameTex: nil;
             Probability: 150;
@@ -1298,6 +1341,8 @@ const
             SkipTurns: 0;
             PosCount: 8;
             PosSprite: sprAmGirder),
+
+// Teleport
             (NameId: sidTeleport;
             NameTex: nil;
             Probability: 200;
@@ -1323,6 +1368,8 @@ const
             SkipTurns: 0;
             PosCount: 2;
             PosSprite: sprAmTeleport),
+
+// Switch
             (NameId: sidSwitch;
             NameTex: nil;
             Probability: 100;
@@ -1347,6 +1394,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Mortar
             (NameId: sidMortar;
             NameTex: nil;
             Probability: 100;
@@ -1367,6 +1416,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Kamikaze
             (NameId: sidKamikaze;
             NameTex: nil;
             Probability: 100;
@@ -1387,6 +1438,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Cake
             (NameId: sidCake;
             NameTex: nil;
             Probability: 100;
@@ -1407,6 +1460,8 @@ const
             SkipTurns: 4;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Seduction
             (NameId: sidSeduction;
             NameTex: nil;
             Probability: 100;
@@ -1427,6 +1482,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Watermelon
             (NameId: sidWatermelon;
             NameTex: nil;
             Probability: 400;
@@ -1447,6 +1504,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// HellishBomb ("Hellish Hand-Grenade")
             (NameId: sidHellishBomb;
             NameTex: nil;
             Probability: 400;
@@ -1467,6 +1526,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Napalm
             (NameId: sidNapalm;
             NameTex: nil;
             Probability: 100;
@@ -1491,6 +1552,8 @@ const
             SkipTurns: 7;
             PosCount: 2;
             PosSprite: sprAmAirplane),
+
+// Drill ("Drill Rocket")
             (NameId: sidDrill;
             NameTex: nil;
             Probability: 300;
@@ -1511,6 +1574,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprDrill),
+
+// Ballgun
             (NameId: sidBallgun;
             NameTex: nil;
             Probability: 400;
@@ -1531,6 +1596,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// RC-Plane
             (NameId: sidRCPlane;
             NameTex: nil;
             Probability: 200;
@@ -1553,6 +1620,8 @@ const
             SkipTurns: 4;
             PosCount: 1;
             PosSprite: sprWater),
+
+// LowGravity
             (NameId: sidLowGravity;
             NameTex: nil;
             Probability: 20;
@@ -1578,6 +1647,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// ExtraDamage
             (NameId: sidExtraDamage;
             NameTex: nil;
             Probability: 15;
@@ -1603,6 +1674,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Invulnerable
             (NameId: sidInvulnerable;
             NameTex: nil;
             Probability: 20;
@@ -1628,6 +1701,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// ExtraTime
             (NameId: sidExtraTime;
             NameTex: nil;
             Probability: 30;
@@ -1653,6 +1728,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// LaserSight
             (NameId: sidLaserSight;
             NameTex: nil;
             Probability: 15;
@@ -1678,6 +1755,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Vampiric
             (NameId: sidVampiric;
             NameTex: nil;
             Probability: 15;
@@ -1703,6 +1782,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// SniperRifle
             (NameId: sidSniperRifle;
             NameTex: nil;
             Probability: 20;
@@ -1723,6 +1804,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Jetpack ("Flying Saucer")
             (NameId: sidJetpack;
             NameTex: nil;
             Probability: 20;
@@ -1749,6 +1832,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Molotov
             (NameId: sidMolotov;
             NameTex: nil;
             Probability: 0;
@@ -1769,6 +1854,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Birdy
             (NameId: sidBirdy;
             NameTex: nil;
             Probability: 20;
@@ -1791,6 +1878,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// PortalGun
             (NameId: sidPortalGun;
             NameTex: nil;
             Probability: 20;
@@ -1813,6 +1902,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
+
+// Piano
             (NameId: sidPiano;
             NameTex: nil;
             Probability: 100;
@@ -1837,6 +1928,8 @@ const
             SkipTurns: 7;
             PosCount: 1;
             PosSprite: sprWater),
+
+// GasBomb
             (NameId: sidGasBomb;
             NameTex: nil;
             Probability: 0;
@@ -1851,6 +1944,28 @@ const
                 AttackVoice: sndCover);
             Slot: 1;
             TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater),
+            
+// SineGun
+            (NameId: sidSineGun;
+            NameTex: nil;
+            Probability: 20;
+            NumberInCase: 2;
+            Ammo: (Propz: ammoprop_AttackInMove;
+                Count: 1;
+                InitialCount: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amSineGun;
+                AttackVoice: sndNone);
+            Slot: 2;
+            TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;

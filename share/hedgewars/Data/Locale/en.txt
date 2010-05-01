@@ -45,6 +45,7 @@
 00:42=Portable Portal Device
 00:43=Piano Strike
 00:44=Gas grenade
+00:45=Sine Gun
 
 01:00=Let's fight!
 01:01=Round draw

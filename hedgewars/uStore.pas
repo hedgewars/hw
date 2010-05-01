@@ -453,7 +453,9 @@ AddProgress;
 for ai:= Low(TAmmoType) to High(TAmmoType) do
     with Ammoz[ai] do
         begin
+        TryDo(trAmmo[NameId] <> '','No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
         tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
+        TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
         NameTex:= Surface2Tex(tmpsurf, false);
         SDL_FreeSurface(tmpsurf)
