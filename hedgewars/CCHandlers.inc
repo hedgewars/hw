@@ -697,8 +697,7 @@ begin
         SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN    
         {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});     
     SDL_CreateRenderer(window, -1, 0);
-    PixelFormat:= nil;   
-        
+    
     SDL_SetRenderDrawColor(0, 0, 0, 255);    
     SDL_RenderFill(nil);     
     SDL_RenderPresent();

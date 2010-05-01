@@ -13,7 +13,7 @@
 unit PascalExports;
 
 interface
-uses uKeys, uConsole, hwengine;
+uses uKeys, uConsole, uStore, GLunit, uMisc, uWorld, hwengine;
 
 {$INCLUDE "config.inc"}
 
@@ -137,6 +137,26 @@ procedure HW_terminate(closeFrontend: boolean); cdecl; export;
 begin
     isTerminated:= true;
     if closeFrontend then alsoShutdownFrontend:= true;
+end;
+
+procedure HW_setLandscape(landscape: boolean); cdecl; export;
+begin
+    if landscape then
+    begin
+        rotationQt:= -90;
+        uStore.wScreen:= cScreenWidth;
+        uStore.hScreen:= cScreenHeight;
+        //uWorld.w:= cScreenWidth;
+        //uWorld.h:= cScreenHeight;
+    end
+    else
+    begin
+        rotationQt:= 270;
+        uStore.wScreen:= cScreenHeight;
+        uStore.hScreen:= cScreenWidth;
+        //uWorld.w:= cScreenHeight;
+        //uWorld.h:= cScreenWidth;
+    end;
 end;
 {$ENDIF}
 

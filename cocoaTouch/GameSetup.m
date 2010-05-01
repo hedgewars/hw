@@ -195,7 +195,7 @@
 				[self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
 				
 				// various flags
-				[self sendToEngine:@"e$gmflags 8448"]; 
+				[self sendToEngine:@"e$gmflags 256"]; 
 				[self sendToEngine:@"e$damagepct 100"];
 				[self sendToEngine:@"e$turntime 45000"];
 				[self sendToEngine:@"e$minestime 3000"];
@@ -221,10 +221,10 @@
                 }
                 
                 NSDictionary *ammoData = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                          @"9391929422199121032235111001201000000211190",@"ammostore_initialqt",
-                                          @"0405040541600655546554464776576666666155501",@"ammostore_probability",
-                                          @"0000000000000205500000040007004000000000200",@"ammostore_delay",
-                                          @"1311110312111111123114111111111111111211101",@"ammostore_crate", nil];
+                                          @"939192942219912103223511100120100000021119091",@"ammostore_initialqt",
+                                          @"040504054160065554655446477657666666615550100",@"ammostore_probability",
+                                          @"000000000000020550000004000700400000000020000",@"ammostore_delay",
+                                          @"131111031211111112311411111111111111121110111",@"ammostore_crate", nil];
                 [self sendAmmoData:ammoData forTeams:[teamsConfig count]];
                 [ammoData release];
                 

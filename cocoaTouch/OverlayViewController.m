@@ -32,27 +32,41 @@
 -(void) didRotate:(NSNotification *)notification {	
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     CGRect rect = [[UIScreen mainScreen] bounds];
+    CGRect usefulRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
+    UIView *sdlView = [[SDLUIKitDelegate sharedAppDelegate].uiwindow viewWithTag:SDL_VIEW_TAG];
     
-	if (orientation == UIDeviceOrientationLandscapeLeft) {
-        [UIView beginAnimations:@"flip1" context:NULL];
-        [UIView setAnimationDuration:0.8f];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [[SDLUIKitDelegate sharedAppDelegate].uiwindow viewWithTag:SDL_VIEW_TAG].transform = CGAffineTransformMakeRotation(degreesToRadian(0));
-        self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
-        self.view.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
-        [UIView commitAnimations];
-	} else
-        if (orientation == UIDeviceOrientationLandscapeRight) {
-            [UIView beginAnimations:@"flip2" context:NULL];
-            [UIView setAnimationDuration:0.8f];
-            [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-            [[SDLUIKitDelegate sharedAppDelegate].uiwindow viewWithTag:SDL_VIEW_TAG].transform = CGAffineTransformMakeRotation(degreesToRadian(180));
+    [UIView beginAnimations:@"rotation" context:NULL];
+    [UIView setAnimationDuration:0.8f];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+	switch (orientation) {
+        case UIDeviceOrientationLandscapeLeft:
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
+            HW_setLandscape(YES);
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(-90));
-            self.view.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
-            [UIView commitAnimations];
-        }
+            HW_setLandscape(YES);
+            break;
+        case UIDeviceOrientationPortrait:
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(270));
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
+            HW_setLandscape(NO);
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
+            HW_setLandscape(NO);
+            break;
+        default:
+            NSLog(@"warning - Unknown rotation status");
+            break;
+    }
+    self.view.frame = usefulRect;
+    sdlView.frame = usefulRect;
+    [UIView commitAnimations];
 }
-
 
 -(void) viewDidLoad {
 

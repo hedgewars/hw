@@ -329,6 +329,7 @@
 		617995311150403800BA94A9 /* joyPush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyPush.png; path = ../../cocoaTouch/resources/joyPush.png; sourceTree = SOURCE_ROOT; };
 		6184DEA111795DBD00AF6EFA /* UIImageExtra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImageExtra.h; path = ../../cocoaTouch/otherSrc/UIImageExtra.h; sourceTree = SOURCE_ROOT; };
 		6184DEA211795DBD00AF6EFA /* UIImageExtra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImageExtra.m; path = ../../cocoaTouch/otherSrc/UIImageExtra.m; sourceTree = SOURCE_ROOT; };
+		618736B8118CA28600123B23 /* GearDrawing.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GearDrawing.inc; path = ../../hedgewars/GearDrawing.inc; sourceTree = SOURCE_ROOT; };
 		618BE5911175126900F22556 /* LevelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LevelViewController.h; path = ../../cocoaTouch/LevelViewController.h; sourceTree = SOURCE_ROOT; };
 		618BE5921175126900F22556 /* LevelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LevelViewController.m; path = ../../cocoaTouch/LevelViewController.m; sourceTree = SOURCE_ROOT; };
 		618BE60111751F4F00F22556 /* GravesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GravesViewController.h; path = ../../cocoaTouch/GravesViewController.h; sourceTree = SOURCE_ROOT; };
@@ -590,6 +591,7 @@
 		61798892114AA56300BA94A9 /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				618736B8118CA28600123B23 /* GearDrawing.inc */,
 				61798852114AA44900BA94A9 /* config.inc */,
 				617987E1114AA34C00BA94A9 /* CCHandlers.inc */,
 				617987E4114AA34C00BA94A9 /* GSHandlers.inc */,
