@@ -36,7 +36,12 @@ var PixelFormat: PSDL_PixelFormat;
     ProgrTex: PTexture;
     MissionIcons: PSDL_Surface;
     ropeIconTex: PTexture;
-
+{$IFDEF IPHONEOS}
+    rotationQt: GLfloat;
+{$ENDIF}
+    wScreen: LongInt;
+    hScreen: LongInt;
+    
 procedure initModule;
 procedure freeModule;
 
@@ -71,7 +76,7 @@ procedure FinishProgress;
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
-function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
+function  RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
@@ -1201,7 +1206,7 @@ begin
     // prepare default translation/scaling
     glLoadIdentity();
 {$IFDEF IPHONEOS}
-    glRotatef(-90, 0, 0, 1);
+    glRotatef(rotationQt, 0, 0, 1);
 {$ENDIF}
     glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
     glTranslatef(0, -cScreenHeight / 2, 0);
@@ -1231,15 +1236,15 @@ begin
     if f = scale then
         glPopMatrix   // "return" to default scaling
     else                // other scaling
-        begin
+    begin
         glPushMatrix;       // save default scaling
         glLoadIdentity;
 {$IFDEF IPHONEOS}
-        glRotatef(-90, 0, 0, 1);
+        glRotatef(rotationQt, 0, 0, 1);
 {$ENDIF}
-        glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
+        glScalef(f / wScreen, -f / hScreen, 1.0);
         glTranslatef(0, -cScreenHeight / 2, 0);
-        end;
+    end;
 
     cScaleFactor:= f;
 end;
@@ -1542,14 +1547,19 @@ end;
 
 procedure initModule;
 begin
-PixelFormat:= nil;
-SDLPrimSurface:= nil;
-{$IFNDEF IPHONEOS}cGPUVendor:= gvUnknown;{$ENDIF}
-
-cScaleFactor:= 2.0;
-SupportNPOTT:= false;
-Step:= 0;
-ProgrTex:= nil;
+    PixelFormat:= nil;
+    SDLPrimSurface:= nil;
+{$IFDEF IPHONEOS}
+    rotationQt:= -90;
+{$ELSE}
+    cGPUVendor:= gvUnknown;
+{$ENDIF}
+    uStore.wScreen:= cScreenWidth; 
+    uStore.hScreen:= cScreenHeight;
+    cScaleFactor:= 2.0;
+    SupportNPOTT:= false;
+    Step:= 0;
+    ProgrTex:= nil;
 end;
 
 procedure freeModule;

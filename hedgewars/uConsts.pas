@@ -72,7 +72,12 @@ type
             sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee, 
-            sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal);
+            sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
+{$IFDEF IPHONEOS}
+            sprAMBordersIPhone, sprAMSlotIPhone, sprAMSlotNameIPhone,
+{$ENDIF}
+            sprEgga // remove this
+            );
     
     // Gears that interact with other Gears and/or Land
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
@@ -451,7 +456,7 @@ const
             );
 
     SpritesData: array[TSprite] of record
-            FileName: String[14];
+            FileName: String[16];
             Path, AltPath: TPathType;
             Texture: PTexture;
             Surface: PSDL_Surface;
@@ -517,11 +522,11 @@ const
             (FileName:       'SkyR'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSky
             (FileName:  'BrdrLines'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 202; Height:  1; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMBorders
+            Width: 236; Height:  1; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMBorders
             (FileName:       'Slot'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 202; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSlot
+            Width: 236; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSlot
             (FileName:   'AmmoName'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 202; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSlotName
+            Width: 236; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSlotName
             (FileName:      'Ammos'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true),// sprAMAmmos
             (FileName:   'SlotKeys'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -747,7 +752,17 @@ const
             (FileName:  'amPortalGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprPortalGun
             (FileName:  'Portal'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprPortal
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprPortal
+{$IFDEF IPHONEOS}
+			(FileName:  'BrdrLines_iPhone'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 202; Height:  1; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMBordersIPhone
+            (FileName:  'Slot_iPhone'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 202; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSlotIPhone
+            (FileName:  'AmmoName_iPhone'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 202; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSlotNameIPhone
+{$ENDIF}
+            (FileName:  'Egg'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false) // DELETEME (when adding another sprite)
             );
 
     Wavez: array [TWave] of record

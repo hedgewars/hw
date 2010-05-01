@@ -1,4 +1,5 @@
-file(GLOB AmmoMenuSprites *.png) 
+file(GLOB AmmoMenuSprites *.png)
+list(REMOVE_ITEM AmmoMenuSprites *_iPhone.png)
 
 install(FILES
 	${AmmoMenuSprites}
