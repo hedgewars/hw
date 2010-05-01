@@ -4,6 +4,7 @@ var i, t: LongInt;
     hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
     lx, ly, dx, dy, ax, ay, aAngle, dAngle, hAngle: real;  // laser, change
     defaultPos, HatVisible: boolean;
+    VertexBuffer: array [0..1] of TVertex2f;
     HH: PHedgehog;
 begin
 HH:= PHedgehog(Gear^.Hedgehog);
@@ -109,22 +110,23 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
             //if (abs(lx-tx)>8) or (abs(ly-ty)>8) then
                 begin
-                glEnable(GL_LINE_SMOOTH);
                 glDisable(GL_TEXTURE_2D);
+                glEnable(GL_LINE_SMOOTH);
+
                 glLineWidth(1.0);
+
                 Tint($FF, $00, $00, $C0);
-                glBegin(GL_LINES);
-                glVertex3f(hx + WorldDx, hy + WorldDy, 0);
-                glVertex3f(tx + WorldDx, ty + WorldDy, 0);
-                glEnd();
-                glLineWidth(5.0);
-                glBegin(GL_LINES);
-                glVertex3f(tx + WorldDx - 0.5, ty + WorldDy, 0);
-                glVertex3f(tx + WorldDx + 0.5, ty + WorldDy, 0);
-                glEnd();
+                VertexBuffer[0].X:= hx + WorldDx;
+                VertexBuffer[0].Y:= hy + WorldDy;
+                VertexBuffer[1].X:= tx + WorldDx;
+                VertexBuffer[1].Y:= ty + WorldDy;
+
+                glEnableClientState(GL_VERTEX_ARRAY);
+                glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+                glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
                 Tint($FF, $FF, $FF, $FF);
-                glDisable(GL_LINE_SMOOTH);
                 glEnable(GL_TEXTURE_2D);
+                glDisable(GL_LINE_SMOOTH);
                 end;
             end;
         // draw crosshair
