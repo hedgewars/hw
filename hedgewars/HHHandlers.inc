@@ -162,7 +162,20 @@ Ok. Here's where I plan to go with this.
 2) If on first shot, delete all existing gtPortal
 3) On any other shot, delete any existing portals of type X%2, and spawn a new portal of type X%2 oriented at angle 180° from the portal gun.  It might possibly be worth linking portals with a Gear reference, to save time on scanning through the Gear list every time we need a portal.
 *)
-                    amPortalGun: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtPortal, 0, xx * _0_3, yy * _0_3, 0);
+                    amPortalGun: begin
+        //if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= MultiShootAttacks) then
+                                
+
+//CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtPortal, 0, xx * _0_6, yy * _0_6, 0);
+AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtPortal, 0, xx * _0_6, yy * _0_6, 0);
+
+
+
+                                 end;
+
+
+
+
                   amSniperRifle: begin
                                  PlaySound(sndSniperReload);
                                  CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtSniperRifleShot, 0, xx * _0_5, yy * _0_5, 0);

@@ -53,11 +53,10 @@ var skipSpeed, skipAngle, skipDecay: hwFloat;
     particle: PVisualGear;
 begin
 // probably needs tweaking. might need to be in a case statement based upon gear type
-//(not Gear^.dY.isNegative) and  this should not be necessary
 if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
     begin
-    skipSpeed:= _0_25;  // was 0.36 - couldn't manage baseball bat. Tiy's build is 0.36...
-    skipAngle:= _1 + _0_9;  // these should perhaps also be constants, once work out what proper values are
+    skipSpeed:= _0_25;
+    skipAngle:= _1_9;  
     skipDecay:= _0_87;  // this could perhaps be a tiny bit higher.
     if  (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed) and
         (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)) then
@@ -3061,7 +3060,7 @@ Ok. Here's where I plan to go with this.
 end;
 
 procedure doStepMovingPortal(Gear: PGear);
-var i, x, y: LongWord;
+var i, x, y: LongInt;
     oX, oY: hwFloat;
 begin
 oX:= Gear^.X;
@@ -3079,13 +3078,13 @@ if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y,
     begin
     inc(Gear^.Tag);
     Gear^.doStep:= @doStepPortal;
-    AfterAttack
+//    AfterAttack;
     end
 // How laser checks for infinite
-else if (y > LAND_HEIGHT + LAND_WIDTH div 4) or (y < - LAND_WIDTH div 4) or (x > LAND_WIDTH + LAND_WIDTH div 4) or (x < - LAND_WIDTH div 4) then
+else if (y > cWaterLine + cVisibleWater + Gear^.Radius) or (y < -LAND_WIDTH) or (x > LAND_WIDTH + LAND_WIDTH) or (x < -LAND_WIDTH) then
     begin
     DeleteGear(Gear);
-    AfterAttack
+//    AfterAttack
     end;
 end;
 
