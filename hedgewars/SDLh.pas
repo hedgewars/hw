@@ -403,16 +403,17 @@ type
         end;
 
     TSDL_MouseButtonEvent = record
-        which,
-        button,
-        state: byte;
+
 {$IFDEF SDL13}
         _type: LongInt;
         windowID: LongInt;
         x, y: LongInt;
         padding1: byte;
 {$ELSE}
-        _type: byte;
+        _type,
+        which,
+        button,
+        state: byte;
         x, y: word;
 {$ENDIF}
         end;
