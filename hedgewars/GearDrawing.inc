@@ -29,7 +29,7 @@ sy:= hwRound(Gear^.Y) - 3 + WorldDy;
 
 if HH^.Effects[hePoisoned] then
     begin
-    Tint($40, $FF, $00, $40);
+    Tint($00, $FF, $40, $40);
     DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
     Tint($FF, $FF, $FF, $FF)
     end;
@@ -555,7 +555,7 @@ with HH^ do
 
 if HH^.Effects[hePoisoned] then
     begin
-    Tint($40, $FF, $00, $80);
+    Tint($00, $FF, $40, $80);
     DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 1.5, 0, 0, sx, sy, 0, 1, 22, 22, 360 - (RealTicks shr 37) mod 360);
     end;
 
