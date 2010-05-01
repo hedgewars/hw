@@ -380,7 +380,7 @@ glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 glDisableClientState(GL_VERTEX_ARRAY);
-Tint($FFFFFFFF);
+Tint($FF, $FF, $FF, $FF);
 
 {for i:= -1 to cWaterSprCount do
     DrawSprite(sprWater,
@@ -652,7 +652,7 @@ for t:= 0 to Pred(TeamsCount) do
       highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
       
       if highlight then
-         Tint(Clan^.Color);
+         Tint(((Clan^.Color shr 16) and $FF), ((Clan^.Color shr 8) and $FF), (Clan^.Color and $FF), $FF);
 
       // draw name
       DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY, NameTagTex);
@@ -675,7 +675,7 @@ for t:= 0 to Pred(TeamsCount) do
       // this approach should be faster than drawing all borders one by one tinted or not
       if highlight then
          begin
-         Tint($FFFFFFFF);
+         Tint($FF, $FF, $FF, $FF);
 
          // draw name
          r.x:= 2;
@@ -845,7 +845,7 @@ if ScreenFade <> sfNone then
         glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
         glDisableClientState(GL_VERTEX_ARRAY);
         glEnable(GL_TEXTURE_2D);
-        Tint($FFFFFFFF);
+        Tint($FF, $FF, $FF, $FF);
         if not isFirstFrame and ((ScreenFadeValue = 0) or (ScreenFadeValue = sfMax)) then ScreenFade:= sfNone
         end
     end;

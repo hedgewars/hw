@@ -4,7 +4,6 @@ var i, t: LongInt;
     hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
     lx, ly, dx, dy, ax, ay, aAngle, dAngle, hAngle: real;  // laser, change
     defaultPos, HatVisible: boolean;
-    VertexBuffer: array [0..1] of TVertex2f;
     HH: PHedgehog;
 begin
 HH:= PHedgehog(Gear^.Hedgehog);
@@ -30,9 +29,9 @@ sy:= hwRound(Gear^.Y) - 3 + WorldDy;
 
 if HH^.Effects[hePoisoned] then
     begin
-    Tint($4040FF00);
+    Tint($40, $FF, $00, $40);
     DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
-    Tint($FFFFFFFF)
+    Tint($FF, $FF, $FF, $FF)
     end;
 
 if ((Gear^.State and gstWinner) <> 0) and
@@ -110,23 +109,22 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
             //if (abs(lx-tx)>8) or (abs(ly-ty)>8) then
                 begin
-                glDisable(GL_TEXTURE_2D);
                 glEnable(GL_LINE_SMOOTH);
-
+                glDisable(GL_TEXTURE_2D);
                 glLineWidth(1.0);
-
-                Tint($C0FF0000);
-                VertexBuffer[0].X:= hx + WorldDx;
-                VertexBuffer[0].Y:= hy + WorldDy;
-                VertexBuffer[1].X:= tx + WorldDx;
-                VertexBuffer[1].Y:= ty + WorldDy;
-
-                glEnableClientState(GL_VERTEX_ARRAY);
-                glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-                glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
-                Tint($FFFFFFFF);
-                glEnable(GL_TEXTURE_2D);
+                Tint($FF, $00, $00, $C0);
+                glBegin(GL_LINES);
+                glVertex3f(hx + WorldDx, hy + WorldDy, 0);
+                glVertex3f(tx + WorldDx, ty + WorldDy, 0);
+                glEnd();
+                glLineWidth(5.0);
+                glBegin(GL_LINES);
+                glVertex3f(tx + WorldDx - 0.5, ty + WorldDy, 0);
+                glVertex3f(tx + WorldDx + 0.5, ty + WorldDy, 0);
+                glEnd();
+                Tint($FF, $FF, $FF, $FF);
                 glDisable(GL_LINE_SMOOTH);
+                glEnable(GL_TEXTURE_2D);
                 end;
             end;
         // draw crosshair
@@ -524,7 +522,7 @@ with HH^ do
         begin
         t:= hwRound(Gear^.Y) - cHHRadius - 12 + WorldDy;
         if (cTagsMask and htTransparent) <> 0 then
-            Tint($80FFFFFF);
+            Tint($FF, $FF, $FF, $80);
         if ((cTagsMask and htHealth) <> 0) then
             begin
             dec(t, HealthTagTex^.h + 2);
@@ -541,7 +539,7 @@ with HH^ do
             DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTagTex)
             end;
         if (cTagsMask and htTransparent) <> 0 then
-            Tint($FFFFFFFF)
+            Tint($FF, $FF, $FF, $FF)
         end;
     if (Gear^.State and gstHHDriven) <> 0 then // Current hedgehog
         begin
@@ -557,7 +555,7 @@ with HH^ do
 
 if HH^.Effects[hePoisoned] then
     begin
-    Tint($8040FF00);
+    Tint($40, $FF, $00, $80);
     DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 1.5, 0, 0, sx, sy, 0, 1, 22, 22, 360 - (RealTicks shr 37) mod 360);
     end;
 
@@ -573,7 +571,7 @@ if cVampiric and
     Tint($FF, $FF, $FF, max($40, floor($FF * abs(1 - (RealTicks mod 1500) / 750))));
     DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
     end;
-    Tint($FFFFFFFF)
+    Tint($FF, $FF, $FF, $FF)
 end;
 
 procedure DrawGears;
@@ -673,7 +671,7 @@ while Gear<>nil do
           gtTarget: begin
                     Tint($FF, $FF, $FF, floor($FF * Gear^.Timer / 1000));
                     DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
-                    Tint($FFFFFFFF);
+                    Tint($FF, $FF, $FF, $FF);
                     end;
           gtMortar: DrawRotated(sprMortar, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
           gtCake: if Gear^.Pos = 6 then
@@ -717,16 +715,16 @@ while Gear<>nil do
     gtBigExplosion: begin
                     Tint($FF, $FF, $FF, floor($FF * (1 - power(Gear^.Timer / 250, 4))));
                     DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
-                    Tint($FFFFFFFF);
+                    Tint($FF, $FF, $FF, $FF);
                     end;
              gtEgg: DrawRotatedTextureF(SpritesData[sprEgg].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 16, 16, Gear^.DirAngle);
            gtPiano: begin
                     if (Gear^.State and gstDrowning) = 0 then
                         begin
-                        Tint($10FFFFFF);
+                        Tint($FF, $FF, $FF, $10);
                         for i:= 8 downto 1 do
                             DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy - hwRound(Gear^.dY * 4 * i), 0, 1, 128, 128, 0);
-                        Tint($FFFFFFFF)
+                        Tint($FF, $FF, $FF, $FF)
                         end;
                     DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 128, 128, 0);
                     end;

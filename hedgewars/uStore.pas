@@ -76,7 +76,6 @@ procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
 procedure Tint(r, g, b, a: Byte); inline;
-procedure Tint(c: Longword); inline;
 
 implementation
 uses uMisc, uConsole, uLand, uLocale, uWorld{$IFDEF IPHONEOS}, PascalExports{$ENDIF};
@@ -88,20 +87,6 @@ var HHTexture: PTexture;
     cGPUVendor: TGPUVendor;
     lastTint: Longword;
 
-{$IFNDEF IPHONEOS}
-procedure Tint(r, g, b, a: Byte); inline;
-begin
-Tint((a shl 24) or (r shl 16) or (g shl 8) or b);
-end;
-
-procedure Tint(c: Longword); inline;
-begin
-if c = lastTint then
-    exit;
-glColor4ubv(@c);
-lastTint:= c;
-end;
-{$ELSE}
 procedure Tint(r, g, b, a: Byte); inline;
 var nc: Longword;
 begin
@@ -111,15 +96,6 @@ if nc = lastTint then
 glColor4ub(r, g, b, a);
 lastTint:= nc;
 end;
-
-procedure Tint(c: Longword); inline;
-begin
-if c = lastTint then
-    exit;
-Tint((c shr 16) and $FF, (c shr 8) and $FF, c and $FF, (c shr 24) and $FF);
-lastTint:= c;
-end;
-{$ENDIF}
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 var r: TSDL_Rect;
@@ -799,7 +775,7 @@ var VertexBuffer: array [0..3] of TVertex2f;
 begin
 glDisable(GL_TEXTURE_2D);
 
-Tint($80000000);
+Tint($00, $00, $00, $80);
 
 VertexBuffer[0].X:= r.x;
 VertexBuffer[0].Y:= r.y;
@@ -815,7 +791,7 @@ glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 glDisableClientState(GL_VERTEX_ARRAY);
 
-Tint($FFFFFFFF);
+Tint($FF, $FF, $FF, $FF);
 glEnable(GL_TEXTURE_2D)
 end;
 

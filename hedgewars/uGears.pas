@@ -958,12 +958,12 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 
     glLineWidth(4.0);
 
-    Tint($FFC0C0C0);
+    Tint($C0, $C0, $C0, $FF);
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, @RopePoints.rounded[0]);
     glDrawArrays(GL_LINE_STRIP, 0, RopePoints.Count + 2);
-    Tint($FFFFFFFF);
+    Tint($FF, $FF, $FF, $FF);
 
     glPopMatrix;
 
