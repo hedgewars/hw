@@ -30,7 +30,7 @@
 	SDL_Window *window;
 	UIWindow *uiwindow;
 
-	MainMenuViewController *viewController;
+	MainMenuViewController *mainViewController;
     BOOL isInGame;
 }
 

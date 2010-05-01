@@ -29,34 +29,37 @@
 	// Release any cached data, images, etc that aren't in use.
 }
 
-/*
-- (void)didRotate:(NSNotification *)notification {	
+-(void) didRotate:(NSNotification *)notification {	
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    
 	if (orientation == UIDeviceOrientationLandscapeLeft) {
-	}
-    if (orientation == UIDeviceOrientationLandscapeRight) {
-    }
-	if (orientation == UIDeviceOrientationPortrait) {
-	}
-    if (orientation == UIDeviceOrientationPortrait) {
-	}
+        [UIView beginAnimations:@"flip1" context:NULL];
+        [UIView setAnimationDuration:0.8f];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        [[SDLUIKitDelegate sharedAppDelegate].uiwindow viewWithTag:SDL_VIEW_TAG].transform = CGAffineTransformMakeRotation(degreesToRadian(0));
+        self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
+        self.view.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
+        [UIView commitAnimations];
+	} else
+        if (orientation == UIDeviceOrientationLandscapeRight) {
+            [UIView beginAnimations:@"flip2" context:NULL];
+            [UIView setAnimationDuration:0.8f];
+            [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+            [[SDLUIKitDelegate sharedAppDelegate].uiwindow viewWithTag:SDL_VIEW_TAG].transform = CGAffineTransformMakeRotation(degreesToRadian(180));
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(-90));
+            self.view.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
+            [UIView commitAnimations];
+        }
 }
-*/
+
 
 -(void) viewDidLoad {
-    /*
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];	
-    [[NSNotificationCenter defaultCenter] addObserver:self
-							selector:@selector(didRotate:)
-							name:UIDeviceOrientationDidChangeNotification
-							object:nil];
-    */
+
     isPopoverVisible = NO;
     self.view.alpha = 0;
-
-    // needed for rotation to work on os < 3.2
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
-    self.view.transform = CGAffineTransformRotate(self.view.transform, (M_PI/2.0));
-    self.view.frame = [[UIScreen mainScreen] applicationFrame];
+    
     
     dimTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
@@ -98,7 +101,20 @@
 // draws the controller overlay after the sdl window has taken control
 -(void) showMenuAfterwards {
     [[SDLUIKitDelegate sharedAppDelegate].uiwindow bringSubviewToFront:self.view];
-
+    
+    // need to split paths because iphone doesn't rotate (so we don't need to subscribe to any notification
+    // nor perform engine actions when rotating
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];	
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didRotate:)
+                                                     name:@"UIDeviceOrientationDidChangeNotification"
+                                                   object:nil];
+        
+        [self didRotate:nil];
+    } else 
+        self.view.transform = CGAffineTransformRotate(self.view.transform, (M_PI/2.0));
+    
 	[UIView beginAnimations:@"showing overlay" context:NULL];
 	[UIView setAnimationDuration:1];
 	self.view.alpha = 1;

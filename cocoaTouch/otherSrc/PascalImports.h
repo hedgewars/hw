@@ -51,6 +51,7 @@ extern "C" {
     
     void HW_terminate(BOOL);
 	
+    void HW_setRotationQt(float);
 #ifdef __cplusplus
 }
 #endif

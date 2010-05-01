@@ -430,7 +430,9 @@
 #pragma mark view management
 -(void) viewDidLoad {
     [super viewDidLoad];
-
+    
+    srandom(time(NULL));
+    
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
 

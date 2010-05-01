@@ -66,7 +66,7 @@ int main (int argc, char *argv[]) {
 	if (self = [super init]){
         self.uiwindow = nil;
         self.window = NULL;
-        viewController = nil;
+        mainViewController = nil;
         isInGame = NO;
         return self;
     } else 
@@ -75,14 +75,14 @@ int main (int argc, char *argv[]) {
 
 -(void) dealloc {
     SDL_DestroyWindow(self.window);
-    [viewController release];
+    [mainViewController release];
 	[uiwindow release];
 	[super dealloc];
 }
 
 // main routine for calling the actual game engine
 -(IBAction) startSDLgame {
-    [viewController disappear];
+    [mainViewController disappear];
 
     // pull out useful configuration info from various files
 	GameSetup *setup = [[GameSetup alloc] init];
@@ -104,7 +104,7 @@ int main (int argc, char *argv[]) {
     free(gameArgs);
     [overlayController.view removeFromSuperview];
     
-    [viewController appear];
+    [mainViewController appear];
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
@@ -118,10 +118,10 @@ int main (int argc, char *argv[]) {
 	self.uiwindow.backgroundColor = [UIColor blackColor];
 	
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
+        mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
     else
-        viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPhone" bundle:nil];
-	[uiwindow addSubview:viewController.view];
+        mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPhone" bundle:nil];
+	[uiwindow addSubview:mainViewController.view];
     
 	// Set working directory to resource path
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath:[[NSBundle mainBundle] resourcePath]];

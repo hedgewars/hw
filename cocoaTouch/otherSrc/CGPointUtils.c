@@ -10,8 +10,6 @@
 #include "CGPointUtils.h"
 #include <math.h>
 
-#define degreesToRadian(x) (M_PI * x / 180.0)
-#define radiansToDegrees(x) (180.0 * x / M_PI)
 
 CGFloat distanceBetweenPoints (CGPoint first, CGPoint second) {
 	CGFloat deltaX = second.x - first.x;

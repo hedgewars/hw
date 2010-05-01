@@ -27,13 +27,22 @@ interface
 {$IFDEF FREEBSD}
   {$DEFINE UNIX}
 {$ENDIF}
-// UNIX is already defined in Darwin
+{$IFDEF DARWIN}
+  {$DEFINE UNIX}
+{$ENDIF}
+{$IFDEF HAIKU}
+  {$DEFINE UNIX}
+{$ENDIF}
 
 {$IFDEF UNIX}
   {$IFNDEF DARWIN}
     {$linklib c}
   {$ENDIF}
-  {$linklib pthread}
+  {$IFDEF HAIKU}
+    {$linklib root}
+  {$ELSE}
+    {$linklib pthread}
+  {$ENDIF}
 {$ENDIF}
 
 {$IFDEF FPC}
