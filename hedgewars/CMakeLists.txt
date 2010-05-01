@@ -70,6 +70,7 @@ set(engine_sources
 	uWorld.pas
 	CCHandlers.inc
 	GSHandlers.inc
+	GearDrawing.inc
 	HHHandlers.inc
 	SinTable.inc
 	options.inc

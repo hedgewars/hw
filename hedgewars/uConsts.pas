@@ -72,7 +72,7 @@ type
             sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee, 
-            sprFeather, sprPiano, sprHandSineGun);
+            sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal);
     
     // Gears that interact with other Gears and/or Land
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
@@ -85,7 +85,7 @@ type
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
             gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, 
-            gtBigExplosion, gtEgg, gtPortal, gtPortalGun, gtPiano, gtGasBomb, gtSineGunShot);
+            gtBigExplosion, gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot);
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -743,7 +743,11 @@ const
             (FileName:  'Piano'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprPiano
             (FileName:  'amSineGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprHandSineGun
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprHandSineGun
+            (FileName:  'amPortalGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprPortalGun
+            (FileName:  'amPortal'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprPortal
             );
 
     Wavez: array [TWave] of record

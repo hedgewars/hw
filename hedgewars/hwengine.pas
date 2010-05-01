@@ -63,6 +63,7 @@ uses
     sysutils;
 
 // also: GSHandlers.inc
+//       GearDrawing.inc
 //       CCHandlers.inc
 //       HHHandlers.inc
 //       SinTable.inc
