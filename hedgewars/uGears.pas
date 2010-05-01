@@ -183,7 +183,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepBirdy,
             @doStepBigExplosion,
             @doStepEggWork,
-            @doStepPortal,
+            @doStepMovingPortal,
             @doStepPiano,
             @doStepBomb,
             @doStepSineGunShot
@@ -478,6 +478,7 @@ gtBigExplosion: begin
                 gear^.nImpactSounds:= 1;
                 gear^.AdvBounce:= 0;
                 gear^.Radius:= 16;
+                gear^.Tag:= 0;
                 end;
        gtPiano: begin
                 gear^.Radius:= 32

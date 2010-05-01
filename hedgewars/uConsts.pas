@@ -746,7 +746,7 @@ const
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprHandSineGun
             (FileName:  'amPortalGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprPortalGun
-            (FileName:  'amPortal'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            (FileName:  'Portal'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprPortal
             );
 

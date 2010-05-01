@@ -3052,15 +3052,41 @@ A portal will have a few things it does.
 3) At end of turn, all gtPortal will be deleted.
 
 *)
-end;
-procedure doStepPortalGun(Gear: PGear);
-begin
 (*
 Ok. Here's where I plan to go with this.
 1) Restrict portal gun to X shots.
 2) If on first shot, delete all existing gtPortal
 3) On any other shot, delete any existing portals of type X%2, and spawn a new portal of type X%2 oriented at angle 180° from the portal gun.  It might possibly be worth linking portals with a Gear reference, to save time on scanning through the Gear list every time we need a portal.
 *)
+end;
+
+procedure doStepMovingPortal(Gear: PGear);
+var i, x, y: LongWord;
+    oX, oY: hwFloat;
+begin
+oX:= Gear^.X;
+oY:= Gear^.Y;
+Gear^.X:= Gear^.X + Gear^.dX;
+Gear^.Y:= Gear^.Y + Gear^.dY;
+x:= hwRound(Gear^.X);
+y:= hwRound(Gear^.Y);
+(* 
+Potential issue, portals embedded in land?
+Also, will need checks on how well portal is placed
+Thought is possibly doing it based on midpoint and two ends, so a bit of rough terrain is still permitted, but not curves.
+*)
+if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] <> 0) then
+    begin
+    inc(Gear^.Tag);
+    Gear^.doStep:= @doStepPortal;
+    AfterAttack
+    end
+// How laser checks for infinite
+else if (y > LAND_HEIGHT + LAND_WIDTH div 4) or (y < - LAND_WIDTH div 4) or (x > LAND_WIDTH + LAND_WIDTH div 4) or (x < - LAND_WIDTH div 4) then
+    begin
+    DeleteGear(Gear);
+    AfterAttack
+    end;
 end;
 
 procedure doStepPiano(Gear: PGear);
