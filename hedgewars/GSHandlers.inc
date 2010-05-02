@@ -173,6 +173,8 @@ var isFalling: boolean;
     tdX, tdY: hwFloat;
     collV, collH: LongInt;
 begin
+if Gear^.dX > _0_995 then Gear^.dX:= _0_995;
+if Gear^.dY > _0_995 then Gear^.dY:= _0_995;
 Gear^.State:= Gear^.State and not gstCollision;
 collV:= 0; 
 collH:= 0;
@@ -1828,8 +1830,7 @@ HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 
 DeleteCI(HHGear);
 
-OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+AfterAttack;
 
 HHGear^.State:= HHGear^.State and not (gstAttacking or gstAttacked or gstMoving);
 HHGear^.Message:= HHGear^.Message and not gm_Attack;
@@ -1935,8 +1936,7 @@ if (Distance(tx - x, ty - y) > _256) or
 else begin
     PlaySound(sndPlaced);
     DeleteGear(Gear);
-    OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
+    AfterAttack;
     end;
 
 HHGear^.State:= HHGear^.State and not (gstAttacking or gstAttacked);
@@ -2019,8 +2019,7 @@ if ((Gear^.Message and not gm_Switch) <> 0) or (TurnTimeLeft = 0) then
     HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
     Msg:= Gear^.Message and not gm_Switch;
     DeleteGear(Gear);
-    OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+    AfterAttack;
 
     HHGear:= CurrentHedgehog^.Gear;
     ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
@@ -2798,8 +2797,7 @@ Gear^.doStep:= @doStepJetpackWork;
 
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 FollowGear:= HHGear;
-OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+AfterAttack;
 with HHGear^ do
     begin
     State:= State and not gstAttacking;
@@ -3042,49 +3040,67 @@ end;
 
 procedure doStepPortal(Gear: PGear);
 begin
+    if Gear^.IntersectGear <> nil then
+        begin
+// do portal stuff
+        end
+
 (*
-A portal will have a few things it does.
-1) At first, it will move through the air until it collides with a surface. Once it does, it will stop.  At this point we might try a check to verify there is enough terrain for it to be spawned against, and delete. Or we could just let it kinda stick out for now.
 
 2) From then on, if doStepPortal is called and a gear of a radius less than or equal to the portal is within X pixels of the portal (we could also check on moving toward the portal I guess, depends how accurate this needs to be) the portal will then locate the first other portal of the opposite type (there should only be one other one), and move that gear's X/Y to that other portal's location, and modify dX/dY to be relative to that other portal's orientation relative to this portal's orientation.  This might require some tweaking with offsets of a few pixels to avoid getting gears stuck in land.
 
-3) At end of turn, all gtPortal will be deleted.
-
-*)
-(*
-Ok. Here's where I plan to go with this.
-1) Restrict portal gun to X shots.
-2) If on first shot, delete all existing gtPortal
-3) On any other shot, delete any existing portals of type X%2, and spawn a new portal of type X%2 oriented at angle 180° from the portal gun.  It might possibly be worth linking portals with a Gear reference, to save time on scanning through the Gear list every time we need a portal.
 *)
 end;
 
 procedure doStepMovingPortal(Gear: PGear);
-var i, x, y: LongInt;
-    oX, oY: hwFloat;
+var x, y: LongInt;//, tx, ty, bx, by, tangle: LongInt;
 begin
-oX:= Gear^.X;
-oY:= Gear^.Y;
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 x:= hwRound(Gear^.X);
 y:= hwRound(Gear^.Y);
-(* 
-Potential issue, portals embedded in land?
-Also, will need checks on how well portal is placed
-Thought is possibly doing it based on midpoint and two ends, so a bit of rough terrain is still permitted, but not curves.
-*)
-if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] <> 0) then
+
+if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and ((Land[y, x] and $FF00) <> 0) then
     begin
-    inc(Gear^.Tag);
-    Gear^.doStep:= @doStepPortal;
-//    AfterAttack;
+(* 
+This is not quite doing what I want, but basically hoping to avoid portals just sitting out in midair
+Works ok for right angles, aaaand that's about it.
+The opposite approach could be taken, we could determine the angle of the land using sheepluva's code and snap the Angle/DirAngle to it.
+tangle:= Gear^.Angle+1024;
+if tangle > 2048 then dec(tangle,2048);
+tx:= hwRound(Gear^.X+SignAs(AngleSin(tangle), Gear^.dX)*_6);
+ty:= hwRound(Gear^.Y-AngleCos(tangle)*_6);
+bx:= hwRound(Gear^.X-SignAs(AngleSin(tangle), Gear^.dX)*_6);
+by:= hwRound(Gear^.Y+AngleCos(tangle)*_6);
+*)
+    if ((Gear^.IntersectGear <> nil) and (hwRound(Distance(Gear^.X - Gear^.IntersectGear^.X,Gear^.Y-Gear^.IntersectGear^.Y)) < Gear^.Radius*2)) 
+(*or
+(((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and ((Land[ty, tx] and $FF00) = 0)) or
+(((by and LAND_HEIGHT_MASK) = 0) and ((bx and LAND_WIDTH_MASK) = 0) and ((Land[by, bx] and $FF00) = 0))*)
+    then
+        begin
+        if CurrentHedgehog <> nil then
+            if Gear^.IntersectGear = nil then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1
+            else if Gear^.Tag = 2 then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 2
+            else CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1;
+        DeleteGear(Gear)
+        end
+    else
+        begin
+        if CurrentHedgehog <> nil then
+            if Gear^.Tag = 2 then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1
+            else CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 2;
+        inc(Gear^.Tag);
+        Gear^.doStep:= @doStepPortal
+        end
     end
-// How laser checks for infinite
 else if (y > cWaterLine + cVisibleWater + Gear^.Radius) or (y < -LAND_WIDTH) or (x > LAND_WIDTH + LAND_WIDTH) or (x < -LAND_WIDTH) then
     begin
+    if CurrentHedgehog <> nil then
+        if Gear^.IntersectGear = nil then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1
+        else if Gear^.Tag = 2 then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 2
+        else CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1;
     DeleteGear(Gear);
-//    AfterAttack
     end;
 end;
 

@@ -81,7 +81,7 @@ procedure initModule;
 procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 procedure ProcessGears;
-procedure ResetUtilities;
+procedure EndTurnCleanup;
 procedure ApplyDamage(Gear: PGear; Damage: Longword);
 procedure SetAllToActive;
 procedure SetAllHHToActive;
@@ -736,7 +736,7 @@ case step of
                 AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                 playSound(sndSuddenDeath)
                 end
-            else if (TotalRounds < cSuddenDTurns - 1) then
+            else if (TotalRounds < cSuddenDTurns - 1) and not isInMultiShoot then
                 begin
                 i:= cSuddenDTurns - TotalRounds - 1;
                 s:= inttostr(i);
@@ -771,7 +771,7 @@ case step of
                         and ((Gear^.State and gstAttacked) = 0)
                         and (MultiShootAttacks > 0) then OnUsedAmmo(CurrentHedgehog^);
                 
-                ResetUtilities;
+                EndTurnCleanup;
 
                 FreeActionsList; // could send -left, -right and similar commands, so should be called before /nextturn
 
@@ -816,10 +816,11 @@ if ((GameTicks and $FFFF) = $FFFF) then
 inc(GameTicks)
 end;
 
-//Purpose, to reset all transient attributes toggled by a utility.
+//Purpose, to reset all transient attributes toggled by a utility and clean up various gears and effects at end of turn
 //If any of these are set as permanent toggles in the frontend, that needs to be checked and skipped here.
-procedure ResetUtilities;
+procedure EndTurnCleanup;
 var  i: LongInt;
+    tmpGear, iterator: PGear;
 begin
     SpeechText:= ''; // in case it has not been consumed
 
@@ -853,6 +854,18 @@ begin
                      if (GameFlags and gfInvulnerable) = 0 then
                         Gear^.Invulnerable:= false;
                   end;
+    iterator:= GearsList;
+    tmpGear:= nil;
+    while iterator <> nil do
+        begin
+        if (iterator^.Kind = gtPortal) then 
+            begin
+            tmpGear:= iterator;
+            if iterator^.NextGear <> nil then iterator:= iterator^.NextGear;
+            DeleteGear(tmpGear)
+            end
+        else iterator:= iterator^.NextGear;
+        end;
 end;
 
 procedure ApplyDamage(Gear: PGear; Damage: Longword);

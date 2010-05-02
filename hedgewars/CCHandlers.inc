@@ -633,8 +633,9 @@ with CurrentTeam^ do
             bSelected:= false;
 
             if bShowAmmoMenu then bShowAmmoMenu:= false
-            else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or (MultiShootAttacks > 0)
-                or ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
+            else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or 
+                    ((MultiShootAttacks > 0) and ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NoRoundEndHint) = 0)) or
+                    ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
             end
 end;
 

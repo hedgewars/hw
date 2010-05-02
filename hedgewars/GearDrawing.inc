@@ -347,7 +347,10 @@ if (Gear^.State and gstHHDriven) <> 0 then
             amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
             amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
             amSineGun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
-            amPortalGun: DrawRotatedF(sprPortalGun, hx, hy, 0, hwSign(Gear^.dX), aangle);
+            amPortalGun: if HH^.MultiShootAttacks = 0 then // Add a new Hedgehog value instead of abusing timer?
+                            DrawRotatedF(sprPortalGun, hx, hy, 0, hwSign(Gear^.dX), aangle)
+                      else
+                            DrawRotatedF(sprPortalGun, hx, hy, HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].Timer, hwSign(Gear^.dX), aangle);
             amSniperRifle: DrawRotatedF(sprSniperRifle, hx, hy, 0, hwSign(Gear^.dX), aangle);
             amBlowTorch: DrawRotated(sprHandBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
             amCake: DrawRotated(sprHandCake, hx, hy, hwSign(Gear^.dX), aangle);
@@ -599,7 +602,7 @@ while Gear<>nil do
                   end;
        gtBall: DrawRotatedf(sprBalls, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag,0, Gear^.DirAngle);
 // Still need portal types and states
-       gtPortal: DrawRotatedf(sprPortal, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0,0, Gear^.DirAngle);
+       gtPortal: DrawRotatedf(sprPortal, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag, hwSign(Gear^.dX), Gear^.DirAngle);
 
        gtDrill: DrawRotated(sprDrill, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 

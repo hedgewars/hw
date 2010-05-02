@@ -26,10 +26,11 @@ with PHedgehog(Gear^.Hedgehog)^ do
     begin
     Gear^.Message:= Gear^.Message and not gm_Slot;
 
-    if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
-        or (MultiShootAttacks > 0)
-        or ((Gear^.State and gstHHDriven) = 0) then exit;
+    if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
+       ((MultiShootAttacks > 0) and ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NoRoundEndHint) = 0)) or
+       ((Gear^.State and gstHHDriven) = 0) then exit;
 
+    MultiShootAttacks:= 0;
     Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
 
     if CurSlot = slot then
@@ -101,6 +102,7 @@ end;
 procedure Attack(Gear: PGear);
 var xx, yy: hwFloat;
     tmpGear: PVisualGear;
+    newGear, iterator, portal: PGear;
 begin
 bShowFinger:= false;
 with Gear^,
@@ -148,34 +150,53 @@ with Gear^,
                           amBee: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtBee,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                       amShotgun: begin
                                  PlaySound(sndShotgunReload);
-                                 CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
+                                 AddGear(hwRound(X), hwRound(Y), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
                                  end;
                    amPickHammer: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, gtPickHammer, 0, _0, _0, 0);
                          amSkip: ParseCommand('/skip', true);
                          amRope: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtRope, 0, xx, yy, 0);
                          amMine: AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtMine, gstWait, SignAs(_0_02, dX), _0, 3000);
-                       amDEagle: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
+                       amDEagle: AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
                       amSineGun: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtSineGunShot, 0, xx * _0_5, yy * _0_5, 0);
-(*
-Ok. Here's where I plan to go with this.
-1) Restrict portal gun to X shots.
-2) If on first shot, delete all existing gtPortal
-3) On any other shot, delete any existing portals of type X%2, and spawn a new portal of type X%2 oriented at angle 180° from the portal gun.  It might possibly be worth linking portals with a Gear reference, to save time on scanning through the Gear list every time we need a portal.
-*)
                     amPortalGun: begin
-        //if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= MultiShootAttacks) then
-                                
+                                 iterator:= GearsList;
+                                 portal:= nil;
+                                 while iterator <> nil do
+                                     begin
+                                     if (iterator^.Kind = gtPortal) then
+                                         begin
+                                         newGear:= iterator;
+                                         iterator:= iterator^.NextGear;
+                                         if (portal <> nil) then
+                                             begin
+                                             if (portal^.uid < newGear^.uid) then 
+                                                 begin
+                                                 DeleteGear(portal);
+                                                 portal:= newGear
+                                                 end
+                                             else
+                                                 begin
+                                                 if newGear^.NextGear = nil then iterator:= nil;
+                                                 DeleteGear(newGear);
+                                                 end
+                                             end
+                                         else portal:= newGear
+                                         end
+                                     else iterator:= iterator^.NextGear
+                                     end;
 
-//CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtPortal, 0, xx * _0_6, yy * _0_6, 0);
-AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtPortal, 0, xx * _0_6, yy * _0_6, 0);
-
-
-
+                                 newGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtPortal, 0, xx * _0_6, yy * _0_6, 0);
+                                 if portal <> nil then 
+                                     begin
+                                     newGear^.IntersectGear:= portal;
+                                     if portal^.Tag < 2 then newGear^.Tag:= 2
+                                     end;
+                                 newGear^.Angle:= Angle;
+                                 newGear^.DirAngle:= Angle * 180 / cMaxAngle - 90;
+                                 if Gear^.DirAngle < 0 then Gear^.DirAngle:= Gear^.DirAngle + 360
+                                 else if 360 < Gear^.DirAngle then Gear^.DirAngle:= Gear^.DirAngle - 360;
+                                 Ammo^[CurSlot, CurAmmo].Timer:= 0
                                  end;
-
-
-
-
                   amSniperRifle: begin
                                  PlaySound(sndSniperReload);
                                  CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtSniperRifleShot, 0, xx * _0_5, yy * _0_5, 0);
@@ -289,8 +310,11 @@ with CurrentHedgehog^.Gear^,
             end
         else
             begin
-            TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
-            State:= State or gstAttacked;
+            if ((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_NoRoundEndHint) = 0 then
+                begin
+                TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
+                State:= State or gstAttacked
+                end;
             OnUsedAmmo(CurrentHedgehog^);
             end;
         end
@@ -565,6 +589,8 @@ procedure doStepHedgehog(Gear: PGear); forward;
 procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling: boolean;
 begin
+if Gear^.dX > _0_995 then Gear^.dX:= _0_995;
+if Gear^.dY > _0_995 then Gear^.dY:= _0_995;
 if PHedgehog(Gear^.Hedgehog)^.Unplaced then
    begin
    Gear^.dY:= _0;

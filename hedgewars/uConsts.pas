@@ -1904,6 +1904,7 @@ const
             Probability: 20;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoRoundEndHint or
+                          ammoprop_AttackInMove or
                           ammoprop_DontHold or
                           ammoprop_Utility;
                 Count: 1;
