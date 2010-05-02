@@ -190,7 +190,8 @@ with Gear^,
                                      begin
                                      newGear^.IntersectGear:= portal;
                                      if portal^.Tag < 2 then newGear^.Tag:= 2
-                                     end;
+                                     end
+                                 else newGear^.IntersectGear:= nil;
                                  newGear^.Angle:= Angle;
                                  newGear^.DirAngle:= Angle * 180 / cMaxAngle - 90;
                                  if Gear^.DirAngle < 0 then Gear^.DirAngle:= Gear^.DirAngle + 360
