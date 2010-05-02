@@ -3039,6 +3039,7 @@ begin
     end;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepPortal(Gear: PGear);
 var tmpGear, iterator: PGear;
 begin
@@ -3071,7 +3072,7 @@ begin
 end;
 
 procedure doStepMovingPortal(Gear: PGear);
-var x, y: LongInt;//, tx, ty, bx, by, tangle: LongInt;
+var x, y, tx, ty: LongInt;//, bx, by, tangle: LongInt;
 begin
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
@@ -3080,6 +3081,14 @@ y:= hwRound(Gear^.Y);
 
 if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and ((Land[y, x] and $FF00) <> 0) then
     begin
+    if not calcSlopeNormal(Gear, x, y, tx, ty, 255) then
+        begin
+        DeleteGear(Gear);
+        EXIT;
+        end;
+    //AddFileLog(IntToStr(tx)+' '+IntToStr(ty));
+    if Gear^.dX.isNegative then ty:= -ty;
+    Gear^.DirAngle:= DxDy2Angle(Int2hwFloat(ty),Int2hwFloat(tx));
 (* 
 This is not quite doing what I want, but basically hoping to avoid portals just sitting out in midair
 Works ok for right angles, aaaand that's about it.
@@ -3091,6 +3100,9 @@ ty:= hwRound(Gear^.Y-AngleCos(tangle)*_6);
 bx:= hwRound(Gear^.X-SignAs(AngleSin(tangle), Gear^.dX)*_6);
 by:= hwRound(Gear^.Y+AngleCos(tangle)*_6);
 *)
+
+
+
     if ((Gear^.IntersectGear <> nil) and (hwRound(Distance(Gear^.X - Gear^.IntersectGear^.X,Gear^.Y-Gear^.IntersectGear^.Y)) < Gear^.Radius*2)) 
 (*or
 (((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and ((Land[ty, tx] and $FF00) = 0)) or
