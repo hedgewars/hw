@@ -150,13 +150,13 @@ with Gear^,
                           amBee: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtBee,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                       amShotgun: begin
                                  PlaySound(sndShotgunReload);
-                                 AddGear(hwRound(X), hwRound(Y), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
+                                 CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
                                  end;
                    amPickHammer: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, gtPickHammer, 0, _0, _0, 0);
                          amSkip: ParseCommand('/skip', true);
                          amRope: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtRope, 0, xx, yy, 0);
                          amMine: AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtMine, gstWait, SignAs(_0_02, dX), _0, 3000);
-                       amDEagle: AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
+                       amDEagle: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
                       amSineGun: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtSineGunShot, 0, xx * _0_5, yy * _0_5, 0);
                     amPortalGun: begin
                                  iterator:= GearsList;

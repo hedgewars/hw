@@ -3039,9 +3039,30 @@ begin
 end;
 
 procedure doStepPortal(Gear: PGear);
+var tmpGear, iterator: PGear;
 begin
-    if Gear^.IntersectGear <> nil then
+AddFileLog('...');
+    if not AllInactive and (Gear^.IntersectGear <> nil) then
         begin
+AddFileLog('!!!');
+        iterator:= GearsList;
+        while iterator <> nil do
+            begin
+            if
+// iterator^.Active and 
+(iterator^.Kind <> gtPortal) and 
+              // (hwRound(hwAbs(Gear^.X-iterator^.X)+hwAbs(Gear^.Y-iterator^.Y)) < Gear^.Radius) and 
+              // ((hwAbs(Gear^.X-(iterator^.X+iterator^.dX))+hwAbs(Gear^.Y-(iterator^.Y+iterator^.dY))).QWordValue < (hwAbs(Gear^.X-iterator^.X)+hwAbs(Gear^.Y-iterator^.Y)).QWordValue) and
+               (hwRound(Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y)) < Gear^.Radius) then // Let's check this one more closely
+                begin
+AddFileLog(inttostr(iterator^.uid));
+                iterator^.X:=Gear^.IntersectGear^.X+_128;
+                iterator^.Y:=Gear^.IntersectGear^.Y+_128;
+                iterator^.dX.isNegative:= not iterator^.dX.isNegative;
+                end;
+
+            iterator:= iterator^.NextGear;
+            end;
 // do portal stuff
         end
 
@@ -3091,7 +3112,12 @@ by:= hwRound(Gear^.Y+AngleCos(tangle)*_6);
             if Gear^.Tag = 2 then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1
             else CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 2;
         inc(Gear^.Tag);
-        Gear^.doStep:= @doStepPortal
+        Gear^.doStep:= @doStepPortal;
+        if Gear^.IntersectGear <> nil then
+            begin
+            Gear^.IntersectGear^.IntersectGear:= Gear;
+            SetAllToActive
+            end
         end
     end
 else if (y > cWaterLine + cVisibleWater + Gear^.Radius) or (y < -LAND_WIDTH) or (x > LAND_WIDTH + LAND_WIDTH) or (x < -LAND_WIDTH) then
