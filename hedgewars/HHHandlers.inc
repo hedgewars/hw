@@ -250,6 +250,10 @@ with Gear^,
                       amLaserSight: cLaserSighting:= true;
                       amVampiric: cVampiric:= true;
                       amPiano: begin
+                               // Tuck the hedgehog away until the piano attack is completed
+                               Unplaced:= true;
+                               X:= _0;
+                               Y:= _0;
                                FollowGear:= AddGear(TargetPoint.X, 0, gtPiano, 0, _0, _0, 0);
                                PauseMusic
                                end;

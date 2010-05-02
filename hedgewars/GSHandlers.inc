@@ -79,10 +79,11 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
             Gear^.State:= Gear^.State and (not gstHHDriven);
             AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
             end;
-        PlaySound(sndSplash)
+        if hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius then // don't play splash if they are already way past the surface
+            PlaySound(sndSplash)
         end;
     
-    if not cReducedQuality then 
+    if not cReducedQuality and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius) then 
         begin
         AddVisualGear(hwRound(Gear^.X), cWaterLine, vgtSplash);
        
@@ -3158,7 +3159,17 @@ if ((Gear^.Pos = 3) and ((GameFlags and gfSolidLand) <> 0)) or (Gear^.Pos = 20) 
 doStepFallingGear(Gear);
 
 if (Gear^.State and gstDrowning) <> 0 then
+    begin
+    if CurrentHedgehog^.Gear <> nil then
+        begin
+        // Drown the hedgehog.  Could also just delete it, but hey, this gets a caption
+        CurrentHedgehog^.Gear^.Active:= true;
+        CurrentHedgehog^.Gear^.X:= Gear^.X;
+        CurrentHedgehog^.Gear^.Y:=int2hwFloat(cWaterLine+cVisibleWater)+_128;
+        CurrentHedgehog^.Unplaced:= false
+        end;
     ResumeMusic
+    end
 else if (Gear^.State and gstCollision) <> 0 then
     begin
     r0:= GetRandom(21);
