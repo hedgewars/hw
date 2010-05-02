@@ -3133,15 +3133,18 @@ by:= hwRound(Gear^.Y+AngleCos(tangle)*_6);
             iterator:= GearsList;
             while iterator <> nil do
                 begin
-                iterator^.Active:= true;
-                if iterator^.dY.QWordValue = _0.QWordValue then iterator^.dY.isNegative:= false;
-                iterator^.State:= iterator^.State or gstMoving;
-                DeleteCI(iterator);
-                inc(iterator^.dY.QWordValue,10);
-                iterator:= iterator^.NextGear;
+                if iterator^.Kind <> gtPortal then
+                    begin
+                    iterator^.Active:= true;
+                    if iterator^.dY.QWordValue = _0.QWordValue then iterator^.dY.isNegative:= false;
+                    iterator^.State:= iterator^.State or gstMoving;
+                    DeleteCI(iterator);
+                    inc(iterator^.dY.QWordValue,10);
+                    end;
+                iterator:= iterator^.NextGear
                 end;
             doStepPortal(Gear);
-            if Gear^.IntersectGear <> nil then doStepPortal(Gear^.IntersectGear);
+            if Gear^.IntersectGear <> nil then Gear^.IntersectGear^.doStep(Gear^.IntersectGear);
             end
         end
     end
