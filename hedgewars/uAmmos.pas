@@ -41,7 +41,7 @@ procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 procedure SetWeapon(weap: TAmmoType);
 procedure DisableSomeWeapons;
 procedure ResetWeapons;
-function GetAmmoByNum(num: Longword): PHHAmmo;
+function  GetAmmoByNum(num: Longword): PHHAmmo;
 
 var shoppa: boolean;
 

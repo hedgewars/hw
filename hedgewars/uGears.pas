@@ -89,10 +89,10 @@ procedure DrawGears;
 procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
-function GearByUID(uid : Longword) : PGear;
+function  GearByUID(uid : Longword) : PGear;
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
-function ModifyDamage(dmg: Longword; Gear: PGear): Longword;
+function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 
 implementation

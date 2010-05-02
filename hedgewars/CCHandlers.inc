@@ -665,12 +665,12 @@ begin
         cScreenHeight:= cInitHeight
     end;
 
-    // load window icon
 {$IFDEF SDL_IMAGE_NEWER}
     WriteToConsole('Init SDL_image... ');
     SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
     WriteLnToConsole(msgOK);
 {$ENDIF}
+    // load engine icon
 {$IFDEF DARWIN}
     ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
 {$ELSE}

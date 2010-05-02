@@ -69,7 +69,6 @@
 }
 
 -(void) viewDidLoad {
-
     isPopoverVisible = NO;
     self.view.alpha = 0;
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);

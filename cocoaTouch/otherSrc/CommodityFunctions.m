@@ -44,7 +44,7 @@ void createTeamNamed (NSString *nameWithoutExt) {
 
 BOOL rotationManager (UIInterfaceOrientation interfaceOrientation) {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) || (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+        return YES;
     else
         return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 

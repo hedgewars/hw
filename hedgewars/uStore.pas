@@ -608,7 +608,7 @@ end;
 
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 begin
-DrawRotatedTex(SpritesData[Sprite].Texture,
+    DrawRotatedTex(SpritesData[Sprite].Texture,
         SpritesData[Sprite].Width,
         SpritesData[Sprite].Height,
         X, Y, Dir, Angle)
@@ -711,11 +711,11 @@ end;
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
 var r: TSDL_Rect;
 begin
-r.x:= FrameX * SpritesData[Sprite].Width;
-r.w:= SpritesData[Sprite].Width;
-r.y:= FrameY * SpritesData[Sprite].Height;
-r.h:= SpritesData[Sprite].Height;
-DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
+    r.x:= FrameX * SpritesData[Sprite].Width;
+    r.w:= SpritesData[Sprite].Width;
+    r.y:= FrameY * SpritesData[Sprite].Height;
+    r.h:= SpritesData[Sprite].Height;
+    DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
@@ -803,14 +803,15 @@ end;
 procedure StoreRelease;
 var ii: TSprite;
 begin
-for ii:= Low(TSprite) to High(TSprite) do
+    for ii:= Low(TSprite) to High(TSprite) do
     begin
-    FreeTexture(SpritesData[ii].Texture);
-    if SpritesData[ii].Surface <> nil then SDL_FreeSurface(SpritesData[ii].Surface)
+        FreeTexture(SpritesData[ii].Texture);
+        if SpritesData[ii].Surface <> nil then
+            SDL_FreeSurface(SpritesData[ii].Surface)
     end;
-SDL_FreeSurface(MissionIcons);
-FreeTexture(ropeIconTex);
-FreeTexture(HHTexture)
+    SDL_FreeSurface(MissionIcons);
+    FreeTexture(ropeIconTex);
+    FreeTexture(HHTexture);
 end;
 
 
@@ -1134,12 +1135,32 @@ end;
 
 procedure SetupOpenGL;
 var vendor: shortstring;
+{$IFDEF DARWIN}
+    one: LongInt;
+{$ENDIF}
 begin
+    // initialized here because when initModule is called cScreenWidth/Height are not yet set
+    if (uStore.wScreen = 0) and (uStore.hScreen = 0) then
+    begin
+        uStore.wScreen:= cScreenWidth; 
+        uStore.hScreen:= cScreenHeight;
+    end;
+
 {$IFDEF IPHONEOS}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0); // no double buffering
     SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+{$IFNDEF SDL13}
+// this attribute is default in 1.3 and must be enabled in MacOSX
+    if cVSyncInUse then
+        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+{$IFDEF DARWIN}
+// fixes vsync in Snow Leopard
+    one := 1;
+    CGLSetParameter(CGLGetCurrentContext(), 222, @one);
+{$ENDIF}
+{$ENDIF}
 {$ENDIF}
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0); // no depth buffer
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
@@ -1148,14 +1169,6 @@ begin
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0); // no alpha channel required
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 16); // buffer has to be 16 bit only
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); // try to prefer hardware rendering
-
-{$IFNDEF SDL13}
-// this attribute is default in 1.3 and must be enabled in MacOSX
-{$IFNDEF DARWIN}
-    if cVSyncInUse then
-{$ENDIF}
-        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
-{$ENDIF}
 
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 
@@ -1276,7 +1289,7 @@ begin
     r.w:= squaresize;
     r.h:= squaresize;
     
-    DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
+    DrawFromRect( -squaresize div 2, (hScreen - squaresize) shr 1, @r, ProgrTex);
 
     SDL_GL_SwapBuffers();
 {$IFDEF SDL13}
@@ -1554,8 +1567,10 @@ begin
 {$ELSE}
     cGPUVendor:= gvUnknown;
 {$ENDIF}
-    uStore.wScreen:= cScreenWidth; 
-    uStore.hScreen:= cScreenHeight;
+    // really initalized in storeLoad
+    uStore.wScreen:= 0; 
+    uStore.hScreen:= 0;
+    
     cScaleFactor:= 2.0;
     SupportNPOTT:= false;
     Step:= 0;

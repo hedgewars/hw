@@ -60,6 +60,7 @@ interface
     {$linkframework SDL_image}
     {$linkframework SDL_ttf}
     {$linkframework SDL_mixer}
+    {$linkframework OpenGL}
   {$ENDIF}
 {$ENDIF}
 
@@ -731,6 +732,12 @@ procedure SDL_JoystickClose(joy: PSDL_Joystick); cdecl; external SDLLibName;
 
 function SDL_putenv(const text: PChar): LongInt; cdecl; external SDLLibName;
 function SDL_getenv(const text: PChar): PChar; cdecl; external SDLLibName;
+
+{* OpenGL *}
+{$IFDEF DARWIN}
+function CGLGetCurrentContext(): Pointer; cdecl; external 'OpenGL';
+procedure CGLSetParameter(context: Pointer; option: LongInt; value: Pointer); cdecl; external 'OpenGL';
+{$ENDIF}
 
 (*  SDL_TTF  *)
 function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;

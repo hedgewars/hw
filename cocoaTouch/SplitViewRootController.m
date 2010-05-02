@@ -47,7 +47,8 @@
         UINavigationController *mainNavController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
     
         masterViewController.detailViewController = detailViewController;
-
+        //[splitViewRootController setDelegate:detailViewController];
+        
         [masterViewController release];
 
         [splitViewRootController setViewControllers:[NSArray arrayWithObjects: mainNavController, detailedNavController, nil]];

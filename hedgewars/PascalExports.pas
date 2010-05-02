@@ -140,22 +140,23 @@ begin
 end;
 
 procedure HW_setLandscape(landscape: boolean); cdecl; export;
+var tmp:LongInt;
 begin
     if landscape then
     begin
         rotationQt:= -90;
         uStore.wScreen:= cScreenWidth;
         uStore.hScreen:= cScreenHeight;
-        //uWorld.w:= cScreenWidth;
-        //uWorld.h:= cScreenHeight;
+        uWorld.wScreen:= cScreenWidth;
+        uWorld.hScreen:= cScreenHeight;
     end
     else
     begin
         rotationQt:= 270;
         uStore.wScreen:= cScreenHeight;
         uStore.hScreen:= cScreenWidth;
-        //uWorld.w:= cScreenHeight;
-        //uWorld.h:= cScreenWidth;
+        uWorld.wScreen:= cScreenHeight;
+        uWorld.hScreen:= cScreenWidth;
     end;
 end;
 {$ENDIF}
