@@ -3044,16 +3044,17 @@ end;
 procedure doStepPortal(Gear: PGear);
 var tmpGear, iterator: PGear;
 begin
-    //if not AllInactive and (Gear^.IntersectGear <> nil) then
-    if (Gear^.IntersectGear <> nil) then
+    if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0 then DeleteGear(Gear);
+    if not AllInactive and (Gear^.IntersectGear <> nil) then
+    //if (Gear^.IntersectGear <> nil) then
         begin
         iterator:= GearsList;
         while iterator <> nil do
             begin
             if iterator^.Active and (iterator^.Kind <> gtPortal) and 
-               (hwRound(hwAbs(Gear^.X-iterator^.X)+hwAbs(Gear^.Y-iterator^.Y)) < Gear^.Radius) and 
+               (hwRound(hwAbs(Gear^.X-iterator^.X)+hwAbs(Gear^.Y-iterator^.Y)) < Gear^.Radius+iterator^.Radius) and 
                ((hwAbs(Gear^.X-(iterator^.X+iterator^.dX))+hwAbs(Gear^.Y-(iterator^.Y+iterator^.dY))).QWordValue < (hwAbs(Gear^.X-iterator^.X)+hwAbs(Gear^.Y-iterator^.Y)).QWordValue) and
-               (hwRound(Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y)) < Gear^.Radius) then // Let's check this one more closely
+               (hwRound(Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y)) < Gear^.Radius+iterator^.Radius) then // Let's check this one more closely
                 begin
                 iterator^.X:=Gear^.IntersectGear^.X+_128;
                 iterator^.Y:=Gear^.IntersectGear^.Y+_128;
@@ -3074,6 +3075,7 @@ end;
 
 procedure doStepMovingPortal(Gear: PGear);
 var x, y, tx, ty: LongInt;//, bx, by, tangle: LongInt;
+    iterator: PGear;
 begin
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
@@ -3126,7 +3128,20 @@ by:= hwRound(Gear^.Y+AngleCos(tangle)*_6);
         if Gear^.IntersectGear <> nil then
             begin
             Gear^.IntersectGear^.IntersectGear:= Gear;
-            SetAllToActive
+            AllInactive:= false;
+            // This jiggles gears, to ensure a portal connection just placed under a gear takes effect.
+            iterator:= GearsList;
+            while iterator <> nil do
+                begin
+                iterator^.Active:= true;
+                if iterator^.dY.QWordValue = _0.QWordValue then iterator^.dY.isNegative:= false;
+                iterator^.State:= iterator^.State or gstMoving;
+                DeleteCI(iterator);
+                inc(iterator^.dY.QWordValue,10);
+                iterator:= iterator^.NextGear;
+                end;
+            doStepPortal(Gear);
+            if Gear^.IntersectGear <> nil then doStepPortal(Gear^.IntersectGear);
             end
         end
     end
