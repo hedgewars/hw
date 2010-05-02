@@ -1838,7 +1838,7 @@ const
                           ammoprop_AltAttack;
                 Count: 1;
                 InitialCount: 1;
-                NumPerTurn: 1;
+                NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amJetpack;

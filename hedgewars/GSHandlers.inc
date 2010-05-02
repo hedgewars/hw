@@ -2020,7 +2020,8 @@ if ((Gear^.Message and not gm_Switch) <> 0) or (TurnTimeLeft = 0) then
     HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
     Msg:= Gear^.Message and not gm_Switch;
     DeleteGear(Gear);
-    AfterAttack;
+    OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
+    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
 
     HHGear:= CurrentHedgehog^.Gear;
     ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
