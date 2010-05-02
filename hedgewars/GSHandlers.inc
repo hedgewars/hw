@@ -3041,21 +3041,17 @@ end;
 procedure doStepPortal(Gear: PGear);
 var tmpGear, iterator: PGear;
 begin
-AddFileLog('...');
-    if not AllInactive and (Gear^.IntersectGear <> nil) then
+    //if not AllInactive and (Gear^.IntersectGear <> nil) then
+    if (Gear^.IntersectGear <> nil) then
         begin
-AddFileLog('!!!');
         iterator:= GearsList;
         while iterator <> nil do
             begin
-            if
-// iterator^.Active and 
-(iterator^.Kind <> gtPortal) and 
-              // (hwRound(hwAbs(Gear^.X-iterator^.X)+hwAbs(Gear^.Y-iterator^.Y)) < Gear^.Radius) and 
-              // ((hwAbs(Gear^.X-(iterator^.X+iterator^.dX))+hwAbs(Gear^.Y-(iterator^.Y+iterator^.dY))).QWordValue < (hwAbs(Gear^.X-iterator^.X)+hwAbs(Gear^.Y-iterator^.Y)).QWordValue) and
+            if iterator^.Active and (iterator^.Kind <> gtPortal) and 
+               (hwRound(hwAbs(Gear^.X-iterator^.X)+hwAbs(Gear^.Y-iterator^.Y)) < Gear^.Radius) and 
+               ((hwAbs(Gear^.X-(iterator^.X+iterator^.dX))+hwAbs(Gear^.Y-(iterator^.Y+iterator^.dY))).QWordValue < (hwAbs(Gear^.X-iterator^.X)+hwAbs(Gear^.Y-iterator^.Y)).QWordValue) and
                (hwRound(Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y)) < Gear^.Radius) then // Let's check this one more closely
                 begin
-AddFileLog(inttostr(iterator^.uid));
                 iterator^.X:=Gear^.IntersectGear^.X+_128;
                 iterator^.Y:=Gear^.IntersectGear^.Y+_128;
                 iterator^.dX.isNegative:= not iterator^.dX.isNegative;
