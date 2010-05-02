@@ -20,7 +20,7 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, uTeams, SDLh, uFloat, GLunit;
+uses sysutils, uConsts, uTeams, SDLh, GLunit;
 
 
 var PixelFormat: PSDL_PixelFormat;
@@ -83,7 +83,7 @@ procedure FreeWeaponTooltip;
 procedure Tint(r, g, b, a: Byte); inline;
 
 implementation
-uses uMisc, uConsole, uLand, uLocale, uWorld{$IFDEF IPHONEOS}, PascalExports{$ENDIF};
+uses uMisc, uConsole, uLocale{$IFDEF IPHONEOS}, PascalExports{$ENDIF};
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -137,6 +137,7 @@ var w, h: LongInt;
     clr: TSDL_Color;
     finalRect: TSDL_Rect;
 begin
+w:= 0; h:= 0; // avoid compiler hints
 TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
 finalRect.x:= X;
 finalRect.y:= Y;
@@ -165,6 +166,7 @@ var w, h: LongInt;
     clr: TSDL_Color;
     finalRect: TSDL_Rect;
 begin
+w:= 0; h:= 0; // avoid compiler hints
 TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
 finalRect.x:= X + FontBorder + 2;
 finalRect.y:= Y + FontBorder;
@@ -845,11 +847,12 @@ exit(font);
 end;
 
 function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
-var w, h : LongInt;
+var w, h: LongInt;
     finalSurface: PSDL_Surface;
 begin
 if length(s) = 0 then s:= ' ';
 font:= CheckCJKFont(s, font);
+w:= 0; h:= 0; // avoid compiler hints
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
 
 finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
@@ -905,6 +908,7 @@ numLines:= 0;
 
 if length(s) = 0 then s:= '...';
 font:= CheckCJKFont(s, font);
+w:= 0; h:= 0; // avoid compiler hints
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
 if w<8 then w:= 8;
 j:= 0;
@@ -1062,7 +1066,18 @@ function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surf
 var tmpsurf: PSDL_Surface;
     s: shortstring;
 begin
-    WriteToConsole(msgLoading + filename + ' [flags: ' + inttostr(imageFlags) + ']... ');
+    WriteToConsole(msgLoading + filename + '.png [flags:');
+    if imageFlags = ifNone then
+        WriteToConsole(' None')
+    else
+        begin
+        if (imageFlags and ifAlpha) <> 0 then WriteToConsole(' Alpha');
+        if (imageFlags and ifCritical) <> 0 then WriteToConsole(' Critical');
+        if (imageFlags and ifTransparent) <> 0 then WriteToConsole(' Transparent');
+        if (imageFlags and ifIgnoreCaps) <> 0 then WriteToConsole(' IgnoreCaps');
+        if (imageFlags and ifLowRes) <> 0 then WriteToConsole(' LowRes');
+        end;
+    WriteToConsole('] ');
 
     s:= filename + '.png';
     tmpsurf:= IMG_Load(Str2PChar(s));
@@ -1109,8 +1124,7 @@ begin
     if (imageFlags and ifTransparent) <> 0 then
         TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-    WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');
-    WriteLnToConsole(msgOK);
+    WriteLnToConsole(msgOK + ' (' + inttostr(tmpsurf^.w) + 'x' + inttostr(tmpsurf^.h) + ')');
 
     LoadImage:= tmpsurf //Result
 end;
@@ -1353,7 +1367,11 @@ for srcX:= 0 to src^.w - 1 do
          begin
          SDL_GetRGBA(destPixels^[i], dest^.format, @r0, @g0, @b0, @a0);
          SDL_GetRGBA(srcPixels^[j], src^.format, @r1, @g1, @b1, @a1);
-         destPixels^[i]:= SDL_MapRGBA(dest^.format, (r0 * (255 - a1) + r1 * a1) div 255, (g0 * (255 - a1) + g1 * a1) div 255, (b0 * (255 - a1) + b1 * a1) div 255, (a0 * (255 - a1) + a1 * a1) div 255);
+         r0:= (r0 * (255 - LongInt(a1)) + r1 * LongInt(a1)) div 255;
+         g0:= (g0 * (255 - LongInt(a1)) + g1 * LongInt(a1)) div 255;
+         b0:= (b0 * (255 - LongInt(a1)) + b1 * LongInt(a1)) div 255;
+         a0:= (a0 * (255 - LongInt(a1)) + a1 * LongInt(a1)) div 255;
+         destPixels^[i]:= SDL_MapRGBA(dest^.format, r0, g0, b0, a0);
          end;
       end;
 end;
@@ -1399,6 +1417,8 @@ w:= 0;
 h:= 0;
 wa:= FontBorder * 2 + 4;
 ha:= FontBorder * 2;
+
+i:= 0; j:= 0; // avoid compiler hints
 
 // TODO: Recheck height/position calculation
 
@@ -1467,6 +1487,7 @@ while tmpdesc <> '' do
         r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
         
         // render highlighted caption (if there's a ':')
+        tmpline2:= '';
         SplitByChar(tmpline, tmpline2, ':');
         if tmpline2 <> '' then
             WriteInRect(tmpsurf, FontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, tmpline + ':');

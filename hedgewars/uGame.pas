@@ -20,14 +20,13 @@
 
 unit uGame;
 interface
-uses uFloat;
 
 procedure DoGameTick(Lag: LongInt);
 
 ////////////////////
    implementation
 ////////////////////
-uses uMisc, uConsts, uWorld, uKeys, uTeams, uIO, uAI, uGears, uConsole, uScript;
+uses uMisc, uConsts, uKeys, uTeams, uIO, uAI, uGears, uScript;
 
 procedure DoGameTick(Lag: LongInt);
 var i: LongInt;

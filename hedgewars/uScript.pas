@@ -105,6 +105,7 @@ end;
 
 function lc_hidemission(L : Plua_State) : LongInt; Cdecl;
 begin
+    L:= L; // avoid compiler hint
     HideMission;
     lc_hidemission:= 0;
 end;
@@ -372,6 +373,7 @@ end;
 
 function lc_endgame(L : Plua_State) : LongInt; Cdecl;
 begin
+    L:= L; // avoid compiler hint
     GameState:= gsExit;
     lc_endgame:= 0
 end;
@@ -569,6 +571,7 @@ ScriptSetString('Theme', '');
 
 // import locale
 s:= cLocaleFName;
+t:= '';
 SplitByChar(s, t, '.');
 ScriptSetString('L', s);
 

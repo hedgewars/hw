@@ -51,7 +51,7 @@ procedure CheckLandDigest(s: shortstring);
 function  LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
-uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uAmmos, uLandTexture;
+uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uLandTexture;
 
 operator=(const a, b: direction) c: Boolean;
 begin
@@ -68,7 +68,9 @@ var ctx: TSHA1Context;
     dig: TSHA1Digest;
     s: shortstring;
 begin
+{$HINTS OFF}
 SHA1Init(ctx);
+{$HINTS ON}
 SHA1UpdateLongwords(ctx, @Land, sizeof(Land));
 dig:= SHA1Final(ctx);
 s:='M{'+inttostr(dig[0])+':'
@@ -192,7 +194,9 @@ begin
 pi:= EndI;
 i:= StartI;
 ni:= Succ(StartI);
+{$HINTS OFF}
 Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
+{$HINTS ON}
 repeat
     inc(pi);
     if pi > EndI then pi:= StartI;
@@ -296,6 +300,7 @@ xl:= x - 1;
 xr:= x;
 Push(xl, xr, y, -1);
 Push(xl, xr, y,  1);
+dir:= 0;
 while Stack.Count > 0 do
       begin
       Pop(xl, xr, y, dir);
@@ -405,7 +410,7 @@ with Template do
          pa.ar[i].x:= BasePoints^[i].x + LongInt(GetRandom(BasePoints^[i].w));
          if pa.ar[i].x <> NTPX then
             pa.ar[i].x:= pa.ar[i].x + ((LAND_WIDTH - Template.TemplateWidth) div 2);
-         pa.ar[i].y:= BasePoints^[i].y + LongInt(GetRandom(BasePoints^[i].h)) + LAND_HEIGHT - Template.TemplateHeight
+         pa.ar[i].y:= BasePoints^[i].y + LongInt(GetRandom(BasePoints^[i].h)) + LAND_HEIGHT - LongInt(Template.TemplateHeight)
          end;
 
      if canMirror then
@@ -552,7 +557,9 @@ for y:= 0 to LAND_HEIGHT - 1 do
     for x:= 0 to LAND_WIDTH - 1 do
         Land[y, x]:= COLOR_LAND;
 
+{$HINTS OFF}
 SetPoints(Template, pa);
+{$HINTS ON}
 for i:= 1 to Template.BezierizeCount do
     begin
     BezierizeEdge(pa, _0_5);

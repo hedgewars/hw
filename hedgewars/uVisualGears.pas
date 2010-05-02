@@ -20,7 +20,7 @@
 
 unit uVisualGears;
 interface
-uses SDLh, uConsts, uFloat, Math, GLunit;
+uses uConsts, uFloat, Math, GLunit;
 
 type PVisualGear = ^TVisualGear;
     TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);
@@ -375,8 +375,8 @@ for t:= 1 to Steps do
             with thexchar[i] do
                 begin
                 {$WARNINGS OFF}
-                team^.DrawHealthY:= ny + dy * Gear^.Timer div 640;
-                team^.TeamHealthBarWidth:= team^.NewTeamHealthBarWidth + dw * Gear^.Timer div cSorterWorkTime;
+                team^.DrawHealthY:= ny + dy * LongInt(Gear^.Timer div 640);
+                team^.TeamHealthBarWidth:= team^.NewTeamHealthBarWidth + dw * LongInt(Gear^.Timer div cSorterWorkTime);
                 {$WARNINGS ON}
                 end;
 
@@ -394,6 +394,7 @@ var i: Longword;
     b: boolean;
     t: LongInt;
 begin
+Steps:= Steps; // avoid compiler hint
 for t:= 0 to Pred(TeamsCount) do
     with thexchar[t] do
         begin
@@ -453,6 +454,8 @@ end;
 
 procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
 begin
+Steps:= Steps; // avoid compiler hint
+
 with PHedgehog(Gear^.Hedgehog)^ do
     if SpeechGear <> nil then SpeechGear^.Timer:= 0;
 

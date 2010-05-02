@@ -28,6 +28,7 @@ interface
 {$ELSE}
 program hwengine;
 {$ENDIF}
+
 uses
     SDLh in 'SDLh.pas',
     uConsts in 'uConsts.pas',
@@ -423,7 +424,7 @@ end;
 
 {$IFNDEF HWLIBRARY}
 ////////////////////////////////
-procedure Resize(w, h: LongInt);
+(*procedure Resize(w, h: LongInt);
 begin
     cScreenWidth:= w;
     cScreenHeight:= h;
@@ -431,7 +432,7 @@ begin
         ParseCommand('/fullscr 1', true)
     else
         ParseCommand('/fullscr 0', true);
-end;
+end;*)
 
 /////////////////////
 procedure DisplayUsage;

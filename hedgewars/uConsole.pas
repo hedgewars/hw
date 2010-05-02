@@ -37,8 +37,8 @@ function  GetLastConsoleLine: shortstring;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,
-     uRandom, uAmmos, uStats, uGame, uChat, SDLh, uSound, uVisualGears, uScript;
+uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld,
+     uRandom, uAmmos, uStats, uChat, SDLh, uSound, uVisualGears, uScript;
 
 const cLineWidth: LongInt = 0;
       cLinesCount = 256;
@@ -132,7 +132,6 @@ begin
 end;
 
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
-type PhwFloat = ^hwFloat;
 var ii: LongInt;
     s: shortstring;
     t: PVariable;
@@ -143,6 +142,7 @@ if CmdStr[0]=#0 then exit;
 {$IFDEF DEBUGFILE}AddFileLog('ParseCommand "' + CmdStr + '"');{$ENDIF}
 c:= CmdStr[1];
 if c in ['/', '$'] then Delete(CmdStr, 1, 1) else c:= '/';
+s:= '';
 SplitBySpace(CmdStr, s);
 t:= Variables;
 while t <> nil do

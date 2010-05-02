@@ -29,7 +29,7 @@ procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PS
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
-uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, uSound, uWorld, GLunit;
+uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uSound, GLunit;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
@@ -205,7 +205,7 @@ AddGirder:= bRes;
 end;
 
 function CheckLand(rect: TSDL_Rect; dX, dY, Color: Longword): boolean;
-var i: Longword;
+var i: LongInt;
     bRes: boolean = true;
 begin
 inc(rect.x, dX);

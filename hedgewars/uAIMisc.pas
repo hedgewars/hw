@@ -246,6 +246,7 @@ end;
 function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
 var i, dmg, rate: LongInt;
 begin
+Me:= Me; // avoid compiler hint
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do

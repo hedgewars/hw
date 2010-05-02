@@ -143,7 +143,7 @@ type hwFloat = Extended;
 {$ENDIF}
 
 implementation
-uses uConsts, uMisc;
+uses uMisc;
 
 {$IFDEF FPC}
 

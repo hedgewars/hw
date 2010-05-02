@@ -35,7 +35,7 @@ procedure DumpBuffer;
 {$ENDIF}
 
 implementation
-uses uMisc{$IFDEF DEBUGFILE},uConsole{$ENDIF};
+uses uMisc;
 
 var cirbuf: array[0..63] of Longword;
     n: byte;

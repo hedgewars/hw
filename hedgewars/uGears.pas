@@ -1607,10 +1607,7 @@ repeat
     repeat
         inc(x, Delta);
         cnt:= 0;
-        if topY > 1024 then
-            y:= 1024-Gear^.Radius * 2
-        else
-            y:= topY-Gear^.Radius * 2;
+        y:= min(1024, topY) - 2 * Gear^.Radius;
         while y < LAND_HEIGHT do
             begin
             repeat

@@ -304,7 +304,7 @@ with CurrentHedgehog^.Gear^,
         
         if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= MultiShootAttacks) then
             begin
-            s:= inttostr(Ammo^[CurSlot, CurAmmo].NumPerTurn + 1 - MultiShootAttacks);
+            s:= inttostr(Ammo^[CurSlot, CurAmmo].NumPerTurn - MultiShootAttacks + 1);
             AddCaption(format(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
             end;
         
@@ -454,7 +454,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         with Ammo^[CurSlot, CurAmmo] do
           begin
           if (Gear^.Message and gm_Left  ) <> 0 then
-             Pos:= (Pos + Ammoz[AmmoType].PosCount - 1) mod Ammoz[AmmoType].PosCount
+             Pos:= (Pos - 1 + Ammoz[AmmoType].PosCount) mod Ammoz[AmmoType].PosCount
           else
           if (Gear^.Message and gm_Right ) <> 0 then
              Pos:= (Pos + 1) mod Ammoz[AmmoType].PosCount

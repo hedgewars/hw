@@ -57,7 +57,9 @@ procedure FillAmmoStore(Ammo: PHHAmmo; var cnts: TAmmoCounts);
 var mi: array[0..cMaxSlotIndex] of byte;
     a: TAmmoType;
 begin
+{$HINTS OFF}
 FillChar(mi, sizeof(mi), 0);
+{$HINTS ON}
 FillChar(Ammo^, sizeof(Ammo^), 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
@@ -172,7 +174,9 @@ var ammos: TAmmoCounts;
     slot, ami: LongInt;
     hhammo: PHHAmmo;
 begin
+{$HINTS OFF}
 FillChar(ammos, sizeof(ammos), 0);
+{$HINTS ON}
 hhammo:= Hedgehog.Ammo;
 
 for slot:= 0 to cMaxSlotIndex do

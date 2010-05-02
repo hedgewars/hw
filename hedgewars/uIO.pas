@@ -104,7 +104,9 @@ fds:= SDLNet_AllocSocketSet(1);
 SDLTry(fds <> nil, true);
 WriteLnToConsole(msgOK);
 WriteToConsole('Establishing IPC connection... ');
+{$HINTS OFF}
 SDLTry(SDLNet_ResolveHost(ipaddr, '127.0.0.1', ipcPort) = 0, true);
+{$HINTS ON}
 IPCSock:= SDLNet_TCP_Open(ipaddr);
 SDLTry(IPCSock <> nil, true);
 WriteLnToConsole(msgOK)
@@ -182,6 +184,8 @@ filemode:= 0;
 assign(f, fileName);
 reset(f, 1);
 
+i:= 0; // avoid compiler hints
+buf[0]:= 0;
 repeat
     BlockRead(f, buf[1], 255 - Length(ss), i);
     if i > 0 then

@@ -20,7 +20,7 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, uLand, GLunit, uSound;
+uses uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound;
 
 type PHHAmmo = ^THHAmmo;
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
@@ -42,7 +42,7 @@ type PHHAmmo = ^THHAmmo;
             Team: PTeam;
             MultiShootAttacks: Longword;
             visStepPos: LongWord;
-            BotLevel  : LongWord; // 0 - Human player
+            BotLevel  : Byte; // 0 - Human player
             HatVisibility: GLfloat;
             stats: TStatistics;
             Hat: shortstring;
@@ -114,7 +114,7 @@ procedure TeamGoneEffect(var Team: TTeam);
 function GetTeamStatString(p: PTeam): shortstring;
 
 implementation
-uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uChat;
+uses uMisc, uWorld, uLocale, uAmmos, uChat;
 const MaxTeamHealth: LongInt = 0;
 
 function CheckForWin: boolean;

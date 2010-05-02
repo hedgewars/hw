@@ -3042,7 +3042,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepPortal(Gear: PGear);
-var tmpGear, iterator: PGear;
+var iterator: PGear;
 begin
     if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0 then DeleteGear(Gear);
     if not AllInactive and (Gear^.IntersectGear <> nil) then
@@ -3081,6 +3081,7 @@ Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 x:= hwRound(Gear^.X);
 y:= hwRound(Gear^.Y);
+tx:= 0; ty:= 0; // avoid compiler hints
 
 if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and ((Land[y, x] and $FF00) <> 0) then
     begin
@@ -3218,7 +3219,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSineGunShotWork(Gear: PGear);
-var x, y, rX, rY, t, tmp, initHealth: LongWord;
+var x, y, rX, rY, t, tmp, initHealth: LongInt;
     oX, oY, ldX, ldY, sdX, sdY, sine, lx, ly, amp: hwFloat;
     justCollided: boolean;
 begin
@@ -3304,7 +3305,7 @@ repeat
             
             // add some fire to the tunnel
             if getRandom(6) = 0 then
-                AddGear(x-Gear^.Radius+getRandom(2*Gear^.Radius), y-getRandom(Gear^.Radius+1), gtFlame, gsttmpFlag, _0, _0, 0);
+                AddGear(x - Gear^.Radius + LongInt(getRandom(2 * Gear^.Radius)), y - getRandom(Gear^.Radius + 1), gtFlame, gsttmpFlag, _0, _0, 0);
             end;
 
         if getRandom(100) = 0 then

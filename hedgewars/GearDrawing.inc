@@ -700,7 +700,7 @@ while Gear<>nil do
                             else
                                 startX:= max(-LAND_WIDTH - 1024, endX - 2048);
                             startY:= endY - 256;
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + trunc((endX - startX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1)), startY + WorldDy + trunc((endY - startY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + floor((endX - startX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1)), startY + WorldDy + floor((endY - startY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                             end
                         else // Disappearing
                             begin
@@ -711,7 +711,7 @@ while Gear<>nil do
                             else
                                 endX:= max(-LAND_WIDTH - 1024, startX - 2048);
                             endY:= startY + 256;
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + trunc((endX - startX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1))) + hwRound(Gear^.dX * Gear^.Timer), startY + WorldDy + trunc((endY - startY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) - (endY - startY)) + hwRound(Gear^.dY * Gear^.Timer), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + floor((endX - startX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1))) + hwRound(Gear^.dX * Gear^.Timer), startY + WorldDy + floor((endY - startY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) - (endY - startY)) + hwRound(Gear^.dY * Gear^.Timer), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                             end;
                         end
                     else

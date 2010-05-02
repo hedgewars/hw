@@ -51,7 +51,7 @@ procedure HideMission;
 procedure ShakeCamera(amount: LongWord);
 
 implementation
-uses    uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand, GLunit;
+uses    uStore, uMisc, uTeams, uIO, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand, GLunit;
 
 type TCaptionStr = record
                    Tex: PTexture;
@@ -380,7 +380,7 @@ begin
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
 
-        Tint($FF, $FF, $FF, $FF); // disable coloring
+        glColor4ub($FF, $FF, $FF, $FF); // must not be Tint() as color array seems to stay active and color reset is required
         glEnable(GL_TEXTURE_2D);
     end;
 end;
@@ -392,10 +392,10 @@ begin
 lw:= wScreen / cScaleFactor;
 waves:= lw * 2 / cWaveWidth;
 
-Tint((tnt * WaterColorArray[2].r div 255) + (255-tnt),
-     (tnt * WaterColorArray[2].g div 255) + (255-tnt),
-     (tnt * WaterColorArray[2].b div 255) + (255-tnt),
-      255
+Tint(LongInt(tnt) * WaterColorArray[2].r div 255 + 255 - tnt,
+     LongInt(tnt) * WaterColorArray[2].g div 255 + 255 - tnt,
+     LongInt(tnt) * WaterColorArray[2].b div 255 + 255 - tnt,
+     255
 );
 
 glBindTexture(GL_TEXTURE_2D, SpritesData[sprWater].Texture^.id);
@@ -767,7 +767,7 @@ if isInLag then DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr
         if WindBarWidth < 0 then
         begin
             {$WARNINGS OFF}
-            r.x:= (WindBarWidth + RealTicks shr 6) mod 8;
+            r.x:= (Longword(WindBarWidth) + RealTicks shr 6) mod 8;
             {$WARNINGS ON}
             r.y:= 0;
             r.w:= - WindBarWidth;
@@ -806,13 +806,16 @@ inc(Frames);
 if cShowFPS or (GameType = gmtDemo) then inc(CountTicks, Lag);
 if (GameType = gmtDemo) and (CountTicks >= 1000) then
    begin
-   i:=GameTicks div 60000;
-   t:=(GameTicks-(i*60000)) div 1000;
-   s:='';
-   if i<10 then s:='0';
-   s:= s+inttostr(i)+':';
-   if t<10 then s:=s+'0';
-   s:= s+inttostr(t);
+   i:=GameTicks div 1000;
+   t:= i mod 60;
+   s:= inttostr(t);
+   if t < 10 then s:= '0' + s;
+   i:= i div 60;
+   t:= i mod 60;
+   s:= inttostr(t) + ':' + s;
+   if t < 10 then s:= '0' + s;
+   s:= inttostr(i div 60) + ':' + s;
+   
    if timeTexture <> nil then FreeTexture(timeTexture);
    tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
    tmpSurface:= doSurfaceConversion(tmpSurface);

@@ -1,3 +1,5 @@
+{$HINTS OFF}
+
 unit LuaPas;
 
 (*
@@ -1045,3 +1047,4 @@ end;
 
 end.
 
+{$HINTS ON}

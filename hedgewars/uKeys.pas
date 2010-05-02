@@ -90,8 +90,8 @@ var hideAmmoMenu: boolean;
 procedure setiPhoneBinds;
 {$ENDIF}
 implementation
-uses uTeams, uConsole, uMisc, uStore;
-const KeyNumber = 1024;
+uses uTeams, uConsole, uMisc;
+//const KeyNumber = 1024;
 
 var tkbd, tkbdn: TKeyboardState;
     KeyNames: array [0..cKeyMaxIndex] of string[15];

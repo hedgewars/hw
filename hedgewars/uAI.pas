@@ -30,7 +30,7 @@ procedure FreeActionsList;
 
 implementation
 uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
-     uAmmos, uConsole, uCollisions, SysUtils{$IFDEF UNIX}, cthreads{$ENDIF};
+     uAmmos, uConsole, SysUtils{$IFDEF UNIX}, cthreads{$ENDIF};
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
@@ -60,7 +60,7 @@ BestActions.Pos:= 0
 end;
 
 procedure TestAmmos(var Actions: TActions; Me: PGear; isMoved: boolean);
-var BotLevel: Longword;
+var BotLevel: Byte;
     ap: TAttackParams;
     Score, i: LongInt;
     a, aa: TAmmoType;
@@ -77,9 +77,11 @@ for i:= 0 to Pred(Targets.Count) do
         if (CanUseAmmo[a]) and
            ((not isMoved) or ((AmmoTests[a].flags and amtest_OnTurn) = 0)) then
            begin
+{$HINTS OFF}
            Score:= AmmoTests[a].proc(Me, Targets.ar[i].Point, BotLevel, ap);
+{$HINTS ON}
            if Actions.Score + Score > BestActions.Score then
-            if (BestActions.Score < 0) or (Actions.Score + Score > BestActions.Score + LongInt(BotLevel) * 2048) then
+            if (BestActions.Score < 0) or (Actions.Score + Score > BestActions.Score + Byte(BotLevel) * 2048) then
               begin
               BestActions:= Actions;
               inc(BestActions.Score, Score);
@@ -180,12 +182,14 @@ var Stack: record
 
 
 var Actions: TActions;
-    ticks, maxticks, steps, BotLevel, tmp: Longword;
+    ticks, maxticks, steps, tmp: Longword;
     BaseRate, BestRate, Rate: integer;
     GoInfo: TGoInfo;
     CanGo: boolean;
     AltMe: TGear;
+    BotLevel: Byte;
 begin
+ticks:= 0; // avoid compiler hint
 Actions.Count:= 0;
 Actions.Pos:= 0;
 Actions.Score:= 0;
@@ -196,7 +200,7 @@ tmp:= random(2) + 1;
 Push(0, Actions, Me^, tmp);
 Push(0, Actions, Me^, tmp xor 3);
 
-if (Me^.State and gstAttacked) = 0 then maxticks:= max(0, TurnTimeLeft - 5000 - 4000 * BotLevel)
+if (Me^.State and gstAttacked) = 0 then maxticks:= max(0, TurnTimeLeft - 5000 - LongWord(4000 * BotLevel))
                                    else maxticks:= TurnTimeLeft;
 
 if (Me^.State and gstAttacked) = 0 then TestAmmos(Actions, Me, false);
@@ -214,7 +218,9 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
 
     while (not StopThinking) and (not PosInThinkStack(Me)) do
        begin
+{$HINTS OFF}
        CanGo:= HHGo(Me, @AltMe, GoInfo);
+{$HINTS ON}
        inc(ticks, GoInfo.Ticks);
        if ticks > maxticks then break;
 

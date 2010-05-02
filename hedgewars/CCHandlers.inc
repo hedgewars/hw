@@ -31,6 +31,7 @@ end;
 procedure chQuit(var s: shortstring);
 const prevGState: TGameState = gsConfirm;
 begin
+s:= s; // avoid compiler hint
 if GameState <> gsConfirm then
         begin
         prevGState:= GameState;
@@ -41,6 +42,7 @@ end;
 
 procedure chConfirm(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if GameState = gsConfirm then
     begin
     SendIPC('Q');
@@ -75,6 +77,8 @@ procedure chAddTeam(var s: shortstring);
 var Color: Longword;
     ts, cs: shortstring;
 begin
+cs:= '';
+ts:= '';
 if isDeveloperMode then
 begin
 SplitBySpace(s, cs);
@@ -96,6 +100,7 @@ end;
 
 procedure chTeamLocal(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if not isDeveloperMode then exit;
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/rdriven"', true);
 CurrentTeam^.ExtDriven:= true
@@ -144,6 +149,7 @@ procedure chAddHH(var id: shortstring);
 var s: shortstring;
     Gear: PGear;
 begin
+s:= '';
 if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
 with CurrentTeam^ do
     begin
@@ -183,6 +189,7 @@ procedure chSetHHCoords(var x: shortstring);
 var y: shortstring;
     t: Longint;
 begin
+y:= '';
 if (not isDeveloperMode) or (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then exit;
 SplitBySpace(x, y);
 val(x, t);
@@ -213,6 +220,7 @@ end;
 
 procedure chAddAmmoStore(var descr: shortstring);
 begin
+descr:= ''; // avoid compiler hint
 AddAmmoStore
 end;
 
@@ -220,6 +228,7 @@ procedure chBind(var id: shortstring);
 var s: shortstring;
     b: LongInt;
 begin
+s:= '';
 if CurrentTeam = nil then exit;
 SplitBySpace(id, s);
 if s[1]='"' then Delete(s, 1, 1);
@@ -231,46 +240,55 @@ end;
 
 procedure chCurU_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 CursorMovementY:= -1;
 end;
 
 procedure chCurU_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 CursorMovementY:= 0;
 end;
 
 procedure chCurD_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 CursorMovementY:= 1;
 end;
 
 procedure chCurD_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 CursorMovementY:= 0;
 end;
 
 procedure chCurL_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 CursorMovementX:= -1;
 end;
 
 procedure chCurL_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 CursorMovementX:= 0;
 end;
 
 procedure chCurR_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 CursorMovementX:= 1;
 end;
 
 procedure chCurR_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 CursorMovementX:= 0;
 end;
 
 procedure chLeft_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('L');
@@ -280,6 +298,7 @@ end;
 
 procedure chLeft_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('l');
 with CurrentHedgehog^.Gear^ do
@@ -288,6 +307,7 @@ end;
 
 procedure chRight_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('R');
@@ -297,6 +317,7 @@ end;
 
 procedure chRight_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('r');
 with CurrentHedgehog^.Gear^ do
@@ -305,6 +326,7 @@ end;
 
 procedure chUp_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('U');
@@ -314,6 +336,7 @@ end;
 
 procedure chUp_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('u');
 with CurrentHedgehog^.Gear^ do
@@ -322,6 +345,7 @@ end;
 
 procedure chDown_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('D');
@@ -331,6 +355,7 @@ end;
 
 procedure chDown_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('d');
 with CurrentHedgehog^.Gear^ do
@@ -339,6 +364,7 @@ end;
 
 procedure chPrecise_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('Z');
@@ -348,6 +374,7 @@ end;
 
 procedure chPrecise_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('z');
 with CurrentHedgehog^.Gear^ do
@@ -356,6 +383,7 @@ end;
 
 procedure chLJump(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('j');
@@ -365,6 +393,7 @@ end;
 
 procedure chHJump(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven then SendIPC('J');
@@ -374,6 +403,7 @@ end;
 
 procedure chAttack_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -390,6 +420,7 @@ end;
 
 procedure chAttack_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 with CurrentHedgehog^.Gear^ do
     begin
@@ -401,6 +432,7 @@ end;
 
 procedure chSwitch(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('S');
 with CurrentHedgehog^.Gear^ do
@@ -409,6 +441,7 @@ end;
 
 procedure chNextTurn(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
 
 if not CurrentTeam^.ExtDriven then SendIPC('N');
@@ -579,16 +612,19 @@ end;
 
 procedure chPut(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 doPut(0, 0, false)
 end;
 
 procedure chCapture(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 flagMakeCapture:= true
 end;
 
 procedure chSkip(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if not CurrentTeam^.ExtDriven then SendIPC(',');
 uStats.Skipped;
 skipFlag:= true
@@ -624,6 +660,7 @@ end;
 
 procedure chAmmoMenu(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then 
 bShowAmmoMenu:= true
 else
@@ -649,6 +686,8 @@ var flags: Longword = 0;
     window: PSDL_Window;
 {$ENDIF}
 begin
+    s:= s; // avoid compiler hint
+    buf[0]:= char(0); // avoid compiler hint
     if Length(s) = 0 then cFullScreen:= not cFullScreen
     else cFullScreen:= s = '1';
 
@@ -717,16 +756,19 @@ end;
 
 procedure chVol_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 inc(cVolumeDelta, 3)
 end;
 
 procedure chVol_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 dec(cVolumeDelta, 3)
 end;
 
 procedure chFindhh(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= true;
 FollowGear:= CurrentHedgehog^.Gear
@@ -734,6 +776,7 @@ end;
 
 procedure chPause(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if gameType <> gmtNet then
     isPaused:= not isPaused;
 SDL_ShowCursor(ord(isPaused))
@@ -741,21 +784,25 @@ end;
 
 procedure chRotateMask(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 if ((GameFlags and gfInvulnerable) = 0) then cTagsMask:= cTagsMasks[cTagsMask] else cTagsMask:= cTagsMasksNoHealth[cTagsMask];
 end;
 
 procedure chSpeedup_p(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 isSpeed:= true
 end;
 
 procedure chSpeedup_m(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 isSpeed:= false
 end;
 
 procedure chZoomIn(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 {$IFDEF IPHONEOS}
 if ZoomValue < 3.5 then
 {$ELSE}
@@ -766,6 +813,7 @@ end;
 
 procedure chZoomOut(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 {$IFDEF IPHONEOS}
 if ZoomValue > 0.5 then
 {$ELSE}
@@ -776,16 +824,19 @@ end;
 
 procedure chZoomReset(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 ZoomValue:= 2.0
 end;
 
 procedure chChat(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 GameState:= gsChat;
 KeyPressChat(27)
 end;
 
 procedure chHistory(var s: shortstring);
 begin
+s:= s; // avoid compiler hint
 uChat.showAll:= not uChat.showAll
 end;

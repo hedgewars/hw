@@ -170,7 +170,7 @@ procedure MakeScreenshot(filename: shortstring);
 {$ENDIF}
 
 implementation
-uses Math, uConsole, uStore, uIO, uRandom, uSound, typinfo;
+uses Math, uConsole, uStore, uIO, uSound, typinfo;
 
 var KBnum: Longword;
 {$IFDEF DEBUGFILE}
@@ -246,14 +246,15 @@ end;
 
 procedure OutError(Msg: shortstring; isFatalError: boolean);
 begin
-{$IFDEF DEBUGFILE}AddFileLog(Msg);{$ENDIF}
+// obsolete? written in WriteLnToConsole() anyway
+// {$IFDEF DEBUGFILE}AddFileLog(Msg);{$ENDIF}
 WriteLnToConsole(Msg);
 if isFatalError then
-begin
-SendIPC('E' + GetLastConsoleLine);
-SDL_Quit;
-halt(1)
-end
+    begin
+    SendIPC('E' + GetLastConsoleLine);
+    SDL_Quit;
+    halt(1)
+    end
 end;
 
 procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean);

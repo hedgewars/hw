@@ -68,7 +68,9 @@ var S: array[0..4 ] of LongWord;
     W: array[0..79] of LongWord;
     i, t: LongWord;
 begin
+{$HINTS OFF}
 move(Context.H, S, sizeof(S));
+{$HINTS ON}
 for i:= 0 to 15 do
     SDLNet_Write32(PLongWordArray(@Context.Buf)^[i], @W[i]);
 

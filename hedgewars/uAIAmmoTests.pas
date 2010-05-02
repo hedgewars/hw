@@ -378,7 +378,7 @@ TestWatermelon:= valueResult
 end;
 
 function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-const tDelta = 24;
+//const tDelta = 24;
 var Vx, Vy: hwFloat;
     Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
@@ -502,6 +502,7 @@ var Vx, Vy, x, y, t: hwFloat;
     d: Longword;
     valueResult: LongInt;
 begin
+Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
@@ -530,6 +531,7 @@ end;
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var valueResult: LongInt;
 begin
+Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 if (Level > 2) or (Abs(hwRound(Me^.X) - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) > 25) then
    exit(BadTurn);
@@ -546,6 +548,7 @@ end;
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var i, valueResult: LongInt;
 begin
+Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
@@ -643,6 +646,7 @@ function TestTeleport(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackPa
 var
   i, failNum: longword;
 begin
+  Level:= Level; // avoid compiler hint
   FillBonuses(true, [gtCase]);
   if bonuses.Count = 0 then begin
     if Me^.Health <= 100  then begin
