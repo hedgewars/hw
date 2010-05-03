@@ -1,11 +1,11 @@
 ; Brazilian Portuguese locale
 
 00:00=Granada
-00:01=Bomba de estilhaço
-00:02=Bazooka
-00:03=OVNI
+00:01=Bomba de Estilhaço
+00:02=Bazuca
+00:03=Abelha
 00:04=Escopeta
-00:05=Cavadeira
+00:05=Escavadeira
 00:06=Pula a Vez
 00:07=Corda
 00:08=Mina
@@ -14,33 +14,38 @@
 00:11=Taco de Baseball
 00:12=Soco de Fogo
 00:13=seg
-00:14=Para-quedas
+00:14=Paraquedas
 00:15=Ataque Aéreo
-00:16=Mine Strike
+00:16=Ataque de Minas
 00:17=Maçarico
 00:18=Construção
 00:19=Teleporte
 00:20=Trocar de Jogador
 00:21=Morteiro
-00:22=Empurrão
-00:23=Suicídio
-00:24=Bolo de aniversário
+00:22=Chicote
+00:23=Kamikaze
+00:24=Bolo de Aniversário
 00:25=Sedução
-00:26=Bomba de Melância
-00:27=Granada infernal
-00:28=Drill Rocket
-00:29=Ballgun
-00:30=Napalm
-00:31=RCPlane
-00:32=Low Gravity
-00:33=Extra Damage
-00:34=Invulnerable
-00:35=Extra Time
-00:36=Laser Sight
-00:37=Vampirism
-00:38=Sniper Rifle
+00:26=Bomba de Melancia
+00:27=Granada Infernal
+00:28=Foguete perfurador
+00:29=Arma de gomas
+00:30=Napalme
+00:31=Aeromodelo
+00:32=Baixa Gravidade
+00:33=Dano Extra
+00:34=Invulnerabilidade
+00:35=Tempo Extra
+00:36=Mira Laser
+00:37=Vampirismo
+00:38=Rifle Sniper
 00:39=Disco Voador
-00:40=Molotov Cocktail
+00:40=Coquetel Molotov
+00:41=Pássaro
+00:42=Dispositivo de Portal
+00:43=Atatque com Piano
+00:44=Granada de Gás
+00:45=Arma Senóide
 
 01:00=Hora de lutar!
 01:01=Partida empatou
@@ -49,22 +54,235 @@
 01:04=Pausado
 01:05=Realmente sair (Y/Esc)?
 01:06=Morte Súbita!
-01:07=%1 Remaining
-01:08=Fuel
+01:07=%1 Remanescente
+01:08=Combustível
+01:09=Sincronizando...
+01:10=Usar esta ultilidade não encerrará o turno
+01:11=Esta arma ou utilidade ainda não está disponível
+01:12=Último round antes da Morte Súbita!
+01:13=%1 rounds até a Morte Súbita
 
 ; Event messages
 ; Hog (%1) died
-02:00=%1 has kicked the bucket!
-02:00=%1 has seen the light!
-02:00=%1 never saw that comming!
+02:00=%1 passou desta para melhor!
+02:00=%1 viu a luz no fim do túnel!
+02:00=%1 não viu de onde veio!
+02:00=%1 diz adeus!
+02:00=%1 foi dessa para melhor!
+02:00=%1 encontrou o Criador!
+02:00=%1 fez seu trabalho!
+02:00=%1 fez seu último sacrifício!
+02:00=%1 bateu as botas!
+02:00=%1 não vai ver mais a luz do dia!
+02:00=%1 vai conhecer a própria cova!
+02:00=%1 deixou esposa e filhos!
+02:00=%1 está te olhando lá de cima!
+02:00=%1 vai comer o pão que o diabo amassou!
+02:00=%1 já era!
+02:00=%1 devia ter feito seguro de vida!
+02:00=%1 foi embora para Passargada
+
 ; Hog (%1) drowned
-02:01=%1 plays submarine!
-02:01=%1 mimics the Titanic!
-02:01=%1 swims like a stone!
+02:01=%1 bebeu água até não poder mais
+02:01=%1 brinca de submarino!
+02:01=%1 está se achando o Titanic!
+02:01=%1 afunda como uma pedra!
+02:01=%1 não sabe nadar
+02:01=%1 diz blup blup blup
+02:01=%1 foi pescar e não voltou mais
+02:01=%1 está conversando com os peixes
+02:01=%1 afundou o barco
+02:01=%1 foi procurar Atlântida
+02:01=%1 está procurando Nemo
+02:01=%1 tá se achando Bob Esponja
+
 ; Match starts
-02:02=Let's fight!
-02:02=Armed and ready!
+02:02=Vamos lutar!
+02:02=Armado e preparado!
+02:02=3..2..1.Fight!
+02:02=Cúpula do Trovão!Cúpula do Trovão!Cúpula do Trovão!
+02:02=Abrem-se as curtinas e começa o espetáculo
+02:02=A bola está em jogo!
+02:02=Bobeou....dançou!
+02:02=Só os melhores sobrevivem!
+02:02=A Batalha do século!
+
+; Round ends (win; unused atm)
+02:03=...
+
+; Round ends (draw; unused atm)
+02:04=...
+
 ; Hog shot an home run (using the bat and another hog)
-02:10=Home Run!
-02:10=A bird, a plane, ...
-02:10=That one is out!
+02:10=Humilhooooouuu!
+02:10=Era uma passáro, era um avião, ...
+02:10=Esse aí está fora!
+
+; New health crate
+02:05=Socorro a caminho!
+02:05=Para-médicos!
+02:05=A ajuda veio dos céus!
+02:05=Mais um suspiro!
+02:05=Chamando doutor Hans Chucrutes
+02:05=Colírio para os olhos!
+02:05=Sedex 10
+
+; New ammo crate
+02:06=Mais armas!
+02:06=Reforços!
+02:06=Quem quer se armar até os dentes?
+02:06=A ajuda veio dos céus!
+02:06=O Natal veio mais cedo!
+02:06=Mais opções a caminho!
+02:06=Entrega especial!
+02:06=Sedex 10
+02:06=Mmmmm Armas
+02:06=Ou dá ou desce!
+02:06=Brinquedinho novo....
+
+; Hog (%1) skips his turn
+02:08=%1 está entediado
+02:08=%1 não sabe o que fazer
+02:08=%1 não tem criatividade
+02:08=%1 perdeu o ônibus
+02:08=%1 desencanou
+02:08=%1 preferiu ficar na rede
+02:08=%1 é pacífico
+02:08=%1 dormiu no ponto
+
+; Hog (%1) hurts himself only
+02:09=%1 se machucou
+02:09=%1 fez dodói
+02:09=%1 é uma anta 
+02:09=%1 não sabe quem é o inimigo
+02:09=%1 não gosta de si mesmo
+02:09=%1 não tem amor próprio
+02:09=%1 está para lá de Bagdá
+02:09=%1 arrancou a tampa do dedão
+
+
+; Hog (%1) has to leave (team is gone)
+02:11=%1 foi nanar
+02:11=%1 abandonou o jogo
+02:11=%1 estava borrando as calças
+02:11=Beam him up, Scotty!
+02:11=%1 teve que sair
+
+; Weapon Categories
+03:00=Granada temporizada
+03:01=Granada temporizada
+03:02=Arma Balística
+03:03=Arma Guiada
+03:04=Arma de Fogo (tiros múltiplos)
+03:05=Ferramenta de Escavação
+03:06=Ação
+03:07=Utilidade de Transporte
+03:08=Bomba de Proximidade
+03:09=Arma de Fogo (tiros múltiplos)
+03:10=BOOM!
+03:11=Bonk!
+03:12=Artes Marciais
+03:13=Sem Uso
+03:14=Utilidade de Transporte
+03:15=Ataque Aéreo
+03:16=Ataque Aéreo
+03:17=Ferramenta de Escavação
+03:18=Utilidade
+03:19=Utilidade de Transporte
+03:20=Ação
+03:21=Arma Balística
+03:22=Me chame Indiana!
+03:23=Artes Marciais (Realmente) 
+03:24=O Bolo não é de brinquedo!
+03:25=Disfarce
+03:26=Granada Suculenta
+03:27=Granada Infernal
+03:28=Arma Balística
+03:29=Arma Balística
+03:30=Ataque Aéreo
+03:31=Bomba remotamente controlada
+03:32=Efeito Temporário
+03:33=Efeito Temporário
+03:34=Efeito Temporário
+03:35=Efeito Temporário
+03:36=Efeito Temporário
+03:37=Efeito Temporário
+03:38=Arma de Fogo (múltiplos tiros)
+03:39=Utilidade de Transporte
+03:40=Granada Inceneradora
+03:41=Grande fan de Squawks
+03:42=Fazendo anotações aqui....
+; the misspelled "Beethoven" is intentional (-> to beat)
+03:43=Excutando a sonata mortal de Beethoven
+
+; Weapon Descriptions (use | as line breaks)
+04:00=Ataque seus inimigos usando uma granada simples|Ela explodirá assim que o tempo passar|1-5: Escolha o tempo da granada|Ataque: Quanto mais tempo, mais forte o lançamento.
+04:01=Ataque seus inimigos usando uma bomba de estilhaços|Ela se dividirá em bombas menores assim que o tempo passar|1-5: Escolha o tempo da granada|Ataque: Quanto mais tempo, mais forte o lançamento.
+04:02=Ataque seus inimigos usando um projétil balístico| que pode ser influenciado pelo vento.|Ataque: Quanto mais tempo, mais forte o lançamento.
+04:03=Lance uma abelha explosiva que irá travar|no alvo selecionado.|Atire com a força adequeda para que ela tenha chance de acertar.|Cursor: Escolha um alvo|Ataque: Quanto mais tempo, mais forte o lançamento.
+04:04=Ataque seu inimigo usando uma escopeta de dois tiros.|Uma vez que ela se espalha, você não tem que acertar em cheio|Ataque: Atira (múltiplas vezes)
+
+04:05=Mova sob o solo! Use a escavadeira para cavar|um burado no solo e alcançar outras áreas.|Ataque: Inicia e para a escavação
+04:06=Entediado? Não tem como atacar? Save your ammo?|No problem! Just skip your turn, coward!|Attack: Skip your turn without fighting
+04:07=Atravesse grandes distancias usando a corda.|Use seu momento para deslizar outros ouriços|ou jogue granadas ou outros armas neles.|Ataque: Atira ou solta a corda|Salto longo: Joga granadas ou outras armas.
+04:08=Mantenha seus inimigos longes usando minas| em passagens estreitas ou sob os pés deles.|Corra antes que você mesmo detone ela!|Ataque: Deixa a mina próxima aos seus pés
+04:09=Não tem certeza de sua mira? Use a Desert|Eagle para atirar até 4 vezes.|Ataque: Dispara (múltiplas vezes)
+
+04:10=Força bruta é sempre uma opção. Deixe este |explosivo clássico próximo a seus inimigos e se proteja.|Ataque: Deixa a dinamite próxima aos seus pés
+04:11=Se livre dos ouriços inimigos mandando eles para longe|das bordas do mapa ou na água. Ou então|acerte algumas minas.|Ataque: Arremesse tudo próximo a você
+04:12=Get close and personal to unleash the power of|this almost deadly martial arts technique.|Attack: Perform the Fire Punch
+04:13=Sem Uso
+04:14=Medo de altura? Melhor usar um paraquedas.|Ele se abrirá automaticamente se necessário| evitando danos decorrente de quedas no seu ouriço|Ataque: Abre o paraquedas|Solto longo: Joga granadas ou outras armas.
+
+04:15=Chame um avião para bombadear seus inimigos.|Esquerda/Direita: Determina a direção do ataque|Cursor: Seleciona a região do ataque
+04:16=Chame um avião para lançar diversas minas | na área alvo.|Esquerda/Direita: Determina a direção do ataque|Cursor: Seleciona a região do ataque
+04:17=Precisa de abrigo? Use o maçarico para | cavar um túnel quete de cobertura.|Ataque:Liga/Desliga o maçarico
+04:18=Precisa de proteção adicional ou quer atravessar | um lugar difícil? Coloque algumas vigas.|Esquerda/Direita: Seleciona a viga a colocar|Cursor: Coloca a viga em uma posição válida. 
+04:19=Usada no momento certo, teleportar-se pode ser | mais poderosa que todas as outras armas, permitindo | a você salvar alguns ouriços| em situação perigosa|Cursor: Seleciona o destino do teletransporte.
+
+04:20=Permite você jogar este turno com um ouriço diferente.|Ataque: Ativa. Tab: Alterna o ouriço
+04:21=Atire um morteiro que lancará múltiplas bombas | após o impacto|Ataque: Atira a força total
+04:22=Não apenas para o Indiana Jones ! O chicote é | uma arma útil em muitas situações. Especialmente|quando você quer lançar alguém de um penhasco.|Ataque: Acerta tudo na sua frente
+04:23=Se você não tem nada a perder, isto pode vir a calhar.|Sacrifique o seu ouriço lançando-o em uma determinada direção| machucando todos que estiverem no caminho, e explodindo ao final .|Ataque: Lança o devastador e mortal ataque
+04:24=Feliz Aniversário! Jogue este bolo, deixo andar até| o seu inimigo fazendo com que eles tenham uma festa explosiva!. O bolo pode caminhar por quase todo o terreno|mas ele pode acabar detonando antes.|Ataque: Faz o bolo caminhar ou parar para que exploda
+04:25=Use este disfarce para fazer com que o inimigo pule | aos seus pés (ou um buraco).|Ataque: Usa o kit e tenta seduzir outro ouriço
+
+04:26=Jogue este suculento melão em seus inimigos. |Quando o tempo acabar ele se dividirá em vários |pedaços explosivos.|1-5: Escolha o tempo do melão|Ataque: Quanto mais tempo, mais forte o lançamento
+04:27=Deixe o inferno tocar seus inimigos usando este | tenebroso explosivo. Não fique muito perto | da explosão que algumas chamas podem te acertar|Ataque: Quanto mais tempo, mais forte o lançamento
+04:28=Pouco tempo de lançar este foguete, ele começará | a cavar através do terreno e explodirá quando ativado ou quando sair do terreno|Ataque: Quanto mais tempo, mais forte o lançamento
+04:29=Isto não é para crianças pequenas! A arma de goma dispara dezenas de bolas coloridas recheadas de explosivos|Ataque: Atira com força total|Cima e Baixo: Continua mirando
+04:30=Chame um avião para lançar napalm.| Se usado corretamente este ataque pode destruir grandes partes do terreno, incluindo | alguns ouriços que estejam no caminho|Esquerda/Direita: Determina a direção do ataque|Cursor: Seleciona a região do ataque
+
+04:31=O Aeromodelo é a arma ideal para coletar caixas ou | atacar ouriços distantes. Jogue o em algum inimigo ou |bombardeie primeiro.|Ataque: Lança o avião ou bombardeia|Salto Longo: Desconhecido|Esquerda/Direita: Manobra o aeromodelo
+04:32=Baixa gravidade é mais efetiva que uma dieta! |Salte mais alto e por longas distâncias ou faça|seu inimigo voar mais longe!.|Ataque: Ativa
+04:33=Algumas vezes você precisa de um pouco mais de efeito | para causar mais danos em seus ataques.|Ataque: Ativa
+04:34=Não me toque!|ataque: Ativa
+04:35=Algumas vezes o tempo parece passar muito rápido.|Ganhe alguns segundos para concluir sua jogada.|Ataque: Ativar
+
+04:36=As vezes você não é tão bom de mira. | use a tecnologia moderna para lhe auziliar.|Ataque: Ativa
+04:37=Não tema a luz do dia! Isto durará somente um turno | mas pemitirá que você absorva os danos causados a outros ouriços | Ataque: Ativa
+04:38=O rifle sniper pode ser a arma mais devastadora | do seu arsenal, contudo é inefetiva a curta alcance,|já que o dano causado aumenta com a distancia do alvo|Ataque: Dispara (duas vezes)
+04:39=Voe para outras partes do mapa usando o disco voador.| este veículo difícil de manobrar permite chegar | a quase qualquer posição do campo de batalha|Ataque: Ativa|Cima/Esquerda/Direita: Desloca o veículo na direção|Salto Longo: Joga granadas ou armas similares
+04:40=Ponha um pouco de fogo no chão com esta garrafa | cheia de líquido inflamável.|Ataque: Quanto mais tempo, mais forte o lançamento
+
+04:41=A natureza pode ser mais poderosa que um disco voador|. Birdy pode carregar seu ouriço e jogar ovos no inimigo!|Ataque: Ativa e joga ovos|Cima/Esquerda/Direita: Bate asas na respectiva direção
+04:42=Grande Sucesso| | |(mas faltando textos!)
+04:43=(texto faltando)
+
+; Game goal strings
+05:00=Modos de Jogo
+05:01=As seguintes regras se aplicam
+05:02=Fortes: Proteja o seu forte, vença seus inimigos!
+05:03=Baixa Gravidade: Cuidado com seus passos
+05:04=Invulnerabilidade: Ouriços são (quase) invulneráveis
+05:05=Vampirismo: Ouriços serão curados pelos danos causados
+05:06=Carma: Ouriços serão machucados pelos danos causados
+05:07=Proteja o rei: Não deixe o seu Rei morrer!|Colocar o Rei: Escolha um lugar protegido para posicionar o seu Rei
+05:08=Colocar Ouriços: Permite posicionar os ouriços antes dapartida começar 
+05:09=Artilharia: Ouriços não podem andar para mudar de lugar
+05:10=Terreno Indestrutível: Maioria das armas não destrói o terreno
+05:11=Armas Compartilhadas: Todos as equipes de mesma cor compratilham a munição
+05:12=Temporizador de mina: Minas detonarão após %1 segundo(s)
+05:13=Temporizador de mina: Minas detonarão imediatamente
+05:14=Temporizador de mina: Minas detonarão em 0 - 3 segundos
+05:15=Modificador de Dano: Todas as armas farão %1% danos
