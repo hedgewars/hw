@@ -3184,6 +3184,7 @@ if ((Gear^.Pos = 3) and ((GameFlags and gfSolidLand) <> 0)) or (Gear^.Pos = 20) 
     Gear^.dY:= Gear^.dY + cGravity * 3;
     Gear^.Y:= Gear^.Y + Gear^.dY;
     CheckGearDrowning(Gear);
+    ResumeMusic;
     exit
     end;
 
