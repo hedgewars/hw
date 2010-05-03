@@ -210,7 +210,7 @@ if flag then
       if (Gear <> cGear) and
          (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
          ((mx > x) xor (Dir > 0)) then
-         if (cGear^.Kind in [gtHedgehog, gtMine]) and ((Gear^.State and gstNotKickable) = 0) then
+         if (cGear^.Kind in [gtHedgehog, gtMine, gtExplosives]) and ((Gear^.State and gstNotKickable) = 0) then
              begin
              with cGear^ do
                   begin
@@ -262,7 +262,7 @@ if flag then
       if (Gear <> cGear) and
          (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
          ((my > y) xor (Dir > 0)) then
-         if (cGear^.Kind in [gtHedgehog, gtMine]) and ((Gear^.State and gstNotKickable) = 0) then
+         if (cGear^.Kind in [gtHedgehog, gtMine, gtExplosives]) and ((Gear^.State and gstNotKickable) = 0) then
              begin
              with cGear^ do
                   begin
