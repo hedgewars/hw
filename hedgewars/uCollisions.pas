@@ -49,7 +49,7 @@ function  TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
 function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
 
-function  calcSlopeNormal(Gear: PGear; collisionX, collisionY: LongInt; var deltaX, deltaY: LongInt; TestWord: LongWord): Boolean;
+function  calcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var deltaX, deltaY: LongInt; TestWord: LongWord): Boolean;
 
 implementation
 uses uMisc, uConsts, uLand, uLandGraphics;
@@ -315,67 +315,55 @@ Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
 
 
-function calcSlopeNormal(Gear: PGear; collisionX, collisionY: LongInt; var deltaX, deltaY: LongInt; TestWord: LongWord): boolean;
-var sx, sy, ldx, ldy, rdx, rdy: LongInt;
-    i, j, mx, my : ShortInt;
+function calcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var deltaX, deltaY: LongInt; TestWord: LongWord): boolean;
+var ldx, ldy, rdx, rdy: LongInt;
+    i, j, mx, my, li, ri, jfr, jto, tmpo : ShortInt;
     tmpx, tmpy: LongWord;
-    dx, dy, rx, ry: hwFloat;
-    leftsteps:  Array[0..4,0..1] of ShortInt;
-    rightsteps: Array[0..4,0..1] of ShortInt;
+    dx, dy: hwFloat;
+    offset: Array[0..7,0..1] of ShortInt;
 
 begin
     dx:= Gear^.dX;
     dy:= Gear^.dY;
+
+    // we start searching from the direction the gear center is at
+    mx:= hwRound(Gear^.X-dx) - hwRound(Gear^.X);
+    my:= hwRound(Gear^.Y-dy) - hwRound(Gear^.Y);
+
+    li:= -1;
+    ri:= -1;
     
-    if Gear^.AdvBounce > 0 then
+    // go around collision pixel, checking for first/last collisions
+    // this will determinate what angles will be tried to crawl along
+    for i:= 0 to 7 do
         begin
-        rx:= _0_5 + Int2hwFloat(collisionX) - Gear^.X;
-        ry:= _0_5 + Int2hwFloat(collisionY) - Gear^.Y;
-        end
-    else
-        begin
-        rx:= dx;
-        ry:= dy;
-        end;
+        offset[i,0]:= mx;
+        offset[i,1]:= my;
+        
+        tmpx:= collisionX + mx;
+        tmpy:= collisionY + my;
 
-    sx:= hwSign(rx);
-    sy:= hwSign(ry);
+        if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0) then
+            if (Land[tmpy,tmpx] > TestWord) then
+                begin
+                // remember the index belonging to the first and last collision (if in 1st half)
+                if (i <> 0) then
+                    begin
+                    if (ri = -1) then
+                        ri:= i
+                    else
+                        li:= i;
+                    end;
+                end;
 
-    if rx.QWordValue > ry.QWordValue then
-        begin
-        if (ry/rx).QWordValue < _0_5.QWordValue then sy:= 0;
-        end
-    else
-        begin
-        if (rx/ry).QWordValue < _0_5.QWordValue then sx:= 0;
-        end;
+        if i = 7 then break;
 
-    mx:= -sx;
-    my:= -sy;
-
-    for i:= 0 to 4 do
-        begin
-        if (mx = -1) and (my <>  1) then my:= my + 1
-        else if (my = 1) and (mx <> 1) then mx:= mx + 1
-        else if (mx = 1) and (my <> -1) then my:= my - 1
-        else mx:= mx - 1;
-
-        leftsteps[i,0]:= mx;
-        leftsteps[i,1]:= my;
-        end;
-
-    mx:= -sx;
-    my:= -sy;
-
-    for i:= 0 to 4 do
-        begin
+        // prepare offset for next check (clockwise)
         if (mx = -1) and (my <> -1) then my:= my - 1
         else if (my = -1) and (mx <> 1) then mx:= mx + 1
         else if (mx = 1) and (my <> 1) then my:= my + 1
         else mx:= mx - 1;
 
-        rightsteps[i,0]:= mx;
-        rightsteps[i,1]:= my;
         end;
 
     ldx:= collisionX;
@@ -383,69 +371,38 @@ begin
     rdx:= collisionX;
     rdy:= collisionY;
 
-    for i:= 0 to 4 do
+    // edge-crawl
+    for i:= 0 to 8 do
         begin
-        tmpx:= collisionX + leftsteps[i,0];
-        tmpy:= collisionY + leftsteps[i,1];
-        if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0) then
-            if (Land[tmpy,tmpx] > TestWord) then
-                begin
-                if i <> 0 then
-                    for j:= 0 to 2 do
-                        begin
-                        leftsteps[j,0]:= leftsteps[i+j,0];
-                        leftsteps[j,1]:= leftsteps[i+j,1];
-                        end;
-                ldx:= tmpx;
-                ldy:= tmpy;
-                break;
-                end;
-        end;
+        // using mx,my as temporary value buffer here
+        
+        jfr:= 8+li+1;
+        jto:= 8+li-1;
 
-    for i:= 0 to 4 do
-        begin
-        tmpx:= collisionX + rightsteps[i,0];
-        tmpy:= collisionY + rightsteps[i,1];
-        if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0) then
-            if (Land[tmpy,tmpx] > TestWord) then
-                begin
-                if i <> 0 then
-                    for j:= 0 to 2 do
-                        begin
-                        rightsteps[j,0]:= rightsteps[i+j-1,0];
-                        rightsteps[j,1]:= rightsteps[i+j-1,1];
-                        end;
-                rdx:= tmpx;
-                rdy:= tmpy;
-                break;
-                end;
-        end;
-
-    // TODO: avoid redundant checks
-    for i:= 0 to 4 do
-        begin
-        for j:= 0 to 2 do
+        for j:= jfr downto jto do
             begin
-            tmpx:= ldx + leftsteps[j,0];
-            tmpy:= ldy + leftsteps[j,1];
-            if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0) then
-                if (Land[tmpy,tmpx] > TestWord) then
+            tmpo:= j mod 8;
+            tmpx:= ldx + offset[tmpo,0];
+            tmpy:= ldy + offset[tmpo,1];
+            if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
+                and (Land[tmpy,tmpx] > TestWord) then
                     begin
                     ldx:= tmpx;
                     ldy:= tmpy;
                     break;
                     end;
             end;
-        end;
 
-    for i:= 0 to 4 do
-        begin
-        for j:= 0 to 2 do
+        jfr:= 8+ri-1;
+        jto:= 8+ri+1;
+
+        for j:= jfr to jto do
             begin
-            tmpx:= rdx + rightsteps[j,0];
-            tmpy:= rdy + rightsteps[j,1];
-            if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0) then
-                if (Land[tmpy,tmpx] > TestWord) then
+            tmpo:= j mod 8;
+            tmpx:= rdx + offset[tmpo,0];
+            tmpy:= rdy + offset[tmpo,1];
+            if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
+                and (Land[tmpy,tmpx] > TestWord) then
                     begin
                     rdx:= tmpx;
                     rdy:= tmpy;
@@ -457,42 +414,11 @@ begin
     ldx:= rdx - ldx;
     ldy:= rdy - ldy;
 
-    // rotate vector by 90°
-    rdx:= -ldy;
-    ldy:= ldx;
-    ldx:= rdx;
-    
-    if (ldy <> 0) then tmpy := collisionY + ldy div abs(ldy) else tmpy:= collisionY;
-    if (ldx <> 0) then tmpx := collisionX + ldx div abs(ldx) else tmpx:= collisionX;
     if ((ldx = 0) and (ldy = 0)) then EXIT(false);
-    
-    if ((((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0) 
-        and (Land[tmpy,tmpx] > TestWord)) then
-            begin
-            if (ldy <> 0) then
-                begin
-                ldy:= -ldy;
-                tmpy := collisionY + ldy div abs(ldy);
-                end;
-            if (ldx <> 0) then
-                begin
-                ldx:= -ldx;
-                tmpx := collisionX + ldx div abs(ldx);
-                end;
-            
-            if ((((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0) 
-                and (Land[tmpy,tmpx] > TestWord)) then
-                    EXIT(false);
-            end;
 
-        
-    if (dx*ldx + dy*ldy).isNegative then
-        begin
-        deltaX:= ldx;
-        deltaY:= ldy;
-        EXIT(true);
-        end;
-exit(false);
+deltaX:= ldx;
+deltaY:= ldy;
+exit(true);
 end;
 
 procedure initModule;

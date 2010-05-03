@@ -3083,16 +3083,15 @@ x:= hwRound(Gear^.X);
 y:= hwRound(Gear^.Y);
 tx:= 0; ty:= 0; // avoid compiler hints
 
-if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and ((Land[y, x] and $FF00) <> 0) then
+if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] > 255) then
     begin
-    if not calcSlopeNormal(Gear, x, y, tx, ty, 255) then
+    if not calcSlopeTangent(Gear, x, y, tx, ty, 255) then
         begin
         DeleteGear(Gear);
         EXIT;
         end;
-    //AddFileLog(IntToStr(tx)+' '+IntToStr(ty));
-    if Gear^.dX.isNegative then ty:= -ty;
-    Gear^.DirAngle:= DxDy2Angle(Int2hwFloat(ty),Int2hwFloat(tx));
+    if not Gear^.dX.isNegative then ty:= -ty;
+    Gear^.DirAngle:= DxDy2Angle(Int2hwFloat(tx),Int2hwFloat(ty));
 (* 
 This is not quite doing what I want, but basically hoping to avoid portals just sitting out in midair
 Works ok for right angles, aaaand that's about it.
