@@ -3047,6 +3047,7 @@ var iterator: PGear;
 begin
     if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0 then
         begin
+        if Gear^.IntersectGear <> nil then Gear^.IntersectGear^.IntersectGear:= nil;
         DeleteGear(Gear);
         EXIT;
         end;
