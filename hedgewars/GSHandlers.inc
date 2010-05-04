@@ -3219,7 +3219,18 @@ if ((Gear^.Pos = 3) and ((GameFlags and gfSolidLand) <> 0)) or (Gear^.Pos = 20) 
     Gear^.dY:= Gear^.dY + cGravity * 3;
     Gear^.Y:= Gear^.Y + Gear^.dY;
     CheckGearDrowning(Gear);
-    ResumeMusic;
+    if (Gear^.State and gstDrowning) <> 0 then
+        begin
+        if CurrentHedgehog^.Gear <> nil then
+            begin
+            // Drown the hedgehog.  Could also just delete it, but hey, this gets a caption
+            CurrentHedgehog^.Gear^.Active:= true;
+            CurrentHedgehog^.Gear^.X:= Gear^.X;
+            CurrentHedgehog^.Gear^.Y:=int2hwFloat(cWaterLine+cVisibleWater)+_128;
+            CurrentHedgehog^.Unplaced:= false
+            end;
+        ResumeMusic
+        end;
     exit
     end;
 
