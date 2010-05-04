@@ -142,6 +142,7 @@ public:
     QPushButton *BtnSetup;
     QPushButton *BtnInfo;
     QPushButton *BtnExit;
+    QLabel *mainNote;
 };
 
 class PageEditTeam : public AbstractPage

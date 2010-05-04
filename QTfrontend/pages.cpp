@@ -38,6 +38,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QDataWidgetMapper>
+#include <QTime>
 
 
 #include "ammoSchemeModel.h"
@@ -88,13 +89,24 @@ PageMain::PageMain(QWidget* parent) :
     BtnNet->setToolTip(tr("Network Game (Play a game across a network)"));
     pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
 
+    mainNote = new QLabel(this);
+    mainNote->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    mainNote->setWordWrap(true);
+
+    QStringList Tips;
+    Tips << tr("Tips", "Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they'll win together.");
+    Tips << tr("Tips", "Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.");
+    Tips << tr("Tips", "If you're unsure what to do and don't want to waste ammo, skip one round. But don't let too much time pass as there will be Sudden Death!");
+    Tips << tr("Tips", "Want to save ropse? Release the rope in mid air and then shoot again. As long as you don't touch the ground you'll reuse your rope without wasting ammo!");
+    Tips << tr("Tips", "If you'd like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.");
+    Tips << tr("Tips", "You're bored of default gameplay? Try one of the missions - they'll offer different gameplay depending on the one you picked.");
+
     if(isDevBuild)
-    {
-        QLabel* devNote = new QLabel(this);
-        devNote->setText(QLabel::tr("This SVN build is 'work in progress' and may not be compatible with other versions of the game.\nSome features might be broken or incomplete. Use at your own risk!"));
-        devNote->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        pageLayout->addWidget(devNote, 4, 1, 1, 2);
-    }
+        mainNote->setText(QLabel::tr("This SVN build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
+    else
+        mainNote->setText(QLabel::tr("Tip: ") + Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()]);
+
+    pageLayout->addWidget(mainNote, 4, 1, 1, 2);
 
     BtnSetup = addButton(":/res/Settings.png", pageLayout, 4, 3, true);
 
