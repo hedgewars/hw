@@ -3045,7 +3045,12 @@ procedure doStepPortal(Gear: PGear);
 var iterator: PGear;
     s: hwFloat;
 begin
-    if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0 then DeleteGear(Gear);
+    if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0 then
+        begin
+        DeleteGear(Gear);
+        EXIT;
+        end;
+        
     if Gear^.IntersectGear <> nil then
     //if (Gear^.IntersectGear <> nil) then
         begin
