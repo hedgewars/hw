@@ -54,7 +54,7 @@ function  AskForVoicepack(name: shortstring): Pointer;
 implementation
 uses uMisc, uConsole;
 
-const chanTPU = 12;
+const chanTPU = 32;
 var Volume: LongInt;
     lastChan: array [TSound] of LongInt;
     voicepacks: array[0..cMaxTeams] of TVoicepack;
