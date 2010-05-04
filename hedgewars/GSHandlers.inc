@@ -3052,11 +3052,12 @@ begin
         iterator:= GearsList;
         while iterator <> nil do
             begin
-            if (iterator^.Kind <> gtPortal) then
+            if (iterator^.Kind <> gtPortal) and (iterator^.PortedCounter < 20) then
                 if (((iterator^.State and gstMoving) <> 0) or (Gear^.IntersectGear^.dY.isNegative and not Gear^.dY.isNegative))
                     and (hwRound(Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y)) < iterator^.Radius+Gear^.Radius) then // Let's check this one more closely
                         if (Gear^.dX*iterator^.dX + Gear^.dY*iterator^.dY).isNegative then // make sure object moves towards the portal
                             begin
+                            inc(iterator^.PortedCounter);
                             s:= (_1+(Int2hwFloat(Gear^.Radius))) / Distance(Gear^.IntersectGear^.dX, Gear^.IntersectGear^.dY);
                             iterator^.X:= Gear^.IntersectGear^.X + s * Gear^.IntersectGear^.dX;
                             iterator^.Y:= Gear^.IntersectGear^.Y + s * Gear^.IntersectGear^.dY;

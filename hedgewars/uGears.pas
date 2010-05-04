@@ -60,7 +60,8 @@ type
             uid: Longword;
             ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
             nImpactSounds: Word; // count of ImpactSounds
-            SoundChannel: LongInt
+            SoundChannel: LongInt;
+            PortedCounter: LongWord // TEMPORARY. To break portal loops pending handling it w/ something a bit saner.
         end;
 
 var AllInactive: boolean;
@@ -858,6 +859,7 @@ begin
     tmpGear:= nil;
     while iterator <> nil do
         begin
+        iterator^.PortedCounter:= 0;
         if (iterator^.Kind = gtPortal) then 
             begin
             tmpGear:= iterator;

@@ -163,6 +163,7 @@ with Gear^,
                                  portal:= nil;
                                  while iterator <> nil do
                                      begin
+                                     iterator^.PortedCounter:= 0;
                                      if (iterator^.Kind = gtPortal) then
                                          begin
                                          newGear:= iterator;
