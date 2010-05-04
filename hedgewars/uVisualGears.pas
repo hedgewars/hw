@@ -375,8 +375,8 @@ for t:= 1 to Steps do
             with thexchar[i] do
                 begin
                 {$WARNINGS OFF}
-                team^.DrawHealthY:= ny + dy * LongInt(Gear^.Timer div 640);
-                team^.TeamHealthBarWidth:= team^.NewTeamHealthBarWidth + dw * LongInt(Gear^.Timer div cSorterWorkTime);
+                team^.DrawHealthY:= ny + dy * LongInt(Gear^.Timer) div 640;
+                team^.TeamHealthBarWidth:= team^.NewTeamHealthBarWidth + dw * LongInt(Gear^.Timer) div cSorterWorkTime;
                 {$WARNINGS ON}
                 end;
 
