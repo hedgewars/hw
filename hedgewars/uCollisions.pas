@@ -49,7 +49,7 @@ function  TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
 function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
 
-function  calcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var deltaX, deltaY: LongInt; TestWord: LongWord): Boolean;
+function  calcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): Boolean;
 
 implementation
 uses uMisc, uConsts, uLand, uLandGraphics;
@@ -315,7 +315,7 @@ Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
 
 
-function calcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var deltaX, deltaY: LongInt; TestWord: LongWord): boolean;
+function calcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;
 var ldx, ldy, rdx, rdy: LongInt;
     i, j, mx, my, li, ri, jfr, jto, tmpo : ShortInt;
     tmpx, tmpy: LongWord;
@@ -416,8 +416,8 @@ begin
 
     if ((ldx = 0) and (ldy = 0)) then EXIT(false);
 
-deltaX:= ldx;
-deltaY:= ldy;
+outDeltaX:= ldx;
+outDeltaY:= ldy;
 exit(true);
 end;
 

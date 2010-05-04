@@ -3043,23 +3043,27 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepPortal(Gear: PGear);
 var iterator: PGear;
+    s: hwFloat;
 begin
     if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0 then DeleteGear(Gear);
-    if not AllInactive and (Gear^.IntersectGear <> nil) then
+    if Gear^.IntersectGear <> nil then
     //if (Gear^.IntersectGear <> nil) then
         begin
         iterator:= GearsList;
         while iterator <> nil do
             begin
-            if iterator^.Active and (iterator^.Kind <> gtPortal) and 
-               (hwRound(hwAbs(Gear^.X-iterator^.X)+hwAbs(Gear^.Y-iterator^.Y)) < Gear^.Radius+iterator^.Radius) and 
-               ((hwAbs(Gear^.X-(iterator^.X+iterator^.dX))+hwAbs(Gear^.Y-(iterator^.Y+iterator^.dY))).QWordValue < (hwAbs(Gear^.X-iterator^.X)+hwAbs(Gear^.Y-iterator^.Y)).QWordValue) and
-               (hwRound(Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y)) < Gear^.Radius+iterator^.Radius) then // Let's check this one more closely
-                begin
-                iterator^.X:=Gear^.IntersectGear^.X+_128;
-                iterator^.Y:=Gear^.IntersectGear^.Y+_128;
-                iterator^.dX.isNegative:= not iterator^.dX.isNegative;
-                end;
+            if (iterator^.Kind <> gtPortal) then
+                if (((iterator^.State and gstMoving) <> 0) or (Gear^.IntersectGear^.dY.isNegative and not Gear^.dY.isNegative))
+                    and (hwRound(Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y)) < iterator^.Radius+Gear^.Radius) then // Let's check this one more closely
+                        if (Gear^.dX*iterator^.dX + Gear^.dY*iterator^.dY).isNegative then // make sure object moves towards the portal
+                            begin
+                            s:= (_1+(Int2hwFloat(Gear^.Radius))) / Distance(Gear^.IntersectGear^.dX, Gear^.IntersectGear^.dY);
+                            iterator^.X:= Gear^.IntersectGear^.X + s * Gear^.IntersectGear^.dX;
+                            iterator^.Y:= Gear^.IntersectGear^.Y + s * Gear^.IntersectGear^.dY;
+                            s:= Distance(iterator^.dX, iterator^.dY) / Distance(Gear^.IntersectGear^.dX, Gear^.IntersectGear^.dY);
+                            iterator^.dX:= s * Gear^.IntersectGear^.dX;
+                            iterator^.dY:= s * Gear^.IntersectGear^.dY;
+                            end;    
 
             iterator:= iterator^.NextGear;
             end;
@@ -3076,6 +3080,7 @@ end;
 procedure doStepMovingPortal(Gear: PGear);
 var x, y, tx, ty: LongInt;//, bx, by, tangle: LongInt;
     iterator: PGear;
+    s, dx, dy: hwFloat;
 begin
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
@@ -3090,8 +3095,31 @@ if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y,
         DeleteGear(Gear);
         EXIT;
         end;
-    if not Gear^.dX.isNegative then ty:= -ty;
-    Gear^.DirAngle:= DxDy2Angle(Int2hwFloat(tx),Int2hwFloat(ty));
+
+    // reject shots at too irregular terrain
+    if DistanceI(tx,ty) < _10 then
+        begin
+        DeleteGear(Gear);
+        EXIT;
+    end;
+    
+    // making a normal, normalized vector
+    s:= _1/DistanceI(tx,ty);
+    dx:= -s * ty;
+    dy:=  s * tx;
+
+    // make sure the vector is pointing outwards
+    if not (Gear^.dX*dx + Gear^.dY*dy).isNegative then
+    begin
+        dx:= -dx;
+        dy:= -dy;
+    end;
+
+    Gear^.dX:= dx;
+    Gear^.dY:= dy;
+
+    Gear^.DirAngle:= DxDy2Angle(-dy,dx);
+    if not Gear^.dX.isNegative then Gear^.DirAngle:= 180-Gear^.DirAngle;
 (* 
 This is not quite doing what I want, but basically hoping to avoid portals just sitting out in midair
 Works ok for right angles, aaaand that's about it.
