@@ -3135,12 +3135,6 @@ begin
 
         iterator:= iterator^.NextGear;
         end;
-
-(*
-
-2) From then on, if doStepPortal is called and a gear of a radius less than or equal to the portal is within X pixels of the portal (we could also check on moving toward the portal I guess, depends how accurate this needs to be) the portal will then locate the first other portal of the opposite type (there should only be one other one), and move that gear's X/Y to that other portal's location, and modify dX/dY to be relative to that other portal's orientation relative to this portal's orientation.  This might require some tweaking with offsets of a few pixels to avoid getting gears stuck in land.
-
-*)
 end;
 
 procedure doStepMovingPortal(Gear: PGear);
@@ -3185,24 +3179,8 @@ if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y,
 
     Gear^.DirAngle:= DxDy2Angle(-dy,dx);
     if not Gear^.dX.isNegative then Gear^.DirAngle:= 180-Gear^.DirAngle;
-(* 
-This is not quite doing what I want, but basically hoping to avoid portals just sitting out in midair
-Works ok for right angles, aaaand that's about it.
-The opposite approach could be taken, we could determine the angle of the land using sheepluva's code and snap the Angle/DirAngle to it.
-tangle:= Gear^.Angle+1024;
-if tangle > 2048 then dec(tangle,2048);
-tx:= hwRound(Gear^.X+SignAs(AngleSin(tangle), Gear^.dX)*_6);
-ty:= hwRound(Gear^.Y-AngleCos(tangle)*_6);
-bx:= hwRound(Gear^.X-SignAs(AngleSin(tangle), Gear^.dX)*_6);
-by:= hwRound(Gear^.Y+AngleCos(tangle)*_6);
-*)
-
-
 
     if ((Gear^.IntersectGear <> nil) and (hwRound(Distance(Gear^.X - Gear^.IntersectGear^.X,Gear^.Y-Gear^.IntersectGear^.Y)) < Gear^.Radius*2)) 
-(*or
-(((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and ((Land[ty, tx] and $FF00) = 0)) or
-(((by and LAND_HEIGHT_MASK) = 0) and ((bx and LAND_WIDTH_MASK) = 0) and ((Land[by, bx] and $FF00) = 0))*)
     then
         begin
         if CurrentHedgehog <> nil then
