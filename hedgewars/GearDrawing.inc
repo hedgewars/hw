@@ -602,7 +602,12 @@ while Gear<>nil do
                   end;
        gtBall: DrawRotatedf(sprBalls, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag,0, Gear^.DirAngle);
 // Still need portal types and states
-       gtPortal: DrawRotatedf(sprPortal, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag, hwSign(Gear^.dX), Gear^.DirAngle);
+       gtPortal: begin
+                 if (Gear^.IntersectGear = nil) or (Gear^.IntersectGear^.IntersectGear <> Gear) then // = is portal unlinked?
+                    DrawRotatedf(sprPortal, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag, hwSign(Gear^.dX), Gear^.DirAngle)
+                 else
+                    DrawRotatedf(sprPortal, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 4 + Gear^.Tag div 2, hwSign(Gear^.dX), Gear^.DirAngle)
+                 end;
 
        gtDrill: DrawRotated(sprDrill, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 

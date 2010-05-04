@@ -3042,40 +3042,99 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepPortal(Gear: PGear);
-var iterator: PGear;
-    s: hwFloat;
+var iterator, conPortal: PGear;
+    s, acptRadius: hwFloat;
+    noTrap, hasdxy: Boolean;
 begin
-    if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0 then
-        begin
-        if Gear^.IntersectGear <> nil then Gear^.IntersectGear^.IntersectGear:= nil;
-        DeleteGear(Gear);
-        EXIT;
-        end;
-        
-    if Gear^.IntersectGear <> nil then
-    //if (Gear^.IntersectGear <> nil) then
-        begin
-        iterator:= GearsList;
-        while iterator <> nil do
-            begin
-            if (iterator^.Kind <> gtPortal) and (iterator^.PortedCounter < 20) then
-                if (((iterator^.State and gstMoving) <> 0) or (Gear^.IntersectGear^.dY.isNegative and not Gear^.dY.isNegative))
-                    and (hwRound(Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y)) < iterator^.Radius+Gear^.Radius) then // Let's check this one more closely
-                        if (Gear^.dX*iterator^.dX + Gear^.dY*iterator^.dY).isNegative then // make sure object moves towards the portal
-                            begin
-                            inc(iterator^.PortedCounter);
-                            s:= (_1+(Int2hwFloat(Gear^.Radius))) / Distance(Gear^.IntersectGear^.dX, Gear^.IntersectGear^.dY);
-                            iterator^.X:= Gear^.IntersectGear^.X + s * Gear^.IntersectGear^.dX;
-                            iterator^.Y:= Gear^.IntersectGear^.Y + s * Gear^.IntersectGear^.dY;
-                            s:= Distance(iterator^.dX, iterator^.dY) / Distance(Gear^.IntersectGear^.dX, Gear^.IntersectGear^.dY);
-                            iterator^.dX:= s * Gear^.IntersectGear^.dX;
-                            iterator^.dY:= s * Gear^.IntersectGear^.dY;
-                            end;    
+    // destroy portal if ground it was attached too is gone
+    if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0 then deleteGear(Gear);
 
-            iterator:= iterator^.NextGear;
+    // abort if there is no other portal connected to this one
+    if Gear^.IntersectGear = nil then
+        exit;
+
+    conPortal:= Gear^.IntersectGear;
+
+    // check all gears for stuff to port through
+    iterator:= nil;
+    while true do
+        begin
+
+        if iterator = nil then
+            iterator:= GearsList // start
+        else
+            iterator:= iterator^.NextGear; // iterate through GearsList
+        
+        if iterator = nil then
+            break; // end of list
+
+        // don't port portals or other gear that wouldn't make sense
+        if (iterator^.Kind = gtPortal)
+        or (iterator^.Kind = gtHealthTag) then
+            continue;
+
+{
+        if (((iterator^.State and gstMoving) = 0) // we don't port non-moving stuff IF the portal entry...
+            and (iterator^.Active = false)
+            and ) then //...
+                continue;
+}
+
+        if (iterator^.Radius > Gear^.Radius) then
+            continue; // sorry, you're too fat!
+
+        // this is the range we accept incoming gears in
+        acptRadius:= Int2hwFloat(iterator^.Radius+Gear^.Radius);
+
+        if (iterator^.X < Gear^.X - acptRadius)
+        or (iterator^.X > Gear^.X + acptRadius)
+        or (iterator^.Y < Gear^.Y - acptRadius)
+        or (iterator^.Y > Gear^.Y + acptRadius) then
+            continue; // too far away!
+
+        hasdxy:= ((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0));
+
+        if hasdxy and not (Gear^.dX*iterator^.dX + Gear^.dY*iterator^.dY).isNegative then
+            continue; // won't port stuff that moves away from me!
+
+        // wow! good candidate there, let's see if the distance really is small enough!
+        if (Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y) > acptRadius) then
+            continue;
+
+        noTrap:= ((not Gear^.dY.isNegative or (Gear^.dY.QWordValue = 0)) // can't be entered from above
+            or ((conPortal^.dY.isNegative or (conPortal^.dY.QWordValue = 0)))); // can't be left downwards;
+ 
+ 
+        // lets see if this one is just stuck in a stuck-loop       
+        if noTrap and (iterator^.dY.QWordValue < _0_1.QWordValue) then
+            continue;
+        
+        iterator^.Active:= true;
+        iterator^.State:= iterator^.State or gstMoving;
+        DeleteCI(iterator);
+
+        s:= (_1+(Int2hwFloat(Gear^.Radius))) / Distance(conPortal^.dX, conPortal^.dY);
+        iterator^.X:= conPortal^.X + s * conPortal^.dX;
+        iterator^.Y:= conPortal^.Y + s * conPortal^.dY;
+        s:= Distance(iterator^.dX, iterator^.dY) / Distance(conPortal^.dX, conPortal^.dY);
+        iterator^.dX:= s * conPortal^.dX;
+        iterator^.dY:= s * conPortal^.dY;
+        
+        if iterator^.dY.isNegative and (iterator^.dY.QWordValue <> 0) then
+            iterator^.dY:= iterator^.dY + hwAbs(Int2hwFloat(iterator^.Radius) / iterator^.dY) * cGravity;
+
+        // breaks (some) loops
+        if Distance(iterator^.dX, iterator^.dY) > _0_96 then
+            begin
+            iterator^.dX:= iterator^.dX + signAs(cGravity * getRandom(1000),iterator^.dX);
+            iterator^.dY:= iterator^.dY + signAs(cGravity * getRandom(1000),iterator^.dY);
+            s:= _0_995 / Distance(iterator^.dX, iterator^.dY);
+            iterator^.dX:= s * iterator^.dX;
+            iterator^.dY:= s * iterator^.dX;
             end;
-// do portal stuff
-        end
+
+        iterator:= iterator^.NextGear;
+        end;
 
 (*
 
@@ -3086,7 +3145,6 @@ end;
 
 procedure doStepMovingPortal(Gear: PGear);
 var x, y, tx, ty: LongInt;//, bx, by, tangle: LongInt;
-    iterator: PGear;
     s, dx, dy: hwFloat;
 begin
 Gear^.X:= Gear^.X + Gear^.dX;
@@ -3099,14 +3157,14 @@ if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y,
     begin
     if not calcSlopeTangent(Gear, x, y, tx, ty, 255) then
         begin
-        DeleteGear(Gear);
+        deleteGear(Gear);
         EXIT;
         end;
 
     // reject shots at too irregular terrain
-    if DistanceI(tx,ty) < _10 then
+    if DistanceI(tx,ty) < _12 then
         begin
-        DeleteGear(Gear);
+        deleteGear(Gear);
         EXIT;
     end;
     
@@ -3151,7 +3209,7 @@ by:= hwRound(Gear^.Y+AngleCos(tangle)*_6);
             if Gear^.IntersectGear = nil then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1
             else if Gear^.Tag = 2 then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 2
             else CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1;
-        DeleteGear(Gear)
+        deleteGear(Gear)
         end
     else
         begin
@@ -3160,27 +3218,7 @@ by:= hwRound(Gear^.Y+AngleCos(tangle)*_6);
             else CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 2;
         inc(Gear^.Tag);
         Gear^.doStep:= @doStepPortal;
-        if Gear^.IntersectGear <> nil then
-            begin
-            Gear^.IntersectGear^.IntersectGear:= Gear;
-            AllInactive:= false;
-            // This jiggles gears, to ensure a portal connection just placed under a gear takes effect.
-            iterator:= GearsList;
-            while iterator <> nil do
-                begin
-                if iterator^.Kind <> gtPortal then
-                    begin
-                    iterator^.Active:= true;
-                    if iterator^.dY.QWordValue = _0.QWordValue then iterator^.dY.isNegative:= false;
-                    iterator^.State:= iterator^.State or gstMoving;
-                    DeleteCI(iterator);
-                    inc(iterator^.dY.QWordValue,10);
-                    end;
-                iterator:= iterator^.NextGear
-                end;
-            doStepPortal(Gear);
-            if Gear^.IntersectGear <> nil then Gear^.IntersectGear^.doStep(Gear^.IntersectGear);
-            end
+        if Gear^.IntersectGear <> nil then Gear^.IntersectGear^.IntersectGear:= Gear;
         end
     end
 else if (y > cWaterLine + cVisibleWater + Gear^.Radius) or (y < -LAND_WIDTH) or (x > LAND_WIDTH + LAND_WIDTH) or (x < -LAND_WIDTH) then
@@ -3189,7 +3227,7 @@ else if (y > cWaterLine + cVisibleWater + Gear^.Radius) or (y < -LAND_WIDTH) or 
         if Gear^.IntersectGear = nil then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1
         else if Gear^.Tag = 2 then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 2
         else CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1;
-    DeleteGear(Gear);
+    deleteGear(Gear);
     end;
 end;
 

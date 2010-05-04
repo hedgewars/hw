@@ -60,8 +60,7 @@ type
             uid: Longword;
             ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
             nImpactSounds: Word; // count of ImpactSounds
-            SoundChannel: LongInt;
-            PortedCounter: LongWord // TEMPORARY. To break portal loops pending handling it w/ something a bit saner.
+            SoundChannel: LongInt
         end;
 
 var AllInactive: boolean;
@@ -511,7 +510,11 @@ if Gear^.Tex <> nil then
     Gear^.Tex:= nil
     end;
 
-if Gear^.Kind = gtHedgehog then
+// make sure that portals have their link removed before deletion
+if (Gear^.Kind = gtPortal) and (Gear^.IntersectGear <> nil) then
+    Gear^.IntersectGear^.IntersectGear:= nil
+
+else if Gear^.Kind = gtHedgehog then
     if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
         begin
         Gear^.Message:= gm_Destroy;
@@ -859,7 +862,6 @@ begin
     tmpGear:= nil;
     while iterator <> nil do
         begin
-        iterator^.PortedCounter:= 0;
         if (iterator^.Kind = gtPortal) then 
             begin
             tmpGear:= iterator;

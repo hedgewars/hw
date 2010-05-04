@@ -163,7 +163,6 @@ with Gear^,
                                  portal:= nil;
                                  while iterator <> nil do
                                      begin
-                                     iterator^.PortedCounter:= 0;
                                      if (iterator^.Kind = gtPortal) then
                                          begin
                                          newGear:= iterator;
@@ -172,13 +171,13 @@ with Gear^,
                                              begin
                                              if (portal^.uid < newGear^.uid) then 
                                                  begin
-                                                 DeleteGear(portal);
+                                                 deleteGear(portal);
                                                  portal:= newGear
                                                  end
                                              else
                                                  begin
                                                  if newGear^.NextGear = nil then iterator:= nil;
-                                                 DeleteGear(newGear);
+                                                 deleteGear(newGear);
                                                  end
                                              end
                                          else portal:= newGear

@@ -116,6 +116,7 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
               _5: hwFloat = (isNegative: false; QWordValue:  4294967296 * 5);
               _6: hwFloat = (isNegative: false; QWordValue:  4294967296 * 6);
              _10: hwFloat = (isNegative: false; QWordValue:  4294967296 * 10);
+             _12: hwFloat = (isNegative: false; QWordValue:  4294967296 * 12);
              _16: hwFloat = (isNegative: false; QWordValue:  4294967296 * 16);
              _19: hwFloat = (isNegative: false; QWordValue:  4294967296 * 19);
              _20: hwFloat = (isNegative: false; QWordValue:  4294967296 * 20);
