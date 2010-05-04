@@ -1937,6 +1937,9 @@ if (Distance(tx - x, ty - y) > _256) or
 else begin
     PlaySound(sndPlaced);
     DeleteGear(Gear);
+    //Using these two instead means girder stays active without needing to reselect it
+    //OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
+    //ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
     AfterAttack;
     end;
 
