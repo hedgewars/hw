@@ -687,11 +687,11 @@ var flags: Longword = 0;
 {$ENDIF}
 begin
     s:= s; // avoid compiler hint
-    buf[0]:= char(0); // avoid compiler hint
     if Length(s) = 0 then cFullScreen:= not cFullScreen
     else cFullScreen:= s = '1';
 
 {$IFDEF DEBUGFILE}
+    buf[0]:= char(0); // avoid compiler hint
     AddFileLog('Prepare to change video parameters...');
 {$ENDIF}
 
