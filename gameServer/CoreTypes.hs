@@ -12,6 +12,7 @@ import Data.Time
 import Network
 import Data.Function
 
+import RoomsAndClients
 
 data ClientInfo =
     ClientInfo
@@ -177,12 +178,12 @@ data CoreMessage =
     | ClientAccountInfo (Int, AccountInfo)
     | TimerAction Int
 
-type Clients = IntMap.IntMap ClientInfo
-type Rooms = IntMap.IntMap RoomInfo
+type MRnC = MRoomsAndClients RoomInfo ClientInfo
+type IRnC = IRoomsAndClients RoomInfo ClientInfo
 
 --type ClientsTransform = [ClientInfo] -> [ClientInfo]
 --type RoomsTransform = [RoomInfo] -> [RoomInfo]
 --type HandlesSelector = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [ClientInfo]
 --type Answer = ServerInfo -> (HandlesSelector, [String])
 
-type ClientsSelector = Clients -> Rooms -> [Int]
+--type ClientsSelector = Clients -> Rooms -> [Int]

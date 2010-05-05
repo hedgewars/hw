@@ -100,7 +100,7 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
             roomClientsIDs
 
         toAnswer (paramName, paramStrs) = AnswerThisClient $ "CFG" : paramName : paramStrs
-        
+
         answerFullConfig = map toAnswer (leftConfigPart ++ rightConfigPart)
         (leftConfigPart, rightConfigPart) = partition (\(p, _) -> p /= "MAP") (Map.toList $ params jRoom)
 
@@ -118,7 +118,7 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
 
 handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName] =
     handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, ""]
-    
+
 
 handleCmd_lobby clID clients rooms ["FOLLOW", asknick] =
     if noSuchClient || roomID followClient == 0 then

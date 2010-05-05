@@ -26,7 +26,7 @@ acceptLoop servSock coreChan clientCounter = do
         clientHost <- sockAddr2String sockAddr
 
         currentTime <- getCurrentTime
-        
+
         sendChan <- newChan
 
         let newClient =
@@ -50,9 +50,6 @@ acceptLoop servSock coreChan clientCounter = do
                     )
 
         writeChan coreChan $ Accept newClient
-
-        forkIO $ clientRecvLoop cHandle coreChan nextID
-        forkIO $ clientSendLoop cHandle coreChan sendChan nextID
         return ()
 
     acceptLoop servSock coreChan nextID

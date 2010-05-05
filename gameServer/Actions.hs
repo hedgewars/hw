@@ -1,26 +1,23 @@
 module Actions where
 
+import Control.Concurrent
 import Control.Concurrent.STM
 import Control.Concurrent.Chan
-import Data.IntMap
 import qualified Data.IntSet as IntSet
 import qualified Data.Sequence as Seq
 import System.Log.Logger
 import Monad
 import Data.Time
 import Maybe
+
 -----------------------------
 import CoreTypes
 import Utils
+import ClientIO
+import RoomsAndClients
 
 data Action =
-    AnswerThisClient [String]
-    | AnswerAll [String]
-    | AnswerAllOthers [String]
-    | AnswerThisRoom [String]
-    | AnswerOthersInRoom [String]
-    | AnswerSameClan [String]
-    | AnswerLobby [String]
+    AnswerClients [Chan [String]] [String]
     | SendServerMessage
     | SendServerVars
     | RoomAddThisClient Int -- roomID
@@ -49,74 +46,22 @@ data Action =
     | PingAll
     | StatsAction
 
-type CmdHandler = Int -> Clients -> Rooms -> [String] -> [Action]
+type CmdHandler = Int -> MRnC -> [String] -> [Action]
 
 replaceID a (b, c, d, e) = (a, c, d, e)
 
-processAction :: (Int, ServerInfo, Clients, Rooms) -> Action -> IO (Int, ServerInfo, Clients, Rooms)
+processAction :: (ClientIndex, ServerInfo, MRnC) -> Action -> IO (ClientIndex, ServerInfo)
 
 
-processAction (clID, serverInfo, clients, rooms) (AnswerThisClient msg) = do
-    writeChan (sendChan $ clients ! clID) msg
-    return (clID, serverInfo, clients, rooms)
+processAction (ci, serverInfo, rnc) (AnswerClients chans msg) = do
+    mapM_ (flip writeChan msg) chans
+    return (ci, serverInfo)
 
 
-processAction (clID, serverInfo, clients, rooms) (AnswerAll msg) = do
-    mapM_ (\cl -> writeChan (sendChan cl) msg) (elems clients)
-    return (clID, serverInfo, clients, rooms)
-
-
-processAction (clID, serverInfo, clients, rooms) (AnswerAllOthers msg) = do
-    mapM_ (\id' -> writeChan (sendChan $ clients ! id') msg) $
-        Prelude.filter (\id' -> (id' /= clID) && logonPassed (clients ! id')) (keys clients)
-    return (clID, serverInfo, clients, rooms)
-
-
-processAction (clID, serverInfo, clients, rooms) (AnswerThisRoom msg) = do
-    mapM_ (\id' -> writeChan (sendChan $ clients ! id') msg) roomClients
-    return (clID, serverInfo, clients, rooms)
-    where
-        roomClients = IntSet.elems $ playersIDs room
-        room = rooms ! rID
-        rID = roomID client
-        client = clients ! clID
-
-
-processAction (clID, serverInfo, clients, rooms) (AnswerOthersInRoom msg) = do
-    mapM_ (\id' -> writeChan (sendChan $ clients ! id') msg) $ Prelude.filter (/= clID) roomClients
-    return (clID, serverInfo, clients, rooms)
-    where
-        roomClients = IntSet.elems $ playersIDs room
-        room = rooms ! rID
-        rID = roomID client
-        client = clients ! clID
-
-
-processAction (clID, serverInfo, clients, rooms) (AnswerLobby msg) = do
-    mapM_ (\id' -> writeChan (sendChan $ clients ! id') msg) roomClients
-    return (clID, serverInfo, clients, rooms)
-    where
-        roomClients = IntSet.elems $ playersIDs room
-        room = rooms ! 0
-
-
-processAction (clID, serverInfo, clients, rooms) (AnswerSameClan msg) = do
-    mapM_ (\cl -> writeChan (sendChan cl) msg) sameClanOrSpec
-    return (clID, serverInfo, clients, rooms)
-    where
-        otherRoomClients = Prelude.map ((!) clients) $ IntSet.elems $ clID `IntSet.delete` (playersIDs room)
-        sameClanOrSpec = if teamsInGame client > 0 then sameClanClients else spectators
-        spectators = Prelude.filter (\cl -> teamsInGame cl == 0) otherRoomClients
-        sameClanClients = Prelude.filter (\cl -> teamsInGame cl > 0 && clientClan cl == thisClan) otherRoomClients
-        thisClan = clientClan client
-        room = rooms ! rID
-        rID = roomID client
-        client = clients ! clID
-
-
-processAction (clID, serverInfo, clients, rooms) SendServerMessage = do
+{-
+processAction (clID, serverInfo, rnc) SendServerMessage = do
     writeChan (sendChan $ clients ! clID) ["SERVER_MESSAGE", message serverInfo]
-    return (clID, serverInfo, clients, rooms)
+    return (clID, serverInfo, rnc)
     where
         client = clients ! clID
         message si = if clientProto client < latestReleaseVersion si then
@@ -124,35 +69,35 @@ processAction (clID, serverInfo, clients, rooms) SendServerMessage = do
             else
             serverMessage si
 
-processAction (clID, serverInfo, clients, rooms) SendServerVars = do
+processAction (clID, serverInfo, rnc) SendServerVars = do
     writeChan (sendChan $ clients ! clID) ("SERVER_VARS" : vars)
-    return (clID, serverInfo, clients, rooms)
+    return (clID, serverInfo, rnc)
     where
         client = clients ! clID
         vars = [
-            "MOTD_NEW", serverMessage serverInfo, 
-            "MOTD_OLD", serverMessageForOldVersions serverInfo, 
+            "MOTD_NEW", serverMessage serverInfo,
+            "MOTD_OLD", serverMessageForOldVersions serverInfo,
             "LATEST_PROTO", show $ latestReleaseVersion serverInfo
             ]
 
 
-processAction (clID, serverInfo, clients, rooms) (ProtocolError msg) = do
+processAction (clID, serverInfo, rnc) (ProtocolError msg) = do
     writeChan (sendChan $ clients ! clID) ["ERROR", msg]
-    return (clID, serverInfo, clients, rooms)
+    return (clID, serverInfo, rnc)
 
 
-processAction (clID, serverInfo, clients, rooms) (Warning msg) = do
+processAction (clID, serverInfo, rnc) (Warning msg) = do
     writeChan (sendChan $ clients ! clID) ["WARNING", msg]
-    return (clID, serverInfo, clients, rooms)
+    return (clID, serverInfo, rnc)
 
 
-processAction (clID, serverInfo, clients, rooms) (ByeClient msg) = do
+processAction (clID, serverInfo, rnc) (ByeClient msg) = do
     infoM "Clients" (show (clientUID client) ++ " quits: " ++ msg)
     (_, _, newClients, newRooms) <-
             if roomID client /= 0 then
-                processAction  (clID, serverInfo, clients, rooms) $ RoomRemoveThisClient "quit"
+                processAction  (clID, serverInfo, rnc) $ RoomRemoveThisClient "quit"
                 else
-                    return (clID, serverInfo, clients, rooms)
+                    return (clID, serverInfo, rnc)
 
     mapM_ (processAction (clID, serverInfo, newClients, newRooms)) $ answerOthersQuit ++ answerInformRoom
     writeChan (sendChan $ clients ! clID) ["BYE", msg]
@@ -187,25 +132,25 @@ processAction (clID, serverInfo, clients, rooms) (ByeClient msg) = do
                 []
 
 
-processAction (clID, serverInfo, clients, rooms) (ModifyClient func) =
-    return (clID, serverInfo, adjust func clID clients, rooms)
+processAction (clID, serverInfo, rnc) (ModifyClient func) =
+    return (clID, serverInfo, adjust func clID rnc)
 
 
-processAction (clID, serverInfo, clients, rooms) (ModifyClient2 cl2ID func) =
-    return (clID, serverInfo, adjust func cl2ID clients, rooms)
+processAction (clID, serverInfo, rnc) (ModifyClient2 cl2ID func) =
+    return (clID, serverInfo, adjust func cl2ID rnc)
 
 
-processAction (clID, serverInfo, clients, rooms) (ModifyRoom func) =
+processAction (clID, serverInfo, rnc) (ModifyRoom func) =
     return (clID, serverInfo, clients, adjust func rID rooms)
     where
         rID = roomID $ clients ! clID
 
 
-processAction (clID, serverInfo, clients, rooms) (ModifyServerInfo func) =
-    return (clID, func serverInfo, clients, rooms)
+processAction (clID, serverInfo, rnc) (ModifyServerInfo func) =
+    return (clID, func serverInfo, rnc)
 
 
-processAction (clID, serverInfo, clients, rooms) (RoomAddThisClient rID) =
+processAction (clID, serverInfo, rnc) (RoomAddThisClient rID) =
     processAction (
         clID,
         serverInfo,
@@ -221,7 +166,7 @@ processAction (clID, serverInfo, clients, rooms) (RoomAddThisClient rID) =
                 AnswerThisRoom ["JOINED", nick client]
 
 
-processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
+processAction (clID, serverInfo, rnc) (RoomRemoveThisClient msg) = do
     (_, _, newClients, newRooms) <-
         if roomID client /= 0 then
             if isMaster client then
@@ -231,16 +176,16 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
                         AnswerOthersInRoom ["WARNING", "Admin left the room"],
                         RemoveClientTeams clID]))
                 else -- not in game
-                    processAction (clID, serverInfo, clients, rooms) RemoveRoom
+                    processAction (clID, serverInfo, rnc) RemoveRoom
             else -- not master
                 foldM
                     processAction
-                        (clID, serverInfo, clients, rooms)
+                        (clID, serverInfo, rnc)
                         [AnswerOthersInRoom ["LEFT", nick client, msg],
                         RemoveClientTeams clID]
         else -- in lobby
-            return (clID, serverInfo, clients, rooms)
-    
+            return (clID, serverInfo, rnc)
+
     return (
         clID,
         serverInfo,
@@ -259,7 +204,7 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
                 }
         insertClientToRoom r = r{playersIDs = IntSet.insert clID (playersIDs r)}
         changeMaster = do
-            processAction (newMasterId, serverInfo, clients, rooms) $ AnswerThisClient ["ROOM_CONTROL_ACCESS", "1"]
+            processAction (newMasterId, serverInfo, rnc) $ AnswerThisClient ["ROOM_CONTROL_ACCESS", "1"]
             return (
                 clID,
                 serverInfo,
@@ -272,7 +217,7 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
         newMasterClient = clients ! newMasterId
 
 
-processAction (clID, serverInfo, clients, rooms) (AddRoom roomName roomPassword) = do
+processAction (clID, serverInfo, rnc) (AddRoom roomName roomPassword) = do
     let newServerInfo = serverInfo {nextRoomID = newID}
     let room = newRoom{
             roomUID = newID,
@@ -282,7 +227,7 @@ processAction (clID, serverInfo, clients, rooms) (AddRoom roomName roomPassword)
             roomProto = (clientProto client)
             }
 
-    processAction (clID, serverInfo, clients, rooms) $ AnswerLobby ["ROOM", "ADD", roomName]
+    processAction (clID, serverInfo, rnc) $ AnswerLobby ["ROOM", "ADD", roomName]
 
     processAction (
         clID,
@@ -295,9 +240,9 @@ processAction (clID, serverInfo, clients, rooms) (AddRoom roomName roomPassword)
         client = clients ! clID
 
 
-processAction (clID, serverInfo, clients, rooms) (RemoveRoom) = do
-    processAction (clID, serverInfo, clients, rooms) $ AnswerLobby ["ROOM", "DEL", name room]
-    processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["ROOMABANDONED", name room]
+processAction (clID, serverInfo, rnc) (RemoveRoom) = do
+    processAction (clID, serverInfo, rnc) $ AnswerLobby ["ROOM", "DEL", name room]
+    processAction (clID, serverInfo, rnc) $ AnswerOthersInRoom ["ROOMABANDONED", name room]
     return (clID,
         serverInfo,
         Data.IntMap.map (\cl -> if roomID cl == rID then cl{roomID = 0, isMaster = False, isReady = False, teamsInGame = undefined} else cl) clients,
@@ -309,8 +254,8 @@ processAction (clID, serverInfo, clients, rooms) (RemoveRoom) = do
         client = clients ! clID
 
 
-processAction (clID, serverInfo, clients, rooms) (UnreadyRoomClients) = do
-    processAction (clID, serverInfo, clients, rooms) $ AnswerThisRoom ("NOT_READY" : roomPlayers)
+processAction (clID, serverInfo, rnc) (UnreadyRoomClients) = do
+    processAction (clID, serverInfo, rnc) $ AnswerThisRoom ("NOT_READY" : roomPlayers)
     return (clID,
         serverInfo,
         Data.IntMap.map (\cl -> if roomID cl == rID then cl{isReady = False} else cl) clients,
@@ -323,15 +268,15 @@ processAction (clID, serverInfo, clients, rooms) (UnreadyRoomClients) = do
         roomPlayersIDs = IntSet.elems $ playersIDs room
 
 
-processAction (clID, serverInfo, clients, rooms) (RemoveTeam teamName) = do
+processAction (clID, serverInfo, rnc) (RemoveTeam teamName) = do
     newRooms <- if not $ gameinprogress room then
             do
-            processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["REMOVE_TEAM", teamName]
+            processAction (clID, serverInfo, rnc) $ AnswerOthersInRoom ["REMOVE_TEAM", teamName]
             return $
                 adjust (\r -> r{teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r}) rID rooms
         else
             do
-            processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["EM", rmTeamMsg]
+            processAction (clID, serverInfo, rnc) $ AnswerOthersInRoom ["EM", rmTeamMsg]
             return $
                 adjust (\r -> r{
                 teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r,
@@ -346,41 +291,41 @@ processAction (clID, serverInfo, clients, rooms) (RemoveTeam teamName) = do
         rmTeamMsg = toEngineMsg $ 'F' : teamName
 
 
-processAction (clID, serverInfo, clients, rooms) (CheckRegistered) = do
+processAction (clID, serverInfo, rnc) (CheckRegistered) = do
     writeChan (dbQueries serverInfo) $ CheckAccount (clientUID client) (nick client) (host client)
-    return (clID, serverInfo, clients, rooms)
+    return (clID, serverInfo, rnc)
     where
         client = clients ! clID
 
 
-processAction (clID, serverInfo, clients, rooms) (ClearAccountsCache) = do
+processAction (clID, serverInfo, rnc) (ClearAccountsCache) = do
     writeChan (dbQueries serverInfo) ClearCache
-    return (clID, serverInfo, clients, rooms)
+    return (clID, serverInfo, rnc)
     where
         client = clients ! clID
 
 
-processAction (clID, serverInfo, clients, rooms) (Dump) = do
+processAction (clID, serverInfo, rnc) (Dump) = do
     writeChan (sendChan $ clients ! clID) ["DUMP", show serverInfo, showTree clients, showTree rooms]
-    return (clID, serverInfo, clients, rooms)
+    return (clID, serverInfo, rnc)
 
 
-processAction (clID, serverInfo, clients, rooms) (ProcessAccountInfo info) =
+processAction (clID, serverInfo, rnc) (ProcessAccountInfo info) =
     case info of
         HasAccount passwd isAdmin -> do
             infoM "Clients" $ show clID ++ " has account"
             writeChan (sendChan $ clients ! clID) ["ASKPASSWORD"]
-            return (clID, serverInfo, adjust (\cl -> cl{webPassword = passwd, isAdministrator = isAdmin}) clID clients, rooms)
+            return (clID, serverInfo, adjust (\cl -> cl{webPassword = passwd, isAdministrator = isAdmin}) clID rnc)
         Guest -> do
             infoM "Clients" $ show clID ++ " is guest"
-            processAction (clID, serverInfo, adjust (\cl -> cl{logonPassed = True}) clID clients, rooms) MoveToLobby
+            processAction (clID, serverInfo, adjust (\cl -> cl{logonPassed = True}) clID rnc) MoveToLobby
         Admin -> do
             infoM "Clients" $ show clID ++ " is admin"
-            foldM processAction (clID, serverInfo, adjust (\cl -> cl{logonPassed = True, isAdministrator = True}) clID clients, rooms) [MoveToLobby, AnswerThisClient ["ADMIN_ACCESS"]]
+            foldM processAction (clID, serverInfo, adjust (\cl -> cl{logonPassed = True, isAdministrator = True}) clID rnc) [MoveToLobby, AnswerThisClient ["ADMIN_ACCESS"]]
 
 
-processAction (clID, serverInfo, clients, rooms) (MoveToLobby) =
-    foldM processAction (clID, serverInfo, clients, rooms) $
+processAction (clID, serverInfo, rnc) (MoveToLobby) =
+    foldM processAction (clID, serverInfo, rnc) $
         (RoomAddThisClient 0)
         : answerLobbyNicks
         ++ [SendServerMessage]
@@ -391,22 +336,22 @@ processAction (clID, serverInfo, clients, rooms) (MoveToLobby) =
         answerLobbyNicks = [AnswerThisClient ("LOBBY:JOINED": lobbyNicks) | not $ Prelude.null lobbyNicks]
 
 
-processAction (clID, serverInfo, clients, rooms) (KickClient kickID) =
-    liftM2 replaceID (return clID) (processAction (kickID, serverInfo, clients, rooms) $ ByeClient "Kicked")
+processAction (clID, serverInfo, rnc) (KickClient kickID) =
+    liftM2 replaceID (return clID) (processAction (kickID, serverInfo, rnc) $ ByeClient "Kicked")
 
 
-processAction (clID, serverInfo, clients, rooms) (BanClient banNick) =
-    return (clID, serverInfo, clients, rooms)
+processAction (clID, serverInfo, rnc) (BanClient banNick) =
+    return (clID, serverInfo, rnc)
 
 
-processAction (clID, serverInfo, clients, rooms) (KickRoomClient kickID) = do
+processAction (clID, serverInfo, rnc) (KickRoomClient kickID) = do
     writeChan (sendChan $ clients ! kickID) ["KICKED"]
-    liftM2 replaceID (return clID) (processAction (kickID, serverInfo, clients, rooms) $ RoomRemoveThisClient "kicked")
+    liftM2 replaceID (return clID) (processAction (kickID, serverInfo, rnc) $ RoomRemoveThisClient "kicked")
 
 
-processAction (clID, serverInfo, clients, rooms) (RemoveClientTeams teamsClID) =
+processAction (clID, serverInfo, rnc) (RemoveClientTeams teamsClID) =
     liftM2 replaceID (return clID) $
-        foldM processAction (teamsClID, serverInfo, clients, rooms) removeTeamsActions
+        foldM processAction (teamsClID, serverInfo, rnc) removeTeamsActions
     where
         client = clients ! teamsClID
         room = rooms ! (roomID client)
@@ -414,33 +359,38 @@ processAction (clID, serverInfo, clients, rooms) (RemoveClientTeams teamsClID) =
         removeTeamsActions = Prelude.map (RemoveTeam . teamname) teamsToRemove
 
 
-processAction (clID, serverInfo, clients, rooms) (AddClient client) = do
+processAction (clID, serverInfo, rnc) (AddClient client) = do
+    forkIO $ clientRecvLoop (clientHandle client) (coreChan serverInfo) (clientUID client)
+    forkIO $ clientSendLoop (clientHandle client) (coreChan serverInfo) (sendChan client) (clientUID client)
+
     let updatedClients = insert (clientUID client) client clients
     infoM "Clients" (show (clientUID client) ++ ": New client. Time: " ++ show (connectTime client))
     writeChan (sendChan client) ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 
     let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 11) $ lastLogins serverInfo
 
-    if isJust $ host client `Prelude.lookup` newLogins then
+    if False && (isJust $ host client `Prelude.lookup` newLogins) then
         processAction (clID, serverInfo{lastLogins = newLogins}, updatedClients, rooms) $ ByeClient "Reconnected too fast"
         else
         return (clID, serverInfo{lastLogins = (host client, connectTime client) : newLogins}, updatedClients, rooms)
 
 
-processAction (clID, serverInfo, clients, rooms) PingAll = do
-    (_, _, newClients, newRooms) <- foldM kickTimeouted (clID, serverInfo, clients, rooms) $ elems clients
+processAction (clID, serverInfo, rnc) PingAll = do
+    (_, _, newClients, newRooms) <- foldM kickTimeouted (clID, serverInfo, rnc) $ elems clients
     processAction (clID,
         serverInfo,
         Data.IntMap.map (\cl -> cl{pingsQueue = pingsQueue cl + 1}) newClients,
         newRooms) $ AnswerAll ["PING"]
     where
-        kickTimeouted (clID, serverInfo, clients, rooms) client =
+        kickTimeouted (clID, serverInfo, rnc) client =
             if pingsQueue client > 0 then
-                processAction (clientUID client, serverInfo, clients, rooms) $ ByeClient "Ping timeout"
+                processAction (clientUID client, serverInfo, rnc) $ ByeClient "Ping timeout"
                 else
-                return (clID, serverInfo, clients, rooms)
+                return (clID, serverInfo, rnc)
 
 
-processAction (clID, serverInfo, clients, rooms) (StatsAction) = do
+processAction (clID, serverInfo, rnc) (StatsAction) = do
     writeChan (dbQueries serverInfo) $ SendStats (size clients) (size rooms - 1)
-    return (clID, serverInfo, clients, rooms)
+    return (clID, serverInfo, rnc)
+
+-}

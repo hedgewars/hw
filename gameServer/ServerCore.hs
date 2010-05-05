@@ -2,7 +2,6 @@ module ServerCore where
 
 import Network
 import Control.Concurrent
-import Control.Concurrent.STM
 import Control.Concurrent.Chan
 import Control.Monad
 import qualified Data.IntMap as IntMap
@@ -10,7 +9,6 @@ import System.Log.Logger
 --------------------------------------
 import CoreTypes
 import NetRoutines
-import Utils
 import HWProtoCore
 import Actions
 import OfficialServer.DBInteraction
@@ -28,7 +26,7 @@ reactCmd serverInfo clID cmd clients rooms =
 mainLoop :: ServerInfo -> Clients -> Rooms -> IO ()
 mainLoop serverInfo clients rooms = do
     r <- readChan $ coreChan serverInfo
-    
+
     (newServerInfo, mClients, mRooms) <-
         case r of
             Accept ci ->
@@ -58,11 +56,6 @@ mainLoop serverInfo clients rooms = do
                 liftM firstAway $
                     foldM processAction (0, serverInfo, clients, rooms) $
                         PingAll : [StatsAction | even tick]
-
-
-    {-          let hadRooms = (not $ null rooms) && (null mrooms)
-                    in unless ((not $ isDedicated serverInfo) && ((null clientsIn) || hadRooms)) $
-                        mainLoop serverInfo acceptChan messagesChan clientsIn mrooms -}
 
     mainLoop newServerInfo mClients mRooms
 
