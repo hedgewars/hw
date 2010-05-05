@@ -865,7 +865,7 @@ begin
         if (iterator^.Kind = gtPortal) then 
             begin
             tmpGear:= iterator;
-            if iterator^.NextGear <> nil then iterator:= iterator^.NextGear;
+            iterator:= iterator^.NextGear;
             DeleteGear(tmpGear)
             end
         else iterator:= iterator^.NextGear;
