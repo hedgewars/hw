@@ -183,7 +183,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepBirdy,
             @doStepBigExplosion,
             @doStepEggWork,
-            @doStepMovingPortal,
+            @doStepPortalShot,
             @doStepPiano,
             @doStepBomb,
             @doStepSineGunShot
@@ -479,6 +479,9 @@ gtBigExplosion: begin
                 gear^.AdvBounce:= 0;
                 gear^.Radius:= 16;
                 gear^.Tag:= 0;
+                gear^.Timer:= 15000;
+                gear^.RenderTimer:= false;
+                gear^.Health:= 100;
                 end;
        gtPiano: begin
                 gear^.Radius:= 32
@@ -511,8 +514,9 @@ if Gear^.Tex <> nil then
     end;
 
 // make sure that portals have their link removed before deletion
-if (Gear^.Kind = gtPortal) and (Gear^.IntersectGear <> nil) then
-    Gear^.IntersectGear^.IntersectGear:= nil
+if (Gear^.Kind = gtPortal) then
+    if (Gear^.IntersectGear <> nil) then
+        Gear^.IntersectGear^.IntersectGear:= nil
 
 else if Gear^.Kind = gtHedgehog then
     if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
@@ -678,6 +682,7 @@ while t <> nil do
             if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
             Gear^.Tex:= RenderStringTex(inttostr(Gear^.Timer div 1000), cWhiteColor, fntSmall);
             end;
+AddFileLog('doing step for gear '+intToStr(Gear^.uid)+' (type '+EnumToStr(Gear^.Kind)+')');
         Gear^.doStep(Gear);
         end
     end;

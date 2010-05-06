@@ -88,9 +88,9 @@ type
             gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder, // 27
             gtTeleport, gtSwitcher, gtTarget, gtMortar, // 31
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
-            gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
-            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, 
-            gtBigExplosion, gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot);
+            gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 44
+            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 49
+            gtBigExplosion, gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot); // 55
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -1918,7 +1918,7 @@ const
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
-            isDamaging: true;
+            isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),

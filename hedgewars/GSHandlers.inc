@@ -3044,16 +3044,52 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doPortalColorSwitch();
+var flags: LongWord;
+begin
+   if (CurrentHedgehog <> nil)
+        and (CurrentHedgehog^.Gear <> nil)
+            and ((CurrentHedgehog^.Gear^.Message and gm_Switch) <> 0) then
+            With CurrentHedgehog^ do
+                if (Ammo^[CurSlot, CurAmmo].AmmoType = amPortalGun) then
+                    begin
+                    CurrentHedgehog^.Gear^.Message:= CurrentHedgehog^.Gear^.Message and not gm_Switch;
+
+                    flags:= Ammo^[CurSlot, CurAmmo].Timer and not 2;
+                    if (flags and 1) = 0 then
+                        Ammo^[CurSlot, CurAmmo].Timer:= flags or 1
+                    else
+                        Ammo^[CurSlot, CurAmmo].Timer:= flags and not 1;
+                    end;
+end;
+
 procedure doStepPortal(Gear: PGear);
 var iterator, conPortal: PGear;
-    s, acptRadius: hwFloat;
+    s, acptRadius, cdxy: hwFloat;
     noTrap, hasdxy: Boolean;
 begin
+    doPortalColorSwitch();
+
     // destroy portal if ground it was attached too is gone
-    if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0 then deleteGear(Gear);
+    if ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0)
+    or (Gear^.Timer < 1)
+    or (hwRound(Gear^.Y) > cWaterLine) then
+        begin
+        deleteGear(Gear);
+        EXIT;
+        end;
+
+    if (TurnTimeLeft < 1)
+    or (Gear^.Health < 1) then
+        dec(Gear^.Timer);
+
+    if Gear^.Timer < 10000 then
+        gear^.RenderTimer:= true;
 
     // abort if there is no other portal connected to this one
-    if Gear^.IntersectGear = nil then
+    if (Gear^.IntersectGear = nil) then 
+        exit;
+    if ((Gear^.IntersectGear^.Tag and 1) = 0) then // or if it's still moving;
         exit;
 
     conPortal:= Gear^.IntersectGear;
@@ -3073,15 +3109,14 @@ begin
 
         // don't port portals or other gear that wouldn't make sense
         if (iterator^.Kind = gtPortal)
+        or (iterator^.Kind = gtRope)
         or (iterator^.Kind = gtHealthTag) then
             continue;
-
-{
-        if (((iterator^.State and gstMoving) = 0) // we don't port non-moving stuff IF the portal entry...
-            and (iterator^.Active = false)
-            and ) then //...
+        
+        // don't port hogs on rope
+        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)
+            and (iterator = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtRope) then
                 continue;
-}
 
         if (iterator^.Radius > Gear^.Radius) then
             continue; // sorry, you're too fat!
@@ -3105,45 +3140,79 @@ begin
             continue;
 
         noTrap:= ((not Gear^.dY.isNegative or (Gear^.dY.QWordValue = 0)) // can't be entered from above
-            or ((conPortal^.dY.isNegative or (conPortal^.dY.QWordValue = 0)))); // can't be left downwards;
+            or ((conPortal^.dY.isNegative and not (conPortal^.dY.QWordValue = 0)))); // can't be left downwards; 
  
- 
-        // lets see if this one is just stuck in a stuck-loop       
-        if noTrap and (iterator^.dY.QWordValue < _0_1.QWordValue) then
+        // prevent getting stuck in a ground portal loop       
+        if noTrap and (iterator^.dY.QWordValue < _0_08.QWordValue) then
             continue;
-        
+
         iterator^.Active:= true;
         iterator^.State:= iterator^.State or gstMoving;
         DeleteCI(iterator);
 
-        s:= (_1+(Int2hwFloat(Gear^.Radius))) / Distance(conPortal^.dX, conPortal^.dY);
+// TODO: more accurate porting
+        cdxy:= Distance(conPortal^.dX, conPortal^.dY);
+        s:= (Int2hwFloat(Gear^.Radius)) / cdxy;
+
         iterator^.X:= conPortal^.X + s * conPortal^.dX;
         iterator^.Y:= conPortal^.Y + s * conPortal^.dY;
-        s:= Distance(iterator^.dX, iterator^.dY) / Distance(conPortal^.dX, conPortal^.dY);
+
+        s:= Distance(iterator^.dX, iterator^.dY) / cdxy;
+
         iterator^.dX:= s * conPortal^.dX;
         iterator^.dY:= s * conPortal^.dY;
+
+        FollowGear:= iterator;
+
+        s:= _0_2 + _0_008 * Gear^.Health;
+        iterator^.dX:= s * iterator^.dX;
+        iterator^.dY:= s * iterator^.dY;
         
-        if iterator^.dY.isNegative and (iterator^.dY.QWordValue <> 0) then
-            iterator^.dY:= iterator^.dY + hwAbs(Int2hwFloat(iterator^.Radius) / iterator^.dY) * cGravity;
+        if Gear^.Health > 1 then
+            begin
+            dec(Gear^.Health);
+            dec(iterator^.Health);
+            end;
 
         // breaks (some) loops
         if Distance(iterator^.dX, iterator^.dY) > _0_96 then
             begin
             iterator^.dX:= iterator^.dX + signAs(cGravity * getRandom(1000),iterator^.dX);
             iterator^.dY:= iterator^.dY + signAs(cGravity * getRandom(1000),iterator^.dY);
-            s:= _0_995 / Distance(iterator^.dX, iterator^.dY);
+            s:= _0_96 / Distance(iterator^.dX, iterator^.dY);
             iterator^.dX:= s * iterator^.dX;
             iterator^.dY:= s * iterator^.dX;
             end;
-
-        iterator:= iterator^.NextGear;
         end;
 end;
 
 procedure doStepMovingPortal(Gear: PGear);
 var x, y, tx, ty: LongInt;//, bx, by, tangle: LongInt;
     s, dx, dy: hwFloat;
+
+procedure loadNewPortalBall(oldPortal: PGear; destroyGear: Boolean);
+var flags: LongWord;
 begin
+if CurrentHedgehog <> nil then
+    With CurrentHedgehog^ do
+        if (Ammo^[CurSlot, CurAmmo].AmmoType = amPortalGun) then
+            begin
+            flags:= Ammo^[CurSlot, CurAmmo].Timer;
+
+            if destroyGear xor ((oldPortal^.Tag and 2) = 0) then
+                flags:= flags or 1
+            else
+                flags:= flags and not 1;
+
+            Ammo^[CurSlot, CurAmmo].Timer:= flags and not 2; // make the ball visible
+            end;
+
+if destroyGear then deleteGear(oldPortal);
+end;
+
+begin
+doPortalColorSwitch();
+
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 x:= hwRound(Gear^.X);
@@ -3152,30 +3221,24 @@ tx:= 0; ty:= 0; // avoid compiler hints
 
 if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] > 255) then
     begin
-    if not calcSlopeTangent(Gear, x, y, tx, ty, 255) then
-        begin
-        deleteGear(Gear);
-        EXIT;
-        end;
-
-    // reject shots at too irregular terrain
-    if DistanceI(tx,ty) < _12 then
-        begin
-        deleteGear(Gear);
-        EXIT;
-    end;
+    if not calcSlopeTangent(Gear, x, y, tx, ty, 255)
+        or (DistanceI(tx,ty) < _12) then // reject shots at too irregular terrain
+            begin
+            loadNewPortalBall(Gear, true);
+            EXIT;
+            end;
     
-    // making a normal, normalized vector
+    // making a normalized normal vector
     s:= _1/DistanceI(tx,ty);
     dx:= -s * ty;
     dy:=  s * tx;
 
     // make sure the vector is pointing outwards
     if not (Gear^.dX*dx + Gear^.dY*dy).isNegative then
-    begin
+        begin
         dx:= -dx;
         dy:= -dy;
-    end;
+        end;
 
     Gear^.dX:= dx;
     Gear^.dY:= dy;
@@ -3183,33 +3246,60 @@ if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y,
     Gear^.DirAngle:= DxDy2Angle(-dy,dx);
     if not Gear^.dX.isNegative then Gear^.DirAngle:= 180-Gear^.DirAngle;
 
-    if ((Gear^.IntersectGear <> nil) and (hwRound(Distance(Gear^.X - Gear^.IntersectGear^.X,Gear^.Y-Gear^.IntersectGear^.Y)) < Gear^.Radius*2)) 
+    if ((Gear^.IntersectGear = nil)
+    or (hwRound(Distance(Gear^.X - Gear^.IntersectGear^.X,Gear^.Y-Gear^.IntersectGear^.Y)) >= Gear^.Radius*2)) 
     then
         begin
-        if CurrentHedgehog <> nil then
-            if Gear^.IntersectGear = nil then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1
-            else if Gear^.Tag = 2 then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 2
-            else CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1;
-        deleteGear(Gear)
-        end
-    else
-        begin
-        if CurrentHedgehog <> nil then
-            if Gear^.Tag = 2 then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1
-            else CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 2;
+        loadNewPortalBall(Gear, false);
         inc(Gear^.Tag);
         Gear^.doStep:= @doStepPortal;
-        if Gear^.IntersectGear <> nil then Gear^.IntersectGear^.IntersectGear:= Gear;
         end
+    else
+        loadNewPortalBall(Gear, true);
     end
-else if (y > cWaterLine + cVisibleWater + Gear^.Radius) or (y < -LAND_WIDTH) or (x > LAND_WIDTH + LAND_WIDTH) or (x < -LAND_WIDTH) then
+else if (y > cWaterLine) or (y < -LAND_WIDTH)
+     or (x > 2*LAND_WIDTH) or (x < -LAND_WIDTH) then
+        loadNewPortalBall(Gear, true);
+end;
+
+procedure doStepPortalShot(newPortal: PGear);
+var iterator: PGear;
+begin
+newPortal^.IntersectGear:= nil;
+
+if CurrentHedgehog <> nil then
+    With CurrentHedgehog^ do
     begin
-    if CurrentHedgehog <> nil then
-        if Gear^.IntersectGear = nil then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1
-        else if Gear^.Tag = 2 then CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 2
-        else CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].Timer:= 1;
-    deleteGear(Gear);
+    // make portal gun look unloaded
+    Ammo^[CurSlot, CurAmmo].Timer:= Ammo^[CurSlot, CurAmmo].Timer or 2;
+
+    // set portal to the currently chosen color
+    if ((Ammo^[CurSlot, CurAmmo].Timer and 1) <> 0) then
+        newPortal^.Tag:= newPortal^.Tag or 2;
+
+    iterator:= GearsList;
+    while iterator <> nil do
+        begin
+        if (iterator^.Kind = gtPortal) then
+            if (iterator <> newPortal) then
+                begin
+                if (iterator^.Tag and 2) = (newPortal^.Tag and 2) then
+                    begin
+                    iterator:= iterator^.PrevGear;
+                    deleteGear(iterator^.NextGear);
+                    continue;
+                    end
+                else
+                    begin // link portals with each other
+                    newPortal^.IntersectGear:= iterator;
+                    iterator^.IntersectGear:= newPortal;
+                    iterator^.Health:= newPortal^.Health;
+                    end;
+                end;
+        iterator:= iterator^.NextGear
+        end;
     end;
+newPortal^.doStep:= @doStepMovingPortal;
 end;
 
 procedure doStepPiano(Gear: PGear);
