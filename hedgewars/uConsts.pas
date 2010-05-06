@@ -76,24 +76,24 @@ type
             );
     
     // Gears that interact with other Gears and/or Land
-    TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
-            gtGrave, gtBee, gtShotgunShot, gtPickHammer, gtRope, // 8
-            gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite, // 14
-            gtClusterBomb, gtCluster, gtShover, gtFlame, // 18
-            gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame, // 24
-            gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder, // 27
-            gtTeleport, gtSwitcher, gtTarget, gtMortar, // 31
-            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
-            gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 44
-            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 49
-            gtBigExplosion, gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot); // 55
+    TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtGrave, gtBee, // 4
+            gtShotgunShot, gtPickHammer, gtRope, gtMine, gtCase, // 9
+            gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 14
+            gtFlame, gtFirePunch, gtATStartGame, gtATSmoothWindCh, // 18
+            gtATFinishGame, gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, // 23
+            gtGirder, gtTeleport, gtSwitcher, gtTarget, gtMortar, // 28
+            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 34
+            gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
+            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
+            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot); // 50
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
-            vgtFeather);
+            vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
+            vgtBigExplosion);
 
     TGearsType = set of TGearType;
 

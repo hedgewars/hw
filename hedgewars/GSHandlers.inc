@@ -343,7 +343,7 @@ if Gear^.Kind = gtHellishBomb then
 
     if (GameTicks and $3F) = 0 then
         if (Gear^.State and gstCollision) = 0 then
-            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtEvilTrace, 0, _0, _0, 0);
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEvilTrace);
     end;
 end;
 ////////////////////////////////////////////////////////////////////////////////
@@ -400,7 +400,7 @@ if (Gear^.Kind = gtMelonPiece) or (Gear^.Kind = gtBall) then
     CalcRotationDirAngle(Gear)
 else
     if (GameTicks and $1F) = 0 then
-        AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0)
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -416,51 +416,7 @@ if (Gear^.State and gstCollision) <> 0 then
     exit
     end;
 if (GameTicks and $3F) = 0 then
-    AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0)
-end;
-
-////////////////////////////////////////////////////////////////////////////////
-procedure doStepHealthTagWork(Gear: PGear);
-begin
-if Gear^.Kind = gtHealthTag then
-    AllInactive:= false;
-
-dec(Gear^.Timer);
-Gear^.Y:= Gear^.Y + Gear^.dY;
-
-if Gear^.Timer = 0 then
-    begin
-    if (Gear^.Kind = gtHealthTag) and (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
-        PHedgehog(Gear^.Hedgehog)^.Gear^.Active:= true; // to let current hh die
-    DeleteGear(Gear)
-    end
-end;
-
-procedure doStepHealthTagWorkUnderWater(Gear: PGear);
-begin
-AllInactive:= false;
-
-Gear^.Y:= Gear^.Y - _0_08;
-
-if hwRound(Gear^.Y) < cWaterLine + 10 then
-    DeleteGear(Gear)
-end;
-
-procedure doStepHealthTag(Gear: PGear);
-var s: shortstring;
-begin
-AllInactive:= false;
-Gear^.dY:= -_0_08;
-
-str(Gear^.State, s);
-Gear^.Tex:= RenderStringTex(s, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color, fnt16);
-
-if hwRound(Gear^.Y) < cWaterLine then
-    Gear^.doStep:= @doStepHealthTagWork
-else
-    Gear^.doStep:= @doStepHealthTagWorkUnderWater;
-
-Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Tex^.h)
+    AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1292,41 +1248,6 @@ PlaySound(sndRopeShot)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepSmokeTrace(Gear: PGear);
-begin
-inc(Gear^.Timer);
-if Gear^.Timer > 64 then
-    begin
-    Gear^.Timer:= 0;
-    dec(Gear^.State)
-    end;
-Gear^.dX:= Gear^.dX + cWindSpeed;
-Gear^.X:= Gear^.X + Gear^.dX;
-if Gear^.State = 0 then DeleteGear(Gear)
-end;
-
-////////////////////////////////////////////////////////////////////////////////
-procedure doStepExplosionWork(Gear: PGear);
-begin
-inc(Gear^.Timer);
-if Gear^.Timer > 75 then
-    begin
-    inc(Gear^.State);
-    Gear^.Timer:= 0;
-    if Gear^.State > 5 then DeleteGear(Gear)
-    end;
-end;
-
-procedure doStepExplosion(Gear: PGear);
-var i: LongWord;
-begin
-for i:= 0 to 31 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFire);
-for i:= 0 to 8 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart);
-for i:= 0 to 8 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart2);
-Gear^.doStep:= @doStepExplosionWork
-end;
-
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepMine(Gear: PGear);
 begin
 if (Gear^.State and gstMoving) <> 0 then
@@ -1862,7 +1783,7 @@ if (Gear^.Health > 0)and(not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirP
     end;
 
 if (GameTicks and $3F) = 0 then
-    AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
+    AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
 if (hwRound(Gear^.X) > (LAND_WIDTH+1024)) or (hwRound(Gear^.X) < -1024) then DeleteGear(Gear)
 end;
@@ -1905,7 +1826,7 @@ if (Gear^.State and gstCollision) <> 0 then
     exit
     end;
 if (GameTicks and $3F) = 0 then
-    AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0)
+    AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2103,7 +2024,7 @@ if (Gear^.State and gstCollision) <> 0 then
     end;
 
 if (GameTicks and $3F) = 0 then
-    AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0)
+    AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2492,7 +2413,7 @@ oldDy:= Gear^.dY;
 doStepFallingGear(Gear);
 
 if (GameTicks and $3F) = 0 then
-    AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
+    AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
 if ((Gear^.State and gstCollision) <> 0) then begin //hit
     Gear^.dX:= oldDx;
@@ -2616,9 +2537,9 @@ if (TrainingFlags and tfRCPlane) = 0 then
     begin
     if (GameTicks and $FF) = 0 then
         if Gear^.Timer < 3500 then
-            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtEvilTrace, 0, _0, _0, 0)
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEvilTrace)
         else
-            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
     if ((HHGear^.Message and gm_Attack) <> 0) and (Gear^.Health <> 0) then
         begin
@@ -2643,7 +2564,7 @@ if (TrainingFlags and tfRCPlane) = 0 then
 else
     begin
     if (GameTicks and $FF) = 0 then
-        AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
     // pickup targets
     t:= CheckGearNear(Gear, gtTarget, 36, 36);
@@ -2985,32 +2906,6 @@ with HHGear^ do
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepBigExplosionWork(Gear: PGear);
-var maxMovement: LongInt;
-begin
-inc(Gear^.Timer);
-if (Gear^.Timer and 5) = 0 then
-    begin
-    maxMovement := max(1, 13 - ((Gear^.Timer * 15) div 250));
-    ShakeCamera(maxMovement);
-    end;
-if Gear^.Timer > 250 then DeleteGear(Gear);
-end;
-
-procedure doStepBigExplosion(Gear: PGear);
-var i: LongWord;
-gX,gY: LongInt;
-begin
-gX:= hwRound(Gear^.X);
-gY:= hwRound(Gear^.Y);
-AddVisualGear(gX, gY, vgtSmokeRing);
-for i:= 0 to 46 do AddVisualGear(gX, gY, vgtFire);
-for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart);
-for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart2);
-Gear^.doStep:= @doStepBigExplosionWork
-end;
-
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepEggWork(Gear: PGear);
 var vg: PVisualGear;
      i: LongInt;
@@ -3106,8 +3001,7 @@ begin
 
         // don't port portals or other gear that wouldn't make sense
         if (iterator^.Kind = gtPortal)
-        or (iterator^.Kind = gtRope)
-        or (iterator^.Kind = gtHealthTag) then
+        or (iterator^.Kind = gtRope) then
             continue;
         
         // don't port hogs on rope
@@ -3461,7 +3355,7 @@ repeat
             end;
 
         if getRandom(100) = 0 then
-            AddGear(x, y, gtSmokeTrace, 0, _0, _0, 0);
+            AddVisualGear(x, y, vgtSmokeTrace);
         
         end
         // if underwater get additional damage

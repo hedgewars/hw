@@ -134,14 +134,11 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepBomb,
             @doStepHedgehog,
             @doStepGrenade,
-            @doStepHealthTag,
             @doStepGrave,
             @doStepBee,
             @doStepShotgunShot,
             @doStepPickHammer,
             @doStepRope,
-            @doStepSmokeTrace,
-            @doStepExplosion,
             @doStepMine,
             @doStepCase,
             @doStepDEagleShot,
@@ -170,7 +167,6 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepWatermelon,
             @doStepCluster,
             @doStepBomb,
-            @doStepSmokeTrace,
             @doStepWaterUp,
             @doStepDrill,
             @doStepBallgun,
@@ -181,7 +177,6 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepMolotov,
             @doStepCase,
             @doStepBirdy,
-            @doStepBigExplosion,
             @doStepEggWork,
             @doStepPortalShot,
             @doStepPiano,
@@ -291,10 +286,6 @@ case Kind of
 gtAmmo_Grenade: begin // bazooka
                 gear^.Radius:= 4;
                 end;
-   gtHealthTag: begin
-                gear^.Timer:= 1500;
-                gear^.Z:= 2002;
-                end;
        gtGrave: begin
                 gear^.ImpactSound:= sndGraveImpact;
                 gear^.nImpactSounds:= 1;
@@ -315,13 +306,6 @@ gtAmmo_Grenade: begin // bazooka
   gtPickHammer: begin
                 gear^.Radius:= 10;
                 gear^.Timer:= 4000
-                end;
-  gtSmokeTrace,
-   gtEvilTrace: begin
-                gear^.X:= gear^.X - _16;
-                gear^.Y:= gear^.Y - _16;
-                gear^.State:= 8;
-                gear^.Z:= cSmokeZ
                 end;
         gtRope: begin
                 gear^.Radius:= 3;
@@ -464,9 +448,6 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Health := 2000;
                 gear^.FlightTime := 2;
                 end;
-gtBigExplosion: begin
-                gear^.Angle:= random(360);
-                end;
          gtEgg: begin 
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_6;
@@ -533,7 +514,7 @@ else if Gear^.Kind = gtHedgehog then
             t:= max(Gear^.Damage, Gear^.Health);
             Gear^.Damage:= t;
             if (cWaterOpacity < $FF) and (hwRound(Gear^.Y) < cWaterLine + 256) then
-                AddGear(hwRound(Gear^.X), min(hwRound(Gear^.Y),cWaterLine+cVisibleWater+32), gtHealthTag, t, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+                AddVisualGear(hwRound(Gear^.X), min(hwRound(Gear^.Y),cWaterLine+cVisibleWater+32), vgtHealthTag, t)^.Hedgehog:= Gear^.Hedgehog;
             uStats.HedgehogDamaged(Gear)
             end;
 
@@ -594,8 +575,8 @@ while Gear <> nil do
                 not SuddenDeathDmg then
                 Gear^.State:= Gear^.State or gstLoser;
 
-            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
-                    gtHealthTag, dmg, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
+                    vgtHealthTag, dmg)^.Hedgehog:= Gear^.Hedgehog;
 
             RenderHealth(PHedgehog(Gear^.Hedgehog)^);
             RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
@@ -915,9 +896,9 @@ begin
            not CurrentHedgehog^.Gear^.Invulnerable then
            begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
            inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
-           AddGear(hwRound(CurrentHedgehog^.Gear^.X),
+           AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X),
                    hwRound(CurrentHedgehog^.Gear^.Y),
-                   gtHealthTag, tmpDmg, _0, _0, 0)^.Hedgehog:= CurrentHedgehog;
+                   vgtHealthTag, tmpDmg)^.Hedgehog:= CurrentHedgehog;
            end;
         end;
     end;
@@ -1169,8 +1150,8 @@ if Radius > 25 then KickFlakes(Radius, X, Y);
 
 if ((Mask and EXPLNoGfx) = 0) then
     begin
-    if Radius > 50 then AddGear(X, Y, gtBigExplosion, 0, _0, _0, 0)
-    else if Radius > 10 then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
+    if Radius > 50 then AddVisualGear(X, Y, vgtBigExplosion)
+    else if Radius > 10 then AddVIsualGear(X, Y, vgtExplosion);
     end;
 if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion);
 
