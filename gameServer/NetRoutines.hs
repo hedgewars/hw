@@ -1,38 +1,34 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module NetRoutines where
 
-import Network
 import Network.Socket
 import System.IO
-import Control.Concurrent
 import Control.Concurrent.Chan
-import Control.Concurrent.STM
 import qualified Control.Exception as Exception
 import Data.Time
+import Control.Monad
 -----------------------------
 import CoreTypes
-import ClientIO
 import Utils
 
-acceptLoop :: Socket -> Chan CoreMessage -> Int -> IO ()
-acceptLoop servSock coreChan clientCounter = do
+acceptLoop :: Socket -> Chan CoreMessage -> IO ()
+acceptLoop servSock chan = forever $ do
     Exception.handle
         (\(_ :: Exception.IOException) -> putStrLn "exception on connect") $
         do
-        (socket, sockAddr) <- Network.Socket.accept servSock
+        (sock, sockAddr) <- Network.Socket.accept servSock
 
-        cHandle <- socketToHandle socket ReadWriteMode
+        cHandle <- socketToHandle sock ReadWriteMode
         hSetBuffering cHandle LineBuffering
         clientHost <- sockAddr2String sockAddr
 
         currentTime <- getCurrentTime
 
-        sendChan <- newChan
+        sendChan' <- newChan
 
         let newClient =
                 (ClientInfo
-                    nextID
-                    sendChan
+                    sendChan'
                     cHandle
                     clientHost
                     currentTime
@@ -49,9 +45,5 @@ acceptLoop servSock coreChan clientCounter = do
                     undefined
                     )
 
-        writeChan coreChan $ Accept newClient
+        writeChan chan $ Accept newClient
         return ()
-
-    acceptLoop servSock coreChan nextID
-    where
-        nextID = clientCounter + 1

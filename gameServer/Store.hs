@@ -23,12 +23,10 @@ import Control.Monad
 
 
 newtype ElemIndex = ElemIndex Int
-    deriving (Eq)
+    deriving (Eq, Show, Read)
 newtype MStore e = MStore (IORef (IntSet.IntSet, IntSet.IntSet, IOA.IOArray Int e))
 newtype IStore e = IStore (IntSet.IntSet, IA.Array Int e)
 
-instance Show ElemIndex where
-    show (ElemIndex i) = 'i' : show i
 
 firstIndex :: ElemIndex
 firstIndex = ElemIndex 0

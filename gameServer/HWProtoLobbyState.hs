@@ -11,16 +11,18 @@ import Data.Word
 import CoreTypes
 import Actions
 import Utils
+import HandlerUtils
 
-answerAllTeams protocol teams = concatMap toAnswer teams
+{-answerAllTeams protocol teams = concatMap toAnswer teams
     where
         toAnswer team =
             [AnswerThisClient $ teamToNet protocol team,
             AnswerThisClient ["TEAM_COLOR", teamname team, teamcolor team],
             AnswerThisClient ["HH_NUM", teamname team, show $ hhnum team]]
-
+-}
 handleCmd_lobby :: CmdHandler
 
+{-
 handleCmd_lobby clID clients rooms ["LIST"] =
     [AnswerThisClient ("ROOMS" : roomsInfoList)]
     where
@@ -45,13 +47,14 @@ handleCmd_lobby clID clients rooms ["LIST"] =
                 head (Map.findWithDefault ["Default"] "SCHEME" (params room)),
                 head (Map.findWithDefault ["Default"] "AMMO" (params room))
                 ]
+-}
 
-handleCmd_lobby clID clients _ ["CHAT", msg] =
-    [AnswerOthersInRoom ["CHAT", clientNick, msg]]
-    where
-        clientNick = nick $ clients IntMap.! clID
+handleCmd_lobby ["CHAT", msg] = do
+    n <- clientNick
+    s <- roomOthersChans
+    return [AnswerClients s ["CHAT", n, msg]]
 
-
+{-
 handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, roomPassword]
     | haveSameRoom = [Warning "Room exists"]
     | illegalName newRoom = [Warning "Illegal room name"]
@@ -183,3 +186,4 @@ handleCmd_lobby clID clients rooms ["CLEAR_ACCOUNTS_CACHE"] =
 
 
 handleCmd_lobby clID _ _ _ = [ProtocolError "Incorrect command (state: in lobby)"]
+-}

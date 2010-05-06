@@ -11,6 +11,7 @@ import Utils
 
 handleCmd_NotEntered :: CmdHandler
 
+{-
 handleCmd_NotEntered clID clients _ ["NICK", newNick]
     | not . null $ nick client = [ProtocolError "Nickname already chosen"]
     | haveSameNick = [AnswerThisClient ["WARNING", "Nickname already in use"], ByeClient ""]
@@ -49,6 +50,6 @@ handleCmd_NotEntered clID clients _ ["PASSWORD", passwd] =
 
 handleCmd_NotEntered clID clients _ ["DUMP"] =
     if isAdministrator (clients IntMap.! clID) then [Dump] else []
+-}
 
-
-handleCmd_NotEntered clID _ _ _ = [ProtocolError "Incorrect command (state: not entered)"]
+handleCmd_NotEntered _ = return [ProtocolError "Incorrect command (state: not entered)"]

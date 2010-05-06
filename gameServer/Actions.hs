@@ -1,7 +1,6 @@
 module Actions where
 
 import Control.Concurrent
-import Control.Concurrent.STM
 import Control.Concurrent.Chan
 import qualified Data.IntSet as IntSet
 import qualified Data.Sequence as Seq
@@ -9,6 +8,7 @@ import System.Log.Logger
 import Monad
 import Data.Time
 import Maybe
+import Control.Monad.Reader
 
 -----------------------------
 import CoreTypes
@@ -17,7 +17,7 @@ import ClientIO
 import RoomsAndClients
 
 data Action =
-    AnswerClients [Chan [String]] [String]
+    AnswerClients [ClientChan] [String]
     | SendServerMessage
     | SendServerVars
     | RoomAddThisClient Int -- roomID
@@ -46,7 +46,7 @@ data Action =
     | PingAll
     | StatsAction
 
-type CmdHandler = Int -> MRnC -> [String] -> [Action]
+type CmdHandler = [String] -> Reader (ClientIndex, IRnC) [Action]
 
 replaceID a (b, c, d, e) = (a, c, d, e)
 
@@ -89,17 +89,16 @@ processAction (clID, serverInfo, rnc) (ProtocolError msg) = do
 processAction (clID, serverInfo, rnc) (Warning msg) = do
     writeChan (sendChan $ clients ! clID) ["WARNING", msg]
     return (clID, serverInfo, rnc)
+-}
 
+processAction (ci, serverInfo, rnc) (ByeClient msg) = do
+    infoM "Clients" (show ci ++ " quits: " ++ msg)
 
-processAction (clID, serverInfo, rnc) (ByeClient msg) = do
-    infoM "Clients" (show (clientUID client) ++ " quits: " ++ msg)
-    (_, _, newClients, newRooms) <-
-            if roomID client /= 0 then
-                processAction  (clID, serverInfo, rnc) $ RoomRemoveThisClient "quit"
-                else
-                    return (clID, serverInfo, rnc)
+    ri <- clientRoomM rnc ci
+    when (ri /= lobbyId)
+        processAction (ci, serverInfo, rnc) $ RoomRemoveThisClient ("quit: " ++ msg)
 
-    mapM_ (processAction (clID, serverInfo, newClients, newRooms)) $ answerOthersQuit ++ answerInformRoom
+    mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
     writeChan (sendChan $ clients ! clID) ["BYE", msg]
     return (
             0,
@@ -130,7 +129,7 @@ processAction (clID, serverInfo, rnc) (ByeClient msg) = do
                     [AnswerAll ["LOBBY:LEFT", clientNick]]
             else
                 []
-
+{-
 
 processAction (clID, serverInfo, rnc) (ModifyClient func) =
     return (clID, serverInfo, adjust func clID rnc)
@@ -357,24 +356,24 @@ processAction (clID, serverInfo, rnc) (RemoveClientTeams teamsClID) =
         room = rooms ! (roomID client)
         teamsToRemove = Prelude.filter (\t -> teamowner t == nick client) $ teams room
         removeTeamsActions = Prelude.map (RemoveTeam . teamname) teamsToRemove
+-}
 
+processAction (_, serverInfo, rnc) (AddClient client) = do
+    ci <- addClient rnc client
+    forkIO $ clientRecvLoop (clientHandle client) (coreChan serverInfo) ci
+    forkIO $ clientSendLoop (clientHandle client) (coreChan serverInfo) (sendChan client) ci
 
-processAction (clID, serverInfo, rnc) (AddClient client) = do
-    forkIO $ clientRecvLoop (clientHandle client) (coreChan serverInfo) (clientUID client)
-    forkIO $ clientSendLoop (clientHandle client) (coreChan serverInfo) (sendChan client) (clientUID client)
-
-    let updatedClients = insert (clientUID client) client clients
-    infoM "Clients" (show (clientUID client) ++ ": New client. Time: " ++ show (connectTime client))
+    infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime client))
     writeChan (sendChan client) ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 
     let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 11) $ lastLogins serverInfo
 
     if False && (isJust $ host client `Prelude.lookup` newLogins) then
-        processAction (clID, serverInfo{lastLogins = newLogins}, updatedClients, rooms) $ ByeClient "Reconnected too fast"
+        processAction (ci, serverInfo{lastLogins = newLogins}, rnc) $ ByeClient "Reconnected too fast"
         else
-        return (clID, serverInfo{lastLogins = (host client, connectTime client) : newLogins}, updatedClients, rooms)
+        return (ci, serverInfo)
 
-
+{-
 processAction (clID, serverInfo, rnc) PingAll = do
     (_, _, newClients, newRooms) <- foldM kickTimeouted (clID, serverInfo, rnc) $ elems clients
     processAction (clID,

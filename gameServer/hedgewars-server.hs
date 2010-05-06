@@ -22,10 +22,12 @@ import System.Posix
 #endif
 
 
+setupLoggers :: IO ()
 setupLoggers =
     updateGlobalLogger "Clients"
         (setLevel DEBUG)
 
+main :: IO ()
 main = withSocketsDo $ do
 #if !defined(mingw32_HOST_OS)
     installHandler sigPIPE Ignore Nothing;
@@ -38,7 +40,7 @@ main = withSocketsDo $ do
     dbQueriesChan <- newChan
     coreChan' <- newChan
     serverInfo' <- getOpts $ newServerInfo stats' coreChan' dbQueriesChan
-    
+
 #if defined(OFFICIAL_SERVER)
     dbHost' <- askFromConsole "DB host: "
     dbLogin' <- askFromConsole "login: "

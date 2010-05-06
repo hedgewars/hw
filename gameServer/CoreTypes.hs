@@ -5,7 +5,6 @@ import Control.Concurrent.Chan
 import Control.Concurrent.STM
 import Data.Word
 import qualified Data.Map as Map
-import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
 import Data.Sequence(Seq, empty)
 import Data.Time
@@ -14,11 +13,12 @@ import Data.Function
 
 import RoomsAndClients
 
+type ClientChan = Chan [String]
+
 data ClientInfo =
     ClientInfo
     {
-        clientUID :: !Int,
-        sendChan :: Chan [String],
+        sendChan :: ClientChan,
         clientHandle :: Handle,
         host :: String,
         connectTime :: UTCTime,
@@ -36,9 +36,7 @@ data ClientInfo =
     }
 
 instance Show ClientInfo where
-    show ci = show (clientUID ci)
-            ++ " nick: " ++ (nick ci)
-            ++ " host: " ++ (host ci)
+    show ci = " nick: " ++ (nick ci) ++ " host: " ++ (host ci)
 
 instance Eq ClientInfo where
     (==) = (==) `on` clientHandle
@@ -70,7 +68,6 @@ instance Show TeamInfo where
 data RoomInfo =
     RoomInfo
     {
-        roomUID :: !Int,
         masterID :: !Int,
         name :: String,
         password :: String,
@@ -89,18 +86,14 @@ data RoomInfo =
     }
 
 instance Show RoomInfo where
-    show ri = show (roomUID ri)
-            ++ ", players ids: " ++ show (IntSet.size $ playersIDs ri)
+    show ri = ", players ids: " ++ show (IntSet.size $ playersIDs ri)
             ++ ", players: " ++ show (playersIn ri)
             ++ ", ready: " ++ show (readyPlayers ri)
             ++ ", teams: " ++ show (teams ri)
 
-instance Eq RoomInfo where
-    (==) = (==) `on` roomUID
-
+newRoom :: RoomInfo
 newRoom = (
     RoomInfo
-        0
         0
         ""
         ""
@@ -144,8 +137,9 @@ data ServerInfo =
     }
 
 instance Show ServerInfo where
-    show si = "Server Info"
+    show _ = "Server Info"
 
+newServerInfo :: TMVar StatisticsInfo -> Chan CoreMessage -> Chan DBQuery -> ServerInfo
 newServerInfo = (
     ServerInfo
         True
@@ -167,23 +161,17 @@ data AccountInfo =
     deriving (Show, Read)
 
 data DBQuery =
-    CheckAccount Int String String
+    CheckAccount ClientIndex String String
     | ClearCache
     | SendStats Int Int
     deriving (Show, Read)
 
 data CoreMessage =
     Accept ClientInfo
-    | ClientMessage (Int, [String])
-    | ClientAccountInfo (Int, AccountInfo)
+    | ClientMessage (ClientIndex, [String])
+    | ClientAccountInfo (ClientIndex, AccountInfo)
     | TimerAction Int
 
 type MRnC = MRoomsAndClients RoomInfo ClientInfo
 type IRnC = IRoomsAndClients RoomInfo ClientInfo
 
---type ClientsTransform = [ClientInfo] -> [ClientInfo]
---type RoomsTransform = [RoomInfo] -> [RoomInfo]
---type HandlesSelector = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [ClientInfo]
---type Answer = ServerInfo -> (HandlesSelector, [String])
-
---type ClientsSelector = Clients -> Rooms -> [Int]

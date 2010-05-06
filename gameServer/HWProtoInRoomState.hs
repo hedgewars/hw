@@ -1,7 +1,6 @@
 module HWProtoInRoomState where
 
 import qualified Data.Foldable as Foldable
-import qualified Data.IntMap as IntMap
 import qualified Data.Map as Map
 import Data.Sequence(Seq, (|>), (><), fromList, empty)
 import Data.List
@@ -10,15 +9,17 @@ import Maybe
 import CoreTypes
 import Actions
 import Utils
+import HandlerUtils
 
 
 handleCmd_inRoom :: CmdHandler
 
-handleCmd_inRoom clID clients _ ["CHAT", msg] =
-    [AnswerOthersInRoom ["CHAT", clientNick, msg]]
-    where
-        clientNick = nick $ clients IntMap.! clID
+handleCmd_inRoom ["CHAT", msg] = do
+    n <- clientNick
+    s <- roomOthersChans
+    return [AnswerClients s ["CHAT", n, msg]]
 
+{-
 handleCmd_inRoom clID clients rooms ["PART"] =
     [RoomRemoveThisClient "part"]
     where
@@ -194,3 +195,4 @@ handleCmd_inRoom clID clients _ ["TEAMCHAT", msg] =
         engineMsg = toEngineMsg $ 'b' : ((nick client) ++ "(team): " ++ msg ++ "\x20\x20")
 
 handleCmd_inRoom clID _ _ _ = [ProtocolError "Incorrect command (state: in room)"]
+-}

@@ -10,8 +10,9 @@ import qualified Data.ByteString.UTF8 as BUTF8
 import qualified Data.ByteString as B
 ----------------
 import CoreTypes
+import RoomsAndClients
 
-listenLoop :: Handle -> Int -> [String] -> Chan CoreMessage -> Int -> IO ()
+listenLoop :: Handle -> Int -> [String] -> Chan CoreMessage -> ClientIndex -> IO ()
 listenLoop handle linesNumber buf chan clientID = do
     str <- liftM BUTF8.toString $ B.hGetLine handle
     if (linesNumber > 50) || (length str > 450) then
@@ -24,13 +25,13 @@ listenLoop handle linesNumber buf chan clientID = do
             else
             listenLoop handle (linesNumber + 1) (buf ++ [str]) chan clientID
 
-clientRecvLoop :: Handle -> Chan CoreMessage -> Int -> IO ()
+clientRecvLoop :: Handle -> Chan CoreMessage -> ClientIndex -> IO ()
 clientRecvLoop handle chan clientID =
     listenLoop handle 0 [] chan clientID
         `catch` (\e -> clientOff (show e) >> return ())
     where clientOff msg = writeChan chan $ ClientMessage (clientID, ["QUIT", msg]) -- if the client disconnects, we perform as if it sent QUIT message
 
-clientSendLoop :: Handle -> Chan CoreMessage -> Chan [String] -> Int -> IO()
+clientSendLoop :: Handle -> Chan CoreMessage -> Chan [String] -> ClientIndex -> IO()
 clientSendLoop handle coreChan chan clientID = do
     answer <- readChan chan
     doClose <- Exception.handle

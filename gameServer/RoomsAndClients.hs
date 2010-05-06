@@ -15,7 +15,8 @@ module RoomsAndClients(
     client,
     allClients,
     withRoomsAndClients,
-    showRooms
+    showRooms,
+    roomClients
     ) where
 
 
@@ -38,12 +39,10 @@ data Client c = Client {
 newtype RoomIndex = RoomIndex ElemIndex
     deriving (Eq)
 newtype ClientIndex = ClientIndex ElemIndex
-    deriving (Eq)
+    deriving (Eq, Show, Read)
 
 instance Show RoomIndex where
     show (RoomIndex i) = 'r' : show i
-instance Show ClientIndex where
-    show (ClientIndex i) = 'c' : show i
 
 unRoomIndex :: RoomIndex -> ElemIndex
 unRoomIndex (RoomIndex r) = r
@@ -76,7 +75,7 @@ roomAddClient cl room = room{roomClients' = cl : roomClients' room}
 roomRemoveClient :: ClientIndex -> Room r -> Room r
 roomRemoveClient cl room = room{roomClients' = filter (/= cl) $ roomClients' room}
 
-    
+
 addRoom :: MRoomsAndClients r c -> r -> IO RoomIndex
 addRoom (MRoomsAndClients (rooms, _)) room = do
     i <- addElem rooms (Room  [] room)
@@ -149,8 +148,11 @@ allClients :: IRoomsAndClients r c -> [ClientIndex]
 allClients (IRoomsAndClients (_, clients)) = map ClientIndex $ indices clients
 
 
-clientRoom :: ClientIndex -> IRoomsAndClients r c -> RoomIndex
-clientRoom (ClientIndex ci) (IRoomsAndClients (_, clients)) = clientRoom' (clients ! ci)
+clientRoom :: IRoomsAndClients r c -> ClientIndex -> RoomIndex
+clientRoom (IRoomsAndClients (_, clients)) (ClientIndex ci) = clientRoom' (clients ! ci)
 
 client :: IRoomsAndClients r c -> ClientIndex -> c
 client (IRoomsAndClients (_, clients)) (ClientIndex ci) = client' (clients ! ci)
+
+roomClients :: IRoomsAndClients r c -> RoomIndex -> [ClientIndex]
+roomClients (IRoomsAndClients (rooms, _)) (RoomIndex ri) = roomClients' $ (rooms ! ri)
