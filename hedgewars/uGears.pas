@@ -682,7 +682,6 @@ while t <> nil do
             if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
             Gear^.Tex:= RenderStringTex(inttostr(Gear^.Timer div 1000), cWhiteColor, fntSmall);
             end;
-AddFileLog('doing step for gear '+intToStr(Gear^.uid)+' (type '+EnumToStr(Gear^.Kind)+')');
         Gear^.doStep(Gear);
         end
     end;
