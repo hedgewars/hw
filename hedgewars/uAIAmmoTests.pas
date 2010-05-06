@@ -653,7 +653,7 @@ begin
   if bonuses.Count = 0 then begin
     if Me^.Health <= 100  then begin
 	  maxTop := Targ.Y - cHHRadius * 2; 
-	  while(not TestColl(Targ.X, maxTop, cHHRadius) and (maxTop > topY)) do
+	  while(not TestColl(Targ.X, maxTop, cHHRadius) and (maxTop > topY + cHHRadius * 2 + 1)) do
 	  	dec(maxTop, cHHRadius*2);
 	  if(not TestColl(Targ.X, maxTop + cHHRadius, cHHRadius)) then begin
         ap.AttackPutX := Targ.X;
