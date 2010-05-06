@@ -192,9 +192,9 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 procedure InsertGearToList(Gear: PGear);
 var tmp, ptmp: PGear;
 begin
-if GearsList = nil then
-    GearsList:= Gear
-    else begin
+// this thing is broken, and the bug explains why you sometimes see grenade stuck in hog not behind hedgehog sprite
+// when there's only one gear in list, the next one is inserted right after it disregarding its Z value
+// TODO: fix the bug
     tmp:= GearsList;
     ptmp:= GearsList;
     while (tmp <> nil) and (tmp^.Z <= Gear^.Z) do
@@ -210,8 +210,8 @@ if GearsList = nil then
         if ptmp^.NextGear <> nil then ptmp^.NextGear^.PrevGear:= Gear;
         ptmp^.NextGear:= Gear
         end
-    else GearsList:= Gear
-    end
+    else 
+        GearsList:= Gear
 end;
 
 procedure RemoveGearFromList(Gear: PGear);
