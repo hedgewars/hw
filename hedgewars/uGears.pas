@@ -515,9 +515,10 @@ if Gear^.Tex <> nil then
 
 // make sure that portals have their link removed before deletion
 if (Gear^.Kind = gtPortal) then
+    begin
     if (Gear^.IntersectGear <> nil) then
-        Gear^.IntersectGear^.IntersectGear:= nil
-
+        Gear^.IntersectGear^.IntersectGear:= nil;
+    end
 else if Gear^.Kind = gtHedgehog then
     if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
         begin
