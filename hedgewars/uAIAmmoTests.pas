@@ -644,36 +644,36 @@ end;
 
 function TestTeleport(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var
-  i, failNum: longword;
-  maxTop: longword;
+    i, failNum: longword;
+    maxTop: longword;
 begin
-  TestTeleport := BadTurn;
-  Level:= Level; // avoid compiler hint
-  FillBonuses(true, [gtCase]);
-  if bonuses.Count = 0 then begin
-    if Me^.Health <= 100  then begin
-	  maxTop := Targ.Y - cHHRadius * 2; 
-	  while(not TestColl(Targ.X, maxTop, cHHRadius) and (maxTop > topY + cHHRadius * 2 + 1)) do
-	  	dec(maxTop, cHHRadius*2);
-	  if(not TestColl(Targ.X, maxTop + cHHRadius, cHHRadius)) then begin
-        ap.AttackPutX := Targ.X;
-        ap.AttackPutY := maxTop + cHHRadius;
-        TestTeleport := Targ.Y - maxTop;
-	  end;
+    TestTeleport := BadTurn;
+    Level:= Level; // avoid compiler hint
+    FillBonuses(true, [gtCase]);
+    if bonuses.Count = 0 then begin
+        if Me^.Health <= 100  then begin
+            maxTop := Targ.Y - cHHRadius * 2; 
+            while not TestColl(Targ.X, maxTop, cHHRadius) and (maxTop > topY + cHHRadius * 2 + 1) do
+            dec(maxTop, cHHRadius*2);
+            if not TestColl(Targ.X, maxTop + cHHRadius, cHHRadius) then begin
+                ap.AttackPutX := Targ.X;
+                ap.AttackPutY := maxTop + cHHRadius;
+                TestTeleport := Targ.Y - maxTop;
+            end;
+        end;
     end
-  end
-  else begin
-	failNum := 0;
-    repeat 
-		i := random(bonuses.Count);
-		inc(failNum);
-	until(not TestColl(bonuses.ar[i].X, bonuses.ar[i].Y - cHHRadius - bonuses.ar[i].Radius, cHHRadius) or (failNum = bonuses.Count*2));
-	if failNum < bonuses.Count*2 then begin
-	  ap.AttackPutX := bonuses.ar[i].X;
-	  ap.AttackPutY := bonuses.ar[i].Y - cHHRadius - bonuses.ar[i].Radius;
-	  TestTeleport := 0;
-	end
-  end;
+    else begin
+        failNum := 0;
+        repeat 
+            i := random(bonuses.Count);
+            inc(failNum);
+        until not TestColl(bonuses.ar[i].X, bonuses.ar[i].Y - cHHRadius - bonuses.ar[i].Radius, cHHRadius) or (failNum = bonuses.Count*2);
+        if failNum < bonuses.Count*2 then begin
+            ap.AttackPutX := bonuses.ar[i].X;
+            ap.AttackPutY := bonuses.ar[i].Y - cHHRadius - bonuses.ar[i].Radius;
+            TestTeleport := 0;
+        end;
+    end;
 end;
 
 end.
