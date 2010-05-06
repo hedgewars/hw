@@ -95,21 +95,22 @@ processAction (ci, serverInfo, rnc) (ByeClient msg) = do
     infoM "Clients" (show ci ++ " quits: " ++ msg)
 
     ri <- clientRoomM rnc ci
-    when (ri /= lobbyId)
+    when (ri /= lobbyId) $ do
         processAction (ci, serverInfo, rnc) $ RoomRemoveThisClient ("quit: " ++ msg)
+        return ()
 
-    mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
-    writeChan (sendChan $ clients ! clID) ["BYE", msg]
-    return (
-            0,
-            serverInfo,
-            delete clID newClients,
-            adjust (\r -> r{
-                    playersIDs = IntSet.delete clID (playersIDs r),
-                    playersIn = (playersIn r) - 1,
-                    readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
-                    }) (roomID $ newClients ! clID) newRooms
-            )
+    --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
+    --writeChan (sendChan $ clients ! clID) ["BYE", msg]
+    modifyRoom rnc (\r -> r{
+                    --playersIDs = IntSet.delete ci (playersIDs r)
+                    playersIn = (playersIn r) - 1
+                    --readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
+                    }) ri
+    removeClient rnc ci
+    
+    return (ci, serverInfo)
+    
+{-
     where
         client = clients ! clID
         clientNick = nick client
@@ -128,7 +129,8 @@ processAction (ci, serverInfo, rnc) (ByeClient msg) = do
                 else
                     [AnswerAll ["LOBBY:LEFT", clientNick]]
             else
-                []
+            [] 
+-}
 {-
 
 processAction (clID, serverInfo, rnc) (ModifyClient func) =

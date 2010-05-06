@@ -8,10 +8,13 @@ module RoomsAndClients(
     addClient,
     removeRoom,
     removeClient,
+    modifyRoom,
+    modifyClient,
     lobbyId,
     moveClientToLobby,
     moveClientToRoom,
     clientRoom,
+    clientRoomM,
     client,
     allClients,
     withRoomsAndClients,
@@ -105,6 +108,12 @@ removeClient (MRoomsAndClients (rooms, clients)) cl@(ClientIndex ci) = do
     modifyElem rooms (roomRemoveClient cl) ri
     removeElem clients ci
 
+
+modifyRoom :: MRoomsAndClients r c -> (r -> r) -> RoomIndex -> IO ()
+modifyRoom (MRoomsAndClients (rooms, _)) f (RoomIndex ri) = modifyElem rooms (\r -> r{room' = f $ room' r}) ri
+
+modifyClient :: MRoomsAndClients r c -> (c -> c) -> ClientIndex -> IO ()
+modifyClient (MRoomsAndClients (_, clients)) f (ClientIndex ci) = modifyElem clients (\c -> c{client' = f $ client' c}) ci
 
 moveClientInRooms :: MRoomsAndClients r c -> RoomIndex -> RoomIndex -> ClientIndex -> IO ()
 moveClientInRooms (MRoomsAndClients (rooms, clients)) (RoomIndex riFrom) rt@(RoomIndex riTo) cl@(ClientIndex ci) = do
