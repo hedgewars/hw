@@ -30,6 +30,8 @@ with PHedgehog(Gear^.Hedgehog)^ do
        ((MultiShootAttacks > 0) and ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NoRoundEndHint) = 0)) or
        ((Gear^.State and gstHHDriven) = 0) then exit;
 
+    if ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NoRoundEndHint) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
+
     MultiShootAttacks:= 0;
     Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
 
@@ -275,12 +277,14 @@ with CurrentHedgehog^.Gear^,
             end
         else
             begin
+            OnUsedAmmo(CurrentHedgehog^);
             if ((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_NoRoundEndHint) = 0 then
                 begin
                 TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
                 State:= State or gstAttacked
-                end;
-            OnUsedAmmo(CurrentHedgehog^);
+                end
+            else
+                ApplyAmmoChanges(CurrentHedgehog^);
             end;
         end
     else
