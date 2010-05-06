@@ -645,17 +645,22 @@ end;
 function TestTeleport(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var
   i, failNum: longword;
+  maxTop: longword;
 begin
+  TestTeleport := BadTurn;
   Level:= Level; // avoid compiler hint
   FillBonuses(true, [gtCase]);
   if bonuses.Count = 0 then begin
     if Me^.Health <= 100  then begin
-      ap.AttackPutX := Targ.X;
-      ap.AttackPutY := topY + cHHRadius*2;
-      TestTeleport := Targ.Y - topY;
+	  maxTop := Targ.Y - cHHRadius * 2; 
+	  while(not TestColl(Targ.X, maxTop, cHHRadius) and (maxTop > topY)) do
+	  	dec(maxTop, cHHRadius*2);
+	  if(not TestColl(Targ.X, maxTop + cHHRadius, cHHRadius)) then begin
+        ap.AttackPutX := Targ.X;
+        ap.AttackPutY := maxTop + cHHRadius;
+        TestTeleport := Targ.Y - maxTop;
+	  end;
     end
-    else
-      TestTeleport := BadTurn;
   end
   else begin
 	failNum := 0;
@@ -668,8 +673,6 @@ begin
 	  ap.AttackPutY := bonuses.ar[i].Y - cHHRadius - bonuses.ar[i].Radius;
 	  TestTeleport := 0;
 	end
-    else
-	  TestTeleport := BadTurn;
   end;
 end;
 
