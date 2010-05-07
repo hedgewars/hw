@@ -429,13 +429,8 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHealthTagWork(Gear: PVisualGear; Steps: Longword);
 begin
-//if Gear^.Kind = gtHealthTag then
-//    AllInactive:= false;
-
 if Steps > Gear^.Timer then
     begin
-//    if (Gear^.Kind = vgtHealthTag) and (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
-//        PHedgehog(Gear^.Hedgehog)^.Gear^.Active:= true; // to let current hh die
     DeleteVisualGear(Gear);
     end
 else
@@ -447,8 +442,6 @@ end;
 
 procedure doStepHealthTagWorkUnderWater(Gear: PVisualGear; Steps: Longword);
 begin
-//AllInactive:= false;
-
 if hwRound(Gear^.Y) < cWaterLine + 10 then
     DeleteVisualGear(Gear)
 else
@@ -459,14 +452,14 @@ end;
 procedure doStepHealthTag(Gear: PVisualGear; Steps: Longword);
 var s: shortstring;
 begin
-//AllInactive:= false;
-
 s:= '';
 
 Gear^.dY:= -_0_08;
 
 str(Gear^.State, s);
 Gear^.Tex:= RenderStringTex(s, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color, fnt16);
+// if you segfault here you probably added this healthtag directly
+// maybe you should call spawnHealthTagForHH() in uGears.pas instead
 
 if hwRound(Gear^.Y) < cWaterLine then
     Gear^.doStep:= @doStepHealthTagWork

@@ -219,6 +219,17 @@ else
     GearsList:= Gear^.NextGear
 end;
 
+procedure spawnHealthTagForHH(HHGear: PGear; dmg: Longword);
+var tag: PVisualGear;
+begin
+tag:= AddVisualGear(hwRound(HHGear^.X), hwRound(HHGear^.Y), vgtHealthTag, dmg);
+tag^.Hedgehog:= PHedgehog(HHGear^.Hedgehog); // the tag needs the tag to determine the text color
+tag^.doStep(tag,1); // do this now because the Gear could already be deleted on next step call
+tag^.Hedgehog:= nil;
+AllInactive:= false;
+HHGear^.Active:= true;
+end;
+
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 const Counter: Longword = 0;
 var gear: PGear;
@@ -515,7 +526,7 @@ else if Gear^.Kind = gtHedgehog then
             t:= max(Gear^.Damage, Gear^.Health);
             Gear^.Damage:= t;
             if (cWaterOpacity < $FF) and (hwRound(Gear^.Y) < cWaterLine + 256) then
-                AddVisualGear(hwRound(Gear^.X), min(hwRound(Gear^.Y),cWaterLine+cVisibleWater+32), vgtHealthTag, t)^.Hedgehog:= Gear^.Hedgehog;
+                spawnHealthTagForHH(Gear, t);
             uStats.HedgehogDamaged(Gear)
             end;
 
@@ -576,8 +587,7 @@ while Gear <> nil do
                 not SuddenDeathDmg then
                 Gear^.State:= Gear^.State or gstLoser;
 
-            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
-                    vgtHealthTag, dmg)^.Hedgehog:= Gear^.Hedgehog;
+            spawnHealthTagForHH(Gear, dmg);
 
             RenderHealth(PHedgehog(Gear^.Hedgehog)^);
             RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
@@ -897,9 +907,7 @@ begin
            not CurrentHedgehog^.Gear^.Invulnerable then
            begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
            inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
-           AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X),
-                   hwRound(CurrentHedgehog^.Gear^.Y),
-                   vgtHealthTag, tmpDmg)^.Hedgehog:= CurrentHedgehog;
+           spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
            end;
         end;
     end;

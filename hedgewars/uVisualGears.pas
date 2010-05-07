@@ -381,6 +381,9 @@ case Layer of
                     else
                         DrawRotatedF(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
             vgtCloud: DrawSprite(sprCloud, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
+            
+            vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
+            vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
             end;
         Gear:= Gear^.NextGear
         end;
@@ -398,21 +401,19 @@ case Layer of
                             if Gear^.FrameTicks < 255 then
                                 Tint($FF, $FF, $FF, $FF);
                             end;
-                end;
-            case Gear^.Kind of
-                vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
-                vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);                
-                vgtExplosion: DrawSprite(sprExplosion50, hwRound(Gear^.X) - 32 + WorldDx, hwRound(Gear^.Y) - 32 + WorldDy, Gear^.State);
-                vgtBigExplosion: begin
-                                 Tint($FF, $FF, $FF, floor($FF * (1 - power(Gear^.Timer / 250, 4))));
-                                 DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
-                                 Tint($FF, $FF, $FF, $FF);
-                                 end;
-            end;
+                 end;
         Gear:= Gear^.NextGear
         end;
     2: while Gear <> nil do
         begin
+        case Gear^.Kind of
+            vgtExplosion: DrawSprite(sprExplosion50, hwRound(Gear^.X) - 32 + WorldDx, hwRound(Gear^.Y) - 32 + WorldDy, Gear^.State);
+            vgtBigExplosion: begin
+                             Tint($FF, $FF, $FF, floor($FF * (1 - power(Gear^.Timer / 250, 4))));
+                             DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
+                             Tint($FF, $FF, $FF, $FF);
+                             end;
+            end;
         if not cReducedQuality then
             case Gear^.Kind of
                 vgtExplPart: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
