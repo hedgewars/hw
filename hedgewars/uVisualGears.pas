@@ -132,9 +132,14 @@ if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we are
         end;
 
 if cReducedQuality and
-   (Kind <> vgtTeamHealthSorter) and
-   (Kind <> vgtSmallDamageTag) and
-   (Kind <> vgtSpeechBubble) then
+   not (Kind in
+   [vgtTeamHealthSorter,
+    vgtSmallDamageTag,
+    vgtSpeechBubble,
+    vgtHealthTag,
+    vgtExplosion,
+    vgtSmokeTrace,
+    vgtEvilTrace]) then
     begin
     AddVisualGear:= nil;
     exit
@@ -381,14 +386,15 @@ case Layer of
                     else
                         DrawRotatedF(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
             vgtCloud: DrawSprite(sprCloud, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
-            
-            vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
-            vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
             end;
         Gear:= Gear^.NextGear
         end;
     1: while Gear <> nil do
         begin
+        case Gear^.Kind of
+            vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
+            vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
+        end;
             if not cReducedQuality then
                 case Gear^.Kind of
                     vgtSmoke: DrawSprite(sprSmoke, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
