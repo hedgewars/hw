@@ -122,7 +122,7 @@ begin
                 DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
                 ProcessKbd;
                 DoGameTick(Lag);
-                ProcessVisualGears(Lag);
+                if not isPaused then ProcessVisualGears(Lag);
                 end;
         gsChat: begin
                 DrawWorld(Lag);

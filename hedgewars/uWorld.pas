@@ -540,16 +540,21 @@ var i, t: LongInt;
     scale: GLfloat;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
-if ZoomValue < zoom then
+if not isPaused then
     begin
-    zoom:= zoom - 0.002 * Lag;
-    if ZoomValue > zoom then zoom:= ZoomValue
-    end else
-if ZoomValue > zoom then
-    begin
-    zoom:= zoom + 0.002 * Lag;
-    if ZoomValue < zoom then zoom:= ZoomValue
-    end;
+    if ZoomValue < zoom then
+        begin
+        zoom:= zoom - 0.002 * Lag;
+        if ZoomValue > zoom then zoom:= ZoomValue
+        end else
+    if ZoomValue > zoom then
+        begin
+        zoom:= zoom + 0.002 * Lag;
+        if ZoomValue < zoom then zoom:= ZoomValue
+        end
+    end
+else
+    ZoomValue:= zoom;
 
 // Sky
 glClear(GL_COLOR_BUFFER_BIT);
