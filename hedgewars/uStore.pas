@@ -81,6 +81,7 @@ procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
 procedure Tint(r, g, b, a: Byte); inline;
+procedure Tint(c: Longword); inline;
 
 implementation
 uses uMisc, uConsole, uLocale{$IFDEF IPHONEOS}, PascalExports{$ENDIF};
@@ -100,6 +101,11 @@ if nc = lastTint then
     exit;
 glColor4ub(r, g, b, a);
 lastTint:= nc;
+end;
+
+procedure Tint(c: Longword); inline;
+begin
+Tint(((c shr 16) and $FF), ((c shr 8) and $FF), (c and $FF), $FF);
 end;
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);

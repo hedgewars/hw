@@ -184,8 +184,17 @@ if (Gear^.State and gstHHDriven) <> 0 then
                            DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
                    with HH^ do
                        if (HatTex <> nil) then
+                           begin
                            DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 0, i, 32, 32,
                                i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
+                           if HatTex^.w > 32 then
+                               begin
+                               Tint(HH^.Team^.Clan^.Color);
+                               DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 32, i, 32, 32,
+                                   i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
+                               Tint($FF, $FF, $FF, $FF)
+                               end
+                           end
                    end;
                 DrawAltWeapon(Gear, sx, sy);
                 defaultPos:= false
@@ -199,14 +208,29 @@ if (Gear^.State and gstHHDriven) <> 0 then
                         0);
                 with HH^ do
                     if (HatTex <> nil) then
-                       DrawTextureF(HatTex,
-                           1,
-                           sx,
-                           hwRound(Gear^.Y) - 8 + WorldDy,
-                           0,
-                           hwSign(Gear^.dX),
-                           32,
-                           32);
+                        begin
+                        DrawTextureF(HatTex,
+                            1,
+                            sx,
+                            hwRound(Gear^.Y) - 8 + WorldDy,
+                            0,
+                            hwSign(Gear^.dX),
+                            32,
+                            32);
+                        if HatTex^.w > 32 then
+                            begin
+                            Tint(HH^.Team^.Clan^.Color);
+                            DrawTextureF(HatTex,
+                                1,
+                                sx,
+                                hwRound(Gear^.Y) - 8 + WorldDy,
+                                32,
+                                hwSign(Gear^.dX),
+                                32,
+                                32);
+                            Tint($FF, $FF, $FF, $FF)
+                            end
+                        end;
                 defaultPos:= false
                 end;
             gtShover: DrawRotated(sprHandBaseball, hx, hy, hwSign(Gear^.dX), aangle + 180);
@@ -478,6 +502,7 @@ with HH^ do
     if (HatTex <> nil)
     and (HatVisibility > 0) then
         if DefaultPos then
+            begin
             DrawTextureF(HatTex,
                 HatVisibility,
                 sx,
@@ -485,8 +510,23 @@ with HH^ do
                 (RealTicks div 128 + Gear^.Pos) mod 19,
                 hwSign(Gear^.dX),
                 32,
-                32)
+                32);
+            if HatTex^.w > 32 then
+                begin
+                Tint(HH^.Team^.Clan^.Color);
+                DrawTextureF(HatTex,
+                    HatVisibility,
+                    sx,
+                    hwRound(Gear^.Y) - 8 + WorldDy,
+                    (RealTicks div 128 + Gear^.Pos) mod 19 + 32,
+                    hwSign(Gear^.dX),
+                    32,
+                    32);
+                Tint($FF, $FF, $FF, $FF)
+                end
+            end
         else
+            begin
             DrawTextureF(HatTex,
                 HatVisibility,
                 sx,
@@ -495,6 +535,20 @@ with HH^ do
                 hwSign(Gear^.dX)*m,
                 32,
                 32);
+            if HatTex^.w > 32 then
+                begin
+                Tint(HH^.Team^.Clan^.Color);
+                DrawTextureF(HatTex,
+                    HatVisibility,
+                    sx,
+                    hwRound(Gear^.Y) - 8 + WorldDy,
+                    32,
+                    hwSign(Gear^.dX)*m,
+                    32,
+                    32);
+                Tint($FF, $FF, $FF, $FF)
+                end
+            end
     end;
 if (Gear^.State and gstHHDriven) <> 0 then
     begin

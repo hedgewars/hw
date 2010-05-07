@@ -48,6 +48,8 @@ HatsModel::HatsModel(QObject* parent) :
         QPainter painter(&tmppix);
         painter.drawPixmap(QPoint(0, 5), hhpix);
         painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));
+        if(pix.width() > 32)
+            painter.drawPixmap(QPoint(0, 0), pix.copy(32, 0, 32, 32));
         painter.end();
 
         hats.append(qMakePair(str, QIcon(tmppix)));
