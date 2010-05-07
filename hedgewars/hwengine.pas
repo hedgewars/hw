@@ -90,7 +90,7 @@ procedure DoTimer(Lag: LongInt);
 var s: shortstring;
 {$ENDIF}
 begin
-    inc(RealTicks, Lag);
+    if not isPaused then inc(RealTicks, Lag);
 
     case GameState of
         gsLandGen: begin
@@ -121,13 +121,19 @@ begin
         gsGame: begin
                 DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
                 ProcessKbd;
-                DoGameTick(Lag);
-                if not isPaused then ProcessVisualGears(Lag);
+                if not isPaused then
+                    begin
+                    DoGameTick(Lag);
+                    ProcessVisualGears(Lag);
+                    end;
                 end;
         gsChat: begin
                 DrawWorld(Lag);
-                DoGameTick(Lag);
-                ProcessVisualGears(Lag);
+                if not isPaused then
+                    begin
+                    DoGameTick(Lag);
+                    ProcessVisualGears(Lag);
+                    end;
                 end;
         gsExit: begin
                 isTerminated:= true;
@@ -156,6 +162,7 @@ procedure OnDestroy;
 begin
     WriteLnToConsole('Freeing resources...');
     if isSoundEnabled then ReleaseSound();
+    FreeActionsList();
     StoreRelease();
     FreeGearsList();
     FreeVisualGears();
