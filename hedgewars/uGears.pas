@@ -222,10 +222,12 @@ end;
 procedure spawnHealthTagForHH(HHGear: PGear; dmg: Longword);
 var tag: PVisualGear;
 begin
-tag:= AddVisualGear(hwRound(HHGear^.X), hwRound(HHGear^.Y), vgtHealthTag, dmg);
-tag^.Hedgehog:= PHedgehog(HHGear^.Hedgehog); // the tag needs the tag to determine the text color
-tag^.doStep(tag,1); // do this now because the Gear could already be deleted on next step call
-tag^.Hedgehog:= nil;
+tag:= AddVisualGear(hwRound(HHGear^.X), hwRound(HHGear^.Y), vgtHealthTag, dmg);if (tag <> nil) then
+    begin
+    tag^.Hedgehog:= PHedgehog(HHGear^.Hedgehog); // the tag needs the tag to determine the text color
+    tag^.doStep(tag,1); // do this now because the Gear could already be deleted on next step call
+    tag^.Hedgehog:= nil
+    end;
 AllInactive:= false;
 HHGear^.Active:= true;
 end;
@@ -1160,7 +1162,7 @@ if Radius > 25 then KickFlakes(Radius, X, Y);
 if ((Mask and EXPLNoGfx) = 0) then
     begin
     if Radius > 50 then AddVisualGear(X, Y, vgtBigExplosion)
-    else if Radius > 10 then AddVIsualGear(X, Y, vgtExplosion);
+    else if Radius > 10 then AddVisualGear(X, Y, vgtExplosion);
     end;
 if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion);
 
