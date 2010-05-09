@@ -7,6 +7,7 @@ import Control.Monad
 import qualified Data.IntMap as IntMap
 import System.Log.Logger
 import Control.Monad.Reader
+import Control.Monad.State
 --------------------------------------
 import CoreTypes
 import NetRoutines
@@ -20,25 +21,28 @@ timerLoop :: Int -> Chan CoreMessage -> IO()
 timerLoop tick messagesChan = threadDelay (30 * 10^6) >> writeChan messagesChan (TimerAction tick) >> timerLoop (tick + 1) messagesChan
 
 
-reactCmd :: ServerInfo -> ClientIndex -> [String] -> MRnC -> IO ()
-reactCmd sInfo ci cmd rnc = do
-    actions <- withRoomsAndClients rnc (\irnc -> runReader (handleCmd cmd) (ci, irnc))
-    forM_ actions (processAction (ci, sInfo, rnc))
+reactCmd :: [String] -> StateT ActionsState IO ()
+reactCmd cmd = do
+    (Just ci) <- gets clientIndex
+    rnc <- gets roomsClients
+    actions <- liftIO $ withRoomsAndClients rnc (\irnc -> runReader (handleCmd cmd) (ci, irnc))
+    forM_ actions processAction
 
-mainLoop :: ServerInfo -> MRnC -> IO ()
-mainLoop serverInfo rnc = forever $ do
-    r <- readChan $ coreChan serverInfo
+mainLoop :: StateT ActionsState IO ()
+mainLoop = forever $ do
+    si <- gets serverInfo
+    r <- liftIO $ readChan $ coreChan si
 
     case r of
         Accept ci -> do
-            processAction
-                (undefined, serverInfo, rnc) (AddClient ci)
+            processAction (AddClient ci)
             return ()
 
-        ClientMessage (clID, cmd) -> do
-            debugM "Clients" $ (show clID) ++ ": " ++ (show cmd)
+        ClientMessage (ci, cmd) -> do
+            liftIO $ debugM "Clients" $ (show ci) ++ ": " ++ (show cmd)
+            modify (\as -> as{clientIndex = Just ci})
             --if clID `IntMap.member` clients then
-            reactCmd serverInfo clID cmd rnc
+            reactCmd cmd
             return ()
                 --else
                 --do
@@ -47,9 +51,7 @@ mainLoop serverInfo rnc = forever $ do
 
         ClientAccountInfo (clID, info) -> do
             --if clID `IntMap.member` clients then
-            processAction
-                (clID, serverInfo, rnc)
-                (ProcessAccountInfo info)
+            processAction (ProcessAccountInfo info)
             return ()
                 --else
                 --do
@@ -79,6 +81,6 @@ startServer serverInfo serverSocket = do
 
     rnc <- newRoomsAndClients newRoom
 
-    forkIO $ mainLoop serverInfo rnc
+    forkIO $ evalStateT mainLoop (ActionsState Nothing serverInfo rnc)
 
     forever $ threadDelay (60 * 60 * 10^6) >> putStrLn "***"

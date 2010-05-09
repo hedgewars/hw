@@ -9,6 +9,7 @@ import Monad
 import Data.Time
 import Maybe
 import Control.Monad.Reader
+import Control.Monad.State
 
 -----------------------------
 import CoreTypes
@@ -48,14 +49,25 @@ data Action =
 
 type CmdHandler = [String] -> Reader (ClientIndex, IRnC) [Action]
 
+data ActionsState = ActionsState {
+        clientIndex :: Maybe ClientIndex,
+        serverInfo :: ServerInfo,
+        roomsClients :: MRnC
+    }
+    
+clientRoomA :: StateT ActionsState IO RoomIndex
+clientRoomA = do
+    (Just ci) <- gets clientIndex
+    rnc <- gets roomsClients
+    liftIO $ clientRoomM rnc ci
+
 replaceID a (b, c, d, e) = (a, c, d, e)
 
-processAction :: (ClientIndex, ServerInfo, MRnC) -> Action -> IO (ClientIndex, ServerInfo)
+processAction :: Action -> StateT ActionsState IO ()
 
 
-processAction (ci, serverInfo, rnc) (AnswerClients chans msg) = do
-    mapM_ (flip writeChan msg) chans
-    return (ci, serverInfo)
+processAction (AnswerClients chans msg) = 
+    liftIO $ mapM_ (flip writeChan msg) chans
 
 
 {-
@@ -91,24 +103,28 @@ processAction (clID, serverInfo, rnc) (Warning msg) = do
     return (clID, serverInfo, rnc)
 -}
 
-processAction (ci, serverInfo, rnc) (ByeClient msg) = do
-    infoM "Clients" (show ci ++ " quits: " ++ msg)
-
-    ri <- clientRoomM rnc ci
+processAction (ByeClient msg) = do
+    (Just ci) <- gets clientIndex
+    rnc <- gets roomsClients
+    ri <- clientRoomA
     when (ri /= lobbyId) $ do
-        processAction (ci, serverInfo, rnc) $ RoomRemoveThisClient ("quit: " ++ msg)
+        processAction $ RoomRemoveThisClient ("quit: " ++ msg)
         return ()
 
-    --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
-    --writeChan (sendChan $ clients ! clID) ["BYE", msg]
-    modifyRoom rnc (\r -> r{
-                    --playersIDs = IntSet.delete ci (playersIDs r)
-                    playersIn = (playersIn r) - 1
-                    --readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
-                    }) ri
-    removeClient rnc ci
-    
-    return (ci, serverInfo)
+    liftIO $ do
+        infoM "Clients" (show ci ++ " quits: " ++ msg)
+
+        ri <- clientRoomM rnc ci
+
+        --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
+        --writeChan (sendChan $ clients ! clID) ["BYE", msg]
+        modifyRoom rnc (\r -> r{
+                        --playersIDs = IntSet.delete ci (playersIDs r)
+                        playersIn = (playersIn r) - 1
+                        --readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
+                        }) ri
+        removeClient rnc ci
+
     
 {-
     where
@@ -360,20 +376,27 @@ processAction (clID, serverInfo, rnc) (RemoveClientTeams teamsClID) =
         removeTeamsActions = Prelude.map (RemoveTeam . teamname) teamsToRemove
 -}
 
-processAction (_, serverInfo, rnc) (AddClient client) = do
-    ci <- addClient rnc client
-    forkIO $ clientRecvLoop (clientHandle client) (coreChan serverInfo) ci
-    forkIO $ clientSendLoop (clientHandle client) (coreChan serverInfo) (sendChan client) ci
+processAction (AddClient client) = do
+    rnc <- gets roomsClients
+    si <- gets serverInfo
+    liftIO $ do
+        ci <- addClient rnc client
+        forkIO $ clientRecvLoop (clientHandle client) (coreChan si) ci
+        forkIO $ clientSendLoop (clientHandle client) (coreChan si) (sendChan client) ci
 
-    infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime client))
-    writeChan (sendChan client) ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
+        infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime client))
+        writeChan (sendChan client) ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 
-    let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 11) $ lastLogins serverInfo
+{-        let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 11) $ lastLogins serverInfo
 
-    if False && (isJust $ host client `Prelude.lookup` newLogins) then
-        processAction (ci, serverInfo{lastLogins = newLogins}, rnc) $ ByeClient "Reconnected too fast"
-        else
-        return (ci, serverInfo)
+        if False && (isJust $ host client `Prelude.lookup` newLogins) then
+            processAction (ci, serverInfo{lastLogins = newLogins}, rnc) $ ByeClient "Reconnected too fast"
+            else
+            return (ci, serverInfo)
+-}
+
+
+
 
 {-
 processAction (clID, serverInfo, rnc) PingAll = do
