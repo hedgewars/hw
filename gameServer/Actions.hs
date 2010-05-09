@@ -114,16 +114,18 @@ processAction (ByeClient msg) = do
     liftIO $ do
         infoM "Clients" (show ci ++ " quits: " ++ msg)
 
-        ri <- clientRoomM rnc ci
+        chan <- withRoomsAndClients rnc (getChan ci)
 
         --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
-        --writeChan (sendChan $ clients ! clID) ["BYE", msg]
+        writeChan chan ["BYE", msg]
         modifyRoom rnc (\r -> r{
                         --playersIDs = IntSet.delete ci (playersIDs r)
                         playersIn = (playersIn r) - 1
                         --readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
                         }) ri
         removeClient rnc ci
+    where
+        getChan ci irnc = let cl = irnc `client` ci in (sendChan cl)
 
     
 {-
