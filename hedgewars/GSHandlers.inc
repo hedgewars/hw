@@ -2979,14 +2979,8 @@ begin
         end;
     end;
 
-    if HHGear^.Message and (gm_Up or gm_Precise or gm_Left or gm_Right) <> 0 then Gear^.State := 
-                                                                                                Gear
-                                                                                                 ^.
-                                                                                               State
-                                                                                                 and
-                                                                                                 not
-                                                                                          gsttmpFlag
-    ;
+    if HHGear^.Message and (gm_Up or gm_Precise or gm_Left or gm_Right) <> 0 then 
+        Gear^.State := Gear^.State and not gsttmpFlag;
     HHGear^.Message := HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
     HHGear^.State := HHGear^.State or gstMoving;
 
