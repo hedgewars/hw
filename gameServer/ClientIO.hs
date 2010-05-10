@@ -14,22 +14,29 @@ import RoomsAndClients
 
 listenLoop :: Handle -> Int -> [String] -> Chan CoreMessage -> ClientIndex -> IO ()
 listenLoop handle linesNumber buf chan clientID = do
+    putStrLn $ show handle ++ show buf ++ show clientID
     str <- liftM BUTF8.toString $ B.hGetLine handle
     if (linesNumber > 50) || (length str > 450) then
-        writeChan chan $ ClientMessage (clientID, ["QUIT", "Protocol violation"])
+           protocolViolationMsg >> freeClient
         else
         if str == "" then do
-            writeChan chan $ ClientMessage (clientID, buf)
+            writeChan chan $ ClientMessage (clientID, reverse buf)
             yield
             listenLoop handle 0 [] chan clientID
             else
-            listenLoop handle (linesNumber + 1) (buf ++ [str]) chan clientID
+            listenLoop handle (linesNumber + 1) (str : buf) chan clientID
+    where 
+        protocolViolationMsg = writeChan chan $ ClientMessage (clientID, ["QUIT", "Protocol violation"])
+        freeClient = writeChan chan $ FreeClient clientID
+
 
 clientRecvLoop :: Handle -> Chan CoreMessage -> ClientIndex -> IO ()
 clientRecvLoop handle chan clientID =
     listenLoop handle 0 [] chan clientID
-        `catch` (\e -> clientOff (show e) >> return ())
-    where clientOff msg = writeChan chan $ ClientMessage (clientID, ["QUIT", msg]) -- if the client disconnects, we perform as if it sent QUIT message
+        `catch` (\e -> clientOff (show e) >> freeClient >> return ())
+    where 
+        clientOff msg = writeChan chan $ ClientMessage (clientID, ["QUIT", msg]) -- if the client disconnects, we perform as if it sent QUIT message
+        freeClient = writeChan chan $ FreeClient clientID
 
 clientSendLoop :: Handle -> Chan CoreMessage -> Chan [String] -> ClientIndex -> IO()
 clientSendLoop handle coreChan chan clientID = do

@@ -171,6 +171,7 @@ data CoreMessage =
     | ClientMessage (ClientIndex, [String])
     | ClientAccountInfo (ClientIndex, AccountInfo)
     | TimerAction Int
+    | FreeClient ClientIndex
 
 type MRnC = MRoomsAndClients RoomInfo ClientInfo
 type IRnC = IRoomsAndClients RoomInfo ClientInfo

@@ -1,3 +1,4 @@
+
 module Actions where
 
 import Control.Concurrent
@@ -15,13 +16,13 @@ import Control.Monad.State
 import CoreTypes
 import Utils
 import ClientIO
-import RoomsAndClients
+import ServerState
 
 data Action =
     AnswerClients [ClientChan] [String]
     | SendServerMessage
     | SendServerVars
-    | RoomAddThisClient Int -- roomID
+    | RoomAddThisClient RoomIndex -- roomID
     | RoomRemoveThisClient String
     | RemoveTeam String
     | RemoveRoom
@@ -30,12 +31,12 @@ data Action =
     | ProtocolError String
     | Warning String
     | ByeClient String
-    | KickClient Int -- clID
-    | KickRoomClient Int -- clID
+    | KickClient ClientIndex -- clID
+    | KickRoomClient ClientIndex -- clID
     | BanClient String -- nick
-    | RemoveClientTeams Int -- clID
+    | RemoveClientTeams ClientIndex -- clID
     | ModifyClient (ClientInfo -> ClientInfo)
-    | ModifyClient2 Int (ClientInfo -> ClientInfo)
+    | ModifyClient2 ClientIndex (ClientInfo -> ClientInfo)
     | ModifyRoom (RoomInfo -> RoomInfo)
     | ModifyServerInfo (ServerInfo -> ServerInfo)
     | AddRoom String String
@@ -49,21 +50,8 @@ data Action =
 
 type CmdHandler = [String] -> Reader (ClientIndex, IRnC) [Action]
 
-data ActionsState = ActionsState {
-        clientIndex :: Maybe ClientIndex,
-        serverInfo :: ServerInfo,
-        roomsClients :: MRnC
-    }
-    
-clientRoomA :: StateT ActionsState IO RoomIndex
-clientRoomA = do
-    (Just ci) <- gets clientIndex
-    rnc <- gets roomsClients
-    liftIO $ clientRoomM rnc ci
 
-replaceID a (b, c, d, e) = (a, c, d, e)
-
-processAction :: Action -> StateT ActionsState IO ()
+processAction :: Action -> StateT ServerState IO ()
 
 
 processAction (AnswerClients chans msg) = 
@@ -111,11 +99,12 @@ processAction (ByeClient msg) = do
         processAction $ RoomRemoveThisClient ("quit: " ++ msg)
         return ()
 
+    chan <- clients sendChan
+
     liftIO $ do
         infoM "Clients" (show ci ++ " quits: " ++ msg)
 
-        chan <- withRoomsAndClients rnc (getChan ci)
-
+        
         --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
         writeChan chan ["BYE", msg]
         modifyRoom rnc (\r -> r{
@@ -123,10 +112,6 @@ processAction (ByeClient msg) = do
                         playersIn = (playersIn r) - 1
                         --readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
                         }) ri
-        removeClient rnc ci
-    where
-        getChan ci irnc = let cl = irnc `client` ci in (sendChan cl)
-
     
 {-
     where
@@ -149,21 +134,21 @@ processAction (ByeClient msg) = do
             else
             [] 
 -}
+
+processAction (ModifyClient f) = do
+    (Just ci) <- gets clientIndex
+    rnc <- gets roomsClients
+    liftIO $ modifyClient rnc f ci
+    return ()
+    
+
+processAction (ModifyRoom f) = do
+    rnc <- gets roomsClients
+    ri <- clientRoomA
+    liftIO $ modifyRoom rnc f ri
+    return ()
+
 {-
-
-processAction (clID, serverInfo, rnc) (ModifyClient func) =
-    return (clID, serverInfo, adjust func clID rnc)
-
-
-processAction (clID, serverInfo, rnc) (ModifyClient2 cl2ID func) =
-    return (clID, serverInfo, adjust func cl2ID rnc)
-
-
-processAction (clID, serverInfo, rnc) (ModifyRoom func) =
-    return (clID, serverInfo, clients, adjust func rID rooms)
-    where
-        rID = roomID $ clients ! clID
-
 
 processAction (clID, serverInfo, rnc) (ModifyServerInfo func) =
     return (clID, func serverInfo, rnc)
@@ -308,15 +293,17 @@ processAction (clID, serverInfo, rnc) (RemoveTeam teamName) = do
         rID = roomID client
         client = clients ! clID
         rmTeamMsg = toEngineMsg $ 'F' : teamName
+-}
 
+processAction CheckRegistered = do
+    (Just ci) <- gets clientIndex
+    n <- clients nick
+    h <- clients host
+    db <- gets (dbQueries . serverInfo)
+    liftIO $ writeChan db $ CheckAccount ci n h
+    return ()
 
-processAction (clID, serverInfo, rnc) (CheckRegistered) = do
-    writeChan (dbQueries serverInfo) $ CheckAccount (clientUID client) (nick client) (host client)
-    return (clID, serverInfo, rnc)
-    where
-        client = clients ! clID
-
-
+{-
 processAction (clID, serverInfo, rnc) (ClearAccountsCache) = do
     writeChan (dbQueries serverInfo) ClearCache
     return (clID, serverInfo, rnc)
@@ -397,7 +384,7 @@ processAction (AddClient client) = do
             return (ci, serverInfo)
 -}
 
-
+    
 
 
 {-

@@ -14,21 +14,21 @@ import NetRoutines
 import HWProtoCore
 import Actions
 import OfficialServer.DBInteraction
-import RoomsAndClients
+import ServerState
 
 
 timerLoop :: Int -> Chan CoreMessage -> IO()
 timerLoop tick messagesChan = threadDelay (30 * 10^6) >> writeChan messagesChan (TimerAction tick) >> timerLoop (tick + 1) messagesChan
 
 
-reactCmd :: [String] -> StateT ActionsState IO ()
+reactCmd :: [String] -> StateT ServerState IO ()
 reactCmd cmd = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
     actions <- liftIO $ withRoomsAndClients rnc (\irnc -> runReader (handleCmd cmd) (ci, irnc))
     forM_ actions processAction
 
-mainLoop :: StateT ActionsState IO ()
+mainLoop :: StateT ServerState IO ()
 mainLoop = forever $ do
     si <- gets serverInfo
     r <- liftIO $ readChan $ coreChan si
@@ -64,6 +64,11 @@ mainLoop = forever $ do
             --    foldM processAction (0, serverInfo, rnc) $
             --        PingAll : [StatsAction | even tick]
 
+        FreeClient ci -> do
+            rnc <- gets roomsClients
+            liftIO $ removeClient rnc ci
+
+
 startServer :: ServerInfo -> Socket -> IO ()
 startServer serverInfo serverSocket = do
     putStrLn $ "Listening on port " ++ show (listenPort serverInfo)
@@ -81,6 +86,6 @@ startServer serverInfo serverSocket = do
 
     rnc <- newRoomsAndClients newRoom
 
-    forkIO $ evalStateT mainLoop (ActionsState Nothing serverInfo rnc)
+    forkIO $ evalStateT mainLoop (ServerState Nothing serverInfo rnc)
 
     forever $ threadDelay (60 * 60 * 10^6) >> putStrLn "***"

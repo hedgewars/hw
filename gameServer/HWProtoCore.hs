@@ -25,7 +25,7 @@ handleCmd ("QUIT" : xs) = return [ByeClient msg]
         msg = if not $ null xs then head xs else ""
 
 {-
-handleCmd clID clients _ ["PONG"] =
+handleCmd ["PONG"] =
     if pingsQueue client == 0 then
         [ProtocolError "Protocol violation"]
     else
@@ -37,9 +37,9 @@ handleCmd clID clients _ ["PONG"] =
 handleCmd cmd = do
     (ci, irnc) <- ask
     if logonPassed (irnc `client` ci) then
-        handleCmd_NotEntered cmd
-        else
         handleCmd_loggedin cmd
+        else
+        handleCmd_NotEntered cmd
 
 {-
 handleCmd_loggedin clID clients rooms ["INFO", asknick] =
