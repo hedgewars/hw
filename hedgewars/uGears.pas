@@ -578,7 +578,10 @@ while Gear <> nil do
             uStats.HedgehogDamaged(Gear);
             dmg:= Gear^.Damage;
             if Gear^.Health < dmg then
+                begin
+                Gear^.Active:= true;
                 Gear^.Health:= 0
+                end
             else
                 dec(Gear^.Health, dmg);
 
