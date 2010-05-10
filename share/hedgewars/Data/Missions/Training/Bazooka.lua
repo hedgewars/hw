@@ -20,7 +20,8 @@ local caption = {
 	["de"] = "Bazooka-Training",
 	["es"] = "Entrenamiento con bazuca",
 	["pl"] = "Trening bazooki",
-	["pt_PT"] = "Treino com Bazuca"
+	["pt_PT"] = "Treino com Bazuca",
+	["pt_BR"] = "Treino com a Bazuca"
 	-- To add other languages, just add lines similar to the
 	-- existing ones - don't forget the trailing ","!
 	}
@@ -30,7 +31,8 @@ local subcaption = {
 	["de"] = "Zielübung",
 	["es"] = "Practica tu puntería",
 	["pl"] = "Potrenuj celność",
-	["pt_PT"] = "Pratica a tua pontaria"
+	["pt_PT"] = "Pratica a tua pontaria",
+	["pt_BR"] = "Pratique a sua pontaria"
 	}
 
 local goal = {
@@ -38,7 +40,8 @@ local goal = {
 	["de"] = "Eliminiere alle Ziele bevor die Zeit ausläuft.|Du hast in dieser Mission unbegrenzte Munition.",
 	["es"] = "Destruye todos los objetivos antes de que se agote el tiempo.|La munición en esta misión es ilimitada.",
 	["pl"] = "Zniszcz wszystkie cele zanim upłynie czas.|W tej misji masz nieskończoną ilość amunicji.",
-	["pt_PT"] = "Destrói todos os alvos antes do tempo terminar.|Tens munições infinitas para esta missão."
+	["pt_PT"] = "Destrói todos os alvos antes do tempo terminar.|Tens munições infinitas para esta missão.",
+	["pt_BR"] = "Destrua todos os alvos antes que o tempo acabe.|Você tem munição infinita para esta missão."
 	}
 
 local timeout = {
@@ -46,7 +49,8 @@ local timeout = {
 	["de"] = "Oh nein! Die Zeit ist um! Versuche es nochmal.",
 	["es"] = "¡Oh, no, se te acabó el tiempo! ¿Por qué no lo intentas de nuevo?",
 	["pl"] = "Ajajaj! Koniec czasu! Spróbuj jeszcze raz.",
-	["pt_PT"] = "Oh não! Acabou o tempo! Tenta novamente."
+	["pt_PT"] = "Oh não! Acabou o tempo! Tenta novamente.",
+	["pt_BR"] = "Oh não! O tempo acabou! Tente novamente."
 	}
 
 local success = {
@@ -54,7 +58,8 @@ local success = {
 	["de"] = "Gratulation! Du hast alle Ziele innerhalb der|verfügbaren Zeit ausgeschaltet.",
 	["es"] = "¡Felicidades! Has destruido todos los objectivos|dentro del tiempo establecido.",
 	["pl"] = "Gratulacje! Zniszczyłeś wszystkie cele przed upłynięciem czasu.",
-	["pt_PT"] = "Parabéns! Eliminaste todos os alvos|dentro do tempo limite."
+	["pt_PT"] = "Parabéns! Eliminaste todos os alvos|dentro do tempo limite.",
+	["pt_BR"] = "Parabéns! Você eliminou todos os alvos|dentro do tempo limite."
 	}
 
 local teamname = {
@@ -62,7 +67,8 @@ local teamname = {
 	["de"] = "Die Knalltüten",
 	["es"] = "Bazuqueros",
 	["pl"] = "Bazookinierzy",
-	["pt_PT"] = "Bazuqueiros"
+	["pt_PT"] = "Bazuqueiros",
+	["pt_BR"] = "Bazuqueiros"
 	}
 
 local hogname = {
@@ -70,7 +76,8 @@ local hogname = {
 	["de"] = "Jäger",
 	["es"] = "Artillero",
 	["pl"] = "Strzelec",
-	["pt_PT"] = "Comando"
+	["pt_PT"] = "Comando",
+	["pt_BR"] = "Artilheiro"
 	}
 
 -- To handle missing texts we define a small wrapper function that

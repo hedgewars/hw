@@ -1,4 +1,6 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="pt_BR">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -12,9 +14,11 @@
         <source>Never</source>
         <translation>Nunca</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation>A cada %1 turno(s)
+        <translation>
+            <numerusform>A cada %1 turno</numerusform>
+            <numerusform>A cada %1 turnos</numerusform>
         </translation>
     </message>
 </context>
@@ -72,7 +76,7 @@
     </message>
     <message>
         <source>Cannot save record to file %1</source>
-        <translation>Falha ao salvar o recorde no arquivo %1</translation>
+        <translation type="unfinished">Falha ao salvar registro no arquivo %1</translation>
     </message>
     <message>
         <source>new</source>
@@ -80,7 +84,7 @@
     </message>
     <message>
         <source>Please select record from the list above</source>
-        <translation>Por favor selecione um entrada na lista acima</translation>
+        <translation type="unfinished">Selecione um registro na lista acima</translation>
     </message>
 </context>
 <context>
@@ -138,7 +142,7 @@
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation>Túneis pequenos </translation>
+        <translation type="unfinished">Túneis pequenos</translation>
     </message>
     <message>
         <source>Medium tunnels</source>
@@ -188,7 +192,7 @@
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation type="unfinished">Motivo de sair: </translation>
+        <translation>Motivo de sair: </translation>
     </message>
     <message>
         <source>Room destroyed</source>
@@ -207,7 +211,7 @@
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation>Seu apelido %1 é 
+        <translation type="obsolete">Seu apelido %1 é 
 registrado no Hedgewars.org
 Por favor, forneça sua senha
 ou escolha outro apelido:</translation>
@@ -228,6 +232,16 @@ ou escolha outro apelido:</translation>
         <source>%1 *** %2 has left</source>
         <translation>%1 *** %2 saiu</translation>
     </message>
+    <message>
+        <source>Your nickname %1 is
+registered on Hedgewars.org
+Please provide your password below
+or pick another nickname in game config:</source>
+        <translation type="unfinished">Seu apelido %1 é
+registrado no Hedgewars.org
+Por favor, forneça sua senha
+ou escolha outro apelido:</translation>
+    </message>
 </context>
 <context>
     <name>KB</name>
@@ -240,7 +254,7 @@ ou escolha outro apelido:</translation>
     <name>PageAdmin</name>
     <message>
         <source>Clear Accounts Cache</source>
-        <translation>Limpar cache de contas</translation>
+        <translation type="unfinished">Limpar Cache de Contas</translation>
     </message>
     <message>
         <source>Fetch data</source>
@@ -291,14 +305,18 @@ ou escolha outro apelido:</translation>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;O prêmio de melhor disparo foi ganho por &lt;b&gt;%1&lt;/b&gt; , com &lt;b&gt;%2&lt;/b&gt; pontos.&lt;/p&gt;</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;O prêmio de melhor matador é de &lt;b&gt;%1&lt;/b&gt; , com &lt;b&gt;%2&lt;/b&gt; mortos em um turno.&lt;/p&gt;
+        <translation>
+            <numerusform>&lt;p&gt;O prêmio de melhor matador é de &lt;b&gt;%1&lt;/b&gt;, com &lt;b&gt;%2&lt;/b&gt; morto em um turno.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;O prêmio de melhor matador é de &lt;b&gt;%1&lt;/b&gt;, com &lt;b&gt;%2&lt;/b&gt; mortos em um turno.&lt;/p&gt;</numerusform>
         </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Um total de &lt;b&gt;%1&lt;/b&gt; ouriço(s) foram mortos nesta jogada.&lt;/p&gt;
+        <translation>
+            <numerusform>&lt;p&gt;Um total de &lt;b&gt;%1&lt;/b&gt; ouriço foi morto nesta rodada.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Um total de &lt;b&gt;%1&lt;/b&gt; ouriços foram mortos nesta rodada.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -335,7 +353,7 @@ ou escolha outro apelido:</translation>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
-        <translation type="unfinished">Control</translation>
+        <translation>Control</translation>
     </message>
 </context>
 <context>
@@ -361,7 +379,7 @@ ou escolha outro apelido:</translation>
     </message>
     <message>
         <source>Delete team</source>
-        <translation>Apagar time</translation>
+        <translation>Apagar equipe</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
@@ -374,6 +392,10 @@ ou escolha outro apelido:</translation>
     <message>
         <source>Delete weapon scheme</source>
         <translation>Apagar esquema de armas</translation>
+    </message>
+    <message>
+        <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
+        <translation>Você não pode editar as equipes a partir da seleção de equipes. Volte ao menu para adicionar, editar ou apagar equipes.</translation>
     </message>
 </context>
 <context>
@@ -469,14 +491,18 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
         <translation>o Esquema de Armas define as armas disponíveis e as quantidades de munições delas.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation>Existe %1 clientes conectados a esta salas.
+        <translation>
+            <numerusform>Existe %1 cliente conectado a esta sala.</numerusform>
+            <numerusform>Existe %1 clientes conectados a esta sala.</numerusform>
         </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation>Existem %1 times participando desta sala.
+        <translation>
+            <numerusform>Existe %1 equipe participando desta sala.</numerusform>
+            <numerusform>Existem %1 equipes participando desta sala.</numerusform>
         </translation>
     </message>
     <message>
@@ -568,7 +594,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation>Munição é compartilhada entre todos os times da mesma cor.</translation>
+        <translation>Munição é compartilhada entre todos as equipes da mesma cor.</translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
@@ -786,7 +812,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>Team Settings</source>
-        <translation>Opções de Time</translation>
+        <translation type="unfinished">Opções de Equipe</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -797,7 +823,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     <name>QLabel</name>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation>Este programa é distribuido sob a GNU General Public License</translation>
+        <translation type="unfinished">Este programa é distribuido sob a Licensa Pública GNU</translation>
     </message>
     <message>
         <source>Developers:</source>
@@ -805,7 +831,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>Art:</source>
-        <translation>Gráficos:</translation>
+        <translation type="unfinished">Arte:</translation>
     </message>
     <message>
         <source>Translations:</source>
@@ -865,7 +891,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>Turn Time</source>
-        <translation type="unfinished">Tempo de turno</translation>
+        <translation type="unfinished">Tempo de Turno</translation>
     </message>
     <message>
         <source>Initial Health</source>
@@ -877,7 +903,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>Mines Time</source>
-        <translation>Tempo das minas</translation>
+        <translation type="unfinished">Tempo das Minas</translation>
     </message>
     <message>
         <source>Mines</source>
@@ -980,11 +1006,13 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>Can not edit default weapon set</source>
-        <translation>Não foi possível editar o set de armas padrão</translation>
+        <translatorcomment>Duvida:Esquema ou disposição?</translatorcomment>
+        <translation type="unfinished">Não foi possível editar o equemas de armas padrão</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Não foi possível excluir o set padrão de armas</translation>
+        <translatorcomment>Duvida:Esquema ou disposição?</translatorcomment>
+        <translation type="unfinished">Não foi possível excluir o esquema padrão de armas</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1022,7 +1050,7 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>default</source>
-        <translation>pré-determinado</translation>
+        <translation>padrão</translation>
     </message>
     <message>
         <source>OK</source>
@@ -1078,7 +1106,7 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>Random Team</source>
-        <translation>Time aleatório</translation>
+        <translation type="unfinished">Time Aleatório</translation>
     </message>
 </context>
 <context>
@@ -1093,7 +1121,8 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>T</source>
-        <translation>T</translation>
+        <translatorcomment>E de equipe, na tabela de salas. (Equipes conectadas)</translatorcomment>
+        <translation>E</translation>
     </message>
     <message>
         <source>Owner</source>
@@ -1116,6 +1145,7 @@ Por favor verifique sua instalação</translation>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
+        <translatorcomment>Duvida: conjunto ou esquema</translatorcomment>
         <translation type="unfinished">Conjunto de armas</translation>
     </message>
     <message>
@@ -1154,7 +1184,7 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>Karma</source>
-        <translation>Carma</translation>
+        <translation type="unfinished">Karma</translation>
     </message>
     <message>
         <source>Artillery</source>
@@ -1166,7 +1196,8 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>Divide Teams</source>
-        <translation>Dividir Times</translation>
+        <translatorcomment>Equipes ou times? Estamos assumindo equipe = 1 jogador, time = varios</translatorcomment>
+        <translation type="unfinished">Dividir Equipes</translation>
     </message>
     <message>
         <source>Solid Land</source>
@@ -1206,14 +1237,15 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
-        <translation>Clan compartilha armas</translation>
+        <translation>Clan Compartilha Armas</translation>
     </message>
     <message>
         <source>Disable Girders</source>
-        <translation>Desabilitar vigas</translation>
+        <translation type="unfinished">Desabilitar Vigas</translation>
     </message>
     <message>
         <source>Disable Land Objects</source>
+        <translatorcomment>Duvida: o que sao objetos do terreno</translatorcomment>
         <translation type="unfinished">Desabilitar objetos do terreno</translation>
     </message>
 </context>
@@ -1221,7 +1253,7 @@ Por favor verifique sua instalação</translation>
     <name>binds</name>
     <message>
         <source>up</source>
-        <translation>acima</translation>
+        <translation>cima</translation>
     </message>
     <message>
         <source>left</source>
@@ -1233,7 +1265,7 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>down</source>
-        <translation>abaixo</translation>
+        <translation>baixo</translation>
     </message>
     <message>
         <source>attack</source>
@@ -1241,7 +1273,8 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>put</source>
-        <translation>usar</translation>
+        <translatorcomment>Duvida: verificar no jogo</translatorcomment>
+        <translation type="unfinished">usar</translation>
     </message>
     <message>
         <source>switch</source>
@@ -1249,11 +1282,11 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>find hedgehog</source>
-        <translation>encontrar porco espinho</translation>
+        <translation>encontrar ouriço</translation>
     </message>
     <message>
         <source>ammo menu</source>
-        <translation>menu de munições</translation>
+        <translation>menu de armas</translation>
     </message>
     <message>
         <source>slot 1</source>
@@ -1335,7 +1368,7 @@ Por favor verifique sua instalação</translation>
         <source>hedgehogs
 info</source>
         <translation>informação dos
-porcos espinho</translation>
+ouriços</translation>
     </message>
     <message>
         <source>quit</source>
@@ -1413,7 +1446,7 @@ porcos espinho</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished">Pegue uma arma ou um alvo usando o mouse:</translation>
+        <translation>Escolha uma arma ou um alvo usando o mouse:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
@@ -1468,15 +1501,15 @@ porcos espinho</translation>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished">Eixo</translation>
+        <translation>Eixo</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation>(Acima)</translation>
+        <translation>(Cima)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation>(Abaixo)</translation>
+        <translation>(Baixo)</translation>
     </message>
     <message>
         <source>Hat</source>
@@ -1536,6 +1569,7 @@ porcos espinho</translation>
     </message>
     <message>
         <source>Return</source>
+        <translatorcomment>Duvida:Ou seria enter?</translatorcomment>
         <translation>Voltar</translation>
     </message>
     <message>
@@ -1620,11 +1654,11 @@ porcos espinho</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Acima</translation>
+        <translation>Cima</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Abaixo</translation>
+        <translation>Baixo</translation>
     </message>
     <message>
         <source>Right</source>
@@ -1716,10 +1750,12 @@ porcos espinho</translation>
     </message>
     <message>
         <source>LB button</source>
+        <translatorcomment>Duvida:Não sei o que é isso</translatorcomment>
         <translation>Botão LB</translation>
     </message>
     <message>
         <source>RB button</source>
+        <translatorcomment>Duvida:Não sei o que é isso</translatorcomment>
         <translation>Botão RB</translation>
     </message>
     <message>
@@ -1756,11 +1792,13 @@ porcos espinho</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="unfinished">gatilho esquerdo</translation>
+        <translatorcomment>Duvida:Não sei o que é isso</translatorcomment>
+        <translation>Gatilho esquerdo</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="unfinished">Gatilho direito</translation>
+        <translatorcomment>Duvida:Não sei o que é isso</translatorcomment>
+        <translation>Gatilho direito</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
