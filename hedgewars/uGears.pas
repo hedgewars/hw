@@ -194,7 +194,7 @@ begin
         ptmp:= tmp;
         tmp:= tmp^.NextGear
         end;
-
+    
     if ptmp <> tmp then
         begin
         Gear^.NextGear:= ptmp^.NextGear;
@@ -222,12 +222,9 @@ end;
 procedure spawnHealthTagForHH(HHGear: PGear; dmg: Longword);
 var tag: PVisualGear;
 begin
-tag:= AddVisualGear(hwRound(HHGear^.X), hwRound(HHGear^.Y), vgtHealthTag, dmg);if (tag <> nil) then
-    begin
+tag:= AddVisualGear(hwRound(HHGear^.X), hwRound(HHGear^.Y), vgtHealthTag, dmg);
+if (tag <> nil) then
     tag^.Hedgehog:= PHedgehog(HHGear^.Hedgehog); // the tag needs the tag to determine the text color
-    tag^.doStep(tag,1); // do this now because the Gear could already be deleted on next step call
-    tag^.Hedgehog:= nil
-    end;
 AllInactive:= false;
 HHGear^.Active:= true;
 end;

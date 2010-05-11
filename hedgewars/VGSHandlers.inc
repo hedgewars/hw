@@ -430,9 +430,7 @@ end;
 procedure doStepHealthTagWork(Gear: PVisualGear; Steps: Longword);
 begin
 if Steps > Gear^.Timer then
-    begin
-    DeleteVisualGear(Gear);
-    end
+    DeleteVisualGear(Gear)
 else
     begin
     dec(Gear^.Timer, Steps);
@@ -457,9 +455,10 @@ s:= '';
 Gear^.dY:= -_0_08;
 
 str(Gear^.State, s);
-Gear^.Tex:= RenderStringTex(s, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color, fnt16);
-// if you segfault here you probably added this healthtag directly
-// maybe you should call spawnHealthTagForHH() in uGears.pas instead
+if Gear^.Hedgehog <> nil then
+    Gear^.Tex:= RenderStringTex(s, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color, fnt16)
+else
+    Gear^.Tex:= RenderStringTex(s, cWhiteColor, fnt16);
 
 if hwRound(Gear^.Y) < cWaterLine then
     Gear^.doStep:= @doStepHealthTagWork
