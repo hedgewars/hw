@@ -85,7 +85,7 @@ type
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 34
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
-            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtHealthTag); // 51
+            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot); // 50
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,

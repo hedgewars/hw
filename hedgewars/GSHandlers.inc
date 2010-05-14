@@ -447,50 +447,6 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepHealthTagWork(Gear: PGear);
-begin
-if Gear^.Kind = gtHealthTag then
-    AllInactive:= false;
-
-dec(Gear^.Timer);
-Gear^.Y:= Gear^.Y + Gear^.dY;
-
-if Gear^.Timer = 0 then
-    begin
-    if (Gear^.Kind = gtHealthTag) and (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
-        PHedgehog(Gear^.Hedgehog)^.Gear^.Active:= true; // to let current hh die
-    DeleteGear(Gear)
-    end
-end;
-
-procedure doStepHealthTagWorkUnderWater(Gear: PGear);
-begin
-AllInactive:= false;
-
-Gear^.Y:= Gear^.Y - _0_08;
-
-if hwRound(Gear^.Y) < cWaterLine + 10 then
-    DeleteGear(Gear)
-end;
-
-procedure doStepHealthTag(Gear: PGear);
-var s: shortstring;
-begin
-AllInactive:= false;
-Gear^.dY:= -_0_08;
-
-str(Gear^.State, s);
-Gear^.Tex:= RenderStringTex(s, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color, fnt16);
-
-if hwRound(Gear^.Y) < cWaterLine then
-    Gear^.doStep:= @doStepHealthTagWork
-else
-    Gear^.doStep:= @doStepHealthTagWorkUnderWater;
-
-Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Tex^.h)
-end;
-
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepGrave(Gear: PGear);
 begin
     AllInactive := false;
