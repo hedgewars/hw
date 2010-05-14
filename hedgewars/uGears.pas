@@ -181,7 +181,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepPortalShot,
             @doStepPiano,
             @doStepBomb,
-            @doStepSineGunShot
+            @doStepSineGunShot,
+            @doStepHealthTag
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -296,6 +297,10 @@ case Kind of
                 end;
 gtAmmo_Grenade: begin // bazooka
                 gear^.Radius:= 4;
+                end;
+   gtHealthTag: begin
+                gear^.Timer:= 1500;
+                gear^.Z:= 2002;
                 end;
        gtGrave: begin
                 gear^.ImpactSound:= sndGraveImpact;
@@ -525,7 +530,7 @@ else if Gear^.Kind = gtHedgehog then
             t:= max(Gear^.Damage, Gear^.Health);
             Gear^.Damage:= t;
             if (cWaterOpacity < $FF) and (hwRound(Gear^.Y) < cWaterLine + 256) then
-                spawnHealthTagForHH(Gear, t);
+                AddGear(hwRound(Gear^.X), min(hwRound(Gear^.Y),cWaterLine+cVisibleWater+32), gtHealthTag, t, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog; //spawnHealthTagForHH(Gear, t);
             uStats.HedgehogDamaged(Gear)
             end;
 
@@ -589,7 +594,8 @@ while Gear <> nil do
                 not SuddenDeathDmg then
                 Gear^.State:= Gear^.State or gstLoser;
 
-            spawnHealthTagForHH(Gear, dmg);
+            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
+                    gtHealthTag, dmg, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog; // spawnHealthTagForHH(Gear, dmg);
 
             RenderHealth(PHedgehog(Gear^.Hedgehog)^);
             RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
@@ -909,7 +915,10 @@ begin
            not CurrentHedgehog^.Gear^.Invulnerable then
            begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
            inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
-           spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
+           
+           AddGear(hwRound(CurrentHedgehog^.Gear^.X),
+                   hwRound(CurrentHedgehog^.Gear^.Y),
+                   gtHealthTag, tmpDmg, _0, _0, 0)^.Hedgehog:= CurrentHedgehog; // spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
            end;
         end;
     end;
