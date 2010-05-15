@@ -1695,13 +1695,13 @@ begin
         end
         else
         begin
+            gX := hwRound(Gear^.X);
+            gY := hwRound(Gear^.Y);
             // Standard fire
             if (Gear^.State and gsttmpFlag) = 0 then
             begin
                 Gear^.Radius := 9;
                 AmmoShove(Gear, 4, 100);
-                gX := hwRound(Gear^.X);
-                gY := hwRound(Gear^.Y);
                 Gear^.Radius := 1;
                 doMakeExplosion(gX, gY, 4, EXPLNoDamage);
                 if ((GameTicks and $7) = 0) and (Random(2) = 0) then
