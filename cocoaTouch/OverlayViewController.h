@@ -20,12 +20,15 @@
     PopoverMenuViewController *popupMenu;
     BOOL isPopoverVisible;
     
+    UITextField *writeChatTextField;
+    
     CGFloat initialDistanceForPinching;
     CGPoint gestureStartPoint;
 }
 
 @property (nonatomic,retain) id popoverController;
 @property (nonatomic,retain) PopoverMenuViewController *popupMenu;
+@property (nonatomic,retain) UITextField *writeChatTextField;
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
@@ -38,6 +41,8 @@
 -(void) showPopover;
 -(void) dismissPopover;
 -(void) dimOverlay;
--(void) showMenuAfterwards;
+-(void) activateOverlay;
+-(void) chatAppear;
+-(void) chatDisappear;
 
 @end

@@ -1212,15 +1212,19 @@ end;
 procedure GenMap;
 var x, y, w, c: Longword;
 begin
-hasBorder:= false;
+    hasBorder:= false;
 
-LoadThemeConfig;
-isMap:= false;
-if (GameFlags and gfForts) = 0 then
-   if Pathz[ptMapCurrent] <> '' then LoadMap
-                                else GenLandSurface
-                               else MakeFortsMap;
-AddProgress;
+    LoadThemeConfig;
+    isMap:= false;
+    if (GameFlags and gfForts) = 0 then
+        if Pathz[ptMapCurrent] <> '' then
+            LoadMap
+        else
+            GenLandSurface
+    else
+        MakeFortsMap;
+
+    AddProgress;
 
 {$IFDEF DEBUGFILE}LogLandDigest;{$ENDIF}
 

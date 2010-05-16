@@ -1,6 +1,6 @@
 /*
     SDL - Simple DirectMedia Layer
-    Copyright (C) 1997-2009 Sam Lantinga
+    Copyright (C) 1997-2010 Sam Lantinga
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -16,27 +16,20 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-    Sam Lantinga, mods for Hedgewars by Vittorio Giovara
-    slouken@libsdl.org, vittorio.giovara@gmail.com
+    Sam Lantinga
+    slouken@libsdl.org
 */
 
 #import <UIKit/UIKit.h>
-#import "SDL_video.h"
+#import "SDL_uikitopenglview.h"
 
 @class MainMenuViewController;
 @class OverlayViewController;
 
-@interface SDLUIKitDelegate:NSObject <UIApplicationDelegate> {
-	SDL_Window *window;
-	UIWindow *uiwindow;
-
-	MainMenuViewController *mainViewController;
+@interface SDLUIKitDelegate:NSObject<UIApplicationDelegate> {
+    MainMenuViewController *mainViewController;
     BOOL isInGame;
 }
-
-@property (readwrite, assign) SDL_Window *window;
-@property (readwrite, retain) UIWindow *uiwindow;
-
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(void) startSDLgame;
 

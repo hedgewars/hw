@@ -37,8 +37,7 @@ var FollowGear: PGear;
 {$IFDEF COUNTTICKS}
     cntTicks: LongWord;
 {$ENDIF}
-    wScreen: LongInt;
-    hScreen: LongInt;
+    cOffsetY: LongInt;
     
 procedure initModule;
 procedure freeModule;
@@ -97,12 +96,6 @@ var i, t: LongInt;
     end;
 begin
     missionTimer:= 0;
-    // initialized here because when initModule is called cScreenWidth/Height are not yet set
-    if (uWorld.wScreen = 0) and (uWorld.hScreen = 0) then
-    begin
-        uWorld.wScreen:= cScreenWidth; 
-        uWorld.hScreen:= cScreenHeight;
-    end;
 
 if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
    begin
@@ -241,7 +234,8 @@ x:= (cScreenWidth shr 1) - AMWidth + AMxShift;
 
 {$IFDEF IPHONEOS}
 Slot:= cMaxSlotIndex;
-y:= AMyOffset;
+x:= x - cOffsetY;
+y:= AMyOffset + 123;
 dec(y, BORDERSIZE);
 DrawSprite(sprAMCorners, x - BORDERSIZE, y, 0);
 for i:= 0 to cMaxSlotAmmoIndex do
@@ -403,12 +397,12 @@ begin
     WaterColorArray[2].a := Alpha;
     WaterColorArray[3].a := Alpha;
 
-    lw:= wScreen / cScaleFactor;
-    lh:= trunc(hScreen / cScaleFactor) + hScreen div 2 + 16;
+    lw:= cScreenWidth / cScaleFactor;
+    lh:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 + 16;
     
     // Water
     r.y:= OffsetY + WorldDy + cWaterLine;
-    if WorldDy < trunc(hScreen / cScaleFactor) + hScreen div 2 - cWaterLine then
+    if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine then
     begin
         if r.y < 0 then
             r.y:= 0;
@@ -443,7 +437,7 @@ procedure DrawWaves(Dir, dX, dY: LongInt; tnt: Byte);
 var VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
     lw, waves, shift: GLfloat;
 begin
-lw:= wScreen / cScaleFactor;
+lw:= cScreenWidth / cScaleFactor;
 waves:= lw * 2 / cWaveWidth;
 
 Tint(LongInt(tnt) * WaterColorArray[2].r div 255 + 255 - tnt,
@@ -667,20 +661,21 @@ offsetX:= cScreenHeight - 13;
 {$ELSE}
 offsetX:= 48;
 {$ENDIF}
+offsetY:= cOffsetY;
 if TurnTimeLeft <> 0 then
    begin
    i:= Succ(Pred(TurnTimeLeft) div 1000);
    if i>99 then t:= 112
       else if i>9 then t:= 96
                   else t:= 80;
-   DrawSprite(sprFrame, -(cScreenWidth shr 1) + t, cScreenHeight - offsetX, 1);
+   DrawSprite(sprFrame, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, 1);
    while i > 0 do
          begin
          dec(t, 32);
-         DrawSprite(sprBigDigit, -(cScreenWidth shr 1) + t, cScreenHeight - offsetX, i mod 10);
+         DrawSprite(sprBigDigit, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, i mod 10);
          i:= i div 10
          end;
-   DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4, cScreenHeight - offsetX, 0);
+   DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4 + offsetY, cScreenHeight - offsetX, 0);
    end;
 
 {$IFNDEF IPHONEOS}
@@ -856,10 +851,11 @@ if not isFirstFrame and ((missionTimer <> 0) or isPaused or fastUntilLag or (Gam
 
 // fps
 {$IFDEF IPHONEOS}
-offset:= 8;
+offsetX:= 8;
 {$ELSE}
-offset:= 10;
+offsetX:= 10;
 {$ENDIF}
+offsetY:= cOffsetY;
 inc(Frames);
 
 if cShowFPS or (GameType = gmtDemo) then inc(CountTicks, Lag);
@@ -883,7 +879,7 @@ if (GameType = gmtDemo) and (CountTicks >= 1000) then
    end;
 
 if timeTexture <> nil then
-   DrawTexture((cScreenWidth shr 1) - 10 - timeTexture^.w, offset + timeTexture^.h+5, timeTexture);
+   DrawTexture((cScreenWidth shr 1) - 20 - timeTexture^.w - offsetY, offsetX + timeTexture^.h+5, timeTexture);
 
 if cShowFPS then
    begin
@@ -900,7 +896,7 @@ if cShowFPS then
       SDL_FreeSurface(tmpSurface)
       end;
    if fpsTexture <> nil then
-      DrawTexture((cScreenWidth shr 1) - 50, offset, fpsTexture);
+      DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);
    end;
 
 if CountTicks >= 1000 then CountTicks:= 0;
@@ -1025,17 +1021,17 @@ if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then exit;
 
 if AMxShift < AMWidth then
     begin
-    {$IFDEF IPHONEOS}
+{$IFDEF IPHONEOS}
     if CursorPoint.X < cScreenWidth div 2 + AMxShift - AMWidth then CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMWidth;
     if CursorPoint.X > cScreenWidth div 2 + AMxShift - AMxOffset then CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMxOffset;
     if CursorPoint.Y < cScreenHeight - AMyOffset - SlotsNum * AMSlotSize then CursorPoint.Y:= cScreenHeight - AMyOffset - SlotsNum * AMSlotSize;
     if CursorPoint.Y > cScreenHeight - AMyOffset then CursorPoint.Y:= cScreenHeight - AMyOffset;
-    {$ELSE}
+{$ELSE}
     if CursorPoint.X < cScreenWidth div 2 + AMxShift - AMWidth + AMSlotSize then CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMWidth + AMSlotSize;
     if CursorPoint.X > cScreenWidth div 2 + AMxShift - AMxOffset then CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMxOffset;
     if CursorPoint.Y > AMyOffset + (SlotsNum + 1) * AMSlotSize then CursorPoint.Y:= AMyOffset + (SlotsNum + 1) * AMSlotSize;
     if CursorPoint.Y < AMyOffset + AMSlotSize then CursorPoint.Y:= AMyOffset + AMSlotSize;
-    {$ENDIF}
+{$ENDIF}
     prevPoint:= CursorPoint;
     if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
     exit
@@ -1140,10 +1136,6 @@ begin
     WorldDx:= -512;
     WorldDy:= -256;
     
-    // really initalized in initWorld
-    uWorld.wScreen:= 0; 
-    uWorld.hScreen:= 0;
-    
     FPS:= 0;
     CountTicks:= 0;
     SoundTimerTicks:= 0;
@@ -1151,6 +1143,7 @@ begin
     prevPoint.Y:= 0;
     missionTimer:= 0;
     missionTex:= nil;
+    cOffsetY:= 0;
     
     FillChar(Captions, sizeof(Captions), 0)
 end;

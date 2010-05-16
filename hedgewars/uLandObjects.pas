@@ -518,18 +518,19 @@ end;
 
 procedure LoadThemeConfig;
 begin
-ReadThemeInfo(ThemeObjects, SprayObjects)
+    ReadThemeInfo(ThemeObjects, SprayObjects)
 end;
 
 procedure FreeLandObjects();
 var i: Longword;
 begin
-for i:= 0 to Pred(MAXTHEMEOBJECTS) do
-    if ThemeObjects.objs[i].Surf <> nil then
-        SDL_FreeSurface(ThemeObjects.objs[i].Surf);
-for i:= 0 to Pred(MAXTHEMEOBJECTS) do
-    if SprayObjects.objs[i].Surf <> nil then
-        SDL_FreeSurface(SprayObjects.objs[i].Surf);
+    for i:= 0 to Pred(MAXTHEMEOBJECTS) do
+    begin
+        if ThemeObjects.objs[i].Surf <> nil then
+            SDL_FreeSurface(ThemeObjects.objs[i].Surf);
+        if SprayObjects.objs[i].Surf <> nil then
+            SDL_FreeSurface(SprayObjects.objs[i].Surf);
+    end;
 end;
 
 end.

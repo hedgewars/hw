@@ -12,18 +12,12 @@
 @class GameConfigViewController;
 
 @interface MainMenuViewController : UIViewController {
-    UIView *cover;
     UILabel *versionLabel;
     SplitViewRootController *splitRootViewController;
     GameConfigViewController *gameConfigViewController;
 }
 
-@property (nonatomic,retain) UIView *cover;
 @property (nonatomic,retain) IBOutlet UILabel *versionLabel;
-
--(void) appear;
--(void) disappear;
--(void) hideBehind;
 
 -(IBAction) switchViews:(id)sender;
 @end

@@ -254,8 +254,9 @@
         // the % prevents a strange bug that occurs sporadically
         NSString *themeName = [self.themeArray objectAtIndex:row % [self.themeArray count]];
         cell.textLabel.text = themeName;
-        UIImage *image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/Icon.png",THEMES_DIRECTORY(),themeName]];
-        cell.imageView.image = [image scaleToSize:CGSizeMake(40, 40)];
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/Icon.png",THEMES_DIRECTORY(),themeName]];
+        cell.imageView.image = image;
+        [image release];
     } else {
         cell.textLabel.text = [self.mapArray objectAtIndex:row];
         cell.imageView.image = nil;

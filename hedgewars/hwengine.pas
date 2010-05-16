@@ -178,12 +178,11 @@ end;
 ///////////////////
 procedure MainLoop; 
 var PrevTime, CurrTime: Longword;
-    {$IFNDEF IPHONEOS}event: TSDL_Event;{$ENDIF}
+    event: TSDL_Event;
 begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
     begin
-{$IFNDEF IPHONEOS}
 // have to remove this cycle because otherwise it segfaults at exit
         while SDL_PollEvent(@event) <> 0 do
         begin
@@ -191,22 +190,26 @@ begin
                 SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
 {$IFDEF SDL13}
                 SDL_WINDOWEVENT:
+                    if event.wevent.event = SDL_WINDOWEVENT_SHOWN then
+                        cHasFocus:= true;
 {$ELSE}
                 SDL_ACTIVEEVENT:
-{$ENDIF}
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
                         cHasFocus:= event.active.gain = 1;
+{$ENDIF}
+{$IFNDEF IPHONEOS}
                 //SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
                 SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
                 SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
+{$ENDIF}
                 SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
                 SDL_JOYHATMOTION: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
                 SDL_JOYBUTTONDOWN: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, true);
                 SDL_JOYBUTTONUP: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
                 SDL_QUITEV: isTerminated:= true
-            end; // end case event.type_ of
-        end; // end while SDL_PollEvent(@event) <> 0 do
-{$ENDIF}
+            end; // end case event.type_
+        end; // end while SDL_PollEvent(@event) <> 0
+
         if isTerminated = false then
         begin
             CurrTime:= SDL_GetTicks;
@@ -402,7 +405,6 @@ begin
     uScript.freeModule;
     // uMisc closes the debug log.
     uMisc.freeModule;
-
 end;
 
 /////////////////////////

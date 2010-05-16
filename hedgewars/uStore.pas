@@ -84,7 +84,7 @@ procedure Tint(r, g, b, a: Byte); inline;
 procedure Tint(c: Longword); inline;
 
 implementation
-uses uMisc, uConsole, uLocale{$IFDEF IPHONEOS}, PascalExports{$ENDIF};
+uses uMisc, uConsole, uLocale;
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 

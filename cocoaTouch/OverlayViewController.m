@@ -11,11 +11,16 @@
 #import "PascalImports.h"
 #import "CGPointUtils.h"
 #import "SDL_mouse.h"
+#import "SDL_config_iphoneos.h"
 #import "PopoverMenuViewController.h"
 #import "CommodityFunctions.h"
 
+#define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
+#define HIDING_TIME_NEVER   [NSDate dateWithTimeIntervalSinceNow:10000]
+
+
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu;
+@synthesize popoverController, popupMenu, writeChatTextField;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -33,7 +38,7 @@
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     CGRect rect = [[UIScreen mainScreen] bounds];
     CGRect usefulRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
-    UIView *sdlView = [[SDLUIKitDelegate sharedAppDelegate].uiwindow viewWithTag:SDL_VIEW_TAG];
+    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:12345];
     
     [UIView beginAnimations:@"rotation" context:NULL];
     [UIView setAnimationDuration:0.8f];
@@ -42,21 +47,31 @@
         case UIDeviceOrientationLandscapeLeft:
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
+            [self chatDisappear];
+            [dimTimer setFireDate:HIDING_TIME_DEFAULT];
             HW_setLandscape(YES);
             break;
         case UIDeviceOrientationLandscapeRight:
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(-90));
+            [self chatDisappear];
+            [dimTimer setFireDate:HIDING_TIME_DEFAULT];
             HW_setLandscape(YES);
             break;
         case UIDeviceOrientationPortrait:
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(270));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
+            [self chatAppear];
+            [self activateOverlay];
+            [dimTimer setFireDate:HIDING_TIME_NEVER];
             HW_setLandscape(NO);
             break;
         case UIDeviceOrientationPortraitUpsideDown:
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
+            [self chatAppear];
+            [self activateOverlay];
+            [dimTimer setFireDate:HIDING_TIME_NEVER];
             HW_setLandscape(NO);
             break;
         default:
@@ -64,8 +79,32 @@
             break;
     }
     self.view.frame = usefulRect;
-    sdlView.frame = usefulRect;
+    //sdlView.frame = usefulRect;
     [UIView commitAnimations];
+}
+
+-(void) chatAppear {
+    if (writeChatTextField == nil) {
+        writeChatTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 100, 768, [UIFont systemFontSize]+8)];
+        writeChatTextField.textColor = [UIColor whiteColor];
+        writeChatTextField.backgroundColor = [UIColor blueColor];
+        writeChatTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        writeChatTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+        writeChatTextField.enablesReturnKeyAutomatically = NO;
+        writeChatTextField.keyboardAppearance = UIKeyboardAppearanceDefault;
+        writeChatTextField.keyboardType = UIKeyboardTypeDefault;
+        writeChatTextField.returnKeyType = UIReturnKeyDefault;
+        writeChatTextField.secureTextEntry = NO;	
+        [self.view addSubview:writeChatTextField];
+    }
+    writeChatTextField.alpha = 1;
+    //[self activateOverlay];
+}
+
+-(void) chatDisappear {
+    writeChatTextField.alpha = 0;
+    [writeChatTextField resignFirstResponder];
+    [dimTimer setFireDate:HIDING_TIME_DEFAULT];
 }
 
 -(void) viewDidLoad {
@@ -89,31 +128,6 @@
                                              selector:@selector(dismissPopover)
                                                  name:@"dismissPopover"
                                                object:nil];
-    // present the overlay after 2 seconds
-    [NSTimer scheduledTimerWithTimeInterval:2
-                                     target:self
-                                   selector:@selector(showMenuAfterwards)
-                                   userInfo:nil
-                                    repeats:NO];
-}
-
--(void) viewDidUnload {
-    self.popoverController = nil;
-    self.popupMenu = nil;
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-	[dimTimer invalidate];
-    [popupMenu release];
-    [popoverController release];
-    // dimTimer is autoreleased
-    [super dealloc];
-}
-
-// draws the controller overlay after the sdl window has taken control
--(void) showMenuAfterwards {
-    [[SDLUIKitDelegate sharedAppDelegate].uiwindow bringSubviewToFront:self.view];
     
     // need to split paths because iphone doesn't rotate (so we don't need to subscribe to any notification
     // nor perform engine actions when rotating
@@ -134,13 +148,29 @@
 	[UIView commitAnimations];
 }
 
+-(void) viewDidUnload {
+    self.writeChatTextField = nil;
+    self.popoverController = nil;
+    self.popupMenu = nil;
+    [super viewDidUnload];
+}
+
+-(void) dealloc {
+	[dimTimer invalidate];
+    [writeChatTextField release];
+    [popupMenu release];
+    [popoverController release];
+    // dimTimer is autoreleased
+    [super dealloc];
+}
+
 // dim the overlay when there's no more input for a certain amount of time
 -(IBAction) buttonReleased:(id) sender {
 	HW_allKeysUp();
-    [dimTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2.7]];
+    [dimTimer setFireDate:HIDING_TIME_DEFAULT];
 }
 
-// nice transition for dimming
+// nice transition for dimming, should be called only by the timer himself
 -(void) dimOverlay {
     [UIView beginAnimations:@"overlay dim" context:NULL];
    	[UIView setAnimationDuration:0.6];
@@ -151,7 +181,7 @@
 // set the overlay visible and put off the timer for enough time
 -(void) activateOverlay {
     self.view.alpha = 1;
-    [dimTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:1000]];
+    [dimTimer setFireDate:HIDING_TIME_NEVER];
 }
 
 // issue certain action based on the tag of the button 
@@ -208,6 +238,7 @@
 // on iphone instead just use the tableViewController directly (and implement manually all animations)
 -(IBAction) showPopover{
     isPopoverVisible = YES;
+    CGRect anchorForPopover;
     Class popoverControllerClass = NSClassFromString(@"UIPopoverController");
     if (popoverControllerClass) {
 #ifdef __IPHONE_3_2
@@ -215,10 +246,15 @@
         popoverController = [[popoverControllerClass alloc] initWithContentViewController:popupMenu];
         [popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
         [popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
+
+        if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation]))
+            anchorForPopover = CGRectMake(960, 0, 220, 32);
+        else
+            anchorForPopover = CGRectMake(736, 0, 220, 32);
         
-        [popoverController presentPopoverFromRect:CGRectMake(960, 0, 220, 32)
+        [popoverController presentPopoverFromRect:anchorForPopover
                                            inView:self.view
-                         permittedArrowDirections:UIPopoverArrowDirectionUp 
+                         permittedArrowDirections:UIPopoverArrowDirectionUp
                                          animated:YES];
 #endif
     } else {
@@ -235,7 +271,7 @@
     popupMenu.tableView.scrollEnabled = NO;
 }
 
-// on ipad just dismiss it, on iphone transtion on the right
+// on ipad just dismiss it, on iphone transtion to the right
 -(void) dismissPopover {
     if (YES == isPopoverVisible) {
         isPopoverVisible = NO;
@@ -252,13 +288,14 @@
         
             [popupMenu.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.35];
             [popupMenu performSelector:@selector(release) withObject:nil afterDelay:0.35];
-            
-            //[dimTimer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2.7]];
         }
         [self buttonReleased:nil];
     }
 }
 
+-(void) textFieldDoneEditing:(id) sender{
+    [sender resignFirstResponder];
+}
 
 #pragma mark -
 #pragma mark Custom touch event handling
@@ -272,6 +309,10 @@
     
     if (isPopoverVisible) {
         [self dismissPopover];
+    }
+    if (writeChatTextField) {
+        [self.writeChatTextField resignFirstResponder];
+        [dimTimer setFireDate:HIDING_TIME_DEFAULT];
     }
     
     gestureStartPoint = [touch locationInView:self.view];

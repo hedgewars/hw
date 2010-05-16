@@ -78,7 +78,6 @@
 		6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880F114AA34C00BA94A9 /* uWorld.pas */; };
 		6179885C114AA48A00BA94A9 /* CGPointUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798856114AA48A00BA94A9 /* CGPointUtils.c */; };
 		61798869114AA4AA00BA94A9 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798864114AA4AA00BA94A9 /* SDL_uikitappdelegate.m */; };
-		6179886B114AA4AA00BA94A9 /* SDL_uikitwindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798868114AA4AA00BA94A9 /* SDL_uikitwindow.m */; };
 		6179887D114AA4D000BA94A9 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179886F114AA4D000BA94A9 /* MainMenuViewController.m */; };
 		61798889114AA4E600BA94A9 /* GameSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798888114AA4E600BA94A9 /* GameSetup.m */; };
 		617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */; };
@@ -1076,7 +1075,6 @@
 				6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */,
 				6179885C114AA48A00BA94A9 /* CGPointUtils.c in Sources */,
 				61798869114AA4AA00BA94A9 /* SDL_uikitappdelegate.m in Sources */,
-				6179886B114AA4AA00BA94A9 /* SDL_uikitwindow.m in Sources */,
 				6179887D114AA4D000BA94A9 /* MainMenuViewController.m in Sources */,
 				61798889114AA4E600BA94A9 /* GameSetup.m in Sources */,
 				61CE250D115E749A0098C467 /* OverlayViewController.m in Sources */,

@@ -14,7 +14,7 @@
 #import "CommodityFunctions.h"
 
 @implementation MainMenuViewController
-@synthesize cover, versionLabel;
+@synthesize versionLabel;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
 	return rotationManager(interfaceOrientation);
@@ -90,62 +90,24 @@
 }
 
 #pragma mark -
--(void) appear {
-    [[SDLUIKitDelegate sharedAppDelegate].uiwindow addSubview:self.view];
-    [self release];
-    
-    [UIView beginAnimations:@"inserting main controller" context:NULL];
-	[UIView setAnimationDuration:1];
-	self.view.alpha = 1;
-	[UIView commitAnimations];
-    
-    [NSTimer scheduledTimerWithTimeInterval:0.7 target:self selector:@selector(hideBehind) userInfo:nil repeats:NO];
-}
-
--(void) disappear {
-    if (nil != cover)
-        [cover release];
-    
-    [UIView beginAnimations:@"removing main controller" context:NULL];
-	[UIView setAnimationDuration:1];
-	self.view.alpha = 0;
-	[UIView commitAnimations];
-    [self retain];
-    //[self.view removeFromSuperview];
-}
-
-// this is a silly way to hide the sdl contex that remained active
--(void) hideBehind {
-    if (nil == cover) {
-        cover= [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        cover.backgroundColor = [UIColor blackColor];
-    }
-    [[SDLUIKitDelegate sharedAppDelegate].uiwindow insertSubview:cover belowSubview:self.view];
-}
-
-#pragma mark -
 -(IBAction) switchViews:(id) sender {
     UIButton *button = (UIButton *)sender;
     UIAlertView *alert;
-    NSString *configNibName;
-    NSString *debugStr;
-    
+    NSString *debugStr, *configNibName;
+
     switch (button.tag) {
         case 0:
-            if (1) { // bug in UIModalTransitionStylePartialCurl?
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-                    configNibName = @"GameConfigViewController-iPad";
-                else
-                    configNibName = @"GameConfigViewController-iPhone";
-
-                gameConfigViewController = [[GameConfigViewController alloc] initWithNibName:configNibName
-                                                                                      bundle:nil];
-#ifdef __IPHONE_3_2
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-                    gameConfigViewController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
-#endif
-            }
+            // bug in UIModalTransitionStylePartialCurl, displays the controller awkwardly if it is not allocated every time
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                configNibName = @"GameConfigViewController-iPad";
+            else
+                configNibName = @"GameConfigViewController-iPhone";
             
+            gameConfigViewController = [[GameConfigViewController alloc] initWithNibName:configNibName bundle:nil];        
+#ifdef __IPHONE_3_2
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                gameConfigViewController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+#endif
             [self presentModalViewController:gameConfigViewController animated:YES];
             break;
         case 2:
@@ -190,7 +152,6 @@
 
 
 -(void) viewDidUnload {
-    self.cover = nil;
     self.versionLabel = nil;
     gameConfigViewController = nil;
     splitRootViewController = nil;
@@ -199,7 +160,6 @@
 
 -(void) dealloc {
     [versionLabel release];
-    [cover release];
     [splitRootViewController release];
     [gameConfigViewController release];
 	[super dealloc];

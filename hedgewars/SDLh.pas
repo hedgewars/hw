@@ -113,7 +113,8 @@ const
     SDL_APPINPUTFOCUS    = 2;
     SDL_BUTTON_WHEELUP   = 4;
     SDL_BUTTON_WHEELDOWN = 5;
-        
+
+
 {*begin SDL_Event binding*}
 
 {$IFDEF SDL13}
@@ -196,7 +197,7 @@ const
 {$ENDIF}
 
 {$IFDEF SDL13}
-// SDL_WindowFlags (enum)
+    // SDL_WindowFlags (enum)
     SDL_WINDOW_FULLSCREEN = $00000001;         //*< fullscreen window, implies borderless */
     SDL_WINDOW_OPENGL = $00000002;             //*< window usable with OpenGL context */
     SDL_WINDOW_SHOWN = $00000004;              //*< window is visible */
@@ -208,6 +209,22 @@ const
     SDL_WINDOW_INPUT_FOCUS = $00000200;        //*< window has input focus */
     SDL_WINDOW_MOUSE_FOCUS = $00000400;        //*< window has mouse focus */
     SDL_WINDOW_FOREIGN = $00000800;            //*< window not created by SDL */
+    
+    // SDL_WindowEventID (enum)
+    SDL_WINDOWEVENT_NONE = 0;            //*< Never used
+    SDL_WINDOWEVENT_SHOWN = 1;           //*< Window has been shown
+    SDL_WINDOWEVENT_HIDDEN = 2;          //*< Window has been hidden
+    SDL_WINDOWEVENT_EXPOSED = 3;         //*< Window has been exposed and should be redrawn 
+    SDL_WINDOWEVENT_MOVED = 4;           //*< Window has been moved to data1, data2
+    SDL_WINDOWEVENT_RESIZED = 5;         //*< Window size changed to data1xdata2
+    SDL_WINDOWEVENT_MINIMIZED = 6;       //*< Window has been minimized
+    SDL_WINDOWEVENT_MAXIMIZED = 7;       //*< Window has been maximized
+    SDL_WINDOWEVENT_RESTORED = 8;        //*< Window has been restored to normal size and position
+    SDL_WINDOWEVENT_ENTER = 9;           //*< Window has gained mouse focus
+    SDL_WINDOWEVENT_LEAVE = 10;          //*< Window has lost mouse focus
+    SDL_WINDOWEVENT_FOCUS_GAINED = 11;   //*< Window has gained keyboard focus
+    SDL_WINDOWEVENT_FOCUS_LOST = 12;     //*< Window has lost keyboard focus
+    SDL_WINDOWEVENT_CLOSE = 13;          //*< The window manager requests that the window be closed */
 {$ENDIF}
 
     {* SDL_mixer *}
@@ -336,13 +353,6 @@ type
             2: (unknown: TUnknown);
             end;
 
-    TSDL_KeySym = record
-        scancode: Byte;
-        sym: Longword;
-        modifier: Longword;
-        unicode: Word;
-        end;
-
 
 {* SDL_Event type definition *}
 
@@ -357,9 +367,23 @@ type
         padding1, padding2, padding3: byte;
         data1, data2: LongInt;
         end;
+        
+    TSDL_KeySym = record
+        scancode,
+        sym,
+        modifier,
+        unicode: LongInt;
+        end;
 
 // implement SDL_TextEditingEvent + SDL_TextInputEvent for sdl13
 {$ELSE}
+    TSDL_KeySym = record
+        scancode: Byte;
+        sym: Longword;
+        modifier: Longword;
+        unicode: Word;
+        end;
+
     // these two are present in sdl1.3 but only for backward compatibility
     // and in 1.3 type_ is LongInt, not byte
     TSDL_ActiveEvent = record
@@ -404,7 +428,6 @@ type
         end;
 
     TSDL_MouseButtonEvent = record
-
 {$IFDEF SDL13}
         _type: LongInt;
         windowID: LongInt;
@@ -432,7 +455,11 @@ type
 {$ENDIF}
 
     TSDL_JoyAxisEvent = record
+{$IFDEF SDL13}
+        type_: LongInt;
+{$ELSE}
         type_: Byte;
+{$ENDIF}
         which: Byte;
         axis: Byte;
 {$IFDEF SDL13}
@@ -486,11 +513,11 @@ type
 
     PSDL_Event = ^TSDL_Event;
     TSDL_Event = record
-        case Byte of
 {$IFDEF SDL13}
-            SDL_FIRSTEVENT: (type_: byte);
+        case LongInt of
+            SDL_FIRSTEVENT: (type_: LongInt);
             SDL_QUITEV: (quit: TSDL_QuitEvent);
-            SDL_WINDOWEVENT: (active: TSDL_WindowEvent);
+            SDL_WINDOWEVENT: (wevent: TSDL_WindowEvent);
             SDL_KEYDOWN,
             SDL_KEYUP: (key: TSDL_KeyboardEvent);
             SDL_TEXTEDITING,
@@ -505,6 +532,7 @@ type
             SDL_JOYBUTTONDOWN,
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
 {$ELSE}
+        case Byte of
             SDL_NOEVENT: (type_: byte);
             SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
             SDL_KEYDOWN,

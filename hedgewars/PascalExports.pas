@@ -13,7 +13,7 @@
 unit PascalExports;
 
 interface
-uses uKeys, uConsole, uStore, GLunit, uMisc, uWorld, hwengine;
+uses uKeys, GLunit, uWorld, hwengine;
 
 {$INCLUDE "config.inc"}
 
@@ -140,23 +140,14 @@ begin
 end;
 
 procedure HW_setLandscape(landscape: boolean); cdecl; export;
-var tmp:LongInt;
 begin
     if landscape then
     begin
-        rotationQt:= -90;
-        uStore.wScreen:= cScreenWidth;
-        uStore.hScreen:= cScreenHeight;
-        uWorld.wScreen:= cScreenWidth;
-        uWorld.hScreen:= cScreenHeight;
+        cOffsetY:= 0;
     end
     else
     begin
-        rotationQt:= 270;
-        uStore.wScreen:= cScreenHeight;
-        uStore.hScreen:= cScreenWidth;
-        uWorld.wScreen:= cScreenHeight;
-        uWorld.hScreen:= cScreenWidth;
+        cOffsetY:= 120;
     end;
 end;
 {$ENDIF}

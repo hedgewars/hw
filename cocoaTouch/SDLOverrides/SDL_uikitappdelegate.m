@@ -20,10 +20,11 @@
  slouken@libsdl.org, vittorio.giovara@gmail.com
 */
 
-#import <pthread.h>
 #import "SDL_uikitappdelegate.h"
 #import "SDL_uikitopenglview.h"
+#import "SDL_uikitwindow.h"
 #import "SDL_events_c.h"
+#import "../SDL_sysvideo.h"
 #import "jumphack.h"
 #import "SDL_video.h"
 #import "GameSetup.h"
@@ -54,7 +55,6 @@ int main (int argc, char *argv[]) {
 }
 
 @implementation SDLUIKitDelegate
-@synthesize uiwindow, window;
 
 // convenience method
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -64,70 +64,74 @@ int main (int argc, char *argv[]) {
 
 -(id) init {
 	if (self = [super init]){
-        self.uiwindow = nil;
-        self.window = NULL;
         mainViewController = nil;
         isInGame = NO;
-        return self;
-    } else 
-        return nil;
+    }
+    return self;
 }
 
 -(void) dealloc {
-    SDL_DestroyWindow(self.window);
     [mainViewController release];
-	[uiwindow release];
 	[super dealloc];
 }
 
 // main routine for calling the actual game engine
 -(IBAction) startSDLgame {
-    [mainViewController disappear];
+    [UIView beginAnimations:@"removing main controller" context:NULL];
+	[UIView setAnimationDuration:1];
+	mainViewController.view.alpha = 0;
+	[UIView commitAnimations];
 
     // pull out useful configuration info from various files
 	GameSetup *setup = [[GameSetup alloc] init];
 	[setup startThread:@"engineProtocol"];
 	const char **gameArgs = [setup getSettings];
 	[setup release];
-    
-    OverlayViewController *overlayController;
-    // overlay with controls, become visible after 2 seconds
-    overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
-    
-    [uiwindow addSubview:overlayController.view];
-    [overlayController release];
 
+    //NSLog(@"%@",[[[UIApplication sharedApplication] windows]);
+    // since the sdlwindow is not yet created, we add the overlayController with a delay
+    [self performSelector:@selector(later) withObject:nil afterDelay:4];
+    
+    // this is the pascal fuction that starts the game (wrapped around isInGame)
     isInGame = YES;
-	Game(gameArgs); // this is the pascal fuction that starts the game
+	Game(gameArgs);
     isInGame = NO;
     
     free(gameArgs);
-    [overlayController.view removeFromSuperview];
+    //[overlayController.view removeFromSuperview];
     
-    [mainViewController appear];
+    [UIView beginAnimations:@"inserting main controller" context:NULL];
+	[UIView setAnimationDuration:1];
+	mainViewController.view.alpha = 1;
+	[UIView commitAnimations];
 }
 
-// override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
+-(void) later {
+    // overlay with controls, become visible after 4 seconds, with a transparency effect
+    OverlayViewController *overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
+    
+    [[[UIApplication sharedApplication] keyWindow] addSubview:overlayController.view];
+    [overlayController release];
+}
+
+// override the direct execution of SDL_main to allow us to implement the frontend (or even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
-	//[application setStatusBarHidden:YES animated:NO];
-    //[application setStatusBarHidden:YES withAnimation:NO];
     [application setStatusBarHidden:YES];
     [application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];  
     
-	self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	self.uiwindow.backgroundColor = [UIColor blackColor];
+    UIWindow *uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	uiwindow.backgroundColor = [UIColor blackColor];
 	
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
     else
         mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPhone" bundle:nil];
+
 	[uiwindow addSubview:mainViewController.view];
-    
+	[uiwindow makeKeyAndVisible];
+
 	// Set working directory to resource path
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath:[[NSBundle mainBundle] resourcePath]];
-
-	[uiwindow makeKeyAndVisible];
-	[uiwindow layoutSubviews];
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {
@@ -141,14 +145,42 @@ int main (int argc, char *argv[]) {
 
 -(void) applicationWillResignActive:(UIApplication *)application {
 	//NSLog(@"%@", NSStringFromSelector(_cmd));
-    if (isInGame) HW_pause();
-	//SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
+    if (isInGame) {
+        HW_pause();
+        
+        // Send every window on every screen a MINIMIZED event.
+        SDL_VideoDevice *_this = SDL_GetVideoDevice();
+        if (!_this)
+            return;
+
+        int i;
+        for (i = 0; i < _this->num_displays; i++) {
+            const SDL_VideoDisplay *display = &_this->displays[i];
+            SDL_Window *window;
+            for (window = display->windows; window != nil; window = window->next)
+                SDL_SendWindowEvent(window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
+        }
+    }
 }
 
 -(void) applicationDidBecomeActive:(UIApplication *)application {
 	//NSLog(@"%@", NSStringFromSelector(_cmd));
-    if (isInGame) HW_pause();
-	//SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_RESTORED, 0, 0);
+    if (isInGame) {
+        HW_pause();
+
+        // Send every window on every screen a RESTORED event.
+        SDL_VideoDevice *_this = SDL_GetVideoDevice();
+        if (!_this)
+            return;
+
+        int i;
+        for (i = 0; i < _this->num_displays; i++) {
+            const SDL_VideoDisplay *display = &_this->displays[i];
+            SDL_Window *window;
+            for (window = display->windows; window != nil; window = window->next)
+                SDL_SendWindowEvent(window, SDL_WINDOWEVENT_RESTORED, 0, 0);
+        }
+    }
 }
 
 @end

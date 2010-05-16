@@ -10,6 +10,7 @@
 #import "PopoverMenuViewController.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
+#import "SDL_sysvideo.h"
 
 @implementation PopoverMenuViewController
 @synthesize menuList;
@@ -75,7 +76,12 @@
             break;
         case 1:
 			HW_chat();
-            //SDL_iPhoneKeyboardShow([SDLUIKitDelegate sharedAppDelegate].window);
+            /*
+            SDL_VideoDevice *_this = SDL_GetVideoDevice();
+            SDL_VideoDisplay *display = &_this->displays[0];
+            SDL_Window *window = display->windows;
+            SDL_iPhoneKeyboardShow(window);
+            */
             break;
         case 2:
             // expand the view (and table) so that the actionsheet can be selected on the iPhone
