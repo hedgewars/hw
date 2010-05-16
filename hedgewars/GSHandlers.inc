@@ -3300,10 +3300,16 @@ begin
                 // make the ball visible
             end;
 
-    if destroyGear then deleteGear(oldPortal);
+    if destroyGear then oldPortal^.Timer:= 0;
 end;
 
 begin
+    if (Gear^.Timer < 1) then
+    begin
+        deleteGear(Gear);
+        EXIT;
+    end;
+    
     doPortalColorSwitch();
 
     Gear^.X := Gear^.X + Gear^.dX;
@@ -3378,13 +3384,11 @@ begin
             while iterator <> nil do
             begin
                 if (iterator^.Kind = gtPortal) then
-                    if (iterator <> newPortal) then
+                    if (iterator <> newPortal) and (iterator^.Timer > 0) then
                     begin
                         if (iterator^.Tag and 2) = (newPortal^.Tag and 2) then
                         begin
-                            iterator := iterator^.PrevGear;
-                            deleteGear(iterator^.NextGear);
-                            continue;
+                            iterator^.Timer:= 0;
                         end
                         else
                         begin
