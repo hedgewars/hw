@@ -60,11 +60,11 @@
 ; Hog (%1) died
 ;02:00=%1 has kicked the bucket!
 02:00=%1 har sett ljuset!
-;02:00=%1 såg inte det komma!
+02:00=%1 såg inte den komma!
 02:00=%1 vinkar farväl!
 02:00=%1 har kommit till en bättre plats!
 02:00=%1 träffar sin skapare!
-;02:00=%1 kan inte hålla sig kvar längre!
+02:00=%1 kunde inte hålla sig kvar längre!
 02:00=%1 har gjort sin plikt!
 02:00=%1 gör den slutliga uppoffringen!
 02:00=%1 lämnar det jordiska!
@@ -73,7 +73,7 @@
 ;02:00=%1 says peace out!
 02:00=%1 kommer bli väl ihågkommen!
 02:00=%1 har en aneurysm!
-;02:00=%1 lämnar bakom sig fru och barn
+02:00=%1 lämnar bakom sig fru och barn
 02:00=%1 har skjutit sin sista raket
 02:00=%1 har kastat sin sista granat
 02:00=%1 har bakat sin sista tårta
@@ -95,7 +95,7 @@
 02:00=%1 har lämnat byggnaden
 02:00=%1 går i dinosauriernas fotspår
 02:00=%1 för igelkottarna ett steg närmare utrotning
-;02:00=%1 får mina ögon att tåras
+02:00=%1 får mina ögon att tåras
 02:00=%1 är en före detta igelkott
 ;02:00=%1 is pushing up the daisies
 02:00=%1 har upphört att vara
@@ -124,8 +124,8 @@
 02:01=%1 simmar som en sten!
 02:01=%1 flyter som en tegelsten!
 02:01=%1 kollar vad som finns i den djupa änden
-;02:01=%1 goes glug glug glug
-;02:01=%1 goes splash
+02:01=%1 låter blub blub blub
+02:01=%1 låter splash
 ;02:01=%1 forgot his armbands
 02:01=%1 borde verkligen ha tagit simlektioner
 02:01=%1 lämnade sin surfingbräda hemma
@@ -411,37 +411,37 @@
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attackera fienden med en enkel granat.|Exploderar när tiden når noll.|1-5: Ställ in granatens tid|Attack: Håll ner för att kasta med mer kraft
 04:01=Attackera fienden med en splitterbomb.|Delas upp i små bomber när tiden når noll.|1-5: Ställ in granatens tid|Attack: Håll ner för att kasta med mer kraft
-04:02=Attackera fienden med en projektil som|kan påverkas av vinden.|Attack: Håll ner för att skjuta med mer kraft
+04:02=Attackera fienden med en projektil som kan|påverkas av vinden.|Attack: Håll ner för att skjuta med mer kraft
 04:03=Avfyra ett explosivt bi som låser sig på det valda|målet. Öka precisionen genom att inte skjuta med|full kraft.|Markör: Välj mål|Attack: Håll ner för att skjuta med mer kraft
 04:04=Attackera fienden med ett hagelgevär med två|skott. Tack vare sin spridning behöver du inte|träffa direkt för att skada motståndarna.|Attack: Skjut (flera gånger)
 04:05=Rör dig under marken! Använd slagborren för att|borra ett hål i marken och nå andra områden.|Attack: Börja eller sluta gräva
-04:06=Uttråkad? Finns det inget sätt att attackera?|Spara på ammunition? Inga problem! Bara hoppa över|turen, ynkrygg!|Attack: Hoppa över turen utan att strida
+04:06=Uttråkad? Finns det inget sätt att attackera?|Spara på ammunition? Inga problem! Bara hoppa|över turen, ynkrygg!|Attack: Hoppa över turen utan att strida
 04:07=Tillryggalägg stora avstånd med tajmade skott med|repet. Använd din fart till att glida in i andra|igelkottar eller släppa granater och andra vapen.|Attack: Skjut eller släpp repet|Långhopp: Släpp granater eller liknande vapen
 04:08=Håll fienden borta genom att släppa en mina i en|trång passage eller precis vid deras fötter. Se|till att ge dig av innan du aktiverar den själv!|Attack: Släpp ner minan på marken bredvid
 04:09=Har du svårt att sikta? Använd den här pistolen|till att attackera med upp till fyra skott.|Attack: Skjut (flera gånger)
-04:10=Brutalt våld är alltid en möjlighet. Släpp ner den här klassiska dynamiten bredvid fienden och fly.|Attack: Släpp ner dynamit på marken bredvid
-04:11=Bli av med fientliga igelkottar genom att slå dem|över kartans kanter eller ner i vattnet. Eller|kanske slå iväg några minor till vännerna?|Attack: Slå till allt framför dig
-04:12=Gå nära och var intim för att släppa lös kraften från den här nästan dödliga kampsportstekniken.|Attack: Utför den Flammande näven
+04:10=Brutalt våld är alltid en möjlighet. Släpp ner den|här klassiska dynamiten bredvid fienden och fly.|Attack: Släpp ner dynamit på marken bredvid
+04:11=Bli av med fientliga igelkottar genom att slå dem|över kartans kanter eller ner i vattnet. Eller kanske|slå iväg några minor till vännerna?|Attack: Slå till allt framför dig
+04:12=Gå nära och var intim för att släppa lös kraften|från den här nästan dödliga kampsportstekniken.|Attack: Utför den Flammande näven
 04:13=UNUSED
 04:14=Höjdrädd? Då borde du greppa tag i en fallskärm.|Den fälls ut när du faller för långt och|igelkotten tar ingen fallskada.|Attack: Utveckla fallskärmen|Långhopp: Släpp granater eller liknande vapen
 04:15=Kalla på ett flygplan som attackerar fienden med|ett bombnedslag.|Vänster/Höger: Bestäm attackriktning|Markör: Välj målområde
 04:16=Kalla på ett flygplan som släpper ner flera minor|i målområdet.|Vänster/Höger: Bestäm attackriktning|Markör: Välj målområde
 04:17=Behöver du gömma dig? Använd blåslampan för att|gräva en tunnel in i marken för skydd.|Attack: Börja eller sluta gräva
 04:18=Behöver du extra skydd eller vill du passera|opasserbar mark? Placera några balkar som du vill.|Vänster/Höger: Välj balk att placera|Markör: Placera balk på en godkänd plats
-04:19=Använd vid rätt tidpunkt kan teleportation vara|mer användbart än nästan alla andra vapen eftersom|den tillåter dig att rädda igelkottarna från|farliga situationer direkt.|Markör: Välj målområde
+04:19=Använd vid rätt tidpunkt kan teleportation vara|mer användbart än nästan alla andra vapen|eftersom den tillåter dig att rädda igelkottarna|från farliga situationer direkt.|Markör: Välj målområde
 04:20=Tillåter dig att spela nuvarande tur med en annan|igelkott.|Attack: Aktivera Byt igelkott
 04:21=Skjut en granatliknande projektil som släpper ut|flera bomber vid kollision.|Attack: Skjut med full kraft
-04:22=Inte bara för Indiana Jones! Piskan är ett|användbart vapen i många situationer. Speciellt|när du vill knuffa någon ner från en klippa.|Attack: Piska allt framför dig
-04:23=Om du inte har något att förlora kan det här komma|till hands. Offra en igelkott genom att skicka|iväg honom i en specifik riktning så han skadar|allt på vägen och exploderar i slutet.|Attack: Gör den här förödande och dödliga attacken
-04:24=Grattis på födelsedagen! Skicka iväg tårtan, låt|den vandra fram till fienden och låt dem ha en|explosiv fest. Tårtan kan passera nästan all|terräng men kan detoneras tidigare så här.|Attack: Skicka iväg tårtan eller låt den stanna och explodera
-04:25=Använd denna förklädnad för att få fienden att|hoppa mot dig (och ner i något gap eller hål).|Attack: Använd sättet och försök förföra en annan igelkott
+04:22=Inte bara för Indiana Jones! Piskan är ett användbart|vapen i många situationer. Speciellt när du vill knuffa|någon ner från en klippa.|Attack: Piska allt framför dig
+04:23=Om du inte har något att förlora kan det här komma|till hands. Offra en igelkott genom att skicka iväg|honom i en specifik riktning så han skadar allt i sin|vägen och exploderar i slutet.|Attack: Gör den här förödande och dödliga attacken
+04:24=Grattis på födelsedagen! Skicka iväg tårtan, låt|den vandra fram till fienden och låt dem ha en|explosiv fest. Tårtan kan passera nästan all|terräng men kan detoneras tidigare så här.|Attack: Skicka iväg tårtan eller låt den stanna|och explodera
+04:25=Använd denna förklädnad för att få fienden att|hoppa mot dig (och ner i något gap eller hål).|Attack: Använd kostymsättet och försök att|förföra en annan igelkott
 04:26=Kasta den här saftiga vattenmelonen på fienden.|När tiden når noll delas melonen upp i flera|explosiva delar.|1-5: Ställ in vattenmelonens tid|Attack: Håll ner för att kasta med mer kraft
 04:27=Låt helvetets eldar regna över motståndarna med|den här djävulska granaten. Var inte för nära|explosionen då små eldar kan vara kvar längre.|Attack: Håll ner för att kasta med mer kraft
 04:28=Strax efter att den skjutits iväg kommer den här|raketen att börja borra igenom solid mark och|explodera när tiden tar slut eller den kommer ut|på andra sidan.|Attack: Håll ner för att skjuta med mer kraft
-04:29=Den här är inget för småbarn! Bollgeväret skjuter|massor av små färgade bollar fyllda med|sprängämnen.|Attack: Skjut med full kraft|Upp/Ner: Fortsätt att sikta
+04:29=Den här är inget för småbarn! Bollgeväret skjuter|massvis av små färgglada bollar fyllda med|sprängämnen.|Attack: Skjut med full kraft|Upp/Ner: Fortsätt att sikta
 04:30=Kalla på ett flygplan som utför ett kraftfullt|napalmanfall. Med bra precision kan den här|attacken utplåna stora delar av landskapet|inklusive otursamma igelkottar som är där.|Vänster/Höger: Bestäm attackriktning|Markör: Välj målområde
 04:31=Det radiostyrda flygplanet är det idealiska vapnet|för att samla lådor eller attackera igelkottar på|avstånd. Antingen krascha in i fiender eller släpp|några bomber på dem först.|Attack: Skicka iväg planet eller släpp bomber|Långhopp: Låt valkyriorna rida till strid|Upp/Ner: Styr planet
-04:32=Låg gravitation är effektivare än vilken bantning som helst! Hoppa högra och längre sträckor eller låt fienden flyga längre.|Attack: Aktivera
+04:32=Låg gravitation är effektivare än vilken bantning|som helst! Hoppa högra och längre sträckor eller|låt fienden flyga längre.|Attack: Aktivera
 04:33=Ibland behöver man bara den där lilla extra|kraften för att göra aningen mer skada.|Attack: Aktivera
 04:34=Can't touch me!|Attack: Aktivera
 04:35=Ibland går tiden för fort. Roffa åt dig några|extra sekunder till att avsluta din attack.|Attack: Aktivera
@@ -449,7 +449,7 @@
 04:37=Frukta inte dagsljus. Det varar bara en tur men|tillåter dig att absorbera den skada du gör på|andra igelkottar.|Attack: Aktivera
 04:38=Prickskyttegeväret kan vara det mest förödande|vapnet i hela din arsenal, men det är väldigt|ineffektivt på nära håll. Skadan det gör ökar med|avståndet till målet.|Attack: Skjut (två gånger)
 04:39=Flyg till andra delar av kartan med det flygande|tefatet. Det här svårhanterliga verktyget kan ta|dig till nästan alla positioner på slagfältet.|Attack: Aktivera|Upp/Vänster/Höger: Skjut ifrån åt ett håll|Långhopp: Släpp granater eller liknande vapen
-04:40=Sätt eld på lite mark med den här flaskan fylld med (snart) brinnande vätska.|Attack: Håll ner för att kasta med mer kraft
+04:40=Sätt eld på lite mark med den här flaskan fylld|med (snart) brinnande vätska.|Attack: Håll ner för att kasta med mer kraft
 04:41=Beviset på att naturen kanske till och med kan slå|det flygande tefatet. Birdy kan bära runt på din|igelkott och släppa ägg på fienden!|Attack: Aktivera och släpp ägg|Upp/Vänster/Höger: Flaxa åt ett håll
 
 ; Game goal strings

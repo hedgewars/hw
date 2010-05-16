@@ -111,15 +111,12 @@
             [self presentModalViewController:gameConfigViewController animated:YES];
             break;
         case 2:
-            /*
-            if (nil == splitRootViewController) {
-                splitRootViewController = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
-                splitRootViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            if (nil == settingsViewController) {
+                settingsViewController = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
+                settingsViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             }
             
-            [self.view addSubview:splitRootViewController.view];
-            [self presentModalViewController:splitRootViewController animated:YES];
-            */
+            [self presentModalViewController:settingsViewController animated:YES];
             break;
         case 3:
             debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
@@ -157,13 +154,13 @@
 -(void) viewDidUnload {
     self.versionLabel = nil;
     gameConfigViewController = nil;
-    splitRootViewController = nil;
+    settingsViewController = nil;
 	[super viewDidUnload];
 }
 
 -(void) dealloc {
     [versionLabel release];
-    [splitRootViewController release];
+    [settingsViewController release];
     [gameConfigViewController release];
 	[super dealloc];
 }

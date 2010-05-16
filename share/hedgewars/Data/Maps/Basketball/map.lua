@@ -6,7 +6,8 @@ local caption = {
 	["es"] = "Hedgewars-Baloncesto",
 	["pl"] = "Hedgewars-Koszykówka",
 	["pt_PT"] = "Hedgewars-Basketball",
-	["sk"] = "Hedgewars-Basketbal"
+	["sk"] = "Hedgewars-Basketbal",
+	["sv"] = "Hedgewars-Basket"
 	}
 
 local subcaption = {
@@ -15,7 +16,8 @@ local subcaption = {
 	["es"] = "Partido no-tan-amistoso",
 	["pl"] = "Mecz Nie-Taki-Towarzyski",
 	["pt_PT"] = "Partida não muito amigável",
-	["sk"] = "Nie tak celkom priateľský zápas"
+	["sk"] = "Nie tak celkom priateľský zápas",
+	["sv"] = "En inte så vänlig match"
 	}
 
 local goal = {
@@ -24,7 +26,8 @@ local goal = {
 	["es"] = "¡Batea a tus oponentes fuera del mapa a través de la canasta!",
 	["pl"] = "Uderzaj swoich przekiwników|wyrzucając przez kosz, poza mapę!",
 	["pt_PT"] = "Bate os teus adversarios|fora do mapa acertando com eles no cesto!",
-	["sk"] = "Odpálkujte vašich súperov do koša|a von z mapy!"
+	["sk"] = "Odpálkujte vašich súperov do koša|a von z mapy!",
+	["sv"] = "Slå ner dina motståndare i|korgarna och ut ur kartan!"
 	}
 
 local scored = {
@@ -33,7 +36,8 @@ local scored = {
 	["es"] = " anotó un tanto!",
 	["pl"] = " zdobyła punkt!",
 	["pt_PT"] = " marca um cesto!",
-	["sk"] = " skóruje!"
+	["sk"] = " skóruje!",
+	["sv"] = " fick ett poäng"
 	}
 
 local failed = {
@@ -42,7 +46,8 @@ local failed = {
 	["es"] = " anotó una falta!",
 	["pl"] = " zdobyła punkt karny!",
 	["pt_PT"] = " perde um ponto!",
-	["sk"] = " dostáva trestný bod!"
+	["sk"] = " dostáva trestný bod!",
+	["sv"] = " fick ett straff"
 	}
 
 	local sscore = {
@@ -51,7 +56,8 @@ local failed = {
 	["es"] = "Puntuación",
 	["pl"] = "Punktacja",
 	["pt_PT"] = "Pontuação",
-	["sk"] = "Skóre"
+	["sk"] = "Skóre",
+	["sv"] = "Poängställning"
 	}
 
 local team = {
@@ -59,7 +65,8 @@ local team = {
 	["es"] = "Equipo",
 	["pl"] = "Drużyna",
 	["pt_PT"] = "Equipa",
-	["sk"] = "Tím"
+	["sk"] = "Tím",
+	["sv"] = "Lag"
 	}
 
 local drowning = {
@@ -68,7 +75,8 @@ local drowning = {
 	["es"] = "cayó y",
 	["pl"] = "jest wyautowany i",
 	["pt_PT"] = "está fora e",
-	["sk"] = "je mimo hru a"
+	["sk"] = "je mimo hru a",
+	["sv"] = "är ute och"
 	}
 
 local function loc(text)

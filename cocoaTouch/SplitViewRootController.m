@@ -34,14 +34,15 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         self.view.frame = CGRectMake(0, 0, 1024, 768);
     
-    id splitViewRootController;
+    //id splitViewRootController;
     
     Class splitViewControllerClass = NSClassFromString(@"UISplitViewController");
     if (splitViewControllerClass) {
-        splitViewRootController = [[splitViewControllerClass alloc] init];
+#ifdef __IPHONE_3_2
+        UISplitViewController *splitViewRootController = [[UISplitViewController alloc] init];
         //[[splitViewRootController view] setAutoresizingMask: UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
         
-        [[splitViewRootController view] setFrame:CGRectMake(0, 0, 1024, 768)];
+        splitViewRootController.view.frame = CGRectMake(0, 0, 1024, 768);
         MasterViewController *masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
         
         UINavigationController *mainNavController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
@@ -49,15 +50,16 @@
         masterViewController.detailViewController = detailViewController;        
         [masterViewController release];
 
-        [splitViewRootController setViewControllers:[NSArray arrayWithObjects: mainNavController, detailedNavController, nil]];
+        splitViewRootController.viewControllers = [NSArray arrayWithObjects: mainNavController, detailedNavController, nil];
         [mainNavController release];
         [detailedNavController release];
         
-        [splitViewRootController setDelegate:detailViewController];
+        splitViewRootController.delegate = detailViewController;
         [detailViewController release];
 
         // add view to main controller
         [self.view addSubview:[splitViewRootController view]];
+#endif
     } else {
         [self.view addSubview:detailedNavController.view];
     }

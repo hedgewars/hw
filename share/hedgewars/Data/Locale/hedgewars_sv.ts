@@ -12,7 +12,7 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation>aldrig</translation>
+        <translation>Aldrig</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
@@ -34,11 +34,11 @@
     </message>
     <message>
         <source>Illegal ammo scheme</source>
-        <translation>Ogiltigt vapenupplägg</translation>
+        <translation>Ogiltigt vapenschema</translation>
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation>Redigera vapenscheman</translation>
+        <translation>Redigera scheman</translation>
     </message>
 </context>
 <context>
@@ -130,11 +130,11 @@
     </message>
     <message>
         <source>Cavern</source>
-        <translation>Ihålig</translation>
+        <translation>Grotta</translation>
     </message>
     <message>
         <source>Wacky</source>
-        <translation>Galet</translation>
+        <translation>Galen</translation>
     </message>
     <message>
         <source>Type</source>
@@ -188,7 +188,7 @@
     </message>
     <message>
         <source>Connection refused</source>
-        <translation>Kontakt nekades</translation>
+        <translation>Annslutning nekad</translation>
     </message>
     <message>
         <source>Quit reason: </source>
@@ -200,7 +200,7 @@
     </message>
     <message>
         <source>You got kicked</source>
-        <translation>Du kickades</translation>
+        <translation>Du sparkades ut</translation>
     </message>
     <message>
         <source>Password</source>
@@ -214,7 +214,7 @@ or pick another nickname:</source>
         <translation>Ditt smeknamn (%1) är
 registrerat på Hedgewars.org
 Var god ange ditt lösenord
-eller välj ett annat smeknamn</translation>
+eller välj ett annat smeknamn:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
@@ -256,34 +256,34 @@ eller välj ett annat smeknamn</translation>
     </message>
     <message>
         <source>Fetch data</source>
-        <translation type="unfinished"></translation>
+        <translation>Hämta data</translation>
     </message>
     <message>
         <source>Server message for latest version:</source>
-        <translation type="unfinished"></translation>
+        <translation>Servermaddelande för senaste versionen:</translation>
     </message>
     <message>
         <source>Server message for previous versions:</source>
-        <translation type="unfinished"></translation>
+        <translation>Servermeddelande för tidigare versioner:</translation>
     </message>
     <message>
         <source>Latest version protocol number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Senaste versionens protokollnummer:</translation>
     </message>
     <message>
         <source>MOTD preview:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MOTD-förhandsvisning:</translation>
     </message>
     <message>
         <source>Set data</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange data</translation>
     </message>
 </context>
 <context>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
-        <translation>Kopplar upp...</translation>
+        <translation>Ansluter...</translation>
     </message>
 </context>
 <context>
@@ -301,13 +301,13 @@ eller välj ett annat smeknamn</translation>
     <name>PageGameStats</name>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Priset för bästa skott går till &lt;b&gt;%1&lt;/b&gt; som fick &lt;b&gt;%2&lt;/b&gt; poäng.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Priset för bästa skott går till &lt;b&gt;%1&lt;/b&gt; med &lt;b&gt;%2&lt;/b&gt; poäng.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation>
-            <numerusform>&lt;p&gt;Det bästa dödande skottet skjöts av &lt;b&gt;%1&lt;/b&gt; som dödade &lt;b&gt;%2&lt;/b&gt; igelkott i samma slag.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Det bästa dödande skottet skjöts av &lt;b&gt;%1&lt;/b&gt; som dödade &lt;b&gt;%2&lt;/b&gt; igelkottar i samma slag.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Den bästa mördaren är &lt;b&gt;%1&lt;/b&gt; med &lt;b&gt;%2&lt;/b&gt; dödad på samma tur.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Den bästa mördaren är &lt;b&gt;%1&lt;/b&gt; med &lt;b&gt;%2&lt;/b&gt; dödade på samma tur.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -322,11 +322,11 @@ eller välj ett annat smeknamn</translation>
     <name>PageMain</name>
     <message>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation>Lokalt spel (spela en omgång på en enskild dator)</translation>
+        <translation>Lokalt spel (Spela en omgång på en enskild dator)</translation>
     </message>
     <message>
         <source>Network Game (Play a game across a network)</source>
-        <translation>Nätverkspel (spela en omgång via nätverk)</translation>
+        <translation>Nätverkspel (Spela en omgång över ett nätverk)</translation>
     </message>
 </context>
 <context>
@@ -404,7 +404,7 @@ eller välj ett annat smeknamn</translation>
     </message>
     <message>
         <source>Rename dialog</source>
-        <translation>Byt namn på dialogruta</translation>
+        <translation>Namnbytesdialig</translation>
     </message>
     <message>
         <source>Enter new file name:</source>
@@ -420,7 +420,7 @@ eller välj ett annat smeknamn</translation>
     </message>
     <message>
         <source>Please select record from the list</source>
-        <translation>Var god välj inspelning från listan</translation>
+        <translation>Välj inspelning från listan</translation>
     </message>
 </context>
 <context>
@@ -456,14 +456,14 @@ eller välj ett annat smeknamn</translation>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation>Detta rum är i lobbyläge.
-Du kan gå in och börja spela när spelet börjar.</translation>
+        <translation>Detta spel är i lobby.
+Du kan gå med och börja spela när spelet börjar.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation>Detta rum genomför ett spel.
-Du kan gå in och se på men du måste vänta tills spelet är slut för att själv kunna börja spela.</translation>
+        <translation>Detta spel pågår.
+Du kan gå med och se på men du måste vänta tills spelet är slut för att kunna börja spela.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
@@ -471,19 +471,19 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Random Map</source>
-        <translation>Slumpvald karta</translation>
+        <translation>Slumpad karta</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation>Spel kan spelas på fördefinierade eller slumpade kartor.</translation>
+        <translation>Spel kan spelas på färdiga eller slumpade kartor.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation>Spelöversikten ställer in allmäna inställningar som tid per person, Sudden Death eller Vampyrism.</translation>
+        <translation>Spelschemat anger allmäna inställningar som tid per person, Sudden Death eller Vampyrism.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation>Vapenöversikten ställer in tillgängliga vapen och deras ammunitionsantal.</translation>
+        <translation>Vapenschemat anger tillgängliga vapen och deras ammunitionsantal.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
@@ -501,11 +501,11 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation>Var god skriv rummets namn</translation>
+        <translation>Skriv in rummets namn</translation>
     </message>
     <message>
         <source>Please select room from the list</source>
-        <translation>Var god välj ett rum från listan</translation>
+        <translation>Välj ett rum från listan</translation>
     </message>
     <message>
         <source>Random Maze</source>
@@ -532,7 +532,7 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation>Dela dina fienders smärta och skada</translation>
+        <translation>Dela dina fienders smärta, dela deras skada</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
@@ -548,11 +548,11 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Skydda ditt fort och förstör motståndarens, två lag max!</translation>
+        <translation>Skydda ditt fort och förstör motståndarens, två lagfärger max!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Lag startar på motsatta sidor av terrängen, två lag max!</translation>
+        <translation>Lag startar på motsatta sidor av terrängen, två lagfärger max!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -564,31 +564,31 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Lower gravity</source>
-        <translation>Mindre gravitation</translation>
+        <translation>Lägre gravitation</translation>
     </message>
     <message>
         <source>Assisted aiming with laser sight</source>
-        <translation>Förenklad siktesmöjlighet med lasersikte</translation>
+        <translation>Få hjälp med siktande med lasersikte</translation>
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
-        <translation>Alla igelkottar har ett personligt skydd</translation>
+        <translation>Alla igelkottar har ett personligt skyddsfält</translation>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation>Turordning av spelet är slumpvald istället för rumordning.</translation>
+        <translation>Spelording är slumpvald istället för i rumsordning.</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation>Spela med en kung. Om han dör så dör din sida.</translation>
+        <translation>Spela med en kung. Om han dör, dör din sida.</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation>Innan spelstart placeras igelkottar ut av spelaren.</translation>
+        <translation>Turas om att placera ut era igelkottar innan spelet börjar.</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation>Ammunition är delad mellan alla lag med samma färg.</translation>
+        <translation>Ammunition delas mellan alla lag med samma färg.</translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
@@ -596,7 +596,7 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avaktivera landföremål när slumpade kartor genereras.</translation>
     </message>
 </context>
 <context>
@@ -614,11 +614,11 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     <name>PageSinglePlayer</name>
     <message>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation>Enkelt spel (en snabb omgång mot datorn, inställningar väljs åt dig)</translation>
+        <translation>Enkelt spel (en snabbomgång mot datorn, inställningar väljs åt dig)</translation>
     </message>
     <message>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation>Flerspelarläge (spela en hotseat-omgång mot dina vänner eller AI-lag)</translation>
+        <translation>Flera spelare (spela en hotseat-omgång mot dina vänner eller AI-lag)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
@@ -637,7 +637,7 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     <name>QAction</name>
     <message>
         <source>Kick</source>
-        <translation>Kicka</translation>
+        <translation>Släng ut</translation>
     </message>
     <message>
         <source>Start</source>
@@ -645,7 +645,7 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Restrict Joins</source>
-        <translation>Begränsa anslutningar</translation>
+        <translation>Begränsa tillkommande</translation>
     </message>
     <message>
         <source>Restrict Team Additions</source>
@@ -669,7 +669,7 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Add friend</source>
-        <translation>Lägg till vän</translation>
+        <translation>Lägg till som vän</translation>
     </message>
     <message>
         <source>Unignore</source>
@@ -677,14 +677,14 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Remove friend</source>
-        <translation>Ta bort vän</translation>
+        <translation>Ta bort som vän</translation>
     </message>
 </context>
 <context>
     <name>QCheckBox</name>
     <message>
         <source>Fullscreen</source>
-        <translation>Helskärmsläge</translation>
+        <translation>Helskärm</translation>
     </message>
     <message>
         <source>Enable sound</source>
@@ -704,15 +704,15 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Frontend fullscreen</source>
-        <translation>Frontend helskärmsläge</translation>
+        <translation>Spelmenyn i helskärm</translation>
     </message>
     <message>
         <source>Append date and time to record file name</source>
-        <translation>Bifoga datum och tid till namnet på inspelningsfilen</translation>
+        <translation>Bifoga datum och tid till namnet på inspelningsfiler</translation>
     </message>
     <message>
         <source>Check for updates at startup</source>
-        <translation>Sök efter uppdatering vid programstart</translation>
+        <translation>Leta efter uppdatering vid programstart</translation>
     </message>
     <message>
         <source>Reduced quality</source>
@@ -747,11 +747,11 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Level</source>
-        <translation>Bana</translation>
+        <translation>Nivå</translation>
     </message>
     <message>
         <source>(System default)</source>
-        <translation>(Systemets standard)</translation>
+        <translation>(Systemstandard)</translation>
     </message>
     <message>
         <source>generated maze...</source>
@@ -873,7 +873,7 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Sounds:</source>
-        <translation>Ljudeffekter:</translation>
+        <translation>Ljud:</translation>
     </message>
     <message>
         <source>Initial sound volume</source>
@@ -881,7 +881,7 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Damage Modifier</source>
-        <translation>Skadeinställning procentuellt</translation>
+        <translation>Skadeprocent</translation>
     </message>
     <message>
         <source>Turn Time</source>
@@ -893,11 +893,11 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Sudden Death Timeout</source>
-        <translation>Turordningar till Sudden Death</translation>
+        <translation>Rundor till Sudden Death</translation>
     </message>
     <message>
         <source>Mines Time</source>
-        <translation>Tid innan minexplosion</translation>
+        <translation>Mintid</translation>
     </message>
     <message>
         <source>Mines</source>
@@ -905,19 +905,19 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Scheme Name:</source>
-        <translation>Schemanamn</translation>
+        <translation>Schemanamn:</translation>
     </message>
     <message>
         <source>Crate Drops</source>
-        <translation>Lådfall</translation>
+        <translation>Lådor</translation>
     </message>
     <message>
         <source>Game scheme</source>
-        <translation>Spelupplägg</translation>
+        <translation>Spelschema</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation>Falska minor i procent</translation>
+        <translation>% falska minor</translation>
     </message>
     <message>
         <source>Name</source>
@@ -929,7 +929,7 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Grave</source>
-        <translation>Gravsten</translation>
+        <translation>Grav</translation>
     </message>
     <message>
         <source>Flag</source>
@@ -941,7 +941,7 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
     </message>
     <message>
         <source>Locale</source>
-        <translation>Plats</translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <source>Restart game to apply</source>
@@ -951,7 +951,7 @@ Du kan gå in och se på men du måste vänta tills spelet är slut för att sj�
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
         <translation>Detta SVN-bygge är &apos;under utveckling&apos; och kanske inte är kompatibel med andra versioner av spelet.
-Det kan finnas buggar eller ofullständiga funktioner. Använd på egen risk!</translation>
+Det kan finnas trasiga eller ofullständiga funktioner. Använd på egen risk!</translation>
     </message>
     <message>
         <source>Explosives</source>
@@ -980,7 +980,7 @@ Det kan finnas buggar eller ofullständiga funktioner. Använd på egen risk!</t
     </message>
     <message>
         <source>Connection to server is lost</source>
-        <translation>Kontakten med servern förlorades</translation>
+        <translation>Ansluting till servern bröts</translation>
     </message>
     <message>
         <source>Error</source>
@@ -1000,15 +1000,15 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Can not edit default weapon set</source>
-        <translation>Kan inte redigera vapnens standarduppsättning</translation>
+        <translation>Kan inte redigera ursprungliga vapenscheman</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Kan inte ta bort vapnens standarduppsättning</translation>
+        <translation>Kan inte ta bort ursprungliga vapenscheman</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
-        <translation>Vill du verkligen ta bort denna vapenuppsättning?</translation>
+        <translation>Vill du verkligen ta bort detta vapenschema?</translation>
     </message>
 </context>
 <context>
@@ -1058,7 +1058,7 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation>Kontakta</translation>
+        <translation>Anslut</translation>
     </message>
     <message>
         <source>Update</source>
@@ -1105,11 +1105,11 @@ Var god kontrollera din installation</translation>
     <name>QTableWidget</name>
     <message>
         <source>Room Name</source>
-        <translation>Namn på rum</translation>
+        <translation>Rumnamn</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>K</translation>
+        <translation>A</translation>
     </message>
     <message>
         <source>T</source>
@@ -1186,7 +1186,7 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Divide Teams</source>
-        <translation>Dela lag</translation>
+        <translation>Dela upp lag</translation>
     </message>
     <message>
         <source>Solid Land</source>
@@ -1234,7 +1234,7 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Disable Land Objects</source>
-        <translation type="unfinished"></translation>
+        <translation>Avaktivera landföremål</translation>
     </message>
 </context>
 <context>
@@ -1313,23 +1313,23 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>timer 1 sec</source>
-        <translation>tidur 1 sek</translation>
+        <translation>tid 1 sek</translation>
     </message>
     <message>
         <source>timer 2 sec</source>
-        <translation>tidur 2 sek</translation>
+        <translation>tid 2 sek</translation>
     </message>
     <message>
         <source>timer 3 sec</source>
-        <translation>tidur 3 sek</translation>
+        <translation>tid 3 sek</translation>
     </message>
     <message>
         <source>timer 4 sec</source>
-        <translation>tidur 4 sek</translation>
+        <translation>tid 4 sek</translation>
     </message>
     <message>
         <source>timer 5 sec</source>
-        <translation>tidur 5 sek</translation>
+        <translation>tid 5 sek</translation>
     </message>
     <message>
         <source>pause</source>
@@ -1349,7 +1349,7 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>capture</source>
-        <translation>spela in</translation>
+        <translation>ta bild</translation>
     </message>
     <message>
         <source>hedgehogs
@@ -1386,15 +1386,15 @@ info</source>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation>Återställ zoom</translation>
+        <translation>återställ zoom</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation>Långhopp</translation>
+        <translation>långhopp</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation>Högt hopp</translation>
+        <translation>högt hopp</translation>
     </message>
 </context>
 <context>
@@ -1432,7 +1432,7 @@ info</source>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation>Välj ett vapen eller ett mål med pilen:</translation>
+        <translation>Välj ett vapen eller ett mål under markören:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
@@ -1448,7 +1448,7 @@ info</source>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation>Flytta kamera till aktiv igelkotte:</translation>
+        <translation>Flytta kameran till aktiv igelkotte:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
@@ -1472,7 +1472,7 @@ info</source>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation>Sätt på/av helskärmsläge:</translation>
+        <translation>Byt till/från helskärmsläge:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
@@ -1480,14 +1480,14 @@ info</source>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation>Sätt på/av etiketter över igelkottar:</translation>
+        <translation>Visa etiketter över igelkottar:</translation>
     </message>
 </context>
 <context>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation></translation>
+        <translation>Axlar</translation>
     </message>
     <message>
         <source>(Up)</source>
@@ -1519,7 +1519,7 @@ info</source>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation>Vänster musknapp</translation>
+        <translation>Mus: Vänsterknapp</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
@@ -1527,19 +1527,19 @@ info</source>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation>Höger musknapp</translation>
+        <translation>Mus: Högerknapp</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation>Mushjul upp</translation>
+        <translation>Mus: Hjul upp</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation>Mushjul ner</translation>
+        <translation>Mus: Hjul ner</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation>backsteg</translation>
+        <translation>Baksteg</translation>
     </message>
     <message>
         <source>Tab</source>
@@ -1695,27 +1695,27 @@ info</source>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation>Höger Ctrl</translation>
+        <translation>Höger ctrl</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation>Vänster Ctrl</translation>
+        <translation>Vänster ctrl</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation>Alt Gr</translation>
+        <translation>Höger alt</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation>Alt</translation>
+        <translation>Vänster alt</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation>Höger metaknapp</translation>
+        <translation>Höger meta</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation>Vänster metaknapp</translation>
+        <translation>Vänster meta</translation>
     </message>
     <message>
         <source>A button</source>
@@ -1747,7 +1747,7 @@ info</source>
     </message>
     <message>
         <source>Start button</source>
-        <translation>Startknappen</translation>
+        <translation>Start-knappen</translation>
     </message>
     <message>
         <source>Left stick</source>

@@ -13,7 +13,7 @@
 
 @interface MainMenuViewController : UIViewController {
     UILabel *versionLabel;
-    SplitViewRootController *splitRootViewController;
+    SplitViewRootController *settingsViewController;
     GameConfigViewController *gameConfigViewController;
 }
 
