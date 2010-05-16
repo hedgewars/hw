@@ -42,6 +42,10 @@
 00:39=Lietajúci tanier
 00:40=Molotovov koktejl
 00:41=Vtáčisko
+00:42=Prenosné portálové zariadenie
+00:43=Klavírový útok
+00:44=Plynový granát
+00:45=Sínusová puška
 
 01:00=Do boja!
 01:01=Remíza
@@ -83,6 +87,7 @@
 02:00=%1 je už za riekou Styx
 02:00=Škoda, že %1 nemá ešte jeden život
 02:00=%1 odišiel za lepším
+02:00=%1 už nespotrebováva pamäť tohto počítača
 ; Ježko (%1) sa utopil
 02:01=%1 sa hrá na ponorku!
 02:01=%1 napodobnil Titanik!
@@ -97,6 +102,9 @@
 02:01=%1 nemá rád vodné športy
 02:01=%1 sa chystá preskúmať dno oceána
 02:01=%1 má rád potápanie
+02:01=%1 pláva bruchom nahor
+02:01=%1 si len skočí po bazuku na dne mora
+02:01=%1 chcel vedieť, či majú ježkovia žiabre
 ; Zápas začína
 02:02=Do boja!
 02:02=Ozbrojení a pripravení!
@@ -155,6 +163,7 @@
 02:08=Sklamal si ma, %1
 02:08=%1 má lepšie veci na práci
 02:08=%1 zaspal
+02:08=%1 sa príliš dlho zadíval na vločky
 ; Ježko (%1) ublížil len sebe
 02:09=%1 by sa mal naučiť mieriť
 02:09=%1 sa zjavne nemá rád
@@ -167,6 +176,8 @@
 02:09=To je trapas!
 02:09=%1 to teraz súperovi ukázal!
 02:09=Nykto nie je dokonalí!
+02:09=%1 je opitý!
+02:09=Išlo o jasné zlyhanie techniky!
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
 02:10=Vták, lietadlo, ...
@@ -264,6 +275,8 @@
 04:39=Preleťte na iné miesta mapy v lietajúcom tanieri.|Táto komplikovane sa ovládajúca pomôcka je schopná|vás preniesť na takmer akúkoľvek pozíciu na mape.|Útok: Aktivácia|Hore/Vľavo/Vpravo: Použiť silu v jednom smere|Dlhý skok: Zhodiť granáty alebo iné zbrane
 04:40=Podpáľte kúsok zeme použitím tejto fľaše naplnenej|zápalnou tekutinou.|Útok: Držanie tlačidla zvyšuje silu hodu
 04:41=Dôkaz, že príroda môže dokonca predčiť lietajúci tanier.|Vtáčisko dokáže niesť vášho ježka a znášať vajcia na vašich nepriateľov!|Útok: Aktivácia a zhadzovanie vajec|Hore/Vľavo/Vpravo: Mávanie krídiel v jednom smere
+04:42=OBROVSKÝ ÚSPECH|||(ale chýba text!)
+04:43=(chýba text)
 
 ; Reťazce pre ciele hry
 05:00=Herné režimy
