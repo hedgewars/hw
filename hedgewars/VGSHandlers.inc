@@ -518,11 +518,15 @@ var maxMovement: LongInt;
 begin
 
 inc(Gear^.Timer, Steps);
+(*
+FIXME - This block desyncs due to the way WorldDx is important for various things network related.
+One possible solution is, instead of using WorldDx, to use straight gl/SDL calls to jitter the screen a bit.
 if (Gear^.Timer and 5) = 0 then
     begin
     maxMovement := max(1, 13 - ((Gear^.Timer * 15) div 250));
     ShakeCamera(maxMovement);
     end;
+*)
 if Gear^.Timer > 250 then DeleteVisualGear(Gear);
 end;
 
