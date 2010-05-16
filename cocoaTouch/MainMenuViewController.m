@@ -111,12 +111,15 @@
             [self presentModalViewController:gameConfigViewController animated:YES];
             break;
         case 2:
+            /*
             if (nil == splitRootViewController) {
                 splitRootViewController = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
                 splitRootViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             }
             
+            [self.view addSubview:splitRootViewController.view];
             [self presentModalViewController:splitRootViewController animated:YES];
+            */
             break;
         case 3:
             debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];

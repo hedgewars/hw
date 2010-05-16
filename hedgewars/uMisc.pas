@@ -170,7 +170,7 @@ procedure MakeScreenshot(filename: shortstring);
 {$ENDIF}
 
 implementation
-uses Math, uConsole, uStore, uIO, typinfo;
+uses Math, uConsole, uStore, uIO, uSound, typinfo;
 
 var KBnum: Longword;
 {$IFDEF DEBUGFILE}

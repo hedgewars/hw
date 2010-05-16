@@ -169,7 +169,7 @@ WorldDy:=  - (LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 AMSlotSize:= 33;
 {$IFDEF IPHONEOS}
 AMxOffset:= 10;
-AMyOffset:= 10;
+AMyOffset:= 10 + 123;   // moved downwards
 AMWidth:= (cMaxSlotAmmoIndex + 1) * AMSlotSize + AMxOffset;
 {$ELSE}
 AMxOffset:= 10;
@@ -235,7 +235,7 @@ x:= (cScreenWidth shr 1) - AMWidth + AMxShift;
 {$IFDEF IPHONEOS}
 Slot:= cMaxSlotIndex;
 x:= x - cOffsetY;
-y:= AMyOffset + 123;
+y:= AMyOffset;
 dec(y, BORDERSIZE);
 DrawSprite(sprAMCorners, x - BORDERSIZE, y, 0);
 for i:= 0 to cMaxSlotAmmoIndex do
