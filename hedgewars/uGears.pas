@@ -823,7 +823,7 @@ end;
 //If any of these are set as permanent toggles in the frontend, that needs to be checked and skipped here.
 procedure EndTurnCleanup;
 var  i: LongInt;
-    tmpGear, iterator: PGear;
+    iterator: PGear;
 begin
     SpeechText:= ''; // in case it has not been consumed
 
@@ -858,16 +858,10 @@ begin
                         Gear^.Invulnerable:= false;
                   end;
     iterator:= GearsList;
-    tmpGear:= nil;
     while iterator <> nil do
         begin
-        if (iterator^.Kind = gtPortal) then 
-            begin
-            tmpGear:= iterator;
-            iterator:= iterator^.NextGear;
-            DeleteGear(tmpGear)
-            end
-        else iterator:= iterator^.NextGear;
+        if (iterator^.Kind = gtPortal) then iterator^.Timer:= 0;
+        iterator:= iterator^.NextGear;
         end;
 end;
 
