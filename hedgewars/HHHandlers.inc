@@ -139,7 +139,7 @@ with Gear^,
         xx:= SignAs(AngleSin(Angle), dX);
         yy:= -AngleCos(Angle);
 
-        if ((Gear^.State and gstHHHJump) <> 0) then xx:= - xx;
+        if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery) then xx:= - xx;
         if Ammo^[CurSlot, CurAmmo].AttackVoice <> sndNone then
            PlaySound(Ammo^[CurSlot, CurAmmo].AttackVoice, CurrentTeam^.voicepack);
              case Ammo^[CurSlot, CurAmmo].AmmoType of
