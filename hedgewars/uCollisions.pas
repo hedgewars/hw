@@ -210,11 +210,13 @@ if flag then
       if (Gear <> cGear) and
          (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
          ((mx > x) xor (Dir > 0)) then
-         if (cGear^.Kind in [gtHedgehog, gtMine, gtExplosives]) and ((Gear^.State and gstNotKickable) = 0) then
+         if ((cGear^.Kind in [gtHedgehog, gtMine]) and ((Gear^.State and gstNotKickable) = 0)) or
+            // only apply X kick if the barrel is knocked over
+            ((cGear^.Kind = gtExplosives) and ((cGear^.State and gsttmpflag) <> 0)) then
              begin
              with cGear^ do
                   begin
-                  if (Kind <> gtExplosives) or ((State and gsttmpflag) <> 0) then dX:= Gear^.dX;
+                  dX:= Gear^.dX;
                   dY:= Gear^.dY * _0_5;
                   State:= State or gstMoving;
                   Active:= true
