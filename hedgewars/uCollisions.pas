@@ -214,7 +214,7 @@ if flag then
              begin
              with cGear^ do
                   begin
-                  dX:= Gear^.dX;
+                  if (Kind <> gtExplosives) or ((State and gsttmpflag) <> 0) then dX:= Gear^.dX;
                   dY:= Gear^.dY * _0_5;
                   State:= State or gstMoving;
                   Active:= true
@@ -266,7 +266,7 @@ if flag then
              begin
              with cGear^ do
                   begin
-                  dX:= Gear^.dX * _0_5;
+                  if (Kind <> gtExplosives) or ((State and gsttmpflag) <> 0) then dX:= Gear^.dX * _0_5;
                   dY:= Gear^.dY;
                   State:= State or gstMoving;
                   Active:= true

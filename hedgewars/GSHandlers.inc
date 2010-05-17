@@ -1405,10 +1405,10 @@ begin
     begin
         DeleteCI(Gear);
         AllInactive := false;
-        if not Gear^.dY.isNegative and (Gear^.dY > _0_03) and TestCollisionYwithGear(Gear, 1) then
+        if not Gear^.dY.isNegative and (Gear^.dY > _0_2) and TestCollisionYwithGear(Gear, 1) then
         begin
             Gear^.State := Gear^.State or gsttmpFlag;
-            inc(Gear^.Damage, hwRound(Gear^.dY * _50));
+            inc(Gear^.Damage, hwRound(Gear^.dY * _70));
             for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do
             begin
                 particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12,
@@ -1416,15 +1416,15 @@ begin
                 if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX / 5)
             end
         end
-        else if not Gear^.dX.isNegative and (Gear^.dX > _0_03) and TestCollisionXwithGear(Gear, 1)
+        else if not Gear^.dX.isNegative and (Gear^.dX > _0_2) and TestCollisionXwithGear(Gear, 1)
                  then
-                 inc(Gear^.Damage, hwRound(Gear^.dX * _50))
-        else if Gear^.dY.isNegative and (Gear^.dY < -_0_03) and TestCollisionYwithGear(Gear, -1)
+                 inc(Gear^.Damage, hwRound(Gear^.dX * _70))
+        else if Gear^.dY.isNegative and (Gear^.dY < -_0_2) and TestCollisionYwithGear(Gear, -1)
                  then
-                 inc(Gear^.Damage, hwRound(Gear^.dY * -_50))
-        else if Gear^.dX.isNegative and (Gear^.dX < -_0_03) and TestCollisionXwithGear(Gear, -1)
+                 inc(Gear^.Damage, hwRound(Gear^.dY * -_70))
+        else if Gear^.dX.isNegative and (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1)
                  then
-                 inc(Gear^.Damage, hwRound(Gear^.dX * -_50));
+                 inc(Gear^.Damage, hwRound(Gear^.dX * -_70));
 
         doStepFallingGear(Gear);
         CalcRotationDirAngle(Gear);
@@ -1542,8 +1542,8 @@ begin
         if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY := _0;
         if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
         begin
-            if (Gear^.dY > _0_02) and (k = gtExplosives) then
-                inc(Gear^.Damage, hwRound(Gear^.dY * _40));
+            if (Gear^.dY > _0_2) and (k = gtExplosives) then
+                inc(Gear^.Damage, hwRound(Gear^.dY * _70));
 
             if Gear^.dY > _0_2 then
                 for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do
