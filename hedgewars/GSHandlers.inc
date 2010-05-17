@@ -3156,6 +3156,7 @@ begin
     // destroy portal if ground it was attached too is gone
     if ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0)
        or (Gear^.Timer < 1)
+       or (PHedgehog(Gear^.Hedgehog) <> CurrentHedgehog)
        or (hwRound(Gear^.Y) > cWaterLine) then
     begin
         deleteGear(Gear);
@@ -3304,7 +3305,8 @@ begin
 end;
 
 begin
-    if (Gear^.Timer < 1) then
+    if (Gear^.Timer < 1)
+       or (PHedgehog(Gear^.Hedgehog) <> CurrentHedgehog) then
     begin
         deleteGear(Gear);
         EXIT;

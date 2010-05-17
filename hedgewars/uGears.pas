@@ -823,7 +823,6 @@ end;
 //If any of these are set as permanent toggles in the frontend, that needs to be checked and skipped here.
 procedure EndTurnCleanup;
 var  i: LongInt;
-    iterator: PGear;
 begin
     SpeechText:= ''; // in case it has not been consumed
 
@@ -857,12 +856,6 @@ begin
                      if (GameFlags and gfInvulnerable) = 0 then
                         Gear^.Invulnerable:= false;
                   end;
-    iterator:= GearsList;
-    while iterator <> nil do
-        begin
-        if (iterator^.Kind = gtPortal) then iterator^.Timer:= 0;
-        iterator:= iterator^.NextGear;
-        end;
 end;
 
 procedure ApplyDamage(Gear: PGear; Damage: Longword);
