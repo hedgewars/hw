@@ -509,7 +509,8 @@ if Gear^.Tex <> nil then
 if (Gear^.Kind = gtPortal) then
     begin
     if (Gear^.IntersectGear <> nil) then
-        Gear^.IntersectGear^.IntersectGear:= nil;
+        if (Gear^.IntersectGear^.IntersectGear = Gear) then
+            Gear^.IntersectGear^.IntersectGear:= nil;
     end
 else if Gear^.Kind = gtHedgehog then
     if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
