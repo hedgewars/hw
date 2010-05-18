@@ -282,6 +282,7 @@ var
     i, x, y: LongInt;
     dX, dY: hwFloat;
     Fire: PGear;
+    vg: PVisualGear;
 begin
     AllInactive := false;
 
@@ -302,6 +303,13 @@ begin
         CheckCollision(Gear);
         if (Gear^.State and gstCollision) <> 0 then
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLDontDraw or EXPLNoGfx);
+    end;
+
+    if (Gear^.Kind = gtGasBomb) and ((GameTicks mod 200) = 0) then
+    begin
+        vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeWhite);
+        if vg <> nil then
+            vg^.Tint:= $FFC0C000;
     end;
 
     if Gear^.Timer = 0 then
@@ -349,7 +357,7 @@ begin
         if i mod 2 <> 0 then Fire^.State := Fire^.State or gsttmpFlag;
     end
 end;
-gtGasBomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound or EXPLPoisoned);
+gtGasBomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound or EXPLPoisoned, $FFFFC000);
 end;
 DeleteGear(Gear);
 exit
@@ -3105,8 +3113,7 @@ begin
 
     if (Gear^.State and gstCollision) <> 0 then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, EXPLPoisoned or EXPLNoGfx);
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, EXPLPoisoned or EXPLNoGfx);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 11, EXPLPoisoned, $C000FFC0);
         PlaySound(sndEggBreak);
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg);
         vg := AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg);

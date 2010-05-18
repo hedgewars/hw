@@ -384,6 +384,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
             amClusterBomb: DrawRotated(sprHandCluster, hx, hy, hwSign(Gear^.dX), aangle);
             amDynamite: DrawRotated(sprHandDynamite, hx, hy, hwSign(Gear^.dX), aangle);
             amHellishBomb: DrawRotated(sprHandHellish, hx, hy, hwSign(Gear^.dX), aangle);
+            amGasBomb: DrawRotated(sprHandCheese, hx, hy, hwSign(Gear^.dX), aangle);
             amMine: DrawRotated(sprHandMine, hx, hy, hwSign(Gear^.dX), aangle);
             amSeduction: DrawRotated(sprHandSeduction, hx, hy, hwSign(Gear^.dX), aangle);
             amVampiric: DrawRotated(sprHandVamp, hx, hy, hwSign(Gear^.dX), aangle);
@@ -643,7 +644,7 @@ while Gear<>nil do
     begin
     case Gear^.Kind of
        gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
-       gtGasBomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+       gtGasBomb: DrawRotated(sprCheese, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
     gtMolotov: DrawRotated(sprMolotov, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
 
        gtRCPlane: begin

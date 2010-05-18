@@ -113,6 +113,7 @@ var RopePoints: record
  
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
+procedure doMakeExplosion(X, Y, Radius: LongInt; Mask, Tint: LongWord); forward;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 //procedure AmmoFlameWork(Ammo: PGear); forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear; forward;
@@ -270,9 +271,9 @@ case Kind of
                 gear^.ImpactSound:= sndGrenadeImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.AdvBounce:= 1;
-                gear^.Radius:= 4;
-                gear^.Elasticity:= _0_6;
-                gear^.Friction:= _0_96;
+                gear^.Radius:= 6;
+                gear^.Elasticity:= _0_8;
+                gear^.Friction:= _0_8;
                 gear^.RenderTimer:= true;
                 if gear^.Timer = 0 then gear^.Timer:= 3000
                 end;
@@ -1139,9 +1140,15 @@ if (GameFlags and gfArtillery) <> 0 then
 end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);
+begin
+doMakeExplosion(X, Y, Radius, Mask, $FFFFFFFF);
+end;
+
+procedure doMakeExplosion(X, Y, Radius: LongInt; Mask, Tint: LongWord);
 var Gear: PGear;
     dmg, dmgRadius, dmgBase: LongInt;
     fX, fY: hwFloat;
+    vg: PVisualGear;
 begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
@@ -1149,8 +1156,11 @@ if Radius > 25 then KickFlakes(Radius, X, Y);
 
 if ((Mask and EXPLNoGfx) = 0) then
     begin
-    if Radius > 50 then AddVisualGear(X, Y, vgtBigExplosion)
-    else if Radius > 10 then AddVisualGear(X, Y, vgtExplosion);
+    vg:= nil;
+    if Radius > 50 then vg:= AddVisualGear(X, Y, vgtBigExplosion)
+    else if Radius > 10 then vg:= AddVisualGear(X, Y, vgtExplosion);
+    if vg <> nil then
+        vg^.Tint:= Tint;
     end;
 if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion);
 

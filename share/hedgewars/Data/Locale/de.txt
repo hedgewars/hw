@@ -43,6 +43,8 @@
 00:40=Molotov-Cocktail
 00:41=Birdy
 
+00:44=Alter Limburger
+
 01:00=Auf in die Schlacht!
 01:01=Unentschieden
 01:02=%1 gewinnt!
@@ -211,6 +213,7 @@
 03:39=Fortbewegungsmittel
 03:40=Brandbombe
 03:41=Riesiger Squawks-Fan
+03:44=Ziemlich alt und stinkig
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Greife deine Feinde mit einfachen Granaten an.|Der Zeitzünder steuert den Explosionszeitpunkt.|1-5: Zeitzünder einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
@@ -255,6 +258,8 @@
 04:39=Fliege mit der fliegenden Untertasse in andere|Teile der Karte. Sie ist schwer zu beherrschen,|bringt dich aber an so gut wie jeden Ort.|Angriff: Aktivieren|Hoch/Links/Rechts: Beschleunigen|Weiter Sprung: Waffe benutzen
 04:40=Entzünde einen Teil der Landschaft oder auch etwas|mehr mit dieser (schon bald) brennenden Flüssigkeit.|Angriff: Halten, um mit mehr Kraft zu werfen
 04:41=Der Beweis, dass die Natur sogar die fliegende|Untertasse übertreffen könnte. Birdy kann|deinen Igel herumtragen und zudem Eier auf|deine Feinde fallen lassen.|Angriff: Aktivieren und Eier fallen lassen|Hoch/Links/Rechts: In eine Richtung flattern
+
+04:44=Das ist nicht nur Käse, das ist biologische Kriegsführung!|Er wird nicht viel Schaden verursachen, sobald der Zünder|abgelaufen ist, aber er wird garantiert jeden in der Nähe|vergiften!|1-5: Zeitzünder einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
 
 ; Game goal strings
 05:00=Spielmodifikationen

@@ -43,7 +43,8 @@ type PVisualGear = ^TVisualGear;
         Tex: PTexture;
         alpha, scale: GLfloat;
         Hedgehog: pointer;
-        Text: shortstring
+        Text: shortstring;
+        Tint: Longword;
         end;
 
 procedure initModule;
@@ -152,6 +153,7 @@ gear^.Y:= int2hwFloat(Y);
 gear^.Kind := Kind;
 gear^.doStep:= doStepHandlers[Kind];
 gear^.State:= 0;
+gear^.Tint:= $FFFFFFFF;
 
 with gear^ do
     case Kind of
@@ -380,6 +382,7 @@ Gear:= VisualGearsList;
 case Layer of
     0: while Gear <> nil do
         begin
+        Tint(Gear^.Tint);
         case Gear^.Kind of
             vgtFlake: if vobVelocity = 0 then
                         DrawSprite(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
@@ -391,6 +394,7 @@ case Layer of
         end;
     1: while Gear <> nil do
         begin
+        Tint(Gear^.Tint);
         case Gear^.Kind of
             vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
             vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
@@ -404,20 +408,18 @@ case Layer of
                             if Gear^.FrameTicks < 255 then
                                 Tint($FF, $FF, $FF, Gear^.FrameTicks);
                             DrawRotatedF(sprFeather, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                            if Gear^.FrameTicks < 255 then
-                                Tint($FF, $FF, $FF, $FF);
                             end;
                  end;
         Gear:= Gear^.NextGear
         end;
     2: while Gear <> nil do
         begin
+        Tint(Gear^.Tint);
         case Gear^.Kind of
             vgtExplosion: DrawSprite(sprExplosion50, hwRound(Gear^.X) - 32 + WorldDx, hwRound(Gear^.Y) - 32 + WorldDy, Gear^.State);
             vgtBigExplosion: begin
                              Tint($FF, $FF, $FF, floor($FF * (1 - power(Gear^.Timer / 250, 4))));
                              DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
-                             Tint($FF, $FF, $FF, $FF);
                              end;
             end;
         if not cReducedQuality then
@@ -431,7 +433,6 @@ case Layer of
                         Tint($FF, $FF, $FF, floor(Gear^.alpha * $FF));
                         DrawTextureF(ropeIconTex, Gear^.scale, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 32, 32);
                         DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
-                        Tint($FF, $FF, $FF, $FF);
                         end;
                 vgtHealth:  begin
                             case Gear^.Frame div 10 of
@@ -439,21 +440,16 @@ case Layer of
                                 1:Tint($FF, 0, 0, floor(Gear^.FrameTicks * $FF / 1000));
                             end;
                             DrawSprite(sprHealth, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, 0);
-                            Tint($FF, $FF, $FF, $FF);
                             end;
                 vgtShell: begin
                             if Gear^.FrameTicks < $FF then
                                 Tint($FF, $FF, $FF, Gear^.FrameTicks);
                             DrawRotatedF(sprShell, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                            if Gear^.FrameTicks < $FF then
-                                Tint($FF, $FF, $FF, $FF);
                             end;
                   vgtEgg: begin
                             if Gear^.FrameTicks < $FF then
                                 Tint($FF, $FF, $FF, Gear^.FrameTicks);
                             DrawRotatedF(sprEgg, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                            if Gear^.FrameTicks < $FF then
-                                Tint($FF, $FF, $FF, $FF);
                             end;
                 vgtSplash: DrawSprite(sprSplash, hwRound(Gear^.X) + WorldDx - 40, hwRound(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
                 vgtDroplet: DrawSprite(sprDroplet, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, Gear^.Frame);
@@ -463,12 +459,10 @@ case Layer of
                             else
                                 Tint($FF, $FF, $FF, $80);
                             DrawRotatedF(sprBeeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, (RealTicks shr 4) mod cMaxAngle);
-                            Tint($FF, $FF, $FF, $FF);
                             end;
                 vgtSmokeRing: begin
                             Tint($FF, $FF, $FF, floor(Gear^.alpha * $FF));
                             DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);
-                            Tint($FF, $FF, $FF, $FF);
                             end;
             end;
         case Gear^.Kind of

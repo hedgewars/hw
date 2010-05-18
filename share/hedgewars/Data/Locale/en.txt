@@ -44,7 +44,7 @@
 00:41=Birdy
 00:42=Portable Portal Device
 00:43=Piano Strike
-00:44=Gas grenade
+00:44=Old Limburger
 00:45=Sine Gun
 
 01:00=Let's fight!
@@ -420,6 +420,7 @@
 03:42=I'm making a note here...
 ; the misspelled "Beethoven" is intentional (-> to beat)
 03:43=Performing Beathoven's deadly sonata
+03:44=Quite old and very smelly
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
@@ -466,6 +467,7 @@
 04:41=The evidence nature might even top the flying|saucer. Birdy can carry your hog around and|drop eggs on your enemies!|Attack: Activate and drop eggs|Up/Left/Right: Flap in one direction
 04:42=HUGE SUCCESS| | |(but missing texts!)
 04:43=(missing text)
+04:44=This isn't just cheese, it's biological warfare!|It won't cause an huge amount of damage once|the timer reaches zero but it will definitely|poison anyone unlucky to be nearby!|1-5: Set grenade's timer|Attack: Hold to throw with more power
 
 ; Game goal strings
 05:00=Game Modes

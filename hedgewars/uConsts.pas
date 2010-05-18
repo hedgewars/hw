@@ -72,7 +72,8 @@ type
             sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee, 
-            sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal
+            sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
+            sprCheese, sprHandCheese
             );
     
     // Gears that interact with other Gears and/or Land
@@ -748,7 +749,11 @@ const
             (FileName:  'amPortalGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprPortalGun
             (FileName:  'Portal'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprPortal
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprPortal
+            (FileName:  'cheese'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprCheese
+            (FileName:  'amCheese'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprHandCheese
             );
 
     Wavez: array [TWave] of record
