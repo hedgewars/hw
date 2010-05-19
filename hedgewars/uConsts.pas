@@ -73,7 +73,7 @@ type
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee, 
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
-            sprCheese, sprHandCheese
+            sprCheese, sprHandCheese, sprHandFlamethrower
             );
     
     // Gears that interact with other Gears and/or Land
@@ -86,7 +86,7 @@ type
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 34
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
-            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot); // 50
+            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower); // 51
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -127,7 +127,7 @@ type
             amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun,
-            amPiano, amGasBomb, amSineGun);
+            amPiano, amGasBomb, amSineGun, amFlamethrower);
 
     THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
 
@@ -749,11 +749,13 @@ const
             (FileName:  'amPortalGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprPortalGun
             (FileName:  'Portal'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprPortal
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprPortal
             (FileName:  'cheese'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprCheese
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprCheese
             (FileName:  'amCheese'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprHandCheese
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprHandCheese
+            (FileName:  'amFlamethrower'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false)  // sprHandFlamethrower
             );
 
     Wavez: array [TWave] of record
@@ -1905,7 +1907,7 @@ const
                 Pos: 0;
                 AmmoType: amPortalGun;
                 AttackVoice: sndNone);
-            Slot: 2;
+            Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1974,6 +1976,28 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amSineGun;
+                AttackVoice: sndNone);
+            Slot: 2;
+            TimeAfterTurn: 0;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater),
+
+// Flamethrower
+            (NameId: sidFlamethrower;
+            NameTex: nil;
+            Probability: 20;
+            NumberInCase: 1;
+            Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
+                Count: 1;
+                InitialCount: 1;
+                NumPerTurn: 0;
+                Timer: 5001;
+                Pos: 0;
+                AmmoType: amFlamethrower;
                 AttackVoice: sndNone);
             Slot: 2;
             TimeAfterTurn: 0;

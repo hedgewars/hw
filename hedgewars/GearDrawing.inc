@@ -291,6 +291,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                     end;
                 defaultPos:= false
                 end;
+            gtFlamethrower: DrawRotated(sprHandFlamethrower, hx, hy, hwSign(Gear^.dX), aangle);
         end;
 
         case CurAmmoGear^.Kind of
@@ -403,6 +404,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                                   LongInt(leftX)+WorldDx)
                 end;
             amBee: DrawRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
+            amFlamethrower: DrawRotated(sprHandFlamethrower, hx, hy, hwSign(Gear^.dX), aangle);
         end;
 
         case amt of
@@ -645,7 +647,7 @@ while Gear<>nil do
     case Gear^.Kind of
        gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
        gtGasBomb: DrawRotated(sprCheese, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
-    gtMolotov: DrawRotated(sprMolotov, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+       gtMolotov: DrawRotated(sprMolotov, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
 
        gtRCPlane: begin
                   if (Gear^.Tag = -1) then

@@ -46,6 +46,7 @@
 00:43=Piano Strike
 00:44=Old Limburger
 00:45=Sine Gun
+00:46=Flamethrower
 
 01:00=Let's fight!
 01:01=Round draw

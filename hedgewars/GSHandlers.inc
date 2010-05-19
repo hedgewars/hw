@@ -318,49 +318,49 @@ begin
             gtAmmo_Bomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
             gtBall: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 40, EXPLAutoSound);
             gtClusterBomb: 
-        begin
-            x := hwRound(Gear^.X);
-            y := hwRound(Gear^.Y);
-            doMakeExplosion(x, y, 20, EXPLAutoSound);
-            for i:= 0 to 4 do
-            begin
-                dX := rndSign(GetRandom * _0_1);
-                dY := (GetRandom - _3) * _0_08;
-                AddGear(x, y, gtCluster, 0, dX, dY, 25);
-            end
-        end;
-        gtWatermelon: 
-    begin
-        x := hwRound(Gear^.X);
-        y := hwRound(Gear^.Y);
-        doMakeExplosion(x, y, 75, EXPLAutoSound);
-        for i:= 0 to 5 do
-        begin
-            dX := rndSign(GetRandom * _0_1);
-            dY := (GetRandom - _1_5) * _0_3;
-            AddGear(x, y, gtMelonPiece, 0, dX, dY, 75)^.DirAngle := i * 60;
-        end
-    end;
-    gtHellishBomb: 
-begin
-    x := hwRound(Gear^.X);
-    y := hwRound(Gear^.Y);
-    doMakeExplosion(x, y, 90, EXPLAutoSound);
+                begin
+                    x := hwRound(Gear^.X);
+                    y := hwRound(Gear^.Y);
+                    doMakeExplosion(x, y, 20, EXPLAutoSound);
+                    for i:= 0 to 4 do
+                        begin
+                        dX := rndSign(GetRandom * _0_1);
+                        dY := (GetRandom - _3) * _0_08;
+                        AddGear(x, y, gtCluster, 0, dX, dY, 25);
+                        end
+                end;
+            gtWatermelon: 
+                begin
+                x := hwRound(Gear^.X);
+                y := hwRound(Gear^.Y);
+                doMakeExplosion(x, y, 75, EXPLAutoSound);
+                for i:= 0 to 5 do
+                    begin
+                    dX := rndSign(GetRandom * _0_1);
+                    dY := (GetRandom - _1_5) * _0_3;
+                    AddGear(x, y, gtMelonPiece, 0, dX, dY, 75)^.DirAngle := i * 60;
+                    end
+                end;
+            gtHellishBomb: 
+                begin
+                x := hwRound(Gear^.X);
+                y := hwRound(Gear^.Y);
+                doMakeExplosion(x, y, 90, EXPLAutoSound);
 
-    for i:= 0 to 127 do
-    begin
-        dX := AngleCos(i * 16) * _0_5 * (GetRandom + _1);
-        dY := AngleSin(i * 16) * _0_5 * (GetRandom + _1);
-        Fire := AddGear(x, y, gtFlame, 0, dX, dY, 0);
-        if i mod 2 = 0 then Fire^.State := Fire^.State or gsttmpFlag;
-        Fire := AddGear(x, y, gtFlame, 0, dX, -dY, 0);
-        if i mod 2 <> 0 then Fire^.State := Fire^.State or gsttmpFlag;
-    end
-end;
-gtGasBomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound or EXPLPoisoned, $FFFFC000);
-end;
-DeleteGear(Gear);
-exit
+                for i:= 0 to 127 do
+                    begin
+                    dX := AngleCos(i * 16) * _0_5 * (GetRandom + _1);
+                    dY := AngleSin(i * 16) * _0_5 * (GetRandom + _1);
+                    Fire := AddGear(x, y, gtFlame, 0, dX, dY, 0);
+                    if i mod 2 = 0 then Fire^.State := Fire^.State or gsttmpFlag;
+                    Fire := AddGear(x, y, gtFlame, 0, dX, -dY, 0);
+                    if i mod 2 <> 0 then Fire^.State := Fire^.State or gsttmpFlag;
+                    end
+                end;
+            gtGasBomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound or EXPLPoisoned);
+        end;
+    DeleteGear(Gear);
+    exit
 end;
 
 CalcRotationDirAngle(Gear);
@@ -1670,11 +1670,11 @@ begin
         if Gear^.dX.QWordValue > _0_01.QWordValue then
             Gear^.dX := Gear^.dX * _0_995;
         Gear^.dY := Gear^.dY + cGravity;
-        if (Gear^.State and gsttmpFlag) <> 0 then Gear^.dY := Gear^.dY + cGravity;
+        {if (Gear^.State and gsttmpFlag) <> 0 then Gear^.dY := Gear^.dY + cGravity;}
         if Gear^.dY.QWordValue > _0_2.QWordValue then Gear^.dY := Gear^.dY * _0_995;
 
-        if (Gear^.State and gsttmpFlag) <> 0 then Gear^.X := Gear^.X + Gear^.dX
-        else
+        {if (Gear^.State and gsttmpFlag) <> 0 then Gear^.X := Gear^.X + Gear^.dX
+        else}
             Gear^.X := Gear^.X + Gear^.dX + cWindSpeed * 640;
         Gear^.Y := Gear^.Y + Gear^.dY;
 
@@ -3624,3 +3624,52 @@ begin
 
     Gear^.doStep := @doStepSineGunShotWork; 
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepFlamethrowerWork(Gear: PGear);
+var 
+    HHGear: PGear;
+    rx, ry: hwFloat;
+    gX, gY: LongInt;
+    Fire: PGear;
+begin
+    AllInactive := false;
+    dec(Gear^.Timer);
+    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HedgehogChAngle(HHGear);
+    gX := hwRound(Gear^.X);
+    gY := hwRound(Gear^.Y);
+    if (Gear^.Timer mod 100) = 0 then
+    begin
+        rx := rndSign(getRandom * _0_1);
+        ry := rndSign(getRandom * _0_1);
+
+        Fire := AddGear(gx, gy, gtFlame, 0,
+                    SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx,
+            AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
+        Fire^.State := Fire^.State or gsttmpFlag;
+        
+        if (Gear^.Timer mod 200) = 0 then 
+            Fire := AddGear(gx, gy, gtFlame, 0,
+                        SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx,
+                AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
+    end;
+
+    if (Gear^.Timer = 0) or (HHGear^.Damage <> 0) then
+    begin
+        DeleteGear(Gear);
+        AfterAttack
+    end
+end;
+
+procedure doStepFlamethrower(Gear: PGear);
+var 
+    HHGear: PGear;
+begin
+    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear^.Message := HHGear^.Message and not (gm_Up or gm_Down);
+    HHGear^.State := HHGear^.State or gstNotKickable;
+    Gear^.doStep := @doStepFlamethrowerWork
+end;
+
+

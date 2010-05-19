@@ -220,6 +220,7 @@ with Gear^,
                                FollowGear:= AddGear(TargetPoint.X, 0, gtPiano, 0, _0, _0, 0);
                                PauseMusic
                                end;
+                      amFlamethrower: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtFlamethrower,  0, xx * _0_5, yy * _0_5, 0);
                   end;
 
         uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);

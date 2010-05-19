@@ -182,7 +182,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepPortalShot,
             @doStepPiano,
             @doStepBomb,
-            @doStepSineGunShot
+            @doStepSineGunShot,
+            @doStepFlamethrower
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -482,6 +483,9 @@ gtAmmo_Grenade: begin // bazooka
  gtSineGunShot: begin
                 gear^.Radius:= 5;
                 gear^.Health:= 6000;
+                end;
+gtFlamethrower: begin
+                gear^.Timer:= 5001;
                 end;
      end;
 InsertGearToList(gear);
