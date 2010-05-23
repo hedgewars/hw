@@ -3201,7 +3201,7 @@ begin
         // end of list
 
         // don't port portals or other gear that wouldn't make sense
-        if (iterator^.Kind = gtPortal) or (iterator^.Kind = gtRope) then
+        if (iterator^.Kind = gtPortal) or (iterator^.Kind = gtRope) or (iterator^.PortalCounter > 20) then
             continue;
 
         // don't port hogs on rope
@@ -3246,6 +3246,9 @@ begin
         iterator^.Active := true;
         iterator^.State := iterator^.State or gstMoving;
         DeleteCI(iterator);
+
+        // Until loops are reliably broken
+        inc(iterator^.PortalCounter);
 
         // TODO: more accurate porting
         cdxy := Distance(conPortal^.dX, conPortal^.dY);
@@ -3407,6 +3410,7 @@ begin
                             iterator^.Health := newPortal^.Health;
                         end;
                     end;
+                iterator^.PortalCounter:= 0;
                 iterator := iterator^.NextGear
             end;
         end;

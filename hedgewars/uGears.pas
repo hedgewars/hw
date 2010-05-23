@@ -60,7 +60,8 @@ type
             uid: Longword;
             ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
             nImpactSounds: Word; // count of ImpactSounds
-            SoundChannel: LongInt
+            SoundChannel: LongInt;
+            PortalCounter: LongWord  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
         end;
 
 var AllInactive: boolean;
@@ -829,6 +830,7 @@ end;
 //If any of these are set as permanent toggles in the frontend, that needs to be checked and skipped here.
 procedure EndTurnCleanup;
 var  i: LongInt;
+     t: PGear;
 begin
     SpeechText:= ''; // in case it has not been consumed
 
@@ -845,7 +847,6 @@ begin
 
     if (GameFlags and gfArtillery) = 0 then
         cArtillery:= false;
-
     // have to sweep *all* current team hedgehogs since it is theoretically possible if you have enough invulnerabilities and switch turns to make your entire team invulnerable
     if (CurrentTeam <> nil) then
        with CurrentTeam^ do
@@ -862,6 +863,12 @@ begin
                      if (GameFlags and gfInvulnerable) = 0 then
                         Gear^.Invulnerable:= false;
                   end;
+    t:= GearsList;
+    while t <> nil do
+        begin
+        t^.PortalCounter:= 0;
+        t:= t^.NextGear
+        end
 end;
 
 procedure ApplyDamage(Gear: PGear; Damage: Longword);
