@@ -41,6 +41,8 @@
 		6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6151347D116C2803001F16D1 /* Icon-iPad.png */; };
 		615134B1116C2C5F001F16D1 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 615134B0116C2C5F001F16D1 /* OverlayViewController.xib */; };
 		615A92911183E31C006CA772 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 615A92901183E31C006CA772 /* MapConfigViewController-iPhone.xib */; };
+		615FBA5511A93C9800B139F9 /* SingleSchemeViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 615FBA5311A93C9800B139F9 /* SingleSchemeViewController.h */; };
+		615FBA5811A93D6700B139F9 /* SingleSchemeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615FBA5411A93C9800B139F9 /* SingleSchemeViewController.m */; };
 		617814E8118947A200C6A535 /* MapConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 617814E7118947A200C6A535 /* MapConfigViewController-iPad.xib */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
@@ -245,6 +247,8 @@
 		6151347D116C2803001F16D1 /* Icon-iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-iPad.png"; path = "../../cocoaTouch/resources/Icon-iPad.png"; sourceTree = SOURCE_ROOT; };
 		615134B0116C2C5F001F16D1 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = ../../cocoaTouch/xib/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
 		615A92901183E31C006CA772 /* MapConfigViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapConfigViewController-iPhone.xib"; path = "../../cocoaTouch/xib/MapConfigViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
+		615FBA5311A93C9800B139F9 /* SingleSchemeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleSchemeViewController.h; path = ../../cocoaTouch/SingleSchemeViewController.h; sourceTree = SOURCE_ROOT; };
+		615FBA5411A93C9800B139F9 /* SingleSchemeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingleSchemeViewController.m; path = ../../cocoaTouch/SingleSchemeViewController.m; sourceTree = SOURCE_ROOT; };
 		617814E7118947A200C6A535 /* MapConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapConfigViewController-iPad.xib"; path = "../../cocoaTouch/xib/MapConfigViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -713,6 +717,8 @@
 			children = (
 				61A11ADF1168DC6E00359010 /* SingleTeamViewController.h */,
 				61A11AE01168DC6E00359010 /* SingleTeamViewController.m */,
+				615FBA5311A93C9800B139F9 /* SingleSchemeViewController.h */,
+				615FBA5411A93C9800B139F9 /* SingleSchemeViewController.m */,
 			);
 			name = "second level";
 			sourceTree = "<group>";
@@ -786,6 +792,7 @@
 				61C325491179A336001E70B1 /* openalbridge.h in Headers */,
 				61C3254B1179A336001E70B1 /* wrappers.h in Headers */,
 				61AA7ACA117FCC8200FDDD4D /* openalbridge_t.h in Headers */,
+				615FBA5511A93C9800B139F9 /* SingleSchemeViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -986,7 +993,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels/.svn*\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,KnockBall,Ruler,BasketBall}\n\n#the following ones must be removed when their support is implemented\n\n#delete some voices\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/{Classic,British,Mobster,Pirate,Robot,Russian,Singer,Surfer}\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
+			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/btn*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/icon*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels/.svn*\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,KnockBall,Ruler,BasketBall}\n\n#the following ones must be removed when their support is implemented\n\n#delete some voices\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/{Classic,British,Mobster,Pirate,Robot,Russian,Singer,Surfer}\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -1088,6 +1095,7 @@
 				61CF4971117E702F00BF05B7 /* SquareButtonView.m in Sources */,
 				61B22E0F1180FBF400B2FCE0 /* MapConfigViewController.m in Sources */,
 				61AE62C711A067FE008DC32E /* SplitViewRootController.m in Sources */,
+				615FBA5811A93D6700B139F9 /* SingleSchemeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1169,7 +1177,7 @@
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs  -Cfvfpv2";
+				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -Ci- -Cr- -Co- -O-2 -Xs  -Cfvfpv2";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = default;

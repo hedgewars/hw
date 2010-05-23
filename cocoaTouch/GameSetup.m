@@ -58,19 +58,26 @@
 
 // wrapper that computes the length of the message and then sends the command string
 -(int) sendToEngine: (NSString *)string {
-	unsigned char length = [string length];
+	uint8_t length = [string length];
 	
 	SDLNet_TCP_Send(csd, &length , 1);
 	return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
-// unpacks team data from the team.plist to a sequence of commands for engine
--(void) sendTeamData:(NSString *)fileName withPlayingHogs:(NSInteger) playingHogs ofColor:(NSNumber *)color{    
-    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@", TEAMS_DIRECTORY(), fileName];
+// unpacks team data from the selected team.plist to a sequence of engine commands
+-(void) provideTeamData:(NSString *)teamName forHogs:(NSInteger) numberOfPlayingHogs withHealth:(NSInteger) initialHealth ofColor:(NSNumber *)teamColor {
+    /*
+     addteam <32charsMD5hash> <color> <team name>
+     addhh <level> <health> <hedgehog name>
+     <level> is 0 for human, 1-5 for bots (5 is the most stupid)
+    */
+    
+    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@", TEAMS_DIRECTORY(), teamName];
     NSDictionary *teamData = [[NSDictionary alloc] initWithContentsOfFile:teamFile];
     [teamFile release];
     
-    NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"eaddteam %@ %@ %@", [teamData objectForKey:@"hash"], [color stringValue], [teamData objectForKey:@"teamname"]];
+    NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"eaddteam %@ %@ %@", 
+                                      [teamData objectForKey:@"hash"], [teamColor stringValue], [teamData objectForKey:@"teamname"]];
     [self sendToEngine: teamHashColorAndName];
     [teamHashColorAndName release];
     
@@ -91,10 +98,11 @@
     [flag release];
     
     NSArray *hogs = [teamData objectForKey:@"hedgehogs"];
-    for (int i = 0; i < playingHogs; i++) {
+    for (int i = 0; i < numberOfPlayingHogs; i++) {
         NSDictionary *hog = [hogs objectAtIndex:i];
         
-        NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %@ %@", [hog objectForKey:@"level"], [hog objectForKey:@"health"], [hog objectForKey:@"hogname"]];
+        NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %d %@", 
+                                           [hog objectForKey:@"level"], initialHealth, [hog objectForKey:@"hogname"]];
         [self sendToEngine: hogLevelHealthAndName];
         [hogLevelHealthAndName release];
         
@@ -106,19 +114,28 @@
     [teamData release];
 }
 
-// unpacks ammodata from the ammo.plist to a sequence of commands for engine
--(void) sendAmmoData:(NSDictionary *)ammoData forTeams: (NSInteger)numberPlaying {
+// unpacks ammostore data from the selected ammo.plist to a sequence of engine commands
+-(void) provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger) numberOfTeams {
+    
+    //NSDictionary *ammoData = [[NSDictionary alloc] initWithContentsOfFile:ammoDataFile];
+    NSDictionary *ammoData = [[NSDictionary alloc] initWithObjectsAndKeys:
+                              @"9391929422199121032235111001201000000211190911",@"ammostore_initialqt",
+                              @"0405040541600655546554464776576666666155501000",@"ammostore_probability",
+                              @"0000000000000205500000040007004000000000200000",@"ammostore_delay",
+                              @"1311110312111111123114111111111111111211101111",@"ammostore_crate", nil];
+    
+    
     NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@", [ammoData objectForKey:@"ammostore_initialqt"]];
     [self sendToEngine: ammloadt];
     [ammloadt release];
     
-    NSString *ammdelay = [[NSString alloc] initWithFormat:@"eammprob %@", [ammoData objectForKey:@"ammostore_probability"]];
-    [self sendToEngine: ammdelay];
-    [ammdelay release];
-    
-    NSString *ammprob = [[NSString alloc] initWithFormat:@"eammdelay %@", [ammoData objectForKey:@"ammostore_delay"]];
+    NSString *ammprob = [[NSString alloc] initWithFormat:@"eammprob %@", [ammoData objectForKey:@"ammostore_probability"]];
     [self sendToEngine: ammprob];
     [ammprob release];
+    
+    NSString *ammdelay = [[NSString alloc] initWithFormat:@"eammdelay %@", [ammoData objectForKey:@"ammostore_delay"]];
+    [self sendToEngine: ammdelay];
+    [ammdelay release];
     
     NSString *ammreinf = [[NSString alloc] initWithFormat:@"eammreinf %@", [ammoData objectForKey:@"ammostore_crate"]];
     [self sendToEngine: ammreinf];
@@ -126,9 +143,95 @@
     
     // sent twice so it applies to both teams
     NSString *ammstore = [[NSString alloc] initWithString:@"eammstore"];
-    for (int i = 0; i < numberPlaying; i++)
+    for (int i = 0; i < numberOfTeams; i++)
         [self sendToEngine: ammstore];
     [ammstore release];
+    
+    [ammoData release];
+}
+
+// unpacks scheme data from the selected scheme.plist to a sequence of engine commands
+-(NSInteger) provideScheme:(NSString *)schemeName {
+    NSString *schemePath = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),schemeName];
+    NSArray *scheme = [[NSArray alloc] initWithContentsOfFile:schemePath];
+    int result = 0;
+    int i = 0;
+    
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x01;
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x10;    
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x04;
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x08;    
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x20;
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x40;    
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x80;
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x100;    
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x200;
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x400;    
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x800;
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x2000;    
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x4000;
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x8000;    
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x10000;
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x20000;
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x80000;    
+
+    NSString *flags = [[NSString alloc] initWithFormat:@"e$gmflags %d",result];
+    [self sendToEngine:flags];
+    [flags release];
+    
+    NSString *dmgMod = [[NSString alloc] initWithFormat:@"e$damagepct %d",[[scheme objectAtIndex:i++] intValue]];
+    [self sendToEngine:dmgMod];
+    [dmgMod release];
+    
+    NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",[[scheme objectAtIndex:i++] intValue] * 1000];
+    [self sendToEngine:turnTime];
+    [turnTime release];
+    
+    result = [[scheme objectAtIndex:i++] intValue]; // initial health
+    
+    NSString *sdTime = [[NSString alloc] initWithFormat:@"e$sd_turns %d",[[scheme objectAtIndex:i++] intValue]];
+    [self sendToEngine:sdTime];
+    [sdTime release];
+    
+    NSString *crateDrops = [[NSString alloc] initWithFormat:@"e$casefreq %d",[[scheme objectAtIndex:i++] intValue]];
+    [self sendToEngine:crateDrops];
+    [crateDrops release];
+    
+    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$minestime %d",[[scheme objectAtIndex:i++] intValue] * 1000];
+    [self sendToEngine:minesTime];
+    [minesTime release];
+    
+    NSString *minesNumber = [[NSString alloc] initWithFormat:@"e$landadds %d",[[scheme objectAtIndex:i++] intValue]];
+    [self sendToEngine:minesNumber];
+    [minesNumber release];
+    
+
+    NSString *dudMines = [[NSString alloc] initWithFormat:@"e$minedudpct %d",[[scheme objectAtIndex:i++] intValue]];
+    [self sendToEngine:dudMines];
+    [dudMines release];
+    
+    NSString *explosives = [[NSString alloc] initWithFormat:@"e$explosives %d",[[scheme objectAtIndex:i++] intValue]];
+    [self sendToEngine:explosives];
+    [explosives release];
+    
+    return result;
 }
 
 // method that handles net setup with engine and keeps connection alive
@@ -138,8 +241,8 @@
 	int eProto;
 	BOOL clientQuit, serverQuit;
 	char buffer[BUFFER_SIZE], string[BUFFER_SIZE];
-	Uint8 msgSize;
-	Uint16 gameTicks;
+	uint8_t msgSize;
+	uint16_t gameTicks;
 
     serverQuit = NO;
 
@@ -162,7 +265,6 @@
 	
 	NSLog(@"engineProtocol - Waiting for a client on port %d", ipcPort);
 	while (!serverQuit) {
-		
 		// This check the sd if there is a pending connection.
         // If there is one, accept that, and open a new socket for communicating
 		csd = SDLNet_TCP_Accept(sd);
@@ -172,7 +274,7 @@
 			NSLog(@"engineProtocol - Client found");
 			
 			//first byte of the command alwayas contain the size of the command
-			SDLNet_TCP_Recv(csd, &msgSize, sizeof(Uint8));
+			SDLNet_TCP_Recv(csd, &msgSize, sizeof(uint8_t));
 			
 			SDLNet_TCP_Recv(csd, buffer, msgSize);
 			gameTicks = SDLNet_Read16 (&buffer[msgSize - 2]);
@@ -181,29 +283,14 @@
 			if ('C' == buffer[0]) {
 				NSLog(@"engineProtocol - sending game config");
                 
-				// send config data data
-				/*
-				seed is arbitrary string
-				addteam <32charsMD5hash> <color> <team name>
-				addhh <level> <health> <hedgehog name>
-				  <level> is 0 for human, 1-5 for bots (5 is the most stupid)
-				*/
 				// local game
 				[self sendToEngine:@"TL"];
 				
 				// seed info
 				[self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
 				
-				// various flags
-				[self sendToEngine:@"e$gmflags 256"]; 
-				[self sendToEngine:@"e$damagepct 100"];
-				[self sendToEngine:@"e$turntime 45000"];
-				[self sendToEngine:@"e$minestime 3000"];
-				[self sendToEngine:@"e$landadds 4"];
-				[self sendToEngine:@"e$sd_turns 15"];
-				[self sendToEngine:@"e$casefreq 5"];
-				[self sendToEngine:@"e$explosives 2"];
-				[self sendToEngine:@"e$minedudpct 0"];
+                // scheme (returns initial health)
+                NSInteger health = [self provideScheme:@"testing"];
 
 				// dimension of the map
 				[self sendToEngine:[self.gameConfig objectForKey:@"templatefilter_command"]];
@@ -215,18 +302,13 @@
 				
                 NSArray *teamsConfig = [self.gameConfig objectForKey:@"teams_list"];
                 for (NSDictionary *teamData in teamsConfig) {
-                    [self sendTeamData:[teamData objectForKey:@"team"] 
-                       withPlayingHogs:[[teamData objectForKey:@"number"] intValue]
-                               ofColor:[teamData objectForKey:@"color"]];
+                    [self provideTeamData:[teamData objectForKey:@"team"] 
+                                  forHogs:[[teamData objectForKey:@"number"] intValue]
+                               withHealth:health
+                                  ofColor:[teamData objectForKey:@"color"]];
                 }
                 
-                NSDictionary *ammoData = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                          @"939192942219912103223511100120100000021119091",@"ammostore_initialqt",
-                                          @"040504054160065554655446477657666666615550100",@"ammostore_probability",
-                                          @"000000000000020550000004000700400000000020000",@"ammostore_delay",
-                                          @"131111031211111112311411111111111111121110111",@"ammostore_crate", nil];
-                [self sendAmmoData:ammoData forTeams:[teamsConfig count]];
-                [ammoData release];
+                [self provideAmmoData:nil forPlayingTeams:[teamsConfig count]];
                 
                 clientQuit = NO;
 			} else {
@@ -238,7 +320,7 @@
 				msgSize = 0;
 				memset(buffer, 0, BUFFER_SIZE);
 				memset(string, 0, BUFFER_SIZE);
-				if (SDLNet_TCP_Recv(csd, &msgSize, sizeof(Uint8)) <= 0)
+				if (SDLNet_TCP_Recv(csd, &msgSize, sizeof(uint8_t)) <= 0)
 					clientQuit = YES;
 				if (SDLNet_TCP_Recv(csd, buffer, msgSize) <=0)
 					clientQuit = YES;

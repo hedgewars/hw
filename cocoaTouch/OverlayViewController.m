@@ -48,30 +48,24 @@
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
             [self chatDisappear];
-            [dimTimer setFireDate:HIDING_TIME_DEFAULT];
             HW_setLandscape(YES);
             break;
         case UIDeviceOrientationLandscapeRight:
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(-90));
             [self chatDisappear];
-            [dimTimer setFireDate:HIDING_TIME_DEFAULT];
             HW_setLandscape(YES);
             break;
         case UIDeviceOrientationPortrait:
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(270));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
             [self chatAppear];
-            [self activateOverlay];
-            [dimTimer setFireDate:HIDING_TIME_NEVER];
             HW_setLandscape(NO);
             break;
         case UIDeviceOrientationPortraitUpsideDown:
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
             [self chatAppear];
-            [self activateOverlay];
-            [dimTimer setFireDate:HIDING_TIME_NEVER];
             HW_setLandscape(NO);
             break;
         default:
@@ -98,7 +92,8 @@
         [self.view addSubview:writeChatTextField];
     }
     writeChatTextField.alpha = 1;
-    //[self activateOverlay];
+    [self activateOverlay];
+    [dimTimer setFireDate:HIDING_TIME_NEVER];
 }
 
 -(void) chatDisappear {

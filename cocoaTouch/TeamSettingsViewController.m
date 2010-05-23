@@ -25,7 +25,7 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
 
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit",@"from the team navigation")
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit",@"from the team panel")
                                                                    style:UIBarButtonItemStyleBordered
                                                                   target:self
                                                                   action:@selector(toggleEdit:)];
@@ -51,13 +51,13 @@
     [self.tableView setEditing:!isEditing animated:YES];
     
     if (isEditing) {
-        [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"Edit",@"from the team navigation")];
+        [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"Edit",@"from the team panel")];
         [self.navigationItem.rightBarButtonItem setStyle: UIBarButtonItemStyleBordered];
         self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
     } else {
-        [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"Done",@"from the team navigation")];
+        [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"Done",@"from the team panel")];
         [self.navigationItem.rightBarButtonItem setStyle:UIBarButtonItemStyleDone];
-        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Add",@"from the team navigation")
+        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Add",@"from the team panel")
                                                                       style:UIBarButtonItemStyleBordered
                                                                      target:self
                                                                      action:@selector(addTeam:)];
@@ -88,7 +88,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [listOfTeams count];
+    return [self.listOfTeams count];
 }
 
 // Customize the appearance of table view cells.
@@ -101,7 +101,7 @@
     }
     
     NSUInteger row = [indexPath row]; 
-    NSString *rowString = [[listOfTeams objectAtIndex:row] stringByDeletingPathExtension]; 
+    NSString *rowString = [[self.listOfTeams objectAtIndex:row] stringByDeletingPathExtension]; 
     cell.textLabel.text = rowString; 
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
@@ -120,20 +120,6 @@
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
 
 #pragma mark -
 #pragma mark Table view delegate
@@ -144,7 +130,6 @@
     
     NSInteger row = [indexPath row];
     NSString *selectedTeamFile = [listOfTeams objectAtIndex:row];
-    NSLog(@"%@",selectedTeamFile);
     
     // this must be set so childController can load the correct plist
     childController.title = [selectedTeamFile stringByDeletingPathExtension];
@@ -169,7 +154,7 @@
 }
 
 -(void) dealloc {
-    [listOfTeams release];
+    [self.listOfTeams release];
     [childController release];
     [super dealloc];
 }

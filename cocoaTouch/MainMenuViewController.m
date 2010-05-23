@@ -69,6 +69,8 @@
     // create a team
     createTeamNamed(@"Default Team");
     
+    createSchemeNamed(@"testing ftw");
+    
     // create settings.plist
     NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
 

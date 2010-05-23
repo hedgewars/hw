@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class SingleSchemeViewController;
 
 @interface SchemeSettingsViewController : UITableViewController {
-
+    NSMutableArray *listOfSchemes;
+    SingleSchemeViewController *childController;
 }
+
+@property (nonatomic, retain) NSMutableArray *listOfSchemes;
 
 @end

@@ -29,7 +29,6 @@
 
 #pragma mark -
 #pragma mark textfield methods
-// return to previous table
 -(void) cancel:(id) sender {
     if (textFieldBeingEdited != nil)
         [self.textFieldBeingEdited resignFirstResponder];

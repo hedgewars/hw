@@ -30,8 +30,10 @@
     MainMenuViewController *mainViewController;
     BOOL isInGame;
 }
+
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(void) startSDLgame;
+-(void) displayOverlayLater;
 
 @end
 

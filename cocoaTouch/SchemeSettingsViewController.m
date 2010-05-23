@@ -7,85 +7,88 @@
 //
 
 #import "SchemeSettingsViewController.h"
-
+#import "CommodityFunctions.h"
+#import "SingleSchemeViewController.h"
 
 @implementation SchemeSettingsViewController
+@synthesize listOfSchemes;
 
-
-#pragma mark -
-#pragma mark Initialization
-
-/*
-- (id)initWithStyle:(UITableViewStyle)style {
-    // Override initWithStyle: if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-    if ((self = [super initWithStyle:style])) {
-    }
-    return self;
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return rotationManager(interfaceOrientation);
 }
-*/
 
 
 #pragma mark -
 #pragma mark View lifecycle
-
-/*
-- (void)viewDidLoad {
+-(void) viewDidLoad {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit",@"from the scheme panel")
+                                                                   style:UIBarButtonItemStyleBordered
+                                                                  target:self
+                                                                  action:@selector(toggleEdit:)];
+    self.navigationItem.rightBarButtonItem = editButton;
+    [editButton release];
+    
 }
-*/
 
-/*
-- (void)viewWillAppear:(BOOL)animated {
+-(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
-}
-*/
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
-
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Override to allow orientations other than the default portrait orientation.
-    return YES;
+    
+    NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCHEMES_DIRECTORY() error:NULL];
+    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:contentsOfDir copyItems:YES];
+    self.listOfSchemes = array;
+    [array release];
+    
+    [self.tableView reloadData];
 }
 
+// modifies the navigation bar to add the "Add" and "Done" buttons
+-(void) toggleEdit:(id) sender {
+    BOOL isEditing = self.tableView.editing;
+    [self.tableView setEditing:!isEditing animated:YES];
+    
+    if (isEditing) {
+        [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"Edit",@"from the scheme panel")];
+        [self.navigationItem.rightBarButtonItem setStyle: UIBarButtonItemStyleBordered];
+        self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
+    } else {
+        [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"Done",@"from the scheme panel")];
+        [self.navigationItem.rightBarButtonItem setStyle:UIBarButtonItemStyleDone];
+        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Add",@"from the scheme panel")
+                                                                      style:UIBarButtonItemStyleBordered
+                                                                     target:self
+                                                                     action:@selector(addScheme:)];
+        self.navigationItem.leftBarButtonItem = addButton;
+        [addButton release];
+    }
+}
+
+-(void) addScheme:(id) sender {
+    NSString *fileName = [[NSString alloc] initWithFormat:@"Scheme %u.plist", [self.listOfSchemes count]];
+    
+    createSchemeNamed([fileName stringByDeletingPathExtension]);
+    
+    [self.listOfSchemes addObject:fileName];
+    [fileName release];
+    
+    // order the array alphabetically, so schemes will keep their position
+    [self.listOfSchemes sortUsingSelector:@selector(compare:)];
+    
+    [self.tableView reloadData];
+}
 
 #pragma mark -
 #pragma mark Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
-    return 1;
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.listOfSchemes count];
 }
 
-
-// Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -93,84 +96,60 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    // Configure the cell...
+    NSUInteger row = [indexPath row]; 
+    NSString *rowString = [[self.listOfSchemes objectAtIndex:row] stringByDeletingPathExtension]; 
+    cell.textLabel.text = rowString; 
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
 }
 
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+// delete the row and the file
+-(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger row = [indexPath row];
     
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),[self.listOfSchemes objectAtIndex:row]];
+    [[NSFileManager defaultManager] removeItemAtPath:schemeFile error:NULL];
+    [schemeFile release];
+    
+    [self.listOfSchemes removeObjectAtIndex:row];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 
 #pragma mark -
 #pragma mark Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	/*
-	 <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-	 [self.navigationController pushViewController:detailViewController animated:YES];
-	 [detailViewController release];
-	 */
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (childController == nil) {
+        childController = [[SingleSchemeViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    }
+    
+    NSInteger row = [indexPath row];
+    NSString *selectedSchemeFile = [self.listOfSchemes objectAtIndex:row];
+    
+    // this must be set so childController can load the correct plist
+    childController.title = [selectedSchemeFile stringByDeletingPathExtension];
+    [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
+
+    [self.navigationController pushViewController:childController animated:YES];
 }
 
 
 #pragma mark -
 #pragma mark Memory management
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
+-(void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
-    // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
+-(void) viewDidUnload {
+    self.listOfSchemes = nil;
+    childController = nil;
 }
 
 
-- (void)dealloc {
+-(void) dealloc {
+    [self.listOfSchemes release];
+    [childController release];
     [super dealloc];
 }
 

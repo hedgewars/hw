@@ -88,9 +88,8 @@ int main (int argc, char *argv[]) {
 	const char **gameArgs = [setup getSettings];
 	[setup release];
 
-    //NSLog(@"%@",[[[UIApplication sharedApplication] windows]);
     // since the sdlwindow is not yet created, we add the overlayController with a delay
-    [self performSelector:@selector(later) withObject:nil afterDelay:4];
+    [self performSelector:@selector(displayOverlayLater) withObject:nil afterDelay:4];
     
     // this is the pascal fuction that starts the game (wrapped around isInGame)
     isInGame = YES;
@@ -98,7 +97,6 @@ int main (int argc, char *argv[]) {
     isInGame = NO;
     
     free(gameArgs);
-    //[overlayController.view removeFromSuperview];
     
     [UIView beginAnimations:@"inserting main controller" context:NULL];
 	[UIView setAnimationDuration:1];
@@ -106,7 +104,7 @@ int main (int argc, char *argv[]) {
 	[UIView commitAnimations];
 }
 
--(void) later {
+-(void) displayOverlayLater {
     // overlay with controls, become visible after 4 seconds, with a transparency effect
     OverlayViewController *overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
     

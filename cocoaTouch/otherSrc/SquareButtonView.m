@@ -7,9 +7,9 @@
 //
 
 #import "SquareButtonView.h"
+#import <QuartzCore/QuartzCore.h>
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
-#import "QuartzCore/QuartzCore.h"
 
 @implementation SquareButtonView
 @synthesize colorArray, selectedColor, ownerDictionary;

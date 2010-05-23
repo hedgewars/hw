@@ -21,10 +21,11 @@
 @property (nonatomic, retain) NSDictionary *gameConfig;
 
 -(void) engineProtocol;
--(void) startThread: (NSString *)selector;
--(int)  sendToEngine: (NSString *)string;
--(void) sendTeamData:(NSString *)fileName withPlayingHogs:(NSInteger) playingHogs ofColor:(NSNumber *)color;
--(void) sendAmmoData:(NSDictionary *)ammoData forTeams: (NSInteger)numberPlaying;
+-(void) startThread:(NSString *)selector;
+-(int)  sendToEngine:(NSString *)string;
+-(void) provideTeamData:(NSString *)teamName forHogs:(NSInteger) numberOfPlayingHogs withHealth:(NSInteger) initialHealth ofColor:(NSNumber *)teamColor;
+-(void) provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger) numberOfTeams;
+-(NSInteger) provideScheme:(NSString *)schemeName;
 
 -(const char **)getSettings;
 
