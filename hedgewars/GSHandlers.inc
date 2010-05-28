@@ -2612,8 +2612,8 @@ begin
     dec(Gear^.Timer);
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
     HedgehogChAngle(HHGear);
-    gX := hwRound(Gear^.X);
-    gY := hwRound(Gear^.Y);
+    gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
+    gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
     if (Gear^.Timer mod 100) = 0 then
     begin
         rx := rndSign(getRandom * _0_1);
@@ -3639,8 +3639,8 @@ begin
     dec(Gear^.Timer);
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
     HedgehogChAngle(HHGear);
-    gX := hwRound(Gear^.X);
-    gY := hwRound(Gear^.Y);
+    gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
+    gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
     if (Gear^.Timer mod 100) = 0 then
     begin
         rx := rndSign(getRandom * _0_1);
