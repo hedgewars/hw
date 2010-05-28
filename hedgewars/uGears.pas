@@ -495,7 +495,9 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Health:= 6000;
                 end;
 gtFlamethrower: begin
-                gear^.Timer:= 5001;
+                gear^.Tag:= 10;
+                gear^.Timer:= 10;
+                gear^.Health:= 500;
                 end;
      end;
 InsertGearToList(gear);

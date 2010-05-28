@@ -3631,36 +3631,63 @@ end;
 procedure doStepFlamethrowerWork(Gear: PGear);
 var 
     HHGear: PGear;
-    rx, ry: hwFloat;
+    rx, ry, speed: hwFloat;
     gX, gY: LongInt;
     Fire: PGear;
 begin
     AllInactive := false;
-    dec(Gear^.Timer);
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
     HedgehogChAngle(HHGear);
     gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
     gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
-    if (Gear^.Timer mod 100) = 0 then
+    
+    if (GameTicks and $FF) = 0 then
     begin
-        rx := rndSign(getRandom * _0_1);
-        ry := rndSign(getRandom * _0_1);
-
-        Fire := AddGear(gx, gy, gtFlame, 0,
-                    SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx,
-            AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
-        Fire^.State := Fire^.State or gsttmpFlag;
-        
-        if (Gear^.Timer mod 200) = 0 then 
+        if (HHGear^.Message and gm_Right) <> 0 then
+        begin
+            if HHGear^.dX.isNegative and (Gear^.Tag < 20) then inc(Gear^.Tag)
+            else if Gear^.Tag > 5 then dec(Gear^.Tag);
+        end
+        else if (HHGear^.Message and gm_Left) <> 0 then
+        begin
+            if HHGear^.dX.isNegative and (Gear^.Tag > 5) then dec(Gear^.Tag)
+            else if Gear^.Tag < 20 then inc(Gear^.Tag);
+        end
+    end;
+    
+    dec(Gear^.Timer);
+    if Gear^.Timer = 0 then
+    begin
+        dec(Gear^.Health);
+        if (Gear^.Health mod 10) = 0 then
+        begin
+            rx := rndSign(getRandom * _0_1);
+            ry := rndSign(getRandom * _0_1);
+            speed := _0_8 * (_10 / Gear^.Tag);
+    
             Fire := AddGear(gx, gy, gtFlame, 0,
-                        SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx,
-                AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
+                        SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
+                AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
+            Fire^.State := Fire^.State or gsttmpFlag;
+            
+            if (Gear^.Health mod 20) = 0 then 
+                Fire := AddGear(gx, gy, gtFlame, 0,
+                            SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
+                    AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
+        end;
+        Gear^.Timer:= Gear^.Tag
     end;
 
-    if (Gear^.Timer = 0) or (HHGear^.Damage <> 0) then
+    if (Gear^.Health = 0) or (HHGear^.Damage <> 0) then
     begin
         DeleteGear(Gear);
         AfterAttack
+    end
+    else
+    begin
+        if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
+        Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 5)) +
+                     '%', cWhiteColor, fntSmall) 
     end
 end;
 
@@ -3669,7 +3696,7 @@ var
     HHGear: PGear;
 begin
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
-    HHGear^.Message := HHGear^.Message and not (gm_Up or gm_Down);
+    HHGear^.Message := HHGear^.Message and not (gm_Up or gm_Down or gm_Left or gm_Right);
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.doStep := @doStepFlamethrowerWork
 end;

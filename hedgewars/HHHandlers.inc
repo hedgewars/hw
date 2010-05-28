@@ -104,6 +104,7 @@ end;
 procedure Attack(Gear: PGear);
 var xx, yy, lx, ly: hwFloat;
     tmpGear: PVisualGear;
+    tmpGear2: PGear;
 begin
 bShowFinger:= false;
 with Gear^,

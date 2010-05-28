@@ -370,7 +370,7 @@ const
     gm_Precise= $00002000;
     gmAllStoppable = gm_Left or gm_Right or gm_Up or gm_Down or gm_Attack or gm_Precise;
 
-    cMaxSlotIndex       = 8;
+    cMaxSlotIndex       = 9;
     cMaxSlotAmmoIndex   = 5;
 
     ammoprop_Timerable    = $00000001;
@@ -1074,7 +1074,7 @@ const
                 Pos: 0;
                 AmmoType: amSkip;
                 AttackVoice: sndNone);
-            Slot: 8;
+            Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1441,7 +1441,7 @@ const
                     Pos: 0;
                     AmmoType: amSwitch;
                     AttackVoice: sndNone);
-            Slot: 8;
+            Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1716,7 +1716,7 @@ const
                     Pos: 0;
                     AmmoType: amLowGravity;
                     AttackVoice: sndNone);
-            Slot: 8;
+            Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1745,7 +1745,7 @@ const
                     Pos: 0;
                     AmmoType: amExtraDamage;
                     AttackVoice: sndNone);
-            Slot: 8;
+            Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1774,7 +1774,7 @@ const
                     Pos: 0;
                     AmmoType: amInvulnerable;
                     AttackVoice: sndNone);
-            Slot: 6;
+            Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1803,7 +1803,7 @@ const
                     Pos: 0;
                     AmmoType: amExtraTime;
                     AttackVoice: sndNone);
-            Slot: 8;
+            Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1832,7 +1832,7 @@ const
                     Pos: 0;
                     AmmoType: amLaserSight;
                     AttackVoice: sndNone);
-            Slot: 2;
+            Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1861,7 +1861,7 @@ const
                     Pos: 0;
                     AmmoType: amVampiric;
                     AttackVoice: sndNone);
-            Slot: 6;
+            Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;

@@ -289,7 +289,10 @@ if (Gear^.State and gstHHDriven) <> 0 then
                     end;
                 defaultPos:= false
                 end;
-            gtFlamethrower: DrawRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
+            gtFlamethrower: begin
+                DrawRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
+                if CurAmmoGear^.Tex <> nil then DrawCentered(sx, sy - 40, CurAmmoGear^.Tex)
+                end;
         end;
 
         case CurAmmoGear^.Kind of

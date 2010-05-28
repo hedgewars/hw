@@ -22,9 +22,9 @@
 #include <QString>
 
 #ifdef _WIN32
-#define BINDS_NUMBER 42
-#else
 #define BINDS_NUMBER 43
+#else
+#define BINDS_NUMBER 44
 #endif
 
 struct BindAction
