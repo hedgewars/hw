@@ -727,7 +727,7 @@ const
             (FileName:  'amSeduction'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandSeduction
             (FileName:  'amVamp'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandVamp
+            Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandVamp
             (FileName:  'BigExplosion'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  385; Height: 385; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprBigExplosion
             (FileName:  'SmokeRing'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;

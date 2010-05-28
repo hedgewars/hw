@@ -388,7 +388,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
             amGasBomb: DrawRotated(sprHandCheese, hx, hy, hwSign(Gear^.dX), aangle);
             amMine: DrawRotated(sprHandMine, hx, hy, hwSign(Gear^.dX), aangle);
             amSeduction: DrawRotated(sprHandSeduction, hx, hy, hwSign(Gear^.dX), aangle);
-            amVampiric: DrawRotated(sprHandVamp, hx, hy, hwSign(Gear^.dX), aangle);
+            amVampiric: DrawRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
             amRCPlane: begin
                 DrawRotated(sprHandPlane, hx, hy, hwSign(Gear^.dX), 0);
                 defaultPos:= false
