@@ -291,7 +291,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                     end;
                 defaultPos:= false
                 end;
-            gtFlamethrower: DrawRotated(sprHandFlamethrower, hx, hy, hwSign(Gear^.dX), aangle);
+            gtFlamethrower: DrawRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
         end;
 
         case CurAmmoGear^.Kind of
@@ -404,7 +404,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                                   LongInt(leftX)+WorldDx)
                 end;
             amBee: DrawRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
-            amFlamethrower: DrawRotated(sprHandFlamethrower, hx, hy, hwSign(Gear^.dX), aangle);
+            amFlamethrower: DrawRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
         end;
 
         case amt of
