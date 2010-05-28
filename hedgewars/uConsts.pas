@@ -892,6 +892,7 @@ const
             SkipTurns: Longword;
             PosCount: Longword;
             PosSprite: TSprite;
+            ejectX, ejectY: Longint;
             end = (
             (NameId: sidNothing;
             NameTex: nil;
@@ -912,7 +913,9 @@ const
             isDamaging: false;
             SkipTurns: 9999;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Grenade
             (NameId: sidGrenade;
@@ -934,7 +937,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // ClusterBomb
             (NameId: sidClusterBomb;
@@ -956,7 +961,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Bazooka
             (NameId: sidBazooka;
@@ -978,7 +985,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 20;
+            ejectY: -6),
 
 // Bee
             (NameId: sidBee;
@@ -1000,7 +1009,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 16;
+            ejectY: 0),
 
 // Shotgun
             (NameId: sidShotgun;
@@ -1022,7 +1033,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 26;
+            ejectY: -6),
 
 // PickHammer
             (NameId: sidPickHammer;
@@ -1044,7 +1057,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Skip
             (NameId: sidSkip;
@@ -1066,7 +1081,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Rope
             (NameId: sidRope;
@@ -1092,7 +1109,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 20;
+            ejectY: -6),
 
 // Mine
             (NameId: sidMine;
@@ -1114,7 +1133,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // DEagle
             (NameId: sidDEagle;
@@ -1136,7 +1157,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 23;
+            ejectY: -6),
 
 // Dynamite
             (NameId: sidDynamite;
@@ -1158,7 +1181,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // FirePunch
             (NameId: sidFirePunch;
@@ -1180,7 +1205,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Whip
             (NameId: sidWhip;
@@ -1202,7 +1229,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // BaseballBat
             (NameId: sidBaseballBat;
@@ -1224,7 +1253,9 @@ const
             isDamaging: true;
             SkipTurns: 2;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Parachute
             (NameId: sidParachute;
@@ -1252,7 +1283,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // AirAttack
             (NameId: sidAirAttack;
@@ -1278,7 +1311,9 @@ const
             isDamaging: true;
             SkipTurns: 5;
             PosCount: 2;
-            PosSprite: sprAmAirplane),
+            PosSprite: sprAmAirplane;
+            ejectX: 0;
+            ejectY: 0),
 
 // MineStrike
             (NameId: sidMineStrike;
@@ -1304,7 +1339,9 @@ const
             isDamaging: true;
             SkipTurns: 5;
             PosCount: 2;
-            PosSprite: sprAmAirplane),
+            PosSprite: sprAmAirplane;
+            ejectX: 0;
+            ejectY: 0),
 
 // BlowTorch
             (NameId: sidBlowTorch;
@@ -1326,7 +1363,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Girder
             (NameId: sidGirder;
@@ -1352,7 +1391,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 8;
-            PosSprite: sprAmGirder),
+            PosSprite: sprAmGirder;
+            ejectX: 0;
+            ejectY: 0),
 
 // Teleport
             (NameId: sidTeleport;
@@ -1379,7 +1420,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 2;
-            PosSprite: sprAmTeleport),
+            PosSprite: sprAmTeleport;
+            ejectX: 0;
+            ejectY: 0),
 
 // Switch
             (NameId: sidSwitch;
@@ -1405,7 +1448,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Mortar
             (NameId: sidMortar;
@@ -1427,7 +1472,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 20;
+            ejectY: -6),
 
 // Kamikaze
             (NameId: sidKamikaze;
@@ -1449,7 +1496,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Cake
             (NameId: sidCake;
@@ -1471,7 +1520,9 @@ const
             isDamaging: true;
             SkipTurns: 4;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Seduction
             (NameId: sidSeduction;
@@ -1493,7 +1544,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Watermelon
             (NameId: sidWatermelon;
@@ -1515,7 +1568,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // HellishBomb ("Hellish Hand-Grenade")
             (NameId: sidHellishBomb;
@@ -1537,7 +1592,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Napalm
             (NameId: sidNapalm;
@@ -1563,7 +1620,9 @@ const
             isDamaging: true;
             SkipTurns: 7;
             PosCount: 2;
-            PosSprite: sprAmAirplane),
+            PosSprite: sprAmAirplane;
+            ejectX: 0;
+            ejectY: 0),
 
 // Drill ("Drill Rocket")
             (NameId: sidDrill;
@@ -1585,7 +1644,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprDrill),
+            PosSprite: sprDrill;
+            ejectX: 20;
+            ejectY: -6),
 
 // Ballgun
             (NameId: sidBallgun;
@@ -1607,7 +1668,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 20;
+            ejectY: -3),
 
 // RC-Plane
             (NameId: sidRCPlane;
@@ -1631,7 +1694,9 @@ const
             isDamaging: true;
             SkipTurns: 4;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // LowGravity
             (NameId: sidLowGravity;
@@ -1658,7 +1723,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // ExtraDamage
             (NameId: sidExtraDamage;
@@ -1685,7 +1752,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Invulnerable
             (NameId: sidInvulnerable;
@@ -1712,7 +1781,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // ExtraTime
             (NameId: sidExtraTime;
@@ -1739,7 +1810,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // LaserSight
             (NameId: sidLaserSight;
@@ -1766,7 +1839,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Vampiric
             (NameId: sidVampiric;
@@ -1793,7 +1868,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // SniperRifle
             (NameId: sidSniperRifle;
@@ -1815,7 +1892,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 40;
+            ejectY: -5),
 
 // Jetpack ("Flying Saucer")
             (NameId: sidJetpack;
@@ -1843,7 +1922,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Molotov
             (NameId: sidMolotov;
@@ -1865,7 +1946,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Birdy
             (NameId: sidBirdy;
@@ -1889,7 +1972,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // PortalGun
             (NameId: sidPortalGun;
@@ -1914,7 +1999,9 @@ const
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 29;
+            ejectY: -15),
 
 // Piano
             (NameId: sidPiano;
@@ -1940,7 +2027,9 @@ const
             isDamaging: true;
             SkipTurns: 7;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // GasBomb
             (NameId: sidGasBomb;
@@ -1962,7 +2051,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
             
 // SineGun
             (NameId: sidSineGun;
@@ -1984,7 +2075,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater),
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
 
 // Flamethrower
             (NameId: sidFlamethrower;
@@ -2006,7 +2099,9 @@ const
             isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
-            PosSprite: sprWater)
+            PosSprite: sprWater;
+            ejectX: 20;
+            ejectY: -3)
             );
 
 

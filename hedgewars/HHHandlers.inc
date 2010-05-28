@@ -102,7 +102,7 @@ end;
 
 
 procedure Attack(Gear: PGear);
-var xx, yy: hwFloat;
+var xx, yy, lx, ly: hwFloat;
     tmpGear: PVisualGear;
 begin
 bShowFinger:= false;
@@ -139,69 +139,72 @@ with Gear^,
         xx:= SignAs(AngleSin(Angle), dX);
         yy:= -AngleCos(Angle);
 
+        lx:= X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(dX), Angle)));
+        ly:= Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Angle)));
+
         if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery) then xx:= - xx;
         if Ammo^[CurSlot, CurAmmo].AttackVoice <> sndNone then
            PlaySound(Ammo^[CurSlot, CurAmmo].AttackVoice, CurrentTeam^.voicepack);
              case Ammo^[CurSlot, CurAmmo].AmmoType of
-                      amGrenade: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtAmmo_Bomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
-                      amMolotov: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtMolotov,      0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
-                  amClusterBomb: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtClusterBomb,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
-                      amGasBomb: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtGasBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
-                      amBazooka: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtAmmo_Grenade, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
-                          amBee: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtBee,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                      amGrenade: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtAmmo_Bomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
+                      amMolotov: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtMolotov,      0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                  amClusterBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtClusterBomb,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
+                      amGasBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtGasBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
+                      amBazooka: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtAmmo_Grenade, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                          amBee: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtBee,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                       amShotgun: begin
                                  PlaySound(sndShotgunReload);
-                                 CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
+                                 CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
                                  end;
-                   amPickHammer: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, gtPickHammer, 0, _0, _0, 0);
+                   amPickHammer: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly) + cHHRadius, gtPickHammer, 0, _0, _0, 0);
                          amSkip: ParseCommand('/skip', true);
-                         amRope: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtRope, 0, xx, yy, 0);
-                         amMine: AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtMine, gstWait, SignAs(_0_02, dX), _0, 3000);
-                       amDEagle: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
-                      amSineGun: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtSineGunShot, 0, xx * _0_5, yy * _0_5, 0);
-                    amPortalGun: AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtPortal, 0, xx * _0_6, yy * _0_6, 0);
+                         amRope: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtRope, 0, xx, yy, 0);
+                         amMine: AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtMine, gstWait, SignAs(_0_02, dX), _0, 3000);
+                       amDEagle: CurAmmoGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
+                      amSineGun: CurAmmoGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtSineGunShot, 0, xx * _0_5, yy * _0_5, 0);
+                    amPortalGun: AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtPortal, 0, xx * _0_6, yy * _0_6, 0);
                   amSniperRifle: begin
                                  PlaySound(sndSniperReload);
-                                 CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtSniperRifleShot, 0, xx * _0_5, yy * _0_5, 0);
+                                 CurAmmoGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtSniperRifleShot, 0, xx * _0_5, yy * _0_5, 0);
                                  end;
-                     amDynamite: AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtDynamite, 0, SignAs(_0_03, dX), _0, 5000);
-                    amFirePunch: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtFirePunch, 0, xx, _0, 0);
+                     amDynamite: AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtDynamite, 0, SignAs(_0_03, dX), _0, 5000);
+                    amFirePunch: CurAmmoGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtFirePunch, 0, xx, _0, 0);
                          amWhip: begin
-                                 CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtWhip, 0, SignAs(_1, dX), - _0_8, 0);
+                                 CurAmmoGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtWhip, 0, SignAs(_1, dX), - _0_8, 0);
                                  PlaySound(sndWhipCrack)
                                  end;
                   amBaseballBat: begin
-                                 CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtShover, gsttmpFlag, xx * _0_5, yy * _0_5, 0);
+                                 CurAmmoGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtShover, gsttmpFlag, xx * _0_5, yy * _0_5, 0);
                                  PlaySound(sndBaseballBat) // TODO: Only play if something is hit?
                                  end;
-                    amParachute: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtParachute, 0, _0, _0, 0);
+                    amParachute: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtParachute, 0, _0, _0, 0);
                     // we save Ammo^[CurSlot, CurAmmo].Pos (in this case: cursor direction) by using it as (otherwise irrelevant) X value of the new gear.
                     amAirAttack: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 0, _0, _0, 0);
                    amMineStrike: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 1, _0, _0, 0);
-                    amBlowTorch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBlowTorch, 0, SignAs(_0_5, dX), _0, 0);
+                    amBlowTorch: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtBlowTorch, 0, SignAs(_0_5, dX), _0, 0);
                        amGirder: CurAmmoGear:= AddGear(0, 0, gtGirder, Ammo^[CurSlot, CurAmmo].Pos, _0, _0, 0);
                      amTeleport: CurAmmoGear:= AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtTeleport, 0, _0, _0, 0);
-                       amSwitch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtSwitcher, 0, _0, _0, 0);
+                       amSwitch: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtSwitcher, 0, _0, _0, 0);
                        amMortar: begin
-                playSound(sndMortar);
-                FollowGear:= AddGear(hwRound(X), hwRound(Y), gtMortar,  0, xx*cMaxPower/cPowerDivisor, yy*cMaxPower/cPowerDivisor, 0);
-                 end;
+                                 playSound(sndMortar);
+                                 FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtMortar,  0, xx*cMaxPower/cPowerDivisor, yy*cMaxPower/cPowerDivisor, 0);
+                                 end;
                       amRCPlane: begin
-                                 CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtRCPlane,  0, xx * cMaxPower / cPowerDivisor / 4, yy * cMaxPower / cPowerDivisor / 4, 0);
+                                 CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtRCPlane,  0, xx * cMaxPower / cPowerDivisor / 4, yy * cMaxPower / cPowerDivisor / 4, 0);
                                  CurAmmoGear^.SoundChannel:= LoopSound(sndRCPlane, nil)
                                  end;
-                       amKamikaze: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtKamikaze, 0, xx * _0_5, yy * _0_5, 0);
-                         amCake: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 3, hwRound(Y), gtCake, 0, xx, _0, 0);
-                    amSeduction: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius * 2), hwRound(Y + yy * cHHRadius * 2), gtSeduction, 0, xx * _0_4, yy * _0_4, 0);
-                   amWatermelon: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtWatermelon,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
-                  amHellishBomb: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtHellishBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                       amKamikaze: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtKamikaze, 0, xx * _0_5, yy * _0_5, 0);
+                         amCake: CurAmmoGear:= AddGear(hwRound(lx) + hwSign(dX) * 3, hwRound(ly), gtCake, 0, xx, _0, 0);
+                    amSeduction: CurAmmoGear:= AddGear(hwRound(lx + xx * cHHRadius * 2), hwRound(ly + yy * cHHRadius * 2), gtSeduction, 0, xx * _0_4, yy * _0_4, 0);
+                   amWatermelon: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtWatermelon,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
+                  amHellishBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtHellishBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                        amNapalm: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 2, _0, _0, 0);
-                        amDrill: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtDrill, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
-                      amBallgun: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBallgun,  0, xx * _0_5, yy * _0_5, 0);
-                    amJetpack: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtJetpack, 0, _0, _0, 0);
+                        amDrill: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtDrill, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                      amBallgun: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtBallgun,  0, xx * _0_5, yy * _0_5, 0);
+                    amJetpack: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtJetpack, 0, _0, _0, 0);
                     amBirdy: begin
                              PlaySound(sndWhistle);
-                             CurAmmoGear:= AddGear(hwRound(X), hwRound(Y) - 32, gtBirdy, 0, _0, _0, 0);
+                             CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly) - 32, gtBirdy, 0, _0, _0, 0);
                              end;
                       amLowGravity: begin
                                     PlaySound(sndLowGravity);
@@ -211,7 +214,10 @@ with Gear^,
                       amInvulnerable: Invulnerable:= true;
                       amExtraTime: TurnTimeLeft:= TurnTimeLeft + 30000;
                       amLaserSight: cLaserSighting:= true;
-                      amVampiric: cVampiric:= true;
+                      amVampiric: begin
+                                  PlaySound(sndOw1, Team^.voicepack);
+                                  cVampiric:= true;
+                                  end;
                       amPiano: begin
                                // Tuck the hedgehog away until the piano attack is completed
                                Unplaced:= true;
@@ -220,7 +226,7 @@ with Gear^,
                                FollowGear:= AddGear(TargetPoint.X, 0, gtPiano, 0, _0, _0, 0);
                                PauseMusic
                                end;
-                      amFlamethrower: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtFlamethrower,  0, xx * _0_5, yy * _0_5, 0);
+                      amFlamethrower: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtFlamethrower,  0, xx * _0_5, yy * _0_5, 0);
                   end;
 
         uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);

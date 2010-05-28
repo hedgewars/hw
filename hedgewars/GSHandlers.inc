@@ -3479,11 +3479,9 @@ begin
         begin
             r0 := GetRandom(21);
             r1 := GetRandom(21);
+            doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, 0);
+            doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, 0);
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, EXPLAutoSound);
-            doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1,
-            EXPLAutoSound);
-            doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0,
-            EXPLAutoSound);
             Gear^.dY := -_1;
             Gear^.Pos := Gear^.Pos + 1;
         end

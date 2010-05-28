@@ -128,6 +128,15 @@ procedure PickUp(HH, Gear: PGear); forward;
 procedure HHSetWeapon(Gear: PGear); forward;
 procedure doStepCase(Gear: PGear); forward;
 
+function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
+begin
+    GetLaunchX:= dir * (8 + hwRound(AngleSin(angle) * Ammoz[at].ejectX) + hwRound(AngleCos(angle) * Ammoz[at].ejectY))
+end;
+
+function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
+begin
+    GetLaunchY:= hwRound(AngleSin(angle) * Ammoz[at].ejectY) - hwRound(AngleCos(angle) * Ammoz[at].ejectX) - 2;
+end;
 
 {$INCLUDE "GSHandlers.inc"}
 {$INCLUDE "HHHandlers.inc"}

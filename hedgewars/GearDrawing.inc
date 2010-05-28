@@ -2,7 +2,7 @@ procedure DrawHH(Gear: PGear);
 var i, t: LongInt;
     amt: TAmmoType;
     hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
-    lx, ly, dx, dy, ax, ay, aAngle, dAngle, hAngle: real;  // laser, change
+    dx, dy, ax, ay, aAngle, dAngle, hAngle, lx, ly: real;  // laser, change
     defaultPos, HatVisible: boolean;
     VertexBuffer: array [0..1] of TVertex2f;
     HH: PHedgehog;
@@ -77,13 +77,11 @@ if (Gear^.State and gstHHDriven) <> 0 then
    This routine perhaps should be pushed into uStore or somesuch instead of continuuing the increase in size of this function.
 *)
         dx:= hwSign(Gear^.dX) * m * Sin(Gear^.Angle * pi / cMaxAngle);
-        dy:= - Cos(Gear^.Angle * pi / cMaxAngle);
+        dy:= -Cos(Gear^.Angle * pi / cMaxAngle);
         if cLaserSighting then
             begin
-            lx:= hwRound(Gear^.X);
-            ly:= hwRound(Gear^.Y);
-            lx:= lx + dx * 16;
-            ly:= ly + dy * 16;
+            lx:= hwRound(Gear^.X) + GetLaunchX(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, hwSign(Gear^.dX), Gear^.Angle);
+            ly:= hwRound(Gear^.Y) + GetLaunchY(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, Gear^.Angle);
 
             ax:= dx * 4;
             ay:= dy * 4;
@@ -130,13 +128,13 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 end;
             end;
         // draw crosshair
-        cx:= Round(hwRound(Gear^.X) + dx * 80);
-        cy:= Round(hwRound(Gear^.Y) + dy * 80);
+        cx:= Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, hwSign(Gear^.dX), Gear^.Angle));
+        cy:= Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, Gear^.Angle));
         DrawRotatedTex(HH^.Team^.CrosshairTex,
                 12, 12, cx + WorldDx, cy + WorldDy, 0,
                 hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle);
         end;
-    hx:= hwRound(Gear^.X) + 1 + 8 * hwSign(Gear^.dX) + WorldDx;
+    hx:= hwRound(Gear^.X) + 8 * hwSign(Gear^.dX) + WorldDx;
     hy:= hwRound(Gear^.Y) - 2 + WorldDy;
     aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
 

@@ -588,6 +588,7 @@ DrawLand(WorldDx, WorldDy);
 DrawWater(255, 0);
 
 // Attack bar
+// TODO: Add weapon offset
 if CurrentTeam <> nil then
     case AttackBar of
 (*        1: begin
