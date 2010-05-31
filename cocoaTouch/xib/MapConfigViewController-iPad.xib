@@ -86,7 +86,7 @@
 					<object class="IBUISlider" id="938256702">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{573, 37}, {149, 23}}</string>
+						<string key="NSFrame">{{570, 117}, {149, 23}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -126,7 +126,7 @@
 					<object class="IBUILabel" id="634417433">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{627, 110}, {42, 21}}</string>
+						<string key="NSFrame">{{623, 20}, {42, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -146,7 +146,7 @@
 					<object class="IBUILabel" id="743202682">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{575, 67}, {145, 29}}</string>
+						<string key="NSFrame">{{572, 66}, {145, 29}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -346,10 +346,10 @@
 							<reference ref="88728219"/>
 							<reference ref="565214171"/>
 							<reference ref="967260168"/>
-							<reference ref="938256702"/>
-							<reference ref="634417433"/>
-							<reference ref="743202682"/>
 							<reference ref="326163764"/>
+							<reference ref="938256702"/>
+							<reference ref="743202682"/>
+							<reference ref="634417433"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -422,7 +422,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>MapConfigViewController</string>
 					<string>UIResponder</string>
-					<string>{{255, 106}, {1024, 768}}</string>
+					<string>{{255, 115}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>

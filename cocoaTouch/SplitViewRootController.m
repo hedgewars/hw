@@ -22,6 +22,8 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];    
     // Release any cached data, images, etc that aren't in use.
+    detailViewController = nil;
+    MSG_MEMCLEAN();
 }
 
 // load the view programmatically; we need a splitViewController that handles a MasterViewController 

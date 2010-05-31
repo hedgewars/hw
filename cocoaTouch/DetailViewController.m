@@ -146,13 +146,13 @@
 #ifdef __IPHONE_3_2
 -(void) splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)pc {
     barButtonItem.title = @"Master List";
-    [self.navigationController.navigationBar.topItem setLeftBarButtonItem:barButtonItem animated:YES];
+    [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.popoverController = pc;
 }
 
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
 -(void) splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-    [self.navigationController.navigationBar.topItem setLeftBarButtonItem:nil animated:YES];
+    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
     self.popoverController = nil;
 }
 #endif
@@ -166,6 +166,11 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
+    generalSettingsViewController = nil;
+    teamSettingsViewController = nil;
+    weaponSettingsViewController = nil;
+    schemeSettingsViewController = nil;
+    MSG_MEMCLEAN();
 }
 
 -(void) viewDidUnload {

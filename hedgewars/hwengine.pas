@@ -183,6 +183,7 @@ begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
     begin
+{$IFNDEF IPHONEOS}
 // have to remove this cycle because otherwise it segfaults at exit
         while SDL_PollEvent(@event) <> 0 do
         begin
@@ -209,6 +210,7 @@ begin
                 SDL_QUITEV: isTerminated:= true
             end; // end case event.type_
         end; // end while SDL_PollEvent(@event) <> 0
+{$ENDIF}
 
         if isTerminated = false then
         begin

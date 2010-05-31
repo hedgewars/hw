@@ -88,6 +88,7 @@
     int port = randomPort();
     pthread_t thread_id;
     pthread_create(&thread_id, NULL, (void *)GenLandPreview, (void *)port);
+    pthread_detach(thread_id);
     [self engineProtocol:port];
 
     // draw the buffer (1 pixel per component, 0= transparent 1= color)
@@ -128,7 +129,8 @@
     [indicator removeFromSuperview];
     
     [pool release];
-    [NSThread exit];
+    //Invoking this method should be avoided as it does not give your thread a chance to clean up any resources it allocated during its execution.
+    //[NSThread exit];
 
     /*
     // http://developer.apple.com/mac/library/qa/qa2001/qa1037.html
@@ -360,6 +362,9 @@
             mazeCommand = @"e$maze_size 0";
             break;
         default:
+            labelText = nil;
+            templateCommand = nil;
+            mazeCommand = nil;
             break;
     }
     
@@ -401,6 +406,10 @@
             mapgen = @"e$mapgen 1";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
+            break;
+        
+        default:
+            mapgen = nil;
             break;
     }
     self.mapGenCommand = mapgen;

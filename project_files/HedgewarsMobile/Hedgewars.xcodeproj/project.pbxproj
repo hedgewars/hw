@@ -31,6 +31,7 @@
 		611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */; };
 		611E1316117BBE5A0044B62F /* WeaponSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611E1315117BBE5A0044B62F /* WeaponSettingsViewController.m */; };
 		611E1319117BBE700044B62F /* SchemeSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611E1318117BBE700044B62F /* SchemeSettingsViewController.m */; };
+		611F4D4B11B27A9900F9759A /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 611F4D4A11B27A9900F9759A /* uScript.pas */; };
 		6122CD01116BECCA002648E9 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6122CD00116BECCA002648E9 /* Default-Landscape.png */; };
 		61272334117DF764005B90CF /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272333117DF752005B90CF /* libSDL_image.a */; };
 		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
@@ -70,7 +71,6 @@
 		61798832114AA34C00BA94A9 /* uLocale.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798804114AA34C00BA94A9 /* uLocale.pas */; };
 		61798833114AA34C00BA94A9 /* uMisc.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798805114AA34C00BA94A9 /* uMisc.pas */; };
 		61798834114AA34C00BA94A9 /* uRandom.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798806114AA34C00BA94A9 /* uRandom.pas */; };
-		61798835114AA34C00BA94A9 /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798807114AA34C00BA94A9 /* uScript.pas */; };
 		61798836114AA34C00BA94A9 /* uSHA.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798808114AA34C00BA94A9 /* uSHA.pas */; };
 		61798837114AA34C00BA94A9 /* uSound.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798809114AA34C00BA94A9 /* uSound.pas */; };
 		61798838114AA34C00BA94A9 /* uStats.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880A114AA34C00BA94A9 /* uStats.pas */; };
@@ -230,6 +230,7 @@
 		611E1315117BBE5A0044B62F /* WeaponSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeaponSettingsViewController.m; path = ../../cocoaTouch/WeaponSettingsViewController.m; sourceTree = SOURCE_ROOT; };
 		611E1317117BBE700044B62F /* SchemeSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SchemeSettingsViewController.h; path = ../../cocoaTouch/SchemeSettingsViewController.h; sourceTree = SOURCE_ROOT; };
 		611E1318117BBE700044B62F /* SchemeSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SchemeSettingsViewController.m; path = ../../cocoaTouch/SchemeSettingsViewController.m; sourceTree = SOURCE_ROOT; };
+		611F4D4A11B27A9900F9759A /* uScript.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uScript.pas; path = ../../hedgewars/uScript.pas; sourceTree = SOURCE_ROOT; };
 		611FD9C81155A1F200C2203D /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Background.png; path = ../../QTfrontend/res/Background.png; sourceTree = SOURCE_ROOT; };
 		611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HedgewarsTitle.png; path = ../../QTfrontend/res/HedgewarsTitle.png; sourceTree = SOURCE_ROOT; };
 		611FD9CF1155A40700C2203D /* NetworkPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = NetworkPlay.png; path = ../../QTfrontend/res/NetworkPlay.png; sourceTree = SOURCE_ROOT; };
@@ -281,7 +282,6 @@
 		61798804114AA34C00BA94A9 /* uLocale.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLocale.pas; path = ../../hedgewars/uLocale.pas; sourceTree = SOURCE_ROOT; };
 		61798805114AA34C00BA94A9 /* uMisc.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uMisc.pas; path = ../../hedgewars/uMisc.pas; sourceTree = SOURCE_ROOT; };
 		61798806114AA34C00BA94A9 /* uRandom.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uRandom.pas; path = ../../hedgewars/uRandom.pas; sourceTree = SOURCE_ROOT; };
-		61798807114AA34C00BA94A9 /* uScript.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uScript.pas; path = ../../hedgewars/uScript.pas; sourceTree = SOURCE_ROOT; };
 		61798808114AA34C00BA94A9 /* uSHA.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uSHA.pas; path = ../../hedgewars/uSHA.pas; sourceTree = SOURCE_ROOT; };
 		61798809114AA34C00BA94A9 /* uSound.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uSound.pas; path = ../../hedgewars/uSound.pas; sourceTree = SOURCE_ROOT; };
 		6179880A114AA34C00BA94A9 /* uStats.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uStats.pas; path = ../../hedgewars/uStats.pas; sourceTree = SOURCE_ROOT; };
@@ -582,12 +582,12 @@
 		61798892114AA56300BA94A9 /* inc */ = {
 			isa = PBXGroup;
 			children = (
-				618736B8118CA28600123B23 /* GearDrawing.inc */,
 				61798852114AA44900BA94A9 /* config.inc */,
+				617987EB114AA34C00BA94A9 /* options.inc */,
+				618736B8118CA28600123B23 /* GearDrawing.inc */,
 				617987E1114AA34C00BA94A9 /* CCHandlers.inc */,
 				617987E4114AA34C00BA94A9 /* GSHandlers.inc */,
 				617987E5114AA34C00BA94A9 /* HHHandlers.inc */,
-				617987EB114AA34C00BA94A9 /* options.inc */,
 				617987F0114AA34C00BA94A9 /* SinTable.inc */,
 			);
 			name = inc;
@@ -768,7 +768,7 @@
 				61798804114AA34C00BA94A9 /* uLocale.pas */,
 				61798805114AA34C00BA94A9 /* uMisc.pas */,
 				61798806114AA34C00BA94A9 /* uRandom.pas */,
-				61798807114AA34C00BA94A9 /* uScript.pas */,
+				611F4D4A11B27A9900F9759A /* uScript.pas */,
 				61798808114AA34C00BA94A9 /* uSHA.pas */,
 				61798809114AA34C00BA94A9 /* uSound.pas */,
 				6179880A114AA34C00BA94A9 /* uStats.pas */,
@@ -1060,7 +1060,6 @@
 				61798832114AA34C00BA94A9 /* uLocale.pas in Sources */,
 				61798833114AA34C00BA94A9 /* uMisc.pas in Sources */,
 				61798834114AA34C00BA94A9 /* uRandom.pas in Sources */,
-				61798835114AA34C00BA94A9 /* uScript.pas in Sources */,
 				61798836114AA34C00BA94A9 /* uSHA.pas in Sources */,
 				61798837114AA34C00BA94A9 /* uSound.pas in Sources */,
 				61798838114AA34C00BA94A9 /* uStats.pas in Sources */,
@@ -1096,6 +1095,7 @@
 				61B22E0F1180FBF400B2FCE0 /* MapConfigViewController.m in Sources */,
 				61AE62C711A067FE008DC32E /* SplitViewRootController.m in Sources */,
 				615FBA5811A93D6700B139F9 /* SingleSchemeViewController.m in Sources */,
+				611F4D4B11B27A9900F9759A /* uScript.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1129,6 +1129,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1148,6 +1149,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Development.plist";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1169,7 +1171,7 @@
 		6137064B117B1CB3004EE44A /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -1211,7 +1213,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
@@ -1372,7 +1374,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				DEBUG_INFORMATION_FORMAT = stabs;
@@ -1386,6 +1388,7 @@
 				GCC_DEBUGGING_SYMBOLS = full;
 				GCC_FAST_MATH = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1411,7 +1414,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";

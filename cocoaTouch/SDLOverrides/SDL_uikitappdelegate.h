@@ -27,9 +27,14 @@
 @class OverlayViewController;
 
 @interface SDLUIKitDelegate:NSObject<UIApplicationDelegate> {
+    SDL_Window *window; 	 
+    UIWindow *uiwindow;
     MainMenuViewController *mainViewController;
     BOOL isInGame;
 }
+
+@property (readwrite, assign) SDL_Window *window; 	 
+@property (readwrite, retain) UIWindow *uiwindow;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(void) startSDLgame;

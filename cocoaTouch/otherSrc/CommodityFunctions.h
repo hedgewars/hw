@@ -34,6 +34,8 @@
 #define MAPS_DIRECTORY()        [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Maps/"]
 #define VOICES_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Sounds/voices/"]
 
+#define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory");
+
 void createTeamNamed (NSString *nameWithoutExt);
 void createSchemeNamed (NSString *nameWithoutExt);
 BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);

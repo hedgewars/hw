@@ -72,7 +72,7 @@ void helper_fade(void *tmp) {
 
     if (type == AL_FADE_IN) {
 #ifdef DEBUG
-        err_msg("(%s) INFO - Fade-in in progress [index %d quantity %d]", prog, index, quantity);
+        fprintf(stderr,"(Bridge Info) - Fade-in in progress [index %d quantity %d]", index, quantity);
 #endif
 
         // save the volume desired after the fade

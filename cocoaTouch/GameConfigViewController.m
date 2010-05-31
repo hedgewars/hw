@@ -137,6 +137,12 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
+    if (mapConfigViewController.view.superview == nil ) 
+        mapConfigViewController = nil;
+    if (teamConfigViewController.view.superview == nil)
+        teamConfigViewController = nil;
+    activeController = nil;
+    MSG_MEMCLEAN();
 }
 
 

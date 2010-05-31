@@ -154,6 +154,7 @@
 -(NSInteger) provideScheme:(NSString *)schemeName {
     NSString *schemePath = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),schemeName];
     NSArray *scheme = [[NSArray alloc] initWithContentsOfFile:schemePath];
+    [schemePath release];
     int result = 0;
     int i = 0;
     
@@ -231,6 +232,7 @@
     [self sendToEngine:explosives];
     [explosives release];
     
+    [scheme release];
     return result;
 }
 

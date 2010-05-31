@@ -55,6 +55,7 @@ int main (int argc, char *argv[]) {
 }
 
 @implementation SDLUIKitDelegate
+@synthesize uiwindow, window;
 
 // convenience method
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -66,11 +67,15 @@ int main (int argc, char *argv[]) {
 	if (self = [super init]){
         mainViewController = nil;
         isInGame = NO;
+        self.uiwindow = nil; 	 
+        self.window = NULL;
     }
     return self;
 }
 
 -(void) dealloc {
+    SDL_DestroyWindow(self.window);
+     [uiwindow release];
     [mainViewController release];
 	[super dealloc];
 }
@@ -89,7 +94,7 @@ int main (int argc, char *argv[]) {
 	[setup release];
 
     // since the sdlwindow is not yet created, we add the overlayController with a delay
-    [self performSelector:@selector(displayOverlayLater) withObject:nil afterDelay:4];
+    [self performSelector:@selector(displayOverlayLater) withObject:nil afterDelay:1];
     
     // this is the pascal fuction that starts the game (wrapped around isInGame)
     isInGame = YES;
@@ -117,9 +122,11 @@ int main (int argc, char *argv[]) {
     [application setStatusBarHidden:YES];
     [application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];  
     
-    UIWindow *uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	uiwindow.backgroundColor = [UIColor blackColor];
-	
+    // needed to keep the app running after a game (gets released in sdl_uikitwindow)
+	[uiwindow retain];
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
     else
@@ -146,6 +153,7 @@ int main (int argc, char *argv[]) {
     if (isInGame) {
         HW_pause();
         
+        /*
         // Send every window on every screen a MINIMIZED event.
         SDL_VideoDevice *_this = SDL_GetVideoDevice();
         if (!_this)
@@ -158,6 +166,7 @@ int main (int argc, char *argv[]) {
             for (window = display->windows; window != nil; window = window->next)
                 SDL_SendWindowEvent(window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
         }
+        */
     }
 }
 
@@ -166,6 +175,7 @@ int main (int argc, char *argv[]) {
     if (isInGame) {
         HW_pause();
 
+        /*
         // Send every window on every screen a RESTORED event.
         SDL_VideoDevice *_this = SDL_GetVideoDevice();
         if (!_this)
@@ -178,6 +188,7 @@ int main (int argc, char *argv[]) {
             for (window = display->windows; window != nil; window = window->next)
                 SDL_SendWindowEvent(window, SDL_WINDOWEVENT_RESTORED, 0, 0);
         }
+        */
     }
 }
 
