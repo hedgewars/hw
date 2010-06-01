@@ -986,7 +986,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 20;
+            ejectX: 0; //20;
             ejectY: -6),
 
 // Bee
@@ -1010,7 +1010,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 16;
+            ejectX: 0; //16;
             ejectY: 0),
 
 // Shotgun
@@ -1034,7 +1034,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 26;
+            ejectX: 0; //26;
             ejectY: -6),
 
 // PickHammer
@@ -1158,7 +1158,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 23;
+            ejectX: 0; //23;
             ejectY: -6),
 
 // Dynamite
@@ -1473,7 +1473,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 20;
+            ejectX: 0; //20;
             ejectY: -6),
 
 // Kamikaze
@@ -1645,7 +1645,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprDrill;
-            ejectX: 20;
+            ejectX: 0; //20;
             ejectY: -6),
 
 // Ballgun
@@ -1669,7 +1669,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 20;
+            ejectX: 0; //20;
             ejectY: -3),
 
 // RC-Plane
@@ -1893,7 +1893,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 40;
+            ejectX: 0; //40;
             ejectY: -5),
 
 // Jetpack ("Flying Saucer")
@@ -2000,7 +2000,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 29;
+            ejectX: 0; //29;
             ejectY: -15),
 
 // Piano
@@ -2100,7 +2100,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 20;
+            ejectX: 0; //20;
             ejectY: -3)
             );
 
