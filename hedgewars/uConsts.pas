@@ -1110,8 +1110,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 20;
-            ejectY: -6),
+            ejectX: 0;
+            ejectY: 0),
 
 // Mine
             (NameId: sidMine;
