@@ -173,7 +173,7 @@
 
 #pragma mark -
 #pragma mark Memory management
-- (void)didReceiveMemoryWarning {
+-(void) didReceiveMemoryWarning {
     openal_stopsound(voiceBeingPlayed);
     openal_freesound(voiceBeingPlayed);
     voiceBeingPlayed = -1;
@@ -182,17 +182,17 @@
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
-    [super viewDidUnload];
-
+-(void) viewDidUnload {
     openal_close();
     voiceBeingPlayed = -1;
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
     self.voiceArray = nil;
+    [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
-- (void)dealloc {
+-(void) dealloc {
     [voiceArray release];
     [teamDictionary release];
     [lastIndexPath release];

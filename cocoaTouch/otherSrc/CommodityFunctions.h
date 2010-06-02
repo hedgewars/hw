@@ -34,16 +34,17 @@
 #define MAPS_DIRECTORY()        [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Maps/"]
 #define VOICES_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Sounds/voices/"]
 
-#define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory");
+#define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory"); print_free_memory()
+#define MSG_DIDUNLOAD()         DLog(@"did unload");
 
 void createTeamNamed (NSString *nameWithoutExt);
 void createSchemeNamed (NSString *nameWithoutExt);
 BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);
 NSInteger randomPort ();
 void popError (const char *title, const char *message);
+void print_free_memory ();
 
-
-#ifndef __IPHONE_3_2	// if iPhoneOS is 3.2 or greater then __IPHONE_3_2 will be defined
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_3_2
 typedef enum {
     UIUserInterfaceIdiomPhone,           // iPhone and iPod touch style UI
     UIUserInterfaceIdiomPad,             // iPad style UI

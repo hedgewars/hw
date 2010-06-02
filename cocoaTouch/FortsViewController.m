@@ -143,8 +143,8 @@
     self.teamDictionary = nil;
     self.lastIndexPath = nil;
     self.fortArray = nil;
-//    self.fortSprites = nil;
     [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 

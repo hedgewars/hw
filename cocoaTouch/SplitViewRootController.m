@@ -22,7 +22,8 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];    
     // Release any cached data, images, etc that aren't in use.
-    detailViewController = nil;
+    if (detailViewController.view.superview == nil)
+        detailViewController = nil;
     MSG_MEMCLEAN();
 }
 
@@ -33,34 +34,29 @@
     UINavigationController *detailedNavController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
     [detailViewController release];
 
+    CGRect rect = [[UIScreen mainScreen] bounds];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        self.view.frame = CGRectMake(0, 0, 1024, 768);
-    
-    //id splitViewRootController;
-    
+        self.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
+        
     Class splitViewControllerClass = NSClassFromString(@"UISplitViewController");
     if (splitViewControllerClass) {
-#ifdef __IPHONE_3_2
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_3_2
         UISplitViewController *splitViewRootController = [[UISplitViewController alloc] init];
-        //[[splitViewRootController view] setAutoresizingMask: UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+        //splitViewRootController.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;        
+        splitViewRootController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
         
-        splitViewRootController.view.frame = CGRectMake(0, 0, 1024, 768);
         MasterViewController *masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
-        
         UINavigationController *mainNavController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
-    
-        masterViewController.detailViewController = detailViewController;        
         [masterViewController release];
 
+        splitViewRootController.delegate = detailViewController;
+        masterViewController.detailViewController = detailViewController;        
         splitViewRootController.viewControllers = [NSArray arrayWithObjects: mainNavController, detailedNavController, nil];
         [mainNavController release];
         [detailedNavController release];
         
-        splitViewRootController.delegate = detailViewController;
-        [detailViewController release];
-
         // add view to main controller
-        [self.view addSubview:[splitViewRootController view]];
+        [self.view addSubview:splitViewRootController.view];
 #endif
     } else {
         [self.view addSubview:detailedNavController.view];
@@ -72,11 +68,15 @@
 -(void) viewDidUnload {
     detailViewController = nil;
     [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 -(void) dealloc {
     [detailViewController release];
     [super dealloc];
+}
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    [detailViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
 #pragma mark -

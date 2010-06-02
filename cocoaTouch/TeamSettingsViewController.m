@@ -145,12 +145,15 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
+    if (childController.view.superview == nil )
+        childController = nil;
 }
 
 -(void) viewDidUnload {
     self.listOfTeams = nil;
     childController = nil;
     [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 -(void) dealloc {

@@ -405,6 +405,18 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
+    if (hogHatViewController.view.superview == nil)
+        hogHatViewController = nil;
+    if (gravesViewController.view.superview == nil)
+        gravesViewController = nil;
+    if (voicesViewController.view.superview == nil)
+        voicesViewController = nil;
+    if (fortsViewController.view.superview == nil)
+        fortsViewController = nil;
+    if (flagsViewController.view.superview == nil)
+        flagsViewController = nil;
+    if (levelViewController.view.superview == nil)
+        levelViewController = nil;
 }
 
 -(void) viewDidUnload {
@@ -419,6 +431,7 @@
     gravesViewController = nil;
     levelViewController = nil;
     [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 -(void) dealloc {

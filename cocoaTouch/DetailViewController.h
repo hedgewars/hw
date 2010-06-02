@@ -12,23 +12,21 @@
 @class TeamSettingsViewController;
 @class WeaponSettingsViewController;
 @class SchemeSettingsViewController;
-#ifdef __IPHONE_3_2
-@interface DetailViewController : UITableViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate> {
-#else
-@interface DetailViewController : UITableViewController {
-#endif
-    id popoverController;
+
+@interface DetailViewController : UITableViewController <UISplitViewControllerDelegate, UIPopoverControllerDelegate> {
     NSArray *controllerNames;
+    
     GeneralSettingsViewController *generalSettingsViewController;
     TeamSettingsViewController *teamSettingsViewController;
     WeaponSettingsViewController *weaponSettingsViewController;
     SchemeSettingsViewController *schemeSettingsViewController;
+    UIPopoverController *popoverController;
 }
 
 // used in iphone version
 -(IBAction) dismissSplitView;
 
-@property (nonatomic, retain) id popoverController;
 @property (nonatomic, retain) NSArray *controllerNames;
+@property (nonatomic,retain) UIPopoverController *popoverController;
 
 @end

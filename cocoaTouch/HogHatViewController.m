@@ -128,11 +128,12 @@
 }
 
 - (void)viewDidUnload {
-    [super viewDidUnload];
     self.lastIndexPath = nil;
     self.normalHogSprite = nil;
     self.teamDictionary = nil;
     self.hatArray = nil;
+    [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 - (void)dealloc {

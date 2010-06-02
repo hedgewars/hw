@@ -159,6 +159,8 @@
 
 -(void) viewDidUnload {
     self.listOfTeams = nil;
+    [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 

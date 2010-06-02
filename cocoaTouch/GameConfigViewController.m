@@ -64,6 +64,18 @@
 }
 
 -(void) startGame {
+    // don't start playing if the preview is in progress
+    if ([mapConfigViewController busy]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Wait for the Preview",@"")
+                                                        message:NSLocalizedString(@"Before playing the preview needs to be generated",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        return;
+    }
+    
     // play only if there is more than one team
     if ([teamConfigViewController.listOfSelectedTeams count] < 2) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too few teams playing",@"")
@@ -91,6 +103,8 @@
         [alert release];
         return;
     }
+    
+    // create the configuration file that is going to be sent to engine
     NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:mapConfigViewController.seedCommand,@"seed_command",
                                                                       mapConfigViewController.templateFilterCommand,@"templatefilter_command",
                                                                       mapConfigViewController.mapGenCommand,@"mapgen_command",
@@ -99,6 +113,8 @@
                                                                       teamConfigViewController.listOfSelectedTeams,@"teams_list",nil];
     [dict writeToFile:GAMECONFIG_FILE() atomically:YES];
     [dict release];
+
+    // finally launch game and remove this controller
     [[self parentViewController] dismissModalViewControllerAnimated:YES];
     [[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
 }
@@ -137,7 +153,7 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
-    if (mapConfigViewController.view.superview == nil ) 
+    if (mapConfigViewController.view.superview == nil) 
         mapConfigViewController = nil;
     if (teamConfigViewController.view.superview == nil)
         teamConfigViewController = nil;
@@ -147,11 +163,11 @@
 
 
 -(void) viewDidUnload {
-    NSLog(@"unloading");
     activeController = nil;
     mapConfigViewController = nil;
     teamConfigViewController = nil;
     [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 

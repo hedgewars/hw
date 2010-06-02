@@ -32,6 +32,8 @@
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 	// Release any cached data, images, etc that aren't in use.
+    if (popupMenu.view.superview == nil) 
+        popupMenu = nil;
 }
 
 -(void) didRotate:(NSNotification *)notification {	
@@ -148,6 +150,7 @@
     self.popoverController = nil;
     self.popupMenu = nil;
     [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 -(void) dealloc {
@@ -236,8 +239,9 @@
     CGRect anchorForPopover;
     Class popoverControllerClass = NSClassFromString(@"UIPopoverController");
     if (popoverControllerClass) {
-#ifdef __IPHONE_3_2
-        popupMenu = [[PopoverMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_3_2
+        if (popupMenu == nil) 
+            popupMenu = [[PopoverMenuViewController alloc] initWithStyle:UITableViewStylePlain];
         popoverController = [[popoverControllerClass alloc] initWithContentViewController:popupMenu];
         [popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
         [popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
@@ -253,7 +257,8 @@
                                          animated:YES];
 #endif
     } else {
-        popupMenu = [[PopoverMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        if (popupMenu == nil) 
+            popupMenu = [[PopoverMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
         popupMenu.view.backgroundColor = [UIColor clearColor];
         popupMenu.view.frame = CGRectMake(480, 0, 200, 170);
         [self.view addSubview:popupMenu.view];
@@ -272,7 +277,7 @@
         isPopoverVisible = NO;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-#ifdef __IPHONE_3_2
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_3_2
             [popoverController dismissPopoverAnimated:YES];
 #endif
         } else {

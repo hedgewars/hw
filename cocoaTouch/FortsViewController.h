@@ -13,7 +13,6 @@
     NSDictionary *teamDictionary;
 
     NSArray *fortArray;
-//    NSArray *fortSprites;
     NSIndexPath *lastIndexPath;
 }
 

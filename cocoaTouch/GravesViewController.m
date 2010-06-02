@@ -109,10 +109,11 @@
 }
 
 - (void)viewDidUnload {
-    [super viewDidUnload];
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
     self.graveArray = nil;
+    [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 - (void)dealloc {

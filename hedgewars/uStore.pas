@@ -1072,7 +1072,9 @@ function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surf
 var tmpsurf: PSDL_Surface;
     s: shortstring;
 begin
-    WriteToConsole(msgLoading + filename + '.png [flags:');
+    WriteToConsole(msgLoading + filename + '.png (flags: ' + inttostr(imageFlags)+') ');
+{$IFDEF DEBUGFILE}
+    WriteToConsole('[flag translation:');
     if imageFlags = ifNone then
         WriteToConsole(' None')
     else
@@ -1084,6 +1086,7 @@ begin
         if (imageFlags and ifLowRes) <> 0 then WriteToConsole(' LowRes');
         end;
     WriteToConsole('] ');
+{$ENDIF}
 
     s:= filename + '.png';
     tmpsurf:= IMG_Load(Str2PChar(s));

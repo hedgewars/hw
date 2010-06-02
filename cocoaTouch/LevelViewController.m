@@ -156,11 +156,12 @@
 }
 
 -(void) viewDidUnload {
-    [super viewDidUnload];
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
     self.levelArray = nil;
     self.levelSprites = nil;
+    [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 -(void) dealloc {

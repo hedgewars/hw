@@ -292,7 +292,7 @@
 				[self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
 				
                 // scheme (returns initial health)
-                NSInteger health = [self provideScheme:@"testing"];
+                NSInteger health = [self provideScheme:@"Scheme 0"];
 
 				// dimension of the map
 				[self sendToEngine:[self.gameConfig objectForKey:@"templatefilter_command"]];
@@ -384,7 +384,8 @@
     [[NSFileManager defaultManager] removeItemAtPath:GAMECONFIG_FILE() error:NULL];
     
 	[pool release];
-	[NSThread exit];
+    //Invoking this method should be avoided as it does not give your thread a chance to clean up any resources it allocated during its execution.
+    //[NSThread exit];
 }
 
 #pragma mark -

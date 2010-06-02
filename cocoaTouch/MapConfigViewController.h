@@ -39,6 +39,7 @@
 }
 
 @property (nonatomic) NSInteger maxHogs;
+@property (nonatomic) BOOL busy;
 @property (nonatomic,retain) NSString *seedCommand;
 @property (nonatomic,retain) NSString *templateFilterCommand;
 @property (nonatomic,retain) NSString *mapGenCommand;

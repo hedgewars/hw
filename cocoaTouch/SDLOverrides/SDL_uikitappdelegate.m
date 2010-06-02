@@ -43,9 +43,8 @@ int main (int argc, char *argv[]) {
 #ifdef VALGRIND_REXEC
     // Using the valgrind build config, rexec ourself in valgrind
     // from http://landonf.bikemonkey.org/code/iphone/iPhone_Simulator_Valgrind.20081224.html
-    if (argc < 2 || (argc >= 2 && strcmp(argv[1], "-valgrind") != 0)) {
-        execl(VALGRIND, VALGRIND, "--leak-check=full", "--show-reachable=yes", argv[0], "-valgrind", NULL);
-    }
+    if (argc < 2 || (argc >= 2 && strcmp(argv[1], "-valgrind") != 0))
+        execl(VALGRIND, VALGRIND, "--leak-check=full", argv[0], "-valgrind", NULL);
 #endif
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];

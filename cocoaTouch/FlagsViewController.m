@@ -111,6 +111,7 @@
     self.lastIndexPath = nil;
     self.flagArray = nil;
     [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 -(void) dealloc {

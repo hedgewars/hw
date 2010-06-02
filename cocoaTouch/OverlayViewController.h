@@ -12,7 +12,7 @@
 
 @interface OverlayViewController : UIViewController {
     NSTimer *dimTimer;
-#ifdef __IPHONE_3_2
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_3_2
     UIPopoverController *popoverController;
 #else
     id popoverController;

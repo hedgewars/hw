@@ -139,11 +139,15 @@
 #pragma mark Memory management
 -(void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    if (childController.view.superview == nil )
+        childController = nil;
 }
 
 -(void) viewDidUnload {
     self.listOfSchemes = nil;
     childController = nil;
+    [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 

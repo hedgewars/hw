@@ -37,6 +37,10 @@
     [super viewDidLoad];
 }
 
+-(void) viewDidUnload {
+    [super viewDidUnload];
+    MSG_DIDUNLOAD();
+}
 
 -(void) dealloc {
     [menuList release];

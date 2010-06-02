@@ -17,7 +17,7 @@
 
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand,
-            tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, themeArray, mapArray;
+            tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, themeArray, mapArray, busy;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -54,13 +54,13 @@
         serverQuit = YES;
 	}
 	
-	NSLog(@"engineProtocol - Waiting for a client on port %d", port);
+	DLog(@"Waiting for a client on port %d", port);
 	while (!serverQuit) {
 		/* This check the sd if there is a pending connection.
 		 * If there is one, accept that, and open a new socket for communicating */
 		csd = SDLNet_TCP_Accept(sd);
 		if (NULL != csd) {			
-			NSLog(@"engineProtocol - Client found");
+			DLog(@"Client found");
             
             [self sendToEngine:self.seedCommand];
             [self sendToEngine:self.templateFilterCommand];
@@ -70,7 +70,7 @@
                 
             memset(map, 0, 128*32);
             SDLNet_TCP_Recv(csd, map, 128*32);
-            SDLNet_TCP_Recv(csd, &maxHogs, sizeof(Uint8));
+            SDLNet_TCP_Recv(csd, &maxHogs, sizeof(uint8_t));
 
 			SDLNet_TCP_Close(csd);
 			serverQuit = YES;
@@ -218,7 +218,6 @@
     self.previewButton.enabled = NO;
     self.maxLabel.text = @"...";
     self.segmentedControl.enabled = NO;
-    self.tableView.allowsSelection = NO;
     self.slider.enabled = NO;
 }
 
@@ -226,7 +225,6 @@
     self.previewButton.alpha = 1.0f;
     self.previewButton.enabled = YES;
     self.segmentedControl.enabled = YES;
-    self.tableView.allowsSelection = YES;
     self.slider.enabled = YES;
     busy = NO;
 }
@@ -505,6 +503,7 @@
     self.mapArray = nil;
     
     [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 -(void) dealloc {

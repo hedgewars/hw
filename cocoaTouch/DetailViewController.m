@@ -15,11 +15,15 @@
 #import "CommodityFunctions.h"
 
 @implementation DetailViewController
-@synthesize popoverController, controllerNames;
+@synthesize controllerNames,popoverController;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
 	return rotationManager(interfaceOrientation);
+}
+
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    self.view.frame = CGRectMake(0, 0, 1024, 1024);
 }
 
 -(void) viewDidLoad {
@@ -120,45 +124,50 @@
     [self.navigationController pushViewController:nextController animated:YES];
 }
 
-/*
-#pragma mark -
-#pragma mark Managing the popover controller
-// When setting the detail item, update the view and dismiss the popover controller if it's showing.
--(void) setDetailItem:(id) newDetailItem {
-    if (detailItem != newDetailItem) {
-        [detailItem release];
-        detailItem = [newDetailItem retain];
-        
-        // Update the view.
-       // navigationBar.topItem.title = (NSString*) detailItem;
-
-		//test.text=(NSString*) detailItem;
-    }
-
-  //  if (popoverController != nil) {
-  //      [popoverController dismissPopoverAnimated:YES];
-  //  }        
-}
-*/
-
-#pragma mark -
-#pragma mark Split view support
-#ifdef __IPHONE_3_2
--(void) splitViewController:(UISplitViewController *)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)pc {
-    barButtonItem.title = @"Master List";
-    [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
-    self.popoverController = pc;
-}
-
-// Called when the view is shown again in the split view, invalidating the button and popover controller.
--(void) splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
-    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
-    self.popoverController = nil;
-}
-#endif
-
 -(IBAction) dismissSplitView {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
+}
+
+#pragma mark -
+#pragma mark splitview support
+-(void) splitViewController:(UISplitViewController *)svc popoverController:(UIPopoverController *)pc willPresentViewController:(UIViewController *)aViewController {
+    if (popoverController != nil) {
+        [popoverController dismissPopoverAnimated:YES];
+    }
+}
+
+// Called when the master view controller is about to be hidden
+-(void) splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController 
+            withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
+
+  /*  barButtonItem.title = @"Master View";
+    UIToolbar *toolbar = self.parentViewController.navigationController.toolbar;
+    NSMutableArray *items = [[toolbar items] mutableCopy];
+    [items insertObject:barButtonItem atIndex:0];
+    [toolbar setItems:items animated:YES];
+
+    [items release];
+
+    self.popoverController = pc;*/
+    barButtonItem.title = aViewController.title;
+    self.navigationItem.rightBarButtonItem = barButtonItem;
+}
+
+// Called when the master view controller is about to appear
+-(void) splitViewController: (UISplitViewController*)svc  willShowViewController:(UIViewController *)aViewController 
+            invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+    /*UIToolbar *toolbar = self.parentViewController.navigationController.toolbar;
+
+    NSMutableArray *items = [[toolbar items] mutableCopy];
+    [items removeObjectAtIndex:0];
+
+    [toolbar setItems:items animated:YES];
+
+    [items release];
+
+    self.popoverController = nil;*/
+        self.navigationItem.rightBarButtonItem = nil;
+
 }
 
 
@@ -166,26 +175,29 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
-    generalSettingsViewController = nil;
-    teamSettingsViewController = nil;
-    weaponSettingsViewController = nil;
-    schemeSettingsViewController = nil;
+    if (generalSettingsViewController.view.superview == nil)
+        generalSettingsViewController = nil;
+    if (teamSettingsViewController.view.superview == nil)
+        teamSettingsViewController = nil;
+    if (weaponSettingsViewController.view.superview == nil)
+        weaponSettingsViewController = nil;
+    if (schemeSettingsViewController.view.superview == nil)
+        schemeSettingsViewController = nil;
     MSG_MEMCLEAN();
 }
 
 -(void) viewDidUnload {
     self.controllerNames = nil;
-    self.popoverController = nil;
     generalSettingsViewController = nil;
     teamSettingsViewController = nil;
     weaponSettingsViewController = nil;
     schemeSettingsViewController = nil;
     [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 -(void) dealloc {
     [controllerNames release];
-    [popoverController release];
     [generalSettingsViewController release];
     [teamSettingsViewController release];
     [weaponSettingsViewController release];

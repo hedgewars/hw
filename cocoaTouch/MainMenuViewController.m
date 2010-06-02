@@ -23,6 +23,11 @@
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
 	[super didReceiveMemoryWarning];
+    if (settingsViewController.view.superview == nil) 
+        settingsViewController = nil;
+    if (gameConfigViewController.view.superview == nil) 
+        gameConfigViewController = nil;
+    MSG_MEMCLEAN();
 }
 
 -(void) viewDidLoad {
@@ -67,9 +72,10 @@
     [indicator release];
     
     // create a team
-    createTeamNamed(@"Default Team");
+    createTeamNamed(@"Pirates");
+    createTeamNamed(@"Ninjas");
     
-    createSchemeNamed(@"testing ftw");
+    createSchemeNamed(@"Scheme 0");
     
     // create settings.plist
     NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
@@ -158,6 +164,7 @@
     gameConfigViewController = nil;
     settingsViewController = nil;
 	[super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 -(void) dealloc {

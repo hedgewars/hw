@@ -382,6 +382,7 @@
 	self.soundSwitch = nil;
 	self.altDamageSwitch = nil;
 	[super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 -(void) dealloc {

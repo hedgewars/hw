@@ -112,7 +112,16 @@
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
+    // Relinquish ownership any cached data, images, etc that aren't in use.    
+    if (generalSettingsViewController.view.superview == nil)
+        generalSettingsViewController = nil;
+    if (teamSettingsViewController.view.superview == nil)
+        teamSettingsViewController = nil;
+    if (weaponSettingsViewController.view.superview == nil)
+        weaponSettingsViewController = nil;
+    if (schemeSettingsViewController.view.superview == nil)
+        schemeSettingsViewController = nil;
+    MSG_MEMCLEAN();
 }
 
 -(void) viewDidUnload {
@@ -124,6 +133,7 @@
     weaponSettingsViewController = nil;
     schemeSettingsViewController = nil;
     [super viewDidUnload];
+    MSG_DIDUNLOAD();
 }
 
 -(void) dealloc {
