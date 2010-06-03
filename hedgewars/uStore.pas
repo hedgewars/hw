@@ -418,6 +418,7 @@ for ii:= Low(TSprite) to High(TSprite) do
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
                     end;
                 end;
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, priority);
                 if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
                 end
             else

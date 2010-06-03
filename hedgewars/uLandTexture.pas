@@ -83,7 +83,11 @@ if LandTextures[0, 0].tex = nil then
     for x:= 0 to LANDTEXARW -1 do
         for y:= 0 to LANDTEXARH - 1 do
             with LandTextures[x, y] do
-                tex:= NewTexture(TEXSIZE, TEXSIZE, Pixels(x, y))
+                begin
+                    tex:= NewTexture(TEXSIZE, TEXSIZE, Pixels(x, y));
+                    glBindTexture(GL_TEXTURE_2D, tex^.id);
+                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, tpHigh);
+                end
 else
     for x:= 0 to LANDTEXARW -1 do
         for y:= 0 to LANDTEXARH - 1 do
