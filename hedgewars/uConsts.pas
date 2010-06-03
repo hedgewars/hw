@@ -259,10 +259,11 @@ const
     MAXNAMELEN = 192;
     
     // some opengl headers do not have these macros
-    GL_BGR       = $80E0;
-    GL_BGRA      = $80E1;
-    GL_CLAMP_TO_EDGE = $812F;
-
+    GL_BGR              = $80E0;
+    GL_BGRA             = $80E1;
+    GL_CLAMP_TO_EDGE    = $812F;
+    GL_TEXTURE_PRIORITY = $8066;
+    
     cSendCursorPosTime  : LongWord = 50;
     cVisibleWater       : LongInt = 128;
     cCursorEdgesDist    : LongInt = 100;

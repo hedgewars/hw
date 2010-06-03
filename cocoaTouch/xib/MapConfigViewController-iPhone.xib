@@ -109,7 +109,6 @@
 							<double key="NSSize">15</double>
 							<int key="NSfFlags">16</int>
 						</object>
-						<int key="IBUIButtonType">1</int>
 						<object class="NSColor" key="IBUIHighlightedTitleColor" id="437070330">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -451,7 +450,6 @@
 							<string>sizeLabel</string>
 							<string>slider</string>
 							<string>tableView</string>
-							<string>viewForTables</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -461,7 +459,6 @@
 							<string>UILabel</string>
 							<string>UISlider</string>
 							<string>UITableView</string>
-							<string>UIView</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

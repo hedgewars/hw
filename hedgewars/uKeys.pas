@@ -61,7 +61,7 @@ var hideAmmoMenu: boolean;
     DefaultBinds, CurrentBinds: TBinds;
 
     coeff: LongInt;
-{$IFDEF IPHONEOS}
+{$IFDEF HWLIBRARY}
     leftClick: boolean;
     middleClick: boolean;
     rightClick: boolean;
@@ -86,8 +86,9 @@ var hideAmmoMenu: boolean;
     cursorDown: boolean;
     cursorLeft: boolean;
     cursorRight: boolean;
-    
+{$IFDEF IPHONEOS}    
 procedure setiPhoneBinds;
+{$ENDIF}
 {$ENDIF}
 implementation
 uses uTeams, uConsole, uMisc;
@@ -509,7 +510,7 @@ begin
     wheelUp:= false;
     wheelDown:= false;
     coeff:= 5;
-{$IFDEF IPHONEOS}
+{$IFDEF HWLIBRARY}
     // this function is called by HW_allKeysUp so be careful
     
     // mouse emulation
