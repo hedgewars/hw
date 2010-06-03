@@ -416,8 +416,6 @@ begin
     initEverything();
     WriteLnToConsole('Preview connecting on port ' + inttostr(port));
     ipcPort:= port;
-    // this function is so quick that we need slow it down
-    SDL_Delay(250);
 {$ENDIF}
     InitIPC;
     IPCWaitPongEvent;

@@ -11,7 +11,6 @@
 
 @interface MapConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
     TCPsocket sd, csd;
-    unsigned char map[128*32];
     NSInteger oldValue;  //slider
     NSInteger oldPage;   //segmented control
     BOOL busy;
@@ -63,7 +62,9 @@
 -(IBAction) segmentedControlChanged:(id) sender;
 -(void) turnOnWidgets;
 -(void) turnOffWidgets;
+-(void) setLabelText:(NSString *)str;
+-(void) setButtonImage:(UIImage *)img;
 
--(void) engineProtocol:(NSInteger) port;
+-(uint8_t *)engineProtocol:(NSInteger) port;
 
 @end

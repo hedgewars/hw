@@ -33,9 +33,10 @@
 	return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
--(void) engineProtocol:(NSInteger) port {
+-(uint8_t *)engineProtocol:(NSInteger) port {
 	IPaddress ip;
 	BOOL serverQuit = NO;
+    uint8_t map[128*32];
     
 	if (SDLNet_Init() < 0) {
 		NSLog(@"SDLNet_Init: %s", SDLNet_GetError());
@@ -54,6 +55,11 @@
         serverQuit = YES;
 	}
 	
+    // launch the preview here so that we're sure the tcp channel is open
+    pthread_t thread_id;
+    pthread_create(&thread_id, NULL, (void *)GenLandPreview, (void *)port);
+    pthread_detach(thread_id);
+    
 	DLog(@"Waiting for a client on port %d", port);
 	while (!serverQuit) {
 		/* This check the sd if there is a pending connection.
@@ -79,54 +85,46 @@
 	
 	SDLNet_TCP_Close(sd);
 	SDLNet_Quit();
+    return map;
 }
 
 -(void) drawingThread {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    // select the port for IPC and launch the preview generation
+    // select the port for IPC and launch the preview generation through engineProtocol:
     int port = randomPort();
-    pthread_t thread_id;
-    pthread_create(&thread_id, NULL, (void *)GenLandPreview, (void *)port);
-    pthread_detach(thread_id);
-    [self engineProtocol:port];
+    uint8_t *map = [self engineProtocol:port];
+    uint8_t mapExp[128*32*8];
 
     // draw the buffer (1 pixel per component, 0= transparent 1= color)
-    int xc = 0;
-    int yc = -1;
-    UIGraphicsBeginImageContext(CGSizeMake(256,128));      
-    CGContextRef context = UIGraphicsGetCurrentContext();       
-    UIGraphicsPushContext(context);  
+    int k = 0;
     for (int i = 0; i < 32*128; i++) {
         unsigned char byte = map[i];
         for (int j = 0; j < 8; j++) {
             // select the color based on the leftmost bit
             if ((byte & 0x80) != 0)
-                CGContextSetRGBFillColor(context, 0.5, 0.5, 0.7, 1.0);
+                mapExp[k] = 100;
             else
-                CGContextSetRGBFillColor(context, 0.0, 0.0, 0.0, 0.0);
-            // draw pixel
-            CGContextFillRect(context,CGRectMake(xc,yc,1,1));
-            // move coordinates
-            xc = (xc + 1) % 256;
-            if (xc == 0) yc++;
+                mapExp[k] = 255;
             // shift to next bit
             byte <<= 1;
+            k++;
         }
     }
-    UIGraphicsPopContext();
-    UIImage *previewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-
-    // set the preview image (autoreleased) in the button and the maxhog label
-    [self.previewButton setBackgroundImage:previewImage forState:UIControlStateNormal];
-    self.maxLabel.text = [NSString stringWithFormat:@"%d", maxHogs];
+    CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceGray();
+    CGContextRef bitmapImage = CGBitmapContextCreate(mapExp, 256, 128, 8, 256, colorspace, kCGImageAlphaNone);
+    CGColorSpaceRelease(colorspace);
     
-    // restore functionality of button and remove the spinning wheel
-    [self turnOnWidgets];
-    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self.previewButton viewWithTag:INDICATOR_TAG];
-    [indicator stopAnimating];
-    [indicator removeFromSuperview];
+    CGImageRef previewCGImage = CGBitmapContextCreateImage(bitmapImage);
+    UIImage *previewImage = [[UIImage alloc] initWithCGImage:previewCGImage];
+    CGImageRelease(previewCGImage);
+
+    // set the preview image (autoreleased) in the button and the maxhog label on the main thread to prevent a leak
+    [self performSelectorOnMainThread:@selector(setButtonImage:) withObject:[previewImage makeRoundCornersOfSize:CGSizeMake(12, 12)] waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(setLabelText:) withObject:[NSString stringWithFormat:@"%d", maxHogs] waitUntilDone:NO];
+    
+    // restore functionality of button and remove the spinning wheel on the main thread to prevent a leak
+    [self performSelectorOnMainThread:@selector(turnOnWidgets) withObject:nil waitUntilDone:NO];
     
     [pool release];
     //Invoking this method should be avoided as it does not give your thread a chance to clean up any resources it allocated during its execution.
@@ -134,13 +132,16 @@
 
     /*
     // http://developer.apple.com/mac/library/qa/qa2001/qa1037.html
-    CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceGray();
-    CGContextRef bitmapImage = CGBitmapContextCreate(mapExp, 128, 32, 8, 128, colorspace, kCGImageAlphaNone);
-    CGColorSpaceRelease(colorspace);
+    UIGraphicsBeginImageContext(CGSizeMake(256,128));      
+    CGContextRef context = UIGraphicsGetCurrentContext();       
+    UIGraphicsPushContext(context);  
+
+    CGContextSetRGBFillColor(context, 0.5, 0.5, 0.7, 1.0);
+    CGContextFillRect(context,CGRectMake(xc,yc,1,1));
     
-    CGImageRef previewCGImage = CGBitmapContextCreateImage(bitmapImage);
-    UIImage *previewImage = [[UIImage alloc] initWithCGImage:previewCGImage];
-    CGImageRelease(previewCGImage);
+    UIGraphicsPopContext();
+    UIImage *previewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     */
 }
 
@@ -192,9 +193,8 @@
     NSString *fileImage = [[NSString alloc] initWithFormat:@"%@/%@/preview.png", MAPS_DIRECTORY(),[self.mapArray objectAtIndex:index]];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:fileImage];
     [fileImage release];
-    [self.previewButton setBackgroundImage:image forState:UIControlStateNormal];
-    [image release];
-    
+    [self.previewButton setImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:UIControlStateNormal];
+
     // update label
     maxHogs = 18;
     NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg", MAPS_DIRECTORY(),[self.mapArray objectAtIndex:index]];
@@ -227,8 +227,37 @@
     self.segmentedControl.enabled = YES;
     self.slider.enabled = YES;
     busy = NO;
-}
     
+    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self.previewButton viewWithTag:INDICATOR_TAG];
+    if (indicator) {
+        [indicator stopAnimating];
+        [indicator removeFromSuperview];
+    }
+}
+ 
+-(void) setLabelText:(NSString *)str {
+    self.maxLabel.text = str;
+}
+
+-(void) setButtonImage:(UIImage *)img {
+    [self.previewButton setBackgroundImage:img forState:UIControlStateNormal];
+}
+
+-(void) restoreBackgroundImage {
+    // white rounded rectangle as background image for previewButton
+    UIGraphicsBeginImageContext(CGSizeMake(256,128));      
+    CGContextRef context = UIGraphicsGetCurrentContext();       
+    UIGraphicsPushContext(context);  
+
+    CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
+    CGContextFillRect(context,CGRectMake(0,0,256,128));
+    
+    UIGraphicsPopContext();
+    UIImage *bkgImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [self.previewButton setBackgroundImage:[[bkgImg retain] makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:UIControlStateNormal];
+}
+
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
@@ -398,6 +427,7 @@
             mapgen = @"e$mapgen 0";
             self.slider.enabled = NO;
             self.sizeLabel.text = @".";
+            [self restoreBackgroundImage];
             break;
             
         case 2: // Maze
@@ -458,6 +488,10 @@
 
     self.tableView.rowHeight = 42;
     busy = NO;
+    
+    // draw a white background
+    [self restoreBackgroundImage];
+    
     // initialize some "default" values
     self.sizeLabel.text = NSLocalizedString(@"All",@"");
     self.slider.value = 0.05f;

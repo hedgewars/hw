@@ -15,6 +15,8 @@
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint;
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint atSize:(CGSize) resultingSize;
 -(id) initWithContentsOfFile:(NSString *)path andCutAt:(CGRect) rect;
--(UIImage *)convertImageToGrayScale:(UIImage *)image;
+-(UIImage *)convertToGrayScale;
+-(UIImage *)maskImageWith:(UIImage *)maskImage;
+-(UIImage *)makeRoundCornersOfSize:(CGSize) sizewh;
 
 @end

@@ -78,19 +78,19 @@
     }
 }
 
--(UIImage *)convertImageToGrayScale:(UIImage *)image {
+-(UIImage *)convertToGrayScale {
   // Create image rectangle with current image width/height
-  CGRect imageRect = CGRectMake(0, 0, image.size.width, image.size.height);
+  CGRect imageRect = CGRectMake(0, 0, self.size.width, self.size.height);
  
   // Grayscale color space
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
  
   // Create bitmap content with current image size and grayscale colorspace
-  CGContextRef context = CGBitmapContextCreate(nil, image.size.width, image.size.height, 8, 0, colorSpace, kCGImageAlphaNone);
+  CGContextRef context = CGBitmapContextCreate(nil, self.size.width, self.size.height, 8, 0, colorSpace, kCGImageAlphaNone);
  
   // Draw image into current context, with specified rectangle
   // using previously defined context (with grayscale colorspace)
-  CGContextDrawImage(context, imageRect, [image CGImage]);
+  CGContextDrawImage(context, imageRect, [self CGImage]);
  
   // Create bitmap image info from pixel data in current context
   CGImageRef imageRef = CGBitmapContextCreateImage(context);
@@ -106,5 +106,84 @@
   // Return the new grayscale image
   return newImage;
 }
- 
+
+// by http://iphonedevelopertips.com/cocoa/how-to-mask-an-image.html turned into a category by koda
+-(UIImage*) maskImageWith:(UIImage *)maskImage {
+    CGImageRef maskRef = maskImage.CGImage;
+    
+    CGImageRef mask = CGImageMaskCreate(CGImageGetWidth(maskRef),
+                                        CGImageGetHeight(maskRef),
+                                        CGImageGetBitsPerComponent(maskRef),
+                                        CGImageGetBitsPerPixel(maskRef),
+                                        CGImageGetBytesPerRow(maskRef),
+                                        CGImageGetDataProvider(maskRef), NULL, false);
+    
+    CGImageRef masked = CGImageCreateWithMask([self CGImage], mask);
+    
+    CGImageRelease(mask);
+    
+    UIImage* retImage = [UIImage imageWithCGImage:masked];
+    
+    CGImageRelease(masked);
+    
+    return retImage;
+}
+
+// by http://blog.sallarp.com/iphone-uiimage-round-corners/ turned into a category by koda
+void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, float ovalHeight)
+{
+    float fw, fh;
+    if (ovalWidth == 0 || ovalHeight == 0) {
+        CGContextAddRect(context, rect);
+        return;
+    }
+    CGContextSaveGState(context);
+    CGContextTranslateCTM (context, CGRectGetMinX(rect), CGRectGetMinY(rect));
+    CGContextScaleCTM (context, ovalWidth, ovalHeight);
+    fw = CGRectGetWidth (rect) / ovalWidth;
+    fh = CGRectGetHeight (rect) / ovalHeight;
+    CGContextMoveToPoint(context, fw, fh/2);
+    CGContextAddArcToPoint(context, fw, fh, fw/2, fh, 1);
+    CGContextAddArcToPoint(context, 0, fh, 0, fh/2, 1);
+    CGContextAddArcToPoint(context, 0, 0, fw/2, 0, 1);
+    CGContextAddArcToPoint(context, fw, 0, fw, fh/2, 1);
+    CGContextClosePath(context);
+    CGContextRestoreGState(context);
+}
+
+-(UIImage *)makeRoundCornersOfSize:(CGSize) sizewh {
+	UIImage * newImage = nil;
+
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+    
+    NSInteger cornerWidth = sizewh.width;
+    NSInteger cornerHeight = sizewh.height;
+    int w = self.size.width;
+    int h = self.size.height;
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
+    
+    CGContextBeginPath(context);
+    CGRect rect = CGRectMake(0, 0, w, h);
+    addRoundedRectToPath(context, rect, cornerWidth, cornerHeight);
+    CGContextClosePath(context);
+    CGContextClip(context);
+    
+    CGContextDrawImage(context, CGRectMake(0, 0, w, h), self.CGImage);
+    
+    CGImageRef imageMasked = CGBitmapContextCreateImage(context);
+    CGContextRelease(context);
+    CGColorSpaceRelease(colorSpace);
+    [self release];
+    
+    newImage = [[UIImage imageWithCGImage:imageMasked] retain];
+    CGImageRelease(imageMasked);
+    
+    [pool release];
+    
+    return newImage;
+}
+
+
 @end
