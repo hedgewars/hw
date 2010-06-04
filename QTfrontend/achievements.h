@@ -20,6 +20,32 @@
 #define ACHIEVEMENTS_H
 
 #define MAX_ACHIEVEMENTS 128
-extern const char achievements[][5][256];
+
+// This is just for testing and far from being complete - everything might change so don't use it anywhere!
+
+enum achflags
+{
+    ACH_FLAGS_NONE      = 0x00,
+    ACH_FLAGS_HIDDEN    = 0x01,
+    ACH_FLAGS_INACTIVE  = 0x02,
+    // UNKNOWN          = 0x04,
+    // UNKNOWN          = 0x08,
+    // UNKNOWN          = 0x10,
+    // UNKNOWN          = 0x20,
+    // UNKNOWN          = 0x40,
+    // UNKNOWN          = 0x80,
+};
+
+struct achievement
+{
+    const char *id;
+    const char *caption;
+    const char *description;
+    const char *image;
+    const int   goal;
+    const int   flags;
+};
+
+extern const char achievements[][6][256];
 
 #endif // ACHIEVEMENTS_H

@@ -168,11 +168,11 @@ void SelWeaponWidget::setDefault()
 
 void SelWeaponWidget::save()
 {
-    if (m_name->text() == "Default") {
-        QMessageBox impossible(QMessageBox::Warning, QMessageBox::tr("Weapons"), QMessageBox::tr("Can not edit default weapon set"));
-        impossible.exec();
-        return;
-    }
+    for(int i = 0; i < cDefaultAmmos.size(); i++)
+        if (!cDefaultAmmos[i].first.compare(m_name->text())) {
+            QMessageBox::warning(0, QMessageBox::tr("Weapons"), QMessageBox::tr("Can not overwrite default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+            return;
+        }
 
     if (m_name->text() == "") return;
 

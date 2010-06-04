@@ -397,12 +397,12 @@ QVariant AmmoSchemeModel::data(const QModelIndex &index, int role) const
 
 void AmmoSchemeModel::Save()
 {
-    fileConfig.beginWriteArray("schemes", schemes.size());
+    fileConfig.beginWriteArray("schemes", schemes.size() - numberOfDefaultSchemes);
 
-    for (int i = 0; i < schemes.size(); ++i) {
+    for (int i = 0; i < schemes.size() - numberOfDefaultSchemes; ++i) {
         fileConfig.setArrayIndex(i);
 
-        QList<QVariant> scheme = schemes[i];
+        QList<QVariant> scheme = schemes[i + numberOfDefaultSchemes];
 
         for (int k = 0; k < scheme.size(); ++k)
             fileConfig.setValue(spNames[k], scheme[k]);
