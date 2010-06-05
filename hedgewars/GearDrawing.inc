@@ -80,9 +80,21 @@ if (Gear^.State and gstHHDriven) <> 0 then
         dy:= -Cos(Gear^.Angle * pi / cMaxAngle);
         if cLaserSighting then
             begin
-            lx:= hwRound(Gear^.X) + GetLaunchX(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, hwSign(Gear^.dX), Gear^.Angle);
-            ly:= hwRound(Gear^.Y) + GetLaunchY(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, Gear^.Angle);
+            lx:= GetLaunchX(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, hwSign(Gear^.dX) * m, Gear^.Angle);
+            ly:= GetLaunchY(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, Gear^.Angle);
 
+            // ensure we start outside the hedgehog (he's solid after all)
+            while abs(lx * lx + ly * ly) < (Gear^.radius * Gear^.radius) do
+                begin
+                lx:= lx + dx;
+                ly:= ly + dy
+                end;
+
+            // add hog's position
+            lx:= lx + hwRound(Gear^.X);
+            ly:= ly + hwRound(Gear^.Y);
+
+            // decrease number of iterations required
             ax:= dx * 4;
             ay:= dy * 4;
 
@@ -92,7 +104,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
             hy:= ty;
             while ((ty and LAND_HEIGHT_MASK) = 0) and
                 ((tx and LAND_WIDTH_MASK) = 0) and
-                (Land[ty, tx] = 0) do
+                (Land[ty, tx] = 0) do // TODO: check for constant variable instead
                 begin
                 lx:= lx + ax;
                 ly:= ly + ay;
@@ -128,7 +140,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 end;
             end;
         // draw crosshair
-        cx:= Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, hwSign(Gear^.dX), Gear^.Angle));
+        cx:= Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, hwSign(Gear^.dX) * m, Gear^.Angle));
         cy:= Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, Gear^.Angle));
         DrawRotatedTex(HH^.Team^.CrosshairTex,
                 12, 12, cx + WorldDx, cy + WorldDy, 0,
@@ -137,7 +149,6 @@ if (Gear^.State and gstHHDriven) <> 0 then
     hx:= hwRound(Gear^.X) + 8 * hwSign(Gear^.dX) + WorldDx;
     hy:= hwRound(Gear^.Y) - 2 + WorldDy;
     aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
-
     if CurAmmoGear <> nil then
     begin
         case CurAmmoGear^.Kind of

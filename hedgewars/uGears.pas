@@ -130,7 +130,7 @@ procedure doStepCase(Gear: PGear); forward;
 
 function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 begin
-    GetLaunchX:= dir * (8 + hwRound(AngleSin(angle) * Ammoz[at].ejectX) + hwRound(AngleCos(angle) * Ammoz[at].ejectY))
+    GetLaunchX:= sign(dir) * (8 + hwRound(AngleSin(angle) * Ammoz[at].ejectX) + hwRound(AngleCos(angle) * Ammoz[at].ejectY))
 end;
 
 function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
