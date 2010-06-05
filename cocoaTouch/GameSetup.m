@@ -397,7 +397,7 @@
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     NSString *wSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.width];
     NSString *hSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.height];
-	const char **gameArgs = (const char**) malloc(sizeof(char *) * 8);
+	const char **gameArgs = (const char**) malloc(sizeof(char *) * 9);
 
     /*
     size_t size;
@@ -435,6 +435,7 @@
 	gameArgs[5] = [[[self.systemSettings objectForKey:@"alternate"] stringValue] UTF8String];	//cAltDamage
 	gameArgs[6] = [wSize UTF8String];                                                           //cScreenHeight
     gameArgs[7] = [hSize UTF8String];                                                           //cScreenWidth
+    gameArgs[8] = NULL;                                                                         //recordFileName
     
     [wSize release];
     [hSize release];

@@ -11,24 +11,24 @@ configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_B
 #if the headers are not installed, the newer apis won't be activated
 find_file(sdlmixer_h SDL_mixer.h ${SDLMIXER_INCLUDE_DIR})
 if(sdlmixer_h)
-file(STRINGS ${sdlmixer_h} sdlmixer_version_tmp REGEX "SDL_MIXER_PATCHLEVEL[\t' ']+[0-9]+")
-string(REGEX MATCH ".([0-9]+)" sdlmixer_version "${sdlmixer_version_tmp}")
+	file(STRINGS ${sdlmixer_h} sdlmixer_version_tmp REGEX "SDL_MIXER_PATCHLEVEL[\t' ']+[0-9]+")
+	string(REGEX MATCH ".([0-9]+)" sdlmixer_version "${sdlmixer_version_tmp}")
 
-if(sdlmixer_version GREATER 9)
-message(STATUS "Enabling enhanced SDL_Mixer calls")
-set(pascal_compiler_flags_cmn "-dSDL_MIXER_NEWER" ${pascal_compiler_flags_cmn})
-endif()
+	if(sdlmixer_version GREATER 9)
+		message(STATUS "Enabling enhanced SDL_Mixer calls")
+		set(pascal_compiler_flags_cmn "-dSDL_MIXER_NEWER" ${pascal_compiler_flags_cmn})
+	endif()
 endif()
 
 find_file(sdlimage_h SDL_image.h ${SDLIMAGE_INCLUDE_DIR})
 if(sdlimage_h)
-file(STRINGS ${sdlimage_h} sdlimage_version_tmp REGEX "SDL_IMAGE_PATCHLEVEL[\t' ']+[0-9]+")
-string(REGEX MATCH ".([0-9]+)" sdlimage_version "${sdlimage_version_tmp}")
+	file(STRINGS ${sdlimage_h} sdlimage_version_tmp REGEX "SDL_IMAGE_PATCHLEVEL[\t' ']+[0-9]+")
+	string(REGEX MATCH ".([0-9]+)" sdlimage_version "${sdlimage_version_tmp}")
 
-if(sdlimage_version GREATER 7)
-message(STATUS "Enabling enhanced SDL_Image calls")
-set(pascal_compiler_flags_cmn "-dSDL_IMAGE_NEWER" ${pascal_compiler_flags_cmn})
-endif()
+	if(sdlimage_version GREATER 7)
+		message(STATUS "Enabling enhanced SDL_Image calls")
+		set(pascal_compiler_flags_cmn "-dSDL_IMAGE_NEWER" ${pascal_compiler_flags_cmn})
+	endif()
 endif()
 
 #SOURCE AND PROGRAMS SECTION 
@@ -77,6 +77,14 @@ set(engine_sources
 	options.inc
 	${CMAKE_CURRENT_BINARY_DIR}/config.inc
 	)
+
+if(BUILD_ENGINE_LIBRARY)
+	message(STATUS "Engine will be built as library (experimental)")
+	set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas)
+	set(engine_sources ${hwengine_project} PascalExports.pas ${engine_sources})
+	set(pascal_compiler_flags_cmn "-dHWLIBRARY" "-k-no_order_inits" ${pascal_compiler_flags_cmn})
+endif(BUILD_ENGINE_LIBRARY)
+
 
 find_program(fpc_executable ${fpc_tryexe})
 
@@ -133,8 +141,8 @@ set(pascal_compiler_flags ${noexecstack_flags} ${pascal_compiler_flags_cmn} ${hw
 
 
 #DEPENDECIES AND EXECUTABLES SECTION
-IF(NOT APPLE)
-#here is the standard command for any system
+IF(NOT APPLE OR BUILD_ENGINE_LIBRARY)
+	#here is the command for standard executables or for shared library
 	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
 		COMMAND "${pascal_compiler}"
 		ARGS ${pascal_compiler_flags}
@@ -145,7 +153,6 @@ ELSE()
 	#let's build sdlmain, which is absent from the framework
 	find_package(SDL REQUIRED)
 
-#	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")
 	set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 	include_directories(${SDL_INCLUDE_DIR})
 

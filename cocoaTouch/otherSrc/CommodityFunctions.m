@@ -7,7 +7,6 @@
 //
 
 #import "CommodityFunctions.h"
-#import "SDL_uikitappdelegate.h"
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 

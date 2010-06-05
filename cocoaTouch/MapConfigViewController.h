@@ -65,6 +65,6 @@
 -(void) setLabelText:(NSString *)str;
 -(void) setButtonImage:(UIImage *)img;
 
--(uint8_t *)engineProtocol:(NSInteger) port;
+-(const uint8_t *)engineProtocol:(NSInteger) port;
 
 @end

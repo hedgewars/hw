@@ -73,7 +73,7 @@ uses
 var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
 {$IFDEF HWLIBRARY}
-type arrayofpchar = array[0..7] of PChar;
+type arrayofpchar = array[0..8] of PChar;
 
 procedure initEverything;
 procedure freeEverything;
@@ -265,6 +265,7 @@ begin
     val(gameArgs[7], cScreenWidth);
     cInitHeight:= cScreenHeight;
     cInitWidth:= cScreenWidth;
+    recordFileName:= gameArgs[8];
 {$ENDIF}
 
     for p:= Succ(Low(TPathType)) to High(TPathType) do

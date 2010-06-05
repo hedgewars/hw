@@ -33,10 +33,10 @@
 	return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
--(uint8_t *)engineProtocol:(NSInteger) port {
+-(const uint8_t *)engineProtocol:(NSInteger) port {
 	IPaddress ip;
 	BOOL serverQuit = NO;
-    uint8_t map[128*32];
+    static uint8_t map[128*32];
     
 	if (SDLNet_Init() < 0) {
 		NSLog(@"SDLNet_Init: %s", SDLNet_GetError());
@@ -93,7 +93,7 @@
     
     // select the port for IPC and launch the preview generation through engineProtocol:
     int port = randomPort();
-    uint8_t *map = [self engineProtocol:port];
+    const uint8_t *map = [self engineProtocol:port];
     uint8_t mapExp[128*32*8];
 
     // draw the buffer (1 pixel per component, 0= transparent 1= color)
