@@ -3268,11 +3268,8 @@ begin
         iterator^.dX := s * iterator^.dX;
         iterator^.dY := s * iterator^.dY;
 
-        if Gear^.Health > 1 then
-        begin
-            dec(Gear^.Health);
-            dec(iterator^.Health);
-        end;
+        if Gear^.Health > 1 then dec(Gear^.Health);
+            //dec(iterator^.Health);??
 
         // breaks (some) loops
         if Distance(iterator^.dX, iterator^.dY) > _0_96 then
