@@ -1,4 +1,4 @@
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 module NetRoutines where
 
 import Network.Socket
@@ -18,8 +18,6 @@ acceptLoop servSock chan = forever $ do
         do
         (sock, sockAddr) <- Network.Socket.accept servSock
 
-        cHandle <- socketToHandle sock ReadWriteMode
-        hSetBuffering cHandle LineBuffering
         clientHost <- sockAddr2String sockAddr
 
         currentTime <- getCurrentTime
@@ -29,7 +27,7 @@ acceptLoop servSock chan = forever $ do
         let newClient =
                 (ClientInfo
                     sendChan'
-                    cHandle
+                    sock
                     clientHost
                     currentTime
                     ""

@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, ScopedTypeVariables #-}
+{-# LANGUAGE CPP, ScopedTypeVariables, OverloadedStrings #-}
 module OfficialServer.DBInteraction
 (
     startDBConnection

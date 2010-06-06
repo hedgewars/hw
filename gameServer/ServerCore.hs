@@ -8,6 +8,7 @@ import qualified Data.IntMap as IntMap
 import System.Log.Logger
 import Control.Monad.Reader
 import Control.Monad.State
+import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import NetRoutines
@@ -21,7 +22,7 @@ timerLoop :: Int -> Chan CoreMessage -> IO()
 timerLoop tick messagesChan = threadDelay (30 * 10^6) >> writeChan messagesChan (TimerAction tick) >> timerLoop (tick + 1) messagesChan
 
 
-reactCmd :: [String] -> StateT ServerState IO ()
+reactCmd :: [B.ByteString] -> StateT ServerState IO ()
 reactCmd cmd = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients

@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module HWProtoCore where
 
 import qualified Data.IntMap as IntMap

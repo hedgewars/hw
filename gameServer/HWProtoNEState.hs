@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module HWProtoNEState where
 
 import qualified Data.IntMap as IntMap
@@ -5,6 +6,7 @@ import Maybe
 import Data.List
 import Data.Word
 import Control.Monad.Reader
+import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
@@ -16,7 +18,7 @@ handleCmd_NotEntered :: CmdHandler
 handleCmd_NotEntered ["NICK", newNick] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
-    if not . null $ nick cl then return [ProtocolError "Nickname already chosen"]
+    if not . B.null $ nick cl then return [ProtocolError "Nickname already chosen"]
         else
         if haveSameNick irnc then return [AnswerClients [sendChan cl] ["WARNING", "Nickname already in use"], ByeClient ""]
             else 
@@ -38,10 +40,12 @@ handleCmd_NotEntered ["PROTO", protoNum] = do
             else 
             return $
                 ModifyClient (\c -> c{clientProto = parsedProto}) :
-                AnswerClients [sendChan cl] ["PROTO", show parsedProto] :
-                [CheckRegistered | (not . null) (nick cl)]
+                AnswerClients [sendChan cl] ["PROTO", B.pack $ show parsedProto] :
+                [CheckRegistered | not . B.null $ nick cl]
     where
-        parsedProto = fromMaybe 0 (maybeRead protoNum :: Maybe Word16)
+        parsedProto = case B.readInt protoNum of
+                           Just (i, t) | B.null t -> fromIntegral i
+                           otherwise -> 0
 
 {-
 

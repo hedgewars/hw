@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module CoreTypes where
 
 import System.IO
@@ -10,20 +11,21 @@ import Data.Sequence(Seq, empty)
 import Data.Time
 import Network
 import Data.Function
+import Data.ByteString.Char8 as B
 
 import RoomsAndClients
 
-type ClientChan = Chan [String]
+type ClientChan = Chan [B.ByteString]
 
 data ClientInfo =
     ClientInfo
     {
         sendChan :: ClientChan,
-        clientHandle :: Handle,
-        host :: String,
+        clientSocket :: Socket,
+        host :: B.ByteString,
         connectTime :: UTCTime,
-        nick :: String,
-        webPassword :: String,
+        nick :: B.ByteString,
+        webPassword :: B.ByteString,
         logonPassed :: Bool,
         clientProto :: !Word16,
         roomID :: !Int,
@@ -31,46 +33,46 @@ data ClientInfo =
         isMaster :: Bool,
         isReady :: Bool,
         isAdministrator :: Bool,
-        clientClan :: String,
+        clientClan :: B.ByteString,
         teamsInGame :: Word
     }
 
 instance Show ClientInfo where
-    show ci = " nick: " ++ (nick ci) ++ " host: " ++ (host ci)
+    show ci = " nick: " ++ (unpack $ nick ci) ++ " host: " ++ (unpack $ host ci)
 
 instance Eq ClientInfo where
-    (==) = (==) `on` clientHandle
+    (==) = (==) `on` clientSocket
 
 data HedgehogInfo =
-    HedgehogInfo String String
+    HedgehogInfo B.ByteString B.ByteString
 
 data TeamInfo =
     TeamInfo
     {
         teamownerId :: !Int,
-        teamowner :: String,
-        teamname :: String,
-        teamcolor :: String,
-        teamgrave :: String,
-        teamfort :: String,
-        teamvoicepack :: String,
-        teamflag :: String,
+        teamowner :: B.ByteString,
+        teamname :: B.ByteString,
+        teamcolor :: B.ByteString,
+        teamgrave :: B.ByteString,
+        teamfort :: B.ByteString,
+        teamvoicepack :: B.ByteString,
+        teamflag :: B.ByteString,
         difficulty :: Int,
         hhnum :: Int,
         hedgehogs :: [HedgehogInfo]
     }
 
 instance Show TeamInfo where
-    show ti = "owner: " ++ (teamowner ti)
-            ++ "name: " ++ (teamname ti)
-            ++ "color: " ++ (teamcolor ti)
+    show ti = "owner: " ++ (unpack $ teamowner ti)
+            ++ "name: " ++ (unpack $ teamname ti)
+            ++ "color: " ++ (unpack $ teamcolor ti)
 
 data RoomInfo =
     RoomInfo
     {
         masterID :: !Int,
-        name :: String,
-        password :: String,
+        name :: B.ByteString,
+        password :: B.ByteString,
         roomProto :: Word16,
         teams :: [TeamInfo],
         gameinprogress :: Bool,
@@ -79,10 +81,10 @@ data RoomInfo =
         playersIDs :: IntSet.IntSet,
         isRestrictedJoins :: Bool,
         isRestrictedTeams :: Bool,
-        roundMsgs :: Seq String,
-        leftTeams :: [String],
+        roundMsgs :: Seq B.ByteString,
+        leftTeams :: [B.ByteString],
         teamsAtStart :: [TeamInfo],
-        params :: Map.Map String [String]
+        params :: Map.Map B.ByteString [B.ByteString]
     }
 
 instance Show RoomInfo where
@@ -123,14 +125,14 @@ data ServerInfo =
     {
         isDedicated :: Bool,
         serverMessage :: String,
-        serverMessageForOldVersions :: String,
+        serverMessageForOldVersions :: B.ByteString,
         latestReleaseVersion :: Word16,
         listenPort :: PortNumber,
         nextRoomID :: Int,
-        dbHost :: String,
-        dbLogin :: String,
-        dbPassword :: String,
-        lastLogins :: [(String, UTCTime)],
+        dbHost :: B.ByteString,
+        dbLogin :: B.ByteString,
+        dbPassword :: B.ByteString,
+        lastLogins :: [(B.ByteString, UTCTime)],
         stats :: TMVar StatisticsInfo,
         coreChan :: Chan CoreMessage,
         dbQueries :: Chan DBQuery
@@ -155,20 +157,20 @@ newServerInfo = (
     )
 
 data AccountInfo =
-    HasAccount String Bool
+    HasAccount B.ByteString Bool
     | Guest
     | Admin
     deriving (Show, Read)
 
 data DBQuery =
-    CheckAccount ClientIndex String String
+    CheckAccount ClientIndex B.ByteString B.ByteString
     | ClearCache
     | SendStats Int Int
     deriving (Show, Read)
 
 data CoreMessage =
     Accept ClientInfo
-    | ClientMessage (ClientIndex, [String])
+    | ClientMessage (ClientIndex, [B.ByteString])
     | ClientAccountInfo (ClientIndex, AccountInfo)
     | TimerAction Int
     | FreeClient ClientIndex

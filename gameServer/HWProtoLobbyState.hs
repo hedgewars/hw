@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module HWProtoLobbyState where
 
 import qualified Data.Map as Map

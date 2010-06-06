@@ -1,4 +1,4 @@
-
+{-# LANGUAGE OverloadedStrings #-}
 module Actions where
 
 import Control.Concurrent
@@ -11,7 +11,7 @@ import Data.Time
 import Maybe
 import Control.Monad.Reader
 import Control.Monad.State
-
+import Data.ByteString.Char8 as B
 -----------------------------
 import CoreTypes
 import Utils
@@ -19,27 +19,27 @@ import ClientIO
 import ServerState
 
 data Action =
-    AnswerClients [ClientChan] [String]
+    AnswerClients [ClientChan] [ByteString]
     | SendServerMessage
     | SendServerVars
     | RoomAddThisClient RoomIndex -- roomID
-    | RoomRemoveThisClient String
-    | RemoveTeam String
+    | RoomRemoveThisClient ByteString
+    | RemoveTeam ByteString
     | RemoveRoom
     | UnreadyRoomClients
     | MoveToLobby
-    | ProtocolError String
-    | Warning String
-    | ByeClient String
+    | ProtocolError ByteString
+    | Warning ByteString
+    | ByeClient ByteString
     | KickClient ClientIndex -- clID
     | KickRoomClient ClientIndex -- clID
-    | BanClient String -- nick
+    | BanClient ByteString -- nick
     | RemoveClientTeams ClientIndex -- clID
     | ModifyClient (ClientInfo -> ClientInfo)
     | ModifyClient2 ClientIndex (ClientInfo -> ClientInfo)
     | ModifyRoom (RoomInfo -> RoomInfo)
     | ModifyServerInfo (ServerInfo -> ServerInfo)
-    | AddRoom String String
+    | AddRoom ByteString ByteString
     | CheckRegistered
     | ClearAccountsCache
     | ProcessAccountInfo AccountInfo
@@ -48,7 +48,7 @@ data Action =
     | PingAll
     | StatsAction
 
-type CmdHandler = [String] -> Reader (ClientIndex, IRnC) [Action]
+type CmdHandler = [ByteString] -> Reader (ClientIndex, IRnC) [Action]
 
 
 processAction :: Action -> StateT ServerState IO ()
@@ -96,13 +96,13 @@ processAction (ByeClient msg) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     when (ri /= lobbyId) $ do
-        processAction $ RoomRemoveThisClient ("quit: " ++ msg)
+        processAction $ RoomRemoveThisClient ("quit: " `B.append` msg)
         return ()
 
     chan <- clients sendChan
 
     liftIO $ do
-        infoM "Clients" (show ci ++ " quits: " ++ msg)
+        infoM "Clients" (show ci ++ " quits: " ++ (B.unpack msg))
 
         
         --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
@@ -370,8 +370,8 @@ processAction (AddClient client) = do
     si <- gets serverInfo
     liftIO $ do
         ci <- addClient rnc client
-        forkIO $ clientRecvLoop (clientHandle client) (coreChan si) ci
-        forkIO $ clientSendLoop (clientHandle client) (coreChan si) (sendChan client) ci
+        forkIO $ clientRecvLoop (clientSocket client) (coreChan si) ci
+        forkIO $ clientSendLoop (clientSocket client) (coreChan si) (sendChan client) ci
 
         infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime client))
         writeChan (sendChan client) ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]

@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module HWProtoInRoomState where
 
 import qualified Data.Foldable as Foldable
