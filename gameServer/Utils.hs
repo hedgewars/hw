@@ -119,3 +119,6 @@ unfoldrE f b  =
     case f b of
         Right (a, new_b) -> let (a', b') = unfoldrE f new_b in (a : a', b')
         Left new_b       -> ([], new_b)
+
+showB :: Show a => a -> B.ByteString
+showB = B.pack .show

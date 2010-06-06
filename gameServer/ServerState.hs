@@ -3,7 +3,8 @@ module ServerState
     module RoomsAndClients,
     clientRoomA,
     ServerState(..),
-    clients
+    client's,
+    allClientsS
     ) where
 
 import Control.Monad.State
@@ -24,9 +25,11 @@ clientRoomA = do
     rnc <- gets roomsClients
     liftIO $ clientRoomM rnc ci
 
-clients :: (ClientInfo -> a) -> StateT ServerState IO a
-clients f = do
+client's :: (ClientInfo -> a) -> StateT ServerState IO a
+client's f = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
-    liftIO $ clientsM rnc f ci
+    liftIO $ client'sM rnc f ci
     
+allClientsS :: StateT ServerState IO [ClientInfo]
+allClientsS = gets roomsClients >>= liftIO . clientsM

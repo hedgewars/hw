@@ -39,7 +39,7 @@ listenLoop sock chan ci = recieveWithBufferLoop B.empty
     where
         recieveWithBufferLoop recvBuf = do
             recvBS <- recv sock 4096
-            putStrLn $ show sock ++ " got smth: " ++ (show $ B.length recvBS)
+--            putStrLn $ show sock ++ " got smth: " ++ (show $ B.length recvBS)
             unless (B.null recvBS) $ do
                 let (packets, newrecvBuf) = bs2Packets $ B.append recvBuf recvBS
                 forM_ packets sendPacket

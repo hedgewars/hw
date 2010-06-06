@@ -28,3 +28,6 @@ thisClientChans = do
 
 answerClient :: [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
 answerClient msg = thisClientChans >>= return . (: []) . flip AnswerClients msg
+
+allRoomInfos :: Reader (a, IRnC) [RoomInfo]
+allRoomInfos = liftM ((\irnc -> map (room irnc) $ allRooms irnc) . snd) ask

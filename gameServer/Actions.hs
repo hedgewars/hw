@@ -58,16 +58,16 @@ processAction (AnswerClients chans msg) =
     liftIO $ mapM_ (flip writeChan msg) chans
 
 
-{-
-processAction (clID, serverInfo, rnc) SendServerMessage = do
-    writeChan (sendChan $ clients ! clID) ["SERVER_MESSAGE", message serverInfo]
-    return (clID, serverInfo, rnc)
-    where
-        client = clients ! clID
-        message si = if clientProto client < latestReleaseVersion si then
+processAction SendServerMessage = do
+    chan <- client's sendChan
+    protonum <- client's clientProto
+    si <- liftM serverInfo get
+    let message = if protonum < latestReleaseVersion si then
             serverMessageForOldVersions si
             else
             serverMessage si
+    liftIO $ writeChan chan ["SERVER_MESSAGE", message]
+{-
 
 processAction (clID, serverInfo, rnc) SendServerVars = do
     writeChan (sendChan $ clients ! clID) ("SERVER_VARS" : vars)
@@ -81,15 +81,16 @@ processAction (clID, serverInfo, rnc) SendServerVars = do
             ]
 
 
-processAction (clID, serverInfo, rnc) (ProtocolError msg) = do
-    writeChan (sendChan $ clients ! clID) ["ERROR", msg]
-    return (clID, serverInfo, rnc)
-
-
-processAction (clID, serverInfo, rnc) (Warning msg) = do
-    writeChan (sendChan $ clients ! clID) ["WARNING", msg]
-    return (clID, serverInfo, rnc)
 -}
+
+processAction (ProtocolError msg) = do
+    chan <- client's sendChan
+    liftIO $ writeChan chan ["ERROR", msg]
+
+
+processAction (Warning msg) = do
+    chan <- client's sendChan
+    liftIO $ writeChan chan ["WARNING", msg]
 
 processAction (ByeClient msg) = do
     (Just ci) <- gets clientIndex
@@ -99,7 +100,7 @@ processAction (ByeClient msg) = do
         processAction $ RoomRemoveThisClient ("quit: " `B.append` msg)
         return ()
 
-    chan <- clients sendChan
+    chan <- client's sendChan
 
     liftIO $ do
         infoM "Clients" (show ci ++ " quits: " ++ (B.unpack msg))
@@ -297,8 +298,8 @@ processAction (clID, serverInfo, rnc) (RemoveTeam teamName) = do
 
 processAction CheckRegistered = do
     (Just ci) <- gets clientIndex
-    n <- clients nick
-    h <- clients host
+    n <- client's nick
+    h <- client's host
     db <- gets (dbQueries . serverInfo)
     liftIO $ writeChan db $ CheckAccount ci n h
     return ()
@@ -314,33 +315,29 @@ processAction (clID, serverInfo, rnc) (ClearAccountsCache) = do
 processAction (clID, serverInfo, rnc) (Dump) = do
     writeChan (sendChan $ clients ! clID) ["DUMP", show serverInfo, showTree clients, showTree rooms]
     return (clID, serverInfo, rnc)
+-}
 
-
-processAction (clID, serverInfo, rnc) (ProcessAccountInfo info) =
+processAction (ProcessAccountInfo info) =
     case info of
         HasAccount passwd isAdmin -> do
-            infoM "Clients" $ show clID ++ " has account"
-            writeChan (sendChan $ clients ! clID) ["ASKPASSWORD"]
-            return (clID, serverInfo, adjust (\cl -> cl{webPassword = passwd, isAdministrator = isAdmin}) clID rnc)
+            chan <- client's sendChan
+            liftIO $ writeChan chan ["ASKPASSWORD"]
         Guest -> do
-            infoM "Clients" $ show clID ++ " is guest"
-            processAction (clID, serverInfo, adjust (\cl -> cl{logonPassed = True}) clID rnc) MoveToLobby
+            mapM_ processAction [ModifyClient (\cl -> cl{logonPassed = True}), MoveToLobby]
         Admin -> do
-            infoM "Clients" $ show clID ++ " is admin"
-            foldM processAction (clID, serverInfo, adjust (\cl -> cl{logonPassed = True, isAdministrator = True}) clID rnc) [MoveToLobby, AnswerThisClient ["ADMIN_ACCESS"]]
+            mapM processAction [ModifyClient (\cl -> cl{logonPassed = True, isAdministrator = True}), MoveToLobby]
+            chan <- client's sendChan
+            liftIO $ writeChan chan ["ADMIN_ACCESS"]
 
-
-processAction (clID, serverInfo, rnc) (MoveToLobby) =
-    foldM processAction (clID, serverInfo, rnc) $
-        (RoomAddThisClient 0)
-        : answerLobbyNicks
+processAction MoveToLobby = do
+    chan <- client's sendChan
+    lobbyNicks <- liftM (Prelude.map nick . Prelude.filter logonPassed) allClientsS
+    mapM_ processAction $
+--        (RoomAddThisClient 0)
+        [AnswerClients [chan] ("LOBBY:JOINED" : lobbyNicks) | not $ Prelude.null lobbyNicks]
         ++ [SendServerMessage]
 
-        -- ++ (answerServerMessage client clients)
-    where
-        lobbyNicks = Prelude.map nick $ Prelude.filter logonPassed $ elems clients
-        answerLobbyNicks = [AnswerThisClient ("LOBBY:JOINED": lobbyNicks) | not $ Prelude.null lobbyNicks]
-
+{-
 
 processAction (clID, serverInfo, rnc) (KickClient kickID) =
     liftM2 replaceID (return clID) (processAction (kickID, serverInfo, rnc) $ ByeClient "Kicked")

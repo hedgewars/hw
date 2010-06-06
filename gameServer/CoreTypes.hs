@@ -70,7 +70,7 @@ instance Show TeamInfo where
 data RoomInfo =
     RoomInfo
     {
-        masterID :: !Int,
+        masterID :: ClientIndex,
         name :: B.ByteString,
         password :: B.ByteString,
         roomProto :: Word16,
@@ -96,7 +96,7 @@ instance Show RoomInfo where
 newRoom :: RoomInfo
 newRoom = (
     RoomInfo
-        0
+        undefined
         ""
         ""
         0
@@ -124,7 +124,7 @@ data ServerInfo =
     ServerInfo
     {
         isDedicated :: Bool,
-        serverMessage :: String,
+        serverMessage :: B.ByteString,
         serverMessageForOldVersions :: B.ByteString,
         latestReleaseVersion :: Word16,
         listenPort :: PortNumber,

@@ -2,17 +2,19 @@
 module HWProtoLobbyState where
 
 import qualified Data.Map as Map
-import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
 import qualified Data.Foldable as Foldable
 import Maybe
 import Data.List
 import Data.Word
+import Control.Monad.Reader
+import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
 import Utils
 import HandlerUtils
+import RoomsAndClients
 
 {-answerAllTeams protocol teams = concatMap toAnswer teams
     where
@@ -23,32 +25,31 @@ import HandlerUtils
 -}
 handleCmd_lobby :: CmdHandler
 
-{-
-handleCmd_lobby clID clients rooms ["LIST"] =
-    [AnswerThisClient ("ROOMS" : roomsInfoList)]
+
+handleCmd_lobby ["LIST"] = do
+    (ci, irnc) <- ask
+    let cl = irnc `client` ci
+    rooms <- allRoomInfos
+    let roomsInfoList = concatMap (roomInfo irnc) . filter (\r -> (roomProto r == clientProto cl) && not (isRestrictedJoins r))
+    return [AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
     where
-        roomsInfoList = concatMap roomInfo sameProtoRooms
-        sameProtoRooms = filter (\r -> (roomProto r == protocol) && not (isRestrictedJoins r)) roomsList
-        roomsList = IntMap.elems rooms
-        protocol = clientProto client
-        client = clients IntMap.! clID
-        roomInfo room
-            | clientProto client < 28 = [
+        roomInfo irnc room
+            | roomProto room < 28 = [
                 name room,
-                show (playersIn room) ++ "(" ++ show (length $ teams room) ++ ")",
-                show $ gameinprogress room
+                B.pack $ show (playersIn room) ++ "(" ++ show (length $ teams room) ++ ")",
+                B.pack $ show $ gameinprogress room
                 ]
             | otherwise = [
-                show $ gameinprogress room,
+                showB $ gameinprogress room,
                 name room,
-                show $ playersIn room,
-                show $ length $ teams room,
-                nick $ clients IntMap.! (masterID room),
+                showB $ playersIn room,
+                showB $ length $ teams room,
+                nick $ irnc `client` (masterID room),
                 head (Map.findWithDefault ["+gen+"] "MAP" (params room)),
                 head (Map.findWithDefault ["Default"] "SCHEME" (params room)),
                 head (Map.findWithDefault ["Default"] "AMMO" (params room))
                 ]
--}
+
 
 handleCmd_lobby ["CHAT", msg] = do
     n <- clientNick

@@ -9,6 +9,7 @@ module Store(
     writeElem,
     modifyElem,
     firstIndex,
+    indicesM,
     withIStore,
     withIStore2,
     (!),
@@ -94,12 +95,19 @@ modifyElem (MStore ref) f (ElemIndex n) = do
     IOA.readArray arr n >>= (IOA.writeArray arr n) . f
 
 
+indicesM :: MStore e -> IO [ElemIndex]
+indicesM (MStore ref) = do
+    (busy, _, _) <- readIORef ref
+    return $ map ElemIndex $ IntSet.toList busy
+
+
 -- A way to use see MStore elements in pure code via IStore
 m2i :: MStore e -> IO (IStore e)
 m2i (MStore ref) = do
     (a, _, c') <- readIORef ref 
     c <- IOA.unsafeFreeze c'
     return $ IStore (a, c)
+
 
 withIStore :: MStore e -> (IStore e -> a) -> IO a
 withIStore m f = liftM f (m2i m)
