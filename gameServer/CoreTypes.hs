@@ -28,7 +28,7 @@ data ClientInfo =
         webPassword :: B.ByteString,
         logonPassed :: Bool,
         clientProto :: !Word16,
-        roomID :: !Int,
+        roomID :: RoomIndex,
         pingsQueue :: !Word,
         isMaster :: Bool,
         isReady :: Bool,

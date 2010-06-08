@@ -10,6 +10,7 @@ import Control.Monad
 -----------------------------
 import CoreTypes
 import Utils
+import RoomsAndClients
 
 acceptLoop :: Socket -> Chan CoreMessage -> IO ()
 acceptLoop servSock chan = forever $ do
@@ -34,7 +35,7 @@ acceptLoop servSock chan = forever $ do
                     ""
                     False
                     0
-                    0
+                    lobbyId
                     0
                     False
                     False

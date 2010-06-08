@@ -19,6 +19,7 @@ module RoomsAndClients(
     room,
     client'sM,
     clientsM,
+    roomClientsM,
     withRoomsAndClients,
     allRooms,
     allClients,
@@ -142,6 +143,9 @@ client'sM (MRoomsAndClients (_, clients)) f (ClientIndex ci) = liftM (f . client
 
 clientsM :: MRoomsAndClients r c -> IO [c]
 clientsM (MRoomsAndClients (_, clients)) = indicesM clients >>= mapM (\ci -> liftM client' $ readElem clients ci)
+
+roomClientsM :: MRoomsAndClients r c -> RoomIndex -> IO [c]
+roomClientsM (MRoomsAndClients (rooms, clients)) (RoomIndex ri) = liftM roomClients' (rooms `readElem` ri) >>= mapM (\(ClientIndex ci) -> liftM client' $ readElem clients ci)
 
 withRoomsAndClients :: MRoomsAndClients r c -> (IRoomsAndClients r c -> a) -> IO a
 withRoomsAndClients (MRoomsAndClients (rooms, clients)) f =

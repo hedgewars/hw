@@ -56,23 +56,25 @@ handleCmd_lobby ["CHAT", msg] = do
     s <- roomOthersChans
     return [AnswerClients s ["CHAT", n, msg]]
 
+handleCmd_lobby ["CREATE_ROOM", newRoom, roomPassword]
+    | illegalName newRoom = return [Warning "Illegal room name"]
+    | otherwise = do
+        rs <- allRoomInfos
+        (ci, irnc) <- ask
+        let cl =  irnc `client` ci
+        return $ if isJust $ find (\room -> newRoom == name room) rs then 
+            [Warning "Room exists"]
+            else
+            [
+                AddRoom newRoom roomPassword,
+                AnswerClients [sendChan cl] ["NOT_READY", nick cl]
+            ]
+
+
+handleCmd_lobby ["CREATE_ROOM", newRoom] =
+    handleCmd_lobby ["CREATE_ROOM", newRoom, ""]
+
 {-
-handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, roomPassword]
-    | haveSameRoom = [Warning "Room exists"]
-    | illegalName newRoom = [Warning "Illegal room name"]
-    | otherwise =
-        [RoomRemoveThisClient "", -- leave lobby
-        AddRoom newRoom roomPassword,
-        AnswerThisClient ["NOT_READY", clientNick]
-        ]
-    where
-        clientNick = nick $ clients IntMap.! clID
-        haveSameRoom = isJust $ find (\room -> newRoom == name room) $ IntMap.elems rooms
-
-
-handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom] =
-    handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, ""]
-
 
 handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
     | noSuchRoom = [Warning "No such room"]
@@ -185,7 +187,7 @@ handleCmd_lobby clID clients rooms ["CLEAR_ACCOUNTS_CACHE"] =
         [ClearAccountsCache | isAdministrator client]
     where
         client = clients IntMap.! clID
-
-
-handleCmd_lobby clID _ _ _ = [ProtocolError "Incorrect command (state: in lobby)"]
 -}
+
+
+handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]
