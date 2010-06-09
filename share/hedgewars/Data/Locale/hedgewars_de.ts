@@ -215,7 +215,7 @@
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation>Dein Spitzname &apos;%1&apos; wurde
+        <translation type="obsolete">Dein Spitzname &apos;%1&apos; wurde
 auf Hedgewars.org registriert.
 
 Bitte gib dein Passwort ein oder
@@ -236,6 +236,13 @@ wähle einen anderen Spitznamen:</translation>
     <message>
         <source>%1 *** %2 has left</source>
         <translation>%1 *** %2 ist gegangen</translation>
+    </message>
+    <message>
+        <source>Your nickname %1 is
+registered on Hedgewars.org
+Please provide your password below
+or pick another nickname in game config:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -333,6 +340,131 @@ wähle einen anderen Spitznamen:</translation>
         <source>Network Game (Play a game across a network)</source>
         <translation>Netzwerkspiel</translation>
     </message>
+    <message>
+        <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You&apos;re bored of default gameplay? Try one of the missions - they&apos;ll offer different gameplay depending on the one you picked.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>By default the game will always record the last game played as a demo. Select &apos;Local Game&apos; and pick the &apos;Demos&apos; button on the lower right corner to play or manage them.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you&apos;ve got problems, ask on our forums but please don&apos;t expect 24/7 support!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you like it, help us with a small donation or contribute your own work!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars is Open Source and Freeware we create in our spare time. Share it with your family and friends as you like!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Always remember you&apos;re able to set up your own games in local and network/online play. You&apos;re not restricted to the &apos;Simple Game&apos; option.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connect a gamepad before launching the game to be able to assign its controls to your team.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create an account on http://www.hedgewars.org/ to keep others from using your most favourite nickname while playing on the official server.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>While playing you should give yourself a short break at least once an hour.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We&apos;re open to suggestions and constructive feedback. If you don&apos;t like something or got a great idea, let us know!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No hedgehogs were harmed in making this game.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -395,6 +527,10 @@ wähle einen anderen Spitznamen:</translation>
     <message>
         <source>Delete weapon scheme</source>
         <translation>Waffenzusammenstellung löschen</translation>
+    </message>
+    <message>
+        <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -959,8 +1095,16 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation>Diese SVN-Kopie ist noch in Entwicklung und sie ist mit anderen Versionen vielleicht nicht kompatibel.
+        <translation type="obsolete">Diese SVN-Kopie ist noch in Entwicklung und sie ist mit anderen Versionen vielleicht nicht kompatibel.
 Einige Dinge könnten nicht funktionieren oder unvollständig sein. Benutzung auf eigene Gefahr!</translation>
+    </message>
+    <message>
+        <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tip: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1005,7 +1149,7 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>Can not edit default weapon set</source>
-        <translation>Das Standard-Waffen-Set kann nicht editiert werden</translation>
+        <translation type="obsolete">Das Standard-Waffen-Set kann nicht editiert werden</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
@@ -1014,6 +1158,10 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <source>Really delete this weapon set?</source>
         <translation>Soll dieses Waffen-Set wirklich gelöscht werden?</translation>
+    </message>
+    <message>
+        <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1401,6 +1549,10 @@ Statistik</translation>
     <message>
         <source>high jump</source>
         <translation>Hoher Sprung</translation>
+    </message>
+    <message>
+        <source>slot 10</source>
+        <translation type="unfinished">Slot 10</translation>
     </message>
 </context>
 <context>
