@@ -431,6 +431,7 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Radius:= 7;
                 gear^.Z:= cOnHHZ;
                 gear^.RenderTimer:= true;
+                gear^.DirAngle:= -90 * hwSign(Gear^.dX);
                 if not dX.isNegative then gear^.Angle:= 1 else gear^.Angle:= 3
                 end;
  gtHellishBomb: begin
