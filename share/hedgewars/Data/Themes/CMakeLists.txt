@@ -1,7 +1,9 @@
 foreach(dir
+	Art
 	Bamboo
 	Bath
 	Blox
+	Brick
 	Cake
 	Castle
 	Cheese
@@ -18,10 +20,11 @@ foreach(dir
 	Planes
 	Sheep
 	Snow
+	Stage
 	Underwater
-    Compost
-    Olympics
-    Desert
+	Compost
+	Olympics
+	Desert
 	)
 	add_subdirectory(${dir})
 endforeach(dir)
