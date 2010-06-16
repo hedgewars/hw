@@ -324,7 +324,7 @@ begin
                     doMakeExplosion(x, y, 20, EXPLAutoSound);
                     for i:= 0 to 4 do
                         begin
-                        dX := rndSign(GetRandom * _0_1);
+                        dX := rndSign(GetRandom * _0_1) + Gear^.dX / 5;
                         dY := (GetRandom - _3) * _0_08;
                         AddGear(x, y, gtCluster, 0, dX, dY, 25);
                         end
@@ -336,7 +336,7 @@ begin
                 doMakeExplosion(x, y, 75, EXPLAutoSound);
                 for i:= 0 to 5 do
                     begin
-                    dX := rndSign(GetRandom * _0_1);
+                    dX := rndSign(GetRandom * _0_1) + Gear^.dX / 5;
                     dY := (GetRandom - _1_5) * _0_3;
                     AddGear(x, y, gtMelonPiece, 0, dX, dY, 75)^.DirAngle := i * 60;
                     end
