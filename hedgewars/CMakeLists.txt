@@ -82,7 +82,7 @@ if(BUILD_ENGINE_LIBRARY)
 	message(STATUS "Engine will be built as library (experimental)")
 	set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas)
 	set(engine_sources ${hwengine_project} PascalExports.pas ${engine_sources})
-	set(pascal_compiler_flags_cmn "-dHWLIBRARY" "-k-no_order_inits" ${pascal_compiler_flags_cmn})
+	set(pascal_compiler_flags_cmn "-dHWLIBRARY" "-k-no_order_inits" "-fPIC" ${pascal_compiler_flags_cmn})
 endif(BUILD_ENGINE_LIBRARY)
 
 

@@ -122,7 +122,7 @@ PageMain::PageMain(QWidget* parent) :
     
 
     if(isDevBuild)
-        mainNote->setText(QLabel::tr("This SVN build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
+        mainNote->setText(QLabel::tr("This HG build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
     else
         mainNote->setText(QLabel::tr("Tip: ") + Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()]);
 
