@@ -44,11 +44,3 @@ NSInteger randomPort ();
 void popError (const char *title, const char *message);
 void print_free_memory ();
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_3_2
-typedef enum {
-    UIUserInterfaceIdiomPhone,           // iPhone and iPod touch style UI
-    UIUserInterfaceIdiomPad,             // iPad style UI
-} UIUserInterfaceIdiom;
-#define UI_USER_INTERFACE_IDIOM() UIUserInterfaceIdiomPhone
-#endif // ifndef __IPHONE_3_2
-

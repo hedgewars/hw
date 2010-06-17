@@ -31,13 +31,6 @@
 #endif
 
 
-// control debug verbosity
-#ifdef TRACE
-#ifndef DEBUG
-#define DEBUG
-#endif
-#endif
-
 // 1.0 02/03/10 - Defines cross-platform sleep, usleep, etc. [Wu Yongwei]
 #ifndef _SLEEP_H
 #define _SLEEP_H
@@ -92,7 +85,7 @@
 #define ENDIAN_BIG_16(x)    x
 #endif
 
-/*file format defines*/
+/* file format defines */
 #define OGG_FILE_FORMAT         0x4F676753
 #define WAV_FILE_FORMAT         0x52494646
 #define WAV_HEADER_SUBCHUNK2ID  0x64617461

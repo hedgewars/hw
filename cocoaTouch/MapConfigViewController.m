@@ -120,7 +120,7 @@
     CGImageRelease(previewCGImage);
 
     // set the preview image (autoreleased) in the button and the maxhog label on the main thread to prevent a leak
-    [self performSelectorOnMainThread:@selector(setButtonImage:) withObject:[previewImage makeRoundCornersOfSize:CGSizeMake(12, 12)] waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(setButtonImage:) withObject:[[previewImage retain] makeRoundCornersOfSize:CGSizeMake(12, 12)] waitUntilDone:NO];
     [self performSelectorOnMainThread:@selector(setLabelText:) withObject:[NSString stringWithFormat:@"%d", maxHogs] waitUntilDone:NO];
     
     // restore functionality of button and remove the spinning wheel on the main thread to prevent a leak
@@ -283,7 +283,7 @@
         // the % prevents a strange bug that occurs sporadically
         NSString *themeName = [self.themeArray objectAtIndex:row % [self.themeArray count]];
         cell.textLabel.text = themeName;
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/Icon.png",THEMES_DIRECTORY(),themeName]];
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),themeName]];
         cell.imageView.image = image;
         [image release];
     } else {

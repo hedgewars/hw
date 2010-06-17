@@ -48,17 +48,16 @@
 
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     
-    NSString *grave = [graveArray objectAtIndex:[indexPath row]];
+    NSString *grave = [self.graveArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = [grave stringByDeletingPathExtension];
     
-    if ([grave isEqualToString:[teamDictionary objectForKey:@"grave"]]) {
+    if ([grave isEqualToString:[self.teamDictionary objectForKey:@"grave"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.lastIndexPath = indexPath;
     } else {

@@ -1177,6 +1177,7 @@ begin
     end;
     if (tmpsurf <> nil) then 
         SDL_FreeSurface(tmpsurf);
+    tmpsurf:= nil;
 end;
 
 procedure LoadMap;

@@ -19,16 +19,15 @@
 #include "wrappers.h"
 #include "openalbridge_t.h"
 
-extern ALint *Sources;
 
 void *Malloc (size_t nbytes) {
     void *aptr;
 
     if ((aptr = malloc(nbytes)) == NULL) {
-        fprintf(stderr,"(Bridge Fatal Error) - not enough memory");
+        fprintf(stderr,"(Bridge FATAL) - not enough memory\n");
         abort();
     }
-    
+
     return aptr;
 }
 
@@ -37,7 +36,7 @@ void *Realloc (void *aptr, size_t nbytes) {
     aptr = realloc(aptr, nbytes);
 
     if (aptr == NULL) {
-        fprintf(stderr,"(Bridge Fatal Error) - not enough memory");
+        fprintf(stderr,"(Bridge FATAL) - not enough memory\n");
         abort();
     }
 
@@ -50,71 +49,9 @@ FILE *Fopen (const char *fname, char *mode)	{
 
     fp = fopen(fname,mode);
     if (fp == NULL)
-        fprintf(stderr,"(Bridge Error) - can't open file %s in mode '%s'", fname, mode);
+        fprintf(stderr,"(Bridge Error) - can't open file %s in mode '%s'\n", fname, mode);
 
     return fp;
 }
 
-
-void helper_fade(void *tmp) {
-    ALfloat gain;
-    ALfloat target_gain;
-    fade_t *fade;
-    uint32_t index;
-    uint16_t quantity;
-    al_fade_t type;
-
-    fade = tmp;
-    index = fade->index;
-    quantity = fade->quantity;
-    type = fade->type;
-    free (fade);
-
-    if (type == AL_FADE_IN) {
-#ifdef DEBUG
-        fprintf(stderr,"(Bridge Info) - Fade-in in progress [index %d quantity %d]", index, quantity);
-#endif
-
-        // save the volume desired after the fade
-        alGetSourcef(Sources[index], AL_GAIN, &target_gain);
-        if (target_gain > 1.0f || target_gain <= 0.0f)
-            target_gain = 1.0f;
-
-        alSourcePlay(Sources[index]);
-
-        for (gain = 0.0f ; gain <= target_gain; gain += (float) quantity/10000) {
-#ifdef TRACE
-            err_msg("(%s) DEBUG - Fade-in set gain to %f", gain);
-#endif
-            alSourcef(Sources[index], AL_GAIN, gain);
-            usleep(10000);
-        }
-    } else {
-        alGetSourcef(Sources[index], AL_GAIN, &target_gain);
-
-        for (gain = target_gain; gain >= 0.00f; gain -= (float) quantity/10000) {
-#ifdef TRACE
-            err_msg("(%s) DEBUG - Fade-out set gain to %f", gain);
-#endif
-            alSourcef(Sources[index], AL_GAIN, gain);
-            usleep(10000);
-        }
-
-        if (AL_NO_ERROR != alGetError())
-            fprintf(stderr,"(Bridge Warning) - Failed to set fade-out effect");
-
-        // stop that sound and reset its volume
-        alSourceStop (Sources[index]);
-        alSourcef (Sources[index], AL_GAIN, target_gain);
-    }
-
-    if (AL_NO_ERROR != alGetError())
-        fprintf(stderr,"(Bridge Warning) - Failed to set fade effect");
-
-#ifndef _WIN32
-    pthread_exit(NULL);
-#else
-    _endthread();
-#endif
-}
 

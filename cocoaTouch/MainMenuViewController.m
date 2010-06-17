@@ -75,7 +75,7 @@
     createTeamNamed(@"Pirates");
     createTeamNamed(@"Ninjas");
     
-    createSchemeNamed(@"Scheme 0");
+    createSchemeNamed(@"Default");
     
     // create settings.plist
     NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];

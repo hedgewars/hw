@@ -26,12 +26,7 @@
     [super viewDidLoad];
     srandom(time(NULL));
 
-    openal_init(1);
-    voiceBeingPlayed = -1;
-
-    // load all the voices names and store them into voiceArray
-    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VOICES_DIRECTORY() error:NULL];
-    self.voiceArray = array;
+    openal_init(20);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -39,6 +34,11 @@
     
     // this moves the tableview to the top
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
+    voiceBeingPlayed = -1;
+
+    // load all the voices names and store them into voiceArray
+    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VOICES_DIRECTORY() error:NULL];
+    self.voiceArray = array;
 }
 
 /*
@@ -50,16 +50,10 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     if(voiceBeingPlayed >= 0) {
-        openal_freesound(voiceBeingPlayed);
+        openal_stopsound(voiceBeingPlayed);
         voiceBeingPlayed = -1;
     }
 }
-
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
 
 
 #pragma mark -
@@ -73,7 +67,7 @@
 }
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"Cell";
     
@@ -96,45 +90,6 @@
 }
 
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -155,7 +110,6 @@
     
     if (voiceBeingPlayed >= 0) {
         openal_stopsound(voiceBeingPlayed);
-        openal_freesound(voiceBeingPlayed);
         voiceBeingPlayed = -1;
     }
     
@@ -174,9 +128,6 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    openal_stopsound(voiceBeingPlayed);
-    openal_freesound(voiceBeingPlayed);
-    voiceBeingPlayed = -1;
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
@@ -201,5 +152,4 @@
 
 
 @end
-
 

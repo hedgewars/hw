@@ -22,7 +22,7 @@
 #include "openalbridge_t.h"
 
 
-int load_wavpcm (const char *filename, ALenum *format, char ** data, ALsizei *bitsize, ALsizei *freq) {
+int load_wavpcm (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq) {
     WAV_header_t WAVHeader;
     FILE *wavfile;
     int32_t t;
@@ -80,7 +80,7 @@ int load_wavpcm (const char *filename, ALenum *format, char ** data, ALsizei *bi
 
         if (t <= 0) {
             // eof
-            fprintf(stderr,"(Bridge Error) - wrong WAV header");
+            fprintf(stderr,"(Bridge Error) - wrong WAV header\n");
             return -1;
         }
     } while (1);
@@ -102,7 +102,7 @@ int load_wavpcm (const char *filename, ALenum *format, char ** data, ALsizei *bi
     fclose(wavfile);
 
 #ifdef DEBUG
-    fprintf(stderr,"(Bridge Info) - WAV data loaded");
+    fprintf(stderr,"(Bridge Info) - WAV data loaded\n");
 #endif
 
     /*set parameters for OpenAL*/
@@ -114,7 +114,7 @@ int load_wavpcm (const char *filename, ALenum *format, char ** data, ALsizei *bi
             if (ENDIAN_LITTLE_16(WAVHeader.BitsPerSample) == 16)
                 *format = AL_FORMAT_MONO16;
             else {
-                fprintf(stderr,"(Bridge Error) - wrong WAV header [bitsample value]");
+                fprintf(stderr,"(Bridge Error) - wrong WAV header [bitsample value]\n");
                 return -2;
             }
         }
@@ -126,12 +126,12 @@ int load_wavpcm (const char *filename, ALenum *format, char ** data, ALsizei *bi
                 if (ENDIAN_LITTLE_16(WAVHeader.BitsPerSample) == 16)
                     *format = AL_FORMAT_STEREO16;
                 else {
-                    fprintf(stderr,"(Bridge Error) - wrong WAV header [bitsample value]");
+                    fprintf(stderr,"(Bridge Error) - wrong WAV header [bitsample value]\n");
                     return -2;
                 }
             }
         } else {
-            fprintf(stderr,"(Bridge Error) - wrong WAV header [format value]");
+            fprintf(stderr,"(Bridge Error) - wrong WAV header [format value]\n");
             return -2;
         }
     }
@@ -164,7 +164,7 @@ int load_oggvorbis (const char *filename, ALenum *format, char **data, ALsizei *
     oggFile = Fopen(filename, "rb");
     result = ov_open_callbacks(oggFile, &oggStream, NULL, 0, OV_CALLBACKS_DEFAULT);
     if (result < 0) {
-        fprintf(stderr,"(Bridge Error) - ov_open_callbacks() failed with %X", result);
+        fprintf(stderr,"(Bridge Error) - ov_open_callbacks() failed with %X\n", result);
         ov_clear(&oggStream);
         return -1;
     }
@@ -199,7 +199,7 @@ int load_oggvorbis (const char *filename, ALenum *format, char **data, ALsizei *
         if (vorbisInfo->channels == 2)
             *format = AL_FORMAT_STEREO16;
         else {
-            fprintf(stderr,"(Bridge Error) - wrong OGG header [channel %d]", vorbisInfo->channels);
+            fprintf(stderr,"(Bridge Error) - wrong OGG header [channel %d]\n", vorbisInfo->channels);
             ov_clear(&oggStream);
             return -2;
         }
@@ -220,7 +220,7 @@ int load_oggvorbis (const char *filename, ALenum *format, char **data, ALsizei *
             if (result == 0)
                 break;
             else {
-                fprintf(stderr,"(Bridge Error) - End of file from OGG stream");
+                fprintf(stderr,"(Bridge Error) - End of file from OGG stream\n");
                 ov_clear(&oggStream);
                 return -3;
             }

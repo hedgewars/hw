@@ -16,10 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include "globals.h"
+
 #ifndef _OALB_LOADERS_H
 #define _OALB_LOADERS_H
-
-#include "globals.h"
 
 int load_wavpcm     (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
 int load_oggvorbis  (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);

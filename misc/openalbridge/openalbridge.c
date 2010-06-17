@@ -22,187 +22,200 @@
 #include "alc.h"
 #include "wrappers.h"
 #include "loaders.h"
+#include "string.h"
 
-
-/*Sources are points emitting sound*/
+// Sources are points emitting sound, their number is limited, but a single source can play many buffers
+// Buffers hold sound data and are unlimited
 ALuint *Sources;
-/*Buffers hold sound data*/
-ALuint *Buffers;
-/*index for Sources and Buffers*/
-ALuint globalindex, globalsize, increment;
+ALuint cache_size, cache_index, sources_number;
+ALboolean instances_number;
+al_sound_t *the_sounds;
+ALint cache_pointer;
 
-ALboolean isBridgeReady = AL_FALSE;
-ALfloat old_gain;
-
+// Initialize an OpenAL contex and allocate memory space for data and buffers
+// It can be called twice to increase the cache size
 int openal_init (int memorysize) {
-    /*Initialize an OpenAL contex and allocate memory space for data and buffers*/
     ALCcontext *context;
     ALCdevice *device;
+    int i;
+        
+    // reuse old context and resize the existing 
+    if (openal_ready() == AL_TRUE) {
+        cache_size += memorysize;
+        fprintf(stderr,"(Bridge Info) - already initialized, resizing cache to %d\n", cache_size);
+        the_sounds = (al_sound_t *)Realloc (the_sounds, sizeof(al_sound_t) * cache_size);
+        for (i = cache_size - memorysize; i < cache_size; i++) {
+            the_sounds[i].filename = NULL;
+            the_sounds[i].buffer = -1;
+            the_sounds[i].source_index = -1;
+            the_sounds[i].stats = 0;
+        }
+        instances_number++;
+        return AL_TRUE;
+    }
+    
+    cache_pointer = 0;
+    instances_number++;
     
     // set the memory dimentsion and the increment width when reallocating
     if (memorysize <= 0)
-        globalsize = 50;
+        cache_size = 50;
     else
-        globalsize = memorysize;
-    increment = globalsize;
-    
-    // reuse old context but keep the new value for increment
-    if (isBridgeReady == AL_TRUE) {
-        fprintf(stderr,"(Bridge Warning) - already initialized");
-        return 0;
-    }
-    
+        cache_size = memorysize;
+
     // open hardware device if present
     device = alcOpenDevice(NULL);
-    
+    sources_number = 16;
     if (device == NULL) {
-        fprintf(stderr,"(Bridge Warning) - failed to open sound device, using software renderer");
+        fprintf(stderr,"(Bridge Warning) - failed to open sound device, using software renderer\n");
         device = alcOpenDevice("Generic Software");
+        sources_number = 32;
         if (device == NULL) {
-            fprintf(stderr,"(Bridge Error) - failed to open sound software device, sound will be disabled");
+            fprintf(stderr,"(Bridge ERROR) - failed to start software renderer, sound will be disabled\n");
             return -1;
         }
     }
-    
-    fprintf(stderr,"(Bridge Info) - Output device: %s", alcGetString(device, ALC_DEVICE_SPECIFIER));
-    
+
+    fprintf(stderr,"(Bridge Info) - output device: %s\n", alcGetString(device, ALC_DEVICE_SPECIFIER));
+
     context = alcCreateContext(device, NULL);
     alcMakeContextCurrent(context);
     alcProcessContext(context);
-    
+
     if (AL_NO_ERROR != alGetError()) {
-        fprintf(stderr,"(Bridge Error) - Failed to create a new contex");
+        fprintf(stderr,"(Bridge ERROR) - Failed to create a new contex\n");
         alcMakeContextCurrent(NULL);
         alcDestroyContext(context);
         alcCloseDevice(device);
         return -2;
     }
-    
-    // allocate memory space for buffers and sources
-    Buffers = (ALuint*) Malloc(sizeof(ALuint)*globalsize);
-    Sources = (ALuint*) Malloc(sizeof(ALuint)*globalsize);
+
+    Sources = (ALuint *)Malloc (sizeof(ALuint) * sources_number);
+    alGenSources(sources_number, Sources);
     
     // set the listener gain, position (on xyz axes), velocity (one value for each axe) and orientation
     // Position, Velocity and Orientation of the listener
     ALfloat ListenerPos[] = {0.0, 0.0, 0.0};
     ALfloat ListenerVel[] = {0.0, 0.0, 0.0};
-    ALfloat ListenerOri[] = {0.0, 0.0, -1.0,  0.0, 1.0, 0.0};
-    
+    ALfloat ListenerOri[] = {0.0, 0.0, -1.0, 0.0, 1.0, 0.0};
+
     alListenerf (AL_GAIN,        1.0f       );
     alListenerfv(AL_POSITION,    ListenerPos);
     alListenerfv(AL_VELOCITY,    ListenerVel);
     alListenerfv(AL_ORIENTATION, ListenerOri);
-    
+
     if (AL_NO_ERROR != alGetError()) {
-        fprintf(stderr,"(Bridge Error) - Failed to set Listener properties");
+        fprintf(stderr,"(Bridge ERROR) - Failed to set Listener properties\n");
         return -3;
     }
-    isBridgeReady = AL_TRUE;
-    
-    alGetError();  // clear any AL errors beforehand
+
+    the_sounds = (al_sound_t *)Malloc (sizeof(al_sound_t) * cache_size);
+    for (i = 0; i < cache_size; i++) {
+        the_sounds[i].filename = NULL;
+        the_sounds[i].buffer = -1;
+        the_sounds[i].source_index = -1;
+        the_sounds[i].stats = 0;
+    }
+
+    alGetError();
     return AL_TRUE;
 }
 
+
+// Stop all sounds, deallocate all memory and close OpenAL context
 void openal_close (void) {
-    /*Stop all sounds, deallocate all memory and close OpenAL */
     ALCcontext *context;
     ALCdevice  *device;
+    int i;
     
-    if (isBridgeReady == AL_FALSE) {
-        fprintf(stderr,"(Bridge Warning) - OpenAL not initialized");
+    if (instances_number == 0) {
+        fprintf(stderr,"(Bridge Warning) - OpenAL not initialized\n");
+        return;
+    }
+
+    instances_number--;
+    if (instances_number > 0) {
         return;
     }
     
-    alSourceStopv	(globalsize, Sources);
-    alDeleteSources (globalsize, Sources);
-    alDeleteBuffers (globalsize, Buffers);
-    
+    //TODO: free other stuff also
+    for (i = 0; i < cache_size; i++)
+        alDeleteBuffers (1, &the_sounds[i].buffer);
+    free(the_sounds);
+
+    alSourceStopv	(sources_number, Sources);
+    alDeleteSources (sources_number, Sources);
+
     free(Sources);
-    free(Buffers);
-    
+
     context = alcGetCurrentContext();
     device  = alcGetContextsDevice(context);
-    
+
     alcMakeContextCurrent(NULL);
     alcDestroyContext(context);
     alcCloseDevice(device);
-    
-    isBridgeReady = AL_FALSE;
-    
-    fprintf(stderr,"(Bridge Info) - closed");
-    
+
+    fprintf(stderr,"(Bridge Info) - closed\n");
+
     return;
 }
+
 
 ALboolean openal_ready (void) {
-    return isBridgeReady;
+    if (instances_number >= 1) 
+        return AL_TRUE;
+    else
+        return AL_FALSE;
 }
 
 
-void helper_realloc (void) {
-    /*expands allocated memory when loading more sound files than expected*/
-    int oldsize = globalsize;
-    globalsize += increment;
-    
-    fprintf(stderr,"(Bridge Info) - Realloc in process from %d to %d\n", oldsize, globalsize);
-    
-    Buffers = (ALuint*) Realloc(Buffers, sizeof(ALuint)*globalsize);
-    Sources = (ALuint*) Realloc(Sources, sizeof(ALuint)*globalsize);
-    
-    return;
-}
-
-
+// Open a file, load into memory and allocate the Source buffer for playing
 int openal_loadfile (const char *filename){
-    /*Open a file, load into memory and allocate the Source buffer for playing*/
-    ALfloat SourcePos[] = { 0.0, 0.0, 0.0 }; /*Position of the source sound*/
-    ALfloat SourceVel[] = { 0.0, 0.0, 0.0 }; /*Velocity of the source sound*/
-    ALenum format;
+    ALenum format, error;
     ALsizei bitsize, freq;
-    char *data;
     uint32_t fileformat;
-    ALenum error;
+    al_sound_t soundData;
+    int len, i;
+    char *data;
     FILE *fp;
     
-    if (isBridgeReady == AL_FALSE) {
-        fprintf(stderr,"(Bridge Warning) - not initialized");
+    if (openal_ready() == AL_FALSE) {
+        fprintf(stderr,"(Bridge Warning) - not initialized\n");
         return -1;
     }
     
-    /*when the buffers are all used, we can expand memory to accept new files*/
-    if (globalindex == globalsize)
-        helper_realloc();
-    
-    /*detect the file format, as written in the first 4 bytes of the header*/
-    fp = Fopen (filename, "rb");
-    
-    if (fp == NULL)
+    // if this sound is already loaded return the index from the_sounds
+    len = strlen(filename);
+    for (i = 0; i < cache_size; i++) {
+        if (the_sounds[i].filename != NULL && strncmp(the_sounds[i].filename, filename, len) == 0) {
+#ifdef DEBUG
+            fprintf(stderr,"(Bridge Debug) - sound %d is already loaded\n", i);
+#endif
+            return i;
+        }
+    }
+
+    if (cache_pointer >= cache_size) {
+        fprintf(stderr,"(Bridge ERROR) - Cache size limit reached; consider allocating more space\n", filename);
         return -2;
+    }
     
-    error = fread (&fileformat, sizeof(uint32_t), 1, fp);
-    fclose (fp);
-    
-    if (error < 0) {
-        fprintf(stderr,"(Bridge Error) - File %s is too short", filename);
+    // detect the file format, as written in the first 4 bytes of the header
+    fp = Fopen (filename, "rb");
+
+    if (fp == NULL) {
+        fprintf(stderr,"(Bridge ERROR) - File %s not loaded\n", filename);
         return -3;
     }
-    
-    /*prepare the buffer to receive data*/
-    alGenBuffers(1, &Buffers[globalindex]);
-    
-    if (AL_NO_ERROR != alGetError()) {
-        fprintf(stderr,"(Bridge Error) - Failed to allocate memory for buffers");
+
+    error = fread (&fileformat, sizeof(uint32_t), 1, fp);
+    fclose (fp);
+
+    if (error < 0) {
+        fprintf(stderr,"(Bridge ERROR) - File %s is too short\n", filename);
         return -4;
     }
-    
-    /*prepare the source to emit sound*/
-    alGenSources(1, &Sources[globalindex]);
-    
-    if (AL_NO_ERROR != alGetError()) {
-        fprintf(stderr,"(Bridge Error) - Failed to allocate memory for sources");
-        return -5;
-    }
-    
+
     switch (ENDIAN_BIG_32(fileformat)) {
         case OGG_FILE_FORMAT:
             error = load_oggvorbis (filename, &format, &data, &bitsize, &freq);
@@ -211,156 +224,42 @@ int openal_loadfile (const char *filename){
             error = load_wavpcm (filename, &format, &data, &bitsize, &freq);
             break;
         default:
-            fprintf(stderr,"(Bridge Error) - File format (%08X) not supported", ENDIAN_BIG_32(fileformat));
-            return -6;
+            fprintf(stderr,"(Bridge ERROR) - File format (%08X) not supported\n", ENDIAN_BIG_32(fileformat));
+            return -5;
             break;
     }
-    
+
     if (error != 0) {
-        fprintf(stderr,"(Bridge Error) - error loading file %s", filename);
+        fprintf(stderr,"(Bridge ERROR) - error loading file %s\n", filename);
         free(data);
-        return -7;
+        return -6;
     }
-    
-    //copy pcm data in one buffer and free it
-    alBufferData(Buffers[globalindex], format, data, bitsize, freq);
-    free(data);
+
+    alGenBuffers(1, &soundData.buffer);
+    soundData.filename = filename;
+    soundData.source_index = -1;
+    soundData.stats = 0;
     
     if (AL_NO_ERROR != alGetError()) {
-        fprintf(stderr,"(Bridge Error) - Failed to write data to buffers");
+        fprintf(stderr,"(Bridge ERROR) - Failed to allocate memory for buffers\n");
+        return -5;
+    }
+    
+    // copy pcm data in one buffer and free it
+    alBufferData(soundData.buffer, format, data, bitsize, freq);
+    free(data);
+
+    if (AL_NO_ERROR != alGetError()) {
+        fprintf(stderr,"(Bridge ERROR) - Failed to write data to buffers\n");
         return -8;
     }
     
-    /*set source properties that it will use when it's in playback*/
-    alSourcei (Sources[globalindex], AL_BUFFER,   Buffers[globalindex]  );
-    alSourcef (Sources[globalindex], AL_PITCH,    1.0f                  );
-    alSourcef (Sources[globalindex], AL_GAIN,     1.0f                  );
-    alSourcefv(Sources[globalindex], AL_POSITION, SourcePos             );
-    alSourcefv(Sources[globalindex], AL_VELOCITY, SourceVel             );
-    alSourcei (Sources[globalindex], AL_LOOPING,  0                     );
-    
-    if (AL_NO_ERROR != alGetError()) {
-        fprintf(stderr,"(Bridge Error) - Failed to set Source properties");
-        return -9;
-    }
-    
-    alGetError();  /* clear any AL errors beforehand */
-    
-    /*returns the index of the source you just loaded, increments it and exits*/
-    return globalindex++;
-}
+    // clear any AL errors beforehand
+    alGetError();
 
+    fprintf(stderr,"(Bridge Info) - successfully loaded %s\n", filename);
 
-void openal_playsound (uint32_t index) {
-    openal_playsound_loop (index, 0);
-}
-
-
-void openal_pausesound (uint32_t index) {
-    if (isBridgeReady == AL_TRUE && index < globalsize)
-        alSourcePause(Sources[index]);
-}
-
-
-void openal_stopsound (uint32_t index) {
-    openal_stopsound_free(index, 0);
-}
-
-
-void openal_freesound (uint32_t index){
-    if (isBridgeReady == AL_TRUE && index < globalsize)
-        alSourceStop(Sources[index]);
-    // STUB
-}
-
-
-void openal_playsound_loop (unsigned int index, char loops) {
-    if (isBridgeReady == AL_TRUE && index < globalsize) {
-        alSourcePlay(Sources[index]);
-        if (loops != 0)
-            openal_toggleloop(index);
-    }
-}
-
-void openal_stopsound_free (unsigned int index, char freesource) {
-    if (isBridgeReady == AL_TRUE && index < globalsize) {
-        alSourceStop(Sources[index]);
-        if (freesource != 0)
-            openal_freesound(index);
-    }
-}
-
-void openal_toggleloop (uint32_t index) {
-    ALint loop;
-    
-    if (isBridgeReady == AL_TRUE && index < globalsize) {
-        alGetSourcei (Sources[index], AL_LOOPING, &loop);
-        alSourcei (Sources[index], AL_LOOPING, !((uint8_t) loop) & 0x00000001);
-    }
-    
-}
-
-
-void openal_setvolume (uint32_t index, float gain) {
-    if (isBridgeReady == AL_TRUE && index < globalsize)
-        alSourcef (Sources[index], AL_GAIN, gain);
-}
-
-
-void openal_setglobalvolume (float gain) {
-    if (isBridgeReady == AL_TRUE)
-        alListenerf (AL_GAIN, gain);
-}
-
-void openal_togglemute () {
-    ALfloat gain;
-    
-    if (isBridgeReady == AL_TRUE) {
-        alGetListenerf (AL_GAIN, &gain);
-        if (gain > 0) {
-            old_gain = gain;
-            gain = 0;
-        } else
-            gain = old_gain;
-        
-        alListenerf (AL_GAIN, gain);
-    }
-}
-
-// Fade in or out by calling a helper thread
-void openal_fade (uint32_t index, uint16_t quantity, al_fade_t direction) {
-#ifndef _WIN32
-    pthread_t thread;
-#else
-    HANDLE Thread;
-#endif
-    fade_t *fade;
-    
-    if (isBridgeReady == AL_TRUE && index < globalsize) {
-        fade = (fade_t*) Malloc(sizeof(fade_t));
-        fade->index = index;
-        fade->quantity = quantity;
-        fade->type = direction;
-        
-#ifndef _WIN32
-        pthread_create(&thread, NULL, (void *)helper_fade, (void *)fade);
-        pthread_detach(thread);
-#else
-        Thread = (HANDLE) _beginthread((void *)helper_fade, 0, (void *)fade);
-#endif
-    }
-}
-
-void openal_fadein (uint32_t index, uint16_t quantity) {
-    openal_fade(index, quantity, AL_FADE_IN);
-}
-
-void openal_fadeout (uint32_t index, uint16_t quantity) {
-    openal_fade(index, quantity, AL_FADE_OUT);
-}
-
-
-void openal_setposition (uint32_t index, float x, float y, float z) {
-    if (isBridgeReady == AL_TRUE && index < globalsize)
-        alSource3f(Sources[index], AL_POSITION, x, y, z);;
+    // returns the index of the source you just loaded, increments it and exits
+    the_sounds[cache_pointer] = soundData;
+    return cache_pointer++;
 }

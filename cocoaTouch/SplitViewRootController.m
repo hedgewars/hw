@@ -40,7 +40,7 @@
         
     Class splitViewControllerClass = NSClassFromString(@"UISplitViewController");
     if (splitViewControllerClass) {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_3_2
+#if __IPHONE_3_2
         UISplitViewController *splitViewRootController = [[UISplitViewController alloc] init];
         //splitViewRootController.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;        
         splitViewRootController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);

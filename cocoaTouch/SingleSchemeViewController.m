@@ -103,6 +103,8 @@
     self.schemeArray = scheme;
     [scheme release];
 	[schemeFile release];
+    
+    [self.tableView reloadData];
 }
 
 // save to file

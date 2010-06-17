@@ -137,8 +137,9 @@ begin
                 tex:= nil;
             end;
 
-if LandBackSurface <> nil then
-    SDL_FreeSurface(LandBackSurface);
+    if LandBackSurface <> nil then
+        SDL_FreeSurface(LandBackSurface);
+    LandBackSurface:= nil;
 end;
 
 end.

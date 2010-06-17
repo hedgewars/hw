@@ -11,6 +11,7 @@
 #import "CommodityFunctions.h"
 #import "MapConfigViewController.h"
 #import "TeamConfigViewController.h"
+#import "SchemeWeaponConfigViewController.h"
 
 @implementation GameConfigViewController
 
@@ -31,7 +32,8 @@
                        withObject:nil
                        afterDelay:0.25];
             break;
-
+        default:
+            break;
     }
 }
 
@@ -43,23 +45,26 @@
             // this init here is just aestetic as this controller was already set up in viewDidLoad
             if (mapConfigViewController == nil) {
                 mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
-                [mapConfigViewController viewWillAppear:NO];  
             }
             activeController = mapConfigViewController;
             break;
         case 1:
             if (teamConfigViewController == nil) {
                 teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                // this message is compulsory otherwise the team table won't be loaded at all
-                [teamConfigViewController viewWillAppear:NO];  
+                // this message is compulsory otherwise the table won't be loaded at all
             }
             activeController = teamConfigViewController;
             break;
         case 2:
-            
+            if (schemeWeaponConfigViewController == nil) {
+                schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            }
+            activeController = schemeWeaponConfigViewController;
             break;
     }
     
+    // this message is compulsory otherwise the table won't be loaded at all
+    [activeController viewWillAppear:NO];      
     [self.view addSubview:activeController.view];
 }
 
@@ -110,7 +115,10 @@
                                                                       mapConfigViewController.mapGenCommand,@"mapgen_command",
                                                                       mapConfigViewController.mazeSizeCommand,@"mazesize_command",
                                                                       mapConfigViewController.themeCommand,@"theme_command",
-                                                                      teamConfigViewController.listOfSelectedTeams,@"teams_list",nil];
+                                                                      teamConfigViewController.listOfSelectedTeams,@"teams_list",
+                                                                      schemeWeaponConfigViewController.selectedScheme,@"scheme",
+                                                                      schemeWeaponConfigViewController.selectedWeapon,@"weapon",
+                                                                      nil];
     [dict writeToFile:GAMECONFIG_FILE() atomically:YES];
     [dict release];
 
@@ -121,11 +129,18 @@
 
 -(void) viewDidLoad {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
-        teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStylePlain];
+        if (mapConfigViewController == nil)
+            mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
+        if (teamConfigViewController == nil)
+            teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStylePlain];
         teamConfigViewController.view.frame = CGRectMake(0, 224, 300, 500);
         teamConfigViewController.view.backgroundColor = [UIColor clearColor];
         [mapConfigViewController.view addSubview:teamConfigViewController.view];
+        if (schemeWeaponConfigViewController == nil)
+            schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        schemeWeaponConfigViewController.view.frame = CGRectMake(362, 224, 300, 500);
+        schemeWeaponConfigViewController.view.backgroundColor = [UIColor clearColor];
+        [mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
     } else
         mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
     activeController = mapConfigViewController;
@@ -138,6 +153,7 @@
 -(void) viewWillAppear:(BOOL)animated {
     [mapConfigViewController viewWillAppear:animated];
     [teamConfigViewController viewWillAppear:animated];
+    [schemeWeaponConfigViewController viewWillAppear:animated];
     // ADD other controllers here
      
     [super viewWillAppear:animated];
@@ -146,6 +162,7 @@
 -(void) viewDidAppear:(BOOL)animated {
     [mapConfigViewController viewDidAppear:animated];
     [teamConfigViewController viewDidAppear:animated];
+    [schemeWeaponConfigViewController viewDidAppear:animated];
     [super viewDidAppear:animated];
 }
 
@@ -157,24 +174,26 @@
         mapConfigViewController = nil;
     if (teamConfigViewController.view.superview == nil)
         teamConfigViewController = nil;
+    if (schemeWeaponConfigViewController.view.superview == nil)
+        schemeWeaponConfigViewController = nil;
     activeController = nil;
     MSG_MEMCLEAN();
 }
-
 
 -(void) viewDidUnload {
     activeController = nil;
     mapConfigViewController = nil;
     teamConfigViewController = nil;
+    schemeWeaponConfigViewController = nil;
     [super viewDidUnload];
     MSG_DIDUNLOAD();
 }
-
 
 -(void) dealloc {
     [activeController release];
     [mapConfigViewController release];
     [teamConfigViewController release];
+    [schemeWeaponConfigViewController release];
     [super dealloc];
 }
 

@@ -49,21 +49,7 @@
 }
 
 #pragma mark -
-#pragma mark Thread/Network relevant code
-// select one of GameSetup method and execute it in a seprate thread
--(void) startThread: (NSString *) selector {
-	SEL usage = NSSelectorFromString(selector);
-	[NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
-}
-
-// wrapper that computes the length of the message and then sends the command string
--(int) sendToEngine: (NSString *)string {
-	uint8_t length = [string length];
-	
-	SDLNet_TCP_Send(csd, &length , 1);
-	return SDLNet_TCP_Send(csd, [string UTF8String], length);
-}
-
+#pragma mark Provider functions
 // unpacks team data from the selected team.plist to a sequence of engine commands
 -(void) provideTeamData:(NSString *)teamName forHogs:(NSInteger) numberOfPlayingHogs withHealth:(NSInteger) initialHealth ofColor:(NSNumber *)teamColor {
     /*
@@ -152,12 +138,12 @@
 
 // unpacks scheme data from the selected scheme.plist to a sequence of engine commands
 -(NSInteger) provideScheme:(NSString *)schemeName {
-    NSString *schemePath = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),schemeName];
+    NSString *schemePath = [[NSString alloc] initWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),schemeName];
     NSArray *scheme = [[NSArray alloc] initWithContentsOfFile:schemePath];
     [schemePath release];
     int result = 0;
     int i = 0;
-    
+
     if ([[scheme objectAtIndex:i++] boolValue])
         result |= 0x01;
     if ([[scheme objectAtIndex:i++] boolValue])
@@ -223,7 +209,6 @@
     [self sendToEngine:minesNumber];
     [minesNumber release];
     
-
     NSString *dudMines = [[NSString alloc] initWithFormat:@"e$minedudpct %d",[[scheme objectAtIndex:i++] intValue]];
     [self sendToEngine:dudMines];
     [dudMines release];
@@ -234,6 +219,22 @@
     
     [scheme release];
     return result;
+}
+
+#pragma mark -
+#pragma mark Thread/Network relevant code
+// select one of GameSetup method and execute it in a seprate thread
+-(void) startThread: (NSString *) selector {
+	SEL usage = NSSelectorFromString(selector);
+	[NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
+}
+
+// wrapper that computes the length of the message and then sends the command string
+-(int) sendToEngine: (NSString *)string {
+	uint8_t length = [string length];
+	
+	SDLNet_TCP_Send(csd, &length , 1);
+	return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
 // method that handles net setup with engine and keeps connection alive
@@ -292,7 +293,7 @@
 				[self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
 				
                 // scheme (returns initial health)
-                NSInteger health = [self provideScheme:@"Scheme 0"];
+                NSInteger health = [self provideScheme:[self.gameConfig objectForKey:@"scheme"]];
 
 				// dimension of the map
 				[self sendToEngine:[self.gameConfig objectForKey:@"templatefilter_command"]];

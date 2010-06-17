@@ -536,6 +536,8 @@ begin
             SDL_FreeSurface(ThemeObjects.objs[i].Surf);
         if SprayObjects.objs[i].Surf <> nil then
             SDL_FreeSurface(SprayObjects.objs[i].Surf);
+        ThemeObjects.objs[i].Surf:= nil;
+        SprayObjects.objs[i].Surf:= nil;
     end;
 end;
 

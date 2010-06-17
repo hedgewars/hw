@@ -17,6 +17,7 @@
  */
 
 #include <stdint.h>
+#include "al.h"
 
 #ifndef _OALB_INTERFACE_TYPES_H
 #define _OALB_INTERFACE_TYPES_H
@@ -24,7 +25,19 @@
 enum al_fade_enum {AL_FADE_IN, AL_FADE_OUT};
 typedef enum al_fade_enum al_fade_t;
 
-//data type for passing data between threads
+
+// data type to handle which source source is playing what
+#pragma pack(1)
+typedef struct _al_sound_t {
+    const char *filename;       // name of the sound file
+    ALuint buffer;              // actual sound content
+    uint32_t source_index;      // index of the associated source
+    uint32_t stats;             // number of times the sound has been played
+} al_sound_t;
+#pragma pack()
+
+
+// data type for passing data between threads
 #pragma pack(1)
 typedef struct _fade_t {
     uint32_t index;
@@ -34,7 +47,7 @@ typedef struct _fade_t {
 #pragma pack()
 
 
-//data type for WAV header
+// data type for WAV header
 #pragma pack(1)
 typedef struct _WAV_header_t {
     uint32_t ChunkID;

@@ -21,3 +21,12 @@
 #endif
  
 #define ZAssert(condition, ...) do { if (!(condition)) { ALog(__VA_ARGS__); }} while(0)
+
+#if !__IPHONE_3_2
+typedef enum {
+    UIUserInterfaceIdiomPhone,           // iPhone and iPod touch style UI
+    UIUserInterfaceIdiomPad,             // iPad style UI
+} UIUserInterfaceIdiom;
+#define UI_USER_INTERFACE_IDIOM() UIUserInterfaceIdiomPhone
+#define UIPopoverController id
+#endif // ifndef __IPHONE_3_2

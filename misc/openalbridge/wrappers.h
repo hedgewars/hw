@@ -20,6 +20,7 @@
 #define _OALB_WRAPPERS_H
 
 #include "globals.h"
+#include "openalbridge_t.h"
 
 void *Malloc (size_t nbytes);
 void *Realloc (void *aptr, size_t nbytes);

@@ -59,19 +59,23 @@
             HW_setLandscape(YES);
             break;
         case UIDeviceOrientationPortrait:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(270));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
-            [self chatAppear];
-            HW_setLandscape(NO);
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(270));
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
+                [self chatAppear];
+                HW_setLandscape(NO);
+            }
             break;
         case UIDeviceOrientationPortraitUpsideDown:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
-            [self chatAppear];
-            HW_setLandscape(NO);
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
+                [self chatAppear];
+                HW_setLandscape(NO);
+            }
             break;
         default:
-            NSLog(@"warning - Unknown rotation status");
+            DLog(@"Unknown rotation status");
             break;
     }
     self.view.frame = usefulRect;
@@ -126,19 +130,13 @@
                                                  name:@"dismissPopover"
                                                object:nil];
     
-    // need to split paths because iphone doesn't rotate (so we don't need to subscribe to any notification
-    // nor perform engine actions when rotating
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];	
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(didRotate:)
-                                                     name:@"UIDeviceOrientationDidChangeNotification"
-                                                   object:nil];
-        
-        [self didRotate:nil];
-    } else 
-        self.view.transform = CGAffineTransformRotate(self.view.transform, (M_PI/2.0));
-    
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];	
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didRotate:)
+                                                 name:@"UIDeviceOrientationDidChangeNotification"
+                                               object:nil];
+
+    //self.view.transform = CGAffineTransformRotate(self.view.transform, (M_PI/2.0)); 
 	[UIView beginAnimations:@"showing overlay" context:NULL];
 	[UIView setAnimationDuration:1];
 	self.view.alpha = 1;
@@ -239,7 +237,7 @@
     CGRect anchorForPopover;
     Class popoverControllerClass = NSClassFromString(@"UIPopoverController");
     if (popoverControllerClass) {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_3_2
+#if __IPHONE_3_2
         if (popupMenu == nil) 
             popupMenu = [[PopoverMenuViewController alloc] initWithStyle:UITableViewStylePlain];
         popoverController = [[popoverControllerClass alloc] initWithContentViewController:popupMenu];
