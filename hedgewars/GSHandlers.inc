@@ -812,7 +812,7 @@ begin
         end;
 
         if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9)
-           , COLOR_INDESTRUCTIBLE) then
+           , LAND_INDESTRUCTIBLE) then
         begin
             Gear^.X := Gear^.X + Gear^.dX;
             Gear^.Y := Gear^.Y + _1_9;
@@ -922,11 +922,11 @@ begin
             // why the call to HedgehogStep then a further increment of X?
             if (prevX = hwRound(HHGear^.X)) and
                CheckLandValue(hwRound(HHGear^.X + SignAs(_6, HHGear^.dX)), hwRound(HHGear^.Y),
-               COLOR_INDESTRUCTIBLE) then HedgehogStep(HHGear);
+               LAND_INDESTRUCTIBLE) then HedgehogStep(HHGear);
 
             if (prevX = hwRound(HHGear^.X)) and
                CheckLandValue(hwRound(HHGear^.X + SignAs(_6, HHGear^.dX)), hwRound(HHGear^.Y),
-               COLOR_INDESTRUCTIBLE) then HHGear^.X := HHGear^.X + SignAs(_1, HHGear^.dX);
+               LAND_INDESTRUCTIBLE) then HHGear^.X := HHGear^.X + SignAs(_1, HHGear^.dX);
             HHGear^.State := HHGear^.State or gstAttacking
         end;
 
@@ -936,7 +936,7 @@ begin
             BTSteps := 0;
             if CheckLandValue(hwRound(HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC) + SignAs(_6,
                Gear^.dX)), hwRound(HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC)),
-               COLOR_INDESTRUCTIBLE) then
+               LAND_INDESTRUCTIBLE) then
             begin
                 Gear^.X := HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
                 Gear^.Y := HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
@@ -1795,7 +1795,7 @@ begin
     end;
 
     if CheckLandValue(hwRound(HHGear^.X), hwRound(HHGear^.Y + HHGear^.dY + SignAs(_6,Gear^.dY)),
-       COLOR_INDESTRUCTIBLE) then
+       LAND_INDESTRUCTIBLE) then
         HHGear^.Y := HHGear^.Y + HHGear^.dY
 end;
 
@@ -2544,7 +2544,8 @@ begin
        or (t^.Count <> 0)
        or (not TestCollisionYWithGear(Gear, hwSign(Gear^.dY))
        and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)))
-       or (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] = COLOR_INDESTRUCTIBLE) then
+// CheckLandValue returns true if the type isn't matched
+       or not CheckLandValue(hwRound(Gear^.Y), hwRound(Gear^.X), LAND_INDESTRUCTIBLE) then
     begin
         //out of time or exited ground
         StopSound(Gear^.SoundChannel);

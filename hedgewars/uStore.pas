@@ -51,7 +51,7 @@ procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Positi
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
-procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
+procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat = 1.0);
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
 procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
@@ -524,10 +524,11 @@ glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 glDisableClientState(GL_VERTEX_ARRAY)
 end;
 
-procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
+procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
 begin
 glPushMatrix;
 glTranslatef(X, Y, 0);
+glScalef(Scale, Scale, 1);
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 

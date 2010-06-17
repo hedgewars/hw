@@ -248,9 +248,11 @@ const
     LAND_HEIGHT_MASK = $FFFFF800;
 {$ENDIF}
 
-    COLOR_LAND           = $FFFF;  // white
-    COLOR_INDESTRUCTIBLE = $88FF;  // red
-    COLOR_OBJECT         = $44FF;  // no idea
+// To allow these to layer, going to treat them as masks. The bottom byte is reserved for objects
+    LAND_BASIC          = $8000;  // white
+    LAND_INDESTRUCTIBLE = $4000;  // red
+    LAND_OBJECT         = $2000;  // no idea
+    LAND_DAMAGED        = $1000;  // no idea
 
     cMaxPower     = 1500;
     cMaxAngle     = 2048;

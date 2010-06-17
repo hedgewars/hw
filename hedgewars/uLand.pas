@@ -22,7 +22,13 @@ unit uLand;
 interface
 uses SDLh, uLandTemplates, uFloat, uConsts, GLunit;
 
-type TLandArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of LongWord;
+type
+{$IFDEF DOWNSCALE}
+    TLandArray = packed array[0 .. LAND_HEIGHT div 2 - 1, 0 .. LAND_WIDTH div 2 - 1] of LongWord;
+{$ELSE}
+    TLandArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of LongWord;
+{$ENDIF}
+ 
     TCollisionArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Word;
     TPreview  = packed array[0..127, 0..31] of byte;
     TDirtyTag = packed array[0 .. LAND_HEIGHT div 32 - 1, 0 .. LAND_WIDTH div 32 - 1] of byte;
@@ -555,7 +561,7 @@ var pa: TPixAr;
 begin
 for y:= 0 to LAND_HEIGHT - 1 do
     for x:= 0 to LAND_WIDTH - 1 do
-        Land[y, x]:= COLOR_LAND;
+        Land[y, x]:= LAND_BASIC;
 
 {$HINTS OFF}
 SetPoints(Template, pa);
@@ -576,7 +582,7 @@ with Template do
          with FillPoints^[i] do
               FillLand(x, y);
 
-DrawEdge(pa, COLOR_LAND);
+DrawEdge(pa, LAND_BASIC);
 
 MaxHedgehogs:= Template.MaxHedgehogs;
 hasGirders:= Template.hasGirders;
@@ -599,8 +605,8 @@ if (cTemplateFilter = 4) or
             else
             begin
                if Land[y, x] = 0 then
-                   Land[y, x]:= COLOR_LAND
-               else if Land[y, x] = COLOR_LAND then
+                   Land[y, x]:= LAND_BASIC
+               else if Land[y, x] = LAND_BASIC then
                    Land[y, x]:= 0;
             end;
     end;
@@ -644,7 +650,11 @@ p:= Surface^.pixels;
 for y:= 0 to LAND_HEIGHT - 1 do
     begin
     for x:= 0 to LAND_WIDTH - 1 do
+{$IFDEF DOWNSCALE}
+        if Land[y, x] <> 0 then LandPixels[y div 2, x div 2]:= p^[x] or AMask;
+{$ELSE}
         if Land[y, x] <> 0 then LandPixels[y, x]:= p^[x] or AMask;
+{$ENDIF}
 
     p:= @(p^[Surface^.pitch div 4]);
     end;
@@ -968,7 +978,7 @@ for x := 0 to playWidth do
 
 for x := 0 to playWidth do
     for y := off_y to LAND_HEIGHT - 1 do
-        Land[y, x] := COLOR_LAND;
+        Land[y, x] := LAND_BASIC;
 
 for y := 0 to num_cells_y - 1 do
     for x := 0 to num_cells_x - 1 do
@@ -1069,7 +1079,7 @@ if maze_inverted then
 else
 begin
     x := 0;
-    while Land[cellsize div 2 + cellsize + off_y, x] = COLOR_LAND do
+    while Land[cellsize div 2 + cellsize + off_y, x] = LAND_BASIC do
         x := x + 1;
     while Land[cellsize div 2 + cellsize + off_y, x] = 0 do
         x := x + 1;
@@ -1155,9 +1165,9 @@ begin
                     if ((AMask and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
                         Land[cpY + y, cpX + x]:= 0
                     else if p^[x] = (AMask or RMask) then
-                        Land[cpY + y, cpX + x]:= COLOR_INDESTRUCTIBLE
+                        Land[cpY + y, cpX + x]:= LAND_INDESTRUCTIBLE
                     else if p^[x] = $FFFFFFFF then
-                        Land[cpY + y, cpX + x]:= COLOR_LAND;
+                        Land[cpY + y, cpX + x]:= LAND_BASIC;
                 end;
                 p:= @(p^[tmpsurf^.pitch div 4]);
             end;
@@ -1250,31 +1260,40 @@ if hasBorder then
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
             if (y < topY) or (x < leftX) or (x > rightX) then
-                Land[y, x]:= COLOR_INDESTRUCTIBLE;
+                Land[y, x]:= LAND_INDESTRUCTIBLE;
     // experiment hardcoding cave
     // also try basing cave dimensions on map/template dimensions, if they exist
     for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
         begin
         for y:= topY to LAND_HEIGHT - 1 do
             begin
-            Land[y, leftX + w]:= COLOR_INDESTRUCTIBLE;
-            Land[y, rightX - w]:= COLOR_INDESTRUCTIBLE;
+            Land[y, leftX + w]:= LAND_INDESTRUCTIBLE;
+            Land[y, rightX - w]:= LAND_INDESTRUCTIBLE;
             if (y + w) mod 32 < 16 then
                 c:= AMask
             else
                 c:= AMask or RMask or GMask; // FF00FFFF
+{$IFDEF DOWNSCALE}
+            LandPixels[y div 2, (leftX + w) div 2]:= c;
+            LandPixels[y div 2, (rightX - w) div 2]:= c;
+{$ELSE}
             LandPixels[y, leftX + w]:= c;
             LandPixels[y, rightX - w]:= c;
+{$ENDIF}
             end;
 
         for x:= leftX to rightX do
             begin
-            Land[topY + w, x]:= COLOR_INDESTRUCTIBLE;
+            Land[topY + w, x]:= LAND_INDESTRUCTIBLE;
             if (x + w) mod 32 < 16 then
                 c:= AMask
             else
                 c:= AMask or RMask or GMask; // FF00FFFF
+{$IFDEF DOWNSCALE}
+            LandPixels[(topY + w) div 2, x div 2]:= c;
+{$ELSE}
             LandPixels[topY + w, x]:= c;
+{$ENDIF}
             end;
         end;
     end;

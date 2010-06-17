@@ -84,12 +84,18 @@ p:= Image^.pixels;
 for y:= 0 to Pred(Image^.h) do
     begin
     for x:= 0 to Pred(Width) do
+        begin
+{$IFDEF DOWNSCALE}
+        if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
+            LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
+{$ELSE}
         if LandPixels[cpY + y, cpX + x] = 0 then
-            begin
             LandPixels[cpY + y, cpX + x]:= p^[x];
-            if (p^[x] and AMask) <> 0 then Land[cpY + y, cpX + x]:= COLOR_OBJECT;
-            end;
-    p:= @(p^[Image^.pitch shr 2]);
+{$ENDIF}
+        if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then 
+            Land[cpY + y, cpX + x]:= LAND_OBJECT
+        end;
+    p:= @(p^[Image^.pitch shr 2])
     end;
 
 if SDL_MustLock(Image) then
@@ -232,7 +238,7 @@ var i: Longword;
     bRes: boolean;
 begin
 with Obj do
-     if CheckLand(inland, x, y, COLOR_LAND) then
+     if CheckLand(inland, x, y, LAND_BASIC) then
         begin
         bRes:= true;
         i:= 1;
@@ -312,7 +318,7 @@ with Obj do
     repeat
         y:= 8;
         repeat
-            if CheckLand(r, x, y - 8, COLOR_LAND)
+            if CheckLand(r, x, y - 8, LAND_BASIC)
             and not CheckIntersect(x, y, Width, Height) then
             begin
             ar[cnt].x:= x;
