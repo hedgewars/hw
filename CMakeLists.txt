@@ -1,26 +1,31 @@
 project(hedgewars)
 
 cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
+cmake_policy(SET CMP0003 NEW)
 
-IF(COMMAND cmake_policy)
-	cmake_policy(SET CMP0003 NEW)
-ENDIF(COMMAND cmake_policy)
+IF(POLICY CMP0012)
+	cmake_policy(SET CMP0012 NEW)
+ENDIF()
 
 #detect subversion revision (if present)
 set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
 IF(version_suffix MATCHES "-dev")
 	set(HW_DEV true)
-	IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.svn) 
-		FIND_PACKAGE(Subversion)
-		IF(Subversion_FOUND)
-			Subversion_WC_INFO(${CMAKE_HOME_DIRECTORY} Project)
-			MESSAGE(STATUS "Builing revision ${Project_WC_REVISION}")
-			set(version_suffix ".${Project_WC_REVISION}")
-			#truncate to numbers only - trying to fix a problem described in http://www.hedgewars.org/node/2019
-			STRING(REGEX REPLACE "^\\.(\\d+)" ".\\1" version_suffix ${version_suffix})
-			# screw whole suffix if there's no number
-			STRING(REGEX REPLACE "^\\.([a-z]+.*)" "-dev" version_suffix ${version_suffix})
-		ENDIF(Subversion_FOUND)
+	IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.hg) 
+		FIND_PROGRAM(HGCOMMAND hg)
+		IF(HGCOMMAND)
+			exec_program(${HGCOMMAND} 
+				     ARGS identify ${CMAKE_CURRENT_SOURCE_DIR}
+				     OUTPUT_VARIABLE version_suffix
+				     )
+			STRING(REGEX REPLACE "(.*) +.*" "\\1" version_suffix ${version_suffix})
+			MESSAGE(STATUS "Builing revision ${version_suffix}")
+			set(version_suffix ".${version_suffix}")
+#			#truncate to numbers only - trying to fix a problem described in http://www.hedgewars.org/node/2019
+#			STRING(REGEX REPLACE "^\\.(\\d+)" ".\\1" version_suffix ${version_suffix})
+#			# screw whole suffix if there's no number
+#			STRING(REGEX REPLACE "^\\.([a-z]+.*)" "-dev" version_suffix ${version_suffix})
+		ENDIF()
 	ENDIF()
 ELSE()
 	set(HW_DEV false)
@@ -177,13 +182,14 @@ else(WITH_SERVER)
 	set(HAVE_NETSERVER false)
 endif(WITH_SERVER)
 
-
-add_subdirectory(bin)
-add_subdirectory(QTfrontend)
 add_subdirectory(hedgewars)
-add_subdirectory(share)
-add_subdirectory(tools)
-add_subdirectory(misc/liblua)
+if(NOT BUILD_ENGINE_LIBRARY)
+	add_subdirectory(bin)
+	add_subdirectory(QTfrontend)
+	add_subdirectory(share)
+	add_subdirectory(tools)
+	add_subdirectory(misc/liblua)
+endif()
 
 # CPack vars
 
