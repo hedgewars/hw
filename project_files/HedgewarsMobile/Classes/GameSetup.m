@@ -102,14 +102,9 @@
 
 // unpacks ammostore data from the selected ammo.plist to a sequence of engine commands
 -(void) provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger) numberOfTeams {
-    
-    //NSDictionary *ammoData = [[NSDictionary alloc] initWithContentsOfFile:ammoDataFile];
-    NSDictionary *ammoData = [[NSDictionary alloc] initWithObjectsAndKeys:
-                              @"9391929422199121032235111001201000000211190911",@"ammostore_initialqt",
-                              @"0405040541600655546554464776576666666155501000",@"ammostore_probability",
-                              @"0000000000000205500000040007004000000000200000",@"ammostore_delay",
-                              @"1311110312111111123114111111111111111211101111",@"ammostore_crate", nil];
-    
+    NSString *weaponPath = [[NSString alloc] initWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),ammostoreName];
+    NSDictionary *ammoData = [[NSDictionary alloc] initWithContentsOfFile:ammoDataFile];
+    [weaponPath release];
     
     NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@", [ammoData objectForKey:@"ammostore_initialqt"]];
     [self sendToEngine: ammloadt];
@@ -250,23 +245,23 @@
     serverQuit = NO;
 
 	if (SDLNet_Init() < 0) {
-		NSLog(@"SDLNet_Init: %s", SDLNet_GetError());
+		DLog(@"SDLNet_Init: %s", SDLNet_GetError());
         serverQuit = YES;
 	}
 	
 	// Resolving the host using NULL make network interface to listen
 	if (SDLNet_ResolveHost(&ip, NULL, ipcPort) < 0) {
-		NSLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
+		DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         serverQuit = YES;
 	}
 	
 	// Open a connection with the IP provided (listen on the host's port) 
 	if (!(sd = SDLNet_TCP_Open(&ip))) {
-		NSLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), ipcPort);
+		DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), ipcPort);
         serverQuit = YES;
 	}
 	
-	NSLog(@"engineProtocol - Waiting for a client on port %d", ipcPort);
+	DLog(@"Waiting for a client on port %d", ipcPort);
 	while (!serverQuit) {
 		// This check the sd if there is a pending connection.
         // If there is one, accept that, and open a new socket for communicating
@@ -274,17 +269,17 @@
 		if (NULL != csd) {
 			// Now we can communicate with the client using csd socket
 			// sd will remain opened waiting other connections
-			NSLog(@"engineProtocol - Client found");
+			DLog(@"client found");
 			
 			//first byte of the command alwayas contain the size of the command
 			SDLNet_TCP_Recv(csd, &msgSize, sizeof(uint8_t));
 			
 			SDLNet_TCP_Recv(csd, buffer, msgSize);
 			gameTicks = SDLNet_Read16 (&buffer[msgSize - 2]);
-			//NSLog(@"engineProtocol - %d: received [%s]", gameTicks, buffer);
+			//DLog(@"engineProtocol - %d: received [%s]", gameTicks, buffer);
 			
 			if ('C' == buffer[0]) {
-				NSLog(@"engineProtocol - sending game config");
+				DLog(@"sending game config");
                 
 				// local game
 				[self sendToEngine:@"TL"];
@@ -311,11 +306,11 @@
                                   ofColor:[teamData objectForKey:@"color"]];
                 }
                 
-                [self provideAmmoData:nil forPlayingTeams:[teamsConfig count]];
+                [self provideAmmoData:@"Default" forPlayingTeams:[teamsConfig count]];
                 
                 clientQuit = NO;
 			} else {
-				NSLog(@"engineProtocolThread - wrong message or client closed connection");
+				DLog(@"wrong message or client closed connection");
 				clientQuit = YES;
 			}
 			
@@ -329,15 +324,15 @@
 					clientQuit = YES;
 				
 				gameTicks = SDLNet_Read16(&buffer[msgSize - 2]);
-				//NSLog(@"engineProtocolThread - %d: received [%s]", gameTicks, buffer);
+				//DLog(@"engineProtocolThread - %d: received [%s]", gameTicks, buffer);
 				
 				switch (buffer[0]) {
 					case '?':
-						NSLog(@"Ping? Pong!");
+						DLog(@"Ping? Pong!");
 						[self sendToEngine:@"!"];
 						break;
 					case 'E':
-						NSLog(@"ERROR - last console line: [%s]", buffer);
+						DLog(@"ERROR - last console line: [%s]", buffer);
 						clientQuit = YES;
 						break;
 					case 'e':
@@ -347,9 +342,9 @@
 						
                         HW_versionInfo(&netProto, &versionStr);
 						if (netProto == eProto) {
-							NSLog(@"Setting protocol version %d (%s)", eProto, versionStr);
+							DLog(@"Setting protocol version %d (%s)", eProto, versionStr);
 						} else {
-							NSLog(@"ERROR - wrong protocol number: [%s] - expecting %d", buffer, eProto);
+							DLog(@"ERROR - wrong protocol number: [%s] - expecting %d", buffer, eProto);
 							clientQuit = YES;
 						}
                         
@@ -360,7 +355,7 @@
 								NSLog(@"Winning team: %s", &buffer[2]);
 								break;
 							case 'k':
-								NSLog(@"Best Hedgehog: %s", &buffer[2]);
+                                NSLog(@"Best Hedgehog: %s", &buffer[2]);
 								break;
 						}
 						break;
@@ -370,7 +365,7 @@
 					// missing case for exiting right away
 				}
 			}
-			NSLog(@"Engine exited, closing server");
+			DLog(@"Engine exited, closing server");
 			// wait a little to let the client close cleanly
 			[NSThread sleepForTimeInterval:2];
 			// Close the client socket

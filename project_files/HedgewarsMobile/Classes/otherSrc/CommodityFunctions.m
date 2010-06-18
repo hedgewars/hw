@@ -43,6 +43,29 @@ void createTeamNamed (NSString *nameWithoutExt) {
     [theTeam release];
 }
 
+void createWeaponNamed (NSString *nameWithoutExt) {
+    NSString *weaponsDirectory = WEAPONS_DIRECTORY();
+
+    if (![[NSFileManager defaultManager] fileExistsAtPath: weaponsDirectory]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:weaponsDirectory 
+                                  withIntermediateDirectories:NO 
+                                                   attributes:nil 
+                                                        error:NULL];
+    }
+    
+    NSDictionary *theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
+                               @"9391929422199121032235111001201000000211190911",@"ammostore_initialqt",
+                               @"0405040541600655546554464776576666666155501000",@"ammostore_probability",
+                               @"0000000000000205500000040007004000000000200000",@"ammostore_delay",
+                               @"1311110312111111123114111111111111111211101111",@"ammostore_crate", nil];
+    
+    NSString *weaponFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", weaponsDirectory, nameWithoutExt];
+    
+    [theWeapon writeToFile:weaponFile atomically:YES];
+    [weaponFile release];
+    [theWeapon release];
+}
+
 void createSchemeNamed (NSString *nameWithoutExt) {
     NSString *schemesDirectory = SCHEMES_DIRECTORY();
     
@@ -128,9 +151,7 @@ void print_free_memory () {
         DLog(@"Failed to fetch vm statistics");
  
     /* Stats in bytes */ 
-    natural_t mem_used = (vm_stat.active_count +
-                          vm_stat.inactive_count +
-                          vm_stat.wire_count) * pagesize;
+    natural_t mem_used = (vm_stat.active_count + vm_stat.inactive_count + vm_stat.wire_count) * pagesize;
     natural_t mem_free = vm_stat.free_count * pagesize;
     natural_t mem_total = mem_used + mem_free;
     DLog(@"used: %u free: %u total: %u", mem_used, mem_free, mem_total);

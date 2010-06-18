@@ -20,6 +20,8 @@
 
 #define TEAMS_DIRECTORY()       [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
                                  objectAtIndex:0] stringByAppendingString:@"/Teams/"]
+#define WEAPONS_DIRECTORY()     [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
+                                 objectAtIndex:0] stringByAppendingString:@"/Weapons/"]
 #define SCHEMES_DIRECTORY()     [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
                                  objectAtIndex:0] stringByAppendingString:@"/Schemes/"]
 
@@ -38,6 +40,7 @@
 #define MSG_DIDUNLOAD()         DLog(@"did unload");
 
 void createTeamNamed (NSString *nameWithoutExt);
+void createWeaponNamed (NSString *nameWithoutExt);
 void createSchemeNamed (NSString *nameWithoutExt);
 BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);
 NSInteger randomPort ();

@@ -27,6 +27,12 @@
     srandom(time(NULL));
 
     openal_init(20);
+    voiceBeingPlayed = -1;
+
+    // load all the voices names and store them into voiceArray
+    // it's here and not in viewWillAppear because user cannot add/remove them
+    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VOICES_DIRECTORY() error:NULL];
+    self.voiceArray = array;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -34,20 +40,9 @@
     
     // this moves the tableview to the top
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
-    voiceBeingPlayed = -1;
-
-    // load all the voices names and store them into voiceArray
-    NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VOICES_DIRECTORY() error:NULL];
-    self.voiceArray = array;
 }
 
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-
-- (void)viewWillDisappear:(BOOL)animated {
+-(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     if(voiceBeingPlayed >= 0) {
         openal_stopsound(voiceBeingPlayed);

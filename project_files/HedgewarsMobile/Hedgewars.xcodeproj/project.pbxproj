@@ -32,6 +32,7 @@
 		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
 		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
 		6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6151347D116C2803001F16D1 /* Icon-iPad.png */; };
+		6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */; };
 		6165920C11CA9BA200D6E256 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591DF11CA9BA200D6E256 /* DetailViewController.m */; };
 		6165920D11CA9BA200D6E256 /* FlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E111CA9BA200D6E256 /* FlagsViewController.m */; };
 		6165920E11CA9BA200D6E256 /* FortsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E311CA9BA200D6E256 /* FortsViewController.m */; };
@@ -235,6 +236,8 @@
 		61272338117DF778005B90CF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		61370652117B1D50004EE44A /* Entitlements-Distribution.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Distribution.plist"; sourceTree = "<group>"; };
 		6151347D116C2803001F16D1 /* Icon-iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-iPad.png"; path = "Resources/Icon-iPad.png"; sourceTree = "<group>"; };
+		6163EE7C11CC2600001C0453 /* SingleWeaponViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleWeaponViewController.h; sourceTree = "<group>"; };
+		6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleWeaponViewController.m; sourceTree = "<group>"; };
 		616591DE11CA9BA200D6E256 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		616591DF11CA9BA200D6E256 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		616591E011CA9BA200D6E256 /* FlagsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlagsViewController.h; sourceTree = "<group>"; };
@@ -428,52 +431,13 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				616591DE11CA9BA200D6E256 /* DetailViewController.h */,
-				616591DF11CA9BA200D6E256 /* DetailViewController.m */,
-				616591E011CA9BA200D6E256 /* FlagsViewController.h */,
-				616591E111CA9BA200D6E256 /* FlagsViewController.m */,
-				616591E211CA9BA200D6E256 /* FortsViewController.h */,
-				616591E311CA9BA200D6E256 /* FortsViewController.m */,
-				616591E411CA9BA200D6E256 /* GameConfigViewController.h */,
-				616591E511CA9BA200D6E256 /* GameConfigViewController.m */,
-				616591E611CA9BA200D6E256 /* GameSetup.h */,
-				616591E711CA9BA200D6E256 /* GameSetup.m */,
-				616591E811CA9BA200D6E256 /* GeneralSettingsViewController.h */,
-				616591E911CA9BA200D6E256 /* GeneralSettingsViewController.m */,
-				616591EA11CA9BA200D6E256 /* GravesViewController.h */,
-				616591EB11CA9BA200D6E256 /* GravesViewController.m */,
-				616591EC11CA9BA200D6E256 /* HogHatViewController.h */,
-				616591ED11CA9BA200D6E256 /* HogHatViewController.m */,
-				616591EE11CA9BA200D6E256 /* LevelViewController.h */,
-				616591EF11CA9BA200D6E256 /* LevelViewController.m */,
+				6163EE4D11CC247D001C0453 /* Game Config */,
+				6163EE4C11CC2478001C0453 /* Settings Pages */,
+				6163EE6C11CC253F001C0453 /* Overlay */,
 				616591F011CA9BA200D6E256 /* MainMenuViewController.h */,
 				616591F111CA9BA200D6E256 /* MainMenuViewController.m */,
-				616591F211CA9BA200D6E256 /* MapConfigViewController.h */,
-				616591F311CA9BA200D6E256 /* MapConfigViewController.m */,
-				616591F411CA9BA200D6E256 /* MasterViewController.h */,
-				616591F511CA9BA200D6E256 /* MasterViewController.m */,
-				616591F611CA9BA200D6E256 /* OverlayViewController.h */,
-				616591F711CA9BA200D6E256 /* OverlayViewController.m */,
-				616591F811CA9BA200D6E256 /* PopoverMenuViewController.h */,
-				616591F911CA9BA200D6E256 /* PopoverMenuViewController.m */,
-				616591FA11CA9BA200D6E256 /* SchemeSettingsViewController.h */,
-				616591FB11CA9BA200D6E256 /* SchemeSettingsViewController.m */,
-				616591FC11CA9BA200D6E256 /* SchemeWeaponConfigViewController.h */,
-				616591FD11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m */,
-				616591FE11CA9BA200D6E256 /* SingleSchemeViewController.h */,
-				616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */,
-				6165920011CA9BA200D6E256 /* SingleTeamViewController.h */,
-				6165920111CA9BA200D6E256 /* SingleTeamViewController.m */,
-				6165920211CA9BA200D6E256 /* SplitViewRootController.h */,
-				6165920311CA9BA200D6E256 /* SplitViewRootController.m */,
-				6165920411CA9BA200D6E256 /* TeamConfigViewController.h */,
-				6165920511CA9BA200D6E256 /* TeamConfigViewController.m */,
-				6165920611CA9BA200D6E256 /* TeamSettingsViewController.h */,
-				6165920711CA9BA200D6E256 /* TeamSettingsViewController.m */,
-				6165920811CA9BA200D6E256 /* VoicesViewController.h */,
-				6165920911CA9BA200D6E256 /* VoicesViewController.m */,
-				6165920A11CA9BA200D6E256 /* WeaponSettingsViewController.h */,
-				6165920B11CA9BA200D6E256 /* WeaponSettingsViewController.m */,
+				616591E611CA9BA200D6E256 /* GameSetup.h */,
+				616591E711CA9BA200D6E256 /* GameSetup.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -601,6 +565,95 @@
 				61272333117DF752005B90CF /* libSDL_image.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		6163EE4C11CC2478001C0453 /* Settings Pages */ = {
+			isa = PBXGroup;
+			children = (
+				6165920211CA9BA200D6E256 /* SplitViewRootController.h */,
+				6165920311CA9BA200D6E256 /* SplitViewRootController.m */,
+				616591F411CA9BA200D6E256 /* MasterViewController.h */,
+				616591F511CA9BA200D6E256 /* MasterViewController.m */,
+				616591DE11CA9BA200D6E256 /* DetailViewController.h */,
+				616591DF11CA9BA200D6E256 /* DetailViewController.m */,
+				6163EE4E11CC248D001C0453 /* First Level */,
+				6163EE4F11CC2497001C0453 /* Second Level */,
+				6163EE5011CC24A1001C0453 /* Third Level */,
+			);
+			name = "Settings Pages";
+			sourceTree = "<group>";
+		};
+		6163EE4D11CC247D001C0453 /* Game Config */ = {
+			isa = PBXGroup;
+			children = (
+				616591E411CA9BA200D6E256 /* GameConfigViewController.h */,
+				616591E511CA9BA200D6E256 /* GameConfigViewController.m */,
+				6165920411CA9BA200D6E256 /* TeamConfigViewController.h */,
+				6165920511CA9BA200D6E256 /* TeamConfigViewController.m */,
+				616591F211CA9BA200D6E256 /* MapConfigViewController.h */,
+				616591F311CA9BA200D6E256 /* MapConfigViewController.m */,
+				616591FC11CA9BA200D6E256 /* SchemeWeaponConfigViewController.h */,
+				616591FD11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m */,
+			);
+			name = "Game Config";
+			sourceTree = "<group>";
+		};
+		6163EE4E11CC248D001C0453 /* First Level */ = {
+			isa = PBXGroup;
+			children = (
+				616591E811CA9BA200D6E256 /* GeneralSettingsViewController.h */,
+				616591E911CA9BA200D6E256 /* GeneralSettingsViewController.m */,
+				6165920611CA9BA200D6E256 /* TeamSettingsViewController.h */,
+				6165920711CA9BA200D6E256 /* TeamSettingsViewController.m */,
+				6165920A11CA9BA200D6E256 /* WeaponSettingsViewController.h */,
+				6165920B11CA9BA200D6E256 /* WeaponSettingsViewController.m */,
+				616591FA11CA9BA200D6E256 /* SchemeSettingsViewController.h */,
+				616591FB11CA9BA200D6E256 /* SchemeSettingsViewController.m */,
+			);
+			name = "First Level";
+			sourceTree = "<group>";
+		};
+		6163EE4F11CC2497001C0453 /* Second Level */ = {
+			isa = PBXGroup;
+			children = (
+				616591FE11CA9BA200D6E256 /* SingleSchemeViewController.h */,
+				616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */,
+				6165920011CA9BA200D6E256 /* SingleTeamViewController.h */,
+				6165920111CA9BA200D6E256 /* SingleTeamViewController.m */,
+				6163EE7C11CC2600001C0453 /* SingleWeaponViewController.h */,
+				6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */,
+			);
+			name = "Second Level";
+			sourceTree = "<group>";
+		};
+		6163EE5011CC24A1001C0453 /* Third Level */ = {
+			isa = PBXGroup;
+			children = (
+				616591EC11CA9BA200D6E256 /* HogHatViewController.h */,
+				616591ED11CA9BA200D6E256 /* HogHatViewController.m */,
+				616591EE11CA9BA200D6E256 /* LevelViewController.h */,
+				616591EF11CA9BA200D6E256 /* LevelViewController.m */,
+				616591E011CA9BA200D6E256 /* FlagsViewController.h */,
+				616591E111CA9BA200D6E256 /* FlagsViewController.m */,
+				616591E211CA9BA200D6E256 /* FortsViewController.h */,
+				616591E311CA9BA200D6E256 /* FortsViewController.m */,
+				616591EA11CA9BA200D6E256 /* GravesViewController.h */,
+				616591EB11CA9BA200D6E256 /* GravesViewController.m */,
+				6165920811CA9BA200D6E256 /* VoicesViewController.h */,
+				6165920911CA9BA200D6E256 /* VoicesViewController.m */,
+			);
+			name = "Third Level";
+			sourceTree = "<group>";
+		};
+		6163EE6C11CC253F001C0453 /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				616591F811CA9BA200D6E256 /* PopoverMenuViewController.h */,
+				616591F911CA9BA200D6E256 /* PopoverMenuViewController.m */,
+				616591F611CA9BA200D6E256 /* OverlayViewController.h */,
+				616591F711CA9BA200D6E256 /* OverlayViewController.m */,
+			);
+			name = Overlay;
 			sourceTree = "<group>";
 		};
 		6165924811CA9C4B00D6E256 /* libopenalbridge */ = {
@@ -854,8 +907,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* Hedgewars */,
 				928301160F10CAFC00CC5A3C /* fpc */,
+				1D6058900D05DD3D006BFB54 /* Hedgewars */,
 				61C3251C1179A300001E70B1 /* openalbridge */,
 				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
 			);
@@ -1063,6 +1116,7 @@
 				6165923111CA9BD500D6E256 /* SquareButtonView.m in Sources */,
 				6165923211CA9BD500D6E256 /* UIImageExtra.m in Sources */,
 				6165929E11CA9E2F00D6E256 /* SDL_uikitappdelegate.m in Sources */,
+				6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

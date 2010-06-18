@@ -19,7 +19,7 @@ extern "C" {
 	 */
 
 	void Game(const char *args[]);
-    void GenLandPreview();
+    void GenLandPreview(void);
 
 
 	void HW_versionInfo(short int*, char**);

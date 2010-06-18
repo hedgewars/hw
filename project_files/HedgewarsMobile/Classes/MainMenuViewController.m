@@ -71,10 +71,10 @@
     [alert addSubview:indicator];
     [indicator release];
     
-    // create a team
+    // create default files (teams/weapons/scheme)
     createTeamNamed(@"Pirates");
     createTeamNamed(@"Ninjas");
-    
+    createWeaponNamed(@"Default");
     createSchemeNamed(@"Default");
     
     // create settings.plist

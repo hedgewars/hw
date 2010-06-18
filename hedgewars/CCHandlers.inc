@@ -730,6 +730,7 @@ begin
         AddFileLog('Freeing old primary surface...');
 {$ENDIF}
         SDL_FreeSurface(SDLPrimSurface);
+        SDLPrimSurface:= nil;
     end;
     
 {$IFDEF SDL13}

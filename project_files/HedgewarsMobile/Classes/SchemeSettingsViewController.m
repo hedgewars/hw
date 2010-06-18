@@ -118,7 +118,6 @@
 
 #pragma mark -
 #pragma mark Table view delegate
-
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (childController == nil) {
         childController = [[SingleSchemeViewController alloc] initWithStyle:UITableViewStyleGrouped];
