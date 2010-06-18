@@ -190,9 +190,9 @@ if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
 {$ENDIF}
        else
 {$IFDEF DOWNSCALE}
-          if (Land[y + dy, i] = LAND_OBJECT) then LandPixels[(y + dy) div 2, i div 2]:= 0;
+          if ((Land[y + dy, i] and LAND_OBJECT) <> 0) then LandPixels[(y + dy) div 2, i div 2]:= 0;
 {$ELSE}
-          if (Land[y + dy, i] = LAND_OBJECT) then LandPixels[y + dy, i]:= 0;
+          if ((Land[y + dy, i] and LAND_OBJECT) <> 0) then LandPixels[y + dy, i]:= 0;
 {$ENDIF}
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
@@ -204,9 +204,9 @@ if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
 {$ENDIF}
        else
 {$IFDEF DOWNSCALE}
-          if (Land[y - dy, i] = LAND_OBJECT) then LandPixels[(y - dy) div 2, i div 2]:= 0;
+          if ((Land[y - dy, i] and LAND_OBJECT) <> 0) then LandPixels[(y - dy) div 2, i div 2]:= 0;
 {$ELSE}
-          if (Land[y - dy, i] = LAND_OBJECT) then LandPixels[y - dy, i]:= 0;
+          if ((Land[y - dy, i] and LAND_OBJECT) <> 0) then LandPixels[y - dy, i]:= 0;
 {$ENDIF}
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
@@ -218,9 +218,9 @@ if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
 {$ENDIF}
        else
 {$IFDEF DOWNSCALE}
-          if (Land[y + dx, i] = LAND_OBJECT) then LandPixels[(y + dx) div 2, i div 2]:= 0;
+          if ((Land[y + dx, i] and LAND_OBJECT) <> 0) then LandPixels[(y + dx) div 2, i div 2]:= 0;
 {$ELSE}
-          if (Land[y + dx, i] = LAND_OBJECT) then LandPixels[y + dx, i]:= 0;
+          if ((Land[y + dx, i] and LAND_OBJECT) <> 0) then LandPixels[y + dx, i]:= 0;
 {$ENDIF}
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
@@ -232,9 +232,9 @@ if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
 {$ENDIF}
        else
 {$IFDEF DOWNSCALE}
-          if (Land[y - dx, i] = LAND_OBJECT) then LandPixels[(y - dx) div 2, i div 2]:= 0;
+          if ((Land[y - dx, i] and LAND_OBJECT) <> 0) then LandPixels[(y - dx) div 2, i div 2]:= 0;
 {$ELSE}
-          if (Land[y - dx, i] = LAND_OBJECT) then LandPixels[y - dx, i]:= 0;
+          if ((Land[y - dx, i] and LAND_OBJECT) <> 0) then LandPixels[y - dx, i]:= 0;
 {$ENDIF}
 end;
 
@@ -243,7 +243,7 @@ var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-       if ((Land[y + dy, i] and LAND_BASIC) <> 0) or (Land[y + dy, i] = LAND_OBJECT) then
+       if ((Land[y + dy, i] and LAND_BASIC) <> 0) or ((Land[y + dy, i] and LAND_OBJECT) <> 0) then
           begin
 {$IFDEF DOWNSCALE}
           LandPixels[(y + dy) div 2, i div 2]:= cExplosionBorderColor;
@@ -256,7 +256,7 @@ if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
           end;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-       if ((Land[y - dy, i] and LAND_BASIC) <> 0) or (Land[y - dy, i] = LAND_OBJECT) then
+       if ((Land[y - dy, i] and LAND_BASIC) <> 0) or ((Land[y - dy, i] and LAND_OBJECT) <> 0) then
           begin
 {$IFDEF DOWNSCALE}
           LandPixels[(y - dy) div 2, i div 2]:= cExplosionBorderColor;
@@ -269,7 +269,7 @@ if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
           end;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-       if ((Land[y + dx, i] and LAND_BASIC) <> 0) or (Land[y + dx, i] = LAND_OBJECT) then
+       if ((Land[y + dx, i] and LAND_BASIC) <> 0) or ((Land[y + dx, i] and LAND_OBJECT) <> 0) then
            begin
 {$IFDEF DOWNSCALE}
            LandPixels[(y + dx) div 2, i div 2]:= cExplosionBorderColor;
@@ -282,7 +282,7 @@ if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
            end;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-       if ((Land[y - dx, i] and LAND_BASIC) <> 0) or (Land[y - dx, i] = LAND_OBJECT) then
+       if ((Land[y - dx, i] and LAND_BASIC) <> 0) or ((Land[y - dx, i] and LAND_OBJECT) <> 0) then
           begin
 {$IFDEF DOWNSCALE}
           LandPixels[(y - dx) div 2, i div 2]:= cExplosionBorderColor;
@@ -383,7 +383,7 @@ for i:= 0 to Pred(Count) do
 {$ELSE}
                 LandPixels[ty, tx]:= LandBackPixel(tx, ty)
 {$ENDIF}
-            else if Land[ty, tx] = LAND_OBJECT then
+            else if (Land[ty, tx] and LAND_OBJECT) <> 0 then
 {$IFDEF DOWNSCALE}
                 LandPixels[ty div 2, tx div 2]:= 0;
 {$ELSE}
@@ -399,7 +399,7 @@ for i:= 0 to Pred(Count) do
     begin
     for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
         for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
-            if ((Land[ty, tx] and LAND_BASIC) <> 0) or (Land[ty, tx] = LAND_OBJECT) then
+            if ((Land[ty, tx] and LAND_BASIC) <> 0) or ((Land[ty, tx] and LAND_OBJECT) <> 0) then
                 begin
 {$IFDEF DOWNSCALE}
                 LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor;
@@ -444,7 +444,7 @@ for i:= 0 to 7 do
     if ((ty and LAND_HEIGHT_MASK) = 0) and
        ((tx and LAND_WIDTH_MASK) = 0) and
        (((Land[ty, tx] and LAND_BASIC) <> 0) or 
-       (Land[ty, tx] = LAND_OBJECT)) then
+       ((Land[ty, tx] and LAND_OBJECT) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or LAND_DAMAGED;
 {$IFDEF DOWNSCALE}
@@ -471,7 +471,7 @@ for i:= -HalfWidth to HalfWidth do
     if ((ty and LAND_HEIGHT_MASK) = 0) and
        ((tx and LAND_WIDTH_MASK) = 0) and
        (((Land[ty, tx] and LAND_BASIC) <> 0) or 
-       (Land[ty, tx] = LAND_OBJECT)) then
+       ((Land[ty, tx] and LAND_OBJECT) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or LAND_DAMAGED;
 {$IFDEF DOWNSCALE}
@@ -497,7 +497,7 @@ for i:= -HalfWidth to HalfWidth do
 {$ELSE}
                 LandPixels[ty, tx]:= LandBackPixel(tx, ty)
 {$ENDIF}
-            else if Land[ty, tx] = LAND_OBJECT then
+            else if (Land[ty, tx] and LAND_OBJECT) <> 0 then
 {$IFDEF DOWNSCALE}
                 LandPixels[ty div 2, tx div 2]:= 0;
 {$ELSE}
@@ -515,7 +515,7 @@ for i:= -HalfWidth to HalfWidth do
     if ((ty and LAND_HEIGHT_MASK) = 0) and
        ((tx and LAND_WIDTH_MASK) = 0) and
        (((Land[ty, tx] and LAND_BASIC) <> 0) or 
-       (Land[ty, tx] = LAND_OBJECT)) then
+       ((Land[ty, tx] and LAND_OBJECT) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or LAND_DAMAGED;
 {$IFDEF DOWNSCALE}
@@ -542,7 +542,7 @@ for i:= 0 to 7 do
     if ((ty and LAND_HEIGHT_MASK) = 0) and
        ((tx and LAND_WIDTH_MASK) = 0) and
        (((Land[ty, tx] and LAND_BASIC) <> 0) or 
-       (Land[ty, tx] = LAND_OBJECT)) then
+       ((Land[ty, tx] and LAND_OBJECT) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or LAND_DAMAGED;
 {$IFDEF DOWNSCALE}
