@@ -76,7 +76,7 @@
     </message>
     <message>
         <source>Cannot save record to file %1</source>
-        <translation type="unfinished">Falha ao salvar registro no arquivo %1</translation>
+        <translation>Falha ao salvar registro no arquivo %1</translation>
     </message>
     <message>
         <source>new</source>
@@ -84,7 +84,7 @@
     </message>
     <message>
         <source>Please select record from the list above</source>
-        <translation type="unfinished">Selecione um registro na lista acima</translation>
+        <translation>Selecione um registro na lista acima</translation>
     </message>
 </context>
 <context>
@@ -134,7 +134,7 @@
     </message>
     <message>
         <source>Wacky</source>
-        <translation type="unfinished">Estranho</translation>
+        <translation>Excêntrico</translation>
     </message>
     <message>
         <source>Type</source>
@@ -142,7 +142,7 @@
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation type="unfinished">Túneis pequenos</translation>
+        <translation>Túneis estreitos</translation>
     </message>
     <message>
         <source>Medium tunnels</source>
@@ -154,15 +154,15 @@
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation type="unfinished">Ilhas pequenas</translation>
+        <translation>Ilhas pequenas</translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation type="unfinished">Ilhas médias</translation>
+        <translation>Ilhas médias</translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation type="unfinished">Ilhas grandes</translation>
+        <translation>Ilhas grandes</translation>
     </message>
 </context>
 <context>
@@ -237,7 +237,7 @@ ou escolha outro apelido:</translation>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished">Seu apelido %1 é
+        <translation>O apelido %1 é
 registrado no Hedgewars.org
 Por favor, forneça sua senha
 ou escolha outro apelido:</translation>
@@ -254,7 +254,7 @@ ou escolha outro apelido:</translation>
     <name>PageAdmin</name>
     <message>
         <source>Clear Accounts Cache</source>
-        <translation type="unfinished">Limpar Cache de Contas</translation>
+        <translation>Limpar Cache de Contas</translation>
     </message>
     <message>
         <source>Fetch data</source>
@@ -292,7 +292,7 @@ ou escolha outro apelido:</translation>
     <name>PageEditTeam</name>
     <message>
         <source>General</source>
-        <translation type="unfinished">Geral</translation>
+        <translation>Geral</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -679,11 +679,11 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Proteja seu forte e destrua o oponente, 2 cores de times no máximo!</translation>
+        <translation>Proteja seu forte e destrua o oponente, 2 cores de equipes no máximo!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Times começarão em lados opostos do terreno, 2 cores de time no máximo!</translation>
+        <translation>Equipes começarão em lados opostos do terreno, 2 cores de equipe no máximo!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -780,7 +780,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>Restrict Team Additions</source>
-        <translation>Restringir Adição de Times</translation>
+        <translation>Restringir Adição de Equipes</translation>
     </message>
     <message>
         <source>Info</source>
@@ -870,7 +870,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     <name>QComboBox</name>
     <message>
         <source>generated map...</source>
-        <translation type="unfinished">mapa gerado...</translation>
+        <translation>mapa gerado...</translation>
     </message>
     <message>
         <source>Human</source>
@@ -937,7 +937,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>Team Settings</source>
-        <translation type="unfinished">Opções de Equipe</translation>
+        <translation>Opções da Equipe</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -948,7 +948,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     <name>QLabel</name>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation type="unfinished">Este programa é distribuido sob a Licensa Pública GNU</translation>
+        <translation>Este programa é distribuido sob a Licensa Pública GNU</translation>
     </message>
     <message>
         <source>Developers:</source>
@@ -956,7 +956,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>Art:</source>
-        <translation type="unfinished">Arte:</translation>
+        <translation>Arte:</translation>
     </message>
     <message>
         <source>Translations:</source>
@@ -1016,7 +1016,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>Turn Time</source>
-        <translation type="unfinished">Tempo de Turno</translation>
+        <translation>Tempo de Turno</translation>
     </message>
     <message>
         <source>Initial Health</source>
@@ -1028,7 +1028,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>Mines Time</source>
-        <translation type="unfinished">Tempo das Minas</translation>
+        <translation>Tempo das Minas</translation>
     </message>
     <message>
         <source>Mines</source>
@@ -1048,7 +1048,7 @@ Você pode entrar e assitir, mas terá que esperar o jogo terminar para poder jo
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation type="unfinished">% Minas falhas</translation>
+        <translation>% Minas falhas</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1145,7 +1145,7 @@ Por favor verifique sua instalação</translation>
     <message>
         <source>Can not delete default weapon set</source>
         <translatorcomment>Duvida:Esquema ou disposição?</translatorcomment>
-        <translation type="unfinished">Não foi possível excluir o esquema padrão de armas</translation>
+        <translation>Não foi possível excluir o esquema padrão de armas</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1243,7 +1243,7 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>Random Team</source>
-        <translation type="unfinished">Time Aleatório</translation>
+        <translation>Equipe Aleatória</translation>
     </message>
 </context>
 <context>
@@ -1283,7 +1283,7 @@ Por favor verifique sua instalação</translation>
     <message>
         <source>Weapon set</source>
         <translatorcomment>Duvida: conjunto ou esquema</translatorcomment>
-        <translation type="unfinished">Conjunto de armas</translation>
+        <translation>Conjunto de armas</translation>
     </message>
     <message>
         <source>Probabilities</source>
@@ -1321,7 +1321,7 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>Karma</source>
-        <translation type="unfinished">Karma</translation>
+        <translation>Karma</translation>
     </message>
     <message>
         <source>Artillery</source>
@@ -1333,8 +1333,7 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>Divide Teams</source>
-        <translatorcomment>Equipes ou times? Estamos assumindo equipe = 1 jogador, time = varios</translatorcomment>
-        <translation type="unfinished">Dividir Equipes</translation>
+        <translation>Dividir Equipes</translation>
     </message>
     <message>
         <source>Solid Land</source>
@@ -1378,12 +1377,12 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>Disable Girders</source>
-        <translation type="unfinished">Desabilitar Vigas</translation>
+        <translation>Desabilitar Vigas</translation>
     </message>
     <message>
         <source>Disable Land Objects</source>
-        <translatorcomment>Duvida: o que sao objetos do terreno</translatorcomment>
-        <translation type="unfinished">Desabilitar objetos do terreno</translation>
+        <translatorcomment>Duvida: o que sao objetos do terreno?</translatorcomment>
+        <translation>Desabilitar objetos do terreno</translation>
     </message>
 </context>
 <context>
@@ -1599,7 +1598,7 @@ ouriços</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished">Escolha o tempo das bombas e armas que usam tempo:</translation>
+        <translation>Escolha o tempo das bombas e armas que usam tempo:</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
@@ -1615,7 +1614,7 @@ ouriços</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation>Fale com seu time ou com todos os participantes:</translation>
+        <translation>Fale com sua equipe ou com todos os participantes:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>

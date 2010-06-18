@@ -29,7 +29,7 @@ type PRangeArray = ^TRangeArray;
 
 function  SweepDirty: boolean;
 function  Despeckle(X, Y: LongInt): boolean;
-function  CheckLandValue(X, Y: LongInt; Color: Word): boolean;
+function  CheckLandValue(X, Y: LongInt; LandFlag: Word): boolean;
 procedure DrawExplosion(X, Y, Radius: LongInt);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
@@ -46,19 +46,19 @@ var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-        if Land[y + dy, i] <> COLOR_INDESTRUCTIBLE then
+        if (Land[y + dy, i] and LAND_INDESTRUCTIBLE) = 0 then
             Land[y + dy, i]:= Value;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-        if Land[y - dy, i] <> COLOR_INDESTRUCTIBLE then
+        if (Land[y - dy, i] and LAND_INDESTRUCTIBLE) = 0 then
             Land[y - dy, i]:= Value;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-        if Land[y + dx, i] <> COLOR_INDESTRUCTIBLE then
+        if (Land[y + dx, i] and LAND_INDESTRUCTIBLE) = 0 then
             Land[y + dx, i]:= Value;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-        if Land[y - dx, i] <> COLOR_INDESTRUCTIBLE then
+        if (Land[y - dx, i] and LAND_INDESTRUCTIBLE) = 0 then
             Land[y - dx, i]:= Value;
 end;
 
@@ -145,20 +145,36 @@ var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-        if (not isMap and (Land[y + dy, i] <> COLOR_INDESTRUCTIBLE)) or (Land[y + dy, i] = COLOR_LAND) then
+        if (not isMap and ((Land[y + dy, i] and LAND_INDESTRUCTIBLE) = 0)) or ((Land[y + dy, i] and LAND_BASIC) <> 0) then
+{$IFDEF DOWNSCALE}
+            LandPixels[(y + dy) div 2, i div 2]:= 0;
+{$ELSE}
             LandPixels[y + dy, i]:= 0;
+{$ENDIF}
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-        if (not isMap and (Land[y - dy, i] <> COLOR_INDESTRUCTIBLE)) or (Land[y - dy, i] = COLOR_LAND) then
+        if (not isMap and ((Land[y - dy, i] and LAND_INDESTRUCTIBLE) = 0)) or ((Land[y - dy, i] and LAND_BASIC) <> 0) then
+{$IFDEF DOWNSCALE}
+             LandPixels[(y - dy) div 2, i div 2]:= 0;
+{$ELSE}
              LandPixels[y - dy, i]:= 0;
+{$ENDIF}
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-        if (not isMap and (Land[y + dx, i] <> COLOR_INDESTRUCTIBLE)) or (Land[y + dx, i] = COLOR_LAND) then
+        if (not isMap and ((Land[y + dx, i] and LAND_INDESTRUCTIBLE) = 0)) or ((Land[y + dx, i] and LAND_BASIC) <> 0) then
+{$IFDEF DOWNSCALE}
+            LandPixels[(y + dx) div 2, i div 2]:= 0;
+{$ELSE}
             LandPixels[y + dx, i]:= 0;
+{$ENDIF}
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-        if (not isMap and (Land[y - dx, i] <> COLOR_INDESTRUCTIBLE)) or (Land[y - dx, i] = COLOR_LAND) then
+        if (not isMap and ((Land[y - dx, i] and LAND_INDESTRUCTIBLE) = 0)) or ((Land[y - dx, i] and LAND_BASIC) <> 0) then
+{$IFDEF DOWNSCALE}
+             LandPixels[(y - dx) div 2, i div 2]:= 0;
+{$ELSE}
              LandPixels[y - dx, i]:= 0;
+{$ENDIF}
 end;
 
 procedure FillLandCircleLinesBG(x, y, dx, dy: LongInt);
@@ -166,28 +182,60 @@ var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-       if (Land[y + dy, i] = COLOR_LAND) then
+       if ((Land[y + dy, i] and LAND_BASIC) <> 0) then
+{$IFDEF DOWNSCALE}
+          LandPixels[(y + dy) div 2, i div 2]:= LandBackPixel(i, y + dy)
+{$ELSE}
           LandPixels[y + dy, i]:= LandBackPixel(i, y + dy)
+{$ENDIF}
        else
-          if (Land[y + dy, i] = COLOR_OBJECT) then LandPixels[y + dy, i]:= 0;
+{$IFDEF DOWNSCALE}
+          if (Land[y + dy, i] = LAND_OBJECT) then LandPixels[(y + dy) div 2, i div 2]:= 0;
+{$ELSE}
+          if (Land[y + dy, i] = LAND_OBJECT) then LandPixels[y + dy, i]:= 0;
+{$ENDIF}
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-       if (Land[y - dy, i] = COLOR_LAND) then
+       if ((Land[y - dy, i] and LAND_BASIC) <> 0) then
+{$IFDEF DOWNSCALE}
+          LandPixels[(y - dy) div 2, i div 2]:= LandBackPixel(i, y - dy)
+{$ELSE}
           LandPixels[y - dy, i]:= LandBackPixel(i, y - dy)
+{$ENDIF}
        else
-          if (Land[y - dy, i] = COLOR_OBJECT) then LandPixels[y - dy, i]:= 0;
+{$IFDEF DOWNSCALE}
+          if (Land[y - dy, i] = LAND_OBJECT) then LandPixels[(y - dy) div 2, i div 2]:= 0;
+{$ELSE}
+          if (Land[y - dy, i] = LAND_OBJECT) then LandPixels[y - dy, i]:= 0;
+{$ENDIF}
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-       if (Land[y + dx, i] = COLOR_LAND) then
+       if ((Land[y + dx, i] and LAND_BASIC) <> 0) then
+{$IFDEF DOWNSCALE}
+           LandPixels[(y + dx) div 2, i div 2]:= LandBackPixel(i, y + dx)
+{$ELSE}
            LandPixels[y + dx, i]:= LandBackPixel(i, y + dx)
+{$ENDIF}
        else
-          if (Land[y + dx, i] = COLOR_OBJECT) then LandPixels[y + dx, i]:= 0;
+{$IFDEF DOWNSCALE}
+          if (Land[y + dx, i] = LAND_OBJECT) then LandPixels[(y + dx) div 2, i div 2]:= 0;
+{$ELSE}
+          if (Land[y + dx, i] = LAND_OBJECT) then LandPixels[y + dx, i]:= 0;
+{$ENDIF}
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-       if (Land[y - dx, i] = COLOR_LAND) then
+       if ((Land[y - dx, i] and LAND_BASIC) <> 0) then
+{$IFDEF DOWNSCALE}
+          LandPixels[(y - dx) div 2, i div 2]:= LandBackPixel(i, y - dx)
+{$ELSE}
           LandPixels[y - dx, i]:= LandBackPixel(i, y - dx)
+{$ENDIF}
        else
-          if (Land[y - dx, i] = COLOR_OBJECT) then LandPixels[y - dx, i]:= 0;
+{$IFDEF DOWNSCALE}
+          if (Land[y - dx, i] = LAND_OBJECT) then LandPixels[(y - dx) div 2, i div 2]:= 0;
+{$ELSE}
+          if (Land[y - dx, i] = LAND_OBJECT) then LandPixels[y - dx, i]:= 0;
+{$ENDIF}
 end;
 
 procedure FillLandCircleLinesEBC(x, y, dx, dy: LongInt);
@@ -195,33 +243,53 @@ var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-       if (Land[y + dy, i] = COLOR_LAND) or (Land[y + dy, i] = COLOR_OBJECT) then
+       if ((Land[y + dy, i] and LAND_BASIC) <> 0) or (Land[y + dy, i] = LAND_OBJECT) then
           begin
+{$IFDEF DOWNSCALE}
+          LandPixels[(y + dy) div 2, i div 2]:= cExplosionBorderColor;
+{$ELSE}
           LandPixels[y + dy, i]:= cExplosionBorderColor;
+{$ENDIF}
+          Land[y + dy, i]:= Land[y + dy, i] or LAND_DAMAGED;
           Despeckle(i, y + dy);
           LandDirty[(y + dy) div 32, i div 32]:= 1;
           end;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-       if (Land[y - dy, i] = COLOR_LAND) or (Land[y - dy, i] = COLOR_OBJECT) then
+       if ((Land[y - dy, i] and LAND_BASIC) <> 0) or (Land[y - dy, i] = LAND_OBJECT) then
           begin
+{$IFDEF DOWNSCALE}
+          LandPixels[(y - dy) div 2, i div 2]:= cExplosionBorderColor;
+{$ELSE}
           LandPixels[y - dy, i]:= cExplosionBorderColor;
+{$ENDIF}
+          Land[y - dy, i]:= Land[y - dy, i] or LAND_DAMAGED;
           Despeckle(i, y - dy);
           LandDirty[(y - dy) div 32, i div 32]:= 1;
           end;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-       if (Land[y + dx, i] = COLOR_LAND) or (Land[y + dx, i] = COLOR_OBJECT) then
+       if ((Land[y + dx, i] and LAND_BASIC) <> 0) or (Land[y + dx, i] = LAND_OBJECT) then
            begin
+{$IFDEF DOWNSCALE}
+           LandPixels[(y + dx) div 2, i div 2]:= cExplosionBorderColor;
+{$ELSE}
            LandPixels[y + dx, i]:= cExplosionBorderColor;
+{$ENDIF}
+           Land[y + dx, i]:= Land[y + dx, i] or LAND_DAMAGED;
            Despeckle(i, y + dx);
            LandDirty[(y + dx) div 32, i div 32]:= 1;
            end;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-       if (Land[y - dx, i] = COLOR_LAND) or (Land[y - dx, i] = COLOR_OBJECT) then
+       if ((Land[y - dx, i] and LAND_BASIC) <> 0) or (Land[y - dx, i] = LAND_OBJECT) then
           begin
+{$IFDEF DOWNSCALE}
+          LandPixels[(y - dx) div 2, i div 2]:= cExplosionBorderColor;
+{$ELSE}
           LandPixels[y - dx, i]:= cExplosionBorderColor;
+{$ENDIF}
+          Land[y - dx, i]:= Land[y - dx, i] or LAND_DAMAGED;
           Despeckle(i, y - dy);
           LandDirty[(y - dx) div 32, i div 32]:= 1;
           end;
@@ -309,10 +377,18 @@ for i:= 0 to Pred(Count) do
     begin
     for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
         for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
-            if Land[ty, tx] = COLOR_LAND then
+            if (Land[ty, tx] and LAND_BASIC) <> 0 then
+{$IFDEF DOWNSCALE}
+                LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
+{$ELSE}
                 LandPixels[ty, tx]:= LandBackPixel(tx, ty)
-            else if Land[ty, tx] = COLOR_OBJECT then
+{$ENDIF}
+            else if Land[ty, tx] = LAND_OBJECT then
+{$IFDEF DOWNSCALE}
+                LandPixels[ty div 2, tx div 2]:= 0;
+{$ELSE}
                 LandPixels[ty, tx]:= 0;
+{$ENDIF}
     inc(y, dY)
     end;
 
@@ -323,9 +399,14 @@ for i:= 0 to Pred(Count) do
     begin
     for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
         for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
-            if (Land[ty, tx] = COLOR_LAND) or (Land[ty, tx] = COLOR_OBJECT) then
+            if ((Land[ty, tx] and LAND_BASIC) <> 0) or (Land[ty, tx] = LAND_OBJECT) then
                 begin
+{$IFDEF DOWNSCALE}
+                LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor;
+{$ELSE}
                 LandPixels[ty, tx]:= cExplosionBorderColor;
+{$ENDIF}
+                Land[ty, tx]:= Land[ty, tx] or LAND_DAMAGED;
                 LandDirty[(y + dy) shr 5, i shr 5]:= 1;
                 end;
     inc(y, dY)
@@ -362,9 +443,16 @@ for i:= 0 to 7 do
     ty:= hwRound(Y);
     if ((ty and LAND_HEIGHT_MASK) = 0) and
        ((tx and LAND_WIDTH_MASK) = 0) and
-       ((Land[ty, tx] = COLOR_LAND) or 
-       (Land[ty, tx] = COLOR_OBJECT)) then
+       (((Land[ty, tx] and LAND_BASIC) <> 0) or 
+       (Land[ty, tx] = LAND_OBJECT)) then
+        begin
+        Land[ty, tx]:= Land[ty, tx] or LAND_DAMAGED;
+{$IFDEF DOWNSCALE}
+        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+{$ELSE}
         LandPixels[ty, tx]:= cExplosionBorderColor
+{$ENDIF}
+        end
     end;
     nx:= nx - dY;
     ny:= ny + dX;
@@ -382,9 +470,16 @@ for i:= -HalfWidth to HalfWidth do
     ty:= hwRound(Y);
     if ((ty and LAND_HEIGHT_MASK) = 0) and
        ((tx and LAND_WIDTH_MASK) = 0) and
-       ((Land[ty, tx] = COLOR_LAND) or 
-       (Land[ty, tx] = COLOR_OBJECT)) then
+       (((Land[ty, tx] and LAND_BASIC) <> 0) or 
+       (Land[ty, tx] = LAND_OBJECT)) then
+        begin
+        Land[ty, tx]:= Land[ty, tx] or LAND_DAMAGED;
+{$IFDEF DOWNSCALE}
+        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+{$ELSE}
         LandPixels[ty, tx]:= cExplosionBorderColor
+{$ENDIF}
+        end
     end;
     X:= nx;
     Y:= ny;
@@ -394,12 +489,20 @@ for i:= -HalfWidth to HalfWidth do
         Y:= Y + dY;
         tx:= hwRound(X);
         ty:= hwRound(Y);
-        if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and (Land[ty, tx] <> COLOR_INDESTRUCTIBLE) then
+        if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and ((Land[ty, tx] and LAND_INDESTRUCTIBLE) = 0) then
             begin
-            if Land[ty, tx] = COLOR_LAND then
+            if (Land[ty, tx] and LAND_BASIC) <> 0 then
+{$IFDEF DOWNSCALE}
+                LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
+{$ELSE}
                 LandPixels[ty, tx]:= LandBackPixel(tx, ty)
-            else if Land[ty, tx] = COLOR_OBJECT then
+{$ENDIF}
+            else if Land[ty, tx] = LAND_OBJECT then
+{$IFDEF DOWNSCALE}
+                LandPixels[ty div 2, tx div 2]:= 0;
+{$ELSE}
                 LandPixels[ty, tx]:= 0;
+{$ENDIF}
             Land[ty, tx]:= 0;
             end
         end;
@@ -411,9 +514,16 @@ for i:= -HalfWidth to HalfWidth do
     ty:= hwRound(Y);
     if ((ty and LAND_HEIGHT_MASK) = 0) and
        ((tx and LAND_WIDTH_MASK) = 0) and
-       ((Land[ty, tx] = COLOR_LAND) or 
-       (Land[ty, tx] = COLOR_OBJECT)) then
+       (((Land[ty, tx] and LAND_BASIC) <> 0) or 
+       (Land[ty, tx] = LAND_OBJECT)) then
+        begin
+        Land[ty, tx]:= Land[ty, tx] or LAND_DAMAGED;
+{$IFDEF DOWNSCALE}
+        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+{$ELSE}
         LandPixels[ty, tx]:= cExplosionBorderColor
+{$ENDIF}
+        end
     end;
     nx:= nx - dY;
     ny:= ny + dX;
@@ -431,9 +541,16 @@ for i:= 0 to 7 do
     ty:= hwRound(Y);
     if ((ty and LAND_HEIGHT_MASK) = 0) and
        ((tx and LAND_WIDTH_MASK) = 0) and
-       ((Land[ty, tx] = COLOR_LAND) or 
-       (Land[ty, tx] = COLOR_OBJECT)) then
+       (((Land[ty, tx] and LAND_BASIC) <> 0) or 
+       (Land[ty, tx] = LAND_OBJECT)) then
+        begin
+        Land[ty, tx]:= Land[ty, tx] or LAND_DAMAGED;
+{$IFDEF DOWNSCALE}
+        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+{$ELSE}
         LandPixels[ty, tx]:= cExplosionBorderColor
+{$ENDIF}
+        end
     end;
     nx:= nx - dY;
     ny:= ny + dX;
@@ -503,8 +620,12 @@ case bpp of
             for x:= 0 to Pred(w) do
                 if PLongword(@(p^[x * 4]))^ <> 0 then
                    begin
-                   Land[cpY + y, cpX + x]:= COLOR_OBJECT;
+                   Land[cpY + y, cpX + x]:= LAND_OBJECT;
+{$IFDEF DOWNSCALE}
+                   LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= PLongword(@(p^[x * 4]))^
+{$ELSE}
                    LandPixels[cpY + y, cpX + x]:= PLongword(@(p^[x * 4]))^
+{$ENDIF}
                    end;
             p:= @(p^[Image^.pitch]);
             end;
@@ -523,7 +644,7 @@ end;
 function Despeckle(X, Y: LongInt): boolean;
 var nx, ny, i, j, c: LongInt;
 begin
-if (Land[Y, X] > 255) and (Land[Y, X] <> COLOR_INDESTRUCTIBLE) and (LandPixels[Y, X] = cExplosionBorderColor)then // check neighbours
+if (Land[Y, X] > 255) and ((Land[Y, X] and LAND_INDESTRUCTIBLE) = 0) and ((Land[Y, X] and LAND_DAMAGED) <> 0)then // check neighbours
     begin
     c:= 0;
     for i:= -1 to 1 do
@@ -539,7 +660,11 @@ if (Land[Y, X] > 255) and (Land[Y, X] <> COLOR_INDESTRUCTIBLE) and (LandPixels[Y
 
     if c < 4 then // 0-3 neighbours
         begin
-        if Land[Y, X] = COLOR_LAND then LandPixels[Y, X]:= LandBackPixel(X, Y) else LandPixels[Y, X]:= 0;
+{$IFDEF DOWNSCALE}
+        if (Land[Y, X] and LAND_BASIC) <> 0 then LandPixels[Y div 2, X div 2]:= LandBackPixel(X, Y) else LandPixels[Y div 2, X div 2]:= 0;
+{$ELSE}
+        if (Land[Y, X] and LAND_BASIC) <> 0 then LandPixels[Y, X]:= LandBackPixel(X, Y) else LandPixels[Y, X]:= 0;
+{$ENDIF}
         Land[Y, X]:= 0;
         exit(true);
         end;
@@ -584,8 +709,8 @@ SweepDirty:= bRes;
 end;
 
 // Return true if outside of land or not the value tested, used right now for some X/Y movement that does not use normal hedgehog movement in GSHandlers.inc
-function CheckLandValue(X, Y: LongInt; Color: Word): boolean;
+function CheckLandValue(X, Y: LongInt; LandFlag: Word): boolean;
 begin
-     CheckLandValue:= ((X and LAND_WIDTH_MASK <> 0) or (Y and LAND_HEIGHT_MASK <> 0)) or (Land[Y, X] <> Color)
+     CheckLandValue:= ((X and LAND_WIDTH_MASK <> 0) or (Y and LAND_HEIGHT_MASK <> 0)) or ((Land[Y, X] and LandFlag) = 0)
 end;
 end.

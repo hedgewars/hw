@@ -872,7 +872,10 @@ if (GameType = gmtDemo) and (CountTicks >= 1000) then
    if t < 10 then s:= '0' + s;
    s:= inttostr(i div 60) + ':' + s;
    
-   if timeTexture <> nil then FreeTexture(timeTexture);
+   if timeTexture <> nil then
+        FreeTexture(timeTexture);
+    timeTexture:= nil;
+    
    tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
    tmpSurface:= doSurfaceConversion(tmpSurface);
    timeTexture:= Surface2Tex(tmpSurface, false);
@@ -890,7 +893,9 @@ if cShowFPS then
       Frames:= 0;
       CountTicks:= 0;
       s:= inttostr(FPS) + ' fps';
-      if fpsTexture <> nil then FreeTexture(fpsTexture);
+      if fpsTexture <> nil then
+        FreeTexture(fpsTexture);
+    fpsTexture:= nil;
       tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
       tmpSurface:= doSurfaceConversion(tmpSurface);
       fpsTexture:= Surface2Tex(tmpSurface, false);
@@ -981,14 +986,16 @@ end;
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 begin
 //if Group in [capgrpGameState] then WriteLnToConsole(s);
-if Captions[Group].Tex <> nil then FreeTexture(Captions[Group].Tex);
+    if Captions[Group].Tex <> nil then 
+        FreeTexture(Captions[Group].Tex);
+    Captions[Group].Tex:= nil;
 
-Captions[Group].Tex:= RenderStringTex(s, Color, fntBig);
+    Captions[Group].Tex:= RenderStringTex(s, Color, fntBig);
 
-case Group of
-    capgrpGameState: Captions[Group].EndTime:= RealTicks + 2200
+    case Group of
+        capgrpGameState: Captions[Group].EndTime:= RealTicks + 2200
     else
-    Captions[Group].EndTime:= RealTicks + 1400 + LongWord(Captions[Group].Tex^.w) * 3;
+        Captions[Group].EndTime:= RealTicks + 1400 + LongWord(Captions[Group].Tex^.w) * 3;
     end;
 end;
 
@@ -1096,7 +1103,9 @@ r.h:= 32;
 
 if time = 0 then time:= 5000;
 missionTimer:= time;
-if missionTex <> nil then FreeTexture(missionTex);
+if missionTex <> nil then 
+    FreeTexture(missionTex);
+missionTex:= nil;
 
 if icon > -1 then
     begin

@@ -51,7 +51,7 @@ procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Positi
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
-procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
+procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat = 1.0);
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
 procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
@@ -250,6 +250,7 @@ var s: shortstring;
         TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
         copyToXY(flagsurf, texsurf, 2, 2);
         SDL_FreeSurface(flagsurf);
+        flagsurf:= nil;
         
         // restore black border pixels inside the flag
         PLongwordArray(texsurf^.pixels)^[32 * 2 +  2]:= cNearBlackColor;
@@ -259,7 +260,6 @@ var s: shortstring;
 
         FlagTex:= Surface2Tex(texsurf, false);
         SDL_FreeSurface(texsurf);
-        texsurf:= nil;
 
         dec(drY, r.h + 2);
         DrawHealthY:= drY;
@@ -274,25 +274,27 @@ var s: shortstring;
                             texsurf:= LoadImage(Pathz[ptHats] + '/Reserved/' + Copy(Hat,9,Length(s)-8), ifNone)
                         else
                             texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
-                        if texsurf <> nil then
+                            if texsurf <> nil then
                             begin
-                            HatTex:= Surface2Tex(texsurf, true);
-                            SDL_FreeSurface(texsurf)
-                            end
+                                HatTex:= Surface2Tex(texsurf, true);
+                                SDL_FreeSurface(texsurf)
+                            end;
+                            texsurf:= nil;
                         end
                     end;
         end;
     MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
     iconsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 28, 28, 32, RMask, GMask, BMask, AMask);
-    if iconsurf <> nil then
+        if iconsurf <> nil then
         begin
-        r.x:= 0;
-        r.y:= 0;
-        r.w:= 28;
-        r.h:= 28;
-        DrawRoundRect(@r, cWhiteColor, cNearBlackColor, iconsurf, true);
-        ropeIconTex:= Surface2Tex(iconsurf, false);
-        SDL_FreeSurface(iconsurf)
+            r.x:= 0;
+            r.y:= 0;
+            r.w:= 28;
+            r.h:= 28;
+            DrawRoundRect(@r, cWhiteColor, cNearBlackColor, iconsurf, true);
+            ropeIconTex:= Surface2Tex(iconsurf, false);
+            SDL_FreeSurface(iconsurf);
+            iconsurf:= nil;
         end;
     end;
 
@@ -524,10 +526,11 @@ glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 glDisableClientState(GL_VERTEX_ARRAY)
 end;
 
-procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
+procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
 begin
 glPushMatrix;
 glTranslatef(X, Y, 0);
+glScalef(Scale, Scale, 1);
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
@@ -815,8 +818,10 @@ begin
     for ii:= Low(TSprite) to High(TSprite) do
     begin
         FreeTexture(SpritesData[ii].Texture);
+        SpritesData[ii].Texture:= nil;
         if SpritesData[ii].Surface <> nil then
-            SDL_FreeSurface(SpritesData[ii].Surface)
+            SDL_FreeSurface(SpritesData[ii].Surface);
+        SpritesData[ii].Surface:= nil;
     end;
     SDL_FreeSurface(MissionIcons);
     FreeTexture(ropeIconTex);

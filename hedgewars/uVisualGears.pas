@@ -327,14 +327,15 @@ end;
 
 procedure DeleteVisualGear(Gear: PVisualGear);
 begin
-if Gear^.Tex <> nil then
-    FreeTexture(Gear^.Tex);
+    if Gear^.Tex <> nil then
+        FreeTexture(Gear^.Tex);
+    Gear^.Tex:= nil;
 
-if Gear^.NextGear <> nil then Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
-if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
-   else VisualGearsList:= Gear^.NextGear;
+    if Gear^.NextGear <> nil then Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
+    if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
+    else VisualGearsList:= Gear^.NextGear;
 
-Dispose(Gear)
+    Dispose(Gear);
 end;
 
 procedure ProcessVisualGears(Steps: Longword);

@@ -506,13 +506,16 @@ end;
 
 procedure FreeTexture(tex: PTexture);
 begin
-if tex <> nil then
+    if tex <> nil then
     begin
-    if tex^.NextTexture <> nil then tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
-    if tex^.PrevTexture <> nil then tex^.PrevTexture^.NextTexture:= tex^.NextTexture
-    else TextureList:= tex^.NextTexture;
-    glDeleteTextures(1, @tex^.id);
-    Dispose(tex)
+        if tex^.NextTexture <> nil then 
+            tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
+        if tex^.PrevTexture <> nil then 
+            tex^.PrevTexture^.NextTexture:= tex^.NextTexture
+        else 
+            TextureList:= tex^.NextTexture;
+        glDeleteTextures(1, @tex^.id);
+        Dispose(tex);
     end
 end;
 

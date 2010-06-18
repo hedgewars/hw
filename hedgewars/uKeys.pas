@@ -423,7 +423,9 @@ var Controller: array [0..5] of PSDL_Joystick;
 procedure ControllerInit;
 var i, j: Integer;
 begin
+{$IFNDEF IPHONEOS}
 SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+{$ENDIF}
 
 ControllerEnabled:= 0;
 ControllerNumControllers:= SDL_NumJoysticks();
