@@ -93,7 +93,7 @@ for y:= 0 to Pred(Image^.h) do
             LandPixels[cpY + y, cpX + x]:= p^[x];
 {$ENDIF}
         if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then 
-            Land[cpY + y, cpX + x]:= LAND_OBJECT
+            Land[cpY + y, cpX + x]:= lfObject
         end;
     p:= @(p^[Image^.pitch shr 2])
     end;
@@ -238,7 +238,7 @@ var i: Longword;
     bRes: boolean;
 begin
 with Obj do
-     if CheckLand(inland, x, y, LAND_BASIC) then
+     if CheckLand(inland, x, y, lfBasic) then
         begin
         bRes:= true;
         i:= 1;
@@ -318,7 +318,7 @@ with Obj do
     repeat
         y:= 8;
         repeat
-            if CheckLand(r, x, y - 8, LAND_BASIC)
+            if CheckLand(r, x, y - 8, lfBasic)
             and not CheckIntersect(x, y, Width, Height) then
             begin
             ar[cnt].x:= x;
