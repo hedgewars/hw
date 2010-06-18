@@ -15,10 +15,10 @@ IF(version_suffix MATCHES "-dev")
 		FIND_PROGRAM(HGCOMMAND hg)
 		IF(HGCOMMAND)
 			exec_program(${HGCOMMAND} 
-				     ARGS identify ${CMAKE_CURRENT_SOURCE_DIR}
+				     ARGS identify -in ${CMAKE_CURRENT_SOURCE_DIR}
 				     OUTPUT_VARIABLE version_suffix
 				     )
-			STRING(REGEX REPLACE "(.*) +.*" "\\1" version_suffix ${version_suffix})
+			STRING(REGEX REPLACE "(.*) +(.*)" "\\2:\\1" version_suffix ${version_suffix})
 			MESSAGE(STATUS "Builing revision ${version_suffix}")
 			set(version_suffix ".${version_suffix}")
 #			#truncate to numbers only - trying to fix a problem described in http://www.hedgewars.org/node/2019
