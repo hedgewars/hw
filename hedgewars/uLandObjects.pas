@@ -211,27 +211,31 @@ AddGirder:= bRes;
 end;
 
 function CheckLand(rect: TSDL_Rect; dX, dY, Color: Longword): boolean;
-var i, tmpx, tmpy, bx, by: LongInt;
+var tmpx, tmpx2, tmpy, tmpy2, bx, by: LongInt;
     bRes: boolean = true;
 begin
 inc(rect.x, dX);
 inc(rect.y, dY);
 bx:= rect.x + rect.w;
 by:= rect.y + rect.h;
-i:= 0;
 {$WARNINGS OFF}
 tmpx:= rect.x;
-while (tmpx <= bx) and bRes do
+tmpx2:= bx;
+while (tmpx <= bx - rect.w div 2 - 1) and bRes do
       begin
-      bRes:= (Land[rect.y, tmpx] = Color) and (Land[by, tmpx] = Color);
-      inc(tmpx)
+      bRes:= (Land[rect.y, tmpx] = Color) and (Land[by, tmpx] = Color) and
+             (Land[rect.y, tmpx2] = Color) and (Land[by, tmpx2] = Color);
+      inc(tmpx);
+      dec(tmpx2)
       end;
-i:= 0;
-tmpy:= rect.y;
-while (tmpy <= by) and bRes do
+tmpy:= rect.y+1;
+tmpy2:= by-1;
+while (tmpy <= by - rect.h div 2 - 1) and bRes do
       begin
-      bRes:= (Land[tmpy, rect.x] = Color) and (Land[tmpy, bx] = Color);
-      inc(tmpy)
+      bRes:= (Land[tmpy, rect.x] = Color) and (Land[tmpy, bx] = Color) and
+             (Land[tmpy2, rect.x] = Color) and (Land[tmpy2, bx] = Color);
+      inc(tmpy);
+      dec(tmpy2)
       end;
 {$WARNINGS ON}
 CheckLand:= bRes;
