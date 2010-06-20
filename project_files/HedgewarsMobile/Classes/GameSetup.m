@@ -103,7 +103,7 @@
 // unpacks ammostore data from the selected ammo.plist to a sequence of engine commands
 -(void) provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger) numberOfTeams {
     NSString *weaponPath = [[NSString alloc] initWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),ammostoreName];
-    NSDictionary *ammoData = [[NSDictionary alloc] initWithContentsOfFile:ammoDataFile];
+    NSDictionary *ammoData = [[NSDictionary alloc] initWithContentsOfFile:weaponPath];
     [weaponPath release];
     
     NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@", [ammoData objectForKey:@"ammostore_initialqt"]];
@@ -306,7 +306,7 @@
                                   ofColor:[teamData objectForKey:@"color"]];
                 }
                 
-                [self provideAmmoData:@"Default" forPlayingTeams:[teamsConfig count]];
+                [self provideAmmoData:@"Default.plist" forPlayingTeams:[teamsConfig count]];
                 
                 clientQuit = NO;
 			} else {

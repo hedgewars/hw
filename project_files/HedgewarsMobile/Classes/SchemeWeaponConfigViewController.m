@@ -10,7 +10,7 @@
 #import "CommodityFunctions.h"
 
 @implementation SchemeWeaponConfigViewController
-@synthesize listOfSchemes, listOfWeapons, lastIndexPath, selectedScheme, selectedWeapon;
+@synthesize listOfSchemes, listOfWeapons, lastIndexPath_sc, lastIndexPath_we, selectedScheme, selectedWeapon;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -23,9 +23,6 @@
 
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-
-    self.selectedScheme = @"Default.plist";
-    self.selectedWeapon = @"Default.plist";
 }
 
 -(void) viewWillAppear:(BOOL) animated {
@@ -34,24 +31,15 @@
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCHEMES_DIRECTORY() error:NULL];
     self.listOfSchemes = contentsOfDir;
     
+    contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
+    self.listOfWeapons = contentsOfDir;
+    
+    self.selectedScheme = @"Default.plist";
+    self.selectedWeapon = @"Default.plist";
+    
     [self.tableView reloadData];
 }
 
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
 
 
 #pragma mark -
@@ -84,13 +72,13 @@
         cell.textLabel.text = [[self.listOfSchemes objectAtIndex:row] stringByDeletingPathExtension];
         if ([[self.listOfSchemes objectAtIndex:row] isEqualToString:self.selectedScheme]) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            self.lastIndexPath = indexPath;
+            self.lastIndexPath_sc = indexPath;
         }
     } else {
         cell.textLabel.text = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension];
         if ([[self.listOfWeapons objectAtIndex:row] isEqualToString:self.selectedWeapon]) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            self.lastIndexPath = indexPath;
+            self.lastIndexPath_we = indexPath;
         }
     }
 
@@ -101,6 +89,12 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSIndexPath *lastIndexPath;
+    if ([indexPath section] == 0)
+        lastIndexPath = self.lastIndexPath_sc;
+    else
+        lastIndexPath = self.lastIndexPath_we;
+    
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     
@@ -110,8 +104,15 @@
         newCell.accessoryType = UITableViewCellAccessoryCheckmark;
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
         oldCell.accessoryType = UITableViewCellAccessoryNone;
-        self.lastIndexPath = indexPath;
-        self.selectedScheme = [self.listOfSchemes objectAtIndex:newRow];
+        
+        if ([indexPath section] == 0) {
+            self.lastIndexPath_sc = indexPath;
+            self.selectedScheme = [self.listOfSchemes objectAtIndex:newRow];
+        } else {
+            self.lastIndexPath_we = indexPath;
+            self.selectedWeapon = [self.listOfWeapons objectAtIndex:newRow];
+        }        
+        
         [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -136,7 +137,8 @@
 -(void) viewDidUnload {
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
-    self.lastIndexPath = nil;
+    self.lastIndexPath_sc = nil;
+    self.lastIndexPath_we = nil;
     self.selectedScheme = nil;
     self.selectedWeapon = nil;
     MSG_DIDUNLOAD();
@@ -146,7 +148,8 @@
 -(void) dealloc {
     [listOfSchemes release];
     [listOfWeapons release];
-    [lastIndexPath release];
+    [lastIndexPath_sc release];
+    [lastIndexPath_we release];
     [selectedScheme release];
     [selectedWeapon release];
     [super dealloc];

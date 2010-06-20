@@ -616,12 +616,12 @@
 		6163EE4F11CC2497001C0453 /* Second Level */ = {
 			isa = PBXGroup;
 			children = (
-				616591FE11CA9BA200D6E256 /* SingleSchemeViewController.h */,
-				616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */,
 				6165920011CA9BA200D6E256 /* SingleTeamViewController.h */,
 				6165920111CA9BA200D6E256 /* SingleTeamViewController.m */,
 				6163EE7C11CC2600001C0453 /* SingleWeaponViewController.h */,
 				6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */,
+				616591FE11CA9BA200D6E256 /* SingleSchemeViewController.h */,
+				616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */,
 			);
 			name = "Second Level";
 			sourceTree = "<group>";
@@ -907,8 +907,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				928301160F10CAFC00CC5A3C /* fpc */,
 				1D6058900D05DD3D006BFB54 /* Hedgewars */,
+				928301160F10CAFC00CC5A3C /* fpc */,
 				61C3251C1179A300001E70B1 /* openalbridge */,
 				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
 			);

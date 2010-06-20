@@ -21,6 +21,6 @@
 
 -(IBAction) buttonPressed:(id) sender;
 -(IBAction) segmentPressed:(id) sender;
--(void) startGame;
+-(void) startGame:(UIButton *)button;
 
 @end

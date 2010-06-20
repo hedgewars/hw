@@ -303,8 +303,10 @@ const
 
 {$IFDEF IPHONEOS}
     cMaxCaptions = 3;
+    cDefaultZoomLevel = 1.5;
 {$ELSE}
     cMaxCaptions = 4;
+    cDefaultZoomLevel = 2.0;
 {$ENDIF}
 
     cSendEmptyPacketTime = 1000;

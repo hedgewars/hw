@@ -79,8 +79,6 @@ var hideAmmoMenu: boolean;
     chatAction: boolean;
     pauseAction: boolean;
     switchAction: boolean;
-
-    theJoystick: PSDL_Joystick;
     
     cursorUp: boolean;
     cursorDown: boolean;
@@ -373,11 +371,10 @@ end;
 
 {$IFDEF IPHONEOS}
 procedure setiPhoneBinds;
-// set to false the keys that only need one stoke
 begin
-    tkbdn[1]:= ord(leftClick);
-    tkbdn[2]:= ord(middleClick);
-    tkbdn[3]:= ord(rightClick);
+    tkbdn[ 1]:= ord(leftClick);
+    tkbdn[ 2]:= ord(middleClick);
+    tkbdn[ 3]:= ord(rightClick);
 
     tkbdn[23]:= ord(upKey);
     tkbdn[24]:= ord(downKey);
@@ -398,6 +395,7 @@ begin
     tkbdn[68]:= ord(cursorLeft);
     tkbdn[69]:= ord(cursorRight);
     
+    // set to false the keys that only need one stoke
     leftClick:= false;
     middleClick:= false;
     rightClick:= false;
@@ -478,9 +476,6 @@ if ControllerNumControllers > 0 then
     end
 else    
     WriteLnToConsole('Not using any game controller');
-{$IFDEF IPHONEOS}
-theJoystick:= Controller[0];
-{$ENDIF}
 end;
 
 procedure ControllerClose;

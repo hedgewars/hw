@@ -803,30 +803,26 @@ end;
 
 procedure chZoomIn(var s: shortstring);
 begin
-s:= s; // avoid compiler hint
+    s:= s; // avoid compiler hint
 {$IFDEF IPHONEOS}
-if ZoomValue < 3.5 then
+    if ZoomValue < 4.0 then
 {$ELSE}
-if ZoomValue < 3.0 then
+    if ZoomValue < 3.0 then
 {$ENDIF}
-        ZoomValue:= ZoomValue + 0.25;
+        ZoomValue:= ZoomValue + 0.20;
 end;
 
 procedure chZoomOut(var s: shortstring);
 begin
-s:= s; // avoid compiler hint
-{$IFDEF IPHONEOS}
-if ZoomValue > 0.5 then
-{$ELSE}
-if ZoomValue > 1.0 then
-{$ENDIF}
-        ZoomValue:= ZoomValue - 0.25;
+    s:= s; // avoid compiler hint
+    if ZoomValue > 1.0 then
+        ZoomValue:= ZoomValue - 0.20;
 end;
 
 procedure chZoomReset(var s: shortstring);
 begin
-s:= s; // avoid compiler hint
-ZoomValue:= 2.0
+    s:= s; // avoid compiler hint
+    ZoomValue:= cDefaultZoomLevel;
 end;
 
 procedure chChat(var s: shortstring);

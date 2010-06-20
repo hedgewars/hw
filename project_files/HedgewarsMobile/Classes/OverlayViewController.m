@@ -75,7 +75,6 @@
             }
             break;
         default:
-            DLog(@"Unknown rotation status");
             break;
     }
     self.view.frame = usefulRect;
@@ -108,6 +107,8 @@
     [dimTimer setFireDate:HIDING_TIME_DEFAULT];
 }
 
+#pragma mark -
+#pragma mark View Management
 -(void) viewDidLoad {
     isPopoverVisible = NO;
     self.view.alpha = 0;
@@ -160,6 +161,8 @@
     [super dealloc];
 }
 
+#pragma mark -
+#pragma mark Overlay actions and members
 // dim the overlay when there's no more input for a certain amount of time
 -(IBAction) buttonReleased:(id) sender {
 	HW_allKeysUp();
@@ -297,10 +300,6 @@
 
 #pragma mark -
 #pragma mark Custom touch event handling
-
-#define kMinimumPinchDelta      50
-
-
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	NSArray *twoTouches;
 	UITouch *touch = [touches anyObject];
@@ -316,7 +315,7 @@
     gestureStartPoint = [touch locationInView:self.view];
         
 	switch ([touches count]) {
-		case 1:
+		/*case 1:
 			initialDistanceForPinching = 0;
 			switch ([touch tapCount]) {
 				case 1:
@@ -331,15 +330,14 @@
 				default:
 					break;
 			}
-			break;
+			break;*/
 		case 2:
 			if (2 == [touch tapCount]) {
 				HW_zoomReset();
 			}
 			
 			// pinching
-            gestureStartPoint.x = 0;
-            gestureStartPoint.y = 0;
+            gestureStartPoint = CGPointMake(0, 0);
 			twoTouches = [touches allObjects];
 			UITouch *first = [twoTouches objectAtIndex:0];
 			UITouch *second = [twoTouches objectAtIndex:1];
@@ -352,8 +350,9 @@
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    gestureStartPoint = CGPointMake(0, 0);
 	initialDistanceForPinching = 0;
-	HW_allKeysUp();
+	//HW_allKeysUp();
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -378,14 +377,15 @@
 	UITouch *touch = [touches anyObject];
 
 	switch ([touches count]) {
-		case 1:
+		/*case 1:
 			currentPosition = [touch locationInView:self.view];
 			// panning
 			CGFloat deltaX = fabsf(gestureStartPoint.x - currentPosition.x);
 			CGFloat deltaY = fabsf(gestureStartPoint.y - currentPosition.y);
 			
+            // the two ifs are not mutually exclusive
             if (deltaX >= minimumGestureLength) {
-                NSLog(@"Horizontal swipe detected, deltaX: %f deltaY: %f",deltaX, deltaY);
+                Dlog(@"deltaX: %f deltaY: %f", deltaX, deltaY);
                 if (currentPosition.x > gestureStartPoint.x) {
                     HW_cursorLeft(logCoeff*log(deltaX));
                 } else {
@@ -394,7 +394,7 @@
 
             } 
             if (deltaY >= minimumGestureLength) {
-                NSLog(@"Horizontal swipe detected, deltaX: %f deltaY: %f",deltaX, deltaY);
+                DLog(@"deltaX: %f deltaY: %f", deltaX, deltaY);
                 if (currentPosition.y < gestureStartPoint.y) {
                     HW_cursorDown(logCoeff*log(deltaY));
                 } else {
@@ -402,22 +402,26 @@
                 }            
             }
 
-			break;
+			break;*/
 		case 2:
 			twoTouches = [touches allObjects];
 			UITouch *first = [twoTouches objectAtIndex:0];
 			UITouch *second = [twoTouches objectAtIndex:1];
 			CGFloat currentDistanceOfPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
-			
-			if (0 == initialDistanceForPinching) 
-				initialDistanceForPinching = currentDistanceOfPinching;
-
-			if (currentDistanceOfPinching < initialDistanceForPinching + kMinimumPinchDelta)
-				HW_zoomOut();
-			else if (currentDistanceOfPinching > initialDistanceForPinching + kMinimumPinchDelta)
-				HW_zoomIn();
-
-			currentDistanceOfPinching = initialDistanceForPinching;
+			const int pinchDelta = 40;
+            
+			if (0 != initialDistanceForPinching) {
+                if (currentDistanceOfPinching - initialDistanceForPinching > pinchDelta) {
+                    HW_zoomIn();
+                    initialDistanceForPinching = currentDistanceOfPinching;
+                }
+                else if (initialDistanceForPinching - currentDistanceOfPinching > pinchDelta) {
+                    HW_zoomOut();
+                    initialDistanceForPinching = currentDistanceOfPinching;
+                }
+            } else 
+                initialDistanceForPinching = currentDistanceOfPinching;
+            
 			break;
 		default:
 			break;

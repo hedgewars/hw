@@ -531,20 +531,22 @@ var i, t: LongInt;
     s: string[15];
     highlight: Boolean;
     offset, offsetX, offsetY, ScreenBottom: LongInt;
-    scale: GLfloat;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
-if not isPaused then
+    if not isPaused then
     begin
-    if ZoomValue < zoom then
+        if ZoomValue < zoom then
         begin
-        zoom:= zoom - 0.002 * Lag;
-        if ZoomValue > zoom then zoom:= ZoomValue
-        end else
-    if ZoomValue > zoom then
+            zoom:= zoom - 0.002 * Lag;
+            if ZoomValue > zoom then 
+                zoom:= ZoomValue
+        end 
+    else 
+        if ZoomValue > zoom then
         begin
-        zoom:= zoom + 0.002 * Lag;
-        if ZoomValue < zoom then zoom:= ZoomValue
+            zoom:= zoom + 0.002 * Lag;
+            if ZoomValue < zoom then
+                zoom:= ZoomValue
         end
     end
 else
@@ -648,12 +650,8 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     end;
 {$WARNINGS ON}
 
-{$IFDEF IPHONEOS}
-scale:= 1.5;
-{$ELSE}
-scale:= 2.0;
-{$ENDIF}
-SetScale(scale);
+// this scale is used to keep the various widgets at the same dimension at all zoom levels
+SetScale(cDefaultZoomLevel);
 
 
 // Turn time

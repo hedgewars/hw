@@ -28,8 +28,9 @@
             [[self parentViewController] dismissModalViewControllerAnimated:YES];
             break;
         case 1:
-            [self performSelector:@selector(startGame)
-                       withObject:nil
+            theButton.enabled = NO;
+            [self performSelector:@selector(startGame:)
+                       withObject:theButton
                        afterDelay:0.25];
             break;
         default:
@@ -68,7 +69,9 @@
     [self.view addSubview:activeController.view];
 }
 
--(void) startGame {
+-(void) startGame:(UIButton *)button {
+    button.enabled = YES;
+
     // don't start playing if the preview is in progress
     if ([mapConfigViewController busy]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Wait for the Preview",@"")

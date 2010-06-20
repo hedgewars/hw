@@ -140,9 +140,10 @@ begin
                 end;
         end;
 
-    SDL_GL_SwapBuffers();
 {$IFDEF SDL13}
     SDL_RenderPresent();
+{$ELSE}
+    SDL_GL_SwapBuffers();
 {$ENDIF}
 {$IFNDEF IPHONEOS}
     // not going to make captures on the iPhone
@@ -183,8 +184,7 @@ begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
     begin
-{$IFNDEF IPHONEOS}
-// have to remove this cycle because otherwise it segfaults at exit
+
         while SDL_PollEvent(@event) <> 0 do
         begin
             case event.type_ of
@@ -210,7 +210,6 @@ begin
                 SDL_QUITEV: isTerminated:= true
             end; // end case event.type_
         end; // end while SDL_PollEvent(@event) <> 0
-{$ENDIF}
 
         if isTerminated = false then
         begin

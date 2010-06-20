@@ -73,7 +73,7 @@
         // return resulting image
         return sprite;
     } else {
-        NSLog(@"initWithContentsOfFile: andCutAt: FAILED");
+        DLog(@"error - image == nil");
         return nil;
     }
 }

@@ -35,12 +35,14 @@ end;
 
 procedure HW_zoomIn; cdecl; export;
 begin
-    wheelUp:= true;
+    if wheelDown = false then
+        wheelUp:= true;
 end;
 
 procedure HW_zoomOut; cdecl; export;
 begin
-    wheelDown:= true;
+    if wheelUp = false then
+        wheelDown:= true;
 end;
 
 procedure HW_zoomReset; cdecl; export;
