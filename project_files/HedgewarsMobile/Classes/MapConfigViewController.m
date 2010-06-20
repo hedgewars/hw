@@ -118,9 +118,11 @@
     CGImageRef previewCGImage = CGBitmapContextCreateImage(bitmapImage);
     UIImage *previewImage = [[UIImage alloc] initWithCGImage:previewCGImage];
     CGImageRelease(previewCGImage);
+    previewCGImage = nil;
 
     // set the preview image (autoreleased) in the button and the maxhog label on the main thread to prevent a leak
-    [self performSelectorOnMainThread:@selector(setButtonImage:) withObject:[[previewImage retain] makeRoundCornersOfSize:CGSizeMake(12, 12)] waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(setButtonImage:) withObject:[previewImage makeRoundCornersOfSize:CGSizeMake(12, 12)] waitUntilDone:NO];
+    [previewImage release];
     [self performSelectorOnMainThread:@selector(setLabelText:) withObject:[NSString stringWithFormat:@"%d", maxHogs] waitUntilDone:NO];
     
     // restore functionality of button and remove the spinning wheel on the main thread to prevent a leak
@@ -194,7 +196,8 @@
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:fileImage];
     [fileImage release];
     [self.previewButton setImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:UIControlStateNormal];
-
+    [image release];
+    
     // update label
     maxHogs = 18;
     NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg", MAPS_DIRECTORY(),[self.mapArray objectAtIndex:index]];
@@ -255,7 +258,7 @@
     UIGraphicsPopContext();
     UIImage *bkgImg = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    [self.previewButton setBackgroundImage:[[bkgImg retain] makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:UIControlStateNormal];
+    [self.previewButton setBackgroundImage:[bkgImg makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:UIControlStateNormal];
 }
 
 #pragma mark -

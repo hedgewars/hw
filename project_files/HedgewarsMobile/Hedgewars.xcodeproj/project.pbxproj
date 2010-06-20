@@ -32,6 +32,8 @@
 		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
 		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
 		6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6151347D116C2803001F16D1 /* Icon-iPad.png */; };
+		61536CCF11CE836E00D87A7E /* libfreetype_x86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798917114AAF2100BA94A9 /* libfreetype_x86.a */; };
+		61536DF411CEAE7100D87A7E /* GameConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */; };
 		6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */; };
 		6165920C11CA9BA200D6E256 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591DF11CA9BA200D6E256 /* DetailViewController.m */; };
 		6165920D11CA9BA200D6E256 /* FlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E111CA9BA200D6E256 /* FlagsViewController.m */; };
@@ -71,13 +73,10 @@
 		6165924411CA9C4600D6E256 /* openalbridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 6165923A11CA9C4600D6E256 /* openalbridge.h */; };
 		6165924511CA9C4600D6E256 /* wrappers.c in Sources */ = {isa = PBXBuildFile; fileRef = 6165923B11CA9C4600D6E256 /* wrappers.c */; };
 		6165924611CA9C4600D6E256 /* wrappers.h in Headers */ = {isa = PBXBuildFile; fileRef = 6165923C11CA9C4600D6E256 /* wrappers.h */; };
-		6165925111CA9CB400D6E256 /* GameConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924911CA9CB400D6E256 /* GameConfigViewController-iPad.xib */; };
-		6165925211CA9CB400D6E256 /* GameConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924A11CA9CB400D6E256 /* GameConfigViewController-iPhone.xib */; };
 		6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */; };
 		6165925411CA9CB400D6E256 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */; };
 		6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */; };
 		6165925611CA9CB400D6E256 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
-		6165925711CA9CB400D6E256 /* OverlayViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924F11CA9CB400D6E256 /* OverlayViewController-iPad.xib */; };
 		6165925811CA9CB400D6E256 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165925011CA9CB400D6E256 /* OverlayViewController.xib */; };
 		6165925E11CA9CD300D6E256 /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 6165925911CA9CD300D6E256 /* arrowDown.png */; };
 		6165925F11CA9CD300D6E256 /* arrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 6165925A11CA9CD300D6E256 /* arrowLeft.png */; };
@@ -135,7 +134,6 @@
 		6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880F114AA34C00BA94A9 /* uWorld.pas */; };
 		617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */; };
 		6179891B114AAF2100BA94A9 /* libfreetype_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798916114AAF2100BA94A9 /* libfreetype_arm.a */; };
-		6179891C114AAF2100BA94A9 /* libfreetype_x86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798917114AAF2100BA94A9 /* libfreetype_x86.a */; };
 		6179891F114AAF2100BA94A9 /* libvorbis_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6179891A114AAF2100BA94A9 /* libvorbis_arm.a */; };
 		61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798934114AB25F00BA94A9 /* AudioToolbox.framework */; };
 		61798996114AB3FF00BA94A9 /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798993114AB3FA00BA94A9 /* libSDL_mixer.a */; };
@@ -305,13 +303,11 @@
 		6165923A11CA9C4600D6E256 /* openalbridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = openalbridge.h; path = ../../misc/libopenalbridge/openalbridge.h; sourceTree = SOURCE_ROOT; };
 		6165923B11CA9C4600D6E256 /* wrappers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = wrappers.c; path = ../../misc/libopenalbridge/wrappers.c; sourceTree = SOURCE_ROOT; };
 		6165923C11CA9C4600D6E256 /* wrappers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wrappers.h; path = ../../misc/libopenalbridge/wrappers.h; sourceTree = SOURCE_ROOT; };
-		6165924911CA9CB400D6E256 /* GameConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "GameConfigViewController-iPad.xib"; path = "Resources/GameConfigViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
-		6165924A11CA9CB400D6E256 /* GameConfigViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "GameConfigViewController-iPhone.xib"; path = "Resources/GameConfigViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
+		6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GameConfigViewController.xib; path = Resources/GameConfigViewController.xib; sourceTree = SOURCE_ROOT; };
 		6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainMenuViewController-iPad.xib"; path = "Resources/MainMenuViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
 		6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainMenuViewController-iPhone.xib"; path = "Resources/MainMenuViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
 		6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapConfigViewController-iPad.xib"; path = "Resources/MapConfigViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
 		6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapConfigViewController-iPhone.xib"; path = "Resources/MapConfigViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
-		6165924F11CA9CB400D6E256 /* OverlayViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "OverlayViewController-iPad.xib"; path = "Resources/OverlayViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
 		6165925011CA9CB400D6E256 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = Resources/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
 		6165925911CA9CD300D6E256 /* arrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowDown.png; path = Resources/arrowDown.png; sourceTree = "<group>"; };
 		6165925A11CA9CD300D6E256 /* arrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowLeft.png; path = Resources/arrowLeft.png; sourceTree = "<group>"; };
@@ -396,22 +392,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61272334117DF764005B90CF /* libSDL_image.a in Frameworks */,
-				61C325901179A732001E70B1 /* OpenAL.framework in Frameworks */,
-				61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */,
 				61798A14114AB65C00BA94A9 /* libSDL_ttf.a in Frameworks */,
 				617989BE114AB47A00BA94A9 /* libSDL_net.a in Frameworks */,
-				617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */,
+				61272334117DF764005B90CF /* libSDL_image.a in Frameworks */,
 				61798996114AB3FF00BA94A9 /* libSDL_mixer.a in Frameworks */,
+				617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */,
 				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
+				61536CCF11CE836E00D87A7E /* libfreetype_x86.a in Frameworks */,
+				6179891B114AAF2100BA94A9 /* libfreetype_arm.a in Frameworks */,
+				6179891F114AAF2100BA94A9 /* libvorbis_arm.a in Frameworks */,
 				61C325A31179A7AD001E70B1 /* libopenalbridge.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */,
+				61C325901179A732001E70B1 /* OpenAL.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
-				6179891B114AAF2100BA94A9 /* libfreetype_arm.a in Frameworks */,
-				6179891C114AAF2100BA94A9 /* libfreetype_x86.a in Frameworks */,
-				6179891F114AAF2100BA94A9 /* libvorbis_arm.a in Frameworks */,
 				61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */,
 				61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */,
 			);
@@ -522,10 +518,10 @@
 				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				61C3255A1179A384001E70B1 /* OpenAL.framework */,
+				61272338117DF778005B90CF /* MobileCoreServices.framework */,
 				61798916114AAF2100BA94A9 /* libfreetype_arm.a */,
 				61798917114AAF2100BA94A9 /* libfreetype_x86.a */,
 				6179891A114AAF2100BA94A9 /* libvorbis_arm.a */,
-				61272338117DF778005B90CF /* MobileCoreServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -546,13 +542,11 @@
 		6100DB1711544E8400F455E0 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
-				6165924911CA9CB400D6E256 /* GameConfigViewController-iPad.xib */,
-				6165924A11CA9CB400D6E256 /* GameConfigViewController-iPhone.xib */,
+				6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */,
 				6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */,
 				6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */,
 				6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */,
 				6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */,
-				6165924F11CA9CB400D6E256 /* OverlayViewController-iPad.xib */,
 				6165925011CA9CB400D6E256 /* OverlayViewController.xib */,
 			);
 			name = XIB;
@@ -590,10 +584,10 @@
 				616591E511CA9BA200D6E256 /* GameConfigViewController.m */,
 				6165920411CA9BA200D6E256 /* TeamConfigViewController.h */,
 				6165920511CA9BA200D6E256 /* TeamConfigViewController.m */,
-				616591F211CA9BA200D6E256 /* MapConfigViewController.h */,
-				616591F311CA9BA200D6E256 /* MapConfigViewController.m */,
 				616591FC11CA9BA200D6E256 /* SchemeWeaponConfigViewController.h */,
 				616591FD11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m */,
+				616591F211CA9BA200D6E256 /* MapConfigViewController.h */,
+				616591F311CA9BA200D6E256 /* MapConfigViewController.m */,
 			);
 			name = "Game Config";
 			sourceTree = "<group>";
@@ -958,6 +952,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61536DF411CEAE7100D87A7E /* GameConfigViewController.xib in Resources */,
 				61A118D211683CD100359010 /* Background.png in Resources */,
 				61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */,
 				61A118D411683CD100359010 /* Multiplayer.png in Resources */,
@@ -967,13 +962,10 @@
 				6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */,
 				61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */,
 				611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */,
-				6165925111CA9CB400D6E256 /* GameConfigViewController-iPad.xib in Resources */,
-				6165925211CA9CB400D6E256 /* GameConfigViewController-iPhone.xib in Resources */,
 				6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */,
 				6165925411CA9CB400D6E256 /* MainMenuViewController-iPhone.xib in Resources */,
 				6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */,
 				6165925611CA9CB400D6E256 /* MapConfigViewController-iPhone.xib in Resources */,
-				6165925711CA9CB400D6E256 /* OverlayViewController-iPad.xib in Resources */,
 				6165925811CA9CB400D6E256 /* OverlayViewController.xib in Resources */,
 				6165925E11CA9CD300D6E256 /* arrowDown.png in Resources */,
 				6165925F11CA9CD300D6E256 /* arrowLeft.png in Resources */,
@@ -1161,6 +1153,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../../../Downloads/of_preRelease_v0061_iPhone_FAT-pre3/libs/freetype/lib/iphone\"",
 				);
 				PRODUCT_NAME = Hedgewars;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1182,6 +1175,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../../../Downloads/of_preRelease_v0061_iPhone_FAT-pre3/libs/freetype/lib/iphone\"",
 				);
 				PRODUCT_NAME = Hedgewars;
 				PROVISIONING_PROFILE = "";
@@ -1245,6 +1239,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../../../Downloads/of_preRelease_v0061_iPhone_FAT-pre3/libs/freetype/lib/iphone\"",
 				);
 				PRODUCT_NAME = Hedgewars;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -1358,6 +1353,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../../../Downloads/of_preRelease_v0061_iPhone_FAT-pre3/libs/freetype/lib/iphone\"",
 				);
 				PRODUCT_NAME = Hedgewars;
 				TARGETED_DEVICE_FAMILY = "1,2";

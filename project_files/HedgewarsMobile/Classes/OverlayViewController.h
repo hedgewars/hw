@@ -24,11 +24,16 @@
     
     CGFloat initialDistanceForPinching;
     CGPoint gestureStartPoint;
+    UIActivityIndicatorView *spinningWheel;
 }
 
 @property (nonatomic,retain) id popoverController;
 @property (nonatomic,retain) PopoverMenuViewController *popupMenu;
 @property (nonatomic,retain) UITextField *writeChatTextField;
+@property (nonatomic,retain) IBOutlet UIActivityIndicatorView *spinningWheel;
+
+UIActivityIndicatorView *singleton;
+BOOL canDim;
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;

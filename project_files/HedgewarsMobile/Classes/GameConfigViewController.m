@@ -131,6 +131,9 @@
 }
 
 -(void) viewDidLoad {
+    CGRect screen = [[UIScreen mainScreen] bounds];
+    self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (mapConfigViewController == nil)
             mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
@@ -144,6 +147,12 @@
         schemeWeaponConfigViewController.view.frame = CGRectMake(362, 224, 300, 500);
         schemeWeaponConfigViewController.view.backgroundColor = [UIColor clearColor];
         [mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
+        for (UIView *oneView in self.view.subviews) {
+            if ([oneView isMemberOfClass:[UIToolbar class]]) {
+                [[oneView viewWithTag:12345] setHidden:YES];
+                break;
+            }
+        }
     } else
         mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
     activeController = mapConfigViewController;

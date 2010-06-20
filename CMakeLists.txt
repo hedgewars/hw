@@ -182,13 +182,13 @@ else(WITH_SERVER)
 	set(HAVE_NETSERVER false)
 endif(WITH_SERVER)
 
+add_subdirectory(misc/liblua)
 add_subdirectory(hedgewars)
 if(NOT BUILD_ENGINE_LIBRARY)
 	add_subdirectory(bin)
 	add_subdirectory(QTfrontend)
 	add_subdirectory(share)
 	add_subdirectory(tools)
-	add_subdirectory(misc/liblua)
 endif()
 
 # CPack vars

@@ -1322,11 +1322,16 @@ begin
 
 end;
 
-
+{$IFDEF IPHONEOS}
+procedure spinningWheelDone; cdecl; external;
+{$ENDIF}
 procedure FinishProgress;
 begin
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
+{$IFDEF IPHONEOS}
+    spinningWheelDone();
+{$ENDIF}
 end;
 
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);

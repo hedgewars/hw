@@ -20,8 +20,7 @@
 
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, writeChatTextField;
-
+@synthesize popoverController, popupMenu, writeChatTextField, spinningWheel;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
 	return rotationManager(interfaceOrientation);
@@ -111,6 +110,8 @@
 #pragma mark View Management
 -(void) viewDidLoad {
     isPopoverVisible = NO;
+    singleton = self.spinningWheel;
+    canDim = NO;
     self.view.alpha = 0;
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
     
@@ -148,6 +149,7 @@
     self.writeChatTextField = nil;
     self.popoverController = nil;
     self.popupMenu = nil;
+    self.spinningWheel = nil;
     [super viewDidUnload];
     MSG_DIDUNLOAD();
 }
@@ -158,6 +160,7 @@
     [popupMenu release];
     [popoverController release];
     // dimTimer is autoreleased
+    [spinningWheel release];
     [super dealloc];
 }
 
@@ -171,10 +174,12 @@
 
 // nice transition for dimming, should be called only by the timer himself
 -(void) dimOverlay {
-    [UIView beginAnimations:@"overlay dim" context:NULL];
-   	[UIView setAnimationDuration:0.6];
-    self.view.alpha = 0.2;
-	[UIView commitAnimations];
+    if (canDim) {
+        [UIView beginAnimations:@"overlay dim" context:NULL];
+        [UIView setAnimationDuration:0.6];
+        self.view.alpha = 0.2;
+        [UIView commitAnimations];
+    }
 }
 
 // set the overlay visible and put off the timer for enough time
@@ -296,6 +301,16 @@
 
 -(void) textFieldDoneEditing:(id) sender{
     [sender resignFirstResponder];
+}
+
+// this function is called by pascal FinishProgress and removes the spinning wheel when loading is done
+void spinningWheelDone (void) {
+    [UIView beginAnimations:@"hiding spinning wheel" context:NULL];
+    [UIView setAnimationDuration:0.7];
+    singleton.alpha = 0;
+    [UIView commitAnimations];
+    [singleton performSelector:@selector(stopAnimating) withObject:nil afterDelay:0.7];
+    canDim = YES;
 }
 
 #pragma mark -
