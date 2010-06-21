@@ -644,7 +644,7 @@ end;
 function Despeckle(X, Y: LongInt): boolean;
 var nx, ny, i, j, c: LongInt;
 begin
-if (Land[Y, X] > 255) and ((Land[Y, X] and lfIndestructible) = 0) and ((Land[Y, X] and lfDamaged) <> 0)then // check neighbours
+if ((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0) then // check neighbours
     begin
     c:= 0;
     for i:= -1 to 1 do

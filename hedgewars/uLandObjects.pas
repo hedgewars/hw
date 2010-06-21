@@ -211,23 +211,27 @@ AddGirder:= bRes;
 end;
 
 function CheckLand(rect: TSDL_Rect; dX, dY, Color: Longword): boolean;
-var i: LongInt;
+var i, tmpx, tmpy, bx, by: LongInt;
     bRes: boolean = true;
 begin
 inc(rect.x, dX);
 inc(rect.y, dY);
+bx:= rect.x + rect.w;
+by:= rect.y + rect.h;
 i:= 0;
 {$WARNINGS OFF}
-while (i <= rect.w) and bRes do
+tmpx:= rect.x;
+while (tmpx <= bx) and bRes do
       begin
-      bRes:= (Land[rect.y, rect.x + i] = Color) and (Land[rect.y + rect.h, rect.x + i] = Color);
-      inc(i)
+      bRes:= (Land[rect.y, tmpx] = Color) and (Land[by, tmpx] = Color);
+      inc(tmpx)
       end;
 i:= 0;
-while (i <= rect.h) and bRes do
+tmpy:= rect.y;
+while (tmpy <= by) and bRes do
       begin
-      bRes:= (Land[rect.y + i, rect.x] = Color) and (Land[rect.y + i, rect.x + rect.w] = Color);
-      inc(i)
+      bRes:= (Land[tmpy, rect.x] = Color) and (Land[tmpy, bx] = Color);
+      inc(tmpy)
       end;
 {$WARNINGS ON}
 CheckLand:= bRes;
