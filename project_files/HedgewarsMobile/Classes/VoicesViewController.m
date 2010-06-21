@@ -26,7 +26,7 @@
     [super viewDidLoad];
     srandom(time(NULL));
 
-    openal_init(20);
+    openal_init();
     voiceBeingPlayed = -1;
 
     // load all the voices names and store them into voiceArray

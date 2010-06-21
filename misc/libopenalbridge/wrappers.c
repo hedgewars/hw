@@ -44,7 +44,7 @@ void *Realloc (void *aptr, size_t nbytes) {
 }
 
 
-FILE *Fopen (const char *fname, char *mode)	{
+FILE *Fopen (const char *fname, char *mode) {
     FILE *fp;
 
     fp = fopen(fname,mode);
@@ -55,3 +55,24 @@ FILE *Fopen (const char *fname, char *mode)	{
 }
 
 
+al_sound_t new_sound_el (void) {
+    al_sound_t sound;
+    
+    sound.filename = NULL;
+    sound.buffer = -1;
+    sound.source_index = -1;
+    sound.is_used = AL_FALSE;
+
+    return sound;
+}
+
+al_sound_t init_sound_el (const char *str) {
+    al_sound_t sound;
+    
+    sound.filename = str;
+    sound.source_index = -1;
+    sound.is_used = AL_TRUE;
+    alGenBuffers(1, &sound.buffer);
+
+    return sound;
+}

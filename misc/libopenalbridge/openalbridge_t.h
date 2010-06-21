@@ -32,7 +32,7 @@ typedef struct _al_sound_t {
     const char *filename;       // name of the sound file
     ALuint buffer;              // actual sound content
     uint32_t source_index;      // index of the associated source
-    uint32_t stats;             // number of times the sound has been played
+    ALboolean is_used;          // tells if the element can be overwritten
 } al_sound_t;
 #pragma pack()
 

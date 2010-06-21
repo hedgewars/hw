@@ -92,8 +92,6 @@ void openal_playsound (unsigned int index) {
             fprintf(stderr,"(Bridge Warning) - failed to play sound %d\n", index);
             return;
         }
-        
-        the_sounds[index].stats++;
     }
 }
 

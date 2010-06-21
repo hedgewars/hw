@@ -184,6 +184,7 @@ endif(WITH_SERVER)
 
 add_subdirectory(misc/liblua)
 add_subdirectory(hedgewars)
+add_subdirectory(misc/libopenalbridge)
 if(NOT BUILD_ENGINE_LIBRARY)
 	add_subdirectory(bin)
 	add_subdirectory(QTfrontend)

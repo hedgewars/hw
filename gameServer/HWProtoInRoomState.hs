@@ -6,6 +6,7 @@ import qualified Data.Map as Map
 import Data.Sequence(Seq, (|>), (><), fromList, empty)
 import Data.List
 import Maybe
+import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
@@ -20,12 +21,10 @@ handleCmd_inRoom ["CHAT", msg] = do
     s <- roomOthersChans
     return [AnswerClients s ["CHAT", n, msg]]
 
-{-
-handleCmd_inRoom clID clients rooms ["PART"] =
-    [RoomRemoveThisClient "part"]
-    where
-        client = clients IntMap.! clID
+handleCmd_inRoom ["PART"] = return [MoveToLobby "part"]
+handleCmd_inRoom ["PART", msg] = return [MoveToLobby $ "part: " `B.append` msg]
 
+{-
 
 handleCmd_inRoom clID clients rooms ("CFG" : paramName : paramStrs)
     | null paramStrs = [ProtocolError "Empty config entry"]
@@ -194,6 +193,5 @@ handleCmd_inRoom clID clients _ ["TEAMCHAT", msg] =
     where
         client = clients IntMap.! clID
         engineMsg = toEngineMsg $ 'b' : ((nick client) ++ "(team): " ++ msg ++ "\x20\x20")
-
-handleCmd_inRoom clID _ _ _ = [ProtocolError "Incorrect command (state: in room)"]
 -}
+handleCmd_inRoom _ = return [ProtocolError "Incorrect command (state: in room)"]

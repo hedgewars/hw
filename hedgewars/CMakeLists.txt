@@ -61,7 +61,7 @@ set(engine_sources
 	uMisc.pas
 	uRandom.pas
 	uScript.pas
-	uSHA.pas
+	adler32.pas
 	uSound.pas
 	uStats.pas
 	uStore.pas
@@ -76,6 +76,7 @@ set(engine_sources
 	SinTable.inc
 	options.inc
 	${CMAKE_CURRENT_BINARY_DIR}/config.inc
+	openalbridge
 	)
 
 if(BUILD_ENGINE_LIBRARY)

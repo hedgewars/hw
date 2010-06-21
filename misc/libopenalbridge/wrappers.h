@@ -26,5 +26,7 @@ void *Malloc (size_t nbytes);
 void *Realloc (void *aptr, size_t nbytes);
 FILE *Fopen (const char *fname, char *mode);
 void helper_fade (void *tmp);
+al_sound_t new_sound_el (void);
+al_sound_t init_sound_el (const char *str);
 
 #endif /*_OALB_WRAPPERS_H*/

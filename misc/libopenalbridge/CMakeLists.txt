@@ -7,9 +7,7 @@ include_directories(${OGGVORBIS_INCLUDE_DIRS})
 set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 #list of source files for libraries
-set(openal_src
-	openalbridge.c loaders.c wrappers.c errlib.c
-)
+set(openal_src openalbridge.c loaders.c wrappers.c commands.c)
 
 #build a static library for human systems
 set (build_type STATIC)
@@ -17,9 +15,7 @@ set (build_type STATIC)
 #visualstudio and windows in general don't like static linking, so we're building the library in shared mode
 if(WIN32)
 #workaround for visualstudio (wants headers in the source list)
-	set(openal_src
-		openalbridge.h openalbridge_t.h loaders.h wrappers.h globals.h oggvorbis.h errlib.h ${openal_src}
-	)
+	set(openal_src *.h ${openal_src})
 #deps for the shared library
 	link_libraries(${VORBISFILE_LIBRARY})
 	link_libraries(${VORBIS_LIBRARY})
@@ -39,3 +35,8 @@ endif(MSVC)
 #install it in the executable directory
 	install(TARGETS openalbridge DESTINATION bin)
 endif(WIN32)
+
+#type make openalbridge_test to get a small executable test
+add_executable(openalbridge_test "${hedgewars_SOURCE_DIR}/misc/libopenalbridge/tester.c")
+target_link_libraries(openalbridge_test openalbridge ${OPENAL_LIBRARY} ${OGGVORBIS_LIBRARIES})
+

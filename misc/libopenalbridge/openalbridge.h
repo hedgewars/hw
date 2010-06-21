@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
     // init audio context and allocate memory
-    int openal_init               (int memorysize);
+    int openal_init               (void);
 
     // close audio subsytem and free memory
     void openal_close             (void);
@@ -38,7 +38,9 @@ extern "C" {
     // load an audio file into memory and map it to abuffer
     int  openal_loadfile          (const char *filename);
 
-
+    // unloads data from memory and marks a free spot
+    int  openal_unloadfile        (unsigned int index)
+    
     /******* other functions continue in commands.h *******/
     
 #ifdef __CPLUSPLUS

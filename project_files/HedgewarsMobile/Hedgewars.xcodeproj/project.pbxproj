@@ -125,7 +125,6 @@
 		61798832114AA34C00BA94A9 /* uLocale.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798804114AA34C00BA94A9 /* uLocale.pas */; };
 		61798833114AA34C00BA94A9 /* uMisc.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798805114AA34C00BA94A9 /* uMisc.pas */; };
 		61798834114AA34C00BA94A9 /* uRandom.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798806114AA34C00BA94A9 /* uRandom.pas */; };
-		61798836114AA34C00BA94A9 /* uSHA.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798808114AA34C00BA94A9 /* uSHA.pas */; };
 		61798837114AA34C00BA94A9 /* uSound.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798809114AA34C00BA94A9 /* uSound.pas */; };
 		61798838114AA34C00BA94A9 /* uStats.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880A114AA34C00BA94A9 /* uStats.pas */; };
 		61798839114AA34C00BA94A9 /* uStore.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880B114AA34C00BA94A9 /* uStore.pas */; };
@@ -148,6 +147,7 @@
 		61C3255B1179A384001E70B1 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3255A1179A384001E70B1 /* OpenAL.framework */; };
 		61C325901179A732001E70B1 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3255A1179A384001E70B1 /* OpenAL.framework */; };
 		61C325A31179A7AD001E70B1 /* libopenalbridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3251D1179A300001E70B1 /* libopenalbridge.a */; };
+		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
 
@@ -362,7 +362,6 @@
 		61798804114AA34C00BA94A9 /* uLocale.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLocale.pas; path = ../../hedgewars/uLocale.pas; sourceTree = SOURCE_ROOT; };
 		61798805114AA34C00BA94A9 /* uMisc.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uMisc.pas; path = ../../hedgewars/uMisc.pas; sourceTree = SOURCE_ROOT; };
 		61798806114AA34C00BA94A9 /* uRandom.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uRandom.pas; path = ../../hedgewars/uRandom.pas; sourceTree = SOURCE_ROOT; };
-		61798808114AA34C00BA94A9 /* uSHA.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uSHA.pas; path = ../../hedgewars/uSHA.pas; sourceTree = SOURCE_ROOT; };
 		61798809114AA34C00BA94A9 /* uSound.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uSound.pas; path = ../../hedgewars/uSound.pas; sourceTree = SOURCE_ROOT; };
 		6179880A114AA34C00BA94A9 /* uStats.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uStats.pas; path = ../../hedgewars/uStats.pas; sourceTree = SOURCE_ROOT; };
 		6179880B114AA34C00BA94A9 /* uStore.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uStore.pas; path = ../../hedgewars/uStore.pas; sourceTree = SOURCE_ROOT; };
@@ -383,6 +382,7 @@
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61C3251D1179A300001E70B1 /* libopenalbridge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libopenalbridge.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		61C3255A1179A384001E70B1 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -754,6 +754,7 @@
 			isa = PBXGroup;
 			children = (
 				61798892114AA56300BA94A9 /* inc */,
+				61E1F4F711D004240016A5AA /* adler32.pas */,
 				617987E7114AA34C00BA94A9 /* hwengine.pas */,
 				617987E9114AA34C00BA94A9 /* hwLibrary.pas */,
 				617987EC114AA34C00BA94A9 /* PascalExports.pas */,
@@ -781,7 +782,6 @@
 				61798805114AA34C00BA94A9 /* uMisc.pas */,
 				61798806114AA34C00BA94A9 /* uRandom.pas */,
 				611F4D4A11B27A9900F9759A /* uScript.pas */,
-				61798808114AA34C00BA94A9 /* uSHA.pas */,
 				61798809114AA34C00BA94A9 /* uSound.pas */,
 				6179880A114AA34C00BA94A9 /* uStats.pas */,
 				6179880B114AA34C00BA94A9 /* uStore.pas */,
@@ -1071,7 +1071,6 @@
 				61798832114AA34C00BA94A9 /* uLocale.pas in Sources */,
 				61798833114AA34C00BA94A9 /* uMisc.pas in Sources */,
 				61798834114AA34C00BA94A9 /* uRandom.pas in Sources */,
-				61798836114AA34C00BA94A9 /* uSHA.pas in Sources */,
 				61798837114AA34C00BA94A9 /* uSound.pas in Sources */,
 				61798838114AA34C00BA94A9 /* uStats.pas in Sources */,
 				61798839114AA34C00BA94A9 /* uStore.pas in Sources */,
@@ -1109,6 +1108,7 @@
 				6165923211CA9BD500D6E256 /* UIImageExtra.m in Sources */,
 				6165929E11CA9E2F00D6E256 /* SDL_uikitappdelegate.m in Sources */,
 				6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */,
+				61E1F4F811D004240016A5AA /* adler32.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
