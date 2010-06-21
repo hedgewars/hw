@@ -57,7 +57,7 @@ procedure CheckLandDigest(s: shortstring);
 function  LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
-uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uLandTexture;
+uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, Adler32, uIO, uLandTexture;
 
 operator=(const a, b: direction) c: Boolean;
 begin
@@ -70,20 +70,13 @@ type TPixAr = record
               end;
 
 procedure LogLandDigest;
-var ctx: TSHA1Context;
-    dig: TSHA1Digest;
-    s: shortstring;
+var s: shortstring;
+    adler: LongInt;
 begin
-{$HINTS OFF}
-SHA1Init(ctx);
-{$HINTS ON}
-SHA1UpdateLongwords(ctx, @Land, sizeof(Land));
-dig:= SHA1Final(ctx);
-s:='M{'+inttostr(dig[0])+':'
-       +inttostr(dig[1])+':'
-       +inttostr(dig[2])+':'
-       +inttostr(dig[3])+':'
-       +inttostr(dig[4])+'}';
+adler:= 1;
+Adler32Update(adler, @Land, sizeof(Land));
+s:= 'M'+inttostr(adler);
+
 CheckLandDigest(s);
 SendIPCRaw(@s[0], Length(s) + 1)
 end;
