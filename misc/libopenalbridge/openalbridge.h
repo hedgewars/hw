@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
     // init audio context and allocate memory
-    int openal_init               (int memorysize);
+    int openal_init               (void);
 
     // close audio subsytem and free memory
     void openal_close             (void);

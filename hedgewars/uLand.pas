@@ -57,7 +57,7 @@ procedure CheckLandDigest(s: shortstring);
 function  LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
-uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uLandTexture;
+uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, Adler32, uIO, uLandTexture;
 
 operator=(const a, b: direction) c: Boolean;
 begin
@@ -70,20 +70,13 @@ type TPixAr = record
               end;
 
 procedure LogLandDigest;
-var ctx: TSHA1Context;
-    dig: TSHA1Digest;
-    s: shortstring;
+var s: shortstring;
+    adler: LongInt;
 begin
-{$HINTS OFF}
-SHA1Init(ctx);
-{$HINTS ON}
-SHA1UpdateLongwords(ctx, @Land, sizeof(Land));
-dig:= SHA1Final(ctx);
-s:='M{'+inttostr(dig[0])+':'
-       +inttostr(dig[1])+':'
-       +inttostr(dig[2])+':'
-       +inttostr(dig[3])+':'
-       +inttostr(dig[4])+'}';
+adler:= 1;
+Adler32Update(adler, @Land, sizeof(Land));
+s:= 'M'+inttostr(adler);
+
 CheckLandDigest(s);
 SendIPCRaw(@s[0], Length(s) + 1)
 end;
@@ -561,7 +554,7 @@ var pa: TPixAr;
 begin
 for y:= 0 to LAND_HEIGHT - 1 do
     for x:= 0 to LAND_WIDTH - 1 do
-        Land[y, x]:= LAND_BASIC;
+        Land[y, x]:= lfBasic;
 
 {$HINTS OFF}
 SetPoints(Template, pa);
@@ -582,7 +575,7 @@ with Template do
          with FillPoints^[i] do
               FillLand(x, y);
 
-DrawEdge(pa, LAND_BASIC);
+DrawEdge(pa, lfBasic);
 
 MaxHedgehogs:= Template.MaxHedgehogs;
 hasGirders:= Template.hasGirders;
@@ -605,8 +598,8 @@ if (cTemplateFilter = 4) or
             else
             begin
                if Land[y, x] = 0 then
-                   Land[y, x]:= LAND_BASIC
-               else if Land[y, x] = LAND_BASIC then
+                   Land[y, x]:= lfBasic
+               else if Land[y, x] = lfBasic then
                    Land[y, x]:= 0;
             end;
     end;
@@ -978,7 +971,7 @@ for x := 0 to playWidth do
 
 for x := 0 to playWidth do
     for y := off_y to LAND_HEIGHT - 1 do
-        Land[y, x] := LAND_BASIC;
+        Land[y, x] := lfBasic;
 
 for y := 0 to num_cells_y - 1 do
     for x := 0 to num_cells_x - 1 do
@@ -1079,7 +1072,7 @@ if maze_inverted then
 else
 begin
     x := 0;
-    while Land[cellsize div 2 + cellsize + off_y, x] = LAND_BASIC do
+    while Land[cellsize div 2 + cellsize + off_y, x] = lfBasic do
         x := x + 1;
     while Land[cellsize div 2 + cellsize + off_y, x] = 0 do
         x := x + 1;
@@ -1165,9 +1158,9 @@ begin
                     if ((AMask and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
                         Land[cpY + y, cpX + x]:= 0
                     else if p^[x] = (AMask or RMask) then
-                        Land[cpY + y, cpX + x]:= LAND_INDESTRUCTIBLE
+                        Land[cpY + y, cpX + x]:= lfIndestructible
                     else if p^[x] = $FFFFFFFF then
-                        Land[cpY + y, cpX + x]:= LAND_BASIC;
+                        Land[cpY + y, cpX + x]:= lfBasic;
                 end;
                 p:= @(p^[tmpsurf^.pitch div 4]);
             end;
@@ -1261,15 +1254,15 @@ if hasBorder then
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
             if (y < topY) or (x < leftX) or (x > rightX) then
-                Land[y, x]:= LAND_INDESTRUCTIBLE;
+                Land[y, x]:= lfIndestructible;
     // experiment hardcoding cave
     // also try basing cave dimensions on map/template dimensions, if they exist
     for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
         begin
         for y:= topY to LAND_HEIGHT - 1 do
             begin
-            Land[y, leftX + w]:= LAND_INDESTRUCTIBLE;
-            Land[y, rightX - w]:= LAND_INDESTRUCTIBLE;
+            Land[y, leftX + w]:= lfIndestructible;
+            Land[y, rightX - w]:= lfIndestructible;
             if (y + w) mod 32 < 16 then
                 c:= AMask
             else
@@ -1285,7 +1278,7 @@ if hasBorder then
 
         for x:= leftX to rightX do
             begin
-            Land[topY + w, x]:= LAND_INDESTRUCTIBLE;
+            Land[topY + w, x]:= lfIndestructible;
             if (x + w) mod 32 < 16 then
                 c:= AMask
             else

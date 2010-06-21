@@ -93,7 +93,7 @@ for y:= 0 to Pred(Image^.h) do
             LandPixels[cpY + y, cpX + x]:= p^[x];
 {$ENDIF}
         if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then 
-            Land[cpY + y, cpX + x]:= LAND_OBJECT
+            Land[cpY + y, cpX + x]:= lfObject
         end;
     p:= @(p^[Image^.pitch shr 2])
     end;
@@ -211,23 +211,31 @@ AddGirder:= bRes;
 end;
 
 function CheckLand(rect: TSDL_Rect; dX, dY, Color: Longword): boolean;
-var i: LongInt;
+var tmpx, tmpx2, tmpy, tmpy2, bx, by: LongInt;
     bRes: boolean = true;
 begin
 inc(rect.x, dX);
 inc(rect.y, dY);
-i:= 0;
+bx:= rect.x + rect.w;
+by:= rect.y + rect.h;
 {$WARNINGS OFF}
-while (i <= rect.w) and bRes do
+tmpx:= rect.x;
+tmpx2:= bx;
+while (tmpx <= bx - rect.w div 2 - 1) and bRes do
       begin
-      bRes:= (Land[rect.y, rect.x + i] = Color) and (Land[rect.y + rect.h, rect.x + i] = Color);
-      inc(i)
+      bRes:= (Land[rect.y, tmpx] = Color) and (Land[by, tmpx] = Color) and
+             (Land[rect.y, tmpx2] = Color) and (Land[by, tmpx2] = Color);
+      inc(tmpx);
+      dec(tmpx2)
       end;
-i:= 0;
-while (i <= rect.h) and bRes do
+tmpy:= rect.y+1;
+tmpy2:= by-1;
+while (tmpy <= by - rect.h div 2 - 1) and bRes do
       begin
-      bRes:= (Land[rect.y + i, rect.x] = Color) and (Land[rect.y + i, rect.x + rect.w] = Color);
-      inc(i)
+      bRes:= (Land[tmpy, rect.x] = Color) and (Land[tmpy, bx] = Color) and
+             (Land[tmpy2, rect.x] = Color) and (Land[tmpy2, bx] = Color);
+      inc(tmpy);
+      dec(tmpy2)
       end;
 {$WARNINGS ON}
 CheckLand:= bRes;
@@ -238,7 +246,7 @@ var i: Longword;
     bRes: boolean;
 begin
 with Obj do
-     if CheckLand(inland, x, y, LAND_BASIC) then
+     if CheckLand(inland, x, y, lfBasic) then
         begin
         bRes:= true;
         i:= 1;
@@ -318,7 +326,7 @@ with Obj do
     repeat
         y:= 8;
         repeat
-            if CheckLand(r, x, y - 8, LAND_BASIC)
+            if CheckLand(r, x, y - 8, lfBasic)
             and not CheckIntersect(x, y, Width, Height) then
             begin
             ar[cnt].x:= x;

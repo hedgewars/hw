@@ -249,10 +249,11 @@ const
 {$ENDIF}
 
 // To allow these to layer, going to treat them as masks. The bottom byte is reserved for objects
-    LAND_BASIC          = $8000;  // white
-    LAND_INDESTRUCTIBLE = $4000;  // red
-    LAND_OBJECT         = $2000;  // no idea
-    LAND_DAMAGED        = $1000;  // no idea
+// TODO - set lfBasic for all solid land, ensure all uses of the flags can handle multiple flag bits
+    lfBasic          = $8000;  // white
+    lfIndestructible = $4000;  // red
+    lfObject         = $2000;  // no idea
+    lfDamaged        = $1000;  // no idea
 
     cMaxPower     = 1500;
     cMaxAngle     = 2048;
