@@ -61,7 +61,7 @@ set(engine_sources
 	uMisc.pas
 	uRandom.pas
 	uScript.pas
-	uSHA.pas
+	adler32.pas
 	uSound.pas
 	uStats.pas
 	uStore.pas
