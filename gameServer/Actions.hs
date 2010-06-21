@@ -23,7 +23,7 @@ data Action =
     | SendServerMessage
     | SendServerVars
     | MoveToRoom RoomIndex
-    | RoomRemoveThisClient B.ByteString
+    | MoveToLobby B.ByteString
     | RemoveTeam B.ByteString
     | RemoveRoom
     | UnreadyRoomClients
@@ -97,7 +97,7 @@ processAction (ByeClient msg) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     when (ri /= lobbyId) $ do
-        processAction $ RoomRemoveThisClient ("quit: " `B.append` msg)
+        processAction $ MoveToLobby ("quit: " `B.append` msg)
         return ()
 
     chan <- client's sendChan
@@ -156,23 +156,29 @@ processAction (clID, serverInfo, rnc) (ModifyServerInfo func) =
 
 -}
 
-processAction (MoveToRoom rId) = do
+processAction (MoveToRoom ri) = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
     liftIO $ do
         modifyClient rnc (\cl -> cl{teamsInGame = 0}) ci
-        modifyRoom rnc (\r -> r{playersIn = (playersIn r) + 1}) rId
-        
-    chans <- liftM (map sendChan) $ roomClientsS rId
-     liftio movetoroom
+        modifyRoom rnc (\r -> r{playersIn = (playersIn r) + 1}) ri
+
+    liftIO $ moveClientToRoom rnc ri ci
+
+    chans <- liftM (map sendChan) $ roomClientsS ri
     clNick <- client's nick
     
     processAction $ AnswerClients chans ["JOINED", clNick]
 
+processAction (MoveToLobby msg) = do
+    (Just ci) <- gets clientIndex
+    --ri <- clientRoomA
+    rnc <- gets roomsClients
+
+    liftIO $ moveClientToLobby rnc ci
+
 {-
-processAction (clID, serverInfo, rnc) (RoomRemoveThisClient msg) = do
     (_, _, newClients, newRooms) <-
-        if roomID client /= 0 then
             if isMaster client then
                 if (gameinprogress room) && (playersIn room > 1) then
                     (changeMaster >>= (\state -> foldM processAction state
@@ -187,8 +193,7 @@ processAction (clID, serverInfo, rnc) (RoomRemoveThisClient msg) = do
                         (clID, serverInfo, rnc)
                         [AnswerOthersInRoom ["LEFT", nick client, msg],
                         RemoveClientTeams clID]
-        else -- in lobby
-            return (clID, serverInfo, rnc)
+
 
     return (
         clID,
