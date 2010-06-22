@@ -776,14 +776,25 @@ begin
     Rewrite(f);
 {$ELSE}
     if (ParamStr(1) <> '') and (ParamStr(2) <> '') then
+        if (ParamCount <> 3) and (ParamCount <> 18) then
         begin
-        for i:= 0 to 7 do
+            for i:= 0 to 7 do
+            begin
+                assign(f, ExtractFileDir(ParamStr(2)) + '/debug' + inttostr(i) + '.txt');
+                rewrite(f);
+                if IOResult = 0 then break;
+            end;
+            if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
+        end
+        else
         begin
-            assign(f, ExtractFileDir(ParamStr(2)) + '/debug' + inttostr(i) + '.txt');
-            rewrite(f);
-            if IOResult = 0 then break;
-        end;
-        if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
+            for i:= 0 to 7 do
+            begin
+                assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
+                rewrite(f);
+                if IOResult = 0 then break;
+            end;
+            if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
         end
     else
         f:= stderr;
