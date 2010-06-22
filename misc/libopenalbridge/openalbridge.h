@@ -39,7 +39,7 @@ extern "C" {
     int  openal_loadfile          (const char *filename);
 
     // unloads data from memory and marks a free spot
-    int  openal_unloadfile        (unsigned int index)
+    void openal_unloadfile        (unsigned int index);
     
     /******* other functions continue in commands.h *******/
     
