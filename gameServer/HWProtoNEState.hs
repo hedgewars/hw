@@ -31,6 +31,7 @@ handleCmd_NotEntered ["NICK", newNick] = do
     where
         haveSameNick irnc = False --isJust $ find (\cl -> newNick == nick cl) $ IntMap.elems clients
 
+
 handleCmd_NotEntered ["PROTO", protoNum] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
@@ -47,18 +48,17 @@ handleCmd_NotEntered ["PROTO", protoNum] = do
                            Just (i, t) | B.null t -> fromIntegral i
                            otherwise -> 0
 
+
+handleCmd_NotEntered ["PASSWORD", passwd] = do
+    (ci, irnc) <- ask
+    let cl = irnc `client` ci
+
+    if passwd == webPassword cl then
+        return $ JoinLobby : [AnswerClients [sendChan cl] ["ADMIN_ACCESS"] | isAdministrator cl]
+        else
+        return [ByeClient "Authentication failed"]
+
 {-
-
-handleCmd_NotEntered clID clients _ ["PASSWORD", passwd] =
-    if passwd == webPassword client then
-        [ModifyClient (\cl -> cl{logonPassed = True}),
-        MoveToLobby] ++ adminNotice
-    else
-        [ByeClient "Authentication failed"]
-    where
-        client = clients IntMap.! clID
-        adminNotice = [AnswerThisClient ["ADMIN_ACCESS"] | isAdministrator client]
-
 
 handleCmd_NotEntered clID clients _ ["DUMP"] =
     if isAdministrator (clients IntMap.! clID) then [Dump] else []
