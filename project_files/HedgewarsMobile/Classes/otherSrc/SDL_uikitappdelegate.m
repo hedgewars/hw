@@ -93,7 +93,7 @@ int main (int argc, char *argv[]) {
 	[setup release];
 
     // since the sdlwindow is not yet created, we add the overlayController with a delay
-    [self performSelector:@selector(displayOverlayLater) withObject:nil afterDelay:1];
+    [self performSelector:@selector(displayOverlayLater) withObject:nil afterDelay:0.5];
     
     // this is the pascal fuction that starts the game (wrapped around isInGame)
     isInGame = YES;

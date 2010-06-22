@@ -106,11 +106,10 @@
     switch (button.tag) {
         case 0:
             gameConfigViewController = [[GameConfigViewController alloc] initWithNibName:@"GameConfigViewController" bundle:nil];        
-#ifdef __IPHONE_3_2
+
             // bug in UIModalTransitionStylePartialCurl, displays the controller awkwardly if it is not allocated every time            
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                 gameConfigViewController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
-#endif
             [self presentModalViewController:gameConfigViewController animated:YES];
             break;
         case 2:

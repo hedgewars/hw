@@ -38,9 +38,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         self.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
         
-    Class splitViewControllerClass = NSClassFromString(@"UISplitViewController");
-    if (splitViewControllerClass) {
-#if __IPHONE_3_2
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         UISplitViewController *splitViewRootController = [[UISplitViewController alloc] init];
         //splitViewRootController.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;        
         splitViewRootController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
@@ -57,7 +55,6 @@
         
         // add view to main controller
         [self.view addSubview:splitViewRootController.view];
-#endif
     } else {
         [self.view addSubview:detailedNavController.view];
     }

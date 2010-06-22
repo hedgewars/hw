@@ -13,11 +13,7 @@
 @class WeaponSettingsViewController;
 @class SchemeSettingsViewController;
 
-@interface DetailViewController : UITableViewController
-#if __IPHONE_3_2
-<UISplitViewControllerDelegate, UIPopoverControllerDelegate>
-#endif
-{
+@interface DetailViewController : UITableViewController <UISplitViewControllerDelegate, UIPopoverControllerDelegate> {
     NSArray *controllerNames;
     
     GeneralSettingsViewController *generalSettingsViewController;

@@ -286,9 +286,6 @@
 				
 				// seed info
 				[self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
-				
-                // scheme (returns initial health)
-                NSInteger health = [self provideScheme:[self.gameConfig objectForKey:@"scheme"]];
 
 				// dimension of the map
 				[self sendToEngine:[self.gameConfig objectForKey:@"templatefilter_command"]];
@@ -298,6 +295,9 @@
 				// theme info
 				[self sendToEngine:[self.gameConfig objectForKey:@"theme_command"]];
 				
+                // scheme (returns initial health)
+                NSInteger health = [self provideScheme:[self.gameConfig objectForKey:@"scheme"]];
+                
                 NSArray *teamsConfig = [self.gameConfig objectForKey:@"teams_list"];
                 for (NSDictionary *teamData in teamsConfig) {
                     [self provideTeamData:[teamData objectForKey:@"team"] 

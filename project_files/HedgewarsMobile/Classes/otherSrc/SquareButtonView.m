@@ -33,25 +33,28 @@
         // set the color to the first available one
         [self nextColor];
         
-        // this makes the button round and nice
+        // this makes the button round and nice with a border
         [self.layer setCornerRadius:7.0f];
         [self.layer setMasksToBounds:YES];        
+        [self.layer setBorderWidth:2];
         
         // this changes the color at button press
         [self addTarget:self action:@selector(nextColor) forControlEvents:UIControlEventTouchUpInside];
-
-        self.backgroundColor = [UIColor blackColor];
     }
     return self;
 }
 
 -(void) nextColor {
     colorIndex++;
+
     if (colorIndex >= [colorArray count])
         colorIndex = 0;
 
     NSUInteger color = [[self.colorArray objectAtIndex:colorIndex] unsignedIntValue];
-    [self selectColor:color];
+    self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f 
+                                           green:((color & 0x0000FF00) >> 8)/255.0f 
+                                            blue: (color & 0x000000FF)/255.0f 
+                                           alpha:1.0f];
     
     [ownerDictionary setObject:[NSNumber numberWithInt:color] forKey:@"color"];
 }
@@ -59,28 +62,13 @@
 -(void) selectColor:(NSUInteger) color {
     if (color != selectedColor) {
         selectedColor = color;
+        colorIndex = [colorArray indexOfObject:[NSNumber numberWithUnsignedInt:color]];
         
-        UIGraphicsBeginImageContext(self.frame.size);	
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSetRGBFillColor(context, ((color & 0x00FF0000) >> 16)/255.0f,
-                                          ((color & 0x0000FF00) >> 8)/255.0f,
-                                           (color & 0x000000FF)/255.0f,
-                                            1.0f);
-        CGContextFillRect(context, CGRectMake(1.1, 1.1, self.frame.size.width-2.2, self.frame.size.height-2.2));
-        
-        UIImageView *resultingImage = [[UIImageView alloc] initWithImage: UIGraphicsGetImageFromCurrentImageContext()];
-        UIGraphicsEndImageContext();
-        
-        [self setImage:resultingImage.image forState:UIControlStateNormal];
-        [resultingImage release];
-        
+        self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f 
+                                               green:((color & 0x0000FF00) >> 8)/255.0f 
+                                                blue: (color & 0x000000FF)/255.0f 
+                                               alpha:1.0f];
     }
-    /*  
-    self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f 
-                                           green:((color & 0x0000FF00) >> 8)/255.0f 
-                                            blue: (color & 0x000000FF)/255.0f 
-                                           alpha:1.0f];
-    */
 }
 
 -(void) dealloc {

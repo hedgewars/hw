@@ -243,15 +243,16 @@
 -(IBAction) showPopover{
     isPopoverVisible = YES;
     CGRect anchorForPopover;
-    Class popoverControllerClass = NSClassFromString(@"UIPopoverController");
-    if (popoverControllerClass) {
-#if __IPHONE_3_2
+
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (popupMenu == nil) 
             popupMenu = [[PopoverMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-        popoverController = [[popoverControllerClass alloc] initWithContentViewController:popupMenu];
-        [popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
-        [popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
-
+        if (popoverController == nil) {
+            popoverController = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
+            [popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
+            [popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
+        }
+        
         if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation]))
             anchorForPopover = CGRectMake(960, 0, 220, 32);
         else
@@ -261,14 +262,14 @@
                                            inView:self.view
                          permittedArrowDirections:UIPopoverArrowDirectionUp
                                          animated:YES];
-#endif
     } else {
-        if (popupMenu == nil) 
+        if (popupMenu == nil) {
             popupMenu = [[PopoverMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        popupMenu.view.backgroundColor = [UIColor clearColor];
-        popupMenu.view.frame = CGRectMake(480, 0, 200, 170);
+            popupMenu.view.backgroundColor = [UIColor clearColor];
+            popupMenu.view.frame = CGRectMake(480, 0, 200, 170);
+        }
         [self.view addSubview:popupMenu.view];
-
+        
         [UIView beginAnimations:@"showing popover" context:NULL];
         [UIView setAnimationDuration:0.35];
         popupMenu.view.frame = CGRectMake(280, 0, 200, 170);
@@ -283,9 +284,7 @@
         isPopoverVisible = NO;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_3_2
             [popoverController dismissPopoverAnimated:YES];
-#endif
         } else {
             [UIView beginAnimations:@"hiding popover" context:NULL];
             [UIView setAnimationDuration:0.35];
@@ -293,7 +292,6 @@
             [UIView commitAnimations];
         
             [popupMenu.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.35];
-            [popupMenu performSelector:@selector(release) withObject:nil afterDelay:0.35];
         }
         [self buttonReleased:nil];
     }
@@ -400,7 +398,7 @@ void spinningWheelDone (void) {
 			
             // the two ifs are not mutually exclusive
             if (deltaX >= minimumGestureLength) {
-                Dlog(@"deltaX: %f deltaY: %f", deltaX, deltaY);
+                DLog(@"deltaX: %f deltaY: %f", deltaX, deltaY);
                 if (currentPosition.x > gestureStartPoint.x) {
                     HW_cursorLeft(logCoeff*log(deltaX));
                 } else {

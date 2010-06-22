@@ -29,15 +29,19 @@
 -(void) viewDidLoad {
     isPaused = NO;
 
-    menuList = [[NSArray alloc] initWithObjects:
-                NSLocalizedString(@"Pause Game", @""),
-                NSLocalizedString(@"Chat", @""),
-                NSLocalizedString(@"End Game", @""),
-                nil];
+    NSArray *array = [[NSArray alloc] initWithObjects:
+                      NSLocalizedString(@"Pause Game", @""),
+                      NSLocalizedString(@"Chat", @""),
+                      NSLocalizedString(@"End Game", @""),
+                      nil];
+    self.menuList = array;
+    [array release];
+    
     [super viewDidLoad];
 }
 
 -(void) viewDidUnload {
+    self.menuList = nil;
     [super viewDidUnload];
     MSG_DIDUNLOAD();
 }

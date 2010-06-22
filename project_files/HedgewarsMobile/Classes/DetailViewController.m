@@ -128,7 +128,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
 }
 
-#if __IPHONE_3_2
 #pragma mark -
 #pragma mark splitview support
 -(void) splitViewController:(UISplitViewController *)svc popoverController:(UIPopoverController *)pc willPresentViewController:(UIViewController *)aViewController {
@@ -170,7 +169,6 @@
         self.navigationItem.rightBarButtonItem = nil;
 
 }
-#endif
 
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.

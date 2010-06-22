@@ -12,11 +12,10 @@
 
 @interface OverlayViewController : UIViewController {
     NSTimer *dimTimer;
-#if __IPHONE_3_2
+
+    // used only on the ipad
     UIPopoverController *popoverController;
-#else
-    id popoverController;
-#endif
+
     PopoverMenuViewController *popupMenu;
     BOOL isPopoverVisible;
     
