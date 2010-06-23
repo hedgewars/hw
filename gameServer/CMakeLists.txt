@@ -14,13 +14,14 @@ set(hwserver_sources
     HWProtoInRoomState.hs
     HWProtoLobbyState.hs
     HWProtoNEState.hs
+    HandlerUtils.hs
     NetRoutines.hs
     Opts.hs
-    ServerCore.hs
-    Utils.hs
     RoomsAndClients.hs
+    ServerCore.hs
     ServerState.hs
     Store.hs
+    Utils.hs
     hedgewars-server.hs
     )
 

@@ -19,7 +19,7 @@ roomOthersChans :: Reader (ClientIndex, IRnC) [ClientChan]
 roomOthersChans = do
     (ci, rnc) <- ask
     let ri = clientRoom rnc ci
-    return $ map (sendChan . client rnc) (roomClients rnc ri)
+    return $ map (sendChan . client rnc) $ filter (/= ci) (roomClients rnc ri)
 
 thisClientChans :: Reader (ClientIndex, IRnC) [ClientChan]
 thisClientChans = do
