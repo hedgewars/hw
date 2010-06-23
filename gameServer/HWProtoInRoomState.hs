@@ -37,11 +37,9 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
             else
             return [ProtocolError "Not room master"]
 
-{-
-handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : difStr : hhsInfo)
-    | length hhsInfo == 15 && clientProto client < 30 = handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : " " : flag : difStr : hhsInfo)
-    | length hhsInfo /= 16 = [ProtocolError "Corrupted hedgehogs info"]
-    | length (teams room) == 6 = [Warning "too many teams"]
+handleCmd_inRoom ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : difStr : hhsInfo)
+    | length hhsInfo /= 16 = return [ProtocolError "Corrupted hedgehogs info"]
+{-    | length (teams room) == 6 = [Warning "too many teams"]
     | canAddNumber <= 0 = [Warning "too many hedgehogs"]
     | isJust findTeam = [Warning "There's already a team with same name in the list"]
     | gameinprogress room = [Warning "round in progress"]
@@ -63,7 +61,8 @@ handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : 
         hhsList [] = []
         hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
         newTeamHHNum = min 4 canAddNumber
-
+-}
+{-
 handleCmd_inRoom clID clients rooms ["REMOVE_TEAM", teamName]
     | noSuchTeam = [Warning "REMOVE_TEAM: no such team"]
     | nick client /= teamowner team = [ProtocolError "Not team owner!"]
