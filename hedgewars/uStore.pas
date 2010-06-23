@@ -395,9 +395,9 @@ for ii:= Low(TSprite) to High(TSprite) do
         begin
             if AltPath = ptNone then
                 if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR] then // FIXME: hack
-                    tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifLowRes)
+                    tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
                 else
-                    tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical or ifLowRes)
+                    tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical)
             else begin
                 tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
                 if tmpsurf = nil then
@@ -411,7 +411,10 @@ for ii:= Low(TSprite) to High(TSprite) do
                 if Width = 0 then Width:= tmpsurf^.w;
                 if Height = 0 then Height:= tmpsurf^.h;
                 if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
-                    Texture:= Surface2Tex(tmpsurf, true)
+                    begin
+                    Texture:= Surface2Tex(tmpsurf, true);
+                    Texture^.Scale:= 2
+                    end
                 else
                     begin
                     Texture:= Surface2Tex(tmpsurf, false);
@@ -1089,36 +1092,12 @@ begin
         if (imageFlags and ifCritical) <> 0 then WriteToConsole(' Critical');
         if (imageFlags and ifTransparent) <> 0 then WriteToConsole(' Transparent');
         if (imageFlags and ifIgnoreCaps) <> 0 then WriteToConsole(' IgnoreCaps');
-        if (imageFlags and ifLowRes) <> 0 then WriteToConsole(' LowRes');
         end;
     WriteToConsole('] ');
 {$ENDIF}
 
     s:= filename + '.png';
     tmpsurf:= IMG_Load(Str2PChar(s));
-
-    if (imageFlags and ifLowRes) <> 0 then
-    begin
-        s:= filename + '-lowres.png';
-        if (tmpsurf <> nil) then
-        begin
-            if ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
-            begin
-                SDL_FreeSurface(tmpsurf);
-                {$IFDEF DEBUGFILE}
-                AddFileLog('...image too big, trying to load lowres version: ' + s + '...');
-                {$ENDIF}
-                tmpsurf:= IMG_Load(Str2PChar(s))
-            end;
-        end
-        else
-        begin
-            {$IFDEF DEBUGFILE}
-            AddFileLog('...image not found, trying to load lowres version: ' + s + '...');
-            {$ENDIF}
-            tmpsurf:= IMG_Load(Str2PChar(s))
-        end;
-    end;
 
     if tmpsurf = nil then
     begin

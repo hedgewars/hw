@@ -403,6 +403,7 @@ begin
 new(NewTexture);
 NewTexture^.PrevTexture:= nil;
 NewTexture^.NextTexture:= nil;
+NewTexture^.Scale:= 1;
 if TextureList <> nil then
     begin
     TextureList^.PrevTexture:= NewTexture;
