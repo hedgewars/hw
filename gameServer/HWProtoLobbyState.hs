@@ -74,6 +74,35 @@ handleCmd_lobby ["CREATE_ROOM", newRoom, roomPassword]
 handleCmd_lobby ["CREATE_ROOM", newRoom] =
     handleCmd_lobby ["CREATE_ROOM", newRoom, ""]
 
+
+handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
+    (ci, irnc) <- ask
+    let ris = allRooms irnc
+    let cl =  irnc `client` ci
+    let maybeRI = find (\ri -> roomName == name (irnc `room` ri)) ris
+    let jRI = fromJust maybeRI
+    let jRoom = irnc `room` jRI
+    let jRoomClients = map (client irnc) $! roomClients irnc jRI -- no lazyness here!
+    return $
+        if isNothing maybeRI then 
+            [Warning "No such rooms"]
+            else if isRestrictedJoins jRoom then
+            [Warning "Joining restricted"]
+            else if roomPassword /= password jRoom then
+            [Warning "Wrong password"]
+            else
+            [
+                MoveToRoom jRI,
+                AnswerClients (map sendChan $ cl : jRoomClients) ["NOT_READY", nick cl]
+            ]
+            ++ [ AnswerClients [sendChan cl] $ "JOINED" : map nick jRoomClients | playersIn jRoom /= 0]
+            ++ (map (readynessMessage cl) jRoomClients)
+
+    where
+        readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
+
+
+
 {-
 
 handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
@@ -90,12 +119,6 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
         ++ answerTeams
         ++ watchRound
     where
-        noSuchRoom = isNothing mbRoom
-        mbRoom = find (\r -> roomName == name r && roomProto r == clientProto client) $ IntMap.elems rooms
-        jRoom = fromJust mbRoom
-        rID = roomUID jRoom
-        client = clients IntMap.! clID
-        roomClientsIDs = IntSet.elems $ playersIDs jRoom
         answerNicks =
             [AnswerThisClient $ "JOINED" :
             map (\clID -> nick $ clients IntMap.! clID) roomClientsIDs | playersIn jRoom /= 0]
@@ -121,12 +144,12 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
                 answerAllTeams (clientProto client) (teamsAtStart jRoom)
             else
                 answerAllTeams (clientProto client) (teams jRoom)
+-}
 
+handleCmd_lobby ["JOIN_ROOM", roomName] =
+    handleCmd_lobby ["JOIN_ROOM", roomName, ""]
 
-handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName] =
-    handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, ""]
-
-
+{-
 handleCmd_lobby clID clients rooms ["FOLLOW", asknick] =
     if noSuchClient || roomID followClient == 0 then
         []

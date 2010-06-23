@@ -50,7 +50,8 @@ uses LuaPas in 'LuaPas.pas',
     uAmmos,
     uSound,
     uTeams,
-    uKeys;
+    uKeys,
+    uChat;
     
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
@@ -63,9 +64,15 @@ procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
 procedure ScriptSetAmmo(ammo : TAmmoType; count, propability, delay, reinforcement: Byte); forward;
 
+procedure LuaError(s: shortstring);
+begin
+    WriteLnToConsole(s);
+    AddChatString(#5 + s);
+end;
+
 // wrapped calls //
 
-// functions called from lua:
+// functions called from Lua:
 // function(L : Plua_State) : LongInt; Cdecl;
 // where L contains the state, returns the number of return values on the stack
 // call lua_gettop(L) to receive number of parameters passed
@@ -74,10 +81,10 @@ function lc_writelntoconsole(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 1 then
         begin
-        WriteLnToConsole('LUA: ' + lua_tostring(L ,1));
+        WriteLnToConsole('Lua: ' + lua_tostring(L ,1));
         end
     else
-        WriteLnToConsole('LUA: Wrong number of parameters passed to WriteLnToConsole!');
+        LuaError('Lua: Wrong number of parameters passed to WriteLnToConsole!');
     lc_writelntoconsole:= 0;
 end;
 
@@ -88,7 +95,7 @@ begin
         ParseCommand(lua_tostring(L ,1), true);
         end
     else
-        WriteLnToConsole('LUA: Wrong number of parameters passed to ParseCommand!');
+        LuaError('Lua: Wrong number of parameters passed to ParseCommand!');
     lc_parsecommand:= 0;
 end;
 
@@ -99,7 +106,7 @@ begin
         ShowMission(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
         end
     else
-        WriteLnToConsole('LUA: Wrong number of parameters passed to ShowMission!');
+        LuaError('Lua: Wrong number of parameters passed to ShowMission!');
     lc_showmission:= 0;
 end;
 
@@ -118,7 +125,7 @@ var gear : PGear;
 begin
     if lua_gettop(L) <> 7 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to AddGear!');
+        LuaError('Lua: Wrong number of parameters passed to AddGear!');
         lua_pushnil(L); // return value on stack (nil)
         end
     else
@@ -141,7 +148,7 @@ function lc_getfollowgear(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 0 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to GetFollowGear!');
+        LuaError('Lua: Wrong number of parameters passed to GetFollowGear!');
         lua_pushnil(L); // return value on stack (nil)
         end
     else
@@ -157,7 +164,7 @@ var gear : PGear;
 begin
     if lua_gettop(L) <> 1 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to GetGearType!');
+        LuaError('Lua: Wrong number of parameters passed to GetGearType!');
         lua_pushnil(L); // return value on stack (nil)
         end
     else
@@ -176,7 +183,7 @@ var gear : PGear;
 begin
     if lua_gettop(L) <> 1 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to GetHogClan!');
+        LuaError('Lua: Wrong number of parameters passed to GetHogClan!');
         lua_pushnil(L); // return value on stack (nil)
         end
     else
@@ -197,7 +204,7 @@ var gear : PGear;
 begin
     if lua_gettop(L) <> 1 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to GetHogName!');
+        LuaError('Lua: Wrong number of parameters passed to GetHogName!');
         lua_pushnil(L); // return value on stack (nil)
         end
     else
@@ -218,7 +225,7 @@ var gear : PGear;
 begin
     if lua_gettop(L) <> 1 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to GetX!');
+        LuaError('Lua: Wrong number of parameters passed to GetX!');
         lua_pushnil(L); // return value on stack (nil)
         end
     else
@@ -237,7 +244,7 @@ var gear : PGear;
 begin
     if lua_gettop(L) <> 1 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to GetY!');
+        LuaError('Lua: Wrong number of parameters passed to GetY!');
         lua_pushnil(L); // return value on stack (nil)
         end
     else
@@ -256,7 +263,7 @@ var gears, geard : PGear;
 begin
     if lua_gettop(L) <> 2 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to CopyPV!');
+        LuaError('Lua: Wrong number of parameters passed to CopyPV!');
         end
     else
         begin
@@ -278,7 +285,7 @@ var gears, geard : PGear;
 begin
     if lua_gettop(L) <> 2 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to CopyPV2!');
+        LuaError('Lua: Wrong number of parameters passed to CopyPV2!');
         end
     else
         begin
@@ -299,7 +306,7 @@ function lc_followgear(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
     if lua_gettop(L) <> 1 then
-        WriteLnToConsole('LUA: Wrong number of parameters passed to FollowGear!')
+        LuaError('Lua: Wrong number of parameters passed to FollowGear!')
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
@@ -313,7 +320,7 @@ var gear : PGear;
 begin
     if lua_gettop(L) <> 2 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to SetHealth!');
+        LuaError('Lua: Wrong number of parameters passed to SetHealth!');
         end
     else
         begin
@@ -328,7 +335,7 @@ var gear : PGear;
 begin
     if lua_gettop(L) <> 2 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to SetState!');
+        LuaError('Lua: Wrong number of parameters passed to SetState!');
         end
     else
         begin
@@ -343,7 +350,7 @@ var gear : PGear;
 begin
     if lua_gettop(L) <> 1 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to GetState!');
+        LuaError('Lua: Wrong number of parameters passed to GetState!');
         end
     else
         begin
@@ -361,7 +368,7 @@ var gear : PGear;
 begin
     if lua_gettop(L) <> 2 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to SetTag!');
+        LuaError('Lua: Wrong number of parameters passed to SetTag!');
         end
     else
         begin
@@ -384,7 +391,7 @@ var gear: PGear;
     left, right: LongInt;
 begin
     if lua_gettop(L) <> 4 then
-        WriteLnToConsole('LUA: Wrong number of parameters passed to FindPlace!')
+        LuaError('Lua: Wrong number of parameters passed to FindPlace!')
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
@@ -400,7 +407,7 @@ end;
 function lc_playsound(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 1 then
-        WriteLnToConsole('LUA: Wrong number of parameters passed to PlaySound!')
+        LuaError('Lua: Wrong number of parameters passed to PlaySound!')
     else
         PlaySound(TSound(lua_tointeger(L, 1)));
     lc_playsound:= 0;
@@ -410,7 +417,7 @@ function lc_addteam(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 5 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to AddTeam!');
+        LuaError('Lua: Wrong number of parameters passed to AddTeam!');
         //lua_pushnil(L)
         end
     else
@@ -431,7 +438,7 @@ var temp: ShortString;
 begin
     if lua_gettop(L) <> 4 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to AddHog!');
+        LuaError('Lua: Wrong number of parameters passed to AddHog!');
         lua_pushnil(L)
         end
     else
@@ -449,7 +456,7 @@ var gear: PGear;
 begin
     if lua_gettop(L) <> 1 then
         begin
-        WriteLnToConsole('LUA: Wrong number of parameters passed to GetGearPosition!');
+        LuaError('Lua: Wrong number of parameters passed to GetGearPosition!');
         lua_pushnil(L);
         lua_pushnil(L)
         end
@@ -470,7 +477,7 @@ var gear: PGear;
     x, y: LongInt;
 begin
     if lua_gettop(L) <> 3 then
-        WriteLnToConsole('LUA: Wrong number of parameters passed to SetGearPosition!')
+        LuaError('Lua: Wrong number of parameters passed to SetGearPosition!')
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
@@ -490,7 +497,7 @@ var np: LongInt;
 begin
     np:= lua_gettop(L);
     if (np < 4) or (np > 5) then
-        WriteLnToConsole('LUA: Wrong number of parameters passed to SetAmmo!')
+        LuaError('Lua: Wrong number of parameters passed to SetAmmo!')
     else if np = 4 then
         ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), 1)
     else
@@ -503,14 +510,14 @@ procedure ScriptPrintStack;
 var n, i : LongInt;
 begin
     n:= lua_gettop(luaState);
-    WriteLnToConsole('LUA: Stack (' + inttostr(n) + ' elements):');
+    WriteLnToConsole('Lua: Stack (' + inttostr(n) + ' elements):');
     for i:= 1 to n do
         if not lua_isboolean(luaState, i) then
-            WriteLnToConsole('LUA:  ' + inttostr(i) + ': ' + lua_tostring(luaState, i))
+            WriteLnToConsole('Lua:  ' + inttostr(i) + ': ' + lua_tostring(luaState, i))
         else if lua_toboolean(luaState, i) then
-            WriteLnToConsole('LUA:  ' + inttostr(i) + ': true')
+            WriteLnToConsole('Lua:  ' + inttostr(i) + ': true')
         else
-            WriteLnToConsole('LUA:  ' + inttostr(i) + ': false');
+            WriteLnToConsole('Lua:  ' + inttostr(i) + ': false');
 end;
 
 procedure ScriptClearStack;
@@ -606,10 +613,10 @@ var ret : LongInt;
 begin
 ret:= luaL_loadfile(luaState, Str2PChar(name));
 if ret <> 0 then
-    WriteLnToConsole('LUA: Failed to load ' + name + '(error ' + IntToStr(ret) + ')')
+    LuaError('Lua: Failed to load ' + name + '(error ' + IntToStr(ret) + ')')
 else
     begin
-    WriteLnToConsole('LUA: ' + name + ' loaded');
+    WriteLnToConsole('Lua: ' + name + ' loaded');
     // call the script file
     lua_pcall(luaState, 0, 0, 0);
     ScriptLoaded:= true
@@ -638,7 +645,7 @@ SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));
 if lua_pcall(luaState, 0, 0, 0) <> 0 then
     begin
-    WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+    LuaError('Lua: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
     lua_pop(luaState, 1)
     end;
 GetGlobals;
@@ -672,7 +679,7 @@ lua_pushinteger(luaState, par4);
 ScriptCall:= 0;
 if lua_pcall(luaState, 4, 1, 0) <> 0 then
     begin
-    WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+    LuaError('Lua: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
     lua_pop(luaState, 1)
     end
 else

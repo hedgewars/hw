@@ -486,38 +486,44 @@ Tint($FF, $FF, $FF, $FF);
 end;
 
 procedure DrawRepeated(spr, sprL, sprR: TSprite; Shift, OffsetY: LongInt);
-var i, w, sw: LongInt;
+var i, w, h, lw, lh, rw, rh, sw: LongInt;
 begin
     sw:= round(cScreenWidth / cScaleFactor);
     if (SpritesData[sprL].Texture = nil) or (SpritesData[sprR].Texture = nil) then
     begin
-        w:= SpritesData[spr].Width;
+        w:= SpritesData[spr].Width * SpritesData[spr].Texture^.Scale;
+        h:= SpritesData[spr].Height * SpritesData[spr].Texture^.Scale;
         i:= Shift mod w;
         if i > 0 then dec(i, w);
         dec(i, w * (sw div w + 1));
         repeat
-            DrawSprite(spr, i, WorldDy + LAND_HEIGHT + OffsetY - SpritesData[spr].Height, 0);
+            DrawTexture(i, WorldDy + LAND_HEIGHT + OffsetY - h, SpritesData[spr].Texture, SpritesData[spr].Texture^.Scale);
             inc(i, w)
         until i > sw
     end
     else
     begin
-        w:= SpritesData[spr].Width;
+        w:= SpritesData[spr].Width * SpritesData[spr].Texture^.Scale;
+        h:= SpritesData[spr].Height * SpritesData[spr].Texture^.Scale;
+        lw:= SpritesData[sprL].Width * SpritesData[spr].Texture^.Scale;
+        lh:= SpritesData[sprL].Height * SpritesData[spr].Texture^.Scale;
+        rw:= SpritesData[sprR].Width * SpritesData[spr].Texture^.Scale;
+        rh:= SpritesData[sprR].Height * SpritesData[spr].Texture^.Scale;
         dec(Shift, w div 2);
-        DrawSprite(spr, Shift, WorldDy + LAND_HEIGHT + OffsetY - SpritesData[spr].Height, 0);
+        DrawTexture(Shift, WorldDy + LAND_HEIGHT + OffsetY - h, SpritesData[spr].Texture, SpritesData[spr].Texture^.Scale);
     
-        i:= Shift - SpritesData[sprL].Width;
-        while i >= -sw - SpritesData[sprL].Width do
+        i:= Shift - lw;
+        while i >= -sw - lw do
         begin
-            DrawSprite(sprL, i, WorldDy + LAND_HEIGHT + OffsetY - SpritesData[sprL].Height, 0);
-            dec(i, SpritesData[sprL].Width);
+            DrawTexture(i, WorldDy + LAND_HEIGHT + OffsetY - lh, SpritesData[sprL].Texture, SpritesData[sprL].Texture^.Scale);
+            dec(i, lw);
         end;
         
         i:= Shift + w;
         while i <= sw do
         begin
-            DrawSprite(sprR, i, WorldDy + LAND_HEIGHT + OffsetY - SpritesData[sprR].Height, 0);
-            inc(i, SpritesData[sprR].Width)
+            DrawTexture(i, WorldDy + LAND_HEIGHT + OffsetY - rh, SpritesData[sprR].Texture, SpritesData[sprR].Texture^.Scale);
+            inc(i, rw)
         end
     end
 end;

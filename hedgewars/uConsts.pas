@@ -171,7 +171,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     PTexture = ^TTexture;
     TTexture = record
             id: GLuint;
-            w, h: LongInt;
+            w, h, scale: LongInt;
             rx, ry: GLfloat;
             priority: GLfloat;
             vb, tb: array [0..3] of TVertex2f;
@@ -220,7 +220,6 @@ const
     ifCritical    = $00000002;  // image is critical for gameplay (exit game if unable to load)
     ifTransparent = $00000004;  // image uses transparent pixels (color keying)
     ifIgnoreCaps  = $00000008;  // ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
-    ifLowRes      = $00000010;  // try loading a low resolution image when it is critical
 
     // texture priority (allows OpenGL to keep frequently used textures in video memory more easily)
     tpLowest     = 0.00;
