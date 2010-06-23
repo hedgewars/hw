@@ -17,7 +17,8 @@
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return rotationManager(interfaceOrientation);
+    // dirty trick to avoid rotating below the curl
+    return interfaceOrientation == self.parentViewController.interfaceOrientation;
 }
 
 -(IBAction) buttonPressed:(id) sender {
@@ -104,6 +105,17 @@
     if (hogs > mapConfigViewController.maxHogs) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many hogs",@"")
                                                         message:NSLocalizedString(@"The map you selected is too small for that many hogs",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        return;
+    }
+    
+    if ([schemeWeaponConfigViewController.selectedScheme length] == 0 || [schemeWeaponConfigViewController.selectedWeapon length] == 0 ) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Missing detail",@"")
+                                                        message:NSLocalizedString(@"Make sure you selected one Scheme and one Weapon for this game",@"")
                                                        delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];

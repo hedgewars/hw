@@ -282,17 +282,17 @@
 		6165920911CA9BA200D6E256 /* VoicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoicesViewController.m; sourceTree = "<group>"; };
 		6165920A11CA9BA200D6E256 /* WeaponSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeaponSettingsViewController.h; sourceTree = "<group>"; };
 		6165920B11CA9BA200D6E256 /* WeaponSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeaponSettingsViewController.m; sourceTree = "<group>"; };
-		6165922311CA9BD500D6E256 /* CGPointUtils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CGPointUtils.c; path = Classes/otherSrc/CGPointUtils.c; sourceTree = "<group>"; };
-		6165922411CA9BD500D6E256 /* CGPointUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGPointUtils.h; path = Classes/otherSrc/CGPointUtils.h; sourceTree = "<group>"; };
-		6165922511CA9BD500D6E256 /* CommodityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommodityFunctions.h; path = Classes/otherSrc/CommodityFunctions.h; sourceTree = "<group>"; };
-		6165922611CA9BD500D6E256 /* CommodityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommodityFunctions.m; path = Classes/otherSrc/CommodityFunctions.m; sourceTree = "<group>"; };
-		6165922711CA9BD500D6E256 /* HogButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HogButtonView.h; path = Classes/otherSrc/HogButtonView.h; sourceTree = "<group>"; };
-		6165922811CA9BD500D6E256 /* HogButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HogButtonView.m; path = Classes/otherSrc/HogButtonView.m; sourceTree = "<group>"; };
-		6165922911CA9BD500D6E256 /* PascalImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PascalImports.h; path = Classes/otherSrc/PascalImports.h; sourceTree = "<group>"; };
-		6165922A11CA9BD500D6E256 /* SquareButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SquareButtonView.h; path = Classes/otherSrc/SquareButtonView.h; sourceTree = "<group>"; };
-		6165922B11CA9BD500D6E256 /* SquareButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SquareButtonView.m; path = Classes/otherSrc/SquareButtonView.m; sourceTree = "<group>"; };
-		6165922C11CA9BD500D6E256 /* UIImageExtra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImageExtra.h; path = Classes/otherSrc/UIImageExtra.h; sourceTree = "<group>"; };
-		6165922D11CA9BD500D6E256 /* UIImageExtra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImageExtra.m; path = Classes/otherSrc/UIImageExtra.m; sourceTree = "<group>"; };
+		6165922311CA9BD500D6E256 /* CGPointUtils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CGPointUtils.c; path = Classes/CGPointUtils.c; sourceTree = "<group>"; };
+		6165922411CA9BD500D6E256 /* CGPointUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGPointUtils.h; path = Classes/CGPointUtils.h; sourceTree = "<group>"; };
+		6165922511CA9BD500D6E256 /* CommodityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommodityFunctions.h; path = Classes/CommodityFunctions.h; sourceTree = "<group>"; };
+		6165922611CA9BD500D6E256 /* CommodityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommodityFunctions.m; path = Classes/CommodityFunctions.m; sourceTree = "<group>"; };
+		6165922711CA9BD500D6E256 /* HogButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HogButtonView.h; path = Classes/HogButtonView.h; sourceTree = "<group>"; };
+		6165922811CA9BD500D6E256 /* HogButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HogButtonView.m; path = Classes/HogButtonView.m; sourceTree = "<group>"; };
+		6165922911CA9BD500D6E256 /* PascalImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PascalImports.h; path = Classes/PascalImports.h; sourceTree = "<group>"; };
+		6165922A11CA9BD500D6E256 /* SquareButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SquareButtonView.h; path = Classes/SquareButtonView.h; sourceTree = "<group>"; };
+		6165922B11CA9BD500D6E256 /* SquareButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SquareButtonView.m; path = Classes/SquareButtonView.m; sourceTree = "<group>"; };
+		6165922C11CA9BD500D6E256 /* UIImageExtra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImageExtra.h; path = Classes/UIImageExtra.h; sourceTree = "<group>"; };
+		6165922D11CA9BD500D6E256 /* UIImageExtra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImageExtra.m; path = Classes/UIImageExtra.m; sourceTree = "<group>"; };
 		6165923311CA9C4600D6E256 /* commands.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = commands.c; path = ../../misc/libopenalbridge/commands.c; sourceTree = SOURCE_ROOT; };
 		6165923411CA9C4600D6E256 /* commands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = commands.h; path = ../../misc/libopenalbridge/commands.h; sourceTree = SOURCE_ROOT; };
 		6165923511CA9C4600D6E256 /* globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = globals.h; path = ../../misc/libopenalbridge/globals.h; sourceTree = SOURCE_ROOT; };
@@ -329,8 +329,8 @@
 		6165928411CA9D4800D6E256 /* playButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playButton.png; path = Resources/playButton.png; sourceTree = "<group>"; };
 		6165928511CA9D4800D6E256 /* settingsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settingsButton.png; path = Resources/settingsButton.png; sourceTree = "<group>"; };
 		6165928611CA9D4800D6E256 /* storeButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = storeButton.png; path = Resources/storeButton.png; sourceTree = "<group>"; };
-		6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_uikitappdelegate.h; path = Classes/otherSrc/SDL_uikitappdelegate.h; sourceTree = "<group>"; };
-		6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDL_uikitappdelegate.m; path = Classes/otherSrc/SDL_uikitappdelegate.m; sourceTree = "<group>"; };
+		6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_uikitappdelegate.h; path = Classes/SDL_uikitappdelegate.h; sourceTree = "<group>"; };
+		6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDL_uikitappdelegate.m; path = Classes/SDL_uikitappdelegate.m; sourceTree = "<group>"; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E5114AA34C00BA94A9 /* HHHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = HHHandlers.inc; path = ../../hedgewars/HHHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -466,21 +466,21 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */,
+				6165922911CA9BD500D6E256 /* PascalImports.h */,
+				6165924811CA9C4B00D6E256 /* libopenalbridge */,
 				6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */,
 				6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */,
-				6165924811CA9C4B00D6E256 /* libopenalbridge */,
-				6165922311CA9BD500D6E256 /* CGPointUtils.c */,
 				6165922411CA9BD500D6E256 /* CGPointUtils.h */,
+				6165922311CA9BD500D6E256 /* CGPointUtils.c */,
 				6165922511CA9BD500D6E256 /* CommodityFunctions.h */,
 				6165922611CA9BD500D6E256 /* CommodityFunctions.m */,
 				6165922711CA9BD500D6E256 /* HogButtonView.h */,
 				6165922811CA9BD500D6E256 /* HogButtonView.m */,
-				6165922911CA9BD500D6E256 /* PascalImports.h */,
 				6165922A11CA9BD500D6E256 /* SquareButtonView.h */,
 				6165922B11CA9BD500D6E256 /* SquareButtonView.m */,
 				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
 				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
-				32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -1298,7 +1298,7 @@
 		6164429D11B5CDE500B9A6F3 /* Valgrind */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1333,7 +1333,7 @@
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator3.2;
+				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
 			};
@@ -1501,7 +1501,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1541,7 +1541,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";

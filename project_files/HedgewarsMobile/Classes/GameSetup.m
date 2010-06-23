@@ -16,7 +16,6 @@
 #import "CommodityFunctions.h"
 
 #define BUFFER_SIZE 256
-#define debug(format, ...) CFShow([NSString stringWithFormat:format, ## __VA_ARGS__]);
 
 @implementation GameSetup
 
@@ -36,10 +35,6 @@
         [dictGame release];
     } 
     return self;
-}
-
--(NSString *)description {
-    return [NSString stringWithFormat:@"ipcport: %d\nsockets: %d,%d\n teams: %@\n systemSettings: %@",ipcPort,sd,csd,gameConfig,systemSettings];
 }
 
 -(void) dealloc {
@@ -235,50 +230,49 @@
 // method that handles net setup with engine and keeps connection alive
 -(void) engineProtocol {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    TCPsocket sd;
     IPaddress ip;
     int eProto;
-    BOOL clientQuit, serverQuit;
-    char buffer[BUFFER_SIZE], string[BUFFER_SIZE];
+    BOOL clientQuit;
+    char buffer[BUFFER_SIZE];
     uint8_t msgSize;
     uint16_t gameTicks;
-
-    serverQuit = NO;
+    
+    clientQuit = NO;
+    csd = NULL;
 
     if (SDLNet_Init() < 0) {
         DLog(@"SDLNet_Init: %s", SDLNet_GetError());
-        serverQuit = YES;
+        clientQuit = YES;
     }
     
     // Resolving the host using NULL make network interface to listen
-    if (SDLNet_ResolveHost(&ip, NULL, ipcPort) < 0) {
+    if (SDLNet_ResolveHost(&ip, NULL, ipcPort) < 0 && !clientQuit) {
         DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
-        serverQuit = YES;
+        clientQuit = YES;
     }
     
     // Open a connection with the IP provided (listen on the host's port) 
-    if (!(sd = SDLNet_TCP_Open(&ip))) {
+    if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
         DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), ipcPort);
-        serverQuit = YES;
+        clientQuit = YES;
     }
     
     DLog(@"Waiting for a client on port %d", ipcPort);
-    while (!serverQuit) {
-        // This check the sd if there is a pending connection.
-        // If there is one, accept that, and open a new socket for communicating
+    while (csd == NULL) 
         csd = SDLNet_TCP_Accept(sd);
-        if (NULL != csd) {
-            // Now we can communicate with the client using csd socket
-            // sd will remain opened waiting other connections
-            DLog(@"client found");
-            
-            //first byte of the command alwayas contain the size of the command
-            SDLNet_TCP_Recv(csd, &msgSize, sizeof(uint8_t));
-            
-            SDLNet_TCP_Recv(csd, buffer, msgSize);
-            gameTicks = SDLNet_Read16 (&buffer[msgSize - 2]);
-            //DLog(@"engineProtocol - %d: received [%s]", gameTicks, buffer);
-            
-            if ('C' == buffer[0]) {
+    SDLNet_TCP_Close(sd);
+    
+    while (!clientQuit) {
+        msgSize = 0;
+        memset(buffer, 0, BUFFER_SIZE);
+        if (SDLNet_TCP_Recv(csd, &msgSize, sizeof(uint8_t)) <= 0)
+            clientQuit = YES;
+        if (SDLNet_TCP_Recv(csd, buffer, msgSize) <=0)
+            clientQuit = YES;
+        
+        switch (buffer[0]) {
+            case 'C':
                 DLog(@"sending game config");
                 
                 // local game
@@ -286,12 +280,12 @@
                 
                 // seed info
                 [self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
-
+                
                 // dimension of the map
                 [self sendToEngine:[self.gameConfig objectForKey:@"templatefilter_command"]];
                 [self sendToEngine:[self.gameConfig objectForKey:@"mapgen_command"]];
                 [self sendToEngine:[self.gameConfig objectForKey:@"mazesize_command"]];
-
+                
                 // theme info
                 [self sendToEngine:[self.gameConfig objectForKey:@"theme_command"]];
                 
@@ -306,77 +300,58 @@
                                   ofColor:[teamData objectForKey:@"color"]];
                 }
                 
-                [self provideAmmoData:@"Default.plist" forPlayingTeams:[teamsConfig count]];
+                [self provideAmmoData:[self.gameConfig objectForKey:@"weapon"] forPlayingTeams:[teamsConfig count]];
                 
                 clientQuit = NO;
-            } else {
-                DLog(@"wrong message or client closed connection");
+                break;
+            case '?':
+                // without this sleep sometimes frontend replies before engine has processed any flag (resulting in an error)
+                [NSThread sleepForTimeInterval:0.4];
+                DLog(@"Ping? Pong!");
+                [self sendToEngine:@"!"];
+                break;
+            case 'E':
+                DLog(@"ERROR - last console line: [%s]", &buffer[1]);
                 clientQuit = YES;
-            }
-            
-            while (!clientQuit){
-                msgSize = 0;
-                memset(buffer, 0, BUFFER_SIZE);
-                memset(string, 0, BUFFER_SIZE);
-                if (SDLNet_TCP_Recv(csd, &msgSize, sizeof(uint8_t)) <= 0)
-                    clientQuit = YES;
-                if (SDLNet_TCP_Recv(csd, buffer, msgSize) <=0)
-                    clientQuit = YES;
+                break;
+            case 'e':
+                sscanf(buffer, "%*s %d", &eProto);
+                short int netProto = 0;
+                char *versionStr;
                 
-                gameTicks = SDLNet_Read16(&buffer[msgSize - 2]);
-                //DLog(@"engineProtocolThread - %d: received [%s]", gameTicks, buffer);
-                
-                switch (buffer[0]) {
-                    case '?':
-                        DLog(@"Ping? Pong!");
-                        [self sendToEngine:@"!"];
-                        break;
-                    case 'E':
-                        DLog(@"ERROR - last console line: [%s]", buffer);
-                        clientQuit = YES;
-                        break;
-                    case 'e':
-                        sscanf(buffer, "%*s %d", &eProto);
-                        short int netProto = 0;
-                        char *versionStr;
-                        
-                        HW_versionInfo(&netProto, &versionStr);
-                        if (netProto == eProto) {
-                            DLog(@"Setting protocol version %d (%s)", eProto, versionStr);
-                        } else {
-                            DLog(@"ERROR - wrong protocol number: [%s] - expecting %d", buffer, eProto);
-                            clientQuit = YES;
-                        }
-                        
-                        break;
-                    case 'i':
-                        switch (buffer[1]) {
-                            case 'r':
-                                NSLog(@"Winning team: %s", &buffer[2]);
-                                break;
-                            case 'k':
-                                NSLog(@"Best Hedgehog: %s", &buffer[2]);
-                                break;
-                        }
-                        break;
-                    default:
-                        // empty packet or just statistics
-                        break;
-                    // missing case for exiting right away
+                HW_versionInfo(&netProto, &versionStr);
+                if (netProto == eProto) {
+                    DLog(@"Setting protocol version %d (%s)", eProto, versionStr);
+                } else {
+                    DLog(@"ERROR - wrong protocol number: [%s] - expecting %d", &buffer[1], eProto);
+                    clientQuit = YES;
                 }
-            }
-            DLog(@"Engine exited, closing server");
-            // wait a little to let the client close cleanly
-            [NSThread sleepForTimeInterval:2];
-            // Close the client socket
-            SDLNet_TCP_Close(csd);
-            serverQuit = YES;
+                
+                break;
+            case 'i':
+                switch (buffer[1]) {
+                    case 'r':
+                        NSLog(@"Winning team: %s", &buffer[2]);
+                        break;
+                    case 'k':
+                        NSLog(@"Best Hedgehog: %s", &buffer[2]);
+                        break;
+                }
+                break;
+            default:
+                // empty packet or just statistics -- in either cases gameTicks is sent
+                //gameTicks = SDLNet_Read16 (&buffer[msgSize - 2]);
+                //DLog(@"engineProtocol - %d: received [%s]", gameTicks, buffer);
+                break;
         }
     }
-    
-    SDLNet_TCP_Close(sd);
+    DLog(@"Engine exited, closing server");
+    // wait a little to let the client close cleanly
+    [NSThread sleepForTimeInterval:2];
+    // Close the client socket
+    SDLNet_TCP_Close(csd);    
     SDLNet_Quit();
-
+    
     [[NSFileManager defaultManager] removeItemAtPath:GAMECONFIG_FILE() error:NULL];
     
     [pool release];

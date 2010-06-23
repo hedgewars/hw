@@ -23,6 +23,9 @@
 
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
+    
+    self.selectedScheme = @"";
+    self.selectedWeapon = @"";
 }
 
 -(void) viewWillAppear:(BOOL) animated {
@@ -31,12 +34,15 @@
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCHEMES_DIRECTORY() error:NULL];
     self.listOfSchemes = contentsOfDir;
     
+    if ([listOfSchemes containsObject:@"Default.plist"])
+         self.selectedScheme = @"Default.plist";
+    
     contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
     self.listOfWeapons = contentsOfDir;
-    
-    self.selectedScheme = @"Default.plist";
-    self.selectedWeapon = @"Default.plist";
-    
+         
+    if ([listOfWeapons containsObject:@"Default.plist"])
+         self.selectedWeapon = @"Default.plist";
+
     [self.tableView reloadData];
 }
 

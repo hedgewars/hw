@@ -115,14 +115,6 @@
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
--(BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    if (![cell.textLabel.text isEqualToString:@"Default"]) 
-        return YES;
-    else
-        return NO;
-}
-
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

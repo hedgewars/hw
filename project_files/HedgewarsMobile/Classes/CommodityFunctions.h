@@ -36,8 +36,8 @@
 #define MAPS_DIRECTORY()        [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Maps/"]
 #define VOICES_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Sounds/voices/"]
 
-#define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory"); print_free_memory()
-#define MSG_DIDUNLOAD()         DLog(@"did unload");
+#define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory");
+#define MSG_DIDUNLOAD()         DLog(@"unloaded");
 
 void createTeamNamed (NSString *nameWithoutExt);
 void createWeaponNamed (NSString *nameWithoutExt);

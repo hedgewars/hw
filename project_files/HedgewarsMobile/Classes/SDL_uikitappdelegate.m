@@ -147,6 +147,10 @@ int main (int argc, char *argv[]) {
     }
 }
 
+-(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
+    print_free_memory();
+}
+
 -(void) applicationWillResignActive:(UIApplication *)application {
     //NSLog(@"%@", NSStringFromSelector(_cmd));
     if (isInGame) {

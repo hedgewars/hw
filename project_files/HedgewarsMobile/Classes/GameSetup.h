@@ -13,8 +13,8 @@
     NSDictionary *systemSettings;
     NSDictionary *gameConfig;
     
-    NSInteger ipcPort;
-    TCPsocket sd, csd; // Socket descriptor, Client socket descriptor
+    NSInteger ipcPort;  // Port on which engine will listen
+    TCPsocket csd;      // Client socket descriptor
 }
 
 @property (nonatomic, retain) NSDictionary *systemSettings;
