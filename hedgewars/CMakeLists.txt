@@ -76,7 +76,6 @@ set(engine_sources
 	SinTable.inc
 	options.inc
 	${CMAKE_CURRENT_BINARY_DIR}/config.inc
-	openalbridge
 	)
 
 if(BUILD_ENGINE_LIBRARY)

@@ -30,6 +30,7 @@ procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
 var UserNick: shortstring;
+    ChatReady: boolean;
     showAll: boolean;
 
 implementation
@@ -45,16 +46,19 @@ type TChatLine = record
         end;
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
+    MStrs: array[0 .. MaxStrIndex] of shortstring;
+    missedCount: LongWord;
     lastStr: LongWord;
     visibleCount: LongWord;
     InputStr: TChatLine;
     InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
 
-const colors: array[#1..#4] of TSDL_Color = (
+const colors: array[#1..#5] of TSDL_Color = (
     (r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
     (r:$FF; g:$00; b:$FF; unused:$FF), // action message [Purple]
     (r:$90; g:$FF; b:$90; unused:$FF), // join/leave message [Lime]
-    (r:$FF; g:$FF; b:$A0; unused:$FF)  // team message [Light Yellow]
+    (r:$FF; g:$FF; b:$A0; unused:$FF), // team message [Light Yellow]
+    (r:$FF; g:$00; b:$00; unused:$ff)  // error messages [Red]
     );
 
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
@@ -103,6 +107,16 @@ end;
 
 procedure AddChatString(s: shortstring);
 begin
+if not ChatReady then
+    begin
+    if MissedCount < MaxStrIndex - 1 then
+        MStrs[MissedCount]:= s
+    else if MissedCount < MaxStrIndex then
+        MStrs[MissedCount]:= #5 + '[...]';
+    inc(MissedCount);
+    exit
+    end;
+
 lastStr:= (lastStr + 1) mod (MaxStrIndex + 1);
 
 SetLine(Strs[lastStr], s, false);
@@ -114,6 +128,13 @@ procedure DrawChat;
 var i, t, cnt: Longword;
     r: TSDL_Rect;
 begin
+ChatReady:= true; // maybe move to somewhere else?
+if MissedCount <> 0 then // there are chat strings we missed, so print them now
+    begin
+    for i:= 0 to MissedCount - 1 do
+        AddChatString(MStrs[i]);
+    MissedCount:= 0;
+    end;
 cnt:= 0;
 t:= 0;
 i:= lastStr;
@@ -297,6 +318,8 @@ begin
     visibleCount:= 0;
     UserNick:= '';
     showAll:= false;
+    ChatReady:= false;
+    missedCount:= 0;
 end;
 
 procedure freeModule;
