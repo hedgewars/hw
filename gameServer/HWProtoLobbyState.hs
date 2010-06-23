@@ -78,7 +78,7 @@ handleCmd_lobby ["CREATE_ROOM", newRoom] =
 handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     (ci, irnc) <- ask
     let ris = allRooms irnc
-    let cl =  irnc `client` ci
+    cl <- thisClient
     let maybeRI = find (\ri -> roomName == name (irnc `room` ri)) ris
     let jRI = fromJust maybeRI
     let jRoom = irnc `room` jRI

@@ -24,21 +24,22 @@ handleCmd_inRoom ["CHAT", msg] = do
 handleCmd_inRoom ["PART"] = return [MoveToLobby "part"]
 handleCmd_inRoom ["PART", msg] = return [MoveToLobby $ "part: " `B.append` msg]
 
-{-
 
-handleCmd_inRoom clID clients rooms ("CFG" : paramName : paramStrs)
-    | null paramStrs = [ProtocolError "Empty config entry"]
-    | isMaster client =
-        [ModifyRoom (\r -> r{params = Map.insert paramName paramStrs (params r)}),
-        AnswerOthersInRoom ("CFG" : paramName : paramStrs)]
-    | otherwise = [ProtocolError "Not room master"]
-    where
-        client = clients IntMap.! clID
+handleCmd_inRoom ("CFG" : paramName : paramStrs)
+    | null paramStrs = return [ProtocolError "Empty config entry"]
+    | otherwise = do
+        chans <- roomOthersChans
+        cl <- thisClient
+        if isMaster cl then
+           return [
+                ModifyRoom (\r -> r{params = Map.insert paramName paramStrs (params r)}),
+                AnswerClients chans ("CFG" : paramName : paramStrs)]
+            else
+            return [ProtocolError "Not room master"]
 
-handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : difStr : hhsInfo)
-    | length hhsInfo == 15 && clientProto client < 30 = handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : " " : flag : difStr : hhsInfo)
-    | length hhsInfo /= 16 = [ProtocolError "Corrupted hedgehogs info"]
-    | length (teams room) == 6 = [Warning "too many teams"]
+handleCmd_inRoom ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : difStr : hhsInfo)
+    | length hhsInfo /= 16 = return [ProtocolError "Corrupted hedgehogs info"]
+{-    | length (teams room) == 6 = [Warning "too many teams"]
     | canAddNumber <= 0 = [Warning "too many hedgehogs"]
     | isJust findTeam = [Warning "There's already a team with same name in the list"]
     | gameinprogress room = [Warning "round in progress"]
@@ -60,7 +61,8 @@ handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : 
         hhsList [] = []
         hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
         newTeamHHNum = min 4 canAddNumber
-
+-}
+{-
 handleCmd_inRoom clID clients rooms ["REMOVE_TEAM", teamName]
     | noSuchTeam = [Warning "REMOVE_TEAM: no such team"]
     | nick client /= teamowner team = [ProtocolError "Not team owner!"]
@@ -105,16 +107,18 @@ handleCmd_inRoom clID clients rooms ["TEAM_COLOR", teamName, newColor]
         findTeam = find (\t -> teamName == teamname t) $ teams room
         client = clients IntMap.! clID
         room = rooms IntMap.! (roomID client)
+-}
 
+handleCmd_inRoom ["TOGGLE_READY"] = do
+    cl <- thisClient
+    chans <- roomClientsChans
+    return [
+        ModifyClient (\c -> c{isReady = not $ isReady cl}),
+        ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
+        AnswerClients chans [if isReady cl then "NOT_READY" else "READY", nick cl]
+        ]
 
-handleCmd_inRoom clID clients rooms ["TOGGLE_READY"] =
-    [ModifyClient (\c -> c{isReady = not $ isReady client}),
-    ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady client then -1 else 1)}),
-    AnswerThisRoom [if isReady client then "NOT_READY" else "READY", nick client]]
-    where
-        client = clients IntMap.! clID
-
-
+{-
 handleCmd_inRoom clID clients rooms ["START_GAME"] =
     if isMaster client && (playersIn room == readyPlayers room) && (not . gameinprogress) room then
         if enoughClans then
