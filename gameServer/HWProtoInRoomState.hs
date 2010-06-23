@@ -24,17 +24,20 @@ handleCmd_inRoom ["CHAT", msg] = do
 handleCmd_inRoom ["PART"] = return [MoveToLobby "part"]
 handleCmd_inRoom ["PART", msg] = return [MoveToLobby $ "part: " `B.append` msg]
 
+
+handleCmd_inRoom ("CFG" : paramName : paramStrs)
+    | null paramStrs = return [ProtocolError "Empty config entry"]
+    | otherwise = do
+        chans <- roomOthersChans
+        cl <- thisClient
+        if isMaster cl then
+           return [
+                ModifyRoom (\r -> r{params = Map.insert paramName paramStrs (params r)}),
+                AnswerClients chans ("CFG" : paramName : paramStrs)]
+            else
+            return [ProtocolError "Not room master"]
+
 {-
-
-handleCmd_inRoom clID clients rooms ("CFG" : paramName : paramStrs)
-    | null paramStrs = [ProtocolError "Empty config entry"]
-    | isMaster client =
-        [ModifyRoom (\r -> r{params = Map.insert paramName paramStrs (params r)}),
-        AnswerOthersInRoom ("CFG" : paramName : paramStrs)]
-    | otherwise = [ProtocolError "Not room master"]
-    where
-        client = clients IntMap.! clID
-
 handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : difStr : hhsInfo)
     | length hhsInfo == 15 && clientProto client < 30 = handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : " " : flag : difStr : hhsInfo)
     | length hhsInfo /= 16 = [ProtocolError "Corrupted hedgehogs info"]
