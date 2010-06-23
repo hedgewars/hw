@@ -108,16 +108,18 @@ handleCmd_inRoom clID clients rooms ["TEAM_COLOR", teamName, newColor]
         findTeam = find (\t -> teamName == teamname t) $ teams room
         client = clients IntMap.! clID
         room = rooms IntMap.! (roomID client)
+-}
 
+handleCmd_inRoom ["TOGGLE_READY"] = do
+    cl <- thisClient
+    chans <- roomClientsChans
+    return [
+        ModifyClient (\c -> c{isReady = not $ isReady cl}),
+        ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
+        AnswerClients chans [if isReady cl then "NOT_READY" else "READY", nick cl]
+        ]
 
-handleCmd_inRoom clID clients rooms ["TOGGLE_READY"] =
-    [ModifyClient (\c -> c{isReady = not $ isReady client}),
-    ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady client then -1 else 1)}),
-    AnswerThisRoom [if isReady client then "NOT_READY" else "READY", nick client]]
-    where
-        client = clients IntMap.! clID
-
-
+{-
 handleCmd_inRoom clID clients rooms ["START_GAME"] =
     if isMaster client && (playersIn room == readyPlayers room) && (not . gameinprogress) room then
         if enoughClans then
