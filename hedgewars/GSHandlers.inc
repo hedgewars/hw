@@ -2375,6 +2375,7 @@ begin
 
     dec(Gear^.Health);
     Gear^.Timer := Gear^.Health*10;
+    Gear^.PortalCounter:= 0;
     // This is not seconds, but at least it is *some* feedback
     if (Gear^.Health = 0) or ((Gear^.Message and gm_Attack) <> 0) then
     begin
@@ -3234,7 +3235,7 @@ begin
         // wow! good candidate there, let's see if the distance really is small enough!
         if (Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y) > acptRadius) then
             continue;
-
+(*
         noTrap := ((not Gear^.dY.isNegative or (Gear^.dY.QWordValue = 0))
                   // can't be entered from above
                   or ((conPortal^.dY.isNegative and not (conPortal^.dY.QWordValue = 0))));
@@ -3242,7 +3243,7 @@ begin
 
         // prevent getting stuck in a ground portal loop       
         if noTrap and (iterator^.dY.QWordValue < _0_08.QWordValue) then
-            continue;
+            continue; *)
 
         iterator^.Active := true;
         iterator^.State := iterator^.State or gstMoving;
@@ -3255,13 +3256,21 @@ begin
         cdxy := Distance(conPortal^.dX, conPortal^.dY);
         s := (Int2hwFloat(Gear^.Radius)) / cdxy;
 
-        iterator^.X := conPortal^.X + s * conPortal^.dX;
-        iterator^.Y := conPortal^.Y + s * conPortal^.dY;
+        if iterator^.Kind = gtCake then
+            begin
+            iterator^.X := conPortal^.X ;
+            iterator^.Y := conPortal^.Y ;
+            end
+        else
+            begin
+            iterator^.X := conPortal^.X + s * conPortal^.dX;
+            iterator^.Y := conPortal^.Y + s * conPortal^.dY;
 
-        s := Distance(iterator^.dX, iterator^.dY) / cdxy;
+            s := Distance(iterator^.dX, iterator^.dY) / cdxy;
 
-        iterator^.dX := s * conPortal^.dX;
-        iterator^.dY := s * conPortal^.dY;
+            iterator^.dX := s * conPortal^.dX;
+            iterator^.dY := s * conPortal^.dY
+            end;
 
         FollowGear := iterator;
 
