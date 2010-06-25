@@ -75,22 +75,32 @@ handleCmd_inRoom ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : 
         hhsList [] = []
         hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
         newTeamHHNum r = min 4 (canAddNumber r)
-{-
-handleCmd_inRoom clID clients rooms ["REMOVE_TEAM", teamName]
-    | noSuchTeam = [Warning "REMOVE_TEAM: no such team"]
-    | nick client /= teamowner team = [ProtocolError "Not team owner!"]
-    | otherwise =
-            [RemoveTeam teamName,
-            ModifyClient (\c -> c{teamsInGame = teamsInGame c - 1, clientClan = if teamsInGame client == 1 then undefined else anotherTeamClan})
-            ]
-    where
-        client = clients IntMap.! clID
-        room = rooms IntMap.! (roomID client)
-        noSuchTeam = isNothing findTeam
-        team = fromJust findTeam
-        findTeam = find (\t -> teamName == teamname t) $ teams room
-        anotherTeamClan = teamcolor $ fromJust $ find (\t -> teamownerId t == clID) $ teams room
 
+handleCmd_inRoom ["REMOVE_TEAM", name] = do
+        (ci, rnc) <- ask
+        let r = room rnc $ clientRoom rnc ci
+		clNick <- clientNick
+		
+		let maybeTeam = findTeam r
+		let team = fromJust maybeTeam
+		
+		return $
+			if isNothing $ findTeam r then
+				[Warning "REMOVE_TEAM: no such team"]
+			else if clNick /= teamowner team then
+				[ProtocolError "Not team owner!"]
+			else
+				[RemoveTeam name,
+				ModifyClient 
+					(\c -> c{
+						teamsInGame = teamsInGame c - 1, 
+						clientClan = if teamsInGame client == 1 then undefined else anotherTeamClan ci r
+						})
+				]
+    where
+        anotherTeamClan ci = teamcolor . fromJust . find (\t -> teamownerId t == ci) . teams
+
+{-
 
 handleCmd_inRoom clID clients rooms ["HH_NUM", teamName, numberStr]
     | not $ isMaster client = [ProtocolError "Not room master"]
