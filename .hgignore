@@ -1,0 +1,15 @@
+glob:CMakeCache.txt
+glob:CMakeFiles
+glob:moc_*.cxx
+glob:qrc_*.cxx
+glob:*.o
+glob:Makefile
+glob:bin
+glob:*.hi
+glob:*.*~
+glob:*.core
+glob:hedgewars/config.inc
+glob:cmake_install.cmake
+glob:QTfrontend/hwconsts.cpp
+glob:CPackConfig.cmake
+glob:CPackSourceConfig.cmake
