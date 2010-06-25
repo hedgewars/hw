@@ -23,6 +23,7 @@ module RoomsAndClients(
     withRoomsAndClients,
     allRooms,
     allClients,
+    clientRoom,
     showRooms,
     roomClients
     ) where

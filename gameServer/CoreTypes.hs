@@ -49,7 +49,7 @@ data HedgehogInfo =
 data TeamInfo =
     TeamInfo
     {
-        teamownerId :: !Int,
+        teamownerId :: ClientIndex,
         teamowner :: B.ByteString,
         teamname :: B.ByteString,
         teamcolor :: B.ByteString,

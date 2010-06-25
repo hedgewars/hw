@@ -5,14 +5,16 @@ import qualified Data.Foldable as Foldable
 import qualified Data.Map as Map
 import Data.Sequence(Seq, (|>), (><), fromList, empty)
 import Data.List
-import Maybe
+import Data.Maybe
 import qualified Data.ByteString.Char8 as B
+import Control.Monad
+import Control.Monad.Reader
 --------------------------------------
 import CoreTypes
 import Actions
 import Utils
 import HandlerUtils
-
+import RoomsAndClients
 
 handleCmd_inRoom :: CmdHandler
 
@@ -39,29 +41,40 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
 
 handleCmd_inRoom ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : difStr : hhsInfo)
     | length hhsInfo /= 16 = return [ProtocolError "Corrupted hedgehogs info"]
-{-    | length (teams room) == 6 = [Warning "too many teams"]
-    | canAddNumber <= 0 = [Warning "too many hedgehogs"]
-    | isJust findTeam = [Warning "There's already a team with same name in the list"]
-    | gameinprogress room = [Warning "round in progress"]
-    | isRestrictedTeams room = [Warning "restricted"]
-    | otherwise =
-        [ModifyRoom (\r -> r{teams = teams r ++ [newTeam]}),
-        ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = color}),
-        AnswerThisClient ["TEAM_ACCEPTED", name],
-        AnswerOthersInRoom $ teamToNet (clientProto client) newTeam,
-        AnswerOthersInRoom ["TEAM_COLOR", name, color]
-        ]
-    where
-        client = clients IntMap.! clID
-        room = rooms IntMap.! (roomID client)
-        canAddNumber = 48 - (sum . map hhnum $ teams room)
-        findTeam = find (\t -> name == teamname t) $ teams room
-        newTeam = (TeamInfo clID (nick client) name color grave fort voicepack flag difficulty newTeamHHNum (hhsList hhsInfo))
-        difficulty = fromMaybe 0 (maybeRead difStr :: Maybe Int)
+    | otherwise = do
+        (ci, rnc) <- ask
+        let r = room rnc $ clientRoom rnc ci
+        clNick <- clientNick
+        clChan <- thisClientChans
+        othersChans <- roomOthersChans
+        return $
+            if null . drop 5 $ teams r then
+                [Warning "too many teams"]
+            else if canAddNumber r <= 0 then
+                [Warning "too many hedgehogs"]
+            else if isJust $ findTeam r then
+                [Warning "There's already a team with same name in the list"]
+            else if gameinprogress r then
+                [Warning "round in progress"]
+            else if isRestrictedTeams r then
+                [Warning "restricted"]
+            else
+                [ModifyRoom (\r -> r{teams = teams r ++ [newTeam ci clNick r]}),
+                ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = color}),
+                AnswerClients clChan ["TEAM_ACCEPTED", name],
+                AnswerClients othersChans $ teamToNet $ newTeam ci clNick r,
+                AnswerClients othersChans ["TEAM_COLOR", name, color]
+                ]
+        where
+        canAddNumber r = 48 - (sum . map hhnum $ teams r)
+        findTeam = find (\t -> name == teamname t) . teams
+        newTeam ci clNick r = (TeamInfo ci clNick name color grave fort voicepack flag difficulty (newTeamHHNum r) (hhsList hhsInfo))
+        difficulty = case B.readInt difStr of
+                           Just (i, t) | B.null t -> fromIntegral i
+                           otherwise -> 0
         hhsList [] = []
         hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
-        newTeamHHNum = min 4 canAddNumber
--}
+        newTeamHHNum r = min 4 (canAddNumber r)
 {-
 handleCmd_inRoom clID clients rooms ["REMOVE_TEAM", teamName]
     | noSuchTeam = [Warning "REMOVE_TEAM: no such team"]

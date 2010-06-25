@@ -52,18 +52,8 @@ maybeRead s = case reads s of
     [(x, rest)] | all isSpace rest -> Just x
     _         -> Nothing
 
-teamToNet :: Word16 -> TeamInfo -> [B.ByteString]
-teamToNet protocol team 
-    | protocol < 30 =
-        "ADD_TEAM"
-        : teamname team
-        : teamgrave team
-        : teamfort team
-        : teamvoicepack team
-        : teamowner team
-        : (B.pack $ show $ difficulty team)
-        : hhsInfo
-    | otherwise = 
+teamToNet :: TeamInfo -> [B.ByteString]
+teamToNet team =
         "ADD_TEAM"
         : teamname team
         : teamgrave team

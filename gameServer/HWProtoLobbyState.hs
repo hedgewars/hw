@@ -4,7 +4,7 @@ module HWProtoLobbyState where
 import qualified Data.Map as Map
 import qualified Data.IntSet as IntSet
 import qualified Data.Foldable as Foldable
-import Maybe
+import Data.Maybe
 import Data.List
 import Data.Word
 import Control.Monad.Reader
@@ -44,7 +44,7 @@ handleCmd_lobby ["LIST"] = do
                 name room,
                 showB $ playersIn room,
                 showB $ length $ teams room,
-                nick $ irnc `client` (masterID room),
+                nick $ irnc `client` masterID room,
                 head (Map.findWithDefault ["+gen+"] "MAP" (params room)),
                 head (Map.findWithDefault ["Default"] "SCHEME" (params room)),
                 head (Map.findWithDefault ["Default"] "AMMO" (params room))
