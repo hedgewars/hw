@@ -14,3 +14,4 @@ glob:QTfrontend/hwconsts.cpp
 glob:CPackConfig.cmake
 glob:CPackSourceConfig.cmake
 glob:tools/cmake_uninstall.cmake
+glob:install_manifest.txt
