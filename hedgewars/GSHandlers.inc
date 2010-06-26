@@ -3386,7 +3386,18 @@ end;
 procedure doStepPortalShot(newPortal: PGear);
 var 
     iterator: PGear;
+    s: hwFloat;
 begin
+    s:= Distance (newPortal^.dX, newPortal^.dY);
+
+    // Adds the hog speed (only that part in/directly against shot direction)
+    // to the shot speed (which we triple previously btw)
+    // (This is done my projecting the hog movement vector onto the shot movement vector and then adding the resulting length
+    // to the scaler)
+    s := _3 * s + (newPortal^.dX * CurrentHedgehog^.Gear^.dX + newPortal^.dY * CurrentHedgehog^.Gear^.dY ) / s;
+    newPortal^.dX := newPortal^.dX * s;
+    newPortal^.dY := newPortal^.dY * s;
+
     newPortal^.IntersectGear := nil;
 
     if CurrentHedgehog <> nil then
