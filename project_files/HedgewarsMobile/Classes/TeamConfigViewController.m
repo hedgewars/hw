@@ -25,30 +25,34 @@
     
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
+    isFirstLoad = YES;
 }
 
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    // integer representation of various color (defined in SquareButtonView)
-    NSUInteger colors[6] = { 4421353, 4100897, 10632635, 16749353, 14483456, 7566195 };
-    NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
-    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[contentsOfDir count]];
-    for (int i = 0; i < [contentsOfDir count]; i++) {
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                                                  [contentsOfDir objectAtIndex:i],@"team",
-                                                                  [NSNumber numberWithInt:4],@"number",
-                                                                  [NSNumber numberWithInt:colors[i%6]],@"color",nil];
-        [array addObject:dict];
-        [dict release];
+    // avoid overwriting selected teams when returning on this view
+    if (isFirstLoad) {
+        // integer representation of various color (defined in SquareButtonView)
+        NSUInteger colors[6] = { 4421353, 4100897, 10632635, 16749353, 14483456, 7566195 };
+        NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
+        NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[contentsOfDir count]];
+        for (int i = 0; i < [contentsOfDir count]; i++) {
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                         [contentsOfDir objectAtIndex:i],@"team",
+                                         [NSNumber numberWithInt:4],@"number",
+                                         [NSNumber numberWithInt:colors[i%6]],@"color",nil];
+            [array addObject:dict];
+            [dict release];
+        }
+        self.listOfTeams = array;
+        [array release];
+        
+        NSMutableArray *emptyArray = [[NSMutableArray alloc] initWithObjects:nil];
+        self.listOfSelectedTeams = emptyArray;
+        [emptyArray release];
+        isFirstLoad = NO;
     }
-    self.listOfTeams = array;
-    [array release];
-    
-    NSMutableArray *emptyArray = [[NSMutableArray alloc] initWithObjects:nil];
-    self.listOfSelectedTeams = emptyArray;
-    [emptyArray release];
-
     [self.tableView reloadData];
 }
 

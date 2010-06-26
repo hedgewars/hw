@@ -1220,6 +1220,10 @@ begin
 
     LoadThemeConfig;
     isMap:= false;
+    
+    if ((GameFlags and gfForts) <> 0) or (Pathz[ptMapCurrent] <> '') then
+        FillChar(Land,SizeOf(TCollisionArray),0);
+        
     if (GameFlags and gfForts) = 0 then
         if Pathz[ptMapCurrent] <> '' then
             LoadMap

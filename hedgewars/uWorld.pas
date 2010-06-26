@@ -1007,12 +1007,14 @@ procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
 var EdgesDist,  wdy: LongInt;
 begin
+{$IFNDEF IPHONEOS}
 if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus then
-    begin
+begin
     SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
     CursorPoint.X:= CursorPoint.X - (cScreenWidth shr 1);
     CursorPoint.Y:= cScreenHeight - CursorPoint.Y;
-    end;
+end;
+{$ENDIF}
 
 if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
     if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then

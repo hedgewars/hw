@@ -306,7 +306,7 @@
                 break;
             case '?':
                 // without this sleep sometimes frontend replies before engine has processed any flag (resulting in an error)
-                [NSThread sleepForTimeInterval:0.4];
+                [NSThread sleepForTimeInterval:0.6];
                 DLog(@"Ping? Pong!");
                 [self sendToEngine:@"!"];
                 break;
