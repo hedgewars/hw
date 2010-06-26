@@ -79,26 +79,27 @@ handleCmd_inRoom ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : 
 handleCmd_inRoom ["REMOVE_TEAM", name] = do
         (ci, rnc) <- ask
         let r = room rnc $ clientRoom rnc ci
-		clNick <- clientNick
-		
-		let maybeTeam = findTeam r
-		let team = fromJust maybeTeam
-		
-		return $
-			if isNothing $ findTeam r then
-				[Warning "REMOVE_TEAM: no such team"]
-			else if clNick /= teamowner team then
-				[ProtocolError "Not team owner!"]
-			else
-				[RemoveTeam name,
-				ModifyClient 
-					(\c -> c{
-						teamsInGame = teamsInGame c - 1, 
-						clientClan = if teamsInGame client == 1 then undefined else anotherTeamClan ci r
-						})
-				]
+        clNick <- clientNick
+
+        let maybeTeam = findTeam r
+        let team = fromJust maybeTeam
+
+        return $
+            if isNothing $ findTeam r then
+                [Warning "REMOVE_TEAM: no such team"]
+            else if clNick /= teamowner team then
+                [ProtocolError "Not team owner!"]
+            else
+                [RemoveTeam name,
+                ModifyClient
+                    (\c -> c{
+                        teamsInGame = teamsInGame c - 1,
+                        clientClan = if teamsInGame c == 1 then undefined else anotherTeamClan ci r
+                        })
+                ]
     where
         anotherTeamClan ci = teamcolor . fromJust . find (\t -> teamownerId t == ci) . teams
+        findTeam = find (\t -> name == teamname t) . teams
 
 {-
 
