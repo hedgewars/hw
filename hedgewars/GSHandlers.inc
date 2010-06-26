@@ -16,6 +16,54 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+procedure doStepPerPixel(Gear: PGear; step: TGearStepProcedure; onlyCheckIfChanged: boolean);
+var
+    dX, dY, sX, sY: hwFloat;
+    i, steps: LongWord;
+    caller: TGearStepProcedure;
+begin
+    dX:= Gear^.dX;
+    dY:= Gear^.dY;
+    steps:= max(abs(hwRound(Gear^.X+dX)-hwRound(Gear^.X)), abs(hwRound(Gear^.Y+dY)-hwRound(Gear^.Y)));
+
+    // Gear is still on the same Pixel it was before
+    if steps < 1 then
+    begin
+        if onlyCheckIfChanged then
+        begin
+            Gear^.X := Gear^.X + dX;
+            Gear^.Y := Gear^.Y + dY;
+            EXIT;
+        end
+        else
+            steps := 1;
+    end;
+
+    if steps > 1 then
+    begin
+        sX:= dX / steps;
+        sY:= dY / steps;
+    end
+    else
+    begin
+        sX:= dX;
+        sY:= dY;
+    end;
+
+    caller:= Gear^.doStep;
+
+    for i:= 1 to steps do
+    begin
+        Gear^.X := Gear^.X + sX;
+        Gear^.Y := Gear^.Y + sY;
+        step(Gear);
+        if (Gear^.doStep <> caller)
+        or ((Gear^.State and gstCollision) <> 0)
+        or ((Gear^.State and gstMoving) = 0) then
+            break;
+    end;
+end;
+
 procedure makeHogsWorry(x, y: hwFloat; r: LongInt);
 var 
     gi: PGear;
@@ -3293,10 +3341,9 @@ begin
     end;
 end;
 
-procedure doStepMovingPortal(Gear: PGear);
+procedure doStepMovingPortal_real(Gear: PGear);
 var 
     x, y, tx, ty: LongInt;
-    //, bx, by, tangle: LongInt;
     s: hwFloat;
 
 procedure loadNewPortalBall(oldPortal: PGear; destroyGear: Boolean);
@@ -3322,17 +3369,6 @@ begin
 end;
 
 begin
-    if (Gear^.Timer < 1)
-       or (PHedgehog(Gear^.Hedgehog) <> CurrentHedgehog) then
-    begin
-        deleteGear(Gear);
-        EXIT;
-    end;
-    
-    doPortalColorSwitch();
-
-    Gear^.X := Gear^.X + Gear^.dX;
-    Gear^.Y := Gear^.Y + Gear^.dY;
     x := hwRound(Gear^.X);
     y := hwRound(Gear^.Y);
     tx := 0;
@@ -3341,6 +3377,8 @@ begin
 
     if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] > 255) then
     begin
+        Gear^.State := Gear^.State or gstCollision;
+        Gear^.State := Gear^.State and not gstMoving;
         if not calcSlopeTangent(Gear, x, y, tx, ty, 255)
            or (DistanceI(tx,ty) < _12) then // reject shots at too irregular terrain
         begin
@@ -3371,6 +3409,15 @@ begin
     else if (y > cWaterLine) or (y < -LAND_WIDTH)
             or (x > 2*LAND_WIDTH) or (x < -LAND_WIDTH) then
              loadNewPortalBall(Gear, true);
+end;
+
+procedure doStepMovingPortal(Gear: PGear);
+begin
+    doPortalColorSwitch();
+    doStepPerPixel(Gear, @doStepMovingPortal_real, true);
+    if (Gear^.Timer < 1)
+       or (PHedgehog(Gear^.Hedgehog) <> CurrentHedgehog) then
+            deleteGear(Gear);
 end;
 
 procedure doStepPortalShot(newPortal: PGear);
@@ -3422,6 +3469,8 @@ begin
                 iterator := iterator^.NextGear
             end;
         end;
+    newPortal^.State := newPortal^.State and not gstCollision;
+    newPortal^.State := newPortal^.State or gstMoving;
     newPortal^.doStep := @doStepMovingPortal;
 end;
 

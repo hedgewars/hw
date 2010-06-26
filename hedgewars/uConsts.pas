@@ -2015,7 +2015,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 0; //29;
+            ejectX: -5; //29;
             ejectY: -7),
 
 // Piano
