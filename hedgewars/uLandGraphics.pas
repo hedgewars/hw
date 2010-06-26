@@ -674,36 +674,60 @@ end;
 
 function SweepDirty: boolean;
 var x, y, xx, yy: LongInt;
-    bRes, updateBlock, resweep: boolean;
+    bRes, updateBlock, resweep, recheck: boolean;
 begin
 bRes:= false;
+reCheck:= true;
 
-for y:= 0 to LAND_HEIGHT div 32 - 1 do
+while recheck do
     begin
-
-    for x:= 0 to LAND_WIDTH div 32 - 1 do
+    recheck:= false;
+    for y:= 0 to LAND_HEIGHT div 32 - 1 do
         begin
-        if LandDirty[y, x] <> 0 then
+        for x:= 0 to LAND_WIDTH div 32 - 1 do
             begin
-            updateBlock:= false;
-            resweep:= true;
-            while(resweep) do
+            if LandDirty[y, x] <> 0 then
                 begin
-                resweep:= false;
-                for yy:= y * 32 to y * 32 + 31 do
-                    for xx:= x * 32 to x * 32 + 31 do
-                        if Despeckle(xx, yy) then
-                            begin
-                            bRes:= true;
-                            updateBlock:= true;
-                            resweep:= true;
-                            end;
+                updateBlock:= false;
+                resweep:= true;
+                while(resweep) do
+                    begin
+                    resweep:= false;
+                    for yy:= y * 32 to y * 32 + 31 do
+                        for xx:= x * 32 to x * 32 + 31 do
+                            if Despeckle(xx, yy) then
+                                begin
+                                bRes:= true;
+                                updateBlock:= true;
+                                resweep:= true;
+                                if (yy = y*32) and (y > 0) then
+                                    begin
+                                    LandDirty[y-1, x]:= 1;
+                                    recheck:= true;
+                                    end
+                                else if (yy = y*32+31) and (y < LAND_HEIGHT div 32 - 1) then
+                                    begin
+                                    LandDirty[y+1, x]:= 1;
+                                    recheck:= true;
+                                    end;
+                                if (xx = x*32) and (x > 0) then
+                                    begin
+                                    LandDirty[y, x-1]:= 1;
+                                    recheck:= true;
+                                    end
+                                else if (xx = x*32+31) and (x < LAND_WIDTH div 32 - 1) then
+                                    begin
+                                    LandDirty[y, x+1]:= 1;
+                                    recheck:= true;
+                                    end
+                                end;
+                    end;
+                if updateBlock then UpdateLandTexture(x * 32, 32, y * 32, 32);
+                LandDirty[y, x]:= 0;
                 end;
-            if updateBlock then UpdateLandTexture(x * 32, 32, y * 32, 32);
-            LandDirty[y, x]:= 0;
             end;
         end;
-    end;
+     end;
 
 SweepDirty:= bRes;
 end;

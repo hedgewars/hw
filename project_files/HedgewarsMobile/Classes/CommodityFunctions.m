@@ -113,11 +113,8 @@ void createSchemeNamed (NSString *nameWithoutExt) {
 }
 
 BOOL rotationManager (UIInterfaceOrientation interfaceOrientation) {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        return YES;
-    else
-        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
-               (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);  
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
+           (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);  
 }
 
 NSInteger randomPort () {

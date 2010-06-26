@@ -815,7 +815,11 @@ end;
 procedure chZoomOut(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
+{$IFDEF IPHONEOS}
+    if ZoomValue > 0.5 then
+{$ELSE}
     if ZoomValue > 1.0 then
+{$ENDIF}
         ZoomValue:= ZoomValue - 0.20;
 end;
 

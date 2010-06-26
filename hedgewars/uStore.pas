@@ -406,10 +406,16 @@ for ii:= Low(TSprite) to High(TSprite) do
 
             if tmpsurf <> nil then
             begin
-                if imageWidth = 0 then imageWidth:= tmpsurf^.w;
-                if imageHeight = 0 then imageHeight:= tmpsurf^.h;
-                if Width = 0 then Width:= tmpsurf^.w;
-                if Height = 0 then Height:= tmpsurf^.h;
+                if getImageDimensions then
+                    begin
+                    imageWidth:= tmpsurf^.w;
+                    imageHeight:= tmpsurf^.h
+                    end;
+                if getDimensions then
+                    begin
+                    Width:= tmpsurf^.w;
+                    Height:= tmpsurf^.h
+                    end;
                 if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
                     begin
                     Texture:= Surface2Tex(tmpsurf, true);

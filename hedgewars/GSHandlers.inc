@@ -3297,7 +3297,7 @@ procedure doStepMovingPortal(Gear: PGear);
 var 
     x, y, tx, ty: LongInt;
     //, bx, by, tangle: LongInt;
-    s, dx, dy: hwFloat;
+    s: hwFloat;
 
 procedure loadNewPortalBall(oldPortal: PGear; destroyGear: Boolean);
 var 
@@ -3350,20 +3350,10 @@ begin
 
         // making a normalized normal vector
         s := _1/DistanceI(tx,ty);
-        dx := -s * ty;
-        dy :=  s * tx;
+        Gear^.dX :=  s * ty;
+        Gear^.dY := -s * tx;
 
-        // make sure the vector is pointing outwards
-        if not (Gear^.dX*dx + Gear^.dY*dy).isNegative then
-        begin
-            dx := -dx;
-            dy := -dy;
-        end;
-
-        Gear^.dX := dx;
-        Gear^.dY := dy;
-
-        Gear^.DirAngle := DxDy2Angle(-dy,dx);
+        Gear^.DirAngle := DxDy2Angle(-Gear^.dY,Gear^.dX);
         if not Gear^.dX.isNegative then Gear^.DirAngle := 180-Gear^.DirAngle;
 
         if ((Gear^.IntersectGear = nil)
@@ -3386,7 +3376,18 @@ end;
 procedure doStepPortalShot(newPortal: PGear);
 var 
     iterator: PGear;
+    s: hwFloat;
 begin
+    s:= Distance (newPortal^.dX, newPortal^.dY);
+
+    // Adds the hog speed (only that part in/directly against shot direction)
+    // to the shot speed (which we triple previously btw)
+    // (This is done my projecting the hog movement vector onto the shot movement vector and then adding the resulting length
+    // to the scaler)
+    s := (_2 * s + (newPortal^.dX * CurrentHedgehog^.Gear^.dX + newPortal^.dY * CurrentHedgehog^.Gear^.dY ) / s) / s;
+    newPortal^.dX := newPortal^.dX * s;
+    newPortal^.dY := newPortal^.dY * s;
+
     newPortal^.IntersectGear := nil;
 
     if CurrentHedgehog <> nil then

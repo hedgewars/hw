@@ -22,7 +22,6 @@
     UITextField *writeChatTextField;
     
     CGFloat initialDistanceForPinching;
-    CGPoint gestureStartPoint;
     UIActivityIndicatorView *spinningWheel;
 }
 

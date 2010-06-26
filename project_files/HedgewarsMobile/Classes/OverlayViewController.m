@@ -57,6 +57,7 @@
             [self chatDisappear];
             HW_setLandscape(YES);
             break;
+        /*
         case UIDeviceOrientationPortrait:
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
                 sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(270));
@@ -73,6 +74,7 @@
                 HW_setLandscape(NO);
             }
             break;
+        */
         default:
             break;
     }
@@ -242,7 +244,6 @@
 // on iphone instead just use the tableViewController directly (and implement manually all animations)
 -(IBAction) showPopover{
     isPopoverVisible = YES;
-    CGRect anchorForPopover;
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (popupMenu == nil) 
@@ -252,13 +253,8 @@
             [popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
             [popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
         }
-        
-        if (UIDeviceOrientationIsLandscape([[UIDevice currentDevice] orientation]))
-            anchorForPopover = CGRectMake(960, 0, 220, 32);
-        else
-            anchorForPopover = CGRectMake(736, 0, 220, 32);
-        
-        [popoverController presentPopoverFromRect:anchorForPopover
+
+        [popoverController presentPopoverFromRect:CGRectMake(1000, 0, 220, 32)
                                            inView:self.view
                          permittedArrowDirections:UIPopoverArrowDirectionUp
                                          animated:YES];
@@ -303,11 +299,8 @@
 
 // this function is called by pascal FinishProgress and removes the spinning wheel when loading is done
 void spinningWheelDone (void) {
-    [UIView beginAnimations:@"hiding spinning wheel" context:NULL];
-    [UIView setAnimationDuration:0.7];
-    singleton.alpha = 0;
-    [UIView commitAnimations];
-    [singleton performSelector:@selector(stopAnimating) withObject:nil afterDelay:0.7];
+    [singleton stopAnimating];
+    singleton = nil;
     canDim = YES;
 }
 
@@ -316,6 +309,8 @@ void spinningWheelDone (void) {
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     NSArray *twoTouches;
     UITouch *touch = [touches anyObject];
+    CGRect screen = [[UIScreen mainScreen] bounds];
+    CGPoint currentPosition = [touch locationInView:self.view];
     
     if (isPopoverVisible) {
         [self dismissPopover];
@@ -324,33 +319,19 @@ void spinningWheelDone (void) {
         [self.writeChatTextField resignFirstResponder];
         [dimTimer setFireDate:HIDING_TIME_DEFAULT];
     }
-    
-    gestureStartPoint = [touch locationInView:self.view];
-        
+            
     switch ([touches count]) {
-        /*case 1:
-            initialDistanceForPinching = 0;
-            switch ([touch tapCount]) {
-                case 1:
-                    NSLog(@"X:%d Y:%d", (int)gestureStartPoint.x, (int)gestureStartPoint.y );
-                    //SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
-                    //            (int)gestureStartPoint.y, width - (int)gestureStartPoint.x);
-                    //HW_click();
-                    break;
-                case 2:
-                    HW_ammoMenu();
-                    break;
-                default:
-                    break;
-            }
-            break;*/
+        case 1:
+            DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
+            HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+            break;
         case 2:
-            if (2 == [touch tapCount]) {
-                HW_zoomReset();
+            if (2 == [touch tapCount] && currentPosition.y < screen.size.width - 100) {
+                HW_ammoMenu();
+                //HW_zoomReset();
             }
             
             // pinching
-            gestureStartPoint = CGPointMake(0, 0);
             twoTouches = [touches allObjects];
             UITouch *first = [twoTouches objectAtIndex:0];
             UITouch *second = [twoTouches objectAtIndex:1];
@@ -363,9 +344,9 @@ void spinningWheelDone (void) {
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    gestureStartPoint = CGPointMake(0, 0);
     initialDistanceForPinching = 0;
     //HW_allKeysUp();
+    HW_click();
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -374,48 +355,20 @@ void spinningWheelDone (void) {
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGFloat minimumGestureLength;
-    int logCoeff;
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        minimumGestureLength = 5.0f;
-        logCoeff = 19;
-    } else {
-        minimumGestureLength = 3.0f;
-        logCoeff = 3;
-    }
+    CGRect screen = [[UIScreen mainScreen] bounds];
     
     NSArray *twoTouches;
     CGPoint currentPosition;
     UITouch *touch = [touches anyObject];
 
     switch ([touches count]) {
-        /*case 1:
-            currentPosition = [touch locationInView:self.view];
-            // panning
-            CGFloat deltaX = fabsf(gestureStartPoint.x - currentPosition.x);
-            CGFloat deltaY = fabsf(gestureStartPoint.y - currentPosition.y);
-            
-            // the two ifs are not mutually exclusive
-            if (deltaX >= minimumGestureLength) {
-                DLog(@"deltaX: %f deltaY: %f", deltaX, deltaY);
-                if (currentPosition.x > gestureStartPoint.x) {
-                    HW_cursorLeft(logCoeff*log(deltaX));
-                } else {
-                    HW_cursorRight(logCoeff*log(deltaX));
-                }
-
-            } 
-            if (deltaY >= minimumGestureLength) {
-                DLog(@"deltaX: %f deltaY: %f", deltaX, deltaY);
-                if (currentPosition.y < gestureStartPoint.y) {
-                    HW_cursorDown(logCoeff*log(deltaY));
-                } else {
-                    HW_cursorUp(logCoeff*log(deltaY));
-                }            
+        case 1:
+            if (HW_isAmmoOpen()) {
+                currentPosition = [touch locationInView:self.view];
+                DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
+                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
             }
-
-            break;*/
+            break;
         case 2:
             twoTouches = [touches allObjects];
             UITouch *first = [twoTouches objectAtIndex:0];

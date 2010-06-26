@@ -12,6 +12,7 @@
 @interface TeamConfigViewController : UITableViewController {
     NSMutableArray *listOfTeams;
     NSMutableArray *listOfSelectedTeams;
+    BOOL isFirstLoad;
 }
 
 @property (nonatomic, retain) NSMutableArray *listOfTeams;

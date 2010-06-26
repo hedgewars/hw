@@ -13,7 +13,7 @@
 unit PascalExports;
 
 interface
-uses uKeys, GLunit, uWorld, hwengine;
+uses uKeys, GLunit, uWorld, uMisc, uConsole, hwengine;
 
 {$INCLUDE "config.inc"}
 
@@ -151,6 +151,17 @@ begin
     begin
         cOffsetY:= 120;
     end;
+end;
+
+procedure HW_setCursor(x,y: LongInt); cdecl; export;
+begin
+    CursorPoint.X:= x;
+    CursorPoint.Y:= y;
+end;
+
+function HW_isAmmoOpen:boolean; cdecl; export;
+begin
+    exit(bShowAmmoMenu);
 end;
 {$ENDIF}
 
