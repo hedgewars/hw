@@ -3205,7 +3205,7 @@ end;
 procedure doStepPortal(Gear: PGear);
 var 
     iterator, conPortal: PGear;
-    s, acptRadius, cdxy: hwFloat;
+    s, acptRadius, itdist, nx, ny, pspeed, nspeed: hwFloat;
     noTrap, hasdxy: Boolean;
 begin
     doPortalColorSwitch();
@@ -3281,7 +3281,8 @@ begin
         // won't port stuff that moves away from me!
 
         // wow! good candidate there, let's see if the distance really is small enough!
-        if (Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y) > acptRadius) then
+        itdist := Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y);
+        if (itdist > acptRadius) then
             continue;
 (*
         noTrap := ((not Gear^.dY.isNegative or (Gear^.dY.QWordValue = 0))
@@ -3300,36 +3301,50 @@ begin
         // Until loops are reliably broken
         inc(iterator^.PortalCounter);
 
-        // TODO: more accurate porting
-        cdxy := Distance(conPortal^.dX, conPortal^.dY);
-        s := (Int2hwFloat(Gear^.Radius)) / cdxy;
-
-        if iterator^.Kind = gtCake then
+        // find out how much speed parallel to the portal vector
+        // the gear has
+        pspeed:= (Gear^.dX * iterator^.dX + Gear^.dY * iterator^.dY );
+        // create a normal of the portal vector
+        nx := - Gear^.dY;
+        ny := Gear^.dX;
+        // pick the normal vector that's pointing skywards
+        if (not ny.isNegative) then
             begin
-            iterator^.X := conPortal^.X ;
-            iterator^.Y := conPortal^.Y ;
-            end
-        else
-            begin
-            iterator^.X := conPortal^.X + s * conPortal^.dX;
-            iterator^.Y := conPortal^.Y + s * conPortal^.dY;
-
-            s := Distance(iterator^.dX, iterator^.dY) / cdxy;
-
-            iterator^.dX := s * conPortal^.dX;
-            iterator^.dY := s * conPortal^.dY
+            nx.isNegative := not nx.isNegative;
+            ny.isNegative := not ny.isNegative;
             end;
+        // now let's find out how much speed the gear has in the
+        // direction of that normal
+        nspeed:= (nx * iterator^.dX + ny * iterator^.dY);
+
+        // now let's project those back to the connected portal's vectors
+        nx := - conPortal^.dY;
+        ny := conPortal^.dX;
+        if ny.isNegative then
+            begin
+            nx.isNegative := not nx.isNegative;
+            ny.isNegative := not ny.isNegative;
+            end;
+        iterator^.dX := -pspeed * conPortal^.dX + -nspeed * nx;
+        iterator^.dY := -pspeed * conPortal^.dY + -nspeed * ny;
+        if iterator^.Kind = gtCake then
+            itdist := int2hwFloat(iterator^.Radius) - _0_1;
+        s := itdist / Distance(iterator^.dX, iterator^.dY);            
+        iterator^.X := conPortal^.X + s * iterator^.dX;
+        iterator^.Y := conPortal^.Y + s * iterator^.dY;
+        end;
 
         FollowGear := iterator;
 
+{
         s := _0_2 + _0_008 * Gear^.Health;
         iterator^.dX := s * iterator^.dX;
         iterator^.dY := s * iterator^.dY;
+}
 
         if Gear^.Health > 1 then dec(Gear^.Health);
-            //dec(iterator^.Health);??
 
-        // breaks (some) loops
+{        // breaks (some) loops
         if Distance(iterator^.dX, iterator^.dY) > _0_96 then
         begin
             iterator^.dX := iterator^.dX + signAs(cGravity * getRandom(1000),iterator^.dX);
@@ -3338,7 +3353,7 @@ begin
             iterator^.dX := s * iterator^.dX;
             iterator^.dY := s * iterator^.dX;
         end;
-    end;
+}
 end;
 
 procedure doStepMovingPortal_real(Gear: PGear);
