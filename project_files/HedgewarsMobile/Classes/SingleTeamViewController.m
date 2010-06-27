@@ -40,8 +40,14 @@
     
     if (textFieldBeingEdited != nil) {
         if (TEAMNAME_TAG == index) {
+            if ([textFieldBeingEdited.text length] == 0) 
+                textFieldBeingEdited.text = self.title;
             [self.teamDictionary setObject:textFieldBeingEdited.text forKey:@"teamname"];
+            self.title = textFieldBeingEdited.text;
         } else {
+            if ([textFieldBeingEdited.text length] == 0) 
+                textFieldBeingEdited.text = [NSString stringWithFormat:@"hedgehog %d",index];
+            
             //replace the old value with the new one            
             NSMutableDictionary *hog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:index];
             [hog setObject:textFieldBeingEdited.text forKey:@"hogname"];

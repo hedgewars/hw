@@ -349,7 +349,8 @@
 }
 */
 
-
+/*
+ causes segfault if pressing twice cancel
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -365,7 +366,7 @@
         [aTableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
-
+*/
 
 #pragma mark -
 #pragma mark Memory management

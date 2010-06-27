@@ -138,6 +138,9 @@
 // set the new value
 -(BOOL) save:(id) sender {    
     if (textFieldBeingEdited != nil) {
+        if ([textFieldBeingEdited.text length] == 0) 
+            textFieldBeingEdited.text = self.title;
+        
         [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.title] error:NULL];
         self.title = self.textFieldBeingEdited.text;
         [self.schemeArray writeToFile:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.title] atomically:YES];
@@ -243,6 +246,7 @@
             }
             cell.detailTextLabel.text = nil;
             cell.imageView.image = nil;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             break;
         case 1:
             cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
@@ -279,7 +283,12 @@
             cellSlider.value = [[self.schemeArray objectAtIndex:row+gmSize] floatValue];
             
             // forced to use this weird format otherwise the label disappears when size of the text is bigger than the original
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%0.3d",[[self.schemeArray objectAtIndex:row+gmSize] intValue]];
+            NSString *prestring = [NSString stringWithFormat:@"%d",[[self.schemeArray objectAtIndex:row+gmSize] intValue]];
+            while ([prestring length] <= 4)
+                prestring = [NSString stringWithFormat:@" %@",prestring];
+            cell.detailTextLabel.text = prestring;
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             break;
         case 2:
             cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier2];
@@ -302,6 +311,8 @@
             cell.textLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"title"];
             cell.detailTextLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"description"];
             [(UISwitch *)cell.accessoryView setOn:[[self.schemeArray objectAtIndex:row] boolValue] animated:NO];
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
     
     return cell;
@@ -324,10 +335,9 @@
     // grab the associated label
     UILabel *label = (UILabel *)cell.detailTextLabel;
     // modify it
-    label.text = [NSString stringWithFormat:@"%0.3d",(int)theSlider.value];
+    label.text = [NSString stringWithFormat:@"%d",(int)theSlider.value];
     // save changes in the main array (remember that you need to offset it)
     [self.schemeArray replaceObjectAtIndex:theSlider.tag withObject:[NSNumber numberWithInt:(int)theSlider.value]];
-    NSLog(@"%@",self.schemeArray);
 }
 
 #pragma mark -
@@ -353,9 +363,9 @@
             //cell.detailTextLabel.text = [[[self.basicSettingList objectAtIndex:[indexPath row]] objectForKey:@"default"] stringValue];
             break;
         case 2:
-            sw = (UISwitch *)cell.accessoryView;
+            /*sw = (UISwitch *)cell.accessoryView;
             [sw setOn:!sw.on animated:YES];
-            [self toggleSwitch:sw];
+            [self toggleSwitch:sw];*/
             break;
         default:
             break;
