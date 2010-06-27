@@ -84,7 +84,7 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                           [NSNumber numberWithBool:NO],    //lowgravity
                           [NSNumber numberWithBool:NO],    //lasersight
                           [NSNumber numberWithBool:NO],    //invulnerable
-                          [NSNumber numberWithBool:NO],    //addmines
+                          [NSNumber numberWithBool:YES],   //addmines
                           [NSNumber numberWithBool:NO],    //vampirism
                           [NSNumber numberWithBool:NO],    //karma
                           [NSNumber numberWithBool:NO],    //artillery

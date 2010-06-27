@@ -14,3 +14,11 @@ glob:QTfrontend/hwconsts.cpp
 glob:CPackConfig.cmake
 glob:CPackSourceConfig.cmake
 glob:tools/cmake_uninstall.cmake
+glob:install_manifest.txt
+glob:.DS_Store
+glob:*.swp
+glob:*.orig
+glob:*.diff
+glob:project_files/HedgewarsMobile/Data/
+glob:project_files/HedgewarsMobile/build/
+glob:project_files/HedgewarsMobile/Hedgewars.xcodeproj/vittorio.*

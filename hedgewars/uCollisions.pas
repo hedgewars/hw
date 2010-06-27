@@ -321,31 +321,39 @@ function calcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outD
 var ldx, ldy, rdx, rdy: LongInt;
     i, j, mx, my, li, ri, jfr, jto, tmpo : ShortInt;
     tmpx, tmpy: LongWord;
-    dx, dy: hwFloat;
+    dx, dy, s: hwFloat;
     offset: Array[0..7,0..1] of ShortInt;
 
 begin
     dx:= Gear^.dX;
     dy:= Gear^.dY;
 
-    // we start searching from the direction the gear center is at
+    // we start searching from the direction the gear came from
+    if (dx.QWordValue > _0_995.QWordValue )
+    or (dy.QWordValue > _0_995.QWordValue ) then
+        begin // scale
+        s := _1 / Distance(dx,dy);
+        dx := s * dx;
+        dy := s * dy;
+        end;
+
     mx:= hwRound(Gear^.X-dx) - hwRound(Gear^.X);
     my:= hwRound(Gear^.Y-dy) - hwRound(Gear^.Y);
 
     li:= -1;
     ri:= -1;
-    
+
     // go around collision pixel, checking for first/last collisions
     // this will determinate what angles will be tried to crawl along
     for i:= 0 to 7 do
         begin
         offset[i,0]:= mx;
         offset[i,1]:= my;
-        
+
         tmpx:= collisionX + mx;
         tmpy:= collisionY + my;
 
-        if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0) then
+        if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK) = 0) then
             if (Land[tmpy,tmpx] > TestWord) then
                 begin
                 // remember the index belonging to the first and last collision (if in 1st half)

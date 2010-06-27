@@ -16,6 +16,54 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+procedure doStepPerPixel(Gear: PGear; step: TGearStepProcedure; onlyCheckIfChanged: boolean);
+var
+    dX, dY, sX, sY: hwFloat;
+    i, steps: LongWord;
+    caller: TGearStepProcedure;
+begin
+    dX:= Gear^.dX;
+    dY:= Gear^.dY;
+    steps:= max(abs(hwRound(Gear^.X+dX)-hwRound(Gear^.X)), abs(hwRound(Gear^.Y+dY)-hwRound(Gear^.Y)));
+
+    // Gear is still on the same Pixel it was before
+    if steps < 1 then
+    begin
+        if onlyCheckIfChanged then
+        begin
+            Gear^.X := Gear^.X + dX;
+            Gear^.Y := Gear^.Y + dY;
+            EXIT;
+        end
+        else
+            steps := 1;
+    end;
+
+    if steps > 1 then
+    begin
+        sX:= dX / steps;
+        sY:= dY / steps;
+    end
+    else
+    begin
+        sX:= dX;
+        sY:= dY;
+    end;
+
+    caller:= Gear^.doStep;
+
+    for i:= 1 to steps do
+    begin
+        Gear^.X := Gear^.X + sX;
+        Gear^.Y := Gear^.Y + sY;
+        step(Gear);
+        if (Gear^.doStep <> caller)
+        or ((Gear^.State and gstCollision) <> 0)
+        or ((Gear^.State and gstMoving) = 0) then
+            break;
+    end;
+end;
+
 procedure makeHogsWorry(x, y: hwFloat; r: LongInt);
 var 
     gi: PGear;
@@ -3157,7 +3205,7 @@ end;
 procedure doStepPortal(Gear: PGear);
 var 
     iterator, conPortal: PGear;
-    s, acptRadius, cdxy: hwFloat;
+    s, acptRadius, nx, ny, ox, oy, poffs, noffs, pspeed, nspeed: hwFloat;
     noTrap, hasdxy: Boolean;
 begin
     doPortalColorSwitch();
@@ -3192,15 +3240,15 @@ begin
     while true do
     begin
 
+        // iterate through GearsList
         if iterator = nil then
-            iterator := GearsList // start
+            iterator := GearsList
         else
             iterator := iterator^.NextGear;
-        // iterate through GearsList
 
+        // end of list?
         if iterator = nil then
             break;
-        // end of list
 
         // don't port portals or other gear that wouldn't make sense
         if (iterator^.Kind = gtPortal) or (iterator^.Kind = gtRope) or (iterator^.PortalCounter > 20) then
@@ -3212,29 +3260,45 @@ begin
            gtRope) then
             continue;
 
+        // check if gear fits through portal
         if (iterator^.Radius > Gear^.Radius) then
             continue;
-        // sorry, you're too fat!
 
-        // this is the range we accept incoming gears in
+        // this is the max range we accept incoming gears in
         acptRadius := Int2hwFloat(iterator^.Radius+Gear^.Radius);
 
+        // too far away?
         if (iterator^.X < Gear^.X - acptRadius)
            or (iterator^.X > Gear^.X + acptRadius)
            or (iterator^.Y < Gear^.Y - acptRadius)
            or (iterator^.Y > Gear^.Y + acptRadius) then
             continue;
-        // too far away!
 
         hasdxy := ((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0));
 
-        if hasdxy and not (Gear^.dX*iterator^.dX + Gear^.dY*iterator^.dY).isNegative then
-            continue;
         // won't port stuff that moves away from me!
+        if hasdxy and not (Gear^.dX*iterator^.dX + Gear^.dY*iterator^.dY).isNegative then
+                continue;
 
-        // wow! good candidate there, let's see if the distance really is small enough!
-        if (Distance(Gear^.X-iterator^.X,Gear^.Y-iterator^.Y) > acptRadius) then
-            continue;
+        if (iterator^.Kind <> gtCake) then
+        begin
+            // wow! good candidate there, let's see if the distance and direction is okay!
+            if hasdxy then
+            begin
+                s := int2hwFloat(iterator^.Radius) / Distance(iterator^.dX, iterator^.dY);
+                ox:= iterator^.X + s * iterator^.dX;
+                oy:= iterator^.Y + s * iterator^.dY;
+            end
+            else
+            begin
+                ox:= iterator^.X;
+                oy:= iterator^.Y + Int2hwFloat(iterator^.Radius);
+            end;
+
+            if (hwRound(Distance(Gear^.X-ox,Gear^.Y-oy)) > Gear^.Radius) then
+                continue;
+        end;
+
 (*
         noTrap := ((not Gear^.dY.isNegative or (Gear^.dY.QWordValue = 0))
                   // can't be entered from above
@@ -3252,36 +3316,54 @@ begin
         // Until loops are reliably broken
         inc(iterator^.PortalCounter);
 
-        // TODO: more accurate porting
-        cdxy := Distance(conPortal^.dX, conPortal^.dY);
-        s := (Int2hwFloat(Gear^.Radius)) / cdxy;
-
-        if iterator^.Kind = gtCake then
+        // find out how much speed parallel to the portal vector
+        // the gear has, also get the vector offset
+        pspeed:= (Gear^.dX * iterator^.dX + Gear^.dY * iterator^.dY);
+        ox := (iterator^.X - Gear^.X);
+        oy := (iterator^.Y - Gear^.Y);
+        poffs:= (Gear^.dX * ox + Gear^.dY * oy);
+        // create a normal of the portal vector
+        nx := - Gear^.dY;
+        ny := Gear^.dX;
+        // pick the normal vector that's pointing skywards
+        if (not ny.isNegative) then
             begin
-            iterator^.X := conPortal^.X ;
-            iterator^.Y := conPortal^.Y ;
-            end
-        else
-            begin
-            iterator^.X := conPortal^.X + s * conPortal^.dX;
-            iterator^.Y := conPortal^.Y + s * conPortal^.dY;
-
-            s := Distance(iterator^.dX, iterator^.dY) / cdxy;
-
-            iterator^.dX := s * conPortal^.dX;
-            iterator^.dY := s * conPortal^.dY
+            nx.isNegative := not nx.isNegative;
+            ny.isNegative := not ny.isNegative;
             end;
+        // now let's find out how much speed the gear has in the
+        // direction of that normal
+        nspeed:= (nx * iterator^.dX + ny * iterator^.dY);
+        noffs:= (nx * ox + ny * oy);
+
+        // now let's project those back to the connected portal's vectors
+        nx := - conPortal^.dY;
+        ny := conPortal^.dX;
+        if ny.isNegative then
+            begin
+            nx.isNegative := not nx.isNegative;
+            ny.isNegative := not ny.isNegative;
+            end;
+//AddFileLog('poffs:'+cstr(poffs)+' noffs:'+cstr(noffs)+' pspeed:'+cstr(pspeed)+' nspeed:'+cstr(nspeed));
+        iterator^.dX := -pspeed * conPortal^.dX - nspeed * nx;
+        iterator^.dY := -pspeed * conPortal^.dY - nspeed * ny;
+        if iterator^.Kind = gtCake then
+            poffs := poffs * _0_5;
+        iterator^.X := conPortal^.X + poffs * conPortal^.dX + noffs * nx;
+        iterator^.Y := conPortal^.Y + poffs * conPortal^.dY + noffs * ny;
 
         FollowGear := iterator;
+//AddFileLog('portal''d');
 
+{
         s := _0_2 + _0_008 * Gear^.Health;
         iterator^.dX := s * iterator^.dX;
         iterator^.dY := s * iterator^.dY;
+}
 
         if Gear^.Health > 1 then dec(Gear^.Health);
-            //dec(iterator^.Health);??
 
-        // breaks (some) loops
+{        // breaks (some) loops
         if Distance(iterator^.dX, iterator^.dY) > _0_96 then
         begin
             iterator^.dX := iterator^.dX + signAs(cGravity * getRandom(1000),iterator^.dX);
@@ -3290,13 +3372,13 @@ begin
             iterator^.dX := s * iterator^.dX;
             iterator^.dY := s * iterator^.dX;
         end;
+}
     end;
 end;
 
-procedure doStepMovingPortal(Gear: PGear);
+procedure doStepMovingPortal_real(Gear: PGear);
 var 
     x, y, tx, ty: LongInt;
-    //, bx, by, tangle: LongInt;
     s: hwFloat;
 
 procedure loadNewPortalBall(oldPortal: PGear; destroyGear: Boolean);
@@ -3322,17 +3404,6 @@ begin
 end;
 
 begin
-    if (Gear^.Timer < 1)
-       or (PHedgehog(Gear^.Hedgehog) <> CurrentHedgehog) then
-    begin
-        deleteGear(Gear);
-        EXIT;
-    end;
-    
-    doPortalColorSwitch();
-
-    Gear^.X := Gear^.X + Gear^.dX;
-    Gear^.Y := Gear^.Y + Gear^.dY;
     x := hwRound(Gear^.X);
     y := hwRound(Gear^.Y);
     tx := 0;
@@ -3341,6 +3412,8 @@ begin
 
     if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] > 255) then
     begin
+        Gear^.State := Gear^.State or gstCollision;
+        Gear^.State := Gear^.State and not gstMoving;
         if not calcSlopeTangent(Gear, x, y, tx, ty, 255)
            or (DistanceI(tx,ty) < _12) then // reject shots at too irregular terrain
         begin
@@ -3371,6 +3444,15 @@ begin
     else if (y > cWaterLine) or (y < -LAND_WIDTH)
             or (x > 2*LAND_WIDTH) or (x < -LAND_WIDTH) then
              loadNewPortalBall(Gear, true);
+end;
+
+procedure doStepMovingPortal(Gear: PGear);
+begin
+    doPortalColorSwitch();
+    doStepPerPixel(Gear, @doStepMovingPortal_real, true);
+    if (Gear^.Timer < 1)
+       or (PHedgehog(Gear^.Hedgehog) <> CurrentHedgehog) then
+            deleteGear(Gear);
 end;
 
 procedure doStepPortalShot(newPortal: PGear);
@@ -3422,6 +3504,8 @@ begin
                 iterator := iterator^.NextGear
             end;
         end;
+    newPortal^.State := newPortal^.State and not gstCollision;
+    newPortal^.State := newPortal^.State or gstMoving;
     newPortal^.doStep := @doStepMovingPortal;
 end;
 
