@@ -3345,8 +3345,8 @@ begin
             ny.isNegative := not ny.isNegative;
             end;
 //AddFileLog('poffs:'+cstr(poffs)+' noffs:'+cstr(noffs)+' pspeed:'+cstr(pspeed)+' nspeed:'+cstr(nspeed));
-        iterator^.dX := -pspeed * conPortal^.dX + nspeed * nx;
-        iterator^.dY := -pspeed * conPortal^.dY + nspeed * ny;
+        iterator^.dX := -pspeed * conPortal^.dX - nspeed * nx;
+        iterator^.dY := -pspeed * conPortal^.dY - nspeed * ny;
         if iterator^.Kind = gtCake then
             poffs := poffs * _0_5;
         iterator^.X := conPortal^.X + poffs * conPortal^.dX + noffs * nx;
