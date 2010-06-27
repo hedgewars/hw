@@ -43,7 +43,7 @@ handleCmd_inRoom ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : 
     | length hhsInfo /= 16 = return [ProtocolError "Corrupted hedgehogs info"]
     | otherwise = do
         (ci, rnc) <- ask
-        let r = room rnc $ clientRoom rnc ci
+        r <- thisRoom
         clNick <- clientNick
         clChan <- thisClientChans
         othersChans <- roomOthersChans
@@ -79,7 +79,7 @@ handleCmd_inRoom ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : 
 
 handleCmd_inRoom ["REMOVE_TEAM", name] = do
         (ci, rnc) <- ask
-        let r = room rnc $ clientRoom rnc ci
+        r <- thisRoom
         clNick <- clientNick
 
         let maybeTeam = findTeam r
@@ -102,37 +102,52 @@ handleCmd_inRoom ["REMOVE_TEAM", name] = do
         anotherTeamClan ci = teamcolor . fromJust . find (\t -> teamownerId t == ci) . teams
         findTeam = find (\t -> name == teamname t) . teams
 
-{-
 
-handleCmd_inRoom clID clients rooms ["HH_NUM", teamName, numberStr]
-    | not $ isMaster client = [ProtocolError "Not room master"]
-    | hhNumber < 1 || hhNumber > 8 || noSuchTeam || hhNumber > (canAddNumber + (hhnum team)) = []
-    | otherwise =
-        [ModifyRoom $ modifyTeam team{hhnum = hhNumber},
-        AnswerOthersInRoom ["HH_NUM", teamName, show hhNumber]]
+handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
+    cl <- thisClient
+    others <- roomOthersChans
+    r <- thisRoom
+
+    let maybeTeam = findTeam r
+    let team = fromJust maybeTeam
+
+    return $
+        if not $ isMaster cl then
+            [ProtocolError "Not room master"]
+        else if hhNumber < 1 || hhNumber > 8 || isNothing maybeTeam || hhNumber > (canAddNumber r) + (hhnum team) then
+            []
+        else
+            [ModifyRoom $ modifyTeam team{hhnum = hhNumber},
+            AnswerClients others ["HH_NUM", teamName, B.pack $ show hhNumber]]
     where
-        client = clients IntMap.! clID
-        room = rooms IntMap.! (roomID client)
-        hhNumber = fromMaybe 0 (maybeRead numberStr :: Maybe Int)
-        noSuchTeam = isNothing findTeam
-        team = fromJust findTeam
-        findTeam = find (\t -> teamName == teamname t) $ teams room
-        canAddNumber = 48 - (sum . map hhnum $ teams room)
+        hhNumber = case B.readInt numberStr of
+                           Just (i, t) | B.null t -> fromIntegral i
+                           otherwise -> 0
+        findTeam = find (\t -> teamName == teamname t) . teams
+        canAddNumber = (-) 48 . sum . map hhnum . teams
 
 
-handleCmd_inRoom clID clients rooms ["TEAM_COLOR", teamName, newColor]
-    | not $ isMaster client = [ProtocolError "Not room master"]
-    | noSuchTeam = []
-    | otherwise = [ModifyRoom $ modifyTeam team{teamcolor = newColor},
-            AnswerOthersInRoom ["TEAM_COLOR", teamName, newColor],
+
+handleCmd_inRoom ["TEAM_COLOR", teamName, newColor] = do
+    cl <- thisClient
+    others <- roomOthersChans
+    r <- thisRoom
+
+    let maybeTeam = findTeam r
+    let team = fromJust maybeTeam
+
+    return $
+        if not $ isMaster cl then
+            [ProtocolError "Not room master"]
+        else if isNothing maybeTeam then
+            []
+        else
+            [ModifyRoom $ modifyTeam team{teamcolor = newColor},
+            AnswerClients others ["TEAM_COLOR", teamName, newColor],
             ModifyClient2 (teamownerId team) (\c -> c{clientClan = newColor})]
     where
-        noSuchTeam = isNothing findTeam
-        team = fromJust findTeam
-        findTeam = find (\t -> teamName == teamname t) $ teams room
-        client = clients IntMap.! clID
-        room = rooms IntMap.! (roomID client)
--}
+        findTeam = find (\t -> teamName == teamname t) . teams
+
 
 handleCmd_inRoom ["TOGGLE_READY"] = do
     cl <- thisClient
@@ -192,21 +207,26 @@ handleCmd_inRoom clID clients rooms ["ROUNDFINISHED"] =
         client = clients IntMap.! clID
         room = rooms IntMap.! (roomID client)
         answerRemovedTeams = map (\t -> AnswerThisRoom ["REMOVE_TEAM", t]) $ leftTeams room
+-}
+
+handleCmd_inRoom ["TOGGLE_RESTRICT_JOINS"] = do
+    cl <- thisClient
+    return $
+        if not $ isMaster cl then
+            [ProtocolError "Not room master"]
+        else
+            [ModifyRoom (\r -> r{isRestrictedJoins = not $ isRestrictedJoins r})]
 
 
-handleCmd_inRoom clID clients _ ["TOGGLE_RESTRICT_JOINS"]
-    | isMaster client = [ModifyRoom (\r -> r{isRestrictedJoins = not $ isRestrictedJoins r})]
-    | otherwise = [ProtocolError "Not room master"]
-    where
-        client = clients IntMap.! clID
+handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = do
+    cl <- thisClient
+    return $
+        if not $ isMaster cl then
+            [ProtocolError "Not room master"]
+        else
+            [ModifyRoom (\r -> r{isRestrictedTeams = not $ isRestrictedTeams r})]
 
-
-handleCmd_inRoom clID clients _ ["TOGGLE_RESTRICT_TEAMS"]
-    | isMaster client = [ModifyRoom (\r -> r{isRestrictedTeams = not $ isRestrictedTeams r})]
-    | otherwise = [ProtocolError "Not room master"]
-    where
-        client = clients IntMap.! clID
-
+{-
 handleCmd_inRoom clID clients rooms ["KICK", kickNick] =
     [KickRoomClient kickID | isMaster client && not noSuchClient && (kickID /= clID) && (roomID client == roomID kickClient)]
     where

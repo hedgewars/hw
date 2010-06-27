@@ -12,6 +12,12 @@ thisClient = do
     (ci, rnc) <- ask
     return $ rnc `client` ci
 
+thisRoom :: Reader (ClientIndex, IRnC) RoomInfo
+thisRoom = do
+    (ci, rnc) <- ask
+    let ri = clientRoom rnc ci
+    return $ rnc `room` ri
+
 clientNick :: Reader (ClientIndex, IRnC) B.ByteString
 clientNick = liftM nick thisClient
 

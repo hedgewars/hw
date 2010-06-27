@@ -150,7 +150,12 @@ processAction (ModifyClient f) = do
     rnc <- gets roomsClients
     liftIO $ modifyClient rnc f ci
     return ()
-    
+
+processAction (ModifyClient2 ci f) = do
+    rnc <- gets roomsClients
+    liftIO $ modifyClient rnc f ci
+    return ()
+
 
 processAction (ModifyRoom f) = do
     rnc <- gets roomsClients
