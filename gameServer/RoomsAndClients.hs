@@ -48,7 +48,7 @@ data Client c = Client {
 newtype RoomIndex = RoomIndex ElemIndex
     deriving (Eq)
 newtype ClientIndex = ClientIndex ElemIndex
-    deriving (Eq, Show, Read)
+    deriving (Eq, Show, Read, Ord)
 
 instance Show RoomIndex where
     show (RoomIndex i) = 'r' : show i

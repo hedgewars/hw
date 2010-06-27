@@ -4,6 +4,7 @@ module Actions where
 import Control.Concurrent
 import Control.Concurrent.Chan
 import qualified Data.IntSet as IntSet
+import qualified Data.Set as Set
 import qualified Data.Sequence as Seq
 import System.Log.Logger
 import Monad
@@ -19,7 +20,7 @@ import ClientIO
 import ServerState
 
 data Action =
-    AnswerClients [ClientChan] [B.ByteString]
+    AnswerClients ![ClientChan] ![B.ByteString]
     | SendServerMessage
     | SendServerVars
     | MoveToRoom RoomIndex
@@ -45,6 +46,7 @@ data Action =
     | ProcessAccountInfo AccountInfo
     | Dump
     | AddClient ClientInfo
+    | DeleteClient ClientIndex
     | PingAll
     | StatsAction
 
@@ -101,19 +103,26 @@ processAction (ByeClient msg) = do
         return ()
 
     chan <- client's sendChan
+    ready <- client's isReady
 
     liftIO $ do
         infoM "Clients" (show ci ++ " quits: " ++ (B.unpack msg))
 
-        
         --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
         writeChan chan ["BYE", msg]
         modifyRoom rnc (\r -> r{
                         --playersIDs = IntSet.delete ci (playersIDs r)
-                        playersIn = (playersIn r) - 1
-                        --readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
+                        playersIn = (playersIn r) - 1,
+                        readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
                         }) ri
-    
+
+        removeClient rnc ci
+
+    modify (\s -> s{removedClients = ci `Set.insert` removedClients s})
+
+processAction (DeleteClient ci) = do
+    modify (\s -> s{removedClients = ci `Set.delete` removedClients s})
+
 {-
     where
         client = clients ! clID
@@ -227,7 +236,8 @@ processAction (MoveToLobby msg) = do
 -}
 
 processAction (AddRoom roomName roomPassword) = do
-    (ServerState (Just clId) _ rnc) <- get
+    Just clId <- gets clientIndex
+    rnc <- gets roomsClients
     proto <- liftIO $ client'sM rnc clientProto clId
     
     let room = newRoom{
@@ -335,10 +345,10 @@ processAction (ProcessAccountInfo info) =
 processAction JoinLobby = do
     chan <- client's sendChan
     clientNick <- client's nick
-    (lobbyNicks, clientsChans) <- liftM (unzip . Prelude.map (\c -> (nick c, sendChan c)) . Prelude.filter logonPassed) allClientsS
+    (lobbyNicks, clientsChans) <- liftM (unzip . Prelude.map (\c -> (nick c, sendChan c)) . Prelude.filter logonPassed) $! allClientsS
     mapM_ processAction $
         (AnswerClients clientsChans ["LOBBY:JOINED", clientNick])
-        : [AnswerClients [chan] ("LOBBY:JOINED" : lobbyNicks) | not $ Prelude.null lobbyNicks]
+        : [AnswerClients [chan] ("LOBBY:JOINED" : clientNick : lobbyNicks)]
         ++ [ModifyClient (\cl -> cl{logonPassed = True}), SendServerMessage]
 
 {-

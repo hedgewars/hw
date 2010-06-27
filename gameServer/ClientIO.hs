@@ -32,7 +32,7 @@ bs2Packets buf = unfoldrE extractPackets buf
                         Left bufTail
                         else
                         Right (B.splitWith (== '\n') bsPacket, bufTail)
-                   
+
 
 listenLoop :: Socket -> Chan CoreMessage -> ClientIndex -> IO ()
 listenLoop sock chan ci = recieveWithBufferLoop B.empty
@@ -53,7 +53,7 @@ clientRecvLoop s chan ci = do
     msg <- (listenLoop s chan ci >> return "Connection closed") `catch` (return . B.pack . show)
     clientOff msg
     where 
-        clientOff msg = writeChan chan $ ClientMessage (ci, ["QUIT", msg])
+        clientOff msg = mapM_ (writeChan chan) [ClientMessage (ci, ["QUIT", msg]), Remove ci]
 
 
 

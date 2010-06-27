@@ -173,7 +173,7 @@ data CoreMessage =
     | ClientMessage (ClientIndex, [B.ByteString])
     | ClientAccountInfo (ClientIndex, AccountInfo)
     | TimerAction Int
-    | FreeClient ClientIndex
+    | Remove ClientIndex
 
 type MRnC = MRoomsAndClients RoomInfo ClientInfo
 type IRnC = IRoomsAndClients RoomInfo ClientInfo

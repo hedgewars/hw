@@ -24,7 +24,7 @@ import Control.Monad
 
 
 newtype ElemIndex = ElemIndex Int
-    deriving (Eq, Show, Read)
+    deriving (Eq, Show, Read, Ord)
 newtype MStore e = MStore (IORef (IntSet.IntSet, IntSet.IntSet, IOA.IOArray Int e))
 newtype IStore e = IStore (IntSet.IntSet, IA.Array Int e)
 
@@ -105,7 +105,7 @@ indicesM (MStore ref) = do
 m2i :: MStore e -> IO (IStore e)
 m2i (MStore ref) = do
     (a, _, c') <- readIORef ref 
-    c <- IOA.unsafeFreeze c'
+    c <- IOA.freeze c'
     return $ IStore (a, c)
 
 

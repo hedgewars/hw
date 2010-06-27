@@ -9,6 +9,7 @@ module ServerState
     ) where
 
 import Control.Monad.State
+import Data.Set as Set
 ----------------------
 import RoomsAndClients
 import CoreTypes
@@ -16,6 +17,7 @@ import CoreTypes
 data ServerState = ServerState {
         clientIndex :: Maybe ClientIndex,
         serverInfo :: ServerInfo,
+        removedClients :: Set.Set ClientIndex,
         roomsClients :: MRnC
     }
 

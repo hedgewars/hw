@@ -33,13 +33,7 @@ handleCmd_lobby ["LIST"] = do
     let roomsInfoList = concatMap (roomInfo irnc) . filter (\r -> (roomProto r == clientProto cl) && not (isRestrictedJoins r))
     return [AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
     where
-        roomInfo irnc room
-            | roomProto room < 28 = [
-                name room,
-                B.pack $ show (playersIn room) ++ "(" ++ show (length $ teams room) ++ ")",
-                B.pack $ show $ gameinprogress room
-                ]
-            | otherwise = [
+        roomInfo irnc room = [
                 showB $ gameinprogress room,
                 name room,
                 showB $ playersIn room,

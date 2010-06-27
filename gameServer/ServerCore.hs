@@ -8,6 +8,7 @@ import qualified Data.IntMap as IntMap
 import System.Log.Logger
 import Control.Monad.Reader
 import Control.Monad.State
+import Data.Set as Set
 import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
@@ -35,39 +36,33 @@ mainLoop = forever $ do
     r <- liftIO $ readChan $ coreChan si
 
     case r of
-        Accept ci -> do
-            processAction (AddClient ci)
-            return ()
+        Accept ci -> processAction (AddClient ci)
 
         ClientMessage (ci, cmd) -> do
             liftIO $ debugM "Clients" $ (show ci) ++ ": " ++ (show cmd)
-            modify (\as -> as{clientIndex = Just ci})
-            --if clID `IntMap.member` clients then
-            reactCmd cmd
-            return ()
+
+            removed <- gets removedClients
+            when (not $ ci `Set.member` removed) $ do
+                modify (\as -> as{clientIndex = Just ci})
+                reactCmd cmd
+
+        Remove ci -> processAction (DeleteClient ci)
+
                 --else
                 --do
                 --debugM "Clients" "Message from dead client"
                 --return (serverInfo, rnc)
 
-        ClientAccountInfo (clID, info) -> do
-            --if clID `IntMap.member` clients then
-            processAction (ProcessAccountInfo info)
-            return ()
-                --else
-                --do
-                --debugM "Clients" "Got info for dead client"
-                --return (serverInfo, rnc)
+        ClientAccountInfo (ci, info) -> do
+            removed <- gets removedClients
+            when (not $ ci `Set.member` removed) $
+                processAction (ProcessAccountInfo info)
 
         TimerAction tick ->
             return ()
             --liftM snd $
             --    foldM processAction (0, serverInfo, rnc) $
             --        PingAll : [StatsAction | even tick]
-
-        FreeClient ci -> do
-            rnc <- gets roomsClients
-            liftIO $ removeClient rnc ci
 
 
 startServer :: ServerInfo -> Socket -> IO ()
@@ -87,6 +82,6 @@ startServer serverInfo serverSocket = do
 
     rnc <- newRoomsAndClients newRoom
 
-    forkIO $ evalStateT mainLoop (ServerState Nothing serverInfo rnc)
+    forkIO $ evalStateT mainLoop (ServerState Nothing serverInfo Set.empty rnc)
 
     forever $ threadDelay (60 * 60 * 10^6) >> putStrLn "***"

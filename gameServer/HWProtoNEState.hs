@@ -35,9 +35,9 @@ handleCmd_NotEntered ["PROTO", protoNum] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
     if clientProto cl > 0 then return [ProtocolError "Protocol already known"]
-        else 
+        else
         if parsedProto == 0 then return [ProtocolError "Bad number"]
-            else 
+            else
             return $
                 ModifyClient (\c -> c{clientProto = parsedProto}) :
                 AnswerClients [sendChan cl] ["PROTO", B.pack $ show parsedProto] :
