@@ -12,21 +12,22 @@
 @implementation UIImage (extra)
  
 -(UIImage *)scaleToSize:(CGSize) size {
-  // Create a bitmap graphics context
-  // This will also set it as the current context
-  UIGraphicsBeginImageContext(size);
- 
-  // Draw the scaled image in the current context
-  [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
- 
-  // Create a new image from current context
-  UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
- 
-  // Pop the current context from the stack
-  UIGraphicsEndImageContext();
- 
-  // Return our new scaled image (autoreleased)
-  return scaledImage;
+    DLog(@"warning - this is a very expensive operation, you should avoid using it");
+    
+    // Create a bitmap graphics context; this will also set it as the current context
+    UIGraphicsBeginImageContext(size);
+    
+    // Draw the scaled image in the current context
+    [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    
+    // Create a new image from current context
+    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // Pop the current context from the stack
+    UIGraphicsEndImageContext();
+    
+    // Return our new scaled image (autoreleased)
+    return scaledImage;
 }
 
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint {
@@ -35,12 +36,13 @@
 }
 
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint atSize:(CGSize) resultingSize {
+    // Create a bitmap graphics context; this will also set it as the current context
     UIGraphicsBeginImageContext(resultingSize);
     
-    // drav the background image
+    // draw the background image in the current context
     [self drawAtPoint:CGPointMake(0,0)];
     
-    // draw the image on top of the first image
+    // draw the image on top of the first image (because the context is the same)
     [secondImage drawAtPoint:secondImagePoint];
     
     // create an image from the current contex (not thread safe)
@@ -79,38 +81,40 @@
 }
 
 -(UIImage *)convertToGrayScale {
-  // Create image rectangle with current image width/height
-  CGRect imageRect = CGRectMake(0, 0, self.size.width, self.size.height);
- 
-  // Grayscale color space
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
- 
-  // Create bitmap content with current image size and grayscale colorspace
-  CGContextRef context = CGBitmapContextCreate(nil, self.size.width, self.size.height, 8, 0, colorSpace, kCGImageAlphaNone);
- 
-  // Draw image into current context, with specified rectangle
-  // using previously defined context (with grayscale colorspace)
-  CGContextDrawImage(context, imageRect, [self CGImage]);
- 
-  // Create bitmap image info from pixel data in current context
-  CGImageRef imageRef = CGBitmapContextCreateImage(context);
- 
-  // Create a new UIImage object  
-  UIImage *newImage = [UIImage imageWithCGImage:imageRef];
- 
-  // Release colorspace, context and bitmap information
-  CGColorSpaceRelease(colorSpace);
-  CGContextRelease(context);
-  CFRelease(imageRef);
- 
-  // Return the new grayscale image
-  return newImage;
+    // Create image rectangle with current image width/height
+    CGRect imageRect = CGRectMake(0, 0, self.size.width, self.size.height);
+    
+    // Grayscale color space
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+    
+    // Create bitmap content with current image size and grayscale colorspace
+    CGContextRef context = CGBitmapContextCreate(nil, self.size.width, self.size.height, 8, 0, colorSpace, kCGImageAlphaNone);
+    
+    // Draw image into current context, with specified rectangle
+    // using previously defined context (with grayscale colorspace)
+    CGContextDrawImage(context, imageRect, [self CGImage]);
+    
+    // Create bitmap image info from pixel data in current context
+    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    
+    // Create a new UIImage object  
+    UIImage *newImage = [UIImage imageWithCGImage:imageRef];
+    
+    // Release colorspace, context and bitmap information
+    CGColorSpaceRelease(colorSpace);
+    CGContextRelease(context);
+    CFRelease(imageRef);
+    
+    // Return the new grayscale image
+    return newImage;
 }
 
 // by http://iphonedevelopertips.com/cocoa/how-to-mask-an-image.html turned into a category by koda
 -(UIImage*) maskImageWith:(UIImage *)maskImage {
-    CGImageRef maskRef = maskImage.CGImage;
+    // prepare the reference image
+    CGImageRef maskRef = [maskImage CGImage];
     
+    // create the mask using parameters of the mask reference
     CGImageRef mask = CGImageMaskCreate(CGImageGetWidth(maskRef),
                                         CGImageGetHeight(maskRef),
                                         CGImageGetBitsPerComponent(maskRef),
@@ -118,21 +122,19 @@
                                         CGImageGetBytesPerRow(maskRef),
                                         CGImageGetDataProvider(maskRef), NULL, false);
     
+    // create an image in the current context
     CGImageRef masked = CGImageCreateWithMask([self CGImage], mask);
-    
     CGImageRelease(mask);
     
     UIImage* retImage = [UIImage imageWithCGImage:masked];
-    
     CGImageRelease(masked);
     
     return retImage;
 }
 
 // by http://blog.sallarp.com/iphone-uiimage-round-corners/ turned into a category by koda
-void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, float ovalHeight)
-{
-    float fw, fh;
+void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, CGFloat ovalHeight) {
+    CGFloat fw, fh;
     if (ovalWidth == 0 || ovalHeight == 0) {
         CGContextAddRect(context, rect);
         return;
@@ -151,13 +153,11 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
     CGContextRestoreGState(context);
 }
 
--(UIImage *)makeRoundCornersOfSize:(CGSize) sizewh {
-    UIImage * newImage = nil;
-    
-    NSInteger cornerWidth = sizewh.width;
-    NSInteger cornerHeight = sizewh.height;
-    int w = self.size.width;
-    int h = self.size.height;
+-(UIImage *)makeRoundCornersOfSize:(CGSize) sizewh {    
+    CGFloat cornerWidth = sizewh.width;
+    CGFloat cornerHeight = sizewh.height;
+    CGFloat w = self.size.width;
+    CGFloat h = self.size.height;
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
@@ -168,17 +168,16 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth, fl
     CGContextClosePath(context);
     CGContextClip(context);
     
-    CGContextDrawImage(context, CGRectMake(0, 0, w, h), self.CGImage);
+    CGContextDrawImage(context, CGRectMake(0, 0, w, h), [self CGImage]);
     
     CGImageRef imageMasked = CGBitmapContextCreateImage(context);
     CGContextRelease(context);
     CGColorSpaceRelease(colorSpace);
     
-    newImage = [UIImage imageWithCGImage:imageMasked];
+    UIImage *newImage = [UIImage imageWithCGImage:imageMasked];
     CGImageRelease(imageMasked);
         
     return newImage;
 }
-
 
 @end

@@ -11,6 +11,9 @@
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
 
+#define LABEL_TAG  12345
+#define SLIDER_TAG 54321
+
 @implementation SingleSchemeViewController
 @synthesize textFieldBeingEdited, schemeArray, basicSettingList, gameModifierArray;
 
@@ -80,15 +83,24 @@
     [mods release];
     
     NSArray *basicSettings = [[NSArray alloc] initWithObjects:
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Damage Modifier",@""),@"title",@"Damage",@"image",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Turn Time",@""),@"title",@"Time",@"image",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Initial Health",@""),@"title",@"Health",@"image",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Sudden Death Timeout",@""),@"title",@"SuddenDeath",@"image",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Crate Drops",@""),@"title",@"Box",@"image",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Mines Time",@""),@"title",@"Time",@"image",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Mines Number",@""),@"title",@"Mine",@"image",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Dud Mines Probability",@""),@"title",@"Dud",@"image",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Explosives",@""),@"title",@"Damage",@"image",nil],
+                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Damage Modifier",@""),@"title",@"Damage",@"image",
+                               [NSNumber numberWithInt:100],@"default",[NSNumber numberWithInt:10],@"min",[NSNumber numberWithInt:300],@"max",nil],
+                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Turn Time",@""),@"title",@"Time",@"image",
+                               [NSNumber numberWithInt:45],@"default",[NSNumber numberWithInt:1],@"min",[NSNumber numberWithInt:99],@"max",nil],
+                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Initial Health",@""),@"title",@"Health",@"image",
+                               [NSNumber numberWithInt:100],@"default",[NSNumber numberWithInt:50],@"min",[NSNumber numberWithInt:200],@"max",nil],
+                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Sudden Death Timeout",@""),@"title",@"SuddenDeath",@"image",
+                               [NSNumber numberWithInt:15],@"default",[NSNumber numberWithInt:0],@"min",[NSNumber numberWithInt:50],@"max",nil],
+                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Crate Drops",@""),@"title",@"Box",@"image",
+                               [NSNumber numberWithInt:5],@"default",[NSNumber numberWithInt:0],@"min",[NSNumber numberWithInt:9],@"max",nil],
+                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Mines Time",@""),@"title",@"Time",@"image",
+                               [NSNumber numberWithInt:3],@"default",[NSNumber numberWithInt:0],@"min",[NSNumber numberWithInt:3],@"max",nil],
+                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Mines Number",@""),@"title",@"Mine",@"image",
+                               [NSNumber numberWithInt:4],@"default",[NSNumber numberWithInt:1],@"min",[NSNumber numberWithInt:80],@"max",nil],
+                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Dud Mines Probability",@""),@"title",@"Dud",@"image",
+                               [NSNumber numberWithInt:0],@"default",[NSNumber numberWithInt:0],@"min",[NSNumber numberWithInt:100],@"max",nil],
+                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Explosives",@""),@"title",@"Damage",@"image",
+                               [NSNumber numberWithInt:2],@"default",[NSNumber numberWithInt:0],@"min",[NSNumber numberWithInt:40],@"max",nil],
                               nil];
     self.basicSettingList = basicSettings;
     [basicSettings release];
@@ -193,7 +205,7 @@
     return 0;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier0 = @"Cell0";
     static NSString *CellIdentifier1 = @"Cell1";
     static NSString *CellIdentifier2 = @"Cell2";
@@ -203,7 +215,7 @@
     
     switch ([indexPath section]) {
         case 0:
-            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier0];
+            cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                                reuseIdentifier:CellIdentifier0] autorelease];
@@ -233,20 +245,44 @@
             cell.imageView.image = nil;
             break;
         case 1:
-            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier1];
+            cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
+            NSDictionary *detail = [self.basicSettingList objectAtIndex:row];
+            // need to offset this section (see format in CommodityFunctions.m and above)
+            NSInteger gmSize = [self.gameModifierArray count];
             if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 
                                                reuseIdentifier:CellIdentifier1] autorelease];
+                UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(260, 12, 150, 23)];
+                slider.maximumValue = [[detail objectForKey:@"max"] floatValue];
+                slider.minimumValue = [[detail objectForKey:@"min"] floatValue];
+                slider.tag = row+gmSize;
+                [slider addTarget:self action:@selector(sliderChanged:) forControlEvents:UIControlEventValueChanged];
+                [cell.contentView addSubview:slider];
+                [slider release];
+                
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(50, 7, 200, 30)];
+                label.tag = LABEL_TAG;
+                label.backgroundColor = [UIColor clearColor];
+                label.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+                [cell.contentView addSubview:label];
+                [label release];
             }
             
             UIImage *img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/icon%@.png",BTN_DIRECTORY(),[[self.basicSettingList objectAtIndex:row] objectForKey:@"image"]]];
             cell.imageView.image = [img scaleToSize:CGSizeMake(40, 40)];
             [img release];
-            cell.textLabel.text = [[self.basicSettingList objectAtIndex:row] objectForKey:@"title"];
-            cell.detailTextLabel.text = nil;
+            
+            UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
+            cellLabel.text = [[self.basicSettingList objectAtIndex:row] objectForKey:@"title"];
+            
+            UISlider *cellSlider = (UISlider *)[cell.contentView viewWithTag:row+gmSize];
+            cellSlider.value = [[self.schemeArray objectAtIndex:row+gmSize] floatValue];
+            
+            // forced to use this weird format otherwise the label disappears when size of the text is bigger than the original
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%0.3d",[[self.schemeArray objectAtIndex:row+gmSize] intValue]];
             break;
         case 2:
-            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
+            cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier2];
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                                reuseIdentifier:CellIdentifier2] autorelease];
@@ -261,6 +297,7 @@
             cell.imageView.image = image;
             [image release];
             [cell.imageView.layer setCornerRadius:7.0f];
+            [cell.imageView.layer setBorderWidth:1];
             [cell.imageView.layer setMasksToBounds:YES];
             cell.textLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"title"];
             cell.detailTextLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"description"];
@@ -275,20 +312,55 @@
     [self.schemeArray replaceObjectAtIndex:theSwitch.tag withObject:[NSNumber numberWithBool:theSwitch.on]];
 }
 
+-(void) sliderChanged:(id) sender {
+    // need to offset this section (see format in CommodityFunctions.m and above)
+    NSInteger gmSize = [self.gameModifierArray count];
+    // the slider that changed is sent as object
+    UISlider *theSlider = (UISlider *)sender;
+    // create the indexPath of the row of the slider
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:theSlider.tag-gmSize inSection:1];
+    // get its cell
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    // grab the associated label
+    UILabel *label = (UILabel *)cell.detailTextLabel;
+    // modify it
+    label.text = [NSString stringWithFormat:@"%0.3d",(int)theSlider.value];
+    // save changes in the main array (remember that you need to offset it)
+    [self.schemeArray replaceObjectAtIndex:theSlider.tag withObject:[NSNumber numberWithInt:(int)theSlider.value]];
+    NSLog(@"%@",self.schemeArray);
+}
 
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
+    UISwitch *sw = nil;
+    UISlider *cellSlider = nil;
     
-    if ([indexPath section] == 0) {
-        UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
-        for (UIView *oneView in cell.contentView.subviews) {
-            if ([oneView isMemberOfClass:[UITextField class]]) {
-                textFieldBeingEdited = (UITextField *)oneView;
-                [textFieldBeingEdited becomeFirstResponder];
+    switch ([indexPath section]) {
+        case 0:
+            for (UIView *oneView in cell.contentView.subviews) {
+                if ([oneView isMemberOfClass:[UITextField class]]) {
+                    textFieldBeingEdited = (UITextField *)oneView;
+                    [textFieldBeingEdited becomeFirstResponder];
+                }
             }
-        }
+            break;
+        case 1:
+            cellSlider = (UISlider *)[cell.contentView viewWithTag:[indexPath row]+[self.gameModifierArray count]];
+            [cellSlider setValue:[[[self.basicSettingList objectAtIndex:[indexPath row]] objectForKey:@"default"] floatValue] animated:YES];
+            [self sliderChanged:cellSlider];
+            //cell.detailTextLabel.text = [[[self.basicSettingList objectAtIndex:[indexPath row]] objectForKey:@"default"] stringValue];
+            break;
+        case 2:
+            sw = (UISwitch *)cell.accessoryView;
+            [sw setOn:!sw.on animated:YES];
+            [self toggleSwitch:sw];
+            break;
+        default:
+            break;
     }
+    
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
