@@ -596,7 +596,6 @@ DrawLand(WorldDx, WorldDy);
 DrawWater(255, 0);
 
 // Attack bar
-// TODO: Add weapon offset
 if CurrentTeam <> nil then
     case AttackBar of
 (*        1: begin
@@ -974,7 +973,7 @@ if isCursorVisible then
    if not bShowAmmoMenu then
      begin
      with CurrentHedgehog^ do
-       if (Gear^.State and gstHHChooseTarget) <> 0 then
+       if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
          begin
          i:= Ammo^[CurSlot, CurAmmo].Pos;
          with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
