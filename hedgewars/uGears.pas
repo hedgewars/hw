@@ -95,6 +95,8 @@ procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
+function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
+function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics,

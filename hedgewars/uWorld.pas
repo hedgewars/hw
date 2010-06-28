@@ -612,8 +612,8 @@ if CurrentTeam <> nil then
                 tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
                 for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
                     DrawSprite(sprPower,
-                            hwRound(Gear^.X) + round(WorldDx + tdx * (24 + i * 2)) - 16,
-                            hwRound(Gear^.Y) + round(WorldDy + tdy * (24 + i * 2)) - 12,
+                            hwRound(Gear^.X) + GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Gear^.dX), Gear^.Angle) + round(WorldDx + tdx * (24 + i * 2)) - 16,
+                            hwRound(Gear^.Y) + GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Gear^.Angle) + round(WorldDy + tdy * (24 + i * 2)) - 16,
                             i)
                 end
         end;
