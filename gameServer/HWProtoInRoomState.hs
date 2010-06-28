@@ -183,16 +183,19 @@ handleCmd_inRoom ["START_GAME"] = do
         enoughClans = not . null . drop 1 . group . map teamcolor . teams
 
 
-{-
-handleCmd_inRoom clID clients rooms ["EM", msg] =
-    if (teamsInGame client > 0) && isLegal then
-        (AnswerOthersInRoom ["EM", msg]) : [ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}) | not isKeepAlive]
-    else
-        []
+handleCmd_inRoom ["EM", msg] = do
+    cl <- thisClient
+    r <- thisRoom
+    chans <- roomOthersChans
+    
+    if (teamsInGame cl > 0) && isLegal then
+        return $ (AnswerClients chans ["EM", msg]) : [ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}) | not isKeepAlive]
+        else
+        return []
     where
-        client = clients IntMap.! clID
         (isLegal, isKeepAlive) = checkNetCmd msg
 
+{-
 handleCmd_inRoom clID clients rooms ["ROUNDFINISHED"] =
     if isMaster client then
         [ModifyRoom
