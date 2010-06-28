@@ -158,28 +158,32 @@ handleCmd_inRoom ["TOGGLE_READY"] = do
         AnswerClients chans [if isReady cl then "NOT_READY" else "READY", nick cl]
         ]
 
-{-
-handleCmd_inRoom clID clients rooms ["START_GAME"] =
-    if isMaster client && (playersIn room == readyPlayers room) && (not . gameinprogress) room then
-        if enoughClans then
-            [ModifyRoom
+handleCmd_inRoom ["START_GAME"] = do
+    cl <- thisClient
+    r <- thisRoom
+    chans <- roomClientsChans
+
+    if isMaster cl && (playersIn r == readyPlayers r) && (not $ gameinprogress r) then
+        if enoughClans r then
+            return [
+                ModifyRoom
                     (\r -> r{
                         gameinprogress = True,
                         roundMsgs = empty,
                         leftTeams = [],
                         teamsAtStart = teams r}
                     ),
-            AnswerThisRoom ["RUN_GAME"]]
+                AnswerClients chans ["RUN_GAME"]
+                ]
+            else
+            return [Warning "Less than two clans!"]
         else
-            [Warning "Less than two clans!"]
-    else
-        []
+        return []
     where
-        client = clients IntMap.! clID
-        room = rooms IntMap.! (roomID client)
-        enoughClans = not $ null $ drop 1 $ group $ map teamcolor $ teams room
+        enoughClans = not . null . drop 1 . group . map teamcolor . teams
 
 
+{-
 handleCmd_inRoom clID clients rooms ["EM", msg] =
     if (teamsInGame client > 0) && isLegal then
         (AnswerOthersInRoom ["EM", msg]) : [ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}) | not isKeepAlive]
