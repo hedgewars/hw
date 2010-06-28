@@ -3183,7 +3183,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doPortalColorSwitch();
-var 
+var
     flags: LongWord;
 begin
     if (CurrentHedgehog <> nil)
@@ -3295,7 +3295,7 @@ begin
                 oy:= iterator^.Y + Int2hwFloat(iterator^.Radius);
             end;
 
-            if (hwRound(Distance(Gear^.X-ox,Gear^.Y-oy)) > Gear^.Radius) then
+            if (hwRound(Distance(Gear^.X-ox,Gear^.Y-oy)) > Gear^.Radius + 1 ) then
                 continue;
         end;
 
@@ -3322,31 +3322,31 @@ begin
         ox := (iterator^.X - Gear^.X);
         oy := (iterator^.Y - Gear^.Y);
         poffs:= (Gear^.dX * ox + Gear^.dY * oy);
-        // create a normal of the portal vector
-        nx := - Gear^.dY;
+        // create a normal of the portal vector, but ...
+        nx := Gear^.dY;
         ny := Gear^.dX;
-        // pick the normal vector that's pointing skywards
-        if (not ny.isNegative) then
-            begin
-            nx.isNegative := not nx.isNegative;
+        // ... decide where the top is based on the hog's direction when firing the portal
+        if Gear^.Elasticity.isNegative then
+            nx.isNegative := not nx.isNegative
+        else
             ny.isNegative := not ny.isNegative;
-            end;
+
         // now let's find out how much speed the gear has in the
         // direction of that normal
         nspeed:= (nx * iterator^.dX + ny * iterator^.dY);
         noffs:= (nx * ox + ny * oy);
 
         // now let's project those back to the connected portal's vectors
-        nx := - conPortal^.dY;
+        nx := conPortal^.dY;
         ny := conPortal^.dX;
-        if ny.isNegative then
-            begin
-            nx.isNegative := not nx.isNegative;
+        if conPortal^.Elasticity.isNegative then
+            nx.isNegative := not nx.isNegative
+        else
             ny.isNegative := not ny.isNegative;
-            end;
+
 //AddFileLog('poffs:'+cstr(poffs)+' noffs:'+cstr(noffs)+' pspeed:'+cstr(pspeed)+' nspeed:'+cstr(nspeed));
-        iterator^.dX := -pspeed * conPortal^.dX - nspeed * nx;
-        iterator^.dY := -pspeed * conPortal^.dY - nspeed * ny;
+        iterator^.dX := -pspeed * conPortal^.dX + nspeed * nx;
+        iterator^.dY := -pspeed * conPortal^.dY + nspeed * ny;
         if iterator^.Kind = gtCake then
             poffs := poffs * _0_5;
         iterator^.X := conPortal^.X + poffs * conPortal^.dX + noffs * nx;
@@ -3475,6 +3475,12 @@ begin
     if CurrentHedgehog <> nil then
         With CurrentHedgehog^ do
         begin
+            // let's save the HH's dX's direction so we can decide where the "top" of the portal hole
+            newPortal^.Elasticity.isNegative := CurrentHedgehog^.Gear^.dX.isNegative;
+            // when doing a backjump the dx is the opposite of the facing direction
+            if ((Gear^.State and gstHHHJump) <> 0) and not cArtillery then
+                newPortal^.Elasticity.isNegative := not newPortal^.Elasticity.isNegative;
+
             // make portal gun look unloaded
             Ammo^[CurSlot, CurAmmo].Timer := Ammo^[CurSlot, CurAmmo].Timer or 2;
 
