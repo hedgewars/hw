@@ -538,7 +538,7 @@ begin
     AllInactive := false;
     gX := hwRound(Gear^.X);
     gY := hwRound(Gear^.Y);
-    nuw := (cWaterLine < hwRound(Gear^.Y) + Gear^.Radius);
+    nuw := (cWaterLine < gy + Gear^.Radius);
     if nuw and not uw then
     begin
         AddVisualGear(gX, cWaterLine, vgtSplash);
@@ -559,20 +559,20 @@ begin
         end;
 
 
-    t := Distance(Gear^.dX, Gear^.dY);
-    Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000004 * (TargetPoint.X - gX));
-    Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000004 * (TargetPoint.Y - gY));
+    if (GameTicks and $F) = 0 then
+    begin
+        if (GameTicks and $30) = 0 then
+            AddVisualGear(gX, gY, vgtBeeTrace);
+        Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (TargetPoint.X - gX));
+        Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (TargetPoint.Y - gY));
+        // make sure new speed isn't higher than original one (which we stored in Friction variable)
+        t := Gear^.Friction / Distance(Gear^.dX, Gear^.dY);
+        Gear^.dX := Gear^.dX * t;
+        Gear^.dY := Gear^.dY * t;
+    end;
 
-    t := t / Distance(Gear^.dX, Gear^.dY);
-    Gear^.dX := Gear^.dX * t;
-    Gear^.dY := Gear^.dY * t;
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
-
-    if (GameTicks and $3F) = 0 then
-    begin
-        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBeeTrace);
-    end;
 
     CheckCollision(Gear);
     dec(Gear^.Timer);
@@ -602,6 +602,8 @@ begin
     begin
         Gear^.SoundChannel := LoopSound(sndBee);
         Gear^.Timer := 5000;
+        // save initial speed in otherwise unused Friction variable
+        Gear^.Friction := Distance(Gear^.dX, Gear^.dY);
         Gear^.doStep := @doStepBeeWork
     end;
 end;

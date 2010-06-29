@@ -74,6 +74,7 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
           _1div3: hwFloat = (isNegative: false; QWordValue:  1431655766);
             hwPi: hwFloat = (isNegative: false; QWordValue: 13493037704);
        _0_000004: hwFloat = (isNegative: false; QWordValue:       17179);
+       _0_000064: hwFloat = (isNegative: false; QWordValue:      274878);
          _0_0002: hwFloat = (isNegative: false; QWordValue:      858993);
          _0_0005: hwFloat = (isNegative: false; QWordValue:     2147484);
           _0_001: hwFloat = (isNegative: false; QWordValue:     4294967);
