@@ -1238,13 +1238,14 @@ begin
         HHGear^.dY := SignAs(hwAbs(HHGear^.dY) + _0_2, HHGear^.dY)
     end;
 
-    len := Distance(HHGear^.dX, HHGear^.dY);
-    if len > _0_8 then
+    len := hwSqr(HHGear^.dX) + hwSqr(HHGear^.dY);
+    if len > _0_64 then
     begin
-        len := _0_8 / len;
+        len := _0_8 / hwSqrt(len);
         HHGear^.dX := HHGear^.dX * len;
         HHGear^.dY := HHGear^.dY * len;
     end;
+
 
     if (Gear^.Message and gm_Attack) <> 0 then
         if (Gear^.State and gsttmpFlag) <> 0 then
