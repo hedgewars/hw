@@ -472,7 +472,6 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSmokeTrace(Gear: PVisualGear; Steps: Longword);
-var i: Longword;
 begin
 inc(Gear^.Timer, Steps );
 if Gear^.Timer > 64 then
@@ -480,11 +479,8 @@ if Gear^.Timer > 64 then
     dec(Gear^.State, Gear^.Timer div 65);
     Gear^.Timer:= Gear^.Timer mod 65;
     end;
-for i:= 1 to Steps do
-    begin
-    Gear^.dX:= Gear^.dX + cWindSpeed;
-    Gear^.X:= Gear^.X + Gear^.dX;
-    end;
+Gear^.dX:= Gear^.dX + cWindSpeed * Steps;
+Gear^.X:= Gear^.X + Gear^.dX;
 if Gear^.State = 0 then DeleteVisualGear(Gear);
 end;
 
@@ -514,7 +510,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBigExplosionWork(Gear: PVisualGear; Steps: Longword);
-var maxMovement: LongInt;
+//var maxMovement: LongInt;
 begin
 
 inc(Gear^.Timer, Steps);
