@@ -498,11 +498,13 @@ end;
 
 procedure doStepExplosion(Gear: PVisualGear; Steps: Longword);
 var i: LongWord;
+gX,gY: LongInt;
 begin
-
-for i:= 0 to 31 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFire);
-for i:= 0 to 8 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart);
-for i:= 0 to 8 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart2);
+gX:= hwRound(Gear^.X);
+gY:= hwRound(Gear^.Y);
+for i:= 0 to 31 do AddVisualGear(gX, gY, vgtFire);
+for i:= 0 to  8 do AddVisualGear(gX, gY, vgtExplPart);
+for i:= 0 to  8 do AddVisualGear(gX, gY, vgtExplPart2);
 Gear^.doStep:= @doStepExplosionWork;
 if Steps > 1 then Gear^.doStep(Gear, Steps-1);
 end;
