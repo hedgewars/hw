@@ -1155,21 +1155,22 @@ begin
     // check whether rope needs dividing
 
     len := Gear^.Elasticity - _5;
+    nx := Gear^.X + mdX * len;
+    ny := Gear^.Y + mdY * len;
+    tx := mdX * _0_3; // should be the same as increase step
+    ty := mdY * _0_3;
+
     while len > _3 do
     begin
-        lx := hwRound(Gear^.X + mdX * len);
-        ly := hwRound(Gear^.Y + mdY * len);
+        lx := hwRound(nx);
+        ly := hwRound(ny);
         if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and (Land[ly, lx] <> 0
            ) then
         begin
-            // calculate those the first time we have to divide the rope
-            if not haveDivided then
-            begin
             ny := _1 / Distance(ropeDx, ropeDy);
             // old rope pos
             nx := ropeDx * ny;
             ny := ropeDy * ny;
-            end;
 
             with RopePoints.ar[RopePoints.Count] do
             begin
@@ -1194,6 +1195,8 @@ begin
             haveDivided := true;
             break
         end;
+        nx := nx - tx;
+        ny := ny - ty;
         len := len - _0_3 // should be the same as increase step
     end;
 
