@@ -85,13 +85,15 @@ for y:= 0 to Pred(Image^.h) do
     begin
     for x:= 0 to Pred(Width) do
         begin
-{$IFDEF DOWNSCALE}
-        if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
-            LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
-{$ELSE}
-        if LandPixels[cpY + y, cpX + x] = 0 then
-            LandPixels[cpY + y, cpX + x]:= p^[x];
-{$ENDIF}
+            if (cReducedQuality and rqBlurryLand) = 0 then
+            begin
+                if LandPixels[cpY + y, cpX + x] = 0 then
+                    LandPixels[cpY + y, cpX + x]:= p^[x];
+            end
+            else
+                if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
+                    LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
+
         if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then 
             Land[cpY + y, cpX + x]:= lfObject
         end;

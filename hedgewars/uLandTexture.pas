@@ -70,21 +70,20 @@ end;
 procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
 var tx, ty: Longword;
 begin
-if (Width <= 0) or (Height <= 0) then exit;
-TryDo((X >= 0) and (X < LAND_WIDTH), 'UpdateLandTexture: wrong X parameter', true);
-TryDo(X + Width <= LAND_WIDTH, 'UpdateLandTexture: wrong Width parameter', true);
-TryDo((Y >= 0) and (Y < LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
-TryDo(Y + Height <= LAND_HEIGHT, 'UpdateLandTexture: wrong Height parameter', true);
+    if (Width <= 0) or (Height <= 0) then exit;
+    TryDo((X >= 0) and (X < LAND_WIDTH), 'UpdateLandTexture: wrong X parameter', true);
+    TryDo(X + Width <= LAND_WIDTH, 'UpdateLandTexture: wrong Width parameter', true);
+    TryDo((Y >= 0) and (Y < LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
+    TryDo(Y + Height <= LAND_HEIGHT, 'UpdateLandTexture: wrong Height parameter', true);
 
-{$IFDEF DOWNSCALE}
-for ty:= (Y div TEXSIZE) div 2 to ((Y + Height - 1) div TEXSIZE) div 2 do
-    for tx:= (X div TEXSIZE) div 2 to ((X + Width - 1) div TEXSIZE) div 2 do
-        LandTextures[tx, ty].shouldUpdate:= true
-{$ELSE}
-for ty:= Y div TEXSIZE to (Y + Height - 1) div TEXSIZE do
-    for tx:= X div TEXSIZE to (X + Width - 1) div TEXSIZE do
-        LandTextures[tx, ty].shouldUpdate:= true
-{$ENDIF}
+    if (cReducedQuality and rqBlurryLand) = 0 then
+        for ty:= Y div TEXSIZE to (Y + Height - 1) div TEXSIZE do
+            for tx:= X div TEXSIZE to (X + Width - 1) div TEXSIZE do
+                LandTextures[tx, ty].shouldUpdate:= true
+    else
+        for ty:= (Y div TEXSIZE) div 2 to ((Y + Height - 1) div TEXSIZE) div 2 do
+            for tx:= (X div TEXSIZE) div 2 to ((X + Width - 1) div TEXSIZE) div 2 do
+                LandTextures[tx, ty].shouldUpdate:= true;
 end;
 
 procedure RealLandTexUpdate;
@@ -119,11 +118,11 @@ RealLandTexUpdate;
 for x:= 0 to LANDTEXARW -1 do
     for y:= 0 to LANDTEXARH - 1 do
         with LandTextures[x, y] do
-{$IFDEF DOWNSCALE}
-            DrawTexture(dX + x * TEXSIZE * 2, dY + y * TEXSIZE * 2, tex, 2.0)
-{$ELSE}
-            DrawTexture(dX + x * TEXSIZE, dY + y * TEXSIZE, tex)
-{$ENDIF}
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                DrawTexture(dX + x * TEXSIZE, dY + y * TEXSIZE, tex)
+            else
+                DrawTexture(dX + x * TEXSIZE * 2, dY + y * TEXSIZE * 2, tex, 2.0)
+
 end;
 
 procedure FreeLand;

@@ -643,11 +643,10 @@ p:= Surface^.pixels;
 for y:= 0 to LAND_HEIGHT - 1 do
     begin
     for x:= 0 to LAND_WIDTH - 1 do
-{$IFDEF DOWNSCALE}
-        if Land[y, x] <> 0 then LandPixels[y div 2, x div 2]:= p^[x] or AMask;
-{$ELSE}
-        if Land[y, x] <> 0 then LandPixels[y, x]:= p^[x] or AMask;
-{$ENDIF}
+        if (cReducedQuality and rqBlurryLand) = 0 then
+            if Land[y, x] <> 0 then LandPixels[y, x]:= p^[x] or AMask
+        else
+            if Land[y, x] <> 0 then LandPixels[y div 2, x div 2]:= p^[x] or AMask;
 
     p:= @(p^[Surface^.pitch div 4]);
     end;
@@ -1265,33 +1264,37 @@ if hasBorder then
         begin
         for y:= topY to LAND_HEIGHT - 1 do
             begin
-            Land[y, leftX + w]:= lfIndestructible;
-            Land[y, rightX - w]:= lfIndestructible;
-            if (y + w) mod 32 < 16 then
-                c:= AMask
-            else
-                c:= AMask or RMask or GMask; // FF00FFFF
-{$IFDEF DOWNSCALE}
-            LandPixels[y div 2, (leftX + w) div 2]:= c;
-            LandPixels[y div 2, (rightX - w) div 2]:= c;
-{$ELSE}
-            LandPixels[y, leftX + w]:= c;
-            LandPixels[y, rightX - w]:= c;
-{$ENDIF}
+                Land[y, leftX + w]:= lfIndestructible;
+                Land[y, rightX - w]:= lfIndestructible;
+                if (y + w) mod 32 < 16 then
+                    c:= AMask
+                else
+                    c:= AMask or RMask or GMask; // FF00FFFF
+
+                if (cReducedQuality and rqBlurryLand) = 0 then
+                begin
+                    LandPixels[y, leftX + w]:= c;
+                    LandPixels[y, rightX - w]:= c;
+                end
+                else
+                begin
+                    LandPixels[y div 2, (leftX + w) div 2]:= c;
+                    LandPixels[y div 2, (rightX - w) div 2]:= c;
+                end;
             end;
 
         for x:= leftX to rightX do
             begin
-            Land[topY + w, x]:= lfIndestructible;
-            if (x + w) mod 32 < 16 then
-                c:= AMask
-            else
-                c:= AMask or RMask or GMask; // FF00FFFF
-{$IFDEF DOWNSCALE}
-            LandPixels[(topY + w) div 2, x div 2]:= c;
-{$ELSE}
-            LandPixels[topY + w, x]:= c;
-{$ENDIF}
+                Land[topY + w, x]:= lfIndestructible;
+                if (x + w) mod 32 < 16 then
+                    c:= AMask
+                else
+                    c:= AMask or RMask or GMask; // FF00FFFF
+
+                if (cReducedQuality and rqBlurryLand) = 0 then
+                    LandPixels[topY + w, x]:= c
+                else
+                    LandPixels[(topY + w) div 2, x div 2]:= c;
             end;
         end;
     end;

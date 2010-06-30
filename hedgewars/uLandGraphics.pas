@@ -146,35 +146,35 @@ begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
         if (not isMap and ((Land[y + dy, i] and lfIndestructible) = 0)) or ((Land[y + dy, i] and lfBasic) <> 0) then
-{$IFDEF DOWNSCALE}
-            LandPixels[(y + dy) div 2, i div 2]:= 0;
-{$ELSE}
-            LandPixels[y + dy, i]:= 0;
-{$ENDIF}
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[y + dy, i]:= 0
+            else
+                LandPixels[(y + dy) div 2, i div 2]:= 0;
+
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
         if (not isMap and ((Land[y - dy, i] and lfIndestructible) = 0)) or ((Land[y - dy, i] and lfBasic) <> 0) then
-{$IFDEF DOWNSCALE}
-             LandPixels[(y - dy) div 2, i div 2]:= 0;
-{$ELSE}
-             LandPixels[y - dy, i]:= 0;
-{$ENDIF}
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[y - dy, i]:= 0
+            else
+                LandPixels[(y - dy) div 2, i div 2]:= 0;
+
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
         if (not isMap and ((Land[y + dx, i] and lfIndestructible) = 0)) or ((Land[y + dx, i] and lfBasic) <> 0) then
-{$IFDEF DOWNSCALE}
-            LandPixels[(y + dx) div 2, i div 2]:= 0;
-{$ELSE}
-            LandPixels[y + dx, i]:= 0;
-{$ENDIF}
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[y + dx, i]:= 0
+            else
+                LandPixels[(y + dx) div 2, i div 2]:= 0;
+
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
         if (not isMap and ((Land[y - dx, i] and lfIndestructible) = 0)) or ((Land[y - dx, i] and lfBasic) <> 0) then
-{$IFDEF DOWNSCALE}
-             LandPixels[(y - dx) div 2, i div 2]:= 0;
-{$ELSE}
-             LandPixels[y - dx, i]:= 0;
-{$ENDIF}
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[y - dx, i]:= 0
+            else
+                LandPixels[(y - dx) div 2, i div 2]:= 0;
+
 end;
 
 procedure FillLandCircleLinesBG(x, y, dx, dy: LongInt);
@@ -183,59 +183,60 @@ begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
        if ((Land[y + dy, i] and lfBasic) <> 0) then
-{$IFDEF DOWNSCALE}
-          LandPixels[(y + dy) div 2, i div 2]:= LandBackPixel(i, y + dy)
-{$ELSE}
-          LandPixels[y + dy, i]:= LandBackPixel(i, y + dy)
-{$ENDIF}
+           if (cReducedQuality and rqBlurryLand) = 0 then
+               LandPixels[y + dy, i]:= LandBackPixel(i, y + dy)
+           else
+               LandPixels[(y + dy) div 2, i div 2]:= LandBackPixel(i, y + dy)
        else
-{$IFDEF DOWNSCALE}
-          if ((Land[y + dy, i] and lfObject) <> 0) then LandPixels[(y + dy) div 2, i div 2]:= 0;
-{$ELSE}
-          if ((Land[y + dy, i] and lfObject) <> 0) then LandPixels[y + dy, i]:= 0;
-{$ENDIF}
+           if ((Land[y + dy, i] and lfObject) <> 0) then
+               if (cReducedQuality and rqBlurryLand) = 0 then
+                   LandPixels[y + dy, i]:= 0
+               else
+                   LandPixels[(y + dy) div 2, i div 2]:= 0;
+
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
        if ((Land[y - dy, i] and lfBasic) <> 0) then
-{$IFDEF DOWNSCALE}
-          LandPixels[(y - dy) div 2, i div 2]:= LandBackPixel(i, y - dy)
-{$ELSE}
-          LandPixels[y - dy, i]:= LandBackPixel(i, y - dy)
-{$ENDIF}
+           if (cReducedQuality and rqBlurryLand) = 0 then
+               LandPixels[y - dy, i]:= LandBackPixel(i, y - dy)
+           else
+               LandPixels[(y - dy) div 2, i div 2]:= LandBackPixel(i, y - dy)
        else
-{$IFDEF DOWNSCALE}
-          if ((Land[y - dy, i] and lfObject) <> 0) then LandPixels[(y - dy) div 2, i div 2]:= 0;
-{$ELSE}
-          if ((Land[y - dy, i] and lfObject) <> 0) then LandPixels[y - dy, i]:= 0;
-{$ENDIF}
+           if ((Land[y - dy, i] and lfObject) <> 0) then
+               if (cReducedQuality and rqBlurryLand) = 0 then
+                   LandPixels[y - dy, i]:= 0
+               else
+                   LandPixels[(y - dy) div 2, i div 2]:= 0;
+
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
        if ((Land[y + dx, i] and lfBasic) <> 0) then
-{$IFDEF DOWNSCALE}
-           LandPixels[(y + dx) div 2, i div 2]:= LandBackPixel(i, y + dx)
-{$ELSE}
+           if (cReducedQuality and rqBlurryLand) = 0 then
            LandPixels[y + dx, i]:= LandBackPixel(i, y + dx)
-{$ENDIF}
+            else 
+           LandPixels[(y + dx) div 2, i div 2]:= LandBackPixel(i, y + dx)
        else
-{$IFDEF DOWNSCALE}
-          if ((Land[y + dx, i] and lfObject) <> 0) then LandPixels[(y + dx) div 2, i div 2]:= 0;
-{$ELSE}
-          if ((Land[y + dx, i] and lfObject) <> 0) then LandPixels[y + dx, i]:= 0;
-{$ENDIF}
+            if ((Land[y + dx, i] and lfObject) <> 0) then
+            if (cReducedQuality and rqBlurryLand) = 0 then
+          LandPixels[y + dx, i]:= 0
+            else
+           LandPixels[(y + dx) div 2, i div 2]:= 0;
+
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
        if ((Land[y - dx, i] and lfBasic) <> 0) then
-{$IFDEF DOWNSCALE}
-          LandPixels[(y - dx) div 2, i div 2]:= LandBackPixel(i, y - dx)
-{$ELSE}
+            if (cReducedQuality and rqBlurryLand) = 0 then
           LandPixels[y - dx, i]:= LandBackPixel(i, y - dx)
-{$ENDIF}
+        else 
+         LandPixels[(y - dx) div 2, i div 2]:= LandBackPixel(i, y - dx)
+
        else
-{$IFDEF DOWNSCALE}
-          if ((Land[y - dx, i] and lfObject) <> 0) then LandPixels[(y - dx) div 2, i div 2]:= 0;
-{$ELSE}
-          if ((Land[y - dx, i] and lfObject) <> 0) then LandPixels[y - dx, i]:= 0;
-{$ENDIF}
+          if ((Land[y - dx, i] and lfObject) <> 0) then
+              if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[y - dx, i]:= 0
+              else
+                LandPixels[(y - dx) div 2, i div 2]:= 0;
+
 end;
 
 procedure FillLandCircleLinesEBC(x, y, dx, dy: LongInt);
@@ -245,11 +246,11 @@ if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
        if ((Land[y + dy, i] and lfBasic) <> 0) or ((Land[y + dy, i] and lfObject) <> 0) then
           begin
-{$IFDEF DOWNSCALE}
-          LandPixels[(y + dy) div 2, i div 2]:= cExplosionBorderColor;
-{$ELSE}
-          LandPixels[y + dy, i]:= cExplosionBorderColor;
-{$ENDIF}
+           if (cReducedQuality and rqBlurryLand) = 0 then
+            LandPixels[y + dy, i]:= cExplosionBorderColor
+          else
+            LandPixels[(y + dy) div 2, i div 2]:= cExplosionBorderColor;
+
           Land[y + dy, i]:= Land[y + dy, i] or lfDamaged;
           Despeckle(i, y + dy);
           LandDirty[(y + dy) div 32, i div 32]:= 1;
@@ -258,11 +259,10 @@ if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
        if ((Land[y - dy, i] and lfBasic) <> 0) or ((Land[y - dy, i] and lfObject) <> 0) then
           begin
-{$IFDEF DOWNSCALE}
-          LandPixels[(y - dy) div 2, i div 2]:= cExplosionBorderColor;
-{$ELSE}
-          LandPixels[y - dy, i]:= cExplosionBorderColor;
-{$ENDIF}
+           if (cReducedQuality and rqBlurryLand) = 0 then
+              LandPixels[y - dy, i]:= cExplosionBorderColor 
+            else
+              LandPixels[(y - dy) div 2, i div 2]:= cExplosionBorderColor;
           Land[y - dy, i]:= Land[y - dy, i] or lfDamaged;
           Despeckle(i, y - dy);
           LandDirty[(y - dy) div 32, i div 32]:= 1;
@@ -271,11 +271,11 @@ if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
        if ((Land[y + dx, i] and lfBasic) <> 0) or ((Land[y + dx, i] and lfObject) <> 0) then
            begin
-{$IFDEF DOWNSCALE}
+           if (cReducedQuality and rqBlurryLand) = 0 then
+           LandPixels[y + dx, i]:= cExplosionBorderColor
+            else
            LandPixels[(y + dx) div 2, i div 2]:= cExplosionBorderColor;
-{$ELSE}
-           LandPixels[y + dx, i]:= cExplosionBorderColor;
-{$ENDIF}
+
            Land[y + dx, i]:= Land[y + dx, i] or lfDamaged;
            Despeckle(i, y + dx);
            LandDirty[(y + dx) div 32, i div 32]:= 1;
@@ -284,11 +284,11 @@ if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
        if ((Land[y - dx, i] and lfBasic) <> 0) or ((Land[y - dx, i] and lfObject) <> 0) then
           begin
-{$IFDEF DOWNSCALE}
+           if (cReducedQuality and rqBlurryLand) = 0 then
+          LandPixels[y - dx, i]:= cExplosionBorderColor 
+            else
           LandPixels[(y - dx) div 2, i div 2]:= cExplosionBorderColor;
-{$ELSE}
-          LandPixels[y - dx, i]:= cExplosionBorderColor;
-{$ENDIF}
+
           Land[y - dx, i]:= Land[y - dx, i] or lfDamaged;
           Despeckle(i, y - dy);
           LandDirty[(y - dx) div 32, i div 32]:= 1;
@@ -378,17 +378,16 @@ for i:= 0 to Pred(Count) do
     for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
         for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
             if (Land[ty, tx] and lfBasic) <> 0 then
-{$IFDEF DOWNSCALE}
-                LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
-{$ELSE}
-                LandPixels[ty, tx]:= LandBackPixel(tx, ty)
-{$ENDIF}
-            else if (Land[ty, tx] and lfObject) <> 0 then
-{$IFDEF DOWNSCALE}
-                LandPixels[ty div 2, tx div 2]:= 0;
-{$ELSE}
-                LandPixels[ty, tx]:= 0;
-{$ENDIF}
+                if (cReducedQuality and rqBlurryLand) = 0 then
+                    LandPixels[ty, tx]:= LandBackPixel(tx, ty)
+                else
+                    LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
+            else 
+                if (Land[ty, tx] and lfObject) <> 0 then
+                    if (cReducedQuality and rqBlurryLand) = 0 then
+                        LandPixels[ty, tx]:= 0
+                    else
+                        LandPixels[ty div 2, tx div 2]:= 0;
     inc(y, dY)
     end;
 
@@ -401,11 +400,11 @@ for i:= 0 to Pred(Count) do
         for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
             if ((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0) then
                 begin
-{$IFDEF DOWNSCALE}
-                LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor;
-{$ELSE}
-                LandPixels[ty, tx]:= cExplosionBorderColor;
-{$ENDIF}
+                    if (cReducedQuality and rqBlurryLand) = 0 then
+                        LandPixels[ty, tx]:= cExplosionBorderColor
+                    else
+                        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor;
+
                 Land[ty, tx]:= Land[ty, tx] or lfDamaged;
                 LandDirty[(y + dy) shr 5, i shr 5]:= 1;
                 end;
@@ -447,11 +446,10 @@ for i:= 0 to 7 do
        ((Land[ty, tx] and lfObject) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or lfDamaged;
-{$IFDEF DOWNSCALE}
-        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
-{$ELSE}
-        LandPixels[ty, tx]:= cExplosionBorderColor
-{$ENDIF}
+            if (cReducedQuality and rqBlurryLand) = 0 then
+            LandPixels[ty, tx]:= cExplosionBorderColor
+            else
+            LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
         end
     end;
     nx:= nx - dY;
@@ -474,11 +472,11 @@ for i:= -HalfWidth to HalfWidth do
        ((Land[ty, tx] and lfObject) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or lfDamaged;
-{$IFDEF DOWNSCALE}
-        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
-{$ELSE}
+            if (cReducedQuality and rqBlurryLand) = 0 then
         LandPixels[ty, tx]:= cExplosionBorderColor
-{$ENDIF}
+            else
+        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+
         end
     end;
     X:= nx;
@@ -492,17 +490,17 @@ for i:= -HalfWidth to HalfWidth do
         if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and ((Land[ty, tx] and lfIndestructible) = 0) then
             begin
             if (Land[ty, tx] and lfBasic) <> 0 then
-{$IFDEF DOWNSCALE}
-                LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
-{$ELSE}
-                LandPixels[ty, tx]:= LandBackPixel(tx, ty)
-{$ENDIF}
-            else if (Land[ty, tx] and lfObject) <> 0 then
-{$IFDEF DOWNSCALE}
+                if (cReducedQuality and rqBlurryLand) = 0 then
+                    LandPixels[ty, tx]:= LandBackPixel(tx, ty)
+                else
+                    LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
+            else 
+              if (Land[ty, tx] and lfObject) <> 0 then
+                if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[ty, tx]:= 0
+                else
                 LandPixels[ty div 2, tx div 2]:= 0;
-{$ELSE}
-                LandPixels[ty, tx]:= 0;
-{$ENDIF}
+
             Land[ty, tx]:= 0;
             end
         end;
@@ -518,11 +516,11 @@ for i:= -HalfWidth to HalfWidth do
        ((Land[ty, tx] and lfObject) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or lfDamaged;
-{$IFDEF DOWNSCALE}
-        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
-{$ELSE}
+        if (cReducedQuality and rqBlurryLand) = 0 then
         LandPixels[ty, tx]:= cExplosionBorderColor
-{$ENDIF}
+        else
+        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+
         end
     end;
     nx:= nx - dY;
@@ -545,11 +543,10 @@ for i:= 0 to 7 do
        ((Land[ty, tx] and lfObject) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or lfDamaged;
-{$IFDEF DOWNSCALE}
-        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
-{$ELSE}
+        if (cReducedQuality and rqBlurryLand) = 0 then
         LandPixels[ty, tx]:= cExplosionBorderColor
-{$ENDIF}
+        else
+        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
         end
     end;
     nx:= nx - dY;
@@ -621,11 +618,10 @@ case bpp of
                 if PLongword(@(p^[x * 4]))^ <> 0 then
                    begin
                    Land[cpY + y, cpX + x]:= lfObject;
-{$IFDEF DOWNSCALE}
-                   LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= PLongword(@(p^[x * 4]))^
-{$ELSE}
+                    if (cReducedQuality and rqBlurryLand) = 0 then
                    LandPixels[cpY + y, cpX + x]:= PLongword(@(p^[x * 4]))^
-{$ENDIF}
+                    else
+                   LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= PLongword(@(p^[x * 4]))^
                    end;
             p:= @(p^[Image^.pitch]);
             end;
@@ -660,11 +656,17 @@ if ((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)
 
     if c < 4 then // 0-3 neighbours
         begin
-{$IFDEF DOWNSCALE}
-        if (Land[Y, X] and lfBasic) <> 0 then LandPixels[Y div 2, X div 2]:= LandBackPixel(X, Y) else LandPixels[Y div 2, X div 2]:= 0;
-{$ELSE}
-        if (Land[Y, X] and lfBasic) <> 0 then LandPixels[Y, X]:= LandBackPixel(X, Y) else LandPixels[Y, X]:= 0;
-{$ENDIF}
+        if (cReducedQuality and rqBlurryLand) = 0 then
+            if (Land[Y, X] and lfBasic) <> 0 then 
+                LandPixels[Y, X]:= LandBackPixel(X, Y) 
+            else
+                LandPixels[Y, X]:= 0
+        else
+            if (Land[Y, X] and lfBasic) <> 0 then 
+                LandPixels[Y div 2, X div 2]:= LandBackPixel(X, Y) 
+            else
+                LandPixels[Y div 2, X div 2]:= 0;
+
         Land[Y, X]:= 0;
         exit(true);
         end;
