@@ -148,6 +148,7 @@
 
 -(void) viewDidUnload {
     self.writeChatTextField = nil;
+    [popoverController dismissPopoverAnimated:NO];
     self.popoverController = nil;
     self.popupMenu = nil;
     self.spinningWheel = nil;

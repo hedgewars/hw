@@ -17,6 +17,7 @@
 *)
 
 {$INCLUDE "options.inc"}
+{$INLINE ON}
 
 unit uMisc;
 interface
@@ -147,7 +148,7 @@ function  hwSign(r: hwFloat): LongInt;
 function  Min(a, b: LongInt): LongInt;
 function  Max(a, b: LongInt): LongInt;
 procedure OutError(Msg: shortstring; isFatalError: boolean);
-procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean);
+procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
 procedure SDLTry(Assert: boolean; isFatal: boolean);
 function  IntToStr(n: LongInt): shortstring;
 function  FloatToStr(n: hwFloat): shortstring;
@@ -163,7 +164,7 @@ function  Str2PChar(const s: shortstring): PChar;
 function  NewTexture(width, height: Longword; buf: Pointer): PTexture;
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture(tex: PTexture);
-function  toPowerOf2(i: Longword): Longword;
+function  toPowerOf2(i: Longword): Longword; inline;
 function  DecodeBase64(s: shortstring): shortstring;
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 function  endian(independent: LongWord): LongWord;
