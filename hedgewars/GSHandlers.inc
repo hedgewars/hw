@@ -137,7 +137,7 @@ begin
                 PlaySound(sndSplash)
         end;
 
-        if not cReducedQuality and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius) then
+        if ((cReducedQuality and rqPlainSplash) = 0) and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius) then
         begin
             AddVisualGear(hwRound(Gear^.X), cWaterLine, vgtSplash);
 

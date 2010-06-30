@@ -84,7 +84,7 @@ var
     cLandAdditions  : Longword;
     cExplosives : Longword;
     cFullScreen : boolean;
-    cReducedQuality : boolean;
+    cReducedQuality : LongInt;
     cLocaleFName    : shortstring;
     cSeed       : shortstring;
     cInitVolume : LongInt;
@@ -287,13 +287,14 @@ end;
 
 procedure SetTextureParameters(enableClamp: Boolean);
 begin
-if enableClamp and not cReducedQuality then
+    //if enableClamp and not cReducedQuality then
+    if enableClamp and ((cReducedQuality and rqNoBackground) = 0) then
     begin
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
     end;
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 end;
 
 function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
@@ -765,7 +766,7 @@ begin
     cLandAdditions  := 4;
     cExplosives     := 2;
     cFullScreen     := false;
-    cReducedQuality := false;
+    cReducedQuality := 0;
     cLocaleFName    := 'en.txt';
     cSeed           := '';
     cInitVolume     := 50;

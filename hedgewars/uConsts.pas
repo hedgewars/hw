@@ -214,6 +214,18 @@ const
     cBombsSpeed   : hwFloat = (isNegative: false; QWordValue:    429496729);
 {$WARNINGS ON}
 
+    // reducedquality flags
+    rqNone        = $00000000;  // don't reduce quality
+    rqBlurryLand  = $00000001;  // downscaled terrain
+    rqLowRes      = $00000002;  // use half land array
+    rqNoBackground= $00000004;  // don't draw background
+    rqSimpleRope  = $00000008;  // avoid drawing rope
+    rq2DWater     = $00000010;  // disabe 3D water effect
+    rqFancyBoom   = $00000020;  // no fancy explosion effects
+    rqKillFlakes  = $00000040;  // no flakes
+    rqSlowMenu    = $00000080;  // ammomenu appears with no animation
+    rqPlainSplash = $00000100;  // no droplets
+
     // image flags (for LoadImage())
     ifNone        = $00000000;  // nothing special
     ifAlpha       = $00000001;  // use alpha channel (unused right now?)
@@ -222,11 +234,11 @@ const
     ifIgnoreCaps  = $00000008;  // ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
 
     // texture priority (allows OpenGL to keep frequently used textures in video memory more easily)
-    tpLowest     = 0.00;
+    tpLowest      = 0.00;
     tpLow         = 0.25;
     tpMedium      = 0.50;
     tpHigh        = 0.75;
-    tpHighest    = 1.00;
+    tpHighest     = 1.00;
 
     {*  REFERENCE
       4096 -> $FFFFF000

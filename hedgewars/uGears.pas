@@ -1072,7 +1072,7 @@ var roplen: LongInt;
         end
     end;
 begin
-    if cReducedQuality then
+    if (cReducedQuality and rqSimpleRope) <> 0 then
         DrawRopeLinesRQ(Gear)
     else
         begin

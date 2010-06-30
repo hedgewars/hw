@@ -250,7 +250,7 @@ begin
     cVSyncInUse:= true;
     cTimerInterval:= 8;
     PathPrefix:= 'Data';
-    cReducedQuality:= false;
+    cReducedQuality:= 0;                //FIXME
     cShowFPS:= true;
     cInitVolume:= 100;
 
@@ -501,7 +501,11 @@ begin
             cAltDamage:= ParamStr(15) = '1';
             UserNick:= DecodeBase64(ParamStr(16));
             isMusicEnabled:= ParamStr(17) = '1';
-            cReducedQuality:= ParamStr(18) = '1';
+
+            if (ParamStr(18) = '1') then        //HACK
+                cReducedQuality:= $FFFFFFFF
+            else
+                val(ParamStr(18), cReducedQuality);
         end;
         3: begin
             val(ParamStr(2), ipcPort);
@@ -585,7 +589,10 @@ begin
                 cAltDamage:= ParamStr(12) = '1';
                 cShowFPS:= ParamStr(13) = '1';
                 val(ParamStr(14), cTimerInterval);
-                cReducedQuality:= ParamStr(15) = '1';
+                if (ParamStr(15) = '1') then        //HACK
+                    cReducedQuality:= $FFFFFFFF
+                else
+                    val(ParamStr(15), cReducedQuality);
             end
             else GameType:= gmtSyntax;
         end;

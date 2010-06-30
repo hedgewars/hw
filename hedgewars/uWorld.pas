@@ -194,7 +194,7 @@ if bShowAmmoMenu then
    begin
    FollowGear:= nil;
    if AMxShift = AMWidth then prevPoint.X:= 0;
-   if cReducedQuality then
+   if (cReducedQuality and rqSlowMenu) <> 0 then
        AMxShift:= 0
    else
        if AMxShift > MENUSPEED then
@@ -210,7 +210,7 @@ if bShowAmmoMenu then
       prevPoint:= CursorPoint;
       SDL_WarpMouse(CursorPoint.X  + cScreenWidth div 2, cScreenHeight - CursorPoint.Y)
       end;
-   if cReducedQuality then
+   if (cReducedQuality and rqSlowMenu) <> 0 then
        AMxShift:= AMWidth
    else
        if AMxShift < (AMWidth - MENUSPEED) then
@@ -563,33 +563,35 @@ glClear(GL_COLOR_BUFFER_BIT);
 //glPushMatrix;
 //glScalef(1.0, 1.0, 1.0);
 
-if not isPaused then MoveCamera;
+    if not isPaused then
+        MoveCamera;
 
-if not cReducedQuality then
+{if not cReducedQuality then}
+    if (cReducedQuality and (rqNoBackground or rqKillFlakes or rq2DWater)) = 0 then
     begin
-    // Offsets relative to camera - spare them to wimpier cpus, no bg or flakes for them anyway
-    ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
-    offsetY:= 10 * min(0, -145 - ScreenBottom);
-    SkyOffset:= offsetY div 35 + cWaveHeight;
-    HorizontOffset:= SkyOffset;
-    if ScreenBottom > SkyOffset then
-        HorizontOffset:= HorizontOffset + ((ScreenBottom-SkyOffset) div 20);
+        // Offsets relative to camera - spare them to wimpier cpus, no bg or flakes for them anyway
+        ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
+        offsetY:= 10 * min(0, -145 - ScreenBottom);
+        SkyOffset:= offsetY div 35 + cWaveHeight;
+        HorizontOffset:= SkyOffset;
+        if ScreenBottom > SkyOffset then
+            HorizontOffset:= HorizontOffset + ((ScreenBottom-SkyOffset) div 20);
 
-    // background
-    DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, SkyOffset);
-    DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
+        // background
+        DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, SkyOffset);
+        DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
 
-    DrawVisualGears(0);
-    
-    // Waves
-    DrawWater(255, SkyOffset); 
-    DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 64);
-    DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 48);
-    DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 32);
-    DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 24);
+        DrawVisualGears(0);
+        
+        // Waves
+        DrawWater(255, SkyOffset); 
+        DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 64);
+        DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 48);
+        DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 32);
+        DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 24);
     end
-else
-    DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)), 0);
+    else
+        DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)), 0);
 
 DrawLand(WorldDx, WorldDy);
 
@@ -628,14 +630,14 @@ DrawWater(cWaterOpacity, 0);
 // Waves
 DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
 
-if not cReducedQuality then
+    if (cReducedQuality and rq2DWater) = 0 then
     begin
-    //DrawWater(cWaterOpacity, - offsetY div 40);
-    DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 8);
-    DrawWater(cWaterOpacity, - offsetY div 20);
-    DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 2);
-    DrawWater(cWaterOpacity, - offsetY div 10);
-    DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
+        //DrawWater(cWaterOpacity, - offsetY div 40);
+        DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 8);
+        DrawWater(cWaterOpacity, - offsetY div 20);
+        DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 2);
+        DrawWater(cWaterOpacity, - offsetY div 10);
+        DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
     end
 else
     DrawWaves(-1, 50, - (cWaveHeight shr 1), 0);

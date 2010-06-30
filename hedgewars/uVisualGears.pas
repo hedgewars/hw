@@ -131,7 +131,7 @@ if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we are
         exit
         end;
 
-if cReducedQuality and
+if ((cReducedQuality and rqFancyBoom) <> 0) and
    not (Kind in
    [vgtTeamHealthSorter,
     vgtSmallDamageTag,
@@ -141,8 +141,8 @@ if cReducedQuality and
     vgtSmokeTrace,
     vgtEvilTrace]) then
     begin
-    AddVisualGear:= nil;
-    exit
+      AddVisualGear:= nil;
+      exit
     end;
 
 New(gear);
@@ -345,7 +345,7 @@ procedure KickFlakes(Radius, X, Y: LongInt);
 var Gear, t: PVisualGear;
     dmg: LongInt;
 begin
-if (vobCount = 0) or (vobCount > 200) or cReducedQuality then exit;
+if (vobCount = 0) or (vobCount > 200) or ((cReducedQuality and rqkillFlakes) <> 0) then exit;
 t:= VisualGearsList;
 while t <> nil do
       begin
@@ -391,7 +391,7 @@ case Layer of
             vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
             vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
         end;
-            if not cReducedQuality then
+            if (cReducedQuality and rqFancyBoom) = 0 then
                 case Gear^.Kind of
                     vgtSmoke: DrawSprite(sprSmoke, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                     vgtSmokeWhite: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
@@ -414,7 +414,7 @@ case Layer of
                              DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
                              end;
             end;
-        if not cReducedQuality then
+        if (cReducedQuality and rqFancyBoom) = 0 then
             case Gear^.Kind of
                 vgtExplPart: DrawSprite(sprExplPart, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
                 vgtExplPart2: DrawSprite(sprExplPart2, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
