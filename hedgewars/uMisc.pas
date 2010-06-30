@@ -131,6 +131,9 @@ var
     ScreenFadeValue : LongInt;
     ScreenFadeSpeed : LongInt;
 
+{$IFDEF SDL13}
+    SDLwindow: PSDL_Window;
+{$ENDIF}
 
 procedure initModule;
 procedure freeModule;
@@ -777,6 +780,10 @@ begin
     cAltDamage      := true;
 
     ScreenFade      := sfNone;
+    
+{$IFDEF SDL13}
+    SDLwindow       := nil;
+{$ENDIF}    
 {$IFDEF DEBUGFILE}
 {$I-}
 {$IFDEF IPHONEOS}

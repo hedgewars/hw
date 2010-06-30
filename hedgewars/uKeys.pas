@@ -412,8 +412,8 @@ end;
 
 procedure FreezeEnterKey;
 begin
-tkbd[13]:= 1;
-tkbd[271]:= 1;
+    tkbd[13]:= 1;
+    tkbd[271]:= 1;
 end;
 
 var Controller: array [0..5] of PSDL_Joystick;

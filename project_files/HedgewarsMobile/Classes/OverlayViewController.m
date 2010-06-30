@@ -128,23 +128,22 @@
     // add timer too runloop, otherwise it doesn't work
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
     
-    // listen for dismissal of the popover (see below)
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(dismissPopover)
-                                                 name:@"dismissPopover"
-                                               object:nil];
-    
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];   
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didRotate:)
-                                                 name:@"UIDeviceOrientationDidChangeNotification"
+                                                 name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
 
-    //self.view.transform = CGAffineTransformRotate(self.view.transform, (M_PI/2.0)); 
     [UIView beginAnimations:@"showing overlay" context:NULL];
     [UIView setAnimationDuration:1];
     self.view.alpha = 1;
     [UIView commitAnimations];
+
+    // set initial orientation
+    [self didRotate:[NSNotification notificationWithName:UIDeviceOrientationDidChangeNotification object:nil]];
+
+    // to put the slider vertical...
+    //slider.transform = CGAffineTransformMakeRotation(M_PI * 0.5);
 }
 
 -(void) viewDidUnload {
@@ -319,28 +318,29 @@ void spinningWheelDone (void) {
         [self.writeChatTextField resignFirstResponder];
         [dimTimer setFireDate:HIDING_TIME_DEFAULT];
     }
-            
-    switch ([touches count]) {
-        case 1:
-            DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
-            HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
-            break;
-        case 2:
-            if (2 == [touch tapCount] && currentPosition.y < screen.size.width - 100) {
-                HW_ammoMenu();
-                //HW_zoomReset();
-            }
-            
-            // pinching
-            twoTouches = [touches allObjects];
-            UITouch *first = [twoTouches objectAtIndex:0];
-            UITouch *second = [twoTouches objectAtIndex:1];
-            initialDistanceForPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
-            break;
-        default:
-            break;
+    
+    if (currentPosition.y < screen.size.width - 120) {
+        switch ([touches count]) {
+            case 1:
+                DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
+                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+                break;
+            case 2:
+                if (2 == [touch tapCount]) {
+                    HW_ammoMenu();
+                    //HW_zoomReset();
+                }
+                
+                // pinching
+                twoTouches = [touches allObjects];
+                UITouch *first = [twoTouches objectAtIndex:0];
+                UITouch *second = [twoTouches objectAtIndex:1];
+                initialDistanceForPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
+                break;
+            default:
+                break;
+        }
     }
-
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {

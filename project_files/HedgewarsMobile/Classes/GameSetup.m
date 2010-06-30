@@ -273,7 +273,7 @@
         
         switch (buffer[0]) {
             case 'C':
-                DLog(@"sending game config");
+                DLog(@"sending game config\n%@",self.gameConfig);
                 
                 // local game
                 [self sendToEngine:@"TL"];
@@ -301,12 +301,8 @@
                 }
                 
                 [self provideAmmoData:[self.gameConfig objectForKey:@"weapon"] forPlayingTeams:[teamsConfig count]];
-                
-                clientQuit = NO;
                 break;
             case '?':
-                // without this sleep sometimes frontend replies before engine has processed any flag (resulting in an error)
-                [NSThread sleepForTimeInterval:0.7];
                 DLog(@"Ping? Pong!");
                 [self sendToEngine:@"!"];
                 break;

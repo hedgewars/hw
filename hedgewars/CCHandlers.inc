@@ -682,9 +682,6 @@ var flags: Longword = 0;
 {$IFDEF DEBUGFILE}
     buf: array[byte] of char;
 {$ENDIF}
-{$IFDEF SDL13}
-    window: PSDL_Window;
-{$ENDIF}
 begin
     s:= s; // avoid compiler hint
     if Length(s) = 0 then cFullScreen:= not cFullScreen
@@ -734,10 +731,13 @@ begin
     end;
     
 {$IFDEF SDL13}
-    window:= SDL_CreateWindow('Hedgewars', 0, 0, cScreenWidth, cScreenHeight,
-        SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN    
-        {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});     
-    SDL_CreateRenderer(window, -1, 0);
+    if SDLwindow = nil then
+    begin
+        SDLwindow:= SDL_CreateWindow('Hedgewars', 0, 0, cScreenWidth, cScreenHeight,
+                        SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN    
+                        {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});     
+        SDL_CreateRenderer(SDLwindow, -1, 0);
+    end;
     
     SDL_SetRenderDrawColor(0, 0, 0, 255);    
     SDL_RenderFill(nil);     

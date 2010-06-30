@@ -643,10 +643,11 @@ p:= Surface^.pixels;
 for y:= 0 to LAND_HEIGHT - 1 do
     begin
     for x:= 0 to LAND_WIDTH - 1 do
+    if Land[y, x] <> 0 then
         if (cReducedQuality and rqBlurryLand) = 0 then
-            if Land[y, x] <> 0 then LandPixels[y, x]:= p^[x] or AMask
+             LandPixels[y, x]:= p^[x] or AMask
         else
-            if Land[y, x] <> 0 then LandPixels[y div 2, x div 2]:= p^[x] or AMask;
+             LandPixels[y div 2, x div 2]:= p^[x] or AMask;
 
     p:= @(p^[Surface^.pitch div 4]);
     end;
