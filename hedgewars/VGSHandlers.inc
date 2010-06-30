@@ -70,19 +70,19 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
-var i: Longword;
+var s: Longword;
+    t: hwFloat;
 begin
 Gear^.X:= Gear^.X + (cWindSpeed * 200 + Gear^.dX) * Steps;
 
-for i:= 0 to Steps - 1 do
-    begin
-    if hwRound(Gear^.Y) > LAND_HEIGHT-1184 then // TODO - configure in theme
-        Gear^.dY:= Gear^.dY - _1div50000
-    else
-        Gear^.dY:= Gear^.dY + _1div50000;
+// up-and-down-bounce magic
+s := (GameTicks + Gear^.mdy) mod 4096;
+t := AngleSin(s mod 2048);
+t.isNegative := (s < 2048);
+t.QWordValue := t.QWordValue * 8;
 
-    Gear^.Y:= Gear^.Y + Gear^.dY
-    end;
+Gear^.Y := int2hwFloat(LAND_HEIGHT-1184 + Gear^.mdy mod 8) + t;
+
 
 if hwRound(Gear^.X) < -cScreenWidth - 256 then Gear^.X:= int2hwFloat(cScreenWidth + LAND_WIDTH) else
 if hwRound(Gear^.X) > cScreenWidth + LAND_WIDTH then Gear^.X:= int2hwFloat(-cScreenWidth - 256)

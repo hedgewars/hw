@@ -174,9 +174,7 @@ with gear^ do
                 Frame:= random(4);
                 dx.isNegative:= random(2) = 0;
                 dx.QWordValue:= random(214748364);
-                dy.isNegative:= random(2) = 0;
-                dy.QWordValue:= 21474836 + random(64424509);
-                mdY:= dy.QWordValue
+                mdY:= random(4096);
                 end;
     vgtExplPart,
     vgtExplPart2: begin
