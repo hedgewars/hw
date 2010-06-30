@@ -148,8 +148,8 @@ begin
                 particle := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
                 if particle <> nil then
                 begin
-                    particle^.dX := particle^.dX - (Gear^.dX / 10);
-                    particle^.dY := particle^.dY - (Gear^.dY / 5)
+                    particle^.dX := particle^.dX - (Gear^.dX.QWordValue / 42949672960);
+                    particle^.dY := particle^.dY - (Gear^.dY.QWordValue / 21474836480)
                 end
             end
         end;
@@ -181,7 +181,7 @@ begin
         begin
             particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12,
                         vgtDust);
-            if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX / 5);
+            if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480);
         end;
 
         if (Gear^.Invulnerable) then exit;
@@ -636,8 +636,8 @@ begin
             shell := AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
             if shell <> nil then
             begin
-                shell^.dX := gear^.dX / -4;
-                shell^.dY := gear^.dY / -4;
+                shell^.dX := gear^.dX.QWordValue / -17179869184;
+                shell^.dY := gear^.dY.QWordValue / -17179869184;
                 shell^.Frame := 0
             end;
             Gear^.State := Gear^.State or gstAnimation
@@ -756,8 +756,8 @@ begin
         shell := AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
         if shell <> nil then
         begin
-            shell^.dX := gear^.dX / -2;
-            shell^.dY := gear^.dY / -2;
+            shell^.dX := gear^.dX.QWordValue / -8589934592;
+            shell^.dY := gear^.dY.QWordValue / -8589934592;
             shell^.Frame := 1
         end;
         Gear^.State := Gear^.State or gstAnimation;
@@ -1481,7 +1481,7 @@ begin
             begin
                 particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12,
                             vgtDust);
-                if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX / 5)
+                if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480)
             end
         end
         else if not Gear^.dX.isNegative and (Gear^.dX > _0_2) and TestCollisionXwithGear(Gear, 1)
@@ -3185,7 +3185,7 @@ begin
         begin
             vg := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 3 + Random(6),
                   vgtDust);
-            if vg <> nil then vg^.dX := vg^.dX + (Gear^.dX / 5);
+            if vg <> nil then vg^.dX := vg^.dX + (Gear^.dX.QWordValue / 21474836480);
         end;
 
         DeleteGear(Gear);

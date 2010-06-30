@@ -21,7 +21,7 @@
 unit uMisc;
 interface
 
-uses    SDLh, uConsts, uFloat, GLunit;
+uses    SDLh, uConsts, uFloat, GLunit, Math;
 
 var
     isCursorVisible : boolean;
@@ -101,9 +101,12 @@ var
     CursorMovementX : LongInt;
     CursorMovementY : LongInt;
     cDrownSpeed : hwFloat;
+    cDrownSpeedf : float;
     cMaxWindSpeed   : hwFloat;
     cWindSpeed  : hwFloat;
+    cWindSpeedf  : float;
     cGravity    : hwFloat;
+    cGravityf    : float;
     cDamageModifier : hwFloat;
     cLaserSighting  : boolean;
     cVampiric   : boolean;
@@ -170,7 +173,7 @@ procedure MakeScreenshot(filename: shortstring);
 {$ENDIF}
 
 implementation
-uses Math, uConsole, uStore, uIO, uSound, typinfo, sysutils;
+uses uConsole, uStore, uIO, uSound, typinfo, sysutils;
 
 var KBnum: Longword;
 {$IFDEF DEBUGFILE}
@@ -677,9 +680,12 @@ procedure initModule;
 {$IFDEF DEBUGFILE}{$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}{$ENDIF}
 begin
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
+    cDrownSpeedf            := 0.06;
     cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
     cWindSpeed.QWordValue   := 429496;      // 0.0001
+    cWindSpeedf             := 0.0001;
     cGravity                := cMaxWindSpeed * 2;
+    cGravityf               := 0.00025 * 2;
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
     TextureList             := nil;

@@ -28,13 +28,12 @@ type PVisualGear = ^TVisualGear;
         NextGear, PrevGear: PVisualGear;
         Frame,
         FrameTicks: Longword;
-        X : hwFloat;
-        Y : hwFloat;
-        dX: hwFloat;
-        dY: hwFloat;
-        tdX: hwFloat;
-        tdY: hwFloat;
-        mdY: QWord;
+        X : float;
+        Y : float;
+        dX: float;
+        dY: float;
+        tdX: float;
+        tdY: float;
         State : Longword;
         Timer: Longword;
         Angle, dAngle: real;
@@ -123,7 +122,7 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0): PVisualGear;
 var gear: PVisualGear;
     t: Longword;
-    sp: hwFloat;
+    sp: float;
 begin
 if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we are scrolling now
     if Kind <> vgtCloud then
@@ -148,8 +147,8 @@ if cReducedQuality and
 
 New(gear);
 FillChar(gear^, sizeof(TVisualGear), 0);
-gear^.X:= int2hwFloat(X);
-gear^.Y:= int2hwFloat(Y);
+gear^.X:= float(X);
+gear^.Y:= float(Y);
 gear^.Kind := Kind;
 gear^.doStep:= doStepHandlers[Kind];
 gear^.State:= 0;
@@ -159,51 +158,50 @@ with gear^ do
     case Kind of
     vgtFlake: begin
                 Timer:= 0;
-                tdX:= _0;
-                tdY:= _0;
+                tdX:= 0;
+                tdY:= 0;
                 FrameTicks:= random(vobFrameTicks);
                 Frame:= random(vobFramesCount);
                 Angle:= random * 360;
-                dx.isNegative:= random(2) = 0;
-                dx.QWordValue:= random(100000000);
-                dy.isNegative:= false;
-                dy.QWordValue:= random(70000000);
+                dx:= 0.0000038654705 * random(10000);
+                dy:= 0.000003506096 * random(7000);
+                if random(2) = 0 then dx*=-1;
                 dAngle:= (random(2) * 2 - 1) * (1 + random) * vobVelocity / 1000
                 end;
     vgtCloud: begin
                 Frame:= random(4);
-                dx.isNegative:= random(2) = 0;
-                dx.QWordValue:= random(214748364);
-                mdY:= random(4096);
+                dx:= 0.000005 * random(10000);
+                if random(2) = 0 then dx*=-1;
+                timer:= random(4096);
                 end;
     vgtExplPart,
     vgtExplPart2: begin
                 t:= random(1024);
-                sp:= _0_001 * (random(95) + 70);
-                dx:= AngleSin(t) * sp;
-                dx.isNegative:= random(2) = 0;
-                dy:= AngleCos(t) * sp;
-                dy.isNegative:= random(2) = 0;
+                sp:= 0.001 * (random(95) + 70);
+                dx:= AngleSin(t).QWordValue/4294967296 * sp;
+                dy:= AngleCos(t).QWordValue/4294967296 * sp;
+                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dy*=-1;
                 Frame:= 7 - random(3);
                 FrameTicks:= cExplFrameTicks
                 end;
         vgtFire: begin
                 t:= random(1024);
-                sp:= _0_001 * (random(85) + 95);
-                dx:= AngleSin(t) * sp;
-                dx.isNegative:= random(2) = 0;
-                dy:= AngleCos(t) * sp;
-                dy.isNegative:= random(2) = 0;
+                sp:= 0.001 * (random(85) + 95);
+                dx:= AngleSin(t).QWordValue/4294967296 * sp;
+                dy:= AngleCos(t).QWordValue/4294967296 * sp;
+                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dy*=-1;
                 FrameTicks:= 650 + random(250);
                 Frame:= random(8)
                 end;
          vgtEgg: begin
                 t:= random(1024);
-                sp:= _0_001 * (random(85) + 95);
-                dx:= AngleSin(t) * sp;
-                dx.isNegative:= random(2) = 0;
-                dy:= AngleCos(t) * sp;
-                dy.isNegative:= random(2) = 0;
+                sp:= 0.001 * (random(85) + 95);
+                dx:= AngleSin(t).QWordValue/4294967296 * sp;
+                dy:= AngleCos(t).QWordValue/4294967296 * sp;
+                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dy*=-1;
                 FrameTicks:= 650 + random(250);
                 Frame:= 1
                 end;
@@ -212,18 +210,16 @@ with gear^ do
                 gear^.FrameTicks:= 1100
                 end;
     vgtBubble: begin
-                dx.isNegative:= random(2) = 0;
-                dx.QWordValue:= random(100000000);
-                dy:= _0_001 * (random(85) + 95);
-                dy.isNegative:= false;
+                dx:= 0.0000038654705 * random(10000);
+                dy:= 0.001 * (random(85) + 95);
+                if random(2) = 0 then dx*=-1;
                 FrameTicks:= 250 + random(1751);
                 Frame:= random(5)
                 end;
     vgtSteam: begin
-                dx.isNegative:= random(2) = 0;
-                dx.QWordValue:= random(100000000);
-                dy:= _0_001 * (random(85) + 95);
-                dy.isNegative:= false;
+                dx:= 0.0000038654705 * random(10000);
+                dy:= 0.001 * (random(85) + 95);
+                if random(2) = 0 then dx*=-1;
                 Frame:= 7 - random(3);
                 FrameTicks:= cExplFrameTicks * 2;
                 end;
@@ -233,39 +229,36 @@ with gear^ do
                 end;
   vgtSmokeWhite, 
   vgtSmoke: begin
-                dx:= _0_0002 * (random(45) + 10);
-                dx.isNegative:= random(2) = 0;
-                dy:= _0_0002 * (random(45) + 10);
-                dy.isNegative:= false;
+                dx:= 0.0002 * (random(45) + 10);
+                dy:= 0.0002 * (random(45) + 10);
+                if random(2) = 0 then dx*=-1;
                 Frame:= 7 - random(2);
                 FrameTicks:= cExplFrameTicks * 2;
                 end;
     vgtHealth: begin
-                dx:= _0_001 * random(45);
-                dx.isNegative:= random(2) = 0;
-                dy:= _0_001 * (random(20) + 25);
+                dx:= 0.001 * random(45);
+                dy:= 0.001 * (random(20) + 25);
+                if random(2) = 0 then dx*=-1;
                 Frame:= 0;
                 FrameTicks:= random(750) + 1250;
                 end;
   vgtDust: begin
-                dx:= _0_005 * (random(15) + 10);
-                dx.isNegative:= random(2) = 0;
-                dy:= _0_001 * (random(40) + 20);
+                dx:= 0.005 * (random(15) + 10);
+                dy:= 0.001 * (random(40) + 20);
+                if random(2) = 0 then dx*=-1;
                 Frame:= 7 - random(2);
                 FrameTicks:= random(20) + 15;
                 end;
   vgtSplash: begin
-                dx:= _0;
-                dx.isNegative:= false;
-                dy:= _0;
+                dx:= 0;
+                dy:= 0;
                 FrameTicks:= 740;
                 Frame:= 19;
                 end;
     vgtDroplet: begin
-                dx:= _0_001 * (random(75) + 15);
-                dx.isNegative:= random(2) = 0;
-                dy:= _0_001 * (random(80) + 120);
-                dy.isNegative:= true;
+                dx:= 0.001 * (random(75) + 15);
+                dy:= -0.001 * (random(80) + 120);
+                if random(2) = 0 then dx*=-1;
                 FrameTicks:= 250 + random(1751);
                 Frame:= random(3)
                 end;
@@ -274,10 +267,8 @@ with gear^ do
                 Frame:= random(16);
                 end;
     vgtSmokeRing: begin
-                dx:= _0;
-                dx.isNegative:= false;
-                dy:= _0;
-                dy.isNegative:= false;
+                dx:= 0;
+                dy:= 0;
                 FrameTicks:= 600;
                 Timer:= 0;
                 Frame:= 0;
@@ -287,11 +278,11 @@ with gear^ do
                 end;
      vgtFeather: begin
                 t:= random(1024);
-                sp:= _0_001 * (random(85) + 95);
-                dx:= AngleSin(t) * sp;
-                dx.isNegative:= random(2) = 0;
-                dy:= AngleCos(t) * sp;
-                dy.isNegative:= random(2) = 0;
+                sp:= 0.001 * (random(85) + 95);
+                dx:= AngleSin(t).QWordValue/4294967296 * sp;
+                dy:= AngleCos(t).QWordValue/4294967296 * sp;
+                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dy*=-1;
                 FrameTicks:= 650 + random(250);
                 Frame:= 1
                 end;
@@ -301,8 +292,8 @@ with gear^ do
                 end;
   vgtSmokeTrace,
   vgtEvilTrace: begin
-                gear^.X:= gear^.X - _16;
-                gear^.Y:= gear^.Y - _16;
+                gear^.X:= gear^.X - 16;
+                gear^.Y:= gear^.Y - 16;
                 gear^.State:= 8;
                 //gear^.Z:= cSmokeZ
                 end;
@@ -362,11 +353,13 @@ while t <> nil do
       if Gear^.Kind = vgtFlake then
           begin
           // Damage calc from doMakeExplosion
-          dmg:= min(100,Radius  + cHHRadius div 2 - (hwRound(hwAbs(Gear^.X - int2hwFloat(X))+hwAbs(Gear^.Y - int2hwFloat(Y))) div 5));
+          dmg:= min(101,Radius  + cHHRadius div 2 - (round(abs(Gear^.X - float(X))+abs(Gear^.Y - float(Y))) div 5));
           if dmg > 1 then
               begin
-              Gear^.tdX:= SignAs(_0_02 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
-              Gear^.tdY:= SignAs(_0_02 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
+              Gear^.tdX:= 0.02 * dmg + 0.01;
+              if Gear^.X - X < 0 then Gear^.tdX *= -1;
+              Gear^.tdY:= 0.02 * dmg + 0.01;
+              if Gear^.Y - Y < 0 then Gear^.tdY *= -1;
               Gear^.Timer:= 200
               end
           end;
@@ -384,10 +377,10 @@ case Layer of
         Tint(Gear^.Tint);
         case Gear^.Kind of
             vgtFlake: if vobVelocity = 0 then
-                        DrawSprite(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                        DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                     else
-                        DrawRotatedF(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
-            vgtCloud: DrawSprite(sprCloud, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
+                        DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+            vgtCloud: DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
             end;
         Gear:= Gear^.NextGear
         end;
@@ -395,18 +388,18 @@ case Layer of
         begin
         Tint(Gear^.Tint);
         case Gear^.Kind of
-            vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
-            vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
+            vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
+            vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
         end;
             if not cReducedQuality then
                 case Gear^.Kind of
-                    vgtSmoke: DrawSprite(sprSmoke, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
-                    vgtSmokeWhite: DrawSprite(sprSmokeWhite, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
-                    vgtDust: DrawSprite(sprDust, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+                    vgtSmoke: DrawSprite(sprSmoke, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+                    vgtSmokeWhite: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+                    vgtDust: DrawSprite(sprDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                     vgtFeather: begin
                             if Gear^.FrameTicks < 255 then
                                 Tint($FF, $FF, $FF, Gear^.FrameTicks);
-                            DrawRotatedF(sprFeather, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                            DrawRotatedF(sprFeather, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                             end;
                  end;
         Gear:= Gear^.NextGear
@@ -415,59 +408,59 @@ case Layer of
         begin
         Tint(Gear^.Tint);
         case Gear^.Kind of
-            vgtExplosion: DrawSprite(sprExplosion50, hwRound(Gear^.X) - 32 + WorldDx, hwRound(Gear^.Y) - 32 + WorldDy, Gear^.State);
+            vgtExplosion: DrawSprite(sprExplosion50, round(Gear^.X) - 32 + WorldDx, round(Gear^.Y) - 32 + WorldDy, Gear^.State);
             vgtBigExplosion: begin
                              Tint($FF, $FF, $FF, floor($FF * (1 - power(Gear^.Timer / 250, 4))));
-                             DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
+                             DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
                              end;
             end;
         if not cReducedQuality then
             case Gear^.Kind of
-                vgtExplPart: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
-                vgtExplPart2: DrawSprite(sprExplPart2, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
-                vgtFire: DrawSprite(sprFlame, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
-                vgtBubble: DrawSprite(sprBubbles, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
-                vgtSteam: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
+                vgtExplPart: DrawSprite(sprExplPart, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
+                vgtExplPart2: DrawSprite(sprExplPart2, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
+                vgtFire: DrawSprite(sprFlame, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
+                vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
+                vgtSteam: DrawSprite(sprExplPart, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
                 vgtAmmo: begin
                         Tint($FF, $FF, $FF, floor(Gear^.alpha * $FF));
-                        DrawTextureF(ropeIconTex, Gear^.scale, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 32, 32);
-                        DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
+                        DrawTextureF(ropeIconTex, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 32, 32);
+                        DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
                         end;
                 vgtHealth:  begin
                             case Gear^.Frame div 10 of
                                 0:Tint(0, $FF, 0, floor(Gear^.FrameTicks * $FF / 1000));
                                 1:Tint($FF, 0, 0, floor(Gear^.FrameTicks * $FF / 1000));
                             end;
-                            DrawSprite(sprHealth, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, 0);
+                            DrawSprite(sprHealth, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, 0);
                             end;
                 vgtShell: begin
                             if Gear^.FrameTicks < $FF then
                                 Tint($FF, $FF, $FF, Gear^.FrameTicks);
-                            DrawRotatedF(sprShell, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                            DrawRotatedF(sprShell, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                             end;
                   vgtEgg: begin
                             if Gear^.FrameTicks < $FF then
                                 Tint($FF, $FF, $FF, Gear^.FrameTicks);
-                            DrawRotatedF(sprEgg, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                            DrawRotatedF(sprEgg, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                             end;
-                vgtSplash: DrawSprite(sprSplash, hwRound(Gear^.X) + WorldDx - 40, hwRound(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
-                vgtDroplet: DrawSprite(sprDroplet, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, Gear^.Frame);
+                vgtSplash: DrawSprite(sprSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
+                vgtDroplet: DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                vgtBeeTrace: begin
                             if Gear^.FrameTicks < $FF then
                                 Tint($FF, $FF, $FF, Gear^.FrameTicks div 2)
                             else
                                 Tint($FF, $FF, $FF, $80);
-                            DrawRotatedF(sprBeeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, (RealTicks shr 4) mod cMaxAngle);
+                            DrawRotatedF(sprBeeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, (RealTicks shr 4) mod cMaxAngle);
                             end;
                 vgtSmokeRing: begin
                             Tint($FF, $FF, $FF, floor(Gear^.alpha * $FF));
-                            DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);
+                            DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);
                             end;
             end;
         case Gear^.Kind of
-            vgtSmallDamageTag: DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtSpeechBubble: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
+            vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+            vgtSpeechBubble: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+            vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
         end;
         Gear:= Gear^.NextGear
         end
