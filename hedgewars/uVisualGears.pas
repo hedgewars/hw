@@ -165,13 +165,13 @@ with gear^ do
                 Angle:= random * 360;
                 dx:= 0.0000038654705 * random(10000);
                 dy:= 0.000003506096 * random(7000);
-                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dx := -dx;
                 dAngle:= (random(2) * 2 - 1) * (1 + random) * vobVelocity / 1000
                 end;
     vgtCloud: begin
                 Frame:= random(4);
                 dx:= 0.000005 * random(10000);
-                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dx := -dx;
                 timer:= random(4096);
                 end;
     vgtExplPart,
@@ -180,8 +180,8 @@ with gear^ do
                 sp:= 0.001 * (random(95) + 70);
                 dx:= AngleSin(t).QWordValue/4294967296 * sp;
                 dy:= AngleCos(t).QWordValue/4294967296 * sp;
-                if random(2) = 0 then dx*=-1;
-                if random(2) = 0 then dy*=-1;
+                if random(2) = 0 then dx := -dx;
+                if random(2) = 0 then dy := -dy;
                 Frame:= 7 - random(3);
                 FrameTicks:= cExplFrameTicks
                 end;
@@ -190,8 +190,8 @@ with gear^ do
                 sp:= 0.001 * (random(85) + 95);
                 dx:= AngleSin(t).QWordValue/4294967296 * sp;
                 dy:= AngleCos(t).QWordValue/4294967296 * sp;
-                if random(2) = 0 then dx*=-1;
-                if random(2) = 0 then dy*=-1;
+                if random(2) = 0 then dx := -dx;
+                if random(2) = 0 then dy := -dy;
                 FrameTicks:= 650 + random(250);
                 Frame:= random(8)
                 end;
@@ -200,8 +200,8 @@ with gear^ do
                 sp:= 0.001 * (random(85) + 95);
                 dx:= AngleSin(t).QWordValue/4294967296 * sp;
                 dy:= AngleCos(t).QWordValue/4294967296 * sp;
-                if random(2) = 0 then dx*=-1;
-                if random(2) = 0 then dy*=-1;
+                if random(2) = 0 then dx := -dx;
+                if random(2) = 0 then dy := -dy;
                 FrameTicks:= 650 + random(250);
                 Frame:= 1
                 end;
@@ -212,14 +212,14 @@ with gear^ do
     vgtBubble: begin
                 dx:= 0.0000038654705 * random(10000);
                 dy:= 0.001 * (random(85) + 95);
-                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dx := -dx;
                 FrameTicks:= 250 + random(1751);
                 Frame:= random(5)
                 end;
     vgtSteam: begin
                 dx:= 0.0000038654705 * random(10000);
                 dy:= 0.001 * (random(85) + 95);
-                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dx := -dx;
                 Frame:= 7 - random(3);
                 FrameTicks:= cExplFrameTicks * 2;
                 end;
@@ -231,21 +231,21 @@ with gear^ do
   vgtSmoke: begin
                 dx:= 0.0002 * (random(45) + 10);
                 dy:= 0.0002 * (random(45) + 10);
-                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dx := -dx;
                 Frame:= 7 - random(2);
                 FrameTicks:= cExplFrameTicks * 2;
                 end;
     vgtHealth: begin
                 dx:= 0.001 * random(45);
                 dy:= 0.001 * (random(20) + 25);
-                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dx := -dx;
                 Frame:= 0;
                 FrameTicks:= random(750) + 1250;
                 end;
   vgtDust: begin
                 dx:= 0.005 * (random(15) + 10);
                 dy:= 0.001 * (random(40) + 20);
-                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dx := -dx;
                 Frame:= 7 - random(2);
                 FrameTicks:= random(20) + 15;
                 end;
@@ -258,7 +258,7 @@ with gear^ do
     vgtDroplet: begin
                 dx:= 0.001 * (random(75) + 15);
                 dy:= -0.001 * (random(80) + 120);
-                if random(2) = 0 then dx*=-1;
+                if random(2) = 0 then dx := -dx;
                 FrameTicks:= 250 + random(1751);
                 Frame:= random(3)
                 end;
@@ -281,8 +281,8 @@ with gear^ do
                 sp:= 0.001 * (random(85) + 95);
                 dx:= AngleSin(t).QWordValue/4294967296 * sp;
                 dy:= AngleCos(t).QWordValue/4294967296 * sp;
-                if random(2) = 0 then dx*=-1;
-                if random(2) = 0 then dy*=-1;
+                if random(2) = 0 then dx := -dx;
+                if random(2) = 0 then dy := -dy;
                 FrameTicks:= 650 + random(250);
                 Frame:= 1
                 end;
@@ -357,9 +357,9 @@ while t <> nil do
           if dmg > 1 then
               begin
               Gear^.tdX:= 0.02 * dmg + 0.01;
-              if Gear^.X - X < 0 then Gear^.tdX *= -1;
+              if Gear^.X - X < 0 then Gear^.tdX := -Gear^.tdX;
               Gear^.tdY:= 0.02 * dmg + 0.01;
-              if Gear^.Y - Y < 0 then Gear^.tdY *= -1;
+              if Gear^.Y - Y < 0 then Gear^.tdY := -Gear^.tdY;
               Gear^.Timer:= 200
               end
           end;

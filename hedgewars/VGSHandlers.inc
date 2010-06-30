@@ -80,7 +80,7 @@ Gear^.X:= Gear^.X + (cWindSpeedf * 200 + Gear^.dX) * Steps;
 // up-and-down-bounce magic
 s := (GameTicks + Gear^.Timer) mod 4096;
 t := 8 * AngleSin(s mod 2048).QWordValue / 4294967296;
-if (s < 2048) then t *= -1;
+if (s < 2048) then t := -t;
 
 Gear^.Y := LAND_HEIGHT-1184 + Gear^.Timer mod 8 + t;
 
