@@ -1346,6 +1346,7 @@ begin
     LandBackSurface:= nil;
     digest:= '';
     FillChar(LandPixels, sizeof(TLandArray), 0);
+    FillChar(LandCollided, sizeof(TDirtyTag), 0);
 end;
 
 procedure freeModule;
