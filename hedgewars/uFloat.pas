@@ -22,6 +22,7 @@ unit uFloat;
 interface
 
 {$IFDEF FPC}
+{$INLINE ON}
 {$IFDEF ENDIAN_LITTLE}
 type hwFloat = record
                isNegative: boolean;
@@ -38,14 +39,14 @@ type hwFloat = record
                end;
 {$ENDIF}
 
-function int2hwFloat (const i: LongInt) : hwFloat;
+function int2hwFloat (const i: LongInt) : hwFloat; inline;
 
-operator + (const z1, z2: hwFloat) z : hwFloat;
-operator - (const z1, z2: hwFloat) z : hwFloat;
+operator + (const z1, z2: hwFloat) z : hwFloat; inline;
+operator - (const z1, z2: hwFloat) z : hwFloat; inline;
 operator - (const z1: hwFloat) z : hwFloat;
 
 operator * (const z1, z2: hwFloat) z : hwFloat;
-operator * (const z1: hwFloat; const z2: LongInt) z : hwFloat;
+operator * (const z1: hwFloat; const z2: LongInt) z : hwFloat; inline;
 operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat;
 operator / (const z1: hwFloat; const z2: LongInt) z : hwFloat;
 
@@ -55,8 +56,8 @@ operator > (const z1, z2: hwFloat) b : boolean;
 function cstr(const z: hwFloat): shortstring;
 function hwRound(const t: hwFloat): LongInt;
 function hwAbs(const t: hwFloat): hwFloat;
-function hwSqr(const t: hwFloat): hwFloat;
-function hwSqrt(const t: hwFloat): hwFloat;
+function hwSqr(const t: hwFloat): hwFloat; inline;
+function hwSqrt(const t: hwFloat): hwFloat; inline;
 function Distance(const dx, dy: hwFloat): hwFloat;
 function DistanceI(const dx, dy: LongInt): hwFloat;
 function AngleSin(const Angle: Longword): hwFloat;
@@ -148,6 +149,7 @@ type hwFloat = Extended;
 
 implementation
 uses uMisc;
+
 
 {$IFDEF FPC}
 

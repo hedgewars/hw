@@ -129,10 +129,8 @@
         [UIView commitAnimations];
     }
     
-    if ([actionSheet cancelButtonIndex] != buttonIndex) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissPopover" object:nil];
+    if ([actionSheet cancelButtonIndex] != buttonIndex)
         HW_terminate(NO);
-    }
     else
         if (!isPaused) 
             HW_pause();     

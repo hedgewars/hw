@@ -54,7 +54,6 @@ int main (int argc, char *argv[]) {
 }
 
 @implementation SDLUIKitDelegate
-@synthesize uiwindow, window;
 
 // convenience method
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -66,15 +65,11 @@ int main (int argc, char *argv[]) {
     if (self = [super init]){
         mainViewController = nil;
         isInGame = NO;
-        self.uiwindow = nil;     
-        self.window = NULL;
     }
     return self;
 }
 
 -(void) dealloc {
-    SDL_DestroyWindow(self.window);
-     [uiwindow release];
     [mainViewController release];
     [super dealloc];
 }
@@ -93,14 +88,20 @@ int main (int argc, char *argv[]) {
     [setup release];
 
     // since the sdlwindow is not yet created, we add the overlayController with a delay
-    [self performSelector:@selector(displayOverlayLater) withObject:nil afterDelay:0.5];
+    [self performSelector:@selector(displayOverlayLater) withObject:nil afterDelay:0.3];
     
     // this is the pascal fuction that starts the game (wrapped around isInGame)
     isInGame = YES;
     Game(gameArgs);
     isInGame = NO;
-    
     free(gameArgs);
+    
+    UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+    [aWin makeKeyAndVisible];
+    aWin =  [[[UIApplication sharedApplication] windows] lastObject];
+    [aWin removeFromSuperview];
+    
+    DLog(@"%@",[[UIApplication sharedApplication] windows]);
     
     [UIView beginAnimations:@"inserting main controller" context:NULL];
     [UIView setAnimationDuration:1];
@@ -109,9 +110,10 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) displayOverlayLater {
-    // overlay with controls, become visible after 4 seconds, with a transparency effect
+    // overlay with controls, become visible later, with a transparency effect
     OverlayViewController *overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
-    
+
+    // keyWindow is the frontmost window
     [[[UIApplication sharedApplication] keyWindow] addSubview:overlayController.view];
     [overlayController release];
 }
@@ -121,10 +123,8 @@ int main (int argc, char *argv[]) {
     [application setStatusBarHidden:YES];
     [application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];  
     
-    uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    UIWindow *uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     uiwindow.backgroundColor = [UIColor blackColor];
-    // needed to keep the app running after a game (gets released in sdl_uikitwindow)
-    [uiwindow retain];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
@@ -148,15 +148,16 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
+    if (mainViewController.view.superview == nil)
+        mainViewController = nil;
+    MSG_MEMCLEAN();
     print_free_memory();
 }
 
 -(void) applicationWillResignActive:(UIApplication *)application {
-    //NSLog(@"%@", NSStringFromSelector(_cmd));
     if (isInGame) {
         HW_pause();
         
-        /*
         // Send every window on every screen a MINIMIZED event.
         SDL_VideoDevice *_this = SDL_GetVideoDevice();
         if (!_this)
@@ -169,7 +170,6 @@ int main (int argc, char *argv[]) {
             for (window = display->windows; window != nil; window = window->next)
                 SDL_SendWindowEvent(window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
         }
-        */
     }
 }
 
@@ -178,7 +178,6 @@ int main (int argc, char *argv[]) {
     if (isInGame) {
         HW_pause();
 
-        /*
         // Send every window on every screen a RESTORED event.
         SDL_VideoDevice *_this = SDL_GetVideoDevice();
         if (!_this)
@@ -191,7 +190,6 @@ int main (int argc, char *argv[]) {
             for (window = display->windows; window != nil; window = window->next)
                 SDL_SendWindowEvent(window, SDL_WINDOWEVENT_RESTORED, 0, 0);
         }
-        */
     }
 }
 

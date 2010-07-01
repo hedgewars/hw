@@ -172,6 +172,10 @@ begin
     SendKB();
     CloseIPC();
     TTF_Quit();
+{$IFDEF SDL13}
+    SDL_DestroyRenderer(SDLwindow);
+    SDL_DestroyWindow(SDLwindow);
+{$ENDIF}
     SDL_Quit();
     isTerminated:= false;
 end;
@@ -250,7 +254,7 @@ begin
     cVSyncInUse:= true;
     cTimerInterval:= 8;
     PathPrefix:= 'Data';
-    cReducedQuality:= 0;                //FIXME
+    cReducedQuality:= rqBlurryLand;                //FIXME
     cShowFPS:= true;
     cInitVolume:= 100;
 

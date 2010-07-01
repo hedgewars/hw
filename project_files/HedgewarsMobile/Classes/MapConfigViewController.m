@@ -116,6 +116,7 @@
     CGColorSpaceRelease(colorspace);
     
     CGImageRef previewCGImage = CGBitmapContextCreateImage(bitmapImage);
+    CGContextRelease(bitmapImage);
     UIImage *previewImage = [[UIImage alloc] initWithCGImage:previewCGImage];
     CGImageRelease(previewCGImage);
     previewCGImage = nil;

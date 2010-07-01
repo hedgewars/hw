@@ -705,6 +705,8 @@ function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongIn
 function  SDL_CreateWindow(title: PChar; x,y,w,h, flags: LongInt): PSDL_Window; cdecl; external SDLLibName;      
 function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): LongInt; cdecl; external SDLLibName;   
 function  SDL_SetRenderDrawColor(r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
+function  SDL_DestroyRenderer(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
+function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
 
 function  SDL_RenderFill(rect: PSDL_Rect): LongInt;
 function  SDL_RenderFillRect(rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
