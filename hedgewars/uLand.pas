@@ -35,7 +35,8 @@ type
 
 var Land: TCollisionArray;
     LandPixels: TLandArray;
-    LandDirty: TDirtyTag;
+// LandCollided is reusing DirtyTag size because currently the largest Radius we have is 32px (Piano)
+    LandDirty, LandCollided: TDirtyTag;
     hasBorder: boolean; 
     hasGirders: boolean;  
     isMap: boolean;  

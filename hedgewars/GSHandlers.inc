@@ -1752,7 +1752,7 @@ begin
     begin
         if (Gear^.State and gsttmpFlag) <> 0 then
         begin
-            Gear^.Radius := 9;
+            Gear^.Radius := 7;
             AmmoShove(Gear, 2, 30);
             Gear^.Radius := 1
         end;
@@ -1768,7 +1768,7 @@ begin
             // Standard fire
             if (Gear^.State and gsttmpFlag) = 0 then
             begin
-                Gear^.Radius := 9;
+                Gear^.Radius := 7;
                 AmmoShove(Gear, 4, 100);
                 Gear^.Radius := 1;
                 doMakeExplosion(gX, gY, 4, EXPLNoDamage);
