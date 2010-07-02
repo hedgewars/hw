@@ -420,10 +420,10 @@ begin
 end;
 
 /////////////////////////
-procedure GenLandPreview{$IFDEF IPHONEOS}(port: LongInt){$ENDIF}; {$IFDEF HWLIBRARY}cdecl; export;{$ENDIF}
+procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
 var Preview: TPreview;
 begin
-{$IFDEF IPHONEOS}
+{$IFDEF HWLIBRARY}
     initEverything(false);
     WriteLnToConsole('Preview connecting on port ' + inttostr(port));
     ipcPort:= port;
@@ -438,23 +438,12 @@ begin
     SendIPCRaw(@MaxHedgehogs, sizeof(byte));
     WriteLnToConsole('Preview sent, disconnect');
     CloseIPC();
-{$IFDEF IPHONEOS}
+{$IFDEF HWLIBRARY}
     freeEverything(false);
 {$ENDIF}
 end;
 
 {$IFNDEF HWLIBRARY}
-////////////////////////////////
-(*procedure Resize(w, h: LongInt);
-begin
-    cScreenWidth:= w;
-    cScreenHeight:= h;
-    if cFullScreen then
-        ParseCommand('/fullscr 1', true)
-    else
-        ParseCommand('/fullscr 0', true);
-end;*)
-
 /////////////////////
 procedure DisplayUsage;
 var i: LongInt;
@@ -483,7 +472,6 @@ procedure GetParams;
 var i: LongInt;
 {$ENDIF}
 begin
-
     case ParamCount of
         18: begin
             val(ParamStr(2), cScreenWidth);
