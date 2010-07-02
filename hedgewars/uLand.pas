@@ -35,8 +35,7 @@ type
 
 var Land: TCollisionArray;
     LandPixels: TLandArray;
-// LandCollided is reusing DirtyTag size because currently the largest Radius we have is 32px (Piano)
-    LandDirty, LandCollided: TDirtyTag;
+    LandDirty: TDirtyTag;
     hasBorder: boolean; 
     hasGirders: boolean;  
     isMap: boolean;  
@@ -1346,7 +1345,6 @@ begin
     LandBackSurface:= nil;
     digest:= '';
     FillChar(LandPixels, sizeof(TLandArray), 0);
-    FillChar(LandCollided, sizeof(TDirtyTag), 0);
 end;
 
 procedure freeModule;

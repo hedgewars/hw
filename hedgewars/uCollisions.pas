@@ -65,8 +65,6 @@ var Count: Longword;
     ga: TGearArray;
 
 procedure AddGearCI(Gear: PGear);
-var i, j, k, tr: LongInt;
-    tmpVals: array[0..8] of byte;
 begin
 if Gear^.CollisionIndex >= 0 then exit;
 TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
@@ -75,53 +73,19 @@ with cinfos[Count] do
     X:= hwRound(Gear^.X);
     Y:= hwRound(Gear^.Y);
     Radius:= Gear^.Radius;
-    tr:= Radius - 1;
-    ChangeRoundInLand(X, Y, tr, true);
-    cGear:= Gear;
-    k:= 0;
-    for i:= -1 to 1 do
-        for j:= -1 to 1 do
-            begin
-            tmpVals[k]:= LandCollided[(Y + tr*i) div 32, (X + tr*i) div 32];
-            inc(k);
-            end;
-    k:= 0;
-    for i:= -1 to 1 do
-        for j:= -1 to 1 do
-            begin
-            if LandCollided[(Y + tr*i) div 32, (X + tr*i) div 32] < 255 then LandCollided[(Y + tr*i) div 32, (X + tr*i) div 32]:= tmpVals[k] + 1;
-            inc(k)
-            end
+    ChangeRoundInLand(X, Y, Radius - 1, true);
+    cGear:= Gear
     end;
 Gear^.CollisionIndex:= Count;
 inc(Count)
 end;
 
 procedure DeleteCI(Gear: PGear);
-var i, j, k, tr: LongInt;
-    tmpVals: array[0..8] of byte;
 begin
 if Gear^.CollisionIndex >= 0 then
     begin
     with cinfos[Gear^.CollisionIndex] do
-        begin
-        tr:= Radius - 1;
-        ChangeRoundInLand(X, Y, tr, false);
-        k:= 0;
-        for i:= -1 to 1 do
-            for j:= -1 to 1 do
-                begin
-                tmpVals[k]:= LandCollided[(Y + tr*i) div 32, (X + tr*i) div 32];
-                inc(k);
-                end;
-        k:= 0;
-        for i:= -1 to 1 do
-            for j:= -1 to 1 do
-                begin
-                if LandCollided[(Y + tr*i) div 32, (X + tr*i) div 32] > 0 then LandCollided[(Y + tr*i) div 32, (X + tr*i) div 32]:= tmpVals[k] - 1;
-                inc(k)
-                end
-        end;
+        ChangeRoundInLand(X, Y, Radius - 1, false);
     cinfos[Gear^.CollisionIndex]:= cinfos[Pred(Count)];
     cinfos[Gear^.CollisionIndex].cGear^.CollisionIndex:= Gear^.CollisionIndex;
     Gear^.CollisionIndex:= -1;
@@ -130,7 +94,7 @@ if Gear^.CollisionIndex >= 0 then
 end;
 
 function CheckGearsCollision(Gear: PGear): PGearArray;
-var mx, my, xP, xN, x0, yP, yN, y0, tr: LongInt;
+var mx, my: LongInt;
     i: Longword;
 begin
 CheckGearsCollision:= @ga;
@@ -138,31 +102,15 @@ ga.Count:= 0;
 if Count = 0 then exit;
 mx:= hwRound(Gear^.X);
 my:= hwRound(Gear^.Y);
-tr:= Gear^.Radius - 1;
-xP:= (mx + tr) div 32;
-xN:= (mx - tr) div 32;
-yP:= (my + tr) div 32;
-yN:= (my - tr) div 32;
-x0:= mx div 32;
-y0:= my div 32;
 
-if (LandCollided[yN, xN] <> 0) or
-   (LandCollided[yN, x0] <> 0) or
-   (LandCollided[yN, xP] <> 0) or
-   (LandCollided[y0, xN] <> 0) or
-   (LandCollided[y0, x0] <> 0) or
-   (LandCollided[y0, xP] <> 0) or
-   (LandCollided[yP, xN] <> 0) or
-   (LandCollided[yP, x0] <> 0) or
-   (LandCollided[yP, xP] <> 0) then 
-    for i:= 0 to Pred(Count) do
-        with cinfos[i] do
-            if (Gear <> cGear) and
-                (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) then
-                    begin
-                    ga.ar[ga.Count]:= cinfos[i].cGear;
-                    inc(ga.Count)
-                    end
+for i:= 0 to Pred(Count) do
+    with cinfos[i] do
+        if (Gear <> cGear) and
+            (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) then
+                begin
+                ga.ar[ga.Count]:= cinfos[i].cGear;
+                inc(ga.Count)
+                end
 end;
 
 function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
@@ -228,7 +176,7 @@ TestCollisionYwithGear:= false
 end;
 
 function TestCollisionXKick(Gear: PGear; Dir: LongInt): boolean;
-var x, y, mx, my, i, xP, xN, x0, yP, yN, y0, tr: LongInt;
+var x, y, mx, my, i: LongInt;
     flag: boolean;
 begin
 flag:= false;
@@ -256,47 +204,31 @@ if flag then
 
    mx:= hwRound(Gear^.X);
    my:= hwRound(Gear^.Y);
-   tr:= Gear^.Radius - 1;
-   xP:= (mx + tr) div 32;
-   xN:= (mx - tr) div 32;
-   yP:= (my + tr) div 32;
-   yN:= (my - tr) div 32;
-   x0:= mx div 32;
-   y0:= my div 32;
 
-   if (LandCollided[yN, xN] <> 0) or
-      (LandCollided[yN, x0] <> 0) or
-      (LandCollided[yN, xP] <> 0) or
-      (LandCollided[y0, xN] <> 0) or
-      (LandCollided[y0, x0] <> 0) or
-      (LandCollided[y0, xP] <> 0) or
-      (LandCollided[yP, xN] <> 0) or
-      (LandCollided[yP, x0] <> 0) or
-      (LandCollided[yP, xP] <> 0) then 
-      for i:= 0 to Pred(Count) do
-       with cinfos[i] do
-         if (Gear <> cGear) and
-            (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
-            ((mx > x) xor (Dir > 0)) then
-            if ((cGear^.Kind in [gtHedgehog, gtMine]) and ((Gear^.State and gstNotKickable) = 0)) or
-               // only apply X kick if the barrel is knocked over
-               ((cGear^.Kind = gtExplosives) and ((cGear^.State and gsttmpflag) <> 0)) then
-                begin
-                with cGear^ do
-                     begin
-                     dX:= Gear^.dX;
-                     dY:= Gear^.dY * _0_5;
-                     State:= State or gstMoving;
-                     Active:= true
-                     end;
-                DeleteCI(cGear);
-                exit(false)
-                end
-      end
+   for i:= 0 to Pred(Count) do
+    with cinfos[i] do
+      if (Gear <> cGear) and
+         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
+         ((mx > x) xor (Dir > 0)) then
+         if ((cGear^.Kind in [gtHedgehog, gtMine]) and ((Gear^.State and gstNotKickable) = 0)) or
+            // only apply X kick if the barrel is knocked over
+            ((cGear^.Kind = gtExplosives) and ((cGear^.State and gsttmpflag) <> 0)) then
+             begin
+             with cGear^ do
+                  begin
+                  dX:= Gear^.dX;
+                  dY:= Gear^.dY * _0_5;
+                  State:= State or gstMoving;
+                  Active:= true
+                  end;
+             DeleteCI(cGear);
+             exit(false)
+             end
+   end
 end;
 
 function TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
-var x, y, mx, my, i, xP, xN, x0, yP, yN, y0, tr: LongInt;
+var x, y, mx, my, i: LongInt;
     flag: boolean;
 begin
 flag:= false;
@@ -326,41 +258,25 @@ if flag then
 
    mx:= hwRound(Gear^.X);
    my:= hwRound(Gear^.Y);
-   tr:= Gear^.Radius - 1;
-   xP:= (mx + tr) div 32;
-   xN:= (mx - tr) div 32;
-   yP:= (my + tr) div 32;
-   yN:= (my - tr) div 32;
-   x0:= mx div 32;
-   y0:= my div 32;
 
-   if (LandCollided[yN, xN] <> 0) or
-      (LandCollided[yN, x0] <> 0) or
-      (LandCollided[yN, xP] <> 0) or
-      (LandCollided[y0, xN] <> 0) or
-      (LandCollided[y0, x0] <> 0) or
-      (LandCollided[y0, xP] <> 0) or
-      (LandCollided[yP, xN] <> 0) or
-      (LandCollided[yP, x0] <> 0) or
-      (LandCollided[yP, xP] <> 0) then 
-      for i:= 0 to Pred(Count) do
-       with cinfos[i] do
-         if (Gear <> cGear) and
-            (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
-            ((my > y) xor (Dir > 0)) then
-            if (cGear^.Kind in [gtHedgehog, gtMine, gtExplosives]) and ((Gear^.State and gstNotKickable) = 0) then
-                begin
-                with cGear^ do
-                     begin
-                     if (Kind <> gtExplosives) or ((State and gsttmpflag) <> 0) then dX:= Gear^.dX * _0_5;
-                     dY:= Gear^.dY;
-                     State:= State or gstMoving;
-                     Active:= true
-                     end;
-                DeleteCI(cGear);
-                exit(false)
-                end
-      end
+   for i:= 0 to Pred(Count) do
+    with cinfos[i] do
+      if (Gear <> cGear) and
+         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
+         ((my > y) xor (Dir > 0)) then
+         if (cGear^.Kind in [gtHedgehog, gtMine, gtExplosives]) and ((Gear^.State and gstNotKickable) = 0) then
+             begin
+             with cGear^ do
+                  begin
+                  if (Kind <> gtExplosives) or ((State and gsttmpflag) <> 0) then dX:= Gear^.dX * _0_5;
+                  dY:= Gear^.dY;
+                  State:= State or gstMoving;
+                  Active:= true
+                  end;
+             DeleteCI(cGear);
+             exit(false)
+             end
+   end
 end;
 
 function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;

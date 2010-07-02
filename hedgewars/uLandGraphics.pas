@@ -83,19 +83,19 @@ if not doSet then
    begin
    if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
       for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-          if (Land[y + dy, i] < 255) then
+          if (Land[y + dy, i] < 256) then
               inc(Land[y + dy, i]);
    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
       for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-          if (Land[y - dy, i] < 255) then
+          if (Land[y - dy, i] < 256) then
               inc(Land[y - dy, i]);
    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
       for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-          if (Land[y + dx, i] < 255) then
+          if (Land[y + dx, i] < 256) then
               inc(Land[y + dx, i]);
    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
       for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-          if (Land[y - dx, i] < 255) then
+          if (Land[y - dx, i] < 256) then
               inc(Land[y - dx, i]);
    end
 end;
