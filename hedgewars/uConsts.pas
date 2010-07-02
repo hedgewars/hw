@@ -225,6 +225,7 @@ const
     rqKillFlakes  = $00000040;  // no flakes
     rqSlowMenu    = $00000080;  // ammomenu appears with no animation
     rqPlainSplash = $00000100;  // no droplets
+    rqClampLess   = $00000200;  // don't clamp textures
 
     // image flags (for LoadImage())
     ifNone        = $00000000;  // nothing special
@@ -442,7 +443,29 @@ const
     cThemeCFGFilename = 'theme.cfg';
     
     FontBorder = 2;
-var PathPrefix: shortstring;
+    cPathz: array[TPathType] of shortstring = (
+        '',                              // ptNone
+        '',                              // ptData
+        'Graphics',                      // ptGraphics
+        'Themes',                        // ptThemes
+        'Themes/avematan',               // ptCurrTheme
+        'Teams',                         // ptTeams
+        'Maps',                          // ptMaps
+        '',                              // ptMapCurrent
+        'Demos',                         // ptDemos
+        'Sounds',                        // ptSounds
+        'Graphics/Graves',               // ptGraves
+        'Fonts',                         // ptFonts
+        'Forts',                         // ptForts
+        'Locale',                        // ptLocale
+        'Graphics/AmmoMenu',             // ptAmmoMenu
+        'Graphics/Hedgehog',             // ptHedgehog
+        'Sounds/voices',                 // ptVoices
+        'Graphics/Hats',                 // ptHats
+        'Graphics/Flags'                 // ptFlags
+    );
+    
+var PathPrefix: shortstring = './';
     Pathz: array[TPathType] of shortstring;
     CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
 
@@ -2158,43 +2181,22 @@ const
         colorkey: 0;
         alpha : 255
     );
-            
-
+    
 procedure initModule;
 procedure freeModule;
 
 implementation
 
 procedure initModule;
-var cPathz: array[TPathType] of shortstring = (
-        '',                              // ptNone
-        '',                              // ptData
-        'Graphics',                      // ptGraphics
-        'Themes',                        // ptThemes
-        'Themes/avematan',               // ptCurrTheme
-        'Teams',                         // ptTeams
-        'Maps',                          // ptMaps
-        '',                              // ptMapCurrent
-        'Demos',                         // ptDemos
-        'Sounds',                        // ptSounds
-        'Graphics/Graves',               // ptGraves
-        'Fonts',                         // ptFonts
-        'Forts',                         // ptForts
-        'Locale',                        // ptLocale
-        'Graphics/AmmoMenu',             // ptAmmoMenu
-        'Graphics/Hedgehog',             // ptHedgehog
-        'Sounds/voices',                 // ptVoices
-        'Graphics/Hats',                 // ptHats
-        'Graphics/Flags'                 // ptFlags
-    );
+
 begin
-    PathPrefix := './';
     Pathz:= cPathz;
+
 end;
 
 procedure freeModule;
 begin
-
+    PathPrefix := './';
 end;
 
 end.

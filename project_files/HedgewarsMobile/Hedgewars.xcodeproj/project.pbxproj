@@ -246,6 +246,7 @@
 		6132878211D95185006BA39D /* joyButton_forwardjump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyButton_forwardjump.png; path = Resources/joyButton_forwardjump.png; sourceTree = "<group>"; };
 		6132878411D9518B006BA39D /* joyButton_attack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyButton_attack.png; path = Resources/joyButton_attack.png; sourceTree = "<group>"; };
 		61370652117B1D50004EE44A /* Entitlements-Distribution.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Distribution.plist"; sourceTree = "<group>"; };
+		614E333D11DE9A93009DBA4E /* VGSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = VGSHandlers.inc; path = ../../hedgewars/VGSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		6151347D116C2803001F16D1 /* Icon-iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-iPad.png"; path = "Resources/Icon-iPad.png"; sourceTree = "<group>"; };
 		6163EE7C11CC2600001C0453 /* SingleWeaponViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleWeaponViewController.h; sourceTree = "<group>"; };
 		6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleWeaponViewController.m; sourceTree = "<group>"; };
@@ -680,6 +681,7 @@
 				617987E1114AA34C00BA94A9 /* CCHandlers.inc */,
 				617987E4114AA34C00BA94A9 /* GSHandlers.inc */,
 				617987E5114AA34C00BA94A9 /* HHHandlers.inc */,
+				614E333D11DE9A93009DBA4E /* VGSHandlers.inc */,
 				617987F0114AA34C00BA94A9 /* SinTable.inc */,
 			);
 			name = inc;
@@ -1240,6 +1242,7 @@
 				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = Distribution;
 		};
@@ -1354,6 +1357,7 @@
 				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = Valgrind;
 		};
@@ -1553,6 +1557,7 @@
 				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = Debug;
 		};
@@ -1594,6 +1599,7 @@
 				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = Release;
 		};

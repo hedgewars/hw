@@ -29,8 +29,7 @@ var
     isTerminated    : boolean;
     isInLag         : boolean;
     isPaused        : boolean;
-    isSoundEnabled  : boolean;
-    isMusicEnabled  : boolean;
+
     isSEBackup      : boolean;
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
@@ -38,9 +37,9 @@ var
 
     fastUntilLag    : boolean;
 
-    GameState   : TGameState;
-    GameType    : TGameType;
-    GameFlags   : Longword;
+    GameState       : TGameState;
+    GameType        : TGameType;
+    GameFlags       : Longword;
     TrainingFlags   : Longword;
     TurnTimeLeft    : Longword;
     cSuddenDTurns   : LongInt;
@@ -55,20 +54,13 @@ var
     cMaxAIThinkTime  : Longword;
 
     cCloudsNumber    : LongInt;
-    cScreenWidth     : LongInt;
-    cScreenHeight    : LongInt;
-    cInitWidth       : LongInt;
-    cInitHeight      : LongInt;
-    cVSyncInUse      : boolean;
-    cBits            : LongInt;
-    cBitsStr         : string[2];
+
     cTagsMask        : byte;
     zoom             : GLfloat;
     ZoomValue        : GLfloat;
 
     cWaterLine       : LongInt;
     cGearScrEdgesDist: LongInt;
-    cAltDamage       : boolean;
 
     GameTicks   : LongWord;
     TrainingTimeInc : Longword;
@@ -79,20 +71,35 @@ var
     TimeTrialStartTime: Longword;
     TimeTrialStopTime : Longword;
     
-    recordFileName  : shortstring;
-    cShowFPS    : boolean;
-    cCaseFactor : Longword;
+    // init flags
+    cScreenWidth    : LongInt = 1024;
+    cScreenHeight   : LongInt = 768;
+    cBits           : LongInt = 32;
+    cBitsStr        : string[2] = '32';
+    //ipcPort is in uIO
+    cFullScreen     : boolean = false;
+    isSoundEnabled  : boolean = true;
+    isMusicEnabled  : boolean = false;
+    cVSyncInUse     : boolean = true;    
+    cWeaponTooltips : boolean = true;
+    cLocaleFName    : shortstring = 'en.txt';
+    cInitVolume     : LongInt = 50;
+    cTimerInterval  : LongInt = 8;
+    //pathPrefix is in uConsts
+    cShowFPS        : boolean = false;
+    cAltDamage      : boolean = true;
+    cReducedQuality : LongInt = 0;
+
+    recordFileName  : shortstring = '';
+    
+    cCaseFactor     : Longword;
     cLandAdditions  : Longword;
-    cExplosives : Longword;
-    cFullScreen : boolean;
-    cReducedQuality : LongInt;
-    cLocaleFName    : shortstring;
-    cSeed       : shortstring;
-    cInitVolume : LongInt;
+    cExplosives     : Longword;
+
+    cSeed           : shortstring;
     cVolumeDelta    : LongInt;
-    cTimerInterval  : Longword;
-    cHasFocus   : boolean;
-    cInactDelay : Longword;
+    cHasFocus       : boolean;
+    cInactDelay     : Longword;
 
     bBetweenTurns   : boolean;
     cHealthDecrease : LongWord;
@@ -101,48 +108,47 @@ var
     ShowCrosshair   : boolean;
     CursorMovementX : LongInt;
     CursorMovementY : LongInt;
-    cDrownSpeed : hwFloat;
-    cDrownSpeedf : float;
+    cDrownSpeed     : hwFloat;
+    cDrownSpeedf    : float;
     cMaxWindSpeed   : hwFloat;
-    cWindSpeed  : hwFloat;
-    cWindSpeedf  : float;
-    cGravity    : hwFloat;
-    cGravityf    : float;
+    cWindSpeed      : hwFloat;
+    cWindSpeedf     : float;
+    cGravity        : hwFloat;
+    cGravityf       : float;
     cDamageModifier : hwFloat;
     cLaserSighting  : boolean;
-    cVampiric   : boolean;
-    cArtillery  : boolean;
+    cVampiric       : boolean;
+    cArtillery      : boolean;
     WeaponTooltipTex : PTexture;
-    cWeaponTooltips: boolean;
 
     flagMakeCapture : boolean;
 
     InitStepsFlags  : Longword;
-    RealTicks   : Longword;
-    AttackBar   : LongInt;
+    RealTicks       : Longword;
+    AttackBar       : LongInt;
 
     WaterColorArray : array[0..3] of HwColor4f;
 
-    CursorPoint : TPoint;
-    TargetPoint : TPoint;
+    CursorPoint     : TPoint;
+    TargetPoint     : TPoint;
 
-    TextureList : PTexture;
+    TextureList     : PTexture;
 
-    ScreenFade : TScreenFade;
+    ScreenFade      : TScreenFade;
     ScreenFadeValue : LongInt;
     ScreenFadeSpeed : LongInt;
 
 {$IFDEF SDL13}
-    SDLwindow: PSDL_Window;
+    SDLwindow       : PSDL_Window;
 {$ENDIF}
 
 procedure initModule;
 procedure freeModule;
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: ansistring; c: char);
-function EnumToStr(const en : TGearType) : shortstring; overload;
-function EnumToStr(const en : TSound) : shortstring; overload;
-function EnumToStr(const en : TAmmoType) : shortstring; overload;
+function  EnumToStr(const en : TGearType) : shortstring; overload;
+function  EnumToStr(const en : TSound) : shortstring; overload;
+function  EnumToStr(const en : TAmmoType) : shortstring; overload;
 procedure movecursor(dx, dy: LongInt);
 function  hwSign(r: hwFloat): LongInt;
 function  Min(a, b: LongInt): LongInt;
@@ -292,7 +298,7 @@ end;
 procedure SetTextureParameters(enableClamp: Boolean);
 begin
     //if enableClamp and not cReducedQuality then
-    if enableClamp and ((cReducedQuality and rqNoBackground) = 0) then
+    if enableClamp and ((cReducedQuality and rqClampLess) = 0) then
     begin
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
@@ -718,32 +724,25 @@ begin
     cTemplateFilter     := 0;
     cMapGen             := 0;//MAPGEN_REGULAR
     cMazeSize           := 0;
-
     cHedgehogTurnTime   := 45000;
     cMinesTime          := 3000;
     cMaxAIThinkTime     := 9000;
-
     cCloudsNumber       := 9;
-    cScreenWidth        := 1024;
-    cScreenHeight       := 768;
-    cInitWidth      := cScreenWidth;
-    cInitHeight     := cScreenHeight;
-    cBits           := 32;
+
     cTagsMask       := 0;
     KBnum           := 0;
     InitStepsFlags  := 0;
     RealTicks       := 0;
     AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
-    
-    // tgametype and glfloat and string
+    cCaseFactor     := 5;  {0..9}
+    cLandAdditions  := 4;
+    cExplosives     := 2;
+        
     GameState       := Low(TGameState);
     GameType        := gmtLocal;
     zoom            := 2.0;
     ZoomValue       := 2.0;
-    cBitsStr        := '32';
     WeaponTooltipTex:= nil;
-
-    // booleans
     cLaserSighting  := false;
     cVampiric       := false;
     cArtillery      := false;
@@ -754,31 +753,15 @@ begin
     isTerminated    := false;
     isInLag         := false;
     isPaused        := false;
-    isMusicEnabled  := false;
     isInMultiShoot  := false;
     isSpeed         := false;
     fastUntilLag    := false;
     isFirstFrame    := true;
-    cVSyncInUse     := true;    
-    isSoundEnabled  := true;
     isSEBackup      := true;
-    
-    // init flags
-    recordFileName  := '';
-    cShowFPS        := false;
-    cCaseFactor     := 5;  {0..9}
-    cLandAdditions  := 4;
-    cExplosives     := 2;
-    cFullScreen     := false;
-    cReducedQuality := 0;
-    cLocaleFName    := 'en.txt';
     cSeed           := '';
-    cInitVolume     := 50;
     cVolumeDelta    := 0;
-    cTimerInterval  := 8;
     cHasFocus       := true;
     cInactDelay     := 1250;
-    cAltDamage      := true;
 
     ScreenFade      := sfNone;
     
