@@ -373,7 +373,7 @@ begin
         //uLandGraphics does not need initialization
         //uLandObjects does not need initialization
         //uLandTemplates does not need initialization
-        //uLandTexture does not need initialization
+        uLandTexture.initModule;
         //uLocale does not need initialization
         uRandom.initModule; 
         //uSHA is initialized internally
@@ -402,7 +402,7 @@ begin
         uRandom.freeModule;         //stub
         //uLocale does not need to be freed
         //uLandTemplates does not need to be freed
-        //uLandTexture does not need to be freed
+        uLandTexture.freeModule;
         //uLandObjects does not need to be freed
         //uLandGraphics does not need to be freed
         uKeys.freeModule;           //stub
@@ -495,7 +495,7 @@ begin
             isMusicEnabled:= ParamStr(17) = '1';
 
             if (ParamStr(18) = '1') then        //HACK
-                cReducedQuality:= $FFFFFFFF
+                cReducedQuality:= $FFFFFFFF xor rqLowRes
             else
                 val(ParamStr(18), cReducedQuality);
         end;
@@ -576,7 +576,7 @@ begin
                 cShowFPS:= ParamStr(13) = '1';
                 val(ParamStr(14), cTimerInterval);
                 if (ParamStr(15) = '1') then        //HACK
-                    cReducedQuality:= $FFFFFFFF
+                    cReducedQuality:=  $FFFFFFFF xor rqLowRes
                 else
                     val(ParamStr(15), cReducedQuality);
             end

@@ -22,6 +22,8 @@ unit uLandTexture;
 interface
 uses SDLh;
 
+procedure initModule;
+procedure freeModule;
 procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
 procedure DrawLand(dX, dY: LongInt);
 procedure FreeLand;
@@ -31,23 +33,15 @@ uses uMisc, uLand, uStore, uConsts, GLunit;
 
 
 const TEXSIZE = 256;
-{$IFDEF DOWNSCALE}
-    LANDTEXARW = (LAND_WIDTH div TEXSIZE) div 2;
-    LANDTEXARH = (LAND_HEIGHT div TEXSIZE) div 2;
-{$ELSE}
-    LANDTEXARW = LAND_WIDTH div TEXSIZE;
-    LANDTEXARH = LAND_HEIGHT div TEXSIZE;
-{$ENDIF}
 
-var
-    LandTextures: array[0..LANDTEXARW - 1, 0..LANDTEXARH - 1] of
-            record
+type TLandRecord = record
             shouldUpdate: boolean;
             tex: PTexture;
             end;
-
+var LandTextures: array of array of TLandRecord;
     tmpPixels: array [0..TEXSIZE - 1, 0..TEXSIZE - 1] of LongWord;
-
+LANDTEXARW: LongWord;
+    LANDTEXARH: LongWord;
 function Pixels(x, y: Longword): Pointer;
 var ty: Longword;
 begin
@@ -135,10 +129,29 @@ begin
                 FreeTexture(tex);
                 tex:= nil;
             end;
-
     if LandBackSurface <> nil then
         SDL_FreeSurface(LandBackSurface);
     LandBackSurface:= nil;
 end;
 
+procedure initModule;
+begin
+    if (cReducedQuality and rqBlurryLand) = 0 then
+    begin
+        LANDTEXARW:= LAND_WIDTH div TEXSIZE;
+        LANDTEXARH:= LAND_HEIGHT div TEXSIZE;
+    end
+    else
+    begin
+        LANDTEXARW:= (LAND_WIDTH div TEXSIZE) div 2;
+        LANDTEXARH:= (LAND_HEIGHT div TEXSIZE) div 2;
+    end;
+    
+    SetLength(LandTextures, LANDTEXARW, LANDTEXARH);
+end;
+    
+procedure freeModule;
+begin
+    LandTextures:= nil;
+end;
 end.
