@@ -21,7 +21,7 @@
 
 @synthesize systemSettings, gameConfig;
 
--(id) init {
+-(id) initWithDictionary:(NSDictionary *)gameDictionary {
     if (self = [super init]) {
         ipcPort = randomPort();
         
@@ -30,9 +30,7 @@
         self.systemSettings = dictSett;
         [dictSett release];
         
-        NSDictionary *dictGame = [[NSDictionary alloc] initWithContentsOfFile:GAMECONFIG_FILE()];
-        self.gameConfig = dictGame;
-        [dictGame release];
+        self.gameConfig = gameDictionary;
     } 
     return self;
 }
@@ -336,7 +334,7 @@
                 break;
             default:
                 // empty packet or just statistics -- in either cases gameTicks is sent
-                //gameTicks = SDLNet_Read16 (&buffer[msgSize - 2]);
+                gameTicks = SDLNet_Read16 (&buffer[msgSize - 2]);
                 //DLog(@"engineProtocol - %d: received [%s]", gameTicks, buffer);
                 break;
         }
@@ -347,9 +345,7 @@
     // Close the client socket
     SDLNet_TCP_Close(csd);    
     SDLNet_Quit();
-    
-    [[NSFileManager defaultManager] removeItemAtPath:GAMECONFIG_FILE() error:NULL];
-    
+        
     [pool release];
     //Invoking this method should be avoided as it does not give your thread a chance to clean up any resources it allocated during its execution.
     //[NSThread exit];

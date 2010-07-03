@@ -75,14 +75,15 @@ int main (int argc, char *argv[]) {
 }
 
 // main routine for calling the actual game engine
--(IBAction) startSDLgame {
+-(IBAction) startSDLgame: (NSDictionary *)gameDictionary {
     [UIView beginAnimations:@"removing main controller" context:NULL];
     [UIView setAnimationDuration:1];
     mainViewController.view.alpha = 0;
     [UIView commitAnimations];
 
     // pull out useful configuration info from various files
-    GameSetup *setup = [[GameSetup alloc] init];
+    GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
+    
     [setup startThread:@"engineProtocol"];
     const char **gameArgs = [setup getSettings];
     [setup release];
@@ -96,6 +97,7 @@ int main (int argc, char *argv[]) {
     isInGame = NO;
     free(gameArgs);
     
+    // bring the uiwindow below in front
     UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
     [aWin makeKeyAndVisible];
     aWin =  [[[UIApplication sharedApplication] windows] lastObject];

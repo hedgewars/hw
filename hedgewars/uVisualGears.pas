@@ -375,7 +375,7 @@ case Layer of
         begin
         Tint(Gear^.Tint);
         case Gear^.Kind of
-            vgtFlake: if ((cReducedQuality and rqkillFlakes) <> 0) then
+            vgtFlake: if ((cReducedQuality and rqkillFlakes) = 0) then
                         if vobVelocity = 0 then
                             DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                         else

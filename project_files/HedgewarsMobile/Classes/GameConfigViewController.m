@@ -17,8 +17,7 @@
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // dirty trick to avoid rotating below the curl
-    return interfaceOrientation == self.parentViewController.interfaceOrientation;
+    return rotationManager(interfaceOrientation);
 }
 
 -(IBAction) buttonPressed:(id) sender {
@@ -88,7 +87,7 @@
     // play only if there is more than one team
     if ([teamConfigViewController.listOfSelectedTeams count] < 2) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too few teams playing",@"")
-                                                        message:NSLocalizedString(@"You need to select at least two teams to play a game",@"")
+                                                        message:NSLocalizedString(@"Select at least two teams to play a game",@"")
                                                        delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];
@@ -104,7 +103,7 @@
 
     if (hogs > mapConfigViewController.maxHogs) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many hogs",@"")
-                                                        message:NSLocalizedString(@"The map you selected is too small for that many hogs",@"")
+                                                        message:NSLocalizedString(@"The map is too small for that many hogs",@"")
                                                        delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];
@@ -115,7 +114,7 @@
     
     if ([schemeWeaponConfigViewController.selectedScheme length] == 0 || [schemeWeaponConfigViewController.selectedWeapon length] == 0 ) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Missing detail",@"")
-                                                        message:NSLocalizedString(@"Make sure you selected one Scheme and one Weapon for this game",@"")
+                                                        message:NSLocalizedString(@"Select one Scheme and one Weapon for this game",@"")
                                                        delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];
@@ -125,7 +124,7 @@
     }
     
     // create the configuration file that is going to be sent to engine
-    NSDictionary *dict = [[NSDictionary alloc] initWithObjectsAndKeys:mapConfigViewController.seedCommand,@"seed_command",
+    NSDictionary *gameDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:mapConfigViewController.seedCommand,@"seed_command",
                                                                       mapConfigViewController.templateFilterCommand,@"templatefilter_command",
                                                                       mapConfigViewController.mapGenCommand,@"mapgen_command",
                                                                       mapConfigViewController.mazeSizeCommand,@"mazesize_command",
@@ -134,12 +133,11 @@
                                                                       schemeWeaponConfigViewController.selectedScheme,@"scheme",
                                                                       schemeWeaponConfigViewController.selectedWeapon,@"weapon",
                                                                       nil];
-    [dict writeToFile:GAMECONFIG_FILE() atomically:YES];
-    [dict release];
 
     // finally launch game and remove this controller
     [[self parentViewController] dismissModalViewControllerAnimated:YES];
-    [[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
+    [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:gameDictionary];
+    [gameDictionary release];
 }
 
 -(void) viewDidLoad {
@@ -165,8 +163,12 @@
                 break;
             }
         }
-    } else
+    } else {
+        // this is the visible controller
         mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
+        // this must be loaded to auto set default scheme and ammo
+        schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    }
     activeController = mapConfigViewController;
     
     [self.view addSubview:mapConfigViewController.view];

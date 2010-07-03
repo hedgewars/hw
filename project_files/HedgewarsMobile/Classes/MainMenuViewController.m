@@ -107,9 +107,6 @@
         case 0:
             gameConfigViewController = [[GameConfigViewController alloc] initWithNibName:@"GameConfigViewController" bundle:nil];        
 
-            // bug in UIModalTransitionStylePartialCurl, displays the controller awkwardly if it is not allocated every time            
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-                gameConfigViewController.modalTransitionStyle = UIModalTransitionStylePartialCurl;
             [self presentModalViewController:gameConfigViewController animated:YES];
             break;
         case 2:

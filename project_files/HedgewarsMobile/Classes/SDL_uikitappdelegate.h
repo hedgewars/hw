@@ -32,7 +32,7 @@
 }
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
--(void) startSDLgame;
+-(void) startSDLgame:(NSDictionary *)gameDictionary;
 -(void) displayOverlayLater;
 
 @end

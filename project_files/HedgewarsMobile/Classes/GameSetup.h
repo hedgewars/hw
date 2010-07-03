@@ -20,6 +20,7 @@
 @property (nonatomic, retain) NSDictionary *systemSettings;
 @property (nonatomic, retain) NSDictionary *gameConfig;
 
+-(id) initWithDictionary:(NSDictionary *)gameDictionary;
 -(void) engineProtocol;
 -(void) startThread:(NSString *)selector;
 -(int)  sendToEngine:(NSString *)string;
