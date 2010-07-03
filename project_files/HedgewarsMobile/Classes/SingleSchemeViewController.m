@@ -112,9 +112,9 @@
     
     NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.title];
     NSMutableArray *scheme = [[NSMutableArray alloc] initWithContentsOfFile:schemeFile];
+    [schemeFile release];
     self.schemeArray = scheme;
     [scheme release];
-    [schemeFile release];
     
     [self.tableView reloadData];
 }

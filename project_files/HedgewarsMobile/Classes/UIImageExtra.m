@@ -61,16 +61,16 @@
     
     if (nil != image) {
         // get its CGImage representation with a give size
-        CGImageRef cgImgage = CGImageCreateWithImageInRect([image CGImage], rect);
+        CGImageRef cgImage = CGImageCreateWithImageInRect([image CGImage], rect);
     
         // clean memory
         [image release];
     
         // create a UIImage from the CGImage (memory must be allocated already)
-        UIImage *sprite = [self initWithCGImage:cgImgage];
+        UIImage *sprite = [self initWithCGImage:cgImage];
     
         // clean memory
-        CGImageRelease(cgImgage);
+        CGImageRelease(cgImage);
 
         // return resulting image
         return sprite;
@@ -78,6 +78,15 @@
         DLog(@"error - image == nil");
         return nil;
     }
+}
+
+-(UIImage *)cutAt:(CGRect) rect {
+    CGImageRef cgImage = CGImageCreateWithImageInRect([self CGImage], rect);
+    
+    UIImage *res = [UIImage imageWithCGImage:cgImage];
+    CGImageRelease(cgImage);
+    
+    return res;
 }
 
 -(UIImage *)convertToGrayScale {

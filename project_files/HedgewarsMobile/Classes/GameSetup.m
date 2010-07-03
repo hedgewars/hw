@@ -98,20 +98,26 @@
     NSString *weaponPath = [[NSString alloc] initWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),ammostoreName];
     NSDictionary *ammoData = [[NSDictionary alloc] initWithContentsOfFile:weaponPath];
     [weaponPath release];
+    NSString *update = @"";
     
-    NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@", [ammoData objectForKey:@"ammostore_initialqt"]];
+    // if we're loading an older version of ammos fill the engine message with 0s
+    int diff = CURRENT_AMMOSIZE - [[ammoData objectForKey:@"version"] intValue];
+    if (diff != 0)
+        update = [NSString stringWithCharacters:(const unichar*)"0000000000000000000000000000000000" length:diff];
+    
+    NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@%@", [ammoData objectForKey:@"ammostore_initialqt"], update];
     [self sendToEngine: ammloadt];
     [ammloadt release];
     
-    NSString *ammprob = [[NSString alloc] initWithFormat:@"eammprob %@", [ammoData objectForKey:@"ammostore_probability"]];
+    NSString *ammprob = [[NSString alloc] initWithFormat:@"eammprob %@%@", [ammoData objectForKey:@"ammostore_probability"], update];
     [self sendToEngine: ammprob];
     [ammprob release];
     
-    NSString *ammdelay = [[NSString alloc] initWithFormat:@"eammdelay %@", [ammoData objectForKey:@"ammostore_delay"]];
+    NSString *ammdelay = [[NSString alloc] initWithFormat:@"eammdelay %@%@", [ammoData objectForKey:@"ammostore_delay"], update];
     [self sendToEngine: ammdelay];
     [ammdelay release];
     
-    NSString *ammreinf = [[NSString alloc] initWithFormat:@"eammreinf %@", [ammoData objectForKey:@"ammostore_crate"]];
+    NSString *ammreinf = [[NSString alloc] initWithFormat:@"eammreinf %@%@", [ammoData objectForKey:@"ammostore_crate"], update];
     [self sendToEngine: ammreinf];
     [ammreinf release];
     

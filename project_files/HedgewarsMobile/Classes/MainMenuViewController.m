@@ -94,7 +94,8 @@
     [alert release];
 
     [pool release];
-    [NSThread exit];
+
+    // TODO: instead of this useless runtime initialization, check that all ammos remain compatible with engine
 }
 
 #pragma mark -

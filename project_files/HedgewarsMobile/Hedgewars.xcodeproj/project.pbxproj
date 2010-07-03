@@ -152,6 +152,7 @@
 		61F9040F11DF59D10068B24D /* netplayButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040D11DF59D10068B24D /* netplayButton.png */; };
 		61F9041411DF5E9B0068B24D /* toolbarBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9041311DF5E9B0068B24D /* toolbarBackground.png */; };
 		61F9043A11DF64E20068B24D /* bluebox.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9043911DF64E20068B24D /* bluebox.png */; };
+		61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F904D611DF7DA30068B24D /* WeaponCellView.m */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
 
@@ -399,6 +400,8 @@
 		61F9040D11DF59D10068B24D /* netplayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = netplayButton.png; path = "../../../../Desktop/ForKoda/Main Menu/netplayButton.png"; sourceTree = SOURCE_ROOT; };
 		61F9041311DF5E9B0068B24D /* toolbarBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = toolbarBackground.png; path = "Resources/Frontend-iPad/toolbarBackground.png"; sourceTree = "<group>"; };
 		61F9043911DF64E20068B24D /* bluebox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bluebox.png; path = "Resources/Frontend-iPad/bluebox.png"; sourceTree = "<group>"; };
+		61F904D511DF7DA30068B24D /* WeaponCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeaponCellView.h; sourceTree = "<group>"; };
+		61F904D611DF7DA30068B24D /* WeaponCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeaponCellView.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -618,6 +621,8 @@
 				6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */,
 				616591FE11CA9BA200D6E256 /* SingleSchemeViewController.h */,
 				616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */,
+				61F904D511DF7DA30068B24D /* WeaponCellView.h */,
+				61F904D611DF7DA30068B24D /* WeaponCellView.m */,
 			);
 			name = "Second Level";
 			sourceTree = "<group>";
@@ -1028,7 +1033,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/btn*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/icon*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels/.svn*\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,KnockBall,Ruler,BasketBall}\n\n#the following ones must be removed when their support is implemented\n\n#delete some voices\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/{Classic,British,Mobster,Pirate,Robot,Russian,Singer,Surfer}\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
+			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/btn*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/ammopic.png ${PROJECT_DIR}/Data/Graphics/Btn/iconAmmo.png\ncp ${PROJECT_DIR}/../../QTfrontend/res/icon*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,KnockBall,Ruler,BasketBall}\n\n#the following ones must be removed when their support is implemented\n\n#delete some voices\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/{Classic,British,Mobster,Pirate,Robot,Russian,Singer,Surfer}\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -1133,6 +1138,7 @@
 				6165929E11CA9E2F00D6E256 /* SDL_uikitappdelegate.m in Sources */,
 				6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */,
 				61E1F4F811D004240016A5AA /* adler32.pas in Sources */,
+				61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -54,8 +54,8 @@ void createWeaponNamed (NSString *nameWithoutExt) {
     }
     
     NSDictionary *theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
+                               [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
                                @"9391929422199121032235111001201000000211110111",@"ammostore_initialqt",
-// rope on itouch              @"0000099999000000000000000000000099900000099999",@"ammostore_initialqt",
                                @"0405040541600655546554464776576666666155510111",@"ammostore_probability",
                                @"0000000000000205500000040007004000000000200000",@"ammostore_delay",
                                @"1311110312111111123114111111111111111211111111",@"ammostore_crate", nil];

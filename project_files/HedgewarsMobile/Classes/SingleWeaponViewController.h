@@ -10,7 +10,18 @@
 
 
 @interface SingleWeaponViewController : UITableViewController {
-
+    UIImage *ammoStoreImage;
+    NSArray *ammoNames;
+    NSInteger ammoSize;
+    
+    char *quantity;
+    char *probability;
+    char *delay;
+    char *crateness;
 }
+
+@property (nonatomic,retain) UIImage *ammoStoreImage;
+@property (nonatomic,retain) NSArray *ammoNames;
+
 
 @end

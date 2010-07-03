@@ -37,6 +37,8 @@
 #define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory");
 #define MSG_DIDUNLOAD()         DLog(@"unloaded");
 
+#define CURRENT_AMMOSIZE        46
+
 void createTeamNamed (NSString *nameWithoutExt);
 void createWeaponNamed (NSString *nameWithoutExt);
 void createSchemeNamed (NSString *nameWithoutExt);
