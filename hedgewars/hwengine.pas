@@ -73,7 +73,7 @@ uses
 var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
 {$IFDEF HWLIBRARY}
-type arrayofpchar = array[0..8] of PChar;
+type arrayofpchar = array[0..9] of PChar;
 
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
@@ -256,7 +256,6 @@ begin
     cVSyncInUse:= true;
     cTimerInterval:= 8;
     PathPrefix:= 'Data';
-    cReducedQuality:= rqBlurryLand;                //FIXME
     cShowFPS:= true;
     cInitVolume:= 100;
 
@@ -269,6 +268,15 @@ begin
     val(gameArgs[6], cScreenHeight);
     val(gameArgs[7], cScreenWidth);
     recordFileName:= gameArgs[8];
+    
+    if (gameArgs[9] = '2') then
+        cReducedQuality:= rqLowRes or rqBlurryLand
+    else 
+        if (gameArgs[9] = '1') then
+            cReducedQuality:= rqBlurryLand
+        else
+            cReducedQuality:= rqNone;
+
 {$ENDIF}
     initEverything(true);
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
@@ -576,7 +584,7 @@ begin
                 cShowFPS:= ParamStr(13) = '1';
                 val(ParamStr(14), cTimerInterval);
                 if (ParamStr(15) = '1') then        //HACK
-                    cReducedQuality:=  $FFFFFFFF xor rqLowRes
+                    cReducedQuality:= $FFFFFFFF xor rqLowRes
                 else
                     val(ParamStr(15), cReducedQuality);
             end

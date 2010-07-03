@@ -88,7 +88,7 @@ var
     //pathPrefix is in uConsts
     cShowFPS        : boolean = false;
     cAltDamage      : boolean = true;
-    cReducedQuality : LongInt = 0;
+    cReducedQuality : LongInt = rqNone;
 
     recordFileName  : shortstring = '';
     
@@ -297,7 +297,6 @@ end;
 
 procedure SetTextureParameters(enableClamp: Boolean);
 begin
-    //if enableClamp and not cReducedQuality then
     if enableClamp and ((cReducedQuality and rqClampLess) = 0) then
     begin
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
