@@ -33,6 +33,7 @@
     // Release any cached data, images, etc that aren't in use.
     if (popupMenu.view.superview == nil) 
         popupMenu = nil;
+    MSG_MEMCLEAN();
 }
 
 -(void) didRotate:(NSNotification *)notification {  
@@ -84,6 +85,7 @@
 }
 
 -(void) chatAppear {
+    /*
     if (writeChatTextField == nil) {
         writeChatTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 100, 768, [UIFont systemFontSize]+8)];
         writeChatTextField.textColor = [UIColor whiteColor];
@@ -100,12 +102,15 @@
     writeChatTextField.alpha = 1;
     [self activateOverlay];
     [dimTimer setFireDate:HIDING_TIME_NEVER];
+    */
 }
 
 -(void) chatDisappear {
+    /*
     writeChatTextField.alpha = 0;
     [writeChatTextField resignFirstResponder];
     [dimTimer setFireDate:HIDING_TIME_DEFAULT];
+    */
 }
 
 #pragma mark -
@@ -141,14 +146,12 @@
 
     // set initial orientation
     [self didRotate:[NSNotification notificationWithName:UIDeviceOrientationDidChangeNotification object:nil]];
-
-    // to put the slider vertical...
-    //slider.transform = CGAffineTransformMakeRotation(M_PI * 0.5);
 }
 
 -(void) viewDidUnload {
-    self.writeChatTextField = nil;
+    [dimTimer invalidate];
     [popoverController dismissPopoverAnimated:NO];
+    self.writeChatTextField = nil;
     self.popoverController = nil;
     self.popupMenu = nil;
     self.spinningWheel = nil;
@@ -157,7 +160,6 @@
 }
 
 -(void) dealloc {
-    [dimTimer invalidate];
     [writeChatTextField release];
     [popupMenu release];
     [popoverController release];

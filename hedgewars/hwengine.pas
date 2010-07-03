@@ -125,6 +125,7 @@ end;
 procedure OnDestroy;
 begin
     WriteLnToConsole('Freeing resources...');
+    FreeActionsList();
     StoreRelease();
     ControllerClose();
     SendKB();
@@ -379,7 +380,7 @@ begin
         uAIMisc.freeModule;         //stub
         //uAIAmmoTests does not need to be freed
         //uAIActions does not need to be freed
-        uAI.freeModule;
+        uAI.freeModule;             //stub
     end;
     
     uIO.freeModule;             //stub

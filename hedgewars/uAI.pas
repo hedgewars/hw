@@ -358,7 +358,7 @@ end;
 
 procedure freeModule;
 begin
-    FreeActionsList();
+
 end;
 
 end.

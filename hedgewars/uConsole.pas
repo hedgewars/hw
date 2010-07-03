@@ -85,19 +85,6 @@ if Variables = nil then Variables:= value
 RegisterVariable:= value;
 end;
 
-procedure FreeVariablesList;
-var t, tt: PVariable;
-begin
-tt:= Variables;
-Variables:= nil;
-while tt <> nil do
-      begin
-      t:= tt;
-      tt:= tt^.Next;
-      Dispose(t)
-      end;
-end;
-
 procedure WriteToConsole(s: shortstring);
 var Len: LongInt;
     done: boolean;
@@ -316,8 +303,16 @@ begin
 end;
 
 procedure freeModule;
+var t, tt: PVariable;
 begin
-    FreeVariablesList();
+    tt:= Variables;
+    Variables:= nil;
+    while tt <> nil do
+    begin
+        t:= tt;
+        tt:= tt^.Next;
+        Dispose(t)
+    end;
 end;
 
 end.

@@ -1300,7 +1300,7 @@ UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT);
 end;
 
 function GenPreview: TPreview;
-var x, y, xx, yy, t, bit: LongInt;
+var x, y, xx, yy, t, bit, cbit, lh, lw: LongInt;
     Preview: TPreview;
 begin
     WriteLnToConsole('Generating preview...');
@@ -1309,6 +1309,8 @@ begin
         1: GenMaze;
     end;
 
+    lh:= LAND_HEIGHT div 128;
+    lw:= LAND_WIDTH div 32;
     for y:= 0 to 127 do
         for x:= 0 to 31 do
         begin
@@ -1316,8 +1318,9 @@ begin
             for bit:= 0 to 7 do
             begin
                 t:= 0;
-                for yy:= y * (LAND_HEIGHT div 128) to y * (LAND_HEIGHT div 128) + 7 do
-                    for xx:= x * (LAND_WIDTH div 32) + bit * 8 to x * (LAND_WIDTH div 32) + bit * 8 + 7 do
+                cbit:= bit * 8;
+                for yy:= y * lh to y * lh + 7 do
+                    for xx:= x * lw + cbit to x * lw + cbit + 7 do
                         if Land[yy, xx] <> 0 then inc(t);
                 if t > 8 then
                     Preview[y, x]:= Preview[y, x] or ($80 shr bit);
