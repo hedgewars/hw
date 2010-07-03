@@ -56,7 +56,6 @@ procedure DrawVisualGears(Layer: LongWord);
 procedure DeleteVisualGear(Gear: PVisualGear);
 procedure AddClouds;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
-procedure FreeVisualGears;
 
 var VisualGearsList: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
@@ -475,11 +474,6 @@ for i:= 0 to cCloudsNumber - 1 do
     AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + (LAND_WIDTH+256)) div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
 end;
 
-procedure FreeVisualGears;
-begin
-    while VisualGearsList <> nil do DeleteVisualGear(VisualGearsList);
-end;
-
 procedure initModule;
 begin
     VisualGearsList:= nil;
@@ -487,6 +481,7 @@ end;
 
 procedure freeModule;
 begin
+    while VisualGearsList <> nil do DeleteVisualGear(VisualGearsList);
 end;
 
 end.

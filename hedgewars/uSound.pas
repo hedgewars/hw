@@ -280,7 +280,8 @@ end;
 
 procedure freeModule;
 begin
-
+    if isSoundEnabled then
+        ReleaseSound();
 end;
 
 end.

@@ -26,7 +26,6 @@ procedure initModule;
 procedure freeModule;
 procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
 procedure DrawLand(dX, dY: LongInt);
-procedure FreeLand;
 
 implementation
 uses uMisc, uLand, uStore, uConsts, GLunit;
@@ -38,10 +37,12 @@ type TLandRecord = record
             shouldUpdate: boolean;
             tex: PTexture;
             end;
+
 var LandTextures: array of array of TLandRecord;
     tmpPixels: array [0..TEXSIZE - 1, 0..TEXSIZE - 1] of LongWord;
-LANDTEXARW: LongWord;
+    LANDTEXARW: LongWord;
     LANDTEXARH: LongWord;
+    
 function Pixels(x, y: Longword): Pointer;
 var ty: Longword;
 begin
@@ -119,21 +120,6 @@ for x:= 0 to LANDTEXARW -1 do
 
 end;
 
-procedure FreeLand;
-var x, y: LongInt;
-begin
-    for x:= 0 to LANDTEXARW -1 do
-        for y:= 0 to LANDTEXARH - 1 do
-            with LandTextures[x, y] do
-            begin
-                FreeTexture(tex);
-                tex:= nil;
-            end;
-    if LandBackSurface <> nil then
-        SDL_FreeSurface(LandBackSurface);
-    LandBackSurface:= nil;
-end;
-
 procedure initModule;
 begin
     if (cReducedQuality and rqBlurryLand) = 0 then
@@ -151,7 +137,18 @@ begin
 end;
     
 procedure freeModule;
+var x, y: LongInt;
 begin
+    for x:= 0 to LANDTEXARW -1 do
+        for y:= 0 to LANDTEXARH - 1 do
+            with LandTextures[x, y] do
+            begin
+                FreeTexture(tex);
+                tex:= nil;
+            end;
+    if LandBackSurface <> nil then
+        SDL_FreeSurface(LandBackSurface);
+    LandBackSurface:= nil;
     LandTextures:= nil;
 end;
 end.

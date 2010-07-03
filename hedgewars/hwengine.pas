@@ -29,52 +29,14 @@ interface
 program hwengine;
 {$ENDIF}
 
-uses
-    SDLh in 'SDLh.pas',
-    uConsts in 'uConsts.pas',
-    uGame in 'uGame.pas',
-    uMisc in 'uMisc.pas',
-    uStore in 'uStore.pas',
-    uWorld in 'uWorld.pas',
-    uIO in 'uIO.pas',
-    uGears in 'uGears.pas',
-    uVisualGears in 'uVisualGears.pas',
-    uConsole in 'uConsole.pas',
-    uKeys in 'uKeys.pas',
-    uTeams in 'uTeams.pas',
-    uSound in 'uSound.pas',
-    uRandom in 'uRandom.pas',
-    uAI in 'uAI.pas',
-    uAIMisc in 'uAIMisc.pas',
-//  uAIAmmoTests in 'uAIAmmoTests.pas',
-//  uAIActions in 'uAIActions.pas',
-    uCollisions in 'uCollisions.pas',
-    uLand in 'uLand.pas',
-//  uLandTemplates in 'uLandTemplates.pas',
-//  uLandObjects in 'uLandObjects.pas',
-//  uLandGraphics in 'uLandGraphics.pas',
-    uLocale in 'uLocale.pas',
-    uAmmos in 'uAmmos.pas',
-//  uSHA in 'uSHA.pas',
-//  uFloat in 'uFloat.pas',
-    uStats in 'uStats.pas',
-    uChat in 'uChat.pas',
-    uLandTexture in 'uLandTexture.pas',
-    uScript in 'uScript.pas',
-    sysutils;
-
-// also: GSHandlers.inc
-//       GearDrawing.inc
-//       CCHandlers.inc
-//       HHHandlers.inc
-//       SinTable.inc
-//       proto.inc
-
+uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound, 
+     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, sysutils;
+     
+type arrayofpchar = array[0..9] of PChar;
 var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
-{$IFDEF HWLIBRARY}
-type arrayofpchar = array[0..9] of PChar;
 
+{$IFDEF HWLIBRARY}
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
 
@@ -163,12 +125,7 @@ end;
 procedure OnDestroy;
 begin
     WriteLnToConsole('Freeing resources...');
-    if isSoundEnabled then ReleaseSound();
-    FreeActionsList();
     StoreRelease();
-    FreeGearsList();
-    FreeVisualGears();
-    FreeLand();
     ControllerClose();
     SendKB();
     CloseIPC();
@@ -204,7 +161,6 @@ begin
                         cHasFocus:= event.active.gain = 1;
 {$ENDIF}
 {$IFNDEF IPHONEOS}
-                //SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
                 SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
                 SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
 {$ENDIF}
@@ -319,12 +275,12 @@ begin
 
     LoadLocale(Pathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if cLocaleFName <> 'en.txt' then
-        begin
+    begin
         // Try two letter locale first before trying specific locale overrides
         if (Length(cLocaleFName) > 6) and (Copy(cLocaleFName,1,2)+'.txt' <> 'en.txt') then 
             LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocaleFName,1,2)+'.txt');
         LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
-        end;
+    end;
 
     if recordFileName = '' then
         SendIPCAndWaitReply('C')        // ask for game config
@@ -349,7 +305,9 @@ begin
     ParseCommand('rotmask', true);
 
     MainLoop();
+    // clean up SDL and GL context
     OnDestroy();
+    // clean up all the other memory allocated
     freeEverything(true);
     if alsoShutdownFrontend then halt;
 end;
@@ -384,7 +342,6 @@ begin
         uLandTexture.initModule;
         //uLocale does not need initialization
         uRandom.initModule; 
-        //uSHA is initialized internally
         uScript.initModule;
         uSound.initModule;
         uStats.initModule;
@@ -400,13 +357,12 @@ begin
     if complete then
     begin
         uWorld.freeModule;
-        uVisualGears.freeModule;    //stub
+        uVisualGears.freeModule;
         uTeams.freeModule;
         uStore.freeModule;          //stub
         uStats.freeModule;          //stub
-        uSound.freeModule;          //stub
+        uSound.freeModule;
         uScript.freeModule;
-        //uSHA does not need to be freed
         uRandom.freeModule;         //stub
         //uLocale does not need to be freed
         //uLandTemplates does not need to be freed
@@ -423,7 +379,7 @@ begin
         uAIMisc.freeModule;         //stub
         //uAIAmmoTests does not need to be freed
         //uAIActions does not need to be freed
-        uAI.freeModule;             //stub
+        uAI.freeModule;
     end;
     
     uIO.freeModule;             //stub
