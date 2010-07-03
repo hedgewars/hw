@@ -13,6 +13,14 @@
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
 
+// draw background image in uitoolbar
+@implementation UIToolbar (CustomImage)
+-(void) drawRect:(CGRect)rect {
+    UIImage *image = [UIImage imageWithContentsOfFile:@"toolbarBackground.png"];
+    [image drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+}
+@end
+
 @implementation GameConfigViewController
 
 
@@ -155,7 +163,6 @@
         if (schemeWeaponConfigViewController == nil)
             schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
         schemeWeaponConfigViewController.view.frame = CGRectMake(362, 224, 300, 500);
-        schemeWeaponConfigViewController.view.backgroundColor = [UIColor clearColor];
         [mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
         for (UIView *oneView in self.view.subviews) {
             if ([oneView isMemberOfClass:[UIToolbar class]]) {
