@@ -247,11 +247,7 @@ begin
 
 
 // might need some testing/adjustments - just to avoid projectiles to fly forever (accelerated by wind/skips)
-    if (hwRound(Gear^.X) < LAND_WIDTH div -2) or (hwRound(Gear^.X) > LAND_WIDTH * 3 div 2) then
-    begin
-        Gear^.State := Gear^.State or gstCollision;
-        exit
-    end;
+    if (hwRound(Gear^.X) < LAND_WIDTH div -2) or (hwRound(Gear^.X) > LAND_WIDTH * 3 div 2) then Gear^.State := Gear^.State or gstCollision;
 
     if Gear^.dY.isNegative then
     begin
@@ -1721,8 +1717,10 @@ end;
 procedure doStepFlame(Gear: PGear);
 var 
     gX,gY,i: LongInt;
+    sticky: Boolean;
 begin
-    if (Gear^.State and gsttmpFlag) = 0 then AllInactive := false;
+    sticky:= (Gear^.State and gsttmpFlag) <> 0;
+    if not sticky then AllInactive := false;
 
     if not TestCollisionYwithGear(Gear, 1) then
     begin
@@ -1730,12 +1728,11 @@ begin
         if Gear^.dX.QWordValue > _0_01.QWordValue then
             Gear^.dX := Gear^.dX * _0_995;
         Gear^.dY := Gear^.dY + cGravity;
-        {if (Gear^.State and gsttmpFlag) <> 0 then Gear^.dY := Gear^.dY + cGravity;}
+        // if sticky then Gear^.dY := Gear^.dY + cGravity;
         if Gear^.dY.QWordValue > _0_2.QWordValue then Gear^.dY := Gear^.dY * _0_995;
 
-        {if (Gear^.State and gsttmpFlag) <> 0 then Gear^.X := Gear^.X + Gear^.dX
-        else}
-            Gear^.X := Gear^.X + Gear^.dX + cWindSpeed * 640;
+        //if sticky then Gear^.X := Gear^.X + Gear^.dX else
+        Gear^.X := Gear^.X + Gear^.dX + cWindSpeed * 640;
         Gear^.Y := Gear^.Y + Gear^.dY;
 
         if (hwRound(Gear^.Y) > cWaterLine) then
@@ -1750,7 +1747,7 @@ begin
     end
     else
     begin
-        if (Gear^.State and gsttmpFlag) <> 0 then
+        if sticky then
         begin
             Gear^.Radius := 7;
             AmmoShove(Gear, 2, 30);
@@ -1766,12 +1763,13 @@ begin
             gX := hwRound(Gear^.X);
             gY := hwRound(Gear^.Y);
             // Standard fire
-            if (Gear^.State and gsttmpFlag) = 0 then
+            if not sticky then
             begin
                 Gear^.Radius := 7;
                 AmmoShove(Gear, 4, 100);
                 Gear^.Radius := 1;
-                doMakeExplosion(gX, gY, 4, EXPLNoDamage);
+                doMakeExplosion(gX, gY, 4, 0);//, EXPLNoDamage);
+                //DrawExplosion(gX, gY, 4);
                 if ((GameTicks and $7) = 0) and (Random(2) = 0) then
                     for i:= 1 to Random(2)+1 do
                         AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
@@ -1799,7 +1797,7 @@ begin
     begin
         gX := hwRound(Gear^.X);
         gY := hwRound(Gear^.Y);
-        if (Gear^.State and gsttmpFlag) = 0 then
+        if not sticky then
         begin
             if ((GameTicks and $3) = 0) and (Random(1) = 0) then
             begin

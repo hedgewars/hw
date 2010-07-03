@@ -94,7 +94,7 @@ if Gear^.CollisionIndex >= 0 then
 end;
 
 function CheckGearsCollision(Gear: PGear): PGearArray;
-var mx, my: LongInt;
+var mx, my, tr: LongInt;
     i: Longword;
 begin
 CheckGearsCollision:= @ga;
@@ -103,10 +103,12 @@ if Count = 0 then exit;
 mx:= hwRound(Gear^.X);
 my:= hwRound(Gear^.Y);
 
+tr:= Gear^.Radius + 2;
+
 for i:= 0 to Pred(Count) do
     with cinfos[i] do
         if (Gear <> cGear) and
-            (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) then
+            (sqr(mx - x) + sqr(my - y) <= sqr(Radius + tr)) then
                 begin
                 ga.ar[ga.Count]:= cinfos[i].cGear;
                 inc(ga.Count)
