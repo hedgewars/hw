@@ -364,27 +364,28 @@
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     NSString *wSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.width];
     NSString *hSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.height];
-    const char **gameArgs = (const char**) malloc(sizeof(char *) * 9);
+    const char **gameArgs = (const char**) malloc(sizeof(char *) * 10);
 
-    /*
     size_t size;
     // Set 'oldp' parameter to NULL to get the size of the data returned so we can allocate appropriate amount of space
     sysctlbyname("hw.machine", NULL, &size, NULL, 0); 
-    char *name = malloc(size);
+    char *name = (char *)malloc(sizeof(char) * size);
     // Get the platform name
     sysctlbyname("hw.machine", name, &size, NULL, 0);
-    NSString *machine = [[NSString alloc] initWithUTF8String:name];
+    NSString *modelId = [[NSString alloc] initWithUTF8String:name];
     free(name);
-    
-    const char **gameArgs = (const char**) malloc(sizeof(char*) * 9);
 
-    // if the machine is less than iphone 3gs or less than ipod touch 3g use reduced graphics (land array)
-    if ([machine hasPrefix:@"iPhone1"] || ([machine hasPrefix:@"iPod"] && ([machine hasSuffix:@"1,1"] || [machine hasSuffix:@"2,1"])))
-        gameArgs[8] = "1";
-    else
-        gameArgs[8] = "0";
-    [machine release];
-    */
+    if ([modelId hasPrefix:@"iPhone1"] ||                                   // = iPhone or iPhone 3G
+        [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])   // = iPod Touch or iPod Touch 2G
+        gameArgs[9] = "2";                          // rqLowRes & rqBlurryLand
+    else if ([modelId hasPrefix:@"iPhone2"] ||                              // = iPhone 3GS
+             [modelId hasPrefix:@"iPad1"] ||                                // = iPad
+             [modelId hasPrefix:@"iPod3"])                                  // = iPod Touch 3G
+            gameArgs[9] = "1";                      // rqBlurryLand
+        else                                                                // = everything else
+            gameArgs[9] = "0";                      // full quality
+    [modelId release];
+    
     
     // prevents using an empty nickname
     NSString *username;

@@ -22,7 +22,7 @@ unit uIO;
 interface
 uses SDLh;
 
-var ipcPort: Word;
+var ipcPort: Word = 0;
     hiTicks: Word;
 
 procedure initModule;
@@ -361,11 +361,11 @@ begin
 
     hiTicks:= 0;
     SendEmptyPacketTicks:= 0;
-    ipcPort:= 0;
 end;
 
 procedure freeModule;
 begin
+    ipcPort:= 0;
 
 end;
 

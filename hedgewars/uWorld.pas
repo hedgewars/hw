@@ -553,21 +553,20 @@ begin
             zoom:= zoom + 0.002 * Lag;
             if ZoomValue < zoom then
                 zoom:= ZoomValue
+            end
         end
-    end
-else
-    ZoomValue:= zoom;
+    else
+        ZoomValue:= zoom;
 
-// Sky
-glClear(GL_COLOR_BUFFER_BIT);
-//glPushMatrix;
-//glScalef(1.0, 1.0, 1.0);
+    // Sky
+    glClear(GL_COLOR_BUFFER_BIT);
+    //glPushMatrix;
+    //glScalef(1.0, 1.0, 1.0);
 
     if not isPaused then
         MoveCamera;
 
-{if not cReducedQuality then}
-    if (cReducedQuality and (rqNoBackground or rqKillFlakes or rq2DWater)) = 0 then
+    if (cReducedQuality and rqNoBackground) = 0 then
     begin
         // Offsets relative to camera - spare them to wimpier cpus, no bg or flakes for them anyway
         ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
@@ -580,9 +579,12 @@ glClear(GL_COLOR_BUFFER_BIT);
         // background
         DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, SkyOffset);
         DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
+    end;
 
-        DrawVisualGears(0);
-        
+    DrawVisualGears(0);
+    
+    if (cReducedQuality and rq2DWater) = 0 then
+    begin
         // Waves
         DrawWater(255, SkyOffset); 
         DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 64);
@@ -593,13 +595,13 @@ glClear(GL_COLOR_BUFFER_BIT);
     else
         DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)), 0);
 
-DrawLand(WorldDx, WorldDy);
+    DrawLand(WorldDx, WorldDy);
 
-DrawWater(255, 0);
+    DrawWater(255, 0);
 
 // Attack bar
-if CurrentTeam <> nil then
-    case AttackBar of
+    if CurrentTeam <> nil then
+        case AttackBar of
 (*        1: begin
         r:= StuffPoz[sPowerBar];
         {$WARNINGS OFF}
@@ -619,16 +621,16 @@ if CurrentTeam <> nil then
                 end
         end;
 
-DrawVisualGears(1);
+    DrawVisualGears(1);
 
-DrawGears;
+    DrawGears;
 
-DrawVisualGears(2);
+    DrawVisualGears(2);
 
-DrawWater(cWaterOpacity, 0);
+    DrawWater(cWaterOpacity, 0);
 
-// Waves
-DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
+    // Waves
+    DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
 
     if (cReducedQuality and rq2DWater) = 0 then
     begin
@@ -639,8 +641,8 @@ DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
         DrawWater(cWaterOpacity, - offsetY div 10);
         DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
     end
-else
-    DrawWaves(-1, 50, - (cWaveHeight shr 1), 0);
+    else
+        DrawWaves(-1, 50, - (cWaveHeight shr 1), 0);
 
 
 {$WARNINGS OFF}

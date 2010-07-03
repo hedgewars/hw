@@ -183,7 +183,6 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
 const sfMax = 1000;
 
-const
     // message constants
     errmsgCreateSurface   = 'Error creating SDL surface';
     errmsgTransparentSet  = 'Error setting transparent color';
@@ -225,6 +224,7 @@ const
     rqKillFlakes  = $00000040;  // no flakes
     rqSlowMenu    = $00000080;  // ammomenu appears with no animation
     rqPlainSplash = $00000100;  // no droplets
+    rqClampLess   = $00000200;  // don't clamp textures
 
     // image flags (for LoadImage())
     ifNone        = $00000000;  // nothing special
@@ -239,25 +239,6 @@ const
     tpMedium      = 0.50;
     tpHigh        = 0.75;
     tpHighest     = 1.00;
-
-    {*  REFERENCE
-      4096 -> $FFFFF000
-      2048 -> $FFFFF800
-      1024 -> $FFFFFC00
-       512 -> $FFFFFE00  *}
-
-{$IFDEF LOWRES}
-    // default for iphone pre 3gs
-    LAND_WIDTH  = 2048;
-    LAND_HEIGHT = 1024;
-    LAND_WIDTH_MASK  = $FFFFF800;
-    LAND_HEIGHT_MASK = $FFFFFC00;
-{$ELSE}
-    LAND_WIDTH  = 4096;
-    LAND_HEIGHT = 2048;
-    LAND_WIDTH_MASK  = $FFFFF000;
-    LAND_HEIGHT_MASK = $FFFFF800;
-{$ENDIF}
 
 // To allow these to layer, going to treat them as masks. The bottom byte is reserved for objects
 // TODO - set lfBasic for all solid land, ensure all uses of the flags can handle multiple flag bits
@@ -442,9 +423,35 @@ const
     cThemeCFGFilename = 'theme.cfg';
     
     FontBorder = 2;
-var PathPrefix: shortstring;
+    cPathz: array[TPathType] of shortstring = (
+        '',                              // ptNone
+        '',                              // ptData
+        'Graphics',                      // ptGraphics
+        'Themes',                        // ptThemes
+        'Themes/avematan',               // ptCurrTheme
+        'Teams',                         // ptTeams
+        'Maps',                          // ptMaps
+        '',                              // ptMapCurrent
+        'Demos',                         // ptDemos
+        'Sounds',                        // ptSounds
+        'Graphics/Graves',               // ptGraves
+        'Fonts',                         // ptFonts
+        'Forts',                         // ptForts
+        'Locale',                        // ptLocale
+        'Graphics/AmmoMenu',             // ptAmmoMenu
+        'Graphics/Hedgehog',             // ptHedgehog
+        'Sounds/voices',                 // ptVoices
+        'Graphics/Hats',                 // ptHats
+        'Graphics/Flags'                 // ptFlags
+    );
+    
+var PathPrefix: shortstring = './';
     Pathz: array[TPathType] of shortstring;
     CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
+    LAND_WIDTH  :longint;
+    LAND_HEIGHT :longint;
+    LAND_WIDTH_MASK  :longWord;
+    LAND_HEIGHT_MASK :longWord;
 
 const
     cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
@@ -2158,43 +2165,40 @@ const
         colorkey: 0;
         alpha : 255
     );
-            
-
+    
 procedure initModule;
 procedure freeModule;
 
 implementation
+uses uMisc;
 
 procedure initModule;
-var cPathz: array[TPathType] of shortstring = (
-        '',                              // ptNone
-        '',                              // ptData
-        'Graphics',                      // ptGraphics
-        'Themes',                        // ptThemes
-        'Themes/avematan',               // ptCurrTheme
-        'Teams',                         // ptTeams
-        'Maps',                          // ptMaps
-        '',                              // ptMapCurrent
-        'Demos',                         // ptDemos
-        'Sounds',                        // ptSounds
-        'Graphics/Graves',               // ptGraves
-        'Fonts',                         // ptFonts
-        'Forts',                         // ptForts
-        'Locale',                        // ptLocale
-        'Graphics/AmmoMenu',             // ptAmmoMenu
-        'Graphics/Hedgehog',             // ptHedgehog
-        'Sounds/voices',                 // ptVoices
-        'Graphics/Hats',                 // ptHats
-        'Graphics/Flags'                 // ptFlags
-    );
 begin
-    PathPrefix := './';
     Pathz:= cPathz;
+        {*  REFERENCE
+      4096 -> $FFFFF000
+      2048 -> $FFFFF800
+      1024 -> $FFFFFC00
+       512 -> $FFFFFE00  *}
+    if (cReducedQuality and rqLowRes) <> 0 then
+    begin
+        LAND_WIDTH:= 2048;
+        LAND_HEIGHT:= 1024;
+        LAND_WIDTH_MASK:= $FFFFF800;
+        LAND_HEIGHT_MASK:= $FFFFFC00;
+    end
+    else
+    begin
+        LAND_WIDTH:= 4096;
+        LAND_HEIGHT:= 2048;
+        LAND_WIDTH_MASK:= $FFFFF000;
+        LAND_HEIGHT_MASK:= $FFFFF800
+    end;
 end;
 
 procedure freeModule;
 begin
-
+    PathPrefix := './';
 end;
 
 end.

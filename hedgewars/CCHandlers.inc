@@ -695,11 +695,7 @@ begin
     flags:= SDL_OPENGL;// or SDL_RESIZABLE;
 
     if cFullScreen then
-    begin
         flags:= flags or SDL_FULLSCREEN;
-        cScreenWidth:= cInitWidth;
-        cScreenHeight:= cInitHeight
-    end;
 
 {$IFDEF SDL_IMAGE_NEWER}
     WriteToConsole('Init SDL_image... ');

@@ -73,7 +73,7 @@ uses
 var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
 {$IFDEF HWLIBRARY}
-type arrayofpchar = array[0..8] of PChar;
+type arrayofpchar = array[0..9] of PChar;
 
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
@@ -81,6 +81,7 @@ procedure freeEverything(complete:boolean);
 implementation
 {$ELSE}
 procedure OnDestroy; forward;
+procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
 
@@ -245,16 +246,16 @@ procedure Game;
 {$ENDIF}
 var p: TPathType;
     s: shortstring;
+{$IFDEF DEBUGFILE}
+    i: LongInt;
+{$ENDIF}
 begin
 {$IFDEF HWLIBRARY}
-    initEverything(true);
-
     cBits:= 32;
     cFullScreen:= false;
     cVSyncInUse:= true;
     cTimerInterval:= 8;
     PathPrefix:= 'Data';
-    cReducedQuality:= rqBlurryLand;                //FIXME
     cShowFPS:= true;
     cInitVolume:= 100;
 
@@ -266,9 +267,23 @@ begin
     cAltDamage:= gameArgs[5] = '1';
     val(gameArgs[6], cScreenHeight);
     val(gameArgs[7], cScreenWidth);
-    cInitHeight:= cScreenHeight;
-    cInitWidth:= cScreenWidth;
     recordFileName:= gameArgs[8];
+    
+    if (gameArgs[9] = '2') then
+        cReducedQuality:= rqLowRes or rqBlurryLand
+    else 
+        if (gameArgs[9] = '1') then
+            cReducedQuality:= rqBlurryLand
+        else
+            cReducedQuality:= rqNone;
+
+{$ENDIF}
+    initEverything(true);
+    WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
+{$IFDEF DEBUGFILE}
+    AddFileLog('Prefix: "' + PathPrefix +'"');
+    for i:= 0 to ParamCount do
+        AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 {$ENDIF}
 
     for p:= Succ(Low(TPathType)) to High(TPathType) do
@@ -335,7 +350,7 @@ begin
 
     MainLoop();
     OnDestroy();
-{$IFDEF HWLIBRARY}freeEverything(true);{$ENDIF}
+    freeEverything(true);
     if alsoShutdownFrontend then halt;
 end;
 
@@ -366,7 +381,7 @@ begin
         //uLandGraphics does not need initialization
         //uLandObjects does not need initialization
         //uLandTemplates does not need initialization
-        //uLandTexture does not need initialization
+        uLandTexture.initModule;
         //uLocale does not need initialization
         uRandom.initModule; 
         //uSHA is initialized internally
@@ -395,7 +410,7 @@ begin
         uRandom.freeModule;         //stub
         //uLocale does not need to be freed
         //uLandTemplates does not need to be freed
-        //uLandTexture does not need to be freed
+        uLandTexture.freeModule;
         //uLandObjects does not need to be freed
         //uLandGraphics does not need to be freed
         uKeys.freeModule;           //stub
@@ -420,11 +435,11 @@ begin
 end;
 
 /////////////////////////
-procedure GenLandPreview{$IFDEF IPHONEOS}(port: LongInt){$ENDIF}; {$IFDEF HWLIBRARY}cdecl; export;{$ENDIF}
+procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
 var Preview: TPreview;
 begin
-{$IFDEF IPHONEOS}
     initEverything(false);
+{$IFDEF HWLIBRARY}
     WriteLnToConsole('Preview connecting on port ' + inttostr(port));
     ipcPort:= port;
 {$ENDIF}
@@ -438,23 +453,10 @@ begin
     SendIPCRaw(@MaxHedgehogs, sizeof(byte));
     WriteLnToConsole('Preview sent, disconnect');
     CloseIPC();
-{$IFDEF IPHONEOS}
     freeEverything(false);
-{$ENDIF}
 end;
 
 {$IFNDEF HWLIBRARY}
-////////////////////////////////
-(*procedure Resize(w, h: LongInt);
-begin
-    cScreenWidth:= w;
-    cScreenHeight:= h;
-    if cFullScreen then
-        ParseCommand('/fullscr 1', true)
-    else
-        ParseCommand('/fullscr 0', true);
-end;*)
-
 /////////////////////
 procedure DisplayUsage;
 var i: LongInt;
@@ -479,17 +481,11 @@ end;
 
 ////////////////////
 procedure GetParams;
-{$IFDEF DEBUGFILE}
-var i: LongInt;
-{$ENDIF}
 begin
-
     case ParamCount of
         18: begin
             val(ParamStr(2), cScreenWidth);
             val(ParamStr(3), cScreenHeight);
-            cInitWidth:= cScreenWidth;
-            cInitHeight:= cScreenHeight;
             cBitsStr:= ParamStr(4);
             val(cBitsStr, cBits);
             val(ParamStr(5), ipcPort);
@@ -507,7 +503,7 @@ begin
             isMusicEnabled:= ParamStr(17) = '1';
 
             if (ParamStr(18) = '1') then        //HACK
-                cReducedQuality:= $FFFFFFFF
+                cReducedQuality:= $FFFFFFFF xor rqLowRes
             else
                 val(ParamStr(18), cReducedQuality);
         end;
@@ -529,8 +525,6 @@ begin
             begin
                 val(ParamStr(4), cScreenWidth);
                 val(ParamStr(5), cScreenHeight);
-                cInitWidth:= cScreenWidth;
-                cInitHeight:= cScreenHeight;
                 cBitsStr:= ParamStr(6);
                 val(cBitsStr, cBits);
             end
@@ -562,8 +556,6 @@ begin
             begin
                 val(ParamStr(4), cScreenWidth);
                 val(ParamStr(5), cScreenHeight);
-                cInitWidth:= cScreenWidth;
-                cInitHeight:= cScreenHeight;
                 cBitsStr:= ParamStr(6);
                 val(cBitsStr, cBits);
                 val(ParamStr(7), cInitVolume);
@@ -581,8 +573,6 @@ begin
             begin
                 val(ParamStr(4), cScreenWidth);
                 val(ParamStr(5), cScreenHeight);
-                cInitWidth:= cScreenWidth;
-                cInitHeight:= cScreenHeight;
                 cBitsStr:= ParamStr(6);
                 val(cBitsStr, cBits);
                 val(ParamStr(7), cInitVolume);
@@ -594,7 +584,7 @@ begin
                 cShowFPS:= ParamStr(13) = '1';
                 val(ParamStr(14), cTimerInterval);
                 if (ParamStr(15) = '1') then        //HACK
-                    cReducedQuality:= $FFFFFFFF
+                    cReducedQuality:= $FFFFFFFF xor rqLowRes
                 else
                     val(ParamStr(15), cReducedQuality);
             end
@@ -602,28 +592,18 @@ begin
         end;
         else GameType:= gmtSyntax;
     end;
-
-{$IFDEF DEBUGFILE}
-    AddFileLog('Prefix: "' + PathPrefix +'"');
-    for i:= 0 to ParamCount do
-        AddFileLog(inttostr(i) + ': ' + ParamStr(i));
-{$ENDIF}
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// m a i n ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 begin
-    initEverything(true);
-    WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
-    
     GetParams();
 
     if GameType = gmtLandPreview then GenLandPreview()
     else if GameType = gmtSyntax then DisplayUsage()
     else Game();
     
-    freeEverything(true);
     if GameType = gmtSyntax then
         ExitCode:= 1
     else

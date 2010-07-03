@@ -23,15 +23,10 @@ interface
 uses SDLh, uLandTemplates, uFloat, uConsts, GLunit;
 
 type
-{$IFDEF DOWNSCALE}
-    TLandArray = packed array[0 .. LAND_HEIGHT div 2 - 1, 0 .. LAND_WIDTH div 2 - 1] of LongWord;
-{$ELSE}
-    TLandArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of LongWord;
-{$ENDIF}
- 
-    TCollisionArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Word;
+    TLandArray = packed array of array of LongWord; 
+    TCollisionArray = packed array of array of Word;
     TPreview  = packed array[0..127, 0..31] of byte;
-    TDirtyTag = packed array[0 .. LAND_HEIGHT div 32 - 1, 0 .. LAND_WIDTH div 32 - 1] of byte;
+    TDirtyTag = packed array of array of byte;
 
 var Land: TCollisionArray;
     LandPixels: TLandArray;
@@ -607,27 +602,19 @@ end;
 
 function SelectTemplate: LongInt;
 begin
-case cTemplateFilter of
-     0: begin
-     SelectTemplate:= getrandom(Succ(High(EdgeTemplates)));
-     end;
-     1: begin
-     SelectTemplate:= SmallTemplates[getrandom(Succ(High(SmallTemplates)))];
-     end;
-     2: begin
-     SelectTemplate:= MediumTemplates[getrandom(Succ(High(MediumTemplates)))];
-     end;
-     3: begin
-     SelectTemplate:= LargeTemplates[getrandom(Succ(High(LargeTemplates)))];
-     end;
-     4: begin
-     SelectTemplate:= CavernTemplates[getrandom(Succ(High(CavernTemplates)))];
-     end;
-     5: begin
-     SelectTemplate:= WackyTemplates[getrandom(Succ(High(WackyTemplates)))];
-     end;
-end;
-WriteLnToConsole('Selected template #'+inttostr(SelectTemplate)+' using filter #'+inttostr(cTemplateFilter));
+    if (cReducedQuality and rqLowRes) <> 0 then
+        SelectTemplate:= SmallTemplates[getrandom(Succ(High(SmallTemplates)))]
+    else
+        case cTemplateFilter of
+        0: SelectTemplate:= getrandom(Succ(High(EdgeTemplates)));
+        1: SelectTemplate:= SmallTemplates[getrandom(Succ(High(SmallTemplates)))];
+        2: SelectTemplate:= MediumTemplates[getrandom(Succ(High(MediumTemplates)))];
+        3: SelectTemplate:= LargeTemplates[getrandom(Succ(High(LargeTemplates)))];
+        4: SelectTemplate:= CavernTemplates[getrandom(Succ(High(CavernTemplates)))];
+        5: SelectTemplate:= WackyTemplates[getrandom(Succ(High(WackyTemplates)))];
+    end;
+
+    WriteLnToConsole('Selected template #'+inttostr(SelectTemplate)+' using filter #'+inttostr(cTemplateFilter));
 end;
 
 procedure LandSurface2LandPixels(Surface: PSDL_Surface);
@@ -1344,12 +1331,21 @@ procedure initModule;
 begin
     LandBackSurface:= nil;
     digest:= '';
-    FillChar(LandPixels, sizeof(TLandArray), 0);
+
+    if (cReducedQuality and rqBlurryLand) = 0 then
+        SetLength(LandPixels, LAND_HEIGHT, LAND_WIDTH)
+    else
+        SetLength(LandPixels, LAND_HEIGHT div 2, LAND_WIDTH div 2);
+
+    SetLength(Land, LAND_HEIGHT, LAND_WIDTH);
+    SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
 end;
 
 procedure freeModule;
 begin
-
+    Land:= nil;
+    LandPixels:= nil;
+    LandDirty:= nil;
 end;
 
 end.
