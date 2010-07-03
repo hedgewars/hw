@@ -283,6 +283,10 @@
     if (cell == nil) 
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        cell.textLabel.textColor = [UIColor yellowColor]; //TODO: find proper color
+    }
+    
     if (self.segmentedControl.selectedSegmentIndex != 1) {
         // the % prevents a strange bug that occurs sporadically
         NSString *themeName = [self.themeArray objectAtIndex:row % [self.themeArray count]];

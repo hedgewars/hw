@@ -273,7 +273,7 @@
             }
             
             UIImage *img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/icon%@.png",BTN_DIRECTORY(),[[self.basicSettingList objectAtIndex:row] objectForKey:@"image"]]];
-            cell.imageView.image = [img scaleToSize:CGSizeMake(40, 40)];
+            cell.imageView.image = img;
             [img release];
             
             UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];

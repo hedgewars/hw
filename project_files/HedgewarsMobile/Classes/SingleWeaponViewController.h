@@ -12,7 +12,6 @@
 @interface SingleWeaponViewController : UITableViewController {
     UIImage *ammoStoreImage;
     NSArray *ammoNames;
-    NSInteger ammoSize;
     
     char *quantity;
     char *probability;

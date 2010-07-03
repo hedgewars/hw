@@ -127,6 +127,9 @@
 		61C325901179A732001E70B1 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3255A1179A384001E70B1 /* OpenAL.framework */; };
 		61C325A31179A7AD001E70B1 /* libopenalbridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3251D1179A300001E70B1 /* libopenalbridge.a */; };
 		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
+		61EBA62911DFF2BC0048B68A /* bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62711DFF2BC0048B68A /* bricks.png */; };
+		61EBA62A11DFF2BC0048B68A /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62811DFF2BC0048B68A /* title.png */; };
+		61EBA62D11DFF3310048B68A /* backgroundAndTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */; };
 		61EF920E11DF57AC003441C4 /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920511DF57AC003441C4 /* arrowDown.png */; };
 		61EF920F11DF57AC003441C4 /* arrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920611DF57AC003441C4 /* arrowLeft.png */; };
 		61EF921011DF57AC003441C4 /* arrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920711DF57AC003441C4 /* arrowRight.png */; };
@@ -145,7 +148,6 @@
 		61F903F611DF58550068B24D /* networkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EB11DF58550068B24D /* networkButton.png */; };
 		61F903F711DF58550068B24D /* playButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EC11DF58550068B24D /* playButton.png */; };
 		61F903F811DF58550068B24D /* storeButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903ED11DF58550068B24D /* storeButton.png */; };
-		61F903F911DF58550068B24D /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EE11DF58550068B24D /* title.png */; };
 		61F9040911DF58B00068B24D /* settingsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040811DF58B00068B24D /* settingsButton.png */; };
 		61F9040B11DF59370068B24D /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040A11DF59370068B24D /* background.png */; };
 		61F9040E11DF59D10068B24D /* localplayButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040C11DF59D10068B24D /* localplayButton.png */; };
@@ -375,6 +377,9 @@
 		61C3251D1179A300001E70B1 /* libopenalbridge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libopenalbridge.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		61C3255A1179A384001E70B1 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
+		61EBA62711DFF2BC0048B68A /* bricks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bricks.png; path = "Resources/Frontend-iPad/bricks.png"; sourceTree = "<group>"; };
+		61EBA62811DFF2BC0048B68A /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = "Resources/Frontend-iPad/title.png"; sourceTree = "<group>"; };
+		61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundAndTitle.png; path = "Resources/Frontend-iPad/backgroundAndTitle.png"; sourceTree = "<group>"; };
 		61EF920511DF57AC003441C4 /* arrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowDown.png; path = Resources/Overlay/arrowDown.png; sourceTree = "<group>"; };
 		61EF920611DF57AC003441C4 /* arrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowLeft.png; path = Resources/Overlay/arrowLeft.png; sourceTree = "<group>"; };
 		61EF920711DF57AC003441C4 /* arrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowRight.png; path = Resources/Overlay/arrowRight.png; sourceTree = "<group>"; };
@@ -393,7 +398,6 @@
 		61F903EB11DF58550068B24D /* networkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = networkButton.png; path = "Resources/Frontend-iPhone/networkButton.png"; sourceTree = "<group>"; };
 		61F903EC11DF58550068B24D /* playButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playButton.png; path = "Resources/Frontend-iPhone/playButton.png"; sourceTree = "<group>"; };
 		61F903ED11DF58550068B24D /* storeButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = storeButton.png; path = "Resources/Frontend-iPhone/storeButton.png"; sourceTree = "<group>"; };
-		61F903EE11DF58550068B24D /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = "Resources/Frontend-iPhone/title.png"; sourceTree = "<group>"; };
 		61F9040811DF58B00068B24D /* settingsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settingsButton.png; path = Resources/settingsButton.png; sourceTree = "<group>"; };
 		61F9040A11DF59370068B24D /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = "Resources/Frontend-iPad/background.png"; sourceTree = "<group>"; };
 		61F9040C11DF59D10068B24D /* localplayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = localplayButton.png; path = "../../../../Desktop/ForKoda/Main Menu/localplayButton.png"; sourceTree = SOURCE_ROOT; };
@@ -751,7 +755,6 @@
 				61F903EB11DF58550068B24D /* networkButton.png */,
 				61F903EC11DF58550068B24D /* playButton.png */,
 				61F903ED11DF58550068B24D /* storeButton.png */,
-				61F903EE11DF58550068B24D /* title.png */,
 			);
 			name = "Frontend-iPhone";
 			sourceTree = "<group>";
@@ -760,10 +763,13 @@
 			isa = PBXGroup;
 			children = (
 				61F9043911DF64E20068B24D /* bluebox.png */,
+				61EBA62711DFF2BC0048B68A /* bricks.png */,
+				61EBA62811DFF2BC0048B68A /* title.png */,
 				61F9041311DF5E9B0068B24D /* toolbarBackground.png */,
 				61F9040C11DF59D10068B24D /* localplayButton.png */,
 				61F9040D11DF59D10068B24D /* netplayButton.png */,
 				61F9040A11DF59370068B24D /* background.png */,
+				61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */,
 			);
 			name = "Frontend-iPad";
 			sourceTree = "<group>";
@@ -1009,13 +1015,15 @@
 				61F903F611DF58550068B24D /* networkButton.png in Resources */,
 				61F903F711DF58550068B24D /* playButton.png in Resources */,
 				61F903F811DF58550068B24D /* storeButton.png in Resources */,
-				61F903F911DF58550068B24D /* title.png in Resources */,
 				61F9040911DF58B00068B24D /* settingsButton.png in Resources */,
 				61F9040B11DF59370068B24D /* background.png in Resources */,
 				61F9040E11DF59D10068B24D /* localplayButton.png in Resources */,
 				61F9040F11DF59D10068B24D /* netplayButton.png in Resources */,
 				61F9041411DF5E9B0068B24D /* toolbarBackground.png in Resources */,
 				61F9043A11DF64E20068B24D /* bluebox.png in Resources */,
+				61EBA62911DFF2BC0048B68A /* bricks.png in Resources */,
+				61EBA62A11DFF2BC0048B68A /* title.png in Resources */,
+				61EBA62D11DFF3310048B68A /* backgroundAndTitle.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

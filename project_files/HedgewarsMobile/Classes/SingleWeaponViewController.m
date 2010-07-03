@@ -74,11 +74,10 @@
     self.ammoNames = array;
     [array release];
 
-    ammoSize = [self.ammoNames count];
-    quantity = (char *)malloc(sizeof(char)*ammoSize);
-    probability = (char *)malloc(sizeof(char)*ammoSize);
-    delay = (char *)malloc(sizeof(char)*ammoSize);
-    crateness = (char *)malloc(sizeof(char)*ammoSize);
+    quantity = (char *)malloc(sizeof(char)*CURRENT_AMMOSIZE);
+    probability = (char *)malloc(sizeof(char)*CURRENT_AMMOSIZE);
+    delay = (char *)malloc(sizeof(char)*CURRENT_AMMOSIZE);
+    crateness = (char *)malloc(sizeof(char)*CURRENT_AMMOSIZE);
     
     NSString *str = [NSString stringWithFormat:@"%@/AmmoMenu/Ammos.png",GRAPHICS_DIRECTORY()];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:str];
@@ -110,7 +109,7 @@
         delay[i] = tmp3[i];
         crateness[i] = tmp4[i];
     }
-    for (int i = oldlen; i < ammoSize; i++) {
+    for (int i = oldlen; i < CURRENT_AMMOSIZE; i++) {
         quantity[i] = '0';
         probability[i] = '0';
         delay[i] = '0';
@@ -149,7 +148,7 @@
 
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return ammoSize;
+    return CURRENT_AMMOSIZE;
 }
 
 
