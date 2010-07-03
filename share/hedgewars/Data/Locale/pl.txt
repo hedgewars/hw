@@ -42,6 +42,11 @@
 00:39=Latający Talerz
 00:40=Koktajl Mołotowa
 00:41=Ptaszek
+00:42=Podręczne Urządzenie Teleportujące
+00:43=Zrzut pianina
+00:44=Cuchnący ser
+00:45=Sinusoidalna giwera
+00:46=Miotacz ognia
 
 01:00=Walczmy!
 01:01=Remis
@@ -148,7 +153,7 @@
 02:01=%1 robi za śniętą rybę...
 02:01=Przynajmmniej nie utonąłeś w muszli klozetowej, %1
 02:01=Sonic nie umiał pływać więc ty także, %1
-02:01=%1 chce zagrać delfina Ecco 
+02:01=%1 będzie grał w "Uwolnić Orkę"
 02:01=%1 szuka rybek do akwarium!
 02:01=%1 znalazł Atlantydę!
 02:01=%1 chce być główną postacią w Bioshock 3
@@ -411,6 +416,11 @@
 03:39=Środek transportu
 03:40=Płonący granat
 03:41=Wielki fan Wróbla Ćwirka
+03:42=I'm making a note here...
+; the misspelled "Beethoven" is intentional (-> to beat)
+03:43=Performing Beathoven's deadly sonata
+03:44=Stary i baaaaardzo śmierdzący
+
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy czas detonatora wyniesie zero.|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
 04:01=Atakuj przeciwników granatem odłamkowym.|Rozpadnie się on na kilka odłamków gdy jego czas|wyniesie zero.|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
@@ -454,6 +464,9 @@
 04:39=Leć do innych części mapy uzywjąc spodka.|To ciężkie do opanowania narzędzie, może przenieść Ciebie|w prawie każdą pozycje na polu bitwy.|Atak: Aktywuj|Góra/Lewo/Prawo: Wyznacz lot w odpowiednim kierunku
 04:40=Wznieć ogień używając koktajlu z łatwopalnym płynem.|Atak: Przytrzymaj by rzucić z większą siłą
 04:41=Natura może być na równi z technologią!|Ptaszek uniesie Ciebie ponad ziemię oraz|zrzuci jajka w przeciwników|Atak: Atywacja ptaka i zrzucanie jajek|Góra/Lewo/Prawo: Leć w wybranym kierunku
+04:42=HUGE SUCCESS| | |(but missing texts!)
+04:43=(missing text)
+04:44=To nie jest zwykły ser. To broń biologiczna!|Nie spowoduje dużych obrażeń kiedy|licznik dojdzie do zera, ale z pewnością|zatruje każdego nieszczęśnika|który będzie w pobliżu|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
 
 ; Game goal strings
 05:00=Ustawienia gry
