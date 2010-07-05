@@ -160,6 +160,7 @@
     WeaponCellView *cell = (WeaponCellView *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[WeaponCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell.delegate = self;
     }
     
     int x = ((row*32)/1024)*32;
@@ -168,11 +169,12 @@
     UIImage *img = [[self.ammoStoreImage cutAt:CGRectMake(x, y, 32, 32)] makeRoundCornersOfSize:CGSizeMake(7, 7)];
     cell.weaponIcon.image = img;
     cell.weaponName.text = [ammoNames objectAtIndex:row];
-
-    cell.initialQt.titleLabel.text = [NSString stringWithFormat:@"%c",quantity[row]];
+    cell.tag = row;
+    
+    [cell.initialQt setTitle:[NSString stringWithFormat:@"%c",quantity[row]] forState:UIControlStateNormal];
     cell.probability.titleLabel.text = [NSString stringWithFormat:@"%c",probability[row]];
     cell.delay.titleLabel.text = [NSString stringWithFormat:@"%c",delay[row]];
-    cell.initialQt.titleLabel.text = [NSString stringWithFormat:@"%c",crateness[row]];
+    cell.crateQt.titleLabel.text = [NSString stringWithFormat:@"%c",crateness[row]];
     return cell;
 }
 
@@ -190,6 +192,12 @@
      */
 }
 
+#pragma mark -
+#pragma mark WeaponButtonControllerDelegate
+-(void) buttonPressed:(id) sender {
+    UIButton *button = (UIButton *)sender;
+    DLog(@"%@ %d", button.titleLabel.text, button.tag);
+}
 
 #pragma mark -
 #pragma mark Memory management

@@ -8,8 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol WeaponButtonControllerDelegate <NSObject>
+
+-(void) buttonPressed:(id) sender;
+
+@end
 
 @interface WeaponCellView : UITableViewCell {
+    id<WeaponButtonControllerDelegate> delegate;
     UILabel *weaponName;
     UIImageView *weaponIcon;
     
@@ -18,6 +24,8 @@
     UIButton *delay;
     UIButton *crateQt;
 }
+
+@property (nonatomic,assign) id<WeaponButtonControllerDelegate> delegate;
 
 @property (nonatomic,retain) UILabel *weaponName;
 @property (nonatomic,retain) UIImageView *weaponIcon;

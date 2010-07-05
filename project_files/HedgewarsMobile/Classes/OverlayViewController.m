@@ -228,6 +228,9 @@
         case 10:
             [self showPopover];
             break;
+        case 11:
+            HW_ammoMenu();
+            break;
         default:
             NSLog(@"Nope");
             break;
@@ -327,13 +330,10 @@ void spinningWheelDone (void) {
             case 1:
                 DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
                 HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+                if (2 == [touch tapCount])
+                    HW_zoomReset();
                 break;
-            case 2:
-                if (2 == [touch tapCount]) {
-                    HW_ammoMenu();
-                    //HW_zoomReset();
-                }
-                
+            case 2:                
                 // pinching
                 twoTouches = [touches allObjects];
                 UITouch *first = [twoTouches objectAtIndex:0];

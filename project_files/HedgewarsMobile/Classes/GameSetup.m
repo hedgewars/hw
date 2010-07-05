@@ -379,13 +379,14 @@
 
     if ([modelId hasPrefix:@"iPhone1"] ||                                   // = iPhone or iPhone 3G
         [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])   // = iPod Touch or iPod Touch 2G
-        gameArgs[9] = "2";                          // rqLowRes & rqBlurryLand
+        gameArgs[9] = "3";                          // rqLowRes & rqBlurryLand & rqKillFlakes
     else if ([modelId hasPrefix:@"iPhone2"] ||                              // = iPhone 3GS
-             [modelId hasPrefix:@"iPad1"] ||                                // = iPad
              [modelId hasPrefix:@"iPod3"])                                  // = iPod Touch 3G
-            gameArgs[9] = "1";                      // rqBlurryLand
-        else                                                                // = everything else
-            gameArgs[9] = "0";                      // full quality
+            gameArgs[9] = "2";                      // rqBlurryLand & rqKillFlakes
+        else if ([modelId hasPrefix:@"iPad1"])                              // = iPad
+                gameArgs[9] = "1";                  // rqBlurryLand
+            else                                                            // = everything else
+                gameArgs[9] = "0";                  // full quality
     [modelId release];
     
     

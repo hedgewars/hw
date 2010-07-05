@@ -10,11 +10,12 @@
 #import "CommodityFunctions.h"
 
 @implementation WeaponCellView
-@synthesize weaponName, weaponIcon, initialQt, probability, delay, crateQt;
+@synthesize delegate, weaponName, weaponIcon, initialQt, probability, delay, crateQt;
 
 -(id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
-        // Initialization code
+        delegate = nil;
+        
         weaponName = [[UILabel alloc] init];
         weaponName.backgroundColor = [UIColor clearColor];
         weaponName.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
@@ -23,20 +24,25 @@
         NSString *imgStr;
         initialQt = [[UIButton alloc] init];
         imgStr = [NSString stringWithFormat:@"%@/iconAmmo.png",BTN_DIRECTORY()];
+        [initialQt setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         [initialQt setBackgroundImage:[UIImage imageWithContentsOfFile:imgStr] forState:UIControlStateNormal];
+        [initialQt addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         probability = [[UIButton alloc] init];
         imgStr = [NSString stringWithFormat:@"%@/iconDamage.png",BTN_DIRECTORY()];
         [probability setBackgroundImage:[UIImage imageWithContentsOfFile:imgStr] forState:UIControlStateNormal];
-        
+        [probability addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
         delay = [[UIButton alloc] init];
         imgStr = [NSString stringWithFormat:@"%@/iconTime.png",BTN_DIRECTORY()];
         [delay setBackgroundImage:[UIImage imageWithContentsOfFile:imgStr] forState:UIControlStateNormal];
-        
+        [delay addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
         crateQt = [[UIButton alloc] init];
         imgStr = [NSString stringWithFormat:@"%@/iconBox.png",BTN_DIRECTORY()];
         [crateQt setBackgroundImage:[UIImage imageWithContentsOfFile:imgStr] forState:UIControlStateNormal];
-        
+        [crateQt addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
         [self.contentView addSubview:weaponName];
         [self.contentView addSubview:weaponIcon];
         [self.contentView addSubview:initialQt];
@@ -54,10 +60,10 @@
     CGFloat boundsX = contentRect.origin.x;
     CGRect frame;
     
-    frame = CGRectMake(boundsX+10, 5, 32, 32);
+    frame = CGRectMake(boundsX+5, 5, 32, 32);
     weaponIcon.frame = frame;
 
-    frame = CGRectMake(boundsX+50, 9, 200, 25);
+    frame = CGRectMake(boundsX+45, 8, 200, 25);
     weaponName.frame = frame;
     
     // second line
@@ -80,6 +86,14 @@
     // Configure the view for the selected state
 }
 */
+
+-(void) buttonPressed:(id) sender {
+    if (self.delegate != nil) {
+        [(UIButton *)sender setTag:self.tag];
+        [delegate buttonPressed:sender];
+    } else
+        DLog(@"error - delegate = nil!");
+}
 
 -(void) dealloc {
     [weaponName release];

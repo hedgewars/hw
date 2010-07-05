@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WeaponCellView.h"
 
-
-@interface SingleWeaponViewController : UITableViewController {
+@interface SingleWeaponViewController : UITableViewController <WeaponButtonControllerDelegate> {
     UIImage *ammoStoreImage;
     NSArray *ammoNames;
     

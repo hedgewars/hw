@@ -27,7 +27,6 @@
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
 		611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */; };
 		611F4D4B11B27A9900F9759A /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 611F4D4A11B27A9900F9759A /* uScript.pas */; };
-		6122CD01116BECCA002648E9 /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6122CD00116BECCA002648E9 /* Default-Landscape.png */; };
 		61272334117DF764005B90CF /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272333117DF752005B90CF /* libSDL_image.a */; };
 		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
 		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
@@ -78,7 +77,6 @@
 		6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */; };
 		6165925611CA9CB400D6E256 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
 		6165925811CA9CB400D6E256 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165925011CA9CB400D6E256 /* OverlayViewController.xib */; };
-		6165927F11CA9D3200D6E256 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6165927B11CA9D3200D6E256 /* Default.png */; };
 		6165928011CA9D3200D6E256 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6165927C11CA9D3200D6E256 /* Icon.png */; };
 		6165929E11CA9E2F00D6E256 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
@@ -138,6 +136,11 @@
 		61EF921311DF57AC003441C4 /* joyButton_backjump.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920A11DF57AC003441C4 /* joyButton_backjump.png */; };
 		61EF921411DF57AC003441C4 /* joyButton_forwardjump.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920B11DF57AC003441C4 /* joyButton_forwardjump.png */; };
 		61EF921611DF57AC003441C4 /* menuCorner.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920D11DF57AC003441C4 /* menuCorner.png */; };
+		61F7A2FA11E270E70040BA66 /* Default-LandscapeLeft-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A2F811E270E70040BA66 /* Default-LandscapeLeft-iphone.png */; };
+		61F7A2FB11E270E70040BA66 /* Default-LandscapeRight-iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A2F911E270E70040BA66 /* Default-LandscapeRight-iphone.png */; };
+		61F7A2FE11E270F00040BA66 /* Default-LandscapeLeft-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A2FC11E270F00040BA66 /* Default-LandscapeLeft-ipad.png */; };
+		61F7A2FF11E270F00040BA66 /* Default-LandscapeRight-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A2FD11E270F00040BA66 /* Default-LandscapeRight-ipad.png */; };
+		61F7A30211E272280040BA66 /* lateralButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A30111E272280040BA66 /* lateralButton.png */; };
 		61F903EF11DF58550068B24D /* backgroundBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E411DF58550068B24D /* backgroundBottom.png */; };
 		61F903F011DF58550068B24D /* backgroundCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E511DF58550068B24D /* backgroundCenter.png */; };
 		61F903F111DF58550068B24D /* backgroundLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E611DF58550068B24D /* backgroundLeft.png */; };
@@ -240,7 +243,6 @@
 		611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Development.plist"; sourceTree = "<group>"; };
 		611F4D4A11B27A9900F9759A /* uScript.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uScript.pas; path = ../../hedgewars/uScript.pas; sourceTree = SOURCE_ROOT; };
 		611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HedgewarsTitle.png; path = ../../QTfrontend/res/HedgewarsTitle.png; sourceTree = SOURCE_ROOT; };
-		6122CD00116BECCA002648E9 /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape.png"; path = "Resources/Default-Landscape.png"; sourceTree = "<group>"; };
 		6127232E117DF752005B90CF /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = "../../../Library/SDL-1.3/SDL_image/Xcode_iPhone/SDL_image.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61272338117DF778005B90CF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		61370652117B1D50004EE44A /* Entitlements-Distribution.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Distribution.plist"; sourceTree = "<group>"; };
@@ -321,7 +323,6 @@
 		6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapConfigViewController-iPad.xib"; path = "Resources/MapConfigViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
 		6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapConfigViewController-iPhone.xib"; path = "Resources/MapConfigViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
 		6165925011CA9CB400D6E256 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = Resources/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
-		6165927B11CA9D3200D6E256 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = "<group>"; };
 		6165927C11CA9D3200D6E256 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_uikitappdelegate.h; path = Classes/SDL_uikitappdelegate.h; sourceTree = "<group>"; };
 		6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDL_uikitappdelegate.m; path = Classes/SDL_uikitappdelegate.m; sourceTree = "<group>"; };
@@ -388,6 +389,11 @@
 		61EF920A11DF57AC003441C4 /* joyButton_backjump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyButton_backjump.png; path = Resources/Overlay/joyButton_backjump.png; sourceTree = "<group>"; };
 		61EF920B11DF57AC003441C4 /* joyButton_forwardjump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyButton_forwardjump.png; path = Resources/Overlay/joyButton_forwardjump.png; sourceTree = "<group>"; };
 		61EF920D11DF57AC003441C4 /* menuCorner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuCorner.png; path = Resources/Overlay/menuCorner.png; sourceTree = "<group>"; };
+		61F7A2F811E270E70040BA66 /* Default-LandscapeLeft-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-LandscapeLeft-iphone.png"; path = "Resources/Default-LandscapeLeft-iphone.png"; sourceTree = "<group>"; };
+		61F7A2F911E270E70040BA66 /* Default-LandscapeRight-iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-LandscapeRight-iphone.png"; path = "Resources/Default-LandscapeRight-iphone.png"; sourceTree = "<group>"; };
+		61F7A2FC11E270F00040BA66 /* Default-LandscapeLeft-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-LandscapeLeft-ipad.png"; path = "Resources/Default-LandscapeLeft-ipad.png"; sourceTree = "<group>"; };
+		61F7A2FD11E270F00040BA66 /* Default-LandscapeRight-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-LandscapeRight-ipad.png"; path = "Resources/Default-LandscapeRight-ipad.png"; sourceTree = "<group>"; };
+		61F7A30111E272280040BA66 /* lateralButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lateralButton.png; path = Resources/lateralButton.png; sourceTree = "<group>"; };
 		61F903E411DF58550068B24D /* backgroundBottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundBottom.png; path = "Resources/Frontend-iPhone/backgroundBottom.png"; sourceTree = "<group>"; };
 		61F903E511DF58550068B24D /* backgroundCenter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundCenter.png; path = "Resources/Frontend-iPhone/backgroundCenter.png"; sourceTree = "<group>"; };
 		61F903E611DF58550068B24D /* backgroundLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundLeft.png; path = "Resources/Frontend-iPhone/backgroundLeft.png"; sourceTree = "<group>"; };
@@ -518,7 +524,8 @@
 				61F903E311DF584D0068B24D /* Frontend-iPhone */,
 				6179936611501D1E00BA94A9 /* Overlay */,
 				61798A5E114AE08600BA94A9 /* Data */,
-				6165927B11CA9D3200D6E256 /* Default.png */,
+				61F7A2F811E270E70040BA66 /* Default-LandscapeLeft-iphone.png */,
+				61F7A2F911E270E70040BA66 /* Default-LandscapeRight-iphone.png */,
 				6165927C11CA9D3200D6E256 /* Icon.png */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				61F9040811DF58B00068B24D /* settingsButton.png */,
@@ -553,7 +560,8 @@
 			isa = PBXGroup;
 			children = (
 				6151347D116C2803001F16D1 /* Icon-iPad.png */,
-				6122CD00116BECCA002648E9 /* Default-Landscape.png */,
+				61F7A2FC11E270F00040BA66 /* Default-LandscapeLeft-ipad.png */,
+				61F7A2FD11E270F00040BA66 /* Default-LandscapeRight-ipad.png */,
 				611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */,
 			);
 			name = "Resources-iPad";
@@ -730,6 +738,7 @@
 		6179936611501D1E00BA94A9 /* Overlay */ = {
 			isa = PBXGroup;
 			children = (
+				61F7A30111E272280040BA66 /* lateralButton.png */,
 				61EF920511DF57AC003441C4 /* arrowDown.png */,
 				61EF920611DF57AC003441C4 /* arrowLeft.png */,
 				61EF920711DF57AC003441C4 /* arrowRight.png */,
@@ -986,7 +995,6 @@
 				61536DF411CEAE7100D87A7E /* GameConfigViewController.xib in Resources */,
 				61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */,
 				61799289114AE08700BA94A9 /* Data in Resources */,
-				6122CD01116BECCA002648E9 /* Default-Landscape.png in Resources */,
 				6151347E116C2803001F16D1 /* Icon-iPad.png in Resources */,
 				61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */,
 				611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */,
@@ -995,7 +1003,6 @@
 				6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */,
 				6165925611CA9CB400D6E256 /* MapConfigViewController-iPhone.xib in Resources */,
 				6165925811CA9CB400D6E256 /* OverlayViewController.xib in Resources */,
-				6165927F11CA9D3200D6E256 /* Default.png in Resources */,
 				6165928011CA9D3200D6E256 /* Icon.png in Resources */,
 				61EF920E11DF57AC003441C4 /* arrowDown.png in Resources */,
 				61EF920F11DF57AC003441C4 /* arrowLeft.png in Resources */,
@@ -1024,6 +1031,11 @@
 				61EBA62911DFF2BC0048B68A /* bricks.png in Resources */,
 				61EBA62A11DFF2BC0048B68A /* title.png in Resources */,
 				61EBA62D11DFF3310048B68A /* backgroundAndTitle.png in Resources */,
+				61F7A2FA11E270E70040BA66 /* Default-LandscapeLeft-iphone.png in Resources */,
+				61F7A2FB11E270E70040BA66 /* Default-LandscapeRight-iphone.png in Resources */,
+				61F7A2FE11E270F00040BA66 /* Default-LandscapeLeft-ipad.png in Resources */,
+				61F7A2FF11E270F00040BA66 /* Default-LandscapeRight-ipad.png in Resources */,
+				61F7A30211E272280040BA66 /* lateralButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

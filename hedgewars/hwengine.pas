@@ -198,6 +198,7 @@ end;
 ///////////////
 {$IFDEF HWLIBRARY}
 procedure Game(gameArgs: arrayofpchar); cdecl; export;
+var tmp_quality: LongInt;
 {$ELSE}
 procedure Game;
 {$ENDIF}
@@ -213,7 +214,11 @@ begin
     cVSyncInUse:= true;
     cTimerInterval:= 8;
     PathPrefix:= 'Data';
+{$IFDEF DEBUGFILE}
     cShowFPS:= true;
+{$ELSE}
+    cShowFPS:= false;
+{$ENDIF}
     cInitVolume:= 100;
 
     UserNick:= gameArgs[0];
@@ -226,15 +231,15 @@ begin
     val(gameArgs[7], cScreenWidth);
     recordFileName:= gameArgs[8];
     
-    if (gameArgs[9] = '2') then
-        cReducedQuality:= rqLowRes or rqBlurryLand
-    else 
-        if (gameArgs[9] = '1') then
-            cReducedQuality:= rqBlurryLand
-        else
-            cReducedQuality:= rqNone;
-
+    val(gameArgs[9], tmp_quality);
+    case tmp_quality of
+        0: cReducedQuality:= rqNone;
+        1: cReducedQuality:= rqBlurryLand;
+        2: cReducedQuality:= rqBlurryLand or rqKillFlakes;
+        3: cReducedQuality:= rqBlurryLand or rqKillFlakes or rqLowRes;
+    end;
 {$ENDIF}
+
     initEverything(true);
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
 {$IFDEF DEBUGFILE}
