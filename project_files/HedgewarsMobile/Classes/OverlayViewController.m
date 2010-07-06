@@ -149,8 +149,8 @@
 }
 
 -(void) viewDidUnload {
-    [dimTimer invalidate];
     [popoverController dismissPopoverAnimated:NO];
+    [dimTimer invalidate];
     self.writeChatTextField = nil;
     self.popoverController = nil;
     self.popupMenu = nil;

@@ -284,7 +284,7 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        cell.textLabel.textColor = [UIColor yellowColor]; //TODO: find proper color
+        cell.textLabel.textColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1 ];
     }
     
     if (self.segmentedControl.selectedSegmentIndex != 1) {

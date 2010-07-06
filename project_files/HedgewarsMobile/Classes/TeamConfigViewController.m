@@ -124,14 +124,20 @@
         SquareButtonView *squareButton = (SquareButtonView *)[cell viewWithTag:SQUAREBUTTON_TAG];
         [squareButton selectColor:[[selectedRow objectForKey:@"color"] intValue]];
         squareButton.ownerDictionary = selectedRow;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            cellLabel.textColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1 ];
+        }
     } else {
         cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
         if (cell == nil) 
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
         
         cell.textLabel.text = [[[listOfTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            cell.textLabel.textColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1 ];
+        }
     }
-
+    
     return cell;
 }
 

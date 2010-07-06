@@ -11,7 +11,11 @@
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>Icon.png</string>
-		<string>Icon-iPad.png</string>
+		<string>Icon-72.png</string>
+		<string>Icon@2x.png</string>
+		<string>Icon-Small.png</string>
+		<string>Icon-Small-50.png</string>
+		<string>Icon-Small@2x.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
 	<string>org.hedgewars.mobile</string>
@@ -27,9 +31,16 @@
 	<string>1.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>UIInterfaceOrientation</key>
-	<string>UIInterfaceOrientationLandscapeRight</string>
 	<key>UIStatusBarHidden</key>
 	<true/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UILaunchImageFile~ipad</key>
+	<string>LI-ipad</string>
+	<key>UILaunchImageFile~iphone</key>
+	<string>LI-iphone</string>
 </dict>
 </plist>

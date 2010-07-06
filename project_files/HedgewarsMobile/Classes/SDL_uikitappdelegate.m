@@ -122,8 +122,7 @@ int main (int argc, char *argv[]) {
 
 // override the direct execution of SDL_main to allow us to implement the frontend (or even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
-    [application setStatusBarHidden:YES];
-    [application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];  
+    [application setStatusBarHidden:YES]; 
     
     UIWindow *uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     uiwindow.backgroundColor = [UIColor blackColor];

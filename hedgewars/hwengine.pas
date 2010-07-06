@@ -217,7 +217,7 @@ begin
 {$IFDEF DEBUGFILE}
     cShowFPS:= true;
 {$ELSE}
-    cShowFPS:= false;
+    cShowFPS:= true;    // update me at release time
 {$ENDIF}
     cInitVolume:= 100;
 

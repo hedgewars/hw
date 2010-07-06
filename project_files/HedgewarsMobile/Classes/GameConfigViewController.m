@@ -14,13 +14,13 @@
 #import "SchemeWeaponConfigViewController.h"
 
 // draw background image in uitoolbar
-@implementation UIToolbar (CustomImage)
+/*@implementation UIToolbar (CustomImage)
 -(void) drawRect:(CGRect)rect {
     UIImage *image = [UIImage imageWithContentsOfFile:@"toolbarBackground.png"];
     [image drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
 }
 @end
-
+*/
 @implementation GameConfigViewController
 
 
@@ -33,7 +33,18 @@
     UIButton *theButton = (UIButton *)sender;
     switch (theButton.tag) {
         case 0:
-            [[self parentViewController] dismissModalViewControllerAnimated:YES];
+            if ([mapConfigViewController busy]) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Wait for the Preview",@"")
+                                                                message:NSLocalizedString(@"Before returning the preview needs to be generated",@"")
+                                                               delegate:nil
+                                                      cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
+                                                      otherButtonTitles:nil];
+                [alert show];
+                [alert release];
+            } else {
+                [[self parentViewController] dismissModalViewControllerAnimated:YES];
+                
+            }
             break;
         case 1:
             theButton.enabled = NO;
