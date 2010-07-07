@@ -36,9 +36,7 @@ var PixelFormat: PSDL_PixelFormat;
     ProgrTex: PTexture;
     MissionIcons: PSDL_Surface;
     ropeIconTex: PTexture;
-{$IFDEF IPHONEOS}
     rotationQt: GLfloat;
-{$ENDIF}
     wScreen: LongInt;
     hScreen: LongInt;
     
@@ -1232,9 +1230,7 @@ begin
     glMatrixMode(GL_MODELVIEW);
     // prepare default translation/scaling
     glLoadIdentity();
-{$IFDEF IPHONEOS}
     glRotatef(rotationQt, 0, 0, 1);
-{$ENDIF}
     glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
     glTranslatef(0, -cScreenHeight / 2, 0);
 
@@ -1260,9 +1256,7 @@ begin
     begin
         glPushMatrix;       // save default scaling
         glLoadIdentity;
-{$IFDEF IPHONEOS}
         glRotatef(rotationQt, 0, 0, 1);
-{$ENDIF}
         glScalef(f / wScreen, -f / hScreen, 1.0);
         glTranslatef(0, -cScreenHeight / 2, 0);
     end;
@@ -1585,6 +1579,7 @@ begin
 {$IFDEF IPHONEOS}
     rotationQt:= -90;
 {$ELSE}
+    rotationQt:= 0;
     cGPUVendor:= gvUnknown;
 {$ENDIF}
     // really initalized in storeLoad

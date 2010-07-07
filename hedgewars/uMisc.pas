@@ -804,7 +804,7 @@ end;
 
 procedure freeModule;
 begin
-    //uRandom.DumpBuffer;
+    recordFileName:= '';
     while TextureList <> nil do FreeTexture(TextureList);
 
 {$IFDEF DEBUGFILE}

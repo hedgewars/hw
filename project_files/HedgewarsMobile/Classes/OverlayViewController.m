@@ -26,16 +26,6 @@
     return rotationManager(interfaceOrientation);
 }
 
-
--(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
-    if (popupMenu.view.superview == nil) 
-        popupMenu = nil;
-    MSG_MEMCLEAN();
-}
-
 -(void) didRotate:(NSNotification *)notification {  
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     CGRect rect = [[UIScreen mainScreen] bounds];
@@ -148,6 +138,7 @@
     [self didRotate:[NSNotification notificationWithName:UIDeviceOrientationDidChangeNotification object:nil]];
 }
 
+/* these are causing problems at reloading so let's remove 'em
 -(void) viewDidUnload {
     [popoverController dismissPopoverAnimated:NO];
     [dimTimer invalidate];
@@ -158,6 +149,16 @@
     [super viewDidUnload];
     MSG_DIDUNLOAD();
 }
+
+-(void) didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+    // Release any cached data, images, etc that aren't in use.
+    if (popupMenu.view.superview == nil) 
+        popupMenu = nil;
+    MSG_MEMCLEAN();
+}
+*/
 
 -(void) dealloc {
     [writeChatTextField release];
@@ -170,12 +171,6 @@
 
 #pragma mark -
 #pragma mark Overlay actions and members
-// dim the overlay when there's no more input for a certain amount of time
--(IBAction) buttonReleased:(id) sender {
-    HW_allKeysUp();
-    [dimTimer setFireDate:HIDING_TIME_DEFAULT];
-}
-
 // nice transition for dimming, should be called only by the timer himself
 -(void) dimOverlay {
     if (canDim) {
@@ -190,6 +185,30 @@
 -(void) activateOverlay {
     self.view.alpha = 1;
     [dimTimer setFireDate:HIDING_TIME_NEVER];
+}
+
+// dim the overlay when there's no more input for a certain amount of time
+-(IBAction) buttonReleased:(id) sender {
+    UIButton *theButton = (UIButton *)sender;
+    
+    switch (theButton.tag) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            HW_walkingKeysUp();
+            break;
+        case 4:
+        case 5:
+        case 6:
+            HW_otherKeysUp();
+            break;
+        default:
+            NSLog(@"Nope");
+            break;
+    }
+
+    [dimTimer setFireDate:HIDING_TIME_DEFAULT];
 }
 
 // issue certain action based on the tag of the button 
@@ -232,7 +251,7 @@
             HW_ammoMenu();
             break;
         default:
-            NSLog(@"Nope");
+            DLog(@"Nope");
             break;
     }
 }

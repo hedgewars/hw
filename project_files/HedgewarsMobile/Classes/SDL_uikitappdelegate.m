@@ -100,8 +100,6 @@ int main (int argc, char *argv[]) {
     // bring the uiwindow below in front
     UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
     [aWin makeKeyAndVisible];
-    aWin =  [[[UIApplication sharedApplication] windows] lastObject];
-    [aWin removeFromSuperview];
     
     DLog(@"%@",[[UIApplication sharedApplication] windows]);
     

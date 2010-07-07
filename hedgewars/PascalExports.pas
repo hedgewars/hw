@@ -55,6 +55,21 @@ begin
     rightClick:= true;
 end;
 
+procedure HW_walkingKeysUp; cdecl; export;
+begin
+    leftKey:= false;
+    rightKey:= false;
+    upKey:= false;
+    downKey:= false;
+end;
+
+procedure HW_otherKeysUp; cdecl; export;
+begin
+    spaceKey:= false;
+    enterKey:= false;
+    backspaceKey:= false;
+end;
+
 procedure HW_allKeysUp; cdecl; export;
 begin
     // set all keys to released

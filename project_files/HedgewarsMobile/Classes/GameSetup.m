@@ -277,7 +277,7 @@
         
         switch (buffer[0]) {
             case 'C':
-                DLog(@"sending game config");
+                DLog(@"sending game config...\n%@",self.gameConfig);
                 
                 // local game
                 [self sendToEngine:@"TL"];

@@ -30,6 +30,8 @@ extern "C" {
     void HW_zoomReset(void);
     void HW_ammoMenu(void);
     
+    void HW_walkingKeysUp(void);
+    void HW_otherKeysUp(void);
     void HW_allKeysUp(void);
     
     void HW_walkLeft(void);

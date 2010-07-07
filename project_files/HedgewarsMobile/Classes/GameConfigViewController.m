@@ -48,9 +48,10 @@
             break;
         case 1:
             theButton.enabled = NO;
-            [self performSelector:@selector(startGame:)
-                       withObject:theButton
-                       afterDelay:0.25];
+            [self startGame:theButton];
+//            [self performSelector:@selector(startGame:)
+//                       withObject:theButton
+//                       afterDelay:0.25];
             break;
         default:
             break;
@@ -154,9 +155,9 @@
                                                                       nil];
 
     // finally launch game and remove this controller
-    [[self parentViewController] dismissModalViewControllerAnimated:YES];
     [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:gameDictionary];
     [gameDictionary release];
+    //[[self parentViewController] dismissModalViewControllerAnimated:YES];
 }
 
 -(void) viewDidLoad {
