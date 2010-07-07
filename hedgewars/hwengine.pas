@@ -453,8 +453,8 @@ begin
             val(ParamStr(5), ipcPort);
             cFullScreen:= ParamStr(6) = '1';
             isSoundEnabled:= ParamStr(7) = '1';
-            cVSyncInUse:= ParamStr(8) = '1';
-            cWeaponTooltips:= ParamStr(9) = '1';
+            cVSyncInUse:= ParamStr(8) = '1';        //unused
+            cWeaponTooltips:= ParamStr(9) = '1';    //should be merged with rqFlags
             cLocaleFName:= ParamStr(10);
             val(ParamStr(11), cInitVolume);
             val(ParamStr(12), cTimerInterval);

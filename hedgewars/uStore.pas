@@ -1502,7 +1502,6 @@ SDL_FreeSurface(tmpsurf)
 end;
 
 procedure RenderWeaponTooltip(atype: TAmmoType);
-{$IFNDEF IPHONEOS}
 var r: TSDL_Rect;
     i: LongInt;
     extra: ansistring;
@@ -1548,28 +1547,21 @@ else
 // render window and return the texture
 WeaponTooltipTex:= RenderHelpWindow(trammo[Ammoz[atype].NameId], trammoc[Ammoz[atype].NameId], trammod[Ammoz[atype].NameId], extra, extracolor, SpritesData[sprAMAmmos].Surface, @r)
 end;
-{$ELSE}
-begin end;
-{$ENDIF}
 
 procedure ShowWeaponTooltip(x, y: LongInt);
 begin
-{$IFNDEF IPHONEOS}
 // draw the texture if it exists
 if WeaponTooltipTex <> nil then
     DrawTexture(x, y, WeaponTooltipTex)
-{$ENDIF}
 end;
 
 procedure FreeWeaponTooltip;
 begin
-{$IFNDEF IPHONEOS}
 // free the existing texture (if there's any)
 if WeaponTooltipTex = nil then
     exit;
 FreeTexture(WeaponTooltipTex);
 WeaponTooltipTex:= nil
-{$ENDIF}
 end;
 
 procedure initModule;

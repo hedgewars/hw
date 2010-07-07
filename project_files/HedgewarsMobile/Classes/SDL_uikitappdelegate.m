@@ -98,10 +98,9 @@ int main (int argc, char *argv[]) {
     free(gameArgs);
     
     // bring the uiwindow below in front
-    UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
-    [aWin makeKeyAndVisible];
-    
-    DLog(@"%@",[[UIApplication sharedApplication] windows]);
+    //UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+    //[aWin makeKeyAndVisible];
+    //DLog(@"%@",[[UIApplication sharedApplication] windows]);
     
     [UIView beginAnimations:@"inserting main controller" context:NULL];
     [UIView setAnimationDuration:1];

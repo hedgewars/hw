@@ -113,7 +113,6 @@
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
     
     // set initial orientation
-    ///[self didRotate:[NSNotification notificationWithName:UIDeviceOrientationDidChangeNotification object:nil]];
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:12345];
     switch (orientation) {
