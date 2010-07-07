@@ -112,6 +112,22 @@
     self.view.alpha = 0;
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
     
+    // set initial orientation
+    ///[self didRotate:[NSNotification notificationWithName:UIDeviceOrientationDidChangeNotification object:nil]];
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:12345];
+    switch (orientation) {
+        case UIDeviceOrientationLandscapeLeft:
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(-90));
+            break;
+    }
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    self.view.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
     
     dimTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
@@ -133,9 +149,6 @@
     [UIView setAnimationDuration:1];
     self.view.alpha = 1;
     [UIView commitAnimations];
-
-    // set initial orientation
-    [self didRotate:[NSNotification notificationWithName:UIDeviceOrientationDidChangeNotification object:nil]];
 }
 
 /* these are causing problems at reloading so let's remove 'em
