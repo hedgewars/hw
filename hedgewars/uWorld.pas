@@ -355,12 +355,17 @@ if (Pos >= 0) then
             RenderWeaponTooltip(amSel)
             end;
             
-        {$IFNDEF IPHONEOS}
+{$IFDEF IPHONEOS}
+        DrawTexture(cScreenWidth div 2 - (AMWidth - 10) + AMxShift, AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
+
+        if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
+            DrawTexture(cScreenWidth div 2 + AMxOffset - 45, AMyOffset - 25, CountTexz[Ammo^[Slot, Pos].Count]);
+{$ELSE}
         DrawTexture(cScreenWidth div 2 - (AMWidth - 10) + AMxShift, cScreenHeight - AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
 
         if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
             DrawTexture(cScreenWidth div 2 + AMxOffset - 45, cScreenHeight - AMyOffset - 25, CountTexz[Ammo^[Slot, Pos].Count]);
-        {$ENDIF}
+{$ENDIF}
 
         if bSelected and (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0) then
             begin

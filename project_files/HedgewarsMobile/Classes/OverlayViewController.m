@@ -20,7 +20,7 @@
 
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, writeChatTextField, spinningWheel;
+@synthesize popoverController, popupMenu;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -107,8 +107,6 @@
 #pragma mark View Management
 -(void) viewDidLoad {
     isPopoverVisible = NO;
-    singleton = self.spinningWheel;
-    canDim = NO;
     self.view.alpha = 0;
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
     
@@ -152,12 +150,9 @@
 
 /* these are causing problems at reloading so let's remove 'em
 -(void) viewDidUnload {
-    [popoverController dismissPopoverAnimated:NO];
     [dimTimer invalidate];
-    self.writeChatTextField = nil;
     self.popoverController = nil;
     self.popupMenu = nil;
-    self.spinningWheel = nil;
     [super viewDidUnload];
     MSG_DIDUNLOAD();
 }
@@ -173,11 +168,9 @@
 */
 
 -(void) dealloc {
-    [writeChatTextField release];
     [popupMenu release];
     [popoverController release];
     // dimTimer is autoreleased
-    [spinningWheel release];
     [super dealloc];
 }
 
@@ -185,7 +178,7 @@
 #pragma mark Overlay actions and members
 // nice transition for dimming, should be called only by the timer himself
 -(void) dimOverlay {
-    if (canDim) {
+    if (isGameRunning) {
         [UIView beginAnimations:@"overlay dim" context:NULL];
         [UIView setAnimationDuration:0.6];
         self.view.alpha = 0.2;
@@ -201,6 +194,9 @@
 
 // dim the overlay when there's no more input for a certain amount of time
 -(IBAction) buttonReleased:(id) sender {
+    if (!isGameRunning)
+        return;
+    
     UIButton *theButton = (UIButton *)sender;
     
     switch (theButton.tag) {
@@ -229,6 +225,10 @@
     if (isPopoverVisible) {
         [self dismissPopover];
     }
+    
+    if (!isGameRunning)
+        return;
+    
     UIButton *theButton = (UIButton *)sender;
     
     switch (theButton.tag) {
@@ -333,12 +333,6 @@
     [sender resignFirstResponder];
 }
 
-// this function is called by pascal FinishProgress and removes the spinning wheel when loading is done
-void spinningWheelDone (void) {
-    [singleton stopAnimating];
-    singleton = nil;
-    canDim = YES;
-}
 
 #pragma mark -
 #pragma mark Custom touch event handling
@@ -351,12 +345,14 @@ void spinningWheelDone (void) {
     if (isPopoverVisible) {
         [self dismissPopover];
     }
+    /*
     if (writeChatTextField) {
         [self.writeChatTextField resignFirstResponder];
         [dimTimer setFireDate:HIDING_TIME_DEFAULT];
     }
-    
-    if (currentPosition.y < screen.size.width - 120) {
+    */
+
+    if (currentPosition.y < screen.size.width - 130 || (currentPosition.x > 130 && currentPosition.x < screen.size.height - 130)) {
         switch ([touches count]) {
             case 1:
                 DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
@@ -428,5 +424,23 @@ void spinningWheelDone (void) {
     }
 }
 
+// called from AddProgress and FinishProgress (respectively)
+void startSpinning() {
+    isGameRunning = NO;
+    CGRect screen = [[UIScreen mainScreen] bounds];
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    indicator.tag = 987654;
+    indicator.center = CGPointMake(screen.size.width/2 - 118, screen.size.height/2);
+    indicator.hidesWhenStopped = YES;
+    [indicator startAnimating];
+    [[[[UIApplication sharedApplication] keyWindow] viewWithTag:12345] addSubview:indicator];
+    [indicator release];
+}
+
+void stopSpinning() {
+    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[[[[UIApplication sharedApplication] keyWindow] viewWithTag:12345] viewWithTag:987654];
+    [indicator stopAnimating];
+    isGameRunning = YES;
+}
 
 @end

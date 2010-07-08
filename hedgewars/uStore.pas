@@ -1265,6 +1265,10 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+{$IFDEF IPHONEOS}
+procedure startSpinning; cdecl; external;
+procedure stopSpinning; cdecl; external;
+{$ENDIF}
 procedure AddProgress;
 var r: TSDL_Rect;
     texsurf: PSDL_Surface;
@@ -1279,6 +1283,9 @@ begin
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
+{$IFDEF IPHONEOS}
+        startSpinning();
+{$ENDIF}
     end;
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
@@ -1301,15 +1308,12 @@ begin
 
 end;
 
-{$IFDEF IPHONEOS}
-procedure spinningWheelDone; cdecl; external;
-{$ENDIF}
 procedure FinishProgress;
 begin
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
 {$IFDEF IPHONEOS}
-    spinningWheelDone();
+    stopSpinning();
 {$ENDIF}
 end;
 

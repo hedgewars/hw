@@ -155,12 +155,16 @@
                                                                       nil];
 
     // finally launch game and remove this controller
+    DLog(@"sending config %@", gameDictionary);
+
     [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:gameDictionary];
     [gameDictionary release];
     //[[self parentViewController] dismissModalViewControllerAnimated:YES];
 }
 
 -(void) viewDidLoad {
+    self.view.backgroundColor = [UIColor blackColor];
+    
     CGRect screen = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
 
@@ -185,8 +189,9 @@
     } else {
         // this is the visible controller
         mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
-        // this must be loaded to auto set default scheme and ammo
+        // this must be loaded & added to auto set default scheme and ammo
         schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        [self.view addSubview:schemeWeaponConfigViewController.view];
     }
     activeController = mapConfigViewController;
     
