@@ -69,7 +69,7 @@ var s: shortstring;
     adler: LongInt;
 begin
 adler:= 1;
-Adler32Update(adler, @Land, sizeof(Land));
+Adler32Update(adler, @Land[0,0], sizeof(Land));
 s:= 'M'+inttostr(adler);
 
 CheckLandDigest(s);
