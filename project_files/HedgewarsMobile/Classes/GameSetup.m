@@ -367,7 +367,8 @@
     NSString *wSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.width];
     NSString *hSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.height];
     const char **gameArgs = (const char**) malloc(sizeof(char *) * 10);
-
+    NSInteger tmpQuality;
+    
     size_t size;
     // Set 'oldp' parameter to NULL to get the size of the data returned so we can allocate appropriate amount of space
     sysctlbyname("hw.machine", NULL, &size, NULL, 0); 
@@ -379,17 +380,20 @@
 
     if ([modelId hasPrefix:@"iPhone1"] ||                                   // = iPhone or iPhone 3G
         [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])   // = iPod Touch or iPod Touch 2G
-        gameArgs[9] = "3";                          // rqLowRes & rqBlurryLand & rqKillFlakes
+        tmpQuality = 0x00000001 | 0x00000002 | 0x00000040;  // rqLowRes | rqBlurryLand | rqKillFlakes
     else if ([modelId hasPrefix:@"iPhone2"] ||                              // = iPhone 3GS
              [modelId hasPrefix:@"iPod3"])                                  // = iPod Touch 3G
-            gameArgs[9] = "2";                      // rqBlurryLand & rqKillFlakes
+            tmpQuality = 0x00000002 | 0x00000040;           // rqBlurryLand | rqKillFlakes 
         else if ([modelId hasPrefix:@"iPad1"])                              // = iPad
-                gameArgs[9] = "1";                  // rqBlurryLand
+                tmpQuality = 0x00000002;                    // rqBlurryLand
             else                                                            // = everything else
-                gameArgs[9] = "0";                  // full quality
+                tmpQuality = 0;                             // full quality
+    if (![modelId hasPrefix:@"iPad"])                                       // = disable tooltips unless iPad
+        tmpQuality = tmpQuality | 0x00000400;
     [modelId release];
     
-    
+    gameArgs[9] = [[[NSNumber numberWithInteger:tmpQuality] stringValue] UTF8String];
+
     // prevents using an empty nickname
     NSString *username;
     NSString *originalUsername = [self.systemSettings objectForKey:@"username"];

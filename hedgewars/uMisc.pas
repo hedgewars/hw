@@ -81,7 +81,6 @@ var
     isSoundEnabled  : boolean = true;
     isMusicEnabled  : boolean = false;
     cVSyncInUse     : boolean = true;    
-    cWeaponTooltips : boolean = true;
     cLocaleFName    : shortstring = 'en.txt';
     cInitVolume     : LongInt = 50;
     cTimerInterval  : LongInt = 8;

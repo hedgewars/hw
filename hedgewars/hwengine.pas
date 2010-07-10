@@ -231,13 +231,7 @@ begin
     val(gameArgs[7], cScreenWidth);
     recordFileName:= gameArgs[8];
     
-    val(gameArgs[9], tmp_quality);
-    case tmp_quality of
-        0: cReducedQuality:= rqNone;
-        1: cReducedQuality:= rqBlurryLand;
-        2: cReducedQuality:= rqBlurryLand or rqKillFlakes;
-        3: cReducedQuality:= rqBlurryLand or rqKillFlakes or rqLowRes;
-    end;
+    val(gameArgs[9], cReducedQuality);
 {$ENDIF}
 
     initEverything(true);
@@ -454,7 +448,7 @@ begin
             cFullScreen:= ParamStr(6) = '1';
             isSoundEnabled:= ParamStr(7) = '1';
             cVSyncInUse:= ParamStr(8) = '1';        //unused
-            cWeaponTooltips:= ParamStr(9) = '1';    //should be merged with rqFlags
+            //cWeaponTooltips:= ParamStr(9) = '1';  //merged with rqFlags
             cLocaleFName:= ParamStr(10);
             val(ParamStr(11), cInitVolume);
             val(ParamStr(12), cTimerInterval);
@@ -464,10 +458,13 @@ begin
             UserNick:= DecodeBase64(ParamStr(16));
             isMusicEnabled:= ParamStr(17) = '1';
 
-            if (ParamStr(18) = '1') then        //HACK
+            if (ParamStr(18) = '1') then        //HACK - always disable rqLowRes as it's a game breaker
                 cReducedQuality:= $FFFFFFFF xor rqLowRes
             else
                 val(ParamStr(18), cReducedQuality);
+                
+            if (ParamStr(9) = '0') then         //HACK - if cWeaponTooltips not true, disable it
+                cReducedQuality:= cReducedQuality xor rqTooltipsOff;
         end;
         3: begin
             val(ParamStr(2), ipcPort);

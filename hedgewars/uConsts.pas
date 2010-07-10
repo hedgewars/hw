@@ -215,8 +215,8 @@ const sfMax = 1000;
 
     // reducedquality flags
     rqNone        = $00000000;  // don't reduce quality
-    rqBlurryLand  = $00000001;  // downscaled terrain
-    rqLowRes      = $00000002;  // use half land array
+    rqLowRes      = $00000001;  // use half land array
+    rqBlurryLand  = $00000002;  // downscaled terrain
     rqNoBackground= $00000004;  // don't draw background
     rqSimpleRope  = $00000008;  // avoid drawing rope
     rq2DWater     = $00000010;  // disabe 3D water effect
@@ -225,6 +225,7 @@ const sfMax = 1000;
     rqSlowMenu    = $00000080;  // ammomenu appears with no animation
     rqPlainSplash = $00000100;  // no droplets
     rqClampLess   = $00000200;  // don't clamp textures
+    rqTooltipsOff = $00000400;  // tooltips are not drawn
 
     // image flags (for LoadImage())
     ifNone        = $00000000;  // nothing special

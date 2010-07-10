@@ -1511,11 +1511,11 @@ var r: TSDL_Rect;
     extra: ansistring;
     extracolor: LongInt;
 begin
-// don't do anything if the window shouldn't be shown
-if not cWeaponTooltips then
+    // don't do anything if the window shouldn't be shown
+    if (cReducedQuality and rqTooltipsOff) <> 0 then
     begin
-    WeaponTooltipTex:= nil;
-    exit
+        WeaponTooltipTex:= nil;
+        exit
     end;
 
 // free old texture
