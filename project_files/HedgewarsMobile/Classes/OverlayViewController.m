@@ -355,8 +355,13 @@
     if (currentPosition.y < screen.size.width - 130 || (currentPosition.x > 130 && currentPosition.x < screen.size.height - 130)) {
         switch ([touches count]) {
             case 1:
-                DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
-                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+                //DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
+                // this is a single touch/tap
+                isSingleClick = YES;
+                // save were the click event will take place
+                pointWhereToClick = currentPosition;
+                
+                [[self.view viewWithTag:5599] removeFromSuperview];
                 if (2 == [touch tapCount])
                     HW_zoomReset();
                 break;
@@ -374,9 +379,40 @@
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    initialDistanceForPinching = 0;
+    CGRect screen = [[UIScreen mainScreen] bounds];
     //HW_allKeysUp();
-    HW_click();
+    if (HW_isAmmoOpen()) {
+        // if we're in the menu we just click in the point
+        HW_setCursor(HWX(pointWhereToClick.x), HWY(pointWhereToClick.y));
+        HW_click();
+    } else 
+        if (isSingleClick) {
+            // if they tapped in the screen we trick the system so that camera doesn't move
+            HW_saveCursor(FALSE);
+            HW_setCursor(HWX(pointWhereToClick.x), HWY(pointWhereToClick.y));
+            HW_click();
+            HW_saveCursor(TRUE);
+            
+            // and remove the label (if any)
+            [[self.view viewWithTag:5599] removeFromSuperview];
+        } else {
+            // TODO: only do this if the weapon does require a further click
+            // if no click, then ask for tapping again
+            CGPoint currentPosition = [[touches anyObject] locationInView:self.view];
+            UILabel *tapAgain = [[UILabel alloc] initWithFrame:CGRectMake(currentPosition.x-100, currentPosition.y + 10, 200, 25)];
+            tapAgain.text = NSLocalizedString(@"Tap again to confirm",@"from the overlay");
+            tapAgain.backgroundColor = [UIColor clearColor];
+            tapAgain.tag = 5599;
+            tapAgain.textColor = [UIColor blueColor];
+            tapAgain.textAlignment = UITextAlignmentCenter;
+            tapAgain.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+            [self.view addSubview:tapAgain];
+            [tapAgain release];
+        }
+
+    pointWhereToClick = CGPointZero;
+    initialDistanceForPinching = 0;
+    isSingleClick = NO;
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -393,9 +429,14 @@
 
     switch ([touches count]) {
         case 1:
+            isSingleClick = NO;
+            currentPosition = [touch locationInView:self.view];
             if (HW_isAmmoOpen()) {
-                currentPosition = [touch locationInView:self.view];
                 DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
+                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+                pointWhereToClick = currentPosition;
+            } else {
+                DLog(@"x: %f y: %f -> X:%d Y:%d", currentPosition.x, currentPosition.y, HWX(currentPosition.x), HWY(currentPosition.y));
                 HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
             }
             break;

@@ -20,6 +20,8 @@ uses uKeys, GLunit, uWorld, uMisc, uConsole, hwengine;
 implementation
 
 {$IFDEF HWLIBRARY}
+var xx, yy: LongInt;
+
 // retrieve protocol information
 procedure HW_versionInfo(netProto: PShortInt; versionStr: Ppchar); cdecl; export;
 begin
@@ -172,6 +174,18 @@ procedure HW_setCursor(x,y: LongInt); cdecl; export;
 begin
     CursorPoint.X:= x;
     CursorPoint.Y:= y;
+end;
+
+procedure HW_saveCursor(reset: boolean); cdecl; export;
+begin
+    if reset then
+    begin
+        CursorPoint.X:= xx;
+        CursorPoint.Y:= yy;
+    end
+    else
+        xx:= CursorPoint.X;
+        yy:= CursorPoint.Y;
 end;
 
 function HW_isAmmoOpen:boolean; cdecl; export;

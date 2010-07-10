@@ -162,6 +162,7 @@
     } else {
         DLog(@"gameconfig data not complete!!\nmapConfigViewController = %@\nteamConfigViewController = %@\nschemeWeaponConfigViewController = %@\n",
              mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController);
+        [self.parentViewController dismissModalViewControllerAnimated:YES];
     }
 
 }

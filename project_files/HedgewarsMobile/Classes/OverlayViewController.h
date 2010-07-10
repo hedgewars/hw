@@ -19,7 +19,10 @@
     PopoverMenuViewController *popupMenu;
     BOOL isPopoverVisible;
     
+    // touch section
+    BOOL isSingleClick;
     CGFloat initialDistanceForPinching;
+    CGPoint pointWhereToClick;
 }
 
 @property (nonatomic,retain) id popoverController;
