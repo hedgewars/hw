@@ -143,8 +143,8 @@
         return;
     }
     
-    /*
-    NSDictionary *gameDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:mapConfigViewController.seedCommand,@"seed_command",
+    // create the configuration file that is going to be sent to engine
+    NSDictionary *gameDictionary = [NSDictionary dictionaryWithObjectsAndKeys:mapConfigViewController.seedCommand,@"seed_command",
                                                                       mapConfigViewController.templateFilterCommand,@"templatefilter_command",
                                                                       mapConfigViewController.mapGenCommand,@"mapgen_command",
                                                                       mapConfigViewController.mazeSizeCommand,@"mazesize_command",
@@ -153,34 +153,15 @@
                                                                       schemeWeaponConfigViewController.selectedScheme,@"scheme",
                                                                       schemeWeaponConfigViewController.selectedWeapon,@"weapon",
                                                                       nil];
-    */
     
-    // create the configuration file that is going to be sent to engine
-    NSDictionary *gameDictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:
-                                                                        mapConfigViewController.seedCommand,
-                                                                        mapConfigViewController.templateFilterCommand,
-                                                                        mapConfigViewController.mapGenCommand,
-                                                                        mapConfigViewController.mazeSizeCommand,
-                                                                        mapConfigViewController.themeCommand,
-                                                                        teamConfigViewController.listOfSelectedTeams,
-                                                                        schemeWeaponConfigViewController.selectedScheme,
-                                                                        schemeWeaponConfigViewController.selectedWeapon,nil]
-                                                               forKeys:[NSArray arrayWithObjects:
-                                                                        @"seed_command",
-                                                                        @"templatefilter_command",
-                                                                        @"mapgen_command",
-                                                                        @"mazesize_command",
-                                                                        @"theme_command",
-                                                                        @"teams_list",
-                                                                        @"scheme",
-                                                                        @"weapon",nil]];
     // finally launch game and remove this controller
     DLog(@"sending config %@", gameDictionary);
     
     if ([[gameDictionary allKeys] count] == 8) {
         [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:gameDictionary];
     } else {
-        DLog(@"gameconfig data not complete\n%@\nWHY???", gameDictionary);
+        DLog(@"gameconfig data not complete!!\nmapConfigViewController = %@\nteamConfigViewController = %@\nschemeWeaponConfigViewController = %@\n",
+             mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController);
     }
 
 }

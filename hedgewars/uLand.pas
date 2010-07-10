@@ -66,10 +66,11 @@ type TPixAr = record
 
 procedure LogLandDigest;
 var s: shortstring;
-    adler: LongInt;
+    adler, i, tmp: LongInt;
 begin
 adler:= 1;
-Adler32Update(adler, @Land[0,0], sizeof(Land));
+for i:= 0 to LAND_HEIGHT-1 do
+    Adler32Update(adler, @Land[i,0], LAND_WIDTH);
 s:= 'M'+inttostr(adler);
 
 CheckLandDigest(s);
