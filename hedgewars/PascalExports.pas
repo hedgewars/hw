@@ -197,14 +197,7 @@ end;
 
 function HW_isWeaponRequiringClick: boolean; cdecl; export;
 begin
-    exit( (savedAmmoType = amTeleport) or
-          (savedAmmoType = amBee) or
-          (savedAmmoType = amAirAttack) or
-          (savedAmmoType = amMineStrike) or
-          (savedAmmoType = amGirder) or
-          (savedAmmoType = amNapalm) or
-          (savedAmmoType = amPiano)
-        )
+    exit( (CurrentHedgehog^.Gear^.State and gstHHChooseTarget) <> 0 )
 end;
 
 //amSwitch

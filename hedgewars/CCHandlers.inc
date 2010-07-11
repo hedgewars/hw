@@ -510,10 +510,6 @@ begin
         Message:= Message or gm_Weapon;
         MsgParam:= byte(s[1]);
     end;
-    
-{$IFDEF IPHONEOS}
-    savedAmmoType:= TAmmoType(s[1]);
-{$ENDIF}
 end;
 
 procedure chTaunt(var s: shortstring);
@@ -616,8 +612,8 @@ end;
 
 procedure chPut(var s: shortstring);
 begin
-s:= s; // avoid compiler hint
-doPut(0, 0, false)
+    s:= s; // avoid compiler hint
+    doPut(0, 0, false);
 end;
 
 procedure chCapture(var s: shortstring);
@@ -804,23 +800,15 @@ end;
 procedure chZoomIn(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-{$IFDEF IPHONEOS}
-    if ZoomValue < 4.0 then
-{$ELSE}
-    if ZoomValue < 3.0 then
-{$ENDIF}
-        ZoomValue:= ZoomValue + 0.20;
+    if ZoomValue < cMinZoomLevel then
+        ZoomValue:= ZoomValue + cZoomDelta;
 end;
 
 procedure chZoomOut(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-{$IFDEF IPHONEOS}
-    if ZoomValue > 0.5 then
-{$ELSE}
-    if ZoomValue > 1.0 then
-{$ENDIF}
-        ZoomValue:= ZoomValue - 0.20;
+    if ZoomValue > cMaxZoomLevel then
+        ZoomValue:= ZoomValue - cZoomDelta;
 end;
 
 procedure chZoomReset(var s: shortstring);

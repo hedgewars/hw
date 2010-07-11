@@ -297,11 +297,16 @@ const sfMax = 1000;
 
 {$IFDEF IPHONEOS}
     cMaxCaptions = 3;
-    cDefaultZoomLevel = 1.5;
-    savedAmmoType : TAmmoType = amNothing;
+    cDefaultZoomLevel = 2.0;
+    cMaxZoomLevel = 0.5;
+    cMinZoomLevel = 3.5;
+    cZoomDelta = 0.20;
 {$ELSE}
     cMaxCaptions = 4;
     cDefaultZoomLevel = 2.0;
+    cMaxZoomLevel = 1.0;
+    cMinZoomLevel = 3.0;
+    cZoomDelta = 0.25;
 {$ENDIF}
 
     cSendEmptyPacketTime = 1000;

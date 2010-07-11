@@ -257,9 +257,11 @@
             HW_tab();
             break;
         case 10:
+            removeConfirmationInput();
             [self showPopover];
             break;
         case 11:
+            removeConfirmationInput();
             HW_ammoMenu();
             break;
         default:
@@ -337,10 +339,8 @@
 #pragma mark -
 #pragma mark Custom touch event handling
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSArray *twoTouches;
-    UITouch *touch = [touches anyObject];
-    CGRect screen = [[UIScreen mainScreen] bounds];
-    CGPoint currentPosition = [touch locationInView:self.view];
+    NSSet *allTouches = [event allTouches];
+    UITouch *touch, *first, *second;
     
     if (isPopoverVisible) {
         [self dismissPopover];
@@ -351,87 +351,98 @@
         [dimTimer setFireDate:HIDING_TIME_DEFAULT];
     }
     */
-
-    if (currentPosition.y < screen.size.width - 130 || (currentPosition.x > 130 && currentPosition.x < screen.size.height - 130)) {
-        switch ([touches count]) {
-            case 1:
-                //DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
-                // this is a single touch/tap
-                isSingleClick = YES;
-                // save were the click event will take place
-                pointWhereToClick = currentPosition;
-                
-                [[self.view viewWithTag:5599] removeFromSuperview];
-                if (2 == [touch tapCount])
-                    HW_zoomReset();
-                break;
-            case 2:                
-                // pinching
-                twoTouches = [touches allObjects];
-                UITouch *first = [twoTouches objectAtIndex:0];
-                UITouch *second = [twoTouches objectAtIndex:1];
-                initialDistanceForPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
-                break;
-            default:
-                break;
-        }
+    
+    switch ([allTouches count]) {
+        case 1:
+            touch = [[allTouches allObjects] objectAtIndex:0];
+            CGPoint currentPosition = [touch locationInView:self.view];
+            
+            //DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
+            // this is a single touch/tap
+            isSingleClick = YES;
+            // save were the click event will take place
+            pointWhereToClick = currentPosition;
+            
+            removeConfirmationInput();
+            if (2 == [touch tapCount])
+                HW_zoomReset();
+            break;
+        case 2:                
+            // pinching
+            first = [[allTouches allObjects] objectAtIndex:0];
+            second = [[allTouches allObjects] objectAtIndex:1];
+            initialDistanceForPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
+            break;
+        default:
+            break;
     }
 }
 
+    //if (currentPosition.y < screen.size.width - 130 || (currentPosition.x > 130 && currentPosition.x < screen.size.height - 130)) {
+
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     CGRect screen = [[UIScreen mainScreen] bounds];
-    //HW_allKeysUp();
-    if (HW_isAmmoOpen()) {
-        // if we're in the menu we just click in the point
-        HW_setCursor(HWX(pointWhereToClick.x), HWY(pointWhereToClick.y));
-        HW_click();
-    } else 
-        if (isSingleClick) {
-            // if they tapped in the screen we trick the system so that camera doesn't move
-            HW_saveCursor(FALSE);
-            HW_setCursor(HWX(pointWhereToClick.x), HWY(pointWhereToClick.y));
-            HW_click();
-            HW_saveCursor(TRUE);
-            
-            // and remove the label (if any)
-            [[self.view viewWithTag:5599] removeFromSuperview];
-        } else {
-            // if weapon requires a further click, ask for tapping again
-            if (HW_isWeaponRequiringClick()) {
-                CGPoint currentPosition = [[touches anyObject] locationInView:self.view];
-                UILabel *tapAgain = [[UILabel alloc] initWithFrame:CGRectMake(currentPosition.x-100, currentPosition.y + 10, 200, 25)];
-                tapAgain.text = NSLocalizedString(@"Tap again to confirm",@"from the overlay");
-                tapAgain.backgroundColor = [UIColor clearColor];
-                tapAgain.tag = 5599;
-                tapAgain.textColor = [UIColor blueColor];
-                tapAgain.textAlignment = UITextAlignmentCenter;
-                tapAgain.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
-                [self.view addSubview:tapAgain];
-                [tapAgain release];
-            }
-        }
-
+    NSSet *allTouches = [event allTouches];
+    UITouch *touch;
+    
+    switch ([allTouches count]) {
+        case 1:
+            if (HW_isAmmoOpen()) {
+                // if we're in the menu we just click in the point
+                HW_setCursor(HWX(pointWhereToClick.x), HWY(pointWhereToClick.y));
+                HW_click();
+            } else 
+                if (isSingleClick) {
+                    // if they tapped in the screen we trick the system so that camera doesn't move
+                    HW_saveCursor(FALSE);
+                    HW_setCursor(HWX(pointWhereToClick.x), HWY(pointWhereToClick.y));
+                    HW_click();
+                    HW_saveCursor(TRUE);
+                    
+                    // and remove the label (if any)
+                    removeConfirmationInput();
+                } else {
+                    // if weapon requires a further click, ask for tapping again
+                    if (HW_isWeaponRequiringClick()) {
+                        touch = [[allTouches allObjects] objectAtIndex:0];
+                        CGPoint currentPosition = [touch locationInView:self.view];
+                        UILabel *tapAgain = [[UILabel alloc] initWithFrame:CGRectMake(currentPosition.x-100, currentPosition.y + 10, 200, 25)];
+                        tapAgain.text = NSLocalizedString(@"Tap again to confirm",@"from the overlay");
+                        tapAgain.backgroundColor = [UIColor clearColor];
+                        tapAgain.tag = CONFIRMATION_TAG;
+                        tapAgain.textColor = [UIColor blueColor];
+                        tapAgain.textAlignment = UITextAlignmentCenter;
+                        tapAgain.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+                        [self.view addSubview:tapAgain];
+                        [tapAgain release];
+                    }
+                }
+            break;
+        case 2:
+            HW_allKeysUp();
+            break;
+    }
+    
     pointWhereToClick = CGPointZero;
     initialDistanceForPinching = 0;
     isSingleClick = NO;
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    // this can happen if the user puts more than 5 touches on the screen at once, or perhaps in other circumstances
     [self touchesEnded:touches withEvent:event];
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     CGRect screen = [[UIScreen mainScreen] bounds];
+    NSSet *allTouches = [event allTouches];
     
-    NSArray *twoTouches;
-    CGPoint currentPosition;
-    UITouch *touch = [touches anyObject];
+    UITouch *touch, *first, *second;
 
-    switch ([touches count]) {
+    switch ([allTouches count]) {
         case 1:
+            touch = [[allTouches allObjects] objectAtIndex:0];
+            CGPoint currentPosition = [touch locationInView:self.view];
             isSingleClick = NO;
-            currentPosition = [touch locationInView:self.view];
             if (HW_isAmmoOpen()) {
                 // saves the point on which to select the ammo
                 pointWhereToClick = currentPosition;
@@ -443,9 +454,8 @@
             }
             break;
         case 2:
-            twoTouches = [touches allObjects];
-            UITouch *first = [twoTouches objectAtIndex:0];
-            UITouch *second = [twoTouches objectAtIndex:1];
+            first = [[allTouches allObjects] objectAtIndex:0];
+            second = [[allTouches allObjects] objectAtIndex:1];
             CGFloat currentDistanceOfPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
             const int pinchDelta = 40;
             

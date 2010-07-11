@@ -48,6 +48,7 @@ procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
 procedure ShakeCamera(amount: LongWord);
+procedure MoveCamera;
 
 implementation
 uses    uStore, uMisc, uTeams, uIO, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand, GLunit;
@@ -389,8 +390,6 @@ if (WeaponTooltipTex <> nil) and (AMxShift = 0) then
 bSelected:= false;
 if AMxShift = 0 then DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
 end;
-
-procedure MoveCamera; forward;
 
 procedure DrawWater(Alpha: byte; OffsetY: LongInt);
 var VertexBuffer: array [0..3] of TVertex2f;
@@ -1012,8 +1011,8 @@ begin
 end;
 
 procedure MoveCamera;
-const PrevSentPointTime: LongWord = 0;
 var EdgesDist,  wdy: LongInt;
+    PrevSentPointTime: LongWord = 0;
 begin
 {$IFNDEF IPHONEOS}
 if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus then
