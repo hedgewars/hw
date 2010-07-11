@@ -94,7 +94,6 @@
 		61798829114AA34C00BA94A9 /* uGame.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FB114AA34C00BA94A9 /* uGame.pas */; };
 		6179882A114AA34C00BA94A9 /* uGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FC114AA34C00BA94A9 /* uGears.pas */; };
 		6179882B114AA34C00BA94A9 /* uIO.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FD114AA34C00BA94A9 /* uIO.pas */; };
-		6179882C114AA34C00BA94A9 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
 		6179882D114AA34C00BA94A9 /* uLand.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FF114AA34C00BA94A9 /* uLand.pas */; };
 		6179882E114AA34C00BA94A9 /* uLandGraphics.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798800114AA34C00BA94A9 /* uLandGraphics.pas */; };
 		6179882F114AA34C00BA94A9 /* uLandObjects.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798801114AA34C00BA94A9 /* uLandObjects.pas */; };
@@ -122,6 +121,7 @@
 		619C09EA11E8B8D600F1DF16 /* title_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 619C09E911E8B8D600F1DF16 /* title_small.png */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; };
 		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
+		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
 		61C3255B1179A384001E70B1 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3255A1179A384001E70B1 /* OpenAL.framework */; };
 		61C325901179A732001E70B1 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3255A1179A384001E70B1 /* OpenAL.framework */; };
 		61C325A31179A7AD001E70B1 /* libopenalbridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3251D1179A300001E70B1 /* libopenalbridge.a */; };
@@ -1131,7 +1131,6 @@
 				61798829114AA34C00BA94A9 /* uGame.pas in Sources */,
 				6179882A114AA34C00BA94A9 /* uGears.pas in Sources */,
 				6179882B114AA34C00BA94A9 /* uIO.pas in Sources */,
-				6179882C114AA34C00BA94A9 /* uKeys.pas in Sources */,
 				6179882D114AA34C00BA94A9 /* uLand.pas in Sources */,
 				6179882E114AA34C00BA94A9 /* uLandGraphics.pas in Sources */,
 				6179882F114AA34C00BA94A9 /* uLandObjects.pas in Sources */,
@@ -1179,6 +1178,7 @@
 				6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */,
 				61E1F4F811D004240016A5AA /* adler32.pas in Sources */,
 				61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */,
+				61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

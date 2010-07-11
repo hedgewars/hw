@@ -439,13 +439,22 @@ with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_Switch
 end;
 
+{$IFDEF IPHONEOS}
+procedure clearView; cdecl; external;
+{$ENDIF}
+
 procedure chNextTurn(var s: shortstring);
 begin
-s:= s; // avoid compiler hint
-TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
+    s:= s; // avoid compiler hint
+    TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
 
-if not CurrentTeam^.ExtDriven then SendIPC('N');
-{$IFDEF DEBUGFILE}AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));{$ENDIF}
+    if not CurrentTeam^.ExtDriven then SendIPC('N');
+{$IFDEF DEBUGFILE}
+    AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));
+{$ENDIF}
+{$IFDEF IPHONEOS}
+    clearView();
+{$ENDIF}
 end;
 
 procedure chSay(var s: shortstring);

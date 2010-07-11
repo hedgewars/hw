@@ -25,6 +25,7 @@ extern "C" {
     void HW_versionInfo(short int*, char**);
 
     void HW_click(void);
+    
     void HW_zoomIn(void);
     void HW_zoomOut(void);
     void HW_zoomReset(void);

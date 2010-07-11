@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 
 #define CONFIRMATION_TAG 5959
-#define removeConfirmationInput() [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview]
+#define ANIMATION_DURATION 0.25
+#define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview]; 
 
 @class PopoverMenuViewController;
 
@@ -22,10 +23,7 @@
     PopoverMenuViewController *popupMenu;
     BOOL isPopoverVisible;
     
-    // touch section
-    BOOL isSingleClick;
     CGFloat initialDistanceForPinching;
-    CGPoint pointWhereToClick;
 }
 
 @property (nonatomic,retain) id popoverController;

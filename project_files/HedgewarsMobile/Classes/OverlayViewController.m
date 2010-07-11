@@ -340,7 +340,7 @@
 #pragma mark Custom touch event handling
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     NSSet *allTouches = [event allTouches];
-    UITouch *touch, *first, *second;
+    UITouch *first, *second;
     
     if (isPopoverVisible) {
         [self dismissPopover];
@@ -353,18 +353,9 @@
     */
     
     switch ([allTouches count]) {
-        case 1:
-            touch = [[allTouches allObjects] objectAtIndex:0];
-            CGPoint currentPosition = [touch locationInView:self.view];
-            
-            //DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
-            // this is a single touch/tap
-            isSingleClick = YES;
-            // save were the click event will take place
-            pointWhereToClick = currentPosition;
-            
+        case 1:            
             removeConfirmationInput();
-            if (2 == [touch tapCount])
+            if (2 == [[[allTouches allObjects] objectAtIndex:0] tapCount])
                 HW_zoomReset();
             break;
         case 2:                
@@ -383,49 +374,51 @@
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
-    UITouch *touch;
+    CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
     
     switch ([allTouches count]) {
         case 1:
+            // if we're in the menu we just click in the point
             if (HW_isAmmoOpen()) {
-                // if we're in the menu we just click in the point
-                HW_setCursor(HWX(pointWhereToClick.x), HWY(pointWhereToClick.y));
+                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+                // this click doesn't need any wrapping because the ammoMenu already limits the cursor
                 HW_click();
             } else 
-                if (isSingleClick) {
-                    // if they tapped in the screen we trick the system so that camera doesn't move
-                    HW_saveCursor(FALSE);
-                    HW_setCursor(HWX(pointWhereToClick.x), HWY(pointWhereToClick.y));
-                    HW_click();
-                    HW_saveCursor(TRUE);
+                // if weapon requires a further click, ask for tapping again
+                if (HW_isWeaponRequiringClick()) {
+                    // here don't have to wrap thanks to isCursorVisible magic
+                    HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
                     
-                    // and remove the label (if any)
-                    removeConfirmationInput();
-                } else {
-                    // if weapon requires a further click, ask for tapping again
-                    if (HW_isWeaponRequiringClick()) {
-                        touch = [[allTouches allObjects] objectAtIndex:0];
-                        CGPoint currentPosition = [touch locationInView:self.view];
-                        UILabel *tapAgain = [[UILabel alloc] initWithFrame:CGRectMake(currentPosition.x-100, currentPosition.y + 10, 200, 25)];
-                        tapAgain.text = NSLocalizedString(@"Tap again to confirm",@"from the overlay");
-                        tapAgain.backgroundColor = [UIColor clearColor];
-                        tapAgain.tag = CONFIRMATION_TAG;
-                        tapAgain.textColor = [UIColor blueColor];
-                        tapAgain.textAlignment = UITextAlignmentCenter;
-                        tapAgain.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
-                        [self.view addSubview:tapAgain];
-                        [tapAgain release];
-                    }
+                    // draw the button at the last touched point (which is the current position)
+                    UIButton *tapAgain = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                    tapAgain.frame = CGRectMake(currentPosition.x - 90, currentPosition.y + 15, 180, 30);
+                    tapAgain.tag = CONFIRMATION_TAG;
+                    tapAgain.alpha = 0;
+                    [tapAgain addTarget:self action:@selector(sendHWClick) forControlEvents:UIControlEventTouchUpInside];
+                    [tapAgain setTitle:NSLocalizedString(@"Tap again to confirm",@"from the overlay") forState:UIControlStateNormal];
+                    [self.view addSubview:tapAgain];
+                    
+                    // animation ftw!
+                    [UIView beginAnimations:@"inserting button" context:NULL]; 
+                    [UIView setAnimationDuration:ANIMATION_DURATION];
+                    [self.view viewWithTag:CONFIRMATION_TAG].alpha = 1;
+                    [UIView commitAnimations];
                 }
             break;
         case 2:
             HW_allKeysUp();
             break;
+        default:
+            DLog(@"too many touches");
+            break;
     }
     
-    pointWhereToClick = CGPointZero;
     initialDistanceForPinching = 0;
-    isSingleClick = NO;
+}
+
+-(void) sendHWClick {
+    HW_click();
+    removeConfirmationInput();
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -442,11 +435,9 @@
         case 1:
             touch = [[allTouches allObjects] objectAtIndex:0];
             CGPoint currentPosition = [touch locationInView:self.view];
-            isSingleClick = NO;
+
             if (HW_isAmmoOpen()) {
-                // saves the point on which to select the ammo
-                pointWhereToClick = currentPosition;
-                // moves the cursor over
+                // moves the cursor around
                 HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
             } else {
                 DLog(@"x: %f y: %f -> X:%d Y:%d", currentPosition.x, currentPosition.y, HWX(currentPosition.x), HWY(currentPosition.y));
@@ -477,6 +468,7 @@
     }
 }
 
+
 // called from AddProgress and FinishProgress (respectively)
 void startSpinning() {
     isGameRunning = NO;
@@ -494,6 +486,16 @@ void stopSpinning() {
     UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[[[[UIApplication sharedApplication] keyWindow] viewWithTag:12345] viewWithTag:987654];
     [indicator stopAnimating];
     isGameRunning = YES;
+}
+
+void clearView() {
+    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
+    UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
+    [UIView beginAnimations:@"remove button" context:NULL];
+    [UIView setAnimationDuration:ANIMATION_DURATION];
+    theButton.alpha = 0;
+    [UIView commitAnimations];
+    [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:0.3];
 }
 
 @end
