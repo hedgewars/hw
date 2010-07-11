@@ -499,17 +499,21 @@ end;
 
 procedure chSetWeapon(var s: shortstring);
 begin
-if (s[0] <> #1) or CheckNoTeamOrHH then exit;
+    if (s[0] <> #1) or CheckNoTeamOrHH then exit;
 
-if TAmmoType(s[1]) > High(TAmmoType) then exit;
+    if TAmmoType(s[1]) > High(TAmmoType) then exit;
 
-if not CurrentTeam^.ExtDriven then SendIPC('w' + s);
+    if not CurrentTeam^.ExtDriven then SendIPC('w' + s);
 
-with CurrentHedgehog^.Gear^ do
+    with CurrentHedgehog^.Gear^ do
     begin
-    Message:= Message or gm_Weapon;
-    MsgParam:= byte(s[1])
-    end
+        Message:= Message or gm_Weapon;
+        MsgParam:= byte(s[1]);
+    end;
+    
+{$IFDEF IPHONEOS}
+    savedAmmoType:= TAmmoType(s[1]);
+{$ENDIF}
 end;
 
 procedure chTaunt(var s: shortstring);

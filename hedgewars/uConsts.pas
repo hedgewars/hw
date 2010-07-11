@@ -298,6 +298,7 @@ const sfMax = 1000;
 {$IFDEF IPHONEOS}
     cMaxCaptions = 3;
     cDefaultZoomLevel = 1.5;
+    savedAmmoType : TAmmoType = amNothing;
 {$ELSE}
     cMaxCaptions = 4;
     cDefaultZoomLevel = 2.0;

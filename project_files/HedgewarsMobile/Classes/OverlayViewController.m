@@ -396,18 +396,19 @@
             // and remove the label (if any)
             [[self.view viewWithTag:5599] removeFromSuperview];
         } else {
-            // TODO: only do this if the weapon does require a further click
-            // if no click, then ask for tapping again
-            CGPoint currentPosition = [[touches anyObject] locationInView:self.view];
-            UILabel *tapAgain = [[UILabel alloc] initWithFrame:CGRectMake(currentPosition.x-100, currentPosition.y + 10, 200, 25)];
-            tapAgain.text = NSLocalizedString(@"Tap again to confirm",@"from the overlay");
-            tapAgain.backgroundColor = [UIColor clearColor];
-            tapAgain.tag = 5599;
-            tapAgain.textColor = [UIColor blueColor];
-            tapAgain.textAlignment = UITextAlignmentCenter;
-            tapAgain.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
-            [self.view addSubview:tapAgain];
-            [tapAgain release];
+            // if weapon requires a further click, ask for tapping again
+            if (HW_isWeaponRequiringClick()) {
+                CGPoint currentPosition = [[touches anyObject] locationInView:self.view];
+                UILabel *tapAgain = [[UILabel alloc] initWithFrame:CGRectMake(currentPosition.x-100, currentPosition.y + 10, 200, 25)];
+                tapAgain.text = NSLocalizedString(@"Tap again to confirm",@"from the overlay");
+                tapAgain.backgroundColor = [UIColor clearColor];
+                tapAgain.tag = 5599;
+                tapAgain.textColor = [UIColor blueColor];
+                tapAgain.textAlignment = UITextAlignmentCenter;
+                tapAgain.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+                [self.view addSubview:tapAgain];
+                [tapAgain release];
+            }
         }
 
     pointWhereToClick = CGPointZero;
@@ -432,9 +433,10 @@
             isSingleClick = NO;
             currentPosition = [touch locationInView:self.view];
             if (HW_isAmmoOpen()) {
-                DLog(@"X:%d Y:%d", HWX(currentPosition.x), HWY(currentPosition.y));
-                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+                // saves the point on which to select the ammo
                 pointWhereToClick = currentPosition;
+                // moves the cursor over
+                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
             } else {
                 DLog(@"x: %f y: %f -> X:%d Y:%d", currentPosition.x, currentPosition.y, HWX(currentPosition.x), HWY(currentPosition.y));
                 HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));

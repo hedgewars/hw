@@ -13,7 +13,7 @@
 unit PascalExports;
 
 interface
-uses uKeys, GLunit, uWorld, uMisc, uConsole, hwengine;
+uses uKeys, GLunit, uWorld, uMisc, uGears, uConsole, uTeams, uConsts, hwengine;
 
 {$INCLUDE "config.inc"}
 
@@ -184,14 +184,30 @@ begin
         CursorPoint.Y:= yy;
     end
     else
+    begin
         xx:= CursorPoint.X;
         yy:= CursorPoint.Y;
+    end;
 end;
 
-function HW_isAmmoOpen:boolean; cdecl; export;
+function HW_isAmmoOpen: boolean; cdecl; export;
 begin
     exit(bShowAmmoMenu);
 end;
+
+function HW_isWeaponRequiringClick: boolean; cdecl; export;
+begin
+    exit( (savedAmmoType = amTeleport) or
+          (savedAmmoType = amBee) or
+          (savedAmmoType = amAirAttack) or
+          (savedAmmoType = amMineStrike) or
+          (savedAmmoType = amGirder) or
+          (savedAmmoType = amNapalm) or
+          (savedAmmoType = amPiano)
+        )
+end;
+
+//amSwitch
 {$ENDIF}
 
 end.

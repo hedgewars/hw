@@ -56,7 +56,9 @@ extern "C" {
     void HW_setLandscape(BOOL);
     void HW_setCursor(int x, int y);
     void HW_saveCursor(BOOL reset);
+    
     BOOL HW_isAmmoOpen(void);
+    BOOL HW_isWeaponRequiringClick(void);
 #ifdef __cplusplus
 }
 #endif
