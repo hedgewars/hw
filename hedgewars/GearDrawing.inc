@@ -131,7 +131,6 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 VertexBuffer[1].X:= tx + WorldDx;
                 VertexBuffer[1].Y:= ty + WorldDy;
 
-                glEnableClientState(GL_VERTEX_ARRAY);
                 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
                 glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
                 Tint($FF, $FF, $FF, $FF);

@@ -344,7 +344,7 @@ procedure KickFlakes(Radius, X, Y: LongInt);
 var Gear, t: PVisualGear;
     dmg: LongInt;
 begin
-if (vobCount = 0) or (vobCount > 200) or ((cReducedQuality and rqkillFlakes) <> 0) then exit;
+if (vobCount = 0) or (vobCount > 200) then exit;
 t:= VisualGearsList;
 while t <> nil do
       begin
@@ -375,11 +375,10 @@ case Layer of
         begin
         Tint(Gear^.Tint);
         case Gear^.Kind of
-            vgtFlake: if ((cReducedQuality and rqkillFlakes) = 0) then
-                        if vobVelocity = 0 then
-                            DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                        else
-                            DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+            vgtFlake: if vobVelocity = 0 then
+                          DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                      else
+                          DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
             vgtCloud: DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
             end;
         Gear:= Gear^.NextGear

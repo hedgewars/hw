@@ -421,17 +421,16 @@ begin
         VertexBuffer[3].X:= -lw;
         VertexBuffer[3].Y:= lh;
 
-        glEnableClientState (GL_COLOR_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
         glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
 
-        glEnableClientState(GL_VERTEX_ARRAY);
         glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 
         glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-        glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
-
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glColor4ub($FF, $FF, $FF, $FF); // must not be Tint() as color array seems to stay active and color reset is required
         glEnable(GL_TEXTURE_2D);
     end;
@@ -471,15 +470,11 @@ TextureBuffer[2].Y:= SpritesData[sprWater].Texture^.ry;
 TextureBuffer[3].X:= TextureBuffer[0].X;
 TextureBuffer[3].Y:= TextureBuffer[2].Y;
 
-glEnableClientState(GL_VERTEX_ARRAY);
-glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-glDisableClientState(GL_VERTEX_ARRAY);
 Tint($FF, $FF, $FF, $FF);
 
 {for i:= -1 to cWaterSprCount do
@@ -963,10 +958,10 @@ if ScreenFade <> sfNone then
         VertexBuffer[3].Y:= cScreenHeight;
          
         glDisable(GL_TEXTURE_2D);
-        glEnableClientState(GL_VERTEX_ARRAY);
+
         glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
         glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-        glDisableClientState(GL_VERTEX_ARRAY);
+
         glEnable(GL_TEXTURE_2D);
         Tint($FF, $FF, $FF, $FF);
         if not isFirstFrame and ((ScreenFadeValue = 0) or (ScreenFadeValue = sfMax)) then ScreenFade:= sfNone

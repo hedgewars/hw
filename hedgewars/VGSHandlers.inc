@@ -18,7 +18,7 @@
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: float;
 begin
-if ((cReducedQuality and rqkillFlakes) <> 0) then exit;
+if vobCount = 0 then exit;
 
 sign:= 1;
 with Gear^ do

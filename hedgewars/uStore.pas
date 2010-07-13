@@ -522,15 +522,10 @@ TextureBuffer[2].Y:= _b;
 TextureBuffer[3].X:= _l;
 TextureBuffer[3].Y:= _b;
 
-glEnableClientState(GL_VERTEX_ARRAY);
-glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-glDisableClientState(GL_VERTEX_ARRAY)
 end;
 
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
@@ -541,15 +536,9 @@ glScalef(Scale, Scale, 1);
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
-glEnableClientState(GL_VERTEX_ARRAY);
-glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
 glVertexPointer(2, GL_FLOAT, 0, @Texture^.vb);
 glTexCoordPointer(2, GL_FLOAT, 0, @Texture^.tb);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
-
-glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-glDisableClientState(GL_VERTEX_ARRAY);
 
 glPopMatrix
 end;
@@ -611,16 +600,9 @@ TextureBuffer[2].Y:= fb;
 TextureBuffer[3].X:= fl;
 TextureBuffer[3].Y:= fb;
 
-glEnableClientState(GL_VERTEX_ARRAY);
-glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-glDisableClientState(GL_VERTEX_ARRAY);
-
 
 glPopMatrix
 end;
@@ -674,15 +656,9 @@ VertexBuffer[2].Y:= hh;
 VertexBuffer[3].X:= -hw;
 VertexBuffer[3].Y:= hh;
 
-glEnableClientState(GL_VERTEX_ARRAY);
-glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glTexCoordPointer(2, GL_FLOAT, 0, @Tex^.tb);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-glDisableClientState(GL_VERTEX_ARRAY);
 
 glPopMatrix
 end;
@@ -781,15 +757,9 @@ TextureBuffer[2].Y:= b;
 TextureBuffer[3].X:= l;
 TextureBuffer[3].Y:= b;
 
-glEnableClientState(GL_VERTEX_ARRAY);
-glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-glDisableClientState(GL_VERTEX_ARRAY);
 
 glPopMatrix
 end;
@@ -810,10 +780,8 @@ VertexBuffer[2].Y:= r.y + r.h;
 VertexBuffer[3].X:= r.x;
 VertexBuffer[3].Y:= r.y + r.h;
 
-glEnableClientState(GL_VERTEX_ARRAY);
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-glDisableClientState(GL_VERTEX_ARRAY);
 
 Tint($FF, $FF, $FF, $FF);
 glEnable(GL_TEXTURE_2D)
@@ -1241,8 +1209,10 @@ begin
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     // disable dithering
     glDisable(GL_DITHER);
-    // enable 2d textures by default
+    // enable common states by default as they save a lot
     glEnable(GL_TEXTURE_2D);
+    glEnableClientState(GL_VERTEX_ARRAY);                                                                                        
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);  
 end;
 
 procedure SetScale(f: GLfloat);
