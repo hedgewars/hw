@@ -1765,10 +1765,13 @@ begin
             // Standard fire
             if not sticky then
             begin
-                Gear^.Radius := 7;
-                AmmoShove(Gear, 4, 100);
-                Gear^.Radius := 1;
-                doMakeExplosion(gX, gY, 4, 0);//, EXPLNoDamage);
+                if ((GameTicks and $1) = 0) then
+                    begin
+                    Gear^.Radius := 7;
+                    AmmoShove(Gear, 4, 150);
+                    Gear^.Radius := 1;
+                    end
+                else if ((GameTicks and $3) = 3) then doMakeExplosion(gX, gY, 6, 0);//, EXPLNoDamage); 
                 //DrawExplosion(gX, gY, 4);
                 if ((GameTicks and $7) = 0) and (Random(2) = 0) then
                     for i:= 1 to Random(2)+1 do
