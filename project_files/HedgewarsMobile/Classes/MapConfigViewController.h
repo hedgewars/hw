@@ -22,6 +22,7 @@
     NSString *mapGenCommand;
     NSString *mazeSizeCommand;
     NSString *themeCommand;
+    NSString *staticMapCommand;
    
     // various widgets in the view
     UIButton *previewButton;
@@ -44,6 +45,7 @@
 @property (nonatomic,retain) NSString *mapGenCommand;
 @property (nonatomic,retain) NSString *mazeSizeCommand;
 @property (nonatomic,retain) NSString *themeCommand;
+@property (nonatomic,retain) NSString *staticMapCommand;
 
 @property (nonatomic,retain) IBOutlet UIButton *previewButton;
 @property (nonatomic,retain) IBOutlet UITableView *tableView;

@@ -290,6 +290,11 @@
                 [self sendToEngine:[self.gameConfig objectForKey:@"mapgen_command"]];
                 [self sendToEngine:[self.gameConfig objectForKey:@"mazesize_command"]];
                 
+                // static land (if set)
+                NSString *staticMap = [self.gameConfig objectForKey:@"staticmap_command"];
+                if ([staticMap length] != 0)
+                    [self sendToEngine:staticMap];
+                
                 // theme info
                 [self sendToEngine:[self.gameConfig objectForKey:@"theme_command"]];
                 

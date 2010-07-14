@@ -149,6 +149,7 @@
                                                                       mapConfigViewController.mapGenCommand,@"mapgen_command",
                                                                       mapConfigViewController.mazeSizeCommand,@"mazesize_command",
                                                                       mapConfigViewController.themeCommand,@"theme_command",
+                                                                      mapConfigViewController.staticMapCommand,@"staticmap_command",
                                                                       teamConfigViewController.listOfSelectedTeams,@"teams_list",
                                                                       schemeWeaponConfigViewController.selectedScheme,@"scheme",
                                                                       schemeWeaponConfigViewController.selectedWeapon,@"weapon",
@@ -157,7 +158,7 @@
     // finally launch game and remove this controller
     DLog(@"sending config %@", gameDictionary);
     
-    if ([[gameDictionary allKeys] count] == 8) {
+    if ([[gameDictionary allKeys] count] == 9) {
         [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:gameDictionary];
     } else {
         DLog(@"gameconfig data not complete!!\nmapConfigViewController = %@\nteamConfigViewController = %@\nschemeWeaponConfigViewController = %@\n",

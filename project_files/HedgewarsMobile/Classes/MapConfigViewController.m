@@ -16,7 +16,7 @@
 #define INDICATOR_TAG 7654
 
 @implementation MapConfigViewController
-@synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand,
+@synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
             tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, themeArray, mapArray, busy;
 
 
@@ -191,6 +191,7 @@
     [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionNone animated:YES];
 }
 
+// instead of drawing a random map we load an image; this function is called by didSelectRowAtIndexPath only
 -(void) updatePreviewWithMap:(NSInteger) index {
     // change the preview button
     NSString *fileImage = [[NSString alloc] initWithFormat:@"%@/%@/preview.png", MAPS_DIRECTORY(),[self.mapArray objectAtIndex:index]];
@@ -205,12 +206,16 @@
     NSString *contents = [[NSString alloc] initWithContentsOfFile:fileCfg encoding:NSUTF8StringEncoding error:NULL];
     [fileCfg release];
     NSArray *split = [contents componentsSeparatedByString:@"\n"];
+    [contents release];
 
+    // set the theme and map here
+    self.themeCommand = [NSString stringWithFormat:@"etheme %@", [split objectAtIndex:0]];
+    self.staticMapCommand = [NSString stringWithFormat:@"emap %@", [self.mapArray objectAtIndex:index]];
+    
     // if the number is not set we keep 18 standard; 
     // sometimes it's not set but there are trailing characters, we get around them with the second equation
     if ([split count] > 1 && [[split objectAtIndex:1] intValue] > 0)
         maxHogs = [[split objectAtIndex:1] intValue];
-    [contents release];
     NSString *max = [[NSString alloc] initWithFormat:@"%d",maxHogs];
     self.maxLabel.text = max;
     [max release];
@@ -316,11 +321,13 @@
     
     if (newRow != oldRow) {
         if (self.segmentedControl.selectedSegmentIndex != 1) {
-            NSString *theme = [self.themeArray objectAtIndex:newRow];
-            self.themeCommand =  [NSString stringWithFormat:@"etheme %@", theme];
-        } else
+            NSString *theme = [self.themeArray objectAtIndex:newRow];                
+            self.themeCommand = [NSString stringWithFormat:@"etheme %@", theme];
+        } else {
+            // theme and map are set in the function below
             [self updatePreviewWithMap:newRow];
-
+        }
+        
         UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath]; 
         newCell.accessoryType = UITableViewCellAccessoryCheckmark;
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:self.lastIndexPath];
@@ -421,18 +428,21 @@
 // updatePreview will call didSelectRowAtIndexPath which will call the right update routine)
 // and if necessary update the table with a slide animation
 -(IBAction) segmentedControlChanged:(id) sender {
-    NSString *mapgen;
+    NSString *mapgen, *staticmap;
     NSInteger newPage = self.segmentedControl.selectedSegmentIndex;
     
     switch (newPage) {
         case 0: // Random
             mapgen = @"e$mapgen 0";
+            staticmap = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
             break;
             
         case 1: // Map
             mapgen = @"e$mapgen 0";
+            // dummy value, everything is set by -updatePreview -> -didSelectRowAtIndexPath -> -updatePreviewWithMap
+            staticmap = @"map Bamboo";
             self.slider.enabled = NO;
             self.sizeLabel.text = @".";
             [self restoreBackgroundImage];
@@ -440,15 +450,18 @@
             
         case 2: // Maze
             mapgen = @"e$mapgen 1";
+            staticmap = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
             break;
         
         default:
             mapgen = nil;
+            staticmap = nil;
             break;
     }
     self.mapGenCommand = mapgen;
+    self.staticMapCommand = staticmap;
     [self updatePreview];
     
     // nice animation for updating the table when appropriate (on iphone)
@@ -508,6 +521,8 @@
     self.templateFilterCommand = @"e$template_filter 0";
     self.mazeSizeCommand = @"e$maze_size 0";
     self.mapGenCommand = @"e$mapgen 0";
+    self.staticMapCommand = @"";
+    
     self.lastIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
     oldValue = 5;
@@ -532,6 +547,7 @@
     self.mapGenCommand = nil;
     self.mazeSizeCommand = nil;
     self.themeCommand = nil;
+    self.staticMapCommand = nil;
     
     self.previewButton = nil;
     self.tableView = nil;
@@ -554,6 +570,7 @@
     [mapGenCommand release];
     [mazeSizeCommand release];
     [themeCommand release];
+    [staticMapCommand release];
     
     [previewButton release];
     [tableView release];
