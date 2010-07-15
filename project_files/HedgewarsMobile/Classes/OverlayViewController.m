@@ -17,7 +17,12 @@
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
 #define HIDING_TIME_NEVER   [NSDate dateWithTimeIntervalSinceNow:10000]
+#define doDim()             [dimTimer setFireDate:HIDING_TIME_DEFAULT]
+#define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
+#define CONFIRMATION_TAG 5959
+#define ANIMATION_DURATION 0.25
+#define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview]; 
 
 @implementation OverlayViewController
 @synthesize popoverController, popupMenu;
@@ -189,7 +194,7 @@
 // set the overlay visible and put off the timer for enough time
 -(void) activateOverlay {
     self.view.alpha = 1;
-    [dimTimer setFireDate:HIDING_TIME_NEVER];
+    doNotDim();
 }
 
 // dim the overlay when there's no more input for a certain amount of time
@@ -216,7 +221,7 @@
             break;
     }
 
-    [dimTimer setFireDate:HIDING_TIME_DEFAULT];
+    doDim();
 }
 
 // issue certain action based on the tag of the button 
@@ -352,6 +357,9 @@
     }
     */
     
+    // reset default dimming
+    doDim();
+    
     switch ([allTouches count]) {
         case 1:            
             removeConfirmationInput();
@@ -403,6 +411,9 @@
                     [UIView setAnimationDuration:ANIMATION_DURATION];
                     [self.view viewWithTag:CONFIRMATION_TAG].alpha = 1;
                     [UIView commitAnimations];
+                    
+                    // keep the overlay active, or the button will fade
+                    doNotDim();
                 }
             break;
         case 2:
@@ -419,6 +430,7 @@
 -(void) sendHWClick {
     HW_click();
     removeConfirmationInput();
+    doDim();
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {

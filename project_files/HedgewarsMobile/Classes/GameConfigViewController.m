@@ -164,6 +164,26 @@
         DLog(@"gameconfig data not complete!!\nmapConfigViewController = %@\nteamConfigViewController = %@\nschemeWeaponConfigViewController = %@\n",
              mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController);
         [self.parentViewController dismissModalViewControllerAnimated:YES];
+        
+        // present an alert to the user, with an image on the ipad (too big for the iphone)
+        NSString *msg = NSLocalizedString(@"Something went wrong with your configuration. Please try again.",@"");
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            msg = [msg stringByAppendingString:@"\n\n\n\n\n\n\n\n"];    // this makes space for the image
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Whoops"
+                                                        message:msg
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            UIImageView *deniedImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"denied.png"]];
+            deniedImg.frame = CGRectMake(25, 80, 240, 160);
+            [alert addSubview:deniedImg];
+            [deniedImg release];
+        }
+        [alert show];
+        [alert release];
     }
 
 }

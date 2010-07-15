@@ -29,6 +29,7 @@
 		611F4D4B11B27A9900F9759A /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 611F4D4A11B27A9900F9759A /* uScript.pas */; };
 		61272334117DF764005B90CF /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272333117DF752005B90CF /* libSDL_image.a */; };
 		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
+		6129B9F711EFB04D0017E305 /* denied.png in Resources */ = {isa = PBXBuildFile; fileRef = 6129B9F611EFB04D0017E305 /* denied.png */; };
 		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
 		61536CCF11CE836E00D87A7E /* libfreetype_x86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798917114AAF2100BA94A9 /* libfreetype_x86.a */; };
 		61536DF411CEAE7100D87A7E /* GameConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */; };
@@ -250,6 +251,7 @@
 		611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HedgewarsTitle.png; path = ../../QTfrontend/res/HedgewarsTitle.png; sourceTree = SOURCE_ROOT; };
 		6127232E117DF752005B90CF /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = "../../../Library/SDL-1.3/SDL_image/Xcode_iPhone/SDL_image.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61272338117DF778005B90CF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		6129B9F611EFB04D0017E305 /* denied.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = denied.png; path = Resources/denied.png; sourceTree = "<group>"; };
 		61370652117B1D50004EE44A /* Entitlements-Distribution.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Distribution.plist"; sourceTree = "<group>"; };
 		614E333D11DE9A93009DBA4E /* VGSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = VGSHandlers.inc; path = ../../hedgewars/VGSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		6163EE7C11CC2600001C0453 /* SingleWeaponViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleWeaponViewController.h; sourceTree = "<group>"; };
@@ -529,6 +531,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6129B9F611EFB04D0017E305 /* denied.png */,
 				61F7A42811E2905C0040BA66 /* Icons */,
 				61F903FA11DF58680068B24D /* Frontend-iPad */,
 				61F903E311DF584D0068B24D /* Frontend-iPhone */,
@@ -1056,6 +1059,7 @@
 				6183D83E11E2BCE200A88903 /* LI-ipad-Landscape.png in Resources */,
 				6183D83F11E2BCE200A88903 /* LI-iphone-Landscape.png in Resources */,
 				619C09EA11E8B8D600F1DF16 /* title_small.png in Resources */,
+				6129B9F711EFB04D0017E305 /* denied.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

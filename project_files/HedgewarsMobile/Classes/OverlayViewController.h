@@ -8,10 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define CONFIRMATION_TAG 5959
-#define ANIMATION_DURATION 0.25
-#define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview]; 
-
 @class PopoverMenuViewController;
 
 @interface OverlayViewController : UIViewController {
