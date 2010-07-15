@@ -10,7 +10,7 @@
 
 @protocol WeaponButtonControllerDelegate <NSObject>
 
--(void) buttonPressed:(id) sender;
+-(void) valueChanged:(id) sender;
 
 @end
 
@@ -19,10 +19,21 @@
     UILabel *weaponName;
     UIImageView *weaponIcon;
     
-    UIButton *initialQt;
-    UIButton *probability;
-    UIButton *delay;
-    UIButton *crateQt;
+    UISlider *initialQt;
+    UISlider *probabilityQt;
+    UISlider *delayQt;
+    UISlider *crateQt;
+    
+@private
+    UIImageView *initialImg;
+    UIImageView *probabImg;
+    UIImageView *delayImg;
+    UIImageView *crateImg;
+    
+    UILabel *initialLab;
+    UILabel *probLab;
+    UILabel *delLab;
+    UILabel *craLab;
 }
 
 @property (nonatomic,assign) id<WeaponButtonControllerDelegate> delegate;
@@ -30,9 +41,19 @@
 @property (nonatomic,retain) UILabel *weaponName;
 @property (nonatomic,retain) UIImageView *weaponIcon;
     
-@property (nonatomic,retain) UIButton *initialQt;
-@property (nonatomic,retain) UIButton *probability;
-@property (nonatomic,retain) UIButton *delay;
-@property (nonatomic,retain) UIButton *crateQt;
+@property (nonatomic,retain) UISlider *initialQt;
+@property (nonatomic,retain) UISlider *probabilityQt;
+@property (nonatomic,retain) UISlider *delayQt;
+@property (nonatomic,retain) UISlider *crateQt;
+
+@property (nonatomic,retain) UIImageView *initialImg;
+@property (nonatomic,retain) UIImageView *probabImg;
+@property (nonatomic,retain) UIImageView *delayImg;
+@property (nonatomic,retain) UIImageView *crateImg;
+
+@property (nonatomic,retain) UILabel *initialLab;
+@property (nonatomic,retain) UILabel *probLab;
+@property (nonatomic,retain) UILabel *delLab;
+@property (nonatomic,retain) UILabel *craLab;
 
 @end

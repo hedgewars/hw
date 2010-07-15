@@ -256,7 +256,12 @@
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 
                                                reuseIdentifier:CellIdentifier1] autorelease];
-                UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(260, 12, 150, 23)];
+                
+                int offset = 0;
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                    offset = 45;
+                
+                UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(offset+260, 12, offset+150, 23)];
                 slider.maximumValue = [[detail objectForKey:@"max"] floatValue];
                 slider.minimumValue = [[detail objectForKey:@"min"] floatValue];
                 slider.tag = row+gmSize;
