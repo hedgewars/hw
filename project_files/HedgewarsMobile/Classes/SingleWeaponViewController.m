@@ -74,10 +74,10 @@
     self.ammoNames = array;
     [array release];
 
-    quantity = (char *)malloc(sizeof(char)*CURRENT_AMMOSIZE);
-    probability = (char *)malloc(sizeof(char)*CURRENT_AMMOSIZE);
-    delay = (char *)malloc(sizeof(char)*CURRENT_AMMOSIZE);
-    crateness = (char *)malloc(sizeof(char)*CURRENT_AMMOSIZE);
+    quantity = (char *)malloc(sizeof(char)*(CURRENT_AMMOSIZE+1));
+    probability = (char *)malloc(sizeof(char)*(CURRENT_AMMOSIZE+1));
+    delay = (char *)malloc(sizeof(char)*(CURRENT_AMMOSIZE+1));
+    crateness = (char *)malloc(sizeof(char)*(CURRENT_AMMOSIZE+1));
     
     NSString *str = [NSString stringWithFormat:@"%@/AmmoMenu/Ammos.png",GRAPHICS_DIRECTORY()];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:str];
@@ -121,6 +121,11 @@
 
 -(void) viewWillDisappear:(BOOL) animated {
     [super viewWillDisappear:animated];
+    
+    quantity[CURRENT_AMMOSIZE] = '\0';
+    probability[CURRENT_AMMOSIZE] = '\0';
+    delay[CURRENT_AMMOSIZE] = '\0';
+    crateness[CURRENT_AMMOSIZE] = '\0';
     
     NSString *quantityStr = [NSString stringWithUTF8String:quantity];
     NSString *probabilityStr = [NSString stringWithUTF8String:probability];
@@ -172,7 +177,7 @@
     [cell.initialQt setValue:[[NSString stringWithFormat:@"%c",quantity[row]] intValue] animated:NO];
     [cell.probabilityQt setValue:[[NSString stringWithFormat:@"%c", probability[row]] intValue] animated:NO];
     [cell.delayQt setValue:[[NSString stringWithFormat:@"%c", delay[row]] intValue] animated:NO];
-    [cell.crateQt setValue:[[NSString stringWithFormat:@"%c",crateness[row]] intValue] animated:NO];
+    [cell.crateQt setValue:[[NSString stringWithFormat:@"%c", crateness[row]] intValue] animated:NO];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
@@ -194,9 +199,11 @@
 
 #pragma mark -
 #pragma mark WeaponButtonControllerDelegate
--(void) valueChanged:(id) sender {
-   // UIButton *button = (UIButton *)sender;
-   // DLog(@"%@ %d", button.titleLabel.text, button.tag);
+-(void) updateValues:(NSArray *)withArray atIndex:(NSInteger) index {
+    quantity[index] = [[NSString stringWithFormat:@"%d",[[withArray objectAtIndex:0] intValue]] characterAtIndex:0];
+    probability[index] = [[NSString stringWithFormat:@"%d",[[withArray objectAtIndex:1] intValue]] characterAtIndex:0];
+    delay[index] = [[NSString stringWithFormat:@"%d",[[withArray objectAtIndex:2] intValue]] characterAtIndex:0];
+    crateness[index] = [[NSString stringWithFormat:@"%d",[[withArray objectAtIndex:3] intValue]] characterAtIndex:0];
 }
 
 #pragma mark -

@@ -144,8 +144,12 @@
         delLab.text = ((int)delayQt.value == 9) ? @"∞" : [NSString stringWithFormat:@"%d",(int)delayQt.value];
         craLab.text = ((int)crateQt.value == 9) ? @"∞" : [NSString stringWithFormat:@"%d",(int)crateQt.value];
         
-        [(UISlider *)sender setTag:self.tag];
-        [delegate valueChanged:sender];
+        [delegate updateValues:[NSArray arrayWithObjects:
+                                [NSNumber numberWithInt:(int)initialQt.value],
+                                [NSNumber numberWithInt:(int)probabilityQt.value],
+                                [NSNumber numberWithInt:(int)delayQt.value],
+                                [NSNumber numberWithInt:(int)crateQt.value], nil] 
+                       atIndex:self.tag];
     } else
         DLog(@"error - delegate = nil!");
 }

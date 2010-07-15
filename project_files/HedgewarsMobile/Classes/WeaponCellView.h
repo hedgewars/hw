@@ -10,7 +10,7 @@
 
 @protocol WeaponButtonControllerDelegate <NSObject>
 
--(void) valueChanged:(id) sender;
+-(void) updateValues:(NSArray *)withArray atIndex:(NSInteger) index;
 
 @end
 
