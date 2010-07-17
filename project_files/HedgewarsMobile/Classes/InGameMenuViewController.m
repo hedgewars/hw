@@ -7,19 +7,18 @@
 //
 
 #import "SDL_uikitappdelegate.h"
-#import "PopoverMenuViewController.h"
+#import "InGameMenuViewController.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "SDL_sysvideo.h"
 
-@implementation PopoverMenuViewController
+@implementation InGameMenuViewController
 @synthesize menuList;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
-
 
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -36,6 +35,11 @@
                       nil];
     self.menuList = array;
     [array release];
+    
+    // save the sdl window (!= uikit window) for future reference
+    SDL_VideoDevice *_this = SDL_GetVideoDevice();
+    SDL_VideoDisplay *display = &_this->displays[0];
+    sdlwindow = display->windows;
     
     [super viewDidLoad];
 }
@@ -84,12 +88,7 @@
             break;
         case 1:
             HW_chat();
-            /*
-            SDL_VideoDevice *_this = SDL_GetVideoDevice();
-            SDL_VideoDisplay *display = &_this->displays[0];
-            SDL_Window *window = display->windows;
-            SDL_iPhoneKeyboardShow(window);
-            */
+            SDL_iPhoneKeyboardShow(sdlwindow);
             break;
         case 2:
             // expand the view (and table) so that the actionsheet can be selected on the iPhone

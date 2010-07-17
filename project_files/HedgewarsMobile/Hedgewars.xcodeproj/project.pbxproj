@@ -47,7 +47,7 @@
 		6165921611CA9BA200D6E256 /* MapConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591F311CA9BA200D6E256 /* MapConfigViewController.m */; };
 		6165921711CA9BA200D6E256 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591F511CA9BA200D6E256 /* MasterViewController.m */; };
 		6165921811CA9BA200D6E256 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591F711CA9BA200D6E256 /* OverlayViewController.m */; };
-		6165921911CA9BA200D6E256 /* PopoverMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591F911CA9BA200D6E256 /* PopoverMenuViewController.m */; };
+		6165921911CA9BA200D6E256 /* InGameMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591F911CA9BA200D6E256 /* InGameMenuViewController.m */; };
 		6165921A11CA9BA200D6E256 /* SchemeSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591FB11CA9BA200D6E256 /* SchemeSettingsViewController.m */; };
 		6165921B11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591FD11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m */; };
 		6165921C11CA9BA200D6E256 /* SingleSchemeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */; };
@@ -282,8 +282,8 @@
 		616591F511CA9BA200D6E256 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
 		616591F611CA9BA200D6E256 /* OverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlayViewController.h; sourceTree = "<group>"; };
 		616591F711CA9BA200D6E256 /* OverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OverlayViewController.m; sourceTree = "<group>"; };
-		616591F811CA9BA200D6E256 /* PopoverMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverMenuViewController.h; sourceTree = "<group>"; };
-		616591F911CA9BA200D6E256 /* PopoverMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverMenuViewController.m; sourceTree = "<group>"; };
+		616591F811CA9BA200D6E256 /* InGameMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InGameMenuViewController.h; sourceTree = "<group>"; };
+		616591F911CA9BA200D6E256 /* InGameMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InGameMenuViewController.m; sourceTree = "<group>"; };
 		616591FA11CA9BA200D6E256 /* SchemeSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchemeSettingsViewController.h; sourceTree = "<group>"; };
 		616591FB11CA9BA200D6E256 /* SchemeSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchemeSettingsViewController.m; sourceTree = "<group>"; };
 		616591FC11CA9BA200D6E256 /* SchemeWeaponConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchemeWeaponConfigViewController.h; sourceTree = "<group>"; };
@@ -661,8 +661,8 @@
 		6163EE6C11CC253F001C0453 /* Overlay */ = {
 			isa = PBXGroup;
 			children = (
-				616591F811CA9BA200D6E256 /* PopoverMenuViewController.h */,
-				616591F911CA9BA200D6E256 /* PopoverMenuViewController.m */,
+				616591F811CA9BA200D6E256 /* InGameMenuViewController.h */,
+				616591F911CA9BA200D6E256 /* InGameMenuViewController.m */,
 				616591F611CA9BA200D6E256 /* OverlayViewController.h */,
 				616591F711CA9BA200D6E256 /* OverlayViewController.m */,
 				6165925011CA9CB400D6E256 /* OverlayViewController.xib */,
@@ -1163,7 +1163,7 @@
 				6165921611CA9BA200D6E256 /* MapConfigViewController.m in Sources */,
 				6165921711CA9BA200D6E256 /* MasterViewController.m in Sources */,
 				6165921811CA9BA200D6E256 /* OverlayViewController.m in Sources */,
-				6165921911CA9BA200D6E256 /* PopoverMenuViewController.m in Sources */,
+				6165921911CA9BA200D6E256 /* InGameMenuViewController.m in Sources */,
 				6165921A11CA9BA200D6E256 /* SchemeSettingsViewController.m in Sources */,
 				6165921B11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m in Sources */,
 				6165921C11CA9BA200D6E256 /* SingleSchemeViewController.m in Sources */,

@@ -7,23 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SDL_sysvideo.h"
 
-@class PopoverMenuViewController;
+@class InGameMenuViewController;
 
 @interface OverlayViewController : UIViewController {
+    // the timer that dims the overlay
     NSTimer *dimTimer;
 
-    // used only on the ipad
-    UIPopoverController *popoverController;
-
-    PopoverMenuViewController *popupMenu;
+    // the in-game menu
+    UIPopoverController *popoverController; // iPad only
+    InGameMenuViewController *popupMenu;
     BOOL isPopoverVisible;
     
+    // ths touch section
     CGFloat initialDistanceForPinching;
+    
+    // the sdl window underneath
+    SDL_Window *sdlwindow;
 }
 
 @property (nonatomic,retain) id popoverController;
-@property (nonatomic,retain) PopoverMenuViewController *popupMenu;
+@property (nonatomic,retain) InGameMenuViewController *popupMenu;
 
 BOOL isGameRunning;
 
@@ -39,7 +44,5 @@ BOOL isGameRunning;
 -(void) dismissPopover;
 -(void) dimOverlay;
 -(void) activateOverlay;
--(void) chatAppear;
--(void) chatDisappear;
 
 @end

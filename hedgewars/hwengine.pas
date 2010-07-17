@@ -151,7 +151,13 @@ begin
         while SDL_PollEvent(@event) <> 0 do
         begin
             case event.type_ of
-                SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
+                SDL_KEYDOWN: if GameState = gsChat then
+{$IFDEF IPHONEOS}
+                    // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
+                    KeyPressChat(event.key.keysym.sym);
+{$ELSE}
+                    KeyPressChat(event.key.keysym.unicode);
+{$ENDIF}
 {$IFDEF SDL13}
                 SDL_WINDOWEVENT:
                     if event.wevent.event = SDL_WINDOWEVENT_SHOWN then

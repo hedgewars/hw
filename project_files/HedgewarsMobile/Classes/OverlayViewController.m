@@ -12,7 +12,7 @@
 #import "CGPointUtils.h"
 #import "SDL_mouse.h"
 #import "SDL_config_iphoneos.h"
-#import "PopoverMenuViewController.h"
+#import "InGameMenuViewController.h"
 #import "CommodityFunctions.h"
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
@@ -44,13 +44,11 @@
         case UIDeviceOrientationLandscapeLeft:
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
-            [self chatDisappear];
             HW_setLandscape(YES);
             break;
         case UIDeviceOrientationLandscapeRight:
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(-90));
-            [self chatDisappear];
             HW_setLandscape(YES);
             break;
         /*
@@ -77,35 +75,6 @@
     self.view.frame = usefulRect;
     //sdlView.frame = usefulRect;
     [UIView commitAnimations];
-}
-
--(void) chatAppear {
-    /*
-    if (writeChatTextField == nil) {
-        writeChatTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 100, 768, [UIFont systemFontSize]+8)];
-        writeChatTextField.textColor = [UIColor whiteColor];
-        writeChatTextField.backgroundColor = [UIColor blueColor];
-        writeChatTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        writeChatTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-        writeChatTextField.enablesReturnKeyAutomatically = NO;
-        writeChatTextField.keyboardAppearance = UIKeyboardAppearanceDefault;
-        writeChatTextField.keyboardType = UIKeyboardTypeDefault;
-        writeChatTextField.returnKeyType = UIReturnKeyDefault;
-        writeChatTextField.secureTextEntry = NO;    
-        [self.view addSubview:writeChatTextField];
-    }
-    writeChatTextField.alpha = 1;
-    [self activateOverlay];
-    [dimTimer setFireDate:HIDING_TIME_NEVER];
-    */
-}
-
--(void) chatDisappear {
-    /*
-    writeChatTextField.alpha = 0;
-    [writeChatTextField resignFirstResponder];
-    [dimTimer setFireDate:HIDING_TIME_DEFAULT];
-    */
 }
 
 #pragma mark -
@@ -151,6 +120,11 @@
     [UIView setAnimationDuration:1];
     self.view.alpha = 1;
     [UIView commitAnimations];
+    
+    // find the sdl window we're on
+    SDL_VideoDevice *_this = SDL_GetVideoDevice();
+    SDL_VideoDisplay *display = &_this->displays[0];
+    sdlwindow = display->windows;
 }
 
 /* these are causing problems at reloading so let's remove 'em
@@ -290,7 +264,7 @@
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (popupMenu == nil) 
-            popupMenu = [[PopoverMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+            popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStylePlain];
         if (popoverController == nil) {
             popoverController = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
             [popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
@@ -303,7 +277,7 @@
                                          animated:YES];
     } else {
         if (popupMenu == nil) {
-            popupMenu = [[PopoverMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
             popupMenu.view.backgroundColor = [UIColor clearColor];
             popupMenu.view.frame = CGRectMake(480, 0, 200, 170);
         }
@@ -347,15 +321,13 @@
     NSSet *allTouches = [event allTouches];
     UITouch *first, *second;
     
-    if (isPopoverVisible) {
+    // hide in-game menu
+    if (isPopoverVisible)
         [self dismissPopover];
-    }
-    /*
-    if (writeChatTextField) {
-        [self.writeChatTextField resignFirstResponder];
-        [dimTimer setFireDate:HIDING_TIME_DEFAULT];
-    }
-    */
+    
+    // remove keyboard from the view
+    if (SDL_iPhoneKeyboardIsShown(sdlwindow))
+        SDL_iPhoneKeyboardHide(sdlwindow);
     
     // reset default dimming
     doDim();
