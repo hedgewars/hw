@@ -39,6 +39,8 @@ extern "C" {
     void HW_walkRight(void);
     void HW_aimUp(void);
     void HW_aimDown(void);
+    void HW_preciseSet(BOOL status);
+    
     void HW_shoot(void);
     void HW_jump(void);
     void HW_backjump(void);
@@ -53,14 +55,15 @@ extern "C" {
     void HW_cursorLeft(int);
     void HW_cursorRight(int);
     
-    void HW_terminate(BOOL);
+    void HW_terminate(BOOL andCloseFrontend);
     
-    void HW_setLandscape(BOOL);
+    void HW_setLandscape(BOOL rotate);
     void HW_setCursor(int x, int y);
     void HW_saveCursor(BOOL reset);
     
     BOOL HW_isAmmoOpen(void);
     BOOL HW_isWeaponRequiringClick(void);
+    
 #ifdef __cplusplus
 }
 #endif

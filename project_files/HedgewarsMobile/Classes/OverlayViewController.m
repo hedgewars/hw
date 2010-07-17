@@ -183,6 +183,9 @@
         case 1:
         case 2:
         case 3:
+            [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                                     selector:@selector(unsetPreciseStatus)
+                                                       object:nil];
             HW_walkingKeysUp();
             break;
         case 4:
@@ -218,9 +221,13 @@
             HW_walkRight();
             break;
         case 2:
+            [self performSelector:@selector(unsetPreciseStatus) withObject:nil afterDelay:0.8];
+            HW_preciseSet(YES);
             HW_aimUp();
             break;
         case 3:
+            [self performSelector:@selector(unsetPreciseStatus) withObject:nil afterDelay:0.8];
+            HW_preciseSet(YES);
             HW_aimDown();
             break;
         case 4:
@@ -247,6 +254,10 @@
             DLog(@"Nope");
             break;
     }
+}
+
+-(void) unsetPreciseStatus {
+    HW_preciseSet(NO);
 }
 
 // present a further check before closing game

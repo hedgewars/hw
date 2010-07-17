@@ -70,7 +70,8 @@ var hideAmmoMenu: boolean;
     downKey: boolean;
     rightKey: boolean;
     leftKey: boolean;
-
+    preciseKey: boolean;
+    
     backspaceKey: boolean;
     spaceKey: boolean;
     enterKey: boolean;
@@ -342,6 +343,7 @@ DefaultBinds[23]:= '+up';
 DefaultBinds[24]:= '+down';
 DefaultBinds[25]:= '+left';
 DefaultBinds[26]:= '+right';
+DefaultBinds[27]:= '+precise';
 DefaultBinds[44]:= 'chat';
 DefaultBinds[55]:= 'pause';
 DefaultBinds[66]:= '+cur_u';
@@ -380,6 +382,7 @@ begin
     tkbdn[24]:= ord(downKey);
     tkbdn[25]:= ord(leftKey);
     tkbdn[26]:= ord(rightKey);
+    tkbdn[27]:= ord(preciseKey);
 
     tkbdn[ 8]:= ord(backspaceKey);
     tkbdn[ 9]:= ord(tabKey);
@@ -520,6 +523,7 @@ begin
     downKey:= false;
     rightKey:= false;
     leftKey:= false;
+    preciseKey:= false;
 
     // action key emulation
     backspaceKey:= false;

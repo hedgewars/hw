@@ -63,6 +63,7 @@ begin
     rightKey:= false;
     upKey:= false;
     downKey:= false;
+    preciseKey:= false;
 end;
 
 procedure HW_otherKeysUp; cdecl; export;
@@ -86,6 +87,11 @@ end;
 procedure HW_walkRight; cdecl; export;
 begin
     rightKey:= true;
+end;
+
+procedure HW_preciseSet(status:boolean); cdecl; export;
+begin
+    preciseKey:= status;
 end;
 
 procedure HW_aimUp; cdecl; export;

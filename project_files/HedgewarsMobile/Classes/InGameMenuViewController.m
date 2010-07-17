@@ -158,9 +158,10 @@
 #pragma mark actionSheet methods
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        CGRect screen = [[UIScreen mainScreen] bounds];
         [UIView beginAnimations:@"table width less" context:NULL];
         [UIView setAnimationDuration:0.2];
-        self.view.frame = CGRectMake(280, 0, 200, 170);
+        self.view.frame = CGRectMake(screen.size.height-200, 0, 200, 170);
         [UIView commitAnimations];
     }
     
