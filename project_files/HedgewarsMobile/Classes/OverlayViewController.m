@@ -11,9 +11,9 @@
 #import "PascalImports.h"
 #import "CGPointUtils.h"
 #import "SDL_mouse.h"
-#import "SDL_config_iphoneos.h"
 #import "InGameMenuViewController.h"
 #import "CommodityFunctions.h"
+#import "SDL_config_iphoneos.h"
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
 #define HIDING_TIME_NEVER   [NSDate dateWithTimeIntervalSinceNow:10000]
@@ -35,7 +35,7 @@
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     CGRect rect = [[UIScreen mainScreen] bounds];
     CGRect usefulRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
-    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:12345];
+    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
     
     [UIView beginAnimations:@"rotation" context:NULL];
     [UIView setAnimationDuration:0.8f];
@@ -276,17 +276,11 @@
                          permittedArrowDirections:UIPopoverArrowDirectionUp
                                          animated:YES];
     } else {
-        if (popupMenu == nil) {
+        if (popupMenu == nil)
             popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            popupMenu.view.backgroundColor = [UIColor clearColor];
-            popupMenu.view.frame = CGRectMake(480, 0, 200, 170);
-        }
-        [self.view addSubview:popupMenu.view];
         
-        [UIView beginAnimations:@"showing popover" context:NULL];
-        [UIView setAnimationDuration:0.35];
-        popupMenu.view.frame = CGRectMake(280, 0, 200, 170);
-        [UIView commitAnimations];
+        [self.view addSubview:popupMenu.view];
+        [popupMenu present];
     }
     popupMenu.tableView.scrollEnabled = NO;
 }
@@ -297,14 +291,10 @@
         isPopoverVisible = NO;
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [(InGameMenuViewController *)popoverController.contentViewController removeChat];
             [popoverController dismissPopoverAnimated:YES];
         } else {
-            [UIView beginAnimations:@"hiding popover" context:NULL];
-            [UIView setAnimationDuration:0.35];
-            popupMenu.view.frame = CGRectMake(480, 0, 200, 170);
-            [UIView commitAnimations];
-        
-            [popupMenu.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.35];
+            [popupMenu dismiss];
         }
         [self buttonReleased:nil];
     }
@@ -324,10 +314,6 @@
     // hide in-game menu
     if (isPopoverVisible)
         [self dismissPopover];
-    
-    // remove keyboard from the view
-    if (SDL_iPhoneKeyboardIsShown(sdlwindow))
-        SDL_iPhoneKeyboardHide(sdlwindow);
     
     // reset default dimming
     doDim();

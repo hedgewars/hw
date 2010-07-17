@@ -44,6 +44,7 @@ extern "C" {
     void HW_backjump(void);
     
     void HW_chat(void);
+    void HW_chatEnd(void);
     void HW_tab(void);
     void HW_pause(void);
     

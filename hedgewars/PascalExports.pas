@@ -13,7 +13,7 @@
 unit PascalExports;
 
 interface
-uses uKeys, GLunit, uWorld, uMisc, uGears, uConsole, uTeams, uConsts, hwengine;
+uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat, hwengine;
 
 {$INCLUDE "config.inc"}
 
@@ -116,6 +116,12 @@ end;
 procedure HW_chat; cdecl; export;
 begin
     chatAction:= true;
+end;
+
+procedure HW_chatEnd; cdecl; export;
+begin
+    KeyPressChat(27); // esc - cleans buffer
+    KeyPressChat(13); // enter - removes chat
 end;
 
 procedure HW_tab; cdecl; export;
