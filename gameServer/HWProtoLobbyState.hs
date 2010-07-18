@@ -54,8 +54,7 @@ handleCmd_lobby ["CREATE_ROOM", newRoom, roomPassword]
     | illegalName newRoom = return [Warning "Illegal room name"]
     | otherwise = do
         rs <- allRoomInfos
-        (ci, irnc) <- ask
-        let cl =  irnc `client` ci
+        cl <- thisClient
         return $ if isJust $ find (\room -> newRoom == name room) rs then 
             [Warning "Room exists"]
             else
