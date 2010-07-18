@@ -326,8 +326,9 @@
     doDim();
     
     switch ([allTouches count]) {
-        case 1:            
+        case 1:       
             removeConfirmationInput();
+            startingPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
             if (2 == [[[allTouches allObjects] objectAtIndex:0] tapCount])
                 HW_zoomReset();
             break;
@@ -460,6 +461,8 @@
             } else {
                 DLog(@"x: %f y: %f -> X:%d Y:%d", currentPosition.x, currentPosition.y, HWX(currentPosition.x), HWY(currentPosition.y));
                 HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+                if (HW_isWeaponSwitch())
+                    HW_tab();
             }
             break;
         case 2:

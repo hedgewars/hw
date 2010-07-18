@@ -13,7 +13,7 @@
 unit PascalExports;
 
 interface
-uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat, hwengine;
+uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat, uGears, hwengine;
 
 {$INCLUDE "config.inc"}
 
@@ -119,6 +119,11 @@ begin
     backspaceKey:= true;
 end;
 
+procedure HW_tab; cdecl; export;
+begin
+    tabKey:= true;
+end;
+
 procedure HW_chat; cdecl; export;
 begin
     chatAction:= true;
@@ -130,38 +135,9 @@ begin
     KeyPressChat(13); // enter - removes chat
 end;
 
-procedure HW_tab; cdecl; export;
-begin
-    switchAction:= true;
-end;
-
 procedure HW_pause; cdecl; export;
 begin
     pauseAction:= true;
-end;
-
-procedure HW_cursorUp(coefficient:LongInt); cdecl; export;
-begin
-    coeff:= coefficient;
-    cursorUp:= true;
-end;
-
-procedure HW_cursorDown(coefficient:LongInt); cdecl; export;
-begin
-    coeff:= coefficient;
-    cursorDown:= true;
-end;
-
-procedure HW_cursorLeft(coefficient:LongInt); cdecl; export;
-begin
-    coeff:= coefficient;
-    cursorLeft:= true;
-end;
-
-procedure HW_cursorRight(coefficient:LongInt); cdecl; export;
-begin
-    coeff:= coefficient;
-    cursorRight:= true;
 end;
 
 procedure HW_terminate(closeFrontend: boolean); cdecl; export;
@@ -218,6 +194,14 @@ begin
     CurSlot:= CurrentHedgehog^.CurSlot;
     CurAmmo:= CurrentHedgehog^.CurAmmo;
     exit( (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0)
+end;
+
+function HW_isWeaponSwitch: boolean cdecl; export;
+begin
+    if CurAmmoGear <> nil then
+        exit(CurAmmoGear^.AmmoType = amSwitch) 
+    else
+        exit(false)
 end;
 
 procedure HW_setGrenadeTime(time: LongInt); cdecl; export;

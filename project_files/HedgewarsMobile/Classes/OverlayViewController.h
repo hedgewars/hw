@@ -22,6 +22,7 @@
     
     // ths touch section
     CGFloat initialDistanceForPinching;
+    CGPoint startingPoint;
     BOOL isSegmentVisible;
     
     // the sdl window underneath

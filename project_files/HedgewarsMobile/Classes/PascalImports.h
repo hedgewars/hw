@@ -50,11 +50,6 @@ extern "C" {
     void HW_tab(void);
     void HW_pause(void);
     
-    void HW_cursorUp(int);
-    void HW_cursorDown(int);
-    void HW_cursorLeft(int);
-    void HW_cursorRight(int);
-    
     void HW_terminate(BOOL andCloseFrontend);
     
     void HW_setLandscape(BOOL rotate);
@@ -64,6 +59,7 @@ extern "C" {
     BOOL HW_isAmmoOpen(void);
     BOOL HW_isWeaponRequiringClick(void);
     BOOL HW_isWeaponTimerable(void);
+    BOOL HW_isWeaponSwitch(void);
     
     void HW_setGrenadeTime(int time);
     
