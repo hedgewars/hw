@@ -21,6 +21,7 @@
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
 #define CONFIRMATION_TAG 5959
+#define GRENADE_TAG 9595
 #define ANIMATION_DURATION 0.25
 #define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview]; 
 
@@ -86,7 +87,7 @@
     
     // set initial orientation
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:12345];
+    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
@@ -311,11 +312,6 @@
     }
 }
 
--(void) textFieldDoneEditing:(id) sender{
-    [sender resignFirstResponder];
-}
-
-
 #pragma mark -
 #pragma mark Custom touch event handling
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -382,8 +378,44 @@
                     [UIView commitAnimations];
                     
                     // keep the overlay active, or the button will fade
+                    [self activateOverlay];
                     doNotDim();
-                }
+                } else
+                    if (HW_isWeaponTimerable()) {
+                        if (isSegmentVisible) {
+                            UISegmentedControl *grenadeTime = (UISegmentedControl *)[self.view viewWithTag:GRENADE_TAG];
+                            
+                            [UIView beginAnimations:@"removing segmented control" context:NULL];
+                            [UIView setAnimationDuration:ANIMATION_DURATION];
+                            [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+                            grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
+                            [UIView commitAnimations];
+                            
+                            [grenadeTime performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
+                        } else {
+                            NSArray *items = [[NSArray alloc] initWithObjects:@"1",@"2",@"3",@"4",@"5",nil];
+                            UISegmentedControl *grenadeTime = [[UISegmentedControl alloc] initWithItems:items];
+                            [items release];
+                            
+                            [grenadeTime addTarget:self action:@selector(setGrenadeTime:) forControlEvents:UIControlEventValueChanged];
+                            grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
+                            grenadeTime.selectedSegmentIndex = 2;
+                            grenadeTime.tag = GRENADE_TAG;
+                            [self.view addSubview:grenadeTime];
+                            [grenadeTime release];
+                            
+                            [UIView beginAnimations:@"inserting segmented control" context:NULL];
+                            [UIView setAnimationDuration:ANIMATION_DURATION];
+                            [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+                            grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width - 100, 250, 50);
+                            [UIView commitAnimations];
+                            
+                            [self activateOverlay];
+                            doNotDim();
+                        }
+                        isSegmentVisible = !isSegmentVisible;
+                    }
+
             break;
         case 2:
             HW_allKeysUp();
@@ -400,6 +432,11 @@
     HW_click();
     removeConfirmationInput();
     doDim();
+}
+
+-(void) setGrenadeTime:(id) sender {
+    UISegmentedControl *theSegment = (UISegmentedControl *)sender;
+    HW_setGrenadeTime(theSegment.selectedSegmentIndex + 1);
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -449,7 +486,8 @@
     }
 }
 
-
+#pragma mark -
+#pragma mark Functions called by pascal
 // called from AddProgress and FinishProgress (respectively)
 void startSpinning() {
     isGameRunning = NO;
@@ -459,12 +497,12 @@ void startSpinning() {
     indicator.center = CGPointMake(screen.size.width/2 - 118, screen.size.height/2);
     indicator.hidesWhenStopped = YES;
     [indicator startAnimating];
-    [[[[UIApplication sharedApplication] keyWindow] viewWithTag:12345] addSubview:indicator];
+    [[[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG] addSubview:indicator];
     [indicator release];
 }
 
 void stopSpinning() {
-    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[[[[UIApplication sharedApplication] keyWindow] viewWithTag:12345] viewWithTag:987654];
+    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[[[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG] viewWithTag:987654];
     [indicator stopAnimating];
     isGameRunning = YES;
 }
@@ -472,11 +510,16 @@ void stopSpinning() {
 void clearView() {
     UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
     UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
+    UISegmentedControl *theSegment = (UISegmentedControl *)[theWindow viewWithTag:GRENADE_TAG];
+    
     [UIView beginAnimations:@"remove button" context:NULL];
     [UIView setAnimationDuration:ANIMATION_DURATION];
     theButton.alpha = 0;
+    theSegment.alpha = 0;
     [UIView commitAnimations];
+    
     [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:0.3];
+    [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:0.3];    
 }
 
 @end

@@ -22,6 +22,7 @@
     
     // ths touch section
     CGFloat initialDistanceForPinching;
+    BOOL isSegmentVisible;
     
     // the sdl window underneath
     SDL_Window *sdlwindow;

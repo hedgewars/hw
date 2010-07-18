@@ -76,11 +76,6 @@ int main (int argc, char *argv[]) {
 
 // main routine for calling the actual game engine
 -(IBAction) startSDLgame: (NSDictionary *)gameDictionary {
-    [UIView beginAnimations:@"removing main controller" context:NULL];
-    [UIView setAnimationDuration:1];
-    mainViewController.view.alpha = 0;
-    [UIView commitAnimations];
-
     // pull out useful configuration info from various files
     GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
     
@@ -98,16 +93,11 @@ int main (int argc, char *argv[]) {
     free(gameArgs);
     
     // bring the uiwindow below in front
-    //UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
-    //[aWin makeKeyAndVisible];
+    UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+    [aWin makeKeyAndVisible];
     
     // notice that in the simulator this reports 2 windows
     DLog(@"%@",[[UIApplication sharedApplication] windows]);
-    
-    [UIView beginAnimations:@"inserting main controller" context:NULL];
-    [UIView setAnimationDuration:1];
-    mainViewController.view.alpha = 1;
-    [UIView commitAnimations];
 }
 
 -(void) displayOverlayLater {

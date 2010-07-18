@@ -23,7 +23,7 @@ implementation
 var xx, yy: LongInt;
 
 // retrieve protocol information
-procedure HW_versionInfo(netProto: PShortInt; versionStr: Ppchar); cdecl; export;
+procedure HW_versionInfo(netProto: PShortInt; versionStr: PPChar); cdecl; export;
 begin
 // http://bugs.freepascal.org/view.php?id=16156
     if netProto <> nil then netProto^:= cNetProtoVersion;
@@ -210,6 +210,19 @@ end;
 function HW_isWeaponRequiringClick: boolean; cdecl; export;
 begin
     exit( (CurrentHedgehog^.Gear^.State and gstHHChooseTarget) <> 0 )
+end;
+
+function HW_isWeaponTimerable: boolean; cdecl; export;
+var CurSlot, CurAmmo: LongWord;
+begin
+    CurSlot:= CurrentHedgehog^.CurSlot;
+    CurAmmo:= CurrentHedgehog^.CurAmmo;
+    exit( (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0)
+end;
+
+procedure HW_setGrenadeTime(time: LongInt); cdecl; export;
+begin
+    ParseCommand('/timer ' + inttostr(time), true);
 end;
 
 //amSwitch

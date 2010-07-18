@@ -22,7 +22,7 @@ extern "C" {
     void GenLandPreview(void);
 
 
-    void HW_versionInfo(short int*, char**);
+    void HW_versionInfo(short int *netProto, char **versionStr);
 
     void HW_click(void);
     
@@ -63,6 +63,9 @@ extern "C" {
     
     BOOL HW_isAmmoOpen(void);
     BOOL HW_isWeaponRequiringClick(void);
+    BOOL HW_isWeaponTimerable(void);
+    
+    void HW_setGrenadeTime(int time);
     
 #ifdef __cplusplus
 }

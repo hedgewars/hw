@@ -738,8 +738,8 @@ begin
         
     GameState       := Low(TGameState);
     GameType        := gmtLocal;
-    zoom            := 2.0;
-    ZoomValue       := 2.0;
+    zoom            := cDefaultZoomLevel;
+    ZoomValue       := cDefaultZoomLevel;
     WeaponTooltipTex:= nil;
     cLaserSighting  := false;
     cVampiric       := false;
