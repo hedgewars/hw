@@ -416,8 +416,8 @@ processAction (AddClient client) = do
 
 processAction PingAll = do
     rnc <- gets roomsClients
+    liftIO (allClientsM rnc) >>= mapM_ (kickTimeouted rnc)
     cis <- liftIO $ allClientsM rnc
-    mapM_ (kickTimeouted rnc) $ cis
     chans <- liftIO $ mapM (client'sM rnc sendChan) cis
     liftIO $ mapM_ (modifyClient rnc (\cl -> cl{pingsQueue = pingsQueue cl + 1})) cis
     processAction $ AnswerClients chans ["PING"]
