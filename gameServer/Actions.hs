@@ -434,9 +434,13 @@ processAction (clID, serverInfo, rnc) PingAll = do
                 else
                 return (clID, serverInfo, rnc)
 
-
-processAction (clID, serverInfo, rnc) (StatsAction) = do
-    writeChan (dbQueries serverInfo) $ SendStats (size clients) (size rooms - 1)
-    return (clID, serverInfo, rnc)
-
 -}
+
+processAction (StatsAction) = do
+    rnc <- gets roomsClients
+    si <- gets serverInfo
+    (roomsNum, clientsNum) <- liftIO $ withRoomsAndClients rnc stats
+    liftIO $ writeChan (dbQueries si) $ SendStats clientsNum (roomsNum - 1)
+    where
+          stats irnc = (length $ allRooms irnc, length $ allClients irnc)
+
