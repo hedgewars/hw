@@ -417,24 +417,22 @@ processAction (AddClient client) = do
             return (ci, serverInfo)
 -}
 
-    
 
 
-{-
-processAction (clID, serverInfo, rnc) PingAll = do
-    (_, _, newClients, newRooms) <- foldM kickTimeouted (clID, serverInfo, rnc) $ elems clients
-    processAction (clID,
-        serverInfo,
-        Data.IntMap.map (\cl -> cl{pingsQueue = pingsQueue cl + 1}) newClients,
-        newRooms) $ AnswerAll ["PING"]
+processAction PingAll = do
+    rnc <- gets roomsClients
+    cis <- liftIO $ allClientsM rnc
+    mapM_ (kickTimeouted rnc) $ cis
+    chans <- liftIO $ mapM (client'sM rnc sendChan) cis
+    liftIO $ mapM_ (modifyClient rnc (\cl -> cl{pingsQueue = pingsQueue cl + 1})) cis
+    processAction $ AnswerClients chans ["PING"]
     where
-        kickTimeouted (clID, serverInfo, rnc) client =
-            if pingsQueue client > 0 then
-                processAction (clientUID client, serverInfo, rnc) $ ByeClient "Ping timeout"
-                else
-                return (clID, serverInfo, rnc)
+        kickTimeouted rnc ci = do
+            pq <- liftIO $ client'sM rnc pingsQueue ci
+            when (pq > 0) $
+                withStateT (\as -> as{clientIndex = Just ci}) $
+                    processAction (ByeClient "Ping timeout")
 
--}
 
 processAction (StatsAction) = do
     rnc <- gets roomsClients
