@@ -277,21 +277,16 @@ processAction (clID, serverInfo, rnc) (RemoveRoom) = do
         rID = roomID client
         client = clients ! clID
 
-
-processAction (clID, serverInfo, rnc) (UnreadyRoomClients) = do
-    processAction (clID, serverInfo, rnc) $ AnswerThisRoom ("NOT_READY" : roomPlayers)
-    return (clID,
-        serverInfo,
-        Data.IntMap.map (\cl -> if roomID cl == rID then cl{isReady = False} else cl) clients,
-        adjust (\r -> r{readyPlayers = 0}) rID rooms)
-    where
-        room = rooms ! rID
-        rID = roomID client
-        client = clients ! clID
-        roomPlayers = Prelude.map (nick . (clients !)) roomPlayersIDs
-        roomPlayersIDs = IntSet.elems $ playersIDs room
-
 -}
+processAction (UnreadyRoomClients) = do
+    rnc <- gets roomsClients
+    ri <- clientRoomA
+    roomPlayers <- roomClientsS ri
+    roomClIDs <- liftIO $ roomClientsIndicesM rnc ri
+    processAction $ AnswerClients (map sendChan roomPlayers) ("NOT_READY" : map nick roomPlayers)
+    liftIO $ mapM_ (modifyClient rnc (\cl -> cl{isReady = False})) roomClIDs
+    processAction $ ModifyRoom (\r -> r{readyPlayers = 0})
+
 
 processAction (RemoveTeam teamName) = do
     rnc <- gets roomsClients
