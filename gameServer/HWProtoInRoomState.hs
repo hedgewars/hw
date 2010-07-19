@@ -195,26 +195,27 @@ handleCmd_inRoom ["EM", msg] = do
     where
         (isLegal, isKeepAlive) = checkNetCmd msg
 
-{-
-handleCmd_inRoom clID clients rooms ["ROUNDFINISHED"] =
-    if isMaster client then
-        [ModifyRoom
+
+handleCmd_inRoom ["ROUNDFINISHED"] = do
+    cl <- thisClient
+    r <- thisRoom
+    chans <- roomClientsChans
+
+    if isMaster cl && (gameinprogress r) then
+        return $ (ModifyRoom
                 (\r -> r{
                     gameinprogress = False,
                     readyPlayers = 0,
                     roundMsgs = empty,
                     leftTeams = [],
                     teamsAtStart = []}
-                ),
-        UnreadyRoomClients
-        ] ++ answerRemovedTeams
-    else
-        []
+                ))
+            : UnreadyRoomClients
+            : answerRemovedTeams chans r
+        else
+        return []
     where
-        client = clients IntMap.! clID
-        room = rooms IntMap.! (roomID client)
-        answerRemovedTeams = map (\t -> AnswerThisRoom ["REMOVE_TEAM", t]) $ leftTeams room
--}
+        answerRemovedTeams chans = map (\t -> AnswerClients chans ["REMOVE_TEAM", t]) . leftTeams
 
 handleCmd_inRoom ["TOGGLE_RESTRICT_JOINS"] = do
     cl <- thisClient
