@@ -59,10 +59,8 @@ mainLoop = forever $ do
                 processAction (ProcessAccountInfo info)
 
         TimerAction tick ->
-            return ()
-            --liftM snd $
-            --    foldM processAction (0, serverInfo, rnc) $
-            --        PingAll : [StatsAction | even tick]
+                mapM_ processAction $
+                    PingAll : [StatsAction | even tick]
 
 
 startServer :: ServerInfo -> Socket -> IO ()
