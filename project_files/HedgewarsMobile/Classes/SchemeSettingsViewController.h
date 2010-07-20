@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+
 @class SingleSchemeViewController;
 
 @interface SchemeSettingsViewController : UITableViewController {

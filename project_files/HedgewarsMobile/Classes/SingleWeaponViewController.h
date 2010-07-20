@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EditableCellView.h"
 #import "WeaponCellView.h"
 
-@interface SingleWeaponViewController : UITableViewController <WeaponButtonControllerDelegate> {
+@interface SingleWeaponViewController : UITableViewController <EditableCellViewDelegate, WeaponButtonControllerDelegate> {
+    NSString *weaponName;
+    
     UIImage *ammoStoreImage;
     NSArray *ammoNames;
     
@@ -19,8 +22,10 @@
     char *crateness;
 }
 
+@property (nonatomic,retain) NSString *weaponName;
 @property (nonatomic,retain) UIImage *ammoStoreImage;
 @property (nonatomic,retain) NSArray *ammoNames;
 
+-(void) saveAmmos;
 
 @end

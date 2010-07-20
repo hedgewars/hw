@@ -31,6 +31,8 @@
     BOOL isInGame;
 }
 
+@property (nonatomic,retain) MainMenuViewController *mainViewController;
+
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(void) startSDLgame:(NSDictionary *)gameDictionary;
 -(void) displayOverlayLater;

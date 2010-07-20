@@ -31,6 +31,8 @@
         [self.tableView setBackgroundView:nil]; 
         self.view.backgroundColor = [UIColor clearColor];
     }
+    self.tableView.separatorColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 -(void) viewWillAppear:(BOOL) animated {
@@ -92,7 +94,6 @@
             self.lastIndexPath_we = indexPath;
         }
     }
-
     return cell;
 }
 

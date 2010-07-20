@@ -7,17 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EditableCellView.h"
 
-
-@interface SingleSchemeViewController : UITableViewController <UITextFieldDelegate> {
-    UITextField *textFieldBeingEdited;
-    NSMutableArray *schemeArray;
-    
+@interface SingleSchemeViewController : UITableViewController <EditableCellViewDelegate> {
+    NSString *schemeName;
+    NSMutableArray *schemeArray;    
     NSArray *basicSettingList;
     NSArray *gameModifierArray;
 }
 
-@property (nonatomic, retain) UITextField *textFieldBeingEdited;
+@property (nonatomic, retain) NSString *schemeName;
 @property (nonatomic, retain) NSMutableArray *schemeArray;
 @property (nonatomic, retain) NSArray *basicSettingList;
 @property (nonatomic, retain) NSArray *gameModifierArray;

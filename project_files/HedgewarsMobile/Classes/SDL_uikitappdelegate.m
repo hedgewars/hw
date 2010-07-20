@@ -54,6 +54,7 @@ int main (int argc, char *argv[]) {
 }
 
 @implementation SDLUIKitDelegate
+@synthesize mainViewController;
 
 // convenience method
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -117,11 +118,12 @@ int main (int argc, char *argv[]) {
     uiwindow.backgroundColor = [UIColor blackColor];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
+        self.mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
     else
-        mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPhone" bundle:nil];
+        self.mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPhone" bundle:nil];
 
-    [uiwindow addSubview:mainViewController.view];
+    [uiwindow addSubview:self.mainViewController.view];
+    [self.mainViewController release];
     [uiwindow makeKeyAndVisible];
 
     // Set working directory to resource path
@@ -138,8 +140,8 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
-    if (mainViewController.view.superview == nil)
-        mainViewController = nil;
+    if (self.mainViewController.view.superview == nil)
+        self.mainViewController = nil;
     MSG_MEMCLEAN();
     print_free_memory();
 }

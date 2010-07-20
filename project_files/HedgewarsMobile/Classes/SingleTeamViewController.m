@@ -378,6 +378,7 @@
         nextController.title = [secondaryItems objectAtIndex:row];
         [nextController setTeamDictionary:teamDictionary];
         [self.navigationController pushViewController:nextController animated:YES];
+        [nextController release];
     } else {
         cell = [aTableView cellForRowAtIndexPath:indexPath];
         for (UIView *oneView in cell.contentView.subviews) {

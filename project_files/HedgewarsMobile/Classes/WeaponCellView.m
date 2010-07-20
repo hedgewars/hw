@@ -161,8 +161,15 @@
     [probabilityQt release];
     [delayQt release];
     [crateQt release];
+    [initialImg release];
+    [probabImg release];
+    [delayImg release];
+    [crateImg release];
+    [initialLab release];
+    [probLab release];
+    [delLab release];
+    [craLab release];
     [super dealloc];
 }
-
 
 @end

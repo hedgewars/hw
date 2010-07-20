@@ -126,7 +126,7 @@
     NSString *selectedWeaponFile = [self.listOfWeapons objectAtIndex:row];
     
     // this must be set so childController can load the correct plist
-    childController.title = [selectedWeaponFile stringByDeletingPathExtension];
+    childController.weaponName = [selectedWeaponFile stringByDeletingPathExtension];
     [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
     [self.navigationController pushViewController:childController animated:YES];

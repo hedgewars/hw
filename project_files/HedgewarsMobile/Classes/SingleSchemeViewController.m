@@ -15,7 +15,7 @@
 #define SLIDER_TAG 54321
 
 @implementation SingleSchemeViewController
-@synthesize textFieldBeingEdited, schemeArray, basicSettingList, gameModifierArray;
+@synthesize schemeName, schemeArray, basicSettingList, gameModifierArray;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -104,13 +104,15 @@
                               nil];
     self.basicSettingList = basicSettings;
     [basicSettings release];
+    
+    self.title = NSLocalizedString(@"Edit scheme preferences",@"");
 }
 
 // load from file
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
     
-    NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.title];
+    NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName];
     NSMutableArray *scheme = [[NSMutableArray alloc] initWithContentsOfFile:schemeFile];
     [schemeFile release];
     self.schemeArray = scheme;
@@ -123,68 +125,22 @@
 -(void) viewWillDisappear:(BOOL) animated {
     [super viewWillDisappear:animated];
     
-    NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.title];
+    NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName];
     [self.schemeArray writeToFile:schemeFile atomically:YES];
     [schemeFile release];
 }
 
 #pragma mark -
-#pragma mark textfield methods
--(void) cancel:(id) sender {
-    if (textFieldBeingEdited != nil)
-        [self.textFieldBeingEdited resignFirstResponder];
-}
-
+#pragma mark editableCellView delegate
 // set the new value
--(BOOL) save:(id) sender {    
-    if (textFieldBeingEdited != nil) {
-        if ([textFieldBeingEdited.text length] == 0) 
-            textFieldBeingEdited.text = self.title;
-        
-        [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.title] error:NULL];
-        self.title = self.textFieldBeingEdited.text;
-        [self.schemeArray writeToFile:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.title] atomically:YES];
-        [self.textFieldBeingEdited resignFirstResponder];
-        return YES;
-    }
-    return NO;
+-(void) saveTextFieldValue:(NSString *)textString {    
+    // delete old file
+    [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName] error:NULL];
+    // update filename
+    self.schemeName = textString;
+    // save new file
+    [self.schemeArray writeToFile:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName] atomically:YES];
 }
-
-// the textfield is being modified, update the navigation controller
--(void) textFieldDidBeginEditing:(UITextField *)aTextField{   
-    self.textFieldBeingEdited = aTextField;
-
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel",@"from schemes table")
-                                                                     style:UIBarButtonItemStylePlain
-                                                                    target:self
-                                                                    action:@selector(cancel:)];
-    self.navigationItem.leftBarButtonItem = cancelButton;
-    [cancelButton release];
-    
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save",@"from schemes table")
-                                                                     style:UIBarButtonItemStyleDone
-                                                                    target:self
-                                                                    action:@selector(save:)];
-    self.navigationItem.rightBarButtonItem = saveButton;
-    [saveButton release];
-}
-
-// the textfield has been modified, check for empty strings and restore original navigation bar
--(void) textFieldDidEndEditing:(UITextField *)aTextField{
-    if ([textFieldBeingEdited.text length] == 0) 
-        textFieldBeingEdited.text = [NSString stringWithFormat:@"New Scheme"];
-
-    self.textFieldBeingEdited = nil;
-    self.navigationItem.rightBarButtonItem = self.navigationItem.backBarButtonItem;
-    self.navigationItem.leftBarButtonItem = nil;
-}
-
-// limit the size of the field to 64 characters like in original frontend
--(BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    int limit = 64;
-    return !([textField.text length] > limit && [string length] > range.length);
-}
-
 
 #pragma mark -
 #pragma mark Table view data source
@@ -214,39 +170,23 @@
     static NSString *CellIdentifier2 = @"Cell2";
     
     UITableViewCell *cell = nil;
+    EditableCellView *editableCell = nil;
     NSInteger row = [indexPath row];
     
     switch ([indexPath section]) {
         case 0:
-            cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+            editableCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
+            if (editableCell == nil) {
+                editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault 
                                                reuseIdentifier:CellIdentifier0] autorelease];
-                // create a uitextfield for each row, expand it to take the maximum size
-                UITextField *aTextField = [[UITextField alloc] 
-                                           initWithFrame:CGRectMake(5, 12, (cell.frame.size.width + cell.frame.size.width/3) - 42, 25)];
-                aTextField.clearsOnBeginEditing = NO;
-                aTextField.returnKeyType = UIReturnKeyDone;
-                aTextField.adjustsFontSizeToFitWidth = YES;
-                aTextField.delegate = self;
-                aTextField.tag = [indexPath row];
-                aTextField.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 2];
-                aTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
-                [aTextField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
-                [cell.contentView addSubview:aTextField];
-                [aTextField release];
+                editableCell.delegate = self;
             }
             
-            for (UIView *oneView in cell.contentView.subviews) {
-                if ([oneView isMemberOfClass:[UITextField class]]) {
-                    // we find the uitextfied and we'll use its tag to understand which one is being edited
-                    UITextField *textFieldFound = (UITextField *)oneView;
-                    textFieldFound.text = self.title;
-                }
-            }
-            cell.detailTextLabel.text = nil;
-            cell.imageView.image = nil;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            editableCell.textField.text = self.schemeName;
+            editableCell.detailTextLabel.text = nil;
+            editableCell.imageView.image = nil;
+            editableCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell = editableCell;
             break;
         case 1:
             cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
@@ -259,7 +199,7 @@
                 
                 int offset = 0;
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-                    offset = 45;
+                    offset = 50;
                 
                 UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(offset+260, 12, offset+150, 23)];
                 slider.maximumValue = [[detail objectForKey:@"max"] floatValue];
@@ -349,17 +289,13 @@
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
-    UISwitch *sw = nil;
+    EditableCellView *editableCell = nil;
     UISlider *cellSlider = nil;
     
     switch ([indexPath section]) {
         case 0:
-            for (UIView *oneView in cell.contentView.subviews) {
-                if ([oneView isMemberOfClass:[UITextField class]]) {
-                    textFieldBeingEdited = (UITextField *)oneView;
-                    [textFieldBeingEdited becomeFirstResponder];
-                }
-            }
+            editableCell = (EditableCellView *)cell;
+            [editableCell replyKeyboard];
             break;
         case 1:
             cellSlider = (UISlider *)[cell.contentView viewWithTag:[indexPath row]+[self.gameModifierArray count]];
@@ -379,6 +315,24 @@
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+-(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+    NSString *sectionTitle = nil;
+    switch (section) {
+        case 0:
+            sectionTitle = NSLocalizedString(@"Scheme Name", @"");
+            break;
+        case 1:
+            sectionTitle = NSLocalizedString(@"Game Settings", @"");
+            break;
+        case 2:
+            sectionTitle = NSLocalizedString(@"Game Modifiers", @"");
+            break;
+        default:
+            DLog(@"nope");
+            break;
+    }
+    return sectionTitle;
+}
 
 #pragma mark -
 #pragma mark Memory management
@@ -387,7 +341,7 @@
 }
 
 -(void) viewDidUnload {
-    self.textFieldBeingEdited = nil;
+    self.schemeName = nil;
     self.schemeArray = nil;
     self.basicSettingList = nil;
     self.gameModifierArray = nil;
@@ -396,13 +350,11 @@
 }
 
 -(void) dealloc {
-    [textFieldBeingEdited release];
+    [schemeName release];
     [schemeArray release];
     [basicSettingList release];
     [gameModifierArray release];
     [super dealloc];
 }
 
-
 @end
-

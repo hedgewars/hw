@@ -12,7 +12,7 @@
 #import "UIImageExtra.h"
 
 @implementation SingleWeaponViewController
-@synthesize ammoStoreImage, ammoNames;
+@synthesize weaponName, ammoStoreImage, ammoNames;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -84,13 +84,13 @@
     self.ammoStoreImage = img;
     [img release];
     
-    self.tableView.rowHeight = 120;
+    self.title = NSLocalizedString(@"Edit weapons preferences",@"");
 }
 
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
     
-    NSString *ammoFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.title];
+    NSString *ammoFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.weaponName];
     NSDictionary *weapon = [[NSDictionary alloc] initWithContentsOfFile:ammoFile];
     [ammoFile release];
     
@@ -121,7 +121,10 @@
 
 -(void) viewWillDisappear:(BOOL) animated {
     [super viewWillDisappear:animated];
-    
+    [self saveAmmos];
+}
+
+-(void) saveAmmos {
     quantity[CURRENT_AMMOSIZE] = '\0';
     probability[CURRENT_AMMOSIZE] = '\0';
     delay[CURRENT_AMMOSIZE] = '\0';
@@ -139,7 +142,7 @@
                             delayStr,@"ammostore_delay",
                             cratenessStr,@"ammostore_crate", nil];
 
-    NSString *ammoFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.title];
+    NSString *ammoFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.weaponName];
     [weapon writeToFile:ammoFile atomically:YES];
     [ammoFile release];
     [weapon release];
@@ -148,53 +151,88 @@
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return CURRENT_AMMOSIZE;
+    if (section == 0)
+        return 1;
+    else
+        return CURRENT_AMMOSIZE;
 }
 
 // Customize the appearance of table view cells.
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
+-(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier0 = @"Cell0";
+    static NSString *CellIdentifier1 = @"Cell1";
     NSInteger row = [indexPath row];
-    
-    WeaponCellView *cell = (WeaponCellView *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[WeaponCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        cell.delegate = self;
-    }
-    
-    int x = ((row*32)/1024)*32;
-    int y = (row*32)%1024;
+    UITableViewCell *cell = nil;
 
-    UIImage *img = [[self.ammoStoreImage cutAt:CGRectMake(x, y, 32, 32)] makeRoundCornersOfSize:CGSizeMake(7, 7)];
-    cell.weaponIcon.image = img;
-    cell.weaponName.text = [ammoNames objectAtIndex:row];
-    cell.tag = row;
-    
-    [cell.initialQt setValue:[[NSString stringWithFormat:@"%c",quantity[row]] intValue] animated:NO];
-    [cell.probabilityQt setValue:[[NSString stringWithFormat:@"%c", probability[row]] intValue] animated:NO];
-    [cell.delayQt setValue:[[NSString stringWithFormat:@"%c", delay[row]] intValue] animated:NO];
-    [cell.crateQt setValue:[[NSString stringWithFormat:@"%c", crateness[row]] intValue] animated:NO];
+    if (0 == [indexPath section]) {
+        EditableCellView *customCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
+        if (customCell == nil) {
+            customCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault 
+                                            reuseIdentifier:CellIdentifier0] autorelease];
+            customCell.delegate = self;
+        }
+        
+        customCell.textField.text = self.weaponName;
+        customCell.detailTextLabel.text = nil;
+        customCell.imageView.image = nil;
+        customCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell = customCell;
+    } else {
+        WeaponCellView *customCell = (WeaponCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
+        if (customCell == nil) {
+            customCell = [[[WeaponCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
+            customCell.delegate = self;
+        }
+        
+        int x = ((row*32)/1024)*32;
+        int y = (row*32)%1024;
+        
+        UIImage *img = [[self.ammoStoreImage cutAt:CGRectMake(x, y, 32, 32)] makeRoundCornersOfSize:CGSizeMake(7, 7)];
+        customCell.weaponIcon.image = img;
+        customCell.weaponName.text = [ammoNames objectAtIndex:row];
+        customCell.tag = row;
+        
+        [customCell.initialQt setValue:[[NSString stringWithFormat:@"%c",quantity[row]] intValue] animated:NO];
+        [customCell.probabilityQt setValue:[[NSString stringWithFormat:@"%c", probability[row]] intValue] animated:NO];
+        [customCell.delayQt setValue:[[NSString stringWithFormat:@"%c", delay[row]] intValue] animated:NO];
+        [customCell.crateQt setValue:[[NSString stringWithFormat:@"%c", crateness[row]] intValue] animated:NO];
+        cell = customCell;
+    }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
+-(CGFloat) tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (0 == [indexPath section])
+        return aTableView.rowHeight;
+    else
+        return 120;
+}
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-     */
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (0 == [indexPath section]) {
+        EditableCellView *editableCell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
+        [editableCell replyKeyboard];
+    }
+}
+
+#pragma mark -
+#pragma mark editableCellView delegate
+// set the new value
+-(void) saveTextFieldValue:(NSString *)textString {    
+    // delete old file
+    [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.weaponName] error:NULL];
+    // update filename
+    self.weaponName = textString;
+    // save new file
+    [self saveAmmos];
 }
 
 #pragma mark -
@@ -209,22 +247,26 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
 -(void) viewDidUnload {
-    free(quantity);
-    free(probability);
-    free(delay);
-    free(crateness);
+    free(quantity); quantity = NULL;
+    free(probability); probability = NULL;
+    free(delay); delay = NULL;
+    free(crateness); crateness = NULL;
     [super viewDidUnload];
+    self.weaponName = nil;
+    self.ammoStoreImage = nil;
+    self.ammoNames = nil;
     MSG_DIDUNLOAD();
 }
 
 
 -(void) dealloc {
+    [weaponName release];
+    [ammoStoreImage release];
+    [ammoNames release];
     [super dealloc];
 }
 

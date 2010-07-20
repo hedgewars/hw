@@ -199,7 +199,7 @@
             mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
         if (teamConfigViewController == nil)
             teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStylePlain];
-        teamConfigViewController.view.frame = CGRectMake(0, 224, 300, 472);
+        teamConfigViewController.view.frame = CGRectMake(3, 224, 300, 472);
         teamConfigViewController.view.backgroundColor = [UIColor clearColor];
         [mapConfigViewController.view addSubview:teamConfigViewController.view];
         if (schemeWeaponConfigViewController == nil)

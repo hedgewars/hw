@@ -17,7 +17,6 @@
     return rotationManager(interfaceOrientation);
 }
 
-
 #pragma mark -
 #pragma mark textfield methods
 // return to previous table
@@ -137,47 +136,6 @@
     [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];
     isWriteNeeded = YES;
 }
-
-/*
-#pragma mark -
-#pragma mark UIActionSheet Methods
--(IBAction) deleteData: (id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
-                                 delegate:self
-                            cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
-                           destructiveButtonTitle:NSLocalizedString(@"As sure as I can be!", @"")
-                            otherButtonTitles:nil];
-    [actionSheet showInView:self.view];
-    [actionSheet release];
-}
-
--(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
-    if ([actionSheet cancelButtonIndex] != buttonIndex) {
-        // get the documents dirctory
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        
-        // get the content of the directory
-        NSFileManager *fm = [NSFileManager defaultManager];
-        NSArray *dirContent = [fm directoryContentsAtPath:documentsDirectory];
-        NSError *error;
-        
-        // delete data
-        for (NSString *fileName in dirContent) {
-            [fm removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:fileName] error:&error];
-        }
-        
-        // force resetting
-        UIAlertView *anAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Hit Home Button to Exit", @"")
-                                  message:NSLocalizedString(@"\nEverything is gone!\nNow you need to restart the game...", @"")
-                                 delegate:self
-                            cancelButtonTitle:nil
-                            otherButtonTitles:nil];
-        [anAlert show];
-        [anAlert release];
-    }
-}
-*/
 
 #pragma mark -
 #pragma mark TableView Methods
@@ -371,9 +329,7 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
 -(void) viewDidUnload {

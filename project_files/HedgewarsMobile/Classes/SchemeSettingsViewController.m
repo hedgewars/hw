@@ -17,7 +17,6 @@
     return rotationManager(interfaceOrientation);
 }
 
-
 #pragma mark -
 #pragma mark View lifecycle
 -(void) viewDidLoad {
@@ -127,7 +126,7 @@
     NSString *selectedSchemeFile = [self.listOfSchemes objectAtIndex:row];
     
     // this must be set so childController can load the correct plist
-    childController.title = [selectedSchemeFile stringByDeletingPathExtension];
+    childController.schemeName = [selectedSchemeFile stringByDeletingPathExtension];
     [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
     [self.navigationController pushViewController:childController animated:YES];
@@ -140,6 +139,7 @@
     [super didReceiveMemoryWarning];
     if (childController.view.superview == nil )
         childController = nil;
+    MSG_MEMCLEAN();
 }
 
 -(void) viewDidUnload {
@@ -151,7 +151,7 @@
 
 
 -(void) dealloc {
-    [self.listOfSchemes release];
+    [listOfSchemes release];
     [childController release];
     [super dealloc];
 }
