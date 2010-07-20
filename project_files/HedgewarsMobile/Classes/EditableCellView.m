@@ -9,8 +9,6 @@
 #import "EditableCellView.h"
 #import "CommodityFunctions.h"
 
-#define MAX_STRING_LENGTH 64
-
 @implementation EditableCellView
 @synthesize delegate, textField, oldValue;
 

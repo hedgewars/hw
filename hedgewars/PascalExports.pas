@@ -164,6 +164,12 @@ begin
     CursorPoint.Y:= y;
 end;
 
+procedure HW_getCursor(x,y: PLongInt); cdecl; export;
+begin
+    x^:= CursorPoint.X;
+    y^:= CursorPoint.Y;
+end;
+
 procedure HW_saveCursor(reset: boolean); cdecl; export;
 begin
     if reset then

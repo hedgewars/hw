@@ -243,6 +243,8 @@
 }
 
 -(void) didReceiveMemoryWarning {
+    if (activeController.view.superview == nil) 
+        activeController = nil;
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
@@ -252,7 +254,6 @@
         teamConfigViewController = nil;
     if (schemeWeaponConfigViewController.view.superview == nil)
         schemeWeaponConfigViewController = nil;
-    activeController = nil;
     MSG_MEMCLEAN();
 }
 
@@ -266,7 +267,7 @@
 }
 
 -(void) dealloc {
-    [activeController release];
+    //[activeController release];
     [mapConfigViewController release];
     [teamConfigViewController release];
     [schemeWeaponConfigViewController release];

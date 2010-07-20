@@ -54,6 +54,7 @@ extern "C" {
     
     void HW_setLandscape(BOOL rotate);
     void HW_setCursor(int x, int y);
+    void HW_getCursor(int *x, int *y);
     void HW_saveCursor(BOOL reset);
     
     BOOL HW_isAmmoOpen(void);

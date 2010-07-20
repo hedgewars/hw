@@ -413,10 +413,11 @@
                             
                             [self activateOverlay];
                             doNotDim();
-                        }
+                        } 
                         isSegmentVisible = !isSegmentVisible;
-                    }
-
+                    } else
+                        if (HW_isWeaponSwitch())
+                            HW_tab();
             break;
         case 2:
             HW_allKeysUp();
@@ -447,6 +448,7 @@
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
+    int x, y;
     
     UITouch *touch, *first, *second;
 
@@ -455,14 +457,17 @@
             touch = [[allTouches allObjects] objectAtIndex:0];
             CGPoint currentPosition = [touch locationInView:self.view];
 
-            if (HW_isAmmoOpen()) {
+            if (HW_isAmmoOpen() || HW_isWeaponRequiringClick()) {
                 // moves the cursor around
                 HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
             } else {
-                DLog(@"x: %f y: %f -> X:%d Y:%d", currentPosition.x, currentPosition.y, HWX(currentPosition.x), HWY(currentPosition.y));
-                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
-                if (HW_isWeaponSwitch())
-                    HW_tab();
+                // panning \o/
+                HW_getCursor(&x, &y);
+                x = x + currentPosition.x - startingPoint.x;
+                y = y + currentPosition.y - startingPoint.y;
+                HW_setCursor(x, y);
+                
+                startingPoint = currentPosition;
             }
             break;
         case 2:

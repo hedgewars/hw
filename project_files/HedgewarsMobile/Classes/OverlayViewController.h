@@ -32,8 +32,6 @@
 @property (nonatomic,retain) id popoverController;
 @property (nonatomic,retain) InGameMenuViewController *popupMenu;
 
-BOOL isGameRunning;
-
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
@@ -48,3 +46,6 @@ BOOL isGameRunning;
 -(void) activateOverlay;
 
 @end
+
+BOOL isGameRunning;
+
