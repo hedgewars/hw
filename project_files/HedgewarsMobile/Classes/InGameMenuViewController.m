@@ -141,7 +141,7 @@
                 HW_pause();
             break;
         default:
-            NSLog(@"Warning: unset case value in section!");
+            DLog(@"Warning: unset case value in section!");
             break;
     }
     

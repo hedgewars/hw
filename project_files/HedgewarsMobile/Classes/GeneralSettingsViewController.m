@@ -8,6 +8,7 @@
 
 #import "GeneralSettingsViewController.h"
 #import "CommodityFunctions.h"
+#import "EditableCellView.h"
 
 @implementation GeneralSettingsViewController
 @synthesize settingsDictionary, textFieldBeingEdited, musicSwitch, soundSwitch, altDamageSwitch;
@@ -26,19 +27,15 @@
 }
 
 // set the new value
--(BOOL) save:(id) sender {
+-(void) save:(id) sender {
     if (textFieldBeingEdited != nil) {
-        if (textFieldBeingEdited.tag == 0) {
+        if (textFieldBeingEdited.tag == 0)
             [self.settingsDictionary setObject:textFieldBeingEdited.text forKey:@"username"];
-        } else {
+        else
             [self.settingsDictionary setObject:textFieldBeingEdited.text forKey:@"password"];
-        }
         
-        isWriteNeeded = YES;
         [self.textFieldBeingEdited resignFirstResponder];
-        return YES;
     }
-    return NO;
 }
 
 // the textfield is being modified, update the navigation controller
@@ -68,10 +65,8 @@
 
 // limit the size of the field to 64 characters like in original frontend
 -(BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    int limit = 64;
-    return !([textField.text length] > limit && [string length] > range.length);
+    return !([textField.text length] > MAX_STRING_LENGTH && [string length] > range.length);
 }
-
 
 #pragma mark -
 #pragma mark View Lifecycle
@@ -91,7 +86,6 @@
 
 -(void) viewWillAppear:(BOOL)animated {
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
-    isWriteNeeded = NO;
     
     musicSwitch.on = [[settingsDictionary objectForKey:@"music"] boolValue];
     soundSwitch.on = [[settingsDictionary objectForKey:@"sound"] boolValue];
@@ -101,13 +95,8 @@
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    if (isWriteNeeded) {
-        NSLog(@"writing preferences to file");
-        [self.settingsDictionary writeToFile:SETTINGS_FILE() atomically:YES];
-        isWriteNeeded = NO;
-    }
+    [super viewWillDisappear:animated];    
+    [self.settingsDictionary writeToFile:SETTINGS_FILE() atomically:YES];
 }
 
 #pragma mark -
@@ -118,23 +107,19 @@
         [musicSwitch setOn:NO animated:YES];
         [self.settingsDictionary setObject:[NSNumber numberWithBool:musicSwitch.on] forKey:@"music"];
     }
-    isWriteNeeded = YES;
 }
 
 // if the sound system is off, don't enable background music 
 -(void) dontTurnOnMusic:(id) sender {
-    if (NO == self.soundSwitch.on) {
+    if (NO == self.soundSwitch.on)
         [musicSwitch setOn:NO animated:YES];
-    } else {
+    else
         [self.settingsDictionary setObject:[NSNumber numberWithBool:musicSwitch.on] forKey:@"music"];
-        isWriteNeeded = YES;
-    }
 }
 
 -(void) justUpdateDictionary:(id) sender {
     UISwitch *theSwitch = (UISwitch *)sender;
     [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];
-    isWriteNeeded = YES;
 }
 
 #pragma mark -
@@ -145,13 +130,13 @@
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case kNetworkFields:
+        case 0:     // user and pass
             return 2;
             break;
-        case kAudioFields:
+        case 1:     // audio
             return 2;
             break;
-        case kOtherFields:
+        case 2:     // alternate damage
             return 1;
             break;
         default:
@@ -165,42 +150,37 @@
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
     
-    UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (nil == cell) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
-        if (section == kNetworkFields) {
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(-15, 10, 100, 25)];
-            label.textAlignment = UITextAlignmentRight;
-            label.backgroundColor = [UIColor clearColor];
-            label.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 2];
-            if (row == 0) 
-                label.text = NSLocalizedString(@"Nickname","from the settings table");
-            else 
-                label.text = NSLocalizedString(@"Password","from the settings table");
-            [cell.contentView addSubview:label];
-            [label release];
-            
-            UITextField *aTextField = [[UITextField alloc] initWithFrame:
-                                       CGRectMake(110, 12, (cell.frame.size.width + cell.frame.size.width/3) - 90, 25)];
-            aTextField.clearsOnBeginEditing = NO;
-            aTextField.returnKeyType = UIReturnKeyDone;
-            aTextField.adjustsFontSizeToFitWidth = YES;
-            aTextField.delegate = self;
-            aTextField.tag = row;
-            aTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
-            [aTextField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
-            [cell.contentView addSubview:aTextField];
-            [aTextField release];
-        }
-    }
-    
-    cell.accessoryType = UITableViewCellAccessoryNone;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.imageView.image = nil;
-    
+    UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];    
     UITextField *aTextField;
     switch (section) {
-        case kNetworkFields:
+        case 0:
+            if (nil == cell) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+                if (section == 0) {
+                    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(-9, 10, 100, [UIFont labelFontSize] + 4)];
+                    label.textAlignment = UITextAlignmentRight;
+                    label.backgroundColor = [UIColor clearColor];
+                    label.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+                    if (row == 0) 
+                        label.text = NSLocalizedString(@"Nickname","from the settings table");
+                    else 
+                        label.text = NSLocalizedString(@"Password","from the settings table");
+                    [cell.contentView addSubview:label];
+                    [label release];
+                    
+                    UITextField *aTextField = [[UITextField alloc] initWithFrame:
+                                               CGRectMake(110, 10, (cell.frame.size.width + cell.frame.size.width/3) - 90, [UIFont labelFontSize] + 4)];
+                    aTextField.clearsOnBeginEditing = NO;
+                    aTextField.returnKeyType = UIReturnKeyDone;
+                    aTextField.adjustsFontSizeToFitWidth = YES;
+                    aTextField.delegate = self;
+                    aTextField.tag = row;
+                    aTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+                    [aTextField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
+                    [cell.contentView addSubview:aTextField];
+                    [aTextField release];
+                }
+            }
             for (UIView *oneView in cell.contentView.subviews) 
                 if ([oneView isMemberOfClass:[UITextField class]]) 
                     aTextField = (UITextField *)oneView;
@@ -209,6 +189,7 @@
                 case 0:                    
                     aTextField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"");
                     aTextField.text = [self.settingsDictionary objectForKey:@"username"];
+                    aTextField.secureTextEntry = NO;
                     break;
                 case 1:                    
                     aTextField.placeholder = NSLocalizedString(@"Insert your password",@"");
@@ -220,7 +201,11 @@
             }
             break;
             
-        case kAudioFields:
+            cell.accessoryView = nil;
+        case 1:
+            if (nil == cell)
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+
             switch (row) {
                 case 0:
                     cell.textLabel.text = NSLocalizedString(@"Sound", @"");
@@ -235,31 +220,38 @@
             }
             break;
             
-        case kOtherFields:
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        case 2:
+            if (nil == cell)
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier] autorelease];
+
             cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
             cell.accessoryView = altDamageSwitch;
             break;
         default:
             break;
     }
+    
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.imageView.image = nil;
+    
     return cell;
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *sectionTitle = nil;
     switch (section) {
-        case kNetworkFields:
+        case 0:
             sectionTitle = NSLocalizedString(@"Network Configuration", @"");
             break;
-        case kAudioFields:
+        case 1:
             sectionTitle = NSLocalizedString(@"Audio Preferences", @"");
             break;
-        case kOtherFields:
+        case 2:
             sectionTitle = NSLocalizedString(@"Other Settings", @"");
             break;
         default:
-            NSLog(@"Nope");
+            DLog(@"Nope");
             break;
     }
     return sectionTitle;
@@ -313,7 +305,7 @@
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell;
-    if (kNetworkFields == [indexPath section]) {
+    if (0 == [indexPath section]) {
         cell = [aTableView cellForRowAtIndexPath:indexPath];
         for (UIView *oneView in cell.contentView.subviews) {
             if ([oneView isMemberOfClass:[UITextField class]]) {

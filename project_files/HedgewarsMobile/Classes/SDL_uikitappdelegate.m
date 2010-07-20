@@ -115,7 +115,6 @@ int main (int argc, char *argv[]) {
     [application setStatusBarHidden:YES]; 
     
     UIWindow *uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    uiwindow.backgroundColor = [UIColor blackColor];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         self.mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
@@ -124,9 +123,10 @@ int main (int argc, char *argv[]) {
 
     [uiwindow addSubview:self.mainViewController.view];
     [self.mainViewController release];
+    uiwindow.backgroundColor = [UIColor blackColor];
     [uiwindow makeKeyAndVisible];
 
-    // Set working directory to resource path
+    // set working directory to resource path
     [[NSFileManager defaultManager] changeCurrentDirectoryPath:[[NSBundle mainBundle] resourcePath]];
 }
 
@@ -166,7 +166,6 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationDidBecomeActive:(UIApplication *)application {
-    //NSLog(@"%@", NSStringFromSelector(_cmd));
     if (isInGame) {
         HW_pause();
 

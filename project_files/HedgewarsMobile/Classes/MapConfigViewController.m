@@ -39,19 +39,19 @@
     static uint8_t map[128*32];
     
     if (SDLNet_Init() < 0) {
-        NSLog(@"SDLNet_Init: %s", SDLNet_GetError());
+        DLog(@"SDLNet_Init: %s", SDLNet_GetError());
         serverQuit = YES;
     }
     
     // Resolving the host using NULL make network interface to listen
     if (SDLNet_ResolveHost(&ip, NULL, port) < 0) {
-        NSLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
+        DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         serverQuit = YES;
     }
     
     // Open a connection with the IP provided (listen on the host's port)
     if (!(sd = SDLNet_TCP_Open(&ip))) {
-        NSLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), port);
+        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), port);
         serverQuit = YES;
     }
     

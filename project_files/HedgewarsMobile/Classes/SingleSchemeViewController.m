@@ -133,7 +133,7 @@
 #pragma mark -
 #pragma mark editableCellView delegate
 // set the new value
--(void) saveTextFieldValue:(NSString *)textString {    
+-(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {    
     // delete old file
     [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName] error:NULL];
     // update filename

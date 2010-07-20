@@ -15,7 +15,6 @@
     UISwitch *musicSwitch;
     UISwitch *soundSwitch;
     UISwitch *altDamageSwitch;
-    BOOL isWriteNeeded;
 }
 
 @property (nonatomic, retain) NSMutableDictionary *settingsDictionary;
@@ -23,9 +22,5 @@
 @property (nonatomic, retain) UISwitch *musicSwitch;
 @property (nonatomic, retain) UISwitch *soundSwitch;
 @property (nonatomic, retain) UISwitch *altDamageSwitch;
-
-#define kNetworkFields 0
-#define kAudioFields 1
-#define kOtherFields 2
 
 @end

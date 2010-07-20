@@ -31,7 +31,7 @@ void createTeamNamed (NSString *nameWithoutExt) {
         [hog release];
     }
     
-    NSDictionary *theTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"0",@"hash", nameWithoutExt,@"teamname",
+    NSDictionary *theTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"0",@"hash",
                              @"Statue",@"grave", @"Plane",@"fort", @"Default",@"voicepack",
                              @"hedgewars",@"flag", hedgehogs,@"hedgehogs", nil];
     [hedgehogs release];

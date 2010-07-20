@@ -9,8 +9,10 @@
 #import "EditableCellView.h"
 #import "CommodityFunctions.h"
 
+#define MAX_STRING_LENGTH 64
+
 @implementation EditableCellView
-@synthesize delegate, textField;
+@synthesize delegate, textField, oldValue;
 
 -(id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
@@ -28,6 +30,8 @@
         
         [self.contentView addSubview:textField];
         [textField release];
+        
+        oldValue = nil;
     }
     return self;
 }
@@ -38,7 +42,11 @@
     CGRect contentRect = self.contentView.bounds;
     CGFloat boundsX = contentRect.origin.x;
     
-    textField.frame = CGRectMake(boundsX+10, 11, 250, [UIFont labelFontSize] + 2);
+    int offset = 0;
+    if (self.imageView != nil)
+        offset = self.imageView.frame.size.width;
+    
+    textField.frame = CGRectMake(boundsX+offset+10, 10, 250, [UIFont labelFontSize] + 4);
 }
 
 /*
@@ -49,6 +57,7 @@
 */
 
 -(void) dealloc {
+    [oldValue release];
     [textField release];
     [super dealloc];
 }
@@ -57,8 +66,7 @@
 #pragma mark textField delegate
 // limit the size of the field to 64 characters like in original frontend
 -(BOOL) textField:(UITextField *)aTextField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    int limit = 64;
-    return !([aTextField.text length] > limit && [string length] > range.length);
+    return !([aTextField.text length] > MAX_STRING_LENGTH && [string length] > range.length);
 }
 
 // allow editing only if delegate is set 
@@ -68,8 +76,10 @@
 
 // the textfield is being modified, update the navigation controller
 -(void) textFieldDidBeginEditing:(UITextField *)aTextField{
-    // don't scroll when editing
+    // don't interact with table below
     ((UITableView*)[self superview]).scrollEnabled = NO;
+    
+    self.oldValue = self.textField.text;
     
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel",@"")
                                                                      style:UIBarButtonItemStylePlain
@@ -86,9 +96,15 @@
     [saveButton release];
 }
 
-
+/* with this a field might remain in editing status even if the view moved;
+   use method below instead that allows some more interaction
 // don't accept 0-length strings
 -(BOOL) textFieldShouldEndEditing:(UITextField *)aTextField {
+    return ([aTextField.text length] > 0); 
+}
+*/
+
+-(BOOL) textFieldShouldReturn:(UITextField *)aTextField {
     return ([aTextField.text length] > 0); 
 }
 
@@ -106,7 +122,8 @@
 
 // the user pressed cancel so hide keyboard
 -(void) cancel:(id) sender {
-    [self.textField resignFirstResponder];
+    self.textField.text = self.oldValue;
+    [self save:sender];
 }
 
 // send the value to the delegate
@@ -114,8 +131,13 @@
     if (delegate == nil)
         return;
     
-    [delegate saveTextFieldValue:self.textField.text];
+    // don't save if the textfield is invalid
+    if (![self textFieldShouldReturn:textField])
+        return;
+    
+    [delegate saveTextFieldValue:self.textField.text withTag:self.tag];
     [self.textField resignFirstResponder];
+    self.oldValue = nil;
 }
 
 @end

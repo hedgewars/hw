@@ -56,7 +56,7 @@
     [teamFile release];
     
     NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"eaddteam %@ %@ %@", 
-                                      [teamData objectForKey:@"hash"], [teamColor stringValue], [teamData objectForKey:@"teamname"]];
+                                      [teamData objectForKey:@"hash"], [teamColor stringValue], [teamName stringByDeletingPathExtension]];
     [self sendToEngine: teamHashColorAndName];
     [teamHashColorAndName release];
     

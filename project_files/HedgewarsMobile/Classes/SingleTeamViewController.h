@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EditableCellView.h"
 
 @class HogHatViewController;
 @class GravesViewController;
@@ -14,10 +15,10 @@
 @class FortsViewController;
 @class FlagsViewController;
 @class LevelViewController;
-@interface SingleTeamViewController : UITableViewController <UITextFieldDelegate> {
+
+@interface SingleTeamViewController : UITableViewController <EditableCellViewDelegate> {
     NSMutableDictionary *teamDictionary;
     
-    UITextField *textFieldBeingEdited;
     NSString *teamName;
     UIImage *normalHogSprite;
     
@@ -33,7 +34,6 @@
 }
 
 @property (nonatomic,retain) NSMutableDictionary *teamDictionary;
-@property (nonatomic,retain) UITextField *textFieldBeingEdited;
 @property (nonatomic,retain) NSString *teamName;
 @property (nonatomic,retain) UIImage *normalHogSprite;
 @property (nonatomic,retain) NSArray *secondaryItems;

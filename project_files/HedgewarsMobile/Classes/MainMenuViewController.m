@@ -54,7 +54,7 @@
 // if it is it blocks user interaction with an alertView until files are created
 -(void) checkFirstRun {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"First time run, creating settings files at %@", SETTINGS_FILE());
+    DLog(@"First time run, creating settings files at %@", SETTINGS_FILE());
     
     // show a popup with an indicator to make the user wait
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Please wait",@"")

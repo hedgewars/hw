@@ -195,7 +195,7 @@
             HW_otherKeysUp();
             break;
         default:
-            NSLog(@"Nope");
+            DLog(@"Nope");
             break;
     }
 
