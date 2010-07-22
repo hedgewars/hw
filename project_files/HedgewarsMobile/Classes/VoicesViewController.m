@@ -22,7 +22,7 @@
 
 #pragma mark -
 #pragma mark View lifecycle
-- (void)viewDidLoad {
+-(void) viewDidLoad {
     [super viewDidLoad];
     srandom(time(NULL));
 
@@ -33,9 +33,11 @@
     // it's here and not in viewWillAppear because user cannot add/remove them
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VOICES_DIRECTORY() error:NULL];
     self.voiceArray = array;
+    
+    self.title = NSLocalizedString(@"Set hedgehog voices",@"");
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+-(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     // this moves the tableview to the top
@@ -134,8 +136,8 @@
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
     self.voiceArray = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {

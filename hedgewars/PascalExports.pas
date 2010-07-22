@@ -191,7 +191,10 @@ end;
 
 function HW_isWeaponRequiringClick: boolean; cdecl; export;
 begin
-    exit( (CurrentHedgehog^.Gear^.State and gstHHChooseTarget) <> 0 )
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
+        exit( (CurrentHedgehog^.Gear^.State and gstHHChooseTarget) <> 0 )
+    else
+        exit(false);
 end;
 
 function HW_isWeaponTimerable: boolean; cdecl; export;

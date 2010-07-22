@@ -26,6 +26,8 @@
 
     // load all the grave names and store them into graveArray
     self.graveArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:GRAVES_DIRECTORY() error:NULL];
+    
+    self.title = NSLocalizedString(@"Choose hedgehog graves",@"");
 }
 
 -(void) viewWillAppear:(BOOL)animated {
@@ -101,21 +103,21 @@
 
 #pragma mark -
 #pragma mark Memory management
-- (void)didReceiveMemoryWarning {
+-(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
+-(void) viewDidUnload {
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
     self.graveArray = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
-- (void)dealloc {
+-(void) dealloc {
     [graveArray release];
     [teamDictionary release];
     [lastIndexPath release];

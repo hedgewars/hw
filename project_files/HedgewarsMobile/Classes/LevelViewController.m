@@ -34,6 +34,8 @@
                       nil];
     self.levelArray = array;
     [array release];
+    
+    self.title = NSLocalizedString(@"Set difficulty level",@"");
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -160,8 +162,8 @@
     self.teamDictionary = nil;
     self.levelArray = nil;
     self.levelSprites = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {

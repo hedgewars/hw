@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class DetailViewController;
+
 @interface SplitViewRootController: UIViewController {
     DetailViewController *detailViewController;
 }

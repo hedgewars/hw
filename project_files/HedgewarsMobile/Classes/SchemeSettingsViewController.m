@@ -145,8 +145,8 @@
 -(void) viewDidUnload {
     self.listOfSchemes = nil;
     childController = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 

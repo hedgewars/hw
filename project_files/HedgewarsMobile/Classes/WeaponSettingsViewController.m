@@ -144,8 +144,8 @@
 -(void) viewDidUnload {
     self.listOfWeapons = nil;
     childController = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 

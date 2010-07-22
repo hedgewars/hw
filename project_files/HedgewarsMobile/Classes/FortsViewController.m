@@ -53,6 +53,8 @@
     
     // statically set row height instead of using delegate method for performance reasons
     self.tableView.rowHeight = 200;
+    
+    self.title = NSLocalizedString(@"Choose team fort",@"");
 }
 
 
@@ -143,12 +145,12 @@
     self.teamDictionary = nil;
     self.lastIndexPath = nil;
     self.fortArray = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 
-- (void)dealloc {
+-(void) ealloc {
     [teamDictionary release];
     [lastIndexPath release];
     [fortArray release];

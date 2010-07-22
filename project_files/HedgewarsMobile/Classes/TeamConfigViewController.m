@@ -106,7 +106,7 @@
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12+88+7+36+7, 10, 250, 25)];
             label.textAlignment = UITextAlignmentLeft;
             label.backgroundColor = [UIColor clearColor];
-            label.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize] + 2];
+            label.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize] + 2];
             label.tag = LABEL_TAG;
             [cell.contentView addSubview:label];
             [label release];
@@ -169,8 +169,8 @@
 
 -(void) viewDidUnload {
     self.listOfTeams = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 

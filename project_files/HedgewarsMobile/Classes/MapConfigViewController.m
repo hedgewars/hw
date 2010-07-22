@@ -560,8 +560,8 @@
     self.themeArray = nil;
     self.mapArray = nil;
     
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {

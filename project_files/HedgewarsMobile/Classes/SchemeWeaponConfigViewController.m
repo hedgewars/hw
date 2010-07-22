@@ -154,6 +154,7 @@
     self.selectedScheme = nil;
     self.selectedWeapon = nil;
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 

@@ -24,6 +24,8 @@
     [super viewDidLoad];
 
     self.flagArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:FLAGS_DIRECTORY() error:NULL];
+    
+    self.title = NSLocalizedString(@"Set team flag",@"");
 }
 
 -(void) viewWillAppear:(BOOL)animated {
@@ -110,8 +112,8 @@
     self.teamDictionary = nil;
     self.lastIndexPath = nil;
     self.flagArray = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {

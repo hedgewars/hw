@@ -18,7 +18,6 @@
     return rotationManager(interfaceOrientation);
 }
 
-
 #pragma mark -
 #pragma mark View lifecycle
 // add an edit button
@@ -152,8 +151,8 @@
 -(void) viewDidUnload {
     self.listOfTeams = nil;
     childController = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {

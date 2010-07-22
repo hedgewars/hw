@@ -46,8 +46,8 @@
 
 -(void) viewDidUnload {
     self.menuList = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {

@@ -295,10 +295,9 @@
                 break;
         }
         
-        nextController.title = [secondaryItems objectAtIndex:row];
-        [nextController setTeamDictionary:teamDictionary];
+        if ([nextController respondsToSelector:@selector(setTeamDictionary:)])
+            [nextController setTeamDictionary:teamDictionary];
         [self.navigationController pushViewController:nextController animated:YES];
-        [nextController release];
     } else {
         EditableCellView *cell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
         [cell replyKeyboard];
@@ -309,9 +308,8 @@
 
 // action to perform when you want to change a hog hat
 -(void) tableView:(UITableView *)aTableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    if (nil == hogHatViewController) {
+    if (nil == hogHatViewController)
         hogHatViewController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    }
     
     // cache the dictionary file of the team, so that other controllers can modify it
     hogHatViewController.teamDictionary = self.teamDictionary;
@@ -345,17 +343,19 @@
 }
 
 -(void) viewDidUnload {
+    [super viewDidUnload];
     self.teamDictionary = nil;
     self.teamName = nil;
     self.normalHogSprite = nil;
     self.secondaryItems = nil;
     hogHatViewController = nil;
+    gravesViewController = nil;
+    voicesViewController = nil;
     flagsViewController = nil;
     fortsViewController = nil;
-    gravesViewController = nil;
     levelViewController = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {
@@ -364,8 +364,9 @@
     [normalHogSprite release];
     [secondaryItems release];
     [hogHatViewController release];
-    [fortsViewController release];
     [gravesViewController release];
+    [fortsViewController release];
+    [voicesViewController release];
     [flagsViewController release];
     [levelViewController release];
     [super dealloc];

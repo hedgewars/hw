@@ -1292,8 +1292,8 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
-				ONLY_ACTIVE_ARCH = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
@@ -1410,8 +1410,8 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
-				ONLY_ACTIVE_ARCH = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
@@ -1612,8 +1612,8 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
-				ONLY_ACTIVE_ARCH = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
@@ -1654,8 +1654,8 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
-				ONLY_ACTIVE_ARCH = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",

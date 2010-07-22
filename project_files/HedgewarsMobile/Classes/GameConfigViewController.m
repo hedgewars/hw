@@ -262,12 +262,11 @@
     mapConfigViewController = nil;
     teamConfigViewController = nil;
     schemeWeaponConfigViewController = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {
-    //[activeController release];
     [mapConfigViewController release];
     [teamConfigViewController release];
     [schemeWeaponConfigViewController release];

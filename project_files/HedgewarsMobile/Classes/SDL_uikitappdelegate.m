@@ -140,10 +140,10 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
-    print_free_memory();
-    if (self.mainViewController.view.superview == nil)
-        self.mainViewController = nil;
+    //if (self.mainViewController.view.superview == nil)
+    //     self.mainViewController = nil;
     MSG_MEMCLEAN();
+    print_free_memory();
 }
 
 -(void) applicationWillResignActive:(UIApplication *)application {

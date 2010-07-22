@@ -7,20 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EditableCellView.h"
 
-
-@interface GeneralSettingsViewController : UITableViewController <UITextFieldDelegate> {
+@interface GeneralSettingsViewController : UITableViewController <EditableCellViewDelegate> {
     NSMutableDictionary *settingsDictionary;
-    UITextField *textFieldBeingEdited;
-    UISwitch *musicSwitch;
-    UISwitch *soundSwitch;
-    UISwitch *altDamageSwitch;
 }
 
 @property (nonatomic, retain) NSMutableDictionary *settingsDictionary;
-@property (nonatomic, retain) UITextField *textFieldBeingEdited;;
-@property (nonatomic, retain) UISwitch *musicSwitch;
-@property (nonatomic, retain) UISwitch *soundSwitch;
-@property (nonatomic, retain) UISwitch *altDamageSwitch;
 
 @end

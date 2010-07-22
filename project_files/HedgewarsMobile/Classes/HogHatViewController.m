@@ -35,12 +35,13 @@
     [normalHogFile release];
     self.normalHogSprite = hogSprite;
     [hogSprite release];
+
+    self.title = NSLocalizedString(@"Change hedgehog's hat",@"");
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.title = [[[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog] objectForKey:@"hogname"];
-
+    
     // this updates the hog name and its hat
     [self.tableView reloadData];
     // this moves the tableview to the top
@@ -132,8 +133,8 @@
     self.normalHogSprite = nil;
     self.teamDictionary = nil;
     self.hatArray = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 - (void)dealloc {

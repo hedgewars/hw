@@ -260,6 +260,7 @@
     self.ammoStoreImage = nil;
     self.ammoNames = nil;
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 

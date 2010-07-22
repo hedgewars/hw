@@ -128,13 +128,11 @@
     sdlwindow = display->windows;
 }
 
-/* these are causing problems at reloading so let's remove 'em
 -(void) viewDidUnload {
-    [dimTimer invalidate];
-    self.popoverController = nil;
-    self.popupMenu = nil;
-    [super viewDidUnload];
+    // only object initialized in viewDidLoad should be here
+    dimTimer = nil;
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) didReceiveMemoryWarning {
@@ -145,7 +143,7 @@
         popupMenu = nil;
     MSG_MEMCLEAN();
 }
-*/
+
 
 -(void) dealloc {
     [popupMenu release];
@@ -448,7 +446,7 @@
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
-    int x, y;
+    int x, y, dx, dy;
     
     UITouch *touch, *first, *second;
 
@@ -462,11 +460,13 @@
                 HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
             } else {
                 // panning \o/
+                dx = startingPoint.x - currentPosition.x;
+                dy = currentPosition.y - startingPoint.y;
                 HW_getCursor(&x, &y);
-                x = x + currentPosition.x - startingPoint.x;
-                y = y + currentPosition.y - startingPoint.y;
-                HW_setCursor(x, y);
-                
+                // momentum (or something like that)
+                if (abs(dx) > 40) dx *= log(abs(dx)/4);
+                if (abs(dy) > 40) dy *= log(abs(dy)/4);
+                HW_setCursor(x + dx, y + dy);
                 startingPoint = currentPosition;
             }
             break;

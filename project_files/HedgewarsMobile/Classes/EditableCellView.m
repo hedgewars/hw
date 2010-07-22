@@ -10,7 +10,7 @@
 #import "CommodityFunctions.h"
 
 @implementation EditableCellView
-@synthesize delegate, textField, oldValue;
+@synthesize delegate, textField, titleLabel, minimumCharacters, maximumCharacters, oldValue;
 
 -(id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
@@ -29,6 +29,15 @@
         [self.contentView addSubview:textField];
         [textField release];
         
+        titleLabel = [[UILabel alloc] init];
+        titleLabel.textAlignment = UITextAlignmentLeft;
+        titleLabel.backgroundColor = [UIColor clearColor];
+        titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+        [self.contentView addSubview:titleLabel];
+        [titleLabel release];
+        
+        minimumCharacters = 1;
+        maximumCharacters = 64;
         oldValue = nil;
     }
     return self;
@@ -41,22 +50,30 @@
     CGFloat boundsX = contentRect.origin.x;
     
     int offset = 0;
+    int skew = 0;
     if (self.imageView != nil)
-        offset = self.imageView.frame.size.width;
+        offset += self.imageView.frame.size.width;
     
-    textField.frame = CGRectMake(boundsX+offset+10, 10, 250, [UIFont labelFontSize] + 4);
+    if ([self.titleLabel.text length] == 0)
+        titleLabel.frame = CGRectZero;
+    else {
+        titleLabel.frame = CGRectMake(boundsX+offset+10, 10, 100, [UIFont labelFontSize] + 4);
+        offset += 100;
+        skew +=2;
+    }
+
+    textField.frame = CGRectMake(boundsX+offset+10, skew+10, 250, [UIFont labelFontSize] + 4);
 }
 
-/*
 -(void) setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     // Configure the view for the selected state
 }
-*/
 
 -(void) dealloc {
-    [oldValue release];
-    [textField release];
+    [oldValue release], oldValue = nil;
+    [titleLabel release], titleLabel = nil;
+    [textField release], textField = nil;
     [super dealloc];
 }
 
@@ -64,12 +81,12 @@
 #pragma mark textField delegate
 // limit the size of the field to 64 characters like in original frontend
 -(BOOL) textField:(UITextField *)aTextField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    return !([aTextField.text length] > MAX_STRING_LENGTH && [string length] > range.length);
+    return !([aTextField.text length] > self.maximumCharacters && [string length] > range.length);
 }
 
-// allow editing only if delegate is set 
+// allow editing only if delegate is set and conformant to protocol
 -(BOOL) textFieldShouldBeginEditing:(UITextField *)aTextField {
-    return (delegate != nil);
+    return (delegate != nil) && [delegate respondsToSelector:@selector(saveTextFieldValue:withTag:)];
 }
 
 // the textfield is being modified, update the navigation controller
@@ -103,7 +120,7 @@
 */
 
 -(BOOL) textFieldShouldReturn:(UITextField *)aTextField {
-    return ([aTextField.text length] > 0); 
+    return ([aTextField.text length] >= self.minimumCharacters); 
 }
 
 // the textfield has been modified, tell the delegate to do something
@@ -114,6 +131,9 @@
     [(UITableViewController *)delegate navigationItem].leftBarButtonItem = nil;
 }
 
+#pragma mark -
+#pragma mark instance methods
+// the user wants to show the keyboard
 -(void) replyKeyboard {
     [self.textField becomeFirstResponder];
 }
@@ -126,7 +146,7 @@
 
 // send the value to the delegate
 -(void) save:(id) sender {
-    if (delegate == nil)
+    if (delegate == nil || ![delegate respondsToSelector:@selector(saveTextFieldValue:withTag:)])
         return;
     
     // don't save if the textfield is invalid

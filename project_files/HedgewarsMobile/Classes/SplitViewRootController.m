@@ -35,12 +35,10 @@
     [detailViewController release];
 
     CGRect rect = [[UIScreen mainScreen] bounds];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         self.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
         
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         UISplitViewController *splitViewRootController = [[UISplitViewController alloc] init];
-        //splitViewRootController.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;        
         splitViewRootController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
         
         MasterViewController *masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -64,16 +62,13 @@
          
 -(void) viewDidUnload {
     detailViewController = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {
     [detailViewController release];
     [super dealloc];
-}
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
-    [detailViewController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
 #pragma mark -

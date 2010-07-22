@@ -345,8 +345,8 @@
     self.schemeArray = nil;
     self.basicSettingList = nil;
     self.gameModifierArray = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {

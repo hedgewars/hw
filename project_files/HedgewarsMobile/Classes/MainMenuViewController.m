@@ -155,8 +155,8 @@
     self.versionLabel = nil;
     gameConfigViewController = nil;
     settingsViewController = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {

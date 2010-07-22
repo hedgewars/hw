@@ -132,8 +132,8 @@
     teamSettingsViewController = nil;
     weaponSettingsViewController = nil;
     schemeSettingsViewController = nil;
-    [super viewDidUnload];
     MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) dealloc {
