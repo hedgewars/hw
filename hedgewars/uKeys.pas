@@ -354,7 +354,11 @@ end;
 
 procedure SetBinds(var binds: TBinds);
 begin
+{$IFDEF IPHONEOS}
+    CurrentBinds:= DefaultBinds;
+{$ELSE}
     CurrentBinds:= binds;
+{$ENDIF}
 end;
 
 procedure SetDefaultBinds;
@@ -408,13 +412,13 @@ var Controller: array [0..5] of PSDL_Joystick;
 procedure ControllerInit;
 var i, j: Integer;
 begin
-{$IFNDEF IPHONEOS}
-SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+ControllerEnabled:= 0;
+{$IFDEF IPHONEOS}
+exit; // joystick subsystem disabled on iPhone
 {$ENDIF}
 
-ControllerEnabled:= 0;
+SDL_InitSubSystem(SDL_INIT_JOYSTICK);
 ControllerNumControllers:= SDL_NumJoysticks();
-
 if ControllerNumControllers > 6 then ControllerNumControllers:= 6;
 
 WriteLnToConsole('Number of game controllers: ' + inttostr(ControllerNumControllers));

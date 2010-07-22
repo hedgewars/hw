@@ -439,10 +439,6 @@ with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_Switch
 end;
 
-{$IFDEF IPHONEOS}
-procedure clearView; cdecl; external;
-{$ENDIF}
-
 procedure chNextTurn(var s: shortstring);
 begin
     s:= s; // avoid compiler hint

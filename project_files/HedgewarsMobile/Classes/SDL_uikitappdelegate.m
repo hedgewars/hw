@@ -140,8 +140,7 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
-    //if (self.mainViewController.view.superview == nil)
-    //     self.mainViewController = nil;
+    // don't clean mainMenuViewController here!!!
     MSG_MEMCLEAN();
     print_free_memory();
 }

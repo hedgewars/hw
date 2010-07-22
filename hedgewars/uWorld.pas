@@ -379,11 +379,10 @@ if (Pos >= 0) then
     end
 else
     FreeWeaponTooltip;
-{$IFDEF IPHONEOS}
 if (WeaponTooltipTex <> nil) and (AMxShift = 0) then
+{$IFDEF IPHONEOS}
     ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, AMyOffset - 1);
 {$ELSE}
-if (WeaponTooltipTex <> nil) and (AMxShift = 0) then
     ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, min(y + 1, cScreenHeight - WeaponTooltipTex^.h - 40));
 {$ENDIF}
 

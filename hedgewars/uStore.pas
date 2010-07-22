@@ -1235,10 +1235,6 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-{$IFDEF IPHONEOS}
-procedure startSpinning; cdecl; external;
-procedure stopSpinning; cdecl; external;
-{$ENDIF}
 procedure AddProgress;
 var r: TSDL_Rect;
     texsurf: PSDL_Surface;

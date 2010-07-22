@@ -49,9 +49,7 @@ procedure freeEverything(complete:boolean); forward;
 
 ////////////////////////////////
 procedure DoTimer(Lag: LongInt);
-{$IFNDEF IPHONEOS}
 var s: shortstring;
-{$ENDIF}
 begin
     if not isPaused then inc(RealTicks, Lag);
 
@@ -108,7 +106,6 @@ begin
 {$ELSE}
     SDL_GL_SwapBuffers();
 {$ENDIF}
-{$IFNDEF IPHONEOS}
     // not going to make captures on the iPhone
     if flagMakeCapture then
     begin
@@ -118,7 +115,6 @@ begin
         MakeScreenshot(s);
         //SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
     end;
-{$ENDIF}
 end;
 
 ////////////////////
@@ -157,6 +153,8 @@ begin
                     KeyPressChat(event.key.keysym.sym);
 {$ELSE}
                     KeyPressChat(event.key.keysym.unicode);
+                SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
+                SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
 {$ENDIF}
 {$IFDEF SDL13}
                 SDL_WINDOWEVENT:
@@ -166,10 +164,6 @@ begin
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
                         cHasFocus:= event.active.gain = 1;
-{$ENDIF}
-{$IFNDEF IPHONEOS}
-                SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
-                SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
 {$ENDIF}
                 SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
                 SDL_JOYHATMOTION: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);

@@ -22,6 +22,13 @@
  
 #define ZAssert(condition, ...) do { if (!(condition)) { ALog(__VA_ARGS__); }} while(0)
 
+// by http://blog.coriolis.ch/2009/01/05/macros-for-xcode/
+#define START_TIMER NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
+#define END_TIMER(msg) 	NSTimeInterval stop = [NSDate timeIntervalSinceReferenceDate]; CMLog([NSString stringWithFormat:@"%@ Time = %f", msg, stop-start]);
+
+#define releaseAndNil(x) [x release], x = nil;
+
+
 #if !__IPHONE_3_2
 typedef enum {
     UIUserInterfaceIdiomPhone,           // iPhone and iPod touch style UI

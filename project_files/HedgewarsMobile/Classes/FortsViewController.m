@@ -150,7 +150,7 @@
 }
 
 
--(void) ealloc {
+-(void) dealloc {
     [teamDictionary release];
     [lastIndexPath release];
     [fortArray release];

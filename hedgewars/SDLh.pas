@@ -840,6 +840,13 @@ procedure SDLNet_Write16(value: Word; buf: pointer);
 procedure SDLNet_Write32(value: LongWord; buf: pointer);
 function  SDLNet_Read16(buf: pointer): Word;
 function  SDLNet_Read32(buf: pointer): LongWord;
+
+{$IFDEF IPHONEOS}
+(*  iPhone related calls  *)
+procedure clearView; cdecl; external;
+procedure startSpinning; cdecl; external;
+procedure stopSpinning; cdecl; external;
+{$ENDIF}
 implementation
 
 function SDL_MustLock(Surface: PSDL_Surface): Boolean;

@@ -21,15 +21,15 @@
 #pragma mark View Lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
-    
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
-    self.settingsDictionary = dictionary;
-    [dictionary release];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
     
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
+    self.settingsDictionary = dictionary;
+    [dictionary release];
+
     [super viewWillAppear:animated];
 }
 
