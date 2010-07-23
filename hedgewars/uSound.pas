@@ -130,7 +130,6 @@ end;
 
 procedure SoundLoad;
 var i: TSound;
-    s: shortstring;
     t: Longword;
 begin
     if not isSoundEnabled then exit;
@@ -138,28 +137,13 @@ begin
     defVoicepack:= AskForVoicepack('Default');
 
     for i:= Low(TSound) to High(TSound) do
-        if (Soundz[i].Path <> ptVoices) and (Soundz[i].FileName <> '') then
-        begin
-            s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
-            WriteToConsole(msgLoading + s + ' ');
-            defVoicepack^.chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-            TryDo(defVoicepack^.chunks[i] <> nil, msgFailed, true);
-            WriteLnToConsole(msgOK);
-        end;
-
+        defVoicepack^.chunks[i]:= nil;
+ 
     for t:= 0 to cMaxTeams do
         if voicepacks[t].name <> '' then
             for i:= Low(TSound) to High(TSound) do
-                if (Soundz[i].Path = ptVoices) and (Soundz[i].FileName <> '') then
-                begin
-                    s:= Pathz[Soundz[i].Path] + '/' + voicepacks[t].name + '/' + Soundz[i].FileName;
-                    WriteToConsole(msgLoading + s + ' ');
-                    voicepacks[t].chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-                    if voicepacks[t].chunks[i] = nil then
-                        WriteLnToConsole(msgFailed)
-                    else
-                        WriteLnToConsole(msgOK)
-                end;
+                    voicepacks[t].chunks[i]:= nil;
+
 end;
 
 procedure PlaySound(snd: TSound);
@@ -178,6 +162,7 @@ begin
 end;
 
 procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
+var s:shortstring;
 begin
     if (not isSoundEnabled) or fastUntilLag then
         exit;
@@ -185,10 +170,32 @@ begin
     if keepPlaying and (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
         exit;
 
-    if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
+    if (voicepack <> nil) then
+    begin
+        if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
+        begin
+            s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            WriteToConsole(msgLoading + s + ' ');
+            voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+            if voicepack^.chunks[snd] = nil then
+                WriteLnToConsole(msgFailed)
+            else
+                WriteLnToConsole(msgOK)
+        end;
         lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], 0, -1)
+    end
     else
+    begin
+        if (defVoicepack^.chunks[snd] = nil) and (Soundz[snd].Path <> ptVoices) and (Soundz[snd].FileName <> '') then
+        begin
+            s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
+            WriteToConsole(msgLoading + s + ' ');
+            defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+            TryDo(defVoicepack^.chunks[snd] <> nil, msgFailed, true);
+            WriteLnToConsole(msgOK);
+        end;
         lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1)
+    end;
 end;
 
 function LoopSound(snd: TSound): LongInt;
@@ -197,6 +204,7 @@ begin
 end;
 
 function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
+var s: shortstring;
 begin
     if (not isSoundEnabled) or fastUntilLag then
     begin
@@ -204,10 +212,32 @@ begin
         exit
     end;
 
-    if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
+    if (voicepack <> nil) then
+    begin
+        if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
+        begin
+            s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            WriteToConsole(msgLoading + s + ' ');
+            voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+            if voicepack^.chunks[snd] = nil then
+                WriteLnToConsole(msgFailed)
+            else
+                WriteLnToConsole(msgOK)
+        end;
         LoopSound:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], -1, -1)
+    end
     else
-        LoopSound:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], -1, -1)
+    begin
+        if (defVoicepack^.chunks[snd] = nil) and (Soundz[snd].Path <> ptVoices) and (Soundz[snd].FileName <> '') then
+        begin
+            s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
+            WriteToConsole(msgLoading + s + ' ');
+            defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+            TryDo(defVoicepack^.chunks[snd] <> nil, msgFailed, true);
+            WriteLnToConsole(msgOK);
+        end;
+        LoopSound:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], -1, -1);
+    end;
 end;
 
 procedure StopSound(snd: TSound);
