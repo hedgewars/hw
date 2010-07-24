@@ -149,9 +149,10 @@
 }
 
 -(void) removeChat {
-    HW_chatEnd();
-    if (SDL_iPhoneKeyboardIsShown(sdlwindow))
+    if (SDL_iPhoneKeyboardIsShown(sdlwindow)) {
         SDL_iPhoneKeyboardHide(sdlwindow);
+        HW_chatEnd();
+    }
 }
 
 #pragma mark -

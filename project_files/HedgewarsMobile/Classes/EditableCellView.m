@@ -27,14 +27,14 @@
         [textField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
         
         [self.contentView addSubview:textField];
-        [textField release];
+        //[textField release];
         
         titleLabel = [[UILabel alloc] init];
         titleLabel.textAlignment = UITextAlignmentLeft;
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
         [self.contentView addSubview:titleLabel];
-        [titleLabel release];
+        //[titleLabel release];
         
         minimumCharacters = 1;
         maximumCharacters = 64;
@@ -71,9 +71,10 @@
 }
 
 -(void) dealloc {
-    [oldValue release], oldValue = nil;
-    [titleLabel release], titleLabel = nil;
-    [textField release], textField = nil;
+    self.delegate = nil;
+    releaseAndNil(oldValue);
+    releaseAndNil(titleLabel);
+    releaseAndNil(textField);
     [super dealloc];
 }
 

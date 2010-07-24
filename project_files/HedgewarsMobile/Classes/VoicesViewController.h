@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "SDL_mixer.h"
 
 @interface VoicesViewController : UITableViewController {
     NSMutableDictionary *teamDictionary;
@@ -15,7 +15,8 @@
     NSArray *voiceArray;
     NSIndexPath *lastIndexPath;
 
-    int voiceBeingPlayed;
+    Mix_Chunk *voiceBeingPlayed;
+    int lastChannel;
 }
 
 @property (nonatomic,retain) NSMutableDictionary *teamDictionary;
