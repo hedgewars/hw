@@ -846,6 +846,7 @@ function  SDLNet_Read32(buf: pointer): LongWord;
 procedure clearView; cdecl; external;
 procedure startSpinning; cdecl; external;
 procedure stopSpinning; cdecl; external;
+function  isPhone: Boolean; cdecl; external;
 {$ENDIF}
 implementation
 

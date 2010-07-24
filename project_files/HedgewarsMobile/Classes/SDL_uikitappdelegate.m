@@ -27,11 +27,13 @@
 #import "../SDL_sysvideo.h"
 #import "jumphack.h"
 #import "SDL_video.h"
-#import "GameSetup.h"
+#import "SDL_mixer.h"
+
 #import "PascalImports.h"
+#import "CommodityFunctions.h"
+#import "GameSetup.h"
 #import "MainMenuViewController.h"
 #import "OverlayViewController.h"
-#import "CommodityFunctions.h"
 
 #ifdef main
 #undef main
@@ -131,7 +133,9 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {
+    Mix_CloseAudio();
     SDL_SendQuit();
+    
     if (isInGame) {
         HW_terminate(YES);
         // hack to prevent automatic termination. See SDL_uikitevents.m for details

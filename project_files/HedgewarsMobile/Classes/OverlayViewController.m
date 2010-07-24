@@ -326,6 +326,8 @@
     // reset default dimming
     doDim();
     
+    HW_setPianoSound([allTouches count]);
+    
     switch ([allTouches count]) {
         case 1:       
             removeConfirmationInput();
@@ -424,7 +426,6 @@
             HW_allKeysUp();
             break;
         default:
-            DLog(@"too many touches");
             break;
     }
     
