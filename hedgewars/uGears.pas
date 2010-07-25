@@ -95,8 +95,8 @@ procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
-function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
-function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
+function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
+function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics,
@@ -994,7 +994,6 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 
     Tint($C0, $C0, $C0, $FF);
 
-    glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, @RopePoints.rounded[0]);
     glDrawArrays(GL_LINE_STRIP, 0, RopePoints.Count + 2);
     Tint($FF, $FF, $FF, $FF);

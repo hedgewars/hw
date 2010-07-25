@@ -97,6 +97,8 @@
             sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(-90));
             break;
+        default:
+            break;
     }
     CGRect rect = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
@@ -301,7 +303,8 @@
 -(void) dismissPopover {
     if (YES == isPopoverVisible) {
         isPopoverVisible = NO;
-        HW_pause();
+        if (HW_isPaused())
+            HW_pause();
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             [(InGameMenuViewController *)popoverController.contentViewController removeChat];
@@ -368,11 +371,11 @@
                     
                     // draw the button at the last touched point (which is the current position)
                     UIButton *tapAgain = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                    tapAgain.frame = CGRectMake(currentPosition.x - 90, currentPosition.y + 15, 180, 30);
+                    tapAgain.frame = CGRectMake(currentPosition.x - 75, currentPosition.y + 25, 150, 40);
                     tapAgain.tag = CONFIRMATION_TAG;
                     tapAgain.alpha = 0;
                     [tapAgain addTarget:self action:@selector(sendHWClick) forControlEvents:UIControlEventTouchUpInside];
-                    [tapAgain setTitle:NSLocalizedString(@"Tap again to confirm",@"from the overlay") forState:UIControlStateNormal];
+                    [tapAgain setTitle:NSLocalizedString(@"Tap to set!",@"from the overlay") forState:UIControlStateNormal];
                     [self.view addSubview:tapAgain];
                     
                     // animation ftw!
