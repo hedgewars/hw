@@ -2,7 +2,7 @@
 module HWProtoNEState where
 
 import qualified Data.IntMap as IntMap
-import Maybe
+import Data.Maybe
 import Data.List
 import Data.Word
 import Control.Monad.Reader

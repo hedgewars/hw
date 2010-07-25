@@ -14,7 +14,7 @@ import Network.Socket
 import System.IO
 import qualified Data.List as List
 import Control.Monad
-import Maybe
+import Data.Maybe
 -------------------------------------------------
 import qualified Codec.Binary.Base64 as Base64
 import qualified Data.ByteString.Char8 as B
