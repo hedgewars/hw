@@ -61,7 +61,7 @@ clientSendLoop :: Socket -> Chan CoreMessage -> Chan [B.ByteString] -> ClientInd
 clientSendLoop s coreChan chan ci = do
     answer <- readChan chan
     doClose <- Exception.handle
-        (\(e :: Exception.IOException) -> if isQuit answer then return True else sendQuit e >> return False) $ do
+        (\(e :: Exception.IOException) -> if isQuit answer then return True else sendQuit e >> return True) $ do
             sendAll s $ (B.unlines answer) `B.append` (B.singleton '\n')
             return $ isQuit answer
 

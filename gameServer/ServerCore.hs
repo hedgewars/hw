@@ -74,7 +74,7 @@ startServer serverInfo serverSocket = do
 
     return ()
 
-    forkIO $ timerLoop 0 $ coreChan serverInfo
+    --forkIO $ timerLoop 0 $ coreChan serverInfo
 
     startDBConnection serverInfo
 
@@ -82,4 +82,4 @@ startServer serverInfo serverSocket = do
 
     forkIO $ evalStateT mainLoop (ServerState Nothing serverInfo Set.empty rnc)
 
-    forever $ threadDelay (60 * 60 * 10^6) >> putStrLn "***"
+    forever $ threadDelay (60 * 60 * 10^6)

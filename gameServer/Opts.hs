@@ -3,7 +3,7 @@ module Opts
     getOpts,
 ) where
 
-import System
+import System.Environment
 import System.Console.GetOpt
 import Network
 import Data.Maybe ( fromMaybe )

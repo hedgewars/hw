@@ -11,8 +11,7 @@ import Control.Concurrent
 import qualified Control.Exception as Exception
 import Control.Monad
 import qualified Data.Map as Map
-import Monad
-import Maybe
+import Data.Maybe
 import System.Log.Logger
 import Data.Time
 ------------------------

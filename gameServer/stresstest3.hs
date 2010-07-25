@@ -19,7 +19,6 @@ import System.Posix
 type SState = Handle
 io = liftIO
 
-        
 readPacket :: StateT SState IO [String]
 readPacket = do
     h <- get
@@ -45,22 +44,26 @@ sendPacket s = do
 
 emulateSession :: StateT SState IO ()
 emulateSession = do
+    n <- io $ randomRIO (100000::Int, 100000)
     waitPacket "CONNECTED"
-    sendPacket ["NICK", "test"]
+    sendPacket ["NICK", "test" ++ (show n)]
     waitPacket "NICK"
     sendPacket ["PROTO", "31"]
     waitPacket "PROTO"
     b <- waitPacket "LOBBY:JOINED"
-    io $ print b
+    --io $ print b
+    return ()
 
 testing = Control.OldException.handle print $ do
-    putStrLn "Start"
+    putStr "+"
     sock <- connectTo "127.0.0.1" (PortNumber 46631)
     evalStateT emulateSession sock
-    putStrLn "Finish"
+    --hClose sock
+    putStr "-"
+    hFlush stdout
 
 forks = forever $ do
-    delay <- randomRIO (400000::Int, 600000)
+    delay <- randomRIO (20000::Int, 40000)
     threadDelay delay
     forkIO testing
 

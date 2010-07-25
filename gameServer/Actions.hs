@@ -7,9 +7,9 @@ import qualified Data.IntSet as IntSet
 import qualified Data.Set as Set
 import qualified Data.Sequence as Seq
 import System.Log.Logger
-import Monad
+import Control.Monad
 import Data.Time
-import Maybe
+import Data.Maybe
 import Control.Monad.Reader
 import Control.Monad.State
 import qualified Data.ByteString.Char8 as B
@@ -116,11 +116,11 @@ processAction (ByeClient msg) = do
                         readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
                         }) ri
 
-        removeClient rnc ci
-
     modify (\s -> s{removedClients = ci `Set.insert` removedClients s})
 
 processAction (DeleteClient ci) = do
+    rnc <- gets roomsClients
+    liftIO $ removeClient rnc ci
     modify (\s -> s{removedClients = ci `Set.delete` removedClients s})
 
 {-
