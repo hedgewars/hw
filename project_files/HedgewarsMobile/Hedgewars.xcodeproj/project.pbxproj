@@ -24,7 +24,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
-		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		611E03E711FA747C0077A41E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 611E037C11FA74590077A41E /* libvorbis.a */; };
 		611E0E5111FA92170077A41E /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 611E0E5011FA92130077A41E /* libfreetype.a */; };
 		611E0EE711FB20610077A41E /* ammoButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE511FB20610077A41E /* ammoButton.png */; };
@@ -109,9 +109,9 @@
 		61798A14114AB65C00BA94A9 /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798A13114AB65600BA94A9 /* libSDL_ttf.a */; };
 		61799289114AE08700BA94A9 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 61798A5E114AE08600BA94A9 /* Data */; };
 		6183D83E11E2BCE200A88903 /* LI-ipad-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */; };
-		6183D83F11E2BCE200A88903 /* LI-iphone-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83D11E2BCE200A88903 /* LI-iphone-Landscape.png */; };
+		6183D83F11E2BCE200A88903 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83D11E2BCE200A88903 /* Default.png */; };
 		619C09EA11E8B8D600F1DF16 /* title_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 619C09E911E8B8D600F1DF16 /* title_small.png */; };
-		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; };
+		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
 		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
@@ -806,7 +806,7 @@
 		61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_ttf.xcodeproj; path = "../../../Library/SDL-1.3/SDL_ttf/Xcode-iPhoneOS/SDL_ttf.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61798A5E114AE08600BA94A9 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
 		6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LI-ipad-Landscape.png"; path = "Resources/Icons/LI-ipad-Landscape.png"; sourceTree = "<group>"; };
-		6183D83D11E2BCE200A88903 /* LI-iphone-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LI-iphone-Landscape.png"; path = "Resources/Icons/LI-iphone-Landscape.png"; sourceTree = "<group>"; };
+		6183D83D11E2BCE200A88903 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Icons/Default.png; sourceTree = "<group>"; };
 		618736B8118CA28600123B23 /* GearDrawing.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GearDrawing.inc; path = ../../hedgewars/GearDrawing.inc; sourceTree = SOURCE_ROOT; };
 		619C09E911E8B8D600F1DF16 /* title_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title_small.png; path = "Resources/Frontend-iPhone/title_small.png"; sourceTree = "<group>"; };
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -1241,7 +1241,7 @@
 			isa = PBXGroup;
 			children = (
 				6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */,
-				6183D83D11E2BCE200A88903 /* LI-iphone-Landscape.png */,
+				6183D83D11E2BCE200A88903 /* Default.png */,
 				61F7A43111E290650040BA66 /* Icon-72.png */,
 				61F7A43211E290650040BA66 /* Icon-Small-50.png */,
 				61F7A43311E290650040BA66 /* Icon-Small.png */,
@@ -1997,7 +1997,7 @@
 				61F7A43D11E290650040BA66 /* Icon@2x.png in Resources */,
 				61F7A43E11E290650040BA66 /* iTunesArtwork.png in Resources */,
 				6183D83E11E2BCE200A88903 /* LI-ipad-Landscape.png in Resources */,
-				6183D83F11E2BCE200A88903 /* LI-iphone-Landscape.png in Resources */,
+				6183D83F11E2BCE200A88903 /* Default.png in Resources */,
 				619C09EA11E8B8D600F1DF16 /* title_small.png in Resources */,
 				6129B9F711EFB04D0017E305 /* denied.png in Resources */,
 				611E0EE711FB20610077A41E /* ammoButton.png in Resources */,
@@ -2209,7 +2209,7 @@
 				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
-				GCC_VERSION = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -2228,7 +2228,7 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv6";
@@ -2327,7 +2327,7 @@
 				);
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
-				GCC_VERSION = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -2344,7 +2344,7 @@
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv6";
@@ -2529,7 +2529,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
-				GCC_VERSION = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -2546,7 +2546,7 @@
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv6";
@@ -2572,7 +2572,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
-				GCC_VERSION = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -2591,7 +2591,7 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv6";

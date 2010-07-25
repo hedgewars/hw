@@ -226,6 +226,7 @@ const sfMax = 1000;
     rqPlainSplash = $00000100;  // no droplets
     rqClampLess   = $00000200;  // don't clamp textures
     rqTooltipsOff = $00000400;  // tooltips are not drawn
+    rqDesyncVBlank= $00000800;  // don't sync on vblank
 
     // image flags (for LoadImage())
     ifNone        = $00000000;  // nothing special

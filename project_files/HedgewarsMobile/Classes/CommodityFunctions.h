@@ -46,4 +46,5 @@ BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);
 NSInteger randomPort ();
 void popError (const char *title, const char *message);
 void print_free_memory ();
-
+BOOL isPhone ();
+NSString *modelType ();

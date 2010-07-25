@@ -80,7 +80,6 @@ var
     cFullScreen     : boolean = false;
     isSoundEnabled  : boolean = true;
     isMusicEnabled  : boolean = false;
-    cVSyncInUse     : boolean = true;    
     cLocaleFName    : shortstring = 'en.txt';
     cInitVolume     : LongInt = 50;
     cTimerInterval  : LongInt = 8;

@@ -198,7 +198,6 @@ end;
 ///////////////
 {$IFDEF HWLIBRARY}
 procedure Game(gameArgs: arrayofpchar); cdecl; export;
-var tmp_quality: LongInt;
 {$ELSE}
 procedure Game;
 {$ENDIF}
@@ -211,7 +210,6 @@ begin
 {$IFDEF HWLIBRARY}
     cBits:= 32;
     cFullScreen:= false;
-    cVSyncInUse:= true;
     cTimerInterval:= 8;
     PathPrefix:= 'Data';
 {$IFDEF DEBUGFILE}
@@ -447,7 +445,7 @@ begin
             val(ParamStr(5), ipcPort);
             cFullScreen:= ParamStr(6) = '1';
             isSoundEnabled:= ParamStr(7) = '1';
-            cVSyncInUse:= ParamStr(8) = '1';        //unused
+            //cVSyncInUse:= ParamStr(8) = '1';      //merged with rqFlags
             //cWeaponTooltips:= ParamStr(9) = '1';  //merged with rqFlags
             cLocaleFName:= ParamStr(10);
             val(ParamStr(11), cInitVolume);
@@ -462,7 +460,9 @@ begin
                 cReducedQuality:= $FFFFFFFF xor rqLowRes
             else
                 val(ParamStr(18), cReducedQuality);
-                
+            
+            if (ParamStr(8) = '0') then         //HACK - ifcVSyncInUse not true, disable it
+                cReducedQuality:= cReducedQuality xor rqDesyncVBlank;
             if (ParamStr(9) = '0') then         //HACK - if cWeaponTooltips not true, disable it
                 cReducedQuality:= cReducedQuality xor rqTooltipsOff;
         end;

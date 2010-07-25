@@ -164,24 +164,32 @@
     
     NSIndexPath *theIndex;
     if (segmentedControl.selectedSegmentIndex != 1) {
-        // prevent other events and add an activity while the preview is beign generated
-        [self turnOffWidgets];
-        
-        // remove the current preview
+        // remove the current preview and title
         [self.previewButton setImage:nil forState:UIControlStateNormal];
+        [self.previewButton setTitle:nil forState:UIControlStateNormal];
         
-        // add a very nice spinning wheel
-        UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] 
-                                              initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        indicator.center = CGPointMake(previewButton.bounds.size.width / 2, previewButton.bounds.size.height / 2);
-        indicator.tag = INDICATOR_TAG;
-        [indicator startAnimating];
-        [self.previewButton addSubview:indicator];
-        [indicator release];
+        // don't display preview on slower device, too slow and memory hog
+        NSString *modelId = modelType();
+        if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"]) {
+            busy = NO;
+            [self.previewButton setTitle:NSLocalizedString(@"Preview not available",@"") forState:UIControlStateNormal];
+        } else {
+            // prevent other events and add an activity while the preview is beign generated
+            [self turnOffWidgets];
+            
+            // add a very nice spinning wheel
+            UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] 
+                                                  initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+            indicator.center = CGPointMake(previewButton.bounds.size.width / 2, previewButton.bounds.size.height / 2);
+            indicator.tag = INDICATOR_TAG;
+            [indicator startAnimating];
+            [self.previewButton addSubview:indicator];
+            [indicator release];
+            
+            // let's draw in a separate thread so the gui can work; at the end it restore other widgets
+            [NSThread detachNewThreadSelector:@selector(drawingThread) toTarget:self withObject:nil];
+        }
         
-        // let's draw in a separate thread so the gui can work; at the end it restore other widgets
-        [NSThread detachNewThreadSelector:@selector(drawingThread) toTarget:self withObject:nil];
-    
         theIndex = [NSIndexPath indexPathForRow:(random()%[self.themeArray count]) inSection:0];
     } else {
         theIndex = [NSIndexPath indexPathForRow:(random()%[self.mapArray count]) inSection:0];
@@ -516,7 +524,13 @@
     // initialize some "default" values
     self.sizeLabel.text = NSLocalizedString(@"All",@"");
     self.slider.value = 0.05f;
-    self.segmentedControl.selectedSegmentIndex = 0;
+    
+    // on slower device we show directly the static map
+    NSString *modelId = modelType();
+    if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])
+        self.segmentedControl.selectedSegmentIndex = 1;
+    else
+        self.segmentedControl.selectedSegmentIndex = 0;
 
     self.templateFilterCommand = @"e$template_filter 0";
     self.mazeSizeCommand = @"e$maze_size 0";

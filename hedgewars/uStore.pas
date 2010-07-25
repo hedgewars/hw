@@ -1133,11 +1133,13 @@ begin
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 {$IFNDEF SDL13}
 // this attribute is default in 1.3 and must be enabled in MacOSX
-    if cVSyncInUse then
+    if (cReducedQuality and rqDesyncVBlank) <> 0 then
+        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0)
+    else
         SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
 {$IFDEF DARWIN}
 // fixes vsync in Snow Leopard
-    one := 1;
+    one:= 1;
     CGLSetParameter(CGLGetCurrentContext(), 222, @one);
 {$ENDIF}
 {$ENDIF}
