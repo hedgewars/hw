@@ -7,6 +7,8 @@
 //
 
 #import "CommodityFunctions.h"
+#import <sys/types.h>
+#import <sys/sysctl.h>
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 
@@ -155,6 +157,19 @@ void print_free_memory () {
     DLog(@"used: %u free: %u total: %u", mem_used, mem_free, mem_total);
 }
 
-BOOL isPhone() {
+BOOL isPhone () {
     return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone);
+}
+
+NSString *modelType () {
+    size_t size;
+    // set 'oldp' parameter to NULL to get the size of the data returned so we can allocate appropriate amount of space
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0); 
+    char *name = (char *)malloc(sizeof(char) * size);
+    // get the platform name
+    sysctlbyname("hw.machine", name, &size, NULL, 0);
+    NSString *modelId = [NSString stringWithUTF8String:name];
+    free(name);
+    
+    return modelId;
 }

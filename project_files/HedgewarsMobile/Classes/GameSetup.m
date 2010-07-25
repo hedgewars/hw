@@ -6,9 +6,6 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#include <sys/types.h>
-#include <sys/sysctl.h>
-
 #import "GameSetup.h"
 #import "SDL_uikitappdelegate.h"
 #import "SDL_net.h"
@@ -374,15 +371,7 @@
     const char **gameArgs = (const char**) malloc(sizeof(char *) * 10);
     NSInteger tmpQuality;
     
-    size_t size;
-    // Set 'oldp' parameter to NULL to get the size of the data returned so we can allocate appropriate amount of space
-    sysctlbyname("hw.machine", NULL, &size, NULL, 0); 
-    char *name = (char *)malloc(sizeof(char) * size);
-    // Get the platform name
-    sysctlbyname("hw.machine", name, &size, NULL, 0);
-    NSString *modelId = [[NSString alloc] initWithUTF8String:name];
-    free(name);
-
+    NSString *modelId = modelType();
     if ([modelId hasPrefix:@"iPhone1"] ||                                   // = iPhone or iPhone 3G
         [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])   // = iPod Touch or iPod Touch 2G
         tmpQuality = 0x00000001 | 0x00000002 | 0x00000040;  // rqLowRes | rqBlurryLand | rqKillFlakes
@@ -395,7 +384,6 @@
                 tmpQuality = 0;                             // full quality
     if (![modelId hasPrefix:@"iPad"])                                       // = disable tooltips unless iPad
         tmpQuality = tmpQuality | 0x00000400;
-    [modelId release];
     
     gameArgs[9] = [[[NSNumber numberWithInteger:tmpQuality] stringValue] UTF8String];
 

@@ -30,8 +30,8 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [self.tableView setBackgroundView:nil]; 
         self.view.backgroundColor = [UIColor clearColor];
+        self.tableView.separatorColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1];
     }
-    self.tableView.separatorColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
@@ -54,13 +54,11 @@
 }
 
 
-
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
 }
-
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) 
@@ -68,7 +66,6 @@
     else
         return [self.listOfWeapons count];
 }
-
 
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

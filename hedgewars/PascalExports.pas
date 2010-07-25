@@ -49,6 +49,9 @@ end;
 procedure HW_zoomReset; cdecl; export;
 begin
     middleClick:= true;
+    // center the camera at current hog
+    if CurrentHedgehog <> nil then
+        followGear:= CurrentHedgehog^.Gear;
 end;
 
 procedure HW_ammoMenu; cdecl; export;
