@@ -131,18 +131,31 @@ end;
 procedure SoundLoad;
 var i: TSound;
     t: Longword;
+    s:shortstring;
 begin
     if not isSoundEnabled then exit;
 
     defVoicepack:= AskForVoicepack('Default');
-
-    for i:= Low(TSound) to High(TSound) do
-        defVoicepack^.chunks[i]:= nil;
- 
+    
     for t:= 0 to cMaxTeams do
         if voicepacks[t].name <> '' then
             for i:= Low(TSound) to High(TSound) do
-                    voicepacks[t].chunks[i]:= nil;
+                voicepacks[t].chunks[i]:= nil;
+    
+    for i:= Low(TSound) to High(TSound) do
+    begin
+        defVoicepack^.chunks[i]:= nil;
+        // preload all the big sound files (>32k) that would otherwise lockup the game
+        if (i in [sndBeeWater, sndBee, sndCake, sndHellishImpact1, sndHellish, sndHomerun, sndMolotov, sndMortar, sndRideOfTheValkyries, sndYoohoo]) 
+            and (Soundz[i].Path <> ptVoices) and (Soundz[i].FileName <> '') then
+        begin
+            s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
+            WriteToConsole(msgLoading + s + ' ');
+            defVoicepack^.chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+            TryDo(defVoicepack^.chunks[i] <> nil, msgFailed, true);
+            WriteLnToConsole(msgOK);
+        end;
+    end;
 
 end;
 

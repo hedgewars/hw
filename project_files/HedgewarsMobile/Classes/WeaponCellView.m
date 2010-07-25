@@ -72,23 +72,23 @@
         craLab.textColor = [UIColor grayColor];
         craLab.textAlignment = UITextAlignmentCenter;
         
-        [self.contentView addSubview:weaponName]; [weaponName release];
-        [self.contentView addSubview:weaponIcon]; [weaponIcon release];
+        [self.contentView addSubview:weaponName]; // [weaponName release];
+        [self.contentView addSubview:weaponIcon]; // [weaponIcon release];
         
-        [self.contentView addSubview:initialQt]; [initialQt release];
-        [self.contentView addSubview:probabilityQt]; [probabilityQt release];
-        [self.contentView addSubview:delayQt]; [delayQt release];
-        [self.contentView addSubview:crateQt]; [crateQt release];
+        [self.contentView addSubview:initialQt];  // [initialQt release];
+        [self.contentView addSubview:probabilityQt]; // [probabilityQt release];
+        [self.contentView addSubview:delayQt];    // [delayQt release];
+        [self.contentView addSubview:crateQt];    // [crateQt release];
         
-        [self.contentView addSubview:initialImg]; [initialImg release];
-        [self.contentView addSubview:probabImg]; [probabImg release];
-        [self.contentView addSubview:delayImg]; [delayImg release];
-        [self.contentView addSubview:crateImg]; [crateImg release];
+        [self.contentView addSubview:initialImg]; // [initialImg release];
+        [self.contentView addSubview:probabImg];  // [probabImg release];
+        [self.contentView addSubview:delayImg];   // [delayImg release];
+        [self.contentView addSubview:crateImg];   // [crateImg release];
 
-        [self.contentView addSubview:initialLab]; [initialLab release];
-        [self.contentView addSubview:probLab]; [probLab release];
-        [self.contentView addSubview:delLab]; [delLab release];
-        [self.contentView addSubview:craLab]; [craLab release];
+        [self.contentView addSubview:initialLab]; // [initialLab release];
+        [self.contentView addSubview:probLab];    // [probLab release];
+        [self.contentView addSubview:delLab];     // [delLab release];
+        [self.contentView addSubview:craLab];     // [craLab release];
     }
     return self;
 }
@@ -155,20 +155,21 @@
 }
 
 -(void) dealloc {
-    [weaponName release];
-    [weaponIcon release];
-    [initialQt release];
-    [probabilityQt release];
-    [delayQt release];
-    [crateQt release];
-    [initialImg release];
-    [probabImg release];
-    [delayImg release];
-    [crateImg release];
-    [initialLab release];
-    [probLab release];
-    [delLab release];
-    [craLab release];
+    self.delegate = nil;
+    releaseAndNil(weaponName);
+    releaseAndNil(weaponIcon);
+    releaseAndNil(initialQt);
+    releaseAndNil(probabilityQt);
+    releaseAndNil(delayQt);
+    releaseAndNil(crateQt);
+    releaseAndNil(initialImg);
+    releaseAndNil(probabImg);
+    releaseAndNil(delayImg);
+    releaseAndNil(crateImg);
+    releaseAndNil(initialLab);
+    releaseAndNil(probLab);
+    releaseAndNil(delLab);
+    releaseAndNil(craLab);
     [super dealloc];
 }
 

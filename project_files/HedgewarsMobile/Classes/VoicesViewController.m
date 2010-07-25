@@ -8,7 +8,6 @@
 
 #import "VoicesViewController.h"
 #import "CommodityFunctions.h"
-#import "openalbridge.h"
 
 
 @implementation VoicesViewController
@@ -26,8 +25,7 @@
     [super viewDidLoad];
     srandom(time(NULL));
 
-    openal_init();
-    voiceBeingPlayed = -1;
+    voiceBeingPlayed = NULL;
 
     // load all the voices names and store them into voiceArray
     // it's here and not in viewWillAppear because user cannot add/remove them
@@ -46,9 +44,10 @@
 
 -(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    if(voiceBeingPlayed >= 0) {
-        openal_stopsound(voiceBeingPlayed);
-        voiceBeingPlayed = -1;
+    if(voiceBeingPlayed != NULL) {
+        Mix_HaltChannel(lastChannel);
+        Mix_FreeChunk(voiceBeingPlayed);
+        voiceBeingPlayed = NULL;
     }
 }
 
@@ -105,20 +104,20 @@
     } 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (voiceBeingPlayed >= 0) {
-        openal_stopsound(voiceBeingPlayed);
-        voiceBeingPlayed = -1;
+    if (voiceBeingPlayed != NULL) {
+        Mix_HaltChannel(lastChannel);
+        Mix_FreeChunk(voiceBeingPlayed);
+        voiceBeingPlayed = NULL;
     }
     
-    // the keyword static prevents re-initialization of the variable
     NSString *voiceDir = [[NSString alloc] initWithFormat:@"%@/%@/",VOICES_DIRECTORY(),[voiceArray objectAtIndex:newRow]];
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:voiceDir error:NULL];
     
     int index = random() % [array count];
     
-    voiceBeingPlayed = openal_loadfile([[voiceDir stringByAppendingString:[array objectAtIndex:index]] UTF8String]);
+    voiceBeingPlayed = Mix_LoadWAV([[voiceDir stringByAppendingString:[array objectAtIndex:index]] UTF8String]);
     [voiceDir release];
-    openal_playsound(voiceBeingPlayed);    
+    lastChannel = Mix_PlayChannel(-1, voiceBeingPlayed, 0);    
 }
 
 
@@ -131,8 +130,7 @@
 }
 
 -(void) viewDidUnload {
-    openal_close();
-    voiceBeingPlayed = -1;
+    voiceBeingPlayed = NULL;
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
     self.voiceArray = nil;

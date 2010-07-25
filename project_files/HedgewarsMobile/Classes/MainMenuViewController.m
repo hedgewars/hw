@@ -12,6 +12,7 @@
 #import "GameConfigViewController.h"
 #import "SplitViewRootController.h"
 #import "CommodityFunctions.h"
+#import "SDL_mixer.h"
 
 @implementation MainMenuViewController
 @synthesize versionLabel;
@@ -30,7 +31,18 @@
     MSG_MEMCLEAN();
 }
 
+// using a different thread for audio 'cos it's slow
+-(void) initAudioThread {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 1, 512);
+    [pool release];
+}
+
 -(void) viewDidLoad {
+    [NSThread detachNewThreadSelector:@selector(initAudioThread)
+                             toTarget:self
+                           withObject:nil];
+    
     char *ver;
     HW_versionInfo(NULL, &ver);
     NSString *versionNumber = [[NSString alloc] initWithCString:ver];

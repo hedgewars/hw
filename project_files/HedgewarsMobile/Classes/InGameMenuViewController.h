@@ -11,7 +11,6 @@
 
 @interface InGameMenuViewController : UITableViewController <UIActionSheetDelegate> {
     NSArray *menuList;
-    BOOL isPaused;
     SDL_Window *sdlwindow;
 }
 

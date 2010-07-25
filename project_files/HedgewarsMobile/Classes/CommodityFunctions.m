@@ -154,3 +154,7 @@ void print_free_memory () {
     natural_t mem_total = mem_used + mem_free;
     DLog(@"used: %u free: %u total: %u", mem_used, mem_free, mem_total);
 }
+
+BOOL isPhone() {
+    return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone);
+}

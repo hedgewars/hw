@@ -55,9 +55,11 @@ extern "C" {
     void HW_setLandscape(BOOL rotate);
     void HW_setCursor(int x, int y);
     void HW_getCursor(int *x, int *y);
-    void HW_saveCursor(BOOL reset);
+
+    void HW_setPianoSound(int snd);
     
     BOOL HW_isAmmoOpen(void);
+    BOOL HW_isPaused(void);
     BOOL HW_isWeaponRequiringClick(void);
     BOOL HW_isWeaponTimerable(void);
     BOOL HW_isWeaponSwitch(void);

@@ -13,14 +13,13 @@
 unit PascalExports;
 
 interface
-uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat, uGears, hwengine;
+uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat, uGears, uSound, hwengine;
 
 {$INCLUDE "config.inc"}
 
 implementation
 
 {$IFDEF HWLIBRARY}
-var xx, yy: LongInt;
 
 // retrieve protocol information
 procedure HW_versionInfo(netProto: PShortInt; versionStr: PPChar); cdecl; export;
@@ -170,18 +169,24 @@ begin
     y^:= CursorPoint.Y;
 end;
 
-procedure HW_saveCursor(reset: boolean); cdecl; export;
+procedure HW_setPianoSound(snd: LongInt); cdecl; export;
+var CurSlot, CurAmmo: LongWord;
 begin
-    if reset then
-    begin
-        CursorPoint.X:= xx;
-        CursorPoint.Y:= yy;
-    end
-    else
-    begin
-        xx:= CursorPoint.X;
-        yy:= CursorPoint.Y;
-    end;
+    CurSlot:= CurrentHedgehog^.CurSlot;
+    CurAmmo:= CurrentHedgehog^.CurAmmo;
+    // this most likely won't work in network game
+    if (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].AmmoType = amPiano) then
+        case snd of 
+            0: PlaySound(sndPiano0);
+            1: PlaySound(sndPiano1);
+            2: PlaySound(sndPiano2);
+            3: PlaySound(sndPiano3);
+            4: PlaySound(sndPiano4);
+            5: PlaySound(sndPiano5);
+            6: PlaySound(sndPiano6);
+            7: PlaySound(sndPiano7);
+            else PlaySound(sndPiano8);
+        end;
 end;
 
 function HW_isAmmoOpen: boolean; cdecl; export;
@@ -211,6 +216,11 @@ begin
         exit(CurAmmoGear^.AmmoType = amSwitch) 
     else
         exit(false)
+end;
+
+function HW_isPaused: boolean; cdecl; export;
+begin
+    exit( isPaused );
 end;
 
 procedure HW_setGrenadeTime(time: LongInt); cdecl; export;

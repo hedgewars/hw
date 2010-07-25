@@ -242,6 +242,7 @@
             HW_tab();
             break;
         case 10:
+            HW_pause();
             removeConfirmationInput();
             [self showPopover];
             break;
@@ -270,6 +271,7 @@
 // show up a popover containing a popupMenuViewController; we hook it with setPopoverContentSize
 // on iphone instead just use the tableViewController directly (and implement manually all animations)
 -(IBAction) showPopover{
+    CGRect screen = [[UIScreen mainScreen] bounds];
     isPopoverVisible = YES;
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -281,9 +283,9 @@
             [popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
         }
 
-        [popoverController presentPopoverFromRect:CGRectMake(1000, 0, 220, 32)
+        [popoverController presentPopoverFromRect:CGRectMake(screen.size.height / 2, screen.size.width / 2, 1, 1)
                                            inView:self.view
-                         permittedArrowDirections:UIPopoverArrowDirectionUp
+                         permittedArrowDirections:UIPopoverArrowDirectionAny
                                          animated:YES];
     } else {
         if (popupMenu == nil)
@@ -299,6 +301,7 @@
 -(void) dismissPopover {
     if (YES == isPopoverVisible) {
         isPopoverVisible = NO;
+        HW_pause();
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             [(InGameMenuViewController *)popoverController.contentViewController removeChat];
@@ -322,6 +325,8 @@
     
     // reset default dimming
     doDim();
+    
+    HW_setPianoSound([allTouches count]);
     
     switch ([allTouches count]) {
         case 1:       
@@ -421,7 +426,6 @@
             HW_allKeysUp();
             break;
         default:
-            DLog(@"too many touches");
             break;
     }
     

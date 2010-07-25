@@ -26,10 +26,8 @@
 }
 
 -(void) viewDidLoad {
-    isPaused = NO;
-
     NSArray *array = [[NSArray alloc] initWithObjects:
-                      NSLocalizedString(@"Pause Game", @""),
+                      NSLocalizedString(@"Return to Game", @""),
                       NSLocalizedString(@"Chat", @""),
                       NSLocalizedString(@"End Game", @""),
                       nil];
@@ -100,6 +98,9 @@
     }
     cell.textLabel.text = [menuList objectAtIndex:[indexPath row]];
     
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        cell.textLabel.textAlignment = UITextAlignmentCenter;
+    
     return cell;
 }
 
@@ -109,7 +110,6 @@
     switch ([indexPath row]) {
         case 0:
             HW_pause();
-            isPaused = !isPaused;
             break;
         case 1:
             if (SDL_iPhoneKeyboardIsShown(sdlwindow))
@@ -137,8 +137,6 @@
             [actionSheet showInView:self.view];
             [actionSheet release];
             
-            if (!isPaused) 
-                HW_pause();
             break;
         default:
             DLog(@"Warning: unset case value in section!");
@@ -149,9 +147,10 @@
 }
 
 -(void) removeChat {
-    HW_chatEnd();
-    if (SDL_iPhoneKeyboardIsShown(sdlwindow))
+    if (SDL_iPhoneKeyboardIsShown(sdlwindow)) {
         SDL_iPhoneKeyboardHide(sdlwindow);
+        HW_chatEnd();
+    }
 }
 
 #pragma mark -
@@ -166,10 +165,7 @@
     }
     
     if ([actionSheet cancelButtonIndex] != buttonIndex)
-        HW_terminate(NO);
-    else
-        if (!isPaused) 
-            HW_pause();     
+        HW_terminate(NO);     
 }
 
 @end

@@ -295,15 +295,12 @@ const sfMax = 1000;
 
     cKeyMaxIndex = 1023;
 
-{$IFDEF IPHONEOS}
-    cMaxCaptions = 3;
     cDefaultZoomLevel = 2.0;
+{$IFDEF IPHONEOS}
     cMaxZoomLevel = 0.5;
     cMinZoomLevel = 3.5;
     cZoomDelta = 0.20;
 {$ELSE}
-    cMaxCaptions = 4;
-    cDefaultZoomLevel = 2.0;
     cMaxZoomLevel = 1.0;
     cMinZoomLevel = 3.0;
     cZoomDelta = 0.25;
@@ -459,6 +456,7 @@ var PathPrefix: shortstring = './';
     LAND_HEIGHT :longint;
     LAND_WIDTH_MASK  :longWord;
     LAND_HEIGHT_MASK :longWord;
+    cMaxCaptions : LongInt;
 
 const
     cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
@@ -908,15 +906,15 @@ const
             (FileName:             'BirdyLay.ogg'; Path: ptSounds),// sndBirdyLay
             (FileName:              'Whistle.ogg'; Path: ptSounds),// sndWhistle
             (FileName:             'beewater.ogg'; Path: ptSounds),// sndBeeWater
-            (FileName:                  '1C.ogg'; Path: ptSounds),// sndPiano0
-            (FileName:                  '2D.ogg'; Path: ptSounds),// sndPiano1
-            (FileName:                  '3E.ogg'; Path: ptSounds),// sndPiano2
-            (FileName:                  '4F.ogg'; Path: ptSounds),// sndPiano3
-            (FileName:                  '5G.ogg'; Path: ptSounds),// sndPiano4
-            (FileName:                  '6A.ogg'; Path: ptSounds),// sndPiano5
-            (FileName:                  '7B.ogg'; Path: ptSounds),// sndPiano6
-            (FileName:                  '8C.ogg'; Path: ptSounds),// sndPiano7
-            (FileName:                  '9D.ogg'; Path: ptSounds),// sndPiano8
+            (FileName:                   '1C.ogg'; Path: ptSounds),// sndPiano0
+            (FileName:                   '2D.ogg'; Path: ptSounds),// sndPiano1
+            (FileName:                   '3E.ogg'; Path: ptSounds),// sndPiano2
+            (FileName:                   '4F.ogg'; Path: ptSounds),// sndPiano3
+            (FileName:                   '5G.ogg'; Path: ptSounds),// sndPiano4
+            (FileName:                   '6A.ogg'; Path: ptSounds),// sndPiano5
+            (FileName:                   '7B.ogg'; Path: ptSounds),// sndPiano6
+            (FileName:                   '8C.ogg'; Path: ptSounds),// sndPiano7
+            (FileName:                   '9D.ogg'; Path: ptSounds),// sndPiano8
             (FileName:                 'skip.ogg'; Path: ptSounds),// sndSkip
             (FileName:          'shotgunfire.ogg'; Path: ptSounds) // sndSineGun
             );
@@ -2201,6 +2199,14 @@ begin
         LAND_WIDTH_MASK:= $FFFFF000;
         LAND_HEIGHT_MASK:= $FFFFF800
     end;
+
+{$IFDEF IPHONEOS}    
+    if isPhone() then
+        cMaxCaptions:= 3
+    else
+{$ENDIF}
+        cMaxCaptions:= 4;
+
 end;
 
 procedure freeModule;
