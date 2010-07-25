@@ -175,6 +175,13 @@ data CoreMessage =
     | TimerAction Int
     | Remove ClientIndex
 
+instance Show CoreMessage where
+    show (Accept _) = "Accept"
+    show (ClientMessage _) = "ClientMessage"
+    show (ClientAccountInfo _) = "ClientAccountInfo"
+    show (TimerAction _) = "TimerAction"
+    show (Remove _) = "Remove"
+    
 type MRnC = MRoomsAndClients RoomInfo ClientInfo
 type IRnC = IRoomsAndClients RoomInfo ClientInfo
 

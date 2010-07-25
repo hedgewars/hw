@@ -35,6 +35,7 @@ mainLoop = forever $ do
     si <- gets serverInfo
     r <- liftIO $ readChan $ coreChan si
 
+    liftIO $ putStrLn $ "Core msg: " ++ show r
     case r of
         Accept ci -> processAction (AddClient ci)
 
@@ -46,7 +47,9 @@ mainLoop = forever $ do
                 modify (\as -> as{clientIndex = Just ci})
                 reactCmd cmd
 
-        Remove ci -> processAction (DeleteClient ci)
+        Remove ci -> do
+            liftIO $ debugM "Clients"  $ "DeleteClient: " ++ show ci
+            processAction (DeleteClient ci)
 
                 --else
                 --do
@@ -54,10 +57,13 @@ mainLoop = forever $ do
                 --return (serverInfo, rnc)
 
         ClientAccountInfo (ci, info) -> do
-            removed <- gets removedClients
-            when (not $ ci `Set.member` removed) $
-                processAction (ProcessAccountInfo info)
-
+            --should instead check ci exists and has same nick/hostname
+            --removed <- gets removedClients
+            --when (not $ ci `Set.member` removed) $ do
+            --    modify (\as -> as{clientIndex = Just ci})
+            --    processAction (ProcessAccountInfo info)
+            return ()
+            
         TimerAction tick ->
                 mapM_ processAction $
                     PingAll : [StatsAction | even tick]

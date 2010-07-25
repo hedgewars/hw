@@ -56,8 +56,10 @@ type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
 processAction :: Action -> StateT ServerState IO ()
 
 
-processAction (AnswerClients chans msg) = 
-    liftIO $ mapM_ (flip writeChan msg) chans
+processAction (AnswerClients chans msg) = do
+    liftIO (putStr $ "AnswerClients... " ++ (show $ length chans) ++ " (" ++ (show msg) ++")")
+    liftIO $ map (flip seq ()) chans `seq` mapM_ (flip writeChan msg) chans
+    liftIO (putStrLn "done")
 
 
 processAction SendServerMessage = do
@@ -68,7 +70,7 @@ processAction SendServerMessage = do
             serverMessageForOldVersions si
             else
             serverMessage si
-    liftIO $ writeChan chan ["SERVER_MESSAGE", message]
+    processAction $ AnswerClients [chan] ["SERVER_MESSAGE", message]
 {-
 
 processAction (clID, serverInfo, rnc) SendServerVars = do
@@ -87,12 +89,12 @@ processAction (clID, serverInfo, rnc) SendServerVars = do
 
 processAction (ProtocolError msg) = do
     chan <- client's sendChan
-    liftIO $ writeChan chan ["ERROR", msg]
+    processAction $ AnswerClients [chan] ["ERROR", msg]
 
 
 processAction (Warning msg) = do
     chan <- client's sendChan
-    liftIO $ writeChan chan ["WARNING", msg]
+    processAction $ AnswerClients [chan] ["WARNING", msg]
 
 processAction (ByeClient msg) = do
     (Just ci) <- gets clientIndex
@@ -109,13 +111,13 @@ processAction (ByeClient msg) = do
         infoM "Clients" (show ci ++ " quits: " ++ (B.unpack msg))
 
         --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
-        writeChan chan ["BYE", msg]
         modifyRoom rnc (\r -> r{
                         --playersIDs = IntSet.delete ci (playersIDs r)
                         playersIn = (playersIn r) - 1,
                         readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
                         }) ri
 
+    processAction $ AnswerClients [chan] ["BYE", msg]
     modify (\s -> s{removedClients = ci `Set.insert` removedClients s})
 
 processAction (DeleteClient ci) = do
@@ -336,13 +338,13 @@ processAction (ProcessAccountInfo info) =
     case info of
         HasAccount passwd isAdmin -> do
             chan <- client's sendChan
-            liftIO $ writeChan chan ["ASKPASSWORD"]
+            processAction $ AnswerClients [chan] ["ASKPASSWORD"]
         Guest -> do
             processAction JoinLobby
         Admin -> do
             mapM processAction [ModifyClient (\cl -> cl{isAdministrator = True}), JoinLobby]
             chan <- client's sendChan
-            liftIO $ writeChan chan ["ADMIN_ACCESS"]
+            processAction $ AnswerClients [chan] ["ADMIN_ACCESS"]
 
 
 processAction JoinLobby = do
@@ -402,8 +404,8 @@ processAction (AddClient client) = do
         forkIO $ clientSendLoop (clientSocket client) (coreChan si) (sendChan client) ci
 
         infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime client))
-        writeChan (sendChan client) ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 
+    processAction $ AnswerClients [sendChan client] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 {-        let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 11) $ lastLogins serverInfo
 
         if False && (isJust $ host client `Prelude.lookup` newLogins) then
