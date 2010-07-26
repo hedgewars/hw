@@ -412,7 +412,6 @@ int main(int argc, char *argv[]) {
         QFileInfo f(argv[0]);
         registry.setValue("file", f.absoluteFilePath());
         registry.setValue("path", f.absolutePath());
-        registry.setValue("version", cVersionString);
     }
 #endif
 
