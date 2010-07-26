@@ -108,7 +108,7 @@ PageMain::PageMain(QWidget* parent) :
     Tips << tr("Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!", "Tips");
     Tips << tr("Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.", "Tips");
     Tips << tr("Always remember you're able to set up your own games in local and network/online play. You're not restricted to the 'Simple Game' option.", "Tips");
-    Tips << tr("Connect a gamepad before launching the game to be able to assign its controls to your team.", "Tips");
+    Tips << tr("Connect one or more gamepads before launching the game to be able to assign their controls to your teams.", "Tips");
     Tips << tr("Create an account on http://www.hedgewars.org/ to keep others from using your most favourite nickname while playing on the official server.", "Tips");
     Tips << tr("While playing you should give yourself a short break at least once an hour.", "Tips");
     Tips << tr("If your graphics card isn't able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.", "Tips");
@@ -122,7 +122,7 @@ PageMain::PageMain(QWidget* parent) :
     
 
     if(isDevBuild)
-        mainNote->setText(QLabel::tr("This HG build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
+        mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
     else
         mainNote->setText(QLabel::tr("Tip: ") + Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()]);
 
