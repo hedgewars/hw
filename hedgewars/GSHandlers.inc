@@ -186,12 +186,12 @@ begin
 
         if (Gear^.Invulnerable) then exit;
 
-        if _0_6 < Gear^.dY then
-            PlaySound(sndOw4, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
-        else
-            PlaySound(sndOw1, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+        //if _0_6 < Gear^.dY then
+        //    PlaySound(sndOw4, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
+        //else
+        //    PlaySound(sndOw1, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 
-        ApplyDamage(Gear, dmg);
+        ApplyDamage(Gear, dmg, dsFall);
     end
 end;
 

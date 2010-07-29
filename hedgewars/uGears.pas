@@ -83,7 +83,7 @@ procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 procedure ProcessGears;
 procedure EndTurnCleanup;
-procedure ApplyDamage(Gear: PGear; Damage: Longword);
+procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
 procedure SetAllToActive;
 procedure SetAllHHToActive;
 procedure DrawGears;
@@ -635,22 +635,18 @@ var Gear: PGear;
     team: PTeam;
        i: LongWord;
     flag: Boolean;
+     tmp: LongWord;
 begin
-	Gear:= GearsList;
+    Gear:= GearsList;
 
-	while Gear <> nil do
-	begin
-		if Gear^.Kind = gtHedgehog then
-			begin
+    while Gear <> nil do
+    begin
+        if Gear^.Kind = gtHedgehog then
+            begin
+            tmp:= 0;
             if PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] then
-                begin
-                inc(Gear^.Damage, min(ModifyDamage(5,Gear), max(0,Gear^.Health - 1 - Gear^.Damage)));
-                if getRandom(2) = 0 then
-                    PlaySound(sndPoisonCough, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
-                else
-                    PlaySound(sndPoisonMoan, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
-                end;
-            inc(Gear^.Damage, min(cHealthDecrease, max(0,Gear^.Health - 1 - Gear^.Damage)));
+                inc(tmp, min(ModifyDamage(5,Gear), max(0,Gear^.Health - 1 - Gear^.Damage)));
+            inc(tmp, min(cHealthDecrease, max(0,Gear^.Health - 1 - Gear^.Damage)));
             if PHedgehog(Gear^.Hedgehog)^.King then
                 begin
                 flag:= false;
@@ -660,12 +656,13 @@ begin
                         (not team^.Hedgehogs[i].King) and 
                         (team^.Hedgehogs[i].Gear^.Health > team^.Hedgehogs[i].Gear^.Damage) 
                     then flag:= true;
-                if not flag then inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)))
+                if not flag then inc(tmp, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)))
                 end;
-			end;
+            if tmp > 0 then ApplyDamage(Gear, tmp, dsPoison);
+            end;
 
-		Gear:= Gear^.NextGear
-	end;
+        Gear:= Gear^.NextGear
+    end;
 end;
 
 procedure ProcessGears;
@@ -891,13 +888,14 @@ begin
         end
 end;
 
-procedure ApplyDamage(Gear: PGear; Damage: Longword);
+procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
 var s: shortstring;
     vampDmg, tmpDmg, i: Longword;
     vg: PVisualGear;
 begin
     if (Gear^.Kind = gtHedgehog) and (Damage>=1) then
     begin
+    HHHurt(Gear^.Hedgehog, Source);
     AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color);
     tmpDmg:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
     if (Gear <> CurrentHedgehog^.Gear) and (CurrentHedgehog^.Gear <> nil) and (tmpDmg >= 1) then
@@ -1226,7 +1224,7 @@ while Gear <> nil do
                             if (Mask and EXPLNoDamage) = 0 then
                                 begin
                                 if not Gear^.Invulnerable then
-                                    ApplyDamage(Gear, dmg)
+                                    ApplyDamage(Gear, dmg, dsExplosion)
                                 else
                                     Gear^.State:= Gear^.State or gstWinner;
                                 end;
@@ -1285,7 +1283,7 @@ while t <> nil do
             gtTarget,
             gtExplosives: begin
                     if (not t^.Invulnerable) then
-                        ApplyDamage(t, dmg)
+                        ApplyDamage(t, dmg, dsBullet)
                     else
                         Gear^.State:= Gear^.State or gstWinner;
 
@@ -1340,10 +1338,10 @@ while i > 0 do
             gtExplosives: begin
                     if (Ammo^.Kind = gtDrill) then begin Ammo^.Timer:= 0; exit; end;
                     if (not Gear^.Invulnerable) then
-                        ApplyDamage(Gear, tmpDmg)
+                        ApplyDamage(Gear, tmpDmg, dsShove)
                     else
                         Gear^.State:= Gear^.State or gstWinner;
-                    if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then ApplyDamage(Gear, tmpDmg * 100); // crank up damage for explosives + blowtorch
+                    if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then ApplyDamage(Gear, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
 
                     DeleteCI(Gear);
                     if (Gear^.Kind = gtHedgehog) and PHedgehog(Gear^.Hedgehog)^.King then
