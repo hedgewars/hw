@@ -401,11 +401,6 @@ ou escolha outro apelido:</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Connect a gamepad before launching the game to be able to assign its controls to your team.</source>
-        <comment>Tips</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Create an account on http://www.hedgewars.org/ to keep others from using your most favourite nickname while playing on the official server.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
@@ -452,6 +447,11 @@ ou escolha outro apelido:</translation>
     </message>
     <message>
         <source>No hedgehogs were harmed in making this game.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connect one or more gamepads before launching the game to be able to assign their controls to your teams.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -1089,11 +1089,11 @@ Algumas funcionalidades podem estar quebradas ou incompletas. Use a sua conta e 
         <translation>Explosivos</translation>
     </message>
     <message>
-        <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
+        <source>Tip: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tip: </source>
+        <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
