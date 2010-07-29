@@ -98,6 +98,8 @@ type
 
     TGearsType = set of TGearType;
 
+    TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison);
+
     TSound = (sndNone,
             sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,
             sndSplash, sndShotgunReload, sndShotgunFire, sndGraveImpact,
@@ -106,7 +108,7 @@ type
             sndMissed, sndStupid, sndFirstBlood, sndBoring, sndByeBye,
             sndSameTeam, sndNutter, sndReinforce, sndTraitor, sndRegret,
             sndEnemyDown, sndCoward, sndHurry, sndWatchIt, sndKamikaze,
-            sndCake, sndOw1, sndOw4, sndFirePunch1, sndFirePunch2,
+            sndCake, sndOw1, sndOw2, sndOw3, sndOw4, sndFirePunch1, sndFirePunch2,
             sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
             sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
             sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat,
@@ -118,7 +120,7 @@ type
             sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket,
             sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle, sndBeeWater,
             sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7, sndPiano8,
-            sndSkip, sndSineGun);
+            sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3);
 
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -856,6 +858,8 @@ const
             (FileName:             'Kamikaze.ogg'; Path: ptVoices),// sndKamikaze
             (FileName:                'cake2.ogg'; Path: ptSounds),// sndCake
             (FileName:                  'Ow1.ogg'; Path: ptVoices),// sndOw1
+            (FileName:                  'Ow2.ogg'; Path: ptVoices),// sndOw2
+            (FileName:                  'Ow3.ogg'; Path: ptVoices),// sndOw3
             (FileName:                  'Ow4.ogg'; Path: ptVoices),// sndOw4
             (FileName:           'Firepunch1.ogg'; Path: ptVoices),// sndFirepunch1
             (FileName:           'Firepunch2.ogg'; Path: ptVoices),// sndFirepunch2
@@ -917,7 +921,10 @@ const
             (FileName:                   '8C.ogg'; Path: ptSounds),// sndPiano7
             (FileName:                   '9D.ogg'; Path: ptSounds),// sndPiano8
             (FileName:                 'skip.ogg'; Path: ptSounds),// sndSkip
-            (FileName:          'shotgunfire.ogg'; Path: ptSounds) // sndSineGun
+            (FileName:          'shotgunfire.ogg'; Path: ptSounds),// sndSineGun
+            (FileName:                'Ooff1.ogg'; Path: ptVoices),// sndOoff1
+            (FileName:                'Ooff2.ogg'; Path: ptVoices),// sndOoff2
+            (FileName:                'Ooff3.ogg'; Path: ptVoices) // sndOoff3
             );
 
     Ammoz: array [TAmmoType] of record
