@@ -230,9 +230,11 @@ begin
     recordFileName:= gameArgs[8];
     
     val(gameArgs[9], cReducedQuality);
+    isStereoEnabled:= false; // TODO: Enable anaglyph rendering on iPhone?
 {$ENDIF}
 
     initEverything(true);
+
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
 {$IFDEF DEBUGFILE}
     AddFileLog('Prefix: "' + PathPrefix +'"');
@@ -437,7 +439,7 @@ end;
 procedure GetParams;
 begin
     case ParamCount of
-        18: begin
+        19: begin
             val(ParamStr(2), cScreenWidth);
             val(ParamStr(3), cScreenHeight);
             cBitsStr:= ParamStr(4);
@@ -455,6 +457,7 @@ begin
             cAltDamage:= ParamStr(15) = '1';
             UserNick:= DecodeBase64(ParamStr(16));
             isMusicEnabled:= ParamStr(17) = '1';
+            isStereoEnabled:= ParamStr(19) = '1';
 
             if (ParamStr(18) = '1') then        //HACK - always disable rqLowRes as it's a game breaker
                 cReducedQuality:= $FFFFFFFF xor rqLowRes
