@@ -35,6 +35,8 @@ var
     isSpeed         : boolean;
     isFirstFrame    : boolean;
 
+    isStereoEnabled : boolean = true;
+
     fastUntilLag    : boolean;
 
     GameState       : TGameState;
