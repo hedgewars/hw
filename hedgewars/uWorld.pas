@@ -73,6 +73,11 @@ var cWaveWidth, cWaveHeight: LongInt;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
+    stereoDepth: GLfloat = 0;
+
+const cStereo_Sky     = 0.0750;
+      cStereo_Horizon = 0.0250;
+      cStereo_Water   = 0.0125;
 
 procedure InitWorld;
 var i, t: LongInt;
@@ -566,21 +571,30 @@ begin
     end
     else
     begin
+        // create left fb
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framel);
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
         DrawWorldStereo(Lag, rmLeftEye);
+
+        // create right fb
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framer);
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
         DrawWorldStereo(0, rmRightEye);
+
+        // detatch drawing from fbs
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
         glGetFloatv(GL_COLOR_CLEAR_VALUE, @cc);
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
         glClearColor(cc[0], cc[1], cc[2], cc[3]);
-        SetScale(2.0);
+        SetScale(cDefaultZoomLevel);
+
+        // enable gl stuff
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
+
+        // draw left frame
         glBindTexture(GL_TEXTURE_2D, texl);
         glColor3f(0.0, 1.0, 1.0);
         glBegin(GL_QUADS);
@@ -593,6 +607,8 @@ begin
             glTexCoord2f(0.0, 1.0);
             glVertex2d(cScreenWidth / -2, 0);
         glEnd();
+
+        // draw right frame
         glBindTexture(GL_TEXTURE_2D, texr);
         glColor3f(1.0, 0.0, 0.0);
         glBegin(GL_QUADS);
@@ -605,47 +621,44 @@ begin
             glTexCoord2f(0.0, 1.0);
             glVertex2d(cScreenWidth / -2, 0);
         glEnd();
+
+        // reset
         glColor3f(1.0, 1.0, 1.0);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         SetScale(zoom);
     end
 end;
 
- const cStereo_Sky     = 0.0750;
-       cStereo_Horizon = 0.0250;
-       cStereo_Water   = 0.0125;
- var   stereoDepth: GLfloat = 0;
+procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
+begin
+    if rm = rmDefault then exit
+    else if rm = rmRightEye then d:= -d;
+    stereoDepth:= stereoDepth + d;
+    glMatrixMode(GL_PROJECTION);
+    glTranslatef(d, 0, 0);
+    glMatrixMode(GL_MODELVIEW)
+end;
  
- procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
- begin
-     if rm = rmDefault then exit
-     else if rm = rmRightEye then d:= -d;
-     stereoDepth:= stereoDepth + d;
-     glMatrixMode(GL_PROJECTION);
-     glTranslatef(d, 0, 0);
-     glMatrixMode(GL_MODELVIEW)
- end;
+procedure ResetDepth(rm: TRenderMode);
+begin
+    if rm = rmDefault then exit;
+    glMatrixMode(GL_PROJECTION);
+    glTranslatef(-stereoDepth, 0, 0);
+    glMatrixMode(GL_MODELVIEW);
+    stereoDepth:= 0;
+end;
  
- procedure ResetDepth(rm: TRenderMode);
- begin
-     if rm = rmDefault then exit;
-     glMatrixMode(GL_PROJECTION);
-     glTranslatef(-stereoDepth, 0, 0);
-     glMatrixMode(GL_MODELVIEW);
-     stereoDepth:= 0;
- end;
- 
- procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
- var i, t: LongInt;
-     r: TSDL_Rect;
-     tdx, tdy: Double;
-     grp: TCapGroup;
-     s: string[15];
-     highlight: Boolean;
-     offset, offsetX, offsetY, screenBottom: LongInt;
-     scale: GLfloat;
-     VertexBuffer: array [0..3] of TVertex2f;
- begin
+procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
+var i, t: LongInt;
+    r: TSDL_Rect;
+    tdx, tdy: Double;
+    grp: TCapGroup;
+    s: string[15];
+    highlight: Boolean;
+    offset, offsetX, offsetY, screenBottom: LongInt;
+    scale: GLfloat;
+    VertexBuffer: array [0..3] of TVertex2f;
+begin
     if (cReducedQuality and rqNoBackground) = 0 then
     begin
         // Offsets relative to camera - spare them to wimpier cpus, no bg or flakes for them anyway
@@ -657,9 +670,9 @@ end;
             HorizontOffset:= HorizontOffset + ((ScreenBottom-SkyOffset) div 20);
 
         // background
-ChangeDepth(RM, cStereo_Sky);
+        ChangeDepth(RM, cStereo_Sky);
         DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, SkyOffset);
-ChangeDepth(RM, -cStereo_Horizon);
+        ChangeDepth(RM, -cStereo_Horizon);
         DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
     end;
 
@@ -669,15 +682,15 @@ ChangeDepth(RM, -cStereo_Horizon);
     begin
         // Waves
         DrawWater(255, SkyOffset); 
-ChangeDepth(RM, -cStereo_Water);
+        ChangeDepth(RM, -cStereo_Water);
         DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 64);
-ChangeDepth(RM, -cStereo_Water);
+        ChangeDepth(RM, -cStereo_Water);
         DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 48);
-ChangeDepth(RM, -cStereo_Water);
+        ChangeDepth(RM, -cStereo_Water);
         DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 32);
-ChangeDepth(RM, -cStereo_Water);
+        ChangeDepth(RM, -cStereo_Water);
         DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 24);
-ResetDepth(RM);
+        ResetDepth(RM);
     end
     else
         DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)), 0);
@@ -717,21 +730,21 @@ ResetDepth(RM);
     DrawWater(cWaterOpacity, 0);
 
     // Waves
-ChangeDepth(RM, cStereo_Water);
+    ChangeDepth(RM, cStereo_Water);
     DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
 
     if (cReducedQuality and rq2DWater) = 0 then
     begin
         //DrawWater(cWaterOpacity, - offsetY div 40);
-ChangeDepth(RM, cStereo_Water);
+        ChangeDepth(RM, cStereo_Water);
         DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 8);
         DrawWater(cWaterOpacity, - offsetY div 20);
-ChangeDepth(RM, cStereo_Water);
+        ChangeDepth(RM, cStereo_Water);
         DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 2);
         DrawWater(cWaterOpacity, - offsetY div 10);
-ChangeDepth(RM, cStereo_Water);
+        ChangeDepth(RM, cStereo_Water);
         DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
-ResetDepth(RM);
+        ResetDepth(RM);
     end
     else
         DrawWaves(-1, 50, - (cWaveHeight shr 1), 0);
@@ -956,60 +969,63 @@ offsetX:= 8;
 offsetX:= 10;
 {$ENDIF}
 offsetY:= cOffsetY;
+
+// don't increment fps when drawing the right frame
 if (RM = rmDefault) or (RM = rmLeftEye) then
 begin
-inc(Frames);
+    inc(Frames);
 
-if cShowFPS or (GameType = gmtDemo) then inc(CountTicks, Lag);
-if (GameType = gmtDemo) and (CountTicks >= 1000) then
-   begin
-   i:=GameTicks div 1000;
-   t:= i mod 60;
-   s:= inttostr(t);
-   if t < 10 then s:= '0' + s;
-   i:= i div 60;
-   t:= i mod 60;
-   s:= inttostr(t) + ':' + s;
-   if t < 10 then s:= '0' + s;
-   s:= inttostr(i div 60) + ':' + s;
+    if cShowFPS or (GameType = gmtDemo) then
+        inc(CountTicks, Lag);
+    if (GameType = gmtDemo) and (CountTicks >= 1000) then
+    begin
+        i:=GameTicks div 1000;
+        t:= i mod 60;
+        s:= inttostr(t);
+        if t < 10 then s:= '0' + s;
+        i:= i div 60;
+        t:= i mod 60;
+        s:= inttostr(t) + ':' + s;
+        if t < 10 then s:= '0' + s;
+        s:= inttostr(i div 60) + ':' + s;
    
-   if timeTexture <> nil then
-        FreeTexture(timeTexture);
-    timeTexture:= nil;
+        if timeTexture <> nil then
+            FreeTexture(timeTexture);
+        timeTexture:= nil;
     
-   tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
-   tmpSurface:= doSurfaceConversion(tmpSurface);
-   timeTexture:= Surface2Tex(tmpSurface, false);
-   SDL_FreeSurface(tmpSurface)
-   end;
+        tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
+        tmpSurface:= doSurfaceConversion(tmpSurface);
+        timeTexture:= Surface2Tex(tmpSurface, false);
+        SDL_FreeSurface(tmpSurface)
+    end;
 
-if timeTexture <> nil then
-   DrawTexture((cScreenWidth shr 1) - 20 - timeTexture^.w - offsetY, offsetX + timeTexture^.h+5, timeTexture);
+    if timeTexture <> nil then
+        DrawTexture((cScreenWidth shr 1) - 20 - timeTexture^.w - offsetY, offsetX + timeTexture^.h+5, timeTexture);
 
-if cShowFPS then
-   begin
-   if CountTicks >= 1000 then
-      begin
-      FPS:= Frames;
-      Frames:= 0;
-      CountTicks:= 0;
-      s:= inttostr(FPS) + ' fps';
-      if fpsTexture <> nil then
-        FreeTexture(fpsTexture);
-    fpsTexture:= nil;
-      tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
-      tmpSurface:= doSurfaceConversion(tmpSurface);
-      fpsTexture:= Surface2Tex(tmpSurface, false);
-      SDL_FreeSurface(tmpSurface)
-      end;
-   if fpsTexture <> nil then
-      DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);
-   end;
+    if cShowFPS then
+    begin
+        if CountTicks >= 1000 then
+        begin
+            FPS:= Frames;
+            Frames:= 0;
+            CountTicks:= 0;
+            s:= inttostr(FPS) + ' fps';
+            if fpsTexture <> nil then
+                FreeTexture(fpsTexture);
+            fpsTexture:= nil;
+            tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
+            tmpSurface:= doSurfaceConversion(tmpSurface);
+            fpsTexture:= Surface2Tex(tmpSurface, false);
+            SDL_FreeSurface(tmpSurface)
+        end;
+        if fpsTexture <> nil then
+            DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);
+    end;
 
-if CountTicks >= 1000 then CountTicks:= 0;
+    if CountTicks >= 1000 then CountTicks:= 0;
 
-// lag warning (?)
-inc(SoundTimerTicks, Lag);
+    // lag warning (?)
+    inc(SoundTimerTicks, Lag);
 end;
 
 if SoundTimerTicks >= 50 then

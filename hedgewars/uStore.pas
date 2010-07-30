@@ -1191,9 +1191,13 @@ begin
     else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
         cGPUVendor:= gvIntel;
 //SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
+
     if isStereoEnabled then
     begin
+        // prepare left and right frame buffers and associated textures
         glLoadExtension('GL_EXT_framebuffer_object');
+
+        // left
         glGenFramebuffersEXT(1, @framel);
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framel);
         glGenRenderbuffersEXT(1, @depthl);
@@ -1207,6 +1211,7 @@ begin
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texl, 0);
 
+        // right
         glGenFramebuffersEXT(1, @framer);
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framer);
         glGenRenderbuffersEXT(1, @depthr);
@@ -1220,6 +1225,7 @@ begin
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texr, 0);
 
+        // reset
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
     end;
 {$ENDIF}
