@@ -543,3 +543,19 @@ for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart2);
 Gear^.doStep:= @doStepBigExplosionWork;
 if Steps > 1 then Gear^.doStep(Gear, Steps-1);
 end;
+
+procedure doStepChunk(Gear: PVisualGear; Steps: Longword);
+begin
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
+
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+Gear^.dY:= Gear^.dY + cGravityf * Steps;
+
+Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
+
+if round(Gear^.Y) > cWaterLine then
+    begin
+    DeleteVisualGear(Gear);
+    AddVisualGear(round(Gear^.X), round(Gear^.Y), vgtDroplet);
+    end
+end;

@@ -30,7 +30,7 @@ type PRangeArray = ^TRangeArray;
 function  SweepDirty: boolean;
 function  Despeckle(X, Y: LongInt): boolean;
 function  CheckLandValue(X, Y: LongInt; LandFlag: Word): boolean;
-procedure DrawExplosion(X, Y, Radius: LongInt);
+function DrawExplosion(X, Y, Radius: LongInt): Longword;
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
@@ -181,17 +181,22 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 end;
 
-procedure FillLandCircleLinesBG(x, y, dx, dy: LongInt);
+function FillLandCircleLinesBG(x, y, dx, dy: LongInt): Longword;
 var i, t: LongInt;
+    cnt: Longword;
 begin
+cnt:= 0;
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) then
+           begin
+           inc(cnt);
            if (cReducedQuality and rqBlurryLand) = 0 then
                LandPixels[t, i]:= LandBackPixel(i, t)
            else
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
+           end
        else
            if ((Land[t, i] and lfObject) <> 0) then
                if (cReducedQuality and rqBlurryLand) = 0 then
@@ -203,10 +208,13 @@ t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) then
+           begin
+           inc(cnt);
            if (cReducedQuality and rqBlurryLand) = 0 then
                LandPixels[t, i]:= LandBackPixel(i, t)
            else
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
+           end
        else
            if ((Land[t, i] and lfObject) <> 0) then
                if (cReducedQuality and rqBlurryLand) = 0 then
@@ -218,10 +226,13 @@ t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) then
+           begin
+           inc(cnt);
            if (cReducedQuality and rqBlurryLand) = 0 then
            LandPixels[t, i]:= LandBackPixel(i, t)
             else 
            LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
+           end
        else
             if ((Land[t, i] and lfObject) <> 0) then
             if (cReducedQuality and rqBlurryLand) = 0 then
@@ -233,18 +244,20 @@ t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) then
-            if (cReducedQuality and rqBlurryLand) = 0 then
-          LandPixels[t, i]:= LandBackPixel(i, t)
-        else 
-         LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
-
+           begin
+           inc(cnt);
+           if (cReducedQuality and rqBlurryLand) = 0 then
+               LandPixels[t, i]:= LandBackPixel(i, t)
+           else 
+               LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
+           end
        else
           if ((Land[t, i] and lfObject) <> 0) then
               if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
               else
                 LandPixels[t div 2, i div 2]:= 0;
-
+FillLandCircleLinesBG:= cnt;
 end;
 
 procedure FillLandCircleLinesEBC(x, y, dx, dy: LongInt);
@@ -310,19 +323,21 @@ if (t and LAND_HEIGHT_MASK) = 0 then
           end;
 end;
 
-procedure DrawExplosion(X, Y, Radius: LongInt);
+function DrawExplosion(X, Y, Radius: LongInt): Longword;
 var dx, dy, ty, tx, d: LongInt;
+    cnt: Longword;
 begin
 
 // draw background land texture
     begin
+    cnt:= 0;
     dx:= 0;
     dy:= Radius;
     d:= 3 - 2 * Radius;
 
     while (dx < dy) do
         begin
-        FillLandCircleLinesBG(x, y, dx, dy);
+        inc(cnt, FillLandCircleLinesBG(x, y, dx, dy));
         if (d < 0)
         then d:= d + 4 * dx + 6
         else begin
@@ -331,7 +346,7 @@ begin
             end;
         inc(dx)
         end;
-    if (dx = dy) then FillLandCircleLinesBG(x, y, dx, dy);
+    if (dx = dy) then inc(cnt, FillLandCircleLinesBG(x, y, dx, dy));
     end;
 
 // draw a hole in land
@@ -382,7 +397,8 @@ tx:= max(X - Radius - 1, 0);
 dx:= min(X + Radius + 1, LAND_WIDTH) - tx;
 ty:= max(Y - Radius - 1, 0);
 dy:= min(Y + Radius + 1, LAND_HEIGHT) - ty;
-UpdateLandTexture(tx, dx, ty, dy)
+UpdateLandTexture(tx, dx, ty, dy);
+DrawExplosion:= cnt
 end;
 
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);

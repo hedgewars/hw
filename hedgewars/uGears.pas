@@ -1177,6 +1177,7 @@ var Gear: PGear;
     dmg, dmgRadius, dmgBase: LongInt;
     fX, fY: hwFloat;
     vg: PVisualGear;
+    i, cnt: LongInt;
 begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
@@ -1261,7 +1262,13 @@ while Gear <> nil do
     end;
 
 if (Mask and EXPLDontDraw) = 0 then
-    if (GameFlags and gfSolidLand) = 0 then DrawExplosion(X, Y, Radius);
+    if (GameFlags and gfSolidLand) = 0 then
+        begin
+        cnt:= DrawExplosion(X, Y, Radius) div 1608; // approx 2 16x16 circles to erase per chunk
+        if cnt > 0 then
+            for i:= 0 to cnt do
+                AddVisualGear(X, Y, vgtChunk)
+        end;
 
 uAIMisc.AwareOfExplosion(0, 0, 0)
 end;

@@ -356,8 +356,9 @@ var s: shortstring;
     if TeamsArray[t] <> nil then
         with TeamsArray[t]^ do
             begin
-            if GraveName = '' then GraveName:= 'Simple';
-            texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifCritical or ifTransparent);
+            if GraveName = '' then GraveName:= 'Statue';
+            texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifTransparent);
+            if texsurf = nil then texsurf:= LoadImage(Pathz[ptGraves] + '/Statue', ifCritical or ifTransparent);
             GraveTex:= Surface2Tex(texsurf, false);
             SDL_FreeSurface(texsurf)
             end
