@@ -257,12 +257,12 @@ procedure OutError(Msg: shortstring; isFatalError: boolean);
 begin
 // obsolete? written in WriteLnToConsole() anyway
 // {$IFDEF DEBUGFILE}AddFileLog(Msg);{$ENDIF}
-WriteLnToConsole(Msg);
-if isFatalError then
+    WriteLnToConsole(Msg);
+    if isFatalError then
     begin
-    SendIPC('E' + GetLastConsoleLine);
-    SDL_Quit;
-    halt(1)
+        SendIPC('E' + GetLastConsoleLine);
+        SDL_Quit;
+        halt(1)
     end
 end;
 

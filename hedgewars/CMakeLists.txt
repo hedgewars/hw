@@ -74,6 +74,7 @@ set(engine_sources
 	GearDrawing.inc
 	HHHandlers.inc
 	SinTable.inc
+	ArgParsers.inc
 	options.inc
 	${CMAKE_CURRENT_BINARY_DIR}/config.inc
 	)

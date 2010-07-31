@@ -43,13 +43,13 @@
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
             HW_setLandscape(YES);
             break;
         case UIDeviceOrientationLandscapeRight:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(-90));
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
             HW_setLandscape(YES);
             break;
         /*
@@ -90,12 +90,12 @@
     UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
             break;
         case UIDeviceOrientationLandscapeRight:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(-90));
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
             break;
         default:
             break;
@@ -360,7 +360,7 @@
         case 1:
             // if we're in the menu we just click in the point
             if (HW_isAmmoOpen()) {
-                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+                HW_setCursor(HWXZ(currentPosition.x), HWYZ(currentPosition.y));
                 // this click doesn't need any wrapping because the ammoMenu already limits the cursor
                 HW_click();
             } else 
@@ -462,20 +462,26 @@
             touch = [[allTouches allObjects] objectAtIndex:0];
             CGPoint currentPosition = [touch locationInView:self.view];
 
-            if (HW_isAmmoOpen() || HW_isWeaponRequiringClick()) {
-                // moves the cursor around
-                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
-            } else {
-                // panning \o/
-                dx = startingPoint.x - currentPosition.x;
-                dy = currentPosition.y - startingPoint.y;
-                HW_getCursor(&x, &y);
-                // momentum (or something like that)
-                if (abs(dx) > 40) dx *= log(abs(dx)/4);
-                if (abs(dy) > 40) dy *= log(abs(dy)/4);
-                HW_setCursor(x + dx, y + dy);
-                startingPoint = currentPosition;
-            }
+            if (HW_isAmmoOpen()) {
+                // no zoom consideration for this
+                HW_setCursor(HWXZ(currentPosition.x), HWYZ(currentPosition.y));
+            } else
+                if (HW_isWeaponRequiringClick()) {
+                    // moves the cursor around wrt zoom
+                    HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+                } else {
+                    // panning \o/
+                    dx = startingPoint.x - currentPosition.x;
+                    dy = currentPosition.y - startingPoint.y;
+                    HW_getCursor(&x, &y);
+                    // momentum (or something like that)
+                    /*if (abs(dx) > 40)
+                        dx *= log(abs(dx)/4);
+                    if (abs(dy) > 40)
+                        dy *= log(abs(dy)/4);*/
+                    HW_setCursor(x + dx/HW_zoomFactor(), y + dy/HW_zoomFactor());
+                    startingPoint = currentPosition;
+                }
             break;
         case 2:
             first = [[allTouches allObjects] objectAtIndex:0];

@@ -54,6 +54,17 @@ begin
         followGear:= CurrentHedgehog^.Gear;
 end;
 
+function HW_zoomFactor: GLfloat; cdecl; export;
+begin
+    exit( ZoomValue / cDefaultZoomLevel );
+end;
+
+function HW_zoomLevel: LongInt; cdecl; export;
+begin
+    writelntoconsole(inttostr(trunc((ZoomValue - cDefaultZoomLevel) / cZoomDelta) ));
+    exit( trunc((ZoomValue - cDefaultZoomLevel) / cZoomDelta) );
+end;
+
 procedure HW_ammoMenu; cdecl; export;
 begin
     rightClick:= true;

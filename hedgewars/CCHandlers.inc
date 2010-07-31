@@ -824,13 +824,13 @@ end;
 
 procedure chChat(var s: shortstring);
 begin
-s:= s; // avoid compiler hint
-GameState:= gsChat;
-KeyPressChat(27)
+    s:= s; // avoid compiler hint
+    GameState:= gsChat;
+    KeyPressChat(27)
 end;
 
 procedure chHistory(var s: shortstring);
 begin
-s:= s; // avoid compiler hint
-uChat.showAll:= not uChat.showAll
+    s:= s; // avoid compiler hint
+    uChat.showAll:= not uChat.showAll
 end;

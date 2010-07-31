@@ -58,6 +58,9 @@ extern "C" {
 
     void HW_setPianoSound(int snd);
     
+    float HW_zoomFactor(void);
+    int HW_zoomLevel(void);
+    
     BOOL HW_isAmmoOpen(void);
     BOOL HW_isPaused(void);
     BOOL HW_isWeaponRequiringClick(void);

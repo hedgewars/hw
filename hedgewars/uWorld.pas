@@ -1019,15 +1019,16 @@ end;
 
 if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
     if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
-        begin
+    begin
         FollowGear:= nil;
         prevPoint:= CursorPoint;
         exit
-        end
-        else begin
+    end
+    else
+    begin
         CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
         CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
-        end;
+    end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;
 if WorldDy < wdy then WorldDy:= wdy;
@@ -1035,7 +1036,7 @@ if WorldDy < wdy then WorldDy:= wdy;
 if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then exit;
 
 if AMxShift < AMWidth then
-    begin
+begin
 {$IFDEF IPHONEOS}
     if CursorPoint.X < cScreenWidth div 2 + AMxShift - AMWidth then CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMWidth;
     if CursorPoint.X > cScreenWidth div 2 + AMxShift - AMxOffset then CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMxOffset;
@@ -1050,50 +1051,56 @@ if AMxShift < AMWidth then
     prevPoint:= CursorPoint;
     if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
     exit
-    end;
+end;
 
 if isCursorVisible then
-    begin
+begin
     if (not CurrentTeam^.ExtDriven) and (GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
-        begin
+    begin
         SendIPCXY('P', CursorPoint.X - WorldDx, cScreenHeight - CursorPoint.Y - WorldDy);
         PrevSentPointTime:= GameTicks
+    end;
+    EdgesDist:= cCursorEdgesDist
+end
+else
+    EdgesDist:= cGearScrEdgesDist;
+
+// this generates the border around the screen that moves the camera when cursor is near it
+if isCursorVisible or (FollowGear <> nil) then
+begin
+    if CursorPoint.X < - cScreenWidth div 2 + EdgesDist then
+    begin
+        WorldDx:= WorldDx - CursorPoint.X - cScreenWidth div 2 + EdgesDist;
+        CursorPoint.X:= - cScreenWidth div 2 + EdgesDist
+    end
+    else
+        if CursorPoint.X > cScreenWidth div 2 - EdgesDist then
+        begin
+            WorldDx:= WorldDx - CursorPoint.X + cScreenWidth div 2 - EdgesDist;
+            CursorPoint.X:= cScreenWidth div 2 - EdgesDist
         end;
+    if CursorPoint.Y < EdgesDist then
+    begin
+        WorldDy:= WorldDy + CursorPoint.Y - EdgesDist;
+        CursorPoint.Y:= EdgesDist
+    end
+    else
+        if CursorPoint.Y > cScreenHeight - EdgesDist then
+        begin
+           WorldDy:= WorldDy + CursorPoint.Y - cScreenHeight + EdgesDist;
+           CursorPoint.Y:= cScreenHeight - EdgesDist
+        end;
+end
+else
+    if cHasFocus then
+    begin
+        WorldDx:= WorldDx - CursorPoint.X + prevPoint.X;
+        WorldDy:= WorldDy + CursorPoint.Y - prevPoint.Y;
+        CursorPoint.X:= 0;
+        CursorPoint.Y:= cScreenHeight div 2;
     end;
 
-if isCursorVisible or (FollowGear <> nil) then
-   begin
-   if isCursorVisible then EdgesDist:= cCursorEdgesDist
-                      else EdgesDist:= cGearScrEdgesDist;
-   if CursorPoint.X < - cScreenWidth div 2 + EdgesDist then
-         begin
-         WorldDx:= WorldDx - CursorPoint.X - cScreenWidth div 2 + EdgesDist;
-         CursorPoint.X:= - cScreenWidth div 2 + EdgesDist
-         end else
-      if CursorPoint.X > cScreenWidth div 2 - EdgesDist then
-         begin
-         WorldDx:= WorldDx - CursorPoint.X + cScreenWidth div 2 - EdgesDist;
-         CursorPoint.X:= cScreenWidth div 2 - EdgesDist
-         end;
-      if CursorPoint.Y < EdgesDist then
-         begin
-         WorldDy:= WorldDy + CursorPoint.Y - EdgesDist;
-         CursorPoint.Y:= EdgesDist
-         end else
-      if CursorPoint.Y > cScreenHeight - EdgesDist then
-         begin
-         WorldDy:= WorldDy + CursorPoint.Y - cScreenHeight + EdgesDist;
-         CursorPoint.Y:= cScreenHeight - EdgesDist
-         end;
-   end else
-   if cHasFocus then
-      begin
-      WorldDx:= WorldDx - CursorPoint.X + prevPoint.X;
-      WorldDy:= WorldDy + CursorPoint.Y - prevPoint.Y;
-      CursorPoint.X:= 0;
-      CursorPoint.Y:= cScreenHeight div 2;
-      end;
-
+// this moves the camera according to CursorPoint X and Y
 prevPoint:= CursorPoint;
 if cHasFocus then SDL_WarpMouse(CursorPoint.X + (cScreenWidth shr 1), cScreenHeight - CursorPoint.Y);
 if WorldDy > LAND_HEIGHT + 1024 then WorldDy:= LAND_HEIGHT + 1024;

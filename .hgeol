@@ -1,6 +1,7 @@
 [patterns]
 **.h = native
 **.c = native
+**.m = native
 **.cpp = native
 **.lua = native
 **.txt = native
