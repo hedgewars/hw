@@ -32,11 +32,12 @@ program hwengine;
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound, 
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, sysutils;
      
-type arrayofpchar = array[0..9] of PChar;
 var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
 
 {$IFDEF HWLIBRARY}
+type arrayofpchar = array[0..9] of PChar;
+
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
 
@@ -417,140 +418,38 @@ var i: LongInt;
 begin
     WriteLn('Wrong argument format: correct configurations is');
     WriteLn();
-    WriteLn('  hwengine <path to data folder> <path to replay file> [option]');
+    WriteLn('  hwengine <path to data folder> <path to replay file> [options]');
     WriteLn();
-    WriteLn('where [option] must be specified either as');
+    WriteLn('where [options] must be specified either as:');
     WriteLn(' --set-video [screen width] [screen height] [color dept]');
     WriteLn(' --set-audio [volume] [enable music] [enable sounds]');
     WriteLn(' --set-other [language file] [full screen] [show FPS]');
-    WriteLn(' --set-multimedia [screen height] [screen width] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
-    WriteLn(' --set-everything [screen height] [screen width] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
+    WriteLn(' --set-multimedia [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
+    WriteLn(' --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
     WriteLn();
-    WriteLn('Read documentation online at http://www.hedgewars.org/node/1465 for more information');
-    Write('parsed command: ');
+    WriteLn('Read documentation online at http://code.google.com/p/hedgewars/wiki/CommandLineOptions for more information');
+    WriteLn();
+    Write('PARSED COMMAND: ');
     for i:=0 to ParamCount do
         Write(ParamStr(i) + ' ');
     WriteLn();
 end;
 
 ////////////////////
+{$INCLUDE "ArgParsers.inc"}
+
 procedure GetParams;
 begin
-    case ParamCount of
-        18: begin
-            val(ParamStr(2), cScreenWidth);
-            val(ParamStr(3), cScreenHeight);
-            cBitsStr:= ParamStr(4);
-            val(cBitsStr, cBits);
-            val(ParamStr(5), ipcPort);
-            cFullScreen:= ParamStr(6) = '1';
-            isSoundEnabled:= ParamStr(7) = '1';
-            //cVSyncInUse:= ParamStr(8) = '1';      //merged with rqFlags
-            //cWeaponTooltips:= ParamStr(9) = '1';  //merged with rqFlags
-            cLocaleFName:= ParamStr(10);
-            val(ParamStr(11), cInitVolume);
-            val(ParamStr(12), cTimerInterval);
-            PathPrefix:= ParamStr(13);
-            cShowFPS:= ParamStr(14) = '1';
-            cAltDamage:= ParamStr(15) = '1';
-            UserNick:= DecodeBase64(ParamStr(16));
-            isMusicEnabled:= ParamStr(17) = '1';
-
-            if (ParamStr(18) = '1') then        //HACK - always disable rqLowRes as it's a game breaker
-                cReducedQuality:= $FFFFFFFF xor rqLowRes
+    if (ParamCount < 2) then
+        GameType:= gmtSyntax
+    else
+        if (ParamCount = 3) then
+            internalSetGameTypeLandPreviewFromParameters()
+        else
+            if (ParamCount = 18) then
+                internalStartGameWithParameters()
             else
-                val(ParamStr(18), cReducedQuality);
-            
-            if (ParamStr(8) = '0') then         //HACK - ifcVSyncInUse not true, disable it
-                cReducedQuality:= cReducedQuality xor rqDesyncVBlank;
-            if (ParamStr(9) = '0') then         //HACK - if cWeaponTooltips not true, disable it
-                cReducedQuality:= cReducedQuality xor rqTooltipsOff;
-        end;
-        3: begin
-            val(ParamStr(2), ipcPort);
-            GameType:= gmtLandPreview;
-            if ParamStr(3) <> 'landpreview' then 
-                OutError(errmsgShouldntRun, true);
-        end;
-        2: begin
-            PathPrefix:= ParamStr(1);
-            recordFileName:= ParamStr(2);
-        end;
-        6: begin
-            PathPrefix:= ParamStr(1);
-            recordFileName:= ParamStr(2);
-
-            if ParamStr(3) = '--set-video'  then
-            begin
-                val(ParamStr(4), cScreenWidth);
-                val(ParamStr(5), cScreenHeight);
-                cBitsStr:= ParamStr(6);
-                val(cBitsStr, cBits);
-            end
-            else
-            begin
-                if ParamStr(3) = '--set-audio' then
-                begin
-                    val(ParamStr(4), cInitVolume);
-                    isMusicEnabled:= ParamStr(5) = '1';
-                    isSoundEnabled:= ParamStr(6) = '1';
-                end
-                else
-                begin
-                    if ParamStr(3) = '--set-other' then
-                    begin
-                        cLocaleFName:= ParamStr(4);
-                        cFullScreen:= ParamStr(5) = '1';
-                        cShowFPS:= ParamStr(6) = '1';
-                    end
-                    else GameType:= gmtSyntax;
-                end
-            end;
-        end;
-        11: begin
-            PathPrefix:= ParamStr(1);
-            recordFileName:= ParamStr(2);
-
-            if ParamStr(3) = '--set-multimedia' then
-            begin
-                val(ParamStr(4), cScreenWidth);
-                val(ParamStr(5), cScreenHeight);
-                cBitsStr:= ParamStr(6);
-                val(cBitsStr, cBits);
-                val(ParamStr(7), cInitVolume);
-                isMusicEnabled:= ParamStr(8) = '1';
-                isSoundEnabled:= ParamStr(9) = '1';
-                cLocaleFName:= ParamStr(10);
-                cFullScreen:= ParamStr(11) = '1';
-            end
-            else GameType:= gmtSyntax;
-        end;
-        15: begin
-            PathPrefix:= ParamStr(1);
-            recordFileName:= ParamStr(2);
-            if ParamStr(3) = '--set-everything' then
-            begin
-                val(ParamStr(4), cScreenWidth);
-                val(ParamStr(5), cScreenHeight);
-                cBitsStr:= ParamStr(6);
-                val(cBitsStr, cBits);
-                val(ParamStr(7), cInitVolume);
-                isMusicEnabled:= ParamStr(8) = '1';
-                isSoundEnabled:= ParamStr(9) = '1';
-                cLocaleFName:= ParamStr(10);
-                cFullScreen:= ParamStr(11) = '1';
-                cAltDamage:= ParamStr(12) = '1';
-                cShowFPS:= ParamStr(13) = '1';
-                val(ParamStr(14), cTimerInterval);
-                if (ParamStr(15) = '1') then        //HACK
-                    cReducedQuality:= $FFFFFFFF xor rqLowRes
-                else
-                    val(ParamStr(15), cReducedQuality);
-            end
-            else GameType:= gmtSyntax;
-        end;
-        else GameType:= gmtSyntax;
-    end;
+                playReplayFileWithParameters();
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
