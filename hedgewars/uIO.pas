@@ -366,7 +366,6 @@ end;
 procedure freeModule;
 begin
     ipcPort:= 0;
-
 end;
 
 end.

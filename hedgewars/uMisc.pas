@@ -87,7 +87,7 @@ var
     cShowFPS        : boolean = false;
     cAltDamage      : boolean = true;
     cReducedQuality : LongInt = rqNone;
-
+    //userNick is in uChat
     recordFileName  : shortstring = '';
     
     cCaseFactor     : Longword;
@@ -795,6 +795,25 @@ begin
     flush(f);
     close(f);
 {$ENDIF}
+
+    // re-init flags so they'll always contain safe values
+    cScreenWidth    := 1024;
+    cScreenHeight   := 768;
+    cBits           := 32;
+    cBitsStr        := '32';
+    //ipcPort is in uIO
+    cFullScreen     := false;
+    isSoundEnabled  := true;
+    isMusicEnabled  := false;
+    cLocaleFName    := 'en.txt';
+    cInitVolume     := 50;
+    cTimerInterval  := 8;
+    //pathPrefix is in uConsts
+    cShowFPS        := false;
+    cAltDamage      := true;
+    cReducedQuality := rqNone;
+    //userNick is in uChat
+    recordFileName  := '';
 end;
 
 end.

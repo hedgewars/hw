@@ -29,7 +29,7 @@ procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
-var UserNick: shortstring;
+var UserNick: shortstring = '';
     ChatReady: boolean;
     showAll: boolean;
 
@@ -316,7 +316,6 @@ procedure initModule;
 begin
     lastStr:= 0;
     visibleCount:= 0;
-    UserNick:= '';
     showAll:= false;
     ChatReady:= false;
     missedCount:= 0;
@@ -324,7 +323,7 @@ end;
 
 procedure freeModule;
 begin
-
+    UserNick:= '';
 end;
 
 end.
