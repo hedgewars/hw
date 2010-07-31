@@ -404,9 +404,18 @@ int main(int argc, char *argv[]) {
         app.installTranslator(&Translator);
     }
 
+    // Win32 registry setup (used for xfire detection etc. - don't set it if we're running in "portable" mode with a custom config dir)
+#ifdef _WIN32
+    if(cConfigDir->length() == 0)
+    {
+        QSettings registry(QSettings::NativeFormat, QSettings::UserScope, "Hedgewars Project", "Hedgewars");
+        QFileInfo f(argv[0]);
+        registry.setValue("file", f.absoluteFilePath());
+        registry.setValue("path", f.absolutePath());
+    }
+#endif
 
     HWForm *Form = new HWForm();
-
 
     Form->show();
     return app.exec();

@@ -103,7 +103,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
 const BadTurn = Low(LongInt) div 4;
 
 implementation
-uses uMisc, uAIMisc, uLand;
+uses uMisc, uAIMisc, uLand, uTeams;
 
 function Metric(x1, y1, x2, y2: LongInt): LongInt;
 begin
@@ -121,8 +121,11 @@ var Vx, Vy, r: hwFloat;
         t: LongInt;
         value: LongInt;
     begin
-    x:= Me^.X;
-    y:= Me^.Y;
+    with PHedgehog(Me^.Hedgehog)^ do
+        begin
+        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
+        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
+        end;
     dX:= Vx;
     dY:= -Vy;
     t:= rTime;
@@ -176,8 +179,11 @@ var Vx, Vy, r: hwFloat;
     var x, y, dY: hwFloat;
         t: LongInt;
     begin
-    x:= Me^.X;
-    y:= Me^.Y;
+    with PHedgehog(Me^.Hedgehog)^ do
+        begin
+        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
+        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
+        end;
     dY:= -Vy;
     t:= TestTime;
     repeat
@@ -228,8 +234,11 @@ var Vx, Vy, r: hwFloat;
     var x, y, dY: hwFloat;
         t: LongInt;
     begin
-    x:= Me^.X;
-    y:= Me^.Y;
+    with PHedgehog(Me^.Hedgehog)^ do
+        begin
+        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
+        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
+        end;
     dY:= -Vy;
     t:= TestTime;
     repeat
@@ -280,8 +289,11 @@ var Vx, Vy, r: hwFloat;
     var x, y, dY: hwFloat;
         t: LongInt;
     begin
-    x:= Me^.X;
-    y:= Me^.Y;
+    with PHedgehog(Me^.Hedgehog)^ do
+        begin
+        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
+        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
+        end;
     dY:= -Vy;
     t:= TestTime;
     repeat
@@ -336,8 +348,11 @@ var Vx, Vy, r: hwFloat;
     var x, y, dY: hwFloat;
         t: LongInt;
     begin
-    x:= Me^.X;
-    y:= Me^.Y;
+    with PHedgehog(Me^.Hedgehog)^ do
+        begin
+        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
+        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
+        end;
     dY:= -Vy;
     t:= TestTime;
     repeat
@@ -388,8 +403,11 @@ var Vx, Vy: hwFloat;
     var x, y, dY: hwFloat;
         value: LongInt;
     begin
-        x:= Me^.X;
-        y:= Me^.Y;
+    with PHedgehog(Me^.Hedgehog)^ do
+        begin
+        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
+        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
+        end;
         dY:= -Vy;
 
         repeat
@@ -473,12 +491,15 @@ begin
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
-range:= Metric(hwRound(Me^.X), hwRound(Me^.Y), Targ.X, Targ.Y);
+with PHedgehog(Me^.Hedgehog)^ do
+    begin
+    x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
+    y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
+    end;
+range:= Metric(hwRound(x), hwRound(y), Targ.X, Targ.Y);
 if ( range < MIN_RANGE ) or ( range > MAX_RANGE ) then exit(BadTurn);
-Vx:= (int2hwFloat(Targ.X) - Me^.X) * _1div1024;
-Vy:= (int2hwFloat(Targ.Y) - Me^.Y) * _1div1024;
-x:= Me^.X;
-y:= Me^.Y;
+Vx:= (int2hwFloat(Targ.X) - x) * _1div1024;
+Vy:= (int2hwFloat(Targ.Y) - y) * _1div1024;
 ap.Angle:= DxDy2AttackAngle(Vx, -Vy);
 repeat
   x:= x + vX;
@@ -507,13 +528,16 @@ Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
+with PHedgehog(Me^.Hedgehog)^ do
+    begin
+    x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
+    y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
+    end;
 if Abs(hwRound(Me^.X) - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) < 80 then
    exit(BadTurn);
-t:= _0_5 / Distance(int2hwFloat(Targ.X) - Me^.X, int2hwFloat(Targ.Y) - Me^.Y);
-Vx:= (int2hwFloat(Targ.X) - Me^.X) * t;
-Vy:= (int2hwFloat(Targ.Y) - Me^.Y) * t;
-x:= Me^.X;
-y:= Me^.Y;
+t:= _0_5 / Distance(int2hwFloat(Targ.X) - x, int2hwFloat(Targ.Y) - y);
+Vx:= (int2hwFloat(Targ.X) - x) * t;
+Vy:= (int2hwFloat(Targ.Y) - y) * t;
 ap.Angle:= DxDy2AttackAngle(Vx, -Vy);
 d:= 0;
 
@@ -531,6 +555,7 @@ end;
 
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var valueResult: LongInt;
+    x, y: hwFloat;
 begin
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
@@ -539,26 +564,37 @@ if (Level > 2) or (Abs(hwRound(Me^.X) - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) >
 
 ap.Time:= 0;
 ap.Power:= 1;
-if (Targ.X) - hwRound(Me^.X) >= 0 then ap.Angle:=   cMaxAngle div 4
+with PHedgehog(Me^.Hedgehog)^ do
+    begin
+    x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
+    y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
+    end;
+if (Targ.X) - hwRound(x) >= 0 then ap.Angle:=   cMaxAngle div 4
                                   else ap.Angle:= - cMaxAngle div 4;
-valueResult:= RateShove(Me, hwRound(Me^.X) + 10 * hwSign(int2hwFloat(Targ.X) - Me^.X), hwRound(Me^.Y), 15, 30);
+valueResult:= RateShove(Me, hwRound(x) + 10 * hwSign(int2hwFloat(Targ.X) - x), hwRound(y), 15, 30);
 if valueResult <= 0 then valueResult:= BadTurn else inc(valueResult);
 TestBaseballBat:= valueResult;
 end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var i, valueResult: LongInt;
+    x, y: hwFloat;
 begin
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
 ap.Angle:= 0;
-if (Abs(hwRound(Me^.X) - Targ.X) > 25)
-or (Abs(hwRound(Me^.Y) - 50 - Targ.Y) > 50) then
+with PHedgehog(Me^.Hedgehog)^ do
     begin
-    if TestColl(hwRound(Me^.Y), hwRound(Me^.Y) - 16, 6)
-    and (RateShove(Me, hwRound(Me^.X) + 10 * hwSign(Me^.dX), hwRound(Me^.Y) - 40, 30, 30) = 0) then
+    x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
+    y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
+    end;
+if (Abs(hwRound(x) - Targ.X) > 25)
+or (Abs(hwRound(y) - 50 - Targ.Y) > 50) then
+    begin
+    if TestColl(hwRound(x), hwRound(y) - 16, 6)
+    and (RateShove(Me, hwRound(x) + 10 * hwSign(Me^.dX), hwRound(y) - 40, 30, 30) = 0) then
         valueResult:= Succ(BadTurn)
     else
         valueResult:= BadTurn;
@@ -567,8 +603,8 @@ or (Abs(hwRound(Me^.Y) - 50 - Targ.Y) > 50) then
 
 valueResult:= 0;
 for i:= 0 to 4 do
-    valueResult:= valueResult + RateShove(Me, hwRound(Me^.X) + 10 * hwSign(int2hwFloat(Targ.X) - Me^.X),
-                                    hwRound(Me^.Y) - 20 * i - 5, 10, 30);
+    valueResult:= valueResult + RateShove(Me, hwRound(x) + 10 * hwSign(int2hwFloat(Targ.X) - x),
+                                    hwRound(y) - 20 * i - 5, 10, 30);
 if valueResult <= 0 then
     valueResult:= BadTurn
 else

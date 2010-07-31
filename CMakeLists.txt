@@ -19,7 +19,7 @@ IF(version_suffix MATCHES "-dev")
 				     OUTPUT_VARIABLE version_suffix
 				     )
 			STRING(REGEX REPLACE "(.*) +(.*)" "\\2:\\1" version_suffix ${version_suffix})
-			MESSAGE(STATUS "Builing revision ${version_suffix}")
+			MESSAGE(STATUS "Building revision ${version_suffix}")
 			set(version_suffix ".${version_suffix}")
 #			#truncate to numbers only - trying to fix a problem described in http://www.hedgewars.org/node/2019
 #			STRING(REGEX REPLACE "^\\.(\\d+)" ".\\1" version_suffix ${version_suffix})
@@ -156,6 +156,7 @@ if(LOWRES)
 endif(LOWRES)
 
 if(Optz)
+#	set(pascal_compiler_flags_cmn "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_compiler_flags_cmn})
 	set(pascal_compiler_flags_cmn "-O2" "-Xs" "-Si" ${pascal_compiler_flags_cmn})
 	set(haskell_compiler_flags_cmn "-O2" "-w")
 else(Optz)

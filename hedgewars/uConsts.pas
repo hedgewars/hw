@@ -73,7 +73,7 @@ type
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee, 
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
-            sprCheese, sprHandCheese, sprHandFlamethrower
+            sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk
             );
     
     // Gears that interact with other Gears and/or Land
@@ -94,9 +94,11 @@ type
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
-            vgtBigExplosion);
+            vgtBigExplosion, vgtChunk);
 
     TGearsType = set of TGearType;
+
+    TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison);
 
     TSound = (sndNone,
             sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,
@@ -106,7 +108,7 @@ type
             sndMissed, sndStupid, sndFirstBlood, sndBoring, sndByeBye,
             sndSameTeam, sndNutter, sndReinforce, sndTraitor, sndRegret,
             sndEnemyDown, sndCoward, sndHurry, sndWatchIt, sndKamikaze,
-            sndCake, sndOw1, sndOw4, sndFirePunch1, sndFirePunch2,
+            sndCake, sndOw1, sndOw2, sndOw3, sndOw4, sndFirePunch1, sndFirePunch2,
             sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
             sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
             sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat,
@@ -118,7 +120,7 @@ type
             sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket,
             sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle, sndBeeWater,
             sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7, sndPiano8,
-            sndSkip, sndSineGun);
+            sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3);
 
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -559,17 +561,17 @@ const
             (FileName:       'SkyR'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: true; getImageDimensions: true),// sprSky
             (FileName:  'BorderHorizontal'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 33; Height:  2; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderHorizontal
+            Width: 33; Height:  2; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderHorizontal
             (FileName:  'BorderVertical'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 2; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderVertical
+            Width: 2; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderVertical
             (FileName:   'Slot'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 33; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMSlot
+            Width: 33; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMSlot
             (FileName:      'Ammos'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMAmmos
             (FileName:   'SlotKeys'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMSlotKeys
             (FileName:  'Corners'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  2; Height: 2; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMCorners
+            Width:  2; Height: 2; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMCorners
             (FileName:     'Finger'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprFinger
             (FileName:    'AirBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -795,7 +797,9 @@ const
             (FileName:  'amCheese'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandCheese
             (FileName:  'amFlamethrower'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprHandFlamethrower
+            Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandFlamethrower
+            (FileName:  'Chunk'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprChunk
             );
 
     Wavez: array [TWave] of record
@@ -856,6 +860,8 @@ const
             (FileName:             'Kamikaze.ogg'; Path: ptVoices),// sndKamikaze
             (FileName:                'cake2.ogg'; Path: ptSounds),// sndCake
             (FileName:                  'Ow1.ogg'; Path: ptVoices),// sndOw1
+            (FileName:                  'Ow2.ogg'; Path: ptVoices),// sndOw2
+            (FileName:                  'Ow3.ogg'; Path: ptVoices),// sndOw3
             (FileName:                  'Ow4.ogg'; Path: ptVoices),// sndOw4
             (FileName:           'Firepunch1.ogg'; Path: ptVoices),// sndFirepunch1
             (FileName:           'Firepunch2.ogg'; Path: ptVoices),// sndFirepunch2
@@ -917,7 +923,10 @@ const
             (FileName:                   '8C.ogg'; Path: ptSounds),// sndPiano7
             (FileName:                   '9D.ogg'; Path: ptSounds),// sndPiano8
             (FileName:                 'skip.ogg'; Path: ptSounds),// sndSkip
-            (FileName:          'shotgunfire.ogg'; Path: ptSounds) // sndSineGun
+            (FileName:          'shotgunfire.ogg'; Path: ptSounds),// sndSineGun
+            (FileName:                'Ooff1.ogg'; Path: ptVoices),// sndOoff1
+            (FileName:                'Ooff2.ogg'; Path: ptVoices),// sndOoff2
+            (FileName:                'Ooff3.ogg'; Path: ptVoices) // sndOoff3
             );
 
     Ammoz: array [TAmmoType] of record

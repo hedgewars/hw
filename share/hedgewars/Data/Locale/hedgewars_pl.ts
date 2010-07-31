@@ -418,7 +418,7 @@ w ustawieniach gry:</translation>
     <message>
         <source>Connect a gamepad before launching the game to be able to assign its controls to your team.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Jeśli podłączysz Gamepada przed włączeniem gry, będziesz miał możliwość przypisania klawiszy by sterować nim własne jeże.</translation>
+        <translation type="obsolete">Jeśli podłączysz Gamepada przed włączeniem gry, będziesz miał możliwość przypisania klawiszy by sterować nim własne jeże.</translation>
     </message>
     <message>
         <source>Create an account on http://www.hedgewars.org/ to keep others from using your most favourite nickname while playing on the official server.</source>
@@ -469,6 +469,18 @@ w ustawieniach gry:</translation>
         <source>No hedgehogs were harmed in making this game.</source>
         <comment>Tips</comment>
         <translation type="unfinished">Żadny jeż nie został ranny w czasie tworzenia tej gry.</translation>
+    </message>
+    <message>
+        <source>Connect one or more gamepads before launching the game to be able to assign their controls to your teams.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageMultiplayer</name>
+    <message>
+        <source>Start</source>
+        <translation type="unfinished">Start</translation>
     </message>
 </context>
 <context>
@@ -1104,8 +1116,12 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     </message>
     <message>
         <source>This HG build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation>Ta wersja jest w fazie produkcji i może nie być kompatybilna z innymi wersjami gry.
+        <translation type="obsolete">Ta wersja jest w fazie produkcji i może nie być kompatybilna z innymi wersjami gry.
 Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne ryzyko!</translation>
+    </message>
+    <message>
+        <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

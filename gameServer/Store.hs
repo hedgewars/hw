@@ -77,7 +77,7 @@ addElem m@(MStore ref) element = do
 removeElem :: MStore e -> ElemIndex -> IO ()
 removeElem (MStore ref) (ElemIndex n) = do
     (busyElems, freeElems, arr) <- readIORef ref
-    IOA.writeArray arr n (error "Store: no element")
+    IOA.writeArray arr n (error $ "Store: no element " ++ show n)
     writeIORef ref (IntSet.delete n busyElems, IntSet.insert n freeElems, arr)
 
 

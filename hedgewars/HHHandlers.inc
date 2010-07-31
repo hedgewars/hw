@@ -17,6 +17,29 @@
  *)
 
 ////////////////////////////////////////////////////////////////////////////////
+
+procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
+begin
+if (Source = dsFall) or (Source = dsExplosion) then
+    case random(3) of
+        0: PlaySound(sndOoff1, Hedgehog^.Team^.voicepack);
+        1: PlaySound(sndOoff2, Hedgehog^.Team^.voicepack);
+        2: PlaySound(sndOoff3, Hedgehog^.Team^.voicepack);
+    end
+else if (Source = dsPoison) then
+    case random(2) of
+        0: PlaySound(sndPoisonCough, Hedgehog^.Team^.voicepack);
+        1: PlaySound(sndPoisonMoan, Hedgehog^.Team^.voicepack);
+    end
+else
+    case random(4) of
+        0: PlaySound(sndOw1, Hedgehog^.Team^.voicepack);
+        1: PlaySound(sndOw2, Hedgehog^.Team^.voicepack);
+        2: PlaySound(sndOw3, Hedgehog^.Team^.voicepack);
+        3: PlaySound(sndOw4, Hedgehog^.Team^.voicepack);
+    end
+end;
+
 procedure ChangeAmmo(Gear: PGear);
 var slot, i: Longword;
 begin

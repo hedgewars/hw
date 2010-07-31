@@ -63,7 +63,7 @@ testing = Control.OldException.handle print $ do
     hFlush stdout
 
 forks = forever $ do
-    delay <- randomRIO (20000::Int, 40000)
+    delay <- randomRIO (10000::Int, 30000)
     threadDelay delay
     forkIO testing
 
