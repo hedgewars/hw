@@ -25,7 +25,7 @@
 
 -(void) viewWillAppear:(BOOL)animated {
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
-    
+
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
     self.settingsDictionary = dictionary;
     [dictionary release];
@@ -34,7 +34,7 @@
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];    
+    [super viewWillDisappear:animated];
     [self.settingsDictionary writeToFile:SETTINGS_FILE() atomically:YES];
 }
 
@@ -42,7 +42,7 @@
 -(void) switchValueChanged:(id) sender {
     UISwitch *theSwitch = (UISwitch *)sender;
     UISwitch *theOtherSwitch = nil;
-    
+
     switch (theSwitch.tag) {
         case 10:    //soundSwitch
             // this turn off also the switch below
@@ -123,7 +123,7 @@
     static NSString *cellIdentifier1 = @"Cell1";
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
-    
+
     UITableViewCell *cell = nil;
     EditableCellView *editableCell = nil;
     if (section == 0) {
@@ -135,7 +135,7 @@
             editableCell.textField.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
             editableCell.textField.textColor = [UIColor lightGrayColor];
         }
-        
+
         if (row == 0) {
             editableCell.titleLabel.text = NSLocalizedString(@"Nickname","from the settings table");
             editableCell.textField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"");
@@ -149,7 +149,7 @@
             editableCell.textField.secureTextEntry = YES;
             editableCell.tag = 50;
         }
-        
+
         editableCell.accessoryView = nil;
         cell = editableCell;
     } else {
@@ -161,7 +161,7 @@
             cell.accessoryView = theSwitch;
             [theSwitch release];
         }
-        
+
         UISwitch *switchContent = (UISwitch *)cell.accessoryView;
         if (section == 1) {
             if (row == 0) {
@@ -179,11 +179,11 @@
             switchContent.tag = 30;
         }
     }
-    
+
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.imageView.image = nil;
-    
+
     return cell;
 }
 
@@ -212,7 +212,7 @@
             headerLabel.text = @"!";
             break;
     }
-    
+
     [containerView addSubview:headerLabel];
     return containerView;
 }

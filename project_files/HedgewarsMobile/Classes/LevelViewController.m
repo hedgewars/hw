@@ -34,7 +34,7 @@
                       nil];
     self.levelArray = array;
     [array release];
-    
+
     self.title = NSLocalizedString(@"Set difficulty level",@"");
 }
 
@@ -58,13 +58,13 @@
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-    
+
     NSInteger row = [indexPath row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+
     cell.textLabel.text = [levelArray objectAtIndex:row];
     NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:0];
     if ([[hog objectForKey:@"level"] intValue] == row) {
@@ -73,7 +73,7 @@
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
-    
+
     NSString *botlevelPath = [[NSString alloc] initWithFormat:@"%@/%d.png",BOTLEVELS_DIRECTORY(),row];
     UIImage *levelImage = [[UIImage alloc] initWithContentsOfFile:botlevelPath];
     [botlevelPath release];
@@ -96,14 +96,14 @@
 /*
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
+    }
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    }
 }
 */
 
@@ -129,18 +129,18 @@
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    
+
     if (newRow != oldRow) {
         NSMutableArray *hogs = [teamDictionary objectForKey:@"hedgehogs"];
-        
+
         for (NSMutableDictionary *hog in hogs) {
             [hog setObject:[NSNumber numberWithInt:newRow] forKey:@"level"];
         }
-        
+
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
         [self.tableView reloadData];
-        
+
         self.lastIndexPath = indexPath;
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }

@@ -38,20 +38,20 @@ int openal_init (void) {
     ALCcontext *context;
     ALCdevice *device;
     int i;
-        
-    // reuse old context and resize the existing 
+
+    // reuse old context and resize the existing
     if (openal_ready() == AL_TRUE) {
         fprintf(stderr,"(Bridge Info) - already initialized\n");
         instances_number++;
         return AL_TRUE;
     }
-    
+
     cache_pointer = 0;
     instances_number++;
-    
+
     // initial memory size
     cache_size = 50;
-    
+
     // open hardware device if present
     device = alcOpenDevice(NULL);
     sources_number = 16;
@@ -81,7 +81,7 @@ int openal_init (void) {
 
     Sources = (ALuint *)Malloc (sizeof(ALuint) * sources_number);
     alGenSources(sources_number, Sources);
-    
+
     // set the listener gain, position (on xyz axes), velocity (one value for each axe) and orientation
     // Position, Velocity and Orientation of the listener
     ALfloat ListenerPos[] = {0.0, 0.0, 0.0};
@@ -112,7 +112,7 @@ void openal_close (void) {
     ALCcontext *context;
     ALCdevice  *device;
     int i;
-    
+
     if (instances_number == 0) {
         fprintf(stderr,"(Bridge Warning) - OpenAL not initialized\n");
         return;
@@ -123,7 +123,7 @@ void openal_close (void) {
         // release memory only when last session ends
         return;
     }
-    
+
     for (i = 0; i < cache_size; i++) {
         openal_unloadfile(i);
     }
@@ -148,7 +148,7 @@ void openal_close (void) {
 
 
 ALboolean openal_ready (void) {
-    if (instances_number >= 1) 
+    if (instances_number >= 1)
         return AL_TRUE;
     else
         return AL_FALSE;
@@ -164,12 +164,12 @@ int openal_loadfile (const char *filename){
     int len, i, index = -1;
     char *data;
     FILE *fp;
-    
+
     if (openal_ready() == AL_FALSE) {
         fprintf(stderr,"(Bridge Warning) - not initialized\n");
         return -1;
     }
-    
+
     // if this sound is already loaded return the index from the_sounds
     len = strlen(filename);
     for (i = 0; i < cache_size; i++) {
@@ -182,19 +182,19 @@ int openal_loadfile (const char *filename){
         // if we don't have memory available search for a free element
         if (cache_pointer >= cache_size)
             if (the_sounds[i].is_used == AL_FALSE)
-                index = i; 
+                index = i;
     }
 
     if (index == -1 && cache_pointer >= cache_size) {
         fprintf(stderr,"(Bridge Info) - No free spots found; doubling cache size\n", filename);
         cache_size *= 2;
         the_sounds = (al_sound_t *)Realloc (the_sounds, sizeof(al_sound_t) * cache_size);
-        for (i = cache_size - 50; i < cache_size; i++) 
+        for (i = cache_size - 50; i < cache_size; i++)
             the_sounds[i] = new_sound_el();
-    } else 
+    } else
         index = ++cache_pointer;
-    
-    
+
+
     // detect the file format, as written in the first 4 bytes of the header
     fp = Fopen (filename, "rb");
     if (fp == NULL) {
@@ -231,13 +231,13 @@ int openal_loadfile (const char *filename){
 
     // alGenBuffers happens here
     sound_data = init_sound_el(filename);
-    
+
     if (AL_NO_ERROR != alGetError()) {
         fprintf(stderr,"(Bridge ERROR) - Failed to allocate memory for buffer %d\n", index);
         free(data);
         return -5;
     }
-    
+
     // copy pcm data in one buffer and free it
     alBufferData(sound_data.buffer, format, data, bitsize, freq);
     free(data);
@@ -246,7 +246,7 @@ int openal_loadfile (const char *filename){
         fprintf(stderr,"(Bridge ERROR) - Failed to write data to buffer %d\n", index);
         return -8;
     }
-    
+
     // clear any AL errors beforehand
     alGetError();
 
@@ -265,8 +265,8 @@ void openal_unloadfile (uint32_t index) {
         alGetSourcei (Sources[the_sounds[index].source_index], AL_SOURCE_STATE, &state);
         if (state == AL_PLAYING || state == AL_PAUSED)
             openal_stopsound(index);
-        
-        // free memory and 
+
+        // free memory and
         alDeleteBuffers (1, &the_sounds[index].buffer);
         the_sounds[index] = new_sound_el();
     }

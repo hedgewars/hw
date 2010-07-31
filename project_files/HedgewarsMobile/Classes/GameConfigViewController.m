@@ -43,7 +43,7 @@
                 [alert release];
             } else {
                 [[self parentViewController] dismissModalViewControllerAnimated:YES];
-                
+
             }
             break;
         case 1:
@@ -83,9 +83,9 @@
             activeController = schemeWeaponConfigViewController;
             break;
     }
-    
+
     // this message is compulsory otherwise the table won't be loaded at all
-    [activeController viewWillAppear:NO];      
+    [activeController viewWillAppear:NO];
     [self.view addSubview:activeController.view];
 }
 
@@ -103,7 +103,7 @@
         [alert release];
         return;
     }
-    
+
     // play only if there is more than one team
     if ([teamConfigViewController.listOfSelectedTeams count] < 2) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too few teams playing",@"")
@@ -115,7 +115,7 @@
         [alert release];
         return;
     }
-    
+
     // play if there's room for enough hogs in the selected map
     int hogs = 0;
     for (NSDictionary *teamData in teamConfigViewController.listOfSelectedTeams)
@@ -131,7 +131,7 @@
         [alert release];
         return;
     }
-    
+
     if ([schemeWeaponConfigViewController.selectedScheme length] == 0 || [schemeWeaponConfigViewController.selectedWeapon length] == 0 ) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Missing detail",@"")
                                                         message:NSLocalizedString(@"Select one Scheme and one Weapon for this game",@"")
@@ -142,7 +142,7 @@
         [alert release];
         return;
     }
-    
+
     // create the configuration file that is going to be sent to engine
     NSDictionary *gameDictionary = [NSDictionary dictionaryWithObjectsAndKeys:mapConfigViewController.seedCommand,@"seed_command",
                                                                       mapConfigViewController.templateFilterCommand,@"templatefilter_command",
@@ -154,28 +154,28 @@
                                                                       schemeWeaponConfigViewController.selectedScheme,@"scheme",
                                                                       schemeWeaponConfigViewController.selectedWeapon,@"weapon",
                                                                       nil];
-    
+
     // finally launch game and remove this controller
     DLog(@"sending config %@", gameDictionary);
-    
+
     if ([[gameDictionary allKeys] count] == 9) {
         [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:gameDictionary];
     } else {
         DLog(@"gameconfig data not complete!!\nmapConfigViewController = %@\nteamConfigViewController = %@\nschemeWeaponConfigViewController = %@\n",
              mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController);
         [self.parentViewController dismissModalViewControllerAnimated:YES];
-        
+
         // present an alert to the user, with an image on the ipad (too big for the iphone)
         NSString *msg = NSLocalizedString(@"Something went wrong with your configuration. Please try again.",@"");
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             msg = [msg stringByAppendingString:@"\n\n\n\n\n\n\n\n"];    // this makes space for the image
-        
+
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Whoops"
                                                         message:msg
                                                        delegate:nil
                                               cancelButtonTitle:@"Ok"
                                               otherButtonTitles:nil];
-        
+
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             UIImageView *deniedImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"denied.png"]];
             deniedImg.frame = CGRectMake(25, 80, 240, 160);
@@ -190,7 +190,7 @@
 
 -(void) viewDidLoad {
     self.view.backgroundColor = [UIColor blackColor];
-    
+
     CGRect screen = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
 
@@ -220,9 +220,9 @@
         [self.view addSubview:schemeWeaponConfigViewController.view];
     }
     activeController = mapConfigViewController;
-    
+
     [self.view addSubview:mapConfigViewController.view];
-    
+
     [super viewDidLoad];
 }
 
@@ -231,7 +231,7 @@
     [teamConfigViewController viewWillAppear:animated];
     [schemeWeaponConfigViewController viewWillAppear:animated];
     // ADD other controllers here
-     
+
     [super viewWillAppear:animated];
 }
 
@@ -243,12 +243,12 @@
 }
 
 -(void) didReceiveMemoryWarning {
-    if (activeController.view.superview == nil) 
+    if (activeController.view.superview == nil)
         activeController = nil;
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
-    if (mapConfigViewController.view.superview == nil) 
+    if (mapConfigViewController.view.superview == nil)
         mapConfigViewController = nil;
     if (teamConfigViewController.view.superview == nil)
         teamConfigViewController = nil;

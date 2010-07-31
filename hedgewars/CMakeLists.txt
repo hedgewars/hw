@@ -31,7 +31,7 @@ if(sdlimage_h)
 	endif()
 endif()
 
-#SOURCE AND PROGRAMS SECTION 
+#SOURCE AND PROGRAMS SECTION
 set(fpc_tryexe fpc)
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
 

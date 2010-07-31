@@ -48,7 +48,7 @@
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
-    
+
     // labels for the entries
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Grave",@""),
@@ -65,27 +65,27 @@
     [normalHogFile release];
     self.normalHogSprite = hogSprite;
     [hogSprite release];
-    
+
     // listen if any childController modifies the plist and write it if needed
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setWriteNeeded) name:@"setWriteNeedTeams" object:nil];
     isWriteNeeded = NO;
-    
+
     self.title = NSLocalizedString(@"Edit team settings",@"");
 }
 
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     // load data about the team and write if there has been a change from other childControllers
-    if (isWriteNeeded) 
+    if (isWriteNeeded)
         [self writeFile];
-    
+
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),self.teamName];
     NSMutableDictionary *teamDict = [[NSMutableDictionary alloc] initWithContentsOfFile:teamFile];
     self.teamDictionary = teamDict;
     [teamDict release];
     [teamFile release];
-        
+
     [self.tableView reloadData];
 }
 
@@ -93,7 +93,7 @@
 -(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 
-    if (isWriteNeeded) 
+    if (isWriteNeeded)
         [self writeFile];
 }
 
@@ -159,23 +159,23 @@
     static NSString *CellIdentifier0 = @"Cell0";
     static NSString *CellIdentifier1 = @"Cell1";
     static NSString *CellIdentifier2 = @"Cell2";
-    
+
     NSArray *hogArray;
     UITableViewCell *cell = nil;
     EditableCellView *editableCell = nil;
     NSInteger row = [indexPath row];
     UIImage *accessoryImage;
-    
+
     switch ([indexPath section]) {
         case 0:
             editableCell = (EditableCellView *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier0];
             if (editableCell == nil) {
-                editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault 
+                editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
                                                reuseIdentifier:CellIdentifier0] autorelease];
                 editableCell.delegate = self;
                 editableCell.tag = TEAMNAME_TAG;
             }
-            
+
             editableCell.imageView.image = nil;
             editableCell.accessoryType = UITableViewCellAccessoryNone;
             editableCell.textField.text = self.teamName;
@@ -185,33 +185,33 @@
         case 1:
             editableCell = (EditableCellView *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier1];
             if (editableCell == nil) {
-                editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault 
+                editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
                                                reuseIdentifier:CellIdentifier1] autorelease];
                 editableCell.delegate = self;
                 editableCell.tag = [indexPath row];
             }
-            
+
             hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
-            
+
             // draw the hat on top of the hog
             NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@.png", HATS_DIRECTORY(), [[hogArray objectAtIndex:row] objectForKey:@"hat"]];
             UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
             [hatFile release];
             editableCell.imageView.image = [self.normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, -5)];
             [hatSprite release];
-            
+
             editableCell.textField.text = [[hogArray objectAtIndex:row] objectForKey:@"hogname"];
             editableCell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-            
+
             cell = editableCell;
             break;
         case 2:
             cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
             if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                reuseIdentifier:CellIdentifier2] autorelease];
             }
-            
+
             cell.textLabel.text = [self.secondaryItems objectAtIndex:row];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             switch (row) {
@@ -228,7 +228,7 @@
                     cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(42, 42)];
                     [accessoryImage release];
                     break;
-                    
+
                 case 3: // flags
                     accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png",
                                                                               FLAGS_DIRECTORY(),[teamDictionary objectForKey:@"flag"]]];
@@ -249,7 +249,7 @@
             }
             break;
     }
-    
+
     return cell;
 }
 
@@ -260,41 +260,41 @@
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
     UITableViewController *nextController = nil;
-    
+
     if (2 == section) {
         switch (row) {
             case 0: // grave
                 if (nil == gravesViewController)
                     gravesViewController = [[GravesViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                
+
                 nextController = gravesViewController;
                 break;
             case 1: // voice
                 if (nil == voicesViewController)
                     voicesViewController = [[VoicesViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                
-                nextController = voicesViewController;                    
+
+                nextController = voicesViewController;
                 break;
             case 2: // fort
                 if (nil == fortsViewController)
                     fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                
+
                 nextController = fortsViewController;
                 break;
             case 3: // flag
-                if (nil == flagsViewController) 
+                if (nil == flagsViewController)
                     flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                
+
                 nextController = flagsViewController;
                 break;
             case 4: // level
                 if (nil == levelViewController)
                     levelViewController = [[LevelViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                
+
                 nextController = levelViewController;
                 break;
         }
-        
+
         if ([nextController respondsToSelector:@selector(setTeamDictionary:)])
             [nextController setTeamDictionary:teamDictionary];
         [self.navigationController pushViewController:nextController animated:YES];
@@ -310,15 +310,15 @@
 -(void) tableView:(UITableView *)aTableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     if (nil == hogHatViewController)
         hogHatViewController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    
+
     // cache the dictionary file of the team, so that other controllers can modify it
     hogHatViewController.teamDictionary = self.teamDictionary;
     hogHatViewController.selectedHog = [indexPath row];
-    
+
     // if we are editing the field undo any change before proceeding
     EditableCellView *cell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
     [cell cancel:nil];
-    
+
     [self.navigationController pushViewController:hogHatViewController animated:YES];
 }
 

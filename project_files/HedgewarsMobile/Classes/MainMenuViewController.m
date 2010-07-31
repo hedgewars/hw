@@ -24,9 +24,9 @@
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    if (settingsViewController.view.superview == nil) 
+    if (settingsViewController.view.superview == nil)
         settingsViewController = nil;
-    if (gameConfigViewController.view.superview == nil) 
+    if (gameConfigViewController.view.superview == nil)
         gameConfigViewController = nil;
     MSG_MEMCLEAN();
 }
@@ -42,7 +42,7 @@
     [NSThread detachNewThreadSelector:@selector(initAudioThread)
                              toTarget:self
                            withObject:nil];
-    
+
     char *ver;
     HW_versionInfo(NULL, &ver);
     NSString *versionNumber = [[NSString alloc] initWithCString:ver];
@@ -52,13 +52,13 @@
     // listen to request to remove the modalviewcontroller
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(dismissModalViewController)
-                                                 name: @"dismissModalView" 
+                                                 name: @"dismissModalView"
                                                object:nil];
-    
+
     // initialize some files the first time we load the game
-    if (!([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()])) 
+    if (!([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()]))
         [NSThread detachNewThreadSelector:@selector(checkFirstRun) toTarget:self withObject:nil];
-    
+
     [super viewDidLoad];
 }
 
@@ -67,7 +67,7 @@
 -(void) checkFirstRun {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     DLog(@"First time run, creating settings files at %@", SETTINGS_FILE());
-    
+
     // show a popup with an indicator to make the user wait
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Please wait",@"")
                                                     message:nil
@@ -75,20 +75,20 @@
                                           cancelButtonTitle:nil
                                           otherButtonTitles:nil];
     [alert show];
-    
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] 
+
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]
                                           initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     indicator.center = CGPointMake(alert.bounds.size.width / 2, alert.bounds.size.height - 50);
     [indicator startAnimating];
     [alert addSubview:indicator];
     [indicator release];
-    
+
     // create default files (teams/weapons/scheme)
     createTeamNamed(@"Pirates");
     createTeamNamed(@"Ninjas");
     createWeaponNamed(@"Default");
     createSchemeNamed(@"Default");
-    
+
     // create settings.plist
     NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
 
@@ -99,8 +99,8 @@
     [saveDict setObject:[NSNumber numberWithBool:NO] forKey:@"alternate"];
 
     [saveDict writeToFile:SETTINGS_FILE() atomically:YES];
-    [saveDict release];    
-    
+    [saveDict release];
+
     // ok let the user take control
     [alert dismissWithClickedButtonIndex:0 animated:YES];
     [alert release];
@@ -118,7 +118,7 @@
 
     switch (button.tag) {
         case 0:
-            gameConfigViewController = [[GameConfigViewController alloc] initWithNibName:@"GameConfigViewController" bundle:nil];        
+            gameConfigViewController = [[GameConfigViewController alloc] initWithNibName:@"GameConfigViewController" bundle:nil];
 
             [self presentModalViewController:gameConfigViewController animated:YES];
             break;
@@ -127,7 +127,7 @@
                 settingsViewController = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
                 settingsViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             }
-            
+
             [self presentModalViewController:settingsViewController animated:YES];
             break;
         case 3:
@@ -136,7 +136,7 @@
             scroll.text = debugStr;
             [debugStr release];
             scroll.editable = NO;
-            
+
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             [btn addTarget:scroll action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
             btn.backgroundColor = [UIColor blackColor];

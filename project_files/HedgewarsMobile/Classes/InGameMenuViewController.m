@@ -33,12 +33,12 @@
                       nil];
     self.menuList = array;
     [array release];
-    
+
     // save the sdl window (!= uikit window) for future reference
     SDL_VideoDevice *_this = SDL_GetVideoDevice();
     SDL_VideoDisplay *display = &_this->displays[0];
     sdlwindow = display->windows;
-        
+
     [super viewDidLoad];
 }
 
@@ -59,7 +59,7 @@
     CGRect screen = [[UIScreen mainScreen] bounds];
     self.view.backgroundColor = [UIColor clearColor];
     self.view.frame = CGRectMake(screen.size.height, 0, 200, 170);
-    
+
     [UIView beginAnimations:@"showing popover" context:NULL];
     [UIView setAnimationDuration:0.35];
     self.view.frame = CGRectMake(screen.size.height-200, 0, 200, 170);
@@ -72,9 +72,9 @@
     [UIView setAnimationDuration:0.35];
     self.view.frame = CGRectMake(screen.size.height, 0, 200, 170);
     [UIView commitAnimations];
-        
+
     [self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.35];
-    
+
     [self removeChat];
 }
 
@@ -90,23 +90,23 @@
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier = @"CellIdentifier";
-    
+
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (nil == cell) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:cellIdentifier] autorelease];
     }
     cell.textLabel.text = [menuList objectAtIndex:[indexPath row]];
-    
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         cell.textLabel.textAlignment = UITextAlignmentCenter;
-    
+
     return cell;
 }
 
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UIActionSheet *actionSheet;
-    
+
     switch ([indexPath row]) {
         case 0:
             HW_pause();
@@ -136,13 +136,13 @@
                                              otherButtonTitles:nil];
             [actionSheet showInView:self.view];
             [actionSheet release];
-            
+
             break;
         default:
             DLog(@"Warning: unset case value in section!");
             break;
     }
-    
+
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -163,9 +163,9 @@
         self.view.frame = CGRectMake(screen.size.height-200, 0, 200, 170);
         [UIView commitAnimations];
     }
-    
+
     if ([actionSheet cancelButtonIndex] != buttonIndex)
-        HW_terminate(NO);     
+        HW_terminate(NO);
 }
 
 @end

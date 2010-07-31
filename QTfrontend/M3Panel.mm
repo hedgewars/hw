@@ -1,6 +1,6 @@
 /*
  *  M3Panel.cpp
- *  
+ *
  *
  *  Created by Vittorio on 28/09/09.
  *  Copyright 2009 __MyCompanyName__. All rights reserved.
@@ -21,10 +21,10 @@ public:
 M3Panel::M3Panel(void)
 {
 	c = new Private;
-        
+
 	c->install = [[M3InstallController alloc] init];
 	[c->install retain];
-        
+
 }
 
 M3Panel::~M3Panel()

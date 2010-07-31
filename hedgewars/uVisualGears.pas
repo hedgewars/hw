@@ -227,7 +227,7 @@ with gear^ do
                 alpha:= 1.0;
                 scale:= 1.0
                 end;
-  vgtSmokeWhite, 
+  vgtSmokeWhite,
   vgtSmoke: begin
                 dx:= 0.0002 * (random(45) + 10);
                 dy:= 0.0002 * (random(45) + 10);

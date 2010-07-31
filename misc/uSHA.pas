@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
- 
+
 {$INCLUDE "options.inc"}
 
 unit uSHA;
@@ -159,7 +159,7 @@ begin
     SHA1Hash(Context);
     for i:= 0 to 4 do
         SHA1Final[i]:= Context.H[i];
-    
+
     FillChar(Context, sizeof(Context), 0)
 end;
 

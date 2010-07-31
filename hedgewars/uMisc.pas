@@ -70,7 +70,7 @@ var
 
     TimeTrialStartTime: Longword;
     TimeTrialStopTime : Longword;
-    
+
     // init flags
     cScreenWidth    : LongInt = 1024;
     cScreenHeight   : LongInt = 768;
@@ -89,7 +89,7 @@ var
     cReducedQuality : LongInt = rqNone;
     //userNick is in uChat
     recordFileName  : shortstring = '';
-    
+
     cCaseFactor     : Longword;
     cLandAdditions  : Longword;
     cExplosives     : Longword;
@@ -518,11 +518,11 @@ procedure FreeTexture(tex: PTexture);
 begin
     if tex <> nil then
     begin
-        if tex^.NextTexture <> nil then 
+        if tex^.NextTexture <> nil then
             tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
-        if tex^.PrevTexture <> nil then 
+        if tex^.PrevTexture <> nil then
             tex^.PrevTexture^.NextTexture:= tex^.NextTexture
-        else 
+        else
             TextureList:= tex^.NextTexture;
         glDeleteTextures(1, @tex^.id);
         Dispose(tex);
@@ -682,7 +682,7 @@ begin
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
     TextureList             := nil;
-    
+
     // int, longint longword and byte
     CursorMovementX     := 0;
     CursorMovementY     := 0;
@@ -719,7 +719,7 @@ begin
     cCaseFactor     := 5;  {0..9}
     cLandAdditions  := 4;
     cExplosives     := 2;
-        
+
     GameState       := Low(TGameState);
     GameType        := gmtLocal;
     zoom            := cDefaultZoomLevel;
@@ -746,10 +746,10 @@ begin
     cInactDelay     := 1250;
 
     ScreenFade      := sfNone;
-    
+
 {$IFDEF SDL13}
     SDLwindow       := nil;
-{$ENDIF}    
+{$ENDIF}
 {$IFDEF DEBUGFILE}
 {$I-}
 {$IFDEF IPHONEOS}

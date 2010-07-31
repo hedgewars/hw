@@ -53,7 +53,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
     GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Game scheme"), GBoxOptions), 0, 0);
 
     QPixmap pmEdit(":/res/edit.png");
-    
+
     QPushButton * goToSchemePage = new QPushButton(GBoxOptions);
     goToSchemePage->setToolTip(tr("Edit schemes"));
     goToSchemePage->setIconSize(pmEdit.size());

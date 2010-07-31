@@ -22,7 +22,7 @@
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
-    
+
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
     isFirstLoad = YES;
@@ -47,7 +47,7 @@
         }
         self.listOfTeams = array;
         [array release];
-        
+
         NSMutableArray *emptyArray = [[NSMutableArray alloc] initWithObjects:nil];
         self.listOfSelectedTeams = emptyArray;
         [emptyArray release];
@@ -87,7 +87,7 @@
     static NSString *CellIdentifier1 = @"Cell1";
     NSInteger section = [indexPath section];
     UITableViewCell *cell;
-    
+
     if (section == 0) {
         cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
         if (cell == nil) {
@@ -97,12 +97,12 @@
             numberButton.tag = NUMBERBUTTON_TAG;
             [cell addSubview:numberButton];
             [numberButton release];
-            
+
             SquareButtonView *squareButton = [[SquareButtonView alloc] initWithFrame:CGRectMake(12+88+7, 5, 36, 36)];
             squareButton.tag = SQUAREBUTTON_TAG;
             [cell addSubview:squareButton];
             [squareButton release];
-            
+
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12+88+7+36+7, 10, 250, 25)];
             label.textAlignment = UITextAlignmentLeft;
             label.backgroundColor = [UIColor clearColor];
@@ -111,16 +111,16 @@
             [cell.contentView addSubview:label];
             [label release];
         }
-        
+
         NSMutableDictionary *selectedRow = [listOfSelectedTeams objectAtIndex:[indexPath row]];
-        
+
         UILabel *cellLabel = (UILabel *)[cell viewWithTag:LABEL_TAG];
         cellLabel.text = [[selectedRow objectForKey:@"team"] stringByDeletingPathExtension];
-        
+
         HogButtonView *numberButton = (HogButtonView *)[cell viewWithTag:NUMBERBUTTON_TAG];
         [numberButton drawManyHogs:[[selectedRow objectForKey:@"number"] intValue]];
         numberButton.ownerDictionary = selectedRow;
-        
+
         SquareButtonView *squareButton = (SquareButtonView *)[cell viewWithTag:SQUAREBUTTON_TAG];
         [squareButton selectColor:[[selectedRow objectForKey:@"color"] intValue]];
         squareButton.ownerDictionary = selectedRow;
@@ -129,15 +129,15 @@
         }
     } else {
         cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
-        if (cell == nil) 
+        if (cell == nil)
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
-        
+
         cell.textLabel.text = [[[listOfTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             cell.textLabel.textColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1 ];
         }
     }
-    
+
     return cell;
 }
 
@@ -153,7 +153,7 @@
         [self.listOfSelectedTeams removeObjectAtIndex:row];
     } else {
         [self.listOfSelectedTeams addObject:[self.listOfTeams objectAtIndex:row]];
-        [self.listOfTeams removeObjectAtIndex:row];      
+        [self.listOfTeams removeObjectAtIndex:row];
     }
     [aTableView reloadData];
 }

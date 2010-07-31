@@ -26,7 +26,7 @@
 
     // load all the grave names and store them into graveArray
     self.graveArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:GRAVES_DIRECTORY() error:NULL];
-    
+
     self.title = NSLocalizedString(@"Choose hedgehog graves",@"");
 }
 
@@ -51,14 +51,14 @@
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    
+
     NSString *grave = [self.graveArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = [grave stringByDeletingPathExtension];
-    
+
     if ([grave isEqualToString:[self.teamDictionary objectForKey:@"grave"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.lastIndexPath = indexPath;
@@ -69,10 +69,10 @@
     NSString *graveFilePath = [[NSString alloc] initWithFormat:@"%@/%@",GRAVES_DIRECTORY(),grave];
     // because we also have multi frame graves, let's take the first one only
     UIImage *graveSprite = [[UIImage alloc] initWithContentsOfFile:graveFilePath andCutAt:CGRectMake(0, 0, 32, 32)];
-    [graveFilePath release];        
+    [graveFilePath release];
     cell.imageView.image = graveSprite;
     [graveSprite release];
-    
+
     return cell;
 }
 
@@ -82,13 +82,13 @@
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    
+
     if (newRow != oldRow) {
         [teamDictionary setObject:[[graveArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"grave"];
-        
+
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-        
+
         UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
         newCell.accessoryType = UITableViewCellAccessoryCheckmark;
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];

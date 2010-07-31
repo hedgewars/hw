@@ -226,7 +226,7 @@ begin
     TotalRounds:= -1;
     FinishedTurnsTotal:= -1;
 end;
-    
+
 procedure freeModule;
 begin
 

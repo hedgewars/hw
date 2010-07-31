@@ -29,9 +29,9 @@ interface
 program hwengine;
 {$ENDIF}
 
-uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound, 
+uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, sysutils;
-     
+
 var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
 
@@ -137,7 +137,7 @@ begin
 end;
 
 ///////////////////
-procedure MainLoop; 
+procedure MainLoop;
 var PrevTime, CurrTime: Longword;
     event: TSDL_Event;
 begin
@@ -181,7 +181,7 @@ begin
             begin
                 DoTimer(CurrTime - PrevTime);
                 PrevTime:= CurrTime
-            end 
+            end
             else SDL_Delay(1);
             IPCCheckSock();
         end;
@@ -229,7 +229,7 @@ begin
     val(gameArgs[6], cScreenHeight);
     val(gameArgs[7], cScreenWidth);
     recordFileName:= gameArgs[8];
-    
+
     val(gameArgs[9], cReducedQuality);
 {$ENDIF}
 
@@ -243,7 +243,7 @@ begin
 
     for p:= Succ(Low(TPathType)) to High(TPathType) do
         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
-        
+
     WriteToConsole('Init SDL... ');
     SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);
     WriteLnToConsole(msgOK);
@@ -276,7 +276,7 @@ begin
     if cLocaleFName <> 'en.txt' then
     begin
         // Try two letter locale first before trying specific locale overrides
-        if (Length(cLocaleFName) > 6) and (Copy(cLocaleFName,1,2)+'.txt' <> 'en.txt') then 
+        if (Length(cLocaleFName) > 6) and (Copy(cLocaleFName,1,2)+'.txt' <> 'en.txt') then
             LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocaleFName,1,2)+'.txt');
         LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
     end;
@@ -321,7 +321,7 @@ begin
 
     uLand.initModule;
     uIO.initModule;
-    
+
     if complete then
     begin
         uAI.initModule;
@@ -340,7 +340,7 @@ begin
         //uLandTemplates does not need initialization
         uLandTexture.initModule;
         //uLocale does not need initialization
-        uRandom.initModule; 
+        uRandom.initModule;
         uScript.initModule;
         uSound.initModule;
         uStats.initModule;
@@ -380,7 +380,7 @@ begin
         //uAIActions does not need to be freed
         uAI.freeModule;             //stub
     end;
-    
+
     uIO.freeModule;             //stub
     uLand.freeModule;
 
@@ -461,7 +461,7 @@ begin
     if GameType = gmtLandPreview then GenLandPreview()
     else if GameType = gmtSyntax then DisplayUsage()
     else Game();
-    
+
     if GameType = gmtSyntax then
         ExitCode:= 1
     else

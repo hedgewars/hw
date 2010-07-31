@@ -31,13 +31,13 @@
     // it's here and not in viewWillAppear because user cannot add/remove them
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:VOICES_DIRECTORY() error:NULL];
     self.voiceArray = array;
-    
+
     self.title = NSLocalizedString(@"Set hedgehog voices",@"");
 }
 
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     // this moves the tableview to the top
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
@@ -64,17 +64,17 @@
 
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     static NSString *CellIdentifier = @"Cell";
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+
     NSString *voice = [[voiceArray objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
     cell.textLabel.text = voice;
-    
+
     if ([voice isEqualToString:[teamDictionary objectForKey:@"voicepack"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.lastIndexPath = indexPath;
@@ -91,33 +91,33 @@
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    
+
     if (newRow != oldRow) {
         [teamDictionary setObject:[voiceArray objectAtIndex:newRow] forKey:@"voicepack"];
-        
+
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
         [self.tableView reloadData];
-        
+
         self.lastIndexPath = indexPath;
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-    } 
+    }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+
     if (voiceBeingPlayed != NULL) {
         Mix_HaltChannel(lastChannel);
         Mix_FreeChunk(voiceBeingPlayed);
         voiceBeingPlayed = NULL;
     }
-    
+
     NSString *voiceDir = [[NSString alloc] initWithFormat:@"%@/%@/",VOICES_DIRECTORY(),[voiceArray objectAtIndex:newRow]];
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:voiceDir error:NULL];
-    
+
     int index = random() % [array count];
-    
+
     voiceBeingPlayed = Mix_LoadWAV([[voiceDir stringByAppendingString:[array objectAtIndex:index]] UTF8String]);
     [voiceDir release];
-    lastChannel = Mix_PlayChannel(-1, voiceBeingPlayed, 0);    
+    lastChannel = Mix_PlayChannel(-1, voiceBeingPlayed, 0);
 }
 
 

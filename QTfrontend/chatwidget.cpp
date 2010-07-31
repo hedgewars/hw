@@ -106,7 +106,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     chatNicks->insertAction(0, acFollow);
     chatNicks->insertAction(0, acIgnore);
     chatNicks->insertAction(0, acFriend);
-    
+
     showReady = false;
 }
 
@@ -209,7 +209,7 @@ void HWChatWidget::onChatString(const QString& str)
 
     QString color("");
     bool isFriend = friendsList.contains(parts[0], Qt::CaseInsensitive);
-    
+
     if (str.startsWith("\x03"))
         color = QString("#c0c0c0");
     else if (str.startsWith("\x02"))

@@ -22,7 +22,7 @@
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
-    
+
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Grenade",@""),
                       NSLocalizedString(@"Cluster Bomb",@""),
@@ -78,28 +78,28 @@
     probability = (char *)malloc(sizeof(char)*(CURRENT_AMMOSIZE+1));
     delay = (char *)malloc(sizeof(char)*(CURRENT_AMMOSIZE+1));
     crateness = (char *)malloc(sizeof(char)*(CURRENT_AMMOSIZE+1));
-    
+
     NSString *str = [NSString stringWithFormat:@"%@/AmmoMenu/Ammos.png",GRAPHICS_DIRECTORY()];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:str];
     self.ammoStoreImage = img;
     [img release];
-    
+
     self.title = NSLocalizedString(@"Edit weapons preferences",@"");
 }
 
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
-    
+
     NSString *ammoFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.weaponName];
     NSDictionary *weapon = [[NSDictionary alloc] initWithContentsOfFile:ammoFile];
     [ammoFile release];
-    
+
     const char *tmp1 = [[weapon objectForKey:@"ammostore_initialqt"] UTF8String];
     const char *tmp2 = [[weapon objectForKey:@"ammostore_probability"] UTF8String];
     const char *tmp3 = [[weapon objectForKey:@"ammostore_delay"] UTF8String];
     const char *tmp4 = [[weapon objectForKey:@"ammostore_crate"] UTF8String];
     [weapon release];
-    
+
     // if the new weaponset is diffrent from the older we need to update it replacing
     // the missing ammos with 0 quantity
     int oldlen = strlen(tmp1);
@@ -115,7 +115,7 @@
         delay[i] = '0';
         crateness[i] = '0';
     }
-    
+
     [self.tableView reloadData];
 }
 
@@ -129,7 +129,7 @@
     probability[CURRENT_AMMOSIZE] = '\0';
     delay[CURRENT_AMMOSIZE] = '\0';
     crateness[CURRENT_AMMOSIZE] = '\0';
-    
+
     NSString *quantityStr = [NSString stringWithUTF8String:quantity];
     NSString *probabilityStr = [NSString stringWithUTF8String:probability];
     NSString *delayStr = [NSString stringWithUTF8String:delay];
@@ -171,11 +171,11 @@
     if (0 == [indexPath section]) {
         EditableCellView *customCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
         if (customCell == nil) {
-            customCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault 
+            customCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
                                             reuseIdentifier:CellIdentifier0] autorelease];
             customCell.delegate = self;
         }
-        
+
         customCell.textField.text = self.weaponName;
         customCell.detailTextLabel.text = nil;
         customCell.imageView.image = nil;
@@ -187,22 +187,22 @@
             customCell = [[[WeaponCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
             customCell.delegate = self;
         }
-        
+
         int x = ((row*32)/1024)*32;
         int y = (row*32)%1024;
-        
+
         UIImage *img = [[self.ammoStoreImage cutAt:CGRectMake(x, y, 32, 32)] makeRoundCornersOfSize:CGSizeMake(7, 7)];
         customCell.weaponIcon.image = img;
         customCell.weaponName.text = [ammoNames objectAtIndex:row];
         customCell.tag = row;
-        
+
         [customCell.initialQt setValue:[[NSString stringWithFormat:@"%c",quantity[row]] intValue] animated:NO];
         [customCell.probabilityQt setValue:[[NSString stringWithFormat:@"%c", probability[row]] intValue] animated:NO];
         [customCell.delayQt setValue:[[NSString stringWithFormat:@"%c", delay[row]] intValue] animated:NO];
         [customCell.crateQt setValue:[[NSString stringWithFormat:@"%c", crateness[row]] intValue] animated:NO];
         cell = customCell;
     }
-    
+
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
@@ -226,7 +226,7 @@
 #pragma mark -
 #pragma mark editableCellView delegate
 // set the new value
--(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {    
+-(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
     // delete old file
     [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.weaponName] error:NULL];
     // update filename

@@ -71,11 +71,11 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= cnts[a];
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= cnts[a];
 
-       if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
+       if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
            Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
        inc(mi[Ammoz[a].Slot])
        end
-    else if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
+    else if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
        begin
        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
@@ -99,7 +99,7 @@ TryDo((byte(ammoLoadout[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoProbabil
 
 // FIXME - TEMPORARY hardcoded check on shoppa pending creation of crate *type* probability editor
 substr:= Copy(ammoLoadout,1,15);
-if (substr = '000000990000009') or 
+if (substr = '000000990000009') or
    (substr = '000000990000000') then
     shoppa:= true;
 
@@ -137,11 +137,11 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             end;
         ammos[a]:= cnt;
 
-        if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) and (Ammoz[a].SkipTurns = 0) and (a <> amTeleport) and (a <> amSkip) then 
+        if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) and (Ammoz[a].SkipTurns = 0) and (a <> amTeleport) and (a <> amSkip) then
             Ammoz[a].SkipTurns:= 1;
 
         if ((GameFlags and gfPlaceHog) <> 0) and
-            (a <> amTeleport) and (a <> amSkip) and 
+            (a <> amTeleport) and (a <> amSkip) and
             (Ammoz[a].SkipTurns < 10000) then inc(Ammoz[a].SkipTurns,10000)
         end else
         ammos[a]:= AMMO_INFINITE
@@ -353,7 +353,7 @@ for i:= 0 to Pred(StoreCnt) do
         begin
         for a:= 0 to cMaxSlotAmmoIndex do
             with StoresList[i]^[slot, a] do
-                if (Propz and ammoprop_NotBorder) <> 0 then 
+                if (Propz and ammoprop_NotBorder) <> 0 then
                     begin
                     Count:= 0;
                     InitialCount:= 0

@@ -22,7 +22,7 @@ unit uGears;
 interface
 uses SDLh, uConsts, uFloat, Math;
 
-    
+
 type
     PGear = ^TGear;
     TGearStepProcedure = procedure (Gear: PGear);
@@ -77,7 +77,7 @@ var AllInactive: boolean;
     PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
     StepSoundTimer: LongInt;
     StepSoundChannel: LongInt;
-    
+
 procedure initModule;
 procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
@@ -113,7 +113,7 @@ var RopePoints: record
                                   end;
                 rounded: array[0..MAXROPEPOINTS + 2] of TVertex2f;
                 end;
- 
+
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask, Tint: LongWord); forward;
@@ -214,7 +214,7 @@ begin
         ptmp:= tmp;
         tmp:= tmp^.NextGear
         end;
-    
+
     if ptmp <> tmp then
         begin
         Gear^.NextGear:= ptmp^.NextGear;
@@ -471,7 +471,7 @@ gtAmmo_Grenade: begin // bazooka
      gtJetpack: begin
                 gear^.Health:= 2000;
                 end;
-     gtMolotov: begin 
+     gtMolotov: begin
                 gear^.Radius:= 6;
                 end;
        gtBirdy: begin
@@ -480,7 +480,7 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Health := 2000;
                 gear^.FlightTime := 2;
                 end;
-         gtEgg: begin 
+         gtEgg: begin
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_6;
                 gear^.Friction:= _0_96;
@@ -652,9 +652,9 @@ begin
                 flag:= false;
                 team:= PHedgehog(Gear^.Hedgehog)^.Team;
                 for i:= 0 to Pred(team^.HedgehogsNumber) do
-                    if (team^.Hedgehogs[i].Gear <> nil) and 
-                        (not team^.Hedgehogs[i].King) and 
-                        (team^.Hedgehogs[i].Gear^.Health > team^.Hedgehogs[i].Gear^.Damage) 
+                    if (team^.Hedgehogs[i].Gear <> nil) and
+                        (not team^.Hedgehogs[i].King) and
+                        (team^.Hedgehogs[i].Gear^.Health > team^.Hedgehogs[i].Gear^.Damage)
                     then flag:= true;
                 if not flag then inc(tmp, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)))
                 end;
@@ -794,10 +794,10 @@ case step of
                 // reset to default zoom
                 //ZoomValue:= ZoomDefault;
                 with CurrentHedgehog^ do
-                    if (Gear <> nil) 
+                    if (Gear <> nil)
                         and ((Gear^.State and gstAttacked) = 0)
                         and (MultiShootAttacks > 0) then OnUsedAmmo(CurrentHedgehog^);
-                
+
                 EndTurnCleanup;
 
                 FreeActionsList; // could send -left, -right and similar commands, so should be called before /nextturn
@@ -1318,9 +1318,9 @@ var t: PGearArray;
 begin
 t:= CheckGearsCollision(Ammo);
 // Just to avoid hogs on rope dodging fire.
-if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtRope) and 
-   (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.CollisionIndex = -1) and 
-   (sqr(hwRound(Ammo^.X) - hwRound(CurrentHedgehog^.Gear^.X)) + sqr(hwRound(Ammo^.Y) - hwRound(CurrentHedgehog^.Gear^.Y)) <= sqr(cHHRadius + Ammo^.Radius)) then 
+if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtRope) and
+   (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.CollisionIndex = -1) and
+   (sqr(hwRound(Ammo^.X) - hwRound(CurrentHedgehog^.Gear^.X)) + sqr(hwRound(Ammo^.Y) - hwRound(CurrentHedgehog^.Gear^.Y)) <= sqr(cHHRadius + Ammo^.Radius)) then
     begin
     t^.ar[t^.Count]:= CurrentHedgehog^.Gear;
     inc(t^.Count)
@@ -1336,7 +1336,7 @@ while i > 0 do
     if (Gear^.State and gstNoDamage) = 0 then
         begin
         if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) and (Ammo^.Kind = gtShover) then Gear^.FlightTime:= 1;
-        
+
         case Gear^.Kind of
             gtHedgehog,
             gtMine,
@@ -1374,7 +1374,7 @@ while i > 0 do
                         if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
                             or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
                         end;
-                    
+
                     if (Ammo^.Kind <> gtFlame) or ((Ammo^.State and gsttmpFlag) = 0) then FollowGear:= Gear
                     end;
         end
@@ -1538,19 +1538,19 @@ h:= 1;
 // FIXME - shoppa is TEMPORARY REMOVE WHEN CRATE PROBABILITY ALLOWS DISABLING OF HEALTH CRATES
 // Preserving health crate distribution of 35% until that happens
 if (aTot+uTot) <> 0 then
-    if not shoppa and ((GameFlags and gfInvulnerable) = 0) then 
+    if not shoppa and ((GameFlags and gfInvulnerable) = 0) then
         begin
         h:= 3500;
         t:= GetRandom(10000);
         a:= 6500*aTot div (aTot+uTot)
         end
-    else 
+    else
         begin
         t:= GetRandom(aTot+uTot);
         h:= 0
         end;
 
-    
+
 if t<h then
     begin
     FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
@@ -1653,12 +1653,12 @@ repeat
             repeat
                 inc(y);
             until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) <> 0);
-            
+
             if (y - sy > Gear^.Radius * 2) and
                (((Gear^.Kind = gtExplosives)
                    and (y < LAND_HEIGHT-1)
                    and (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 60, 60) = nil)
-                   and (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1) > Gear^.Radius)) 
+                   and (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1) > Gear^.Radius))
                or
                  ((Gear^.Kind <> gtExplosives)
                    and (y < LAND_HEIGHT)
@@ -1742,7 +1742,7 @@ begin
     SpeechType:= 1;
     TrainingTargetGear:= nil;
     skipFlag:= false;
-    
+
     AllInactive:= false;
     PrvInactive:= false;
 end;

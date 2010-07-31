@@ -32,7 +32,7 @@ class SDLInteraction : public QObject
 
 private:
     Mix_Music *music;
-    int musicInitialized;   
+    int musicInitialized;
 
 public:
     SDLInteraction();
@@ -41,7 +41,7 @@ public:
     void addGameControllerKeys() const;
     void StartMusic();
     void StopMusic();
-    void SDLMusicInit();    
+    void SDLMusicInit();
 };
 
 

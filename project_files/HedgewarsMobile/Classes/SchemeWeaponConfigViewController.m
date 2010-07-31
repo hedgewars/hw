@@ -23,12 +23,12 @@
 
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-    
+
     self.selectedScheme = @"";
     self.selectedWeapon = @"";
-    
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.tableView setBackgroundView:nil]; 
+        [self.tableView setBackgroundView:nil];
         self.view.backgroundColor = [UIColor clearColor];
         self.tableView.separatorColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1];
     }
@@ -40,13 +40,13 @@
 
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCHEMES_DIRECTORY() error:NULL];
     self.listOfSchemes = contentsOfDir;
-    
+
     if ([listOfSchemes containsObject:@"Default.plist"])
          self.selectedScheme = @"Default.plist";
-    
+
     contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
     self.listOfWeapons = contentsOfDir;
-         
+
     if ([listOfWeapons containsObject:@"Default.plist"])
          self.selectedWeapon = @"Default.plist";
 
@@ -61,7 +61,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) 
+    if (section == 0)
         return [self.listOfSchemes count];
     else
         return [self.listOfWeapons count];
@@ -71,12 +71,12 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     NSInteger row = [indexPath row];
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+
     cell.accessoryType = UITableViewCellAccessoryNone;
     if ([indexPath section] == 0) {
         cell.textLabel.text = [[self.listOfSchemes objectAtIndex:row] stringByDeletingPathExtension];
@@ -103,25 +103,25 @@
         lastIndexPath = self.lastIndexPath_sc;
     else
         lastIndexPath = self.lastIndexPath_we;
-    
+
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    
+
     if (newRow != oldRow) {
         //TODO: this code works only for a single section table
         UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
         newCell.accessoryType = UITableViewCellAccessoryCheckmark;
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
         oldCell.accessoryType = UITableViewCellAccessoryNone;
-        
+
         if ([indexPath section] == 0) {
             self.lastIndexPath_sc = indexPath;
             self.selectedScheme = [self.listOfSchemes objectAtIndex:newRow];
         } else {
             self.lastIndexPath_we = indexPath;
             self.selectedWeapon = [self.listOfWeapons objectAtIndex:newRow];
-        }        
-        
+        }
+
         [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];

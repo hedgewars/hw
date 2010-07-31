@@ -92,7 +92,7 @@ begin
     {$IFDEF DEBUGFILE}AddFileLog('Console write: ' + s);{$ENDIF}
     Write(s);
     done:= false;
-    
+
     while not done do
     begin
         Len:= cLineWidth - Length(ConsoleLines[CurrLine].s);
@@ -204,14 +204,14 @@ begin
     CurrLine:= 0;
     Variables:= nil;
     isDeveloperMode:= true;
-    
+
     // initConsole
     cLineWidth:= cScreenWidth div 10;
     if cLineWidth > 255 then
         cLineWidth:= 255;
-    for i:= 0 to Pred(cLinesCount) do 
+    for i:= 0 to Pred(cLinesCount) do
         PByte(@ConsoleLines[i])^:= 0;
-    
+
     RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
     RegisterVariable('spectate', vtBoolean, @fastUntilLag   , false);
     RegisterVariable('capture' , vtCommand, @chCapture      , true );

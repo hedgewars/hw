@@ -96,7 +96,7 @@ const
     SDL_SWSURFACE     = $00000000;
     SDL_HWSURFACE     = $00000001;
     SDL_SRCALPHA      = $00010000;
-    
+
     SDL_INIT_TIMER    = $00000001;
     SDL_INIT_AUDIO    = $00000010;
     SDL_INIT_VIDEO    = $00000020;
@@ -156,7 +156,7 @@ const
     SDL_VIDEORESIZE = 16; // TODO: outdated? no longer in SDL 1.3?
 {$ENDIF}
 {*end SDL_Event binding*}
-        
+
 {$IFDEF SDL13}
     SDL_ASYNCBLIT   = $08000000;
     SDL_ANYFORMAT   = $10000000;
@@ -209,12 +209,12 @@ const
     SDL_WINDOW_INPUT_FOCUS = $00000200;        //*< window has input focus */
     SDL_WINDOW_MOUSE_FOCUS = $00000400;        //*< window has mouse focus */
     SDL_WINDOW_FOREIGN = $00000800;            //*< window not created by SDL */
-    
+
     // SDL_WindowEventID (enum)
     SDL_WINDOWEVENT_NONE = 0;            //*< Never used
     SDL_WINDOWEVENT_SHOWN = 1;           //*< Window has been shown
     SDL_WINDOWEVENT_HIDDEN = 2;          //*< Window has been hidden
-    SDL_WINDOWEVENT_EXPOSED = 3;         //*< Window has been exposed and should be redrawn 
+    SDL_WINDOWEVENT_EXPOSED = 3;         //*< Window has been exposed and should be redrawn
     SDL_WINDOWEVENT_MOVED = 4;           //*< Window has been moved to data1, data2
     SDL_WINDOWEVENT_RESIZED = 5;         //*< Window size changed to data1xdata2
     SDL_WINDOWEVENT_MINIMIZED = 6;       //*< Window has been minimized
@@ -233,7 +233,7 @@ const
     MIX_INIT_MOD  = $00000002;
     MIX_INIT_MP3  = $00000004;
     MIX_INIT_OGG  = $00000008;
-    
+
     {* SDL_TTF *}
     TTF_STYLE_NORMAL = 0;
     TTF_STYLE_BOLD   = 1;
@@ -259,7 +259,7 @@ const
 ///////////////////////  TYPE DEFINITIONS ///////////////////////
 /////////////////////////////////////////////////////////////////
 
-type 
+type
     PSDL_Rect = ^TSDL_Rect;
     TSDL_Rect = record
 {$IFDEF SDL13}
@@ -357,9 +357,9 @@ type
 {* SDL_Event type definition *}
 
 {$IFDEF SDL13}
-    PSDL_Window = pointer;  
+    PSDL_Window = pointer;
     PSDL_Texture = pointer;
-    
+
     TSDL_WindowEvent = record
         type_: LongInt;
         windowID: LongInt;
@@ -367,7 +367,7 @@ type
         padding1, padding2, padding3: byte;
         data1, data2: LongInt;
         end;
-        
+
     TSDL_KeySym = record
         scancode,
         sym,
@@ -407,7 +407,7 @@ type
         padding1, padding2: byte;
         x, y, z, xrel, yrel : LongInt;
         pressure, pressure_max, pressure_min,
-        rotation, tilt, cursor: LongInt; 
+        rotation, tilt, cursor: LongInt;
 {$ELSE}
         type_: byte;
         x, y, xrel, yrel : word;
@@ -450,7 +450,7 @@ type
         x, y: LongInt;
         padding1, padding2, padding3: byte;
         end;
-        
+
     // implement SDL_ProximityEvent
 {$ENDIF}
 
@@ -466,9 +466,9 @@ type
         value: LongInt;
 {$ELSE}
         value: word;
-{$ENDIF}    
+{$ENDIF}
         end;
-            
+
     TSDL_JoyBallEvent = record
         which: Byte;
         ball: Byte;
@@ -491,7 +491,7 @@ type
         hat: Byte;
         value: Byte;
         end;
-    
+
     TSDL_JoyButtonEvent = record
 {$IFDEF SDL13}
         type_: LongInt;
@@ -586,7 +586,7 @@ type
         );
 
 {$IFDEF SDL13}
-    TSDL_ArrayByteOrder = (  // array component order, low byte -> high byte 
+    TSDL_ArrayByteOrder = (  // array component order, low byte -> high byte
         SDL_ARRAYORDER_NONE,
         SDL_ARRAYORDER_RGB,
         SDL_ARRAYORDER_RGBA,
@@ -702,8 +702,8 @@ function  SDL_RWFromFile(filename, mode: PChar): PSDL_RWops; cdecl; external SDL
 function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongInt): LongInt; cdecl; external SDLLibName;
 
 {$IFDEF SDL13}
-function  SDL_CreateWindow(title: PChar; x,y,w,h, flags: LongInt): PSDL_Window; cdecl; external SDLLibName;      
-function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): LongInt; cdecl; external SDLLibName;   
+function  SDL_CreateWindow(title: PChar; x,y,w,h, flags: LongInt): PSDL_Window; cdecl; external SDLLibName;
+function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_SetRenderDrawColor(r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyRenderer(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;

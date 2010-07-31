@@ -39,7 +39,7 @@ var PixelFormat: PSDL_PixelFormat;
     rotationQt: GLfloat;
     wScreen: LongInt;
     hScreen: LongInt;
-    
+
 procedure initModule;
 procedure freeModule;
 
@@ -235,13 +235,13 @@ var s: shortstring;
         r.h:= 19;
 
         DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
-        
+
         // overwrite flag for cpu teams and keep players from using it
         if (Hedgehogs[0].Gear <> nil) and (Hedgehogs[0].BotLevel > 0) then
             Flag:= 'cpu'
         else if Flag = 'cpu' then
             Flag:= 'hedgewars';
-        
+
         flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
         if flagsurf = nil then
             flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
@@ -249,7 +249,7 @@ var s: shortstring;
         copyToXY(flagsurf, texsurf, 2, 2);
         SDL_FreeSurface(flagsurf);
         flagsurf:= nil;
-        
+
         // restore black border pixels inside the flag
         PLongwordArray(texsurf^.pixels)^[32 * 2 +  2]:= cNearBlackColor;
         PLongwordArray(texsurf^.pixels)^[32 * 2 + 23]:= cNearBlackColor;
@@ -1123,7 +1123,7 @@ begin
     // initialized here because when initModule is called cScreenWidth/Height are not yet set
     if (uStore.wScreen = 0) and (uStore.hScreen = 0) then
     begin
-        uStore.wScreen:= cScreenWidth; 
+        uStore.wScreen:= cScreenWidth;
         uStore.hScreen:= cScreenHeight;
     end;
 
@@ -1214,8 +1214,8 @@ begin
     glDisable(GL_DITHER);
     // enable common states by default as they save a lot
     glEnable(GL_TEXTURE_2D);
-    glEnableClientState(GL_VERTEX_ARRAY);                                                                                        
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);  
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 end;
 
 procedure SetScale(f: GLfloat);
@@ -1248,7 +1248,7 @@ begin
         texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
 
         ProgrTex:= Surface2Tex(texsurf, false);
-        
+
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
@@ -1262,11 +1262,11 @@ begin
     glClear(GL_COLOR_BUFFER_BIT);
     if Step < numsquares then r.x:= 0
     else r.x:= squaresize;
-    
+
     r.y:= (Step mod numsquares) * squaresize;
     r.w:= squaresize;
     r.h:= squaresize;
-    
+
     DrawFromRect( -squaresize div 2, (hScreen - squaresize) shr 1, @r, ProgrTex);
 
     SDL_GL_SwapBuffers();
@@ -1421,7 +1421,7 @@ if extra <> '' then
     if w < (i + wa) then w:= i + wa;
     inc(h, j + ha);
     end;
-    
+
 // add borders space
 inc(w, wa);
 inc(h, ha + 8);
@@ -1451,7 +1451,7 @@ while tmpdesc <> '' do
     if tmpline <> '' then
         begin
         r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
-        
+
         // render highlighted caption (if there's a ':')
         tmpline2:= '';
         SplitByChar(tmpline, tmpline2, ':');
@@ -1469,7 +1469,7 @@ r.w:= 32;
 r.h:= 32;
 SDL_FillRect(tmpsurf, @r, $ffffffff);
 SDL_UpperBlit(iconsurf, iconrect, tmpsurf, @r);
-    
+
 RenderHelpWindow:=  Surface2Tex(tmpsurf, true);
 SDL_FreeSurface(tmpsurf)
 end;
@@ -1511,7 +1511,7 @@ else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0 then // weapo
     extra:= trmsg[sidNoEndTurn];
     extracolor:= LongInt($ff70c770);
     end
-else 
+else
     begin
     extra:= '';
     extracolor:= 0;
@@ -1548,9 +1548,9 @@ begin
     cGPUVendor:= gvUnknown;
 {$ENDIF}
     // really initalized in storeLoad
-    uStore.wScreen:= 0; 
+    uStore.wScreen:= 0;
     uStore.hScreen:= 0;
-    
+
     cScaleFactor:= 2.0;
     SupportNPOTT:= false;
     Step:= 0;

@@ -33,7 +33,7 @@ type
     HwColor4f = record
         r, g, b, a: byte
         end;
-        
+
     TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit);
 
     TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax);
@@ -71,11 +71,11 @@ type
             sprAmTeleport, sprSplash, sprDroplet, sprBirdy, sprHandCake, sprHandConstruction,
             sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
-            sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee, 
+            sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk
             );
-    
+
     // Gears that interact with other Gears and/or Land
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtGrave, gtBee, // 4
             gtShotgunShot, gtPickHammer, gtRope, gtMine, gtCase, // 9
@@ -154,7 +154,7 @@ type
             Count: LongWord;
 (* Using for place hedgehogs mode, but for any other situation where the initial count would be needed I guess.
 For example, say, a mode where the weaponset is reset each turn, or on sudden death *)
-            InitialCount: LongWord; 
+            InitialCount: LongWord;
             NumPerTurn: LongWord;
             Timer: LongWord;
             Pos: LongWord;
@@ -256,13 +256,13 @@ const sfMax = 1000;
     cPowerDivisor = 1500;
 
     MAXNAMELEN = 192;
-    
+
     // some opengl headers do not have these macros
     GL_BGR              = $80E0;
     GL_BGRA             = $80E1;
     GL_CLAMP_TO_EDGE    = $812F;
     GL_TEXTURE_PRIORITY = $8066;
-    
+
     cSendCursorPosTime  : LongWord = 50;
     cVisibleWater       : LongInt = 128;
     cCursorEdgesDist    : LongInt = 100;
@@ -321,7 +321,7 @@ const sfMax = 1000;
     tfSpawnTargets  = $00000004;
     tfIgnoreDelays  = $00000008;
     tfTargetRespawn = $00000010;
-    
+
     gfAny            = $FFFFFFFF;
     gfForts          = $00000001;
     gfMultiWeapon    = $00000002;
@@ -400,7 +400,7 @@ const sfMax = 1000;
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
     ammoprop_NoRoundEndHint=$10000000;
-    
+
     AMMO_INFINITE = 100;
 
     EXPLAllDamageInRadius = $00000001;
@@ -424,11 +424,11 @@ const sfMax = 1000;
     htName        = $02;
     htHealth      = $04;
     htTransparent = $08;
-    
+
     cHHFileName = 'Hedgehog';
     cCHFileName = 'Crosshair';
     cThemeCFGFilename = 'theme.cfg';
-    
+
     FontBorder = 2;
     cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
@@ -451,7 +451,7 @@ const sfMax = 1000;
         'Graphics/Hats',                 // ptHats
         'Graphics/Flags'                 // ptFlags
     );
-    
+
 var PathPrefix: shortstring = './';
     Pathz: array[TPathType] of shortstring;
     CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
@@ -722,7 +722,7 @@ const
             Width: 64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprJetpack
             (FileName:  'Health'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprHealth
-            (FileName:  'amMolotov'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil; 
+            (FileName:  'amMolotov'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),//sprHandMolotov
             (FileName:  'Molotov'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprMolotov
@@ -2103,7 +2103,7 @@ const
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
-            
+
 // SineGun
             (NameId: sidSineGun;
             NameTex: nil;
@@ -2180,7 +2180,7 @@ const
         colorkey: 0;
         alpha : 255
     );
-    
+
 procedure initModule;
 procedure freeModule;
 
@@ -2210,7 +2210,7 @@ begin
         LAND_HEIGHT_MASK:= $FFFFF800
     end;
 
-{$IFDEF IPHONEOS}    
+{$IFDEF IPHONEOS}
     if isPhone() then
         cMaxCaptions:= 3
     else

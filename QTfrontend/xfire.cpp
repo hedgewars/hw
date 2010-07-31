@@ -34,10 +34,10 @@ void xfire_init(void)
     if(use_xfire)
         return;
     use_xfire = XfireIsLoaded() == 1;
-    
+
     if(!use_xfire)
         return;
-    
+
     for(int i = 0; i < XFIRE_KEY_COUNT; i++)
     {
         keys[i] = new char[256];
@@ -45,7 +45,7 @@ void xfire_init(void)
         strcpy(keys[i], "");
         strcpy(values[i], "");
     }
-    
+
     strcpy(keys[XFIRE_NICKNAME], "Nickname");
     strcpy(keys[XFIRE_ROOM], "Room");
     strcpy(keys[XFIRE_SERVER], "Server");
@@ -58,7 +58,7 @@ void xfire_free(void)
 {
     if(!use_xfire)
         return;
-    
+
     for(int i = 0; i < XFIRE_KEY_COUNT; i++)
     {
         delete [] keys[i];

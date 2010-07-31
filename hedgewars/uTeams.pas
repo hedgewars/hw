@@ -172,7 +172,7 @@ with CurrentHedgehog^ do
     if (PreviousTeam <> nil) and PlacingHogs and Unplaced then
         begin
         Unplaced:= false;
-        if Gear <> nil then 
+        if Gear <> nil then
            begin
            DeleteCI(Gear);
            FindPlace(Gear, false, 0, LAND_WIDTH);
@@ -232,7 +232,7 @@ if PlacingHogs then
    PlacingHogs:= false;
    for t:= 0 to Pred(TeamsCount) do
       for i:= 0 to cMaxHHIndex do
-          if (TeamsArray[t]^.Hedgehogs[i].Gear <> nil) and (TeamsArray[t]^.Hedgehogs[i].Unplaced) then 
+          if (TeamsArray[t]^.Hedgehogs[i].Gear <> nil) and (TeamsArray[t]^.Hedgehogs[i].Unplaced) then
              PlacingHogs:= true;
 
    if not PlacingHogs then // Reset  various things I mucked with

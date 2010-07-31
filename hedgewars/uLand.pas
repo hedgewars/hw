@@ -23,7 +23,7 @@ interface
 uses SDLh, uLandTemplates, uFloat, uConsts, GLunit;
 
 type
-    TLandArray = packed array of array of LongWord; 
+    TLandArray = packed array of array of LongWord;
     TCollisionArray = packed array of array of Word;
     TPreview  = packed array[0..127, 0..31] of byte;
     TDirtyTag = packed array of array of byte;
@@ -31,9 +31,9 @@ type
 var Land: TCollisionArray;
     LandPixels: TLandArray;
     LandDirty: TDirtyTag;
-    hasBorder: boolean; 
-    hasGirders: boolean;  
-    isMap: boolean;  
+    hasBorder: boolean;
+    hasGirders: boolean;
+    isMap: boolean;
     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
     LandBackSurface: PSDL_Surface;
     digest: shortstring;
@@ -1156,7 +1156,7 @@ begin
         if SDL_MustLock(tmpsurf) then
             SDL_UnlockSurface(tmpsurf);
     end;
-    if (tmpsurf <> nil) then 
+    if (tmpsurf <> nil) then
         SDL_FreeSurface(tmpsurf);
     tmpsurf:= nil;
 end;
@@ -1208,11 +1208,11 @@ begin
 
     LoadThemeConfig;
     isMap:= false;
-    
+
     // is this not needed any more? let's hope setlength sets also 0s
     //if ((GameFlags and gfForts) <> 0) or (Pathz[ptMapCurrent] <> '') then
     //    FillChar(Land,SizeOf(TCollisionArray),0);*)
-        
+
     if (GameFlags and gfForts) = 0 then
         if Pathz[ptMapCurrent] <> '' then
             LoadMap

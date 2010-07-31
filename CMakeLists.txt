@@ -11,10 +11,10 @@ ENDIF()
 set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
 IF(version_suffix MATCHES "-dev")
 	set(HW_DEV true)
-	IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.hg) 
+	IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.hg)
 		FIND_PROGRAM(HGCOMMAND hg)
 		IF(HGCOMMAND)
-			exec_program(${HGCOMMAND} 
+			exec_program(${HGCOMMAND}
 				     ARGS identify -in ${CMAKE_CURRENT_SOURCE_DIR}
 				     OUTPUT_VARIABLE version_suffix
 				     )
@@ -55,16 +55,16 @@ ENDIF(NOT BUILD_ENGINE_LIBRARY)
 
 if(APPLE)
 	set(CMAKE_FIND_FRAMEWORK "FIRST")
-	
+
 	#paths for creating the bundle
 	set(bundle_name Hedgewars.app)
-	set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/) 
+	set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/)
 	set(DATA_INSTALL_DIR "../Resources/")
 	set(target_dir ".")
-	
+
 	#what system are we building for
 	set(minimum_macosx $ENV{MACOSX_DEPLOYMENT_TARGET})
-	
+
 	#detect on which system are we
 	EXEC_PROGRAM("/usr/bin/sw_vers" OUTPUT_VARIABLE MACOSX_VERSION_TMP)
 	STRING(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" MACOSX_VERSION_TMP "${MACOSX_VERSION_TMP}")
@@ -97,9 +97,9 @@ if(APPLE)
 		if(current_macosx_version MATCHES "10.6")
 			set(CMAKE_OSX_ARCHITECTURES "x86_64")
 		endif()
-	ENDIF()	
+	ENDIF()
 
-	message(STATUS "Target system: Mac OS X ${minimum_macosx} ${CMAKE_OSX_ARCHITECTURES}")	
+	message(STATUS "Target system: Mac OS X ${minimum_macosx} ${CMAKE_OSX_ARCHITECTURES}")
 
 	if(minimum_macosx MATCHES "10.4")
 		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
@@ -132,10 +132,10 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 if(CMAKE_BUILD_TYPE MATCHES RELEASE OR CMAKE_BUILD_TYPE MATCHES "Release")
-	message(STATUS "Building Release")	
+	message(STATUS "Building Release")
 	set(Optz true)
 else()
-	message(STATUS "Building Debug")	
+	message(STATUS "Building Debug")
 	#set(CMAKE_VERBOSE_MAKEFILE true)
 	set(Optz false)
 endif()
@@ -205,7 +205,7 @@ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Hedgewars ${HEDGEWARS_VERSION}")
 
 if(WIN32 AND NOT UNIX)
-	set(CPACK_NSIS_DISPLAY_NAME ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}) 
+	set(CPACK_NSIS_DISPLAY_NAME ${CPACK_PACKAGE_DESCRIPTION_SUMMARY})
 	set(CPACK_NSIS_HELP_LINK "http://www.hedgewars.org/")
 	set(CPACK_NSIS_URL_INFO_ABOUT "http://www.hedgewars.org/")
 	set(CPACK_NSIS_CONTACT "unC0Rr@gmail.com")

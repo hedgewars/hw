@@ -689,7 +689,7 @@ begin
     FillBonuses(true, [gtCase]);
     if bonuses.Count = 0 then begin
         if Me^.Health <= 100  then begin
-            maxTop := Targ.Y - cHHRadius * 2; 
+            maxTop := Targ.Y - cHHRadius * 2;
             while not TestColl(Targ.X, maxTop, cHHRadius) and (maxTop > topY + cHHRadius * 2 + 1) do
             dec(maxTop, cHHRadius*2);
             if not TestColl(Targ.X, maxTop + cHHRadius, cHHRadius) then begin
@@ -701,7 +701,7 @@ begin
     end
     else begin
         failNum := 0;
-        repeat 
+        repeat
             i := random(bonuses.Count);
             inc(failNum);
         until not TestColl(bonuses.ar[i].X, bonuses.ar[i].Y - cHHRadius - bonuses.ar[i].Radius, cHHRadius) or (failNum = bonuses.Count*2);

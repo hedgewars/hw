@@ -27,7 +27,7 @@
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
-    
+
     // the list of selectable controllers
     controllerNames = [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""),
                                                        NSLocalizedString(@"Teams",@""),
@@ -54,13 +54,13 @@
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
         cell.textLabel.text = [controllerNames objectAtIndex:[indexPath row]];
     }
-    
+
     return cell;
 }
 
@@ -70,11 +70,11 @@
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     UIViewController *nextController = nil;
-    
+
     if (newRow != oldRow) {
         [self.tableView deselectRowAtIndexPath:lastIndexPath animated:YES];
         [detailViewController.navigationController popToRootViewControllerAnimated:NO];
-        
+
         switch (newRow) {
             case 0:
                 if (nil == generalSettingsViewController)
@@ -97,7 +97,7 @@
                 nextController = schemeSettingsViewController;
                 break;
         }
-        
+
         nextController.navigationItem.hidesBackButton = YES;
         nextController.title = [controllerNames objectAtIndex:newRow];
         [detailViewController.navigationController pushViewController:nextController animated:NO];
@@ -112,7 +112,7 @@
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.    
+    // Relinquish ownership any cached data, images, etc that aren't in use.
     if (generalSettingsViewController.view.superview == nil)
         generalSettingsViewController = nil;
     if (teamSettingsViewController.view.superview == nil)

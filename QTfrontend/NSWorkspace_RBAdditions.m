@@ -107,7 +107,7 @@ static NSString* CheckParents(io_object_t thing,NSString* part,NSMutableDictiona
 			}
 			NSString* cls = [(NSString*)IOObjectCopyClass(nextParent) autorelease];
 			if (![cls isEqualToString:@"IOPCIDevice"]) {
-			
+
 // Uncomment the following line to have the device tree dumped to the console.
 //				NSLog(@"=================================> %@:%@\n",cls,props);
 
@@ -207,7 +207,7 @@ static NSString* FormatAFPURL(AFPXVolMountInfoPtr mountInfo,NSString** devdesc) 
 			}
 		}
 		//Don't need this for disk images, gets around warnings for some deprecated functions
-		
+
 		/* else {
 // For a network volume, get the volume reference number and use to get the server URL.
 			FSRef ref;

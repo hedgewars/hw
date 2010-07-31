@@ -32,11 +32,11 @@
             NSString *currentName = [directoryContents objectAtIndex:i];
             NSString *correctName = [currentName substringToIndex:([currentName length] - 5)];
             [filteredContents addObject:correctName];
-        } 
+        }
     }
     self.fortArray = filteredContents;
     [filteredContents release];
-    
+
     /*
     // this creates a scaled down version of the image
     NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[fortArray count]];
@@ -50,10 +50,10 @@
     self.fortSprites = spriteArray;
     [spriteArray release];
     */
-    
+
     // statically set row height instead of using delegate method for performance reasons
     self.tableView.rowHeight = 200;
-    
+
     self.title = NSLocalizedString(@"Choose team fort",@"");
 }
 
@@ -78,16 +78,16 @@
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                        reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+
     NSString *fortName = [fortArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = fortName;
-    
+
     // this creates a scaled down version of the image
     // TODO: create preview files, scaling is way too slow!
     NSString *fortFile = [[NSString alloc] initWithFormat:@"%@/%@L.png", FORTS_DIRECTORY(), fortName];
@@ -95,7 +95,7 @@
     [fortFile release];
     cell.imageView.image = [fortSprite scaleToSize:CGSizeMake(196,196)];
     [fortSprite release];
-    
+
     cell.detailTextLabel.text = @"Insert funny description here";
     if ([cell.textLabel.text isEqualToString:[self.teamDictionary objectForKey:@"fort"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -103,7 +103,7 @@
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
-    
+
     return cell;
 }
 
@@ -113,14 +113,14 @@
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    
+
     if (newRow != oldRow) {
         // if the two selected rows differ update data on the hog dictionary and reload table content
         [self.teamDictionary setValue:[fortArray objectAtIndex:newRow] forKey:@"fort"];
 
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-        
+
         UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
         newCell.accessoryType = UITableViewCellAccessoryCheckmark;
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];

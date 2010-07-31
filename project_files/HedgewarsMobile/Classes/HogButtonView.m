@@ -16,11 +16,11 @@
 -(id) initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         self.backgroundColor = [UIColor clearColor];
-        
+
         NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
         UIImage *normalHogSprite = [[UIImage alloc] initWithContentsOfFile:normalHogFile andCutAt:CGRectMake(96, 0, 32, 32)];
         [normalHogFile release];
-        
+
         self.singleHog = normalHogSprite;
         [normalHogSprite release];
         [self addTarget:self action:@selector(addOne) forControlEvents:UIControlEventTouchUpInside];
@@ -46,11 +46,11 @@
                 numberOfHogs = MAX_HOGS;
         }
         [ownerDictionary setObject:[NSNumber numberWithInt:numberOfHogs] forKey:@"number"];
-        
+
         UIImage *teamHogs = [[[UIImage alloc] init] autorelease];
         for (int i = 0; i < numberOfHogs; i++) {
             teamHogs = [singleHog mergeWith:teamHogs
-                                    atPoint:CGPointMake(8, 0) 
+                                    atPoint:CGPointMake(8, 0)
                                      atSize:CGSizeMake(88, 32)];
         }
         [self setImage:teamHogs forState:UIControlStateNormal];

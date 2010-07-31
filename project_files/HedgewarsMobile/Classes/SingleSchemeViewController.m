@@ -81,7 +81,7 @@
                      nil];
     self.gameModifierArray = mods;
     [mods release];
-    
+
     NSArray *basicSettings = [[NSArray alloc] initWithObjects:
                               [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Damage Modifier",@""),@"title",@"Damage",@"image",
                                [NSNumber numberWithInt:100],@"default",[NSNumber numberWithInt:10],@"min",[NSNumber numberWithInt:300],@"max",nil],
@@ -104,27 +104,27 @@
                               nil];
     self.basicSettingList = basicSettings;
     [basicSettings release];
-    
+
     self.title = NSLocalizedString(@"Edit scheme preferences",@"");
 }
 
 // load from file
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
-    
+
     NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName];
     NSMutableArray *scheme = [[NSMutableArray alloc] initWithContentsOfFile:schemeFile];
     [schemeFile release];
     self.schemeArray = scheme;
     [scheme release];
-    
+
     [self.tableView reloadData];
 }
 
 // save to file
 -(void) viewWillDisappear:(BOOL) animated {
     [super viewWillDisappear:animated];
-    
+
     NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName];
     [self.schemeArray writeToFile:schemeFile atomically:YES];
     [schemeFile release];
@@ -133,7 +133,7 @@
 #pragma mark -
 #pragma mark editableCellView delegate
 // set the new value
--(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {    
+-(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
     // delete old file
     [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName] error:NULL];
     // update filename
@@ -168,20 +168,20 @@
     static NSString *CellIdentifier0 = @"Cell0";
     static NSString *CellIdentifier1 = @"Cell1";
     static NSString *CellIdentifier2 = @"Cell2";
-    
+
     UITableViewCell *cell = nil;
     EditableCellView *editableCell = nil;
     NSInteger row = [indexPath row];
-    
+
     switch ([indexPath section]) {
         case 0:
             editableCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
             if (editableCell == nil) {
-                editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault 
+                editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
                                                reuseIdentifier:CellIdentifier0] autorelease];
                 editableCell.delegate = self;
             }
-            
+
             editableCell.textField.text = self.schemeName;
             editableCell.detailTextLabel.text = nil;
             editableCell.imageView.image = nil;
@@ -194,13 +194,13 @@
             // need to offset this section (see format in CommodityFunctions.m and above)
             NSInteger gmSize = [self.gameModifierArray count];
             if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
                                                reuseIdentifier:CellIdentifier1] autorelease];
-                
+
                 int offset = 0;
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                     offset = 50;
-                
+
                 UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(offset+260, 12, offset+150, 23)];
                 slider.maximumValue = [[detail objectForKey:@"max"] floatValue];
                 slider.minimumValue = [[detail objectForKey:@"min"] floatValue];
@@ -208,7 +208,7 @@
                 [slider addTarget:self action:@selector(sliderChanged:) forControlEvents:UIControlEventValueChanged];
                 [cell.contentView addSubview:slider];
                 [slider release];
-                
+
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(50, 7, 200, 30)];
                 label.tag = LABEL_TAG;
                 label.backgroundColor = [UIColor clearColor];
@@ -216,23 +216,23 @@
                 [cell.contentView addSubview:label];
                 [label release];
             }
-            
+
             UIImage *img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/icon%@.png",BTN_DIRECTORY(),[[self.basicSettingList objectAtIndex:row] objectForKey:@"image"]]];
             cell.imageView.image = img;
             [img release];
-            
+
             UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
             cellLabel.text = [[self.basicSettingList objectAtIndex:row] objectForKey:@"title"];
-            
+
             UISlider *cellSlider = (UISlider *)[cell.contentView viewWithTag:row+gmSize];
             cellSlider.value = [[self.schemeArray objectAtIndex:row+gmSize] floatValue];
-            
+
             // forced to use this weird format otherwise the label disappears when size of the text is bigger than the original
             NSString *prestring = [NSString stringWithFormat:@"%d",[[self.schemeArray objectAtIndex:row+gmSize] intValue]];
             while ([prestring length] <= 4)
                 prestring = [NSString stringWithFormat:@" %@",prestring];
             cell.detailTextLabel.text = prestring;
-            
+
             cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             break;
         case 2:
@@ -246,7 +246,7 @@
                 cell.accessoryView = onOff;
                 [onOff release];
             }
-            
+
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/btn%@.png",BTN_DIRECTORY(),[[self.gameModifierArray objectAtIndex:row] objectForKey:@"image"]]];
             cell.imageView.image = image;
             [image release];
@@ -256,10 +256,10 @@
             cell.textLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"title"];
             cell.detailTextLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"description"];
             [(UISwitch *)cell.accessoryView setOn:[[self.schemeArray objectAtIndex:row] boolValue] animated:NO];
-            
+
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-    
+
     return cell;
 }
 
@@ -291,7 +291,7 @@
     UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
     EditableCellView *editableCell = nil;
     UISlider *cellSlider = nil;
-    
+
     switch ([indexPath section]) {
         case 0:
             editableCell = (EditableCellView *)cell;
@@ -311,7 +311,7 @@
         default:
             break;
     }
-    
+
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

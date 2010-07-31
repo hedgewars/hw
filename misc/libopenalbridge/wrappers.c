@@ -57,7 +57,7 @@ FILE *Fopen (const char *fname, char *mode) {
 
 al_sound_t new_sound_el (void) {
     al_sound_t sound;
-    
+
     sound.filename = NULL;
     sound.buffer = -1;
     sound.source_index = -1;
@@ -68,7 +68,7 @@ al_sound_t new_sound_el (void) {
 
 al_sound_t init_sound_el (const char *str) {
     al_sound_t sound;
-    
+
     sound.filename = str;
     sound.source_index = -1;
     sound.is_used = AL_TRUE;

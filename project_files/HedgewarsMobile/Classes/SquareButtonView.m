@@ -32,12 +32,12 @@
 
         // set the color to the first available one
         [self nextColor];
-        
+
         // this makes the button round and nice with a border
         [self.layer setCornerRadius:7.0f];
-        [self.layer setMasksToBounds:YES];        
+        [self.layer setMasksToBounds:YES];
         [self.layer setBorderWidth:2];
-        
+
         // this changes the color at button press
         [self addTarget:self action:@selector(nextColor) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -51,11 +51,11 @@
         colorIndex = 0;
 
     NSUInteger color = [[self.colorArray objectAtIndex:colorIndex] unsignedIntValue];
-    self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f 
-                                           green:((color & 0x0000FF00) >> 8)/255.0f 
-                                            blue: (color & 0x000000FF)/255.0f 
+    self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f
+                                           green:((color & 0x0000FF00) >> 8)/255.0f
+                                            blue: (color & 0x000000FF)/255.0f
                                            alpha:1.0f];
-    
+
     [ownerDictionary setObject:[NSNumber numberWithInt:color] forKey:@"color"];
 }
 
@@ -63,10 +63,10 @@
     if (color != selectedColor) {
         selectedColor = color;
         colorIndex = [colorArray indexOfObject:[NSNumber numberWithUnsignedInt:color]];
-        
-        self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f 
-                                               green:((color & 0x0000FF00) >> 8)/255.0f 
-                                                blue: (color & 0x000000FF)/255.0f 
+
+        self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f
+                                               green:((color & 0x0000FF00) >> 8)/255.0f
+                                                blue: (color & 0x000000FF)/255.0f
                                                alpha:1.0f];
     }
 }

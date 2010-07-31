@@ -190,7 +190,7 @@ begin
     CurAmmo:= CurrentHedgehog^.CurAmmo;
     // this most likely won't work in network game
     if (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].AmmoType = amPiano) then
-        case snd of 
+        case snd of
             0: PlaySound(sndPiano0);
             1: PlaySound(sndPiano1);
             2: PlaySound(sndPiano2);
@@ -227,7 +227,7 @@ end;
 function HW_isWeaponSwitch: boolean cdecl; export;
 begin
     if CurAmmoGear <> nil then
-        exit(CurAmmoGear^.AmmoType = amSwitch) 
+        exit(CurAmmoGear^.AmmoType = amSwitch)
     else
         exit(false)
 end;

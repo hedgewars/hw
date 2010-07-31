@@ -48,7 +48,7 @@ class HWNewNet : public QObject
   QString getNick();
   QString getRoom();
   QString getHost();
-  
+
  private:
   GameUIConfig* config;
   GameCFGWidget* m_pGameCFGWidget;

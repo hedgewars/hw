@@ -30,24 +30,24 @@
     self.title = NSLocalizedString(@"Settings",@"");
 
     // allocate controllers and store them into the array
-    NSArray *array= [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""), 
+    NSArray *array= [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""),
                                                      NSLocalizedString(@"Teams",@""),
                                                      NSLocalizedString(@"Weapons",@""),
                                                      NSLocalizedString(@"Schemes",@""),
                                                      nil];
     self.controllerNames = array;
     [array release];
-    
+
     // on ipad make the general setting the first view, on iphone add the "Done" button on top left
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        
+
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(112, 112, 480, 320)];
         label.text = @"Press the buttons on the left";
         label.font = [UIFont systemFontOfSize:20];
         label.textAlignment = UITextAlignmentCenter;
         [self.view addSubview:label];
         [label release];
-        
+
         //[self.navigationController pushViewController:nextController animated:NO];
     } else {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
@@ -62,7 +62,7 @@
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    // don't display 
+    // don't display
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         return 0;
     else
@@ -75,19 +75,19 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+
     NSInteger row = [indexPath row];
-    
+
     cell.textLabel.text = [controllerNames objectAtIndex:row];
     cell.imageView.image = [UIImage imageNamed:@"Icon.png"];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    
+
     return cell;
 }
 
@@ -96,7 +96,7 @@
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
     UIViewController *nextController = nil;
-    
+
     switch (row) {
         case 0:
             if (nil == generalSettingsViewController)
@@ -119,7 +119,7 @@
             nextController = schemeSettingsViewController;
             break;
     }
-    
+
     nextController.title = [controllerNames objectAtIndex:row];
     [self.navigationController pushViewController:nextController animated:YES];
 }
@@ -137,7 +137,7 @@
 }
 
 // Called when the master view controller is about to be hidden
--(void) splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController 
+-(void) splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController
             withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
 
   /*  barButtonItem.title = @"Master View";
@@ -154,7 +154,7 @@
 }
 
 // Called when the master view controller is about to appear
--(void) splitViewController: (UISplitViewController*)svc  willShowViewController:(UIViewController *)aViewController 
+-(void) splitViewController: (UISplitViewController*)svc  willShowViewController:(UIViewController *)aViewController
             invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
     /*UIToolbar *toolbar = self.parentViewController.navigationController.toolbar;
 

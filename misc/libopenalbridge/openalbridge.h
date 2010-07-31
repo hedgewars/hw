@@ -40,9 +40,9 @@ extern "C" {
 
     // unloads data from memory and marks a free spot
     void openal_unloadfile        (unsigned int index);
-    
+
     /******* other functions continue in commands.h *******/
-    
+
 #ifdef __CPLUSPLUS
 }
 #endif

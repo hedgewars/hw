@@ -1,21 +1,21 @@
 /*
  SDL - Simple DirectMedia Layer
  Copyright (C) 1997-2009 Sam Lantinga
- 
+
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
  License as published by the Free Software Foundation; either
  version 2.1 of the License, or (at your option) any later version.
- 
+
  This library is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  Lesser General Public License for more details.
- 
+
  You should have received a copy of the GNU Lesser General Public
  License along with this library; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- 
+
  Sam Lantinga, mods for Hedgewars by Vittorio Giovara
  slouken@libsdl.org, vittorio.giovara@gmail.com
 */
@@ -81,24 +81,24 @@ int main (int argc, char *argv[]) {
 -(IBAction) startSDLgame: (NSDictionary *)gameDictionary {
     // pull out useful configuration info from various files
     GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
-    
+
     [setup startThread:@"engineProtocol"];
     const char **gameArgs = [setup getSettings];
     [setup release];
 
     // since the sdlwindow is not yet created, we add the overlayController with a delay
     [self performSelector:@selector(displayOverlayLater) withObject:nil afterDelay:0.1];
-    
+
     // this is the pascal fuction that starts the game (wrapped around isInGame)
     isInGame = YES;
     Game(gameArgs);
     isInGame = NO;
     free(gameArgs);
-    
+
     // bring the uiwindow below in front
     UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
     [aWin makeKeyAndVisible];
-    
+
     // notice that in the simulator this reports 2 windows
     DLog(@"%@",[[UIApplication sharedApplication] windows]);
 }
@@ -114,10 +114,10 @@ int main (int argc, char *argv[]) {
 
 // override the direct execution of SDL_main to allow us to implement the frontend (or even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
-    [application setStatusBarHidden:YES]; 
-    
+    [application setStatusBarHidden:YES];
+
     UIWindow *uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         self.mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
     else
@@ -135,7 +135,7 @@ int main (int argc, char *argv[]) {
 -(void) applicationWillTerminate:(UIApplication *)application {
     Mix_CloseAudio();
     SDL_SendQuit();
-    
+
     if (isInGame) {
         HW_terminate(YES);
         // hack to prevent automatic termination. See SDL_uikitevents.m for details
@@ -152,7 +152,7 @@ int main (int argc, char *argv[]) {
 -(void) applicationWillResignActive:(UIApplication *)application {
     if (isInGame) {
         HW_pause();
-        
+
         // Send every window on every screen a MINIMIZED event.
         SDL_VideoDevice *_this = SDL_GetVideoDevice();
         if (!_this)

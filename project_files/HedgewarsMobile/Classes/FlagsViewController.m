@@ -24,7 +24,7 @@
     [super viewDidLoad];
 
     self.flagArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:FLAGS_DIRECTORY() error:NULL];
-    
+
     self.title = NSLocalizedString(@"Set team flag",@"");
 }
 
@@ -47,22 +47,22 @@
 
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     static NSString *CellIdentifier = @"Cell";
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+
     NSString *flag = [flagArray objectAtIndex:[indexPath row]];
-    
+
     NSString *flagFile = [[NSString alloc] initWithFormat:@"%@/%@", FLAGS_DIRECTORY(), flag];
     UIImage *flagSprite = [[UIImage alloc] initWithContentsOfFile:flagFile];
     [flagFile release];
     cell.imageView.image = flagSprite;
     [flagSprite release];
-    
+
     cell.textLabel.text = [flag stringByDeletingPathExtension];
     if ([cell.textLabel.text isEqualToString:[self.teamDictionary objectForKey:@"flag"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -70,7 +70,7 @@
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
-    
+
     return cell;
 }
 
@@ -80,7 +80,7 @@
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    
+
     if (newRow != oldRow) {
         // if the two selected rows differ update data on the hog dictionary and reload table content
         [self.teamDictionary setValue:[[flagArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"flag"];

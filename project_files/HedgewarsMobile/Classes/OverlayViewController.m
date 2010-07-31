@@ -23,7 +23,7 @@
 #define CONFIRMATION_TAG 5959
 #define GRENADE_TAG 9595
 #define ANIMATION_DURATION 0.25
-#define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview]; 
+#define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
 @synthesize popoverController, popupMenu;
@@ -32,12 +32,12 @@
     return rotationManager(interfaceOrientation);
 }
 
--(void) didRotate:(NSNotification *)notification {  
+-(void) didRotate:(NSNotification *)notification {
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     CGRect rect = [[UIScreen mainScreen] bounds];
     CGRect usefulRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
     UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
-    
+
     [UIView beginAnimations:@"rotation" context:NULL];
     [UIView setAnimationDuration:0.8f];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
@@ -84,7 +84,7 @@
     isPopoverVisible = NO;
     self.view.alpha = 0;
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
-    
+
     // set initial orientation
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
@@ -102,18 +102,18 @@
     }
     CGRect rect = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
-    
+
     dimTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
                                           target:self
                                         selector:@selector(dimOverlay)
                                         userInfo:nil
                                          repeats:YES];
-    
+
     // add timer too runloop, otherwise it doesn't work
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
-    
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];   
+
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didRotate:)
                                                  name:UIDeviceOrientationDidChangeNotification
@@ -123,7 +123,7 @@
     [UIView setAnimationDuration:1];
     self.view.alpha = 1;
     [UIView commitAnimations];
-    
+
     // find the sdl window we're on
     SDL_VideoDevice *_this = SDL_GetVideoDevice();
     SDL_VideoDisplay *display = &_this->displays[0];
@@ -141,7 +141,7 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
-    if (popupMenu.view.superview == nil) 
+    if (popupMenu.view.superview == nil)
         popupMenu = nil;
     MSG_MEMCLEAN();
 }
@@ -176,9 +176,9 @@
 -(IBAction) buttonReleased:(id) sender {
     if (!isGameRunning)
         return;
-    
+
     UIButton *theButton = (UIButton *)sender;
-    
+
     switch (theButton.tag) {
         case 0:
         case 1:
@@ -202,18 +202,18 @@
     doDim();
 }
 
-// issue certain action based on the tag of the button 
+// issue certain action based on the tag of the button
 -(IBAction) buttonPressed:(id) sender {
     [self activateOverlay];
     if (isPopoverVisible) {
         [self dismissPopover];
     }
-    
+
     if (!isGameRunning)
         return;
-    
+
     UIButton *theButton = (UIButton *)sender;
-    
+
     switch (theButton.tag) {
         case 0:
             HW_walkLeft();
@@ -267,7 +267,7 @@
     if ([actionSheet cancelButtonIndex] != buttonIndex)
         HW_terminate(NO);
     else
-        HW_pause();     
+        HW_pause();
 }
 
 // show up a popover containing a popupMenuViewController; we hook it with setPopoverContentSize
@@ -277,7 +277,7 @@
     isPopoverVisible = YES;
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (popupMenu == nil) 
+        if (popupMenu == nil)
             popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStylePlain];
         if (popoverController == nil) {
             popoverController = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
@@ -292,7 +292,7 @@
     } else {
         if (popupMenu == nil)
             popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        
+
         [self.view addSubview:popupMenu.view];
         [popupMenu present];
     }
@@ -305,7 +305,7 @@
         isPopoverVisible = NO;
         if (HW_isPaused())
             HW_pause();
-        
+
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             [(InGameMenuViewController *)popoverController.contentViewController removeChat];
             [popoverController dismissPopoverAnimated:YES];
@@ -321,24 +321,24 @@
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     NSSet *allTouches = [event allTouches];
     UITouch *first, *second;
-    
+
     // hide in-game menu
     if (isPopoverVisible)
         [self dismissPopover];
-    
+
     // reset default dimming
     doDim();
-    
+
     HW_setPianoSound([allTouches count]);
-    
+
     switch ([allTouches count]) {
-        case 1:       
+        case 1:
             removeConfirmationInput();
             startingPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
             if (2 == [[[allTouches allObjects] objectAtIndex:0] tapCount])
                 HW_zoomReset();
             break;
-        case 2:                
+        case 2:
             // pinching
             first = [[allTouches allObjects] objectAtIndex:0];
             second = [[allTouches allObjects] objectAtIndex:1];
@@ -355,7 +355,7 @@
     CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
     CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
-    
+
     switch ([allTouches count]) {
         case 1:
             // if we're in the menu we just click in the point
@@ -363,12 +363,12 @@
                 HW_setCursor(HWXZ(currentPosition.x), HWYZ(currentPosition.y));
                 // this click doesn't need any wrapping because the ammoMenu already limits the cursor
                 HW_click();
-            } else 
+            } else
                 // if weapon requires a further click, ask for tapping again
                 if (HW_isWeaponRequiringClick()) {
                     // here don't have to wrap thanks to isCursorVisible magic
                     HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
-                    
+
                     // draw the button at the last touched point (which is the current position)
                     UIButton *tapAgain = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                     tapAgain.frame = CGRectMake(currentPosition.x - 75, currentPosition.y + 25, 150, 40);
@@ -377,13 +377,13 @@
                     [tapAgain addTarget:self action:@selector(sendHWClick) forControlEvents:UIControlEventTouchUpInside];
                     [tapAgain setTitle:NSLocalizedString(@"Tap to set!",@"from the overlay") forState:UIControlStateNormal];
                     [self.view addSubview:tapAgain];
-                    
+
                     // animation ftw!
-                    [UIView beginAnimations:@"inserting button" context:NULL]; 
+                    [UIView beginAnimations:@"inserting button" context:NULL];
                     [UIView setAnimationDuration:ANIMATION_DURATION];
                     [self.view viewWithTag:CONFIRMATION_TAG].alpha = 1;
                     [UIView commitAnimations];
-                    
+
                     // keep the overlay active, or the button will fade
                     [self activateOverlay];
                     doNotDim();
@@ -391,35 +391,35 @@
                     if (HW_isWeaponTimerable()) {
                         if (isSegmentVisible) {
                             UISegmentedControl *grenadeTime = (UISegmentedControl *)[self.view viewWithTag:GRENADE_TAG];
-                            
+
                             [UIView beginAnimations:@"removing segmented control" context:NULL];
                             [UIView setAnimationDuration:ANIMATION_DURATION];
                             [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
                             grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
                             [UIView commitAnimations];
-                            
+
                             [grenadeTime performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
                         } else {
                             NSArray *items = [[NSArray alloc] initWithObjects:@"1",@"2",@"3",@"4",@"5",nil];
                             UISegmentedControl *grenadeTime = [[UISegmentedControl alloc] initWithItems:items];
                             [items release];
-                            
+
                             [grenadeTime addTarget:self action:@selector(setGrenadeTime:) forControlEvents:UIControlEventValueChanged];
                             grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
                             grenadeTime.selectedSegmentIndex = 2;
                             grenadeTime.tag = GRENADE_TAG;
                             [self.view addSubview:grenadeTime];
                             [grenadeTime release];
-                            
+
                             [UIView beginAnimations:@"inserting segmented control" context:NULL];
                             [UIView setAnimationDuration:ANIMATION_DURATION];
                             [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
                             grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width - 100, 250, 50);
                             [UIView commitAnimations];
-                            
+
                             [self activateOverlay];
                             doNotDim();
-                        } 
+                        }
                         isSegmentVisible = !isSegmentVisible;
                     } else
                         if (HW_isWeaponSwitch())
@@ -431,7 +431,7 @@
         default:
             break;
     }
-    
+
     initialDistanceForPinching = 0;
 }
 
@@ -454,7 +454,7 @@
     CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
     int x, y, dx, dy;
-    
+
     UITouch *touch, *first, *second;
 
     switch ([allTouches count]) {
@@ -488,7 +488,7 @@
             second = [[allTouches allObjects] objectAtIndex:1];
             CGFloat currentDistanceOfPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
             const int pinchDelta = 40;
-            
+
             if (0 != initialDistanceForPinching) {
                 if (currentDistanceOfPinching - initialDistanceForPinching > pinchDelta) {
                     HW_zoomIn();
@@ -498,9 +498,9 @@
                     HW_zoomOut();
                     initialDistanceForPinching = currentDistanceOfPinching;
                 }
-            } else 
+            } else
                 initialDistanceForPinching = currentDistanceOfPinching;
-            
+
             break;
         default:
             break;
@@ -532,15 +532,15 @@ void clearView() {
     UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
     UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
     UISegmentedControl *theSegment = (UISegmentedControl *)[theWindow viewWithTag:GRENADE_TAG];
-    
+
     [UIView beginAnimations:@"remove button" context:NULL];
     [UIView setAnimationDuration:ANIMATION_DURATION];
     theButton.alpha = 0;
     theSegment.alpha = 0;
     [UIView commitAnimations];
-    
+
     [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:0.3];
-    [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:0.3];    
+    [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:0.3];
 }
 
 @end

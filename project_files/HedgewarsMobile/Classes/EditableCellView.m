@@ -15,7 +15,7 @@
 -(id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
         delegate = nil;
-        
+
         textField = [[UITextField alloc] initWithFrame:CGRectZero];
         textField.backgroundColor = [UIColor clearColor];
         textField.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
@@ -25,17 +25,17 @@
         textField.returnKeyType = UIReturnKeyDone;
         textField.adjustsFontSizeToFitWidth = YES;
         [textField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
-        
+
         [self.contentView addSubview:textField];
         //[textField release];
-        
+
         titleLabel = [[UILabel alloc] init];
         titleLabel.textAlignment = UITextAlignmentLeft;
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
         [self.contentView addSubview:titleLabel];
         //[titleLabel release];
-        
+
         minimumCharacters = 1;
         maximumCharacters = 64;
         oldValue = nil;
@@ -48,12 +48,12 @@
 
     CGRect contentRect = self.contentView.bounds;
     CGFloat boundsX = contentRect.origin.x;
-    
+
     int offset = 0;
     int skew = 0;
     if (self.imageView != nil)
         offset += self.imageView.frame.size.width;
-    
+
     if ([self.titleLabel.text length] == 0)
         titleLabel.frame = CGRectZero;
     else {
@@ -94,16 +94,16 @@
 -(void) textFieldDidBeginEditing:(UITextField *)aTextField{
     // don't interact with table below
     ((UITableView*)[self superview]).scrollEnabled = NO;
-    
+
     self.oldValue = self.textField.text;
-    
+
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel",@"")
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(cancel:)];
     [(UITableViewController *)delegate navigationItem].leftBarButtonItem = cancelButton;
     [cancelButton release];
-    
+
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save",@"")
                                                                      style:UIBarButtonItemStyleDone
                                                                     target:self
@@ -116,18 +116,18 @@
    use method below instead that allows some more interaction
 // don't accept 0-length strings
 -(BOOL) textFieldShouldEndEditing:(UITextField *)aTextField {
-    return ([aTextField.text length] > 0); 
+    return ([aTextField.text length] > 0);
 }
 */
 
 -(BOOL) textFieldShouldReturn:(UITextField *)aTextField {
-    return ([aTextField.text length] >= self.minimumCharacters); 
+    return ([aTextField.text length] >= self.minimumCharacters);
 }
 
 // the textfield has been modified, tell the delegate to do something
 -(void) textFieldDidEndEditing:(UITextField *)aTextField{
     ((UITableView*)[self superview]).scrollEnabled = YES;
-    
+
     [(UITableViewController *)delegate navigationItem].rightBarButtonItem = [(UITableViewController *)delegate navigationItem].backBarButtonItem;
     [(UITableViewController *)delegate navigationItem].leftBarButtonItem = nil;
 }
@@ -149,11 +149,11 @@
 -(void) save:(id) sender {
     if (delegate == nil || ![delegate respondsToSelector:@selector(saveTextFieldValue:withTag:)])
         return;
-    
+
     // don't save if the textfield is invalid
     if (![self textFieldShouldReturn:textField])
         return;
-    
+
     [delegate saveTextFieldValue:self.textField.text withTag:self.tag];
     [self.textField resignFirstResponder];
     self.oldValue = nil;

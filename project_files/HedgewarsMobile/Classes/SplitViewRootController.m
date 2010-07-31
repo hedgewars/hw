@@ -20,14 +20,14 @@
 
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];    
+    [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
     if (detailViewController.view.superview == nil)
         detailViewController = nil;
     MSG_MEMCLEAN();
 }
 
-// load the view programmatically; we need a splitViewController that handles a MasterViewController 
+// load the view programmatically; we need a splitViewController that handles a MasterViewController
 // (which is just a UITableViewController) and a DetailViewController where we present options
 -(void) viewDidLoad {
     detailViewController = [[DetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
@@ -37,20 +37,20 @@
     CGRect rect = [[UIScreen mainScreen] bounds];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         self.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
-        
+
         UISplitViewController *splitViewRootController = [[UISplitViewController alloc] init];
         splitViewRootController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
-        
+
         MasterViewController *masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
         UINavigationController *mainNavController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
         [masterViewController release];
 
         splitViewRootController.delegate = detailViewController;
-        masterViewController.detailViewController = detailViewController;        
+        masterViewController.detailViewController = detailViewController;
         splitViewRootController.viewControllers = [NSArray arrayWithObjects: mainNavController, detailedNavController, nil];
         [mainNavController release];
         [detailedNavController release];
-        
+
         // add view to main controller
         [self.view addSubview:splitViewRootController.view];
     } else {
@@ -59,7 +59,7 @@
 
     [super viewDidLoad];
 }
-         
+
 -(void) viewDidUnload {
     detailViewController = nil;
     MSG_DIDUNLOAD();

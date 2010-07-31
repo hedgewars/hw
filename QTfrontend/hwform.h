@@ -155,11 +155,11 @@ private:
     QStack<quint8> PagesStack;
     QTime eggTimer;
     BGWidget * wBackground;
-        
+
 #ifdef __APPLE__
         InstallController * panel;
 #endif
-        
+
     void OnPageShown(quint8 id, quint8 lastid=0);
 };
 

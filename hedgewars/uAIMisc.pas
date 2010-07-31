@@ -76,7 +76,7 @@ const KillScore = 200;
 var friendlyfactor: LongInt = 300;
     KnownExplosion: record
                     X, Y, Radius: LongInt
-                    end = (X: 0; Y: 0; Radius: 0); 
+                    end = (X: 0; Y: 0; Radius: 0);
 
 procedure FillTargets;
 var i, t: Longword;
@@ -195,7 +195,7 @@ begin
         MeX:= hwRound(Me^.X);
         MeY:= hwRound(Me^.Y);
         // We are still inside the hog. Skip radius test
-        if ((((x-MeX)*(x-MeX)) + ((y-MeY)*(y-MeY))) < 256) and 
+        if ((((x-MeX)*(x-MeX)) + ((y-MeY)*(y-MeY))) < 256) and
            ((Land[y, x] and $FF00) = 0) then exit(false);
         end;
     exit(TestColl(x, y, r))

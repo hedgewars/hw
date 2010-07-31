@@ -119,7 +119,7 @@ PageMain::PageMain(QWidget* parent) :
     Tips << tr("You should never install Hedgewars on computers you don't own (school, university, work, etc.). Please ask the responsible person instead!", "Tips");
     Tips << tr("Hedgewars can be perfect for short games during breaks. Just ensure you don't add too many hedgehogs or use an huge map. Reducing time and health might help as well.", "Tips");
     Tips << tr("No hedgehogs were harmed in making this game.", "Tips");
-    
+
 
     if(isDevBuild)
         mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
@@ -369,7 +369,7 @@ void PageEditTeam::testSound()
     Mix_Chunk *sound;
     QDir tmpdir;
     mySdli->SDLMusicInit();
-    
+
     tmpdir.cd(datadir->absolutePath());
     tmpdir.cd("Sounds/voices");
     tmpdir.cd(CBVoicepack->currentText());
@@ -947,7 +947,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     CBSelect->addItems(tmpdir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1"));
 
     pageLayout->addWidget(CBSelect, 1, 1);
-    
+
     BtnStartTrain = new QPushButton(this);
     BtnStartTrain->setFont(*font14);
     BtnStartTrain->setText(QPushButton::tr("Go!"));
@@ -1063,7 +1063,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         QTableWidgetItem * item;
         item = new QTableWidgetItem(list[i + 1]); // room name
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        
+
         // pick appropriate room icon and tooltip (game in progress yes/no; later maybe locked rooms etc.)
         if(list[i].compare("True"))
         {
@@ -1102,13 +1102,13 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         else
         {
             item = new QTableWidgetItem(list[i + 5]); // selected map
-            
+
             // check to see if we've got this map
             // not perfect but a start
             if(!mapList->contains(list[i + 5]))
                 item->setForeground(QBrush(QColor(255, 0, 0)));
         }
-        
+
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setToolTip(tr("Games may be played on precreated or randomized maps."));
         roomsList->setItem(r, 4, item);
@@ -1506,7 +1506,7 @@ PageAdmin::PageAdmin(QWidget* parent) :
     // 0
     pbAsk = addButton(tr("Fetch data"), pageLayout, 0, 0, 1, 3);
     connect(pbAsk, SIGNAL(clicked()), this, SIGNAL(askServerVars()));
-    
+
     // 1
     QLabel * lblSMN = new QLabel(this);
     lblSMN->setText(tr("Server message for latest version:"));
@@ -1540,10 +1540,10 @@ PageAdmin::PageAdmin(QWidget* parent) :
     pageLayout->addWidget(tb, 4, 1, 1, 2);
     connect(leServerMessageNew, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
     connect(leServerMessageOld, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
-    
+
     // 5
     pbClearAccountsCache = addButton(tr("Clear Accounts Cache"), pageLayout, 5, 0);
-    
+
     // 6
     pbSetSM = addButton(tr("Set data"), pageLayout, 6, 0, 1, 3);
 

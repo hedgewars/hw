@@ -21,14 +21,14 @@
 -(id) initWithDictionary:(NSDictionary *)gameDictionary {
     if (self = [super init]) {
         ipcPort = randomPort();
-        
+
         // should check they exist and throw and exection if not
         NSDictionary *dictSett = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
         self.systemSettings = dictSett;
         [dictSett release];
-        
+
         self.gameConfig = gameDictionary;
-    } 
+    }
     return self;
 }
 
@@ -47,46 +47,46 @@
      addhh <level> <health> <hedgehog name>
      <level> is 0 for human, 1-5 for bots (5 is the most stupid)
     */
-    
+
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@", TEAMS_DIRECTORY(), teamName];
     NSDictionary *teamData = [[NSDictionary alloc] initWithContentsOfFile:teamFile];
     [teamFile release];
-    
-    NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"eaddteam %@ %@ %@", 
+
+    NSString *teamHashColorAndName = [[NSString alloc] initWithFormat:@"eaddteam %@ %@ %@",
                                       [teamData objectForKey:@"hash"], [teamColor stringValue], [teamName stringByDeletingPathExtension]];
     [self sendToEngine: teamHashColorAndName];
     [teamHashColorAndName release];
-    
+
     NSString *grave = [[NSString alloc] initWithFormat:@"egrave %@", [teamData objectForKey:@"grave"]];
     [self sendToEngine: grave];
     [grave release];
-    
+
     NSString *fort = [[NSString alloc] initWithFormat:@"efort %@", [teamData objectForKey:@"fort"]];
     [self sendToEngine: fort];
     [fort release];
-    
+
     NSString *voicepack = [[NSString alloc] initWithFormat:@"evoicepack %@", [teamData objectForKey:@"voicepack"]];
     [self sendToEngine: voicepack];
     [voicepack release];
-    
+
     NSString *flag = [[NSString alloc] initWithFormat:@"eflag %@", [teamData objectForKey:@"flag"]];
     [self sendToEngine: flag];
     [flag release];
-    
+
     NSArray *hogs = [teamData objectForKey:@"hedgehogs"];
     for (int i = 0; i < numberOfPlayingHogs; i++) {
         NSDictionary *hog = [hogs objectAtIndex:i];
-        
-        NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %d %@", 
+
+        NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %d %@",
                                            [hog objectForKey:@"level"], initialHealth, [hog objectForKey:@"hogname"]];
         [self sendToEngine: hogLevelHealthAndName];
         [hogLevelHealthAndName release];
-        
+
         NSString *hogHat = [[NSString alloc] initWithFormat:@"ehat %@", [hog objectForKey:@"hat"]];
         [self sendToEngine: hogHat];
         [hogHat release];
     }
-    
+
     [teamData release];
 }
 
@@ -96,34 +96,34 @@
     NSDictionary *ammoData = [[NSDictionary alloc] initWithContentsOfFile:weaponPath];
     [weaponPath release];
     NSString *update = @"";
-    
+
     // if we're loading an older version of ammos fill the engine message with 0s
     int diff = CURRENT_AMMOSIZE - [[ammoData objectForKey:@"version"] intValue];
     if (diff != 0)
         update = [NSString stringWithCharacters:(const unichar*)"0000000000000000000000000000000000" length:diff];
-    
+
     NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@%@", [ammoData objectForKey:@"ammostore_initialqt"], update];
     [self sendToEngine: ammloadt];
     [ammloadt release];
-    
+
     NSString *ammprob = [[NSString alloc] initWithFormat:@"eammprob %@%@", [ammoData objectForKey:@"ammostore_probability"], update];
     [self sendToEngine: ammprob];
     [ammprob release];
-    
+
     NSString *ammdelay = [[NSString alloc] initWithFormat:@"eammdelay %@%@", [ammoData objectForKey:@"ammostore_delay"], update];
     [self sendToEngine: ammdelay];
     [ammdelay release];
-    
+
     NSString *ammreinf = [[NSString alloc] initWithFormat:@"eammreinf %@%@", [ammoData objectForKey:@"ammostore_crate"], update];
     [self sendToEngine: ammreinf];
     [ammreinf release];
-    
+
     // sent twice so it applies to both teams
     NSString *ammstore = [[NSString alloc] initWithString:@"eammstore"];
     for (int i = 0; i < numberOfTeams; i++)
         [self sendToEngine: ammstore];
     [ammstore release];
-    
+
     [ammoData release];
 }
 
@@ -138,76 +138,76 @@
     if ([[scheme objectAtIndex:i++] boolValue])
         result |= 0x01;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x10;    
+        result |= 0x10;
     if ([[scheme objectAtIndex:i++] boolValue])
         result |= 0x04;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x08;    
+        result |= 0x08;
     if ([[scheme objectAtIndex:i++] boolValue])
         result |= 0x20;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x40;    
+        result |= 0x40;
     if ([[scheme objectAtIndex:i++] boolValue])
         result |= 0x80;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x100;    
+        result |= 0x100;
     if ([[scheme objectAtIndex:i++] boolValue])
         result |= 0x200;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x400;    
+        result |= 0x400;
     if ([[scheme objectAtIndex:i++] boolValue])
         result |= 0x800;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x2000;    
+        result |= 0x2000;
     if ([[scheme objectAtIndex:i++] boolValue])
         result |= 0x4000;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x8000;    
+        result |= 0x8000;
     if ([[scheme objectAtIndex:i++] boolValue])
         result |= 0x10000;
     if ([[scheme objectAtIndex:i++] boolValue])
         result |= 0x20000;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x80000;    
+        result |= 0x80000;
 
     NSString *flags = [[NSString alloc] initWithFormat:@"e$gmflags %d",result];
     [self sendToEngine:flags];
     [flags release];
-    
+
     NSString *dmgMod = [[NSString alloc] initWithFormat:@"e$damagepct %d",[[scheme objectAtIndex:i++] intValue]];
     [self sendToEngine:dmgMod];
     [dmgMod release];
-    
+
     NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",[[scheme objectAtIndex:i++] intValue] * 1000];
     [self sendToEngine:turnTime];
     [turnTime release];
-    
+
     result = [[scheme objectAtIndex:i++] intValue]; // initial health
-    
+
     NSString *sdTime = [[NSString alloc] initWithFormat:@"e$sd_turns %d",[[scheme objectAtIndex:i++] intValue]];
     [self sendToEngine:sdTime];
     [sdTime release];
-    
+
     NSString *crateDrops = [[NSString alloc] initWithFormat:@"e$casefreq %d",[[scheme objectAtIndex:i++] intValue]];
     [self sendToEngine:crateDrops];
     [crateDrops release];
-    
+
     NSString *minesTime = [[NSString alloc] initWithFormat:@"e$minestime %d",[[scheme objectAtIndex:i++] intValue] * 1000];
     [self sendToEngine:minesTime];
     [minesTime release];
-    
+
     NSString *minesNumber = [[NSString alloc] initWithFormat:@"e$landadds %d",[[scheme objectAtIndex:i++] intValue]];
     [self sendToEngine:minesNumber];
     [minesNumber release];
-    
+
     NSString *dudMines = [[NSString alloc] initWithFormat:@"e$minedudpct %d",[[scheme objectAtIndex:i++] intValue]];
     [self sendToEngine:dudMines];
     [dudMines release];
-    
+
     NSString *explosives = [[NSString alloc] initWithFormat:@"e$explosives %d",[[scheme objectAtIndex:i++] intValue]];
     [self sendToEngine:explosives];
     [explosives release];
-    
+
     [scheme release];
     return result;
 }
@@ -223,7 +223,7 @@
 // wrapper that computes the length of the message and then sends the command string
 -(int) sendToEngine: (NSString *)string {
     uint8_t length = [string length];
-    
+
     SDLNet_TCP_Send(csd, &length , 1);
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
@@ -238,7 +238,7 @@
     char buffer[BUFFER_SIZE];
     uint8_t msgSize;
     uint16_t gameTicks;
-    
+
     clientQuit = NO;
     csd = NULL;
 
@@ -246,24 +246,24 @@
         DLog(@"SDLNet_Init: %s", SDLNet_GetError());
         clientQuit = YES;
     }
-    
+
     // Resolving the host using NULL make network interface to listen
     if (SDLNet_ResolveHost(&ip, NULL, ipcPort) < 0 && !clientQuit) {
         DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         clientQuit = YES;
     }
-    
-    // Open a connection with the IP provided (listen on the host's port) 
+
+    // Open a connection with the IP provided (listen on the host's port)
     if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
         DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), ipcPort);
         clientQuit = YES;
     }
-    
+
     DLog(@"Waiting for a client on port %d", ipcPort);
-    while (csd == NULL) 
+    while (csd == NULL)
         csd = SDLNet_TCP_Accept(sd);
     SDLNet_TCP_Close(sd);
-    
+
     while (!clientQuit) {
         msgSize = 0;
         memset(buffer, 0, BUFFER_SIZE);
@@ -271,41 +271,41 @@
             clientQuit = YES;
         if (SDLNet_TCP_Recv(csd, buffer, msgSize) <=0)
             clientQuit = YES;
-        
+
         switch (buffer[0]) {
             case 'C':
                 DLog(@"sending game config...\n%@",self.gameConfig);
-                
+
                 // local game
                 [self sendToEngine:@"TL"];
-                
+
                 // seed info
                 [self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
-                
+
                 // dimension of the map
                 [self sendToEngine:[self.gameConfig objectForKey:@"templatefilter_command"]];
                 [self sendToEngine:[self.gameConfig objectForKey:@"mapgen_command"]];
                 [self sendToEngine:[self.gameConfig objectForKey:@"mazesize_command"]];
-                
+
                 // static land (if set)
                 NSString *staticMap = [self.gameConfig objectForKey:@"staticmap_command"];
                 if ([staticMap length] != 0)
                     [self sendToEngine:staticMap];
-                
+
                 // theme info
                 [self sendToEngine:[self.gameConfig objectForKey:@"theme_command"]];
-                
+
                 // scheme (returns initial health)
                 NSInteger health = [self provideScheme:[self.gameConfig objectForKey:@"scheme"]];
-                
+
                 NSArray *teamsConfig = [self.gameConfig objectForKey:@"teams_list"];
                 for (NSDictionary *teamData in teamsConfig) {
-                    [self provideTeamData:[teamData objectForKey:@"team"] 
+                    [self provideTeamData:[teamData objectForKey:@"team"]
                                   forHogs:[[teamData objectForKey:@"number"] intValue]
                                withHealth:health
                                   ofColor:[teamData objectForKey:@"color"]];
                 }
-                
+
                 [self provideAmmoData:[self.gameConfig objectForKey:@"weapon"] forPlayingTeams:[teamsConfig count]];
                 break;
             case '?':
@@ -320,7 +320,7 @@
                 sscanf(buffer, "%*s %d", &eProto);
                 short int netProto = 0;
                 char *versionStr;
-                
+
                 HW_versionInfo(&netProto, &versionStr);
                 if (netProto == eProto) {
                     DLog(@"Setting protocol version %d (%s)", eProto, versionStr);
@@ -328,7 +328,7 @@
                     DLog(@"ERROR - wrong protocol number: [%s] - expecting %d", &buffer[1], eProto);
                     clientQuit = YES;
                 }
-                
+
                 break;
             case 'i':
                 switch (buffer[1]) {
@@ -351,9 +351,9 @@
     // wait a little to let the client close cleanly
     [NSThread sleepForTimeInterval:2];
     // Close the client socket
-    SDLNet_TCP_Close(csd);    
+    SDLNet_TCP_Close(csd);
     SDLNet_Quit();
-        
+
     [pool release];
     //Invoking this method should be avoided as it does not give your thread a chance to clean up any resources it allocated during its execution.
     //[NSThread exit];
@@ -370,21 +370,21 @@
     NSString *hSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.height];
     const char **gameArgs = (const char**) malloc(sizeof(char *) * 10);
     NSInteger tmpQuality;
-    
+
     NSString *modelId = modelType();
     if ([modelId hasPrefix:@"iPhone1"] ||                                   // = iPhone or iPhone 3G
         [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])   // = iPod Touch or iPod Touch 2G
         tmpQuality = 0x00000001 | 0x00000002 | 0x00000040;  // rqLowRes | rqBlurryLand | rqKillFlakes
     else if ([modelId hasPrefix:@"iPhone2"] ||                              // = iPhone 3GS
              [modelId hasPrefix:@"iPod3"])                                  // = iPod Touch 3G
-            tmpQuality = 0x00000002 | 0x00000040;           // rqBlurryLand | rqKillFlakes 
+            tmpQuality = 0x00000002 | 0x00000040;           // rqBlurryLand | rqKillFlakes
         else if ([modelId hasPrefix:@"iPad1"])                              // = iPad
                 tmpQuality = 0x00000002;                    // rqBlurryLand
             else                                                            // = everything else
                 tmpQuality = 0;                             // full quality
     if (![modelId hasPrefix:@"iPad"])                                       // = disable tooltips unless iPad
         tmpQuality = tmpQuality | 0x00000400;
-    
+
     gameArgs[9] = [[[NSNumber numberWithInteger:tmpQuality] stringValue] UTF8String];
 
     // prevents using an empty nickname
@@ -394,7 +394,7 @@
         username = [[NSString alloc] initWithFormat:@"MobileUser-%@",ipcString];
     else
         username = [[NSString alloc] initWithString:originalUsername];
-    
+
     gameArgs[0] = [username UTF8String];                                                        //UserNick
     gameArgs[1] = [ipcString UTF8String];                                                       //ipcPort
     gameArgs[2] = [[[self.systemSettings objectForKey:@"sound"] stringValue] UTF8String];       //isSoundEnabled
@@ -404,7 +404,7 @@
     gameArgs[6] = [wSize UTF8String];                                                           //cScreenHeight
     gameArgs[7] = [hSize UTF8String];                                                           //cScreenWidth
     gameArgs[8] = NULL;                                                                         //recordFileName
-    
+
     [wSize release];
     [hSize release];
     [localeString release];

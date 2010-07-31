@@ -47,7 +47,7 @@ bool checkForDir(const QString & dir)
     return true;
 }
 
-int main(int argc, char *argv[]) {        
+int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
     QStringList arguments = app.arguments();

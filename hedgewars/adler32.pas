@@ -75,7 +75,7 @@ $ifdef BASM16
 procedure Adler32Update(var adler: longint; Msg: pointer; Len: longint);
   //-update Adler32 with Msg data
 const
-  BASE = 65521; // max. prime < 65536 
+  BASE = 65521; // max. prime < 65536
   NMAX =  5552; // max. n with 255n(n+1)/2 + (n+1)(BASE-1) < 2^32
 type
   LH    = packed record

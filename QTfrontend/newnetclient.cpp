@@ -305,7 +305,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             if(tmp[0] == "MOTD_NEW") emit serverMessageNew(tmp[1]);
             else if(tmp[0] == "MOTD_OLD") emit serverMessageOld(tmp[1]);
             else if(tmp[0] == "LATEST_PROTO") emit latestProtocolVar(tmp[1].toInt());
-                
+
             tmp.removeFirst();
             tmp.removeFirst();
         }
@@ -472,13 +472,13 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         int passLength = config->value("net/passwordlength", 0).toInt();
         QString hash = config->value("net/passwordhash", "").toString();
         QString password = QInputDialog::getText(0, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(mynick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'), &ok);
-        
+
         if (!ok) {
             Disconnect();
             emit Disconnected();
             return;
         }
-        
+
         if (!passLength || password!=QString(passLength, '\0')) {
             hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
             config->setValue("net/passwordhash", hash);
@@ -750,5 +750,5 @@ void HWNewNet::setLatestProtocolVar(int proto)
 
 void HWNewNet::askServerVars()
 {
-    RawSendNet(QString("GET_SERVER_VAR"));    
+    RawSendNet(QString("GET_SERVER_VAR"));
 }

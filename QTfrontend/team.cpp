@@ -73,7 +73,7 @@ HWTeam::HWTeam(const QStringList& strLst) :
         Hedgehogs[i].Hat=strLst[i * 2 + 8];
 // Somehow claymore managed an empty hat.  Until we figure out how, this should avoid a repeat
 // Checking net teams is probably pointless, but can't hurt.
-        if (Hedgehogs[i].Hat.length() == 0) Hedgehogs[i].Hat = "NoHat"; 
+        if (Hedgehogs[i].Hat.length() == 0) Hedgehogs[i].Hat = "NoHat";
     }
     Rounds = 0;
     Wins = 0;

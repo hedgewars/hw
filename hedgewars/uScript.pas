@@ -52,14 +52,14 @@ uses LuaPas in 'LuaPas.pas',
     uTeams,
     uKeys,
     uChat;
-    
+
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
     ScriptAmmoProbability : shortstring;
     ScriptAmmoDelay : shortstring;
     ScriptAmmoReinforcement : shortstring;
     ScriptLoaded : boolean;
-    
+
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
 procedure ScriptSetAmmo(ammo : TAmmoType; count, propability, delay, reinforcement: Byte); forward;
@@ -596,7 +596,7 @@ ParseCommand('$sd_turns ' + ScriptGetString('SuddenDeathTurns'), true);
 if ScriptGetString('Map') <> '' then
     ParseCommand('map ' + ScriptGetString('Map'), true);
 if ScriptGetString('Theme') <> '' then
-    ParseCommand('theme ' + ScriptGetString('Theme'), true);    
+    ParseCommand('theme ' + ScriptGetString('Theme'), true);
 
 if ScriptExists('onAmmoStoreInit') then
     begin
@@ -792,7 +792,7 @@ for st:= Low(TSound) to High(TSound) do
 // register ammo types
 for am:= Low(TAmmoType) to High(TAmmoType) do
     ScriptSetInteger(EnumToStr(am), ord(am));
-    
+
 // register functions
 lua_register(luaState, 'AddGear', @lc_addgear);
 lua_register(luaState, 'WriteLnToConsole', @lc_writelntoconsole);

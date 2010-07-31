@@ -123,7 +123,7 @@ begin
     // make sure all instances of sdl_mixer are unloaded before continuing
     while Mix_Init(0) <> 0 do
         Mix_Quit();
-{$ENDIF}    
+{$ENDIF}
 
     Mix_CloseAudio();
 end;
@@ -136,17 +136,17 @@ begin
     if not isSoundEnabled then exit;
 
     defVoicepack:= AskForVoicepack('Default');
-    
+
     for t:= 0 to cMaxTeams do
         if voicepacks[t].name <> '' then
             for i:= Low(TSound) to High(TSound) do
                 voicepacks[t].chunks[i]:= nil;
-    
+
     for i:= Low(TSound) to High(TSound) do
     begin
         defVoicepack^.chunks[i]:= nil;
         // preload all the big sound files (>32k) that would otherwise lockup the game
-        if (i in [sndBeeWater, sndBee, sndCake, sndHellishImpact1, sndHellish, sndHomerun, sndMolotov, sndMortar, sndRideOfTheValkyries, sndYoohoo]) 
+        if (i in [sndBeeWater, sndBee, sndCake, sndHellishImpact1, sndHellish, sndHomerun, sndMolotov, sndMortar, sndRideOfTheValkyries, sndYoohoo])
             and (Soundz[i].Path <> ptVoices) and (Soundz[i].FileName <> '') then
         begin
             s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;

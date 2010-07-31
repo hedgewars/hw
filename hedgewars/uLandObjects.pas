@@ -94,7 +94,7 @@ for y:= 0 to Pred(Image^.h) do
                 if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
-        if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then 
+        if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then
             Land[cpY + y, cpX + x]:= lfObject
         end;
     p:= @(p^[Image^.pitch shr 2])
@@ -470,16 +470,16 @@ begin
     if ThemeObjects.Count = 0 then exit;
     WriteLnToConsole('Adding theme objects...');
 
-    for i:=0 to ThemeObjects.Count do 
+    for i:=0 to ThemeObjects.Count do
         ThemeObjects.objs[i].Maxcnt := max(1, (ThemeObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
-     
+
     repeat
         t := getrandom(ThemeObjects.Count);
         b := false;
         for i:=0 to ThemeObjects.Count do
             begin
             ii := (i+t) mod ThemeObjects.Count;
-            
+
             if ThemeObjects.objs[ii].Maxcnt <> 0 then
                 b := b or TryPut(ThemeObjects.objs[ii])
             end;
@@ -493,16 +493,16 @@ begin
     if SprayObjects.Count = 0 then exit;
     WriteLnToConsole('Adding spray objects...');
 
-    for i:=0 to SprayObjects.Count do 
+    for i:=0 to SprayObjects.Count do
         SprayObjects.objs[i].Maxcnt := max(1, (SprayObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
-     
+
     repeat
         t := getrandom(SprayObjects.Count);
         b := false;
         for i:=0 to SprayObjects.Count do
             begin
             ii := (i+t) mod SprayObjects.Count;
-            
+
             if SprayObjects.objs[ii].Maxcnt <> 0 then
                 b := b or TryPut(SprayObjects.objs[ii], Surface)
             end;

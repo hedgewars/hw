@@ -38,7 +38,7 @@ var FollowGear: PGear;
     cntTicks: LongWord;
 {$ENDIF}
     cOffsetY: LongInt;
-    
+
 procedure initModule;
 procedure freeModule;
 
@@ -281,7 +281,7 @@ for i:= 0 to cMaxSlotIndex do
         DrawSprite(sprAMBorderVertical, x + AMWidth - AMxOffset, y, 1);
         inc(y, AMSlotSize);
         end;
-        
+
 DrawSprite(sprAMCorners, x - BORDERSIZE, y, 2);
 for i:= 0 to cMaxSlotAmmoIndex do
 	DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 1);
@@ -339,7 +339,7 @@ for i:= cMaxSlotIndex downto 0 do
             DrawSprite(sprAMSlot, x + g * AMSlotSize, y, 1);
         DrawSprite(sprAMBorderVertical, x + AMWidth - AMxOffset, y, 1);
         end;
-        
+
 dec(y, BORDERSIZE);
 DrawSprite(sprAMCorners, x - BORDERSIZE, y, 0);
 for i:= 0 to cMaxSlotAmmoIndex + 1 do
@@ -355,7 +355,7 @@ if (Pos >= 0) then
             amSel:= Ammo^[Slot, Pos].AmmoType;
             RenderWeaponTooltip(amSel)
             end;
-            
+
 {$IFDEF IPHONEOS}
         DrawTexture(cScreenWidth div 2 - (AMWidth - 10) + AMxShift, AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
 
@@ -402,7 +402,7 @@ begin
 
     lw:= cScreenWidth / cScaleFactor;
     lh:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 + 16;
-    
+
     // Water
     r.y:= OffsetY + WorldDy + cWaterLine;
     if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine then
@@ -509,14 +509,14 @@ begin
         rh:= SpritesData[sprR].Height * SpritesData[spr].Texture^.Scale;
         dec(Shift, w div 2);
         DrawTexture(Shift, WorldDy + LAND_HEIGHT + OffsetY - h, SpritesData[spr].Texture, SpritesData[spr].Texture^.Scale);
-    
+
         i:= Shift - lw;
         while i >= -sw - lw do
         begin
             DrawTexture(i, WorldDy + LAND_HEIGHT + OffsetY - lh, SpritesData[sprL].Texture, SpritesData[sprL].Texture^.Scale);
             dec(i, lw);
         end;
-        
+
         i:= Shift + w;
         while i <= sw do
         begin
@@ -542,10 +542,10 @@ begin
         if ZoomValue < zoom then
         begin
             zoom:= zoom - 0.002 * Lag;
-            if ZoomValue > zoom then 
+            if ZoomValue > zoom then
                 zoom:= ZoomValue
-        end 
-    else 
+        end
+    else
         if ZoomValue > zoom then
         begin
             zoom:= zoom + 0.002 * Lag;
@@ -580,11 +580,11 @@ begin
     end;
 
     DrawVisualGears(0);
-    
+
     if (cReducedQuality and rq2DWater) = 0 then
     begin
         // Waves
-        DrawWater(255, SkyOffset); 
+        DrawWater(255, SkyOffset);
         DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 64);
         DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 48);
         DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 32);
@@ -694,7 +694,7 @@ if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
     DrawSprite(sprFrame, -cScreenWidth div 2 + t, 8, 1);
     dec(t, 32);
     // 1 ms
-    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10); 
+    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
     dec(t, 32);
     i:= i div 10;
     // 10 ms
@@ -757,16 +757,16 @@ for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
       highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
-      
+
       if highlight then
          Tint(Clan^.Color);
 
       // draw name
       DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY, NameTagTex);
-      
+
       // draw flag
       DrawTexture(-14, cScreenHeight + DrawHealthY, FlagTex);
-      
+
       // draw health bar
       r.x:= 0;
       r.y:= 0;
@@ -876,11 +876,11 @@ if (GameType = gmtDemo) and (CountTicks >= 1000) then
    s:= inttostr(t) + ':' + s;
    if t < 10 then s:= '0' + s;
    s:= inttostr(i div 60) + ':' + s;
-   
+
    if timeTexture <> nil then
         FreeTexture(timeTexture);
     timeTexture:= nil;
-    
+
    tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
    tmpSurface:= doSurfaceConversion(tmpSurface);
    timeTexture:= Surface2Tex(tmpSurface, false);
@@ -946,7 +946,7 @@ if ScreenFade <> sfNone then
             sfToBlack, sfFromBlack: Tint(0, 0, 0, ScreenFadeValue * 255 div 1000);
             sfToWhite, sfFromWhite: Tint($FF, $FF, $FF, ScreenFadeValue * 255 div 1000);
             end;
-        
+
         VertexBuffer[0].X:= -cScreenWidth;
         VertexBuffer[0].Y:= cScreenHeight;
         VertexBuffer[1].X:= -cScreenWidth;
@@ -955,7 +955,7 @@ if ScreenFade <> sfNone then
         VertexBuffer[2].Y:= 0;
         VertexBuffer[3].X:= cScreenWidth;
         VertexBuffer[3].Y:= cScreenHeight;
-         
+
         glDisable(GL_TEXTURE_2D);
 
         glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
@@ -991,7 +991,7 @@ end;
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 begin
 //if Group in [capgrpGameState] then WriteLnToConsole(s);
-    if Captions[Group].Tex <> nil then 
+    if Captions[Group].Tex <> nil then
         FreeTexture(Captions[Group].Tex);
     Captions[Group].Tex:= nil;
 
@@ -1117,7 +1117,7 @@ r.h:= 32;
 
 if time = 0 then time:= 5000;
 missionTimer:= time;
-if missionTex <> nil then 
+if missionTex <> nil then
     FreeTexture(missionTex);
 missionTex:= nil;
 
@@ -1159,7 +1159,7 @@ begin
     Frames:= 0;
     WorldDx:= -512;
     WorldDy:= -256;
-    
+
     FPS:= 0;
     CountTicks:= 0;
     SoundTimerTicks:= 0;
@@ -1168,7 +1168,7 @@ begin
     missionTimer:= 0;
     missionTex:= nil;
     cOffsetY:= 0;
-    
+
     FillChar(Captions, sizeof(Captions), 0)
 end;
 

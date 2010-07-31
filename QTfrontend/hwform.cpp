@@ -85,7 +85,7 @@ HWForm::HWForm(QWidget *parent)
     setMinimumSize(760, 580);
 
     CustomizePalettes();
-    
+
     ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
 
     config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
@@ -100,7 +100,7 @@ HWForm::HWForm(QWidget *parent)
         updater = new SparkleAutoUpdater(SPARKLE_APPCAST_URL);
     if(updater && config->isAutoUpdateEnabled())
             updater->checkForUpdates();
-#endif        
+#endif
 #endif
 
     UpdateTeamsLists();
