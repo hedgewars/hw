@@ -55,6 +55,7 @@ public:
     bool isFrontendFullscreen() const;
     bool isWeaponTooltip() const;
     void resizeToConfigValues();
+    bool isStereoEnabled() const;
 
 #ifdef __APPLE__
 #ifdef SPARKLE_ENABLED

@@ -221,6 +221,7 @@ public:
     QComboBox *CBResolution;
     QCheckBox *CBEnableSound;
     QCheckBox *CBEnableFrontendSound;
+    QCheckBox *CBEnableStereo;
 #ifdef _WIN32
     QCheckBox *CBHardwareSound;
 #endif

@@ -612,6 +612,10 @@ PageOptions::PageOptions(QWidget* parent) :
             CBReduceQuality->setText(QCheckBox::tr("Reduced quality"));
             GBAlayout->addWidget(CBReduceQuality);
 
+            CBEnableStereo = new QCheckBox(AGGroupBox);
+            CBEnableStereo->setText(QCheckBox::tr("Anaglyph rendering (red/cyan)"));
+            GBAlayout->addWidget(CBEnableStereo);
+
             hr = new QFrame(AGGroupBox);
             hr->setFrameStyle(QFrame::HLine);
             hr->setLineWidth(3);
