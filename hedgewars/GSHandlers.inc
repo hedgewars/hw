@@ -3547,6 +3547,7 @@ begin
             7: PlaySound(sndPiano7);
             else PlaySound(sndPiano8);
         end;
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
         CurrentHedgehog^.Gear^.MsgParam := 0;
         CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gm_Slot;
     end;
@@ -3593,6 +3594,8 @@ begin
             doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, 0);
             doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, 0);
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, EXPLAutoSound);
+            for r0:= 0 to 10 do
+                AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
             Gear^.dY := -_1;
             Gear^.Pos := Gear^.Pos + 1;
         end

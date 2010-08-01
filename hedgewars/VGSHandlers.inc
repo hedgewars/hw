@@ -109,6 +109,22 @@ if Gear^.FrameTicks <= Steps then
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepNote(Gear: PVisualGear; Steps: Longword);
+begin
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
+
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+Gear^.dY:= Gear^.dY + cGravityf * Steps;
+
+Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
+
+if Gear^.FrameTicks <= Steps then
+    DeleteVisualGear(Gear)
+else
+    dec(Gear^.FrameTicks, Steps)
+end;
+
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepEgg(Gear: PVisualGear; Steps: Longword);
 begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;

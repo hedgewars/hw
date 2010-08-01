@@ -73,7 +73,7 @@ type
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
-            sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk
+            sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote
             );
 
     // Gears that interact with other Gears and/or Land
@@ -94,7 +94,7 @@ type
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
-            vgtBigExplosion, vgtChunk);
+            vgtBigExplosion, vgtChunk, vgtNote);
 
     TGearsType = set of TGearType;
 
@@ -799,7 +799,9 @@ const
             (FileName:  'amFlamethrower'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandFlamethrower
             (FileName:  'Chunk'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprChunk
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprChunk
+            (FileName:  'Note'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprNote
             );
 
     Wavez: array [TWave] of record
