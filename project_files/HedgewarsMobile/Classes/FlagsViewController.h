@@ -12,7 +12,7 @@
 @interface FlagsViewController : UITableViewController {
     NSDictionary *teamDictionary;
 
-    NSArray *flagArray;    
+    NSArray *flagArray;
     NSIndexPath *lastIndexPath;
 }
 

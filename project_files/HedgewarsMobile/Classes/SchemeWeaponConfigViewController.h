@@ -12,7 +12,7 @@
 @interface SchemeWeaponConfigViewController : UITableViewController {
     NSArray *listOfSchemes;
     NSArray *listOfWeapons;
-    
+
     NSIndexPath *lastIndexPath_sc;
     NSIndexPath *lastIndexPath_we;
 

@@ -187,48 +187,6 @@
     return cell;
 }
 
-/*
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *containerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 50)] autorelease];
-    UILabel *headerLabel = [[[UILabel alloc] initWithFrame:CGRectMake(10, 20, 300, 40)] autorelease];
-    headerLabel.textColor = [UIColor lightGrayColor];
-    headerLabel.shadowColor = [UIColor blackColor];
-    headerLabel.shadowOffset = CGSizeMake(0, 1);
-    headerLabel.font = [UIFont boldSystemFontOfSize:20];
-    headerLabel.backgroundColor = [UIColor clearColor];
-
-    switch (section) {
-        case kNetworkFields:
-            headerLabel.text = NSLocalizedString(@"Network Configuration", @"");
-            break;
-        case kAudioFields:
-            headerLabel.text = NSLocalizedString(@"Audio Preferences", @"");
-            break;
-        case kOtherFields:
-            headerLabel.text = NSLocalizedString(@"Other Settings", @"");
-            break;
-        default:
-            NSLog(@"Warning: unset case value in titleForHeaderInSection!");
-            headerLabel.text = @"!";
-            break;
-    }
-
-    [containerView addSubview:headerLabel];
-    return containerView;
-}
-
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (kAudioFields == [indexPath section] && 2 == [indexPath row])
-        return volumeCell.frame.size.height;
-    else
-        return table.rowHeight;
-}
-
--(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 57.0;
-}
-*/
-
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

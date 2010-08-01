@@ -11,7 +11,7 @@
 
 @interface SingleSchemeViewController : UITableViewController <EditableCellViewDelegate> {
     NSString *schemeName;
-    NSMutableArray *schemeArray;    
+    NSMutableArray *schemeArray;
     NSArray *basicSettingList;
     NSArray *gameModifierArray;
 }

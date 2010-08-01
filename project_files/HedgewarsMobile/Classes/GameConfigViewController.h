@@ -12,7 +12,7 @@
 @class MapConfigViewController;
 @class SchemeWeaponConfigViewController;
 
-@interface GameConfigViewController : UIViewController {    
+@interface GameConfigViewController : UIViewController {
     UIViewController *activeController;
     MapConfigViewController *mapConfigViewController;
     TeamConfigViewController *teamConfigViewController;

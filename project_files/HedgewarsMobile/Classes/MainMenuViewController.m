@@ -7,15 +7,16 @@
 //
 
 #import "MainMenuViewController.h"
+#import "CommodityFunctions.h"
 #import "SDL_uikitappdelegate.h"
+#import "SDL_mixer.h"
 #import "PascalImports.h"
 #import "GameConfigViewController.h"
 #import "SplitViewRootController.h"
-#import "CommodityFunctions.h"
-#import "SDL_mixer.h"
+#import "AboutViewController.h"
 
 @implementation MainMenuViewController
-@synthesize versionLabel, gameConfigViewController, settingsViewController;
+@synthesize versionLabel, gameConfigViewController, settingsViewController, aboutViewController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -137,6 +138,15 @@
             [self presentModalViewController:self.settingsViewController animated:YES];
             break;
         case 3:
+            if (nil == self.aboutViewController) {
+                AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
+                about.modalTransitionStyle = UIModalPresentationFormSheet;
+                self.aboutViewController = about;
+                [about release];
+            }
+            
+            [self presentModalViewController:self.aboutViewController animated:YES];
+            /*
             debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
             UITextView *scroll = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
             scroll.text = debugStr;
@@ -150,6 +160,7 @@
             [scroll addSubview:btn];
             [self.view addSubview:scroll];
             [scroll release];
+            */
             break;
         default:
             alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
@@ -172,6 +183,7 @@
     self.versionLabel = nil;
     self.gameConfigViewController = nil;
     self.settingsViewController = nil;
+    self.aboutViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -180,6 +192,7 @@
     [versionLabel release];
     [settingsViewController release];
     [gameConfigViewController release];
+    [aboutViewController release];
     [super dealloc];
 }
 

@@ -37,6 +37,7 @@
         [self.layer setCornerRadius:7.0f];
         [self.layer setMasksToBounds:YES];
         [self.layer setBorderWidth:2];
+        [self.layer setBorderColor:[UICOLOR_HW_YELLOW_BODER CGColor]];
 
         // this changes the color at button press
         [self addTarget:self action:@selector(nextColor) forControlEvents:UIControlEventTouchUpInside];

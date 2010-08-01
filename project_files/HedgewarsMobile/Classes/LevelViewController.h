@@ -11,7 +11,7 @@
 
 @interface LevelViewController : UITableViewController {
     NSDictionary *teamDictionary;
-    
+
     NSArray *levelArray;
     NSArray *levelSprites;
     NSIndexPath *lastIndexPath;

@@ -297,7 +297,7 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        cell.textLabel.textColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1 ];
+        cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
     }
 
     if (self.segmentedControl.selectedSegmentIndex != 1) {
@@ -312,11 +312,14 @@
         cell.imageView.image = nil;
     }
 
-    if (row == [self.lastIndexPath row])
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    else
-        cell.accessoryType = UITableViewCellAccessoryNone;
+    if (row == [self.lastIndexPath row]) {
+        UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+        cell.accessoryView = checkbox;
+        [checkbox release];
+    } else
+        cell.accessoryView = nil;
 
+    cell.backgroundColor = [UIColor blackColor];
     return cell;
 }
 
@@ -337,9 +340,11 @@
         }
 
         UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
-        newCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+        newCell.accessoryView = checkbox;
+        [checkbox release];
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:self.lastIndexPath];
-        oldCell.accessoryType = UITableViewCellAccessoryNone;
+        oldCell.accessoryView = nil;
 
         self.lastIndexPath = indexPath;
         [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
@@ -515,7 +520,6 @@
     [array release];
     self.mapArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
 
-    self.tableView.rowHeight = 42;
     busy = NO;
 
     // draw a white background
@@ -527,7 +531,8 @@
 
     // on slower device we show directly the static map
     NSString *modelId = modelType();
-    if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])
+    //if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])
+    if (1)
         self.segmentedControl.selectedSegmentIndex = 1;
     else
         self.segmentedControl.selectedSegmentIndex = 0;
@@ -541,6 +546,14 @@
 
     oldValue = 5;
     oldPage = 0;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [self.tableView setBackgroundView:nil];
+        self.view.backgroundColor = [UIColor clearColor];
+        self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.tableView.rowHeight = 45;
+    }
 }
 
 -(void) viewDidAppear:(BOOL) animated {

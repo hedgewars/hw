@@ -14,7 +14,7 @@
     NSInteger oldValue;  //slider
     NSInteger oldPage;   //segmented control
     BOOL busy;
-    
+
     // objects read (mostly) by parent view
     NSInteger maxHogs;
     NSString *seedCommand;
@@ -23,7 +23,7 @@
     NSString *mazeSizeCommand;
     NSString *themeCommand;
     NSString *staticMapCommand;
-   
+
     // various widgets in the view
     UIButton *previewButton;
     UITableView *tableView;
@@ -31,7 +31,7 @@
     UILabel *sizeLabel;
     UISegmentedControl *segmentedControl;
     UISlider *slider;
-    
+
     // internal objects
     NSIndexPath *lastIndexPath;
     NSArray *themeArray;

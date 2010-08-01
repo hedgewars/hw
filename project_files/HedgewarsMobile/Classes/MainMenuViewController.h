@@ -10,16 +10,19 @@
 
 @class SplitViewRootController;
 @class GameConfigViewController;
+@class AboutViewController;
 
 @interface MainMenuViewController : UIViewController {
     UILabel *versionLabel;
     GameConfigViewController *gameConfigViewController;
     SplitViewRootController *settingsViewController;
+    AboutViewController *aboutViewController;
 }
 
 @property (nonatomic,retain) IBOutlet UILabel *versionLabel;
 @property (nonatomic,retain) GameConfigViewController *gameConfigViewController;
 @property (nonatomic,retain) SplitViewRootController *settingsViewController;
+@property (nonatomic,retain) AboutViewController *aboutViewController;
 
 -(IBAction) switchViews:(id)sender;
 

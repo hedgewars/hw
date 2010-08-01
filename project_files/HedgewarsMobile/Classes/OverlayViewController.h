@@ -19,12 +19,12 @@
     UIPopoverController *popoverController; // iPad only
     InGameMenuViewController *popupMenu;
     BOOL isPopoverVisible;
-    
+
     // ths touch section
     CGFloat initialDistanceForPinching;
     CGPoint startingPoint;
     BOOL isSegmentVisible;
-    
+
     // the sdl window underneath
     SDL_Window *sdlwindow;
 }

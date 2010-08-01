@@ -18,13 +18,13 @@
 
 @interface SingleTeamViewController : UITableViewController <EditableCellViewDelegate> {
     NSMutableDictionary *teamDictionary;
-    
+
     NSString *teamName;
     UIImage *normalHogSprite;
-    
+
     NSArray *secondaryItems;
     BOOL isWriteNeeded;
-    
+
     HogHatViewController *hogHatViewController;
     GravesViewController *gravesViewController;
     VoicesViewController *voicesViewController;

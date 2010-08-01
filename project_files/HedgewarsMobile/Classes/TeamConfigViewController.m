@@ -26,6 +26,13 @@
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
     isFirstLoad = YES;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [self.tableView setBackgroundView:nil];
+        self.view.backgroundColor = [UIColor clearColor];
+        self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
+    }
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 -(void) viewWillAppear:(BOOL)animated {
@@ -74,13 +81,6 @@
         return [listOfTeams count];
 }
 
--(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0)
-        return NSLocalizedString(@"Playing Teams",@"");
-    else
-        return NSLocalizedString(@"Available Teams",@"");
-}
-
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier0 = @"Cell0";
@@ -106,7 +106,8 @@
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12+88+7+36+7, 10, 250, 25)];
             label.textAlignment = UITextAlignmentLeft;
             label.backgroundColor = [UIColor clearColor];
-            label.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize] + 2];
+            label.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+            label.textColor = UICOLOR_HW_YELLOW_TEXT;
             label.tag = LABEL_TAG;
             [cell.contentView addSubview:label];
             [label release];
@@ -124,23 +125,48 @@
         SquareButtonView *squareButton = (SquareButtonView *)[cell viewWithTag:SQUAREBUTTON_TAG];
         [squareButton selectColor:[[selectedRow objectForKey:@"color"] intValue]];
         squareButton.ownerDictionary = selectedRow;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            cellLabel.textColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1];
-        }
     } else {
         cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
         if (cell == nil)
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
 
         cell.textLabel.text = [[[listOfTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            cell.textLabel.textColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1 ];
-        }
     }
 
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+        cell.backgroundColor = [UIColor blackColor];
+    }
+    
     return cell;
 }
 
+-(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 40.0;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *fileToLoad;
+    if (section == 0) 
+        fileToLoad = @"PlayingTeamsLabel.png";
+    else
+        fileToLoad = @"AvailableTeamsLabel.png";
+    
+    UIImage *img = [[UIImage alloc] initWithContentsOfFile:fileToLoad];
+    UIImageView *imgView = [[[UIImageView alloc] initWithImage:img] autorelease];
+    [img release];
+
+    return imgView;
+}
+
+/*
+-(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 0)
+        return NSLocalizedString(@"Playing Teams",@"");
+    else
+        return NSLocalizedString(@"Available Teams",@"");
+}
+*/
 
 #pragma mark -
 #pragma mark Table view delegate

@@ -20,7 +20,7 @@
     UILabel *titleLabel;
     NSInteger minimumCharacters;
     NSInteger maximumCharacters;
-    
+
 @private
     NSString *oldValue;
 }

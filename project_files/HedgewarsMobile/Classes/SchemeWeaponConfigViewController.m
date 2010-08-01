@@ -30,7 +30,7 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [self.tableView setBackgroundView:nil];
         self.view.backgroundColor = [UIColor clearColor];
-        self.tableView.separatorColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1];
+        self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
     }
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
@@ -77,23 +77,57 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
-    cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.accessoryView = nil;
     if ([indexPath section] == 0) {
         cell.textLabel.text = [[self.listOfSchemes objectAtIndex:row] stringByDeletingPathExtension];
         if ([[self.listOfSchemes objectAtIndex:row] isEqualToString:self.selectedScheme]) {
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+            cell.accessoryView = checkbox;
+            [checkbox release];
             self.lastIndexPath_sc = indexPath;
         }
     } else {
         cell.textLabel.text = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension];
         if ([[self.listOfWeapons objectAtIndex:row] isEqualToString:self.selectedWeapon]) {
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+            cell.accessoryView = checkbox;
+            [checkbox release];
             self.lastIndexPath_we = indexPath;
         }
     }
+    
+    cell.backgroundColor = [UIColor blackColor];
+    cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
     return cell;
 }
 
+-(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 40.0;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *fileToLoad;
+    if (section == 0) 
+        fileToLoad = @"SchemesLabel.png";
+    else
+        fileToLoad = @"WeaponsLabel.png";
+    
+    UIImage *img = [[UIImage alloc] initWithContentsOfFile:fileToLoad];
+    UIImageView *imgView = [[[UIImageView alloc] initWithImage:img] autorelease];
+    [img release];
+
+    return imgView;
+}
+
+/*
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger) section {
+    if (section == 0) {
+        return NSLocalizedString(@"Schemes",@"");
+    } else {
+        return NSLocalizedString(@"Weapons",@"");;
+    }
+}
+*/
 
 #pragma mark -
 #pragma mark Table view delegate
@@ -110,9 +144,11 @@
     if (newRow != oldRow) {
         //TODO: this code works only for a single section table
         UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
-        newCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+        newCell.accessoryView = checkbox;
+        [checkbox release];
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
-        oldCell.accessoryType = UITableViewCellAccessoryNone;
+        oldCell.accessoryView = nil;
 
         if ([indexPath section] == 0) {
             self.lastIndexPath_sc = indexPath;
@@ -125,14 +161,6 @@
         [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger) section {
-    if (section == 0) {
-        return NSLocalizedString(@"Schemes",@"");
-    } else {
-        return NSLocalizedString(@"Weapons",@"");;
-    }
 }
 
 #pragma mark -

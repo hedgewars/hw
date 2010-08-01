@@ -12,10 +12,10 @@
 
 @interface SingleWeaponViewController : UITableViewController <EditableCellViewDelegate, WeaponButtonControllerDelegate> {
     NSString *weaponName;
-    
+
     UIImage *ammoStoreImage;
     NSArray *ammoNames;
-    
+
     char *quantity;
     char *probability;
     char *delay;

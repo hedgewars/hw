@@ -198,17 +198,17 @@
         if (mapConfigViewController == nil)
             mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
         if (teamConfigViewController == nil)
-            teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStylePlain];
-        teamConfigViewController.view.frame = CGRectMake(3, 224, 300, 472);
+            teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        teamConfigViewController.view.frame = CGRectMake(10, 225, 300, 470);
         teamConfigViewController.view.backgroundColor = [UIColor clearColor];
         [mapConfigViewController.view addSubview:teamConfigViewController.view];
         if (schemeWeaponConfigViewController == nil)
             schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        schemeWeaponConfigViewController.view.frame = CGRectMake(362, 224, 300, 472);
+        schemeWeaponConfigViewController.view.frame = CGRectMake(362, 230, 300, 470);
         [mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
         for (UIView *oneView in self.view.subviews) {
             if ([oneView isMemberOfClass:[UIToolbar class]]) {
-                [[oneView viewWithTag:12345] setHidden:YES];
+                [oneView setHidden:YES];
                 break;
             }
         }

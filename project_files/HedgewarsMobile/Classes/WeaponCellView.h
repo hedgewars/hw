@@ -18,18 +18,18 @@
     id<WeaponButtonControllerDelegate> delegate;
     UILabel *weaponName;
     UIImageView *weaponIcon;
-    
+
     UISlider *initialQt;
     UISlider *probabilityQt;
     UISlider *delayQt;
     UISlider *crateQt;
-    
+
 @private
     UIImageView *initialImg;
     UIImageView *probabImg;
     UIImageView *delayImg;
     UIImageView *crateImg;
-    
+
     UILabel *initialLab;
     UILabel *probLab;
     UILabel *delLab;
@@ -40,7 +40,7 @@
 
 @property (nonatomic,retain) UILabel *weaponName;
 @property (nonatomic,retain) UIImageView *weaponIcon;
-    
+
 @property (nonatomic,retain) UISlider *initialQt;
 @property (nonatomic,retain) UISlider *probabilityQt;
 @property (nonatomic,retain) UISlider *delayQt;

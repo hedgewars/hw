@@ -11,7 +11,7 @@
 
 @interface VoicesViewController : UITableViewController {
     NSMutableDictionary *teamDictionary;
-    
+
     NSArray *voiceArray;
     NSIndexPath *lastIndexPath;
 

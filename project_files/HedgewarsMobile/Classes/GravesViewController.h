@@ -11,7 +11,7 @@
 
 @interface GravesViewController : UITableViewController {
     NSMutableDictionary *teamDictionary;
-    
+
     NSArray *graveArray;
     NSIndexPath *lastIndexPath;
 }

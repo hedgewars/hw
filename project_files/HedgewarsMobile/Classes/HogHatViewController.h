@@ -12,7 +12,7 @@
 @interface HogHatViewController : UITableViewController {
     NSDictionary *teamDictionary;
     NSInteger selectedHog;
-    
+
     NSArray *hatArray;
     UIImage *normalHogSprite;
     NSIndexPath *lastIndexPath;

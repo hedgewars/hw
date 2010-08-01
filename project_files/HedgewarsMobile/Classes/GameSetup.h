@@ -12,7 +12,7 @@
 @interface GameSetup : NSObject {
     NSDictionary *systemSettings;
     NSDictionary *gameConfig;
-    
+
     NSInteger ipcPort;  // Port on which engine will listen
     TCPsocket csd;      // Client socket descriptor
 }
