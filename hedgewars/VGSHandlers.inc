@@ -555,7 +555,7 @@ Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
 
 if round(Gear^.Y) > cWaterLine then
     begin
-    DeleteVisualGear(Gear);
     AddVisualGear(round(Gear^.X), round(Gear^.Y), vgtDroplet);
+    DeleteVisualGear(Gear);
     end
 end;
