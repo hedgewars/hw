@@ -37,7 +37,6 @@
 		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
 		61536DF411CEAE7100D87A7E /* GameConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */; };
 		6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */; };
-		6165920C11CA9BA200D6E256 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591DF11CA9BA200D6E256 /* DetailViewController.m */; };
 		6165920D11CA9BA200D6E256 /* FlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E111CA9BA200D6E256 /* FlagsViewController.m */; };
 		6165920E11CA9BA200D6E256 /* FortsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E311CA9BA200D6E256 /* FortsViewController.m */; };
 		6165920F11CA9BA200D6E256 /* GameConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E511CA9BA200D6E256 /* GameConfigViewController.m */; };
@@ -115,7 +114,6 @@
 		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
 		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
-		61C3255B1179A384001E70B1 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3255A1179A384001E70B1 /* OpenAL.framework */; };
 		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
 		61EBA62911DFF2BC0048B68A /* bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62711DFF2BC0048B68A /* bricks.png */; };
 		61EBA62A11DFF2BC0048B68A /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62811DFF2BC0048B68A /* title.png */; };
@@ -696,8 +694,6 @@
 		614E333D11DE9A93009DBA4E /* VGSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = VGSHandlers.inc; path = ../../hedgewars/VGSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		6163EE7C11CC2600001C0453 /* SingleWeaponViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleWeaponViewController.h; sourceTree = "<group>"; };
 		6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleWeaponViewController.m; sourceTree = "<group>"; };
-		616591DE11CA9BA200D6E256 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		616591DF11CA9BA200D6E256 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		616591E011CA9BA200D6E256 /* FlagsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlagsViewController.h; sourceTree = "<group>"; };
 		616591E111CA9BA200D6E256 /* FlagsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlagsViewController.m; sourceTree = "<group>"; };
 		616591E211CA9BA200D6E256 /* FortsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FortsViewController.h; sourceTree = "<group>"; };
@@ -812,7 +808,6 @@
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableCellView.h; sourceTree = "<group>"; };
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableCellView.m; sourceTree = "<group>"; };
-		61C3251D1179A300001E70B1 /* libopenalbridge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libopenalbridge.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		61C3255A1179A384001E70B1 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
 		61EBA62711DFF2BC0048B68A /* bricks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bricks.png; path = "Resources/Frontend-iPad/bricks.png"; sourceTree = "<group>"; };
@@ -878,14 +873,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		61C3251B1179A300001E70B1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				61C3255B1179A384001E70B1 /* OpenAL.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -910,7 +897,6 @@
 			children = (
 				1D6058910D05DD3D006BFB54 /* Hedgewars.app */,
 				928301170F10CAFC00CC5A3C /* libfpc.a */,
-				61C3251D1179A300001E70B1 /* libopenalbridge.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1083,8 +1069,6 @@
 				6165920311CA9BA200D6E256 /* SplitViewRootController.m */,
 				616591F411CA9BA200D6E256 /* MasterViewController.h */,
 				616591F511CA9BA200D6E256 /* MasterViewController.m */,
-				616591DE11CA9BA200D6E256 /* DetailViewController.h */,
-				616591DF11CA9BA200D6E256 /* DetailViewController.m */,
 				6163EE4E11CC248D001C0453 /* First Level */,
 				6163EE4F11CC2497001C0453 /* Second Level */,
 				6163EE5011CC24A1001C0453 /* Third Level */,
@@ -1331,16 +1315,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		61C325191179A300001E70B1 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
 		1D6058900D05DD3D006BFB54 /* Hedgewars */ = {
 			isa = PBXNativeTarget;
@@ -1360,23 +1334,6 @@
 			productName = HedgewarsMobile;
 			productReference = 1D6058910D05DD3D006BFB54 /* Hedgewars.app */;
 			productType = "com.apple.product-type.application";
-		};
-		61C3251C1179A300001E70B1 /* openalbridge */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 61C325351179A314001E70B1 /* Build configuration list for PBXNativeTarget "openalbridge" */;
-			buildPhases = (
-				61C325191179A300001E70B1 /* Headers */,
-				61C3251A1179A300001E70B1 /* Sources */,
-				61C3251B1179A300001E70B1 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = openalbridge;
-			productName = openalbridge;
-			productReference = 61C3251D1179A300001E70B1 /* libopenalbridge.a */;
-			productType = "com.apple.product-type.library.static";
 		};
 		928301160F10CAFC00CC5A3C /* fpc */ = {
 			isa = PBXNativeTarget;
@@ -1441,7 +1398,6 @@
 			targets = (
 				1D6058900D05DD3D006BFB54 /* Hedgewars */,
 				928301160F10CAFC00CC5A3C /* fpc */,
-				61C3251C1179A300001E70B1 /* openalbridge */,
 				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
 			);
 		};
@@ -2092,7 +2048,6 @@
 				6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */,
 				6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */,
 				611F4D4B11B27A9900F9759A /* uScript.pas in Sources */,
-				6165920C11CA9BA200D6E256 /* DetailViewController.m in Sources */,
 				6165920D11CA9BA200D6E256 /* FlagsViewController.m in Sources */,
 				6165920E11CA9BA200D6E256 /* FortsViewController.m in Sources */,
 				6165920F11CA9BA200D6E256 /* GameConfigViewController.m in Sources */,
@@ -2129,13 +2084,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		61C3251A1179A300001E70B1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -2154,6 +2102,8 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
@@ -2161,6 +2111,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lgcov",
 				);
 				PRODUCT_NAME = Hedgewars;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2269,30 +2223,6 @@
 			};
 			name = Distribution;
 		};
-		6137064E117B1CB3004EE44A /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
-					"\"$(SRCROOT)/../../../Library/lpng141\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
-					"\"$(SRCROOT)/../../../Library/libvorbis-1.3.1/include\"",
-					"\"$(SRCROOT)/../../../Library/libogg-1.2.0/include\"",
-				);
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = openalbridge;
-				ZERO_LINK = NO;
-			};
-			name = Distribution;
-		};
 		6137064F117B1CB3004EE44A /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2383,29 +2313,6 @@
 			};
 			name = Valgrind;
 		};
-		616442A011B5CDE500B9A6F3 /* Valgrind */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
-					"\"$(SRCROOT)/../../../Library/lpng141\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
-					"\"$(SRCROOT)/../../../Library/libvorbis-1.3.1/include\"",
-					"\"$(SRCROOT)/../../../Library/libogg-1.2.0/include\"",
-				);
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = openalbridge;
-			};
-			name = Valgrind;
-		};
 		616442A111B5CDE500B9A6F3 /* Valgrind */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2433,53 +2340,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = UpdateDataFolder;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		61C3251E1179A300001E70B1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
-					"\"$(SRCROOT)/../../../Library/lpng141\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
-					"\"$(SRCROOT)/../../../Library/libvorbis-1.3.1/include\"",
-					"\"$(SRCROOT)/../../../Library/libogg-1.2.0/include\"",
-				);
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = openalbridge;
-			};
-			name = Debug;
-		};
-		61C3251F1179A300001E70B1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
-					"\"$(SRCROOT)/../../../Library/lpng141\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
-					"\"$(SRCROOT)/../../../Library/libvorbis-1.3.1/include\"",
-					"\"$(SRCROOT)/../../../Library/libogg-1.2.0/include\"",
-				);
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = openalbridge;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -2619,17 +2479,6 @@
 				6179928D114AE0C800BA94A9 /* Release */,
 				6137064F117B1CB3004EE44A /* Distribution */,
 				616442A111B5CDE500B9A6F3 /* Valgrind */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		61C325351179A314001E70B1 /* Build configuration list for PBXNativeTarget "openalbridge" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				61C3251E1179A300001E70B1 /* Debug */,
-				61C3251F1179A300001E70B1 /* Release */,
-				6137064E117B1CB3004EE44A /* Distribution */,
-				616442A011B5CDE500B9A6F3 /* Valgrind */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

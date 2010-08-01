@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class DetailViewController;
+@class MasterViewController;
 
 @interface SplitViewRootController: UIViewController {
-    DetailViewController *detailViewController;
+    MasterViewController *activeController;
 }
+
+@property (nonatomic,retain) MasterViewController *activeController;
 
 @end

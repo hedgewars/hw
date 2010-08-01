@@ -16,7 +16,7 @@
 @class SchemeSettingsViewController;
 
 @interface MasterViewController : UITableViewController {
-    DetailViewController *detailViewController;
+    MasterViewController *targetController;
     NSArray *controllerNames;
     NSIndexPath *lastIndexPath;
     GeneralSettingsViewController *generalSettingsViewController;
@@ -25,7 +25,7 @@
     SchemeSettingsViewController *schemeSettingsViewController;
 }
 
-@property (nonatomic, retain) DetailViewController *detailViewController;
+@property (nonatomic, retain) MasterViewController *targetController;
 @property (nonatomic, retain) NSArray *controllerNames;
 @property (nonatomic, retain) NSIndexPath *lastIndexPath;
 

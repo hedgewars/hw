@@ -15,7 +15,7 @@
 
 @interface DetailViewController : UITableViewController <UISplitViewControllerDelegate, UIPopoverControllerDelegate> {
     NSArray *controllerNames;
-    
+
     GeneralSettingsViewController *generalSettingsViewController;
     TeamSettingsViewController *teamSettingsViewController;
     WeaponSettingsViewController *weaponSettingsViewController;
@@ -26,7 +26,7 @@
 // used in iphone version
 -(IBAction) dismissSplitView;
 
-@property (nonatomic, retain) NSArray *controllerNames;
+@property (nonatomic,retain) NSArray *controllerNames;
 @property (nonatomic,retain) UIPopoverController *popoverController;
 
 @end

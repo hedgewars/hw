@@ -13,11 +13,14 @@
 
 @interface MainMenuViewController : UIViewController {
     UILabel *versionLabel;
-    SplitViewRootController *settingsViewController;
     GameConfigViewController *gameConfigViewController;
+    SplitViewRootController *settingsViewController;
 }
 
 @property (nonatomic,retain) IBOutlet UILabel *versionLabel;
+@property (nonatomic,retain) GameConfigViewController *gameConfigViewController;
+@property (nonatomic,retain) SplitViewRootController *settingsViewController;
 
 -(IBAction) switchViews:(id)sender;
+
 @end

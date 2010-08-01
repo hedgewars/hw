@@ -15,15 +15,11 @@
 #import "CommodityFunctions.h"
 
 @implementation DetailViewController
-@synthesize controllerNames,popoverController;
+@synthesize controllerNames, popoverController;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
-}
-
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
-    self.view.frame = CGRectMake(0, 0, 1024, 1024);
 }
 
 -(void) viewDidLoad {

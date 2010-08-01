@@ -12,7 +12,7 @@
 #import "CommodityFunctions.h"
 
 @implementation SplitViewRootController
-
+@synthesize activeController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -22,52 +22,56 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
-    if (detailViewController.view.superview == nil)
-        detailViewController = nil;
+    if (self.activeController.view.superview == nil)
+        self.activeController = nil;
     MSG_MEMCLEAN();
 }
 
 // load the view programmatically; we need a splitViewController that handles a MasterViewController
 // (which is just a UITableViewController) and a DetailViewController where we present options
 -(void) viewDidLoad {
-    detailViewController = [[DetailViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    UINavigationController *detailedNavController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
-    [detailViewController release];
-
     CGRect rect = [[UIScreen mainScreen] bounds];
+    self.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
+
+    if (self.activeController == nil) {
+        MasterViewController *rightController = [[MasterViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        rightController.targetController = nil;
+        self.activeController = rightController;
+        [rightController release];
+    }
+    UINavigationController *rightNavController = [[UINavigationController alloc] initWithRootViewController:self.activeController];
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        self.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
+        MasterViewController *leftController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
+        leftController.targetController = self.activeController;
+        UINavigationController *leftNavController = [[UINavigationController alloc] initWithRootViewController:leftController];
+        [leftController release];
 
         UISplitViewController *splitViewRootController = [[UISplitViewController alloc] init];
+        splitViewRootController.delegate = nil;
         splitViewRootController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
-
-        MasterViewController *masterViewController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
-        UINavigationController *mainNavController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
-        [masterViewController release];
-
-        splitViewRootController.delegate = detailViewController;
-        masterViewController.detailViewController = detailViewController;
-        splitViewRootController.viewControllers = [NSArray arrayWithObjects: mainNavController, detailedNavController, nil];
-        [mainNavController release];
-        [detailedNavController release];
+        splitViewRootController.viewControllers = [NSArray arrayWithObjects: leftNavController, rightNavController, nil];
+        [leftNavController release];
+        [rightNavController release];
 
         // add view to main controller
         [self.view addSubview:splitViewRootController.view];
     } else {
-        [self.view addSubview:detailedNavController.view];
+        rightNavController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
+        [self.view addSubview:rightNavController.view];
     }
 
     [super viewDidLoad];
 }
 
 -(void) viewDidUnload {
-    detailViewController = nil;
+    self.activeController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
 -(void) dealloc {
-    [detailViewController release];
+    [self.activeController release];
     [super dealloc];
 }
 
@@ -76,22 +80,22 @@
 // see http://davidebenini.it/2009/01/03/viewwillappear-not-being-called-inside-a-uinavigationcontroller/
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [detailViewController.navigationController viewWillAppear:animated];
+    [self.activeController.navigationController viewWillAppear:animated];
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [detailViewController.navigationController viewWillDisappear:animated];
+    [self.activeController.navigationController viewWillDisappear:animated];
 }
 
 -(void) viewDidAppear:(BOOL)animated {
     [super viewDidLoad];
-    [detailViewController.navigationController viewDidAppear:animated];
+    [self.activeController.navigationController viewDidAppear:animated];
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
     [super viewDidUnload];
-    [detailViewController.navigationController viewDidDisappear:animated];
+    [self.activeController.navigationController viewDidDisappear:animated];
 }
 
 

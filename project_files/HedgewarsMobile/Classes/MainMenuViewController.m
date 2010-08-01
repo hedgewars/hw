@@ -15,7 +15,7 @@
 #import "SDL_mixer.h"
 
 @implementation MainMenuViewController
-@synthesize versionLabel;
+@synthesize versionLabel, gameConfigViewController, settingsViewController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -24,10 +24,10 @@
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    if (settingsViewController.view.superview == nil)
-        settingsViewController = nil;
-    if (gameConfigViewController.view.superview == nil)
-        gameConfigViewController = nil;
+    if (self.settingsViewController.view.superview == nil)
+        self.settingsViewController = nil;
+    if (self.gameConfigViewController.view.superview == nil)
+        self.gameConfigViewController = nil;
     MSG_MEMCLEAN();
 }
 
@@ -118,17 +118,23 @@
 
     switch (button.tag) {
         case 0:
-            gameConfigViewController = [[GameConfigViewController alloc] initWithNibName:@"GameConfigViewController" bundle:nil];
-
-            [self presentModalViewController:gameConfigViewController animated:YES];
-            break;
-        case 2:
-            if (nil == settingsViewController) {
-                settingsViewController = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
-                settingsViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            if (nil == self.gameConfigViewController) {
+                GameConfigViewController *gcvc = [[GameConfigViewController alloc] initWithNibName:@"GameConfigViewController" bundle:nil];
+                self.gameConfigViewController = gcvc;
+                [gcvc release];
             }
 
-            [self presentModalViewController:settingsViewController animated:YES];
+            [self presentModalViewController:self.gameConfigViewController animated:YES];
+            break;
+        case 2:
+            if (nil == self.settingsViewController) {
+                SplitViewRootController *svrc = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
+                svrc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                self.settingsViewController = svrc;
+                [svrc release];
+            }
+
+            [self presentModalViewController:self.settingsViewController animated:YES];
             break;
         case 3:
             debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
@@ -162,11 +168,10 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-
 -(void) viewDidUnload {
     self.versionLabel = nil;
-    gameConfigViewController = nil;
-    settingsViewController = nil;
+    self.gameConfigViewController = nil;
+    self.settingsViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }

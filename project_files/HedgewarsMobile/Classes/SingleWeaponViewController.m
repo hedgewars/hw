@@ -214,6 +214,22 @@
         return 120;
 }
 
+-(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+    NSString *sectionTitle = nil;
+    switch (section) {
+        case 0:
+            sectionTitle = NSLocalizedString(@"Weaponset Name", @"");
+            break;
+        case 1:
+            sectionTitle = NSLocalizedString(@"Weapon Ammuntions", @"");
+            break;
+        default:
+            DLog(@"nope");
+            break;
+    }
+    return sectionTitle;
+}
+
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

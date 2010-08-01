@@ -15,7 +15,7 @@
 #import "CommodityFunctions.h"
 
 @implementation MasterViewController
-@synthesize detailViewController, controllerNames, lastIndexPath;
+@synthesize targetController, controllerNames, lastIndexPath;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -29,20 +29,29 @@
     [super viewDidLoad];
 
     // the list of selectable controllers
-    controllerNames = [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""),
-                                                       NSLocalizedString(@"Teams",@""),
-                                                       NSLocalizedString(@"Weapons",@""),
-                                                       NSLocalizedString(@"Schemes",@""),
-                                                       nil];
-    // the "Done" button on top left
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                          target:self
-                                                                                          action:@selector(dismissSplitView)];
+    NSArray *array = [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""),
+                                                      NSLocalizedString(@"Teams",@""),
+                                                      NSLocalizedString(@"Weapons",@""),
+                                                      NSLocalizedString(@"Schemes",@""),
+                                                      nil];
+    self.controllerNames = array;
+    [array release];
+
+    // targetControllers tells whether we're on the right or left side of the splitview -- on iphone we only use the right side
+    if (targetController == nil && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (nil == generalSettingsViewController)
+            generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        generalSettingsViewController.navigationItem.hidesBackButton = YES;
+        [self.navigationController pushViewController:generalSettingsViewController animated:NO];
+    } else {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                              target:self
+                                                                                              action:@selector(dismissSplitView)];
+    }
 }
 
 #pragma mark -
 #pragma mark Table view data source
-
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -58,8 +67,16 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        cell.textLabel.text = [controllerNames objectAtIndex:[indexPath row]];
     }
+
+    cell.textLabel.text = [controllerNames objectAtIndex:[indexPath row]];
+    if (nil == targetController) {
+        UIImage *icon = [[UIImage alloc] initWithContentsOfFile:@"Icon-Small.png"];
+        cell.imageView.image = icon;
+        [icon release];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    } else
+        cell.accessoryType = UITableViewCellAccessoryNone;
 
     return cell;
 }
@@ -73,7 +90,7 @@
 
     if (newRow != oldRow) {
         [self.tableView deselectRowAtIndexPath:lastIndexPath animated:YES];
-        [detailViewController.navigationController popToRootViewControllerAnimated:NO];
+        [targetController.navigationController popToRootViewControllerAnimated:NO];
 
         switch (newRow) {
             case 0:
@@ -98,11 +115,17 @@
                 break;
         }
 
-        nextController.navigationItem.hidesBackButton = YES;
         nextController.title = [controllerNames objectAtIndex:newRow];
-        [detailViewController.navigationController pushViewController:nextController animated:NO];
         self.lastIndexPath = indexPath;
         [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+
+        if (nil == targetController) {
+            nextController.navigationItem.hidesBackButton = NO;
+            [self.navigationController pushViewController:nextController animated:YES];
+        } else {
+            nextController.navigationItem.hidesBackButton = YES;
+            [targetController.navigationController pushViewController:nextController animated:NO];
+        }
     }
 }
 
@@ -125,7 +148,7 @@
 }
 
 -(void) viewDidUnload {
-    self.detailViewController = nil;
+    self.targetController = nil;
     self.controllerNames = nil;
     self.lastIndexPath = nil;
     generalSettingsViewController = nil;
@@ -137,8 +160,8 @@
 }
 
 -(void) dealloc {
+    targetController = nil;
     [controllerNames release];
-    [detailViewController release];
     [lastIndexPath release];
     [generalSettingsViewController release];
     [teamSettingsViewController release];

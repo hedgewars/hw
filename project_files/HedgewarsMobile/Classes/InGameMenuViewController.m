@@ -27,7 +27,7 @@
 
 -(void) viewDidLoad {
     NSArray *array = [[NSArray alloc] initWithObjects:
-                      NSLocalizedString(@"Return to Game", @""),
+                      NSLocalizedString(@"Show Help", @""),
                       NSLocalizedString(@"Chat", @""),
                       NSLocalizedString(@"End Game", @""),
                       nil];

@@ -718,6 +718,7 @@ function  SDL_SelectMouse(index: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRelativeMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetNumMice: LongInt; cdecl; external SDLLibName;
 function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): boolean; cdecl; external SDLLibName;
+function  SDL_RenderReadPixels(rect: PSDL_Rect; format: LongInt; pixels: pointer; pitch: LongInt): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
 
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
