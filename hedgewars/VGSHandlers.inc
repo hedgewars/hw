@@ -114,9 +114,11 @@ begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
 
 Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
-Gear^.dY:= Gear^.dY + cGravityf * Steps;
+Gear^.dY:= Gear^.dY + cGravityf * Steps / 2;
 
-Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
+Gear^.Angle:= Gear^.Angle + (Gear^.Frame + 1) * Steps / 10;
+while Gear^.Angle > cMaxAngle do
+    Gear^.Angle:= Gear^.Angle - cMaxAngle;
 
 if Gear^.FrameTicks <= Steps then
     DeleteVisualGear(Gear)

@@ -307,13 +307,12 @@ vgtBigExplosion: begin
                 t:= random(1024);
                 sp:= 0.001 * (random(85) + 47);
                 dx:= AngleSin(t).QWordValue/4294967296 * sp;
-                dy:= AngleCos(t).QWordValue/4294967296 * sp;
+                dy:= AngleCos(t).QWordValue/4294967296 * sp * -2;
                 if random(2) = 0 then dx := -dx;
-                (*if random(2) = 0 then*) dy := -2 * dy;
                 end;
       vgtNote: begin
                 dx:= 0.005 * (random(15) + 10);
-                dy:= 0.001 * (random(40) + 20);
+                dy:= -0.001 * (random(40) + 20);
                 if random(2) = 0 then dx := -dx;
                 Frame:= random(4);
                 FrameTicks:= random(2000) + 1500;
