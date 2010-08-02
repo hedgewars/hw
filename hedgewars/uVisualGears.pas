@@ -116,7 +116,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepSmokeTrace,
             @doStepExplosion,
             @doStepBigExplosion,
-            @doStepChunk
+            @doStepChunk,
+            @doStepNote
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0): PVisualGear;
@@ -139,7 +140,8 @@ if ((cReducedQuality and rqFancyBoom) <> 0) and
     vgtHealthTag,
     vgtExplosion,
     vgtSmokeTrace,
-    vgtEvilTrace]) then
+    vgtEvilTrace,
+    vgtNote]) then
     begin
       AddVisualGear:= nil;
       exit
@@ -305,9 +307,15 @@ vgtBigExplosion: begin
                 t:= random(1024);
                 sp:= 0.001 * (random(85) + 47);
                 dx:= AngleSin(t).QWordValue/4294967296 * sp;
-                dy:= AngleCos(t).QWordValue/4294967296 * sp;
+                dy:= AngleCos(t).QWordValue/4294967296 * sp * -2;
                 if random(2) = 0 then dx := -dx;
-                (*if random(2) = 0 then*) dy := -2 * dy;
+                end;
+      vgtNote: begin
+                dx:= 0.005 * (random(15) + 10);
+                dy:= -0.001 * (random(40) + 20);
+                if random(2) = 0 then dx := -dx;
+                Frame:= random(4);
+                FrameTicks:= random(2000) + 1500;
                 end;
         end;
 
@@ -466,6 +474,7 @@ case Layer of
                             DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);
                             end;
                 vgtChunk: DrawRotatedF(sprChunk, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                 vgtNote: DrawRotatedF(sprNote, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
             end;
         case Gear^.Kind of
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);

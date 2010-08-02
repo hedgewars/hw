@@ -1436,6 +1436,55 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepSMine(Gear: PGear);
+begin
+    if (Gear^.State and gstMoving) <> 0 then
+    begin
+        if ((Gear^.State and gstCollision) <> 0) and (Gear^.dX < _0_2) and (Gear^.dY < _0_2) then
+        begin
+            Gear^.dX := _0;
+            Gear^.dY := _0
+            // TODO: calc attach dir
+        end
+        else
+            CalcRotationDirAngle(Gear);
+
+        DeleteCI(Gear);
+        doStepFallingGear(Gear);
+        if (Gear^.State and gstMoving) = 0 then
+            AddGearCI(Gear);
+        AllInactive := false
+    end
+    else
+    begin
+        if ((GameTicks and $3F) = 25) then
+            doStepFallingGear(Gear);
+    end;
+
+    if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
+        if ((Gear^.State and gstAttacking) = 0) then
+        begin
+            if ((GameTicks and $1F) = 0) then
+                if CheckGearNear(Gear, gtHedgehog, 46, 32) <> nil then Gear^.State := Gear^.State or
+                                                                                      gstAttacking
+        end
+    else // gstAttacking <> 0
+    begin
+        AllInactive := false;
+        if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick);
+        if Gear^.Timer = 0 then
+        begin
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+            DeleteGear(Gear);
+            exit
+        end;
+        dec(Gear^.Timer);
+    end
+    else // gsttmpFlag = 0
+        if TurnTimeLeft = 0 then Gear^.State := Gear^.State or gsttmpFlag;
+end;
+
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepDynamite(Gear: PGear);
 begin
     doStepFallingGear(Gear);
@@ -3547,6 +3596,7 @@ begin
             7: PlaySound(sndPiano7);
             else PlaySound(sndPiano8);
         end;
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
         CurrentHedgehog^.Gear^.MsgParam := 0;
         CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gm_Slot;
     end;
@@ -3593,6 +3643,8 @@ begin
             doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, 0);
             doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, 0);
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, EXPLAutoSound);
+            for r0:= 0 to 4 do
+                AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
             Gear^.dY := -_1;
             Gear^.Pos := Gear^.Pos + 1;
         end

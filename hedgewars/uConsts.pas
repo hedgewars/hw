@@ -73,7 +73,8 @@ type
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
-            sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk
+            sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
+            sprSMineOff, sprSMineOn, sprHandSMine
             );
 
     // Gears that interact with other Gears and/or Land
@@ -86,7 +87,8 @@ type
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 34
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
-            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower); // 51
+            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
+            gtSMine);
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -94,7 +96,7 @@ type
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
-            vgtBigExplosion, vgtChunk);
+            vgtBigExplosion, vgtChunk, vgtNote);
 
     TGearsType = set of TGearType;
 
@@ -129,7 +131,7 @@ type
             amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun,
-            amPiano, amGasBomb, amSineGun, amFlamethrower);
+            amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine);
 
     THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
 
@@ -183,7 +185,9 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     THogEffect = (heInvulnerable, hePoisoned);
 
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
-const sfMax = 1000;
+const
+    sfMax = 1000;
+    cDefaultParamNum = 16;
 
     // message constants
     errmsgCreateSurface   = 'Error creating SDL surface';
@@ -452,16 +456,6 @@ const sfMax = 1000;
         'Graphics/Flags'                 // ptFlags
     );
 
-var PathPrefix: shortstring = './';
-    Pathz: array[TPathType] of shortstring;
-    CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
-    LAND_WIDTH  :longint;
-    LAND_HEIGHT :longint;
-    LAND_WIDTH_MASK  :longWord;
-    LAND_HEIGHT_MASK :longWord;
-    cMaxCaptions : LongInt;
-
-const
     cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
     cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
 
@@ -799,7 +793,15 @@ const
             (FileName:  'amFlamethrower'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandFlamethrower
             (FileName:  'Chunk'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprChunk
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprChunk
+            (FileName:  'Note'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprNote
+            (FileName:   'SMineOff'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSMineOff
+            (FileName:    'SMineOn'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSMineOn
+            (FileName:  'amSMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprHandSMine
             );
 
     Wavez: array [TWave] of record
@@ -2150,7 +2152,31 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
-            ejectY: -3)
+            ejectY: -3),
+
+// Mine
+            (NameId: sidSMine;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+                Count: 2;
+                InitialCount: 0;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amSMine;
+                AttackVoice: sndLaugh);
+            Slot: 4;
+            TimeAfterTurn: 5000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0)
             );
 
 
@@ -2181,47 +2207,6 @@ const
         alpha : 255
     );
 
-procedure initModule;
-procedure freeModule;
-
 implementation
-uses uMisc;
-
-procedure initModule;
-begin
-    Pathz:= cPathz;
-        {*  REFERENCE
-      4096 -> $FFFFF000
-      2048 -> $FFFFF800
-      1024 -> $FFFFFC00
-       512 -> $FFFFFE00  *}
-    if (cReducedQuality and rqLowRes) <> 0 then
-    begin
-        LAND_WIDTH:= 2048;
-        LAND_HEIGHT:= 1024;
-        LAND_WIDTH_MASK:= $FFFFF800;
-        LAND_HEIGHT_MASK:= $FFFFFC00;
-    end
-    else
-    begin
-        LAND_WIDTH:= 4096;
-        LAND_HEIGHT:= 2048;
-        LAND_WIDTH_MASK:= $FFFFF000;
-        LAND_HEIGHT_MASK:= $FFFFF800
-    end;
-
-{$IFDEF IPHONEOS}
-    if isPhone() then
-        cMaxCaptions:= 3
-    else
-{$ENDIF}
-        cMaxCaptions:= 4;
-
-end;
-
-procedure freeModule;
-begin
-    PathPrefix := './';
-end;
 
 end.

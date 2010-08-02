@@ -398,6 +398,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
             amHellishBomb: DrawRotated(sprHandHellish, hx, hy, hwSign(Gear^.dX), aangle);
             amGasBomb: DrawRotated(sprHandCheese, hx, hy, hwSign(Gear^.dX), aangle);
             amMine: DrawRotated(sprHandMine, hx, hy, hwSign(Gear^.dX), aangle);
+            amSMine: DrawRotated(sprHandSMine, hx, hy, hwSign(Gear^.dX), aangle);
             amSeduction: DrawRotated(sprHandSeduction, hx, hy, hwSign(Gear^.dX), aangle);
             amVampiric: DrawRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
             amRCPlane: begin
@@ -691,6 +692,10 @@ while Gear<>nil do
             gtMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
                            DrawRotated(sprMineOff, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
                        else if Gear^.Health <> 0 then DrawRotated(sprMineOn, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
+                       else DrawRotated(sprMineDead, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+           gtSMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
+                           DrawRotated(sprSMineOff, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
+                       else if Gear^.Health <> 0 then DrawRotated(sprSMineOn, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
                        else DrawRotated(sprMineDead, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
             gtCase: case Gear^.Pos of
                          posCaseAmmo  : begin

@@ -277,21 +277,16 @@ QStringList HWGame::setArguments()
     arguments << QString("%1").arg(ipc_port);
     arguments << (config->vid_Fullscreen() ? "1" : "0");
     arguments << (config->isSoundEnabled() ? "1" : "0");
-#ifdef _WIN32
-    arguments << (config->isSoundHardware() ? "1" : "0");
-#else
-    arguments << "0";
-#endif
-    arguments << (config->isWeaponTooltip() ? "1" : "0");
-    arguments << tr("en.txt");
+    arguments << (config->isMusicEnabled() ? "1" : "0");
     arguments << QString::number(config->volume()); // sound volume
     arguments << QString::number(config->timerInterval());
     arguments << datadir->absolutePath();
     arguments << (config->isShowFPSEnabled() ? "1" : "0");
     arguments << (config->isAltDamageEnabled() ? "1" : "0");
     arguments << config->netNick().toUtf8().toBase64();
-    arguments << (config->isMusicEnabled() ? "1" : "0");
-    arguments << (config->isReducedQuality() ? "1" : "0");
+    arguments << QString::number(config->translateQuality());
+    arguments << tr("en.txt");
+
     return arguments;
 }
 

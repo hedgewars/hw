@@ -71,11 +71,19 @@ var
     TimeTrialStartTime: Longword;
     TimeTrialStopTime : Longword;
 
+    // originally from uConsts
+    Pathz: array[TPathType] of shortstring;
+    CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
+    LAND_WIDTH  :longint;
+    LAND_HEIGHT :longint;
+    LAND_WIDTH_MASK  :longWord;
+    LAND_HEIGHT_MASK :longWord;
+    cMaxCaptions : LongInt;
+
     // init flags
     cScreenWidth    : LongInt = 1024;
     cScreenHeight   : LongInt = 768;
     cBits           : LongInt = 32;
-    cBitsStr        : string[2] = '32';
     //ipcPort is in uIO
     cFullScreen     : boolean = false;
     isSoundEnabled  : boolean = true;
@@ -83,7 +91,7 @@ var
     cLocaleFName    : shortstring = 'en.txt';
     cInitVolume     : LongInt = 50;
     cTimerInterval  : LongInt = 8;
-    //pathPrefix is in uConsts
+    PathPrefix: shortstring = './';
     cShowFPS        : boolean = false;
     cAltDamage      : boolean = true;
     cReducedQuality : LongInt = rqNone;
@@ -672,6 +680,27 @@ end;
 procedure initModule;
 {$IFDEF DEBUGFILE}{$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}{$ENDIF}
 begin
+    Pathz:= cPathz;
+        {*  REFERENCE
+      4096 -> $FFFFF000
+      2048 -> $FFFFF800
+      1024 -> $FFFFFC00
+       512 -> $FFFFFE00  *}
+    if (cReducedQuality and rqLowRes) <> 0 then
+    begin
+        LAND_WIDTH:= 2048;
+        LAND_HEIGHT:= 1024;
+        LAND_WIDTH_MASK:= $FFFFF800;
+        LAND_HEIGHT_MASK:= $FFFFFC00;
+    end
+    else
+    begin
+        LAND_WIDTH:= 4096;
+        LAND_HEIGHT:= 2048;
+        LAND_WIDTH_MASK:= $FFFFF000;
+        LAND_HEIGHT_MASK:= $FFFFF800
+    end;
+
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
     cDrownSpeedf            := 0.06;
     cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
@@ -747,6 +776,13 @@ begin
 
     ScreenFade      := sfNone;
 
+{$IFDEF IPHONEOS}
+    if isPhone() then
+        cMaxCaptions:= 3
+    else
+{$ENDIF}
+        cMaxCaptions:= 4;
+
 {$IFDEF SDL13}
     SDLwindow       := nil;
 {$ENDIF}
@@ -757,7 +793,7 @@ begin
     Rewrite(f);
 {$ELSE}
     if (ParamStr(1) <> '') and (ParamStr(2) <> '') then
-        if (ParamCount <> 3) and (ParamCount <> 18) then
+        if (ParamCount <> 3) and (ParamCount <> cDefaultParamNum) then
         begin
             for i:= 0 to 7 do
             begin
@@ -796,11 +832,10 @@ begin
     close(f);
 {$ENDIF}
 
-    // re-init flags so they'll always contain safe values
+    // re-init flags so they will always contain safe values
     cScreenWidth    := 1024;
     cScreenHeight   := 768;
     cBits           := 32;
-    cBitsStr        := '32';
     //ipcPort is in uIO
     cFullScreen     := false;
     isSoundEnabled  := true;
@@ -808,7 +843,7 @@ begin
     cLocaleFName    := 'en.txt';
     cInitVolume     := 50;
     cTimerInterval  := 8;
-    //pathPrefix is in uConsts
+    PathPrefix := './';
     cShowFPS        := false;
     cAltDamage      := true;
     cReducedQuality := rqNone;
