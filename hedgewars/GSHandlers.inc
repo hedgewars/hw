@@ -1441,31 +1441,15 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepSMine(Gear: PGear);
+procedure doStepSMine(Gear: PGear); forward;
+procedure doStepSMineSticked(Gear: PGear);
 begin
-    if (Gear^.State and gstMoving) <> 0 then
+    if (hwAbs(Gear^.dX) > _0) or (hwAbs(Gear^.dY) > _0) then // moving - "unstick" (better solution?)
     begin
-        if ((Gear^.State and gstCollision) <> 0) and (Gear^.dX < _0_2) and (Gear^.dY < _0_2) then
-        begin
-            Gear^.dX := _0;
-            Gear^.dY := _0
-            // TODO: calc attach dir
-        end
-        else
-            CalcRotationDirAngle(Gear);
-
-        DeleteCI(Gear);
-        doStepFallingGear(Gear);
-        if (Gear^.State and gstMoving) = 0 then
-            AddGearCI(Gear);
-        AllInactive := false
-    end
-    else
-    begin
-        if ((GameTicks and $3F) = 25) then
-            doStepFallingGear(Gear);
+        Gear^.doStep:= @doStepSMine;
+        Gear^.doStep(Gear);
+        exit;
     end;
-
     if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
         if ((Gear^.State and gstAttacking) = 0) then
         begin
@@ -1487,6 +1471,27 @@ begin
     end
     else // gsttmpFlag = 0
         if TurnTimeLeft = 0 then Gear^.State := Gear^.State or gsttmpFlag;
+end;
+
+procedure doStepSMine(Gear: PGear);
+begin
+    if ((Gear^.State and gstCollision) <> 0) and (Gear^.dX < _0_2) and (Gear^.dY < _0_2) then
+    begin
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.doStep:= @doStepSMineSticked;
+        Gear^.doStep(Gear);
+        exit
+    end;
+    if (Gear^.State and gstMoving) <> 0 then
+    begin
+        DeleteCI(Gear);
+        doStepFallingGear(Gear);
+        if (Gear^.State and gstMoving) = 0 then
+            AddGearCI(Gear);
+    end;
+    CalcRotationDirAngle(Gear);
+    AllInactive := false
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3879,9 +3884,9 @@ begin
     dec(Gear^.Timer);
     Gear^.X:= Gear^.X + Gear^.dX;
     Gear^.Y:= Gear^.Y + Gear^.dY;
-    Gear^.dX := Gear^.dX + cWindSpeed / 2;
+    Gear^.dX := Gear^.dX + cWindSpeed / 4;
     Gear^.dY := Gear^.dY + cGravity / 100;
     if (GameTicks mod 250) = 0 then
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLDontDraw or EXPLNoGfx or EXPLNoDamage or EXPLDoNotTouchAny or EXPLPoisoned);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLDontDraw or EXPLNoGfx or EXPLNoDamage or EXPLDoNotTouchAny or EXPLPoisoned);
     AllInactive:= false;
 end;

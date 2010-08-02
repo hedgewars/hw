@@ -520,6 +520,7 @@ gtFlamethrower: begin
                 end;
  gtPoisonCloud: begin
                 gear^.Timer:= 5000;
+                gear^.dY:= int2hwfloat((-4 + getRandom(8))) / 1000;
                 end;
      end;
 InsertGearToList(gear);

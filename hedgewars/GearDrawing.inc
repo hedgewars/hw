@@ -801,14 +801,13 @@ while Gear<>nil do
                     DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 128, 128, 0);
                     end;
      gtPoisonCloud: begin
-                    Tint($00, $FF, $40, $80);
-                    if Gear^.Timer < 1000 then
-                        i:= Gear^.Timer
-                    else if Gear^.Timer > 4000 then
-                        i:= 5000 - Gear^.Timer
+                    if Gear^.Timer < 1020 then
+                        Tint($C0, $C0, $00, Gear^.Timer div 8)
+                    else if Gear^.Timer > 3980 then
+                        Tint($C0, $C0, $00, (5000 - Gear^.Timer) div 8)
                     else
-                        i:= 1000;
-                    DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, i / 250, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 22, 22, (RealTicks shr 36 + Gear^.UID * 100) mod 360);
+                        Tint($C0, $C0, $00, $C0);
+                    DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 22, 22, (RealTicks shr 36 + Gear^.UID * 100) mod 360);
                     Tint($FF, $FF, $FF, $FF)
                     end;
          end;
