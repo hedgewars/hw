@@ -35,12 +35,10 @@ public:
     QStringList GetTeamsList();
     QRect vid_Resolution();
     bool vid_Fullscreen();
+    quint32 translateQuality();
     bool isSoundEnabled();
     bool isFrontendSoundEnabled();
     QString language();
-#ifdef _WIN32
-    bool isSoundHardware();
-#endif
     bool isMusicEnabled();
     bool isFrontendMusicEnabled();
     bool isShowFPSEnabled();
@@ -53,7 +51,6 @@ public:
     bool isReducedQuality() const;
     bool isFrontendEffects() const;
     bool isFrontendFullscreen() const;
-    bool isWeaponTooltip() const;
     void resizeToConfigValues();
     bool isStereoEnabled() const;
 

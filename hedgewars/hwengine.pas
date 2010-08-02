@@ -457,17 +457,8 @@ begin
             cAltDamage:= ParamStr(15) = '1';
             UserNick:= DecodeBase64(ParamStr(16));
             isMusicEnabled:= ParamStr(17) = '1';
+            val(ParamStr(18), cReducedQuality);
             isStereoEnabled:= ParamStr(19) = '1';
-
-            if (ParamStr(18) = '1') then        //HACK - always disable rqLowRes as it's a game breaker
-                cReducedQuality:= $FFFFFFFF xor rqLowRes
-            else
-                val(ParamStr(18), cReducedQuality);
-            
-            if (ParamStr(8) = '0') then         //HACK - ifcVSyncInUse not true, disable it
-                cReducedQuality:= cReducedQuality xor rqDesyncVBlank;
-            if (ParamStr(9) = '0') then         //HACK - if cWeaponTooltips not true, disable it
-                cReducedQuality:= cReducedQuality xor rqTooltipsOff;
         end;
         3: begin
             val(ParamStr(2), ipcPort);

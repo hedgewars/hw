@@ -48,6 +48,7 @@ class QAction;
 class QDataWidgetMapper;
 class QAbstractItemModel;
 class QSettings;
+class QSlider;
 
 class GameCFGWidget;
 class TeamSelWidget;
@@ -222,9 +223,6 @@ public:
     QCheckBox *CBEnableSound;
     QCheckBox *CBEnableFrontendSound;
     QCheckBox *CBEnableStereo;
-#ifdef _WIN32
-    QCheckBox *CBHardwareSound;
-#endif
     QCheckBox *CBEnableMusic;
     QCheckBox *CBEnableFrontendMusic;
     QCheckBox *CBFullscreen;
@@ -241,7 +239,7 @@ public:
     QLabel *labelNN;
     QSpinBox * volumeBox;
     QLineEdit *editNetNick;
-    QCheckBox *CBReduceQuality;
+    QSlider *SLQuality;
     QCheckBox *CBFrontendEffects;
 };
 

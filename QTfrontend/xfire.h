@@ -19,10 +19,6 @@
 #ifndef XFIRE_H
 #define XFIRE_H
 
-#ifdef _WIN32
-// TODO: Move to CMAKE
-#define USE_XFIRE
-#endif
 
 #ifdef USE_XFIRE
 enum XFIRE_KEYS

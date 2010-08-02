@@ -35,8 +35,6 @@ var
     isSpeed         : boolean;
     isFirstFrame    : boolean;
 
-    isStereoEnabled : boolean = true;
-
     isStereoEnabled : boolean;
 
     fastUntilLag    : boolean;
