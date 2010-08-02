@@ -401,7 +401,12 @@ begin
                     if i mod 2 <> 0 then Fire^.State := Fire^.State or gsttmpFlag;
                     end
                 end;
-            gtGasBomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound or EXPLPoisoned);
+            gtGasBomb:
+                begin
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
+                for i:= 0 to 2 do
+                    AddGear(hwRound(Gear^.X) - 30 + GetRandom(60), hwRound(Gear^.Y) - 20 + GetRandom(40), gtPoisonCloud, 0, _0, _0, 0);
+                end;
         end;
     DeleteGear(Gear);
     exit
@@ -3864,4 +3869,19 @@ begin
     Gear^.doStep := @doStepFlamethrowerWork
 end;
 
-
+procedure doStepPoisonCloud(Gear: PGear);
+begin
+    if Gear^.Timer = 0 then
+    begin
+        DeleteGear(Gear);
+        exit
+    end;
+    dec(Gear^.Timer);
+    Gear^.X:= Gear^.X + Gear^.dX;
+    Gear^.Y:= Gear^.Y + Gear^.dY;
+    Gear^.dX := Gear^.dX + cWindSpeed / 2;
+    Gear^.dY := Gear^.dY + cGravity / 100;
+    if (GameTicks mod 250) = 0 then
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLDontDraw or EXPLNoGfx or EXPLNoDamage or EXPLDoNotTouchAny or EXPLPoisoned);
+    AllInactive:= false;
+end;

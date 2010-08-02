@@ -202,7 +202,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepBomb,
             @doStepSineGunShot,
             @doStepFlamethrower,
-            @doStepSMine
+            @doStepSMine,
+            @doStepPoisonCloud
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -516,6 +517,9 @@ gtFlamethrower: begin
                 gear^.Tag:= 10;
                 gear^.Timer:= 10;
                 gear^.Health:= 500;
+                end;
+ gtPoisonCloud: begin
+                gear^.Timer:= 5000;
                 end;
      end;
 InsertGearToList(gear);
@@ -1239,7 +1243,7 @@ while Gear <> nil do
                                 else
                                     Gear^.State:= Gear^.State or gstWinner;
                                 end;
-                            if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
+                            if ((Mask and EXPLDoNotTouchAny) = 0) and (((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog)) then
                                 begin
                                 DeleteCI(Gear);
                                 Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - fX);

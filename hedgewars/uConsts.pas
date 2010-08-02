@@ -88,7 +88,7 @@ type
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
-            gtSMine);
+            gtSMine, gtPoisonCloud);
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -414,6 +414,7 @@ const
     EXPLDontDraw          = $00000010;
     EXPLNoGfx             = $00000020;
     EXPLPoisoned          = $00000040;
+    EXPLDoNotTouchAny     = $00000080;
 
     posCaseAmmo    = $00000001;
     posCaseHealth  = $00000002;
