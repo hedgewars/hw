@@ -201,7 +201,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepPiano,
             @doStepBomb,
             @doStepSineGunShot,
-            @doStepFlamethrower
+            @doStepFlamethrower,
+            @doStepSMine
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -353,6 +354,14 @@ gtAmmo_Grenade: begin // bazooka
                     gear^.Timer:= getrandom(4)*1000
                 else
                     gear^.Timer:= cMinesTime*1;
+                end;
+       gtSMine: begin
+                gear^.Health:= 10;
+                gear^.State:= gear^.State or gstMoving;
+                gear^.Radius:= 2;
+                gear^.Elasticity:= _0_55;
+                gear^.Friction:= _0_995;
+                gear^.Timer:= 500;
                 end;
         gtCase: begin
                 gear^.ImpactSound:= sndGraveImpact;
@@ -1211,6 +1220,7 @@ while Gear <> nil do
         case Gear^.Kind of
             gtHedgehog,
                 gtMine,
+                gtSMine,
                 gtCase,
                 gtTarget,
                 gtFlame,
@@ -1286,6 +1296,7 @@ while t <> nil do
     case t^.Kind of
         gtHedgehog,
             gtMine,
+            gtSMine,
             gtCase,
             gtTarget,
             gtExplosives: begin
@@ -1340,6 +1351,7 @@ while i > 0 do
         case Gear^.Kind of
             gtHedgehog,
             gtMine,
+            gtSMine,
             gtTarget,
             gtCase,
             gtExplosives: begin

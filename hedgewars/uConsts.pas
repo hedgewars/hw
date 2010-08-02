@@ -73,7 +73,8 @@ type
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
-            sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote
+            sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
+            sprSMineOff, sprSMineOn, sprHandSMine
             );
 
     // Gears that interact with other Gears and/or Land
@@ -86,7 +87,8 @@ type
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 34
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
-            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower); // 51
+            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
+            gtSMine);
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -129,7 +131,7 @@ type
             amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun,
-            amPiano, amGasBomb, amSineGun, amFlamethrower);
+            amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine);
 
     THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
 
@@ -793,7 +795,13 @@ const
             (FileName:  'Chunk'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprChunk
             (FileName:  'Note'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprNote
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprNote
+            (FileName:   'SMineOff'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSMineOff
+            (FileName:    'SMineOn'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSMineOn
+            (FileName:  'amSMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprHandSMine
             );
 
     Wavez: array [TWave] of record
@@ -2144,7 +2152,31 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
-            ejectY: -3)
+            ejectY: -3),
+
+// Mine
+            (NameId: sidSMine;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+                Count: 2;
+                InitialCount: 0;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amSMine;
+                AttackVoice: sndLaugh);
+            Slot: 4;
+            TimeAfterTurn: 5000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0)
             );
 
 
