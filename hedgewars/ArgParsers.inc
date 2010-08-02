@@ -11,22 +11,19 @@ procedure internalStartGameWithParameters();
 begin
     val(ParamStr(2), cScreenWidth);
     val(ParamStr(3), cScreenHeight);
-    cBitsStr:= ParamStr(4);
-    val(cBitsStr, cBits);
+    val(ParamStr(4), cBits);
     val(ParamStr(5), ipcPort);
     cFullScreen:= ParamStr(6) = '1';
     isSoundEnabled:= ParamStr(7) = '1';
-    //cVSyncInUse:= ParamStr(8) = '1';      //merged with rqFlags
-    //cWeaponTooltips:= ParamStr(9) = '1';  //merged with rqFlags
-    cLocaleFName:= ParamStr(10);
-    val(ParamStr(11), cInitVolume);
-    val(ParamStr(12), cTimerInterval);
-    PathPrefix:= ParamStr(13);
-    cShowFPS:= ParamStr(14) = '1';
-    cAltDamage:= ParamStr(15) = '1';
-    UserNick:= DecodeBase64(ParamStr(16));
-    isMusicEnabled:= ParamStr(17) = '1';
-    val(ParamStr(18), cReducedQuality);
+    isMusicEnabled:= ParamStr(8) = '1';
+    val(ParamStr(9), cInitVolume);
+    val(ParamStr(10), cTimerInterval);
+    PathPrefix:= ParamStr(11);
+    cShowFPS:= ParamStr(12) = '1';
+    cAltDamage:= ParamStr(13) = '1';
+    UserNick:= DecodeBase64(ParamStr(14));
+    val(ParamStr(15), cReducedQuality);
+    cLocaleFName:= ParamStr(16);
 
 end;
 
@@ -42,8 +39,7 @@ var screenWidthAsInt, screenHeightAsInt, bitsStrAsInt: LongInt;
 begin
     val(screenWidthParam, screenWidthAsInt);
     val(screenHeightParam, screenHeightAsInt);
-    cBitsStr:= bitsParam;
-    val(cBitsStr, bitsStrAsInt);
+    val(bitsParam, bitsStrAsInt);
     setVideo(screenWidthAsInt,screenHeightAsInt,bitsStrAsInt);
 end;
 

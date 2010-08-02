@@ -315,7 +315,7 @@ procedure initEverything (complete:boolean);
 begin
     Randomize();
 
-    uConsts.initModule;
+    // uConsts does not need initialization as they are all consts
     uMisc.initModule;
     uConsole.initModule;    // MUST happen after uMisc
 
@@ -386,7 +386,6 @@ begin
 
     uConsole.freeModule;
     uMisc.freeModule;           // uMisc closes the debug log.
-    uConsts.freeModule;         //stub
 end;
 
 /////////////////////////
@@ -446,7 +445,7 @@ begin
         if (ParamCount = 3) then
             internalSetGameTypeLandPreviewFromParameters()
         else
-            if (ParamCount = 18) then
+            if (ParamCount = cDefaultParamNum) then
                 internalStartGameWithParameters()
             else
                 playReplayFileWithParameters();

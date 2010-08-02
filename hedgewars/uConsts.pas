@@ -183,7 +183,9 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     THogEffect = (heInvulnerable, hePoisoned);
 
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
-const sfMax = 1000;
+const
+    sfMax = 1000;
+    cDefaultParamNum = 16;
 
     // message constants
     errmsgCreateSurface   = 'Error creating SDL surface';
@@ -452,16 +454,6 @@ const sfMax = 1000;
         'Graphics/Flags'                 // ptFlags
     );
 
-var PathPrefix: shortstring = './';
-    Pathz: array[TPathType] of shortstring;
-    CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
-    LAND_WIDTH  :longint;
-    LAND_HEIGHT :longint;
-    LAND_WIDTH_MASK  :longWord;
-    LAND_HEIGHT_MASK :longWord;
-    cMaxCaptions : LongInt;
-
-const
     cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
     cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
 
@@ -2183,47 +2175,6 @@ const
         alpha : 255
     );
 
-procedure initModule;
-procedure freeModule;
-
 implementation
-uses uMisc;
-
-procedure initModule;
-begin
-    Pathz:= cPathz;
-        {*  REFERENCE
-      4096 -> $FFFFF000
-      2048 -> $FFFFF800
-      1024 -> $FFFFFC00
-       512 -> $FFFFFE00  *}
-    if (cReducedQuality and rqLowRes) <> 0 then
-    begin
-        LAND_WIDTH:= 2048;
-        LAND_HEIGHT:= 1024;
-        LAND_WIDTH_MASK:= $FFFFF800;
-        LAND_HEIGHT_MASK:= $FFFFFC00;
-    end
-    else
-    begin
-        LAND_WIDTH:= 4096;
-        LAND_HEIGHT:= 2048;
-        LAND_WIDTH_MASK:= $FFFFF000;
-        LAND_HEIGHT_MASK:= $FFFFF800
-    end;
-
-{$IFDEF IPHONEOS}
-    if isPhone() then
-        cMaxCaptions:= 3
-    else
-{$ENDIF}
-        cMaxCaptions:= 4;
-
-end;
-
-procedure freeModule;
-begin
-    PathPrefix := './';
-end;
 
 end.
