@@ -47,13 +47,10 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     bool ffscr=value("frontend/fullscreen", false).toBool();
     Form->ui.pageOptions->CBFrontendFullscreen->setChecked(ffscr);
 
-    Form->ui.pageOptions->CBReduceQuality->setChecked(value("video/reducequality", false).toBool());
+    Form->ui.pageOptions->SLQuality->setValue(value("video/quality", 5).toUInt());
     Form->ui.pageOptions->CBFrontendEffects->setChecked(frontendEffects);
     Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
     Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("frontend/sound", true).toBool());
-#ifdef _WIN32
-//  Form->ui.pageOptions->CBHardwareSound->setChecked(value("audio/hardware", false).toBool());
-#endif
     Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
     Form->ui.pageOptions->CBEnableFrontendMusic->setChecked(value("frontend/music", true).toBool());
     Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
@@ -115,11 +112,11 @@ void GameUIConfig::SaveOptions()
     setValue("video/resolution", Form->ui.pageOptions->CBResolution->currentText());
     setValue("video/fullscreen", vid_Fullscreen());
 
-    setValue("video/reducequality", isReducedQuality());
+    setValue("video/quality", Form->ui.pageOptions->SLQuality->value());
 
     setValue("frontend/effects", isFrontendEffects());
 
-    setValue("misc/weaponTooltips", isWeaponTooltip());
+    setValue("misc/weaponTooltips", Form->ui.pageOptions->WeaponTooltip->isChecked());
 
     bool ffscr = isFrontendFullscreen();
     setValue("frontend/fullscreen", ffscr);
@@ -133,9 +130,6 @@ void GameUIConfig::SaveOptions()
 
     setValue("audio/sound", isSoundEnabled());
     setValue("frontend/sound", isFrontendSoundEnabled());
-#ifdef _WIN32
-//  setValue("audio/hardware", isSoundHardware());
-#endif
     setValue("audio/music", isMusicEnabled());
     setValue("frontend/music", isFrontendMusicEnabled());
     setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
@@ -181,18 +175,57 @@ bool GameUIConfig::vid_Fullscreen()
     return Form->ui.pageOptions->CBFullscreen->isChecked();
 }
 
-bool GameUIConfig::isReducedQuality() const
+quint32 GameUIConfig::translateQuality()
 {
-  return Form->ui.pageOptions->CBReduceQuality->isChecked();
+    quint32 rqNone = 0x00000000;  // don't reduce quality
+    quint32 rqLowRes = 0x00000001;  // use half land array
+    quint32 rqBlurryLand = 0x00000002;  // downscaled terrain
+    quint32 rqNoBackground = 0x00000004;  // don't draw background
+    quint32 rqSimpleRope = 0x00000008;  // avoid drawing rope
+    quint32 rq2DWater = 0x00000010;  // disabe 3D water effect
+    quint32 rqFancyBoom = 0x00000020;  // no fancy explosion effects
+    quint32 rqKillFlakes = 0x00000040;  // no flakes
+    quint32 rqSlowMenu = 0x00000080;  // ammomenu appears with no animation
+    quint32 rqPlainSplash = 0x00000100;  // no droplets
+    quint32 rqClampLess = 0x00000200;  // don't clamp textures
+    quint32 rqTooltipsOff = 0x00000400;  // tooltips are not drawn
+    quint32 rqDesyncVBlank = 0x00000800;  // don't sync on vblank
+    
+    quint32 result = (Form->ui.pageOptions->WeaponTooltip->isChecked()) ? rqNone : rqTooltipsOff;
+    
+    switch (Form->ui.pageOptions->SLQuality->value()) {
+      case 5:
+        break;
+      case 4:
+        result |= rqBlurryLand;
+        break;
+      case 3:
+        result |= rqBlurryLand | rqKillFlakes | rqPlainSplash;
+        break;
+      case 2:
+        result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
+                  rqFancyBoom | rqSlowMenu;
+        break;
+      case 1:
+        result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
+                  rqFancyBoom | rqSlowMenu | rqSimpleRope | rqDesyncVBlank;
+        break;
+      case 0:
+        result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
+                  rqFancyBoom | rqSlowMenu | rqSimpleRope | rqDesyncVBlank |
+                  rqNoBackground | rqClampLess;
+        break;
+      default:
+        fprintf(stderr,"unset value from slider");
+        break;
+    }
+    
+    return result;
 }
+
 bool GameUIConfig::isFrontendEffects() const
 {
   return Form->ui.pageOptions->CBFrontendEffects->isChecked();
-}
-
-bool GameUIConfig::isWeaponTooltip() const
-{
-  return Form->ui.pageOptions->WeaponTooltip->isChecked();
 }
 
 bool GameUIConfig::isFrontendFullscreen() const
@@ -208,14 +241,6 @@ bool GameUIConfig::isFrontendSoundEnabled()
 {
     return Form->ui.pageOptions->CBEnableFrontendSound->isChecked();
 }
-
-#ifdef _WIN32
-bool GameUIConfig::isSoundHardware()
-{
-//  return Form->ui.pageOptions->CBHardwareSound->isChecked();
-return false;
-}
-#endif
 
 bool GameUIConfig::isMusicEnabled()
 {

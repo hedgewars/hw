@@ -39,7 +39,7 @@
 #include <QMenu>
 #include <QDataWidgetMapper>
 #include <QTime>
-
+#include <QSlider>
 
 #include "ammoSchemeModel.h"
 #include "pages.h"
@@ -573,6 +573,7 @@ PageOptions::PageOptions(QWidget* parent) :
 
             QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
             QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
+            QHBoxLayout * GBAqualayout = new QHBoxLayout(0);
 
             CBFrontendFullscreen = new QCheckBox(AGGroupBox);
             CBFrontendFullscreen->setText(QCheckBox::tr("Frontend fullscreen"));
@@ -608,9 +609,17 @@ PageOptions::PageOptions(QWidget* parent) :
             CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
             GBAlayout->addWidget(CBFullscreen);
 
-            CBReduceQuality = new QCheckBox(AGGroupBox);
-            CBReduceQuality->setText(QCheckBox::tr("Reduced quality"));
-            GBAlayout->addWidget(CBReduceQuality);
+            QLabel * quality = new QLabel(AGGroupBox);
+            quality->setText(QLabel::tr("Quality"));
+            GBAqualayout->addWidget(quality);
+            
+            SLQuality = new QSlider(Qt::Horizontal, AGGroupBox);
+            SLQuality->setTickPosition(QSlider::TicksBelow);
+            SLQuality->setMaximum(5);
+            SLQuality->setMinimum(0);
+            SLQuality->setFixedWidth(150);
+            GBAqualayout->addWidget(SLQuality);
+            GBAlayout->addLayout(GBAqualayout);
 
             hr = new QFrame(AGGroupBox);
             hr->setFrameStyle(QFrame::HLine);

@@ -26,16 +26,8 @@ begin
     cAltDamage:= ParamStr(15) = '1';
     UserNick:= DecodeBase64(ParamStr(16));
     isMusicEnabled:= ParamStr(17) = '1';
+    val(ParamStr(18), cReducedQuality);
 
-    if (ParamStr(18) = '1') then        //HACK - always disable rqLowRes as it is a game breaker
-        cReducedQuality:= $FFFFFFFF xor rqLowRes
-    else
-        val(ParamStr(18), cReducedQuality);
-    
-    if (ParamStr(8) = '0') then         //HACK - ifcVSyncInUse not true, disable it
-        cReducedQuality:= cReducedQuality xor rqDesyncVBlank;
-    if (ParamStr(9) = '0') then         //HACK - if cWeaponTooltips not true, disable it
-        cReducedQuality:= cReducedQuality xor rqTooltipsOff;
 end;
 
 procedure setVideo(screenWidth: LongInt; screenHeight: LongInt; bitsStr: LongInt);
