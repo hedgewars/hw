@@ -9,18 +9,10 @@
 #import "GameConfigViewController.h"
 #import "SDL_uikitappdelegate.h"
 #import "CommodityFunctions.h"
-#import "MapConfigViewController.h"
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
 
-// draw background image in uitoolbar
-/*@implementation UIToolbar (CustomImage)
--(void) drawRect:(CGRect)rect {
-    UIImage *image = [UIImage imageWithContentsOfFile:@"toolbarBackground.png"];
-    [image drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-}
-@end
-*/
+
 @implementation GameConfigViewController
 
 
@@ -197,14 +189,15 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         if (mapConfigViewController == nil)
             mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
+        mapConfigViewController.delegate = self;
         if (teamConfigViewController == nil)
             teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        teamConfigViewController.view.frame = CGRectMake(10, 225, 300, 470);
+        teamConfigViewController.view.frame = CGRectMake(10, 70, 300, 600);
         teamConfigViewController.view.backgroundColor = [UIColor clearColor];
         [mapConfigViewController.view addSubview:teamConfigViewController.view];
         if (schemeWeaponConfigViewController == nil)
             schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        schemeWeaponConfigViewController.view.frame = CGRectMake(362, 230, 300, 470);
+        schemeWeaponConfigViewController.view.frame = CGRectMake(362, 200, 300, 480);
         [mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
         for (UIView *oneView in self.view.subviews) {
             if ([oneView isMemberOfClass:[UIToolbar class]]) {

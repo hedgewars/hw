@@ -17,7 +17,7 @@
 
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
-            tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, themeArray, mapArray, busy;
+            tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, themeArray, mapArray, busy, delegate;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -457,7 +457,7 @@
             // dummy value, everything is set by -updatePreview -> -didSelectRowAtIndexPath -> -updatePreviewWithMap
             staticmap = @"map Bamboo";
             self.slider.enabled = NO;
-            self.sizeLabel.text = @".";
+            self.sizeLabel.text = @"";
             [self restoreBackgroundImage];
             break;
 
@@ -562,12 +562,21 @@
 }
 
 #pragma mark -
-#pragma mark memory
+#pragma mark delegate functions for iPad
+-(IBAction) buttonPressed:(id) sender {
+    if (self.delegate != nil && [delegate respondsToSelector:@selector(buttonPressed:)])
+        [self.delegate buttonPressed:(UIButton *)sender];
+}
+
+#pragma mark -
 -(void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    //[previewButton setImage:nil forState:UIControlStateNormal];
 }
 
 -(void) viewDidUnload {
+    self.delegate = nil;
+    
     self.previewButton = nil;
     self.seedCommand = nil;
     self.templateFilterCommand = nil;
@@ -592,6 +601,8 @@
 }
 
 -(void) dealloc {
+    self.delegate = nil;
+    
     [seedCommand release];
     [templateFilterCommand release];
     [mapGenCommand release];

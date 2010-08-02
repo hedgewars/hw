@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MapConfigViewController.h"
 
 @class TeamConfigViewController;
-@class MapConfigViewController;
 @class SchemeWeaponConfigViewController;
 
-@interface GameConfigViewController : UIViewController {
+@interface GameConfigViewController : UIViewController <MapConfigDelegate> {
     UIViewController *activeController;
     MapConfigViewController *mapConfigViewController;
     TeamConfigViewController *teamConfigViewController;

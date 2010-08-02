@@ -9,7 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "SDL_net.h"
 
+@protocol MapConfigDelegate <NSObject>
+
+-(void) buttonPressed:(id) sender;
+
+@end
+
+
 @interface MapConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+    id<MapConfigDelegate> delegate;
+    
     TCPsocket sd, csd;
     NSInteger oldValue;  //slider
     NSInteger oldPage;   //segmented control
@@ -38,6 +47,8 @@
     NSArray *mapArray;
 }
 
+@property (nonatomic,retain) id<MapConfigDelegate> delegate;
+
 @property (nonatomic) NSInteger maxHogs;
 @property (nonatomic) BOOL busy;
 @property (nonatomic,retain) NSString *seedCommand;
@@ -58,10 +69,13 @@
 @property (nonatomic,retain) NSArray *themeArray;
 @property (nonatomic,retain) NSArray *mapArray;
 
+-(IBAction) buttonPressed:(id) sender;
+
 -(IBAction) updatePreview;
 -(IBAction) sliderChanged:(id) sender;
 -(IBAction) sliderEndedChanging:(id) sender;
 -(IBAction) segmentedControlChanged:(id) sender;
+
 -(void) turnOnWidgets;
 -(void) turnOffWidgets;
 -(void) setLabelText:(NSString *)str;
