@@ -294,6 +294,18 @@ int main(int argc, char *argv[]) {
             "SquareLabel, ItemNum {"
                 "background-color: #000000;"
             "}"
+            "QSlider::groove::horizontal {"
+                "height: 2px;"
+                "margin: 2px 0px;"
+                "background-color: #ffcc00;"
+            "}"
+            "QSlider::handle::horizontal {"
+                "border: 0px;"
+                "margin: -2px 0px;"
+                "border-radius: 3px;"
+                "background-color: #ffcc00;"
+                "width: 8px;"
+            "}"
             )
         );
 

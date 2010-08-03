@@ -1441,15 +1441,66 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepSMine(Gear: PGear); forward;
-procedure doStepSMineSticked(Gear: PGear);
+procedure doStepSMine(Gear: PGear);
 begin
-    if (hwAbs(Gear^.dX) > _0) or (hwAbs(Gear^.dY) > _0) then // moving - "unstick" (better solution?)
+    DeleteCI(Gear);
+    // TODO: do real calculation?
+    if TestCollisionXwithGear(Gear, 2) and TestCollisionYwithGear(Gear, -2) then
     begin
-        Gear^.doStep:= @doStepSMine;
-        Gear^.doStep(Gear);
-        exit;
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.DirAngle:= 225
+    end
+    else if TestCollisionXwithGear(Gear, -2) and TestCollisionYwithGear(Gear, -2) then
+    begin
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.DirAngle:= 135
+    end
+    else if TestCollisionXwithGear(Gear, 2) and TestCollisionYwithGear(Gear, 2) then
+    begin
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.DirAngle:= 315
+    end
+    else if TestCollisionXwithGear(Gear, -2) and TestCollisionYwithGear(Gear, 2) then
+    begin
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.DirAngle:= 45
+    end
+    else if TestCollisionYwithGear(Gear, -2) then
+    begin
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.DirAngle:= 180
+    end
+    else if TestCollisionYwithGear(Gear, 2) then
+    begin
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.DirAngle:= 0
+    end
+    else if TestCollisionXwithGear(Gear, -2) then
+    begin
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.DirAngle:= 90
+    end
+    else if TestCollisionXwithGear(Gear, 2) then
+    begin
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.DirAngle:= 270
+    end
+    else
+    begin
+        doStepFallingGear(Gear);
+        AllInactive := false;
+        CalcRotationDirAngle(Gear);
     end;
+    AddGearCI(Gear);
+
     if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
         if ((Gear^.State and gstAttacking) = 0) then
         begin
@@ -1471,27 +1522,6 @@ begin
     end
     else // gsttmpFlag = 0
         if TurnTimeLeft = 0 then Gear^.State := Gear^.State or gsttmpFlag;
-end;
-
-procedure doStepSMine(Gear: PGear);
-begin
-    if ((Gear^.State and gstCollision) <> 0) and (Gear^.dX < _0_2) and (Gear^.dY < _0_2) then
-    begin
-        Gear^.dX:= _0;
-        Gear^.dY:= _0;
-        Gear^.doStep:= @doStepSMineSticked;
-        Gear^.doStep(Gear);
-        exit
-    end;
-    if (Gear^.State and gstMoving) <> 0 then
-    begin
-        DeleteCI(Gear);
-        doStepFallingGear(Gear);
-        if (Gear^.State and gstMoving) = 0 then
-            AddGearCI(Gear);
-    end;
-    CalcRotationDirAngle(Gear);
-    AllInactive := false
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

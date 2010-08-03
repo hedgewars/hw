@@ -611,6 +611,7 @@ PageOptions::PageOptions(QWidget* parent) :
 
             QLabel * quality = new QLabel(AGGroupBox);
             quality->setText(QLabel::tr("Quality"));
+            quality->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             GBAqualayout->addWidget(quality);
             
             SLQuality = new QSlider(Qt::Horizontal, AGGroupBox);
