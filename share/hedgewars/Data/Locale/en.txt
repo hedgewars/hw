@@ -48,6 +48,7 @@
 00:45=Sine Gun
 00:46=Flamethrower
 00:47=Sticky Mine
+00:48=Hammer
 
 01:00=Let's fight!
 01:01=Round draw

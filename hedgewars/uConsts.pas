@@ -74,7 +74,7 @@ type
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
-            sprSMineOff, sprSMineOn, sprHandSMine
+            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer
             );
 
     // Gears that interact with other Gears and/or Land
@@ -88,7 +88,7 @@ type
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
-            gtSMine, gtPoisonCloud);
+            gtSMine, gtPoisonCloud, gtHammer);
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -122,7 +122,7 @@ type
             sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket,
             sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle, sndBeeWater,
             sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7, sndPiano8,
-            sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3);
+            sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack);
 
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -131,7 +131,7 @@ type
             amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun,
-            amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine);
+            amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer);
 
     THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
 
@@ -801,8 +801,10 @@ const
             Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSMineOff
             (FileName:    'SMineOn'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSMineOn
-            (FileName:  'amSMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprHandSMine
+            (FileName:   'amSMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandSMine
+            (FileName:  'amHammer'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprWhip
             );
 
     Wavez: array [TWave] of record
@@ -929,7 +931,8 @@ const
             (FileName:          'shotgunfire.ogg'; Path: ptSounds),// sndSineGun
             (FileName:                'Ooff1.ogg'; Path: ptVoices),// sndOoff1
             (FileName:                'Ooff2.ogg'; Path: ptVoices),// sndOoff2
-            (FileName:                'Ooff3.ogg'; Path: ptVoices) // sndOoff3
+            (FileName:                'Ooff3.ogg'; Path: ptVoices),// sndOoff3
+            (FileName:            'whipcrack.ogg'; Path: ptSounds) // sndWhack
             );
 
     Ammoz: array [TAmmoType] of record
@@ -2155,7 +2158,7 @@ const
             ejectX: 0; //20;
             ejectY: -3),
 
-// Mine
+// Sticky Mine
             (NameId: sidSMine;
             NameTex: nil;
             Probability: 100;
@@ -2171,6 +2174,30 @@ const
             Slot: 4;
             TimeAfterTurn: 5000;
             minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
+
+// Hammer
+            (NameId: sidHammer;
+            NameTex: nil;
+            Probability: 0;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoCrosshair;
+                Count: 1;
+                InitialCount: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amHammer;
+                AttackVoice: sndNone);
+            Slot: 3;
+            TimeAfterTurn: 3000;
+            MinAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;

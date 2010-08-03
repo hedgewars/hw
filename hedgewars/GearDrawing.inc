@@ -264,6 +264,15 @@ if (Gear^.State and gstHHDriven) <> 0 then
                         0);
                 defaultPos:= false
                 end;
+            gtHammer: begin
+                DrawRotatedF(sprHammer,
+                        sx,
+                        sy,
+                        1,
+                        hwSign(Gear^.dX),
+                        0);
+                defaultPos:= false
+                end;
             gtKamikaze: begin
                 if CurAmmoGear^.Pos = 0 then
                     DrawHedgehog(sx, sy,
@@ -434,6 +443,12 @@ if (Gear^.State and gstHHDriven) <> 0 then
                         5,
                         0);
             amWhip: DrawRotatedF(sprWhip,
+                        sx,
+                        sy,
+                        0,
+                        hwSign(Gear^.dX),
+                        0);
+            amHammer: DrawRotatedF(sprHammer,
                         sx,
                         sy,
                         0,

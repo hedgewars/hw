@@ -198,6 +198,10 @@ with Gear^,
                                  CurAmmoGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtWhip, 0, SignAs(_1, dX), - _0_8, 0);
                                  PlaySound(sndWhipCrack)
                                  end;
+                       amHammer: begin
+                                 CurAmmoGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtHammer, 0, SignAs(_1, dX), - _0_8, 0);
+                                 PlaySound(sndWhack)
+                                 end;
                   amBaseballBat: begin
                                  CurAmmoGear:= AddGear(hwRound(lx) + hwSign(dX) * 10, hwRound(ly), gtShover, gsttmpFlag, xx * _0_5, yy * _0_5, 0);
                                  PlaySound(sndBaseballBat) // TODO: Only play if something is hit?

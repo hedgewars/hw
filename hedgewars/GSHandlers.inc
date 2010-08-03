@@ -1445,53 +1445,12 @@ procedure doStepSMine(Gear: PGear);
 begin
     DeleteCI(Gear);
     // TODO: do real calculation?
-    if TestCollisionXwithGear(Gear, 2) and TestCollisionYwithGear(Gear, -2) then
+    if TestCollisionXwithGear(Gear, 2) or TestCollisionYwithGear(Gear, -2) or TestCollisionXwithGear(Gear, -2) or TestCollisionYwithGear(Gear, 2) then
     begin
+        if (hwAbs(Gear^.dX) > _0) or (hwAbs(Gear^.dY) > _0) then
+            PlaySound(sndRopeAttach);
         Gear^.dX:= _0;
         Gear^.dY:= _0;
-        Gear^.DirAngle:= 225
-    end
-    else if TestCollisionXwithGear(Gear, -2) and TestCollisionYwithGear(Gear, -2) then
-    begin
-        Gear^.dX:= _0;
-        Gear^.dY:= _0;
-        Gear^.DirAngle:= 135
-    end
-    else if TestCollisionXwithGear(Gear, 2) and TestCollisionYwithGear(Gear, 2) then
-    begin
-        Gear^.dX:= _0;
-        Gear^.dY:= _0;
-        Gear^.DirAngle:= 315
-    end
-    else if TestCollisionXwithGear(Gear, -2) and TestCollisionYwithGear(Gear, 2) then
-    begin
-        Gear^.dX:= _0;
-        Gear^.dY:= _0;
-        Gear^.DirAngle:= 45
-    end
-    else if TestCollisionYwithGear(Gear, -2) then
-    begin
-        Gear^.dX:= _0;
-        Gear^.dY:= _0;
-        Gear^.DirAngle:= 180
-    end
-    else if TestCollisionYwithGear(Gear, 2) then
-    begin
-        Gear^.dX:= _0;
-        Gear^.dY:= _0;
-        Gear^.DirAngle:= 0
-    end
-    else if TestCollisionXwithGear(Gear, -2) then
-    begin
-        Gear^.dX:= _0;
-        Gear^.dY:= _0;
-        Gear^.DirAngle:= 90
-    end
-    else if TestCollisionXwithGear(Gear, 2) then
-    begin
-        Gear^.dX:= _0;
-        Gear^.dY:= _0;
-        Gear^.DirAngle:= 270
     end
     else
     begin
@@ -3919,4 +3878,41 @@ begin
     if (GameTicks mod 250) = 0 then
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLDontDraw or EXPLNoGfx or EXPLNoDamage or EXPLDoNotTouchAny or EXPLPoisoned);
     AllInactive:= false;
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepHammer(Gear: PGear);
+var HHGear, tmp: PGear;
+         t: PGearArray;
+         i: LongInt;
+         dust: PVisualGear;
+begin
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+HHGear^.State:= HHGear^.State or gstNoDamage;
+DeleteCI(HHGear);
+
+t:= CheckGearsCollision(Gear);
+i:= t^.Count;
+while i > 0 do
+    begin
+    dec(i);
+    tmp:= t^.ar[i];
+    if (tmp^.State and gstNoDamage) = 0 then
+        if (tmp^.Kind = gtHedgehog) then
+            begin
+            //tmp^.State:= tmp^.State or gstFlatened;
+            ApplyDamage(tmp, tmp^.Health div 2, dsUnknown);
+            DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
+            for i:= 5 downto 0 do
+                dust := AddVisualGear(hwRound(tmp^.X) - 5 + Random(10), hwRound(tmp^.Y) + 12, vgtDust);
+            SetAllToActive
+            end
+        else
+            begin
+            end
+    end;
+
+HHGear^.State:= HHGear^.State and not gstNoDamage;
+Gear^.Timer:= 250;
+Gear^.doStep:= @doStepIdle
 end;

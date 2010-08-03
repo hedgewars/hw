@@ -98,7 +98,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestGrenade;     flags: 0), // amGasBomb
             (proc: @TestShotgun;     flags: 0), // amSineGun
             (proc: nil;              flags: 0), // amFlamethrower
-            (proc: @TestGrenade;     flags: 0)  // amSMine
+            (proc: @TestGrenade;     flags: 0), // amSMine
+            (proc: @TestFirePunch;   flags: 0)  // amHammer
             );
 
 const BadTurn = Low(LongInt) div 4;
