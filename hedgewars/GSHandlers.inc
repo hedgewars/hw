@@ -854,6 +854,8 @@ begin
 
     if (Gear^.Timer mod 47) = 0 then
     begin
+        for i:= 0 to 1 do
+            AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
         i := hwRound(Gear^.X) - Gear^.Radius - LongInt(GetRandom(2));
         ei := hwRound(Gear^.X) + Gear^.Radius + LongInt(GetRandom(2));
         while i <= ei do
@@ -3882,16 +3884,19 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHammer(Gear: PGear);
-var HHGear, tmp: PGear;
+var HHGear, tmp, tmp2: PGear;
          t: PGearArray;
          i: LongInt;
-         dust: PVisualGear;
 begin
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.State:= HHGear^.State or gstNoDamage;
 DeleteCI(HHGear);
 
 t:= CheckGearsCollision(Gear);
+
+for i:= 5 downto 0 do
+    AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
+
 i:= t^.Count;
 while i > 0 do
     begin
@@ -3901,10 +3906,10 @@ while i > 0 do
         if (tmp^.Kind = gtHedgehog) then
             begin
             //tmp^.State:= tmp^.State or gstFlatened;
-            ApplyDamage(tmp, tmp^.Health div 2, dsUnknown);
-            DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
-            for i:= 5 downto 0 do
-                dust := AddVisualGear(hwRound(tmp^.X) - 5 + Random(10), hwRound(tmp^.Y) + 12, vgtDust);
+            ApplyDamage(tmp, tmp^.Health div 3, dsUnknown);
+            //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
+            tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
+            tmp2^.Hedgehog:= tmp^.Hedgehog;
             SetAllToActive
             end
         else
@@ -3915,4 +3920,93 @@ while i > 0 do
 HHGear^.State:= HHGear^.State and not gstNoDamage;
 Gear^.Timer:= 250;
 Gear^.doStep:= @doStepIdle
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepHammerHitWork(Gear: PGear);
+var 
+    i, ei: LongInt;
+    HHGear: PGear;
+begin
+    AllInactive := false;
+    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    dec(Gear^.Timer);
+    if (Gear^.Timer = 0)or((Gear^.Message and gm_Destroy) <> 0) then
+    begin
+        DeleteGear(Gear);
+        exit
+    end;
+
+    if (Gear^.Timer mod 5) = 0 then
+    begin
+        AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
+
+        i := hwRound(Gear^.X) - Gear^.Radius - LongInt(GetRandom(2));
+        ei := hwRound(Gear^.X) + Gear^.Radius + LongInt(GetRandom(2));
+        while i <= ei do
+        begin
+            DrawExplosion(i, hwRound(Gear^.Y) + 3, 3);
+            inc(i, 1)
+        end;
+
+        if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9)
+           , lfIndestructible) then
+        begin
+            Gear^.X := Gear^.X + Gear^.dX;
+            Gear^.Y := Gear^.Y + _1_9;
+        end;
+        SetAllHHToActive;
+    end;
+    if TestCollisionYwithGear(Gear, 1) then
+    begin
+        Gear^.dY := _0;
+        SetLittle(HHGear^.dX);
+        HHGear^.dY := _0;
+    end
+    else
+    begin
+        Gear^.dY := Gear^.dY + cGravity;
+        Gear^.Y := Gear^.Y + Gear^.dY;
+        if hwRound(Gear^.Y) > cWaterLine then Gear^.Timer := 1
+    end;
+
+    Gear^.X := Gear^.X + HHGear^.dX;
+    HHGear^.X := Gear^.X;
+    HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius);
+
+    if (Gear^.Message and gm_Attack) <> 0 then
+        if (Gear^.State and gsttmpFlag) <> 0 then Gear^.Timer := 1
+    else
+    else
+        if (Gear^.State and gsttmpFlag) = 0 then Gear^.State := Gear^.State or gsttmpFlag;
+    if ((Gear^.Message and gm_Left) <> 0) then Gear^.dX := - _0_3
+    else
+        if ((Gear^.Message and gm_Right) <> 0) then Gear^.dX := _0_3
+    else Gear^.dX := _0;
+end;
+
+procedure doStepHammerHit(Gear: PGear);
+var 
+    i, y: LongInt;
+    ar: TRangeArray;
+    HHGear: PGear;
+begin
+    i := 0;
+    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+
+    y := hwRound(Gear^.Y) - cHHRadius * 2;
+    while y < hwRound(Gear^.Y) do
+    begin
+        ar[i].Left := hwRound(Gear^.X) - Gear^.Radius - LongInt(GetRandom(2));
+        ar[i].Right := hwRound(Gear^.X) + Gear^.Radius + LongInt(GetRandom(2));
+        inc(y, 2);
+        inc(i)
+    end;
+
+    DrawHLinesExplosions(@ar, 3, hwRound(Gear^.Y) - cHHRadius * 2, 2, Pred(i));
+    Gear^.dY := HHGear^.dY;
+    DeleteCI(HHGear);
+
+    doStepHammerHitWork(Gear);
+    Gear^.doStep := @doStepHammerHit
 end;
