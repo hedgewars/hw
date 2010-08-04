@@ -821,6 +821,7 @@ TryDo(luaState <> nil, 'lua_open failed', true);
 luaopen_base(luaState);
 luaopen_string(luaState);
 luaopen_math(luaState);
+luaopen_table(luaState);
 
 // import some variables
 ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
