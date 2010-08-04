@@ -220,6 +220,44 @@ begin
     lc_gethogname:= 1
 end;
 
+function lc_gettimer(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetTimer!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushnumber(L, gear^.Timer)
+        else
+            lua_pushnil(L);
+        end;
+    lc_gettimer:= 1
+end;
+
+function lc_gethealth(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetHealth!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushnumber(L, gear^.Health)
+        else
+            lua_pushnil(L);
+        end;
+    lc_gethealth:= 1
+end;
+
 function lc_getx(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -328,6 +366,21 @@ begin
         if gear <> nil then gear^.Health:= lua_tointeger(L, 2)
         end;
     lc_sethealth:= 0
+end;
+
+function lc_settimer(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to SetTimer!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then gear^.Timer:= lua_tointeger(L, 2)
+        end;
+    lc_settimer:= 0
 end;
 
 function lc_setstate(L : Plua_State) : LongInt; Cdecl;
@@ -820,6 +873,9 @@ lua_register(luaState, 'GetFollowGear', @lc_getfollowgear);
 lua_register(luaState, 'SetState', @lc_setstate);
 lua_register(luaState, 'GetState', @lc_getstate);
 lua_register(luaState, 'SetTag', @lc_settag);
+lua_register(luaState, 'SetTimer', @lc_settimer);
+lua_register(luaState, 'GetTimer', @lc_gettimer);
+lua_register(luaState, 'GetHealth', @lc_gethealth);
 
 
 ScriptClearStack; // just to be sure stack is empty
