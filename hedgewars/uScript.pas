@@ -363,7 +363,11 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if gear <> nil then gear^.Health:= lua_tointeger(L, 2)
+        if gear <> nil then
+            begin
+            gear^.Health:= lua_tointeger(L, 2);
+            SetAllToActive;
+            end
         end;
     lc_sethealth:= 0
 end;
@@ -393,7 +397,11 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if gear <> nil then gear^.State:= lua_tointeger(L, 2)
+        if gear <> nil then
+            begin
+            gear^.State:= lua_tointeger(L, 2);
+            SetAllToActive;
+            end
         end;
     lc_setstate:= 0
 end;
@@ -426,7 +434,11 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if gear <> nil then gear^.Tag:= lua_tointeger(L, 2)
+        if gear <> nil then
+            begin
+            gear^.Tag:= lua_tointeger(L, 2);
+            SetAllToActive;
+            end
         end;
     lc_settag:= 0
 end;
@@ -540,6 +552,7 @@ begin
             y:= lua_tointeger(L, 3);
             gear^.X:= int2hwfloat(x);
             gear^.Y:= int2hwfloat(y);
+            SetAllToActive;
             end
         end;
     lc_setgearposition:= 0
