@@ -1475,7 +1475,7 @@ begin
         if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick);
         if Gear^.Timer = 0 then
         begin
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
             DeleteGear(Gear);
             exit
         end;
@@ -3581,6 +3581,7 @@ end;
 procedure doStepPiano(Gear: PGear);
 var 
     r0, r1: LongInt;
+    odY: hwFloat;
 begin
     AllInactive := false;
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and ((CurrentHedgehog^.Gear^.
@@ -3602,10 +3603,10 @@ begin
         CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gm_Slot;
     end;
 
-    if ((Gear^.Pos = 3) and ((GameFlags and gfSolidLand) <> 0)) or (Gear^.Pos = 20) then
-        // bounce up to 20 times (3 times on gameflagged solid land) before dropping past landscape
+    if (*((Gear^.Pos = 3) and ((GameFlags and gfSolidLand) <> 0)) or*) (Gear^.Pos = 5) then
+        // bounce up to 10 times (3 times on gameflagged solid land) before dropping past landscape
     begin
-        Gear^.dY := Gear^.dY + cGravity * 3;
+        Gear^.dY := Gear^.dY + cGravity * 2;
         Gear^.Y := Gear^.Y + Gear^.dY;
         CheckGearDrowning(Gear);
         if (Gear^.State and gstDrowning) <> 0 then
@@ -3623,6 +3624,7 @@ begin
         exit
     end;
 
+    odY:= Gear^.dY;
     doStepFallingGear(Gear);
 
     if (Gear^.State and gstDrowning) <> 0 then
@@ -3646,7 +3648,7 @@ begin
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, EXPLAutoSound);
             for r0:= 0 to 4 do
                 AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
-            Gear^.dY := -_1;
+            Gear^.dY := odY * -1 + cGravity * 2;
             Gear^.Pos := Gear^.Pos + 1;
         end
     else
