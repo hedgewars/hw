@@ -14,6 +14,16 @@ function map(func, tbl)
     return newtbl
 end
 
+function filter(func, tbl)
+    local newtbl = {}
+    for i,v in pairs(tbl) do
+        if func(v) then
+            table.insert(newtbl, v)
+        end
+    end
+    return newtbl
+end
+
 function onGameInit()
     GameFlags = gfSolidLand + gfDivideTeams
     TurnTime = 10000
@@ -25,17 +35,19 @@ function onGameInit()
     Theme = Compost
 end
 
-function setHogPositions(gear)
-    if GetHogClan(gear) == 0 then
-        SetGearPosition(gear, 250, 1000)
-    end 
-    if GetHogClan(gear) == 1 then
-        SetGearPosition(gear, 3500, 1000)
-    end 
-end
-
 function onGameStart()
-    mapM_(setHogPositions, hogs)
+    local offset = 50
+    local team1hh = filter(function(h) return GetHogClan(h) == 0 end, hogs)
+    local team2hh = filter(function(h) return GetHogClan(h) == 1 end, hogs)
+
+    for i,h in ipairs(team1hh) do
+        SetGearPosition(h, 250+(i-1)*offset, 1000)
+    end
+    for i,h in ipairs(team2hh) do
+        SetGearPosition(h, 3500-(i-1)*offset, 1000)
+    end
+
+    SpawnHealthCrate(1800, 1200)
 end
 
 function onAmmoStoreInit()
@@ -50,4 +62,10 @@ function onGearAdd(gear)
     if GetGearType(gear) == gtHedgehog then
         table.insert(hogs, gear)
     end 
+end
+
+function onGearDelete(gear)
+    if GetGearType(gear) == gtCase then
+        SpawnHealthCrate(1600 + math.random(550), 1150)
+    end
 end

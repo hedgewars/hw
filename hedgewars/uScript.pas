@@ -117,6 +117,22 @@ begin
     lc_hidemission:= 0;
 end;
 
+function lc_spawnhealthcrate(L: Plua_State) : LongInt; Cdecl;
+var x, y: LongInt;
+begin
+    if lua_gettop(L) <> 2 then begin
+        LuaError('Lua: Wrong number of parameters passed to SpawnHealthCrate!');
+        lua_pushnil(L);
+    end
+    else begin
+        x:= lua_tointeger(L, 1);
+        y:= lua_tointeger(L, 2);
+        cCaseFactor := 0;
+        SpawnHealthCrate(x, y);
+    end;
+    lc_spawnhealthCrate := 1;
+end;
+
 function lc_addgear(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
     x, y, s, t: LongInt;
@@ -862,6 +878,7 @@ for am:= Low(TAmmoType) to High(TAmmoType) do
 
 // register functions
 lua_register(luaState, 'AddGear', @lc_addgear);
+lua_register(luaState, 'SpawnHealthCrate', @lc_spawnhealthcrate);
 lua_register(luaState, 'WriteLnToConsole', @lc_writelntoconsole);
 lua_register(luaState, 'GetGearType', @lc_getgeartype);
 lua_register(luaState, 'EndGame', @lc_endgame);

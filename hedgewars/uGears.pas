@@ -81,6 +81,7 @@ var AllInactive: boolean;
 procedure initModule;
 procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
+procedure SpawnHealthCrate(x, y: LongInt);
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
@@ -1536,6 +1537,14 @@ while t <> nil do
     t:= t^.NextGear
     end;
 CountGears:= count;
+end;
+
+procedure SpawnHealthCrate(x, y: LongInt);
+begin
+    FollowGear:= AddGear(x, y, gtCase, 0, _0, _0, 0);
+    FollowGear^.Health:= 25;
+    FollowGear^.Pos:= posCaseHealth;
+    AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
 end;
 
 procedure SpawnBoxOfSmth;
