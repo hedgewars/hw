@@ -66,6 +66,6 @@ end
 
 function onGearDelete(gear)
     if GetGearType(gear) == gtCase then
-        SpawnHealthCrate(1600 + math.random(550), 1150)
+        SpawnHealthCrate(1880, 1150)
     end
 end
