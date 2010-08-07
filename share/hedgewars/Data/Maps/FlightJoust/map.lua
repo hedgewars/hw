@@ -1,4 +1,5 @@
 local hogs = {}
+local spawncrate = 0
 
 function mapM_(func, tbl)
     for i,v in pairs(tbl) do
@@ -47,7 +48,7 @@ function onGameStart()
         SetGearPosition(h, 3500-(i-1)*offset, 1000)
     end
 
-    SpawnHealthCrate(1800, 1200)
+    SpawnHealthCrate(1800, 1150)
 end
 
 function onAmmoStoreInit()
@@ -64,8 +65,15 @@ function onGearAdd(gear)
     end 
 end
 
+function onGameTick()
+    if (TurnTimeLeft == 9999 and spawncrate == 1) then
+        SpawnHealthCrate(1800, 1150)
+        spawncrate = 0
+    end
+end
+
 function onGearDelete(gear)
     if GetGearType(gear) == gtCase then
-        SpawnHealthCrate(1880, 1150)
+        spawncrate = 1
     end
 end
