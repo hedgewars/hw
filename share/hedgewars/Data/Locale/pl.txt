@@ -18,7 +18,7 @@
 00:15=Nalot
 00:16=Zrzut min
 00:17=Palnik
-00:18=Budowanie
+00:18=Belka
 00:19=Teleportacja
 00:20=Zmień jeża
 00:21=Moździerz
@@ -47,6 +47,8 @@
 00:44=Cuchnący ser
 00:45=Sinusoidalna giwera
 00:46=Miotacz ognia
+00:47=Mina samoprzylepna
+00:48=Młotek
 
 01:00=Walczmy!
 01:01=Remis
@@ -60,6 +62,8 @@
 01:09=Synchronizuję...
 01:10=Użycie tej broni nie zakończy tury.
 01:11=Ta broń nie jest jeszcze dostępna.
+01:12=To już ostatnia runda przed Nagłą Śmiercią!
+01:13=Zostało %1 rund do Nagłej Śmierci!
 
 ; Event messages
 ; Hog (%1) died
@@ -67,10 +71,10 @@
 02:00=%1 ujrzał światło!
 02:00=%1 nie zobaczy już niczego więcej!
 02:00=%1 macha na pożegnanie!
-02:00=%1 odszedł to piękniejszego świata!
+02:00=%1 odszedł do piękniejszego świata!
 02:00=%1 spotkał stwórcę!
 02:00=%1 już dłużej nie wytrzyma!
-02:00=%1 skończył służbę!
+02:00=%1 zakończył służbę!
 02:00=%1 poświęcił się dla ogółu!
 02:00=%1 zrezygnował z trudu życia!
 02:00=Tak jak liść opuszcza drzewo, tak nas opuszcza %1!
@@ -79,18 +83,18 @@
 02:00=%1 miał tętniaka!
 02:00=%1 opuścił żonę i dziecko!
 02:00=%1 już nie strzeli z bazooki w tym życiu...
-02:00=%1 już nie porzuca granatem w tym życiu...
-02:00=%1 nie będzie piekł już ciast...
+02:00=%1 już nie rzuci granatem w tym życiu...
+02:00=%1 nie upiecze więcej ciast...
 02:00=%1 więcej nie pobawi się w Tarzana...
 02:00=%1 nie będzie więcej wzywał nalotów...
-02:00=%1 po raz ostatni wystrzelił ze strzelby...
+02:00=%1 już nie będzie strzelał z dubeltówki..
 02:00=%1 już nie będzie rzucał w innych owocami...
 02:00=%1 nie postrzela już ze strzelby...
-02:00=%1 przyjął jeden strzał za dużo.
+02:00=%1 przyjął o jeden strzał za dużo.
 02:00=A mógł zebrać tą skrzynkę z życiem...
 02:00=%1 poszedł pograć w lepszą grę...
 02:00=%1 przytupnął nóżką i umarł
-02:00=%1 ponosi całkowitą klęskę.
+02:00=%1 poniósł całkowitą klęskę.
 02:00=Biedny %1 ...
 02:00=%1 woli grać w Wormux
 02:00=%1 blokuje strzały własną twarzą
@@ -98,11 +102,11 @@
 02:00=%1 opuścił budynek
 02:00=%1 podąża drogą dinozaurów
 02:00=%1 przybliża jeże o krok do wyginięcia
-02:00=%1 powoduje, że chce mi się płakać
+02:00=%1 sprawia, że chce mi się płakać
 02:00=%1 to ex-jeż
 02:00=%1 wącha kwiatki... od spodu
 02:00=%1 zakończył egzystencję
-02:00=Powiedzmy "Pa Pa" dla %1
+02:00=Musimy Cię pożegnać, %1
 02:00=Nie ma nadziei dla %1
 02:00=%1 spuszcza kurtynę
 02:00=%1 gryzie piach
@@ -112,13 +116,24 @@
 02:00=%1 przestał istnieć
 02:00=Nie chcąc dłużej żyć, %1 umiera w pokoju.
 02:00=%1 dołącza do chórków anielskich.
-02:00=Żegnaj %1, ledwo co Cię znaliśmy!
+02:00=Żegnaj %1, dopiero Cię poznaliśmy!
 02:00=%1 ma niską tolerancję na bycie postrzelonym.
 02:00=%1 mógł użyć dodatkowego życia.
 02:00=Czy jest na sali jakiś doktor?
 02:00=To z pewnością był toczeń!
-02:00=Ale Urwał!!!
 02:00=Ale to było dobre!!!
+02:00=%1 przeszedł na emeryturę
+02:00=%1 poszedł do innej piaskownicy
+02:00=%1 się tak nie bawi
+02:00=%1 wykitował
+02:00=%1 nie kot, ma tylko jedno życie
+02:00=%1, a nie mówiłem, żeby zbierać apteczki?
+02:00=%1 poległ w boju
+02:00=%1 zginął na polu bitwy
+02:00=%1 wydał ostatnie tchnienie
+02:00=%1 przeszedł do historii
+02:00=%1 ewakuował się z tego świata
+
 ; Hog (%1) drowned
 02:01=%1 robi za łódź podwodną!
 02:01=%1 udaje Titanica!
@@ -130,12 +145,12 @@
 02:01=%1 zapomniał o rękawkach
 02:01=%1 powinien brać lekcje pływania
 02:01=%1 zostawił w domu deskę do pływania.
-02:01=%1 się umył!
-02:01=%1 jest już przemoczony
+02:01=%1 doszedł do wniosku, że czas na kąpiel!
+02:01=%1 przemókł do suchej nitki!
 02:01=%1 zapomniał o kamizelce ratunkowej
-02:01=%1 idzie się popluskać
+02:01=%1 poszedł się popluskać
 02:01=%1 śpi z rybami
-02:01=%1 uważa, że fizyka płynów w tej grze ssie
+02:01=%1 uważa, że fizyka płynów w tej grze jest do bani!
 02:01=%1 wygląda na spragnionego
 02:01=Morze Ciebie wzywa, %1
 02:01=%1 zaginął na morzu
@@ -145,17 +160,17 @@
 02:01=%1 ćwiczy pływanie na plecach
 02:01=%1 szuka Titanica
 02:01=%1 to z pewnością nie jest Jezus.
-02:01=%1 pyta się "Gdzie jest Nemo?"
+02:01=%1 postanowił odnaleźć Nemo!
 02:01=%1 wyczuwa przeciek
-02:01=Nie uwierzysz ile ich jest tam na dole!
+02:01=Nie uwierzysz ile ich już utonęło!
 02:01=%1 podnosi poziom oceanu
 02:01=%1 nie zapisał się do marynarki.
 02:01=%1 robi za śniętą rybę...
 02:01=Przynajmmniej nie utonąłeś w muszli klozetowej, %1
-02:01=Sonic nie umiał pływać więc ty także, %1
+02:01=%1 nie pobił Sonica w pływaniu
 02:01=%1 będzie grał w "Uwolnić Orkę"
 02:01=%1 szuka rybek do akwarium!
-02:01=%1 znalazł Atlantydę!
+02:01=%1 odnalazł Atlantydę!
 02:01=%1 chce być główną postacią w Bioshock 3
 02:01=Trzeba było się uczyć pływać...
 02:01=%1 powinien ze sobą zabrać narty wodne
@@ -164,12 +179,24 @@
 02:01=%1 nie ma tratwy
 02:01=%1 uważa, że słona woda dobrze robi na cerę
 02:01=%1 moczy rany w słonej wodzie
-02:01=%1 znalazł się za burtą
+02:01=%1 wypadł za burtę
 02:01=%1 bierze kąpiel
 02:01=%1 jest bardzo, bardzo mokry
-02:01=%1 przemoczy swoje igły
+02:01=%1 przemoczył sobie igły
 02:01=%1 był bardzo spragniony
 02:01=%1 weźmie udział w "Szczękach"... jako przynęta!
+02:01=%1 lubi nurkować
+02:01=%1 skoczył na główkę
+02:01=%1 skoczył na bombę
+02:01=%1 nie zdążył zadzwonić po WOPR
+02:01=%1 ma za mało tlenu
+02:01=%1 się pochlapał
+02:01=%1 przemoczył sobie wdzianko
+02:01=%1 utonął
+02:01=%1 ma za małą wyporność
+02:01=%1 chciał sobie pogadać z rybkami
+02:01=%1, uważaj na rekiny!
+02:01=%1 pływa po Warszawsku. Tyłkiem po piasku!
 ; Round starts
 02:02=Walczmy!
 02:02=Cel! Pal!
@@ -234,21 +261,29 @@
 02:05=Dobre życie... w formie skrzyneczki!
 02:05=Ktoś dzwonił po doktora?
 02:05=Świeże bandaże!
-02:05=To pomoże poczuć Tobie się lepiej
-02:05=Hi-Potion! Eeee... To chyba nie ta nazwa.
-02:05=Zbierz-mnie!
+02:05=To pomoże poczuć się Tobie lepiej
+02:05=Pomniejszy Eliksir Żywotności! Eeee... To chyba nie ta nazwa.
+02:05=Zbierz mnie!
 02:05=Zbierz to!
 02:05=Zdrowa przekąska!
 02:05=Środek przeciwbólowy
 02:05=Dawkowanie: ile tylko znajdziesz!
 02:05=Ważna przesyłka
-02:05=Zapasy!
+02:05=Najwięcej witaminy mają paczki od rodziny!
 02:05=Czy ktoś wzywał doktor Zosię?
 02:05=Oby to nie był Pavulon!
 02:05=Codziena dawka Panadolu!
 02:05=Chyba Goździkowa maczała w tym palce...
 02:05=Gdzie jest Doktor Queen?
 02:05=U mnie to jak u lekarza!
+02:05=Zawartość refundowana przez NFZ!
+02:05=Dr. House przysyła leki
+02:05=Darmowe leczenie!
+02:05=Życie w pigułce
+02:05=Rozdajemy darmowe HP!
+02:05=W Hedgewars opieka zdrowotna naprawdę wymiata!
+02:05=Na zdrowie!
+02:05=Szczepionka!
 ; New ammo crate
 02:06=Więcej broni!
 02:06=Posiłki!
@@ -273,6 +308,13 @@
 02:06=Tajemnicza skrzynia!
 02:06=KABUM! KABUM! KABUM!
 02:06=Skrzynka pełna niespodzianek
+02:06=Cokolwiek tam jest, na pewno się przyda
+02:06=Darmowa broń bez zezwolenia!
+02:06=Gadżety!
+02:06=Odjazdowy sprzęt!
+02:06=Wyślij SMS na numer 7400 do wygrania zawartość zasobnika!
+02:06=Czy to ptak...? Czy to samolot...?
+02:06=Spadające gwiazdy nie spełniają życzeń, ale zasobniki jak najbardziej
 ; New utility crate
 02:07=Czas na narzędzia!
 02:07=To może się przydać...
@@ -287,9 +329,13 @@
 02:07=Możesz tego potrzebować.
 02:07=Keczup prosto od MacGyvera!
 02:07=Zestaw Małego Majsterkowicza
+02:07=Darmowa paczka narzędzi!
+02:07=Zasobniki prosto z Ameryki!
+02:07=Zapasy materiałów eksploatacyjnych!
+02:07=Dorwij przeciwnika szybciej z nowymi narzędziami
 ; Hog (%1) skips his turn
 02:08=%1 jest taki nudny...
-02:08=%1 nie powinienem być rozpraszany
+02:08=%1 próbuje się skupić
 02:08=%1 jest leniwy
 02:08=%1 jest bezmyślny
 02:08=%1 poddał się.
@@ -302,11 +348,11 @@
 02:08=%1 odpoczywa
 02:08=%1 dał sobie na wstrzymanie
 02:08=%1 nie wierzy we własne możliwości.
-02:08=%1 decyduje by nie robić niczego.
+02:08=%1 decyduje się nic nie robić
 02:08=%1 pozwala przeciwnikowi zniszczyć się samemu.
 02:08=%1 byłby marny w imprezowaniu
 02:08=%1 ukrywa się
-02:08=%1 postanowił nie skorzystać z okazji
+02:08=%1 skorzystał z okazji
 02:08=%1 uważa, że najlepszą rzeczą jaką może zrobić to... nic
 02:08=%1 jest mięczakiem
 02:08=Niuch, Niuch, %1 śmierdzi tchórzem
@@ -328,6 +374,15 @@
 02:08=NIE SPAĆ!!! ZWIEDZAĆ!!!
 02:08=%1 stracił kontakt z bazą...
 02:08=Co za leń...
+02:08=%1, obudź się!
+02:08=Czy się stoi, czy się leży, dobra pensja się należy!
+02:08=%1, nie za to ci płacą!
+02:08=%1, bierz się do roboty!
+02:08=%1 zachwyca się przyrodą
+02:08=%1 nie docenia rywala
+02:08=%1 ma wszystko w nosie
+02:08=%1 nie chce połamać sobie igieł
+02:08=%1 ma stracha
 ; Hog (%1) hurts himself only
 02:09=%1 powinien potrenować celowanie!
 02:09=%1 najwidoczniej nienawidzi samego siebie..
@@ -347,7 +402,7 @@
 02:09=%1 powinien celować w przeciwnika
 02:09=%1 zbliża się małymi kroczkami do samobójstwa...
 02:09=%1 pomaga wrogowi
-02:09=To było głupie %1
+02:09=To było głupie, %1
 02:09=%1 żyje według mantry : "nie ryzykujesz, nie zyskujesz"
 02:09=%1 jest rozkojarzony
 02:09=%1 przez swoje rozkojarzenie uderza samego siebie.
@@ -358,14 +413,24 @@
 02:09=Nie można się spodziewać by %1 był cały czas perfekcyjny.
 02:09=Nie martw się %1, Dikt nie jest noskonały...
 02:09=%1 zrobił to celowo.
-02:09=Jeśli ty o tym nie powiesz, ja też dotrzymam tajemnicy %1
+;02:09=Jeśli ty o tym nie powiesz, ja też dotrzymam tajemnicy %1
 02:09=ŻENUA!!!
-02:09=Jestem pewny, że nikt nie widział %1
+02:09=Na pewno nikt tego nie zobaczył, %1
 02:09=%1 powinien przejrzeć podręcznik walki na froncie...
-02:09=Wiesz co %1? Ktoś ci popsuł giwerę!
+02:09=%1, ktoś popsuł ci giwerę!
 02:09=Nie ma takiego strzelania!!!
 02:09=%1 miał ciężki weekend.
 02:09=KHY! KHY! KHY...
+02:09=Ale Urwał!!!
+02:09=%1, ale z ciebie frajer!
+02:09=%1 próbował zjeść arbuza
+02:09=%1 zapomniał rzucić granatem
+02:09=%1 trzymał karabin za spust
+02:09=%1 walczy o nagrodę Darwina
+02:09=%1 postanowił się rozerwać... na strzępy
+02:09=%1 ma już dość tego świata
+02:09=%1 dostał łapówkę
+02:09=%1 przywalił, jak łysy czupryną o kant kuli
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
 02:10=To ptak? To samolot?
@@ -373,9 +438,12 @@
 02:10=Małysz idzie w odstawkę!
 02:10=Iiii Leciiii...
 02:10=Bzziuuuuu!
+02:10=Niezły rzut!
+02:10=Chyba padnie rekord Guinessa w rzucie jeżem!
+02:10=To było odlotowe!
 ; Weapon Categories
-03:00=Granat czasowy
-03:01=Granat czasowy
+03:00=Granat z zapalnikiem
+03:01=Granat z zapalnikiem
 03:02=Pocisk
 03:03=Bzyku, bzyk!
 03:04=Strzelba (kilka strzałów)
@@ -422,8 +490,8 @@
 03:44=Stary i baaaaardzo śmierdzący
 
 ; Weapon Descriptions (use | as line breaks)
-04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy czas detonatora wyniesie zero.|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
-04:01=Atakuj przeciwników granatem odłamkowym.|Rozpadnie się on na kilka odłamków gdy jego czas|wyniesie zero.|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
+04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
+04:01=Atakuj przeciwników granatem odłamkowym.|Rozpadnie się on na kilka odłamków gdy zapalnik|skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
 04:02=Atakuj przeciwników pociskiem balistycznym,|który jest podatny na wiatr.|Atak: Przytrzymaj by strzelić z większą siłą
 04:03=Wypuść zdenerwowaną pszczołe, która "użądli"|zaznaczony cel. By zwiększyć precyzję nie|strzelaj pełną mocą|Kursor: Wybierz cel|Atak: Przytrzymaj by strzelić z większą siłą
 04:04=Atakuj przeciwników strzelbą z dwoma strzałami.|Działa obszarowo, więc nie musisz dokładnie|celować by zranić przeciwników.|Atak: Strzel (kilka razy)
@@ -466,7 +534,7 @@
 04:41=Natura może być na równi z technologią!|Ptaszek uniesie Ciebie ponad ziemię oraz|zrzuci jajka w przeciwników|Atak: Atywacja ptaka i zrzucanie jajek|Góra/Lewo/Prawo: Leć w wybranym kierunku
 04:42=HUGE SUCCESS| | |(but missing texts!)
 04:43=(missing text)
-04:44=To nie jest zwykły ser. To broń biologiczna!|Nie spowoduje dużych obrażeń kiedy|licznik dojdzie do zera, ale z pewnością|zatruje każdego nieszczęśnika|który będzie w pobliżu|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
+04:44=To nie jest zwykły ser. To broń biologiczna!|Wybuch z pewnością nie będzie potężny, ale gdy|licznik dojdzie do zera, chmura gazu zatruje|każdego nieszczęśnika który będzie w pobliżu|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
 
 ; Game goal strings
 05:00=Ustawienia gry
