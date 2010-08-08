@@ -81,6 +81,7 @@ var AllInactive: boolean;
 procedure initModule;
 procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
+procedure SpawnHealthCrate(x, y: LongInt);
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
@@ -204,7 +205,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepFlamethrower,
             @doStepSMine,
             @doStepPoisonCloud,
-            @doStepHammer
+            @doStepHammer,
+            @doStepHammerHit
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -340,6 +342,10 @@ gtAmmo_Grenade: begin // bazooka
   gtPickHammer: begin
                 gear^.Radius:= 10;
                 gear^.Timer:= 4000
+                end;
+   gtHammerHit: begin
+                gear^.Radius:= 8;
+                gear^.Timer:= 125
                 end;
         gtRope: begin
                 gear^.Radius:= 3;
@@ -1531,6 +1537,14 @@ while t <> nil do
     t:= t^.NextGear
     end;
 CountGears:= count;
+end;
+
+procedure SpawnHealthCrate(x, y: LongInt);
+begin
+    FollowGear:= AddGear(x, y, gtCase, 0, _0, _0, 0);
+    FollowGear^.Health:= 25;
+    FollowGear^.Pos:= posCaseHealth;
+    AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
 end;
 
 procedure SpawnBoxOfSmth;

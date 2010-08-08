@@ -88,7 +88,7 @@ type
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
-            gtSMine, gtPoisonCloud, gtHammer);
+            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit);
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -2164,9 +2164,9 @@ const
             Probability: 100;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
-                Count: 2;
+                Count: 1;
                 InitialCount: 0;
-                NumPerTurn: 0;
+                NumPerTurn: 1;
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amSMine;
@@ -2196,7 +2196,7 @@ const
                 AmmoType: amHammer;
                 AttackVoice: sndNone);
             Slot: 3;
-            TimeAfterTurn: 3000;
+            TimeAfterTurn: 1000;
             MinAngle: 0;
             maxAngle: 0;
             isDamaging: true;
