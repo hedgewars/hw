@@ -133,6 +133,8 @@ type
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun,
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer);
 
+    TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
+
     THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
 
     TCapGroup = (capgrpGameState, capgrpAmmoinfo, capgrpVolume,

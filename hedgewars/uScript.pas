@@ -118,19 +118,42 @@ begin
 end;
 
 function lc_spawnhealthcrate(L: Plua_State) : LongInt; Cdecl;
-var x, y: LongInt;
 begin
     if lua_gettop(L) <> 2 then begin
         LuaError('Lua: Wrong number of parameters passed to SpawnHealthCrate!');
         lua_pushnil(L);
     end
     else begin
-        x:= lua_tointeger(L, 1);
-        y:= lua_tointeger(L, 2);
-        cCaseFactor := 0;
-        SpawnHealthCrate(x, y);
+        SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
+            HealthCrate, 0);
     end;
-    lc_spawnhealthCrate := 1;
+    lc_spawnhealthcrate := 1;        
+end;
+
+function lc_spawnammocrate(L: PLua_State): LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 3 then begin
+        LuaError('Lua: Wrong number of parameters passed to SpawnAmmoCrate!');
+        lua_pushnil(L);
+    end
+    else begin
+        SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
+            AmmoCrate, lua_tointeger(L, 3));
+    end;
+    lc_spawnammocrate := 1;
+end;
+
+function lc_spawnutilitycrate(L: PLua_State): LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 3 then begin
+        LuaError('Lua: Wrong number of parameters passed to SpawnUtilityCrate!');
+        lua_pushnil(L);
+    end
+    else begin  
+        SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
+            UtilityCrate, lua_tointeger(L, 3));
+    end;
+    lc_spawnutilitycrate := 1;
 end;
 
 function lc_addgear(L : Plua_State) : LongInt; Cdecl;
@@ -879,6 +902,8 @@ for am:= Low(TAmmoType) to High(TAmmoType) do
 // register functions
 lua_register(luaState, 'AddGear', @lc_addgear);
 lua_register(luaState, 'SpawnHealthCrate', @lc_spawnhealthcrate);
+lua_register(luaState, 'SpawnAmmoCrate', @lc_spawnammocrate);
+lua_register(luaState, 'SpawnUtilityCrate', @lc_spawnutilitycrate);
 lua_register(luaState, 'WriteLnToConsole', @lc_writelntoconsole);
 lua_register(luaState, 'GetGearType', @lc_getgeartype);
 lua_register(luaState, 'EndGame', @lc_endgame);

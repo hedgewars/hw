@@ -81,7 +81,7 @@ var AllInactive: boolean;
 procedure initModule;
 procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
-procedure SpawnHealthCrate(x, y: LongInt);
+procedure SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword );
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
@@ -1539,12 +1539,31 @@ while t <> nil do
 CountGears:= count;
 end;
 
-procedure SpawnHealthCrate(x, y: LongInt);
+procedure SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword);
 begin
-    FollowGear:= AddGear(x, y, gtCase, 0, _0, _0, 0);
-    FollowGear^.Health:= 25;
-    FollowGear^.Pos:= posCaseHealth;
-    AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
+    FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
+    cCaseFactor := 0;
+
+    if (content < ord(Low(TAmmoType))) then content := 0;
+    if (content > ord(High(TAmmoType))) then content := ord(High(TAmmoType));
+
+    case crate of
+        HealthCrate: begin
+            FollowGear^.Health := 25;
+            FollowGear^.Pos := posCaseHealth;
+            AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
+            end;
+        AmmoCrate: begin
+            FollowGear^.Pos := posCaseAmmo;
+            FollowGear^.State := content;
+            AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
+            end;
+        UtilityCrate: begin
+            FollowGear^.Pos := posCaseUtility;
+            FollowGear^.State := content;
+            AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
+            end;
+    end;
 end;
 
 procedure SpawnBoxOfSmth;
