@@ -61,9 +61,10 @@
     NSString *fileToCheck, *teamToCheck, *teamToUpdate, *schemeToCheck, *schemeToUpdate;
     NSString *resDir = [[NSBundle mainBundle] resourcePath];
     
-    NSString *dirToCheck = [NSString stringWithFormat:@"%@/Settings/", resDir];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:dirToCheck] == YES) {
-
+    NSString *dirToCheck = [NSString stringWithFormat:@"%@/done.txt",DOCUMENTS_FOLDER()];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:dirToCheck] == NO) {
+        DLog(@"Creating necessary files");
+        
         // if the settings file is already present, we merge current preferences with the update
         fileToCheck = [NSString stringWithFormat:@"%@/Settings/settings.plist",resDir];
         if ([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()]) {
@@ -126,8 +127,12 @@
             createWeaponNamed(@"Minefield", 5);
         }
         
-        // clean this dir so that it doesn't get called again
-        [[NSFileManager defaultManager] removeItemAtPath:dirToCheck error:&err];
+        // create a dummy file so that it doesn't get called again
+        if ([[NSFileManager defaultManager] createFileAtPath:dirToCheck 
+                                                    contents:[NSData dataWithContentsOfFile:SETTINGS_FILE()]
+                                                  attributes:nil])
+            DLog(@"Success");
+        
         if (err != nil) 
             DLog(@"%@", err);
     }

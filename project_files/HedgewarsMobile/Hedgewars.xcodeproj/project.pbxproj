@@ -113,7 +113,6 @@
 		6183D83E11E2BCE200A88903 /* LI-ipad-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */; };
 		6183D83F11E2BCE200A88903 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83D11E2BCE200A88903 /* Default.png */; };
 		6187AEBD120781B900B31A27 /* Settings in Resources */ = {isa = PBXBuildFile; fileRef = 6187AEA5120781B900B31A27 /* Settings */; };
-		6187AEBE120781C000B31A27 /* Settings in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6187AEA5120781B900B31A27 /* Settings */; };
 		619C09EA11E8B8D600F1DF16 /* title_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 619C09E911E8B8D600F1DF16 /* title_small.png */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
@@ -684,19 +683,6 @@
 			remoteInfo = fpc;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		6187AE9E12077F9600B31A27 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = .;
-			dstSubfolderSpec = 7;
-			files = (
-				6187AEBE120781C000B31A27 /* Settings in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1372,7 +1358,6 @@
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
-				6187AE9E12077F9600B31A27 /* CopyFiles */,
 			);
 			buildRules = (
 				9283015B0F10E46D00CC5A3C /* PBXBuildRule */,
