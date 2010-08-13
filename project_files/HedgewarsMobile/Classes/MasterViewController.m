@@ -42,6 +42,7 @@
         if (nil == generalSettingsViewController)
             generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
         generalSettingsViewController.navigationItem.hidesBackButton = YES;
+        [generalSettingsViewController viewWillAppear:YES];
         [self.navigationController pushViewController:generalSettingsViewController animated:NO];
     } else {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone

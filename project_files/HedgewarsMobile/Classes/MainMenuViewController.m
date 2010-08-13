@@ -35,7 +35,7 @@
 // using a different thread for audio 'cos it's slow
 -(void) initAudioThread {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 1, 512);
+    // do somthing in the future
     [pool release];
 }
 
@@ -55,72 +55,102 @@
                                              selector:@selector(dismissModalViewController)
                                                  name: @"dismissModalView"
                                                object:nil];
+    
+    // now check if some configuration files are already set; if they are present it means that the current copy must be updated
+    NSError *err = nil;
+    NSString *fileToCheck, *teamToCheck, *teamToUpdate, *schemeToCheck, *schemeToUpdate;
+    NSString *resDir = [[NSBundle mainBundle] resourcePath];
+    
+    NSString *dirToCheck = [NSString stringWithFormat:@"%@/Settings/", resDir];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:dirToCheck] == YES) {
 
-    // initialize some files the first time we load the game
-    if (!([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()]))
-        [NSThread detachNewThreadSelector:@selector(checkFirstRun) toTarget:self withObject:nil];
+        // if the settings file is already present, we merge current preferences with the update
+        fileToCheck = [NSString stringWithFormat:@"%@/Settings/settings.plist",resDir];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()]) {
+            NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
+            NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:fileToCheck];
+            [update addEntriesFromDictionary:settings];
+            [settings release];
+            [update writeToFile:SETTINGS_FILE() atomically:YES];
+            [update release];
+        } else 
+            [[NSFileManager defaultManager] copyItemAtPath:fileToCheck toPath:SETTINGS_FILE() error:&err];
+        
+        // if the teams are already present we merge the old teams if they still exist
+        fileToCheck = [NSString stringWithFormat:@"%@/Settings/Teams",resDir];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:TEAMS_DIRECTORY()]) {
+            for (NSString *str in [[NSFileManager defaultManager] contentsAtPath:fileToCheck]) {
+                teamToCheck = [NSString stringWithFormat:@"%@/%@",TEAMS_DIRECTORY(),str];
+                teamToUpdate = [NSString stringWithFormat:@"%@/Settings/Teams/%@",resDir,str];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:teamToCheck]) {
+                    NSDictionary *team = [[NSDictionary alloc] initWithContentsOfFile:teamToCheck];
+                    NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:teamToUpdate];
+                    [update addEntriesFromDictionary:team];
+                    [team release];
+                    [update writeToFile:teamToCheck atomically:YES];
+                    [update release];
+                }
+            }
+        } else
+            [[NSFileManager defaultManager] copyItemAtPath:fileToCheck toPath:TEAMS_DIRECTORY() error:&err];
 
+        // the same holds for schemes (but they're arrays)
+        fileToCheck = [NSString stringWithFormat:@"%@/Settings/Schemes",resDir];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()]) {
+            for (NSString *str in [[NSFileManager defaultManager] contentsAtPath:fileToCheck]) {
+                schemeToCheck = [NSString stringWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),str];
+                schemeToUpdate = [NSString stringWithFormat:@"%@/Settings/Schemes/%@",resDir,str];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:schemeToCheck]) {
+                    NSArray *scheme = [[NSArray alloc] initWithContentsOfFile:schemeToCheck];
+                    NSArray *update = [[NSArray alloc] initWithContentsOfFile:schemeToUpdate];
+                    if ([update count] > [scheme count])
+                        [update writeToFile:schemeToCheck atomically:YES];
+                    [update release];
+                    [scheme release];
+                }
+            }
+        } else
+            [[NSFileManager defaultManager] copyItemAtPath:fileToCheck toPath:SCHEMES_DIRECTORY() error:&err];
+        
+        // we create weapons the first time only, they are autoupdated each time
+        if ([[NSFileManager defaultManager] fileExistsAtPath:WEAPONS_DIRECTORY()] == NO) {
+            [[NSFileManager defaultManager] createDirectoryAtPath:WEAPONS_DIRECTORY()
+                                      withIntermediateDirectories:YES
+                                                       attributes:nil
+                                                            error:&err];
+            createWeaponNamed(@"Default", 0);
+            createWeaponNamed(@"Crazy", 1);
+            createWeaponNamed(@"Pro mode", 2);
+            createWeaponNamed(@"Shoppa", 3);
+            createWeaponNamed(@"Basketball", 4);
+            createWeaponNamed(@"Minefield", 5);
+        }
+        
+        // clean this dir so that it doesn't get called again
+        [[NSFileManager defaultManager] removeItemAtPath:dirToCheck error:&err];
+        if (err != nil) 
+            DLog(@"%@", err);
+    }
+    
     [super viewDidLoad];
 }
 
-// this is called to verify whether it's the first time the app is launched
-// if it is it blocks user interaction with an alertView until files are created
--(void) checkFirstRun {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    DLog(@"First time run, creating settings files at %@", SETTINGS_FILE());
-
-    // show a popup with an indicator to make the user wait
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Please wait",@"")
-                                                    message:nil
-                                                   delegate:nil
-                                          cancelButtonTitle:nil
-                                          otherButtonTitles:nil];
-    [alert show];
-
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]
-                                          initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    indicator.center = CGPointMake(alert.bounds.size.width / 2, alert.bounds.size.height - 50);
-    [indicator startAnimating];
-    [alert addSubview:indicator];
-    [indicator release];
-
-    // create default files (teams/weapons/scheme)
-    createTeamNamed(@"Pirates");
-    createTeamNamed(@"Ninjas");
-    createWeaponNamed(@"Default");
-    createSchemeNamed(@"Default");
-
-    // create settings.plist
-    NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
-
-    [saveDict setObject:@"" forKey:@"username"];
-    [saveDict setObject:@"" forKey:@"password"];
-    [saveDict setObject:[NSNumber numberWithBool:YES] forKey:@"music"];
-    [saveDict setObject:[NSNumber numberWithBool:YES] forKey:@"sound"];
-    [saveDict setObject:[NSNumber numberWithBool:NO] forKey:@"alternate"];
-
-    [saveDict writeToFile:SETTINGS_FILE() atomically:YES];
-    [saveDict release];
-
-    // ok let the user take control
-    [alert dismissWithClickedButtonIndex:0 animated:YES];
-    [alert release];
-
-    [pool release];
-
-    // TODO: instead of this useless runtime initialization, check that all ammos remain compatible with engine
-}
 
 #pragma mark -
 -(IBAction) switchViews:(id) sender {
     UIButton *button = (UIButton *)sender;
     UIAlertView *alert;
-    NSString *debugStr;
+    NSString *xib;
 
     switch (button.tag) {
         case 0:
             if (nil == self.gameConfigViewController) {
-                GameConfigViewController *gcvc = [[GameConfigViewController alloc] initWithNibName:@"GameConfigViewController" bundle:nil];
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                    xib = nil;
+                else
+                    xib = @"GameConfigViewController";
+                
+                GameConfigViewController *gcvc = [[GameConfigViewController alloc] initWithNibName:xib bundle:nil];
                 self.gameConfigViewController = gcvc;
                 [gcvc release];
             }

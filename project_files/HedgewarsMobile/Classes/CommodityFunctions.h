@@ -10,18 +10,14 @@
 
 #define MAX_HOGS 8
 
+#define DOCUMENTS_FOLDER()      [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
-#define SETTINGS_FILE()         [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
-                                 objectAtIndex:0] stringByAppendingString:@"/settings.plist"]
-#define DEBUG_FILE()            [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
-                                 objectAtIndex:0] stringByAppendingString:@"/debug.txt"]
+#define SETTINGS_FILE()         [DOCUMENTS_FOLDER() stringByAppendingString:@"/settings.plist"]
+#define DEBUG_FILE()            [DOCUMENTS_FOLDER() stringByAppendingString:@"/debug.txt"]
 
-#define TEAMS_DIRECTORY()       [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
-                                 objectAtIndex:0] stringByAppendingString:@"/Teams/"]
-#define WEAPONS_DIRECTORY()     [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
-                                 objectAtIndex:0] stringByAppendingString:@"/Weapons/"]
-#define SCHEMES_DIRECTORY()     [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) \
-                                 objectAtIndex:0] stringByAppendingString:@"/Schemes/"]
+#define TEAMS_DIRECTORY()       [DOCUMENTS_FOLDER() stringByAppendingString:@"/Teams/"]
+#define WEAPONS_DIRECTORY()     [DOCUMENTS_FOLDER() stringByAppendingString:@"/Weapons/"]
+#define SCHEMES_DIRECTORY()     [DOCUMENTS_FOLDER() stringByAppendingString:@"/Schemes/"]
 
 #define GRAPHICS_DIRECTORY()    [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/"]
 #define HATS_DIRECTORY()        [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Hats/"]
@@ -37,13 +33,13 @@
 #define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory");
 #define MSG_DIDUNLOAD()         DLog(@"unloaded");
 
-#define CURRENT_AMMOSIZE        46
+#define CURRENT_AMMOSIZE        48      // also add a line in SingleWeaponViewController array
 
 #define UICOLOR_HW_YELLOW_BODER [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xC0/255 blue:0 alpha:1]
 #define UICOLOR_HW_YELLOW_TEXT  [UIColor colorWithRed:(CGFloat)0xF0/255 green:(CGFloat)0xD0/255 blue:0 alpha:1]
 
 void createTeamNamed (NSString *nameWithoutExt);
-void createWeaponNamed (NSString *nameWithoutExt);
+void createWeaponNamed (NSString *nameWithoutExt, int type);
 void createSchemeNamed (NSString *nameWithoutExt);
 BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);
 NSInteger randomPort ();

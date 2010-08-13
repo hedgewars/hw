@@ -133,7 +133,6 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {
-    Mix_CloseAudio();
     SDL_SendQuit();
 
     if (isInGame) {

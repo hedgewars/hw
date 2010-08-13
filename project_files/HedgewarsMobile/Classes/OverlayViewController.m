@@ -71,6 +71,7 @@
             break;
         */
         default:
+            // a debug log would spam too much
             break;
     }
     self.view.frame = usefulRect;
@@ -81,12 +82,15 @@
 #pragma mark -
 #pragma mark View Management
 -(void) viewDidLoad {
+    isAttacking = NO;
+    
+    // i called it a popover even on the iphone
     isPopoverVisible = NO;
     self.view.alpha = 0;
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
 
-    // set initial orientation
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    // set initial orientation wrt the controller orientation
+    UIDeviceOrientation orientation = self.interfaceOrientation;
     UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
@@ -98,6 +102,7 @@
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
             break;
         default:
+            DLog(@"unknown orientation");
             break;
     }
     CGRect rect = [[UIScreen mainScreen] bounds];
@@ -201,6 +206,7 @@
             break;
     }
 
+    isAttacking = NO;
     doDim();
 }
 
@@ -218,32 +224,32 @@
 
     switch (theButton.tag) {
         case 0:
-            HW_walkLeft();
+            if (isAttacking == NO)
+                HW_walkLeft();
             break;
         case 1:
-            HW_walkRight();
+            if (isAttacking == NO)
+                HW_walkRight();
             break;
         case 2:
             [self performSelector:@selector(unsetPreciseStatus) withObject:nil afterDelay:0.8];
-            HW_preciseSet(YES);
+            HW_preciseSet(!HW_isWeaponRope());
             HW_aimUp();
             break;
         case 3:
             [self performSelector:@selector(unsetPreciseStatus) withObject:nil afterDelay:0.8];
-            HW_preciseSet(YES);
+            HW_preciseSet(!HW_isWeaponRope());
             HW_aimDown();
             break;
         case 4:
             HW_shoot();
+            isAttacking = YES;
             break;
         case 5:
             HW_jump();
             break;
         case 6:
             HW_backjump();
-            break;
-        case 7:
-            HW_tab();
             break;
         case 10:
             HW_pause();
@@ -528,6 +534,7 @@ void stopSpinning() {
     UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[[[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG] viewWithTag:987654];
     [indicator stopAnimating];
     isGameRunning = YES;
+    HW_zoomSet(1.7);
 }
 
 void clearView() {

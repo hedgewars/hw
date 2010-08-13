@@ -66,7 +66,7 @@
 -(void) addWeapon:(id) sender {
     NSString *fileName = [[NSString alloc] initWithFormat:@"Weapon %u.plist", [self.listOfWeapons count]];
 
-    createWeaponNamed([fileName stringByDeletingPathExtension]);
+    createWeaponNamed([fileName stringByDeletingPathExtension], 0);
 
     [self.listOfWeapons addObject:fileName];
     [fileName release];
