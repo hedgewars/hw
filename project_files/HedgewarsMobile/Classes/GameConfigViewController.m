@@ -33,10 +33,8 @@
                                                       otherButtonTitles:nil];
                 [alert show];
                 [alert release];
-            } else {
+            } else
                 [[self parentViewController] dismissModalViewControllerAnimated:YES];
-
-            }
             break;
         case 1:
             theButton.enabled = NO;
@@ -228,6 +226,20 @@
     [teamConfigViewController viewDidAppear:animated];
     [schemeWeaponConfigViewController viewDidAppear:animated];
     [super viewDidAppear:animated];
+}
+
+-(void) viewWillDisappear:(BOOL)animated {
+    [mapConfigViewController viewWillDisappear:animated];
+    [teamConfigViewController viewWillDisappear:animated];
+    [schemeWeaponConfigViewController viewWillDisappear:animated];
+    [super viewWillDisappear:animated];
+}
+
+-(void) viewDidDisappear:(BOOL)animated {
+    [mapConfigViewController viewDidDisappear:animated];
+    [teamConfigViewController viewDidDisappear:animated];
+    [schemeWeaponConfigViewController viewDidDisappear:animated];
+    [super viewDidDisappear:animated];
 }
 
 -(void) didReceiveMemoryWarning {

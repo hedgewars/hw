@@ -133,8 +133,6 @@
     SDL_VideoDevice *_this = SDL_GetVideoDevice();
     SDL_VideoDisplay *display = &_this->displays[0];
     sdlwindow = display->windows;
-
-    doDim();
 }
 
 -(void) viewDidUnload {

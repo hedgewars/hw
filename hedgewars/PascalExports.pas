@@ -202,7 +202,7 @@ end;
 
 function HW_isWeaponRequiringClick: boolean; cdecl; export;
 begin
-    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.BotLevel = 0) then
         exit( (CurrentHedgehog^.Gear^.State and gstHHChooseTarget) <> 0 )
     else
         exit(false);
@@ -213,12 +213,15 @@ var CurSlot, CurAmmo: LongWord;
 begin
     CurSlot:= CurrentHedgehog^.CurSlot;
     CurAmmo:= CurrentHedgehog^.CurAmmo;
-    exit( (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0)
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0) then
+        exit( (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0)
+    else
+        exit(false);
 end;
 
 function HW_isWeaponSwitch: boolean cdecl; export;
 begin
-    if CurAmmoGear <> nil then
+    if (CurAmmoGear <> nil) and (CurrentHedgehog^.BotLevel = 0) then
         exit(CurAmmoGear^.AmmoType = amSwitch)
     else
         exit(false)
@@ -229,7 +232,10 @@ var CurSlot, CurAmmo: LongWord;
 begin
     CurSlot:= CurrentHedgehog^.CurSlot;
     CurAmmo:= CurrentHedgehog^.CurAmmo;
-    exit (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].AmmoType = amRope)
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0) then
+        exit (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].AmmoType = amRope)
+    else
+        exit(false);
 end;
 
 procedure HW_setGrenadeTime(time: LongInt); cdecl; export;
@@ -243,7 +249,8 @@ begin
     CurSlot:= CurrentHedgehog^.CurSlot;
     CurAmmo:= CurrentHedgehog^.CurAmmo;
     // this most likely won't work in network game
-    if (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].AmmoType = amPiano) then
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0)
+       and (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].AmmoType = amPiano) then
         case snd of
             0: PlaySound(sndPiano0);
             1: PlaySound(sndPiano1);
@@ -256,8 +263,6 @@ begin
             else PlaySound(sndPiano8);
         end;
 end;
-
-//amSwitch
 {$ENDIF}
 
 end.

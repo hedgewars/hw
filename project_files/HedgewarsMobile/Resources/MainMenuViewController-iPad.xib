@@ -57,7 +57,7 @@
 					<object class="IBUIButton" id="867308721">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{383, 444}, {258, 215}}</string>
+						<string key="NSFrame">{{383, 444}, {263, 244}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -68,7 +68,7 @@
 							<double key="NSSize">15</double>
 							<int key="NSfFlags">16</int>
 						</object>
-						<double key="IBUITitleEdgeInsets.top">188</double>
+						<double key="IBUITitleEdgeInsets.top">215</double>
 						<double key="IBUITitleEdgeInsets.bottom">0.0</double>
 						<double key="IBUITitleEdgeInsets.left">0.0</double>
 						<double key="IBUITitleEdgeInsets.right">0.0</double>
@@ -93,7 +93,7 @@
 					<object class="IBUIButton" id="607338789">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">-2147483356</int>
-						<string key="NSFrame">{{611, 417}, {258, 215}}</string>
+						<string key="NSFrame">{{611, 417}, {263, 244}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<int key="IBUITag">1</int>
@@ -101,7 +101,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<reference key="IBUIFont" ref="917635782"/>
-						<double key="IBUITitleEdgeInsets.top">188</double>
+						<double key="IBUITitleEdgeInsets.top">215</double>
 						<double key="IBUITitleEdgeInsets.bottom">0.0</double>
 						<double key="IBUITitleEdgeInsets.left">0.0</double>
 						<double key="IBUITitleEdgeInsets.right">0.0</double>
