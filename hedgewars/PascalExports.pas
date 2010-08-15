@@ -18,8 +18,8 @@ uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat, uGears, uSo
 {$INCLUDE "config.inc"}
 
 implementation
-
 {$IFDEF HWLIBRARY}
+var cZoomVal: GLfloat;
 
 // retrieve protocol information
 procedure HW_versionInfo(netProto: PShortInt; versionStr: PPChar); cdecl; export;
@@ -32,6 +32,17 @@ end;
 procedure HW_click; cdecl; export;
 begin
     leftClick:= true;
+end;
+
+procedure HW_ammoMenu; cdecl; export;
+begin
+    rightClick:= true;
+end;
+
+procedure HW_zoomSet(value: GLfloat); cdecl; export;
+begin
+    cZoomVal:= value;
+    ZoomValue:= value;
 end;
 
 procedure HW_zoomIn; cdecl; export;
@@ -48,7 +59,8 @@ end;
 
 procedure HW_zoomReset; cdecl; export;
 begin
-    middleClick:= true;
+    ZoomValue:= cZoomVal;
+    //middleClick:= true;
     // center the camera at current hog
     if CurrentHedgehog <> nil then
         followGear:= CurrentHedgehog^.Gear;
@@ -63,11 +75,6 @@ function HW_zoomLevel: LongInt; cdecl; export;
 begin
     writelntoconsole(inttostr(trunc((ZoomValue - cDefaultZoomLevel) / cZoomDelta) ));
     exit( trunc((ZoomValue - cDefaultZoomLevel) / cZoomDelta) );
-end;
-
-procedure HW_ammoMenu; cdecl; export;
-begin
-    rightClick:= true;
 end;
 
 procedure HW_walkingKeysUp; cdecl; export;
@@ -183,13 +190,67 @@ begin
     y^:= CursorPoint.Y;
 end;
 
+function HW_isAmmoOpen: boolean; cdecl; export;
+begin
+    exit(bShowAmmoMenu);
+end;
+
+function HW_isPaused: boolean; cdecl; export;
+begin
+    exit( isPaused );
+end;
+
+function HW_isWeaponRequiringClick: boolean; cdecl; export;
+begin
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.BotLevel = 0) then
+        exit( (CurrentHedgehog^.Gear^.State and gstHHChooseTarget) <> 0 )
+    else
+        exit(false);
+end;
+
+function HW_isWeaponTimerable: boolean; cdecl; export;
+var CurSlot, CurAmmo: LongWord;
+begin
+    CurSlot:= CurrentHedgehog^.CurSlot;
+    CurAmmo:= CurrentHedgehog^.CurAmmo;
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0) then
+        exit( (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0)
+    else
+        exit(false);
+end;
+
+function HW_isWeaponSwitch: boolean cdecl; export;
+begin
+    if (CurAmmoGear <> nil) and (CurrentHedgehog^.BotLevel = 0) then
+        exit(CurAmmoGear^.AmmoType = amSwitch)
+    else
+        exit(false)
+end;
+
+function HW_isWeaponRope: boolean cdecl; export;
+var CurSlot, CurAmmo: LongWord;
+begin
+    CurSlot:= CurrentHedgehog^.CurSlot;
+    CurAmmo:= CurrentHedgehog^.CurAmmo;
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0) then
+        exit (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].AmmoType = amRope)
+    else
+        exit(false);
+end;
+
+procedure HW_setGrenadeTime(time: LongInt); cdecl; export;
+begin
+    ParseCommand('/timer ' + inttostr(time), true);
+end;
+
 procedure HW_setPianoSound(snd: LongInt); cdecl; export;
 var CurSlot, CurAmmo: LongWord;
 begin
     CurSlot:= CurrentHedgehog^.CurSlot;
     CurAmmo:= CurrentHedgehog^.CurAmmo;
     // this most likely won't work in network game
-    if (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].AmmoType = amPiano) then
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0)
+       and (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].AmmoType = amPiano) then
         case snd of
             0: PlaySound(sndPiano0);
             1: PlaySound(sndPiano1);
@@ -202,47 +263,6 @@ begin
             else PlaySound(sndPiano8);
         end;
 end;
-
-function HW_isAmmoOpen: boolean; cdecl; export;
-begin
-    exit(bShowAmmoMenu);
-end;
-
-function HW_isWeaponRequiringClick: boolean; cdecl; export;
-begin
-    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
-        exit( (CurrentHedgehog^.Gear^.State and gstHHChooseTarget) <> 0 )
-    else
-        exit(false);
-end;
-
-function HW_isWeaponTimerable: boolean; cdecl; export;
-var CurSlot, CurAmmo: LongWord;
-begin
-    CurSlot:= CurrentHedgehog^.CurSlot;
-    CurAmmo:= CurrentHedgehog^.CurAmmo;
-    exit( (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0)
-end;
-
-function HW_isWeaponSwitch: boolean cdecl; export;
-begin
-    if CurAmmoGear <> nil then
-        exit(CurAmmoGear^.AmmoType = amSwitch)
-    else
-        exit(false)
-end;
-
-function HW_isPaused: boolean; cdecl; export;
-begin
-    exit( isPaused );
-end;
-
-procedure HW_setGrenadeTime(time: LongInt); cdecl; export;
-begin
-    ParseCommand('/timer ' + inttostr(time), true);
-end;
-
-//amSwitch
 {$ENDIF}
 
 end.

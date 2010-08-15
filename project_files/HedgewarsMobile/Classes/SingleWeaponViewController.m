@@ -23,6 +23,7 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
 
+    // also increment CURRENT_AMMOSIZE in CommodityFunctions.h
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Grenade",@""),
                       NSLocalizedString(@"Cluster Bomb",@""),
@@ -70,6 +71,8 @@
                       NSLocalizedString(@"Old Limburger",@""),
                       NSLocalizedString(@"Sine Gun",@""),
                       NSLocalizedString(@"Flamethrower",@""),
+                      NSLocalizedString(@"Sticky Mine",@""),
+                      NSLocalizedString(@"Hammer",@""),
                       nil];
     self.ammoNames = array;
     [array release];

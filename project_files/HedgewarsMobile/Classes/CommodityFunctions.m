@@ -45,7 +45,7 @@ void createTeamNamed (NSString *nameWithoutExt) {
     [theTeam release];
 }
 
-void createWeaponNamed (NSString *nameWithoutExt) {
+void createWeaponNamed (NSString *nameWithoutExt, int type) {
     NSString *weaponsDirectory = WEAPONS_DIRECTORY();
 
     if (![[NSFileManager defaultManager] fileExistsAtPath: weaponsDirectory]) {
@@ -55,13 +55,61 @@ void createWeaponNamed (NSString *nameWithoutExt) {
                                                         error:NULL];
     }
 
-    NSDictionary *theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                               [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
-                               @"9391929422199121032235111001201000000211110111",@"ammostore_initialqt",
-                               @"0405040541600655546554464776576666666155510111",@"ammostore_probability",
-                               @"0000000000000205500000040007004000000000200000",@"ammostore_delay",
-                               @"1311110312111111123114111111111111111211111111",@"ammostore_crate", nil];
-
+    NSDictionary *theWeapon;
+    switch (type) {
+        case 0: //default
+            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
+                         [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
+                         @"939192942219912103223511100120100000021111011101",@"ammostore_initialqt",
+                         @"040504054160065554655446477657666666615551011111",@"ammostore_probability",
+                         @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
+                         @"131111031211111112311411111111111111121111111111",@"ammostore_crate", nil];
+            break;
+        case 1: //crazy
+            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
+                         [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
+                         @"999999999999999999299999999999999929999999999999",@"ammostore_initialqt",
+                         @"111111011111111111111111111111111111111111111111",@"ammostore_probability",
+                         @"000000000000000000000000000000000000000000000000",@"ammostore_delay",
+                         @"131111031211111112311411111111111111121111010111",@"ammostore_crate", nil];
+            break;
+        case 2: //pro mode
+            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
+                         [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
+                         @"909000900000000000000900000000000000000000090000",@"ammostore_initialqt",
+                         @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
+                         @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
+                         @"111111111111111111111111111111111111111110011111",@"ammostore_crate", nil];
+            break;
+        case 3: //shoppa
+            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
+                         [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
+                         @"000000990000000000000000000000000000000000000000",@"ammostore_initialqt",
+                         @"444441004424440221011212122242200000000200040001",@"ammostore_probability",
+                         @"000000000000000000000000000000000000000000000000",@"ammostore_delay",
+                         @"111111111111111111111111111111111111111110111111",@"ammostore_crate", nil];
+            break;
+        case 4: //basketball
+            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
+                         [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
+                         @"939192942219912103223511100120100000021111011100",@"ammostore_initialqt",
+                         @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
+                         @"000000000000000550000004000700400000000020000000",@"ammostore_delay",
+                         @"111111111111111111111111111111111111111111111111",@"ammostore_crate", nil];
+            break;
+        case 5: //minefield
+            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
+                         [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
+                         @"000000990009000000030000000000000000000000000000",@"ammostore_initialqt",
+                         @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
+                         @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
+                         @"111111111111111111111111111111111111111111111111",@"ammostore_crate", nil];
+            break;
+        default:
+            NSLog(@"Nope");
+            break;
+    }
+    
     NSString *weaponFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", weaponsDirectory, nameWithoutExt];
 
     [theWeapon writeToFile:weaponFile atomically:YES];

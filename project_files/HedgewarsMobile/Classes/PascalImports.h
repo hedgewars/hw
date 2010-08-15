@@ -25,11 +25,14 @@ extern "C" {
     void HW_versionInfo(short int *netProto, char **versionStr);
 
     void HW_click(void);
-
+    void HW_ammoMenu(void);
+    
+    void HW_zoomSet(float value);
     void HW_zoomIn(void);
     void HW_zoomOut(void);
     void HW_zoomReset(void);
-    void HW_ammoMenu(void);
+    float HW_zoomFactor(void);
+    int HW_zoomLevel(void);
 
     void HW_walkingKeysUp(void);
     void HW_otherKeysUp(void);
@@ -56,18 +59,15 @@ extern "C" {
     void HW_setCursor(int x, int y);
     void HW_getCursor(int *x, int *y);
 
-    void HW_setPianoSound(int snd);
-
-    float HW_zoomFactor(void);
-    int HW_zoomLevel(void);
-
     BOOL HW_isAmmoOpen(void);
     BOOL HW_isPaused(void);
     BOOL HW_isWeaponRequiringClick(void);
     BOOL HW_isWeaponTimerable(void);
     BOOL HW_isWeaponSwitch(void);
+    BOOL HW_isWeaponRope(void);
 
     void HW_setGrenadeTime(int time);
+    void HW_setPianoSound(int snd);
 
 #ifdef __cplusplus
 }

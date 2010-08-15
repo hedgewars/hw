@@ -71,7 +71,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amMineStrike
             (proc: nil;              flags: 0), // amBlowTorch
             (proc: nil;              flags: 0), // amGirder
-            (proc: @TestTeleport;    flags: amtest_OnTurn), // amTeleport
+            (proc: nil;              flags: 0), // amTeleport
+            //(proc: @TestTeleport;    flags: amtest_OnTurn), // amTeleport
             (proc: nil;              flags: 0), // amSwitch
             (proc: @TestMortar;      flags: 0), // amMortar
             (proc: nil;              flags: 0), // amKamikaze

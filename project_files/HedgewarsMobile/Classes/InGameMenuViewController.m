@@ -28,7 +28,7 @@
 -(void) viewDidLoad {
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Show Help", @""),
-                      NSLocalizedString(@"Chat", @""),
+                      NSLocalizedString(@"Tag", @""),
                       NSLocalizedString(@"End Game", @""),
                       nil];
     self.menuList = array;

@@ -304,7 +304,9 @@ const
 
     cKeyMaxIndex = 1023;
 
+    // do not change this value
     cDefaultZoomLevel = 2.0;
+
 {$IFDEF IPHONEOS}
     cMaxZoomLevel = 0.5;
     cMinZoomLevel = 3.5;

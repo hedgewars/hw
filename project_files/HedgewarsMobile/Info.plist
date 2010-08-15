@@ -40,8 +40,6 @@
 	</array>
 	<key>UILaunchImageFile~ipad</key>
 	<string>LI-ipad</string>
-	<key>UILaunchImageFile~iphone</key>
-	<string>LI-iphone</string>
 	<key>UIApplicationExitsOnSuspend</key>
 	<true/>
 </dict>

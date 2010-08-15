@@ -597,6 +597,31 @@ begin
     lc_setgearposition:= 0
 end;
 
+function lc_setzoom(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then
+        LuaError('Lua: Wrong number of parameters passed to SetZoom!')
+    else
+        begin
+        ZoomValue:= lua_tonumber(L, 1);
+        if ZoomValue < cMaxZoomLevel then ZoomValue:= cMaxZoomLevel;
+        if ZoomValue > cMinZoomLevel then ZoomValue:= cMinZoomLevel;
+        end;
+    lc_setzoom:= 0
+end;
+
+function lc_getzoom(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 0 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetZoom!');
+        lua_pushnil(L)
+        end
+    else
+        lua_pushnumber(L, ZoomValue);
+    lc_getzoom:= 1
+end;
+
 function lc_setammo(L : Plua_State) : LongInt; Cdecl;
 var np: LongInt;
 begin
@@ -932,6 +957,8 @@ lua_register(luaState, 'SetTag', @lc_settag);
 lua_register(luaState, 'SetTimer', @lc_settimer);
 lua_register(luaState, 'GetTimer', @lc_gettimer);
 lua_register(luaState, 'GetHealth', @lc_gethealth);
+lua_register(luaState, 'SetZoom', @lc_setzoom);
+lua_register(luaState, 'GetZoom', @lc_getzoom);
 
 
 ScriptClearStack; // just to be sure stack is empty

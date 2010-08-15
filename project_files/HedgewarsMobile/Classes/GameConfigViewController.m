@@ -33,10 +33,8 @@
                                                       otherButtonTitles:nil];
                 [alert show];
                 [alert release];
-            } else {
+            } else
                 [[self parentViewController] dismissModalViewControllerAnimated:YES];
-
-            }
             break;
         case 1:
             theButton.enabled = NO;
@@ -192,19 +190,14 @@
         mapConfigViewController.delegate = self;
         if (teamConfigViewController == nil)
             teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        teamConfigViewController.view.frame = CGRectMake(10, 70, 300, 600);
+        teamConfigViewController.view.frame = CGRectMake(362, 200, 300, 480);
         teamConfigViewController.view.backgroundColor = [UIColor clearColor];
         [mapConfigViewController.view addSubview:teamConfigViewController.view];
         if (schemeWeaponConfigViewController == nil)
             schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        schemeWeaponConfigViewController.view.frame = CGRectMake(362, 200, 300, 480);
+        schemeWeaponConfigViewController.view.frame = CGRectMake(10, 70, 300, 550);
         [mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
-        for (UIView *oneView in self.view.subviews) {
-            if ([oneView isMemberOfClass:[UIToolbar class]]) {
-                [oneView setHidden:YES];
-                break;
-            }
-        }
+        mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
     } else {
         // this is the visible controller
         mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
@@ -233,6 +226,20 @@
     [teamConfigViewController viewDidAppear:animated];
     [schemeWeaponConfigViewController viewDidAppear:animated];
     [super viewDidAppear:animated];
+}
+
+-(void) viewWillDisappear:(BOOL)animated {
+    [mapConfigViewController viewWillDisappear:animated];
+    [teamConfigViewController viewWillDisappear:animated];
+    [schemeWeaponConfigViewController viewWillDisappear:animated];
+    [super viewWillDisappear:animated];
+}
+
+-(void) viewDidDisappear:(BOOL)animated {
+    [mapConfigViewController viewDidDisappear:animated];
+    [teamConfigViewController viewDidDisappear:animated];
+    [schemeWeaponConfigViewController viewDidDisappear:animated];
+    [super viewDidDisappear:animated];
 }
 
 -(void) didReceiveMemoryWarning {

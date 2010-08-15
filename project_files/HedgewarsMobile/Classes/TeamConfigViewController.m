@@ -12,7 +12,7 @@
 #import "SquareButtonView.h"
 
 @implementation TeamConfigViewController
-@synthesize listOfTeams, listOfSelectedTeams;
+@synthesize listOfTeams, listOfSelectedTeams, cachedContentsOfDir;
 
 #define NUMBERBUTTON_TAG 123456
 #define SQUAREBUTTON_TAG 654321
@@ -25,7 +25,6 @@
 
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-    isFirstLoad = YES;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [self.tableView setBackgroundView:nil];
@@ -38,11 +37,11 @@
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
     // avoid overwriting selected teams when returning on this view
-    if (isFirstLoad) {
+    if ([cachedContentsOfDir isEqualToArray:contentsOfDir] == NO) {
         // integer representation of various color (defined in SquareButtonView)
         NSUInteger colors[6] = { 4421353, 4100897, 10632635, 16749353, 14483456, 7566195 };
-        NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
         NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[contentsOfDir count]];
         for (int i = 0; i < [contentsOfDir count]; i++) {
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
@@ -58,7 +57,8 @@
         NSMutableArray *emptyArray = [[NSMutableArray alloc] initWithObjects:nil];
         self.listOfSelectedTeams = emptyArray;
         [emptyArray release];
-        isFirstLoad = NO;
+        
+        cachedContentsOfDir = [[NSArray alloc] initWithArray:contentsOfDir copyItems:YES];
     }
     [self.tableView reloadData];
 }
@@ -191,17 +191,22 @@
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
+    self.cachedContentsOfDir = nil;
 }
 
 -(void) viewDidUnload {
     self.listOfTeams = nil;
+    self.listOfSelectedTeams = nil;
+    self.cachedContentsOfDir = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
 
 -(void) dealloc {
-    [self.listOfTeams release];
+    [listOfTeams release];
+    [listOfSelectedTeams release];
+    [cachedContentsOfDir release];
     [super dealloc];
 }
 
