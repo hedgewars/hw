@@ -8,6 +8,7 @@ module Store(
     readElem,
     writeElem,
     modifyElem,
+    elemExists,
     firstIndex,
     indicesM,
     withIStore,
@@ -94,6 +95,10 @@ modifyElem (MStore ref) f (ElemIndex n) = do
     (_, _, arr) <- readIORef ref
     IOA.readArray arr n >>= (IOA.writeArray arr n) . f
 
+elemExists :: MStore e -> ElemIndex -> IO Bool
+elemExists (MStore ref) (ElemIndex n) = do
+    (_, free, _) <- readIORef ref
+    return $ n `IntSet.notMember` free
 
 indicesM :: MStore e -> IO [ElemIndex]
 indicesM (MStore ref) = do
@@ -101,23 +106,35 @@ indicesM (MStore ref) = do
     return $ map ElemIndex $ IntSet.toList busy
 
 
--- A way to use see MStore elements in pure code via IStore
+-- A way to see MStore elements in pure code via IStore
 m2i :: MStore e -> IO (IStore e)
 m2i (MStore ref) = do
-    (a, _, c') <- readIORef ref 
-    c <- IOA.freeze c'
+    (a, _, c') <- readIORef ref
+    c <- IOA.unsafeFreeze c'
     return $ IStore (a, c)
 
+i2m :: (MStore e) -> IStore e -> IO ()
+i2m (MStore ref) (IStore (_, arr)) = do
+    (b, e, _) <- readIORef ref
+    a <- IOA.unsafeThaw arr
+    writeIORef ref (b, e, a)
 
 withIStore :: MStore e -> (IStore e -> a) -> IO a
-withIStore m f = liftM f (m2i m)
+withIStore m f = do
+    i <- m2i m
+    let res = f i
+    res `seq` i2m m i
+    return res
 
 
 withIStore2 :: MStore e1 -> MStore e2 -> (IStore e1 -> IStore e2 -> a) -> IO a
 withIStore2 m1 m2 f = do
     i1 <- m2i m1
     i2 <- m2i m2
-    return $ f i1 i2
+    let res = f i1 i2
+    res `seq` i2m m1 i1
+    i2m m2 i2
+    return res
 
 
 -- IStore code

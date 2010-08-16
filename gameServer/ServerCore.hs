@@ -7,7 +7,7 @@ import Control.Monad
 import qualified Data.IntMap as IntMap
 import System.Log.Logger
 import Control.Monad.Reader
-import Control.Monad.State
+import Control.Monad.State.Strict
 import Data.Set as Set
 import qualified Data.ByteString.Char8 as B
 --------------------------------------
@@ -19,7 +19,7 @@ import OfficialServer.DBInteraction
 import ServerState
 
 
-timerLoop :: Int -> Chan CoreMessage -> IO()
+timerLoop :: Int -> Chan CoreMessage -> IO ()
 timerLoop tick messagesChan = threadDelay (30 * 10^6) >> writeChan messagesChan (TimerAction tick) >> timerLoop (tick + 1) messagesChan
 
 
@@ -57,13 +57,13 @@ mainLoop = forever $ do
                 --return (serverInfo, rnc)
 
         ClientAccountInfo (ci, info) -> do
-            --should instead check ci exists and has same nick/hostname
-            --removed <- gets removedClients
-            --when (not $ ci `Set.member` removed) $ do
-            --    modify (\as -> as{clientIndex = Just ci})
-            --    processAction (ProcessAccountInfo info)
-            return ()
-            
+            rnc <- gets roomsClients
+            exists <- liftIO $ clientExists rnc ci
+            when (exists) $ do
+                modify (\as -> as{clientIndex = Just ci})
+                processAction (ProcessAccountInfo info)
+                return ()
+
         TimerAction tick ->
                 mapM_ processAction $
                     PingAll : [StatsAction | even tick]

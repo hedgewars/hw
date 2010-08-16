@@ -8,7 +8,7 @@ module ServerState
     roomClientsS
     ) where
 
-import Control.Monad.State
+import Control.Monad.State.Strict
 import Data.Set as Set
 ----------------------
 import RoomsAndClients

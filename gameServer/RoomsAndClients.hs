@@ -15,6 +15,7 @@ module RoomsAndClients(
     moveClientToRoom,
     clientRoom,
     clientRoomM,
+    clientExists,
     client,
     room,
     client'sM,
@@ -138,6 +139,9 @@ moveClientToLobby rnc ci = do
 moveClientToRoom :: MRoomsAndClients r c -> RoomIndex -> ClientIndex -> IO ()
 moveClientToRoom rnc ri ci = moveClientInRooms rnc lobbyId ri ci
 
+
+clientExists :: MRoomsAndClients r c -> ClientIndex -> IO Bool
+clientExists (MRoomsAndClients (_, clients)) (ClientIndex ci) = elemExists clients ci
 
 clientRoomM :: MRoomsAndClients r c -> ClientIndex -> IO RoomIndex
 clientRoomM (MRoomsAndClients (_, clients)) (ClientIndex ci) = liftM clientRoom' (clients `readElem` ci)

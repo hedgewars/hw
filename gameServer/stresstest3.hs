@@ -44,7 +44,7 @@ sendPacket s = do
 
 emulateSession :: StateT SState IO ()
 emulateSession = do
-    n <- io $ randomRIO (100000::Int, 100000)
+    n <- io $ randomRIO (100000::Int, 100100)
     waitPacket "CONNECTED"
     sendPacket ["NICK", "test" ++ (show n)]
     waitPacket "NICK"
