@@ -11,7 +11,7 @@ import Control.Monad
 import Data.Time
 import Data.Maybe
 import Control.Monad.Reader
-import Control.Monad.State
+import Control.Monad.State.Strict
 import qualified Data.ByteString.Char8 as B
 -----------------------------
 import CoreTypes
@@ -57,9 +57,7 @@ processAction :: Action -> StateT ServerState IO ()
 
 
 processAction (AnswerClients chans msg) = do
-    liftIO (putStr $ "AnswerClients... " ++ (show $ length chans) ++ " (" ++ (show msg) ++")")
-    liftIO $ map (flip seq ()) chans `seq` mapM_ (flip writeChan msg) chans
-    liftIO (putStrLn "done")
+    liftIO $ map (flip seq ()) chans `seq` map (flip seq ()) msg `seq` mapM_ (flip writeChan msg) chans
 
 
 processAction SendServerMessage = do
