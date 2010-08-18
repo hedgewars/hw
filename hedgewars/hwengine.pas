@@ -230,7 +230,7 @@ begin
     recordFileName:= gameArgs[8];
     
     val(gameArgs[9], cReducedQuality);
-    isStereoEnabled:= false; // TODO: Enable anaglyph rendering on iPhone?
+    cStereoMode:= smNone; // TODO: Enable anaglyph rendering on iPhone?
 {$ENDIF}
 
     initEverything(true);
@@ -437,6 +437,7 @@ end;
 
 ////////////////////
 procedure GetParams;
+var i : LongInt;
 begin
     case ParamCount of
         19: begin
@@ -458,7 +459,8 @@ begin
             UserNick:= DecodeBase64(ParamStr(16));
             isMusicEnabled:= ParamStr(17) = '1';
             val(ParamStr(18), cReducedQuality);
-            isStereoEnabled:= ParamStr(19) = '1';
+            val(ParamStr(19), i);
+            cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), i)));
         end;
         3: begin
             val(ParamStr(2), ipcPort);

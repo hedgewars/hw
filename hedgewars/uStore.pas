@@ -803,7 +803,7 @@ begin
     SDL_FreeSurface(MissionIcons);
     FreeTexture(ropeIconTex);
     FreeTexture(HHTexture);
-    if isStereoEnabled then
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
     begin
         glDeleteTextures(1, @texl);
         glDeleteRenderbuffersEXT(1, @depthl);
@@ -1192,7 +1192,7 @@ begin
         cGPUVendor:= gvIntel;
 //SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
 
-    if isStereoEnabled then
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
     begin
         // prepare left and right frame buffers and associated textures
         glLoadExtension('GL_EXT_framebuffer_object');

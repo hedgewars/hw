@@ -220,9 +220,9 @@ public:
     QComboBox *CBTeamName;
     IconedGroupBox *AGGroupBox;
     QComboBox *CBResolution;
+    QComboBox *CBStereoMode;
     QCheckBox *CBEnableSound;
     QCheckBox *CBEnableFrontendSound;
-    QCheckBox *CBEnableStereo;
     QCheckBox *CBEnableMusic;
     QCheckBox *CBEnableFrontendMusic;
     QCheckBox *CBFullscreen;

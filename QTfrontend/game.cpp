@@ -288,7 +288,7 @@ QStringList HWGame::setArguments()
     arguments << config->netNick().toUtf8().toBase64();
     arguments << (config->isMusicEnabled() ? "1" : "0");
     arguments << QString::number(config->translateQuality());
-    arguments << (config->isStereoEnabled() ? "1" : "0");
+    arguments << QString::number(config->stereoMode());
     return arguments;
 }
 

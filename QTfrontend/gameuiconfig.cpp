@@ -48,7 +48,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     Form->ui.pageOptions->CBFrontendFullscreen->setChecked(ffscr);
 
     Form->ui.pageOptions->SLQuality->setValue(value("video/quality", 5).toUInt());
-    Form->ui.pageOptions->CBEnableStereo->setChecked(value("video/anaglyph", false).toBool());
+    Form->ui.pageOptions->CBStereoMode->setCurrentIndex(value("video/stereo", 0).toUInt());
     Form->ui.pageOptions->CBFrontendEffects->setChecked(frontendEffects);
     Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
     Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("frontend/sound", true).toBool());
@@ -114,7 +114,7 @@ void GameUIConfig::SaveOptions()
     setValue("video/fullscreen", vid_Fullscreen());
 
     setValue("video/quality", Form->ui.pageOptions->SLQuality->value());
-    setValue("video/anaglyph", isStereoEnabled());
+    setValue("video/stereo", stereoMode());
 
     setValue("frontend/effects", isFrontendEffects());
 
@@ -263,9 +263,9 @@ bool GameUIConfig::isAltDamageEnabled()
     return Form->ui.pageOptions->CBAltDamage->isChecked();
 }
 
-bool GameUIConfig::isStereoEnabled() const
+quint32 GameUIConfig::stereoMode() const
 {
-    return Form->ui.pageOptions->CBEnableStereo->isChecked();
+    return Form->ui.pageOptions->CBStereoMode->currentIndex();
 }
 
 bool GameUIConfig::appendDateTimeToRecordName()

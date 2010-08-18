@@ -573,6 +573,7 @@ PageOptions::PageOptions(QWidget* parent) :
 
             QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
             QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
+            QHBoxLayout * GBAstereolayout = new QHBoxLayout(0);
             QHBoxLayout * GBAqualayout = new QHBoxLayout(0);
 
             CBFrontendFullscreen = new QCheckBox(AGGroupBox);
@@ -621,9 +622,24 @@ PageOptions::PageOptions(QWidget* parent) :
             GBAqualayout->addWidget(SLQuality);
             GBAlayout->addLayout(GBAqualayout);
 
-            CBEnableStereo = new QCheckBox(AGGroupBox);
-            CBEnableStereo->setText(QCheckBox::tr("Anaglyph rendering (red/cyan)"));
-            GBAlayout->addWidget(CBEnableStereo);
+            QLabel * stereo = new QLabel(AGGroupBox);
+            stereo->setText(QLabel::tr("Stereo rendering"));
+            GBAstereolayout->addWidget(stereo);
+
+            CBStereoMode = new QComboBox(AGGroupBox);
+            CBStereoMode->addItem(QComboBox::tr("Disabled"));
+            CBStereoMode->addItem(QComboBox::tr("Red/Cyan"));
+            CBStereoMode->addItem(QComboBox::tr("Cyan/Red"));
+            CBStereoMode->addItem(QComboBox::tr("Red/Blue"));
+            CBStereoMode->addItem(QComboBox::tr("Blue/Red"));
+            CBStereoMode->addItem(QComboBox::tr("Red/Green"));
+            CBStereoMode->addItem(QComboBox::tr("Green/Red"));
+            CBStereoMode->addItem(QComboBox::tr("Side-by-side (horizontal)"));
+            CBStereoMode->addItem(QComboBox::tr("Side-by-side (vertical)"));
+            CBStereoMode->addItem(QComboBox::tr("Alternate frame rendering"));
+
+            GBAstereolayout->addWidget(CBStereoMode);
+            GBAlayout->addLayout(GBAstereolayout);
 
             hr = new QFrame(AGGroupBox);
             hr->setFrameStyle(QFrame::HLine);
