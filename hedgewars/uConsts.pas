@@ -330,27 +330,28 @@ const
     tfIgnoreDelays  = $00000008;
     tfTargetRespawn = $00000010;
 
-    gfAny            = $FFFFFFFF;
-    gfForts          = $00000001;
-    gfMultiWeapon    = $00000002;
-    gfSolidLand      = $00000004;
-    gfBorder         = $00000008;
-    gfDivideTeams    = $00000010;
-    gfLowGravity     = $00000020;
-    gfLaserSight     = $00000040;
-    gfInvulnerable   = $00000080;
-    gfMines          = $00000100;
-    gfVampiric       = $00000200;
-    gfKarma          = $00000400;
-    gfArtillery      = $00000800;
-    gfOneClanMode    = $00001000;
-    gfRandomOrder    = $00002000;
-    gfKing           = $00004000;
-    gfPlaceHog       = $00008000;
-    gfSharedAmmo     = $00010000;
-    gfDisableGirders = $00020000;
-    gfExplosives     = $00040000;
+    gfAny                = $FFFFFFFF;
+    gfForts              = $00000001;
+    gfMultiWeapon        = $00000002;
+    gfSolidLand          = $00000004;
+    gfBorder             = $00000008;
+    gfDivideTeams        = $00000010;
+    gfLowGravity         = $00000020;
+    gfLaserSight         = $00000040;
+    gfInvulnerable       = $00000080;
+    gfMines              = $00000100;
+    gfVampiric           = $00000200;
+    gfKarma              = $00000400;
+    gfArtillery          = $00000800;
+    gfOneClanMode        = $00001000;
+    gfRandomOrder        = $00002000;
+    gfKing               = $00004000;
+    gfPlaceHog           = $00008000;
+    gfSharedAmmo         = $00010000;
+    gfDisableGirders     = $00020000;
+    gfExplosives         = $00040000;
     gfDisableLandObjects = $00080000;
+    gfAISurvival         = $00100000;
     // NOTE: When adding new game flags, ask yourself
     // if a "game start notice" would be useful. If so,
     // add one in uWorld.pas - look for "AddGoal".
