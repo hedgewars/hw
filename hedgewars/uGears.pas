@@ -779,7 +779,7 @@ case step of
             inc(step)
             end;
     stHealth: begin
-            if (TotalRounds = cSuddenDTurns - 1) and (cHealthDecrease = 0) then
+            if (TotalRounds = cSuddenDTurns - 1) and (cHealthDecrease = 0) and not isInMultiShoot then
                 begin
                 cHealthDecrease:= 5;
                 AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
