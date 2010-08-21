@@ -81,7 +81,7 @@ var AllInactive: boolean;
 procedure initModule;
 procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
-procedure SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword );
+function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword ): PGear;
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
@@ -1539,12 +1539,11 @@ while t <> nil do
 CountGears:= count;
 end;
 
-procedure SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword);
+function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword): PGear;
 begin
     FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
     cCaseFactor := 0;
 
-    if (content < ord(Low(TAmmoType))) then content := 0;
     if (content > ord(High(TAmmoType))) then content := ord(High(TAmmoType));
 
     case crate of
@@ -1564,6 +1563,10 @@ begin
             AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
             end;
     end;
+
+    if ( (x = 0) and (y = 0) ) then FindPlace(FollowGear, true, 0, LAND_WIDTH);
+
+    SpawnCustomCrateAt := FollowGear;
 end;
 
 procedure SpawnBoxOfSmth;
