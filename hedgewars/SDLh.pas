@@ -465,7 +465,7 @@ type
 {$IFDEF SDL13}
         value: LongInt;
 {$ELSE}
-        value: word;
+        value: Smallint;
 {$ENDIF}
         end;
 
@@ -477,7 +477,7 @@ type
         xrel, yrel: LongInt;
 {$ELSE}
         type_: Byte;
-        xrel, yrel: word;
+        xrel, yrel: Smallint;
 {$ENDIF}
         end;
 
