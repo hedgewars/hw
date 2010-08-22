@@ -38,5 +38,8 @@
     [super dealloc];
 }
 
+-(IBAction) buttonPressed:(id) sender {
+    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+}
 
 @end

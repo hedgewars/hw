@@ -26,6 +26,7 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
 
+    // title, description, image name (+btn)
     NSArray *mods = [[NSArray alloc] initWithObjects:
                      [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Fort Mode",@""),@"title",
                       NSLocalizedString(@"Defend your fort and destroy the opponents (two team colours max)",@""),@"description",
@@ -85,6 +86,7 @@
     self.gameModifierArray = mods;
     [mods release];
 
+    // title, image name (+icon), default value, max value, min value
     NSArray *basicSettings = [[NSArray alloc] initWithObjects:
                               [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Damage Modifier",@""),@"title",@"Damage",@"image",
                                [NSNumber numberWithInt:100],@"default",[NSNumber numberWithInt:10],@"min",[NSNumber numberWithInt:300],@"max",nil],

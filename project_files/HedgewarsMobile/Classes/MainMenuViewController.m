@@ -176,6 +176,7 @@
         case 2:
             if (nil == self.settingsViewController) {
                 SplitViewRootController *svrc = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
+                svrc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
                 self.settingsViewController = svrc;
                 [svrc release];
             }
@@ -185,7 +186,8 @@
         case 3:
             if (nil == self.aboutViewController) {
                 AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
-                about.modalTransitionStyle = UIModalPresentationFormSheet;
+                about.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+                about.modalPresentationStyle = UIModalPresentationFormSheet;
                 self.aboutViewController = about;
                 [about release];
             }
@@ -219,7 +221,7 @@
     }
 }
 
-// allows child controllers to return to the main controller
+// must be kept for compatibility with the settings page
 -(void) dismissModalViewController {
     [self dismissModalViewControllerAnimated:YES];
 }
