@@ -136,39 +136,41 @@
     int i = 0;
 
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x01;
+        result |= 0x00000001;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x10;
+        result |= 0x00000010;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x04;
+        result |= 0x00000004;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x08;
+        result |= 0x00000008;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x20;
+        result |= 0x00000020;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x40;
+        result |= 0x00000040;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x80;
+        result |= 0x00000080;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x100;
+        result |= 0x00000100;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x200;
+        result |= 0x00000200;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x400;
+        result |= 0x00000400;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x800;
+        result |= 0x00000800;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x2000;
+        result |= 0x00002000;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x4000;
+        result |= 0x00004000;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x8000;
+        result |= 0x00008000;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x10000;
+        result |= 0x00010000;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x20000;
+        result |= 0x00020000;
     if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x80000;
+        result |= 0x00080000;
+    if ([[scheme objectAtIndex:i++] boolValue])
+        result |= 0x00100000;
 
     NSString *flags = [[NSString alloc] initWithFormat:@"e$gmflags %d",result];
     [self sendToEngine:flags];
@@ -200,6 +202,7 @@
     [self sendToEngine:minesNumber];
     [minesNumber release];
 
+    
     NSString *dudMines = [[NSString alloc] initWithFormat:@"e$minedudpct %d",[[scheme objectAtIndex:i++] intValue]];
     [self sendToEngine:dudMines];
     [dudMines release];

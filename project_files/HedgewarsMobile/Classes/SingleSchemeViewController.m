@@ -78,6 +78,9 @@
                      [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Disable Land Objects",@""),@"title",
                       NSLocalizedString(@"Disable land objects when generating maps",@""),@"description",
                       @"DisableLandObjects",@"image",nil],
+                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"AI Survival Mode",@""),@"title",
+                      NSLocalizedString(@"AI-controlled hogs respawn on death",@""),@"description",
+                      @"AISurvival",@"image",nil],
                      nil];
     self.gameModifierArray = mods;
     [mods release];

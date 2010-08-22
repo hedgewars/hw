@@ -57,61 +57,75 @@
                                                object:nil];
     
     // now check if some configuration files are already set; if they are present it means that the current copy must be updated
-    NSError *err = nil;
-    NSString *fileToCheck, *teamToCheck, *teamToUpdate, *schemeToCheck, *schemeToUpdate;
+    BOOL doCreateFiles = NO;
     NSString *resDir = [[NSBundle mainBundle] resourcePath];
     
-    NSString *dirToCheck = [NSString stringWithFormat:@"%@/done.txt",DOCUMENTS_FOLDER()];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:dirToCheck] == NO) {
+    NSString *versionFileToCheck = [NSString stringWithFormat:@"%@/version.txt",DOCUMENTS_FOLDER()];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:versionFileToCheck]) {
+        NSString *currentVersion = [NSString stringWithContentsOfFile:versionFileToCheck encoding:NSUTF8StringEncoding error:nil];
+        NSString *newVersion = [NSString stringWithContentsOfFile:[NSString stringWithFormat:@"%@/Settings/version.txt",resDir] encoding:NSUTF8StringEncoding error:nil];
+        if ([currentVersion intValue] < [newVersion intValue]) {
+            doCreateFiles = YES;
+            [newVersion writeToFile:versionFileToCheck atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        }
+    } else {
+        doCreateFiles = YES;
+        [[NSFileManager defaultManager] copyItemAtPath:[NSString stringWithFormat:@"%@/Settings/version.txt",resDir] toPath:versionFileToCheck error:nil];
+    } 
+
+    
+    if (doCreateFiles == YES) {
+        NSError *err = nil;
+        NSString *directoryToCheck, *fileToCheck, *fileToUpdate;
         DLog(@"Creating necessary files");
         
         // if the settings file is already present, we merge current preferences with the update
-        fileToCheck = [NSString stringWithFormat:@"%@/Settings/settings.plist",resDir];
+        directoryToCheck = [NSString stringWithFormat:@"%@/Settings/settings.plist",resDir];
         if ([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()]) {
             NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
-            NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:fileToCheck];
+            NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:directoryToCheck];
             [update addEntriesFromDictionary:settings];
             [settings release];
             [update writeToFile:SETTINGS_FILE() atomically:YES];
             [update release];
         } else 
-            [[NSFileManager defaultManager] copyItemAtPath:fileToCheck toPath:SETTINGS_FILE() error:&err];
+            [[NSFileManager defaultManager] copyItemAtPath:directoryToCheck toPath:SETTINGS_FILE() error:&err];
         
         // if the teams are already present we merge the old teams if they still exist
-        fileToCheck = [NSString stringWithFormat:@"%@/Settings/Teams",resDir];
+        directoryToCheck = [NSString stringWithFormat:@"%@/Settings/Teams",resDir];
         if ([[NSFileManager defaultManager] fileExistsAtPath:TEAMS_DIRECTORY()]) {
-            for (NSString *str in [[NSFileManager defaultManager] contentsAtPath:fileToCheck]) {
-                teamToCheck = [NSString stringWithFormat:@"%@/%@",TEAMS_DIRECTORY(),str];
-                teamToUpdate = [NSString stringWithFormat:@"%@/Settings/Teams/%@",resDir,str];
-                if ([[NSFileManager defaultManager] fileExistsAtPath:teamToCheck]) {
-                    NSDictionary *team = [[NSDictionary alloc] initWithContentsOfFile:teamToCheck];
-                    NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:teamToUpdate];
+            for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directoryToCheck error:nil]) {
+                fileToCheck = [NSString stringWithFormat:@"%@/%@",TEAMS_DIRECTORY(),str];
+                fileToUpdate = [NSString stringWithFormat:@"%@/Settings/Teams/%@",resDir,str];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:fileToCheck]) {
+                    NSDictionary *team = [[NSDictionary alloc] initWithContentsOfFile:fileToCheck];
+                    NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:fileToUpdate];
                     [update addEntriesFromDictionary:team];
                     [team release];
-                    [update writeToFile:teamToCheck atomically:YES];
+                    [update writeToFile:fileToCheck atomically:YES];
                     [update release];
                 }
             }
         } else
-            [[NSFileManager defaultManager] copyItemAtPath:fileToCheck toPath:TEAMS_DIRECTORY() error:&err];
+            [[NSFileManager defaultManager] copyItemAtPath:directoryToCheck toPath:TEAMS_DIRECTORY() error:&err];
 
         // the same holds for schemes (but they're arrays)
-        fileToCheck = [NSString stringWithFormat:@"%@/Settings/Schemes",resDir];
+        directoryToCheck = [NSString stringWithFormat:@"%@/Settings/Schemes",resDir];
         if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()]) {
-            for (NSString *str in [[NSFileManager defaultManager] contentsAtPath:fileToCheck]) {
-                schemeToCheck = [NSString stringWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),str];
-                schemeToUpdate = [NSString stringWithFormat:@"%@/Settings/Schemes/%@",resDir,str];
-                if ([[NSFileManager defaultManager] fileExistsAtPath:schemeToCheck]) {
-                    NSArray *scheme = [[NSArray alloc] initWithContentsOfFile:schemeToCheck];
-                    NSArray *update = [[NSArray alloc] initWithContentsOfFile:schemeToUpdate];
+            for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directoryToCheck error:nil]) {
+                fileToCheck = [NSString stringWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),str];
+                fileToUpdate = [NSString stringWithFormat:@"%@/Settings/Schemes/%@",resDir,str];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:fileToCheck]) {
+                    NSArray *scheme = [[NSArray alloc] initWithContentsOfFile:fileToCheck];
+                    NSArray *update = [[NSArray alloc] initWithContentsOfFile:fileToUpdate];
                     if ([update count] > [scheme count])
-                        [update writeToFile:schemeToCheck atomically:YES];
+                        [update writeToFile:fileToCheck atomically:YES];
                     [update release];
                     [scheme release];
                 }
             }
         } else
-            [[NSFileManager defaultManager] copyItemAtPath:fileToCheck toPath:SCHEMES_DIRECTORY() error:&err];
+            [[NSFileManager defaultManager] copyItemAtPath:directoryToCheck toPath:SCHEMES_DIRECTORY() error:&err];
         
         // we create weapons the first time only, they are autoupdated each time
         if ([[NSFileManager defaultManager] fileExistsAtPath:WEAPONS_DIRECTORY()] == NO) {
@@ -127,11 +141,7 @@
             createWeaponNamed(@"Minefield", 5);
         }
         
-        // create a dummy file so that it doesn't get called again
-        if ([[NSFileManager defaultManager] createFileAtPath:dirToCheck 
-                                                    contents:[NSData dataWithContentsOfFile:SETTINGS_FILE()]
-                                                  attributes:nil])
-            DLog(@"Success");
+        DLog(@"Success");
         
         if (err != nil) 
             DLog(@"%@", err);
@@ -156,6 +166,7 @@
                     xib = @"GameConfigViewController";
                 
                 GameConfigViewController *gcvc = [[GameConfigViewController alloc] initWithNibName:xib bundle:nil];
+                gcvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
                 self.gameConfigViewController = gcvc;
                 [gcvc release];
             }
@@ -165,7 +176,6 @@
         case 2:
             if (nil == self.settingsViewController) {
                 SplitViewRootController *svrc = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
-                svrc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
                 self.settingsViewController = svrc;
                 [svrc release];
             }
