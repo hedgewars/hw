@@ -144,11 +144,27 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFire(Gear: PVisualGear; Steps: Longword);
+var vgt: PVisualGear;
 begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
 
 Gear^.Y:= Gear^.Y + Gear^.dY * Steps;// + cGravityf * (Steps * Steps);
-Gear^.dY:= Gear^.dY + cGravityf * Steps;
+if (Gear^.State and gstTmpFlag) = 0 then
+    begin
+    Gear^.dY:= Gear^.dY + cGravityf * Steps;
+    if ((GameTicks mod 100) < Steps + 1) then
+        begin
+        vgt:= AddVisualGear(round(Gear^.X), round(Gear^.Y), vgtFire);
+        if vgt <> nil then
+            begin
+            vgt^.dx:= 0;
+            vgt^.dy:= 0;
+            vgt^.State:= gstTmpFlag;
+            end;
+        end
+    end
+else
+    inc(Steps, Steps);
 
 if Gear^.FrameTicks <= Steps then
        DeleteVisualGear(Gear)

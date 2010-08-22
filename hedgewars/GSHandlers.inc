@@ -1768,6 +1768,7 @@ procedure doStepFlame(Gear: PGear);
 var 
     gX,gY,i: LongInt;
     sticky: Boolean;
+    vgt: PVisualGear;
 begin
     sticky:= (Gear^.State and gsttmpFlag) <> 0;
     if not sticky then AllInactive := false;
@@ -1775,6 +1776,20 @@ begin
     if not TestCollisionYwithGear(Gear, 1) then
     begin
         AllInactive := false;
+
+        if ((GameTicks mod 100) = 0) then
+            begin
+            vgt:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFire);
+            if vgt <> nil then
+                begin
+                vgt^.dx:= 0;
+                vgt^.dy:= 0;
+                vgt^.FrameTicks:= 1800 div (Gear^.Tag mod 3 + 2);
+                vgt^.State:= gstTmpFlag;
+                end;
+            end;
+
+
         if Gear^.dX.QWordValue > _0_01.QWordValue then
             Gear^.dX := Gear^.dX * _0_995;
         Gear^.dY := Gear^.dY + cGravity;
