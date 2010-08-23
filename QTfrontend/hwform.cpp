@@ -543,7 +543,8 @@ void HWForm::IntermediateSetup()
     for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it) {
         tmnames += it->TeamName;
     }
-    UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
+    //UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
+    UpdateTeamsLists();
 
     GoToPage(ID_PAGE_SETUP);
 }
