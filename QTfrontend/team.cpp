@@ -52,6 +52,7 @@ HWTeam::HWTeam(const QString & teamname) :
     }
     Rounds = 0;
     Wins = 0;
+    CampaignProgress = 0;
 }
 
 HWTeam::HWTeam(const QStringList& strLst) :
@@ -77,6 +78,7 @@ HWTeam::HWTeam(const QStringList& strLst) :
     }
     Rounds = 0;
     Wins = 0;
+    CampaignProgress = 0;
 }
 
 HWTeam::HWTeam() :
@@ -103,12 +105,13 @@ HWTeam::HWTeam() :
     }
     Rounds = 0;
     Wins = 0;
+    CampaignProgress = 0;
 }
 
 
 bool HWTeam::LoadFromFile()
 {
-    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + TeamName + ".ini", QSettings::IniFormat, 0);
+    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + TeamName + ".hwt", QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     TeamName = teamfile.value("Team/Name", TeamName).toString();
     Grave = teamfile.value("Team/Grave", "Statue").toString();
@@ -118,6 +121,7 @@ bool HWTeam::LoadFromFile()
     difficulty = teamfile.value("Team/Difficulty", 0).toInt();
     Rounds = teamfile.value("Team/Rounds", 0).toInt();
     Wins = teamfile.value("Team/Wins", 0).toInt();
+    CampaignProgress = teamfile.value("Team/CampaignProgress", 0).toInt();
     for(int i = 0; i < 8; i++)
     {
         QString hh = QString("Hedgehog%1/").arg(i);
@@ -140,7 +144,7 @@ bool HWTeam::LoadFromFile()
 
 bool HWTeam::FileExists()
 {
-    QFile f(cfgdir->absolutePath() + "/Teams/" + TeamName + ".ini");
+    QFile f(cfgdir->absolutePath() + "/Teams/" + TeamName + ".hwt");
     return f.exists();
 }
 
@@ -148,7 +152,7 @@ bool HWTeam::DeleteFile()
 {
     if(m_isNetTeam)
         return false;
-    QFile cfgfile(cfgdir->absolutePath() + "/Teams/" + TeamName + ".ini");
+    QFile cfgfile(cfgdir->absolutePath() + "/Teams/" + TeamName + ".hwt");
     cfgfile.remove();
     return true;
 }
@@ -157,11 +161,11 @@ bool HWTeam::SaveToFile()
 {
     if (OldTeamName != TeamName)
     {
-        QFile cfgfile(cfgdir->absolutePath() + "/Teams/" + OldTeamName + ".ini");
+        QFile cfgfile(cfgdir->absolutePath() + "/Teams/" + OldTeamName + ".hwt");
         cfgfile.remove();
         OldTeamName = TeamName;
     }
-    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + TeamName + ".ini", QSettings::IniFormat, 0);
+    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + TeamName + ".hwt", QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     teamfile.setValue("Team/Name", TeamName);
     teamfile.setValue("Team/Grave", Grave);
@@ -171,6 +175,7 @@ bool HWTeam::SaveToFile()
     teamfile.setValue("Team/Difficulty", difficulty);
     teamfile.setValue("Team/Rounds", Rounds);
     teamfile.setValue("Team/Wins", Wins);
+    teamfile.setValue("Team/CampaignProgress", CampaignProgress);
     for(int i = 0; i < 8; i++)
     {
         QString hh = QString("Hedgehog%1/").arg(i);

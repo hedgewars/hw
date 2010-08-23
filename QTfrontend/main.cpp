@@ -319,61 +319,51 @@ int main(int argc, char *argv[]) {
     if(cConfigDir->length() == 0)
     {
 #ifdef __APPLE__
-        if (checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars"))
-        {
-            checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Demos");
-            checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Saves");
-            checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Screenshots");
-            checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Teams");
-        }
+        checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars");
         cfgdir->cd("Library/Application Support/Hedgewars");
 #elif defined _WIN32
         char path[1024];
         if(!SHGetFolderPathA(0, CSIDL_PERSONAL, NULL, 0, path))
         {
             cfgdir->cd(path);
-            if (checkForDir(cfgdir->absolutePath() + "/Hedgewars"))
-            {
-                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Demos");
-                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Saves");
-                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Screenshots");
-                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Teams");
-            }
+            checkForDir(cfgdir->absolutePath() + "/Hedgewars");
             cfgdir->cd("Hedgewars");
         }
-        else
+        else // couldn't retrieve documents folder? almost impossible, but in case fall back to classic path
         {
-            if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
-            {
-                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
-                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
-                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Screenshots");
-                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Teams");
-            }
+            checkForDir(cfgdir->absolutePath() + "/.hedgewars");
             cfgdir->cd(".hedgewars");
         }
 #else
-        if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
-        {
-            checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
-            checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
-            checkForDir(cfgdir->absolutePath() + "/.hedgewars/Screenshots");
-            checkForDir(cfgdir->absolutePath() + "/.hedgewars/Teams");
-        }
+        checkForDir(cfgdir->absolutePath() + "/.hedgewars");
         cfgdir->cd(".hedgewars");
 #endif
     }
-    else
-    {
-        if (checkForDir(cfgdir->absolutePath()))
-        {
-            checkForDir(cfgdir->absolutePath() + "/Demos");
-            checkForDir(cfgdir->absolutePath() + "/Saves");
-            checkForDir(cfgdir->absolutePath() + "/Screenshots");
-            checkForDir(cfgdir->absolutePath() + "/Teams");
-        }
-    }
 
+    if (checkForDir(cfgdir->absolutePath()))
+    {
+        // alternative loading/lookup paths
+        // TODO: Uncomment paths as they're implemented
+        checkForDir(cfgdir->absolutePath() + "/Data");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Forts");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics/Flags");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics/Graves");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics/Hats");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Maps");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Missions");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Missions/Campaign");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Missions/Training");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Sounds");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Sounds/voices");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Themes");
+
+        // config/save paths
+        checkForDir(cfgdir->absolutePath() + "/Demos");
+        checkForDir(cfgdir->absolutePath() + "/Saves");
+        checkForDir(cfgdir->absolutePath() + "/Screenshots");
+        checkForDir(cfgdir->absolutePath() + "/Teams");
+    }
 
     datadir->cd(bindir->absolutePath());
     datadir->cd(*cDataDir);
