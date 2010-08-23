@@ -159,8 +159,8 @@ function onGameTick()
 			progress = 2
 			FollowGear(instructor)
 			HogSay(instructor, loc(drill[3]), SAY_SHOUT)
+			TurnTimeLeft = 10000
 		end
-		TurnTimeLeft = 10000
 	elseif progress == 2 then
 		local x, y = GetGearPosition(player);
 		if x > player_start_x then
