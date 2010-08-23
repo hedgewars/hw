@@ -44,6 +44,7 @@ uses LuaPas in 'LuaPas.pas',
     uConsole,
     uMisc,
     uConsts,
+    uVisualGears,
     uGears,
     uFloat,
     uWorld,
@@ -413,6 +414,33 @@ begin
     lc_followgear:= 0
 end;
 
+function lc_hogsay(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+   vgear : PVisualGear;
+   text : ShortString;
+begin
+    if lua_gettop(L) <> 3 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to HogSay!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            begin
+            vgear:= AddVisualGear(0, 0, vgtSpeechBubble);
+            if vgear <> nil then
+               begin
+               vgear^.Text:= lua_tostring(L, 2);
+               vgear^.Hedgehog:= gear^.Hedgehog;
+               vgear^.FrameTicks:= lua_tointeger(L, 3);
+               if (vgear^.FrameTicks < 1) or (vgear^.FrameTicks > 3) then vgear^.FrameTicks:= 1;
+               end;
+            end
+        end;
+    lc_hogsay:= 0
+end;
+
 function lc_sethealth(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -587,6 +615,22 @@ begin
         lua_pushinteger(L, CurrentHedgehog^.Gear^.uid);
         end;
     lc_addhog:= 1;
+end;
+
+function lc_hogturnleft(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to HogTurnLeft!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            gear^.dX.isNegative:= lua_toboolean(L, 2);
+        end;
+    lc_hogturnleft:= 0;
 end;
 
 function lc_getgearposition(L : Plua_State) : LongInt; Cdecl;
@@ -790,6 +834,8 @@ end;
 procedure SetGlobals;
 begin
 ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
+ScriptSetInteger('GameTime', GameTicks);
+ScriptSetInteger('RealTime', RealTicks);
 if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
     ScriptSetInteger('CurrentHedgehog', CurrentHedgehog^.Gear^.UID)
 else
@@ -947,6 +993,11 @@ ScriptSetInteger('gfSharedAmmo', gfSharedAmmo);
 ScriptSetInteger('gfDisableGirders', gfDisableGirders);
 ScriptSetInteger('gfExplosives', gfExplosives);
 
+// speech bubbles
+ScriptSetInteger('SAY_SAY', 1);
+ScriptSetInteger('SAY_THINK', 2);
+ScriptSetInteger('SAY_SHOUT', 3);
+
 // register gear types
 for at:= Low(TGearType) to High(TGearType) do
     ScriptSetInteger(EnumToStr(at), ord(at));
@@ -999,6 +1050,8 @@ lua_register(luaState, 'GetTimer', @lc_gettimer);
 lua_register(luaState, 'GetHealth', @lc_gethealth);
 lua_register(luaState, 'SetZoom', @lc_setzoom);
 lua_register(luaState, 'GetZoom', @lc_getzoom);
+lua_register(luaState, 'HogSay', @lc_hogsay);
+lua_register(luaState, 'HogTurnLeft', @lc_hogturnleft);
 
 
 ScriptClearStack; // just to be sure stack is empty
