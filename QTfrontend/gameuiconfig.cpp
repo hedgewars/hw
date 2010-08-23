@@ -93,10 +93,10 @@ QStringList GameUIConfig::GetTeamsList()
 {
     QDir teamdir;
     teamdir.cd(cfgdir->absolutePath() + "/Teams");
-    QStringList teamslist = teamdir.entryList(QStringList("*.ini"));
+    QStringList teamslist = teamdir.entryList(QStringList("*.hwt"));
     QStringList cleanedList;
     for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
-            QString tmpTeamStr=(*it).replace(QRegExp("^(.*)\\.ini$"), "\\1");
+            QString tmpTeamStr=(*it).replace(QRegExp("^(.*)\\.hwt$"), "\\1");
             cleanedList.push_back(tmpTeamStr);
     }
     return cleanedList;
