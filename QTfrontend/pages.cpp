@@ -924,7 +924,10 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
     topLine->addStretch();
 
 
-    BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 0, true);
+    BtnCampaignPage = addButton(":/res/SimpleGame.png", middleLine, 0, true);
+    BtnCampaignPage->setToolTip(tr("Campaign Mode (...). IN DEVELOPMENT"));
+
+    BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
     BtnTrainPage->setToolTip(tr("Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT"));
 
     BtnBack = addButton(":/res/Exit.png", bottomLine, 0, true);
@@ -955,6 +958,8 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     tmpdir.cd("Missions/Training");
     tmpdir.setFilter(QDir::Files);
     CBSelect->addItems(tmpdir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1"));
+    for(int i = 0; i < CBSelect->count(); i++)
+        CBSelect->setItemData(i, CBSelect->itemText(i));
 
     pageLayout->addWidget(CBSelect, 1, 1);
     
@@ -964,6 +969,29 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     pageLayout->addWidget(BtnStartTrain, 1, 2);
 
     BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
+}
+
+PageCampaign::PageCampaign(QWidget* parent) : AbstractPage(parent)
+{
+    QGridLayout * pageLayout = new QGridLayout(this);
+    pageLayout->setColumnStretch(0, 1);
+    pageLayout->setColumnStretch(1, 2);
+    pageLayout->setColumnStretch(2, 1);
+    pageLayout->setRowStretch(0, 1);
+    pageLayout->setRowStretch(3, 1);
+
+    CBSelect = new QComboBox(this);
+    CBTeam = new QComboBox(this);
+
+    pageLayout->addWidget(CBTeam, 1, 1);
+    pageLayout->addWidget(CBSelect, 2, 1);
+    
+    BtnStartCampaign = new QPushButton(this);
+    BtnStartCampaign->setFont(*font14);
+    BtnStartCampaign->setText(QPushButton::tr("Go!"));
+    pageLayout->addWidget(BtnStartCampaign, 2, 2);
+
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 }
 
 PageSelectWeapon::PageSelectWeapon(QWidget* parent) :

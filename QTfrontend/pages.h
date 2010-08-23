@@ -334,6 +334,7 @@ public:
 
     QPushButton *BtnSimpleGamePage;
     QPushButton *BtnTrainPage;
+    QPushButton *BtnCampaignPage;
     QPushButton *BtnMultiplayer;
     QPushButton *BtnLoad;
     QPushButton *BtnDemos;
@@ -351,6 +352,19 @@ public:
     QPushButton *BtnStartTrain;
     QPushButton *BtnBack;
     QComboBox   *CBSelect;
+};
+
+class PageCampaign : public AbstractPage
+{
+    Q_OBJECT
+
+public:
+    PageCampaign(QWidget* parent = 0);
+
+    QPushButton *BtnStartCampaign;
+    QPushButton *BtnBack;
+    QComboBox   *CBSelect;
+    QComboBox   *CBTeam;
 };
 
 class PageSelectWeapon : public AbstractPage

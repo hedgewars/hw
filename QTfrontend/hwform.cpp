@@ -104,6 +104,7 @@ HWForm::HWForm(QWidget *parent)
 #endif
 
     UpdateTeamsLists();
+    UpdateCampaignPage(0);
     UpdateWeapons();
 
     connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
@@ -171,6 +172,7 @@ HWForm::HWForm(QWidget *parent)
 
     connect(ui.pageSinglePlayer->BtnSimpleGamePage, SIGNAL(clicked()), this, SLOT(SimpleGame()));
     connect(ui.pageSinglePlayer->BtnTrainPage, SIGNAL(clicked()), this, SLOT(GoToTraining()));
+    connect(ui.pageSinglePlayer->BtnCampaignPage, SIGNAL(clicked()), this, SLOT(GoToCampaign()));
     connect(ui.pageSinglePlayer->BtnMultiplayer, SIGNAL(clicked()), this, SLOT(GoToMultiplayer()));
     connect(ui.pageSinglePlayer->BtnLoad, SIGNAL(clicked()), this, SLOT(GoToSaves()));
     connect(ui.pageSinglePlayer->BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
@@ -178,6 +180,10 @@ HWForm::HWForm(QWidget *parent)
 
     connect(ui.pageTraining->BtnStartTrain, SIGNAL(clicked()), this, SLOT(StartTraining()));
     connect(ui.pageTraining->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+
+    connect(ui.pageCampaign->BtnStartCampaign, SIGNAL(clicked()), this, SLOT(StartCampaign()));
+    connect(ui.pageCampaign->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+    connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
 
     connect(ui.pageSelectWeapon->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
@@ -310,13 +316,15 @@ void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
     }
 
     if(teamslist.empty()) {
-        HWTeam defaultTeam("DefaultTeam");
+        HWTeam defaultTeam(tr("DefaultTeam"));
         defaultTeam.SaveToFile();
-        teamslist.push_back("DefaultTeam");
+        teamslist.push_back(tr("DefaultTeam"));
     }
 
     ui.pageOptions->CBTeamName->clear();
     ui.pageOptions->CBTeamName->addItems(teamslist);
+    ui.pageCampaign->CBTeam->clear();
+    ui.pageCampaign->CBTeam->addItems(teamslist);
 }
 
 void HWForm::GoToMain()
@@ -332,6 +340,11 @@ void HWForm::GoToSinglePlayer()
 void HWForm::GoToTraining()
 {
     GoToPage(ID_PAGE_TRAINING);
+}
+
+void HWForm::GoToCampaign()
+{
+    GoToPage(ID_PAGE_CAMPAIGN);
 }
 
 void HWForm::GoToSetup()
@@ -962,7 +975,14 @@ void HWForm::StartTraining()
 {
     CreateGame(0, 0, 0);
 
-    game->StartTraining(ui.pageTraining->CBSelect->currentText());
+    game->StartTraining(ui.pageTraining->CBSelect->itemData(ui.pageTraining->CBSelect->currentIndex()).toString());
+}
+
+void HWForm::StartCampaign()
+{
+    CreateGame(0, 0, 0);
+
+    game->StartCampaign(ui.pageCampaign->CBSelect->itemData(ui.pageCampaign->CBSelect->currentIndex()).toString());
 }
 
 void HWForm::CreateNetGame()
@@ -1074,4 +1094,19 @@ void HWForm::resizeEvent(QResizeEvent * event)
         wBackground->setFixedSize(w, h);
         wBackground->move(0, 0);
     }
+}
+
+void HWForm::UpdateCampaignPage(int index)
+{
+    HWTeam team(ui.pageCampaign->CBTeam->currentText());
+    ui.pageCampaign->CBSelect->clear();
+
+    QDir tmpdir;
+    tmpdir.cd(datadir->absolutePath());
+    tmpdir.cd("Missions/Campaign");
+    tmpdir.setFilter(QDir::Files);
+    QStringList entries = tmpdir.entryList(QStringList("*#*.lua"));
+    //entries.sort();
+    for(int i = 0; (i < entries.count()) && (i <= team.CampaignProgress); i++)
+        ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2"), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
 }

@@ -32,6 +32,7 @@ class PageInfo;
 class PageGameStats;
 class PageSinglePlayer;
 class PageTraining;
+class PageCampaign;
 class PageSelectWeapon;
 class PageInGame;
 class PageRoomsList;
@@ -70,6 +71,7 @@ public:
     PageScheme *pageScheme;
     PageAdmin *pageAdmin;
     PageNetType *pageNetType;
+    PageCampaign *pageCampaign;
 
     QStackedLayout *Pages;
     QFont *font14;

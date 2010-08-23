@@ -69,6 +69,7 @@ private slots:
     void GoToNetType();
     void GoToInfo();
     void GoToTraining();
+    void GoToCampaign();
     void GoToSelectWeapon();
     void GoToSelectWeaponSet(const QString & name);
     void GoToSelectNewWeapon();
@@ -90,6 +91,7 @@ private slots:
     void SimpleGame();
     void PlayDemo();
     void StartTraining();
+    void StartCampaign();
     void NetConnect();
     void NetConnectServer(const QString & host, quint16 port);
     void NetConnectOfficialServer();
@@ -107,6 +109,7 @@ private slots:
     void UpdateWeapons();
     void onFrontendFullscreen(bool value);
     void Music(bool checked);
+    void UpdateCampaignPage(int index);
 
     void NetGameChangeStatus(bool isMaster);
     void NetGameMaster();
@@ -143,7 +146,8 @@ private:
         ID_PAGE_CONNECTING      = 15,
         ID_PAGE_SCHEME          = 16,
         ID_PAGE_ADMIN           = 17,
-        ID_PAGE_NETTYPE         = 18
+        ID_PAGE_NETTYPE         = 18,
+        ID_PAGE_CAMPAIGN        = 19
         };
     HWGame * game;
     HWNetServer* pnetserver;

@@ -30,7 +30,7 @@
 
 #include <QTextStream>
 
-QString training; // TODO: Cleaner solution?
+QString training, campaign; // TODO: Cleaner solution?
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
   TCPBase(true),
@@ -146,9 +146,19 @@ void HWGame::SendTrainingConfig()
     QByteArray traincfg;
     HWProto::addStringToBuffer(traincfg, "TL");
 
-    HWProto::addStringToBuffer(traincfg, "escript " + datadir->absolutePath() + "/Missions/Training/" + training + ".lua");
+    HWProto::addStringToBuffer(traincfg, "escript " + training);
 
     RawSendIPC(traincfg);
+}
+
+void HWGame::SendCampaignConfig()
+{
+    QByteArray campaigncfg;
+    HWProto::addStringToBuffer(campaigncfg, "TL");
+
+    HWProto::addStringToBuffer(campaigncfg, "escript " + campaign);
+
+    RawSendIPC(campaigncfg);
 }
 
 void HWGame::SendNetConfig()
@@ -180,6 +190,10 @@ void HWGame::ParseMessage(const QByteArray & msg)
                 }
                 case gtTraining: {
                     SendTrainingConfig();
+                    break;
+                }
+                case gtCampaign: {
+                    SendCampaignConfig();
                     break;
                 }
             }
@@ -343,7 +357,16 @@ void HWGame::StartQuick()
 void HWGame::StartTraining(const QString & file)
 {
     gameType = gtTraining;
-    training = file;
+    training = datadir->absolutePath() + "/Missions/Tutorial/" + file + ".lua";
+    demo.clear();
+    Start();
+    SetGameState(gsStarted);
+}
+
+void HWGame::StartCampaign(const QString & file)
+{
+    gameType = gtCampaign;
+    campaign = datadir->absolutePath() + "/Missions/Campaign/" + file + ".lua";
     demo.clear();
     Start();
     SetGameState(gsStarted);

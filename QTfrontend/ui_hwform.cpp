@@ -113,4 +113,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 
     pageNetType = new PageNetType();
     Pages->addWidget(pageNetType);
+
+    pageCampaign = new PageCampaign();
+    Pages->addWidget(pageCampaign);
 }
