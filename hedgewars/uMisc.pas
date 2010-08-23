@@ -155,6 +155,7 @@ procedure SplitByChar(var a, b: ansistring; c: char);
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TSound) : shortstring; overload;
 function  EnumToStr(const en : TAmmoType) : shortstring; overload;
+function  EnumToStr(const en : THogEffect) : shortstring; overload;
 procedure movecursor(dx, dy: LongInt);
 function  hwSign(r: hwFloat): LongInt;
 function  Min(a, b: LongInt): LongInt;
@@ -232,6 +233,11 @@ end;
 function EnumToStr(const en : TAmmoType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TAmmoType), ord(en))
+end;
+
+function EnumToStr(const en: THogEffect) : shortstring; overload;
+begin
+    EnumToStr := GetEnumName(TypeInfo(THogEffect), ord(en))
 end;
 
 procedure movecursor(dx, dy: LongInt);

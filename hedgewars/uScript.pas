@@ -447,6 +447,19 @@ begin
     lc_settimer:= 0
 end;
 
+function lc_seteffect(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 3 then
+        LuaError('Lua: Wrong number of parameters passed to SetEffect!')
+    else begin
+        gear := GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            PHedgehog(gear^.Hedgehog)^.Effects[THogEffect(lua_tointeger(L, 2))]:= lua_tointeger(L, 3) <> 0;
+    end;
+    lc_seteffect := 0;
+end;
+
 function lc_setstate(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -897,6 +910,7 @@ procedure initModule;
 var at : TGearType;
     am : TAmmoType;
     st : TSound;
+    he: THogEffect;
 begin
 // initialize lua
 luaState:= lua_open;
@@ -945,6 +959,9 @@ for st:= Low(TSound) to High(TSound) do
 for am:= Low(TAmmoType) to High(TAmmoType) do
     ScriptSetInteger(EnumToStr(am), ord(am));
 
+for he:= Low(THogEffect) to High(THogEffect) do
+    ScriptSetInteger(EnumToStr(he), ord(he));
+
 // register functions
 lua_register(luaState, 'AddGear', @lc_addgear);
 lua_register(luaState, 'SpawnHealthCrate', @lc_spawnhealthcrate);
@@ -964,6 +981,7 @@ lua_register(luaState, 'PlaySound', @lc_playsound);
 lua_register(luaState, 'AddTeam', @lc_addteam);
 lua_register(luaState, 'AddHog', @lc_addhog);
 lua_register(luaState, 'SetHealth', @lc_sethealth);
+lua_register(luaState, 'SetEffect', @lc_seteffect);
 lua_register(luaState, 'GetHogClan', @lc_gethogclan);
 lua_register(luaState, 'GetHogName', @lc_gethogname);
 lua_register(luaState, 'GetHogLevel', @lc_gethoglevel);
