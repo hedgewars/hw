@@ -199,10 +199,10 @@
         customCell.weaponName.text = [ammoNames objectAtIndex:row];
         customCell.tag = row;
 
-        [customCell.initialQt setValue:[[NSString stringWithFormat:@"%c",quantity[row]] intValue] animated:NO];
-        [customCell.probabilityQt setValue:[[NSString stringWithFormat:@"%c", probability[row]] intValue] animated:NO];
-        [customCell.delayQt setValue:[[NSString stringWithFormat:@"%c", delay[row]] intValue] animated:NO];
-        [customCell.crateQt setValue:[[NSString stringWithFormat:@"%c", crateness[row]] intValue] animated:NO];
+        [customCell.initialSli setValue:[[NSString stringWithFormat:@"%c",quantity[row]] intValue] animated:NO];
+        [customCell.probabilitySli setValue:[[NSString stringWithFormat:@"%c", probability[row]] intValue] animated:NO];
+        [customCell.delaySli setValue:[[NSString stringWithFormat:@"%c", delay[row]] intValue] animated:NO];
+        [customCell.crateSli setValue:[[NSString stringWithFormat:@"%c", crateness[row]] intValue] animated:NO];
         cell = customCell;
     }
 
