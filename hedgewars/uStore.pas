@@ -493,6 +493,13 @@ var rr: TSDL_Rect;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
 if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
+
+// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
+    exit;
+if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) > cScreenHeight / cScaleFactor) then
+    exit;
+
 rr.x:= X;
 rr.y:= Y;
 rr.w:= W;
@@ -531,6 +538,7 @@ end;
 
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
 begin
+
 glPushMatrix;
 glTranslatef(X, Y, 0);
 glScalef(Scale, Scale, 1);
@@ -554,6 +562,12 @@ var ft, fb, fl, fr: GLfloat;
     hw, nx, ny: LongInt;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
+// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) > cScreenWidth / cScaleFactor) then
+    exit;
+if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) > cScreenHeight / cScaleFactor) then
+    exit;
+
 glPushMatrix;
 glTranslatef(X, Y, 0);
 
@@ -635,6 +649,12 @@ end;
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
+// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+if (abs(X) > 2 * hw) and ((abs(X) - hw) > cScreenWidth / cScaleFactor) then
+    exit;
+if (abs(Y) > 2 * hh) and ((abs(Y - 0.5 * cScreenHeight) - hh) > cScreenHeight / cScaleFactor) then
+    exit;
+
 glPushMatrix;
 glTranslatef(X, Y, 0);
 
@@ -728,6 +748,11 @@ const VertexBuffer: array [0..3] of TVertex2f = (
 var l, r, t, b: real;
     TextureBuffer: array [0..3] of TVertex2f;
 begin
+// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+if (abs(X) > 32) and ((abs(X) - 16)> cScreenWidth / cScaleFactor) then
+    exit;
+if (abs(Y) > 32) and ((abs(Y - 0.5 * cScreenHeight) - 16) > cScreenHeight / cScaleFactor) then
+    exit;
 
 t:= Pos * 32 / HHTexture^.h;
 b:= (Pos + 1) * 32 / HHTexture^.h;
@@ -768,6 +793,12 @@ end;
 procedure DrawFillRect(r: TSDL_Rect);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
+// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+if (abs(r.x) > r.w) and ((abs(r.x + r.w / 2) - r.w / 2) > cScreenWidth / cScaleFactor) then
+    exit;
+if (abs(r.y) > r.h) and ((abs(r.y + r.h / 2 - (0.5 * cScreenHeight)) - r.h / 2) > cScreenHeight / cScaleFactor) then
+    exit;
+
 glDisable(GL_TEXTURE_2D);
 
 Tint($00, $00, $00, $80);

@@ -98,6 +98,10 @@ var
     //userNick is in uChat
     recordFileName  : shortstring = '';
 
+    cLeftScreenBorder     : LongInt = 0;
+    cRightScreenBorder    : LongInt = 0;
+    cScreenSpace          : LongInt = 0;
+
     cCaseFactor     : Longword;
     cLandAdditions  : Longword;
     cExplosives     : Longword;

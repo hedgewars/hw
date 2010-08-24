@@ -494,7 +494,7 @@ procedure AddClouds;
 var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber - 1 do
-    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + (LAND_WIDTH+256)) div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
+    AddVisualGear(cLeftScreenBorder + i * cScreenSpace div (cCloudsNumber + 1), LAND_HEIGHT-1184, vgtCloud)
 end;
 
 procedure initModule;

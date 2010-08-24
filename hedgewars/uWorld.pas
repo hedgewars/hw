@@ -96,7 +96,7 @@ var i, t: LongInt;
         AddGoal:= s;
     end;
 begin
-    missionTimer:= 0;
+missionTimer:= 0;
 
 if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
    begin

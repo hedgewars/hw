@@ -403,7 +403,10 @@ if MusicFN = '' then MusicFN:= s;
 ReadLn(f, cCloudsNumber);
 
 // TODO - adjust all the theme cloud numbers. This should not be a permanent fix
-cCloudsNumber:= cCloudsNumber * (LAND_WIDTH div 2048);
+//cCloudsNumber:= cCloudsNumber * (LAND_WIDTH div 2048);
+
+// scale number of clouds depending on screen space (two times land width)
+cCloudsNumber:= cCloudsNumber * cScreenSpace div LAND_WIDTH;
 
 Readln(f, ThemeObjects.Count);
 for i:= 0 to Pred(ThemeObjects.Count) do
@@ -450,12 +453,16 @@ for i:= 0 to Pred(SprayObjects.Count) do
 Readln(f, vobCount);
 if vobCount > 0 then
     Readln(f, vobFramesCount, vobFrameTicks, vobVelocity, vobFallSpeed);
+
+// adjust amount of flakes scaled by screen space
+vobCount:= vobCount * cScreenSpace div LAND_WIDTH;
+
 if (cReducedQuality and rqKillFlakes) <> 0 then
     vobCount:= 0;
 
 
 for i:= 0 to Pred(vobCount) do
-    AddVisualGear( -cScreenWidth + random(cScreenWidth * 2 + LAND_WIDTH), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
+    AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
 
 Close(f);
 {$I+}

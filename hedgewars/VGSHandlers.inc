@@ -34,8 +34,8 @@ with Gear^ do
     Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps;
     Angle:= Angle + dAngle * Steps;
   
-    if (round(X) >= -cScreenWidth - 64) and
-       (round(X) <= cScreenWidth + LAND_WIDTH) and
+    if (round(X) >= cLeftScreenBorder) and
+       (round(X) <= cRightScreenBorder) and
        (round(Y) <= (LAND_HEIGHT + 75)) and 
        (Timer > 0) and (Timer-Steps > 0) then
         begin
@@ -51,8 +51,8 @@ with Gear^ do
         end
     else
         begin
-        if round(X) < -cScreenWidth - 64 then X:= float(cScreenWidth + LAND_WIDTH) else
-        if round(X) > cScreenWidth + LAND_WIDTH then X:= float(-cScreenWidth - 64);
+        if round(X) < cLeftScreenBorder then X:= X + cScreenSpace else
+        if round(X) > cRightScreenBorder then X:= X - cScreenSpace;
         // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + float(25); // For if flag is set for flakes rising upwards?
         if round(Y) > (LAND_HEIGHT + 75) then Y:= Y - float(1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
         Timer:= 0;
@@ -86,8 +86,8 @@ if (s < 2048) then t := -t;
 
 Gear^.Y := LAND_HEIGHT-1184 + Gear^.Timer mod 8 + t;
 
-if round(Gear^.X) < -cScreenWidth - 256 then Gear^.X:= float(cScreenWidth + LAND_WIDTH) else
-if round(Gear^.X) > cScreenWidth + LAND_WIDTH then Gear^.X:= float(-cScreenWidth - 256)
+if round(Gear^.X) < cLeftScreenBorder then Gear^.X:= Gear^.X + cScreenSpace else
+if round(Gear^.X) > cRightScreenBorder then Gear^.X:= Gear^.X - cScreenSpace
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -152,7 +152,7 @@ Gear^.Y:= Gear^.Y + Gear^.dY * Steps;// + cGravityf * (Steps * Steps);
 if (Gear^.State and gstTmpFlag) = 0 then
     begin
     Gear^.dY:= Gear^.dY + cGravityf * Steps;
-    if ((GameTicks mod 100) < Steps + 1) then
+    if ((GameTicks mod 200) < Steps + 1) then
         begin
         vgt:= AddVisualGear(round(Gear^.X), round(Gear^.Y), vgtFire);
         if vgt <> nil then
