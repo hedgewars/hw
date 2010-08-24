@@ -328,6 +328,9 @@
     NSSet *allTouches = [event allTouches];
     UITouch *first, *second;
 
+    if (isGameRunning == NO)
+        return;
+
     // hide in-game menu
     if (isPopoverVisible)
         [self dismissPopover];

@@ -393,7 +393,7 @@ for ii:= Low(TSprite) to High(TSprite) do
         if ((cReducedQuality and rqNoBackground) = 0) or (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR, sprFlake, sprSplash, sprDroplet])) then // FIXME: hack
         begin
             if AltPath = ptNone then
-                if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR] then // FIXME: hack
+                if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR, sprFlake] then // FIXME: hack
                     tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
                 else
                     tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical)
@@ -406,30 +406,29 @@ for ii:= Low(TSprite) to High(TSprite) do
             if tmpsurf <> nil then
             begin
                 if getImageDimensions then
-                    begin
+                begin
                     imageWidth:= tmpsurf^.w;
                     imageHeight:= tmpsurf^.h
-                    end;
+                end;
                 if getDimensions then
-                    begin
+                begin
                     Width:= tmpsurf^.w;
                     Height:= tmpsurf^.h
-                    end;
+                end;
                 if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
-                    begin
+                begin
                     Texture:= Surface2Tex(tmpsurf, true);
                     Texture^.Scale:= 2
-                    end
+                end
                 else
-                    begin
+                begin
                     Texture:= Surface2Tex(tmpsurf, false);
                     if (ii = sprWater) and ((cReducedQuality and (rq2DWater or rqClampLess)) = 0) then // HACK: We should include some sprite attribute to define the texture wrap directions
-                    begin
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-                    end;
                 end;
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, priority);
-                if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
+                if saveSurf then
+                    Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
                 end
             else
                 Surface:= nil
@@ -452,29 +451,24 @@ AddProgress;
 // name of weapons in ammo menu
 for ai:= Low(TAmmoType) to High(TAmmoType) do
     with Ammoz[ai] do
-        begin
+    begin
         TryDo(trAmmo[NameId] <> '','No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
         tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
         TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
         NameTex:= Surface2Tex(tmpsurf, false);
         SDL_FreeSurface(tmpsurf)
-        end;
+    end;
 
 // number of weapons in ammo menu
 for i:= Low(CountTexz) to High(CountTexz) do
-    begin
+begin
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
     tmpsurf:= doSurfaceConversion(tmpsurf);
     CountTexz[i]:= Surface2Tex(tmpsurf, false);
     SDL_FreeSurface(tmpsurf)
-    end;
+end;
 
-{$IFDEF DUMP}
-//not working anymore, where are LandSurface and StoreSurface defined?
-//SDL_SaveBMP_RW(LandSurface, SDL_RWFromFile('LandSurface.bmp', 'wb'), 1);
-//SDL_SaveBMP_RW(StoreSurface, SDL_RWFromFile('StoreSurface.bmp', 'wb'), 1);
-{$ENDIF}
 AddProgress;
 
 {$IFDEF SDL_IMAGE_NEWER}
@@ -492,7 +486,7 @@ var rr: TSDL_Rect;
     _l, _r, _t, _b: real;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
-if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
+if (SourceTexture = nil) or (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
 
 // don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
 if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then

@@ -74,11 +74,11 @@ var
     // originally from uConsts
     Pathz: array[TPathType] of shortstring;
     CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
-    LAND_WIDTH  :longint;
-    LAND_HEIGHT :longint;
-    LAND_WIDTH_MASK  :longWord;
-    LAND_HEIGHT_MASK :longWord;
-    cMaxCaptions : LongInt;
+    LAND_WIDTH       : LongInt;
+    LAND_HEIGHT      : LongInt;
+    LAND_WIDTH_MASK  : LongWord;
+    LAND_HEIGHT_MASK : LongWord;
+    cMaxCaptions     : LongInt;
 
     // init flags
     cScreenWidth    : LongInt = 1024;
@@ -98,9 +98,9 @@ var
     //userNick is in uChat
     recordFileName  : shortstring = '';
 
-    cLeftScreenBorder     : LongInt = 0;
-    cRightScreenBorder    : LongInt = 0;
-    cScreenSpace          : LongInt = 0;
+    cLeftScreenBorder     : LongInt;
+    cRightScreenBorder    : LongInt;
+    cScreenSpace          : LongInt;
 
     cCaseFactor     : Longword;
     cLandAdditions  : Longword;
@@ -785,6 +785,11 @@ begin
     cInactDelay     := 1250;
 
     ScreenFade      := sfNone;
+
+    // those values still aren't perfect
+    cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
+    cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
+    cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
 
 {$IFDEF IPHONEOS}
     if isPhone() then

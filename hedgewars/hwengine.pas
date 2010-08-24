@@ -263,11 +263,6 @@ begin
     ShowMainWindow();
 {$ENDIF}
 
-    // those values still aren't perfect
-    cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
-    cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
-    cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
-
     AddProgress();
 
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
