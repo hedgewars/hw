@@ -23,3 +23,11 @@ glob:project_files/HedgewarsMobile/Data/
 glob:project_files/HedgewarsMobile/build/
 glob:project_files/HedgewarsMobile/Hedgewars.xcodeproj/vittorio.*
 glob:moc_*.cxx_parameters
+relre:^release\/
+glob:*.log
+glob:*.cmd
+glob:*.diff
+glob:*.patch
+glob:*.orig
+glob:*.bak
+glob:*.rej
