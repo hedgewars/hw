@@ -301,12 +301,33 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     tmpdir.cd(datadir->absolutePath());
     tmpdir.cd("Graphics/Flags");
     list = tmpdir.entryList(QStringList("*.png"));
+    
+    // add the default flag
+    CBFlag->addItem(QIcon(QPixmap(datadir->absolutePath() + "/Graphics/Flags/hedgewars.png").copy(0, 0, 22, 15)), "Hedgewars", "hedgewars");
+
+    CBFlag->insertSeparator(CBFlag->count());
+    // add all country flags
     for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
     {
         QPixmap pix(datadir->absolutePath() + "/Graphics/Flags/" + *it);
         QIcon icon(pix.copy(0, 0, 22, 15));
-        if(it->compare("cpu.png")) // skip cpu flag
-            CBFlag->addItem(icon, (*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
+        if(it->compare("cpu.png") && it->compare("hedgewars.png") && (it->indexOf("cm_") == -1)) // skip cpu and hedgewars flags as well as all community flags
+        {
+            QString flag = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
+            CBFlag->addItem(icon, QString(flag).replace("_", " "), flag);
+        }
+    }
+    CBFlag->insertSeparator(CBFlag->count());
+    // add all community flags
+    for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+    {
+        QPixmap pix(datadir->absolutePath() + "/Graphics/Flags/" + *it);
+        QIcon icon(pix.copy(0, 0, 22, 15));
+        if(it->indexOf("cm_") > -1) // skip non community flags this time
+        {
+            QString flag = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
+            CBFlag->addItem(icon, QString(flag).replace("cm_", QComboBox::tr("Community") + ": "), flag);
+        }
     }
 
     vbox1->addStretch();

@@ -209,7 +209,7 @@ void HWTeam::SetToPage(HWForm * hwform)
             hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData(Hedgehogs[i].Hat, Qt::DisplayRole));
     }
     hwform->ui.pageEditTeam->CBGrave->setCurrentIndex(hwform->ui.pageEditTeam->CBGrave->findText(Grave));
-    hwform->ui.pageEditTeam->CBFlag->setCurrentIndex(hwform->ui.pageEditTeam->CBFlag->findText(Flag));
+    hwform->ui.pageEditTeam->CBFlag->setCurrentIndex(hwform->ui.pageEditTeam->CBFlag->findData(Flag));
 
     hwform->ui.pageEditTeam->CBFort->setCurrentIndex(hwform->ui.pageEditTeam->CBFort->findText(Fort));
     hwform->ui.pageEditTeam->CBVoicepack->setCurrentIndex(hwform->ui.pageEditTeam->CBVoicepack->findText(Voicepack));
@@ -237,7 +237,7 @@ void HWTeam::GetFromPage(HWForm * hwform)
     Grave = hwform->ui.pageEditTeam->CBGrave->currentText();
     Fort = hwform->ui.pageEditTeam->CBFort->currentText();
     Voicepack = hwform->ui.pageEditTeam->CBVoicepack->currentText();
-    Flag = hwform->ui.pageEditTeam->CBFlag->currentText();
+    Flag = hwform->ui.pageEditTeam->CBFlag->itemData(hwform->ui.pageEditTeam->CBFlag->currentIndex()).toString();
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
         binds[i].strbind = hwform->ui.pageEditTeam->CBBind[i]->itemData(hwform->ui.pageEditTeam->CBBind[i]->currentIndex()).toString();
