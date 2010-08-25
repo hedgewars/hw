@@ -82,6 +82,7 @@ procedure initModule;
 procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword ): PGear;
+procedure ResurrectHedgehog(gear: PGear);
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
@@ -318,6 +319,9 @@ case Kind of
                 gear^.Friction:= _0_999;
                 gear^.Angle:= cMaxAngle div 2;
                 gear^.Z:= cHHZ;
+                if (GameFlags and gfAISurvival) <> 0 then
+                    if PHedgehog(gear^.Hedgehog)^.BotLevel > 0 then
+                        PHedgehog(gear^.Hedgehog)^.Effects[heResurrectable] := true;
                 end;
 gtAmmo_Grenade: begin // bazooka
                 gear^.Radius:= 4;
@@ -1537,6 +1541,18 @@ while t <> nil do
     t:= t^.NextGear
     end;
 CountGears:= count;
+end;
+
+procedure ResurrectHedgehog(gear: PGear);
+begin
+    gear^.Health := 100;
+    gear^.dX := _0;
+    gear^.dY := _0;
+    gear^.State := gstWait;
+    FindPlace(Gear, false, 0, LAND_WIDTH); 
+    RenderHealth(PHedgehog(gear^.Hedgehog)^);
+    RecountTeamHealth(PHedgehog(gear^.Hedgehog)^.Team);
+    ScriptCall('onResurrect', gear^.uid);
 end;
 
 function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword): PGear;

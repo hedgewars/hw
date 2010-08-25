@@ -851,10 +851,14 @@ if (Gear^.Health = 0) then
 
         if not PHedgehog(Gear^.Hedgehog)^.Team^.hasGone then
             begin
-            Gear^.State:= Gear^.State or gstHHDeath;
-            Gear^.doStep:= @doStepHedgehogDead;
-            // Death message
-            AddCaption(Format(GetEventString(eidDied), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
+            if PHedgehog(Gear^.Hedgehog)^.Effects[heResurrectable] then begin
+                ResurrectHedgehog(Gear);
+            end else begin
+                Gear^.State:= Gear^.State or gstHHDeath;
+                Gear^.doStep:= @doStepHedgehogDead;
+                // Death message
+                AddCaption(Format(GetEventString(eidDied), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
+            end;
             end
         else
             begin

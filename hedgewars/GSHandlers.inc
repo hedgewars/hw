@@ -125,13 +125,17 @@ begin
             Gear^.State := gstDrowning;
             Gear^.RenderTimer := false;
             if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot) and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
-                Gear^.doStep := @doStepDrowningGear;
-            if Gear^.Kind = gtHedgehog then
-            begin
-                Gear^.State := Gear^.State and (not gstHHDriven);
-                AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name),
-                cWhiteColor, capgrpMessage);
-            end;
+                if Gear^.Kind = gtHedgehog then begin
+                    if PHedgehog(Gear^.Hedgehog)^.Effects[heResurrectable] then begin
+                        ResurrectHedgehog(Gear); 
+                    end else begin
+                        Gear^.doStep := @doStepDrowningGear;
+                        Gear^.State := Gear^.State and (not gstHHDriven);
+                        AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
+                    end;
+                end else begin
+                    Gear^.doStep := @doStepDrowningGear;
+                end;
             if hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius then
                 // don't play splash if they are already way past the surface
                 PlaySound(sndSplash)
