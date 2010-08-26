@@ -63,6 +63,7 @@ type PHHAmmo = ^THHAmmo;
             CrosshairTex,
             GraveTex,
             HealthTex,
+            AIKillsTex,
             FlagTex: PTexture;
             Flag: shortstring;
             GraveName: shortstring;

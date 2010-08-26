@@ -1549,7 +1549,11 @@ begin
     gear^.dX := _0;
     gear^.dY := _0;
     gear^.State := gstWait;
-    inc(CurrentHedgehog^.Team^.stats.AIKills);
+    with CurrentHedgehog^ do begin
+        inc(Team^.stats.AIKills);
+        if Team^.AIKillsTex <> nil then FreeTexture(Team^.AIKillsTex);
+        Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
+    end;
     FindPlace(gear, false, 0, LAND_WIDTH); 
     RenderHealth(PHedgehog(gear^.Hedgehog)^);
     RecountTeamHealth(PHedgehog(gear^.Hedgehog)^.Team);

@@ -259,6 +259,8 @@ var s: shortstring;
         FlagTex:= Surface2Tex(texsurf, false);
         SDL_FreeSurface(texsurf);
 
+        AIKillsTex := RenderStringTex(inttostr(stats.AIKills), Clan^.Color, fnt16);
+
         dec(drY, r.h + 2);
         DrawHealthY:= drY;
         for i:= 0 to 7 do

@@ -782,7 +782,7 @@ for t:= 0 to Pred(TeamsCount) do
       // draw ai kill counter for gfAISurvival
       if (GameFlags and gfAISurvival) <> 0 then begin
           DrawTexture(TeamHealthBarWidth + 22, cScreenHeight + DrawHealthY,
-              RenderStringTex(''+inttostr(stats.AIKills)+'', Clan^.Color, fnt16));
+              AIKillsTex);
       end;
 
       // if highlighted, draw flag and other contents again to keep their colors
