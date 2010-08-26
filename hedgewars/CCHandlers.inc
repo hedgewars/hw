@@ -289,9 +289,10 @@ end;
 procedure chLeft_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused or (ReadyTimeLeft > 0) then exit;
-bShowFinger:= false;
+if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('L');
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_Left
 end;
@@ -308,9 +309,10 @@ end;
 procedure chRight_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused or (ReadyTimeLeft > 0) then exit;
-bShowFinger:= false;
+if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('R');
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_Right
 end;
@@ -327,9 +329,10 @@ end;
 procedure chUp_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused or (ReadyTimeLeft > 0) then exit;
-bShowFinger:= false;
+if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('U');
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_Up
 end;
@@ -346,9 +349,10 @@ end;
 procedure chDown_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused or (ReadyTimeLeft > 0) then exit;
-bShowFinger:= false;
+if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('D');
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_Down
 end;
@@ -365,9 +369,10 @@ end;
 procedure chPrecise_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused or (ReadyTimeLeft > 0) then exit;
-bShowFinger:= false;
+if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('Z');
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_Precise
 end;
@@ -384,9 +389,10 @@ end;
 procedure chLJump(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused or (ReadyTimeLeft > 0) then exit;
-bShowFinger:= false;
+if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('j');
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_LJump
 end;
@@ -394,9 +400,10 @@ end;
 procedure chHJump(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused or (ReadyTimeLeft > 0) then exit;
-bShowFinger:= false;
+if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('J');
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_HJump
 end;
@@ -439,8 +446,10 @@ end;
 procedure chSwitch(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused or (ReadyTimeLeft > 0) then exit;
+if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('S');
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_Switch
 end;
@@ -483,9 +492,10 @@ end;
 procedure chTimer(var s: shortstring);
 begin
 if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or CheckNoTeamOrHH then exit;
-bShowFinger:= false;
 
 if not CurrentTeam^.ExtDriven then SendIPC(s);
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or gm_Timer;
@@ -497,10 +507,11 @@ procedure chSlot(var s: shortstring);
 var slot: LongWord;
 begin
 if (s[0] <> #1) or CheckNoTeamOrHH then exit;
-bShowFinger:= false;
 slot:= byte(s[1]) - 49;
 if slot > cMaxSlotIndex then exit;
 if not CurrentTeam^.ExtDriven then SendIPC(char(byte(s[1]) + 79));
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or gm_Slot;
@@ -572,7 +583,9 @@ end;
 
 procedure chNewGrave;
 begin
-if CheckNoTeamOrHH or isPaused or (ReadyTimeLeft > 0) then exit;
+if CheckNoTeamOrHH or isPaused then exit;
+
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
 
 if not CurrentTeam^.ExtDriven then SendIPC('g');
 
@@ -581,7 +594,9 @@ end;
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
-if CheckNoTeamOrHH or isPaused or (ReadyTimeLeft > 0) then exit;
+if CheckNoTeamOrHH or isPaused then exit;
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+bShowFinger:= false;
 if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
     begin
     bSelected:= true;
@@ -785,6 +800,7 @@ end;
 procedure chPause(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
+if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
 if gameType <> gmtNet then
     isPaused:= not isPaused;
 SDL_ShowCursor(ord(isPaused))
