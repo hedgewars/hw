@@ -537,7 +537,7 @@ var i, t: LongInt;
     offset, offsetX, offsetY, ScreenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
-    if not isPaused then
+    if not isPaused and (ReadyTimeLeft = 0) then
     begin
         if ZoomValue < zoom then
         begin
@@ -545,7 +545,7 @@ begin
             if ZoomValue > zoom then
                 zoom:= ZoomValue
         end
-    else
+        else
         if ZoomValue > zoom then
         begin
             zoom:= zoom + 0.002 * Lag;
@@ -668,9 +668,13 @@ offsetX:= cScreenHeight - 13;
 offsetX:= 48;
 {$ENDIF}
 offsetY:= cOffsetY;
-if TurnTimeLeft <> 0 then
-   begin
-   i:= Succ(Pred(TurnTimeLeft) div 1000);
+if (TurnTimeLeft <> 0) or (ReadyTimeLeft <> 0) then
+    begin
+    if ReadyTimeLeft <> 0 then
+        i:= Succ(Pred(ReadyTimeLeft) div 1000)
+    else
+        i:= Succ(Pred(TurnTimeLeft) div 1000);
+   
    if i>99 then t:= 112
       else if i>9 then t:= 96
                   else t:= 80;
@@ -853,10 +857,24 @@ DrawChat;
 
 if fastUntilLag then DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
-
-if not isFirstFrame and ((missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm)) then
+if ReadyTimeLeft > 0 then
     begin
-    if missionTimer > 0 then dec(missionTimer, Lag);
+    // TODO: move outside drawing code or do a spearate step in ugears?
+    if (ReadyTimeLeft = 1) or (ReadyTimeLeft < Lag) then
+        if (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then
+            PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
+        else
+            PlaySound(sndYesSir, CurrentTeam^.voicepack);
+
+    if ReadyTimeLeft > Lag then
+        dec(ReadyTimeLeft, Lag)
+    else
+        ReadyTimeLeft:= 0;
+    DrawCentered(0, (cScreenHeight shr 1), ReadyTexture);
+    end;
+if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then
+    begin
+    if (ReadyTimeLeft = 0) and (missionTimer > 0) then dec(missionTimer, Lag);
     if missionTimer < 0 then missionTimer:= 0; // avoid subtracting below 0
     if missionTex <> nil then
         DrawCentered(0, min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);

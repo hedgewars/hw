@@ -137,6 +137,7 @@ or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then exit(false);
 CheckForWin:= true;
 
 TurnTimeLeft:= 0;
+ReadyTimeLeft:= 0;
 if AliveCount = 0 then
     begin // draw
     AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
@@ -274,17 +275,19 @@ if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
 
 bShowFinger:= true;
 
-if (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then
-    PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
-else
-    PlaySound(sndYesSir, CurrentTeam^.voicepack);
-
 if PlacingHogs then
    begin
    if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 15000
    else TurnTimeLeft:= 0
    end
-else TurnTimeLeft:= cHedgehogTurnTime
+else TurnTimeLeft:= cHedgehogTurnTime;
+if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
+    begin
+    PlaySound(sndComeonthen, CurrentTeam^.voicepack);
+    ReadyTimeLeft:= cReadyDelay
+    end
+else
+    ReadyTimeLeft:= 0;
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;

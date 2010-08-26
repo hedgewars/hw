@@ -122,7 +122,8 @@ type
             sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket,
             sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle, sndBeeWater,
             sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7, sndPiano8,
-            sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack);
+            sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
+            sndComeonthen);
 
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -937,7 +938,8 @@ const
             (FileName:                'Ooff1.ogg'; Path: ptVoices),// sndOoff1
             (FileName:                'Ooff2.ogg'; Path: ptVoices),// sndOoff2
             (FileName:                'Ooff3.ogg'; Path: ptVoices),// sndOoff3
-            (FileName:            'whipcrack.ogg'; Path: ptSounds) // sndWhack
+            (FileName:            'whipcrack.ogg'; Path: ptSounds),// sndWhack
+            (FileName:           'Comeonthen.ogg'; Path: ptVoices) // sndComeonthen
             );
 
     Ammoz: array [TAmmoType] of record

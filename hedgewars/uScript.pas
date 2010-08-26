@@ -780,6 +780,7 @@ ScriptSetInteger('CaseFreq', cCaseFactor);
 ScriptSetInteger('LandAdds', cLandAdditions);
 ScriptSetInteger('Explosives', cExplosives);
 ScriptSetInteger('Delay', cInactDelay);
+ScriptSetInteger('Ready', cReadyDelay);
 ScriptSetInteger('SuddenDeathTurns', cSuddenDTurns);
 ScriptSetString('Map', '');
 ScriptSetString('Theme', '');
@@ -805,6 +806,7 @@ if ScriptGetString('Map') <> '' then
     ParseCommand('map ' + ScriptGetString('Map'), true);
 if ScriptGetString('Theme') <> '' then
     ParseCommand('theme ' + ScriptGetString('Theme'), true);
+cReadyDelay:= ScriptGetInteger('Ready');
 
 if ScriptExists('onAmmoStoreInit') then
     begin
@@ -821,7 +823,10 @@ var ret : LongInt;
 begin
 ret:= luaL_loadfile(luaState, Str2PChar(name));
 if ret <> 0 then
-    LuaError('Lua: Failed to load ' + name + '(error ' + IntToStr(ret) + ')')
+    begin
+    LuaError('Lua: Failed to load ' + name + '(error ' + IntToStr(ret) + ')');
+    LuaError('Lua: ' + lua_tostring(luaState, -1));
+    end
 else
     begin
     WriteLnToConsole('Lua: ' + name + ' loaded');

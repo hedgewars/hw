@@ -42,6 +42,7 @@ var
     GameFlags       : Longword;
     TrainingFlags   : Longword;
     TurnTimeLeft    : Longword;
+    ReadyTimeLeft    : Longword;
     cSuddenDTurns   : LongInt;
     cDamagePercent  : LongInt;
     cMineDudPercent : LongWord;
@@ -110,6 +111,7 @@ var
     cVolumeDelta    : LongInt;
     cHasFocus       : boolean;
     cInactDelay     : Longword;
+    cReadyDelay     : Longword;
 
     bBetweenTurns   : boolean;
     cHealthDecrease : LongWord;
@@ -783,6 +785,8 @@ begin
     cVolumeDelta    := 0;
     cHasFocus       := true;
     cInactDelay     := 1250;
+    cReadyDelay     := 5000;
+    ReadyTimeLeft    := 0;
 
     ScreenFade      := sfNone;
 

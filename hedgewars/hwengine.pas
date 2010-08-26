@@ -85,7 +85,7 @@ begin
                 ProcessKbd;
                 if not isPaused then
                     begin
-                    DoGameTick(Lag);
+                    if ReadyTimeLeft = 0 then DoGameTick(Lag);
                     ProcessVisualGears(Lag);
                     end;
                 end;
@@ -93,7 +93,7 @@ begin
                 DrawWorld(Lag);
                 if not isPaused then
                     begin
-                    DoGameTick(Lag);
+                    if ReadyTimeLeft = 0 then DoGameTick(Lag);
                     ProcessVisualGears(Lag);
                     end;
                 end;
