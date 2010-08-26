@@ -1549,7 +1549,8 @@ begin
     gear^.dX := _0;
     gear^.dY := _0;
     gear^.State := gstWait;
-    FindPlace(Gear, false, 0, LAND_WIDTH); 
+    inc(CurrentHedgehog^.Team^.stats.AIKills);
+    FindPlace(gear, false, 0, LAND_WIDTH); 
     RenderHealth(PHedgehog(gear^.Hedgehog)^);
     RecountTeamHealth(PHedgehog(gear^.Hedgehog)^.Team);
     ScriptCall('onResurrect', gear^.uid);

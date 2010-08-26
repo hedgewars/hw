@@ -778,6 +778,13 @@ for t:= 0 to Pred(TeamsCount) do
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
       DrawFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY, @r, HealthTex);
+
+      // draw ai kill counter for gfAISurvival
+      if (GameFlags and gfAISurvival) <> 0 then begin
+          DrawTexture(TeamHealthBarWidth + 22, cScreenHeight + DrawHealthY,
+              RenderStringTex(''+inttostr(stats.AIKills)+'', Clan^.Color, fnt16));
+      end;
+
       // if highlighted, draw flag and other contents again to keep their colors
       // this approach should be faster than drawing all borders one by one tinted or not
       if highlight then

@@ -32,7 +32,12 @@ type TStatistics = record
                    MaxStepDamageGiven,
                    MaxStepKills: Longword;
                    FinishedTurns: Longword;
+                   AIKills : LongInt;
                    end;
+
+type TTeamStats = record
+    AIKills : LongInt;
+end;
 
 var TotalRounds: LongInt;
     FinishedTurnsTotal: LongInt;

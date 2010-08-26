@@ -76,6 +76,7 @@ type PHHAmmo = ^THHAmmo;
             hasGone: boolean;
             voicepack: PVoicepack;
             PlayerHash: shortstring;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
+            stats: TTeamStats;
             end;
 
     TClan = record
