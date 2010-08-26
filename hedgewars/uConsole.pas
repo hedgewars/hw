@@ -225,6 +225,7 @@ begin
     RegisterVariable('mapgen'  , vtLongInt, @cMapGen        , false);
     RegisterVariable('maze_size',vtLongInt, @cMazeSize      , false);
     RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
+    RegisterVariable('ready'   , vtLongInt, @cReadyDelay    , false);
     RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
     RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);
     RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);

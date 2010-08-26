@@ -801,12 +801,12 @@ ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
 ParseCommand('$landadds ' + ScriptGetString('LandAdds'), true);
 ParseCommand('$explosives ' + ScriptGetString('Explosives'), true);
 ParseCommand('$delay ' + ScriptGetString('Delay'), true);
+ParseCommand('$ready ' + ScriptGetString('Ready'), true);
 ParseCommand('$sd_turns ' + ScriptGetString('SuddenDeathTurns'), true);
 if ScriptGetString('Map') <> '' then
     ParseCommand('map ' + ScriptGetString('Map'), true);
 if ScriptGetString('Theme') <> '' then
     ParseCommand('theme ' + ScriptGetString('Theme'), true);
-cReadyDelay:= ScriptGetInteger('Ready');
 
 if ScriptExists('onAmmoStoreInit') then
     begin
