@@ -1545,10 +1545,12 @@ end;
 
 procedure ResurrectHedgehog(gear: PGear);
 begin
-    gear^.Health := 100;
     gear^.dX := _0;
     gear^.dY := _0;
     gear^.State := gstWait;
+    uStats.HedgehogDamaged(gear);
+    gear^.Damage := 0;
+    gear^.Health := 100;
     with CurrentHedgehog^ do begin
         inc(Team^.stats.AIKills);
         if Team^.AIKillsTex <> nil then FreeTexture(Team^.AIKillsTex);
