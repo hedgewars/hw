@@ -241,6 +241,11 @@ public:
     QLineEdit *editNetNick;
     QSlider *SLQuality;
     QCheckBox *CBFrontendEffects;
+    bool previousFullscreenValue;
+
+private slots:
+    void forceFullscreen(int index);
+    void setFullscreen(void);
 };
 
 class PageNet : public AbstractPage
