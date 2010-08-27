@@ -36,6 +36,11 @@
 }
 
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint atSize:(CGSize) resultingSize {
+    if (secondImage == nil) {
+        DLog(@"Warning, secondImage == nil");
+        return self;
+    }
+    
     // Create a bitmap graphics context; this will also set it as the current context
     UIGraphicsBeginImageContext(resultingSize);
 

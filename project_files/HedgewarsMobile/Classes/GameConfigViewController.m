@@ -11,10 +11,10 @@
 #import "CommodityFunctions.h"
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
-
+#import "UIImageExtra.h"
 
 @implementation GameConfigViewController
-
+@synthesize hedgehogImage, imgContainer;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -185,6 +185,14 @@
     self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        // load a base image that will be updated in viewWill Load
+        NSString *filePath = [NSString stringWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
+        UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath andCutAt:CGRectMake(96, 0, 32, 32)];
+        self.hedgehogImage = sprite;
+        [sprite release];
+        srandom(time(NULL));
+        
+        // load other controllers
         if (mapConfigViewController == nil)
             mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
         mapConfigViewController.delegate = self;
@@ -213,10 +221,33 @@
 }
 
 -(void) viewWillAppear:(BOOL)animated {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
+        int numberOfHats = [hatArray count];
+        if (self.imgContainer == nil)
+            self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
+        
+        for (int i=0; i < 1 + random()%40; i++) {
+            NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
+            
+            NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
+            UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
+            [hatFile release];
+            UIImage *hogWithHat = [self.hedgehogImage mergeWith:hatSprite atPoint:CGPointMake(0, -5)];
+            [hatSprite release];
+            
+            UIImageView *hog = [[UIImageView alloc] initWithImage:hogWithHat];
+            hog.frame = CGRectMake(10*(i+1)+random()%30, 30, 32, 32);
+            [self.imgContainer addSubview:hog];
+            [hog release];
+        }
+        [self.view addSubview:self.imgContainer];
+    }
+
     [mapConfigViewController viewWillAppear:animated];
     [teamConfigViewController viewWillAppear:animated];
     [schemeWeaponConfigViewController viewWillAppear:animated];
-    // ADD other controllers here
+    // add other controllers here and below
 
     [super viewWillAppear:animated];
 }
@@ -236,6 +267,11 @@
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [self.imgContainer removeFromSuperview];
+        releaseAndNil(self.imgContainer);
+    }
+    
     [mapConfigViewController viewDidDisappear:animated];
     [teamConfigViewController viewDidDisappear:animated];
     [schemeWeaponConfigViewController viewDidDisappear:animated];
@@ -243,21 +279,25 @@
 }
 
 -(void) didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
     if (activeController.view.superview == nil)
         activeController = nil;
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
     if (mapConfigViewController.view.superview == nil)
         mapConfigViewController = nil;
     if (teamConfigViewController.view.superview == nil)
         teamConfigViewController = nil;
     if (schemeWeaponConfigViewController.view.superview == nil)
-        schemeWeaponConfigViewController = nil;
+        schemeWeaponConfigViewController = nil;    
+    // Release any cached data, images, etc that aren't in use.
+
+    self.imgContainer = nil;
+    [super didReceiveMemoryWarning];
     MSG_MEMCLEAN();
 }
 
 -(void) viewDidUnload {
+    hedgehogImage = nil;
+    imgContainer = nil;
     activeController = nil;
     mapConfigViewController = nil;
     teamConfigViewController = nil;
@@ -267,6 +307,8 @@
 }
 
 -(void) dealloc {
+    [hedgehogImage release];
+    [imgContainer release];
     [mapConfigViewController release];
     [teamConfigViewController release];
     [schemeWeaponConfigViewController release];

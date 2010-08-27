@@ -73,7 +73,6 @@ end;
 
 function HW_zoomLevel: LongInt; cdecl; export;
 begin
-    writelntoconsole(inttostr(trunc((ZoomValue - cDefaultZoomLevel) / cZoomDelta) ));
     exit( trunc((ZoomValue - cDefaultZoomLevel) / cZoomDelta) );
 end;
 

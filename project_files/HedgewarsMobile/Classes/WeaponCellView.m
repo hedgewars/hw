@@ -203,7 +203,7 @@
 }
 
 -(void) stopDragging:(id) sender {
-    self.helpLabel.text =@"";
+    self.helpLabel.text = @"";
 }
 
 -(void) dealloc {
@@ -222,6 +222,7 @@
     releaseAndNil(probabilityLab);
     releaseAndNil(delayLab);
     releaseAndNil(crateLab);
+    releaseAndNil(helpLabel);
     [super dealloc];
 }
 

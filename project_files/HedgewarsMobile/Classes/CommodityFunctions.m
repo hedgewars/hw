@@ -55,7 +55,7 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
                                                         error:NULL];
     }
 
-    NSDictionary *theWeapon;
+    NSDictionary *theWeapon = nil;
     switch (type) {
         case 0: //default
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
