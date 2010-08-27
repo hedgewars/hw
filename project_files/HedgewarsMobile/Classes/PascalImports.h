@@ -61,6 +61,7 @@ extern "C" {
 
     BOOL HW_isAmmoOpen(void);
     BOOL HW_isPaused(void);
+    BOOL HW_isWaiting(void);
     BOOL HW_isWeaponRequiringClick(void);
     BOOL HW_isWeaponTimerable(void);
     BOOL HW_isWeaponSwitch(void);

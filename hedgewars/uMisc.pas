@@ -25,6 +25,26 @@ interface
 uses    SDLh, uConsts, uFloat, GLunit, Math;
 
 var
+/////// init flags ///////
+    cScreenWidth    : LongInt     = 1024;
+    cScreenHeight   : LongInt     = 768;
+    cBits           : LongInt     = 32;
+    //ipcPort is in uIO
+    cFullScreen     : boolean     = false;
+    isSoundEnabled  : boolean     = true;
+    isMusicEnabled  : boolean     = false;
+    cLocaleFName    : shortstring = 'en.txt';
+    cInitVolume     : LongInt     = 100;
+    cTimerInterval  : LongInt     = 8;
+    PathPrefix      : shortstring = './';
+    cShowFPS        : boolean     = false;
+    cAltDamage      : boolean     = true;
+    cReducedQuality : LongInt     = rqNone;
+    //userNick is in uChat
+    recordFileName  : shortstring = '';
+    cReadyDelay     : Longword    = 5000;
+//////////////////////////
+    
     isCursorVisible : boolean;
     isTerminated    : boolean;
     isInLag         : boolean;
@@ -42,7 +62,7 @@ var
     GameFlags       : Longword;
     TrainingFlags   : Longword;
     TurnTimeLeft    : Longword;
-    ReadyTimeLeft    : Longword;
+    ReadyTimeLeft   : Longword;
     cSuddenDTurns   : LongInt;
     cDamagePercent  : LongInt;
     cMineDudPercent : LongWord;
@@ -81,24 +101,6 @@ var
     LAND_HEIGHT_MASK : LongWord;
     cMaxCaptions     : LongInt;
 
-    // init flags
-    cScreenWidth    : LongInt = 1024;
-    cScreenHeight   : LongInt = 768;
-    cBits           : LongInt = 32;
-    //ipcPort is in uIO
-    cFullScreen     : boolean = false;
-    isSoundEnabled  : boolean = true;
-    isMusicEnabled  : boolean = false;
-    cLocaleFName    : shortstring = 'en.txt';
-    cInitVolume     : LongInt = 50;
-    cTimerInterval  : LongInt = 8;
-    PathPrefix: shortstring = './';
-    cShowFPS        : boolean = false;
-    cAltDamage      : boolean = true;
-    cReducedQuality : LongInt = rqNone;
-    //userNick is in uChat
-    recordFileName  : shortstring = '';
-
     cLeftScreenBorder     : LongInt;
     cRightScreenBorder    : LongInt;
     cScreenSpace          : LongInt;
@@ -111,7 +113,6 @@ var
     cVolumeDelta    : LongInt;
     cHasFocus       : boolean;
     cInactDelay     : Longword;
-    cReadyDelay     : Longword;
 
     bBetweenTurns   : boolean;
     cHealthDecrease : LongWord;
@@ -785,8 +786,7 @@ begin
     cVolumeDelta    := 0;
     cHasFocus       := true;
     cInactDelay     := 1250;
-    cReadyDelay     := 5000;
-    ReadyTimeLeft    := 0;
+    ReadyTimeLeft   := 0;
 
     ScreenFade      := sfNone;
 
@@ -860,7 +860,7 @@ begin
     isSoundEnabled  := true;
     isMusicEnabled  := false;
     cLocaleFName    := 'en.txt';
-    cInitVolume     := 50;
+    cInitVolume     := 100;
     cTimerInterval  := 8;
     PathPrefix := './';
     cShowFPS        := false;
@@ -868,6 +868,7 @@ begin
     cReducedQuality := rqNone;
     //userNick is in uChat
     recordFileName  := '';
+    cReadyDelay     := 5000;
 end;
 
 end.

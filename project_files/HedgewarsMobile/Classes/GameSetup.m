@@ -388,8 +388,6 @@
     if (![modelId hasPrefix:@"iPad"])                                       // = disable tooltips unless iPad
         tmpQuality = tmpQuality | 0x00000400;
 
-    gameArgs[9] = [[[NSNumber numberWithInteger:tmpQuality] stringValue] UTF8String];
-
     // prevents using an empty nickname
     NSString *username;
     NSString *originalUsername = [self.systemSettings objectForKey:@"username"];
@@ -398,15 +396,17 @@
     else
         username = [[NSString alloc] initWithString:originalUsername];
 
-    gameArgs[0] = [username UTF8String];                                                        //UserNick
-    gameArgs[1] = [ipcString UTF8String];                                                       //ipcPort
-    gameArgs[2] = [[[self.systemSettings objectForKey:@"sound"] stringValue] UTF8String];       //isSoundEnabled
-    gameArgs[3] = [[[self.systemSettings objectForKey:@"music"] stringValue] UTF8String];       //isMusicEnabled
-    gameArgs[4] = [localeString UTF8String];                                                    //cLocaleFName
-    gameArgs[5] = [[[self.systemSettings objectForKey:@"alternate"] stringValue] UTF8String];   //cAltDamage
-    gameArgs[6] = [wSize UTF8String];                                                           //cScreenHeight
-    gameArgs[7] = [hSize UTF8String];                                                           //cScreenWidth
-    gameArgs[8] = NULL;                                                                         //recordFileName
+    gameArgs[ 0] = [ipcString UTF8String];                                                       //ipcPort
+    gameArgs[ 1] = [wSize UTF8String];                                                           //cScreenHeight
+    gameArgs[ 2] = [hSize UTF8String];                                                           //cScreenWidth
+    gameArgs[ 3] = [[[NSNumber numberWithInteger:tmpQuality] stringValue] UTF8String];           //quality
+    gameArgs[ 4] = [localeString UTF8String];                                                    //cLocaleFName
+    gameArgs[ 5] = [username UTF8String];                                                        //UserNick
+    gameArgs[ 6] = [[[self.systemSettings objectForKey:@"sound"] stringValue] UTF8String];       //isSoundEnabled
+    gameArgs[ 7] = [[[self.systemSettings objectForKey:@"music"] stringValue] UTF8String];       //isMusicEnabled
+    gameArgs[ 8] = [[[self.systemSettings objectForKey:@"alternate"] stringValue] UTF8String];   //cAltDamage
+    gameArgs[ 9] = [[[self.systemSettings objectForKey:@"ready"] stringValue] UTF8String];       //cReady
+    gameArgs[10] = NULL;                                                                         //recordFileName
 
     [wSize release];
     [hSize release];

@@ -199,6 +199,11 @@ begin
     exit( isPaused );
 end;
 
+function HW_isWaiting: boolean; cdecl; export;
+begin
+    exit( ReadyTimeLeft > 0 );
+end;
+
 function HW_isWeaponRequiringClick: boolean; cdecl; export;
 begin
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.BotLevel = 0) then

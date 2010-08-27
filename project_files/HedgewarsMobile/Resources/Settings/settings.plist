@@ -12,5 +12,7 @@
 	<true/>
 	<key>username</key>
 	<string></string>
+	<key>ready</key>
+	<true/>
 </dict>
 </plist>

@@ -218,8 +218,10 @@
     if (!isGameRunning)
         return;
 
+    if (HW_isWaiting())
+        HW_shoot();
+    
     UIButton *theButton = (UIButton *)sender;
-
     switch (theButton.tag) {
         case 0:
             if (isAttacking == NO)
@@ -367,6 +369,10 @@
 
     switch ([allTouches count]) {
         case 1:
+            // this dismisses the "get ready"
+            if (HW_isWaiting())
+                HW_shoot();
+
             // if we're in the menu we just click in the point
             if (HW_isAmmoOpen()) {
                 HW_setCursor(HWXZ(currentPosition.x), HWYZ(currentPosition.y));

@@ -36,7 +36,7 @@ var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
 
 {$IFDEF HWLIBRARY}
-type arrayofpchar = array[0..9] of PChar;
+type arrayofpchar = array[0..10] of PChar;
 
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
@@ -218,19 +218,18 @@ begin
 {$ELSE}
     cShowFPS:= false;    // update me at release time
 {$ENDIF}
-    cInitVolume:= 100;
-
-    UserNick:= gameArgs[0];
-    val(gameArgs[1], ipcPort);
-    isSoundEnabled:= gameArgs[2] = '1';
-    isMusicEnabled:= gameArgs[3] = '1';
+    val(gameArgs[0], ipcPort);
+    val(gameArgs[1], cScreenHeight);
+    val(gameArgs[2], cScreenWidth);
+    val(gameArgs[3], cReducedQuality);
     cLocaleFName:= gameArgs[4];
-    cAltDamage:= gameArgs[5] = '1';
-    val(gameArgs[6], cScreenHeight);
-    val(gameArgs[7], cScreenWidth);
-    recordFileName:= gameArgs[8];
-
-    val(gameArgs[9], cReducedQuality);
+    UserNick:= gameArgs[5];
+    isSoundEnabled:= gameArgs[6] = '1';
+    isMusicEnabled:= gameArgs[7] = '1';
+    cAltDamage:= gameArgs[8] = '1';
+    if CompareStr(gameArgs[9],'0') = 0 then
+        cReadyDelay:= 0;
+    recordFileName:= gameArgs[10];
 {$ENDIF}
 
     initEverything(true);
