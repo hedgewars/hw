@@ -100,22 +100,25 @@
 					<object class="IBUIImageView" id="742028380">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{106, 707}, {320, 41}}</string>
+						<string key="NSFrame">{{106, 707}, {320, 40}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<reference key="IBUIImage" ref="1034685562"/>
+						<object class="NSCustomResource" key="IBUIImage" id="362444284">
+							<string key="NSClassName">NSImage</string>
+							<string key="NSResourceName">bluebox-squeezed.png</string>
+						</object>
 					</object>
 					<object class="IBUIImageView" id="696928530">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{594, 707}, {320, 41}}</string>
+						<string key="NSFrame">{{594, 707}, {320, 40}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<reference key="IBUIImage" ref="1034685562"/>
+						<reference key="IBUIImage" ref="362444284"/>
 					</object>
 					<object class="IBUILabel" id="848132519">
 						<reference key="NSNextResponder" ref="191373211"/>
@@ -1188,6 +1191,7 @@
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<string>backButton.png</string>
 				<string>background.png</string>
+				<string>bluebox-squeezed.png</string>
 				<string>bluebox.png</string>
 				<string>helpButton.png</string>
 				<string>startGameButton.png</string>
@@ -1197,6 +1201,7 @@
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<string>{64, 64}</string>
 				<string>{1024, 768}</string>
+				<string>{320, 40}</string>
 				<string>{512, 512}</string>
 				<string>{64, 64}</string>
 				<string>{142, 64}</string>

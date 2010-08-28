@@ -126,38 +126,49 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                                                    attributes:nil
                                                         error:NULL];
     }
-
-    NSArray *theScheme = [[NSArray alloc] initWithObjects:
-                          [NSNumber numberWithBool:NO],    //fortmode
-                          [NSNumber numberWithBool:NO],    //divideteam
-                          [NSNumber numberWithBool:NO],    //solidland
-                          [NSNumber numberWithBool:NO],    //addborder
-                          [NSNumber numberWithBool:NO],    //lowgravity
-                          [NSNumber numberWithBool:NO],    //lasersight
-                          [NSNumber numberWithBool:NO],    //invulnerable
-                          [NSNumber numberWithBool:YES],   //addmines
-                          [NSNumber numberWithBool:NO],    //vampirism
-                          [NSNumber numberWithBool:NO],    //karma
-                          [NSNumber numberWithBool:NO],    //artillery
-                          [NSNumber numberWithBool:YES],   //randomorder
-                          [NSNumber numberWithBool:NO],    //king
-                          [NSNumber numberWithBool:NO],    //placehedgehogs
-                          [NSNumber numberWithBool:NO],    //clansharesammo
-                          [NSNumber numberWithBool:NO],    //disablegirders
-                          [NSNumber numberWithBool:NO],    //disablelandobjects
-                          [NSNumber numberWithInt:100],    //damagemodifier
-                          [NSNumber numberWithInt:45],     //turntime
-                          [NSNumber numberWithInt:100],    //initialhealth
-                          [NSNumber numberWithInt:15],     //suddendeathtimeout
-                          [NSNumber numberWithInt:5],      //cratedrops
-                          [NSNumber numberWithInt:3],      //minestime
-                          [NSNumber numberWithInt:4],      //mines
-                          [NSNumber numberWithInt:0],      //dudmines
-                          [NSNumber numberWithInt:2],      //explosives
-                          nil];
-
+    
+    NSMutableArray *basicArray  = [[NSMutableArray alloc] initWithObjects:
+                                   [NSNumber numberWithInt:100],      //damagemodifier
+                                   [NSNumber numberWithInt:45],       //turntime
+                                   [NSNumber numberWithInt:100],      //initialhealth
+                                   [NSNumber numberWithInt:15],       //suddendeathtimeout
+                                   [NSNumber numberWithInt:5],        //cratedrops
+                                   [NSNumber numberWithInt:3],        //minestime
+                                   [NSNumber numberWithInt:4],        //mines
+                                   [NSNumber numberWithInt:0],        //dudmines
+                                   [NSNumber numberWithInt:2],        //explosives
+                                   nil];
+    
+    NSMutableArray *gamemodArray= [[NSMutableArray alloc] initWithObjects:
+                                   [NSNumber numberWithBool:NO],      //fortmode
+                                   [NSNumber numberWithBool:NO],      //divideteam
+                                   [NSNumber numberWithBool:NO],      //solidland
+                                   [NSNumber numberWithBool:NO],      //addborder
+                                   [NSNumber numberWithBool:NO],      //lowgravity
+                                   [NSNumber numberWithBool:NO],      //lasersight
+                                   [NSNumber numberWithBool:NO],      //invulnerable
+                                   [NSNumber numberWithBool:YES],     //addmines
+                                   [NSNumber numberWithBool:NO],      //vampirism
+                                   [NSNumber numberWithBool:NO],      //karma
+                                   [NSNumber numberWithBool:NO],      //artillery
+                                   [NSNumber numberWithBool:YES],     //randomorder
+                                   [NSNumber numberWithBool:NO],      //king
+                                   [NSNumber numberWithBool:NO],      //placehedgehogs
+                                   [NSNumber numberWithBool:NO],      //clansharesammo
+                                   [NSNumber numberWithBool:NO],      //disablegirders
+                                   [NSNumber numberWithBool:NO],      //disablelandobjects
+                                   [NSNumber numberWithBool:NO],      //aisurvival
+                                   nil];
+    
+    NSMutableDictionary *theScheme = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                      basicArray,@"basic",
+                                      gamemodArray,@"gamemod",
+                                      nil];
+    [gamemodArray release];
+    [basicArray release];
+    
     NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", schemesDirectory, nameWithoutExt];
-
+    
     [theScheme writeToFile:schemeFile atomically:YES];
     [schemeFile release];
     [theScheme release];

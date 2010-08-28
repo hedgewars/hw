@@ -74,13 +74,13 @@
     NSInteger row = [indexPath row];
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
+    if (cell == nil)
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
 
     cell.accessoryView = nil;
     if ([indexPath section] == 0) {
         cell.textLabel.text = [[self.listOfSchemes objectAtIndex:row] stringByDeletingPathExtension];
+        cell.detailTextLabel.text = [[self.listOfSchemes objectAtIndex:row] stringByDeletingPathExtension];
         if ([[self.listOfSchemes objectAtIndex:row] isEqualToString:self.selectedScheme]) {
             UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
             cell.accessoryView = checkbox;
@@ -89,6 +89,7 @@
         }
     } else {
         cell.textLabel.text = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension];
+        cell.detailTextLabel.text = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension];
         if ([[self.listOfWeapons objectAtIndex:row] isEqualToString:self.selectedWeapon]) {
             UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
             cell.accessoryView = checkbox;
@@ -99,6 +100,7 @@
     
     cell.backgroundColor = [UIColor blackColor];
     cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+    cell.detailTextLabel.textColor = [UIColor whiteColor];
     return cell;
 }
 

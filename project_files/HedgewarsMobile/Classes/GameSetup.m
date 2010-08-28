@@ -130,88 +130,90 @@
 // unpacks scheme data from the selected scheme.plist to a sequence of engine commands
 -(NSInteger) provideScheme:(NSString *)schemeName {
     NSString *schemePath = [[NSString alloc] initWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),schemeName];
-    NSArray *scheme = [[NSArray alloc] initWithContentsOfFile:schemePath];
+    NSDictionary *schemeDictionary = [[NSDictionary alloc] initWithContentsOfFile:schemePath];
     [schemePath release];
+    NSArray *basicArray = [schemeDictionary objectForKey:@"basic"];
+    NSArray *gamemodArray = [schemeDictionary objectForKey:@"gamemod"];
     int result = 0;
     int i = 0;
 
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00000001;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00000010;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00000004;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00000008;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00000020;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00000040;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00000080;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00000100;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00000200;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00000400;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00000800;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00002000;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00004000;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00008000;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00010000;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00020000;
-    if ([[scheme objectAtIndex:i++] boolValue])
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00080000;
-    if ([[scheme objectAtIndex:i++] boolValue])
-        result |= 0x00100000;
+    if ([[gamemodArray objectAtIndex:i++] boolValue])
+        result |= 0x00100000;  
 
     NSString *flags = [[NSString alloc] initWithFormat:@"e$gmflags %d",result];
     [self sendToEngine:flags];
     [flags release];
 
-    NSString *dmgMod = [[NSString alloc] initWithFormat:@"e$damagepct %d",[[scheme objectAtIndex:i++] intValue]];
+    i = 0;
+    NSString *dmgMod = [[NSString alloc] initWithFormat:@"e$damagepct %d",[[basicArray objectAtIndex:i++] intValue]];
     [self sendToEngine:dmgMod];
     [dmgMod release];
 
-    NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",[[scheme objectAtIndex:i++] intValue] * 1000];
+    NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",[[basicArray objectAtIndex:i++] intValue] * 1000];
     [self sendToEngine:turnTime];
     [turnTime release];
 
-    result = [[scheme objectAtIndex:i++] intValue]; // initial health
+    result = [[basicArray objectAtIndex:i++] intValue]; // initial health
 
-    NSString *sdTime = [[NSString alloc] initWithFormat:@"e$sd_turns %d",[[scheme objectAtIndex:i++] intValue]];
+    NSString *sdTime = [[NSString alloc] initWithFormat:@"e$sd_turns %d",[[basicArray objectAtIndex:i++] intValue]];
     [self sendToEngine:sdTime];
     [sdTime release];
 
-    NSString *crateDrops = [[NSString alloc] initWithFormat:@"e$casefreq %d",[[scheme objectAtIndex:i++] intValue]];
+    NSString *crateDrops = [[NSString alloc] initWithFormat:@"e$casefreq %d",[[basicArray objectAtIndex:i++] intValue]];
     [self sendToEngine:crateDrops];
     [crateDrops release];
 
-    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$minestime %d",[[scheme objectAtIndex:i++] intValue] * 1000];
+    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$minestime %d",[[basicArray objectAtIndex:i++] intValue] * 1000];
     [self sendToEngine:minesTime];
     [minesTime release];
 
-    NSString *minesNumber = [[NSString alloc] initWithFormat:@"e$landadds %d",[[scheme objectAtIndex:i++] intValue]];
+    NSString *minesNumber = [[NSString alloc] initWithFormat:@"e$landadds %d",[[basicArray objectAtIndex:i++] intValue]];
     [self sendToEngine:minesNumber];
     [minesNumber release];
 
-    
-    NSString *dudMines = [[NSString alloc] initWithFormat:@"e$minedudpct %d",[[scheme objectAtIndex:i++] intValue]];
+    NSString *dudMines = [[NSString alloc] initWithFormat:@"e$minedudpct %d",[[basicArray objectAtIndex:i++] intValue]];
     [self sendToEngine:dudMines];
     [dudMines release];
 
-    NSString *explosives = [[NSString alloc] initWithFormat:@"e$explosives %d",[[scheme objectAtIndex:i++] intValue]];
+    NSString *explosives = [[NSString alloc] initWithFormat:@"e$explosives %d",[[basicArray objectAtIndex:i++] intValue]];
     [self sendToEngine:explosives];
     [explosives release];
 
-    [scheme release];
+    [schemeDictionary release];
     return result;
 }
 

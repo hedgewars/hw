@@ -11,13 +11,13 @@
 
 @interface SingleSchemeViewController : UITableViewController <EditableCellViewDelegate> {
     NSString *schemeName;
-    NSMutableArray *schemeArray;
+    NSMutableDictionary *schemeDictionary;
     NSArray *basicSettingList;
     NSArray *gameModifierArray;
 }
 
 @property (nonatomic, retain) NSString *schemeName;
-@property (nonatomic, retain) NSMutableArray *schemeArray;
+@property (nonatomic, retain) NSMutableDictionary *schemeDictionary;
 @property (nonatomic, retain) NSArray *basicSettingList;
 @property (nonatomic, retain) NSArray *gameModifierArray;
 
