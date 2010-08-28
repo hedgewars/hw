@@ -132,11 +132,6 @@
 		61F2E7CE1205EDE0005734F7 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F2E7CC1205EDE0005734F7 /* AboutViewController.m */; };
 		61F2E7CF1205EDE0005734F7 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */; };
 		61F2E7EC12060E31005734F7 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F2E7EB12060E31005734F7 /* checkbox.png */; };
-		61F2E7FA12060FF6005734F7 /* SchemesLabel.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F2E7F812060FF6005734F7 /* SchemesLabel.png */; };
-		61F2E7FB12060FF6005734F7 /* WeaponsLabel.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F2E7F912060FF6005734F7 /* WeaponsLabel.png */; };
-		61F2E80D12061713005734F7 /* AvailableTeamsLabel.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F2E80B12061713005734F7 /* AvailableTeamsLabel.png */; };
-		61F2E80E12061713005734F7 /* PlayingTeamsLabel.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F2E80C12061713005734F7 /* PlayingTeamsLabel.png */; };
-		61F7A35511E27D3C0040BA66 /* background-lobby.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A35411E27D3C0040BA66 /* background-lobby.png */; };
 		61F7A43811E290650040BA66 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43111E290650040BA66 /* Icon-72.png */; };
 		61F7A43911E290650040BA66 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43211E290650040BA66 /* Icon-Small-50.png */; };
 		61F7A43A11E290650040BA66 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43311E290650040BA66 /* Icon-Small.png */; };
@@ -158,7 +153,6 @@
 		61F9040B11DF59370068B24D /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040A11DF59370068B24D /* background.png */; };
 		61F9040E11DF59D10068B24D /* localplayButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040C11DF59D10068B24D /* localplayButton.png */; };
 		61F9040F11DF59D10068B24D /* netplayButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040D11DF59D10068B24D /* netplayButton.png */; };
-		61F9041411DF5E9B0068B24D /* toolbarBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9041311DF5E9B0068B24D /* toolbarBackground.png */; };
 		61F9043A11DF64E20068B24D /* bluebox.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9043911DF64E20068B24D /* bluebox.png */; };
 		61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F904D611DF7DA30068B24D /* WeaponCellView.m */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
@@ -839,11 +833,6 @@
 		61F2E7CC1205EDE0005734F7 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
 		61F2E7EB12060E31005734F7 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkbox.png; path = Resources/checkbox.png; sourceTree = "<group>"; };
-		61F2E7F812060FF6005734F7 /* SchemesLabel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SchemesLabel.png; path = "Resources/Frontend-iPad/SchemesLabel.png"; sourceTree = "<group>"; };
-		61F2E7F912060FF6005734F7 /* WeaponsLabel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WeaponsLabel.png; path = "Resources/Frontend-iPad/WeaponsLabel.png"; sourceTree = "<group>"; };
-		61F2E80B12061713005734F7 /* AvailableTeamsLabel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AvailableTeamsLabel.png; path = "Resources/Frontend-iPad/AvailableTeamsLabel.png"; sourceTree = "<group>"; };
-		61F2E80C12061713005734F7 /* PlayingTeamsLabel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PlayingTeamsLabel.png; path = "Resources/Frontend-iPad/PlayingTeamsLabel.png"; sourceTree = "<group>"; };
-		61F7A35411E27D3C0040BA66 /* background-lobby.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "background-lobby.png"; path = "Resources/Frontend-iPad/background-lobby.png"; sourceTree = "<group>"; };
 		61F7A43111E290650040BA66 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Resources/Icons/Icon-72.png"; sourceTree = "<group>"; };
 		61F7A43211E290650040BA66 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small-50.png"; path = "Resources/Icons/Icon-Small-50.png"; sourceTree = "<group>"; };
 		61F7A43311E290650040BA66 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "Resources/Icons/Icon-Small.png"; sourceTree = "<group>"; };
@@ -865,7 +854,6 @@
 		61F9040A11DF59370068B24D /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = "Resources/Frontend-iPad/background.png"; sourceTree = "<group>"; };
 		61F9040C11DF59D10068B24D /* localplayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = localplayButton.png; path = "../../../../Desktop/ForKoda/Main Menu/localplayButton.png"; sourceTree = SOURCE_ROOT; };
 		61F9040D11DF59D10068B24D /* netplayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = netplayButton.png; path = "../../../../Desktop/ForKoda/Main Menu/netplayButton.png"; sourceTree = SOURCE_ROOT; };
-		61F9041311DF5E9B0068B24D /* toolbarBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = toolbarBackground.png; path = "Resources/Frontend-iPad/toolbarBackground.png"; sourceTree = "<group>"; };
 		61F9043911DF64E20068B24D /* bluebox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bluebox.png; path = "Resources/Frontend-iPad/bluebox.png"; sourceTree = "<group>"; };
 		61F904D511DF7DA30068B24D /* WeaponCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeaponCellView.h; sourceTree = "<group>"; };
 		61F904D611DF7DA30068B24D /* WeaponCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeaponCellView.m; sourceTree = "<group>"; };
@@ -1287,20 +1275,14 @@
 			isa = PBXGroup;
 			children = (
 				615AD96112073B4D00F2FF04 /* startGameButton.png */,
-				61F2E7F812060FF6005734F7 /* SchemesLabel.png */,
-				61F2E80B12061713005734F7 /* AvailableTeamsLabel.png */,
 				615AD9EA1207654E00F2FF04 /* helpButton.png */,
-				61F2E80C12061713005734F7 /* PlayingTeamsLabel.png */,
-				61F2E7F912060FF6005734F7 /* WeaponsLabel.png */,
 				615AD9E8120764CA00F2FF04 /* backButton.png */,
 				61F9043911DF64E20068B24D /* bluebox.png */,
 				61EBA62711DFF2BC0048B68A /* bricks.png */,
 				61EBA62811DFF2BC0048B68A /* title.png */,
-				61F9041311DF5E9B0068B24D /* toolbarBackground.png */,
 				61F9040C11DF59D10068B24D /* localplayButton.png */,
 				61F9040D11DF59D10068B24D /* netplayButton.png */,
 				61F9040A11DF59370068B24D /* background.png */,
-				61F7A35411E27D3C0040BA66 /* background-lobby.png */,
 				61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */,
 			);
 			name = "Frontend-iPad";
@@ -1974,12 +1956,10 @@
 				61F9040B11DF59370068B24D /* background.png in Resources */,
 				61F9040E11DF59D10068B24D /* localplayButton.png in Resources */,
 				61F9040F11DF59D10068B24D /* netplayButton.png in Resources */,
-				61F9041411DF5E9B0068B24D /* toolbarBackground.png in Resources */,
 				61F9043A11DF64E20068B24D /* bluebox.png in Resources */,
 				61EBA62911DFF2BC0048B68A /* bricks.png in Resources */,
 				61EBA62A11DFF2BC0048B68A /* title.png in Resources */,
 				61EBA62D11DFF3310048B68A /* backgroundAndTitle.png in Resources */,
-				61F7A35511E27D3C0040BA66 /* background-lobby.png in Resources */,
 				61F7A43811E290650040BA66 /* Icon-72.png in Resources */,
 				61F7A43911E290650040BA66 /* Icon-Small-50.png in Resources */,
 				61F7A43A11E290650040BA66 /* Icon-Small.png in Resources */,
@@ -1995,10 +1975,6 @@
 				611E0EE811FB20610077A41E /* cornerButton.png in Resources */,
 				61F2E7CF1205EDE0005734F7 /* AboutViewController.xib in Resources */,
 				61F2E7EC12060E31005734F7 /* checkbox.png in Resources */,
-				61F2E7FA12060FF6005734F7 /* SchemesLabel.png in Resources */,
-				61F2E7FB12060FF6005734F7 /* WeaponsLabel.png in Resources */,
-				61F2E80D12061713005734F7 /* AvailableTeamsLabel.png in Resources */,
-				61F2E80E12061713005734F7 /* PlayingTeamsLabel.png in Resources */,
 				615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */,
 				615AD9E9120764CA00F2FF04 /* backButton.png in Resources */,
 				615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */,

@@ -149,7 +149,17 @@
     DLog(@"sending config %@", gameDictionary);
 
     if ([[gameDictionary allKeys] count] == 9) {
+        UIView *black = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
+        black.opaque = YES;
+        black.backgroundColor = [UIColor blackColor];
+        [self.view addSubview:black];
         [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:gameDictionary];
+        [UIView beginAnimations:@"fading in from ingame" context:NULL];
+        [UIView setAnimationDuration:1];
+        black.alpha = 0;
+        [UIView commitAnimations];
+        [black performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+        [black performSelector:@selector(release) withObject:nil afterDelay:1];
     } else {
         DLog(@"gameconfig data not complete!!\nmapConfigViewController = %@\nteamConfigViewController = %@\nschemeWeaponConfigViewController = %@\n",
              mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController);

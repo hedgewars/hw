@@ -7,6 +7,7 @@
 //
 
 #import "SchemeWeaponConfigViewController.h"
+#import <QuartzCore/QuartzCore.h>
 #import "CommodityFunctions.h"
 
 @implementation SchemeWeaponConfigViewController
@@ -106,17 +107,27 @@
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    NSString *fileToLoad;
+    UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30)];
+    theLabel.backgroundColor = [UIColor blueColor];
     if (section == 0) 
-        fileToLoad = @"SchemesLabel.png";
+        theLabel.text = NSLocalizedString(@"Schemes",@"");
     else
-        fileToLoad = @"WeaponsLabel.png";
+        theLabel.text = NSLocalizedString(@"Weapons",@"");
+    theLabel.center = CGPointMake(self.view.frame.size.width/2, 20);
+    theLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+    theLabel.textAlignment = UITextAlignmentCenter;
+    theLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]*80/100];
+    theLabel.backgroundColor = UICOLOR_HW_DARKBLUE;
     
-    UIImage *img = [[UIImage alloc] initWithContentsOfFile:fileToLoad];
-    UIImageView *imgView = [[[UIImageView alloc] initWithImage:img] autorelease];
-    [img release];
+    [theLabel.layer setBorderWidth:1.5f];
+    [theLabel.layer setBorderColor:[UICOLOR_HW_YELLOW_BODER CGColor]];
+    [theLabel.layer setCornerRadius:8.0f];
+    [theLabel.layer setMasksToBounds:YES];
 
-    return imgView;
+    UIView *theView = [[[UIView alloc] init] autorelease];
+    [theView addSubview:theLabel];
+    [theLabel release];
+    return theView;
 }
 
 /*

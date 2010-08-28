@@ -529,13 +529,8 @@
     self.sizeLabel.text = NSLocalizedString(@"All",@"");
     self.slider.value = 0.05f;
 
-    // on slower device we show directly the static map
-    NSString *modelId = modelType();
-    //if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])
-    if (1)
-        self.segmentedControl.selectedSegmentIndex = 1;
-    else
-        self.segmentedControl.selectedSegmentIndex = 0;
+    // select a map at first because it's faster
+    self.segmentedControl.selectedSegmentIndex = 1;
 
     self.templateFilterCommand = @"e$template_filter 0";
     self.mazeSizeCommand = @"e$maze_size 0";
