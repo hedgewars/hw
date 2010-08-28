@@ -140,12 +140,16 @@
 #pragma mark editableCellView delegate
 // set the new value
 -(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
-    // delete old file
-    [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName] error:NULL];
-    // update filename
-    self.schemeName = textString;
-    // save new file
-    [self.schemeDictionary writeToFile:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName] atomically:YES];
+    if (tagValue == 0) {
+        // delete old file
+        [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName] error:NULL];
+        // update filename
+        self.schemeName = textString;
+        // save new file
+        [self.schemeDictionary writeToFile:[NSString stringWithFormat:@"%@/%@.plist",SCHEMES_DIRECTORY(),self.schemeName] atomically:YES];
+    } else {
+        [self.schemeDictionary setObject:textString forKey:@"description"];
+    }
 }
 
 #pragma mark -
@@ -157,7 +161,7 @@
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case 0:
-            return 1;
+            return 2;
             break;
         case 1:
             return [self.basicSettingList count];
@@ -187,11 +191,18 @@
                                                reuseIdentifier:CellIdentifier0] autorelease];
                 editableCell.delegate = self;
             }
-
-            editableCell.textField.text = self.schemeName;
-            editableCell.detailTextLabel.text = nil;
-            editableCell.imageView.image = nil;
+            editableCell.tag = row;
             editableCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            editableCell.imageView.image = nil;
+            editableCell.detailTextLabel.text = nil;
+         
+            if (row == 0) {
+                editableCell.textField.text = self.schemeName;
+            } else {
+                editableCell.textField.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];
+                editableCell.textField.text = [self.schemeDictionary objectForKey:@"description"];
+                editableCell.textField.placeholder = NSLocalizedString(@"You can add a description if you wish",@"");
+            }
             cell = editableCell;
             break;
         case 1:

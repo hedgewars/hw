@@ -12,6 +12,7 @@
 
 @interface SingleWeaponViewController : UITableViewController <EditableCellViewDelegate, WeaponButtonControllerDelegate> {
     NSString *weaponName;
+    NSString *description;
 
     UIImage *ammoStoreImage;
     NSArray *ammoNames;
@@ -23,6 +24,7 @@
 }
 
 @property (nonatomic,retain) NSString *weaponName;
+@property (nonatomic,retain) NSString *description;
 @property (nonatomic,retain) UIImage *ammoStoreImage;
 @property (nonatomic,retain) NSArray *ammoNames;
 

@@ -80,7 +80,10 @@
     cell.accessoryView = nil;
     if ([indexPath section] == 0) {
         cell.textLabel.text = [[self.listOfSchemes objectAtIndex:row] stringByDeletingPathExtension];
-        cell.detailTextLabel.text = [[self.listOfSchemes objectAtIndex:row] stringByDeletingPathExtension];
+        NSString *str = [NSString stringWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),[self.listOfSchemes objectAtIndex:row]];
+        NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
+        cell.detailTextLabel.text = [dict objectForKey:@"description"];
+        [dict release];
         if ([[self.listOfSchemes objectAtIndex:row] isEqualToString:self.selectedScheme]) {
             UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
             cell.accessoryView = checkbox;
@@ -89,7 +92,10 @@
         }
     } else {
         cell.textLabel.text = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension];
-        cell.detailTextLabel.text = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension];
+        NSString *str = [NSString stringWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),[self.listOfWeapons objectAtIndex:row]];
+        NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
+        cell.detailTextLabel.text = [dict objectForKey:@"description"];
+        [dict release];
         if ([[self.listOfWeapons objectAtIndex:row] isEqualToString:self.selectedWeapon]) {
             UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
             cell.accessoryView = checkbox;

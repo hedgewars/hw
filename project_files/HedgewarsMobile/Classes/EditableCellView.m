@@ -62,7 +62,7 @@
         skew +=2;
     }
 
-    textField.frame = CGRectMake(boundsX+offset+10, skew+10, 250, [UIFont labelFontSize] + 4);
+    textField.frame = CGRectMake(boundsX+offset+10, skew+10, 300, [UIFont labelFontSize] + 4);
 }
 
 -(void) setSelected:(BOOL)selected animated:(BOOL)animated {
