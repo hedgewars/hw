@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<array>
+		<string>Andrey &quot;UnC0Rr&quot; Korotaev</string>
+		<string>Igor &quot;Displacer&quot; Ulyanov</string>
+		<string>Derek &quot;Nemo&quot; Pomery</string>
+		<string>Martin &quot;Affect&quot; Boze</string>
+		<string>David &quot;Krawek&quot; Cuadrado</string>
+		<string>Martin &quot;Ttsmj&quot; Minarik</string>
+		<string>Kristian &quot;TheXception&quot; Lehmann</string>
+		<string>Vittorio &quot;Koda&quot; Giovara</string>
+		<string>Mario &quot;Smaxx&quot; Liebisch</string>
+		<string>Carlos &quot;Palewolf&quot; Vives</string>
+		<string>Richard &quot;Sheepluva&quot; Korlyi</string>
+		<string>Henning &quot;Prg&quot; Kühn</string>
+	</array>
+	<array>
+		<string>Finn &quot;Tiyuri&quot; Brice</string>
+		<string>Joshua Frese</string>
+		<string>Stanko Tadić</string>
+		<string>Julien Koesten</string>
+		<string>Joshua O&apos;Sullivan</string>
+		<string>Nils Luck</string>
+		<string>Trey Perry</string>
+	</array>
+	<array>
+		<string>Stephen &quot;Armagon&quot; Alexander</string>
+		<string>Finn &quot;Tiyuri&quot; Brice</string>
+		<string>Jonatan Nilsson</string>
+		<string>Daniel Martin</string>
+	</array>
+	<array>
+		<string>Romulo Fernandes Machado</string>
+		<string>Svetoslav Stefanov</string>
+		<string>Petr Řezáček</string>
+		<string>Jie Luo</string>
+		<string>Andrey Korotaev</string>
+		<string>Nina Kuisma</string>
+		<string>Antoine Turmel</string>
+		<string>Peter Hüwe, Mario Liebisch</string>
+		<string>Luca Bonora</string>
+		<string>Adam Etienne</string>
+		<string>Maciej Mroziński, Wojciech Latkowski, Maciej Górny</string>
+		<string>Fábio Canário</string>
+		<string>Andrey Korotaev</string>
+		<string>Jose Riha</string>
+		<string>Carlos Vives</string>
+		<string>Niklas Grahn</string>
+		<string>Eugene V. Lyubimkin</string>
+	</array>
+	<array>
+		<string>Aleksey Andreev</string>
+		<string>Aleksander Rudalev</string>
+		<string>Natasha Stafeeva</string>
+		<string>Adam Higerd</string>
+	</array>
+	<array>
+		<string>Engine, frontend, net server author</string>
+		<string>Desktop frontend improvements</string>
+		<string>Many engine and frontend improvements</string>
+		<string>Drillrocket, Ballgun, RC Plane weapons</string>
+		<string>Mine number and time game settings</string>
+		<string>Desktop frontend improvements</string>
+		<string>Desktop frontend improvements</string>
+		<string>Mac OS X and iPhone version</string>
+		<string>Gamepad support, OpenGL wizard</string>
+		<string>Many engine improvements and graphics</string>
+		<string>Many engine and server improvements</string>
+		<string>Maze maps</string>
+	</array>
+	<array>
+		<string>Main graphics and art director</string>
+		<string></string>
+		<string></string>
+		<string></string>
+		<string></string>
+		<string></string>
+		<string>Some hats</string>
+	</array>
+	<array>
+		<string>Hedgehogs voice</string>
+		<string></string>
+		<string></string>
+		<string></string>
+	</array>
+	<array>
+		<string>Brazilian Portuguese</string>
+		<string>Bulgarian</string>
+		<string>Czech</string>
+		<string>Chinese</string>
+		<string>English</string>
+		<string>Finnish</string>
+		<string>French</string>
+		<string>German</string>
+		<string>Italian</string>
+		<string>Japanese</string>
+		<string>Polish</string>
+		<string>Portuguese</string>
+		<string>Russian</string>
+		<string>Slovak</string>
+		<string>Spanish</string>
+		<string>Swedish</string>
+		<string>Ukrainian</string>
+	</array>
+	<array>
+		<string></string>
+		<string></string>
+		<string></string>
+		<string></string>
+	</array>
+</array>
+</plist>
