@@ -142,7 +142,8 @@ type
             capgrpMessage, capgrpAmmostate);
 
     TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs,
-            siClanHealth, siTeamStats);
+            siClanHealth, siTeamStats, siPlayerKills, siMaxTeamDamage,
+            siMaxTeamKills, siMaxTurnSkips );
 
     TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
 
