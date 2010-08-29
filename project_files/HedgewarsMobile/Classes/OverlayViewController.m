@@ -217,7 +217,7 @@
         return;
 
     if (HW_isWaiting())
-        HW_shoot();
+        HW_dismissReady();
     
     UIButton *theButton = (UIButton *)sender;
     switch (theButton.tag) {
@@ -369,7 +369,7 @@
         case 1:
             // this dismisses the "get ready"
             if (HW_isWaiting())
-                HW_shoot();
+                HW_dismissReady();
 
             // if we're in the menu we just click in the point
             if (HW_isAmmoOpen()) {

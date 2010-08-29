@@ -25,10 +25,10 @@
     [super viewDidLoad];
 
     NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:FORTS_DIRECTORY() error:NULL];
-    NSMutableArray *filteredContents = [[NSMutableArray alloc] initWithCapacity:([directoryContents count] / 2)];
+    NSMutableArray *filteredContents = [[NSMutableArray alloc] initWithCapacity:([directoryContents count] / 3)];
     // we need to remove the double entries and the L.png suffix
     for (int i = 0; i < [directoryContents count]; i++) {
-        if (i % 2) {
+        if (i % 3 == 1) {
             NSString *currentName = [directoryContents objectAtIndex:i];
             NSString *correctName = [currentName substringToIndex:([currentName length] - 5)];
             [filteredContents addObject:correctName];
@@ -88,15 +88,13 @@
     NSString *fortName = [fortArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = fortName;
 
-    // this creates a scaled down version of the image
-    // TODO: create preview files, scaling is way too slow!
-    NSString *fortFile = [[NSString alloc] initWithFormat:@"%@/%@L.png", FORTS_DIRECTORY(), fortName];
+    NSString *fortFile = [[NSString alloc] initWithFormat:@"%@/%@-preview.png", FORTS_DIRECTORY(), fortName];
     UIImage *fortSprite = [[UIImage alloc] initWithContentsOfFile:fortFile];
     [fortFile release];
-    cell.imageView.image = [fortSprite scaleToSize:CGSizeMake(196,196)];
+    cell.imageView.image = fortSprite;
     [fortSprite release];
 
-    cell.detailTextLabel.text = @"Insert funny description here";
+    //cell.detailTextLabel.text = @"Insert funny description here";
     if ([cell.textLabel.text isEqualToString:[self.teamDictionary objectForKey:@"fort"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.lastIndexPath = indexPath;

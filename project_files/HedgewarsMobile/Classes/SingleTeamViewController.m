@@ -108,7 +108,7 @@
     [self.teamDictionary writeToFile:teamFile atomically:YES];
     [teamFile release];
 
-    DLog(@"%@",teamDictionary);
+    //DLog(@"%@",teamDictionary);
     isWriteNeeded = NO;
 }
 
@@ -223,7 +223,7 @@
                     [accessoryImage release];
                     break;
                 case 2: // fort
-                    accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@L.png",
+                    accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@-preview.png",
                                                                               FORTS_DIRECTORY(),[teamDictionary objectForKey:@"fort"]]];
                     cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(42, 42)];
                     [accessoryImage release];

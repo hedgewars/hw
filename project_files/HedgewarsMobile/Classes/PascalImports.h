@@ -54,6 +54,7 @@ extern "C" {
     void HW_pause(void);
 
     void HW_terminate(BOOL andCloseFrontend);
+    void HW_dismissReady(void);
 
     void HW_setLandscape(BOOL rotate);
     void HW_setCursor(int x, int y);

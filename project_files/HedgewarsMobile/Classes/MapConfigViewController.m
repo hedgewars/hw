@@ -536,8 +536,8 @@
     self.sizeLabel.text = NSLocalizedString(@"All",@"");
     self.slider.value = 0.05f;
 
-    // select a map at first because it's faster
-    self.segmentedControl.selectedSegmentIndex = 1;
+    // select a map at first because it's faster - done in IB
+    //self.segmentedControl.selectedSegmentIndex = 1;
 
     self.templateFilterCommand = @"e$template_filter 0";
     self.mazeSizeCommand = @"e$maze_size 0";
