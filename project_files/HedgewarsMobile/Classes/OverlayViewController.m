@@ -135,22 +135,20 @@
     sdlwindow = display->windows;
 }
 
+-(void) didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    if (self.popupMenu.view.superview == nil)
+        self.popupMenu = nil;
+    MSG_MEMCLEAN();
+}
+
 -(void) viewDidUnload {
-    // only object initialized in viewDidLoad should be here
+    // only objects initialized in viewDidLoad should be here
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     dimTimer = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
-
--(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
-    if (popupMenu.view.superview == nil)
-        popupMenu = nil;
-    MSG_MEMCLEAN();
-}
-
 
 -(void) dealloc {
     [popupMenu release];

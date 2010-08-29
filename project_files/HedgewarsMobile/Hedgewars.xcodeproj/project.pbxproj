@@ -30,6 +30,9 @@
 		611E0EE711FB20610077A41E /* ammoButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE511FB20610077A41E /* ammoButton.png */; };
 		611E0EE811FB20610077A41E /* cornerButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE611FB20610077A41E /* cornerButton.png */; };
 		611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */; };
+		611EE974122A9C4100DF6938 /* clickSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE973122A9C4100DF6938 /* clickSound.wav */; };
+		611EE9D9122AA10A00DF6938 /* backSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D7122AA10A00DF6938 /* backSound.wav */; };
+		611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D8122AA10A00DF6938 /* selSound.wav */; };
 		611F4D4B11B27A9900F9759A /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 611F4D4A11B27A9900F9759A /* uScript.pas */; };
 		61272334117DF764005B90CF /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272333117DF752005B90CF /* libSDL_image.a */; };
 		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
@@ -691,6 +694,9 @@
 		611E0EE511FB20610077A41E /* ammoButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ammoButton.png; path = Resources/Overlay/ammoButton.png; sourceTree = "<group>"; };
 		611E0EE611FB20610077A41E /* cornerButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cornerButton.png; path = Resources/Overlay/cornerButton.png; sourceTree = "<group>"; };
 		611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Development.plist"; sourceTree = "<group>"; };
+		611EE973122A9C4100DF6938 /* clickSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = clickSound.wav; path = Resources/clickSound.wav; sourceTree = "<group>"; };
+		611EE9D7122AA10A00DF6938 /* backSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = backSound.wav; path = Resources/backSound.wav; sourceTree = "<group>"; };
+		611EE9D8122AA10A00DF6938 /* selSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = selSound.wav; path = Resources/selSound.wav; sourceTree = "<group>"; };
 		611F4D4A11B27A9900F9759A /* uScript.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uScript.pas; path = ../../hedgewars/uScript.pas; sourceTree = SOURCE_ROOT; };
 		611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HedgewarsTitle.png; path = ../../QTfrontend/res/HedgewarsTitle.png; sourceTree = SOURCE_ROOT; };
 		6127232E117DF752005B90CF /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = "../../../Library/SDL-1.3/SDL_image/Xcode_iPhone/SDL_image.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -955,6 +961,9 @@
 			children = (
 				6129B9F611EFB04D0017E305 /* denied.png */,
 				61F2E7EB12060E31005734F7 /* checkbox.png */,
+				611EE973122A9C4100DF6938 /* clickSound.wav */,
+				611EE9D7122AA10A00DF6938 /* backSound.wav */,
+				611EE9D8122AA10A00DF6938 /* selSound.wav */,
 				61F7A42811E2905C0040BA66 /* Icons */,
 				61F903FA11DF58680068B24D /* Frontend-iPad */,
 				61F903E311DF584D0068B24D /* Frontend-iPhone */,
@@ -1983,6 +1992,9 @@
 				615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */,
 				6187AEBD120781B900B31A27 /* Settings in Resources */,
 				61EBB1E41228920300C1784F /* bluebox-squeezed.png in Resources */,
+				611EE974122A9C4100DF6938 /* clickSound.wav in Resources */,
+				611EE9D9122AA10A00DF6938 /* backSound.wav in Resources */,
+				611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

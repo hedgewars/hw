@@ -88,7 +88,7 @@
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case 0:     // user and pass
-            return 2;
+            return 1;   // set 2 here for the password field
             break;
         case 1:     // audio
             return 2;

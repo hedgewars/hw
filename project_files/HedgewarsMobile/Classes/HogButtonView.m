@@ -29,6 +29,7 @@
 }
 
 -(void) addOne {
+    playSound(@"clickSound");
     self.highlighted = NO;
     NSInteger number = self.numberOfHogs;
     number++;

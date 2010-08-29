@@ -71,7 +71,7 @@
 
 -(IBAction) buttonPressed:(id) sender;
 
--(IBAction) updatePreview;
+-(IBAction) mapButtonPressed;
 -(IBAction) sliderChanged:(id) sender;
 -(IBAction) sliderEndedChanging:(id) sender;
 -(IBAction) segmentedControlChanged:(id) sender;
@@ -80,6 +80,8 @@
 -(void) turnOffWidgets;
 -(void) setLabelText:(NSString *)str;
 -(void) setButtonImage:(UIImage *)img;
+-(void) updatePreview;
+-(void) updatePreviewWithMap:(NSInteger) index;
 
 -(const uint8_t *)engineProtocol:(NSInteger) port;
 

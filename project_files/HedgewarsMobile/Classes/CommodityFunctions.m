@@ -11,6 +11,7 @@
 #import <sys/sysctl.h>
 #import <mach/mach.h>
 #import <mach/mach_host.h>
+#import "AudioToolbox/AudioToolbox.h"
 
 void createTeamNamed (NSString *nameWithoutExt) {
     NSString *teamsDirectory = TEAMS_DIRECTORY();
@@ -231,4 +232,21 @@ NSString *modelType () {
     free(name);
 
     return modelId;
+}
+
+void playSound (NSString *snd) {
+    //Get the filename of the sound file:
+    NSString *path = [NSString stringWithFormat:@"%@/%@.wav",[[NSBundle mainBundle] resourcePath],snd];
+    
+    //declare a system sound id
+    SystemSoundID soundID;
+
+    //Get a URL for the sound file
+    NSURL *filePath = [NSURL fileURLWithPath:path isDirectory:NO];
+
+    //Use audio sevices to create the sound
+    AudioServicesCreateSystemSoundID((CFURLRef)filePath, &soundID);
+
+    //Use audio services to play the sound
+    AudioServicesPlaySystemSound(soundID);
 }

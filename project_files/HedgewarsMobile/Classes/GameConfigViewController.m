@@ -20,11 +20,12 @@
     return rotationManager(interfaceOrientation);
 }
 
--(IBAction) buttonPressed:(id) sender {
+-(IBAction) buttonPressed:(id) sender {    
     // works even if it's not actually a button
     UIButton *theButton = (UIButton *)sender;
     switch (theButton.tag) {
         case 0:
+            playSound(@"backSound");
             if ([mapConfigViewController busy]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Wait for the Preview",@"")
                                                                 message:NSLocalizedString(@"Before returning the preview needs to be generated",@"")
@@ -37,6 +38,7 @@
                 [[self parentViewController] dismissModalViewControllerAnimated:YES];
             break;
         case 1:
+            playSound(@"clickSound");
             theButton.enabled = NO;
             [self startGame:theButton];
 //            [self performSelector:@selector(startGame:)
@@ -51,6 +53,7 @@
 -(IBAction) segmentPressed:(id) sender {
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
 
+    playSound(@"selSound");
     switch (theSegment.selectedSegmentIndex) {
         case 0:
             // this init here is just aestetic as this controller was already set up in viewDidLoad

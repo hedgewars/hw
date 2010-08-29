@@ -148,7 +148,12 @@
     */
 }
 
--(IBAction) updatePreview {
+-(IBAction) mapButtonPressed {
+    playSound(@"clickSound");
+    [self updatePreview];
+}
+
+-(void) updatePreview {
     // don't generate a new preview while it's already generating one
     if (busy)
         return;
@@ -435,6 +440,7 @@
         [self updatePreview];
         oldValue = num;
     }
+    playSound(@"clickSound");
 }
 
 // perform actions based on the activated section, then call updatePreview to visually update the selection
@@ -444,6 +450,7 @@
     NSString *mapgen, *staticmap;
     NSInteger newPage = self.segmentedControl.selectedSegmentIndex;
 
+    playSound(@"selSound");
     switch (newPage) {
         case 0: // Random
             mapgen = @"e$mapgen 0";

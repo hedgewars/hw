@@ -443,15 +443,6 @@
 					<int key="connectionID">3</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">updatePreview</string>
-						<reference key="source" ref="326163764"/>
-						<reference key="destination" ref="372490531"/>
-						<int key="IBEventType">7</int>
-					</object>
-					<int key="connectionID">12</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">previewButton</string>
 						<reference key="source" ref="372490531"/>
@@ -568,6 +559,15 @@
 						<int key="IBEventType">7</int>
 					</object>
 					<int key="connectionID">77</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">mapButtonPressed</string>
+						<reference key="source" ref="326163764"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">113</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -753,7 +753,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>MapConfigViewController</string>
 					<string>UIResponder</string>
-					<string>{{255, 272}, {1024, 768}}</string>
+					<string>{{335, 290}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -793,7 +793,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">112</int>
+			<int key="maxID">113</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -806,10 +806,10 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>buttonPressed:</string>
+							<string>mapButtonPressed</string>
 							<string>segmentedControlChanged:</string>
 							<string>sliderChanged:</string>
 							<string>sliderEndedChanging:</string>
-							<string>updatePreview</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -825,15 +825,19 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>buttonPressed:</string>
+							<string>mapButtonPressed</string>
 							<string>segmentedControlChanged:</string>
 							<string>sliderChanged:</string>
 							<string>sliderEndedChanging:</string>
-							<string>updatePreview</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBActionInfo">
 								<string key="name">buttonPressed:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">mapButtonPressed</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -846,10 +850,6 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">sliderEndedChanging:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">updatePreview</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>

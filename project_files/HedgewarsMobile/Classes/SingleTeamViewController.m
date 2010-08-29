@@ -343,7 +343,7 @@
 }
 
 -(void) viewDidUnload {
-    [super viewDidUnload];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.teamDictionary = nil;
     self.teamName = nil;
     self.normalHogSprite = nil;

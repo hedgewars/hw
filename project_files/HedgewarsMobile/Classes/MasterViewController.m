@@ -7,7 +7,6 @@
 //
 
 #import "MasterViewController.h"
-#import "DetailViewController.h"
 #import "GeneralSettingsViewController.h"
 #import "TeamSettingsViewController.h"
 #import "WeaponSettingsViewController.h"
@@ -66,18 +65,38 @@
     static NSString *CellIdentifier = @"Cell";
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
+    if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+
+    NSString *iconStr = nil;
+    switch ([indexPath row]) {
+        case 0:
+            iconStr = [NSString stringWithFormat:@"%@/TargetBee.png",GRAPHICS_DIRECTORY()];
+            break;
+        case 1:
+            iconStr = [NSString stringWithFormat:@"%@/Egg.png",GRAPHICS_DIRECTORY()];
+            break;
+        case 2:
+            iconStr = [NSString stringWithFormat:@"%@/Molotov.png",GRAPHICS_DIRECTORY()];
+            break;
+        case 3:
+            iconStr = [NSString stringWithFormat:@"%@/Target.png",GRAPHICS_DIRECTORY()];
+            break;
+        default:
+            //seduction.png for support page
+            DLog(@"Nope");
+            break;
     }
+    
+    if (nil == targetController)
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    else
+        cell.accessoryType = UITableViewCellAccessoryNone;
 
     cell.textLabel.text = [controllerNames objectAtIndex:[indexPath row]];
-    if (nil == targetController) {
-        UIImage *icon = [[UIImage alloc] initWithContentsOfFile:@"Icon-Small.png"];
-        cell.imageView.image = icon;
-        [icon release];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    } else
-        cell.accessoryType = UITableViewCellAccessoryNone;
+    UIImage *icon = [[UIImage alloc] initWithContentsOfFile:iconStr];
+    cell.imageView.image = icon;
+    [icon release];
 
     return cell;
 }
@@ -124,6 +143,7 @@
             nextController.navigationItem.hidesBackButton = NO;
             [self.navigationController pushViewController:nextController animated:YES];
         } else {
+            playSound(@"clickSound");
             nextController.navigationItem.hidesBackButton = YES;
             [targetController.navigationController pushViewController:nextController animated:NO];
         }
@@ -172,6 +192,7 @@
 }
 
 -(IBAction) dismissSplitView {
+    playSound(@"backSound");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
 }
 

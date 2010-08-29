@@ -8,7 +8,6 @@
 
 #import "SplitViewRootController.h"
 #import "MasterViewController.h"
-#import "DetailViewController.h"
 #import "CommodityFunctions.h"
 
 @implementation SplitViewRootController

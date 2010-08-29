@@ -39,6 +39,7 @@
 }
 
 -(IBAction) buttonPressed:(id) sender {
+    playSound(@"backSound");
     [[self parentViewController] dismissModalViewControllerAnimated:YES];
 }
 

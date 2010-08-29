@@ -190,7 +190,7 @@
             str = NSLocalizedString(@"Presence probability in crates ",@"ammo selection");
             break;
         case 300:
-            str = NSLocalizedString(@"Number of turns before you can use it ",@"ammo selection");
+            str = NSLocalizedString(@"Number of turns before you can use this weapon ",@"ammo selection");
             break;
         case 400:
             str = NSLocalizedString(@"Quantity that you will find in a crate ",@"ammo selection");

@@ -157,6 +157,7 @@
     UIAlertView *alert;
     NSString *xib;
 
+    playSound(@"clickSound");
     switch (button.tag) {
         case 0:
             if (nil == self.gameConfigViewController) {
@@ -227,6 +228,7 @@
 }
 
 -(void) viewDidUnload {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.versionLabel = nil;
     self.gameConfigViewController = nil;
     self.settingsViewController = nil;
