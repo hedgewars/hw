@@ -54,14 +54,14 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     mainLayout.setSpacing(1);
     mainLayout.setMargin(1);
     mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
-    mainLayout.setColumnStretch(0, 75);
-    mainLayout.setColumnStretch(1, 25);
+    mainLayout.setColumnStretch(0, 76);
+    mainLayout.setColumnStretch(1, 24);
 
     chatEditLine = new QLineEdit(this);
     chatEditLine->setMaxLength(300);
     connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
 
-    mainLayout.addWidget(chatEditLine, 1, 0, 1, 2);
+    mainLayout.addWidget(chatEditLine, 1, 0);
 
     chatText = new QTextBrowser(this);
     chatText->setMinimumHeight(20);
@@ -81,7 +81,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     connect(chatNicks, SIGNAL(currentRowChanged(int)),
         this, SLOT(chatNickSelected(int)));
 
-    mainLayout.addWidget(chatNicks, 0, 1);
+    mainLayout.addWidget(chatNicks, 0, 1, 0, 1);
 
     acInfo = new QAction(QAction::tr("Info"), chatNicks);
     acInfo->setIcon(QIcon(":/res/info.png"));
