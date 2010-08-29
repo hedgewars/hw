@@ -854,7 +854,8 @@ if TurnTimeLeft > 0 then
 if skipFlag then
     begin
     TurnTimeLeft:= 0;
-    skipFlag:= false
+    skipFlag:= false;
+    inc(CurrentHedgehog^.Team^.stats.TurnSkips);
     end;
 
 if ((GameTicks and $FFFF) = $FFFF) then
