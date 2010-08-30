@@ -8,12 +8,13 @@
 
 #import "OverlayViewController.h"
 #import "SDL_uikitappdelegate.h"
-#import "PascalImports.h"
-#import "CGPointUtils.h"
-#import "SDL_mouse.h"
 #import "InGameMenuViewController.h"
+#import "HelpPageLobbyViewController.h"
+#import "PascalImports.h"
 #import "CommodityFunctions.h"
+#import "CGPointUtils.h"
 #import "SDL_config_iphoneos.h"
+#import "SDL_mouse.h"
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
 #define HIDING_TIME_NEVER   [NSDate dateWithTimeIntervalSinceNow:10000]
@@ -26,7 +27,7 @@
 #define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu;
+@synthesize popoverController, popupMenu, helpPage;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -82,6 +83,8 @@
 #pragma mark -
 #pragma mark View Management
 -(void) viewDidLoad {
+    isGameRunning = NO;
+    cachedGrenadeTime = 2;
     isAttacking = NO;
     
     // i called it a popover even on the iphone
@@ -124,6 +127,11 @@
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showHelp:)
+                                                 name:@"show help ingame"
+                                               object:nil];
+
     [UIView beginAnimations:@"showing overlay" context:NULL];
     [UIView setAnimationDuration:1];
     self.view.alpha = 1;
@@ -135,10 +143,23 @@
     sdlwindow = display->windows;
 }
 
+-(void) showHelp:(id) sender {
+    if (self.helpPage == nil)
+        self.helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController" bundle:nil];
+    self.helpPage.view.alpha = 0;
+    [self.view addSubview:helpPage.view];
+    [UIView beginAnimations:@"helpingame" context:NULL];
+    self.helpPage.view.alpha = 1;
+    [UIView commitAnimations];
+    doNotDim();
+}
+
 -(void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     if (self.popupMenu.view.superview == nil)
         self.popupMenu = nil;
+    if (self.helpPage.view.superview == nil)
+        self.helpPage = nil;
     MSG_MEMCLEAN();
 }
 
@@ -152,6 +173,7 @@
 
 -(void) dealloc {
     [popupMenu release];
+    [helpPage release];
     [popoverController release];
     // dimTimer is autoreleased
     [super dealloc];
@@ -250,11 +272,13 @@
             HW_backjump();
             break;
         case 10:
+            playSound(@"clickSound");
             HW_pause();
             removeConfirmationInput();
             [self showPopover];
             break;
         case 11:
+            playSound(@"clickSound");
             removeConfirmationInput();
             HW_ammoMenu();
             break;
@@ -419,7 +443,7 @@
 
                             [grenadeTime addTarget:self action:@selector(setGrenadeTime:) forControlEvents:UIControlEventValueChanged];
                             grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
-                            grenadeTime.selectedSegmentIndex = 2;
+                            grenadeTime.selectedSegmentIndex = cachedGrenadeTime;
                             grenadeTime.tag = GRENADE_TAG;
                             [self.view addSubview:grenadeTime];
                             [grenadeTime release];
@@ -456,7 +480,10 @@
 
 -(void) setGrenadeTime:(id) sender {
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
-    HW_setGrenadeTime(theSegment.selectedSegmentIndex + 1);
+    if (cachedGrenadeTime != theSegment.selectedSegmentIndex) {
+        HW_setGrenadeTime(theSegment.selectedSegmentIndex + 1);
+        cachedGrenadeTime = theSegment.selectedSegmentIndex;
+    }
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -555,6 +582,8 @@ void clearView() {
 
     [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:0.3];
     [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:0.3];
+
+    cachedGrenadeTime = 2;
 }
 
 @end

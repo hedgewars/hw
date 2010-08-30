@@ -34,6 +34,12 @@
 		611EE9D9122AA10A00DF6938 /* backSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D7122AA10A00DF6938 /* backSound.wav */; };
 		611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D8122AA10A00DF6938 /* selSound.wav */; };
 		611EEA7E122B09C200DF6938 /* background_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEA7D122B09C200DF6938 /* background_small.png */; };
+		611EEAEE122B2A4D00DF6938 /* HelpPageLobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611EEAEC122B2A4D00DF6938 /* HelpPageLobbyViewController.m */; };
+		611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController.xib */; };
+		611EEBC1122B34A800DF6938 /* helpingame.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC0122B34A800DF6938 /* helpingame.png */; };
+		611EEBC4122B355700DF6938 /* helpbottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC2122B355700DF6938 /* helpbottom.png */; };
+		611EEBC5122B355700DF6938 /* helpright.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC3122B355700DF6938 /* helpright.png */; };
+		611EEC31122B54D700DF6938 /* helpplain.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEC30122B54D700DF6938 /* helpplain.png */; };
 		611F4D4B11B27A9900F9759A /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 611F4D4A11B27A9900F9759A /* uScript.pas */; };
 		61272334117DF764005B90CF /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272333117DF752005B90CF /* libSDL_image.a */; };
 		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
@@ -687,6 +693,13 @@
 		611EE9D7122AA10A00DF6938 /* backSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = backSound.wav; path = Resources/backSound.wav; sourceTree = "<group>"; };
 		611EE9D8122AA10A00DF6938 /* selSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = selSound.wav; path = Resources/selSound.wav; sourceTree = "<group>"; };
 		611EEA7D122B09C200DF6938 /* background_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background_small.png; path = Resources/Overlay/background_small.png; sourceTree = "<group>"; };
+		611EEAEB122B2A4D00DF6938 /* HelpPageLobbyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpPageLobbyViewController.h; sourceTree = "<group>"; };
+		611EEAEC122B2A4D00DF6938 /* HelpPageLobbyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpPageLobbyViewController.m; sourceTree = "<group>"; };
+		611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HelpPageLobbyViewController.xib; sourceTree = "<group>"; };
+		611EEBC0122B34A800DF6938 /* helpingame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpingame.png; path = Resources/Overlay/helpingame.png; sourceTree = "<group>"; };
+		611EEBC2122B355700DF6938 /* helpbottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpbottom.png; path = Resources/Overlay/helpbottom.png; sourceTree = "<group>"; };
+		611EEBC3122B355700DF6938 /* helpright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpright.png; path = Resources/Overlay/helpright.png; sourceTree = "<group>"; };
+		611EEC30122B54D700DF6938 /* helpplain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpplain.png; path = Resources/Overlay/helpplain.png; sourceTree = "<group>"; };
 		611F4D4A11B27A9900F9759A /* uScript.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uScript.pas; path = ../../hedgewars/uScript.pas; sourceTree = SOURCE_ROOT; };
 		611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HedgewarsTitle.png; path = ../../QTfrontend/res/HedgewarsTitle.png; sourceTree = SOURCE_ROOT; };
 		6127232E117DF752005B90CF /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = "../../../Library/SDL-1.3/SDL_image/Xcode_iPhone/SDL_image.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -948,6 +961,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				611EEBC0122B34A800DF6938 /* helpingame.png */,
+				611EEC30122B54D700DF6938 /* helpplain.png */,
+				611EEBC2122B355700DF6938 /* helpbottom.png */,
+				611EEBC3122B355700DF6938 /* helpright.png */,
 				6129B9F611EFB04D0017E305 /* denied.png */,
 				61F2E7EB12060E31005734F7 /* checkbox.png */,
 				611EE973122A9C4100DF6938 /* clickSound.wav */,
@@ -1169,6 +1186,9 @@
 				61F2E7CB1205EDE0005734F7 /* AboutViewController.h */,
 				61F2E7CC1205EDE0005734F7 /* AboutViewController.m */,
 				61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */,
+				611EEAEB122B2A4D00DF6938 /* HelpPageLobbyViewController.h */,
+				611EEAEC122B2A4D00DF6938 /* HelpPageLobbyViewController.m */,
+				611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController.xib */,
 			);
 			name = Overlay;
 			sourceTree = "<group>";
@@ -1973,6 +1993,11 @@
 				611EE9D9122AA10A00DF6938 /* backSound.wav in Resources */,
 				611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */,
 				611EEA7E122B09C200DF6938 /* background_small.png in Resources */,
+				611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController.xib in Resources */,
+				611EEBC1122B34A800DF6938 /* helpingame.png in Resources */,
+				611EEBC4122B355700DF6938 /* helpbottom.png in Resources */,
+				611EEBC5122B355700DF6938 /* helpright.png in Resources */,
+				611EEC31122B54D700DF6938 /* helpplain.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2097,6 +2122,7 @@
 				61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */,
 				61C079E411F35A300072BF46 /* EditableCellView.m in Sources */,
 				61F2E7CE1205EDE0005734F7 /* AboutViewController.m in Sources */,
+				611EEAEE122B2A4D00DF6938 /* HelpPageLobbyViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2199,7 +2225,7 @@
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv6";
 			};
@@ -2291,7 +2317,7 @@
 				);
 				PREBINDING = NO;
 				SDKROOT = iphoneos4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv6";
 			};
@@ -2423,7 +2449,7 @@
 				);
 				PREBINDING = NO;
 				SDKROOT = iphoneos4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv6";
 			};
@@ -2468,7 +2494,7 @@
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv6";
 			};

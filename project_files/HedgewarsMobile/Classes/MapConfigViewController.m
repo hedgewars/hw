@@ -464,7 +464,7 @@
             // dummy value, everything is set by -updatePreview -> -didSelectRowAtIndexPath -> -updatePreviewWithMap
             staticmap = @"map Bamboo";
             self.slider.enabled = NO;
-            self.sizeLabel.text = @"";
+            self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
             [self restoreBackgroundImage];
             break;
 
@@ -538,6 +538,10 @@
 
     // select a map at first because it's faster - done in IB
     //self.segmentedControl.selectedSegmentIndex = 1;
+    if (self.segmentedControl.selectedSegmentIndex == 1) {
+        self.slider.enabled = NO;
+        self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
+    }
 
     self.templateFilterCommand = @"e$template_filter 0";
     self.mazeSizeCommand = @"e$maze_size 0";
@@ -574,6 +578,7 @@
 -(void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     //[previewButton setImage:nil forState:UIControlStateNormal];
+    MSG_MEMCLEAN();
 }
 
 -(void) viewDidUnload {

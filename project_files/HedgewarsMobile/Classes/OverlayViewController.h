@@ -10,6 +10,7 @@
 #import "SDL_sysvideo.h"
 
 @class InGameMenuViewController;
+@class HelpPageLobbyViewController;
 
 @interface OverlayViewController : UIViewController {
     // the timer that dims the overlay
@@ -19,6 +20,9 @@
     UIPopoverController *popoverController; // iPad only
     InGameMenuViewController *popupMenu;
     BOOL isPopoverVisible;
+
+    // the help menu
+    HelpPageLobbyViewController *helpPage;
 
     // ths touch section
     CGFloat initialDistanceForPinching;
@@ -32,6 +36,7 @@
 
 @property (nonatomic,retain) id popoverController;
 @property (nonatomic,retain) InGameMenuViewController *popupMenu;
+@property (nonatomic,retain) HelpPageLobbyViewController *helpPage;
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
@@ -48,5 +53,7 @@
 
 @end
 
+// understands when the loading screen is done
 BOOL isGameRunning;
-
+// cache the grenade time
+NSInteger cachedGrenadeTime;

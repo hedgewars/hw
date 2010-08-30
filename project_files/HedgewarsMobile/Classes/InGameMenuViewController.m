@@ -109,7 +109,7 @@
 
     switch ([indexPath row]) {
         case 0:
-            HW_pause();
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"show help ingame" object:nil];
             break;
         case 1:
             if (SDL_iPhoneKeyboardIsShown(sdlwindow))
