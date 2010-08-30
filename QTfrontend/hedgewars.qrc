@@ -96,5 +96,18 @@
     <file>res/follow.png</file>
     <file>res/info.png</file>
     <file>res/kick.png</file>
+    <file>res/StatsMedal1.png</file>
+    <file>res/StatsMedal2.png</file>
+    <file>res/StatsMedal3.png</file>
+    <file>res/StatsMedal4.png</file>
+    <file>res/StatsR.png</file>
+    <file>res/StatsH.png</file>
+    <file>res/StatsD.png</file>
+    <file>res/StatsBestKiller.png</file>
+    <file>res/StatsBestShot.png</file>
+    <file>res/StatsHedgehogsKilled.png</file>
+    <file>res/StatsMostSelfDamage.png</file>
+    <file>res/StatsSelfKilled.png</file>
+    <file>res/StatsSkipped.png</file>
 </qresource>
 </RCC>
