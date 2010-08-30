@@ -44,6 +44,8 @@ public:
 
     QPushButton *BtnBack;
     QLabel *labelGameStats;
+    QLabel *labelGameWin;
+    QLabel *labelGameRank;
     FitGraphicsView * graphic;
 
 public slots:
@@ -55,6 +57,8 @@ private:
     void AddStatText(const QString & msg);
 
     QMap<quint32, QVector<quint32> > healthPoints;
+    unsigned int playerPosition;
+    quint32 lastColor;
 };
 
 #endif // STATSPAGE_H

@@ -1063,22 +1063,81 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     roomsList->setAlternatingRowColors(true);
     pageLayout->addWidget(roomsList, 1, 0, 3, 1);
     pageLayout->setRowStretch(2, 100);
+    
+    QHBoxLayout * filterLayout = new QHBoxLayout();
+    
+    QLabel * stateLabel = new QLabel(this);
+    stateLabel->setText(tr("State:"));
+    CBState = new QComboBox(this);
+    CBState->addItem(QComboBox::tr("Any"));
+    CBState->addItem(QComboBox::tr("In lobby"));
+    CBState->addItem(QComboBox::tr("In progress"));
+    filterLayout->addWidget(stateLabel);
+    filterLayout->addWidget(CBState);
+    filterLayout->addSpacing(30);
+    
+    QLabel * ruleLabel = new QLabel(this);
+    ruleLabel->setText(tr("Rules:"));
+    CBRules = new QComboBox(this);
+    CBRules->addItem(QComboBox::tr("Any"));
+    CBRules->addItem(QComboBox::tr("Default"));
+    CBRules->addItem(QComboBox::tr("Pro mode"));
+    CBRules->addItem(QComboBox::tr("Shoppa"));
+    CBRules->addItem(QComboBox::tr("Basketball"));
+    CBRules->addItem(QComboBox::tr("Minefield"));
+    CBRules->addItem(QComboBox::tr("Barrel mayhem"));
+    CBRules->addItem(QComboBox::tr("Tunnel hogs"));
+    filterLayout->addWidget(ruleLabel);
+    filterLayout->addWidget(CBRules);
+    filterLayout->addSpacing(30);
+    
+    QLabel * weaponLabel = new QLabel(this);
+    weaponLabel->setText(tr("Weapons:"));
+    CBWeapons = new QComboBox(this);
+    CBWeapons->addItem(QComboBox::tr("Any"));
+    CBWeapons->addItem(QComboBox::tr("Basketball"));
+    CBWeapons->addItem(QComboBox::tr("Crazy"));
+    CBWeapons->addItem(QComboBox::tr("Default"));
+    CBWeapons->addItem(QComboBox::tr("Minefield"));
+    CBWeapons->addItem(QComboBox::tr("Pro mode"));
+    CBWeapons->addItem(QComboBox::tr("Shoppa"));
+    filterLayout->addWidget(weaponLabel);
+    filterLayout->addWidget(CBWeapons);
+    filterLayout->addSpacing(30);
+
+    QLabel * searchLabel = new QLabel(this);
+    searchLabel->setText(tr("Search:"));
+    searchText = new QLineEdit(this);
+    searchText->setMaxLength(60);
+    filterLayout->addWidget(searchLabel);
+    filterLayout->addWidget(searchText);
+
+    pageLayout->addLayout(filterLayout, 4, 0);
 
     chatWidget = new HWChatWidget(this, gameSettings, sdli, false);
-    pageLayout->addWidget(chatWidget, 4, 0, 1, 2);
-    pageLayout->setRowStretch(4, 350);
+    pageLayout->addWidget(chatWidget, 5, 0, 1, 2);
+    pageLayout->setRowStretch(5, 350);
 
     BtnCreate = addButton(tr("Create"), pageLayout, 0, 1);
     BtnJoin = addButton(tr("Join"), pageLayout, 1, 1);
     BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 1);
+    BtnClear = addButton(tr("Clear"), pageLayout, 4, 1);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 5, 0, true);
-    BtnAdmin = addButton(tr("Admin features"), pageLayout, 5, 1);
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 6, 0, true);
+    BtnAdmin = addButton(tr("Admin features"), pageLayout, 6, 1);
 
     connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
     connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
     connect(BtnRefresh, SIGNAL(clicked()), this, SLOT(onRefreshClick()));
+    connect(BtnClear, SIGNAL(clicked()), this, SLOT(onClearClick()));
     connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
+    connect(CBState, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
+    connect(CBRules, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
+    connect(CBWeapons, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
+    connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onRefreshClick()));
+    connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
+    
+    gameInLobby = false;
 }
 
 void PageRoomsList::setAdmin(bool flag)
@@ -1088,6 +1147,8 @@ void PageRoomsList::setAdmin(bool flag)
 
 void PageRoomsList::setRoomsList(const QStringList & list)
 {
+    listFromServer = list;
+    
     roomsList->clear();
     roomsList->setColumnCount(7);
     roomsList->setHorizontalHeaderLabels(
@@ -1113,12 +1174,45 @@ void PageRoomsList::setRoomsList(const QStringList & list)
     // set resize modes
 //  roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
 
+    bool gameCanBeJoined = true;
+
     if (list.size() % 8)
         return;
 
     roomsList->setRowCount(list.size() / 8);
     for(int i = 0, r = 0; i < list.size(); i += 8, r++)
     {
+        // if we are joining a game
+        if (gameInLobby) {
+            if (gameInLobbyName == list[i + 1]) {
+                gameCanBeJoined = list[i].compare("True");
+            }
+        }
+        
+        // check filter settings
+        #define NO_FILTER_MATCH roomsList->setRowCount(roomsList->rowCount() - 1); --r; continue
+        
+        if (list[i].compare("True") && CBState->currentIndex() == 2) { NO_FILTER_MATCH; }
+        if (list[i].compare("False") && CBState->currentIndex() == 1) { NO_FILTER_MATCH; }
+        if (CBRules->currentIndex() != 0 && list[i + 6].compare(CBRules->currentText())) { NO_FILTER_MATCH; }
+        if (CBWeapons->currentIndex() != 0 && list[i + 7].compare(CBWeapons->currentText())) { NO_FILTER_MATCH; }
+        bool found = list[i + 1].contains(searchText->text(), Qt::CaseInsensitive);
+        if (!found) {
+            for (int a = 4; a <= 7; ++a) {
+                QString compString = list[i + a];
+                if (a == 5 && compString == "+rnd+") {
+                    compString = "Random Map";
+                } else if (a == 5 && compString == "+maze+") {
+                    compString = "Random Maze";
+                }
+                if (compString.contains(searchText->text(), Qt::CaseInsensitive)) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (!searchText->text().isEmpty() && !found) { NO_FILTER_MATCH; }
+        
         QTableWidgetItem * item;
         item = new QTableWidgetItem(list[i + 1]); // room name
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
@@ -1191,6 +1285,15 @@ void PageRoomsList::setRoomsList(const QStringList & list)
    roomsList->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
    roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
 
+    if (gameInLobby) {
+        gameInLobby = false;
+        if (gameCanBeJoined) {
+            emit askForJoinRoom(gameInLobbyName);
+        } else {
+            emit askJoinConfirmation(gameInLobbyName);
+        }
+    }
+
 //  roomsList->resizeColumnsToContents();
 }
 
@@ -1214,9 +1317,22 @@ void PageRoomsList::onJoinClick()
                 tr("Error"),
                 tr("Please select room from the list"),
                 tr("OK"));
-        return ;
+        return;
     }
-    emit askForJoinRoom(curritem->data(Qt::DisplayRole).toString());
+
+    for (int i = 0; i < listFromServer.size(); i += 8) {
+        if (listFromServer[i + 1] == curritem->data(Qt::DisplayRole).toString()) {
+            gameInLobby = listFromServer[i].compare("True");
+            break;
+        }
+    }
+    
+    if (gameInLobby) {
+        gameInLobbyName = curritem->data(Qt::DisplayRole).toString();
+        emit askForRoomList();
+    } else {
+        emit askForJoinRoom(curritem->data(Qt::DisplayRole).toString());
+    }
 }
 
 void PageRoomsList::onRefreshClick()
@@ -1224,6 +1340,24 @@ void PageRoomsList::onRefreshClick()
     emit askForRoomList();
 }
 
+void PageRoomsList::onClearClick()
+{
+    CBState->setCurrentIndex(0);
+    CBRules->setCurrentIndex(0);
+    CBWeapons->setCurrentIndex(0);
+    searchText->clear();
+}
+
+void PageRoomsList::onJoinConfirmation(const QString & room)
+{
+    if (QMessageBox::warning(this,
+        tr("Warning"),
+        tr("The game you are trying to join has started.\nDo you still want to join the room?"),
+        QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+    {
+        emit askForJoinRoom(room);
+    }
+}
 
 PageConnecting::PageConnecting(QWidget* parent) :
     AbstractPage(parent)
