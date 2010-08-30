@@ -11,10 +11,12 @@
 
 @class TeamConfigViewController;
 @class SchemeWeaponConfigViewController;
+@class HelpPageViewController;
 
 @interface GameConfigViewController : UIViewController <MapConfigDelegate> {
     UIImage *hedgehogImage;
     UIView *imgContainer;
+    HelpPageViewController *helpPage;
     
     UIViewController *activeController;
     MapConfigViewController *mapConfigViewController;
@@ -24,6 +26,7 @@
 
 @property (nonatomic,retain) UIImage *hedgehogImage;
 @property (nonatomic,retain) UIView *imgContainer;
+@property (nonatomic,retain) HelpPageViewController *helpPage;
 
 -(IBAction) buttonPressed:(id) sender;
 -(IBAction) segmentPressed:(id) sender;

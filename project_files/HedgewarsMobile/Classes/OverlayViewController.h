@@ -10,7 +10,7 @@
 #import "SDL_sysvideo.h"
 
 @class InGameMenuViewController;
-@class HelpPageLobbyViewController;
+@class HelpPageViewController;
 
 @interface OverlayViewController : UIViewController {
     // the timer that dims the overlay
@@ -22,7 +22,7 @@
     BOOL isPopoverVisible;
 
     // the help menu
-    HelpPageLobbyViewController *helpPage;
+    HelpPageViewController *helpPage;
 
     // ths touch section
     CGFloat initialDistanceForPinching;
@@ -36,7 +36,7 @@
 
 @property (nonatomic,retain) id popoverController;
 @property (nonatomic,retain) InGameMenuViewController *popupMenu;
-@property (nonatomic,retain) HelpPageLobbyViewController *helpPage;
+@property (nonatomic,retain) HelpPageViewController *helpPage;
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;

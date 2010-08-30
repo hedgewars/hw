@@ -9,7 +9,7 @@
 #import "OverlayViewController.h"
 #import "SDL_uikitappdelegate.h"
 #import "InGameMenuViewController.h"
-#import "HelpPageLobbyViewController.h"
+#import "HelpPageViewController.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "CGPointUtils.h"
@@ -145,7 +145,7 @@
 
 -(void) showHelp:(id) sender {
     if (self.helpPage == nil)
-        self.helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController" bundle:nil];
+        self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageInGameViewController" bundle:nil];
     self.helpPage.view.alpha = 0;
     [self.view addSubview:helpPage.view];
     [UIView beginAnimations:@"helpingame" context:NULL];

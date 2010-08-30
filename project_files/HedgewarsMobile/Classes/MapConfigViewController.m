@@ -301,9 +301,8 @@
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
-    }
 
     if (self.segmentedControl.selectedSegmentIndex != 1) {
         // the % prevents a strange bug that occurs sporadically
@@ -548,7 +547,7 @@
     self.mapGenCommand = @"e$mapgen 0";
     self.staticMapCommand = @"";
 
-    self.lastIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    self.lastIndexPath = [NSIndexPath indexPathForRow:-1 inSection:0];
 
     oldValue = 5;
     oldPage = 0;

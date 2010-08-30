@@ -8,13 +8,14 @@
 
 #import "GameConfigViewController.h"
 #import "SDL_uikitappdelegate.h"
-#import "CommodityFunctions.h"
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
+#import "HelpPageViewController.h"
+#import "CommodityFunctions.h"
 #import "UIImageExtra.h"
 
 @implementation GameConfigViewController
-@synthesize hedgehogImage, imgContainer;
+@synthesize hedgehogImage, imgContainer, helpPage;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -41,11 +42,19 @@
             playSound(@"clickSound");
             theButton.enabled = NO;
             [self startGame:theButton];
-//            [self performSelector:@selector(startGame:)
-//                       withObject:theButton
-//                       afterDelay:0.25];
+            break;
+        case 2:
+            playSound(@"clickSound");
+            if (self.helpPage == nil)
+                self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController" bundle:nil];
+            self.helpPage.view.alpha = 0;
+            [self.view addSubview:helpPage.view];
+            [UIView beginAnimations:@"helplobby" context:NULL];
+            self.helpPage.view.alpha = 1;
+            [UIView commitAnimations];
             break;
         default:
+            DLog(@"Nope");
             break;
     }
 }
