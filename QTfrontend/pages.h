@@ -397,13 +397,23 @@ public:
     PageRoomsList(QWidget* parent, QSettings * config, SDLInteraction * sdli);
 
     QLineEdit * roomName;
+    QLineEdit * searchText;
     QTableWidget * roomsList;
     QPushButton * BtnBack;
     QPushButton * BtnCreate;
     QPushButton * BtnJoin;
     QPushButton * BtnRefresh;
     QPushButton * BtnAdmin;
+    QPushButton * BtnClear;
+    QComboBox * CBState;
+    QComboBox * CBRules;
+    QComboBox * CBWeapons;
     HWChatWidget * chatWidget;
+
+private:
+    bool gameInLobby;
+    QString gameInLobbyName;
+    QStringList listFromServer;
 
 public slots:
     void setRoomsList(const QStringList & list);
@@ -413,11 +423,14 @@ private slots:
     void onCreateClick();
     void onJoinClick();
     void onRefreshClick();
+    void onClearClick();
+    void onJoinConfirmation(const QString &);
 
 signals:
     void askForCreateRoom(const QString &);
     void askForJoinRoom(const QString &);
     void askForRoomList();
+    void askJoinConfirmation(const QString &);
 };
 
 class PageConnecting : public AbstractPage
