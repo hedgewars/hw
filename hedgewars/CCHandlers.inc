@@ -391,7 +391,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('j');
-if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_LJump
@@ -402,7 +402,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('J');
-if ReadyTimeLeft > 1 then begin ReadyTimeLeft:= 1; exit end;
+if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or gm_HJump
@@ -412,12 +412,7 @@ procedure chAttack_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
-if ReadyTimeLeft > 1 then
-    begin
-    ReadyTimeLeft:= 1; // set to 1 millisecond so we still play the sound file
-    if not CurrentTeam^.ExtDriven then SendIPC('A');
-    exit
-    end;
+if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
@@ -687,10 +682,11 @@ end;
 procedure chAmmoMenu(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then 
-bShowAmmoMenu:= true
+if CheckNoTeamOrHH then
+    bShowAmmoMenu:= true
 else
-with CurrentTeam^ do
+    begin
+    with CurrentTeam^ do
         with Hedgehogs[CurrHedgehog] do
             begin
             bSelected:= false;
@@ -699,7 +695,9 @@ with CurrentTeam^ do
             else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or 
                     ((MultiShootAttacks > 0) and ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NoRoundEndHint) = 0)) or
                     ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
-            end
+            end;
+    if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1
+    end
 end;
 
 procedure chFullScr(var s: shortstring);
