@@ -14,7 +14,7 @@
 	<array>
 		<dict>
 			<key>hat</key>
-			<string>NoHat</string>
+			<string>NinjaFull</string>
 			<key>hogname</key>
 			<string>Ukemi</string>
 			<key>level</key>
@@ -22,7 +22,7 @@
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>NoHat</string>
+			<string>NinjaStraight</string>
 			<key>hogname</key>
 			<string>Godai</string>
 			<key>level</key>
@@ -30,7 +30,7 @@
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>NoHat</string>
+			<string>NinjaTriangle</string>
 			<key>hogname</key>
 			<string>Ninpo</string>
 			<key>level</key>
@@ -38,7 +38,7 @@
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>NoHat</string>
+			<string>NinjaStraight</string>
 			<key>hogname</key>
 			<string>Shinobi</string>
 			<key>level</key>
@@ -46,7 +46,7 @@
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>NoHat</string>
+			<string>NinjaFull</string>
 			<key>hogname</key>
 			<string>Tatsujin</string>
 			<key>level</key>
@@ -54,7 +54,7 @@
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>NoHat</string>
+			<string>NinjaTriangle</string>
 			<key>hogname</key>
 			<string>Arashi</string>
 			<key>level</key>
@@ -62,7 +62,7 @@
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>NoHat</string>
+			<string>NinjaStraight</string>
 			<key>hogname</key>
 			<string>Bushi</string>
 			<key>level</key>
@@ -70,7 +70,7 @@
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>NoHat</string>
+			<string>NinjaFull</string>
 			<key>hogname</key>
 			<string>Itami</string>
 			<key>level</key>

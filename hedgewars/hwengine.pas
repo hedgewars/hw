@@ -227,8 +227,7 @@ begin
     isSoundEnabled:= gameArgs[6] = '1';
     isMusicEnabled:= gameArgs[7] = '1';
     cAltDamage:= gameArgs[8] = '1';
-    if CompareStr(gameArgs[9],'0') = 0 then
-        cReadyDelay:= 0;
+    //gameArgs[9] unused
     recordFileName:= gameArgs[10];
 {$ENDIF}
 

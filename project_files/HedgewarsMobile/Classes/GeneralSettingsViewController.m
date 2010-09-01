@@ -94,7 +94,7 @@
             return 2;
             break;
         case 2:     // other stuff
-            return 2;
+            return 1;
             break;
         default:
             break;
@@ -106,7 +106,7 @@
     NSString *sectionTitle = nil;
     switch (section) {
         case 0:
-            sectionTitle = NSLocalizedString(@"Network Configuration", @"");
+            sectionTitle = NSLocalizedString(@"Main Configuration", @"");
             break;
         case 1:
             sectionTitle = NSLocalizedString(@"Audio Preferences", @"");
@@ -193,14 +193,16 @@
             switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
                 cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
-                cell.detailTextLabel.text = NSLocalizedString(@"Damage will popup when the hedgehog is injured", @"");
+                cell.detailTextLabel.text = NSLocalizedString(@"A damage popup will appear when a hedgehog is injured", @"");
                 switchContent.on = [[self.settingsDictionary objectForKey:@"alternate"] boolValue];
                 switchContent.tag = 30;
             } else {
+                /*
                 cell.textLabel.text = NSLocalizedString(@"Get Ready Dialogue", @"");
                 cell.detailTextLabel.text = NSLocalizedString(@"Pause for 5 seconds between turns",@"");
                 switchContent.on = [[self.settingsDictionary objectForKey:@"ready"] boolValue];
                 switchContent.tag = 60;
+                */
             }
             break;
         default:

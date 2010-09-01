@@ -407,7 +407,7 @@
     gameArgs[ 6] = [[[self.systemSettings objectForKey:@"sound"] stringValue] UTF8String];       //isSoundEnabled
     gameArgs[ 7] = [[[self.systemSettings objectForKey:@"music"] stringValue] UTF8String];       //isMusicEnabled
     gameArgs[ 8] = [[[self.systemSettings objectForKey:@"alternate"] stringValue] UTF8String];   //cAltDamage
-    gameArgs[ 9] = [[[self.systemSettings objectForKey:@"ready"] stringValue] UTF8String];       //cReady
+    gameArgs[ 9] = NULL;                                                                         //unused
     gameArgs[10] = NULL;                                                                         //recordFileName
 
     [wSize release];

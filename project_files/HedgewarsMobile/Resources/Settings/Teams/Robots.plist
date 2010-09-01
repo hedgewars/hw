@@ -3,81 +3,81 @@
 <plist version="1.0">
 <dict>
 	<key>flag</key>
-	<string>cm_pirate</string>
+	<string>cm_binary</string>
 	<key>fort</key>
-	<string>Plane</string>
+	<string>UFO</string>
 	<key>grave</key>
-	<string>chest</string>
+	<string>Rip</string>
 	<key>hash</key>
 	<string>0</string>
 	<key>hedgehogs</key>
 	<array>
 		<dict>
 			<key>hat</key>
-			<string>pirate_jack_bandana</string>
+			<string>cyborg</string>
 			<key>hogname</key>
-			<string>Toothless Wayne</string>
+			<string>HAL</string>
 			<key>level</key>
-			<integer>0</integer>
+			<integer>4</integer>
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>pirate_jack</string>
+			<string>cyborg</string>
 			<key>hogname</key>
-			<string>Long-nose Kidd</string>
+			<string>R2-D2</string>
 			<key>level</key>
-			<integer>0</integer>
+			<integer>4</integer>
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>dwarf</string>
+			<string>cyborg</string>
 			<key>hogname</key>
-			<string>Eye-patch Jim</string>
+			<string>Wall-E</string>
 			<key>level</key>
-			<integer>0</integer>
+			<integer>4</integer>
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>pirate_jack</string>
+			<string>cyborg</string>
 			<key>hogname</key>
-			<string>Rackham Blood</string>
+			<string>Robocob</string>
 			<key>level</key>
-			<integer>0</integer>
+			<integer>4</integer>
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>dwarf</string>
+			<string>cyborg</string>
 			<key>hogname</key>
-			<string>One-eyed Ayee</string>
+			<string>Optimus Prime</string>
 			<key>level</key>
-			<integer>0</integer>
+			<integer>4</integer>
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>pirate_jack_bandana</string>
+			<string>cyborg</string>
 			<key>hogname</key>
-			<string>Dirty Ben</string>
+			<string>C-3PO</string>
 			<key>level</key>
-			<integer>0</integer>
+			<integer>4</integer>
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>pirate_jack</string>
+			<string>cyborg</string>
 			<key>hogname</key>
-			<string>Morris</string>
+			<string>Terminator</string>
 			<key>level</key>
-			<integer>0</integer>
+			<integer>4</integer>
 		</dict>
 		<dict>
 			<key>hat</key>
-			<string>dwarf</string>
+			<string>cyborg</string>
 			<key>hogname</key>
-			<string>Cruise Seymour</string>
+			<string>KITT</string>
 			<key>level</key>
-			<integer>0</integer>
+			<integer>4</integer>
 		</dict>
 	</array>
 	<key>voicepack</key>
-	<string>Pirate</string>
+	<string>Robot</string>
 </dict>
 </plist>
