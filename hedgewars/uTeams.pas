@@ -283,11 +283,18 @@ if PlacingHogs then
 else TurnTimeLeft:= cHedgehogTurnTime;
 if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     begin
-    PlaySound(sndComeonthen, CurrentTeam^.voicepack);
+    if CurrentTeam^.ExtDriven then
+        PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
+    else
+        PlaySound(sndYesSir, CurrentTeam^.voicepack);
     ReadyTimeLeft:= cReadyDelay
     end
 else
-    ReadyTimeLeft:= 0;
+    begin
+    if TurnTimeLeft > 0 then
+        PlaySound(sndIllGetYou, CurrentTeam^.voicepack);
+    ReadyTimeLeft:= 0
+    end
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;

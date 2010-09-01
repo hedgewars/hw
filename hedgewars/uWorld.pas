@@ -860,11 +860,8 @@ if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
 if ReadyTimeLeft > 0 then
     begin
     // TODO: move outside drawing code or do a spearate step in ugears?
-    if (ReadyTimeLeft = 1) or (ReadyTimeLeft < Lag) then
-        if (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then
-            PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
-        else
-            PlaySound(sndYesSir, CurrentTeam^.voicepack);
+    if (ReadyTimeLeft = 2000) or ((ReadyTimeLeft - Lag < 2000) and (ReadyTimeLeft > 2000)) then
+        PlaySound(sndComeonthen, CurrentTeam^.voicepack);
 
     if ReadyTimeLeft > Lag then
         dec(ReadyTimeLeft, Lag)
