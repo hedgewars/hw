@@ -2486,7 +2486,7 @@ begin
     begin
         Gear^.Tag := 0;
         Gear^.X := Gear^.X + int2hwFloat(xx);
-        if not TestCollisionYwithGear(Gear, yyn) then
+        if not TestCollisionY(Gear, yyn) then
         begin
             Gear^.Y := Gear^.Y + int2hwFloat(yyn);
             NextAngle
@@ -2561,6 +2561,7 @@ begin
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
     HHGear^.Message := HHGear^.Message and (not gm_Attack);
     DeleteCI(HHGear);
+    Gear^.IntersectGear:= nil;
 
     FollowGear := Gear;
 
