@@ -287,7 +287,8 @@ if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
         PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
     else
         PlaySound(sndYesSir, CurrentTeam^.voicepack);
-    ReadyTimeLeft:= cReadyDelay
+    ReadyTimeLeft:= cReadyDelay;
+    AddCaption(Format(shortstring(trmsg[sidReady]), CurrentTeam^.TeamName), cWhiteColor, capgrpGameState)
     end
 else
     begin

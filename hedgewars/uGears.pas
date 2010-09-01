@@ -848,7 +848,14 @@ if TurnTimeLeft > 0 then
                     and (CurrentHedgehog^.Gear <> nil)
                     and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
                         PlaySound(sndHurry, CurrentTeam^.voicepack);
-                dec(TurnTimeLeft)
+                if ReadyTimeLeft > 0 then
+                    begin
+                    if ReadyTimeLeft = 2000 then
+                        PlaySound(sndComeonthen, CurrentTeam^.voicepack);
+                    dec(ReadyTimeLeft)
+                    end
+                else
+                    dec(TurnTimeLeft)
                 end;
 
 if skipFlag then

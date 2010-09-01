@@ -26,7 +26,6 @@ uses sysutils, uConsts, uTeams, SDLh, GLunit;
 var PixelFormat: PSDL_PixelFormat;
     SDLPrimSurface: PSDL_Surface;
     PauseTexture,
-    ReadyTexture,
     SyncTexture,
     ConfirmTexture: PTexture;
     cScaleFactor: GLfloat;
@@ -447,7 +446,6 @@ InitHealth;
 
 // TODO: are those textures ever freed?
 PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
-ReadyTexture:= RenderStringTex(trmsg[sidReady], cYellowColor, fntBig);
 ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
 SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 

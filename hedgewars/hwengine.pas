@@ -85,7 +85,7 @@ begin
                 ProcessKbd;
                 if not isPaused then
                     begin
-                    if ReadyTimeLeft = 0 then DoGameTick(Lag);
+                    DoGameTick(Lag);
                     ProcessVisualGears(Lag);
                     end;
                 end;
