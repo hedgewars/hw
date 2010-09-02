@@ -89,6 +89,7 @@ procedure WriteToConsole(s: shortstring);
 var Len: LongInt;
     done: boolean;
 begin
+{$IFNDEF NOCONSOLE}
     {$IFDEF DEBUGFILE}AddFileLog('Console write: ' + s);{$ENDIF}
     Write(s);
     done:= false;
@@ -106,16 +107,19 @@ begin
         end;
         done:= (Length(s) = 0);
     end;
+{$ENDIF}
 end;
 
 procedure WriteLnToConsole(s: shortstring);
 begin
+{$IFNDEF NOCOSOLE}
     WriteToConsole(s);
     WriteLn;
     inc(CurrLine);
     if CurrLine = cLinesCount then
         CurrLine:= 0;
     PByte(@ConsoleLines[CurrLine].s)^:= 0
+{$ENDIF}
 end;
 
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);

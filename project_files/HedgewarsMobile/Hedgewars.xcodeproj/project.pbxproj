@@ -2198,7 +2198,99 @@
 			};
 			name = Release;
 		};
-		6137064B117B1CB3004EE44A /* Distribution */ = {
+		61022D7C12305A2800B08935 /* Distribution AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Vittorio Giovara";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vittorio Giovara";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Sc";
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
+				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
+				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs  -Cfvfpv2";
+				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_FAST_MATH = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_STRICT_ALIASING = YES;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-lz",
+					"-Wl,-no_order_inits",
+				);
+				PREBINDING = NO;
+				PROVISIONING_PROFILE = "450C4020-346A-4F44-8DDE-E71300796C94";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "450C4020-346A-4F44-8DDE-E71300796C94";
+				SDKROOT = iphoneos4.0;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = NO;
+				VALID_ARCHS = "armv7 armv6";
+			};
+			name = "Distribution AppStore";
+		};
+		61022D7D12305A2800B08935 /* Distribution AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = "Entitlements-Development.plist";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				PRODUCT_NAME = Hedgewars;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Distribution AppStore";
+		};
+		61022D7E12305A2800B08935 /* Distribution AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = fpc;
+				ZERO_LINK = NO;
+			};
+			name = "Distribution AppStore";
+		};
+		61022D7F12305A2800B08935 /* Distribution AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = UpdateDataFolder;
+				ZERO_LINK = NO;
+			};
+			name = "Distribution AppStore";
+		};
+		6137064B117B1CB3004EE44A /* Distribution AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
@@ -2215,6 +2307,7 @@
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_FAST_MATH = YES;
 				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -2241,9 +2334,9 @@
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv6";
 			};
-			name = Distribution;
+			name = "Distribution AdHoc";
 		};
-		6137064C117B1CB3004EE44A /* Distribution */ = {
+		6137064C117B1CB3004EE44A /* Distribution AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2262,9 +2355,9 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Distribution;
+			name = "Distribution AdHoc";
 		};
-		6137064D117B1CB3004EE44A /* Distribution */ = {
+		6137064D117B1CB3004EE44A /* Distribution AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2275,9 +2368,9 @@
 				PRODUCT_NAME = fpc;
 				ZERO_LINK = NO;
 			};
-			name = Distribution;
+			name = "Distribution AdHoc";
 		};
-		6137064F117B1CB3004EE44A /* Distribution */ = {
+		6137064F117B1CB3004EE44A /* Distribution AdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -2286,7 +2379,7 @@
 				PRODUCT_NAME = UpdateDataFolder;
 				ZERO_LINK = NO;
 			};
-			name = Distribution;
+			name = "Distribution AdHoc";
 		};
 		6164429D11B5CDE500B9A6F3 /* Valgrind */ = {
 			isa = XCBuildConfiguration;
@@ -2483,7 +2576,7 @@
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_FAST_MATH = YES;
 				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -2520,7 +2613,8 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
-				6137064C117B1CB3004EE44A /* Distribution */,
+				6137064C117B1CB3004EE44A /* Distribution AdHoc */,
+				61022D7D12305A2800B08935 /* Distribution AppStore */,
 				6164429E11B5CDE500B9A6F3 /* Valgrind */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2531,7 +2625,8 @@
 			buildConfigurations = (
 				6179928C114AE0C800BA94A9 /* Debug */,
 				6179928D114AE0C800BA94A9 /* Release */,
-				6137064F117B1CB3004EE44A /* Distribution */,
+				6137064F117B1CB3004EE44A /* Distribution AdHoc */,
+				61022D7F12305A2800B08935 /* Distribution AppStore */,
 				616442A111B5CDE500B9A6F3 /* Valgrind */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2542,7 +2637,8 @@
 			buildConfigurations = (
 				928301180F10CAFD00CC5A3C /* Debug */,
 				928301190F10CAFD00CC5A3C /* Release */,
-				6137064D117B1CB3004EE44A /* Distribution */,
+				6137064D117B1CB3004EE44A /* Distribution AdHoc */,
+				61022D7E12305A2800B08935 /* Distribution AppStore */,
 				6164429F11B5CDE500B9A6F3 /* Valgrind */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2553,7 +2649,8 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
-				6137064B117B1CB3004EE44A /* Distribution */,
+				6137064B117B1CB3004EE44A /* Distribution AdHoc */,
+				61022D7C12305A2800B08935 /* Distribution AppStore */,
 				6164429D11B5CDE500B9A6F3 /* Valgrind */,
 			);
 			defaultConfigurationIsVisible = 0;
