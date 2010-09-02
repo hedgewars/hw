@@ -51,7 +51,7 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
     labelGameStats = new QLabel(this);
     QLabel * l = new QLabel(this);
     l->setTextFormat(Qt::RichText);
-    l->setText(PageGameStats::tr("<h1><img src=\":/res/StatsD.png\"> Details</h1>"));
+    l->setText("<h1><img src=\":/res/StatsD.png\"> " + PageGameStats::tr("Details") + "</h1>");
     l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     labelGameStats->setTextFormat(Qt::RichText);
     labelGameStats->setAlignment(Qt::AlignTop);
@@ -64,7 +64,7 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
     graphic = new FitGraphicsView(gb);
     l = new QLabel(this);
     l->setTextFormat(Qt::RichText);
-    l->setText(PageGameStats::tr("<br><h1><img src=\":/res/StatsH.png\"> Health graph</h1>"));
+    l->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph") + "</h1>");
     l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     gbl->addWidget(l);
     gbl->addWidget(graphic);
@@ -81,7 +81,7 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
     labelGameRank = new QLabel(gb);
     l = new QLabel(this);
     l->setTextFormat(Qt::RichText);
-    l->setText(PageGameStats::tr("<h1><img src=\":/res/StatsR.png\"> Ranking</h1>"));
+    l->setText("<h1><img src=\":/res/StatsR.png\"> " + PageGameStats::tr("Ranking") + "</h1>");
     l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     gbl->addWidget(l);
     gbl->addWidget(labelGameRank);
@@ -141,22 +141,20 @@ void PageGameStats::GameStats(char type, const QString & info)
         }
         case 'D' : {
             int i = info.indexOf(' ');
-            QString message = PageGameStats::tr("<p><img src=\":/res/StatsBestShot.png\"> The best shot award was won by <b>%1</b> with <b>%2</b> pts.</p>")
-                    .arg(info.mid(i + 1), info.left(i));
+            QString message = "<p><img src=\":/res/StatsBestShot.png\"> " + PageGameStats::tr("The best shot award was won by <b>%1</b> with <b>%2</b> pts.").arg(info.mid(i + 1), info.left(i)) + "</p>";
             AddStatText(message);
             break;
         }
         case 'k' : {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = PageGameStats::tr("<p><img src=\":/res/StatsBestKiller.png\"> The best killer is <b>%1</b> with <b>%2</b> kills in a turn.</p>", "", num)
-                    .arg(info.mid(i + 1), info.left(i));
+            QString message = "<p><img src=\":/res/StatsBestKiller.png\"> " + PageGameStats::tr("The best killer is <b>%1</b> with <b>%2</b> kills in a turn.", "", num).arg(info.mid(i + 1), info.left(i)) + "</p>";
             AddStatText(message);
             break;
         }
         case 'K' : {
             int num = info.toInt();
-            QString message = PageGameStats::tr("<p><img src=\":/res/StatsHedgehogsKilled.png\"> A total of <b>%1</b> hedgehog(s) were killed during this round.</p>", "", num).arg(num);
+            QString message = "<p><img src=\":/res/StatsHedgehogsKilled.png\"> " +  PageGameStats::tr("A total of <b>%1</b> hedgehog(s) were killed during this round.", "", num).arg(num) + "</p>";
             AddStatText(message);
             break;
         }
@@ -217,33 +215,34 @@ void PageGameStats::GameStats(char type, const QString & info)
 	    }
 
             QString message;
+	    QString killstring;
 	    if (kills.toInt() == 1)
 	    {
-	    	message = PageGameStats::tr("<p><h2>%1 %2. <font color=\"%5\">%3</font>  (%4 kill).</h2></p>").arg(image, QString::number(playerPosition), playername, kills, clanColor.name());
+	    	killstring = PageGameStats::tr("(%1 kill)").arg(kills);
 	    } else {
-	        message = PageGameStats::tr("<p><h2>%1 %2. <font color=\"%5\">%3</font>  (%4 kills).</h2></p>").arg(image, QString::number(playerPosition), playername, kills, clanColor.name());
+	    	killstring = PageGameStats::tr("(%1 kills)").arg(kills);
             }
-            labelGameRank->setText(labelGameRank->text() + message);
+	    
+	    message = QString("<p><h2>%1 %2. <font color=\"%4\">%3</font> ").arg(image, QString::number(playerPosition), playername, clanColor.name()) + killstring + "</h2></p>";
+            
+	    labelGameRank->setText(labelGameRank->text() + message);
             break;
 	}
         case 's' : {
             int i = info.indexOf(' ');
-            QString message = PageGameStats::tr("<p><img src=\":/res/StatsMostSelfDamage.png\"> <b>%1</b> thought it's good to shoot his own hedgehogs with <b>%2</b> pts.</p>")
-                    .arg(info.mid(i + 1), info.left(i));
+            QString message = "<p><img src=\":/res/StatsMostSelfDamage.png\"> " + PageGameStats::tr("<b>%1</b> thought it's good to shoot his own hedgehogs with <b>%2</b> pts.").arg(info.mid(i + 1), info.left(i)) + "</p>";
             AddStatText(message);
             break;
         }
         case 'S' : {
             int i = info.indexOf(' ');
-            QString message = PageGameStats::tr("<p><img src=\":/res/StatsSelfKilled.png\"> <b>%1</b> killed <b>%2</b> of his own hedgehogs.</p>")
-                    .arg(info.mid(i + 1), info.left(i));
+            QString message = "<p><img src=\":/res/StatsSelfKilled.png\"> " + PageGameStats::tr("<b>%1</b> killed <b>%2</b> of his own hedgehogs.").arg(info.mid(i + 1), info.left(i)) + "</p>"; 
             AddStatText(message);
             break;
         }
         case 'B' : {
             int i = info.indexOf(' ');
-            QString message = PageGameStats::tr("<p><img src=\":/res/StatsSkipped.png\"> <b>%1</b> was scared and skipped turn <b>%2</b> times.</p>")
-                    .arg(info.mid(i + 1), info.left(i));
+            QString message = "<p><img src=\":/res/StatsSkipped.png\"> " + PageGameStats::tr("<b>%1</b> was scared and skipped turn <b>%2</b> times.").arg(info.mid(i + 1), info.left(i)) + "</p>";
             AddStatText(message);
             break;
         }
