@@ -19,7 +19,7 @@
 #define TEAMNAME_TAG 78789
 
 @implementation SingleTeamViewController
-@synthesize teamDictionary, normalHogSprite, secondaryItems, teamName;
+@synthesize teamDictionary, normalHogSprite, secondaryItems, moreSecondaryItems, teamName;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -58,6 +58,16 @@
                       NSLocalizedString(@"Level",@""),nil];
     self.secondaryItems = array;
     [array release];
+    
+    // labels for the subtitles
+    NSArray *moreArray = [[NSArray alloc] initWithObjects:
+                          NSLocalizedString(@"Mark the death of your fallen warriors",@""),
+                          NSLocalizedString(@"Pick a slang your hogs will speak",@""),
+                          NSLocalizedString(@"Select the team invincible fortress (only valid for fort games)",@""),
+                          NSLocalizedString(@"Choose a charismatic symbol for your team",@""),
+                          NSLocalizedString(@"Opt for controlling the team or let the AI lead",@""),nil];
+    self.moreSecondaryItems = moreArray;
+    [moreArray release];
 
     // load the base hog image, drawing will occure in cellForRow...
     NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
@@ -208,11 +218,12 @@
         case 2:
             cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier2];
             if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                                reuseIdentifier:CellIdentifier2] autorelease];
             }
 
             cell.textLabel.text = [self.secondaryItems objectAtIndex:row];
+            cell.detailTextLabel.text = [self.moreSecondaryItems objectAtIndex:row];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             switch (row) {
                 case 0: // grave
@@ -222,17 +233,22 @@
                     cell.imageView.image = accessoryImage;
                     [accessoryImage release];
                     break;
+                case 1: // voice
+                    accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/HellishBomb.png",
+                                                                              GRAPHICS_DIRECTORY()]];
+                    cell.imageView.image = accessoryImage;
+                    [accessoryImage release];
+                    break;
                 case 2: // fort
                     accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@-preview.png",
                                                                               FORTS_DIRECTORY(),[teamDictionary objectForKey:@"fort"]]];
-                    cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(42, 42)];
+                    cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(32, 32)];
                     [accessoryImage release];
                     break;
-
                 case 3: // flags
                     accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png",
                                                                               FLAGS_DIRECTORY(),[teamDictionary objectForKey:@"flag"]]];
-                    cell.imageView.image = accessoryImage;
+                    cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(32, 32)];
                     [accessoryImage release];
                     break;
                 case 4: // level
@@ -240,7 +256,7 @@
                                                                               BOTLEVELS_DIRECTORY(),[[[[teamDictionary objectForKey:@"hedgehogs"]
                                                                                                       objectAtIndex:0] objectForKey:@"level"]
                                                                                                      intValue]]];
-                    cell.imageView.image = accessoryImage;
+                    cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(32, 32)];
                     [accessoryImage release];
                     break;
                 default:
@@ -348,6 +364,7 @@
     self.teamName = nil;
     self.normalHogSprite = nil;
     self.secondaryItems = nil;
+    self.moreSecondaryItems = nil;
     hogHatViewController = nil;
     gravesViewController = nil;
     voicesViewController = nil;
@@ -363,6 +380,7 @@
     [teamName release];
     [normalHogSprite release];
     [secondaryItems release];
+    [moreSecondaryItems release];
     [hogHatViewController release];
     [gravesViewController release];
     [fortsViewController release];
