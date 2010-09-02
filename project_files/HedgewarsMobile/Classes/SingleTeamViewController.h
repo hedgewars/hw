@@ -23,6 +23,7 @@
     UIImage *normalHogSprite;
 
     NSArray *secondaryItems;
+    NSArray *moreSecondaryItems;
     BOOL isWriteNeeded;
 
     HogHatViewController *hogHatViewController;
@@ -37,6 +38,7 @@
 @property (nonatomic,retain) NSString *teamName;
 @property (nonatomic,retain) UIImage *normalHogSprite;
 @property (nonatomic,retain) NSArray *secondaryItems;
+@property (nonatomic,retain) NSArray *moreSecondaryItems;
 
 -(void) writeFile;
 -(void) setWriteNeeded;
