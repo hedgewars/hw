@@ -197,7 +197,7 @@
 					<object class="IBUIImageView" id="713859408">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{393, 399}, {240, 128}}</string>
+						<string key="NSFrame">{{393, 389}, {240, 166}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -207,7 +207,7 @@
 					<object class="IBUILabel" id="896727228">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{403, 417}, {109, 22}}</string>
+						<string key="NSFrame">{{401, 410}, {109, 22}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -224,14 +224,14 @@
 					<object class="IBUILabel" id="704238452">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{400, 427}, {232, 100}}</string>
+						<string key="NSFrame">{{400, 429}, {232, 120}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">7</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Select which teams are playing! You can set the number of hogs and have multiple teams play together.</string>
+						<string key="IBUIText">Select which teams are playing! Add hogs by tapping on them and set their color to figure friend and foe teams out. AI teams will appear with a small robot badge next their name.</string>
 						<reference key="IBUIFont" ref="818038162"/>
 						<reference key="IBUITextColor" ref="283637272"/>
 						<nil key="IBUIHighlightedColor"/>
@@ -790,7 +790,7 @@
 					<string>HelpPageViewController</string>
 					<string>UIResponder</string>
 					<string>UIControl</string>
-					<string>{{273, 67}, {1024, 768}}</string>
+					<string>{{273, 106}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>

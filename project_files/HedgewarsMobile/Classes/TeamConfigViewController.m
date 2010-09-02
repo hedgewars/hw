@@ -99,13 +99,16 @@
             [cell addSubview:numberButton];
             [numberButton release];
 
-            SquareButtonView *squareButton = [[SquareButtonView alloc] initWithFrame:CGRectMake(12+88+7, 5, 36, 36)];
+            SquareButtonView *squareButton = [[SquareButtonView alloc] initWithFrame:CGRectMake(12+88+6, 5, 36, 36)];
             squareButton.tag = SQUAREBUTTON_TAG;
             [cell addSubview:squareButton];
             [squareButton release];
 
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12+88+7+36+7, 10, 250, 25)];
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12+88+6+36, 10, 103, 25)];
             label.textAlignment = UITextAlignmentLeft;
+            label.minimumFontSize = 11;
+            label.adjustsFontSizeToFitWidth = YES;
+            label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
             label.backgroundColor = [UIColor clearColor];
             label.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
             label.textColor = UICOLOR_HW_YELLOW_TEXT;
@@ -126,12 +129,26 @@
         SquareButtonView *squareButton = (SquareButtonView *)[cell viewWithTag:SQUAREBUTTON_TAG];
         [squareButton selectColor:[[selectedRow objectForKey:@"color"] intValue]];
         squareButton.ownerDictionary = selectedRow;
+        
+        NSString *teamPath = [NSString stringWithFormat:@"%@/%@",TEAMS_DIRECTORY(),[selectedRow objectForKey:@"team"]];
+        NSDictionary *firstHog = [[[NSDictionary dictionaryWithContentsOfFile:teamPath] objectForKey:@"hedgehogs"] objectAtIndex:0];
+        if ([[firstHog objectForKey:@"level"] intValue]> 0) {
+            NSString *filePath = [NSString stringWithFormat:@"%@/cyborg.png",HATS_DIRECTORY()];
+            UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath andCutAt:CGRectMake(0, 2, 32, 32)];
+            UIImageView *spriteView = [[UIImageView alloc] initWithImage:sprite];
+            [sprite release];
+            
+            cell.accessoryView = spriteView;
+            [spriteView release];
+        } else
+            cell.accessoryView = nil;
     } else {
         cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
         if (cell == nil)
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
 
         cell.textLabel.text = [[[listOfTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
+        cell.accessoryView = nil;
     }
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
