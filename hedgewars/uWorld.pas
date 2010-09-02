@@ -537,7 +537,7 @@ var i, t: LongInt;
     offset, offsetX, offsetY, ScreenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
-    if not isPaused and (ReadyTimeLeft = 0) then
+    if not isPaused then
     begin
         if ZoomValue < zoom then
         begin
