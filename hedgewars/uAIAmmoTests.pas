@@ -124,11 +124,8 @@ var Vx, Vy, r: hwFloat;
         t: LongInt;
         value: LongInt;
     begin
-    with PHedgehog(Me^.Hedgehog)^ do
-        begin
-        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
-        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
-        end;
+    x:= Me^.X;
+    y:= Me^.Y;
     dX:= Vx;
     dY:= -Vy;
     t:= rTime;
@@ -182,11 +179,8 @@ var Vx, Vy, r: hwFloat;
     var x, y, dY: hwFloat;
         t: LongInt;
     begin
-    with PHedgehog(Me^.Hedgehog)^ do
-        begin
-        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
-        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
-        end;
+    x:= Me^.X;
+    y:= Me^.Y;
     dY:= -Vy;
     t:= TestTime;
     repeat
@@ -237,11 +231,8 @@ var Vx, Vy, r: hwFloat;
     var x, y, dY: hwFloat;
         t: LongInt;
     begin
-    with PHedgehog(Me^.Hedgehog)^ do
-        begin
-        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
-        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
-        end;
+    x:= Me^.X;
+    y:= Me^.Y;
     dY:= -Vy;
     t:= TestTime;
     repeat
@@ -292,11 +283,8 @@ var Vx, Vy, r: hwFloat;
     var x, y, dY: hwFloat;
         t: LongInt;
     begin
-    with PHedgehog(Me^.Hedgehog)^ do
-        begin
-        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
-        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
-        end;
+    x:= Me^.X;
+    y:= Me^.Y;
     dY:= -Vy;
     t:= TestTime;
     repeat
@@ -351,11 +339,8 @@ var Vx, Vy, r: hwFloat;
     var x, y, dY: hwFloat;
         t: LongInt;
     begin
-    with PHedgehog(Me^.Hedgehog)^ do
-        begin
-        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
-        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
-        end;
+    x:= Me^.X;
+    y:= Me^.Y;
     dY:= -Vy;
     t:= TestTime;
     repeat
@@ -406,11 +391,8 @@ var Vx, Vy: hwFloat;
     var x, y, dY: hwFloat;
         value: LongInt;
     begin
-    with PHedgehog(Me^.Hedgehog)^ do
-        begin
-        x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
-        y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
-        end;
+        x:= Me^.X;
+        y:= Me^.Y;
         dY:= -Vy;
 
         repeat
@@ -494,11 +476,8 @@ begin
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
-with PHedgehog(Me^.Hedgehog)^ do
-    begin
-    x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
-    y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
-    end;
+x:= Me^.X;
+y:= Me^.Y;
 range:= Metric(hwRound(x), hwRound(y), Targ.X, Targ.Y);
 if ( range < MIN_RANGE ) or ( range > MAX_RANGE ) then exit(BadTurn);
 Vx:= (int2hwFloat(Targ.X) - x) * _1div1024;
@@ -531,11 +510,8 @@ Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
-with PHedgehog(Me^.Hedgehog)^ do
-    begin
-    x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
-    y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
-    end;
+x:= Me^.X;
+y:= Me^.Y;
 if Abs(hwRound(Me^.X) - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) < 80 then
    exit(BadTurn);
 t:= _0_5 / Distance(int2hwFloat(Targ.X) - x, int2hwFloat(Targ.Y) - y);
@@ -567,11 +543,8 @@ if (Level > 2) or (Abs(hwRound(Me^.X) - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) >
 
 ap.Time:= 0;
 ap.Power:= 1;
-with PHedgehog(Me^.Hedgehog)^ do
-    begin
-    x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
-    y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
-    end;
+x:= Me^.X;
+y:= Me^.Y;
 if (Targ.X) - hwRound(x) >= 0 then ap.Angle:=   cMaxAngle div 4
                                   else ap.Angle:= - cMaxAngle div 4;
 valueResult:= RateShove(Me, hwRound(x) + 10 * hwSign(int2hwFloat(Targ.X) - x), hwRound(y), 15, 30);
@@ -588,11 +561,8 @@ ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
 ap.Angle:= 0;
-with PHedgehog(Me^.Hedgehog)^ do
-    begin
-    x:= Me^.X + int2hwfloat(round(GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Me^.dX), Me^.Angle)));
-    y:= Me^.Y + int2hwfloat(round(GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Me^.Angle)))
-    end;
+x:= Me^.X;
+y:= Me^.Y;
 if (Abs(hwRound(x) - Targ.X) > 25)
 or (Abs(hwRound(y) - 50 - Targ.Y) > 50) then
     begin
