@@ -3953,7 +3953,7 @@ begin
     AllInactive := false;
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
     dec(Gear^.Timer);
-    if (Gear^.Timer = 0)or((Gear^.Message and gm_Destroy) <> 0) then
+    if (HHGear = nil) or (Gear^.Timer = 0) or ((Gear^.Message and gm_Destroy) <> 0) then
     begin
         DeleteGear(Gear);
         exit
@@ -3995,16 +3995,6 @@ begin
     Gear^.X := Gear^.X + HHGear^.dX;
     HHGear^.X := Gear^.X;
     HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius);
-
-    if (Gear^.Message and gm_Attack) <> 0 then
-        if (Gear^.State and gsttmpFlag) <> 0 then Gear^.Timer := 1
-    else
-    else
-        if (Gear^.State and gsttmpFlag) = 0 then Gear^.State := Gear^.State or gsttmpFlag;
-    if ((Gear^.Message and gm_Left) <> 0) then Gear^.dX := - _0_3
-    else
-        if ((Gear^.Message and gm_Right) <> 0) then Gear^.dX := _0_3
-    else Gear^.dX := _0;
 end;
 
 procedure doStepHammerHit(Gear: PGear);
@@ -4030,5 +4020,5 @@ begin
     DeleteCI(HHGear);
 
     doStepHammerHitWork(Gear);
-    Gear^.doStep := @doStepHammerHit
+    Gear^.doStep := @doStepHammerHitWork
 end;
