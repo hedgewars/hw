@@ -15,10 +15,10 @@ import RoomsAndClients
 import CoreTypes
 
 data ServerState = ServerState {
-        clientIndex :: Maybe ClientIndex,
-        serverInfo :: ServerInfo,
-        removedClients :: Set.Set ClientIndex,
-        roomsClients :: MRnC
+        clientIndex :: !(Maybe ClientIndex),
+        serverInfo :: !ServerInfo,
+        removedClients :: !(Set.Set ClientIndex),
+        roomsClients :: !MRnC
     }
 
 

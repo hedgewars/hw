@@ -81,7 +81,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     connect(chatNicks, SIGNAL(currentRowChanged(int)),
         this, SLOT(chatNickSelected(int)));
 
-    mainLayout.addWidget(chatNicks, 0, 1, 0, 1);
+    mainLayout.addWidget(chatNicks, 0, 1, -1, 1);
 
     acInfo = new QAction(QAction::tr("Info"), chatNicks);
     acInfo->setIcon(QIcon(":/res/info.png"));
