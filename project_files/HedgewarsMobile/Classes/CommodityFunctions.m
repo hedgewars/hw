@@ -61,16 +61,16 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
         case 0: //default
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
                          [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
-                         @"939192942219912103223511100120100000021111011101",@"ammostore_initialqt",
-                         @"040504054160065554655446477657666666615551011111",@"ammostore_probability",
+                         @"939192942219912103223511100120100000021111010101",@"ammostore_initialqt",
+                         @"040504054160065554655446477657666666615551010111",@"ammostore_probability",
                          @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
-                         @"131111031211111112311411111111111111121111111111",@"ammostore_crate", nil];
+                         @"131111031211111112311411111111111111121111110111",@"ammostore_crate", nil];
             break;
         case 1: //crazy
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
                          [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
-                         @"999999999999999999299999999999999929999999999999",@"ammostore_initialqt",
-                         @"111111011111111111111111111111111111111111111111",@"ammostore_probability",
+                         @"999999999999999999299999999999999929999999990999",@"ammostore_initialqt",
+                         @"111111011111111111111111111111111111111111110111",@"ammostore_probability",
                          @"000000000000000000000000000000000000000000000000",@"ammostore_delay",
                          @"131111031211111112311411111111111111121111010111",@"ammostore_crate", nil];
             break;
@@ -80,7 +80,7 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
                          @"909000900000000000000900000000000000000000090000",@"ammostore_initialqt",
                          @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
-                         @"111111111111111111111111111111111111111110011111",@"ammostore_crate", nil];
+                         @"111111111111111111111111111111111111111110010111",@"ammostore_crate", nil];
             break;
         case 3: //shoppa
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -88,15 +88,15 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
                          @"000000990000000000000000000000000000000000000000",@"ammostore_initialqt",
                          @"444441004424440221011212122242200000000200040001",@"ammostore_probability",
                          @"000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"111111111111111111111111111111111111111110111111",@"ammostore_crate", nil];
+                         @"111111111111111111111111111111111111111110110111",@"ammostore_crate", nil];
             break;
         case 4: //basketball
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
                          [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
-                         @"939192942219912103223511100120100000021111011100",@"ammostore_initialqt",
+                         @"939192942219912103223511100120100000021111010100",@"ammostore_initialqt",
                          @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"000000000000000550000004000700400000000020000000",@"ammostore_delay",
-                         @"111111111111111111111111111111111111111111111111",@"ammostore_crate", nil];
+                         @"111111111111111111111111111111111111111111110111",@"ammostore_crate", nil];
             break;
         case 5: //minefield
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -104,7 +104,7 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
                          @"000000990009000000030000000000000000000000000000",@"ammostore_initialqt",
                          @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
-                         @"111111111111111111111111111111111111111111111111",@"ammostore_crate", nil];
+                         @"111111111111111111111111111111111111111111110111",@"ammostore_crate", nil];
             break;
         default:
             NSLog(@"Nope");
