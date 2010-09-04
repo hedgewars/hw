@@ -1,10 +1,23 @@
-//
-//  FortsViewController.m
-//  HedgewarsMobile
-//
-//  Created by Vittorio on 08/04/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
+/*
+ * Hedgewars-iOS, a Hedgewars port for iOS devices
+ * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 08/04/2010.
+ */
+
 
 #import "FortsViewController.h"
 #import "CommodityFunctions.h"
@@ -36,20 +49,6 @@
     }
     self.fortArray = filteredContents;
     [filteredContents release];
-
-    /*
-    // this creates a scaled down version of the image
-    NSMutableArray *spriteArray = [[NSMutableArray alloc] initWithCapacity:[fortArray count]];
-    for (NSString *fortName in fortArray) {
-        NSString *fortFile = [[NSString alloc] initWithFormat:@"%@/%@L.png", fortsDirectory, fortName];
-        UIImage *fortSprite = [[UIImage alloc] initWithContentsOfFile:fortFile];
-        [fortFile release];
-        [spriteArray addObject:[fortSprite scaleToSize:CGSizeMake(196,196)]];
-        [fortSprite release];
-    }
-    self.fortSprites = spriteArray;
-    [spriteArray release];
-    */
 
     // statically set row height instead of using delegate method for performance reasons
     self.tableView.rowHeight = 200;

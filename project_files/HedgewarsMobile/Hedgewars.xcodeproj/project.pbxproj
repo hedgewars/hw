@@ -2171,7 +2171,7 @@
 					"-lgcov",
 				);
 				PRODUCT_NAME = Hedgewars;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = Debug;
 		};
@@ -2194,14 +2194,14 @@
 				PRODUCT_NAME = Hedgewars;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = Release;
 		};
 		61022D7C12305A2800B08935 /* DistributionAppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Vittorio Giovara";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vittorio Giovara";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Sc";
@@ -2227,8 +2227,8 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
-				ONLY_ACTIVE_ARCH = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
@@ -2262,7 +2262,7 @@
 				PRODUCT_NAME = Hedgewars;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = DistributionAppStore;
 		};
@@ -2293,7 +2293,7 @@
 		6137064B117B1CB3004EE44A /* DistributionAdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -2320,8 +2320,8 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
-				ONLY_ACTIVE_ARCH = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
@@ -2353,7 +2353,7 @@
 				);
 				PRODUCT_NAME = Hedgewars;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = DistributionAdHoc;
 		};
@@ -2384,7 +2384,7 @@
 		6164429D11B5CDE500B9A6F3 /* Valgrind */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2414,8 +2414,8 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
-				ONLY_ACTIVE_ARCH = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
@@ -2444,7 +2444,7 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = Hedgewars;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = Valgrind;
 		};
@@ -2519,7 +2519,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2546,8 +2546,8 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
-				ONLY_ACTIVE_ARCH = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
@@ -2563,7 +2563,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Sc";
@@ -2589,8 +2589,8 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
-				ONLY_ACTIVE_ARCH = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
