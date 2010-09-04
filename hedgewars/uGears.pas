@@ -1552,6 +1552,7 @@ CountGears:= count;
 end;
 
 procedure ResurrectHedgehog(gear: PGear);
+var tempTeam : PTeam;
 begin
     gear^.dX := _0;
     gear^.dY := _0;
@@ -1564,10 +1565,13 @@ begin
         if Team^.AIKillsTex <> nil then FreeTexture(Team^.AIKillsTex);
         Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
     end;
+    tempTeam := PHedgehog(gear^.Hedgehog)^.Team;
     FindPlace(gear, false, 0, LAND_WIDTH); 
-    RenderHealth(PHedgehog(gear^.Hedgehog)^);
-    RecountTeamHealth(PHedgehog(gear^.Hedgehog)^.Team);
-    ScriptCall('onResurrect', gear^.uid);
+    if gear <> nil then begin
+        RenderHealth(PHedgehog(gear^.Hedgehog)^);
+        ScriptCall('onResurrect', gear^.uid);
+    end;
+    RecountTeamHealth(tempTeam);
 end;
 
 function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword): PGear;
