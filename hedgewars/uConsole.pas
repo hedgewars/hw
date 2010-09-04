@@ -112,7 +112,7 @@ end;
 
 procedure WriteLnToConsole(s: shortstring);
 begin
-{$IFNDEF NOCOSOLE}
+{$IFNDEF NOCONSOLE}
     WriteToConsole(s);
     WriteLn;
     inc(CurrLine);

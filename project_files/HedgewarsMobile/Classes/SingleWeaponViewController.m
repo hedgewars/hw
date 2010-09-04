@@ -189,6 +189,7 @@
         if (row == 0) {
             editableCell.textField.text = self.weaponName;
         } else {
+            editableCell.minimumCharacters = 0;
             editableCell.textField.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];
             editableCell.textField.text = self.description;
             editableCell.textField.placeholder = NSLocalizedString(@"You can add a description if you wish",@"");

@@ -47,7 +47,7 @@
     char *ver;
     HW_versionInfo(NULL, &ver);
     NSString *versionNumber = [[NSString alloc] initWithCString:ver];
-    self.versionLabel.text = versionNumber;
+    self.versionLabel.text = @"";//versionNumber;
     [versionNumber release];
 
     // listen to request to remove the modalviewcontroller

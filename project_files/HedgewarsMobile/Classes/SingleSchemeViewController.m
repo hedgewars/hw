@@ -199,6 +199,7 @@
             if (row == 0) {
                 editableCell.textField.text = self.schemeName;
             } else {
+                editableCell.minimumCharacters = 0;
                 editableCell.textField.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];
                 editableCell.textField.text = [self.schemeDictionary objectForKey:@"description"];
                 editableCell.textField.placeholder = NSLocalizedString(@"You can add a description if you wish",@"");

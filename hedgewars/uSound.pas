@@ -77,13 +77,20 @@ end;
 
 procedure InitSound;
 var i: TSound;
+    channels: LongInt;
 begin
     if not isSoundEnabled then exit;
     WriteToConsole('Init sound...');
     isSoundEnabled:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
 
+{$IFDEF IPHONEOS}
+    channels:= 1;
+{$ELSE}
+    channels:= 2;
+{$ENDIF}
+
     if isSoundEnabled then
-        isSoundEnabled:= Mix_OpenAudio(44100, $8010, 2, 1024) = 0;
+        isSoundEnabled:= Mix_OpenAudio(44100, $8010, channels, 1024) = 0;
 
 {$IFDEF SDL_MIXER_NEWER}
     WriteToConsole('Init SDL_mixer... ');

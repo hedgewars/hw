@@ -402,7 +402,7 @@
     gameArgs[ 1] = [wSize UTF8String];                                                           //cScreenHeight
     gameArgs[ 2] = [hSize UTF8String];                                                           //cScreenWidth
     gameArgs[ 3] = [[[NSNumber numberWithInteger:tmpQuality] stringValue] UTF8String];           //quality
-    gameArgs[ 4] = [localeString UTF8String];                                                    //cLocaleFName
+    gameArgs[ 4] = "en.txt";//[localeString UTF8String];                                                    //cLocaleFName
     gameArgs[ 5] = [username UTF8String];                                                        //UserNick
     gameArgs[ 6] = [[[self.systemSettings objectForKey:@"sound"] stringValue] UTF8String];       //isSoundEnabled
     gameArgs[ 7] = [[[self.systemSettings objectForKey:@"music"] stringValue] UTF8String];       //isMusicEnabled
