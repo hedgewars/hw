@@ -1566,6 +1566,7 @@ begin
         Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
     end;
     tempTeam := PHedgehog(gear^.Hedgehog)^.Team;
+    DeleteCI(gear);
     FindPlace(gear, false, 0, LAND_WIDTH); 
     if gear <> nil then begin
         RenderHealth(PHedgehog(gear^.Hedgehog)^);
@@ -1732,26 +1733,26 @@ repeat
         inc(x, Delta);
         cnt:= 0;
         y:= min(1024, topY) - 2 * Gear^.Radius;
-        while y < LAND_HEIGHT do
+        while y < cWaterLine do
             begin
             repeat
                 inc(y, 2);
-            until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) = 0);
+            until (y >= cWaterLine) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) = 0);
 
             sy:= y;
 
             repeat
                 inc(y);
-            until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) <> 0);
+            until (y >= cWaterLine) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) <> 0);
 
             if (y - sy > Gear^.Radius * 2) and
                (((Gear^.Kind = gtExplosives)
-                   and (y < LAND_HEIGHT-1)
+                   and (y < cWaterLine)
                    and (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 60, 60) = nil)
                    and (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1) > Gear^.Radius))
                or
                  ((Gear^.Kind <> gtExplosives)
-                   and (y < LAND_HEIGHT)
+                   and (y < cWaterLine)
                    and (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 110, 110) = nil))) then
                 begin
                 ar[cnt].X:= x;
@@ -1787,6 +1788,7 @@ if cnt2 > 0 then
     else
     begin
     OutError('Can''t find place for Gear', false);
+    if Gear^.Kind = gtHedgehog then PHedgehog(Gear^.Hedgehog)^.Effects[heResurrectable] := false;
     DeleteGear(Gear);
     Gear:= nil
     end
