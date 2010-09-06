@@ -151,8 +151,7 @@ PageMain::PageMain(QWidget* parent) :
         mainNote->setText(QLabel::tr("Tip: ") + Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()]);
     }
     else
-        //mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
-        mainNote->setText();
+        mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
 
     pageLayout->addWidget(mainNote, 4, 1, 1, 2);
 
