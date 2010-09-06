@@ -774,7 +774,7 @@ else
             end;
 
 if (CurAmmoGear = nil)
-    or ((Ammoz[Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) then
+    or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) then
     begin
     if ((Gear^.Message and gm_Slot) <> 0) then
         begin
