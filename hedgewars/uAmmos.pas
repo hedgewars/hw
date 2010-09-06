@@ -42,6 +42,7 @@ procedure SetWeapon(weap: TAmmoType);
 procedure DisableSomeWeapons;
 procedure ResetWeapons;
 function  GetAmmoByNum(num: Longword): PHHAmmo;
+function  GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 
 var shoppa: boolean;
 
@@ -156,6 +157,18 @@ TryDo(num < StoreCnt, 'Invalid store number', true);
 exit(StoresList[num])
 end;
 
+function GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
+var ammoidx, slot: LongWord;
+begin
+with Hedgehog do
+    begin
+    slot:= Ammoz[CurAmmoType].Slot;
+    ammoidx:= 0;
+    while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do inc(ammoidx);
+    GetAmmoEntry:= @Ammo^[slot, ammoidx];
+    end
+end;
+
 procedure AssignStores;
 var t: LongInt;
     i: Longword;
@@ -165,7 +178,10 @@ for t:= 0 to Pred(TeamsCount) do
       begin
       for i:= 0 to cMaxHHIndex do
           if Hedgehogs[i].Gear <> nil then
+             begin
              Hedgehogs[i].Ammo:= GetAmmoByNum(Hedgehogs[i].AmmoStore);
+             Hedgehogs[i].CurAmmoType:= amNothing;
+             end
       end
 end;
 
@@ -213,17 +229,20 @@ begin
 end;
 
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
+var CurWeapon: PAmmo;
 begin
+CurWeapon:= GetAmmoEntry(Hedgehog);
 with Hedgehog do
     begin
+
     MultiShootAttacks:= 0;
-    with Ammo^[CurSlot, CurAmmo] do
+    with CurWeapon^ do
         if Count <> AMMO_INFINITE then
             begin
             dec(Count);
             if Count = 0 then
                 begin
-                PackAmmo(Ammo, CurSlot);
+                PackAmmo(Ammo, Ammoz[AmmoType].Slot);
                 SwitchNotHeldAmmo(Hedgehog)
                 end
             end
@@ -264,33 +283,37 @@ with Hedgehog do
 end;
 
 procedure SwitchToFirstLegalAmmo(var Hedgehog: THedgehog);
+var slot, ammoidx: LongWord;
 begin
 with Hedgehog do
     begin
-    CurAmmo:= 0;
-    CurSlot:= 0;
-    while (CurSlot <= cMaxSlotIndex) and
-        ((Ammo^[CurSlot, CurAmmo].Count = 0) or
-        (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
+    CurAmmoType:= amNothing;
+    slot:= 0;
+    ammoidx:= 0;
+    while (slot <= cMaxSlotIndex) and
+        ((Ammo^[slot, ammoidx].Count = 0) or
+        (Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
         do
         begin
-        while (CurAmmo <= cMaxSlotAmmoIndex) and
-            ((Ammo^[CurSlot, CurAmmo].Count = 0) or
-            (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
-            do inc(CurAmmo);
+        while (ammoidx <= cMaxSlotAmmoIndex) and
+            ((Ammo^[slot, ammoidx].Count = 0) or
+            (Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
+            do inc(ammoidx);
 
-        if (CurAmmo > cMaxSlotAmmoIndex) then
+        if (ammoidx > cMaxSlotAmmoIndex) then
             begin
-            CurAmmo:= 0;
-            inc(CurSlot)
+            ammoidx:= 0;
+            inc(slot)
             end
         end;
-    TryDo(CurSlot <= cMaxSlotIndex, 'Ammo slot index overflow', true)
+    TryDo(slot <= cMaxSlotIndex, 'Ammo slot index overflow', true);
+    CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
     end
 end;
 
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 var s: shortstring;
+    CurWeapon: PAmmo;
 begin
 TargetPoint.X:= NoPointX;
 
@@ -298,13 +321,16 @@ with Hedgehog do
     begin
     Timer:= 10;
 
-    if (Ammo^[CurSlot, CurAmmo].Count = 0) then
+    CurWeapon:= GetAmmoEntry(Hedgehog);
+
+    if (CurWeapon^.Count = 0) then
         SwitchToFirstLegalAmmo(Hedgehog);
 
-        //bad things could happen here in case CurSlot is overflowing
-    ApplyAngleBounds(Hedgehog, Ammo^[CurSlot, CurAmmo].AmmoType);
+    CurWeapon:= GetAmmoEntry(Hedgehog);
 
-    with Ammo^[CurSlot, CurAmmo] do
+    ApplyAngleBounds(Hedgehog, CurWeapon^.AmmoType);
+
+    with CurWeapon^ do
         begin
         if AmmoType <> amNothing then
             begin
@@ -323,8 +349,8 @@ with Hedgehog do
             Gear^.State:= Gear^.State and not gstHHChooseTarget;
             isCursorVisible:= false
             end;
-        if (CurAmmoGear <> nil) and ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0) then
-            ShowCrosshair:= (CurAmmoGear^.Ammo^.Propz and ammoprop_NoCrossHair) = 0
+        if (CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) then
+            ShowCrosshair:= (Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoCrossHair) = 0
         else
             ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0;
         end
@@ -334,8 +360,8 @@ end;
 procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 begin
 with Hedgehog do
-    if ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_DontHold) <> 0) or
-        (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0) then
+    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_DontHold) <> 0) or
+        (Ammoz[CurAmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0) then
         SwitchToFirstLegalAmmo(Hedgehog);
 end;
 

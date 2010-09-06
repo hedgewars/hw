@@ -190,7 +190,7 @@ var x, y, i, t, g: LongInt;
     Slot, Pos, STurns: LongInt;
     Ammo: PHHAmmo;
 begin
-if  (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then bShowAmmoMenu:= false;
+if  (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then bShowAmmoMenu:= false;
 if bShowAmmoMenu then
    begin
    FollowGear:= nil;
@@ -613,8 +613,8 @@ begin
                 tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
                 for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
                     DrawSprite(sprPower,
-                            hwRound(Gear^.X) + GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Gear^.dX), Gear^.Angle) + round(WorldDx + tdx * (24 + i * 2)) - 16,
-                            hwRound(Gear^.Y) + GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Gear^.Angle) + round(WorldDy + tdy * (24 + i * 2)) - 16,
+                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + round(WorldDx + tdx * (24 + i * 2)) - 16,
+                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + round(WorldDy + tdy * (24 + i * 2)) - 16,
                             i)
                 end
         end;
@@ -649,7 +649,7 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     begin
     with PHedgehog(CurrentHedgehog)^ do
         begin
-        if (Ammo^[CurSlot, CurAmmo].AmmoType = amBee) then
+        if (CurAmmoType = amBee) then
             DrawRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
         else
             DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
@@ -987,8 +987,8 @@ if isCursorVisible then
      with CurrentHedgehog^ do
        if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
          begin
-         i:= Ammo^[CurSlot, CurAmmo].Pos;
-         with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
+         i:= GetAmmoEntry(CurrentHedgehog^)^.Pos;
+         with Ammoz[CurAmmoType] do
            if PosCount > 1 then
              DrawSprite(PosSprite, CursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - CursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
          end;

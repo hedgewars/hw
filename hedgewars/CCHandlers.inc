@@ -623,7 +623,7 @@ with CurrentHedgehog^.Gear^,
             end;
         {$IFDEF DEBUGFILE}AddFilelog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));{$ENDIF}
         State:= State and not gstHHChooseTarget;
-        if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackingPut) <> 0 then
+        if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
             Message:= Message or gm_Attack;
         end
     else
@@ -693,7 +693,7 @@ else
 
             if bShowAmmoMenu then bShowAmmoMenu:= false
             else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or 
-                    ((MultiShootAttacks > 0) and ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NoRoundEndHint) = 0)) or
+                    ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) = 0)) or
                     ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
             end;
     if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1

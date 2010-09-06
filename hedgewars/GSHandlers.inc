@@ -697,7 +697,7 @@ begin
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
            and (Land[y, x] <> 0) then inc(Gear^.Damage);
         if Gear^.Damage > 5 then
-            if Gear^.Ammo^.AmmoType = amDEagle then
+            if Gear^.AmmoType = amDEagle then
                 AmmoShove(Gear, 7, 20)
         else
             AmmoShove(Gear, Gear^.Timer, 20);
@@ -727,7 +727,7 @@ begin
     begin
         if (Gear^.Kind = gtSniperRifleShot) and ((GameFlags and gfLaserSight) = 0) then
             cLaserSighting := false;
-        if (Gear^.Ammo^.NumPerTurn <= CurrentHedgehog^.MultiShootAttacks) and
+        if (Ammoz[Gear^.AmmoType].Ammo.NumPerTurn <= CurrentHedgehog^.MultiShootAttacks) and
            ((GameFlags and gfArtillery) = 0) then cArtillery := false;
         Gear^.doStep := @doStepShotIdle
     end;
@@ -1270,7 +1270,7 @@ begin
             with PHedgehog(Gear^.Hedgehog)^ do
             begin
                 PlaySound(sndRopeRelease);
-                if Ammo^[CurSlot, CurAmmo].AmmoType <> amParachute then
+                if CurAmmoType <> amParachute then
                     WaitCollision
                 else
                     DeleteMe
@@ -3266,22 +3266,23 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doPortalColorSwitch();
-var
-    flags: LongWord;
+var flags: LongWord;
+    CurWeapon: PAmmo;
 begin
     if (CurrentHedgehog <> nil)
        and (CurrentHedgehog^.Gear <> nil)
        and ((CurrentHedgehog^.Gear^.Message and gm_Switch) <> 0) then
         With CurrentHedgehog^ do
-            if (Ammo^[CurSlot, CurAmmo].AmmoType = amPortalGun) then
+            if (CurAmmoType = amPortalGun) then
             begin
                 CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gm_Switch;
-
-                flags := Ammo^[CurSlot, CurAmmo].Timer and not 2;
+                
+                CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
+                flags := CurWeapon^.Timer and not 2;
                 if (flags and 1) = 0 then
-                    Ammo^[CurSlot, CurAmmo].Timer := flags or 1
+                    CurWeapon^.Timer := flags or 1
                 else
-                    Ammo^[CurSlot, CurAmmo].Timer := flags and not 1;
+                    CurWeapon^.Timer := flags and not 1;
             end;
 end;
 
@@ -3448,13 +3449,13 @@ begin
 
 {        // breaks (some) loops
         if Distance(iterator^.dX, iterator^.dY) > _0_96 then
-        begin
+            begin
             iterator^.dX := iterator^.dX + signAs(cGravity * getRandom(1000),iterator^.dX);
             iterator^.dY := iterator^.dY + signAs(cGravity * getRandom(1000),iterator^.dY);
             s := _0_96 / Distance(iterator^.dX, iterator^.dY);
             iterator^.dX := s * iterator^.dX;
             iterator^.dY := s * iterator^.dX;
-        end;
+            end;
 }
     end;
 end;
@@ -3467,20 +3468,24 @@ var
 procedure loadNewPortalBall(oldPortal: PGear; destroyGear: Boolean);
 var 
     flags: LongWord;
+    CurWeapon: PAmmo;
 begin
     if CurrentHedgehog <> nil then
-        With CurrentHedgehog^ do
-            if (Ammo^[CurSlot, CurAmmo].AmmoType = amPortalGun) then
+        with CurrentHedgehog^ do
             begin
-                flags := Ammo^[CurSlot, CurAmmo].Timer;
+            CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
+            if (CurAmmoType = amPortalGun) then
+                begin
+                flags := CurWeapon^.Timer;
 
                 if destroyGear xor ((oldPortal^.Tag and 2) = 0) then
                     flags := flags or 1
                 else
                     flags := flags and not 1;
 
-                Ammo^[CurSlot, CurAmmo].Timer := flags and not 2;
+                CurWeapon^.Timer := flags and not 2;
                 // make the ball visible
+                end
             end;
 
     if destroyGear then oldPortal^.Timer:= 0;
@@ -3542,6 +3547,7 @@ procedure doStepPortalShot(newPortal: PGear);
 var 
     iterator: PGear;
     s: hwFloat;
+    CurWeapon: PAmmo;
 begin
     s:= Distance (newPortal^.dX, newPortal^.dY);
 
@@ -3558,6 +3564,7 @@ begin
     if CurrentHedgehog <> nil then
         With CurrentHedgehog^ do
         begin
+            CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
             // let's save the HH's dX's direction so we can decide where the "top" of the portal hole
             newPortal^.Elasticity.isNegative := CurrentHedgehog^.Gear^.dX.isNegative;
             // when doing a backjump the dx is the opposite of the facing direction
@@ -3565,10 +3572,10 @@ begin
                 newPortal^.Elasticity.isNegative := not newPortal^.Elasticity.isNegative;
 
             // make portal gun look unloaded
-            Ammo^[CurSlot, CurAmmo].Timer := Ammo^[CurSlot, CurAmmo].Timer or 2;
+            CurWeapon^.Timer := CurWeapon^.Timer or 2;
 
             // set portal to the currently chosen color
-            if ((Ammo^[CurSlot, CurAmmo].Timer and 1) <> 0) then
+            if ((CurWeapon^.Timer and 1) <> 0) then
                 newPortal^.Tag := newPortal^.Tag or 2;
 
             iterator := GearsList;

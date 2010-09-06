@@ -22,7 +22,8 @@ unit uTeams;
 interface
 uses uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound;
 
-type PHHAmmo = ^THHAmmo;
+type 
+    PHHAmmo = ^THHAmmo;
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
 
     PHedgehog = ^THedgehog;
@@ -37,8 +38,8 @@ type PHHAmmo = ^THHAmmo;
             HealthTagTex,
             HatTex: PTexture;
             Ammo: PHHAmmo;
+            CurAmmoType: TAmmoType;
             AmmoStore: Longword;
-            CurSlot, CurAmmo: LongWord;
             Team: PTeam;
             MultiShootAttacks: Longword;
             visStepPos: LongWord;

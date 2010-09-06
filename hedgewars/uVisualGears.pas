@@ -386,7 +386,6 @@ end;
 
 procedure DrawVisualGears(Layer: LongWord);
 var Gear: PVisualGear;
-    i: LongInt;
 begin
 Gear:= VisualGearsList;
 case Layer of

@@ -32,8 +32,7 @@ type
             AdvBounce: Longword;
             Invulnerable: Boolean;
             RenderTimer: Boolean;
-            Ammo : PAmmo;
-            AmmoType : TAmmoType;  // Used to track AmmoType at time of Gear creation, since Ammo can be reassigned
+            AmmoType : TAmmoType;
             State : Longword;
             X : hwFloat;
             Y : hwFloat;
@@ -996,10 +995,10 @@ procedure DrawAltWeapon(Gear: PGear; sx, sy: LongInt);
 begin
 with PHedgehog(Gear^.Hedgehog)^ do
     begin
-    if not (((Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and ((Gear^.State and gstAttacked) = 0)) then
+    if not (((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and ((Gear^.State and gstAttacked) = 0)) then
         exit;
     DrawTexture(round(sx + 16), round(sy + 16), ropeIconTex);
-    DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, round(sx + 30), round(sy + 30), ord(Ammo^[CurSlot, CurAmmo].AmmoType) - 1, 1, 32, 32);
+    DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, round(sx + 30), round(sy + 30), ord(CurAmmoType) - 1, 1, 32, 32);
     end;
 end;
 

@@ -125,14 +125,14 @@ type
             sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
             sndComeonthen);
 
-    TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
-            amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
-            amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
-            amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
-            amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
-            amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
-            amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun,
-            amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer);
+    TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
+            amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip, // 13
+            amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch, // 18
+            amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake, // 24
+            amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, // 30
+            amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
+            amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
+            amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer); // 48
 
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
 
@@ -201,7 +201,6 @@ const
     errmsgIncorrectUse    = 'Incorrect use';
     errmsgShouldntRun     = 'This program shouldn''t be run manually';
     errmsgWrongNumber     = 'Wrong parameters number';
-    errmsgSlotsOverflow   = 'CurSlot overflowed';
 
     msgLoading           = 'Loading ';
     msgOK                = 'ok';

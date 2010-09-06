@@ -6,6 +6,7 @@ var i, t: LongInt;
     defaultPos, HatVisible: boolean;
     VertexBuffer: array [0..1] of TVertex2f;
     HH: PHedgehog;
+    CurWeapon: PAmmo;
 begin
 HH:= PHedgehog(Gear^.Hedgehog);
 if HH^.Unplaced then exit;
@@ -80,8 +81,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
         dy:= -Cos(Gear^.Angle * pi / cMaxAngle);
         if cLaserSighting then
             begin
-            lx:= GetLaunchX(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, hwSign(Gear^.dX) * m, Gear^.Angle);
-            ly:= GetLaunchY(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, Gear^.Angle);
+            lx:= GetLaunchX(HH^.CurAmmoType, hwSign(Gear^.dX) * m, Gear^.Angle);
+            ly:= GetLaunchY(HH^.CurAmmoType, Gear^.Angle);
 
             // ensure we start outside the hedgehog (he's solid after all)
             while abs(lx * lx + ly * ly) < (Gear^.radius * Gear^.radius) do
@@ -139,8 +140,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 end;
             end;
         // draw crosshair
-        cx:= Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, hwSign(Gear^.dX) * m, Gear^.Angle));
-        cy:= Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, Gear^.Angle));
+        cx:= Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.CurAmmoType, hwSign(Gear^.dX) * m, Gear^.Angle));
+        cy:= Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.CurAmmoType, Gear^.Angle));
         DrawRotatedTex(HH^.Team^.CrosshairTex,
                 12, 12, cx + WorldDx, cy + WorldDy, 0,
                 hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle);
@@ -381,7 +382,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
             else aangle:= aangle+((240-aangle)*HH^.Timer/10);
             dec(HH^.Timer)
             end;
-        amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
+        amt:= CurrentHedgehog^.CurAmmoType;
+        CurWeapon:= GetAmmoEntry(HH^);
         case amt of
             amBazooka: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
             amMortar: DrawRotated(sprHandMortar, hx, hy, hwSign(Gear^.dX), aangle);
@@ -392,10 +394,10 @@ if (Gear^.State and gstHHDriven) <> 0 then
             amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
             amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
             amSineGun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
-            amPortalGun: if (HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].Timer and 2) <> 0 then // Add a new Hedgehog value instead of abusing timer?
+            amPortalGun: if (CurWeapon^.Timer and 2) <> 0 then // Add a new Hedgehog value instead of abusing timer?
                             DrawRotatedF(sprPortalGun, hx, hy, 0, hwSign(Gear^.dX), aangle)
                       else
-                            DrawRotatedF(sprPortalGun, hx, hy, 1+(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].Timer and 1), hwSign(Gear^.dX), aangle);
+                            DrawRotatedF(sprPortalGun, hx, hy, 1+(CurWeapon^.Timer and 1), hwSign(Gear^.dX), aangle);
             amSniperRifle: DrawRotatedF(sprSniperRifle, hx, hy, 0, hwSign(Gear^.dX), aangle);
             amBlowTorch: DrawRotated(sprHandBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
             amCake: DrawRotated(sprHandCake, hx, hy, hwSign(Gear^.dX), aangle);
@@ -584,7 +586,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
     begin
 (*    if (CurAmmoGear = nil) then
         begin
-        amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
+        amt:= CurrentHedgehog^.CurAmmoType;
         case amt of
             amJetpack: DrawSprite(sprJetpack, sx-32, sy-32, 0);
             end

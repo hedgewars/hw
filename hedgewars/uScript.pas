@@ -417,7 +417,6 @@ end;
 function lc_hogsay(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
    vgear : PVisualGear;
-   text : ShortString;
 begin
     if lua_gettop(L) <> 3 then
         begin

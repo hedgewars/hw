@@ -71,7 +71,7 @@ for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
        begin
        with CurrentHedgehog^ do
-            a:= Ammo^[CurSlot, CurAmmo].AmmoType;
+            a:= CurAmmoType;
        aa:= a;
        repeat
         if (CanUseAmmo[a]) and

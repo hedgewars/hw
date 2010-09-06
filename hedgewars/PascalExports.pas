@@ -218,12 +218,9 @@ begin
 end;
 
 function HW_isWeaponTimerable: boolean; cdecl; export;
-var CurSlot, CurAmmo: LongWord;
 begin
-    CurSlot:= CurrentHedgehog^.CurSlot;
-    CurAmmo:= CurrentHedgehog^.CurAmmo;
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0) then
-        exit( (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0)
+        exit( (CurrentHedgehog^.CurWeapon^.Propz and ammoprop_Timerable) <> 0)
     else
         exit(false);
 end;
@@ -237,12 +234,9 @@ begin
 end;
 
 function HW_isWeaponRope: boolean cdecl; export;
-var CurSlot, CurAmmo: LongWord;
 begin
-    CurSlot:= CurrentHedgehog^.CurSlot;
-    CurAmmo:= CurrentHedgehog^.CurAmmo;
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0) then
-        exit (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].AmmoType = amRope)
+        exit (CurrentHedgehog^.CurWeapon^.AmmoType = amRope)
     else
         exit(false);
 end;
@@ -253,13 +247,10 @@ begin
 end;
 
 procedure HW_setPianoSound(snd: LongInt); cdecl; export;
-var CurSlot, CurAmmo: LongWord;
 begin
-    CurSlot:= CurrentHedgehog^.CurSlot;
-    CurAmmo:= CurrentHedgehog^.CurAmmo;
     // this most likely won't work in network game
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0)
-       and (CurrentHedgehog^.Ammo^[CurSlot, CurAmmo].AmmoType = amPiano) then
+       and (CurrentHedgehog^.CurWeapon^.AmmoType = amPiano) then
         case snd of
             0: PlaySound(sndPiano0);
             1: PlaySound(sndPiano1);

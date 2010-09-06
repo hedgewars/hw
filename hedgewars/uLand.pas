@@ -66,7 +66,7 @@ type TPixAr = record
 
 procedure LogLandDigest;
 var s: shortstring;
-    adler, i, tmp: LongInt;
+    adler, i: LongInt;
 begin
 adler:= 1;
 for i:= 0 to LAND_HEIGHT-1 do
