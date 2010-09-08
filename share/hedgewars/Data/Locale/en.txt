@@ -100,7 +100,7 @@
 02:00=Poor poor %1...
 02:00=%1 prefers wormux
 02:00=%1 has been blocking shots with his face
-02:00=%1 is a hero amongst me...err..hogs
+02:00=%1 is a hero amongst me...err...hogs
 02:00=%1 finds his place in Valhalla
 02:00=%1 has left the building
 02:00=%1 goes the way of the dinosaurs
@@ -143,7 +143,7 @@
 02:01=%1 is sleeping with the fishes
 02:01=%1 thinks the water physics suck in this game
 02:01=%1 looks thirsty
-02:01=the sea claims %1
+02:01=The sea claims %1
 02:01=%1 is lost at sea
 02:01=%1 should have brought his scuba gear
 02:01=%1 gets a burial at sea
@@ -242,7 +242,7 @@
 02:05=Medic!
 02:05=First aid from the skies!
 02:05=A health pack for you
-02:05=Good health.. in box form!
+02:05=Good health... in box form!
 02:05=The doctor calls
 02:05=Fresh band-aids!
 02:05=This will make you feel better
@@ -474,9 +474,9 @@
 04:40=Set some ground on fire using this bottle filled|with (soon to be) burning liquid.|Attack: Hold to shoot with more power
 04:41=The evidence nature might even top the flying|saucer. Birdy can carry your hog around and|drop eggs on your enemies!|Attack: Activate and drop eggs|Up/Left/Right: Flap in one direction
 04:42=This portable portal device is capable|of instantly transporting you, your enemies,|or your weaponry between two points on the|terrain.|Use it wisely and your campaign will be a...|HUGE SUCCESS!|Attack: Shoot a portal|Switch: Cycle portal colours
-04:43=Make your musical debut an explosive success! |Drop a piano from the heavens, but beware... |someone needs to play it, and that may cost you |your life!|Cursor: Select target region|F1-F9: Play the piano
+04:43=Make your musical debut an explosive success!|Drop a piano from the heavens, but beware...|someone needs to play it, and that may cost you|your life!|Cursor: Select target region|F1-F9: Play the piano
 04:44=This isn't just cheese, it's biological warfare!|It won't cause an huge amount of damage once|the timer reaches zero but it will definitely|poison anyone unlucky to touch the smell!|1-5: Set grenade's timer|Attack: Hold to throw with more power
-04:45=All those physics classes have finally |paid off, launch a devastating Sine |wave at your foes. |Watch out, this weapon packs quite a kick. (This weapon is incomplete)|Attack: Shoot
+04:45=All those physics classes have finally|paid off, launch a devastating Sine|wave at your foes.|Watch out, this weapon packs quite a kick. (This weapon is incomplete)|Attack: Shoot
 04:46=Cover your foes with sizzling liquid flame.|Heartwarming!|Attack: Activate|Up/Down: Continue aiming|Left/Right: Modify spitting power
 04:47=Double the fun with two spiky, sneaky, sticky mines.|Set up a chain reaction or defend yourself (or both!)|Attack: Hold to shoot with more power (twice)
 04:48=Why should the moles get all the abuse?|Wacking a hog can be just as fun! A good|blow from this hammer will shave off one|third of a hog's health and plunge them|underground.|Attack: Activate
