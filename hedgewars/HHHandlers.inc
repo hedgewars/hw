@@ -43,7 +43,6 @@ end;
 // Shouldn't more of this ammo switching stuff be moved to uAmmos ?
 procedure ChangeAmmo(Gear: PGear);
 var slot, ammoidx, i: Longword;
-    CurWeapon: PAmmo;
 begin
 slot:= Gear^.MsgParam;
 
@@ -52,13 +51,12 @@ with PHedgehog(Gear^.Hedgehog)^ do
     Gear^.Message:= Gear^.Message and not gm_Slot;
     ammoidx:= 0;
     while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do inc(ammoidx);
-    CurWeapon:= @Ammo^[slot, ammoidx];
 
     if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
-       ((MultiShootAttacks > 0) and ((CurWeapon^.Propz and ammoprop_NoRoundEndHint) = 0)) or
+       ((MultiShootAttacks > 0) and (CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) = 0)) or
        ((Gear^.State and gstHHDriven) = 0) then exit;
 
-    if ((CurWeapon^.Propz and ammoprop_NoRoundEndHint) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
+    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
 
     MultiShootAttacks:= 0;
     Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
@@ -774,7 +772,8 @@ else
             end;
 
 if (CurAmmoGear = nil)
-    or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) then
+    or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) 
+    or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0) then
     begin
     if ((Gear^.Message and gm_Slot) <> 0) then
         begin
