@@ -670,8 +670,8 @@ begin
             begin
             tmp:= 0;
             if PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] then
-                inc(tmp, min(ModifyDamage(5,Gear), max(0,Gear^.Health - 1 - Gear^.Damage)));
-            inc(tmp, min(cHealthDecrease, max(0,Gear^.Health - 1 - Gear^.Damage)));
+                inc(tmp, ModifyDamage(cHealthDecrease, Gear));
+            inc(tmp, cHealthDecrease);
             if PHedgehog(Gear^.Hedgehog)^.King then
                 begin
                 flag:= false;
@@ -681,9 +681,13 @@ begin
                         (not team^.Hedgehogs[i].King) and
                         (team^.Hedgehogs[i].Gear^.Health > team^.Hedgehogs[i].Gear^.Damage)
                     then flag:= true;
-                if not flag then inc(tmp, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)))
+                if not flag then inc(tmp, cHealthDecrease)
                 end;
-            if tmp > 0 then ApplyDamage(Gear, tmp, dsPoison);
+            if tmp > 0 then 
+                begin
+                inc(Gear^.Damage, min(tmp, max(0,Gear^.Health - 1 - Gear^.Damage)));
+                HHHurt(Gear^.Hedgehog, dsPoison);
+                end
             end;
 
         Gear:= Gear^.NextGear
