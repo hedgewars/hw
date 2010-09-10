@@ -118,6 +118,28 @@ begin
     lc_hidemission:= 0;
 end;
 
+function lc_campaignlock(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) = 1 then
+        begin
+        // to be done
+        end
+    else
+        LuaError('Lua: Wrong number of parameters passed to CampaignLock!');
+    lc_campaignlock:= 0;
+end;
+
+function lc_campaignunlock(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) = 1 then
+        begin
+        // to be done
+        end
+    else
+        LuaError('Lua: Wrong number of parameters passed to CampaignUnlock!');
+    lc_campaignunlock:= 0;
+end;
+
 function lc_spawnhealthcrate(L: Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
@@ -1056,6 +1078,8 @@ lua_register(luaState, 'SetZoom', @lc_setzoom);
 lua_register(luaState, 'GetZoom', @lc_getzoom);
 lua_register(luaState, 'HogSay', @lc_hogsay);
 lua_register(luaState, 'HogTurnLeft', @lc_hogturnleft);
+lua_register(luaState, 'CampaignLock', @lc_campaignlock);
+lua_register(luaState, 'CampaignUnlock', @lc_campaignunlock);
 
 
 ScriptClearStack; // just to be sure stack is empty

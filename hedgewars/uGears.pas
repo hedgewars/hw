@@ -731,6 +731,8 @@ while t <> nil do
             Gear^.Tex:= RenderStringTex(inttostr(Gear^.Timer div 1000), cWhiteColor, fntSmall);
             end;
         Gear^.doStep(Gear);
+        // might be useful later
+        //ScriptCall('OnGearStep', Gear^.uid);
         end
     end;
 
@@ -969,6 +971,7 @@ begin
         end;
     end;
     inc(Gear^.Damage, Damage);
+    ScriptCall('OnGearDamage', Gear^.UID, Damage);
 end;
 
 procedure SetAllToActive;
@@ -1573,7 +1576,7 @@ begin
     FindPlace(gear, false, 0, LAND_WIDTH); 
     if gear <> nil then begin
         RenderHealth(PHedgehog(gear^.Hedgehog)^);
-        ScriptCall('onResurrect', gear^.uid);
+        ScriptCall('onGearResurrect', gear^.uid);
     end;
     RecountTeamHealth(tempTeam);
 end;
