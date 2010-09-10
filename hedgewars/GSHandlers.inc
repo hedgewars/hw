@@ -2677,7 +2677,7 @@ begin
        or (not TestCollisionYWithGear(Gear, hwSign(Gear^.dY))
        and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)))
 // CheckLandValue returns true if the type isn't matched
-       or not CheckLandValue(hwRound(Gear^.Y), hwRound(Gear^.X), lfIndestructible) then
+       or not CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y), lfIndestructible) then
     begin
         //out of time or exited ground
         StopSound(Gear^.SoundChannel);
