@@ -2306,6 +2306,9 @@ begin
     HHGear^.State := HHGear^.State or gstNoDamage;
     DeleteCI(HHGear);
 
+    Gear^.X := HHGear^.X;
+    Gear^.Y := HHGear^.Y;
+
     i := 2;
     repeat
         Gear^.X := Gear^.X + HHGear^.dX;
