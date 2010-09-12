@@ -1520,8 +1520,8 @@ FreeWeaponTooltip;
 
 // image region
 i:= LongInt(atype) - 1;
-r.x:= (i shr 5) * 32;
-r.y:= (i mod 32) * 32;
+r.x:= (i shr 4) * 32;
+r.y:= (i mod 16) * 32;
 r.w:= 32;
 r.h:= 32;
 
