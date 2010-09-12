@@ -179,6 +179,7 @@ begin
     if _0_4 < Gear^.dY then
     begin
         dmg := ModifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70), Gear);
+        PlaySound(sndBump);
         if dmg < 1 then exit;
 
         for i:= min(12, (3 + dmg div 10)) downto 0 do
