@@ -196,7 +196,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                            begin
                            DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 0, i, 32, 32,
                                i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
-                           if HatTex^.w > 32 then
+                           if HatTex^.w > 64 then
                                begin
                                Tint(HH^.Team^.Clan^.Color);
                                DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 32, i, 32, 32,
@@ -226,7 +226,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                             hwSign(Gear^.dX),
                             32,
                             32);
-                        if HatTex^.w > 32 then
+                        if HatTex^.w > 64 then
                             begin
                             Tint(HH^.Team^.Clan^.Color);
                             DrawTextureF(HatTex,
@@ -543,7 +543,7 @@ with HH^ do
                 hwSign(Gear^.dX),
                 32,
                 32);
-            if HatTex^.w > 32 then
+            if HatTex^.w > 64 then
                 begin
                 Tint(HH^.Team^.Clan^.Color);
                 DrawTextureF(HatTex,
@@ -567,7 +567,7 @@ with HH^ do
                 hwSign(Gear^.dX)*m,
                 32,
                 32);
-            if HatTex^.w > 32 then
+            if HatTex^.w > 64 then
                 begin
                 Tint(HH^.Team^.Clan^.Color);
                 DrawTextureF(HatTex,
