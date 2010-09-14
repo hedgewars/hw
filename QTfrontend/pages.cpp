@@ -1089,7 +1089,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     roomsList->setAlternatingRowColors(true);
     pageLayout->addWidget(roomsList, 1, 0, 3, 1);
-    pageLayout->setRowStretch(2, 100);
+    pageLayout->setRowStretch(2, 320);
     
     QHBoxLayout * filterLayout = new QHBoxLayout();
     
