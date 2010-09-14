@@ -1176,6 +1176,11 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 {
     listFromServer = list;
     
+    QString selection = "";
+    
+    if(QTableWidgetItem *item = roomsList->item(roomsList->currentRow(), 0))
+        selection = item->text();
+    
     roomsList->clear();
     roomsList->setColumnCount(7);
     roomsList->setHorizontalHeaderLabels(
@@ -1303,6 +1308,8 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         item->setToolTip(tr("The Weapon Scheme defines available weapons and their ammunition count."));
         roomsList->setItem(r, 6, item);
 
+        if(!list[i + 1].compare(selection) && !selection.isEmpty())
+            roomsList->selectionModel()->setCurrentIndex(roomsList->model()->index(r,0), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
     }
    roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
    roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
