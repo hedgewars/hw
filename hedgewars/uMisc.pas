@@ -475,11 +475,11 @@ Surface2Tex^.w:= surf^.w;
 Surface2Tex^.h:= surf^.h;
 
 if (surf^.format^.BytesPerPixel <> 4) then
-begin
+    begin
     TryDo(false, 'Surface2Tex failed, expecting 32 bit surface', true);
     Surface2Tex^.id:= 0;
     exit
-end;
+    end;
 
 
 glGenTextures(1, @Surface2Tex^.id);
@@ -490,7 +490,7 @@ if SDL_MustLock(surf) then
     SDLTry(SDL_LockSurface(surf) >= 0, true);
 
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then
-begin
+    begin
     tw:= toPowerOf2(Surf^.w);
     th:= toPowerOf2(Surf^.h);
 
@@ -499,33 +499,33 @@ begin
 
     GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
 
-        fromP4:= Surf^.pixels;
-        toP4:= tmpp;
+    fromP4:= Surf^.pixels;
+    toP4:= tmpp;
 
-        for y:= 0 to Pred(Surf^.h) do
+    for y:= 0 to Pred(Surf^.h) do
         begin
-            for x:= 0 to Pred(Surf^.w) do toP4^[x]:= fromP4^[x];
-            for x:= Surf^.w to Pred(tw) do toP4^[x]:= 0;
-            toP4:= @(toP4^[tw]);
-            fromP4:= @(fromP4^[Surf^.pitch div 4]);
+        for x:= 0 to Pred(Surf^.w) do toP4^[x]:= fromP4^[x];
+        for x:= Surf^.w to Pred(tw) do toP4^[x]:= 0;
+        toP4:= @(toP4^[tw]);
+        fromP4:= @(fromP4^[Surf^.pitch div 4])
         end;
 
-        for y:= Surf^.h to Pred(th) do
+    for y:= Surf^.h to Pred(th) do
         begin
-            for x:= 0 to Pred(tw) do toP4^[x]:= 0;
-            toP4:= @(toP4^[tw]);
+        for x:= 0 to Pred(tw) do toP4^[x]:= 0;
+        toP4:= @(toP4^[tw])
         end;
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmpp);
 
     FreeMem(tmpp, tw * th * surf^.format^.BytesPerPixel)
-end
+    end
 else
-begin
+    begin
     Surface2Tex^.rx:= 1.0;
     Surface2Tex^.ry:= 1.0;
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surf^.w, surf^.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surf^.pixels);
-end;
+    end;
 
 ResetVertexArrays(Surface2Tex);
 
