@@ -274,27 +274,27 @@ var s: shortstring;
                             texsurf:= LoadImage(Pathz[ptHats] + '/Reserved/' + Copy(Hat,9,Length(s)-8), ifNone)
                         else
                             texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
-                            if texsurf <> nil then
+                        if texsurf <> nil then
                             begin
-                                HatTex:= Surface2Tex(texsurf, true);
-                                SDL_FreeSurface(texsurf)
+                            HatTex:= Surface2Tex(texsurf, true);
+                            SDL_FreeSurface(texsurf)
                             end;
-                            texsurf:= nil;
+                        texsurf:= nil;
                         end
                     end;
         end;
     MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
     iconsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 28, 28, 32, RMask, GMask, BMask, AMask);
-        if iconsurf <> nil then
+    if iconsurf <> nil then
         begin
-            r.x:= 0;
-            r.y:= 0;
-            r.w:= 28;
-            r.h:= 28;
-            DrawRoundRect(@r, cWhiteColor, cNearBlackColor, iconsurf, true);
-            ropeIconTex:= Surface2Tex(iconsurf, false);
-            SDL_FreeSurface(iconsurf);
-            iconsurf:= nil;
+        r.x:= 0;
+        r.y:= 0;
+        r.w:= 28;
+        r.h:= 28;
+        DrawRoundRect(@r, cWhiteColor, cNearBlackColor, iconsurf, true);
+        ropeIconTex:= Surface2Tex(iconsurf, false);
+        SDL_FreeSurface(iconsurf);
+        iconsurf:= nil;
         end;
     end;
 
@@ -325,7 +325,7 @@ var s: shortstring;
 
         // make black pixel be alpha-transparent
         for i:= 0 to texsurf^.w * texsurf^.h - 1 do
-            if PLongwordArray(texsurf^.pixels)^[i] = AMask then PLongwordArray(texsurf^.pixels)^[i]:= 0;
+            if PLongwordArray(texsurf^.pixels)^[i] = AMask then PLongwordArray(texsurf^.pixels)^[i]:= (RMask or GMask or BMask) and Color;
 
         if SDL_MustLock(texsurf) then
             SDL_UnlockSurface(texsurf);
@@ -1082,9 +1082,7 @@ function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surf
 var tmpsurf: PSDL_Surface;
     s: shortstring;
 begin
-    WriteToConsole(msgLoading + filename + '.png (flags: ' + inttostr(imageFlags)+') ');
-{$IFDEF DEBUGFILE}
-    WriteToConsole('[flag translation:');
+    WriteToConsole(msgLoading + filename + '.png [flags:');
     if imageFlags = ifNone then
         WriteToConsole(' None')
     else
@@ -1095,7 +1093,6 @@ begin
         if (imageFlags and ifIgnoreCaps) <> 0 then WriteToConsole(' IgnoreCaps');
         end;
     WriteToConsole('] ');
-{$ENDIF}
 
     s:= filename + '.png';
     tmpsurf:= IMG_Load(Str2PChar(s));
@@ -1111,7 +1108,7 @@ begin
         SDL_FreeSurface(tmpsurf);
         OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
         // dummy surface to replace non-critical textures that failed to load due to their size
-        exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask));
+        exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask));
     end;
 
     tmpsurf:= doSurfaceConversion(tmpsurf);
