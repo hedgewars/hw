@@ -1091,7 +1091,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     roomsList->setShowGrid(false);
     roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
     pageLayout->addWidget(roomsList, 1, 0, 3, 1);
-    pageLayout->setRowStretch(2, 320);
+    pageLayout->setRowStretch(2, 100);
     
     QHBoxLayout * filterLayout = new QHBoxLayout();
     
