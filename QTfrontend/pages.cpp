@@ -112,10 +112,11 @@ PageMain::PageMain(QWidget* parent) :
         Tips << tr("Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!", "Tips");
         Tips << tr("Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.", "Tips");
         Tips << tr("Always remember you're able to set up your own games in local and network/online play. You're not restricted to the 'Simple Game' option.", "Tips");
-        Tips << tr("Connect one or more gamepads before launching the game to be able to assign their controls to your teams.", "Tips");
+        Tips << tr("Connect one or more gamepads before starting the game to be able to assign their controls to your teams.", "Tips");
         Tips << tr("Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.", "Tips").arg("<a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a>");
         Tips << tr("While playing you should give yourself a short break at least once an hour.", "Tips");
         Tips << tr("If your graphics card isn't able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.", "Tips");
+        Tips << tr("If your graphics card isn't able to provide hardware accelerated OpenGL, try to update the associated drivers.", "Tips");
         Tips << tr("We're open to suggestions and constructive feedback. If you don't like something or got a great idea, let us know!", "Tips");
         Tips << tr("Especially while playing online be polite and always remember there might be some minors playing with or against you as well!", "Tips");
         Tips << tr("Special game modes such as 'Vampirism' or 'Karma' allow you to develop completely new tactics. Try them in a custom game!", "Tips");
@@ -137,11 +138,12 @@ PageMain::PageMain(QWidget* parent) :
         Tips << tr("The Flame Thrower is a weapon but it can be used for tunnel digging as well.", "Tips");
         Tips << tr("Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.", "Tips");
         Tips << tr("Want to know who's behind the game? Click on the Hedgewars logo in the main menu to see the credits.", "Tips");
-        Tips << tr("Like hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!", "Tips").arg("<a href=\"http://www.facebook.com/Hedgewars\">Facebook</a>").arg("<a href=\"http://steamcommunity.com/groups/hedgewars\">Steam Community</a>").arg("<a href=\"http://twitter.com/hedgewars\">Twitter</a>");
-        //Tips << tr("", "Tips");
-        //Tips << tr("", "Tips");
-        //Tips << tr("", "Tips");
-        //Tips << tr("", "Tips");
+        Tips << tr("Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!", "Tips").arg("<a href=\"http://www.facebook.com/Hedgewars\">Facebook</a>").arg("<a href=\"http://steamcommunity.com/groups/hedgewars\">Steam Community</a>").arg("<a href=\"http://twitter.com/hedgewars\">Twitter</a>");
+        Tips << tr("Feel free to draw your own graves, hats, flags or even maps and themes! But note that you'll have to share them somewhere to use them online.", "Tips");
+        Tips << tr("Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!", "Tips");
+        // The following tip will require links to app store entries first.
+        //Tips << tr("Want to play Hedgewars any time? Grab the Mobile version for %1 and %2.", "Tips").arg("").arg("");
+        Tips << tr("Keep your video card drivers up to date to avoid issues playing the game.", "Tips");
         //Tips << tr("", "Tips");
 #ifdef _WIN32
         Tips << tr("You can find your Hedgewars configuration files under \"My Documents\\Hedgewars\". Create backups or take the files with you, but don't edit them by hand.", "Tips");
