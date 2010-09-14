@@ -15,6 +15,9 @@ if ((Gear^.State and gstHHHJump) <> 0) and not cArtillery then m:= -1;
 if (Gear^.State and gstHHDeath) <> 0 then
     begin
     DrawSprite(sprHHDeath, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 26 + WorldDy, Gear^.Pos);
+    Tint(HH^.Team^.Clan^.Color);
+    DrawSprite(sprHHDeath, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 26 + WorldDy, Gear^.Pos + 8);
+    Tint($FF, $FF, $FF, $FF);
     exit
     end
 else if (Gear^.State and gstHHGone) <> 0 then
