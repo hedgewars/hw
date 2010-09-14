@@ -153,7 +153,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     for (int i = 0; i < Themes->size(); ++i) {
         QListWidgetItem * lwi = new QListWidgetItem();
         lwi->setText(Themes->at(i));
-        lwi->setTextAlignment(Qt::AlignHCenter);
+        lwi->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(Themes->at(i))));
+        //lwi->setTextAlignment(Qt::AlignHCenter);
         lwThemes->addItem(lwi);
     }
     connect(lwThemes, SIGNAL(currentRowChanged(int)), this, SLOT(themeSelected(int)));
@@ -167,7 +168,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
             "border-color: transparent;"
             "background-color: #0d0544;"
             "color: #ffcc00;"
-            "font: bold 14px;"
+            "font: bold 13px;"
             "}"
         )
     );
