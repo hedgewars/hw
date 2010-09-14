@@ -1088,6 +1088,8 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     roomsList->verticalHeader()->setVisible(false);
     roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     roomsList->setAlternatingRowColors(true);
+    roomsList->setShowGrid(false);
+    roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
     pageLayout->addWidget(roomsList, 1, 0, 3, 1);
     pageLayout->setRowStretch(2, 320);
     
@@ -1174,6 +1176,11 @@ void PageRoomsList::setAdmin(bool flag)
 
 void PageRoomsList::setRoomsList(const QStringList & list)
 {
+    QBrush red(QColor(255, 0, 0));
+    QBrush orange(QColor(127, 127, 0));
+    QBrush yellow(QColor(255, 255, 0));
+    QBrush green(QColor(0, 255, 0));
+
     listFromServer = list;
     
     QString selection = "";
@@ -1215,6 +1222,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
     for(int i = 0, r = 0; i < list.size(); i += 8, r++)
     {
         // if we are joining a game
+        // TODO: Should NOT be done here
         if (gameInLobby) {
             if (gameInLobbyName == list[i + 1]) {
                 gameCanBeJoined = list[i].compare("True");
@@ -1273,6 +1281,9 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setTextAlignment(Qt::AlignCenter);
         item->setToolTip(tr("There are %1 teams participating in this room.", "", list[i + 3].toInt()).arg(list[i + 3]));
+        //Should we highlight "full" games? Might get misinterpreted
+        //if(list[i + 3].toInt() >= cMaxTeams)
+        //    item->setForeground(red);
         roomsList->setItem(r, 2, item);
 
         item = new QTableWidgetItem(list[i + 4].left(15)); // name of host
@@ -1281,9 +1292,15 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         roomsList->setItem(r, 3, item);
 
         if(list[i + 5] == "+rnd+")
+        {
             item = new QTableWidgetItem(tr("Random Map")); // selected map (is randomized)
+            item->setIcon(QIcon(":/res/mapRandom.png"));
+        }
         else if (list[i+5] == "+maze+")
+        {
             item = new QTableWidgetItem(tr("Random Maze"));
+            item->setIcon(QIcon(":/res/mapMaze.png"));
+        }
         else
         {
             item = new QTableWidgetItem(list[i + 5]); // selected map
@@ -1291,7 +1308,15 @@ void PageRoomsList::setRoomsList(const QStringList & list)
             // check to see if we've got this map
             // not perfect but a start
             if(!mapList->contains(list[i + 5]))
-                item->setForeground(QBrush(QColor(255, 0, 0)));
+            {
+                item->setForeground(red);
+                item->setIcon(QIcon(":/res/mapMissing.png"));
+            }
+            else
+            {
+                // todo: mission icon?
+                item->setIcon(QIcon(":/res/mapCustom.png"));
+            }
         }
         
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
@@ -1309,16 +1334,18 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         roomsList->setItem(r, 6, item);
 
         if(!list[i + 1].compare(selection) && !selection.isEmpty())
-            roomsList->selectionModel()->setCurrentIndex(roomsList->model()->index(r,0), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+            roomsList->selectionModel()->setCurrentIndex(roomsList->model()->index(r, 0), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
     }
-   roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-   roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
 
+    roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
+
+    // TODO: Should NOT be done here
     if (gameInLobby) {
         gameInLobby = false;
         if (gameCanBeJoined) {

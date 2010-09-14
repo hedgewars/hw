@@ -109,5 +109,10 @@
     <file>res/StatsMostSelfDamage.png</file>
     <file>res/StatsSelfKilled.png</file>
     <file>res/StatsSkipped.png</file>
+    <file>res/mapRandom.png</file>
+    <file>res/mapMaze.png</file>
+    <file>res/mapMissing.png</file>
+    <file>res/mapCustom.png</file>
+    <file>res/mapMission.png</file>
 </qresource>
 </RCC>

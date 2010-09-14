@@ -180,6 +180,7 @@ int main(int argc, char *argv[]) {
             "}"
             "QTableView {"
                 "alternate-background-color: #2f213a;"
+                "gridline-color: transparent;"
             "}"
 
             "QTabBar::tab {"
