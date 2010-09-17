@@ -136,7 +136,7 @@ type
 
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
 
-    THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
+    THWFont = (fnt16, fntBig, fntSmall {$IFNDEF IPHONEOS}, CJKfnt16, CJKfntBig, CJKfntSmall{$ENDIF});
 
     TCapGroup = (capgrpGameState, capgrpAmmoinfo, capgrpVolume,
             capgrpMessage, capgrpAmmostate);
@@ -478,7 +478,8 @@ const
             (Handle: nil;
             Height: 10;
             style: TTF_STYLE_NORMAL;
-            Name: 'DejaVuSans-Bold.ttf'),
+            Name: 'DejaVuSans-Bold.ttf')
+            {$IFNDEF IPHONEOS}, // remove chinese fonts for now
             (Handle: nil;
             Height: 12;
             style: TTF_STYLE_NORMAL;
@@ -491,6 +492,7 @@ const
             Height: 10;
             style: TTF_STYLE_NORMAL;
             Name: 'wqy-zenhei.ttc')
+            {$ENDIF}
             );
 
     SpritesData: array[TSprite] of record

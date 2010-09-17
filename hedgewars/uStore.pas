@@ -838,7 +838,12 @@ var l, i : LongInt;
     u: WideChar;
     tmpstr: array[0..256] of WideChar;
 begin
-if (font >= CJKfnt16) or (length(s) = 0)  then exit(font);
+
+{$IFNDEF IPHONEOS}
+// remove chinese fonts for now
+if (font >= CJKfnt16) or (length(s) = 0) then
+{$ENDIF}
+    exit(font);
 
 l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), length(s))-1;
 i:= 0;
