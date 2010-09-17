@@ -220,7 +220,7 @@ end;
 function HW_isWeaponTimerable: boolean; cdecl; export;
 begin
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0) then
-        exit( (CurrentHedgehog^.CurWeapon^.Propz and ammoprop_Timerable) <> 0)
+        exit( (Ammoz[CurrentHedgehog^.CurWeapon].Ammo.Propz and ammoprop_Timerable) <> 0)
     else
         exit(false);
 end;
@@ -236,7 +236,7 @@ end;
 function HW_isWeaponRope: boolean cdecl; export;
 begin
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0) then
-        exit (CurrentHedgehog^.CurWeapon^.AmmoType = amRope)
+        exit (CurrentHedgehog^.CurWeapon = amRope)
     else
         exit(false);
 end;
@@ -250,7 +250,7 @@ procedure HW_setPianoSound(snd: LongInt); cdecl; export;
 begin
     // this most likely won't work in network game
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0)
-       and (CurrentHedgehog^.CurWeapon^.AmmoType = amPiano) then
+       and (CurrentHedgehog^.CurWeapon = amPiano) then
         case snd of
             0: PlaySound(sndPiano0);
             1: PlaySound(sndPiano1);
