@@ -70,12 +70,17 @@ QList< QPair<QString, QString> > cDefaultAmmos =
 		"111111111111111111111111111111111111111111110111"))
 	;
 
-QColor * color1 = new QColor(221,   0,   0);
-QColor * color2 = new QColor( 67, 118, 233);
-QColor * color3 = new QColor( 62, 147,  33);
-QColor * color4 = new QColor(162,  61, 187);
-QColor * color5 = new QColor(255, 147,  41);
-QColor * color6 = new QColor(115, 115, 115);
+QColor *colors[] = {
+                    new QColor(221,   0,   0), // classic red
+                    new QColor( 67, 118, 233), // classic blue
+                    new QColor( 62, 147,  33), // classic green
+                    new QColor(162,  61, 187), // classic purple
+                    new QColor(255, 147,  41), // classic orange
+                    new QColor(115, 115, 115), // classic gray
+                    new QColor(187, 162,  61), // gold
+                    new QColor( 61, 162, 187), // cyan
+                    // add new colors here
+                    0};
 
 QString * netHost = new QString();
 quint16 netPort = 46631;

@@ -35,12 +35,9 @@ FrameTeams::FrameTeams(QWidget* parent) :
     mainLayout.setSpacing(1);
     mainLayout.setContentsMargins(4, 4, 4, 4);
 
-    availableColors.push_back(*color1);
-    availableColors.push_back(*color2);
-    availableColors.push_back(*color3);
-    availableColors.push_back(*color4);
-    availableColors.push_back(*color5);
-    availableColors.push_back(*color6);
+    int i = 0;
+    while(colors[i])
+        availableColors.push_back(*colors[i++]);
 
     resetColors();
 }
@@ -57,7 +54,7 @@ void FrameTeams::setInteractivity(bool interactive)
 
 void FrameTeams::resetColors()
 {
-  currentColor=availableColors.begin();
+  currentColor=availableColors.end() - 1; // ensure next color is the first one
 }
 
 QColor FrameTeams::getNextColor() const
