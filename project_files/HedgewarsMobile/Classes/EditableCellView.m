@@ -138,9 +138,13 @@
 }
 
 // the textfield has been modified, tell the delegate to do something
--(void) textFieldDidEndEditing:(UITextField *)aTextField{
-    ((UITableView*)[self superview]).scrollEnabled = YES;
+-(void) textFieldDidEndEditing:(UITextField *)aTextField {
+    // this forces a save when user selects a new field
+    if ([self.textField.text isEqualToString:self.oldValue] == NO)
+        [self save:aTextField];
 
+    // restores default behaviour on caller
+    ((UITableView*)[self superview]).scrollEnabled = YES;
     [(UITableViewController *)delegate navigationItem].rightBarButtonItem = [(UITableViewController *)delegate navigationItem].backBarButtonItem;
     [(UITableViewController *)delegate navigationItem].leftBarButtonItem = nil;
 }
@@ -154,17 +158,18 @@
 
 // the user pressed cancel so hide keyboard
 -(void) cancel:(id) sender {
+    // reverts any changes and performs a fake save for removing the keyboard
     self.textField.text = self.oldValue;
     [self save:sender];
 }
 
-// send the value to the delegate
+// send the value to the delegate (called before textFieldDidEndEditing)
 -(void) save:(id) sender {
-    if (delegate == nil || ![delegate respondsToSelector:@selector(saveTextFieldValue:withTag:)])
+    if (delegate == nil || [delegate respondsToSelector:@selector(saveTextFieldValue:withTag:)] == NO)
         return;
 
     // don't save if the textfield is invalid
-    if (![self textFieldShouldReturn:textField])
+    if ([self textFieldShouldReturn:textField] == NO)
         return;
 
     [delegate saveTextFieldValue:self.textField.text withTag:self.tag];

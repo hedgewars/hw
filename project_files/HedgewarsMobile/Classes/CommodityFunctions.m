@@ -90,7 +90,7 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
         case 2: //pro mode
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
                          [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
-                         @"909000900000000000000900000000000000000000090000",@"ammostore_initialqt",
+                         @"909000900000000000000900000000000000000000000000",@"ammostore_initialqt",
                          @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
                          @"111111111111111111111111111111111111111110010111",@"ammostore_crate", nil];
