@@ -34,11 +34,10 @@
 
 #pragma mark -
 #pragma mark View lifecycle
-- (void)viewDidLoad {
+-(void) viewDidLoad {
     [super viewDidLoad];
 
     NSArray *array = [[NSArray alloc] initWithObjects:
-                      NSLocalizedString(@"Human",@""),
                       NSLocalizedString(@"Brutal",@""),
                       NSLocalizedString(@"Aggressive",@""),
                       NSLocalizedString(@"Bully",@""),
@@ -51,114 +50,132 @@
     self.title = NSLocalizedString(@"Set difficulty level",@"");
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+-(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    if ([[[[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:0] objectForKey:@"level"] intValue] == 0)
+        numberOfSections = 1;
+    else
+        numberOfSections = 2;
+    
     [self.tableView reloadData];
     // this moves the tableview to the top
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
 
+-(void) viewWillDisappear:(BOOL)animated {
+ // stuff like checking that at least 1 field was selected   
+}
+
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return numberOfSections;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.levelArray count];
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger) section {
+    if (section == 0)
+        return 1;
+    else
+        return 5;
 }
 
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier0 = @"Cell0";
+    static NSString *CellIdentifier1 = @"Cell1";
 
     NSInteger row = [indexPath row];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-
-    cell.textLabel.text = [levelArray objectAtIndex:row];
-    NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:0];
-    if ([[hog objectForKey:@"level"] intValue] == row) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        self.lastIndexPath = indexPath;
+    NSInteger section = [indexPath section];
+    UITableViewCell *cell;
+    
+    if (section == 0) {
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier0];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
+            UISwitch *theSwitch = [[UISwitch alloc] init];
+            if (numberOfSections == 1)
+                theSwitch.on = NO;
+            else
+                theSwitch.on = YES;
+            [theSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = theSwitch;
+            [theSwitch release];
+        }
+        cell.textLabel.text = NSLocalizedString(@"Hogs controlled by AI",@"");
     } else {
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier1];
+        if (cell == nil)
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
+        
+        cell.textLabel.text = [levelArray objectAtIndex:row];
+        NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:0];
+        if ([[hog objectForKey:@"level"] intValue] == row+1) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            self.lastIndexPath = indexPath;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        
+        NSString *botlevelPath = [[NSString alloc] initWithFormat:@"%@/%d.png",BOTLEVELS_DIRECTORY(),row+1];
+        UIImage *levelImage = [[UIImage alloc] initWithContentsOfFile:botlevelPath];
+        [botlevelPath release];
+        cell.imageView.image = levelImage;
+        [levelImage release];
     }
-
-    NSString *botlevelPath = [[NSString alloc] initWithFormat:@"%@/%d.png",BOTLEVELS_DIRECTORY(),row];
-    UIImage *levelImage = [[UIImage alloc] initWithContentsOfFile:botlevelPath];
-    [botlevelPath release];
-    cell.imageView.image = levelImage;
-    [levelImage release];
-
+    
     return cell;
 }
 
+-(void) switchValueChanged:(id) sender {
+    UISwitch *theSwitch = (UISwitch *)sender;
+    NSIndexSet *sections = [[NSIndexSet alloc] initWithIndex:1];
+    NSMutableArray *hogs = [self.teamDictionary objectForKey:@"hedgehogs"];
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+    if (theSwitch.on) {
+        numberOfSections = 2;
+        [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        for (NSMutableDictionary *hog in hogs)
+            [hog setObject:[NSNumber numberWithInt:4] forKey:@"level"];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
+        [self.tableView reloadData];
+    } else {
+        numberOfSections = 1;
+        [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        
+        for (NSMutableDictionary *hog in hogs)
+            [hog setObject:[NSNumber numberWithInt:0] forKey:@"level"];
 
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
     }
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }
+    [sections release];
 }
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 
 #pragma mark -
 #pragma mark Table view delegate
-- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
-    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+    int oldRow = (self.lastIndexPath != nil) ? [self.lastIndexPath row] : -1;
 
-    if (newRow != oldRow) {
-        NSMutableArray *hogs = [teamDictionary objectForKey:@"hedgehogs"];
-
-        for (NSMutableDictionary *hog in hogs) {
-            [hog setObject:[NSNumber numberWithInt:newRow] forKey:@"level"];
+    if ([indexPath section] != 0) { 
+        if (newRow != oldRow) {
+            NSMutableArray *hogs = [self.teamDictionary objectForKey:@"hedgehogs"];
+            
+            for (NSMutableDictionary *hog in hogs)
+                [hog setObject:[NSNumber numberWithInt:newRow+1] forKey:@"level"];
+            
+            // tell our boss to write this new stuff on disk
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
+            [self.tableView reloadData];
+            
+            self.lastIndexPath = indexPath;
+            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
         }
-
-        // tell our boss to write this new stuff on disk
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-        [self.tableView reloadData];
-
-        self.lastIndexPath = indexPath;
-        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        [self.navigationController popViewControllerAnimated:YES];
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

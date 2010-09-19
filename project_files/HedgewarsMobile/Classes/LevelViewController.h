@@ -28,6 +28,8 @@
     NSArray *levelArray;
     NSArray *levelSprites;
     NSIndexPath *lastIndexPath;
+    
+    NSInteger numberOfSections;
 }
 
 @property (nonatomic,retain) NSDictionary *teamDictionary;
