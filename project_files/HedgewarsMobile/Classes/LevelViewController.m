@@ -36,6 +36,7 @@
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
+    srandom(time(NULL));
 
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Brutal",@""),
@@ -131,24 +132,24 @@
     UISwitch *theSwitch = (UISwitch *)sender;
     NSIndexSet *sections = [[NSIndexSet alloc] initWithIndex:1];
     NSMutableArray *hogs = [self.teamDictionary objectForKey:@"hedgehogs"];
-
+    NSInteger level;
+    
     if (theSwitch.on) {
         numberOfSections = 2;
         [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        for (NSMutableDictionary *hog in hogs)
-            [hog setObject:[NSNumber numberWithInt:4] forKey:@"level"];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-        [self.tableView reloadData];
+        level = random() % [levelArray count];
     } else {
         numberOfSections = 1;
         [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        
-        for (NSMutableDictionary *hog in hogs)
-            [hog setObject:[NSNumber numberWithInt:0] forKey:@"level"];
-
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
+        level = 0;
     }
+
+    for (NSMutableDictionary *hog in hogs)
+        [hog setObject:[NSNumber numberWithInt:0] forKey:@"level"];
+
+    [self.tableView reloadData];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
+
     [sections release];
 }
 

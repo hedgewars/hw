@@ -22,7 +22,6 @@
 #import "VoicesViewController.h"
 #import "CommodityFunctions.h"
 
-
 @implementation VoicesViewController
 @synthesize teamDictionary, voiceArray, lastIndexPath;
 
@@ -30,7 +29,6 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
-
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -55,13 +53,19 @@
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
 
--(void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+-(void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    Mix_OpenAudio(44100, 0x8010, 1, 1024);
+}
+
+-(void) viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
     if(voiceBeingPlayed != NULL) {
         Mix_HaltChannel(lastChannel);
         Mix_FreeChunk(voiceBeingPlayed);
         voiceBeingPlayed = NULL;
     }
+    Mix_CloseAudio();
 }
 
 
@@ -117,6 +121,7 @@
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 
+    // stop any sound before playing another one
     if (voiceBeingPlayed != NULL) {
         Mix_HaltChannel(lastChannel);
         Mix_FreeChunk(voiceBeingPlayed);
@@ -137,9 +142,13 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
+    if (voiceBeingPlayed != NULL) {
+        Mix_HaltChannel(lastChannel);
+        Mix_FreeChunk(voiceBeingPlayed);
+        voiceBeingPlayed = NULL;
+    }
+    MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
 -(void) viewDidUnload {
