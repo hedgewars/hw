@@ -13,7 +13,7 @@
 00:10=Dynamit
 00:11=Basebollträ
 00:12=Flammande näve
-00:13=s
+00:13=sek
 00:14=Fallskärm
 00:15=Luftangrepp
 00:16=Minangrepp
@@ -42,6 +42,13 @@
 00:39=Flygande tefat
 00:40=Molotovcocktail
 00:41=Birdy
+00:42=Portabel portalapparat
+00:43=Pianoangrepp
+00:44=Gammal limburger
+00:45=Sinusgevär (beta)
+00:46=Eldkastare
+00:47=Fästande mina
+00:48=Hammare
 
 01:00=Nu kör vi!
 01:01=Oavgjort
@@ -55,6 +62,9 @@
 01:09=Synkroniserar...
 01:10=Detta verktyg avslutar inte din tur!
 01:11=Detta vapen eller verktyg är inte tillgängligt än!
+01:12=Sista rundan till sudden death!
+01:13=%1 rundor till sudden death!
+01:14=Gör dig redo, %1!
 
 ; Event messages
 ; Hog (%1) died
@@ -145,7 +155,7 @@
 02:01=%1 letar efter Titanic
 02:01=%1 är inte Jesus
 02:01=%1 hittar Nemo
-02:01=%1 springs a leak
+;02:01=%1 springs a leak
 02:01=Du måste undra hur många igelkottar som finns där nere
 02:01=%1 gör havsnivån något högre
 02:01=%1 gick inte med i flottan
@@ -348,7 +358,8 @@
 02:09=%1 är förvirrad
 ;02:09=%1 hurt itself in its confusion
 02:09=%1 är duktig på att skämma ut sig själv
-02:09=%1 är klumpig!
+02:09=%1 är en klant!
+02:09=%1 är klumpig
 02:09=%1 visar fienden vad han kan
 02:09=%1 kan inte förväntas vara perfekt hela tiden
 ;02:09=Don't worry %1, pobody's nerfect
@@ -363,6 +374,12 @@
 02:10=Frivarv!
 02:10=Är det en fågel, är det ett flygplan...
 ;02:10=That one is out!
+
+; Hog (%1) has to leave (team is gone)
+02:11=%1 måste gå och lägga sig!
+02:11=%1 verkar vara för upptagen för att spela
+;02:11=Beam him up, Scotty!
+02:11=%1 måste gå
 
 ; Weapon Categories
 03:00=Tidsinställd granat
@@ -407,6 +424,14 @@
 03:39=Transportverktyg
 03:40=Förbrännande granat
 03:41=Stor beundrare av Squawks
+03:42=I'm making a note here...
+; the misspelled "Beethoven" is intentional (-> to beat)
+03:43=Spelandes Beathovens dödliga sonata
+03:44=Bäst före: 1923
+03:45=Vetenskapens makt
+03:46=Hett Hett Hett!
+03:47=Fäst de här på ett användbart ställe!
+03:48=Dags att banka järnet!
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attackera fienden med en enkel granat.|Exploderar när tiden når noll.|1-5: Ställ in granatens tid|Attack: Håll ner för att kasta med mer kraft
@@ -451,6 +476,13 @@
 04:39=Flyg till andra delar av kartan med det flygande|tefatet. Det här svårhanterliga verktyget kan ta|dig till nästan alla positioner på slagfältet.|Attack: Aktivera|Upp/Vänster/Höger: Skjut ifrån åt ett håll|Långhopp: Släpp granater eller liknande vapen
 04:40=Sätt eld på lite mark med den här flaskan fylld|med (snart) brinnande vätska.|Attack: Håll ner för att kasta med mer kraft
 04:41=Beviset på att naturen kanske till och med kan slå|det flygande tefatet. Birdy kan bära runt på din|igelkott och släppa ägg på fienden!|Attack: Aktivera och släpp ägg|Upp/Vänster/Höger: Flaxa åt ett håll
+04:42=Denna portabla portalapparat kan omedelbart|flytta dig, dina fiender, eller dina vapen mellan|två punkter på banan. Använd den klokt och|ditt uppdrag kommer bli en...|HUGE SUCCESS!|Attack: Skjut en portal|Byt: Växla portalfärger
+04:43=Gör din debut på den musikaliska scenen en|exploderande succe! Släpp ett piano från himlen,|men se upp...|någon måste spela och det kan kosta dig livet!|Markör: Välj målområde|F1-F9: Spela pianot
+04:44=Det här är inte bara ost, det är biologisk krigsföring!|Den kommer inte göra så stor skada när tiden tar slut|men den kommer definitivt förgifta alla oturliga nog|att känna av lukten!|1-5: Ange ostens tid|Attack: Håll ner för att skjuta med mer kraft
+04:45=All den där tiden med fysikboken har äntligen lönat|av sig, frammana en ödesdiger sinusvåg mot fienden.|Men se upp, detta vapnet har en ganska stark rekyl.|(Det här vapnet är ofärdigt)|Attack: Skjut
+04:46=Täck dina fiender med ett fräsande eldhav.|Hjärtvärmande!|Attack: Aktivera|Upp/Ner: Fortsätt sikta|Vänster/Höger: Justera kraft
+04:47=Det är dubbelt så roligt med två farliga, fantastiska,|fästande minor. Skapa en kedjereaktion eller försvara|dig själv (eller både och!)|Attack: Håll ner för att skjuta med mer kraft (två gånger)
+04:48=Varför ska mullvadarna få all misshandel? Att|drämma till en igelkott kan vara minst lika roligt!|Ett rejält slag med den här hammaren kan skala|av en tredjedel av en igelkotts hälsa och slå ner|dem i marken.|Attack: Aktivera
 
 ; Game goal strings
 05:00=Spellägen
@@ -469,3 +501,4 @@
 05:13=Mintider: Minor detoneras direkt
 05:14=Mintider: Minor detoneras efter 0 - 3 sekunder
 05:15=Skademängd: Alla vapen gör %1% skada
+
