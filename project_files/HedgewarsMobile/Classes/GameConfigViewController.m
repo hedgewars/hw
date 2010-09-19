@@ -104,9 +104,7 @@
     [self.view addSubview:activeController.view];
 }
 
--(void) startGame:(UIButton *)button {
-    button.enabled = YES;
-
+-(BOOL) isEverythingSet {
     // don't start playing if the preview is in progress
     if ([mapConfigViewController busy]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Wait for the Preview",@"")
@@ -116,9 +114,9 @@
                                               otherButtonTitles:nil];
         [alert show];
         [alert release];
-        return;
+        return NO;
     }
-
+    
     // play only if there is more than one team
     if ([teamConfigViewController.listOfSelectedTeams count] < 2) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too few teams playing",@"")
@@ -128,14 +126,14 @@
                                               otherButtonTitles:nil];
         [alert show];
         [alert release];
-        return;
+        return NO;
     }
-
+    
     // play if there's room for enough hogs in the selected map
     int hogs = 0;
     for (NSDictionary *teamData in teamConfigViewController.listOfSelectedTeams)
         hogs += [[teamData objectForKey:@"number"] intValue];
-
+    
     if (hogs > mapConfigViewController.maxHogs) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many hogs",@"")
                                                         message:NSLocalizedString(@"The map is too small for that many hogs",@"")
@@ -144,9 +142,20 @@
                                               otherButtonTitles:nil];
         [alert show];
         [alert release];
-        return;
+        return NO;
     }
-
+    
+    if ([teamConfigViewController.listOfSelectedTeams count] > 6) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many teams",@"")
+                                                        message:NSLocalizedString(@"Max six teams are allowed in the same game",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        return NO;
+    }
+    
     if ([schemeWeaponConfigViewController.selectedScheme length] == 0 || [schemeWeaponConfigViewController.selectedWeapon length] == 0 ) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Missing detail",@"")
                                                         message:NSLocalizedString(@"Select one Scheme and one Weapon for this game",@"")
@@ -155,8 +164,17 @@
                                               otherButtonTitles:nil];
         [alert show];
         [alert release];
-        return;
+        return NO;
     }
+
+    return YES;
+}
+
+-(void) startGame:(UIButton *)button {
+    button.enabled = YES;
+
+    if ([self isEverythingSet] == NO)
+        return;
 
     // create the configuration file that is going to be sent to engine
     NSDictionary *gameDictionary = [NSDictionary dictionaryWithObjectsAndKeys:mapConfigViewController.seedCommand,@"seed_command",

@@ -395,7 +395,7 @@ for ii:= Low(TSprite) to High(TSprite) do
         if ((cReducedQuality and rqNoBackground) = 0) or (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR, sprFlake, sprSplash, sprDroplet])) then // FIXME: hack
         begin
             if AltPath = ptNone then
-                if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR, sprFlake] then // FIXME: hack
+                if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR] then // FIXME: hack
                     tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
                 else
                     tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical)
@@ -489,7 +489,7 @@ var rr: TSDL_Rect;
     _l, _r, _t, _b: real;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
-if (SourceTexture = nil) or (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
+if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
 
 // don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
 if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
