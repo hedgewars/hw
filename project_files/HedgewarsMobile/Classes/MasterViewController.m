@@ -20,11 +20,12 @@
 
 
 #import "MasterViewController.h"
+#import "CommodityFunctions.h"
 #import "GeneralSettingsViewController.h"
 #import "TeamSettingsViewController.h"
 #import "WeaponSettingsViewController.h"
 #import "SchemeSettingsViewController.h"
-#import "CommodityFunctions.h"
+#import "SupportViewController.h"
 
 @implementation MasterViewController
 @synthesize targetController, controllerNames, lastIndexPath;
@@ -45,6 +46,7 @@
                                                       NSLocalizedString(@"Teams",@""),
                                                       NSLocalizedString(@"Weapons",@""),
                                                       NSLocalizedString(@"Schemes",@""),
+                                                      NSLocalizedString(@"Support",@""),
                                                       nil];
     self.controllerNames = array;
     [array release];
@@ -94,6 +96,9 @@
             break;
         case 3:
             iconStr = [NSString stringWithFormat:@"%@/Target.png",GRAPHICS_DIRECTORY()];
+            break;
+        case 4:
+            iconStr = [NSString stringWithFormat:@"%@/Seduction.png",GRAPHICS_DIRECTORY()];
             break;
         default:
             //seduction.png for support page
@@ -146,6 +151,11 @@
                     schemeSettingsViewController = [[SchemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 nextController = schemeSettingsViewController;
                 break;
+            case 4:
+                if (nil == supportViewController)
+                    supportViewController = [[SupportViewController alloc] initWithNibName:@"SupportViewController" bundle:nil];
+                nextController = supportViewController;
+                break;
         }
 
         nextController.title = [controllerNames objectAtIndex:newRow];
@@ -178,6 +188,8 @@
         weaponSettingsViewController = nil;
     if (schemeSettingsViewController.view.superview == nil)
         schemeSettingsViewController = nil;
+    if (supportViewController.view.superview == nil)
+        supportViewController = nil;
     MSG_MEMCLEAN();
 }
 
@@ -189,6 +201,7 @@
     teamSettingsViewController = nil;
     weaponSettingsViewController = nil;
     schemeSettingsViewController = nil;
+    supportViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -201,6 +214,7 @@
     [teamSettingsViewController release];
     [weaponSettingsViewController release];
     [schemeSettingsViewController release];
+    [supportViewController release];
     [super dealloc];
 }
 

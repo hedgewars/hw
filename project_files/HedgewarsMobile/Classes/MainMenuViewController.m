@@ -52,24 +52,8 @@
     [pool release];
 }
 
--(void) viewDidLoad {
-    [NSThread detachNewThreadSelector:@selector(initAudioThread)
-                             toTarget:self
-                           withObject:nil];
-
-    char *ver;
-    HW_versionInfo(NULL, &ver);
-    NSString *versionNumber = [[NSString alloc] initWithCString:ver];
-    self.versionLabel.text = @"";//versionNumber;
-    [versionNumber release];
-
-    // listen to request to remove the modalviewcontroller
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(dismissModalViewController)
-                                                 name: @"dismissModalView"
-                                               object:nil];
-    
-    // now check if some configuration files are already set; if they are present it means that the current copy must be updated
+// check if some configuration files are already set; if they are present it means that the current copy must be updated
+-(void) createNecessaryFiles {
     BOOL doCreateFiles = NO;
     NSString *resDir = [[NSBundle mainBundle] resourcePath];
     
@@ -159,6 +143,79 @@
         if (err != nil) 
             DLog(@"%@", err);
     }
+}
+
+/* // ask the user to leave a review for this app
+-(void) reviewCounter {
+    CGFloat reviewInt = [[NSUserDefaults standardUserDefaults] integerForKey: @"intValueKey"];
+    
+    if (reviewInt) {
+        reviewInt++;
+        [[NSUserDefaults standardUserDefaults] setInteger:reviewInt forKey:@"intValueKey"];
+    } else {
+        CGFloat start = 1;
+        NSUserDefaults *reviewPrefs = [NSUserDefaults standardUserDefaults];
+        [reviewPrefs setInteger:start forKey: @"intValueKey"];
+        [reviewPrefs synchronize]; // writes modifications to disk
+    }
+    
+    if (1) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Mabuhay!"
+                                                        message:@"Looks like you Enjoy using this app. Could you spare a moment of your time to review it in the AppStore?"
+                                                       delegate:self
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles: @"OK, I'll Review It Now", @"Remind Me Later", @"Don't Remind Me", nil];
+        [alert show]; 
+        [alert release];
+        
+        reviewInt++;
+        
+        [[NSUserDefaults standardUserDefaults] setInteger:reviewInt forKey:@"intValueKey"];
+    }
+}
+
+#pragma mark -
+#pragma mark alert view delegate
+-(void) alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger) buttonIndex {
+    // the user clicked one of the OK/Cancel buttons
+    if (buttonIndex == 0) {
+        NSString *str = @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa";
+        str = [NSString stringWithFormat:@"%@/wa/viewContentsUserReviews?", str]; 
+        str = [NSString stringWithFormat:@"%@type=Vittorio+Giovara&id=", str];
+        
+        // Here is the app id from itunesconnect
+        str = [NSString stringWithFormat:@"%@391234866", str]; 
+        
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=391234866&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"]]; 
+    } else if (buttonIndex == 1) {
+        int startAgain = 0;
+        [[NSUserDefaults standardUserDefaults] setInteger:startAgain forKey:@"intValueKey"];
+        
+    } else if (buttonIndex == 2) { 
+        int neverRemind = 4;
+        [[NSUserDefaults standardUserDefaults] setInteger:neverRemind forKey:@"intValueKey"];
+    }
+} */
+
+#pragma mark -
+-(void) viewDidLoad {
+    [NSThread detachNewThreadSelector:@selector(initAudioThread)
+                             toTarget:self
+                           withObject:nil];
+
+    char *ver;
+    HW_versionInfo(NULL, &ver);
+    NSString *versionNumber = [[NSString alloc] initWithCString:ver];
+    self.versionLabel.text = @"";//versionNumber;
+    [versionNumber release];
+
+    // listen to request to remove the modalviewcontroller
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(dismissModalViewController)
+                                                 name: @"dismissModalView"
+                                               object:nil];
+
+    [self createNecessaryFiles];
     
     [super viewDidLoad];
 }

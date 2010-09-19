@@ -25,7 +25,7 @@
 @class GameConfigViewController;
 @class AboutViewController;
 
-@interface MainMenuViewController : UIViewController {
+@interface MainMenuViewController : UIViewController <UIAlertViewDelegate> {
     UILabel *versionLabel;
     GameConfigViewController *gameConfigViewController;
     SplitViewRootController *settingsViewController;

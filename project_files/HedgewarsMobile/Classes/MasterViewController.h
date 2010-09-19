@@ -27,6 +27,7 @@
 @class TeamSettingsViewController;
 @class WeaponSettingsViewController;
 @class SchemeSettingsViewController;
+@class SupportViewController;
 
 @interface MasterViewController : UITableViewController {
     MasterViewController *targetController;
@@ -36,6 +37,7 @@
     TeamSettingsViewController *teamSettingsViewController;
     WeaponSettingsViewController *weaponSettingsViewController;
     SchemeSettingsViewController *schemeSettingsViewController;
+    SupportViewController *supportViewController;
 }
 
 @property (nonatomic, retain) MasterViewController *targetController;

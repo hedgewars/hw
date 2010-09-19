@@ -126,6 +126,11 @@
 		61842B3E122B65BD0096E335 /* helpabove.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3D122B65BD0096E335 /* helpabove.png */; };
 		61842B40122B66280096E335 /* helpleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3F122B66280096E335 /* helpleft.png */; };
 		6187AEBD120781B900B31A27 /* Settings in Resources */ = {isa = PBXBuildFile; fileRef = 6187AEA5120781B900B31A27 /* Settings */; };
+		6199E81612463EA800DADF8C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81512463EA800DADF8C /* CFNetwork.framework */; };
+		6199E81A12463EC400DADF8C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81912463EC400DADF8C /* SystemConfiguration.framework */; };
+		6199E839124647DE00DADF8C /* SupportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6199E837124647DE00DADF8C /* SupportViewController.m */; };
+		6199E83A124647DE00DADF8C /* SupportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6199E838124647DE00DADF8C /* SupportViewController.xib */; };
+		6199E86D12464A8E00DADF8C /* surpise.png in Resources */ = {isa = PBXBuildFile; fileRef = 6199E86C12464A8E00DADF8C /* surpise.png */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
 		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
@@ -829,11 +834,16 @@
 		61842B3F122B66280096E335 /* helpleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpleft.png; path = Resources/Overlay/helpleft.png; sourceTree = "<group>"; };
 		618736B8118CA28600123B23 /* GearDrawing.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GearDrawing.inc; path = ../../hedgewars/GearDrawing.inc; sourceTree = SOURCE_ROOT; };
 		6187AEA5120781B900B31A27 /* Settings */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Settings; path = Resources/Settings; sourceTree = "<group>"; };
+		6199E81512463EA800DADF8C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		6199E81912463EC400DADF8C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		6199E836124647DE00DADF8C /* SupportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupportViewController.h; sourceTree = "<group>"; };
+		6199E837124647DE00DADF8C /* SupportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SupportViewController.m; sourceTree = "<group>"; };
+		6199E838124647DE00DADF8C /* SupportViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SupportViewController.xib; sourceTree = "<group>"; };
+		6199E86C12464A8E00DADF8C /* surpise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = surpise.png; path = Resources/surpise.png; sourceTree = "<group>"; };
 		619C09E911E8B8D600F1DF16 /* title_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title_small.png; path = "Resources/Frontend-iPhone/title_small.png"; sourceTree = "<group>"; };
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableCellView.h; sourceTree = "<group>"; };
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableCellView.m; sourceTree = "<group>"; };
-		61C3255A1179A384001E70B1 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
 		61EBA62811DFF2BC0048B68A /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = "Resources/Frontend-iPad/title.png"; sourceTree = "<group>"; };
 		61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundAndTitle.png; path = "Resources/Frontend-iPad/backgroundAndTitle.png"; sourceTree = "<group>"; };
@@ -897,6 +907,8 @@
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
 				61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */,
 				61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */,
+				6199E81612463EA800DADF8C /* CFNetwork.framework in Frameworks */,
+				6199E81A12463EC400DADF8C /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -967,6 +979,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6199E86C12464A8E00DADF8C /* surpise.png */,
 				611EEBC0122B34A800DF6938 /* helpingame.png */,
 				611EEC30122B54D700DF6938 /* helpplain.png */,
 				611EEBC2122B355700DF6938 /* helpbottom.png */,
@@ -1007,8 +1020,9 @@
 				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
 				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
-				61C3255A1179A384001E70B1 /* OpenAL.framework */,
 				61272338117DF778005B90CF /* MobileCoreServices.framework */,
+				6199E81512463EA800DADF8C /* CFNetwork.framework */,
+				6199E81912463EC400DADF8C /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1143,6 +1157,9 @@
 				6165920B11CA9BA200D6E256 /* WeaponSettingsViewController.m */,
 				616591FA11CA9BA200D6E256 /* SchemeSettingsViewController.h */,
 				616591FB11CA9BA200D6E256 /* SchemeSettingsViewController.m */,
+				6199E836124647DE00DADF8C /* SupportViewController.h */,
+				6199E837124647DE00DADF8C /* SupportViewController.m */,
+				6199E838124647DE00DADF8C /* SupportViewController.xib */,
 			);
 			name = "First Level";
 			sourceTree = "<group>";
@@ -2010,6 +2027,8 @@
 				61842B24122B619D0096E335 /* HelpPageInGameViewController.xib in Resources */,
 				61842B3E122B65BD0096E335 /* helpabove.png in Resources */,
 				61842B40122B66280096E335 /* helpleft.png in Resources */,
+				6199E83A124647DE00DADF8C /* SupportViewController.xib in Resources */,
+				6199E86D12464A8E00DADF8C /* surpise.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2135,6 +2154,7 @@
 				61C079E411F35A300072BF46 /* EditableCellView.m in Sources */,
 				61F2E7CE1205EDE0005734F7 /* AboutViewController.m in Sources */,
 				611EEAEE122B2A4D00DF6938 /* HelpPageViewController.m in Sources */,
+				6199E839124647DE00DADF8C /* SupportViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

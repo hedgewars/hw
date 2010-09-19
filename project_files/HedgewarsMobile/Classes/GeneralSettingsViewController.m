@@ -206,7 +206,7 @@
             switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
                 cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
-                cell.detailTextLabel.text = NSLocalizedString(@"A damage popup will appear when a hedgehog is injured", @"");
+                cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit a hedgehog suffers", @"");
                 switchContent.on = [[self.settingsDictionary objectForKey:@"alternate"] boolValue];
                 switchContent.tag = 30;
             } else {
