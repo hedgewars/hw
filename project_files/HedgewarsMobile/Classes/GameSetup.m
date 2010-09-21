@@ -24,12 +24,12 @@
 #import "SDL_net.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
+#import "NSStringExtra.h"
 
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 128
 
 @implementation GameSetup
-
-@synthesize systemSettings, gameConfig;
+@synthesize systemSettings, gameConfig, savePath;
 
 -(id) initWithDictionary:(NSDictionary *)gameDictionary {
     if (self = [super init]) {
@@ -41,6 +41,7 @@
         [dictSett release];
 
         self.gameConfig = gameDictionary;
+        self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", [[NSDate date] description]];
     }
     return self;
 }
@@ -48,6 +49,7 @@
 -(void) dealloc {
     [gameConfig release];
     [systemSettings release];
+    [savePath release];
     [super dealloc];
 }
 
@@ -238,8 +240,17 @@
     [NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
 }
 
-// wrapper that computes the length of the message and then sends the command string
+// wrapper that computes the length of the message and then sends the command string, saving the command on a file
 -(int) sendToEngine: (NSString *)string {
+    uint8_t length = [string length];
+
+    [[NSString stringWithFormat:@"%c%@",length,string] appendToFile:savePath];
+    SDLNet_TCP_Send(csd, &length , 1);
+    return SDLNet_TCP_Send(csd, [string UTF8String], length);
+}
+
+// wrapper that computes the length of the message and then sends the command string, skipping file writing
+-(int) sendToEngineNoSave: (NSString *)string {
     uint8_t length = [string length];
 
     SDLNet_TCP_Send(csd, &length , 1);
@@ -295,7 +306,9 @@
                 DLog(@"sending game config...\n%@",self.gameConfig);
 
                 // local game
-                [self sendToEngine:@"TL"];
+                [self sendToEngineNoSave:@"TL"];
+                NSString *saveHeader = @"TS";
+                [[NSString stringWithFormat:@"%c%@",[saveHeader length], saveHeader] appendToFile:savePath];
 
                 // seed info
                 [self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
@@ -335,6 +348,8 @@
                 clientQuit = YES;
                 break;
             case 'e':
+                buffer[msgSize] = '\0';
+                [[NSString stringWithUTF8String:buffer] appendToFile:savePath];
                 sscanf(buffer, "%*s %d", &eProto);
                 short int netProto = 0;
                 char *versionStr;
@@ -361,7 +376,9 @@
             default:
                 // empty packet or just statistics -- in either cases gameTicks is sent
                 gameTicks = SDLNet_Read16 (&buffer[msgSize - 2]);
-                //DLog(@"engineProtocol - %d: received [%s]", gameTicks, buffer);
+                DLog(@"engineProtocol - %d: received [%s]", gameTicks, buffer);
+                buffer[msgSize] = '\0';
+                [[NSString stringWithUTF8String:buffer] appendToFile:savePath];
                 break;
         }
     }
@@ -422,6 +439,7 @@
     gameArgs[ 8] = [[[self.systemSettings objectForKey:@"alternate"] stringValue] UTF8String];   //cAltDamage
     gameArgs[ 9] = NULL;                                                                         //unused
     gameArgs[10] = NULL;                                                                         //recordFileName
+    //[[SAVES_DIRECTORY() stringByAppendingString:@"/2010-09-21 23/30/10 +0200.hws"] UTF8String];                                                                         //recordFileName
 
     [wSize release];
     [hSize release];

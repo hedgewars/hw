@@ -25,6 +25,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		611D9B12124949D000008271 /* NSStringExtra.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D9B11124949D000008271 /* NSStringExtra.m */; };
 		611E03E711FA747C0077A41E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 611E037C11FA74590077A41E /* libvorbis.a */; };
 		611E0E5111FA92170077A41E /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 611E0E5011FA92130077A41E /* libfreetype.a */; };
 		611E0EE711FB20610077A41E /* ammoButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE511FB20610077A41E /* ammoButton.png */; };
@@ -692,6 +693,8 @@
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hedgewars_Prefix.pch; sourceTree = "<group>"; };
+		611D9B10124949D000008271 /* NSStringExtra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSStringExtra.h; path = Classes/NSStringExtra.h; sourceTree = "<group>"; };
+		611D9B11124949D000008271 /* NSStringExtra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSStringExtra.m; path = Classes/NSStringExtra.m; sourceTree = "<group>"; };
 		611E02EC11FA74580077A41E /* cocos2d-iphone.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "cocos2d-iphone.xcodeproj"; path = "../../../Library/cocos2d/cocos2d-iphone.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		611E0E4B11FA92130077A41E /* freetype.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = freetype.xcodeproj; path = "../../../Library/freetype/Xcode-iPhoneOS/freetype.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		611E0EE511FB20610077A41E /* ammoButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ammoButton.png; path = Resources/Overlay/ammoButton.png; sourceTree = "<group>"; };
@@ -972,6 +975,8 @@
 				6165922B11CA9BD500D6E256 /* SquareButtonView.m */,
 				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
 				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
+				611D9B10124949D000008271 /* NSStringExtra.h */,
+				611D9B11124949D000008271 /* NSStringExtra.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -2155,6 +2160,7 @@
 				61F2E7CE1205EDE0005734F7 /* AboutViewController.m in Sources */,
 				611EEAEE122B2A4D00DF6938 /* HelpPageViewController.m in Sources */,
 				6199E839124647DE00DADF8C /* SupportViewController.m in Sources */,
+				611D9B12124949D000008271 /* NSStringExtra.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

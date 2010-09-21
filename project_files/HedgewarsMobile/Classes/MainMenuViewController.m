@@ -76,6 +76,11 @@
         NSString *directoryToCheck, *fileToCheck, *fileToUpdate;
         DLog(@"Creating necessary files");
         
+        // create an empty saves directory by deleting the previous one (saves are incompatible between releases)
+        if ([[NSFileManager defaultManager] fileExistsAtPath:SAVES_DIRECTORY()])
+            [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
+        [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY() withIntermediateDirectories:NO attributes:nil error:NULL];
+        
         // if the settings file is already present, we merge current preferences with the update
         directoryToCheck = [NSString stringWithFormat:@"%@/Settings/settings.plist",resDir];
         if ([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()]) {
