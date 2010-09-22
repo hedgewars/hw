@@ -404,8 +404,8 @@ if (Gear^.State and gstMoving) <> 0 then
       end;
    continue
    end;
-   if (Gear^.Message and gm_Left  )<>0 then Gear^.dX:= -cLittle else
-   if (Gear^.Message and gm_Right )<>0 then Gear^.dX:=  cLittle else exit(bRes);
+   if (Gear^.Message and gmLeft  )<>0 then Gear^.dX:= -cLittle else
+   if (Gear^.Message and gmRight )<>0 then Gear^.dX:=  cLittle else exit(bRes);
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
       begin
       if not (TestCollisionXwithXYShift(Gear, _0, -6, hwSign(Gear^.dX))

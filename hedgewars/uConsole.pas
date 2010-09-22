@@ -194,11 +194,11 @@ end;
 
 procedure StopMessages(Message: Longword);
 begin
-if (Message and gm_Left) <> 0 then ParseCommand('/-left', true) else
-if (Message and gm_Right) <> 0 then ParseCommand('/-right', true) else
-if (Message and gm_Up) <> 0 then ParseCommand('/-up', true) else
-if (Message and gm_Down) <> 0 then ParseCommand('/-down', true) else
-if (Message and gm_Attack) <> 0 then ParseCommand('/-attack', true)
+if (Message and gmLeft) <> 0 then ParseCommand('/-left', true) else
+if (Message and gmRight) <> 0 then ParseCommand('/-right', true) else
+if (Message and gmUp) <> 0 then ParseCommand('/-up', true) else
+if (Message and gmDown) <> 0 then ParseCommand('/-down', true) else
+if (Message and gmAttack) <> 0 then ParseCommand('/-attack', true)
 end;
 
 {$INCLUDE "CCHandlers.inc"}

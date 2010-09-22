@@ -757,7 +757,7 @@ begin
         if (HHGear^.Angle - 32 >= 0) then dec(HHGear^.Angle,32)
     end;
 
-    if (HHGear^.Message and gm_Attack) <> 0 then
+    if (HHGear^.Message and gmAttack) <> 0 then
     begin
         shell := AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
         if shell <> nil then
@@ -841,7 +841,7 @@ begin
     AllInactive := false;
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
     dec(Gear^.Timer);
-    if (Gear^.Timer = 0)or((Gear^.Message and gm_Destroy) <> 0)or((HHGear^.State and gstHHDriven) =
+    if (Gear^.Timer = 0)or((Gear^.Message and gmDestroy) <> 0)or((HHGear^.State and gstHHDriven) =
        0) then
     begin
         StopSound(Gear^.SoundChannel);
@@ -894,14 +894,14 @@ begin
     HHGear^.X := Gear^.X;
     HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius);
 
-    if (Gear^.Message and gm_Attack) <> 0 then
+    if (Gear^.Message and gmAttack) <> 0 then
         if (Gear^.State and gsttmpFlag) <> 0 then Gear^.Timer := 1
     else
     else
         if (Gear^.State and gsttmpFlag) = 0 then Gear^.State := Gear^.State or gsttmpFlag;
-    if ((Gear^.Message and gm_Left) <> 0) then Gear^.dX := - _0_3
+    if ((Gear^.Message and gmLeft) <> 0) then Gear^.dX := - _0_3
     else
-        if ((Gear^.Message and gm_Right) <> 0) then Gear^.dX := _0_3
+        if ((Gear^.Message and gmRight) <> 0) then Gear^.dX := _0_3
     else Gear^.dX := _0;
 end;
 
@@ -968,9 +968,9 @@ begin
     begin
         b := true;
         if Gear^.dX.isNegative then
-            HHGear^.Message := (HHGear^.Message and (gm_Attack or gm_Up or gm_Down)) or gm_Left
+            HHGear^.Message := (HHGear^.Message and (gmAttack or gmUp or gmDown)) or gmLeft
         else
-            HHGear^.Message := (HHGear^.Message and (gm_Attack or gm_Up or gm_Down)) or gm_Right;
+            HHGear^.Message := (HHGear^.Message and (gmAttack or gmUp or gmDown)) or gmRight;
 
         if ((HHGear^.State and gstMoving) = 0) then
         begin
@@ -1011,7 +1011,7 @@ begin
         Gear^.dX, Gear^.dY,
         cHHRadius * 5, cHHRadius * 2 + 7);
 
-    if (Gear^.Timer = 0) or ((HHGear^.Message and gm_Attack) <> 0) then
+    if (Gear^.Timer = 0) or ((HHGear^.Message and gmAttack) <> 0) then
     begin
         HHGear^.Message := 0;
         HHGear^.State := HHGear^.State and (not gstNotKickable);
@@ -1061,7 +1061,7 @@ begin
     HHGear^.Y := HHGear^.Y + HHGear^.dY;
     HHGear^.dY := HHGear^.dY + cGravity;
 
-    if (Gear^.Message and gm_Attack) <> 0 then
+    if (Gear^.Message and gmAttack) <> 0 then
     begin
         Gear^.X := HHGear^.X;
         Gear^.Y := HHGear^.Y;
@@ -1089,7 +1089,7 @@ procedure DeleteMe;
 begin
     with HHGear^ do
     begin
-        Message := Message and not gm_Attack;
+        Message := Message and not gmAttack;
         State := (State or gstMoving) and not gstWinner;
     end;
     DeleteGear(Gear)
@@ -1099,7 +1099,7 @@ procedure WaitCollision;
 begin
     with HHGear^ do
     begin
-        Message := Message and not gm_Attack;
+        Message := Message and not gmAttack;
         State := State or gstMoving;
     end;
     RopePoints.Count := 0;
@@ -1118,9 +1118,9 @@ begin
         exit
     end;
 
-    if (Gear^.Message and gm_Left  <> 0) then HHGear^.dX := HHGear^.dX - _0_0002
+    if (Gear^.Message and gmLeft  <> 0) then HHGear^.dX := HHGear^.dX - _0_0002
     else
-        if (Gear^.Message and gm_Right <> 0) then HHGear^.dX := HHGear^.dX + _0_0002;
+        if (Gear^.Message and gmRight <> 0) then HHGear^.dX := HHGear^.dX + _0_0002;
 
     if not TestCollisionYwithGear(HHGear, 1) then HHGear^.dY := HHGear^.dY + cGravity;
 
@@ -1143,12 +1143,12 @@ begin
     tx := HHGear^.X;
     ty := HHGear^.Y;
 
-    if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
+    if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
         if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
            or TestCollisionYwithGear(HHGear, hwSign(ropeDy))) then
             Gear^.Elasticity := Gear^.Elasticity + _0_3;
 
-    if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Elasticity > _30) then
+    if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
         if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
            or TestCollisionYwithGear(HHGear, -hwSign(ropeDy))) then
             Gear^.Elasticity := Gear^.Elasticity - _0_3;
@@ -1250,8 +1250,8 @@ begin
     end;
 
     if haveCollision
-       and (Gear^.Message and (gm_Left or gm_Right) <> 0)
-       and (Gear^.Message and (gm_Up or gm_Down) <> 0) then
+       and (Gear^.Message and (gmLeft or gmRight) <> 0)
+       and (Gear^.Message and (gmUp or gmDown) <> 0) then
     begin
         HHGear^.dX := SignAs(hwAbs(HHGear^.dX) + _0_2, HHGear^.dX);
         HHGear^.dY := SignAs(hwAbs(HHGear^.dY) + _0_2, HHGear^.dY)
@@ -1266,7 +1266,7 @@ begin
     end;
 
 
-    if (Gear^.Message and gm_Attack) <> 0 then
+    if (Gear^.Message and gmAttack) <> 0 then
         if (Gear^.State and gsttmpFlag) <> 0 then
             with PHedgehog(Gear^.Hedgehog)^ do
             begin
@@ -1371,14 +1371,14 @@ begin
     end;
 
     if (Gear^.Elasticity > Gear^.Friction)
-       or ((Gear^.Message and gm_Attack) = 0)
+       or ((Gear^.Message and gmAttack) = 0)
        or ((HHGear^.State and gstHHDriven) = 0)
        or (HHGear^.Damage > 0) then
     begin
         with PHedgehog(Gear^.Hedgehog)^.Gear^ do
         begin
             State := State and not gstAttacking;
-            Message := Message and not gm_Attack
+            Message := Message and not gmAttack
         end;
         DeleteGear(Gear)
     end
@@ -1597,14 +1597,14 @@ begin
     k := Gear^.Kind;
     exBoom := false;
 
-    if (Gear^.Message and gm_Destroy) > 0 then
+    if (Gear^.Message and gmDestroy) > 0 then
     begin
         DeleteGear(Gear);
         FreeActionsList;
         SetAllToActive;
         // something (hh, mine, etc...) could be on top of the case
         with CurrentHedgehog^ do
-            if Gear <> nil then Gear^.Message := Gear^.Message and not (gm_LJump or gm_HJump);
+            if Gear <> nil then Gear^.Message := Gear^.Message and not (gmLJump or gmHJump);
         exit
     end;
 
@@ -1898,7 +1898,7 @@ var
     HHGear: PGear;
 begin
     AllInactive := false;
-    if ((Gear^.Message and gm_Destroy) <> 0) then
+    if ((Gear^.Message and gmDestroy) <> 0) then
     begin
         DeleteGear(Gear);
         AfterAttack;
@@ -1965,7 +1965,7 @@ begin
     if TestCollisionYwithGear(HHGear, 1)
        or ((HHGear^.State and gstHHDriven) = 0)
        or CheckGearDrowning(HHGear)
-       or ((Gear^.Message and gm_Attack) <> 0) then
+       or ((Gear^.Message and gmAttack) <> 0) then
     begin
         with HHGear^ do
         begin
@@ -1983,10 +1983,10 @@ begin
     if not TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
         HHGear^.X := HHGear^.X + cWindSpeed * 200;
 
-    if (Gear^.Message and gm_Left) <> 0 then HHGear^.X := HHGear^.X - cMaxWindSpeed * 80
-    else if (Gear^.Message and gm_Right) <> 0 then HHGear^.X := HHGear^.X + cMaxWindSpeed * 80;
-    if (Gear^.Message and gm_Up) <> 0 then HHGear^.Y := HHGear^.Y - cGravity * 40
-    else if (Gear^.Message and gm_Down) <> 0 then HHGear^.Y := HHGear^.Y + cGravity * 40;
+    if (Gear^.Message and gmLeft) <> 0 then HHGear^.X := HHGear^.X - cMaxWindSpeed * 80
+    else if (Gear^.Message and gmRight) <> 0 then HHGear^.X := HHGear^.X + cMaxWindSpeed * 80;
+    if (Gear^.Message and gmUp) <> 0 then HHGear^.Y := HHGear^.Y - cGravity * 40
+    else if (Gear^.Message and gmDown) <> 0 then HHGear^.Y := HHGear^.Y + cGravity * 40;
 
     HHGear^.Y := HHGear^.Y + cGravity * 100;
     Gear^.X := HHGear^.X;
@@ -2004,7 +2004,7 @@ begin
     AfterAttack;
 
     HHGear^.State := HHGear^.State and not (gstAttacking or gstAttacked or gstMoving);
-    HHGear^.Message := HHGear^.Message and not gm_Attack;
+    HHGear^.Message := HHGear^.Message and not gmAttack;
 
     Gear^.doStep := @doStepParachuteWork;
 
@@ -2104,7 +2104,7 @@ begin
        sprAmGirder, Gear^.State, true) then
     begin
         PlaySound(sndDenied);
-        HHGear^.Message := HHGear^.Message and not gm_Attack;
+        HHGear^.Message := HHGear^.Message and not gmAttack;
         HHGear^.State := HHGear^.State and not gstAttacking;
         HHGear^.State := HHGear^.State or gstHHChooseTarget;
         isCursorVisible := true;
@@ -2118,7 +2118,7 @@ begin
     end;
 
     HHGear^.State := HHGear^.State and not (gstAttacking or gstAttacked);
-    HHGear^.Message := HHGear^.Message and not gm_Attack;
+    HHGear^.Message := HHGear^.Message and not gmAttack;
     TargetPoint.X := NoPointX
 end;
 
@@ -2163,7 +2163,7 @@ begin
        TargetPoint.Y - SpritesData[sprHHTelepMask].Height div 2,
        sprHHTelepMask, 0, false) then
     begin
-        HHGear^.Message := HHGear^.Message and not gm_Attack;
+        HHGear^.Message := HHGear^.Message and not gmAttack;
         HHGear^.State := HHGear^.State and not gstAttacking;
         HHGear^.State := HHGear^.State or gstHHChooseTarget;
         DeleteGear(Gear);
@@ -2198,10 +2198,10 @@ var
 begin
     AllInactive := false;
 
-    if ((Gear^.Message and not gm_Switch) <> 0) or (TurnTimeLeft = 0) then
+    if ((Gear^.Message and not gmSwitch) <> 0) or (TurnTimeLeft = 0) then
     begin
         HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
-        Msg := Gear^.Message and not gm_Switch;
+        Msg := Gear^.Message and not gmSwitch;
         DeleteGear(Gear);
         OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
         ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
@@ -2212,11 +2212,11 @@ begin
         exit
     end;
 
-    if (Gear^.Message and gm_Switch) <> 0 then
+    if (Gear^.Message and gmSwitch) <> 0 then
     begin
         HHGear := CurrentHedgehog^.Gear;
-        HHGear^.Message := HHGear^.Message and not gm_Switch;
-        Gear^.Message := Gear^.Message and not gm_Switch;
+        HHGear^.Message := HHGear^.Message and not gmSwitch;
+        Gear^.Message := Gear^.Message and not gmSwitch;
         State := HHGear^.State;
         HHGear^.State := 0;
         HHGear^.Active := false;
@@ -2255,7 +2255,7 @@ begin
     with HHGear^ do
     begin
         State := State and not gstAttacking;
-        Message := Message and not gm_Attack
+        Message := Message and not gmAttack
     end
 end;
 
@@ -2511,7 +2511,7 @@ begin
     Gear^.Timer := Gear^.Health*10;
     Gear^.PortalCounter:= 0;
     // This is not seconds, but at least it is *some* feedback
-    if (Gear^.Health = 0) or ((Gear^.Message and gm_Attack) <> 0) then
+    if (Gear^.Health = 0) or ((Gear^.Message and gmAttack) <> 0) then
     begin
         FollowGear := Gear;
         Gear^.RenderTimer := false;
@@ -2563,7 +2563,7 @@ begin
     AllInactive := false;
 
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
-    HHGear^.Message := HHGear^.Message and (not gm_Attack);
+    HHGear^.Message := HHGear^.Message and (not gmAttack);
     DeleteCI(HHGear);
     Gear^.IntersectGear:= nil;
 
@@ -2776,7 +2776,7 @@ var
     HHGear: PGear;
 begin
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
-    HHGear^.Message := HHGear^.Message and not (gm_Up or gm_Down);
+    HHGear^.Message := HHGear^.Message and not (gmUp or gmDown);
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.doStep := @doStepBallgunWork
 end;
@@ -2814,13 +2814,13 @@ begin
     end
     else
     begin
-        if ((Gear^.Message and gm_Left) <> 0) then
+        if ((Gear^.Message and gmLeft) <> 0) then
         begin
             fChanged := true;
             Gear^.Angle := (Gear^.Angle + (4096 - cAngleSpeed)) mod 4096
         end;
 
-        if ((Gear^.Message and gm_Right) <> 0) then
+        if ((Gear^.Message and gmRight) <> 0) then
         begin
             fChanged := true;
             Gear^.Angle := (Gear^.Angle + cAngleSpeed) mod 4096
@@ -2850,15 +2850,15 @@ begin
         else
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
-        if ((HHGear^.Message and gm_Attack) <> 0) and (Gear^.Health <> 0) then
+        if ((HHGear^.Message and gmAttack) <> 0) and (Gear^.Health <> 0) then
         begin
-            HHGear^.Message := HHGear^.Message and not gm_Attack;
+            HHGear^.Message := HHGear^.Message and not gmAttack;
             AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.dX * _0_5, Gear^.dY *
             _0_5, 0);
             dec(Gear^.Health)
         end;
 
-        if ((HHGear^.Message and gm_LJump) <> 0)
+        if ((HHGear^.Message and gmLJump) <> 0)
            and ((Gear^.State and gsttmpFlag) = 0) then
         begin
             Gear^.State := Gear^.State or gsttmpFlag;
@@ -2956,27 +2956,27 @@ begin
     //dec(Gear^.Timer);
     move := _0_1;
     fuel := 50;
-(*if (HHGear^.Message and gm_Precise) <> 0 then
+(*if (HHGear^.Message and gmPrecise) <> 0 then
     begin
     move:= _0_02;
     fuel:= 5;
     end;*)
 
-    if (HHGear^.Message and gm_Up) <> 0 then
+    if (HHGear^.Message and gmUp) <> 0 then
     begin
         if (not HHGear^.dY.isNegative) or (HHGear^.Y > -_256) then
             HHGear^.dY := HHGear^.dY - move;
         HHGear^.dY := HHGear^.dY - move;
         dec(Gear^.Health, fuel);
-        Gear^.MsgParam := Gear^.MsgParam or gm_Up;
+        Gear^.MsgParam := Gear^.MsgParam or gmUp;
         Gear^.Timer := GameTicks
     end;
-    if (HHGear^.Message and gm_Left) <> 0 then move.isNegative := true;
-    if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
+    if (HHGear^.Message and gmLeft) <> 0 then move.isNegative := true;
+    if (HHGear^.Message and (gmLeft or gmRight)) <> 0 then
     begin
         HHGear^.dX := HHGear^.dX + (move * _0_2);
         dec(Gear^.Health, fuel div 5);
-        Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gm_Left or gm_Right));
+        Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
         Gear^.Timer := GameTicks
     end;
 
@@ -2996,9 +2996,9 @@ begin
                      '%', cWhiteColor, fntSmall)
     end;
 
-    if HHGear^.Message and (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right) <> 0 then Gear^
+    if HHGear^.Message and (gmAttack or gmUp or gmPrecise or gmLeft or gmRight) <> 0 then Gear^
         .State := Gear^.State and not gsttmpFlag;
-    HHGear^.Message := HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
+    HHGear^.Message := HHGear^.Message and not (gmUp or gmPrecise or gmLeft or gmRight);
     HHGear^.State := HHGear^.State or gstMoving;
 
     Gear^.X := HHGear^.X;
@@ -3015,7 +3015,7 @@ begin
        // allow brief ground touches - to be fair on this, might need another counter
        or (((GameTicks and $1FF) = 0) and (not HHGear^.dY.isNegative) and TestCollisionYwithGear(
        HHGear, 1))
-       or ((Gear^.Message and gm_Attack) <> 0) then
+       or ((Gear^.Message and gmAttack) <> 0) then
     begin
         with HHGear^ do
         begin
@@ -3047,7 +3047,7 @@ begin
     with HHGear^ do
     begin
         State := State and not gstAttacking;
-        Message := Message and not (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right);
+        Message := Message and not (gmAttack or gmUp or gmPrecise or gmLeft or gmRight);
         if (dY < _0_1) and (dY > -_0_1) then
         begin
             Gear^.State := Gear^.State or gsttmpFlag;
@@ -3083,7 +3083,7 @@ begin
 
     if Gear^.Pos > 0 then
         dec(Gear^.Pos, 1)
-    else if (HHGear^.Message and (gm_Left or gm_Right or gm_Up)) <> 0 then
+    else if (HHGear^.Message and (gmLeft or gmRight or gmUp)) <> 0 then
              Gear^.Pos := 500;
 
     if HHGear^.dX.isNegative then
@@ -3091,20 +3091,20 @@ begin
     else
         Gear^.Tag := 1;
 
-    if (HHGear^.Message and gm_Up) <> 0 then
+    if (HHGear^.Message and gmUp) <> 0 then
     begin
         if (not HHGear^.dY.isNegative) or (HHGear^.Y > -_256) then
             HHGear^.dY := HHGear^.dY - move;
         HHGear^.dY := HHGear^.dY - move;
         dec(Gear^.Health, fuel);
-        Gear^.MsgParam := Gear^.MsgParam or gm_Up;
+        Gear^.MsgParam := Gear^.MsgParam or gmUp;
     end;
-    if (HHGear^.Message and gm_Left) <> 0 then move.isNegative := true;
-    if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
+    if (HHGear^.Message and gmLeft) <> 0 then move.isNegative := true;
+    if (HHGear^.Message and (gmLeft or gmRight)) <> 0 then
     begin
         HHGear^.dX := HHGear^.dX + (move * _0_2);
         dec(Gear^.Health, fuel div 5);
-        Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gm_Left or gm_Right));
+        Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
     end;
 
     if Gear^.Health < 0 then Gear^.Health := 0;
@@ -3112,9 +3112,9 @@ begin
         for i:= ((500-Gear^.Health) div 250) downto 0 do
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFeather);
 
-    if (HHGear^.Message and gm_Attack <> 0) then
+    if (HHGear^.Message and gmAttack <> 0) then
     begin
-        HHGear^.Message := HHGear^.Message and not gm_Attack;
+        HHGear^.Message := HHGear^.Message and not gmAttack;
         if Gear^.FlightTime > 0 then
         begin
             AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + 32, gtEgg, 0, Gear^.dX * _0_5, Gear^.dY, 0)
@@ -3124,9 +3124,9 @@ begin
         end;
     end;
 
-    if HHGear^.Message and (gm_Up or gm_Precise or gm_Left or gm_Right) <> 0 then 
+    if HHGear^.Message and (gmUp or gmPrecise or gmLeft or gmRight) <> 0 then 
         Gear^.State := Gear^.State and not gsttmpFlag;
-    HHGear^.Message := HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
+    HHGear^.Message := HHGear^.Message and not (gmUp or gmPrecise or gmLeft or gmRight);
     HHGear^.State := HHGear^.State or gstMoving;
 
     Gear^.X := HHGear^.X;
@@ -3143,7 +3143,7 @@ begin
        // allow brief ground touches - to be fair on this, might need another counter
        or (((GameTicks and $1FF) = 0) and (not HHGear^.dY.isNegative) and TestCollisionYwithGear(
        HHGear, 1))
-       or ((Gear^.Message and gm_Attack) <> 0) then
+       or ((Gear^.Message and gmAttack) <> 0) then
     begin
         with HHGear^ do
         begin
@@ -3179,7 +3179,7 @@ begin
             exit
         end;
     HHGear := CurrentHedgehog^.Gear;
-    HHGear^.Message := HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
+    HHGear^.Message := HHGear^.Message and not (gmUp or gmPrecise or gmLeft or gmRight);
     if abs(hwRound(HHGear^.Y - Gear^.Y)) > 32 then
     begin
         if Gear^.Timer = 0 then
@@ -3232,7 +3232,7 @@ begin
     with HHGear^ do
     begin
         State := State and not gstAttacking;
-        Message := Message and not (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right)
+        Message := Message and not (gmAttack or gmUp or gmPrecise or gmLeft or gmRight)
     end
 end;
 
@@ -3275,11 +3275,11 @@ var flags: LongWord;
 begin
     if (CurrentHedgehog <> nil)
        and (CurrentHedgehog^.Gear <> nil)
-       and ((CurrentHedgehog^.Gear^.Message and gm_Switch) <> 0) then
+       and ((CurrentHedgehog^.Gear^.Message and gmSwitch) <> 0) then
         With CurrentHedgehog^ do
             if (CurAmmoType = amPortalGun) then
             begin
-                CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gm_Switch;
+                CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gmSwitch;
                 
                 CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
                 flags := CurWeapon^.Timer and not 2;
@@ -3616,7 +3616,7 @@ var
 begin
     AllInactive := false;
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and ((CurrentHedgehog^.Gear^.
-       Message and gm_Slot) <> 0) then
+       Message and gmSlot) <> 0) then
     begin
         case CurrentHedgehog^.Gear^.MsgParam of 
             0: PlaySound(sndPiano0);
@@ -3631,7 +3631,7 @@ begin
         end;
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
         CurrentHedgehog^.Gear^.MsgParam := 0;
-        CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gm_Slot;
+        CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gmSlot;
     end;
 
     if (*((Gear^.Pos = 3) and ((GameFlags and gfSolidLand) <> 0)) or*) (Gear^.Pos = 5) then
@@ -3840,12 +3840,12 @@ begin
     
     if (GameTicks and $FF) = 0 then
     begin
-        if (HHGear^.Message and gm_Right) <> 0 then
+        if (HHGear^.Message and gmRight) <> 0 then
         begin
             if HHGear^.dX.isNegative and (Gear^.Tag < 20) then inc(Gear^.Tag)
             else if Gear^.Tag > 5 then dec(Gear^.Tag);
         end
-        else if (HHGear^.Message and gm_Left) <> 0 then
+        else if (HHGear^.Message and gmLeft) <> 0 then
         begin
             if HHGear^.dX.isNegative and (Gear^.Tag > 5) then dec(Gear^.Tag)
             else if Gear^.Tag < 20 then inc(Gear^.Tag);
@@ -3893,7 +3893,7 @@ var
     HHGear: PGear;
 begin
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
-    HHGear^.Message := HHGear^.Message and not (gm_Up or gm_Down or gm_Left or gm_Right);
+    HHGear^.Message := HHGear^.Message and not (gmUp or gmDown or gmLeft or gmRight);
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.doStep := @doStepFlamethrowerWork
 end;
@@ -3964,7 +3964,7 @@ begin
     AllInactive := false;
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
     dec(Gear^.Timer);
-    if (HHGear = nil) or (Gear^.Timer = 0) or ((Gear^.Message and gm_Destroy) <> 0) then
+    if (HHGear = nil) or (Gear^.Timer = 0) or ((Gear^.Message and gmDestroy) <> 0) then
     begin
         DeleteGear(Gear);
         exit

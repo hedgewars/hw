@@ -566,8 +566,8 @@ if (Gear^.Kind = gtPortal) then
 else if Gear^.Kind = gtHedgehog then
     if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
         begin
-        Gear^.Message:= gm_Destroy;
-        CurAmmoGear^.Message:= gm_Destroy;
+        Gear^.Message:= gmDestroy;
+        CurAmmoGear^.Message:= gmDestroy;
         exit
         end
     else

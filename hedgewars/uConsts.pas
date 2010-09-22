@@ -377,21 +377,21 @@ const
     gstLoser          = $00080000;
     gstHHGone         = $00100000;
 
-    gm_Left   = $00000001;
-    gm_Right  = $00000002;
-    gm_Up     = $00000004;
-    gm_Down   = $00000008;
-    gm_Switch = $00000010;
-    gm_Attack = $00000020;
-    gm_LJump  = $00000040;
-    gm_HJump  = $00000080;
-    gm_Destroy= $00000100;
-    gm_Slot   = $00000200; // with param
-    gm_Weapon = $00000400; // with param
-    gm_Timer  = $00000800; // with param
-    gm_Animate= $00001000; // with param
-    gm_Precise= $00002000;
-    gmAllStoppable = gm_Left or gm_Right or gm_Up or gm_Down or gm_Attack or gm_Precise;
+    gmLeft   = $00000001;
+    gmRight  = $00000002;
+    gmUp     = $00000004;
+    gmDown   = $00000008;
+    gmSwitch = $00000010;
+    gmAttack = $00000020;
+    gmLJump  = $00000040;
+    gmHJump  = $00000080;
+    gmDestroy= $00000100;
+    gmSlot   = $00000200; // with param
+    gmWeapon = $00000400; // with param
+    gmTimer  = $00000800; // with param
+    gmAnimate= $00001000; // with param
+    gmPrecise= $00002000;
+    gmAllStoppable = gmLeft or gmRight or gmUp or gmDown or gmAttack or gmPrecise;
 
     cMaxSlotIndex       = 9;
     cMaxSlotAmmoIndex   = 5;

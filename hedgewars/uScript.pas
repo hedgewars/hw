@@ -246,6 +246,39 @@ begin
     lc_getgeartype:= 1
 end;
 
+function lc_getgearmessage(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetGearMessage!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushinteger(L, gear^.message)
+        else
+            lua_pushnil(L);
+        end;
+    lc_getgearmessage:= 1
+end;
+
+function lc_setgearmessage(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        LuaError('Lua: Wrong number of parameters passed to SetGearMessage!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            gear^.message:= lua_tointeger(L, 2);
+        end;
+    lc_setgearmessage:= 0
+end;
+
 function lc_gethoglevel(L : Plua_State): LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1019,6 +1052,23 @@ ScriptSetInteger('gfSharedAmmo', gfSharedAmmo);
 ScriptSetInteger('gfDisableGirders', gfDisableGirders);
 ScriptSetInteger('gfExplosives', gfExplosives);
 
+ScriptSetInteger('gmLeft', gmLeft);
+ScriptSetInteger('gmRight', gmRight);
+ScriptSetInteger('gmUp', gmUp);
+ScriptSetInteger('gmDown', gmDown);
+ScriptSetInteger('gmSwitch', gmSwitch);
+ScriptSetInteger('gmAttack', gmAttack);
+ScriptSetInteger('gmLJump', gmLJump);
+ScriptSetInteger('gmHJump', gmHJump);
+ScriptSetInteger('gmDestroy', gmDestroy);
+ScriptSetInteger('gmSlot', gmSlot);
+ScriptSetInteger('gmWeapon', gmWeapon);
+ScriptSetInteger('gmTimer', gmTimer);
+ScriptSetInteger('gmAnimate', gmAnimate);
+ScriptSetInteger('gmPrecise', gmPrecise);
+ScriptSetInteger('gmAllStoppable', gmAllStoppable);
+
+
 // speech bubbles
 ScriptSetInteger('SAY_SAY', 1);
 ScriptSetInteger('SAY_THINK', 2);
@@ -1080,6 +1130,8 @@ lua_register(luaState, 'HogSay', @lc_hogsay);
 lua_register(luaState, 'HogTurnLeft', @lc_hogturnleft);
 lua_register(luaState, 'CampaignLock', @lc_campaignlock);
 lua_register(luaState, 'CampaignUnlock', @lc_campaignunlock);
+lua_register(luaState, 'GetGearMessage', @lc_getgearmessage);
+lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
 
 
 ScriptClearStack; // just to be sure stack is empty

@@ -345,7 +345,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
     defaultPos:= false
     end else
 
-    if (Gear^.Message and (gm_Left or gm_Right) <> 0) and (not isCursorVisible) then
+    if (Gear^.Message and (gmLeft or gmRight) <> 0) and (not isCursorVisible) then
         begin
         DrawHedgehog(sx, sy,
             hwSign(Gear^.dX),
@@ -599,9 +599,9 @@ if (Gear^.State and gstHHDriven) <> 0 then
         case CurAmmoGear^.Kind of
             gtJetpack: begin
                        DrawSprite(sprJetpack, sx-32, sy-32, 0);
-                       if (CurAmmoGear^.MsgParam and gm_Up) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 1);
-                       if (CurAmmoGear^.MsgParam and gm_Left) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 2);
-                       if (CurAmmoGear^.MsgParam and gm_Right) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 3);
+                       if (CurAmmoGear^.MsgParam and gmUp) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 1);
+                       if (CurAmmoGear^.MsgParam and gmLeft) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 2);
+                       if (CurAmmoGear^.MsgParam and gmRight) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 3);
                        if CurAmmoGear^.Tex <> nil then DrawCentered(sx, sy - 40, CurAmmoGear^.Tex);
                        DrawAltWeapon(Gear, sx, sy)
                        end;
