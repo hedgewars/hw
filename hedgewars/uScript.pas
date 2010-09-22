@@ -265,6 +265,20 @@ begin
     lc_getgearmessage:= 1
 end;
 
+function lc_setgearmessage(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        LuaError('Lua: Wrong number of parameters passed to SetGearMessage!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            gear^.message:= lua_tointeger(L, 2);
+        end;
+    lc_setgearmessage:= 0
+end;
+
 function lc_gethoglevel(L : Plua_State): LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1116,7 +1130,8 @@ lua_register(luaState, 'HogSay', @lc_hogsay);
 lua_register(luaState, 'HogTurnLeft', @lc_hogturnleft);
 lua_register(luaState, 'CampaignLock', @lc_campaignlock);
 lua_register(luaState, 'CampaignUnlock', @lc_campaignunlock);
-lua_register(luaState, 'GearGetMessage', @lc_getgearmessage);
+lua_register(luaState, 'GetGearMessage', @lc_getgearmessage);
+lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
 
 
 ScriptClearStack; // just to be sure stack is empty
