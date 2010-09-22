@@ -738,7 +738,7 @@ begin
         scale:= cScreenWidth / (Source^.w + 20)
     else
         scale:= 1.0;
-    DrawTexture(X - round((Source^.w * scale) div 2, Top, Source, scale)
+    DrawTexture(X - round(Source^.w * scale) div 2, Top, Source, scale)
 end;
 
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
