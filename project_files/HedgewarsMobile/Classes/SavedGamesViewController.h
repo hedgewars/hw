@@ -22,8 +22,15 @@
 #import <UIKit/UIKit.h>
 
 
-@interface SavedGamesViewController : UITableViewController {
-
+@interface SavedGamesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>  {
+    UITableView *tableView;
+    NSMutableArray *listOfSavegames;
 }
+
+@property (nonatomic,retain) IBOutlet UITableView *tableView;
+@property (nonatomic,retain) NSMutableArray *listOfSavegames;
+
+
+-(IBAction) buttonPressed:(id) sender;
 
 @end

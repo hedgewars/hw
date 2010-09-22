@@ -20,52 +20,93 @@
 
 
 #import "SavedGamesViewController.h"
-
+#import "SDL_uikitappdelegate.h"
+#import "CommodityFunctions.h"
 
 @implementation SavedGamesViewController
+@synthesize tableView, listOfSavegames;
 
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        // Custom initialization
-    }
-    return self;
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+    return rotationManager(interfaceOrientation);
 }
-*/
 
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
+-(void) viewDidLoad {
+    self.tableView.backgroundView = nil;
+
     [super viewDidLoad];
 }
-*/
 
+-(void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Overriden to allow any orientation.
-    return YES;
+    NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SAVES_DIRECTORY() error:NULL];
+    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:contentsOfDir copyItems:YES];
+    self.listOfSavegames = array;
+    [array release];
+
+    [self.tableView reloadData];    
 }
 
+-(IBAction) buttonPressed:(id) sender {
+    playSound(@"backSound");
+    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+}
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
+#pragma mark -
+#pragma mark Table view data source
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.listOfSavegames count];
+}
+
+-(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"Cell";
+
+    UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil)
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+
+    // first all the names, then the title (which is offset 5)
+    cell.textLabel.text = [[self.listOfSavegames objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+    return cell;
+}
+
+#pragma mark -
+#pragma mark Table view delegate
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    // Release any cached data, images, etc that aren't in use.
+    NSString *filePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:[indexPath row]]];
+    
+    NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      [NSDictionary dictionary],@"game_dictionary",
+                                      filePath,@"savefile",
+                                      [NSNumber numberWithBool:NO],@"netgame",
+                                      nil];
+    [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
 }
 
+#pragma mark -
+#pragma mark Memory Management
+-(void) didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
 
-- (void)viewDidUnload {
+-(void) viewDidUnload {
+    self.tableView = nil;
+    self.listOfSavegames = nil;
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
-
-- (void)dealloc {
+-(void) dealloc {
+    [tableView release];
+    [listOfSavegames release];
     [super dealloc];
 }
-
 
 @end

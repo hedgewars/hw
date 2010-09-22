@@ -81,7 +81,7 @@ int main (int argc, char *argv[]) {
 -(void) startSDLgame:(NSDictionary *)gameDictionary {
     UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
 
-    UIView *blackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aWin.frame.size.height, aWin.frame.size.width)];
+    UIView *blackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aWin.frame.size.width, aWin.frame.size.height)];
     blackView.opaque = YES;
     blackView.backgroundColor = [UIColor blackColor];
     [aWin addSubview:blackView];

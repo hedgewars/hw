@@ -44,10 +44,14 @@
         isNetGame = [[gameDictionary objectForKey:@"netgame"] boolValue];
         NSString *path = [gameDictionary objectForKey:@"savefile"];
         // if path is empty it means i have to create a new file, otherwise i read from that file
-        if ([path isEqualToString:@""] == YES)
-            self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", [[NSDate date] description]];
-        else
-            self.savePath = [SAVES_DIRECTORY() stringByAppendingString:path];
+        if ([path isEqualToString:@""] == YES) {
+            NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+            [outputFormatter setDateFormat:@"yyyy-MM-dd 'at' HH,mm"];
+            NSString *newDateString = [outputFormatter stringFromDate:[NSDate date]];
+            self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", newDateString];
+            [outputFormatter release];
+        } else
+            self.savePath = path;
     }
     return self;
 }
