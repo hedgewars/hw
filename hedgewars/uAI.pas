@@ -212,7 +212,7 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
     Pop(ticks, Actions, Me^);
 
     AddAction(Actions, Me^.Message, aim_push, 250, 0, 0);
-    if (Me^.Message and gm_Left) <> 0 then AddAction(Actions, aia_WaitXL, hwRound(Me^.X), 0, 0, 0)
+    if (Me^.Message and gmLeft) <> 0 then AddAction(Actions, aia_WaitXL, hwRound(Me^.X), 0, 0, 0)
                                       else AddAction(Actions, aia_WaitXR, hwRound(Me^.X), 0, 0, 0);
     steps:= 0;
 

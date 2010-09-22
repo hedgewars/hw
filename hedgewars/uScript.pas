@@ -1038,20 +1038,20 @@ ScriptSetInteger('gfSharedAmmo', gfSharedAmmo);
 ScriptSetInteger('gfDisableGirders', gfDisableGirders);
 ScriptSetInteger('gfExplosives', gfExplosives);
 
-ScriptSetInteger('gm_Left', gm_Left);
-ScriptSetInteger('gm_Right', gm_Right);
-ScriptSetInteger('gm_Up', gm_Up);
-ScriptSetInteger('gm_Down', gm_Down);
-ScriptSetInteger('gm_Switch', gm_Switch);
-ScriptSetInteger('gm_Attack', gm_Attack);
-ScriptSetInteger('gm_LJump', gm_LJump);
-ScriptSetInteger('gm_HJump', gm_HJump);
-ScriptSetInteger('gm_Destroy', gm_Destroy);
-ScriptSetInteger('gm_Slot', gm_Slot);
-ScriptSetInteger('gm_Weapon', gm_Weapon);
-ScriptSetInteger('gm_Timer', gm_Timer);
-ScriptSetInteger('gm_Animate', gm_Animate);
-ScriptSetInteger('gm_Precise', gm_Precise);
+ScriptSetInteger('gmLeft', gmLeft);
+ScriptSetInteger('gmRight', gmRight);
+ScriptSetInteger('gmUp', gmUp);
+ScriptSetInteger('gmDown', gmDown);
+ScriptSetInteger('gmSwitch', gmSwitch);
+ScriptSetInteger('gmAttack', gmAttack);
+ScriptSetInteger('gmLJump', gmLJump);
+ScriptSetInteger('gmHJump', gmHJump);
+ScriptSetInteger('gmDestroy', gmDestroy);
+ScriptSetInteger('gmSlot', gmSlot);
+ScriptSetInteger('gmWeapon', gmWeapon);
+ScriptSetInteger('gmTimer', gmTimer);
+ScriptSetInteger('gmAnimate', gmAnimate);
+ScriptSetInteger('gmPrecise', gmPrecise);
 ScriptSetInteger('gmAllStoppable', gmAllStoppable);
 
 
