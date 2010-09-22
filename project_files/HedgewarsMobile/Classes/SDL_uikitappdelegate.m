@@ -79,10 +79,12 @@ int main (int argc, char *argv[]) {
 
 // main routine for calling the actual game engine
 -(void) startSDLgame:(NSDictionary *)gameDictionary {
-    UIView *blackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
+    UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+
+    UIView *blackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aWin.frame.size.height, aWin.frame.size.width)];
     blackView.opaque = YES;
     blackView.backgroundColor = [UIColor blackColor];
-    [self.view addSubview:blackView];
+    [aWin addSubview:blackView];
 
     // pull out useful configuration info from various files
     GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
@@ -102,7 +104,7 @@ int main (int argc, char *argv[]) {
     isInGame = NO;
     free(gameArgs);
 
-    UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0]; [aWin makeKeyAndVisible];
+    [aWin makeKeyAndVisible];
     [UIView beginAnimations:@"fading in from ingame" context:NULL];
     [UIView setAnimationDuration:1];
     blackView.alpha = 0;

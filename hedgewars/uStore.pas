@@ -732,8 +732,13 @@ begin
 end;
 
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
+var scale: GLfloat;
 begin
-DrawTexture(X - Source^.w shr 1, Top, Source)
+    if (Source^.w + 20) > cScreenWidth then
+        scale:= cScreenWidth / (Source^.w + 20)
+    else
+        scale:= 1.0;
+    DrawTexture(X - round((Source^.w * scale) div 2, Top, Source, scale)
 end;
 
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);

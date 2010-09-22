@@ -26,7 +26,7 @@
 #import "CommodityFunctions.h"
 #import "NSStringExtra.h"
 
-#define BUFFER_SIZE 128
+#define BUFFER_SIZE 64
 
 @implementation GameSetup
 @synthesize systemSettings, gameConfig, savePath;

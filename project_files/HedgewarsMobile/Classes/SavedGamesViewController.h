@@ -22,7 +22,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface SavedGamesViewController : UIViewController {
+@interface SavedGamesViewController : UITableViewController {
 
 }
 
