@@ -1567,7 +1567,7 @@ PageScheme::PageScheme(QWidget* parent) :
     glBSLayout->addWidget(l,1,1,1,1);
 
     SB_TurnTime = new QSpinBox(gbBasicSettings);
-    SB_TurnTime->setRange(1, 99);
+    SB_TurnTime->setRange(1, 9999);
     SB_TurnTime->setValue(45);
     SB_TurnTime->setSingleStep(15);
     glBSLayout->addWidget(SB_TurnTime,1,2,1,1);

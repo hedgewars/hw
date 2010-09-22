@@ -668,7 +668,7 @@ offsetX:= cScreenHeight - 13;
 offsetX:= 48;
 {$ENDIF}
 offsetY:= cOffsetY;
-if (TurnTimeLeft <> 0) or (ReadyTimeLeft <> 0) then
+if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) then
     begin
     if ReadyTimeLeft <> 0 then
         i:= Succ(Pred(ReadyTimeLeft) div 1000)
