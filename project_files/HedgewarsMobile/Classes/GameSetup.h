@@ -30,6 +30,7 @@
     TCPsocket csd;      // Client socket descriptor
     
     NSString *savePath;
+    BOOL isNetGame;
 }
 
 @property (nonatomic, retain) NSDictionary *systemSettings;
@@ -45,6 +46,6 @@
 -(void) provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger) numberOfTeams;
 -(NSInteger) provideScheme:(NSString *)schemeName;
 
--(const char **)getSettings;
+-(const char **)getSettings:(NSString *)recordFile;
 
 @end

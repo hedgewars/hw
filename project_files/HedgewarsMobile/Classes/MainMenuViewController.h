@@ -24,18 +24,21 @@
 @class SplitViewRootController;
 @class GameConfigViewController;
 @class AboutViewController;
+@class SavedGamesViewController;
 
 @interface MainMenuViewController : UIViewController <UIAlertViewDelegate> {
     UILabel *versionLabel;
     GameConfigViewController *gameConfigViewController;
     SplitViewRootController *settingsViewController;
     AboutViewController *aboutViewController;
+    SavedGamesViewController *savedGamesViewController;
 }
 
 @property (nonatomic,retain) IBOutlet UILabel *versionLabel;
 @property (nonatomic,retain) GameConfigViewController *gameConfigViewController;
 @property (nonatomic,retain) SplitViewRootController *settingsViewController;
 @property (nonatomic,retain) AboutViewController *aboutViewController;
+@property (nonatomic,retain) SavedGamesViewController *savedGamesViewController;
 
 -(IBAction) switchViews:(id)sender;
 

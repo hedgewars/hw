@@ -78,16 +78,23 @@ int main (int argc, char *argv[]) {
 }
 
 // main routine for calling the actual game engine
--(IBAction) startSDLgame: (NSDictionary *)gameDictionary {
+-(void) startSDLgame:(NSDictionary *)gameDictionary {
+    UIView *blackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
+    blackView.opaque = YES;
+    blackView.backgroundColor = [UIColor blackColor];
+    [self.view addSubview:blackView];
+
     // pull out useful configuration info from various files
     GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
-
-    [setup startThread:@"engineProtocol"];
-    const char **gameArgs = [setup getSettings];
+    NSNumber *isNetGameNum = [gameDictionary objectForKey:@"netgame"];
+    
+    if ([isNetGameNum boolValue] == NO)
+        [setup startThread:@"engineProtocol"];
+    const char **gameArgs = [setup getSettings:[gameDictionary objectForKey:@"savefile"]];
     [setup release];
 
     // since the sdlwindow is not yet created, we add the overlayController with a delay
-    [self performSelector:@selector(displayOverlayLater) withObject:nil afterDelay:0.1];
+    [self performSelector:@selector(displayOverlayLater:) withObject:isNetGameNum afterDelay:0.1];
 
     // this is the pascal fuction that starts the game (wrapped around isInGame)
     isInGame = YES;
@@ -95,15 +102,16 @@ int main (int argc, char *argv[]) {
     isInGame = NO;
     free(gameArgs);
 
-    // bring the uiwindow below in front
-    UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
-    [aWin makeKeyAndVisible];
-
-    // notice that in the simulator this reports 2 windows
-    DLog(@"%@",[[UIApplication sharedApplication] windows]);
+    UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0]; [aWin makeKeyAndVisible];
+    [UIView beginAnimations:@"fading in from ingame" context:NULL];
+    [UIView setAnimationDuration:1];
+    blackView.alpha = 0;
+    [UIView commitAnimations];
+    [blackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+    [blackView performSelector:@selector(release) withObject:nil afterDelay:1]; 
 }
 
--(void) displayOverlayLater {
+-(void) displayOverlayLater:(NSNumber *)isNetGame {
     // overlay with controls, become visible later, with a transparency effect
     OverlayViewController *overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
 

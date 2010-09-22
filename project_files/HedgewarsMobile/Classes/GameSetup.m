@@ -40,8 +40,14 @@
         self.systemSettings = dictSett;
         [dictSett release];
 
-        self.gameConfig = gameDictionary;
-        self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", [[NSDate date] description]];
+        self.gameConfig = [gameDictionary objectForKey:@"game_dictionary"];
+        isNetGame = [[gameDictionary objectForKey:@"netgame"] boolValue];
+        NSString *path = [gameDictionary objectForKey:@"savefile"];
+        // if path is empty it means i have to create a new file, otherwise i read from that file
+        if ([path isEqualToString:@""] == YES)
+            self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", [[NSDate date] description]];
+        else
+            self.savePath = [SAVES_DIRECTORY() stringByAppendingString:path];
     }
     return self;
 }
@@ -305,8 +311,10 @@
             case 'C':
                 DLog(@"sending game config...\n%@",self.gameConfig);
 
-                // local game
-                [self sendToEngineNoSave:@"TL"];
+                if (isNetGame == YES)
+                    [self sendToEngineNoSave:@"TN"];
+                else
+                    [self sendToEngineNoSave:@"TL"];
                 NSString *saveHeader = @"TS";
                 [[NSString stringWithFormat:@"%c%@",[saveHeader length], saveHeader] appendToFile:savePath];
 
@@ -397,7 +405,7 @@
 #pragma mark -
 #pragma mark Setting methods
 // returns an array of c-strings that are read by engine at startup
--(const char **)getSettings {
+-(const char **)getSettings: (NSString *)recordFile {
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
@@ -438,8 +446,7 @@
     gameArgs[ 7] = [[[self.systemSettings objectForKey:@"music"] stringValue] UTF8String];       //isMusicEnabled
     gameArgs[ 8] = [[[self.systemSettings objectForKey:@"alternate"] stringValue] UTF8String];   //cAltDamage
     gameArgs[ 9] = NULL;                                                                         //unused
-    gameArgs[10] = NULL;                                                                         //recordFileName
-    //[[SAVES_DIRECTORY() stringByAppendingString:@"/2010-09-21 23/30/10 +0200.hws"] UTF8String];                                                                         //recordFileName
+    gameArgs[10] = [recordFile UTF8String];                                                      //recordFileName
 
     [wSize release];
     [hSize release];

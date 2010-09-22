@@ -26,6 +26,8 @@
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		611D9B12124949D000008271 /* NSStringExtra.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D9B11124949D000008271 /* NSStringExtra.m */; };
+		611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D9BF912497E9800008271 /* SavedGamesViewController.m */; };
+		611D9BFC12497E9800008271 /* SavedGamesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611D9BFA12497E9800008271 /* SavedGamesViewController.xib */; };
 		611E03E711FA747C0077A41E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 611E037C11FA74590077A41E /* libvorbis.a */; };
 		611E0E5111FA92170077A41E /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 611E0E5011FA92130077A41E /* libfreetype.a */; };
 		611E0EE711FB20610077A41E /* ammoButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE511FB20610077A41E /* ammoButton.png */; };
@@ -695,6 +697,9 @@
 		32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hedgewars_Prefix.pch; sourceTree = "<group>"; };
 		611D9B10124949D000008271 /* NSStringExtra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSStringExtra.h; path = Classes/NSStringExtra.h; sourceTree = "<group>"; };
 		611D9B11124949D000008271 /* NSStringExtra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSStringExtra.m; path = Classes/NSStringExtra.m; sourceTree = "<group>"; };
+		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
+		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
+		611D9BFA12497E9800008271 /* SavedGamesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SavedGamesViewController.xib; sourceTree = "<group>"; };
 		611E02EC11FA74580077A41E /* cocos2d-iphone.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "cocos2d-iphone.xcodeproj"; path = "../../../Library/cocos2d/cocos2d-iphone.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		611E0E4B11FA92130077A41E /* freetype.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = freetype.xcodeproj; path = "../../../Library/freetype/Xcode-iPhoneOS/freetype.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		611E0EE511FB20610077A41E /* ammoButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ammoButton.png; path = Resources/Overlay/ammoButton.png; sourceTree = "<group>"; };
@@ -923,6 +928,7 @@
 			children = (
 				6163EE4D11CC247D001C0453 /* Game Config */,
 				6163EE4C11CC2478001C0453 /* Settings Pages */,
+				611D9BF312497B7700008271 /* Other Controllers */,
 				6163EE6C11CC253F001C0453 /* Overlay */,
 				616591F011CA9BA200D6E256 /* MainMenuViewController.h */,
 				616591F111CA9BA200D6E256 /* MainMenuViewController.m */,
@@ -1030,6 +1036,19 @@
 				6199E81912463EC400DADF8C /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		611D9BF312497B7700008271 /* Other Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				61F2E7CB1205EDE0005734F7 /* AboutViewController.h */,
+				61F2E7CC1205EDE0005734F7 /* AboutViewController.m */,
+				61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */,
+				611D9BF812497E9800008271 /* SavedGamesViewController.h */,
+				611D9BF912497E9800008271 /* SavedGamesViewController.m */,
+				611D9BFA12497E9800008271 /* SavedGamesViewController.xib */,
+			);
+			name = "Other Controllers";
 			sourceTree = "<group>";
 		};
 		611E02ED11FA74580077A41E /* Products */ = {
@@ -1213,9 +1232,6 @@
 				616591F611CA9BA200D6E256 /* OverlayViewController.h */,
 				616591F711CA9BA200D6E256 /* OverlayViewController.m */,
 				6165925011CA9CB400D6E256 /* OverlayViewController.xib */,
-				61F2E7CB1205EDE0005734F7 /* AboutViewController.h */,
-				61F2E7CC1205EDE0005734F7 /* AboutViewController.m */,
-				61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */,
 				611EEAEB122B2A4D00DF6938 /* HelpPageViewController.h */,
 				611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */,
 				611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController.xib */,
@@ -2034,6 +2050,7 @@
 				61842B40122B66280096E335 /* helpleft.png in Resources */,
 				6199E83A124647DE00DADF8C /* SupportViewController.xib in Resources */,
 				6199E86D12464A8E00DADF8C /* surpise.png in Resources */,
+				611D9BFC12497E9800008271 /* SavedGamesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2161,6 +2178,7 @@
 				611EEAEE122B2A4D00DF6938 /* HelpPageViewController.m in Sources */,
 				6199E839124647DE00DADF8C /* SupportViewController.m in Sources */,
 				611D9B12124949D000008271 /* NSStringExtra.m in Sources */,
+				611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

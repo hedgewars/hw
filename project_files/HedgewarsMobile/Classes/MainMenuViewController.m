@@ -27,9 +27,10 @@
 #import "GameConfigViewController.h"
 #import "SplitViewRootController.h"
 #import "AboutViewController.h"
+#import "SavedGamesViewController.h"
 
 @implementation MainMenuViewController
-@synthesize versionLabel, gameConfigViewController, settingsViewController, aboutViewController;
+@synthesize versionLabel, gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -230,7 +231,8 @@
 -(IBAction) switchViews:(id) sender {
     UIButton *button = (UIButton *)sender;
     UIAlertView *alert;
-    NSString *xib;
+    NSString *xib = nil;
+    NSString *debugStr = nil;
 
     playSound(@"clickSound");
     switch (button.tag) {
@@ -260,16 +262,7 @@
             [self presentModalViewController:self.settingsViewController animated:YES];
             break;
         case 3:
-            if (nil == self.aboutViewController) {
-                AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
-                about.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                about.modalPresentationStyle = UIModalPresentationFormSheet;
-                self.aboutViewController = about;
-                [about release];
-            }
-            
-            [self presentModalViewController:self.aboutViewController animated:YES];
-            /*
+#ifdef DEBUG
             debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
             UITextView *scroll = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
             scroll.text = debugStr;
@@ -283,7 +276,28 @@
             [scroll addSubview:btn];
             [self.view addSubview:scroll];
             [scroll release];
-            */
+#else
+            if (nil == self.aboutViewController) {
+                AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
+                about.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+                about.modalPresentationStyle = UIModalPresentationFormSheet;
+                self.aboutViewController = about;
+                [about release];
+            }
+            
+            [self presentModalViewController:self.aboutViewController animated:YES];
+#endif
+            break;
+        case 4:
+            if (nil == self.savedGamesViewController) {
+                SavedGamesViewController *savedgames = [[SavedGamesViewController alloc] initWithNibName:@"SavedGamesViewController" bundle:nil];
+                savedgames.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+                savedgames.modalPresentationStyle = UIModalPresentationFormSheet;
+                self.savedGamesViewController = savedgames;
+                [savedgames release];
+            }
+            
+            [self presentModalViewController:self.savedGamesViewController animated:YES];
             break;
         default:
             alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
@@ -308,6 +322,7 @@
     self.gameConfigViewController = nil;
     self.settingsViewController = nil;
     self.aboutViewController = nil;
+    self.savedGamesViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -317,6 +332,7 @@
     [settingsViewController release];
     [gameConfigViewController release];
     [aboutViewController release];
+    [savedGamesViewController release];
     [super dealloc];
 }
 
