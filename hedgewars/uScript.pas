@@ -246,6 +246,25 @@ begin
     lc_getgeartype:= 1
 end;
 
+function lc_getgearmessage(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetGearMessage!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushinteger(L, gear^.message)
+        else
+            lua_pushnil(L);
+        end;
+    lc_getgearmessage:= 1
+end;
+
 function lc_gethoglevel(L : Plua_State): LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1019,6 +1038,23 @@ ScriptSetInteger('gfSharedAmmo', gfSharedAmmo);
 ScriptSetInteger('gfDisableGirders', gfDisableGirders);
 ScriptSetInteger('gfExplosives', gfExplosives);
 
+ScriptSetInteger('gm_Left', gm_Left);
+ScriptSetInteger('gm_Right', gm_Right);
+ScriptSetInteger('gm_Up', gm_Up);
+ScriptSetInteger('gm_Down', gm_Down);
+ScriptSetInteger('gm_Switch', gm_Switch);
+ScriptSetInteger('gm_Attack', gm_Attack);
+ScriptSetInteger('gm_LJump', gm_LJump);
+ScriptSetInteger('gm_HJump', gm_HJump);
+ScriptSetInteger('gm_Destroy', gm_Destroy);
+ScriptSetInteger('gm_Slot', gm_Slot);
+ScriptSetInteger('gm_Weapon', gm_Weapon);
+ScriptSetInteger('gm_Timer', gm_Timer);
+ScriptSetInteger('gm_Animate', gm_Animate);
+ScriptSetInteger('gm_Precise', gm_Precise);
+ScriptSetInteger('gmAllStoppable', gmAllStoppable);
+
+
 // speech bubbles
 ScriptSetInteger('SAY_SAY', 1);
 ScriptSetInteger('SAY_THINK', 2);
@@ -1080,6 +1116,7 @@ lua_register(luaState, 'HogSay', @lc_hogsay);
 lua_register(luaState, 'HogTurnLeft', @lc_hogturnleft);
 lua_register(luaState, 'CampaignLock', @lc_campaignlock);
 lua_register(luaState, 'CampaignUnlock', @lc_campaignunlock);
+lua_register(luaState, 'GearGetMessage', @lc_getgearmessage);
 
 
 ScriptClearStack; // just to be sure stack is empty
