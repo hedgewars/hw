@@ -30,6 +30,7 @@
 -(id) initWithContentsOfFile:(NSString *)path andCutAt:(CGRect) rect;
 -(UIImage *)cutAt:(CGRect) rect;
 -(UIImage *)convertToGrayScale;
+-(UIImage *)convertToNegative;
 -(UIImage *)maskImageWith:(UIImage *)maskImage;
 -(UIImage *)makeRoundCornersOfSize:(CGSize) sizewh;
 

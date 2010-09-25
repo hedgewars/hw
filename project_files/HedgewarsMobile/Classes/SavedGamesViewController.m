@@ -49,7 +49,20 @@
 
 -(IBAction) buttonPressed:(id) sender {
     playSound(@"backSound");
+    [self.tableView setEditing:NO animated:YES];
     [[self parentViewController] dismissModalViewControllerAnimated:YES];
+}
+
+// modifies the navigation bar to add the "Add" and "Done" buttons
+-(IBAction) toggleEdit:(id) sender {
+    BOOL isEditing = self.tableView.editing;
+    [self.tableView setEditing:!isEditing animated:YES];
+
+    UIBarButtonItem *barButton = (UIBarButtonItem *)sender;
+    if (isEditing)
+        [barButton setTitle:NSLocalizedString(@"Edit",@"")];
+    else
+        [barButton setTitle:NSLocalizedString(@"Commit",@"")];
 }
 
 #pragma mark -
@@ -65,21 +78,69 @@
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
 
-    UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil)
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+    EditableCellView *editableCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (editableCell == nil) {
+        editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        editableCell.delegate = self;
+    }
+    editableCell.tag = [indexPath row];
 
-    // first all the names, then the title (which is offset 5)
-    cell.textLabel.text = [[self.listOfSavegames objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    editableCell.textField.text = [[self.listOfSavegames objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
+    editableCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    UIImage *addImg = [UIImage imageWithContentsOfFile:@"plus.png"];
+    UIButton *customButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    customButton.tag = [indexPath row];
+    [customButton setImage:addImg forState:UIControlStateNormal];
+    [customButton addTarget:self action:@selector(duplicateEntry:) forControlEvents:UIControlEventTouchUpInside];
+    editableCell.editingAccessoryView = customButton;
 
-    return cell;
+    return (UITableViewCell *)editableCell;
+}
+/*
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
+    UITableViewCellEditingStyleInsert
+}*//*
+-(UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellEditingStyleInsert;
+}*/
+
+-(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger row = [indexPath row];
+    [(EditableCellView *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]] save:nil];
+    
+    NSString *saveName = [self.listOfSavegames objectAtIndex:row];
+    NSString *currentFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),saveName];
+    [[NSFileManager defaultManager] removeItemAtPath:currentFilePath error:nil];
+    [self.listOfSavegames removeObject:saveName];
+    
+    [self.tableView reloadData];
+}
+
+-(void) duplicateEntry:(id) sender {
+    UIButton *button = (UIButton *)sender;
+    NSUInteger row = button.tag;
+    
+    [(EditableCellView *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]] save:nil];
+    NSString *currentSaveName = [self.listOfSavegames objectAtIndex:row];
+    NSString *newSaveName = [[currentSaveName stringByDeletingPathExtension] stringByAppendingFormat:@" %d.hws",[self.listOfSavegames count]];
+    
+    NSString *currentFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),currentSaveName];
+    NSString *newFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),newSaveName];
+    [[NSFileManager defaultManager] copyItemAtPath:currentFilePath toPath:newFilePath error:nil];
+    [self.listOfSavegames addObject:newSaveName];
+    [self.listOfSavegames sortUsingSelector:@selector(compare:)];
+
+    //[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[self.listOfSavegames indexOfObject:newSaveName] inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadData];
 }
 
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    [(EditableCellView *)[self.tableView cellForRowAtIndexPath:indexPath] save:nil];
     
     NSString *filePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:[indexPath row]]];
     
@@ -89,6 +150,20 @@
                                       [NSNumber numberWithBool:NO],@"netgame",
                                       nil];
     [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+}
+
+#pragma mark -
+#pragma mark editableCellView delegate
+// rename old file if names differ
+-(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
+    NSString *oldFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:tagValue]];
+    NSString *newFilePath = [NSString stringWithFormat:@"%@/%@.hws",SAVES_DIRECTORY(),textString];
+    
+    if ([oldFilePath isEqualToString:newFilePath] == NO) {
+        [[NSFileManager defaultManager] moveItemAtPath:oldFilePath toPath:newFilePath error:nil];
+        [self.listOfSavegames replaceObjectAtIndex:tagValue withObject:[textString stringByAppendingString:@".hws"]];
+    }
+    
 }
 
 #pragma mark -

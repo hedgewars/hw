@@ -292,7 +292,7 @@
             if (nil == self.savedGamesViewController) {
                 SavedGamesViewController *savedgames = [[SavedGamesViewController alloc] initWithNibName:@"SavedGamesViewController" bundle:nil];
                 savedgames.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                savedgames.modalPresentationStyle = UIModalPresentationFormSheet;
+                savedgames.modalPresentationStyle = UIModalPresentationPageSheet;
                 self.savedGamesViewController = savedgames;
                 [savedgames release];
             }

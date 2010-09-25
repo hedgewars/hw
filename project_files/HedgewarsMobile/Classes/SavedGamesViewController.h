@@ -20,9 +20,9 @@
 
 
 #import <UIKit/UIKit.h>
+#import "EditableCellView.h"
 
-
-@interface SavedGamesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>  {
+@interface SavedGamesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, EditableCellViewDelegate>  {
     UITableView *tableView;
     NSMutableArray *listOfSavegames;
 }
@@ -30,7 +30,7 @@
 @property (nonatomic,retain) IBOutlet UITableView *tableView;
 @property (nonatomic,retain) NSMutableArray *listOfSavegames;
 
-
 -(IBAction) buttonPressed:(id) sender;
+-(IBAction) toggleEdit:(id) sender;
 
 @end

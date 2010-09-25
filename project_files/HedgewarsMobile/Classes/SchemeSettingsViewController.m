@@ -41,7 +41,6 @@
                                                                   action:@selector(toggleEdit:)];
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
-
 }
 
 -(void) viewWillAppear:(BOOL) animated {
