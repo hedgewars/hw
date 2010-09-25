@@ -31,7 +31,7 @@ data ClientInfo =
         roomID :: RoomIndex,
         pingsQueue :: !Word,
         isMaster :: Bool,
-        isReady :: Bool,
+        isReady :: !Bool,
         isAdministrator :: Bool,
         clientClan :: B.ByteString,
         teamsInGame :: Word

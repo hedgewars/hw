@@ -13,7 +13,6 @@ module RoomsAndClients(
     lobbyId,
     moveClientToLobby,
     moveClientToRoom,
-    clientRoom,
     clientRoomM,
     clientExists,
     client,
