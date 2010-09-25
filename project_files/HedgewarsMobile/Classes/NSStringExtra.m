@@ -35,6 +35,11 @@
     return YES;
 }
 
+-(BOOL) appendToFile:(NSString *)path usingStream:(NSOutputStream *)os {
+    NSData *allData = [self dataUsingEncoding:NSUTF8StringEncoding];
+    [os write:[allData bytes] maxLength:[allData length]];
+    return YES;
+}
 
 // by http://iphonedevelopment.blogspot.com/2010/08/nsstring-appendtofileusingencoding.html
 -(BOOL) appendToFile:(NSString *)path usingEncoding:(NSStringEncoding) encoding {

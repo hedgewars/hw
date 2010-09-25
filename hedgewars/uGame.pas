@@ -26,7 +26,7 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
    implementation
 ////////////////////
-uses uMisc, uConsts, uKeys, uTeams, uIO, uAI, uGears, uScript;
+uses uMisc, uConsts, uKeys, uTeams, uIO, uAI, uGears, uScript, uSound;
 
 procedure DoGameTick(Lag: LongInt);
 var i: LongInt;
@@ -65,7 +65,9 @@ while (GameState <> gsExit) and (i <= Lag) do
                         SetBinds(CurrentTeam^.Binds);
                         //CurrentHedgehog^.Gear^.Message:= 0; <- produces bugs with further save restoring and demos
                         isSoundEnabled:= isSEBackup;
-                        GameType:= gmtLocal
+                        if isSoundEnabled then playMusic;
+                        GameType:= gmtLocal;
+                        InitIPC;
                         end;
                end
           else ProcessGears

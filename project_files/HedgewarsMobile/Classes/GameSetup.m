@@ -26,7 +26,7 @@
 #import "CommodityFunctions.h"
 #import "NSStringExtra.h"
 
-#define BUFFER_SIZE 64
+#define BUFFER_SIZE 255     // like in original frontend
 
 @implementation GameSetup
 @synthesize systemSettings, gameConfig, savePath;
@@ -255,7 +255,7 @@
     uint8_t length = [string length];
 
     [[NSString stringWithFormat:@"%c%@",length,string] appendToFile:savePath];
-    SDLNet_TCP_Send(csd, &length , 1);
+    SDLNet_TCP_Send(csd, &length, 1);
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
@@ -263,7 +263,7 @@
 -(int) sendToEngineNoSave: (NSString *)string {
     uint8_t length = [string length];
 
-    SDLNet_TCP_Send(csd, &length , 1);
+    SDLNet_TCP_Send(csd, &length, 1);
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
@@ -274,9 +274,8 @@
     IPaddress ip;
     int eProto;
     BOOL clientQuit;
-    char buffer[BUFFER_SIZE];
+    uint8_t buffer[BUFFER_SIZE];
     uint8_t msgSize;
-    uint16_t gameTicks;
 
     clientQuit = NO;
     csd = NULL;
@@ -304,12 +303,14 @@
     SDLNet_TCP_Close(sd);
 
     while (!clientQuit) {
+        NSString *msgToSave = nil;
+        NSOutputStream *os = nil;
         msgSize = 0;
-        memset(buffer, 0, BUFFER_SIZE);
+        memset(buffer, '\0', BUFFER_SIZE);
         if (SDLNet_TCP_Recv(csd, &msgSize, sizeof(uint8_t)) <= 0)
-            clientQuit = YES;
+            break;
         if (SDLNet_TCP_Recv(csd, buffer, msgSize) <=0)
-            clientQuit = YES;
+            break;
 
         switch (buffer[0]) {
             case 'C':
@@ -360,9 +361,10 @@
                 clientQuit = YES;
                 break;
             case 'e':
-                buffer[msgSize] = '\0';
-                [[NSString stringWithUTF8String:buffer] appendToFile:savePath];
-                sscanf(buffer, "%*s %d", &eProto);
+                msgToSave = [NSString stringWithFormat:@"%c%s",msgSize,buffer];                
+                [msgToSave appendToFile:self.savePath];
+                
+                sscanf((char *)buffer, "%*s %d", &eProto);
                 short int netProto = 0;
                 char *versionStr;
 
@@ -378,19 +380,28 @@
             case 'i':
                 switch (buffer[1]) {
                     case 'r':
-                        NSLog(@"Winning team: %s", &buffer[2]);
+                        DLog(@"Winning team: %s", &buffer[2]);
                         break;
                     case 'k':
-                        NSLog(@"Best Hedgehog: %s", &buffer[2]);
+                        DLog(@"Best Hedgehog: %s", &buffer[2]);
+                        break;
+                    default:
+                        // TODO: losta stats stuff
                         break;
                 }
                 break;
+            case 'q':
+                // game ended, can remove the savefile
+                [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
+                break;
             default:
-                // empty packet or just statistics -- in either cases gameTicks is sent
-                gameTicks = SDLNet_Read16 (&buffer[msgSize - 2]);
-                DLog(@"engineProtocol - %d: received [%s]", gameTicks, buffer);
-                buffer[msgSize] = '\0';
-                [[NSString stringWithUTF8String:buffer] appendToFile:savePath];
+                // is it performant to reopen the stream every time? 
+                os = [[NSOutputStream alloc] initToFileAtPath:self.savePath append:YES];
+                [os open];
+                [os write:&msgSize maxLength:1];
+                [os write:buffer maxLength:msgSize];
+                [os close];
+                [os release];
                 break;
         }
     }
