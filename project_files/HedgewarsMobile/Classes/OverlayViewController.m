@@ -36,6 +36,7 @@
 
 #define CONFIRMATION_TAG 5959
 #define GRENADE_TAG 9595
+#define BLACKVIEW_TAG 9955
 #define ANIMATION_DURATION 0.25
 #define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
 
@@ -97,6 +98,7 @@
 #pragma mark View Management
 -(void) viewDidLoad {
     isGameRunning = NO;
+    isReplay = NO;
     cachedGrenadeTime = 2;
     isAttacking = NO;
     
@@ -212,7 +214,7 @@
 
 // dim the overlay when there's no more input for a certain amount of time
 -(IBAction) buttonReleased:(id) sender {
-    if (!isGameRunning)
+    if (isGameRunning == NO)
         return;
 
     UIButton *theButton = (UIButton *)sender;
@@ -244,15 +246,12 @@
 // issue certain action based on the tag of the button
 -(IBAction) buttonPressed:(id) sender {
     [self activateOverlay];
-    if (isPopoverVisible) {
-        [self dismissPopover];
-    }
-
-    if (!isGameRunning)
+    
+    if (isGameRunning == NO)
         return;
-
-    if (HW_isWaiting())
-        HW_dismissReady();
+    
+    if (isPopoverVisible)
+        [self dismissPopover];
     
     UIButton *theButton = (UIButton *)sender;
     switch (theButton.tag) {
@@ -402,12 +401,11 @@
     NSSet *allTouches = [event allTouches];
     CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
 
+    if (isGameRunning == NO)
+        return;
+    
     switch ([allTouches count]) {
         case 1:
-            // this dismisses the "get ready"
-            if (HW_isWaiting())
-                HW_dismissReady();
-
             // if we're in the menu we just click in the point
             if (HW_isAmmoOpen()) {
                 HW_setCursor(HWXZ(currentPosition.x), HWYZ(currentPosition.y));
@@ -507,9 +505,11 @@
     CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
     int x, y, dx, dy;
-
     UITouch *touch, *first, *second;
 
+    if (isGameRunning == NO)
+        return;
+    
     switch ([allTouches count]) {
         case 1:
             touch = [[allTouches allObjects] objectAtIndex:0];
@@ -562,9 +562,13 @@
 
 #pragma mark -
 #pragma mark Functions called by pascal
-// called from AddProgress and FinishProgress (respectively)
+void setGameRunning(BOOL value) {
+    isGameRunning = value;
+}
+
+// called by uStore from AddProgress
 void startSpinning() {
-    isGameRunning = NO;
+    setGameRunning(NO);
     CGRect screen = [[UIScreen mainScreen] bounds];
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     indicator.tag = 987654;
@@ -575,13 +579,16 @@ void startSpinning() {
     [indicator release];
 }
 
+// called by uStore from FinishProgress
 void stopSpinning() {
     UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[[[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG] viewWithTag:987654];
     [indicator stopAnimating];
-    isGameRunning = YES;
     HW_zoomSet(1.7);
+    if (isReplay == NO)
+        setGameRunning(YES);
 }
 
+// called by CCHandlers from chNextTurn
 void clearView() {
     UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
     UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
@@ -597,6 +604,36 @@ void clearView() {
     [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:0.3];
 
     cachedGrenadeTime = 2;
+}
+
+// called by hwengine
+void replayBegan() {
+    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
+    UIView *blackView = [[UIView alloc] initWithFrame:theWindow.frame];
+    blackView.backgroundColor = [UIColor blackColor];
+    blackView.alpha = 0.6;
+    blackView.tag = BLACKVIEW_TAG;
+    blackView.exclusiveTouch = NO;
+    blackView.multipleTouchEnabled = NO;
+    blackView.userInteractionEnabled = NO;
+    [theWindow addSubview:blackView];
+    [blackView release];
+    isReplay = YES;
+}
+
+// called by uGame
+void replayFinished() {
+    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
+    UIView *blackView = (UIView *)[theWindow viewWithTag:BLACKVIEW_TAG];
+    
+    [UIView beginAnimations:@"removing black" context:NULL];
+    [UIView setAnimationDuration:1];
+    blackView.alpha = 0;
+    [UIView commitAnimations];
+    [theWindow performSelector:@selector(removeFromSuperview) withObject:blackView afterDelay:1];
+    
+    setGameRunning(YES);
+    isReplay = NO;
 }
 
 @end

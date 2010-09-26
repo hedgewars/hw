@@ -25,6 +25,7 @@
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "NSStringExtra.h"
+#import "OverlayViewController.h"
 
 #define BUFFER_SIZE 255     // like in original frontend
 
@@ -375,7 +376,6 @@
                     DLog(@"ERROR - wrong protocol number: [%s] - expecting %d", &buffer[1], eProto);
                     clientQuit = YES;
                 }
-
                 break;
             case 'i':
                 switch (buffer[1]) {
@@ -393,6 +393,10 @@
             case 'q':
                 // game ended, can remove the savefile
                 [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
+                // so update the relative viewcontroler
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"removedSave" object:nil];
+                // and disable the overlay
+                setGameRunning(NO);
                 break;
             default:
                 // is it performant to reopen the stream every time? 

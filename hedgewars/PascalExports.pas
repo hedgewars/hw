@@ -165,11 +165,6 @@ begin
     if closeFrontend then alsoShutdownFrontend:= true;
 end;
 
-procedure HW_dismissReady; cdecl; export;
-begin
-    ReadyTimeLeft:= 0;
-end;
-
 procedure HW_setLandscape(landscape: boolean); cdecl; export;
 begin
     if landscape then

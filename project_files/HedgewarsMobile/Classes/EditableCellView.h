@@ -33,6 +33,7 @@
     UILabel *titleLabel;
     NSInteger minimumCharacters;
     NSInteger maximumCharacters;
+    BOOL respectEditing;
 
 @private
     NSString *oldValue;
@@ -43,6 +44,7 @@
 @property (nonatomic,retain,readonly) UILabel *titleLabel;
 @property (nonatomic,assign) NSInteger minimumCharacters;
 @property (nonatomic,assign) NSInteger maximumCharacters;
+@property (nonatomic,assign) BOOL respectEditing;
 @property (nonatomic,retain) NSString *oldValue;
 
 -(void) replyKeyboard;

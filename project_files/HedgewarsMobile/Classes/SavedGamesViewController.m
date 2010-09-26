@@ -32,7 +32,10 @@
 
 -(void) viewDidLoad {
     self.tableView.backgroundView = nil;
-
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(viewWillAppear:)
+                                                 name:@"removedSave"
+                                               object:nil];
     [super viewDidLoad];
 }
 
@@ -53,16 +56,9 @@
     [[self parentViewController] dismissModalViewControllerAnimated:YES];
 }
 
-// modifies the navigation bar to add the "Add" and "Done" buttons
 -(IBAction) toggleEdit:(id) sender {
     BOOL isEditing = self.tableView.editing;
     [self.tableView setEditing:!isEditing animated:YES];
-
-    UIBarButtonItem *barButton = (UIBarButtonItem *)sender;
-    if (isEditing)
-        [barButton setTitle:NSLocalizedString(@"Edit",@"")];
-    else
-        [barButton setTitle:NSLocalizedString(@"Commit",@"")];
 }
 
 #pragma mark -
@@ -84,7 +80,7 @@
         editableCell.delegate = self;
     }
     editableCell.tag = [indexPath row];
-
+    editableCell.respectEditing = YES;
     editableCell.textField.text = [[self.listOfSavegames objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
     editableCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
@@ -97,13 +93,24 @@
 
     return (UITableViewCell *)editableCell;
 }
-/*
+
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
-    UITableViewCellEditingStyleInsert
-}*//*
--(UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewCellEditingStyleInsert;
-}*/
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 50)];
+    footer.backgroundColor = [UIColor clearColor];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width*80/100, 100)];
+    label.center = CGPointMake(self.tableView.frame.size.width/2,70);
+    label.textAlignment = UITextAlignmentCenter;
+    label.font = [UIFont systemFontOfSize:16];
+    label.textColor = [UIColor lightGrayColor];
+    label.numberOfLines = 5;
+    label.text = NSLocalizedString(@"Games are automatically saved and can be resumed by selecting an entry above.\nYou can modify this list by pressing the 'Edit' button.\nNotice that completed games are deleted, so make backups.",@"");
+
+    label.backgroundColor = [UIColor clearColor];
+    [footer addSubview:label];
+    [label release];
+    return [footer autorelease];
+}
 
 -(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger row = [indexPath row];

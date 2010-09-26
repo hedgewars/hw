@@ -66,7 +66,10 @@
 
 @end
 
-// understands when the loading screen is done
+// actual game started (controls should be enabled)
 BOOL isGameRunning;
+void setGameRunning(BOOL value);
+// black screen present
+BOOL isReplay;
 // cache the grenade time
 NSInteger cachedGrenadeTime;

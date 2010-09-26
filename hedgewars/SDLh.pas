@@ -848,6 +848,8 @@ procedure clearView; cdecl; external;
 procedure startSpinning; cdecl; external;
 procedure stopSpinning; cdecl; external;
 function  isPhone: Boolean; cdecl; external;
+procedure replayBegan; cdecl; external;
+procedure replayFinished; cdecl; external;
 {$ENDIF}
 implementation
 

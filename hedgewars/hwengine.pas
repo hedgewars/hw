@@ -266,10 +266,6 @@ begin
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
 
-    if recordFileName = '' then
-        InitIPC;
-    WriteLnToConsole(msgGettingConfig);
-
     LoadLocale(Pathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if cLocaleFName <> 'en.txt' then
     begin
@@ -279,10 +275,19 @@ begin
         LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
     end;
 
+    WriteLnToConsole(msgGettingConfig);
     if recordFileName = '' then
-        SendIPCAndWaitReply('C')        // ask for game config
+    begin
+        InitIPC;
+        SendIPCAndWaitReply('C');        // ask for game config
+    end
     else
+    begin
         LoadRecordFromFile(recordFileName);
+{$IFDEF IPHONEOS}
+        replayBegan();
+{$ENDIF}
+    end;
 
     ScriptOnGameInit;
 

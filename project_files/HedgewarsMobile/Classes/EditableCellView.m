@@ -23,7 +23,7 @@
 #import "CommodityFunctions.h"
 
 @implementation EditableCellView
-@synthesize delegate, textField, titleLabel, minimumCharacters, maximumCharacters, oldValue;
+@synthesize delegate, textField, titleLabel, minimumCharacters, maximumCharacters, respectEditing, oldValue;
 
 -(id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
@@ -37,6 +37,7 @@
         textField.clearsOnBeginEditing = NO;
         textField.returnKeyType = UIReturnKeyDone;
         textField.adjustsFontSizeToFitWidth = YES;
+        textField.userInteractionEnabled = YES;
         [textField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
 
         [self.contentView addSubview:textField];
@@ -51,6 +52,7 @@
 
         minimumCharacters = 1;
         maximumCharacters = 64;
+        respectEditing = NO;
         oldValue = nil;
     }
     return self;
@@ -98,9 +100,11 @@
     return !([aTextField.text length] > self.maximumCharacters && [string length] > range.length);
 }
 
-// allow editing only if delegate is set and conformant to protocol
+// allow editing only if delegate is set and conformant to protocol, and if editableOnlyWhileEditing
 -(BOOL) textFieldShouldBeginEditing:(UITextField *)aTextField {
-    return (delegate != nil) && [delegate respondsToSelector:@selector(saveTextFieldValue:withTag:)];
+    return (delegate != nil) &&
+           [delegate respondsToSelector:@selector(saveTextFieldValue:withTag:)] &&
+           (respectEditing) ? ((UITableView*)[self superview]).editing : YES;
 }
 
 // the textfield is being modified, update the navigation controller
@@ -175,6 +179,14 @@
     [delegate saveTextFieldValue:self.textField.text withTag:self.tag];
     [self.textField resignFirstResponder];
     self.oldValue = nil;
+}
+
+// when field is editable only when the tableview is editable, resign responder when exiting editing mode
+-(void) willTransitionToState:(UITableViewCellStateMask)state {
+    if (respectEditing && state == UITableViewCellStateDefaultMask)
+        [self save:nil];
+
+    [super willTransitionToState:state];
 }
 
 @end
