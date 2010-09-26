@@ -148,21 +148,23 @@
 					<object class="IBUISegmentedControl" id="88728219">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">289</int>
-						<string key="NSFrame">{{744, 166}, {240, 30}}</string>
+						<string key="NSFrame">{{725, 166}, {277, 30}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<int key="IBSegmentControlStyle">2</int>
-						<int key="IBNumberOfSegments">3</int>
+						<int key="IBNumberOfSegments">4</int>
 						<int key="IBSelectedSegmentIndex">1</int>
 						<object class="NSArray" key="IBSegmentTitles">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>Random</string>
 							<string>Map</string>
 							<string>Maze</string>
+							<string>Mission</string>
 						</object>
 						<object class="NSMutableArray" key="IBSegmentWidths">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<real value="0.0"/>
 							<real value="0.0"/>
 							<real value="0.0"/>
 							<real value="0.0"/>
@@ -172,9 +174,11 @@
 							<boolean value="YES"/>
 							<boolean value="YES"/>
 							<boolean value="YES"/>
+							<boolean value="YES"/>
 						</object>
 						<object class="NSMutableArray" key="IBSegmentContentOffsets">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>{0, 0}</string>
 							<string>{0, 0}</string>
 							<string>{0, 0}</string>
 							<string>{0, 0}</string>
@@ -182,6 +186,7 @@
 						<object class="NSMutableArray" key="IBSegmentImages">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="NSNull" id="4"/>
+							<reference ref="4"/>
 							<reference ref="4"/>
 							<reference ref="4"/>
 						</object>
@@ -610,7 +615,6 @@
 							<reference ref="634417433"/>
 							<reference ref="326163764"/>
 							<reference ref="938256702"/>
-							<reference ref="88728219"/>
 							<reference ref="848132519"/>
 							<reference ref="696928530"/>
 							<reference ref="742028380"/>
@@ -619,6 +623,7 @@
 							<reference ref="867832822"/>
 							<reference ref="553937568"/>
 							<reference ref="420136851"/>
+							<reference ref="88728219"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>

@@ -338,7 +338,7 @@
                     [self sendToEngine:staticMap];
 
                 // lua script (if set)
-                NSString *script = [self.gameConfig objectForKey:@"script_command"];
+                NSString *script = [self.gameConfig objectForKey:@"mission_command"];
                 if ([script length] != 0)
                     [self sendToEngine:script];
                 

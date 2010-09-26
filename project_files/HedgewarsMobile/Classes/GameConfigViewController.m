@@ -183,6 +183,7 @@
                                                                       mapConfigViewController.mazeSizeCommand,@"mazesize_command",
                                                                       mapConfigViewController.themeCommand,@"theme_command",
                                                                       mapConfigViewController.staticMapCommand,@"staticmap_command",
+                                                                      mapConfigViewController.missionCommand,@"mission_command",  
                                                                       teamConfigViewController.listOfSelectedTeams,@"teams_list",
                                                                       schemeWeaponConfigViewController.selectedScheme,@"scheme",
                                                                       schemeWeaponConfigViewController.selectedWeapon,@"weapon",
@@ -191,10 +192,13 @@
     // finally launch game and remove this controller
     DLog(@"sending config %@", gameDictionary);
 
-    if ([[gameDictionary allKeys] count] == 9) {
+    if ([[gameDictionary allKeys] count] == 10) {
         NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:gameDictionary,@"game_dictionary", @"",@"savefile",
                                                                                     [NSNumber numberWithBool:NO],@"netgame", nil];
         [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+        
+        // tell controllers that they're being reloaded
+        [mapConfigViewController viewWillAppear:YES];
     } else {
         DLog(@"gameconfig data not complete!!\nmapConfigViewController = %@\nteamConfigViewController = %@\nschemeWeaponConfigViewController = %@\n",
              mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController);

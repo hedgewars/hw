@@ -44,6 +44,7 @@
     NSString *mazeSizeCommand;
     NSString *themeCommand;
     NSString *staticMapCommand;
+    NSString *missionCommand;
 
     // various widgets in the view
     MapPreviewButtonView *previewButton;
@@ -55,8 +56,7 @@
 
     // internal objects
     NSIndexPath *lastIndexPath;
-    NSArray *themeArray;
-    NSArray *mapArray;
+    NSArray *dataSourceArray;
 }
 
 @property (nonatomic,retain) id<MapConfigDelegate> delegate;
@@ -69,6 +69,7 @@
 @property (nonatomic,retain) NSString *mazeSizeCommand;
 @property (nonatomic,retain) NSString *themeCommand;
 @property (nonatomic,retain) NSString *staticMapCommand;
+@property (nonatomic,retain) NSString *missionCommand;
 
 @property (nonatomic,retain) IBOutlet MapPreviewButtonView *previewButton;
 @property (nonatomic,retain) IBOutlet UITableView *tableView;
@@ -78,8 +79,7 @@
 @property (nonatomic,retain) IBOutlet UISlider *slider;
 
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
-@property (nonatomic,retain) NSArray *themeArray;
-@property (nonatomic,retain) NSArray *mapArray;
+@property (nonatomic,retain) NSArray *dataSourceArray;
 
 -(IBAction) buttonPressed:(id) sender;
 

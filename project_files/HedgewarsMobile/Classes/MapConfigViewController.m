@@ -24,10 +24,12 @@
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
 
+#define scIndex         self.segmentedControl.selectedSegmentIndex
+#define isRandomness()  (segmentedControl.selectedSegmentIndex == 0 || segmentedControl.selectedSegmentIndex == 2)
 
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
-            tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, themeArray, mapArray, busy, delegate;
+            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy, delegate;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -52,14 +54,15 @@
     self.seedCommand = seedCmd;
     [seedCmd release];
 
+    NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
     NSIndexPath *theIndex;
-    if (segmentedControl.selectedSegmentIndex != 1) {
+    if (isRandomness()) {
         // prevent other events and add an activity while the preview is beign generated
         [self turnOffWidgets];
         [self.previewButton updatePreviewWithSeed:seed];
-        theIndex = [NSIndexPath indexPathForRow:(random()%[self.themeArray count]) inSection:0];
+        theIndex = [NSIndexPath indexPathForRow:(random()%[source count]) inSection:0];
     } else {
-        theIndex = [NSIndexPath indexPathForRow:(random()%[self.mapArray count]) inSection:0];
+        theIndex = [NSIndexPath indexPathForRow:(random()%[source count]) inSection:0];
         // the preview for static maps is loaded in didSelectRowAtIndexPath
     }
     [seed release];
@@ -108,10 +111,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger) section {
-    if (self.segmentedControl.selectedSegmentIndex != 1)
-        return [themeArray count];
-    else
-        return [mapArray count];
+    return [[self.dataSourceArray objectAtIndex:scIndex] count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -125,17 +125,17 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
 
-    if (self.segmentedControl.selectedSegmentIndex != 1) {
-        // the % prevents a strange bug that occurs sporadically
-        NSString *themeName = [self.themeArray objectAtIndex:row % [self.themeArray count]];
-        cell.textLabel.text = themeName;
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),themeName]];
+    NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
+
+    NSString *labelString = [source objectAtIndex:row];
+    cell.textLabel.text = labelString;
+
+    if (isRandomness()) {
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),labelString]];
         cell.imageView.image = image;
         [image release];
-    } else {
-        cell.textLabel.text = [self.mapArray objectAtIndex:row];
+    } else
         cell.imageView.image = nil;
-    }
 
     if (row == [self.lastIndexPath row]) {
         UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
@@ -150,25 +150,31 @@
 
 // this set details for a static map (called by didSelectRowAtIndexPath)
 -(void) setDetailsForStaticMap:(NSInteger) index {
-    // update label
-    maxHogs = 18;
-    NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg", MAPS_DIRECTORY(),[self.mapArray objectAtIndex:index]];
+    NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
+    
+    NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg", 
+                         (scIndex == 1) ? MAPS_DIRECTORY() : MISSIONS_DIRECTORY(),[source objectAtIndex:index]];
     NSString *contents = [[NSString alloc] initWithContentsOfFile:fileCfg encoding:NSUTF8StringEncoding error:NULL];
     [fileCfg release];
     NSArray *split = [contents componentsSeparatedByString:@"\n"];
     [contents release];
 
-    // set the theme and map here
-    self.themeCommand = [NSString stringWithFormat:@"etheme %@", [split objectAtIndex:0]];
-    self.staticMapCommand = [NSString stringWithFormat:@"emap %@", [self.mapArray objectAtIndex:index]];
-
     // if the number is not set we keep 18 standard;
     // sometimes it's not set but there are trailing characters, we get around them with the second equation
     if ([split count] > 1 && [[split objectAtIndex:1] intValue] > 0)
         maxHogs = [[split objectAtIndex:1] intValue];
+    else
+        maxHogs = 18;
     NSString *max = [[NSString alloc] initWithFormat:@"%d",maxHogs];
     self.maxLabel.text = max;
     [max release];
+    
+    self.themeCommand = [NSString stringWithFormat:@"etheme %@", [split objectAtIndex:0]];
+    self.staticMapCommand = [NSString stringWithFormat:@"emap %@", [source objectAtIndex:index]];
+    if (scIndex != 3)
+        self.missionCommand = @"";
+    else
+        self.missionCommand = [NSString stringWithFormat:@"escript %@/%@/map.lua",MISSIONS_DIRECTORY(),[source objectAtIndex:index]];
 }
 
 #pragma mark -
@@ -178,12 +184,13 @@
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
     if (newRow != oldRow) {
-        [self.tableView reloadData];
-        if (self.segmentedControl.selectedSegmentIndex != 1) {
+        NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
+        if (isRandomness()) {
             // just change the theme, don't update preview
-            self.themeCommand = [NSString stringWithFormat:@"etheme %@", [self.themeArray objectAtIndex:newRow]];
+            self.themeCommand = [NSString stringWithFormat:@"etheme %@", [source objectAtIndex:newRow]];
         } else {
-            NSString *fileImage = [NSString stringWithFormat:@"%@/%@/preview.png",MAPS_DIRECTORY(),[self.mapArray objectAtIndex:newRow]];
+            NSString *fileImage = [NSString stringWithFormat:@"%@/%@/preview.png",
+                                   (scIndex == 1) ? MAPS_DIRECTORY() : MISSIONS_DIRECTORY(),[source objectAtIndex:newRow]];
             [self.previewButton updatePreviewWithFile:fileImage];
             [self setDetailsForStaticMap:newRow];
         }
@@ -290,7 +297,7 @@
 // perform actions based on the activated section, then call updatePreview to visually update the selection
 // and if necessary update the table with a slide animation
 -(IBAction) segmentedControlChanged:(id) sender {
-    NSString *mapgen, *staticmap;
+    NSString *mapgen, *staticmap, *mission;
     NSInteger newPage = self.segmentedControl.selectedSegmentIndex;
 
     playSound(@"selSound");
@@ -298,14 +305,17 @@
         case 0: // Random
             mapgen = @"e$mapgen 0";
             staticmap = @"";
+            mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
             break;
 
         case 1: // Map
+        case 3: // Mission
             mapgen = @"e$mapgen 0";
-            // dummy value, everything is set by -updatePreview -> -didSelectRowAtIndexPath -> -updatePreviewWithMap
+            // dummy values, these are set by -updatePreview -> -didSelectRowAtIndexPath -> -setDetailsForStaticMap
             staticmap = @"map Bamboo";
+            mission = @"";
             self.slider.enabled = NO;
             self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
             break;
@@ -313,6 +323,7 @@
         case 2: // Maze
             mapgen = @"e$mapgen 1";
             staticmap = @"";
+            mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
             break;
@@ -320,31 +331,52 @@
         default:
             mapgen = nil;
             staticmap = nil;
+            mission = nil;
             break;
     }
     self.mapGenCommand = mapgen;
     self.staticMapCommand = staticmap;
-    [self updatePreview];
+    self.missionCommand = mission;
 
     // nice animation for updating the table when appropriate (on iphone)
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        if (((oldPage == 0 || oldPage == 2) && newPage == 1) ||
-            (oldPage == 1 && (newPage == 0 || newPage == 2))) {
-            [UIView beginAnimations:@"moving out table" context:NULL];
+        if (((oldPage == 0 || oldPage == 2) && (newPage == 1 || newPage == 3)) ||
+            ((oldPage == 1 || oldPage == 3) && (newPage == 0 || newPage == 2)) ||
+            ((oldPage == 1 && newPage == 3) || (oldPage == 3 || newPage == 1))) {
             self.tableView.frame = CGRectMake(480, 0, 185, 276);
+            [UIView beginAnimations:@"moving in table" context:NULL];
+            self.tableView.frame = CGRectMake(295, 0, 185, 276);
             [UIView commitAnimations];
-            [self performSelector:@selector(moveTable) withObject:nil afterDelay:0.2];
         }
+
+    [self.tableView reloadData];
+    [self updatePreview];
     oldPage = newPage;
 }
 
-// update data when table is not visible and then show it
--(void) moveTable {
-    [self.tableView reloadData];
+#pragma mark -
+#pragma mark delegate functions for iPad
+-(IBAction) buttonPressed:(id) sender {
+    if (self.delegate != nil && [delegate respondsToSelector:@selector(buttonPressed:)])
+        [self.delegate buttonPressed:(UIButton *)sender];
+}
 
-    [UIView beginAnimations:@"moving in table" context:NULL];
-    self.tableView.frame = CGRectMake(295, 0, 185, 276);
-    [UIView commitAnimations];
+-(void) loadDataSourceArray {
+    // themes.cfg contains all the user-selectable themes
+    NSString *string = [[NSString alloc] initWithContentsOfFile:[THEMES_DIRECTORY() stringByAppendingString:@"/themes.cfg"]
+                                                       encoding:NSUTF8StringEncoding
+                                                          error:NULL];
+    NSMutableArray *themeArray = [[NSMutableArray alloc] initWithArray:[string componentsSeparatedByString:@"\n"]];
+    [string release];
+    // remove a trailing "" element
+    [themeArray removeLastObject];
+    NSArray *mapArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
+    NSArray *missionArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
+    
+    NSArray *array = [[NSArray alloc] initWithObjects:themeArray,mapArray,themeArray,missionArray,nil];
+    self.dataSourceArray = array;
+    [array release];
+    [themeArray release];
 }
 
 #pragma mark -
@@ -356,25 +388,18 @@
 
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-
-    // themes.cfg contains all the user-selectable themes
-    NSString *string = [[NSString alloc] initWithContentsOfFile:[THEMES_DIRECTORY() stringByAppendingString:@"/themes.cfg"]
-                                                       encoding:NSUTF8StringEncoding
-                                                          error:NULL];
-    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:[string componentsSeparatedByString:@"\n"]];
-    [string release];
-    // remove a trailing "" element
-    [array removeLastObject];
-    self.themeArray = array;
-    [array release];
-    self.mapArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
-
+    
     // initialize some "default" values
     self.sizeLabel.text = NSLocalizedString(@"All",@"");
     self.slider.value = 0.05f;
-
+    oldValue = 5;
+    
+    busy = NO;
+    [self loadDataSourceArray];
+    self.lastIndexPath = [NSIndexPath indexPathForRow:-1 inSection:0];
+    
     // select a map at first because it's faster - done in IB
-    //self.segmentedControl.selectedSegmentIndex = 1;
+    oldPage = 1;
     if (self.segmentedControl.selectedSegmentIndex == 1) {
         self.slider.enabled = NO;
         self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
@@ -384,12 +409,7 @@
     self.mazeSizeCommand = @"e$maze_size 0";
     self.mapGenCommand = @"e$mapgen 0";
     self.staticMapCommand = @"";
-
-    self.lastIndexPath = [NSIndexPath indexPathForRow:-1 inSection:0];
-
-    oldValue = 5;
-    oldPage = 0;
-    busy = NO;
+    self.missionCommand = @"";
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         [self.tableView setBackgroundView:nil];
@@ -400,22 +420,15 @@
     }
 }
 
+-(void) viewWillAppear:(BOOL)animated {
+    if (self.dataSourceArray == nil)
+        [self loadDataSourceArray];
+    [super viewWillAppear:animated];
+}
+
 -(void) viewDidAppear:(BOOL) animated {
     [self updatePreview];
     [super viewDidAppear:animated];
-}
-
-#pragma mark -
-#pragma mark delegate functions for iPad
--(IBAction) buttonPressed:(id) sender {
-    if (self.delegate != nil && [delegate respondsToSelector:@selector(buttonPressed:)])
-        [self.delegate buttonPressed:(UIButton *)sender];
-}
-
-#pragma mark -
--(void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    MSG_MEMCLEAN();
 }
 
 -(void) viewDidUnload {
@@ -428,6 +441,7 @@
     self.mazeSizeCommand = nil;
     self.themeCommand = nil;
     self.staticMapCommand = nil;
+    self.missionCommand = nil;
 
     self.previewButton = nil;
     self.tableView = nil;
@@ -437,11 +451,17 @@
     self.slider = nil;
 
     self.lastIndexPath = nil;
-    self.themeArray = nil;
-    self.mapArray = nil;
+    self.dataSourceArray = nil;
 
     MSG_DIDUNLOAD();
     [super viewDidUnload];
+}
+
+-(void) didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    self.dataSourceArray = nil;
+    // maybe we can save some more
+    MSG_MEMCLEAN();
 }
 
 -(void) dealloc {
@@ -453,6 +473,7 @@
     [mazeSizeCommand release];
     [themeCommand release];
     [staticMapCommand release];
+    [missionCommand release];
 
     [previewButton release];
     [tableView release];
@@ -462,8 +483,7 @@
     [slider release];
 
     [lastIndexPath release];
-    [themeArray release];
-    [mapArray release];
+    [dataSourceArray release];
 
     [super dealloc];
 }

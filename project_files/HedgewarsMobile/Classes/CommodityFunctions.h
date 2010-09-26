@@ -21,7 +21,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define MAX_HOGS 8
+#define MAX_HOGS                8
+#define CURRENT_AMMOSIZE        48      // also add a line in SingleWeaponViewController array
 
 #define DOCUMENTS_FOLDER()      [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
@@ -40,14 +41,13 @@
 #define BTN_DIRECTORY()         [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Btn"]
 #define FLAGS_DIRECTORY()       [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Flags/"]
 #define FORTS_DIRECTORY()       [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Forts/"]
+#define VOICES_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Sounds/voices/"]
 #define THEMES_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Themes/"]
 #define MAPS_DIRECTORY()        [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Maps/"]
-#define VOICES_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Sounds/voices/"]
+#define MISSIONS_DIRECTORY()    [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Maps/"]
 
 #define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory");
 #define MSG_DIDUNLOAD()         DLog(@"unloaded");
-
-#define CURRENT_AMMOSIZE        48      // also add a line in SingleWeaponViewController array
 
 #define UICOLOR_HW_YELLOW_BODER [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xC0/255 blue:0 alpha:1]
 #define UICOLOR_HW_YELLOW_TEXT  [UIColor colorWithRed:(CGFloat)0xF0/255 green:(CGFloat)0xD0/255 blue:0 alpha:1]
@@ -56,10 +56,10 @@
 void createTeamNamed (NSString *nameWithoutExt);
 void createWeaponNamed (NSString *nameWithoutExt, int type);
 void createSchemeNamed (NSString *nameWithoutExt);
-BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);
-NSInteger randomPort ();
-void popError (const char *title, const char *message);
 void print_free_memory ();
-BOOL isPhone ();
-NSString *modelType ();
 void playSound (NSString *snd);
+void popError (const char *title, const char *message);
+BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);
+BOOL isPhone ();
+NSInteger randomPort ();
+NSString *modelType ();
