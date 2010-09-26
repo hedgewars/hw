@@ -93,7 +93,7 @@ writeElem (MStore ref) (ElemIndex n) el = readIORef ref >>= \(_, _, arr) -> IOA.
 modifyElem :: MStore e -> (e -> e) -> ElemIndex -> IO ()
 modifyElem (MStore ref) f (ElemIndex n) = do
     (_, _, arr) <- readIORef ref
-    IOA.readArray arr n >>= (IOA.writeArray arr n) . f
+    IOA.readArray arr n >>= IOA.writeArray arr n . f
 
 elemExists :: MStore e -> ElemIndex -> IO Bool
 elemExists (MStore ref) (ElemIndex n) = do
