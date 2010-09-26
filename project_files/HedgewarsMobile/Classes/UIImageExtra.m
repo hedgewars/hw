@@ -220,4 +220,19 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
     return result;
 }
 
++(UIImage *)whiteImage:(CGSize) ofSize {
+    // white rounded rectangle as background image for previewButton
+    UIGraphicsBeginImageContext(ofSize);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    UIGraphicsPushContext(context);
+
+    CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
+    CGContextFillRect(context,CGRectMake(0,0,ofSize.width,ofSize.height));
+
+    UIGraphicsPopContext();
+    UIImage *bkgImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return bkgImg;
+}
+
 @end

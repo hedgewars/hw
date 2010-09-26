@@ -337,6 +337,11 @@
                 if ([staticMap length] != 0)
                     [self sendToEngine:staticMap];
 
+                // lua script (if set)
+                NSString *script = [self.gameConfig objectForKey:@"script_command"];
+                if ([script length] != 0)
+                    [self sendToEngine:script];
+                
                 // theme info
                 [self sendToEngine:[self.gameConfig objectForKey:@"theme_command"]];
 

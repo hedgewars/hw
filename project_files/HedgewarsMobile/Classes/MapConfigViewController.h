@@ -20,7 +20,7 @@
 
 
 #import <UIKit/UIKit.h>
-#import "SDL_net.h"
+#import "MapPreviewButtonView.h"
 
 @protocol MapConfigDelegate <NSObject>
 
@@ -29,10 +29,9 @@
 @end
 
 
-@interface MapConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+@interface MapConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, MapPreviewViewDelegate> {
     id<MapConfigDelegate> delegate;
     
-    TCPsocket sd, csd;
     NSInteger oldValue;  //slider
     NSInteger oldPage;   //segmented control
     BOOL busy;
@@ -47,7 +46,7 @@
     NSString *staticMapCommand;
 
     // various widgets in the view
-    UIButton *previewButton;
+    MapPreviewButtonView *previewButton;
     UITableView *tableView;
     UILabel *maxLabel;
     UILabel *sizeLabel;
@@ -62,8 +61,8 @@
 
 @property (nonatomic,retain) id<MapConfigDelegate> delegate;
 
-@property (nonatomic) NSInteger maxHogs;
-@property (nonatomic) BOOL busy;
+@property (nonatomic,assign) NSInteger maxHogs;
+@property (nonatomic,assign) BOOL busy;
 @property (nonatomic,retain) NSString *seedCommand;
 @property (nonatomic,retain) NSString *templateFilterCommand;
 @property (nonatomic,retain) NSString *mapGenCommand;
@@ -71,7 +70,7 @@
 @property (nonatomic,retain) NSString *themeCommand;
 @property (nonatomic,retain) NSString *staticMapCommand;
 
-@property (nonatomic,retain) IBOutlet UIButton *previewButton;
+@property (nonatomic,retain) IBOutlet MapPreviewButtonView *previewButton;
 @property (nonatomic,retain) IBOutlet UITableView *tableView;
 @property (nonatomic,retain) IBOutlet UILabel *maxLabel;
 @property (nonatomic,retain) IBOutlet UILabel *sizeLabel;
@@ -92,10 +91,6 @@
 -(void) turnOnWidgets;
 -(void) turnOffWidgets;
 -(void) setLabelText:(NSString *)str;
--(void) setButtonImage:(UIImage *)img;
 -(void) updatePreview;
--(void) updatePreviewWithMap:(NSInteger) index;
-
--(const uint8_t *)engineProtocol:(NSInteger) port;
 
 @end

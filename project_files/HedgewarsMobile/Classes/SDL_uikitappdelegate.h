@@ -35,7 +35,7 @@
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(void) startSDLgame:(NSDictionary *)gameDictionary;
--(void) displayOverlayLater;
+-(void) displayOverlayLater:(NSNumber *)isNetGame ;
 
 @end
 
