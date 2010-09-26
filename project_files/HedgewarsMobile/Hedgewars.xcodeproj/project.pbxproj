@@ -136,6 +136,8 @@
 		6199E839124647DE00DADF8C /* SupportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6199E837124647DE00DADF8C /* SupportViewController.m */; };
 		6199E83A124647DE00DADF8C /* SupportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6199E838124647DE00DADF8C /* SupportViewController.xib */; };
 		6199E86D12464A8E00DADF8C /* surpise.png in Resources */ = {isa = PBXBuildFile; fileRef = 6199E86C12464A8E00DADF8C /* surpise.png */; };
+		619C5ACF124F7DE200D041AE /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619C5ACE124F7DDF00D041AE /* libLua.a */; };
+		619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619C5AF3124F7E3100D041AE /* LuaPas.pas */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
 		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
@@ -681,6 +683,27 @@
 			remoteGlobalIDString = 006E982211955059001DE610;
 			remoteInfo = testsdl;
 		};
+		619C5AC9124F7DDF00D041AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1D6058910D05DD3D006BFB54 /* Lua.app */;
+			remoteInfo = "Test Lua";
+		};
+		619C5ACB124F7DDF00D041AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 506EE05E10304ED200A389B3 /* libcocos2d libraries.a */;
+			remoteInfo = "cocos2d libraries";
+		};
+		619C5ACD124F7DDF00D041AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E14CF7C110ABC177005470B6 /* libLua.a */;
+			remoteInfo = Lua;
+		};
 		928301590F10E41300CC5A3C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -853,6 +876,8 @@
 		6199E838124647DE00DADF8C /* SupportViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SupportViewController.xib; sourceTree = "<group>"; };
 		6199E86C12464A8E00DADF8C /* surpise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = surpise.png; path = Resources/surpise.png; sourceTree = "<group>"; };
 		619C09E911E8B8D600F1DF16 /* title_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title_small.png; path = "Resources/Frontend-iPhone/title_small.png"; sourceTree = "<group>"; };
+		619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../../Library/Lua/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
+		619C5AF3124F7E3100D041AE /* LuaPas.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = LuaPas.pas; path = ../../hedgewars/LuaPas.pas; sourceTree = SOURCE_ROOT; };
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableCellView.h; sourceTree = "<group>"; };
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableCellView.m; sourceTree = "<group>"; };
@@ -912,6 +937,7 @@
 				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
 				611E03E711FA747C0077A41E /* libvorbis.a in Frameworks */,
 				611E0E5111FA92170077A41E /* libfreetype.a in Frameworks */,
+				619C5ACF124F7DE200D041AE /* libLua.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
@@ -1022,6 +1048,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */,
 				611E02EC11FA74580077A41E /* cocos2d-iphone.xcodeproj */,
 				611E0E4B11FA92130077A41E /* freetype.xcodeproj */,
 				617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */,
@@ -1311,6 +1338,16 @@
 			name = Overlay;
 			sourceTree = "<group>";
 		};
+		619C5AC1124F7DDF00D041AE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				619C5ACA124F7DDF00D041AE /* Lua.app */,
+				619C5ACC124F7DDF00D041AE /* libcocos2d libraries.a */,
+				619C5ACE124F7DDF00D041AE /* libLua.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		61F7A42811E2905C0040BA66 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
@@ -1365,6 +1402,7 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
+				619C5AF3124F7E3100D041AE /* LuaPas.pas */,
 				61798892114AA56300BA94A9 /* inc */,
 				61E1F4F711D004240016A5AA /* adler32.pas */,
 				617987E7114AA34C00BA94A9 /* hwengine.pas */,
@@ -1463,6 +1501,10 @@
 				{
 					ProductGroup = 611E0E4C11FA92130077A41E /* Products */;
 					ProjectRef = 611E0E4B11FA92130077A41E /* freetype.xcodeproj */;
+				},
+				{
+					ProductGroup = 619C5AC1124F7DDF00D041AE /* Products */;
+					ProjectRef = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
 				},
 				{
 					ProductGroup = 6127232F117DF752005B90CF /* Products */;
@@ -1992,6 +2034,27 @@
 			remoteRef = 6184608B11DA8BF3000E1314 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		619C5ACA124F7DDF00D041AE /* Lua.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Lua.app;
+			remoteRef = 619C5AC9124F7DDF00D041AE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		619C5ACC124F7DDF00D041AE /* libcocos2d libraries.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcocos2d libraries.a";
+			remoteRef = 619C5ACB124F7DDF00D041AE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		619C5ACE124F7DDF00D041AE /* libLua.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libLua.a;
+			remoteRef = 619C5ACD124F7DDF00D041AE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -2076,7 +2139,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/btn*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/ammopic.png ${PROJECT_DIR}/Data/Graphics/Btn/iconAmmo.png\ncp ${PROJECT_DIR}/../../QTfrontend/res/icon*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps and hats\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,KnockBall,Ruler,BasketBall}\nrm -rf ${PROJECT_DIR}/Data/Hats/{TeamCap,TeamHeadband,TeamHair}\n\ncp -R ${PROJECT_DIR}/audio/* ${PROJECT_DIR}/Data/\n\n#the following ones must be removed when their support is implemented\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\nrm -rf ${PROJECT_DIR}/Data/Themes/Island\n\n#reduce the number of flakes for City\nawk '{if ($1 == 1500) $1=40; print $0}' < ${PROJECT_DIR}/Data/Themes/City/theme.cfg > /tmp/tempfile\nmv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\n#remove Isalnd from the list of Themes\nawk '{if ($1 != \"Island\") print $0}' < ${PROJECT_DIR}/Data/Themes/themes.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/themes.cfg\n\n#remove Isalnd from the Maps\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/Cave/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/Cave/map.cfg\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/Lonely_Island/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/Lonely_Island/map.cfg\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/PirateFlag/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/PirateFlag/map.cfg\n\n#delete some voices\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n#rm -rf ${PROJECT_DIR}/Data/Sounds/voices/{Classic,British,Mobster,Pirate,Robot,Russian,Singer,Surfer}\n\n#delete useless fonts\nrm -rf ${PROJECT_DIR}/Data/Fonts/wqy-zenhei.ttc\nrm -rf ${PROJECT_DIR}/Data/Fonts/DroidSansFallback.ttf\n\n#delete all names, missions, reserved hats\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Missions/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\n";
+			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/btn*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/ammopic.png ${PROJECT_DIR}/Data/Graphics/Btn/iconAmmo.png\ncp ${PROJECT_DIR}/../../QTfrontend/res/icon*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps and hats\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,Ruler}\nrm -rf ${PROJECT_DIR}/Data/Hats/{TeamCap,TeamHeadband,TeamHair}\n\ncp -R ${PROJECT_DIR}/audio/* ${PROJECT_DIR}/Data/\n\n#the following ones must be removed when their support is implemented\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\n\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nmv ${PROJECT_DIR}/Data/Maps/{Basketball,Knockball} ${PROJECT_DIR}/Data/Missions/Maps/\n\n#reduce the number of flakes for City\nawk '{if ($1 == 1500) $1=40; print $0}' < ${PROJECT_DIR}/Data/Themes/City/theme.cfg > /tmp/tempfile\nmv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\n#remove Isalnd from the list of Themes\nawk '{if ($1 != \"Island\") print $0}' < ${PROJECT_DIR}/Data/Themes/themes.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/themes.cfg\n\n#remove Isalnd from the Maps and themes\nrm -rf ${PROJECT_DIR}/Data/Themes/Island\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/Cave/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/Cave/map.cfg\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/Lonely_Island/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/Lonely_Island/map.cfg\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/PirateFlag/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/PirateFlag/map.cfg\n\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n\n#delete useless fonts\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\n#delete all names, reserved hats\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\n";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -2187,6 +2250,7 @@
 				6199E839124647DE00DADF8C /* SupportViewController.m in Sources */,
 				611D9B12124949D000008271 /* NSStringExtra.m in Sources */,
 				611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */,
+				619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

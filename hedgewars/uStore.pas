@@ -1092,17 +1092,7 @@ function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surf
 var tmpsurf: PSDL_Surface;
     s: shortstring;
 begin
-    WriteToConsole(msgLoading + filename + '.png [flags:');
-    if imageFlags = ifNone then
-        WriteToConsole(' None')
-    else
-        begin
-        if (imageFlags and ifAlpha) <> 0 then WriteToConsole(' Alpha');
-        if (imageFlags and ifCritical) <> 0 then WriteToConsole(' Critical');
-        if (imageFlags and ifTransparent) <> 0 then WriteToConsole(' Transparent');
-        if (imageFlags and ifIgnoreCaps) <> 0 then WriteToConsole(' IgnoreCaps');
-        end;
-    WriteToConsole('] ');
+    WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + ']');
 
     s:= filename + '.png';
     tmpsurf:= IMG_Load(Str2PChar(s));

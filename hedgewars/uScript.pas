@@ -39,7 +39,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-{$IFNDEF IPHONEOS}
+{$IFNDEF LUA_DISABLED}
 uses LuaPas in 'LuaPas.pas',
     uConsole,
     uMisc,

@@ -579,7 +579,7 @@ void startSpinning() {
     [indicator release];
 }
 
-// called by uStore from FinishProgress
+// called by uStore from FinishProgress and by OverlayViewController by replayBegan
 void stopSpinning() {
     UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[[[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG] viewWithTag:987654];
     [indicator stopAnimating];
@@ -616,9 +616,15 @@ void replayBegan() {
     blackView.exclusiveTouch = NO;
     blackView.multipleTouchEnabled = NO;
     blackView.userInteractionEnabled = NO;
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    indicator.center = theWindow.center;
+    [indicator startAnimating];
+    [blackView addSubview:indicator];
+    [indicator release];
     [theWindow addSubview:blackView];
     [blackView release];
     isReplay = YES;
+    stopSpinning();
 }
 
 // called by uGame
