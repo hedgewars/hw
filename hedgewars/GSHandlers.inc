@@ -102,7 +102,9 @@ var
     skipSpeed, skipAngle, skipDecay: hwFloat;
     i, maxDrops: LongInt;
     particle: PVisualGear;
+    isSubmersible: boolean;
 begin
+    isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);
     // probably needs tweaking. might need to be in a case statement based upon gear type
     if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
     begin
@@ -121,27 +123,35 @@ begin
         end
         else
         begin
-            CheckGearDrowning := true;
-            Gear^.State := gstDrowning;
-            Gear^.RenderTimer := false;
-            if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot) and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
-                if Gear^.Kind = gtHedgehog then begin
-                    if PHedgehog(Gear^.Hedgehog)^.Effects[heResurrectable] then begin
-                        ResurrectHedgehog(Gear); 
-                    end else begin
-                        Gear^.doStep := @doStepDrowningGear;
-                        Gear^.State := Gear^.State and (not gstHHDriven);
-                        AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
-                    end;
-                end else begin
-                    Gear^.doStep := @doStepDrowningGear;
-                end;
-            if hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius then
+            if not isSubmersible then
+            begin
+                CheckGearDrowning := true;
+                Gear^.State := gstDrowning;
+                Gear^.RenderTimer := false;
+                if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot) and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
+                    if Gear^.Kind = gtHedgehog then 
+                        begin
+                        if PHedgehog(Gear^.Hedgehog)^.Effects[heResurrectable] then
+                            ResurrectHedgehog(Gear)
+                        else
+                            begin
+                            Gear^.doStep := @doStepDrowningGear;
+                            Gear^.State := Gear^.State and (not gstHHDriven);
+                            AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
+                            end
+                        end
+                    else
+                        Gear^.doStep := @doStepDrowningGear
+            end;
+            if ((not isSubmersible) and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius)) or
+               (isSubmersible and (hwRound(Gear^.Y) < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01))) then
                 // don't play splash if they are already way past the surface
                 PlaySound(sndSplash)
         end;
 
-        if ((cReducedQuality and rqPlainSplash) = 0) and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius) then
+        if ((cReducedQuality and rqPlainSplash) = 0) and 
+           (((not isSubmersible) and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius)) or
+             (isSubmersible and (hwRound(Gear^.Y) < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01)))) then
         begin
             AddVisualGear(hwRound(Gear^.X), cWaterLine, vgtSplash);
 
@@ -157,9 +167,10 @@ begin
                 end
             end
         end;
+        if isSubmersible and (CurAmmoGear^.Pos = 0) then CurAmmoGear^.Pos := 1000
     end
     else
-        CheckGearDrowning := false
+        CheckGearDrowning := false;
 end;
 
 procedure CheckCollision(Gear: PGear);
@@ -2951,10 +2962,11 @@ var
     fuel: LongInt;
     move: hwFloat;
 begin
+    if Gear^.Pos > 0 then dec(Gear^.Pos);
     AllInactive := false;
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
     //dec(Gear^.Timer);
-    move := _0_1;
+    move := _0_2;
     fuel := 50;
 (*if (HHGear^.Message and gmPrecise) <> 0 then
     begin
@@ -2962,23 +2974,25 @@ begin
     fuel:= 5;
     end;*)
 
-    if (HHGear^.Message and gmUp) <> 0 then
-    begin
-        if (not HHGear^.dY.isNegative) or (HHGear^.Y > -_256) then
-            HHGear^.dY := HHGear^.dY - move;
-        HHGear^.dY := HHGear^.dY - move;
-        dec(Gear^.Health, fuel);
-        Gear^.MsgParam := Gear^.MsgParam or gmUp;
-        Gear^.Timer := GameTicks
-    end;
-    if (HHGear^.Message and gmLeft) <> 0 then move.isNegative := true;
-    if (HHGear^.Message and (gmLeft or gmRight)) <> 0 then
-    begin
-        HHGear^.dX := HHGear^.dX + (move * _0_2);
-        dec(Gear^.Health, fuel div 5);
-        Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
-        Gear^.Timer := GameTicks
-    end;
+    if Gear^.Health > 0 then
+        begin
+        if (HHGear^.Message and gmUp) <> 0 then
+            begin
+            if (not HHGear^.dY.isNegative) or (HHGear^.Y > -_256) then
+                HHGear^.dY := HHGear^.dY - move;
+            dec(Gear^.Health, fuel);
+            Gear^.MsgParam := Gear^.MsgParam or gmUp;
+            Gear^.Timer := GameTicks
+            end;
+        if (HHGear^.Message and gmLeft) <> 0 then move.isNegative := true;
+        if (HHGear^.Message and (gmLeft or gmRight)) <> 0 then
+            begin
+            HHGear^.dX := HHGear^.dX + (move * _0_1);
+            dec(Gear^.Health, fuel div 5);
+            Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
+            Gear^.Timer := GameTicks
+            end
+        end;
 
     // erases them all at once :-/
     if (Gear^.Timer <> 0) and (GameTicks - Gear^.Timer > 250) then
@@ -2989,12 +3003,12 @@ begin
 
     if Gear^.Health < 0 then Gear^.Health := 0;
     if (GameTicks and $3F) = 0 then
-    begin
+        begin
         //AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
         if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
         Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) +
                      '%', cWhiteColor, fntSmall)
-    end;
+        end;
 
     if HHGear^.Message and (gmAttack or gmUp or gmPrecise or gmLeft or gmRight) <> 0 then Gear^
         .State := Gear^.State and not gsttmpFlag;
@@ -3008,15 +3022,16 @@ begin
 
     if ((Gear^.State and gsttmpFlag) = 0) or (HHGear^.dY < _0) then doStepHedgehogMoving(HHGear);
 
-    if  (Gear^.Health = 0)
-       or (HHGear^.Damage <> 0)
-       or CheckGearDrowning(HHGear)
-       or (TurnTimeLeft = 0)
-       // allow brief ground touches - to be fair on this, might need another counter
-       or (((GameTicks and $1FF) = 0) and (not HHGear^.dY.isNegative) and TestCollisionYwithGear(
-       HHGear, 1))
-       or ((Gear^.Message and gmAttack) <> 0) then
-    begin
+    if // (Gear^.Health = 0)
+        (HHGear^.Damage <> 0)
+        //or CheckGearDrowning(HHGear)
+        or (cWaterLine + 512 < hwRound(HHGear^.Y))
+        or (TurnTimeLeft = 0)
+        // allow brief ground touches - to be fair on this, might need another counter
+        or (((GameTicks and $1FF) = 0) and (not HHGear^.dY.isNegative) and TestCollisionYwithGear(
+        HHGear, 1))
+        or ((Gear^.Message and gmAttack) <> 0) then
+        begin
         with HHGear^ do
         begin
             Message := 0;
@@ -3039,6 +3054,7 @@ procedure doStepJetpack(Gear: PGear);
 var 
     HHGear: PGear;
 begin
+    Gear^.Pos:= 0;
     Gear^.doStep := @doStepJetpackWork;
 
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;

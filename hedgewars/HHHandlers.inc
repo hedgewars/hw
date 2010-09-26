@@ -604,8 +604,9 @@ end;
 procedure doStepHedgehog(Gear: PGear); forward;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogMoving(Gear: PGear);
-var isFalling: boolean;
+var isFalling, isUnderwater: boolean;
 begin
+isUnderwater:= cWaterLine < hwRound(Gear^.Y) + Gear^.Radius;
 if Gear^.dX > _0_995 then Gear^.dX:= _0_995;
 if Gear^.dY > _0_995 then Gear^.dY:= _0_995;
 if PHedgehog(Gear^.Hedgehog)^.Unplaced then
@@ -641,6 +642,12 @@ if isFalling then
    end;
 
 if (Gear^.State <> 0) then DeleteCI(Gear);
+
+if isUnderwater then
+   begin
+   Gear^.dY:= Gear^.dY * _0_999;
+   Gear^.dX:= Gear^.dX * _0_999;
+   end;
 
 if (Gear^.State and gstMoving) <> 0 then
    if TestCollisionXKick(Gear, hwSign(Gear^.dX)) then
