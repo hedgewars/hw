@@ -621,8 +621,10 @@ if isFalling then
    begin
    if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then Gear^.dY:= _0;
    Gear^.State:= Gear^.State or gstMoving;
-   Gear^.dY:= Gear^.dY + cGravity
-   end else
+   if isUnderwater then Gear^.dY:= Gear^.dY + cGravity / _2
+   else Gear^.dY:= Gear^.dY + cGravity
+   end 
+else
    begin
    if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_55)
       and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);

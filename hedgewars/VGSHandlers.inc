@@ -201,8 +201,12 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBubble(Gear: PVisualGear; Steps: Longword);
 begin
-    Gear^.X:= Gear^.X + (cWindSpeedf * 100 + Gear^.dX) * Steps;
+    Gear^.X:= Gear^.X + Gear^.dX * Steps;
+    Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
     Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
+
+    Gear^.dX /= (1.001 * Steps);
+    Gear^.dY /= (1.001 * Steps);
 
     if (Gear^.FrameTicks <= Steps) or (round(Gear^.Y) < cWaterLine) then
         DeleteVisualGear(Gear)
