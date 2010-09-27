@@ -52,7 +52,7 @@ procedure CheckLandDigest(s: shortstring);
 function  LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
-uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, Adler32, uIO, uLandTexture;
+uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, Adler32, uIO, uLandTexture, sysutils;
 
 operator=(const a, b: direction) c: Boolean;
 begin
@@ -1165,22 +1165,35 @@ procedure LoadMap;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
     f: textfile;
+    mapName: shortstring;
 begin
 isMap:= true;
 WriteLnToConsole('Loading land from file...');
 AddProgress;
-tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then
+begin
+    mapName:= ExtractFileName(Pathz[ptMapCurrent]);
+    tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+end;
 TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimensions too big!', true);
 
 // unC0Rr - should this be passed from the GUI? I am not sure which layer does what
 s:= Pathz[ptMapCurrent] + '/map.cfg';
 WriteLnToConsole('Fetching map HH limit');
+{$I-}
 Assign(f, s);
 filemode:= 0; // readonly
 Reset(f);
+if IOResult <> 0 then
+begin
+    s:= Pathz[ptMissionMaps] + '/' + mapName + '/map.cfg';
+    Assign(f, s);
+    Reset(f);
+end;
 Readln(f);
 if not eof(f) then Readln(f, MaxHedgehogs);
-
+{$I+}
 if (MaxHedgehogs = 0) then MaxHedgehogs:= 18;
 
 playHeight:= tmpsurf^.h;

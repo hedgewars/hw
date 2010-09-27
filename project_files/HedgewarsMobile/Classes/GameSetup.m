@@ -251,11 +251,21 @@
     [NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
 }
 
+-(void) dumpRawData:(const uint8_t*)buffer ofSize:(uint8_t) length {
+    // is it performant to reopen the stream every time?
+    NSOutputStream *os = [[NSOutputStream alloc] initToFileAtPath:self.savePath append:YES];
+    [os open];
+    [os write:&length maxLength:1];
+    [os write:buffer maxLength:length];
+    [os close];
+    [os release];
+}
+
 // wrapper that computes the length of the message and then sends the command string, saving the command on a file
 -(int) sendToEngine: (NSString *)string {
     uint8_t length = [string length];
 
-    [[NSString stringWithFormat:@"%c%@",length,string] appendToFile:savePath];
+    [self dumpRawData:(const uint8_t *)[string UTF8String] ofSize:length];
     SDLNet_TCP_Send(csd, &length, 1);
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
@@ -304,8 +314,6 @@
     SDLNet_TCP_Close(sd);
 
     while (!clientQuit) {
-        NSString *msgToSave = nil;
-        NSOutputStream *os = nil;
         msgSize = 0;
         memset(buffer, '\0', BUFFER_SIZE);
         if (SDLNet_TCP_Recv(csd, &msgSize, sizeof(uint8_t)) <= 0)
@@ -322,7 +330,7 @@
                 else
                     [self sendToEngineNoSave:@"TL"];
                 NSString *saveHeader = @"TS";
-                [[NSString stringWithFormat:@"%c%@",[saveHeader length], saveHeader] appendToFile:savePath];
+                [self dumpRawData:(const uint8_t *)[saveHeader UTF8String] ofSize:[saveHeader length]];
 
                 // seed info
                 [self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
@@ -367,9 +375,8 @@
                 clientQuit = YES;
                 break;
             case 'e':
-                msgToSave = [NSString stringWithFormat:@"%c%s",msgSize,buffer];                
-                [msgToSave appendToFile:self.savePath];
-                
+                [self dumpRawData:buffer ofSize:msgSize];
+
                 sscanf((char *)buffer, "%*s %d", &eProto);
                 short int netProto = 0;
                 char *versionStr;
@@ -404,13 +411,7 @@
                 setGameRunning(NO);
                 break;
             default:
-                // is it performant to reopen the stream every time? 
-                os = [[NSOutputStream alloc] initToFileAtPath:self.savePath append:YES];
-                [os open];
-                [os write:&msgSize maxLength:1];
-                [os write:buffer maxLength:msgSize];
-                [os close];
-                [os release];
+                [self dumpRawData:buffer ofSize:msgSize];
                 break;
         }
     }

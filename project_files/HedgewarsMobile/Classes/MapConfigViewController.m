@@ -171,6 +171,7 @@
     
     self.themeCommand = [NSString stringWithFormat:@"etheme %@", [split objectAtIndex:0]];
     self.staticMapCommand = [NSString stringWithFormat:@"emap %@", [source objectAtIndex:index]];
+
     if (scIndex != 3)
         self.missionCommand = @"";
     else

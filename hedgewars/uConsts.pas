@@ -40,7 +40,7 @@ type
 
     TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
             ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags);
+            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps);
 
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
             sprLag, sprArrow, sprGrenade, sprTargetP, sprBee,
@@ -460,7 +460,8 @@ const
         'Graphics/Hedgehog',             // ptHedgehog
         'Sounds/voices',                 // ptVoices
         'Graphics/Hats',                 // ptHats
-        'Graphics/Flags'                 // ptFlags
+        'Graphics/Flags',                // ptFlags
+        'Missions/Maps'                  // ptMissionMaps
     );
 
     cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
