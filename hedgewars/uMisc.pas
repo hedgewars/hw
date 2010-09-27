@@ -43,6 +43,7 @@ var
     //userNick is in uChat
     recordFileName  : shortstring = '';
     cReadyDelay     : Longword    = 5000;
+    cLogfileBase    : shortstring = 'debug';
 //////////////////////////
     
     isCursorVisible : boolean;
@@ -808,7 +809,7 @@ begin
 {$IFDEF DEBUGFILE}
 {$I-}
 {$IFDEF IPHONEOS}
-    Assign(f,'../Documents/debug.txt');
+    Assign(f,'../Documents/hw-' + cLogfileBase + '.log');
     Rewrite(f);
 {$ELSE}
     if (ParamStr(1) <> '') and (ParamStr(2) <> '') then
@@ -816,7 +817,7 @@ begin
         begin
             for i:= 0 to 7 do
             begin
-                assign(f, ExtractFileDir(ParamStr(2)) + '/debug' + inttostr(i) + '.txt');
+                assign(f, ExtractFileDir(ParamStr(2)) + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
                 rewrite(f);
                 if IOResult = 0 then break;
             end;
@@ -826,7 +827,7 @@ begin
         begin
             for i:= 0 to 7 do
             begin
-                assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
+                assign(f, ParamStr(1) + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
                 rewrite(f);
                 if IOResult = 0 then break;
             end;

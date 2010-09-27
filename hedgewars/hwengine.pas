@@ -231,6 +231,7 @@ begin
     recordFileName:= gameArgs[10];
 {$ENDIF}
 
+    cLogfileBase:= 'game';
     initEverything(true);
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
 {$IFDEF DEBUGFILE}
@@ -395,6 +396,7 @@ end;
 procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
 var Preview: TPreview;
 begin
+    cLogfileBase:= 'preview';
     initEverything(false);
 {$IFDEF HWLIBRARY}
     WriteLnToConsole('Preview connecting on port ' + inttostr(port));
