@@ -2959,9 +2959,12 @@ end;
 procedure doStepJetpackWork(Gear: PGear);
 var 
     HHGear: PGear;
-    fuel: LongInt;
+    fuel, i: LongInt;
     move: hwFloat;
+    isUnderwater: Boolean;
+    bubble: PVisualGear;
 begin
+    isUnderwater:= cWaterLine < hwRound(Gear^.Y) + Gear^.Radius;
     if Gear^.Pos > 0 then dec(Gear^.Pos);
     AllInactive := false;
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
@@ -2979,15 +2982,43 @@ begin
         if (HHGear^.Message and gmUp) <> 0 then
             begin
             if (not HHGear^.dY.isNegative) or (HHGear^.Y > -_256) then
-                HHGear^.dY := HHGear^.dY - move;
+                begin
+                if isUnderwater then
+                    begin
+                    HHGear^.dY := HHGear^.dY - (move * _0_7);
+                    for i:= random(10)+10 downto 0 do
+                        begin
+                        bubble := AddVisualGear(hwRound(HHGear^.X) - 8 + random(16), hwRound(HHGear^.Y) + 16 + random(8), vgtBubble);
+                        if bubble <> nil then bubble^.dY:= random(20)/10+0.1;
+                        end
+                    end
+                else HHGear^.dY := HHGear^.dY - move;
+                end;
             dec(Gear^.Health, fuel);
             Gear^.MsgParam := Gear^.MsgParam or gmUp;
             Gear^.Timer := GameTicks
             end;
-        if (HHGear^.Message and gmLeft) <> 0 then move.isNegative := true;
+        move.isNegative := (HHGear^.Message and gmLeft) <> 0;
         if (HHGear^.Message and (gmLeft or gmRight)) <> 0 then
             begin
             HHGear^.dX := HHGear^.dX + (move * _0_1);
+            if isUnderwater then
+                begin
+                for i:= random(5)+5 downto 0 do
+                    begin
+                    bubble := AddVisualGear(hwRound(HHGear^.X)+random(8), hwRound(HHGear^.Y) - 8 + random(16), vgtBubble);
+                    if bubble <> nil then 
+                        begin
+                        bubble^.dX:= (random(10)/10 + 0.02) * -1;
+                        if (move.isNegative) then
+                            begin
+                            bubble^.X := bubble^.X + 28;
+                            bubble^.dX *= -1
+                            end
+                        else bubble^.X := bubble^.X - 28;
+                        end;
+                    end
+                end;
             dec(Gear^.Health, fuel div 5);
             Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
             Gear^.Timer := GameTicks

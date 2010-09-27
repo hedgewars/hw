@@ -599,9 +599,12 @@ if (Gear^.State and gstHHDriven) <> 0 then
         case CurAmmoGear^.Kind of
             gtJetpack: begin
                        DrawSprite(sprJetpack, sx-32, sy-32, 0);
-                       if (CurAmmoGear^.MsgParam and gmUp) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 1);
-                       if (CurAmmoGear^.MsgParam and gmLeft) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 2);
-                       if (CurAmmoGear^.MsgParam and gmRight) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 3);
+                       if cWaterLine > hwRound(Gear^.Y) + Gear^.Radius then
+                           begin
+                           if (CurAmmoGear^.MsgParam and gmUp) <> 0 then DrawSprite(sprJetpack, sx-32, sy-28, 1);
+                           if (CurAmmoGear^.MsgParam and gmLeft) <> 0 then DrawSprite(sprJetpack, sx-28, sy-28, 2);
+                           if (CurAmmoGear^.MsgParam and gmRight) <> 0 then DrawSprite(sprJetpack, sx-36, sy-28, 3)
+                           end;
                        if CurAmmoGear^.Tex <> nil then DrawCentered(sx, sy - 40, CurAmmoGear^.Tex);
                        DrawAltWeapon(Gear, sx, sy)
                        end;

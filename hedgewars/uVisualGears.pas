@@ -213,7 +213,7 @@ with gear^ do
                 end;
     vgtBubble: begin
                 dx:= 0.0000038654705 * random(10000);
-                dy:= 0.001 * (random(85) + 95);
+                dy:= 0;
                 if random(2) = 0 then dx := -dx;
                 FrameTicks:= 250 + random(1751);
                 Frame:= random(5)
