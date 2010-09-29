@@ -253,8 +253,9 @@ var
     tdX, tdY: hwFloat;
     collV, collH: LongInt;
 begin
-    if Gear^.dX > _0_995 then Gear^.dX := _0_995;
-    if Gear^.dY > _0_995 then Gear^.dY := _0_995;
+    // clip velocity at 1.9 - over 1 per pixel, but really shouldn't cause many actual problems.
+    if Gear^.dX.QWordValue > 8160437862 then Gear^.dX.QWordValue:= 8160437862;
+    if Gear^.dY.QWordValue > 8160437862 then Gear^.dY.QWordValue:= 8160437862;
     Gear^.State := Gear^.State and not gstCollision;
     collV := 0;
     collH := 0;
@@ -3125,7 +3126,7 @@ var
 begin
     HHGear := CurrentHedgehog^.Gear;
 
-    move := _0_1;
+    move := _0_2;
     fuel := 50;
 
     if Gear^.Pos > 0 then
@@ -3142,14 +3143,13 @@ begin
     begin
         if (not HHGear^.dY.isNegative) or (HHGear^.Y > -_256) then
             HHGear^.dY := HHGear^.dY - move;
-        HHGear^.dY := HHGear^.dY - move;
         dec(Gear^.Health, fuel);
         Gear^.MsgParam := Gear^.MsgParam or gmUp;
     end;
     if (HHGear^.Message and gmLeft) <> 0 then move.isNegative := true;
     if (HHGear^.Message and (gmLeft or gmRight)) <> 0 then
     begin
-        HHGear^.dX := HHGear^.dX + (move * _0_2);
+        HHGear^.dX := HHGear^.dX + (move * _0_1);
         dec(Gear^.Health, fuel div 5);
         Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
     end;

@@ -607,8 +607,9 @@ procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling, isUnderwater: boolean;
 begin
 isUnderwater:= cWaterLine < hwRound(Gear^.Y) + Gear^.Radius;
-if Gear^.dX > _0_995 then Gear^.dX:= _0_995;
-if Gear^.dY > _0_995 then Gear^.dY:= _0_995;
+if Gear^.dX.QWordValue > 8160437862 then Gear^.dX.QWordValue:= 8160437862;
+if Gear^.dY.QWordValue > 8160437862 then Gear^.dY.QWordValue:= 8160437862;
+
 if PHedgehog(Gear^.Hedgehog)^.Unplaced then
    begin
    Gear^.dY:= _0;
