@@ -24,7 +24,6 @@
 #import "SDL_net.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
-#import "NSStringExtra.h"
 #import "OverlayViewController.h"
 
 #define BUFFER_SIZE 255     // like in original frontend
@@ -209,7 +208,11 @@
     [self sendToEngine:dmgMod];
     [dmgMod release];
 
-    NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",[[basicArray objectAtIndex:i++] intValue] * 1000];
+    // support for endless games
+    int tentativeTurntime = [[basicArray objectAtIndex:i++] intValue];
+    if (tentativeTurntime == 100)
+        tentativeTurntime = 9999;
+    NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",tentativeTurntime * 1000];
     [self sendToEngine:turnTime];
     [turnTime release];
 

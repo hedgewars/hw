@@ -105,7 +105,7 @@
                               [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Damage Modifier",@""),@"title",@"Damage",@"image",
                                [NSNumber numberWithInt:100],@"default",[NSNumber numberWithInt:10],@"min",[NSNumber numberWithInt:300],@"max",nil],
                               [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Turn Time",@""),@"title",@"Time",@"image",
-                               [NSNumber numberWithInt:45],@"default",[NSNumber numberWithInt:1],@"min",[NSNumber numberWithInt:99],@"max",nil],
+                               [NSNumber numberWithInt:45],@"default",[NSNumber numberWithInt:1],@"min",[NSNumber numberWithInt:100],@"max",nil],
                               [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Initial Health",@""),@"title",@"Health",@"image",
                                [NSNumber numberWithInt:100],@"default",[NSNumber numberWithInt:50],@"min",[NSNumber numberWithInt:200],@"max",nil],
                               [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Sudden Death Timeout",@""),@"title",@"SuddenDeath",@"image",
@@ -234,7 +234,6 @@
                 UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(offset+260, 12, offset+150, 23)];
                 slider.maximumValue = [[detail objectForKey:@"max"] floatValue];
                 slider.minimumValue = [[detail objectForKey:@"min"] floatValue];
-                slider.tag = SLIDER_TAG+row;
                 [slider addTarget:self action:@selector(sliderChanged:) forControlEvents:UIControlEventValueChanged];
                 [cell.contentView addSubview:slider];
                 [slider release];
@@ -254,11 +253,23 @@
             UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
             cellLabel.text = [[self.basicSettingList objectAtIndex:row] objectForKey:@"title"];
 
-            UISlider *cellSlider = (UISlider *)[cell.contentView viewWithTag:SLIDER_TAG+row];
+            // can't use the viewWithTag method because row is dynamic
+            UISlider *cellSlider = nil;
+            for (UIView *oneView in cell.contentView.subviews) {
+                if ([oneView isMemberOfClass:[UISlider class]]) {
+                    cellSlider = (UISlider *)oneView;
+                    break;
+                }
+            }
+            cellSlider.tag = SLIDER_TAG + row;
             cellSlider.value = [[[self.schemeDictionary objectForKey:@"basic"] objectAtIndex:row] floatValue];
 
             // forced to use this weird format otherwise the label disappears when size of the text is bigger than the original
             NSString *prestring = [NSString stringWithFormat:@"%d",(NSInteger) cellSlider.value];
+            // turntime 100 means unlimited time turns (set in GameSetup)
+            if (row == 1 && (NSInteger) cellSlider.value == 100)
+                prestring = @"∞";
+            
             while ([prestring length] <= 4)
                 prestring = [NSString stringWithFormat:@" %@",prestring];
             cell.detailTextLabel.text = prestring;
@@ -309,7 +320,10 @@
     // grab the associated label
     UILabel *label = (UILabel *)cell.detailTextLabel;
     // modify it
-    label.text = [NSString stringWithFormat:@"%d",(NSInteger) theSlider.value];
+    if ([indexPath row] == 1 && [indexPath section] == 1 && (NSInteger) theSlider.value == 100)
+        label.text = @"∞";
+    else
+        label.text = [NSString stringWithFormat:@"%d",(NSInteger) theSlider.value];
     // save changes in the main array
     NSMutableArray *array = [self.schemeDictionary objectForKey:@"basic"];
     [array replaceObjectAtIndex:theSlider.tag-SLIDER_TAG withObject:[NSNumber numberWithInt:(NSInteger) theSlider.value]];
