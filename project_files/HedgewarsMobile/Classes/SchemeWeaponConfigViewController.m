@@ -41,11 +41,9 @@
     self.selectedScheme = @"";
     self.selectedWeapon = @"";
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.tableView setBackgroundView:nil];
-        self.view.backgroundColor = [UIColor clearColor];
-        self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
-    }
+    [self.tableView setBackgroundView:nil];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 

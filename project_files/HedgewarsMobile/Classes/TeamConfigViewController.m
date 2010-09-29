@@ -40,11 +40,9 @@
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
     
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.tableView setBackgroundView:nil];
-        self.view.backgroundColor = [UIColor clearColor];
-        self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
-    }
+    [self.tableView setBackgroundView:nil];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
@@ -54,14 +52,13 @@
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
     // avoid overwriting selected teams when returning on this view
     if ([cachedContentsOfDir isEqualToArray:contentsOfDir] == NO) {
-        // integer representation of various color (defined in SquareButtonView)
-        NSUInteger colors[6] = { 4421353, 4100897, 10632635, 16749353, 14483456, 7566195 };
+        NSArray *colors = getAvailableColors();
         NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[contentsOfDir count]];
         for (int i = 0; i < [contentsOfDir count]; i++) {
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                          [contentsOfDir objectAtIndex:i],@"team",
                                          [NSNumber numberWithInt:4],@"number",
-                                         [NSNumber numberWithInt:colors[i%6]],@"color",nil];
+                                         [colors objectAtIndex:i%[colors count]],@"color",nil];
             [array addObject:dict];
             [dict release];
         }
@@ -163,11 +160,9 @@
         cell.textLabel.text = [[[listOfTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
         cell.accessoryView = nil;
     }
-
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
-        cell.backgroundColor = [UIColor blackColor];
-    }
+    
+    cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+    cell.backgroundColor = [UIColor blackColor];
     
     return cell;
 }
@@ -199,15 +194,6 @@
     [theLabel release];
     return theView;
 }
-
-/*
--(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0)
-        return NSLocalizedString(@"Playing Teams",@"");
-    else
-        return NSLocalizedString(@"Available Teams",@"");
-}
-*/
 
 #pragma mark -
 #pragma mark Table view delegate

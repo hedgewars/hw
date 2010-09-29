@@ -263,3 +263,15 @@ void playSound (NSString *snd) {
     //Use audio services to play the sound
     AudioServicesPlaySystemSound(soundID);
 }
+
+NSArray *getAvailableColors(void) {
+    return [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInt:0x4376e9],     // bluette
+                                     [NSNumber numberWithUnsignedInt:0x3e9321],     // greeeen
+                                     [NSNumber numberWithUnsignedInt:0xa23dbb],     // violett
+                                     [NSNumber numberWithUnsignedInt:0xff9329],     // oranngy
+                                     [NSNumber numberWithUnsignedInt:0xdd0000],     // reddish
+                                     [NSNumber numberWithUnsignedInt:0x737373],     // graaaay
+                                     [NSNumber numberWithUnsignedInt:0xbba23d],     // gold$$$
+                                     [NSNumber numberWithUnsignedInt:0x3da2bb],     // cyannnn  
+                                     nil];
+}

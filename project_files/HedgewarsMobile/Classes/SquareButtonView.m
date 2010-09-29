@@ -32,16 +32,7 @@
         colorIndex = -1;
         selectedColor = 0;
 
-        // list of allowed colors
-        NSArray *colors = [[NSArray alloc] initWithObjects: [NSNumber numberWithUnsignedInt:4421353],    // bluette
-                                                            [NSNumber numberWithUnsignedInt:4100897],    // greeeen
-                                                            [NSNumber numberWithUnsignedInt:10632635],   // violett
-                                                            [NSNumber numberWithUnsignedInt:16749353],   // oranngy
-                                                            [NSNumber numberWithUnsignedInt:14483456],   // reddish
-                                                            [NSNumber numberWithUnsignedInt:7566195],    // graaaay
-                                                            nil];
-        self.colorArray = colors;
-        [colors release];
+        self.colorArray = getAvailableColors();
 
         // set the color to the first available one
         [self nextColor];

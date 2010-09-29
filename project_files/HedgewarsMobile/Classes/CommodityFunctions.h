@@ -63,3 +63,4 @@ BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);
 BOOL isPhone ();
 NSInteger randomPort ();
 NSString *modelType ();
+NSArray *getAvailableColors(void);
