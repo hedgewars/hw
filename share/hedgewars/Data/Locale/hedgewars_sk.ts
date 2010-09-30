@@ -87,6 +87,10 @@
         <source>Please select record from the list above</source>
         <translation>Prosím vyberte záznam zo zoznamu vyššie</translation>
     </message>
+    <message>
+        <source>DefaultTeam</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -309,11 +313,11 @@ or pick another nickname in game config:</source>
     <name>PageGameStats</name>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Ocenenie za najlepší zásah vyhral(a) &lt;b&gt;%1&lt;/b&gt; so ziskom &lt;b&gt;%2&lt;/b&gt; bodov.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;Ocenenie za najlepší zásah vyhral(a) &lt;b&gt;%1&lt;/b&gt; so ziskom &lt;b&gt;%2&lt;/b&gt; bodov.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>&lt;p&gt;Najlepším zabijákom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;jedným&lt;/b&gt; zabitím počas ťahu.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;Najlepším zabijákom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;%2&lt;/b&gt; zabitiami počas ťahu.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;Najlepším zabijákom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;%2&lt;/b&gt; zabitiami počas ťahu.&lt;/p&gt;</numerusform>
@@ -321,11 +325,63 @@ or pick another nickname in game config:</source>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>&lt;p&gt;Celkovo bol v tomto kole zabitý &lt;b&gt;jeden&lt;/b&gt; ježko.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;Celkovo boli v tomto kole zabití &lt;b&gt;%1&lt;/b&gt; ježkovia.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;Celkovo boli v tomto kole zabití &lt;b&gt;%1&lt;/b&gt; ježkovia.&lt;/p&gt;</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health graph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ranking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>(%1 kill)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(%1 kills)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -409,11 +465,6 @@ or pick another nickname in game config:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Create an account on http://www.hedgewars.org/ to keep others from using your most favourite nickname while playing on the official server.</source>
-        <comment>Tips</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>While playing you should give yourself a short break at least once an hour.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
@@ -459,7 +510,122 @@ or pick another nickname in game config:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Connect one or more gamepads before launching the game to be able to assign their controls to your teams.</source>
+        <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Afraid of falling off a cliff? Hold down [precise] to turn [left] or [right] without actually moving.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Some weapons require special strategies or just lots of training, so don&apos;t give up on a particular tool if you miss an enemy once.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Most weapons won&apos;t work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you&apos;re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Cake&apos;s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep your video card drivers up to date to avoid issues playing the game.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -652,6 +818,35 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
         <source>Random Maze</source>
         <translation>Náhodné bludisko</translation>
     </message>
+    <message>
+        <source>State:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rules:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished">Clear</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The game you are trying to join has started.
+Do you still want to join the room?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageScheme</name>
@@ -739,6 +934,10 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
         <source>Disable land objects when generating random maps.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>AI respawns on death.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -772,6 +971,10 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     <message>
         <source>Load (Load a previously saved game)</source>
         <translation>Načítať (načíta v minulosti uloženú hru)</translation>
+    </message>
+    <message>
+        <source>Campaign Mode (...). IN DEVELOPMENT</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -857,7 +1060,7 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation>Znížená kvalita</translation>
+        <translation type="obsolete">Znížená kvalita</translation>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
@@ -901,6 +1104,54 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     <message>
         <source>Mission</source>
         <translation>Misia</translation>
+    </message>
+    <message>
+        <source>Community</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Any</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In lobby</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">Východzie</translation>
+    </message>
+    <message>
+        <source>Pro mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shoppa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Basketball</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minefield</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Barrel mayhem</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tunnel hogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Crazy</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1104,6 +1355,10 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quality</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1387,6 +1642,10 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Disable Land Objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AI Survival Mode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
