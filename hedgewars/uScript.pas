@@ -875,7 +875,7 @@ end;
 procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
 begin
-ret:= luaL_loadfile(luaState, Str2PChar(name));
+ret:= luaL_loadfile(luaState, Str2PChar(Pathz[ptData] + '/' + name));
 if ret <> 0 then
     begin
     LuaError('Lua: Failed to load ' + name + '(error ' + IntToStr(ret) + ')');

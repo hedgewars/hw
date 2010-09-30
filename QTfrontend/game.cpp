@@ -357,7 +357,7 @@ void HWGame::StartQuick()
 void HWGame::StartTraining(const QString & file)
 {
     gameType = gtTraining;
-    training = datadir->absolutePath() + "/Missions/Training/" + file + ".lua";
+    training = "Missions/Training/" + file + ".lua";
     demo.clear();
     Start();
     SetGameState(gsStarted);
@@ -366,7 +366,7 @@ void HWGame::StartTraining(const QString & file)
 void HWGame::StartCampaign(const QString & file)
 {
     gameType = gtCampaign;
-    campaign = datadir->absolutePath() + "/Missions/Campaign/" + file + ".lua";
+    campaign = "Missions/Campaign/" + file + ".lua";
     demo.clear();
     Start();
     SetGameState(gsStarted);

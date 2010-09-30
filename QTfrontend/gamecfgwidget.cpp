@@ -167,8 +167,7 @@ QStringList GameCFGWidget::getFullConfig() const
     {
         sl.append("emap " + currentMap);
         if(pMapContainer->getCurrentIsMission())
-            sl.append(QString("escript %1/Maps/%2/map.lua")
-                .arg(datadir->absolutePath())
+            sl.append(QString("escript Maps/%1/map.lua")
                 .arg(currentMap));
     }
     sl.append("etheme " + pMapContainer->getCurrentTheme());
