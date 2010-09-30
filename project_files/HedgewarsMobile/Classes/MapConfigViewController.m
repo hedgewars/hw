@@ -175,7 +175,7 @@
     if (scIndex != 3)
         self.missionCommand = @"";
     else
-        self.missionCommand = [NSString stringWithFormat:@"escript %@/%@/map.lua",MISSIONS_DIRECTORY(),[source objectAtIndex:index]];
+        self.missionCommand = [NSString stringWithFormat:@"escript Missions/Maps/%@/map.lua",[source objectAtIndex:index]];
 }
 
 #pragma mark -

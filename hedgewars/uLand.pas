@@ -1125,12 +1125,15 @@ end;
 // He said I could add it here only when I swore it would not impact gameplay.  Which, as far as I can tell, is true.
 // I would just like to play with it with my friends if you do not mind.
 // Can allow for amusing maps.
-procedure LoadMask;
+procedure LoadMask(mapName: shortstring);
 var tmpsurf: PSDL_Surface;
     p: PLongwordArray;
     x, y, cpX, cpY: Longword;
 begin
     tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+    if (tmpsurf = nil) and (mapName <> '') then
+        tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName +'/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+
     if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
     begin
         cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
@@ -1165,7 +1168,7 @@ procedure LoadMap;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
     f: textfile;
-    mapName: shortstring;
+    mapName: shortstring = '';
 begin
 isMap:= true;
 WriteLnToConsole('Loading land from file...');
@@ -1211,7 +1214,7 @@ BlitImageAndGenerateCollisionInfo(
     tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-LoadMask;
+LoadMask(mapname);
 end;
 
 procedure GenMap;
