@@ -81,27 +81,34 @@
             // this init here is just aestetic as this controller was already set up in viewDidLoad
             if (mapConfigViewController == nil) {
                 mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
+                [self.view addSubview:mapConfigViewController.view];
             }
-            activeController = mapConfigViewController;
+            // this message is compulsory otherwise the table won't be loaded at all
+            [mapConfigViewController viewWillAppear:NO];
+            [self.view bringSubviewToFront:mapConfigViewController.view];
             break;
         case 1:
             if (teamConfigViewController == nil) {
                 teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                // this message is compulsory otherwise the table won't be loaded at all
+                [self.view addSubview:teamConfigViewController.view];
             }
-            activeController = teamConfigViewController;
+            // this message is compulsory otherwise the table won't be loaded at all
+            [teamConfigViewController viewWillAppear:NO];
+            [self.view bringSubviewToFront:teamConfigViewController.view];
             break;
         case 2:
             if (schemeWeaponConfigViewController == nil) {
                 schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                [self.view addSubview:schemeWeaponConfigViewController.view];
             }
-            activeController = schemeWeaponConfigViewController;
+            // this message is compulsory otherwise the table won't be loaded at all
+            [schemeWeaponConfigViewController viewWillAppear:NO];
+            [self.view bringSubviewToFront:schemeWeaponConfigViewController.view];
+            break;
+        default:
+            DLog(@"Nope");
             break;
     }
-
-    // this message is compulsory otherwise the table won't be loaded at all
-    [activeController viewWillAppear:NO];
-    [self.view addSubview:activeController.view];
 }
 
 -(BOOL) isEverythingSet {
@@ -234,27 +241,22 @@
     self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        // load a base image that will be updated in viewWill Load
-        NSString *filePath = [NSString stringWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
-        UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath andCutAt:CGRectMake(96, 0, 32, 32)];
-        self.hedgehogImage = sprite;
-        [sprite release];
         srandom(time(NULL));
+        self.hedgehogImage = nil;
         
         // load other controllers
         if (mapConfigViewController == nil)
             mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
         mapConfigViewController.delegate = self;
+        mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
         if (teamConfigViewController == nil)
             teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        teamConfigViewController.view.frame = CGRectMake(362, 200, 300, 480);
-        teamConfigViewController.view.backgroundColor = [UIColor clearColor];
+        teamConfigViewController.view.frame = CGRectMake(362, 200, 328, 480);
         [mapConfigViewController.view addSubview:teamConfigViewController.view];
         if (schemeWeaponConfigViewController == nil)
             schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
         schemeWeaponConfigViewController.view.frame = CGRectMake(10, 70, 300, 550);
         [mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
-        mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
     } else {
         // this is the visible controller
         mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
@@ -262,8 +264,6 @@
         schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
         [self.view addSubview:schemeWeaponConfigViewController.view];
     }
-    activeController = mapConfigViewController;
-
     [self.view addSubview:mapConfigViewController.view];
 
     [super viewDidLoad];
@@ -271,6 +271,14 @@
 
 -(void) viewWillAppear:(BOOL)animated {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        // load a base image that will be updated in viewWill Load
+        if (self.hedgehogImage == nil) {
+            NSString *filePath = [NSString stringWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
+            UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath andCutAt:CGRectMake(96, 0, 32, 32)];
+            self.hedgehogImage = sprite;
+            [sprite release];
+        }
+        
         NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
         int numberOfHats = [hatArray count];
         if (self.imgContainer == nil)
@@ -329,25 +337,23 @@
 
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
-    if (activeController.view.superview == nil)
-        activeController = nil;
     if (mapConfigViewController.view.superview == nil)
         mapConfigViewController = nil;
     if (teamConfigViewController.view.superview == nil)
         teamConfigViewController = nil;
     if (schemeWeaponConfigViewController.view.superview == nil)
-        schemeWeaponConfigViewController = nil;    
-    // Release any cached data, images, etc that aren't in use.
+        schemeWeaponConfigViewController = nil;
 
+    // Release any cached data, images, etc that aren't in use.
     self.imgContainer = nil;
-    [super didReceiveMemoryWarning];
+    self.hedgehogImage = nil;
     MSG_MEMCLEAN();
+    [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
-    hedgehogImage = nil;
-    imgContainer = nil;
-    activeController = nil;
+    self.hedgehogImage = nil;
+    self.imgContainer = nil;
     mapConfigViewController = nil;
     teamConfigViewController = nil;
     schemeWeaponConfigViewController = nil;

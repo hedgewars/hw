@@ -30,6 +30,15 @@
     return rotationManager(interfaceOrientation);
 }
 
+-(void) updateTable {
+    NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SAVES_DIRECTORY() error:NULL];
+    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:contentsOfDir copyItems:YES];
+    self.listOfSavegames = array;
+    [array release];
+
+    [self.tableView reloadData];
+}
+
 -(void) viewDidLoad {
     self.tableView.backgroundView = nil;
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -41,15 +50,11 @@
 
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-    NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SAVES_DIRECTORY() error:NULL];
-    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:contentsOfDir copyItems:YES];
-    self.listOfSavegames = array;
-    [array release];
-
-    [self.tableView reloadData];    
+    [self updateTable];
 }
 
+#pragma mark -
+#pragma mark button functions
 -(IBAction) buttonPressed:(id) sender {
     playSound(@"backSound");
     [self.tableView setEditing:NO animated:YES];
@@ -59,6 +64,16 @@
 -(IBAction) toggleEdit:(id) sender {
     BOOL isEditing = self.tableView.editing;
     [self.tableView setEditing:!isEditing animated:YES];
+    UIToolbar *toolbar = (UIToolbar *)[self.view viewWithTag:458912];
+    for (UIBarButtonItem *item in toolbar.items)
+        if (item.tag == 452198)
+            item.enabled = !isEditing;
+}
+
+-(IBAction) clearAll:(id) sender {
+    [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
+    [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY() withIntermediateDirectories:NO attributes:nil error:NULL];
+    [self updateTable];
 }
 
 #pragma mark -

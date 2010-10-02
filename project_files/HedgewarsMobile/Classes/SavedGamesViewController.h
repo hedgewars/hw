@@ -32,5 +32,6 @@
 
 -(IBAction) buttonPressed:(id) sender;
 -(IBAction) toggleEdit:(id) sender;
+-(IBAction) clearAll:(id) sender;
 
 @end

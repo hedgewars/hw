@@ -31,7 +31,6 @@
     UIView *imgContainer;
     HelpPageViewController *helpPage;
     
-    UIViewController *activeController;
     MapConfigViewController *mapConfigViewController;
     TeamConfigViewController *teamConfigViewController;
     SchemeWeaponConfigViewController *schemeWeaponConfigViewController;

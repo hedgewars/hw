@@ -144,6 +144,7 @@
         level = 0;
     }
 
+    DLog(@"New level is %d",level);
     for (NSMutableDictionary *hog in hogs)
         [hog setObject:[NSNumber numberWithInt:0] forKey:@"level"];
 

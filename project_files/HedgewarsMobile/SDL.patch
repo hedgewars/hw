@@ -1,0 +1,398 @@
+diff -r f50c7996d925 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
+--- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Wed Sep 29 21:24:50 2010 -0700
++++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Sun Oct 03 00:21:37 2010 +0200
+@@ -106,6 +106,7 @@
+ 		04F2AF561104ABD200D6DDF7 /* SDL_assert.c in Sources */ = {isa = PBXBuildFile; fileRef = 04F2AF551104ABD200D6DDF7 /* SDL_assert.c */; };
+ 		56ED04E1118A8EE200A56AA6 /* SDL_power.c in Sources */ = {isa = PBXBuildFile; fileRef = 56ED04E0118A8EE200A56AA6 /* SDL_power.c */; };
+ 		56ED04E3118A8EFD00A56AA6 /* SDL_syspower.m in Sources */ = {isa = PBXBuildFile; fileRef = 56ED04E2118A8EFD00A56AA6 /* SDL_syspower.m */; };
++		61F7E7F4125543DA00DE6C14 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FD689FCC0E26E9D400F90B21 /* SDL_uikitappdelegate.m */; };
+ 		FD24846D0E5655AE0021E198 /* SDL_uikitkeyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = FD24846B0E5655AE0021E198 /* SDL_uikitkeyboard.h */; };
+ 		FD3F495C0DEA5B2100C5B771 /* begin_code.h in Headers */ = {isa = PBXBuildFile; fileRef = FD99B8CC0DD52EB400FB1D6B /* begin_code.h */; settings = {ATTRIBUTES = (Public, ); }; };
+ 		FD3F495D0DEA5B2100C5B771 /* close_code.h in Headers */ = {isa = PBXBuildFile; fileRef = FD99B8CD0DD52EB400FB1D6B /* close_code.h */; settings = {ATTRIBUTES = (Public, ); }; };
+@@ -192,8 +193,6 @@
+ 		FD689F250E26E5D900F90B21 /* SDL_uikitwindow.m in Sources */ = {isa = PBXBuildFile; fileRef = FD689F150E26E5D900F90B21 /* SDL_uikitwindow.m */; };
+ 		FD689F260E26E5D900F90B21 /* SDL_uikitopenglview.h in Headers */ = {isa = PBXBuildFile; fileRef = FD689F160E26E5D900F90B21 /* SDL_uikitopenglview.h */; };
+ 		FD689F270E26E5D900F90B21 /* SDL_uikitopenglview.m in Sources */ = {isa = PBXBuildFile; fileRef = FD689F170E26E5D900F90B21 /* SDL_uikitopenglview.m */; };
+-		FD689FCE0E26E9D400F90B21 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FD689FCC0E26E9D400F90B21 /* SDL_uikitappdelegate.m */; };
+-		FD689FCF0E26E9D400F90B21 /* SDL_uikitappdelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = FD689FCD0E26E9D400F90B21 /* SDL_uikitappdelegate.h */; };
+ 		FD6C83B60DEA66E500ABEE55 /* SDL_systimer.h in Headers */ = {isa = PBXBuildFile; fileRef = FD99BA2D0DD52EDC00FB1D6B /* SDL_systimer.h */; };
+ 		FD8BD7AC0E27DCA400B52CD5 /* SDL_opengles.h in Headers */ = {isa = PBXBuildFile; fileRef = FD8BD7AB0E27DCA400B52CD5 /* SDL_opengles.h */; settings = {ATTRIBUTES = (Public, ); }; };
+ 		FD8BD8250E27E25900B52CD5 /* SDL_sysloadso.c in Sources */ = {isa = PBXBuildFile; fileRef = FD8BD8190E27E25900B52CD5 /* SDL_sysloadso.c */; };
+@@ -1186,7 +1185,6 @@
+ 				FD689F200E26E5D900F90B21 /* SDL_uikitvideo.h in Headers */,
+ 				FD689F240E26E5D900F90B21 /* SDL_uikitwindow.h in Headers */,
+ 				FD689F260E26E5D900F90B21 /* SDL_uikitopenglview.h in Headers */,
+-				FD689FCF0E26E9D400F90B21 /* SDL_uikitappdelegate.h in Headers */,
+ 				FD8BD7AC0E27DCA400B52CD5 /* SDL_opengles.h in Headers */,
+ 				FDC656490E560DF800311C8E /* jumphack.h in Headers */,
+ 				FD24846D0E5655AE0021E198 /* SDL_uikitkeyboard.h in Headers */,
+@@ -1347,6 +1345,7 @@
+ 			isa = PBXSourcesBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
++				61F7E7F4125543DA00DE6C14 /* SDL_uikitappdelegate.m in Sources */,
+ 				006E9852119550FB001DE610 /* audio.c in Sources */,
+ 				006E9853119550FB001DE610 /* common.c in Sources */,
+ 				006E9859119550FB001DE610 /* platform.c in Sources */,
+@@ -1429,7 +1428,6 @@
+ 				FD689F230E26E5D900F90B21 /* SDL_uikitview.m in Sources */,
+ 				FD689F250E26E5D900F90B21 /* SDL_uikitwindow.m in Sources */,
+ 				FD689F270E26E5D900F90B21 /* SDL_uikitopenglview.m in Sources */,
+-				FD689FCE0E26E9D400F90B21 /* SDL_uikitappdelegate.m in Sources */,
+ 				FD8BD8250E27E25900B52CD5 /* SDL_sysloadso.c in Sources */,
+ 				FDC656480E560DF800311C8E /* jumphack.c in Sources */,
+ 				0495E68C0E97408800152DFE /* SDL_renderer_gl.c in Sources */,
+@@ -1549,15 +1547,19 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
++				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+ 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+ 				GCC_C_LANGUAGE_STANDARD = c99;
+ 				GCC_DEBUGGING_SYMBOLS = full;
++				GCC_THUMB_SUPPORT = NO;
++				GCC_VERSION = com.apple.compilers.llvmgcc42;
+ 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = NO;
+-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
++				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../include\"";
++				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+ 				ONLY_ACTIVE_ARCH = NO;
+ 				PREBINDING = NO;
+-				SDKROOT = iphoneos3.2;
++				SDKROOT = iphoneos4.0;
+ 				TARGETED_DEVICE_FAMILY = "1,2";
+ 			};
+ 			name = Debug;
+@@ -1566,14 +1568,18 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
++				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+ 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+ 				GCC_C_LANGUAGE_STANDARD = c99;
++				GCC_OPTIMIZATION_LEVEL = 2;
++				GCC_THUMB_SUPPORT = NO;
++				GCC_VERSION = com.apple.compilers.llvmgcc42;
+ 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = NO;
+-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
++				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../include\"";
++				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+ 				PREBINDING = NO;
+-				SDKROOT = iphoneos3.2;
++				SDKROOT = iphoneos4.0;
+ 				TARGETED_DEVICE_FAMILY = "1,2";
+ 			};
+ 			name = Release;
+diff -r f50c7996d925 Xcode-iPhoneOS/SDL/testsdl-Info.plist
+--- a/Xcode-iPhoneOS/SDL/testsdl-Info.plist	Wed Sep 29 21:24:50 2010 -0700
++++ b/Xcode-iPhoneOS/SDL/testsdl-Info.plist	Sun Oct 03 00:21:37 2010 +0200
+@@ -16,7 +16,5 @@
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+ 	<string>1.0</string>
+-	<key>NSMainNibFile</key>
+-	<string>MainWindow</string>
+ </dict>
+ </plist>
+diff -r f50c7996d925 include/SDL_config_iphoneos.h
+--- a/include/SDL_config_iphoneos.h	Wed Sep 29 21:24:50 2010 -0700
++++ b/include/SDL_config_iphoneos.h	Sun Oct 03 00:21:37 2010 +0200
+@@ -98,6 +98,8 @@
+ #define HAVE_COS	1
+ #define HAVE_COSF	1
+ #define HAVE_FABS	1
++#define HAVE_ATAN       1
++#define HAVE_ATAN2      1
+ #define HAVE_FLOOR	1
+ #define HAVE_LOG	1
+ #define HAVE_POW	1
+@@ -114,7 +116,7 @@
+ /* enable iPhone version of Core Audio driver */
+ #define SDL_AUDIO_DRIVER_COREAUDIOIPHONE 1
+ /* Enable the dummy audio driver (src/audio/dummy/\*.c) */
+-#define SDL_AUDIO_DRIVER_DUMMY	1
++#define SDL_AUDIO_DRIVER_DUMMY	0
+ 
+ /* Enable the stub haptic driver (src/haptic/dummy/\*.c) */
+ #define SDL_HAPTIC_DISABLED	1
+@@ -135,7 +137,7 @@
+ 
+ /* Supported video drivers */
+ #define SDL_VIDEO_DRIVER_UIKIT	1
+-#define SDL_VIDEO_DRIVER_DUMMY	1
++#define SDL_VIDEO_DRIVER_DUMMY	0
+ 
+ /* enable OpenGL ES */
+ #define SDL_VIDEO_OPENGL_ES	1
+@@ -152,4 +154,7 @@
+  */
+ #define SDL_IPHONE_MAX_GFORCE 5.0
+ 
++/* Tag to grab the uikit view from external code for further modification */
++#define SDL_VIEW_TAG 456987
++
+ #endif /* _SDL_config_iphoneos_h */
+diff -r f50c7996d925 src/video/SDL_renderer_gles.c
+--- a/src/video/SDL_renderer_gles.c	Wed Sep 29 21:24:50 2010 -0700
++++ b/src/video/SDL_renderer_gles.c	Sun Oct 03 00:21:37 2010 +0200
+@@ -324,6 +324,9 @@
+     data->glDisable(GL_CULL_FACE);
+     data->updateSize = SDL_TRUE;
+ 
++    data->glEnableClientState(GL_VERTEX_ARRAY);
++    data->glEnableClientState(GL_TEXTURE_COORD_ARRAY);
++    
+     return renderer;
+ }
+ 
+@@ -665,9 +668,7 @@
+         vertices[2*i+1] = (GLshort)points[i].y;
+     }
+     data->glVertexPointer(2, GL_SHORT, 0, vertices);
+-    data->glEnableClientState(GL_VERTEX_ARRAY);
+     data->glDrawArrays(GL_POINTS, 0, count);
+-    data->glDisableClientState(GL_VERTEX_ARRAY);
+     SDL_stack_free(vertices);
+ 
+     return 0;
+@@ -694,7 +695,6 @@
+         vertices[2*i+1] = (GLshort)points[i].y;
+     }
+     data->glVertexPointer(2, GL_SHORT, 0, vertices);
+-    data->glEnableClientState(GL_VERTEX_ARRAY);
+     if (count > 2 && 
+         points[0].x == points[count-1].x && points[0].y == points[count-1].y) {
+         /* GL_LINE_LOOP takes care of the final segment */
+@@ -703,7 +703,6 @@
+     } else {
+         data->glDrawArrays(GL_LINE_STRIP, 0, count);
+     }
+-    data->glDisableClientState(GL_VERTEX_ARRAY);
+     SDL_stack_free(vertices);
+ 
+     return 0;
+@@ -723,7 +722,6 @@
+                     (GLfloat) renderer->b * inv255f,
+                     (GLfloat) renderer->a * inv255f);
+ 
+-    data->glEnableClientState(GL_VERTEX_ARRAY);
+     for (i = 0; i < count; ++i) {
+         const SDL_Rect *rect = rects[i];
+         GLshort minx = rect->x;
+@@ -743,7 +741,6 @@
+         data->glVertexPointer(2, GL_SHORT, 0, vertices);
+         data->glDrawArrays(GL_LINE_LOOP, 0, 4);
+     }
+-    data->glDisableClientState(GL_VERTEX_ARRAY);
+ 
+     return 0;
+ }
+@@ -762,7 +759,6 @@
+                     (GLfloat) renderer->b * inv255f,
+                     (GLfloat) renderer->a * inv255f);
+ 
+-    data->glEnableClientState(GL_VERTEX_ARRAY);
+     for (i = 0; i < count; ++i) {
+         const SDL_Rect *rect = rects[i];
+         GLshort minx = rect->x;
+@@ -782,7 +778,6 @@
+         data->glVertexPointer(2, GL_SHORT, 0, vertices);
+         data->glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+     }
+-    data->glDisableClientState(GL_VERTEX_ARRAY);
+ 
+     return 0;
+ }
+@@ -925,12 +920,8 @@
+         texCoords[7] = maxv;
+ 
+         data->glVertexPointer(2, GL_SHORT, 0, vertices);
+-        data->glEnableClientState(GL_VERTEX_ARRAY);
+         data->glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+-        data->glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+         data->glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+-        data->glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+-        data->glDisableClientState(GL_VERTEX_ARRAY);
+     }
+ 
+     data->glDisable(GL_TEXTURE_2D);
+diff -r f50c7996d925 src/video/SDL_video.c
+--- a/src/video/SDL_video.c	Wed Sep 29 21:24:50 2010 -0700
++++ b/src/video/SDL_video.c	Sun Oct 03 00:21:37 2010 +0200
+@@ -1416,9 +1416,9 @@
+         SDL_MinimizeWindow(window);
+     }
+ 
+-    if (display->gamma && _this->SetDisplayGammaRamp) {
++    /*if (display->gamma && _this->SetDisplayGammaRamp) {
+         _this->SetDisplayGammaRamp(_this, display, display->saved_gamma);
+-    }
++    }*/
+     if ((window->flags & (SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_FULLSCREEN))
+         && _this->SetWindowGrab) {
+         _this->SetWindowGrab(_this, window);
+diff -r f50c7996d925 src/video/uikit/SDL_uikitopengles.m
+--- a/src/video/uikit/SDL_uikitopengles.m	Wed Sep 29 21:24:50 2010 -0700
++++ b/src/video/uikit/SDL_uikitopengles.m	Sun Oct 03 00:21:37 2010 +0200
+@@ -114,7 +114,7 @@
+ 									bBits: _this->gl_config.blue_size \
+ 									aBits: _this->gl_config.alpha_size \
+ 									depthBits: _this->gl_config.depth_size];
+-	
++        view.tag = SDL_VIEW_TAG;
+ 	data->view = view;
+ 	
+ 	/* add the view to our window */
+diff -r f50c7996d925 src/video/uikit/SDL_uikitview.m
+--- a/src/video/uikit/SDL_uikitview.m	Wed Sep 29 21:24:50 2010 -0700
++++ b/src/video/uikit/SDL_uikitview.m	Sun Oct 03 00:21:37 2010 +0200
+@@ -35,9 +35,6 @@
+ @implementation SDL_uikitview
+ 
+ - (void)dealloc {
+-#if SDL_IPHONE_KEYBOARD
+-	[textField release];
+-#endif
+ 	[super dealloc];
+ }
+ 
+@@ -220,7 +217,7 @@
+ /* Set ourselves up as a UITextFieldDelegate */
+ - (void)initializeKeyboard {
+ 		
+-	textField = [[[UITextField alloc] initWithFrame: CGRectZero] autorelease];
++	textField = [[UITextField alloc] initWithFrame: CGRectZero];
+ 	textField.delegate = self;
+ 	/* placeholder so there is something to delete! */
+ 	textField.text = @" ";	
+@@ -238,6 +235,7 @@
+ 	keyboardVisible = NO;
+ 	/* add the UITextField (hidden) to our view */
+ 	[self addSubview: textField];
++        [textField release];
+ }
+ 
+ /* reveal onscreen virtual keyboard */
+@@ -300,6 +298,7 @@
+ 
+ /* Terminates the editing session */
+ - (BOOL)textFieldShouldReturn:(UITextField*)_textField {
++        SDL_SendKeyboardKey(SDL_PRESSED, SDL_SCANCODE_RETURN);
+ 	[self hideKeyboard];
+ 	return YES;
+ }
+@@ -314,7 +313,7 @@
+ int SDL_iPhoneKeyboardShow(SDL_Window * window) {
+ 	
+ 	SDL_WindowData *data;
+-	SDL_uikitview *view;
++	SDL_uikitview *view = NULL;
+ 	
+ 	if (NULL == window) {
+ 		SDL_SetError("Window does not exist");
+@@ -322,7 +321,8 @@
+ 	}
+ 	
+ 	data = (SDL_WindowData *)window->driverdata;
+-	view = data->view;
++	if (data != NULL)
++            view = data->view;
+ 	
+ 	if (nil == view) {
+ 		SDL_SetError("Window has no view");
+@@ -337,7 +337,7 @@
+ int SDL_iPhoneKeyboardHide(SDL_Window * window) {
+ 	
+ 	SDL_WindowData *data;
+-	SDL_uikitview *view;
++	SDL_uikitview *view = NULL;
+ 	
+ 	if (NULL == window) {
+ 		SDL_SetError("Window does not exist");
+@@ -345,7 +345,8 @@
+ 	}	
+ 	
+ 	data = (SDL_WindowData *)window->driverdata;
+-	view = data->view;
++	if (data != NULL)
++            view = data->view;
+ 	
+ 	if (NULL == view) {
+ 		SDL_SetError("Window has no view");
+@@ -360,7 +361,7 @@
+ SDL_bool SDL_iPhoneKeyboardIsShown(SDL_Window * window) {
+ 	
+ 	SDL_WindowData *data;
+-	SDL_uikitview *view;
++	SDL_uikitview *view = NULL;
+ 	
+ 	if (NULL == window) {
+ 		SDL_SetError("Window does not exist");
+@@ -368,7 +369,8 @@
+ 	}	
+ 	
+ 	data = (SDL_WindowData *)window->driverdata;
+-	view = data->view;
++	if (data != NULL)
++            view = data->view;
+ 	
+ 	if (NULL == view) {
+ 		SDL_SetError("Window has no view");
+@@ -382,7 +384,7 @@
+ int SDL_iPhoneKeyboardToggle(SDL_Window * window) {
+ 	
+ 	SDL_WindowData *data;
+-	SDL_uikitview *view;
++	SDL_uikitview *view = NULL;
+ 	
+ 	if (NULL == window) {
+ 		SDL_SetError("Window does not exist");
+@@ -390,7 +392,8 @@
+ 	}	
+ 	
+ 	data = (SDL_WindowData *)window->driverdata;
+-	view = data->view;
++	if (data != NULL)
++            view = data->view;
+ 	
+ 	if (NULL == view) {
+ 		SDL_SetError("Window has no view");
+diff -r f50c7996d925 src/video/uikit/SDL_uikitwindow.m
+--- a/src/video/uikit/SDL_uikitwindow.m	Wed Sep 29 21:24:50 2010 -0700
++++ b/src/video/uikit/SDL_uikitwindow.m	Sun Oct 03 00:21:37 2010 +0200
+@@ -144,7 +144,10 @@
+     if (SDL_UIKit_supports_multiple_displays) {
+         [uiwindow setScreen:uiscreen];
+     }
+-
++    
++    if ([[UIScreen screens] count] > 1)
++        uiwindow.screen = [[UIScreen screens] objectAtIndex:1];
++    
+     if (SetupWindowData(_this, window, uiwindow, SDL_TRUE) < 0) {
+         [uiwindow release];
+         return -1;
+diff -r f50c7996d925 src/video/uikit/keyinfotable.h
+--- a/src/video/uikit/keyinfotable.h	Wed Sep 29 21:24:50 2010 -0700
++++ b/src/video/uikit/keyinfotable.h	Sun Oct 03 00:21:37 2010 +0200
+@@ -54,7 +54,7 @@
+ /*  10 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+ /*  11 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+ /*  12 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+-/*  13 */ {   SDL_SCANCODE_UNKNOWN, 0 },
++/*  13 */ {   SDL_SCANCODE_RETURN, 0 },
+ /*  14 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+ /*  15 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+ /*  16 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+@@ -137,7 +137,7 @@
+ /*  93 */ {   SDL_SCANCODE_RIGHTBRACKET, 0 },
+ /*  94 */ {   SDL_SCANCODE_6,  KMOD_SHIFT },			/* plus shift modifier '^' */
+ /*  95 */ {   SDL_SCANCODE_MINUS,  KMOD_SHIFT },		/* plus shift modifier '_' */
+-/*  96 */ {   SDL_SCANCODE_GRAVE,  KMOD_SHIFT },		/* '`'
++/*  96 */ {   SDL_SCANCODE_GRAVE,  KMOD_SHIFT },		/* '`' */
+ /*  97 */ {   SDL_SCANCODE_A, 0	},	
+ /*  98 */ {   SDL_SCANCODE_B, 0 },
+ /*  99 */ {   SDL_SCANCODE_C, 0 },

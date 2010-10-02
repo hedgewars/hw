@@ -199,6 +199,7 @@
     if ([[gamemodArray objectAtIndex:i++] boolValue])
         result |= 0x00100000;  
 
+    DLog(@"Sent %d flags",i);
     NSString *flags = [[NSString alloc] initWithFormat:@"e$gmflags %d",result];
     [self sendToEngine:flags];
     [flags release];
@@ -242,6 +243,7 @@
     [self sendToEngine:explosives];
     [explosives release];
 
+    DLog(@"Sent %d modes",i);
     [schemeDictionary release];
     return result;
 }

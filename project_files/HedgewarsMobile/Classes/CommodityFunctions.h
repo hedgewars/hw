@@ -27,7 +27,7 @@
 #define DOCUMENTS_FOLDER()      [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
 #define SETTINGS_FILE()         [DOCUMENTS_FOLDER() stringByAppendingString:@"/settings.plist"]
-#define DEBUG_FILE()            [DOCUMENTS_FOLDER() stringByAppendingString:@"/hw-debug.log"]
+#define DEBUG_FILE()            [DOCUMENTS_FOLDER() stringByAppendingString:@"/hw-game.log"]
 
 #define TEAMS_DIRECTORY()       [DOCUMENTS_FOLDER() stringByAppendingString:@"/Teams/"]
 #define WEAPONS_DIRECTORY()     [DOCUMENTS_FOLDER() stringByAppendingString:@"/Weapons/"]
