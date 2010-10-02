@@ -42,9 +42,6 @@
     CGPoint startingPoint;
     BOOL isSegmentVisible;
     BOOL isAttacking;
-
-    // the sdl window underneath
-    SDL_Window *sdlwindow;
 }
 
 @property (nonatomic,retain) id popoverController;

@@ -31,12 +31,13 @@
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
 #define HIDING_TIME_NEVER   [NSDate dateWithTimeIntervalSinceNow:10000]
-#define doDim()             [dimTimer setFireDate:HIDING_TIME_DEFAULT]
+#define doDim()             [dimTimer setFireDate: ([[UIScreen screens] count] == 1) ? HIDING_TIME_DEFAULT : HIDING_TIME_NEVER]
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
 #define CONFIRMATION_TAG 5959
 #define GRENADE_TAG 9595
-#define BLACKVIEW_TAG 9955
+#define REPLAYBLACKVIEW_TAG 9955
+#define ACTIVITYINDICATOR_TAG 987654
 #define ANIMATION_DURATION 0.25
 #define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
 
@@ -58,12 +59,14 @@
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
+            if ([[UIScreen screens] count] == 1)
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
             HW_setLandscape(YES);
             break;
         case UIDeviceOrientationLandscapeRight:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
+            if ([[UIScreen screens] count] == 1)
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
             HW_setLandscape(YES);
             break;
@@ -112,21 +115,23 @@
     UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
+            if ([[UIScreen screens] count] == 1)
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
             break;
         case UIDeviceOrientationLandscapeRight:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
+            if ([[UIScreen screens] count] == 1)
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
             break;
         default:
             DLog(@"unknown orientation");
             break;
     }
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    self.view.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
 
-    dimTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:6]
+    dimTimer = [[NSTimer alloc] initWithFireDate:([[UIScreen screens] count] == 1) ? [NSDate dateWithTimeIntervalSinceNow:6] : HIDING_TIME_NEVER
                                         interval:1000
                                           target:self
                                         selector:@selector(dimOverlay)
@@ -147,15 +152,15 @@
                                                  name:@"show help ingame"
                                                object:nil];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cleanup)
+                                                 name:@"remove overlay"
+                                               object:nil];
+    
     [UIView beginAnimations:@"showing overlay" context:NULL];
     [UIView setAnimationDuration:1];
     self.view.alpha = 1;
     [UIView commitAnimations];
-
-    // find the sdl window we're on
-    SDL_VideoDevice *_this = SDL_GetVideoDevice();
-    SDL_VideoDisplay *display = &_this->displays[0];
-    sdlwindow = display->windows;
 }
 
 -(void) showHelp:(id) sender {
@@ -192,6 +197,11 @@
     [popoverController release];
     // dimTimer is autoreleased
     [super dealloc];
+}
+
+-(void) cleanup {
+    [self dismissPopover];
+    [self.view removeFromSuperview];
 }
 
 #pragma mark -
@@ -569,19 +579,23 @@ void setGameRunning(BOOL value) {
 // called by uStore from AddProgress
 void startSpinning() {
     setGameRunning(NO);
-    CGRect screen = [[UIScreen mainScreen] bounds];
+    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    indicator.tag = 987654;
-    indicator.center = CGPointMake(screen.size.width/2 - 118, screen.size.height/2);
+    indicator.tag = ACTIVITYINDICATOR_TAG;
+    if ([[UIScreen screens] count] > 1)
+        indicator.center = CGPointMake(theWindow.frame.size.width/2, theWindow.frame.size.height/2 + 118);
+    else
+        indicator.center = CGPointMake(theWindow.frame.size.width/2 + 118, theWindow.frame.size.height/2);
     indicator.hidesWhenStopped = YES;
     [indicator startAnimating];
-    [[[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG] addSubview:indicator];
+    [theWindow addSubview:indicator];
     [indicator release];
 }
 
 // called by uStore from FinishProgress and by OverlayViewController by replayBegan
 void stopSpinning() {
-    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[[[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG] viewWithTag:987654];
+    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
+    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[theWindow viewWithTag:ACTIVITYINDICATOR_TAG];
     [indicator stopAnimating];
     HW_zoomSet(1.7);
     if (isReplay == NO)
@@ -590,7 +604,7 @@ void stopSpinning() {
 
 // called by CCHandlers from chNextTurn
 void clearView() {
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
+    UIWindow *theWindow = ([[UIScreen screens] count] == 1) ? [[UIApplication sharedApplication] keyWindow] : [SDLUIKitDelegate sharedAppDelegate].uiwindow;
     UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
     UISegmentedControl *theSegment = (UISegmentedControl *)[theWindow viewWithTag:GRENADE_TAG];
 
@@ -600,8 +614,8 @@ void clearView() {
     theSegment.alpha = 0;
     [UIView commitAnimations];
 
-    [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:0.3];
-    [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:0.3];
+    [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:ANIMATION_DURATION];
+    [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:ANIMATION_DURATION];
 
     cachedGrenadeTime = 2;
 }
@@ -612,7 +626,7 @@ void replayBegan() {
     UIView *blackView = [[UIView alloc] initWithFrame:theWindow.frame];
     blackView.backgroundColor = [UIColor blackColor];
     blackView.alpha = 0.6;
-    blackView.tag = BLACKVIEW_TAG;
+    blackView.tag = REPLAYBLACKVIEW_TAG;
     blackView.exclusiveTouch = NO;
     blackView.multipleTouchEnabled = NO;
     blackView.userInteractionEnabled = NO;
@@ -630,7 +644,7 @@ void replayBegan() {
 // called by uGame
 void replayFinished() {
     UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIView *blackView = (UIView *)[theWindow viewWithTag:BLACKVIEW_TAG];
+    UIView *blackView = (UIView *)[theWindow viewWithTag:REPLAYBLACKVIEW_TAG];
     
     [UIView beginAnimations:@"removing black" context:NULL];
     [UIView setAnimationDuration:1];

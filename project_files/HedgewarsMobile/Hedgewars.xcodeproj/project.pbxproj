@@ -2333,8 +2333,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/events\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
@@ -2426,8 +2426,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/events\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
@@ -2520,8 +2520,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/events\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
@@ -2652,8 +2652,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/events\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
@@ -2695,8 +2695,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/events\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",

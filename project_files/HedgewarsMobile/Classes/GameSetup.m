@@ -434,11 +434,24 @@
 #pragma mark Setting methods
 // returns an array of c-strings that are read by engine at startup
 -(const char **)getSettings: (NSString *)recordFile {
+    NSInteger width, height;
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    NSString *wSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.width];
-    NSString *hSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.height];
+    NSString *rotation;
+    if ([[UIScreen screens] count] > 1) {
+        CGRect screenBounds = [[[UIScreen screens] objectAtIndex:1] bounds];
+        width = (int) screenBounds.size.width;
+        height = (int) screenBounds.size.height;
+        rotation = @"0";
+    } else {
+        CGRect screenBounds = [[UIScreen mainScreen] bounds];
+        width = (int) screenBounds.size.height;
+        height = (int) screenBounds.size.width;
+        rotation = @"-90";
+    }
+        
+    NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width];
+    NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height];
     const char **gameArgs = (const char**) malloc(sizeof(char *) * 10);
     NSInteger tmpQuality;
 
@@ -453,7 +466,7 @@
                 tmpQuality = 0x00000002;                    // rqBlurryLand
             else                                                            // = everything else
                 tmpQuality = 0;                             // full quality
-    if (![modelId hasPrefix:@"iPad"])                                       // = disable tooltips unless iPad
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)             // = disable tooltips on phone
         tmpQuality = tmpQuality | 0x00000400;
 
     // prevents using an empty nickname
@@ -465,19 +478,19 @@
         username = [[NSString alloc] initWithString:originalUsername];
 
     gameArgs[ 0] = [ipcString UTF8String];                                                       //ipcPort
-    gameArgs[ 1] = [wSize UTF8String];                                                           //cScreenHeight
-    gameArgs[ 2] = [hSize UTF8String];                                                           //cScreenWidth
+    gameArgs[ 1] = [horizontalSize UTF8String];                                                  //cScreenWidth
+    gameArgs[ 2] = [verticalSize UTF8String];                                                    //cScreenHeight
     gameArgs[ 3] = [[[NSNumber numberWithInteger:tmpQuality] stringValue] UTF8String];           //quality
     gameArgs[ 4] = "en.txt";//[localeString UTF8String];                                                    //cLocaleFName
     gameArgs[ 5] = [username UTF8String];                                                        //UserNick
     gameArgs[ 6] = [[[self.systemSettings objectForKey:@"sound"] stringValue] UTF8String];       //isSoundEnabled
     gameArgs[ 7] = [[[self.systemSettings objectForKey:@"music"] stringValue] UTF8String];       //isMusicEnabled
     gameArgs[ 8] = [[[self.systemSettings objectForKey:@"alternate"] stringValue] UTF8String];   //cAltDamage
-    gameArgs[ 9] = NULL;                                                                         //unused
+    gameArgs[ 9] = [rotation UTF8String];                                                        //rotateQt
     gameArgs[10] = [recordFile UTF8String];                                                      //recordFileName
 
-    [wSize release];
-    [hSize release];
+    [verticalSize release];
+    [horizontalSize release];
     [localeString release];
     [ipcString release];
     [username release];

@@ -24,6 +24,7 @@
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "SDL_sysvideo.h"
+#import "SDL_uikitkeyboard.h"
 
 @implementation InGameMenuViewController
 @synthesize menuList;
@@ -177,8 +178,10 @@
         [UIView commitAnimations];
     }
 
-    if ([actionSheet cancelButtonIndex] != buttonIndex)
+    if ([actionSheet cancelButtonIndex] != buttonIndex) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
         HW_terminate(NO);
+    }
 }
 
 @end

@@ -39,6 +39,8 @@
 #undef main
 #endif
 
+#define BLACKVIEW_TAG 17935
+#define SECONDBLACKVIEW_TAG 48620
 #define VALGRIND "/opt/valgrind/bin/valgrind"
 
 int main (int argc, char *argv[]) {
@@ -56,7 +58,7 @@ int main (int argc, char *argv[]) {
 }
 
 @implementation SDLUIKitDelegate
-@synthesize mainViewController;
+@synthesize mainViewController, uiwindow, secondWindow;
 
 // convenience method
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -67,6 +69,8 @@ int main (int argc, char *argv[]) {
 -(id) init {
     if (self = [super init]){
         mainViewController = nil;
+        uiwindow = nil;
+        secondWindow = nil;
         isInGame = NO;
     }
     return self;
@@ -74,17 +78,38 @@ int main (int argc, char *argv[]) {
 
 -(void) dealloc {
     [mainViewController release];
+    [uiwindow release];
+    [secondWindow release];
     [super dealloc];
 }
 
 // main routine for calling the actual game engine
 -(void) startSDLgame:(NSDictionary *)gameDictionary {
-    UIWindow *aWin = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
-
-    UIView *blackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aWin.frame.size.width, aWin.frame.size.height)];
-    blackView.opaque = YES;
+    UIWindow *gameWindow;
+    if ([[UIScreen screens] count] > 1)
+        gameWindow = self.secondWindow;
+    else
+        gameWindow = self.uiwindow;
+    UIView *blackView = [[UIView alloc] initWithFrame:gameWindow.frame];
     blackView.backgroundColor = [UIColor blackColor];
-    [aWin addSubview:blackView];
+    blackView.opaque = YES;
+    blackView.tag = BLACKVIEW_TAG;
+    [gameWindow addSubview:blackView];
+    [blackView release];
+    
+    if ([[UIScreen screens] count] > 1) {
+        UIView *secondBlackView = [[UIView alloc] initWithFrame:self.uiwindow.frame];
+        secondBlackView.backgroundColor = [UIColor blackColor];
+        secondBlackView.opaque = YES;
+        secondBlackView.tag = SECONDBLACKVIEW_TAG;
+        secondBlackView.alpha = 0;
+        [self.uiwindow addSubview:secondBlackView];
+        [UIView beginAnimations:@"fading to game" context:NULL];
+        [UIView setAnimationDuration:1];
+        secondBlackView.alpha = 1;
+        [UIView commitAnimations];
+        [secondBlackView release];
+    }
 
     // pull out useful configuration info from various files
     GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
@@ -104,21 +129,29 @@ int main (int argc, char *argv[]) {
     isInGame = NO;
     free(gameArgs);
 
-    [aWin makeKeyAndVisible];
+    [uiwindow makeKeyAndVisible];
+    
+    UIView *refBlackView = [gameWindow viewWithTag:BLACKVIEW_TAG];
+    UIView *refSecondBlackView = [self.uiwindow viewWithTag:SECONDBLACKVIEW_TAG];
     [UIView beginAnimations:@"fading in from ingame" context:NULL];
     [UIView setAnimationDuration:1];
-    blackView.alpha = 0;
+    refBlackView.alpha = 0;
+    refSecondBlackView.alpha = 0;
     [UIView commitAnimations];
-    [blackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
-    [blackView performSelector:@selector(release) withObject:nil afterDelay:1]; 
+    [refBlackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+    [refSecondBlackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 }
 
+// overlay with controls, become visible later, with a transparency effect
 -(void) displayOverlayLater:(NSNumber *)isNetGame {
-    // overlay with controls, become visible later, with a transparency effect
     OverlayViewController *overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
 
-    // keyWindow is the frontmost window
-    [[[UIApplication sharedApplication] keyWindow] addSubview:overlayController.view];
+    UIWindow *gameWindow;
+    if ([[UIScreen screens] count] > 1)
+        gameWindow = self.uiwindow;
+    else
+        gameWindow = [[UIApplication sharedApplication] keyWindow];
+    [gameWindow addSubview:overlayController.view];
     [overlayController release];
 }
 
@@ -126,18 +159,41 @@ int main (int argc, char *argv[]) {
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
     [application setStatusBarHidden:YES];
 
-    UIWindow *uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         self.mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
     else
         self.mainViewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPhone" bundle:nil];
 
-    [uiwindow addSubview:self.mainViewController.view];
+    [self.uiwindow addSubview:self.mainViewController.view];
     [self.mainViewController release];
-    uiwindow.backgroundColor = [UIColor blackColor];
-    [uiwindow makeKeyAndVisible];
+    self.uiwindow.backgroundColor = [UIColor blackColor];
+    [self.uiwindow makeKeyAndVisible];
 
+    if ([[UIScreen screens]count] > 1) {
+        /*
+        CGSize maxSize = CGSizeZero;
+        UIScreenMode *screenMode = nil;
+        for (UIScreenMode *mode in [[[UIScreen screens] objectAtIndex:1] availableModes]) {
+            if (mode.size.width > maxSize.width) {
+                maxSize = mode.size;
+                screenMode = mode;
+            }
+        }
+        */
+        DLog(@"dual head mode ftw");
+        self.secondWindow = [[UIWindow alloc] initWithFrame:[[[UIScreen screens] objectAtIndex:1] bounds]];
+        self.secondWindow.backgroundColor = [UIColor blackColor];
+        self.secondWindow.screen = [[UIScreen screens] objectAtIndex:1];
+        UIImage *titleImage = [UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"title.png"]];
+        UIImageView *titleView = [[UIImageView alloc] initWithImage:titleImage];
+        titleView.center = self.secondWindow.center;
+        [self.secondWindow addSubview:titleView];
+        [titleView release];
+        [self.secondWindow makeKeyAndVisible];
+    }
+    
     // set working directory to resource path
     [[NSFileManager defaultManager] changeCurrentDirectoryPath:[[NSBundle mainBundle] resourcePath]];
 }

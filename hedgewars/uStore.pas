@@ -37,8 +37,6 @@ var PixelFormat: PSDL_PixelFormat;
     MissionIcons: PSDL_Surface;
     ropeIconTex: PTexture;
     rotationQt: GLfloat;
-    wScreen: LongInt;
-    hScreen: LongInt;
 
 procedure initModule;
 procedure freeModule;
@@ -1145,12 +1143,6 @@ var vendor: shortstring;
     one: LongInt;
 {$ENDIF}
 begin
-    // initialized here because when initModule is called cScreenWidth/Height are not yet set
-    if (uStore.wScreen = 0) and (uStore.hScreen = 0) then
-    begin
-        uStore.wScreen:= cScreenWidth;
-        uStore.hScreen:= cScreenHeight;
-    end;
 
 {$IFDEF IPHONEOS}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0); // no double buffering
@@ -1217,11 +1209,10 @@ begin
 {$ENDIF}
 
     // set view port to whole window
-{$IFDEF IPHONEOS}
-    glViewport(0, 0, cScreenHeight, cScreenWidth);
-{$ELSE}
-    glViewport(0, 0, cScreenWidth, cScreenHeight);
-{$ENDIF}
+    if rotationQt = 0 then
+        glViewport(0, 0, cScreenWidth, cScreenHeight)
+    else
+        glViewport(0, 0, cScreenHeight, cScreenWidth);
 
     glMatrixMode(GL_MODELVIEW);
     // prepare default translation/scaling
@@ -1255,7 +1246,7 @@ begin
         glPushMatrix;       // save default scaling
         glLoadIdentity;
         glRotatef(rotationQt, 0, 0, 1);
-        glScalef(f / wScreen, -f / hScreen, 1.0);
+        glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
         glTranslatef(0, -cScreenHeight / 2, 0);
     end;
 
@@ -1292,7 +1283,7 @@ begin
     r.w:= squaresize;
     r.h:= squaresize;
 
-    DrawFromRect( -squaresize div 2, (hScreen - squaresize) shr 1, @r, ProgrTex);
+    DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
 
     SDL_GL_SwapBuffers();
 {$IFDEF SDL13}
@@ -1566,15 +1557,11 @@ procedure initModule;
 begin
     PixelFormat:= nil;
     SDLPrimSurface:= nil;
-{$IFDEF IPHONEOS}
-    rotationQt:= -90;
-{$ELSE}
+
+{$IFNDEF IPHONEOS}
     rotationQt:= 0;
     cGPUVendor:= gvUnknown;
 {$ENDIF}
-    // really initalized in storeLoad
-    uStore.wScreen:= 0;
-    uStore.hScreen:= 0;
 
     cScaleFactor:= 2.0;
     SupportNPOTT:= false;

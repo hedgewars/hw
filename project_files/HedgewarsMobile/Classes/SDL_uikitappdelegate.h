@@ -21,17 +21,19 @@
 */
 
 #import <UIKit/UIKit.h>
-#import "SDL_uikitopenglview.h"
 
 @class MainMenuViewController;
-@class OverlayViewController;
 
 @interface SDLUIKitDelegate:NSObject<UIApplicationDelegate> {
     MainMenuViewController *mainViewController;
+    UIWindow *uiwindow;
+    UIWindow *secondWindow;
     BOOL isInGame;
 }
 
 @property (nonatomic,retain) MainMenuViewController *mainViewController;
+@property (nonatomic,retain) UIWindow *uiwindow;
+@property (nonatomic,retain) UIWindow *secondWindow;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(void) startSDLgame:(NSDictionary *)gameDictionary;

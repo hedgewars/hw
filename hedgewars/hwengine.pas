@@ -219,15 +219,15 @@ begin
     cShowFPS:= false;    // update me at release time
 {$ENDIF}
     val(gameArgs[0], ipcPort);
-    val(gameArgs[1], cScreenHeight);
-    val(gameArgs[2], cScreenWidth);
+    val(gameArgs[1], cScreenWidth);
+    val(gameArgs[2], cScreenHeight);
     val(gameArgs[3], cReducedQuality);
     cLocaleFName:= gameArgs[4];
     UserNick:= gameArgs[5];
     isSoundEnabled:= gameArgs[6] = '1';
     isMusicEnabled:= gameArgs[7] = '1';
     cAltDamage:= gameArgs[8] = '1';
-    //gameArgs[9] unused
+    val(gameArgs[9], rotationQt);
     recordFileName:= gameArgs[10];
 {$ENDIF}
 
