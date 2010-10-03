@@ -80,6 +80,7 @@ extern "C" {
 
     void HW_setGrenadeTime(int time);
     void HW_setPianoSound(int snd);
+    void HW_setWeapon(int whichone);
 
 #ifdef __cplusplus
 }

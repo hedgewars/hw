@@ -215,8 +215,8 @@
             weaponCell.delegate = self;
         }
 
-        int x = ((row*32)/1024)*32;
-        int y = (row*32)%1024;
+        int x = ((row*32)/(int)self.ammoStoreImage.size.height)*32;
+        int y = (row*32)%(int)self.ammoStoreImage.size.height;
 
         UIImage *img = [[self.ammoStoreImage cutAt:CGRectMake(x, y, 32, 32)] makeRoundCornersOfSize:CGSizeMake(7, 7)];
         weaponCell.weaponIcon.image = img;

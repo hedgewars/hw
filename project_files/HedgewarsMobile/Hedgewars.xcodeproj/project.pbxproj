@@ -142,6 +142,7 @@
 		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
 		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
+		61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */; };
 		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
 		61EBA62A11DFF2BC0048B68A /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62811DFF2BC0048B68A /* title.png */; };
 		61EBA62D11DFF3310048B68A /* backgroundAndTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */; };
@@ -879,6 +880,8 @@
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableCellView.h; sourceTree = "<group>"; };
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableCellView.m; sourceTree = "<group>"; };
+		61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmmoMenuViewController.h; sourceTree = "<group>"; };
+		61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmmoMenuViewController.m; sourceTree = "<group>"; };
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
 		61EBA62811DFF2BC0048B68A /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = "Resources/Frontend-iPad/title.png"; sourceTree = "<group>"; };
 		61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundAndTitle.png; path = "Resources/Frontend-iPad/backgroundAndTitle.png"; sourceTree = "<group>"; };
@@ -995,22 +998,17 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61DE91561258B76800B80214 /* Custom Buttons */,
 				32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */,
 				6165922911CA9BD500D6E256 /* PascalImports.h */,
-				6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */,
-				6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */,
 				6165922411CA9BD500D6E256 /* CGPointUtils.h */,
 				6165922311CA9BD500D6E256 /* CGPointUtils.c */,
+				6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */,
+				6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */,
 				6165922511CA9BD500D6E256 /* CommodityFunctions.h */,
 				6165922611CA9BD500D6E256 /* CommodityFunctions.m */,
-				6165922711CA9BD500D6E256 /* HogButtonView.h */,
-				6165922811CA9BD500D6E256 /* HogButtonView.m */,
-				6165922A11CA9BD500D6E256 /* SquareButtonView.h */,
-				6165922B11CA9BD500D6E256 /* SquareButtonView.m */,
 				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
 				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
-				619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */,
-				619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -1266,6 +1264,8 @@
 				611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */,
 				611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController.xib */,
 				61842B23122B619D0096E335 /* HelpPageInGameViewController.xib */,
+				61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */,
+				61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */,
 			);
 			name = Overlay;
 			sourceTree = "<group>";
@@ -1345,6 +1345,19 @@
 				619C5ACE124F7DDF00D041AE /* libLua.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		61DE91561258B76800B80214 /* Custom Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				6165922711CA9BD500D6E256 /* HogButtonView.h */,
+				6165922811CA9BD500D6E256 /* HogButtonView.m */,
+				6165922A11CA9BD500D6E256 /* SquareButtonView.h */,
+				6165922B11CA9BD500D6E256 /* SquareButtonView.m */,
+				619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */,
+				619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */,
+			);
+			name = "Custom Buttons";
 			sourceTree = "<group>";
 		};
 		61F7A42811E2905C0040BA66 /* Icons */ = {
@@ -2247,6 +2260,7 @@
 				611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */,
 				619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */,
 				619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */,
+				61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

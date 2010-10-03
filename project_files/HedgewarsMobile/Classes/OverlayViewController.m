@@ -23,6 +23,7 @@
 #import "SDL_uikitappdelegate.h"
 #import "InGameMenuViewController.h"
 #import "HelpPageViewController.h"
+#import "AmmoMenuViewController.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "CGPointUtils.h"
@@ -161,6 +162,10 @@
     [UIView setAnimationDuration:1];
     self.view.alpha = 1;
     [UIView commitAnimations];
+    
+    AmmoMenuViewController *amvc = [[AmmoMenuViewController alloc] init];
+    amvc.view.center = self.view.center;
+    [self.view addSubview:amvc.view];
 }
 
 -(void) showHelp:(id) sender {
@@ -201,6 +206,7 @@
 
 -(void) cleanup {
     [self dismissPopover];
+    HW_terminate(NO);
     [self.view removeFromSuperview];
 }
 
@@ -317,7 +323,7 @@
 // present a further check before closing game
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
     if ([actionSheet cancelButtonIndex] != buttonIndex)
-        HW_terminate(NO);
+        [self cleanup];
     else
         HW_pause();
 }

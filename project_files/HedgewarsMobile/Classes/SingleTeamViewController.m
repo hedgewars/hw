@@ -288,45 +288,48 @@
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
-    UITableViewController *nextController = nil;
 
     if (2 == section) {
         switch (row) {
             case 0: // grave
                 if (nil == gravesViewController)
                     gravesViewController = [[GravesViewController alloc] initWithStyle:UITableViewStyleGrouped];
-
-                nextController = gravesViewController;
+                
+                [gravesViewController setTeamDictionary:teamDictionary];
+                [self.navigationController pushViewController:gravesViewController animated:YES];
                 break;
             case 1: // voice
                 if (nil == voicesViewController)
                     voicesViewController = [[VoicesViewController alloc] initWithStyle:UITableViewStyleGrouped];
-
-                nextController = voicesViewController;
+                
+                [voicesViewController setTeamDictionary:teamDictionary];
+                [self.navigationController pushViewController:voicesViewController animated:YES];
                 break;
             case 2: // fort
                 if (nil == fortsViewController)
                     fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-
-                nextController = fortsViewController;
+                
+                [fortsViewController setTeamDictionary:teamDictionary];
+                [self.navigationController pushViewController:fortsViewController animated:YES];
                 break;
             case 3: // flag
                 if (nil == flagsViewController)
                     flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-
-                nextController = flagsViewController;
+                
+                [flagsViewController setTeamDictionary:teamDictionary];
+                [self.navigationController pushViewController:flagsViewController animated:YES];
                 break;
             case 4: // level
                 if (nil == levelViewController)
                     levelViewController = [[LevelViewController alloc] initWithStyle:UITableViewStyleGrouped];
-
-                nextController = levelViewController;
+                
+                [levelViewController setTeamDictionary:teamDictionary];
+                [self.navigationController pushViewController:levelViewController animated:YES];
+                break;
+            default:
+                DLog(@"Nope");
                 break;
         }
-
-        if ([nextController respondsToSelector:@selector(setTeamDictionary:)])
-            [nextController setTeamDictionary:teamDictionary];
-        [self.navigationController pushViewController:nextController animated:YES];
     } else {
         EditableCellView *cell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
         [cell replyKeyboard];

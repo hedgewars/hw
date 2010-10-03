@@ -13,7 +13,8 @@
 unit PascalExports;
 
 interface
-uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat, uGears, uSound, hwengine;
+uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat, 
+     uGears, uSound, hwengine, uAmmos; // don't change the order!
 
 {$INCLUDE "config.inc"}
 
@@ -257,6 +258,12 @@ begin
             7: PlaySound(sndPiano7);
             else PlaySound(sndPiano8);
         end;
+end;
+
+
+procedure HW_setWeapon(whichone: LongInt); cdecl; export;
+begin
+    SetWeapon(TAmmoType(whichone));
 end;
 {$ENDIF}
 

@@ -178,10 +178,8 @@
         [UIView commitAnimations];
     }
 
-    if ([actionSheet cancelButtonIndex] != buttonIndex) {
+    if ([actionSheet cancelButtonIndex] != buttonIndex)
         [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
-        HW_terminate(NO);
-    }
 }
 
 @end
