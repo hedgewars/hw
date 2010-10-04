@@ -151,17 +151,17 @@ void HWChatWidget::updateIcon(QListWidgetItem *item)
 
     if(ignoreList.contains(nick, Qt::CaseInsensitive))
     {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_ignore_on" : ":/res/chat_ignore_off") : ":/res/chat_ignore.png"));
+        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_ignore_on.png" : ":/res/chat_ignore_off.png") : ":/res/chat_ignore.png"));
         item->setForeground(Qt::gray);
     }
     else if(friendsList.contains(nick, Qt::CaseInsensitive))
     {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_friend_on" : ":/res/chat_friend_off") : ":/res/chat_friend.png"));
+        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_friend_on.png" : ":/res/chat_friend_off.png") : ":/res/chat_friend.png"));
         item->setForeground(Qt::green);
     }
     else
     {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_default_on" : ":/res/chat_default_off") : ":/res/chat_default.png"));
+        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_default_on.png" : ":/res/chat_default_off.png") : ":/res/chat_default.png"));
         item->setForeground(QBrush(QColor(0xff, 0xcc, 0x00)));
     }
 }
