@@ -73,11 +73,13 @@ int main(int argc, char *argv[]) {
             qWarning() << "WARNING: Cannot open DATA_PATH=" << f.absoluteFilePath();
         }
         *cDataDir = f.absoluteFilePath();
+        custom_data = true;
     }
 
     if(parsedArgs.contains("config-dir")) {
         QFileInfo f(parsedArgs["config-dir"]);
         *cConfigDir = f.absoluteFilePath();
+        custom_config = true;
     }
 
     app.setStyle(new QPlastiqueStyle);
@@ -410,12 +412,11 @@ int main(int argc, char *argv[]) {
 
     // Win32 registry setup (used for xfire detection etc. - don't set it if we're running in "portable" mode with a custom config dir)
 #ifdef _WIN32
-    if(cConfigDir->length() == 0)
+    if(!custom_config)
     {
-        QSettings registry(QSettings::NativeFormat, QSettings::UserScope, "Hedgewars Project", "Hedgewars");
-        QFileInfo f(argv[0]);
-        registry.setValue("file", f.absoluteFilePath());
-        registry.setValue("path", f.absolutePath());
+        QSettings registry_hklm("HKEY_LOCAL_MACHINE", QSettings::NativeFormat);
+        registry_hklm.setValue("Software/Hedgewars/Frontend", bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe");
+        registry_hklm.setValue("Software/Hedgewars/Path", bindir->absolutePath().replace("/", "\\"));
     }
 #endif
 

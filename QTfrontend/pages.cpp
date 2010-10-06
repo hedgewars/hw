@@ -147,6 +147,7 @@ PageMain::PageMain(QWidget* parent) :
         //Tips << tr("", "Tips");
 #ifdef _WIN32
         Tips << tr("You can find your Hedgewars configuration files under \"My Documents\\Hedgewars\". Create backups or take the files with you, but don't edit them by hand.", "Tips");
+        Tips << tr("You're able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.", "Tips");
 #else
         Tips << tr("You can find your Hedgewars configuration files under \"Hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");
 #endif
@@ -610,7 +611,12 @@ PageOptions::PageOptions(QWidget* parent) :
             CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
             MiscLayout->addWidget(CBAutoUpdate, 4, 0, 1, 2);
 #endif
-
+#ifdef _WIN32
+            BtnAssociateFiles = new QPushButton(groupMisc);
+            BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
+            BtnAssociateFiles->setEnabled(!custom_data && !custom_config);
+            MiscLayout->addWidget(BtnAssociateFiles, 4, 0, 1, 2);
+#endif
             gbTBLayout->addWidget(groupMisc, 2, 0);
         }
 
@@ -735,6 +741,8 @@ PageOptions::PageOptions(QWidget* parent) :
     BtnBack->setFixedHeight(BtnSaveOptions->height());
     BtnBack->setFixedWidth(BtnBack->width()+2);
     BtnBack->setStyleSheet("QPushButton{margin: 22px 0 9px 2px;}");
+
+//    BtnAssociateFiles = addButton("");
 }
 
 PageNet::PageNet(QWidget* parent) : AbstractPage(parent)

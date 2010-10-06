@@ -78,6 +78,7 @@ private slots:
     void GoToAdmin();
     void GoToPage(quint8 id);
     void GoBack();
+    void AssociateFiles();
     void btnExitPressed();
     void btnExitClicked();
     void IntermediateSetup();
