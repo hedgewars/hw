@@ -49,15 +49,30 @@
     [array release];
 
     // save the sdl window (!= uikit window) for future reference
-    SDL_VideoDevice *_this = SDL_GetVideoDevice();
-    SDL_VideoDisplay *display = &_this->displays[0];
-    sdlwindow = display->windows;
-
+    SDL_VideoDevice *videoDevice = SDL_GetVideoDevice();
+    if (videoDevice) {
+        SDL_VideoDisplay *display = &videoDevice->displays[0];
+        if (display)
+            sdlwindow = display->windows;
+    }
     [super viewDidLoad];
+}
+
+-(void) viewWillAppear:(BOOL)animated {
+    if (sdlwindow == NULL) {
+        SDL_VideoDevice *_this = SDL_GetVideoDevice();
+        if (_this) {
+            SDL_VideoDisplay *display = &_this->displays[0];
+            if (display)
+                sdlwindow = display->windows;
+        }
+    }
+    [super viewWillAppear:animated];
 }
 
 -(void) viewDidUnload {
     self.menuList = nil;
+    sdlwindow = NULL;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }

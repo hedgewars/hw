@@ -14,7 +14,7 @@ unit PascalExports;
 
 interface
 uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat, 
-     uGears, uSound, hwengine, uAmmos; // don't change the order!
+     uGears, uSound, hwengine, uAmmos, uLocale; // don't change the order!
 
 {$INCLUDE "config.inc"}
 
@@ -260,10 +260,46 @@ begin
         end;
 end;
 
+function HW_getWeaponNameByIndex(whichone: LongInt): PChar; cdecl; export;
+begin
+    exit (str2pchar(trammo[Ammoz[TAmmoType(whichone+1)].NameId]));
+end;
+
+function HW_getNumberOfWeapons:LongInt; cdecl; export;
+begin
+    exit(ord(high(TAmmoType)));
+end;
 
 procedure HW_setWeapon(whichone: LongInt); cdecl; export;
 begin
-    SetWeapon(TAmmoType(whichone));
+    if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
+        SetWeapon(TAmmoType(whichone+1));
+end;
+
+function HW_getDelays: pByte; cdecl; export;
+var skipTurns : PByte;
+    a : TAmmoType;
+begin
+    GetMem(skipTurns,ord(High(TAmmoType)));
+    for a:= Low(TAmmoType) to High(TAmmoType) do
+        skipTurns[ord(a)-1]:= byte(Ammoz[a].SkipTurns);
+    exit(skipTurns);
+    // leak?
+end;
+
+function HW_getTurnsForCurrentTeam:LongInt; cdecl; export;
+begin
+    exit(CurrentTeam^.Clan^.TurnNumber);
+end;
+
+function HW_getMaxNumberOfHogs: LongInt; cdecl; export;
+begin
+    exit(cMaxHHIndex+1);
+end;
+
+function HW_getMaxNumberOfTeams: LongInt; cdecl; export;
+begin
+    exit(cMaxTeams);
 end;
 {$ENDIF}
 

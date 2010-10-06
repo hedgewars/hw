@@ -92,5 +92,6 @@
 -(void) turnOffWidgets;
 -(void) setLabelText:(NSString *)str;
 -(void) updatePreview;
+-(void) loadDataSourceArray;
 
 @end

@@ -588,10 +588,15 @@ void startSpinning() {
     UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     indicator.tag = ACTIVITYINDICATOR_TAG;
-    if ([[UIScreen screens] count] > 1)
-        indicator.center = CGPointMake(theWindow.frame.size.width/2, theWindow.frame.size.height/2 + 118);
+    int offset;
+    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft)
+        offset = -120;
     else
-        indicator.center = CGPointMake(theWindow.frame.size.width/2 + 118, theWindow.frame.size.height/2);
+        offset = 120;
+    if ([[UIScreen screens] count] > 1)
+        indicator.center = CGPointMake(theWindow.frame.size.width/2, theWindow.frame.size.height/2 + offset);
+    else
+        indicator.center = CGPointMake(theWindow.frame.size.width/2 + offset, theWindow.frame.size.height/2);
     indicator.hidesWhenStopped = YES;
     [indicator startAnimating];
     [theWindow addSubview:indicator];

@@ -54,6 +54,8 @@
     self.seedCommand = seedCmd;
     [seedCmd release];
 
+    if (self.dataSourceArray == nil)
+        [self loadDataSourceArray];
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
     NSIndexPath *theIndex;
     if (isRandomness()) {
@@ -111,6 +113,8 @@
 }
 
 -(NSInteger) tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger) section {
+    if (self.dataSourceArray == nil)
+        [self loadDataSourceArray];
     return [[self.dataSourceArray objectAtIndex:scIndex] count];
 }
 
@@ -125,6 +129,8 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
 
+    if (self.dataSourceArray == nil)
+        [self loadDataSourceArray];
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
 
     NSString *labelString = [source objectAtIndex:row];
@@ -150,6 +156,8 @@
 
 // this set details for a static map (called by didSelectRowAtIndexPath)
 -(void) setDetailsForStaticMap:(NSInteger) index {
+    if (self.dataSourceArray == nil)
+        [self loadDataSourceArray];
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
     
     NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg", 
@@ -185,6 +193,8 @@
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
     if (newRow != oldRow) {
+        if (self.dataSourceArray == nil)
+            [self loadDataSourceArray];
         NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
         if (isRandomness()) {
             // just change the theme, don't update preview
@@ -461,6 +471,7 @@
 -(void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     self.dataSourceArray = nil;
+    self.lastIndexPath = nil;
     // maybe we can save some more
     MSG_MEMCLEAN();
 }

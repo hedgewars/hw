@@ -28,6 +28,7 @@
 #import "LevelViewController.h"
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
+#import "PascalImports.h"
 
 #define TEAMNAME_TAG 78789
 
@@ -148,7 +149,7 @@
             rows = 1;
             break;
         case 1: // team members
-            rows = MAX_HOGS;
+            rows = HW_getMaxNumberOfHogs();
             break;
         case 2: // team details
             rows = [self.secondaryItems count];

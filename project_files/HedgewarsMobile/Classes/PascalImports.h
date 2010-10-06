@@ -32,7 +32,7 @@ extern "C" {
 
     void Game(const char *args[]);
     void GenLandPreview(void);
-
+    void LoadLocaleWrapper(const char *filename);
 
     void HW_versionInfo(short int *netProto, char **versionStr);
 
@@ -44,7 +44,7 @@ extern "C" {
     void HW_zoomOut(void);
     void HW_zoomReset(void);
     float HW_zoomFactor(void);
-    int HW_zoomLevel(void);
+    int  HW_zoomLevel(void);
 
     void HW_walkingKeysUp(void);
     void HW_otherKeysUp(void);
@@ -80,8 +80,15 @@ extern "C" {
 
     void HW_setGrenadeTime(int time);
     void HW_setPianoSound(int snd);
+    
     void HW_setWeapon(int whichone);
-
+    unsigned char *HW_getDelays(void);
+    int  HW_getTurnsForCurrentTeam(void);
+    int  HW_getNumberOfWeapons(void);
+    char *HW_getWeaponNameByIndex(int whichone);
+    int  HW_getMaxNumberOfHogs(void);
+    int  HW_getMaxNumberOfTeams(void);
+    
 #ifdef __cplusplus
 }
 #endif

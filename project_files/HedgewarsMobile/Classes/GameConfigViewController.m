@@ -26,6 +26,7 @@
 #import "HelpPageViewController.h"
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
+#import "PascalImports.h"
 
 @implementation GameConfigViewController
 @synthesize hedgehogImage, imgContainer, helpPage;
@@ -152,7 +153,7 @@
         return NO;
     }
     
-    if ([teamConfigViewController.listOfSelectedTeams count] > 6) {
+    if ([teamConfigViewController.listOfSelectedTeams count] > HW_getMaxNumberOfTeams()) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many teams",@"")
                                                         message:NSLocalizedString(@"Max six teams are allowed in the same game",@"")
                                                        delegate:nil
@@ -251,11 +252,11 @@
         mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
         if (teamConfigViewController == nil)
             teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        teamConfigViewController.view.frame = CGRectMake(362, 200, 328, 480);
+        teamConfigViewController.view.frame = CGRectMake(348, 200, 328, 480);
         [mapConfigViewController.view addSubview:teamConfigViewController.view];
         if (schemeWeaponConfigViewController == nil)
             schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        schemeWeaponConfigViewController.view.frame = CGRectMake(10, 70, 300, 550);
+        schemeWeaponConfigViewController.view.frame = CGRectMake(10, 70, 300, 600);
         [mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
     } else {
         // this is the visible controller

@@ -28,7 +28,6 @@
     NSString *description;
 
     UIImage *ammoStoreImage;
-    NSArray *ammoNames;
 
     char *quantity;
     char *probability;
@@ -39,7 +38,6 @@
 @property (nonatomic,retain) NSString *weaponName;
 @property (nonatomic,retain) NSString *description;
 @property (nonatomic,retain) UIImage *ammoStoreImage;
-@property (nonatomic,retain) NSArray *ammoNames;
 
 -(void) saveAmmos;
 

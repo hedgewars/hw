@@ -123,7 +123,7 @@
     NSString *update = @"";
 
     // if we're loading an older version of ammos fill the engine message with 0s
-    int diff = CURRENT_AMMOSIZE - [[ammoData objectForKey:@"version"] intValue];
+    int diff = HW_getNumberOfWeapons() - [[ammoData objectForKey:@"version"] intValue];
     if (diff != 0)
         update = [NSString stringWithCharacters:(const unichar*)"0000000000000000000000000000000000" length:diff];
 

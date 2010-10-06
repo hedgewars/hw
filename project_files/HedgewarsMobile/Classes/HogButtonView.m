@@ -22,6 +22,7 @@
 #import "HogButtonView.h"
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
+#import "PascalImports.h"
 
 @implementation HogButtonView
 @synthesize singleHog, numberOfHogs, ownerDictionary;
@@ -51,13 +52,13 @@
 
 -(void) drawManyHogs:(NSInteger) hogs {
     if (numberOfHogs != hogs) {
-        if (hogs <= MAX_HOGS && hogs >= 1)
+        if (hogs <= HW_getMaxNumberOfHogs() && hogs >= 1)
             numberOfHogs = hogs;
         else {
-            if (hogs > MAX_HOGS)
+            if (hogs > HW_getMaxNumberOfHogs())
                 numberOfHogs = 1;
             else
-                numberOfHogs = MAX_HOGS;
+                numberOfHogs = HW_getMaxNumberOfHogs();
         }
         [ownerDictionary setObject:[NSNumber numberWithInt:numberOfHogs] forKey:@"number"];
 
