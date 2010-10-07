@@ -80,7 +80,7 @@ procedure Tint(r, g, b, a: Byte); inline;
 procedure Tint(c: Longword); inline;
 
 implementation
-uses uMisc, uConsole, uLocale;
+uses uMisc, uConsole, uLocale, uMobile;
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -1138,9 +1138,11 @@ begin
 end;
 
 procedure SetupOpenGL;
+{$IFNDEF IPHONEOS}
 var vendor: shortstring;
 {$IFDEF DARWIN}
     one: LongInt;
+{$ENDIF}
 {$ENDIF}
 begin
 
@@ -1149,6 +1151,7 @@ begin
     SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
 {$IFNDEF SDL13}
 // this attribute is default in 1.3 and must be enabled in MacOSX
     if (cReducedQuality and rqDesyncVBlank) <> 0 then
@@ -1172,7 +1175,6 @@ begin
 
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 
-    vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
 {$IFDEF DEBUGFILE}
     AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
     AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
@@ -1268,9 +1270,8 @@ begin
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
-{$IFDEF IPHONEOS}
-        startSpinning();
-{$ENDIF}
+
+        doSomethingWhen_AddProgress();
     end;
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
@@ -1297,9 +1298,7 @@ procedure FinishProgress;
 begin
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
-{$IFDEF IPHONEOS}
-    stopSpinning();
-{$ENDIF}
+    doSomethingWhen_FinishProgress();
 end;
 
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);

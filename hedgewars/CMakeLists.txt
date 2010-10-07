@@ -59,6 +59,7 @@ set(engine_sources
 	uLandTexture.pas
 	uLocale.pas
 	uMisc.pas
+	uMobile.pas
 	uRandom.pas
 	uScript.pas
 	adler32.pas

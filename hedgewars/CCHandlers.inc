@@ -458,9 +458,6 @@ begin
 {$IFDEF DEBUGFILE}
     AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));
 {$ENDIF}
-{$IFDEF IPHONEOS}
-    clearView();
-{$ENDIF}
 end;
 
 procedure chSay(var s: shortstring);

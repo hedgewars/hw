@@ -49,6 +49,7 @@
 		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
 		6129B9F711EFB04D0017E305 /* denied.png in Resources */ = {isa = PBXBuildFile; fileRef = 6129B9F611EFB04D0017E305 /* denied.png */; };
 		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
+		61399013125D19C0003C2DC0 /* uMobile.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61399012125D19C0003C2DC0 /* uMobile.pas */; };
 		6147DAD31253DCDE0010357E /* savesButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 6147DAD21253DCDE0010357E /* savesButton.png */; };
 		61536DF411CEAE7100D87A7E /* GameConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */; };
 		615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD96112073B4D00F2FF04 /* startGameButton.png */; };
@@ -83,9 +84,7 @@
 		6165923111CA9BD500D6E256 /* SquareButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922B11CA9BD500D6E256 /* SquareButtonView.m */; };
 		6165923211CA9BD500D6E256 /* UIImageExtra.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922D11CA9BD500D6E256 /* UIImageExtra.m */; };
 		6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */; };
-		6165925411CA9CB400D6E256 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */; };
 		6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */; };
-		6165925611CA9CB400D6E256 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
 		6165925811CA9CB400D6E256 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165925011CA9CB400D6E256 /* OverlayViewController.xib */; };
 		6165929E11CA9E2F00D6E256 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
@@ -745,6 +744,7 @@
 		61272338117DF778005B90CF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		6129B9F611EFB04D0017E305 /* denied.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = denied.png; path = Resources/denied.png; sourceTree = "<group>"; };
 		61370652117B1D50004EE44A /* Entitlements-Distribution.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Distribution.plist"; sourceTree = "<group>"; };
+		61399012125D19C0003C2DC0 /* uMobile.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uMobile.pas; path = ../../hedgewars/uMobile.pas; sourceTree = SOURCE_ROOT; };
 		6147DAD21253DCDE0010357E /* savesButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = savesButton.png; path = Resources/savesButton.png; sourceTree = "<group>"; };
 		614E333D11DE9A93009DBA4E /* VGSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = VGSHandlers.inc; path = ../../hedgewars/VGSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		615AD96112073B4D00F2FF04 /* startGameButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = startGameButton.png; path = "Resources/Frontend-iPad/startGameButton.png"; sourceTree = "<group>"; };
@@ -1414,6 +1414,7 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61399012125D19C0003C2DC0 /* uMobile.pas */,
 				619C5AF3124F7E3100D041AE /* LuaPas.pas */,
 				61798892114AA56300BA94A9 /* inc */,
 				61E1F4F711D004240016A5AA /* adler32.pas */,
@@ -2080,9 +2081,7 @@
 				61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */,
 				611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */,
 				6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */,
-				6165925411CA9CB400D6E256 /* MainMenuViewController-iPhone.xib in Resources */,
 				6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */,
-				6165925611CA9CB400D6E256 /* MapConfigViewController-iPhone.xib in Resources */,
 				6165925811CA9CB400D6E256 /* OverlayViewController.xib in Resources */,
 				61EF920E11DF57AC003441C4 /* arrowDown.png in Resources */,
 				61EF920F11DF57AC003441C4 /* arrowLeft.png in Resources */,
@@ -2261,6 +2260,7 @@
 				619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */,
 				619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */,
 				61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */,
+				61399013125D19C0003C2DC0 /* uMobile.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

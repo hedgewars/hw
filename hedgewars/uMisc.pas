@@ -196,7 +196,7 @@ function  RectToStr(Rect: TSDL_Rect): shortstring;
 procedure MakeScreenshot(filename: shortstring);
 
 implementation
-uses uConsole, uStore, uIO, uSound, typinfo, sysutils;
+uses uConsole, uStore, uIO, uSound, typinfo, sysutils, uMobile;
 
 var KBnum: Longword;
 {$IFDEF DEBUGFILE}
@@ -791,21 +791,20 @@ begin
 
     ScreenFade      := sfNone;
 
+{$IFDEF SDL13}
+    SDLwindow       := nil;
+{$ENDIF}
+
     // those values still aren't perfect
     cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
     cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
     cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
 
-{$IFDEF IPHONEOS}
     if isPhone() then
         cMaxCaptions:= 3
     else
-{$ENDIF}
         cMaxCaptions:= 4;
 
-{$IFDEF SDL13}
-    SDLwindow       := nil;
-{$ENDIF}
 {$IFDEF DEBUGFILE}
 {$I-}
 {$IFDEF IPHONEOS}

@@ -842,15 +842,6 @@ procedure SDLNet_Write32(value: LongWord; buf: pointer);
 function  SDLNet_Read16(buf: pointer): Word;
 function  SDLNet_Read32(buf: pointer): LongWord;
 
-{$IFDEF IPHONEOS}
-(*  iPhone related calls  *)
-procedure clearView; cdecl; external;
-procedure startSpinning; cdecl; external;
-procedure stopSpinning; cdecl; external;
-function  isPhone: Boolean; cdecl; external;
-procedure replayBegan; cdecl; external;
-procedure replayFinished; cdecl; external;
-{$ENDIF}
 implementation
 
 function SDL_MustLock(Surface: PSDL_Surface): Boolean;

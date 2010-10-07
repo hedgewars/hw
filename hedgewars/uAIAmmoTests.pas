@@ -106,7 +106,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
 const BadTurn = Low(LongInt) div 4;
 
 implementation
-uses uMisc, uAIMisc, uLand, uTeams;
+uses uMisc, uAIMisc, uLand;
 
 function Metric(x1, y1, x2, y2: LongInt): LongInt;
 begin

@@ -30,7 +30,7 @@ program hwengine;
 {$ENDIF}
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
-     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, sysutils;
+     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, uMobile, sysutils;
 
 var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
@@ -285,9 +285,7 @@ begin
     else
     begin
         LoadRecordFromFile(recordFileName);
-{$IFDEF IPHONEOS}
-        replayBegan();
-{$ENDIF}
+        doSomethingWhen_SaveBeganSynching();
     end;
 
     ScriptOnGameInit;

@@ -114,10 +114,10 @@ procedure RestoreTeamsFromSave;
 function  CheckForWin: boolean;
 procedure TeamGone(s: shortstring);
 procedure TeamGoneEffect(var Team: TTeam);
-function GetTeamStatString(p: PTeam): shortstring;
+function  GetTeamStatString(p: PTeam): shortstring;
 
 implementation
-uses uMisc, uWorld, uLocale, uAmmos, uChat;
+uses uMisc, uWorld, uLocale, uAmmos, uChat, uMobile;
 const MaxTeamHealth: LongInt = 0;
 
 function CheckForWin: boolean;
@@ -224,7 +224,8 @@ repeat
         end
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
 
-CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog])
+CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
+doSomethingWhen_NewTurnBeginning();
 end;
 
 procedure AfterSwitchHedgehog;

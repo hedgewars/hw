@@ -276,11 +276,31 @@ begin
         SetWeapon(TAmmoType(whichone+1));
 end;
 
-function HW_getDelays: pByte; cdecl; export;
+function HW_getAmmoCounts: PByte; cdecl; export;
+var counts : PByte;
+    a : PHHAmmo;
+    slot, index: LongInt;
+begin
+    if (CurrentTeam^.ExtDriven) or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
+        exit(nil);
+    a:= CurrentHedgehog^.Ammo;
+    GetMem(counts,ord(High(TAmmoType)));
+    FillChar(counts^,ord(High(TAmmoType)),0);
+    for slot:= 0 to cMaxSlotIndex do
+        for index:= 0 to cMaxSlotAmmoIndex do
+            counts[ord(a^[slot,index].AmmoType)-1]:= byte(a^[slot,index].Count);
+    exit(counts);
+    // leak?
+end;
+
+function HW_getAmmoDelays: PByte; cdecl; export;
 var skipTurns : PByte;
     a : TAmmoType;
 begin
+    if (CurrentTeam^.ExtDriven) or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
+        exit(nil);
     GetMem(skipTurns,ord(High(TAmmoType)));
+    FillChar(skipTurns^,ord(High(TAmmoType)),0);
     for a:= Low(TAmmoType) to High(TAmmoType) do
         skipTurns[ord(a)-1]:= byte(Ammoz[a].SkipTurns);
     exit(skipTurns);
