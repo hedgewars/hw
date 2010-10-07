@@ -82,7 +82,8 @@ extern "C" {
     void HW_setPianoSound(int snd);
     
     void HW_setWeapon(int whichone);
-    unsigned char *HW_getDelays(void);
+    unsigned char *HW_getAmmoDelays(void);
+    unsigned char *HW_getAmmoCounts(void);
     int  HW_getTurnsForCurrentTeam(void);
     int  HW_getNumberOfWeapons(void);
     char *HW_getWeaponNameByIndex(int whichone);

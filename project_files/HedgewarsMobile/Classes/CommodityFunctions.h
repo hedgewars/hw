@@ -58,7 +58,7 @@ void print_free_memory ();
 void playSound (NSString *snd);
 void popError (const char *title, const char *message);
 BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);
-BOOL isPhone ();
+BOOL isApplePhone ();
 NSInteger randomPort ();
 NSString *modelType ();
 NSArray *getAvailableColors(void);

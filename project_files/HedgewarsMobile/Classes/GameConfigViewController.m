@@ -21,6 +21,7 @@
 
 #import "GameConfigViewController.h"
 #import "SDL_uikitappdelegate.h"
+#import "MapConfigViewController.h"
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
 #import "HelpPageViewController.h"
@@ -29,15 +30,21 @@
 #import "PascalImports.h"
 
 @implementation GameConfigViewController
-@synthesize hedgehogImage, imgContainer, helpPage;
+@synthesize hedgehogImage, imgContainer, helpPage, mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
+
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
--(IBAction) buttonPressed:(id) sender {    
+-(IBAction) buttonPressed:(id) sender {
     // works even if it's not actually a button
-    UIButton *theButton = (UIButton *)sender;
+    UIButton *theButton;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        theButton = [[(NSNotification *)sender userInfo] objectForKey:@"sender"];
+    else
+        theButton = (UIButton *)sender;
+
     switch (theButton.tag) {
         case 0:
             playSound(@"backSound");
@@ -180,7 +187,7 @@
 
 -(void) startGame:(UIButton *)button {
     button.enabled = YES;
-
+    
     if ([self isEverythingSet] == NO)
         return;
 
@@ -242,25 +249,30 @@
     self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(buttonPressed:)
+                                                     name:@"buttonPressed"
+                                                   object:nil];
         srandom(time(NULL));
         self.hedgehogImage = nil;
         
         // load other controllers
-        if (mapConfigViewController == nil)
-            mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
-        mapConfigViewController.delegate = self;
-        mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
-        if (teamConfigViewController == nil)
-            teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        teamConfigViewController.view.frame = CGRectMake(348, 200, 328, 480);
-        [mapConfigViewController.view addSubview:teamConfigViewController.view];
-        if (schemeWeaponConfigViewController == nil)
-            schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        schemeWeaponConfigViewController.view.frame = CGRectMake(10, 70, 300, 600);
-        [mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
+        if (self.mapConfigViewController == nil)
+            self.mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
+        if (self.teamConfigViewController == nil)
+            self.teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        [self.mapConfigViewController.view addSubview:self.teamConfigViewController.view];
+        if (self.schemeWeaponConfigViewController == nil)
+            self.schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        [self.mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
+        self.mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
+        self.teamConfigViewController.view.frame = CGRectMake(348, 200, 328, 480);
+        self.schemeWeaponConfigViewController.view.frame = CGRectMake(10, 70, 300, 600);
+        
     } else {
         // this is the visible controller
-        mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
+        if (mapConfigViewController == nil)
+            mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
         // this must be loaded & added to auto set default scheme and ammo
         schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
         [self.view addSubview:schemeWeaponConfigViewController.view];
@@ -344,6 +356,8 @@
         teamConfigViewController = nil;
     if (schemeWeaponConfigViewController.view.superview == nil)
         schemeWeaponConfigViewController = nil;
+    if (helpPage.view.superview == nil)
+        helpPage = nil;
 
     // Release any cached data, images, etc that aren't in use.
     self.imgContainer = nil;
@@ -353,11 +367,13 @@
 }
 
 -(void) viewDidUnload {
+    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:@"buttonPressed"];
     self.hedgehogImage = nil;
     self.imgContainer = nil;
-    mapConfigViewController = nil;
-    teamConfigViewController = nil;
-    schemeWeaponConfigViewController = nil;
+    self.mapConfigViewController = nil;
+    self.teamConfigViewController = nil;
+    self.schemeWeaponConfigViewController = nil;
+    self.helpPage = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -368,6 +384,7 @@
     [mapConfigViewController release];
     [teamConfigViewController release];
     [schemeWeaponConfigViewController release];
+    [helpPage release];
     [super dealloc];
 }
 

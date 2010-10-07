@@ -103,7 +103,6 @@
     NSString *cratenessStr = [NSString stringWithUTF8String:crateness];
     
     NSDictionary *weapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                            [NSNumber numberWithInt:HW_getNumberOfWeapons()],@"version",
                             quantityStr,@"ammostore_initialqt",
                             probabilityStr,@"ammostore_probability",
                             delayStr,@"ammostore_delay",

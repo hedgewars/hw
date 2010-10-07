@@ -74,7 +74,6 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
     switch (type) {
         case 0: //default
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         [NSNumber numberWithInt:HW_getNumberOfWeapons()],@"version",
                          @"939192942219912103223511100120100000021111010101",@"ammostore_initialqt",
                          @"040504054160065554655446477657666666615551010111",@"ammostore_probability",
                          @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
@@ -82,7 +81,6 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
             break;
         case 1: //crazy
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         [NSNumber numberWithInt:HW_getNumberOfWeapons()],@"version",
                          @"999999999999999999299999999999999929999999990999",@"ammostore_initialqt",
                          @"111111011111111111111111111111111111111111110111",@"ammostore_probability",
                          @"000000000000000000000000000000000000000000000000",@"ammostore_delay",
@@ -90,7 +88,6 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
             break;
         case 2: //pro mode
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         [NSNumber numberWithInt:HW_getNumberOfWeapons()],@"version",
                          @"909000900000000000000900000000000000000000000000",@"ammostore_initialqt",
                          @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
@@ -98,7 +95,6 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
             break;
         case 3: //shoppa
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         [NSNumber numberWithInt:HW_getNumberOfWeapons()],@"version",
                          @"000000990000000000000000000000000000000000000000",@"ammostore_initialqt",
                          @"444441004424440221011212122242200000000200040001",@"ammostore_probability",
                          @"000000000000000000000000000000000000000000000000",@"ammostore_delay",
@@ -106,7 +102,6 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
             break;
         case 4: //basketball
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         [NSNumber numberWithInt:HW_getNumberOfWeapons()],@"version",
                          @"939192942219912103223511100120100000021111010100",@"ammostore_initialqt",
                          @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"000000000000000550000004000700400000000020000000",@"ammostore_delay",
@@ -114,7 +109,6 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
             break;
         case 5: //minefield
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         [NSNumber numberWithInt:HW_getNumberOfWeapons()],@"version",
                          @"000000990009000000030000000000000000000000000000",@"ammostore_initialqt",
                          @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
@@ -231,7 +225,7 @@ void print_free_memory () {
     DLog(@"used: %u free: %u total: %u", mem_used, mem_free, mem_total);
 }
 
-BOOL isPhone () {
+BOOL inline isApplePhone () {
     return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone);
 }
 

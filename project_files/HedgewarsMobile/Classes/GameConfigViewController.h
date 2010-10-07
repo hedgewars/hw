@@ -20,13 +20,13 @@
 
 
 #import <UIKit/UIKit.h>
-#import "MapConfigViewController.h"
 
+@class HelpPageViewController;
+@class MapConfigViewController;
 @class TeamConfigViewController;
 @class SchemeWeaponConfigViewController;
-@class HelpPageViewController;
 
-@interface GameConfigViewController : UIViewController <MapConfigDelegate> {
+@interface GameConfigViewController : UIViewController {
     UIImage *hedgehogImage;
     UIView *imgContainer;
     HelpPageViewController *helpPage;
@@ -39,6 +39,9 @@
 @property (nonatomic,retain) UIImage *hedgehogImage;
 @property (nonatomic,retain) UIView *imgContainer;
 @property (nonatomic,retain) HelpPageViewController *helpPage;
+@property (nonatomic,retain) MapConfigViewController *mapConfigViewController;
+@property (nonatomic,retain) TeamConfigViewController *teamConfigViewController;
+@property (nonatomic,retain) SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
 
 -(IBAction) buttonPressed:(id) sender;
 -(IBAction) segmentPressed:(id) sender;

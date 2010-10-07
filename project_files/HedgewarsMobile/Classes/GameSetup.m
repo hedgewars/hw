@@ -120,12 +120,12 @@
     NSString *weaponPath = [[NSString alloc] initWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),ammostoreName];
     NSDictionary *ammoData = [[NSDictionary alloc] initWithContentsOfFile:weaponPath];
     [weaponPath release];
-    NSString *update = @"";
 
     // if we're loading an older version of ammos fill the engine message with 0s
-    int diff = HW_getNumberOfWeapons() - [[ammoData objectForKey:@"version"] intValue];
-    if (diff != 0)
-        update = [NSString stringWithCharacters:(const unichar*)"0000000000000000000000000000000000" length:diff];
+    int diff = HW_getNumberOfWeapons() - [[ammoData objectForKey:@"ammostore_initialqt"] length];
+    NSString *update = @"";
+    while ([update length] < diff)
+        update = [update stringByAppendingString:@"0"];
 
     NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@%@", [ammoData objectForKey:@"ammostore_initialqt"], update];
     [self sendToEngine: ammloadt];
@@ -143,7 +143,7 @@
     [self sendToEngine: ammreinf];
     [ammreinf release];
 
-    // sent twice so it applies to both teams
+    // send this for each team so it applies the same ammostore to all teams
     NSString *ammstore = [[NSString alloc] initWithString:@"eammstore"];
     for (int i = 0; i < numberOfTeams; i++)
         [self sendToEngine: ammstore];
@@ -410,9 +410,10 @@
             case 'q':
                 // game ended, can remove the savefile
                 [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
-                // so update the relative viewcontroler
+                // so update the relative viewcontroler and the overlay
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"removedSave" object:nil];
-                // and disable the overlay
+                // and remove + disable the overlay
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
                 setGameRunning(NO);
                 break;
             default:

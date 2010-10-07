@@ -22,16 +22,7 @@
 #import <UIKit/UIKit.h>
 #import "MapPreviewButtonView.h"
 
-@protocol MapConfigDelegate <NSObject>
-
--(void) buttonPressed:(id) sender;
-
-@end
-
-
 @interface MapConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, MapPreviewViewDelegate> {
-    id<MapConfigDelegate> delegate;
-    
     NSInteger oldValue;  //slider
     NSInteger oldPage;   //segmented control
     BOOL busy;
@@ -59,7 +50,6 @@
     NSArray *dataSourceArray;
 }
 
-@property (nonatomic,retain) id<MapConfigDelegate> delegate;
 
 @property (nonatomic,assign) NSInteger maxHogs;
 @property (nonatomic,assign) BOOL busy;

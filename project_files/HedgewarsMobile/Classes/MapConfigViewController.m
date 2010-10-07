@@ -29,7 +29,7 @@
 
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
-            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy, delegate;
+            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -366,10 +366,9 @@
 }
 
 #pragma mark -
-#pragma mark delegate functions for iPad
+#pragma mark calls the parent's function that checks the parameters and starts the game
 -(IBAction) buttonPressed:(id) sender {
-    if (self.delegate != nil && [delegate respondsToSelector:@selector(buttonPressed:)])
-        [self.delegate buttonPressed:(UIButton *)sender];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"buttonPressed" object:nil userInfo:[NSDictionary dictionaryWithObject:sender forKey:@"sender"]];
 }
 
 -(void) loadDataSourceArray {
@@ -443,8 +442,6 @@
 }
 
 -(void) viewDidUnload {
-    self.delegate = nil;
-    
     self.previewButton = nil;
     self.seedCommand = nil;
     self.templateFilterCommand = nil;
@@ -477,8 +474,6 @@
 }
 
 -(void) dealloc {
-    self.delegate = nil;
-    
     [seedCommand release];
     [templateFilterCommand release];
     [mapGenCommand release];
