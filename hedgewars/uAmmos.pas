@@ -243,7 +243,8 @@ with Hedgehog do
             if Count = 0 then
                 begin
                 PackAmmo(Ammo, Ammoz[AmmoType].Slot);
-                SwitchNotHeldAmmo(Hedgehog)
+                //SwitchNotHeldAmmo(Hedgehog);
+                CurAmmoType:= amNothing
                 end
             end
     end
