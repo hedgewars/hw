@@ -822,7 +822,7 @@ begin
         begin
             for i:= 0 to 7 do
             begin
-                assign(f, ExtractFileDir(ParamStr(2)) + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
+                assign(f, ExtractFileDir(ParamStr(2)) + '/' + cLogfileBase + inttostr(i) + '.log');
                 rewrite(f);
                 if IOResult = 0 then break;
             end;

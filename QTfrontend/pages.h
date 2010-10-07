@@ -216,6 +216,7 @@ public:
     QPushButton *BtnNewTeam;
     QPushButton *BtnEditTeam;
     QPushButton *BtnDeleteTeam;
+    QPushButton *BtnAssociateFiles;
     QLabel *LblNoEditTeam;
     QComboBox *CBTeamName;
     IconedGroupBox *AGGroupBox;

@@ -31,6 +31,9 @@ extern QDir * bindir;
 extern QDir * cfgdir;
 extern QDir * datadir;
 
+extern bool custom_config;
+extern bool custom_data;
+
 extern int cMaxTeams;
 
 extern QStringList * Themes;
