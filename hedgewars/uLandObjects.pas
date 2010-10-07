@@ -529,7 +529,7 @@ if hasGirders then
         i:=i+int;
     until (i>rightX-int);
     end;
-AddThemeObjects(ThemeObjects);
+if (GameFlags and gfDisableLandObjects) = 0 then AddThemeObjects(ThemeObjects);
 AddProgress();
 FreeRects();
 end;
