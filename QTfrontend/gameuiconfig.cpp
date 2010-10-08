@@ -178,7 +178,7 @@ bool GameUIConfig::vid_Fullscreen()
 quint32 GameUIConfig::translateQuality()
 {
     quint32 rqNone = 0x00000000;  // don't reduce quality
-    quint32 rqLowRes = 0x00000001;  // use half land array
+    //quint32 rqLowRes = 0x00000001;  // use half land array
     quint32 rqBlurryLand = 0x00000002;  // downscaled terrain
     quint32 rqNoBackground = 0x00000004;  // don't draw background
     quint32 rqSimpleRope = 0x00000008;  // avoid drawing rope

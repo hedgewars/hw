@@ -83,7 +83,7 @@ HWForm::HWForm(QWidget *parent)
 
     ui.setupUi(this);
     setMinimumSize(760, 580);
-
+    setFocusPolicy(Qt::StrongFocus);
     CustomizePalettes();
 
     ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
@@ -93,13 +93,13 @@ HWForm::HWForm(QWidget *parent)
     namegen = new HWNamegen();
 
 #ifdef __APPLE__
-        panel = new M3Panel;
+    panel = new M3Panel;
 #ifdef SPARKLE_ENABLED
-        AutoUpdater* updater;
-        CocoaInitializer initializer;
-        updater = new SparkleAutoUpdater(SPARKLE_APPCAST_URL);
-    if(updater && config->isAutoUpdateEnabled())
-            updater->checkForUpdates();
+    AutoUpdater* updater;
+    CocoaInitializer initializer;
+    updater = new SparkleAutoUpdater(SPARKLE_APPCAST_URL);
+    if (updater && config->isAutoUpdateEnabled())
+        updater->checkForUpdates();
 #endif
 #endif
 
@@ -272,6 +272,12 @@ void HWForm::onFrontendFullscreen(bool value)
   else {
     setWindowState(windowState() & !Qt::WindowFullScreen);
   }
+}
+
+void HWForm::keyReleaseEvent(QKeyEvent *event)
+{
+  if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Backspace)
+    this->GoBack();
 }
 
 void HWForm::CustomizePalettes()
@@ -529,11 +535,11 @@ void HWForm::btnExitClicked()
 {
     if (eggTimer.elapsed() < 3000){
 #ifdef __APPLE__
-                panel->showInstallController();
+        panel->showInstallController();
 #endif
         close();
     }
-        else
+    else
     {
         QPushButton * btn = findChild<QPushButton *>("imageButt");
         if (btn)
@@ -1127,3 +1133,4 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
     QMessageBox::information(0, "", QMessageBox::tr("All file associations have been set."));
 }
+

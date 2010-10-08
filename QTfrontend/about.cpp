@@ -90,7 +90,7 @@ About::About(QWidget * parent) :
             "<br>"
             "Julien Koesten &lt;<a href=\"mailto:julienkoesten@aol.com\">julienkoesten@aol.com</a>&gt;"
             "<br>"
-            "Joshua O'Sullivan &lt;<a href=\"mailto:battysausage@hotmail.co.uk\">battysausage@hotmail.co.uk</a>&gt;"
+            "Joshua O'Sullivan &lt;<a href=\"mailto:coheedftw@hotmail.co.uk\">coheedftw@hotmail.co.uk</a>&gt;"
             "<br>"
             "Nils Lück &lt;<a href=\"mailto:nils.luck.design@gmail.com\">nils.luck.design@gmail.com</a>&gt;"
             "<br>"
