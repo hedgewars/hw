@@ -558,9 +558,9 @@ var ft, fb, fl, fr: GLfloat;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
 // don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) > cScreenWidth / cScaleFactor) then
+if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWidth) then
     exit;
-if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) > cScreenHeight / cScaleFactor) then
+if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScaleFactor > cScreenHeight) then
     exit;
 
 glPushMatrix;
@@ -749,9 +749,9 @@ var l, r, t, b: real;
     TextureBuffer: array [0..3] of TVertex2f;
 begin
 // don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > 32) and ((abs(X) - 16)> cScreenWidth / cScaleFactor) then
+if (abs(X) > 32) and ((abs(X) - 16) * cScaleFactor > cScreenWidth) then
     exit;
-if (abs(Y) > 32) and ((abs(Y - 0.5 * cScreenHeight) - 16) > cScreenHeight / cScaleFactor) then
+if (abs(Y) > 32) and ((abs(Y - 0.5 * cScreenHeight) - 16) * cScaleFactor > cScreenHeight) then
     exit;
 
 t:= Pos * 32 / HHTexture^.h;
@@ -794,9 +794,9 @@ procedure DrawFillRect(r: TSDL_Rect);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
 // don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(r.x) > r.w) and ((abs(r.x + r.w / 2) - r.w / 2) > cScreenWidth / cScaleFactor) then
+if (abs(r.x) > r.w) and ((abs(r.x + r.w / 2) - r.w / 2) * cScaleFactor > cScreenWidth) then
     exit;
-if (abs(r.y) > r.h) and ((abs(r.y + r.h / 2 - (0.5 * cScreenHeight)) - r.h / 2) > cScreenHeight / cScaleFactor) then
+if (abs(r.y) > r.h) and ((abs(r.y + r.h / 2 - (0.5 * cScreenHeight)) - r.h / 2) * cScaleFactor > cScreenHeight) then
     exit;
 
 glDisable(GL_TEXTURE_2D);

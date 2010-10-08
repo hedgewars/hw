@@ -216,6 +216,9 @@ begin
     for i:= 0 to Pred(cLinesCount) do
         PByte(@ConsoleLines[i])^:= 0;
 
+    // NOTE: please, keep most frequently used commands on bottom
+    RegisterVariable('flag'    , vtCommand, @chFlag         , false);
+    RegisterVariable('script'  , vtCommand, @chScript       , false);
     RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
     RegisterVariable('spectate', vtBoolean, @fastUntilLag   , false);
     RegisterVariable('capture' , vtCommand, @chCapture      , true );
@@ -303,8 +306,6 @@ begin
     RegisterVariable('-cur_l'  , vtCommand, @chCurL_m       , true );
     RegisterVariable('+cur_r'  , vtCommand, @chCurR_p       , true );
     RegisterVariable('-cur_r'  , vtCommand, @chCurR_m       , true );
-    RegisterVariable('flag'    , vtCommand, @chFlag         , false);
-    RegisterVariable('script'  , vtCommand, @chScript       , false);
 end;
 
 procedure freeModule;
