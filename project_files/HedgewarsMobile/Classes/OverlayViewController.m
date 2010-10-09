@@ -43,7 +43,7 @@
 #define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage;
+@synthesize popoverController, popupMenu, helpPage, amvc;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -162,10 +162,6 @@
     [UIView setAnimationDuration:1];
     self.view.alpha = 1;
     [UIView commitAnimations];
-    
-    AmmoMenuViewController *amvc = [[AmmoMenuViewController alloc] init];
-    amvc.view.center = self.view.center;
-    [self.view addSubview:amvc.view];
 }
 
 -(void) showHelp:(id) sender {
@@ -185,6 +181,10 @@
         self.popupMenu = nil;
     if (self.helpPage.view.superview == nil)
         self.helpPage = nil;
+    if (((UIPopoverController *)self.popoverController).contentViewController.view.superview == nil)
+        self.popoverController = nil;
+    if (self.amvc.view.superview == nil)
+        self.amvc = nil;
     MSG_MEMCLEAN();
 }
 
@@ -192,6 +192,10 @@
     // only objects initialized in viewDidLoad should be here
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     dimTimer = nil;
+    self.helpPage = nil;
+    [self dismissPopover];
+    self.popoverController = nil;
+    self.amvc = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -200,6 +204,7 @@
     [popupMenu release];
     [helpPage release];
     [popoverController release];
+    [amvc release];
     // dimTimer is autoreleased
     [super dealloc];
 }
@@ -302,6 +307,10 @@
         case 10:
             playSound(@"clickSound");
             HW_pause();
+            if (amvc.isVisible) {
+                doDim();
+                [amvc disappear];
+            }
             removeConfirmationInput();
             [self showPopover];
             break;
@@ -309,6 +318,19 @@
             playSound(@"clickSound");
             removeConfirmationInput();
             HW_ammoMenu();
+            
+            // TODO: removal and multimonitor experience
+            if (self.amvc == nil)
+                self.amvc = [[AmmoMenuViewController alloc] init];
+
+            if (self.amvc.isVisible) {
+                doDim();
+                [self.amvc disappear];
+            } else {
+                doNotDim();
+                [self.amvc appearInView:self.view];
+            }
+            
             break;
         default:
             DLog(@"Nope");
@@ -335,26 +357,26 @@
     isPopoverVisible = YES;
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (popupMenu == nil)
-            popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-        if (popoverController == nil) {
-            popoverController = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
-            [popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
-            [popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
+        if (self.popupMenu == nil)
+            self.popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        if (self.popoverController == nil) {
+            self.popoverController = [[UIPopoverController alloc] initWithContentViewController:self.popupMenu];
+            [self.popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
+            [self.popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
         }
 
-        [popoverController presentPopoverFromRect:CGRectMake(screen.size.height / 2, screen.size.width / 2, 1, 1)
+        [self.popoverController presentPopoverFromRect:CGRectMake(screen.size.height / 2, screen.size.width / 2, 1, 1)
                                            inView:self.view
                          permittedArrowDirections:UIPopoverArrowDirectionAny
                                          animated:YES];
     } else {
-        if (popupMenu == nil)
-            popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        if (self.popupMenu == nil)
+            self.popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
         [self.view addSubview:popupMenu.view];
-        [popupMenu present];
+        [self.popupMenu present];
     }
-    popupMenu.tableView.scrollEnabled = NO;
+    self.popupMenu.tableView.scrollEnabled = NO;
 }
 
 // on ipad just dismiss it, on iphone transtion to the right
@@ -365,10 +387,10 @@
             HW_pause();
 
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [(InGameMenuViewController *)popoverController.contentViewController removeChat];
-            [popoverController dismissPopoverAnimated:YES];
+            [(InGameMenuViewController *)[[self popoverController] contentViewController] removeChat];
+            [self.popoverController dismissPopoverAnimated:YES];
         } else {
-            [popupMenu dismiss];
+            [self.popupMenu dismiss];
         }
         [self buttonReleased:nil];
     }
@@ -387,6 +409,10 @@
     if (isPopoverVisible)
         [self dismissPopover];
 
+    if (amvc.isVisible) {
+        doDim();
+        [self.amvc disappear];
+    }
     // reset default dimming
     doDim();
 

@@ -297,8 +297,6 @@ function HW_getAmmoDelays: PByte; cdecl; export;
 var skipTurns : PByte;
     a : TAmmoType;
 begin
-    if (CurrentTeam^.ExtDriven) or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
-        exit(nil);
     GetMem(skipTurns,ord(High(TAmmoType)));
     FillChar(skipTurns^,ord(High(TAmmoType)),0);
     for a:= Low(TAmmoType) to High(TAmmoType) do
