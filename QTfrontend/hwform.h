@@ -78,6 +78,7 @@ private slots:
     void GoToAdmin();
     void GoToPage(quint8 id);
     void GoBack();
+    void AssociateFiles();
     void btnExitPressed();
     void btnExitClicked();
     void IntermediateSetup();
@@ -126,7 +127,8 @@ private:
     void closeEvent(QCloseEvent *event);
     void CustomizePalettes();
     void resizeEvent(QResizeEvent * event);
-
+    void keyReleaseEvent(QKeyEvent *event);
+    
     enum PageIDs {
         ID_PAGE_SETUP_TEAM      =  0,
         ID_PAGE_SETUP           =  1,

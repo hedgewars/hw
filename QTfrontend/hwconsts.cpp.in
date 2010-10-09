@@ -30,6 +30,9 @@ QDir * datadir = new QDir();
 QStringList * Themes;
 QStringList * mapList;
 
+bool custom_config = false;
+bool custom_data = false;
+
 int cMaxTeams = 6;
 
 QString * cDefaultAmmoStore = new QString(

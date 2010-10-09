@@ -83,7 +83,7 @@ HWForm::HWForm(QWidget *parent)
 
     ui.setupUi(this);
     setMinimumSize(760, 580);
-
+    setFocusPolicy(Qt::StrongFocus);
     CustomizePalettes();
 
     ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
@@ -93,13 +93,13 @@ HWForm::HWForm(QWidget *parent)
     namegen = new HWNamegen();
 
 #ifdef __APPLE__
-        panel = new M3Panel;
+    panel = new M3Panel;
 #ifdef SPARKLE_ENABLED
-        AutoUpdater* updater;
-        CocoaInitializer initializer;
-        updater = new SparkleAutoUpdater(SPARKLE_APPCAST_URL);
-    if(updater && config->isAutoUpdateEnabled())
-            updater->checkForUpdates();
+    AutoUpdater* updater;
+    CocoaInitializer initializer;
+    updater = new SparkleAutoUpdater(SPARKLE_APPCAST_URL);
+    if (updater && config->isAutoUpdateEnabled())
+        updater->checkForUpdates();
 #endif
 #endif
 
@@ -141,6 +141,9 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageOptions->BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(DeleteTeam()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), config, SLOT(SaveOptions()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), this, SLOT(GoBack()));
+#ifdef _WIN32
+    connect(ui.pageOptions->BtnAssociateFiles, SIGNAL(clicked()), this, SLOT(AssociateFiles()));
+#endif
 
     connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
     connect(ui.pageOptions->WeaponsButt, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
@@ -269,6 +272,12 @@ void HWForm::onFrontendFullscreen(bool value)
   else {
     setWindowState(windowState() & !Qt::WindowFullScreen);
   }
+}
+
+void HWForm::keyReleaseEvent(QKeyEvent *event)
+{
+  if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Backspace)
+    this->GoBack();
 }
 
 void HWForm::CustomizePalettes()
@@ -526,11 +535,11 @@ void HWForm::btnExitClicked()
 {
     if (eggTimer.elapsed() < 3000){
 #ifdef __APPLE__
-                panel->showInstallController();
+        panel->showInstallController();
 #endif
         close();
     }
-        else
+    else
     {
         QPushButton * btn = findChild<QPushButton *>("imageButt");
         if (btn)
@@ -1110,3 +1119,18 @@ void HWForm::UpdateCampaignPage(int index)
     for(int i = 0; (i < entries.count()) && (i <= team.CampaignProgress); i++)
         ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2"), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
 }
+
+void HWForm::AssociateFiles()
+{
+    QSettings registry_hkcr("HKEY_CLASSES_ROOT", QSettings::NativeFormat);
+    registry_hkcr.setValue(".hwd/Default", "Hedgewars.Demo");
+    registry_hkcr.setValue(".hws/Default", "Hedgewars.Save");
+    registry_hkcr.setValue("Hedgewars.Demo/Default", tr("Hedgewars Demo File", "File Types"));
+    registry_hkcr.setValue("Hedgewars.Save/Default", tr("Hedgewars Save File", "File Types"));
+    registry_hkcr.setValue("Hedgewars.Demo/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwdfile.ico\",0");
+    registry_hkcr.setValue("Hedgewars.Save/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwsfile.ico\",0");
+    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
+    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
+    QMessageBox::information(0, "", QMessageBox::tr("All file associations have been set."));
+}
+

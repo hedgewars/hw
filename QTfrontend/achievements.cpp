@@ -33,5 +33,5 @@ const char achievements[][6][256] = {
     {"skipping", QT_TRANSLATE_NOOP("achievements", "Skipped"),              QT_TRANSLATE_NOOP("achievements", "Let a single hog skip over the surface of the water for at least 5 times."),                   "skipped",    "1", "hidden"},
     {"cgunman",  QT_TRANSLATE_NOOP("achievements", "Crazy Gunman"),         QT_TRANSLATE_NOOP("achievements", "Eliminate 3 hogs with a single shot of the sniper rifle."),                                    "cgunman",    "1", ""},
     */
-    {0, 0, 0, 0, 0, 0} // "terminator" line
+    { {0, 0, 0, 0, 0, 0} } // "terminator" line
 };

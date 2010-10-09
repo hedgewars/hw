@@ -17,7 +17,6 @@
 *)
 
 {$INCLUDE "options.inc"}
-{$INLINE ON}
 
 unit uMisc;
 interface
@@ -165,9 +164,9 @@ function  EnumToStr(const en : TSound) : shortstring; overload;
 function  EnumToStr(const en : TAmmoType) : shortstring; overload;
 function  EnumToStr(const en : THogEffect) : shortstring; overload;
 procedure movecursor(dx, dy: LongInt);
-function  hwSign(r: hwFloat): LongInt;
-function  Min(a, b: LongInt): LongInt;
-function  Max(a, b: LongInt): LongInt;
+function  hwSign(r: hwFloat): LongInt; inline;
+function  Min(a, b: LongInt): LongInt; inline;
+function  Max(a, b: LongInt): LongInt; inline;
 procedure OutError(Msg: shortstring; isFatalError: boolean);
 procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
 procedure SDLTry(Assert: boolean; isFatal: boolean);
@@ -176,8 +175,10 @@ function  FloatToStr(n: hwFloat): shortstring;
 function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
 function  DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
+(*
 procedure AdjustColor(var Color: Longword);
 procedure SetKB(n: Longword);
+*)
 procedure SendKB;
 procedure SetLittle(var r: hwFloat);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
@@ -191,7 +192,7 @@ function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 function  endian(independent: LongWord): LongWord;
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
-function  RectToStr(Rect: TSDL_Rect): shortstring;
+(* function  RectToStr(Rect: TSDL_Rect): shortstring; *)
 {$ENDIF}
 procedure MakeScreenshot(filename: shortstring);
 
@@ -298,10 +299,18 @@ begin
 if not Assert then OutError(SDL_GetError, isFatal)
 end;
 
+(*
 procedure AdjustColor(var Color: Longword);
 begin
 Color:= SDL_MapRGB(PixelFormat, (Color shr 16) and $FF, (Color shr 8) and $FF, Color and $FF)
 end;
+
+procedure SetKB(n: Longword);
+begin
+KBnum:= n
+end;
+*)
+
 
 function IntToStr(n: LongInt): shortstring;
 begin
@@ -354,11 +363,6 @@ if _dY.isNegative then dY:= - dY;
 dX:= _dX.QWordValue / $100000000;
 if _dX.isNegative then dX:= - dX;
 DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI)
-end;
-
-procedure SetKB(n: Longword);
-begin
-KBnum:= n
 end;
 
 procedure SendKB;
@@ -657,11 +661,12 @@ begin
 writeln(f, GameTicks: 6, ': ', s);
 flush(f)
 end;
-
+(*
 function RectToStr(Rect: TSDL_Rect): shortstring;
 begin
 RectToStr:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
 end;
+*)
 {$ENDIF}
 
 function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
@@ -816,7 +821,7 @@ begin
         begin
             for i:= 0 to 7 do
             begin
-                assign(f, ExtractFileDir(ParamStr(2)) + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
+                assign(f, ExtractFileDir(ParamStr(2)) + '/' + cLogfileBase + inttostr(i) + '.log');
                 rewrite(f);
                 if IOResult = 0 then break;
             end;

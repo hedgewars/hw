@@ -70,6 +70,7 @@ class AbstractPage : public QWidget
  protected:
   AbstractPage(QWidget* parent = 0) {
     font14 = new QFont("MS Shell Dlg", 14);
+    setFocusPolicy(Qt::StrongFocus);
   }
   virtual ~AbstractPage() {};
 
@@ -216,6 +217,7 @@ public:
     QPushButton *BtnNewTeam;
     QPushButton *BtnEditTeam;
     QPushButton *BtnDeleteTeam;
+    QPushButton *BtnAssociateFiles;
     QLabel *LblNoEditTeam;
     QComboBox *CBTeamName;
     IconedGroupBox *AGGroupBox;
