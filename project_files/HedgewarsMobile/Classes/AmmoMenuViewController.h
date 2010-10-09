@@ -36,7 +36,7 @@
 @property (assign) BOOL isVisible;
 
 -(void) buttonPressed:(id)sender;
--(void) updateVisuals:(NSNotification *)object;
+-(void) updateAmmoVisuals;
 -(void) appearInView:(UIView *)container;
 -(void) disappear;
 

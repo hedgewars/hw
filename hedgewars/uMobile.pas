@@ -33,11 +33,12 @@ function  isApplePhone: Boolean; cdecl; external;
 {$ENDIF}
 function  isPhone: Boolean;
 procedure doRumble;
-procedure doSomethingWhen_AddProgress;
-procedure doSomethingWhen_FinishProgress;
-procedure doSomethingWhen_NewTurnBeginning;
-procedure doSomethingWhen_SaveBeganSynching;
-procedure doSomethingWhen_SaveFinishedSynching;
+procedure perfExt_AddProgress;
+procedure perfExt_FinishProgress;
+procedure perfExt_AmmoUpdate;
+procedure perfExt_NewTurnBeginning;
+procedure perfExt_SaveBeganSynching;
+procedure perfExt_SaveFinishedSynching;
 
 implementation
 
@@ -54,21 +55,28 @@ begin
     // fill me!
 end;
 
-procedure doSomethingWhen_AddProgress;
+procedure perfExt_AddProgress;
 begin
 {$IFDEF IPHONEOS}
     startSpinning();
 {$ENDIF}
 end;
 
-procedure doSomethingWhen_FinishProgress;
+procedure perfExt_FinishProgress;
 begin
 {$IFDEF IPHONEOS}
     stopSpinning();
 {$ENDIF}
 end;
 
-procedure doSomethingWhen_NewTurnBeginning;
+procedure perfExt_AmmoUpdate;
+begin
+{$IFDEF IPHONEOS}
+    updateVisualsNewTurn();
+{$ENDIF}
+end;
+
+procedure perfExt_NewTurnBeginning;
 begin
 {$IFDEF IPHONEOS}
     clearView();
@@ -76,14 +84,14 @@ begin
 {$ENDIF}
 end;
 
-procedure doSomethingWhen_SaveBeganSynching;
+procedure perfExt_SaveBeganSynching;
 begin
 {$IFDEF IPHONEOS}
     replayBegan();
 {$ENDIF}
 end;
 
-procedure doSomethingWhen_SaveFinishedSynching;
+procedure perfExt_SaveFinishedSynching;
 begin
 {$IFDEF IPHONEOS}
     replayFinished();

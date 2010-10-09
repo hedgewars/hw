@@ -47,7 +47,7 @@ function  GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 var shoppa: boolean;
 
 implementation
-uses uMisc, uGears, uWorld, uLocale, uConsole;
+uses uMisc, uGears, uWorld, uLocale, uConsole, uMobile;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
@@ -246,7 +246,8 @@ with Hedgehog do
                 SwitchNotHeldAmmo(Hedgehog)
                 end
             end
-    end
+    end;
+perfExt_NewTurnBeginning;
 end;
 
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
@@ -354,7 +355,8 @@ with Hedgehog do
         else
             ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0;
         end
-    end
+    end;
+perfExt_NewTurnBeginning;
 end;
 
 procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);

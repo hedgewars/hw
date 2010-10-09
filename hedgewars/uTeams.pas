@@ -225,7 +225,7 @@ repeat
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
 
 CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
-doSomethingWhen_NewTurnBeginning();
+perfExt_AmmoUpdate
 end;
 
 procedure AfterSwitchHedgehog;

@@ -29,7 +29,7 @@
 #define BUFFER_SIZE 255     // like in original frontend
 
 @implementation GameSetup
-@synthesize systemSettings, gameConfig, savePath;
+@synthesize systemSettings, gameConfig, savePath, menuStyle;
 
 -(id) initWithDictionary:(NSDictionary *)gameDictionary {
     if (self = [super init]) {
@@ -38,6 +38,7 @@
         // should check they exist and throw and exection if not
         NSDictionary *dictSett = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
         self.systemSettings = dictSett;
+        self.menuStyle = [[dictSett objectForKey:@"menu"] boolValue];
         [dictSett release];
 
         self.gameConfig = [gameDictionary objectForKey:@"game_dictionary"];

@@ -46,12 +46,18 @@
     CGPoint startingPoint;
     BOOL isSegmentVisible;
     BOOL isAttacking;
+    
+    // stuff initialized externally
+    BOOL isNetGame;
+    BOOL useClassicMenu;
 }
 
 @property (nonatomic,retain) id popoverController;
 @property (nonatomic,retain) InGameMenuViewController *popupMenu;
 @property (nonatomic,retain) HelpPageViewController *helpPage;
 @property (nonatomic,retain) AmmoMenuViewController *amvc;
+@property (assign) BOOL isNetGame;
+@property (assign) BOOL useClassicMenu;
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;

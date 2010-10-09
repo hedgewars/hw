@@ -285,7 +285,7 @@ begin
     else
     begin
         LoadRecordFromFile(recordFileName);
-        doSomethingWhen_SaveBeganSynching();
+        perfExt_SaveBeganSynching();
     end;
 
     ScriptOnGameInit;

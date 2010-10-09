@@ -77,7 +77,7 @@
             [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];
             break;
         case 60:    //getReady
-            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"ready"];
+            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"menu"];
             break;
         default:
             DLog(@"Wrong tag");
@@ -107,9 +107,10 @@
             return 2;
             break;
         case 2:     // other stuff
-            return 1;
+            return 2;
             break;
         default:
+            DLog(@"Nope");
             break;
     }
     return 0;
@@ -210,12 +211,10 @@
                 switchContent.on = [[self.settingsDictionary objectForKey:@"alternate"] boolValue];
                 switchContent.tag = 30;
             } else {
-                /*
-                cell.textLabel.text = NSLocalizedString(@"Get Ready Dialogue", @"");
-                cell.detailTextLabel.text = NSLocalizedString(@"Pause for 5 seconds between turns",@"");
-                switchContent.on = [[self.settingsDictionary objectForKey:@"ready"] boolValue];
+                cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
+                cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
+                switchContent.on = [[self.settingsDictionary objectForKey:@"menu"] boolValue];
                 switchContent.tag = 60;
-                */
             }
             break;
         default:

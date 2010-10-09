@@ -458,6 +458,7 @@ begin
 {$IFDEF DEBUGFILE}
     AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));
 {$ENDIF}
+    perfExt_NewTurnBeginning();
 end;
 
 procedure chSay(var s: shortstring);

@@ -43,7 +43,7 @@
 #define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc;
+@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -307,9 +307,9 @@
         case 10:
             playSound(@"clickSound");
             HW_pause();
-            if (amvc.isVisible) {
+            if (self.amvc.isVisible) {
                 doDim();
-                [amvc disappear];
+                [self.amvc disappear];
             }
             removeConfirmationInput();
             [self showPopover];
@@ -317,20 +317,22 @@
         case 11:
             playSound(@"clickSound");
             removeConfirmationInput();
-            HW_ammoMenu();
             
-            // TODO: removal and multimonitor experience
-            if (self.amvc == nil)
-                self.amvc = [[AmmoMenuViewController alloc] init];
-
-            if (self.amvc.isVisible) {
-                doDim();
-                [self.amvc disappear];
-            } else {
-                doNotDim();
-                [self.amvc appearInView:self.view];
+            if (self.useClassicMenu)
+                HW_ammoMenu();
+            else {
+                // TODO: removal and multimonitor experience
+                if (self.amvc == nil)
+                    self.amvc = [[AmmoMenuViewController alloc] init];
+                
+                if (self.amvc.isVisible) {
+                    doDim();
+                    [self.amvc disappear];
+                } else {
+                    doNotDim();
+                    [self.amvc appearInView:self.view];
+                }
             }
-            
             break;
         default:
             DLog(@"Nope");

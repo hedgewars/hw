@@ -33,7 +33,7 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updateVisuals:)
+                                             selector:@selector(updateAmmoVisuals)
                                                  name:@"updateAmmoVisuals"
                                                object:nil];
      
@@ -59,7 +59,7 @@
 
 -(void) viewWillAppear:(BOOL)animated {
     if (self.buttonsArray != nil)
-        [self updateVisuals:nil];
+        [self updateAmmoVisuals];
     [super viewWillAppear:animated];
 }
 
@@ -105,7 +105,7 @@
         [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitleColor:UICOLOR_HW_YELLOW_TEXT forState:UIControlStateNormal];
         button.titleLabel.backgroundColor = [UIColor blackColor];
-        button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+        button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
         [button.titleLabel.layer setCornerRadius:3];
         [button.titleLabel.layer setMasksToBounds:YES];
         button.titleLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
@@ -127,10 +127,10 @@
     [[dict objectForKey:@"spinner"] stopAnimating];
     self.weaponsImage = [dict objectForKey:@"image"];
     self.buttonsArray = [dict objectForKey:@"array"];
-    [self updateVisuals:nil];
+    [self updateAmmoVisuals];
 }
 
--(void) updateVisuals:(NSNotification *) object {
+-(void) updateAmmoVisuals {
     unsigned char *loadout = HW_getAmmoCounts();
     int turns = HW_getTurnsForCurrentTeam();
 
@@ -153,35 +153,40 @@
     for (int i = 0; i < HW_getNumberOfWeapons(); i++) {
         UIButton *button = [self.buttonsArray objectAtIndex:i];
         if (loadout[i] > 0) {
-            /*if (button.enabled == NO) {
+            if (button.enabled == NO) {
                 int x_src = ((i*32)/(int)self.weaponsImage.size.height)*32;
                 int y_src = (i*32)%(int)self.weaponsImage.size.height;
                 UIImage *img = [self.weaponsImage cutAt:CGRectMake(x_src, y_src, 32, 32)];
                 [button setBackgroundImage:img forState:UIControlStateNormal];
-            }*/
+            }
             button.enabled = YES;
             button.layer.borderColor = [UICOLOR_HW_YELLOW_TEXT CGColor];
         } else {
-            /*if (button.enabled == YES) {
-                int x_src = ((i*32)/(int)self.weaponsImage.size.height)*32;
-                int y_src = (i*32)%(int)self.weaponsImage.size.height;
-                UIImage *img = [self.weaponsImage cutAt:CGRectMake(x_src, y_src, 32, 32)];
-                [button setBackgroundImage:img forState:UIControlStateNormal];
-            }*/
+            if (button.enabled == YES)
+                [button setBackgroundImage:nil forState:UIControlStateNormal];
             button.enabled = NO;
             button.layer.borderColor = [[UIColor darkGrayColor] CGColor];
-            //NSLog(@"disabled: %d",button.tag);
         }
         
         if (button.enabled == YES) {
             if (delay[i]-turns >= 0) {
-            //    NSLog(@"delayed(%d) %d",delay[i], button.tag);
                 button.layer.borderColor = [[UIColor lightGrayColor] CGColor];
                 [button setTitle:[NSString stringWithFormat:@" %d ",delay[i]-turns+1] forState:UIControlStateNormal];
+                if (button.enabled == YES) {
+                    int x_src = ((i*32)/(int)self.weaponsImage.size.height)*32;
+                    int y_src = (i*32)%(int)self.weaponsImage.size.height;
+                    UIImage *img = [self.weaponsImage cutAt:CGRectMake(x_src, y_src, 32, 32)];
+                    [button setBackgroundImage:[img convertToGrayScale] forState:UIControlStateNormal];
+                }
             } else {
-             //   NSLog(@"enabled %d",button.tag);
                 button.layer.borderColor = [UICOLOR_HW_YELLOW_TEXT CGColor];
                 [button setTitle:@"" forState:UIControlStateNormal];
+                if (button.enabled == YES) {
+                    int x_src = ((i*32)/(int)self.weaponsImage.size.height)*32;
+                    int y_src = (i*32)%(int)self.weaponsImage.size.height;
+                    UIImage *img = [self.weaponsImage cutAt:CGRectMake(x_src, y_src, 32, 32)];
+                    [button setBackgroundImage:img forState:UIControlStateNormal];
+                }
             }
         }
     }

@@ -31,11 +31,13 @@
     
     NSString *savePath;
     BOOL isNetGame;
+    BOOL menuStyle;
 }
 
 @property (nonatomic, retain) NSDictionary *systemSettings;
 @property (nonatomic, retain) NSDictionary *gameConfig;
 @property (nonatomic, retain) NSString *savePath;
+@property (assign) BOOL menuStyle;
 
 -(id) initWithDictionary:(NSDictionary *)gameDictionary;
 -(void) engineProtocol;

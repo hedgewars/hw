@@ -1271,7 +1271,7 @@ begin
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
 
-        doSomethingWhen_AddProgress();
+        perfExt_AddProgress();
     end;
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
@@ -1298,7 +1298,7 @@ procedure FinishProgress;
 begin
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
-    doSomethingWhen_FinishProgress();
+    perfExt_FinishProgress();
 end;
 
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);

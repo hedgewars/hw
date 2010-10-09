@@ -68,7 +68,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         if isSoundEnabled then playMusic;
                         GameType:= gmtLocal;
                         InitIPC;
-                        doSomethingWhen_SaveFinishedSynching();
+                        perfExt_SaveFinishedSynching();
                         end;
                end
           else ProcessGears

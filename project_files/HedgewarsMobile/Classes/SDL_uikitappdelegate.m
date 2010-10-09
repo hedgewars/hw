@@ -118,10 +118,12 @@ int main (int argc, char *argv[]) {
     if ([isNetGameNum boolValue] == NO)
         [setup startThread:@"engineProtocol"];
     const char **gameArgs = [setup getSettings:[gameDictionary objectForKey:@"savefile"]];
+    NSNumber *menuStyle = [NSNumber numberWithBool:setup.menuStyle];
     [setup release];
 
     // since the sdlwindow is not yet created, we add the overlayController with a delay
-    [self performSelector:@selector(displayOverlayLater:) withObject:isNetGameNum afterDelay:0.1];
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:isNetGameNum,@"net",menuStyle,@"menu",nil];
+    [self performSelector:@selector(displayOverlayLater:) withObject:dict afterDelay:0.1];
 
     // this is the pascal fuction that starts the game (wrapped around isInGame)
     isInGame = YES;
@@ -129,7 +131,8 @@ int main (int argc, char *argv[]) {
     isInGame = NO;
     free(gameArgs);
 
-    [uiwindow makeKeyAndVisible];
+    [self.uiwindow makeKeyAndVisible];
+    [self.uiwindow bringSubviewToFront:self.mainViewController.view];
     
     UIView *refBlackView = [gameWindow viewWithTag:BLACKVIEW_TAG];
     UIView *refSecondBlackView = [self.uiwindow viewWithTag:SECONDBLACKVIEW_TAG];
@@ -143,9 +146,12 @@ int main (int argc, char *argv[]) {
 }
 
 // overlay with controls, become visible later, with a transparency effect
--(void) displayOverlayLater:(NSNumber *)isNetGame {
+-(void) displayOverlayLater:(id) object {
+    NSDictionary *dict = (NSDictionary *)object;
     OverlayViewController *overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
-
+    overlayController.isNetGame = [[dict objectForKey:@"net"] boolValue];
+    overlayController.useClassicMenu = [[dict objectForKey:@"menu"] boolValue];
+    
     UIWindow *gameWindow;
     if ([[UIScreen screens] count] > 1)
         gameWindow = self.uiwindow;
@@ -171,31 +177,22 @@ int main (int argc, char *argv[]) {
     self.uiwindow.backgroundColor = [UIColor blackColor];
     [self.uiwindow makeKeyAndVisible];
 
-    if ([[UIScreen screens]count] > 1) {
-        /*
-        CGSize maxSize = CGSizeZero;
-        UIScreenMode *screenMode = nil;
-        for (UIScreenMode *mode in [[[UIScreen screens] objectAtIndex:1] availableModes]) {
-            if (mode.size.width > maxSize.width) {
-                maxSize = mode.size;
-                screenMode = mode;
-            }
-        }
-        */
+    // set working directory to resource path
+    [[NSFileManager defaultManager] changeCurrentDirectoryPath:[[NSBundle mainBundle] resourcePath]];
+
+    // check for dual monitor support
+    if ([[UIScreen screens] count] > 1) {
         DLog(@"dual head mode ftw");
         self.secondWindow = [[UIWindow alloc] initWithFrame:[[[UIScreen screens] objectAtIndex:1] bounds]];
         self.secondWindow.backgroundColor = [UIColor blackColor];
         self.secondWindow.screen = [[UIScreen screens] objectAtIndex:1];
-        UIImage *titleImage = [UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"title.png"]];
+        UIImage *titleImage = [UIImage imageWithContentsOfFile:@"title.png"];
         UIImageView *titleView = [[UIImageView alloc] initWithImage:titleImage];
         titleView.center = self.secondWindow.center;
         [self.secondWindow addSubview:titleView];
         [titleView release];
         [self.secondWindow makeKeyAndVisible];
     }
-    
-    // set working directory to resource path
-    [[NSFileManager defaultManager] changeCurrentDirectoryPath:[[NSBundle mainBundle] resourcePath]];
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {
