@@ -597,16 +597,16 @@
                 }
             } else
                 initialDistanceForPinching = currentDistanceOfPinching;
-
             break;
         default:
+            DLog(@"Nope");
             break;
     }
 }
 
 #pragma mark -
 #pragma mark Functions called by pascal
-void setGameRunning(BOOL value) {
+void inline setGameRunning(BOOL value) {
     isGameRunning = value;
 }
 
@@ -653,8 +653,10 @@ void clearView() {
     theSegment.alpha = 0;
     [UIView commitAnimations];
 
-    [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:ANIMATION_DURATION];
-    [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:ANIMATION_DURATION];
+    if (theButton)
+        [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:ANIMATION_DURATION];
+    if (theSegment)
+        [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:ANIMATION_DURATION];
 
     cachedGrenadeTime = 2;
 }

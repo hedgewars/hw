@@ -276,7 +276,7 @@ void HWForm::onFrontendFullscreen(bool value)
 
 void HWForm::keyReleaseEvent(QKeyEvent *event)
 {
-  if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Backspace)
+  if (event->key() == Qt::Key_Escape /*|| event->key() == Qt::Key_Backspace*/ )
     this->GoBack();
 }
 

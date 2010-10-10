@@ -41,6 +41,7 @@ procedure perfExt_SaveBeganSynching;
 procedure perfExt_SaveFinishedSynching;
 
 implementation
+uses uTeams;
 
 function isPhone: Boolean;
 begin
@@ -72,6 +73,8 @@ end;
 procedure perfExt_AmmoUpdate;
 begin
 {$IFDEF IPHONEOS}
+    if (CurrentTeam^.ExtDriven) or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
+        exit(); // the other way around throws a compiler error
     updateVisualsNewTurn();
 {$ENDIF}
 end;

@@ -17,6 +17,7 @@ uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat,
      uGears, uSound, hwengine, uAmmos, uLocale; // don't change the order!
 
 {$INCLUDE "config.inc"}
+type PPByte = ^PByte;
 
 implementation
 {$IFDEF HWLIBRARY}
@@ -276,33 +277,24 @@ begin
         SetWeapon(TAmmoType(whichone+1));
 end;
 
-function HW_getAmmoCounts: PByte; cdecl; export;
-var counts : PByte;
-    a : PHHAmmo;
+function HW_getAmmoCounts(counts: PLongInt): LongInt; cdecl; export;
+var a : PHHAmmo;
     slot, index: LongInt;
 begin
     if (CurrentTeam^.ExtDriven) or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
-        exit(nil);
+        exit(-1);
     a:= CurrentHedgehog^.Ammo;
-    GetMem(counts,ord(High(TAmmoType)));
-    FillChar(counts^,ord(High(TAmmoType)),0);
     for slot:= 0 to cMaxSlotIndex do
         for index:= 0 to cMaxSlotAmmoIndex do
-            counts[ord(a^[slot,index].AmmoType)-1]:= byte(a^[slot,index].Count);
-    exit(counts);
-    // leak?
+            counts[ord(a^[slot,index].AmmoType)-1]:= a^[slot,index].Count;
+    exit(0);
 end;
 
-function HW_getAmmoDelays: PByte; cdecl; export;
-var skipTurns : PByte;
-    a : TAmmoType;
+procedure HW_getAmmoDelays (skipTurns: PByte); cdecl; export;
+var a : TAmmoType;
 begin
-    GetMem(skipTurns,ord(High(TAmmoType)));
-    FillChar(skipTurns^,ord(High(TAmmoType)),0);
     for a:= Low(TAmmoType) to High(TAmmoType) do
         skipTurns[ord(a)-1]:= byte(Ammoz[a].SkipTurns);
-    exit(skipTurns);
-    // leak?
 end;
 
 function HW_getTurnsForCurrentTeam:LongInt; cdecl; export;

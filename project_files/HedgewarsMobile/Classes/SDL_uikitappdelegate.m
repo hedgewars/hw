@@ -158,7 +158,7 @@ int main (int argc, char *argv[]) {
     else
         gameWindow = [[UIApplication sharedApplication] keyWindow];
     [gameWindow addSubview:overlayController.view];
-    [overlayController release];
+    //[overlayController release];
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (or even using a nib)

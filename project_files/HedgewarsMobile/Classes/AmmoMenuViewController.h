@@ -26,7 +26,7 @@
     UIImage *weaponsImage;
     NSArray *buttonsArray;
     
-    unsigned char *delay;
+    uint8_t *delay;
     CGPoint startingPoint;
     BOOL isVisible;
 }

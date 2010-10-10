@@ -183,12 +183,12 @@ void createSchemeNamed (NSString *nameWithoutExt) {
     [theScheme release];
 }
 
-BOOL rotationManager (UIInterfaceOrientation interfaceOrientation) {
+BOOL inline rotationManager (UIInterfaceOrientation interfaceOrientation) {
     return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
            (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
 }
 
-NSInteger randomPort () {
+NSInteger inline randomPort () {
     srandom(time(NULL));
     return (random() % 64511) + 1024;
 }

@@ -1211,7 +1211,7 @@ begin
 {$ENDIF}
 
     // set view port to whole window
-    if rotationQt = 0 then
+    if (rotationQt = 0) or (rotationQt = 180) then
         glViewport(0, 0, cScreenWidth, cScreenHeight)
     else
         glViewport(0, 0, cScreenHeight, cScreenWidth);
