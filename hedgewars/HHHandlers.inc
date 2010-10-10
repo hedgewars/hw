@@ -327,9 +327,9 @@ with CurrentHedgehog^.Gear^,
             if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) = 0) and ((GameFlags and gfInfAttack) = 0) then
                 begin
                 TurnTimeLeft:= Ammoz[CurAmmoType].TimeAfterTurn;
-                State:= State or gstAttacked
                 end
-            else ApplyAmmoChanges(CurrentHedgehog^)
+            else ApplyAmmoChanges(CurrentHedgehog^);
+            if (GameFlags and gfInfAttack) <> 0 then State:= State or gstAttacked;
             end;
         end
     else

@@ -696,6 +696,7 @@ end;
 
 procedure ProcessGears;
 const delay: LongWord = 0;
+      delay2: LongWord = 0;
     step: (stDelay, stChDmg, stSweep, stTurnReact,
             stAfterDelay, stChWin, stWater, stChWin2, stHealth,
             stSpawn, stNTurn) = stDelay;
@@ -841,6 +842,20 @@ case step of
                 end;
             step:= Low(step)
             end;
+    end
+else if ((GameFlags and gfInfAttack) <> 0) then
+    begin
+    if delay2 = 0 then
+        delay2:= cInactDelay 
+    else
+        dec(delay2);
+
+    if delay2 = 0 then
+        begin
+        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstAttacked;
+        CheckNoDamage;
+        CheckForWin
+        end
     end;
 
 if TurnTimeLeft > 0 then
