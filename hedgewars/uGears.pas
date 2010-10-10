@@ -924,7 +924,10 @@ begin
         begin
         t^.PortalCounter:= 0;
         t:= t^.NextGear
-        end
+        end;
+   
+    if (GameFlags and gfResetWeps) <> 0 then
+        ResetWeapons
 end;
 
 procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
