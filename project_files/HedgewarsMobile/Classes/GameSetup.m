@@ -442,7 +442,7 @@
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
     NSString *rotation;
-    if ([[UIScreen screens] count] > 1) {
+    if (IS_DUALHEAD()) {
         CGRect screenBounds = [[[UIScreen screens] objectAtIndex:1] bounds];
         width = (int) screenBounds.size.width;
         height = (int) screenBounds.size.height;

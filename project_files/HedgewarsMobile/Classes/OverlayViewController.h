@@ -50,6 +50,9 @@
     // stuff initialized externally
     BOOL isNetGame;
     BOOL useClassicMenu;
+    
+    // dual head support
+    NSInteger initialScreenCount;
 }
 
 @property (nonatomic,retain) id popoverController;
@@ -71,6 +74,7 @@
 -(void) dismissPopover;
 -(void) dimOverlay;
 -(void) activateOverlay;
+-(void) cleanup;
 
 @end
 

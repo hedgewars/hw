@@ -86,30 +86,36 @@ int main (int argc, char *argv[]) {
 // main routine for calling the actual game engine
 -(void) startSDLgame:(NSDictionary *)gameDictionary {
     UIWindow *gameWindow;
-    if ([[UIScreen screens] count] > 1)
+    if (IS_DUALHEAD())
         gameWindow = self.secondWindow;
     else
         gameWindow = self.uiwindow;
+
     UIView *blackView = [[UIView alloc] initWithFrame:gameWindow.frame];
     blackView.backgroundColor = [UIColor blackColor];
     blackView.opaque = YES;
     blackView.tag = BLACKVIEW_TAG;
-    [gameWindow addSubview:blackView];
-    [blackView release];
-    
-    if ([[UIScreen screens] count] > 1) {
+    [gameWindow addSubview:blackView];    
+    if (IS_DUALHEAD()) {
+        blackView.alpha = 0;
+        [UIView beginAnimations:@"fading to game first" context:NULL];
+        [UIView setAnimationDuration:1];
+        blackView.alpha = 1;
+        [UIView commitAnimations];
+        
         UIView *secondBlackView = [[UIView alloc] initWithFrame:self.uiwindow.frame];
         secondBlackView.backgroundColor = [UIColor blackColor];
         secondBlackView.opaque = YES;
         secondBlackView.tag = SECONDBLACKVIEW_TAG;
         secondBlackView.alpha = 0;
         [self.uiwindow addSubview:secondBlackView];
-        [UIView beginAnimations:@"fading to game" context:NULL];
+        [UIView beginAnimations:@"fading to game second" context:NULL];
         [UIView setAnimationDuration:1];
         secondBlackView.alpha = 1;
         [UIView commitAnimations];
         [secondBlackView release];
     }
+    [blackView release];
 
     // pull out useful configuration info from various files
     GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
@@ -153,12 +159,12 @@ int main (int argc, char *argv[]) {
     overlayController.useClassicMenu = [[dict objectForKey:@"menu"] boolValue];
     
     UIWindow *gameWindow;
-    if ([[UIScreen screens] count] > 1)
+    if (IS_DUALHEAD())
         gameWindow = self.uiwindow;
     else
         gameWindow = [[UIApplication sharedApplication] keyWindow];
     [gameWindow addSubview:overlayController.view];
-    //[overlayController release];
+    [overlayController release];
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (or even using a nib)
@@ -181,7 +187,7 @@ int main (int argc, char *argv[]) {
     [[NSFileManager defaultManager] changeCurrentDirectoryPath:[[NSBundle mainBundle] resourcePath]];
 
     // check for dual monitor support
-    if ([[UIScreen screens] count] > 1) {
+    if (IS_DUALHEAD()) {
         DLog(@"dual head mode ftw");
         self.secondWindow = [[UIWindow alloc] initWithFrame:[[[UIScreen screens] objectAtIndex:1] bounds]];
         self.secondWindow.backgroundColor = [UIColor blackColor];

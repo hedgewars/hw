@@ -259,7 +259,7 @@ void playSound (NSString *snd) {
     AudioServicesPlaySystemSound(soundID);
 }
 
-NSArray *getAvailableColors(void) {
+NSArray inline *getAvailableColors(void) {
     return [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInt:0x4376e9],     // bluette
                                      [NSNumber numberWithUnsignedInt:0x3e9321],     // greeeen
                                      [NSNumber numberWithUnsignedInt:0xa23dbb],     // violett

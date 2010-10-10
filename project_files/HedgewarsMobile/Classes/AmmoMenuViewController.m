@@ -188,7 +188,8 @@
     UIButton *theButton = (UIButton *)sender;
     HW_setWeapon(theButton.tag);
     playSound(@"clickSound");
-    [self disappear];
+    if (IS_DUALHEAD() == NO)
+        [self disappear];
 }
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {

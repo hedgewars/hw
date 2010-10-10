@@ -32,7 +32,7 @@
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
 #define HIDING_TIME_NEVER   [NSDate dateWithTimeIntervalSinceNow:10000]
-#define doDim()             [dimTimer setFireDate: ([[UIScreen screens] count] == 1) ? HIDING_TIME_DEFAULT : HIDING_TIME_NEVER]
+#define doDim()             [dimTimer setFireDate: (IS_DUALHEAD()) ? HIDING_TIME_NEVER : HIDING_TIME_DEFAULT]
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
 #define CONFIRMATION_TAG 5959
@@ -60,13 +60,13 @@
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
-            if ([[UIScreen screens] count] == 1)
+            if (IS_DUALHEAD() == NO)
                 sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
             HW_setLandscape(YES);
             break;
         case UIDeviceOrientationLandscapeRight:
-            if ([[UIScreen screens] count] == 1)
+            if (IS_DUALHEAD() == NO)
                 sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
             HW_setLandscape(YES);
@@ -111,17 +111,19 @@
     self.view.alpha = 0;
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
 
+    initialScreenCount = [[UIScreen screens] count];
+    
     // set initial orientation wrt the controller orientation
     UIDeviceOrientation orientation = self.interfaceOrientation;
     UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
-            if ([[UIScreen screens] count] == 1)
+            if (IS_DUALHEAD() == NO)
                 sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
             break;
         case UIDeviceOrientationLandscapeRight:
-            if ([[UIScreen screens] count] == 1)
+            if (IS_DUALHEAD() == NO)
                 sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
             break;
@@ -132,7 +134,7 @@
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
 
-    dimTimer = [[NSTimer alloc] initWithFireDate:([[UIScreen screens] count] == 1) ? [NSDate dateWithTimeIntervalSinceNow:6] : HIDING_TIME_NEVER
+    dimTimer = [[NSTimer alloc] initWithFireDate:(IS_DUALHEAD()) ? HIDING_TIME_NEVER : [NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
                                           target:self
                                         selector:@selector(dimOverlay)
@@ -158,11 +160,49 @@
                                                  name:@"remove overlay"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(numberOfScreensIncreased)
+                                                 name:UIScreenDidConnectNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(numberOfScreensDecreased)
+                                                 name:UIScreenDidDisconnectNotification
+                                               object:nil];
+    
     [UIView beginAnimations:@"showing overlay" context:NULL];
     [UIView setAnimationDuration:1];
     self.view.alpha = 1;
     [UIView commitAnimations];
 }
+
+-(void) numberOfScreensIncreased {
+    if (initialScreenCount == 1) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New display detected"
+                                                        message:NSLocalizedString(@"Hedgewars supports multi-monitor configurations, but the screen has to be connected before launching the game.",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        if (HW_isPaused() == NO)
+            HW_pause();
+    }
+}
+
+-(void) numberOfScreensDecreased {
+    if (initialScreenCount == 2) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh noes! Display disconnected"
+                                                        message:NSLocalizedString(@"A monitor has been disconnected while playing and this has ended the match! You need to restart the game if you wish to use the second display again.",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        [self cleanup];
+    }
+}
+
 
 -(void) showHelp:(id) sender {
     if (self.helpPage == nil)
@@ -307,7 +347,7 @@
         case 10:
             playSound(@"clickSound");
             HW_pause();
-            if (self.amvc.isVisible) {
+            if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
                 doDim();
                 [self.amvc disappear];
             }
@@ -318,10 +358,7 @@
             playSound(@"clickSound");
             removeConfirmationInput();
             
-            if (self.useClassicMenu)
-                HW_ammoMenu();
-            else {
-                // TODO: removal and multimonitor experience
+            if (IS_DUALHEAD() || self.useClassicMenu == NO) {
                 if (self.amvc == nil)
                     self.amvc = [[AmmoMenuViewController alloc] init];
                 
@@ -332,6 +369,8 @@
                     doNotDim();
                     [self.amvc appearInView:self.view];
                 }
+            } else {
+                HW_ammoMenu();
             }
             break;
         default:
@@ -411,7 +450,7 @@
     if (isPopoverVisible)
         [self dismissPopover];
 
-    if (amvc.isVisible) {
+    if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
         doDim();
         [self.amvc disappear];
     }
@@ -621,7 +660,7 @@ void startSpinning() {
         offset = -120;
     else
         offset = 120;
-    if ([[UIScreen screens] count] > 1)
+    if (IS_DUALHEAD())
         indicator.center = CGPointMake(theWindow.frame.size.width/2, theWindow.frame.size.height/2 + offset);
     else
         indicator.center = CGPointMake(theWindow.frame.size.width/2 + offset, theWindow.frame.size.height/2);
@@ -643,7 +682,7 @@ void stopSpinning() {
 
 // called by CCHandlers from chNextTurn
 void clearView() {
-    UIWindow *theWindow = ([[UIScreen screens] count] == 1) ? [[UIApplication sharedApplication] keyWindow] : [SDLUIKitDelegate sharedAppDelegate].uiwindow;
+    UIWindow *theWindow = (IS_DUALHEAD()) ? [SDLUIKitDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow];
     UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
     UISegmentedControl *theSegment = (UISegmentedControl *)[theWindow viewWithTag:GRENADE_TAG];
 

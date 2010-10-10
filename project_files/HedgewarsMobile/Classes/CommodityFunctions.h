@@ -51,14 +51,17 @@
 #define UICOLOR_HW_YELLOW_TEXT  [UIColor colorWithRed:(CGFloat)0xF0/255 green:(CGFloat)0xD0/255 blue:0 alpha:1]
 #define UICOLOR_HW_DARKBLUE     [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:1]
 
+#define IS_DUALHEAD()           ([[UIScreen screens] count] > 1)
+
+
 void createTeamNamed (NSString *nameWithoutExt);
 void createWeaponNamed (NSString *nameWithoutExt, int type);
 void createSchemeNamed (NSString *nameWithoutExt);
-void print_free_memory ();
+void print_free_memory (void);
 void playSound (NSString *snd);
 void popError (const char *title, const char *message);
 BOOL rotationManager (UIInterfaceOrientation interfaceOrientation);
-BOOL isApplePhone ();
-NSInteger randomPort ();
-NSString *modelType ();
-NSArray *getAvailableColors(void);
+BOOL isApplePhone (void);
+NSInteger randomPort (void);
+NSString *modelType (void);
+NSArray *getAvailableColors (void);
