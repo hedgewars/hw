@@ -1743,15 +1743,18 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(TBW_disablegirders, 16);
     mapper->addMapping(TBW_disablelandobjects, 17);
     mapper->addMapping(TBW_aisurvival, 18);
-    mapper->addMapping(SB_DamageModifier, 19);
-    mapper->addMapping(SB_TurnTime, 20);
-    mapper->addMapping(SB_InitHealth, 21);
-    mapper->addMapping(SB_SuddenDeath, 22);
-    mapper->addMapping(SB_CaseProb, 23);
-    mapper->addMapping(SB_MinesTime, 24);
-    mapper->addMapping(SB_Mines, 25);
-    mapper->addMapping(SB_MineDuds, 26);
-    mapper->addMapping(SB_Explosives, 27);
+    mapper->addMapping(TBW_infattack, 19);
+    mapper->addMapping(TBW_resetweps, 20);
+    mapper->addMapping(TBW_perhogammo, 21);
+    mapper->addMapping(SB_DamageModifier, 22);
+    mapper->addMapping(SB_TurnTime, 23);
+    mapper->addMapping(SB_InitHealth, 24);
+    mapper->addMapping(SB_SuddenDeath, 25);
+    mapper->addMapping(SB_CaseProb, 26);
+    mapper->addMapping(SB_MinesTime, 27);
+    mapper->addMapping(SB_Mines, 28);
+    mapper->addMapping(SB_MineDuds, 29);
+    mapper->addMapping(SB_Explosives, 30);
 
     mapper->toFirst();
 }
