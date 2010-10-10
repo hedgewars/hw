@@ -23,7 +23,7 @@
 #import "CommodityFunctions.h"
 
 @implementation FlagsViewController
-@synthesize teamDictionary, flagArray, lastIndexPath;
+@synthesize teamDictionary, flagArray, communityArray, lastIndexPath;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -36,48 +36,73 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
 
-    self.flagArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:FLAGS_DIRECTORY() error:NULL];
+    NSMutableArray *array_na = [[NSMutableArray alloc] init];
+    NSMutableArray *array_cm = [[NSMutableArray alloc] init];
+    
+    for (NSString *name in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:FLAGS_DIRECTORY() error:NULL]) {
+        if ([name hasPrefix:@"cm_"]) {
+            NSString *processed = [name substringFromIndex:3];
+            [array_cm addObject:processed];
+        } else
+             [array_na addObject:name];
+    }
+    
+    self.flagArray = array_na;
+    [array_na release];
+    self.communityArray = array_cm;
+    [array_cm release];
 
     self.title = NSLocalizedString(@"Set team flag",@"");
 }
 
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    // reloadData needed because team might change
     [self.tableView reloadData];
-    [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
+    //[self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
 
 
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [flagArray count];
+    if (section == 0)
+        return [self.flagArray count];
+    else
+        return [self.communityArray count];
 }
 
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     static NSString *CellIdentifier = @"Cell";
+    NSInteger row = [indexPath row];
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
-    NSString *flag = [flagArray objectAtIndex:[indexPath row]];
-
-    NSString *flagFile = [[NSString alloc] initWithFormat:@"%@/%@", FLAGS_DIRECTORY(), flag];
+    NSString *flagName = nil;
+    NSArray *source = nil;
+    if ([indexPath section] == 0) {
+        source = self.flagArray;
+        flagName = [source objectAtIndex:row];
+    } else {
+        source = self.communityArray;
+        flagName = [NSString stringWithFormat:@"cm_%@",[source objectAtIndex:row]];
+    }
+    NSString *flagFile = [[NSString alloc] initWithFormat:@"%@/%@", FLAGS_DIRECTORY(), flagName];
     UIImage *flagSprite = [[UIImage alloc] initWithContentsOfFile:flagFile];
     [flagFile release];
     cell.imageView.image = flagSprite;
     [flagSprite release];
 
-    cell.textLabel.text = [flag stringByDeletingPathExtension];
-    if ([cell.textLabel.text isEqualToString:[self.teamDictionary objectForKey:@"flag"]]) {
+    cell.textLabel.text = [[source objectAtIndex:row] stringByDeletingPathExtension];
+    if ([[flagName stringByDeletingPathExtension] isEqualToString:[self.teamDictionary objectForKey:@"flag"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.lastIndexPath = indexPath;
     } else {
@@ -87,16 +112,40 @@
     return cell;
 }
 
+-(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+    NSString *sectionTitle = nil;
+    switch (section) {
+        case 0:
+            sectionTitle = NSLocalizedString(@"Worldwide", @"");
+            break;
+        case 1:
+            sectionTitle = NSLocalizedString(@"Community", @"");
+            break;
+        default:
+            DLog(@"nope");
+            break;
+    }
+    return sectionTitle;
+}
+
 
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-
-    if (newRow != oldRow) {
+    int newSection = [indexPath section];
+    int oldSection = (lastIndexPath != nil) ? [lastIndexPath section] : -1;
+    
+    if (newRow != oldRow || newSection != oldSection) {
+        NSString *flag = nil;
+        if ([indexPath section] == 0)
+            flag = [self.flagArray objectAtIndex:newRow];
+        else
+            flag = [NSString stringWithFormat:@"cm_%@",[self.communityArray objectAtIndex:newRow]];
+        
         // if the two selected rows differ update data on the hog dictionary and reload table content
-        [self.teamDictionary setValue:[[flagArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"flag"];
+        [self.teamDictionary setValue:[flag stringByDeletingPathExtension] forKey:@"flag"];
 
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
@@ -117,14 +166,17 @@
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
+    self.lastIndexPath = nil;
+    MSG_MEMCLEAN();
+    [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
     self.teamDictionary = nil;
     self.lastIndexPath = nil;
     self.flagArray = nil;
+    self.communityArray = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -133,6 +185,7 @@
     [teamDictionary release];
     [lastIndexPath release];
     [flagArray release];
+    [communityArray release];
     [super dealloc];
 }
 

@@ -26,11 +26,13 @@
     NSDictionary *teamDictionary;
 
     NSArray *flagArray;
+    NSArray *communityArray;
     NSIndexPath *lastIndexPath;
 }
 
 @property (nonatomic,retain) NSDictionary * teamDictionary;
 @property (nonatomic,retain) NSArray *flagArray;
+@property (nonatomic,retain) NSArray *communityArray;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
 
 @end
