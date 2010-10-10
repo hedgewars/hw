@@ -136,13 +136,19 @@ quint32 GameCFGWidget::getGameFlags() const
         result |= 0x80000;
     if (schemeData(18).toBool())
         result |= 0x100000;
+    if (schemeData(19).toBool())
+        result |= 0x200000;
+    if (schemeData(20).toBool())
+        result |= 0x400000;
+    if (schemeData(21).toBool())
+        result |= 0x800000;
 
     return result;
 }
 
 quint32 GameCFGWidget::getInitHealth() const
 {
-    return schemeData(21).toInt();
+    return schemeData(24).toInt();
 }
 
 QStringList GameCFGWidget::getFullConfig() const
@@ -150,14 +156,14 @@ QStringList GameCFGWidget::getFullConfig() const
     QStringList sl;
     sl.append("eseed " + pMapContainer->getCurrentSeed());
     sl.append(QString("e$gmflags %1").arg(getGameFlags()));
-    sl.append(QString("e$damagepct %1").arg(schemeData(19).toInt()));
-    sl.append(QString("e$turntime %1").arg(schemeData(20).toInt() * 1000));
-    sl.append(QString("e$minestime %1").arg(schemeData(24).toInt() * 1000));
-    sl.append(QString("e$landadds %1").arg(schemeData(25).toInt()));
-    sl.append(QString("e$sd_turns %1").arg(schemeData(22).toInt()));
-    sl.append(QString("e$casefreq %1").arg(schemeData(23).toInt()));
-    sl.append(QString("e$minedudpct %1").arg(schemeData(26).toInt()));
-    sl.append(QString("e$explosives %1").arg(schemeData(27).toInt()));
+    sl.append(QString("e$damagepct %1").arg(schemeData(22).toInt()));
+    sl.append(QString("e$turntime %1").arg(schemeData(23).toInt() * 1000));
+    sl.append(QString("e$minestime %1").arg(schemeData(27).toInt() * 1000));
+    sl.append(QString("e$landadds %1").arg(schemeData(28).toInt()));
+    sl.append(QString("e$sd_turns %1").arg(schemeData(25).toInt()));
+    sl.append(QString("e$casefreq %1").arg(schemeData(26).toInt()));
+    sl.append(QString("e$minedudpct %1").arg(schemeData(29).toInt()));
+    sl.append(QString("e$explosives %1").arg(schemeData(30).toInt()));
     sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
     sl.append(QString("e$mapgen %1").arg(pMapContainer->get_mapgen()));
     sl.append(QString("e$maze_size %1").arg(pMapContainer->get_maze_size()));

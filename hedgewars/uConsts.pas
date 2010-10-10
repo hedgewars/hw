@@ -353,6 +353,9 @@ const
     gfExplosives         = $00040000;
     gfDisableLandObjects = $00080000;
     gfAISurvival         = $00100000;
+    gfInfAttack          = $00200000;
+    gfResetWeps          = $00400000;
+    gfPerHogAmmo         = $00800000;
     // NOTE: When adding new game flags, ask yourself
     // if a "game start notice" would be useful. If so,
     // add one in uWorld.pas - look for "AddGoal".

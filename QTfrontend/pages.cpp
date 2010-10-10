@@ -1493,59 +1493,71 @@ PageScheme::PageScheme(QWidget* parent) :
 
     TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity.png");
     TBW_lowGravity->setToolTip("<b>" + ToggleButtonWidget::tr("Low Gravity") + "</b>:<br />" + tr("Lower gravity"));
-    glGMLayout->addWidget(TBW_lowGravity,1,0,1,1);
+    glGMLayout->addWidget(TBW_lowGravity,0,4,1,1);
 
     TBW_laserSight = new ToggleButtonWidget(gbGameModes, ":/res/btnLaserSight.png");
     TBW_laserSight->setToolTip("<b>" + ToggleButtonWidget::tr("Laser Sight") + "</b>:<br />" + tr("Assisted aiming with laser sight"));
-    glGMLayout->addWidget(TBW_laserSight,1,1,1,1);
+    glGMLayout->addWidget(TBW_laserSight,1,0,1,1);
 
     TBW_invulnerable = new ToggleButtonWidget(gbGameModes, ":/res/btnInvulnerable.png");
     TBW_invulnerable->setToolTip("<b>" + ToggleButtonWidget::tr("Invulnerable") + "</b>:<br />" + tr("All hogs have a personal forcefield"));
-    glGMLayout->addWidget(TBW_invulnerable,1,2,1,1);
+    glGMLayout->addWidget(TBW_invulnerable,1,1,1,1);
 
     TBW_mines = new ToggleButtonWidget(gbGameModes, ":/res/btnMines.png");
     TBW_mines->setToolTip("<b>" + ToggleButtonWidget::tr("Add Mines") + "</b>:<br />" + tr("Enable random mines"));
-    glGMLayout->addWidget(TBW_mines,1,3,1,1);
+    glGMLayout->addWidget(TBW_mines,1,2,1,1);
 
     TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric.png");
     TBW_vampiric->setToolTip("<b>" + ToggleButtonWidget::tr("Vampirism") + "</b>:<br />" + tr("Gain 80% of the damage you do back in health"));
-    glGMLayout->addWidget(TBW_vampiric,2,0,1,1);
+    glGMLayout->addWidget(TBW_vampiric,1,3,1,1);
 
     TBW_karma = new ToggleButtonWidget(gbGameModes, ":/res/btnKarma.png");
     TBW_karma->setToolTip("<b>" + ToggleButtonWidget::tr("Karma") + "</b>:<br />" + tr("Share your opponents pain, share their damage"));
-    glGMLayout->addWidget(TBW_karma,2,1,1,1);
+    glGMLayout->addWidget(TBW_karma,1,4,1,1);
 
     TBW_artillery = new ToggleButtonWidget(gbGameModes, ":/res/btnArtillery.png");
     TBW_artillery->setToolTip("<b>" + ToggleButtonWidget::tr("Artillery") + "</b>:<br />" + tr("Your hogs are unable to move, put your artillery skills to the test"));
-    glGMLayout->addWidget(TBW_artillery,2,2,1,1);
+    glGMLayout->addWidget(TBW_artillery,2,0,1,1);
 
     TBW_randomorder = new ToggleButtonWidget(gbGameModes, ":/res/btnRandomOrder.png");
     TBW_randomorder->setToolTip("<b>" + ToggleButtonWidget::tr("Random Order") + "</b>:<br />" + tr("Order of play is random instead of in room order."));
-    glGMLayout->addWidget(TBW_randomorder,2,3,1,1);
+    glGMLayout->addWidget(TBW_randomorder,2,1,1,1);
 
     TBW_king = new ToggleButtonWidget(gbGameModes, ":/res/btnKing.png");
     TBW_king->setToolTip("<b>" + ToggleButtonWidget::tr("King") + "</b>:<br />" + tr("Play with a King. If he dies, your side dies."));
-    glGMLayout->addWidget(TBW_king,3,0,1,1);
+    glGMLayout->addWidget(TBW_king,2,2,1,1);
 
     TBW_placehog = new ToggleButtonWidget(gbGameModes, ":/res/btnPlaceHog.png");
     TBW_placehog->setToolTip("<b>" + ToggleButtonWidget::tr("Place Hedgehogs") + "</b>:<br />" + tr("Take turns placing your hedgehogs before the start of play."));
-    glGMLayout->addWidget(TBW_placehog,3,1,1,1);
+    glGMLayout->addWidget(TBW_placehog,2,2,1,1);
 
     TBW_sharedammo = new ToggleButtonWidget(gbGameModes, ":/res/btnSharedAmmo.png");
     TBW_sharedammo->setToolTip("<b>" + ToggleButtonWidget::tr("Clan Shares Ammo") + "</b>:<br />" + tr("Ammo is shared between all teams that share a colour."));
-    glGMLayout->addWidget(TBW_sharedammo,3,2,1,1);
+    glGMLayout->addWidget(TBW_sharedammo,2,3,1,1);
 
     TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders.png");
     TBW_disablegirders->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Girders") + "</b>:<br />" + tr("Disable girders when generating random maps."));
-    glGMLayout->addWidget(TBW_disablegirders,3,3,1,1);
+    glGMLayout->addWidget(TBW_disablegirders,2,4,1,1);
 
     TBW_disablelandobjects = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableLandObjects.png");
     TBW_disablelandobjects->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Land Objects") + "</b>:<br />" + tr("Disable land objects when generating random maps."));
-    glGMLayout->addWidget(TBW_disablelandobjects,4,0,1,1);
+    glGMLayout->addWidget(TBW_disablelandobjects,3,0,1,1);
 
     TBW_aisurvival = new ToggleButtonWidget(gbGameModes, ":/res/btnAISurvival.png");
     TBW_aisurvival->setToolTip("<b>" + ToggleButtonWidget::tr("AI Survival Mode") + "</b>:<br />" + tr("AI respawns on death."));
-    glGMLayout->addWidget(TBW_aisurvival,4,1,1,1);
+    glGMLayout->addWidget(TBW_aisurvival,3,1,1,1);
+
+    TBW_infattack = new ToggleButtonWidget(gbGameModes, ":/res/btnInfAttack.png");
+    TBW_infattack->setToolTip("<b>" + ToggleButtonWidget::tr("Unlimited Attacks") + "</b>:<br />" + tr("Attacking does not end your turn."));
+    glGMLayout->addWidget(TBW_infattack,3,2,1,1);
+
+    TBW_resetweps = new ToggleButtonWidget(gbGameModes, ":/res/btnResetWeps.png");
+    TBW_resetweps->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Weapons") + "</b>:<br />" + tr("Weapons are reset to starting values each turn."));
+    glGMLayout->addWidget(TBW_resetweps,3,3,1,1);
+
+    TBW_perhogammo = new ToggleButtonWidget(gbGameModes, ":/res/btnPerHogAmmo.png");
+    TBW_perhogammo->setToolTip("<b>" + ToggleButtonWidget::tr("Per Hedgehog Ammo") + "</b>:<br />" + tr("Each hedgehog has its own ammo. It does not share with the team."));
+    glGMLayout->addWidget(TBW_perhogammo,3,4,1,1);
 
     // Right
     QLabel * l;

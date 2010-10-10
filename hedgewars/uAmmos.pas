@@ -45,13 +45,13 @@ function  GetAmmoByNum(num: Longword): PHHAmmo;
 function  GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 
 var shoppa: boolean;
+    StoreCnt: Longword;
 
 implementation
 uses uMisc, uGears, uWorld, uLocale, uConsole, uMobile;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
-    StoreCnt: Longword;
     ammoLoadout, ammoProbability, ammoDelay, ammoReinforcement: shortstring;
 
 procedure FillAmmoStore(Ammo: PHHAmmo; var cnts: TAmmoCounts);

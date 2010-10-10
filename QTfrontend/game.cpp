@@ -84,13 +84,13 @@ void HWGame::commonConfig()
         QList<HWTeam> teams = m_pTeamSelWidget->getPlayingTeams();
         for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it)
         {
-            HWProto::addStringListToBuffer(buf,
-                (*it).TeamGameConfig(gamecfg->getInitHealth()));
             HWProto::addStringToBuffer(buf, QString("eammloadt %1").arg(ammostr.mid(0, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammprob %1").arg(ammostr.mid(cAmmoNumber, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammdelay %1").arg(ammostr.mid(2 * cAmmoNumber, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammreinf %1").arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammstore"));
+            HWProto::addStringListToBuffer(buf,
+                (*it).TeamGameConfig(gamecfg->getInitHealth()));
         }
     }
     RawSendIPC(buf);

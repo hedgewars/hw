@@ -477,6 +477,9 @@ private:
     ToggleButtonWidget * TBW_disablegirders;
     ToggleButtonWidget * TBW_disablelandobjects;
     ToggleButtonWidget * TBW_aisurvival;
+    ToggleButtonWidget * TBW_infattack;
+    ToggleButtonWidget * TBW_resetweps;
+    ToggleButtonWidget * TBW_perhogammo;
 
     QSpinBox * SB_DamageModifier;
     QSpinBox * SB_TurnTime;

@@ -162,6 +162,11 @@ with CurrentTeam^ do
     TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
     PHedgehog(Gear^.Hedgehog)^.Team:= CurrentTeam;
     if (GameFlags and gfSharedAmmo) <> 0 then CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
+    else if (GameFlags and gfPerHogAmmo) <> 0 then
+        begin
+        AddAmmoStore;
+        CurrentHedgehog^.AmmoStore:= StoreCnt - 1
+        end
     else CurrentHedgehog^.AmmoStore:= TeamsCount - 1;
     CurrentHedgehog^.Gear:= Gear;
     CurrentHedgehog^.Name:= id;

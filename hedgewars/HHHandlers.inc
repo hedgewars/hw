@@ -42,7 +42,8 @@ end;
 
 // Shouldn't more of this ammo switching stuff be moved to uAmmos ?
 procedure ChangeAmmo(Gear: PGear);
-var slot, ammoidx, i: Longword;
+var slot, i: Longword;
+    ammoidx: LongInt;
 begin
 slot:= Gear^.MsgParam;
 
@@ -73,7 +74,8 @@ with PHedgehog(Gear^.Hedgehog)^ do
             TryDo(i < 2, 'Engine bug: no ammo in current slot', true)
             end;
         until (Ammo^[slot, ammoidx].Count > 0) and (Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns)
-        end else
+        end 
+    else
         begin
         i:= 0;
         // check whether there is ammo in slot
@@ -82,8 +84,9 @@ with PHedgehog(Gear^.Hedgehog)^ do
                or (Team^.Clan^.TurnNumber <= Ammoz[Ammo^[slot, i].AmmoType].SkipTurns)) do inc(i);
 
         if i <= cMaxSlotAmmoIndex then ammoidx:= i
+        else ammoidx:= -1
         end;
-        CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
+        if ammoidx >= 0 then CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
     end
 end;
 
