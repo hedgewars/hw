@@ -82,10 +82,10 @@ newRoomsAndClients r = do
 
 
 roomAddClient :: ClientIndex -> Room r -> Room r
-roomAddClient cl room = room{roomClients' = cl : roomClients' room}
+roomAddClient cl room = let cls = cl : roomClients' room; nr = room{roomClients' = cls} in cls `seq` nr `seq` nr
 
 roomRemoveClient :: ClientIndex -> Room r -> Room r
-roomRemoveClient cl room = room{roomClients' = filter (/= cl) $ roomClients' room}
+roomRemoveClient cl room = let cls = filter (/= cl) $ roomClients' room; nr = room{roomClients' = cls} in cls `seq` nr `seq` nr
 
 
 addRoom :: MRoomsAndClients r c -> r -> IO RoomIndex

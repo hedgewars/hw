@@ -32,10 +32,11 @@ reactCmd cmd = do
 
 mainLoop :: StateT ServerState IO ()
 mainLoop = forever $ do
+    get >>= \s -> put $! s
+
     si <- gets serverInfo
     r <- liftIO $ readChan $ coreChan si
 
-    liftIO $ putStrLn $ "Core msg: " ++ show r
     case r of
         Accept ci -> processAction (AddClient ci)
 
@@ -44,7 +45,8 @@ mainLoop = forever $ do
 
             removed <- gets removedClients
             when (not $ ci `Set.member` removed) $ do
-                modify (\as -> as{clientIndex = Just ci})
+                as <- get
+                put $! as{clientIndex = Just ci}
                 reactCmd cmd
 
         Remove ci -> do
@@ -60,7 +62,8 @@ mainLoop = forever $ do
             rnc <- gets roomsClients
             exists <- liftIO $ clientExists rnc ci
             when (exists) $ do
-                modify (\as -> as{clientIndex = Just ci})
+                as <- get
+                put $! as{clientIndex = Just ci}
                 processAction (ProcessAccountInfo info)
                 return ()
 

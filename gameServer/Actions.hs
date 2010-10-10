@@ -98,30 +98,35 @@ processAction (ByeClient msg) = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
     ri <- clientRoomA
-    when (ri /= lobbyId) $ do
-        processAction $ MoveToLobby ("quit: " `B.append` msg)
-        return ()
 
     chan <- client's sendChan
     ready <- client's isReady
+
+    when (ri /= lobbyId) $ do
+        processAction $ MoveToLobby ("quit: " `B.append` msg)
+        liftIO $ modifyRoom rnc (\r -> r{
+                        --playersIDs = IntSet.delete ci (playersIDs r)
+                        playersIn = (playersIn r) - 1,
+                        readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
+                        }) ri
+        return ()
 
     liftIO $ do
         infoM "Clients" (show ci ++ " quits: " ++ (B.unpack msg))
 
         --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
-        modifyRoom rnc (\r -> r{
-                        --playersIDs = IntSet.delete ci (playersIDs r)
-                        playersIn = (playersIn r) - 1,
-                        readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
-                        }) ri
 
     processAction $ AnswerClients [chan] ["BYE", msg]
-    modify (\s -> s{removedClients = ci `Set.insert` removedClients s})
+
+    s <- get
+    put $! s{removedClients = ci `Set.insert` removedClients s}
 
 processAction (DeleteClient ci) = do
     rnc <- gets roomsClients
     liftIO $ removeClient rnc ci
-    modify (\s -> s{removedClients = ci `Set.delete` removedClients s})
+
+    s <- get
+    put $! s{removedClients = ci `Set.delete` removedClients s}
 
 {-
     where
@@ -256,7 +261,7 @@ processAction (AddRoom roomName roomPassword) = do
 
     processAction $ MoveToRoom rId
 
-    chans <- liftM (map sendChan) $ roomClientsS lobbyId
+    chans <- liftM (map sendChan) $! roomClientsS lobbyId
 
     mapM_ processAction [
         AnswerClients chans ["ROOM", "ADD", roomName]
@@ -399,7 +404,7 @@ processAction (AddClient client) = do
     liftIO $ do
         ci <- addClient rnc client
         forkIO $ clientRecvLoop (clientSocket client) (coreChan si) ci
-        forkIO $ clientSendLoop (clientSocket client) (coreChan si) (sendChan client) ci
+        forkIO $ clientSendLoop (clientSocket client) (sendChan client) ci
 
         infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime client))
 

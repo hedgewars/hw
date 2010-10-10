@@ -78,7 +78,6 @@ data RoomInfo =
         gameinprogress :: Bool,
         playersIn :: !Int,
         readyPlayers :: !Int,
-        playersIDs :: IntSet.IntSet,
         isRestrictedJoins :: Bool,
         isRestrictedTeams :: Bool,
         roundMsgs :: Seq B.ByteString,
@@ -88,8 +87,7 @@ data RoomInfo =
     }
 
 instance Show RoomInfo where
-    show ri = ", players ids: " ++ show (IntSet.size $ playersIDs ri)
-            ++ ", players: " ++ show (playersIn ri)
+    show ri = ", players: " ++ show (playersIn ri)
             ++ ", ready: " ++ show (readyPlayers ri)
             ++ ", teams: " ++ show (teams ri)
 
@@ -104,7 +102,6 @@ newRoom = (
         False
         0
         0
-        IntSet.empty
         False
         False
         Data.Sequence.empty
