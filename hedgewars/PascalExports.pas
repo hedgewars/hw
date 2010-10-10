@@ -167,18 +167,6 @@ begin
     if closeFrontend then alsoShutdownFrontend:= true;
 end;
 
-procedure HW_setLandscape(landscape: boolean); cdecl; export;
-begin
-    if landscape then
-    begin
-        cOffsetY:= 0;
-    end
-    else
-    begin
-        cOffsetY:= 120;
-    end;
-end;
-
 procedure HW_setCursor(x,y: LongInt); cdecl; export;
 begin
     CursorPoint.X:= x;

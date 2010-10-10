@@ -35,19 +35,24 @@
     if (self = [super init]) {
         ipcPort = randomPort();
 
-        // should check they exist and throw and exection if not
+        // the general settings file + menu style (read by the overlay)
         NSDictionary *dictSett = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
-        self.systemSettings = dictSett;
         self.menuStyle = [[dictSett objectForKey:@"menu"] boolValue];
+        self.systemSettings = dictSett;
         [dictSett release];
 
+        // this game run settings
         self.gameConfig = [gameDictionary objectForKey:@"game_dictionary"];
+
+        // is it a netgame?
         isNetGame = [[gameDictionary objectForKey:@"netgame"] boolValue];
+
+        // is it a Save?
         NSString *path = [gameDictionary objectForKey:@"savefile"];
-        // if path is empty it means i have to create a new file, otherwise i read from that file
+        // if path is empty it means that you have to create a new file, otherwise read from that file
         if ([path isEqualToString:@""] == YES) {
             NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-            [outputFormatter setDateFormat:@"yyyy-MM-dd 'at' HH,mm"];
+            [outputFormatter setDateFormat:@"yyyy.MM.dd '@' HH-mm"];
             NSString *newDateString = [outputFormatter stringFromDate:[NSDate date]];
             self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", newDateString];
             [outputFormatter release];
@@ -451,7 +456,12 @@
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
         width = (int) screenBounds.size.height;
         height = (int) screenBounds.size.width;
-        rotation = @"-90";
+        UIDeviceOrientation orientation = (UIDeviceOrientation) [[self.gameConfig objectForKey:@"orientation"] intValue];
+        if (orientation == UIDeviceOrientationLandscapeLeft)
+            rotation = @"-90";
+        else
+            rotation = @"90";
+
     }
         
     NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width];

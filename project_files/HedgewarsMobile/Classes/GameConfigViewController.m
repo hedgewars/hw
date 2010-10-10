@@ -30,7 +30,7 @@
 #import "PascalImports.h"
 
 @implementation GameConfigViewController
-@synthesize hedgehogImage, imgContainer, helpPage, mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
+@synthesize imgContainer, helpPage, mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -202,12 +202,13 @@
                                                                       teamConfigViewController.listOfSelectedTeams,@"teams_list",
                                                                       schemeWeaponConfigViewController.selectedScheme,@"scheme",
                                                                       schemeWeaponConfigViewController.selectedWeapon,@"weapon",
+                                                                      [NSNumber numberWithInt:self.interfaceOrientation],@"orientation",
                                                                       nil];
 
     // finally launch game and remove this controller
     DLog(@"sending config %@", gameDictionary);
 
-    if ([[gameDictionary allKeys] count] == 10) {
+    if ([[gameDictionary allKeys] count] == 11) {
         NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:gameDictionary,@"game_dictionary", @"",@"savefile",
                                                                                     [NSNumber numberWithBool:NO],@"netgame", nil];
         [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
@@ -242,6 +243,37 @@
 
 }
 
+-(void) loadNiceHogs {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSString *filePath = [NSString stringWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
+    UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath andCutAt:CGRectMake(96, 0, 32, 32)];
+    
+    NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
+    int numberOfHats = [hatArray count];
+
+    if (self.imgContainer != nil)
+        [self.imgContainer removeFromSuperview];
+    
+    self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
+    for (int i = 0; i < 1 + random()%40; i++) {
+        NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
+        
+        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
+        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
+        [hatFile release];
+        UIImage *hogWithHat = [sprite mergeWith:hatSprite atPoint:CGPointMake(0, 5)];
+        [hatSprite release];
+        
+        UIImageView *hog = [[UIImageView alloc] initWithImage:hogWithHat];
+        hog.frame = CGRectMake(10*(i+1)+random()%30, 30, 32, 32);
+        [self.imgContainer addSubview:hog];
+        [hog release];
+    }
+    [self.view addSubview:self.imgContainer];
+    [sprite release];
+    [pool drain];
+}
+
 -(void) viewDidLoad {
     self.view.backgroundColor = [UIColor blackColor];
 
@@ -254,7 +286,6 @@
                                                      name:@"buttonPressed"
                                                    object:nil];
         srandom(time(NULL));
-        self.hedgehogImage = nil;
         
         // load other controllers
         if (self.mapConfigViewController == nil)
@@ -271,48 +302,20 @@
         
     } else {
         // this is the visible controller
-        if (mapConfigViewController == nil)
-            mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
-        // this must be loaded & added to auto set default scheme and ammo
-        schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        [self.view addSubview:schemeWeaponConfigViewController.view];
+        if (self.mapConfigViewController == nil)
+            self.mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
+        // this must be loaded & added in order to auto set default scheme and ammo
+        self.schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        [self.view addSubview:self.schemeWeaponConfigViewController.view];
     }
-    [self.view addSubview:mapConfigViewController.view];
+    [self.view addSubview:self.mapConfigViewController.view];
 
     [super viewDidLoad];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        // load a base image that will be updated in viewWill Load
-        if (self.hedgehogImage == nil) {
-            NSString *filePath = [NSString stringWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
-            UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath andCutAt:CGRectMake(96, 0, 32, 32)];
-            self.hedgehogImage = sprite;
-            [sprite release];
-        }
-        
-        NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
-        int numberOfHats = [hatArray count];
-        if (self.imgContainer == nil)
-            self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
-        
-        for (int i=0; i < 1 + random()%40; i++) {
-            NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
-            
-            NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
-            UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
-            [hatFile release];
-            UIImage *hogWithHat = [self.hedgehogImage mergeWith:hatSprite atPoint:CGPointMake(0, -5)];
-            [hatSprite release];
-            
-            UIImageView *hog = [[UIImageView alloc] initWithImage:hogWithHat];
-            hog.frame = CGRectMake(10*(i+1)+random()%30, 30, 32, 32);
-            [self.imgContainer addSubview:hog];
-            [hog release];
-        }
-        [self.view addSubview:self.imgContainer];
-    }
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
 
     [mapConfigViewController viewWillAppear:animated];
     [teamConfigViewController viewWillAppear:animated];
@@ -337,11 +340,6 @@
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.imgContainer removeFromSuperview];
-        releaseAndNil(self.imgContainer);
-    }
-    
     [mapConfigViewController viewDidDisappear:animated];
     [teamConfigViewController viewDidDisappear:animated];
     [schemeWeaponConfigViewController viewDidDisappear:animated];
@@ -361,14 +359,12 @@
 
     // Release any cached data, images, etc that aren't in use.
     self.imgContainer = nil;
-    self.hedgehogImage = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
-    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:@"buttonPressed"];
-    self.hedgehogImage = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.imgContainer = nil;
     self.mapConfigViewController = nil;
     self.teamConfigViewController = nil;
@@ -379,7 +375,6 @@
 }
 
 -(void) dealloc {
-    [hedgehogImage release];
     [imgContainer release];
     [mapConfigViewController release];
     [teamConfigViewController release];

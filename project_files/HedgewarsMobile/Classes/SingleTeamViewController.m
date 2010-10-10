@@ -221,7 +221,7 @@
             NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@.png", HATS_DIRECTORY(), [[hogArray objectAtIndex:row] objectForKey:@"hat"]];
             UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
             [hatFile release];
-            editableCell.imageView.image = [self.normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, -5)];
+            editableCell.imageView.image = [self.normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, 5)];
             [hatSprite release];
 
             editableCell.textField.text = [[hogArray objectAtIndex:row] objectForKey:@"hogname"];

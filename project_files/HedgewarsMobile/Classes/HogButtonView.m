@@ -66,7 +66,7 @@
         for (int i = 0; i < numberOfHogs; i++) {
             teamHogs = [singleHog mergeWith:teamHogs
                                     atPoint:CGPointMake(8, 0)
-                                     atSize:CGSizeMake(88, 32)];
+                                     ofSize:CGSizeMake(88, 32)];
         }
         [self setImage:teamHogs forState:UIControlStateNormal];
     }

@@ -31,19 +31,19 @@ procedure replayFinished; cdecl; external;
 procedure updateVisualsNewTurn; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
 {$ENDIF}
-function  isPhone: Boolean;
-procedure doRumble;
-procedure perfExt_AddProgress;
-procedure perfExt_FinishProgress;
-procedure perfExt_AmmoUpdate;
-procedure perfExt_NewTurnBeginning;
-procedure perfExt_SaveBeganSynching;
-procedure perfExt_SaveFinishedSynching;
+function  isPhone: Boolean; inline;
+procedure doRumble; inline;
+procedure perfExt_AddProgress; inline;
+procedure perfExt_FinishProgress; inline;
+procedure perfExt_AmmoUpdate; // don't inline
+procedure perfExt_NewTurnBeginning; inline;
+procedure perfExt_SaveBeganSynching; inline;
+procedure perfExt_SaveFinishedSynching; inline;
 
 implementation
 uses uTeams;
 
-function isPhone: Boolean;
+function isPhone: Boolean; inline;
 begin
 {$IFDEF IPHONEOS}
     exit(isApplePhone());
@@ -51,26 +51,26 @@ begin
     exit(false);
 end;
 
-procedure doRumble;
+procedure doRumble; inline;
 begin
     // fill me!
 end;
 
-procedure perfExt_AddProgress;
+procedure perfExt_AddProgress; inline;
 begin
 {$IFDEF IPHONEOS}
     startSpinning();
 {$ENDIF}
 end;
 
-procedure perfExt_FinishProgress;
+procedure perfExt_FinishProgress; inline;
 begin
 {$IFDEF IPHONEOS}
     stopSpinning();
 {$ENDIF}
 end;
 
-procedure perfExt_AmmoUpdate;
+procedure perfExt_AmmoUpdate; // don't inline
 begin
 {$IFDEF IPHONEOS}
     if (CurrentTeam^.ExtDriven) or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
@@ -79,22 +79,22 @@ begin
 {$ENDIF}
 end;
 
-procedure perfExt_NewTurnBeginning;
+procedure perfExt_NewTurnBeginning; inline;
 begin
 {$IFDEF IPHONEOS}
     clearView();
-    updateVisualsNewTurn();
+    perfExt_AmmoUpdate();
 {$ENDIF}
 end;
 
-procedure perfExt_SaveBeganSynching;
+procedure perfExt_SaveBeganSynching; inline;
 begin
 {$IFDEF IPHONEOS}
     replayBegan();
 {$ENDIF}
 end;
 
-procedure perfExt_SaveFinishedSynching;
+procedure perfExt_SaveFinishedSynching; inline;
 begin
 {$IFDEF IPHONEOS}
     replayFinished();

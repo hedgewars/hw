@@ -45,31 +45,41 @@
 
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint {
     // create a contex of size of the background image
-    return [self mergeWith:secondImage atPoint:secondImagePoint atSize:self.size];
+    return [self mergeWith:secondImage atPoint:secondImagePoint ofSize:self.size];
 }
 
--(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint atSize:(CGSize) resultingSize {
+-(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint ofSize:(CGSize) resultingSize {
     if (secondImage == nil) {
         DLog(@"Warning, secondImage == nil");
         return self;
     }
+    int w = resultingSize.width;
+    int h = resultingSize.height;
+    
+    if (w == 0 || h == 0) {
+        DLog(@"Can have 0 dimesions");
+        return self;
+    }
     
     // Create a bitmap graphics context; this will also set it as the current context
-    UIGraphicsBeginImageContext(resultingSize);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
+    
+    // draw the two images in the current context
+    CGContextDrawImage(context, CGRectMake(0, 0, self.size.width, self.size.height), [self CGImage]);
+    CGContextDrawImage(context, CGRectMake(secondImagePoint.x, secondImagePoint.y, secondImage.size.width, secondImage.size.height), [secondImage CGImage]);
+    
+    // Create bitmap image info from pixel data in current context
+    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    
+    // Create a new UIImage object
+    UIImage *resultImage = [UIImage imageWithCGImage:imageRef];
 
-    // draw the background image in the current context
-    [self drawAtPoint:CGPointMake(0,0)];
-
-    // draw the image on top of the first image (because the context is the same)
-    [secondImage drawAtPoint:secondImagePoint];
-
-    // create an image from the current contex (not thread safe)
-    UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
-
-    // free drawing contex
-    UIGraphicsEndImageContext();
-
-    // return the resulting autoreleased image
+    // Release colorspace, context and bitmap information
+    CGColorSpaceRelease(colorSpace);
+    CGContextRelease(context);
+    CFRelease(imageRef);
+   
     return resultImage;
 }
 
@@ -215,13 +225,13 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
     CGContextSetBlendMode(UIGraphicsGetCurrentContext(), kCGBlendModeDifference);
     CGContextSetFillColorWithColor(UIGraphicsGetCurrentContext(),[UIColor whiteColor].CGColor);
     CGContextFillRect(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, self.size.width, self.size.height));
+    // create an image from the current contex (not thread safe)
     UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return result;
 }
 
 +(UIImage *)whiteImage:(CGSize) ofSize {
-    // white rounded rectangle as background image for previewButton
     UIGraphicsBeginImageContext(ofSize);
     CGContextRef context = UIGraphicsGetCurrentContext();
     UIGraphicsPushContext(context);

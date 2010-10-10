@@ -63,32 +63,12 @@
             if (IS_DUALHEAD() == NO)
                 sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
-            HW_setLandscape(YES);
             break;
         case UIDeviceOrientationLandscapeRight:
             if (IS_DUALHEAD() == NO)
                 sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-            HW_setLandscape(YES);
             break;
-        /*
-        case UIDeviceOrientationPortrait:
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(270));
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
-                [self chatAppear];
-                HW_setLandscape(NO);
-            }
-            break;
-        case UIDeviceOrientationPortraitUpsideDown:
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
-                [self chatAppear];
-                HW_setLandscape(NO);
-            }
-            break;
-        */
         default:
             // a debug log would spam too much
             break;
@@ -112,25 +92,7 @@
     self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
 
     initialScreenCount = [[UIScreen screens] count];
-    
-    // set initial orientation wrt the controller orientation
-    UIDeviceOrientation orientation = self.interfaceOrientation;
-    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
-    switch (orientation) {
-        case UIDeviceOrientationLandscapeLeft:
-            if (IS_DUALHEAD() == NO)
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
-            break;
-        case UIDeviceOrientationLandscapeRight:
-            if (IS_DUALHEAD() == NO)
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-            break;
-        default:
-            DLog(@"unknown orientation");
-            break;
-    }
+
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
 

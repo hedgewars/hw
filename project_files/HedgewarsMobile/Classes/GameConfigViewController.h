@@ -27,7 +27,6 @@
 @class SchemeWeaponConfigViewController;
 
 @interface GameConfigViewController : UIViewController {
-    UIImage *hedgehogImage;
     UIView *imgContainer;
     HelpPageViewController *helpPage;
     
@@ -36,8 +35,7 @@
     SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
 }
 
-@property (nonatomic,retain) UIImage *hedgehogImage;
-@property (nonatomic,retain) UIView *imgContainer;
+@property (retain) UIView *imgContainer;
 @property (nonatomic,retain) HelpPageViewController *helpPage;
 @property (nonatomic,retain) MapConfigViewController *mapConfigViewController;
 @property (nonatomic,retain) TeamConfigViewController *teamConfigViewController;

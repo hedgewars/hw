@@ -31,7 +31,6 @@
     return rotationManager(interfaceOrientation);
 }
 
-
 #pragma mark -
 #pragma mark View lifecycle
 - (void)viewDidLoad {
@@ -88,7 +87,7 @@
     NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
     UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
     [hatFile release];
-    cell.imageView.image = [self.normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, -5)];
+    cell.imageView.image = [self.normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, 5)];
     [hatSprite release];
 
     if ([hat isEqualToString:[hog objectForKey:@"hat"]]) {
