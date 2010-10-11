@@ -62,6 +62,7 @@ type
             SoundChannel: LongInt;
             PortalCounter: LongWord  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
         end;
+    TPGearArray = Array of PGear;
 
 var AllInactive: boolean;
     PrvInactive: boolean;
@@ -120,6 +121,7 @@ procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask, Tint: LongWord); forward;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 //procedure AmmoFlameWork(Ammo: PGear); forward;
+function GearsNear(Gear: PGear; Kind: TGearType; r: LongInt): TPGearArray; forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
@@ -206,7 +208,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepSMine,
             @doStepPoisonCloud,
             @doStepHammer,
-            @doStepHammerHit
+            @doStepHammerHit,
+            @doStepResurrector
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -533,7 +536,11 @@ gtFlamethrower: begin
                 gear^.Timer:= 5000;
                 gear^.dY:= int2hwfloat((-4 + getRandom(8))) / 1000;
                 end;
-     end;
+ gtResurrector: begin
+                gear^.Radius := 100;
+                end;
+    end;
+
 InsertGearToList(gear);
 AddGear:= gear;
 
@@ -846,15 +853,19 @@ case step of
 else if ((GameFlags and gfInfAttack) <> 0) then
     begin
     if delay2 = 0 then
-        delay2:= cInactDelay 
+        delay2:= cInactDelay * 4
     else
+        begin
         dec(delay2);
 
-    if delay2 = 0 then
-        begin
-        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstAttacked;
-        CheckNoDamage;
-        CheckForWin
+        if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then 
+            CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstAttacked;
+        if delay2 = 0 then
+            begin
+            SweepDirty;
+            CheckNoDamage;
+            CheckForWin
+            end
         end
     end;
 
@@ -864,6 +875,7 @@ if TurnTimeLeft > 0 then
                 and not isInMultiShoot then
                 begin
                 if (TurnTimeLeft = 5000)
+                    and (cHedgehogTurnTime >= 10000)
                     and (not PlacingHogs)
                     and (CurrentHedgehog^.Gear <> nil)
                     and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
@@ -1505,6 +1517,25 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
         dec(Count)
         end
     end
+end;
+
+function GearsNear(Gear: PGear; Kind: TGearType; r: LongInt): TPGearArray;
+var
+    t: PGear;
+begin
+    GearsNear := nil;
+    t := GearsList;
+    while t <> nil do begin
+        if (t <> Gear) and (t^.Kind = Kind) then begin
+            if (Gear^.X - t^.X)*(Gear^.X - t^.X) + (Gear^.Y -
+                   t^.Y)*(Gear^.Y-t^.Y) < int2hwFloat(r)*int2hwFloat(r) then
+            begin
+                SetLength(GearsNear, Length(GearsNear)+1);
+                GearsNear[High(GearsNear)] := t;
+            end;
+        end;
+        t := t^.NextGear;
+    end;
 end;
 
 function CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;

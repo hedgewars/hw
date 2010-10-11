@@ -53,6 +53,7 @@ uses uMisc, uGears, uWorld, uLocale, uConsole, uMobile;
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
     ammoLoadout, ammoProbability, ammoDelay, ammoReinforcement: shortstring;
+    InitialCounts: array[0..Pred(cMaxHHs)] of TAmmoCounts;
 
 procedure FillAmmoStore(Ammo: PHHAmmo; var cnts: TAmmoCounts);
 var mi: array[0..cMaxSlotIndex] of byte;
@@ -68,12 +69,11 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
        begin
        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
-
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= cnts[a];
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= cnts[a];
-
-       if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
-           Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
+       with Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]] do
+           begin
+           Count:= cnts[a];
+           if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then Count:= AMMO_INFINITE;
+           end;
        inc(mi[Ammoz[a].Slot])
        end
     else if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
@@ -82,7 +82,6 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
 
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= 0;
 
        inc(mi[Ammoz[a].Slot])
        end
@@ -144,10 +143,10 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         if ((GameFlags and gfPlaceHog) <> 0) and
             (a <> amTeleport) and (a <> amSkip) and
             (Ammoz[a].SkipTurns < 10000) then inc(Ammoz[a].SkipTurns,10000)
-        end else
-        ammos[a]:= AMMO_INFINITE
+        end 
+    else ammos[a]:= AMMO_INFINITE;
+    InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
     end;
-
 FillAmmoStore(StoresList[Pred(StoreCnt)], ammos)
 end;
 
@@ -384,7 +383,7 @@ for i:= 0 to Pred(StoreCnt) do
                 if (Propz and ammoprop_NotBorder) <> 0 then
                     begin
                     Count:= 0;
-                    InitialCount:= 0
+                    InitialCounts[i][AmmoType]:= 0
                     end;
 
         PackAmmo(StoresList[i], slot)
@@ -416,20 +415,17 @@ end;
 
 // Restore indefinitely disabled weapons and initial weapon counts.  Only used for hog placement right now
 procedure ResetWeapons;
-var i, slot, a: Longword;
-    t: TAmmoType;
+var i, t: Longword;
+    a: TAmmoType;
 begin
-for i:= 0 to Pred(StoreCnt) do
-    for slot:= 0 to cMaxSlotIndex do
-        begin
-        for a:= 0 to cMaxSlotAmmoIndex do
-            with StoresList[i]^[slot, a] do
-                Count:= InitialCount;
+for t:= 0 to Pred(TeamsCount) do
+   with TeamsArray[t]^ do
+      for i:= 0 to cMaxHHIndex do
+          if Hedgehogs[i].Gear <> nil then
+             FillAmmoStore(Hedgehogs[i].Ammo, InitialCounts[Hedgehogs[i].AmmoStore]);
 
-        PackAmmo(StoresList[i], slot)
-        end;
-for t:= Low(TAmmoType) to High(TAmmoType) do
-    if Ammoz[t].SkipTurns >= 10000 then dec(Ammoz[t].SkipTurns,10000);
+for a:= Low(TAmmoType) to High(TAmmoType) do
+    if Ammoz[a].SkipTurns >= 10000 then dec(Ammoz[a].SkipTurns,10000)
 end;
 
 procedure initModule;
@@ -439,7 +435,8 @@ begin
     ammoLoadout:= '';
     ammoProbability:= '';
     ammoDelay:= '';
-    ammoReinforcement:= ''
+    ammoReinforcement:= '';
+    FillChar(InitialCounts, sizeof(InitialCounts), 0)
 end;
 
 procedure freeModule;

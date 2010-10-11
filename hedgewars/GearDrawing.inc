@@ -277,6 +277,9 @@ if (Gear^.State and gstHHDriven) <> 0 then
                         0);
                 defaultPos:= false
                 end;
+            gtResurrector: begin
+                // yet to come?
+            end;
             gtKamikaze: begin
                 if CurAmmoGear^.Pos = 0 then
                     DrawHedgehog(sx, sy,
@@ -431,6 +434,10 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 end;
             amBee: DrawRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
             amFlamethrower: DrawRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
+            amResurrector: begin
+                DrawCircle(hwRound(Gear^.X), hwRound(Gear^.y), 100, 1.5, 0, 0,
+                        $FF, $FF); // I'd rather not like to hardcore 100 here
+            end;
         end;
 
         case amt of

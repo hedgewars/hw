@@ -69,11 +69,12 @@ with PHedgehog(Gear^.Hedgehog)^ do
         inc(ammoidx);
         if (ammoidx > cMaxSlotAmmoIndex) then
             begin
-            ammoidx:= 0;
             inc(i);
-            TryDo(i < 2, 'Engine bug: no ammo in current slot', true)
+            CurAmmoType:= amNothing;
+            ammoidx:= -1;
+            //TryDo(i < 2, 'Engine bug: no ammo in current slot', true)
             end;
-        until (Ammo^[slot, ammoidx].Count > 0) and (Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns)
+        until ((Ammo^[slot, ammoidx].Count > 0) and (Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns)) or (i = 1)
         end 
     else
         begin
@@ -267,6 +268,9 @@ with Gear^,
                                PauseMusic
                                end;
                       amFlamethrower: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtFlamethrower,  0, xx * _0_5, yy * _0_5, 0);
+                    amResurrector: CurAmmoGear:= AddGear(hwRound(lx),
+                                           hwRound(ly), gtResurrector, 0, _0,
+                                           _0, 0);
                   end;
 
         uStats.AmmoUsed(CurAmmoType);
@@ -323,13 +327,14 @@ with CurrentHedgehog^.Gear^,
             end
         else
             begin
-            OnUsedAmmo(CurrentHedgehog^);
             if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) = 0) and ((GameFlags and gfInfAttack) = 0) then
                 begin
                 TurnTimeLeft:= Ammoz[CurAmmoType].TimeAfterTurn;
-                end
-            else ApplyAmmoChanges(CurrentHedgehog^);
+                State:= State or gstAttacked
+                end;
+            if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0 then ApplyAmmoChanges(CurrentHedgehog^);
             if (GameFlags and gfInfAttack) <> 0 then State:= State or gstAttacked;
+            OnUsedAmmo(CurrentHedgehog^)
             end;
         end
     else

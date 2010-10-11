@@ -237,6 +237,7 @@ end;
 procedure SendIPCTimeInc;
 const timeinc: shortstring = '#';
 begin
+AddFileLog('Send #');
 SendIPCRaw(@timeinc, 2)
 end;
 

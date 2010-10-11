@@ -230,6 +230,8 @@ end;
 procedure AfterSwitchHedgehog;
 var g: PGear;
     i, t: LongInt;
+    CurWeapon: PAmmo;
+
 begin
 if PlacingHogs then
    begin
@@ -249,7 +251,8 @@ if PlacingHogs then
 
 inc(CurrentTeam^.Clan^.TurnNumber);
 
-SwitchNotHeldAmmo(CurrentHedgehog^);
+CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
+if CurWeapon^.Count = 0 then CurrentHedgehog^.CurAmmoType:= amNothing;
 
 with CurrentHedgehog^ do
     begin

@@ -859,6 +859,7 @@ begin
         StopSound(Gear^.SoundChannel);
         DeleteGear(Gear);
         AfterAttack;
+        doStepHedgehogMoving(HHGear);  // for gfInfAttack
         exit
     end;
 
@@ -1456,7 +1457,7 @@ begin
         dec(Gear^.Timer);
     end
     else // gsttmpFlag = 0
-        if TurnTimeLeft = 0 then Gear^.State := Gear^.State or gsttmpFlag;
+        if (TurnTimeLeft = 0) or ((GameFlags and gfInfAttack) <> 0) then Gear^.State := Gear^.State or gsttmpFlag;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2933,7 +2934,7 @@ begin
 
         AfterAttack;
         CurAmmoGear := nil;
-        TurnTimeLeft := 14 * 125;
+        if (GameFlags and gfInfAttack) = 0 then TurnTimeLeft := 14 * 125;
 
         if (TrainingFlags and tfRCPlane) <> 0 then
             TurnTimeLeft := 0;
@@ -3695,7 +3696,8 @@ begin
                 CurrentHedgehog^.Gear^.Active := true;
                 CurrentHedgehog^.Gear^.X := Gear^.X;
                 CurrentHedgehog^.Gear^.Y := int2hwFloat(cWaterLine+cVisibleWater)+_128;
-                CurrentHedgehog^.Unplaced := false
+                CurrentHedgehog^.Unplaced := false;
+                TurnTimeLeft:= 0
             end;
             ResumeMusic
         end;
@@ -3713,7 +3715,8 @@ begin
             CurrentHedgehog^.Gear^.Active := true;
             CurrentHedgehog^.Gear^.X := Gear^.X;
             CurrentHedgehog^.Gear^.Y := int2hwFloat(cWaterLine+cVisibleWater)+_128;
-            CurrentHedgehog^.Unplaced := false
+            CurrentHedgehog^.Unplaced := false;
+            TurnTimeLeft:= 0
         end;
         ResumeMusic
     end
@@ -4080,3 +4083,80 @@ begin
     doStepHammerHitWork(Gear);
     Gear^.doStep := @doStepHammerHitWork
 end;
+
+
+procedure doStepResurrectorWork(Gear: PGear);
+var
+    graves: TPGearArray;
+    resgear: PGear;
+    hh: PHedgehog;
+    i: LongInt;
+begin
+    AllInactive := false;
+    hh := PHedgehog(Gear^.Hedgehog);
+    RenderHealth(hh^);
+    DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy -
+            cHHRadius - 14 - hh^.HealthTagTex^.h, hh^.HealthTagTex);
+    DrawCircle(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, 1.5, 0, 0, $FF,
+            $FF);
+
+    if ((Gear^.Message and gmUp) <> 0) then begin
+        if (GameTicks and $F) <> 0 then exit;
+    end else begin
+        if (GameTicks and $1FF) <> 0 then exit;
+    end;
+
+    graves := GearsNear(hh^.Gear, gtGrave, Gear^.Radius);
+
+    if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) then begin
+        i := getRandom(Length(graves));
+        writeln(i);
+        dec(hh^.Gear^.Health);
+        inc(graves[i]^.Health);
+{-for i:= 0 to High(graves) do begin
+            if hh^.Gear^.Health > 0 then begin
+                dec(hh^.Gear^.Health);
+                inc(graves[i]^.Health);
+            end;
+        end; -}
+    end else begin
+        // now really resurrect the hogs with the hp saved in the graves
+        for i:= 0 to High(graves) do begin
+            if graves[i]^.Health > 0 then begin
+                resgear := AddGear(hwRound(graves[i]^.X), hwRound(graves[i]^.Y),
+                        gtHedgehog, gstWait, _0, _0, 0);
+                resgear^.Hedgehog := graves[i]^.Hedgehog;
+                resgear^.Health := graves[i]^.Health;
+                PHedgehog(graves[i]^.Hedgehog)^.Gear := resgear;
+                DeleteGear(graves[i]);
+                RenderHealth(PHedgehog(resgear^.Hedgehog)^);
+                RecountTeamHealth(Phedgehog(resgear^.Hedgehog)^.Team);
+            end;
+        end;
+        Gear^.Timer := 250;
+        Gear^.doStep := @doStepIdle;
+    end;
+end;
+
+procedure doStepResurrector(Gear: PGear);
+var
+    graves: TPGearArray;
+    hh: PHedgehog;
+    i: LongInt;
+begin
+    AllInactive := false;
+    hh := PHedgehog(Gear^.Hedgehog);
+    graves := GearsNear(hh^.Gear, gtGrave, Gear^.Radius);
+
+    if Length(graves) > 0 then begin
+        for i:= 0 to High(graves) do begin
+            PHedgehog(graves[i]^.Hedgehog)^.Gear := nil;
+            graves[i]^.Health := 0;
+        end;
+        Gear^.doStep := @doStepResurrectorWork;
+    end else begin
+        Gear^.Timer := 250;
+        Gear^.doStep := @doStepIdle;
+    end;
+end;
+

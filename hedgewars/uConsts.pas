@@ -74,7 +74,7 @@ type
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
-            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer
+            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer, sprResurrector
             );
 
     // Gears that interact with other Gears and/or Land
@@ -88,7 +88,7 @@ type
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
-            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit);
+            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector);
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -132,7 +132,8 @@ type
             amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, // 30
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
-            amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer); // 48
+            amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
+            amResurrector);
 
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
 
@@ -160,7 +161,6 @@ type
             Count: LongWord;
 (* Using for place hedgehogs mode, but for any other situation where the initial count would be needed I guess.
 For example, say, a mode where the weaponset is reset each turn, or on sudden death *)
-            InitialCount: LongWord;
             NumPerTurn: LongWord;
             Timer: LongWord;
             Pos: LongWord;
@@ -816,7 +816,11 @@ const
             (FileName:   'amSMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandSMine
             (FileName:  'amHammer'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprWhip
+            Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprWhip
+            (FileName: 'amResurrector'; Path: ptHedgehog; AltPath: ptNone;
+                Texture: nil; Surface: nil; Width: 128; Height: 64;
+                imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
+                tpMedium; getDimensions: false; getImageDimensions: true) 
             );
 
     Wavez: array [TWave] of record
@@ -970,7 +974,6 @@ const
             NumberInCase: 0;
             Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_Effect;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -994,7 +997,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
                 Pos: 0;
@@ -1018,7 +1020,6 @@ const
             NumberInCase: 3;
             Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
                 Count: 5;
-                InitialCount: 5;
                 NumPerTurn: 0;
                 Timer: 3000;
                 Pos: 0;
@@ -1042,7 +1043,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1066,7 +1066,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or ammoprop_NeedTarget or ammoprop_DontHold;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1090,7 +1089,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 1;
                 Timer: 0;
                 Pos: 0;
@@ -1114,7 +1112,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInMove or ammoprop_NoCrosshair or ammoprop_DontHold;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1138,7 +1135,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1166,7 +1162,6 @@ const
                           ammoprop_Utility or
                           ammoprop_AltAttack;
                     Count: 5;
-                    InitialCount: 5;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1190,7 +1185,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1214,7 +1208,6 @@ const
             NumberInCase: 2;
             Ammo: (Propz: 0;
                 Count: 3;
-                InitialCount: 3;
                 NumPerTurn: 3;
                 Timer: 0;
                 Pos: 0;
@@ -1238,7 +1231,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1262,7 +1254,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_ForwMsgs or ammoprop_AttackInMove;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1286,7 +1277,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1310,7 +1300,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_DontHold;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1340,7 +1329,6 @@ const
                           ammoprop_Utility or
                           ammoprop_AltAttack;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1368,7 +1356,6 @@ const
                             ammoprop_DontHold or
                             ammoprop_NotBorder;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1396,7 +1383,6 @@ const
                             ammoprop_DontHold or
                             ammoprop_NotBorder;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1420,7 +1406,6 @@ const
             NumberInCase: 2;
             Ammo: (Propz: ammoprop_ForwMsgs;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1448,7 +1433,6 @@ const
                           ammoprop_Utility or
                           ammoprop_AttackingPut;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1477,7 +1461,6 @@ const
                           ammoprop_Utility or
                           ammoprop_DontHold;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1505,7 +1488,6 @@ const
                           ammoprop_Utility or
                           ammoprop_DontHold;
                     Count: 3;
-                    InitialCount: 3;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1529,7 +1511,6 @@ const
             NumberInCase: 4;
             Ammo: (Propz: 0;
                 Count: 4;
-                InitialCount: 4;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1553,7 +1534,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold or ammoprop_AttackInMove;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1577,7 +1557,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_NoCrosshair or ammoprop_DontHold;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1601,7 +1580,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1625,7 +1603,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
                 Count: 0;
-                InitialCount: 0;
                 NumPerTurn: 0;
                 Timer: 3000;
                 Pos: 0;
@@ -1649,7 +1626,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz:  ammoprop_Power or ammoprop_AltUse;
                 Count: 0;
-                InitialCount: 0;
                 NumPerTurn: 0;
                 Timer: 5000;
                 Pos: 0;
@@ -1677,7 +1653,6 @@ const
                             ammoprop_DontHold or
                             ammoprop_NotBorder;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1701,7 +1676,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1725,7 +1699,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 5001;
                 Pos: 0;
@@ -1751,7 +1724,6 @@ const
                             ammoprop_DontHold or
                             ammoprop_AltAttack};
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1780,7 +1752,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1809,7 +1780,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1838,7 +1808,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1867,7 +1836,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1896,7 +1864,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1925,7 +1892,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1949,7 +1915,6 @@ const
             NumberInCase: 2;
             Ammo: (Propz: 0;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 1;
                 Timer: 0;
                 Pos: 0;
@@ -1979,7 +1944,6 @@ const
                           ammoprop_Utility or
                           ammoprop_AltAttack;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -2003,7 +1967,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
                 Pos: 0;
@@ -2029,7 +1992,6 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -2056,7 +2018,6 @@ const
                           ammoprop_DontHold or
                           ammoprop_Utility;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 3;
                 Timer: 0;
                 Pos: 0;
@@ -2084,7 +2045,6 @@ const
                             ammoprop_DontHold or
                             ammoprop_NotBorder;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -2108,7 +2068,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
                 Pos: 0;
@@ -2132,7 +2091,6 @@ const
             NumberInCase: 2;
             Ammo: (Propz: ammoprop_AttackInMove;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -2156,7 +2114,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 5001;
                 Pos: 0;
@@ -2180,7 +2137,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
                 Count: 1;
-                InitialCount: 0;
                 NumPerTurn: 1;
                 Timer: 0;
                 Pos: 0;
@@ -2204,7 +2160,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -2219,8 +2174,31 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0;
+            ejectY: 0),
+
+        (NameId: sidResurrector;
+            NameTex: nil;
+            Probability: 0;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoCrosshair;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amResurrector;
+                AttackVoice: sndNone);
+            Slot: 8;
+            TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
             ejectY: 0)
-            );
+        );
+
 
 
     conversionFormat: TSDL_PixelFormat = (
