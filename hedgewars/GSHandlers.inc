@@ -3092,8 +3092,7 @@ begin
 
     HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
     FollowGear := HHGear;
-    OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
-    ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^);
+    AfterAttack;
     with HHGear^ do
     begin
         State := State and not gstAttacking;
