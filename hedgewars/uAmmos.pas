@@ -147,9 +147,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     else ammos[a]:= AMMO_INFINITE;
     InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
     end;
-FillAmmoStore(StoresList[Pred(StoreCnt)], ammos);
-for cnt:= 0 to cMaxSlotIndex do
-    PackAmmo(StoresList[Pred(StoreCnt)], cnt)
+FillAmmoStore(StoresList[Pred(StoreCnt)], ammos)
 end;
 
 function GetAmmoByNum(num: Longword): PHHAmmo;
