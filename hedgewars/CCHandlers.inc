@@ -105,7 +105,7 @@ if not isDeveloperMode then exit;
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/rdriven"', true);
 CurrentTeam^.ExtDriven:= true
 end;
-
+(* conflicts with resurrection
 procedure chGrave(var s: shortstring);
 begin
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/grave"', true);
@@ -113,6 +113,7 @@ if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 CurrentTeam^.GraveName:= s
 end;
+*)
 
 procedure chFort(var s: shortstring);
 begin

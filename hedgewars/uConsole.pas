@@ -245,7 +245,7 @@ begin
     RegisterVariable('minestime',vtLongInt, @cMinesTime     , false);
     RegisterVariable('fort'    , vtCommand, @chFort         , false);
     RegisterVariable('voicepack',vtCommand, @chVoicepack    , false);
-    RegisterVariable('grave'   , vtCommand, @chGrave        , false);
+    //RegisterVariable('grave'   , vtCommand, @chGrave        , false);
     RegisterVariable('bind'    , vtCommand, @chBind         , true );
     RegisterVariable('addhh'   , vtCommand, @chAddHH        , false);
     RegisterVariable('hat'     , vtCommand, @chSetHat       , false);
