@@ -846,13 +846,14 @@ case step of
 else if ((GameFlags and gfInfAttack) <> 0) then
     begin
     if delay2 = 0 then
-        delay2:= cInactDelay 
+        delay2:= cInactDelay * 4
     else
         dec(delay2);
 
+    if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then 
+        CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstAttacked;
     if delay2 = 0 then
         begin
-        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstAttacked;
         CheckNoDamage;
         CheckForWin
         end

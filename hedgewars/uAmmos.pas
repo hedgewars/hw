@@ -53,6 +53,7 @@ uses uMisc, uGears, uWorld, uLocale, uConsole, uMobile;
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
     ammoLoadout, ammoProbability, ammoDelay, ammoReinforcement: shortstring;
+    InitialCounts: array[0..Pred(cMaxHHs)] of TAmmoCounts;
 
 procedure FillAmmoStore(Ammo: PHHAmmo; var cnts: TAmmoCounts);
 var mi: array[0..cMaxSlotIndex] of byte;
@@ -68,12 +69,11 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
        begin
        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
-
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= cnts[a];
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= cnts[a];
-
-       if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
-           Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
+       with Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]] do
+           begin
+           Count:= cnts[a];
+           if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then Count:= AMMO_INFINITE;
+           end;
        inc(mi[Ammoz[a].Slot])
        end
     else if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
@@ -82,7 +82,6 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
 
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= 0;
 
        inc(mi[Ammoz[a].Slot])
        end
@@ -144,11 +143,13 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         if ((GameFlags and gfPlaceHog) <> 0) and
             (a <> amTeleport) and (a <> amSkip) and
             (Ammoz[a].SkipTurns < 10000) then inc(Ammoz[a].SkipTurns,10000)
-        end else
-        ammos[a]:= AMMO_INFINITE
+        end 
+    else ammos[a]:= AMMO_INFINITE;
+    InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
     end;
-
-FillAmmoStore(StoresList[Pred(StoreCnt)], ammos)
+FillAmmoStore(StoresList[Pred(StoreCnt)], ammos);
+for cnt:= 0 to cMaxSlotIndex do
+    PackAmmo(StoresList[Pred(StoreCnt)], cnt)
 end;
 
 function GetAmmoByNum(num: Longword): PHHAmmo;
@@ -385,7 +386,7 @@ for i:= 0 to Pred(StoreCnt) do
                 if (Propz and ammoprop_NotBorder) <> 0 then
                     begin
                     Count:= 0;
-                    InitialCount:= 0
+                    InitialCounts[i][AmmoType]:= 0
                     end;
 
         PackAmmo(StoresList[i], slot)
@@ -425,7 +426,7 @@ for i:= 0 to Pred(StoreCnt) do
         begin
         for a:= 0 to cMaxSlotAmmoIndex do
             with StoresList[i]^[slot, a] do
-                Count:= InitialCount;
+                if AmmoType <> amNothing then Count:= InitialCounts[i][AmmoType];
 
         PackAmmo(StoresList[i], slot)
         end;
@@ -440,7 +441,8 @@ begin
     ammoLoadout:= '';
     ammoProbability:= '';
     ammoDelay:= '';
-    ammoReinforcement:= ''
+    ammoReinforcement:= '';
+    FillChar(InitialCounts, sizeof(InitialCounts), 0)
 end;
 
 procedure freeModule;

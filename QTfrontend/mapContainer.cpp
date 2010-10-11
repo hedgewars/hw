@@ -154,7 +154,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     gbTLayout->setSpacing(0);
     lwThemes = new QListWidget(this);
     lwThemes->setMinimumHeight(30);
-    lwThemes->setFixedWidth(120);
+    lwThemes->setFixedWidth(140);
     for (int i = 0; i < Themes->size(); ++i) {
         QListWidgetItem * lwi = new QListWidgetItem();
         lwi->setText(Themes->at(i));

@@ -69,11 +69,12 @@ with PHedgehog(Gear^.Hedgehog)^ do
         inc(ammoidx);
         if (ammoidx > cMaxSlotAmmoIndex) then
             begin
-            ammoidx:= 0;
             inc(i);
-            TryDo(i < 2, 'Engine bug: no ammo in current slot', true)
+            CurAmmoType:= amNothing;
+            ammoidx:= -1;
+            //TryDo(i < 2, 'Engine bug: no ammo in current slot', true)
             end;
-        until (Ammo^[slot, ammoidx].Count > 0) and (Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns)
+        until ((Ammo^[slot, ammoidx].Count > 0) and (Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns)) or (i = 1)
         end 
     else
         begin
