@@ -74,7 +74,7 @@ type
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
-            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer
+            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer, sprResurrector
             );
 
     // Gears that interact with other Gears and/or Land
@@ -88,7 +88,7 @@ type
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
-            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit);
+            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector);
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -132,7 +132,8 @@ type
             amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, // 30
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
-            amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer); // 48
+            amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
+            amResurrector);
 
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
 
@@ -815,7 +816,11 @@ const
             (FileName:   'amSMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandSMine
             (FileName:  'amHammer'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprWhip
+            Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprWhip
+            (FileName: 'amResurrector'; Path: ptHedgehog; AltPath: ptNone;
+                Texture: nil; Surface: nil; Width: 128; Height: 64;
+                imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
+                tpMedium; getDimensions: false; getImageDimensions: true) 
             );
 
     Wavez: array [TWave] of record
@@ -2169,8 +2174,31 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0;
+            ejectY: 0),
+
+        (NameId: sidResurrector;
+            NameTex: nil;
+            Probability: 0;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoCrosshair;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amResurrector;
+                AttackVoice: sndNone);
+            Slot: 8;
+            TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
             ejectY: 0)
-            );
+        );
+
 
 
     conversionFormat: TSDL_PixelFormat = (

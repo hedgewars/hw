@@ -20,7 +20,7 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, uTeams, SDLh, GLunit;
+uses sysutils, uConsts, uTeams, SDLh, GLunit, uWorld;
 
 
 var PixelFormat: PSDL_PixelFormat;
@@ -58,6 +58,7 @@ procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTextur
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawFillRect(r: TSDL_Rect);
+procedure DrawCircle(X, Y, Radius: LongInt; Width: Single; r, g, b, a: Byte); 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 function  CheckCJKFont(s: ansistring; font: THWFont): THWFont;
 function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
@@ -817,6 +818,29 @@ glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 Tint($FF, $FF, $FF, $FF);
 glEnable(GL_TEXTURE_2D)
+end;
+
+procedure DrawCircle(X, Y, Radius: LongInt; Width: Single; r, g, b, a: Byte); 
+var
+    i: LongInt;
+    CircleVertex: array [0..359] of TVertex2f;
+begin
+    for i := 0 to 359 do begin
+        CircleVertex[i].X := X + Radius*cos(i*pi/180);
+        CircleVertex[i].Y := Y + Radius*sin(i*pi/180);
+    end;
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_LINE_SMOOTH);
+    glPushMatrix;
+    glTranslatef(WorldDx, WorldDy, 0);
+    glLineWidth(Width);
+    Tint(r, g, b, a);
+    glVertexPointer(2, GL_FLOAT, 0, @CircleVertex[0]);
+    glDrawArrays(GL_LINE_LOOP, 0, 360);
+    Tint($FF, $FF, $FF, $FF);
+    glPopMatrix;
+    glEnable(GL_TEXTURE_2D);
+    glDisable(GL_LINE_SMOOTH);
 end;
 
 procedure StoreRelease;

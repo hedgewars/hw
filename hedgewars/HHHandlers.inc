@@ -268,6 +268,9 @@ with Gear^,
                                PauseMusic
                                end;
                       amFlamethrower: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtFlamethrower,  0, xx * _0_5, yy * _0_5, 0);
+                    amResurrector: CurAmmoGear:= AddGear(hwRound(lx),
+                                           hwRound(ly), gtResurrector, 0, _0,
+                                           _0, 0);
                   end;
 
         uStats.AmmoUsed(CurAmmoType);
