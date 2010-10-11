@@ -1456,7 +1456,7 @@ begin
         dec(Gear^.Timer);
     end
     else // gsttmpFlag = 0
-        if TurnTimeLeft = 0 then Gear^.State := Gear^.State or gsttmpFlag;
+        if (TurnTimeLeft = 0) or ((GameFlags and gfInfAttack) <> 0) then Gear^.State := Gear^.State or gsttmpFlag;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
