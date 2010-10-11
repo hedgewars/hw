@@ -253,11 +253,6 @@ if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
             ParseCommand('/taunt ' + char(i), true);
             exit
             end;
-    if (s = '/newgrave') then
-        begin
-        ParseCommand('/newgrave', true);
-        exit
-        end;
     end
     else
         ParseCommand('/say ' + s, true);

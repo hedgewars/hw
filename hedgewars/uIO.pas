@@ -330,7 +330,6 @@ while (headcmd <> nil)
             end;
         'w': ParseCommand('setweap ' + headcmd^.str[2], true);
         't': ParseCommand('taunt ' + headcmd^.str[2], true);
-        'g': ParseCommand('newgrave', true);
         'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         '1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
         #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)

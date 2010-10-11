@@ -245,7 +245,7 @@ begin
     RegisterVariable('minestime',vtLongInt, @cMinesTime     , false);
     RegisterVariable('fort'    , vtCommand, @chFort         , false);
     RegisterVariable('voicepack',vtCommand, @chVoicepack    , false);
-    //RegisterVariable('grave'   , vtCommand, @chGrave        , false);
+    RegisterVariable('grave'   , vtCommand, @chGrave        , false);
     RegisterVariable('bind'    , vtCommand, @chBind         , true );
     RegisterVariable('addhh'   , vtCommand, @chAddHH        , false);
     RegisterVariable('hat'     , vtCommand, @chSetHat       , false);
@@ -265,7 +265,6 @@ begin
     RegisterVariable('skip'    , vtCommand, @chSkip         , false);
     RegisterVariable('history' , vtCommand, @chHistory      , true );
     RegisterVariable('chat'    , vtCommand, @chChat         , true );
-    RegisterVariable('newgrave', vtCommand, @chNewGrave     , false);
     RegisterVariable('say'     , vtCommand, @chSay          , true );
     RegisterVariable('hogsay'  , vtCommand, @chHogSay       , true );
     RegisterVariable('team'    , vtCommand, @chTeamSay      , true );

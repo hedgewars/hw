@@ -105,7 +105,7 @@ if not isDeveloperMode then exit;
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/rdriven"', true);
 CurrentTeam^.ExtDriven:= true
 end;
-(* conflicts with resurrection
+
 procedure chGrave(var s: shortstring);
 begin
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/grave"', true);
@@ -113,7 +113,6 @@ if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 CurrentTeam^.GraveName:= s
 end;
-*)
 
 procedure chFort(var s: shortstring);
 begin
@@ -578,17 +577,6 @@ else
     SpeechText:= text
     end;
 
-end;
-
-procedure chNewGrave;
-begin
-if CheckNoTeamOrHH or isPaused then exit;
-
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
-
-if not CurrentTeam^.ExtDriven then SendIPC('g');
-
-AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtGrave, 0, _0, _0, 0)
 end;
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
