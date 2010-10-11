@@ -305,36 +305,35 @@ end;
 
 procedure AfterAttack;
 var s: shortstring;
+    a: TAmmoType;
 begin
 with CurrentHedgehog^.Gear^,
         CurrentHedgehog^ do
     begin
+    a:= CurAmmoType;
     State:= State and not gstAttacking;
-    if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_Effect) = 0 then
+    if (Ammoz[a].Ammo.Propz and ammoprop_Effect) = 0 then
         begin
         Inc(MultiShootAttacks);
         
-        if (Ammoz[CurAmmoType].Ammo.NumPerTurn >= MultiShootAttacks) then
+        if (Ammoz[a].Ammo.NumPerTurn >= MultiShootAttacks) then
             begin
-            s:= inttostr(Ammoz[CurAmmoType].Ammo.NumPerTurn - MultiShootAttacks + 1);
+            s:= inttostr(Ammoz[a].Ammo.NumPerTurn - MultiShootAttacks + 1);
             AddCaption(format(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
             end;
         
-        if (Ammoz[CurAmmoType].Ammo.NumPerTurn >= MultiShootAttacks) or
+        if (Ammoz[a].Ammo.NumPerTurn >= MultiShootAttacks) or
             ((GameFlags and gfMultiWeapon) <> 0) then
             begin
             isInMultiShoot:= true
             end
         else
             begin
-            if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) = 0) and ((GameFlags and gfInfAttack) = 0) then
-                begin
-                TurnTimeLeft:= Ammoz[CurAmmoType].TimeAfterTurn;
-                State:= State or gstAttacked
-                end;
-            if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0 then ApplyAmmoChanges(CurrentHedgehog^);
-            if (GameFlags and gfInfAttack) <> 0 then State:= State or gstAttacked;
-            OnUsedAmmo(CurrentHedgehog^)
+            OnUsedAmmo(CurrentHedgehog^);
+            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEndHint) = 0) and ((GameFlags and gfInfAttack) = 0) then
+                TurnTimeLeft:= Ammoz[a].TimeAfterTurn;
+            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEndHint) = 0) then State:= State or gstAttacked;
+            if (Ammoz[a].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0 then ApplyAmmoChanges(CurrentHedgehog^)
             end;
         end
     else
