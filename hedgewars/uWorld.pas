@@ -247,7 +247,7 @@ inc(y, BORDERSIZE);
 for i:= 0 to cMaxSlotIndex do
     if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
         begin
-        if (cScreenHeight - CursorPoint.Y >= y) and (cScreenHeight - CursorPoint.Y < y + AMSlotSize) then Slot:= i;
+        if (cScreenHeight - CursorPoint.Y >= y) and (cScreenHeight - CursorPoint.Y <= y + AMSlotSize) then Slot:= i;
         inc(SlotsNum);
         DrawSprite(sprAMBorderVertical, x - BORDERSIZE, y, 0);
         t:= 0;
@@ -303,7 +303,7 @@ DrawSprite(sprAMBorderVertical, x + AMWidth - AMxOffset, y, 1);
 for i:= cMaxSlotIndex downto 0 do
     if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
         begin
-        if (cScreenHeight - CursorPoint.Y >= y - AMSlotSize) and (cScreenHeight - CursorPoint.Y < y) then Slot:= i;
+        if (cScreenHeight - CursorPoint.Y >= y - AMSlotSize) and (cScreenHeight - CursorPoint.Y <= y) then Slot:= i;
         dec(y, AMSlotSize);
         inc(SlotsNum);
         DrawSprite(sprAMBorderVertical, x - BORDERSIZE, y, 0);
