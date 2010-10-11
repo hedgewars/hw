@@ -418,20 +418,17 @@ end;
 
 // Restore indefinitely disabled weapons and initial weapon counts.  Only used for hog placement right now
 procedure ResetWeapons;
-var i, slot, a: Longword;
-    t: TAmmoType;
+var i, t: Longword;
+    a: TAmmoType;
 begin
-for i:= 0 to Pred(StoreCnt) do
-    for slot:= 0 to cMaxSlotIndex do
-        begin
-        for a:= 0 to cMaxSlotAmmoIndex do
-            with StoresList[i]^[slot, a] do
-                if AmmoType <> amNothing then Count:= InitialCounts[i][AmmoType];
+for t:= 0 to Pred(TeamsCount) do
+   with TeamsArray[t]^ do
+      for i:= 0 to cMaxHHIndex do
+          if Hedgehogs[i].Gear <> nil then
+             FillAmmoStore(Hedgehogs[i].Ammo, InitialCounts[Hedgehogs[i].AmmoStore]);
 
-        PackAmmo(StoresList[i], slot)
-        end;
-for t:= Low(TAmmoType) to High(TAmmoType) do
-    if Ammoz[t].SkipTurns >= 10000 then dec(Ammoz[t].SkipTurns,10000);
+for a:= Low(TAmmoType) to High(TAmmoType) do
+    if Ammoz[a].SkipTurns >= 10000 then dec(Ammoz[a].SkipTurns,10000)
 end;
 
 procedure initModule;
