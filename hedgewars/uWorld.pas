@@ -268,7 +268,7 @@ for i:= 0 to cMaxSlotIndex do
                     DrawSprite(sprAMAmmos, x + g * AMSlotSize, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
                 if (Slot = i)
                 and (CursorPoint.X >= x + g * AMSlotSize)
-                and (CursorPoint.X < x + (g + 1) * AMSlotSize) then
+                and (CursorPoint.X <= x + (g + 1) * AMSlotSize) then
                     begin
                     if (STurns < 0) then DrawSprite(sprAMSlot, x + g * AMSlotSize, y, 0);
                     Pos:= t;
@@ -327,7 +327,7 @@ for i:= cMaxSlotIndex downto 0 do
                     DrawSprite(sprAMAmmos, x + g * AMSlotSize, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
                 if (Slot = i)
                 and (CursorPoint.X >= x + g * AMSlotSize)
-                and (CursorPoint.X < x + (g + 1) * AMSlotSize) then
+                and (CursorPoint.X <= x + (g + 1) * AMSlotSize) then
                     begin
                     if (STurns < 0) then DrawSprite(sprAMSlot, x + g * AMSlotSize, y, 0);
                     Pos:= t;
@@ -351,6 +351,7 @@ DrawSprite(sprAMCorners, x + AMWidth - AMxOffset, y, 1);
 if (Pos >= 0) then
     begin
     if (Ammo^[Slot, Pos].Count > 0) and (Ammo^[Slot, Pos].AmmoType <> amNothing) then
+        begin
         if (amSel <> Ammo^[Slot, Pos].AmmoType) or (WeaponTooltipTex = nil) then
             begin
             amSel:= Ammo^[Slot, Pos].AmmoType;
@@ -364,7 +365,6 @@ if (Pos >= 0) then
             DrawTexture(cScreenWidth div 2 + AMxOffset - 45, AMyOffset - 25, CountTexz[Ammo^[Slot, Pos].Count]);
 {$ELSE}
         DrawTexture(cScreenWidth div 2 - (AMWidth - 10) + AMxShift, cScreenHeight - AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
-
         if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
             DrawTexture(cScreenWidth div 2 + AMxOffset - 45, cScreenHeight - AMyOffset - 25, CountTexz[Ammo^[Slot, Pos].Count]);
 {$ENDIF}
@@ -377,6 +377,7 @@ if (Pos >= 0) then
             FreeWeaponTooltip;
             exit
             end;
+       end
     end
 else
     FreeWeaponTooltip;
