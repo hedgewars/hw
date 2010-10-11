@@ -859,6 +859,7 @@ begin
         StopSound(Gear^.SoundChannel);
         DeleteGear(Gear);
         AfterAttack;
+        doStepHedgehogMoving(HHGear);  // for gfInfAttack
         exit
     end;
 
@@ -2933,7 +2934,7 @@ begin
 
         AfterAttack;
         CurAmmoGear := nil;
-        TurnTimeLeft := 14 * 125;
+        if (GameFlags and gfInfAttack) = 0 then TurnTimeLeft := 14 * 125;
 
         if (TrainingFlags and tfRCPlane) <> 0 then
             TurnTimeLeft := 0;
@@ -3695,7 +3696,8 @@ begin
                 CurrentHedgehog^.Gear^.Active := true;
                 CurrentHedgehog^.Gear^.X := Gear^.X;
                 CurrentHedgehog^.Gear^.Y := int2hwFloat(cWaterLine+cVisibleWater)+_128;
-                CurrentHedgehog^.Unplaced := false
+                CurrentHedgehog^.Unplaced := false;
+                TurnTimeLeft:= 0
             end;
             ResumeMusic
         end;
@@ -3713,7 +3715,8 @@ begin
             CurrentHedgehog^.Gear^.Active := true;
             CurrentHedgehog^.Gear^.X := Gear^.X;
             CurrentHedgehog^.Gear^.Y := int2hwFloat(cWaterLine+cVisibleWater)+_128;
-            CurrentHedgehog^.Unplaced := false
+            CurrentHedgehog^.Unplaced := false;
+            TurnTimeLeft:= 0
         end;
         ResumeMusic
     end

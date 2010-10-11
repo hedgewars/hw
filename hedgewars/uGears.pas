@@ -854,6 +854,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
         CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstAttacked;
     if delay2 = 0 then
         begin
+        SweepDirty;
         CheckNoDamage;
         CheckForWin
         end
