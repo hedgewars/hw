@@ -41,7 +41,7 @@ procedure perfExt_SaveBeganSynching; inline;
 procedure perfExt_SaveFinishedSynching; inline;
 
 implementation
-uses uTeams;
+uses uTeams, uConsole;
 
 function isPhone: Boolean; inline;
 begin

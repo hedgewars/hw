@@ -190,7 +190,8 @@ var x, y, i, t, g: LongInt;
     Slot, Pos, STurns: LongInt;
     Ammo: PHHAmmo;
 begin
-if  (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then bShowAmmoMenu:= false;
+if (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then
+    bShowAmmoMenu:= false;
 if bShowAmmoMenu then
    begin
    FollowGear:= nil;

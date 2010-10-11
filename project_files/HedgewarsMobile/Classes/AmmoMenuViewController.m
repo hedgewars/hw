@@ -25,6 +25,8 @@
 #import "UIImageExtra.h"
 #import "PascalImports.h"
 
+#define BTNS_PER_ROW 9
+
 @implementation AmmoMenuViewController
 @synthesize weaponsImage, buttonsArray, isVisible;
 
@@ -46,7 +48,8 @@
     self.view.layer.borderWidth = 1.3f;
     [self.view.layer setCornerRadius:10];
     [self.view.layer setMasksToBounds:YES];
-
+    self.view.autoresizingMask = UIViewAutoresizingNone;
+    
     self.isVisible = NO;
     delay = (uint8_t *) calloc(HW_getNumberOfWeapons(), sizeof(uint8_t));
     HW_getAmmoDelays(delay);
@@ -62,7 +65,15 @@
 -(void) appearInView:(UIView *)container {
     [self viewWillAppear:YES];
     [container addSubview:self.view];
-    self.view.center = CGPointMake(container.center.y, container.center.x);
+    if (IS_DUALHEAD() == NO)
+        self.view.center = CGPointMake(container.center.y, container.center.x);
+    else {
+        UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+        if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight)
+            self.view.center = CGPointMake(container.center.y, container.center.x);
+        else
+            self.view.center = CGPointMake(container.center.x, container.center.y);
+    }
     self.isVisible = YES;
 }
 
@@ -83,18 +94,33 @@
     [ammoStoreImage release];
 
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:HW_getNumberOfWeapons()];
-    for (int i = 0; i < HW_getNumberOfWeapons(); i++) {
-        int x_dst = 10+(i%10)*44;
-        int y_dst = 10+(i/10)*44;
+    int i, j, e;
+    for (i = 0, j = 0, e = 0; i < HW_getNumberOfWeapons(); i++) {
+        int x, y;
+        float w, radius;
         
-        if (i / 10 % 2 != 0)
-            x_dst += 20;
+        // move utilities aside and make 'em rounded
+        if (HW_isWeaponAnEffect(i)) {
+            x = 432;
+            y = 20 + 48*e++;
+            w = 1.5;
+            radius = 22;
+        } else {
+            x = 10+(j%BTNS_PER_ROW)*44;
+            y = 10+(j/BTNS_PER_ROW)*44;
+            if (j / BTNS_PER_ROW % 2 != 0)
+                x += 20;
+            w = 1;
+            radius = 6;
+            j++;
+        }
+
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(x_dst, y_dst, 40, 40);
+        button.frame = CGRectMake(x, y, 40, 40);
         button.tag = i;
-        button.layer.borderWidth = 1;
         button.layer.borderColor = [UICOLOR_HW_YELLOW_TEXT CGColor];
-        [button.layer setCornerRadius:6];
+        button.layer.borderWidth = w;
+        [button.layer setCornerRadius:radius];
         [button.layer setMasksToBounds:YES];
         [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitleColor:UICOLOR_HW_YELLOW_TEXT forState:UIControlStateNormal];
@@ -106,6 +132,7 @@
         button.titleLabel.layer.borderWidth = 1;
         [self.view addSubview:button];
         [array addObject:button];
+        
     }
     [self performSelectorOnMainThread:@selector(setButtonsArray:) withObject:array waitUntilDone:NO];
     [array release];

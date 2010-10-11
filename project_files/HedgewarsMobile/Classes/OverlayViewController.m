@@ -61,21 +61,33 @@
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
             if (IS_DUALHEAD() == NO)
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
             break;
         case UIDeviceOrientationLandscapeRight:
             if (IS_DUALHEAD() == NO)
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
+            break;
+        case UIDeviceOrientationPortrait:
+            if (IS_DUALHEAD())
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            if (IS_DUALHEAD())
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
             break;
         default:
             // a debug log would spam too much
             break;
     }
+    if (self.amvc.isVisible)
+        [self.amvc appearInView:self.view];
     self.view.frame = usefulRect;
-    //sdlView.frame = usefulRect;
     [UIView commitAnimations];
+    
+    // for single screens only landscape mode is supported
+    // for dual screen mode the sdlview is not modified, but you can rotate the pad in any direction
 }
 
 #pragma mark -
@@ -93,6 +105,26 @@
 
     initialScreenCount = [[UIScreen screens] count];
 
+    if (IS_DUALHEAD()) {
+        // set initial orientation wrt the controller orientation
+        switch (self.interfaceOrientation) {
+            case UIDeviceOrientationLandscapeLeft:
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
+                break;
+            case UIDeviceOrientationLandscapeRight:
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
+                break;
+            case UIDeviceOrientationPortrait:
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
+                break;
+            case UIDeviceOrientationPortraitUpsideDown:
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
+                break;
+            default:
+                DLog(@"Nope");
+                break;
+        }
+    }
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
 
@@ -103,7 +135,7 @@
                                         userInfo:nil
                                          repeats:YES];
 
-    // add timer too runloop, otherwise it doesn't work
+    // add timer to runloop, otherwise it doesn't work
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
 
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
@@ -323,13 +355,15 @@
             if (IS_DUALHEAD() || self.useClassicMenu == NO) {
                 if (self.amvc == nil)
                     self.amvc = [[AmmoMenuViewController alloc] init];
-                
+
                 if (self.amvc.isVisible) {
                     doDim();
                     [self.amvc disappear];
                 } else {
-                    doNotDim();
-                    [self.amvc appearInView:self.view];
+                    if (HW_isAmmoMenuNotAllowed() == NO) {
+                        doNotDim();
+                        [self.amvc appearInView:self.view];
+                    }
                 }
             } else {
                 HW_ammoMenu();
@@ -452,7 +486,7 @@
     switch ([allTouches count]) {
         case 1:
             // if we're in the menu we just click in the point
-            if (HW_isAmmoOpen()) {
+            if (HW_isAmmoMenuOpen()) {
                 HW_setCursor(HWXZ(currentPosition.x), HWYZ(currentPosition.y));
                 // this click doesn't need any wrapping because the ammoMenu already limits the cursor
                 HW_click();
@@ -560,7 +594,7 @@
             touch = [[allTouches allObjects] objectAtIndex:0];
             CGPoint currentPosition = [touch locationInView:self.view];
 
-            if (HW_isAmmoOpen()) {
+            if (HW_isAmmoMenuOpen()) {
                 // no zoom consideration for this
                 HW_setCursor(HWXZ(currentPosition.x), HWYZ(currentPosition.y));
             } else

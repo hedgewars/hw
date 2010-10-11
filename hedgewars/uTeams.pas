@@ -225,7 +225,6 @@ repeat
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
 
 CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
-perfExt_AmmoUpdate
 end;
 
 procedure AfterSwitchHedgehog;
@@ -297,7 +296,9 @@ else
     if TurnTimeLeft > 0 then
         PlaySound(sndIllGetYou, CurrentTeam^.voicepack);
     ReadyTimeLeft:= 0
-    end
+    end;
+
+perfExt_NewTurnBeginning();
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;

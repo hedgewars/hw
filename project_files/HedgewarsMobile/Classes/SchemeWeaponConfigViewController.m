@@ -53,15 +53,15 @@
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCHEMES_DIRECTORY() error:NULL];
     self.listOfSchemes = contentsOfDir;
 
-    if ([listOfSchemes containsObject:@"Default.plist"])
-         self.selectedScheme = @"Default.plist";
-
+    if ([self.selectedScheme isEqualToString:@""] && [listOfSchemes containsObject:@"Default.plist"])
+        self.selectedScheme = @"Default.plist";
+    
     contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
     self.listOfWeapons = contentsOfDir;
-
-    if ([listOfWeapons containsObject:@"Default.plist"])
-         self.selectedWeapon = @"Default.plist";
-
+    
+    if ([self.selectedWeapon isEqualToString:@""] && [listOfWeapons containsObject:@"Default.plist"])
+        self.selectedWeapon = @"Default.plist";
+    
     [self.tableView reloadData];
 }
 

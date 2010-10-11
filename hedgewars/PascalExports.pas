@@ -179,9 +179,14 @@ begin
     y^:= CursorPoint.Y;
 end;
 
-function HW_isAmmoOpen: boolean; cdecl; export;
+function HW_isAmmoMenuOpen: boolean; cdecl; export;
 begin
     exit(bShowAmmoMenu);
+end;
+
+function HW_isAmmoMenuNotAllowed: boolean; cdecl; export;
+begin;
+    exit ( (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) );
 end;
 
 function HW_isPaused: boolean; cdecl; export;
@@ -263,6 +268,11 @@ procedure HW_setWeapon(whichone: LongInt); cdecl; export;
 begin
     if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
         SetWeapon(TAmmoType(whichone+1));
+end;
+
+function HW_isWeaponAnEffect(whichone: LongInt): boolean; cdecl; export;
+begin
+    exit(Ammoz[TAmmoType(whichone+1)].Ammo.Propz and ammoprop_Effect <> 0)
 end;
 
 function HW_getAmmoCounts(counts: PLongInt): LongInt; cdecl; export;

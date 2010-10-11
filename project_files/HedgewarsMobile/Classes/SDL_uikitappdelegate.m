@@ -129,7 +129,7 @@ int main (int argc, char *argv[]) {
 
     // since the sdlwindow is not yet created, we add the overlayController with a delay
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:isNetGameNum,@"net",menuStyle,@"menu",nil];
-    [self performSelector:@selector(displayOverlayLater:) withObject:dict afterDelay:0.1];
+    [self performSelector:@selector(displayOverlayLater:) withObject:dict afterDelay:1];
 
     // this is the pascal fuction that starts the game (wrapped around isInGame)
     isInGame = YES;

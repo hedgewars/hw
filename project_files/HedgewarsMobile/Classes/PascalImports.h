@@ -70,7 +70,8 @@ extern "C" {
     void HW_setCursor(int x, int y);
     void HW_getCursor(int *x, int *y);
 
-    BOOL HW_isAmmoOpen(void);
+    BOOL HW_isAmmoMenuOpen(void);
+    BOOL HW_isAmmoMenuNotAllowed(void);
     BOOL HW_isPaused(void);
     BOOL HW_isWeaponRequiringClick(void);
     BOOL HW_isWeaponTimerable(void);
@@ -81,11 +82,14 @@ extern "C" {
     void HW_setPianoSound(int snd);
     
     void HW_setWeapon(int whichone);
-    void HW_getAmmoDelays(unsigned char *);
-    int  HW_getAmmoCounts(int *);
-    int  HW_getTurnsForCurrentTeam(void);
-    int  HW_getNumberOfWeapons(void);
+    BOOL HW_isWeaponAnEffect(int whichone);
     char *HW_getWeaponNameByIndex(int whichone);
+
+    void HW_getAmmoDelays(unsigned char *pointer);
+    int  HW_getAmmoCounts(int *pointer);
+    
+    int  HW_getNumberOfWeapons(void);
+    int  HW_getTurnsForCurrentTeam(void);
     int  HW_getMaxNumberOfHogs(void);
     int  HW_getMaxNumberOfTeams(void);
     

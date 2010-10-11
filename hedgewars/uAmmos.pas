@@ -248,7 +248,7 @@ with Hedgehog do
                 end
             end
     end;
-perfExt_NewTurnBeginning;
+perfExt_AmmoUpdate;
 end;
 
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
@@ -357,7 +357,6 @@ with Hedgehog do
             ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0;
         end
     end;
-perfExt_NewTurnBeginning;
 end;
 
 procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
