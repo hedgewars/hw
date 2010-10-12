@@ -199,13 +199,13 @@
                                     self.mapConfigViewController.mazeSizeCommand,@"mazesize_command",
                                     self.mapConfigViewController.themeCommand,@"theme_command",
                                     self.mapConfigViewController.staticMapCommand,@"staticmap_command",
-                                    self.mapConfigViewController.missionCommand,@"mission_command",  
+                                    self.mapConfigViewController.missionCommand,@"mission_command",
                                     self.teamConfigViewController.listOfSelectedTeams,@"teams_list",
                                     self.schemeWeaponConfigViewController.selectedScheme,@"scheme",
                                     self.schemeWeaponConfigViewController.selectedWeapon,@"weapon",
                                     [NSNumber numberWithInt:self.interfaceOrientation],@"orientation",
                                     nil];
-    
+
     // finally launch game and remove this controller
     DLog(@"sending config %@", gameDictionary);
 
