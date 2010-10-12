@@ -1,6 +1,6 @@
 /*
  * Hedgewars Xfire integration
- * Copyright (c) 2010 Mario Liebisch <mario.liebisch AT googlemail.com>
+ * Copyright (c) 2010 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
