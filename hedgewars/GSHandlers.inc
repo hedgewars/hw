@@ -3342,7 +3342,7 @@ procedure doStepPortal(Gear: PGear);
 var 
     iterator, conPortal: PGear;
     s, acptRadius, nx, ny, ox, oy, poffs, noffs, pspeed, nspeed: hwFloat;
-    noTrap, hasdxy: Boolean;
+    hasdxy: Boolean;
 begin
     doPortalColorSwitch();
 

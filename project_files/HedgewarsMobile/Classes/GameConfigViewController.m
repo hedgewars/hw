@@ -48,7 +48,7 @@
     switch (theButton.tag) {
         case 0:
             playSound(@"backSound");
-            if ([mapConfigViewController busy]) {
+            if ([self.mapConfigViewController busy]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Wait for the Preview",@"")
                                                                 message:NSLocalizedString(@"Before returning the preview needs to be generated",@"")
                                                                delegate:nil
@@ -121,7 +121,7 @@
 
 -(BOOL) isEverythingSet {
     // don't start playing if the preview is in progress
-    if ([mapConfigViewController busy]) {
+    if ([self.mapConfigViewController busy]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Wait for the Preview",@"")
                                                         message:NSLocalizedString(@"Before playing the preview needs to be generated",@"")
                                                        delegate:nil
@@ -133,7 +133,7 @@
     }
     
     // play only if there is more than one team
-    if ([teamConfigViewController.listOfSelectedTeams count] < 2) {
+    if ([self.teamConfigViewController.listOfSelectedTeams count] < 2) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too few teams playing",@"")
                                                         message:NSLocalizedString(@"Select at least two teams to play a game",@"")
                                                        delegate:nil
@@ -149,7 +149,7 @@
     for (NSDictionary *teamData in teamConfigViewController.listOfSelectedTeams)
         hogs += [[teamData objectForKey:@"number"] intValue];
     
-    if (hogs > mapConfigViewController.maxHogs) {
+    if (hogs > self.mapConfigViewController.maxHogs) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many hogs",@"")
                                                         message:NSLocalizedString(@"The map is too small for that many hogs",@"")
                                                        delegate:nil
@@ -160,7 +160,7 @@
         return NO;
     }
     
-    if ([teamConfigViewController.listOfSelectedTeams count] > HW_getMaxNumberOfTeams()) {
+    if ([self.teamConfigViewController.listOfSelectedTeams count] > HW_getMaxNumberOfTeams()) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many teams",@"")
                                                         message:NSLocalizedString(@"Max six teams are allowed in the same game",@"")
                                                        delegate:nil
@@ -171,7 +171,7 @@
         return NO;
     }
     
-    if ([schemeWeaponConfigViewController.selectedScheme length] == 0 || [schemeWeaponConfigViewController.selectedWeapon length] == 0 ) {
+    if ([self.schemeWeaponConfigViewController.selectedScheme length] == 0 || [self.schemeWeaponConfigViewController.selectedWeapon length] == 0 ) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Missing detail",@"")
                                                         message:NSLocalizedString(@"Select one Scheme and one Weapon for this game",@"")
                                                        delegate:nil
@@ -192,19 +192,20 @@
         return;
 
     // create the configuration file that is going to be sent to engine
-    NSDictionary *gameDictionary = [NSDictionary dictionaryWithObjectsAndKeys:mapConfigViewController.seedCommand,@"seed_command",
-                                                                      mapConfigViewController.templateFilterCommand,@"templatefilter_command",
-                                                                      mapConfigViewController.mapGenCommand,@"mapgen_command",
-                                                                      mapConfigViewController.mazeSizeCommand,@"mazesize_command",
-                                                                      mapConfigViewController.themeCommand,@"theme_command",
-                                                                      mapConfigViewController.staticMapCommand,@"staticmap_command",
-                                                                      mapConfigViewController.missionCommand,@"mission_command",  
-                                                                      teamConfigViewController.listOfSelectedTeams,@"teams_list",
-                                                                      schemeWeaponConfigViewController.selectedScheme,@"scheme",
-                                                                      schemeWeaponConfigViewController.selectedWeapon,@"weapon",
-                                                                      [NSNumber numberWithInt:self.interfaceOrientation],@"orientation",
-                                                                      nil];
-
+    NSDictionary *gameDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    self.mapConfigViewController.seedCommand,@"seed_command",
+                                    self.mapConfigViewController.templateFilterCommand,@"templatefilter_command",
+                                    self.mapConfigViewController.mapGenCommand,@"mapgen_command",
+                                    self.mapConfigViewController.mazeSizeCommand,@"mazesize_command",
+                                    self.mapConfigViewController.themeCommand,@"theme_command",
+                                    self.mapConfigViewController.staticMapCommand,@"staticmap_command",
+                                    self.mapConfigViewController.missionCommand,@"mission_command",  
+                                    self.teamConfigViewController.listOfSelectedTeams,@"teams_list",
+                                    self.schemeWeaponConfigViewController.selectedScheme,@"scheme",
+                                    self.schemeWeaponConfigViewController.selectedWeapon,@"weapon",
+                                    [NSNumber numberWithInt:self.interfaceOrientation],@"orientation",
+                                    nil];
+    
     // finally launch game and remove this controller
     DLog(@"sending config %@", gameDictionary);
 
@@ -214,10 +215,10 @@
         [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
         
         // tell controllers that they're being reloaded
-        [mapConfigViewController viewWillAppear:YES];
+        [self.mapConfigViewController viewWillAppear:YES];
+        [self.schemeWeaponConfigViewController viewWillAppear:YES];
     } else {
-        DLog(@"gameconfig data not complete!!\nmapConfigViewController = %@\nteamConfigViewController = %@\nschemeWeaponConfigViewController = %@\n",
-             mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController);
+        DLog(@"gameconfig data not complete!!");
         [self.parentViewController dismissModalViewControllerAnimated:YES];
 
         // present an alert to the user, with an image on the ipad (too big for the iphone)
@@ -317,45 +318,44 @@
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
 
-    [mapConfigViewController viewWillAppear:animated];
-    [teamConfigViewController viewWillAppear:animated];
-    [schemeWeaponConfigViewController viewWillAppear:animated];
+    [self.mapConfigViewController viewWillAppear:animated];
+    [self.teamConfigViewController viewWillAppear:animated];
+    [self.schemeWeaponConfigViewController viewWillAppear:animated];
     // add other controllers here and below
 
     [super viewWillAppear:animated];
 }
 
 -(void) viewDidAppear:(BOOL)animated {
-    [mapConfigViewController viewDidAppear:animated];
-    [teamConfigViewController viewDidAppear:animated];
-    [schemeWeaponConfigViewController viewDidAppear:animated];
+    [self.mapConfigViewController viewDidAppear:animated];
+    [self.teamConfigViewController viewDidAppear:animated];
+    [self.schemeWeaponConfigViewController viewDidAppear:animated];
     [super viewDidAppear:animated];
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
-    [mapConfigViewController viewWillDisappear:animated];
-    [teamConfigViewController viewWillDisappear:animated];
-    [schemeWeaponConfigViewController viewWillDisappear:animated];
+    [self.mapConfigViewController viewWillDisappear:animated];
+    [self.teamConfigViewController viewWillDisappear:animated];
+    [self.schemeWeaponConfigViewController viewWillDisappear:animated];
     [super viewWillDisappear:animated];
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
-    [mapConfigViewController viewDidDisappear:animated];
-    [teamConfigViewController viewDidDisappear:animated];
-    [schemeWeaponConfigViewController viewDidDisappear:animated];
+    [self.mapConfigViewController viewDidDisappear:animated];
+    [self.teamConfigViewController viewDidDisappear:animated];
+    [self.schemeWeaponConfigViewController viewDidDisappear:animated];
     [super viewDidDisappear:animated];
 }
 
 -(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    if (mapConfigViewController.view.superview == nil)
-        mapConfigViewController = nil;
-    if (teamConfigViewController.view.superview == nil)
-        teamConfigViewController = nil;
-    if (schemeWeaponConfigViewController.view.superview == nil)
-        schemeWeaponConfigViewController = nil;
-    if (helpPage.view.superview == nil)
-        helpPage = nil;
+    if (self.mapConfigViewController.view.superview == nil)
+        self.mapConfigViewController = nil;
+    if (self.teamConfigViewController.view.superview == nil)
+        self.teamConfigViewController = nil;
+    if (self.schemeWeaponConfigViewController.view.superview == nil)
+        self.schemeWeaponConfigViewController = nil;
+    if (self.helpPage.view.superview == nil)
+        self.helpPage = nil;
 
     // Release any cached data, images, etc that aren't in use.
     self.imgContainer = nil;

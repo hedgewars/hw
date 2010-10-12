@@ -35,16 +35,6 @@
     return rotationManager(interfaceOrientation);
 }
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    if (self.settingsViewController.view.superview == nil)
-        self.settingsViewController = nil;
-    if (self.gameConfigViewController.view.superview == nil)
-        self.gameConfigViewController = nil;
-    MSG_MEMCLEAN();
-}
-
 // using a different thread for audio 'cos it's slow
 -(void) initAudioThread {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -254,6 +244,19 @@
     self.savedGamesViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
+}
+
+-(void) didReceiveMemoryWarning {
+    if (self.settingsViewController.view.superview == nil)
+        self.settingsViewController = nil;
+    if (self.gameConfigViewController.view.superview == nil)
+        self.gameConfigViewController = nil;
+    if (self.aboutViewController.view.superview == nil)
+        self.aboutViewController = nil;
+    if (self.savedGamesViewController.view.superview == nil)
+        self.savedGamesViewController = nil;
+    MSG_MEMCLEAN();
+    [super didReceiveMemoryWarning];
 }
 
 -(void) dealloc {

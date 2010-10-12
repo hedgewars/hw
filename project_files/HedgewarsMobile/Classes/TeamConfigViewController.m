@@ -51,7 +51,7 @@
 
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
     // avoid overwriting selected teams when returning on this view
-    if ([cachedContentsOfDir isEqualToArray:contentsOfDir] == NO) {
+    if ([self.cachedContentsOfDir isEqualToArray:contentsOfDir] == NO) {
         NSArray *colors = getAvailableColors();
         NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[contentsOfDir count]];
         for (int i = 0; i < [contentsOfDir count]; i++) {
@@ -215,10 +215,10 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
     // Relinquish ownership any cached data, images, etc that aren't in use.
     self.cachedContentsOfDir = nil;
+    MSG_MEMCLEAN();
+    [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {

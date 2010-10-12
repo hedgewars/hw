@@ -64,16 +64,56 @@
 -(IBAction) toggleEdit:(id) sender {
     BOOL isEditing = self.tableView.editing;
     [self.tableView setEditing:!isEditing animated:YES];
-    UIToolbar *toolbar = (UIToolbar *)[self.view viewWithTag:458912];
-    for (UIBarButtonItem *item in toolbar.items)
-        if (item.tag == 452198)
-            item.enabled = !isEditing;
+}
+
+-(void) duplicateEntry:(id) sender {
+    UIButton *button = (UIButton *)sender;
+    NSUInteger row = button.tag;
+    
+    if (self.listOfSavegames == nil)
+        [self updateTable];
+    
+    [(EditableCellView *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]] save:nil];
+    NSString *currentSaveName = [self.listOfSavegames objectAtIndex:row];
+    NSString *newSaveName = [[currentSaveName stringByDeletingPathExtension] stringByAppendingFormat:@" %d.hws",[self.listOfSavegames count]];
+    
+    NSString *currentFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),currentSaveName];
+    NSString *newFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),newSaveName];
+    [[NSFileManager defaultManager] copyItemAtPath:currentFilePath toPath:newFilePath error:nil];
+    [self.listOfSavegames addObject:newSaveName];
+    [self.listOfSavegames sortUsingSelector:@selector(compare:)];
+
+    //[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[self.listOfSavegames indexOfObject:newSaveName] inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadData];
 }
 
 -(IBAction) clearAll:(id) sender {
-    [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
-    [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY() withIntermediateDirectories:NO attributes:nil error:NULL];
-    [self updateTable];
+    NSString *titleStr, *cancelStr, *confirmStr;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        titleStr = nil;
+        cancelStr = nil;
+        confirmStr = NSLocalizedString(@"Tap to confirm",@"");
+    } else {
+        titleStr = NSLocalizedString(@"Are you reeeeeally sure?", @"");
+        cancelStr = NSLocalizedString(@"Well, maybe not...", @"");
+        confirmStr = NSLocalizedString(@"Of course!", @"");
+    }
+
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:titleStr
+                                                             delegate:self
+                                                    cancelButtonTitle:cancelStr
+                                               destructiveButtonTitle:confirmStr
+                                                    otherButtonTitles:nil];
+    [actionSheet showInView:self.view];
+    [actionSheet release];
+}
+
+-(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
+    if ([actionSheet cancelButtonIndex] != buttonIndex) {
+        [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
+        [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY() withIntermediateDirectories:NO attributes:nil error:NULL];
+        [self updateTable];
+    }
 }
 
 #pragma mark -
@@ -83,12 +123,16 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.listOfSavegames == nil)
+        [self updateTable];
     return [self.listOfSavegames count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
 
+    if (self.listOfSavegames == nil)
+        [self updateTable];
     EditableCellView *editableCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (editableCell == nil) {
         editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
@@ -131,6 +175,9 @@
     NSUInteger row = [indexPath row];
     [(EditableCellView *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]] save:nil];
     
+    if (self.listOfSavegames == nil)
+        [self updateTable];
+    
     NSString *saveName = [self.listOfSavegames objectAtIndex:row];
     NSString *currentFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),saveName];
     [[NSFileManager defaultManager] removeItemAtPath:currentFilePath error:nil];
@@ -139,29 +186,13 @@
     [self.tableView reloadData];
 }
 
--(void) duplicateEntry:(id) sender {
-    UIButton *button = (UIButton *)sender;
-    NSUInteger row = button.tag;
-    
-    [(EditableCellView *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]] save:nil];
-    NSString *currentSaveName = [self.listOfSavegames objectAtIndex:row];
-    NSString *newSaveName = [[currentSaveName stringByDeletingPathExtension] stringByAppendingFormat:@" %d.hws",[self.listOfSavegames count]];
-    
-    NSString *currentFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),currentSaveName];
-    NSString *newFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),newSaveName];
-    [[NSFileManager defaultManager] copyItemAtPath:currentFilePath toPath:newFilePath error:nil];
-    [self.listOfSavegames addObject:newSaveName];
-    [self.listOfSavegames sortUsingSelector:@selector(compare:)];
-
-    //[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[self.listOfSavegames indexOfObject:newSaveName] inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView reloadData];
-}
-
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+    if (self.listOfSavegames == nil)
+        [self updateTable];
+
     [(EditableCellView *)[self.tableView cellForRowAtIndexPath:indexPath] save:nil];
     
     NSString *filePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:[indexPath row]]];
@@ -178,6 +209,8 @@
 #pragma mark editableCellView delegate
 // rename old file if names differ
 -(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
+    if (self.listOfSavegames == nil)
+        [self updateTable];
     NSString *oldFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:tagValue]];
     NSString *newFilePath = [NSString stringWithFormat:@"%@/%@.hws",SAVES_DIRECTORY(),textString];
     
@@ -191,12 +224,15 @@
 #pragma mark -
 #pragma mark Memory Management
 -(void) didReceiveMemoryWarning {
+    self.listOfSavegames = nil;
+    MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
     self.tableView = nil;
     self.listOfSavegames = nil;
+    MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 

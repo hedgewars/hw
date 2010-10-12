@@ -74,45 +74,45 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
     switch (type) {
         case 0: //default
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"939192942219912103223511100120100000021111010101",@"ammostore_initialqt",
-                         @"040504054160065554655446477657666666615551010111",@"ammostore_probability",
-                         @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
-                         @"131111031211111112311411111111111111121111110111",@"ammostore_crate", nil];
+                         @"9391929422199121032235111001201000000211110101011",@"ammostore_initialqt",
+                         @"0405040541600655546554464776576666666155510101117",@"ammostore_probability",
+                         @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
+                         @"1311110312111111123114111111111111111211111101111",@"ammostore_crate", nil];
             break;
         case 1: //crazy
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"999999999999999999299999999999999929999999990999",@"ammostore_initialqt",
-                         @"111111011111111111111111111111111111111111110111",@"ammostore_probability",
-                         @"000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"131111031211111112311411111111111111121111010111",@"ammostore_crate", nil];
+                         @"9999999999999999992999999999999999299999999909999",@"ammostore_initialqt",
+                         @"1111110111111111111111111111111111111111111101111",@"ammostore_probability",
+                         @"0000000000000000000000000000000000000000000000000",@"ammostore_delay",
+                         @"1311110312111111123114111111111111111211110101111",@"ammostore_crate", nil];
             break;
         case 2: //pro mode
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"909000900000000000000900000000000000000000000000",@"ammostore_initialqt",
-                         @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
-                         @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
-                         @"111111111111111111111111111111111111111110010111",@"ammostore_crate", nil];
+                         @"9090009000000000000009000000000000000000000000000",@"ammostore_initialqt",
+                         @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
+                         @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
+                         @"1111111111111111111111111111111111111111100101111",@"ammostore_crate", nil];
             break;
         case 3: //shoppa
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"000000990000000000000000000000000000000000000000",@"ammostore_initialqt",
-                         @"444441004424440221011212122242200000000200040001",@"ammostore_probability",
-                         @"000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"111111111111111111111111111111111111111110110111",@"ammostore_crate", nil];
+                         @"0000009900000000000000000000000000000000000000000",@"ammostore_initialqt",
+                         @"4444410044244402210112121222422000000002000400010",@"ammostore_probability",
+                         @"0000000000000000000000000000000000000000000000000",@"ammostore_delay",
+                         @"1111111111111111111111111111111111111111101101111",@"ammostore_crate", nil];
             break;
         case 4: //basketball
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"939192942219912103223511100120100000021111010100",@"ammostore_initialqt",
-                         @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
-                         @"000000000000000550000004000700400000000020000000",@"ammostore_delay",
-                         @"111111111111111111111111111111111111111111110111",@"ammostore_crate", nil];
+                         @"9391929422199121032235111001201000000211110101000",@"ammostore_initialqt",
+                         @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
+                         @"0000000000000005500000040007004000000000200000000",@"ammostore_delay",
+                         @"1111111111111111111111111111111111111111111101111",@"ammostore_crate", nil];
             break;
         case 5: //minefield
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"000000990009000000030000000000000000000000000000",@"ammostore_initialqt",
-                         @"000000000000000000000000000000000000000000000000",@"ammostore_probability",
-                         @"000000000000020550000004000700400000000020000000",@"ammostore_delay",
-                         @"111111111111111111111111111111111111111111110111",@"ammostore_crate", nil];
+                         @"0000009900090000000300000000000000000000000000000",@"ammostore_initialqt",
+                         @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
+                         @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
+                         @"1111111111111111111111111111111111111111111101111",@"ammostore_crate", nil];
             break;
         default:
             NSLog(@"Nope");
@@ -190,7 +190,8 @@ BOOL inline rotationManager (UIInterfaceOrientation interfaceOrientation) {
 
 NSInteger inline randomPort () {
     srandom(time(NULL));
-    return (random() % 64511) + 1024;
+    NSInteger res = (random() % 64511) + 1024;
+    return (res == DEFAULT_NETGAME_PORT) ? randomPort() : res;
 }
 
 void popError (const char *title, const char *message) {

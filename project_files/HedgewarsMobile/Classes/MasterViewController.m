@@ -177,9 +177,6 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
     if (generalSettingsViewController.view.superview == nil)
         generalSettingsViewController = nil;
     if (teamSettingsViewController.view.superview == nil)
@@ -191,6 +188,7 @@
     if (supportViewController.view.superview == nil)
         supportViewController = nil;
     MSG_MEMCLEAN();
+    [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {

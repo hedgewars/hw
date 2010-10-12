@@ -466,11 +466,11 @@
 }
 
 -(void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
     self.dataSourceArray = nil;
     self.lastIndexPath = nil;
-    // maybe we can save some more
+
     MSG_MEMCLEAN();
+    [super didReceiveMemoryWarning];
 }
 
 -(void) dealloc {

@@ -147,12 +147,17 @@
         Mix_FreeChunk(voiceBeingPlayed);
         voiceBeingPlayed = NULL;
     }
+    self.lastIndexPath = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
-    voiceBeingPlayed = NULL;
+    if (voiceBeingPlayed != NULL) {
+        Mix_HaltChannel(lastChannel);
+        Mix_FreeChunk(voiceBeingPlayed);
+        voiceBeingPlayed = NULL;
+    }
     self.lastIndexPath = nil;
     self.teamDictionary = nil;
     self.voiceArray = nil;

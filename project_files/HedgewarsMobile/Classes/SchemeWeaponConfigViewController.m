@@ -22,6 +22,7 @@
 #import "SchemeWeaponConfigViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "CommodityFunctions.h"
+#import "SDL_uikitappdelegate.h"
 
 @implementation SchemeWeaponConfigViewController
 @synthesize listOfSchemes, listOfWeapons, lastIndexPath_sc, lastIndexPath_we, selectedScheme, selectedWeapon;
@@ -38,8 +39,8 @@
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
 
-    self.selectedScheme = @"";
-    self.selectedWeapon = @"";
+    self.selectedScheme = nil;
+    self.selectedWeapon = nil;
 
     [self.tableView setBackgroundView:nil];
     self.view.backgroundColor = [UIColor clearColor];
@@ -53,13 +54,13 @@
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCHEMES_DIRECTORY() error:NULL];
     self.listOfSchemes = contentsOfDir;
 
-    if ([self.selectedScheme isEqualToString:@""] && [listOfSchemes containsObject:@"Default.plist"])
+    if (self.selectedScheme == nil && [listOfSchemes containsObject:@"Default.plist"])
         self.selectedScheme = @"Default.plist";
     
     contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
     self.listOfWeapons = contentsOfDir;
     
-    if ([self.selectedWeapon isEqualToString:@""] && [listOfWeapons containsObject:@"Default.plist"])
+    if (self.selectedWeapon == nil && [listOfWeapons containsObject:@"Default.plist"])
         self.selectedWeapon = @"Default.plist";
     
     [self.tableView reloadData];
@@ -196,9 +197,14 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
+    if ([[SDLUIKitDelegate sharedAppDelegate] isInGame]) {
+        self.lastIndexPath_sc = nil;
+        self.lastIndexPath_we = nil;
+        self.listOfSchemes = nil;
+        self.listOfWeapons = nil;
+        MSG_MEMCLEAN();
+    }
     [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
 -(void) viewDidUnload {

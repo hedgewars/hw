@@ -58,7 +58,7 @@ int main (int argc, char *argv[]) {
 }
 
 @implementation SDLUIKitDelegate
-@synthesize mainViewController, uiwindow, secondWindow;
+@synthesize mainViewController, uiwindow, secondWindow, isInGame;
 
 // convenience method
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -132,9 +132,9 @@ int main (int argc, char *argv[]) {
     [self performSelector:@selector(displayOverlayLater:) withObject:dict afterDelay:1];
 
     // this is the pascal fuction that starts the game (wrapped around isInGame)
-    isInGame = YES;
+    self.isInGame = YES;
     Game(gameArgs);
-    isInGame = NO;
+    self.isInGame = NO;
     free(gameArgs);
 
     [self.uiwindow makeKeyAndVisible];
@@ -204,7 +204,7 @@ int main (int argc, char *argv[]) {
 -(void) applicationWillTerminate:(UIApplication *)application {
     SDL_SendQuit();
 
-    if (isInGame) {
+    if (self.isInGame) {
         HW_terminate(YES);
         // hack to prevent automatic termination. See SDL_uikitevents.m for details
         longjmp(*(jump_env()), 1);
@@ -218,7 +218,7 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationWillResignActive:(UIApplication *)application {
-    if (isInGame) {
+    if (self.isInGame) {
         HW_pause();
 
         // Send every window on every screen a MINIMIZED event.
@@ -237,7 +237,7 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationDidBecomeActive:(UIApplication *)application {
-    if (isInGame) {
+    if (self.isInGame) {
         HW_pause();
 
         // Send every window on every screen a RESTORED event.

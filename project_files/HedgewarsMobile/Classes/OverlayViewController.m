@@ -210,16 +210,18 @@
 }
 
 -(void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
     if (self.popupMenu.view.superview == nil)
         self.popupMenu = nil;
     if (self.helpPage.view.superview == nil)
         self.helpPage = nil;
-    if (((UIPopoverController *)self.popoverController).contentViewController.view.superview == nil)
-        self.popoverController = nil;
     if (self.amvc.view.superview == nil)
         self.amvc = nil;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        if (((UIPopoverController *)self.popoverController).contentViewController.view.superview == nil)
+            self.popoverController = nil;
+    
     MSG_MEMCLEAN();
+    [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {

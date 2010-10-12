@@ -22,7 +22,8 @@
 #import <UIKit/UIKit.h>
 #import "EditableCellView.h"
 
-@interface SavedGamesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, EditableCellViewDelegate>  {
+@interface SavedGamesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource,
+                                                        EditableCellViewDelegate, UIActionSheetDelegate>  {
     UITableView *tableView;
     NSMutableArray *listOfSavegames;
 }

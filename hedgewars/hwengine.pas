@@ -36,8 +36,6 @@ var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
 
 {$IFDEF HWLIBRARY}
-type arrayofpchar = array[0..10] of PChar;
-
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
 
@@ -198,7 +196,7 @@ end;
 
 ///////////////
 {$IFDEF HWLIBRARY}
-procedure Game(gameArgs: arrayofpchar); cdecl; export;
+procedure Game(gameArgs: PPChar); cdecl; export;
 {$ELSE}
 procedure Game;
 {$ENDIF}
@@ -216,7 +214,7 @@ begin
 {$IFDEF DEBUGFILE}
     cShowFPS:= true;
 {$ELSE}
-    cShowFPS:= false;    // update me at release time
+    cShowFPS:= false;
 {$ENDIF}
     val(gameArgs[0], ipcPort);
     val(gameArgs[1], cScreenWidth);

@@ -31,12 +31,10 @@
 }
 
 -(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
     if (self.activeController.view.superview == nil)
         self.activeController = nil;
     MSG_MEMCLEAN();
+    [super didReceiveMemoryWarning];
 }
 
 // load the view programmatically; we need a splitViewController that handles a MasterViewController

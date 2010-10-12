@@ -1146,6 +1146,7 @@ end;
 function glLoadExtension(extension : shortstring) : boolean;
 begin
 {$IFDEF IPHONEOS}
+    extension:= extension; // avoid hint
     glLoadExtension:= false;
 {$IFDEF DEBUGFILE}
     AddFileLog('OpenGL - "' + extension + '" skipped')

@@ -85,6 +85,7 @@
 #pragma mark -
 #pragma mark Memory Management
 -(void) didReceiveMemoryWarning {
+    self.people = nil;
     [super didReceiveMemoryWarning];
 }
 

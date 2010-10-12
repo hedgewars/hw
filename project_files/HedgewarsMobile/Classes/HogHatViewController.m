@@ -33,7 +33,7 @@
 
 #pragma mark -
 #pragma mark View lifecycle
-- (void)viewDidLoad {
+-(void) viewDidLoad {
     [super viewDidLoad];
 
     // load all the hat file names and store them into hatArray
@@ -51,7 +51,7 @@
     self.title = NSLocalizedString(@"Change hedgehog's hat",@"");
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+-(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
     // this updates the hog name and its hat
@@ -72,7 +72,7 @@
 }
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     static NSString *CellIdentifier = @"Cell";
 
@@ -103,7 +103,7 @@
 
 #pragma mark -
 #pragma mark Table view delegate
-- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
@@ -134,13 +134,13 @@
 
 #pragma mark -
 #pragma mark Memory management
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
+-(void) didReceiveMemoryWarning {
+    self.lastIndexPath = nil;
+    MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
+-(void) viewDidUnload {
     self.lastIndexPath = nil;
     self.normalHogSprite = nil;
     self.teamDictionary = nil;
@@ -149,7 +149,7 @@
     [super viewDidUnload];
 }
 
-- (void)dealloc {
+-(void) dealloc {
     [hatArray release];
     [teamDictionary release];
     [normalHogSprite release];

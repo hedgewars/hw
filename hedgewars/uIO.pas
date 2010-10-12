@@ -237,7 +237,7 @@ end;
 procedure SendIPCTimeInc;
 const timeinc: shortstring = '#';
 begin
-AddFileLog('Send #');
+{$IFDEF DEBUGFILE}AddFileLog('IPC Send #');{$ENDIF}
 SendIPCRaw(@timeinc, 2)
 end;
 

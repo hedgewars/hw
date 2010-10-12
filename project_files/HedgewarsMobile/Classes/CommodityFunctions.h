@@ -53,6 +53,8 @@
 
 #define IS_DUALHEAD()           ([[UIScreen screens] count] > 1)
 
+#define DEFAULT_NETGAME_PORT    46631
+
 
 void createTeamNamed (NSString *nameWithoutExt);
 void createWeaponNamed (NSString *nameWithoutExt, int type);

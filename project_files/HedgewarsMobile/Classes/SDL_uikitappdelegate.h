@@ -31,6 +31,7 @@
     BOOL isInGame;
 }
 
+@property (assign) BOOL isInGame;
 @property (nonatomic,retain) MainMenuViewController *mainViewController;
 @property (nonatomic,retain) UIWindow *uiwindow;
 @property (nonatomic,retain) UIWindow *secondWindow;

@@ -355,6 +355,7 @@ end;
 procedure SetBinds(var binds: TBinds);
 begin
 {$IFDEF IPHONEOS}
+    binds:= binds; // avoid hint
     CurrentBinds:= DefaultBinds;
 {$ELSE}
     CurrentBinds:= binds;

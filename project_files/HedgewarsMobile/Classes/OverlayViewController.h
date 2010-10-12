@@ -31,7 +31,7 @@
     NSTimer *dimTimer;
 
     // the in-game menu
-    UIPopoverController *popoverController; // iPad only
+    UIPopoverController *popoverController; // iPad only, never set on iPhone
     InGameMenuViewController *popupMenu;
     BOOL isPopoverVisible;
 

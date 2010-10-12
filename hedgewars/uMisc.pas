@@ -189,7 +189,7 @@ procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword; inline;
 function  DecodeBase64(s: shortstring): shortstring;
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
-function  endian(independent: LongWord): LongWord;
+function  endian(independent: LongWord): LongWord; inline;
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
 (* function  RectToStr(Rect: TSDL_Rect): shortstring; *)
@@ -683,7 +683,7 @@ begin
     exit(tmpsurf);
 end;
 
-function endian(independent: LongWord): LongWord;
+function endian(independent: LongWord): LongWord; inline;
 begin
 {$IFDEF ENDIAN_LITTLE}
 endian:= independent;
