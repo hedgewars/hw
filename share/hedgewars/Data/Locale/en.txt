@@ -430,6 +430,7 @@
 03:46=Hot Hot Hot!
 03:47=Stick these somewhere useful!
 03:48=It's Hammer time!
+03:49=Does what you guess
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
@@ -481,6 +482,7 @@
 04:46=Cover your foes with sizzling liquid flame.|Heartwarming!|Attack: Activate|Up/Down: Continue aiming|Left/Right: Modify spitting power
 04:47=Double the fun with two spiky, sneaky, sticky mines.|Set up a chain reaction or defend yourself (or both!)|Attack: Hold to shoot with more power (twice)
 04:48=Why should the moles get all the abuse?|Wacking a hog can be just as fun! A good|blow from this hammer will shave off one|third of a hog's health and plunge them|underground.|Attack: Activate
+04:49=Resurrect your friends!|But beware that this also resurrects your foes.|Attack: Keep attack pressed to resurrect slowly|Up: Accelerate resurrection
 
 ; Game goal strings
 05:00=Game Modes

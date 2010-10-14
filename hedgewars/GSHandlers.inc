@@ -4100,6 +4100,8 @@ begin
     DrawCircle(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, 1.5, 0, 0, $FF,
             $FF);
 
+    doStepHedgehogMoving(hh^.Gear);
+
     if ((Gear^.Message and gmUp) <> 0) then begin
         if (GameTicks and $F) <> 0 then exit;
     end else begin
@@ -4108,9 +4110,14 @@ begin
 
     graves := GearsNear(hh^.Gear, gtGrave, Gear^.Radius);
 
+    if Length(graves) = 0 then begin
+        Gear^.Timer := 250;
+        Gear^.doStep := @doStepIdle;
+        exit;
+    end;
+
     if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) then begin
         i := getRandom(Length(graves));
-        writeln(i);
         dec(hh^.Gear^.Health);
         inc(graves[i]^.Health);
 {-for i:= 0 to High(graves) do begin
