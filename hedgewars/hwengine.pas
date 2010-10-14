@@ -175,7 +175,7 @@ begin
         if isTerminated = false then
         begin
             CurrTime:= SDL_GetTicks;
-            if PrevTime + cTimerInterval <= CurrTime then
+            if PrevTime + longword(cTimerInterval) <= CurrTime then
             begin
                 DoTimer(CurrTime - PrevTime);
                 PrevTime:= CurrTime

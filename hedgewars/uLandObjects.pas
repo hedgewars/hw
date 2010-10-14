@@ -292,9 +292,9 @@ with Obj do
                    end
                 end;
              inc(y, 3);
-         until y > LAND_HEIGHT - 1 - Height;
+         until y > int64(LAND_HEIGHT) - 1 - Height;
          inc(x, getrandom(6) + 3)
-     until x > LAND_WIDTH - 1 - Width;
+     until x > int64(LAND_WIDTH) - 1 - Width;
      bRes:= cnt <> 0;
      if bRes then
         begin
@@ -341,9 +341,9 @@ with Obj do
                 end
             end;
             inc(y, 12);
-        until y > LAND_HEIGHT - 1 - Height - 8;
+        until y > int64(LAND_HEIGHT) - 1 - Height - 8;
         inc(x, getrandom(12) + 12)
-    until x > LAND_WIDTH - 1 - Width;
+    until x > int64(LAND_WIDTH) - 1 - Width;
     bRes:= cnt <> 0;
     if bRes then
         begin
@@ -455,7 +455,7 @@ if vobCount > 0 then
     Readln(f, vobFramesCount, vobFrameTicks, vobVelocity, vobFallSpeed);
 
 // adjust amount of flakes scaled by screen space
-vobCount:= vobCount * cScreenSpace div LAND_WIDTH;
+vobCount:= longint(vobCount) * cScreenSpace div LAND_WIDTH;
 
 if (cReducedQuality and rqKillFlakes) <> 0 then
     vobCount:= 0;

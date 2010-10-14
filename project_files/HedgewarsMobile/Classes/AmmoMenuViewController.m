@@ -122,7 +122,8 @@
         button.layer.borderWidth = w;
         [button.layer setCornerRadius:radius];
         [button.layer setMasksToBounds:YES];
-        [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchDown];
+        [button addTarget:self action:@selector(buttonReleased:) forControlEvents:UIControlEventTouchUpInside];
         [button setTitleColor:UICOLOR_HW_YELLOW_TEXT forState:UIControlStateNormal];
         button.titleLabel.backgroundColor = [UIColor blackColor];
         button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
@@ -182,7 +183,7 @@
                     }
                 } else {
                     button.layer.borderColor = [UICOLOR_HW_YELLOW_TEXT CGColor];
-                    [button setTitle:@"" forState:UIControlStateNormal];
+                    [button setTitle:nil forState:UIControlStateNormal];
                     if (button.currentBackgroundImage == nil || button.imageView.tag == 10000) {
                         int x_src = ((i*32)/(int)self.weaponsImage.size.height)*32;
                         int y_src = (i*32)%(int)self.weaponsImage.size.height;
@@ -211,10 +212,19 @@
 
 #pragma mark -
 #pragma mark user interaction
--(void) buttonPressed:(id) sender {
+-(void) buttonPressed:(id)  sender {
     UIButton *theButton = (UIButton *)sender;
-    HW_setWeapon(theButton.tag);
-    playSound(@"clickSound");
+    if (theButton.currentTitle != nil) {
+        DLog(@"eeee");
+    }
+}
+
+-(void) buttonReleased:(id) sender {
+    UIButton *theButton = (UIButton *)sender;
+    if (theButton.currentTitle == nil) {
+        HW_setWeapon(theButton.tag);
+        playSound(@"clickSound");
+    }
     if (IS_DUALHEAD() == NO)
         [self disappear];
 }

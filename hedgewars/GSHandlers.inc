@@ -422,7 +422,7 @@ begin
                 begin
                 doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
                 for i:= 0 to 2 do
-                    AddGear(hwRound(Gear^.X) - 30 + GetRandom(60), hwRound(Gear^.Y) - 20 + GetRandom(40), gtPoisonCloud, 0, _0, _0, 0);
+                    AddGear(int64(hwRound(Gear^.X)) - 30 + GetRandom(60), int64(hwRound(Gear^.Y)) - 20 + GetRandom(40), gtPoisonCloud, 0, _0, _0, 0);
                 end;
         end;
     DeleteGear(Gear);

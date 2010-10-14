@@ -615,8 +615,8 @@ begin
                 tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
                 for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
                     DrawSprite(sprPower,
-                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + round(WorldDx + tdx * (24 + i * 2)) - 16,
-                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + round(WorldDy + tdy * (24 + i * 2)) - 16,
+                            int64(hwRound(Gear^.X)) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + round(WorldDx + tdx * (24 + i * 2)) - 16,
+                            int64(hwRound(Gear^.Y)) + GetLaunchY(CurAmmoType, Gear^.Angle) + round(WorldDy + tdy * (24 + i * 2)) - 16,
                             i)
                 end
         end;

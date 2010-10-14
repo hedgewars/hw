@@ -461,7 +461,6 @@
             rotation = @"-90";
         else
             rotation = @"90";
-
     }
         
     NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width];
