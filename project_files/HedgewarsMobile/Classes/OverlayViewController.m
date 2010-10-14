@@ -48,10 +48,7 @@
 #pragma mark -
 #pragma mark rotation
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
-    if (IS_DUALHEAD())
-        return YES;                         ////// TEST MEEEEE
-    else
-        return rotationManager(interfaceOrientation);
+    return rotationManager(interfaceOrientation);
 }
 
 // pause the game and remove objc menus so that animation is smoother
@@ -82,27 +79,24 @@
 -(void) didRotate:(NSNotification *)notification {
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
-
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    
     [UIView beginAnimations:@"rotation" context:NULL];
     [UIView setAnimationDuration:0.7];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
-            if (IS_DUALHEAD() == NO)
+            if (IS_DUALHEAD()) {
+                self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
+            } else
                 sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
-            //self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
             break;
         case UIDeviceOrientationLandscapeRight:
-            if (IS_DUALHEAD() == NO)
+            if (IS_DUALHEAD()) {
+                self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
+            } else
                 sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
-            //self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-            break;
-        case UIDeviceOrientationPortrait:
-            if (IS_DUALHEAD())
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
-            break;
-        case UIDeviceOrientationPortraitUpsideDown:
-            if (IS_DUALHEAD())
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
             break;
         default:
             // a debug log would spam too much
@@ -121,22 +115,20 @@
         isGameRunning = NO;
         isReplay = NO;
         cachedGrenadeTime = 2;
+
         isAttacking = NO;
         wasVisible = NO;
         isPopoverVisible = NO;    // it is called "popover" even on the iphone
+        self.view.alpha = 0;
     }
     return self;
 }
 
 -(void) viewDidLoad {
     CGRect screenRect = [[UIScreen mainScreen] bounds];
-    self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
-    self.view.alpha = 0;
+    self.view.frame = CGRectMake(0, 0, screenRect.size.height, screenRect.size.width);
     self.view.center = CGPointMake(self.view.frame.size.height/2, self.view.frame.size.width/2);
 
-    // get the number of screens to know the previous state whan a display is connected or detached
-    initialScreenCount = [[UIScreen screens] count];
-    
     // detrmine the quanitiy and direction of the rotation
     if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
         a = 180;
@@ -144,6 +136,24 @@
     } else {
         a = 0;
         b = 180;
+    }
+
+    // get the number of screens to know the previous state whan a display is connected or detached
+    initialScreenCount = [[UIScreen screens] count];
+
+    // set initial orientation of the controller orientation
+    if (IS_DUALHEAD()) {
+        switch (self.interfaceOrientation) {
+            case UIDeviceOrientationLandscapeLeft:
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
+                break;
+            case UIDeviceOrientationLandscapeRight:
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
+                break;
+            default:
+                DLog(@"Nope");
+                break;
+        }
     }
 
     // the timer used to dim the overlay
