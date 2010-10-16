@@ -1,48 +1,7 @@
-diff -r f50c7996d925 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
---- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Wed Sep 29 21:24:50 2010 -0700
-+++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Sun Oct 03 00:21:37 2010 +0200
-@@ -106,6 +106,7 @@
- 		04F2AF561104ABD200D6DDF7 /* SDL_assert.c in Sources */ = {isa = PBXBuildFile; fileRef = 04F2AF551104ABD200D6DDF7 /* SDL_assert.c */; };
- 		56ED04E1118A8EE200A56AA6 /* SDL_power.c in Sources */ = {isa = PBXBuildFile; fileRef = 56ED04E0118A8EE200A56AA6 /* SDL_power.c */; };
- 		56ED04E3118A8EFD00A56AA6 /* SDL_syspower.m in Sources */ = {isa = PBXBuildFile; fileRef = 56ED04E2118A8EFD00A56AA6 /* SDL_syspower.m */; };
-+		61F7E7F4125543DA00DE6C14 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FD689FCC0E26E9D400F90B21 /* SDL_uikitappdelegate.m */; };
- 		FD24846D0E5655AE0021E198 /* SDL_uikitkeyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = FD24846B0E5655AE0021E198 /* SDL_uikitkeyboard.h */; };
- 		FD3F495C0DEA5B2100C5B771 /* begin_code.h in Headers */ = {isa = PBXBuildFile; fileRef = FD99B8CC0DD52EB400FB1D6B /* begin_code.h */; settings = {ATTRIBUTES = (Public, ); }; };
- 		FD3F495D0DEA5B2100C5B771 /* close_code.h in Headers */ = {isa = PBXBuildFile; fileRef = FD99B8CD0DD52EB400FB1D6B /* close_code.h */; settings = {ATTRIBUTES = (Public, ); }; };
-@@ -192,8 +193,6 @@
- 		FD689F250E26E5D900F90B21 /* SDL_uikitwindow.m in Sources */ = {isa = PBXBuildFile; fileRef = FD689F150E26E5D900F90B21 /* SDL_uikitwindow.m */; };
- 		FD689F260E26E5D900F90B21 /* SDL_uikitopenglview.h in Headers */ = {isa = PBXBuildFile; fileRef = FD689F160E26E5D900F90B21 /* SDL_uikitopenglview.h */; };
- 		FD689F270E26E5D900F90B21 /* SDL_uikitopenglview.m in Sources */ = {isa = PBXBuildFile; fileRef = FD689F170E26E5D900F90B21 /* SDL_uikitopenglview.m */; };
--		FD689FCE0E26E9D400F90B21 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FD689FCC0E26E9D400F90B21 /* SDL_uikitappdelegate.m */; };
--		FD689FCF0E26E9D400F90B21 /* SDL_uikitappdelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = FD689FCD0E26E9D400F90B21 /* SDL_uikitappdelegate.h */; };
- 		FD6C83B60DEA66E500ABEE55 /* SDL_systimer.h in Headers */ = {isa = PBXBuildFile; fileRef = FD99BA2D0DD52EDC00FB1D6B /* SDL_systimer.h */; };
- 		FD8BD7AC0E27DCA400B52CD5 /* SDL_opengles.h in Headers */ = {isa = PBXBuildFile; fileRef = FD8BD7AB0E27DCA400B52CD5 /* SDL_opengles.h */; settings = {ATTRIBUTES = (Public, ); }; };
- 		FD8BD8250E27E25900B52CD5 /* SDL_sysloadso.c in Sources */ = {isa = PBXBuildFile; fileRef = FD8BD8190E27E25900B52CD5 /* SDL_sysloadso.c */; };
-@@ -1186,7 +1185,6 @@
- 				FD689F200E26E5D900F90B21 /* SDL_uikitvideo.h in Headers */,
- 				FD689F240E26E5D900F90B21 /* SDL_uikitwindow.h in Headers */,
- 				FD689F260E26E5D900F90B21 /* SDL_uikitopenglview.h in Headers */,
--				FD689FCF0E26E9D400F90B21 /* SDL_uikitappdelegate.h in Headers */,
- 				FD8BD7AC0E27DCA400B52CD5 /* SDL_opengles.h in Headers */,
- 				FDC656490E560DF800311C8E /* jumphack.h in Headers */,
- 				FD24846D0E5655AE0021E198 /* SDL_uikitkeyboard.h in Headers */,
-@@ -1347,6 +1345,7 @@
- 			isa = PBXSourcesBuildPhase;
- 			buildActionMask = 2147483647;
- 			files = (
-+				61F7E7F4125543DA00DE6C14 /* SDL_uikitappdelegate.m in Sources */,
- 				006E9852119550FB001DE610 /* audio.c in Sources */,
- 				006E9853119550FB001DE610 /* common.c in Sources */,
- 				006E9859119550FB001DE610 /* platform.c in Sources */,
-@@ -1429,7 +1428,6 @@
- 				FD689F230E26E5D900F90B21 /* SDL_uikitview.m in Sources */,
- 				FD689F250E26E5D900F90B21 /* SDL_uikitwindow.m in Sources */,
- 				FD689F270E26E5D900F90B21 /* SDL_uikitopenglview.m in Sources */,
--				FD689FCE0E26E9D400F90B21 /* SDL_uikitappdelegate.m in Sources */,
- 				FD8BD8250E27E25900B52CD5 /* SDL_sysloadso.c in Sources */,
- 				FDC656480E560DF800311C8E /* jumphack.c in Sources */,
- 				0495E68C0E97408800152DFE /* SDL_renderer_gl.c in Sources */,
-@@ -1549,15 +1547,19 @@
+diff -r c0021a587dc7 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
+--- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Sun Oct 10 15:45:58 2010 -0700
++++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Sat Oct 16 18:35:03 2010 +0200
+@@ -1549,15 +1549,19 @@
  			isa = XCBuildConfiguration;
  			buildSettings = {
  				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -54,9 +13,8 @@ diff -r f50c7996d925 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
 +				GCC_VERSION = com.apple.compilers.llvmgcc42;
  				GCC_WARN_ABOUT_RETURN_TYPE = YES;
  				GCC_WARN_UNUSED_VARIABLE = NO;
--				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
 +				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../include\"";
-+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+ 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
  				ONLY_ACTIVE_ARCH = NO;
  				PREBINDING = NO;
 -				SDKROOT = iphoneos3.2;
@@ -64,7 +22,7 @@ diff -r f50c7996d925 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
  				TARGETED_DEVICE_FAMILY = "1,2";
  			};
  			name = Debug;
-@@ -1566,14 +1568,18 @@
+@@ -1566,14 +1570,19 @@
  			isa = XCBuildConfiguration;
  			buildSettings = {
  				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -74,21 +32,21 @@ diff -r f50c7996d925 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
  				GCC_C_LANGUAGE_STANDARD = c99;
 +				GCC_OPTIMIZATION_LEVEL = 2;
 +				GCC_THUMB_SUPPORT = NO;
++				GCC_UNROLL_LOOPS = YES;
 +				GCC_VERSION = com.apple.compilers.llvmgcc42;
  				GCC_WARN_ABOUT_RETURN_TYPE = YES;
  				GCC_WARN_UNUSED_VARIABLE = NO;
--				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
 +				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../include\"";
-+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+ 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
  				PREBINDING = NO;
 -				SDKROOT = iphoneos3.2;
 +				SDKROOT = iphoneos4.0;
  				TARGETED_DEVICE_FAMILY = "1,2";
  			};
  			name = Release;
-diff -r f50c7996d925 Xcode-iPhoneOS/SDL/testsdl-Info.plist
---- a/Xcode-iPhoneOS/SDL/testsdl-Info.plist	Wed Sep 29 21:24:50 2010 -0700
-+++ b/Xcode-iPhoneOS/SDL/testsdl-Info.plist	Sun Oct 03 00:21:37 2010 +0200
+diff -r c0021a587dc7 Xcode-iPhoneOS/SDL/testsdl-Info.plist
+--- a/Xcode-iPhoneOS/SDL/testsdl-Info.plist	Sun Oct 10 15:45:58 2010 -0700
++++ b/Xcode-iPhoneOS/SDL/testsdl-Info.plist	Sat Oct 16 18:35:03 2010 +0200
 @@ -16,7 +16,5 @@
  	<string>????</string>
  	<key>CFBundleVersion</key>
@@ -97,9 +55,9 @@ diff -r f50c7996d925 Xcode-iPhoneOS/SDL/testsdl-Info.plist
 -	<string>MainWindow</string>
  </dict>
  </plist>
-diff -r f50c7996d925 include/SDL_config_iphoneos.h
---- a/include/SDL_config_iphoneos.h	Wed Sep 29 21:24:50 2010 -0700
-+++ b/include/SDL_config_iphoneos.h	Sun Oct 03 00:21:37 2010 +0200
+diff -r c0021a587dc7 include/SDL_config_iphoneos.h
+--- a/include/SDL_config_iphoneos.h	Sun Oct 10 15:45:58 2010 -0700
++++ b/include/SDL_config_iphoneos.h	Sat Oct 16 18:35:03 2010 +0200
 @@ -98,6 +98,8 @@
  #define HAVE_COS	1
  #define HAVE_COSF	1
@@ -135,9 +93,24 @@ diff -r f50c7996d925 include/SDL_config_iphoneos.h
 +#define SDL_VIEW_TAG 456987
 +
  #endif /* _SDL_config_iphoneos_h */
-diff -r f50c7996d925 src/video/SDL_renderer_gles.c
---- a/src/video/SDL_renderer_gles.c	Wed Sep 29 21:24:50 2010 -0700
-+++ b/src/video/SDL_renderer_gles.c	Sun Oct 03 00:21:37 2010 +0200
+diff -r c0021a587dc7 src/SDL_fatal.c
+--- a/src/SDL_fatal.c	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/SDL_fatal.c	Sat Oct 16 18:35:03 2010 +0200
+@@ -38,9 +38,9 @@
+ static void
+ SDL_Parachute(int sig)
+ {
+-    signal(sig, SIG_DFL);
++    /*signal(sig, SIG_DFL);
+     SDL_Quit();
+-    raise(sig);
++    raise(sig);*/
+ }
+ 
+ static const int SDL_fatal_signals[] = {
+diff -r c0021a587dc7 src/video/SDL_renderer_gles.c
+--- a/src/video/SDL_renderer_gles.c	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/SDL_renderer_gles.c	Sat Oct 16 18:35:03 2010 +0200
 @@ -324,6 +324,9 @@
      data->glDisable(GL_CULL_FACE);
      data->updateSize = SDL_TRUE;
@@ -219,9 +192,9 @@ diff -r f50c7996d925 src/video/SDL_renderer_gles.c
      }
  
      data->glDisable(GL_TEXTURE_2D);
-diff -r f50c7996d925 src/video/SDL_video.c
---- a/src/video/SDL_video.c	Wed Sep 29 21:24:50 2010 -0700
-+++ b/src/video/SDL_video.c	Sun Oct 03 00:21:37 2010 +0200
+diff -r c0021a587dc7 src/video/SDL_video.c
+--- a/src/video/SDL_video.c	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/SDL_video.c	Sat Oct 16 18:35:03 2010 +0200
 @@ -1416,9 +1416,9 @@
          SDL_MinimizeWindow(window);
      }
@@ -234,21 +207,23 @@ diff -r f50c7996d925 src/video/SDL_video.c
      if ((window->flags & (SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_FULLSCREEN))
          && _this->SetWindowGrab) {
          _this->SetWindowGrab(_this, window);
-diff -r f50c7996d925 src/video/uikit/SDL_uikitopengles.m
---- a/src/video/uikit/SDL_uikitopengles.m	Wed Sep 29 21:24:50 2010 -0700
-+++ b/src/video/uikit/SDL_uikitopengles.m	Sun Oct 03 00:21:37 2010 +0200
-@@ -114,7 +114,7 @@
+diff -r c0021a587dc7 src/video/uikit/SDL_uikitopengles.m
+--- a/src/video/uikit/SDL_uikitopengles.m	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/uikit/SDL_uikitopengles.m	Sat Oct 16 18:35:03 2010 +0200
+@@ -114,8 +114,8 @@
  									bBits: _this->gl_config.blue_size \
  									aBits: _this->gl_config.alpha_size \
  									depthBits: _this->gl_config.depth_size];
 -	
+-	data->view = view;
 +        view.tag = SDL_VIEW_TAG;
- 	data->view = view;
++        data->view = view;
  	
  	/* add the view to our window */
-diff -r f50c7996d925 src/video/uikit/SDL_uikitview.m
---- a/src/video/uikit/SDL_uikitview.m	Wed Sep 29 21:24:50 2010 -0700
-+++ b/src/video/uikit/SDL_uikitview.m	Sun Oct 03 00:21:37 2010 +0200
+ 	[uiwindow addSubview: view ];
+diff -r c0021a587dc7 src/video/uikit/SDL_uikitview.m
+--- a/src/video/uikit/SDL_uikitview.m	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/uikit/SDL_uikitview.m	Sat Oct 16 18:35:03 2010 +0200
 @@ -35,9 +35,6 @@
  @implementation SDL_uikitview
  
@@ -360,9 +335,9 @@ diff -r f50c7996d925 src/video/uikit/SDL_uikitview.m
  	
  	if (NULL == view) {
  		SDL_SetError("Window has no view");
-diff -r f50c7996d925 src/video/uikit/SDL_uikitwindow.m
---- a/src/video/uikit/SDL_uikitwindow.m	Wed Sep 29 21:24:50 2010 -0700
-+++ b/src/video/uikit/SDL_uikitwindow.m	Sun Oct 03 00:21:37 2010 +0200
+diff -r c0021a587dc7 src/video/uikit/SDL_uikitwindow.m
+--- a/src/video/uikit/SDL_uikitwindow.m	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/uikit/SDL_uikitwindow.m	Sat Oct 16 18:35:03 2010 +0200
 @@ -144,7 +144,10 @@
      if (SDL_UIKit_supports_multiple_displays) {
          [uiwindow setScreen:uiscreen];
@@ -375,9 +350,9 @@ diff -r f50c7996d925 src/video/uikit/SDL_uikitwindow.m
      if (SetupWindowData(_this, window, uiwindow, SDL_TRUE) < 0) {
          [uiwindow release];
          return -1;
-diff -r f50c7996d925 src/video/uikit/keyinfotable.h
---- a/src/video/uikit/keyinfotable.h	Wed Sep 29 21:24:50 2010 -0700
-+++ b/src/video/uikit/keyinfotable.h	Sun Oct 03 00:21:37 2010 +0200
+diff -r c0021a587dc7 src/video/uikit/keyinfotable.h
+--- a/src/video/uikit/keyinfotable.h	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/uikit/keyinfotable.h	Sat Oct 16 18:35:03 2010 +0200
 @@ -54,7 +54,7 @@
  /*  10 */ {   SDL_SCANCODE_UNKNOWN, 0 },
  /*  11 */ {   SDL_SCANCODE_UNKNOWN, 0 },

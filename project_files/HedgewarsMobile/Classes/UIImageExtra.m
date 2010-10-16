@@ -138,9 +138,9 @@
     UIImage *newImage = [UIImage imageWithCGImage:imageRef];
 
     // Release colorspace, context and bitmap information
-    CGColorSpaceRelease(colorSpace);
-    CGContextRelease(context);
     CFRelease(imageRef);
+    CGContextRelease(context);
+    CGColorSpaceRelease(colorSpace);
 
     // Return the new grayscale image
     return newImage;

@@ -52,7 +52,7 @@
         // if path is empty it means that you have to create a new file, otherwise read from that file
         if ([path isEqualToString:@""] == YES) {
             NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-            [outputFormatter setDateFormat:@"yyyy.MM.dd '@' HH-mm"];
+            [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
             NSString *newDateString = [outputFormatter stringFromDate:[NSDate date]];
             self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", newDateString];
             [outputFormatter release];
@@ -416,8 +416,7 @@
             case 'q':
                 // game ended, can remove the savefile
                 [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
-                // so update the relative viewcontroler and the overlay
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"removedSave" object:nil];
+                //[[NSNotificationCenter defaultCenter] postNotificationName:@"removedSave" object:nil];
                 // and remove + disable the overlay
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
                 setGameRunning(NO);

@@ -256,7 +256,7 @@
         [self.imgContainer removeFromSuperview];
     
     self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
-    for (int i = 0; i < 1 + random()%40; i++) {
+    for (int i = 0; i < 1 + random()%20; i++) {
         NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
         
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
@@ -266,7 +266,10 @@
         [hatSprite release];
         
         UIImageView *hog = [[UIImageView alloc] initWithImage:hogWithHat];
-        hog.frame = CGRectMake(10*(i+1)+random()%30, 30, 32, 32);
+        int x = 15*(i+1)+random()%40;
+        if (x + 32 > 300)
+            x = i*10;
+        hog.frame = CGRectMake(x, 30, 32, 32);
         [self.imgContainer addSubview:hog];
         [hog release];
     }

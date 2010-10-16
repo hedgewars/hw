@@ -119,7 +119,6 @@
         isAttacking = NO;
         wasVisible = NO;
         isPopoverVisible = NO;    // it is called "popover" even on the iphone
-        self.view.alpha = 0;
     }
     return self;
 }
@@ -128,6 +127,7 @@
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0, 0, screenRect.size.height, screenRect.size.width);
     self.view.center = CGPointMake(self.view.frame.size.height/2, self.view.frame.size.width/2);
+    self.view.alpha = 0;
 
     // detrmine the quanitiy and direction of the rotation
     if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
@@ -263,6 +263,9 @@
 -(void) viewDidUnload {
     // only objects initialized in viewDidLoad should be here
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                             selector:@selector(unsetPreciseStatus)
+                                               object:nil];
     dimTimer = nil;
     self.helpPage = nil;
     [self dismissPopover];

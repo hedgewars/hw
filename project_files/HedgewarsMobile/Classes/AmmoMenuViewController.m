@@ -51,8 +51,10 @@
     self.view.autoresizingMask = UIViewAutoresizingNone;
     
     self.isVisible = NO;
-    delay = (uint8_t *) calloc(HW_getNumberOfWeapons(), sizeof(uint8_t));
+    delay = (uint8_t *)calloc(HW_getNumberOfWeapons(), sizeof(uint8_t));
     HW_getAmmoDelays(delay);
+
+    shouldUpdateImage = (BOOL *)calloc(HW_getNumberOfWeapons(), sizeof(BOOL));
 
     [super viewDidLoad];
 }
@@ -175,18 +177,18 @@
                 if (delay[i]-turns >= 0) {
                     button.layer.borderColor = [[UIColor lightGrayColor] CGColor];
                     [button setTitle:[NSString stringWithFormat:@" %d ",delay[i]-turns+1] forState:UIControlStateNormal];
-                    if (button.currentBackgroundImage == nil) {
+                    if (button.currentBackgroundImage == nil || shouldUpdateImage[i] == NO) {
                         UIImage *img = [self.imagesArray objectAtIndex:i];
                         [button setBackgroundImage:[img convertToGrayScale] forState:UIControlStateNormal];
-                        button.imageView.tag = 10000;
+                        shouldUpdateImage[i] = YES;
                     }
                 } else {
                     button.layer.borderColor = [UICOLOR_HW_YELLOW_TEXT CGColor];
                     [button setTitle:nil forState:UIControlStateNormal];
-                    if (button.currentBackgroundImage == nil || button.imageView.tag == 10000) {
+                    if (button.currentBackgroundImage == nil || shouldUpdateImage[i] == YES) {
                         UIImage *img = [self.imagesArray objectAtIndex:i];
                         [button setBackgroundImage:img forState:UIControlStateNormal];
-                        button.imageView.tag = 0;
+                        shouldUpdateImage[i] = NO;
                     }
                 }
                 button.enabled = YES;
@@ -195,6 +197,7 @@
                     [button setBackgroundImage:nil forState:UIControlStateNormal];
                 button.layer.borderColor = [[UIColor darkGrayColor] CGColor];
                 button.enabled = NO;
+                shouldUpdateImage[i] = NO;
             }
         }
     } else {
@@ -274,6 +277,8 @@
     self.buttonsArray = nil;
     free(delay);
     delay = NULL;
+    free(shouldUpdateImage);
+    shouldUpdateImage = NULL;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }

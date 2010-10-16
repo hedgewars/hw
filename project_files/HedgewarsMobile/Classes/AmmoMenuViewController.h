@@ -27,6 +27,7 @@
     NSArray *imagesArray;
     
     uint8_t *delay;
+    BOOL *shouldUpdateImage;
     CGPoint startingPoint;
     BOOL isVisible;
 }
