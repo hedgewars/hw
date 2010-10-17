@@ -28,7 +28,7 @@
 #define BTNS_PER_ROW 9
 
 @implementation AmmoMenuViewController
-@synthesize imagesArray, buttonsArray, isVisible;
+@synthesize imagesArray, buttonsArray, nameLabel, extraLabel, captionLabel, isVisible;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -87,6 +87,39 @@
 
 #pragma mark -
 #pragma mark drawing
+-(void) prepareLabels {
+    int x = 12;
+    int y = (HW_getNumberOfWeapons()/BTNS_PER_ROW)*44 + 18;
+    UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(x, y, 200, 20)];
+    name.backgroundColor = [UIColor clearColor];
+    name.textColor = UICOLOR_HW_YELLOW_BODER;
+    name.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+    self.nameLabel = name;
+    [self.view addSubview:self.nameLabel];
+    [name release];
+
+    UILabel *caption = [[UILabel alloc] initWithFrame:CGRectMake(x+200, y, 220, 20)];
+    caption.backgroundColor = [UIColor clearColor];
+    caption.textColor = [UIColor whiteColor];
+    caption.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+    caption.adjustsFontSizeToFitWidth = YES;
+    caption.minimumFontSize = 8;
+    self.captionLabel = caption;
+    [self.view addSubview:self.captionLabel];
+    [caption release];
+
+    UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(x+2, y+20, 410, 53)];
+    description.backgroundColor = [UIColor clearColor];
+    description.textColor = [UIColor whiteColor];
+    description.font = [UIFont italicSystemFontOfSize:[UIFont systemFontSize]];
+    description.adjustsFontSizeToFitWidth = YES;
+    description.minimumFontSize = 8;
+    description.numberOfLines = 0;
+    self.extraLabel = description;
+    [self.view addSubview:self.extraLabel];
+    [description release];
+}
+
 -(void) loadAmmoStuff:(id) object {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSString *str = [NSString stringWithFormat:@"%@/AmmoMenu/Ammos.png",GRAPHICS_DIRECTORY()];
@@ -124,6 +157,7 @@
         [button.layer setMasksToBounds:YES];
         [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchDown];
         [button addTarget:self action:@selector(buttonReleased:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(buttonCancel:) forControlEvents:UIControlEventTouchUpOutside|UIControlEventTouchCancel];
         [button setTitleColor:UICOLOR_HW_YELLOW_TEXT forState:UIControlStateNormal];
         button.titleLabel.backgroundColor = [UIColor blackColor];
         button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
@@ -210,15 +244,38 @@
 
 #pragma mark -
 #pragma mark user interaction
--(void) buttonPressed:(id)  sender {
+-(void) buttonPressed:(id) sender {
     UIButton *theButton = (UIButton *)sender;
-    if (theButton.currentTitle != nil) {
-        DLog(@"eeee");
-    }
+    if (self.nameLabel == nil || self.extraLabel == nil)
+        [self prepareLabels];
+
+    self.nameLabel.text = [NSString stringWithUTF8String:HW_getWeaponNameByIndex(theButton.tag)];
+    // description contains a lot of unnecessary stuff, we clean it by removing .|, !| and ?|
+    NSString *description = [NSString stringWithUTF8String:HW_getWeaponDescriptionByIndex(theButton.tag)];
+    NSArray *elements = [description componentsSeparatedByString:@".|"];
+    NSArray *purgedElements = [[elements objectAtIndex:0] componentsSeparatedByString:@"!|"];
+    NSArray *morePurgedElements = [[purgedElements objectAtIndex:0] componentsSeparatedByString:@"?|"];
+    self.extraLabel.text = [[[morePurgedElements objectAtIndex:0] stringByReplacingOccurrencesOfString:@"|" withString:@" "] stringByAppendingString:@"."];
+    if (theButton.currentTitle != nil)
+        self.captionLabel.text = NSLocalizedString(@"This weapon is locked",@"");
+    else
+        self.captionLabel.text = [NSString stringWithUTF8String:HW_getWeaponCaptionByIndex(theButton.tag)];
+}
+
+-(void) buttonCancel:(id) sender {
+    self.nameLabel.text = nil;
+    self.extraLabel.text = nil;
+    self.captionLabel.text = nil;
 }
 
 -(void) buttonReleased:(id) sender {
     UIButton *theButton = (UIButton *)sender;
+    if (self.nameLabel == nil || self.extraLabel == nil)
+        [self prepareLabels];
+
+    self.nameLabel.text = nil;
+    self.extraLabel.text = nil;
+    self.captionLabel.text = nil;
     if (theButton.currentTitle == nil) {
         HW_setWeapon(theButton.tag);
         playSound(@"clickSound");
@@ -267,6 +324,9 @@
 -(void) didReceiveMemoryWarning {
     self.imagesArray = nil;
     self.buttonsArray = nil;
+    self.nameLabel = nil;
+    self.extraLabel = nil;
+    self.captionLabel = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
@@ -275,6 +335,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.imagesArray = nil;
     self.buttonsArray = nil;
+    self.nameLabel = nil;
+    self.extraLabel = nil;
+    self.captionLabel = nil;
     free(delay);
     delay = NULL;
     free(shouldUpdateImage);
@@ -284,6 +347,9 @@
 }
 
 -(void) dealloc {
+    [nameLabel release];
+    [extraLabel release];
+    [captionLabel release];
     [imagesArray release];
     [buttonsArray release];
     [super dealloc];

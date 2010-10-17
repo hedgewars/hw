@@ -84,6 +84,8 @@ extern "C" {
     void HW_setWeapon(int whichone);
     BOOL HW_isWeaponAnEffect(int whichone);
     char *HW_getWeaponNameByIndex(int whichone);
+    char *HW_getWeaponCaptionByIndex(int whichone);
+    char *HW_getWeaponDescriptionByIndex(int whichone);
 
     void HW_getAmmoDelays(unsigned char *pointer);
     int  HW_getAmmoCounts(int *pointer);

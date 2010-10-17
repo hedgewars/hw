@@ -267,6 +267,16 @@ begin
     exit (str2pchar(trammo[Ammoz[TAmmoType(whichone+1)].NameId]));
 end;
 
+function HW_getWeaponCaptionByIndex(whichone: LongInt): PChar; cdecl; export;
+begin
+    exit (str2pchar(trammoc[Ammoz[TAmmoType(whichone+1)].NameId]));
+end;
+
+function HW_getWeaponDescriptionByIndex(whichone: LongInt): PChar; cdecl; export;
+begin
+    exit (str2pchar(trammod[Ammoz[TAmmoType(whichone+1)].NameId]));
+end;
+
 function HW_getNumberOfWeapons:LongInt; cdecl; export;
 begin
     exit(ord(high(TAmmoType)));
