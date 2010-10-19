@@ -534,7 +534,7 @@ gtFlamethrower: begin
                 end;
  gtPoisonCloud: begin
                 gear^.Timer:= 5000;
-                gear^.dY:= int2hwfloat((-4 + getRandom(8))) / 1000;
+                gear^.dY:= int2hwfloat(-4 + longint(getRandom(8))) / 1000;
                 end;
  gtResurrector: begin
                 gear^.Radius := 100;
@@ -1034,8 +1034,8 @@ with PHedgehog(Gear^.Hedgehog)^ do
     begin
     if not (((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and ((Gear^.State and gstAttacked) = 0)) then
         exit;
-    DrawTexture(round(sx + 16), round(sy + 16), ropeIconTex);
-    DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, round(sx + 30), round(sy + 30), ord(CurAmmoType) - 1, 1, 32, 32);
+    DrawTexture(round(int64(sx) + 16), round(int64(sy) + 16), ropeIconTex);
+    DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, round(int64(sx) + 30), round(int64(sy) + 30), ord(CurAmmoType) - 1, 1, 32, 32);
     end;
 end;
 

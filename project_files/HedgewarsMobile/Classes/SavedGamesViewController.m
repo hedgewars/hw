@@ -41,16 +41,12 @@
 
 -(void) viewDidLoad {
     self.tableView.backgroundView = nil;
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(viewWillAppear:)
-                                                 name:@"removedSave"
-                                               object:nil];
     [super viewDidLoad];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
     [self updateTable];
+    [super viewWillAppear:animated];
 }
 
 #pragma mark -
@@ -198,11 +194,12 @@
     NSString *filePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:[indexPath row]]];
     
     NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [NSDictionary dictionary],@"game_dictionary",
                                       filePath,@"savefile",
                                       [NSNumber numberWithBool:NO],@"netgame",
+                                      [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:@"orientation"],@"game_dictionary",
                                       nil];
     [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+    [self.parentViewController dismissModalViewControllerAnimated:NO];
 }
 
 #pragma mark -

@@ -422,7 +422,7 @@ begin
                 begin
                 doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
                 for i:= 0 to 2 do
-                    AddGear(hwRound(Gear^.X) - 30 + GetRandom(60), hwRound(Gear^.Y) - 20 + GetRandom(40), gtPoisonCloud, 0, _0, _0, 0);
+                    AddGear(int64(hwRound(Gear^.X)) - 30 + GetRandom(60), int64(hwRound(Gear^.Y)) - 20 + GetRandom(40), gtPoisonCloud, 0, _0, _0, 0);
                 end;
         end;
     DeleteGear(Gear);
@@ -4101,6 +4101,8 @@ begin
     DrawCircle(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, 1.5, 0, 0, $FF,
             $FF);
 
+    doStepHedgehogMoving(hh^.Gear);
+
     if ((Gear^.Message and gmUp) <> 0) then begin
         if (GameTicks and $F) <> 0 then exit;
     end else begin
@@ -4109,9 +4111,14 @@ begin
 
     graves := GearsNear(hh^.Gear, gtGrave, Gear^.Radius);
 
+    if Length(graves) = 0 then begin
+        Gear^.Timer := 250;
+        Gear^.doStep := @doStepIdle;
+        exit;
+    end;
+
     if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) then begin
         i := getRandom(Length(graves));
-        writeln(i);
         dec(hh^.Gear^.Health);
         inc(graves[i]^.Health);
 {-for i:= 0 to High(graves) do begin

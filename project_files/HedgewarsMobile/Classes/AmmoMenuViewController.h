@@ -23,16 +23,24 @@
 
 
 @interface AmmoMenuViewController : UIViewController {
-    UIImage *weaponsImage;
     NSArray *buttonsArray;
+    NSArray *imagesArray;
     
+    UILabel *nameLabel;
+    UILabel *extraLabel;
+    UILabel *captionLabel;
+
     uint8_t *delay;
+    BOOL *shouldUpdateImage;
     CGPoint startingPoint;
     BOOL isVisible;
 }
 
-@property (nonatomic,retain) UIImage *weaponsImage;
-@property (nonatomic,retain) NSArray *buttonsArray;
+@property (retain) NSArray *buttonsArray;
+@property (retain) NSArray *imagesArray;
+@property (nonatomic,retain) UILabel *nameLabel;
+@property (nonatomic,retain) UILabel *extraLabel;
+@property (nonatomic,retain) UILabel *captionLabel;
 @property (assign) BOOL isVisible;
 
 -(void) buttonPressed:(id)sender;

@@ -24,6 +24,7 @@
 #import <sys/sysctl.h>
 #import <mach/mach.h>
 #import <mach/mach_host.h>
+#import <QuartzCore/QuartzCore.h>
 #import "AudioToolbox/AudioToolbox.h"
 #import "PascalImports.h"
 
@@ -74,45 +75,45 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
     switch (type) {
         case 0: //default
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9391929422199121032235111001201000000211110101011",@"ammostore_initialqt",
-                         @"0405040541600655546554464776576666666155510101117",@"ammostore_probability",
+                         @"9391929422199121032235111001201000000211110101010",@"ammostore_initialqt",
+                         @"0405040541600655546554464776576666666155510101110",@"ammostore_probability",
                          @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1311110312111111123114111111111111111211111101111",@"ammostore_crate", nil];
+                         @"1311110312111111123114111111111111111211111101110",@"ammostore_crate", nil];
             break;
         case 1: //crazy
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9999999999999999992999999999999999299999999909999",@"ammostore_initialqt",
-                         @"1111110111111111111111111111111111111111111101111",@"ammostore_probability",
+                         @"9999999999999999992999999999999999299999999909990",@"ammostore_initialqt",
+                         @"1111110111111111111111111111111111111111111101110",@"ammostore_probability",
                          @"0000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"1311110312111111123114111111111111111211110101111",@"ammostore_crate", nil];
+                         @"1311110312111111123114111111111111111211110101110",@"ammostore_crate", nil];
             break;
         case 2: //pro mode
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
                          @"9090009000000000000009000000000000000000000000000",@"ammostore_initialqt",
                          @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111100101111",@"ammostore_crate", nil];
+                         @"1111111111111111111111111111111111111111100101110",@"ammostore_crate", nil];
             break;
         case 3: //shoppa
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
                          @"0000009900000000000000000000000000000000000000000",@"ammostore_initialqt",
                          @"4444410044244402210112121222422000000002000400010",@"ammostore_probability",
                          @"0000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111101101111",@"ammostore_crate", nil];
+                         @"1111111111111111111111111111111111111111101101110",@"ammostore_crate", nil];
             break;
         case 4: //basketball
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
                          @"9391929422199121032235111001201000000211110101000",@"ammostore_initialqt",
                          @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"0000000000000005500000040007004000000000200000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111111101111",@"ammostore_crate", nil];
+                         @"1111111111111111111111111111111111111111111101110",@"ammostore_crate", nil];
             break;
         case 5: //minefield
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
                          @"0000009900090000000300000000000000000000000000000",@"ammostore_initialqt",
                          @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111111101111",@"ammostore_crate", nil];
+                         @"1111111111111111111111111111111111111111111101110",@"ammostore_crate", nil];
             break;
         default:
             NSLog(@"Nope");
@@ -260,7 +261,7 @@ void playSound (NSString *snd) {
     AudioServicesPlaySystemSound(soundID);
 }
 
-NSArray inline *getAvailableColors(void) {
+NSArray inline *getAvailableColors (void) {
     return [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInt:0x4376e9],     // bluette
                                      [NSNumber numberWithUnsignedInt:0x3e9321],     // greeeen
                                      [NSNumber numberWithUnsignedInt:0xa23dbb],     // violett
@@ -270,4 +271,27 @@ NSArray inline *getAvailableColors(void) {
                                      [NSNumber numberWithUnsignedInt:0xbba23d],     // gold$$$
                                      [NSNumber numberWithUnsignedInt:0x3da2bb],     // cyannnn  
                                      nil];
+}
+
+UILabel *createBlueLabel (NSString *title, CGRect frame) {
+    return createLabelWithParams(title, frame, 1.5f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_DARKBLUE);
+}
+
+UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWidth, UIColor *borderColor, UIColor *backgroundColor) {
+    UILabel *theLabel = [[UILabel alloc] initWithFrame:frame];
+    theLabel.backgroundColor = backgroundColor;
+
+    if (title != nil) {
+        theLabel.text = title;
+        theLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+        theLabel.textAlignment = UITextAlignmentCenter;
+        theLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]*80/100];
+    }
+    
+    [theLabel.layer setBorderWidth:borderWidth];
+    [theLabel.layer setBorderColor:borderColor.CGColor];
+    [theLabel.layer setCornerRadius:8.0f];
+    [theLabel.layer setMasksToBounds:YES];
+    
+    return theLabel;
 }

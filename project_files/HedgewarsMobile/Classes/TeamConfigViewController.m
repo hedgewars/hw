@@ -20,7 +20,6 @@
 
 
 #import "TeamConfigViewController.h"
-#import <QuartzCore/QuartzCore.h>
 #import "CommodityFunctions.h"
 #import "HogButtonView.h"
 #import "SquareButtonView.h"
@@ -172,22 +171,14 @@
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UILabel *theLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30)];
-    theLabel.backgroundColor = [UIColor blueColor];
+    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
+    NSString *text;
     if (section == 0) 
-        theLabel.text = NSLocalizedString(@"Playing Teams",@"");
+        text = NSLocalizedString(@"Playing Teams",@"");
     else
-        theLabel.text = NSLocalizedString(@"Available Teams",@"");
+        text = NSLocalizedString(@"Available Teams",@"");
+    UILabel *theLabel = createBlueLabel(text, frame);
     theLabel.center = CGPointMake(self.view.frame.size.width/2, 20);
-    theLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
-    theLabel.textAlignment = UITextAlignmentCenter;
-    theLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]*80/100];
-    theLabel.backgroundColor = UICOLOR_HW_DARKBLUE;
-    
-    [theLabel.layer setBorderWidth:1.5f];
-    [theLabel.layer setBorderColor:[UICOLOR_HW_YELLOW_BODER CGColor]];
-    [theLabel.layer setCornerRadius:8.0f];
-    [theLabel.layer setMasksToBounds:YES];
 
     UIView *theView = [[[UIView alloc] init] autorelease];
     [theView addSubview:theLabel];

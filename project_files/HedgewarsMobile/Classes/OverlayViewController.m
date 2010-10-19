@@ -45,68 +45,104 @@
 @implementation OverlayViewController
 @synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu;
 
+#pragma mark -
+#pragma mark rotation
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
+// pause the game and remove objc menus so that animation is smoother
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval) duration{
+    [self dismissPopover];
+    if (HW_isPaused() == NO)
+        HW_pause();
+    if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
+        [self.amvc disappear];
+        wasVisible = YES;
+    } else
+        wasVisible = NO;
+
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
+// now restore previous state
+-(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation {
+    if (wasVisible || IS_DUALHEAD())
+        [self.amvc appearInView:self.view];
+    if (HW_isPaused() == YES)
+        HW_pause();
+
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+}
+
+// rotate the sdl view according to the orientation -- the uiview is autorotated
 -(void) didRotate:(NSNotification *)notification {
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    CGRect usefulRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
     UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
-
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    
     [UIView beginAnimations:@"rotation" context:NULL];
-    [UIView setAnimationDuration:0.8f];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationDuration:0.7];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
-            if (IS_DUALHEAD() == NO)
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
+            if (IS_DUALHEAD()) {
+                self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
+            } else
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
             break;
         case UIDeviceOrientationLandscapeRight:
-            if (IS_DUALHEAD() == NO)
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-            break;
-        case UIDeviceOrientationPortrait:
-            if (IS_DUALHEAD())
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
-            break;
-        case UIDeviceOrientationPortraitUpsideDown:
-            if (IS_DUALHEAD())
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
+            if (IS_DUALHEAD()) {
+                self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
+            } else
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
             break;
         default:
             // a debug log would spam too much
             break;
     }
-    if (self.amvc.isVisible)
-        [self.amvc appearInView:self.view];
-    self.view.frame = usefulRect;
     [UIView commitAnimations];
-    
+
     // for single screens only landscape mode is supported
     // for dual screen mode the sdlview is not modified, but you can rotate the pad in any direction
 }
 
 #pragma mark -
 #pragma mark View Management
--(void) viewDidLoad {
-    isGameRunning = NO;
-    isReplay = NO;
-    cachedGrenadeTime = 2;
-    isAttacking = NO;
-    
-    // i called it a popover even on the iphone
-    isPopoverVisible = NO;
-    self.view.alpha = 0;
-    self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
+-(id) initWithCoder:(NSCoder *)aDecoder {
+    if ((self = [super initWithCoder:aDecoder])) {
+        isGameRunning = NO;
+        isReplay = NO;
+        cachedGrenadeTime = 2;
 
+        isAttacking = NO;
+        wasVisible = NO;
+        isPopoverVisible = NO;    // it is called "popover" even on the iphone
+    }
+    return self;
+}
+
+-(void) viewDidLoad {
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    self.view.frame = CGRectMake(0, 0, screenRect.size.height, screenRect.size.width);
+    self.view.center = CGPointMake(self.view.frame.size.height/2, self.view.frame.size.width/2);
+    self.view.alpha = 0;
+
+    // detrmine the quanitiy and direction of the rotation
+    if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
+        a = 180;
+        b = 0;
+    } else {
+        a = 0;
+        b = 180;
+    }
+
+    // get the number of screens to know the previous state whan a display is connected or detached
     initialScreenCount = [[UIScreen screens] count];
 
+    // set initial orientation of the controller orientation
     if (IS_DUALHEAD()) {
-        // set initial orientation wrt the controller orientation
         switch (self.interfaceOrientation) {
             case UIDeviceOrientationLandscapeLeft:
                 self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
@@ -114,30 +150,23 @@
             case UIDeviceOrientationLandscapeRight:
                 self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
                 break;
-            case UIDeviceOrientationPortrait:
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(0));
-                break;
-            case UIDeviceOrientationPortraitUpsideDown:
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(180));
-                break;
             default:
                 DLog(@"Nope");
                 break;
         }
     }
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
 
+    // the timer used to dim the overlay
     dimTimer = [[NSTimer alloc] initWithFireDate:(IS_DUALHEAD()) ? HIDING_TIME_NEVER : [NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
                                           target:self
                                         selector:@selector(dimOverlay)
                                         userInfo:nil
                                          repeats:YES];
-
     // add timer to runloop, otherwise it doesn't work
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
 
+    // become listener of some notifications
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didRotate:)
@@ -163,7 +192,8 @@
                                              selector:@selector(numberOfScreensDecreased)
                                                  name:UIScreenDidDisconnectNotification
                                                object:nil];
-    
+
+    // present the overlay
     [UIView beginAnimations:@"showing overlay" context:NULL];
     [UIView setAnimationDuration:1];
     self.view.alpha = 1;
@@ -209,6 +239,12 @@
     doNotDim();
 }
 
+-(void) cleanup {
+    [self dismissPopover];
+    HW_terminate(NO);
+    [self.view removeFromSuperview];
+}
+
 -(void) didReceiveMemoryWarning {
     if (self.popupMenu.view.superview == nil)
         self.popupMenu = nil;
@@ -227,6 +263,9 @@
 -(void) viewDidUnload {
     // only objects initialized in viewDidLoad should be here
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                             selector:@selector(unsetPreciseStatus)
+                                               object:nil];
     dimTimer = nil;
     self.helpPage = nil;
     [self dismissPopover];
@@ -245,14 +284,8 @@
     [super dealloc];
 }
 
--(void) cleanup {
-    [self dismissPopover];
-    HW_terminate(NO);
-    [self.view removeFromSuperview];
-}
-
 #pragma mark -
-#pragma mark Overlay actions and members
+#pragma mark overlay user interaction
 // nice transition for dimming, should be called only by the timer himself
 -(void) dimOverlay {
     if (isGameRunning) {
@@ -381,6 +414,22 @@
     HW_preciseSet(NO);
 }
 
+-(void) sendHWClick {
+    HW_click();
+    removeConfirmationInput();
+    doDim();
+}
+
+-(void) setGrenadeTime:(id) sender {
+    UISegmentedControl *theSegment = (UISegmentedControl *)sender;
+    if (cachedGrenadeTime != theSegment.selectedSegmentIndex) {
+        HW_setGrenadeTime(theSegment.selectedSegmentIndex + 1);
+        cachedGrenadeTime = theSegment.selectedSegmentIndex;
+    }
+}
+
+#pragma mark -
+#pragma mark other menu
 // present a further check before closing game
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
     if ([actionSheet cancelButtonIndex] != buttonIndex)
@@ -475,8 +524,6 @@
     }
 }
 
-    //if (currentPosition.y < screen.size.width - 130 || (currentPosition.x > 130 && currentPosition.x < screen.size.height - 130)) {
-
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
@@ -564,20 +611,6 @@
     initialDistanceForPinching = 0;
 }
 
--(void) sendHWClick {
-    HW_click();
-    removeConfirmationInput();
-    doDim();
-}
-
--(void) setGrenadeTime:(id) sender {
-    UISegmentedControl *theSegment = (UISegmentedControl *)sender;
-    if (cachedGrenadeTime != theSegment.selectedSegmentIndex) {
-        HW_setGrenadeTime(theSegment.selectedSegmentIndex + 1);
-        cachedGrenadeTime = theSegment.selectedSegmentIndex;
-    }
-}
-
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     [self touchesEnded:touches withEvent:event];
 }
@@ -642,7 +675,7 @@
 }
 
 #pragma mark -
-#pragma mark Functions called by pascal
+#pragma mark Functions called by pascal code
 void inline setGameRunning(BOOL value) {
     isGameRunning = value;
 }

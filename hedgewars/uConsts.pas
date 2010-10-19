@@ -2180,7 +2180,7 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair;
+            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_NoRoundEndHint;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;

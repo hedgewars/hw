@@ -28,7 +28,7 @@
 #define BTNS_PER_ROW 9
 
 @implementation AmmoMenuViewController
-@synthesize weaponsImage, buttonsArray, isVisible;
+@synthesize imagesArray, buttonsArray, nameLabel, extraLabel, captionLabel, isVisible;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -51,8 +51,10 @@
     self.view.autoresizingMask = UIViewAutoresizingNone;
     
     self.isVisible = NO;
-    delay = (uint8_t *) calloc(HW_getNumberOfWeapons(), sizeof(uint8_t));
+    delay = (uint8_t *)calloc(HW_getNumberOfWeapons(), sizeof(uint8_t));
     HW_getAmmoDelays(delay);
+
+    shouldUpdateImage = (BOOL *)calloc(HW_getNumberOfWeapons(), sizeof(BOOL));
 
     [super viewDidLoad];
 }
@@ -85,14 +87,45 @@
 
 #pragma mark -
 #pragma mark drawing
+-(void) prepareLabels {
+    int x = 12;
+    int y = (HW_getNumberOfWeapons()/BTNS_PER_ROW)*44 + 18;
+    UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(x, y, 200, 20)];
+    name.backgroundColor = [UIColor clearColor];
+    name.textColor = UICOLOR_HW_YELLOW_BODER;
+    name.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+    self.nameLabel = name;
+    [self.view addSubview:self.nameLabel];
+    [name release];
+
+    UILabel *caption = [[UILabel alloc] initWithFrame:CGRectMake(x+200, y, 220, 20)];
+    caption.backgroundColor = [UIColor clearColor];
+    caption.textColor = [UIColor whiteColor];
+    caption.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+    caption.adjustsFontSizeToFitWidth = YES;
+    caption.minimumFontSize = 8;
+    self.captionLabel = caption;
+    [self.view addSubview:self.captionLabel];
+    [caption release];
+
+    UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(x+2, y+20, 410, 53)];
+    description.backgroundColor = [UIColor clearColor];
+    description.textColor = [UIColor whiteColor];
+    description.font = [UIFont italicSystemFontOfSize:[UIFont systemFontSize]];
+    description.adjustsFontSizeToFitWidth = YES;
+    description.minimumFontSize = 8;
+    description.numberOfLines = 0;
+    self.extraLabel = description;
+    [self.view addSubview:self.extraLabel];
+    [description release];
+}
+
 -(void) loadAmmoStuff:(id) object {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
     NSString *str = [NSString stringWithFormat:@"%@/AmmoMenu/Ammos.png",GRAPHICS_DIRECTORY()];
     UIImage *ammoStoreImage = [[UIImage alloc] initWithContentsOfFile:str];
-    [self performSelectorOnMainThread:@selector(setWeaponsImage:) withObject:ammoStoreImage waitUntilDone:NO];
-    [ammoStoreImage release];
 
+    NSMutableArray *imgs = [[NSMutableArray alloc] initWithCapacity:HW_getNumberOfWeapons()];
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:HW_getNumberOfWeapons()];
     int i, j, e;
     for (i = 0, j = 0, e = 0; i < HW_getNumberOfWeapons(); i++) {
@@ -122,7 +155,9 @@
         button.layer.borderWidth = w;
         [button.layer setCornerRadius:radius];
         [button.layer setMasksToBounds:YES];
-        [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchDown];
+        [button addTarget:self action:@selector(buttonReleased:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(buttonCancel:) forControlEvents:UIControlEventTouchUpOutside|UIControlEventTouchCancel];
         [button setTitleColor:UICOLOR_HW_YELLOW_TEXT forState:UIControlStateNormal];
         button.titleLabel.backgroundColor = [UIColor blackColor];
         button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
@@ -132,19 +167,27 @@
         button.titleLabel.layer.borderWidth = 1;
         [self.view addSubview:button];
         [array addObject:button];
-        
+
+        int x_src = ((i*32)/(int)ammoStoreImage.size.height)*32;
+        int y_src = (i*32)%(int)ammoStoreImage.size.height;
+        UIImage *img = [ammoStoreImage cutAt:CGRectMake(x_src, y_src, 32, 32)];
+        [imgs addObject:img];
     }
     [self performSelectorOnMainThread:@selector(setButtonsArray:) withObject:array waitUntilDone:NO];
     [array release];
-    
-    [self performSelectorOnMainThread:@selector(updateAmmoVisuals) withObject:nil waitUntilDone:NO];
+
+    [self performSelectorOnMainThread:@selector(setImagesArray:) withObject:imgs waitUntilDone:NO];
+    [imgs release];
+    [ammoStoreImage release];
+
+    [self performSelectorOnMainThread:@selector(updateAmmoVisuals) withObject:nil waitUntilDone:YES];
     UIActivityIndicatorView *spinner = (UIActivityIndicatorView *)object;
     [spinner stopAnimating];
     [pool drain];
 }
 
 -(void) updateAmmoVisuals {
-    if (self.buttonsArray == nil || self.weaponsImage == nil) {
+    if (self.buttonsArray == nil || self.imagesArray == nil) {
         UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         spinner.hidesWhenStopped = YES;
         spinner.center = self.view.center;
@@ -155,11 +198,6 @@
         return;
     }
     
-    [NSThread detachNewThreadSelector:@selector(drawingThread) toTarget:self withObject:nil];
-}
-
--(void) drawingThread {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     int *loadout = (int *)calloc(HW_getNumberOfWeapons(), sizeof(int));
     int res = HW_getAmmoCounts(loadout);
     int turns = HW_getTurnsForCurrentTeam();
@@ -173,22 +211,18 @@
                 if (delay[i]-turns >= 0) {
                     button.layer.borderColor = [[UIColor lightGrayColor] CGColor];
                     [button setTitle:[NSString stringWithFormat:@" %d ",delay[i]-turns+1] forState:UIControlStateNormal];
-                    if (button.currentBackgroundImage == nil) {
-                        int x_src = ((i*32)/(int)self.weaponsImage.size.height)*32;
-                        int y_src = (i*32)%(int)self.weaponsImage.size.height;
-                        UIImage *img = [self.weaponsImage cutAt:CGRectMake(x_src, y_src, 32, 32)];
+                    if (button.currentBackgroundImage == nil || shouldUpdateImage[i] == NO) {
+                        UIImage *img = [self.imagesArray objectAtIndex:i];
                         [button setBackgroundImage:[img convertToGrayScale] forState:UIControlStateNormal];
-                        button.imageView.tag = 10000;
+                        shouldUpdateImage[i] = YES;
                     }
                 } else {
                     button.layer.borderColor = [UICOLOR_HW_YELLOW_TEXT CGColor];
-                    [button setTitle:@"" forState:UIControlStateNormal];
-                    if (button.currentBackgroundImage == nil || button.imageView.tag == 10000) {
-                        int x_src = ((i*32)/(int)self.weaponsImage.size.height)*32;
-                        int y_src = (i*32)%(int)self.weaponsImage.size.height;
-                        UIImage *img = [self.weaponsImage cutAt:CGRectMake(x_src, y_src, 32, 32)];
+                    [button setTitle:nil forState:UIControlStateNormal];
+                    if (button.currentBackgroundImage == nil || shouldUpdateImage[i] == YES) {
+                        UIImage *img = [self.imagesArray objectAtIndex:i];
                         [button setBackgroundImage:img forState:UIControlStateNormal];
-                        button.imageView.tag = 0;
+                        shouldUpdateImage[i] = NO;
                     }
                 }
                 button.enabled = YES;
@@ -197,8 +231,8 @@
                     [button setBackgroundImage:nil forState:UIControlStateNormal];
                 button.layer.borderColor = [[UIColor darkGrayColor] CGColor];
                 button.enabled = NO;
+                shouldUpdateImage[i] = NO;
             }
-            
         }
     } else {
         self.view.userInteractionEnabled = NO;
@@ -206,15 +240,46 @@
 
     free(loadout);
     loadout = NULL;
-    [pool drain];
 }
 
 #pragma mark -
 #pragma mark user interaction
 -(void) buttonPressed:(id) sender {
     UIButton *theButton = (UIButton *)sender;
-    HW_setWeapon(theButton.tag);
-    playSound(@"clickSound");
+    if (self.nameLabel == nil || self.extraLabel == nil)
+        [self prepareLabels];
+
+    self.nameLabel.text = [NSString stringWithUTF8String:HW_getWeaponNameByIndex(theButton.tag)];
+    // description contains a lot of unnecessary stuff, we clean it by removing .|, !| and ?|
+    NSString *description = [NSString stringWithUTF8String:HW_getWeaponDescriptionByIndex(theButton.tag)];
+    NSArray *elements = [description componentsSeparatedByString:@".|"];
+    NSArray *purgedElements = [[elements objectAtIndex:0] componentsSeparatedByString:@"!|"];
+    NSArray *morePurgedElements = [[purgedElements objectAtIndex:0] componentsSeparatedByString:@"?|"];
+    self.extraLabel.text = [[[morePurgedElements objectAtIndex:0] stringByReplacingOccurrencesOfString:@"|" withString:@" "] stringByAppendingString:@"."];
+    if (theButton.currentTitle != nil)
+        self.captionLabel.text = NSLocalizedString(@"This weapon is locked",@"");
+    else
+        self.captionLabel.text = [NSString stringWithUTF8String:HW_getWeaponCaptionByIndex(theButton.tag)];
+}
+
+-(void) buttonCancel:(id) sender {
+    self.nameLabel.text = nil;
+    self.extraLabel.text = nil;
+    self.captionLabel.text = nil;
+}
+
+-(void) buttonReleased:(id) sender {
+    UIButton *theButton = (UIButton *)sender;
+    if (self.nameLabel == nil || self.extraLabel == nil)
+        [self prepareLabels];
+
+    self.nameLabel.text = nil;
+    self.extraLabel.text = nil;
+    self.captionLabel.text = nil;
+    if (theButton.currentTitle == nil) {
+        HW_setWeapon(theButton.tag);
+        playSound(@"clickSound");
+    }
     if (IS_DUALHEAD() == NO)
         [self disappear];
 }
@@ -257,24 +322,35 @@
 #pragma mark -
 #pragma mark memory
 -(void) didReceiveMemoryWarning {
-    self.weaponsImage = nil;
+    self.imagesArray = nil;
     self.buttonsArray = nil;
+    self.nameLabel = nil;
+    self.extraLabel = nil;
+    self.captionLabel = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    self.weaponsImage = nil;
+    self.imagesArray = nil;
     self.buttonsArray = nil;
+    self.nameLabel = nil;
+    self.extraLabel = nil;
+    self.captionLabel = nil;
     free(delay);
     delay = NULL;
+    free(shouldUpdateImage);
+    shouldUpdateImage = NULL;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
 -(void) dealloc {
-    [weaponsImage release];
+    [nameLabel release];
+    [extraLabel release];
+    [captionLabel release];
+    [imagesArray release];
     [buttonsArray release];
     [super dealloc];
 }

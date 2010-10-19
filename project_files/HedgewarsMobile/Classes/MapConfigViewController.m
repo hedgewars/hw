@@ -467,7 +467,7 @@
 
 -(void) didReceiveMemoryWarning {
     self.dataSourceArray = nil;
-    self.lastIndexPath = nil;
+    //self.lastIndexPath = nil;
 
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
