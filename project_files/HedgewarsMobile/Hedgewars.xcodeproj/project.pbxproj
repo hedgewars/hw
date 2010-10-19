@@ -145,7 +145,6 @@
 		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
 		61EBA62A11DFF2BC0048B68A /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62811DFF2BC0048B68A /* title.png */; };
 		61EBA62D11DFF3310048B68A /* backgroundAndTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */; };
-		61EBB1E41228920300C1784F /* bluebox-squeezed.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBB1E31228920300C1784F /* bluebox-squeezed.png */; };
 		61EF920E11DF57AC003441C4 /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920511DF57AC003441C4 /* arrowDown.png */; };
 		61EF920F11DF57AC003441C4 /* arrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920611DF57AC003441C4 /* arrowLeft.png */; };
 		61EF921011DF57AC003441C4 /* arrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920711DF57AC003441C4 /* arrowRight.png */; };
@@ -164,7 +163,6 @@
 		61F9040911DF58B00068B24D /* settingsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040811DF58B00068B24D /* settingsButton.png */; };
 		61F9040B11DF59370068B24D /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040A11DF59370068B24D /* background.png */; };
 		61F9040E11DF59D10068B24D /* localplayButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040C11DF59D10068B24D /* localplayButton.png */; };
-		61F9043A11DF64E20068B24D /* bluebox.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9043911DF64E20068B24D /* bluebox.png */; };
 		61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F904D611DF7DA30068B24D /* WeaponCellView.m */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
@@ -885,7 +883,6 @@
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
 		61EBA62811DFF2BC0048B68A /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = "Resources/Frontend-iPad/title.png"; sourceTree = "<group>"; };
 		61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundAndTitle.png; path = "Resources/Frontend-iPad/backgroundAndTitle.png"; sourceTree = "<group>"; };
-		61EBB1E31228920300C1784F /* bluebox-squeezed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bluebox-squeezed.png"; path = "Resources/Frontend-iPad/bluebox-squeezed.png"; sourceTree = "<group>"; };
 		61EF920511DF57AC003441C4 /* arrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowDown.png; path = Resources/Overlay/arrowDown.png; sourceTree = "<group>"; };
 		61EF920611DF57AC003441C4 /* arrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowLeft.png; path = Resources/Overlay/arrowLeft.png; sourceTree = "<group>"; };
 		61EF920711DF57AC003441C4 /* arrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowRight.png; path = Resources/Overlay/arrowRight.png; sourceTree = "<group>"; };
@@ -918,7 +915,6 @@
 		61F9040A11DF59370068B24D /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = "Resources/Frontend-iPad/background.png"; sourceTree = "<group>"; };
 		61F9040C11DF59D10068B24D /* localplayButton.png */ = {isa = PBXFileReference; explicitFileType = image.png; name = localplayButton.png; path = "Resources/Frontend-iPad/localplayButton.png"; sourceTree = "<group>"; };
 		61F9040D11DF59D10068B24D /* netplayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = netplayButton.png; path = "Resources/Frontend-iPad/netplayButton.png"; sourceTree = "<group>"; };
-		61F9043911DF64E20068B24D /* bluebox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bluebox.png; path = "Resources/Frontend-iPad/bluebox.png"; sourceTree = "<group>"; };
 		61F904D511DF7DA30068B24D /* WeaponCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeaponCellView.h; sourceTree = "<group>"; };
 		61F904D611DF7DA30068B24D /* WeaponCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeaponCellView.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1397,11 +1393,9 @@
 		61F903FA11DF58680068B24D /* Frontend-iPad */ = {
 			isa = PBXGroup;
 			children = (
-				61EBB1E31228920300C1784F /* bluebox-squeezed.png */,
 				615AD96112073B4D00F2FF04 /* startGameButton.png */,
 				615AD9EA1207654E00F2FF04 /* helpButton.png */,
 				615AD9E8120764CA00F2FF04 /* backButton.png */,
-				61F9043911DF64E20068B24D /* bluebox.png */,
 				61EBA62811DFF2BC0048B68A /* title.png */,
 				61F9040C11DF59D10068B24D /* localplayButton.png */,
 				61F9040D11DF59D10068B24D /* netplayButton.png */,
@@ -1458,7 +1452,7 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* Hedgewars */ = {
+		1D6058900D05DD3D006BFB54 /* Test Lua */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Hedgewars" */;
 			buildPhases = (
@@ -1542,7 +1536,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* Hedgewars */,
+				1D6058900D05DD3D006BFB54 /* Test Lua */,
 				928301160F10CAFC00CC5A3C /* fpc */,
 				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
 			);
@@ -2093,7 +2087,6 @@
 				61F9040911DF58B00068B24D /* settingsButton.png in Resources */,
 				61F9040B11DF59370068B24D /* background.png in Resources */,
 				61F9040E11DF59D10068B24D /* localplayButton.png in Resources */,
-				61F9043A11DF64E20068B24D /* bluebox.png in Resources */,
 				61EBA62A11DFF2BC0048B68A /* title.png in Resources */,
 				61EBA62D11DFF3310048B68A /* backgroundAndTitle.png in Resources */,
 				61F7A43811E290650040BA66 /* Icon-72.png in Resources */,
@@ -2111,7 +2104,6 @@
 				615AD9E9120764CA00F2FF04 /* backButton.png in Resources */,
 				615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */,
 				6187AEBD120781B900B31A27 /* Settings in Resources */,
-				61EBB1E41228920300C1784F /* bluebox-squeezed.png in Resources */,
 				611EE974122A9C4100DF6938 /* clickSound.wav in Resources */,
 				611EE9D9122AA10A00DF6938 /* backSound.wav in Resources */,
 				611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */,

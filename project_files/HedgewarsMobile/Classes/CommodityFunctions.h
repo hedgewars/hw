@@ -50,6 +50,7 @@
 #define UICOLOR_HW_YELLOW_BODER [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xC0/255 blue:0 alpha:1]
 #define UICOLOR_HW_YELLOW_TEXT  [UIColor colorWithRed:(CGFloat)0xF0/255 green:(CGFloat)0xD0/255 blue:0 alpha:1]
 #define UICOLOR_HW_DARKBLUE     [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:1]
+#define UICOLOR_HW_ALPHABLUE    [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:0.58f]
 
 #define IS_DUALHEAD()           ([[UIScreen screens] count] > 1)
 
@@ -67,3 +68,5 @@ BOOL isApplePhone (void);
 NSInteger randomPort (void);
 NSString *modelType (void);
 NSArray *getAvailableColors (void);
+UILabel *createBlueLabel (NSString *title, CGRect frame);
+UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWidth, UIColor *borderColor, UIColor *backgroundColor);

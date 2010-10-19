@@ -24,6 +24,7 @@
 #import <sys/sysctl.h>
 #import <mach/mach.h>
 #import <mach/mach_host.h>
+#import <QuartzCore/QuartzCore.h>
 #import "AudioToolbox/AudioToolbox.h"
 #import "PascalImports.h"
 
@@ -260,7 +261,7 @@ void playSound (NSString *snd) {
     AudioServicesPlaySystemSound(soundID);
 }
 
-NSArray inline *getAvailableColors(void) {
+NSArray inline *getAvailableColors (void) {
     return [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInt:0x4376e9],     // bluette
                                      [NSNumber numberWithUnsignedInt:0x3e9321],     // greeeen
                                      [NSNumber numberWithUnsignedInt:0xa23dbb],     // violett
@@ -270,4 +271,27 @@ NSArray inline *getAvailableColors(void) {
                                      [NSNumber numberWithUnsignedInt:0xbba23d],     // gold$$$
                                      [NSNumber numberWithUnsignedInt:0x3da2bb],     // cyannnn  
                                      nil];
+}
+
+UILabel *createBlueLabel (NSString *title, CGRect frame) {
+    return createLabelWithParams(title, frame, 1.5f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_DARKBLUE);
+}
+
+UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWidth, UIColor *borderColor, UIColor *backgroundColor) {
+    UILabel *theLabel = [[UILabel alloc] initWithFrame:frame];
+    theLabel.backgroundColor = backgroundColor;
+
+    if (title != nil) {
+        theLabel.text = title;
+        theLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+        theLabel.textAlignment = UITextAlignmentCenter;
+        theLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]*80/100];
+    }
+    
+    [theLabel.layer setBorderWidth:borderWidth];
+    [theLabel.layer setBorderColor:borderColor.CGColor];
+    [theLabel.layer setCornerRadius:8.0f];
+    [theLabel.layer setMasksToBounds:YES];
+    
+    return theLabel;
 }

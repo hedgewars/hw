@@ -290,10 +290,37 @@
                                                      name:@"buttonPressed"
                                                    object:nil];
         srandom(time(NULL));
-        
+
         // load other controllers
         if (self.mapConfigViewController == nil)
             self.mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
+
+        UILabel *leftBackground = createLabelWithParams(nil, CGRectMake(0, 60, 320, 620), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
+        [self.mapConfigViewController.view addSubview:leftBackground];
+        [leftBackground release];
+        UILabel *middleBackground = createLabelWithParams(nil, CGRectMake(337, 187, 350, 505), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
+        [self.mapConfigViewController.view addSubview:middleBackground];
+        [middleBackground release];
+        UILabel *rightBackground = createLabelWithParams(nil, CGRectMake(704, 214, 320, 464), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
+        [self.mapConfigViewController.view addSubview:rightBackground];
+        [rightBackground release];
+        UILabel *topBackground = createLabelWithParams(nil, CGRectMake(714, 14, 300, 190), 2.3f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
+        [self.mapConfigViewController.view addSubview:topBackground];
+        [topBackground release];
+        UILabel *bottomLeftBackground = createLabelWithParams(nil, CGRectMake(106, 714, 320, 40), 2.0f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
+        [self.mapConfigViewController.view addSubview:bottomLeftBackground];
+        [bottomLeftBackground release];
+        UILabel *bottomRightBackground = createLabelWithParams(NSLocalizedString(@"Max Hogs:                 ",@""), CGRectMake(594, 714, 320, 40), 2.0f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
+        bottomRightBackground.font = [UIFont italicSystemFontOfSize:[UIFont labelFontSize]];
+        [self.mapConfigViewController.view addSubview:bottomRightBackground];
+        [bottomRightBackground release];
+        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.maxLabel];
+        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.sizeLabel];
+        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.segmentedControl];
+        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.previewButton];
+        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.slider];
+        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.tableView];
+
         if (self.teamConfigViewController == nil)
             self.teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
         [self.mapConfigViewController.view addSubview:self.teamConfigViewController.view];
@@ -303,7 +330,7 @@
         self.mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
         self.teamConfigViewController.view.frame = CGRectMake(348, 200, 328, 480);
         self.schemeWeaponConfigViewController.view.frame = CGRectMake(10, 70, 300, 600);
-        
+
     } else {
         // this is the visible controller
         if (self.mapConfigViewController == nil)
@@ -351,16 +378,15 @@
 }
 
 -(void) didReceiveMemoryWarning {
-    if (self.mapConfigViewController.view.superview == nil)
-        self.mapConfigViewController = nil;
     if (self.teamConfigViewController.view.superview == nil)
         self.teamConfigViewController = nil;
     if (self.schemeWeaponConfigViewController.view.superview == nil)
         self.schemeWeaponConfigViewController = nil;
     if (self.helpPage.view.superview == nil)
         self.helpPage = nil;
+    if (self.mapConfigViewController.view.superview == nil)
+        self.mapConfigViewController = nil;
 
-    // Release any cached data, images, etc that aren't in use.
     self.imgContainer = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
