@@ -1093,7 +1093,7 @@ end;
 procedure doStepRopeWork(Gear: PGear);
 var 
     HHGear: PGear;
-    len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY: hwFloat;
+    len, tx, ty, nx, ny, rDxDy, ropeDx, ropeDy, mdX, mdY: hwFloat;
     lx, ly: LongInt;
     haveCollision,
     haveDivided: boolean;
@@ -1125,11 +1125,11 @@ begin
 
     if ((HHGear^.State and gstHHDriven) = 0)
        or (CheckGearDrowning(HHGear)) then
-    begin
+        begin
         PlaySound(sndRopeRelease);
         DeleteMe;
         exit
-    end;
+        end;
 
     if (Gear^.Message and gmLeft  <> 0) then HHGear^.dX := HHGear^.dX - _0_0002
     else
@@ -1183,31 +1183,31 @@ begin
     tx := mdX * _0_3; // should be the same as increase step
     ty := mdY * _0_3;
 
+    rDxDy.isNegative:= true;
     while len > _3 do
-    begin
+        begin
         lx := hwRound(nx);
         ly := hwRound(ny);
-        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and (Land[ly, lx] <> 0
-           ) then
-        begin
-            ny := _1 / Distance(ropeDx, ropeDy);
+        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and (Land[ly, lx] <> 0) then
+            begin
+            if rDxDy.isNegative then rDxDy := _1 / Distance(ropeDx, ropeDy);
             // old rope pos
-            nx := ropeDx * ny;
-            ny := ropeDy * ny;
+            nx := ropeDx * rDxDy;
+            ny := ropeDy * rDxDy;
 
             with RopePoints.ar[RopePoints.Count] do
-            begin
+                begin
                 X := Gear^.X;
                 Y := Gear^.Y;
                 if RopePoints.Count = 0 then RopePoints.HookAngle := DxDy2Angle(Gear^.dY, Gear^.dX);
                 b := (nx * HHGear^.dY) > (ny * HHGear^.dX);
                 dLen := len
-            end;
+                end;
             with RopePoints.rounded[RopePoints.Count] do
-            begin
+                begin
                 X := hwRound(Gear^.X);
                 Y := hwRound(Gear^.Y);
-            end;
+                end;
 
             Gear^.X := Gear^.X + nx * len;
             Gear^.Y := Gear^.Y + ny * len;
@@ -1217,23 +1217,24 @@ begin
             Gear^.Friction := Gear^.Friction - len;
             haveDivided := true;
             break
-        end;
+            end;
         nx := nx - tx;
         ny := ny - ty;
+        lx := hwRound(nx);
+        ly := hwRound(ny);
         // len := len - _0_3 // should be the same as increase step
         len.QWordValue := len.QWordValue - _0_3.QWordValue;
-    end;
+        end;
 
     if not haveDivided then
         if RopePoints.Count > 0 then // check whether the last dividing point could be removed
-        begin
+            begin
             tx := RopePoints.ar[Pred(RopePoints.Count)].X;
             ty := RopePoints.ar[Pred(RopePoints.Count)].Y;
             mdX := tx - Gear^.X;
             mdY := ty - Gear^.Y;
-            if RopePoints.ar[Pred(RopePoints.Count)].b xor (mdX * (ty - HHGear^.Y) > (tx - HHGear^.X
-               ) * mdY) then
-            begin
+            if RopePoints.ar[Pred(RopePoints.Count)].b xor (mdX * (ty - HHGear^.Y) > (tx - HHGear^.X) * mdY) then
+                begin
                 dec(RopePoints.Count);
                 Gear^.X := RopePoints.ar[RopePoints.Count].X;
                 Gear^.Y := RopePoints.ar[RopePoints.Count].Y;
@@ -1247,48 +1248,48 @@ begin
 
                 HHGear^.X := Gear^.X - mdX * Gear^.Elasticity;
                 HHGear^.Y := Gear^.Y - mdY * Gear^.Elasticity;
-            end
-        end;
+                end
+            end;
 
     haveCollision := false;
     if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
-    begin
+        begin
         HHGear^.dX := -_0_6 * HHGear^.dX;
         haveCollision := true
-    end;
+        end;
     if TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) then
-    begin
+        begin
         HHGear^.dY := -_0_6 * HHGear^.dY;
         haveCollision := true
-    end;
+        end;
 
     if haveCollision
        and (Gear^.Message and (gmLeft or gmRight) <> 0)
        and (Gear^.Message and (gmUp or gmDown) <> 0) then
-    begin
+        begin
         HHGear^.dX := SignAs(hwAbs(HHGear^.dX) + _0_2, HHGear^.dX);
         HHGear^.dY := SignAs(hwAbs(HHGear^.dY) + _0_2, HHGear^.dY)
-    end;
+        end;
 
     len := hwSqr(HHGear^.dX) + hwSqr(HHGear^.dY);
     if len > _0_64 then
-    begin
+        begin
         len := _0_8 / hwSqrt(len);
         HHGear^.dX := HHGear^.dX * len;
         HHGear^.dY := HHGear^.dY * len;
-    end;
+        end;
 
 
     if (Gear^.Message and gmAttack) <> 0 then
         if (Gear^.State and gsttmpFlag) <> 0 then
             with PHedgehog(Gear^.Hedgehog)^ do
-            begin
+                begin
                 PlaySound(sndRopeRelease);
                 if CurAmmoType <> amParachute then
                     WaitCollision
                 else
                     DeleteMe
-            end
+                end
     else
     else
         if (Gear^.State and gsttmpFlag) = 0 then
