@@ -1093,7 +1093,7 @@ end;
 procedure doStepRopeWork(Gear: PGear);
 var 
     HHGear: PGear;
-    len, tx, ty, nx, ny, rDxDy, ropeDx, ropeDy, mdX, mdY: hwFloat;
+    len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY: hwFloat;
     lx, ly: LongInt;
     haveCollision,
     haveDivided: boolean;
@@ -1183,17 +1183,16 @@ begin
     tx := mdX * _0_3; // should be the same as increase step
     ty := mdY * _0_3;
 
-    rDxDy.isNegative:= true;
     while len > _3 do
         begin
         lx := hwRound(nx);
         ly := hwRound(ny);
         if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and (Land[ly, lx] <> 0) then
             begin
-            if rDxDy.isNegative then rDxDy := _1 / Distance(ropeDx, ropeDy);
+            ny := _1 / Distance(ropeDx, ropeDy);
             // old rope pos
-            nx := ropeDx * rDxDy;
-            ny := ropeDy * rDxDy;
+            nx := ropeDx * ny;
+            ny := ropeDy * ny;
 
             with RopePoints.ar[RopePoints.Count] do
                 begin
