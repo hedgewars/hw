@@ -279,9 +279,9 @@
     if (theButton.currentTitle == nil) {
         HW_setWeapon(theButton.tag);
         playSound(@"clickSound");
+        if (IS_DUALHEAD() == NO)
+            [self disappear];
     }
-    if (IS_DUALHEAD() == NO)
-        [self disappear];
 }
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {

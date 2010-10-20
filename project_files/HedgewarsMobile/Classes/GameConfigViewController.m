@@ -212,11 +212,12 @@
     if ([[gameDictionary allKeys] count] == 11) {
         NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:gameDictionary,@"game_dictionary", @"",@"savefile",
                                                                                     [NSNumber numberWithBool:NO],@"netgame", nil];
+        // let's hide all the views while the game is on
+        UIViewController *dummy = [[UIViewController alloc] init];
+        [self presentModalViewController:dummy animated:NO];
         [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-        
-        // tell controllers that they're being reloaded
-        [self.mapConfigViewController viewWillAppear:YES];
-        [self.schemeWeaponConfigViewController viewWillAppear:YES];
+        [self dismissModalViewControllerAnimated:NO];
+        [dummy release];
     } else {
         DLog(@"gameconfig data not complete!!");
         [self.parentViewController dismissModalViewControllerAnimated:YES];

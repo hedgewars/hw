@@ -467,7 +467,13 @@
 
 -(void) didReceiveMemoryWarning {
     self.dataSourceArray = nil;
-    //self.lastIndexPath = nil;
+
+    self.previewButton = nil;
+    self.tableView = nil;
+    self.maxLabel = nil;
+    self.sizeLabel = nil;
+    self.segmentedControl = nil;
+    self.slider = nil;
 
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
