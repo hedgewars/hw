@@ -41,7 +41,7 @@ var
     cReducedQuality : LongInt     = rqNone;
     //userNick is in uChat
     recordFileName  : shortstring = '';
-    cReadyDelay     : Longword    = 5000;
+    cReadyDelay     : Longword    = 0;
     cLogfileBase    : shortstring = 'debug';
 //////////////////////////
     
