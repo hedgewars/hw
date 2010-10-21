@@ -43,9 +43,13 @@
 @property (nonatomic,retain) UILabel *captionLabel;
 @property (assign) BOOL isVisible;
 
--(void) buttonPressed:(id)sender;
--(void) updateAmmoVisuals;
+-(void) buttonPressed:(id) sender;
+-(void) buttonReleased:(id) sender;
+-(void) buttonCancelled:(id) sender;
 -(void) appearInView:(UIView *)container;
 -(void) disappear;
+-(void) updateAmmoVisuals;
+-(void) loadLabels;
+-(void) loadAmmoStuff:(id) object;
 
 @end

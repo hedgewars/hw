@@ -25,7 +25,8 @@
 #import "UIImageExtra.h"
 #import "PascalImports.h"
 
-#define BTNS_PER_ROW 9
+#define BTNS_PER_ROW         9
+#define DEFAULT_DESCRIPTION  NSLocalizedString(@"Hold your finger on a weapon to see what it does",@"")
 
 @implementation AmmoMenuViewController
 @synthesize imagesArray, buttonsArray, nameLabel, extraLabel, captionLabel, isVisible;
@@ -87,7 +88,7 @@
 
 #pragma mark -
 #pragma mark drawing
--(void) prepareLabels {
+-(void) loadLabels {
     int x = 12;
     int y = (HW_getNumberOfWeapons()/BTNS_PER_ROW)*44 + 18;
     UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(x, y, 200, 20)];
@@ -111,6 +112,7 @@
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(x+2, y+20, 410, 53)];
     description.backgroundColor = [UIColor clearColor];
     description.textColor = [UIColor whiteColor];
+    description.text = DEFAULT_DESCRIPTION;
     description.font = [UIFont italicSystemFontOfSize:[UIFont systemFontSize]];
     description.adjustsFontSizeToFitWidth = YES;
     description.minimumFontSize = 8;
@@ -157,7 +159,7 @@
         [button.layer setMasksToBounds:YES];
         [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchDown];
         [button addTarget:self action:@selector(buttonReleased:) forControlEvents:UIControlEventTouchUpInside];
-        [button addTarget:self action:@selector(buttonCancel:) forControlEvents:UIControlEventTouchUpOutside|UIControlEventTouchCancel];
+        [button addTarget:self action:@selector(buttonCancelled:) forControlEvents:UIControlEventTouchUpOutside|UIControlEventTouchCancel];
         [button setTitleColor:UICOLOR_HW_YELLOW_TEXT forState:UIControlStateNormal];
         button.titleLabel.backgroundColor = [UIColor blackColor];
         button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
@@ -180,6 +182,8 @@
     [imgs release];
     [ammoStoreImage release];
 
+    [self performSelectorOnMainThread:@selector(loadLabels) withObject:nil waitUntilDone:NO];
+    
     [self performSelectorOnMainThread:@selector(updateAmmoVisuals) withObject:nil waitUntilDone:YES];
     UIActivityIndicatorView *spinner = (UIActivityIndicatorView *)object;
     [spinner stopAnimating];
@@ -247,7 +251,7 @@
 -(void) buttonPressed:(id) sender {
     UIButton *theButton = (UIButton *)sender;
     if (self.nameLabel == nil || self.extraLabel == nil)
-        [self prepareLabels];
+        [self loadLabels];
 
     self.nameLabel.text = [NSString stringWithUTF8String:HW_getWeaponNameByIndex(theButton.tag)];
     // description contains a lot of unnecessary stuff, we clean it by removing .|, !| and ?|
@@ -262,19 +266,19 @@
         self.captionLabel.text = [NSString stringWithUTF8String:HW_getWeaponCaptionByIndex(theButton.tag)];
 }
 
--(void) buttonCancel:(id) sender {
+-(void) buttonCancelled:(id) sender {
     self.nameLabel.text = nil;
-    self.extraLabel.text = nil;
+    self.extraLabel.text = DEFAULT_DESCRIPTION;
     self.captionLabel.text = nil;
 }
 
 -(void) buttonReleased:(id) sender {
     UIButton *theButton = (UIButton *)sender;
     if (self.nameLabel == nil || self.extraLabel == nil)
-        [self prepareLabels];
+        [self loadLabels];
 
     self.nameLabel.text = nil;
-    self.extraLabel.text = nil;
+    self.extraLabel.text = DEFAULT_DESCRIPTION;
     self.captionLabel.text = nil;
     if (theButton.currentTitle == nil) {
         HW_setWeapon(theButton.tag);

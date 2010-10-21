@@ -297,8 +297,12 @@ function HW_getAmmoCounts(counts: PLongInt): LongInt; cdecl; export;
 var a : PHHAmmo;
     slot, index: LongInt;
 begin
-    if (CurrentTeam^.ExtDriven) or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
+    if (CurrentTeam = nil) or
+       (CurrentHedgehog = nil) or
+       (CurrentTeam^.ExtDriven) or
+       (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
         exit(-1);
+
     a:= CurrentHedgehog^.Ammo;
     for slot:= 0 to cMaxSlotIndex do
         for index:= 0 to cMaxSlotAmmoIndex do
@@ -314,7 +318,7 @@ begin
         skipTurns[ord(a)-1]:= byte(Ammoz[a].SkipTurns);
 end;
 
-function HW_getTurnsForCurrentTeam:LongInt; cdecl; export;
+function HW_getTurnsForCurrentTeam: LongInt; cdecl; export;
 begin
     exit(CurrentTeam^.Clan^.TurnNumber);
 end;
