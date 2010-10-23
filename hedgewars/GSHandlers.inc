@@ -4111,6 +4111,7 @@ begin
     graves := GearsNear(hh^.Gear, gtGrave, Gear^.Radius);
 
     if Length(graves) = 0 then begin
+        StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
         exit;
@@ -4140,6 +4141,7 @@ begin
                 RecountTeamHealth(Phedgehog(resgear^.Hedgehog)^.Team);
             end;
         end;
+        StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
     end;
@@ -4162,6 +4164,7 @@ begin
         end;
         Gear^.doStep := @doStepResurrectorWork;
     end else begin
+        StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
     end;

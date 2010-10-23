@@ -74,7 +74,7 @@ type
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
-            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer, sprResurrector
+            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer, sprHandResurrector
             );
 
     // Gears that interact with other Gears and/or Land
@@ -123,7 +123,7 @@ type
             sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle, sndBeeWater,
             sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7, sndPiano8,
             sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
-            sndComeonthen, sndParachute, sndBump);
+            sndComeonthen, sndParachute, sndBump, sndResurrector);
 
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip, // 13
@@ -818,10 +818,10 @@ const
             (FileName:  'amHammer'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprWhip
             (FileName: 'amResurrector'; Path: ptHedgehog; AltPath: ptNone;
-                Texture: nil; Surface: nil; Width: 128; Height: 64;
+                Texture: nil; Surface: nil; Width: 32; Height: 32;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
                 tpMedium; getDimensions: false; getImageDimensions: true) 
-            );
+            ); // sprHandResurrector
 
     Wavez: array [TWave] of record
             Sprite: TSprite;
@@ -951,7 +951,8 @@ const
             (FileName:            'whipcrack.ogg'; Path: ptSounds),// sndWhack
             (FileName:           'Comeonthen.ogg'; Path: ptVoices),// sndComeonthen
             (FileName:            'parachute.ogg'; Path: ptSounds),// sndParachute
-            (FileName:                 'bump.ogg'; Path: ptSounds) // sndBump
+            (FileName:                 'bump.ogg'; Path: ptSounds),// sndBump
+            (FileName: 'hogchant3.ogg'; Path: ptSounds) // sndResurrector
             );
 
     Ammoz: array [TAmmoType] of record

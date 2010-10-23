@@ -278,7 +278,9 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 defaultPos:= false
                 end;
             gtResurrector: begin
-                // yet to come?
+                DrawRotated(sprHandResurrector, hwRound(Gear^.X) + WorldDx,
+                        hwRound(Gear^.Y) + WorldDy, 0, 0); 
+                defaultPos := false;
             end;
             gtKamikaze: begin
                 if CurAmmoGear^.Pos = 0 then
