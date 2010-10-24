@@ -172,8 +172,7 @@ with gear^ do
                 end;
     vgtCloud: begin
                 Frame:= random(4);
-                dx:= 0.000005 * random(10000);
-                if random(2) = 0 then dx := -dx;
+                dx:= 0.5 + 0.1 * random(5); // how much the cloud will be affected by wind
                 timer:= random(4096);
                 end;
     vgtExplPart,

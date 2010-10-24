@@ -270,6 +270,9 @@ with CurrentHedgehog^ do
 ResetKbd;
 
 cWindSpeed:= rndSign(GetRandom * 2 * cMaxWindSpeed);
+cWindSpeedf:= cWindSpeed.QWordValue / _1.QWordValue;
+if cWindSpeed.isNegative then
+    CWindSpeedf := -cWindSpeedf;
 g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);
 g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
