@@ -158,7 +158,7 @@
     switch (button.tag) {
         case 0:
             if (nil == self.gameConfigViewController) {
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                if (IS_IPAD())
                     xib = nil;
                 else
                     xib = @"GameConfigViewController";

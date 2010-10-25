@@ -297,6 +297,8 @@
         startingPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
     }
     */
+    if (IS_IPAD() == NO)
+        [self disappear];
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {

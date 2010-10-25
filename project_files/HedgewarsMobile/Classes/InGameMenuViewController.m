@@ -127,7 +127,7 @@
     }
     cell.textLabel.text = [menuList objectAtIndex:[indexPath row]];
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (IS_IPAD())
         cell.textLabel.textAlignment = UITextAlignmentCenter;
 
     return cell;
@@ -150,7 +150,7 @@
             break;
         case 2:
             // expand the view (and table) so that the actionsheet can be selected on the iPhone
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            if (IS_IPAD()) {
                 CGRect screen = [[UIScreen mainScreen] bounds];
                 [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
                 [UIView beginAnimations:@"table width more" context:NULL];
@@ -185,7 +185,7 @@
 #pragma mark -
 #pragma mark actionSheet methods
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+    if (IS_IPAD()){
         CGRect screen = [[UIScreen mainScreen] bounds];
         [UIView beginAnimations:@"table width less" context:NULL];
         [UIView setAnimationDuration:0.2];

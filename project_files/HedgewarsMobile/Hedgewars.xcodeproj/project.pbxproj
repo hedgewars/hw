@@ -141,6 +141,14 @@
 		619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
+		61A670BE12747D8900B06CE7 /* borderBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E911DF58550068B24D /* borderBottom.png */; };
+		61A670BF12747D9100B06CE7 /* borderTop.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EA11DF58550068B24D /* borderTop.png */; };
+		61A670C012747D9B00B06CE7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83D11E2BCE200A88903 /* Default.png */; };
+		61A670C112747DB900B06CE7 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */; };
+		61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
+		61A670FA12747E0000B06CE7 /* playButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EC11DF58550068B24D /* playButton.png */; };
+		61A670FB12747E0D00B06CE7 /* title_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 619C09E911E8B8D600F1DF16 /* title_small.png */; };
+		61A6710612747E4000B06CE7 /* backgroundCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E511DF58550068B24D /* backgroundCenter.png */; };
 		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
 		61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */; };
@@ -1499,7 +1507,14 @@
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Hedgewars" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
 			projectReferences = (
@@ -2126,6 +2141,14 @@
 				6147DAD31253DCDE0010357E /* savesButton.png in Resources */,
 				610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */,
 				610D5FB31270E26C0033333A /* Icon@2x.png in Resources */,
+				61A670BE12747D8900B06CE7 /* borderBottom.png in Resources */,
+				61A670BF12747D9100B06CE7 /* borderTop.png in Resources */,
+				61A670C012747D9B00B06CE7 /* Default.png in Resources */,
+				61A670C112747DB900B06CE7 /* MainMenuViewController-iPhone.xib in Resources */,
+				61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */,
+				61A670FA12747E0000B06CE7 /* playButton.png in Resources */,
+				61A670FB12747E0D00B06CE7 /* title_small.png in Resources */,
+				61A6710612747E4000B06CE7 /* backgroundCenter.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2323,7 +2346,8 @@
 		61022D7C12305A2800B08935 /* DistributionAppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				APPLY_RULES_IN_COPY_FILES = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Vittorio Giovara";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vittorio Giovara";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Sc";
@@ -2350,7 +2374,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
@@ -2358,10 +2382,10 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "450C4020-346A-4F44-8DDE-E71300796C94";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "450C4020-346A-4F44-8DDE-E71300796C94";
-				SDKROOT = iphoneos4.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				SDKROOT = iphoneos4.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv6 armv7";
 			};
 			name = DistributionAppStore;
 		};
@@ -2415,7 +2439,8 @@
 		6137064B117B1CB3004EE44A /* DistributionAdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				APPLY_RULES_IN_COPY_FILES = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -2443,7 +2468,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
@@ -2451,10 +2476,10 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos4.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				SDKROOT = iphoneos4.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv6 armv7";
 			};
 			name = DistributionAdHoc;
 		};
@@ -2506,7 +2531,8 @@
 		6164429D11B5CDE500B9A6F3 /* Valgrind */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				APPLY_RULES_IN_COPY_FILES = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2537,16 +2563,16 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				SDKROOT = iphoneos4.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv6 armv7";
 			};
 			name = Valgrind;
 		};
@@ -2641,7 +2667,8 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				APPLY_RULES_IN_COPY_FILES = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2658,7 +2685,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -2669,23 +2696,24 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				SDKROOT = iphoneos4.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv6 armv7";
 			};
 			name = Debug;
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				APPLY_RULES_IN_COPY_FILES = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Sc";
@@ -2712,7 +2740,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
@@ -2720,10 +2748,10 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos4.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				SDKROOT = iphoneos4.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv6 armv7";
 			};
 			name = Release;
 		};

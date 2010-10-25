@@ -51,7 +51,7 @@
     }
     UINavigationController *rightNavController = [[UINavigationController alloc] initWithRootViewController:self.activeController];
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (IS_IPAD()) {
         MasterViewController *leftController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
         leftController.targetController = self.activeController;
         UINavigationController *leftNavController = [[UINavigationController alloc] initWithRootViewController:leftController];

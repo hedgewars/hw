@@ -85,7 +85,7 @@
 
 -(IBAction) clearAll:(id) sender {
     NSString *titleStr, *cancelStr, *confirmStr;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (IS_IPAD()) {
         titleStr = nil;
         cancelStr = nil;
         confirmStr = NSLocalizedString(@"Tap to confirm",@"");

@@ -478,7 +478,7 @@
                 tmpQuality = 0x00000002;                    // rqBlurryLand
             else                                                            // = everything else
                 tmpQuality = 0;                             // full quality
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)             // = disable tooltips on phone
+    if (IS_IPAD() == NO)             // = disable tooltips on phone
         tmpQuality = tmpQuality | 0x00000400;
 
     // prevents using an empty nickname

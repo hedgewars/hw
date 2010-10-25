@@ -53,6 +53,7 @@
 #define UICOLOR_HW_ALPHABLUE    [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:0.58f]
 
 #define IS_DUALHEAD()           ([[UIScreen screens] count] > 1)
+#define IS_IPAD()               (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
 #define DEFAULT_NETGAME_PORT    46631
 

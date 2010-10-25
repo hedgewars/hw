@@ -133,7 +133,7 @@
     CGFloat shiftSliders = contentRect.origin.x;
     CGFloat shiftLabel = 0;
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (IS_IPAD()) {
         shiftSliders += 65;
         shiftLabel += 165;
     } else

@@ -126,7 +126,7 @@
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (IS_IPAD())
         cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
 
     if (self.dataSourceArray == nil)
@@ -135,6 +135,8 @@
 
     NSString *labelString = [source objectAtIndex:row];
     cell.textLabel.text = labelString;
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
+    cell.textLabel.minimumFontSize = 7;
 
     if (isRandomness()) {
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),labelString]];
@@ -350,7 +352,7 @@
     self.missionCommand = mission;
 
     // nice animation for updating the table when appropriate (on iphone)
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if (IS_IPAD())
         if (((oldPage == 0 || oldPage == 2) && (newPage == 1 || newPage == 3)) ||
             ((oldPage == 1 || oldPage == 3) && (newPage == 0 || newPage == 2)) ||
             ((oldPage == 1 && newPage == 3) || (oldPage == 3 || newPage == 1))) {
@@ -421,7 +423,7 @@
     self.staticMapCommand = @"";
     self.missionCommand = @"";
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (IS_IPAD()) {
         [self.tableView setBackgroundView:nil];
         self.view.backgroundColor = [UIColor clearColor];
         self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;

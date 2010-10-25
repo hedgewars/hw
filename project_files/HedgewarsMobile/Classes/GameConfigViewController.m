@@ -40,7 +40,7 @@
 -(IBAction) buttonPressed:(id) sender {
     // works even if it's not actually a button
     UIButton *theButton;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (IS_IPAD())
         theButton = [[(NSNotification *)sender userInfo] objectForKey:@"sender"];
     else
         theButton = (UIButton *)sender;
@@ -224,7 +224,7 @@
 
         // present an alert to the user, with an image on the ipad (too big for the iphone)
         NSString *msg = NSLocalizedString(@"Something went wrong with your configuration. Please try again.",@"");
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        if (IS_IPAD())
             msg = [msg stringByAppendingString:@"\n\n\n\n\n\n\n\n"];    // this makes space for the image
 
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Whoops"
@@ -233,7 +233,7 @@
                                               cancelButtonTitle:@"Ok"
                                               otherButtonTitles:nil];
 
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (IS_IPAD()) {
             UIImageView *deniedImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"denied.png"]];
             deniedImg.frame = CGRectMake(25, 80, 240, 160);
             [alert addSubview:deniedImg];
@@ -285,7 +285,7 @@
     CGRect screen = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (IS_IPAD()) {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(buttonPressed:)
                                                      name:@"buttonPressed"
@@ -346,7 +346,7 @@
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (IS_IPAD())
         [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
 
     [self.mapConfigViewController viewWillAppear:animated];

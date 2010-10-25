@@ -52,7 +52,7 @@
     [array release];
 
     // targetControllers tells whether we're on the right or left side of the splitview -- on iphone we only use the right side
-    if (targetController == nil && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (targetController == nil && IS_IPAD()) {
         if (nil == generalSettingsViewController)
             generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
         generalSettingsViewController.navigationItem.hidesBackButton = YES;

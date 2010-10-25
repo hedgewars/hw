@@ -252,7 +252,7 @@
         self.helpPage = nil;
     if (self.amvc.view.superview == nil)
         self.amvc = nil;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (IS_IPAD())
         if (((UIPopoverController *)self.popoverController).contentViewController.view.superview == nil)
             self.popoverController = nil;
     
@@ -444,7 +444,7 @@
     CGRect screen = [[UIScreen mainScreen] bounds];
     isPopoverVisible = YES;
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (IS_IPAD()) {
         if (self.popupMenu == nil)
             self.popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStylePlain];
         if (self.popoverController == nil) {
@@ -474,7 +474,7 @@
         if (HW_isPaused())
             HW_pause();
 
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (IS_IPAD()) {
             [(InGameMenuViewController *)[[self popoverController] contentViewController] removeChat];
             [self.popoverController dismissPopoverAnimated:YES];
         } else {

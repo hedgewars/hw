@@ -228,7 +228,7 @@ void print_free_memory () {
 }
 
 BOOL inline isApplePhone () {
-    return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone);
+    return (IS_IPAD() == NO);
 }
 
 NSString *modelType () {

@@ -228,7 +228,7 @@
                                                reuseIdentifier:CellIdentifier1] autorelease];
 
                 int offset = 0;
-                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                if (IS_IPAD())
                     offset = 50;
 
                 UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(offset+260, 12, offset+150, 23)];
