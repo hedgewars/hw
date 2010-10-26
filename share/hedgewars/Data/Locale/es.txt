@@ -1,5 +1,5 @@
 ; Spanish locale
-; Revision 3205
+; Revision 3987
 
 00:00=Granada
 00:01=Granada de frag.
@@ -43,6 +43,14 @@
 00:39=Platillo volante
 00:40=Cóctel molotov
 00:41=Birdy
+00:42=Dispositivo portátil de portales
+00:43=Piano
+00:44=Limbuger añejo
+00:45=Rifle sinusoidal (beta)
+00:46=Lanzallamas
+00:47=Bomba lapa
+00:48=Mazo
+00:49=Resurrección (beta)
 
 01:00=¡Luchad!
 01:01=Empate
@@ -56,6 +64,9 @@
 01:09=Sincronizando...
 01:10=Activar esta herramienta no hará que tu turno acabe.
 01:11=Esta herramienta o arma todavía no está disponible.
+01:12=¡Última ronda antes de la muerte súbita!
+01:13=¡%1 rondas hasta la muerte súbita!
+01:14=¡Prepárate, %1!
 
 ; Eventos
 ; El erizo (%1) ha muerto
@@ -361,6 +372,13 @@
 02:10=Es un pájaro, es un avión...
 02:10=¡Eliminado!
 
+; El erizo (%1) abandona (el equipo ha salido de la partida)
+02:11=¡%1 tiene que irse a mimir!
+02:11=¡%1 tiene que irse a la cama!
+02:11=Parece que %1 está demasiado ocupado para seguir jugando
+02:11=¡Teletranspórtame, Scotty!
+02:11=%1 tiene que irse
+
 ; Categorías de armamento
 03:00=Arma arrojadiza
 03:01=Arma arrojadiza
@@ -404,6 +422,14 @@
 03:39=Herramienta de transporte
 03:40=Bomba incendiaria
 03:41=Amigo chillón
+03:42=I'm making a note here...
+03:43=Performing Beathoven's deadly sonata
+03:44=Consumir preferentemente antes de 1923
+03:45=¡El poder de la ciencia!
+03:46=¡Caliente caliente caliente!
+03:47=Stick these somewhere useful!
+03:48=Pablo clavó un clavito
+03:49=Hace exactamente lo que dice
 
 ; Descripciones de armamento ( líneas delimitadas con | )
 04:00=Ataca a tus enemigos usando una sencilla granada.|Explotará una vez el temporizador llegue a cero.|1-5: ajustar temporizador.|Atacar: mantener presionado para lanzar más lejos.
@@ -411,12 +437,12 @@
 04:02=Ataca a tus enemigos usando un proyectil balístico.|¡Atención al viento, modificará su trayectoria!|Atacar: mantener presionado para lanzar más lejos.
 04:03=Lanza un abejorro explosivo que buscará el objetivo marcado.|No dispares a máxima potencia para mejorar su precisión.|Ratón: seleccionar objetivo.|Atacar: mantener presionado para lanzar más lejos.
 04:04=Ataca a tus enemigos usando una escopeta de dos cañones.|Las balas se dispersan, así que no necesitarás|un tiro directo para herir a tus oponentes.|Atacar: abrir fuego (dos tiros).
-04:05=¡Ve bajo tierra! Usa el martillo neumático para excavar|un pozo en el suelo y alcanzar otras áreas.|Atacar: empezar o terminar de cavar.
+04:05=¡Entiérrate! Usa el martillo neumático para excavar|un pozo en el suelo y alcanzar otras áreas.|Atacar: empezar o terminar de cavar.
 04:06=¿Aburrido? ¿Sin posibilidad de atacar? ¿Racionas tu munición?|¡No hay problema! ¡Adelante, pasa esta turno, gallina!|Atacar: pasa este turno sin hacer nada.
 04:07=Cubre grandes distancias usando hábilmente la cuerda.|Gana inercia para empujar a otros erizos|o deja caer granadas u otras armas sobre ellos.|Atacar: lanza o suelta la cuerda.|Salto: deja caer el arma seleccionada.
 04:08=Mantén alejados a tus enemigos desplegando minas|en pasadizos estrechos o justo bajo sus pies.|¡Asegúrate de alejarte rápidamente para no activarla tú mismo!|Atacar: deposita una mina ante ti.
 04:09=¿No confías en tu puntería? Con la desert eagle|tienes 4 disparos para conseguir alcanzar a tu enemigo.|Atacar: abrir fuego (hasta 4 veces).
-04:10=La fuerza bruta siempre es una opción. Lanza este clásico|explosivo cerca de tus enemigos y huye.|Atacar: deposita la dinamita ante ti.
+04:10=La fuerza bruta siempre es una opción. Coloca este clásico|explosivo cerca de tus enemigos y huye.|Atacar: deposita la dinamita ante ti.
 04:11=¡Manda a tus enemigos lejos de ti de un buen batazo!|Acaba con ellos lanzándolos fuera del mapa o al agua.|¿O qué tal lanzarles algunas minas?|Atacar: batear cualquier cosa delante de ti.
 04:12=Enfréntate cara a cara con tus enemigos|y libera el poder de tus puños sobre ellos.|Útil para lanzarlos fuera del mapa o al agua.|Atacar: ejecutar el puño de fuego.
 04:13=SIN USAR
@@ -429,7 +455,7 @@
 04:20=Te permite jugar este turno con otro de tus erizos.|Atacar: activar.|Tabulador: cambiar entre erizos una vez activada.
 04:21=Lanza un proyectil que se fragmentará al impactar, enviando|una lluvia explosiva sobre tus enemigos.|Atacar: lanzar a máxima potencia.
 04:22=¡Siéntete como Indiana Jones! El látigo es un arma muy útil|en ciertas situaciones, especialmente para deshacerte de|erizos enemigos enviándolos fuera del mapa o al agua.|Atacar: golpear cualquier cosa delante de ti.
-04:23=Si no tienes nada que perder, esto puede serte útil.|Sacrifica a tu erizo lanzándolo como un cohete que despejará|cualquier cosa que encuentre en su camino, explotando al final.|Atacar: manda a tu erizo a la perdición.
+04:23=Si no tienes nada que perder, esto puede serte útil.|Sacrifica a tu erizo lanzándolo como un cohete que despejará|cualquier cosa que encuentre en su camino, detonando al final.|Atacar: manda a tu erizo a la perdición.
 04:24=¡Feliz cumpleaños! Esta tarta bípeda caminará|hasta tus enemigos para darles una fiesta sorpresa explosiva.|La tarta es capaz de atravesar casi cualquier tipo de terreno,|pero evita que se quede atascada.|Atacar: enviar la tarta de camino o hacerla detonar.
 04:25=Utiliza este disfraz para seducir a tus enemigos,|haciéndoles perder la cabeza y saltar como locos hacia ti|(y de paso hacia el agua o una mina).|Atacar: disfrazarte y lanzar un beso a tus enemigos.
 04:26=Lanza esta jugosa sandía a tus enemigos.|Una vez el temporizador llegue a cero se fragmentará|en rodajas deliciosamente explosivas sobre tus enemigos.|Atacar: mantener presionado para lanzar más lejos.
@@ -440,14 +466,22 @@
 04:31=El avión teledirigido es el arma ideal para recoger cajas|o atacar enemigos lejanos.|Cargado con 3 bombas, el avión explotará|si choca contra algo.|Atacar: lanzar el avión o dejar caer las bombas.|Cursores: controlar el avión.
 04:32=¡Mucho mejor que cualquier dieta! Salta más alto y más lejos|o haz que tus enemigos vuelen incluso más lejos.|Atacar: activar.
 04:33=A veces uno necesita una pequeña ayuda para acabar con sus enemigos.|Atacar: activar.
-04:34=¡Na, na, no me tocas!|Atacar: activar.
+04:34=¡Na, na, na, no me tocas!|Atacar: activar.
 04:35=A veces el reloj corre demasiado deprisa. Consigue un poco|de tiempo extra para finalizar tu ataque.|Atacar: activar.
 04:36=Vaya, parece que tu puntería apesta. Por suerte para ti|la tecnología moderna está de tu lado.|Atacar: activar.
 04:37=No le temas a la luz del día. Sólo durará un turno, pero|te permitirá absorber la fuerza vital de tus enemigos|cuando les ataques.|Atacar: activar.
 04:38=El rifle de francotirador puede ser el arma más destructiva|de todo tu arsenal, pero es muy inefectiva en distancias cortas.|El daño infligido es proporcional a la distancia respecto del objetivo.|Atacar: abrir fuego (un disparo).
 04:39=Vuela hasta otras partes del mapa usando un platillo volante.|Puede ser complicado de controlar, pero conseguirás llegar|a sitios que nunca hubieras imaginado accesibles.|Atacar: activar.|Cursores: acelerar en esa dirección (un golpe cada vez).
 04:40=Alza un muro de fuego usando esta botella|llena de (en breve, ardiendo) líquido inflamable.|Atacar: mantener presionado para lanzar más lejos.
-04:41=¡Demostrando que lo natural puede ser mejor|que lo artificial, Birdy puede no sólo|transportar tu erizo como el platillo volante,|sino también lanzar huevos envenenados a tus enemigos!|Atacar: activar y lanzar huevos.|Cursores: aletear en esa dirección.
+04:41=¡Demostrando que lo natural puede ser mejor|que lo artificial, Birdy puede no sólo|transportar tu erizo como el platillo volante,|sino también lanzar huevos envenenados a tus enemigos!|Atacar: activar/lanzar huevos.|Cursores: aletear en esa dirección.
+04:42=El dispositivo portátil de portales es capaz de|transportar instantáneamente minas, armas o ¡incluso erizos!|Úsalo adecuadamente y tu campaña será un... |¡ÉXITO ALUCINANTE!|Atacar: disparar un portal.|Cambiar: alternar el color a disparar.
+04:43=¡Haz un debut explosivo en el mundo del espectáculo!|Lanza un piano desde lo más alto del firmamento, pero ten cuidado...|¡alguien debe tocarlo, y eso puede costarte la vida!|Ratón: seleccionar objetivo.|F1-F9: tocar el piano.
+04:44=¡No es simplemente queso, es un arma biológica!|No causará mucho daño al detonar, pero ten por seguro|que cualquiera que se acerque demasiado|a su oloroso rastro quedará gravemente intoxicado.|1-5: ajustar temporizador.|Atacar: mantener presionado para lanzar más lejos.
+04:45=Al fin una utilidad para todas esas clases de física.|Dispara una devastadora onda sinusoidal que mandará|a tus enemigos al infierno matemático.|Ten cuidado, el retroceso de este arma es considerable.|Atacar: disparar.
+04:46=Envuelve a tus enemigos en siseante fuego líquido.|¡Se derretirán de placer!|Atacar: activar.|Arriba/abajo: modificar trayectoria.|Izquierda/derecha: modificar potencia de fuego.
+04:47=¡Dos bombas lapa, doble diversión!|Útiles para planear reacciones en cadena, atrincherarte...|¡o las dos cosas!.|Atacar: mantener presionado para lanzar más lejos (dos disparos).
+04:48=¿Por qué la gente siempre la toma con los topos?|¡Golpear erizos es aún más divertido!|Un buen mazazo puede reducir en un tercio la|vida de cualquier erizo y enterrarlo completamente.|Atacar: activar.
+04:49=¡Resucita a tus aliados!|Pero ten cuidado, también resucitarás a tus enemigos.|Atacar: mantener presionado para resucitar lentamente.|Arriba: acelerar resurrección.
 
 ; Game goal strings
 05:00=Modos de juego
