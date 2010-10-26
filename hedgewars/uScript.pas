@@ -1049,7 +1049,6 @@ ScriptSetInteger('gfKing', gfKing);
 ScriptSetInteger('gfPlaceHog', gfPlaceHog);
 ScriptSetInteger('gfSharedAmmo', gfSharedAmmo);
 ScriptSetInteger('gfDisableGirders', gfDisableGirders);
-ScriptSetInteger('gfExplosives', gfExplosives);
 
 ScriptSetInteger('gmLeft', gmLeft);
 ScriptSetInteger('gmRight', gmRight);

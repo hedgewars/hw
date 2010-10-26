@@ -1208,7 +1208,6 @@ if ((GameFlags and gfForts) = 0) then
             FindPlace(Gear, false, 0, LAND_WIDTH);
             end;
 //  No game flag for this for now
-//  if ((GameFlags and gfExplosives) <> 0) then
         for i:= 0 to Pred(cExplosives) do
             begin
             Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
