@@ -165,58 +165,26 @@
     [schemePath release];
     NSArray *basicArray = [schemeDictionary objectForKey:@"basic"];
     NSArray *gamemodArray = [schemeDictionary objectForKey:@"gamemod"];
-    int result = 0;
     int i = 0;
+    int result = 0;
+    int mask = 0x00000004;
 
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00000001;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00000010;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00000004;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00000008;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00000020;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00000040;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00000080;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00000100;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00000200;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00000400;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00000800;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00002000;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00004000;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00008000;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00010000;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00020000;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00080000;
-    if ([[gamemodArray objectAtIndex:i++] boolValue])
-        result |= 0x00100000;  
-
-    DLog(@"Sent %d flags",i);
+    // pack the gameflags in a single var and send it
+    for (NSNumber *value in gamemodArray) {
+        if ([value boolValue] == YES)
+            result |= mask;
+        mask <<= 1;
+    }
     NSString *flags = [[NSString alloc] initWithFormat:@"e$gmflags %d",result];
     [self sendToEngine:flags];
     [flags release];
 
-    i = 0;
     NSString *dmgMod = [[NSString alloc] initWithFormat:@"e$damagepct %d",[[basicArray objectAtIndex:i++] intValue]];
     [self sendToEngine:dmgMod];
     [dmgMod release];
 
     // support for endless games
-    int tentativeTurntime = [[basicArray objectAtIndex:i++] intValue];
+    NSInteger tentativeTurntime = [[basicArray objectAtIndex:i++] intValue];
     if (tentativeTurntime == 100)
         tentativeTurntime = 9999;
     NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",tentativeTurntime * 1000];
@@ -249,7 +217,7 @@
     [self sendToEngine:explosives];
     [explosives release];
 
-    DLog(@"Sent %d modes",i);
+    DLog(@"Sent %d flags and %d modes", [gamemodArray count], i);
     [schemeDictionary release];
     return result;
 }
@@ -367,15 +335,17 @@
                 // scheme (returns initial health)
                 NSInteger health = [self provideScheme:[self.gameConfig objectForKey:@"scheme"]];
 
+                // send an ammostore for each team
                 NSArray *teamsConfig = [self.gameConfig objectForKey:@"teams_list"];
+                [self provideAmmoData:[self.gameConfig objectForKey:@"weapon"] forPlayingTeams:[teamsConfig count]];
+
+                // finally add hogs
                 for (NSDictionary *teamData in teamsConfig) {
                     [self provideTeamData:[teamData objectForKey:@"team"]
                                   forHogs:[[teamData objectForKey:@"number"] intValue]
                                withHealth:health
                                   ofColor:[teamData objectForKey:@"color"]];
                 }
-
-                [self provideAmmoData:[self.gameConfig objectForKey:@"weapon"] forPlayingTeams:[teamsConfig count]];
                 break;
             case '?':
                 DLog(@"Ping? Pong!");

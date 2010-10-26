@@ -101,47 +101,47 @@ quint32 GameCFGWidget::getGameFlags() const
     quint32 result = 0;
 
     if (schemeData(1).toBool())
-        result |= 0x01;
+        result |= 0x00001000;
     if (schemeData(2).toBool())
-        result |= 0x10;
+        result |= 0x00000010;
     if (schemeData(3).toBool())
-        result |= 0x04;
+        result |= 0x00000004;
     if (schemeData(4).toBool())
-        result |= 0x08;
+        result |= 0x00000008;
     if (schemeData(5).toBool())
-        result |= 0x20;
+        result |= 0x00000020;
     if (schemeData(6).toBool())
-        result |= 0x40;
+        result |= 0x00000040;
     if (schemeData(7).toBool())
-        result |= 0x80;
+        result |= 0x00000080;
     if (schemeData(8).toBool())
-        result |= 0x100;
+        result |= 0x00000100;
     if (schemeData(9).toBool())
-        result |= 0x200;
+        result |= 0x00000200;
     if (schemeData(10).toBool())
-        result |= 0x400;
+        result |= 0x00000400;
     if (schemeData(11).toBool())
-        result |= 0x800;
+        result |= 0x00000800;
     if (schemeData(12).toBool())
-        result |= 0x2000;
+        result |= 0x00002000;
     if (schemeData(13).toBool())
-        result |= 0x4000;
+        result |= 0x00004000;
     if (schemeData(14).toBool())
-        result |= 0x8000;
+        result |= 0x00008000;
     if (schemeData(15).toBool())
-        result |= 0x10000;
+        result |= 0x00010000;
     if (schemeData(16).toBool())
-        result |= 0x20000;
+        result |= 0x00020000;
     if (schemeData(17).toBool())
-        result |= 0x80000;
+        result |= 0x00040000;
     if (schemeData(18).toBool())
-        result |= 0x100000;
+        result |= 0x00080000;
     if (schemeData(19).toBool())
-        result |= 0x200000;
+        result |= 0x00100000;
     if (schemeData(20).toBool())
-        result |= 0x400000;
+        result |= 0x00200000;
     if (schemeData(21).toBool())
-        result |= 0x800000;
+        result |= 0x00400000;
 
     return result;
 }

@@ -33,7 +33,7 @@
     self.tableView.backgroundView = nil;
     self.tableView.allowsSelection = NO;
 
-    NSString *strPath = [NSString stringWithFormat:@"%@/Settings/credits.plist",[[NSBundle mainBundle] resourcePath]];
+    NSString *strPath = [NSString stringWithFormat:@"%@/credits.plist",IFRONTEND_DIRECTORY()];
     NSArray *array = [[NSArray alloc] initWithContentsOfFile:strPath];
     self.people = array;
     [array release];
