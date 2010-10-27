@@ -778,6 +778,12 @@ void PageOptions::forceFullscreen(int index)
 
 void PageOptions::setFullscreen(void)
 {
+    int tmp = this->CBResolution->currentIndex();
+    if (this->CBFullscreen->isChecked())
+        this->CBResolution->setCurrentIndex(0);
+    else
+        this->CBResolution->setCurrentIndex(previousResolutionIndex);
+    previousResolutionIndex = tmp;
     this->CBResolution->setEnabled(!this->CBFullscreen->isChecked());
 }
 

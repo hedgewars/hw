@@ -243,7 +243,10 @@ public:
     QLineEdit *editNetNick;
     QSlider *SLQuality;
     QCheckBox *CBFrontendEffects;
+
+private:
     bool previousFullscreenValue;
+    int previousResolutionIndex;
 
 private slots:
     void forceFullscreen(int index);
