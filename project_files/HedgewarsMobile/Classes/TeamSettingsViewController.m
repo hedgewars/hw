@@ -1,10 +1,23 @@
-//
-//  TeamSettingsViewController.m
-//  HedgewarsMobile
-//
-//  Created by Vittorio on 02/04/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
+/*
+ * Hedgewars-iOS, a Hedgewars port for iOS devices
+ * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 02/04/2010.
+ */
+
 
 #import "TeamSettingsViewController.h"
 #import "SingleTeamViewController.h"
@@ -24,7 +37,7 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
 
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit",@"from the team panel")
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit",@"")
                                                                    style:UIBarButtonItemStyleBordered
                                                                   target:self
                                                                   action:@selector(toggleEdit:)];
@@ -35,12 +48,12 @@
 // load the list of teams in the teams directory
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:contentsOfDir copyItems:YES];
     self.listOfTeams = array;
     [array release];
-    
+
     [self.tableView reloadData];
 }
 
@@ -48,7 +61,7 @@
 -(void) toggleEdit:(id) sender {
     BOOL isEditing = self.tableView.editing;
     [self.tableView setEditing:!isEditing animated:YES];
-    
+
     if (isEditing) {
         [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"Edit",@"from the team panel")];
         [self.navigationItem.rightBarButtonItem setStyle: UIBarButtonItemStyleBordered];
@@ -68,15 +81,15 @@
 // add a team file with default values and updates the table
 -(void) addTeam:(id) sender {
     NSString *fileName = [[NSString alloc] initWithFormat:@"Default Team %u.plist", [self.listOfTeams count]];
-    
+
     createTeamNamed([fileName stringByDeletingPathExtension]);
-    
+
     [self.listOfTeams addObject:fileName];
     [fileName release];
-    
+
     // order the array alphabetically, so teams will keep their position
     [self.listOfTeams sortUsingSelector:@selector(compare:)];
-    
+
     [self.tableView reloadData];
 }
 
@@ -93,28 +106,28 @@
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    
-    NSUInteger row = [indexPath row]; 
-    NSString *rowString = [[self.listOfTeams objectAtIndex:row] stringByDeletingPathExtension]; 
-    cell.textLabel.text = rowString; 
+
+    NSUInteger row = [indexPath row];
+    NSString *rowString = [[self.listOfTeams objectAtIndex:row] stringByDeletingPathExtension];
+    cell.textLabel.text = rowString;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    
+
     return cell;
 }
 
 // delete the row and the file
 -(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger row = [indexPath row];
-    
+
     NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@",TEAMS_DIRECTORY(),[self.listOfTeams objectAtIndex:row]];
     [[NSFileManager defaultManager] removeItemAtPath:teamFile error:NULL];
     [teamFile release];
-    
+
     [self.listOfTeams removeObjectAtIndex:row];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
@@ -126,10 +139,10 @@
     if (childController == nil) {
         childController = [[SingleTeamViewController alloc] initWithStyle:UITableViewStyleGrouped];
     }
-    
+
     NSInteger row = [indexPath row];
     NSString *selectedTeamFile = [listOfTeams objectAtIndex:row];
-    
+
     // this must be set so childController can load the correct plist
     childController.teamName = [selectedTeamFile stringByDeletingPathExtension];
     [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];

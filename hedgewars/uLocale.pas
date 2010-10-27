@@ -29,11 +29,12 @@ type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidBee, s
             sidHellishBomb, sidDrill, sidBallgun, sidNapalm, sidRCPlane,
             sidLowGravity, sidExtraDamage, sidInvulnerable, sidExtraTime,
             sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack,
-            sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb, sidSineGun, sidFlamethrower);
+            sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb, sidSineGun, sidFlamethrower,
+            sidSMine, sidHammer, sidResurrector);
 
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
-            sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD);
+            sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady);
 
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
             eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
@@ -45,17 +46,16 @@ type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidBee, s
             gidDamageModifier);
 
 const MAX_EVENT_STRINGS = 100;
-var trammo: array[TAmmoStrId] of ansistring;
-    trammoc: array[TAmmoStrId] of ansistring;
-    trammod: array[TAmmoStrId] of ansistring;
-    trmsg: array[TMsgStrId] of ansistring;
-    trgoal: array[TGoalStrId] of ansistring;
+var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
+    trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
+    trammod: array[TAmmoStrId] of ansistring;   // description of the weapon
+    trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
+    trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
 
 procedure LoadLocale(FileName: shortstring);
-function Format(fmt: shortstring; var arg: shortstring): shortstring;
-function Format(fmt: ansistring; var arg: ansistring): ansistring;
-
-function GetEventString(e: TEventId): ansistring;
+function  Format(fmt: shortstring; var arg: shortstring): shortstring;
+function  Format(fmt: ansistring; var arg: ansistring): ansistring;
+function  GetEventString(e: TEventId): ansistring;
 
 implementation
 uses uMisc, uRandom;
@@ -141,6 +141,11 @@ begin
 i:= Pos('%1', fmt);
 if i = 0 then Format:= fmt
          else Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
+end;
+
+procedure LoadLocaleWrapper(str: pchar); cdecl; export;
+begin
+    LoadLocale(Strpas(str));
 end;
 
 end.

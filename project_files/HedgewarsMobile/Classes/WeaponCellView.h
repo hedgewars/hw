@@ -1,10 +1,23 @@
-//
-//  WeaponCellView.h
-//  Hedgewars
-//
-//  Created by Vittorio on 03/07/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
+/*
+ * Hedgewars-iOS, a Hedgewars port for iOS devices
+ * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 03/07/2010.
+ */
+
 
 #import <UIKit/UIKit.h>
 
@@ -18,42 +31,46 @@
     id<WeaponButtonControllerDelegate> delegate;
     UILabel *weaponName;
     UIImageView *weaponIcon;
-    
-    UISlider *initialQt;
-    UISlider *probabilityQt;
-    UISlider *delayQt;
-    UISlider *crateQt;
-    
+
+    UISlider *initialSli;
+    UISlider *probabilitySli;
+    UISlider *delaySli;
+    UISlider *crateSli;
+
 @private
     UIImageView *initialImg;
-    UIImageView *probabImg;
+    UIImageView *probabilityImg;
     UIImageView *delayImg;
     UIImageView *crateImg;
-    
+
     UILabel *initialLab;
-    UILabel *probLab;
-    UILabel *delLab;
-    UILabel *craLab;
+    UILabel *probabilityLab;
+    UILabel *delayLab;
+    UILabel *crateLab;
+
+    UILabel *helpLabel;
 }
 
 @property (nonatomic,assign) id<WeaponButtonControllerDelegate> delegate;
 
 @property (nonatomic,retain) UILabel *weaponName;
 @property (nonatomic,retain) UIImageView *weaponIcon;
-    
-@property (nonatomic,retain) UISlider *initialQt;
-@property (nonatomic,retain) UISlider *probabilityQt;
-@property (nonatomic,retain) UISlider *delayQt;
-@property (nonatomic,retain) UISlider *crateQt;
+
+@property (nonatomic,retain) UISlider *initialSli;
+@property (nonatomic,retain) UISlider *probabilitySli;
+@property (nonatomic,retain) UISlider *delaySli;
+@property (nonatomic,retain) UISlider *crateSli;
 
 @property (nonatomic,retain) UIImageView *initialImg;
-@property (nonatomic,retain) UIImageView *probabImg;
+@property (nonatomic,retain) UIImageView *probabilityImg;
 @property (nonatomic,retain) UIImageView *delayImg;
 @property (nonatomic,retain) UIImageView *crateImg;
 
 @property (nonatomic,retain) UILabel *initialLab;
-@property (nonatomic,retain) UILabel *probLab;
-@property (nonatomic,retain) UILabel *delLab;
-@property (nonatomic,retain) UILabel *craLab;
+@property (nonatomic,retain) UILabel *probabilityLab;
+@property (nonatomic,retain) UILabel *delayLab;
+@property (nonatomic,retain) UILabel *crateLab;
+
+@property (nonatomic,retain) UILabel *helpLabel;
 
 @end

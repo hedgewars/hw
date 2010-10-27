@@ -42,7 +42,7 @@ var LandTextures: array of array of TLandRecord;
     tmpPixels: array [0..TEXSIZE - 1, 0..TEXSIZE - 1] of LongWord;
     LANDTEXARW: LongWord;
     LANDTEXARH: LongWord;
-    
+
 function Pixels(x, y: Longword): Pointer;
 var ty: Longword;
 begin
@@ -101,7 +101,7 @@ else
                     begin
                     shouldUpdate:= false;
                     glBindTexture(GL_TEXTURE_2D, tex^.id);
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXSIZE, TEXSIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, Pixels(x,y)); 
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXSIZE, TEXSIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, Pixels(x,y));
                     end
 end;
 
@@ -132,10 +132,10 @@ begin
         LANDTEXARW:= (LAND_WIDTH div TEXSIZE) div 2;
         LANDTEXARH:= (LAND_HEIGHT div TEXSIZE) div 2;
     end;
-    
+
     SetLength(LandTextures, LANDTEXARW, LANDTEXARH);
 end;
-    
+
 procedure freeModule;
 var x, y: LongInt;
 begin

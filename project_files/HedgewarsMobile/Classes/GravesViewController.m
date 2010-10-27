@@ -1,10 +1,23 @@
-//
-//  GravesViewController.m
-//  HedgewarsMobile
-//
-//  Created by Vittorio on 02/04/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
+/*
+ * Hedgewars-iOS, a Hedgewars port for iOS devices
+ * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 02/04/2010.
+ */
+
 
 #import "GravesViewController.h"
 #import "CommodityFunctions.h"
@@ -26,7 +39,7 @@
 
     // load all the grave names and store them into graveArray
     self.graveArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:GRAVES_DIRECTORY() error:NULL];
-    
+
     self.title = NSLocalizedString(@"Choose hedgehog graves",@"");
 }
 
@@ -51,14 +64,14 @@
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    
+
     NSString *grave = [self.graveArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = [grave stringByDeletingPathExtension];
-    
+
     if ([grave isEqualToString:[self.teamDictionary objectForKey:@"grave"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         self.lastIndexPath = indexPath;
@@ -69,10 +82,10 @@
     NSString *graveFilePath = [[NSString alloc] initWithFormat:@"%@/%@",GRAVES_DIRECTORY(),grave];
     // because we also have multi frame graves, let's take the first one only
     UIImage *graveSprite = [[UIImage alloc] initWithContentsOfFile:graveFilePath andCutAt:CGRectMake(0, 0, 32, 32)];
-    [graveFilePath release];        
+    [graveFilePath release];
     cell.imageView.image = graveSprite;
     [graveSprite release];
-    
+
     return cell;
 }
 
@@ -82,13 +95,13 @@
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    
+
     if (newRow != oldRow) {
         [teamDictionary setObject:[[graveArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"grave"];
-        
+
         // tell our boss to write this new stuff on disk
         [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-        
+
         UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
         newCell.accessoryType = UITableViewCellAccessoryCheckmark;
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
@@ -104,9 +117,9 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
+    self.lastIndexPath = nil;
+    MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
 -(void) viewDidUnload {

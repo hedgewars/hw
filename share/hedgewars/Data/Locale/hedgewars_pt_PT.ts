@@ -86,6 +86,10 @@
         <source>Please select record from the list above</source>
         <translation>Seleccione uma gravação da lista acima</translation>
     </message>
+    <message>
+        <source>DefaultTeam</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -237,14 +241,17 @@ ou escolha outro nome de utilizador:</translation>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome de utilizador %1 está
+registado em Hedgewars.org
+Por favor digite a sua palavra passe ou escolha
+outro nome de utilizador no menu de configuração:</translation>
     </message>
 </context>
 <context>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf retornou um erro ao renderizar o texto, provavelmente está relacionado com o bug no freetype2. É recomendado actualizar a sua livraria freetype.</translation>
+        <translation>SDL_ttf retornou um erro ao renderizar o texto, muito provavelmente está relacionado com o bug no freetype2. É recomendado actualizar a sua lib freetype.</translation>
     </message>
 </context>
 <context>
@@ -308,21 +315,71 @@ or pick another nickname in game config:</source>
     <name>PageGameStats</name>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;O título de melhor tiro foi para &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; pontos de dano.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;O título de melhor tiro foi para &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; pontos de dano.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>&lt;p&gt;O extreminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; morto num unico turno.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;O extreminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; mortes num unico turno.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>&lt;p&gt;Apenas &lt;b&gt;%1&lt;/b&gt; ouriço perdeu a vida durante esta ronda.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;Um total de &lt;b&gt;%1&lt;/b&gt; ouriços perderam a vida durante esta ronda.&lt;/p&gt;</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health graph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ranking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>(%1 kill)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(%1 kills)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -338,17 +395,127 @@ or pick another nickname in game config:</source>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Simplesmente selecciona a mesma cor de outro jogador para jogarem em equipa. Continuas a ter total controlo dos teus ouriços, mas ganham ou perdem juntos.</translation>
     </message>
     <message>
         <source>Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Algumas armas podem não fazer muito dano, mas em ocasiões especificas podem-se demonstrar bastante mais letais. Experimenta usar a Desert Eagle para empurrar varios ouriços para a água.</translation>
     </message>
     <message>
         <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Se não tens a certeza do que fazer a seguir não desperdiçes munições, passa o turno. Mas não desperdices muito tempo, a Morte Súbita aproxima-se.</translation>
+    </message>
+    <message>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation type="obsolete">Precisas de poupar as cordas? Solta a corda enquanto no ar e dispara-a novamente. Enquanto não tocares no solo podes usar a mesma corda novamente sem desperdiar outras!</translation>
+    </message>
+    <message>
+        <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
+        <comment>Tips</comment>
+        <translation>Se não queres que outros usem o teu nome de utilizador preferido no servidor oficial, regista-o em http://www.hedgewars.org/.</translation>
+    </message>
+    <message>
+        <source>You&apos;re bored of default gameplay? Try one of the missions - they&apos;ll offer different gameplay depending on the one you picked.</source>
+        <comment>Tips</comment>
+        <translation>Estás cansado do modo de jogo habitual? Experimenta uma das missões - existem várias por onde escolher, e todas com objectivos um pouco diferentes.</translation>
+    </message>
+    <message>
+        <source>By default the game will always record the last game played as a demo. Select &apos;Local Game&apos; and pick the &apos;Demos&apos; button on the lower right corner to play or manage them.</source>
+        <comment>Tips</comment>
+        <translation>Por defeito, o ultimo jogo em que participaste é sempre gravado como &apos;demo&apos;. Selecciona &apos;Jogo Local&apos; e aí a opção &apos;Demos&apos; no canto inferior direito para os gerir ou reproduzir.</translation>
+    </message>
+    <message>
+        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you&apos;ve got problems, ask on our forums but please don&apos;t expect 24/7 support!</source>
+        <comment>Tips</comment>
+        <translation>O Hedgewars é Open Source e Freeware, desenvolvido nos tempos livres. Se tiveres algum problema pergunta nos fóruns, mas por favor não esperes suporte 24/7!</translation>
+    </message>
+    <message>
+        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you like it, help us with a small donation or contribute your own work!</source>
+        <comment>Tips</comment>
+        <translation>O Hedgewars é Open Source e Freeware, desenvolvido nos tempos livres. Se gostares do jogo podes contribuir com uma pequena doação ou o teu próprio trabalho!</translation>
+    </message>
+    <message>
+        <source>Hedgewars is Open Source and Freeware we create in our spare time. Share it with your family and friends as you like!</source>
+        <comment>Tips</comment>
+        <translation>O Hedgewars é Open Source e Freeware, desenvolvido nos tempos livres. Partilha-o com a família e amigos como quiseres!</translation>
+    </message>
+    <message>
+        <source>From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.</source>
+        <comment>Tips</comment>
+        <translation>De tempos a tempos realizam-se torneios oficiais. Todos estes eventos são anunciados em http://www.hedgewars.org/ com alguns dias de antecedência.</translation>
+    </message>
+    <message>
+        <source>Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!</source>
+        <comment>Tips</comment>
+        <translation>O Hedgewars está disponível em vários idiomas. Se a tradução do teu idioma está desactualizada ou em falta, não hesites em contactar-nos!</translation>
+    </message>
+    <message>
+        <source>Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.</source>
+        <comment>Tips</comment>
+        <translation>O Hedgewars está disponível para vários sistemas operativos incluindo Microsoft Windows, Mac OS X e Linux.</translation>
+    </message>
+    <message>
+        <source>Always remember you&apos;re able to set up your own games in local and network/online play. You&apos;re not restricted to the &apos;Simple Game&apos; option.</source>
+        <comment>Tips</comment>
+        <translation>Lembra-te que tens sempre a opção de poder jogar na tua rede local ou online. Não estás restrito ao modo de Jogo Local.</translation>
+    </message>
+    <message>
+        <source>Create an account on http://www.hedgewars.org/ to keep others from using your most favourite nickname while playing on the official server.</source>
+        <comment>Tips</comment>
+        <translation type="obsolete">Cria uma conta em http://www.hedgewars.org/ para prevenir que outros usem o teu nome de utilizador favorito no servidor oficial.</translation>
+    </message>
+    <message>
+        <source>While playing you should give yourself a short break at least once an hour.</source>
+        <comment>Tips</comment>
+        <translation>Lembra-te de fazer pequenos intervalos durante sessões de jogo prolongadas.</translation>
+    </message>
+    <message>
+        <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</source>
+        <comment>Tips</comment>
+        <translation>Se a tua placa gráfica não é capaz de fornecer aceleração por hardware para OpenGL experimenta activar o modo de baixa qualidade para melhorar a performance.</translation>
+    </message>
+    <message>
+        <source>We&apos;re open to suggestions and constructive feedback. If you don&apos;t like something or got a great idea, let us know!</source>
+        <comment>Tips</comment>
+        <translation>Estamos abertos a sugestões e críticas construtivas. Se há algo que não gostas em particular ou tiveste uma boa ideia, deixa-nos saber!</translation>
+    </message>
+    <message>
+        <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
+        <comment>Tips</comment>
+        <translation>Especialmente durante partidas online é importante ser educado. Lembra-te que podem haver menores a jogar com ou contra ti!</translation>
+    </message>
+    <message>
+        <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
+        <comment>Tips</comment>
+        <translation>Modos de jogo especiais como &apos;Vampirismo&apos; ou &apos;Karma&apos; permitem-te desenvolver tácticas completamente novas! Experimenta-os num jogo personalizado!</translation>
+    </message>
+    <message>
+        <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
+        <comment>Tips</comment>
+        <translation>A versão do Hedgewars para Windows suporta Xfire. Não te esqueças de adicionar o Hedgewars à tua lista de jogos para que os teus amigos te possam ver a jogar.</translation>
+    </message>
+    <message>
+        <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
+        <comment>Tips</comment>
+        <translation>Não deves instalar o Hedgewars em computadores que não te pertençam (escola, universidade, trabalho, etc.). Por favor contacta o responsável caso o pretendas fazer.</translation>
+    </message>
+    <message>
+        <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
+        <comment>Tips</comment>
+        <translation>O Hedgewars é perfeito para pequenos jogos durante intervalos. Tem apenas a certeza que não adicionas muitos ouriços ou usas um mapa muito grande. Reduzir o tempo e pontos de vida pode ajudar também.</translation>
+    </message>
+    <message>
+        <source>No hedgehogs were harmed in making this game.</source>
+        <comment>Tips</comment>
+        <translation>Nenhum ouriço foi mal tratado durante a produção deste jogo.</translation>
+    </message>
+    <message>
+        <source>Connect one or more gamepads before launching the game to be able to assign their controls to your teams.</source>
+        <comment>Tips</comment>
+        <translation type="obsolete">Conecta um ou mais comandos antes de lançar o jogo para que seja possível configura-los nas opções das tuas equipas.</translation>
     </message>
     <message>
         <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
@@ -356,107 +523,122 @@ or pick another nickname in game config:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
+        <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You&apos;re bored of default gameplay? Try one of the missions - they&apos;ll offer different gameplay depending on the one you picked.</source>
+        <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>By default the game will always record the last game played as a demo. Select &apos;Local Game&apos; and pick the &apos;Demos&apos; button on the lower right corner to play or manage them.</source>
+        <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you&apos;ve got problems, ask on our forums but please don&apos;t expect 24/7 support!</source>
+        <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you like it, help us with a small donation or contribute your own work!</source>
+        <source>There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. Share it with your family and friends as you like!</source>
+        <source>Afraid of falling off a cliff? Hold down [precise] to turn [left] or [right] without actually moving.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.</source>
+        <source>Some weapons require special strategies or just lots of training, so don&apos;t give up on a particular tool if you miss an enemy once.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!</source>
+        <source>Most weapons won&apos;t work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.</source>
+        <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Always remember you&apos;re able to set up your own games in local and network/online play. You&apos;re not restricted to the &apos;Simple Game&apos; option.</source>
+        <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Create an account on http://www.hedgewars.org/ to keep others from using your most favourite nickname while playing on the official server.</source>
+        <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>While playing you should give yourself a short break at least once an hour.</source>
+        <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</source>
+        <source>The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>We&apos;re open to suggestions and constructive feedback. If you don&apos;t like something or got a great idea, let us know!</source>
+        <source>If you&apos;re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
+        <source>The Cake&apos;s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
+        <source>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
+        <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
+        <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
+        <source>Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No hedgehogs were harmed in making this game.</source>
+        <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Connect one or more gamepads before launching the game to be able to assign their controls to your teams.</source>
+        <source>Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep your video card drivers up to date to avoid issues playing the game.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -525,7 +707,7 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
-        <translation type="unfinished"></translation>
+        <translation>Não é possível editar equipas do menu de selecção de equipa. Volte ao menu principal se pretender adicionar, editar ou apagar equipas.</translation>
     </message>
 </context>
 <context>
@@ -647,6 +829,35 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <source>Random Maze</source>
         <translation>Labirinto Aleatório</translation>
     </message>
+    <message>
+        <source>State:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rules:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished">Clear</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The game you are trying to join has started.
+Do you still want to join the room?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageScheme</name>
@@ -732,6 +943,10 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
+        <translation>Não adicionar objectos de terreno ao gerar mapas aleatórios.</translation>
+    </message>
+    <message>
+        <source>AI respawns on death.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -767,6 +982,10 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <message>
         <source>Load (Load a previously saved game)</source>
         <translation>Carregar (carregar um jogo salvo previamente)</translation>
+    </message>
+    <message>
+        <source>Campaign Mode (...). IN DEVELOPMENT</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -852,7 +1071,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation>Qualidade reduzida</translation>
+        <translation type="obsolete">Qualidade reduzida</translation>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
@@ -896,6 +1115,54 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <message>
         <source>generated maze...</source>
         <translation>labirinto gerado...</translation>
+    </message>
+    <message>
+        <source>Community</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Any</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In lobby</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">Predefinido</translation>
+    </message>
+    <message>
+        <source>Pro mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shoppa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Basketball</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minefield</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Barrel mayhem</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tunnel hogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Crazy</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1089,10 +1356,14 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Tip: </source>
-        <translation type="unfinished"></translation>
+        <translation>Dica: </translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</translation>
+    </message>
+    <message>
+        <source>Quality</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1150,7 +1421,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Não é possivel sobrescrever o esquema de armas por omissão &apos;%1&apos;!</translation>
     </message>
 </context>
 <context>
@@ -1378,6 +1649,10 @@ Por favor verifique a sua instalação</translation>
         <source>Disable Land Objects</source>
         <translation>Desactivar Objectos no Terreno</translation>
     </message>
+    <message>
+        <source>AI Survival Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds</name>
@@ -1541,7 +1816,7 @@ ouriços</translation>
     </message>
     <message>
         <source>slot 10</source>
-        <translation type="unfinished">slot 10</translation>
+        <translation>slot 10</translation>
     </message>
 </context>
 <context>

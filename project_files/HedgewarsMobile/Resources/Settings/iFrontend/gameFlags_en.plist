@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>description</key>
+		<string>Land can not be destroyed</string>
+		<key>image</key>
+		<string>Solid</string>
+		<key>title</key>
+		<string>Solid Land</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Add an indestructable border around the terrain</string>
+		<key>image</key>
+		<string>Border</string>
+		<key>title</key>
+		<string>Add Border</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Teams will start on opposite sides of the terrain (two teams only)</string>
+		<key>image</key>
+		<string>TeamsDivide</string>
+		<key>title</key>
+		<string>Divide Team</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Lower gravity</string>
+		<key>image</key>
+		<string>LowGravity</string>
+		<key>title</key>
+		<string>Low Gravity</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Assisted aiming with laser sight</string>
+		<key>image</key>
+		<string>LaserSight</string>
+		<key>title</key>
+		<string>Laser Sight</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>All hogs have a personal forcefield</string>
+		<key>image</key>
+		<string>Invulnerable</string>
+		<key>title</key>
+		<string>Invulnerable</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Enable random mines</string>
+		<key>image</key>
+		<string>Mines</string>
+		<key>title</key>
+		<string>Add Mines</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Gain 80% of the damage you do back in health</string>
+		<key>image</key>
+		<string>Vampiric</string>
+		<key>title</key>
+		<string>Vampirism Mode</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Share your opponents pain, share their damage</string>
+		<key>image</key>
+		<string>Karma</string>
+		<key>title</key>
+		<string>Karma Mode</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Your hogs are unable to move, test your aim</string>
+		<key>image</key>
+		<string>Artillery</string>
+		<key>title</key>
+		<string>Artillery Mode</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Defend your fort and destroy the opponents (two teams only)</string>
+		<key>image</key>
+		<string>Forts</string>
+		<key>title</key>
+		<string>Fort Mode</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Order of play is random instead of in room order</string>
+		<key>image</key>
+		<string>RandomOrder</string>
+		<key>title</key>
+		<string>Random Order</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Play with a King. If he dies, your side loses</string>
+		<key>image</key>
+		<string>King</string>
+		<key>title</key>
+		<string>King Mode</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Take turns placing your hedgehogs pre-game</string>
+		<key>image</key>
+		<string>PlaceHog</string>
+		<key>title</key>
+		<string>Place Hedgehogs</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Ammo is shared between all clan teams</string>
+		<key>image</key>
+		<string>SharedAmmo</string>
+		<key>title</key>
+		<string>Clan Shares Ammo</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Disable girders when generating random maps</string>
+		<key>image</key>
+		<string>DisableGirders</string>
+		<key>title</key>
+		<string>Disable Girders</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Disable land objects when generating maps</string>
+		<key>image</key>
+		<string>DisableLandObjects</string>
+		<key>title</key>
+		<string>Disable Land Objects</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>AI-controlled hogs respawn on death</string>
+		<key>image</key>
+		<string>AISurvival</string>
+		<key>title</key>
+		<string>AI Survival Mode</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Attacking does not end your turn</string>
+		<key>image</key>
+		<string>InfAttack</string>
+		<key>title</key>
+		<string>Unlimited Attacks</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Weapons are reset to starting values each turn</string>
+		<key>image</key>
+		<string>ResetWeps</string>
+		<key>title</key>
+		<string>Reset Weapons</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Each hedgehog has its own ammo.</string>
+		<key>image</key>
+		<string>PerHogAmmo</string>
+		<key>title</key>
+		<string>Per Hedgehog Ammo</string>
+	</dict>
+</array>
+</plist>

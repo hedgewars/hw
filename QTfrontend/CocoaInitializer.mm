@@ -8,7 +8,7 @@
 #include <Cocoa/Cocoa.h>
 #include <QtDebug>
 
-class CocoaInitializer::Private 
+class CocoaInitializer::Private
 {
 	public:
 		NSAutoreleasePool* autoReleasePool_;

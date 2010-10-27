@@ -30,7 +30,7 @@
 
 #include <QTextStream>
 
-QString training; // TODO: Cleaner solution?
+QString training, campaign; // TODO: Cleaner solution?
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
   TCPBase(true),
@@ -84,13 +84,13 @@ void HWGame::commonConfig()
         QList<HWTeam> teams = m_pTeamSelWidget->getPlayingTeams();
         for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it)
         {
-            HWProto::addStringListToBuffer(buf,
-                (*it).TeamGameConfig(gamecfg->getInitHealth()));
             HWProto::addStringToBuffer(buf, QString("eammloadt %1").arg(ammostr.mid(0, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammprob %1").arg(ammostr.mid(cAmmoNumber, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammdelay %1").arg(ammostr.mid(2 * cAmmoNumber, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammreinf %1").arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammstore"));
+            HWProto::addStringListToBuffer(buf,
+                (*it).TeamGameConfig(gamecfg->getInitHealth()));
         }
     }
     RawSendIPC(buf);
@@ -115,7 +115,7 @@ void HWGame::SendQuickConfig()
     HWTeam * team1;
     team1 = new HWTeam;
     team1->difficulty = 0;
-    team1->teamColor = *color1;
+    team1->teamColor = *colors[0];
     team1->numHedgehogs = 4;
     namegen.TeamRandomNames(team1,TRUE);
     HWProto::addStringListToBuffer(teamscfg,
@@ -124,7 +124,7 @@ void HWGame::SendQuickConfig()
     HWTeam * team2;
     team2 = new HWTeam;
     team2->difficulty = 4;
-    team2->teamColor = *color2;
+    team2->teamColor = *colors[1];
     team2->numHedgehogs = 4;
 	do
         namegen.TeamRandomNames(team2,TRUE);
@@ -146,9 +146,19 @@ void HWGame::SendTrainingConfig()
     QByteArray traincfg;
     HWProto::addStringToBuffer(traincfg, "TL");
 
-    HWProto::addStringToBuffer(traincfg, "escript " + datadir->absolutePath() + "/Missions/Training/" + training + ".lua");
+    HWProto::addStringToBuffer(traincfg, "escript " + training);
 
     RawSendIPC(traincfg);
+}
+
+void HWGame::SendCampaignConfig()
+{
+    QByteArray campaigncfg;
+    HWProto::addStringToBuffer(campaigncfg, "TL");
+
+    HWProto::addStringToBuffer(campaigncfg, "escript " + campaign);
+
+    RawSendIPC(campaigncfg);
 }
 
 void HWGame::SendNetConfig()
@@ -180,6 +190,10 @@ void HWGame::ParseMessage(const QByteArray & msg)
                 }
                 case gtTraining: {
                     SendTrainingConfig();
+                    break;
+                }
+                case gtCampaign: {
+                    SendCampaignConfig();
                     break;
                 }
             }
@@ -277,18 +291,17 @@ QStringList HWGame::setArguments()
     arguments << QString("%1").arg(ipc_port);
     arguments << (config->vid_Fullscreen() ? "1" : "0");
     arguments << (config->isSoundEnabled() ? "1" : "0");
-    arguments << "0"; //(config->isSoundHardware() ? "1" : "0");
-    arguments << "0"; //(config->isWeaponTooltip() ? "1" : "0");
-    arguments << tr("en.txt");
+    arguments << (config->isMusicEnabled() ? "1" : "0");
     arguments << QString::number(config->volume()); // sound volume
     arguments << QString::number(config->timerInterval());
     arguments << datadir->absolutePath();
     arguments << (config->isShowFPSEnabled() ? "1" : "0");
     arguments << (config->isAltDamageEnabled() ? "1" : "0");
     arguments << config->netNick().toUtf8().toBase64();
-    arguments << (config->isMusicEnabled() ? "1" : "0");
     arguments << QString::number(config->translateQuality());
     arguments << QString::number(config->stereoMode());
+    arguments << tr("en.txt");
+
     return arguments;
 }
 
@@ -345,7 +358,16 @@ void HWGame::StartQuick()
 void HWGame::StartTraining(const QString & file)
 {
     gameType = gtTraining;
-    training = file;
+    training = "Missions/Training/" + file + ".lua";
+    demo.clear();
+    Start();
+    SetGameState(gsStarted);
+}
+
+void HWGame::StartCampaign(const QString & file)
+{
+    gameType = gtCampaign;
+    campaign = "Missions/Campaign/" + file + ".lua";
     demo.clear();
     Start();
     SetGameState(gsStarted);

@@ -387,7 +387,7 @@ begin
     for i:= 0 to 8 do
         begin
         // using mx,my as temporary value buffer here
-        
+
         jfr:= 8+li+1;
         jto:= 8+li-1;
 

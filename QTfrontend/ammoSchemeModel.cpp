@@ -41,15 +41,19 @@ QList<QVariant> defaultScheme = QList<QVariant>()
         << QVariant(false)         // shared ammo    15
         << QVariant(false)         //disable girders 16
         << QVariant(false)         // disable land objects 17
-        << QVariant(100)           // damage modfier 18
-        << QVariant(45)            // turn time      19
-        << QVariant(100)           // init health    20
-        << QVariant(15)            // sudden death   21
-        << QVariant(5)             // case prob      22
-        << QVariant(3)             //  mines time    23
-        << QVariant(4)             //  landadds      24
-        << QVariant(0)             // mine dud pct   25
-        << QVariant(2)             // explosives     26
+        << QVariant(false)         // AI survival    18
+        << QVariant(false)         // inf. attack    19
+        << QVariant(false)         // reset weps     20
+        << QVariant(false)         // per hog ammo   21
+        << QVariant(100)           // damage modfier 22
+        << QVariant(45)            // turn time      23
+        << QVariant(100)           // init health    24
+        << QVariant(15)            // sudden death   25
+        << QVariant(5)             // case prob      26
+        << QVariant(3)             //  mines time    27
+        << QVariant(4)             //  landadds      28
+        << QVariant(0)             // mine dud pct   29
+        << QVariant(2)             // explosives     30
         ;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -87,15 +91,19 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << "sharedammo"       // 15
         << "disablegirders"   // 16
         << "disablelandobjects" // 17
-        << "damagefactor"     // 18
-        << "turntime"         // 19
-        << "health"           // 20
-        << "suddendeath"      // 21
-        << "caseprobability"  // 22
-        << "minestime"        // 23
-        << "landadds"         // 24
-        << "minedudpct"       // 25
-        << "explosives"       // 26
+        << "aisurvival"       // 18
+        << "infattack"        // 19
+        << "resetweps"        // 20
+        << "perhogammo"       // 21
+        << "damagefactor"     // 22
+        << "turntime"         // 23
+        << "health"           // 24
+        << "suddendeath"      // 25
+        << "caseprobability"  // 26
+        << "minestime"        // 27
+        << "landadds"         // 28
+        << "minedudpct"       // 29
+        << "explosives"       // 30
         ;
 
     QList<QVariant> proMode;
@@ -118,15 +126,19 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(true)          // shared ammo    15
         << QVariant(false)         //disable girders 16
         << QVariant(false)         // disable land objects 17
-        << QVariant(100)           // damage modfier 18
-        << QVariant(15)            // turn time      19
-        << QVariant(100)           // init health    20
-        << QVariant(15)            // sudden death   21
-        << QVariant(0)             // case prob      22
-        << QVariant(3)             //  mines time    23
-        << QVariant(4)             //  landadds      24
-        << QVariant(0)             // mine dud pct   25
-        << QVariant(2)             // explosives     26
+        << QVariant(false)         // AI survival    18
+        << QVariant(false)         // inf. attack    19
+        << QVariant(false)         // reset weps     20
+        << QVariant(false)         // per hog ammo   21
+        << QVariant(100)           // damage modfier 22
+        << QVariant(15)            // turn time      23
+        << QVariant(100)           // init health    24
+        << QVariant(15)            // sudden death   25
+        << QVariant(0)             // case prob      26
+        << QVariant(3)             //  mines time    27
+        << QVariant(4)             //  landadds      28
+        << QVariant(0)             // mine dud pct   29
+        << QVariant(2)             // explosives     30
         ;
 
     QList<QVariant> shoppa;
@@ -149,15 +161,19 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(true)          // shared ammo    15
         << QVariant(true)          //disable girders 16
         << QVariant(false)         // disable land objects 17
-        << QVariant(100)           // damage modfier 18
-        << QVariant(30)            // turn time      19
-        << QVariant(100)           // init health    20
-        << QVariant(50)            // sudden death   21
-        << QVariant(1)             // case prob      22
-        << QVariant(3)             //  mines time    23
-        << QVariant(4)             //  landadds      24
-        << QVariant(0)             // mine dud pct   25
-        << QVariant(0)             // explosives     26
+        << QVariant(false)         // AI survival    18
+        << QVariant(false)         // inf. attack    19
+        << QVariant(false)         // reset weps     20
+        << QVariant(false)         // per hog ammo   21
+        << QVariant(100)           // damage modfier 22
+        << QVariant(30)            // turn time      23
+        << QVariant(100)           // init health    24
+        << QVariant(50)            // sudden death   25
+        << QVariant(1)             // case prob      26
+        << QVariant(3)             //  mines time    27
+        << QVariant(4)             //  landadds      28
+        << QVariant(0)             // mine dud pct   29
+        << QVariant(0)             // explosives     30
         ;
 
     QList<QVariant> basketball;
@@ -180,15 +196,19 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(true)          // shared ammo    15
         << QVariant(true)          //disable girders 16
         << QVariant(false)         // disable land objects 17
-        << QVariant(100)           // damage modfier 18
-        << QVariant(30)            // turn time      19
-        << QVariant(100)           // init health    20
-        << QVariant(15)            // sudden death   21
-        << QVariant(0)             // case prob      22
-        << QVariant(3)             //  mines time    23
-        << QVariant(4)             //  landadds      24
-        << QVariant(0)             // mine dud pct   25
-        << QVariant(0)             // explosives     26
+        << QVariant(false)         // AI survival    18
+        << QVariant(false)         // inf. attack    19
+        << QVariant(false)         // reset weps     20
+        << QVariant(false)         // per hog ammo   21
+        << QVariant(100)           // damage modfier 22
+        << QVariant(30)            // turn time      23
+        << QVariant(100)           // init health    24
+        << QVariant(15)            // sudden death   25
+        << QVariant(0)             // case prob      26
+        << QVariant(3)             //  mines time    27
+        << QVariant(4)             //  landadds      28
+        << QVariant(0)             // mine dud pct   29
+        << QVariant(0)             // explosives     30
         ;
 
     QList<QVariant> minefield;
@@ -211,15 +231,19 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(true)          // shared ammo    15
         << QVariant(true)          //disable girders 16
         << QVariant(false)         // disable land objects 17
-        << QVariant(150)           // damage modfier 18
-        << QVariant(30)            // turn time      19
-        << QVariant(50)            // init health    20
-        << QVariant(15)            // sudden death   21
-        << QVariant(0)             // case prob      22
-        << QVariant(0)             //  mines time    23
-        << QVariant(80)            //  landadds      24
-        << QVariant(0)             // mine dud pct   25
-        << QVariant(0)             // explosives     26
+        << QVariant(false)         // AI survival    18
+        << QVariant(false)         // inf. attack    19
+        << QVariant(false)         // reset weps     20
+        << QVariant(false)         // per hog ammo   21
+        << QVariant(150)           // damage modfier 22
+        << QVariant(30)            // turn time      23
+        << QVariant(50)            // init health    24
+        << QVariant(15)            // sudden death   25
+        << QVariant(0)             // case prob      26
+        << QVariant(0)             //  mines time    27
+        << QVariant(80)            //  landadds      28
+        << QVariant(0)             // mine dud pct   29
+        << QVariant(0)             // explosives     30
         ;
 
     QList<QVariant> barrelmayhem;
@@ -242,15 +266,19 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(true)          // shared ammo    15
         << QVariant(false)         //disable girders 16
         << QVariant(false)         // disable land objects 17
-        << QVariant(100)           // damage modfier 18
-        << QVariant(30)            // turn time      19
-        << QVariant(100)           // init health    20
-        << QVariant(15)            // sudden death   21
-        << QVariant(0)             // case prob      22
-        << QVariant(0)             // mines time     23
-        << QVariant(0)             // landadds       24
-        << QVariant(0)             // mine dud pct   25
-        << QVariant(80)            // explosives     26
+        << QVariant(false)         // AI survival    18
+        << QVariant(false)         // inf. attack    19
+        << QVariant(false)         // reset weps     20
+        << QVariant(false)         // per hog ammo   21
+        << QVariant(100)           // damage modfier 22
+        << QVariant(30)            // turn time      23
+        << QVariant(100)           // init health    24
+        << QVariant(15)            // sudden death   25
+        << QVariant(0)             // case prob      26
+        << QVariant(0)             // mines time     27
+        << QVariant(0)             // landadds       28
+        << QVariant(0)             // mine dud pct   29
+        << QVariant(80)            // explosives     30
         ;
 
     QList<QVariant> tunnelhogs;
@@ -273,15 +301,19 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(true)          // shared ammo    15
         << QVariant(true)          //disable girders 16
         << QVariant(true)          // disable land objects 17
-        << QVariant(100)           // damage modfier 18
-        << QVariant(30)            // turn time      19
-        << QVariant(100)           // init health    20
-        << QVariant(15)            // sudden death   21
-        << QVariant(5)             // case prob      22
-        << QVariant(3)             // mines time     23
-        << QVariant(10)            // landadds       24
-        << QVariant(10)            // mine dud pct   25
-        << QVariant(10)            // explosives     26
+        << QVariant(false)         // AI survival    18
+        << QVariant(false)         // inf. attack    19
+        << QVariant(false)         // reset weps     20
+        << QVariant(false)         // per hog ammo   21
+        << QVariant(100)           // damage modfier 22
+        << QVariant(30)            // turn time      23
+        << QVariant(100)           // init health    24
+        << QVariant(15)            // sudden death   25
+        << QVariant(5)             // case prob      26
+        << QVariant(3)             // mines time     27
+        << QVariant(10)            // landadds       28
+        << QVariant(10)            // mine dud pct   29
+        << QVariant(10)            // explosives     30
         ;
 
     schemes.append(defaultScheme);

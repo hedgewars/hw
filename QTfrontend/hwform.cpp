@@ -83,9 +83,9 @@ HWForm::HWForm(QWidget *parent)
 
     ui.setupUi(this);
     setMinimumSize(760, 580);
-
+    setFocusPolicy(Qt::StrongFocus);
     CustomizePalettes();
-    
+
     ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
 
     config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
@@ -93,17 +93,18 @@ HWForm::HWForm(QWidget *parent)
     namegen = new HWNamegen();
 
 #ifdef __APPLE__
-        panel = new M3Panel;
+    panel = new M3Panel;
 #ifdef SPARKLE_ENABLED
-        AutoUpdater* updater;
-        CocoaInitializer initializer;
-        updater = new SparkleAutoUpdater(SPARKLE_APPCAST_URL);
-    if(updater && config->isAutoUpdateEnabled())
-            updater->checkForUpdates();
-#endif        
+    AutoUpdater* updater;
+    CocoaInitializer initializer;
+    updater = new SparkleAutoUpdater(SPARKLE_APPCAST_URL);
+    if (updater && config->isAutoUpdateEnabled())
+        updater->checkForUpdates();
+#endif
 #endif
 
     UpdateTeamsLists();
+    UpdateCampaignPage(0);
     UpdateWeapons();
 
     connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
@@ -140,6 +141,9 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageOptions->BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(DeleteTeam()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), config, SLOT(SaveOptions()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), this, SLOT(GoBack()));
+#ifdef _WIN32
+    connect(ui.pageOptions->BtnAssociateFiles, SIGNAL(clicked()), this, SLOT(AssociateFiles()));
+#endif
 
     connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
     connect(ui.pageOptions->WeaponsButt, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
@@ -171,6 +175,7 @@ HWForm::HWForm(QWidget *parent)
 
     connect(ui.pageSinglePlayer->BtnSimpleGamePage, SIGNAL(clicked()), this, SLOT(SimpleGame()));
     connect(ui.pageSinglePlayer->BtnTrainPage, SIGNAL(clicked()), this, SLOT(GoToTraining()));
+    connect(ui.pageSinglePlayer->BtnCampaignPage, SIGNAL(clicked()), this, SLOT(GoToCampaign()));
     connect(ui.pageSinglePlayer->BtnMultiplayer, SIGNAL(clicked()), this, SLOT(GoToMultiplayer()));
     connect(ui.pageSinglePlayer->BtnLoad, SIGNAL(clicked()), this, SLOT(GoToSaves()));
     connect(ui.pageSinglePlayer->BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
@@ -178,6 +183,10 @@ HWForm::HWForm(QWidget *parent)
 
     connect(ui.pageTraining->BtnStartTrain, SIGNAL(clicked()), this, SLOT(StartTraining()));
     connect(ui.pageTraining->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+
+    connect(ui.pageCampaign->BtnStartCampaign, SIGNAL(clicked()), this, SLOT(StartCampaign()));
+    connect(ui.pageCampaign->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+    connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
 
     connect(ui.pageSelectWeapon->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
@@ -265,6 +274,12 @@ void HWForm::onFrontendFullscreen(bool value)
   }
 }
 
+void HWForm::keyReleaseEvent(QKeyEvent *event)
+{
+  if (event->key() == Qt::Key_Escape /*|| event->key() == Qt::Key_Backspace*/ )
+    this->GoBack();
+}
+
 void HWForm::CustomizePalettes()
 {
     QList<QScrollBar *> allSBars = findChildren<QScrollBar *>();
@@ -310,13 +325,15 @@ void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
     }
 
     if(teamslist.empty()) {
-        HWTeam defaultTeam("DefaultTeam");
+        HWTeam defaultTeam(tr("DefaultTeam"));
         defaultTeam.SaveToFile();
-        teamslist.push_back("DefaultTeam");
+        teamslist.push_back(tr("DefaultTeam"));
     }
 
     ui.pageOptions->CBTeamName->clear();
     ui.pageOptions->CBTeamName->addItems(teamslist);
+    ui.pageCampaign->CBTeam->clear();
+    ui.pageCampaign->CBTeam->addItems(teamslist);
 }
 
 void HWForm::GoToMain()
@@ -332,6 +349,11 @@ void HWForm::GoToSinglePlayer()
 void HWForm::GoToTraining()
 {
     GoToPage(ID_PAGE_TRAINING);
+}
+
+void HWForm::GoToCampaign()
+{
+    GoToPage(ID_PAGE_CAMPAIGN);
 }
 
 void HWForm::GoToSetup()
@@ -513,11 +535,11 @@ void HWForm::btnExitClicked()
 {
     if (eggTimer.elapsed() < 3000){
 #ifdef __APPLE__
-                panel->showInstallController();
+        panel->showInstallController();
 #endif
         close();
     }
-        else
+    else
     {
         QPushButton * btn = findChild<QPushButton *>("imageButt");
         if (btn)
@@ -543,7 +565,8 @@ void HWForm::IntermediateSetup()
     for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it) {
         tmnames += it->TeamName;
     }
-    UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
+    //UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
+    UpdateTeamsLists();
 
     GoToPage(ID_PAGE_SETUP);
 }
@@ -961,7 +984,14 @@ void HWForm::StartTraining()
 {
     CreateGame(0, 0, 0);
 
-    game->StartTraining(ui.pageTraining->CBSelect->currentText());
+    game->StartTraining(ui.pageTraining->CBSelect->itemData(ui.pageTraining->CBSelect->currentIndex()).toString());
+}
+
+void HWForm::StartCampaign()
+{
+    CreateGame(0, 0, 0);
+
+    game->StartCampaign(ui.pageCampaign->CBSelect->itemData(ui.pageCampaign->CBSelect->currentIndex()).toString());
 }
 
 void HWForm::CreateNetGame()
@@ -1074,3 +1104,33 @@ void HWForm::resizeEvent(QResizeEvent * event)
         wBackground->move(0, 0);
     }
 }
+
+void HWForm::UpdateCampaignPage(int index)
+{
+    HWTeam team(ui.pageCampaign->CBTeam->currentText());
+    ui.pageCampaign->CBSelect->clear();
+
+    QDir tmpdir;
+    tmpdir.cd(datadir->absolutePath());
+    tmpdir.cd("Missions/Campaign");
+    tmpdir.setFilter(QDir::Files);
+    QStringList entries = tmpdir.entryList(QStringList("*#*.lua"));
+    //entries.sort();
+    for(int i = 0; (i < entries.count()) && (i <= team.CampaignProgress); i++)
+        ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2"), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
+}
+
+void HWForm::AssociateFiles()
+{
+    QSettings registry_hkcr("HKEY_CLASSES_ROOT", QSettings::NativeFormat);
+    registry_hkcr.setValue(".hwd/Default", "Hedgewars.Demo");
+    registry_hkcr.setValue(".hws/Default", "Hedgewars.Save");
+    registry_hkcr.setValue("Hedgewars.Demo/Default", tr("Hedgewars Demo File", "File Types"));
+    registry_hkcr.setValue("Hedgewars.Save/Default", tr("Hedgewars Save File", "File Types"));
+    registry_hkcr.setValue("Hedgewars.Demo/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwdfile.ico\",0");
+    registry_hkcr.setValue("Hedgewars.Save/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwsfile.ico\",0");
+    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
+    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
+    QMessageBox::information(0, "", QMessageBox::tr("All file associations have been set."));
+}
+

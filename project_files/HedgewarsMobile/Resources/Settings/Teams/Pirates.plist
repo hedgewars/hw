@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>flag</key>
+	<string>cm_pirate</string>
+	<key>fort</key>
+	<string>Plane</string>
+	<key>grave</key>
+	<string>chest</string>
+	<key>hash</key>
+	<string>0</string>
+	<key>hedgehogs</key>
+	<array>
+		<dict>
+			<key>hat</key>
+			<string>pirate_jack_bandana</string>
+			<key>hogname</key>
+			<string>Toothless Wayne</string>
+			<key>level</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>hat</key>
+			<string>pirate_jack</string>
+			<key>hogname</key>
+			<string>Long-nose Kidd</string>
+			<key>level</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>hat</key>
+			<string>dwarf</string>
+			<key>hogname</key>
+			<string>Eye-patch Jim</string>
+			<key>level</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>hat</key>
+			<string>pirate_jack</string>
+			<key>hogname</key>
+			<string>Rackham Blood</string>
+			<key>level</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>hat</key>
+			<string>dwarf</string>
+			<key>hogname</key>
+			<string>One-eyed Ayee</string>
+			<key>level</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>hat</key>
+			<string>pirate_jack_bandana</string>
+			<key>hogname</key>
+			<string>Dirty Ben</string>
+			<key>level</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>hat</key>
+			<string>pirate_jack</string>
+			<key>hogname</key>
+			<string>Morris</string>
+			<key>level</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>hat</key>
+			<string>dwarf</string>
+			<key>hogname</key>
+			<string>Cruise Seymour</string>
+			<key>level</key>
+			<integer>0</integer>
+		</dict>
+	</array>
+	<key>voicepack</key>
+	<string>Pirate</string>
+</dict>
+</plist>

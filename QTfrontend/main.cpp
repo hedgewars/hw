@@ -47,7 +47,7 @@ bool checkForDir(const QString & dir)
     return true;
 }
 
-int main(int argc, char *argv[]) {        
+int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
     QStringList arguments = app.arguments();
@@ -73,11 +73,13 @@ int main(int argc, char *argv[]) {
             qWarning() << "WARNING: Cannot open DATA_PATH=" << f.absoluteFilePath();
         }
         *cDataDir = f.absoluteFilePath();
+        custom_data = true;
     }
 
     if(parsedArgs.contains("config-dir")) {
         QFileInfo f(parsedArgs["config-dir"]);
         *cConfigDir = f.absoluteFilePath();
+        custom_config = true;
     }
 
     app.setStyle(new QPlastiqueStyle);
@@ -180,6 +182,7 @@ int main(int argc, char *argv[]) {
             "}"
             "QTableView {"
                 "alternate-background-color: #2f213a;"
+                "gridline-color: transparent;"
             "}"
 
             "QTabBar::tab {"
@@ -294,6 +297,18 @@ int main(int argc, char *argv[]) {
             "SquareLabel, ItemNum {"
                 "background-color: #000000;"
             "}"
+            "QSlider::groove::horizontal {"
+                "height: 2px;"
+                "margin: 2px 0px;"
+                "background-color: #ffcc00;"
+            "}"
+            "QSlider::handle::horizontal {"
+                "border: 0px;"
+                "margin: -2px 0px;"
+                "border-radius: 3px;"
+                "background-color: #ffcc00;"
+                "width: 8px;"
+            "}"
             )
         );
 
@@ -307,61 +322,52 @@ int main(int argc, char *argv[]) {
     if(cConfigDir->length() == 0)
     {
 #ifdef __APPLE__
-        if (checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars"))
-        {
-            checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Demos");
-            checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Saves");
-            checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Screenshots");
-            checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Teams");
-        }
+        checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars");
         cfgdir->cd("Library/Application Support/Hedgewars");
 #elif defined _WIN32
         char path[1024];
         if(!SHGetFolderPathA(0, CSIDL_PERSONAL, NULL, 0, path))
         {
             cfgdir->cd(path);
-            if (checkForDir(cfgdir->absolutePath() + "/Hedgewars"))
-            {
-                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Demos");
-                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Saves");
-                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Screenshots");
-                checkForDir(cfgdir->absolutePath() + "/Hedgewars/Teams");
-            }
+            checkForDir(cfgdir->absolutePath() + "/Hedgewars");
             cfgdir->cd("Hedgewars");
         }
-        else
+        else // couldn't retrieve documents folder? almost impossible, but in case fall back to classic path
         {
-            if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
-            {
-                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
-                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
-                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Screenshots");
-                checkForDir(cfgdir->absolutePath() + "/.hedgewars/Teams");
-            }
+            checkForDir(cfgdir->absolutePath() + "/.hedgewars");
             cfgdir->cd(".hedgewars");
         }
 #else
-        if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
-        {
-            checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
-            checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
-            checkForDir(cfgdir->absolutePath() + "/.hedgewars/Screenshots");
-            checkForDir(cfgdir->absolutePath() + "/.hedgewars/Teams");
-        }
+        checkForDir(cfgdir->absolutePath() + "/.hedgewars");
         cfgdir->cd(".hedgewars");
 #endif
     }
-    else
-    {
-        if (checkForDir(cfgdir->absolutePath()))
-        {
-            checkForDir(cfgdir->absolutePath() + "/Demos");
-            checkForDir(cfgdir->absolutePath() + "/Saves");
-            checkForDir(cfgdir->absolutePath() + "/Screenshots");
-            checkForDir(cfgdir->absolutePath() + "/Teams");
-        }
-    }
 
+    if (checkForDir(cfgdir->absolutePath()))
+    {
+        // alternative loading/lookup paths
+        // TODO: Uncomment paths as they're implemented
+        checkForDir(cfgdir->absolutePath() + "/Data");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Forts");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics/Flags");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics/Graves");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics/Hats");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Maps");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Missions");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Missions/Campaign");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Missions/Training");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Sounds");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Sounds/voices");
+        //checkForDir(cfgdir->absolutePath() + "/Data/Themes");
+
+        // config/save paths
+        checkForDir(cfgdir->absolutePath() + "/Demos");
+        checkForDir(cfgdir->absolutePath() + "/Saves");
+        checkForDir(cfgdir->absolutePath() + "/Screenshots");
+        checkForDir(cfgdir->absolutePath() + "/Teams");
+        checkForDir(cfgdir->absolutePath() + "/Logs");
+    }
 
     datadir->cd(bindir->absolutePath());
     datadir->cd(*cDataDir);
@@ -406,12 +412,11 @@ int main(int argc, char *argv[]) {
 
     // Win32 registry setup (used for xfire detection etc. - don't set it if we're running in "portable" mode with a custom config dir)
 #ifdef _WIN32
-    if(cConfigDir->length() == 0)
+    if(!custom_config)
     {
-        QSettings registry(QSettings::NativeFormat, QSettings::UserScope, "Hedgewars Project", "Hedgewars");
-        QFileInfo f(argv[0]);
-        registry.setValue("file", f.absoluteFilePath());
-        registry.setValue("path", f.absolutePath());
+        QSettings registry_hklm("HKEY_LOCAL_MACHINE", QSettings::NativeFormat);
+        registry_hklm.setValue("Software/Hedgewars/Frontend", bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe");
+        registry_hklm.setValue("Software/Hedgewars/Path", bindir->absolutePath().replace("/", "\\"));
     }
 #endif
 

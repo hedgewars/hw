@@ -34,9 +34,9 @@ with Gear^ do
     Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps;
     Angle:= Angle + dAngle * Steps;
   
-    if (round(X) >= -cScreenWidth - 64) and
-       (round(X) <= cScreenWidth + LAND_WIDTH) and
-       (round(Y) <= (LAND_HEIGHT + 75)) and 
+    if (round(X) >= cLeftScreenBorder) and
+       (round(X) <= cRightScreenBorder) and
+       (round(Y) <= (int64(LAND_HEIGHT) + 75)) and
        (Timer > 0) and (Timer-Steps > 0) then
         begin
         if tdX > 0 then sign := 1
@@ -51,10 +51,10 @@ with Gear^ do
         end
     else
         begin
-        if round(X) < -cScreenWidth - 64 then X:= float(cScreenWidth + LAND_WIDTH) else
-        if round(X) > cScreenWidth + LAND_WIDTH then X:= float(-cScreenWidth - 64);
+        if round(X) < cLeftScreenBorder then X:= X + cScreenSpace else
+        if round(X) > cRightScreenBorder then X:= X - cScreenSpace;
         // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + float(25); // For if flag is set for flakes rising upwards?
-        if round(Y) > (LAND_HEIGHT + 75) then Y:= Y - float(1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
+        if round(Y) > (int64(LAND_HEIGHT) + 75) then Y:= Y - float(1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
         Timer:= 0;
         tdX:= 0;
         tdY:= 0
@@ -77,17 +77,17 @@ procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
 var s: Longword;
     t: float;
 begin
-Gear^.X:= Gear^.X + (cWindSpeedf * 200 + Gear^.dX) * Steps;
+Gear^.X:= Gear^.X + (cWindSpeedf * 750 * Gear^.dX) * Steps;
 
 // up-and-down-bounce magic
 s := (GameTicks + Gear^.Timer) mod 4096;
 t := 8 * AngleSin(s mod 2048).QWordValue / 4294967296;
 if (s < 2048) then t := -t;
 
-Gear^.Y := LAND_HEIGHT-1184 + Gear^.Timer mod 8 + t;
+Gear^.Y := int64(LAND_HEIGHT) - 1184 + Gear^.Timer mod 8 + t;
 
-if round(Gear^.X) < -cScreenWidth - 256 then Gear^.X:= float(cScreenWidth + LAND_WIDTH) else
-if round(Gear^.X) > cScreenWidth + LAND_WIDTH then Gear^.X:= float(-cScreenWidth - 256)
+if round(Gear^.X) < cLeftScreenBorder then Gear^.X:= Gear^.X + cScreenSpace else
+if round(Gear^.X) > cRightScreenBorder then Gear^.X:= Gear^.X - cScreenSpace
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -109,6 +109,24 @@ if Gear^.FrameTicks <= Steps then
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepNote(Gear: PVisualGear; Steps: Longword);
+begin
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
+
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+Gear^.dY:= Gear^.dY + cGravityf * Steps / 2;
+
+Gear^.Angle:= Gear^.Angle + (Gear^.Frame + 1) * Steps / 10;
+while Gear^.Angle > cMaxAngle do
+    Gear^.Angle:= Gear^.Angle - cMaxAngle;
+
+if Gear^.FrameTicks <= Steps then
+    DeleteVisualGear(Gear)
+else
+    dec(Gear^.FrameTicks, Steps)
+end;
+
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepEgg(Gear: PVisualGear; Steps: Longword);
 begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
@@ -126,11 +144,27 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFire(Gear: PVisualGear; Steps: Longword);
+var vgt: PVisualGear;
 begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
 
 Gear^.Y:= Gear^.Y + Gear^.dY * Steps;// + cGravityf * (Steps * Steps);
-Gear^.dY:= Gear^.dY + cGravityf * Steps;
+if (Gear^.State and gstTmpFlag) = 0 then
+    begin
+    Gear^.dY:= Gear^.dY + cGravityf * Steps;
+    if ((GameTicks mod 200) < Steps + 1) then
+        begin
+        vgt:= AddVisualGear(round(Gear^.X), round(Gear^.Y), vgtFire);
+        if vgt <> nil then
+            begin
+            vgt^.dx:= 0;
+            vgt^.dy:= 0;
+            vgt^.State:= gstTmpFlag;
+            end;
+        end
+    end
+else
+    inc(Steps, Steps);
 
 if Gear^.FrameTicks <= Steps then
        DeleteVisualGear(Gear)
@@ -167,8 +201,12 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBubble(Gear: PVisualGear; Steps: Longword);
 begin
-    Gear^.X:= Gear^.X + (cWindSpeedf * 100 + Gear^.dX) * Steps;
+    Gear^.X:= Gear^.X + Gear^.dX * Steps;
+    Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
     Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
+
+    Gear^.dX /= (1.001 * Steps);
+    Gear^.dY /= (1.001 * Steps);
 
     if (Gear^.FrameTicks <= Steps) or (round(Gear^.Y) < cWaterLine) then
         DeleteVisualGear(Gear)
@@ -442,7 +480,7 @@ end;
 
 procedure doStepHealthTagWorkUnderWater(Gear: PVisualGear; Steps: Longword);
 begin
-if round(Gear^.Y) < cWaterLine + 10 then
+if round(Gear^.Y) < int64(cWaterLine) + 10 then
     DeleteVisualGear(Gear)
 else
     Gear^.Y:= Gear^.Y - 0.08 * Steps;
@@ -478,12 +516,16 @@ begin
 inc(Gear^.Timer, Steps );
 if Gear^.Timer > 64 then
     begin
+    if Gear^.State = 0 then
+      begin
+      DeleteVisualGear(Gear);
+      exit;
+      end;
     dec(Gear^.State, Gear^.Timer div 65);
     Gear^.Timer:= Gear^.Timer mod 65;
     end;
 Gear^.dX:= Gear^.dX + cWindSpeedf * Steps;
 Gear^.X:= Gear^.X + Gear^.dX;
-if Gear^.State = 0 then DeleteVisualGear(Gear);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -542,4 +584,20 @@ for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart);
 for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart2);
 Gear^.doStep:= @doStepBigExplosionWork;
 if Steps > 1 then Gear^.doStep(Gear, Steps-1);
+end;
+
+procedure doStepChunk(Gear: PVisualGear; Steps: Longword);
+begin
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
+
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+Gear^.dY:= Gear^.dY + cGravityf * Steps;
+
+Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
+
+if round(Gear^.Y) > cWaterLine then
+    begin
+    AddVisualGear(round(Gear^.X), round(Gear^.Y), vgtDroplet);
+    DeleteVisualGear(Gear);
+    end
 end;

@@ -23,34 +23,36 @@
 CHedgehogerWidget::CHedgehogerWidget(const QImage& im, QWidget * parent) :
     ItemNum(im, parent, 1)
 {
-  if(parent) {
+  // TODO: maxHedgehogsPerGame doesn't reset properly and won't match map limits for now
+  /*if(parent) {
     pOurFrameTeams = dynamic_cast<FrameTeams*>(parent->parentWidget());
   }
   if(pOurFrameTeams->overallHedgehogs + 4 > pOurFrameTeams->maxHedgehogsPerGame) {
     numItems = pOurFrameTeams->maxHedgehogsPerGame - pOurFrameTeams->overallHedgehogs;
   } else numItems = 4;
-  pOurFrameTeams->overallHedgehogs += numItems;
+  pOurFrameTeams->overallHedgehogs += numItems;*/
 }
 
 void CHedgehogerWidget::incItems()
 {
-  if (pOurFrameTeams->overallHedgehogs < pOurFrameTeams->maxHedgehogsPerGame) {
+  //if (pOurFrameTeams->overallHedgehogs < pOurFrameTeams->maxHedgehogsPerGame) {
     numItems++;
-    pOurFrameTeams->overallHedgehogs++;
+    //pOurFrameTeams->overallHedgehogs++;
     emit hedgehogsNumChanged();
-  }
+  //}
 }
 
 void CHedgehogerWidget::decItems()
 {
   numItems--;
-  pOurFrameTeams->overallHedgehogs--;
+  //pOurFrameTeams->overallHedgehogs--;
   emit hedgehogsNumChanged();
 }
 
 CHedgehogerWidget::~CHedgehogerWidget()
 {
-  pOurFrameTeams->overallHedgehogs-=numItems;
+  // TODO: not called?
+  //pOurFrameTeams->overallHedgehogs-=numItems;
 }
 
 void CHedgehogerWidget::setNonInteractive()
@@ -60,9 +62,10 @@ void CHedgehogerWidget::setNonInteractive()
 
 void CHedgehogerWidget::setHHNum(unsigned int num)
 {
-  unsigned int diff = num - numItems;
+  /*unsigned int diff = num - numItems;
   numItems += diff;
-  pOurFrameTeams->overallHedgehogs += diff;
+  pOurFrameTeams->overallHedgehogs += diff;*/
+  numItems = num;
   repaint();
 }
 

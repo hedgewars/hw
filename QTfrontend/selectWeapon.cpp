@@ -131,11 +131,11 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
         SelWeaponItem * pwi = new SelWeaponItem(false, i, currentState[numItems + i].digitValue(), QImage(":/res/ammopicbox.png"), this);
         weaponItems[i].append(pwi);
         p2Layout->addWidget(pwi, j, k % 4);
-        
+
         SelWeaponItem * dwi = new SelWeaponItem(false, i, currentState[numItems*2 + i].digitValue(), QImage(":/res/ammopicdelay.png"), this);
         weaponItems[i].append(dwi);
         p3Layout->addWidget(dwi, j, k % 4);
-        
+
         SelWeaponItem * awi = new SelWeaponItem(false, i, currentState[numItems*3 + i].digitValue(), QImage(":/res/ammopic.png"), this);
         weaponItems[i].append(awi);
         p4Layout->addWidget(awi, j, k % 4);

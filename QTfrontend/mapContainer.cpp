@@ -56,16 +56,18 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     imageButt->setFlat(true);
     imageButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);//QSizePolicy::Minimum, QSizePolicy::Minimum);
     mainLayout.addWidget(imageButt, 0, 0, 1, 2);
-    connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomSeed()));
-    connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomTheme()));
+    //connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomSeed()));
+    //connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomTheme()));
+    connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomMap()));
 
     chooseMap = new QComboBox(this);
     chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    chooseMap->addItem(QComboBox::tr("generated map..."));
-    chooseMap->addItem(QComboBox::tr("generated maze..."));
+    chooseMap->addItem(QIcon(":/res/mapRandom.png"), QComboBox::tr("generated map..."));
+    chooseMap->addItem(QIcon(":/res/mapMaze.png"), QComboBox::tr("generated maze..."));
     chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
 
     int missionindex = chooseMap->count();
+    numMissions = 0;
     for (int i = 0; i < mapList->size(); ++i) {
         QString map = (*mapList)[i];
         QFile mapCfgFile(
@@ -92,9 +94,12 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
                 mapInfo.push_back(18);
             mapInfo.push_back(mapLuaFile.exists());
             if(mapLuaFile.exists())
-                chooseMap->insertItem(missionindex++, QComboBox::tr("Mission") + ": " + map, mapInfo);
+            {
+                chooseMap->insertItem(missionindex++, QIcon(":/res/mapMission.png"), QComboBox::tr("Mission") + ": " + map, mapInfo);
+                numMissions++;
+            }
             else
-                chooseMap->addItem(map, mapInfo);
+                chooseMap->addItem(QIcon(":/res/mapCustom.png"), map, mapInfo);
             mapCfgFile.close();
         }
     }
@@ -149,11 +154,12 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     gbTLayout->setSpacing(0);
     lwThemes = new QListWidget(this);
     lwThemes->setMinimumHeight(30);
-    lwThemes->setFixedWidth(120);
+    lwThemes->setFixedWidth(140);
     for (int i = 0; i < Themes->size(); ++i) {
         QListWidgetItem * lwi = new QListWidgetItem();
         lwi->setText(Themes->at(i));
-        lwi->setTextAlignment(Qt::AlignHCenter);
+        lwi->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(Themes->at(i))));
+        //lwi->setTextAlignment(Qt::AlignHCenter);
         lwThemes->addItem(lwi);
     }
     connect(lwThemes, SIGNAL(currentRowChanged(int)), this, SLOT(themeSelected(int)));
@@ -167,7 +173,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
             "border-color: transparent;"
             "background-color: #0d0544;"
             "color: #ffcc00;"
-            "font: bold 14px;"
+            "font: bold 13px;"
             "}"
         )
     );
@@ -388,6 +394,36 @@ void HWMapContainer::setTheme(const QString & theme)
     QList<QListWidgetItem *> items = lwThemes->findItems(theme, Qt::MatchExactly);
     if(items.size())
         lwThemes->setCurrentItem(items.at(0));
+}
+#include <QMessageBox>
+void HWMapContainer::setRandomMap()
+{
+    switch(chooseMap->currentIndex())
+    {
+    case MAPGEN_REGULAR:
+    case MAPGEN_MAZE:
+        setRandomSeed();
+        setRandomTheme();
+        break;
+    default:
+        if(chooseMap->currentIndex() < numMissions + 3)
+            setRandomMission();
+        else
+            setRandomStatic();
+        break;
+    }
+}
+
+void HWMapContainer::setRandomStatic()
+{
+    chooseMap->setCurrentIndex(4 + numMissions + rand() % (chooseMap->count() - 4 - numMissions));
+    m_seed = QUuid::createUuid().toString();
+}
+
+void HWMapContainer::setRandomMission()
+{
+    chooseMap->setCurrentIndex(3 + rand() % numMissions);
+    m_seed = QUuid::createUuid().toString();
 }
 
 void HWMapContainer::setRandomSeed()

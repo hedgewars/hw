@@ -29,7 +29,7 @@ static XfireSetCustomGameDataUTF8Function ptr_XfireSetCustomGameDataUTF8 = NULL;
 
 #ifdef Module32Next
 #undef Module32Next
-#endif 
+#endif
 
 
 int XfireIsLoaded()
@@ -99,7 +99,7 @@ static HMODULE HelperGetToucanDLL()
 	if (snapshot_handle != INVALID_HANDLE_VALUE)
 	{
 		MODULEENTRY32 module_entry;
-		module_entry.dwSize = sizeof(MODULEENTRY32); 
+		module_entry.dwSize = sizeof(MODULEENTRY32);
 
 		BOOL result = Module32First(snapshot_handle, &module_entry);
 		char module_name[] = "xfire_toucan";

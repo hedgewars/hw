@@ -72,7 +72,7 @@ void TCPBase::RealStart()
   process = new QProcess;
   connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
   QStringList arguments=setArguments();
-  
+
   // redirect everything written on stdout/stderr
   if(isDevBuild)
     process->setProcessChannelMode(QProcess::ForwardedChannels);

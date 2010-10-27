@@ -42,16 +42,18 @@ procedure SetWeapon(weap: TAmmoType);
 procedure DisableSomeWeapons;
 procedure ResetWeapons;
 function  GetAmmoByNum(num: Longword): PHHAmmo;
+function  GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 
 var shoppa: boolean;
+    StoreCnt: Longword;
 
 implementation
-uses uMisc, uGears, uWorld, uLocale, uConsole;
+uses uMisc, uGears, uWorld, uLocale, uConsole, uMobile;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
-    StoreCnt: Longword;
     ammoLoadout, ammoProbability, ammoDelay, ammoReinforcement: shortstring;
+    InitialCounts: array[0..Pred(cMaxHHs)] of TAmmoCounts;
 
 procedure FillAmmoStore(Ammo: PHHAmmo; var cnts: TAmmoCounts);
 var mi: array[0..cMaxSlotIndex] of byte;
@@ -67,21 +69,19 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
        begin
        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
-
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= cnts[a];
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= cnts[a];
-
-       if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
-           Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
+       with Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]] do
+           begin
+           Count:= cnts[a];
+           if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then Count:= AMMO_INFINITE;
+           end;
        inc(mi[Ammoz[a].Slot])
        end
-    else if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
+    else if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
        begin
        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
 
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= 0;
 
        inc(mi[Ammoz[a].Slot])
        end
@@ -99,7 +99,7 @@ TryDo((byte(ammoLoadout[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoProbabil
 
 // FIXME - TEMPORARY hardcoded check on shoppa pending creation of crate *type* probability editor
 substr:= Copy(ammoLoadout,1,15);
-if (substr = '000000990000009') or 
+if (substr = '000000990000009') or
    (substr = '000000990000000') then
     shoppa:= true;
 
@@ -137,16 +137,16 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             end;
         ammos[a]:= cnt;
 
-        if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) and (Ammoz[a].SkipTurns = 0) and (a <> amTeleport) and (a <> amSkip) then 
+        if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) and (Ammoz[a].SkipTurns = 0) and (a <> amTeleport) and (a <> amSkip) then
             Ammoz[a].SkipTurns:= 1;
 
         if ((GameFlags and gfPlaceHog) <> 0) and
-            (a <> amTeleport) and (a <> amSkip) and 
+            (a <> amTeleport) and (a <> amSkip) and
             (Ammoz[a].SkipTurns < 10000) then inc(Ammoz[a].SkipTurns,10000)
-        end else
-        ammos[a]:= AMMO_INFINITE
+        end 
+    else ammos[a]:= AMMO_INFINITE;
+    InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
     end;
-
 FillAmmoStore(StoresList[Pred(StoreCnt)], ammos)
 end;
 
@@ -154,6 +154,18 @@ function GetAmmoByNum(num: Longword): PHHAmmo;
 begin
 TryDo(num < StoreCnt, 'Invalid store number', true);
 exit(StoresList[num])
+end;
+
+function GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
+var ammoidx, slot: LongWord;
+begin
+with Hedgehog do
+    begin
+    slot:= Ammoz[CurAmmoType].Slot;
+    ammoidx:= 0;
+    while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do inc(ammoidx);
+    GetAmmoEntry:= @Ammo^[slot, ammoidx];
+    end
 end;
 
 procedure AssignStores;
@@ -165,7 +177,10 @@ for t:= 0 to Pred(TeamsCount) do
       begin
       for i:= 0 to cMaxHHIndex do
           if Hedgehogs[i].Gear <> nil then
+             begin
              Hedgehogs[i].Ammo:= GetAmmoByNum(Hedgehogs[i].AmmoStore);
+             Hedgehogs[i].CurAmmoType:= amNothing;
+             end
       end
 end;
 
@@ -213,21 +228,26 @@ begin
 end;
 
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
+var CurWeapon: PAmmo;
 begin
+CurWeapon:= GetAmmoEntry(Hedgehog);
 with Hedgehog do
     begin
+
     MultiShootAttacks:= 0;
-    with Ammo^[CurSlot, CurAmmo] do
+    with CurWeapon^ do
         if Count <> AMMO_INFINITE then
             begin
             dec(Count);
             if Count = 0 then
                 begin
-                PackAmmo(Ammo, CurSlot);
-                SwitchNotHeldAmmo(Hedgehog)
+                PackAmmo(Ammo, Ammoz[AmmoType].Slot);
+                //SwitchNotHeldAmmo(Hedgehog);
+                CurAmmoType:= amNothing
                 end
             end
-    end
+    end;
+perfExt_AmmoUpdate;
 end;
 
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
@@ -264,33 +284,37 @@ with Hedgehog do
 end;
 
 procedure SwitchToFirstLegalAmmo(var Hedgehog: THedgehog);
+var slot, ammoidx: LongWord;
 begin
 with Hedgehog do
     begin
-    CurAmmo:= 0;
-    CurSlot:= 0;
-    while (CurSlot <= cMaxSlotIndex) and
-        ((Ammo^[CurSlot, CurAmmo].Count = 0) or
-        (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
+    CurAmmoType:= amNothing;
+    slot:= 0;
+    ammoidx:= 0;
+    while (slot <= cMaxSlotIndex) and
+        ((Ammo^[slot, ammoidx].Count = 0) or
+        (Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
         do
         begin
-        while (CurAmmo <= cMaxSlotAmmoIndex) and
-            ((Ammo^[CurSlot, CurAmmo].Count = 0) or
-            (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
-            do inc(CurAmmo);
+        while (ammoidx <= cMaxSlotAmmoIndex) and
+            ((Ammo^[slot, ammoidx].Count = 0) or
+            (Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
+            do inc(ammoidx);
 
-        if (CurAmmo > cMaxSlotAmmoIndex) then
+        if (ammoidx > cMaxSlotAmmoIndex) then
             begin
-            CurAmmo:= 0;
-            inc(CurSlot)
+            ammoidx:= 0;
+            inc(slot)
             end
         end;
-    TryDo(CurSlot <= cMaxSlotIndex, 'Ammo slot index overflow', true)
+    TryDo(slot <= cMaxSlotIndex, 'Ammo slot index overflow', true);
+    CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
     end
 end;
 
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 var s: shortstring;
+    CurWeapon: PAmmo;
 begin
 TargetPoint.X:= NoPointX;
 
@@ -298,13 +322,16 @@ with Hedgehog do
     begin
     Timer:= 10;
 
-    if (Ammo^[CurSlot, CurAmmo].Count = 0) then
+    CurWeapon:= GetAmmoEntry(Hedgehog);
+
+    if (CurWeapon^.Count = 0) then
         SwitchToFirstLegalAmmo(Hedgehog);
 
-        //bad things could happen here in case CurSlot is overflowing
-    ApplyAngleBounds(Hedgehog, Ammo^[CurSlot, CurAmmo].AmmoType);
+    CurWeapon:= GetAmmoEntry(Hedgehog);
 
-    with Ammo^[CurSlot, CurAmmo] do
+    ApplyAngleBounds(Hedgehog, CurWeapon^.AmmoType);
+
+    with CurWeapon^ do
         begin
         if AmmoType <> amNothing then
             begin
@@ -323,19 +350,19 @@ with Hedgehog do
             Gear^.State:= Gear^.State and not gstHHChooseTarget;
             isCursorVisible:= false
             end;
-        if (CurAmmoGear <> nil) and ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0) then
-            ShowCrosshair:= (CurAmmoGear^.Ammo^.Propz and ammoprop_NoCrossHair) = 0
+        if (CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) then
+            ShowCrosshair:= (Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoCrossHair) = 0
         else
             ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0;
         end
-    end
+    end;
 end;
 
 procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 begin
 with Hedgehog do
-    if ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_DontHold) <> 0) or
-        (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0) then
+    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_DontHold) <> 0) or
+        (Ammoz[CurAmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0) then
         SwitchToFirstLegalAmmo(Hedgehog);
 end;
 
@@ -353,10 +380,10 @@ for i:= 0 to Pred(StoreCnt) do
         begin
         for a:= 0 to cMaxSlotAmmoIndex do
             with StoresList[i]^[slot, a] do
-                if (Propz and ammoprop_NotBorder) <> 0 then 
+                if (Propz and ammoprop_NotBorder) <> 0 then
                     begin
                     Count:= 0;
-                    InitialCount:= 0
+                    InitialCounts[i][AmmoType]:= 0
                     end;
 
         PackAmmo(StoresList[i], slot)
@@ -388,20 +415,17 @@ end;
 
 // Restore indefinitely disabled weapons and initial weapon counts.  Only used for hog placement right now
 procedure ResetWeapons;
-var i, slot, a: Longword;
-    t: TAmmoType;
+var i, t: Longword;
+    a: TAmmoType;
 begin
-for i:= 0 to Pred(StoreCnt) do
-    for slot:= 0 to cMaxSlotIndex do
-        begin
-        for a:= 0 to cMaxSlotAmmoIndex do
-            with StoresList[i]^[slot, a] do
-                Count:= InitialCount;
+for t:= 0 to Pred(TeamsCount) do
+   with TeamsArray[t]^ do
+      for i:= 0 to cMaxHHIndex do
+          if Hedgehogs[i].Gear <> nil then
+             FillAmmoStore(Hedgehogs[i].Ammo, InitialCounts[Hedgehogs[i].AmmoStore]);
 
-        PackAmmo(StoresList[i], slot)
-        end;
-for t:= Low(TAmmoType) to High(TAmmoType) do
-    if Ammoz[t].SkipTurns >= 10000 then dec(Ammoz[t].SkipTurns,10000);
+for a:= Low(TAmmoType) to High(TAmmoType) do
+    if Ammoz[a].SkipTurns >= 10000 then dec(Ammoz[a].SkipTurns,10000)
 end;
 
 procedure initModule;
@@ -411,7 +435,8 @@ begin
     ammoLoadout:= '';
     ammoProbability:= '';
     ammoDelay:= '';
-    ammoReinforcement:= ''
+    ammoReinforcement:= '';
+    FillChar(InitialCounts, sizeof(InitialCounts), 0)
 end;
 
 procedure freeModule;

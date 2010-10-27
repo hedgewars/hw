@@ -94,10 +94,10 @@ QStringList GameUIConfig::GetTeamsList()
 {
     QDir teamdir;
     teamdir.cd(cfgdir->absolutePath() + "/Teams");
-    QStringList teamslist = teamdir.entryList(QStringList("*.ini"));
+    QStringList teamslist = teamdir.entryList(QStringList("*.hwt"));
     QStringList cleanedList;
     for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
-            QString tmpTeamStr=(*it).replace(QRegExp("^(.*)\\.ini$"), "\\1");
+            QString tmpTeamStr=(*it).replace(QRegExp("^(.*)\\.hwt$"), "\\1");
             cleanedList.push_back(tmpTeamStr);
     }
     return cleanedList;
@@ -180,7 +180,7 @@ bool GameUIConfig::vid_Fullscreen()
 quint32 GameUIConfig::translateQuality()
 {
     quint32 rqNone = 0x00000000;  // don't reduce quality
-    quint32 rqLowRes = 0x00000001;  // use half land array
+    //quint32 rqLowRes = 0x00000001;  // use half land array
     quint32 rqBlurryLand = 0x00000002;  // downscaled terrain
     quint32 rqNoBackground = 0x00000004;  // don't draw background
     quint32 rqSimpleRope = 0x00000008;  // avoid drawing rope

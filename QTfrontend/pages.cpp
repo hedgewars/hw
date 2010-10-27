@@ -92,39 +92,69 @@ PageMain::PageMain(QWidget* parent) :
     mainNote = new QLabel(this);
     mainNote->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     mainNote->setWordWrap(true);
+    mainNote->setOpenExternalLinks(true);
 
-    QStringList Tips;
-    Tips << tr("Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they'll win or lose together.", "Tips");
-    Tips << tr("Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.", "Tips");
-    Tips << tr("If you're unsure what to do and don't want to waste ammo, skip one round. But don't let too much time pass as there will be Sudden Death!", "Tips");
-    Tips << tr("Want to save ropse? Release the rope in mid air and then shoot again. As long as you don't touch the ground you'll reuse your rope without wasting ammo!", "Tips");
-    Tips << tr("If you'd like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.", "Tips");
-    Tips << tr("You're bored of default gameplay? Try one of the missions - they'll offer different gameplay depending on the one you picked.", "Tips");
-    Tips << tr("By default the game will always record the last game played as a demo. Select 'Local Game' and pick the 'Demos' button on the lower right corner to play or manage them.", "Tips");
-    Tips << tr("Hedgewars is Open Source and Freeware we create in our spare time. If you've got problems, ask on our forums but please don't expect 24/7 support!", "Tips");
-    Tips << tr("Hedgewars is Open Source and Freeware we create in our spare time. If you like it, help us with a small donation or contribute your own work!", "Tips");
-    Tips << tr("Hedgewars is Open Source and Freeware we create in our spare time. Share it with your family and friends as you like!", "Tips");
-    Tips << tr("From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.", "Tips");
-    Tips << tr("Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!", "Tips");
-    Tips << tr("Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.", "Tips");
-    Tips << tr("Always remember you're able to set up your own games in local and network/online play. You're not restricted to the 'Simple Game' option.", "Tips");
-    Tips << tr("Connect one or more gamepads before launching the game to be able to assign their controls to your teams.", "Tips");
-    Tips << tr("Create an account on http://www.hedgewars.org/ to keep others from using your most favourite nickname while playing on the official server.", "Tips");
-    Tips << tr("While playing you should give yourself a short break at least once an hour.", "Tips");
-    Tips << tr("If your graphics card isn't able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.", "Tips");
-    Tips << tr("We're open to suggestions and constructive feedback. If you don't like something or got a great idea, let us know!", "Tips");
-    Tips << tr("Especially while playing online be polite and always remember there might be some minors playing with or against you as well!", "Tips");
-    Tips << tr("Special game modes such as 'Vampirism' or 'Karma' allow you to develop completely new tactics. Try them in a custom game!", "Tips");
-    Tips << tr("The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.", "Tips");
-    Tips << tr("You should never install Hedgewars on computers you don't own (school, university, work, etc.). Please ask the responsible person instead!", "Tips");
-    Tips << tr("Hedgewars can be perfect for short games during breaks. Just ensure you don't add too many hedgehogs or use an huge map. Reducing time and health might help as well.", "Tips");
-    Tips << tr("No hedgehogs were harmed in making this game.", "Tips");
-    
-
-    if(isDevBuild)
-        mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
-    else
+    if(!isDevBuild)
+    {
+        QStringList Tips;
+        Tips << tr("Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they'll win or lose together.", "Tips");
+        Tips << tr("Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.", "Tips");
+        Tips << tr("If you're unsure what to do and don't want to waste ammo, skip one round. But don't let too much time pass as there will be Sudden Death!", "Tips");
+        Tips << tr("Want to save ropse? Release the rope in mid air and then shoot again. As long as you don't touch the ground you'll reuse your rope without wasting ammo!", "Tips");
+        Tips << tr("If you'd like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.", "Tips");
+        Tips << tr("You're bored of default gameplay? Try one of the missions - they'll offer different gameplay depending on the one you picked.", "Tips");
+        Tips << tr("By default the game will always record the last game played as a demo. Select 'Local Game' and pick the 'Demos' button on the lower right corner to play or manage them.", "Tips");
+        Tips << tr("Hedgewars is Open Source and Freeware we create in our spare time. If you've got problems, ask on our forums but please don't expect 24/7 support!", "Tips");
+        Tips << tr("Hedgewars is Open Source and Freeware we create in our spare time. If you like it, help us with a small donation or contribute your own work!", "Tips");
+        Tips << tr("Hedgewars is Open Source and Freeware we create in our spare time. Share it with your family and friends as you like!", "Tips");
+        Tips << tr("Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!", "Tips");
+        Tips << tr("From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.", "Tips");
+        Tips << tr("Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!", "Tips");
+        Tips << tr("Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.", "Tips");
+        Tips << tr("Always remember you're able to set up your own games in local and network/online play. You're not restricted to the 'Simple Game' option.", "Tips");
+        Tips << tr("Connect one or more gamepads before starting the game to be able to assign their controls to your teams.", "Tips");
+        Tips << tr("Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.", "Tips").arg("<a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a>");
+        Tips << tr("While playing you should give yourself a short break at least once an hour.", "Tips");
+        Tips << tr("If your graphics card isn't able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.", "Tips");
+        Tips << tr("If your graphics card isn't able to provide hardware accelerated OpenGL, try to update the associated drivers.", "Tips");
+        Tips << tr("We're open to suggestions and constructive feedback. If you don't like something or got a great idea, let us know!", "Tips");
+        Tips << tr("Especially while playing online be polite and always remember there might be some minors playing with or against you as well!", "Tips");
+        Tips << tr("Special game modes such as 'Vampirism' or 'Karma' allow you to develop completely new tactics. Try them in a custom game!", "Tips");
+        Tips << tr("The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.", "Tips");
+        Tips << tr("You should never install Hedgewars on computers you don't own (school, university, work, etc.). Please ask the responsible person instead!", "Tips");
+        Tips << tr("Hedgewars can be perfect for short games during breaks. Just ensure you don't add too many hedgehogs or use an huge map. Reducing time and health might help as well.", "Tips");
+        Tips << tr("No hedgehogs were harmed in making this game.", "Tips");
+        Tips << tr("There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.", "Tips");
+        Tips << tr("Afraid of falling off a cliff? Hold down [precise] to turn [left] or [right] without actually moving.", "Tips");
+        Tips << tr("Some weapons require special strategies or just lots of training, so don't give up on a particular tool if you miss an enemy once.", "Tips");
+        Tips << tr("Most weapons won't work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.", "Tips");
+        Tips << tr("The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.", "Tips");
+        Tips << tr("The Piano Strike is the most damaging air strike. You'll lose the hedgehog performing it, so there's a huge downside as well.", "Tips");
+        Tips << tr("The Homing Bee can be tricky to use. It's turn radius depends on it's velocity, so try to not use full power.", "Tips");
+        Tips << tr("Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.", "Tips");
+        Tips << tr("The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.", "Tips");
+        Tips << tr("If you're stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.", "Tips");
+        Tips << tr("The Cake's maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.", "Tips");
+        Tips << tr("The Flame Thrower is a weapon but it can be used for tunnel digging as well.", "Tips");
+        Tips << tr("Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.", "Tips");
+        Tips << tr("Want to know who's behind the game? Click on the Hedgewars logo in the main menu to see the credits.", "Tips");
+        Tips << tr("Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!", "Tips").arg("<a href=\"http://www.facebook.com/Hedgewars\">Facebook</a>").arg("<a href=\"http://steamcommunity.com/groups/hedgewars\">Steam Community</a>").arg("<a href=\"http://twitter.com/hedgewars\">Twitter</a>");
+        Tips << tr("Feel free to draw your own graves, hats, flags or even maps and themes! But note that you'll have to share them somewhere to use them online.", "Tips");
+        Tips << tr("Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!", "Tips");
+        // The following tip will require links to app store entries first.
+        //Tips << tr("Want to play Hedgewars any time? Grab the Mobile version for %1 and %2.", "Tips").arg("").arg("");
+        Tips << tr("Keep your video card drivers up to date to avoid issues playing the game.", "Tips");
+        //Tips << tr("", "Tips");
+#ifdef _WIN32
+        Tips << tr("You can find your Hedgewars configuration files under \"My Documents\\Hedgewars\". Create backups or take the files with you, but don't edit them by hand.", "Tips");
+        Tips << tr("You're able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.", "Tips");
+#else
+        Tips << tr("You can find your Hedgewars configuration files under \"Hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");
+#endif
         mainNote->setText(QLabel::tr("Tip: ") + Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()]);
+    }
+    else
+        mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
 
     pageLayout->addWidget(mainNote, 4, 1, 1, 2);
 
@@ -301,12 +331,33 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     tmpdir.cd(datadir->absolutePath());
     tmpdir.cd("Graphics/Flags");
     list = tmpdir.entryList(QStringList("*.png"));
+    
+    // add the default flag
+    CBFlag->addItem(QIcon(QPixmap(datadir->absolutePath() + "/Graphics/Flags/hedgewars.png").copy(0, 0, 22, 15)), "Hedgewars", "hedgewars");
+
+    CBFlag->insertSeparator(CBFlag->count());
+    // add all country flags
     for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
     {
         QPixmap pix(datadir->absolutePath() + "/Graphics/Flags/" + *it);
         QIcon icon(pix.copy(0, 0, 22, 15));
-        if(it->compare("cpu.png")) // skip cpu flag
-            CBFlag->addItem(icon, (*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
+        if(it->compare("cpu.png") && it->compare("hedgewars.png") && (it->indexOf("cm_") == -1)) // skip cpu and hedgewars flags as well as all community flags
+        {
+            QString flag = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
+            CBFlag->addItem(icon, QString(flag).replace("_", " "), flag);
+        }
+    }
+    CBFlag->insertSeparator(CBFlag->count());
+    // add all community flags
+    for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+    {
+        QPixmap pix(datadir->absolutePath() + "/Graphics/Flags/" + *it);
+        QIcon icon(pix.copy(0, 0, 22, 15));
+        if(it->indexOf("cm_") > -1) // skip non community flags this time
+        {
+            QString flag = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
+            CBFlag->addItem(icon, QString(flag).replace("cm_", QComboBox::tr("Community") + ": "), flag);
+        }
     }
 
     vbox1->addStretch();
@@ -560,7 +611,12 @@ PageOptions::PageOptions(QWidget* parent) :
             CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
             MiscLayout->addWidget(CBAutoUpdate, 4, 0, 1, 2);
 #endif
-
+#ifdef _WIN32
+            BtnAssociateFiles = new QPushButton(groupMisc);
+            BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
+            BtnAssociateFiles->setEnabled(!custom_data && !custom_config);
+            MiscLayout->addWidget(BtnAssociateFiles, 4, 0, 1, 2);
+#endif
             gbTBLayout->addWidget(groupMisc, 2, 0);
         }
 
@@ -613,6 +669,7 @@ PageOptions::PageOptions(QWidget* parent) :
 
             QLabel * quality = new QLabel(AGGroupBox);
             quality->setText(QLabel::tr("Quality"));
+            quality->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             GBAqualayout->addWidget(quality);
             
             SLQuality = new QSlider(Qt::Horizontal, AGGroupBox);
@@ -622,7 +679,6 @@ PageOptions::PageOptions(QWidget* parent) :
             SLQuality->setFixedWidth(150);
             GBAqualayout->addWidget(SLQuality);
             GBAlayout->addLayout(GBAqualayout);
-
             QLabel * stereo = new QLabel(AGGroupBox);
             stereo->setText(QLabel::tr("Stereo rendering"));
             GBAstereolayout->addWidget(stereo);
@@ -962,7 +1018,10 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
     topLine->addStretch();
 
 
-    BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 0, true);
+    BtnCampaignPage = addButton(":/res/SimpleGame.png", middleLine, 0, true);
+    BtnCampaignPage->setToolTip(tr("Campaign Mode (...). IN DEVELOPMENT"));
+
+    BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
     BtnTrainPage->setToolTip(tr("Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT"));
 
     BtnBack = addButton(":/res/Exit.png", bottomLine, 0, true);
@@ -993,6 +1052,8 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     tmpdir.cd("Missions/Training");
     tmpdir.setFilter(QDir::Files);
     CBSelect->addItems(tmpdir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1"));
+    for(int i = 0; i < CBSelect->count(); i++)
+        CBSelect->setItemData(i, CBSelect->itemText(i));
 
     pageLayout->addWidget(CBSelect, 1, 1);
     
@@ -1002,6 +1063,29 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     pageLayout->addWidget(BtnStartTrain, 1, 2);
 
     BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
+}
+
+PageCampaign::PageCampaign(QWidget* parent) : AbstractPage(parent)
+{
+    QGridLayout * pageLayout = new QGridLayout(this);
+    pageLayout->setColumnStretch(0, 1);
+    pageLayout->setColumnStretch(1, 2);
+    pageLayout->setColumnStretch(2, 1);
+    pageLayout->setRowStretch(0, 1);
+    pageLayout->setRowStretch(3, 1);
+
+    CBSelect = new QComboBox(this);
+    CBTeam = new QComboBox(this);
+
+    pageLayout->addWidget(CBTeam, 1, 1);
+    pageLayout->addWidget(CBSelect, 2, 1);
+    
+    BtnStartCampaign = new QPushButton(this);
+    BtnStartCampaign->setFont(*font14);
+    BtnStartCampaign->setText(QPushButton::tr("Go!"));
+    pageLayout->addWidget(BtnStartCampaign, 2, 2);
+
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 }
 
 PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
@@ -1050,24 +1134,85 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     roomsList->verticalHeader()->setVisible(false);
     roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     roomsList->setAlternatingRowColors(true);
+    roomsList->setShowGrid(false);
+    roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
     pageLayout->addWidget(roomsList, 1, 0, 3, 1);
     pageLayout->setRowStretch(2, 100);
+    
+    QHBoxLayout * filterLayout = new QHBoxLayout();
+    
+    QLabel * stateLabel = new QLabel(this);
+    stateLabel->setText(tr("State:"));
+    CBState = new QComboBox(this);
+    CBState->addItem(QComboBox::tr("Any"));
+    CBState->addItem(QComboBox::tr("In lobby"));
+    CBState->addItem(QComboBox::tr("In progress"));
+    filterLayout->addWidget(stateLabel);
+    filterLayout->addWidget(CBState);
+    filterLayout->addSpacing(30);
+    
+    QLabel * ruleLabel = new QLabel(this);
+    ruleLabel->setText(tr("Rules:"));
+    CBRules = new QComboBox(this);
+    CBRules->addItem(QComboBox::tr("Any"));
+    CBRules->addItem(QComboBox::tr("Default"));
+    CBRules->addItem(QComboBox::tr("Pro mode"));
+    CBRules->addItem(QComboBox::tr("Shoppa"));
+    CBRules->addItem(QComboBox::tr("Basketball"));
+    CBRules->addItem(QComboBox::tr("Minefield"));
+    CBRules->addItem(QComboBox::tr("Barrel mayhem"));
+    CBRules->addItem(QComboBox::tr("Tunnel hogs"));
+    filterLayout->addWidget(ruleLabel);
+    filterLayout->addWidget(CBRules);
+    filterLayout->addSpacing(30);
+    
+    QLabel * weaponLabel = new QLabel(this);
+    weaponLabel->setText(tr("Weapons:"));
+    CBWeapons = new QComboBox(this);
+    CBWeapons->addItem(QComboBox::tr("Any"));
+    CBWeapons->addItem(QComboBox::tr("Basketball"));
+    CBWeapons->addItem(QComboBox::tr("Crazy"));
+    CBWeapons->addItem(QComboBox::tr("Default"));
+    CBWeapons->addItem(QComboBox::tr("Minefield"));
+    CBWeapons->addItem(QComboBox::tr("Pro mode"));
+    CBWeapons->addItem(QComboBox::tr("Shoppa"));
+    filterLayout->addWidget(weaponLabel);
+    filterLayout->addWidget(CBWeapons);
+    filterLayout->addSpacing(30);
+
+    QLabel * searchLabel = new QLabel(this);
+    searchLabel->setText(tr("Search:"));
+    searchText = new QLineEdit(this);
+    searchText->setMaxLength(60);
+    filterLayout->addWidget(searchLabel);
+    filterLayout->addWidget(searchText);
+
+    pageLayout->addLayout(filterLayout, 4, 0);
 
     chatWidget = new HWChatWidget(this, gameSettings, sdli, false);
-    pageLayout->addWidget(chatWidget, 4, 0, 1, 2);
-    pageLayout->setRowStretch(4, 350);
+    pageLayout->addWidget(chatWidget, 5, 0, 1, 2);
+    pageLayout->setRowStretch(5, 350);
 
     BtnCreate = addButton(tr("Create"), pageLayout, 0, 1);
     BtnJoin = addButton(tr("Join"), pageLayout, 1, 1);
     BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 1);
+    BtnClear = addButton(tr("Clear"), pageLayout, 4, 1);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 5, 0, true);
-    BtnAdmin = addButton(tr("Admin features"), pageLayout, 5, 1);
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 6, 0, true);
+    BtnAdmin = addButton(tr("Admin features"), pageLayout, 6, 1);
 
     connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
     connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
     connect(BtnRefresh, SIGNAL(clicked()), this, SLOT(onRefreshClick()));
+    connect(BtnClear, SIGNAL(clicked()), this, SLOT(onClearClick()));
     connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
+    connect(CBState, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
+    connect(CBRules, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
+    connect(CBWeapons, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
+    connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onRefreshClick()));
+    connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
+    
+    gameInLobby = false;
 }
 
 void PageRoomsList::setAdmin(bool flag)
@@ -1077,6 +1222,18 @@ void PageRoomsList::setAdmin(bool flag)
 
 void PageRoomsList::setRoomsList(const QStringList & list)
 {
+    QBrush red(QColor(255, 0, 0));
+    QBrush orange(QColor(127, 127, 0));
+    QBrush yellow(QColor(255, 255, 0));
+    QBrush green(QColor(0, 255, 0));
+
+    listFromServer = list;
+    
+    QString selection = "";
+    
+    if(QTableWidgetItem *item = roomsList->item(roomsList->currentRow(), 0))
+        selection = item->text();
+    
     roomsList->clear();
     roomsList->setColumnCount(7);
     roomsList->setHorizontalHeaderLabels(
@@ -1102,12 +1259,46 @@ void PageRoomsList::setRoomsList(const QStringList & list)
     // set resize modes
 //  roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
 
+    bool gameCanBeJoined = true;
+
     if (list.size() % 8)
         return;
 
     roomsList->setRowCount(list.size() / 8);
     for(int i = 0, r = 0; i < list.size(); i += 8, r++)
     {
+        // if we are joining a game
+        // TODO: Should NOT be done here
+        if (gameInLobby) {
+            if (gameInLobbyName == list[i + 1]) {
+                gameCanBeJoined = list[i].compare("True");
+            }
+        }
+        
+        // check filter settings
+        #define NO_FILTER_MATCH roomsList->setRowCount(roomsList->rowCount() - 1); --r; continue
+        
+        if (list[i].compare("True") && CBState->currentIndex() == 2) { NO_FILTER_MATCH; }
+        if (list[i].compare("False") && CBState->currentIndex() == 1) { NO_FILTER_MATCH; }
+        if (CBRules->currentIndex() != 0 && list[i + 6].compare(CBRules->currentText())) { NO_FILTER_MATCH; }
+        if (CBWeapons->currentIndex() != 0 && list[i + 7].compare(CBWeapons->currentText())) { NO_FILTER_MATCH; }
+        bool found = list[i + 1].contains(searchText->text(), Qt::CaseInsensitive);
+        if (!found) {
+            for (int a = 4; a <= 7; ++a) {
+                QString compString = list[i + a];
+                if (a == 5 && compString == "+rnd+") {
+                    compString = "Random Map";
+                } else if (a == 5 && compString == "+maze+") {
+                    compString = "Random Maze";
+                }
+                if (compString.contains(searchText->text(), Qt::CaseInsensitive)) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (!searchText->text().isEmpty() && !found) { NO_FILTER_MATCH; }
+        
         QTableWidgetItem * item;
         item = new QTableWidgetItem(list[i + 1]); // room name
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
@@ -1136,6 +1327,9 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setTextAlignment(Qt::AlignCenter);
         item->setToolTip(tr("There are %1 teams participating in this room.", "", list[i + 3].toInt()).arg(list[i + 3]));
+        //Should we highlight "full" games? Might get misinterpreted
+        //if(list[i + 3].toInt() >= cMaxTeams)
+        //    item->setForeground(red);
         roomsList->setItem(r, 2, item);
 
         item = new QTableWidgetItem(list[i + 4].left(15)); // name of host
@@ -1144,9 +1338,15 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         roomsList->setItem(r, 3, item);
 
         if(list[i + 5] == "+rnd+")
+        {
             item = new QTableWidgetItem(tr("Random Map")); // selected map (is randomized)
+            item->setIcon(QIcon(":/res/mapRandom.png"));
+        }
         else if (list[i+5] == "+maze+")
+        {
             item = new QTableWidgetItem(tr("Random Maze"));
+            item->setIcon(QIcon(":/res/mapMaze.png"));
+        }
         else
         {
             item = new QTableWidgetItem(list[i + 5]); // selected map
@@ -1154,7 +1354,15 @@ void PageRoomsList::setRoomsList(const QStringList & list)
             // check to see if we've got this map
             // not perfect but a start
             if(!mapList->contains(list[i + 5]))
-                item->setForeground(QBrush(QColor(255, 0, 0)));
+            {
+                item->setForeground(red);
+                item->setIcon(QIcon(":/res/mapMissing.png"));
+            }
+            else
+            {
+                // todo: mission icon?
+                item->setIcon(QIcon(":/res/mapCustom.png"));
+            }
         }
         
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
@@ -1171,14 +1379,27 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         item->setToolTip(tr("The Weapon Scheme defines available weapons and their ammunition count."));
         roomsList->setItem(r, 6, item);
 
+        if(!list[i + 1].compare(selection) && !selection.isEmpty())
+            roomsList->selectionModel()->setCurrentIndex(roomsList->model()->index(r, 0), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
     }
-   roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-   roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
+
+    roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
+
+    // TODO: Should NOT be done here
+    if (gameInLobby) {
+        gameInLobby = false;
+        if (gameCanBeJoined) {
+            emit askForJoinRoom(gameInLobbyName);
+        } else {
+            emit askJoinConfirmation(gameInLobbyName);
+        }
+    }
 
 //  roomsList->resizeColumnsToContents();
 }
@@ -1203,9 +1424,22 @@ void PageRoomsList::onJoinClick()
                 tr("Error"),
                 tr("Please select room from the list"),
                 tr("OK"));
-        return ;
+        return;
     }
-    emit askForJoinRoom(curritem->data(Qt::DisplayRole).toString());
+
+    for (int i = 0; i < listFromServer.size(); i += 8) {
+        if (listFromServer[i + 1] == curritem->data(Qt::DisplayRole).toString()) {
+            gameInLobby = listFromServer[i].compare("True");
+            break;
+        }
+    }
+    
+    if (gameInLobby) {
+        gameInLobbyName = curritem->data(Qt::DisplayRole).toString();
+        emit askForRoomList();
+    } else {
+        emit askForJoinRoom(curritem->data(Qt::DisplayRole).toString());
+    }
 }
 
 void PageRoomsList::onRefreshClick()
@@ -1213,6 +1447,24 @@ void PageRoomsList::onRefreshClick()
     emit askForRoomList();
 }
 
+void PageRoomsList::onClearClick()
+{
+    CBState->setCurrentIndex(0);
+    CBRules->setCurrentIndex(0);
+    CBWeapons->setCurrentIndex(0);
+    searchText->clear();
+}
+
+void PageRoomsList::onJoinConfirmation(const QString & room)
+{
+    if (QMessageBox::warning(this,
+        tr("Warning"),
+        tr("The game you are trying to join has started.\nDo you still want to join the room?"),
+        QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+    {
+        emit askForJoinRoom(room);
+    }
+}
 
 PageConnecting::PageConnecting(QWidget* parent) :
     AbstractPage(parent)
@@ -1277,55 +1529,71 @@ PageScheme::PageScheme(QWidget* parent) :
 
     TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity.png");
     TBW_lowGravity->setToolTip("<b>" + ToggleButtonWidget::tr("Low Gravity") + "</b>:<br />" + tr("Lower gravity"));
-    glGMLayout->addWidget(TBW_lowGravity,1,0,1,1);
+    glGMLayout->addWidget(TBW_lowGravity,0,4,1,1);
 
     TBW_laserSight = new ToggleButtonWidget(gbGameModes, ":/res/btnLaserSight.png");
     TBW_laserSight->setToolTip("<b>" + ToggleButtonWidget::tr("Laser Sight") + "</b>:<br />" + tr("Assisted aiming with laser sight"));
-    glGMLayout->addWidget(TBW_laserSight,1,1,1,1);
+    glGMLayout->addWidget(TBW_laserSight,1,0,1,1);
 
     TBW_invulnerable = new ToggleButtonWidget(gbGameModes, ":/res/btnInvulnerable.png");
     TBW_invulnerable->setToolTip("<b>" + ToggleButtonWidget::tr("Invulnerable") + "</b>:<br />" + tr("All hogs have a personal forcefield"));
-    glGMLayout->addWidget(TBW_invulnerable,1,2,1,1);
+    glGMLayout->addWidget(TBW_invulnerable,1,1,1,1);
 
     TBW_mines = new ToggleButtonWidget(gbGameModes, ":/res/btnMines.png");
     TBW_mines->setToolTip("<b>" + ToggleButtonWidget::tr("Add Mines") + "</b>:<br />" + tr("Enable random mines"));
-    glGMLayout->addWidget(TBW_mines,1,3,1,1);
+    glGMLayout->addWidget(TBW_mines,1,2,1,1);
 
     TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric.png");
     TBW_vampiric->setToolTip("<b>" + ToggleButtonWidget::tr("Vampirism") + "</b>:<br />" + tr("Gain 80% of the damage you do back in health"));
-    glGMLayout->addWidget(TBW_vampiric,2,0,1,1);
+    glGMLayout->addWidget(TBW_vampiric,1,3,1,1);
 
     TBW_karma = new ToggleButtonWidget(gbGameModes, ":/res/btnKarma.png");
     TBW_karma->setToolTip("<b>" + ToggleButtonWidget::tr("Karma") + "</b>:<br />" + tr("Share your opponents pain, share their damage"));
-    glGMLayout->addWidget(TBW_karma,2,1,1,1);
+    glGMLayout->addWidget(TBW_karma,1,4,1,1);
 
     TBW_artillery = new ToggleButtonWidget(gbGameModes, ":/res/btnArtillery.png");
     TBW_artillery->setToolTip("<b>" + ToggleButtonWidget::tr("Artillery") + "</b>:<br />" + tr("Your hogs are unable to move, put your artillery skills to the test"));
-    glGMLayout->addWidget(TBW_artillery,2,2,1,1);
+    glGMLayout->addWidget(TBW_artillery,2,0,1,1);
 
     TBW_randomorder = new ToggleButtonWidget(gbGameModes, ":/res/btnRandomOrder.png");
     TBW_randomorder->setToolTip("<b>" + ToggleButtonWidget::tr("Random Order") + "</b>:<br />" + tr("Order of play is random instead of in room order."));
-    glGMLayout->addWidget(TBW_randomorder,2,3,1,1);
+    glGMLayout->addWidget(TBW_randomorder,2,1,1,1);
 
     TBW_king = new ToggleButtonWidget(gbGameModes, ":/res/btnKing.png");
     TBW_king->setToolTip("<b>" + ToggleButtonWidget::tr("King") + "</b>:<br />" + tr("Play with a King. If he dies, your side dies."));
-    glGMLayout->addWidget(TBW_king,3,0,1,1);
+    glGMLayout->addWidget(TBW_king,2,2,1,1);
 
     TBW_placehog = new ToggleButtonWidget(gbGameModes, ":/res/btnPlaceHog.png");
     TBW_placehog->setToolTip("<b>" + ToggleButtonWidget::tr("Place Hedgehogs") + "</b>:<br />" + tr("Take turns placing your hedgehogs before the start of play."));
-    glGMLayout->addWidget(TBW_placehog,3,1,1,1);
+    glGMLayout->addWidget(TBW_placehog,2,3,1,1);
 
     TBW_sharedammo = new ToggleButtonWidget(gbGameModes, ":/res/btnSharedAmmo.png");
     TBW_sharedammo->setToolTip("<b>" + ToggleButtonWidget::tr("Clan Shares Ammo") + "</b>:<br />" + tr("Ammo is shared between all teams that share a colour."));
-    glGMLayout->addWidget(TBW_sharedammo,3,2,1,1);
+    glGMLayout->addWidget(TBW_sharedammo,2,4,1,1);
 
     TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders.png");
     TBW_disablegirders->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Girders") + "</b>:<br />" + tr("Disable girders when generating random maps."));
-    glGMLayout->addWidget(TBW_disablegirders,3,3,1,1);
+    glGMLayout->addWidget(TBW_disablegirders,3,0,1,1);
 
     TBW_disablelandobjects = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableLandObjects.png");
     TBW_disablelandobjects->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Land Objects") + "</b>:<br />" + tr("Disable land objects when generating random maps."));
-    glGMLayout->addWidget(TBW_disablelandobjects,4,0,1,1);
+    glGMLayout->addWidget(TBW_disablelandobjects,3,1,1,1);
+
+    TBW_aisurvival = new ToggleButtonWidget(gbGameModes, ":/res/btnAISurvival.png");
+    TBW_aisurvival->setToolTip("<b>" + ToggleButtonWidget::tr("AI Survival Mode") + "</b>:<br />" + tr("AI respawns on death."));
+    glGMLayout->addWidget(TBW_aisurvival,3,2,1,1);
+
+    TBW_infattack = new ToggleButtonWidget(gbGameModes, ":/res/btnInfAttack.png");
+    TBW_infattack->setToolTip("<b>" + ToggleButtonWidget::tr("Unlimited Attacks") + "</b>:<br />" + tr("Attacking does not end your turn."));
+    glGMLayout->addWidget(TBW_infattack,3,3,1,1);
+
+    TBW_resetweps = new ToggleButtonWidget(gbGameModes, ":/res/btnResetWeps.png");
+    TBW_resetweps->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Weapons") + "</b>:<br />" + tr("Weapons are reset to starting values each turn."));
+    glGMLayout->addWidget(TBW_resetweps,3,4,1,1);
+
+    TBW_perhogammo = new ToggleButtonWidget(gbGameModes, ":/res/btnPerHogAmmo.png");
+    TBW_perhogammo->setToolTip("<b>" + ToggleButtonWidget::tr("Per Hedgehog Ammo") + "</b>:<br />" + tr("Each hedgehog has its own ammo. It does not share with the team."));
+    glGMLayout->addWidget(TBW_perhogammo,4,0,1,1);
 
     // Right
     QLabel * l;
@@ -1355,7 +1623,7 @@ PageScheme::PageScheme(QWidget* parent) :
     glBSLayout->addWidget(l,1,1,1,1);
 
     SB_TurnTime = new QSpinBox(gbBasicSettings);
-    SB_TurnTime->setRange(1, 99);
+    SB_TurnTime->setRange(1, 9999);
     SB_TurnTime->setValue(45);
     SB_TurnTime->setSingleStep(15);
     glBSLayout->addWidget(SB_TurnTime,1,2,1,1);
@@ -1510,15 +1778,19 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(TBW_sharedammo, 15);
     mapper->addMapping(TBW_disablegirders, 16);
     mapper->addMapping(TBW_disablelandobjects, 17);
-    mapper->addMapping(SB_DamageModifier, 18);
-    mapper->addMapping(SB_TurnTime, 19);
-    mapper->addMapping(SB_InitHealth, 20);
-    mapper->addMapping(SB_SuddenDeath, 21);
-    mapper->addMapping(SB_CaseProb, 22);
-    mapper->addMapping(SB_MinesTime, 23);
-    mapper->addMapping(SB_Mines, 24);
-    mapper->addMapping(SB_MineDuds, 25);
-    mapper->addMapping(SB_Explosives, 26);
+    mapper->addMapping(TBW_aisurvival, 18);
+    mapper->addMapping(TBW_infattack, 19);
+    mapper->addMapping(TBW_resetweps, 20);
+    mapper->addMapping(TBW_perhogammo, 21);
+    mapper->addMapping(SB_DamageModifier, 22);
+    mapper->addMapping(SB_TurnTime, 23);
+    mapper->addMapping(SB_InitHealth, 24);
+    mapper->addMapping(SB_SuddenDeath, 25);
+    mapper->addMapping(SB_CaseProb, 26);
+    mapper->addMapping(SB_MinesTime, 27);
+    mapper->addMapping(SB_Mines, 28);
+    mapper->addMapping(SB_MineDuds, 29);
+    mapper->addMapping(SB_Explosives, 30);
 
     mapper->toFirst();
 }

@@ -21,7 +21,7 @@ import System.Posix
 setupLoggers :: IO ()
 setupLoggers =
     updateGlobalLogger "Clients"
-        (setLevel DEBUG)
+        (setLevel INFO)
 
 main :: IO ()
 main = withSocketsDo $ do

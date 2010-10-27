@@ -31,7 +31,7 @@ if(sdlimage_h)
 	endif()
 endif()
 
-#SOURCE AND PROGRAMS SECTION 
+#SOURCE AND PROGRAMS SECTION
 set(fpc_tryexe fpc)
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
 
@@ -59,6 +59,7 @@ set(engine_sources
 	uLandTexture.pas
 	uLocale.pas
 	uMisc.pas
+	uMobile.pas
 	uRandom.pas
 	uScript.pas
 	adler32.pas
@@ -74,6 +75,7 @@ set(engine_sources
 	GearDrawing.inc
 	HHHandlers.inc
 	SinTable.inc
+	ArgParsers.inc
 	options.inc
 	${CMAKE_CURRENT_BINARY_DIR}/config.inc
 	)

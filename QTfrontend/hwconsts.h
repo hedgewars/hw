@@ -31,6 +31,11 @@ extern QDir * bindir;
 extern QDir * cfgdir;
 extern QDir * datadir;
 
+extern bool custom_config;
+extern bool custom_data;
+
+extern int cMaxTeams;
+
 extern QStringList * Themes;
 extern QStringList * mapList;
 
@@ -38,12 +43,7 @@ extern QString * cDefaultAmmoStore;
 extern int cAmmoNumber;
 extern QList< QPair<QString, QString> > cDefaultAmmos;
 
-extern QColor * color1;
-extern QColor * color2;
-extern QColor * color3;
-extern QColor * color4;
-extern QColor * color5;
-extern QColor * color6;
+extern QColor *colors[];
 
 extern QString * netHost;
 extern quint16 netPort;

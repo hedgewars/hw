@@ -66,6 +66,10 @@
     <file>res/btnSharedAmmo.png</file>
     <file>res/btnDisableGirders.png</file>
     <file>res/btnDisableLandObjects.png</file>
+    <file>res/btnAISurvival.png</file>
+    <file>res/btnInfAttack.png</file>
+    <file>res/btnResetWeps.png</file>
+    <file>res/btnPerHogAmmo.png</file>
     <file>res/iconBox.png</file>
     <file>res/iconHealth.png</file>
     <file>res/iconSuddenDeath.png</file>
@@ -95,5 +99,23 @@
     <file>res/follow.png</file>
     <file>res/info.png</file>
     <file>res/kick.png</file>
+    <file>res/StatsMedal1.png</file>
+    <file>res/StatsMedal2.png</file>
+    <file>res/StatsMedal3.png</file>
+    <file>res/StatsMedal4.png</file>
+    <file>res/StatsR.png</file>
+    <file>res/StatsH.png</file>
+    <file>res/StatsD.png</file>
+    <file>res/StatsBestKiller.png</file>
+    <file>res/StatsBestShot.png</file>
+    <file>res/StatsHedgehogsKilled.png</file>
+    <file>res/StatsMostSelfDamage.png</file>
+    <file>res/StatsSelfKilled.png</file>
+    <file>res/StatsSkipped.png</file>
+    <file>res/mapRandom.png</file>
+    <file>res/mapMaze.png</file>
+    <file>res/mapMissing.png</file>
+    <file>res/mapCustom.png</file>
+    <file>res/mapMission.png</file>
 </qresource>
 </RCC>

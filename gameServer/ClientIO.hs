@@ -57,8 +57,8 @@ clientRecvLoop s chan ci = do
 
 
 
-clientSendLoop :: Socket -> Chan CoreMessage -> Chan [B.ByteString] -> ClientIndex -> IO()
-clientSendLoop s coreChan chan ci = do
+clientSendLoop :: Socket -> Chan [B.ByteString] -> ClientIndex -> IO ()
+clientSendLoop s chan ci = do
     answer <- readChan chan
     Exception.handle
         (\(e :: Exception.IOException) -> when (not $ isQuit answer) $ sendQuit e) $ do
@@ -67,7 +67,7 @@ clientSendLoop s coreChan chan ci = do
     if (isQuit answer) then
         Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on sClose") $ sClose s
         else
-        clientSendLoop s coreChan chan ci
+        clientSendLoop s chan ci
 
     where
         --sendQuit e = writeChan coreChan $ ClientMessage (ci, ["QUIT", B.pack $ show e])

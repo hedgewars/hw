@@ -23,7 +23,7 @@ interface
 uses SDLh, uLandTemplates, uFloat, uConsts, GLunit;
 
 type
-    TLandArray = packed array of array of LongWord; 
+    TLandArray = packed array of array of LongWord;
     TCollisionArray = packed array of array of Word;
     TPreview  = packed array[0..127, 0..31] of byte;
     TDirtyTag = packed array of array of byte;
@@ -31,9 +31,9 @@ type
 var Land: TCollisionArray;
     LandPixels: TLandArray;
     LandDirty: TDirtyTag;
-    hasBorder: boolean; 
-    hasGirders: boolean;  
-    isMap: boolean;  
+    hasBorder: boolean;
+    hasGirders: boolean;
+    isMap: boolean;
     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
     LandBackSurface: PSDL_Surface;
     digest: shortstring;
@@ -52,7 +52,7 @@ procedure CheckLandDigest(s: shortstring);
 function  LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
-uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, Adler32, uIO, uLandTexture;
+uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, Adler32, uIO, uLandTexture, sysutils;
 
 operator=(const a, b: direction) c: Boolean;
 begin
@@ -66,7 +66,7 @@ type TPixAr = record
 
 procedure LogLandDigest;
 var s: shortstring;
-    adler, i, tmp: LongInt;
+    adler, i: LongInt;
 begin
 adler:= 1;
 for i:= 0 to LAND_HEIGHT-1 do
@@ -1125,12 +1125,15 @@ end;
 // He said I could add it here only when I swore it would not impact gameplay.  Which, as far as I can tell, is true.
 // I would just like to play with it with my friends if you do not mind.
 // Can allow for amusing maps.
-procedure LoadMask;
+procedure LoadMask(mapName: shortstring);
 var tmpsurf: PSDL_Surface;
     p: PLongwordArray;
     x, y, cpX, cpY: Longword;
 begin
     tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+    if (tmpsurf = nil) and (mapName <> '') then
+        tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName +'/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+
     if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
     begin
         cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
@@ -1156,7 +1159,7 @@ begin
         if SDL_MustLock(tmpsurf) then
             SDL_UnlockSurface(tmpsurf);
     end;
-    if (tmpsurf <> nil) then 
+    if (tmpsurf <> nil) then
         SDL_FreeSurface(tmpsurf);
     tmpsurf:= nil;
 end;
@@ -1165,22 +1168,35 @@ procedure LoadMap;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
     f: textfile;
+    mapName: shortstring = '';
 begin
 isMap:= true;
 WriteLnToConsole('Loading land from file...');
 AddProgress;
-tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then
+begin
+    mapName:= ExtractFileName(Pathz[ptMapCurrent]);
+    tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+end;
 TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimensions too big!', true);
 
 // unC0Rr - should this be passed from the GUI? I am not sure which layer does what
 s:= Pathz[ptMapCurrent] + '/map.cfg';
 WriteLnToConsole('Fetching map HH limit');
+{$I-}
 Assign(f, s);
 filemode:= 0; // readonly
 Reset(f);
+if IOResult <> 0 then
+begin
+    s:= Pathz[ptMissionMaps] + '/' + mapName + '/map.cfg';
+    Assign(f, s);
+    Reset(f);
+end;
 Readln(f);
 if not eof(f) then Readln(f, MaxHedgehogs);
-
+{$I+}
 if (MaxHedgehogs = 0) then MaxHedgehogs:= 18;
 
 playHeight:= tmpsurf^.h;
@@ -1198,7 +1214,7 @@ BlitImageAndGenerateCollisionInfo(
     tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-LoadMask;
+LoadMask(mapname);
 end;
 
 procedure GenMap;
@@ -1208,11 +1224,11 @@ begin
 
     LoadThemeConfig;
     isMap:= false;
-    
+
     // is this not needed any more? let's hope setlength sets also 0s
     //if ((GameFlags and gfForts) <> 0) or (Pathz[ptMapCurrent] <> '') then
     //    FillChar(Land,SizeOf(TCollisionArray),0);*)
-        
+
     if (GameFlags and gfForts) = 0 then
         if Pathz[ptMapCurrent] <> '' then
             LoadMap
@@ -1292,9 +1308,9 @@ if hasBorder then
 if (GameFlags and gfDisableGirders) <> 0 then hasGirders:= false;
 
 if ((GameFlags and gfForts) = 0)
-    and ((GameFlags and gfDisableLandObjects) = 0)
     and (Pathz[ptMapCurrent] = '')
-    then AddObjects;
+    then AddObjects
+else AddProgress();
 
 FreeLandObjects;
 

@@ -1,10 +1,23 @@
-//
-//  SettingsViewController.m
-//  hwengine
-//
-//  Created by Vittorio on 08/01/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
+/*
+ * Hedgewars-iOS, a Hedgewars port for iOS devices
+ * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 08/01/2010.
+ */
+
 
 #import "GeneralSettingsViewController.h"
 #import "CommodityFunctions.h"
@@ -25,7 +38,7 @@
 
 -(void) viewWillAppear:(BOOL)animated {
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
-    
+
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
     self.settingsDictionary = dictionary;
     [dictionary release];
@@ -34,7 +47,7 @@
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];    
+    [super viewWillDisappear:animated];
     [self.settingsDictionary writeToFile:SETTINGS_FILE() atomically:YES];
 }
 
@@ -42,7 +55,7 @@
 -(void) switchValueChanged:(id) sender {
     UISwitch *theSwitch = (UISwitch *)sender;
     UISwitch *theOtherSwitch = nil;
-    
+
     switch (theSwitch.tag) {
         case 10:    //soundSwitch
             // this turn off also the switch below
@@ -62,6 +75,9 @@
             break;
         case 30:    //alternateSwitch
             [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];
+            break;
+        case 60:    //getReady
+            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"menu"];
             break;
         default:
             DLog(@"Wrong tag");
@@ -85,15 +101,16 @@
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case 0:     // user and pass
-            return 2;
+            return 1;   // set 2 here for the password field
             break;
         case 1:     // audio
             return 2;
             break;
-        case 2:     // alternate damage
-            return 1;
+        case 2:     // other stuff
+            return 2;
             break;
         default:
+            DLog(@"Nope");
             break;
     }
     return 0;
@@ -103,7 +120,7 @@
     NSString *sectionTitle = nil;
     switch (section) {
         case 0:
-            sectionTitle = NSLocalizedString(@"Network Configuration", @"");
+            sectionTitle = NSLocalizedString(@"Main Configuration", @"");
             break;
         case 1:
             sectionTitle = NSLocalizedString(@"Audio Preferences", @"");
@@ -121,49 +138,52 @@
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier0 = @"Cell0";
     static NSString *cellIdentifier1 = @"Cell1";
+    static NSString *cellIdentifier2 = @"Cell2";
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
-    
+
     UITableViewCell *cell = nil;
     EditableCellView *editableCell = nil;
-    if (section == 0) {
-        editableCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:cellIdentifier0];
-        if (nil == editableCell) {
-            editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier0] autorelease];
-            editableCell.minimumCharacters = 0;
-            editableCell.delegate = self;
-            editableCell.textField.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-            editableCell.textField.textColor = [UIColor lightGrayColor];
-        }
-        
-        if (row == 0) {
-            editableCell.titleLabel.text = NSLocalizedString(@"Nickname","from the settings table");
-            editableCell.textField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"");
-            editableCell.textField.text = [self.settingsDictionary objectForKey:@"username"];
-            editableCell.textField.secureTextEntry = NO;
-            editableCell.tag = 40;
-        } else {
-            editableCell.titleLabel.text = NSLocalizedString(@"Password","from the settings table");
-            editableCell.textField.placeholder = NSLocalizedString(@"Insert your password",@"");
-            editableCell.textField.text = [self.settingsDictionary objectForKey:@"password"];
-            editableCell.textField.secureTextEntry = YES;
-            editableCell.tag = 50;
-        }
-        
-        editableCell.accessoryView = nil;
-        cell = editableCell;
-    } else {
-        cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier1];
-        if (nil == cell) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier1] autorelease];
-            UISwitch *theSwitch = [[UISwitch alloc] init];
-            [theSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.accessoryView = theSwitch;
-            [theSwitch release];
-        }
-        
-        UISwitch *switchContent = (UISwitch *)cell.accessoryView;
-        if (section == 1) {
+    UISwitch *switchContent = nil;
+    switch(section) {
+        case 0:
+            editableCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:cellIdentifier0];
+            if (nil == editableCell) {
+                editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier0] autorelease];
+                editableCell.minimumCharacters = 0;
+                editableCell.delegate = self;
+                editableCell.textField.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+                editableCell.textField.textColor = [UIColor lightGrayColor];
+            }
+            
+            if (row == 0) {
+                editableCell.titleLabel.text = NSLocalizedString(@"Nickname","from the settings table");
+                editableCell.textField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"");
+                editableCell.textField.text = [self.settingsDictionary objectForKey:@"username"];
+                editableCell.textField.secureTextEntry = NO;
+                editableCell.tag = 40;
+            } else {
+                editableCell.titleLabel.text = NSLocalizedString(@"Password","from the settings table");
+                editableCell.textField.placeholder = NSLocalizedString(@"Insert your password",@"");
+                editableCell.textField.text = [self.settingsDictionary objectForKey:@"password"];
+                editableCell.textField.secureTextEntry = YES;
+                editableCell.tag = 50;
+            }
+            
+            editableCell.accessoryView = nil;
+            cell = editableCell;
+            break;
+        case 1:
+            cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier1];
+            if (nil == cell) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier1] autorelease];
+                UISwitch *theSwitch = [[UISwitch alloc] init];
+                [theSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
+                cell.accessoryView = theSwitch;
+                [theSwitch release];
+            }
+            
+            switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
                 cell.textLabel.text = NSLocalizedString(@"Sound", @"");
                 switchContent.on = [[self.settingsDictionary objectForKey:@"sound"] boolValue];
@@ -173,61 +193,40 @@
                 switchContent.on = [[self.settingsDictionary objectForKey:@"music"] boolValue];
                 switchContent.tag = 20;
             }
-        } else {
-            cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
-            switchContent.on = [[self.settingsDictionary objectForKey:@"alternate"] boolValue];
-            switchContent.tag = 30;
-        }
+            break;
+        case 2:
+            cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier2];
+            if (nil == cell) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier2] autorelease];
+                UISwitch *theSwitch = [[UISwitch alloc] init];
+                [theSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
+                cell.accessoryView = theSwitch;
+                [theSwitch release];
+            }
+            
+            switchContent = (UISwitch *)cell.accessoryView;
+            if (row == 0) {
+                cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
+                cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit a hedgehog suffers", @"");
+                switchContent.on = [[self.settingsDictionary objectForKey:@"alternate"] boolValue];
+                switchContent.tag = 30;
+            } else {
+                cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
+                cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
+                switchContent.on = [[self.settingsDictionary objectForKey:@"menu"] boolValue];
+                switchContent.tag = 60;
+            }
+            break;
+        default:
+            break;
     }
     
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.imageView.image = nil;
-    
+
     return cell;
 }
-
-/*
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *containerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 50)] autorelease];
-    UILabel *headerLabel = [[[UILabel alloc] initWithFrame:CGRectMake(10, 20, 300, 40)] autorelease];
-    headerLabel.textColor = [UIColor lightGrayColor];
-    headerLabel.shadowColor = [UIColor blackColor];
-    headerLabel.shadowOffset = CGSizeMake(0, 1);
-    headerLabel.font = [UIFont boldSystemFontOfSize:20];
-    headerLabel.backgroundColor = [UIColor clearColor];
-
-    switch (section) {
-        case kNetworkFields:
-            headerLabel.text = NSLocalizedString(@"Network Configuration", @"");
-            break;
-        case kAudioFields:
-            headerLabel.text = NSLocalizedString(@"Audio Preferences", @"");
-            break;
-        case kOtherFields:
-            headerLabel.text = NSLocalizedString(@"Other Settings", @"");
-            break;
-        default:
-            NSLog(@"Warning: unset case value in titleForHeaderInSection!");
-            headerLabel.text = @"!";
-            break;
-    }
-    
-    [containerView addSubview:headerLabel];
-    return containerView;
-}
-
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (kAudioFields == [indexPath section] && 2 == [indexPath row])
-        return volumeCell.frame.size.height;
-    else
-        return table.rowHeight;
-}
-
--(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 57.0;
-}
-*/
 
 #pragma mark -
 #pragma mark Table view delegate

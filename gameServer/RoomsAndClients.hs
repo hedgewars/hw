@@ -13,8 +13,8 @@ module RoomsAndClients(
     lobbyId,
     moveClientToLobby,
     moveClientToRoom,
-    clientRoom,
     clientRoomM,
+    clientExists,
     client,
     room,
     client'sM,
@@ -82,10 +82,10 @@ newRoomsAndClients r = do
 
 
 roomAddClient :: ClientIndex -> Room r -> Room r
-roomAddClient cl room = room{roomClients' = cl : roomClients' room}
+roomAddClient cl room = let cls = cl : roomClients' room; nr = room{roomClients' = cls} in cls `seq` nr `seq` nr
 
 roomRemoveClient :: ClientIndex -> Room r -> Room r
-roomRemoveClient cl room = room{roomClients' = filter (/= cl) $ roomClients' room}
+roomRemoveClient cl room = let cls = filter (/= cl) $ roomClients' room; nr = room{roomClients' = cls} in cls `seq` nr `seq` nr
 
 
 addRoom :: MRoomsAndClients r c -> r -> IO RoomIndex
@@ -138,6 +138,9 @@ moveClientToLobby rnc ci = do
 moveClientToRoom :: MRoomsAndClients r c -> RoomIndex -> ClientIndex -> IO ()
 moveClientToRoom rnc ri ci = moveClientInRooms rnc lobbyId ri ci
 
+
+clientExists :: MRoomsAndClients r c -> ClientIndex -> IO Bool
+clientExists (MRoomsAndClients (_, clients)) (ClientIndex ci) = elemExists clients ci
 
 clientRoomM :: MRoomsAndClients r c -> ClientIndex -> IO RoomIndex
 clientRoomM (MRoomsAndClients (_, clients)) (ClientIndex ci) = liftM clientRoom' (clients `readElem` ci)

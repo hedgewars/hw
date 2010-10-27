@@ -71,16 +71,16 @@ var hideAmmoMenu: boolean;
     rightKey: boolean;
     leftKey: boolean;
     preciseKey: boolean;
-    
+
     backspaceKey: boolean;
     spaceKey: boolean;
     enterKey: boolean;
     tabKey: boolean;
-    
+
     chatAction: boolean;
     pauseAction: boolean;
-    
-{$IFDEF IPHONEOS}    
+
+{$IFDEF IPHONEOS}
 procedure setiPhoneBinds;
 {$ENDIF}
 {$ENDIF}
@@ -90,7 +90,7 @@ uses uTeams, uConsole, uMisc;
 
 var tkbd, tkbdn: TKeyboardState;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
-    
+
 function KeyNameToCode(name: shortstring): word;
 var code: Word;
 begin
@@ -247,7 +247,7 @@ for j:= 0 to Pred(ControllerNumControllers) do
         inc(k, 1);
         end;
     end;
-    
+
 for t:= 0 to cKeyMaxIndex do
     tkbd[i]:= tkbdn[i]
 end;
@@ -355,6 +355,7 @@ end;
 procedure SetBinds(var binds: TBinds);
 begin
 {$IFDEF IPHONEOS}
+    binds:= binds; // avoid hint
     CurrentBinds:= DefaultBinds;
 {$ELSE}
     CurrentBinds:= binds;
@@ -386,7 +387,7 @@ begin
 
     tkbdn[44]:= ord(chatAction);
     tkbdn[55]:= ord(pauseAction);
-    
+
     // set to false the keys that only need one stoke
     leftClick:= false;
     middleClick:= false;
@@ -395,7 +396,7 @@ begin
     tabKey:= false;
     enterKey:= false;
     backspaceKey:= false;
-    
+
     chatAction:= false;
     pauseAction:= false;
 end;
@@ -408,7 +409,7 @@ begin
 end;
 
 var Controller: array [0..5] of PSDL_Joystick;
-    
+
 procedure ControllerInit;
 var i, j: Integer;
 begin
@@ -442,12 +443,12 @@ if ControllerNumControllers > 0 then
             WriteLnToConsole('* Number of hats: ' + inttostr(ControllerNumHats[j]));
             WriteLnToConsole('* Number of buttons: ' + inttostr(ControllerNumButtons[j]));
             ControllerEnabled:= 1;
-            
+
             if ControllerNumAxes[j] > 20 then ControllerNumAxes[j]:= 20;
             //if ControllerNumBalls[j] > 20 then ControllerNumBalls[j]:= 20;
             if ControllerNumHats[j] > 20 then ControllerNumHats[j]:= 20;
             if ControllerNumButtons[j] > 20 then ControllerNumButtons[j]:= 20;
-            
+
             // reset all buttons/axes
             for i:= 0 to pred(ControllerNumAxes[j]) do
                 ControllerAxes[j][i]:= 0;
@@ -465,7 +466,7 @@ if ControllerNumControllers > 0 then
     // enable event generation/controller updating
     SDL_JoystickEventState(1);
     end
-else    
+else
     WriteLnToConsole('Not using any game controller');
 end;
 
@@ -500,7 +501,7 @@ begin
     coeff:= 5;
 {$IFDEF HWLIBRARY}
     // this function is called by HW_allKeysUp so be careful
-    
+
     // mouse emulation
     leftClick:= false;
     middleClick:= false;

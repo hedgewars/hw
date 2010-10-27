@@ -34,26 +34,26 @@ void openal_playsound (unsigned int index) {
     ALfloat SourceVelocity[] = { 0.0, 0.0, 0.0 };
     ALint state;
     int i, j;
-    
+
     if (openal_ready() == AL_TRUE && index < cache_size) {
         // check if sound has already a source
         if (the_sounds[index].source_index != -1) {
             // it has a source, check it's not playing
             alGetSourcei(Sources[the_sounds[index].source_index], AL_SOURCE_STATE, &state);
-            if (state != AL_PLAYING && state != AL_PAUSED) { 	 
+            if (state != AL_PLAYING && state != AL_PAUSED) {
                 // it is not being played, so we can use it safely
-	            needsSource = AL_FALSE; 		 
+	            needsSource = AL_FALSE;
             }
             // else it is being played, so we have to allocate a new source for this buffer
         }
-        
+
         if (needsSource) {
 #ifdef DEBUG
             fprintf(stderr,"(Bridge Debug) - looking for a source for sound %d\n", index);
 #endif
             for (i = 0; i < sources_number; i++) {
                 // let's iterate on Sources until we find a source that is not playing
-                alGetSourcei(Sources[i], AL_SOURCE_STATE, &state); 	 
+                alGetSourcei(Sources[i], AL_SOURCE_STATE, &state);
                 if (state != AL_PLAYING && state != AL_PAUSED) {
                     // let's iterate on the_sounds until we find the sound using that source
                     for (j = 0; j < cache_size; j++) {
@@ -66,11 +66,11 @@ void openal_playsound (unsigned int index) {
                     break;
                 }
             }
-            
+
             if (i == sources_number) {
                 // this means all sources are busy
             }
-            
+
             // set source properties that it will use when it's in playback
             alSourcei (Sources[i], AL_BUFFER,   the_sounds[index].buffer);
             alSourcef (Sources[i], AL_PITCH,    1.0f);
@@ -78,16 +78,16 @@ void openal_playsound (unsigned int index) {
             alSourcefv(Sources[i], AL_POSITION, SourcePosition);
             alSourcefv(Sources[i], AL_VELOCITY, SourceVelocity);
             alSourcei (Sources[i], AL_LOOPING,  0);
-            
+
             if (AL_NO_ERROR != alGetError()) {
                 fprintf(stderr,"(Bridge ERROR) - failed to set Source properties\n");
                 return;
             }
             the_sounds[index].source_index = i;
         }
-        
+
         alSourcePlay(Sources[the_sounds[index].source_index]);
-        
+
         if (AL_NO_ERROR != alGetError()) {
             fprintf(stderr,"(Bridge Warning) - failed to play sound %d\n", index);
             return;

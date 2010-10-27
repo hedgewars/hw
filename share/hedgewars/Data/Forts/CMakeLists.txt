@@ -1,4 +1,4 @@
-file(GLOB FortSprites *.png) 
+file(GLOB FortSprites *L.png *R.png) 
 
 install(FILES
 	${FortSprites}

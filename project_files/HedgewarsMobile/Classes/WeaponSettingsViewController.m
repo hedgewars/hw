@@ -1,10 +1,23 @@
-//
-//  WeaponSettingsViewController.m
-//  HedgewarsMobile
-//
-//  Created by Vittorio on 19/04/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
+/*
+ * Hedgewars-iOS, a Hedgewars port for iOS devices
+ * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 19/04/2010.
+ */
+
 
 #import "WeaponSettingsViewController.h"
 #import "CommodityFunctions.h"
@@ -21,24 +34,24 @@
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
-    
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit",@"from the weapon panel")
+
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Edit",@"")
                                                                    style:UIBarButtonItemStyleBordered
                                                                   target:self
                                                                   action:@selector(toggleEdit:)];
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
-    
+
 }
 
 -(void) viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
-    
+
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
     NSMutableArray *array = [[NSMutableArray alloc] initWithArray:contentsOfDir copyItems:YES];
     self.listOfWeapons = array;
     [array release];
-    
+
     [self.tableView reloadData];
 }
 
@@ -46,7 +59,7 @@
 -(void) toggleEdit:(id) sender {
     BOOL isEditing = self.tableView.editing;
     [self.tableView setEditing:!isEditing animated:YES];
-    
+
     if (isEditing) {
         [self.navigationItem.rightBarButtonItem setTitle:NSLocalizedString(@"Edit",@"from the scheme panel")];
         [self.navigationItem.rightBarButtonItem setStyle: UIBarButtonItemStyleBordered];
@@ -65,15 +78,15 @@
 
 -(void) addWeapon:(id) sender {
     NSString *fileName = [[NSString alloc] initWithFormat:@"Weapon %u.plist", [self.listOfWeapons count]];
-    
-    createWeaponNamed([fileName stringByDeletingPathExtension]);
-    
+
+    createWeaponNamed([fileName stringByDeletingPathExtension], 0);
+
     [self.listOfWeapons addObject:fileName];
     [fileName release];
-    
+
     // order the array alphabetically, so schemes will keep their position
     [self.listOfWeapons sortUsingSelector:@selector(compare:)];
-    
+
     [self.tableView reloadData];
 }
 
@@ -89,28 +102,28 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    
-    NSUInteger row = [indexPath row]; 
-    NSString *rowString = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension]; 
-    cell.textLabel.text = rowString; 
+
+    NSUInteger row = [indexPath row];
+    NSString *rowString = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension];
+    cell.textLabel.text = rowString;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    
+
     return cell;
 }
 
 // delete the row and the file
 -(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSUInteger row = [indexPath row];
-    
+
     NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),[self.listOfWeapons objectAtIndex:row]];
     [[NSFileManager defaultManager] removeItemAtPath:schemeFile error:NULL];
     [schemeFile release];
-    
+
     [self.listOfWeapons removeObjectAtIndex:row];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
@@ -121,10 +134,10 @@
     if (childController == nil) {
         childController = [[SingleWeaponViewController alloc] initWithStyle:UITableViewStyleGrouped];
     }
-    
+
     NSInteger row = [indexPath row];
     NSString *selectedWeaponFile = [self.listOfWeapons objectAtIndex:row];
-    
+
     // this must be set so childController can load the correct plist
     childController.weaponName = [selectedWeaponFile stringByDeletingPathExtension];
     [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];

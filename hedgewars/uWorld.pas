@@ -39,7 +39,7 @@ var FollowGear: PGear;
     cntTicks: LongWord;
 {$ENDIF}
     cOffsetY: LongInt;
-    
+
 procedure initModule;
 procedure freeModule;
 
@@ -103,7 +103,7 @@ var i, t: LongInt;
         AddGoal:= s;
     end;
 begin
-    missionTimer:= 0;
+missionTimer:= 0;
 
 if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
    begin
@@ -197,7 +197,8 @@ var x, y, i, t, g: LongInt;
     Slot, Pos, STurns: LongInt;
     Ammo: PHHAmmo;
 begin
-if  (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then bShowAmmoMenu:= false;
+if (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then
+    bShowAmmoMenu:= false;
 if bShowAmmoMenu then
    begin
    FollowGear:= nil;
@@ -254,7 +255,7 @@ inc(y, BORDERSIZE);
 for i:= 0 to cMaxSlotIndex do
     if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
         begin
-        if (cScreenHeight - CursorPoint.Y >= y) and (cScreenHeight - CursorPoint.Y < y + AMSlotSize) then Slot:= i;
+        if (cScreenHeight - CursorPoint.Y >= y) and (cScreenHeight - CursorPoint.Y <= y + AMSlotSize) then Slot:= i;
         inc(SlotsNum);
         DrawSprite(sprAMBorderVertical, x - BORDERSIZE, y, 0);
         t:= 0;
@@ -274,7 +275,7 @@ for i:= 0 to cMaxSlotIndex do
                     DrawSprite(sprAMAmmos, x + g * AMSlotSize, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
                 if (Slot = i)
                 and (CursorPoint.X >= x + g * AMSlotSize)
-                and (CursorPoint.X < x + (g + 1) * AMSlotSize) then
+                and (CursorPoint.X <= x + (g + 1) * AMSlotSize) then
                     begin
                     if (STurns < 0) then DrawSprite(sprAMSlot, x + g * AMSlotSize, y, 0);
                     Pos:= t;
@@ -288,7 +289,7 @@ for i:= 0 to cMaxSlotIndex do
         DrawSprite(sprAMBorderVertical, x + AMWidth - AMxOffset, y, 1);
         inc(y, AMSlotSize);
         end;
-        
+
 DrawSprite(sprAMCorners, x - BORDERSIZE, y, 2);
 for i:= 0 to cMaxSlotAmmoIndex do
 	DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 1);
@@ -310,7 +311,7 @@ DrawSprite(sprAMBorderVertical, x + AMWidth - AMxOffset, y, 1);
 for i:= cMaxSlotIndex downto 0 do
     if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
         begin
-        if (cScreenHeight - CursorPoint.Y >= y - AMSlotSize) and (cScreenHeight - CursorPoint.Y < y) then Slot:= i;
+        if (cScreenHeight - CursorPoint.Y >= y - AMSlotSize) and (cScreenHeight - CursorPoint.Y <= y) then Slot:= i;
         dec(y, AMSlotSize);
         inc(SlotsNum);
         DrawSprite(sprAMBorderVertical, x - BORDERSIZE, y, 0);
@@ -333,7 +334,7 @@ for i:= cMaxSlotIndex downto 0 do
                     DrawSprite(sprAMAmmos, x + g * AMSlotSize, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
                 if (Slot = i)
                 and (CursorPoint.X >= x + g * AMSlotSize)
-                and (CursorPoint.X < x + (g + 1) * AMSlotSize) then
+                and (CursorPoint.X <= x + (g + 1) * AMSlotSize) then
                     begin
                     if (STurns < 0) then DrawSprite(sprAMSlot, x + g * AMSlotSize, y, 0);
                     Pos:= t;
@@ -346,7 +347,7 @@ for i:= cMaxSlotIndex downto 0 do
             DrawSprite(sprAMSlot, x + g * AMSlotSize, y, 1);
         DrawSprite(sprAMBorderVertical, x + AMWidth - AMxOffset, y, 1);
         end;
-        
+
 dec(y, BORDERSIZE);
 DrawSprite(sprAMCorners, x - BORDERSIZE, y, 0);
 for i:= 0 to cMaxSlotAmmoIndex + 1 do
@@ -357,12 +358,13 @@ DrawSprite(sprAMCorners, x + AMWidth - AMxOffset, y, 1);
 if (Pos >= 0) then
     begin
     if (Ammo^[Slot, Pos].Count > 0) and (Ammo^[Slot, Pos].AmmoType <> amNothing) then
+        begin
         if (amSel <> Ammo^[Slot, Pos].AmmoType) or (WeaponTooltipTex = nil) then
             begin
             amSel:= Ammo^[Slot, Pos].AmmoType;
             RenderWeaponTooltip(amSel)
             end;
-            
+
 {$IFDEF IPHONEOS}
         DrawTexture(cScreenWidth div 2 - (AMWidth - 10) + AMxShift, AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
 
@@ -370,7 +372,6 @@ if (Pos >= 0) then
             DrawTexture(cScreenWidth div 2 + AMxOffset - 45, AMyOffset - 25, CountTexz[Ammo^[Slot, Pos].Count]);
 {$ELSE}
         DrawTexture(cScreenWidth div 2 - (AMWidth - 10) + AMxShift, cScreenHeight - AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
-
         if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
             DrawTexture(cScreenWidth div 2 + AMxOffset - 45, cScreenHeight - AMyOffset - 25, CountTexz[Ammo^[Slot, Pos].Count]);
 {$ENDIF}
@@ -383,6 +384,7 @@ if (Pos >= 0) then
             FreeWeaponTooltip;
             exit
             end;
+       end
     end
 else
     FreeWeaponTooltip;
@@ -409,7 +411,7 @@ begin
 
     lw:= cScreenWidth / cScaleFactor;
     lh:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 + 16;
-    
+
     // Water
     r.y:= OffsetY + WorldDy + cWaterLine;
     if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine then
@@ -516,14 +518,14 @@ begin
         rh:= SpritesData[sprR].Height * SpritesData[spr].Texture^.Scale;
         dec(Shift, w div 2);
         DrawTexture(Shift, WorldDy + LAND_HEIGHT + OffsetY - h, SpritesData[spr].Texture, SpritesData[spr].Texture^.Scale);
-    
+
         i:= Shift - lw;
         while i >= -sw - lw do
         begin
             DrawTexture(i, WorldDy + LAND_HEIGHT + OffsetY - lh, SpritesData[sprL].Texture, SpritesData[sprL].Texture^.Scale);
             dec(i, lw);
         end;
-        
+
         i:= Shift + w;
         while i <= sw do
         begin
@@ -535,17 +537,16 @@ end;
 
 
 procedure DrawWorld(Lag: LongInt);
-var cc: array[0..3] of GLfloat;
 begin
     if not isPaused then
     begin
         if ZoomValue < zoom then
         begin
             zoom:= zoom - 0.002 * Lag;
-            if ZoomValue > zoom then 
+            if ZoomValue > zoom then
                 zoom:= ZoomValue
-        end 
-    else 
+        end
+        else
         if ZoomValue > zoom then
         begin
             zoom:= zoom + 0.002 * Lag;
@@ -706,7 +707,6 @@ var i, t: LongInt;
     s: string[15];
     highlight: Boolean;
     offset, offsetX, offsetY, screenBottom: LongInt;
-    scale: GLfloat;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
     if (cReducedQuality and rqNoBackground) = 0 then
@@ -727,7 +727,7 @@ begin
     end;
 
     DrawVisualGears(0);
-    
+
     if (cReducedQuality and rq2DWater) = 0 then
     begin
         // Waves
@@ -765,8 +765,8 @@ begin
                 tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
                 for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
                     DrawSprite(sprPower,
-                            hwRound(Gear^.X) + GetLaunchX(Ammo^[CurSlot, CurAmmo].AmmoType, hwSign(Gear^.dX), Gear^.Angle) + round(WorldDx + tdx * (24 + i * 2)) - 16,
-                            hwRound(Gear^.Y) + GetLaunchY(Ammo^[CurSlot, CurAmmo].AmmoType, Gear^.Angle) + round(WorldDy + tdy * (24 + i * 2)) - 16,
+                            int64(hwRound(Gear^.X)) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + round(WorldDx + tdx * (24 + i * 2)) - 16,
+                            int64(hwRound(Gear^.Y)) + GetLaunchY(CurAmmoType, Gear^.Angle) + round(WorldDy + tdy * (24 + i * 2)) - 16,
                             i)
                 end
         end;
@@ -806,7 +806,7 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     begin
     with PHedgehog(CurrentHedgehog)^ do
         begin
-        if (Ammo^[CurSlot, CurAmmo].AmmoType = amBee) then
+        if (CurAmmoType = amBee) then
             DrawRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
         else
             DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
@@ -825,9 +825,13 @@ offsetX:= cScreenHeight - 13;
 offsetX:= 48;
 {$ENDIF}
 offsetY:= cOffsetY;
-if TurnTimeLeft <> 0 then
-   begin
-   i:= Succ(Pred(TurnTimeLeft) div 1000);
+if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) then
+    begin
+    if ReadyTimeLeft <> 0 then
+        i:= Succ(Pred(ReadyTimeLeft) div 1000)
+    else
+        i:= Succ(Pred(TurnTimeLeft) div 1000);
+   
    if i>99 then t:= 112
       else if i>9 then t:= 96
                   else t:= 80;
@@ -851,7 +855,7 @@ if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
     DrawSprite(sprFrame, -cScreenWidth div 2 + t, 8, 1);
     dec(t, 32);
     // 1 ms
-    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10); 
+    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
     dec(t, 32);
     i:= i div 10;
     // 10 ms
@@ -914,16 +918,16 @@ for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
       highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
-      
+
       if highlight then
          Tint(Clan^.Color);
 
       // draw name
       DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY, NameTagTex);
-      
+
       // draw flag
       DrawTexture(-14, cScreenHeight + DrawHealthY, FlagTex);
-      
+
       // draw health bar
       r.x:= 0;
       r.y:= 0;
@@ -935,6 +939,13 @@ for t:= 0 to Pred(TeamsCount) do
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
       DrawFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY, @r, HealthTex);
+
+      // draw ai kill counter for gfAISurvival
+      if (GameFlags and gfAISurvival) <> 0 then begin
+          DrawTexture(TeamHealthBarWidth + 22, cScreenHeight + DrawHealthY,
+              AIKillsTex);
+      end;
+
       // if highlighted, draw flag and other contents again to keep their colors
       // this approach should be faster than drawing all borders one by one tinted or not
       if highlight then
@@ -1003,10 +1014,9 @@ DrawChat;
 
 if fastUntilLag then DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
-
-if not isFirstFrame and ((missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm)) then
+if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then
     begin
-    if missionTimer > 0 then dec(missionTimer, Lag);
+    if (ReadyTimeLeft = 0) and (missionTimer > 0) then dec(missionTimer, Lag);
     if missionTimer < 0 then missionTimer:= 0; // avoid subtracting below 0
     if missionTex <> nil then
         DrawCentered(0, min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
@@ -1019,8 +1029,6 @@ offsetX:= 8;
 offsetX:= 10;
 {$ENDIF}
 offsetY:= cOffsetY;
-
-// don't increment fps when drawing the right frame
 if (RM = rmDefault) or (RM = rmRightEye) then
 begin
     inc(Frames);
@@ -1110,7 +1118,7 @@ if ScreenFade <> sfNone then
             sfToBlack, sfFromBlack: Tint(0, 0, 0, ScreenFadeValue * 255 div 1000);
             sfToWhite, sfFromWhite: Tint($FF, $FF, $FF, ScreenFadeValue * 255 div 1000);
             end;
-        
+
         VertexBuffer[0].X:= -cScreenWidth;
         VertexBuffer[0].Y:= cScreenHeight;
         VertexBuffer[1].X:= -cScreenWidth;
@@ -1119,7 +1127,7 @@ if ScreenFade <> sfNone then
         VertexBuffer[2].Y:= 0;
         VertexBuffer[3].X:= cScreenWidth;
         VertexBuffer[3].Y:= cScreenHeight;
-         
+
         glDisable(GL_TEXTURE_2D);
 
         glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
@@ -1141,8 +1149,8 @@ if isCursorVisible then
      with CurrentHedgehog^ do
        if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
          begin
-         i:= Ammo^[CurSlot, CurAmmo].Pos;
-         with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
+         i:= GetAmmoEntry(CurrentHedgehog^)^.Pos;
+         with Ammoz[CurAmmoType] do
            if PosCount > 1 then
              DrawSprite(PosSprite, CursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - CursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
          end;
@@ -1155,7 +1163,7 @@ end;
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 begin
 //if Group in [capgrpGameState] then WriteLnToConsole(s);
-    if Captions[Group].Tex <> nil then 
+    if Captions[Group].Tex <> nil then
         FreeTexture(Captions[Group].Tex);
     Captions[Group].Tex:= nil;
 
@@ -1183,15 +1191,16 @@ end;
 
 if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
     if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
-        begin
+    begin
         FollowGear:= nil;
         prevPoint:= CursorPoint;
         exit
-        end
-        else begin
+    end
+    else
+    begin
         CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
         CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
-        end;
+    end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;
 if WorldDy < wdy then WorldDy:= wdy;
@@ -1199,7 +1208,7 @@ if WorldDy < wdy then WorldDy:= wdy;
 if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then exit;
 
 if AMxShift < AMWidth then
-    begin
+begin
 {$IFDEF IPHONEOS}
     if CursorPoint.X < cScreenWidth div 2 + AMxShift - AMWidth then CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMWidth;
     if CursorPoint.X > cScreenWidth div 2 + AMxShift - AMxOffset then CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMxOffset;
@@ -1214,50 +1223,56 @@ if AMxShift < AMWidth then
     prevPoint:= CursorPoint;
     if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
     exit
-    end;
+end;
 
 if isCursorVisible then
-    begin
+begin
     if (not CurrentTeam^.ExtDriven) and (GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
-        begin
+    begin
         SendIPCXY('P', CursorPoint.X - WorldDx, cScreenHeight - CursorPoint.Y - WorldDy);
         PrevSentPointTime:= GameTicks
+    end;
+    EdgesDist:= cCursorEdgesDist
+end
+else
+    EdgesDist:= cGearScrEdgesDist;
+
+// this generates the border around the screen that moves the camera when cursor is near it
+if isCursorVisible or (FollowGear <> nil) then
+begin
+    if CursorPoint.X < - cScreenWidth div 2 + EdgesDist then
+    begin
+        WorldDx:= WorldDx - CursorPoint.X - cScreenWidth div 2 + EdgesDist;
+        CursorPoint.X:= - cScreenWidth div 2 + EdgesDist
+    end
+    else
+        if CursorPoint.X > cScreenWidth div 2 - EdgesDist then
+        begin
+            WorldDx:= WorldDx - CursorPoint.X + cScreenWidth div 2 - EdgesDist;
+            CursorPoint.X:= cScreenWidth div 2 - EdgesDist
         end;
+    if CursorPoint.Y < EdgesDist then
+    begin
+        WorldDy:= WorldDy + CursorPoint.Y - EdgesDist;
+        CursorPoint.Y:= EdgesDist
+    end
+    else
+        if CursorPoint.Y > cScreenHeight - EdgesDist then
+        begin
+           WorldDy:= WorldDy + CursorPoint.Y - cScreenHeight + EdgesDist;
+           CursorPoint.Y:= cScreenHeight - EdgesDist
+        end;
+end
+else
+    if cHasFocus then
+    begin
+        WorldDx:= WorldDx - CursorPoint.X + prevPoint.X;
+        WorldDy:= WorldDy + CursorPoint.Y - prevPoint.Y;
+        CursorPoint.X:= 0;
+        CursorPoint.Y:= cScreenHeight div 2;
     end;
 
-if isCursorVisible or (FollowGear <> nil) then
-   begin
-   if isCursorVisible then EdgesDist:= cCursorEdgesDist
-                      else EdgesDist:= cGearScrEdgesDist;
-   if CursorPoint.X < - cScreenWidth div 2 + EdgesDist then
-         begin
-         WorldDx:= WorldDx - CursorPoint.X - cScreenWidth div 2 + EdgesDist;
-         CursorPoint.X:= - cScreenWidth div 2 + EdgesDist
-         end else
-      if CursorPoint.X > cScreenWidth div 2 - EdgesDist then
-         begin
-         WorldDx:= WorldDx - CursorPoint.X + cScreenWidth div 2 - EdgesDist;
-         CursorPoint.X:= cScreenWidth div 2 - EdgesDist
-         end;
-      if CursorPoint.Y < EdgesDist then
-         begin
-         WorldDy:= WorldDy + CursorPoint.Y - EdgesDist;
-         CursorPoint.Y:= EdgesDist
-         end else
-      if CursorPoint.Y > cScreenHeight - EdgesDist then
-         begin
-         WorldDy:= WorldDy + CursorPoint.Y - cScreenHeight + EdgesDist;
-         CursorPoint.Y:= cScreenHeight - EdgesDist
-         end;
-   end else
-   if cHasFocus then
-      begin
-      WorldDx:= WorldDx - CursorPoint.X + prevPoint.X;
-      WorldDy:= WorldDy + CursorPoint.Y - prevPoint.Y;
-      CursorPoint.X:= 0;
-      CursorPoint.Y:= cScreenHeight div 2;
-      end;
-
+// this moves the camera according to CursorPoint X and Y
 prevPoint:= CursorPoint;
 if cHasFocus then SDL_WarpMouse(CursorPoint.X + (cScreenWidth shr 1), cScreenHeight - CursorPoint.Y);
 if WorldDy > LAND_HEIGHT + 1024 then WorldDy:= LAND_HEIGHT + 1024;
@@ -1274,7 +1289,7 @@ r.h:= 32;
 
 if time = 0 then time:= 5000;
 missionTimer:= time;
-if missionTex <> nil then 
+if missionTex <> nil then
     FreeTexture(missionTex);
 missionTex:= nil;
 
@@ -1316,7 +1331,7 @@ begin
     Frames:= 0;
     WorldDx:= -512;
     WorldDy:= -256;
-    
+
     FPS:= 0;
     CountTicks:= 0;
     SoundTimerTicks:= 0;
@@ -1325,7 +1340,7 @@ begin
     missionTimer:= 0;
     missionTex:= nil;
     cOffsetY:= 0;
-    
+
     FillChar(Captions, sizeof(Captions), 0)
 end;
 

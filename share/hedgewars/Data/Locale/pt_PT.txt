@@ -42,6 +42,14 @@
 00:39=Disco Voador
 00:40=Coquetail Molotov
 00:41=Passarito
+00:42=Arma de Portais Portátil
+00:43=Ataque Piano
+00:44=Limburger Venho
+00:45=Arma Seno (beta)
+00:46=Lança-chamas
+00:47=Mina Pegajosa
+00:48=Martelo
+00:49=Ressuscitador
 
 01:00=Vamos lutar!
 01:01=Ronda empatada
@@ -49,12 +57,15 @@
 01:03=Volume %1%
 01:04=Pausado
 01:05=Deseja realmente sair (Y/Esc)?
-01:06=Morte súbita!
+01:06=Morte Súbita!
 01:07=%1 restante
 01:08=Combustível
 01:09=A sincronizar...
 01:10=Usar este utilitário não termina o turno!
 01:11=Esta arma ou utilitário ainda não está disponível!
+01:12=Último turno até Morte Súbita!
+01:13=%1 turnos até Morte Súbita!
+01:14=Prepara-te!
 
 ; Event messages
 ; Hog (%1) died
@@ -62,7 +73,7 @@
 02:00=%1 não viu a luz ao fundo do túnel!
 02:00=%1 não esperava por esta!
 02:00=%1 acena um adeus!
-02:00=%1 foi para um local melhor!
+02:00=%1 foi para um lugar melhor!
 02:00=%1 conhece o seu criador!
 02:00=%1 não aguentou mais!
 02:00=%1 cumpriu o seu dever!
@@ -88,7 +99,7 @@
 02:00=%1 desligou-se da vida
 02:00=%1 falhou
 02:00=Pobrezinho do %1...
-02:00=%1 prefere wormux
+02:00=%1 prefere Wormux
 02:00=%1 esteve a bloquear tiros com a tromba
 02:00=%1 é um herói agora... no céu
 02:00=%1 encontrou o seu descanso
@@ -101,9 +112,9 @@
 02:00=%1 deixou de existir
 02:00=Diga adeus a %1
 02:00=Não há mais esperança para %1
-02:00=%1 vê o túnel final
-02:00=A vida de %1 foi curta
 02:00=%1 desligou-se da Matrix
+02:00=A vida de %1 foi curta
+02:00=%1 sofreu combustão espontânea
 02:00=%1 passou à história
 02:00=%1 está morto que nem uma pedra
 02:00=%1 foi-se
@@ -130,16 +141,16 @@
 02:01=%1 está encharcado até aos ossos
 02:01=%1 esqueceu-se do salva-vidas
 02:01=%1 faz splish splash splish
-02:01=%1 está a dormir com os peixinhos
+02:01=%1 foi dormir com os peixinhos
 02:01=%1 nunca gostou de aquários
-02:01=%1 disse que tinha sede
+02:01=%1 tinha sede
 02:01=O mar reclama %1
 02:01=%1 está perdido no mar
 02:01=%1 devia ter trazido o equipamento de mergulho
 02:01=%1 vai ter um funeral no mar
 02:01=%1 está com aquela sensação de se estar a afundar
 02:01=%1 pratica costas
-02:01=%1 vai à procura do Titanic
+02:01=%1 foi à procura do Titanic
 02:01=%1 não é Jesus
 02:01=%1 anda à procura do Nemo
 02:01=%1 tinha uma fuga de água
@@ -153,8 +164,8 @@
 02:01=%1 foi visitar o Oceanário
 02:01=%1 encontrou a Atlântida perdida
 02:01=%1 inscreve-se no papel principal do Bioshock 3
-02:01=O teu pato insuflável ficou triste, %1
-02:01=%1 devia ter comprado uma mota aquática
+02:01=O teu pato insuflável ficou triste %1
+02:01=%1 devia ter comprado uma mota de água
 02:01=%1 não gosta de desportos náuticos
 02:01=%1 adora ver bolhinhas
 02:01=%1 não aterrou na jangada
@@ -232,7 +243,7 @@
 02:05=Médico!
 02:05=Primeiros-socorros atirados dos céus!
 02:05=Um pacote de vida para ti
-02:05=Energia.. em forma de caixa!
+02:05=Energia... em forma de caixa!
 02:05=O doutor chama
 02:05=Ligaduras frescas!
 02:05=Isto irá fazer-te sentir melhor
@@ -258,7 +269,7 @@
 02:06=Deu-me um trabalhão enfiar a arma nesta caixa
 02:06=Brinquedos destrutivos a cair do paraíso
 02:06=Aviso! Conteúdo volátil
-02:06=Agarrar ou rebentar, é contigo
+02:06=Apanhar ou rebentar, é contigo
 02:06=Coisas giras!
 02:06=Mmmmm Munições
 02:06=Uma caixa de poder destrutivo
@@ -272,21 +283,21 @@
 
 ; New utility crate
 02:07=Hora das ferramentas!
-02:07=Isto poderá ser útil...
+02:07=Isto pode ser útil...
 02:07=Utilidades!
 02:07=Utilize esta caixa
 02:07=Cuidado aí em baixo
 02:07=Mais ferramentas!
 02:07=Ferramentas para ti!
-02:07=Isto poderá ser bom!
+02:07=Isto pode ser bom!
 02:07=Use com cabeça
 02:07=Ooo esta caixa é pesada
-02:07=Poderás precisar disto
+02:07=Podes precisar disto
 
 ; Hog (%1) skips his turn
-02:08=%1 é tãaao aborrecido...
+02:08=%1 é tão aborrecido...
 02:08=%1 não se quis incomodar
-02:08=%1 é um ouriço preguiçoso
+02:08=%1 é um ouriço tão preguiçoso
 02:08=%1 não conseguiu pensar
 02:08=%1 desistiu
 02:08=Espirras-te, perdes-te a vez, %1
@@ -297,7 +308,7 @@
 02:08=%1 ficou sem fôlego
 02:08=%1 tem um pequeno descanso
 02:08=%1 relaxa
-02:08=%1 não tem fé nas suas capacidades
+02:08=%1 não confia nas suas próprias capacidades
 02:08=%1 decide... não fazer nada
 02:08=%1 deixa que o inimigo se mate sozinho
 02:08=%1 iria ser terrível em festas
@@ -308,16 +319,16 @@
 02:08=Cócórócócó, %1 é uma galinha
 02:08=%1 está meio amarelo
 02:08=%1 é um cobardolas!
-02:08=%1 fica à espera da morte súbita
+02:08=%1 está à espera da morte súbita
 02:08=%1 não gosta de violência
-02:08=%1 está à procura do sentido da vida
+02:08=%1 anda à procura do sentido da vida
 02:08=%1 não valia grande coisa de qualquer maneira
-02:08=%1 não se queria alistar no exército sequer
-02:08=Pára de nos fazer perder tempo, %1
+02:08=%1 nem sequer se queria alistar no exército
+02:08=Pára de nos fazer perder tempo %1
 02:08=Estou desapontado contigo %1
 02:08=Vá lá, consegues fazer melhor que isso %1
 02:08=A vontade de %1 foi-se
-02:08=%1 tem coisas melhores para fazer
+02:08=%1 tem mais que fazer
 02:08=%1 está cheio de medo
 02:08=%1 adormeceu
 
@@ -362,6 +373,12 @@
 02:10=Será uma ave, um avião, ...
 02:10=%1 está fora de jogo!
 
+; Hog (%1) has to leave (team is gone)
+02:11=%1 tem de ir para a cama!
+02:11=%1 parece demasiado ocupado para jogar
+02:11=Beam him up, Scotty!|%1 teve de ir por a cusquiçe em dia
+02:11=%1 tem de ir embora
+
 ; Weapon Categories
 03:00=Granada Temporizada
 03:01=Granada Temporizada
@@ -387,7 +404,7 @@
 03:21=Arma Balística
 03:22=Chama-me Indiana!
 03:23=(Mesmo) Artes Marciais
-03:24=O bolo NÃO é uma mentira!
+03:24=Afinal o bolo NÃO é mentira!
 03:25=Kit de Vestuário
 03:26=Granada Sumarenta
 03:27=Granada Escaldante
@@ -405,6 +422,14 @@
 03:39=Utilitário de Transporte
 03:40=Granada Incendiária
 03:41=Enorme fã do Squawks
+03:42=I'm making a note here... HUGE SUCCESS
+; just to make it easier to compare...
+03:43=A composição musical mais letal de sempre
+03:44=Consumir de preferência antes de: 1923
+03:45=O poder da ciência
+03:46=Labaredas enormes!
+03:47=Cola-as onde achares mais útil!
+03:48=Garantia vitalícia!
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Ataca os teus inimigos usando uma simples granada.|Explodirá quando o tempo chegar a zero.|1-5: Define o temporizador da granada|Ataque: Deixa premido para lançar com mais força
@@ -412,7 +437,7 @@
 04:02=Ataca os teus inimigos usando um projéctil balístico|que pode ser influenciado pelo vento.|Ataque: Deixa premido para disparar com mais força
 04:03=Lança uma abelha teleguiada que ira perseguir o|alvo seleccionado. Não dispares com muita força|para aumentar a precisão.|Cursor: Escolher o alvo|Ataque: Deixa premido para disparar com mais força
 04:04=Ataca o teu inimigo utilizando uma caçadeira com dois tiros.|Como o tiro se espalha não precisas de acertar em cheio|para magoar os teus oponentes.|Ataque: Disparar (múltiplas vezes)
-04:05=Move-te pelo subsolo! Usa o martelo pneumático para|escavar um buraco no chão e alcançar outras áreas.|Ataque: Começar ou parar de escavar
+04:05=Move-te pelo subsolo! Usa o martelo pneumático para|escavar um buraco no solo e alcançar outras áreas.|Ataque: Começar ou parar de escavar
 04:06=Aborrecido? Não tens maneira de atacar?|Preferes guardar as munições?|Não há problema! Passa o turno, covarde!|Ataque: Passa o turno
 04:07=Ultrapassa enormes distancias, usa a velocidade adquirida|para deslizar e empurrar outros ouriços ou larga granadas|(ou outras armas) em cima deles.|Ataque: Dispara ou solta a corda|Saltar: Larga granadas ou armas similares
 04:08=Mantém os teus inimigos bem longe largando uma mina numa|passagem estreita ou mesmo por baixo dos seus pés.|Tem apenas cuidado para não a activares tu mesmo!|Ataque: Larga uma mina aos teus pés
@@ -433,7 +458,7 @@
 04:23=Se não tens nada a perder, isto pode ser|muito útil. Sacrifica o teu ouriço lançando-o|na direcção desejada destruindo tudo o|que esteja no caminho e explodindo no fim.|Ataque: Lança um devastador e mortífero ataque
 04:24=Feliz aniversário! Lança este bolo, deixa-o caminhar até|aos teus inimigos e oferece-lhes uma festa explosiva.|O bolo pode andar em quase qualquer terreno mas isso|faz com que detone mais cedo.|Ataque: Larga o bolo ou pára-o para que expluda
 04:25=Usa este kit de vestuário para fazer os teus inimigos saltar|para o teu ouriço (e para alguma falha ou buraco).|Ataque: Usa este kit e tenta seduzir outro ouriço
-04:26=Atira esta sumarenta melancia aos teus inimigos.|Assim que o tempo termine, dividir-se-à em vários|pedaços explosivos.|1-5: Define o temporizador da melancia|Ataque: Deixa premido para lançar com mais força
+04:26=Atira esta sumarenta melancia aos teus inimigos.|Assim que o tempo termine, dividir-se-à em várias|fatias explosivas.|1-5: Define o temporizador da melancia|Ataque: Deixa premido para lançar com mais força
 04:27=Deixa as chamas do inferno chover sobre os teus|oponentes usando este demoníaco explosivo.|Não fiques muito perto da explosão pois as pequenas|chamas são igualmente perigosas.|Ataque: Deixa premido para lançar com mais força
 04:28=Pouco depois de lançares este rocket, ira começar a|escavar através do solo e explodir assim que o rastilho|acabe ou alcance a superfície novamente.|Ataque: Deixa premido para disparar com mais força
 04:29=Não recomendada para crianças!|A arma de bolas disparamontes de pequenas|e coloridas bolas recheadas de explosivos.|Ataque: Dispara com a força máxima|Cima/Baixo: Continua a apontar
@@ -444,11 +469,18 @@
 04:34=Não me podes tocar!|Ataque: Activar
 04:35=Por vezes o tempo passa demasiado depressa.|Agarra uns segundos extra para acabar o teu ataque.|Ataque: Activar
 04:36=Há dias em que a tua pontaria anda simplesmente terrível.|Obtém alguma ajuda utilizando a tecnologia moderna.|Ataque: Activar
-04:37=Não temas a luz do dia. Só vai durar um turno|mas vais poder absorver o dano que fizeres|aos outros ouriços.|Ataque: Activar
-04:38=A sniper pode ser a arma mais devastadora no teu|arsenal, mas é muito pouco eficiente ao perto.|O dano aumenta proporcionalmente à distancia do alvo.|Ataque: Disparar (duas vezes)
+04:37=Não temas a luz do dia. Só vai durar um turno|mas vais poder absorver parte do dano que|fizeres aos outros ouriços.|Ataque: Activar
+04:38=Embora a sniper tenha a capacidade de ser tornar uma|das armas mais devastadoras do teu arsenal é|infelizmente muito pouco eficiente a curta distancia.|O dano aumenta proporcionalmente à distancia do alvo.|Ataque: Disparar (duas vezes)
 04:39=Voa para outras partes do mapa usando o disco voador.|Este utilitário difícil de controlar é capaz de te levar|a quase qualquer posição no campo de batalha.|Ataque: Activar|Cima/Esquerda/Direita: Aplica força nessa direcção|Saltar: Larga granadas ou armas similares
 04:40=Pôe o chão a arder com esta garrafa cheia de|liquido altamente inflamável.|Ataque: Deixa premido para atirar com mais força
-04:41=Prova que a natureza está mais avançada que o que|poderiam imaginar. Este passarito consegue transportar|o teu ouriço e largar ovos nos teus enimigos!|Attack: Activar e largar ovos|Cima/Esquerda/Direita: Bater as asas nessa direcção
+04:41=Prova que a natureza está mais avançada que o que|poderiamos imaginar. Este passarito consegue transportar|o teu ouriço e largar ovos nos teus enimigos!|Attack: Activar e largar ovos|Cima/Esquerda/Direita: Bater as asas nessa direcção
+04:42=Este dispositivo de portais portatil é capaz de|instantaneamente teletransportar os teus inimigos,|o teu arsenal ou a ti entre dois pontos no terreno.|Embora dificil de usar ao inicio, com prática pode-se|tornar uma das armas mais letais do teu arsenal.|Ataque: Disparar um portal|Trocar: Alterar (alternar) o portal de cor
+04:43=Faz da tua estreia musical um sucesso explosivo!|Larga este piano do céu, mas cuidado... alguem|precisa de o tocar o que te pode custar vida!|Cursor: Selecciona a zona alvo|F1-F9: Tocar piano
+04:44=Isto não é apenas queijo, é uma arma biologica!|Pode não causar muito dano quando o tempo|chegue a zero, mas vai definitivamente envenenar|qualquer ouriço que tenha a infelicidade de o cheirar.|1-5: Define o temporizador da granada|Ataque: Deixa premido para lançar com mais força
+04:45=Finalmente todas aquelas aulas de fisica vão ser úteis.|Liberta uma devastadora onda Seno nos teus enimigos,|mas cuidado, esta arma responde com o grande coiçe.|(Esta arma está incompleta)|Ataque: Disparar
+04:46=Cobre os teus inimigos com este viscoso e|flamejante liquido de aquecer o coração!|Ataque: Activar|Cima/Baixo: Apontar|Esquerda/Direita: Modificar a pressão
+04:47=Duplica a diversão com estas duas minas autocolantes!|Utiliza-as para atacar ou defender. É contigo!|Ataque: Deixa pressionado para disparar mais longe
+04:48=Porque é que têm as toupeiras de ser sempre as vitimas?|Dar marteladas em ouriços pode ser igualmente divertido!|Uma boa martelada rapidamente remove um terço da vida|de um ouriço e ainda o enterra no solo!|Ataque: Activar
 
 ; Game goal strings
 05:00=Modos de Jogo

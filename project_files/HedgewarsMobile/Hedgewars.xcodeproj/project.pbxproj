@@ -25,19 +25,39 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43411E290650040BA66 /* Icon-Small@2x.png */; };
+		610D5FB31270E26C0033333A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43611E290650040BA66 /* Icon@2x.png */; };
+		611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D9BF912497E9800008271 /* SavedGamesViewController.m */; };
+		611D9BFC12497E9800008271 /* SavedGamesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611D9BFA12497E9800008271 /* SavedGamesViewController.xib */; };
+		611DA031124E2BC500008271 /* background_med.png in Resources */ = {isa = PBXBuildFile; fileRef = 611DA030124E2BC500008271 /* background_med.png */; };
+		611DA1D0124E5C6300008271 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 611DA1CF124E5C6300008271 /* plus.png */; };
 		611E03E711FA747C0077A41E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 611E037C11FA74590077A41E /* libvorbis.a */; };
 		611E0E5111FA92170077A41E /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 611E0E5011FA92130077A41E /* libfreetype.a */; };
 		611E0EE711FB20610077A41E /* ammoButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE511FB20610077A41E /* ammoButton.png */; };
 		611E0EE811FB20610077A41E /* cornerButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE611FB20610077A41E /* cornerButton.png */; };
 		611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */; };
+		611EE974122A9C4100DF6938 /* clickSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE973122A9C4100DF6938 /* clickSound.wav */; };
+		611EE9D9122AA10A00DF6938 /* backSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D7122AA10A00DF6938 /* backSound.wav */; };
+		611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D8122AA10A00DF6938 /* selSound.wav */; };
+		611EEA7E122B09C200DF6938 /* background_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEA7D122B09C200DF6938 /* background_small.png */; };
+		611EEAEE122B2A4D00DF6938 /* HelpPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */; };
+		611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController.xib */; };
+		611EEBC1122B34A800DF6938 /* helpingame.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC0122B34A800DF6938 /* helpingame.png */; };
+		611EEBC4122B355700DF6938 /* helpbottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC2122B355700DF6938 /* helpbottom.png */; };
+		611EEBC5122B355700DF6938 /* helpright.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC3122B355700DF6938 /* helpright.png */; };
+		611EEC31122B54D700DF6938 /* helpplain.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEC30122B54D700DF6938 /* helpplain.png */; };
 		611F4D4B11B27A9900F9759A /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 611F4D4A11B27A9900F9759A /* uScript.pas */; };
 		61272334117DF764005B90CF /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272333117DF752005B90CF /* libSDL_image.a */; };
 		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
 		6129B9F711EFB04D0017E305 /* denied.png in Resources */ = {isa = PBXBuildFile; fileRef = 6129B9F611EFB04D0017E305 /* denied.png */; };
 		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
+		61399013125D19C0003C2DC0 /* uMobile.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61399012125D19C0003C2DC0 /* uMobile.pas */; };
+		6147DAD31253DCDE0010357E /* savesButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 6147DAD21253DCDE0010357E /* savesButton.png */; };
 		61536DF411CEAE7100D87A7E /* GameConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */; };
+		615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD96112073B4D00F2FF04 /* startGameButton.png */; };
+		615AD9E9120764CA00F2FF04 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD9E8120764CA00F2FF04 /* backButton.png */; };
+		615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD9EA1207654E00F2FF04 /* helpButton.png */; };
 		6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */; };
-		6165920C11CA9BA200D6E256 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591DF11CA9BA200D6E256 /* DetailViewController.m */; };
 		6165920D11CA9BA200D6E256 /* FlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E111CA9BA200D6E256 /* FlagsViewController.m */; };
 		6165920E11CA9BA200D6E256 /* FortsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E311CA9BA200D6E256 /* FortsViewController.m */; };
 		6165920F11CA9BA200D6E256 /* GameConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E511CA9BA200D6E256 /* GameConfigViewController.m */; };
@@ -66,9 +86,7 @@
 		6165923111CA9BD500D6E256 /* SquareButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922B11CA9BD500D6E256 /* SquareButtonView.m */; };
 		6165923211CA9BD500D6E256 /* UIImageExtra.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922D11CA9BD500D6E256 /* UIImageExtra.m */; };
 		6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */; };
-		6165925411CA9CB400D6E256 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */; };
 		6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */; };
-		6165925611CA9CB400D6E256 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
 		6165925811CA9CB400D6E256 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165925011CA9CB400D6E256 /* OverlayViewController.xib */; };
 		6165929E11CA9E2F00D6E256 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
@@ -109,15 +127,32 @@
 		61798A14114AB65C00BA94A9 /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798A13114AB65600BA94A9 /* libSDL_ttf.a */; };
 		61799289114AE08700BA94A9 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 61798A5E114AE08600BA94A9 /* Data */; };
 		6183D83E11E2BCE200A88903 /* LI-ipad-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */; };
-		6183D83F11E2BCE200A88903 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83D11E2BCE200A88903 /* Default.png */; };
-		619C09EA11E8B8D600F1DF16 /* title_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 619C09E911E8B8D600F1DF16 /* title_small.png */; };
+		61842B24122B619D0096E335 /* HelpPageInGameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61842B23122B619D0096E335 /* HelpPageInGameViewController.xib */; };
+		61842B3E122B65BD0096E335 /* helpabove.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3D122B65BD0096E335 /* helpabove.png */; };
+		61842B40122B66280096E335 /* helpleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3F122B66280096E335 /* helpleft.png */; };
+		6187AEBD120781B900B31A27 /* Settings in Resources */ = {isa = PBXBuildFile; fileRef = 6187AEA5120781B900B31A27 /* Settings */; };
+		6199E81612463EA800DADF8C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81512463EA800DADF8C /* CFNetwork.framework */; };
+		6199E81A12463EC400DADF8C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81912463EC400DADF8C /* SystemConfiguration.framework */; };
+		6199E839124647DE00DADF8C /* SupportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6199E837124647DE00DADF8C /* SupportViewController.m */; };
+		6199E83A124647DE00DADF8C /* SupportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6199E838124647DE00DADF8C /* SupportViewController.xib */; };
+		6199E86D12464A8E00DADF8C /* surpise.png in Resources */ = {isa = PBXBuildFile; fileRef = 6199E86C12464A8E00DADF8C /* surpise.png */; };
+		619C5ACF124F7DE200D041AE /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619C5ACE124F7DDF00D041AE /* libLua.a */; };
+		619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619C5AF3124F7E3100D041AE /* LuaPas.pas */; };
+		619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
+		61A670BE12747D8900B06CE7 /* borderBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E911DF58550068B24D /* borderBottom.png */; };
+		61A670BF12747D9100B06CE7 /* borderTop.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EA11DF58550068B24D /* borderTop.png */; };
+		61A670C012747D9B00B06CE7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83D11E2BCE200A88903 /* Default.png */; };
+		61A670C112747DB900B06CE7 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */; };
+		61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
+		61A670FA12747E0000B06CE7 /* playButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EC11DF58550068B24D /* playButton.png */; };
+		61A670FB12747E0D00B06CE7 /* title_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 619C09E911E8B8D600F1DF16 /* title_small.png */; };
+		61A6710612747E4000B06CE7 /* backgroundCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E511DF58550068B24D /* backgroundCenter.png */; };
 		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
-		61C3255B1179A384001E70B1 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C3255A1179A384001E70B1 /* OpenAL.framework */; };
+		61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */; };
 		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
-		61EBA62911DFF2BC0048B68A /* bricks.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62711DFF2BC0048B68A /* bricks.png */; };
 		61EBA62A11DFF2BC0048B68A /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62811DFF2BC0048B68A /* title.png */; };
 		61EBA62D11DFF3310048B68A /* backgroundAndTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */; };
 		61EF920E11DF57AC003441C4 /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920511DF57AC003441C4 /* arrowDown.png */; };
@@ -127,30 +162,17 @@
 		61EF921211DF57AC003441C4 /* joyButton_attack.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920911DF57AC003441C4 /* joyButton_attack.png */; };
 		61EF921311DF57AC003441C4 /* joyButton_backjump.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920A11DF57AC003441C4 /* joyButton_backjump.png */; };
 		61EF921411DF57AC003441C4 /* joyButton_forwardjump.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920B11DF57AC003441C4 /* joyButton_forwardjump.png */; };
-		61F7A35511E27D3C0040BA66 /* background-lobby.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A35411E27D3C0040BA66 /* background-lobby.png */; };
+		61F2E7CE1205EDE0005734F7 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F2E7CC1205EDE0005734F7 /* AboutViewController.m */; };
+		61F2E7CF1205EDE0005734F7 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */; };
+		61F2E7EC12060E31005734F7 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F2E7EB12060E31005734F7 /* checkbox.png */; };
 		61F7A43811E290650040BA66 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43111E290650040BA66 /* Icon-72.png */; };
 		61F7A43911E290650040BA66 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43211E290650040BA66 /* Icon-Small-50.png */; };
 		61F7A43A11E290650040BA66 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43311E290650040BA66 /* Icon-Small.png */; };
-		61F7A43B11E290650040BA66 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43411E290650040BA66 /* Icon-Small@2x.png */; };
 		61F7A43C11E290650040BA66 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43511E290650040BA66 /* Icon.png */; };
-		61F7A43D11E290650040BA66 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43611E290650040BA66 /* Icon@2x.png */; };
 		61F7A43E11E290650040BA66 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43711E290650040BA66 /* iTunesArtwork.png */; };
-		61F903EF11DF58550068B24D /* backgroundBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E411DF58550068B24D /* backgroundBottom.png */; };
-		61F903F011DF58550068B24D /* backgroundCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E511DF58550068B24D /* backgroundCenter.png */; };
-		61F903F111DF58550068B24D /* backgroundLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E611DF58550068B24D /* backgroundLeft.png */; };
-		61F903F211DF58550068B24D /* backgroundRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E711DF58550068B24D /* backgroundRight.png */; };
-		61F903F311DF58550068B24D /* backgroundTop.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E811DF58550068B24D /* backgroundTop.png */; };
-		61F903F411DF58550068B24D /* borderBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E911DF58550068B24D /* borderBottom.png */; };
-		61F903F511DF58550068B24D /* borderTop.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EA11DF58550068B24D /* borderTop.png */; };
-		61F903F611DF58550068B24D /* networkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EB11DF58550068B24D /* networkButton.png */; };
-		61F903F711DF58550068B24D /* playButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EC11DF58550068B24D /* playButton.png */; };
-		61F903F811DF58550068B24D /* storeButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903ED11DF58550068B24D /* storeButton.png */; };
 		61F9040911DF58B00068B24D /* settingsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040811DF58B00068B24D /* settingsButton.png */; };
 		61F9040B11DF59370068B24D /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040A11DF59370068B24D /* background.png */; };
 		61F9040E11DF59D10068B24D /* localplayButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040C11DF59D10068B24D /* localplayButton.png */; };
-		61F9040F11DF59D10068B24D /* netplayButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9040D11DF59D10068B24D /* netplayButton.png */; };
-		61F9041411DF5E9B0068B24D /* toolbarBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9041311DF5E9B0068B24D /* toolbarBackground.png */; };
-		61F9043A11DF64E20068B24D /* bluebox.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F9043911DF64E20068B24D /* bluebox.png */; };
 		61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F904D611DF7DA30068B24D /* WeaponCellView.m */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
@@ -666,6 +688,27 @@
 			remoteGlobalIDString = 006E982211955059001DE610;
 			remoteInfo = testsdl;
 		};
+		619C5AC9124F7DDF00D041AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1D6058910D05DD3D006BFB54;
+			remoteInfo = "Test Lua";
+		};
+		619C5ACB124F7DDF00D041AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 506EE05E10304ED200A389B3;
+			remoteInfo = "cocos2d libraries";
+		};
+		619C5ACD124F7DDF00D041AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E14CF7C110ABC177005470B6;
+			remoteInfo = Lua;
+		};
 		928301590F10E41300CC5A3C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -682,22 +725,41 @@
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hedgewars_Prefix.pch; sourceTree = "<group>"; };
+		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
+		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
+		611D9BFA12497E9800008271 /* SavedGamesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SavedGamesViewController.xib; sourceTree = "<group>"; };
+		611DA030124E2BC500008271 /* background_med.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background_med.png; path = Resources/Overlay/background_med.png; sourceTree = "<group>"; };
+		611DA1CF124E5C6300008271 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = plus.png; path = Resources/Overlay/plus.png; sourceTree = "<group>"; };
 		611E02EC11FA74580077A41E /* cocos2d-iphone.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "cocos2d-iphone.xcodeproj"; path = "../../../Library/cocos2d/cocos2d-iphone.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		611E0E4B11FA92130077A41E /* freetype.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = freetype.xcodeproj; path = "../../../Library/freetype/Xcode-iPhoneOS/freetype.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		611E0EE511FB20610077A41E /* ammoButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ammoButton.png; path = Resources/Overlay/ammoButton.png; sourceTree = "<group>"; };
 		611E0EE611FB20610077A41E /* cornerButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cornerButton.png; path = Resources/Overlay/cornerButton.png; sourceTree = "<group>"; };
 		611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Development.plist"; sourceTree = "<group>"; };
+		611EE973122A9C4100DF6938 /* clickSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = clickSound.wav; path = Resources/clickSound.wav; sourceTree = "<group>"; };
+		611EE9D7122AA10A00DF6938 /* backSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = backSound.wav; path = Resources/backSound.wav; sourceTree = "<group>"; };
+		611EE9D8122AA10A00DF6938 /* selSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = selSound.wav; path = Resources/selSound.wav; sourceTree = "<group>"; };
+		611EEA7D122B09C200DF6938 /* background_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background_small.png; path = Resources/Overlay/background_small.png; sourceTree = "<group>"; };
+		611EEAEB122B2A4D00DF6938 /* HelpPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpPageViewController.h; sourceTree = "<group>"; };
+		611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpPageViewController.m; sourceTree = "<group>"; };
+		611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HelpPageLobbyViewController.xib; sourceTree = "<group>"; };
+		611EEBC0122B34A800DF6938 /* helpingame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpingame.png; path = Resources/Overlay/helpingame.png; sourceTree = "<group>"; };
+		611EEBC2122B355700DF6938 /* helpbottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpbottom.png; path = Resources/Overlay/helpbottom.png; sourceTree = "<group>"; };
+		611EEBC3122B355700DF6938 /* helpright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpright.png; path = Resources/Overlay/helpright.png; sourceTree = "<group>"; };
+		611EEC30122B54D700DF6938 /* helpplain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpplain.png; path = Resources/Overlay/helpplain.png; sourceTree = "<group>"; };
 		611F4D4A11B27A9900F9759A /* uScript.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uScript.pas; path = ../../hedgewars/uScript.pas; sourceTree = SOURCE_ROOT; };
 		611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HedgewarsTitle.png; path = ../../QTfrontend/res/HedgewarsTitle.png; sourceTree = SOURCE_ROOT; };
 		6127232E117DF752005B90CF /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = "../../../Library/SDL-1.3/SDL_image/Xcode_iPhone/SDL_image.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61272338117DF778005B90CF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		6129B9F611EFB04D0017E305 /* denied.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = denied.png; path = Resources/denied.png; sourceTree = "<group>"; };
 		61370652117B1D50004EE44A /* Entitlements-Distribution.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Distribution.plist"; sourceTree = "<group>"; };
+		61399012125D19C0003C2DC0 /* uMobile.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uMobile.pas; path = ../../hedgewars/uMobile.pas; sourceTree = SOURCE_ROOT; };
+		6147DAD21253DCDE0010357E /* savesButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = savesButton.png; path = Resources/savesButton.png; sourceTree = "<group>"; };
 		614E333D11DE9A93009DBA4E /* VGSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = VGSHandlers.inc; path = ../../hedgewars/VGSHandlers.inc; sourceTree = SOURCE_ROOT; };
+		615AD96112073B4D00F2FF04 /* startGameButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = startGameButton.png; path = "Resources/Frontend-iPad/startGameButton.png"; sourceTree = "<group>"; };
+		615AD9E8120764CA00F2FF04 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backButton.png; path = "Resources/Frontend-iPad/backButton.png"; sourceTree = "<group>"; };
+		615AD9EA1207654E00F2FF04 /* helpButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpButton.png; path = "Resources/Frontend-iPad/helpButton.png"; sourceTree = "<group>"; };
 		6163EE7C11CC2600001C0453 /* SingleWeaponViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleWeaponViewController.h; sourceTree = "<group>"; };
 		6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleWeaponViewController.m; sourceTree = "<group>"; };
-		616591DE11CA9BA200D6E256 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		616591DF11CA9BA200D6E256 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		616591E011CA9BA200D6E256 /* FlagsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlagsViewController.h; sourceTree = "<group>"; };
 		616591E111CA9BA200D6E256 /* FlagsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlagsViewController.m; sourceTree = "<group>"; };
 		616591E211CA9BA200D6E256 /* FortsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FortsViewController.h; sourceTree = "<group>"; };
@@ -807,15 +869,28 @@
 		61798A5E114AE08600BA94A9 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
 		6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LI-ipad-Landscape.png"; path = "Resources/Icons/LI-ipad-Landscape.png"; sourceTree = "<group>"; };
 		6183D83D11E2BCE200A88903 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Icons/Default.png; sourceTree = "<group>"; };
+		61842B23122B619D0096E335 /* HelpPageInGameViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HelpPageInGameViewController.xib; sourceTree = "<group>"; };
+		61842B3D122B65BD0096E335 /* helpabove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpabove.png; path = Resources/Overlay/helpabove.png; sourceTree = "<group>"; };
+		61842B3F122B66280096E335 /* helpleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpleft.png; path = Resources/Overlay/helpleft.png; sourceTree = "<group>"; };
 		618736B8118CA28600123B23 /* GearDrawing.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GearDrawing.inc; path = ../../hedgewars/GearDrawing.inc; sourceTree = SOURCE_ROOT; };
+		6187AEA5120781B900B31A27 /* Settings */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Settings; path = Resources/Settings; sourceTree = "<group>"; };
+		6199E81512463EA800DADF8C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		6199E81912463EC400DADF8C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		6199E836124647DE00DADF8C /* SupportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupportViewController.h; sourceTree = "<group>"; };
+		6199E837124647DE00DADF8C /* SupportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SupportViewController.m; sourceTree = "<group>"; };
+		6199E838124647DE00DADF8C /* SupportViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SupportViewController.xib; sourceTree = "<group>"; };
+		6199E86C12464A8E00DADF8C /* surpise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = surpise.png; path = Resources/surpise.png; sourceTree = "<group>"; };
 		619C09E911E8B8D600F1DF16 /* title_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title_small.png; path = "Resources/Frontend-iPhone/title_small.png"; sourceTree = "<group>"; };
+		619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../../Library/Lua/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
+		619C5AF3124F7E3100D041AE /* LuaPas.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = LuaPas.pas; path = ../../hedgewars/LuaPas.pas; sourceTree = SOURCE_ROOT; };
+		619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapPreviewButtonView.h; path = Classes/MapPreviewButtonView.h; sourceTree = "<group>"; };
+		619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapPreviewButtonView.m; path = Classes/MapPreviewButtonView.m; sourceTree = "<group>"; };
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableCellView.h; sourceTree = "<group>"; };
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableCellView.m; sourceTree = "<group>"; };
-		61C3251D1179A300001E70B1 /* libopenalbridge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libopenalbridge.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		61C3255A1179A384001E70B1 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmmoMenuViewController.h; sourceTree = "<group>"; };
+		61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmmoMenuViewController.m; sourceTree = "<group>"; };
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
-		61EBA62711DFF2BC0048B68A /* bricks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bricks.png; path = "Resources/Frontend-iPad/bricks.png"; sourceTree = "<group>"; };
 		61EBA62811DFF2BC0048B68A /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = "Resources/Frontend-iPad/title.png"; sourceTree = "<group>"; };
 		61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundAndTitle.png; path = "Resources/Frontend-iPad/backgroundAndTitle.png"; sourceTree = "<group>"; };
 		61EF920511DF57AC003441C4 /* arrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowDown.png; path = Resources/Overlay/arrowDown.png; sourceTree = "<group>"; };
@@ -825,7 +900,10 @@
 		61EF920911DF57AC003441C4 /* joyButton_attack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyButton_attack.png; path = Resources/Overlay/joyButton_attack.png; sourceTree = "<group>"; };
 		61EF920A11DF57AC003441C4 /* joyButton_backjump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyButton_backjump.png; path = Resources/Overlay/joyButton_backjump.png; sourceTree = "<group>"; };
 		61EF920B11DF57AC003441C4 /* joyButton_forwardjump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyButton_forwardjump.png; path = Resources/Overlay/joyButton_forwardjump.png; sourceTree = "<group>"; };
-		61F7A35411E27D3C0040BA66 /* background-lobby.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "background-lobby.png"; path = "Resources/Frontend-iPad/background-lobby.png"; sourceTree = "<group>"; };
+		61F2E7CB1205EDE0005734F7 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		61F2E7CC1205EDE0005734F7 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
+		61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
+		61F2E7EB12060E31005734F7 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkbox.png; path = Resources/checkbox.png; sourceTree = "<group>"; };
 		61F7A43111E290650040BA66 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Resources/Icons/Icon-72.png"; sourceTree = "<group>"; };
 		61F7A43211E290650040BA66 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small-50.png"; path = "Resources/Icons/Icon-Small-50.png"; sourceTree = "<group>"; };
 		61F7A43311E290650040BA66 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "Resources/Icons/Icon-Small.png"; sourceTree = "<group>"; };
@@ -845,10 +923,8 @@
 		61F903ED11DF58550068B24D /* storeButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = storeButton.png; path = "Resources/Frontend-iPhone/storeButton.png"; sourceTree = "<group>"; };
 		61F9040811DF58B00068B24D /* settingsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settingsButton.png; path = Resources/settingsButton.png; sourceTree = "<group>"; };
 		61F9040A11DF59370068B24D /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = "Resources/Frontend-iPad/background.png"; sourceTree = "<group>"; };
-		61F9040C11DF59D10068B24D /* localplayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = localplayButton.png; path = "../../../../Desktop/ForKoda/Main Menu/localplayButton.png"; sourceTree = SOURCE_ROOT; };
-		61F9040D11DF59D10068B24D /* netplayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = netplayButton.png; path = "../../../../Desktop/ForKoda/Main Menu/netplayButton.png"; sourceTree = SOURCE_ROOT; };
-		61F9041311DF5E9B0068B24D /* toolbarBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = toolbarBackground.png; path = "Resources/Frontend-iPad/toolbarBackground.png"; sourceTree = "<group>"; };
-		61F9043911DF64E20068B24D /* bluebox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bluebox.png; path = "Resources/Frontend-iPad/bluebox.png"; sourceTree = "<group>"; };
+		61F9040C11DF59D10068B24D /* localplayButton.png */ = {isa = PBXFileReference; explicitFileType = image.png; name = localplayButton.png; path = "Resources/Frontend-iPad/localplayButton.png"; sourceTree = "<group>"; };
+		61F9040D11DF59D10068B24D /* netplayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = netplayButton.png; path = "Resources/Frontend-iPad/netplayButton.png"; sourceTree = "<group>"; };
 		61F904D511DF7DA30068B24D /* WeaponCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeaponCellView.h; sourceTree = "<group>"; };
 		61F904D611DF7DA30068B24D /* WeaponCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeaponCellView.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -868,6 +944,7 @@
 				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
 				611E03E711FA747C0077A41E /* libvorbis.a in Frameworks */,
 				611E0E5111FA92170077A41E /* libfreetype.a in Frameworks */,
+				619C5ACF124F7DE200D041AE /* libLua.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
@@ -875,14 +952,8 @@
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
 				61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */,
 				61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		61C3251B1179A300001E70B1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				61C3255B1179A384001E70B1 /* OpenAL.framework in Frameworks */,
+				6199E81612463EA800DADF8C /* CFNetwork.framework in Frameworks */,
+				6199E81A12463EC400DADF8C /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -894,6 +965,7 @@
 			children = (
 				6163EE4D11CC247D001C0453 /* Game Config */,
 				6163EE4C11CC2478001C0453 /* Settings Pages */,
+				611D9BF312497B7700008271 /* Other Controllers */,
 				6163EE6C11CC253F001C0453 /* Overlay */,
 				616591F011CA9BA200D6E256 /* MainMenuViewController.h */,
 				616591F111CA9BA200D6E256 /* MainMenuViewController.m */,
@@ -910,7 +982,6 @@
 			children = (
 				1D6058910D05DD3D006BFB54 /* Hedgewars.app */,
 				928301170F10CAFC00CC5A3C /* libfpc.a */,
-				61C3251D1179A300001E70B1 /* libopenalbridge.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -933,18 +1004,15 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61DE91561258B76800B80214 /* Custom Buttons */,
 				32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */,
 				6165922911CA9BD500D6E256 /* PascalImports.h */,
-				6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */,
-				6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */,
 				6165922411CA9BD500D6E256 /* CGPointUtils.h */,
 				6165922311CA9BD500D6E256 /* CGPointUtils.c */,
+				6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */,
+				6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */,
 				6165922511CA9BD500D6E256 /* CommodityFunctions.h */,
 				6165922611CA9BD500D6E256 /* CommodityFunctions.m */,
-				6165922711CA9BD500D6E256 /* HogButtonView.h */,
-				6165922811CA9BD500D6E256 /* HogButtonView.m */,
-				6165922A11CA9BD500D6E256 /* SquareButtonView.h */,
-				6165922B11CA9BD500D6E256 /* SquareButtonView.m */,
 				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
 				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
 			);
@@ -954,12 +1022,25 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6147DAD21253DCDE0010357E /* savesButton.png */,
+				6199E86C12464A8E00DADF8C /* surpise.png */,
+				611EEBC0122B34A800DF6938 /* helpingame.png */,
+				611EEC30122B54D700DF6938 /* helpplain.png */,
+				611EEBC2122B355700DF6938 /* helpbottom.png */,
+				61842B3D122B65BD0096E335 /* helpabove.png */,
+				611EEBC3122B355700DF6938 /* helpright.png */,
+				61842B3F122B66280096E335 /* helpleft.png */,
 				6129B9F611EFB04D0017E305 /* denied.png */,
+				61F2E7EB12060E31005734F7 /* checkbox.png */,
+				611EE973122A9C4100DF6938 /* clickSound.wav */,
+				611EE9D7122AA10A00DF6938 /* backSound.wav */,
+				611EE9D8122AA10A00DF6938 /* selSound.wav */,
 				61F7A42811E2905C0040BA66 /* Icons */,
 				61F903FA11DF58680068B24D /* Frontend-iPad */,
 				61F903E311DF584D0068B24D /* Frontend-iPhone */,
 				6179936611501D1E00BA94A9 /* Overlay */,
 				61798A5E114AE08600BA94A9 /* Data */,
+				6187AEA5120781B900B31A27 /* Settings */,
 				611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				61F9040811DF58B00068B24D /* settingsButton.png */,
@@ -970,6 +1051,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */,
 				611E02EC11FA74580077A41E /* cocos2d-iphone.xcodeproj */,
 				611E0E4B11FA92130077A41E /* freetype.xcodeproj */,
 				617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */,
@@ -983,10 +1065,24 @@
 				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
 				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
-				61C3255A1179A384001E70B1 /* OpenAL.framework */,
 				61272338117DF778005B90CF /* MobileCoreServices.framework */,
+				6199E81512463EA800DADF8C /* CFNetwork.framework */,
+				6199E81912463EC400DADF8C /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		611D9BF312497B7700008271 /* Other Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				61F2E7CB1205EDE0005734F7 /* AboutViewController.h */,
+				61F2E7CC1205EDE0005734F7 /* AboutViewController.m */,
+				61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */,
+				611D9BF812497E9800008271 /* SavedGamesViewController.h */,
+				611D9BF912497E9800008271 /* SavedGamesViewController.m */,
+				611D9BFA12497E9800008271 /* SavedGamesViewController.xib */,
+			);
+			name = "Other Controllers";
 			sourceTree = "<group>";
 		};
 		611E02ED11FA74580077A41E /* Products */ = {
@@ -1083,8 +1179,6 @@
 				6165920311CA9BA200D6E256 /* SplitViewRootController.m */,
 				616591F411CA9BA200D6E256 /* MasterViewController.h */,
 				616591F511CA9BA200D6E256 /* MasterViewController.m */,
-				616591DE11CA9BA200D6E256 /* DetailViewController.h */,
-				616591DF11CA9BA200D6E256 /* DetailViewController.m */,
 				6163EE4E11CC248D001C0453 /* First Level */,
 				6163EE4F11CC2497001C0453 /* Second Level */,
 				6163EE5011CC24A1001C0453 /* Third Level */,
@@ -1121,6 +1215,9 @@
 				6165920B11CA9BA200D6E256 /* WeaponSettingsViewController.m */,
 				616591FA11CA9BA200D6E256 /* SchemeSettingsViewController.h */,
 				616591FB11CA9BA200D6E256 /* SchemeSettingsViewController.m */,
+				6199E836124647DE00DADF8C /* SupportViewController.h */,
+				6199E837124647DE00DADF8C /* SupportViewController.m */,
+				6199E838124647DE00DADF8C /* SupportViewController.xib */,
 			);
 			name = "First Level";
 			sourceTree = "<group>";
@@ -1169,6 +1266,12 @@
 				616591F611CA9BA200D6E256 /* OverlayViewController.h */,
 				616591F711CA9BA200D6E256 /* OverlayViewController.m */,
 				6165925011CA9CB400D6E256 /* OverlayViewController.xib */,
+				611EEAEB122B2A4D00DF6938 /* HelpPageViewController.h */,
+				611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */,
+				611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController.xib */,
+				61842B23122B619D0096E335 /* HelpPageInGameViewController.xib */,
+				61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */,
+				61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */,
 			);
 			name = Overlay;
 			sourceTree = "<group>";
@@ -1224,17 +1327,43 @@
 		6179936611501D1E00BA94A9 /* Overlay */ = {
 			isa = PBXGroup;
 			children = (
+				611DA1CF124E5C6300008271 /* plus.png */,
+				611DA030124E2BC500008271 /* background_med.png */,
 				611E0EE511FB20610077A41E /* ammoButton.png */,
 				611E0EE611FB20610077A41E /* cornerButton.png */,
 				61EF920511DF57AC003441C4 /* arrowDown.png */,
 				61EF920611DF57AC003441C4 /* arrowLeft.png */,
 				61EF920711DF57AC003441C4 /* arrowRight.png */,
 				61EF920811DF57AC003441C4 /* arrowUp.png */,
+				611EEA7D122B09C200DF6938 /* background_small.png */,
 				61EF920911DF57AC003441C4 /* joyButton_attack.png */,
 				61EF920A11DF57AC003441C4 /* joyButton_backjump.png */,
 				61EF920B11DF57AC003441C4 /* joyButton_forwardjump.png */,
 			);
 			name = Overlay;
+			sourceTree = "<group>";
+		};
+		619C5AC1124F7DDF00D041AE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				619C5ACA124F7DDF00D041AE /* Lua.app */,
+				619C5ACC124F7DDF00D041AE /* libcocos2d libraries.a */,
+				619C5ACE124F7DDF00D041AE /* libLua.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		61DE91561258B76800B80214 /* Custom Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				6165922711CA9BD500D6E256 /* HogButtonView.h */,
+				6165922811CA9BD500D6E256 /* HogButtonView.m */,
+				6165922A11CA9BD500D6E256 /* SquareButtonView.h */,
+				6165922B11CA9BD500D6E256 /* SquareButtonView.m */,
+				619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */,
+				619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */,
+			);
+			name = "Custom Buttons";
 			sourceTree = "<group>";
 		};
 		61F7A42811E2905C0040BA66 /* Icons */ = {
@@ -1274,14 +1403,13 @@
 		61F903FA11DF58680068B24D /* Frontend-iPad */ = {
 			isa = PBXGroup;
 			children = (
-				61F9043911DF64E20068B24D /* bluebox.png */,
-				61EBA62711DFF2BC0048B68A /* bricks.png */,
+				615AD96112073B4D00F2FF04 /* startGameButton.png */,
+				615AD9EA1207654E00F2FF04 /* helpButton.png */,
+				615AD9E8120764CA00F2FF04 /* backButton.png */,
 				61EBA62811DFF2BC0048B68A /* title.png */,
-				61F9041311DF5E9B0068B24D /* toolbarBackground.png */,
 				61F9040C11DF59D10068B24D /* localplayButton.png */,
 				61F9040D11DF59D10068B24D /* netplayButton.png */,
 				61F9040A11DF59370068B24D /* background.png */,
-				61F7A35411E27D3C0040BA66 /* background-lobby.png */,
 				61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */,
 			);
 			name = "Frontend-iPad";
@@ -1290,6 +1418,8 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61399012125D19C0003C2DC0 /* uMobile.pas */,
+				619C5AF3124F7E3100D041AE /* LuaPas.pas */,
 				61798892114AA56300BA94A9 /* inc */,
 				61E1F4F711D004240016A5AA /* adler32.pas */,
 				617987E7114AA34C00BA94A9 /* hwengine.pas */,
@@ -1331,16 +1461,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		61C325191179A300001E70B1 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
 		1D6058900D05DD3D006BFB54 /* Hedgewars */ = {
 			isa = PBXNativeTarget;
@@ -1360,23 +1480,6 @@
 			productName = HedgewarsMobile;
 			productReference = 1D6058910D05DD3D006BFB54 /* Hedgewars.app */;
 			productType = "com.apple.product-type.application";
-		};
-		61C3251C1179A300001E70B1 /* openalbridge */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 61C325351179A314001E70B1 /* Build configuration list for PBXNativeTarget "openalbridge" */;
-			buildPhases = (
-				61C325191179A300001E70B1 /* Headers */,
-				61C3251A1179A300001E70B1 /* Sources */,
-				61C3251B1179A300001E70B1 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = openalbridge;
-			productName = openalbridge;
-			productReference = 61C3251D1179A300001E70B1 /* libopenalbridge.a */;
-			productType = "com.apple.product-type.library.static";
 		};
 		928301160F10CAFC00CC5A3C /* fpc */ = {
 			isa = PBXNativeTarget;
@@ -1404,7 +1507,14 @@
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Hedgewars" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
 			projectReferences = (
@@ -1415,6 +1525,10 @@
 				{
 					ProductGroup = 611E0E4C11FA92130077A41E /* Products */;
 					ProjectRef = 611E0E4B11FA92130077A41E /* freetype.xcodeproj */;
+				},
+				{
+					ProductGroup = 619C5AC1124F7DDF00D041AE /* Products */;
+					ProjectRef = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
 				},
 				{
 					ProductGroup = 6127232F117DF752005B90CF /* Products */;
@@ -1441,7 +1555,6 @@
 			targets = (
 				1D6058900D05DD3D006BFB54 /* Hedgewars */,
 				928301160F10CAFC00CC5A3C /* fpc */,
-				61C3251C1179A300001E70B1 /* openalbridge */,
 				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
 			);
 		};
@@ -1945,6 +2058,27 @@
 			remoteRef = 6184608B11DA8BF3000E1314 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		619C5ACA124F7DDF00D041AE /* Lua.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Lua.app;
+			remoteRef = 619C5AC9124F7DDF00D041AE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		619C5ACC124F7DDF00D041AE /* libcocos2d libraries.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcocos2d libraries.a";
+			remoteRef = 619C5ACB124F7DDF00D041AE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		619C5ACE124F7DDF00D041AE /* libLua.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libLua.a;
+			remoteRef = 619C5ACD124F7DDF00D041AE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1958,9 +2092,7 @@
 				61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */,
 				611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */,
 				6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */,
-				6165925411CA9CB400D6E256 /* MainMenuViewController-iPhone.xib in Resources */,
 				6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */,
-				6165925611CA9CB400D6E256 /* MapConfigViewController-iPhone.xib in Resources */,
 				6165925811CA9CB400D6E256 /* OverlayViewController.xib in Resources */,
 				61EF920E11DF57AC003441C4 /* arrowDown.png in Resources */,
 				61EF920F11DF57AC003441C4 /* arrowLeft.png in Resources */,
@@ -1969,39 +2101,54 @@
 				61EF921211DF57AC003441C4 /* joyButton_attack.png in Resources */,
 				61EF921311DF57AC003441C4 /* joyButton_backjump.png in Resources */,
 				61EF921411DF57AC003441C4 /* joyButton_forwardjump.png in Resources */,
-				61F903EF11DF58550068B24D /* backgroundBottom.png in Resources */,
-				61F903F011DF58550068B24D /* backgroundCenter.png in Resources */,
-				61F903F111DF58550068B24D /* backgroundLeft.png in Resources */,
-				61F903F211DF58550068B24D /* backgroundRight.png in Resources */,
-				61F903F311DF58550068B24D /* backgroundTop.png in Resources */,
-				61F903F411DF58550068B24D /* borderBottom.png in Resources */,
-				61F903F511DF58550068B24D /* borderTop.png in Resources */,
-				61F903F611DF58550068B24D /* networkButton.png in Resources */,
-				61F903F711DF58550068B24D /* playButton.png in Resources */,
-				61F903F811DF58550068B24D /* storeButton.png in Resources */,
 				61F9040911DF58B00068B24D /* settingsButton.png in Resources */,
 				61F9040B11DF59370068B24D /* background.png in Resources */,
 				61F9040E11DF59D10068B24D /* localplayButton.png in Resources */,
-				61F9040F11DF59D10068B24D /* netplayButton.png in Resources */,
-				61F9041411DF5E9B0068B24D /* toolbarBackground.png in Resources */,
-				61F9043A11DF64E20068B24D /* bluebox.png in Resources */,
-				61EBA62911DFF2BC0048B68A /* bricks.png in Resources */,
 				61EBA62A11DFF2BC0048B68A /* title.png in Resources */,
 				61EBA62D11DFF3310048B68A /* backgroundAndTitle.png in Resources */,
-				61F7A35511E27D3C0040BA66 /* background-lobby.png in Resources */,
 				61F7A43811E290650040BA66 /* Icon-72.png in Resources */,
 				61F7A43911E290650040BA66 /* Icon-Small-50.png in Resources */,
 				61F7A43A11E290650040BA66 /* Icon-Small.png in Resources */,
-				61F7A43B11E290650040BA66 /* Icon-Small@2x.png in Resources */,
 				61F7A43C11E290650040BA66 /* Icon.png in Resources */,
-				61F7A43D11E290650040BA66 /* Icon@2x.png in Resources */,
 				61F7A43E11E290650040BA66 /* iTunesArtwork.png in Resources */,
 				6183D83E11E2BCE200A88903 /* LI-ipad-Landscape.png in Resources */,
-				6183D83F11E2BCE200A88903 /* Default.png in Resources */,
-				619C09EA11E8B8D600F1DF16 /* title_small.png in Resources */,
 				6129B9F711EFB04D0017E305 /* denied.png in Resources */,
 				611E0EE711FB20610077A41E /* ammoButton.png in Resources */,
 				611E0EE811FB20610077A41E /* cornerButton.png in Resources */,
+				61F2E7CF1205EDE0005734F7 /* AboutViewController.xib in Resources */,
+				61F2E7EC12060E31005734F7 /* checkbox.png in Resources */,
+				615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */,
+				615AD9E9120764CA00F2FF04 /* backButton.png in Resources */,
+				615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */,
+				6187AEBD120781B900B31A27 /* Settings in Resources */,
+				611EE974122A9C4100DF6938 /* clickSound.wav in Resources */,
+				611EE9D9122AA10A00DF6938 /* backSound.wav in Resources */,
+				611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */,
+				611EEA7E122B09C200DF6938 /* background_small.png in Resources */,
+				611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController.xib in Resources */,
+				611EEBC1122B34A800DF6938 /* helpingame.png in Resources */,
+				611EEBC4122B355700DF6938 /* helpbottom.png in Resources */,
+				611EEBC5122B355700DF6938 /* helpright.png in Resources */,
+				611EEC31122B54D700DF6938 /* helpplain.png in Resources */,
+				61842B24122B619D0096E335 /* HelpPageInGameViewController.xib in Resources */,
+				61842B3E122B65BD0096E335 /* helpabove.png in Resources */,
+				61842B40122B66280096E335 /* helpleft.png in Resources */,
+				6199E83A124647DE00DADF8C /* SupportViewController.xib in Resources */,
+				6199E86D12464A8E00DADF8C /* surpise.png in Resources */,
+				611D9BFC12497E9800008271 /* SavedGamesViewController.xib in Resources */,
+				611DA031124E2BC500008271 /* background_med.png in Resources */,
+				611DA1D0124E5C6300008271 /* plus.png in Resources */,
+				6147DAD31253DCDE0010357E /* savesButton.png in Resources */,
+				610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */,
+				610D5FB31270E26C0033333A /* Icon@2x.png in Resources */,
+				61A670BE12747D8900B06CE7 /* borderBottom.png in Resources */,
+				61A670BF12747D9100B06CE7 /* borderTop.png in Resources */,
+				61A670C012747D9B00B06CE7 /* Default.png in Resources */,
+				61A670C112747DB900B06CE7 /* MainMenuViewController-iPhone.xib in Resources */,
+				61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */,
+				61A670FA12747E0000B06CE7 /* playButton.png in Resources */,
+				61A670FB12747E0D00B06CE7 /* title_small.png in Resources */,
+				61A6710612747E4000B06CE7 /* backgroundCenter.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2019,7 +2166,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/btn*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/ammopic.png ${PROJECT_DIR}/Data/Graphics/Btn/iconAmmo.png\ncp ${PROJECT_DIR}/../../QTfrontend/res/icon*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,KnockBall,Ruler,BasketBall}\n\n#the following ones must be removed when their support is implemented\n\n#delete some voices\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/{Classic,British,Mobster,Pirate,Robot,Russian,Singer,Surfer}\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/\n\n#delete all reserved hats\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/";
+			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/btn*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/ammopic.png ${PROJECT_DIR}/Data/Graphics/Btn/iconAmmo.png\ncp ${PROJECT_DIR}/../../QTfrontend/res/icon*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.svgz -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\nfind ${PROJECT_DIR}/Data -name *.orig -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps and hats\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,Ruler}\nrm -rf ${PROJECT_DIR}/Data/Hats/{TeamCap,TeamHeadband,TeamHair}\n\n#copy mono audio\ncp -R ${PROJECT_DIR}/audio/* ${PROJECT_DIR}/Data/\n\n#the following ones must be removed when their support is implemented\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\n\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nmv ${PROJECT_DIR}/Data/Maps/{Basketball,Knockball} ${PROJECT_DIR}/Data/Missions/Maps/\n\n#reduce the number of flakes for City\nawk '{if ($1 == 1500) $1=40; print $0}' < ${PROJECT_DIR}/Data/Themes/City/theme.cfg > /tmp/tempfile\nmv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\n#remove Isalnd from the list of Themes\nawk '{if ($1 != \"Island\") print $0}' < ${PROJECT_DIR}/Data/Themes/themes.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/themes.cfg\n\n#remove Isalnd from the Maps and themes\nrm -rf ${PROJECT_DIR}/Data/Themes/Island\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/Cave/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/Cave/map.cfg\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/Lonely_Island/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/Lonely_Island/map.cfg\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/PirateFlag/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/PirateFlag/map.cfg\n\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n\n#delete useless fonts\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\n#delete all names, reserved hats\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\n";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -2092,7 +2239,6 @@
 				6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */,
 				6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */,
 				611F4D4B11B27A9900F9759A /* uScript.pas in Sources */,
-				6165920C11CA9BA200D6E256 /* DetailViewController.m in Sources */,
 				6165920D11CA9BA200D6E256 /* FlagsViewController.m in Sources */,
 				6165920E11CA9BA200D6E256 /* FortsViewController.m in Sources */,
 				6165920F11CA9BA200D6E256 /* GameConfigViewController.m in Sources */,
@@ -2126,13 +2272,14 @@
 				61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */,
 				61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */,
 				61C079E411F35A300072BF46 /* EditableCellView.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		61C3251A1179A300001E70B1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				61F2E7CE1205EDE0005734F7 /* AboutViewController.m in Sources */,
+				611EEAEE122B2A4D00DF6938 /* HelpPageViewController.m in Sources */,
+				6199E839124647DE00DADF8C /* SupportViewController.m in Sources */,
+				611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */,
+				619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */,
+				619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */,
+				61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */,
+				61399013125D19C0003C2DC0 /* uMobile.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2154,6 +2301,8 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
@@ -2162,8 +2311,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lgcov",
+				);
 				PRODUCT_NAME = Hedgewars;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = Debug;
 		};
@@ -2186,13 +2339,107 @@
 				PRODUCT_NAME = Hedgewars;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = Release;
 		};
-		6137064B117B1CB3004EE44A /* Distribution */ = {
+		61022D7C12305A2800B08935 /* DistributionAppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLY_RULES_IN_COPY_FILES = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Vittorio Giovara";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vittorio Giovara";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Sc";
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
+				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
+				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs  -Cfvfpv2 -dNOCONSOLE";
+				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_FAST_MATH = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_STRICT_ALIASING = YES;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/events\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/video\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-lz",
+					"-Wl,-no_order_inits",
+				);
+				PREBINDING = NO;
+				PROVISIONING_PROFILE = "450C4020-346A-4F44-8DDE-E71300796C94";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "450C4020-346A-4F44-8DDE-E71300796C94";
+				SDKROOT = iphoneos4.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv6 armv7";
+			};
+			name = DistributionAppStore;
+		};
+		61022D7D12305A2800B08935 /* DistributionAppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = "Entitlements-Development.plist";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				PRODUCT_NAME = Hedgewars;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				TARGETED_DEVICE_FAMILY = "$(inherited)";
+			};
+			name = DistributionAppStore;
+		};
+		61022D7E12305A2800B08935 /* DistributionAppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = fpc;
+				ZERO_LINK = NO;
+			};
+			name = DistributionAppStore;
+		};
+		61022D7F12305A2800B08935 /* DistributionAppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = UpdateDataFolder;
+				ZERO_LINK = NO;
+			};
+			name = DistributionAppStore;
+		};
+		6137064B117B1CB3004EE44A /* DistributionAdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLY_RULES_IN_COPY_FILES = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2207,19 +2454,20 @@
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_FAST_MATH = YES;
 				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/events\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
@@ -2228,14 +2476,14 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6";
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv6 armv7";
 			};
-			name = Distribution;
+			name = DistributionAdHoc;
 		};
-		6137064C117B1CB3004EE44A /* Distribution */ = {
+		6137064C117B1CB3004EE44A /* DistributionAdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2252,11 +2500,11 @@
 				);
 				PRODUCT_NAME = Hedgewars;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
-			name = Distribution;
+			name = DistributionAdHoc;
 		};
-		6137064D117B1CB3004EE44A /* Distribution */ = {
+		6137064D117B1CB3004EE44A /* DistributionAdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2267,33 +2515,9 @@
 				PRODUCT_NAME = fpc;
 				ZERO_LINK = NO;
 			};
-			name = Distribution;
+			name = DistributionAdHoc;
 		};
-		6137064E117B1CB3004EE44A /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
-					"\"$(SRCROOT)/../../../Library/lpng141\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
-					"\"$(SRCROOT)/../../../Library/libvorbis-1.3.1/include\"",
-					"\"$(SRCROOT)/../../../Library/libogg-1.2.0/include\"",
-				);
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = openalbridge;
-				ZERO_LINK = NO;
-			};
-			name = Distribution;
-		};
-		6137064F117B1CB3004EE44A /* Distribution */ = {
+		6137064F117B1CB3004EE44A /* DistributionAdHoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -2302,11 +2526,12 @@
 				PRODUCT_NAME = UpdateDataFolder;
 				ZERO_LINK = NO;
 			};
-			name = Distribution;
+			name = DistributionAdHoc;
 		};
 		6164429D11B5CDE500B9A6F3 /* Valgrind */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLY_RULES_IN_COPY_FILES = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
@@ -2331,23 +2556,23 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/events\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv6 armv7";
 			};
 			name = Valgrind;
 		};
@@ -2367,7 +2592,7 @@
 					"\"$(SRCROOT)\"",
 				);
 				PRODUCT_NAME = Hedgewars;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = Valgrind;
 		};
@@ -2380,29 +2605,6 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PREBINDING = NO;
 				PRODUCT_NAME = fpc;
-			};
-			name = Valgrind;
-		};
-		616442A011B5CDE500B9A6F3 /* Valgrind */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
-					"\"$(SRCROOT)/../../../Library/lpng141\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
-					"\"$(SRCROOT)/../../../Library/libvorbis-1.3.1/include\"",
-					"\"$(SRCROOT)/../../../Library/libogg-1.2.0/include\"",
-				);
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = openalbridge;
 			};
 			name = Valgrind;
 		};
@@ -2437,53 +2639,6 @@
 			};
 			name = Release;
 		};
-		61C3251E1179A300001E70B1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
-					"\"$(SRCROOT)/../../../Library/lpng141\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
-					"\"$(SRCROOT)/../../../Library/libvorbis-1.3.1/include\"",
-					"\"$(SRCROOT)/../../../Library/libogg-1.2.0/include\"",
-				);
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = openalbridge;
-			};
-			name = Debug;
-		};
-		61C3251F1179A300001E70B1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
-					"\"$(SRCROOT)/../../../Library/lpng141\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer\"",
-					"\"$(SRCROOT)/../../../Library/libvorbis-1.3.1/include\"",
-					"\"$(SRCROOT)/../../../Library/libogg-1.2.0/include\"",
-				);
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = openalbridge;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		928301180F10CAFD00CC5A3C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2512,6 +2667,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLY_RULES_IN_COPY_FILES = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
@@ -2529,33 +2685,34 @@
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/events\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv6 armv7";
 			};
 			name = Debug;
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLY_RULES_IN_COPY_FILES = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2563,7 +2720,7 @@
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs  -Cfvfpv2";
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs  -Cfvfpv2 -dDEBUGFILE";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = default;
@@ -2576,13 +2733,13 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator3.2.sdk/System/Library/Frameworks/OpenAL.framework/Headers,
-					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/events\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
@@ -2591,10 +2748,10 @@
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv6 armv7";
 			};
 			name = Release;
 		};
@@ -2606,7 +2763,8 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
-				6137064C117B1CB3004EE44A /* Distribution */,
+				6137064C117B1CB3004EE44A /* DistributionAdHoc */,
+				61022D7D12305A2800B08935 /* DistributionAppStore */,
 				6164429E11B5CDE500B9A6F3 /* Valgrind */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2617,19 +2775,9 @@
 			buildConfigurations = (
 				6179928C114AE0C800BA94A9 /* Debug */,
 				6179928D114AE0C800BA94A9 /* Release */,
-				6137064F117B1CB3004EE44A /* Distribution */,
+				6137064F117B1CB3004EE44A /* DistributionAdHoc */,
+				61022D7F12305A2800B08935 /* DistributionAppStore */,
 				616442A111B5CDE500B9A6F3 /* Valgrind */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		61C325351179A314001E70B1 /* Build configuration list for PBXNativeTarget "openalbridge" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				61C3251E1179A300001E70B1 /* Debug */,
-				61C3251F1179A300001E70B1 /* Release */,
-				6137064E117B1CB3004EE44A /* Distribution */,
-				616442A011B5CDE500B9A6F3 /* Valgrind */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2639,7 +2787,8 @@
 			buildConfigurations = (
 				928301180F10CAFD00CC5A3C /* Debug */,
 				928301190F10CAFD00CC5A3C /* Release */,
-				6137064D117B1CB3004EE44A /* Distribution */,
+				6137064D117B1CB3004EE44A /* DistributionAdHoc */,
+				61022D7E12305A2800B08935 /* DistributionAppStore */,
 				6164429F11B5CDE500B9A6F3 /* Valgrind */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2650,7 +2799,8 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
-				6137064B117B1CB3004EE44A /* Distribution */,
+				6137064B117B1CB3004EE44A /* DistributionAdHoc */,
+				61022D7C12305A2800B08935 /* DistributionAppStore */,
 				6164429D11B5CDE500B9A6F3 /* Valgrind */,
 			);
 			defaultConfigurationIsVisible = 0;

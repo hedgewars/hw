@@ -75,6 +75,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 
         phhoger = new CHedgehogerWidget(QImage(":/res/hh25x25.png"), this);
         connect(phhoger, SIGNAL(hedgehogsNumChanged()), this, SLOT(hhNumChanged()));
+        phhoger->setHHNum(team.numHedgehogs);
         mainLayout.addWidget(phhoger);
     } else {
     }

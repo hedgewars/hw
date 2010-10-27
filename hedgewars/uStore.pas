@@ -20,7 +20,7 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, uTeams, SDLh, GLunit;
+uses sysutils, uConsts, uTeams, SDLh, GLunit, uWorld;
 
 
 var PixelFormat: PSDL_PixelFormat;
@@ -62,6 +62,7 @@ procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTextur
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawFillRect(r: TSDL_Rect);
+procedure DrawCircle(X, Y, Radius: LongInt; Width: Single; r, g, b, a: Byte); 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 function  CheckCJKFont(s: ansistring; font: THWFont): THWFont;
 function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
@@ -84,7 +85,7 @@ procedure Tint(r, g, b, a: Byte); inline;
 procedure Tint(c: Longword); inline;
 
 implementation
-uses uMisc, uConsole, uLocale;
+uses uMisc, uConsole, uLocale, uMobile;
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -237,13 +238,13 @@ var s: shortstring;
         r.h:= 19;
 
         DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
-        
+
         // overwrite flag for cpu teams and keep players from using it
         if (Hedgehogs[0].Gear <> nil) and (Hedgehogs[0].BotLevel > 0) then
             Flag:= 'cpu'
         else if Flag = 'cpu' then
             Flag:= 'hedgewars';
-        
+
         flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
         if flagsurf = nil then
             flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
@@ -251,7 +252,7 @@ var s: shortstring;
         copyToXY(flagsurf, texsurf, 2, 2);
         SDL_FreeSurface(flagsurf);
         flagsurf:= nil;
-        
+
         // restore black border pixels inside the flag
         PLongwordArray(texsurf^.pixels)^[32 * 2 +  2]:= cNearBlackColor;
         PLongwordArray(texsurf^.pixels)^[32 * 2 + 23]:= cNearBlackColor;
@@ -260,6 +261,8 @@ var s: shortstring;
 
         FlagTex:= Surface2Tex(texsurf, false);
         SDL_FreeSurface(texsurf);
+
+        AIKillsTex := RenderStringTex(inttostr(stats.AIKills), Clan^.Color, fnt16);
 
         dec(drY, r.h + 2);
         DrawHealthY:= drY;
@@ -274,27 +277,27 @@ var s: shortstring;
                             texsurf:= LoadImage(Pathz[ptHats] + '/Reserved/' + Copy(Hat,9,Length(s)-8), ifNone)
                         else
                             texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
-                            if texsurf <> nil then
+                        if texsurf <> nil then
                             begin
-                                HatTex:= Surface2Tex(texsurf, true);
-                                SDL_FreeSurface(texsurf)
+                            HatTex:= Surface2Tex(texsurf, true);
+                            SDL_FreeSurface(texsurf)
                             end;
-                            texsurf:= nil;
+                        texsurf:= nil;
                         end
                     end;
         end;
     MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
     iconsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 28, 28, 32, RMask, GMask, BMask, AMask);
-        if iconsurf <> nil then
+    if iconsurf <> nil then
         begin
-            r.x:= 0;
-            r.y:= 0;
-            r.w:= 28;
-            r.h:= 28;
-            DrawRoundRect(@r, cWhiteColor, cNearBlackColor, iconsurf, true);
-            ropeIconTex:= Surface2Tex(iconsurf, false);
-            SDL_FreeSurface(iconsurf);
-            iconsurf:= nil;
+        r.x:= 0;
+        r.y:= 0;
+        r.w:= 28;
+        r.h:= 28;
+        DrawRoundRect(@r, cWhiteColor, cNearBlackColor, iconsurf, true);
+        ropeIconTex:= Surface2Tex(iconsurf, false);
+        SDL_FreeSurface(iconsurf);
+        iconsurf:= nil;
         end;
     end;
 
@@ -325,7 +328,7 @@ var s: shortstring;
 
         // make black pixel be alpha-transparent
         for i:= 0 to texsurf^.w * texsurf^.h - 1 do
-            if PLongwordArray(texsurf^.pixels)^[i] = AMask then PLongwordArray(texsurf^.pixels)^[i]:= 0;
+            if PLongwordArray(texsurf^.pixels)^[i] = AMask then PLongwordArray(texsurf^.pixels)^[i]:= (RMask or GMask or BMask) and Color;
 
         if SDL_MustLock(texsurf) then
             SDL_UnlockSurface(texsurf);
@@ -358,8 +361,9 @@ var s: shortstring;
     if TeamsArray[t] <> nil then
         with TeamsArray[t]^ do
             begin
-            if GraveName = '' then GraveName:= 'Simple';
-            texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifCritical or ifTransparent);
+            if GraveName = '' then GraveName:= 'Statue';
+            texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifTransparent);
+            if texsurf = nil then texsurf:= LoadImage(Pathz[ptGraves] + '/Statue', ifCritical or ifTransparent);
             GraveTex:= Surface2Tex(texsurf, false);
             SDL_FreeSurface(texsurf)
             end
@@ -407,30 +411,29 @@ for ii:= Low(TSprite) to High(TSprite) do
             if tmpsurf <> nil then
             begin
                 if getImageDimensions then
-                    begin
+                begin
                     imageWidth:= tmpsurf^.w;
                     imageHeight:= tmpsurf^.h
-                    end;
+                end;
                 if getDimensions then
-                    begin
+                begin
                     Width:= tmpsurf^.w;
                     Height:= tmpsurf^.h
-                    end;
+                end;
                 if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
-                    begin
+                begin
                     Texture:= Surface2Tex(tmpsurf, true);
                     Texture^.Scale:= 2
-                    end
+                end
                 else
-                    begin
+                begin
                     Texture:= Surface2Tex(tmpsurf, false);
                     if (ii = sprWater) and ((cReducedQuality and (rq2DWater or rqClampLess)) = 0) then // HACK: We should include some sprite attribute to define the texture wrap directions
-                    begin
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-                    end;
                 end;
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, priority);
-                if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
+                if saveSurf then
+                    Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
                 end
             else
                 Surface:= nil
@@ -444,6 +447,7 @@ SDL_FreeSurface(tmpsurf);
 
 InitHealth;
 
+// TODO: are those textures ever freed?
 PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
 ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
 SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
@@ -453,29 +457,24 @@ AddProgress;
 // name of weapons in ammo menu
 for ai:= Low(TAmmoType) to High(TAmmoType) do
     with Ammoz[ai] do
-        begin
+    begin
         TryDo(trAmmo[NameId] <> '','No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
         tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
         TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
         NameTex:= Surface2Tex(tmpsurf, false);
         SDL_FreeSurface(tmpsurf)
-        end;
+    end;
 
 // number of weapons in ammo menu
 for i:= Low(CountTexz) to High(CountTexz) do
-    begin
+begin
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
     tmpsurf:= doSurfaceConversion(tmpsurf);
     CountTexz[i]:= Surface2Tex(tmpsurf, false);
     SDL_FreeSurface(tmpsurf)
-    end;
+end;
 
-{$IFDEF DUMP}
-//not working anymore, where are LandSurface and StoreSurface defined?
-//SDL_SaveBMP_RW(LandSurface, SDL_RWFromFile('LandSurface.bmp', 'wb'), 1);
-//SDL_SaveBMP_RW(StoreSurface, SDL_RWFromFile('StoreSurface.bmp', 'wb'), 1);
-{$ENDIF}
 AddProgress;
 
 {$IFDEF SDL_IMAGE_NEWER}
@@ -494,6 +493,13 @@ var rr: TSDL_Rect;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
 if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
+
+// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
+    exit;
+if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) > cScreenHeight / cScaleFactor) then
+    exit;
+
 rr.x:= X;
 rr.y:= Y;
 rr.w:= W;
@@ -532,6 +538,7 @@ end;
 
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
 begin
+
 glPushMatrix;
 glTranslatef(X, Y, 0);
 glScalef(Scale, Scale, 1);
@@ -555,6 +562,12 @@ var ft, fb, fl, fr: GLfloat;
     hw, nx, ny: LongInt;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
+// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWidth) then
+    exit;
+if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScaleFactor > cScreenHeight) then
+    exit;
+
 glPushMatrix;
 glTranslatef(X, Y, 0);
 
@@ -636,6 +649,12 @@ end;
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
+// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+if (abs(X) > 2 * hw) and ((abs(X) - hw) > cScreenWidth / cScaleFactor) then
+    exit;
+if (abs(Y) > 2 * hh) and ((abs(Y - 0.5 * cScreenHeight) - hh) > cScreenHeight / cScaleFactor) then
+    exit;
+
 glPushMatrix;
 glTranslatef(X, Y, 0);
 
@@ -716,8 +735,13 @@ begin
 end;
 
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
+var scale: GLfloat;
 begin
-DrawTexture(X - Source^.w shr 1, Top, Source)
+    if (Source^.w + 20) > cScreenWidth then
+        scale:= cScreenWidth / (Source^.w + 20)
+    else
+        scale:= 1.0;
+    DrawTexture(X - round(Source^.w * scale) div 2, Top, Source, scale)
 end;
 
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
@@ -729,6 +753,11 @@ const VertexBuffer: array [0..3] of TVertex2f = (
 var l, r, t, b: real;
     TextureBuffer: array [0..3] of TVertex2f;
 begin
+// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+if (abs(X) > 32) and ((abs(X) - 16) * cScaleFactor > cScreenWidth) then
+    exit;
+if (abs(Y) > 32) and ((abs(Y - 0.5 * cScreenHeight) - 16) * cScaleFactor > cScreenHeight) then
+    exit;
 
 t:= Pos * 32 / HHTexture^.h;
 b:= (Pos + 1) * 32 / HHTexture^.h;
@@ -769,6 +798,12 @@ end;
 procedure DrawFillRect(r: TSDL_Rect);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
+// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+if (abs(r.x) > r.w) and ((abs(r.x + r.w / 2) - r.w / 2) * cScaleFactor > cScreenWidth) then
+    exit;
+if (abs(r.y) > r.h) and ((abs(r.y + r.h / 2 - (0.5 * cScreenHeight)) - r.h / 2) * cScaleFactor > cScreenHeight) then
+    exit;
+
 glDisable(GL_TEXTURE_2D);
 
 Tint($00, $00, $00, $80);
@@ -787,6 +822,29 @@ glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 Tint($FF, $FF, $FF, $FF);
 glEnable(GL_TEXTURE_2D)
+end;
+
+procedure DrawCircle(X, Y, Radius: LongInt; Width: Single; r, g, b, a: Byte); 
+var
+    i: LongInt;
+    CircleVertex: array [0..359] of TVertex2f;
+begin
+    for i := 0 to 359 do begin
+        CircleVertex[i].X := X + Radius*cos(i*pi/180);
+        CircleVertex[i].Y := Y + Radius*sin(i*pi/180);
+    end;
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_LINE_SMOOTH);
+    glPushMatrix;
+    glTranslatef(WorldDx, WorldDy, 0);
+    glLineWidth(Width);
+    Tint(r, g, b, a);
+    glVertexPointer(2, GL_FLOAT, 0, @CircleVertex[0]);
+    glDrawArrays(GL_LINE_LOOP, 0, 360);
+    Tint($FF, $FF, $FF, $FF);
+    glPopMatrix;
+    glEnable(GL_TEXTURE_2D);
+    glDisable(GL_LINE_SMOOTH);
 end;
 
 procedure StoreRelease;
@@ -820,7 +878,12 @@ var l, i : LongInt;
     u: WideChar;
     tmpstr: array[0..256] of WideChar;
 begin
-if (font >= CJKfnt16) or (length(s) = 0)  then exit(font);
+
+{$IFNDEF IPHONEOS}
+// remove chinese fonts for now
+if (font >= CJKfnt16) or (length(s) = 0) then
+{$ENDIF}
+    exit(font);
 
 l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), length(s))-1;
 i:= 0;
@@ -1064,20 +1127,7 @@ function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surf
 var tmpsurf: PSDL_Surface;
     s: shortstring;
 begin
-    WriteToConsole(msgLoading + filename + '.png (flags: ' + inttostr(imageFlags)+') ');
-{$IFDEF DEBUGFILE}
-    WriteToConsole('[flag translation:');
-    if imageFlags = ifNone then
-        WriteToConsole(' None')
-    else
-        begin
-        if (imageFlags and ifAlpha) <> 0 then WriteToConsole(' Alpha');
-        if (imageFlags and ifCritical) <> 0 then WriteToConsole(' Critical');
-        if (imageFlags and ifTransparent) <> 0 then WriteToConsole(' Transparent');
-        if (imageFlags and ifIgnoreCaps) <> 0 then WriteToConsole(' IgnoreCaps');
-        end;
-    WriteToConsole('] ');
-{$ENDIF}
+    WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + ']');
 
     s:= filename + '.png';
     tmpsurf:= IMG_Load(Str2PChar(s));
@@ -1093,7 +1143,7 @@ begin
         SDL_FreeSurface(tmpsurf);
         OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
         // dummy surface to replace non-critical textures that failed to load due to their size
-        exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask));
+        exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask));
     end;
 
     tmpsurf:= doSurfaceConversion(tmpsurf);
@@ -1109,6 +1159,7 @@ end;
 function glLoadExtension(extension : shortstring) : boolean;
 begin
 {$IFDEF IPHONEOS}
+    extension:= extension; // avoid hint
     glLoadExtension:= false;
 {$IFDEF DEBUGFILE}
     AddFileLog('OpenGL - "' + extension + '" skipped')
@@ -1125,23 +1176,20 @@ begin
 end;
 
 procedure SetupOpenGL;
+{$IFNDEF IPHONEOS}
 var vendor: shortstring;
 {$IFDEF DARWIN}
     one: LongInt;
 {$ENDIF}
+{$ENDIF}
 begin
-    // initialized here because when initModule is called cScreenWidth/Height are not yet set
-    if (uStore.wScreen = 0) and (uStore.hScreen = 0) then
-    begin
-        uStore.wScreen:= cScreenWidth; 
-        uStore.hScreen:= cScreenHeight;
-    end;
 
 {$IFDEF IPHONEOS}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0); // no double buffering
     SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
 {$IFNDEF SDL13}
 // this attribute is default in 1.3 and must be enabled in MacOSX
     if (cReducedQuality and rqDesyncVBlank) <> 0 then
@@ -1165,10 +1213,9 @@ begin
 
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 
-    vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
 {$IFDEF DEBUGFILE}
     AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
-    AddFileLog('  |----- Vendor: ' + vendor);
+    AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
     AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
     AddFileLog('  \----- GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
@@ -1239,11 +1286,10 @@ begin
 {$ENDIF}
 
     // set view port to whole window
-{$IFDEF IPHONEOS}
-    glViewport(0, 0, cScreenHeight, cScreenWidth);
-{$ELSE}
-    glViewport(0, 0, cScreenWidth, cScreenHeight);
-{$ENDIF}
+    if (rotationQt = 0) or (rotationQt = 180) then
+        glViewport(0, 0, cScreenWidth, cScreenHeight)
+    else
+        glViewport(0, 0, cScreenHeight, cScreenWidth);
 
     glMatrixMode(GL_MODELVIEW);
     // prepare default translation/scaling
@@ -1261,8 +1307,8 @@ begin
     glDisable(GL_DITHER);
     // enable common states by default as they save a lot
     glEnable(GL_TEXTURE_2D);
-    glEnableClientState(GL_VERTEX_ARRAY);                                                                                        
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);  
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 end;
 
 procedure SetScale(f: GLfloat);
@@ -1277,7 +1323,7 @@ begin
         glPushMatrix;       // save default scaling
         glLoadIdentity;
         glRotatef(rotationQt, 0, 0, 1);
-        glScalef(f / wScreen, -f / hScreen, 1.0);
+        glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
         glTranslatef(0, -cScreenHeight / 2, 0);
     end;
 
@@ -1295,13 +1341,12 @@ begin
         texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
 
         ProgrTex:= Surface2Tex(texsurf, false);
-        
+
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
-{$IFDEF IPHONEOS}
-        startSpinning();
-{$ENDIF}
+
+        perfExt_AddProgress();
     end;
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
@@ -1309,12 +1354,12 @@ begin
     glClear(GL_COLOR_BUFFER_BIT);
     if Step < numsquares then r.x:= 0
     else r.x:= squaresize;
-    
+
     r.y:= (Step mod numsquares) * squaresize;
     r.w:= squaresize;
     r.h:= squaresize;
-    
-    DrawFromRect( -squaresize div 2, (hScreen - squaresize) shr 1, @r, ProgrTex);
+
+    DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
 
     SDL_GL_SwapBuffers();
 {$IFDEF SDL13}
@@ -1328,9 +1373,7 @@ procedure FinishProgress;
 begin
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
-{$IFDEF IPHONEOS}
-    stopSpinning();
-{$ENDIF}
+    perfExt_FinishProgress();
 end;
 
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);
@@ -1468,7 +1511,7 @@ if extra <> '' then
     if w < (i + wa) then w:= i + wa;
     inc(h, j + ha);
     end;
-    
+
 // add borders space
 inc(w, wa);
 inc(h, ha + 8);
@@ -1498,7 +1541,7 @@ while tmpdesc <> '' do
     if tmpline <> '' then
         begin
         r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
-        
+
         // render highlighted caption (if there's a ':')
         tmpline2:= '';
         SplitByChar(tmpline, tmpline2, ':');
@@ -1516,7 +1559,7 @@ r.w:= 32;
 r.h:= 32;
 SDL_FillRect(tmpsurf, @r, $ffffffff);
 SDL_UpperBlit(iconsurf, iconrect, tmpsurf, @r);
-    
+
 RenderHelpWindow:=  Surface2Tex(tmpsurf, true);
 SDL_FreeSurface(tmpsurf)
 end;
@@ -1539,8 +1582,8 @@ FreeWeaponTooltip;
 
 // image region
 i:= LongInt(atype) - 1;
-r.x:= (i shr 5) * 32;
-r.y:= (i mod 32) * 32;
+r.x:= (i shr 4) * 32;
+r.y:= (i mod 16) * 32;
 r.w:= 32;
 r.h:= 32;
 
@@ -1558,7 +1601,7 @@ else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0 then // weapo
     extra:= trmsg[sidNoEndTurn];
     extracolor:= LongInt($ff70c770);
     end
-else 
+else
     begin
     extra:= '';
     extracolor:= 0;
@@ -1588,16 +1631,12 @@ procedure initModule;
 begin
     PixelFormat:= nil;
     SDLPrimSurface:= nil;
-{$IFDEF IPHONEOS}
-    rotationQt:= -90;
-{$ELSE}
+
+{$IFNDEF IPHONEOS}
     rotationQt:= 0;
     cGPUVendor:= gvUnknown;
 {$ENDIF}
-    // really initalized in storeLoad
-    uStore.wScreen:= 0; 
-    uStore.hScreen:= 0;
-    
+
     cScaleFactor:= 2.0;
     SupportNPOTT:= false;
     Step:= 0;

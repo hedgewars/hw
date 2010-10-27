@@ -70,6 +70,7 @@ class AbstractPage : public QWidget
  protected:
   AbstractPage(QWidget* parent = 0) {
     font14 = new QFont("MS Shell Dlg", 14);
+    setFocusPolicy(Qt::StrongFocus);
   }
   virtual ~AbstractPage() {};
 
@@ -216,6 +217,7 @@ public:
     QPushButton *BtnNewTeam;
     QPushButton *BtnEditTeam;
     QPushButton *BtnDeleteTeam;
+    QPushButton *BtnAssociateFiles;
     QLabel *LblNoEditTeam;
     QComboBox *CBTeamName;
     IconedGroupBox *AGGroupBox;
@@ -340,6 +342,7 @@ public:
 
     QPushButton *BtnSimpleGamePage;
     QPushButton *BtnTrainPage;
+    QPushButton *BtnCampaignPage;
     QPushButton *BtnMultiplayer;
     QPushButton *BtnLoad;
     QPushButton *BtnDemos;
@@ -357,6 +360,19 @@ public:
     QPushButton *BtnStartTrain;
     QPushButton *BtnBack;
     QComboBox   *CBSelect;
+};
+
+class PageCampaign : public AbstractPage
+{
+    Q_OBJECT
+
+public:
+    PageCampaign(QWidget* parent = 0);
+
+    QPushButton *BtnStartCampaign;
+    QPushButton *BtnBack;
+    QComboBox   *CBSelect;
+    QComboBox   *CBTeam;
 };
 
 class PageSelectWeapon : public AbstractPage
@@ -389,13 +405,23 @@ public:
     PageRoomsList(QWidget* parent, QSettings * config, SDLInteraction * sdli);
 
     QLineEdit * roomName;
+    QLineEdit * searchText;
     QTableWidget * roomsList;
     QPushButton * BtnBack;
     QPushButton * BtnCreate;
     QPushButton * BtnJoin;
     QPushButton * BtnRefresh;
     QPushButton * BtnAdmin;
+    QPushButton * BtnClear;
+    QComboBox * CBState;
+    QComboBox * CBRules;
+    QComboBox * CBWeapons;
     HWChatWidget * chatWidget;
+
+private:
+    bool gameInLobby;
+    QString gameInLobbyName;
+    QStringList listFromServer;
 
 public slots:
     void setRoomsList(const QStringList & list);
@@ -405,11 +431,14 @@ private slots:
     void onCreateClick();
     void onJoinClick();
     void onRefreshClick();
+    void onClearClick();
+    void onJoinConfirmation(const QString &);
 
 signals:
     void askForCreateRoom(const QString &);
     void askForJoinRoom(const QString &);
     void askForRoomList();
+    void askJoinConfirmation(const QString &);
 };
 
 class PageConnecting : public AbstractPage
@@ -453,6 +482,10 @@ private:
     ToggleButtonWidget * TBW_sharedammo;
     ToggleButtonWidget * TBW_disablegirders;
     ToggleButtonWidget * TBW_disablelandobjects;
+    ToggleButtonWidget * TBW_aisurvival;
+    ToggleButtonWidget * TBW_infattack;
+    ToggleButtonWidget * TBW_resetweps;
+    ToggleButtonWidget * TBW_perhogammo;
 
     QSpinBox * SB_DamageModifier;
     QSpinBox * SB_TurnTime;

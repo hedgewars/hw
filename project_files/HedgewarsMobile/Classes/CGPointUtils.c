@@ -8,7 +8,7 @@
  */
 
 #include "CGPointUtils.h"
-#include <math.h>
+#include "math.h"
 
 
 CGFloat distanceBetweenPoints (CGPoint first, CGPoint second) {

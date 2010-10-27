@@ -17,7 +17,6 @@
 *)
 
 {$INCLUDE "options.inc"}
-{$INLINE ON}
 
 unit uMisc;
 interface
@@ -25,6 +24,27 @@ interface
 uses    SDLh, uConsts, uFloat, GLunit, Math;
 
 var
+/////// init flags ///////
+    cScreenWidth    : LongInt     = 1024;
+    cScreenHeight   : LongInt     = 768;
+    cBits           : LongInt     = 32;
+    //ipcPort is in uIO
+    cFullScreen     : boolean     = false;
+    isSoundEnabled  : boolean     = true;
+    isMusicEnabled  : boolean     = false;
+    cLocaleFName    : shortstring = 'en.txt';
+    cInitVolume     : LongInt     = 100;
+    cTimerInterval  : LongInt     = 8;
+    PathPrefix      : shortstring = './';
+    cShowFPS        : boolean     = false;
+    cAltDamage      : boolean     = true;
+    cReducedQuality : LongInt     = rqNone;
+    //userNick is in uChat
+    recordFileName  : shortstring = '';
+    cReadyDelay     : Longword    = 0;
+    cLogfileBase    : shortstring = 'debug';
+//////////////////////////
+    
     isCursorVisible : boolean;
     isTerminated    : boolean;
     isInLag         : boolean;
@@ -35,9 +55,7 @@ var
     isSpeed         : boolean;
     isFirstFrame    : boolean;
 
-    //isStereoEnabled : boolean;
     cStereoMode     : TStereoMode;
-
     fastUntilLag    : boolean;
 
     GameState       : TGameState;
@@ -45,6 +63,7 @@ var
     GameFlags       : Longword;
     TrainingFlags   : Longword;
     TurnTimeLeft    : Longword;
+    ReadyTimeLeft   : Longword;
     cSuddenDTurns   : LongInt;
     cDamagePercent  : LongInt;
     cMineDudPercent : LongWord;
@@ -73,26 +92,20 @@ var
 
     TimeTrialStartTime: Longword;
     TimeTrialStopTime : Longword;
-    
-    // init flags
-    cScreenWidth    : LongInt = 1024;
-    cScreenHeight   : LongInt = 768;
-    cBits           : LongInt = 32;
-    cBitsStr        : string[2] = '32';
-    //ipcPort is in uIO
-    cFullScreen     : boolean = false;
-    isSoundEnabled  : boolean = true;
-    isMusicEnabled  : boolean = false;
-    cLocaleFName    : shortstring = 'en.txt';
-    cInitVolume     : LongInt = 50;
-    cTimerInterval  : LongInt = 8;
-    //pathPrefix is in uConsts
-    cShowFPS        : boolean = false;
-    cAltDamage      : boolean = true;
-    cReducedQuality : LongInt = rqNone;
 
-    recordFileName  : shortstring = '';
-    
+    // originally from uConsts
+    Pathz: array[TPathType] of shortstring;
+    CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
+    LAND_WIDTH       : LongInt;
+    LAND_HEIGHT      : LongInt;
+    LAND_WIDTH_MASK  : LongWord;
+    LAND_HEIGHT_MASK : LongWord;
+    cMaxCaptions     : LongInt;
+
+    cLeftScreenBorder     : LongInt;
+    cRightScreenBorder    : LongInt;
+    cScreenSpace          : LongInt;
+
     cCaseFactor     : Longword;
     cLandAdditions  : Longword;
     cExplosives     : Longword;
@@ -150,10 +163,11 @@ procedure SplitByChar(var a, b: ansistring; c: char);
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TSound) : shortstring; overload;
 function  EnumToStr(const en : TAmmoType) : shortstring; overload;
+function  EnumToStr(const en : THogEffect) : shortstring; overload;
 procedure movecursor(dx, dy: LongInt);
-function  hwSign(r: hwFloat): LongInt;
-function  Min(a, b: LongInt): LongInt;
-function  Max(a, b: LongInt): LongInt;
+function  hwSign(r: hwFloat): LongInt; inline;
+function  Min(a, b: LongInt): LongInt; inline;
+function  Max(a, b: LongInt): LongInt; inline;
 procedure OutError(Msg: shortstring; isFatalError: boolean);
 procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
 procedure SDLTry(Assert: boolean; isFatal: boolean);
@@ -162,8 +176,10 @@ function  FloatToStr(n: hwFloat): shortstring;
 function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
 function  DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
+(*
 procedure AdjustColor(var Color: Longword);
 procedure SetKB(n: Longword);
+*)
 procedure SendKB;
 procedure SetLittle(var r: hwFloat);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
@@ -174,15 +190,15 @@ procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword; inline;
 function  DecodeBase64(s: shortstring): shortstring;
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
-function  endian(independent: LongWord): LongWord;
+function  endian(independent: LongWord): LongWord; inline;
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
-function  RectToStr(Rect: TSDL_Rect): shortstring;
+(* function  RectToStr(Rect: TSDL_Rect): shortstring; *)
 {$ENDIF}
 procedure MakeScreenshot(filename: shortstring);
 
 implementation
-uses uConsole, uStore, uIO, uSound, typinfo, sysutils;
+uses uConsole, uStore, uIO, uSound, typinfo, sysutils, uMobile;
 
 var KBnum: Longword;
 {$IFDEF DEBUGFILE}
@@ -229,6 +245,11 @@ begin
 EnumToStr:= GetEnumName(TypeInfo(TAmmoType), ord(en))
 end;
 
+function EnumToStr(const en: THogEffect) : shortstring; overload;
+begin
+    EnumToStr := GetEnumName(TypeInfo(THogEffect), ord(en))
+end;
+
 procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
 begin
@@ -260,12 +281,12 @@ procedure OutError(Msg: shortstring; isFatalError: boolean);
 begin
 // obsolete? written in WriteLnToConsole() anyway
 // {$IFDEF DEBUGFILE}AddFileLog(Msg);{$ENDIF}
-WriteLnToConsole(Msg);
-if isFatalError then
+    WriteLnToConsole(Msg);
+    if isFatalError then
     begin
-    SendIPC('E' + GetLastConsoleLine);
-    SDL_Quit;
-    halt(1)
+        SendIPC('E' + GetLastConsoleLine);
+        SDL_Quit;
+        halt(1)
     end
 end;
 
@@ -279,10 +300,18 @@ begin
 if not Assert then OutError(SDL_GetError, isFatal)
 end;
 
+(*
 procedure AdjustColor(var Color: Longword);
 begin
 Color:= SDL_MapRGB(PixelFormat, (Color shr 16) and $FF, (Color shr 8) and $FF, Color and $FF)
 end;
+
+procedure SetKB(n: Longword);
+begin
+KBnum:= n
+end;
+*)
+
 
 function IntToStr(n: LongInt): shortstring;
 begin
@@ -337,11 +366,6 @@ if _dX.isNegative then dX:= - dX;
 DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI)
 end;
 
-procedure SetKB(n: Longword);
-begin
-KBnum:= n
-end;
-
 procedure SendKB;
 var s: shortstring;
 begin
@@ -358,7 +382,7 @@ r:= SignAs(cLittle, r)
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = 'rDkKHT';
+const stc: array [TStatInfoType] of char = 'rDkKHTPsSB';
 var buf: shortstring;
 begin
 buf:= 'i' + stc[sit] + s;
@@ -457,11 +481,11 @@ Surface2Tex^.w:= surf^.w;
 Surface2Tex^.h:= surf^.h;
 
 if (surf^.format^.BytesPerPixel <> 4) then
-begin
+    begin
     TryDo(false, 'Surface2Tex failed, expecting 32 bit surface', true);
     Surface2Tex^.id:= 0;
     exit
-end;
+    end;
 
 
 glGenTextures(1, @Surface2Tex^.id);
@@ -472,7 +496,7 @@ if SDL_MustLock(surf) then
     SDLTry(SDL_LockSurface(surf) >= 0, true);
 
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then
-begin
+    begin
     tw:= toPowerOf2(Surf^.w);
     th:= toPowerOf2(Surf^.h);
 
@@ -481,33 +505,33 @@ begin
 
     GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
 
-        fromP4:= Surf^.pixels;
-        toP4:= tmpp;
+    fromP4:= Surf^.pixels;
+    toP4:= tmpp;
 
-        for y:= 0 to Pred(Surf^.h) do
+    for y:= 0 to Pred(Surf^.h) do
         begin
-            for x:= 0 to Pred(Surf^.w) do toP4^[x]:= fromP4^[x];
-            for x:= Surf^.w to Pred(tw) do toP4^[x]:= 0;
-            toP4:= @(toP4^[tw]);
-            fromP4:= @(fromP4^[Surf^.pitch div 4]);
+        for x:= 0 to Pred(Surf^.w) do toP4^[x]:= fromP4^[x];
+        for x:= Surf^.w to Pred(tw) do toP4^[x]:= 0;
+        toP4:= @(toP4^[tw]);
+        fromP4:= @(fromP4^[Surf^.pitch div 4])
         end;
 
-        for y:= Surf^.h to Pred(th) do
+    for y:= Surf^.h to Pred(th) do
         begin
-            for x:= 0 to Pred(tw) do toP4^[x]:= 0;
-            toP4:= @(toP4^[tw]);
+        for x:= 0 to Pred(tw) do toP4^[x]:= 0;
+        toP4:= @(toP4^[tw])
         end;
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmpp);
 
     FreeMem(tmpp, tw * th * surf^.format^.BytesPerPixel)
-end
+    end
 else
-begin
+    begin
     Surface2Tex^.rx:= 1.0;
     Surface2Tex^.ry:= 1.0;
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surf^.w, surf^.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surf^.pixels);
-end;
+    end;
 
 ResetVertexArrays(Surface2Tex);
 
@@ -521,11 +545,11 @@ procedure FreeTexture(tex: PTexture);
 begin
     if tex <> nil then
     begin
-        if tex^.NextTexture <> nil then 
+        if tex^.NextTexture <> nil then
             tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
-        if tex^.PrevTexture <> nil then 
+        if tex^.PrevTexture <> nil then
             tex^.PrevTexture^.NextTexture:= tex^.NextTexture
-        else 
+        else
             TextureList:= tex^.NextTexture;
         glDeleteTextures(1, @tex^.id);
         Dispose(tex);
@@ -638,11 +662,12 @@ begin
 writeln(f, GameTicks: 6, ': ', s);
 flush(f)
 end;
-
+(*
 function RectToStr(Rect: TSDL_Rect): shortstring;
 begin
 RectToStr:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
 end;
+*)
 {$ENDIF}
 
 function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
@@ -659,7 +684,7 @@ begin
     exit(tmpsurf);
 end;
 
-function endian(independent: LongWord): LongWord;
+function endian(independent: LongWord): LongWord; inline;
 begin
 {$IFDEF ENDIAN_LITTLE}
 endian:= independent;
@@ -675,6 +700,27 @@ end;
 procedure initModule;
 {$IFDEF DEBUGFILE}{$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}{$ENDIF}
 begin
+    Pathz:= cPathz;
+        {*  REFERENCE
+      4096 -> $FFFFF000
+      2048 -> $FFFFF800
+      1024 -> $FFFFFC00
+       512 -> $FFFFFE00  *}
+    if (cReducedQuality and rqLowRes) <> 0 then
+    begin
+        LAND_WIDTH:= 2048;
+        LAND_HEIGHT:= 1024;
+        LAND_WIDTH_MASK:= $FFFFF800;
+        LAND_HEIGHT_MASK:= $FFFFFC00;
+    end
+    else
+    begin
+        LAND_WIDTH:= 4096;
+        LAND_HEIGHT:= 2048;
+        LAND_WIDTH_MASK:= $FFFFF000;
+        LAND_HEIGHT_MASK:= $FFFFF800
+    end;
+
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
     cDrownSpeedf            := 0.06;
     cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
@@ -685,7 +731,7 @@ begin
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
     TextureList             := nil;
-    
+
     // int, longint longword and byte
     CursorMovementX     := 0;
     CursorMovementY     := 0;
@@ -722,7 +768,7 @@ begin
     cCaseFactor     := 5;  {0..9}
     cLandAdditions  := 4;
     cExplosives     := 2;
-        
+
     GameState       := Low(TGameState);
     GameType        := gmtLocal;
     zoom            := cDefaultZoomLevel;
@@ -747,24 +793,36 @@ begin
     cVolumeDelta    := 0;
     cHasFocus       := true;
     cInactDelay     := 1250;
+    ReadyTimeLeft   := 0;
 
     ScreenFade      := sfNone;
-    
+
 {$IFDEF SDL13}
     SDLwindow       := nil;
-{$ENDIF}    
+{$ENDIF}
+
+    // those values still aren't perfect
+    cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
+    cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
+    cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
+
+    if isPhone() then
+        cMaxCaptions:= 3
+    else
+        cMaxCaptions:= 4;
+
 {$IFDEF DEBUGFILE}
 {$I-}
 {$IFDEF IPHONEOS}
-    Assign(f,'../Documents/debug.txt');
+    Assign(f,'../Documents/hw-' + cLogfileBase + '.log');
     Rewrite(f);
 {$ELSE}
     if (ParamStr(1) <> '') and (ParamStr(2) <> '') then
-        if (ParamCount <> 3) and (ParamCount <> 19) then
+        if (ParamCount <> 3) and (ParamCount <> cDefaultParamNum) then
         begin
             for i:= 0 to 7 do
             begin
-                assign(f, ExtractFileDir(ParamStr(2)) + '/debug' + inttostr(i) + '.txt');
+                assign(f, ExtractFileDir(ParamStr(2)) + '/' + cLogfileBase + inttostr(i) + '.log');
                 rewrite(f);
                 if IOResult = 0 then break;
             end;
@@ -774,7 +832,7 @@ begin
         begin
             for i:= 0 to 7 do
             begin
-                assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
+                assign(f, ParamStr(1) + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
                 rewrite(f);
                 if IOResult = 0 then break;
             end;
@@ -797,6 +855,25 @@ begin
     flush(f);
     close(f);
 {$ENDIF}
+
+    // re-init flags so they will always contain safe values
+    cScreenWidth    := 1024;
+    cScreenHeight   := 768;
+    cBits           := 32;
+    //ipcPort is in uIO
+    cFullScreen     := false;
+    isSoundEnabled  := true;
+    isMusicEnabled  := false;
+    cLocaleFName    := 'en.txt';
+    cInitVolume     := 100;
+    cTimerInterval  := 8;
+    PathPrefix := './';
+    cShowFPS        := false;
+    cAltDamage      := true;
+    cReducedQuality := rqNone;
+    //userNick is in uChat
+    recordFileName  := '';
+    cReadyDelay     := 5000;
 end;
 
 end.

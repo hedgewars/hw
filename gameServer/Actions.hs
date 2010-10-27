@@ -11,7 +11,7 @@ import Control.Monad
 import Data.Time
 import Data.Maybe
 import Control.Monad.Reader
-import Control.Monad.State
+import Control.Monad.State.Strict
 import qualified Data.ByteString.Char8 as B
 -----------------------------
 import CoreTypes
@@ -57,9 +57,7 @@ processAction :: Action -> StateT ServerState IO ()
 
 
 processAction (AnswerClients chans msg) = do
-    liftIO (putStr $ "AnswerClients... " ++ (show $ length chans) ++ " (" ++ (show msg) ++")")
-    liftIO $ map (flip seq ()) chans `seq` mapM_ (flip writeChan msg) chans
-    liftIO (putStrLn "done")
+    liftIO $ map (flip seq ()) chans `seq` map (flip seq ()) msg `seq` mapM_ (flip writeChan msg) chans
 
 
 processAction SendServerMessage = do
@@ -100,30 +98,35 @@ processAction (ByeClient msg) = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
     ri <- clientRoomA
-    when (ri /= lobbyId) $ do
-        processAction $ MoveToLobby ("quit: " `B.append` msg)
-        return ()
 
     chan <- client's sendChan
     ready <- client's isReady
+
+    when (ri /= lobbyId) $ do
+        processAction $ MoveToLobby ("quit: " `B.append` msg)
+        liftIO $ modifyRoom rnc (\r -> r{
+                        --playersIDs = IntSet.delete ci (playersIDs r)
+                        playersIn = (playersIn r) - 1,
+                        readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
+                        }) ri
+        return ()
 
     liftIO $ do
         infoM "Clients" (show ci ++ " quits: " ++ (B.unpack msg))
 
         --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
-        modifyRoom rnc (\r -> r{
-                        --playersIDs = IntSet.delete ci (playersIDs r)
-                        playersIn = (playersIn r) - 1,
-                        readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
-                        }) ri
 
     processAction $ AnswerClients [chan] ["BYE", msg]
-    modify (\s -> s{removedClients = ci `Set.insert` removedClients s})
+
+    s <- get
+    put $! s{removedClients = ci `Set.insert` removedClients s}
 
 processAction (DeleteClient ci) = do
     rnc <- gets roomsClients
     liftIO $ removeClient rnc ci
-    modify (\s -> s{removedClients = ci `Set.delete` removedClients s})
+
+    s <- get
+    put $! s{removedClients = ci `Set.delete` removedClients s}
 
 {-
     where
@@ -258,7 +261,7 @@ processAction (AddRoom roomName roomPassword) = do
 
     processAction $ MoveToRoom rId
 
-    chans <- liftM (map sendChan) $ roomClientsS lobbyId
+    chans <- liftM (map sendChan) $! roomClientsS lobbyId
 
     mapM_ processAction [
         AnswerClients chans ["ROOM", "ADD", roomName]
@@ -401,7 +404,7 @@ processAction (AddClient client) = do
     liftIO $ do
         ci <- addClient rnc client
         forkIO $ clientRecvLoop (clientSocket client) (coreChan si) ci
-        forkIO $ clientSendLoop (clientSocket client) (coreChan si) (sendChan client) ci
+        forkIO $ clientSendLoop (clientSocket client) (sendChan client) ci
 
         infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime client))
 

@@ -94,7 +94,7 @@ for y:= 0 to Pred(Image^.h) do
                 if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
-        if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then 
+        if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then
             Land[cpY + y, cpX + x]:= lfObject
         end;
     p:= @(p^[Image^.pitch shr 2])
@@ -292,9 +292,9 @@ with Obj do
                    end
                 end;
              inc(y, 3);
-         until y > LAND_HEIGHT - 1 - Height;
+         until y > int64(LAND_HEIGHT) - 1 - Height;
          inc(x, getrandom(6) + 3)
-     until x > LAND_WIDTH - 1 - Width;
+     until x > int64(LAND_WIDTH) - 1 - Width;
      bRes:= cnt <> 0;
      if bRes then
         begin
@@ -341,9 +341,9 @@ with Obj do
                 end
             end;
             inc(y, 12);
-        until y > LAND_HEIGHT - 1 - Height - 8;
+        until y > int64(LAND_HEIGHT) - 1 - Height - 8;
         inc(x, getrandom(12) + 12)
-    until x > LAND_WIDTH - 1 - Width;
+    until x > int64(LAND_WIDTH) - 1 - Width;
     bRes:= cnt <> 0;
     if bRes then
         begin
@@ -403,7 +403,10 @@ if MusicFN = '' then MusicFN:= s;
 ReadLn(f, cCloudsNumber);
 
 // TODO - adjust all the theme cloud numbers. This should not be a permanent fix
-cCloudsNumber:= cCloudsNumber * (LAND_WIDTH div 2048);
+//cCloudsNumber:= cCloudsNumber * (LAND_WIDTH div 2048);
+
+// scale number of clouds depending on screen space (two times land width)
+cCloudsNumber:= cCloudsNumber * cScreenSpace div LAND_WIDTH;
 
 Readln(f, ThemeObjects.Count);
 for i:= 0 to Pred(ThemeObjects.Count) do
@@ -450,12 +453,16 @@ for i:= 0 to Pred(SprayObjects.Count) do
 Readln(f, vobCount);
 if vobCount > 0 then
     Readln(f, vobFramesCount, vobFrameTicks, vobVelocity, vobFallSpeed);
+
+// adjust amount of flakes scaled by screen space
+vobCount:= longint(vobCount) * cScreenSpace div LAND_WIDTH;
+
 if (cReducedQuality and rqKillFlakes) <> 0 then
     vobCount:= 0;
 
 
 for i:= 0 to Pred(vobCount) do
-    AddVisualGear( -cScreenWidth + random(cScreenWidth * 2 + LAND_WIDTH), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
+    AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
 
 Close(f);
 {$I+}
@@ -470,16 +477,16 @@ begin
     if ThemeObjects.Count = 0 then exit;
     WriteLnToConsole('Adding theme objects...');
 
-    for i:=0 to ThemeObjects.Count do 
+    for i:=0 to ThemeObjects.Count do
         ThemeObjects.objs[i].Maxcnt := max(1, (ThemeObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
-     
+
     repeat
         t := getrandom(ThemeObjects.Count);
         b := false;
         for i:=0 to ThemeObjects.Count do
             begin
             ii := (i+t) mod ThemeObjects.Count;
-            
+
             if ThemeObjects.objs[ii].Maxcnt <> 0 then
                 b := b or TryPut(ThemeObjects.objs[ii])
             end;
@@ -493,16 +500,16 @@ begin
     if SprayObjects.Count = 0 then exit;
     WriteLnToConsole('Adding spray objects...');
 
-    for i:=0 to SprayObjects.Count do 
+    for i:=0 to SprayObjects.Count do
         SprayObjects.objs[i].Maxcnt := max(1, (SprayObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
-     
+
     repeat
         t := getrandom(SprayObjects.Count);
         b := false;
         for i:=0 to SprayObjects.Count do
             begin
             ii := (i+t) mod SprayObjects.Count;
-            
+
             if SprayObjects.objs[ii].Maxcnt <> 0 then
                 b := b or TryPut(SprayObjects.objs[ii], Surface)
             end;
@@ -522,7 +529,7 @@ if hasGirders then
         i:=i+int;
     until (i>rightX-int);
     end;
-AddThemeObjects(ThemeObjects);
+if (GameFlags and gfDisableLandObjects) = 0 then AddThemeObjects(ThemeObjects);
 AddProgress();
 FreeRects();
 end;

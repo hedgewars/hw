@@ -115,7 +115,9 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepSmokeTrace,
             @doStepSmokeTrace,
             @doStepExplosion,
-            @doStepBigExplosion
+            @doStepBigExplosion,
+            @doStepChunk,
+            @doStepNote
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0): PVisualGear;
@@ -138,7 +140,8 @@ if ((cReducedQuality and rqFancyBoom) <> 0) and
     vgtHealthTag,
     vgtExplosion,
     vgtSmokeTrace,
-    vgtEvilTrace]) then
+    vgtEvilTrace,
+    vgtNote]) then
     begin
       AddVisualGear:= nil;
       exit
@@ -169,8 +172,7 @@ with gear^ do
                 end;
     vgtCloud: begin
                 Frame:= random(4);
-                dx:= 0.000005 * random(10000);
-                if random(2) = 0 then dx := -dx;
+                dx:= 0.5 + 0.1 * random(5); // how much the cloud will be affected by wind
                 timer:= random(4096);
                 end;
     vgtExplPart,
@@ -210,7 +212,7 @@ with gear^ do
                 end;
     vgtBubble: begin
                 dx:= 0.0000038654705 * random(10000);
-                dy:= 0.001 * (random(85) + 95);
+                dy:= 0;
                 if random(2) = 0 then dx := -dx;
                 FrameTicks:= 250 + random(1751);
                 Frame:= random(5)
@@ -226,7 +228,7 @@ with gear^ do
                 alpha:= 1.0;
                 scale:= 1.0
                 end;
-  vgtSmokeWhite, 
+  vgtSmokeWhite,
   vgtSmoke: begin
                 dx:= 0.0002 * (random(45) + 10);
                 dy:= 0.0002 * (random(45) + 10);
@@ -299,6 +301,21 @@ with gear^ do
 vgtBigExplosion: begin
                 gear^.Angle:= random(360);
                 end;
+      vgtChunk: begin
+                gear^.Frame:= random(4);
+                t:= random(1024);
+                sp:= 0.001 * (random(85) + 47);
+                dx:= AngleSin(t).QWordValue/4294967296 * sp;
+                dy:= AngleCos(t).QWordValue/4294967296 * sp * -2;
+                if random(2) = 0 then dx := -dx;
+                end;
+      vgtNote: begin
+                dx:= 0.005 * (random(15) + 10);
+                dy:= -0.001 * (random(40) + 20);
+                if random(2) = 0 then dx := -dx;
+                Frame:= random(4);
+                FrameTicks:= random(2000) + 1500;
+                end;
         end;
 
 if State <> 0 then gear^.State:= State;
@@ -352,7 +369,7 @@ while t <> nil do
       if Gear^.Kind = vgtFlake then
           begin
           // Damage calc from doMakeExplosion
-          dmg:= min(101,Radius  + cHHRadius div 2 - (round(abs(Gear^.X - float(X))+abs(Gear^.Y - float(Y))) div 5));
+          dmg:= min(101, int64(Radius) + cHHRadius div 2 - (round(abs(Gear^.X - float(X))+abs(Gear^.Y - float(Y))) div 5));
           if dmg > 1 then
               begin
               Gear^.tdX:= 0.02 * dmg + 0.01;
@@ -417,9 +434,12 @@ case Layer of
             case Gear^.Kind of
                 vgtExplPart: DrawSprite(sprExplPart, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
                 vgtExplPart2: DrawSprite(sprExplPart2, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
-                vgtFire: DrawSprite(sprFlame, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
+                vgtFire: if (Gear^.State and gstTmpFlag) = 0 then
+                             DrawSprite(sprFlame, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy, (RealTicks shr 6 + Gear^.Frame) mod 8)
+                         else
+                             DrawTextureF(SpritesData[sprFlame].Texture, Gear^.FrameTicks / 900, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, (RealTicks shr 7 + Gear^.Frame) mod 8, 1, 16, 16);
                 vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
-                vgtSteam: DrawSprite(sprExplPart, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
+                vgtSteam: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                 vgtAmmo: begin
                         Tint($FF, $FF, $FF, floor(Gear^.alpha * $FF));
                         DrawTextureF(ropeIconTex, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 32, 32);
@@ -455,6 +475,8 @@ case Layer of
                             Tint($FF, $FF, $FF, floor(Gear^.alpha * $FF));
                             DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);
                             end;
+                vgtChunk: DrawRotatedF(sprChunk, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                 vgtNote: DrawRotatedF(sprNote, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
             end;
         case Gear^.Kind of
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
@@ -470,7 +492,7 @@ procedure AddClouds;
 var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber - 1 do
-    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + (LAND_WIDTH+256)) div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
+    AddVisualGear(cLeftScreenBorder + i * cScreenSpace div (cCloudsNumber + 1), LAND_HEIGHT-1184, vgtCloud)
 end;
 
 procedure initModule;

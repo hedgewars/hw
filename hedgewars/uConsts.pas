@@ -33,14 +33,14 @@ type
     HwColor4f = record
         r, g, b, a: byte
         end;
-        
+
     TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit);
 
     TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax);
 
     TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
             ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags);
+            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps);
 
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
             sprLag, sprArrow, sprGrenade, sprTargetP, sprBee,
@@ -71,11 +71,12 @@ type
             sprAmTeleport, sprSplash, sprDroplet, sprBirdy, sprHandCake, sprHandConstruction,
             sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
-            sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee, 
+            sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
-            sprCheese, sprHandCheese, sprHandFlamethrower
+            sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
+            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer, sprHandResurrector
             );
-    
+
     // Gears that interact with other Gears and/or Land
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtGrave, gtBee, // 4
             gtShotgunShot, gtPickHammer, gtRope, gtMine, gtCase, // 9
@@ -86,7 +87,8 @@ type
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 34
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
-            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower); // 51
+            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
+            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector);
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -94,7 +96,7 @@ type
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
-            vgtBigExplosion);
+            vgtBigExplosion, vgtChunk, vgtNote);
 
     TGearsType = set of TGearType;
 
@@ -120,24 +122,29 @@ type
             sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket,
             sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle, sndBeeWater,
             sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7, sndPiano8,
-            sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3);
+            sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
+            sndComeonthen, sndParachute, sndBump, sndResurrector);
 
-    TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
-            amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
-            amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
-            amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
-            amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
-            amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
-            amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun,
-            amPiano, amGasBomb, amSineGun, amFlamethrower);
+    TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
+            amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip, // 13
+            amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch, // 18
+            amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake, // 24
+            amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, // 30
+            amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
+            amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
+            amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
+            amResurrector);
 
-    THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
+    TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
+
+    THWFont = (fnt16, fntBig, fntSmall {$IFNDEF IPHONEOS}, CJKfnt16, CJKfntBig, CJKfntSmall{$ENDIF});
 
     TCapGroup = (capgrpGameState, capgrpAmmoinfo, capgrpVolume,
             capgrpMessage, capgrpAmmostate);
 
     TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs,
-            siClanHealth, siTeamStats);
+            siClanHealth, siTeamStats, siPlayerKills, siMaxTeamDamage,
+            siMaxTeamKills, siMaxTurnSkips );
 
     TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
 
@@ -157,7 +164,6 @@ type
             Count: LongWord;
 (* Using for place hedgehogs mode, but for any other situation where the initial count would be needed I guess.
 For example, say, a mode where the weaponset is reset each turn, or on sudden death *)
-            InitialCount: LongWord; 
             NumPerTurn: LongWord;
             Timer: LongWord;
             Pos: LongWord;
@@ -183,10 +189,12 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             PrevTexture, NextTexture: PTexture;
             end;
 
-    THogEffect = (heInvulnerable, hePoisoned);
+    THogEffect = (heInvulnerable, heResurrectable, hePoisoned);
 
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
-const sfMax = 1000;
+const
+    sfMax = 1000;
+    cDefaultParamNum = 17;
 
     // message constants
     errmsgCreateSurface   = 'Error creating SDL surface';
@@ -196,7 +204,6 @@ const sfMax = 1000;
     errmsgIncorrectUse    = 'Incorrect use';
     errmsgShouldntRun     = 'This program shouldn''t be run manually';
     errmsgWrongNumber     = 'Wrong parameters number';
-    errmsgSlotsOverflow   = 'CurSlot overflowed';
 
     msgLoading           = 'Loading ';
     msgOK                = 'ok';
@@ -223,8 +230,8 @@ const sfMax = 1000;
     rqLowRes      = $00000001;  // use half land array
     rqBlurryLand  = $00000002;  // downscaled terrain
     rqNoBackground= $00000004;  // don't draw background
-    rqSimpleRope  = $00000008;  // avoid drawing rope
-    rq2DWater     = $00000010;  // disabe 3D water effect
+    rqSimpleRope  = $00000008;  // draw rope using lines only
+    rq2DWater     = $00000010;  // disable 3D water effect
     rqFancyBoom   = $00000020;  // no fancy explosion effects
     rqKillFlakes  = $00000040;  // no flakes
     rqSlowMenu    = $00000080;  // ammomenu appears with no animation
@@ -259,13 +266,13 @@ const sfMax = 1000;
     cPowerDivisor = 1500;
 
     MAXNAMELEN = 192;
-    
+
     // some opengl headers do not have these macros
     GL_BGR              = $80E0;
     GL_BGRA             = $80E1;
     GL_CLAMP_TO_EDGE    = $812F;
     GL_TEXTURE_PRIORITY = $8066;
-    
+
     cSendCursorPosTime  : LongWord = 50;
     cVisibleWater       : LongInt = 128;
     cCursorEdgesDist    : LongInt = 100;
@@ -301,7 +308,9 @@ const sfMax = 1000;
 
     cKeyMaxIndex = 1023;
 
+    // do not change this value
     cDefaultZoomLevel = 2.0;
+
 {$IFDEF IPHONEOS}
     cMaxZoomLevel = 0.5;
     cMinZoomLevel = 3.5;
@@ -313,8 +322,6 @@ const sfMax = 1000;
 {$ENDIF}
 
     cSendEmptyPacketTime = 1000;
-
-    // from uTriggers
     trigTurns = $80000001;
 
     // Training Flags
@@ -324,28 +331,31 @@ const sfMax = 1000;
     tfSpawnTargets  = $00000004;
     tfIgnoreDelays  = $00000008;
     tfTargetRespawn = $00000010;
-    
-    gfAny            = $FFFFFFFF;
-    gfForts          = $00000001;
-    gfMultiWeapon    = $00000002;
-    gfSolidLand      = $00000004;
-    gfBorder         = $00000008;
-    gfDivideTeams    = $00000010;
-    gfLowGravity     = $00000020;
-    gfLaserSight     = $00000040;
-    gfInvulnerable   = $00000080;
-    gfMines          = $00000100;
-    gfVampiric       = $00000200;
-    gfKarma          = $00000400;
-    gfArtillery      = $00000800;
-    gfOneClanMode    = $00001000;
-    gfRandomOrder    = $00002000;
-    gfKing           = $00004000;
-    gfPlaceHog       = $00008000;
-    gfSharedAmmo     = $00010000;
-    gfDisableGirders = $00020000;
-    gfExplosives     = $00040000;
-    gfDisableLandObjects = $00080000;
+
+    gfAny                = $FFFFFFFF;
+    gfOneClanMode        = $00000001;           // used in trainings
+    gfMultiWeapon        = $00000002;           // used in trainings
+    gfSolidLand          = $00000004;
+    gfBorder             = $00000008;
+    gfDivideTeams        = $00000010;
+    gfLowGravity         = $00000020;
+    gfLaserSight         = $00000040;
+    gfInvulnerable       = $00000080;
+    gfMines              = $00000100;           // redundant? same effect as 'landadds 0'
+    gfVampiric           = $00000200;
+    gfKarma              = $00000400;
+    gfArtillery          = $00000800;
+    gfForts              = $00001000;
+    gfRandomOrder        = $00002000;
+    gfKing               = $00004000;
+    gfPlaceHog           = $00008000;
+    gfSharedAmmo         = $00010000;
+    gfDisableGirders     = $00020000;
+    gfDisableLandObjects = $00040000;
+    gfAISurvival         = $00080000;
+    gfInfAttack          = $00100000;
+    gfResetWeps          = $00200000;
+    gfPerHogAmmo         = $00400000;
     // NOTE: When adding new game flags, ask yourself
     // if a "game start notice" would be useful. If so,
     // add one in uWorld.pas - look for "AddGoal".
@@ -370,21 +380,21 @@ const sfMax = 1000;
     gstLoser          = $00080000;
     gstHHGone         = $00100000;
 
-    gm_Left   = $00000001;
-    gm_Right  = $00000002;
-    gm_Up     = $00000004;
-    gm_Down   = $00000008;
-    gm_Switch = $00000010;
-    gm_Attack = $00000020;
-    gm_LJump  = $00000040;
-    gm_HJump  = $00000080;
-    gm_Destroy= $00000100;
-    gm_Slot   = $00000200; // with param
-    gm_Weapon = $00000400; // with param
-    gm_Timer  = $00000800; // with param
-    gm_Animate= $00001000; // with param
-    gm_Precise= $00002000;
-    gmAllStoppable = gm_Left or gm_Right or gm_Up or gm_Down or gm_Attack or gm_Precise;
+    gmLeft   = $00000001;
+    gmRight  = $00000002;
+    gmUp     = $00000004;
+    gmDown   = $00000008;
+    gmSwitch = $00000010;
+    gmAttack = $00000020;
+    gmLJump  = $00000040;
+    gmHJump  = $00000080;
+    gmDestroy= $00000100;
+    gmSlot   = $00000200; // with param
+    gmWeapon = $00000400; // with param
+    gmTimer  = $00000800; // with param
+    gmAnimate= $00001000; // with param
+    gmPrecise= $00002000;
+    gmAllStoppable = gmLeft or gmRight or gmUp or gmDown or gmAttack or gmPrecise;
 
     cMaxSlotIndex       = 9;
     cMaxSlotAmmoIndex   = 5;
@@ -403,7 +413,7 @@ const sfMax = 1000;
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
     ammoprop_NoRoundEndHint=$10000000;
-    
+
     AMMO_INFINITE = 100;
 
     EXPLAllDamageInRadius = $00000001;
@@ -413,6 +423,7 @@ const sfMax = 1000;
     EXPLDontDraw          = $00000010;
     EXPLNoGfx             = $00000020;
     EXPLPoisoned          = $00000040;
+    EXPLDoNotTouchAny     = $00000080;
 
     posCaseAmmo    = $00000001;
     posCaseHealth  = $00000002;
@@ -427,11 +438,11 @@ const sfMax = 1000;
     htName        = $02;
     htHealth      = $04;
     htTransparent = $08;
-    
+
     cHHFileName = 'Hedgehog';
     cCHFileName = 'Crosshair';
     cThemeCFGFilename = 'theme.cfg';
-    
+
     FontBorder = 2;
     cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
@@ -452,19 +463,10 @@ const sfMax = 1000;
         'Graphics/Hedgehog',             // ptHedgehog
         'Sounds/voices',                 // ptVoices
         'Graphics/Hats',                 // ptHats
-        'Graphics/Flags'                 // ptFlags
+        'Graphics/Flags',                // ptFlags
+        'Missions/Maps'                  // ptMissionMaps
     );
-    
-var PathPrefix: shortstring = './';
-    Pathz: array[TPathType] of shortstring;
-    CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
-    LAND_WIDTH  :longint;
-    LAND_HEIGHT :longint;
-    LAND_WIDTH_MASK  :longWord;
-    LAND_HEIGHT_MASK :longWord;
-    cMaxCaptions : LongInt;
 
-const
     cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
     cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
 
@@ -480,7 +482,8 @@ const
             (Handle: nil;
             Height: 10;
             style: TTF_STYLE_NORMAL;
-            Name: 'DejaVuSans-Bold.ttf'),
+            Name: 'DejaVuSans-Bold.ttf')
+            {$IFNDEF IPHONEOS}, // remove chinese fonts for now
             (Handle: nil;
             Height: 12;
             style: TTF_STYLE_NORMAL;
@@ -493,6 +496,7 @@ const
             Height: 10;
             style: TTF_STYLE_NORMAL;
             Name: 'wqy-zenhei.ttc')
+            {$ENDIF}
             );
 
     SpritesData: array[TSprite] of record
@@ -725,7 +729,7 @@ const
             Width: 64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprJetpack
             (FileName:  'Health'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprHealth
-            (FileName:  'amMolotov'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil; 
+            (FileName:  'amMolotov'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),//sprHandMolotov
             (FileName:  'Molotov'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprMolotov
@@ -800,8 +804,24 @@ const
             (FileName:  'amCheese'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandCheese
             (FileName:  'amFlamethrower'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprHandFlamethrower
-            );
+            Width:  128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandFlamethrower
+            (FileName:  'Chunk'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprChunk
+            (FileName:  'Note'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprNote
+            (FileName:   'SMineOff'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSMineOff
+            (FileName:    'SMineOn'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSMineOn
+            (FileName:   'amSMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandSMine
+            (FileName:  'amHammer'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprWhip
+            (FileName: 'amResurrector'; Path: ptHedgehog; AltPath: ptNone;
+                Texture: nil; Surface: nil; Width: 32; Height: 32;
+                imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
+                tpMedium; getDimensions: false; getImageDimensions: true) 
+            ); // sprHandResurrector
 
     Wavez: array [TWave] of record
             Sprite: TSprite;
@@ -908,7 +928,7 @@ const
             (FileName:             'Droplet2.ogg'; Path: ptSounds),// sndDroplet2
             (FileName:             'Droplet3.ogg'; Path: ptSounds),// sndDroplet3
             (FileName:                  'egg.ogg'; Path: ptSounds),// sndEggBreak
-            (FileName:           'pickhammer.ogg'; Path: ptSounds),// sndDrillRocket
+            (FileName:             'drillgun.ogg'; Path: ptSounds),// sndDrillRocket
             (FileName:          'PoisonCough.ogg'; Path: ptVoices),// sndPoisonCough
             (FileName:           'PoisonMoan.ogg'; Path: ptVoices),// sndPoisonMoan
             (FileName:             'BirdyLay.ogg'; Path: ptSounds),// sndBirdyLay
@@ -927,7 +947,12 @@ const
             (FileName:          'shotgunfire.ogg'; Path: ptSounds),// sndSineGun
             (FileName:                'Ooff1.ogg'; Path: ptVoices),// sndOoff1
             (FileName:                'Ooff2.ogg'; Path: ptVoices),// sndOoff2
-            (FileName:                'Ooff3.ogg'; Path: ptVoices) // sndOoff3
+            (FileName:                'Ooff3.ogg'; Path: ptVoices),// sndOoff3
+            (FileName:            'whipcrack.ogg'; Path: ptSounds),// sndWhack
+            (FileName:           'Comeonthen.ogg'; Path: ptVoices),// sndComeonthen
+            (FileName:            'parachute.ogg'; Path: ptSounds),// sndParachute
+            (FileName:                 'bump.ogg'; Path: ptSounds),// sndBump
+            (FileName: 'hogchant3.ogg'; Path: ptSounds) // sndResurrector
             );
 
     Ammoz: array [TAmmoType] of record
@@ -950,7 +975,6 @@ const
             NumberInCase: 0;
             Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_Effect;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -974,7 +998,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
                 Pos: 0;
@@ -998,7 +1021,6 @@ const
             NumberInCase: 3;
             Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
                 Count: 5;
-                InitialCount: 5;
                 NumPerTurn: 0;
                 Timer: 3000;
                 Pos: 0;
@@ -1022,7 +1044,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1046,7 +1067,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or ammoprop_NeedTarget or ammoprop_DontHold;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1070,7 +1090,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 1;
                 Timer: 0;
                 Pos: 0;
@@ -1094,7 +1113,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInMove or ammoprop_NoCrosshair or ammoprop_DontHold;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1118,7 +1136,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1146,7 +1163,6 @@ const
                           ammoprop_Utility or
                           ammoprop_AltAttack;
                     Count: 5;
-                    InitialCount: 5;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1170,7 +1186,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1194,7 +1209,6 @@ const
             NumberInCase: 2;
             Ammo: (Propz: 0;
                 Count: 3;
-                InitialCount: 3;
                 NumPerTurn: 3;
                 Timer: 0;
                 Pos: 0;
@@ -1218,7 +1232,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1242,7 +1255,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_ForwMsgs or ammoprop_AttackInMove;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1266,7 +1278,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1290,7 +1301,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_DontHold;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1320,7 +1330,6 @@ const
                           ammoprop_Utility or
                           ammoprop_AltAttack;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1348,7 +1357,6 @@ const
                             ammoprop_DontHold or
                             ammoprop_NotBorder;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1376,7 +1384,6 @@ const
                             ammoprop_DontHold or
                             ammoprop_NotBorder;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1400,7 +1407,6 @@ const
             NumberInCase: 2;
             Ammo: (Propz: ammoprop_ForwMsgs;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1428,7 +1434,6 @@ const
                           ammoprop_Utility or
                           ammoprop_AttackingPut;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1457,7 +1462,6 @@ const
                           ammoprop_Utility or
                           ammoprop_DontHold;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1485,7 +1489,6 @@ const
                           ammoprop_Utility or
                           ammoprop_DontHold;
                     Count: 3;
-                    InitialCount: 3;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1509,7 +1512,6 @@ const
             NumberInCase: 4;
             Ammo: (Propz: 0;
                 Count: 4;
-                InitialCount: 4;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1533,7 +1535,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold or ammoprop_AttackInMove;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1557,7 +1558,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_NoCrosshair or ammoprop_DontHold;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1581,7 +1581,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1605,7 +1604,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
                 Count: 0;
-                InitialCount: 0;
                 NumPerTurn: 0;
                 Timer: 3000;
                 Pos: 0;
@@ -1629,7 +1627,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz:  ammoprop_Power or ammoprop_AltUse;
                 Count: 0;
-                InitialCount: 0;
                 NumPerTurn: 0;
                 Timer: 5000;
                 Pos: 0;
@@ -1657,7 +1654,6 @@ const
                             ammoprop_DontHold or
                             ammoprop_NotBorder;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1681,7 +1677,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1705,7 +1700,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 5001;
                 Pos: 0;
@@ -1731,7 +1725,6 @@ const
                             ammoprop_DontHold or
                             ammoprop_AltAttack};
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1760,7 +1753,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1789,7 +1781,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1818,7 +1809,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1847,7 +1837,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1876,7 +1865,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1905,7 +1893,6 @@ const
                           ammoprop_Utility or
                           ammoprop_Effect;
                     Count: 1;
-                    InitialCount: 1;
                     NumPerTurn: 0;
                     Timer: 0;
                     Pos: 0;
@@ -1929,7 +1916,6 @@ const
             NumberInCase: 2;
             Ammo: (Propz: 0;
                 Count: 2;
-                InitialCount: 2;
                 NumPerTurn: 1;
                 Timer: 0;
                 Pos: 0;
@@ -1959,7 +1945,6 @@ const
                           ammoprop_Utility or
                           ammoprop_AltAttack;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -1983,7 +1968,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
                 Pos: 0;
@@ -2009,7 +1993,6 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -2036,7 +2019,6 @@ const
                           ammoprop_DontHold or
                           ammoprop_Utility;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 3;
                 Timer: 0;
                 Pos: 0;
@@ -2064,7 +2046,6 @@ const
                             ammoprop_DontHold or
                             ammoprop_NotBorder;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -2088,7 +2069,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
                 Count: AMMO_INFINITE;
-                InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
                 Pos: 0;
@@ -2104,7 +2084,7 @@ const
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
-            
+
 // SineGun
             (NameId: sidSineGun;
             NameTex: nil;
@@ -2112,7 +2092,6 @@ const
             NumberInCase: 2;
             Ammo: (Propz: ammoprop_AttackInMove;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
@@ -2136,7 +2115,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
                 Count: 1;
-                InitialCount: 1;
                 NumPerTurn: 0;
                 Timer: 5001;
                 Pos: 0;
@@ -2151,8 +2129,77 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
-            ejectY: -3)
-            );
+            ejectY: -3),
+
+// Sticky Mine
+            (NameId: sidSMine;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+                Count: 1;
+                NumPerTurn: 1;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amSMine;
+                AttackVoice: sndLaugh);
+            Slot: 4;
+            TimeAfterTurn: 5000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
+
+// Hammer
+            (NameId: sidHammer;
+            NameTex: nil;
+            Probability: 0;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoCrosshair;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amHammer;
+                AttackVoice: sndNone);
+            Slot: 3;
+            TimeAfterTurn: 1000;
+            MinAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
+
+        (NameId: sidResurrector;
+            NameTex: nil;
+            Probability: 0;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_NoRoundEndHint;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amResurrector;
+                AttackVoice: sndNone);
+            Slot: 8;
+            TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0)
+        );
+
 
 
     conversionFormat: TSDL_PixelFormat = (
@@ -2181,48 +2228,7 @@ const
         colorkey: 0;
         alpha : 255
     );
-    
-procedure initModule;
-procedure freeModule;
 
 implementation
-uses uMisc;
-
-procedure initModule;
-begin
-    Pathz:= cPathz;
-        {*  REFERENCE
-      4096 -> $FFFFF000
-      2048 -> $FFFFF800
-      1024 -> $FFFFFC00
-       512 -> $FFFFFE00  *}
-    if (cReducedQuality and rqLowRes) <> 0 then
-    begin
-        LAND_WIDTH:= 2048;
-        LAND_HEIGHT:= 1024;
-        LAND_WIDTH_MASK:= $FFFFF800;
-        LAND_HEIGHT_MASK:= $FFFFFC00;
-    end
-    else
-    begin
-        LAND_WIDTH:= 4096;
-        LAND_HEIGHT:= 2048;
-        LAND_WIDTH_MASK:= $FFFFF000;
-        LAND_HEIGHT_MASK:= $FFFFF800
-    end;
-
-{$IFDEF IPHONEOS}    
-    if isPhone() then
-        cMaxCaptions:= 3
-    else
-{$ENDIF}
-        cMaxCaptions:= 4;
-
-end;
-
-procedure freeModule;
-begin
-    PathPrefix := './';
-end;
 
 end.

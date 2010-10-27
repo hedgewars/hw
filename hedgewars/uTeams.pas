@@ -22,7 +22,8 @@ unit uTeams;
 interface
 uses uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound;
 
-type PHHAmmo = ^THHAmmo;
+type 
+    PHHAmmo = ^THHAmmo;
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
 
     PHedgehog = ^THedgehog;
@@ -37,8 +38,8 @@ type PHHAmmo = ^THHAmmo;
             HealthTagTex,
             HatTex: PTexture;
             Ammo: PHHAmmo;
+            CurAmmoType: TAmmoType;
             AmmoStore: Longword;
-            CurSlot, CurAmmo: LongWord;
             Team: PTeam;
             MultiShootAttacks: Longword;
             visStepPos: LongWord;
@@ -63,6 +64,7 @@ type PHHAmmo = ^THHAmmo;
             CrosshairTex,
             GraveTex,
             HealthTex,
+            AIKillsTex,
             FlagTex: PTexture;
             Flag: shortstring;
             GraveName: shortstring;
@@ -76,6 +78,7 @@ type PHHAmmo = ^THHAmmo;
             hasGone: boolean;
             voicepack: PVoicepack;
             PlayerHash: shortstring;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
+            stats: TTeamStats;
             end;
 
     TClan = record
@@ -111,10 +114,10 @@ procedure RestoreTeamsFromSave;
 function  CheckForWin: boolean;
 procedure TeamGone(s: shortstring);
 procedure TeamGoneEffect(var Team: TTeam);
-function GetTeamStatString(p: PTeam): shortstring;
+function  GetTeamStatString(p: PTeam): shortstring;
 
 implementation
-uses uMisc, uWorld, uLocale, uAmmos, uChat;
+uses uMisc, uWorld, uLocale, uAmmos, uChat, uMobile;
 const MaxTeamHealth: LongInt = 0;
 
 function CheckForWin: boolean;
@@ -135,6 +138,7 @@ or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then exit(false);
 CheckForWin:= true;
 
 TurnTimeLeft:= 0;
+ReadyTimeLeft:= 0;
 if AliveCount = 0 then
     begin // draw
     AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
@@ -172,7 +176,7 @@ with CurrentHedgehog^ do
     if (PreviousTeam <> nil) and PlacingHogs and Unplaced then
         begin
         Unplaced:= false;
-        if Gear <> nil then 
+        if Gear <> nil then
            begin
            DeleteCI(Gear);
            FindPlace(Gear, false, 0, LAND_WIDTH);
@@ -220,19 +224,21 @@ repeat
         end
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
 
-CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog])
+CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
 end;
 
 procedure AfterSwitchHedgehog;
 var g: PGear;
     i, t: LongInt;
+    CurWeapon: PAmmo;
+
 begin
 if PlacingHogs then
    begin
    PlacingHogs:= false;
    for t:= 0 to Pred(TeamsCount) do
       for i:= 0 to cMaxHHIndex do
-          if (TeamsArray[t]^.Hedgehogs[i].Gear <> nil) and (TeamsArray[t]^.Hedgehogs[i].Unplaced) then 
+          if (TeamsArray[t]^.Hedgehogs[i].Gear <> nil) and (TeamsArray[t]^.Hedgehogs[i].Unplaced) then
              PlacingHogs:= true;
 
    if not PlacingHogs then // Reset  various things I mucked with
@@ -245,7 +251,8 @@ if PlacingHogs then
 
 inc(CurrentTeam^.Clan^.TurnNumber);
 
-SwitchNotHeldAmmo(CurrentHedgehog^);
+CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
+if CurWeapon^.Count = 0 then CurrentHedgehog^.CurAmmoType:= amNothing;
 
 with CurrentHedgehog^ do
     begin
@@ -263,6 +270,11 @@ with CurrentHedgehog^ do
 ResetKbd;
 
 cWindSpeed:= rndSign(GetRandom * 2 * cMaxWindSpeed);
+// cWindSpeedf:= cWindSpeed.QWordValue / _1.QWordValue throws Internal error 200502052 on fpc 2.5.1
+// see http://mantis.freepascal.org/view.php?id=17714
+cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
+if cWindSpeed.isNegative then
+    CWindSpeedf := -cWindSpeedf;
 g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);
 g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
@@ -272,17 +284,29 @@ if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
 
 bShowFinger:= true;
 
-if (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then
-    PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
-else
-    PlaySound(sndYesSir, CurrentTeam^.voicepack);
-
 if PlacingHogs then
    begin
    if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 15000
    else TurnTimeLeft:= 0
    end
-else TurnTimeLeft:= cHedgehogTurnTime
+else TurnTimeLeft:= cHedgehogTurnTime;
+if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
+    begin
+    if CurrentTeam^.ExtDriven then
+        PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
+    else
+        PlaySound(sndYesSir, CurrentTeam^.voicepack);
+    if PlacingHogs or (cHedgehogTurnTime < 1000000) then ReadyTimeLeft:= cReadyDelay;
+    AddCaption(Format(shortstring(trmsg[sidReady]), CurrentTeam^.TeamName), cWhiteColor, capgrpGameState)
+    end
+else
+    begin
+    if TurnTimeLeft > 0 then
+        PlaySound(sndIllGetYou, CurrentTeam^.voicepack);
+    ReadyTimeLeft:= 0
+    end;
+
+perfExt_NewTurnBeginning();
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;

@@ -71,7 +71,7 @@ for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
        begin
        with CurrentHedgehog^ do
-            a:= Ammo^[CurSlot, CurAmmo].AmmoType;
+            a:= CurAmmoType;
        aa:= a;
        repeat
         if (CanUseAmmo[a]) and
@@ -212,7 +212,7 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
     Pop(ticks, Actions, Me^);
 
     AddAction(Actions, Me^.Message, aim_push, 250, 0, 0);
-    if (Me^.Message and gm_Left) <> 0 then AddAction(Actions, aia_WaitXL, hwRound(Me^.X), 0, 0, 0)
+    if (Me^.Message and gmLeft) <> 0 then AddAction(Actions, aia_WaitXL, hwRound(Me^.X), 0, 0, 0)
                                       else AddAction(Actions, aia_WaitXR, hwRound(Me^.X), 0, 0, 0);
     steps:= 0;
 

@@ -56,6 +56,7 @@ class HWTeam
         QString Owner;
         int Rounds;
         int Wins;
+        int CampaignProgress;
         HWHog Hedgehogs[8];
         unsigned int AchievementProgress[MAX_ACHIEVEMENTS];
         unsigned int difficulty;

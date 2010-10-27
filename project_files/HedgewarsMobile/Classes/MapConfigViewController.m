@@ -1,232 +1,77 @@
-//
-//  MapConfigViewController.m
-//  HedgewarsMobile
-//
-//  Created by Vittorio on 22/04/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
+/*
+ * Hedgewars-iOS, a Hedgewars port for iOS devices
+ * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 22/04/2010.
+ */
+
 
 #import "MapConfigViewController.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
-#import "SDL_net.h"
-#import <pthread.h>
 
-#define INDICATOR_TAG 7654
+#define scIndex         self.segmentedControl.selectedSegmentIndex
+#define isRandomness()  (segmentedControl.selectedSegmentIndex == 0 || segmentedControl.selectedSegmentIndex == 2)
 
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
-            tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, themeArray, mapArray, busy;
+            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
-#pragma mark -
-#pragma mark Preview Handling
--(int) sendToEngine: (NSString *)string {
-    unsigned char length = [string length];
-    
-    SDLNet_TCP_Send(csd, &length , 1);
-    return SDLNet_TCP_Send(csd, [string UTF8String], length);
+-(IBAction) mapButtonPressed {
+    playSound(@"clickSound");
+    [self updatePreview];
 }
 
--(const uint8_t *)engineProtocol:(NSInteger) port {
-    IPaddress ip;
-    BOOL serverQuit = NO;
-    static uint8_t map[128*32];
-    
-    if (SDLNet_Init() < 0) {
-        DLog(@"SDLNet_Init: %s", SDLNet_GetError());
-        serverQuit = YES;
-    }
-    
-    // Resolving the host using NULL make network interface to listen
-    if (SDLNet_ResolveHost(&ip, NULL, port) < 0) {
-        DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
-        serverQuit = YES;
-    }
-    
-    // Open a connection with the IP provided (listen on the host's port)
-    if (!(sd = SDLNet_TCP_Open(&ip))) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), port);
-        serverQuit = YES;
-    }
-    
-    // launch the preview here so that we're sure the tcp channel is open
-    pthread_t thread_id;
-    pthread_create(&thread_id, NULL, (void *)GenLandPreview, (void *)port);
-    pthread_detach(thread_id);
-    
-    DLog(@"Waiting for a client on port %d", port);
-    while (!serverQuit) {
-        /* This check the sd if there is a pending connection.
-         * If there is one, accept that, and open a new socket for communicating */
-        csd = SDLNet_TCP_Accept(sd);
-        if (NULL != csd) {          
-            DLog(@"Client found");
-            
-            [self sendToEngine:self.seedCommand];
-            [self sendToEngine:self.templateFilterCommand];
-            [self sendToEngine:self.mapGenCommand];
-            [self sendToEngine:self.mazeSizeCommand];
-            [self sendToEngine:@"!"];
-                
-            memset(map, 0, 128*32);
-            SDLNet_TCP_Recv(csd, map, 128*32);
-            SDLNet_TCP_Recv(csd, &maxHogs, sizeof(uint8_t));
-
-            SDLNet_TCP_Close(csd);
-            serverQuit = YES;
-        }
-    }
-    
-    SDLNet_TCP_Close(sd);
-    SDLNet_Quit();
-    return map;
-}
-
--(void) drawingThread {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
-    // select the port for IPC and launch the preview generation through engineProtocol:
-    int port = randomPort();
-    const uint8_t *map = [self engineProtocol:port];
-    uint8_t mapExp[128*32*8];
-
-    // draw the buffer (1 pixel per component, 0= transparent 1= color)
-    int k = 0;
-    for (int i = 0; i < 32*128; i++) {
-        unsigned char byte = map[i];
-        for (int j = 0; j < 8; j++) {
-            // select the color based on the leftmost bit
-            if ((byte & 0x80) != 0)
-                mapExp[k] = 100;
-            else
-                mapExp[k] = 255;
-            // shift to next bit
-            byte <<= 1;
-            k++;
-        }
-    }
-    CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceGray();
-    CGContextRef bitmapImage = CGBitmapContextCreate(mapExp, 256, 128, 8, 256, colorspace, kCGImageAlphaNone);
-    CGColorSpaceRelease(colorspace);
-    
-    CGImageRef previewCGImage = CGBitmapContextCreateImage(bitmapImage);
-    CGContextRelease(bitmapImage);
-    UIImage *previewImage = [[UIImage alloc] initWithCGImage:previewCGImage];
-    CGImageRelease(previewCGImage);
-    previewCGImage = nil;
-
-    // set the preview image (autoreleased) in the button and the maxhog label on the main thread to prevent a leak
-    [self performSelectorOnMainThread:@selector(setButtonImage:) withObject:[previewImage makeRoundCornersOfSize:CGSizeMake(12, 12)] waitUntilDone:NO];
-    [previewImage release];
-    [self performSelectorOnMainThread:@selector(setLabelText:) withObject:[NSString stringWithFormat:@"%d", maxHogs] waitUntilDone:NO];
-    
-    // restore functionality of button and remove the spinning wheel on the main thread to prevent a leak
-    [self performSelectorOnMainThread:@selector(turnOnWidgets) withObject:nil waitUntilDone:NO];
-    
-    [pool release];
-    //Invoking this method should be avoided as it does not give your thread a chance to clean up any resources it allocated during its execution.
-    //[NSThread exit];
-
-    /*
-    // http://developer.apple.com/mac/library/qa/qa2001/qa1037.html
-    UIGraphicsBeginImageContext(CGSizeMake(256,128));      
-    CGContextRef context = UIGraphicsGetCurrentContext();       
-    UIGraphicsPushContext(context);  
-
-    CGContextSetRGBFillColor(context, 0.5, 0.5, 0.7, 1.0);
-    CGContextFillRect(context,CGRectMake(xc,yc,1,1));
-    
-    UIGraphicsPopContext();
-    UIImage *previewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    */
-}
-
--(IBAction) updatePreview {
+-(void) updatePreview {
     // don't generate a new preview while it's already generating one
     if (busy)
         return;
-    
+
     // generate a seed
     CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
     NSString *seed = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
     CFRelease(uuid);
     NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
-    [seed release];
     self.seedCommand = seedCmd;
     [seedCmd release];
-    
+
+    if (self.dataSourceArray == nil)
+        [self loadDataSourceArray];
+    NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
     NSIndexPath *theIndex;
-    if (segmentedControl.selectedSegmentIndex != 1) {
-        // remove the current preview and title
-        [self.previewButton setImage:nil forState:UIControlStateNormal];
-        [self.previewButton setTitle:nil forState:UIControlStateNormal];
-        
-        // don't display preview on slower device, too slow and memory hog
-        NSString *modelId = modelType();
-        if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"]) {
-            busy = NO;
-            [self.previewButton setTitle:NSLocalizedString(@"Preview not available",@"") forState:UIControlStateNormal];
-        } else {
-            // prevent other events and add an activity while the preview is beign generated
-            [self turnOffWidgets];
-            
-            // add a very nice spinning wheel
-            UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] 
-                                                  initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-            indicator.center = CGPointMake(previewButton.bounds.size.width / 2, previewButton.bounds.size.height / 2);
-            indicator.tag = INDICATOR_TAG;
-            [indicator startAnimating];
-            [self.previewButton addSubview:indicator];
-            [indicator release];
-            
-            // let's draw in a separate thread so the gui can work; at the end it restore other widgets
-            [NSThread detachNewThreadSelector:@selector(drawingThread) toTarget:self withObject:nil];
-        }
-        
-        theIndex = [NSIndexPath indexPathForRow:(random()%[self.themeArray count]) inSection:0];
+    if (isRandomness()) {
+        // prevent other events and add an activity while the preview is beign generated
+        [self turnOffWidgets];
+        [self.previewButton updatePreviewWithSeed:seed];
+        theIndex = [NSIndexPath indexPathForRow:(random()%[source count]) inSection:0];
     } else {
-        theIndex = [NSIndexPath indexPathForRow:(random()%[self.mapArray count]) inSection:0];
+        theIndex = [NSIndexPath indexPathForRow:(random()%[source count]) inSection:0];
+        // the preview for static maps is loaded in didSelectRowAtIndexPath
     }
-    [self.tableView reloadData];
+    [seed release];
+
+    // perform as if user clicked on an entry
     [self tableView:self.tableView didSelectRowAtIndexPath:theIndex];
     [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionNone animated:YES];
-}
-
-// instead of drawing a random map we load an image; this function is called by didSelectRowAtIndexPath only
--(void) updatePreviewWithMap:(NSInteger) index {
-    // change the preview button
-    NSString *fileImage = [[NSString alloc] initWithFormat:@"%@/%@/preview.png", MAPS_DIRECTORY(),[self.mapArray objectAtIndex:index]];
-    UIImage *image = [[UIImage alloc] initWithContentsOfFile:fileImage];
-    [fileImage release];
-    [self.previewButton setImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:UIControlStateNormal];
-    [image release];
-    
-    // update label
-    maxHogs = 18;
-    NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg", MAPS_DIRECTORY(),[self.mapArray objectAtIndex:index]];
-    NSString *contents = [[NSString alloc] initWithContentsOfFile:fileCfg encoding:NSUTF8StringEncoding error:NULL];
-    [fileCfg release];
-    NSArray *split = [contents componentsSeparatedByString:@"\n"];
-    [contents release];
-
-    // set the theme and map here
-    self.themeCommand = [NSString stringWithFormat:@"etheme %@", [split objectAtIndex:0]];
-    self.staticMapCommand = [NSString stringWithFormat:@"emap %@", [self.mapArray objectAtIndex:index]];
-    
-    // if the number is not set we keep 18 standard; 
-    // sometimes it's not set but there are trailing characters, we get around them with the second equation
-    if ([split count] > 1 && [[split objectAtIndex:1] intValue] > 0)
-        maxHogs = [[split objectAtIndex:1] intValue];
-    NSString *max = [[NSString alloc] initWithFormat:@"%d",maxHogs];
-    self.maxLabel.text = max;
-    [max release];
 }
 
 -(void) turnOffWidgets {
@@ -244,35 +89,21 @@
     self.segmentedControl.enabled = YES;
     self.slider.enabled = YES;
     busy = NO;
-    
-    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self.previewButton viewWithTag:INDICATOR_TAG];
-    if (indicator) {
-        [indicator stopAnimating];
-        [indicator removeFromSuperview];
-    }
 }
- 
+
 -(void) setLabelText:(NSString *)str {
+    self.maxHogs = [str intValue];
     self.maxLabel.text = str;
 }
 
--(void) setButtonImage:(UIImage *)img {
-    [self.previewButton setBackgroundImage:img forState:UIControlStateNormal];
-}
-
--(void) restoreBackgroundImage {
-    // white rounded rectangle as background image for previewButton
-    UIGraphicsBeginImageContext(CGSizeMake(256,128));      
-    CGContextRef context = UIGraphicsGetCurrentContext();       
-    UIGraphicsPushContext(context);  
-
-    CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
-    CGContextFillRect(context,CGRectMake(0,0,256,128));
-    
-    UIGraphicsPopContext();
-    UIImage *bkgImg = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    [self.previewButton setBackgroundImage:[bkgImg makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:UIControlStateNormal];
+-(NSDictionary *)getDataForEngine {
+    NSDictionary *dictForEngine = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   self.seedCommand,@"seedCommand",
+                                   self.templateFilterCommand,@"templateFilterCommand",
+                                   self.mapGenCommand,@"mapGenCommand",
+                                   self.mazeSizeCommand,@"mazeSizeCommand",
+                                   nil];
+    return dictForEngine;
 }
 
 #pragma mark -
@@ -282,64 +113,107 @@
 }
 
 -(NSInteger) tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger) section {
-    if (self.segmentedControl.selectedSegmentIndex != 1)
-        return [themeArray count];
-    else
-        return [mapArray count];
+    if (self.dataSourceArray == nil)
+        [self loadDataSourceArray];
+    return [[self.dataSourceArray objectAtIndex:scIndex] count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     NSInteger row = [indexPath row];
-    
+
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) 
+    if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        cell.textLabel.textColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1 ];
-    }
-    
-    if (self.segmentedControl.selectedSegmentIndex != 1) {
-        // the % prevents a strange bug that occurs sporadically
-        NSString *themeName = [self.themeArray objectAtIndex:row % [self.themeArray count]];
-        cell.textLabel.text = themeName;
-        UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),themeName]];
+
+    if (IS_IPAD())
+        cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+
+    if (self.dataSourceArray == nil)
+        [self loadDataSourceArray];
+    NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
+
+    NSString *labelString = [source objectAtIndex:row];
+    cell.textLabel.text = labelString;
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
+    cell.textLabel.minimumFontSize = 7;
+
+    if (isRandomness()) {
+        UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),labelString]];
         cell.imageView.image = image;
         [image release];
-    } else {
-        cell.textLabel.text = [self.mapArray objectAtIndex:row];
+    } else
         cell.imageView.image = nil;
-    }
-    
-    if (row == [self.lastIndexPath row]) 
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    else
-        cell.accessoryType = UITableViewCellAccessoryNone;
 
+    if (row == [self.lastIndexPath row]) {
+        UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+        cell.accessoryView = checkbox;
+        [checkbox release];
+    } else
+        cell.accessoryView = nil;
+
+    cell.backgroundColor = [UIColor blackColor];
     return cell;
 }
 
+// this set details for a static map (called by didSelectRowAtIndexPath)
+-(void) setDetailsForStaticMap:(NSInteger) index {
+    if (self.dataSourceArray == nil)
+        [self loadDataSourceArray];
+    NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
+    
+    NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg", 
+                         (scIndex == 1) ? MAPS_DIRECTORY() : MISSIONS_DIRECTORY(),[source objectAtIndex:index]];
+    NSString *contents = [[NSString alloc] initWithContentsOfFile:fileCfg encoding:NSUTF8StringEncoding error:NULL];
+    [fileCfg release];
+    NSArray *split = [contents componentsSeparatedByString:@"\n"];
+    [contents release];
+
+    // if the number is not set we keep 18 standard;
+    // sometimes it's not set but there are trailing characters, we get around them with the second equation
+    if ([split count] > 1 && [[split objectAtIndex:1] intValue] > 0)
+        maxHogs = [[split objectAtIndex:1] intValue];
+    else
+        maxHogs = 18;
+    NSString *max = [[NSString alloc] initWithFormat:@"%d",maxHogs];
+    self.maxLabel.text = max;
+    [max release];
+    
+    self.themeCommand = [NSString stringWithFormat:@"etheme %@", [split objectAtIndex:0]];
+    self.staticMapCommand = [NSString stringWithFormat:@"emap %@", [source objectAtIndex:index]];
+
+    if (scIndex != 3)
+        self.missionCommand = @"";
+    else
+        self.missionCommand = [NSString stringWithFormat:@"escript Missions/Maps/%@/map.lua",[source objectAtIndex:index]];
+}
 
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    
+
     if (newRow != oldRow) {
-        if (self.segmentedControl.selectedSegmentIndex != 1) {
-            NSString *theme = [self.themeArray objectAtIndex:newRow];                
-            self.themeCommand = [NSString stringWithFormat:@"etheme %@", theme];
+        if (self.dataSourceArray == nil)
+            [self loadDataSourceArray];
+        NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
+        if (isRandomness()) {
+            // just change the theme, don't update preview
+            self.themeCommand = [NSString stringWithFormat:@"etheme %@", [source objectAtIndex:newRow]];
         } else {
-            // theme and map are set in the function below
-            [self updatePreviewWithMap:newRow];
+            NSString *fileImage = [NSString stringWithFormat:@"%@/%@/preview.png",
+                                   (scIndex == 1) ? MAPS_DIRECTORY() : MISSIONS_DIRECTORY(),[source objectAtIndex:newRow]];
+            [self.previewButton updatePreviewWithFile:fileImage];
+            [self setDetailsForStaticMap:newRow];
         }
-        
-        UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath]; 
-        newCell.accessoryType = UITableViewCellAccessoryCheckmark;
+
+        UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
+        UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+        newCell.accessoryView = checkbox;
+        [checkbox release];
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:self.lastIndexPath];
-        oldCell.accessoryType = UITableViewCellAccessoryNone;
+        oldCell.accessoryView = nil;
 
         self.lastIndexPath = indexPath;
         [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
@@ -355,7 +229,7 @@
     NSString *labelText;
     NSString *templateCommand;
     NSString *mazeCommand;
-    
+
     switch ((int)(self.slider.value*100)) {
         case 0:
             if (self.segmentedControl.selectedSegmentIndex == 0) {
@@ -417,7 +291,7 @@
             mazeCommand = nil;
             break;
     }
-    
+
     self.sizeLabel.text = labelText;
     self.templateFilterCommand = templateCommand;
     self.mazeSizeCommand = mazeCommand;
@@ -430,128 +304,143 @@
         [self updatePreview];
         oldValue = num;
     }
+    playSound(@"clickSound");
 }
 
-// perform actions based on the activated section, then call updatePreview to visually update the selection 
-// updatePreview will call didSelectRowAtIndexPath which will call the right update routine)
+// perform actions based on the activated section, then call updatePreview to visually update the selection
 // and if necessary update the table with a slide animation
 -(IBAction) segmentedControlChanged:(id) sender {
-    NSString *mapgen, *staticmap;
+    NSString *mapgen, *staticmap, *mission;
     NSInteger newPage = self.segmentedControl.selectedSegmentIndex;
-    
+
+    playSound(@"selSound");
     switch (newPage) {
         case 0: // Random
             mapgen = @"e$mapgen 0";
             staticmap = @"";
+            mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
             break;
-            
+
         case 1: // Map
+        case 3: // Mission
             mapgen = @"e$mapgen 0";
-            // dummy value, everything is set by -updatePreview -> -didSelectRowAtIndexPath -> -updatePreviewWithMap
+            // dummy values, these are set by -updatePreview -> -didSelectRowAtIndexPath -> -setDetailsForStaticMap
             staticmap = @"map Bamboo";
+            mission = @"";
             self.slider.enabled = NO;
-            self.sizeLabel.text = @".";
-            [self restoreBackgroundImage];
+            self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
             break;
-            
+
         case 2: // Maze
             mapgen = @"e$mapgen 1";
             staticmap = @"";
+            mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
             break;
-        
+
         default:
             mapgen = nil;
             staticmap = nil;
+            mission = nil;
             break;
     }
     self.mapGenCommand = mapgen;
     self.staticMapCommand = staticmap;
-    [self updatePreview];
-    
+    self.missionCommand = mission;
+
     // nice animation for updating the table when appropriate (on iphone)
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        if (((oldPage == 0 || oldPage == 2) && newPage == 1) ||
-            (oldPage == 1 && (newPage == 0 || newPage == 2))) {
-            [UIView beginAnimations:@"moving out table" context:NULL];
+    if (IS_IPAD())
+        if (((oldPage == 0 || oldPage == 2) && (newPage == 1 || newPage == 3)) ||
+            ((oldPage == 1 || oldPage == 3) && (newPage == 0 || newPage == 2)) ||
+            ((oldPage == 1 && newPage == 3) || (oldPage == 3 || newPage == 1))) {
             self.tableView.frame = CGRectMake(480, 0, 185, 276);
+            [UIView beginAnimations:@"moving in table" context:NULL];
+            self.tableView.frame = CGRectMake(295, 0, 185, 276);
             [UIView commitAnimations];
-            [self performSelector:@selector(moveTable) withObject:nil afterDelay:0.2];
         }
+
+    [self.tableView reloadData];
+    [self updatePreview];
     oldPage = newPage;
 }
 
-// update data when table is not visible and then show it
--(void) moveTable {
-    [self.tableView reloadData];
+#pragma mark -
+#pragma mark calls the parent's function that checks the parameters and starts the game
+-(IBAction) buttonPressed:(id) sender {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"buttonPressed" object:nil userInfo:[NSDictionary dictionaryWithObject:sender forKey:@"sender"]];
+}
+
+-(void) loadDataSourceArray {
+    // themes.cfg contains all the user-selectable themes
+    NSString *string = [[NSString alloc] initWithContentsOfFile:[THEMES_DIRECTORY() stringByAppendingString:@"/themes.cfg"]
+                                                       encoding:NSUTF8StringEncoding
+                                                          error:NULL];
+    NSMutableArray *themeArray = [[NSMutableArray alloc] initWithArray:[string componentsSeparatedByString:@"\n"]];
+    [string release];
+    // remove a trailing "" element
+    [themeArray removeLastObject];
+    NSArray *mapArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
+    NSArray *missionArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
     
-    [UIView beginAnimations:@"moving in table" context:NULL];
-    self.tableView.frame = CGRectMake(295, 0, 185, 276);
-    [UIView commitAnimations];
+    NSArray *array = [[NSArray alloc] initWithObjects:themeArray,mapArray,themeArray,missionArray,nil];
+    self.dataSourceArray = array;
+    [array release];
+    [themeArray release];
 }
 
 #pragma mark -
 #pragma mark view management
 -(void) viewDidLoad {
     [super viewDidLoad];
-    
+
     srandom(time(NULL));
-    
+
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-
-    // themes.cfg contains all the user-selectable themes
-    NSString *string = [[NSString alloc] initWithContentsOfFile:[THEMES_DIRECTORY() stringByAppendingString:@"/themes.cfg"]
-                                                       encoding:NSUTF8StringEncoding 
-                                                          error:NULL];
-    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:[string componentsSeparatedByString:@"\n"]];
-    [string release];
-    // remove a trailing "" element
-    [array removeLastObject];
-    self.themeArray = array;
-    [array release];
-    self.mapArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
-
-    self.tableView.rowHeight = 42;
-    busy = NO;
-    
-    // draw a white background
-    [self restoreBackgroundImage];
     
     // initialize some "default" values
     self.sizeLabel.text = NSLocalizedString(@"All",@"");
     self.slider.value = 0.05f;
+    oldValue = 5;
     
-    // on slower device we show directly the static map
-    NSString *modelId = modelType();
-    if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])
-        self.segmentedControl.selectedSegmentIndex = 1;
-    else
-        self.segmentedControl.selectedSegmentIndex = 0;
+    busy = NO;
+    [self loadDataSourceArray];
+    self.lastIndexPath = [NSIndexPath indexPathForRow:-1 inSection:0];
+    
+    // select a map at first because it's faster - done in IB
+    oldPage = 1;
+    if (self.segmentedControl.selectedSegmentIndex == 1) {
+        self.slider.enabled = NO;
+        self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
+    }
 
     self.templateFilterCommand = @"e$template_filter 0";
     self.mazeSizeCommand = @"e$maze_size 0";
     self.mapGenCommand = @"e$mapgen 0";
     self.staticMapCommand = @"";
-    
-    self.lastIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    
-    oldValue = 5;
-    oldPage = 0;
+    self.missionCommand = @"";
+
+    if (IS_IPAD()) {
+        [self.tableView setBackgroundView:nil];
+        self.view.backgroundColor = [UIColor clearColor];
+        self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.tableView.rowHeight = 45;
+    }
+}
+
+-(void) viewWillAppear:(BOOL)animated {
+    if (self.dataSourceArray == nil)
+        [self loadDataSourceArray];
+    [super viewWillAppear:animated];
 }
 
 -(void) viewDidAppear:(BOOL) animated {
-    [super viewDidAppear:animated];
     [self updatePreview];
-}
-
-#pragma mark -
-#pragma mark memory
--(void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+    [super viewDidAppear:animated];
 }
 
 -(void) viewDidUnload {
@@ -562,20 +451,34 @@
     self.mazeSizeCommand = nil;
     self.themeCommand = nil;
     self.staticMapCommand = nil;
-    
+    self.missionCommand = nil;
+
     self.previewButton = nil;
     self.tableView = nil;
     self.maxLabel = nil;
     self.sizeLabel = nil;
     self.segmentedControl = nil;
     self.slider = nil;
-    
+
     self.lastIndexPath = nil;
-    self.themeArray = nil;
-    self.mapArray = nil;
-    
+    self.dataSourceArray = nil;
+
     MSG_DIDUNLOAD();
     [super viewDidUnload];
+}
+
+-(void) didReceiveMemoryWarning {
+    self.dataSourceArray = nil;
+
+    self.previewButton = nil;
+    self.tableView = nil;
+    self.maxLabel = nil;
+    self.sizeLabel = nil;
+    self.segmentedControl = nil;
+    self.slider = nil;
+
+    MSG_MEMCLEAN();
+    [super didReceiveMemoryWarning];
 }
 
 -(void) dealloc {
@@ -585,20 +488,19 @@
     [mazeSizeCommand release];
     [themeCommand release];
     [staticMapCommand release];
-    
+    [missionCommand release];
+
     [previewButton release];
     [tableView release];
     [maxLabel release];
     [sizeLabel release];
     [segmentedControl release];
     [slider release];
-    
+
     [lastIndexPath release];
-    [themeArray release];
-    [mapArray release];
-    
+    [dataSourceArray release];
+
     [super dealloc];
 }
-
 
 @end

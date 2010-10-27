@@ -25,7 +25,7 @@
 {$MODE OBJFPC}
 {$MACRO ON}
 
-{$DEFINE GLunit:=GL,GLext} 
+{$DEFINE GLunit:=GL,GLext}
 
 {$IFDEF IPHONEOS}
   {$DEFINE SDL13}

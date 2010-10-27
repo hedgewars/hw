@@ -1,13 +1,27 @@
-//
-//  SchemeWeaponConfigViewController.m
-//  Hedgewars
-//
-//  Created by Vittorio on 13/06/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
+/*
+ * Hedgewars-iOS, a Hedgewars port for iOS devices
+ * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 13/06/2010.
+ */
+
 
 #import "SchemeWeaponConfigViewController.h"
 #import "CommodityFunctions.h"
+#import "SDL_uikitappdelegate.h"
 
 @implementation SchemeWeaponConfigViewController
 @synthesize listOfSchemes, listOfWeapons, lastIndexPath_sc, lastIndexPath_we, selectedScheme, selectedWeapon;
@@ -23,15 +37,13 @@
 
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-    
-    self.selectedScheme = @"";
-    self.selectedWeapon = @"";
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.tableView setBackgroundView:nil]; 
-        self.view.backgroundColor = [UIColor clearColor];
-        self.tableView.separatorColor = [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xCB/255 blue:0 alpha:1];
-    }
+
+    self.selectedScheme = nil;
+    self.selectedWeapon = nil;
+
+    [self.tableView setBackgroundView:nil];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
@@ -40,16 +52,16 @@
 
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCHEMES_DIRECTORY() error:NULL];
     self.listOfSchemes = contentsOfDir;
-    
-    if ([listOfSchemes containsObject:@"Default.plist"])
-         self.selectedScheme = @"Default.plist";
+
+    if (self.selectedScheme == nil && [listOfSchemes containsObject:@"Default.plist"])
+        self.selectedScheme = @"Default.plist";
     
     contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
     self.listOfWeapons = contentsOfDir;
-         
-    if ([listOfWeapons containsObject:@"Default.plist"])
-         self.selectedWeapon = @"Default.plist";
-
+    
+    if (self.selectedWeapon == nil && [listOfWeapons containsObject:@"Default.plist"])
+        self.selectedWeapon = @"Default.plist";
+    
     [self.tableView reloadData];
 }
 
@@ -61,7 +73,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) 
+    if (section == 0)
         return [self.listOfSchemes count];
     else
         return [self.listOfWeapons count];
@@ -71,29 +83,63 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     NSInteger row = [indexPath row];
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    cell.accessoryType = UITableViewCellAccessoryNone;
+    if (cell == nil)
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+
+    cell.accessoryView = nil;
     if ([indexPath section] == 0) {
         cell.textLabel.text = [[self.listOfSchemes objectAtIndex:row] stringByDeletingPathExtension];
+        NSString *str = [NSString stringWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),[self.listOfSchemes objectAtIndex:row]];
+        NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
+        cell.detailTextLabel.text = [dict objectForKey:@"description"];
+        [dict release];
         if ([[self.listOfSchemes objectAtIndex:row] isEqualToString:self.selectedScheme]) {
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+            cell.accessoryView = checkbox;
+            [checkbox release];
             self.lastIndexPath_sc = indexPath;
         }
     } else {
         cell.textLabel.text = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension];
+        NSString *str = [NSString stringWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),[self.listOfWeapons objectAtIndex:row]];
+        NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
+        cell.detailTextLabel.text = [dict objectForKey:@"description"];
+        [dict release];
         if ([[self.listOfWeapons objectAtIndex:row] isEqualToString:self.selectedWeapon]) {
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+            cell.accessoryView = checkbox;
+            [checkbox release];
             self.lastIndexPath_we = indexPath;
         }
     }
+    
+    cell.backgroundColor = [UIColor blackColor];
+    cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+    cell.detailTextLabel.textColor = [UIColor whiteColor];
     return cell;
 }
 
+-(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 40.0;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
+    NSString *text;
+    if (section == 0) 
+        text = NSLocalizedString(@"Schemes",@"");
+    else
+        text = NSLocalizedString(@"Weapons",@"");
+    UILabel *theLabel = createBlueLabel(text, frame);
+    theLabel.center = CGPointMake(self.view.frame.size.width/2, 20);
+
+    UIView *theView = [[[UIView alloc] init] autorelease];
+    [theView addSubview:theLabel];
+    [theLabel release];
+    return theView;
+}
 
 #pragma mark -
 #pragma mark Table view delegate
@@ -103,44 +149,43 @@
         lastIndexPath = self.lastIndexPath_sc;
     else
         lastIndexPath = self.lastIndexPath_we;
-    
+
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    
+
     if (newRow != oldRow) {
         //TODO: this code works only for a single section table
         UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
-        newCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+        newCell.accessoryView = checkbox;
+        [checkbox release];
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
-        oldCell.accessoryType = UITableViewCellAccessoryNone;
-        
+        oldCell.accessoryView = nil;
+
         if ([indexPath section] == 0) {
             self.lastIndexPath_sc = indexPath;
             self.selectedScheme = [self.listOfSchemes objectAtIndex:newRow];
         } else {
             self.lastIndexPath_we = indexPath;
             self.selectedWeapon = [self.listOfWeapons objectAtIndex:newRow];
-        }        
-        
+        }
+
         [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger) section {
-    if (section == 0) {
-        return NSLocalizedString(@"Schemes",@"");
-    } else {
-        return NSLocalizedString(@"Weapons",@"");;
-    }
-}
-
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
+    if ([[SDLUIKitDelegate sharedAppDelegate] isInGame]) {
+        self.lastIndexPath_sc = nil;
+        self.lastIndexPath_we = nil;
+        self.listOfSchemes = nil;
+        self.listOfWeapons = nil;
+        MSG_MEMCLEAN();
+    }
     [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
 -(void) viewDidUnload {

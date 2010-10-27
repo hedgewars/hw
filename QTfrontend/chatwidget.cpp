@@ -54,14 +54,14 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     mainLayout.setSpacing(1);
     mainLayout.setMargin(1);
     mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
-    mainLayout.setColumnStretch(0, 75);
-    mainLayout.setColumnStretch(1, 25);
+    mainLayout.setColumnStretch(0, 76);
+    mainLayout.setColumnStretch(1, 24);
 
     chatEditLine = new QLineEdit(this);
     chatEditLine->setMaxLength(300);
     connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
 
-    mainLayout.addWidget(chatEditLine, 1, 0, 1, 2);
+    mainLayout.addWidget(chatEditLine, 1, 0);
 
     chatText = new QTextBrowser(this);
     chatText->setMinimumHeight(20);
@@ -81,7 +81,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     connect(chatNicks, SIGNAL(currentRowChanged(int)),
         this, SLOT(chatNickSelected(int)));
 
-    mainLayout.addWidget(chatNicks, 0, 1);
+    mainLayout.addWidget(chatNicks, 0, 1, -1, 1);
 
     acInfo = new QAction(QAction::tr("Info"), chatNicks);
     acInfo->setIcon(QIcon(":/res/info.png"));
@@ -106,7 +106,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     chatNicks->insertAction(0, acFollow);
     chatNicks->insertAction(0, acIgnore);
     chatNicks->insertAction(0, acFriend);
-    
+
     showReady = false;
 }
 
@@ -151,17 +151,17 @@ void HWChatWidget::updateIcon(QListWidgetItem *item)
 
     if(ignoreList.contains(nick, Qt::CaseInsensitive))
     {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_ignore_on" : ":/res/chat_ignore_off") : ":/res/chat_ignore.png"));
+        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_ignore_on.png" : ":/res/chat_ignore_off.png") : ":/res/chat_ignore.png"));
         item->setForeground(Qt::gray);
     }
     else if(friendsList.contains(nick, Qt::CaseInsensitive))
     {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_friend_on" : ":/res/chat_friend_off") : ":/res/chat_friend.png"));
+        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_friend_on.png" : ":/res/chat_friend_off.png") : ":/res/chat_friend.png"));
         item->setForeground(Qt::green);
     }
     else
     {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_default_on" : ":/res/chat_default_off") : ":/res/chat_default.png"));
+        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_default_on.png" : ":/res/chat_default_off.png") : ":/res/chat_default.png"));
         item->setForeground(QBrush(QColor(0xff, 0xcc, 0x00)));
     }
 }
@@ -209,7 +209,7 @@ void HWChatWidget::onChatString(const QString& str)
 
     QString color("");
     bool isFriend = friendsList.contains(parts[0], Qt::CaseInsensitive);
-    
+
     if (str.startsWith("\x03"))
         color = QString("#c0c0c0");
     else if (str.startsWith("\x02"))

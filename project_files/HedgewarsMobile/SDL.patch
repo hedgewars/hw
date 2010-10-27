@@ -1,0 +1,373 @@
+diff -r c0021a587dc7 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
+--- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Sun Oct 10 15:45:58 2010 -0700
++++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Sat Oct 16 18:35:03 2010 +0200
+@@ -1549,15 +1549,19 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
++				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+ 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+ 				GCC_C_LANGUAGE_STANDARD = c99;
+ 				GCC_DEBUGGING_SYMBOLS = full;
++				GCC_THUMB_SUPPORT = NO;
++				GCC_VERSION = com.apple.compilers.llvmgcc42;
+ 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = NO;
++				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../include\"";
+ 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+ 				ONLY_ACTIVE_ARCH = NO;
+ 				PREBINDING = NO;
+-				SDKROOT = iphoneos3.2;
++				SDKROOT = iphoneos4.0;
+ 				TARGETED_DEVICE_FAMILY = "1,2";
+ 			};
+ 			name = Debug;
+@@ -1566,14 +1570,19 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
++				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+ 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+ 				GCC_C_LANGUAGE_STANDARD = c99;
++				GCC_OPTIMIZATION_LEVEL = 2;
++				GCC_THUMB_SUPPORT = NO;
++				GCC_UNROLL_LOOPS = YES;
++				GCC_VERSION = com.apple.compilers.llvmgcc42;
+ 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = NO;
++				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../include\"";
+ 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+ 				PREBINDING = NO;
+-				SDKROOT = iphoneos3.2;
++				SDKROOT = iphoneos4.0;
+ 				TARGETED_DEVICE_FAMILY = "1,2";
+ 			};
+ 			name = Release;
+diff -r c0021a587dc7 Xcode-iPhoneOS/SDL/testsdl-Info.plist
+--- a/Xcode-iPhoneOS/SDL/testsdl-Info.plist	Sun Oct 10 15:45:58 2010 -0700
++++ b/Xcode-iPhoneOS/SDL/testsdl-Info.plist	Sat Oct 16 18:35:03 2010 +0200
+@@ -16,7 +16,5 @@
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+ 	<string>1.0</string>
+-	<key>NSMainNibFile</key>
+-	<string>MainWindow</string>
+ </dict>
+ </plist>
+diff -r c0021a587dc7 include/SDL_config_iphoneos.h
+--- a/include/SDL_config_iphoneos.h	Sun Oct 10 15:45:58 2010 -0700
++++ b/include/SDL_config_iphoneos.h	Sat Oct 16 18:35:03 2010 +0200
+@@ -98,6 +98,8 @@
+ #define HAVE_COS	1
+ #define HAVE_COSF	1
+ #define HAVE_FABS	1
++#define HAVE_ATAN       1
++#define HAVE_ATAN2      1
+ #define HAVE_FLOOR	1
+ #define HAVE_LOG	1
+ #define HAVE_POW	1
+@@ -114,7 +116,7 @@
+ /* enable iPhone version of Core Audio driver */
+ #define SDL_AUDIO_DRIVER_COREAUDIOIPHONE 1
+ /* Enable the dummy audio driver (src/audio/dummy/\*.c) */
+-#define SDL_AUDIO_DRIVER_DUMMY	1
++#define SDL_AUDIO_DRIVER_DUMMY	0
+ 
+ /* Enable the stub haptic driver (src/haptic/dummy/\*.c) */
+ #define SDL_HAPTIC_DISABLED	1
+@@ -135,7 +137,7 @@
+ 
+ /* Supported video drivers */
+ #define SDL_VIDEO_DRIVER_UIKIT	1
+-#define SDL_VIDEO_DRIVER_DUMMY	1
++#define SDL_VIDEO_DRIVER_DUMMY	0
+ 
+ /* enable OpenGL ES */
+ #define SDL_VIDEO_OPENGL_ES	1
+@@ -152,4 +154,7 @@
+  */
+ #define SDL_IPHONE_MAX_GFORCE 5.0
+ 
++/* Tag to grab the uikit view from external code for further modification */
++#define SDL_VIEW_TAG 456987
++
+ #endif /* _SDL_config_iphoneos_h */
+diff -r c0021a587dc7 src/SDL_fatal.c
+--- a/src/SDL_fatal.c	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/SDL_fatal.c	Sat Oct 16 18:35:03 2010 +0200
+@@ -38,9 +38,9 @@
+ static void
+ SDL_Parachute(int sig)
+ {
+-    signal(sig, SIG_DFL);
++    /*signal(sig, SIG_DFL);
+     SDL_Quit();
+-    raise(sig);
++    raise(sig);*/
+ }
+ 
+ static const int SDL_fatal_signals[] = {
+diff -r c0021a587dc7 src/video/SDL_renderer_gles.c
+--- a/src/video/SDL_renderer_gles.c	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/SDL_renderer_gles.c	Sat Oct 16 18:35:03 2010 +0200
+@@ -324,6 +324,9 @@
+     data->glDisable(GL_CULL_FACE);
+     data->updateSize = SDL_TRUE;
+ 
++    data->glEnableClientState(GL_VERTEX_ARRAY);
++    data->glEnableClientState(GL_TEXTURE_COORD_ARRAY);
++    
+     return renderer;
+ }
+ 
+@@ -665,9 +668,7 @@
+         vertices[2*i+1] = (GLshort)points[i].y;
+     }
+     data->glVertexPointer(2, GL_SHORT, 0, vertices);
+-    data->glEnableClientState(GL_VERTEX_ARRAY);
+     data->glDrawArrays(GL_POINTS, 0, count);
+-    data->glDisableClientState(GL_VERTEX_ARRAY);
+     SDL_stack_free(vertices);
+ 
+     return 0;
+@@ -694,7 +695,6 @@
+         vertices[2*i+1] = (GLshort)points[i].y;
+     }
+     data->glVertexPointer(2, GL_SHORT, 0, vertices);
+-    data->glEnableClientState(GL_VERTEX_ARRAY);
+     if (count > 2 && 
+         points[0].x == points[count-1].x && points[0].y == points[count-1].y) {
+         /* GL_LINE_LOOP takes care of the final segment */
+@@ -703,7 +703,6 @@
+     } else {
+         data->glDrawArrays(GL_LINE_STRIP, 0, count);
+     }
+-    data->glDisableClientState(GL_VERTEX_ARRAY);
+     SDL_stack_free(vertices);
+ 
+     return 0;
+@@ -723,7 +722,6 @@
+                     (GLfloat) renderer->b * inv255f,
+                     (GLfloat) renderer->a * inv255f);
+ 
+-    data->glEnableClientState(GL_VERTEX_ARRAY);
+     for (i = 0; i < count; ++i) {
+         const SDL_Rect *rect = rects[i];
+         GLshort minx = rect->x;
+@@ -743,7 +741,6 @@
+         data->glVertexPointer(2, GL_SHORT, 0, vertices);
+         data->glDrawArrays(GL_LINE_LOOP, 0, 4);
+     }
+-    data->glDisableClientState(GL_VERTEX_ARRAY);
+ 
+     return 0;
+ }
+@@ -762,7 +759,6 @@
+                     (GLfloat) renderer->b * inv255f,
+                     (GLfloat) renderer->a * inv255f);
+ 
+-    data->glEnableClientState(GL_VERTEX_ARRAY);
+     for (i = 0; i < count; ++i) {
+         const SDL_Rect *rect = rects[i];
+         GLshort minx = rect->x;
+@@ -782,7 +778,6 @@
+         data->glVertexPointer(2, GL_SHORT, 0, vertices);
+         data->glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+     }
+-    data->glDisableClientState(GL_VERTEX_ARRAY);
+ 
+     return 0;
+ }
+@@ -925,12 +920,8 @@
+         texCoords[7] = maxv;
+ 
+         data->glVertexPointer(2, GL_SHORT, 0, vertices);
+-        data->glEnableClientState(GL_VERTEX_ARRAY);
+         data->glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+-        data->glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+         data->glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+-        data->glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+-        data->glDisableClientState(GL_VERTEX_ARRAY);
+     }
+ 
+     data->glDisable(GL_TEXTURE_2D);
+diff -r c0021a587dc7 src/video/SDL_video.c
+--- a/src/video/SDL_video.c	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/SDL_video.c	Sat Oct 16 18:35:03 2010 +0200
+@@ -1416,9 +1416,9 @@
+         SDL_MinimizeWindow(window);
+     }
+ 
+-    if (display->gamma && _this->SetDisplayGammaRamp) {
++    /*if (display->gamma && _this->SetDisplayGammaRamp) {
+         _this->SetDisplayGammaRamp(_this, display, display->saved_gamma);
+-    }
++    }*/
+     if ((window->flags & (SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_FULLSCREEN))
+         && _this->SetWindowGrab) {
+         _this->SetWindowGrab(_this, window);
+diff -r c0021a587dc7 src/video/uikit/SDL_uikitopengles.m
+--- a/src/video/uikit/SDL_uikitopengles.m	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/uikit/SDL_uikitopengles.m	Sat Oct 16 18:35:03 2010 +0200
+@@ -114,8 +114,8 @@
+ 									bBits: _this->gl_config.blue_size \
+ 									aBits: _this->gl_config.alpha_size \
+ 									depthBits: _this->gl_config.depth_size];
+-	
+-	data->view = view;
++        view.tag = SDL_VIEW_TAG;
++        data->view = view;
+ 	
+ 	/* add the view to our window */
+ 	[uiwindow addSubview: view ];
+diff -r c0021a587dc7 src/video/uikit/SDL_uikitview.m
+--- a/src/video/uikit/SDL_uikitview.m	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/uikit/SDL_uikitview.m	Sat Oct 16 18:35:03 2010 +0200
+@@ -35,9 +35,6 @@
+ @implementation SDL_uikitview
+ 
+ - (void)dealloc {
+-#if SDL_IPHONE_KEYBOARD
+-	[textField release];
+-#endif
+ 	[super dealloc];
+ }
+ 
+@@ -220,7 +217,7 @@
+ /* Set ourselves up as a UITextFieldDelegate */
+ - (void)initializeKeyboard {
+ 		
+-	textField = [[[UITextField alloc] initWithFrame: CGRectZero] autorelease];
++	textField = [[UITextField alloc] initWithFrame: CGRectZero];
+ 	textField.delegate = self;
+ 	/* placeholder so there is something to delete! */
+ 	textField.text = @" ";	
+@@ -238,6 +235,7 @@
+ 	keyboardVisible = NO;
+ 	/* add the UITextField (hidden) to our view */
+ 	[self addSubview: textField];
++        [textField release];
+ }
+ 
+ /* reveal onscreen virtual keyboard */
+@@ -300,6 +298,7 @@
+ 
+ /* Terminates the editing session */
+ - (BOOL)textFieldShouldReturn:(UITextField*)_textField {
++        SDL_SendKeyboardKey(SDL_PRESSED, SDL_SCANCODE_RETURN);
+ 	[self hideKeyboard];
+ 	return YES;
+ }
+@@ -314,7 +313,7 @@
+ int SDL_iPhoneKeyboardShow(SDL_Window * window) {
+ 	
+ 	SDL_WindowData *data;
+-	SDL_uikitview *view;
++	SDL_uikitview *view = NULL;
+ 	
+ 	if (NULL == window) {
+ 		SDL_SetError("Window does not exist");
+@@ -322,7 +321,8 @@
+ 	}
+ 	
+ 	data = (SDL_WindowData *)window->driverdata;
+-	view = data->view;
++	if (data != NULL)
++            view = data->view;
+ 	
+ 	if (nil == view) {
+ 		SDL_SetError("Window has no view");
+@@ -337,7 +337,7 @@
+ int SDL_iPhoneKeyboardHide(SDL_Window * window) {
+ 	
+ 	SDL_WindowData *data;
+-	SDL_uikitview *view;
++	SDL_uikitview *view = NULL;
+ 	
+ 	if (NULL == window) {
+ 		SDL_SetError("Window does not exist");
+@@ -345,7 +345,8 @@
+ 	}	
+ 	
+ 	data = (SDL_WindowData *)window->driverdata;
+-	view = data->view;
++	if (data != NULL)
++            view = data->view;
+ 	
+ 	if (NULL == view) {
+ 		SDL_SetError("Window has no view");
+@@ -360,7 +361,7 @@
+ SDL_bool SDL_iPhoneKeyboardIsShown(SDL_Window * window) {
+ 	
+ 	SDL_WindowData *data;
+-	SDL_uikitview *view;
++	SDL_uikitview *view = NULL;
+ 	
+ 	if (NULL == window) {
+ 		SDL_SetError("Window does not exist");
+@@ -368,7 +369,8 @@
+ 	}	
+ 	
+ 	data = (SDL_WindowData *)window->driverdata;
+-	view = data->view;
++	if (data != NULL)
++            view = data->view;
+ 	
+ 	if (NULL == view) {
+ 		SDL_SetError("Window has no view");
+@@ -382,7 +384,7 @@
+ int SDL_iPhoneKeyboardToggle(SDL_Window * window) {
+ 	
+ 	SDL_WindowData *data;
+-	SDL_uikitview *view;
++	SDL_uikitview *view = NULL;
+ 	
+ 	if (NULL == window) {
+ 		SDL_SetError("Window does not exist");
+@@ -390,7 +392,8 @@
+ 	}	
+ 	
+ 	data = (SDL_WindowData *)window->driverdata;
+-	view = data->view;
++	if (data != NULL)
++            view = data->view;
+ 	
+ 	if (NULL == view) {
+ 		SDL_SetError("Window has no view");
+diff -r c0021a587dc7 src/video/uikit/SDL_uikitwindow.m
+--- a/src/video/uikit/SDL_uikitwindow.m	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/uikit/SDL_uikitwindow.m	Sat Oct 16 18:35:03 2010 +0200
+@@ -144,7 +144,10 @@
+     if (SDL_UIKit_supports_multiple_displays) {
+         [uiwindow setScreen:uiscreen];
+     }
+-
++    
++    if ([[UIScreen screens] count] > 1)
++        uiwindow.screen = [[UIScreen screens] objectAtIndex:1];
++    
+     if (SetupWindowData(_this, window, uiwindow, SDL_TRUE) < 0) {
+         [uiwindow release];
+         return -1;
+diff -r c0021a587dc7 src/video/uikit/keyinfotable.h
+--- a/src/video/uikit/keyinfotable.h	Sun Oct 10 15:45:58 2010 -0700
++++ b/src/video/uikit/keyinfotable.h	Sat Oct 16 18:35:03 2010 +0200
+@@ -54,7 +54,7 @@
+ /*  10 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+ /*  11 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+ /*  12 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+-/*  13 */ {   SDL_SCANCODE_UNKNOWN, 0 },
++/*  13 */ {   SDL_SCANCODE_RETURN, 0 },
+ /*  14 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+ /*  15 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+ /*  16 */ {   SDL_SCANCODE_UNKNOWN, 0 },
+@@ -137,7 +137,7 @@
+ /*  93 */ {   SDL_SCANCODE_RIGHTBRACKET, 0 },
+ /*  94 */ {   SDL_SCANCODE_6,  KMOD_SHIFT },			/* plus shift modifier '^' */
+ /*  95 */ {   SDL_SCANCODE_MINUS,  KMOD_SHIFT },		/* plus shift modifier '_' */
+-/*  96 */ {   SDL_SCANCODE_GRAVE,  KMOD_SHIFT },		/* '`'
++/*  96 */ {   SDL_SCANCODE_GRAVE,  KMOD_SHIFT },		/* '`' */
+ /*  97 */ {   SDL_SCANCODE_A, 0	},	
+ /*  98 */ {   SDL_SCANCODE_B, 0 },
+ /*  99 */ {   SDL_SCANCODE_C, 0 },

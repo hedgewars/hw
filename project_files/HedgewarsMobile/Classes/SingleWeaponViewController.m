@@ -1,18 +1,31 @@
-//
-//  SingleWeaponViewController.m
-//  Hedgewars
-//
-//  Created by Vittorio on 19/06/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
+/*
+ * Hedgewars-iOS, a Hedgewars port for iOS devices
+ * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 19/06/2010.
+ */
+
 
 #import "SingleWeaponViewController.h"
-#import "WeaponCellView.h"
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
+#import "PascalImports.h"
 
 @implementation SingleWeaponViewController
-@synthesize weaponName, ammoStoreImage, ammoNames;
+@synthesize weaponName, description, ammoStoreImage;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -23,61 +36,14 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
     
-    NSArray *array = [[NSArray alloc] initWithObjects:
-                      NSLocalizedString(@"Grenade",@""),
-                      NSLocalizedString(@"Cluster Bomb",@""),
-                      NSLocalizedString(@"Bazooka",@""),
-                      NSLocalizedString(@"Homing Bee",@""),
-                      NSLocalizedString(@"Shotgun",@""),
-                      NSLocalizedString(@"Pick Hammer",@""),
-                      NSLocalizedString(@"Skip",@""),
-                      NSLocalizedString(@"Rope",@""),
-                      NSLocalizedString(@"Mine",@""),
-                      NSLocalizedString(@"Deagle",@""),
-                      NSLocalizedString(@"Dynamite",@""),
-                      NSLocalizedString(@"Fire Punch",@""),
-                      NSLocalizedString(@"Slash",@""),
-                      NSLocalizedString(@"Baseball bat",@""),
-                      NSLocalizedString(@"Parachute",@""),
-                      NSLocalizedString(@"Air Attack",@""),
-                      NSLocalizedString(@"Mines Attack",@""),
-                      NSLocalizedString(@"Blow Torch",@""),
-                      NSLocalizedString(@"Construction",@""),
-                      NSLocalizedString(@"Teleport",@""),
-                      NSLocalizedString(@"Switch Hedgehog",@""),
-                      NSLocalizedString(@"Mortar",@""),
-                      NSLocalizedString(@"Kamikaze",@""),
-                      NSLocalizedString(@"Cake",@""),
-                      NSLocalizedString(@"Seduction",@""),
-                      NSLocalizedString(@"Watermelon Bomb",@""),
-                      NSLocalizedString(@"Hellish Hand Grenade",@""),
-                      NSLocalizedString(@"Napalm Attack",@""),
-                      NSLocalizedString(@"Drill Rocket",@""),
-                      NSLocalizedString(@"Ballgun",@""),
-                      NSLocalizedString(@"RC Plane",@""),
-                      NSLocalizedString(@"Low Gravity",@""),
-                      NSLocalizedString(@"Extra Damage",@""),
-                      NSLocalizedString(@"Invulnerable",@""),
-                      NSLocalizedString(@"Extra Time",@""),
-                      NSLocalizedString(@"Laser Sight",@""),
-                      NSLocalizedString(@"Vampirism",@""),
-                      NSLocalizedString(@"Sniper Rifle",@""),
-                      NSLocalizedString(@"Flying Saucer",@""),
-                      NSLocalizedString(@"Molotov Cocktail",@""),
-                      NSLocalizedString(@"Birdy",@""),
-                      NSLocalizedString(@"Portable Portal Device",@""),
-                      NSLocalizedString(@"Piano Attack",@""),
-                      NSLocalizedString(@"Old Limburger",@""),
-                      NSLocalizedString(@"Sine Gun",@""),
-                      NSLocalizedString(@"Flamethrower",@""),
-                      nil];
-    self.ammoNames = array;
-    [array release];
-
-    quantity = (char *)malloc(sizeof(char)*(CURRENT_AMMOSIZE+1));
-    probability = (char *)malloc(sizeof(char)*(CURRENT_AMMOSIZE+1));
-    delay = (char *)malloc(sizeof(char)*(CURRENT_AMMOSIZE+1));
-    crateness = (char *)malloc(sizeof(char)*(CURRENT_AMMOSIZE+1));
+    NSString *trFilePath = [NSString stringWithFormat:@"%@/en.txt",LOCALE_DIRECTORY()];
+    // fill the data structure that we are going to read
+    LoadLocaleWrapper([trFilePath UTF8String]);
+    
+    quantity = (char *)malloc(sizeof(char)*(HW_getNumberOfWeapons()+1));
+    probability = (char *)malloc(sizeof(char)*(HW_getNumberOfWeapons()+1));
+    delay = (char *)malloc(sizeof(char)*(HW_getNumberOfWeapons()+1));
+    crateness = (char *)malloc(sizeof(char)*(HW_getNumberOfWeapons()+1));
     
     NSString *str = [NSString stringWithFormat:@"%@/AmmoMenu/Ammos.png",GRAPHICS_DIRECTORY()];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:str];
@@ -94,6 +60,7 @@
     NSDictionary *weapon = [[NSDictionary alloc] initWithContentsOfFile:ammoFile];
     [ammoFile release];
     
+    self.description = [weapon objectForKey:@"description"];
     const char *tmp1 = [[weapon objectForKey:@"ammostore_initialqt"] UTF8String];
     const char *tmp2 = [[weapon objectForKey:@"ammostore_probability"] UTF8String];
     const char *tmp3 = [[weapon objectForKey:@"ammostore_delay"] UTF8String];
@@ -109,7 +76,7 @@
         delay[i] = tmp3[i];
         crateness[i] = tmp4[i];
     }
-    for (int i = oldlen; i < CURRENT_AMMOSIZE; i++) {
+    for (int i = oldlen; i < HW_getNumberOfWeapons(); i++) {
         quantity[i] = '0';
         probability[i] = '0';
         delay[i] = '0';
@@ -125,23 +92,24 @@
 }
 
 -(void) saveAmmos {
-    quantity[CURRENT_AMMOSIZE] = '\0';
-    probability[CURRENT_AMMOSIZE] = '\0';
-    delay[CURRENT_AMMOSIZE] = '\0';
-    crateness[CURRENT_AMMOSIZE] = '\0';
+    quantity[HW_getNumberOfWeapons()] = '\0';
+    probability[HW_getNumberOfWeapons()] = '\0';
+    delay[HW_getNumberOfWeapons()] = '\0';
+    crateness[HW_getNumberOfWeapons()] = '\0';
     
     NSString *quantityStr = [NSString stringWithUTF8String:quantity];
     NSString *probabilityStr = [NSString stringWithUTF8String:probability];
     NSString *delayStr = [NSString stringWithUTF8String:delay];
     NSString *cratenessStr = [NSString stringWithUTF8String:crateness];
-
+    
     NSDictionary *weapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                            [NSNumber numberWithInt:CURRENT_AMMOSIZE],@"version",
                             quantityStr,@"ammostore_initialqt",
                             probabilityStr,@"ammostore_probability",
                             delayStr,@"ammostore_delay",
-                            cratenessStr,@"ammostore_crate", nil];
-
+                            cratenessStr,@"ammostore_crate", 
+                            self.description,@"description",
+                            nil];
+    
     NSString *ammoFile = [[NSString alloc] initWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.weaponName];
     [weapon writeToFile:ammoFile atomically:YES];
     [ammoFile release];
@@ -156,9 +124,9 @@
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
-        return 1;
+        return 2;
     else
-        return CURRENT_AMMOSIZE;
+        return HW_getNumberOfWeapons();
 }
 
 // Customize the appearance of table view cells.
@@ -167,42 +135,50 @@
     static NSString *CellIdentifier1 = @"Cell1";
     NSInteger row = [indexPath row];
     UITableViewCell *cell = nil;
-
-    if (0 == [indexPath section]) {
-        EditableCellView *customCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
-        if (customCell == nil) {
-            customCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault 
-                                            reuseIdentifier:CellIdentifier0] autorelease];
-            customCell.delegate = self;
-        }
-        
-        customCell.textField.text = self.weaponName;
-        customCell.detailTextLabel.text = nil;
-        customCell.imageView.image = nil;
-        customCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell = customCell;
-    } else {
-        WeaponCellView *customCell = (WeaponCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
-        if (customCell == nil) {
-            customCell = [[[WeaponCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
-            customCell.delegate = self;
-        }
-        
-        int x = ((row*32)/1024)*32;
-        int y = (row*32)%1024;
-        
-        UIImage *img = [[self.ammoStoreImage cutAt:CGRectMake(x, y, 32, 32)] makeRoundCornersOfSize:CGSizeMake(7, 7)];
-        customCell.weaponIcon.image = img;
-        customCell.weaponName.text = [ammoNames objectAtIndex:row];
-        customCell.tag = row;
-        
-        [customCell.initialQt setValue:[[NSString stringWithFormat:@"%c",quantity[row]] intValue] animated:NO];
-        [customCell.probabilityQt setValue:[[NSString stringWithFormat:@"%c", probability[row]] intValue] animated:NO];
-        [customCell.delayQt setValue:[[NSString stringWithFormat:@"%c", delay[row]] intValue] animated:NO];
-        [customCell.crateQt setValue:[[NSString stringWithFormat:@"%c", crateness[row]] intValue] animated:NO];
-        cell = customCell;
-    }
     
+    if (0 == [indexPath section]) {
+        EditableCellView *editableCell = (EditableCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
+        if (editableCell == nil) {
+            editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
+                                                    reuseIdentifier:CellIdentifier0] autorelease];
+            editableCell.delegate = self;
+        }
+        editableCell.tag = row;
+        editableCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        editableCell.imageView.image = nil;
+        editableCell.detailTextLabel.text = nil;
+        
+        if (row == 0) {
+            editableCell.textField.text = self.weaponName;
+        } else {
+            editableCell.minimumCharacters = 0;
+            editableCell.textField.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];
+            editableCell.textField.text = self.description;
+            editableCell.textField.placeholder = NSLocalizedString(@"You can add a description if you wish",@"");
+        }
+        cell = editableCell;
+    } else {
+        WeaponCellView *weaponCell = (WeaponCellView *)[aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
+        if (weaponCell == nil) {
+            weaponCell = [[[WeaponCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
+            weaponCell.delegate = self;
+        }
+
+        int x = ((row*32)/(int)self.ammoStoreImage.size.height)*32;
+        int y = (row*32)%(int)self.ammoStoreImage.size.height;
+
+        UIImage *img = [[self.ammoStoreImage cutAt:CGRectMake(x, y, 32, 32)] makeRoundCornersOfSize:CGSizeMake(7, 7)];
+        weaponCell.weaponIcon.image = img;
+        weaponCell.weaponName.text = [NSString stringWithUTF8String:HW_getWeaponNameByIndex(row)];
+        weaponCell.tag = row;
+
+        [weaponCell.initialSli setValue:[[NSString stringWithFormat:@"%c",quantity[row]] intValue] animated:NO];
+        [weaponCell.probabilitySli setValue:[[NSString stringWithFormat:@"%c", probability[row]] intValue] animated:NO];
+        [weaponCell.delaySli setValue:[[NSString stringWithFormat:@"%c", delay[row]] intValue] animated:NO];
+        [weaponCell.crateSli setValue:[[NSString stringWithFormat:@"%c", crateness[row]] intValue] animated:NO];
+        cell = weaponCell;
+    }
+
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
@@ -212,6 +188,22 @@
         return aTableView.rowHeight;
     else
         return 120;
+}
+
+-(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {
+    NSString *sectionTitle = nil;
+    switch (section) {
+        case 0:
+            sectionTitle = NSLocalizedString(@"Weaponset Name", @"");
+            break;
+        case 1:
+            sectionTitle = NSLocalizedString(@"Weapon Ammuntions", @"");
+            break;
+        default:
+            DLog(@"nope");
+            break;
+    }
+    return sectionTitle;
 }
 
 #pragma mark -
@@ -226,13 +218,17 @@
 #pragma mark -
 #pragma mark editableCellView delegate
 // set the new value
--(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {    
-    // delete old file
-    [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.weaponName] error:NULL];
-    // update filename
-    self.weaponName = textString;
-    // save new file
-    [self saveAmmos];
+-(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
+    if (tagValue == 0) {
+        // delete old file
+        [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@.plist",WEAPONS_DIRECTORY(),self.weaponName] error:NULL];
+        // update filename
+        self.weaponName = textString;
+        // save new file
+        [self saveAmmos];
+    } else {
+        self.description = textString;
+    }
 }
 
 #pragma mark -
@@ -256,9 +252,9 @@
     free(delay); delay = NULL;
     free(crateness); crateness = NULL;
     [super viewDidUnload];
+    self.description = nil;
     self.weaponName = nil;
     self.ammoStoreImage = nil;
-    self.ammoNames = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -266,8 +262,8 @@
 
 -(void) dealloc {
     [weaponName release];
+    [description release];
     [ammoStoreImage release];
-    [ammoNames release];
     [super dealloc];
 }
 

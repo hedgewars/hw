@@ -51,6 +51,7 @@ public:
     void StartQuick();
     void StartNet();
     void StartTraining(const QString & file);
+    void StartCampaign(const QString & file);
 
  protected:
     virtual QStringList setArguments();
@@ -76,7 +77,8 @@ private:
         gtQLocal   = 2,
         gtDemo     = 3,
         gtNet      = 4,
-        gtTraining = 5
+        gtTraining = 5,
+        gtCampaign = 6,
     };
     char msgbuf[MAXMSGCHARS];
     QString teams[5];
@@ -93,6 +95,7 @@ private:
     void SendQuickConfig();
     void SendNetConfig();
     void SendTrainingConfig();
+    void SendCampaignConfig();
     void ParseMessage(const QByteArray & msg);
     void SetGameState(GameState state);
 };

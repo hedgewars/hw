@@ -22,7 +22,6 @@ unit uFloat;
 interface
 
 {$IFDEF FPC}
-{$INLINE ON}
 {$IFDEF ENDIAN_LITTLE}
 type hwFloat = record
                isNegative: boolean;
@@ -43,26 +42,26 @@ function int2hwFloat (const i: LongInt) : hwFloat; inline;
 
 operator + (const z1, z2: hwFloat) z : hwFloat; inline;
 operator - (const z1, z2: hwFloat) z : hwFloat; inline;
-operator - (const z1: hwFloat) z : hwFloat;
+operator - (const z1: hwFloat) z : hwFloat; inline;
 
-operator * (const z1, z2: hwFloat) z : hwFloat;
+operator * (const z1, z2: hwFloat) z : hwFloat; inline;
 operator * (const z1: hwFloat; const z2: LongInt) z : hwFloat; inline;
-operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat;
-operator / (const z1: hwFloat; const z2: LongInt) z : hwFloat;
+operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat; inline;
+operator / (const z1: hwFloat; const z2: LongInt) z : hwFloat; inline;
 
-operator < (const z1, z2: hwFloat) b : boolean;
-operator > (const z1, z2: hwFloat) b : boolean;
+operator < (const z1, z2: hwFloat) b : boolean; inline;
+operator > (const z1, z2: hwFloat) b : boolean; inline;
 
 function cstr(const z: hwFloat): shortstring;
-function hwRound(const t: hwFloat): LongInt;
-function hwAbs(const t: hwFloat): hwFloat;
+function hwRound(const t: hwFloat): LongInt; inline;
+function hwAbs(const t: hwFloat): hwFloat; inline;
 function hwSqr(const t: hwFloat): hwFloat; inline;
 function hwSqrt(const t: hwFloat): hwFloat; inline;
 function Distance(const dx, dy: hwFloat): hwFloat;
 function DistanceI(const dx, dy: LongInt): hwFloat;
 function AngleSin(const Angle: Longword): hwFloat;
 function AngleCos(const Angle: Longword): hwFloat;
-function SignAs(const num, signum: hwFloat): hwFloat;
+function SignAs(const num, signum: hwFloat): hwFloat; inline;
 
 {$IFDEF FPC}
 {$J-}
@@ -148,7 +147,7 @@ type hwFloat = Extended;
 {$ENDIF}
 
 implementation
-uses uMisc;
+//uses uMisc;
 
 
 {$IFDEF FPC}
@@ -348,7 +347,7 @@ end;
 function AngleSin(const Angle: Longword): hwFloat;
 begin
 {$IFDEF DEBUGFILE}
-TryDo((Angle >= 0) and (Angle <= 2048), 'Sin param exceeds limits', true);
+//TryDo((Angle >= 0) and (Angle <= 2048), 'Sin param exceeds limits', true);
 {$ENDIF}
 AngleSin.isNegative:= false;
 if Angle < 1024 then AngleSin.QWordValue:= SinTable[Angle]
@@ -358,7 +357,7 @@ end;
 function AngleCos(const Angle: Longword): hwFloat;
 begin
 {$IFDEF DEBUGFILE}
-TryDo((Angle >= 0) and (Angle <= 2048), 'Cos param exceeds limits', true);
+//TryDo((Angle >= 0) and (Angle <= 2048), 'Cos param exceeds limits', true);
 {$ENDIF}
 AngleCos.isNegative:= Angle > 1024;
 if Angle < 1024 then AngleCos.QWordValue:= SinTable[1024 - Angle]

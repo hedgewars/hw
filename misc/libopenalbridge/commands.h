@@ -22,32 +22,32 @@
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif
-    
+
     // play, pause, stop a single sound source
     void openal_pausesound        (unsigned int index);
     void openal_stopsound         (unsigned int index);
-    
+
     // play a sound and set whether it should loop or not (0/1)
     void openal_playsound         (unsigned int index);
-    
+
     void openal_freesound         (unsigned int index);
-    
+
     // set or unset the looping property for a sound source
     void openal_toggleloop        (unsigned int index);
-    
+
     // set position and volume of a sound source
     void openal_setposition       (unsigned int index, float x, float y, float z);
     void openal_setvolume         (unsigned int index, float gain);
-    
+
     // set volume for all sounds (gain interval is [0-1])
     void openal_setglobalvolume   (float gain);
-    
+
     // mute or unmute all sounds
     void openal_togglemute        (void);
-    
+
     // fade effect,
     void openal_fade              (unsigned int index, unsigned short int quantity, al_fade_t direction);
-    
+
 #ifdef __CPLUSPLUS
 }
 #endif

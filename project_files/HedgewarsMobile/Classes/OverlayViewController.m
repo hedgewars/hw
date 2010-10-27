@@ -1,161 +1,291 @@
-//
-//  overlayViewController.m
-//  HedgewarsMobile
-//
-//  Created by Vittorio on 16/03/10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
-//
+/*
+ * Hedgewars-iOS, a Hedgewars port for iOS devices
+ * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 16/03/2010.
+ */
+
 
 #import "OverlayViewController.h"
 #import "SDL_uikitappdelegate.h"
-#import "PascalImports.h"
-#import "CGPointUtils.h"
-#import "SDL_mouse.h"
 #import "InGameMenuViewController.h"
+#import "HelpPageViewController.h"
+#import "AmmoMenuViewController.h"
+#import "PascalImports.h"
 #import "CommodityFunctions.h"
+#import "CGPointUtils.h"
 #import "SDL_config_iphoneos.h"
+#import "SDL_mouse.h"
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
 #define HIDING_TIME_NEVER   [NSDate dateWithTimeIntervalSinceNow:10000]
-#define doDim()             [dimTimer setFireDate:HIDING_TIME_DEFAULT]
+#define doDim()             [dimTimer setFireDate: (IS_DUALHEAD()) ? HIDING_TIME_NEVER : HIDING_TIME_DEFAULT]
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
 #define CONFIRMATION_TAG 5959
 #define GRENADE_TAG 9595
+#define REPLAYBLACKVIEW_TAG 9955
+#define ACTIVITYINDICATOR_TAG 987654
 #define ANIMATION_DURATION 0.25
-#define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview]; 
+#define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu;
+@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu;
 
+#pragma mark -
+#pragma mark rotation
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
--(void) didRotate:(NSNotification *)notification {  
+// pause the game and remove objc menus so that animation is smoother
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval) duration{
+    [self dismissPopover];
+    if (HW_isPaused() == NO)
+        HW_pause();
+    if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
+        [self.amvc disappear];
+        wasVisible = YES;
+    } else
+        wasVisible = NO;
+
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
+// now restore previous state
+-(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation {
+    if (wasVisible || IS_DUALHEAD())
+        [self.amvc appearInView:self.view];
+    if (HW_isPaused() == YES)
+        HW_pause();
+
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+}
+
+// rotate the sdl view according to the orientation -- the uiview is autorotated
+-(void) didRotate:(NSNotification *)notification {
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    CGRect usefulRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
     UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
     
     [UIView beginAnimations:@"rotation" context:NULL];
-    [UIView setAnimationDuration:0.8f];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationDuration:0.7];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
-            HW_setLandscape(YES);
+            if (IS_DUALHEAD()) {
+                self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
+            } else
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
             break;
         case UIDeviceOrientationLandscapeRight:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(-90));
-            HW_setLandscape(YES);
+            if (IS_DUALHEAD()) {
+                self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
+            } else
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
             break;
-        /*
-        case UIDeviceOrientationPortrait:
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(270));
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
-                [self chatAppear];
-                HW_setLandscape(NO);
-            }
-            break;
-        case UIDeviceOrientationPortraitUpsideDown:
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
-                [self chatAppear];
-                HW_setLandscape(NO);
-            }
-            break;
-        */
         default:
+            // a debug log would spam too much
             break;
     }
-    self.view.frame = usefulRect;
-    //sdlView.frame = usefulRect;
     [UIView commitAnimations];
+
+    // for single screens only landscape mode is supported
+    // for dual screen mode the sdlview is not modified, but you can rotate the pad in any direction
 }
 
 #pragma mark -
 #pragma mark View Management
--(void) viewDidLoad {
-    isPopoverVisible = NO;
-    self.view.alpha = 0;
-    self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
-    
-    // set initial orientation
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
-    switch (orientation) {
-        case UIDeviceOrientationLandscapeLeft:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(0));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(90));
-            break;
-        case UIDeviceOrientationLandscapeRight:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadian(180));
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadian(-90));
-            break;
-        default:
-            break;
+-(id) initWithCoder:(NSCoder *)aDecoder {
+    if ((self = [super initWithCoder:aDecoder])) {
+        isGameRunning = NO;
+        isReplay = NO;
+        cachedGrenadeTime = 2;
+
+        isAttacking = NO;
+        wasVisible = NO;
+        isPopoverVisible = NO;    // it is called "popover" even on the iphone
     }
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    self.view.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
-    
-    dimTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:6]
+    return self;
+}
+
+-(void) viewDidLoad {
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    self.view.frame = CGRectMake(0, 0, screenRect.size.height, screenRect.size.width);
+    self.view.center = CGPointMake(self.view.frame.size.height/2, self.view.frame.size.width/2);
+    self.view.alpha = 0;
+
+    // detrmine the quanitiy and direction of the rotation
+    if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
+        a = 180;
+        b = 0;
+    } else {
+        a = 0;
+        b = 180;
+    }
+
+    // get the number of screens to know the previous state whan a display is connected or detached
+    initialScreenCount = [[UIScreen screens] count];
+
+    // set initial orientation of the controller orientation
+    if (IS_DUALHEAD()) {
+        switch (self.interfaceOrientation) {
+            case UIDeviceOrientationLandscapeLeft:
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
+                break;
+            case UIDeviceOrientationLandscapeRight:
+                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
+                break;
+            default:
+                DLog(@"Nope");
+                break;
+        }
+    }
+
+    // the timer used to dim the overlay
+    dimTimer = [[NSTimer alloc] initWithFireDate:(IS_DUALHEAD()) ? HIDING_TIME_NEVER : [NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
                                           target:self
                                         selector:@selector(dimOverlay)
                                         userInfo:nil
                                          repeats:YES];
-    
-    // add timer too runloop, otherwise it doesn't work
+    // add timer to runloop, otherwise it doesn't work
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
-    
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];   
+
+    // become listener of some notifications
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didRotate:)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showHelp:)
+                                                 name:@"show help ingame"
+                                               object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cleanup)
+                                                 name:@"remove overlay"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(numberOfScreensIncreased)
+                                                 name:UIScreenDidConnectNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(numberOfScreensDecreased)
+                                                 name:UIScreenDidDisconnectNotification
+                                               object:nil];
+
+    // present the overlay
     [UIView beginAnimations:@"showing overlay" context:NULL];
     [UIView setAnimationDuration:1];
     self.view.alpha = 1;
     [UIView commitAnimations];
+}
+
+-(void) numberOfScreensIncreased {
+    if (initialScreenCount == 1) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New display detected"
+                                                        message:NSLocalizedString(@"Hedgewars supports multi-monitor configurations, but the screen has to be connected before launching the game.",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        if (HW_isPaused() == NO)
+            HW_pause();
+    }
+}
+
+-(void) numberOfScreensDecreased {
+    if (initialScreenCount == 2) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh noes! Display disconnected"
+                                                        message:NSLocalizedString(@"A monitor has been disconnected while playing and this has ended the match! You need to restart the game if you wish to use the second display again.",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        [self cleanup];
+    }
+}
+
+
+-(void) showHelp:(id) sender {
+    if (self.helpPage == nil)
+        self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageInGameViewController" bundle:nil];
+    self.helpPage.view.alpha = 0;
+    [self.view addSubview:helpPage.view];
+    [UIView beginAnimations:@"helpingame" context:NULL];
+    self.helpPage.view.alpha = 1;
+    [UIView commitAnimations];
+    doNotDim();
+}
+
+-(void) cleanup {
+    [self dismissPopover];
+    HW_terminate(NO);
+    [self.view removeFromSuperview];
+}
+
+-(void) didReceiveMemoryWarning {
+    if (self.popupMenu.view.superview == nil)
+        self.popupMenu = nil;
+    if (self.helpPage.view.superview == nil)
+        self.helpPage = nil;
+    if (self.amvc.view.superview == nil)
+        self.amvc = nil;
+    if (IS_IPAD())
+        if (((UIPopoverController *)self.popoverController).contentViewController.view.superview == nil)
+            self.popoverController = nil;
     
-    // find the sdl window we're on
-    SDL_VideoDevice *_this = SDL_GetVideoDevice();
-    SDL_VideoDisplay *display = &_this->displays[0];
-    sdlwindow = display->windows;
+    MSG_MEMCLEAN();
+    [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
-    // only object initialized in viewDidLoad should be here
+    // only objects initialized in viewDidLoad should be here
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                             selector:@selector(unsetPreciseStatus)
+                                               object:nil];
     dimTimer = nil;
+    self.helpPage = nil;
+    [self dismissPopover];
+    self.popoverController = nil;
+    self.amvc = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
--(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
-    if (popupMenu.view.superview == nil) 
-        popupMenu = nil;
-    MSG_MEMCLEAN();
-}
-
-
 -(void) dealloc {
     [popupMenu release];
+    [helpPage release];
     [popoverController release];
+    [amvc release];
     // dimTimer is autoreleased
     [super dealloc];
 }
 
 #pragma mark -
-#pragma mark Overlay actions and members
+#pragma mark overlay user interaction
 // nice transition for dimming, should be called only by the timer himself
 -(void) dimOverlay {
     if (isGameRunning) {
@@ -174,11 +304,11 @@
 
 // dim the overlay when there's no more input for a certain amount of time
 -(IBAction) buttonReleased:(id) sender {
-    if (!isGameRunning)
+    if (isGameRunning == NO)
         return;
-    
+
     UIButton *theButton = (UIButton *)sender;
-    
+
     switch (theButton.tag) {
         case 0:
         case 1:
@@ -199,40 +329,43 @@
             break;
     }
 
+    isAttacking = NO;
     doDim();
 }
 
-// issue certain action based on the tag of the button 
+// issue certain action based on the tag of the button
 -(IBAction) buttonPressed:(id) sender {
     [self activateOverlay];
-    if (isPopoverVisible) {
-        [self dismissPopover];
-    }
     
-    if (!isGameRunning)
+    if (isGameRunning == NO)
         return;
     
-    UIButton *theButton = (UIButton *)sender;
+    if (isPopoverVisible)
+        [self dismissPopover];
     
+    UIButton *theButton = (UIButton *)sender;
     switch (theButton.tag) {
         case 0:
-            HW_walkLeft();
+            if (isAttacking == NO)
+                HW_walkLeft();
             break;
         case 1:
-            HW_walkRight();
+            if (isAttacking == NO)
+                HW_walkRight();
             break;
         case 2:
             [self performSelector:@selector(unsetPreciseStatus) withObject:nil afterDelay:0.8];
-            HW_preciseSet(YES);
+            HW_preciseSet(!HW_isWeaponRope());
             HW_aimUp();
             break;
         case 3:
             [self performSelector:@selector(unsetPreciseStatus) withObject:nil afterDelay:0.8];
-            HW_preciseSet(YES);
+            HW_preciseSet(!HW_isWeaponRope());
             HW_aimDown();
             break;
         case 4:
             HW_shoot();
+            isAttacking = YES;
             break;
         case 5:
             HW_jump();
@@ -240,17 +373,36 @@
         case 6:
             HW_backjump();
             break;
-        case 7:
-            HW_tab();
-            break;
         case 10:
+            playSound(@"clickSound");
             HW_pause();
+            if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
+                doDim();
+                [self.amvc disappear];
+            }
             removeConfirmationInput();
             [self showPopover];
             break;
         case 11:
+            playSound(@"clickSound");
             removeConfirmationInput();
-            HW_ammoMenu();
+            
+            if (IS_DUALHEAD() || self.useClassicMenu == NO) {
+                if (self.amvc == nil)
+                    self.amvc = [[AmmoMenuViewController alloc] init];
+
+                if (self.amvc.isVisible) {
+                    doDim();
+                    [self.amvc disappear];
+                } else {
+                    if (HW_isAmmoMenuNotAllowed() == NO) {
+                        doNotDim();
+                        [self.amvc appearInView:self.view];
+                    }
+                }
+            } else {
+                HW_ammoMenu();
+            }
             break;
         default:
             DLog(@"Nope");
@@ -262,12 +414,28 @@
     HW_preciseSet(NO);
 }
 
+-(void) sendHWClick {
+    HW_click();
+    removeConfirmationInput();
+    doDim();
+}
+
+-(void) setGrenadeTime:(id) sender {
+    UISegmentedControl *theSegment = (UISegmentedControl *)sender;
+    if (cachedGrenadeTime != theSegment.selectedSegmentIndex) {
+        HW_setGrenadeTime(theSegment.selectedSegmentIndex + 1);
+        cachedGrenadeTime = theSegment.selectedSegmentIndex;
+    }
+}
+
+#pragma mark -
+#pragma mark other menu
 // present a further check before closing game
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
     if ([actionSheet cancelButtonIndex] != buttonIndex)
-        HW_terminate(NO);
+        [self cleanup];
     else
-        HW_pause();     
+        HW_pause();
 }
 
 // show up a popover containing a popupMenuViewController; we hook it with setPopoverContentSize
@@ -276,27 +444,27 @@
     CGRect screen = [[UIScreen mainScreen] bounds];
     isPopoverVisible = YES;
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        if (popupMenu == nil) 
-            popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-        if (popoverController == nil) {
-            popoverController = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
-            [popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
-            [popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
+    if (IS_IPAD()) {
+        if (self.popupMenu == nil)
+            self.popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        if (self.popoverController == nil) {
+            self.popoverController = [[UIPopoverController alloc] initWithContentViewController:self.popupMenu];
+            [self.popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
+            [self.popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
         }
 
-        [popoverController presentPopoverFromRect:CGRectMake(screen.size.height / 2, screen.size.width / 2, 1, 1)
+        [self.popoverController presentPopoverFromRect:CGRectMake(screen.size.height / 2, screen.size.width / 2, 1, 1)
                                            inView:self.view
                          permittedArrowDirections:UIPopoverArrowDirectionAny
                                          animated:YES];
     } else {
-        if (popupMenu == nil)
-            popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        
+        if (self.popupMenu == nil)
+            self.popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
+
         [self.view addSubview:popupMenu.view];
-        [popupMenu present];
+        [self.popupMenu present];
     }
-    popupMenu.tableView.scrollEnabled = NO;
+    self.popupMenu.tableView.scrollEnabled = NO;
 }
 
 // on ipad just dismiss it, on iphone transtion to the right
@@ -305,12 +473,12 @@
         isPopoverVisible = NO;
         if (HW_isPaused())
             HW_pause();
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [(InGameMenuViewController *)popoverController.contentViewController removeChat];
-            [popoverController dismissPopoverAnimated:YES];
+
+        if (IS_IPAD()) {
+            [(InGameMenuViewController *)[[self popoverController] contentViewController] removeChat];
+            [self.popoverController dismissPopoverAnimated:YES];
         } else {
-            [popupMenu dismiss];
+            [self.popupMenu dismiss];
         }
         [self buttonReleased:nil];
     }
@@ -321,24 +489,31 @@
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     NSSet *allTouches = [event allTouches];
     UITouch *first, *second;
-    
+
+    if (isGameRunning == NO)
+        return;
+
     // hide in-game menu
     if (isPopoverVisible)
         [self dismissPopover];
-    
+
+    if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
+        doDim();
+        [self.amvc disappear];
+    }
     // reset default dimming
     doDim();
-    
+
     HW_setPianoSound([allTouches count]);
-    
+
     switch ([allTouches count]) {
-        case 1:       
+        case 1:
             removeConfirmationInput();
             startingPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
             if (2 == [[[allTouches allObjects] objectAtIndex:0] tapCount])
                 HW_zoomReset();
             break;
-        case 2:                
+        case 2:
             // pinching
             first = [[allTouches allObjects] objectAtIndex:0];
             second = [[allTouches allObjects] objectAtIndex:1];
@@ -349,26 +524,27 @@
     }
 }
 
-    //if (currentPosition.y < screen.size.width - 130 || (currentPosition.x > 130 && currentPosition.x < screen.size.height - 130)) {
-
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
     CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
+
+    if (isGameRunning == NO)
+        return;
     
     switch ([allTouches count]) {
         case 1:
             // if we're in the menu we just click in the point
-            if (HW_isAmmoOpen()) {
-                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+            if (HW_isAmmoMenuOpen()) {
+                HW_setCursor(HWXZ(currentPosition.x), HWYZ(currentPosition.y));
                 // this click doesn't need any wrapping because the ammoMenu already limits the cursor
                 HW_click();
-            } else 
+            } else
                 // if weapon requires a further click, ask for tapping again
                 if (HW_isWeaponRequiringClick()) {
                     // here don't have to wrap thanks to isCursorVisible magic
                     HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
-                    
+
                     // draw the button at the last touched point (which is the current position)
                     UIButton *tapAgain = [UIButton buttonWithType:UIButtonTypeRoundedRect];
                     tapAgain.frame = CGRectMake(currentPosition.x - 75, currentPosition.y + 25, 150, 40);
@@ -377,13 +553,13 @@
                     [tapAgain addTarget:self action:@selector(sendHWClick) forControlEvents:UIControlEventTouchUpInside];
                     [tapAgain setTitle:NSLocalizedString(@"Tap to set!",@"from the overlay") forState:UIControlStateNormal];
                     [self.view addSubview:tapAgain];
-                    
+
                     // animation ftw!
-                    [UIView beginAnimations:@"inserting button" context:NULL]; 
+                    [UIView beginAnimations:@"inserting button" context:NULL];
                     [UIView setAnimationDuration:ANIMATION_DURATION];
                     [self.view viewWithTag:CONFIRMATION_TAG].alpha = 1;
                     [UIView commitAnimations];
-                    
+
                     // keep the overlay active, or the button will fade
                     [self activateOverlay];
                     doNotDim();
@@ -391,35 +567,35 @@
                     if (HW_isWeaponTimerable()) {
                         if (isSegmentVisible) {
                             UISegmentedControl *grenadeTime = (UISegmentedControl *)[self.view viewWithTag:GRENADE_TAG];
-                            
+
                             [UIView beginAnimations:@"removing segmented control" context:NULL];
                             [UIView setAnimationDuration:ANIMATION_DURATION];
                             [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
                             grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
                             [UIView commitAnimations];
-                            
+
                             [grenadeTime performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
                         } else {
                             NSArray *items = [[NSArray alloc] initWithObjects:@"1",@"2",@"3",@"4",@"5",nil];
                             UISegmentedControl *grenadeTime = [[UISegmentedControl alloc] initWithItems:items];
                             [items release];
-                            
+
                             [grenadeTime addTarget:self action:@selector(setGrenadeTime:) forControlEvents:UIControlEventValueChanged];
                             grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
-                            grenadeTime.selectedSegmentIndex = 2;
+                            grenadeTime.selectedSegmentIndex = cachedGrenadeTime;
                             grenadeTime.tag = GRENADE_TAG;
                             [self.view addSubview:grenadeTime];
                             [grenadeTime release];
-                            
+
                             [UIView beginAnimations:@"inserting segmented control" context:NULL];
                             [UIView setAnimationDuration:ANIMATION_DURATION];
                             [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
                             grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width - 100, 250, 50);
                             [UIView commitAnimations];
-                            
+
                             [self activateOverlay];
                             doNotDim();
-                        } 
+                        }
                         isSegmentVisible = !isSegmentVisible;
                     } else
                         if (HW_isWeaponSwitch())
@@ -431,19 +607,8 @@
         default:
             break;
     }
-    
+
     initialDistanceForPinching = 0;
-}
-
--(void) sendHWClick {
-    HW_click();
-    removeConfirmationInput();
-    doDim();
-}
-
--(void) setGrenadeTime:(id) sender {
-    UISegmentedControl *theSegment = (UISegmentedControl *)sender;
-    HW_setGrenadeTime(theSegment.selectedSegmentIndex + 1);
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -454,35 +619,43 @@
     CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
     int x, y, dx, dy;
-    
     UITouch *touch, *first, *second;
 
+    if (isGameRunning == NO)
+        return;
+    
     switch ([allTouches count]) {
         case 1:
             touch = [[allTouches allObjects] objectAtIndex:0];
             CGPoint currentPosition = [touch locationInView:self.view];
 
-            if (HW_isAmmoOpen() || HW_isWeaponRequiringClick()) {
-                // moves the cursor around
-                HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
-            } else {
-                // panning \o/
-                dx = startingPoint.x - currentPosition.x;
-                dy = currentPosition.y - startingPoint.y;
-                HW_getCursor(&x, &y);
-                // momentum (or something like that)
-                if (abs(dx) > 40) dx *= log(abs(dx)/4);
-                if (abs(dy) > 40) dy *= log(abs(dy)/4);
-                HW_setCursor(x + dx, y + dy);
-                startingPoint = currentPosition;
-            }
+            if (HW_isAmmoMenuOpen()) {
+                // no zoom consideration for this
+                HW_setCursor(HWXZ(currentPosition.x), HWYZ(currentPosition.y));
+            } else
+                if (HW_isWeaponRequiringClick()) {
+                    // moves the cursor around wrt zoom
+                    HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
+                } else {
+                    // panning \o/
+                    dx = startingPoint.x - currentPosition.x;
+                    dy = currentPosition.y - startingPoint.y;
+                    HW_getCursor(&x, &y);
+                    // momentum (or something like that)
+                    /*if (abs(dx) > 40)
+                        dx *= log(abs(dx)/4);
+                    if (abs(dy) > 40)
+                        dy *= log(abs(dy)/4);*/
+                    HW_setCursor(x + dx/HW_zoomFactor(), y + dy/HW_zoomFactor());
+                    startingPoint = currentPosition;
+                }
             break;
         case 2:
             first = [[allTouches allObjects] objectAtIndex:0];
             second = [[allTouches allObjects] objectAtIndex:1];
             CGFloat currentDistanceOfPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
             const int pinchDelta = 40;
-            
+
             if (0 != initialDistanceForPinching) {
                 if (currentDistanceOfPinching - initialDistanceForPinching > pinchDelta) {
                     HW_zoomIn();
@@ -492,49 +665,106 @@
                     HW_zoomOut();
                     initialDistanceForPinching = currentDistanceOfPinching;
                 }
-            } else 
+            } else
                 initialDistanceForPinching = currentDistanceOfPinching;
-            
             break;
         default:
+            DLog(@"Nope");
             break;
     }
 }
 
 #pragma mark -
-#pragma mark Functions called by pascal
-// called from AddProgress and FinishProgress (respectively)
+#pragma mark Functions called by pascal code
+void inline setGameRunning(BOOL value) {
+    isGameRunning = value;
+}
+
+// called by uStore from AddProgress
 void startSpinning() {
-    isGameRunning = NO;
-    CGRect screen = [[UIScreen mainScreen] bounds];
+    setGameRunning(NO);
+    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    indicator.tag = 987654;
-    indicator.center = CGPointMake(screen.size.width/2 - 118, screen.size.height/2);
+    indicator.tag = ACTIVITYINDICATOR_TAG;
+    int offset;
+    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft)
+        offset = -120;
+    else
+        offset = 120;
+    if (IS_DUALHEAD())
+        indicator.center = CGPointMake(theWindow.frame.size.width/2, theWindow.frame.size.height/2 + offset);
+    else
+        indicator.center = CGPointMake(theWindow.frame.size.width/2 + offset, theWindow.frame.size.height/2);
     indicator.hidesWhenStopped = YES;
     [indicator startAnimating];
-    [[[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG] addSubview:indicator];
+    [theWindow addSubview:indicator];
     [indicator release];
 }
 
+// called by uStore from FinishProgress and by OverlayViewController by replayBegan
 void stopSpinning() {
-    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[[[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG] viewWithTag:987654];
+    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
+    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[theWindow viewWithTag:ACTIVITYINDICATOR_TAG];
     [indicator stopAnimating];
-    isGameRunning = YES;
+    HW_zoomSet(1.7);
+    if (isReplay == NO)
+        setGameRunning(YES);
 }
 
+// called by CCHandlers from chNextTurn
 void clearView() {
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
+    UIWindow *theWindow = (IS_DUALHEAD()) ? [SDLUIKitDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow];
     UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
     UISegmentedControl *theSegment = (UISegmentedControl *)[theWindow viewWithTag:GRENADE_TAG];
-    
+
     [UIView beginAnimations:@"remove button" context:NULL];
     [UIView setAnimationDuration:ANIMATION_DURATION];
     theButton.alpha = 0;
     theSegment.alpha = 0;
     [UIView commitAnimations];
+
+    if (theButton)
+        [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:ANIMATION_DURATION];
+    if (theSegment)
+        [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:ANIMATION_DURATION];
+
+    cachedGrenadeTime = 2;
+}
+
+// called by hwengine
+void replayBegan() {
+    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
+    UIView *blackView = [[UIView alloc] initWithFrame:theWindow.frame];
+    blackView.backgroundColor = [UIColor blackColor];
+    blackView.alpha = 0.6;
+    blackView.tag = REPLAYBLACKVIEW_TAG;
+    blackView.exclusiveTouch = NO;
+    blackView.multipleTouchEnabled = NO;
+    blackView.userInteractionEnabled = NO;
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    indicator.center = theWindow.center;
+    [indicator startAnimating];
+    [blackView addSubview:indicator];
+    [indicator release];
+    [theWindow addSubview:blackView];
+    [blackView release];
+    isReplay = YES;
+    stopSpinning();
+}
+
+// called by uGame
+void replayFinished() {
+    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
+    UIView *blackView = (UIView *)[theWindow viewWithTag:REPLAYBLACKVIEW_TAG];
     
-    [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:0.3];
-    [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:0.3];    
+    [UIView beginAnimations:@"removing black" context:NULL];
+    [UIView setAnimationDuration:1];
+    blackView.alpha = 0;
+    [UIView commitAnimations];
+    [theWindow performSelector:@selector(removeFromSuperview) withObject:blackView afterDelay:1];
+    
+    setGameRunning(YES);
+    isReplay = NO;
 }
 
 @end

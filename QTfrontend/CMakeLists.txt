@@ -183,7 +183,7 @@ add_executable(hedgewars WIN32
 	)
 
 
-set(	HW_LINK_LIBS 
+set(	HW_LINK_LIBS
 	${QT_LIBRARIES}
 	${SDL_LIBRARY}
 	${SDLMIXER_LIBRARY}
@@ -195,7 +195,7 @@ if(WIN32 AND NOT UNIX)
 		set(HW_LINK_LIBS ${HW_LINK_LIBS} SDL)
 	endif()
 
-	set(	HW_LINK_LIBS 
+	set(	HW_LINK_LIBS
 		${HW_LINK_LIBS}
 		ole32
 		oleaut32

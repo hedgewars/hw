@@ -44,7 +44,7 @@ sendPacket s = do
 
 emulateSession :: StateT SState IO ()
 emulateSession = do
-    n <- io $ randomRIO (100000::Int, 100000)
+    n <- io $ randomRIO (100000::Int, 100100)
     waitPacket "CONNECTED"
     sendPacket ["NICK", "test" ++ (show n)]
     waitPacket "NICK"
@@ -52,6 +52,7 @@ emulateSession = do
     waitPacket "PROTO"
     b <- waitPacket "LOBBY:JOINED"
     --io $ print b
+    sendPacket ["QUIT", "BYE"]
     return ()
 
 testing = Control.OldException.handle print $ do
@@ -62,7 +63,7 @@ testing = Control.OldException.handle print $ do
     putStr "-"
     hFlush stdout
 
-forks = forever $ do
+forks = forM_ [1..100] $ const $ do
     delay <- randomRIO (10000::Int, 30000)
     threadDelay delay
     forkIO testing

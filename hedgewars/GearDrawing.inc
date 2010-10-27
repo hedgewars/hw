@@ -6,6 +6,7 @@ var i, t: LongInt;
     defaultPos, HatVisible: boolean;
     VertexBuffer: array [0..1] of TVertex2f;
     HH: PHedgehog;
+    CurWeapon: PAmmo;
 begin
 HH:= PHedgehog(Gear^.Hedgehog);
 if HH^.Unplaced then exit;
@@ -14,6 +15,9 @@ if ((Gear^.State and gstHHHJump) <> 0) and not cArtillery then m:= -1;
 if (Gear^.State and gstHHDeath) <> 0 then
     begin
     DrawSprite(sprHHDeath, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 26 + WorldDy, Gear^.Pos);
+    Tint(HH^.Team^.Clan^.Color);
+    DrawSprite(sprHHDeath, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 26 + WorldDy, Gear^.Pos + 8);
+    Tint($FF, $FF, $FF, $FF);
     exit
     end
 else if (Gear^.State and gstHHGone) <> 0 then
@@ -80,8 +84,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
         dy:= -Cos(Gear^.Angle * pi / cMaxAngle);
         if cLaserSighting then
             begin
-            lx:= GetLaunchX(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, hwSign(Gear^.dX) * m, Gear^.Angle);
-            ly:= GetLaunchY(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, Gear^.Angle);
+            lx:= GetLaunchX(HH^.CurAmmoType, hwSign(Gear^.dX) * m, Gear^.Angle);
+            ly:= GetLaunchY(HH^.CurAmmoType, Gear^.Angle);
 
             // ensure we start outside the hedgehog (he's solid after all)
             while abs(lx * lx + ly * ly) < (Gear^.radius * Gear^.radius) do
@@ -139,8 +143,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 end;
             end;
         // draw crosshair
-        cx:= Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, hwSign(Gear^.dX) * m, Gear^.Angle));
-        cy:= Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].AmmoType, Gear^.Angle));
+        cx:= Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.CurAmmoType, hwSign(Gear^.dX) * m, Gear^.Angle));
+        cy:= Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.CurAmmoType, Gear^.Angle));
         DrawRotatedTex(HH^.Team^.CrosshairTex,
                 12, 12, cx + WorldDx, cy + WorldDy, 0,
                 hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle);
@@ -195,7 +199,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                            begin
                            DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 0, i, 32, 32,
                                i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
-                           if HatTex^.w > 32 then
+                           if HatTex^.w > 64 then
                                begin
                                Tint(HH^.Team^.Clan^.Color);
                                DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 32, i, 32, 32,
@@ -225,7 +229,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                             hwSign(Gear^.dX),
                             32,
                             32);
-                        if HatTex^.w > 32 then
+                        if HatTex^.w > 64 then
                             begin
                             Tint(HH^.Team^.Clan^.Color);
                             DrawTextureF(HatTex,
@@ -264,6 +268,20 @@ if (Gear^.State and gstHHDriven) <> 0 then
                         0);
                 defaultPos:= false
                 end;
+            gtHammer: begin
+                DrawRotatedF(sprHammer,
+                        sx,
+                        sy,
+                        1,
+                        hwSign(Gear^.dX),
+                        0);
+                defaultPos:= false
+                end;
+            gtResurrector: begin
+                DrawRotated(sprHandResurrector, hwRound(Gear^.X) + WorldDx,
+                        hwRound(Gear^.Y) + WorldDy, 0, 0); 
+                defaultPos := false;
+            end;
             gtKamikaze: begin
                 if CurAmmoGear^.Pos = 0 then
                     DrawHedgehog(sx, sy,
@@ -332,7 +350,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
     defaultPos:= false
     end else
 
-    if (Gear^.Message and (gm_Left or gm_Right) <> 0) and (not isCursorVisible) then
+    if (Gear^.Message and (gmLeft or gmRight) <> 0) and (not isCursorVisible) then
         begin
         DrawHedgehog(sx, sy,
             hwSign(Gear^.dX),
@@ -372,7 +390,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
             else aangle:= aangle+((240-aangle)*HH^.Timer/10);
             dec(HH^.Timer)
             end;
-        amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
+        amt:= CurrentHedgehog^.CurAmmoType;
+        CurWeapon:= GetAmmoEntry(HH^);
         case amt of
             amBazooka: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
             amMortar: DrawRotated(sprHandMortar, hx, hy, hwSign(Gear^.dX), aangle);
@@ -383,10 +402,10 @@ if (Gear^.State and gstHHDriven) <> 0 then
             amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
             amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
             amSineGun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
-            amPortalGun: if (HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].Timer and 2) <> 0 then // Add a new Hedgehog value instead of abusing timer?
+            amPortalGun: if (CurWeapon^.Timer and 2) <> 0 then // Add a new Hedgehog value instead of abusing timer?
                             DrawRotatedF(sprPortalGun, hx, hy, 0, hwSign(Gear^.dX), aangle)
                       else
-                            DrawRotatedF(sprPortalGun, hx, hy, 1+(HH^.Ammo^[HH^.CurSlot, HH^.CurAmmo].Timer and 1), hwSign(Gear^.dX), aangle);
+                            DrawRotatedF(sprPortalGun, hx, hy, 1+(CurWeapon^.Timer and 1), hwSign(Gear^.dX), aangle);
             amSniperRifle: DrawRotatedF(sprSniperRifle, hx, hy, 0, hwSign(Gear^.dX), aangle);
             amBlowTorch: DrawRotated(sprHandBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
             amCake: DrawRotated(sprHandCake, hx, hy, hwSign(Gear^.dX), aangle);
@@ -398,6 +417,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
             amHellishBomb: DrawRotated(sprHandHellish, hx, hy, hwSign(Gear^.dX), aangle);
             amGasBomb: DrawRotated(sprHandCheese, hx, hy, hwSign(Gear^.dX), aangle);
             amMine: DrawRotated(sprHandMine, hx, hy, hwSign(Gear^.dX), aangle);
+            amSMine: DrawRotated(sprHandSMine, hx, hy, hwSign(Gear^.dX), aangle);
             amSeduction: DrawRotated(sprHandSeduction, hx, hy, hwSign(Gear^.dX), aangle);
             amVampiric: DrawRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
             amRCPlane: begin
@@ -416,6 +436,10 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 end;
             amBee: DrawRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
             amFlamethrower: DrawRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, hwSign(Gear^.dX), aangle);
+            amResurrector: begin
+                DrawCircle(hwRound(Gear^.X), hwRound(Gear^.y), 100, 1.5, 0, 0,
+                        $FF, $FF); // I'd rather not like to hardcore 100 here
+            end;
         end;
 
         case amt of
@@ -433,6 +457,12 @@ if (Gear^.State and gstHHDriven) <> 0 then
                         5,
                         0);
             amWhip: DrawRotatedF(sprWhip,
+                        sx,
+                        sy,
+                        0,
+                        hwSign(Gear^.dX),
+                        0);
+            amHammer: DrawRotatedF(sprHammer,
                         sx,
                         sy,
                         0,
@@ -525,7 +555,7 @@ with HH^ do
                 hwSign(Gear^.dX),
                 32,
                 32);
-            if HatTex^.w > 32 then
+            if HatTex^.w > 64 then
                 begin
                 Tint(HH^.Team^.Clan^.Color);
                 DrawTextureF(HatTex,
@@ -549,7 +579,7 @@ with HH^ do
                 hwSign(Gear^.dX)*m,
                 32,
                 32);
-            if HatTex^.w > 32 then
+            if HatTex^.w > 64 then
                 begin
                 Tint(HH^.Team^.Clan^.Color);
                 DrawTextureF(HatTex,
@@ -568,7 +598,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
     begin
 (*    if (CurAmmoGear = nil) then
         begin
-        amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
+        amt:= CurrentHedgehog^.CurAmmoType;
         case amt of
             amJetpack: DrawSprite(sprJetpack, sx-32, sy-32, 0);
             end
@@ -578,9 +608,12 @@ if (Gear^.State and gstHHDriven) <> 0 then
         case CurAmmoGear^.Kind of
             gtJetpack: begin
                        DrawSprite(sprJetpack, sx-32, sy-32, 0);
-                       if (CurAmmoGear^.MsgParam and gm_Up) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 1);
-                       if (CurAmmoGear^.MsgParam and gm_Left) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 2);
-                       if (CurAmmoGear^.MsgParam and gm_Right) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 3);
+                       if cWaterLine > hwRound(Gear^.Y) + Gear^.Radius then
+                           begin
+                           if (CurAmmoGear^.MsgParam and gmUp) <> 0 then DrawSprite(sprJetpack, sx-32, sy-28, 1);
+                           if (CurAmmoGear^.MsgParam and gmLeft) <> 0 then DrawSprite(sprJetpack, sx-28, sy-28, 2);
+                           if (CurAmmoGear^.MsgParam and gmRight) <> 0 then DrawSprite(sprJetpack, sx-36, sy-28, 3)
+                           end;
                        if CurAmmoGear^.Tex <> nil then DrawCentered(sx, sy - 40, CurAmmoGear^.Tex);
                        DrawAltWeapon(Gear, sx, sy)
                        end;
@@ -692,6 +725,10 @@ while Gear<>nil do
                            DrawRotated(sprMineOff, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
                        else if Gear^.Health <> 0 then DrawRotated(sprMineOn, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
                        else DrawRotated(sprMineDead, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+           gtSMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
+                           DrawRotated(sprSMineOff, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
+                       else if Gear^.Health <> 0 then DrawRotated(sprSMineOn, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
+                       else DrawRotated(sprMineDead, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
             gtCase: case Gear^.Pos of
                          posCaseAmmo  : begin
                                         i:= (GameTicks shr 6) mod 64;
@@ -727,7 +764,7 @@ while Gear<>nil do
         gtDynamite: DrawSprite2(sprDynamite, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, Gear^.Tag and 1, Gear^.Tag shr 1);
      gtClusterBomb: DrawRotated(sprClusterBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
          gtCluster: DrawSprite(sprClusterParticle, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, 0);
-           gtFlame: DrawTextureF(SpritesData[sprFlame].Texture, 2 / (Gear^.Tag mod 3 + 2), hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks div 128 + LongWord(Gear^.Tag)) mod 8, 1, 16, 16);
+           gtFlame: DrawTextureF(SpritesData[sprFlame].Texture, 2 / (Gear^.Tag mod 3 + 2), hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks shr 7 + LongWord(Gear^.Tag)) mod 8, 1, 16, 16);
        gtParachute: begin
                     DrawSprite(sprParachute, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 48 + WorldDy, 0);
                     DrawAltWeapon(Gear, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy)
@@ -794,6 +831,16 @@ while Gear<>nil do
                         Tint($FF, $FF, $FF, $FF)
                         end;
                     DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 128, 128, 0);
+                    end;
+     gtPoisonCloud: begin
+                    if Gear^.Timer < 1020 then
+                        Tint($C0, $C0, $00, Gear^.Timer div 8)
+                    else if Gear^.Timer > 3980 then
+                        Tint($C0, $C0, $00, (5000 - Gear^.Timer) div 8)
+                    else
+                        Tint($C0, $C0, $00, $C0);
+                    DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 22, 22, (RealTicks shr 36 + Gear^.UID * 100) mod 360);
+                    Tint($FF, $FF, $FF, $FF)
                     end;
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(hwRound(Gear^.X) + 8 + WorldDx, hwRound(Gear^.Y) + 8 + WorldDy, Gear^.Tex);

@@ -12,9 +12,9 @@
 extern void Game (const char **);
 
 int SDL_main (int argc, const char **argv) {
-    
+
     const char **gameArgs = (const char**) malloc(sizeof(char *) * 9);
-    
+
     gameArgs[0] = "wrapper";    //UserNick
 	gameArgs[1] = "0";          //ipcPort
 	gameArgs[2] = "0";          //isSoundEnabled
@@ -24,9 +24,9 @@ int SDL_main (int argc, const char **argv) {
 	gameArgs[6] = "768";        //cScreenHeight
     gameArgs[7] = "1024";       //cScreenHeight
     gameArgs[8] = "Save.hws";   //recordFileName
-    
+
     Game(gameArgs);
     free(gameArgs);
-    
+
     return 0;
 }

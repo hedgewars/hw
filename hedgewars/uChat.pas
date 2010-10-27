@@ -29,7 +29,7 @@ procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
-var UserNick: shortstring;
+var UserNick: shortstring = '';
     ChatReady: boolean;
     showAll: boolean;
 
@@ -253,11 +253,6 @@ if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
             ParseCommand('/taunt ' + char(i), true);
             exit
             end;
-    if (s = '/newgrave') then
-        begin
-        ParseCommand('/newgrave', true);
-        exit
-        end;
     end
     else
         ParseCommand('/say ' + s, true);
@@ -316,7 +311,6 @@ procedure initModule;
 begin
     lastStr:= 0;
     visibleCount:= 0;
-    UserNick:= '';
     showAll:= false;
     ChatReady:= false;
     missedCount:= 0;
@@ -324,7 +318,7 @@ end;
 
 procedure freeModule;
 begin
-
+    UserNick:= '';
 end;
 
 end.
