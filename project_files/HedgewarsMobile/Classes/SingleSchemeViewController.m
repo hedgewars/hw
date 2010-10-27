@@ -39,88 +39,17 @@
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
+    NSString *path = nil;
 
     // title, description, image name (+btn)
-    NSArray *mods = [[NSArray alloc] initWithObjects:
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Fort Mode",@""),@"title",
-                      NSLocalizedString(@"Defend your fort and destroy the opponents (two team colours max)",@""),@"description",
-                      @"Forts",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Divide Team",@""),@"title",
-                      NSLocalizedString(@"Teams will start on opposite sides of the terrain (two team colours max)",@""),@"description",
-                      @"TeamsDivide",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Solid Land",@""),@"title",
-                      NSLocalizedString(@"Land can not be destroyed",@""),@"description",
-                      @"Solid",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Add Border",@""),@"title",
-                      NSLocalizedString(@"Add an indestructable border around the terrain",@""),@"description",
-                      @"Border",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Low Gravity",@""),@"title",
-                      NSLocalizedString(@"Lower gravity",@""),@"description",
-                      @"LowGravity",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Laser Sight",@""),@"title",
-                      NSLocalizedString(@"Assisted aiming with laser sight",@""),@"description",
-                      @"LaserSight",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Invulnerable",@""),@"title",
-                      NSLocalizedString(@"All hogs have a personal forcefield",@""),@"description",
-                      @"Invulnerable",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Add Mines",@""),@"title",
-                      NSLocalizedString(@"Enable random mines",@""),@"description",
-                      @"Mines",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Vampirism Mode",@""),@"title",
-                      NSLocalizedString(@"Gain 80% of the damage you do back in health",@""),@"description",
-                      @"Vampiric",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Karma Mode",@""),@"title",
-                      NSLocalizedString(@"Share your opponents pain, share their damage",@""),@"description",
-                      @"Karma",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Artillery Mode",@""),@"title",
-                      NSLocalizedString(@"Your hogs are unable to move, test your aim",@""),@"description",
-                      @"Artillery",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Random Order",@""),@"title",
-                      NSLocalizedString(@"Order of play is random instead of in room order",@""),@"description",
-                      @"RandomOrder",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"King Mode",@""),@"title",
-                      NSLocalizedString(@"Play with a King. If he dies, your side loses",@""),@"description",
-                      @"King",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys: NSLocalizedString(@"Place Hedgehogs",@""),@"title",
-                      NSLocalizedString(@"Take turns placing your hedgehogs pre-game",@""),@"description",
-                      @"PlaceHog",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Clan Shares Ammo",@""),@"title",
-                      NSLocalizedString(@"Ammo is shared between all clan teams",@""),@"description",
-                      @"SharedAmmo",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Disable Girders",@""),@"title",
-                      NSLocalizedString(@"Disable girders when generating random maps",@""),@"description",
-                      @"DisableGirders",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Disable Land Objects",@""),@"title",
-                      NSLocalizedString(@"Disable land objects when generating maps",@""),@"description",
-                      @"DisableLandObjects",@"image",nil],
-                     [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"AI Survival Mode",@""),@"title",
-                      NSLocalizedString(@"AI-controlled hogs respawn on death",@""),@"description",
-                      @"AISurvival",@"image",nil],
-                     nil];
+    path = [NSString stringWithFormat:@"%@/gameFlags_en.plist",IFRONTEND_DIRECTORY()];
+    NSArray *mods = [[NSArray alloc] initWithContentsOfFile:path];
     self.gameModifierArray = mods;
     [mods release];
 
     // title, image name (+icon), default value, max value, min value
-    NSArray *basicSettings = [[NSArray alloc] initWithObjects:
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Damage Modifier",@""),@"title",@"Damage",@"image",
-                               [NSNumber numberWithInt:100],@"default",[NSNumber numberWithInt:10],@"min",[NSNumber numberWithInt:300],@"max",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Turn Time",@""),@"title",@"Time",@"image",
-                               [NSNumber numberWithInt:45],@"default",[NSNumber numberWithInt:1],@"min",[NSNumber numberWithInt:100],@"max",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Initial Health",@""),@"title",@"Health",@"image",
-                               [NSNumber numberWithInt:100],@"default",[NSNumber numberWithInt:50],@"min",[NSNumber numberWithInt:200],@"max",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Sudden Death Timeout",@""),@"title",@"SuddenDeath",@"image",
-                               [NSNumber numberWithInt:15],@"default",[NSNumber numberWithInt:0],@"min",[NSNumber numberWithInt:50],@"max",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Crate Drops",@""),@"title",@"Box",@"image",
-                               [NSNumber numberWithInt:5],@"default",[NSNumber numberWithInt:0],@"min",[NSNumber numberWithInt:9],@"max",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Mines Time",@""),@"title",@"Time",@"image",
-                               [NSNumber numberWithInt:3],@"default",[NSNumber numberWithInt:0],@"min",[NSNumber numberWithInt:3],@"max",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Mines Number",@""),@"title",@"Mine",@"image",
-                               [NSNumber numberWithInt:4],@"default",[NSNumber numberWithInt:1],@"min",[NSNumber numberWithInt:80],@"max",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Dud Mines Probability",@""),@"title",@"Dud",@"image",
-                               [NSNumber numberWithInt:0],@"default",[NSNumber numberWithInt:0],@"min",[NSNumber numberWithInt:100],@"max",nil],
-                              [NSDictionary dictionaryWithObjectsAndKeys:NSLocalizedString(@"Explosives",@""),@"title",@"Damage",@"image",
-                               [NSNumber numberWithInt:2],@"default",[NSNumber numberWithInt:0],@"min",[NSNumber numberWithInt:40],@"max",nil],
-                              nil];
+    path = [NSString stringWithFormat:@"%@/basicFlags_en.plist",IFRONTEND_DIRECTORY()];
+    NSArray *basicSettings = [[NSArray alloc] initWithContentsOfFile:path];
     self.basicSettingList = basicSettings;
     [basicSettings release];
 
@@ -177,10 +106,10 @@
             return 2;
             break;
         case 1:
-            return [self.basicSettingList count];
+            return [[self.schemeDictionary objectForKey:@"basic"] count];
             break;
         case 2:
-            return [self.gameModifierArray count];
+            return [[self.schemeDictionary objectForKey:@"gamemod"] count];
         default:
             break;
     }
@@ -259,7 +188,7 @@
                 if ([oneView isMemberOfClass:[UISlider class]]) {
                     cellSlider = (UISlider *)oneView;
                     break;
-                }
+                } 
             }
             cellSlider.tag = SLIDER_TAG + row;
             cellSlider.value = [[[self.schemeDictionary objectForKey:@"basic"] objectAtIndex:row] floatValue];
@@ -282,21 +211,24 @@
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                                reuseIdentifier:CellIdentifier2] autorelease];
                 UISwitch *onOff = [[UISwitch alloc] init];
-                onOff.tag = SWITCH_TAG+row;
                 [onOff addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
                 cell.accessoryView = onOff;
                 [onOff release];
             }
 
+            UISwitch *switcher = (UISwitch *)cell.accessoryView;
+            switcher.tag = SWITCH_TAG + row;
+            [switcher setOn:[[[self.schemeDictionary objectForKey:@"gamemod"] objectAtIndex:row] boolValue] animated:NO];
+            
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/btn%@.png",BTN_DIRECTORY(),[[self.gameModifierArray objectAtIndex:row] objectForKey:@"image"]]];
             cell.imageView.image = image;
             [image release];
             [cell.imageView.layer setCornerRadius:7.0f];
-            [cell.imageView.layer setBorderWidth:1];
             [cell.imageView.layer setMasksToBounds:YES];
             cell.textLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"title"];
             cell.detailTextLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"description"];
-            [(UISwitch *)cell.accessoryView setOn:[[[self.schemeDictionary objectForKey:@"gamemod"] objectAtIndex:row] boolValue] animated:NO];
+            cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+            cell.detailTextLabel.minimumFontSize = 6;
 
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

@@ -1529,35 +1529,35 @@ PageScheme::PageScheme(QWidget* parent) :
 
     TBW_placehog = new ToggleButtonWidget(gbGameModes, ":/res/btnPlaceHog.png");
     TBW_placehog->setToolTip("<b>" + ToggleButtonWidget::tr("Place Hedgehogs") + "</b>:<br />" + tr("Take turns placing your hedgehogs before the start of play."));
-    glGMLayout->addWidget(TBW_placehog,2,2,1,1);
+    glGMLayout->addWidget(TBW_placehog,2,3,1,1);
 
     TBW_sharedammo = new ToggleButtonWidget(gbGameModes, ":/res/btnSharedAmmo.png");
     TBW_sharedammo->setToolTip("<b>" + ToggleButtonWidget::tr("Clan Shares Ammo") + "</b>:<br />" + tr("Ammo is shared between all teams that share a colour."));
-    glGMLayout->addWidget(TBW_sharedammo,2,3,1,1);
+    glGMLayout->addWidget(TBW_sharedammo,2,4,1,1);
 
     TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders.png");
     TBW_disablegirders->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Girders") + "</b>:<br />" + tr("Disable girders when generating random maps."));
-    glGMLayout->addWidget(TBW_disablegirders,2,4,1,1);
+    glGMLayout->addWidget(TBW_disablegirders,3,0,1,1);
 
     TBW_disablelandobjects = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableLandObjects.png");
     TBW_disablelandobjects->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Land Objects") + "</b>:<br />" + tr("Disable land objects when generating random maps."));
-    glGMLayout->addWidget(TBW_disablelandobjects,3,0,1,1);
+    glGMLayout->addWidget(TBW_disablelandobjects,3,1,1,1);
 
     TBW_aisurvival = new ToggleButtonWidget(gbGameModes, ":/res/btnAISurvival.png");
     TBW_aisurvival->setToolTip("<b>" + ToggleButtonWidget::tr("AI Survival Mode") + "</b>:<br />" + tr("AI respawns on death."));
-    glGMLayout->addWidget(TBW_aisurvival,3,1,1,1);
+    glGMLayout->addWidget(TBW_aisurvival,3,2,1,1);
 
     TBW_infattack = new ToggleButtonWidget(gbGameModes, ":/res/btnInfAttack.png");
     TBW_infattack->setToolTip("<b>" + ToggleButtonWidget::tr("Unlimited Attacks") + "</b>:<br />" + tr("Attacking does not end your turn."));
-    glGMLayout->addWidget(TBW_infattack,3,2,1,1);
+    glGMLayout->addWidget(TBW_infattack,3,3,1,1);
 
     TBW_resetweps = new ToggleButtonWidget(gbGameModes, ":/res/btnResetWeps.png");
     TBW_resetweps->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Weapons") + "</b>:<br />" + tr("Weapons are reset to starting values each turn."));
-    glGMLayout->addWidget(TBW_resetweps,3,3,1,1);
+    glGMLayout->addWidget(TBW_resetweps,3,4,1,1);
 
     TBW_perhogammo = new ToggleButtonWidget(gbGameModes, ":/res/btnPerHogAmmo.png");
     TBW_perhogammo->setToolTip("<b>" + ToggleButtonWidget::tr("Per Hedgehog Ammo") + "</b>:<br />" + tr("Each hedgehog has its own ammo. It does not share with the team."));
-    glGMLayout->addWidget(TBW_perhogammo,3,4,1,1);
+    glGMLayout->addWidget(TBW_perhogammo,4,0,1,1);
 
     // Right
     QLabel * l;

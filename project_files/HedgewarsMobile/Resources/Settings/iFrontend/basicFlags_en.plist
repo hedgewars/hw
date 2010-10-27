@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>default</key>
+		<integer>100</integer>
+		<key>image</key>
+		<string>Damage</string>
+		<key>max</key>
+		<integer>300</integer>
+		<key>min</key>
+		<integer>10</integer>
+		<key>title</key>
+		<string>Damage Modifier</string>
+	</dict>
+	<dict>
+		<key>default</key>
+		<integer>45</integer>
+		<key>image</key>
+		<string>Time</string>
+		<key>max</key>
+		<integer>100</integer>
+		<key>min</key>
+		<integer>1</integer>
+		<key>title</key>
+		<string>Turn Time</string>
+	</dict>
+	<dict>
+		<key>default</key>
+		<integer>100</integer>
+		<key>image</key>
+		<string>Health</string>
+		<key>max</key>
+		<integer>200</integer>
+		<key>min</key>
+		<integer>50</integer>
+		<key>title</key>
+		<string>Initial Health</string>
+	</dict>
+	<dict>
+		<key>default</key>
+		<integer>15</integer>
+		<key>image</key>
+		<string>SuddenDeath</string>
+		<key>max</key>
+		<integer>50</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Sudden Death Timeout</string>
+	</dict>
+	<dict>
+		<key>default</key>
+		<integer>5</integer>
+		<key>image</key>
+		<string>Box</string>
+		<key>max</key>
+		<integer>9</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Crate Drops</string>
+	</dict>
+	<dict>
+		<key>default</key>
+		<integer>3</integer>
+		<key>image</key>
+		<string>Time</string>
+		<key>max</key>
+		<integer>3</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Mines Time</string>
+	</dict>
+	<dict>
+		<key>default</key>
+		<integer>4</integer>
+		<key>image</key>
+		<string>Mine</string>
+		<key>max</key>
+		<integer>80</integer>
+		<key>min</key>
+		<integer>1</integer>
+		<key>title</key>
+		<string>Mines Number</string>
+	</dict>
+	<dict>
+		<key>default</key>
+		<integer>0</integer>
+		<key>image</key>
+		<string>Dud</string>
+		<key>max</key>
+		<integer>100</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Dud Mines Probability</string>
+	</dict>
+	<dict>
+		<key>default</key>
+		<integer>2</integer>
+		<key>image</key>
+		<string>Damage</string>
+		<key>max</key>
+		<integer>40</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Explosives</string>
+	</dict>
+</array>
+</plist>
