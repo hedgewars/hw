@@ -3051,7 +3051,7 @@ begin
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y;
     // For some reason I need to reapply followgear here, something else grabs it otherwise.
-    if not bShowAmmoMenu then FollowGear := HHGear;
+    if not bShowAmmoMenu and not CurrentTeam^.ExtDriven then FollowGear := HHGear;
 
     if ((Gear^.State and gsttmpFlag) = 0) or (HHGear^.dY < _0) then doStepHedgehogMoving(HHGear);
 
