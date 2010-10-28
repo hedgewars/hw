@@ -1307,7 +1307,7 @@ while Gear <> nil do
                                 if not Gear^.Invulnerable then
                                     Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
                                 Gear^.Active:= true;
-                                FollowGear:= Gear
+                                if Gear^.Kind <> gtFlame then FollowGear:= Gear
                                 end;
                             if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) then
                                 PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] := true;
