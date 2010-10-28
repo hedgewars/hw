@@ -106,7 +106,7 @@ var
     cScreenSpace          : LongInt;
 
     cCaseFactor     : Longword;
-    cLandAdditions  : Longword;
+    cLandMines      : Longword;
     cExplosives     : Longword;
 
     cSeed           : shortstring;
@@ -752,7 +752,7 @@ begin
     cDamagePercent      := 100;
     cMineDudPercent     := 0;
     cTemplateFilter     := 0;
-    cMapGen             := 0;//MAPGEN_REGULAR
+    cMapGen             := 0;   // MAPGEN_REGULAR
     cMazeSize           := 0;
     cHedgehogTurnTime   := 45000;
     cMinesTime          := 3000;
@@ -765,7 +765,7 @@ begin
     RealTicks       := 0;
     AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
     cCaseFactor     := 5;  {0..9}
-    cLandAdditions  := 4;
+    cLandMines      := 4;
     cExplosives     := 2;
 
     GameState       := Low(TGameState);

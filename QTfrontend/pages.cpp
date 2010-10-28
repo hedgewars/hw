@@ -1645,7 +1645,7 @@ PageScheme::PageScheme(QWidget* parent) :
     l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
     glBSLayout->addWidget(l,5,1,1,1);
     SB_MinesTime = new QSpinBox(gbBasicSettings);
-    SB_MinesTime->setRange(-1, 3);
+    SB_MinesTime->setRange(-1, 5);
     SB_MinesTime->setValue(3);
     SB_MinesTime->setSingleStep(1);
     SB_MinesTime->setSpecialValueText(tr("Random"));

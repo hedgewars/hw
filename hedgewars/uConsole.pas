@@ -237,7 +237,7 @@ begin
     RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);
     RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);
     RegisterVariable('minedudpct',vtLongInt,@cMineDudPercent, false);
-    RegisterVariable('landadds', vtLongInt, @cLandAdditions , false);
+    RegisterVariable('minesnum', vtLongInt, @cLandMines     , false);
     RegisterVariable('explosives',vtLongInt,@cExplosives    , false);
     RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
     RegisterVariable('trflags' , vtLongInt, @TrainingFlags  , false);

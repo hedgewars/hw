@@ -205,7 +205,7 @@
     [self sendToEngine:minesTime];
     [minesTime release];
 
-    NSString *minesNumber = [[NSString alloc] initWithFormat:@"e$landadds %d",[[basicArray objectAtIndex:i++] intValue]];
+    NSString *minesNumber = [[NSString alloc] initWithFormat:@"e$minesnum %d",[[basicArray objectAtIndex:i++] intValue]];
     [self sendToEngine:minesNumber];
     [minesNumber release];
 

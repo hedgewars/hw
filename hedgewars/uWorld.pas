@@ -147,11 +147,11 @@ ScreenFadeSpeed:= 1;
 if cMinesTime <> 3000 then
     begin
     if cMinesTime = 0 then
-        g:= AddGoal(g, gfMines, gidNoMineTimer)
+        g:= AddGoal(g, gfAny, gidNoMineTimer)
     else if cMinesTime < 0 then
-        g:= AddGoal(g, gfMines, gidRandomMineTimer)
+        g:= AddGoal(g, gfAny, gidRandomMineTimer)
     else
-        g:= AddGoal(g, gfMines, gidMineTimer, cMinesTime div 1000);
+        g:= AddGoal(g, gfAny, gidMineTimer, cMinesTime div 1000);
     end;
 
 // if the string has been set, show it for (default timeframe) seconds

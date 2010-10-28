@@ -68,9 +68,9 @@
 		<key>image</key>
 		<string>Time</string>
 		<key>max</key>
-		<integer>3</integer>
+		<integer>5</integer>
 		<key>min</key>
-		<integer>0</integer>
+		<integer>-1</integer>
 		<key>title</key>
 		<string>Mines Time</string>
 	</dict>
@@ -82,7 +82,7 @@
 		<key>max</key>
 		<integer>80</integer>
 		<key>min</key>
-		<integer>1</integer>
+		<integer>0</integer>
 		<key>title</key>
 		<string>Mines Number</string>
 	</dict>

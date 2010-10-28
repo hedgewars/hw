@@ -338,7 +338,7 @@ const
     gfLowGravity         = $00000020;
     gfLaserSight         = $00000040;
     gfInvulnerable       = $00000080;
-    gfMines              = $00000100;           // redundant? same effect as 'landadds 0'
+
     gfVampiric           = $00000200;
     gfKarma              = $00000400;
     gfArtillery          = $00000800;

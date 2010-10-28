@@ -101,47 +101,47 @@ quint32 GameCFGWidget::getGameFlags() const
     quint32 result = 0;
 
     if (schemeData(1).toBool())
-        result |= 0x00001000;
+        result |= 0x00001000;       // fort
     if (schemeData(2).toBool())
-        result |= 0x00000010;
+        result |= 0x00000010;       // divide teams
     if (schemeData(3).toBool())
-        result |= 0x00000004;
+        result |= 0x00000004;       // solid land
     if (schemeData(4).toBool())
-        result |= 0x00000008;
+        result |= 0x00000008;       // border
     if (schemeData(5).toBool())
-        result |= 0x00000020;
+        result |= 0x00000020;       // low gravity
     if (schemeData(6).toBool())
-        result |= 0x00000040;
+        result |= 0x00000040;       // laser sight
     if (schemeData(7).toBool())
-        result |= 0x00000080;
+        result |= 0x00000080;       // invulnerable
     if (schemeData(8).toBool())
-        result |= 0x00000100;
+        result |= 0x00000100;       // mines
     if (schemeData(9).toBool())
-        result |= 0x00000200;
+        result |= 0x00000200;       // vampirism
     if (schemeData(10).toBool())
-        result |= 0x00000400;
+        result |= 0x00000400;       // karma
     if (schemeData(11).toBool())
-        result |= 0x00000800;
+        result |= 0x00000800;       // artillery
     if (schemeData(12).toBool())
-        result |= 0x00002000;
+        result |= 0x00002000;       // random
     if (schemeData(13).toBool())
-        result |= 0x00004000;
+        result |= 0x00004000;       // king
     if (schemeData(14).toBool())
-        result |= 0x00008000;
+        result |= 0x00008000;       // place hogs
     if (schemeData(15).toBool())
-        result |= 0x00010000;
+        result |= 0x00010000;       // shared ammo
     if (schemeData(16).toBool())
-        result |= 0x00020000;
+        result |= 0x00020000;       // disable girders
     if (schemeData(17).toBool())
-        result |= 0x00040000;
+        result |= 0x00040000;       // disable land obj
     if (schemeData(18).toBool())
-        result |= 0x00080000;
+        result |= 0x00080000;       // ai survival
     if (schemeData(19).toBool())
-        result |= 0x00100000;
+        result |= 0x00100000;       // infinite attacks
     if (schemeData(20).toBool())
-        result |= 0x00200000;
+        result |= 0x00200000;       // reset weaps
     if (schemeData(21).toBool())
-        result |= 0x00400000;
+        result |= 0x00400000;       // per hog ammo
 
     return result;
 }
@@ -159,7 +159,7 @@ QStringList GameCFGWidget::getFullConfig() const
     sl.append(QString("e$damagepct %1").arg(schemeData(22).toInt()));
     sl.append(QString("e$turntime %1").arg(schemeData(23).toInt() * 1000));
     sl.append(QString("e$minestime %1").arg(schemeData(27).toInt() * 1000));
-    sl.append(QString("e$landadds %1").arg(schemeData(28).toInt()));
+    sl.append(QString("e$minesnum %1").arg(schemeData(28).toInt()));
     sl.append(QString("e$sd_turns %1").arg(schemeData(25).toInt()));
     sl.append(QString("e$casefreq %1").arg(schemeData(26).toInt()));
     sl.append(QString("e$minedudpct %1").arg(schemeData(29).toInt()));

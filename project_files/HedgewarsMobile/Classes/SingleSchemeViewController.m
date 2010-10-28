@@ -195,9 +195,14 @@
 
             // forced to use this weird format otherwise the label disappears when size of the text is bigger than the original
             NSString *prestring = [NSString stringWithFormat:@"%d",(NSInteger) cellSlider.value];
+
             // turntime 100 means unlimited time turns (set in GameSetup)
             if (row == 1 && (NSInteger) cellSlider.value == 100)
                 prestring = @"∞";
+            else
+                // mines less than 0 means random
+                if (row == 5 && (NSInteger) cellSlider.value == -1)
+                    prestring = NSLocalizedString(@"Rnd",@"Short for 'Random'");
             
             while ([prestring length] <= 4)
                 prestring = [NSString stringWithFormat:@" %@",prestring];
@@ -255,7 +260,10 @@
     if ([indexPath row] == 1 && [indexPath section] == 1 && (NSInteger) theSlider.value == 100)
         label.text = @"∞";
     else
-        label.text = [NSString stringWithFormat:@"%d",(NSInteger) theSlider.value];
+        if ([indexPath row] == 5 && [indexPath section] == 1 && (NSInteger) theSlider.value == -1)
+            label.text = NSLocalizedString(@"Rnd",@"Short for 'Random'");
+        else
+            label.text = [NSString stringWithFormat:@"%d",(NSInteger) theSlider.value];
     // save changes in the main array
     NSMutableArray *array = [self.schemeDictionary objectForKey:@"basic"];
     [array replaceObjectAtIndex:theSlider.tag-SLIDER_TAG withObject:[NSNumber numberWithInt:(NSInteger) theSlider.value]];
