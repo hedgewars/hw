@@ -674,7 +674,7 @@ if cVampiric and
    (CurrentHedgehog^.Gear <> nil) and
    (CurrentHedgehog^.Gear = Gear) then
     begin
-    Tint($FF, $FF, $FF, max($40, floor($FF * abs(1 - (RealTicks mod 1500) / 750))));
+    Tint($FF, 0, 0, max($40, floor($FF * abs(1 - (RealTicks mod 1500) / 750))));
     DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
     end;
     Tint($FF, $FF, $FF, $FF)
@@ -683,122 +683,134 @@ end;
 procedure DrawGears;
 var Gear, HHGear: PGear;
     i: Longword;
-    startX, endX, startY, endY: LongInt;
+    x, y, startX, endX, startY, endY: LongInt;
 begin
 Gear:= GearsList;
 while Gear<>nil do
     begin
+    x:= hwRound(Gear^.X) + WorldDx;
+    y:= hwRound(Gear^.Y) + WorldDy;
     case Gear^.Kind of
-       gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
-       gtGasBomb: DrawRotated(sprCheese, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
-       gtMolotov: DrawRotated(sprMolotov, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+       gtAmmo_Bomb: DrawRotated(sprBomb, x, y, 0, Gear^.DirAngle);
+       gtGasBomb: DrawRotated(sprCheese, x, y, 0, Gear^.DirAngle);
+       gtMolotov: DrawRotated(sprMolotov, x, y, 0, Gear^.DirAngle);
 
        gtRCPlane: begin
                   if (Gear^.Tag = -1) then
-                     DrawRotated(sprPlane, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, -1,  DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
+                     DrawRotated(sprPlane, x, y, -1,  DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
                   else
-                     DrawRotated(sprPlane, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,0,DxDy2Angle(Gear^.dY, Gear^.dX));
+                     DrawRotated(sprPlane, x, y,0,DxDy2Angle(Gear^.dY, Gear^.dX));
                   if ((TrainingFlags and tfRCPlane) <> 0) and (TrainingTargetGear <> nil) and ((Gear^.State and gstDrowning) = 0) then
-                     DrawRotatedf(sprFinger, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, GameTicks div 32 mod 16, 0, DxDy2Angle(Gear^.X - TrainingTargetGear^.X, TrainingTargetGear^.Y - Gear^.Y));
+                     DrawRotatedf(sprFinger, x, y, GameTicks div 32 mod 16, 0, DxDy2Angle(Gear^.X - TrainingTargetGear^.X, TrainingTargetGear^.Y - Gear^.Y));
                   end;
-       gtBall: DrawRotatedf(sprBalls, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag,0, Gear^.DirAngle);
+       gtBall: DrawRotatedf(sprBalls, x, y, Gear^.Tag,0, Gear^.DirAngle);
 
        gtPortal: if ((Gear^.Tag and 1) = 0) // still moving?
                  or (Gear^.IntersectGear = nil) or (Gear^.IntersectGear^.IntersectGear <> Gear) // not linked&backlinked?
                  or ((Gear^.IntersectGear^.Tag and 1) = 0) then // linked portal still moving?
-                      DrawRotatedf(sprPortal, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag, hwSign(Gear^.dX), Gear^.DirAngle)
-                 else DrawRotatedf(sprPortal, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 4 + Gear^.Tag div 2, hwSign(Gear^.dX), Gear^.DirAngle);
+                      DrawRotatedf(sprPortal, x, y, Gear^.Tag, hwSign(Gear^.dX), Gear^.DirAngle)
+                 else DrawRotatedf(sprPortal, x, y, 4 + Gear^.Tag div 2, hwSign(Gear^.dX), Gear^.DirAngle);
 
-       gtDrill: DrawRotated(sprDrill, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+       gtDrill: DrawRotated(sprDrill, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 
         gtHedgehog: DrawHH(Gear);
 
-    gtAmmo_Grenade: DrawRotated(sprGrenade, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+    gtAmmo_Grenade: DrawRotated(sprGrenade, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 
-           gtGrave: DrawTextureF(PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex, 1, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks shr 7+Gear^.uid) and 7, 1, 32, 32);
+           gtGrave: begin 
+                    DrawTextureF(PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex, 1, x, y, (GameTicks shr 7+Gear^.uid) and 7, 1, 32, 32);
+                    if Gear^.Health > 0 then
+                        begin
+                        //Tint($33, $33, $FF, max($40, floor($FF * abs(1 - (GameTicks mod (6000 div Gear^.Health)) / 750))));
+                        Tint($33, $33, $FF, max($40, floor($FF * abs(1 - (GameTicks mod 1500) / (750 + Gear^.Health)))));
+                        //Tint($FF, $FF, $FF, max($40, floor($FF * abs(1 - (RealTicks mod 1500) / 750))));
+                        DrawSprite(sprVampiric, x - 24, y - 24, 0);
+                        Tint($FF, $FF, $FF, $FF)
+                        end
+                    end;
 
-             gtBee: DrawRotatedF(sprBee, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks shr 5) mod 2, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+             gtBee: DrawRotatedF(sprBee, x, y, (GameTicks shr 5) mod 2, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 
-      gtPickHammer: DrawSprite(sprPHammer, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 50 + LongInt(((GameTicks shr 5) and 1) * 2) + WorldDy, 0);
+      gtPickHammer: DrawSprite(sprPHammer, x - 16, y - 50 + LongInt(((GameTicks shr 5) and 1) * 2), 0);
             gtRope: DrawRope(Gear);
             gtMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
-                           DrawRotated(sprMineOff, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
-                       else if Gear^.Health <> 0 then DrawRotated(sprMineOn, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
-                       else DrawRotated(sprMineDead, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+                           DrawRotated(sprMineOff, x, y, 0, Gear^.DirAngle)
+                       else if Gear^.Health <> 0 then DrawRotated(sprMineOn, x, y, 0, Gear^.DirAngle)
+                       else DrawRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
            gtSMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
-                           DrawRotated(sprSMineOff, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
-                       else if Gear^.Health <> 0 then DrawRotated(sprSMineOn, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
-                       else DrawRotated(sprMineDead, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+                           DrawRotated(sprSMineOff, x, y, 0, Gear^.DirAngle)
+                       else if Gear^.Health <> 0 then DrawRotated(sprSMineOn, x, y, 0, Gear^.DirAngle)
+                       else DrawRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
             gtCase: case Gear^.Pos of
                          posCaseAmmo  : begin
                                         i:= (GameTicks shr 6) mod 64;
                                         if i > 18 then i:= 0;
-                                        DrawSprite(sprCase, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
+                                        DrawSprite(sprCase, x - 24, y - 24, i);
                                         end;
                          posCaseHealth: begin
                                         i:= ((GameTicks shr 6) + 38) mod 64;
                                         if i > 13 then i:= 0;
-                                        DrawSprite(sprFAid, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
+                                        DrawSprite(sprFAid, x - 24, y - 24, i);
                                         end;
                          posCaseUtility: begin
                                         i:= (GameTicks shr 6) mod 70;
                                         if i > 23 then i:= 0;
                                         i:= i mod 12;
-                                        DrawSprite(sprUtility, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
+                                        DrawSprite(sprUtility, x - 24, y - 24, i);
                                         end;
                          end;
       gtExplosives: begin
                     if ((Gear^.State and gstDrowning) <> 0) then
-                        DrawSprite(sprExplosivesRoll, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, 0)
+                        DrawSprite(sprExplosivesRoll, x - 24, y - 24, 0)
                     else if Gear^.State and gstAnimation = 0 then
                         begin
                         i:= (GameTicks shr 6 + Gear^.uid*3) mod 64;
                         if i > 18 then i:= 0;
-                        DrawSprite(sprExplosives, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i)
+                        DrawSprite(sprExplosives, x - 24, y - 24, i)
                         end
                     else if Gear^.State and gsttmpFlag = 0 then
-                        DrawRotatedF(sprExplosivesRoll, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) +4 + WorldDy, 0, 0, Gear^.DirAngle)
+                        DrawRotatedF(sprExplosivesRoll, x, y + 4, 0, 0, Gear^.DirAngle)
                     else
-                        DrawRotatedF(sprExplosivesRoll, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) +4 + WorldDy, 1, 0, Gear^.DirAngle);
+                        DrawRotatedF(sprExplosivesRoll, x, y + 4, 1, 0, Gear^.DirAngle);
                     end;
-        gtDynamite: DrawSprite2(sprDynamite, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, Gear^.Tag and 1, Gear^.Tag shr 1);
-     gtClusterBomb: DrawRotated(sprClusterBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
-         gtCluster: DrawSprite(sprClusterParticle, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, 0);
-           gtFlame: DrawTextureF(SpritesData[sprFlame].Texture, 2 / (Gear^.Tag mod 3 + 2), hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks shr 7 + LongWord(Gear^.Tag)) mod 8, 1, 16, 16);
+        gtDynamite: DrawSprite2(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
+     gtClusterBomb: DrawRotated(sprClusterBomb, x, y, 0, Gear^.DirAngle);
+         gtCluster: DrawSprite(sprClusterParticle, x - 8, y - 8, 0);
+           gtFlame: DrawTextureF(SpritesData[sprFlame].Texture, 2 / (Gear^.Tag mod 3 + 2), x, y, (GameTicks shr 7 + LongWord(Gear^.Tag)) mod 8, 1, 16, 16);
        gtParachute: begin
-                    DrawSprite(sprParachute, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 48 + WorldDy, 0);
-                    DrawAltWeapon(Gear, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy)
+                    DrawSprite(sprParachute, x - 24, y - 48, 0);
+                    DrawAltWeapon(Gear, x + 1, y - 3)
                     end;
-       gtAirAttack: if Gear^.Tag > 0 then DrawSprite(sprAirplane, hwRound(Gear^.X) - SpritesData[sprAirplane].Width div 2 + WorldDx, hwRound(Gear^.Y) - SpritesData[sprAirplane].Height div 2 + WorldDy, 0)
-                                     else DrawSprite(sprAirplane, hwRound(Gear^.X) - SpritesData[sprAirplane].Width div 2 + WorldDx, hwRound(Gear^.Y) - SpritesData[sprAirplane].Height div 2 + WorldDy, 1);
-         gtAirBomb: DrawRotated(sprAirBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+       gtAirAttack: if Gear^.Tag > 0 then DrawSprite(sprAirplane, x - SpritesData[sprAirplane].Width div 2, y - SpritesData[sprAirplane].Height div 2, 0)
+                                     else DrawSprite(sprAirplane, x - SpritesData[sprAirplane].Width div 2, y - SpritesData[sprAirplane].Height div 2, 1);
+         gtAirBomb: DrawRotated(sprAirBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
         gtTeleport: begin
                     HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
-                    if not PHedgehog(Gear^.Hedgehog)^.Unplaced then DrawRotatedF(sprTeleport, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy, Gear^.Pos, hwSign(Gear^.dX), 0);
+                    if not PHedgehog(Gear^.Hedgehog)^.Unplaced then DrawRotatedF(sprTeleport, x + 1, y - 3, Gear^.Pos, hwSign(Gear^.dX), 0);
                     DrawRotatedF(sprTeleport, hwRound(HHGear^.X) + 1 + WorldDx, hwRound(HHGear^.Y) - 3 + WorldDy, 11 - Gear^.Pos, hwSign(HHGear^.dX), 0);
                     end;
-        gtSwitcher: DrawSprite(sprSwitch, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 56 + WorldDy, (GameTicks shr 6) mod 12);
+        gtSwitcher: DrawSprite(sprSwitch, x - 16, y - 56, (GameTicks shr 6) mod 12);
           gtTarget: begin
                     Tint($FF, $FF, $FF, floor($FF * Gear^.Timer / 1000));
-                    DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
+                    DrawSprite(sprTarget, x - 16, y - 16, 0);
                     Tint($FF, $FF, $FF, $FF);
                     end;
-          gtMortar: DrawRotated(sprMortar, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+          gtMortar: DrawRotated(sprMortar, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
           gtCake: if Gear^.Pos = 6 then
-                     DrawRotatedf(sprCakeWalk, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks div 40) mod 6, hwSign(Gear^.dX), Gear^.DirAngle * hwSign(Gear^.dX) + 90)
+                     DrawRotatedf(sprCakeWalk, x, y, (GameTicks div 40) mod 6, hwSign(Gear^.dX), Gear^.DirAngle * hwSign(Gear^.dX) + 90)
                   else
-                     DrawRotatedf(sprCakeDown, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 5 - Gear^.Pos, hwSign(Gear^.dX), Gear^.DirAngle * hwSign(Gear^.dX) + 90);
-       gtSeduction: if Gear^.Pos >= 14 then DrawSprite(sprSeduction, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
-      gtWatermelon: DrawRotatedf(sprWatermelon, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 0, Gear^.DirAngle);
-      gtMelonPiece: DrawRotatedf(sprWatermelon, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 1, 0, Gear^.DirAngle);
-     gtHellishBomb: DrawRotated(sprHellishBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+                     DrawRotatedf(sprCakeDown, x, y, 5 - Gear^.Pos, hwSign(Gear^.dX), Gear^.DirAngle * hwSign(Gear^.dX) + 90);
+       gtSeduction: if Gear^.Pos >= 14 then DrawSprite(sprSeduction, x - 16, y - 16, 0);
+      gtWatermelon: DrawRotatedf(sprWatermelon, x, y, 0, 0, Gear^.DirAngle);
+      gtMelonPiece: DrawRotatedf(sprWatermelon, x, y, 1, 0, Gear^.DirAngle);
+     gtHellishBomb: DrawRotated(sprHellishBomb, x, y, 0, Gear^.DirAngle);
            gtBirdy: begin
                     if Gear^.State and gstAnimation = gstAnimation then
                         begin
                         if Gear^.State and gstTmpFlag = 0 then // Appearing
                             begin
-                            endX:= hwRound(Gear^.X);
-                            endY:= hwRound(Gear^.Y);
+                            endX:= x - WorldDx;
+                            endY:= y - WorldDy;
                             if Gear^.Tag < 0 then
                                 startX:= max(LAND_WIDTH + 1024, endX + 2048)
                             else
@@ -808,8 +820,8 @@ while Gear<>nil do
                             end
                         else // Disappearing
                             begin
-                            startX:= hwRound(Gear^.X);
-                            startY:= hwRound(Gear^.Y);
+                            startX:= x - WorldDx;
+                            startY:= y - WorldDy;
                             if Gear^.Tag > 0 then
                                 endX:= max(LAND_WIDTH + 1024, startX + 2048)
                             else
@@ -819,18 +831,18 @@ while Gear<>nil do
                             end;
                         end
                     else
-                        DrawTextureF(SpritesData[sprBirdy].Texture, 1, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                        DrawTextureF(SpritesData[sprBirdy].Texture, 1, x, y, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                     end;
-             gtEgg: DrawRotatedTextureF(SpritesData[sprEgg].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 16, 16, Gear^.DirAngle);
+             gtEgg: DrawRotatedTextureF(SpritesData[sprEgg].Texture, 1, 0, 0, x, y, 0, 1, 16, 16, Gear^.DirAngle);
            gtPiano: begin
                     if (Gear^.State and gstDrowning) = 0 then
                         begin
                         Tint($FF, $FF, $FF, $10);
                         for i:= 8 downto 1 do
-                            DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy - hwRound(Gear^.dY * 4 * i), 0, 1, 128, 128, 0);
+                            DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, x, y - hwRound(Gear^.dY * 4 * i), 0, 1, 128, 128, 0);
                         Tint($FF, $FF, $FF, $FF)
                         end;
-                    DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 128, 128, 0);
+                    DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, x, y, 0, 1, 128, 128, 0);
                     end;
      gtPoisonCloud: begin
                     if Gear^.Timer < 1020 then
@@ -839,11 +851,11 @@ while Gear<>nil do
                         Tint($C0, $C0, $00, (5000 - Gear^.Timer) div 8)
                     else
                         Tint($C0, $C0, $00, $C0);
-                    DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 22, 22, (RealTicks shr 36 + Gear^.UID * 100) mod 360);
+                    DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, x, y, 0, 1, 22, 22, (RealTicks shr 36 + Gear^.UID * 100) mod 360);
                     Tint($FF, $FF, $FF, $FF)
                     end;
          end;
-      if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(hwRound(Gear^.X) + 8 + WorldDx, hwRound(Gear^.Y) + 8 + WorldDy, Gear^.Tex);
+      if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(x + 8, y + 8, Gear^.Tex);
       Gear:= Gear^.NextGear
       end;
 end;
