@@ -101,6 +101,7 @@ var CurrentTeam: PTeam;
     LocalClan: LongInt;  // last non-bot, non-extdriven clan
     LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index
     CurMinAngle, CurMaxAngle: Longword;
+    GameOver: boolean;
 
 procedure initModule;
 procedure freeModule;
@@ -139,31 +140,35 @@ CheckForWin:= true;
 
 TurnTimeLeft:= 0;
 ReadyTimeLeft:= 0;
-if AliveCount = 0 then
-    begin // draw
-    AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
-    SendStat(siGameResult, trmsg[sidDraw]);
-    AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
-    end else // win
-    with AliveClan^ do
-        begin
-        if TeamsNumber = 1 then
-            s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName)  // team wins
-        else
-            s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName); // clan wins
-
-        for j:= 0 to Pred(TeamsNumber) do
-            with Teams[j]^ do
-                for i:= 0 to cMaxHHIndex do
-                    with Hedgehogs[i] do
-                        if (Gear <> nil) then
-                            Gear^.State:= gstWinner;
-
-        AddCaption(s, cWhiteColor, capgrpGameState);
-        SendStat(siGameResult, s);
+if not GameOver then
+    begin
+    if AliveCount = 0 then
+        begin // draw
+        AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
+        SendStat(siGameResult, trmsg[sidDraw]);
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
-        end;
-SendStats
+        end else // win
+        with AliveClan^ do
+            begin
+            if TeamsNumber = 1 then
+                s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName)  // team wins
+            else
+                s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName); // clan wins
+
+            for j:= 0 to Pred(TeamsNumber) do
+                with Teams[j]^ do
+                    for i:= 0 to cMaxHHIndex do
+                        with Hedgehogs[i] do
+                            if (Gear <> nil) then
+                                Gear^.State:= gstWinner;
+
+            AddCaption(s, cWhiteColor, capgrpGameState);
+            SendStat(siGameResult, s);
+            AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+            end;
+    SendStats;
+    end;
+GameOver:= true
 end;
 
 procedure SwitchHedgehog;
@@ -497,6 +502,7 @@ begin
     ClansCount:= 0;
     LocalClan:= -1;
     LocalAmmo:= -1;
+    GameOver:= false
 end;
 
 procedure freeModule;
