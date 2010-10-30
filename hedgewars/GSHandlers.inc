@@ -4094,7 +4094,6 @@ var
 begin
     AllInactive := false;
     hh := PHedgehog(Gear^.Hedgehog);
-    RenderHealth(hh^);
     DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy -
             cHHRadius - 14 - hh^.HealthTagTex^.h, hh^.HealthTagTex);
     DrawCircle(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, 1.5, 0, 0, $FF,
@@ -4102,24 +4101,30 @@ begin
 
     doStepHedgehogMoving(hh^.Gear);
 
-    if ((Gear^.Message and gmUp) <> 0) then begin
+    if ((Gear^.Message and gmUp) <> 0) then 
+        begin
         if (GameTicks and $F) <> 0 then exit;
-    end else begin
-        if (GameTicks and $1FF) <> 0 then exit;
-    end;
+        end 
+    else if (GameTicks and $1FF) <> 0 then exit;
+
 
     graves := GearsNear(hh^.Gear, gtGrave, Gear^.Radius);
 
-    if Length(graves) = 0 then begin
+    if Length(graves) = 0 then 
+        begin
         StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
         exit;
-    end;
+        end;
 
-    if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) then begin
+    if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) then 
+        begin
         i := getRandom(Length(graves));
         dec(hh^.Gear^.Health);
+        if (hh^.Gear^.Health = 0) and (hh^.Gear^.Damage = 0) then
+            hh^.Gear^.Damage:= 1;
+        RenderHealth(hh^);
         inc(graves[i]^.Health);
 {-for i:= 0 to High(graves) do begin
             if hh^.Gear^.Health > 0 then begin
@@ -4127,10 +4132,13 @@ begin
                 inc(graves[i]^.Health);
             end;
         end; -}
-    end else begin
+        end 
+    else 
+        begin
         // now really resurrect the hogs with the hp saved in the graves
-        for i:= 0 to High(graves) do begin
-            if graves[i]^.Health > 0 then begin
+        for i:= 0 to High(graves) do
+            if graves[i]^.Health > 0 then
+                begin
                 resgear := AddGear(hwRound(graves[i]^.X), hwRound(graves[i]^.Y),
                         gtHedgehog, gstWait, _0, _0, 0);
                 resgear^.Hedgehog := graves[i]^.Hedgehog;
@@ -4139,12 +4147,12 @@ begin
                 DeleteGear(graves[i]);
                 RenderHealth(PHedgehog(resgear^.Hedgehog)^);
                 RecountTeamHealth(Phedgehog(resgear^.Hedgehog)^.Team);
-            end;
-        end;
+                end;
         StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
-    end;
+        end;
+    //if hh^.Gear^.Health = 0 then doStepHedgehogFree(hh^.Gear);
 end;
 
 procedure doStepResurrector(Gear: PGear);
