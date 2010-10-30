@@ -600,7 +600,7 @@ tai aseta eri nimimerkki asetuksissa:</translation>
     <message>
         <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation>Pidätkö Hedgewarsista? Liity faniksi osoitteessa %1 tai liity meidän ryhmään osoitteessa %2. Voit myös seurata meitä osoitteessa %3!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>

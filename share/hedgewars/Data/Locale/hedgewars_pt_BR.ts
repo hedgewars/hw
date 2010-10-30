@@ -668,7 +668,7 @@ ou escolha outro apelido:</translation>
     <message>
         <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation>Gostou de Hedgewars? Se torne um fã no %1, participe em nosso grupo em %2. Você também poderia nos seguir no %3!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>

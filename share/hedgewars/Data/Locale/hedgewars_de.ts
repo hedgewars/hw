@@ -606,7 +606,7 @@ wähle einen anderen Spitznamen:</translation>
     <message>
         <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation>Du magst Hedgewars? Werde ein Fan auf %1 or tritt unserer Gruppe auf %2 bei. Du kannst uns auch auf %3 folgen!</translation>
+        <translation>Du magst Hedgewars? Werde ein Fan auf %1 oder folge uns auf %2!</translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>

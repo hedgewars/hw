@@ -605,7 +605,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation>喜欢“刺猬杀”？成为一名粉丝吧 %1，或者加入我们的团队 %2！你可以follow我们 %3!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
