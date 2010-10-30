@@ -3387,7 +3387,8 @@ begin
             break;
 
         // don't port portals or other gear that wouldn't make sense
-        if (iterator^.Kind = gtPortal) or (iterator^.Kind = gtRope) or (iterator^.PortalCounter > 20) then
+        if (iterator^.Kind = gtPortal) or (iterator^.Kind = gtRope)
+        or (iterator^.Kind = gtRCPlane) or (iterator^.PortalCounter > 20) then
             continue;
 
         // don't port hogs on rope
