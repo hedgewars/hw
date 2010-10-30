@@ -4118,8 +4118,7 @@ begin
         exit;
         end;
 
-    if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) then 
-        begin
+    if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) then begin
         i := getRandom(Length(graves));
         dec(hh^.Gear^.Health);
         if (hh^.Gear^.Health = 0) and (hh^.Gear^.Damage = 0) then
@@ -4132,13 +4131,10 @@ begin
                 inc(graves[i]^.Health);
             end;
         end; -}
-        end 
-    else 
-        begin
+    end else begin
         // now really resurrect the hogs with the hp saved in the graves
         for i:= 0 to High(graves) do
-            if graves[i]^.Health > 0 then
-                begin
+            if graves[i]^.Health > 0 then begin
                 resgear := AddGear(hwRound(graves[i]^.X), hwRound(graves[i]^.Y),
                         gtHedgehog, gstWait, _0, _0, 0);
                 resgear^.Hedgehog := graves[i]^.Hedgehog;
@@ -4147,11 +4143,15 @@ begin
                 DeleteGear(graves[i]);
                 RenderHealth(PHedgehog(resgear^.Hedgehog)^);
                 RecountTeamHealth(Phedgehog(resgear^.Hedgehog)^.Team);
-                end;
+                FreeTexture(PHedgehog(resgear^.Hedgehog)^.HatTex);
+                PHedgehog(resgear^.Hedgehog)^.HatTex := Surface2Tex(
+                    LoadImage(Pathz[ptHats] + '/Reserved/Zombie', ifNone),
+                    True);
+            end;
         StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
-        end;
+    end;
     //if hh^.Gear^.Health = 0 then doStepHedgehogFree(hh^.Gear);
 end;
 
