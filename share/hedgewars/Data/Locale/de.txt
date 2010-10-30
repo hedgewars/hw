@@ -42,8 +42,15 @@
 00:39=Fliegende Untertasse
 00:40=Molotov-Cocktail
 00:41=Birdy
-
+00:42=Tragbares Portal Device
+00:43=Piano-Angriff
 00:44=Alter Limburger
+00:45=Sinuskanone
+00:46=Flammenwerfer
+00:47=Haftmine
+00:48=Hammer
+00:49=Totenbeschwörung (beta)
+
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden
@@ -61,6 +68,7 @@
 01:11=Waffe oder Werkzeug noch nicht verfügbar!
 01:12=Letzte Runde bis zum Sudden Death!
 01:13=%1 Runden bis zum Sudden Death!
+01:14=Mach dich bereit, %1!
 
 ; Event messages
 ; Hog (%1) died
@@ -213,7 +221,15 @@
 03:39=Fortbewegungsmittel
 03:40=Brandbombe
 03:41=Riesiger Squawks-Fan
+03:42=Portalöffner
+; the misspelled "Beethoven" is intentional (-> to beat)
+03:43=Spiele Beathovens tötliche Sonate!
 03:44=Ziemlich alt und stinkig
+03:45=Die Macht der Wissenschaft
+03:46=Heiß heiß heiß!
+03:47=Mach es weg!
+03:48=Stop! Hammer time!
+03:49=Tut was man vermutet
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Greife deine Feinde mit einfachen Granaten an.|Der Zeitzünder steuert den Explosionszeitpunkt.|1-5: Zeitzünder einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
@@ -245,7 +261,7 @@
 04:26=Wirf diese saftige Wassermelone auf deine Feinde.|Sobald die Zeit abgelaufen ist, wird sie in|einzelne und explosive Stücke zerspringen.|Angriff: Halten, um mit mehr Kraft zu werfen
 04:27=Entfessle das Höllenfeuer und umgebe deine|Widersacher damit, indem du diesen teuflischen|Sprengsatz gegen sie einsetzt. Komm ihr aber|nicht zu nahe, denn die Flammen könnten|länger bestehen bleiben.|Angriff: Halten, um mit mehr Kraft zu werfen
 04:28=Kurz nach dem Start wird diese Rakete beginnen,|sich durch soliden Grund zu graben. Sobald sie|wieder austritt oder der Zeitzünder abläuft,|wird sie explodieren.|Angriff: Halten, um mit mehr Kraft zu feuern
-04:29=Das ist nichts für kleine Kinder! Die Ballpistole|feuert Tonnen kleiner farbiger Bälle, die mit|Sprengstoff gefüllt sind.|Angriff: Mit voller Kraft feuern|Hoch/Runter: Im feuern zielen
+04:29=Das ist nichts für kleine Kinder! Die Ballpistole|feuert Tonnen kleiner farbiger Bälle, die mit|Sprengstoff gefüllt sind.|Angriff: Mit voller Kraft feuern|Hoch/Runter: Im Feuern zielen
 04:30=Rufe ein Flugzeug, um ein Areal gezielt mit|tödlichem Napalm einzudecken. Gut gezielt|lassen sich so große Teile der Karte auslöschen.|Links/Rechts: Angriffsrichtung wählen|Cursor: Zielgebiet wählen und Angriff starten
 04:31=Das RC-Flugzeug kann Kisten einsammeln und weit|entfernte Igel angreifen. Steuere es direkt in|ein Opfer oder wirf erst einige Bomben ab.|Angriff: Flugzeug starten und Bomben abwerfen|Weiter Sprung: "Ritt der Walküren"|Hoch/Runter: Flugzeug lenken
 04:32=Niedrige Schwerkraft ist effektiver als jede|Diät! Springe höher und weiter oder lass|einfach deine Gegner noch weiter fliegen.|Angriff: Aktivieren
@@ -258,8 +274,14 @@
 04:39=Fliege mit der fliegenden Untertasse in andere|Teile der Karte. Sie ist schwer zu beherrschen,|bringt dich aber an so gut wie jeden Ort.|Angriff: Aktivieren|Hoch/Links/Rechts: Beschleunigen|Weiter Sprung: Waffe benutzen
 04:40=Entzünde einen Teil der Landschaft oder auch etwas|mehr mit dieser (schon bald) brennenden Flüssigkeit.|Angriff: Halten, um mit mehr Kraft zu werfen
 04:41=Der Beweis, dass die Natur sogar die fliegende|Untertasse übertreffen könnte. Birdy kann|deinen Igel herumtragen und zudem Eier auf|deine Feinde fallen lassen.|Angriff: Aktivieren und Eier fallen lassen|Hoch/Links/Rechts: In eine Richtung flattern
-
+04:42=Das tragbare Portal Device ermöglicht es dir|dich, deine Feinde oder Waffen direkt zwischen|zwei Punkten auf der Karte zu|teleportieren.|Benutze es weise und deine Kampagne wird ein...|RIESENERFOLG!|Angriff: Öffnet ein Portal|Wechsel: Wechsle die Portalfarbe
+04:43=Lass dein musikalisches Debüt einschlagen wie eine Bombe!|Lässt ein Piano vom Himmel fallen, aber pass auf...|jemand muss es spielen und das könnte dich |dein Leben kosten!|Cursor: Zielgebiet wählen und Angriff starten|F1-F9: Spiel das Piano
 04:44=Das ist nicht nur Käse, das ist biologische Kriegsführung!|Er wird nicht viel Schaden verursachen, sobald der Zünder|abgelaufen ist, aber er wird garantiert jeden in der Nähe|vergiften!|1-5: Zeitzünder einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
+04:45=All die Physikstunden haben sich endlich|bezahlt gemacht: Starte eine zerstörerische Sinuswelle|auf deine Feinde.|Pass auf, die Waffe erzeugt einen ordentlichen Stoß. (Diese Waffe ist unvollständig)|Angriff: Sinuswellen erzeugen
+04:46=Bruzzele deine Feinde mit fließenden Flammen|Herzerwärmend!|Angriff: Aktivieren|Hoch/Runter: Im Feuern zielen|Links/Rechts: Verändere Ausstoßstärke
+04:47=Verdopple den Spaß mit zwei spitzen, schicken, klebrigen Minen.|Löse eine Kettenreaktion aus oder beschütze dich (oder beides).|Angriff: Halten, um mit mehr Kraft zu feuern (zweimal)
+04:48=Warum sind Maulwürfe verhasst? Einen|Igel in den Boden zu stampfen kann sehr lustig sein!|Ein guter Treffer des Hammers wird ein Drittel|der Lebenspunkte eines Igels abziehen und ihn|im Boden versenken|Angriff: Aktivieren
+04:49=Hol deine Freunde zurück!|Aber pass auf, dass du keine Feinde beschwörst.|Angriff: Gedrückt halten um Igel langsam wiederauferstehen zu lassen|Hoch: Beschleunige Totenbeschwörung
 
 ; Game goal strings
 05:00=Spielmodifikationen
