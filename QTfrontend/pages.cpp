@@ -138,7 +138,7 @@ PageMain::PageMain(QWidget* parent) :
         Tips << tr("The Flame Thrower is a weapon but it can be used for tunnel digging as well.", "Tips");
         Tips << tr("Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.", "Tips");
         Tips << tr("Want to know who's behind the game? Click on the Hedgewars logo in the main menu to see the credits.", "Tips");
-        Tips << tr("Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!", "Tips").arg("<a href=\"http://www.facebook.com/Hedgewars\">Facebook</a>").arg("<a href=\"http://steamcommunity.com/groups/hedgewars\">Steam Community</a>").arg("<a href=\"http://twitter.com/hedgewars\">Twitter</a>");
+        Tips << tr("Like Hedgewars? Become a fan on %1 or follow us on %2!", "Tips").arg("<a href=\"http://www.facebook.com/Hedgewars\">Facebook</a>").arg("<a href=\"http://twitter.com/hedgewars\">Twitter</a>");
         Tips << tr("Feel free to draw your own graves, hats, flags or even maps and themes! But note that you'll have to share them somewhere to use them online.", "Tips");
         Tips << tr("Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!", "Tips");
         // The following tip will require links to app store entries first.

@@ -666,7 +666,7 @@ ou escolha outro apelido:</translation>
         <translation>Quer saber quem está por trás desse jogo? Clique no logo do Hedgewars no menu principal para ver os créditos.</translation>
     </message>
     <message>
-        <source>Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!</source>
+        <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
         <translation>Gostou de Hedgewars? Se torne um fã no %1, participe em nosso grupo em %2. Você também poderia nos seguir no %3!</translation>
     </message>

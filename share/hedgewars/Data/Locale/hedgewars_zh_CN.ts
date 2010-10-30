@@ -603,7 +603,7 @@ or pick another nickname in game config:</source>
         <translation>想知道是谁贡献的这个游戏？请在主界面点击“Hedgewars”LOGO就可以看到“制作团队”.</translation>
     </message>
     <message>
-        <source>Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!</source>
+        <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
         <translation>喜欢“刺猬杀”？成为一名粉丝吧 %1，或者加入我们的团队 %2！你可以follow我们 %3!</translation>
     </message>
