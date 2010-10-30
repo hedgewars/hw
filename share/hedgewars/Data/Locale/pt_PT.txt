@@ -430,6 +430,7 @@
 03:46=Labaredas enormes!
 03:47=Cola-as onde achares mais útil!
 03:48=Garantia vitalícia!
+03:49=Funciona tal como anunciado
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Ataca os teus inimigos usando uma simples granada.|Explodirá quando o tempo chegar a zero.|1-5: Define o temporizador da granada|Ataque: Deixa premido para lançar com mais força
@@ -481,6 +482,7 @@
 04:46=Cobre os teus inimigos com este viscoso e|flamejante liquido de aquecer o coração!|Ataque: Activar|Cima/Baixo: Apontar|Esquerda/Direita: Modificar a pressão
 04:47=Duplica a diversão com estas duas minas autocolantes!|Utiliza-as para atacar ou defender. É contigo!|Ataque: Deixa pressionado para disparar mais longe
 04:48=Porque é que têm as toupeiras de ser sempre as vitimas?|Dar marteladas em ouriços pode ser igualmente divertido!|Uma boa martelada rapidamente remove um terço da vida|de um ouriço e ainda o enterra no solo!|Ataque: Activar
+04:49=Ressuscita os teus amigos!|Mas cuidado, esta tecnica ressuscita também os teus enimigos.|Ataque: Deixa pressionado para ressuscitar lentamente|Up: Acelerar a ressureição
 
 ; Game goal strings
 05:00=Modos de Jogo

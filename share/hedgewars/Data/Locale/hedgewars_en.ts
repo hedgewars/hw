@@ -841,7 +841,8 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
-        <translation type="unfinished"></translation>
+        <translation>The game you are trying to join has started.
+Do you still want to join the room?</translation>
     </message>
 </context>
 <context>
