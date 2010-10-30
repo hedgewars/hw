@@ -4113,15 +4113,15 @@ begin
         Gear^.Y := Gear^.Y - _1;
     end;
 
-    graves := GearsNear(hh^.Gear, gtGrave, Gear^.Radius);
+    graves := GearsNear(hh^.Gear^.X, hh^.Gear^.Y + int2hwFloat(Gear^.Power),
+                    gtGrave, Gear^.Radius);
 
-    if Length(graves) = 0 then 
-        begin
+    if Length(graves) = 0 then begin
         StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
         exit;
-        end;
+    end;
 
     if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) then begin
         i := getRandom(Length(graves));
@@ -4170,7 +4170,7 @@ var
 begin
     AllInactive := false;
     hh := PHedgehog(Gear^.Hedgehog);
-    graves := GearsNear(hh^.Gear, gtGrave, Gear^.Radius);
+    graves := GearsNear(hh^.Gear^.X, hh^.Gear^.Y, gtGrave, Gear^.Radius);
 
     if Length(graves) > 0 then begin
         for i:= 0 to High(graves) do begin

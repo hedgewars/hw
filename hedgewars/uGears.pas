@@ -121,7 +121,7 @@ procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask, Tint: LongWord); forward;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 //procedure AmmoFlameWork(Ammo: PGear); forward;
-function GearsNear(Gear: PGear; Kind: TGearType; r: LongInt): TPGearArray; forward;
+function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray; forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
@@ -1517,16 +1517,16 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
     end
 end;
 
-function GearsNear(Gear: PGear; Kind: TGearType; r: LongInt): TPGearArray;
+function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray;
 var
     t: PGear;
 begin
     GearsNear := nil;
     t := GearsList;
     while t <> nil do begin
-        if (t <> Gear) and (t^.Kind = Kind) then begin
-            if (Gear^.X - t^.X)*(Gear^.X - t^.X) + (Gear^.Y -
-                   t^.Y)*(Gear^.Y-t^.Y) < int2hwFloat(r)*int2hwFloat(r) then
+        if (t^.Kind = Kind) then begin
+            if (X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) <
+                int2hwFloat(r)*int2hwFloat(r) then
             begin
                 SetLength(GearsNear, Length(GearsNear)+1);
                 GearsNear[High(GearsNear)] := t;

@@ -284,7 +284,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
                         hwRound(CurAmmoGear^.Y) + WorldDy + (CurAmmoGear^.Power), 0, 0);
                 defaultPos := false;
                 Tint($33, $33, $FF, max($00, floor($C0 * abs(1 - (GameTicks mod 6000) / 3000))));
-                DrawTexture(sx - 108, sy - 108, SpritesData[sprVampiric].Texture, 4.5);
+                DrawTexture(sx - 108, sy - 108 + (CurAmmoGear^.Power),
+                        SpritesData[sprVampiric].Texture, 4.5);
                 Tint($FF, $FF, $FF, $FF);
                 end;
             gtKamikaze: begin
