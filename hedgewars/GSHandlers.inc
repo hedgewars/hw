@@ -4100,6 +4100,7 @@ begin
             $FF);*)
 
     doStepHedgehogMoving(hh^.Gear);
+    hh^.Gear^.Y := Gear^.Y;
 
     if ((Gear^.Message and gmUp) <> 0) then 
         begin
@@ -4107,6 +4108,10 @@ begin
         end 
     else if (GameTicks and $1FF) <> 0 then exit;
 
+    if Gear^.Power < 45 then begin
+        inc(Gear^.Power);
+        Gear^.Y := Gear^.Y - _1;
+    end;
 
     graves := GearsNear(hh^.Gear, gtGrave, Gear^.Radius);
 
@@ -4148,6 +4153,8 @@ begin
                     LoadImage(Pathz[ptHats] + '/Reserved/Zombie', ifNone),
                     True);
             end;
+
+        hh^.Gear^.dY := _0;
         StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;

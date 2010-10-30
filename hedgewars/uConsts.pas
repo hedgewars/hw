@@ -74,7 +74,8 @@ type
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
-            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer, sprHandResurrector
+            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer,
+            sprHandResurrector, sprCross
             );
 
     // Gears that interact with other Gears and/or Land
@@ -817,8 +818,15 @@ const
             (FileName: 'amResurrector'; Path: ptHedgehog; AltPath: ptNone;
                 Texture: nil; Surface: nil; Width: 32; Height: 32;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
-                tpMedium; getDimensions: false; getImageDimensions: true) 
-            ); // sprHandResurrector
+                tpMedium; getDimensions: false; getImageDimensions: true),
+            //sprHandResurrector
+            (FileName: 'Cross'; Path: ptGraphics; altPath: ptNone;
+                Texture: nil; Surface: nil; Width: 108; Height: 138;
+                imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
+                tpMedium; getDimensions: false; getImageDimensions: true)
+            //sprCross
+            );
+
 
     Wavez: array [TWave] of record
             Sprite: TSprite;

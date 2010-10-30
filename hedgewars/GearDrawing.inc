@@ -280,6 +280,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
             gtResurrector: begin
                 DrawRotated(sprHandResurrector, hwRound(Gear^.X) + WorldDx,
                         hwRound(Gear^.Y) + WorldDy, 0, 0); 
+                DrawRotated(sprCross, hwRound(CurAmmoGear^.X) + WorldDx,
+                        hwRound(CurAmmoGear^.Y) + WorldDy + (CurAmmoGear^.Power), 0, 0);
                 defaultPos := false;
                 Tint($33, $33, $FF, max($00, floor($C0 * abs(1 - (GameTicks mod 6000) / 3000))));
                 DrawTexture(sx - 108, sy - 108, SpritesData[sprVampiric].Texture, 4.5);
