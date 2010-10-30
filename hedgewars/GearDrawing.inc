@@ -281,7 +281,10 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 DrawRotated(sprHandResurrector, hwRound(Gear^.X) + WorldDx,
                         hwRound(Gear^.Y) + WorldDy, 0, 0); 
                 defaultPos := false;
-            end;
+                Tint($33, $33, $FF, max($00, floor($C0 * abs(1 - (GameTicks mod 6000) / 3000))));
+                DrawTexture(sx - 108, sy - 108, SpritesData[sprVampiric].Texture, 4.5);
+                Tint($FF, $FF, $FF, $FF);
+                end;
             gtKamikaze: begin
                 if CurAmmoGear^.Pos = 0 then
                     DrawHedgehog(sx, sy,

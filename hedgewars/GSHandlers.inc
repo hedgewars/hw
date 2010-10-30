@@ -4096,8 +4096,8 @@ begin
     hh := PHedgehog(Gear^.Hedgehog);
     DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy -
             cHHRadius - 14 - hh^.HealthTagTex^.h, hh^.HealthTagTex);
-    DrawCircle(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, 1.5, 0, 0, $FF,
-            $FF);
+    (*DrawCircle(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, 1.5, 0, 0, $FF,
+            $FF);*)
 
     doStepHedgehogMoving(hh^.Gear);
 
