@@ -422,12 +422,12 @@
 03:39=Herramienta de transporte
 03:40=Bomba incendiaria
 03:41=Amigo chillón
-03:42=I'm making a note here...
-03:43=Performing Beathoven's deadly sonata
+03:42=Creo que voy a tomar una nota...
+03:43=E interpretando el Cascanueces tenemos a...
 03:44=Consumir preferentemente antes de 1923
 03:45=¡El poder de la ciencia!
 03:46=¡Caliente caliente caliente!
-03:47=Stick these somewhere useful!
+03:47=¡Pégalo en un buen sitio!
 03:48=Pablo clavó un clavito
 03:49=Hace exactamente lo que dice
 
