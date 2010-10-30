@@ -879,6 +879,7 @@ if (Gear^.Health = 0) then
 
         if not PHedgehog(Gear^.Hedgehog)^.Team^.hasGone then
             begin
+            PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] := false;
             if PHedgehog(Gear^.Hedgehog)^.Effects[heResurrectable] then begin
                 ResurrectHedgehog(Gear);
             end else begin
