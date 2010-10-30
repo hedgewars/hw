@@ -151,6 +151,7 @@
 		61A6710612747E4000B06CE7 /* backgroundCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E511DF58550068B24D /* backgroundCenter.png */; };
 		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
+		61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D205A0127CDD1100ABD83E /* ObjcExports.m */; };
 		61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */; };
 		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
 		61EBA62A11DFF2BC0048B68A /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62811DFF2BC0048B68A /* title.png */; };
@@ -888,6 +889,8 @@
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableCellView.h; sourceTree = "<group>"; };
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableCellView.m; sourceTree = "<group>"; };
+		61D2059F127CDD1100ABD83E /* ObjcExports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjcExports.h; path = Classes/ObjcExports.h; sourceTree = "<group>"; };
+		61D205A0127CDD1100ABD83E /* ObjcExports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObjcExports.m; path = Classes/ObjcExports.m; sourceTree = "<group>"; };
 		61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmmoMenuViewController.h; sourceTree = "<group>"; };
 		61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmmoMenuViewController.m; sourceTree = "<group>"; };
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
@@ -1015,6 +1018,8 @@
 				6165922611CA9BD500D6E256 /* CommodityFunctions.m */,
 				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
 				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
+				61D2059F127CDD1100ABD83E /* ObjcExports.h */,
+				61D205A0127CDD1100ABD83E /* ObjcExports.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -2280,6 +2285,7 @@
 				619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */,
 				61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */,
 				61399013125D19C0003C2DC0 /* uMobile.pas in Sources */,
+				61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
