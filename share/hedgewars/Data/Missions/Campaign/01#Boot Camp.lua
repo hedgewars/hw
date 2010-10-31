@@ -5,101 +5,120 @@ local teamnames = {}
 local hognames = {}
 teamnames[0] = {
 	["en"] = "Bloody Rookies",
-	["de"] = "Blutige Anfänger"
+	["de"] = "Blutige Anfänger",
+	["pl"] = "¯ótodzioby"
 }
 
 teamnames[1] = {
 	["en"] = "Instructors",
-	["de"] = "Ausbilder"
+	["de"] = "Ausbilder",
+	["pl"] = "Instruktor"
 }
 
 hognames[0] = {
 	["en"] = "Joker",
-	["de"] = "Joker"
+	["de"] = "Joker",
+	["pl"] = "Joker"
 }
 
 hognames[1] = {
 	["en"] = "Harthog",
-	["de"] = "Harthog"
+	["de"] = "Harthog",
+	["pl"] = "Harthog"
 }
 
 local caption = {
 	["en"] = "Boot Camp",
-	["de"] = "Grundausbildung"
+	["de"] = "Grundausbildung",
+	["pl"] = "Poligon"
 }
 
 local subcaption = {
 	["en"] = "Follow the instructions!",
-	["de"] = "Befolge die Anweisungen!"
+	["de"] = "Befolge die Anweisungen!",
+	["pl"] = "Wykonuj polecenia!"
 }
 
 local goals = {}
 
 goals[0] = {
 	["en"] = "Listen to your Drill Instructor and follow his lead!",
-	["de"] = "Höre deinem Ausbilder zu und befolge seine Anweisungen!"
+	["de"] = "Höre deinem Ausbilder zu und befolge seine Anweisungen!",
+	["pl"] = "S³uchaj instruktora i wykonuj jego rozkazy!"
 }
 
 goals[1] = {
 	["en"] = "Destroy the target to finish this mission!",
-	["de"] = "Zerstöre das Ziel, um diese Mission abzuschließen!"
+	["de"] = "Zerstöre das Ziel, um diese Mission abzuschließen!",
+	["pl"] = "Zniszcz cel by ukoñczyæ misjê!"
 }
 
 goals[2] = {
 	["en"] = "Excellent! You've passed the Boot Camp!",
-	["de"] = "Ausgezeichnet! Du hast das Ausbildungslager bestanden!"
+	["de"] = "Ausgezeichnet! Du hast das Ausbildungslager bestanden!",
+	["pl"] = "Doskonale! Wyszed³e¶ ca³o z poligonu!"
 }
 
 local failed = {
 	["en"] = "You failed! Follow the instructions and shoot the target only!",
-	["de"] = "Du hast versagt! Befolge die Anweisungen und schieß nur auf das Ziel!"
+	["de"] = "Du hast versagt! Befolge die Anweisungen und schieß nur auf das Ziel!",
+	["pl"] = "Przegra³e¶! Wykonuj instrukcje poprawnie i strzelaj tylko w podane cele!"
 }
 
 local drill = {}
 
 drill[0] = {
 	["en"] = "Allright, maggot!",
-	["de"] = "Also gut, du Made!"
+	["de"] = "Also gut, du Made!",
+	["pl"] = "S³uchaj mnie gnido!"
 }
 
 drill[1] = {
 	["en"] = "Show that you aren't that useless.",
-	["de"] = "Zeig, dass du nicht so nutzlos bist."
+	["de"] = "Zeig, dass du nicht so nutzlos bist.",
+	["pl"] = "Udowodnij, ¿e nie jeste¶ bezwarto¶ciowy."
 }
 
 drill[2] = {
 	["en"] = "Use [left] to move to the left!",
-	["de"] = "Benutze [Links], um nach links zu gehen!"
+	["de"] = "Benutze [Links], um nach links zu gehen!",
+	["pl"] = "U¿yj [lewo] by poruszyæ siê w lew± stronê!"
 }
 
 drill[3] = {
 	["en"] = "Good! Now use [right] to come back!",
-	["de"] = "Gut! Nun komm mit [Rechts] zurück!"
+	["de"] = "Gut! Nun komm mit [Rechts] zurück!",
+	["pl"] = "Dobzre, Teraz u¿yj [prawo] by wróciæ!"
 }
 
 drill[4] = {
 	["en"] = "Excellent!",
-	["de"] = "Ausgezeichnet!"
+	["de"] = "Ausgezeichnet!",
+	["pl"] = "Wspaniale!"
 }
 
 drill[5] = {
 	["en"] = "Now jump to the left using [return]!",
-	["de"] = "Jetzt springe mit [Eingabetaste] nach links!"
+	["de"] = "Jetzt springe mit [Eingabetaste] nach links!",
+	["pl"] = "Teraz skocz w lewo u¿ywaj±c [Enter]"
 }
 
 drill[6] = {
 	["en"] = "Use [up] and [down] to aim.",
-	["de"] = "Benutze [Hoch] und [Runter], um zu zielen."
+	["de"] = "Benutze [Hoch] und [Runter], um zu zielen.",
+	["en"] = "U¿yj klawiszy [góra] i [dó³] by celowaæ."
 }
 
 drill[7] = {
 	["en"] = "Hold [space] to power up your shot and then release it to shoot.",
-	["de"] = "Halte [Leertaste], um deinen Schuss aufzuladen, und lasse dann rechtzeitig los."
+	["de"] = "Halte [Leertaste], um deinen Schuss aufzuladen, und lasse dann rechtzeitig los.",
+	["pl"] = "Przytrzymaj spacjê by zwiêkszyæ si³ê strza³u."
 }
 
 drill[8] = {
 	["en"] = "Destroy the target to finish your basic training!",
-	["de"] = "Zerstöre das Ziel, um deine Grundausbildung abzuschließen!"
+	["de"] = "Zerstöre das Ziel, um deine Grundausbildung abzuschließen!",
+	["pl"] = "Zniszcz cel by by ukoñczyæ trening podstawowy!"
 }
 
 local function loc(text)

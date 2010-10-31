@@ -49,6 +49,7 @@
 00:46=Miotacz ognia
 00:47=Mina samoprzylepna
 00:48=Młotek
+00:49=Wskrzeszacz
 
 01:00=Walczmy!
 01:01=Remis
@@ -485,9 +486,13 @@
 03:40=Płonący granat
 03:41=Wielki fan Wróbla Ćwirka
 03:42=I'm making a note here...
-; the misspelled "Beethoven" is intentional (-> to beat)
-03:43=Performing Beathoven's deadly sonata
-03:44=Stary i baaaaardzo śmierdzący
+03:43=Chopin to przy tym pikuś
+03:44=Najlepiej spożyć przed: 1923
+03:45=Siła nauki
+03:46=Ciepło! Gorąco! Parzy!
+03:47=Co Kropelka sklei, sklei...
+03:48="It's Hammer time!"
+03:49=Robi to na co wskazuje nazwa
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
@@ -532,9 +537,15 @@
 04:39=Leć do innych części mapy uzywjąc spodka.|To ciężkie do opanowania narzędzie, może przenieść Ciebie|w prawie każdą pozycje na polu bitwy.|Atak: Aktywuj|Góra/Lewo/Prawo: Wyznacz lot w odpowiednim kierunku
 04:40=Wznieć ogień używając koktajlu z łatwopalnym płynem.|Atak: Przytrzymaj by rzucić z większą siłą
 04:41=Natura może być na równi z technologią!|Ptaszek uniesie Ciebie ponad ziemię oraz|zrzuci jajka w przeciwników|Atak: Atywacja ptaka i zrzucanie jajek|Góra/Lewo/Prawo: Leć w wybranym kierunku
-04:42=HUGE SUCCESS| | |(but missing texts!)
-04:43=(missing text)
-04:44=To nie jest zwykły ser. To broń biologiczna!|Wybuch z pewnością nie będzie potężny, ale gdy|licznik dojdzie do zera, chmura gazu zatruje|każdego nieszczęśnika który będzie w pobliżu|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
+04:42=To urządzenie umożliwia natychmiastowe|przetransportowanie Ciebie, Twoich|wrogów bądź uzbrojenia pomiędzy dwoma|miejscami na mapie|Użyj tego z głową a Twoja|misja zakończy się... WIELKIM SUKCESEM|Atak: Wystrzel portal|Zmiana (Tab): Zmień kolor portalu
+04:43=Niech twój debiut będzie WYBUCHOWY!|Zrzuć pianino z nieba, ale uważaj!|Ktoś musi na nim grać więc prawdopodobnie będziesz|musiał poświęcić swojego jeża|Myszka: Wybierz cel|F1-F9: Graj na pianinie
+04:44=To nie jest zwykły ser. To broń biologiczna!|Wybuch z pewnością nie będzie potężny, ale gdy|licznik dojdzie do zera, chmura gazu zatruje|każdego nieszczęśnika który będzie w pobliżu|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
+04:45=Wszystkie lekcje fizyki w końcu się opłaciły!|Wystrzel niszczącą sinusoidalną falę|w swoich przeciwników|Uważaj! Ta broń ma kopa!|Atak: Strzelaj
+04:46=Pokrywa twoich wrogów ognistą powłoką.|Czy koś zamawiał pieczonego jeża?|Atak: Aktywuj|Góra/Dół: Celowanie|Lewo/Prawo: Ustaw prędkość wystrzeliwania
+04:47=Podwójna zabawa z podwójną ilością kleistych min.|Spróbuj wywołać reakcję łańcuchową lub chroń|samego siebie (lub obydwie rzeczy na raz!)|Atak: Przytrzymaj by rzucić z większą siłą (dwa razy)
+04:48=Czyż walenie jeży po głowach nie|jest zabawne? Dobre uderzenie|z młotka zabierze 1/3 życia|przeciwnika i wkopie go w podłoże|Atak: Uderz
+04:49=Wskrześ swoich przyjaciół!|Jednakże uważaj byś nie pomógł swojemu wrogowi.|Atak: Przytrzymaj by powoli przywracać życie|Góra: Przyspiesz wskrzeszanie
+
 
 ; Game goal strings
 05:00=Ustawienia gry
