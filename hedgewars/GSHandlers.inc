@@ -4149,10 +4149,13 @@ begin
                 DeleteGear(graves[i]);
                 RenderHealth(PHedgehog(resgear^.Hedgehog)^);
                 RecountTeamHealth(Phedgehog(resgear^.Hedgehog)^.Team);
-                FreeTexture(PHedgehog(resgear^.Hedgehog)^.HatTex);
-                PHedgehog(resgear^.Hedgehog)^.HatTex := Surface2Tex(
-                    LoadImage(Pathz[ptHats] + '/Reserved/Zombie', ifNone),
-                    True);
+                if PHedgehog(resgear^.Hedgehog)^.Hat = 'NoHat' then
+                    begin
+                    FreeTexture(PHedgehog(resgear^.Hedgehog)^.HatTex);
+                    PHedgehog(resgear^.Hedgehog)^.HatTex := Surface2Tex(
+                        LoadImage(Pathz[ptHats] + '/Reserved/Zombie', ifNone),
+                        True)
+                    end
             end;
 
         hh^.Gear^.dY := _0;
