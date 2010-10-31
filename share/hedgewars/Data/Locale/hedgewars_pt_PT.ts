@@ -625,7 +625,7 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation>Podes encontrar os ficheiros de configuração do Hedgewars na pasta &quot;Hedgewars&quot dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
+        <translation>Podes encontrar os ficheiros de configuração do Hedgewars na pasta &quot;Hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
     </message>
 </context>
 <context>
