@@ -50,7 +50,7 @@
 00:46=Lanzallamas
 00:47=Bomba lapa
 00:48=Mazo
-00:49=Resurrección (beta)
+00:49=Resurrección
 
 01:00=¡Luchad!
 01:01=Empate

@@ -49,7 +49,7 @@
 00:46=Flammenwerfer
 00:47=Haftmine
 00:48=Hammer
-00:49=Totenbeschwörung (beta)
+00:49=Totenbeschwörung
 
 
 01:00=Auf in die Schlacht!

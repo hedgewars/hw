@@ -49,7 +49,7 @@
 00:46=Lança-chamas
 00:47=Mina Pegajosa
 00:48=Martelo
-00:49=Ressuscitador (beta)
+00:49=Ressuscitador
 
 01:00=Vamos lutar!
 01:01=Ronda empatada
