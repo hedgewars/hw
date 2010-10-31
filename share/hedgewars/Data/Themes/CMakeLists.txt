@@ -7,7 +7,7 @@ foreach(dir
 	Cake
 	Castle
 	Cheese
-    Deepspace
+	Deepspace
 	City
 	CrazyMission
 	EarthRise
@@ -16,6 +16,7 @@ foreach(dir
 	Halloween
 	Hell
 	Island
+	Jungle
 	Nature
 	Planes
 	Sheep
