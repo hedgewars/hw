@@ -26,7 +26,7 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
    implementation
 ////////////////////
-uses uMisc, uConsts, uKeys, uTeams, uIO, uAI, uGears, uScript, uSound, uMobile;
+uses uMisc, uConsts, uKeys, uTeams, uIO, uAI, uGears, uScript, uSound, uMobile, uVisualGears;
 
 procedure DoGameTick(Lag: LongInt);
 var i: LongInt;
@@ -67,6 +67,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         isSoundEnabled:= isSEBackup;
                         if isSoundEnabled then playMusic;
                         GameType:= gmtLocal;
+                        AddVisualGear(0, 0, vgtTeamHealthSorter);
                         {$IFDEF IPHONEOS}InitIPC;{$ENDIF}
                         perfExt_SaveFinishedSynching();
                         end;
