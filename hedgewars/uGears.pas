@@ -601,7 +601,10 @@ else if Gear^.Kind = gtHedgehog then
                 if (team^.Clan^.Teams[i]^.Hedgehogs[0].Gear <> nil) then k:= true;
             if not k then
                 for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
+                    begin
+                    team^.Clan^.Teams[i]^.hasGone:= true;
                     TeamGoneEffect(team^.Clan^.Teams[i]^)
+                    end
             end;
         inc(KilledHHs);
         RecountTeamHealth(team)
