@@ -90,22 +90,22 @@ var Len: LongInt;
     done: boolean;
 begin
 {$IFNDEF NOCONSOLE}
-    {$IFDEF DEBUGFILE}AddFileLog('Console write: ' + s);{$ENDIF}
-    Write(s);
-    done:= false;
+{$IFDEF DEBUGFILE}AddFileLog('Console write: ' + s);{$ENDIF}
+Write(s);
+done:= false;
 
-    while not done do
+while not done do
     begin
-        Len:= cLineWidth - Length(ConsoleLines[CurrLine].s);
-        SetLine(ConsoleLines[CurrLine], ConsoleLines[CurrLine].s + copy(s, 1, Len));
-        Delete(s, 1, Len);
-        if byte(ConsoleLines[CurrLine].s[0]) = cLineWidth then
+    Len:= cLineWidth - Length(ConsoleLines[CurrLine].s);
+    SetLine(ConsoleLines[CurrLine], ConsoleLines[CurrLine].s + copy(s, 1, Len));
+    Delete(s, 1, Len);
+    if byte(ConsoleLines[CurrLine].s[0]) = cLineWidth then
         begin
-            inc(CurrLine);
-            if CurrLine = cLinesCount then CurrLine:= 0;
-            PByte(@ConsoleLines[CurrLine].s)^:= 0
+        inc(CurrLine);
+        if CurrLine = cLinesCount then CurrLine:= 0;
+        PByte(@ConsoleLines[CurrLine].s)^:= 0
         end;
-        done:= (Length(s) = 0);
+    done:= (Length(s) = 0);
     end;
 {$ENDIF}
 end;
@@ -113,12 +113,12 @@ end;
 procedure WriteLnToConsole(s: shortstring);
 begin
 {$IFNDEF NOCONSOLE}
-    WriteToConsole(s);
-    WriteLn;
-    inc(CurrLine);
-    if CurrLine = cLinesCount then
-        CurrLine:= 0;
-    PByte(@ConsoleLines[CurrLine].s)^:= 0
+WriteToConsole(s);
+WriteLn;
+inc(CurrLine);
+if CurrLine = cLinesCount then
+    CurrLine:= 0;
+PByte(@ConsoleLines[CurrLine].s)^:= 0
 {$ENDIF}
 end;
 

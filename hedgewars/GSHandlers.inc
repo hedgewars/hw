@@ -3414,8 +3414,20 @@ begin
 
         hasdxy := ((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0));
 
+        // in case the object is not moving, let's asume it's moving towards the portal
+        if not hasdxy then
+        begin
+            ox:= Gear^.X - iterator^.X;
+            oy:= Gear^.Y - iterator^.Y;
+        end
+        else
+        begin
+            ox:= iterator^.dX;
+            oy:= iterator^.dY;
+        end;
+
         // won't port stuff that moves away from me!
-        if hasdxy and not (Gear^.dX*iterator^.dX + Gear^.dY*iterator^.dY).isNegative then
+        if not (Gear^.dX*ox + Gear^.dY*oy).isNegative then
                 continue;
 
         if (iterator^.Kind <> gtCake) then
@@ -4097,13 +4109,10 @@ var
 begin
     AllInactive := false;
     hh := PHedgehog(Gear^.Hedgehog);
-    DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy -
+    DrawCentered(hwRound(hh^.Gear^.X) + WorldDx, hwRound(hh^.Gear^.Y) + WorldDy -
             cHHRadius - 14 - hh^.HealthTagTex^.h, hh^.HealthTagTex);
     (*DrawCircle(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, 1.5, 0, 0, $FF,
             $FF);*)
-
-    doStepHedgehogMoving(hh^.Gear);
-    hh^.Gear^.Y := Gear^.Y;
 
     if ((Gear^.Message and gmUp) <> 0) then 
         begin
@@ -4111,22 +4120,25 @@ begin
         end 
     else if (GameTicks and $1FF) <> 0 then exit;
 
-    if Gear^.Power < 45 then begin
+    if Gear^.Power < 45 then 
+        begin
         inc(Gear^.Power);
-        Gear^.Y := Gear^.Y - _1;
-    end;
+        if not TestCollisionYwithGear(hh^.Gear, -1) then hh^.Gear^.Y := hh^.Gear^.Y - _1;
+        end;
 
-    graves := GearsNear(hh^.Gear^.X, hh^.Gear^.Y + int2hwFloat(Gear^.Power),
+    graves := GearsNear(Gear^.X, Gear^.Y + int2hwFloat(Gear^.Power),
                     gtGrave, Gear^.Radius);
 
-    if Length(graves) = 0 then begin
+    if Length(graves) = 0 then 
+        begin
         StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
         exit;
-    end;
+        end;
 
-    if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) then begin
+    if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) then 
+        begin
         i := getRandom(Length(graves));
         dec(hh^.Gear^.Health);
         if (hh^.Gear^.Health = 0) and (hh^.Gear^.Damage = 0) then
@@ -4139,10 +4151,13 @@ begin
                 inc(graves[i]^.Health);
             end;
         end; -}
-    end else begin
+        end 
+    else 
+        begin
         // now really resurrect the hogs with the hp saved in the graves
         for i:= 0 to High(graves) do
-            if graves[i]^.Health > 0 then begin
+            if graves[i]^.Health > 0 then
+                begin
                 resgear := AddGear(hwRound(graves[i]^.X), hwRound(graves[i]^.Y),
                         gtHedgehog, gstWait, _0, _0, 0);
                 resgear^.Hedgehog := graves[i]^.Hedgehog;
@@ -4151,40 +4166,48 @@ begin
                 DeleteGear(graves[i]);
                 RenderHealth(PHedgehog(resgear^.Hedgehog)^);
                 RecountTeamHealth(Phedgehog(resgear^.Hedgehog)^.Team);
-                FreeTexture(PHedgehog(resgear^.Hedgehog)^.HatTex);
-                PHedgehog(resgear^.Hedgehog)^.HatTex := Surface2Tex(
-                    LoadImage(Pathz[ptHats] + '/Reserved/Zombie', ifNone),
-                    True);
-            end;
+                PHedgehog(resgear^.Hedgehog)^.Effects[heResurrected]:= true;
+                if PHedgehog(resgear^.Hedgehog)^.Hat = 'NoHat' then
+                    begin
+                    FreeTexture(PHedgehog(resgear^.Hedgehog)^.HatTex);
+                    PHedgehog(resgear^.Hedgehog)^.HatTex := Surface2Tex(
+                        LoadImage(Pathz[ptHats] + '/Reserved/Zombie', ifNone),
+                        True)
+                    end
+                end;
 
         hh^.Gear^.dY := _0;
+        hh^.Gear^.dX := _0;
+        doStepHedgehogMoving(hh^.Gear);
         StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
-    end;
+        end
     //if hh^.Gear^.Health = 0 then doStepHedgehogFree(hh^.Gear);
 end;
 
 procedure doStepResurrector(Gear: PGear);
 var
     graves: TPGearArray;
-    hh: PHedgehog;
     i: LongInt;
 begin
     AllInactive := false;
-    hh := PHedgehog(Gear^.Hedgehog);
-    graves := GearsNear(hh^.Gear^.X, hh^.Gear^.Y, gtGrave, Gear^.Radius);
+    graves := GearsNear(Gear^.X, Gear^.Y, gtGrave, Gear^.Radius);
 
-    if Length(graves) > 0 then begin
-        for i:= 0 to High(graves) do begin
+    if Length(graves) > 0 then
+        begin
+        for i:= 0 to High(graves) do
+            begin
             PHedgehog(graves[i]^.Hedgehog)^.Gear := nil;
             graves[i]^.Health := 0;
-        end;
+            end;
         Gear^.doStep := @doStepResurrectorWork;
-    end else begin
+        end 
+    else 
+        begin
         StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
-    end;
+        end
 end;
 

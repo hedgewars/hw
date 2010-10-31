@@ -49,7 +49,7 @@
 00:46=Lança Chamas
 00:47=Mina Adesiva
 00:48=Martelo
-00:49=Ressucitador (beta)
+00:49=Ressucitador
 
 01:00=Hora de lutar!
 01:01=Partida empatou
