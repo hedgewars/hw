@@ -67,7 +67,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         isSoundEnabled:= isSEBackup;
                         if isSoundEnabled then playMusic;
                         GameType:= gmtLocal;
-                        InitIPC;
+                        {$IFDEF IPHONEOS}InitIPC;{$ENDIF}
                         perfExt_SaveFinishedSynching();
                         end;
                end
