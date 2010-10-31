@@ -1,7 +1,7 @@
 ; Swedish locale
 
 00:00=Granat
-00:01=Splitterbomb
+00:01=Splittergranat
 00:02=Raketgevär
 00:03=Målsökande bi
 00:04=Hagelgevär
@@ -49,6 +49,7 @@
 00:46=Eldkastare
 00:47=Fästande mina
 00:48=Hammare
+00:49=Återuppliva
 
 01:00=Nu kör vi!
 01:01=Oavgjort
@@ -432,10 +433,11 @@
 03:46=Hett Hett Hett!
 03:47=Fäst de här på ett användbart ställe!
 03:48=Dags att banka järnet!
+03:49=Gör vad du tror
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attackera fienden med en enkel granat.|Exploderar när tiden når noll.|1-5: Ställ in granatens tid|Attack: Håll ner för att kasta med mer kraft
-04:01=Attackera fienden med en splitterbomb.|Delas upp i små bomber när tiden når noll.|1-5: Ställ in granatens tid|Attack: Håll ner för att kasta med mer kraft
+04:01=Attackera fienden med en splittergranat.|Delas upp i små bomber när tiden når noll.|1-5: Ställ in granatens tid|Attack: Håll ner för att kasta med mer kraft
 04:02=Attackera fienden med en projektil som kan|påverkas av vinden.|Attack: Håll ner för att skjuta med mer kraft
 04:03=Avfyra ett explosivt bi som låser sig på det valda|målet. Öka precisionen genom att inte skjuta med|full kraft.|Markör: Välj mål|Attack: Håll ner för att skjuta med mer kraft
 04:04=Attackera fienden med ett hagelgevär med två|skott. Tack vare sin spridning behöver du inte|träffa direkt för att skada motståndarna.|Attack: Skjut (flera gånger)
@@ -483,6 +485,7 @@
 04:46=Täck dina fiender med ett fräsande eldhav.|Hjärtvärmande!|Attack: Aktivera|Upp/Ner: Fortsätt sikta|Vänster/Höger: Justera kraft
 04:47=Det är dubbelt så roligt med två farliga, fantastiska,|fästande minor. Skapa en kedjereaktion eller försvara|dig själv (eller både och!)|Attack: Håll ner för att skjuta med mer kraft (två gånger)
 04:48=Varför ska mullvadarna få all misshandel? Att|drämma till en igelkott kan vara minst lika roligt!|Ett rejält slag med den här hammaren kan skala|av en tredjedel av en igelkotts hälsa och slå ner|dem i marken.|Attack: Aktivera
+04:49=Återuppliva dina vänner!|Men tänk på att du också återupplivar dina fiender.|Attack: Håll inne för att återuppliva långsamt|Upp: Accelerera återupplivning
 
 ; Game goal strings
 05:00=Spellägen
