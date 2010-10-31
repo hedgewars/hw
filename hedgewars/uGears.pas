@@ -102,7 +102,7 @@ function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics,
-    uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit;
+     uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile;
 
 const MAXROPEPOINTS = 384;
 var RopePoints: record
@@ -121,7 +121,7 @@ procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask, Tint: LongWord); forward;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 //procedure AmmoFlameWork(Ammo: PGear); forward;
-function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray; forward;
+function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray; forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
@@ -365,7 +365,7 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
                 if cMinesTime < 0 then
-                    gear^.Timer:= getrandom(4)*1000
+                    gear^.Timer:= getrandom(6)*1000
                 else
                     gear^.Timer:= cMinesTime*1;
                 end;

@@ -584,6 +584,7 @@ for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart);
 for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart2);
 Gear^.doStep:= @doStepBigExplosionWork;
 if Steps > 1 then Gear^.doStep(Gear, Steps-1);
+performRumble();
 end;
 
 procedure doStepChunk(Gear: PVisualGear; Steps: Longword);

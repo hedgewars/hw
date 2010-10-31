@@ -367,7 +367,3 @@
 }
 
 @end
-
-void updateVisualsNewTurn (void) {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateAmmoVisuals" object:nil];
-}

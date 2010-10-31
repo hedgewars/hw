@@ -33,9 +33,9 @@ NSInteger grenadeTime;
 #pragma mark -
 #pragma mark functions called like oop
 void objcExportsInit() {
-        gameRunning = NO;
-        savedGame = NO;
-        grenadeTime = 2;
+    gameRunning = NO;
+    savedGame = NO;
+    grenadeTime = 2;
 }
 
 BOOL inline isGameRunning() {
@@ -56,7 +56,6 @@ void inline setGrenadeTime(NSInteger value) {
 
 #pragma mark -
 #pragma mark functions called by pascal code
-// called by uStore from AddProgress
 void startSpinning() {
     gameRunning = NO;
     UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
@@ -77,7 +76,6 @@ void startSpinning() {
     [indicator release];
 }
 
-// called by uStore from FinishProgress and by OverlayViewController by replayBegan
 void stopSpinning() {
     UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
     UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[theWindow viewWithTag:ACTIVITYINDICATOR_TAG];
@@ -87,7 +85,6 @@ void stopSpinning() {
         gameRunning = YES;
 }
 
-// called by CCHandlers from chNextTurn
 void clearView() {
     UIWindow *theWindow = (IS_DUALHEAD()) ? [SDLUIKitDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow];
     UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
@@ -107,7 +104,6 @@ void clearView() {
     grenadeTime = 2;
 }
 
-// called by hwengine
 void replayBegan() {
     UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
     UIView *blackView = [[UIView alloc] initWithFrame:theWindow.frame];
@@ -130,7 +126,6 @@ void replayBegan() {
     stopSpinning();
 }
 
-// called by uGame
 void replayFinished() {
     UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
     UIView *blackView = (UIView *)[theWindow viewWithTag:REPLAYBLACKVIEW_TAG];
@@ -143,4 +138,8 @@ void replayFinished() {
 
     gameRunning = YES;
     savedGame = NO;
+}
+
+void updateVisualsNewTurn(void) {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateAmmoVisuals" object:nil];
 }

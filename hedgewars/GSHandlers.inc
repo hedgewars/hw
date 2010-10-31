@@ -2090,6 +2090,7 @@ begin
     begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
         DeleteGear(Gear);
+        performRumble();
         exit
     end;
     if (GameTicks and $3F) = 0 then
@@ -3872,7 +3873,8 @@ begin
     Gear^.dX.isNegative := not Gear^.dX.isNegative;
     Gear^.dY.isNegative := not Gear^.dY.isNegative;
 
-    Gear^.doStep := @doStepSineGunShotWork; 
+    Gear^.doStep := @doStepSineGunShotWork;
+    performRumble();
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

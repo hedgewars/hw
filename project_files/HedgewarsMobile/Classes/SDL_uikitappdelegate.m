@@ -28,7 +28,6 @@
 #import "jumphack.h"
 #import "SDL_video.h"
 #import "SDL_mixer.h"
-
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "GameSetup.h"
