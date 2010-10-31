@@ -550,82 +550,82 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>O Limburger Venho causa apenas uma pequena explosão. No entanto a pequena nuvem malcheirosa, afectada pelo vento, pode envenenar vários ouriços de uma vez.</translation>
     </message>
     <message>
         <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>O Piano é o ataque aéreo que mais potencial dano causa. No entanto uma enorme desvantagem, é necessario sacrificar um ouriço para o utilizar.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>A Abelha Teleguiada é uma arma difícil de usar. O grau a que pode virar depende da sua velocidade, por isso tenta não a usar com o poder máximo.</translation>
     </message>
     <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>As Minas Pegajosas são a arma ideal para com pequenas explosões em cadeia empurrar ouriços para situações terríveis... ou para a água.</translation>
     </message>
     <message>
         <source>The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>O melhor local para usar o Martelo é em pontes ou vigas. Os ouriços atingidos nestes locais vão simplesmente furar pelo chão.</translation>
     </message>
     <message>
         <source>If you&apos;re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Se ficares preso atrás de um ouriço inimigo utiliza o Martelo para te libertares sem ser necessário levar dano de uma explosão.</translation>
     </message>
     <message>
         <source>The Cake&apos;s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>A distancia máxima que o Bolo é capaz de alcançar depende do terreno que tenha de ultrapassar. Podes também utilizar [ataque] para o detonar a qualquer altura.</translation>
     </message>
     <message>
         <source>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Embora o Lança-chamas seja uma arma, pode também ser usado para escavar túneis.</translation>
     </message>
     <message>
         <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Utiliza o Coquetail Molotov para temporariamente impedir outros ouriços de passar por áreas no terreno como túneis e plataformas.</translation>
     </message>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Gostavas de saber quem está por traz deste jogo? Clica no logótipo do Hedgewars no menu inicial para aceder aos créditos.</translation>
     </message>
     <message>
         <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Gostas do Hedgewars? Torna-te fã no %1 ou segue-nos pelo %!</translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Está à vontade para desenhar as tuas próprias sepulturas, chapéus, bandeiras ou mesmo mapas e temas! Tem em nota que vai ser necessário partilha-los algures para que os consigas usar online.</translation>
     </message>
     <message>
         <source>Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Gostavas poder usar um chapéu em particular que ainda não existe? Faz uma pequena doação para este projecto e recebe um chapéu exclusivo à tua escolha!</translation>
     </message>
     <message>
         <source>Keep your video card drivers up to date to avoid issues playing the game.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Mantém os drivers da placa gráfica actualizados de forma a evitar problemas com o jogo.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;Documentos\Hedgewars&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Podes encontrar os ficheiros de configuração do Hedgewars na pasta &quot;Hedgewars&quot dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
     </message>
 </context>
 <context>
