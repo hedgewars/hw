@@ -433,7 +433,7 @@
 03:46=Hett Hett Hett!
 03:47=Fäst de här på ett användbart ställe!
 03:48=Dags att banka järnet!
-03:49=Gör vad du tror
+03:49=Gör det du tror
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attackera fienden med en enkel granat.|Exploderar när tiden når noll.|1-5: Ställ in granatens tid|Attack: Håll ner för att kasta med mer kraft
