@@ -1203,13 +1203,12 @@ if (TrainingFlags and tfSpawnTargets) <> 0 then
 
 if ((GameFlags and gfForts) = 0) then
     begin
-    // TODO: exclude each other or allow both, mines and explosives, on same map?
-    for i:= 0 to Pred(cLandMines) do
-        begin
-        Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
-        FindPlace(Gear, false, 0, LAND_WIDTH);
-        end;
-    // No game flag for this for now
+    if ((GameFlags and gfMines) <> 0) then
+        for i:= 0 to Pred(cLandMines) do
+            begin
+            Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
+            FindPlace(Gear, false, 0, LAND_WIDTH);
+            end;
     for i:= 0 to Pred(cExplosives) do
         begin
         Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
