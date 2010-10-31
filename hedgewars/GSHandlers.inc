@@ -4112,8 +4112,6 @@ begin
     (*DrawCircle(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, 1.5, 0, 0, $FF,
             $FF);*)
 
-    if hh^.Gear^.Damage <> 0 then doStepHedgehogMoving(hh^.Gear);
-
     if ((Gear^.Message and gmUp) <> 0) then 
         begin
         if (GameTicks and $F) <> 0 then exit;
@@ -4176,6 +4174,8 @@ begin
                     end
                 end;
 
+        hh^.Gear^.dY := _0;
+        hh^.Gear^.dX := _0;
         doStepHedgehogMoving(hh^.Gear);
         StopSound(Gear^.SoundChannel);
         Gear^.Timer := 250;
