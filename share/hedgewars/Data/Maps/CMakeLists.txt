@@ -30,6 +30,7 @@ foreach(dir
 	Ropes
 	Ruler
 	Sheep
+	ShoppaKing
 	Trash
 	Tree
 	)
