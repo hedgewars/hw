@@ -34,6 +34,7 @@ foreach(dir
 	Sticks
 	Trash
 	Tree
+	TrophyRace
 	)
 
 add_subdirectory(${dir})
