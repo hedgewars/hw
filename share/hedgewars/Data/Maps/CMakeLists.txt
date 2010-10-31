@@ -31,6 +31,7 @@ foreach(dir
 	Ruler
 	Sheep
 	ShoppaKing
+	Sticks
 	Trash
 	Tree
 	)
