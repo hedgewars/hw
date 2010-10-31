@@ -3342,8 +3342,8 @@ end;
 procedure doStepPortal(Gear: PGear);
 var 
     iterator, conPortal: PGear;
-    s, acptRadius, nx, ny, ox, oy, poffs, noffs, pspeed, nspeed: hwFloat;
-    hasdxy: Boolean;
+    s, r, nx, ny, ox, oy, poffs, noffs, pspeed, nspeed: hwFloat;
+    hasdxy, isbullet: Boolean;
 begin
     doPortalColorSwitch();
 
@@ -3388,9 +3388,9 @@ begin
             break;
 
         // don't port portals or other gear that wouldn't make sense
-        if (iterator^.Kind = gtPortal) or (iterator^.Kind = gtRope)
-        or (iterator^.Kind = gtRCPlane) or (iterator^.PortalCounter > 20) then
-            continue;
+        if (iterator^.Kind in [gtPortal, gtRope, gtRCPlane])
+            or (iterator^.PortalCounter > 20) then
+             continue;
 
         // don't port hogs on rope
         if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)
@@ -3403,13 +3403,13 @@ begin
             continue;
 
         // this is the max range we accept incoming gears in
-        acptRadius := Int2hwFloat(iterator^.Radius+Gear^.Radius);
+        r := Int2hwFloat(iterator^.Radius+Gear^.Radius);
 
         // too far away?
-        if (iterator^.X < Gear^.X - acptRadius)
-           or (iterator^.X > Gear^.X + acptRadius)
-           or (iterator^.Y < Gear^.Y - acptRadius)
-           or (iterator^.Y > Gear^.Y + acptRadius) then
+        if (iterator^.X < Gear^.X - r)
+           or (iterator^.X > Gear^.X + r)
+           or (iterator^.Y < Gear^.Y - r)
+           or (iterator^.Y > Gear^.Y + r) then
             continue;
 
         hasdxy := ((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0));
@@ -3426,23 +3426,27 @@ begin
             oy:= iterator^.dY;
         end;
 
-        // won't port stuff that moves away from me!
+        // won't port stuff that does not move towards the front/portal entrance
         if not (Gear^.dX*ox + Gear^.dY*oy).isNegative then
                 continue;
 
-        if (iterator^.Kind <> gtCake) then
+        isbullet:= (iterator^.Kind in [gtShotgunShot, gtDEagleShot, gtSniperRifleShot, gtSineGunShot]);
+
+        r:= int2hwFloat(iterator^.Radius);
+
+        if not isbullet and (iterator^.Kind <> gtCake) then
         begin
             // wow! good candidate there, let's see if the distance and direction is okay!
             if hasdxy then
             begin
-                s := int2hwFloat(iterator^.Radius) / Distance(iterator^.dX, iterator^.dY);
+                s := r / Distance(iterator^.dX, iterator^.dY);
                 ox:= iterator^.X + s * iterator^.dX;
                 oy:= iterator^.Y + s * iterator^.dY;
             end
             else
             begin
                 ox:= iterator^.X;
-                oy:= iterator^.Y + Int2hwFloat(iterator^.Radius);
+                oy:= iterator^.Y + r;
             end;
 
             if (hwRound(Distance(Gear^.X-ox,Gear^.Y-oy)) > Gear^.Radius + 1 ) then
@@ -3459,19 +3463,21 @@ begin
         if noTrap and (iterator^.dY.QWordValue < _0_08.QWordValue) then
             continue; *)
 
-        iterator^.Active := true;
-        iterator^.State := iterator^.State or gstMoving;
-        DeleteCI(iterator);
-
-        // Until loops are reliably broken
-        inc(iterator^.PortalCounter);
-
-        // find out how much speed parallel to the portal vector
-        // the gear has, also get the vector offset
-        pspeed:= (Gear^.dX * iterator^.dX + Gear^.dY * iterator^.dY);
+        // calc gear offset in portal vector direction
         ox := (iterator^.X - Gear^.X);
         oy := (iterator^.Y - Gear^.Y);
         poffs:= (Gear^.dX * ox + Gear^.dY * oy);
+
+        if poffs < _0 then
+            continue;
+
+        // don't port stuff that isn't really close;
+        if not isbullet and (poffs > (r + _3)) then
+            continue;
+
+        if isbullet then
+            poffs:= _1_5;
+
         // create a normal of the portal vector, but ...
         nx := Gear^.dY;
         ny := Gear^.dX;
@@ -3481,12 +3487,37 @@ begin
         else
             ny.isNegative := not ny.isNegative;
 
-        // now let's find out how much speed the gear has in the
-        // direction of that normal
-        nspeed:= (nx * iterator^.dX + ny * iterator^.dY);
+        // calc gear offset in portal normal vector direction
         noffs:= (nx * ox + ny * oy);
 
-        // now let's project those back to the connected portal's vectors
+        // don't port stuff that misses the portal entrance
+        if noffs > (r + _1_5) then
+            continue;
+
+        // move stuff with high normal offset close to the portal's center
+        if not isbullet then
+        begin
+            s := hwAbs(noffs) + r - int2hwFloat(Gear^.Radius);
+            if s > _0 then
+                noffs:= noffs - SignAs(s,noffs)
+        end;
+
+        //
+        // gears that make it till here will definately be ported
+        //
+
+        iterator^.Active := true;
+        iterator^.State := iterator^.State or gstMoving;
+        DeleteCI(iterator);
+
+        // Until loops are reliably broken
+        inc(iterator^.PortalCounter);
+
+        // calc gear speed along to the vector and the normal vector of the portal
+        pspeed:= (Gear^.dX * iterator^.dX + Gear^.dY * iterator^.dY);
+        nspeed:= (nx * iterator^.dX + ny * iterator^.dY);
+
+        // creating normal vector of connected (exit) portal
         nx := conPortal^.dY;
         ny := conPortal^.dX;
         if conPortal^.Elasticity.isNegative then
@@ -3498,11 +3529,15 @@ begin
         iterator^.dX := -pspeed * conPortal^.dX + nspeed * nx;
         iterator^.dY := -pspeed * conPortal^.dY + nspeed * ny;
         if iterator^.Kind = gtCake then
-            poffs := poffs * _0_5;
+            poffs := poffs * _0_5
+        else
+        if poffs < r + _1_5 then
+            poffs := r + _1_5;
         iterator^.X := conPortal^.X + poffs * conPortal^.dX + noffs * nx;
         iterator^.Y := conPortal^.Y + poffs * conPortal^.dY + noffs * ny;
 
-        FollowGear := iterator;
+        if not isbullet then
+            FollowGear := iterator;
 //AddFileLog('portal''d');
 
 {
@@ -3510,6 +3545,20 @@ begin
         iterator^.dX := s * iterator^.dX;
         iterator^.dY := s * iterator^.dY;
 }
+        // This jiggles gears, to ensure a portal connection just placed under a gear takes effect.
+        iterator:= GearsList;
+        while iterator <> nil do
+            begin
+            if iterator^.Kind <> gtPortal then
+                begin
+                iterator^.Active:= true;
+                if iterator^.dY.QWordValue = _0.QWordValue then iterator^.dY.isNegative:= false;
+                iterator^.State:= iterator^.State or gstMoving;
+                DeleteCI(iterator);
+                inc(iterator^.dY.QWordValue,10);
+                end;
+            iterator:= iterator^.NextGear
+            end;
 
         if Gear^.Health > 1 then dec(Gear^.Health);
 
