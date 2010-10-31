@@ -3413,8 +3413,20 @@ begin
 
         hasdxy := ((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0));
 
+        // in case the object is not moving, let's asume it's moving towards the portal
+        if not hasdxy then
+        begin
+            ox:= Gear^.X - iterator^.X;
+            oy:= Gear^.Y - iterator^.Y;
+        end
+        else
+        begin
+            ox:= iterator^.dX;
+            oy:= iterator^.dY;
+        end;
+
         // won't port stuff that moves away from me!
-        if hasdxy and not (Gear^.dX*iterator^.dX + Gear^.dY*iterator^.dY).isNegative then
+        if not (Gear^.dX*ox + Gear^.dY*oy).isNegative then
                 continue;
 
         if (iterator^.Kind <> gtCake) then
