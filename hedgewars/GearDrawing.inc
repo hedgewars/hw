@@ -283,7 +283,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 DrawRotated(sprCross, hwRound(CurAmmoGear^.X) + WorldDx,
                         hwRound(CurAmmoGear^.Y) + WorldDy + (CurAmmoGear^.Power), 0, 0);
                 defaultPos := false;
-                Tint($33, $33, $FF, max($00, floor($C0 * abs(1 - (GameTicks mod 6000) / 3000))));
+                Tint($f5, $db, $35, max($00, floor($C0 * abs(1 - (GameTicks mod 6000) / 3000))));
                 DrawTexture(sx - 108, sy - 108 + (CurAmmoGear^.Power),
                         SpritesData[sprVampiric].Texture, 4.5);
                 Tint($FF, $FF, $FF, $FF);
@@ -670,6 +670,11 @@ if HH^.Effects[hePoisoned] then
     Tint($00, $FF, $40, $80);
     DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 1.5, 0, 0, sx, sy, 0, 1, 22, 22, 360 - (RealTicks shr 37) mod 360);
     end;
+if HH^.Effects[heResurrected] then
+    begin
+    Tint($f5, $db, $35, $20);
+    DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
+    end;
 
 if Gear^.Invulnerable then
     begin
@@ -728,7 +733,7 @@ while Gear<>nil do
                     if Gear^.Health > 0 then
                         begin
                         //Tint($33, $33, $FF, max($40, floor($FF * abs(1 - (GameTicks mod (6000 div Gear^.Health)) / 750))));
-                        Tint($33, $33, $FF, max($40, floor($FF * abs(1 - (GameTicks mod 1500) / (750 + Gear^.Health)))));
+                        Tint($f5, $db, $35, max($40, floor($FF * abs(1 - (GameTicks mod 1500) / (750 + Gear^.Health)))));
                         //Tint($FF, $FF, $FF, max($40, floor($FF * abs(1 - (RealTicks mod 1500) / 750))));
                         DrawSprite(sprVampiric, x - 24, y - 24, 0);
                         Tint($FF, $FF, $FF, $FF)

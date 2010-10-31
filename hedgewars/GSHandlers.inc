@@ -4149,6 +4149,7 @@ begin
                 DeleteGear(graves[i]);
                 RenderHealth(PHedgehog(resgear^.Hedgehog)^);
                 RecountTeamHealth(Phedgehog(resgear^.Hedgehog)^.Team);
+                PHedgehog(resgear^.Hedgehog)^.Effects[heResurrected]:= true;
                 if PHedgehog(resgear^.Hedgehog)^.Hat = 'NoHat' then
                     begin
                     FreeTexture(PHedgehog(resgear^.Hedgehog)^.HatTex);
