@@ -278,15 +278,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 defaultPos:= false
                 end;
             gtResurrector: begin
-                DrawRotated(sprHandResurrector, hwRound(Gear^.X) + WorldDx,
-                        hwRound(Gear^.Y) + WorldDy, 0, 0); 
-                DrawRotated(sprCross, hwRound(CurAmmoGear^.X) + WorldDx,
-                        hwRound(CurAmmoGear^.Y) + WorldDy + (CurAmmoGear^.Power), 0, 0);
-                defaultPos := false;
-                Tint($f5, $db, $35, max($00, floor($C0 * abs(1 - (GameTicks mod 6000) / 3000))));
-                DrawTexture(sx - 108, sy - 108 + (CurAmmoGear^.Power),
-                        SpritesData[sprVampiric].Texture, 4.5);
-                Tint($FF, $FF, $FF, $FF);
+                DrawRotated(sprHandResurrector, sx, sy, 0, 0); 
+                defaultPos:= false
                 end;
             gtKamikaze: begin
                 if CurAmmoGear^.Pos = 0 then
@@ -864,6 +857,12 @@ while Gear<>nil do
                         Tint($C0, $C0, $00, $C0);
                     DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, x, y, 0, 1, 22, 22, (RealTicks shr 36 + Gear^.UID * 100) mod 360);
                     Tint($FF, $FF, $FF, $FF)
+                    end;
+     gtResurrector: begin
+                    DrawRotated(sprCross, x, y, 0, 0);
+                    Tint($f5, $db, $35, max($00, floor($C0 * abs(1 - (GameTicks mod 6000) / 3000))));
+                    DrawTexture(x - 108, y - 108, SpritesData[sprVampiric].Texture, 4.5);
+                    Tint($FF, $FF, $FF, $FF);
                     end;
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(x + 8, y + 8, Gear^.Tex);
