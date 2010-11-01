@@ -611,11 +611,12 @@ PageOptions::PageOptions(QWidget* parent) :
             CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
             MiscLayout->addWidget(CBAutoUpdate, 4, 0, 1, 2);
 #endif
+#ifndef __APPLE__
             BtnAssociateFiles = new QPushButton(groupMisc);
             BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
             BtnAssociateFiles->setEnabled(!custom_data && !custom_config);
             MiscLayout->addWidget(BtnAssociateFiles, 4, 0, 1, 2);
-
+#endif
             gbTBLayout->addWidget(groupMisc, 2, 0);
         }
 

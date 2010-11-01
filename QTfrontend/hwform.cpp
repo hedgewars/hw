@@ -1131,6 +1131,9 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Save/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwsfile.ico\",0");
     registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
     registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
+#elif defined __APPLE__
+    success = false;
+    // TODO; also reenable button in pages.cpp
 #else
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local");
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share");
