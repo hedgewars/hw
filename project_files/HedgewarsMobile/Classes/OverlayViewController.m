@@ -58,6 +58,19 @@
         wasVisible = NO;
 
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+
+    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
+    switch (toInterfaceOrientation) {
+        case UIDeviceOrientationLandscapeLeft:
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
+            break;
+        default:
+            // a debug log would spam too much
+            break;
+    }
 }
 
 // now restore previous state
@@ -70,37 +83,26 @@
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
-// rotate the sdl view according to the orientation -- the uiview is autorotated
--(void) didRotate:(NSNotification *)notification {
+// while in dual head the above rotation functions are not called
+-(void) dualHeadRotation:(NSNotification *)notification {
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
     
     [UIView beginAnimations:@"rotation" context:NULL];
     [UIView setAnimationDuration:0.7];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
-            if (IS_DUALHEAD()) {
-                self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
-            } else
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
+            self.view.frame = [[UIScreen mainScreen] bounds];
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
             break;
         case UIDeviceOrientationLandscapeRight:
-            if (IS_DUALHEAD()) {
-                self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-            } else
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
+            self.view.frame = [[UIScreen mainScreen] bounds];
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
             break;
         default:
             // a debug log would spam too much
             break;
     }
     [UIView commitAnimations];
-
-    // for single screens only landscape mode is supported
-    // for dual screen mode the sdlview is not modified, but you can rotate the pad in any direction
 }
 
 #pragma mark -
@@ -146,6 +148,11 @@
                 DLog(@"Nope");
                 break;
         }
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(dualHeadRotation:)
+                                                     name:UIDeviceOrientationDidChangeNotification
+                                                   object:nil];
     }
 
     // the timer used to dim the overlay
@@ -159,12 +166,6 @@
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
 
     // become listener of some notifications
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didRotate:)
-                                                 name:UIDeviceOrientationDidChangeNotification
-                                               object:nil];
-
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(showHelp:)
                                                  name:@"show help ingame"
