@@ -141,9 +141,7 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageOptions->BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(DeleteTeam()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), config, SLOT(SaveOptions()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), this, SLOT(GoBack()));
-#ifdef _WIN32
     connect(ui.pageOptions->BtnAssociateFiles, SIGNAL(clicked()), this, SLOT(AssociateFiles()));
-#endif
 
     connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
     connect(ui.pageOptions->WeaponsButt, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
@@ -1122,6 +1120,8 @@ void HWForm::UpdateCampaignPage(int index)
 
 void HWForm::AssociateFiles()
 {
+    bool success = true;
+#ifdef _WIN32
     QSettings registry_hkcr("HKEY_CLASSES_ROOT", QSettings::NativeFormat);
     registry_hkcr.setValue(".hwd/Default", "Hedgewars.Demo");
     registry_hkcr.setValue(".hws/Default", "Hedgewars.Save");
@@ -1131,6 +1131,14 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Save/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwsfile.ico\",0");
     registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
     registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
-    QMessageBox::information(0, "", QMessageBox::tr("All file associations have been set."));
+#else
+    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/mime/packages");
+    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/applications");
+    if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hedgewars-mimeinfo.xml "+QDir::home().absolutePath()+"/.local/share/mime/packages").toLocal8Bit().constData())==0;
+    if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hwengine.desktop "+QDir::home().absolutePath()+"/.local/share/applications").toLocal8Bit().constData())==0;
+    if (success) success = system(("update-mime-database "+QDir::home().absolutePath()+"/.local/share/mime").toLocal8Bit().constData())==0;
+#endif
+    if (success) QMessageBox::information(0, "", QMessageBox::tr("All file associations have been set."));
+    else QMessageBox::information(0, "", QMessageBox::tr("File association failed."));
 }
 
