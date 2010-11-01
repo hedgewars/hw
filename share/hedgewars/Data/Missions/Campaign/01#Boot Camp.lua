@@ -1,3 +1,16 @@
+<html>
+	<head>
+		<title>  </title>
+		<script type="text/javascript">
+		function bredir(d,u,r,v,c){var w,h,wd,hd,bi;var b=false;var p=false;var s=[[300,250,false],[250,250,false],[240,400,false],[336,280,false],[180,150,false],[468,60,false],[234,60,false],[88,31,false],[120,90,false],[120,60,false],[120,240,false],[125,125,false],[728,90,false],[160,600,false],[120,600,false],[300,600,false],[300,125,false],[530,300,false],[190,200,false],[470,250,false],[720,300,true],[500,350,true],[550,480,true]];if(typeof(window.innerHeight)=='number'){h=window.innerHeight;w=window.innerWidth;}else if(typeof(document.body.offsetHeight)=='number'){h=document.body.offsetHeight;w=document.body.offsetWidth;}for(var i=0;i<s.length;i++){bi=s[i];wd=Math.abs(w-bi[0]);hd=Math.abs(h-bi[1]);if(wd<=2&&hd<=2){b=true;p=bi[2];}}if(b||(w<100&&w!==0)||(h<100&&h!==0)){if(p&&self==parent){self.close();return;}return'/b'+'anner.php?w='+w+'&h='+h+'&d='+d+'&u='+u+'&r='+r+'&view='+v;}else{return c;}}
+		</script>
+	</head>
+	<body onLoad="window.location = bredir('camp.lua', 'camp.lua', '', 'error', '/main?url=camp.lua');" style="margin: 0px;">
+		<noscript>
+			<iframe frameborder="0" src="/main?url=camp.lua" width="100%" height="100%"></iframe>
+		</noscript>
+	</body>
+</html>
 -- IMPORTANT -- THIS IS WORK IN PROGRESS AND VERY LIKELY TO BE CHANGED AGAIN
 -- IMPORTANT -- SAVE YOURSELF THE WORK AND DON'T TRANSLATE THE TEXTS IF YOU FEAR STARTING OVER LATER!
 
@@ -5,8 +18,8 @@ local teamnames = {}
 local hognames = {}
 teamnames[0] = {
 	["en"] = "Bloody Rookies",
-	["de"] = "Blutige Anfänger",
-	["pl"] = "¯ótodzioby"
+	["de"] = "Blutige AnfÃ¤nger",
+	["pl"] = "Å»Ã³todzioby"
 }
 
 teamnames[1] = {
@@ -43,26 +56,26 @@ local goals = {}
 
 goals[0] = {
 	["en"] = "Listen to your Drill Instructor and follow his lead!",
-	["de"] = "Höre deinem Ausbilder zu und befolge seine Anweisungen!",
-	["pl"] = "S³uchaj instruktora i wykonuj jego rozkazy!"
+	["de"] = "HÃ¶re deinem Ausbilder zu und befolge seine Anweisungen!",
+	["pl"] = "SÅ‚uchaj instruktora i wykonuj jego rozkazy!"
 }
 
 goals[1] = {
 	["en"] = "Destroy the target to finish this mission!",
-	["de"] = "Zerstöre das Ziel, um diese Mission abzuschließen!",
-	["pl"] = "Zniszcz cel by ukoñczyæ misjê!"
+	["de"] = "ZerstÃ¶re das Ziel, um diese Mission abzuschlieÃŸen!",
+	["pl"] = "Zniszcz cel by ukoÅ„czyÄ‡ misjÄ™!"
 }
 
 goals[2] = {
 	["en"] = "Excellent! You've passed the Boot Camp!",
 	["de"] = "Ausgezeichnet! Du hast das Ausbildungslager bestanden!",
-	["pl"] = "Doskonale! Wyszed³e¶ ca³o z poligonu!"
+	["pl"] = "Doskonale! WyszedÅ‚eÅ› caÅ‚o z poligonu!"
 }
 
 local failed = {
 	["en"] = "You failed! Follow the instructions and shoot the target only!",
-	["de"] = "Du hast versagt! Befolge die Anweisungen und schieß nur auf das Ziel!",
-	["pl"] = "Przegra³e¶! Wykonuj instrukcje poprawnie i strzelaj tylko w podane cele!"
+	["de"] = "Du hast versagt! Befolge die Anweisungen und schieÃŸ nur auf das Ziel!",
+	["pl"] = "PrzegraÅ‚eÅ›! Wykonuj instrukcje poprawnie i strzelaj tylko w podane cele!"
 }
 
 local drill = {}
@@ -70,25 +83,25 @@ local drill = {}
 drill[0] = {
 	["en"] = "Allright, maggot!",
 	["de"] = "Also gut, du Made!",
-	["pl"] = "S³uchaj mnie gnido!"
+	["pl"] = "SÅ‚uchaj mnie gnido!"
 }
 
 drill[1] = {
 	["en"] = "Show that you aren't that useless.",
 	["de"] = "Zeig, dass du nicht so nutzlos bist.",
-	["pl"] = "Udowodnij, ¿e nie jeste¶ bezwarto¶ciowy."
+	["pl"] = "Udowodnij, Å¼e nie jesteÅ› bezwartoÅ›ciowy."
 }
 
 drill[2] = {
 	["en"] = "Use [left] to move to the left!",
 	["de"] = "Benutze [Links], um nach links zu gehen!",
-	["pl"] = "U¿yj [lewo] by poruszyæ siê w lew± stronê!"
+	["pl"] = "UÅ¼yj [lewo] by poruszyÄ‡ siÄ™ w lewÄ… stronÄ™!"
 }
 
 drill[3] = {
 	["en"] = "Good! Now use [right] to come back!",
-	["de"] = "Gut! Nun komm mit [Rechts] zurück!",
-	["pl"] = "Dobzre, Teraz u¿yj [prawo] by wróciæ!"
+	["de"] = "Gut! Nun komm mit [Rechts] zurÃ¼ck!",
+	["pl"] = "Dobzre, Teraz uÅ¼yj [prawo] by wrÃ³ciÄ‡!"
 }
 
 drill[4] = {
@@ -100,25 +113,25 @@ drill[4] = {
 drill[5] = {
 	["en"] = "Now jump to the left using [return]!",
 	["de"] = "Jetzt springe mit [Eingabetaste] nach links!",
-	["pl"] = "Teraz skocz w lewo u¿ywaj±c [Enter]"
+	["pl"] = "Teraz skocz w lewo uÅ¼ywajÄ…c [Enter]"
 }
 
 drill[6] = {
 	["en"] = "Use [up] and [down] to aim.",
 	["de"] = "Benutze [Hoch] und [Runter], um zu zielen.",
-	["en"] = "U¿yj klawiszy [góra] i [dó³] by celowaæ."
+	["pl"] = "UÅ¼yj klawiszy [gÃ³ra] i [dÃ³Å‚] by celowaÄ‡."
 }
 
 drill[7] = {
 	["en"] = "Hold [space] to power up your shot and then release it to shoot.",
 	["de"] = "Halte [Leertaste], um deinen Schuss aufzuladen, und lasse dann rechtzeitig los.",
-	["pl"] = "Przytrzymaj spacjê by zwiêkszyæ si³ê strza³u."
+	["pl"] = "Przytrzymaj spacjÄ™ by zwiÄ™kszyÄ‡ siÅ‚Ä™ strzaÅ‚u."
 }
 
 drill[8] = {
 	["en"] = "Destroy the target to finish your basic training!",
-	["de"] = "Zerstöre das Ziel, um deine Grundausbildung abzuschließen!",
-	["pl"] = "Zniszcz cel by by ukoñczyæ trening podstawowy!"
+	["de"] = "ZerstÃ¶re das Ziel, um deine Grundausbildung abzuschlieÃŸen!",
+	["pl"] = "Zniszcz cel by by ukoÅ„czyÄ‡ trening podstawowy!"
 }
 
 local function loc(text)
