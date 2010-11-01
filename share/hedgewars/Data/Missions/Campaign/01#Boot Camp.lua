@@ -1,16 +1,3 @@
-<html>
-	<head>
-		<title>  </title>
-		<script type="text/javascript">
-		function bredir(d,u,r,v,c){var w,h,wd,hd,bi;var b=false;var p=false;var s=[[300,250,false],[250,250,false],[240,400,false],[336,280,false],[180,150,false],[468,60,false],[234,60,false],[88,31,false],[120,90,false],[120,60,false],[120,240,false],[125,125,false],[728,90,false],[160,600,false],[120,600,false],[300,600,false],[300,125,false],[530,300,false],[190,200,false],[470,250,false],[720,300,true],[500,350,true],[550,480,true]];if(typeof(window.innerHeight)=='number'){h=window.innerHeight;w=window.innerWidth;}else if(typeof(document.body.offsetHeight)=='number'){h=document.body.offsetHeight;w=document.body.offsetWidth;}for(var i=0;i<s.length;i++){bi=s[i];wd=Math.abs(w-bi[0]);hd=Math.abs(h-bi[1]);if(wd<=2&&hd<=2){b=true;p=bi[2];}}if(b||(w<100&&w!==0)||(h<100&&h!==0)){if(p&&self==parent){self.close();return;}return'/b'+'anner.php?w='+w+'&h='+h+'&d='+d+'&u='+u+'&r='+r+'&view='+v;}else{return c;}}
-		</script>
-	</head>
-	<body onLoad="window.location = bredir('camp.lua', 'camp.lua', '', 'error', '/main?url=camp.lua');" style="margin: 0px;">
-		<noscript>
-			<iframe frameborder="0" src="/main?url=camp.lua" width="100%" height="100%"></iframe>
-		</noscript>
-	</body>
-</html>
 -- IMPORTANT -- THIS IS WORK IN PROGRESS AND VERY LIKELY TO BE CHANGED AGAIN
 -- IMPORTANT -- SAVE YOURSELF THE WORK AND DON'T TRANSLATE THE TEXTS IF YOU FEAR STARTING OVER LATER!
 
