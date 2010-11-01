@@ -1135,6 +1135,7 @@ void HWForm::AssociateFiles()
     success = false;
     // TODO; also reenable button in pages.cpp
 #else
+    // this is a little silly due to all the system commands below anyway - just use mkdir -p ?  Does have the advantage of the alert I guess
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local");
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share");
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/mime");
@@ -1145,6 +1146,8 @@ void HWForm::AssociateFiles()
     if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hedgewars-mimeinfo.xml "+QDir::home().absolutePath()+"/.local/share/mime/packages").toLocal8Bit().constData())==0;
     if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hwengine.desktop "+QDir::home().absolutePath()+"/.local/share/applications").toLocal8Bit().constData())==0;
     if (success) success = system(("update-mime-database "+QDir::home().absolutePath()+"/.local/share/mime").toLocal8Bit().constData())==0;
+    if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-demo")==0;
+    if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-save")==0;
 #endif
     if (success) QMessageBox::information(0, "", QMessageBox::tr("All file associations have been set."));
     else QMessageBox::information(0, "", QMessageBox::tr("File association failed."));
