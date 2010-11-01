@@ -362,14 +362,14 @@ w ustawieniach gry:</translation>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>Odznaczenie za najlepszy strzał przyznano &lt;b&gt;%1&lt;/b&gt;, zadał(a) on(a) &lt;b&gt;%2&lt;/b&gt; punktów obrażeń.</translation>
+        <translation>Największe obrażenia (&lt;b&gt;%2&lt;/b&gt; pkt.) zadał &lt;b&gt;%1&lt;/b&gt;.</translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
         <translation>
-            <numerusform>Najlepszym zabójcą został &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitym jeżem w ciągu tury.</numerusform>
-            <numerusform>Najlepszym zabójcą został &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitymi jeżami w ciągu tury.</numerusform>
-            <numerusform>Najlepszym zabójcą został &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitymi jeżami w ciągu tury.</numerusform>
+            <numerusform>Najlepszym zabójcą został &lt;b&gt;%1&lt;/b&gt; zabijając &lt;b&gt;%2&lt;/b&gt; jeża w ciągu tury.</numerusform>
+            <numerusform>Najlepszym zabójcą został &lt;b&gt;%1&lt;/b&gt; zabijając &lt;b&gt;%2&lt;/b&gt; jeże w ciągu tury.</numerusform>
+            <numerusform>Najlepszym zabójcą został &lt;b&gt;%1&lt;/b&gt; zabijając &lt;b&gt;%2&lt;/b&gt; jeży w ciągu tury.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -382,15 +382,15 @@ w ustawieniach gry:</translation>
     </message>
     <message>
         <source>(%1 kill)</source>
-        <translation>(Zabili %1 wroga)</translation>
+        <translation>(%1 zabity)</translation>
     </message>
     <message>
         <source>(%1 kills)</source>
-        <translation>(Zabili %1 wrogów)</translation>
+        <translation>(%1 zabitych)</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; pomyślał, że dobrze jest strzelać we własne jeże i zabrał im &lt;b&gt;%2&lt;/b&gt; pkt życia.</translation>
+        <translation>&lt;b&gt;%1&lt;/b&gt; przyjaźni się z wrogiem i zabrał swojej drużynie &lt;b&gt;%2&lt;/b&gt; pkt. życia.</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
