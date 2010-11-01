@@ -30,7 +30,8 @@
 }
 
 -(void) viewDidLoad {
-    self.tableView.backgroundView = nil;
+    if ([UITableView respondsToSelector:@selector(setBackgroundView:)])
+        self.tableView.backgroundView = nil;
     self.tableView.allowsSelection = NO;
 
     NSString *strPath = [NSString stringWithFormat:@"%@/credits.plist",IFRONTEND_DIRECTORY()];

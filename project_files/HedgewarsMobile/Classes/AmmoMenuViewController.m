@@ -334,7 +334,8 @@
 #pragma mark memory
 -(void) didReceiveMemoryWarning {
     self.imagesArray = nil;
-    self.buttonsArray = nil;
+    if (self.isVisible == NO)
+        self.buttonsArray = nil;
     self.nameLabel = nil;
     self.extraLabel = nil;
     self.captionLabel = nil;

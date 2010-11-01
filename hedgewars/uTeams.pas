@@ -275,9 +275,7 @@ with CurrentHedgehog^ do
 ResetKbd;
 
 cWindSpeed:= rndSign(GetRandom * 2 * cMaxWindSpeed);
-// cWindSpeedf:= cWindSpeed.QWordValue / _1.QWordValue throws Internal error 200502052 on fpc 2.5.1
-// see http://mantis.freepascal.org/view.php?id=17714
-cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
+cWindSpeedf:= cWindSpeed.QWordValue / _1.QWordValue;
 if cWindSpeed.isNegative then
     CWindSpeedf := -cWindSpeedf;
 g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);

@@ -2385,7 +2385,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
@@ -2397,7 +2397,7 @@
 				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = DistributionAppStore;
 		};
@@ -2479,7 +2479,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
@@ -2491,7 +2491,7 @@
 				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = DistributionAdHoc;
 		};
@@ -2574,7 +2574,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
@@ -2584,7 +2584,7 @@
 				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = Valgrind;
 		};
@@ -2707,7 +2707,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
@@ -2717,7 +2717,7 @@
 				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = Debug;
 		};
@@ -2751,7 +2751,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_mixer/\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",
@@ -2763,7 +2763,7 @@
 				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv6 armv7";
+				VALID_ARCHS = "armv7 armv6";
 			};
 			name = Release;
 		};

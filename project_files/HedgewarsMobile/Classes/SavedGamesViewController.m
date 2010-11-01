@@ -40,8 +40,10 @@
 }
 
 -(void) viewDidLoad {
-    self.tableView.backgroundView = nil;
-        NSString *imgName;
+    if ([UITableView respondsToSelector:@selector(setBackgroundView:)])
+        self.tableView.backgroundView = nil;
+
+    NSString *imgName;
     if (IS_IPAD())
         imgName = @"mediumBackground~ipad.png";
     else
@@ -49,6 +51,7 @@
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
     self.view.backgroundColor = [UIColor colorWithPatternImage:img];
     [img release];
+
     [super viewDidLoad];
 }
 

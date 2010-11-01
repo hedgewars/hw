@@ -41,7 +41,8 @@
     self.selectedScheme = nil;
     self.selectedWeapon = nil;
 
-    [self.tableView setBackgroundView:nil];
+    if ([UITableView respondsToSelector:@selector(setBackgroundView:)])
+         [self.tableView setBackgroundView:nil];
     self.view.backgroundColor = [UIColor clearColor];
     self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

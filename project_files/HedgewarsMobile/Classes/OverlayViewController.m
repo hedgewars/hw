@@ -133,7 +133,10 @@
     }
 
     // get the number of screens to know the previous state whan a display is connected or detached
-    initialScreenCount = [[UIScreen screens] count];
+    if ([UIScreen respondsToSelector:@selector(screens)])
+        initialScreenCount = [[UIScreen screens] count];
+    else
+        initialScreenCount = 1;
 
     // set initial orientation of the controller orientation
     if (IS_DUALHEAD()) {
@@ -175,16 +178,19 @@
                                              selector:@selector(cleanup)
                                                  name:@"remove overlay"
                                                object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(numberOfScreensIncreased)
-                                                 name:UIScreenDidConnectNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(numberOfScreensDecreased)
-                                                 name:UIScreenDidDisconnectNotification
-                                               object:nil];
+
+    // for iOS > 3.2
+    if ([UIScreen respondsToSelector:@selector(screens)]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(numberOfScreensIncreased)
+                                                     name:UIScreenDidConnectNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(numberOfScreensDecreased)
+                                                     name:UIScreenDidDisconnectNotification
+                                                   object:nil];
+    }
 
     // present the overlay
     [UIView beginAnimations:@"showing overlay" context:NULL];
@@ -234,6 +240,7 @@
 
 -(void) cleanup {
     [self dismissPopover];
+    setGameRunning(NO);
     HW_terminate(NO);
     [self.view removeFromSuperview];
 }

@@ -389,7 +389,6 @@
                 //[[NSNotificationCenter defaultCenter] postNotificationName:@"removedSave" object:nil];
                 // and remove + disable the overlay
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
-                setGameRunning(NO);
                 break;
             default:
                 [self dumpRawData:buffer ofSize:msgSize];

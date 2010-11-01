@@ -71,7 +71,8 @@
 
     // perform as if user clicked on an entry
     [self tableView:self.tableView didSelectRowAtIndexPath:theIndex];
-    [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionNone animated:YES];
+    if (IS_NOT_POWERFUL() == NO)
+        [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionNone animated:YES];
 }
 
 -(void) turnOffWidgets {
@@ -222,7 +223,7 @@
 }
 
 #pragma mark -
-#pragma mark slider & segmentedControl
+#pragma mark slider & segmentedControl & button
 // this updates the label and the command keys when the slider is moved, depending of the selection in segmentedControl
 // no methods are called by this routine and you can pass nil to it
 -(IBAction) sliderChanged:(id) sender {
@@ -367,12 +368,14 @@
     oldPage = newPage;
 }
 
-#pragma mark -
-#pragma mark calls the parent's function that checks the parameters and starts the game
 -(IBAction) buttonPressed:(id) sender {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"buttonPressed" object:nil userInfo:[NSDictionary dictionaryWithObject:sender forKey:@"sender"]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"buttonPressed"
+                                                        object:nil
+                                                      userInfo:[NSDictionary dictionaryWithObject:sender forKey:@"sender"]];
 }
 
+#pragma mark -
+#pragma mark view management
 -(void) loadDataSourceArray {
     // themes.cfg contains all the user-selectable themes
     NSString *string = [[NSString alloc] initWithContentsOfFile:[THEMES_DIRECTORY() stringByAppendingString:@"/themes.cfg"]
@@ -391,8 +394,6 @@
     [themeArray release];
 }
 
-#pragma mark -
-#pragma mark view management
 -(void) viewDidLoad {
     [super viewDidLoad];
 
@@ -424,7 +425,8 @@
     self.missionCommand = @"";
 
     if (IS_IPAD()) {
-        [self.tableView setBackgroundView:nil];
+        if ([UITableView respondsToSelector:@selector(setBackgroundView:)])
+            [self.tableView setBackgroundView:nil];
         self.view.backgroundColor = [UIColor clearColor];
         self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
