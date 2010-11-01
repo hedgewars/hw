@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Encoding=UTF-8
+Name=Hedgewars Engine
+GenericName=Hedgewars engine, for playback of saves and demos
+#GenericName[fr]=translate me
+#GenericName[es]=translate me
+Icon=hedgewars.png
+Exec=hwengine ${HEDGEWARS_DATADIR}/hedgewars/Data %f
+Path=/tmp
+Terminal=false
+StartupNotify=false
+NoDisplay=true
+Categories=Application;Game;StrategyGame;
+MimeType=application/x-hedgewars-demo;application/x-hedgewars-save

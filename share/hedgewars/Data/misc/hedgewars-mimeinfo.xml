@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="application/x-hedgewars-demo">
+    <comment>Hedgewars Demo</comment>
+    <comment xml:lang="fr">Hedgewars Démonstration</comment>
+    <magic priority="50">
+      <match required="yes" type="byte" offset="0" value="2"/>
+      <match required="yes" type="big16" offset="1" value="21572"/>
+    </magic>
+    <glob weight="60" pattern="*.hwd"/>
+  </mime-type>
+  <mime-type type="application/x-hedgewars-save">
+    <comment>Hedgewars Save</comment>
+    <magic priority="50">
+      <match required="yes" type="byte" offset="0" value="2"/>
+      <match required="yes" type="big16" offset="1" value="21587"/>
+    </magic>
+    <glob weight="60" pattern="*.hws"/>
+  </mime-type>
+</mime-info>
