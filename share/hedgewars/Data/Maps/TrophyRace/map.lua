@@ -4,51 +4,60 @@ local caption = {
 	["en"] = "ShoppaKing Map Three: TrophyRace",
 	["sv"] = "ShoppaKing bana tre: TrophyRace",
 	["pl"] = "ShoppaKing: TrophyRace",
+	["es"] = "ShoppaKing, tercer mapa: TrophyRace"
 	}
 
 local subcaption = {
 	["en"] = "Made by Wolfmarc and Dragonfly",
 	["sv"] = "Skapad av Wolfmarc och Dragonfly",
 	["pl"] = "Zrobione przez Wolfmarca i Dragonfly",
+	["es"] = "Por Wolfmarc y Dragonfly"
 	}
 
 local goal = {
 	["en"] = "Use your rope to get from start to finish as fast as you can!",
 	["sv"] = "Använd ditt rep för att ta dig från start till mål så fort du kan!",
 	["pl"] = "Użyj liny by jak najszybciej dotrzec od startu do mety",
+	["es"] = "¡Usa tu cuerda para llegar a la salida lo más rápido que puedas!"
 	}
 
 local done = {
 	["en"] = "You've reached the goal!| |Time: ",
 	["sv"] = "Du är i mål!| |Tid: ",
 	["pl"] = "Dotarłeś do celu!| |Czas: ",
+	["es"] = "¡Has llegado a la meta!| |Tiempo: "
 	}
 local eliminated = {
 	["en"] = "Eliminating worst hedgehog this round...| |%s is OUT!",
 	["sv"] = "Eliminerar sämsta igelkotten den här omgången...| |%s är UTE!",
 	["pl"] = "Eliminujemy najgorszego jeża tej rundy...| |%s ODPADŁ!",
+	["es"] = "Eliminando al peor erizo de esta ronda...| |¡%s está FUERA!"
 	}
 
 local newbesttime = {
 	["en"] = "NEW fastest lap: ",
 	["sv"] = "NY snabbaste tid: ",
 	["pl"] = "NOWE najszybsze okrążenie: ",
+	["es"] = "NUEVA vuelta rápida: "
 	}
 
 local oldbesttime = {
 	["en"] = "Fastest lap: ",
 	["sv"] = "Snabbaste tid: ",
 	["pl"] = "Najszybsze okrążenie: ",
+	["es"] = "Vuelta rápida: "
 	}
 local bestclantimes = {
 	["en"] = "Best laps per team: ",
 	["sv"] = "Bästa tider per lag: ",
 	["pl"] = "Najszybsze okrążenie drużyny: ",
+	["es"] = "Mejores tiempos por equipo: "
 	}
 local clantime = {
 	["en"] = "Team %d: ",
 	["sv"] = "Lag %d: ",
 	["pl"] = "Drużyna %d: ",
+	["es"] = "Equipo %d"
 	}
 
 	local function loc(text)

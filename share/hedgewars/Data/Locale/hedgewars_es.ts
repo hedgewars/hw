@@ -614,7 +614,7 @@ o elige otro nick en las preferencias del juego:</translation>
     <message>
         <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>¿Te gusta Hedgewars? ¡Hazte fan en %1 o síguenos en %2!</translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
