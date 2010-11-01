@@ -2,35 +2,44 @@
 
 local caption = {
 	["en"] = "ShoppaKing Map Three: TrophyRace",
+	["sv"] = "ShoppaKing bana tre: TrophyRace",
 	}
 
 local subcaption = {
 	["en"] = "Made by Wolfmarc and Dragonfly",
+	["sv"] = "Skapad av Wolfmarc och Dragonfly",
 	}
 
 local goal = {
 	["en"] = "Use your rope to get from start to finish as fast as you can!",
+	["sv"] = "Använd ditt rep för att ta dig från start till mål så fort du kan!",
 	}
 
 local done = {
 	["en"] = "You've reached the goal!| |Time: ",
+	["sv"] = "Du är i mål!| |Tid: ",
 	}
 local eliminated = {
 	["en"] = "Eliminating worst hedgehog this round...| |%s is OUT!",
+	["sv"] = "Eliminerar sämsta igelkotten den här omgången...| |%s är UTE!",
 	}
 
 local newbesttime = {
 	["en"] = "NEW fastest lap: ",
+	["sv"] = "NY snabbaste tid: ",
 	}
 
 local oldbesttime = {
 	["en"] = "Fastest lap: ",
+	["sv"] = "Snabbaste tid: ",
 	}
 local bestclantimes = {
 	["en"] = "Best laps per team: ",
+	["sv"] = "Bästa tider per lag: ",
 	}
 local clantime = {
 	["en"] = "Team %d: ",
+	["sv"] = "Lag %d: ",
 	}
 
 	local function loc(text)
