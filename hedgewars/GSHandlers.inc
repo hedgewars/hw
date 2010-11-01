@@ -3471,9 +3471,9 @@ begin
         if poffs < _0 then
             continue;
 
-        // don't port stuff that isn't really close;
-        if not isbullet and (poffs > (r + _3)) then
-            continue;
+        //
+        // gears that make it till here will definately be ported
+        //
 
         if isbullet then
             poffs:= _1_5;
@@ -3490,10 +3490,6 @@ begin
         // calc gear offset in portal normal vector direction
         noffs:= (nx * ox + ny * oy);
 
-        // don't port stuff that misses the portal entrance
-        if noffs > (r + _1_5) then
-            continue;
-
         // move stuff with high normal offset close to the portal's center
         if not isbullet then
         begin
@@ -3501,10 +3497,6 @@ begin
             if s > _0 then
                 noffs:= noffs - SignAs(s,noffs)
         end;
-
-        //
-        // gears that make it till here will definately be ported
-        //
 
         iterator^.Active := true;
         iterator^.State := iterator^.State or gstMoving;
