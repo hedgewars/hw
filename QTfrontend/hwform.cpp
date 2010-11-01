@@ -1132,7 +1132,12 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
     registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
 #else
+    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local");
+    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share");
+    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/mime");
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/mime/packages");
+    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local");
+    if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share");
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/applications");
     if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hedgewars-mimeinfo.xml "+QDir::home().absolutePath()+"/.local/share/mime/packages").toLocal8Bit().constData())==0;
     if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hwengine.desktop "+QDir::home().absolutePath()+"/.local/share/applications").toLocal8Bit().constData())==0;
