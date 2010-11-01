@@ -55,7 +55,11 @@ while (GameState <> gsExit) and (i <= Lag) do
        NetGetNextCmd;
        if isInLag then
           case GameType of
-                gmtNet: break;
+                gmtNet: begin
+                        // just update the health bars
+                        AddVisualGear(0, 0, vgtTeamHealthSorter);
+                        break;
+                        end;
                gmtDemo: begin
                         GameState:= gsExit;
                         exit
