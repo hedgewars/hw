@@ -6,6 +6,7 @@ Name=Hedgewars Engine
 GenericName=Hedgewars engine, for playback of saves and demos
 #GenericName[fr]=translate me
 #GenericName[es]=translate me
+GenericName[pl]=Silnik gry Hedgewars do odtwarzania dem i zapisów gier
 Icon=hedgewars.png
 Exec=${CMAKE_INSTALL_PREFIX}/bin/hwengine ${HEDGEWARS_DATADIR}/hedgewars/Data %f
 Path=/tmp

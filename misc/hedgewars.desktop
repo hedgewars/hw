@@ -5,6 +5,7 @@ Encoding=UTF-8
 Name=Hedgewars
 GenericName=Fighting Hedgehogs
 GenericName[ru]=Битвы ежей
+GenericName[pl]=Walczące jeże
 Icon=hedgewars.png
 Exec=hedgewars
 Terminal=false
