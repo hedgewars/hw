@@ -98,7 +98,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
             // add hog's position
             lx:= lx + ox - WorldDx;
-            ly:= ly + ox - WorldDy;
+            ly:= ly + oy - WorldDy;
 
             // decrease number of iterations required
             ax:= dx * 4;
