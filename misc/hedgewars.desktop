@@ -6,6 +6,7 @@ Name=Hedgewars
 GenericName=Fighting Hedgehogs
 GenericName[ru]=Битвы ежей
 GenericName[pl]=Walczące jeże
+GenericName[sv]=Stridande igelkottar
 Icon=hedgewars.png
 Exec=hedgewars
 Terminal=false
