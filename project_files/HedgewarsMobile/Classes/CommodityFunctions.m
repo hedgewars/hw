@@ -185,8 +185,11 @@ void createSchemeNamed (NSString *nameWithoutExt) {
 }
 
 BOOL inline rotationManager (UIInterfaceOrientation interfaceOrientation) {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
-           (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+    if (IS_IPAD())
+        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
+               (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+    else
+        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 NSInteger inline randomPort () {

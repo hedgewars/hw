@@ -150,10 +150,6 @@ set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
 set(pascal_compiler_flags_cmn "-B" "-FE../bin" "-Cs2000000" "-vewn" ${pascal_compiler_flags_cmn})
-if(LOWRES)
-	set(pascal_compiler_flags_cmn "-dLOWRES" ${pascal_compiler_flags_cmn})
-	add_definitions(-DLOWRES)
-endif(LOWRES)
 
 if(Optz)
 #	set(pascal_compiler_flags_cmn "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_compiler_flags_cmn})

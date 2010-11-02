@@ -179,7 +179,7 @@
                                                  name:@"remove overlay"
                                                object:nil];
 
-    // for iOS > 3.2
+    // for iOS >= 3.2
     if ([UIScreen respondsToSelector:@selector(screens)]) {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(numberOfScreensIncreased)
@@ -194,7 +194,7 @@
 
     // present the overlay
     [UIView beginAnimations:@"showing overlay" context:NULL];
-    [UIView setAnimationDuration:1];
+    [UIView setAnimationDuration:2];
     self.view.alpha = 1;
     [UIView commitAnimations];
 }
@@ -262,6 +262,8 @@
 
 -(void) viewDidUnload {
     // only objects initialized in viewDidLoad should be here
+    if (IS_DUALHEAD())
+        [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [NSObject cancelPreviousPerformRequestsWithTarget:self
                                              selector:@selector(unsetPreciseStatus)

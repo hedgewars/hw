@@ -56,7 +56,7 @@
 #define IS_DUALHEAD()           ([UIScreen respondsToSelector:@selector(screens)] && [[UIScreen screens] count] > 1)
 #define IS_IPAD()               (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define IS_NOT_POWERFUL()       ([modelType() hasPrefix:@"iPhone1"] || [modelType() hasPrefix:@"iPod1,1"] || [modelType() hasPrefix:@"iPod2,1"])
-    
+
 #define DEFAULT_NETGAME_PORT    46631
 
 
