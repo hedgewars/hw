@@ -221,7 +221,7 @@
  + New animations, weapon sprites
  + New themes 'Snow' and 'Nature'
  + Many new sounds
- + Hedgehog somersaults like in worms
+ + Hedgehog backjump
  + Automated parachute
  + Hedgehog can jump even when someone is on its head
  * Improve and bugfix statistics
