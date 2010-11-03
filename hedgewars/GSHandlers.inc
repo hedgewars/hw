@@ -1319,7 +1319,7 @@ begin
     DeleteCI(HHGear);
 
     if (HHGear^.State and gstMoving) <> 0 then
-    begin
+        begin
         if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
         if HHGear^.dY.isNegative and TestCollisionYwithGear(HHGear, -1) then HHGear^.dY := _0;
 
@@ -1327,26 +1327,26 @@ begin
         Gear^.X := Gear^.X + HHGear^.dX;
 
         if TestCollisionYwithGear(HHGear, 1) then
-        begin
+            begin
             CheckHHDamage(HHGear);
-            HHGear^.dY := _0;
+            HHGear^.dY := _0
             //HHGear^.State:= HHGear^.State and not (gstHHJumping or gstHHHJump);
-        end
+            end
         else
-        begin
+            begin
             HHGear^.Y := HHGear^.Y + HHGear^.dY;
             Gear^.Y := Gear^.Y + HHGear^.dY;
-            HHGear^.dY := HHGear^.dY + cGravity;
-        end;
+            HHGear^.dY := HHGear^.dY + cGravity
+            end;
 
         tt := Gear^.Elasticity;
         tx := _0;
         ty := _0;
         while tt > _20 do
-        begin
+            begin
             if  TestCollisionXwithXYShift(Gear, tx, hwRound(ty), -hwSign(Gear^.dX))
                or TestCollisionYwithXYShift(Gear, hwRound(tx), hwRound(ty), -hwSign(Gear^.dY)) then
-            begin
+                begin
                 Gear^.X := Gear^.X + tx;
                 Gear^.Y := Gear^.Y + ty;
                 Gear^.Elasticity := tt;
@@ -1359,12 +1359,12 @@ begin
 
                 tt := _0;
                 exit
-            end;
+                end;
             tx := tx + Gear^.dX + Gear^.dX;
             ty := ty + Gear^.dY + Gear^.dY;
             tt := tt - _2;
+            end;
         end;
-    end;
 
     CheckCollision(Gear);
 
@@ -1372,29 +1372,32 @@ begin
         if Gear^.Elasticity < _10 then
             Gear^.Elasticity := _10000
     else
-    begin
+        begin
         Gear^.doStep := @doStepRopeWork;
         PlaySound(sndRopeAttach);
         with HHGear^ do
+            begin
             State := State and not (gstAttacking or gstHHJumping or gstHHHJump);
+            Message := Message and not gmAttack
+            end;
 
         RemoveFromAmmo;
 
         exit
-    end;
+        end;
 
     if (Gear^.Elasticity > Gear^.Friction)
        or ((Gear^.Message and gmAttack) = 0)
        or ((HHGear^.State and gstHHDriven) = 0)
        or (HHGear^.Damage > 0) then
-    begin
-        with PHedgehog(Gear^.Hedgehog)^.Gear^ do
         begin
+        with PHedgehog(Gear^.Hedgehog)^.Gear^ do
+            begin
             State := State and not gstAttacking;
             Message := Message and not gmAttack
-        end;
+            end;
         DeleteGear(Gear)
-    end
+        end
 end;
 
 procedure doStepRope(Gear: PGear);
