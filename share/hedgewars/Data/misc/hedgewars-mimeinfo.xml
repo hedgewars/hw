@@ -9,6 +9,7 @@
     <comment>Hedgewars Demo</comment>
     <comment xml:lang="fr">Hedgewars Démonstration</comment>
     <comment xml:lang="pl">Demo gry Hedgewars</comment>
+    <comment xml:lang="sk">Demo hry Hedgewars</comment>
     <comment xml:lang="sv">Hedgewars demo</comment>
     <magic priority="50">
       <match required="yes" type="byte" offset="0" value="2"/>
@@ -21,6 +22,7 @@
     <!--<generic-icon name="applications-games"/>-->
     <comment>Hedgewars Save</comment>
     <comment xml:lang="pl">Zapis gry Hedgewars</comment>
+    <comment xml:lang="sk">Uložená hra Hedgewars</comment>
     <comment xml:lang="sv">Hedgewars-sparfil</comment>
     <magic priority="50">
       <match required="yes" type="byte" offset="0" value="2"/>
