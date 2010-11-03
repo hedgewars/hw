@@ -47,7 +47,7 @@ type
             HatVisibility: GLfloat;
             stats: TStatistics;
             Hat: shortstring;
-            InitialHealth: Byte; // used for gfResetHealth
+            InitialHealth: LongInt; // used for gfResetHealth
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
             Timer: Longword;
@@ -371,35 +371,36 @@ var i, t: LongInt;
 begin
 
 for t:= 0 to Pred(TeamsCount) do
-   with TeamsArray[t]^ do
-      begin
-      if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
-          begin
-          LocalClan:= Clan^.ClanIndex;
-          LocalAmmo:= Hedgehogs[0].AmmoStore
-          end;
-      th:= 0;
-      for i:= 0 to cMaxHHIndex do
-          if Hedgehogs[i].Gear <> nil then
-             inc(th, Hedgehogs[i].Gear^.Health);
-      if th > MaxTeamHealth then MaxTeamHealth:= th;
-      // Some initial King buffs
-      if (GameFlags and gfKing) <> 0 then
-          begin
-          Hedgehogs[0].King:= true;
-          Hedgehogs[0].Hat:= 'crown';
-          Hedgehogs[0].Effects[hePoisoned] := false;
-          h:= Hedgehogs[0].Gear^.Health;
-          Hedgehogs[0].Gear^.Health:= hwRound(int2hwFloat(th)*_0_375);
-          if Hedgehogs[0].Gear^.Health > h then
-              begin
-              dec(th, h);
-              inc(th, Hedgehogs[0].Gear^.Health);
-              if th > MaxTeamHealth then MaxTeamHealth:= th
-              end
-          else Hedgehogs[0].Gear^.Health:= h
-          end;
-      end;
+    with TeamsArray[t]^ do
+        begin
+        if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
+            begin
+            LocalClan:= Clan^.ClanIndex;
+            LocalAmmo:= Hedgehogs[0].AmmoStore
+            end;
+        th:= 0;
+        for i:= 0 to cMaxHHIndex do
+            if Hedgehogs[i].Gear <> nil then
+               inc(th, Hedgehogs[i].Gear^.Health);
+        if th > MaxTeamHealth then MaxTeamHealth:= th;
+        // Some initial King buffs
+        if (GameFlags and gfKing) <> 0 then
+            begin
+            Hedgehogs[0].King:= true;
+            Hedgehogs[0].Hat:= 'crown';
+            Hedgehogs[0].Effects[hePoisoned] := false;
+            h:= Hedgehogs[0].Gear^.Health;
+            Hedgehogs[0].Gear^.Health:= hwRound(int2hwFloat(th)*_0_375);
+            if Hedgehogs[0].Gear^.Health > h then
+                begin
+                dec(th, h);
+                inc(th, Hedgehogs[0].Gear^.Health);
+                if th > MaxTeamHealth then MaxTeamHealth:= th
+                end
+            else Hedgehogs[0].Gear^.Health:= h
+            Hedgehogs[0].InitialHealth:= Hedgehogs[0].Gear^.Health;
+            end;
+        end;
 
 RecountAllTeamsHealth
 end;

@@ -949,27 +949,26 @@ begin
                         begin
                         if (GameFlags and gfInvulnerable) = 0 then
                             Gear^.Invulnerable:= false;
-                        if (GameFlags and gfResetHealth) <> 0 then
-                            begin
-                            if Gear^.Health < InitialHealth then
-                                begin
-                                Gear^.Health:= InitialHealth;
-                                RenderHealth(CurrentHedgehog^);
-                                end;
-                            end;
                         end;
                     end;
     t:= GearsList;
     while t <> nil do
         begin
         t^.PortalCounter:= 0;
+        if ((GameFlags and gfResetHealth) <> 0) and (t^.Kind = gtHedgehog) and (t^.Health < PHedgehog(t^.Hedgehog)^.InitialHealth) then
+            begin
+            t^.Health:= PHedgehog(t^.Hedgehog)^.InitialHealth;
+            RenderHealth(PHedgehog(t^.Hedgehog)^);
+            end;
         t:= t^.NextGear
         end;
    
     if (GameFlags and gfResetWeps) <> 0 then
         ResetWeapons;
+
     if (GameFlags and gfResetHealth) <> 0 then
-        RecountTeamHealth(CurrentTeam);
+        for i:= 0 to Pred(TeamsCount) do
+            RecountTeamHealth(TeamsArray[i])
 end;
 
 procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
