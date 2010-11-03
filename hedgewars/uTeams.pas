@@ -397,8 +397,8 @@ for t:= 0 to Pred(TeamsCount) do
                 inc(th, Hedgehogs[0].Gear^.Health);
                 if th > MaxTeamHealth then MaxTeamHealth:= th
                 end
-            else Hedgehogs[0].Gear^.Health:= h
-            Hedgehogs[0].InitialHealth:= Hedgehogs[0].Gear^.Health;
+            else Hedgehogs[0].Gear^.Health:= h;
+            Hedgehogs[0].InitialHealth:= Hedgehogs[0].Gear^.Health
             end;
         end;
 
