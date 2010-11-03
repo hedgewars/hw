@@ -1353,7 +1353,10 @@ begin
                 Gear^.doStep := @doStepRopeWork;
                 PlaySound(sndRopeAttach);
                 with HHGear^ do
+                    begin
                     State := State and not (gstAttacking or gstHHJumping or gstHHHJump);
+                    Message := Message and not gmAttack
+                    end;
 
                 RemoveFromAmmo;
 
