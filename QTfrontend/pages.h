@@ -466,7 +466,7 @@ private:
     ToggleButtonWidget * TBW_lowGravity;
     ToggleButtonWidget * TBW_laserSight;
     ToggleButtonWidget * TBW_invulnerable;
-    ToggleButtonWidget * TBW_mines;
+    ToggleButtonWidget * TBW_resethealth;
     ToggleButtonWidget * TBW_vampiric;
     ToggleButtonWidget * TBW_karma;
     ToggleButtonWidget * TBW_artillery;

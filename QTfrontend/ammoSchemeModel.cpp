@@ -31,7 +31,7 @@ QList<QVariant> defaultScheme = QList<QVariant>()
         << QVariant(false)         // low gravity    5
         << QVariant(false)         // laser sight    6
         << QVariant(false)         // invulnerable   7
-        << QVariant(true)          // add mines      8
+        << QVariant(false)         // reset health   8
         << QVariant(false)         // vampiric       9
         << QVariant(false)         // karma          10
         << QVariant(false)         // artillery      11
@@ -81,7 +81,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << "lowgrav"          //  5
         << "laser"            //  6
         << "invulnerability"  //  7
-        << "mines"            //  8
+        << "resethealth"      //  8
         << "vampiric"         //  9
         << "karma"            // 10
         << "artillery"        // 11
@@ -116,7 +116,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // low gravity    5
         << QVariant(false)         // laser sight    6
         << QVariant(false)         // invulnerable   7
-        << QVariant(false)         // add mines      8
+        << QVariant(false)         // reset health   8
         << QVariant(false)         // vampiric       9
         << QVariant(false)         // karma          10
         << QVariant(false)         // artillery      11
@@ -151,7 +151,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // low gravity    5
         << QVariant(false)         // laser sight    6
         << QVariant(false)         // invulnerable   7
-        << QVariant(false)         // add mines      8
+        << QVariant(false)         // reset health   8
         << QVariant(false)         // vampiric       9
         << QVariant(false)         // karma          10
         << QVariant(false)         // artillery      11
@@ -186,7 +186,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(true)          // low gravity    5
         << QVariant(false)         // laser sight    6
         << QVariant(true)          // invulnerable   7
-        << QVariant(false)         // add mines      8
+        << QVariant(false)         // reset health   8
         << QVariant(false)         // vampiric       9
         << QVariant(false)         // karma          10
         << QVariant(false)         // artillery      11
@@ -221,7 +221,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // low gravity    5
         << QVariant(false)         // laser sight    6
         << QVariant(false)         // invulnerable   7
-        << QVariant(true)          // add mines      8
+        << QVariant(false)         // reset health   8
         << QVariant(false)         // vampiric       9
         << QVariant(false)         // karma          10
         << QVariant(false)         // artillery      11
@@ -256,7 +256,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // low gravity    5
         << QVariant(false)         // laser sight    6
         << QVariant(false)         // invulnerable   7
-        << QVariant(false)         // add mines      8
+        << QVariant(false)         // reset health   8
         << QVariant(false)         // vampiric       9
         << QVariant(false)         // karma          10
         << QVariant(false)         // artillery      11
@@ -291,7 +291,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // low gravity    5
         << QVariant(false)         // laser sight    6
         << QVariant(false)         // invulnerable   7
-        << QVariant(true)          // add mines      8
+        << QVariant(false)         // reset health   8
         << QVariant(false)         // vampiric       9
         << QVariant(false)         // karma          10
         << QVariant(false)         // artillery      11

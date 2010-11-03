@@ -47,6 +47,7 @@ type
             HatVisibility: GLfloat;
             stats: TStatistics;
             Hat: shortstring;
+            InitialHealth: Byte; // used for gfResetHealth
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
             Timer: Longword;

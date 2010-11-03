@@ -935,20 +935,30 @@ begin
         cArtillery:= false;
     // have to sweep *all* current team hedgehogs since it is theoretically possible if you have enough invulnerabilities and switch turns to make your entire team invulnerable
     if (CurrentTeam <> nil) then
-       with CurrentTeam^ do
-          for i:= 0 to cMaxHHIndex do
-              with Hedgehogs[i] do
-                  begin
-                  if (SpeechGear <> nil) then
-                     begin
-                     DeleteVisualGear(SpeechGear);  // remove to restore persisting beyond end of turn. Tiy says was too much of a gameplay issue
-                     SpeechGear:= nil
-                     end;
+        with CurrentTeam^ do
+            for i:= 0 to cMaxHHIndex do
+                with Hedgehogs[i] do
+                    begin
+                    if (SpeechGear <> nil) then
+                        begin
+                        DeleteVisualGear(SpeechGear);  // remove to restore persisting beyond end of turn. Tiy says was too much of a gameplay issue
+                        SpeechGear:= nil
+                        end;
 
-                  if (Gear <> nil) then
-                     if (GameFlags and gfInvulnerable) = 0 then
-                        Gear^.Invulnerable:= false;
-                  end;
+                    if (Gear <> nil) then
+                        begin
+                        if (GameFlags and gfInvulnerable) = 0 then
+                            Gear^.Invulnerable:= false;
+                        if (GameFlags and gfResetHealth) <> 0 then
+                            begin
+                            if Gear^.Health < InitialHealth then
+                                begin
+                                Gear^.Health:= InitialHealth;
+                                RenderHealth(CurrentHedgehog^);
+                                end;
+                            end;
+                        end;
+                    end;
     t:= GearsList;
     while t <> nil do
         begin
@@ -957,7 +967,9 @@ begin
         end;
    
     if (GameFlags and gfResetWeps) <> 0 then
-        ResetWeapons
+        ResetWeapons;
+    if (GameFlags and gfResetHealth) <> 0 then
+        RecountTeamHealth(CurrentTeam);
 end;
 
 procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
@@ -1203,12 +1215,11 @@ if (TrainingFlags and tfSpawnTargets) <> 0 then
 
 if ((GameFlags and gfForts) = 0) then
     begin
-    if ((GameFlags and gfMines) <> 0) then
-        for i:= 0 to Pred(cLandMines) do
-            begin
-            Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
-            FindPlace(Gear, false, 0, LAND_WIDTH);
-            end;
+    for i:= 0 to Pred(cLandMines) do
+        begin
+        Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
+        FindPlace(Gear, false, 0, LAND_WIDTH);
+        end;
     for i:= 0 to Pred(cExplosives) do
         begin
         Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);

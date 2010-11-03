@@ -170,6 +170,7 @@ with CurrentTeam^ do
     else CurrentHedgehog^.AmmoStore:= TeamsCount - 1;
     CurrentHedgehog^.Gear:= Gear;
     CurrentHedgehog^.Name:= id;
+    CurrentHedgehog^.InitialHealth:= Gear^.Health;
     CurrHedgehog:= HedgehogsNumber;
     inc(HedgehogsNumber)
     end

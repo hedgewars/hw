@@ -1503,9 +1503,9 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_invulnerable->setToolTip("<b>" + ToggleButtonWidget::tr("Invulnerable") + "</b>:<br />" + tr("All hogs have a personal forcefield"));
     glGMLayout->addWidget(TBW_invulnerable,1,1,1,1);
 
-    TBW_mines = new ToggleButtonWidget(gbGameModes, ":/res/btnMines.png");
-    TBW_mines->setToolTip("<b>" + ToggleButtonWidget::tr("Add Mines") + "</b>:<br />" + tr("Enable random mines"));
-    glGMLayout->addWidget(TBW_mines,1,2,1,1);
+    TBW_resethealth = new ToggleButtonWidget(gbGameModes, ":/res/btnResetHealth.png");
+    TBW_resethealth->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Health") + "</b>:<br />" + tr("Every hog of the team is fully restored at the end of turn"));
+    glGMLayout->addWidget(TBW_resethealth,1,2,1,1);
 
     TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric.png");
     TBW_vampiric->setToolTip("<b>" + ToggleButtonWidget::tr("Vampirism") + "</b>:<br />" + tr("Gain 80% of the damage you do back in health"));
@@ -1732,7 +1732,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(TBW_lowGravity, 5);
     mapper->addMapping(TBW_laserSight, 6);
     mapper->addMapping(TBW_invulnerable, 7);
-    mapper->addMapping(TBW_mines, 8);
+    mapper->addMapping(TBW_resethealth, 8);
     mapper->addMapping(TBW_vampiric, 9);
     mapper->addMapping(TBW_karma, 10);
     mapper->addMapping(TBW_artillery, 11);
