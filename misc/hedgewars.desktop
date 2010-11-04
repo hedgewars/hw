@@ -4,6 +4,7 @@ Version=1.0
 Encoding=UTF-8
 Name=Hedgewars
 GenericName=Fighting Hedgehogs
+GenericName[de]=Kämpfende Igel
 GenericName[ru]=Битвы ежей
 GenericName[pl]=Walczące jeże
 GenericName[sk]=Bojujúci ježkovia
