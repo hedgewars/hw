@@ -680,8 +680,12 @@ begin
             begin
             tmp:= 0;
             if PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] then
+                begin
                 inc(tmp, ModifyDamage(5, Gear));
+                if (GameFlags and gfResetHealth) <> 0 then dec(PHedgehog(Gear^.Hedgehog)^.InitialHealth)  // does not need a minimum check since <= 1 basically disables it
+                end;
             inc(tmp, cHealthDecrease);
+            if (GameFlags and gfResetHealth) <> 0 then dec(PHedgehog(Gear^.Hedgehog)^.InitialHealth, cHealthDecrease);
             if PHedgehog(Gear^.Hedgehog)^.King then
                 begin
                 flag:= false;
@@ -691,7 +695,11 @@ begin
                         (not team^.Hedgehogs[i].King) and
                         (team^.Hedgehogs[i].Gear^.Health > team^.Hedgehogs[i].Gear^.Damage)
                     then flag:= true;
-                if not flag then inc(tmp, 5)
+                if not flag then
+                    begin
+                    inc(tmp, 5);
+                    if (GameFlags and gfResetHealth) <> 0 then dec(PHedgehog(Gear^.Hedgehog)^.InitialHealth, 5)
+                    end
                 end;
             if tmp > 0 then 
                 begin
