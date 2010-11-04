@@ -12,6 +12,7 @@
     <comment xml:lang="pl">Demo gry Hedgewars</comment>
     <comment xml:lang="sk">Demo hry Hedgewars</comment>
     <comment xml:lang="sv">Hedgewars demo</comment>
+    <comment xml:lang="es">Demo de Hedgewars</comment>
     <magic priority="50">
       <match required="yes" type="byte" offset="0" value="2"/>
       <match required="yes" type="big16" offset="1" value="21572"/>
@@ -26,6 +27,7 @@
     <comment xml:lang="pl">Zapis gry Hedgewars</comment>
     <comment xml:lang="sk">Uložená hra Hedgewars</comment>
     <comment xml:lang="sv">Hedgewars-sparfil</comment>
+    <comment xml:lang="sv">Partida guardada de Hedgewars</comment>
     <magic priority="50">
       <match required="yes" type="byte" offset="0" value="2"/>
       <match required="yes" type="big16" offset="1" value="21587"/>
