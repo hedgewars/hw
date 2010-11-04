@@ -10,6 +10,7 @@ GenericName[pl]=Walczące jeże
 GenericName[sk]=Bojujúci ježkovia
 GenericName[sv]=Stridande igelkottar
 GenericName[es]=Batallas entre erizos
+GenericName[it]=Ricci combattenti
 Icon=hedgewars.png
 Exec=hedgewars
 Terminal=false

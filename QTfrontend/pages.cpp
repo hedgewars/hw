@@ -1504,7 +1504,7 @@ PageScheme::PageScheme(QWidget* parent) :
     glGMLayout->addWidget(TBW_invulnerable,1,1,1,1);
 
     TBW_resethealth = new ToggleButtonWidget(gbGameModes, ":/res/btnResetHealth.png");
-    TBW_resethealth->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Health") + "</b>:<br />" + tr("Every hog of the team is fully restored at the end of turn"));
+    TBW_resethealth->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Health") + "</b>:<br />" + tr("All (living) hedgehogs are fully restored at the end of turn"));
     glGMLayout->addWidget(TBW_resethealth,1,2,1,1);
 
     TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric.png");

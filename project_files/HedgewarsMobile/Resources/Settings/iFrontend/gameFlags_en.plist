@@ -52,11 +52,11 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Enable random mines</string>
+		<string>All (living) hedgehogs are fully restored at the end of turn</string>
 		<key>image</key>
-		<string>Mines</string>
+		<string>ResetHealth</string>
 		<key>title</key>
-		<string>Add Mines</string>
+		<string>Reset Health</string>
 	</dict>
 	<dict>
 		<key>description</key>
@@ -164,7 +164,7 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Each hedgehog has its own ammo.</string>
+		<string>Each hedgehog has its own ammo</string>
 		<key>image</key>
 		<string>PerHogAmmo</string>
 		<key>title</key>
