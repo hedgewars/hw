@@ -135,8 +135,7 @@
 		6199E81612463EA800DADF8C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81512463EA800DADF8C /* CFNetwork.framework */; };
 		6199E81A12463EC400DADF8C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81912463EC400DADF8C /* SystemConfiguration.framework */; };
 		6199E839124647DE00DADF8C /* SupportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6199E837124647DE00DADF8C /* SupportViewController.m */; };
-		6199E83A124647DE00DADF8C /* SupportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6199E838124647DE00DADF8C /* SupportViewController.xib */; };
-		6199E86D12464A8E00DADF8C /* surpise.png in Resources */ = {isa = PBXBuildFile; fileRef = 6199E86C12464A8E00DADF8C /* surpise.png */; };
+		6199E86D12464A8E00DADF8C /* surprise.png in Resources */ = {isa = PBXBuildFile; fileRef = 6199E86C12464A8E00DADF8C /* surprise.png */; };
 		619C5ACF124F7DE200D041AE /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619C5ACE124F7DDF00D041AE /* libLua.a */; };
 		619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619C5AF3124F7E3100D041AE /* LuaPas.pas */; };
 		619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */; };
@@ -155,6 +154,8 @@
 		61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D205A0127CDD1100ABD83E /* ObjcExports.m */; };
 		61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */; };
 		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
+		61E2F7441283752C00E12521 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = 61E2F7421283752C00E12521 /* fb.png */; };
+		61E2F7451283752C00E12521 /* tw.png in Resources */ = {isa = PBXBuildFile; fileRef = 61E2F7431283752C00E12521 /* tw.png */; };
 		61EBA62A11DFF2BC0048B68A /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62811DFF2BC0048B68A /* title.png */; };
 		61EBA62D11DFF3310048B68A /* backgroundAndTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */; };
 		61EF920E11DF57AC003441C4 /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920511DF57AC003441C4 /* arrowDown.png */; };
@@ -882,8 +883,7 @@
 		6199E81912463EC400DADF8C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		6199E836124647DE00DADF8C /* SupportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupportViewController.h; sourceTree = "<group>"; };
 		6199E837124647DE00DADF8C /* SupportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SupportViewController.m; sourceTree = "<group>"; };
-		6199E838124647DE00DADF8C /* SupportViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SupportViewController.xib; path = ../Resources/SupportViewController.xib; sourceTree = "<group>"; };
-		6199E86C12464A8E00DADF8C /* surpise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = surpise.png; path = Resources/surpise.png; sourceTree = "<group>"; };
+		6199E86C12464A8E00DADF8C /* surprise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = surprise.png; path = Resources/surprise.png; sourceTree = "<group>"; };
 		619C09E911E8B8D600F1DF16 /* title_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title_small.png; path = "Resources/Frontend-iPhone/title_small.png"; sourceTree = "<group>"; };
 		619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../../Library/Lua/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
 		619C5AF3124F7E3100D041AE /* LuaPas.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = LuaPas.pas; path = ../../hedgewars/LuaPas.pas; sourceTree = SOURCE_ROOT; };
@@ -897,6 +897,8 @@
 		61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmmoMenuViewController.h; sourceTree = "<group>"; };
 		61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmmoMenuViewController.m; sourceTree = "<group>"; };
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
+		61E2F7421283752C00E12521 /* fb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fb.png; path = Resources/Icons/fb.png; sourceTree = "<group>"; };
+		61E2F7431283752C00E12521 /* tw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tw.png; path = Resources/Icons/tw.png; sourceTree = "<group>"; };
 		61EBA62811DFF2BC0048B68A /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = "Resources/Frontend-iPad/title.png"; sourceTree = "<group>"; };
 		61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundAndTitle.png; path = "Resources/Frontend-iPad/backgroundAndTitle.png"; sourceTree = "<group>"; };
 		61EF920511DF57AC003441C4 /* arrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowDown.png; path = Resources/Overlay/arrowDown.png; sourceTree = "<group>"; };
@@ -1031,7 +1033,7 @@
 			isa = PBXGroup;
 			children = (
 				6147DAD21253DCDE0010357E /* savesButton.png */,
-				6199E86C12464A8E00DADF8C /* surpise.png */,
+				6199E86C12464A8E00DADF8C /* surprise.png */,
 				611EEBC0122B34A800DF6938 /* helpingame.png */,
 				611EEC30122B54D700DF6938 /* helpplain.png */,
 				611EEBC2122B355700DF6938 /* helpbottom.png */,
@@ -1225,7 +1227,6 @@
 				616591FB11CA9BA200D6E256 /* SchemeSettingsViewController.m */,
 				6199E836124647DE00DADF8C /* SupportViewController.h */,
 				6199E837124647DE00DADF8C /* SupportViewController.m */,
-				6199E838124647DE00DADF8C /* SupportViewController.xib */,
 			);
 			name = "First Level";
 			sourceTree = "<group>";
@@ -1379,6 +1380,8 @@
 		61F7A42811E2905C0040BA66 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				61E2F7421283752C00E12521 /* fb.png */,
+				61E2F7431283752C00E12521 /* tw.png */,
 				6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */,
 				6183D83D11E2BCE200A88903 /* Default.png */,
 				61F7A43111E290650040BA66 /* Icon-72.png */,
@@ -2142,8 +2145,7 @@
 				61842B24122B619D0096E335 /* HelpPageInGameViewController.xib in Resources */,
 				61842B3E122B65BD0096E335 /* helpabove.png in Resources */,
 				61842B40122B66280096E335 /* helpleft.png in Resources */,
-				6199E83A124647DE00DADF8C /* SupportViewController.xib in Resources */,
-				6199E86D12464A8E00DADF8C /* surpise.png in Resources */,
+				6199E86D12464A8E00DADF8C /* surprise.png in Resources */,
 				611D9BFC12497E9800008271 /* SavedGamesViewController.xib in Resources */,
 				611DA031124E2BC500008271 /* mediumBackground~ipad.png in Resources */,
 				611DA1D0124E5C6300008271 /* plus.png in Resources */,
@@ -2160,6 +2162,8 @@
 				61A6710612747E4000B06CE7 /* backgroundCenter.png in Resources */,
 				614AE65D127D090A0070BF5F /* smallerBackground~ipad.png in Resources */,
 				614AE65E127D090A0070BF5F /* smallerBackground~iphone.png in Resources */,
+				61E2F7441283752C00E12521 /* fb.png in Resources */,
+				61E2F7451283752C00E12521 /* tw.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

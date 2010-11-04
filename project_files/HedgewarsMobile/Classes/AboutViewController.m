@@ -30,7 +30,7 @@
 }
 
 -(void) viewDidLoad {
-    if ([UITableView respondsToSelector:@selector(setBackgroundView:)])
+    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
         self.tableView.backgroundView = nil;
     self.tableView.allowsSelection = NO;
 

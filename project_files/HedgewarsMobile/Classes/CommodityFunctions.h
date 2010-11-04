@@ -53,7 +53,7 @@
 #define UICOLOR_HW_DARKBLUE     [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:1]
 #define UICOLOR_HW_ALPHABLUE    [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:0.58f]
 
-#define IS_DUALHEAD()           ([UIScreen respondsToSelector:@selector(screens)] && [[UIScreen screens] count] > 1)
+#define IS_DUALHEAD()           ([[UIScreen class] respondsToSelector:@selector(screens)] && [[UIScreen screens] count] > 1)
 #define IS_IPAD()               (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define IS_NOT_POWERFUL()       ([modelType() hasPrefix:@"iPhone1"] || [modelType() hasPrefix:@"iPod1,1"] || [modelType() hasPrefix:@"iPod2,1"])
 

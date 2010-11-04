@@ -353,7 +353,7 @@
     self.missionCommand = mission;
 
     // nice animation for updating the table when appropriate (on iphone)
-    if (IS_IPAD())
+    if (IS_IPAD() == NO)
         if (((oldPage == 0 || oldPage == 2) && (newPage == 1 || newPage == 3)) ||
             ((oldPage == 1 || oldPage == 3) && (newPage == 0 || newPage == 2)) ||
             ((oldPage == 1 && newPage == 3) || (oldPage == 3 || newPage == 1))) {
@@ -425,7 +425,7 @@
     self.missionCommand = @"";
 
     if (IS_IPAD()) {
-        if ([UITableView respondsToSelector:@selector(setBackgroundView:)])
+        if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
             [self.tableView setBackgroundView:nil];
         self.view.backgroundColor = [UIColor clearColor];
         self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;

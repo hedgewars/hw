@@ -40,7 +40,7 @@
 }
 
 -(void) viewDidLoad {
-    if ([UITableView respondsToSelector:@selector(setBackgroundView:)])
+    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
         self.tableView.backgroundView = nil;
 
     NSString *imgName;
@@ -165,7 +165,7 @@
     footer.backgroundColor = [UIColor clearColor];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width*80/100, 100)];
-    label.center = CGPointMake(self.tableView.frame.size.width/2,70);
+    label.center = CGPointMake(self.tableView.frame.size.width/2, 70);
     label.textAlignment = UITextAlignmentCenter;
     label.font = [UIFont systemFontOfSize:16];
     label.textColor = [UIColor lightGrayColor];
@@ -176,6 +176,10 @@
     [footer addSubview:label];
     [label release];
     return [footer autorelease];
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 125;
 }
 
 -(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {

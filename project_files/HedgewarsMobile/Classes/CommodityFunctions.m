@@ -157,7 +157,7 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                                    [NSNumber numberWithBool:NO],      //lowgravity
                                    [NSNumber numberWithBool:NO],      //lasersight
                                    [NSNumber numberWithBool:NO],      //invulnerable
-                                   [NSNumber numberWithBool:YES],     //addmines
+                                   [NSNumber numberWithBool:NO],      //resethealth
                                    [NSNumber numberWithBool:NO],      //vampirism
                                    [NSNumber numberWithBool:NO],      //karma
                                    [NSNumber numberWithBool:NO],      //artillery
@@ -168,6 +168,9 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                                    [NSNumber numberWithBool:NO],      //disablegirders
                                    [NSNumber numberWithBool:NO],      //disablelandobjects
                                    [NSNumber numberWithBool:NO],      //aisurvival
+                                   [NSNumber numberWithBool:NO],      //infattack
+                                   [NSNumber numberWithBool:NO],      //resetweaps
+                                   [NSNumber numberWithBool:NO],      //perhogammo
                                    nil];
     
     NSMutableDictionary *theScheme = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
