@@ -28,7 +28,7 @@
     <comment xml:lang="pl">Zapis gry Hedgewars</comment>
     <comment xml:lang="sk">Uložená hra Hedgewars</comment>
     <comment xml:lang="sv">Hedgewars-sparfil</comment>
-    <comment xml:lang="sv">Partida guardada de Hedgewars</comment>
+    <comment xml:lang="es">Partida guardada de Hedgewars</comment>
     <comment xml:lang="it">Partita salvata di Hedgewars</comment>
     <magic priority="50">
       <match required="yes" type="byte" offset="0" value="2"/>
