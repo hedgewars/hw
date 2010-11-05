@@ -504,4 +504,8 @@
 05:13=Mintider: Minor detoneras direkt
 05:14=Mintider: Minor detoneras efter 0 - 3 sekunder
 05:15=Skademängd: Alla vapen gör %1% skada
-
+05:16=Hälsa för alla igelkottar återställs efter varje tur
+05:17=AI-igelkottar kommer tillbaka när de dör
+05:18=Obegränsade attacker
+05:19=Vapen nollställs när turen är över
+05:20=Igelkottar delar inte på vapnen

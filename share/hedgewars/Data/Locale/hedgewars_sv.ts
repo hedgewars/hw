@@ -26,7 +26,7 @@
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation>Redigera vapen</translation>
+        <translation>Redigera vapenscheman</translation>
     </message>
     <message>
         <source>Error</source>
@@ -38,7 +38,7 @@
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation>Redigera scheman</translation>
+        <translation>Redigera spelscheman</translation>
     </message>
 </context>
 <context>
@@ -707,7 +707,7 @@ ett annat smeknamn i spelinställningarna:</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
-        <translation>Du kan inte redigera lag från ett spel. Gå tillbaka till huvudmenyn för att lägga till, redigera eller ta bort lag</translation>
+        <translation>Du kan inte redigera lag från ett spel. Gå tillbaka till huvudmenyn för att lägga till, redigera eller ta bort lag.</translation>
     </message>
 </context>
 <context>
@@ -975,7 +975,7 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Radera</translation>
+        <translation>Ta bort</translation>
     </message>
 </context>
 <context>
