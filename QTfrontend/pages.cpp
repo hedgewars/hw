@@ -982,7 +982,7 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
     topLine->addStretch();
 
 
-    BtnCampaignPage = addButton(":/res/SimpleGame.png", middleLine, 0, true);
+    BtnCampaignPage = addButton(":/res/Campaign.png", middleLine, 0, true);
     BtnCampaignPage->setToolTip(tr("Campaign Mode (...). IN DEVELOPMENT"));
 
     BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
