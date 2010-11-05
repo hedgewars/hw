@@ -14,6 +14,7 @@
     <comment xml:lang="sv">Hedgewars demo</comment>
     <comment xml:lang="es">Demo de Hedgewars</comment>
     <comment xml:lang="it">Demo di Hedgewars</comment>
+	<comment xml:lang="pt">Hedgewars Demo</comment>
     <magic priority="50">
       <match required="yes" type="byte" offset="0" value="2"/>
       <match required="yes" type="big16" offset="1" value="21572"/>
@@ -30,6 +31,7 @@
     <comment xml:lang="sv">Hedgewars-sparfil</comment>
     <comment xml:lang="es">Partida guardada de Hedgewars</comment>
     <comment xml:lang="it">Partita salvata di Hedgewars</comment>
+	<comment xml:lang="pt">Partida guardada de Hedgewars</comment>
     <magic priority="50">
       <match required="yes" type="byte" offset="0" value="2"/>
       <match required="yes" type="big16" offset="1" value="21587"/>

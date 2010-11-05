@@ -10,6 +10,7 @@ GenericName[sk]=Engine hry Hedgewars, pre prehrávanie uložených hier a demo s
 GenericName[sv]=Hedgewarsmotorn, för att öppna demo- och sparfiler
 GenericName[es]=Motor del juego Hedgewars, reproduce demos y partidas guardadas
 GenericName[it]=Motore grafico di Hedgewars, riproduce le demo e riprende le partite salvate
+GenericName[pt]=Motor de jogo Hedgewars, para reprodução de jogos guardados e demos
 Icon=hedgewars.png
 Exec=${CMAKE_INSTALL_PREFIX}/bin/hwengine ${HEDGEWARS_DATADIR}/hedgewars/Data %f
 Path=/tmp
