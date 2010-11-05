@@ -90,6 +90,16 @@
         <source>DefaultTeam</source>
         <translation>EquipaPorOmissão</translation>
     </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -515,7 +525,7 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>Connect one or more gamepads before launching the game to be able to assign their controls to your teams.</source>
         <comment>Tips</comment>
-        <translation>Conecta um ou mais comandos antes de lançar o jogo para que seja possível configura-los nas opções das tuas equipas.</translation>
+        <translation type="obsolete">Conecta um ou mais comandos antes de lançar o jogo para que seja possível configura-los nas opções das tuas equipas.</translation>
     </message>
     <message>
         <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
@@ -626,6 +636,16 @@ outro nome de utilizador no menu de configuração:</translation>
         <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
         <translation>Podes encontrar os ficheiros de configuração do Hedgewars na pasta &quot;Hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
+    </message>
+    <message>
+        <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -877,7 +897,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>Adiciona minas aleatoriamente</translation>
+        <translation type="obsolete">Adiciona minas aleatoriamente</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -934,6 +954,22 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message>
         <source>AI respawns on death.</source>
         <translation>O computador ressuscita ao morrer.</translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attacking does not end your turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons are reset to starting values each turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Each hedgehog has its own ammo. It does not share with the team.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1409,6 +1445,14 @@ Por favor verifique a sua instalação</translation>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
         <translation>Não é possivel sobrescrever o esquema de armas por omissão &apos;%1&apos;!</translation>
     </message>
+    <message>
+        <source>All file associations have been set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File association failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -1498,6 +1542,10 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>Random Team</source>
         <translation>Equipa aleatória</translation>
+    </message>
+    <message>
+        <source>Associate file extensions</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1609,7 +1657,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>Adicionar minas</translation>
+        <translation type="obsolete">Adicionar minas</translation>
     </message>
     <message>
         <source>Random Order</source>
@@ -1638,6 +1686,22 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>AI Survival Mode</source>
         <translation>Modo de sobrevivência</translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlimited Attacks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Weapons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Per Hedgehog Ammo</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

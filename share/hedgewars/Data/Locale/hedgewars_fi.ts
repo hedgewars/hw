@@ -90,6 +90,16 @@
         <source>DefaultTeam</source>
         <translation>OletusJoukkue</translation>
     </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -627,6 +637,11 @@ tai aseta eri nimimerkki asetuksissa:</translation>
         <comment>Tips</comment>
         <translation>Löydät Hedgewars-asetustiedostot &quot;Hedgewars&quot;-hakemistosta kotihakemistossasi. Ota varmuuskopio tai ota ne mukaasi, mutta älä muokkaa niitä käsin.</translation>
     </message>
+    <message>
+        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -877,7 +892,7 @@ Haluatko silti liittyä huoneeseen?</translation>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>Lisää miinoja satunnaisesti</translation>
+        <translation type="obsolete">Lisää miinoja satunnaisesti</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -934,6 +949,22 @@ Haluatko silti liittyä huoneeseen?</translation>
     <message>
         <source>AI respawns on death.</source>
         <translation>Tekoäly syntyy uudelleen kuollessaan.</translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attacking does not end your turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons are reset to starting values each turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Each hedgehog has its own ammo. It does not share with the team.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1409,6 +1440,14 @@ Ole hyvä ja tarkista asennuksesi</translation>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
         <translation>Oletusasetussettiä &apos;%1&apos; ei voida ylikirjoittaa!</translation>
     </message>
+    <message>
+        <source>All file associations have been set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File association failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -1498,6 +1537,10 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <source>Random Team</source>
         <translation>Satunnainen joukkue</translation>
+    </message>
+    <message>
+        <source>Associate file extensions</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1609,7 +1652,7 @@ Ole hyvä ja tarkista asennuksesi</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>Lisää miinat</translation>
+        <translation type="obsolete">Lisää miinat</translation>
     </message>
     <message>
         <source>Random Order</source>
@@ -1638,6 +1681,22 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <source>AI Survival Mode</source>
         <translation>Tekoäly selviytymistila</translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlimited Attacks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Weapons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Per Hedgehog Ammo</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

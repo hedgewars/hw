@@ -930,7 +930,7 @@ Você ainda quer entrar na sala?</translation>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>Habilitar minas aleatórias</translation>
+        <translation type="obsolete">Habilitar minas aleatórias</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -1019,6 +1019,10 @@ Você ainda quer entrar na sala?</translation>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation>Cada ouriço tem sua própria munição. Ele não compartilha com a equipe.</translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1510,6 +1514,10 @@ Por favor verifique sua instalação</translation>
         <source>All file associations have been set.</source>
         <translation>Todos os arquivos foram associados.</translation>
     </message>
+    <message>
+        <source>File association failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -1716,7 +1724,7 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>Adicionar Minas</translation>
+        <translation type="obsolete">Adicionar Minas</translation>
     </message>
     <message>
         <source>Random Order</source>
@@ -1757,6 +1765,10 @@ Por favor verifique sua instalação</translation>
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation>Munição por Ouriço</translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
