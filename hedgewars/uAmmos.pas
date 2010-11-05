@@ -98,7 +98,7 @@ begin
 TryDo((byte(ammoLoadout[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoProbability[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoDelay[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoReinforcement[0]) = byte(ord(High(TAmmoType)))), 'Incomplete or missing ammo scheme set (incompatible frontend or demo/save?)', true);
 
 // FIXME - TEMPORARY hardcoded check on shoppa pending creation of crate *type* probability editor
-substr:= Copy(ammoLoadout,1,39);
+substr:= Copy(ammoLoadout,1,42);
 if (substr = '000000990000009000000000000000000000000000') or  // ropes + parachute
    (substr = '000000900000000000000000000000000000009000') or  // saucer
    (substr = '000000900000000000000000000000000000000009') or  // portal
