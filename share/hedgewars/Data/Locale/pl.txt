@@ -565,3 +565,8 @@
 05:13=Detonacja min: Miny wybuchają natychmiast
 05:14=Detonacja min: Miny wybuchają po 0-3 sekundach
 05:15=Modyfikator obrażeń: Wszystkie bronie zadają %1% obrażeń
+05:16=Życie wszystkich jeży jest przywrócone przy kolejnej turze
+05:17=AI odradza się po śmierci.
+05:18=Tura nie kończy się po wykonaniu ataku
+05:19=Uzbrojenie zostaje przywrócone przy kolejnej turze
+05:20=Każdy z jeży ma oddzielne uzbrojenie
