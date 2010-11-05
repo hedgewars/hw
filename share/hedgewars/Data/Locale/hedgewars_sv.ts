@@ -93,12 +93,12 @@
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Demo-fil för Hedgewars</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Sparfil för Hedgewars</translation>
     </message>
 </context>
 <context>
@@ -640,7 +640,7 @@ ett annat smeknamn i spelinställningarna:</translation>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Du kan associera Hedgewars-relaterade filer (sparfiler och demo-inspelningar) med spelet för att köra dem direkt från den filhanterare eller webbläsare du tycker bäst om.</translation>
     </message>
 </context>
 <context>
@@ -952,19 +952,19 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla (levande) igelkottar återfår sin hälsa i slutet av varje tur</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>Att använda vapen avslutar inte din tur.</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vapnen nollställs till startvärderna varje tur.</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation type="unfinished"></translation>
+        <translation>Varje igelkott har sin egen ammunition. Laget delar inte med varandra.</translation>
     </message>
 </context>
 <context>
@@ -1448,11 +1448,11 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>All file associations have been set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla filassociationer har satts.</translation>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Filassociationer har misslyckats.</translation>
     </message>
 </context>
 <context>
@@ -1546,7 +1546,7 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Associate file extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>Associera filextentioner</translation>
     </message>
 </context>
 <context>
@@ -1690,19 +1690,19 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Reset Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ hälsa</translation>
     </message>
     <message>
         <source>Unlimited Attacks</source>
-        <translation type="unfinished"></translation>
+        <translation>Obegränsade attacker</translation>
     </message>
     <message>
         <source>Reset Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ vapen</translation>
     </message>
     <message>
         <source>Per Hedgehog Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation>Ammunition per igelkott</translation>
     </message>
 </context>
 <context>
