@@ -627,7 +627,7 @@ CheckNoDamage:= true;
 Gear:= GearsList;
 while Gear <> nil do
     begin
-    if Gear^.Kind = gtHedgehog then
+    if (Gear^.Kind = gtHedgehog) and (((GameFlags and gfInfAttack) = 0) or ((Gear^.dX.QWordValue < _0_000004.QWordValue) and (Gear^.dY.QWordValue < _0_000004.QWordValue))) then
         begin
         if (not isInMultiShoot) then inc(Gear^.Damage, Gear^.Karma);
         if (Gear^.Damage <> 0) and
