@@ -65,7 +65,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << "Default"
         << "Pro Mode"
         << "Shoppa"
-        << "Basketball"
+        << "Clean Slate"
         << "Minefield"
         << "Barrel Mayhem"
         << "Tunnel Hogs";
@@ -176,39 +176,39 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(0)             // explosives     30
         ;
 
-    QList<QVariant> basketball;
-    basketball
+    QList<QVariant> cleanslate;
+    cleanslate
         << predefSchemesNames[3]   // name           0
         << QVariant(false)         // fortsmode      1
         << QVariant(false)         // team divide    2
-        << QVariant(true)          // solid land     3
-        << QVariant(true)          // border         4
-        << QVariant(true)          // low gravity    5
+        << QVariant(false)         // solid land     3
+        << QVariant(false)         // border         4
+        << QVariant(false)         // low gravity    5
         << QVariant(false)         // laser sight    6
-        << QVariant(true)          // invulnerable   7
-        << QVariant(false)         // reset health   8
+        << QVariant(false)         // invulnerable   7
+        << QVariant(true)          // reset health   8
         << QVariant(false)         // vampiric       9
         << QVariant(false)         // karma          10
         << QVariant(false)         // artillery      11
         << QVariant(true)          // random order   12
         << QVariant(false)         // king           13
         << QVariant(false)         // place hog      14
-        << QVariant(true)          // shared ammo    15
-        << QVariant(true)          // disable girders 16
+        << QVariant(false)         // shared ammo    15
+        << QVariant(false)         // disable girders 16
         << QVariant(false)         // disable land objects 17
         << QVariant(false)         // AI survival    18
-        << QVariant(false)         // inf. attack    19
-        << QVariant(false)         // reset weps     20
+        << QVariant(true)          // inf. attack    19
+        << QVariant(true)          // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(100)           // damage modfier 22
-        << QVariant(30)            // turn time      23
+        << QVariant(45)            // turn time      23
         << QVariant(100)           // init health    24
         << QVariant(15)            // sudden death   25
-        << QVariant(0)             // case prob      26
+        << QVariant(5)             // case prob      26
         << QVariant(3)             // mines time     27
-        << QVariant(0)             // mines number   28
+        << QVariant(4)             // mines number   28
         << QVariant(0)             // mine dud pct   29
-        << QVariant(0)             // explosives     30
+        << QVariant(2)             // explosives     30
         ;
 
     QList<QVariant> minefield;
@@ -319,7 +319,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
     schemes.append(defaultScheme);
     schemes.append(proMode);
     schemes.append(shoppa);
-    schemes.append(basketball);
+    schemes.append(cleanslate);
     schemes.append(minefield);
     schemes.append(barrelmayhem);
     schemes.append(tunnelhogs);
