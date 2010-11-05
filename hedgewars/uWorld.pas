@@ -133,6 +133,11 @@ g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
 g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
 g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
 g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
+g:= AddGoal(g, gfResetHealth, gidResetHealth);
+g:= AddGoal(g, gfAISurvival, gidAISurvival);
+g:= AddGoal(g, gfInfAttack, gidInfAttack);
+g:= AddGoal(g, gfResetWeps, gidResetWeps);
+g:= AddGoal(g, gfPerHogAmmo, gidPerHogAmmo);
 
 // modified damage modificator?
 if cDamagePercent <> 100 then
