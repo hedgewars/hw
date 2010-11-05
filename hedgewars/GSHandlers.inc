@@ -618,6 +618,10 @@ begin
     dec(Gear^.Timer);
     if Gear^.Timer = 0 then
     begin
+        PHedgehog(Gear^.Hedgehog)^.Gear^.Message:= PHedgehog(Gear^.Hedgehog)^.Gear^.Message and not gmAttack;
+        PHedgehog(Gear^.Hedgehog)^.Gear^.State:= PHedgehog(Gear^.Hedgehog)^.Gear^.State and not gstAttacking;
+        AttackBar:= 0;
+        
         Gear^.SoundChannel := LoopSound(sndBee);
         Gear^.Timer := 5000;
         // save initial speed in otherwise unused Friction variable

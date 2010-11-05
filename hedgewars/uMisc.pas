@@ -763,7 +763,7 @@ begin
     KBnum           := 0;
     InitStepsFlags  := 0;
     RealTicks       := 0;
-    AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
+    AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - from weapon
     cCaseFactor     := 5;  {0..9}
     cLandMines      := 4;
     cExplosives     := 2;

@@ -41,21 +41,24 @@ else
 end;
 
 // Shouldn't more of this ammo switching stuff be moved to uAmmos ?
-procedure ChangeAmmo(Gear: PGear);
+function ChangeAmmo(Gear: PGear): boolean;
 var slot, i: Longword;
     ammoidx: LongInt;
 begin
+ChangeAmmo:= false;
 slot:= Gear^.MsgParam;
 
 with PHedgehog(Gear^.Hedgehog)^ do
     begin
     Gear^.Message:= Gear^.Message and not gmSlot;
     ammoidx:= 0;
-    while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do inc(ammoidx);
-
     if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
+       (TargetPoint.X <> NoPointX) or
        ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) = 0)) or
        ((Gear^.State and gstHHDriven) = 0) then exit;
+    ChangeAmmo:= true;
+
+    while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do inc(ammoidx);
 
     if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
 
@@ -95,6 +98,7 @@ procedure HHSetWeapon(Gear: PGear);
 var t: LongInt;
     weap: TAmmoType;
     Hedgehog: PHedgehog;
+    s: boolean;
 begin
 weap:= TAmmoType(Gear^.MsgParam);
 Hedgehog:= PHedgehog(Gear^.Hedgehog);
@@ -110,11 +114,11 @@ Gear^.Message:= Gear^.Message and not gmWeapon;
 with Hedgehog^ do
     while (CurAmmoType <> weap) and (t >= 0) do
         begin
-        ChangeAmmo(Gear);
+        s:= ChangeAmmo(Gear);
         dec(t)
         end;
 
-ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^)
+if s then ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^)
 end;
 
 procedure HHSetTimer(Gear: PGear);
@@ -794,10 +798,7 @@ if (CurAmmoGear = nil)
     or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0) then
     begin
     if ((Gear^.Message and gmSlot) <> 0) then
-        begin
-        ChangeAmmo(Gear);
-        ApplyAmmoChanges(Hedgehog^)
-        end;
+        if ChangeAmmo(Gear) then ApplyAmmoChanges(Hedgehog^);
 
     if ((Gear^.Message and gmWeapon) <> 0) then HHSetWeapon(Gear);
 
