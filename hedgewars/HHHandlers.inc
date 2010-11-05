@@ -53,7 +53,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
     Gear^.Message:= Gear^.Message and not gmSlot;
     ammoidx:= 0;
     if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
-       (TargetPoint.X <> NoPointX) or
+       ((CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0) and (TargetPoint.X <> NoPointX)) or
        ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) = 0)) or
        ((Gear^.State and gstHHDriven) = 0) then exit;
     ChangeAmmo:= true;
@@ -188,7 +188,10 @@ with Gear^,
                   amClusterBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtClusterBomb,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
                       amGasBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtGasBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
                       amBazooka: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtAmmo_Grenade, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
-                          amBee: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtBee,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                          amBee: begin
+                                 FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtBee,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                                 CurAmmoGear:= FollowGear
+                                 end;
                       amShotgun: begin
                                  PlaySound(sndShotgunReload);
                                  CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
@@ -224,8 +227,8 @@ with Gear^,
                                  PlaySound(sndParachute)
                                  end;
                     // we save CurWeapon^.Pos (in this case: cursor direction) by using it as (otherwise irrelevant) X value of the new gear.
-                    amAirAttack: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 0, _0, _0, 0);
-                   amMineStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 1, _0, _0, 0);
+                    amAirAttack: CurAmmoGear:= AddGear(CurWeapon^.Pos, 0, gtAirAttack, 0, _0, _0, 0);
+                   amMineStrike: CurAmmoGear:= AddGear(CurWeapon^.Pos, 0, gtAirAttack, 1, _0, _0, 0);
                     amBlowTorch: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtBlowTorch, 0, SignAs(_0_5, dX), _0, 0);
                        amGirder: CurAmmoGear:= AddGear(0, 0, gtGirder, CurWeapon^.Pos, _0, _0, 0);
                      amTeleport: CurAmmoGear:= AddGear(CurWeapon^.Pos, 0, gtTeleport, 0, _0, _0, 0);
@@ -243,7 +246,7 @@ with Gear^,
                     amSeduction: CurAmmoGear:= AddGear(hwRound(lx + xx * cHHRadius * 2), hwRound(ly + yy * cHHRadius * 2), gtSeduction, 0, xx * _0_4, yy * _0_4, 0);
                    amWatermelon: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtWatermelon,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
                   amHellishBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtHellishBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
-                       amNapalm: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 2, _0, _0, 0);
+                       amNapalm: CurAmmoGear:= AddGear(CurWeapon^.Pos, 0, gtAirAttack, 2, _0, _0, 0);
                         amDrill: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtDrill, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                       amBallgun: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBallgun,  0, xx * _0_5, yy * _0_5, 0);
                     amJetpack: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtJetpack, 0, _0, _0, 0);
@@ -295,6 +298,7 @@ with Gear^,
 
         Power:= 0;
         if (CurAmmoGear <> nil)
+           and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) = 0)
            and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) = 0){check for dropping ammo from rope} then
            begin
            CurAmmoGear^.AmmoType:= CurAmmoType;
