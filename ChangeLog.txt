@@ -1,6 +1,37 @@
 + features
 * bugfixes
 
+0.9.13 -> 0.9.14:
+ + New audio tracks
+ + New forts: EvilChicken, Tank
+ + New game modes: AI Survival Mode, Per Hedgehog Ammo, Reset Health, Reset Weapons, Unlimited Attacks
+ + New grave: ring
+ + Over 30 new hats
+ + New themes: Art, Brick, Jungle, Stage
+ + New maps: ShoppaKing, Sticks, TrophyRace (Mission)
+ + New utilities: Portal Gun, Resurrector
+ + New weapons: Flamethrower, Hammer, Old Limburger, Piano Strike, Sticky Mines
+ + Weapons' projectiles will how be launched from their barrels instead of the hog's center
+ + Bomb clusters/Melon parts inherit some of the original bomb's speed
+ + Extended game statistics
+ + Improved health bar updating
+ + Hogs that blow themselves up will use triggers in they team color
+ + Settings allow better control over the level of details/effects
+ + Improved Lua support
+ + On empty ammo switch to no weapon rather than the first available one (to avoid shooting by accident)
+ + Display of hints in the frontend
+ + Some improvements of existing Themes of Maps
+ + Improved fire effects
+ + Online game lobby now features game filters
+ + Other Frontend enhancements
+ + Additional sounds
+ + Show special game rules in Esc screen
+ + Updated translation
+ + Speed optimizations
+ + Hedgewars will now use a sub directory of "My Documents" like other games instead of "%userprofile%/.hedgewars" under Windows
+ * Fixed bug that allowed charging a weapon while on rope, leading to frozen timer
+ * Various bug fixes
+
 0.9.12 -> 0.9.13:
  + Speed optimizations
  + New weapon: Birdy (carries your hog and lets you throw poisonous eggs at your foes)
