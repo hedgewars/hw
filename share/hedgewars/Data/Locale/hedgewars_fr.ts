@@ -45,19 +45,19 @@
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 a été enlevé de la liste des personnes ignorées</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 a été ajouté dans la liste des personnes ignorées</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 a été enlevé à votre liste d&apos;amis</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 a été ajouté à votre liste d&apos;amis</translation>
     </message>
 </context>
 <context>
@@ -88,7 +88,7 @@
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation type="unfinished"></translation>
+        <translation>Équipe par défaut</translation>
     </message>
     <message>
         <source>Hedgewars Demo File</source>
@@ -152,31 +152,31 @@
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Petits tunnels</translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Tunnels moyens</translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Grand tunnels</translation>
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Petites Îles flottantes</translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Îles flottantes moyennes</translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Grandes îles flottantes</translation>
     </message>
 </context>
 <context>
@@ -605,7 +605,7 @@ or pick another nickname in game config:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
+        <source>Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -868,7 +868,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation type="obsolete">Activer les mines aléatoires</translation>
+        <translation>Activer les mines aléatoires</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -1648,7 +1648,7 @@ Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation type="obsolete">Ajouter des Mines</translation>
+        <translation>Ajouter des Mines</translation>
     </message>
     <message>
         <source>Random Order</source>
