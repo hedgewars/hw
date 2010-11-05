@@ -990,7 +990,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Wszystkie żyjące jeże mają pełne życie od następnej tury</translation>
     </message>
 </context>
 <context>
@@ -1484,7 +1484,7 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Powiązanie plików nie powiodło się.</translation>
     </message>
 </context>
 <context>
@@ -1734,7 +1734,7 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Reset Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Odnów życie</translation>
     </message>
 </context>
 <context>
