@@ -32,3 +32,5 @@ glob:*.patch
 glob:*.orig
 glob:*.bak
 glob:*.rej
+glob:*.qm
+glob:share/hedgewars/Data/misc/hwengine.desktop

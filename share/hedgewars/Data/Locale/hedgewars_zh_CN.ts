@@ -89,6 +89,16 @@
         <source>DefaultTeam</source>
         <translation>默认团队</translation>
     </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -632,6 +642,11 @@ or pick another nickname in game config:</source>
         <comment>Tips</comment>
         <translation>你可以在你的主文件夹下下找到“Hedgewars”文件夹，里面又配置文件，你可以新建和备份这个文件，但请不要随便编辑它.</translation>
     </message>
+    <message>
+        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -888,7 +903,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>开启随机地雷</translation>
+        <translation type="obsolete">开启随机地雷</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -937,6 +952,22 @@ Do you still want to join the room?</source>
     <message>
         <source>AI respawns on death.</source>
         <translation>AI死后重生。</translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attacking does not end your turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons are reset to starting values each turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Each hedgehog has its own ammo. It does not share with the team.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1412,6 +1443,14 @@ Please check your installation</source>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
         <translation>不能覆盖默认的武器配置 &apos;%1&apos;!</translation>
     </message>
+    <message>
+        <source>All file associations have been set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File association failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -1501,6 +1540,10 @@ Please check your installation</source>
     <message>
         <source>Random Team</source>
         <translation>随机分配队伍</translation>
+    </message>
+    <message>
+        <source>Associate file extensions</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1600,7 +1643,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>布置地雷</translation>
+        <translation type="obsolete">布置地雷</translation>
     </message>
     <message>
         <source>Vampirism</source>
@@ -1641,6 +1684,22 @@ Please check your installation</source>
     <message>
         <source>AI Survival Mode</source>
         <translation>AI 复活模式</translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlimited Attacks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Weapons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Per Hedgehog Ammo</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

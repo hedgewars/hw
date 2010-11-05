@@ -90,6 +90,16 @@
         <source>DefaultTeam</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -633,6 +643,11 @@ wähle einen anderen Spitznamen:</translation>
         <comment>Tips</comment>
         <translation>Du findest die Hedgewars Konfigurationsdateien in deinem Home-Verzeichnis. Erstelle Backups oder kopiere deine Dateien, aber editiere sie besser nicht selbst.</translation>
     </message>
+    <message>
+        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -863,7 +878,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>Zufällige Minen Positionen</translation>
+        <translation type="obsolete">Zufällige Minen Positionen</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -940,6 +955,22 @@ Willst du trotzdem den Raum betreten?</translation>
     <message>
         <source>AI respawns on death.</source>
         <translation>KI wird wiederbelebt.</translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attacking does not end your turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons are reset to starting values each turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Each hedgehog has its own ammo. It does not share with the team.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1126,7 +1157,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Standard</translation>
     </message>
     <message>
         <source>Pro mode</source>
@@ -1421,6 +1452,14 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
         <translation>Kann nicht das Standardwaffenset &apos;%1&apos; überschreiben!</translation>
     </message>
+    <message>
+        <source>All file associations have been set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File association failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -1510,6 +1549,10 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <source>Random Team</source>
         <translation>Zufallsteam</translation>
+    </message>
+    <message>
+        <source>Associate file extensions</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1621,7 +1664,7 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>Minen hinzufügen</translation>
+        <translation type="obsolete">Minen hinzufügen</translation>
     </message>
     <message>
         <source>Random Order</source>
@@ -1650,6 +1693,22 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <source>AI Survival Mode</source>
         <translation>KI Überlebensmodus</translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlimited Attacks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Weapons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Per Hedgehog Ammo</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

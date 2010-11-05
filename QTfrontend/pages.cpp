@@ -982,7 +982,7 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
     topLine->addStretch();
 
 
-    BtnCampaignPage = addButton(":/res/SimpleGame.png", middleLine, 0, true);
+    BtnCampaignPage = addButton(":/res/Campaign.png", middleLine, 0, true);
     BtnCampaignPage->setToolTip(tr("Campaign Mode (...). IN DEVELOPMENT"));
 
     BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
@@ -1504,7 +1504,7 @@ PageScheme::PageScheme(QWidget* parent) :
     glGMLayout->addWidget(TBW_invulnerable,1,1,1,1);
 
     TBW_resethealth = new ToggleButtonWidget(gbGameModes, ":/res/btnResetHealth.png");
-    TBW_resethealth->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Health") + "</b>:<br />" + tr("Every hog of the team is fully restored at the end of turn"));
+    TBW_resethealth->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Health") + "</b>:<br />" + tr("All (living) hedgehogs are fully restored at the end of turn"));
     glGMLayout->addWidget(TBW_resethealth,1,2,1,1);
 
     TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric.png");
@@ -1661,8 +1661,8 @@ PageScheme::PageScheme(QWidget* parent) :
     l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
     glBSLayout->addWidget(l,6,1,1,1);
     SB_Mines = new QSpinBox(gbBasicSettings);
-    SB_Mines->setRange(1, 80);
-    SB_Mines->setValue(1);
+    SB_Mines->setRange(0, 80);
+    SB_Mines->setValue(0);
     SB_Mines->setSingleStep(5);
     glBSLayout->addWidget(SB_Mines,6,2,1,1);
 

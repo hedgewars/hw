@@ -90,6 +90,16 @@
         <source>DefaultTeam</source>
         <translation>Standardlag</translation>
     </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <comment>File Types</comment>
+        <translation>Demo-fil för Hedgewars</translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <comment>File Types</comment>
+        <translation>Sparfil för Hedgewars</translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -627,6 +637,11 @@ ett annat smeknamn i spelinställningarna:</translation>
         <comment>Tips</comment>
         <translation>Du kan hitta dina konfigurationsfiler under &quot;Hedgewars&quot; i din hem-mapp. Gör en säkerhetskopia eller ta med dig filerna, men redigera dem inte för hand.</translation>
     </message>
+    <message>
+        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <comment>Tips</comment>
+        <translation>Du kan associera Hedgewars-relaterade filer (sparfiler och demo-inspelningar) med spelet för att köra dem direkt från den filhanterare eller webbläsare du tycker bäst om.</translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -857,7 +872,7 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>Aktivera slumpade minor</translation>
+        <translation type="obsolete">Aktivera slumpade minor</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -934,6 +949,22 @@ Vill du fortfarande gå med i rummet?</translation>
     <message>
         <source>AI respawns on death.</source>
         <translation>AI kommer tillbaka när de dör.</translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation>Alla (levande) igelkottar återfår sin hälsa i slutet av varje tur</translation>
+    </message>
+    <message>
+        <source>Attacking does not end your turn.</source>
+        <translation>Att använda vapen avslutar inte din tur.</translation>
+    </message>
+    <message>
+        <source>Weapons are reset to starting values each turn.</source>
+        <translation>Vapnen nollställs till startvärderna varje tur.</translation>
+    </message>
+    <message>
+        <source>Each hedgehog has its own ammo. It does not share with the team.</source>
+        <translation>Varje igelkott har sin egen ammunition. Laget delar inte med varandra.</translation>
     </message>
 </context>
 <context>
@@ -1415,6 +1446,14 @@ Var god kontrollera din installation</translation>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
         <translation>Kan inte skriva över standardvapenschema &apos;%1&apos;!</translation>
     </message>
+    <message>
+        <source>All file associations have been set.</source>
+        <translation>Alla filassociationer har satts.</translation>
+    </message>
+    <message>
+        <source>File association failed.</source>
+        <translation>Filassociationer har misslyckats.</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -1504,6 +1543,10 @@ Var god kontrollera din installation</translation>
     <message>
         <source>Random Team</source>
         <translation>Slumpat lag</translation>
+    </message>
+    <message>
+        <source>Associate file extensions</source>
+        <translation>Associera filextentioner</translation>
     </message>
 </context>
 <context>
@@ -1615,7 +1658,7 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>Lägg till minor</translation>
+        <translation type="obsolete">Lägg till minor</translation>
     </message>
     <message>
         <source>Random Order</source>
@@ -1644,6 +1687,22 @@ Var god kontrollera din installation</translation>
     <message>
         <source>AI Survival Mode</source>
         <translation>AI-överlevnad</translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation>Återställ hälsa</translation>
+    </message>
+    <message>
+        <source>Unlimited Attacks</source>
+        <translation>Obegränsade attacker</translation>
+    </message>
+    <message>
+        <source>Reset Weapons</source>
+        <translation>Återställ vapen</translation>
+    </message>
+    <message>
+        <source>Per Hedgehog Ammo</source>
+        <translation>Ammunition per igelkott</translation>
     </message>
 </context>
 <context>

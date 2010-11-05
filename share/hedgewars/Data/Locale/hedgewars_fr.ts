@@ -45,19 +45,19 @@
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 a été enlevé de la liste des personnes ignorées</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 a été ajouté dans la liste des personnes ignorées</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 a été enlevé à votre liste d&apos;amis</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 a été ajouté à votre liste d&apos;amis</translation>
     </message>
 </context>
 <context>
@@ -88,6 +88,16 @@
     </message>
     <message>
         <source>DefaultTeam</source>
+        <translation>Équipe par défaut</translation>
+    </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <comment>File Types</comment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -142,31 +152,31 @@
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Petits tunnels</translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Tunnels moyens</translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Grand tunnels</translation>
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Petites Îles flottantes</translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Îles flottantes moyennes</translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Grandes îles flottantes</translation>
     </message>
 </context>
 <context>
@@ -595,7 +605,7 @@ or pick another nickname in game config:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
+        <source>Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -621,6 +631,11 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -929,6 +944,22 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>AI respawns on death.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attacking does not end your turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons are reset to starting values each turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1405,6 +1436,14 @@ Veuillez vérifier votre installation</translation>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>All file associations have been set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File association failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -1493,6 +1532,10 @@ Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <source>Random Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Associate file extensions</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1633,6 +1676,22 @@ Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <source>AI Survival Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlimited Attacks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Weapons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Per Hedgehog Ammo</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

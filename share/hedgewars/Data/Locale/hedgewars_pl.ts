@@ -926,7 +926,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>Dodaj miny</translation>
+        <translation type="obsolete">Dodaj miny</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -987,6 +987,10 @@ Czy chcesz dołączyć do pokoju?</translation>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation>Każdy z Jeży ma własny zestaw broni. Nie są one dzielone pomiędzy członków drużyny.</translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1478,6 +1482,10 @@ Sprawdź poprawność instalacji</translation>
         <source>All file associations have been set.</source>
         <translation>Wszystkie powiązania plików zostały utworzone</translation>
     </message>
+    <message>
+        <source>File association failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -1682,7 +1690,7 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>Dodaj miny</translation>
+        <translation type="obsolete">Dodaj miny</translation>
     </message>
     <message>
         <source>Random Order</source>
@@ -1723,6 +1731,10 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation>Oddzielna amunicja</translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

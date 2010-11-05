@@ -318,6 +318,13 @@
     return sectionTitle;
 }
 
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == 2)
+        return 56;
+    else
+        return self.tableView.rowHeight;
+}
+
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {

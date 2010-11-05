@@ -350,6 +350,8 @@ DefaultBinds[KeyNameToCode('right')]:= '+right';
 DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
 {$ENDIF}
 
+for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+inttostr(i))]:= 'slot '+inttostr(i);
+
 SetDefaultBinds();
 end;
 

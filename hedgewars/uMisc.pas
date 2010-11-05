@@ -873,7 +873,7 @@ begin
     cReducedQuality := rqNone;
     //userNick is in uChat
     recordFileName  := '';
-    cReadyDelay     := 5000;
+    cReadyDelay     := 0;
 end;
 
 end.

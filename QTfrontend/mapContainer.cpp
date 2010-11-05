@@ -62,8 +62,14 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     chooseMap = new QComboBox(this);
     chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    chooseMap->addItem(QIcon(":/res/mapRandom.png"), QComboBox::tr("generated map..."));
-    chooseMap->addItem(QIcon(":/res/mapMaze.png"), QComboBox::tr("generated maze..."));
+    chooseMap->addItem(
+// FIXME - need real icons. Disabling until then
+//QIcon(":/res/mapRandom.png"), 
+QComboBox::tr("generated map..."));
+    chooseMap->addItem(
+// FIXME - need real icons. Disabling until then
+//QIcon(":/res/mapMaze.png"), 
+QComboBox::tr("generated maze..."));
     chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
 
     int missionindex = chooseMap->count();
@@ -95,11 +101,17 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
             mapInfo.push_back(mapLuaFile.exists());
             if(mapLuaFile.exists())
             {
-                chooseMap->insertItem(missionindex++, QIcon(":/res/mapMission.png"), QComboBox::tr("Mission") + ": " + map, mapInfo);
+                chooseMap->insertItem(missionindex++, 
+// FIXME - need real icons. Disabling until then
+//QIcon(":/res/mapMission.png"), 
+QComboBox::tr("Mission") + ": " + map, mapInfo);
                 numMissions++;
             }
             else
-                chooseMap->addItem(QIcon(":/res/mapCustom.png"), map, mapInfo);
+                chooseMap->addItem(
+// FIXME - need real icons. Disabling until then
+//QIcon(":/res/mapCustom.png"), 
+map, mapInfo);
             mapCfgFile.close();
         }
     }

@@ -876,7 +876,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>Habilitar minas aleatorias</translation>
+        <translation type="obsolete">Habilitar minas aleatorias</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -965,6 +965,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation>Cada erizo tiene su propia munición y no la comparte con el resto del equipo.</translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1453,6 +1457,10 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
         <source>All file associations have been set.</source>
         <translation>Se reestablecieron todas las asociaciones de tipo de archivo.</translation>
     </message>
+    <message>
+        <source>File association failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -1657,7 +1665,7 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>Añadir minas</translation>
+        <translation type="obsolete">Añadir minas</translation>
     </message>
     <message>
         <source>Random Order</source>
@@ -1698,6 +1706,10 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation>Munición individualizada</translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
