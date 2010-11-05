@@ -245,7 +245,8 @@ if (copy(s, 1, 6) = '/team ') and (length(s) > 6) then
     end;
 if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
     begin
-    if CurrentTeam^.ExtDriven then exit;
+    if CurrentTeam^.ExtDriven or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
+        exit;
 
     for i:= Low(TWave) to High(TWave) do
         if (s = Wavez[i].cmd) then
