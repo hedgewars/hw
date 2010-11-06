@@ -605,11 +605,6 @@ or pick another nickname in game config:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!</source>
-        <comment>Tips</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
@@ -636,6 +631,11 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -868,7 +868,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>Activer les mines aléatoires</translation>
+        <translation type="obsolete">Activer les mines aléatoires</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -1147,35 +1147,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Défaut</translation>
-    </message>
-    <message>
-        <source>Pro mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shoppa</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Basketball</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Minefield</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Barrel mayhem</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tunnel hogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Crazy</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Défaut</translation>
     </message>
 </context>
 <context>
@@ -1341,7 +1313,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Type</translation>
     </message>
     <message>
         <source>Grave</source>
@@ -1377,6 +1349,14 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1648,7 +1628,7 @@ Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>Ajouter des Mines</translation>
+        <translation type="obsolete">Ajouter des Mines</translation>
     </message>
     <message>
         <source>Random Order</source>

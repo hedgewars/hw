@@ -1151,35 +1151,35 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation>Predefinido</translation>
+        <translation type="obsolete">Predefinido</translation>
     </message>
     <message>
         <source>Pro mode</source>
-        <translation>Modo Profissional</translation>
+        <translation type="obsolete">Modo Profissional</translation>
     </message>
     <message>
         <source>Shoppa</source>
-        <translation>Shoppa</translation>
+        <translation type="obsolete">Shoppa</translation>
     </message>
     <message>
         <source>Basketball</source>
-        <translation>Basquetebol</translation>
+        <translation type="obsolete">Basquetebol</translation>
     </message>
     <message>
         <source>Minefield</source>
-        <translation>Campo de minas</translation>
+        <translation type="obsolete">Campo de minas</translation>
     </message>
     <message>
         <source>Barrel mayhem</source>
-        <translation>Barrel mayhem</translation>
+        <translation type="obsolete">Barrel mayhem</translation>
     </message>
     <message>
         <source>Tunnel hogs</source>
-        <translation>Tuneis</translation>
+        <translation type="obsolete">Tuneis</translation>
     </message>
     <message>
         <source>Crazy</source>
-        <translation>Crazy</translation>
+        <translation type="obsolete">Crazy</translation>
     </message>
 </context>
 <context>
@@ -1382,6 +1382,14 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message>
         <source>Quality</source>
         <translation>Qualidade</translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation>% de Caixas de Vida</translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
+        <translation>Vida por Caixa</translation>
     </message>
 </context>
 <context>

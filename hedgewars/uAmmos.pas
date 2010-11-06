@@ -44,8 +44,7 @@ procedure ResetWeapons;
 function  GetAmmoByNum(num: Longword): PHHAmmo;
 function  GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 
-var shoppa: boolean;
-    StoreCnt: Longword;
+var StoreCnt: Longword;
 
 implementation
 uses uMisc, uGears, uWorld, uLocale, uConsole, uMobile;
@@ -96,14 +95,6 @@ var cnt: Longword;
     substr: shortstring; // TEMPORARY
 begin
 TryDo((byte(ammoLoadout[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoProbability[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoDelay[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoReinforcement[0]) = byte(ord(High(TAmmoType)))), 'Incomplete or missing ammo scheme set (incompatible frontend or demo/save?)', true);
-
-// FIXME - TEMPORARY hardcoded check on shoppa pending creation of crate *type* probability editor
-substr:= Copy(ammoLoadout,1,42);
-if (substr = '000000990000009000000000000000000000000000') or  // ropes + parachute
-   (substr = '000000900000000000000000000000000000009000') or  // saucer
-   (substr = '000000900000000000000000000000000000000009') or  // portal
-   (substr = '000000990000000000000000000000000000000000')     // ropes
-   then shoppa:= true;
 
 inc(StoreCnt);
 TryDo(StoreCnt <= cMaxHHs, 'Ammo stores overflow', true);
@@ -432,7 +423,6 @@ end;
 
 procedure initModule;
 begin
-    shoppa:= false;
     StoreCnt:= 0;
     ammoLoadout:= '';
     ammoProbability:= '';

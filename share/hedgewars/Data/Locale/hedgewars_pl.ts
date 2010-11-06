@@ -1177,35 +1177,35 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation>Domyślne</translation>
+        <translation type="obsolete">Domyślne</translation>
     </message>
     <message>
         <source>Pro mode</source>
-        <translation>Pro mode</translation>
+        <translation type="obsolete">Pro mode</translation>
     </message>
     <message>
         <source>Shoppa</source>
-        <translation>Shoppa</translation>
+        <translation type="obsolete">Shoppa</translation>
     </message>
     <message>
         <source>Basketball</source>
-        <translation>Basketball</translation>
+        <translation type="obsolete">Basketball</translation>
     </message>
     <message>
         <source>Minefield</source>
-        <translation>Minefield</translation>
+        <translation type="obsolete">Minefield</translation>
     </message>
     <message>
         <source>Barrel mayhem</source>
-        <translation>Barrel mayhem</translation>
+        <translation type="obsolete">Barrel mayhem</translation>
     </message>
     <message>
         <source>Tunnel hogs</source>
-        <translation>Tunnel hogs</translation>
+        <translation type="obsolete">Tunnel hogs</translation>
     </message>
     <message>
         <source>Crazy</source>
-        <translation>Crazy</translation>
+        <translation type="obsolete">Crazy</translation>
     </message>
 </context>
 <context>
@@ -1420,6 +1420,14 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     <message>
         <source>Quality</source>
         <translation>Jakość</translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

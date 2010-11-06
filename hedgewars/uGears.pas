@@ -1657,7 +1657,7 @@ begin
 
     case crate of
         HealthCrate: begin
-            FollowGear^.Health := 25;
+            FollowGear^.Health := cHealthCaseAmount;
             FollowGear^.Pos := posCaseHealth;
             AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
             end;
@@ -1699,14 +1699,13 @@ for i:= Low(TAmmoType) to High(TAmmoType) do
 t:=0;
 a:=aTot;
 h:= 1;
-// FIXME - shoppa is TEMPORARY REMOVE WHEN CRATE PROBABILITY ALLOWS DISABLING OF HEALTH CRATES
-// Preserving health crate distribution of 35% until that happens
+
 if (aTot+uTot) <> 0 then
-    if not shoppa and ((GameFlags and gfInvulnerable) = 0) then
+    if ((GameFlags and gfInvulnerable) = 0) then
         begin
-        h:= 3500;
+        h:= cHealthCaseProb * 100;
         t:= GetRandom(10000);
-        a:= 6500*aTot div (aTot+uTot)
+        a:= (10000-h)*aTot div (aTot+uTot)
         end
     else
         begin
@@ -1718,7 +1717,7 @@ if (aTot+uTot) <> 0 then
 if t<h then
     begin
     FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
-    FollowGear^.Health:= 25;
+    FollowGear^.Health:= cHealthCaseAmount;
     FollowGear^.Pos:= posCaseHealth;
     AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
     end

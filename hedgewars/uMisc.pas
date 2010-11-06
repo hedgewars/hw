@@ -74,6 +74,9 @@ var
     cMinesTime       : LongInt;
     cMaxAIThinkTime  : Longword;
 
+    cHealthCaseProb  : LongInt;
+    cHealthCaseAmount: LongInt;
+
     cCloudsNumber    : LongInt;
 
     cTagsMask        : byte;
@@ -758,6 +761,8 @@ begin
     cMinesTime          := 3000;
     cMaxAIThinkTime     := 9000;
     cCloudsNumber       := 9;
+    cHealthCaseProb     := 35;
+    cHealthCaseAmount   := 25;
 
     cTagsMask       := 0;
     KBnum           := 0;

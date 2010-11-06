@@ -347,7 +347,7 @@ ett annat smeknamn i spelinställningarna:</translation>
     </message>
     <message>
         <source>Health graph</source>
-        <translation>Hälsograf</translation>
+        <translation>Livgraf</translation>
     </message>
     <message>
         <source>Ranking</source>
@@ -1151,35 +1151,35 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation>Standard</translation>
+        <translation type="obsolete">Standard</translation>
     </message>
     <message>
         <source>Pro mode</source>
-        <translation>Pro-läge</translation>
+        <translation type="obsolete">Pro-läge</translation>
     </message>
     <message>
         <source>Shoppa</source>
-        <translation>Shoppa</translation>
+        <translation type="obsolete">Shoppa</translation>
     </message>
     <message>
         <source>Basketball</source>
-        <translation>Basket</translation>
+        <translation type="obsolete">Basket</translation>
     </message>
     <message>
         <source>Minefield</source>
-        <translation>Minfält</translation>
+        <translation type="obsolete">Minfält</translation>
     </message>
     <message>
         <source>Barrel mayhem</source>
-        <translation>Tunnförödelse</translation>
+        <translation type="obsolete">Tunnförödelse</translation>
     </message>
     <message>
         <source>Tunnel hogs</source>
-        <translation>Tunnelkottar</translation>
+        <translation type="obsolete">Tunnelkottar</translation>
     </message>
     <message>
         <source>Crazy</source>
-        <translation>Galet</translation>
+        <translation type="obsolete">Galet</translation>
     </message>
 </context>
 <context>
@@ -1388,6 +1388,14 @@ Det kan finnas trasiga eller ofullständiga funktioner. Använd på egen risk!</
     <message>
         <source>Quality</source>
         <translation>Kvalitet</translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation>% förbandslådor</translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
+        <translation>Liv i förbandslådor</translation>
     </message>
 </context>
 <context>

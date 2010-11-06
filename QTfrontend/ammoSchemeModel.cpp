@@ -54,6 +54,8 @@ QList<QVariant> defaultScheme = QList<QVariant>()
         << QVariant(4)             // mines number   28
         << QVariant(0)             // mine dud pct   29
         << QVariant(2)             // explosives     30
+        << QVariant(35)            // health case pct 31
+        << QVariant(25)            // health case amt 32
         ;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -104,6 +106,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << "minesnum"         // 28
         << "minedudpct"       // 29
         << "explosives"       // 30
+        << "healthprobability" // 31
+        << "healthcaseamount" // 32
         ;
 
     QList<QVariant> proMode;
@@ -139,6 +143,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(0)             // mines number   28
         << QVariant(0)             // mine dud pct   29
         << QVariant(2)             // explosives     30
+        << QVariant(35)            // health case pct 31
+        << QVariant(25)            // health case amt 32
         ;
 
     QList<QVariant> shoppa;
@@ -174,6 +180,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(0)             // mines number   28
         << QVariant(0)             // mine dud pct   29
         << QVariant(0)             // explosives     30
+        << QVariant(0)             // health case pct 31
+        << QVariant(25)            // health case amt 32
         ;
 
     QList<QVariant> cleanslate;
@@ -209,6 +217,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(4)             // mines number   28
         << QVariant(0)             // mine dud pct   29
         << QVariant(2)             // explosives     30
+        << QVariant(35)            // health case pct 31
+        << QVariant(25)            // health case amt 32
         ;
 
     QList<QVariant> minefield;
@@ -244,6 +254,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(80)            // mines number   28
         << QVariant(0)             // mine dud pct   29
         << QVariant(0)             // explosives     30
+        << QVariant(35)            // health case pct 31
+        << QVariant(25)            // health case amt 32
         ;
 
     QList<QVariant> barrelmayhem;
@@ -279,6 +291,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(0)             // mines number   28
         << QVariant(0)             // mine dud pct   29
         << QVariant(80)            // explosives     30
+        << QVariant(35)            // health case pct 31
+        << QVariant(25)            // health case amt 32
         ;
 
     QList<QVariant> tunnelhogs;
@@ -314,6 +328,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(10)            // mines number   28
         << QVariant(10)            // mine dud pct   29
         << QVariant(10)            // explosives     30
+        << QVariant(35)            // health case pct 31
+        << QVariant(25)            // health case amt 32
         ;
 
     schemes.append(defaultScheme);

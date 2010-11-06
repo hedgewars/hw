@@ -1155,35 +1155,35 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Default</source>
-        <translation>Predeterminado</translation>
+        <translation type="obsolete">Predeterminado</translation>
     </message>
     <message>
         <source>Pro mode</source>
-        <translation>Modo pro</translation>
+        <translation type="obsolete">Modo pro</translation>
     </message>
     <message>
         <source>Shoppa</source>
-        <translation>Shoppa</translation>
+        <translation type="obsolete">Shoppa</translation>
     </message>
     <message>
         <source>Basketball</source>
-        <translation>Baloncesto</translation>
+        <translation type="obsolete">Baloncesto</translation>
     </message>
     <message>
         <source>Minefield</source>
-        <translation>Campo de minas</translation>
+        <translation type="obsolete">Campo de minas</translation>
     </message>
     <message>
         <source>Barrel mayhem</source>
-        <translation>Bodega infernal</translation>
+        <translation type="obsolete">Bodega infernal</translation>
     </message>
     <message>
         <source>Tunnel hogs</source>
-        <translation>Erizos subterráneos</translation>
+        <translation type="obsolete">Erizos subterráneos</translation>
     </message>
     <message>
         <source>Crazy</source>
-        <translation>Lunático</translation>
+        <translation type="obsolete">Lunático</translation>
     </message>
 </context>
 <context>
@@ -1395,6 +1395,14 @@ así como carecer de algunas funcionalidades o simplemente funcionar mal.
     <message>
         <source>Quality</source>
         <translation>Calidad</translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

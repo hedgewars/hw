@@ -486,6 +486,8 @@ private:
     QSpinBox * SB_InitHealth;
     QSpinBox * SB_SuddenDeath;
     FreqSpinBox * SB_CaseProb;
+    QSpinBox * SB_HealthCrates;
+    QSpinBox * SB_CrateHealth;
     QSpinBox * SB_MinesTime;
     QSpinBox * SB_Mines;
     QSpinBox * SB_MineDuds;

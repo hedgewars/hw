@@ -1151,35 +1151,35 @@ Haluatko silti liittyä huoneeseen?</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation>Oletus</translation>
+        <translation type="obsolete">Oletus</translation>
     </message>
     <message>
         <source>Pro mode</source>
-        <translation>Pro-tila</translation>
+        <translation type="obsolete">Pro-tila</translation>
     </message>
     <message>
         <source>Shoppa</source>
-        <translation>Shoppa</translation>
+        <translation type="obsolete">Shoppa</translation>
     </message>
     <message>
         <source>Basketball</source>
-        <translation>Koripallo</translation>
+        <translation type="obsolete">Koripallo</translation>
     </message>
     <message>
         <source>Minefield</source>
-        <translation>Miinakenttä</translation>
+        <translation type="obsolete">Miinakenttä</translation>
     </message>
     <message>
         <source>Barrel mayhem</source>
-        <translation>Tynnyrikaaos</translation>
+        <translation type="obsolete">Tynnyrikaaos</translation>
     </message>
     <message>
         <source>Tunnel hogs</source>
-        <translation>Tunnelisiilit</translation>
+        <translation type="obsolete">Tunnelisiilit</translation>
     </message>
     <message>
         <source>Crazy</source>
-        <translation>Sekopäinen</translation>
+        <translation type="obsolete">Sekopäinen</translation>
     </message>
 </context>
 <context>
@@ -1382,6 +1382,14 @@ Haluatko silti liittyä huoneeseen?</translation>
     <message>
         <source>Quality</source>
         <translation>Laatu</translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

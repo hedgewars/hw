@@ -1112,35 +1112,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Öntanımlı</translation>
-    </message>
-    <message>
-        <source>Pro mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shoppa</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Basketball</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Minefield</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Barrel mayhem</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tunnel hogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Crazy</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Öntanımlı</translation>
     </message>
 </context>
 <context>
@@ -1342,6 +1314,14 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

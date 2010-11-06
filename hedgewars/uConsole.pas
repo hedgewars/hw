@@ -234,6 +234,8 @@ begin
     RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
     RegisterVariable('ready'   , vtLongInt, @cReadyDelay    , false);
     RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
+    RegisterVariable('healthprob', vtLongInt, @cHealthCaseProb, false);
+    RegisterVariable('hcaseamount', vtLongInt, @cHealthCaseAmount, false);
     RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);
     RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);
     RegisterVariable('minedudpct',vtLongInt,@cMineDudPercent, false);

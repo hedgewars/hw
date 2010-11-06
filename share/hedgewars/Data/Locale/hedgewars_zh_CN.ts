@@ -1154,35 +1154,35 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Default</source>
-        <translation>默认</translation>
+        <translation type="obsolete">默认</translation>
     </message>
     <message>
         <source>Pro mode</source>
-        <translation>Pro 模式</translation>
+        <translation type="obsolete">Pro 模式</translation>
     </message>
     <message>
         <source>Shoppa</source>
-        <translation>绳索模式</translation>
+        <translation type="obsolete">绳索模式</translation>
     </message>
     <message>
         <source>Basketball</source>
-        <translation>篮球模式</translation>
+        <translation type="obsolete">篮球模式</translation>
     </message>
     <message>
         <source>Minefield</source>
-        <translation>地雷模式</translation>
+        <translation type="obsolete">地雷模式</translation>
     </message>
     <message>
         <source>Barrel mayhem</source>
-        <translation>武器不共享</translation>
+        <translation type="obsolete">武器不共享</translation>
     </message>
     <message>
         <source>Tunnel hogs</source>
-        <translation>洞穴刺猬</translation>
+        <translation type="obsolete">洞穴刺猬</translation>
     </message>
     <message>
         <source>Crazy</source>
-        <translation>疯狂模式</translation>
+        <translation type="obsolete">疯狂模式</translation>
     </message>
 </context>
 <context>
@@ -1385,6 +1385,14 @@ Do you still want to join the room?</source>
     <message>
         <source>Quality</source>
         <translation>价值</translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1209,35 +1209,35 @@ Você ainda quer entrar na sala?</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation>Padrão</translation>
+        <translation type="obsolete">Padrão</translation>
     </message>
     <message>
         <source>Pro mode</source>
-        <translation>Modo Pro</translation>
+        <translation type="obsolete">Modo Pro</translation>
     </message>
     <message>
         <source>Shoppa</source>
-        <translation>Shoppa</translation>
+        <translation type="obsolete">Shoppa</translation>
     </message>
     <message>
         <source>Basketball</source>
-        <translation>Basketball</translation>
+        <translation type="obsolete">Basketball</translation>
     </message>
     <message>
         <source>Minefield</source>
-        <translation>Campo Minado</translation>
+        <translation type="obsolete">Campo Minado</translation>
     </message>
     <message>
         <source>Barrel mayhem</source>
-        <translation type="unfinished">Inferno de Barris</translation>
+        <translation type="obsolete">Inferno de Barris</translation>
     </message>
     <message>
         <source>Tunnel hogs</source>
-        <translation type="unfinished">Túneis</translation>
+        <translation type="obsolete">Túneis</translation>
     </message>
     <message>
         <source>Crazy</source>
-        <translation type="unfinished">Crazy</translation>
+        <translation type="obsolete">Crazy</translation>
     </message>
 </context>
 <context>
@@ -1450,6 +1450,14 @@ Algumas funcionalidades podem estar quebradas ou incompletas. Use a sua conta e 
     <message>
         <source>Quality</source>
         <translation>Qualidade</translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
