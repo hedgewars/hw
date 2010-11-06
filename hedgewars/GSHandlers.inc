@@ -2655,6 +2655,12 @@ procedure doStepWaterUp(Gear: PGear);
 var 
     i: LongWord;
 begin
+    if (Gear^.Tag = 0) or (cWaterLine = 0) then
+        begin
+            DeleteGear(Gear);
+            exit
+        end;
+
     AllInactive := false;
 
     inc(Gear^.Timer);
@@ -2671,9 +2677,7 @@ begin
         SetAllToActive
     end;
 
-    inc(Gear^.Tag);
-    if (Gear^.Tag = 47) or (cWaterLine = 0) then
-        DeleteGear(Gear)
+    dec(Gear^.Tag);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

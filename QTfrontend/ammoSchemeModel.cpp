@@ -56,6 +56,8 @@ QList<QVariant> defaultScheme = QList<QVariant>()
         << QVariant(2)             // explosives     30
         << QVariant(35)            // health case pct 31
         << QVariant(25)            // health case amt 32
+        << QVariant(47)            // water rise amt 33
+        << QVariant(5)             // health dec amt 34
         ;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -110,6 +112,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << "explosives"       // 30
         << "healthprobability" // 31
         << "healthcaseamount" // 32
+        << "waterrise"        // 33
+        << "healthdecrease"   // 34
         ;
 
     QList<QVariant> proMode;
@@ -147,6 +151,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(2)             // explosives     30
         << QVariant(35)            // health case pct 31
         << QVariant(25)            // health case amt 32
+        << QVariant(47)            // water rise amt 33
+        << QVariant(5)             // health dec amt 34
         ;
 
     QList<QVariant> shoppa;
@@ -184,6 +190,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(0)             // explosives     30
         << QVariant(0)             // health case pct 31
         << QVariant(25)            // health case amt 32
+        << QVariant(47)            // water rise amt 33
+        << QVariant(5)             // health dec amt 34
         ;
 
     QList<QVariant> cleanslate;
@@ -221,6 +229,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(2)             // explosives     30
         << QVariant(25)            // health case pct 31
         << QVariant(50)            // health case amt 32
+        << QVariant(47)            // water rise amt 33
+        << QVariant(5)             // health dec amt 34
         ;
 
     QList<QVariant> minefield;
@@ -258,6 +268,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(0)             // explosives     30
         << QVariant(35)            // health case pct 31
         << QVariant(25)            // health case amt 32
+        << QVariant(47)            // water rise amt 33
+        << QVariant(5)             // health dec amt 34
         ;
 
     QList<QVariant> barrelmayhem;
@@ -295,6 +307,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(80)            // explosives     30
         << QVariant(35)            // health case pct 31
         << QVariant(25)            // health case amt 32
+        << QVariant(47)            // water rise amt 33
+        << QVariant(5)             // health dec amt 34
         ;
 
     QList<QVariant> tunnelhogs;
@@ -332,6 +346,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(10)            // explosives     30
         << QVariant(35)            // health case pct 31
         << QVariant(25)            // health case amt 32
+        << QVariant(47)            // water rise amt 33
+        << QVariant(5)             // health dec amt 34
         ;
 
     QList<QVariant> forts;
@@ -369,6 +385,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(0)             // explosives     30
         << QVariant(35)            // health case pct 31
         << QVariant(25)            // health case amt 32
+        << QVariant(47)            // water rise amt 33
+        << QVariant(5)             // health dec amt 34
         ;
 
     QList<QVariant> timeless;
@@ -406,6 +424,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(2)             // explosives     30
         << QVariant(35)            // health case pct 31
         << QVariant(30)            // health case amt 32
+        << QVariant(47)            // water rise amt 33
+        << QVariant(5)             // health dec amt 34
         ;
 
     schemes.append(defaultScheme);

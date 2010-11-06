@@ -1397,6 +1397,14 @@ Det kan finnas trasiga eller ofullständiga funktioner. Använd på egen risk!</
         <source>Health in Crates</source>
         <translation>Liv i förbandslådor</translation>
     </message>
+    <message>
+        <source>Sudden Death Water Rise</source>
+        <translation>Sudden Death vattenhöjning</translation>
+    </message>
+    <message>
+        <source>Sudden Death Health Decrease</source>
+        <translation>Sudden Death livminskning</translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>

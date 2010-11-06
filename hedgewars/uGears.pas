@@ -539,6 +539,9 @@ gtFlamethrower: begin
  gtResurrector: begin
                 gear^.Radius := 100;
                 end;
+     gtWaterUp: begin
+                gear^.Tag := 47;
+                end;
     end;
 
 InsertGearToList(gear);
@@ -662,7 +665,6 @@ while Gear <> nil do
         end;
     Gear:= Gear^.NextGear
     end;
-SuddenDeathDmg:= false;
 end;
 
 procedure HealthMachine;
@@ -684,8 +686,11 @@ begin
                 inc(tmp, ModifyDamage(5, Gear));
                 if (GameFlags and gfResetHealth) <> 0 then dec(PHedgehog(Gear^.Hedgehog)^.InitialHealth)  // does not need a minimum check since <= 1 basically disables it
                 end;
-            inc(tmp, cHealthDecrease);
-            if (GameFlags and gfResetHealth) <> 0 then dec(PHedgehog(Gear^.Hedgehog)^.InitialHealth, cHealthDecrease);
+            if (TotalRounds > cSuddenDTurns - 1) then
+                begin
+                inc(tmp, cHealthDecrease);
+                if (GameFlags and gfResetHealth) <> 0 then dec(PHedgehog(Gear^.Hedgehog)^.InitialHealth, cHealthDecrease)
+                end;
             if PHedgehog(Gear^.Hedgehog)^.King then
                 begin
                 flag:= false;
@@ -797,8 +802,8 @@ case step of
                 begin
                 if TotalRounds = cSuddenDTurns + 1 then bWaterRising:= true;
 
-                if bWaterRising then
-                AddGear(0, 0, gtWaterUp, 0, _0, _0, 0);
+                if bWaterRising and (cWaterRise > 0) then
+                    AddGear(0, 0, gtWaterUp, 0, _0, _0, 0)^.Tag:= cWaterRise;
 
                 inc(step)
                 end else inc(step);
@@ -807,15 +812,15 @@ case step of
             inc(step)
             end;
     stHealth: begin
-            if (TotalRounds = cSuddenDTurns - 1) and (cHealthDecrease = 0) and not isInMultiShoot then
+            if (TotalRounds = cSuddenDTurns) and not SuddenDeathDmg and not isInMultiShoot then
                 begin
-                cHealthDecrease:= 5;
+                SuddenDeathDmg:= true;
                 AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                 playSound(sndSuddenDeath)
                 end
-            else if (TotalRounds < cSuddenDTurns - 1) and not isInMultiShoot then
+            else if (TotalRounds < cSuddenDTurns) and not isInMultiShoot then
                 begin
-                i:= cSuddenDTurns - TotalRounds - 1;
+                i:= cSuddenDTurns - TotalRounds;
                 s:= inttostr(i);
                 if i = 1 then
                     AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
@@ -828,7 +833,6 @@ case step of
             else begin
                 bBetweenTurns:= true;
                 HealthMachine;
-                if cHealthDecrease > 0 then SuddenDeathDmg:= true;
                 step:= stChDmg
                 end
             end;

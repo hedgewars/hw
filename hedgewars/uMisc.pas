@@ -76,6 +76,8 @@ var
 
     cHealthCaseProb  : LongInt;
     cHealthCaseAmount: LongInt;
+    cWaterRise       : LongInt;
+    cHealthDecrease  : LongInt;
 
     cCloudsNumber    : LongInt;
 
@@ -118,8 +120,7 @@ var
     cInactDelay     : Longword;
 
     bBetweenTurns   : boolean;
-    cHealthDecrease : LongWord;
-    bWaterRising    : Boolean;
+    bWaterRising    : boolean;
 
     ShowCrosshair   : boolean;
     CursorMovementX : LongInt;
@@ -746,7 +747,6 @@ begin
     TimeTrialStopTime   := 0;
     cWaterLine          := LAND_HEIGHT;
     cGearScrEdgesDist   := 240;
-    cHealthDecrease     := 0;
 
     GameFlags           := 0;
     TrainingFlags       := 0;
@@ -763,6 +763,8 @@ begin
     cCloudsNumber       := 9;
     cHealthCaseProb     := 35;
     cHealthCaseAmount   := 25;
+    cWaterRise          := 47;
+    cHealthDecrease     := 5;
 
     cTagsMask       := 0;
     KBnum           := 0;

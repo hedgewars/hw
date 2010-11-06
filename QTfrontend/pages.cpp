@@ -1622,104 +1622,132 @@ PageScheme::PageScheme(QWidget* parent) :
     glBSLayout->addWidget(SB_SuddenDeath,3,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("Crate Drops"));
+    l->setText(QLabel::tr("Sudden Death Water Rise"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,4,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconBox.png"));
+    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png")); // TODO: icon
     glBSLayout->addWidget(l,4,1,1,1);
-    SB_CaseProb = new FreqSpinBox(gbBasicSettings);
-    SB_CaseProb->setRange(0, 9);
-    SB_CaseProb->setValue(5);
-    glBSLayout->addWidget(SB_CaseProb,4,2,1,1);
+    SB_WaterRise = new QSpinBox(gbBasicSettings);
+    SB_WaterRise->setRange(0, 100);
+    SB_WaterRise->setValue(47);
+    SB_WaterRise->setSingleStep(5);
+    glBSLayout->addWidget(SB_WaterRise,4,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("% Health Crates"));
+    l->setText(QLabel::tr("Sudden Death Health Decrease"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,5,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png")); // TODO: icon
     glBSLayout->addWidget(l,5,1,1,1);
-    SB_HealthCrates = new QSpinBox(gbBasicSettings);
-    SB_HealthCrates->setRange(0, 100);
-    SB_HealthCrates->setValue(35);
-    SB_HealthCrates->setSingleStep(5);
-    glBSLayout->addWidget(SB_HealthCrates,5,2,1,1);
+    SB_HealthDecrease = new QSpinBox(gbBasicSettings);
+    SB_HealthDecrease->setRange(0, 100);
+    SB_HealthDecrease->setValue(5);
+    SB_HealthDecrease->setSingleStep(1);
+    glBSLayout->addWidget(SB_HealthDecrease,5,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("Health in Crates"));
+    l->setText(QLabel::tr("Crate Drops"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,6,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconBox.png"));
     glBSLayout->addWidget(l,6,1,1,1);
-    SB_CrateHealth = new QSpinBox(gbBasicSettings);
-    SB_CrateHealth->setRange(0, 200);
-    SB_CrateHealth->setValue(25);
-    SB_CrateHealth->setSingleStep(5);
-    glBSLayout->addWidget(SB_CrateHealth,6,2,1,1);
+    SB_CaseProb = new FreqSpinBox(gbBasicSettings);
+    SB_CaseProb->setRange(0, 9);
+    SB_CaseProb->setValue(5);
+    glBSLayout->addWidget(SB_CaseProb,6,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("Mines Time"));
+    l->setText(QLabel::tr("% Health Crates"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,7,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
     glBSLayout->addWidget(l,7,1,1,1);
+    SB_HealthCrates = new QSpinBox(gbBasicSettings);
+    SB_HealthCrates->setRange(0, 100);
+    SB_HealthCrates->setValue(35);
+    SB_HealthCrates->setSingleStep(5);
+    glBSLayout->addWidget(SB_HealthCrates,7,2,1,1);
+
+    l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("Health in Crates"));
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,8,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
+    glBSLayout->addWidget(l,8,1,1,1);
+    SB_CrateHealth = new QSpinBox(gbBasicSettings);
+    SB_CrateHealth->setRange(0, 200);
+    SB_CrateHealth->setValue(25);
+    SB_CrateHealth->setSingleStep(5);
+    glBSLayout->addWidget(SB_CrateHealth,8,2,1,1);
+
+    l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("Mines Time"));
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,9,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
+    glBSLayout->addWidget(l,9,1,1,1);
     SB_MinesTime = new QSpinBox(gbBasicSettings);
     SB_MinesTime->setRange(-1, 5);
     SB_MinesTime->setValue(3);
     SB_MinesTime->setSingleStep(1);
     SB_MinesTime->setSpecialValueText(tr("Random"));
     SB_MinesTime->setSuffix(" "+ tr("Seconds"));
-    glBSLayout->addWidget(SB_MinesTime,7,2,1,1);
+    glBSLayout->addWidget(SB_MinesTime,9,2,1,1);
 
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Mines"));
     l->setWordWrap(true);
-    glBSLayout->addWidget(l,8,0,1,1);
+    glBSLayout->addWidget(l,10,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
-    glBSLayout->addWidget(l,8,1,1,1);
+    glBSLayout->addWidget(l,10,1,1,1);
     SB_Mines = new QSpinBox(gbBasicSettings);
     SB_Mines->setRange(0, 80);
     SB_Mines->setValue(0);
     SB_Mines->setSingleStep(5);
-    glBSLayout->addWidget(SB_Mines,8,2,1,1);
+    glBSLayout->addWidget(SB_Mines,10,2,1,1);
 
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("% Dud Mines"));
     l->setWordWrap(true);
-    glBSLayout->addWidget(l,9,0,1,1);
+    glBSLayout->addWidget(l,11,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconDud.png"));
-    glBSLayout->addWidget(l,9,1,1,1);
+    glBSLayout->addWidget(l,11,1,1,1);
     SB_MineDuds = new QSpinBox(gbBasicSettings);
     SB_MineDuds->setRange(0, 100);
     SB_MineDuds->setValue(0);
     SB_MineDuds->setSingleStep(5);
-    glBSLayout->addWidget(SB_MineDuds,9,2,1,1);
+    glBSLayout->addWidget(SB_MineDuds,11,2,1,1);
 
 
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Explosives"));
     l->setWordWrap(true);
-    glBSLayout->addWidget(l,10,0,1,1);
+    glBSLayout->addWidget(l,12,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconDamage.png"));
-    glBSLayout->addWidget(l,10,1,1,1);
+    glBSLayout->addWidget(l,12,1,1,1);
     SB_Explosives = new QSpinBox(gbBasicSettings);
     SB_Explosives->setRange(0, 40);
     SB_Explosives->setValue(0);
     SB_Explosives->setSingleStep(1);
-    glBSLayout->addWidget(SB_Explosives,10,2,1,1);
+    glBSLayout->addWidget(SB_Explosives,12,2,1,1);
 
 
     l = new QLabel(gbBasicSettings);
@@ -1783,6 +1811,8 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(SB_Explosives, 30);
     mapper->addMapping(SB_HealthCrates, 31);
     mapper->addMapping(SB_CrateHealth, 32);
+    mapper->addMapping(SB_WaterRise, 33);
+    mapper->addMapping(SB_HealthDecrease, 34);
 
     mapper->toFirst();
 }

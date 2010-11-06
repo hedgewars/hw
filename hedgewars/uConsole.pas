@@ -237,6 +237,8 @@ begin
     RegisterVariable('healthprob', vtLongInt, @cHealthCaseProb, false);
     RegisterVariable('hcaseamount', vtLongInt, @cHealthCaseAmount, false);
     RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);
+    RegisterVariable('waterrise', vtLongInt, @cWaterRise    , false);
+    RegisterVariable('healthdec', vtLongInt, @cHealthDecrease, false);
     RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);
     RegisterVariable('minedudpct',vtLongInt,@cMineDudPercent, false);
     RegisterVariable('minesnum', vtLongInt, @cLandMines     , false);

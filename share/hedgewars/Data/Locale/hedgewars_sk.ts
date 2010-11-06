@@ -1372,6 +1372,14 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
         <source>Health in Crates</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Sudden Death Water Rise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sudden Death Health Decrease</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
