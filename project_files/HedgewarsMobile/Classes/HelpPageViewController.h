@@ -22,9 +22,11 @@
 #import <UIKit/UIKit.h>
 
 
-@interface HelpPageViewController : UIViewController {
-
+@interface HelpPageViewController : UIViewController <UIScrollViewDelegate> {
+    UIScrollView *scrollView;
 }
+
+@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
 -(IBAction) dismiss;
 

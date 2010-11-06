@@ -67,7 +67,7 @@
         case 2:
             playSound(@"clickSound");
             if (self.helpPage == nil)
-                self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController" bundle:nil];
+                self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
             self.helpPage.view.alpha = 0;
             [self.view addSubview:helpPage.view];
             [UIView beginAnimations:@"helplobby" context:NULL];
@@ -112,6 +112,15 @@
             // this message is compulsory otherwise the table won't be loaded at all
             [schemeWeaponConfigViewController viewWillAppear:NO];
             [self.view bringSubviewToFront:schemeWeaponConfigViewController.view];
+            break;
+        case 3:
+            if (helpPage == nil) {
+                helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPhone" bundle:nil];
+                [self.view addSubview:helpPage.view];
+            }
+            // this message is compulsory otherwise the table won't be loaded at all
+            [helpPage viewWillAppear:NO];
+            [self.view bringSubviewToFront:helpPage.view];
             break;
         default:
             DLog(@"Nope");

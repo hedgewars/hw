@@ -228,8 +228,14 @@
 
 
 -(void) showHelp:(id) sender {
-    if (self.helpPage == nil)
-        self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageInGameViewController" bundle:nil];
+    if (self.helpPage == nil) {
+        NSString *xib;
+        if (IS_IPAD())
+            xib = @"HelpPageInGameViewController-iPad";
+        else
+            xib = @"HelpPageInGameViewController-iPhone";
+        self.helpPage = [[HelpPageViewController alloc] initWithNibName:xib bundle:nil];
+    }
     self.helpPage.view.alpha = 0;
     [self.view addSubview:helpPage.view];
     [UIView beginAnimations:@"helpingame" context:NULL];

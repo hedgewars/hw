@@ -40,7 +40,7 @@
 		611EE9D9122AA10A00DF6938 /* backSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D7122AA10A00DF6938 /* backSound.wav */; };
 		611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D8122AA10A00DF6938 /* selSound.wav */; };
 		611EEAEE122B2A4D00DF6938 /* HelpPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */; };
-		611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController.xib */; };
+		611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib */; };
 		611EEBC1122B34A800DF6938 /* helpingame.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC0122B34A800DF6938 /* helpingame.png */; };
 		611EEBC4122B355700DF6938 /* helpbottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC2122B355700DF6938 /* helpbottom.png */; };
 		611EEBC5122B355700DF6938 /* helpright.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC3122B355700DF6938 /* helpright.png */; };
@@ -128,7 +128,7 @@
 		61798A14114AB65C00BA94A9 /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798A13114AB65600BA94A9 /* libSDL_ttf.a */; };
 		61799289114AE08700BA94A9 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 61798A5E114AE08600BA94A9 /* Data */; };
 		6183D83E11E2BCE200A88903 /* LI-ipad-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */; };
-		61842B24122B619D0096E335 /* HelpPageInGameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61842B23122B619D0096E335 /* HelpPageInGameViewController.xib */; };
+		61842B24122B619D0096E335 /* HelpPageInGameViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */; };
 		61842B3E122B65BD0096E335 /* helpabove.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3D122B65BD0096E335 /* helpabove.png */; };
 		61842B40122B66280096E335 /* helpleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3F122B66280096E335 /* helpleft.png */; };
 		6187AEBD120781B900B31A27 /* Settings in Resources */ = {isa = PBXBuildFile; fileRef = 6187AEA5120781B900B31A27 /* Settings */; };
@@ -153,6 +153,8 @@
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
 		61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D205A0127CDD1100ABD83E /* ObjcExports.m */; };
 		61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */; };
+		61DF0EDC1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61DF0EDB1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib */; };
+		61DF0F211284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61DF0F201284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib */; };
 		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
 		61E2F7441283752C00E12521 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = 61E2F7421283752C00E12521 /* fb.png */; };
 		61E2F7451283752C00E12521 /* tw.png in Resources */ = {isa = PBXBuildFile; fileRef = 61E2F7431283752C00E12521 /* tw.png */; };
@@ -743,7 +745,7 @@
 		611EE9D8122AA10A00DF6938 /* selSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = selSound.wav; path = Resources/selSound.wav; sourceTree = "<group>"; };
 		611EEAEB122B2A4D00DF6938 /* HelpPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpPageViewController.h; sourceTree = "<group>"; };
 		611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpPageViewController.m; sourceTree = "<group>"; };
-		611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = HelpPageLobbyViewController.xib; path = ../Resources/HelpPageLobbyViewController.xib; sourceTree = "<group>"; };
+		611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageLobbyViewController-iPad.xib"; path = "../Resources/HelpPageLobbyViewController-iPad.xib"; sourceTree = "<group>"; };
 		611EEBC0122B34A800DF6938 /* helpingame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpingame.png; path = Resources/Overlay/helpingame.png; sourceTree = "<group>"; };
 		611EEBC2122B355700DF6938 /* helpbottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpbottom.png; path = Resources/Overlay/helpbottom.png; sourceTree = "<group>"; };
 		611EEBC3122B355700DF6938 /* helpright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpright.png; path = Resources/Overlay/helpright.png; sourceTree = "<group>"; };
@@ -874,7 +876,7 @@
 		61798A5E114AE08600BA94A9 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
 		6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LI-ipad-Landscape.png"; path = "Resources/Icons/LI-ipad-Landscape.png"; sourceTree = "<group>"; };
 		6183D83D11E2BCE200A88903 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Icons/Default.png; sourceTree = "<group>"; };
-		61842B23122B619D0096E335 /* HelpPageInGameViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = HelpPageInGameViewController.xib; path = ../Resources/HelpPageInGameViewController.xib; sourceTree = "<group>"; };
+		61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageInGameViewController-iPad.xib"; path = "../Resources/HelpPageInGameViewController-iPad.xib"; sourceTree = "<group>"; };
 		61842B3D122B65BD0096E335 /* helpabove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpabove.png; path = Resources/Overlay/helpabove.png; sourceTree = "<group>"; };
 		61842B3F122B66280096E335 /* helpleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpleft.png; path = Resources/Overlay/helpleft.png; sourceTree = "<group>"; };
 		618736B8118CA28600123B23 /* GearDrawing.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GearDrawing.inc; path = ../../hedgewars/GearDrawing.inc; sourceTree = SOURCE_ROOT; };
@@ -896,6 +898,8 @@
 		61D205A0127CDD1100ABD83E /* ObjcExports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObjcExports.m; path = Classes/ObjcExports.m; sourceTree = "<group>"; };
 		61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmmoMenuViewController.h; sourceTree = "<group>"; };
 		61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmmoMenuViewController.m; sourceTree = "<group>"; };
+		61DF0EDB1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageLobbyViewController-iPhone.xib"; path = "../Resources/HelpPageLobbyViewController-iPhone.xib"; sourceTree = "<group>"; };
+		61DF0F201284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageInGameViewController-iPhone.xib"; path = "Resources/HelpPageInGameViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
 		61E2F7421283752C00E12521 /* fb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fb.png; path = Resources/Icons/fb.png; sourceTree = "<group>"; };
 		61E2F7431283752C00E12521 /* tw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tw.png; path = Resources/Icons/tw.png; sourceTree = "<group>"; };
@@ -1270,6 +1274,8 @@
 		6163EE6C11CC253F001C0453 /* Overlay */ = {
 			isa = PBXGroup;
 			children = (
+				61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */,
+				61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */,
 				616591F811CA9BA200D6E256 /* InGameMenuViewController.h */,
 				616591F911CA9BA200D6E256 /* InGameMenuViewController.m */,
 				616591F611CA9BA200D6E256 /* OverlayViewController.h */,
@@ -1277,10 +1283,10 @@
 				6165925011CA9CB400D6E256 /* OverlayViewController.xib */,
 				611EEAEB122B2A4D00DF6938 /* HelpPageViewController.h */,
 				611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */,
-				611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController.xib */,
-				61842B23122B619D0096E335 /* HelpPageInGameViewController.xib */,
-				61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */,
-				61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */,
+				61DF0F201284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib */,
+				61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */,
+				61DF0EDB1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib */,
+				611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib */,
 			);
 			name = Overlay;
 			sourceTree = "<group>";
@@ -2137,12 +2143,12 @@
 				611EE974122A9C4100DF6938 /* clickSound.wav in Resources */,
 				611EE9D9122AA10A00DF6938 /* backSound.wav in Resources */,
 				611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */,
-				611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController.xib in Resources */,
+				611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib in Resources */,
 				611EEBC1122B34A800DF6938 /* helpingame.png in Resources */,
 				611EEBC4122B355700DF6938 /* helpbottom.png in Resources */,
 				611EEBC5122B355700DF6938 /* helpright.png in Resources */,
 				611EEC31122B54D700DF6938 /* helpplain.png in Resources */,
-				61842B24122B619D0096E335 /* HelpPageInGameViewController.xib in Resources */,
+				61842B24122B619D0096E335 /* HelpPageInGameViewController-iPad.xib in Resources */,
 				61842B3E122B65BD0096E335 /* helpabove.png in Resources */,
 				61842B40122B66280096E335 /* helpleft.png in Resources */,
 				6199E86D12464A8E00DADF8C /* surprise.png in Resources */,
@@ -2164,6 +2170,8 @@
 				614AE65E127D090A0070BF5F /* smallerBackground~iphone.png in Resources */,
 				61E2F7441283752C00E12521 /* fb.png in Resources */,
 				61E2F7451283752C00E12521 /* tw.png in Resources */,
+				61DF0EDC1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib in Resources */,
+				61DF0F211284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
