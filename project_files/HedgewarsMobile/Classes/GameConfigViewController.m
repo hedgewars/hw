@@ -140,7 +140,7 @@
         [alert release];
         return NO;
     }
-    
+
     // play only if there is more than one team
     if ([self.teamConfigViewController.listOfSelectedTeams count] < 2) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too few teams playing",@"")
@@ -152,7 +152,7 @@
         [alert release];
         return NO;
     }
-    
+
     // play if there's room for enough hogs in the selected map
     int hogs = 0;
     for (NSDictionary *teamData in teamConfigViewController.listOfSelectedTeams)
@@ -168,7 +168,8 @@
         [alert release];
         return NO;
     }
-    
+
+    // play if there aren't too many teams
     if ([self.teamConfigViewController.listOfSelectedTeams count] > HW_getMaxNumberOfTeams()) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many teams",@"")
                                                         message:NSLocalizedString(@"Max six teams are allowed in the same game",@"")
@@ -179,10 +180,26 @@
         [alert release];
         return NO;
     }
-    
+
+    // play only if one scheme and one weapon are selected
     if ([self.schemeWeaponConfigViewController.selectedScheme length] == 0 || [self.schemeWeaponConfigViewController.selectedWeapon length] == 0 ) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Missing detail",@"")
                                                         message:NSLocalizedString(@"Select one Scheme and one Weapon for this game",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        return NO;
+    }
+
+    // play if the gameflags are set correctly (divideteam works only with 2 teams
+    NSString *schemePath = [[NSString alloc] initWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),self.schemeWeaponConfigViewController.selectedScheme];
+    NSArray *gameFlags = [[NSDictionary dictionaryWithContentsOfFile:schemePath] objectForKey:@"gamemod"];
+    [schemePath release];
+    if ([[gameFlags objectAtIndex:2] boolValue] && [self.teamConfigViewController.listOfSelectedTeams count] != 2) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Scheme mismatch",@"")
+                                                        message:NSLocalizedString(@"The scheme you selected allows only for two teams",@"")
                                                        delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];

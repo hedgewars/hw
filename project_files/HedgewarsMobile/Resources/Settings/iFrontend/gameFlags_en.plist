@@ -20,11 +20,11 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Teams will start on opposite sides of the terrain (two teams only)</string>
+		<string>Teams will start on opposite sides of the terrain</string>
 		<key>image</key>
 		<string>TeamsDivide</string>
 		<key>title</key>
-		<string>Divide Team</string>
+		<string>Divide Team (max 2 teams)</string>
 	</dict>
 	<dict>
 		<key>description</key>
@@ -84,7 +84,7 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Defend your fort and destroy the opponents (two teams only)</string>
+		<string>Defend your fort and destroy the opponents</string>
 		<key>image</key>
 		<string>Forts</string>
 		<key>title</key>
