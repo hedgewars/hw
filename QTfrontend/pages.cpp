@@ -1304,12 +1304,14 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         if(list[i + 5] == "+rnd+")
         {
             item = new QTableWidgetItem(tr("Random Map")); // selected map (is randomized)
-            item->setIcon(QIcon(":/res/mapRandom.png"));
+// FIXME - need real icons. Disabling until then
+//            item->setIcon(QIcon(":/res/mapRandom.png"));
         }
         else if (list[i+5] == "+maze+")
         {
             item = new QTableWidgetItem(tr("Random Maze"));
-            item->setIcon(QIcon(":/res/mapMaze.png"));
+// FIXME - need real icons. Disabling until then
+//            item->setIcon(QIcon(":/res/mapMaze.png"));
         }
         else
         {
@@ -1324,8 +1326,9 @@ void PageRoomsList::setRoomsList(const QStringList & list)
             }
             else
             {
-                // todo: mission icon?
-                item->setIcon(QIcon(":/res/mapCustom.png"));
+               // todo: mission icon?
+// FIXME - need real icons. Disabling until then
+//               item->setIcon(QIcon(":/res/mapCustom.png"));
             }
         }
         
