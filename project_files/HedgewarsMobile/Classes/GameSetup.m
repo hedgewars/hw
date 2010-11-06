@@ -187,7 +187,7 @@
 
     // support for endless games
     NSInteger tentativeTurntime = [[basicArray objectAtIndex:i] intValue];
-    if (tentativeTurntime == 100)
+    if (tentativeTurntime >= 100)
         tentativeTurntime = 9999;
     NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",tentativeTurntime * 1000];
     [self sendToEngine:turnTime];

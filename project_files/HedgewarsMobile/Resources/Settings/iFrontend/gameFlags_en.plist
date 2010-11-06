@@ -100,7 +100,7 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Play with a King. If he dies, your side loses</string>
+		<string>Play with a King; when he dies, your side loses</string>
 		<key>image</key>
 		<string>King</string>
 		<key>title</key>
