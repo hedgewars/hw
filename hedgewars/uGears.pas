@@ -1220,18 +1220,15 @@ if (TrainingFlags and tfSpawnTargets) <> 0 then
     FindPlace(TrainingTargetGear, false, 0, LAND_WIDTH);
     end;
 
-if ((GameFlags and gfForts) = 0) then
+for i:= 0 to Pred(cLandMines) do
     begin
-    for i:= 0 to Pred(cLandMines) do
-        begin
-        Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
-        FindPlace(Gear, false, 0, LAND_WIDTH);
-        end;
-    for i:= 0 to Pred(cExplosives) do
-        begin
-        Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
-        FindPlace(Gear, false, 0, LAND_WIDTH);
-        end;
+    Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
+    FindPlace(Gear, false, 0, LAND_WIDTH);
+    end;
+for i:= 0 to Pred(cExplosives) do
+    begin
+    Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
+    FindPlace(Gear, false, 0, LAND_WIDTH);
     end;
 
 if (GameFlags and gfLowGravity) <> 0 then
@@ -1480,7 +1477,7 @@ var i, t, p, j: LongInt;
     Count: Longword;
 begin
 if (GameFlags and gfPlaceHog) <> 0 then PlacingHogs:= true;
-if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
+if (GameFlags and gfDivideTeams) <> 0 then
     begin
     t:= 0;
     TryDo(ClansCount = 2, 'More or less than 2 clans on map in divided teams mode!', true);
