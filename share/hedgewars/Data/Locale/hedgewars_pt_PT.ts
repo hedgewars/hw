@@ -93,12 +93,12 @@
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ficheiro de demo do Hedgewars</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ficheiro de jogo Hedgewars</translation>
     </message>
 </context>
 <context>
@@ -523,9 +523,9 @@ outro nome de utilizador no menu de configuração:</translation>
         <translation>O Hedgewars é Open Source e Freeware desenvolvido durante o tempo livre. Se alguem te vendeu o jogo, tente obter o reembolso!</translation>
     </message>
     <message>
-        <source>Connect one or more gamepads before launching the game to be able to assign their controls to your teams.</source>
+        <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
         <comment>Tips</comment>
-        <translation type="obsolete">Conecta um ou mais comandos antes de lançar o jogo para que seja possível configura-los nas opções das tuas equipas.</translation>
+        <translation>Conecta um ou mais comandos antes de lançar o jogo para que seja possível configura-los com as tuas equipas.</translation>
     </message>
     <message>
         <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
@@ -638,14 +638,9 @@ outro nome de utilizador no menu de configuração:</translation>
         <translation>Podes encontrar os ficheiros de configuração do Hedgewars na pasta &quot;Hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
     </message>
     <message>
-        <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
-        <comment>Tips</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>É possivel associar os ficheiros relacionados com o Hedgewars (partidas e demonstrações) directamente com o jogo para que seja possivel lançalos directamente do teu explorador de ficheiros ou internet favorito.</translation>
     </message>
 </context>
 <context>
@@ -957,19 +952,19 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Todos os ouriços (vivos) são completamente restaurados no final do turn</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>Atacar não faz o turno terminar.</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>O armamento é redefinido para os valores iniciais todos os turnos.</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cada ouriço tem as suas próprias armas. Não são partilhadas com a equipa.</translation>
     </message>
 </context>
 <context>
@@ -1447,11 +1442,11 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>All file associations have been set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Todos os ficheiros foram associados com sucesso.</translation>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possivel associar os ficheiros.</translation>
     </message>
 </context>
 <context>
@@ -1545,7 +1540,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Associate file extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>Associar as extenções dos ficheiros</translation>
     </message>
 </context>
 <context>
@@ -1633,19 +1628,19 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Divide Teams</source>
-        <translation>Separar equipas</translation>
+        <translation>Separar Equipas</translation>
     </message>
     <message>
         <source>Solid Land</source>
-        <translation>Terreno sólido</translation>
+        <translation>Terreno Sólido</translation>
     </message>
     <message>
         <source>Add Border</source>
-        <translation>Adicionar borda</translation>
+        <translation>Adicionar Borda</translation>
     </message>
     <message>
         <source>Low Gravity</source>
-        <translation>Baixa gravidade</translation>
+        <translation>Baixa Gravidade</translation>
     </message>
     <message>
         <source>Laser Sight</source>
@@ -1653,7 +1648,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Invulnerable</source>
-        <translation>Invulnerável</translation>
+        <translation>Invulnerabilidade</translation>
     </message>
     <message>
         <source>Add Mines</source>
@@ -1673,7 +1668,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
-        <translation>Clãs partilham armamento</translation>
+        <translation>Clãs Partilham Armamento</translation>
     </message>
     <message>
         <source>Disable Girders</source>
@@ -1685,23 +1680,23 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>AI Survival Mode</source>
-        <translation>Modo de sobrevivência</translation>
+        <translation>Modo de Sobrevivência</translation>
     </message>
     <message>
         <source>Reset Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar a Vida</translation>
     </message>
     <message>
         <source>Unlimited Attacks</source>
-        <translation type="unfinished"></translation>
+        <translation>Ataques Ilimitados</translation>
     </message>
     <message>
         <source>Reset Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar o Armamento</translation>
     </message>
     <message>
         <source>Per Hedgehog Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation>Armamento Por Ouriço</translation>
     </message>
 </context>
 <context>
