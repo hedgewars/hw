@@ -55,18 +55,19 @@
     [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY() withIntermediateDirectories:NO attributes:nil error:NULL];
     
     // if the settings file is already present, we merge current preferences with the update
-    directoryToCheck = [NSString stringWithFormat:@"%@/Settings/settings.plist",resDir];
+    fileToCheck = [NSString stringWithFormat:@"%@/Settings/settings.plist",resDir];
     if ([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()]) {
         NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
-        NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:directoryToCheck];
+        NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:fileToCheck];
         [update addEntriesFromDictionary:settings];
         [settings release];
         [update writeToFile:SETTINGS_FILE() atomically:YES];
         [update release];
     } else 
-        [[NSFileManager defaultManager] copyItemAtPath:directoryToCheck toPath:SETTINGS_FILE() error:&err];
+        [[NSFileManager defaultManager] copyItemAtPath:fileToCheck toPath:SETTINGS_FILE() error:&err];
     
-    // if the teams are already present we merge the old teams if they still exist
+    // TODO: scrap this and always copy the bundled files; update exisising ones in some way
+    // if the teams are already present we merge the old teams, else we copy new teams
     directoryToCheck = [NSString stringWithFormat:@"%@/Settings/Teams",resDir];
     if ([[NSFileManager defaultManager] fileExistsAtPath:TEAMS_DIRECTORY()]) {
         for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directoryToCheck error:&err]) {
@@ -79,43 +80,46 @@
                 [team release];
                 [update writeToFile:fileToCheck atomically:YES];
                 [update release];
-            }
+            } else
+                [[NSFileManager defaultManager] copyItemAtPath:fileToUpdate toPath:fileToCheck error:&err];
         }
     } else
         [[NSFileManager defaultManager] copyItemAtPath:directoryToCheck toPath:TEAMS_DIRECTORY() error:&err];
     
-    // the same holds for schemes (but they're arrays)
+    // TODO: scrap this and always copy the bundled files; update exisising ones in some way
+    // the same holds for schemes (but they're dictionaries containing arrays)
     directoryToCheck = [NSString stringWithFormat:@"%@/Settings/Schemes",resDir];
     if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()]) {
         for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directoryToCheck error:nil]) {
             fileToCheck = [NSString stringWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),str];
             fileToUpdate = [NSString stringWithFormat:@"%@/Settings/Schemes/%@",resDir,str];
             if ([[NSFileManager defaultManager] fileExistsAtPath:fileToCheck]) {
-                NSArray *scheme = [[NSArray alloc] initWithContentsOfFile:fileToCheck];
-                NSArray *update = [[NSArray alloc] initWithContentsOfFile:fileToUpdate];
-                if ([update count] > [scheme count])
+                NSDictionary *scheme = [[NSDictionary alloc] initWithContentsOfFile:fileToCheck];
+                NSDictionary *update = [[NSDictionary alloc] initWithContentsOfFile:fileToUpdate];
+                if ([[update objectForKey:@"basic"] count] > [[scheme objectForKey:@"basic"] count] ||
+                    [[update objectForKey:@"gamemod"] count] > [[scheme objectForKey:@"gamemod"] count])
                     [update writeToFile:fileToCheck atomically:YES];
                 [update release];
                 [scheme release];
-            }
+            } else
+                [[NSFileManager defaultManager] copyItemAtPath:fileToUpdate toPath:fileToCheck error:&err];
         }
     } else
         [[NSFileManager defaultManager] copyItemAtPath:directoryToCheck toPath:SCHEMES_DIRECTORY() error:&err];
     
-    // we create weapons the first time only, they are autoupdated each time
-    if ([[NSFileManager defaultManager] fileExistsAtPath:WEAPONS_DIRECTORY()] == NO) {
+    // weapons are autoupdated at runtime but it's better to update then every new version
+    if ([[NSFileManager defaultManager] fileExistsAtPath:WEAPONS_DIRECTORY()] == NO)
         [[NSFileManager defaultManager] createDirectoryAtPath:WEAPONS_DIRECTORY()
                                   withIntermediateDirectories:YES
                                                    attributes:nil
                                                         error:&err];
-        createWeaponNamed(@"Default", 0);
-        createWeaponNamed(@"Crazy", 1);
-        createWeaponNamed(@"Pro mode", 2);
-        createWeaponNamed(@"Shoppa", 3);
-        createWeaponNamed(@"Basketball", 4);
-        createWeaponNamed(@"Minefield", 5);
-    }
-    
+    createWeaponNamed(@"Default", 0);
+    createWeaponNamed(@"Crazy", 1);
+    createWeaponNamed(@"Pro mode", 2);
+    createWeaponNamed(@"Shoppa", 3);
+    createWeaponNamed(@"Clean slate", 4);
+    createWeaponNamed(@"Minefield", 5);
+
     if (err != nil) 
         DLog(@"%@", err);
     else

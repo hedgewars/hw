@@ -75,45 +75,45 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
     switch (type) {
         case 0: //default
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9391929422199121032235111001201000000211110101010",@"ammostore_initialqt",
-                         @"0405040541600655546554464776576666666155510101110",@"ammostore_probability",
+                         @"9391929422199121032235111001201000000211110101011",@"ammostore_initialqt",
+                         @"0405040541600655546554464776576666666155510101117",@"ammostore_probability",
                          @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1311110312111111123114111111111111111211111101110",@"ammostore_crate", nil];
+                         @"1311110312111111123114111111111111111211111101111",@"ammostore_crate", nil];
             break;
         case 1: //crazy
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9999999999999999992999999999999999299999999909990",@"ammostore_initialqt",
-                         @"1111110111111111111111111111111111111111111101110",@"ammostore_probability",
+                         @"9999999999999999992999999999999999299999999909999",@"ammostore_initialqt",
+                         @"1111110111111111111111111111111111111111111101111",@"ammostore_probability",
                          @"0000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"1311110312111111123114111111111111111211110101110",@"ammostore_crate", nil];
+                         @"1311110312111111123114111111111111111211110101111",@"ammostore_crate", nil];
             break;
         case 2: //pro mode
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
                          @"9090009000000000000009000000000000000000000000000",@"ammostore_initialqt",
                          @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111100101110",@"ammostore_crate", nil];
+                         @"1111111111111111111111111111111111111111100101111",@"ammostore_crate", nil];
             break;
         case 3: //shoppa
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
                          @"0000009900000000000000000000000000000000000000000",@"ammostore_initialqt",
                          @"4444410044244402210112121222422000000002000400010",@"ammostore_probability",
                          @"0000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111101101110",@"ammostore_crate", nil];
+                         @"1111111111111111111111111111111111111111101101111",@"ammostore_crate", nil];
             break;
-        case 4: //basketball
+        case 4: //clean slate
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9391929422199121032235111001201000000211110101000",@"ammostore_initialqt",
-                         @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
-                         @"0000000000000005500000040007004000000000200000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111111101110",@"ammostore_crate", nil];
+                         @"1010009000010000011000000000000000000000000000001",@"ammostore_initialqt",
+                         @"0405040541600655546554464776576666666155510101117",@"ammostore_probability",
+                         @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
+                         @"1311110312111111123114111111111111111211111101111",@"ammostore_crate", nil];
             break;
         case 5: //minefield
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
                          @"0000009900090000000300000000000000000000000000000",@"ammostore_initialqt",
                          @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
                          @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111111101110",@"ammostore_crate", nil];
+                         @"1111111111111111111111111111111111111111111101111",@"ammostore_crate", nil];
             break;
         default:
             NSLog(@"Nope");
@@ -143,8 +143,10 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                                    [NSNumber numberWithInt:100],      //initialhealth
                                    [NSNumber numberWithInt:15],       //suddendeathtimeout
                                    [NSNumber numberWithInt:5],        //cratedrops
+                                   [NSNumber numberWithInt:35],       //healthprob
+                                   [NSNumber numberWithInt:25],       //healthamount
                                    [NSNumber numberWithInt:3],        //minestime
-                                   [NSNumber numberWithInt:4],        //mines
+                                   [NSNumber numberWithInt:4],        //minesnumber
                                    [NSNumber numberWithInt:0],        //dudmines
                                    [NSNumber numberWithInt:2],        //explosives
                                    nil];

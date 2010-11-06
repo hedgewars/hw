@@ -44,7 +44,7 @@
 		<key>image</key>
 		<string>SuddenDeath</string>
 		<key>max</key>
-		<integer>50</integer>
+		<integer>999</integer>
 		<key>min</key>
 		<integer>0</integer>
 		<key>title</key>
@@ -61,6 +61,30 @@
 		<integer>0</integer>
 		<key>title</key>
 		<string>Crate Drops</string>
+	</dict>
+	<dict>
+		<key>default</key>
+		<integer>35</integer>
+		<key>image</key>
+		<string>Health</string>
+		<key>max</key>
+		<integer>100</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Health Kit Probability</string>
+	</dict>
+	<dict>
+		<key>default</key>
+		<integer>25</integer>
+		<key>image</key>
+		<string>Health</string>
+		<key>max</key>
+		<integer>200</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Health Amount in Kit</string>
 	</dict>
 	<dict>
 		<key>default</key>

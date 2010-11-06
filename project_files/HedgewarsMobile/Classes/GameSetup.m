@@ -168,6 +168,7 @@
     int i = 0;
     int result = 0;
     int mask = 0x00000004;
+    int basicArraySize = [basicArray count] - 1;
 
     // pack the gameflags in a single var and send it
     for (NSNumber *value in gamemodArray) {
@@ -179,43 +180,62 @@
     [self sendToEngine:flags];
     [flags release];
 
-    NSString *dmgMod = [[NSString alloc] initWithFormat:@"e$damagepct %d",[[basicArray objectAtIndex:i++] intValue]];
+    NSString *dmgMod = [[NSString alloc] initWithFormat:@"e$damagepct %d",[[basicArray objectAtIndex:i] intValue]];
     [self sendToEngine:dmgMod];
     [dmgMod release];
+    if (i < basicArraySize) i++;
 
     // support for endless games
-    NSInteger tentativeTurntime = [[basicArray objectAtIndex:i++] intValue];
+    NSInteger tentativeTurntime = [[basicArray objectAtIndex:i] intValue];
     if (tentativeTurntime == 100)
         tentativeTurntime = 9999;
     NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",tentativeTurntime * 1000];
     [self sendToEngine:turnTime];
     [turnTime release];
+    if (i < basicArraySize) i++;
 
-    result = [[basicArray objectAtIndex:i++] intValue]; // initial health
+    result = [[basicArray objectAtIndex:i] intValue]; // initial health
+    if (i < basicArraySize) i++;
 
-    NSString *sdTime = [[NSString alloc] initWithFormat:@"e$sd_turns %d",[[basicArray objectAtIndex:i++] intValue]];
+    NSString *sdTime = [[NSString alloc] initWithFormat:@"e$sd_turns %d",[[basicArray objectAtIndex:i] intValue]];
     [self sendToEngine:sdTime];
     [sdTime release];
+    if (i < basicArraySize) i++;
 
-    NSString *crateDrops = [[NSString alloc] initWithFormat:@"e$casefreq %d",[[basicArray objectAtIndex:i++] intValue]];
+    NSString *crateDrops = [[NSString alloc] initWithFormat:@"e$casefreq %d",[[basicArray objectAtIndex:i] intValue]];
     [self sendToEngine:crateDrops];
     [crateDrops release];
+    if (i < basicArraySize) i++;
 
-    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$minestime %d",[[basicArray objectAtIndex:i++] intValue] * 1000];
+    NSString *healthProb = [[NSString alloc] initWithFormat:@"e$healthprob %d",[[basicArray objectAtIndex:i] intValue]];
+    [self sendToEngine:healthProb];
+    [healthProb release];
+    if (i < basicArraySize) i++;
+
+    NSString *healthAmount = [[NSString alloc] initWithFormat:@"e$hcaseamount %d",[[basicArray objectAtIndex:i] intValue]];
+    [self sendToEngine:healthAmount];
+    [healthAmount release];
+    if (i < basicArraySize) i++;
+
+    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$minestime %d",[[basicArray objectAtIndex:i] intValue] * 1000];
     [self sendToEngine:minesTime];
     [minesTime release];
+    if (i < basicArraySize) i++;
 
-    NSString *minesNumber = [[NSString alloc] initWithFormat:@"e$minesnum %d",[[basicArray objectAtIndex:i++] intValue]];
+    NSString *minesNumber = [[NSString alloc] initWithFormat:@"e$minesnum %d",[[basicArray objectAtIndex:i] intValue]];
     [self sendToEngine:minesNumber];
     [minesNumber release];
+    if (i < basicArraySize) i++;
 
-    NSString *dudMines = [[NSString alloc] initWithFormat:@"e$minedudpct %d",[[basicArray objectAtIndex:i++] intValue]];
+    NSString *dudMines = [[NSString alloc] initWithFormat:@"e$minedudpct %d",[[basicArray objectAtIndex:i] intValue]];
     [self sendToEngine:dudMines];
     [dudMines release];
+    if (i < basicArraySize) i++;
 
-    NSString *explosives = [[NSString alloc] initWithFormat:@"e$explosives %d",[[basicArray objectAtIndex:i++] intValue]];
+    NSString *explosives = [[NSString alloc] initWithFormat:@"e$explosives %d",[[basicArray objectAtIndex:i] intValue]];
     [self sendToEngine:explosives];
     [explosives release];
+    if (i < basicArraySize) i++;
 
     DLog(@"Sent %d flags and %d modes", [gamemodArray count], i);
     [schemeDictionary release];
@@ -225,7 +245,7 @@
 #pragma mark -
 #pragma mark Thread/Network relevant code
 // select one of GameSetup method and execute it in a seprate thread
--(void) startThread: (NSString *) selector {
+-(void) startThread:(NSString *)selector {
     SEL usage = NSSelectorFromString(selector);
     [NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
 }
