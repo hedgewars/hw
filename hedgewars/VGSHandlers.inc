@@ -33,6 +33,12 @@ with Gear^ do
     X:= X + (cWindSpeedf * 200 + dX + tdX) * Steps;
     Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps;
     Angle:= Angle + dAngle * Steps;
+    if Angle > 360 then
+        Angle:= Angle - 360
+    else
+        if Angle < - 360 then
+            Angle:= Angle + 360;
+    
   
     if (round(X) >= cLeftScreenBorder) and
        (round(X) <= cRightScreenBorder) and
