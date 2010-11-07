@@ -42,7 +42,7 @@ with Gear^ do
   
     if (round(X) >= cLeftScreenBorder) and
        (round(X) <= cRightScreenBorder) and
-       (round(Y) <= (int64(LAND_HEIGHT) + 75)) and
+       (round(Y) - 75 <= LAND_HEIGHT) and
        (Timer > 0) and (Timer-Steps > 0) then
         begin
         if tdX > 0 then sign := 1
@@ -60,7 +60,7 @@ with Gear^ do
         if round(X) < cLeftScreenBorder then X:= X + cScreenSpace else
         if round(X) > cRightScreenBorder then X:= X - cScreenSpace;
         // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + float(25); // For if flag is set for flakes rising upwards?
-        if round(Y) > (int64(LAND_HEIGHT) + 75) then Y:= Y - float(1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
+        if round(Y) - 75 > LAND_HEIGHT then Y:= Y - float(1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
         Timer:= 0;
         tdX:= 0;
         tdY:= 0
@@ -90,7 +90,7 @@ s := (GameTicks + Gear^.Timer) mod 4096;
 t := 8 * AngleSin(s mod 2048).QWordValue / 4294967296;
 if (s < 2048) then t := -t;
 
-Gear^.Y := int64(LAND_HEIGHT) - 1184 + Gear^.Timer mod 8 + t;
+Gear^.Y := LAND_HEIGHT - 1184 + LongInt(Gear^.Timer mod 8) + t;
 
 if round(Gear^.X) < cLeftScreenBorder then Gear^.X:= Gear^.X + cScreenSpace else
 if round(Gear^.X) > cRightScreenBorder then Gear^.X:= Gear^.X - cScreenSpace
@@ -486,7 +486,7 @@ end;
 
 procedure doStepHealthTagWorkUnderWater(Gear: PVisualGear; Steps: Longword);
 begin
-if round(Gear^.Y) < int64(cWaterLine) + 10 then
+if round(Gear^.Y) - 10 < cWaterLine then
     DeleteVisualGear(Gear)
 else
     Gear^.Y:= Gear^.Y - 0.08 * Steps;
