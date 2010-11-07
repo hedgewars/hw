@@ -377,9 +377,9 @@ o elige otro nick en las preferencias del juego:</translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>(%1 baja)</numerusform>
-            <numerusform></numerusform>
+            <numerusform>(%1 bajas)</numerusform>
         </translation>
     </message>
     <message>
@@ -388,23 +388,23 @@ o elige otro nick en las preferencias del juego:</translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; prefiere disparar a sus miembros, con un total de &lt;b&gt;%2&lt;/b&gt; pt.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; prefiere disparar a sus miembros, con un total de &lt;b&gt;%2&lt;/b&gt; pts.</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; acabó con &lt;b&gt;%2&lt;/b&gt; de sus propios miembros.</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; tenía demasiado miedo y pasó &lt;b&gt;%2&lt;/b&gt; turno.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; tenía demasiado miedo y pasó &lt;b&gt;%2&lt;/b&gt; turnos.</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -661,7 +661,7 @@ o elige otro nick en las preferencias del juego:</translation>
     <message>
         <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>¿Necesitas conservar cuerdas? Cuando estés usando una cuerda puedes desengancharla y volver a lanzarla de nuevo. ¡Mientras no toques el suelo seguirás usando la misma cuerda continuamente sin desperdiciar munición adicional!</translation>
     </message>
 </context>
 <context>
