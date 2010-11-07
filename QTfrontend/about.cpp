@@ -74,7 +74,7 @@ About::About(QWidget * parent) :
             "Frontend improvements: Martin Minarik &lt;<a href=\"mailto:ttsmj@pokec.sk\">ttsmj@pokec.sk</a>&gt;<br>"
             "Frontend improvements: Kristian Lehmann &lt;<a href=\"mailto:email@thexception.net\">email@thexception.net</a>&gt;<br>"
             "Mac OS X/iPhone port, OpenGL-ES conversion: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;<br>"
-            "Gamepad and Lua integration, misc effects: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@gmail.com\">mario.liebisch@gmail.com</a>&gt;<br>"
+            "Gamepad and Lua integration: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@gmail.com\">mario.liebisch@gmail.com</a>&gt;<br>"
             "Many engine improvements and graphics: Carlos Vives &lt;<a href=\"mailto:mail@carlosvives.es\">mail@carlosvives.es</a>&gt;<br>"
             "Few engine and frontend improvements: Richard Karolyi &lt;<a href=\"mailto:sheepluva@ercatec.net\">sheepluva@ercatec.net</a>&gt;<br>"
             "Maze maps: Henning K&uuml;hn &lt;<a href=\"mailto:prg@cooco.de\">prg@cooco.de</a>&gt;"
