@@ -373,9 +373,9 @@ outro nome de utilizador no menu de configuração:</translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>(%1 morto)</numerusform>
-            <numerusform></numerusform>
+            <numerusform>(%1 mortos)</numerusform>
         </translation>
     </message>
     <message>
@@ -384,23 +384,23 @@ outro nome de utilizador no menu de configuração:</translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; axou que seria divertido disparar dispara contra a sua própria equipa com &lt;b&gt;%2&lt;/b&gt; pontos de dano.</numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; axou que seria divertido atacar a sua própria equipa fazendo &lt;b&gt;%2&lt;/b&gt; ponto de dano.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; axou que seria divertido atacar a sua própria equipa fazendo &lt;b&gt;%2&lt;/b&gt; pontos de dano.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; matou &lt;b&gt;%2&lt;/b&gt; ouriço da sua própria equipa.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; matou &lt;b&gt;%2&lt;/b&gt; ouriços da sua própria equipa.</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; estava tão intimidado que passou &lt;b&gt;%2&lt;/b&gt; turno.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; estava tão intimidado que passou &lt;b&gt;%2&lt;/b&gt; turnos.</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -657,7 +657,7 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Gostavas de poupar algumas cordas? Solta a corda enquanto no ar e dispara-a novamente. Desde que não toques no solo podes reutilizar a usar a mesma corda quantas vezes quiseres!</translation>
     </message>
 </context>
 <context>
