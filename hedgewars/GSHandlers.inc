@@ -3035,7 +3035,7 @@ begin
                         if (move.isNegative) then
                             begin
                             bubble^.X := bubble^.X + 28;
-                            bubble^.dX *= -1
+                            bubble^.dX:= bubble^.dX * (-1)
                             end
                         else bubble^.X := bubble^.X - 28;
                         end;

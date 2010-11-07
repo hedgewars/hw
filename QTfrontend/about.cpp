@@ -78,11 +78,12 @@ About::About(QWidget * parent) :
             "Many engine improvements and graphics: Carlos Vives &lt;<a href=\"mailto:mail@carlosvives.es\">mail@carlosvives.es</a>&gt;<br>"
             "Few engine and frontend improvements: Richard Karolyi &lt;<a href=\"mailto:sheepluva@ercatec.net\">sheepluva@ercatec.net</a>&gt;<br>"
             "Maze maps: Henning K&uuml;hn &lt;<a href=\"mailto:prg@cooco.de\">prg@cooco.de</a>&gt;"
+            "Engine and frontend improvements: Henrik Rostedt &lt;<a href=\"mailto:henrik.rostedt@gmail.com\">henrik.rostedt@gmail.com</a>&gt;<br>"
             "</p><h2>" +
 
             QLabel::tr("Art:") + "</h2>"
             + QString::fromUtf8(
-            "<p>Finn Brice &lt;<a href=\"mailto:tiyuri@gmail.com\">tiyuri@gmail.com</a>&gt;"
+            "<p>John Dum &lt;<a href=\"mailto:fizzy@gmail.com\">fizzy@gmail.com</a>&gt;"
             "<br>"
             "Joshua Frese &lt;<a href=\"mailto:joshfrese@gmail.com\">joshfrese@gmail.com</a>&gt;"
             "<br>"
@@ -99,7 +100,7 @@ About::About(QWidget * parent) :
             QLabel::tr("Sounds:") + "</h2>"
             "Hedgehogs voice: Stephen Alexander &lt;<a href=\"mailto:ArmagonNo1@gmail.com\">ArmagonNo1@gmail.com</a>&gt;"
             "<br>"
-            "Finn Brice &lt;<a href=\"mailto:tiyuri@gmail.com\">tiyuri@gmail.com</a>&gt;"
+            "John Dum &lt;<a href=\"mailto:fizzy@gmail.com\">fizzy@gmail.com</a>&gt;"
             "<br>"
             "Jonatan Nilsson &lt;<a href=\"mailto:jonatanfan@gmail.com\">jonatanfan@gmail.com</a>&gt;"
             "<br>"

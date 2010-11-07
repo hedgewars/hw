@@ -26,6 +26,7 @@ uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat,
 
 {$INCLUDE "config.inc"}
 type PPByte = ^PByte;
+var dummy: boolean;  // avoid compiler hint
 
 implementation
 {$IFDEF HWLIBRARY}

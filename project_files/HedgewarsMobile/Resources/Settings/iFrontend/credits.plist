@@ -15,9 +15,10 @@
 		<string>Carlos &quot;Palewolf&quot; Vives</string>
 		<string>Richard &quot;Sheepluva&quot; Korlyi</string>
 		<string>Henning &quot;Prg&quot; Kühn</string>
+		<string>Henrik &quot;Henek&quot; Rostedt</string>
 	</array>
 	<array>
-		<string>Tiyuri</string>
+		<string>John &quot;Fizzy&quot; Dum</string>
 		<string>Joshua Frese</string>
 		<string>Stanko Tadić</string>
 		<string>Julien Koesten</string>
@@ -27,7 +28,7 @@
 	</array>
 	<array>
 		<string>Stephen &quot;Armagon&quot; Alexander</string>
-		<string>Finn &quot;Tiyuri&quot; Brice</string>
+		<string>John &quot;Fizzy&quot; Dum</string>
 		<string>Jonatan Nilsson</string>
 		<string>Daniel Martin</string>
 	</array>
@@ -53,7 +54,7 @@
 	<array>
 		<string>Aleksey Andreev</string>
 		<string>Aleksander Rudalev</string>
-		<string>Natasha Stafeeva</string>
+		<string>Natasha Korotaeva</string>
 		<string>Adam Higerd</string>
 	</array>
 	<array>
@@ -69,9 +70,10 @@
 		<string>Many engine improvements and graphics</string>
 		<string>Many engine and server improvements</string>
 		<string>Maze maps</string>
+		<string>Engine and frontend improvements</string>
 	</array>
 	<array>
-		<string></string>
+		<string>Main graphics</string>
 		<string></string>
 		<string></string>
 		<string></string>
