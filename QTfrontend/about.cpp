@@ -130,7 +130,7 @@ About::About(QWidget * parent) :
             QLabel::tr("Special thanks:") + "</h2><p>"
             "Aleksey Andreev &lt;<a href=\"mailto:blaknayabr@gmail.com\">blaknayabr@gmail.com</a>&gt;<br>"
             "Aleksander Rudalev &lt;<a href=\"mailto:alexv@pomorsu.ru\">alexv@pomorsu.ru</a>&gt;<br>"
-            "Natasha Stafeeva &lt;<a href=\"mailto:layout@pisem.net\">layout@pisem.net</a>&gt;<br>"
+            "Natasha Korotaeva &lt;<a href=\"mailto:layout@pisem.net\">layout@pisem.net</a>&gt;<br>"
             "Adam Higerd (aka ahigerd at FreeNode)"
             "</p>"
             );
