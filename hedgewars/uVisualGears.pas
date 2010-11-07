@@ -369,7 +369,7 @@ while t <> nil do
       if Gear^.Kind = vgtFlake then
           begin
           // Damage calc from doMakeExplosion
-          dmg:= min(101, int64(Radius) + cHHRadius div 2 - (round(abs(Gear^.X - float(X))+abs(Gear^.Y - float(Y))) div 5));
+          dmg:= min(101, Radius + cHHRadius div 2 - LongInt(abs(round(Gear^.X) - X) + abs(round(Gear^.Y) - Y)) div 5);
           if dmg > 1 then
               begin
               Gear^.tdX:= 0.02 * dmg + 0.01;
