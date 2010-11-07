@@ -382,17 +382,26 @@ ett annat smeknamn i spelinställningarna:</translation>
         <source>(%1 kills)</source>
         <translation type="obsolete">(%1 döda)</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; tyckte att det var bra att sjuta sina egna igelkottar med &lt;b&gt;%2&lt;/b&gt; poäng.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; tyckte att det var bra att sjuta sina egna igelkottar med &lt;b&gt;%2&lt;/b&gt; poäng.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; dödade &lt;b&gt;%2&lt;/b&gt; av sina egna igelkottar.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; dödade &lt;b&gt;%2&lt;/b&gt; av sina egna igelkottar.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; var rädd och hoppade över turer &lt;b&gt;%2&lt;/b&gt; gånger.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; var rädd och hoppade över turer &lt;b&gt;%2&lt;/b&gt; gånger.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>

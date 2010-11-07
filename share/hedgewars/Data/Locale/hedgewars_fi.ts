@@ -382,17 +382,26 @@ tai aseta eri nimimerkki asetuksissa:</translation>
         <source>(%1 kills)</source>
         <translation type="obsolete">(%1 tappoa)</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; ajatteli että omia siilejä on hyvä vahingoittaa &lt;b&gt;%2&lt;/b&gt; vahinkopisteellä.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; ajatteli että omia siilejä on hyvä vahingoittaa &lt;b&gt;%2&lt;/b&gt; vahinkopisteellä.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; tappoi &lt;b&gt;%2&lt;/b&gt; omaa siiltä.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; tappoi &lt;b&gt;%2&lt;/b&gt; omaa siiltä.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; pelkäsi ja jätti vuoronsa väliin &lt;b&gt;%2&lt;/b&gt; kertaa.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; pelkäsi ja jätti vuoronsa väliin &lt;b&gt;%2&lt;/b&gt; kertaa.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>

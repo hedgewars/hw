@@ -376,17 +376,23 @@ or pick another nickname in game config:</source>
         <source>(%1 kills)</source>
         <translation type="obsolete">(%1 灭杀)</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt;另外，射击己方刺猬损失&lt;b&gt;%2&lt;/b&gt;点血。</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;另外，射击己方刺猬损失&lt;b&gt;%2&lt;/b&gt;点血。</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt;个刺猬被&lt;b&gt;%2&lt;/b&gt;己方的刺猬误伤.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;个刺猬被&lt;b&gt;%2&lt;/b&gt;己方的刺猬误伤.</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt;被迫跳过&lt;b&gt;%2&lt;/b&gt;回合。</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;被迫跳过&lt;b&gt;%2&lt;/b&gt;回合。</numerusform>
+        </translation>
     </message>
 </context>
 <context>

@@ -386,17 +386,26 @@ o elige otro nick en las preferencias del juego:</translation>
         <source>(%1 kills)</source>
         <translation type="obsolete">(%1 bajas)</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; prefiere disparar a sus miembros, con un total de &lt;b&gt;%2&lt;/b&gt; pts.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; prefiere disparar a sus miembros, con un total de &lt;b&gt;%2&lt;/b&gt; pts.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; acabó con &lt;b&gt;%2&lt;/b&gt; de sus propios miembros.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; acabó con &lt;b&gt;%2&lt;/b&gt; de sus propios miembros.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; tenía demasiado miedo y pasó &lt;b&gt;%2&lt;/b&gt; turnos.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; tenía demasiado miedo y pasó &lt;b&gt;%2&lt;/b&gt; turnos.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>

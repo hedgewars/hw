@@ -382,17 +382,26 @@ outro nome de utilizador no menu de configuração:</translation>
         <source>(%1 kills)</source>
         <translation type="obsolete">(%1 mortos)</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; axou que seria divertido disparar dispara contra a sua própria equipa com &lt;b&gt;%2&lt;/b&gt; pontos de dano.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; axou que seria divertido disparar dispara contra a sua própria equipa com &lt;b&gt;%2&lt;/b&gt; pontos de dano.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; matou &lt;b&gt;%2&lt;/b&gt; ouriços da sua própria equipa.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; matou &lt;b&gt;%2&lt;/b&gt; ouriços da sua própria equipa.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; estava tão intimidado que passou &lt;b&gt;%2&lt;/b&gt; turnos.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; estava tão intimidado que passou &lt;b&gt;%2&lt;/b&gt; turnos.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>

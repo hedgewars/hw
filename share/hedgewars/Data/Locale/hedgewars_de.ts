@@ -388,17 +388,26 @@ wähle einen anderen Spitznamen:</translation>
         <source>(%1 kills)</source>
         <translation type="obsolete">(%1 Kills)</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; dachte es ist gut seine eigenen Igel mit &lt;b&gt;%2&lt;/b&gt; Punkten zu verletzen.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; dachte es ist gut seine eigenen Igel mit &lt;b&gt;%2&lt;/b&gt; Punkten zu verletzen.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; killte &lt;b&gt;%2&lt;/b&gt; seiner eigenen Igel.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; killte &lt;b&gt;%2&lt;/b&gt; seiner eigenen Igel.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; hatte Angst und übersprang &lt;b&gt;%2&lt;/b&gt; Runden.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; hatte Angst und übersprang &lt;b&gt;%2&lt;/b&gt; Runden.</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>

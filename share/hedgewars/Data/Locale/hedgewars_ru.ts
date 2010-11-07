@@ -89,17 +89,17 @@
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation type="unfinished"></translation>
+        <translation>Команда по умолчанию</translation>
     </message>
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Файл записи игры hedgewars</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Файл сохранения игры hedgewars</translation>
     </message>
 </context>
 <context>
@@ -252,7 +252,10 @@ or pick another nickname:</source>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваше имя пользователя %1 
+зарегистрировано на сайте hedgewars.org
+Пожалуйста, укажите ваш пароль в поле ввода внизу
+или выберите иное имя пользователя в настройках игры:</translation>
     </message>
 </context>
 <context>
@@ -347,7 +350,7 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Health graph</source>
-        <translation type="unfinished"></translation>
+        <translation>График уровня здоровья</translation>
     </message>
     <message>
         <source>Ranking</source>
@@ -355,43 +358,55 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Приз за лучший выстрел получает &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; пунктами урона.</translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Лучший убийца &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убийством за ход.</numerusform>
+            <numerusform>Лучший убийца &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убийствами за ход.</numerusform>
+            <numerusform>Лучший убийца &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убийствами за ход.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
+        <translation>
+            <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ёж был убит в течение игры.</numerusform>
+            <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ёжа был убит в течение игры.</numerusform>
+            <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ёжей был убит в течение игры.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 kill)</source>
+        <translation>
+            <numerusform>(%1 убийство)</numerusform>
+            <numerusform>(%1 убийства)</numerusform>
+            <numerusform>(%1 убийств)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; посчитал нужным подстрелить друзей на &lt;b&gt;%2&lt;/b&gt; пунктов урона.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <source>(%1 kill)</source>
+        <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; убил &lt;b&gt;%2&lt;/b&gt; союзников.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
-    <message>
-        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; испугался и пропустил &lt;b&gt;%2&lt;/b&gt; ходов.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>

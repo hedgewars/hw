@@ -392,17 +392,29 @@ w ustawieniach gry:</translation>
         <source>(%1 kills)</source>
         <translation type="obsolete">(%1 zabitych)</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; przyjaźni się z wrogiem i zabrał swojej drużynie &lt;b&gt;%2&lt;/b&gt; pkt. życia.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; przyjaźni się z wrogiem i zabrał swojej drużynie &lt;b&gt;%2&lt;/b&gt; pkt. życia.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; zabił &lt;b&gt;%2&lt;/b&gt; spośród jego własnych jeży.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; zabił &lt;b&gt;%2&lt;/b&gt; spośród jego własnych jeży.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation>&lt;b&gt;%1&lt;/b&gt; trząsł portkami i opuścił turę &lt;b&gt;%2&lt;/b&gt; razy.</translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; trząsł portkami i opuścił turę &lt;b&gt;%2&lt;/b&gt; razy.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
