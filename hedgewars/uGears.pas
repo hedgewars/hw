@@ -885,7 +885,6 @@ else if ((GameFlags and gfInfAttack) <> 0) then
             if (AliveCount <= 1) and ((GameFlags and gfOneClanMode) = 0) then
                 begin
                 step:= stChDmg;
-                GameFlags:= GameFlags and not gfInfAttack;
                 TurnTimeLeft:= 0
                 end
             end
