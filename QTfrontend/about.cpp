@@ -77,7 +77,7 @@ About::About(QWidget * parent) :
             "Gamepad and Lua integration: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@gmail.com\">mario.liebisch@gmail.com</a>&gt;<br>"
             "Many engine improvements and graphics: Carlos Vives &lt;<a href=\"mailto:mail@carlosvives.es\">mail@carlosvives.es</a>&gt;<br>"
             "Few engine and frontend improvements: Richard Karolyi &lt;<a href=\"mailto:sheepluva@ercatec.net\">sheepluva@ercatec.net</a>&gt;<br>"
-            "Maze maps: Henning K&uuml;hn &lt;<a href=\"mailto:prg@cooco.de\">prg@cooco.de</a>&gt;"
+            "Maze maps: Henning K&uuml;hn &lt;<a href=\"mailto:prg@cooco.de\">prg@cooco.de</a>&gt;<br>"
             "Engine and frontend improvements: Henrik Rostedt &lt;<a href=\"mailto:henrik.rostedt@gmail.com\">henrik.rostedt@gmail.com</a>&gt;<br>"
             "</p><h2>" +
 
@@ -124,7 +124,7 @@ About::About(QWidget * parent) :
             "Russian: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
             "Slovak: Jose Riha<br>"
             "Spanish: Carlos Vives &lt;<a href=\"mailto:mail@carlosvives.es\">mail@carlosvives.es</a>&gt;<br>"
-            "Swedish: Niklas Grahn &lt;<a href=\"mailto:raewolusjoon@yaoo.com\">raewolusjoon@yaoo.com</a>&gt;<br>"
+            "Swedish: Niklas Grahn &lt;<a href=\"mailto:raewolusjoon@yaoo.com\">raewolusjoon@yaoo.com</a>&gt;, Henrik Rostedt &lt;<a href=\"mailto:henrik.rostedt@gmail.com\">henrik.rostedt@gmail.com</a>&gt;<br>"
             "Ukrainian: Eugene V. Lyubimkin &lt;<a href=\"mailto:jackyf.devel@gmail.com\">jackyf.devel@gmail.com</a>&gt;"
             "</p><h2>") +
 
