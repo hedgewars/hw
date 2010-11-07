@@ -225,21 +225,21 @@ void PageGameStats::GameStats(char type, const QString & info)
         case 's' : {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsMostSelfDamage.png\"> " + PageGameStats::tr("<b>%1</b> thought it's good to shoot his own hedgehogs with <b>%2</b> pts.", "", num).arg(info.mid(i + 1), num) + "</p>";
+            QString message = "<p><img src=\":/res/StatsMostSelfDamage.png\"> " + PageGameStats::tr("<b>%1</b> thought it's good to shoot his own hedgehogs with <b>%2</b> pts.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
             AddStatText(message);
             break;
         }
         case 'S' : {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsSelfKilled.png\"> " + PageGameStats::tr("<b>%1</b> killed <b>%2</b> of his own hedgehogs.", "", num).arg(info.mid(i + 1), num) + "</p>";
+            QString message = "<p><img src=\":/res/StatsSelfKilled.png\"> " + PageGameStats::tr("<b>%1</b> killed <b>%2</b> of his own hedgehogs.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
             AddStatText(message);
             break;
         }
         case 'B' : {
             int i = info.indexOf(' ');
             int num = info.left(i).toInt();
-            QString message = "<p><img src=\":/res/StatsSkipped.png\"> " + PageGameStats::tr("<b>%1</b> was scared and skipped turn <b>%2</b> times.", "", num).arg(info.mid(i + 1), num) + "</p>";
+            QString message = "<p><img src=\":/res/StatsSkipped.png\"> " + PageGameStats::tr("<b>%1</b> was scared and skipped turn <b>%2</b> times.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
             AddStatText(message);
             break;
         }
