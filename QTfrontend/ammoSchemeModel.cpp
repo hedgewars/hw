@@ -218,7 +218,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(true)          // inf. attack    19
         << QVariant(true)          // reset weps     20
         << QVariant(false)         // per hog ammo   21
-        << QVariant(120)           // damage modfier 22
+        << QVariant(100)           // damage modfier 22
         << QVariant(45)            // turn time      23
         << QVariant(100)           // init health    24
         << QVariant(15)            // sudden death   25
@@ -227,8 +227,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(4)             // mines number   28
         << QVariant(0)             // mine dud pct   29
         << QVariant(2)             // explosives     30
-        << QVariant(25)            // health case pct 31
-        << QVariant(50)            // health case amt 32
+        << QVariant(35)            // health case pct 31
+        << QVariant(25)            // health case amt 32
         << QVariant(47)            // water rise amt 33
         << QVariant(5)             // health dec amt 34
         ;
