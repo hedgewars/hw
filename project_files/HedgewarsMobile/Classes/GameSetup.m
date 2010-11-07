@@ -168,6 +168,7 @@
     int i = 0;
     int result = 0;
     int mask = 0x00000004;
+    int basicArraySize = [basicArray count] - 1;
 
     // pack the gameflags in a single var and send it
     for (NSNumber *value in gamemodArray) {
@@ -179,26 +180,64 @@
     [self sendToEngine:flags];
     [flags release];
 
-    /* basic game flags */
-    NSString *path = [[NSString alloc] initWithFormat:@"%@/basicFlags_en.plist",IFRONTEND_DIRECTORY()];
-    NSArray *mods = [[NSArray alloc] initWithContentsOfFile:path];
-    [path release];
+    NSString *dmgMod = [[NSString alloc] initWithFormat:@"e$damagepct %d",[[basicArray objectAtIndex:i] intValue]];
+    [self sendToEngine:dmgMod];
+    [dmgMod release];
+    if (i < basicArraySize) i++;
 
-    // initial health
-    result = [[basicArray objectAtIndex:0] intValue];
+    // support for endless games
+    NSInteger tentativeTurntime = [[basicArray objectAtIndex:i] intValue];
+    if (tentativeTurntime >= 100)
+        tentativeTurntime = 9999;
+    NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",tentativeTurntime * 1000];
+    [self sendToEngine:turnTime];
+    [turnTime release];
+    if (i < basicArraySize) i++;
 
-    for (i = 1; i < [basicArray count]; i++) {
-        NSDictionary *basicDict = [mods objectAtIndex:i];
-        NSString *command = [basicDict objectForKey:@"command"];
-        NSInteger value = [[basicArray objectAtIndex:i] intValue];
-        if ([basicDict objectForKey:@"checkOverMax"] && value >= [[basicDict objectForKey:@"max"] intValue])
-            value = 9999;
-        NSString *strToSend = [[NSString alloc] initWithFormat:@"%@ %d",command,value];
-        [self sendToEngine:strToSend];
-        [strToSend release];
-    }
-    [mods release];
+    result = [[basicArray objectAtIndex:i] intValue]; // initial health
+    if (i < basicArraySize) i++;
 
+    NSString *sdTime = [[NSString alloc] initWithFormat:@"e$sd_turns %d",[[basicArray objectAtIndex:i] intValue]];
+    [self sendToEngine:sdTime];
+    [sdTime release];
+    if (i < basicArraySize) i++;
+
+    NSString *crateDrops = [[NSString alloc] initWithFormat:@"e$casefreq %d",[[basicArray objectAtIndex:i] intValue]];
+    [self sendToEngine:crateDrops];
+    [crateDrops release];
+    if (i < basicArraySize) i++;
+
+    NSString *healthProb = [[NSString alloc] initWithFormat:@"e$healthprob %d",[[basicArray objectAtIndex:i] intValue]];
+    [self sendToEngine:healthProb];
+    [healthProb release];
+    if (i < basicArraySize) i++;
+
+    NSString *healthAmount = [[NSString alloc] initWithFormat:@"e$hcaseamount %d",[[basicArray objectAtIndex:i] intValue]];
+    [self sendToEngine:healthAmount];
+    [healthAmount release];
+    if (i < basicArraySize) i++;
+
+    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$minestime %d",[[basicArray objectAtIndex:i] intValue] * 1000];
+    [self sendToEngine:minesTime];
+    [minesTime release];
+    if (i < basicArraySize) i++;
+
+    NSString *minesNumber = [[NSString alloc] initWithFormat:@"e$minesnum %d",[[basicArray objectAtIndex:i] intValue]];
+    [self sendToEngine:minesNumber];
+    [minesNumber release];
+    if (i < basicArraySize) i++;
+
+    NSString *dudMines = [[NSString alloc] initWithFormat:@"e$minedudpct %d",[[basicArray objectAtIndex:i] intValue]];
+    [self sendToEngine:dudMines];
+    [dudMines release];
+    if (i < basicArraySize) i++;
+
+    NSString *explosives = [[NSString alloc] initWithFormat:@"e$explosives %d",[[basicArray objectAtIndex:i] intValue]];
+    [self sendToEngine:explosives];
+    [explosives release];
+    if (i < basicArraySize) i++;
+
+    DLog(@"Sent %d flags and %d modes", [gamemodArray count], i);
     [schemeDictionary release];
     return result;
 }

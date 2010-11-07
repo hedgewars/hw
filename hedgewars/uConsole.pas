@@ -245,7 +245,7 @@ begin
     RegisterVariable('explosives',vtLongInt,@cExplosives    , false);
     RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
     RegisterVariable('trflags' , vtLongInt, @TrainingFlags  , false);
-    RegisterVariable('turntime', vtCommand, @chTurnTime     , false);
+    RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);
     RegisterVariable('minestime',vtLongInt, @cMinesTime     , false);
     RegisterVariable('fort'    , vtCommand, @chFort         , false);
     RegisterVariable('voicepack',vtCommand, @chVoicepack    , false);

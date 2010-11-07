@@ -3,26 +3,6 @@
 <plist version="1.0">
 <array>
 	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string></string>
-		<key>default</key>
-		<integer>100</integer>
-		<key>image</key>
-		<string>Health</string>
-		<key>max</key>
-		<integer>200</integer>
-		<key>min</key>
-		<integer>50</integer>
-		<key>title</key>
-		<string>Initial Health</string>
-	</dict>
-	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$damagepct</string>
 		<key>default</key>
 		<integer>100</integer>
 		<key>image</key>
@@ -35,10 +15,6 @@
 		<string>Damage Modifier</string>
 	</dict>
 	<dict>
-		<key>checkOverMax</key>
-		<true/>
-		<key>command</key>
-		<string>e$turntime</string>
 		<key>default</key>
 		<integer>45</integer>
 		<key>image</key>
@@ -51,58 +27,30 @@
 		<string>Turn Time</string>
 	</dict>
 	<dict>
-		<key>checkOverMax</key>
-		<true/>
-		<key>command</key>
-		<string>e$sd_turns</string>
+		<key>default</key>
+		<integer>100</integer>
+		<key>image</key>
+		<string>Health</string>
+		<key>max</key>
+		<integer>200</integer>
+		<key>min</key>
+		<integer>50</integer>
+		<key>title</key>
+		<string>Initial Health</string>
+	</dict>
+	<dict>
 		<key>default</key>
 		<integer>15</integer>
 		<key>image</key>
 		<string>SuddenDeath</string>
 		<key>max</key>
-		<integer>100</integer>
+		<integer>999</integer>
 		<key>min</key>
 		<integer>0</integer>
 		<key>title</key>
 		<string>Sudden Death Timeout</string>
 	</dict>
 	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$waterrise</string>
-		<key>default</key>
-		<integer>47</integer>
-		<key>image</key>
-		<string>SuddenDeath</string>
-		<key>max</key>
-		<integer>100</integer>
-		<key>min</key>
-		<integer>0</integer>
-		<key>title</key>
-		<string>Water Rise Amount</string>
-	</dict>
-	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$healthdec</string>
-		<key>default</key>
-		<integer>5</integer>
-		<key>image</key>
-		<string>SuddenDeath</string>
-		<key>max</key>
-		<integer>100</integer>
-		<key>min</key>
-		<integer>0</integer>
-		<key>title</key>
-		<string>Health Decrease</string>
-	</dict>
-	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$casefreq</string>
 		<key>default</key>
 		<integer>5</integer>
 		<key>image</key>
@@ -112,13 +60,9 @@
 		<key>min</key>
 		<integer>0</integer>
 		<key>title</key>
-		<string>Crate Drop Turns</string>
+		<string>Crate Drops</string>
 	</dict>
 	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$healthprob</string>
 		<key>default</key>
 		<integer>35</integer>
 		<key>image</key>
@@ -131,10 +75,6 @@
 		<string>Health Kit Probability</string>
 	</dict>
 	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$hcaseamount</string>
 		<key>default</key>
 		<integer>25</integer>
 		<key>image</key>
@@ -147,10 +87,6 @@
 		<string>Health Amount in Kit</string>
 	</dict>
 	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$minestime</string>
 		<key>default</key>
 		<integer>3</integer>
 		<key>image</key>
@@ -163,10 +99,6 @@
 		<string>Mines Time</string>
 	</dict>
 	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$minesnum</string>
 		<key>default</key>
 		<integer>4</integer>
 		<key>image</key>
@@ -179,10 +111,6 @@
 		<string>Mines Number</string>
 	</dict>
 	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$minedudpct</string>
 		<key>default</key>
 		<integer>0</integer>
 		<key>image</key>
@@ -195,10 +123,6 @@
 		<string>Dud Mines Probability</string>
 	</dict>
 	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$explosives</string>
 		<key>default</key>
 		<integer>2</integer>
 		<key>image</key>
