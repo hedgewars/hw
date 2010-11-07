@@ -500,3 +500,8 @@
 05:13=Minas: las minas detonarán al instante
 05:14=Minas: las minas detonarán aleatoriamente al cabo de 0 - 3 segundos
 05:15=Modificador al daño: las armas harán un %1% de su daño habitual
+05:16=La salud de todos los erizos se restaura al final de cada turno
+05:17=La computadora resucita al morir
+05:18=Sin límite de ataques por turno
+05:19=El arsenal se restaura al final de cada turno
+05:20=Los erizos no comparten arsenal

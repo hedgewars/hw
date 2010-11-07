@@ -359,20 +359,20 @@ o elige otro nick en las preferencias del juego:</translation>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>&lt;p&gt;El premio al mejor disparo es para &lt;b&gt;%1&lt;/b&gt;, con &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</translation>
+        <translation>El premio al mejor disparo es para &lt;b&gt;%1&lt;/b&gt;, con &lt;b&gt;%2&lt;/b&gt; pts.</translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
         <translation>
-            <numerusform>&lt;p&gt;El mejor guerrero es &lt;b&gt;%1&lt;/b&gt;, con &lt;b&gt;%2&lt;/b&gt; muerte en un solo turno.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;El mejor guerrero es &lt;b&gt;%1&lt;/b&gt;, con &lt;b&gt;%2&lt;/b&gt; muertes en un solo turno.&lt;/p&gt;</numerusform>
+            <numerusform>El mejor guerrero es &lt;b&gt;%1&lt;/b&gt;, con &lt;b&gt;%2&lt;/b&gt; muerte en un solo turno.</numerusform>
+            <numerusform>El mejor guerrero es &lt;b&gt;%1&lt;/b&gt;, con &lt;b&gt;%2&lt;/b&gt; muertes en un solo turno.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
         <translation>
-            <numerusform>&lt;p&gt;Un total de &lt;b&gt;%1&lt;/b&gt; erizo murió esta ronda.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Un total de &lt;b&gt;%1&lt;/b&gt; erizos murieron esta ronda.&lt;/p&gt;</numerusform>
+            <numerusform>Un total de &lt;b&gt;%1&lt;/b&gt; erizo murió esta ronda.</numerusform>
+            <numerusform>Un total de &lt;b&gt;%1&lt;/b&gt; erizos murieron esta ronda.</numerusform>
         </translation>
     </message>
     <message>
@@ -429,7 +429,7 @@ o elige otro nick en las preferencias del juego:</translation>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
         <comment>Tips</comment>
-        <translation>Si prefieres que nadie más use tu nick en el servidor oficial puedes registrarlo en http://www.hedgewars.org</translation>
+        <translation>Si prefieres que nadie más use tu nick en el servidor oficial puedes registrarlo en http://www.hedgewars.org/.</translation>
     </message>
     <message>
         <source>You&apos;re bored of default gameplay? Try one of the missions - they&apos;ll offer different gameplay depending on the one you picked.</source>
@@ -444,12 +444,12 @@ o elige otro nick en las preferencias del juego:</translation>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If you&apos;ve got problems, ask on our forums but please don&apos;t expect 24/7 support!</source>
         <comment>Tips</comment>
-        <translation>Hedgewars es un juego gratuito de código abierto que hemos creado en nuestro tiempo libre. Si tienes algún problema estaremos encantados de ayudarte en nuestros foros o canal de IRC, pero no esperes que estemos allí las 24 horas del día.</translation>
+        <translation>Hedgewars es un juego gratuito de código abierto que hemos creado en nuestro tiempo libre. Si tienes algún problema estaremos encantados de ayudarte en nuestros foros o canal de IRC, pero ¡no esperes que estemos allí las 24 horas del día!</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If you like it, help us with a small donation or contribute your own work!</source>
         <comment>Tips</comment>
-        <translation>Hedgewars es un juego gratuito de código abierto que hemos creado en nuestro tiempo libre. Si te gusta podrías considerar el ayudarnos con una pequeña donación o contribuyendo tu propio código, gráficos o audios.</translation>
+        <translation>Hedgewars es un juego gratuito de código abierto que hemos creado en nuestro tiempo libre. ¡Si te gusta podrías considerar el ayudarnos con una pequeña donación o contribuyendo con tu propio trabajo!</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. Share it with your family and friends as you like!</source>
@@ -459,7 +459,7 @@ o elige otro nick en las preferencias del juego:</translation>
     <message>
         <source>From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.</source>
         <comment>Tips</comment>
-        <translation>De cuando en cuando celebramos torneos oficiales. Puedes mantenerte al día sobre los próximos eventos en http://www.hedgewars.org</translation>
+        <translation>De cuando en cuando celebramos torneos oficiales. Puedes mantenerte al día sobre los próximos eventos en http://www.hedgewars.org.</translation>
     </message>
     <message>
         <source>Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!</source>
@@ -489,7 +489,7 @@ o elige otro nick en las preferencias del juego:</translation>
     <message>
         <source>We&apos;re open to suggestions and constructive feedback. If you don&apos;t like something or got a great idea, let us know!</source>
         <comment>Tips</comment>
-        <translation>Siempre estamos abiertos a sugerencias y opiniones constructivas. Si hay algo que no te guste o tienes grandes ideas que te gustaría ver en el juego, háznoslo saber.</translation>
+        <translation>Siempre estamos abiertos a sugerencias y opiniones constructivas. Si hay algo que no te guste o tienes grandes ideas que te gustaría ver en el juego, ¡háznoslo saber!</translation>
     </message>
     <message>
         <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
@@ -509,7 +509,7 @@ o elige otro nick en las preferencias del juego:</translation>
     <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
         <comment>Tips</comment>
-        <translation>Nunca instales Hedgewars en ordenadores que no te pertenezcan tales como los de tu escuela, universidad o trabajo sin perdir permiso primero a las personas responsables de los mismos.</translation>
+        <translation>¡Nunca instales Hedgewars en ordenadores que no te pertenezcan tales como los de tu escuela, universidad o trabajo sin perdir permiso primero a las personas responsables de los mismos!</translation>
     </message>
     <message>
         <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
@@ -524,7 +524,7 @@ o elige otro nick en las preferencias del juego:</translation>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
         <comment>Tips</comment>
-        <translation>Hedgewars es un juego gratuito de código abierto que hemos creado en nuestro tiempo libre. Si alguien te vendió el juego deberías pedirle que te devuelva tu dinero.</translation>
+        <translation>Hedgewars es un juego gratuito de código abierto que hemos creado en nuestro tiempo libre. Si alguien te ha vendido el juego deberías pedirle que te devuelva tu dinero.</translation>
     </message>
     <message>
         <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
@@ -912,19 +912,19 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Añade un borde indestructible alrededor del campo de juego.</translation>
+        <translation>Añade un borde indestructible alrededor del campo de juego</translation>
     </message>
     <message>
         <source>Lower gravity</source>
-        <translation>Baja gravedad.</translation>
+        <translation>Baja gravedad</translation>
     </message>
     <message>
         <source>Assisted aiming with laser sight</source>
-        <translation>Una mira láser que te ayudará a apuntar.</translation>
+        <translation>Una mira láser que te ayudará a apuntar</translation>
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
-        <translation>Todos los erizos tienen un campo de fuerza personal que los protege.</translation>
+        <translation>Todos los erizos tienen un campo de fuerza personal que los protege</translation>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
@@ -968,7 +968,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation type="unfinished"></translation>
+        <translation>La salud de todos los erizos en pie es restaurada al final de cada turno</translation>
     </message>
 </context>
 <context>
@@ -1398,19 +1398,19 @@ así como carecer de algunas funcionalidades o simplemente funcionar mal.
     </message>
     <message>
         <source>% Health Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>% botiquines</translation>
     </message>
     <message>
         <source>Health in Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>Vida en botiquines</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation type="unfinished"></translation>
+        <translation>Aumento del nivel del agua en muerte súbita</translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation type="unfinished"></translation>
+        <translation>Decremento de vida en muerte súbita</translation>
     </message>
 </context>
 <context>
@@ -1475,7 +1475,7 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se pudieron asociar los tipos de fichero.</translation>
     </message>
 </context>
 <context>
@@ -1569,7 +1569,7 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Associate file extensions</source>
-        <translation>Asociar tipos de archivo.</translation>
+        <translation>Asociar tipos de archivo</translation>
     </message>
 </context>
 <context>
@@ -1725,7 +1725,7 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Reset Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar salud</translation>
     </message>
 </context>
 <context>
