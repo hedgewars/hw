@@ -93,7 +93,7 @@
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation>Ficheiro de demo do Hedgewars</translation>
+        <translation>Ficheiro de demo Hedgewars</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
@@ -1153,34 +1153,6 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
         <source>Default</source>
         <translation type="obsolete">Predefinido</translation>
     </message>
-    <message>
-        <source>Pro mode</source>
-        <translation type="obsolete">Modo Profissional</translation>
-    </message>
-    <message>
-        <source>Shoppa</source>
-        <translation type="obsolete">Shoppa</translation>
-    </message>
-    <message>
-        <source>Basketball</source>
-        <translation type="obsolete">Basquetebol</translation>
-    </message>
-    <message>
-        <source>Minefield</source>
-        <translation type="obsolete">Campo de minas</translation>
-    </message>
-    <message>
-        <source>Barrel mayhem</source>
-        <translation type="obsolete">Barrel mayhem</translation>
-    </message>
-    <message>
-        <source>Tunnel hogs</source>
-        <translation type="obsolete">Tuneis</translation>
-    </message>
-    <message>
-        <source>Crazy</source>
-        <translation type="obsolete">Crazy</translation>
-    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -1265,7 +1237,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Translations:</source>
-        <translation>Traduções:</translation>
+        <translation>Tradutores:</translation>
     </message>
     <message>
         <source>Special thanks:</source>
@@ -1365,7 +1337,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation>Reiniciar o jogo para aplicar as definições</translation>
+        <translation>Reinicie o jogo para aplicar as alterações</translation>
     </message>
     <message>
         <source>Explosives</source>
@@ -1458,7 +1430,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>All file associations have been set.</source>
-        <translation>Todos os ficheiros foram associados com sucesso.</translation>
+        <translation>Os ficheiros foram associados com sucesso.</translation>
     </message>
     <message>
         <source>File association failed.</source>
@@ -1524,7 +1496,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Go!</source>
-        <translation>Ir!</translation>
+        <translation>Começar!</translation>
     </message>
     <message>
         <source>Play demo</source>
@@ -1556,7 +1528,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Associate file extensions</source>
-        <translation>Associar as extenções dos ficheiros</translation>
+        <translation>Associar com as extensões dos ficheiros</translation>
     </message>
 </context>
 <context>
