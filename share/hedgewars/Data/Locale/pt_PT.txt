@@ -501,3 +501,8 @@
 05:13=Tempo das minas: As minas detonam instantaneamente
 05:14=Tempo das minas: As minas detonam passado 0 - 3 segundos
 05:15=Modificador de Dano: Todas as armas fazem %1% de dano
+05:16=A vida de todos ouriços é restaurada no final do turno
+05:17=Os ouriços do CPU são ressuscitados ao morrerem
+05:18=Ataques ilimitados
+05:19=O armamento é restaurado no final do turno
+05:20=O armamento não é partilhado entre ouriços

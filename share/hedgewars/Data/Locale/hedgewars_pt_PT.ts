@@ -1365,11 +1365,11 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation type="unfinished"></translation>
+        <translation>Súbida da água durante Morte Súbita</translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation type="unfinished"></translation>
+        <translation>Vida perdida durante Morte Súbita</translation>
     </message>
 </context>
 <context>
