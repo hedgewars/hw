@@ -333,7 +333,7 @@ begin
 with CurrentHedgehog^ do
      if (Gear <> nil)
         and ((Gear^.State and gstHHDriven) <> 0)
-        and (TurnTimeLeft < (cHedgehogTurnTime * 1000) - 50) then
+        and (TurnTimeLeft < cHedgehogTurnTime - 50) then
         if ((Gear^.State and gstHHThinking) = 0) then
            if (BestActions.Pos >= BestActions.Count)
               and (TurnTimeLeft > cStopThinkTime) then

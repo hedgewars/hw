@@ -295,14 +295,14 @@ if PlacingHogs then
    if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 15000
    else TurnTimeLeft:= 0
    end
-else TurnTimeLeft:= cHedgehogTurnTime * 1000;
+else TurnTimeLeft:= cHedgehogTurnTime;
 if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     begin
     if CurrentTeam^.ExtDriven then
         PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
     else
         PlaySound(sndYesSir, CurrentTeam^.voicepack);
-    if PlacingHogs or (cHedgehogTurnTime < 1000) then ReadyTimeLeft:= cReadyDelay;
+    if PlacingHogs or (cHedgehogTurnTime < 1000000) then ReadyTimeLeft:= cReadyDelay;
     AddCaption(Format(shortstring(trmsg[sidReady]), CurrentTeam^.TeamName), cWhiteColor, capgrpGameState)
     end
 else

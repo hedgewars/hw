@@ -365,9 +365,9 @@ case Kind of
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
                 if cMinesTime < 0 then
-                    gear^.Timer:= getrandom(51)*100
+                    gear^.Timer:= getrandom(6)*1000
                 else
-                    gear^.Timer:= cMinesTime*1000;
+                    gear^.Timer:= cMinesTime*1;
                 end;
        gtSMine: begin
                 gear^.Health:= 10;
@@ -890,7 +890,7 @@ if TurnTimeLeft > 0 then
                 and not isInMultiShoot then
                 begin
                 if (TurnTimeLeft = 5000)
-                    and (cHedgehogTurnTime >= 10)
+                    and (cHedgehogTurnTime >= 10000)
                     and (not PlacingHogs)
                     and (CurrentHedgehog^.Gear <> nil)
                     and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then

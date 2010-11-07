@@ -157,8 +157,8 @@ QStringList GameCFGWidget::getFullConfig() const
     sl.append("eseed " + pMapContainer->getCurrentSeed());
     sl.append(QString("e$gmflags %1").arg(getGameFlags()));
     sl.append(QString("e$damagepct %1").arg(schemeData(22).toInt()));
-    sl.append(QString("e$turntime %1").arg(schemeData(23).toInt()));
-    sl.append(QString("e$minestime %1").arg(schemeData(27).toInt()));
+    sl.append(QString("e$turntime %1").arg(schemeData(23).toInt() * 1000));
+    sl.append(QString("e$minestime %1").arg(schemeData(27).toInt() * 1000));
     sl.append(QString("e$minesnum %1").arg(schemeData(28).toInt()));
     sl.append(QString("e$sd_turns %1").arg(schemeData(25).toInt()));
     sl.append(QString("e$casefreq %1").arg(schemeData(26).toInt()));
