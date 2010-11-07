@@ -1,4 +1,4 @@
-﻿; Japanese locale
+; Japanese locale
 
 00:00=擲弾
 00:01=クラスタ爆弾

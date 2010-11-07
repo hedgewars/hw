@@ -382,10 +382,10 @@ w ustawieniach gry:</translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation type="unfinished">
-            <numerusform>(%1 zabity)</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 zabity jeż)</numerusform>
+            <numerusform>(%1 zabite jeże)</numerusform>
+            <numerusform>(%1 zabitych jeży)</numerusform>
         </translation>
     </message>
     <message>
@@ -394,26 +394,26 @@ w ustawieniach gry:</translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; przyjaźni się z wrogiem i zabrał swojej drużynie &lt;b&gt;%2&lt;/b&gt; pkt. życia.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; przyjaźni się z wrogiem i zabrał swojej drużynie &lt;b&gt;%2&lt;/b&gt; pkt. życia.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; przyjaźni się z wrogiem i zabrał swojej drużynie &lt;b&gt;%2&lt;/b&gt; pkt. życia.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished">
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; zabił &lt;b&gt;%2&lt;/b&gt; spośród jego własnych jeży.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; zabił &lt;b&gt;%2&lt;/b&gt; swojego jeża</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; zabił &lt;b&gt;%2&lt;/b&gt; swoje jeże</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; zabił &lt;b&gt;%2&lt;/b&gt; swoich jeży</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; trząsł portkami i opuścił turę &lt;b&gt;%2&lt;/b&gt; raz.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; trząsł portkami i opuścił turę &lt;b&gt;%2&lt;/b&gt; razy.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; trząsł portkami i opuścił turę &lt;b&gt;%2&lt;/b&gt; razy.</numerusform>
         </translation>
     </message>
 </context>
@@ -685,7 +685,7 @@ w ustawieniach gry:</translation>
     <message>
         <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Chcesz zaoszczędzić liny? Odłącz ją będąc w powietrzu, a potem wypuść ją ponownie. Tak długo jak nie dotkniesz ziemi, będziesz używał pojedynczego naboju!</translation>
     </message>
 </context>
 <context>
