@@ -43,7 +43,7 @@ type
             ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps);
 
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
-            sprLag, sprArrow, sprGrenade, sprTargetP, sprBee,
+            sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
             sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
             sprMineOn, sprMineDead, sprCase, sprFAid, sprDynamite, sprPower,
             sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
@@ -79,7 +79,7 @@ type
             );
 
     // Gears that interact with other Gears and/or Land
-    TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtGrave, gtBee, // 4
+    TGearType = (gtBomb, gtHedgehog, gtShell, gtGrave, gtBee, // 4
             gtShotgunShot, gtPickHammer, gtRope, gtMine, gtCase, // 9
             gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 14
             gtFlame, gtFirePunch, gtATStartGame, gtATSmoothWindCh, // 18
@@ -521,8 +521,8 @@ const
             Width:  65; Height: 65; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpLowest; getDimensions: false; getImageDimensions: true),// sprLag
             (FileName:      'Arrow'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprCursor
-            (FileName:    'Grenade'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprGrenade
+            (FileName:'BazookaShell'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprBazookaShell
             (FileName:    'Targetp'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTargetP
             (FileName:        'Bee'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;

@@ -183,11 +183,11 @@ with Gear^,
         if Ammoz[CurAmmoType].Ammo.AttackVoice <> sndNone then
            PlaySound(Ammoz[CurAmmoType].Ammo.AttackVoice, CurrentTeam^.voicepack);
              case CurAmmoType of
-                      amGrenade: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtAmmo_Bomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
+                      amGrenade: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtBomb,         0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
                       amMolotov: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtMolotov,      0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                   amClusterBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtClusterBomb,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
-                      amGasBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtGasBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
-                      amBazooka: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtAmmo_Grenade, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                      amGasBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtGasBomb,      0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
+                      amBazooka: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtShell,        0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                           amBee: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtBee,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                       amShotgun: begin
                                  PlaySound(sndShotgunReload);

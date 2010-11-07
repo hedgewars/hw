@@ -694,7 +694,7 @@ while Gear<>nil do
     x:= hwRound(Gear^.X) + WorldDx;
     y:= hwRound(Gear^.Y) + WorldDy;
     case Gear^.Kind of
-       gtAmmo_Bomb: DrawRotated(sprBomb, x, y, 0, Gear^.DirAngle);
+          gtBomb: DrawRotated(sprBomb, x, y, 0, Gear^.DirAngle);
        gtGasBomb: DrawRotated(sprCheese, x, y, 0, Gear^.DirAngle);
        gtMolotov: DrawRotated(sprMolotov, x, y, 0, Gear^.DirAngle);
 
@@ -718,7 +718,7 @@ while Gear<>nil do
 
         gtHedgehog: DrawHH(Gear, x, y);
 
-    gtAmmo_Grenade: DrawRotated(sprGrenade, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+           gtShell: DrawRotated(sprBazookaShell, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 
            gtGrave: begin 
                     DrawTextureF(PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex, 1, x, y, (GameTicks shr 7+Gear^.uid) and 7, 1, 32, 32);

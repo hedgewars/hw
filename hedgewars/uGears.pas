@@ -155,7 +155,7 @@ end;
 const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepBomb,
             @doStepHedgehog,
-            @doStepGrenade,
+            @doStepShell,
             @doStepGrave,
             @doStepBee,
             @doStepShotgunShot,
@@ -292,7 +292,7 @@ if CurrentTeam <> nil then
     end;
 
 case Kind of
-     gtAmmo_Bomb,
+     gtBomb,
      gtClusterBomb,
      gtGasBomb: begin
                 gear^.ImpactSound:= sndGrenadeImpact;
@@ -325,7 +325,7 @@ case Kind of
                     if PHedgehog(gear^.Hedgehog)^.BotLevel > 0 then
                         PHedgehog(gear^.Hedgehog)^.Effects[heResurrectable] := true;
                 end;
-gtAmmo_Grenade: begin // bazooka
+       gtShell: begin
                 gear^.Radius:= 4;
                 end;
        gtGrave: begin

@@ -352,7 +352,7 @@ begin
     dec(Gear^.Timer);
     if Gear^.Timer = 1000 then // might need adjustments
         case Gear^.Kind of 
-            gtAmmo_Bomb: makeHogsWorry(Gear^.X, Gear^.Y, 50);
+            gtBomb: makeHogsWorry(Gear^.X, Gear^.Y, 50);
             gtClusterBomb: makeHogsWorry(Gear^.X, Gear^.Y, 20);
             gtWatermelon: makeHogsWorry(Gear^.X, Gear^.Y, 75);
             gtHellishBomb: makeHogsWorry(Gear^.X, Gear^.Y, 90);
@@ -376,7 +376,7 @@ begin
     if Gear^.Timer = 0 then
     begin
         case Gear^.Kind of 
-            gtAmmo_Bomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+            gtBomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
             gtBall: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 40, EXPLAutoSound);
             gtClusterBomb: 
                 begin
@@ -509,7 +509,7 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepGrenade(Gear: PGear);
+procedure doStepShell(Gear: PGear);
 begin
     AllInactive := false;
     Gear^.dX := Gear^.dX + cWindSpeed;

@@ -169,7 +169,7 @@ function onGameTick()
 				SetHealth(worsthog, 0)
 				--Place a grenade to make inactive slowest hog active
 				x, y = GetGearPosition(worsthog)
-				AddGear(x, y, gtAmmo_Grenade, 0, 0, 0, 0)
+				AddGear(x, y, gtShell, 0, 0, 0, 0)
 				worsttime = 0
 				worsthog = nil
 				end
