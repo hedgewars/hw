@@ -2,32 +2,40 @@
 
 local caption = {
 	["en"] = "TrophyRace",
+	["sv"] = "TrophyRace",
 	}
 
 local goal = {
 	["en"] = "Use your rope to get from start to finish as fast as you can!",
+	["sv"] = "Använd ditt rep för att ta dig från start till mål så fort som möjligt!",
 	}
 
 local done = {
 	["en"] = "You've reached the goal!| |Time: ",
+	["sv"] = "Du har nått målet!| |Tid: ",
 	}
 
 local eliminated = {
 	["en"] = "Eliminating worst hedgehog this round...| |%s is OUT!",
+	["sv"] = "Eliminerar sämsta igelkott den här rundan...| |%s är UTE!",
 	}
 
 local newbesttime = {
 	["en"] = "NEW fastest lap: ",
+	["sv"] = "NYTT snabbast varv: ",
 	}
 
 local oldbesttime = {
 	["en"] = "Fastest lap: ",
+	["sv"] = "Snabbast varv: ",
 	}
 local bestclantimes = {
 	["en"] = "Best laps per team: ",
+	["sv"] = "Bästa varv per lag: ",
 	}
 local clantime = {
 	["en"] = "Team %d: ",
+	["sv"] = "Lag %d: ",
 	}
 
 	local function loc(text)
@@ -82,7 +90,7 @@ function onGameInit()
 	GameFlags = gfSolidLand + gfInvulnerable
 	TurnTime = maxtime
 	CaseFreq = 0
-	LandAdds = 0
+	MinesNum = 0
 	Explosives = 0
 	Delay = 500
 	SuddenDeathTurns = 99999 -- "disable" sudden death

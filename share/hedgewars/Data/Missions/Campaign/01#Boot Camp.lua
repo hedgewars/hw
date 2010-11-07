@@ -270,7 +270,7 @@ function onGameInit()
 	GameFlags = gfMultiWeapon + gfOneClanMode
 	TurnTime = 25000
 	CaseFreq = 0
-	LandAdds = 0
+	MinesNum = 0
 	Explosives = 0
 	Delay = 2500
 	Map = "Mushrooms"

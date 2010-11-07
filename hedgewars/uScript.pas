@@ -830,11 +830,15 @@ ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TurnTime', cHedgehogTurnTime);
 ScriptSetInteger('CaseFreq', cCaseFactor);
+ScriptSetInteger('HealthCaseProb', cHealthCaseProb);
+ScriptSetInteger('HealthCaseAmount', cHealthCaseAmount);
 ScriptSetInteger('MinesNum', cLandMines);
 ScriptSetInteger('Explosives', cExplosives);
 ScriptSetInteger('Delay', cInactDelay);
 ScriptSetInteger('Ready', cReadyDelay);
 ScriptSetInteger('SuddenDeathTurns', cSuddenDTurns);
+ScriptSetInteger('WaterRise', cWaterRise);
+ScriptSetInteger('HealthDecrease', cHealthDecrease);
 ScriptSetString('Map', '');
 ScriptSetString('Theme', '');
 
@@ -851,11 +855,15 @@ ParseCommand('seed ' + ScriptGetString('Seed'), true);
 ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
 ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
 ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
+ParseCommand('$healthprob ' + ScriptGetString('HealthCaseProb'), true);
+ParseCommand('$hcaseamount ' + ScriptGetString('HealthCaseAmount'), true);
 ParseCommand('$minesnum ' + ScriptGetString('MinesNum'), true);
 ParseCommand('$explosives ' + ScriptGetString('Explosives'), true);
 ParseCommand('$delay ' + ScriptGetString('Delay'), true);
 ParseCommand('$ready ' + ScriptGetString('Ready'), true);
 ParseCommand('$sd_turns ' + ScriptGetString('SuddenDeathTurns'), true);
+ParseCommand('$waterrise ' + ScriptGetString('WaterRise'), true);
+ParseCommand('$healthdec ' + ScriptGetString('HealthDecrease'), true);
 if ScriptGetString('Map') <> '' then
     ParseCommand('map ' + ScriptGetString('Map'), true);
 if ScriptGetString('Theme') <> '' then
@@ -1048,6 +1056,11 @@ ScriptSetInteger('gfKing', gfKing);
 ScriptSetInteger('gfPlaceHog', gfPlaceHog);
 ScriptSetInteger('gfSharedAmmo', gfSharedAmmo);
 ScriptSetInteger('gfDisableGirders', gfDisableGirders);
+ScriptSetInteger('gfDisableLandObjects', gfDisableLandObjects);
+ScriptSetInteger('gfAISurvival', gfAISurvival);
+ScriptSetInteger('gfInfAttack', gfInfAttack);
+ScriptSetInteger('gfResetWeps', gfResetWeps);
+ScriptSetInteger('gfPerHogAmmo', gfPerHogAmmo);
 
 ScriptSetInteger('gmLeft', gmLeft);
 ScriptSetInteger('gmRight', gmRight);
