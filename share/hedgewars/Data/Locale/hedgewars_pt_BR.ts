@@ -668,7 +668,7 @@ ou escolha outro apelido:</translation>
     <message>
         <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Gostou de Hedgewars? Se torne um fã no %1 ou nos siga pelo %2!</translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
@@ -1022,7 +1022,7 @@ Você ainda quer entrar na sala?</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Todos os ouriços vivos são completamente restaurados ao fim do turno</translation>
     </message>
 </context>
 <context>
@@ -1387,7 +1387,7 @@ Você ainda quer entrar na sala?</translation>
     </message>
     <message>
         <source>Crate Drops</source>
-        <translation>Ítems caem</translation>
+        <translation>Caixas caem</translation>
     </message>
     <message>
         <source>Game scheme</source>
@@ -1453,19 +1453,19 @@ Algumas funcionalidades podem estar quebradas ou incompletas. Use a sua conta e 
     </message>
     <message>
         <source>% Health Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>% Caixas de vida</translation>
     </message>
     <message>
         <source>Health in Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>Vida por Caixa</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Morte Subita: aumento do nível da água</translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Morte Subita: redução de vida</translation>
     </message>
 </context>
 <context>
@@ -1532,7 +1532,7 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Associação de arquivos falhou.</translation>
     </message>
 </context>
 <context>
@@ -1784,7 +1784,7 @@ Por favor verifique sua instalação</translation>
     </message>
     <message>
         <source>Reset Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar Vida</translation>
     </message>
 </context>
 <context>

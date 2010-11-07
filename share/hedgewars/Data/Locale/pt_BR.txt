@@ -279,7 +279,7 @@
 03:46=Incendiário
 03:47=Grudenta
 03:48=Tanto bate até que fura!
-09:49=Faz o que você imagina
+03:49=Faz o que você imagina
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Ataque seus inimigos usando uma granada simples|Ela explodirá assim que o tempo passar|1-5: Escolha o tempo da granada|Ataque: Quanto mais tempo, mais forte o lançamento.
@@ -336,13 +336,13 @@
 04:46=Que tal um churrasco? Use o lança chamas para|torrar o inimigo ou destruir o solo.|Ataque: Ativa o lança chamas
 04:47=Uma simples mina não basta? A mina aderente pode|ser arremessada e ficará aderida ao tocar no solo,|em um objeto, e até em um ouriço!|Ataque:Quanto mais tempo, mais forte o lançamento (duas vezes).
 04:48=Vamos a obra? Use esta arma para martelar|o inimigo no solo, ou através dele e tirando um terço da vida dele!|Ataque: Ativa
-04:49=Ressucite seus amigos!i Mas preste atenção|que ele também pode ressucitar inimigos|Ataque: Mantenha pressionado para ressucitar lentamente|Acima:Acelera a ressureição
+04:49=Ressucite seus amigos, mas preste atenção|para não ressucitar seus inimigos!|Ataque: Mantenha pressionado para transferir|sua vida|Acima:Acelera a transferência de vida
 
 ; Game goal strings
 05:00=Modos de Jogo
-05:01=As seguintes regras se aplicam
-05:02=Fortes: Proteja o seu forte, vença seus inimigos!
-05:03=Baixa Gravidade: Cuidado com seus passos
+05:01=As seguintes regras aplicam
+05:02=Fortes: Proteja o seu forte, destrua seus inimigos!
+05:03=Baixa Gravidade: Olhe seus passos
 05:04=Invulnerabilidade: Ouriços são (quase) invulneráveis
 05:05=Vampirismo: Ouriços serão curados pelos danos causados
 05:06=Carma: Ouriços serão machucados pelos danos causados
@@ -355,3 +355,8 @@
 05:13=Temporizador de mina: Minas detonarão imediatamente
 05:14=Temporizador de mina: Minas detonarão em 0 - 3 segundos
 05:15=Modificador de Dano: Todas as armas farão %1% danos
+05:16=A vida dos ouriços é reiniciada ao fim de cada turno
+05:17=Ouriços da IA renascem após morrerem
+05:18=Ataque ilimitado
+05:19=Armas são reiniciadas ao fim do turno
+05:20=Armas não são compartilhadas entre os ouriços
