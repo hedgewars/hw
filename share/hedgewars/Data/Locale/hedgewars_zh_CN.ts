@@ -92,12 +92,12 @@
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>刺猬杀演示文件</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>刺猬杀存储文件</translation>
     </message>
 </context>
 <context>
@@ -615,7 +615,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>喜欢刺猬杀？ 来做我们的粉丝吧可以到%1或者%2!</translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
@@ -645,7 +645,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>你可以组织刺猬杀的相关文件（保存的游戏和演示还有录像），通过收藏夹或者浏览器.</translation>
     </message>
 </context>
 <context>
@@ -955,19 +955,19 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation type="unfinished"></translation>
+        <translation>所有或者的刺猬结局的时候都会被保存</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>不会终结你的回合.</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>每轮武器的配置都会重置.</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation type="unfinished"></translation>
+        <translation>每个刺猬都有其自己的武器. 并在奔队中不共享.</translation>
     </message>
 </context>
 <context>
@@ -1388,11 +1388,11 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>% Health Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>% 健康包裹</translation>
     </message>
     <message>
         <source>Health in Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>包裹里有血</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
@@ -1461,11 +1461,11 @@ Please check your installation</source>
     </message>
     <message>
         <source>All file associations have been set.</source>
-        <translation type="unfinished"></translation>
+        <translation>文件联合已经存储完毕. </translation>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>文件联合失败.</translation>
     </message>
 </context>
 <context>
@@ -1559,7 +1559,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Associate file extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>连接文件扩展</translation>
     </message>
 </context>
 <context>
@@ -1703,19 +1703,19 @@ Please check your installation</source>
     </message>
     <message>
         <source>Reset Health</source>
-        <translation type="unfinished"></translation>
+        <translation>重置健康值</translation>
     </message>
     <message>
         <source>Unlimited Attacks</source>
-        <translation type="unfinished"></translation>
+        <translation>无限攻击</translation>
     </message>
     <message>
         <source>Reset Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>重置所有武器</translation>
     </message>
     <message>
         <source>Per Hedgehog Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation>每个刺猬的武器</translation>
     </message>
 </context>
 <context>

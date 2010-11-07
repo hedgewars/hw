@@ -3,39 +3,47 @@
 local caption = {
 	["en"] = "TrophyRace",
 	["sv"] = "TrophyRace",
+	["pt_PT"] = "TrophyRace"
 	}
 
 local goal = {
 	["en"] = "Use your rope to get from start to finish as fast as you can!",
 	["sv"] = "Använd ditt rep för att ta dig från start till mål så fort som möjligt!",
+	["pt_PT"] = "Utilizando a corda, percorre o percurso do inicio ao fim o mais rápido que conseguires!"
 	}
 
 local done = {
 	["en"] = "You've reached the goal!| |Time: ",
 	["sv"] = "Du har nått målet!| |Tid: ",
+	["pt_PT"] = "Chegaste ao fim!| |Tempo: "
 	}
 
 local eliminated = {
 	["en"] = "Eliminating worst hedgehog this round...| |%s is OUT!",
 	["sv"] = "Eliminerar sämsta igelkott den här rundan...| |%s är UTE!",
+	["pt_PT"] = "A eliminar o pior ouriço da ronda...| |% está FORA!"
 	}
 
 local newbesttime = {
 	["en"] = "NEW fastest lap: ",
 	["sv"] = "NYTT snabbast varv: ",
+	["pt_PT"] = "NOVA volta recorde: "
 	}
 
 local oldbesttime = {
 	["en"] = "Fastest lap: ",
 	["sv"] = "Snabbast varv: ",
+	["pt_PT"] = "Volta mais rápida: "
 	}
 local bestclantimes = {
 	["en"] = "Best laps per team: ",
 	["sv"] = "Bästa varv per lag: ",
+	["pt_PT"] = "Melhores voltas por equipa: "
 	}
 local clantime = {
 	["en"] = "Team %d: ",
 	["sv"] = "Lag %d: ",
+	["pt_PT"] = "Equipa %d: "
 	}
 
 	local function loc(text)
