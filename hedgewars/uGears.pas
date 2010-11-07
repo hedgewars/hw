@@ -724,7 +724,7 @@ const delay: LongWord = 0;
             stAfterDelay, stChWin, stWater, stChWin2, stHealth,
             stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
-    i: LongInt;
+    i, AliveCount: LongInt;
     s: shortstring;
 begin
 PrvInactive:= AllInactive;
@@ -879,7 +879,15 @@ else if ((GameFlags and gfInfAttack) <> 0) then
             begin
             SweepDirty;
             CheckNoDamage;
-            CheckForWin
+            AliveCount:= 0; // shorter version of check for win to allow typical step activity to proceed
+            for i:= 0 to Pred(ClansCount) do
+                if ClansArray[i]^.ClanHealth > 0 then inc(AliveCount);
+            if (AliveCount <= 1) and ((GameFlags and gfOneClanMode) = 0) then
+                begin
+                step:= stChDmg;
+                GameFlags:= GameFlags and not gfInfAttack;
+                TurnTimeLeft:= 0
+                end
             end
         end
     end;
