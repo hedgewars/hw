@@ -100,7 +100,7 @@ PageMain::PageMain(QWidget* parent) :
         Tips << tr("Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they'll win or lose together.", "Tips");
         Tips << tr("Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.", "Tips");
         Tips << tr("If you're unsure what to do and don't want to waste ammo, skip one round. But don't let too much time pass as there will be Sudden Death!", "Tips");
-        Tips << tr("Want to save ropse? Release the rope in mid air and then shoot again. As long as you don't touch the ground you'll reuse your rope without wasting ammo!", "Tips");
+        Tips << tr("Want to save ropes? Release the rope in mid air and then shoot again. As long as you don't touch the ground you'll reuse your rope without wasting ammo!", "Tips");
         Tips << tr("If you'd like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.", "Tips");
         Tips << tr("You're bored of default gameplay? Try one of the missions - they'll offer different gameplay depending on the one you picked.", "Tips");
         Tips << tr("By default the game will always record the last game played as a demo. Select 'Local Game' and pick the 'Demos' button on the lower right corner to play or manage them.", "Tips");
