@@ -5,7 +5,8 @@ local caption = {
 	["sv"] = "TrophyRace",
 	["pt_PT"] = "TrophyRace",
 	["pl"] = "TrophyRace",
-	["es"] = "TrophyRace"
+	["es"] = "TrophyRace",
+	["pt_BR"] = "TrophyRace"
 	}
 
 local goal = {
@@ -13,7 +14,8 @@ local goal = {
 	["sv"] = "Använd ditt rep för att ta dig från start till mål så fort som möjligt!",
 	["pt_PT"] = "Utilizando a corda, percorre o percurso do inicio ao fim o mais rápido que conseguires!",
 	["pl"] = "Użyj liny by jak najszybciej dotrzec od startu do mety",
-	["es"] = "¡Usa tu cuerda para llegar a la salida lo más rápido que puedas!"
+	["es"] = "¡Usa tu cuerda para llegar a la salida lo más rápido que puedas!",
+	["pt_BR"] = "Use sua corda para ir do início ao fim o mais rápido que você puder!"
 	}
 
 local done = {
@@ -21,7 +23,8 @@ local done = {
 	["sv"] = "Du har nått målet!| |Tid: ",
 	["pt_PT"] = "Chegaste ao fim!| |Tempo: ",
 	["pl"] = "Dotarłeś do celu!| |Czas: ",
-	["es"] = "¡Has llegado a la meta!| |Tiempo: "
+	["es"] = "¡Has llegado a la meta!| |Tiempo: ",
+	["pt_BR"] = "Você alcançou o objetivo!| |Tempo: "
 	}
 
 local eliminated = {
@@ -29,7 +32,8 @@ local eliminated = {
 	["sv"] = "Eliminerar sämsta igelkott den här rundan...| |%s är UTE!",
 	["pt_PT"] = "A eliminar o pior ouriço da ronda...| |% está FORA!",
 	["pl"] = "Eliminujemy najgorszego jeża tej rundy...| |%s ODPADŁ!",
-	["es"] = "Eliminando al peor erizo de esta ronda...| |¡%s está FUERA!"
+	["es"] = "Eliminando al peor erizo de esta ronda...| |¡%s está FUERA!",
+	["pt_BR"] = "Eliminando o ouriço mais lento...| |%s vai para o chuveiro!"
 	}
 
 local newbesttime = {
@@ -37,7 +41,8 @@ local newbesttime = {
 	["sv"] = "NYTT snabbast varv: ",
 	["pt_PT"] = "NOVA volta recorde: ",
 	["pl"] = "NOWE najszybsze okrążenie: ",
-	["es"] = "NUEVA vuelta rápida: "
+	["es"] = "NUEVA vuelta rápida: ",
+	["pt_BR"] = "NOVA volta mais rápida: "
 	}
 
 local oldbesttime = {
@@ -45,24 +50,29 @@ local oldbesttime = {
 	["sv"] = "Snabbast varv: ",
 	["pt_PT"] = "Volta mais rápida: ",
 	["pl"] = "Najszybsze okrążenie: ",
-	["es"] = "Vuelta rápida: "
+	["es"] = "Vuelta rápida: ",
+	["pt_BR"] = "Volta mais rápida: "
 	}
+
 local bestclantimes = {
 	["en"] = "Best laps per team: ",
 	["sv"] = "Bästa varv per lag: ",
 	["pt_PT"] = "Melhores voltas por equipa: ",
 	["pl"] = "Najszybsze okrążenie drużyny: ",
-	["es"] = "Mejores tiempos por equipo: "
+	["es"] = "Mejores tiempos por equipo: ",
+	["pt_BR"] = "Melhor volta por equipe: "
 	}
+
 local clantime = {
 	["en"] = "Team %d: ",
 	["sv"] = "Lag %d: ",
 	["pt_PT"] = "Equipa %d: ",
 	["pl"] = "Drużyna %d: ",
-	["es"] = "Equipo %d"
+	["es"] = "Equipo %d",
+	["pt_BR"] = "Equipe %d: "
 	}
 
-	local function loc(text)
+local function loc(text)
 	if text == nil then return "**missing**"
 	elseif text[L] == nil then return text["en"]
 	else return text[L]

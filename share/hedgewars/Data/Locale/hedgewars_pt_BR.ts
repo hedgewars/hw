@@ -415,9 +415,9 @@ ou escolha outro apelido:</translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>(%1 morte)</numerusform>
-            <numerusform></numerusform>
+            <numerusform>(%1 mortes)</numerusform>
         </translation>
     </message>
     <message>
@@ -427,22 +427,22 @@ ou escolha outro apelido:</translation>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation type="unfinished">
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; pensou que era bom atirar na sua própria equipe totalizando &lt;b&gt;%2&lt;/b&gt; pts.</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; pensou que era bom atirar na sua própria equipe totalizando &lt;b&gt;%2&lt;/b&gt; ponto.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; pensou que era bom atirar na sua própria equipe totalizando &lt;b&gt;%2&lt;/b&gt; pontos.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
         <translation type="unfinished">
             <numerusform>&lt;b&gt;%1&lt;/b&gt; matou &lt;b&gt;%2&lt;/b&gt; dos próprios ouriços.&lt;/p&gt;.</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; matou &lt;b&gt;%2&lt;/b&gt; dos próprios ouriços.&lt;/p&gt;.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
         <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; estava assustado e passou o turno &lt;b&gt;%2&lt;/b&gt; vez.&lt;/p&gt;.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; estava assustado e passou o turno &lt;b&gt;%2&lt;/b&gt; vezes.&lt;/p&gt;.</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -715,7 +715,7 @@ ou escolha outro apelido:</translation>
     <message>
         <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quer economizar corda? Solte-a quando estiver no meio do ar e então atire de novo. Se você não tocar o solo, você reutilizará a corda e não desperdiçará o seu arsenal!</translation>
     </message>
 </context>
 <context>
