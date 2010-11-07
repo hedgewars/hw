@@ -211,8 +211,8 @@ begin
     Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
     Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
 
-    Gear^.dX /= (1.001 * Steps);
-    Gear^.dY /= (1.001 * Steps);
+    Gear^.dX := Gear^.dX / (1.001 * Steps);
+    Gear^.dY := Gear^.dY / (1.001 * Steps);
 
     if (Gear^.FrameTicks <= Steps) or (round(Gear^.Y) < cWaterLine) then
         DeleteVisualGear(Gear)
