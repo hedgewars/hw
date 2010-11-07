@@ -1730,8 +1730,6 @@ else if (t<a+h) then
         FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
         t:= GetRandom(t);
         i:= Low(TAmmoType);
-        if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
-            dec(t, Ammoz[i].Probability);
         while t >= 0 do
           begin
           inc(i);
@@ -1751,8 +1749,6 @@ else
         FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
         t:= GetRandom(t);
         i:= Low(TAmmoType);
-        if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
-            dec(t, Ammoz[i].Probability);
         while t >= 0 do
           begin
           inc(i);
