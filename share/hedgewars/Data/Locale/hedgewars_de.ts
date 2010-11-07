@@ -93,12 +93,12 @@
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars Demo Datei</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars gespeichertes Spiel</translation>
     </message>
 </context>
 <context>
@@ -379,9 +379,9 @@ wähle einen anderen Spitznamen:</translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation type="unfinished">
-            <numerusform>(%1 Kill)</numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 Opfer)</numerusform>
+            <numerusform>(%1 Opfer)</numerusform>
         </translation>
     </message>
     <message>
@@ -390,23 +390,23 @@ wähle einen anderen Spitznamen:</translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; dachte es ist gut seinen eigenen Igel mit &lt;b&gt;%2&lt;/b&gt; Punkten zu verletzen.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; dachte es ist gut seine eigenen Igel mit &lt;b&gt;%2&lt;/b&gt; Punkten zu verletzen.</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished">
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; killte &lt;b&gt;%2&lt;/b&gt; seiner eigenen Igel.</numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; erledigte &lt;b&gt;%2&lt;/b&gt; seiner eigenen Igel.</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; hatte Angst und übersprang &lt;b&gt;%2&lt;/b&gt; Runde.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; hatte Angst und übersprang &lt;b&gt;%2&lt;/b&gt; Runden.</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -658,12 +658,12 @@ wähle einen anderen Spitznamen:</translation>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Du kannst Dateien wie Speicherstände oder Demos mit Hedgewars verknüpfen um sie so direkt mit deinem Datei- oder Internetbrowser zu öffnen.</translation>
     </message>
     <message>
         <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Du willst Seile sparen? Lass das Seil in der Luft los und schieß nochmal. Solange du nicht den Boden berührst kannst du es wiederverwenden ohne Munition zu verschwenden!</translation>
     </message>
 </context>
 <context>
@@ -975,19 +975,19 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle (lebenden) Igel werden am Ende der Runde vollkommen geheilt</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>Angriffe beenden die Runde nicht.</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>Waffenarsenal wird jede Runde zurückgesetzt.</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeder igel hat sein eigenes Waffenarsenal. Es wird nicht mit dem Team geteilt.</translation>
     </message>
 </context>
 <context>
@@ -1158,7 +1158,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Community</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Any</source>
@@ -1386,19 +1386,19 @@ Einige Dinge könnten nicht funktionieren oder unvollständig sein. Benutzung au
     </message>
     <message>
         <source>% Health Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>% Medipacks</translation>
     </message>
     <message>
         <source>Health in Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>Lebenspunkte pro Medipack</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation type="unfinished"></translation>
+        <translation>Steigen des Wassers</translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation type="unfinished"></translation>
+        <translation>Schaden bei Sudden Death</translation>
     </message>
 </context>
 <context>
@@ -1459,11 +1459,11 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>All file associations have been set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Dateizuordnungen wurden gesetzt.</translation>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateizuordnung fehlgeschlagen.</translation>
     </message>
 </context>
 <context>
@@ -1557,7 +1557,7 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>Associate file extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordne Dateitypen zu</translation>
     </message>
 </context>
 <context>
@@ -1701,19 +1701,19 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>Reset Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesundheit zurücksetzen</translation>
     </message>
     <message>
         <source>Unlimited Attacks</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbegrenzte Angriffe</translation>
     </message>
     <message>
         <source>Reset Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Waffen zurücksetzen</translation>
     </message>
     <message>
         <source>Per Hedgehog Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation>Waffen pro Igel</translation>
     </message>
 </context>
 <context>
