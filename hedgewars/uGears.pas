@@ -1415,9 +1415,7 @@ if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtRope) and
     begin
     t^.ar[t^.Count]:= CurrentHedgehog^.Gear;
     inc(t^.Count)
-    end else
-    with CurrentHedgehog^.Gear^ do
-        State:= State or gstMoving;
+    end;
 
 i:= t^.Count;
 

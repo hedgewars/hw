@@ -1769,7 +1769,7 @@ begin
 
     AmmoShove(Gear, 30, 115);
 
-    HHGear^.State := HHGear^.State and not gstNoDamage;
+    HHGear^.State := (HHGear^.State and (not gstNoDamage)) or gstMoving;
     Gear^.Timer := 250;
     Gear^.doStep := @doStepIdle
 end;
@@ -1790,7 +1790,8 @@ begin
         Gear^.X := Gear^.X + Gear^.dX * 5
     end;
 
-    HHGear^.State := HHGear^.State and not gstNoDamage;
+    HHGear^.State := (HHGear^.State and (not gstNoDamage)) or gstMoving;
+
     Gear^.Timer := 250;
     Gear^.doStep := @doStepIdle
 end;
