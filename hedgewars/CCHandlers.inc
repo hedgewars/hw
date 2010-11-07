@@ -145,6 +145,13 @@ if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 ScriptLoad(s)
 end;
 
+procedure chTurnTime(var s: shortstring);
+var temp: Longint;
+begin
+val(s, temp);
+cHedgehogTurnTime:= temp * 1000;
+end;
+
 procedure chAddHH(var id: shortstring);
 var s: shortstring;
     Gear: PGear;
