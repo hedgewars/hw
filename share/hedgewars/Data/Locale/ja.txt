@@ -1,9 +1,9 @@
-; Japanese locale
+﻿; Japanese locale
 
 00:00=擲弾
 00:01=クラスタ爆弾
 00:02=バズーカ
-00:03=UFO
+00:03=ホーミングビー
 00:04=ショットガン
 00:05=槌
 00:06=スキップ
@@ -13,7 +13,7 @@
 00:10=ダイナマイト
 00:11=野球バット
 00:12=ファイヤーパンチ
-00:13=sec
+00:13=秒
 00:14=落下傘
 00:15=空袭
 00:16=マイン空袭
@@ -29,18 +29,18 @@
 00:26=すいか爆弾
 00:27=悪手擲弾
 00:28=錐ロケット
-00:29=Ballガン
+00:29=ボールガン
 00:30=ナパーム
-00:31=RC Plane
-00:32=Low Gravity
-00:33=Extra Damage
-00:34=Invulnerable
-00:35=Extra Time
-00:36=Laser Sight
-00:37=Vampirism
-00:38=Sniper Rifle
-00:39=Flying Saucer
-00:40=Molotov Cocktail
+00:31=ラジコン飛行機
+00:32=弱い重力
+00:33=追加ダメージ
+00:34=不死身
+00:35=追加時間
+00:36=レーザーサイト
+00:37=ヴァンパイア
+00:38=スナイパーライフル
+00:39=空飛ぶ円盤
+00:40=モロトブカクテル
 
 01:00=ヨシ、ファイト！
 01:01=ドロー！
@@ -49,37 +49,31 @@
 01:04=休憩
 01:05=本当にやめるの (Y/Esc)?
 01:06=急に死ぬ!
-01:07=%1 Remaining
-01:08=Fuel
+01:07=%1 残る
+01:08=燃料 
 
 ; Event messages
-; Hog (%1) died
-02:00=%1 has kicked the bucket!
-02:00=%1 has seen the light!
-02:00=%1 never saw that coming!
-; Hog (%1) drowned
-02:01=%1 plays submarine!
-02:01=%1 mimics the Titanic!
+; Hog (%1) は死んだ。
+02:00=%1 は天国を見た。
+; Hog (%1) は溺れた。
+02:01=%1 はタイタニック見たい。
 02:01=%1 swims like a stone!
-; Round starts
+; 初め！
 02:02=頑張って!
 ; Round ends (win; unused atm)
 02:03=...
 ; Round ends (draw; unused atm)
 02:04=...
 ; New health crate
-02:05=Incoming aid!
+; 02:05=Incoming aid!
 ; New ammo crate
-02:06=More weapons!
+; 02:06=More weapons!
 ; New utility crate
-02:07=Tooltime!
+; 02:07=Tooltime!
 ; Hog (%1) skips his turn
-02:08=%1 is sooo boring...
-; Hog (%1) hurts himself only
-02:09=%1 should practice aiming!
-02:09=%1 seems to hate himself.
-02:09=%1 is standing on the wrong side!
+02:08=%1 は凄く詰まらない。
+; Hog (%1) hurts himself only - see en.txt for examples
+; 02:09=%1 should practice aiming!
 ; Hog shot an home run (using the bat and another hog)
-02:10=Home Run!
-02:10=A bird, a plane, ...
-02:10=That one is out!
+02:10=ホームラン!
+02:10=鳥、飛行機….
