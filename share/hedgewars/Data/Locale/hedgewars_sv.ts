@@ -368,14 +368,14 @@ ett annat smeknamn i spelinställningarna:</translation>
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
         <translation>
             <numerusform>Totalt &lt;b&gt;%1&lt;/b&gt; igelkott(ar) dödades under den här omgången.</numerusform>
-            <numerusform></numerusform>
+            <numerusform>Totalt &lt;b&gt;%1&lt;/b&gt; igelkott(ar) dödades under den här omgången.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>(%1 död)</numerusform>
-            <numerusform></numerusform>
+            <numerusform>(%1 döda)</numerusform>
         </translation>
     </message>
     <message>
@@ -384,23 +384,23 @@ ett annat smeknamn i spelinställningarna:</translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; tyckte att det var bra att sjuta sina egna igelkottar med &lt;b&gt;%2&lt;/b&gt; poäng.</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; tyckte att det var bra att sjuta sina egna igelkottar med &lt;b&gt;%2&lt;/b&gt; poäng.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; dödade &lt;b&gt;%2&lt;/b&gt; av sina egna igelkottar.</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; dödade &lt;b&gt;%2&lt;/b&gt; av sina egna igelkottar.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; var rädd och hoppade över turer &lt;b&gt;%2&lt;/b&gt; gånger.</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; var rädd och hoppade över turer &lt;b&gt;%2&lt;/b&gt; gånger.</numerusform>
         </translation>
     </message>
 </context>
@@ -657,7 +657,7 @@ ett annat smeknamn i spelinställningarna:</translation>
     <message>
         <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Vill du spara rep? Släpp repet i luften och sedan sjut igen. Så länge du inte nuddar marken använder du samma rep utan att slösa på ammunition!</translation>
     </message>
 </context>
 <context>
