@@ -38,7 +38,7 @@ var
     PathPrefix      : shortstring = './';
     cShowFPS        : boolean     = false;
     cAltDamage      : boolean     = true;
-    cReducedQuality : LongInt     = rqNone;
+    cReducedQuality : LongWord    = rqNone;
     //userNick is in uChat
     recordFileName  : shortstring = '';
     cReadyDelay     : Longword    = 0;

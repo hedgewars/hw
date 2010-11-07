@@ -498,7 +498,12 @@ repeat
                    else dec(valueResult, Level * 4000);
      exit(valueResult)
      end
-until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x.isNegative) or (y.isNegative) or (x.Round > LAND_WIDTH) or (y.Round > LAND_HEIGHT);
+until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4)
+    or (x.isNegative)
+    or (y.isNegative)
+    or (x.Round > LongWord(LAND_WIDTH))
+    or (y.Round > LongWord(LAND_HEIGHT));
+
 TestShotgun:= BadTurn
 end;
 
@@ -526,7 +531,12 @@ repeat
   y:= y + vY;
   if ((hwRound(x) and LAND_WIDTH_MASK) = 0)and((hwRound(y) and LAND_HEIGHT_MASK) = 0)
      and (Land[hwRound(y), hwRound(x)] <> 0) then inc(d);
-until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x.isNegative) or (y.isNegative) or (x.Round > LAND_WIDTH) or (y.Round > LAND_HEIGHT) or (d > 200);
+until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4)
+    or (x.isNegative)
+    or (y.isNegative)
+    or (x.Round > LongWord(LAND_WIDTH))
+    or (y.Round > LongWord(LAND_HEIGHT))
+    or (d > 200);
 
 if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then valueResult:= max(0, (4 - d div 50) * 7 * 1024)
                                                            else valueResult:= BadTurn;
