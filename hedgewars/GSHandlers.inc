@@ -4199,6 +4199,9 @@ var
     hh: PHedgehog;
     i: LongInt;
 begin
+    if (TurnTimeLeft > 0) then
+        dec(TurnTimeLeft);
+
     AllInactive := false;
     hh := PHedgehog(Gear^.Hedgehog);
     DrawCentered(hwRound(hh^.Gear^.X) + WorldDx, hwRound(hh^.Gear^.Y) + WorldDy -
@@ -4218,8 +4221,7 @@ begin
         if not TestCollisionYwithGear(hh^.Gear, -1) then hh^.Gear^.Y := hh^.Gear^.Y - _1;
         end;
 
-    graves := GearsNear(Gear^.X, Gear^.Y + int2hwFloat(Gear^.Power),
-                    gtGrave, Gear^.Radius);
+    graves := GearsNear(Gear^.X, Gear^.Y, gtGrave, Gear^.Radius);
 
     if Length(graves) = 0 then 
         begin
@@ -4229,7 +4231,7 @@ begin
         exit;
         end;
 
-    if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) then 
+    if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) and (TurnTimeLeft > 0) then 
         begin
         i := getRandom(Length(graves));
         dec(hh^.Gear^.Health);
