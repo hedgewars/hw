@@ -423,7 +423,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation>想节省绳子数量？在半空释放然后再次射出。只要不触地即可继续使用同一根而不浪费!</translation>
+        <translation type="obsolete">想节省绳子数量？在半空释放然后再次射出。只要不触地即可继续使用同一根而不浪费!</translation>
     </message>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
@@ -654,6 +654,11 @@ or pick another nickname in game config:</source>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
         <translation>你可以组织刺猬杀的相关文件（保存的游戏和演示还有录像），通过收藏夹或者浏览器.</translation>
+    </message>
+    <message>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

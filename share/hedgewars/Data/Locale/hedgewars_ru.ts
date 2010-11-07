@@ -346,7 +346,7 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Подробности</translation>
     </message>
     <message>
         <source>Health graph</source>
@@ -354,7 +354,7 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Ranking</source>
-        <translation type="unfinished"></translation>
+        <translation>Рейтинг</translation>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
@@ -386,26 +386,26 @@ or pick another nickname in game config:</source>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; посчитал нужным подстрелить друзей на &lt;b&gt;%2&lt;/b&gt; пункт урона.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; посчитал нужным подстрелить друзей на &lt;b&gt;%2&lt;/b&gt; пункта урона.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; посчитал нужным подстрелить друзей на &lt;b&gt;%2&lt;/b&gt; пунктов урона.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; убил &lt;b&gt;%2&lt;/b&gt; союзника.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; убил &lt;b&gt;%2&lt;/b&gt; союзников.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; убил &lt;b&gt;%2&lt;/b&gt; союзников.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; испугался и пропустил &lt;b&gt;%2&lt;/b&gt; ход.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; испугался и пропустил &lt;b&gt;%2&lt;/b&gt; хода.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; испугался и пропустил &lt;b&gt;%2&lt;/b&gt; ходов.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -431,11 +431,6 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
-        <comment>Tips</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -659,6 +654,11 @@ or pick another nickname in game config:</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -724,7 +724,7 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно редактировать команды со страницы выбора команд. Вернитесь в главное меню для добавления, редактирования или удаления команд.</translation>
     </message>
 </context>
 <context>
@@ -850,32 +850,33 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>State:</source>
-        <translation type="unfinished"></translation>
+        <translation>Состояние:</translation>
     </message>
     <message>
         <source>Rules:</source>
-        <translation type="unfinished"></translation>
+        <translation>Правила:</translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation>Оружие:</translation>
     </message>
     <message>
         <source>Search:</source>
-        <translation type="unfinished"></translation>
+        <translation>Поиск:</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Очистить</translation>
+        <translation>Очистить</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
-        <translation type="unfinished"></translation>
+        <translation>Игра, к которой вы хотите присоединиться, уже началась
+Вы всё равно хотите зайти в комнату?</translation>
     </message>
 </context>
 <context>
@@ -962,27 +963,27 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation type="unfinished">Отключить добавляемые объекты на генерируемых картах.</translation>
+        <translation>Отключить добавляемые объекты на генерируемых картах.</translation>
     </message>
     <message>
         <source>AI respawns on death.</source>
-        <translation type="unfinished"></translation>
+        <translation>Боты воскресают после смерти</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Все (живые) ежи полностью поправляются в конце хода</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>Атака не заканчивает ход.</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>Набор оружия восстанавливается на каждом ходу.</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation type="unfinished"></translation>
+        <translation>У каждого ежа свой набор оружия, не являющийся общим для команды.</translation>
     </message>
 </context>
 <context>
@@ -1020,7 +1021,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим прохождения кампании. В РАЗРАБОТКЕ</translation>
     </message>
 </context>
 <context>
@@ -1153,19 +1154,19 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Community</source>
-        <translation type="unfinished"></translation>
+        <translation>Сообщество</translation>
     </message>
     <message>
         <source>Any</source>
-        <translation type="unfinished"></translation>
+        <translation>Любой</translation>
     </message>
     <message>
         <source>In lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>Подготовка</translation>
     </message>
     <message>
         <source>In progress</source>
-        <translation type="unfinished"></translation>
+        <translation>В игре</translation>
     </message>
     <message>
         <source>Default</source>
@@ -1369,7 +1370,7 @@ Some features might be broken or incomplete. Use at your own risk!</translation>
     </message>
     <message>
         <source>Tip: </source>
-        <translation type="unfinished"></translation>
+        <translation>Подсказка:</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
@@ -1377,23 +1378,23 @@ Some features might be broken or incomplete. Use at your own risk!</translation>
     </message>
     <message>
         <source>Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Качество</translation>
     </message>
     <message>
         <source>% Health Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>% аптечек</translation>
     </message>
     <message>
         <source>Health in Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>Здоровье в аптечках</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation type="unfinished"></translation>
+        <translation>Скорость поднятия воды</translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation type="unfinished"></translation>
+        <translation>Скорость уменьшения здоровья</translation>
     </message>
 </context>
 <context>
@@ -1450,15 +1451,15 @@ Please check your installation</source>
     </message>
     <message>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Не могу переписать встроенный набор оружия &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>All file associations have been set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Проведено сопоставление расширений файлов.</translation>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сопоставление не удалось.</translation>
     </message>
 </context>
 <context>
@@ -1552,7 +1553,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Associate file extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>Споставить расширения файлов</translation>
     </message>
 </context>
 <context>
@@ -1688,27 +1689,27 @@ Please check your installation</source>
     </message>
     <message>
         <source>Disable Land Objects</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключить дополнительные объекты</translation>
     </message>
     <message>
         <source>AI Survival Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим бессмертия ботов</translation>
     </message>
     <message>
         <source>Reset Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Сброс уровня здоровья</translation>
     </message>
     <message>
         <source>Unlimited Attacks</source>
-        <translation type="unfinished"></translation>
+        <translation>Бесконечные атаки</translation>
     </message>
     <message>
         <source>Reset Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Сброс оружия</translation>
     </message>
     <message>
         <source>Per Hedgehog Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation>Индивидуальный набор оружия</translation>
     </message>
 </context>
 <context>
@@ -1873,7 +1874,7 @@ info</source>
     </message>
     <message>
         <source>slot 10</source>
-        <translation type="unfinished">слот 10</translation>
+        <translation>слот 10</translation>
     </message>
 </context>
 <context>
@@ -2158,23 +2159,23 @@ info</source>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished"></translation>
+        <translation>Insert</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>Home</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>End</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="unfinished"></translation>
+        <translation>Page up</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="unfinished"></translation>
+        <translation>Page down</translation>
     </message>
     <message>
         <source>Num lock</source>
@@ -2198,19 +2199,19 @@ info</source>
     </message>
     <message>
         <source>A button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка A</translation>
     </message>
     <message>
         <source>B button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка B</translation>
     </message>
     <message>
         <source>X button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка X</translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка Y</translation>
     </message>
     <message>
         <source>LB button</source>

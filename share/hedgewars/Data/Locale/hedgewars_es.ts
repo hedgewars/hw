@@ -436,7 +436,7 @@ o elige otro nick en las preferencias del juego:</translation>
     <message>
         <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation>¿Andas escaso de cuerdas? Suelta la cuerda mientras estés en el aire y vuelve a dispararla de nuevo. ¡Mientras no toques el suelo seguirás usando la misma cuerda sin desperdiciar munición adicional!</translation>
+        <translation type="obsolete">¿Andas escaso de cuerdas? Suelta la cuerda mientras estés en el aire y vuelve a dispararla de nuevo. ¡Mientras no toques el suelo seguirás usando la misma cuerda sin desperdiciar munición adicional!</translation>
     </message>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
@@ -657,6 +657,11 @@ o elige otro nick en las preferencias del juego:</translation>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
         <translation>Puedes asociar los tipos de archivo relacionados, partidas guardadas y demos, con Hedgewars para lanzarlos directamente desde tu gestor de archivos o navegador favoritos.</translation>
+    </message>
+    <message>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

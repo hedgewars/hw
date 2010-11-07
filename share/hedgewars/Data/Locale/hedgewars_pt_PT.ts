@@ -527,7 +527,7 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation>Precisas de poupar as cordas? Solta a corda enquanto no ar e dispara-a novamente. Enquanto não tocares no solo podes usar a mesma corda novamente sem desperdiar outras!</translation>
+        <translation type="obsolete">Precisas de poupar as cordas? Solta a corda enquanto no ar e dispara-a novamente. Enquanto não tocares no solo podes usar a mesma corda novamente sem desperdiar outras!</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
@@ -653,6 +653,11 @@ outro nome de utilizador no menu de configuração:</translation>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
         <translation>É possivel associar os ficheiros relacionados com o Hedgewars (partidas e demonstrações) directamente com o jogo para que seja possivel lançalos directamente do teu explorador de ficheiros ou internet favorito.</translation>
+    </message>
+    <message>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

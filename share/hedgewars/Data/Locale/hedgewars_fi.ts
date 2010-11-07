@@ -432,7 +432,7 @@ tai aseta eri nimimerkki asetuksissa:</translation>
     <message>
         <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation>Haluatko säästää köysiä? Päästä köysi irti ilmassa ja ammu uudelleen. Niin pitkään kun et osu maahan, pääse käyttämään köyden uudelleen kuluttamatta ammuksia!</translation>
+        <translation type="obsolete">Haluatko säästää köysiä? Päästä köysi irti ilmassa ja ammu uudelleen. Niin pitkään kun et osu maahan, pääse käyttämään köyden uudelleen kuluttamatta ammuksia!</translation>
     </message>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
@@ -651,6 +651,11 @@ tai aseta eri nimimerkki asetuksissa:</translation>
     </message>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>

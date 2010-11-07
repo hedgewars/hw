@@ -445,7 +445,7 @@ w ustawieniach gry:</translation>
     <message>
         <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation>Chcesz zaoszczędzić liny? Odłącz ją będąc w powietrzu, a potem wypuść ją ponownie. Tak długo jak nie dotkniesz ziemi, będziesz używał pojedynczego naboju!</translation>
+        <translation type="obsolete">Chcesz zaoszczędzić liny? Odłącz ją będąc w powietrzu, a potem wypuść ją ponownie. Tak długo jak nie dotkniesz ziemi, będziesz używał pojedynczego naboju!</translation>
     </message>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
@@ -681,6 +681,11 @@ w ustawieniach gry:</translation>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
         <translation>Możesz powiązać typy plików związane z Hedgewars (zapisy gier i dema) by móc je uruchamiać potem bezpośrednio z ulubionego menedżera plików bądź przeglądarki internetowej.</translation>
+    </message>
+    <message>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
