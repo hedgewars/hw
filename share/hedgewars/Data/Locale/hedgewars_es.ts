@@ -375,13 +375,16 @@ o elige otro nick en las preferencias del juego:</translation>
             <numerusform>Un total de &lt;b&gt;%1&lt;/b&gt; erizos murieron esta ronda.</numerusform>
         </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation>(%1 baja)</translation>
+        <translation type="unfinished">
+            <numerusform>(%1 baja)</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>(%1 kills)</source>
-        <translation>(%1 bajas)</translation>
+        <translation type="obsolete">(%1 bajas)</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>

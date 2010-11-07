@@ -377,13 +377,16 @@ wähle einen anderen Spitznamen:</translation>
             <numerusform>Insgesamt fanden &lt;b&gt;%1&lt;/b&gt; Igel ein trauriges Ende in dieser Runde.</numerusform>
         </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation>(%1 Kill)</translation>
+        <translation type="unfinished">
+            <numerusform>(%1 Kill)</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>(%1 kills)</source>
-        <translation>(%1 Kills)</translation>
+        <translation type="obsolete">(%1 Kills)</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>

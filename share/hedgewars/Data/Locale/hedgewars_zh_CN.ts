@@ -366,13 +366,15 @@ or pick another nickname in game config:</source>
             <numerusform>本轮总共有 &lt;b&gt;%1&lt;/b&gt; 只刺猬被击杀.&lt;/p&gt;</numerusform>
         </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation>(%1 灭杀)</translation>
+        <translation type="unfinished">
+            <numerusform>(%1 灭杀)</numerusform>
+        </translation>
     </message>
     <message>
         <source>(%1 kills)</source>
-        <translation>(%1 灭杀)</translation>
+        <translation type="obsolete">(%1 灭杀)</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>

@@ -371,13 +371,16 @@ ett annat smeknamn i spelinställningarna:</translation>
             <numerusform></numerusform>
         </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation>(%1 död)</translation>
+        <translation type="unfinished">
+            <numerusform>(%1 död)</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>(%1 kills)</source>
-        <translation>(%1 döda)</translation>
+        <translation type="obsolete">(%1 döda)</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>

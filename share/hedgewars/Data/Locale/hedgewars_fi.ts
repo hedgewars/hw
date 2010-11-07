@@ -371,13 +371,16 @@ tai aseta eri nimimerkki asetuksissa:</translation>
             <numerusform>Yhteensä &lt;b&gt;%1&lt;/b&gt; siiltä tapettiin tämän erän aikana.</numerusform>
         </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation>(%1 tappo)</translation>
+        <translation type="unfinished">
+            <numerusform>(%1 tappo)</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>(%1 kills)</source>
-        <translation>(%1 tappoa)</translation>
+        <translation type="obsolete">(%1 tappoa)</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>

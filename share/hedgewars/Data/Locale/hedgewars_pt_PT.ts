@@ -371,13 +371,16 @@ outro nome de utilizador no menu de configuração:</translation>
             <numerusform>Um total de &lt;b&gt;%1&lt;/b&gt; ouriços perderam a vida durante esta ronda.</numerusform>
         </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation>(%1 morto)</translation>
+        <translation type="unfinished">
+            <numerusform>(%1 morto)</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>(%1 kills)</source>
-        <translation>(%1 mortos)</translation>
+        <translation type="obsolete">(%1 mortos)</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>

@@ -413,13 +413,16 @@ ou escolha outro apelido:</translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; ouriços foram mortos neste round.</numerusform>
         </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation>(%1 morte)</translation>
+        <translation type="unfinished">
+            <numerusform>(%1 morte)</numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>(%1 kills)</source>
-        <translation>(%1 mortes)</translation>
+        <translation type="obsolete">(%1 mortes)</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
