@@ -80,13 +80,13 @@ QList< QPair<QString, QString> > cDefaultAmmos =
 
 QColor *colors[] = {
                     new QColor(221,   0,   0), // classic red
-                    new QColor( 67, 118, 233), // classic blue
+                    new QColor( 51, 102, 217), // dark blue
                     new QColor( 62, 147,  33), // classic green
                     new QColor(162,  61, 187), // classic purple
                     new QColor(255, 147,  41), // classic orange
                     new QColor(115, 115, 115), // classic gray
-                    new QColor(187, 162,  61), // gold
-                    new QColor( 61, 162, 187), // cyan
+                    new QColor(0, 255, 255),   // cyan
+                    new QColor(255, 136, 136), // peach
                     // add new colors here
                     0};
 
