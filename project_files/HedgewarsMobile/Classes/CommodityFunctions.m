@@ -139,8 +139,8 @@ void createSchemeNamed (NSString *nameWithoutExt) {
     
     NSMutableArray *basicArray  = [[NSMutableArray alloc] initWithObjects:
                                    [NSNumber numberWithInt:100],      //initialhealth
-                                   [NSNumber numberWithInt:100],      //damagemodifier
                                    [NSNumber numberWithInt:45],       //turntime
+                                   [NSNumber numberWithInt:100],      //damagemodifier
                                    [NSNumber numberWithInt:15],       //suddendeathtimeout
                                    [NSNumber numberWithInt:47],       //waterrise
                                    [NSNumber numberWithInt:5],        //healthdecrease
@@ -272,14 +272,14 @@ void playSound (NSString *snd) {
 }
 
 NSArray inline *getAvailableColors (void) {
-    return [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInt:0x4376e9],     // bluette
+    return [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInt:0x3376E9],     // bluette
                                      [NSNumber numberWithUnsignedInt:0x3e9321],     // greeeen
                                      [NSNumber numberWithUnsignedInt:0xa23dbb],     // violett
                                      [NSNumber numberWithUnsignedInt:0xff9329],     // oranngy
                                      [NSNumber numberWithUnsignedInt:0xdd0000],     // reddish
                                      [NSNumber numberWithUnsignedInt:0x737373],     // graaaay
-                                     [NSNumber numberWithUnsignedInt:0xbba23d],     // gold$$$
-                                     [NSNumber numberWithUnsignedInt:0x3da2bb],     // cyannnn  
+                                     [NSNumber numberWithUnsignedInt:0x00FFFF],     // cyannnn  
+                                     [NSNumber numberWithUnsignedInt:0xFF8888],     // peachyj
                                      nil];
 }
 

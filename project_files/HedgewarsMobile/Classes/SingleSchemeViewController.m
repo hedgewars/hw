@@ -31,8 +31,6 @@
 #define checkValueString(detailString,labelSting,sliderRef); \
     if ([labelSting isEqualToString:@"Turn Time"] && (NSInteger) sliderRef.value == 100) \
         detailString = @"∞"; \
-    else if ([labelSting isEqualToString:@"Sudden Death Timeout"] && (NSInteger) sliderRef.value == 100) \
-        detailString = NSLocalizedString(@"Nvr",@"Short for 'Never'"); \
     else if ([labelSting isEqualToString:@"Water Rise Amount"] && (NSInteger) sliderRef.value == 100) \
         detailString = NSLocalizedString(@"Nvr",@"Short for 'Never'"); \
     else if ([labelSting isEqualToString:@"Crate Drop Turns"] && (NSInteger) sliderRef.value == 0) \

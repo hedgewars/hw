@@ -20,6 +20,22 @@
 	</dict>
 	<dict>
 		<key>checkOverMax</key>
+		<true/>
+		<key>command</key>
+		<string>e$turntime</string>
+		<key>default</key>
+		<integer>45</integer>
+		<key>image</key>
+		<string>Time</string>
+		<key>max</key>
+		<integer>100</integer>
+		<key>min</key>
+		<integer>1</integer>
+		<key>title</key>
+		<string>Turn Time</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
 		<false/>
 		<key>command</key>
 		<string>e$damagepct</string>
@@ -38,29 +54,13 @@
 		<key>checkOverMax</key>
 		<true/>
 		<key>command</key>
-		<string>e$turntime</string>
-		<key>default</key>
-		<integer>45</integer>
-		<key>image</key>
-		<string>Time</string>
-		<key>max</key>
-		<integer>100</integer>
-		<key>min</key>
-		<integer>1</integer>
-		<key>title</key>
-		<string>Turn Time</string>
-	</dict>
-	<dict>
-		<key>checkOverMax</key>
-		<true/>
-		<key>command</key>
 		<string>e$sd_turns</string>
 		<key>default</key>
 		<integer>15</integer>
 		<key>image</key>
 		<string>SuddenDeath</string>
 		<key>max</key>
-		<integer>100</integer>
+		<integer>50</integer>
 		<key>min</key>
 		<integer>0</integer>
 		<key>title</key>
