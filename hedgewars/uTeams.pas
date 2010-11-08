@@ -275,15 +275,19 @@ with CurrentHedgehog^ do
 
 ResetKbd;
 
-cWindSpeed:= rndSign(GetRandom * 2 * cMaxWindSpeed);
-// cWindSpeedf:= cWindSpeed.QWordValue / _1.QWordValue throws 'Internal error 200502052' on Darwin
-// see http://mantis.freepascal.org/view.php?id=17714
-cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
-if cWindSpeed.isNegative then
-    CWindSpeedf := -cWindSpeedf;
-g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);
-g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+if (GameFlags and gfDisableWind) = 0 then
+    begin
+    cWindSpeed:= rndSign(GetRandom * 2 * cMaxWindSpeed);
+    // cWindSpeedf:= cWindSpeed.QWordValue / _1.QWordValue throws 'Internal error 200502052' on Darwin
+    // see http://mantis.freepascal.org/view.php?id=17714
+    cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
+    if cWindSpeed.isNegative then
+        CWindSpeedf := -cWindSpeedf;
+    g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);
+    g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
+    end;
+
 ApplyAmmoChanges(CurrentHedgehog^);
 
 if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
