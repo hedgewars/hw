@@ -812,20 +812,23 @@ case step of
             inc(step)
             end;
     stHealth: begin
-            if (TotalRounds = cSuddenDTurns) and not SuddenDeathDmg and not isInMultiShoot then
+            if (cWaterRise <> 0) or (cHealthDecrease <> 0) then
                 begin
-                SuddenDeathDmg:= true;
-                AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
-                playSound(sndSuddenDeath)
-                end
-            else if (TotalRounds < cSuddenDTurns) and not isInMultiShoot then
-                begin
-                i:= cSuddenDTurns - TotalRounds;
-                s:= inttostr(i);
-                if i = 1 then
-                    AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
-                else if i in [2, 5, 10, 15, 20, 25, 50, 100] then
-                    AddCaption(Format(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
+                if (TotalRounds = cSuddenDTurns) and not SuddenDeathDmg and not isInMultiShoot then
+                    begin
+                    SuddenDeathDmg:= true;
+                    AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
+                    playSound(sndSuddenDeath)
+                    end
+                else if (TotalRounds < cSuddenDTurns) and not isInMultiShoot then
+                    begin
+                    i:= cSuddenDTurns - TotalRounds;
+                    s:= inttostr(i);
+                    if i = 1 then
+                        AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
+                    else if i in [2, 5, 10, 15, 20, 25, 50, 100] then
+                        AddCaption(Format(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
+                    end;
                 end;
             if bBetweenTurns
                 or isInMultiShoot
