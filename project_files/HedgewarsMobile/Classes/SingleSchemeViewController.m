@@ -28,6 +28,21 @@
 #define SLIDER_TAG 54321
 #define SWITCH_TAG 67890
 
+#define checkValueString(detailString,labelSting,sliderRef); \
+    if ([labelSting isEqualToString:@"Turn Time"] && (NSInteger) sliderRef.value == 100) \
+        detailString = @"∞"; \
+    else if ([labelSting isEqualToString:@"Sudden Death Timeout"] && (NSInteger) sliderRef.value == 100) \
+        detailString = NSLocalizedString(@"Nvr",@"Short for 'Never'"); \
+    else if ([labelSting isEqualToString:@"Water Rise Amount"] && (NSInteger) sliderRef.value == 100) \
+        detailString = NSLocalizedString(@"Nvr",@"Short for 'Never'"); \
+    else if ([labelSting isEqualToString:@"Crate Drop Turns"] && (NSInteger) sliderRef.value == 0) \
+        detailString = NSLocalizedString(@"Nvr",@"Short for 'Never'"); \
+    else if ([labelSting isEqualToString:@"Mines Time"] && (NSInteger) sliderRef.value == -1) \
+        detailString = NSLocalizedString(@"Rnd",@"Short for 'Random'"); \
+    else \
+        detailString = [NSString stringWithFormat:@"%d",(NSInteger) sliderRef.value];
+
+
 @implementation SingleSchemeViewController
 @synthesize schemeName, schemeDictionary, basicSettingList, gameModifierArray;
 
@@ -161,8 +176,6 @@
                     offset = 50;
 
                 UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(offset+260, 12, offset+150, 23)];
-                slider.maximumValue = [[detail objectForKey:@"max"] floatValue];
-                slider.minimumValue = [[detail objectForKey:@"min"] floatValue];
                 [slider addTarget:self action:@selector(sliderChanged:) forControlEvents:UIControlEventValueChanged];
                 [cell.contentView addSubview:slider];
                 [slider release];
@@ -191,19 +204,14 @@
                 } 
             }
             cellSlider.tag = SLIDER_TAG + row;
+            cellSlider.maximumValue = [[detail objectForKey:@"max"] floatValue];
+            cellSlider.minimumValue = [[detail objectForKey:@"min"] floatValue];
             cellSlider.value = [[[self.schemeDictionary objectForKey:@"basic"] objectAtIndex:row] floatValue];
 
-            // forced to use this weird format otherwise the label disappears when size of the text is bigger than the original
-            NSString *prestring = [NSString stringWithFormat:@"%d",(NSInteger) cellSlider.value];
+            NSString *prestring = nil;
+            checkValueString(prestring,cellLabel.text,cellSlider);
 
-            // turntime 100 means unlimited time turns (set in GameSetup)
-            if (row == 1 && (NSInteger) cellSlider.value == 100)
-                prestring = @"∞";
-            else
-                // mines less than 0 means random
-                if (row == 5 && (NSInteger) cellSlider.value == -1)
-                    prestring = NSLocalizedString(@"Rnd",@"Short for 'Random'");
-            
+            // forced to use this weird format otherwise the label disappears when size of the text is bigger than the original
             while ([prestring length] <= 4)
                 prestring = [NSString stringWithFormat:@" %@",prestring];
             cell.detailTextLabel.text = prestring;
@@ -254,16 +262,13 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:theSlider.tag-SLIDER_TAG inSection:1];
     // get its cell
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    // grab the associated label
-    UILabel *label = (UILabel *)cell.detailTextLabel;
+    // grab the associated labels
+    UILabel *detailLabel = (UILabel *)cell.detailTextLabel;
+    UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
     // modify it
-    if ([indexPath row] == 1 && [indexPath section] == 1 && (NSInteger) theSlider.value == 100)
-        label.text = @"∞";
-    else
-        if ([indexPath row] == 5 && [indexPath section] == 1 && (NSInteger) theSlider.value == -1)
-            label.text = NSLocalizedString(@"Rnd",@"Short for 'Random'");
-        else
-            label.text = [NSString stringWithFormat:@"%d",(NSInteger) theSlider.value];
+
+    checkValueString(detailLabel.text,cellLabel.text,theSlider);
+
     // save changes in the main array
     NSMutableArray *array = [self.schemeDictionary objectForKey:@"basic"];
     [array replaceObjectAtIndex:theSlider.tag-SLIDER_TAG withObject:[NSNumber numberWithInt:(NSInteger) theSlider.value]];
