@@ -416,7 +416,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(100)           // damage modfier 22
         << QVariant(9999)          // turn time      23
         << QVariant(100)           // init health    24
-        << QVariant(999)           // sudden death   25
+        << QVariant(15)            // sudden death   25
         << QVariant(5)             // case prob      26
         << QVariant(3)             // mines time     27
         << QVariant(5)             // mines number   28
@@ -424,8 +424,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(2)             // explosives     30
         << QVariant(35)            // health case pct 31
         << QVariant(30)            // health case amt 32
-        << QVariant(47)            // water rise amt 33
-        << QVariant(5)             // health dec amt 34
+        << QVariant(0)             // water rise amt 33
+        << QVariant(0)             // health dec amt 34
         ;
 
     schemes.append(defaultScheme);

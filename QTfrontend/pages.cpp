@@ -1617,7 +1617,7 @@ PageScheme::PageScheme(QWidget* parent) :
     l->setPixmap(QPixmap(":/res/iconSuddenDeath.png"));
     glBSLayout->addWidget(l,3,1,1,1);
     SB_SuddenDeath = new QSpinBox(gbBasicSettings);
-    SB_SuddenDeath->setRange(0, 999);
+    SB_SuddenDeath->setRange(0, 50);
     SB_SuddenDeath->setValue(15);
     SB_SuddenDeath->setSingleStep(3);
     glBSLayout->addWidget(SB_SuddenDeath,3,2,1,1);
