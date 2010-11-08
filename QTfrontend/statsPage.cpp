@@ -195,7 +195,7 @@ void PageGameStats::GameStats(char type, const QString & info)
             QString playername = playerinfo.mid(i + 1);
             QString image;
 
-            if (lastColor == c && playerPosition <= 2) playerPosition = 1;
+            if (lastColor == c) playerPosition--;
             lastColor = c;
 
             switch (playerPosition)

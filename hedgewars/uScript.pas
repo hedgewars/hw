@@ -1061,6 +1061,7 @@ ScriptSetInteger('gfAISurvival', gfAISurvival);
 ScriptSetInteger('gfInfAttack', gfInfAttack);
 ScriptSetInteger('gfResetWeps', gfResetWeps);
 ScriptSetInteger('gfPerHogAmmo', gfPerHogAmmo);
+ScriptSetInteger('gfDisableWind', gfDisableWind);
 
 ScriptSetInteger('gmLeft', gmLeft);
 ScriptSetInteger('gmRight', gmRight);
