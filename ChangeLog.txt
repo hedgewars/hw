@@ -12,6 +12,9 @@
  + New utilities: Portal Gun, Resurrector
  + New weapons: Flamethrower, Hammer, Old Limburger, Piano Strike, Sticky Mines
  + Weapons' projectiles will how be launched from their barrels instead of the hog's center
+ + Flying Saucers may be used for moving below the water surface
+ + New default game schemes: Clean Slate, Fort Mode, Timeless
+ + New default weapon set: Clean Slate
  + Bomb clusters/Melon parts inherit some of the original bomb's speed
  + Extended game statistics
  + Improved health bar updating
@@ -21,7 +24,9 @@
  + On empty ammo switch to no weapon rather than the first available one (to avoid shooting by accident)
  + Display of hints in the frontend
  + Some improvements of existing Themes of Maps
+ + Land destruction effects added
  + Improved fire effects
+ + Improved Melon explosion effects
  + Online game lobby now features game filters
  + Other Frontend enhancements
  + Additional sounds
@@ -29,6 +34,8 @@
  + Updated translation
  + Speed optimizations
  + Hedgewars will now use a sub directory of "My Documents" like other games instead of "%userprofile%/.hedgewars" under Windows
+ + Added support for graphics cards/drivers that have a 512x512 pixel textures limit
+ + Team colors are more distinguishable from each other now
  * Fixed bug that allowed charging a weapon while on rope, leading to frozen timer
  * Various bug fixes
 
