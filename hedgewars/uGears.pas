@@ -365,9 +365,9 @@ case Kind of
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
                 if cMinesTime < 0 then
-                    gear^.Timer:= getrandom(51)*100
+                    gear^.Timer:= getrandom(6)*1000
                 else
-                    gear^.Timer:= cMinesTime*1000;
+                    gear^.Timer:= cMinesTime*1;
                 end;
        gtSMine: begin
                 gear^.Health:= 10;

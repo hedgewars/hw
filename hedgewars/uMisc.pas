@@ -758,7 +758,7 @@ begin
     cMapGen             := 0;   // MAPGEN_REGULAR
     cMazeSize           := 0;
     cHedgehogTurnTime   := 45000;
-    cMinesTime          := 3;
+    cMinesTime          := 3000;
     cMaxAIThinkTime     := 9000;
     cCloudsNumber       := 9;
     cHealthCaseProb     := 35;
