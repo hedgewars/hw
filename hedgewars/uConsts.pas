@@ -2142,7 +2142,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
                 Count: 1;
                 NumPerTurn: 1;
                 Timer: 0;
