@@ -832,7 +832,6 @@ begin
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_LINE_SMOOTH);
     glPushMatrix;
-    glTranslatef(WorldDx, WorldDy, 0);
     glLineWidth(Width);
     Tint(r, g, b, a);
     glVertexPointer(2, GL_FLOAT, 0, @CircleVertex[0]);

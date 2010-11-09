@@ -433,10 +433,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 end;
             amBee: DrawRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
             amFlamethrower: DrawRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
-            amResurrector: begin
-                DrawCircle(ox, oy, 100, 1.5, 0, 0,
-                        $FF, $FF); // I'd rather not like to hardcode 100 here
-            end;
+            amResurrector: DrawCircle(ox, oy, 98, 4, $F5, $DB, $35, $AA); // I'd rather not like to hardcode 100 here
         end;
 
         case amt of
