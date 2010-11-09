@@ -74,7 +74,10 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << "Barrel Mayhem"
         << "Tunnel Hogs"
         << "Fort Mode"
-        << "Timeless";
+        << "Timeless"
+        << "Thinking with Portals"
+        << "King Mode"
+        ;
 
     numberOfDefaultSchemes = predefSchemesNames.size();
 
@@ -428,6 +431,85 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(0)             // health dec amt 34
         ;
 
+    QList<QVariant> thinkingportals;
+    thinkingportals
+        << predefSchemesNames[9]   // name           0
+        << QVariant(false)         // fortsmode      1
+        << QVariant(false)         // team divide    2
+        << QVariant(false)         // solid land     3
+        << QVariant(false)         // border         4
+        << QVariant(false)         // low gravity    5
+        << QVariant(false)         // laser sight    6
+        << QVariant(false)         // invulnerable   7
+        << QVariant(false)         // reset health   8
+        << QVariant(false)         // vampiric       9
+        << QVariant(false)         // karma          10
+        << QVariant(true)          // artillery      11
+        << QVariant(true)          // random order   12
+        << QVariant(false)         // king           13
+        << QVariant(false)         // place hog      14
+        << QVariant(false)         // shared ammo    15
+        << QVariant(false)         // disable girders 16
+        << QVariant(false)         // disable land objects 17
+        << QVariant(false)         // AI survival    18
+        << QVariant(false)         // inf. attack    19
+        << QVariant(false)         // reset weps     20
+        << QVariant(false)         // per hog ammo   21
+        << QVariant(100)           // damage modfier 22
+        << QVariant(45)            // turn time      23
+        << QVariant(100)           // init health    24
+        << QVariant(15)            // sudden death   25
+        << QVariant(2)             // case prob      26
+        << QVariant(3)             // mines time     27
+        << QVariant(5)             // mines number   28
+        << QVariant(0)             // mine dud pct   29
+        << QVariant(5)             // explosives     30
+        << QVariant(25)            // health case pct 31
+        << QVariant(25)            // health case amt 32
+        << QVariant(47)            // water rise amt 33
+        << QVariant(5)             // health dec amt 34
+        ;
+
+    QList<QVariant> kingmode;
+    kingmode
+        << predefSchemesNames[10]   // name           0
+        << QVariant(false)         // fortsmode      1
+        << QVariant(false)         // team divide    2
+        << QVariant(false)         // solid land     3
+        << QVariant(false)         // border         4
+        << QVariant(false)         // low gravity    5
+        << QVariant(false)         // laser sight    6
+        << QVariant(false)         // invulnerable   7
+        << QVariant(false)         // reset health   8
+        << QVariant(false)         // vampiric       9
+        << QVariant(false)         // karma          10
+        << QVariant(false)         // artillery      11
+        << QVariant(true)          // random order   12
+        << QVariant(true)          // king           13
+        << QVariant(true)          // place hog      14
+        << QVariant(true)          // shared ammo    15
+        << QVariant(false)         // disable girders 16
+        << QVariant(false)         // disable land objects 17
+        << QVariant(false)         // AI survival    18
+        << QVariant(false)         // inf. attack    19
+        << QVariant(false)         // reset weps     20
+        << QVariant(false)         // per hog ammo   21
+        << QVariant(100)           // damage modfier 22
+        << QVariant(45)            // turn time      23
+        << QVariant(100)           // init health    24
+        << QVariant(15)            // sudden death   25
+        << QVariant(5)             // case prob      26
+        << QVariant(3)             // mines time     27
+        << QVariant(3)             // mines number   28
+        << QVariant(20)            // mine dud pct   29
+        << QVariant(3)             // explosives     30
+        << QVariant(35)            // health case pct 31
+        << QVariant(30)            // health case amt 32
+        << QVariant(30)            // water rise amt 33
+        << QVariant(5)             // health dec amt 34
+        ;
+
+
     schemes.append(defaultScheme);
     schemes.append(proMode);
     schemes.append(shoppa);
@@ -437,6 +519,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
     schemes.append(tunnelhogs);
     schemes.append(forts);
     schemes.append(timeless);
+    schemes.append(thinkingportals);
+    schemes.append(kingmode);
 
 
     int size = fileConfig.beginReadArray("schemes");
