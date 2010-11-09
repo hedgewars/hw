@@ -362,7 +362,7 @@ ap.ExplR:= 0;
 repeat
   inc(TestTime, 1000);
   Vx:= (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(TestTime + tDelta);
-  Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y-125) - Me^.Y) / int2hwFloat(TestTime + tDelta);
+  Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y-200) - Me^.Y) / int2hwFloat(TestTime + tDelta);
   r:= Distance(Vx, Vy);
   if not (r > _1) then
      begin
