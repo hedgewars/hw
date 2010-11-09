@@ -1441,35 +1441,35 @@ begin
 
     if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
         if ((Gear^.State and gstAttacking) = 0) then
-        begin
+            begin
             if ((GameTicks and $1F) = 0) then
                 if CheckGearNear(Gear, gtHedgehog, 46, 32) <> nil then Gear^.State := Gear^.State or
                                                                                       gstAttacking
-        end
-    else // gstAttacking <> 0
-    begin
-        AllInactive := false;
-        if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick);
-        if Gear^.Timer = 0 then
-        begin
-            if ((Gear^.State and gstWait) <> 0) or
-               (cMineDudPercent = 0) or
-               (getRandom(100) > cMineDudPercent) then
-            begin
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
-                DeleteGear(Gear)
             end
-            else
+        else // gstAttacking <> 0
             begin
-                AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4),
-                vgtSmoke);
-                PlaySound(sndVaporize);
-                Gear^.Health := 0;
-            end;
-            exit
-        end;
-        dec(Gear^.Timer);
-    end
+            AllInactive := false;
+            if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick);
+            if Gear^.Timer = 0 then
+                begin
+                if ((Gear^.State and gstWait) <> 0) or
+                   (cMineDudPercent = 0) or
+                   (getRandom(100) > cMineDudPercent) then
+                    begin
+                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+                    DeleteGear(Gear)
+                    end
+                else
+                    begin
+                    AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4),
+                    vgtSmoke);
+                    PlaySound(sndVaporize);
+                    Gear^.Health := 0;
+                    end;
+                exit
+                end;
+            dec(Gear^.Timer);
+            end
     else // gsttmpFlag = 0
         if (TurnTimeLeft = 0) or ((GameFlags and gfInfAttack) <> 0) then Gear^.State := Gear^.State or gsttmpFlag;
 end;

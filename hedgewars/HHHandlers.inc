@@ -255,9 +255,15 @@ with Gear^,
                                     PlaySound(sndLowGravity);
                                     cGravity:= cMaxWindSpeed
                                     end;
-                      amExtraDamage: cDamageModifier:= _1_5;
+                      amExtraDamage:begin 
+                                    PlaySound(sndHellishImpact4);
+                                    cDamageModifier:= _1_5
+                                    end;
                       amInvulnerable: Invulnerable:= true;
-                      amExtraTime: TurnTimeLeft:= TurnTimeLeft + 30000;
+                      amExtraTime:  begin
+                                    PlaySound(sndSwitchHog);
+                                    TurnTimeLeft:= TurnTimeLeft + 30000
+                                    end;
                       amLaserSight: cLaserSighting:= true;
                       amVampiric: begin
                                   PlaySound(sndOw1, Team^.voicepack);
@@ -871,7 +877,7 @@ if (Gear^.State and (gstMoving or gstDrowning)) <> 0 then
 
 if (Gear^.Health = 0) then
     begin
-    if PrvInactive then
+    if PrvInactive or ((GameFlags and gfInfAttack) <> 0) then
         begin
         Gear^.Timer:= 0;
         FollowGear:= Gear;
