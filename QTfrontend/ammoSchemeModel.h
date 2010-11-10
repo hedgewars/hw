@@ -41,6 +41,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
 
     int numberOfDefaultSchemes;
+    QStringList predefSchemesNames;
 
 public slots:
     void Save();

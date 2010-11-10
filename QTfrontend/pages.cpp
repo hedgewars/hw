@@ -1120,13 +1120,10 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     ruleLabel->setText(tr("Rules:"));
     CBRules = new QComboBox(this);
     CBRules->addItem(QComboBox::tr("Any"));
-    CBRules->addItem("Default");
-    CBRules->addItem("Pro mode");
-    CBRules->addItem("Shoppa");
-    CBRules->addItem("Clean Slate");
-    CBRules->addItem("Minefield");
-    CBRules->addItem("Barrel mayhem");
-    CBRules->addItem("Tunnel hogs");
+    // not the most elegant solution but it works
+    ammoSchemeModel = new AmmoSchemeModel(this, NULL);
+    for (int i = 0; i < ammoSchemeModel->predefSchemesNames.count(); i++)
+        CBRules->addItem(ammoSchemeModel->predefSchemesNames.at(i).toAscii().constData());
     filterLayout->addWidget(ruleLabel);
     filterLayout->addWidget(CBRules);
     filterLayout->addSpacing(30);
@@ -1135,12 +1132,10 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     weaponLabel->setText(tr("Weapons:"));
     CBWeapons = new QComboBox(this);
     CBWeapons->addItem(QComboBox::tr("Any"));
-    CBWeapons->addItem("Clean Slate");
-    CBWeapons->addItem("Crazy");
-    CBWeapons->addItem("Default");
-    CBWeapons->addItem("Minefield");
-    CBWeapons->addItem("Pro mode");
-    CBWeapons->addItem("Shoppa");
+    for (int i = 0; i < cDefaultAmmos.count(); i++) {
+        QPair<QString,QString> ammo = cDefaultAmmos.at(i);
+        CBWeapons->addItem(ammo.first.toAscii().constData());
+    }
     filterLayout->addWidget(weaponLabel);
     filterLayout->addWidget(CBWeapons);
     filterLayout->addSpacing(30);
@@ -1337,12 +1332,12 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         item->setToolTip(tr("Games may be played on precreated or randomized maps."));
         roomsList->setItem(r, 4, item);
 
-        item = new QTableWidgetItem(list[i + 6].left(20)); // selected game scheme
+        item = new QTableWidgetItem(list[i + 6].left(24)); // selected game scheme
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setToolTip(tr("The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism."));
         roomsList->setItem(r, 5, item);
 
-        item = new QTableWidgetItem(list[i + 7].left(20)); // selected weapon scheme
+        item = new QTableWidgetItem(list[i + 7].left(24)); // selected weapon scheme
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setToolTip(tr("The Weapon Scheme defines available weapons and their ammunition count."));
         roomsList->setItem(r, 6, item);

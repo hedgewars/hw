@@ -64,8 +64,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
     QAbstractTableModel(parent),
     fileConfig(fileName, QSettings::IniFormat)
 {
-    QStringList predefSchemesNames;
-    predefSchemesNames
+    predefSchemesNames = QStringList()
         << "Default"
         << "Pro Mode"
         << "Shoppa"
@@ -472,7 +471,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 
     QList<QVariant> kingmode;
     kingmode
-        << predefSchemesNames[10]   // name           0
+        << predefSchemesNames[10]  // name           0
         << QVariant(false)         // fortsmode      1
         << QVariant(false)         // team divide    2
         << QVariant(false)         // solid land     3

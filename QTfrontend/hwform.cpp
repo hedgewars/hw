@@ -141,7 +141,9 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageOptions->BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(DeleteTeam()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), config, SLOT(SaveOptions()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), this, SLOT(GoBack()));
+#ifndef __APPLE__
     connect(ui.pageOptions->BtnAssociateFiles, SIGNAL(clicked()), this, SLOT(AssociateFiles()));
+#endif
 
     connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
     connect(ui.pageOptions->WeaponsButt, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
@@ -1133,7 +1135,7 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
 #elif defined __APPLE__
     success = false;
-    // TODO; also reenable button in pages.cpp
+    // TODO; also enable button in pages.cpp and signal in hwform.cpp
 #else
     // this is a little silly due to all the system commands below anyway - just use mkdir -p ?  Does have the advantage of the alert I guess
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local");

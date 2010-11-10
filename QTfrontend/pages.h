@@ -416,6 +416,7 @@ private:
     bool gameInLobby;
     QString gameInLobbyName;
     QStringList listFromServer;
+    AmmoSchemeModel * ammoSchemeModel;
 
 public slots:
     void setRoomsList(const QStringList & list);
