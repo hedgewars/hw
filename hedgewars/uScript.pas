@@ -315,6 +315,27 @@ begin
     lc_gethogclan:= 1
 end;
 
+function lc_gethogteamname(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetHogTeamName!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            begin
+            lua_pushstring(L, str2pchar(PHedgehog(gear^.Hedgehog)^.Team^.TeamName))
+            end
+        else
+            lua_pushnil(L);
+        end;
+    lc_gethogteamname:= 1
+end;
+
 function lc_gethogname(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1130,6 +1151,7 @@ lua_register(luaState, 'AddHog', @lc_addhog);
 lua_register(luaState, 'SetHealth', @lc_sethealth);
 lua_register(luaState, 'SetEffect', @lc_seteffect);
 lua_register(luaState, 'GetHogClan', @lc_gethogclan);
+lua_register(luaState, 'GetHogTeamName', @lc_gethogteamname);
 lua_register(luaState, 'GetHogName', @lc_gethogname);
 lua_register(luaState, 'GetHogLevel', @lc_gethoglevel);
 lua_register(luaState, 'GetX', @lc_getx);
