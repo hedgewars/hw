@@ -51,7 +51,8 @@ uses LuaPas in 'LuaPas.pas',
     uSound,
     uTeams,
     uKeys,
-    uChat;
+    uChat,
+    uStats;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
@@ -882,7 +883,8 @@ if ScriptExists('onAmmoStoreInit') then
     ScriptApplyAmmoStore
     end;
 
-ScriptSetInteger('ClansCount', ClansCount)
+ScriptSetInteger('ClansCount', ClansCount);
+ScriptSetInteger('TeamsCount', TeamsCount)
 end;
 
 procedure ScriptLoad(name : shortstring);
@@ -908,6 +910,7 @@ begin
 ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 ScriptSetInteger('GameTime', GameTicks);
 ScriptSetInteger('RealTime', RealTicks);
+ScriptSetInteger('TotalRounds', TotalRounds);
 if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
     ScriptSetInteger('CurrentHedgehog', CurrentHedgehog^.Gear^.UID)
 else
