@@ -235,6 +235,7 @@ with Hedgehog do
                 begin
                 PackAmmo(Ammo, Ammoz[AmmoType].Slot);
                 //SwitchNotHeldAmmo(Hedgehog);
+                ShowCrossHair:= false;
                 CurAmmoType:= amNothing
                 end
             end
