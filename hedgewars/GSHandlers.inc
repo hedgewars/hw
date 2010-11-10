@@ -3087,11 +3087,11 @@ begin
         or ((Gear^.Message and gmAttack) <> 0) then
         begin
         with HHGear^ do
-        begin
+            begin
             Message := 0;
             Active := true;
             State := State or gstMoving
-        end;
+            end;
         DeleteGear(Gear);
         isCursorVisible := false;
         ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
@@ -3100,7 +3100,7 @@ begin
 //    Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
 
 //AddCaption(trmsg[sidFuel]+': '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
-    end
+        end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
