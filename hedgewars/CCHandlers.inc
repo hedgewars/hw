@@ -686,7 +686,7 @@ else
 
             if bShowAmmoMenu then bShowAmmoMenu:= false
             else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or 
-                    ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) = 0)) or
+                    ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0)) or
                     ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
             end;
     if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1

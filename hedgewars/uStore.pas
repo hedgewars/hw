@@ -1545,7 +1545,7 @@ if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNu
     extra:= trmsg[sidNotYetAvailable];
     extracolor:= LongInt($ffc77070);
     end
-else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0 then // weapon or utility won't end your turn
+else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then // weapon or utility won't end your turn
     begin
     extra:= trmsg[sidNoEndTurn];
     extracolor:= LongInt($ff70c770);

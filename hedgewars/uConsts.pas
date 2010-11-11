@@ -411,7 +411,7 @@ const
     ammoprop_NotBorder    = $00000800;
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
-    ammoprop_NoRoundEndHint=$10000000;
+    ammoprop_NoRoundEnd=$10000000;
 
     AMMO_INFINITE = 100;
 
@@ -1163,7 +1163,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 3;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
                           ammoprop_Utility or
@@ -1328,7 +1328,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
                           ammoprop_NoCrosshair or
@@ -1434,7 +1434,7 @@ const
             NameTex: nil;
             Probability: 150;
             NumberInCase: 3;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_NeedTarget or
                           ammoprop_Utility or
@@ -1489,7 +1489,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
                           ammoprop_Utility or
@@ -1752,7 +1752,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1780,7 +1780,7 @@ const
             NameTex: nil;
             Probability: 15;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1808,7 +1808,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1836,7 +1836,7 @@ const
             NameTex: nil;
             Probability: 30;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1864,7 +1864,7 @@ const
             NameTex: nil;
             Probability: 15;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1892,7 +1892,7 @@ const
             NameTex: nil;
             Probability: 15;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1943,7 +1943,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
                           ammoprop_NoCrosshair or
@@ -2020,7 +2020,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_AttackInMove or
                           ammoprop_DontHold or
                           ammoprop_Utility;
@@ -2187,7 +2187,9 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_NoRoundEndHint;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_Utility or
+                          ammoprop_NoRoundEnd;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;

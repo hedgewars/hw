@@ -54,13 +54,13 @@ with PHedgehog(Gear^.Hedgehog)^ do
     ammoidx:= 0;
     if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
        (TargetPoint.X <> NoPointX) or
-       ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) = 0)) or
+       ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0)) or
        ((Gear^.State and gstHHDriven) = 0) then exit;
     ChangeAmmo:= true;
 
     while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do inc(ammoidx);
 
-    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
+    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
 
     MultiShootAttacks:= 0;
     Gear^.Message:= Gear^.Message and not (gmLJump or gmHJump);
@@ -364,10 +364,10 @@ with CurrentHedgehog^.Gear^,
         else
             begin
             OnUsedAmmo(CurrentHedgehog^);
-            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEndHint) = 0) and ((GameFlags and gfInfAttack) = 0) then
+            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and ((GameFlags and gfInfAttack) = 0) then
                 TurnTimeLeft:= Ammoz[a].TimeAfterTurn;
-            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEndHint) = 0) then State:= State or gstAttacked;
-            if (Ammoz[a].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0 then ApplyAmmoChanges(CurrentHedgehog^)
+            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) then State:= State or gstAttacked;
+            if (Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then ApplyAmmoChanges(CurrentHedgehog^)
             end;
         end
     else
@@ -823,7 +823,7 @@ else
 
 if (CurAmmoGear = nil)
     or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) 
-    or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0) then
+    or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) then
     begin
     if ((Gear^.Message and gmSlot) <> 0) then
         if ChangeAmmo(Gear) then ApplyAmmoChanges(Hedgehog^);
