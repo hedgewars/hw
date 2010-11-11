@@ -37,7 +37,6 @@
 		611E0EE811FB20610077A41E /* cornerButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE611FB20610077A41E /* cornerButton.png */; };
 		611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */; };
 		611EE974122A9C4100DF6938 /* clickSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE973122A9C4100DF6938 /* clickSound.wav */; };
-		611EE9D9122AA10A00DF6938 /* backSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D7122AA10A00DF6938 /* backSound.wav */; };
 		611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D8122AA10A00DF6938 /* selSound.wav */; };
 		611EEAEE122B2A4D00DF6938 /* HelpPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */; };
 		611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib */; };
@@ -127,7 +126,10 @@
 		617989BE114AB47A00BA94A9 /* libSDL_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617989BB114AB47500BA94A9 /* libSDL_net.a */; };
 		61798A14114AB65C00BA94A9 /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798A13114AB65600BA94A9 /* libSDL_ttf.a */; };
 		61799289114AE08700BA94A9 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 61798A5E114AE08600BA94A9 /* Data */; };
-		6183D83E11E2BCE200A88903 /* LI-ipad-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */; };
+		61808A4B128C901B005D0E2F /* startButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61808A4A128C901B005D0E2F /* startButton.png */; };
+		61808A5D128C930A005D0E2F /* backSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D7122AA10A00DF6938 /* backSound.wav */; };
+		61808A6F128C94E1005D0E2F /* backgroundTop.png in Resources */ = {isa = PBXBuildFile; fileRef = 61808A6E128C94E1005D0E2F /* backgroundTop.png */; };
+		6183D83E11E2BCE200A88903 /* Default-ipad-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83C11E2BCE200A88903 /* Default-ipad-Landscape.png */; };
 		61842B24122B619D0096E335 /* HelpPageInGameViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */; };
 		61842B3E122B65BD0096E335 /* helpabove.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3D122B65BD0096E335 /* helpabove.png */; };
 		61842B40122B66280096E335 /* helpleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3F122B66280096E335 /* helpleft.png */; };
@@ -142,15 +144,12 @@
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		61A118D311683CD100359010 /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
 		61A670BE12747D8900B06CE7 /* borderBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E911DF58550068B24D /* borderBottom.png */; };
-		61A670BF12747D9100B06CE7 /* borderTop.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EA11DF58550068B24D /* borderTop.png */; };
 		61A670C012747D9B00B06CE7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83D11E2BCE200A88903 /* Default.png */; };
 		61A670C112747DB900B06CE7 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */; };
 		61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
-		61A670FA12747E0000B06CE7 /* playButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903EC11DF58550068B24D /* playButton.png */; };
 		61A670FB12747E0D00B06CE7 /* title_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 619C09E911E8B8D600F1DF16 /* title_small.png */; };
 		61A6710612747E4000B06CE7 /* backgroundCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903E511DF58550068B24D /* backgroundCenter.png */; };
 		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
-		61B9C9CA12871E1300B4D51F /* storeButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F903ED11DF58550068B24D /* storeButton.png */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
 		61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D205A0127CDD1100ABD83E /* ObjcExports.m */; };
 		61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */; };
@@ -875,7 +874,9 @@
 		617989B3114AB47500BA94A9 /* SDL_net.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_net.xcodeproj; path = "../../../Library/SDL-1.3/SDL_net/Xcode-iPhoneOS/SDL_net.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_ttf.xcodeproj; path = "../../../Library/SDL-1.3/SDL_ttf/Xcode-iPhoneOS/SDL_ttf.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61798A5E114AE08600BA94A9 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
-		6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LI-ipad-Landscape.png"; path = "Resources/Icons/LI-ipad-Landscape.png"; sourceTree = "<group>"; };
+		61808A4A128C901B005D0E2F /* startButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = startButton.png; path = "Resources/Frontend-iPhone/startButton.png"; sourceTree = "<group>"; };
+		61808A6E128C94E1005D0E2F /* backgroundTop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundTop.png; path = "Resources/Frontend-iPhone/backgroundTop.png"; sourceTree = "<group>"; };
+		6183D83C11E2BCE200A88903 /* Default-ipad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-ipad-Landscape.png"; path = "Resources/Icons/Default-ipad-Landscape.png"; sourceTree = "<group>"; };
 		6183D83D11E2BCE200A88903 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Icons/Default.png; sourceTree = "<group>"; };
 		61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageInGameViewController-iPad.xib"; path = "../Resources/HelpPageInGameViewController-iPad.xib"; sourceTree = "<group>"; };
 		61842B3D122B65BD0096E335 /* helpabove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpabove.png; path = Resources/Overlay/helpabove.png; sourceTree = "<group>"; };
@@ -924,16 +925,8 @@
 		61F7A43511E290650040BA66 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icons/Icon.png; sourceTree = "<group>"; };
 		61F7A43611E290650040BA66 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icons/Icon@2x.png"; sourceTree = "<group>"; };
 		61F7A43711E290650040BA66 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iTunesArtwork.png; path = Resources/Icons/iTunesArtwork.png; sourceTree = "<group>"; };
-		61F903E411DF58550068B24D /* backgroundBottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundBottom.png; path = "Resources/Frontend-iPhone/backgroundBottom.png"; sourceTree = "<group>"; };
 		61F903E511DF58550068B24D /* backgroundCenter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundCenter.png; path = "Resources/Frontend-iPhone/backgroundCenter.png"; sourceTree = "<group>"; };
-		61F903E611DF58550068B24D /* backgroundLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundLeft.png; path = "Resources/Frontend-iPhone/backgroundLeft.png"; sourceTree = "<group>"; };
-		61F903E711DF58550068B24D /* backgroundRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundRight.png; path = "Resources/Frontend-iPhone/backgroundRight.png"; sourceTree = "<group>"; };
-		61F903E811DF58550068B24D /* backgroundTop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundTop.png; path = "Resources/Frontend-iPhone/backgroundTop.png"; sourceTree = "<group>"; };
 		61F903E911DF58550068B24D /* borderBottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = borderBottom.png; path = "Resources/Frontend-iPhone/borderBottom.png"; sourceTree = "<group>"; };
-		61F903EA11DF58550068B24D /* borderTop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = borderTop.png; path = "Resources/Frontend-iPhone/borderTop.png"; sourceTree = "<group>"; };
-		61F903EB11DF58550068B24D /* networkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = networkButton.png; path = "Resources/Frontend-iPhone/networkButton.png"; sourceTree = "<group>"; };
-		61F903EC11DF58550068B24D /* playButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playButton.png; path = "Resources/Frontend-iPhone/playButton.png"; sourceTree = "<group>"; };
-		61F903ED11DF58550068B24D /* storeButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = storeButton.png; path = "Resources/Frontend-iPhone/storeButton.png"; sourceTree = "<group>"; };
 		61F9040811DF58B00068B24D /* settingsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settingsButton.png; path = Resources/settingsButton.png; sourceTree = "<group>"; };
 		61F9040A11DF59370068B24D /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = "Resources/Frontend-iPad/background.png"; sourceTree = "<group>"; };
 		61F9040C11DF59D10068B24D /* localplayButton.png */ = {isa = PBXFileReference; explicitFileType = image.png; name = localplayButton.png; path = "Resources/Frontend-iPad/localplayButton.png"; sourceTree = "<group>"; };
@@ -1051,8 +1044,7 @@
 				611EE9D7122AA10A00DF6938 /* backSound.wav */,
 				611EE9D8122AA10A00DF6938 /* selSound.wav */,
 				61F7A42811E2905C0040BA66 /* Icons */,
-				61F903FA11DF58680068B24D /* Frontend-iPad */,
-				61F903E311DF584D0068B24D /* Frontend-iPhone */,
+				61F903FA11DF58680068B24D /* Frontend */,
 				6179936611501D1E00BA94A9 /* Overlay */,
 				61798A5E114AE08600BA94A9 /* Data */,
 				6187AEA5120781B900B31A27 /* Settings */,
@@ -1389,7 +1381,7 @@
 			children = (
 				61E2F7421283752C00E12521 /* fb.png */,
 				61E2F7431283752C00E12521 /* tw.png */,
-				6183D83C11E2BCE200A88903 /* LI-ipad-Landscape.png */,
+				6183D83C11E2BCE200A88903 /* Default-ipad-Landscape.png */,
 				6183D83D11E2BCE200A88903 /* Default.png */,
 				61F7A43111E290650040BA66 /* Icon-72.png */,
 				61F7A43211E290650040BA66 /* Icon-Small-50.png */,
@@ -1402,37 +1394,24 @@
 			name = Icons;
 			sourceTree = "<group>";
 		};
-		61F903E311DF584D0068B24D /* Frontend-iPhone */ = {
+		61F903FA11DF58680068B24D /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
 				619C09E911E8B8D600F1DF16 /* title_small.png */,
-				61F903E411DF58550068B24D /* backgroundBottom.png */,
+				61808A6E128C94E1005D0E2F /* backgroundTop.png */,
 				61F903E511DF58550068B24D /* backgroundCenter.png */,
-				61F903E611DF58550068B24D /* backgroundLeft.png */,
-				61F903E711DF58550068B24D /* backgroundRight.png */,
-				61F903E811DF58550068B24D /* backgroundTop.png */,
 				61F903E911DF58550068B24D /* borderBottom.png */,
-				61F903EA11DF58550068B24D /* borderTop.png */,
-				61F903EB11DF58550068B24D /* networkButton.png */,
-				61F903EC11DF58550068B24D /* playButton.png */,
-				61F903ED11DF58550068B24D /* storeButton.png */,
-			);
-			name = "Frontend-iPhone";
-			sourceTree = "<group>";
-		};
-		61F903FA11DF58680068B24D /* Frontend-iPad */ = {
-			isa = PBXGroup;
-			children = (
 				615AD96112073B4D00F2FF04 /* startGameButton.png */,
 				615AD9EA1207654E00F2FF04 /* helpButton.png */,
 				615AD9E8120764CA00F2FF04 /* backButton.png */,
+				61808A4A128C901B005D0E2F /* startButton.png */,
 				61EBA62811DFF2BC0048B68A /* title.png */,
 				61F9040C11DF59D10068B24D /* localplayButton.png */,
 				61F9040D11DF59D10068B24D /* netplayButton.png */,
 				61F9040A11DF59370068B24D /* background.png */,
 				61EBA62C11DFF3310048B68A /* backgroundAndTitle.png */,
 			);
-			name = "Frontend-iPad";
+			name = Frontend;
 			sourceTree = "<group>";
 		};
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
@@ -2131,7 +2110,7 @@
 				61F7A43A11E290650040BA66 /* Icon-Small.png in Resources */,
 				61F7A43C11E290650040BA66 /* Icon.png in Resources */,
 				61F7A43E11E290650040BA66 /* iTunesArtwork.png in Resources */,
-				6183D83E11E2BCE200A88903 /* LI-ipad-Landscape.png in Resources */,
+				6183D83E11E2BCE200A88903 /* Default-ipad-Landscape.png in Resources */,
 				6129B9F711EFB04D0017E305 /* denied.png in Resources */,
 				611E0EE711FB20610077A41E /* ammoButton.png in Resources */,
 				611E0EE811FB20610077A41E /* cornerButton.png in Resources */,
@@ -2142,7 +2121,6 @@
 				615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */,
 				6187AEBD120781B900B31A27 /* Settings in Resources */,
 				611EE974122A9C4100DF6938 /* clickSound.wav in Resources */,
-				611EE9D9122AA10A00DF6938 /* backSound.wav in Resources */,
 				611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */,
 				611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib in Resources */,
 				611EEBC1122B34A800DF6938 /* helpingame.png in Resources */,
@@ -2160,11 +2138,9 @@
 				610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */,
 				610D5FB31270E26C0033333A /* Icon@2x.png in Resources */,
 				61A670BE12747D8900B06CE7 /* borderBottom.png in Resources */,
-				61A670BF12747D9100B06CE7 /* borderTop.png in Resources */,
 				61A670C012747D9B00B06CE7 /* Default.png in Resources */,
 				61A670C112747DB900B06CE7 /* MainMenuViewController-iPhone.xib in Resources */,
 				61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */,
-				61A670FA12747E0000B06CE7 /* playButton.png in Resources */,
 				61A670FB12747E0D00B06CE7 /* title_small.png in Resources */,
 				61A6710612747E4000B06CE7 /* backgroundCenter.png in Resources */,
 				614AE65D127D090A0070BF5F /* smallerBackground~ipad.png in Resources */,
@@ -2173,7 +2149,9 @@
 				61E2F7451283752C00E12521 /* tw.png in Resources */,
 				61DF0EDC1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib in Resources */,
 				61DF0F211284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib in Resources */,
-				61B9C9CA12871E1300B4D51F /* storeButton.png in Resources */,
+				61808A4B128C901B005D0E2F /* startButton.png in Resources */,
+				61808A5D128C930A005D0E2F /* backSound.wav in Resources */,
+				61808A6F128C94E1005D0E2F /* backgroundTop.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2191,7 +2169,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/btn*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/ammopic.png ${PROJECT_DIR}/Data/Graphics/Btn/iconAmmo.png\ncp ${PROJECT_DIR}/../../QTfrontend/res/icon*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.svgz -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\nfind ${PROJECT_DIR}/Data -name *.orig -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps and hats\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,Ruler}\nrm -rf ${PROJECT_DIR}/Data/Hats/{TeamCap,TeamHeadband,TeamHair}\n\n#copy mono audio\ncp -R ${PROJECT_DIR}/audio/* ${PROJECT_DIR}/Data/\n\n#the following ones must be removed when their support is implemented\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\n\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nmv ${PROJECT_DIR}/Data/Maps/{Basketball,Knockball,TrophyRace} ${PROJECT_DIR}/Data/Missions/Maps/\n\n#reduce the number of flakes for City\nawk '{if ($1 == 1500) $1=40; print $0}' < ${PROJECT_DIR}/Data/Themes/City/theme.cfg > /tmp/tempfile\nmv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\n#remove Isalnd from the list of Themes\nawk '{if ($1 != \"Island\") print $0}' < ${PROJECT_DIR}/Data/Themes/themes.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/themes.cfg\n\n#remove Isalnd from the Maps and themes\nrm -rf ${PROJECT_DIR}/Data/Themes/Island\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/Cave/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/Cave/map.cfg\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/Lonely_Island/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/Lonely_Island/map.cfg\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/PirateFlag/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/PirateFlag/map.cfg\n\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n\n#delete useless fonts\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\n#delete all names, reserved hats\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\n";
+			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/btn*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp ${PROJECT_DIR}/../../QTfrontend/res/ammopic.png ${PROJECT_DIR}/Data/Graphics/Btn/iconAmmo.png\ncp ${PROJECT_DIR}/../../QTfrontend/res/icon*.png ${PROJECT_DIR}/Data/Graphics/Btn\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels\n\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.svgz -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\nfind ${PROJECT_DIR}/Data -name *.orig -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps and hats\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,Ruler}\nrm -rf ${PROJECT_DIR}/Data/Hats/{TeamCap,TeamHeadband,TeamHair}\n\n#copy mono audio\ncp -R ${PROJECT_DIR}/audio/* ${PROJECT_DIR}/Data/\n\n#the following ones must be removed\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\n\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nmv ${PROJECT_DIR}/Data/Maps/{Basketball,Knockball,TrophyRace} ${PROJECT_DIR}/Data/Missions/Maps/\n\n#reduce the number of flakes for City\nawk '{if ($1 == 1500) $1=40; print $0}' < ${PROJECT_DIR}/Data/Themes/City/theme.cfg > /tmp/tempfile\nmv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\n#remove Isalnd from the list of Themes\nawk '{if ($1 != \"Island\") print $0}' < ${PROJECT_DIR}/Data/Themes/themes.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/themes.cfg\n\n#remove Isalnd from the Maps and themes\nrm -rf ${PROJECT_DIR}/Data/Themes/Island\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/Cave/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/Cave/map.cfg\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/Lonely_Island/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/Lonely_Island/map.cfg\nawk '{if ($1 == \"Island\") print \"Nature\"}' < ${PROJECT_DIR}/Data/Maps/PirateFlag/map.cfg > /tmp/tempfile && mv /tmp/tempfile ${PROJECT_DIR}/Data/Maps/PirateFlag/map.cfg\n\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n\n#delete useless fonts\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\n#delete all names, reserved hats\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\n";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {

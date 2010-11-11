@@ -127,9 +127,6 @@
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-    if (IS_IPAD())
-        cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
-
     if (self.dataSourceArray == nil)
         [self loadDataSourceArray];
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
@@ -138,6 +135,7 @@
     cell.textLabel.text = labelString;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.minimumFontSize = 7;
+    cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
 
     if (isRandomness()) {
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),labelString]];
@@ -353,6 +351,7 @@
     self.missionCommand = mission;
 
     // nice animation for updating the table when appropriate (on iphone)
+    /*
     if (IS_IPAD() == NO)
         if (((oldPage == 0 || oldPage == 2) && (newPage == 1 || newPage == 3)) ||
             ((oldPage == 1 || oldPage == 3) && (newPage == 0 || newPage == 2)) ||
@@ -362,6 +361,7 @@
             self.tableView.frame = CGRectMake(295, 0, 185, 276);
             [UIView commitAnimations];
         }
+    */
 
     [self.tableView reloadData];
     [self updatePreview];
@@ -424,14 +424,11 @@
     self.staticMapCommand = @"";
     self.missionCommand = @"";
 
-    if (IS_IPAD()) {
-        if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
-            [self.tableView setBackgroundView:nil];
-        self.view.backgroundColor = [UIColor clearColor];
-        self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        self.tableView.rowHeight = 45;
-    }
+    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
+        [self.tableView setBackgroundView:nil];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 -(void) viewWillAppear:(BOOL)animated {
