@@ -1748,7 +1748,7 @@ else if (t<a+h) then
               dec(t, Ammoz[i].Probability)
           end;
         FollowGear^.Pos:= posCaseAmmo;
-        FollowGear^.State:= Longword(i);
+        FollowGear^.AmmoType:= i;
         AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
         end
     end
@@ -1767,7 +1767,7 @@ else
               dec(t, Ammoz[i].Probability)
           end;
         FollowGear^.Pos:= posCaseUtility;
-        FollowGear^.State:= Longword(i);
+        FollowGear^.AmmoType:= i;
         AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
         end
     end;

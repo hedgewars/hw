@@ -451,7 +451,7 @@ PlaySound(sndShotgunReload);
 case Gear^.Pos of
        posCaseUtility,
        posCaseAmmo: begin
-                    a:= TAmmoType(Gear^.State);
+                    a:= Gear^.AmmoType;
                     AddAmmo(PHedgehog(HH^.Hedgehog)^, a);
 // Possibly needs to check shared clan ammo game flag once added.
 // On the other hand, no obvious reason that clan members shouldn't know what ammo another clan member picked up
