@@ -1675,12 +1675,12 @@ begin
             end;
         AmmoCrate: begin
             FollowGear^.Pos := posCaseAmmo;
-            FollowGear^.State := content;
+            FollowGear^.AmmoType := content;
             AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
             end;
         UtilityCrate: begin
             FollowGear^.Pos := posCaseUtility;
-            FollowGear^.State := content;
+            FollowGear^.AmmoType := content;
             AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
             end;
     end;
