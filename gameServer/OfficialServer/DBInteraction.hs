@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, ScopedTypeVariables, OverloadedStrings #-}
+{-# LANGUAGE CPP, ScopedTypeVariables #-}
 module OfficialServer.DBInteraction
 (
     startDBConnection
@@ -11,7 +11,8 @@ import Control.Concurrent
 import qualified Control.Exception as Exception
 import Control.Monad
 import qualified Data.Map as Map
-import Data.Maybe
+import Monad
+import Maybe
 import System.Log.Logger
 import Data.Time
 ------------------------
@@ -20,7 +21,7 @@ import Utils
 
 localAddressList = ["127.0.0.1", "0:0:0:0:0:0:0:1", "0:0:0:0:0:ffff:7f00:1"]
 
-fakeDbConnection serverInfo = forever $ do
+fakeDbConnection serverInfo = do
     q <- readChan $ dbQueries serverInfo
     case q of
         CheckAccount clUid _ clHost -> do
@@ -28,6 +29,8 @@ fakeDbConnection serverInfo = forever $ do
                 if clHost `elem` localAddressList then Admin else Guest)
         ClearCache -> return ()
         SendStats {} -> return ()
+
+    fakeDbConnection serverInfo
 
 
 #if defined(OFFICIAL_SERVER)

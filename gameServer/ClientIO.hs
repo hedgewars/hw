@@ -1,4 +1,4 @@
-{-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module ClientIO where
 
 import qualified Control.Exception as Exception
@@ -6,71 +6,45 @@ import Control.Concurrent.Chan
 import Control.Concurrent
 import Control.Monad
 import System.IO
-import Network
-import Network.Socket.ByteString
-import qualified Data.ByteString.Char8 as B
+import qualified Data.ByteString.UTF8 as BUTF8
+import qualified Data.ByteString as B
 ----------------
 import CoreTypes
-import RoomsAndClients
-import Utils
 
-
-pDelim :: B.ByteString
-pDelim = B.pack "\n\n"
-
-bs2Packets :: B.ByteString -> ([[B.ByteString]], B.ByteString)
-bs2Packets buf = unfoldrE extractPackets buf
-    where
-    extractPackets :: B.ByteString -> Either B.ByteString ([B.ByteString], B.ByteString)
-    extractPackets buf = 
-        let buf' = until (not . B.isPrefixOf pDelim) (B.drop 2) buf in
-            let (bsPacket, bufTail) = B.breakSubstring pDelim buf' in
-                if B.null bufTail then
-                    Left bsPacket
-                    else
-                    if B.null bsPacket then 
-                        Left bufTail
-                        else
-                        Right (B.splitWith (== '\n') bsPacket, bufTail)
-
-
-listenLoop :: Socket -> Chan CoreMessage -> ClientIndex -> IO ()
-listenLoop sock chan ci = recieveWithBufferLoop B.empty
-    where
-        recieveWithBufferLoop recvBuf = do
-            recvBS <- recv sock 4096
---            putStrLn $ show sock ++ " got smth: " ++ (show $ B.length recvBS)
-            unless (B.null recvBS) $ do
-                let (packets, newrecvBuf) = bs2Packets $ B.append recvBuf recvBS
-                forM_ packets sendPacket
-                recieveWithBufferLoop newrecvBuf
-
-        sendPacket packet = writeChan chan $ ClientMessage (ci, packet)
-
-
-clientRecvLoop :: Socket -> Chan CoreMessage -> ClientIndex -> IO ()
-clientRecvLoop s chan ci = do
-    msg <- (listenLoop s chan ci >> return "Connection closed") `catch` (return . B.pack . show)
-    clientOff msg
-    where 
-        clientOff msg = mapM_ (writeChan chan) [ClientMessage (ci, ["QUIT", msg]), Remove ci]
-
-
-
-clientSendLoop :: Socket -> Chan [B.ByteString] -> ClientIndex -> IO ()
-clientSendLoop s chan ci = do
-    answer <- readChan chan
-    Exception.handle
-        (\(e :: Exception.IOException) -> when (not $ isQuit answer) $ sendQuit e) $ do
-            sendAll s $ (B.unlines answer) `B.append` (B.singleton '\n')
-
-    if (isQuit answer) then
-        Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on sClose") $ sClose s
+listenLoop :: Handle -> Int -> [String] -> Chan CoreMessage -> Int -> IO ()
+listenLoop handle linesNumber buf chan clientID = do
+    str <- liftM BUTF8.toString $ B.hGetLine handle
+    if (linesNumber > 50) || (length str > 450) then
+        writeChan chan $ ClientMessage (clientID, ["QUIT", "Protocol violation"])
         else
-        clientSendLoop s chan ci
+        if str == "" then do
+            writeChan chan $ ClientMessage (clientID, buf)
+            yield
+            listenLoop handle 0 [] chan clientID
+            else
+            listenLoop handle (linesNumber + 1) (buf ++ [str]) chan clientID
+
+clientRecvLoop :: Handle -> Chan CoreMessage -> Int -> IO ()
+clientRecvLoop handle chan clientID =
+    listenLoop handle 0 [] chan clientID
+        `catch` (\e -> clientOff (show e) >> return ())
+    where clientOff msg = writeChan chan $ ClientMessage (clientID, ["QUIT", msg]) -- if the client disconnects, we perform as if it sent QUIT message
+
+clientSendLoop :: Handle -> Chan CoreMessage -> Chan [String] -> Int -> IO()
+clientSendLoop handle coreChan chan clientID = do
+    answer <- readChan chan
+    doClose <- Exception.handle
+        (\(e :: Exception.IOException) -> if isQuit answer then return True else sendQuit e >> return False) $ do
+            B.hPutStrLn handle $ BUTF8.fromString $ unlines answer
+            hFlush handle
+            return $ isQuit answer
+
+    if doClose then
+        Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on hClose") $ hClose handle
+        else
+        clientSendLoop handle coreChan chan clientID
 
     where
-        --sendQuit e = writeChan coreChan $ ClientMessage (ci, ["QUIT", B.pack $ show e])
-        sendQuit e = putStrLn $ show e
+        sendQuit e = writeChan coreChan $ ClientMessage (clientID, ["QUIT", show e])
         isQuit ("BYE":xs) = True
         isQuit _ = False

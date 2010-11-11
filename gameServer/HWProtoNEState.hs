@@ -1,66 +1,54 @@
-{-# LANGUAGE OverloadedStrings #-}
 module HWProtoNEState where
 
 import qualified Data.IntMap as IntMap
-import Data.Maybe
+import Maybe
 import Data.List
 import Data.Word
-import Control.Monad.Reader
-import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
 import Utils
-import RoomsAndClients
 
 handleCmd_NotEntered :: CmdHandler
 
-handleCmd_NotEntered ["NICK", newNick] = do
-    (ci, irnc) <- ask
-    let cl = irnc `client` ci
-    if not . B.null $ nick cl then return [ProtocolError "Nickname already chosen"]
-        else
-        if haveSameNick irnc (nick cl) then return [AnswerClients [sendChan cl] ["WARNING", "Nickname already in use"], ByeClient ""]
-            else
-            if illegalName newNick then return [ByeClient "Illegal nickname"]
-                else
-                return $
-                    ModifyClient (\c -> c{nick = newNick}) :
-                    AnswerClients [sendChan cl] ["NICK", newNick] :
-                    [CheckRegistered | clientProto cl /= 0]
+handleCmd_NotEntered clID clients _ ["NICK", newNick]
+    | not . null $ nick client = [ProtocolError "Nickname already chosen"]
+    | haveSameNick = [AnswerThisClient ["WARNING", "Nickname already in use"], ByeClient ""]
+    | illegalName newNick = [ByeClient "Illegal nickname"]
+    | otherwise =
+        ModifyClient (\c -> c{nick = newNick}) :
+        AnswerThisClient ["NICK", newNick] :
+        [CheckRegistered | clientProto client /= 0]
     where
-    haveSameNick irnc clNick = isJust $ find (\cl -> newNick == clNick) $ map (client irnc) $ allClients irnc
+        client = clients IntMap.! clID
+        haveSameNick = isJust $ find (\cl -> newNick == nick cl) $ IntMap.elems clients
 
-handleCmd_NotEntered ["PROTO", protoNum] = do
-    (ci, irnc) <- ask
-    let cl = irnc `client` ci
-    if clientProto cl > 0 then return [ProtocolError "Protocol already known"]
-        else
-        if parsedProto == 0 then return [ProtocolError "Bad number"]
-            else
-            return $
-                ModifyClient (\c -> c{clientProto = parsedProto}) :
-                AnswerClients [sendChan cl] ["PROTO", B.pack $ show parsedProto] :
-                [CheckRegistered | not . B.null $ nick cl]
+
+handleCmd_NotEntered clID clients _ ["PROTO", protoNum]
+    | clientProto client > 0 = [ProtocolError "Protocol already known"]
+    | parsedProto == 0 = [ProtocolError "Bad number"]
+    | otherwise =
+        ModifyClient (\c -> c{clientProto = parsedProto}) :
+        AnswerThisClient ["PROTO", show parsedProto] :
+        [CheckRegistered | (not . null) (nick client)]
     where
-        parsedProto = case B.readInt protoNum of
-                           Just (i, t) | B.null t -> fromIntegral i
-                           otherwise -> 0
+        client = clients IntMap.! clID
+        parsedProto = fromMaybe 0 (maybeRead protoNum :: Maybe Word16)
 
 
-handleCmd_NotEntered ["PASSWORD", passwd] = do
-    (ci, irnc) <- ask
-    let cl = irnc `client` ci
+handleCmd_NotEntered clID clients _ ["PASSWORD", passwd] =
+    if passwd == webPassword client then
+        [ModifyClient (\cl -> cl{logonPassed = True}),
+        MoveToLobby] ++ adminNotice
+    else
+        [ByeClient "Authentication failed"]
+    where
+        client = clients IntMap.! clID
+        adminNotice = [AnswerThisClient ["ADMIN_ACCESS"] | isAdministrator client]
 
-    if passwd == webPassword cl then
-        return $ JoinLobby : [AnswerClients [sendChan cl] ["ADMIN_ACCESS"] | isAdministrator cl]
-        else
-        return [ByeClient "Authentication failed"]
-
-{-
 
 handleCmd_NotEntered clID clients _ ["DUMP"] =
     if isAdministrator (clients IntMap.! clID) then [Dump] else []
--}
 
-handleCmd_NotEntered _ = return [ProtocolError "Incorrect command (state: not entered)"]
+
+handleCmd_NotEntered clID _ _ _ = [ProtocolError "Incorrect command (state: not entered)"]
