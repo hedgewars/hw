@@ -494,6 +494,7 @@ case Kind of
                 end;
      gtJetpack: begin
                 gear^.Health:= 2000;
+                gear^.Damage:= 100
                 end;
      gtMolotov: begin
                 gear^.Radius:= 6;

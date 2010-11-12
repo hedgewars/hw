@@ -3059,11 +3059,13 @@ begin
     end;
 
     if Gear^.Health < 0 then Gear^.Health := 0;
-    if (GameTicks and $3F) = 0 then
+    i:= Gear^.Health div 20;
+    if i <> Gear^.Damage then
         begin
+        Gear^.Damage:= i;
         //AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
         if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
-        Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) +
+        Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) +
                      '%', cWhiteColor, fntSmall)
         end;
 
