@@ -315,3 +315,8 @@
 05:13=Časovače mín: Míny detonujú okamžite
 05:14=Časovače mín: Míny detonujú po 0-3 sekundách
 05:15=Modifikátor škody: Všetky zbrane spôsobia škodu %1%
+05:16=Na konci každého ťahu je zdravie všetkých ježkov resetované
+05:17=Počítačoví ježkovia po smrti ožijú
+05:18=Neobmedzené útoky
+05:19=Zbrane sú na konci ťahu resetované
+05:20=Zbrane nie sú zdieľané ježkami
