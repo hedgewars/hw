@@ -40,6 +40,10 @@
         <source>Edit schemes</source>
         <translation>Editar esquemas</translation>
     </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
@@ -705,7 +709,7 @@ ou escolha outro apelido:</translation>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation>Você pode encontrar os arquivos de configuração em &quot;.hedgewars&quot;. Crie cópias ou leve os arquivos com você, mas não edite eles manualmente.</translation>
+        <translation type="obsolete">Você pode encontrar os arquivos de configuração em &quot;.hedgewars&quot;. Crie cópias ou leve os arquivos com você, mas não edite eles manualmente.</translation>
     </message>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
@@ -716,6 +720,16 @@ ou escolha outro apelido:</translation>
         <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
         <translation type="unfinished">Quer economizar corda? Solte-a quando estiver no meio do ar e então atire de novo. Se você não tocar o solo, você reutilizará a corda e não desperdiçará o seu arsenal!</translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1483,6 +1497,10 @@ Algumas funcionalidades podem estar quebradas ou incompletas. Use a sua conta e 
     <message>
         <source>Sudden Death Health Decrease</source>
         <translation type="unfinished">Morte Subita: redução de vida</translation>
+    </message>
+    <message>
+        <source>Bind schemes and weapons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
