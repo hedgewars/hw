@@ -97,7 +97,7 @@ type
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
-            vgtBigExplosion, vgtChunk, vgtNote);
+            vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail);
 
     TGearsType = set of TGearType;
 

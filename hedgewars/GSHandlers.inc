@@ -705,6 +705,7 @@ procedure doStepBulletWork(Gear: PGear);
 var 
     i, x, y: LongWord;
     oX, oY: hwFloat;
+    trail: PVisualGear;
 begin
     AllInactive := false;
     inc(Gear^.Timer);
@@ -751,6 +752,29 @@ begin
             cLaserSighting := false;
         if (Ammoz[Gear^.AmmoType].Ammo.NumPerTurn <= CurrentHedgehog^.MultiShootAttacks) and
            ((GameFlags and gfArtillery) = 0) then cArtillery := false;
+        
+        // Bullet trail
+        trail := AddVisualGear(
+            hwround(CurrentHedgehog^.Gear^.X) + GetLaunchX(CurrentHedgehog^.CurAmmoType, hwSign(CurrentHedgehog^.Gear^.dX), CurrentHedgehog^.Gear^.Angle), 
+            hwround(CurrentHedgehog^.Gear^.Y) + GetLaunchY(CurrentHedgehog^.CurAmmoType, CurrentHedgehog^.Gear^.Angle),
+            vgtLineTrail
+        );
+        if trail <> nil then
+        begin
+            trail^.dX := Gear^.X.QWordValue / _1.QWordValue;
+            trail^.dY := Gear^.Y.QWordValue / _1.QWordValue;
+            
+            // reached edge of land. assume infinite beam. Extend it way out past camera
+            if (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0) 
+                or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
+            begin
+                trail^.dX := trail^.dX + (CurrentHedgehog^.Gear^.dX * LAND_WIDTH).QWordValue / _1.QWordValue;
+                trail^.dY := trail^.dY + (CurrentHedgehog^.Gear^.dY * LAND_WIDTH).QWordValue / _1.QWordValue;
+            end;
+            
+            trail^.Timer := 200;
+        end;
+        
         Gear^.doStep := @doStepShotIdle
     end;
 end;

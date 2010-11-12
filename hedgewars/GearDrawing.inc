@@ -126,22 +126,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
             //if (abs(lx-tx)>8) or (abs(ly-ty)>8) then
                 begin
-                glDisable(GL_TEXTURE_2D);
-                glEnable(GL_LINE_SMOOTH);
-
-                glLineWidth(1.0);
-
-                Tint($FF, $00, $00, $C0);
-                VertexBuffer[0].X:= hx + WorldDx;
-                VertexBuffer[0].Y:= hy + WorldDy;
-                VertexBuffer[1].X:= tx + WorldDx;
-                VertexBuffer[1].Y:= ty + WorldDy;
-
-                glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-                glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
-                Tint($FF, $FF, $FF, $FF);
-                glEnable(GL_TEXTURE_2D);
-                glDisable(GL_LINE_SMOOTH);
+                DrawLine(hx, hy, tx, ty, 1.0, $FF, $00, $00, $C0);
                 end;
             end;
         // draw crosshair

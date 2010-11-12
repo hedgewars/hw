@@ -133,6 +133,16 @@ else
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepLineTrail(Gear: PVisualGear; Steps: Longword);
+begin
+Steps := Steps;
+if Gear^.Timer <= Steps then
+    DeleteVisualGear(Gear)
+else
+    dec(Gear^.Timer, Steps)
+end;
+
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepEgg(Gear: PVisualGear; Steps: Longword);
 begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
