@@ -4,6 +4,7 @@ module Main where
 
 import Network.Socket
 import qualified Network
+import Network.BSD
 import Control.Concurrent.STM
 import Control.Concurrent.Chan
 #if defined(NEW_EXCEPTIONS)
@@ -51,7 +52,14 @@ main = withSocketsDo $ do
     let serverInfo = serverInfo'
 #endif
 
+
+    proto <- getProtocolNumber "tcp"
     Exception.bracket
-        (Network.listenOn $ Network.PortNumber $ listenPort serverInfo)
+        (socket AF_INET Stream proto)
         sClose
-        (startServer serverInfo)
+        (\sock -> do
+            setSocketOption sock ReuseAddr 1
+            bindSocket sock (SockAddrInet (listenPort serverInfo) iNADDR_ANY)
+            listen sock maxListenQueue
+            startServer serverInfo sock
+        )
