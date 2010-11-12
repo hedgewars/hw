@@ -438,7 +438,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
         case amt of
             amAirAttack,
-            amMineStrike: DrawRotated(sprHandAirAttack, sx, oy, sign, 0);
+            amMineStrike,
+            amDrillStrike: DrawRotated(sprHandAirAttack, sx, oy, sign, 0);
             amPickHammer: DrawHedgehog(sx, sy,
                         sign,
                         1,

@@ -134,7 +134,7 @@ type
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
-            amResurrector);
+            amResurrector, amDrillStrike);
 
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
 
@@ -2183,6 +2183,7 @@ const
             ejectX: 0;
             ejectY: 0),
 
+// Ressurrector
         (NameId: sidResurrector;
             NameTex: nil;
             Probability: 0;
@@ -2204,6 +2205,33 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
+
+// DrillStrike
+            (NameId: sidDrillStrike;
+            NameTex: nil;
+            Probability: 200;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoCrosshair or
+                            ammoprop_NeedTarget or
+                            ammoprop_AttackingPut or
+                            ammoprop_DontHold or
+                            ammoprop_NotBorder;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amDrillStrike;
+                AttackVoice: sndIncoming);
+            Slot: 5;
+            TimeAfterTurn: 0;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 6;
+            PosCount: 2;
+            PosSprite: sprAmAirplane;
             ejectX: 0;
             ejectY: 0)
         );

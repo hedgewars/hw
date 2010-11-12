@@ -50,6 +50,7 @@
 00:47=Sticky Mine
 00:48=Hammer
 00:49=Resurrector
+00:50=Drill Strike
 
 01:00=Let's fight!
 01:01=Round draw
@@ -431,6 +432,7 @@
 03:47=Stick these somewhere useful!
 03:48=It's Hammer time!
 03:49=Does what you guess
+03:50=Moles fan
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power

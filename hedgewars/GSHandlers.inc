@@ -2059,6 +2059,10 @@ begin
             2: for i:= -19 to 19 do
                    FollowGear := AddGear(hwRound(Gear^.X) + i div 3, hwRound(Gear^.Y), gtFlame, 0,
                                  _0_001 * i, _0, 0);
+            3: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtDrill, 0, cBombsSpeed *
+                             Gear^.Tag, _0, 0);
+            //4: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtWaterMelon, 0, cBombsSpeed *
+            //                 Gear^.Tag, _0, 5000);
         end;
         Gear^.dX := Gear^.dX + int2hwFloat(30 * Gear^.Tag)
     end;
