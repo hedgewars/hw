@@ -428,7 +428,7 @@
     NSString *modelId = modelType();
     if ([modelId hasPrefix:@"iPhone1"] ||                                   // = iPhone or iPhone 3G
         [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])   // = iPod Touch or iPod Touch 2G
-        tmpQuality = 0x00000001 | 0x00000002 | 0x00000040;  // rqLowRes | rqBlurryLand | rqKillFlakes
+        tmpQuality = 0x00000001 | 0x00000002 | 0x00000008 | 0x00000040;  // rqLowRes | rqBlurryLand | rqSimpleRope | rqKillFlakes
     else if ([modelId hasPrefix:@"iPhone2"] ||                              // = iPhone 3GS
              [modelId hasPrefix:@"iPod3"])                                  // = iPod Touch 3G
             tmpQuality = 0x00000002 | 0x00000040;           // rqBlurryLand | rqKillFlakes

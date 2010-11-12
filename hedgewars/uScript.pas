@@ -52,7 +52,8 @@ uses LuaPas in 'LuaPas.pas',
     uTeams,
     uKeys,
     uChat,
-    uStats;
+    uStats,
+    uRandom;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
@@ -116,6 +117,17 @@ begin
     L:= L; // avoid compiler hint
     HideMission;
     lc_hidemission:= 0;
+end;
+
+function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) = 1 then
+        begin
+        AddCaption(lua_tostring(L, 1), cWhiteColor, capgrpMessage);
+        end
+    else
+        LuaError('Lua: Wrong number of parameters passed to AddCaption!');
+    lc_addcaption:= 0;
 end;
 
 function lc_campaignlock(L : Plua_State) : LongInt; Cdecl;
@@ -787,6 +799,28 @@ begin
         ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
     lc_setammo:= 0
 end;
+
+function lc_getrandom(L : Plua_State) : LongInt; Cdecl;
+var m : LongInt;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetRandom!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        m:= lua_tointeger(L, 1);
+        if (m > 0) then
+            lua_pushinteger(L, GetRandom(m))
+        else
+            begin
+            LuaError('Lua: Tried to pass 0 to GetRandom!');
+            lua_pushnil(L);
+            end
+        end;
+    lc_getrandom:= 1
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -1144,6 +1178,7 @@ lua_register(luaState, 'GetGearPosition', @lc_getgearposition);
 lua_register(luaState, 'ParseCommand', @lc_parsecommand);
 lua_register(luaState, 'ShowMission', @lc_showmission);
 lua_register(luaState, 'HideMission', @lc_hidemission);
+lua_register(luaState, 'AddCaption', @lc_addcaption);
 lua_register(luaState, 'SetAmmo', @lc_setammo);
 lua_register(luaState, 'PlaySound', @lc_playsound);
 lua_register(luaState, 'AddTeam', @lc_addteam);
@@ -1174,6 +1209,7 @@ lua_register(luaState, 'CampaignLock', @lc_campaignlock);
 lua_register(luaState, 'CampaignUnlock', @lc_campaignunlock);
 lua_register(luaState, 'GetGearMessage', @lc_getgearmessage);
 lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
+lua_register(luaState, 'GetRandom', @lc_getrandom);
 
 
 ScriptClearStack; // just to be sure stack is empty
