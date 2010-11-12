@@ -2729,6 +2729,8 @@ begin
         Gear^.X := Gear^.X + Gear^.dX;
         Gear^.Y := Gear^.Y + Gear^.dY;
         DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 2, 6);
+        if (Gear^.Timer mod 30) = 0 then
+            AddVisualGear(hwRound(Gear^.X + _20 * Gear^.dX), hwRound(Gear^.Y + _20 * Gear^.dY), vgtDust);
         if (CheckGearDrowning(Gear)) then
         begin
             StopSound(Gear^.SoundChannel);
