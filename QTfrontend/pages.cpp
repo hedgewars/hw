@@ -145,11 +145,15 @@ PageMain::PageMain(QWidget* parent) :
         //Tips << tr("Want to play Hedgewars any time? Grab the Mobile version for %1 and %2.", "Tips").arg("").arg("");
         Tips << tr("Keep your video card drivers up to date to avoid issues playing the game.", "Tips");
         //Tips << tr("", "Tips");
+#ifndef __APPLE__
+        Tips << tr("You're able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.", "Tips");
+#endif
 #ifdef _WIN32
         Tips << tr("You can find your Hedgewars configuration files under \"My Documents\\Hedgewars\". Create backups or take the files with you, but don't edit them by hand.", "Tips");
-        Tips << tr("You're able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.", "Tips");
-#else
-        Tips << tr("You can find your Hedgewars configuration files under \"Hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");
+#elif defined __APPLE__                                                                                                                     
+        Tips << tr("You can find your Hedgewars configuration files under \"Library/Application Support/Hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");
+#else  
+        Tips << tr("You can find your Hedgewars configuration files under \".hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");
 #endif
         mainNote->setText(QLabel::tr("Tip: ") + Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()]);
     }
