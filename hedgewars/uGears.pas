@@ -540,6 +540,7 @@ gtFlamethrower: begin
                 end;
  gtResurrector: begin
                 gear^.Radius := 100;
+                gear^.Tag := 0
                 end;
      gtWaterUp: begin
                 gear^.Tag := 47;
