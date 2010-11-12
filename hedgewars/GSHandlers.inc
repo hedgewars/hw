@@ -4244,12 +4244,13 @@ begin
 
     if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) and (TurnTimeLeft > 0) then 
         begin
-        i := getRandom(Length(graves));
+        if Length(graves) > Gear^.Tag then Gear^.Tag:= 0;
         dec(hh^.Gear^.Health);
         if (hh^.Gear^.Health = 0) and (hh^.Gear^.Damage = 0) then
             hh^.Gear^.Damage:= 1;
         RenderHealth(hh^);
-        inc(graves[i]^.Health);
+        inc(graves[Gear^.Tag]^.Health);
+        inc(Gear^.Tag)
 {-for i:= 0 to High(graves) do begin
             if hh^.Gear^.Health > 0 then begin
                 dec(hh^.Gear^.Health);
