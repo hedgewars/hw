@@ -943,7 +943,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation>Порядок ходов случаен, а не является порядком команд в списке</translation>
+        <translation>Порядок ходов случаен, а не является порядком команд в списке.</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
@@ -967,7 +967,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>AI respawns on death.</source>
-        <translation>Боты воскресают после смерти</translation>
+        <translation>Боты воскресают после смерти.</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
@@ -1553,7 +1553,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Associate file extensions</source>
-        <translation>Споставить расширения файлов</translation>
+        <translation>Сопоставить расширения файлов</translation>
     </message>
 </context>
 <context>
