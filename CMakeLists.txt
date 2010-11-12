@@ -7,7 +7,7 @@ IF(POLICY CMP0012)
 	cmake_policy(SET CMP0012 NEW)
 ENDIF()
 
-#detect subversion revision (if present)
+#detect Mercurial revision (if present)
 set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
 IF(version_suffix MATCHES "-dev")
 	set(HW_DEV true)
@@ -35,7 +35,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
 set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "9")
-set(CPACK_PACKAGE_VERSION_PATCH "14${version_suffix}")
+set(CPACK_PACKAGE_VERSION_PATCH "15${version_suffix}")
 
 #forbid in-tree building
 #IF (${CMAKE_SOURCE_DIR} MATCHES ${CMAKE_BINARY_DIR})
@@ -169,7 +169,7 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-set(HEDGEWARS_PROTO_VER 32)
+set(HEDGEWARS_PROTO_VER 34)
 
 if(WITH_SERVER)
 	message(STATUS "Server is going to be built! Make sure you have GHC installed")
