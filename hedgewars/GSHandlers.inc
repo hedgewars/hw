@@ -4043,7 +4043,7 @@ begin
         end
     else
         begin
-        i:= round(Gear^.Health / 5);
+        i:= Gear^.Health div 5;
         if i <> Gear^.Tag then
             begin
             Gear^.Tag:= i;
