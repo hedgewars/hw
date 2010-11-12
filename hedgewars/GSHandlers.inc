@@ -318,6 +318,7 @@ begin
     if Gear^.AdvBounce > 1 then dec(Gear^.AdvBounce);
 
     if isFalling then Gear^.dY := Gear^.dY + cGravity;
+    if (GameFlags and gfMoreWind) <> 0 then Gear^.dX := Gear^.dX + cWindSpeed * _4 / HHGear^.Radius;
 
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
@@ -512,7 +513,7 @@ end;
 procedure doStepShell(Gear: PGear);
 begin
     AllInactive := false;
-    Gear^.dX := Gear^.dX + cWindSpeed;
+    if (GameFlags and gfMoreWind) = 0 then Gear^.dX := Gear^.dX + cWindSpeed;
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
     begin
@@ -3050,6 +3051,7 @@ begin
             Gear^.Timer := GameTicks
             end
         end;
+    if not isUnderwater and ((GameFlags and gfMoreWind) <> 0) then HHGear^.dX := HHGear^.dX + cWindSpeed * _4 / HHGear^.Radius;
 
     // erases them all at once :-/
     if (Gear^.Timer <> 0) and (GameTicks - Gear^.Timer > 250) then
@@ -3168,19 +3170,20 @@ begin
         Gear^.Tag := 1;
 
     if (HHGear^.Message and gmUp) <> 0 then
-    begin
+        begin
         if (not HHGear^.dY.isNegative) or (HHGear^.Y > -_256) then
             HHGear^.dY := HHGear^.dY - move;
         dec(Gear^.Health, fuel);
         Gear^.MsgParam := Gear^.MsgParam or gmUp;
-    end;
+        end;
     if (HHGear^.Message and gmLeft) <> 0 then move.isNegative := true;
     if (HHGear^.Message and (gmLeft or gmRight)) <> 0 then
-    begin
+        begin
         HHGear^.dX := HHGear^.dX + (move * _0_1);
         dec(Gear^.Health, fuel div 5);
         Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
-    end;
+        end;
+    if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _4 / HHGear^.Radius;
 
     if Gear^.Health < 0 then Gear^.Health := 0;
     if ((GameTicks and $FF) = 0) and (Gear^.Health < 500) then
@@ -3188,16 +3191,15 @@ begin
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFeather);
 
     if (HHGear^.Message and gmAttack <> 0) then
-    begin
+        begin
         HHGear^.Message := HHGear^.Message and not gmAttack;
         if Gear^.FlightTime > 0 then
-        begin
-            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + 32, gtEgg, 0, Gear^.dX * _0_5, Gear^.dY, 0)
-            ;
+            begin
+            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + 32, gtEgg, 0, Gear^.dX * _0_5, Gear^.dY, 0);
             PlaySound(sndBirdyLay);
             dec(Gear^.FlightTime)
+            end;
         end;
-    end;
 
     if HHGear^.Message and (gmUp or gmPrecise or gmLeft or gmRight) <> 0 then 
         Gear^.State := Gear^.State and not gsttmpFlag;
@@ -3219,25 +3221,25 @@ begin
        or (((GameTicks and $1FF) = 0) and (not HHGear^.dY.isNegative) and TestCollisionYwithGear(
        HHGear, 1))
        or ((Gear^.Message and gmAttack) <> 0) then
-    begin
-        with HHGear^ do
         begin
+        with HHGear^ do
+            begin
             Message := 0;
             Active := true;
             State := State or gstMoving
-        end;
+            end;
         Gear^.State := Gear^.State or gstAnimation or gstTmpFlag;
         if HHGear^.dY < _0 then
-        begin
+            begin
             Gear^.dX := HHGear^.dX;
             Gear^.dY := HHGear^.dY;
-        end;
+            end;
         Gear^.Timer := 0;
         Gear^.doStep := @doStepBirdyDisappear;
         CurAmmoGear := nil;
         isCursorVisible := false;
         AfterAttack;
-    end
+        end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

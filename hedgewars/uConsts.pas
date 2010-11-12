@@ -355,6 +355,7 @@ const
     gfResetWeps          = $00200000;
     gfPerHogAmmo         = $00400000;
     gfDisableWind        = $00800000;           // only lua for now
+    gfMoreWind           = $01000000;
     // NOTE: When adding new game flags, ask yourself
     // if a "game start notice" would be useful. If so,
     // add one in uWorld.pas - look for "AddGoal".
