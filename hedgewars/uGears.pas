@@ -494,6 +494,7 @@ case Kind of
                 end;
      gtJetpack: begin
                 gear^.Health:= 2000;
+                gear^.Damage:= 100
                 end;
      gtMolotov: begin
                 gear^.Radius:= 6;
@@ -531,6 +532,7 @@ gtFlamethrower: begin
                 gear^.Tag:= 10;
                 gear^.Timer:= 10;
                 gear^.Health:= 500;
+                gear^.Damage:= 100;
                 end;
  gtPoisonCloud: begin
                 gear^.Timer:= 5000;

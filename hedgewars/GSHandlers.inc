@@ -3049,17 +3049,19 @@ begin
 
     // erases them all at once :-/
     if (Gear^.Timer <> 0) and (GameTicks - Gear^.Timer > 250) then
-    begin
+        begin
         Gear^.Timer := 0;
         Gear^.MsgParam := 0
-    end;
+        end;
 
     if Gear^.Health < 0 then Gear^.Health := 0;
-    if (GameTicks and $3F) = 0 then
+    i:= Gear^.Health div 20;
+    if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
         begin
+        Gear^.Damage:= i;
         //AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
         if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
-        Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) +
+        Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) +
                      '%', cWhiteColor, fntSmall)
         end;
 
@@ -3986,7 +3988,7 @@ procedure doStepFlamethrowerWork(Gear: PGear);
 var 
     HHGear: PGear;
     rx, ry, speed: hwFloat;
-    gX, gY: LongInt;
+    i, gX, gY: LongInt;
     Fire: PGear;
 begin
     AllInactive := false;
@@ -3996,25 +3998,25 @@ begin
     gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
     
     if (GameTicks and $FF) = 0 then
-    begin
-        if (HHGear^.Message and gmRight) <> 0 then
         begin
+        if (HHGear^.Message and gmRight) <> 0 then
+            begin
             if HHGear^.dX.isNegative and (Gear^.Tag < 20) then inc(Gear^.Tag)
             else if Gear^.Tag > 5 then dec(Gear^.Tag);
-        end
+            end
         else if (HHGear^.Message and gmLeft) <> 0 then
-        begin
+            begin
             if HHGear^.dX.isNegative and (Gear^.Tag > 5) then dec(Gear^.Tag)
             else if Gear^.Tag < 20 then inc(Gear^.Tag);
-        end
-    end;
+            end
+        end;
     
     dec(Gear^.Timer);
     if Gear^.Timer = 0 then
-    begin
+        begin
         dec(Gear^.Health);
         if (Gear^.Health mod 10) = 0 then
-        begin
+            begin
             rx := rndSign(getRandom * _0_1);
             ry := rndSign(getRandom * _0_1);
             speed := _0_8 * (_10 / Gear^.Tag);
@@ -4028,21 +4030,26 @@ begin
                 Fire := AddGear(gx, gy, gtFlame, 0,
                             SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-        end;
+            end;
         Gear^.Timer:= Gear^.Tag
-    end;
+        end;
 
     if (Gear^.Health = 0) or (HHGear^.Damage <> 0) then
-    begin
+        begin
         DeleteGear(Gear);
         AfterAttack
-    end
+        end
     else
-    begin
-        if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
-        Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 5)) +
-                     '%', cWhiteColor, fntSmall) 
-    end
+        begin
+        i:= Gear^.Health div 5;
+        if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+            begin
+            Gear^.Damage:= i;
+            if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
+            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) +
+                         '%', cWhiteColor, fntSmall)
+            end
+        end
 end;
 
 procedure doStepFlamethrower(Gear: PGear);
