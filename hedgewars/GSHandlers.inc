@@ -4246,7 +4246,7 @@ begin
 
     if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) and (TurnTimeLeft > 0) then 
         begin
-        if Length(graves) > Gear^.Tag then Gear^.Tag:= 0;
+        if Length(graves) >= Gear^.Tag then Gear^.Tag:= 0;
         dec(hh^.Gear^.Health);
         if (hh^.Gear^.Health = 0) and (hh^.Gear^.Damage = 0) then
             hh^.Gear^.Damage:= 1;
