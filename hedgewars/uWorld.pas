@@ -149,14 +149,14 @@ ScreenFadeValue:= sfMax;
 ScreenFadeSpeed:= 1;
 
 // modified mine timers?
-if cMinesTime <> 3000 then
+if cMinesTime <> 3 then
     begin
     if cMinesTime = 0 then
         g:= AddGoal(g, gfAny, gidNoMineTimer)
     else if cMinesTime < 0 then
         g:= AddGoal(g, gfAny, gidRandomMineTimer)
     else
-        g:= AddGoal(g, gfAny, gidMineTimer, cMinesTime div 1000);
+        g:= AddGoal(g, gfAny, gidMineTimer, cMinesTime);
     end;
 
 // if the string has been set, show it for (default timeframe) seconds
