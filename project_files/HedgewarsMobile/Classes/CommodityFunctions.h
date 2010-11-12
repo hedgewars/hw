@@ -60,9 +60,6 @@
 #define DEFAULT_NETGAME_PORT    46631
 
 
-void createTeamNamed (NSString *nameWithoutExt);
-void createWeaponNamed (NSString *nameWithoutExt, int type);
-void createSchemeNamed (NSString *nameWithoutExt);
 void print_free_memory (void);
 void playSound (NSString *snd);
 void popError (const char *title, const char *message);

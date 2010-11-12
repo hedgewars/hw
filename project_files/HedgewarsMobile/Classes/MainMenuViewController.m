@@ -20,7 +20,7 @@
 
 
 #import "MainMenuViewController.h"
-#import "CommodityFunctions.h"
+#import "CreationChamber.h"
 #import "SDL_uikitappdelegate.h"
 #import "PascalImports.h"
 #import "GameConfigViewController.h"
@@ -35,84 +35,67 @@
     return rotationManager(interfaceOrientation);
 }
 
-// using a different thread for audio 'cos it's slow
--(void) initAudioThread {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    // do somthing in the future
-    [pool release];
-}
-
 // check if some configuration files are already set; if they are present it means that the current copy must be updated
 -(void) createNecessaryFiles {
-    NSError *err = nil;
-    NSString *directoryToCheck, *fileToCheck, *fileToUpdate;
+    NSString *sourceFile, *destinationFile;
     NSString *resDir = [[NSBundle mainBundle] resourcePath];
     DLog(@"Creating necessary files");
     
-    // create an empty saves directory by deleting the previous one (saves are incompatible between releases)
+    // SAVES - just delete and overwrite
     if ([[NSFileManager defaultManager] fileExistsAtPath:SAVES_DIRECTORY()])
         [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
     [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY() withIntermediateDirectories:NO attributes:nil error:NULL];
     
-    // if the settings file is already present, we merge current preferences with the update
-    fileToCheck = [NSString stringWithFormat:@"%@/Settings/settings.plist",resDir];
+    // SETTINGS FILE - merge when present
+    NSString *baseSettingsFile = [NSString stringWithFormat:@"%@/Settings/settings.plist",resDir];
     if ([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()]) {
         NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
-        NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:fileToCheck];
+        NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:baseSettingsFile];
+        // the order of what adds what is important
         [update addEntriesFromDictionary:settings];
         [settings release];
         [update writeToFile:SETTINGS_FILE() atomically:YES];
         [update release];
     } else 
-        [[NSFileManager defaultManager] copyItemAtPath:fileToCheck toPath:SETTINGS_FILE() error:&err];
-    
-    // TODO: scrap this and always copy the bundled files; update exisising ones in some way
-    // if the teams are already present we merge the old teams, else we copy new teams
-    directoryToCheck = [NSString stringWithFormat:@"%@/Settings/Teams",resDir];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:TEAMS_DIRECTORY()]) {
-        for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directoryToCheck error:&err]) {
-            fileToCheck = [NSString stringWithFormat:@"%@/%@",TEAMS_DIRECTORY(),str];
-            fileToUpdate = [NSString stringWithFormat:@"%@/Settings/Teams/%@",resDir,str];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:fileToCheck]) {
-                NSDictionary *team = [[NSDictionary alloc] initWithContentsOfFile:fileToCheck];
-                NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:fileToUpdate];
-                [update addEntriesFromDictionary:team];
-                [team release];
-                [update writeToFile:fileToCheck atomically:YES];
-                [update release];
-            } else
-                [[NSFileManager defaultManager] copyItemAtPath:fileToUpdate toPath:fileToCheck error:&err];
-        }
-    } else
-        [[NSFileManager defaultManager] copyItemAtPath:directoryToCheck toPath:TEAMS_DIRECTORY() error:&err];
-    
-    // TODO: scrap this and always copy the bundled files; update exisising ones in some way
-    // the same holds for schemes (but they're dictionaries containing arrays)
-    directoryToCheck = [NSString stringWithFormat:@"%@/Settings/Schemes",resDir];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()]) {
-        for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directoryToCheck error:nil]) {
-            fileToCheck = [NSString stringWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),str];
-            fileToUpdate = [NSString stringWithFormat:@"%@/Settings/Schemes/%@",resDir,str];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:fileToCheck]) {
-                NSDictionary *scheme = [[NSDictionary alloc] initWithContentsOfFile:fileToCheck];
-                NSDictionary *update = [[NSDictionary alloc] initWithContentsOfFile:fileToUpdate];
-                if ([[update objectForKey:@"basic"] count] > [[scheme objectForKey:@"basic"] count] ||
-                    [[update objectForKey:@"gamemod"] count] > [[scheme objectForKey:@"gamemod"] count])
-                    [update writeToFile:fileToCheck atomically:YES];
-                [update release];
-                [scheme release];
-            } else
-                [[NSFileManager defaultManager] copyItemAtPath:fileToUpdate toPath:fileToCheck error:&err];
-        }
-    } else
-        [[NSFileManager defaultManager] copyItemAtPath:directoryToCheck toPath:SCHEMES_DIRECTORY() error:&err];
-    
-    // weapons are autoupdated at runtime but it's better to update then every new version
+        [[NSFileManager defaultManager] copyItemAtPath:baseSettingsFile toPath:SETTINGS_FILE() error:NULL];
+
+    // TEAMS - update exisiting teams with new format
+    if ([[NSFileManager defaultManager] fileExistsAtPath:TEAMS_DIRECTORY()] == NO) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:TEAMS_DIRECTORY()
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:NULL];
+        // we copy teams only the first time because it's unlikely that newer ones are going to be added
+        NSString *baseTeamsDir = [NSString stringWithFormat:@"%@/Settings/Teams",resDir];
+        for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:baseTeamsDir error:NULL]) {
+            sourceFile = [baseTeamsDir stringByAppendingString:str];
+            destinationFile = [TEAMS_DIRECTORY() stringByAppendingString:str];
+            [[NSFileManager defaultManager] copyItemAtPath:sourceFile toPath:destinationFile error:NULL];
+        }  
+    }
+    // TODO: is merge needed?
+
+    // SCHEMES - update old stuff and add new stuff
+    if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == NO)
+        [[NSFileManager defaultManager] createDirectoryAtPath:SCHEMES_DIRECTORY()
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:NULL];
+    // TODO: do the merge if necessary
+    // we overwrite the default ones because it is likely that new modes are added every release
+    NSString *baseSchemesDir = [NSString stringWithFormat:@"%@/Settings/Schemes",resDir];
+    for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:baseSchemesDir error:NULL]) {
+        sourceFile = [baseSchemesDir stringByAppendingString:str];
+        destinationFile = [SCHEMES_DIRECTORY() stringByAppendingString:str];
+        [[NSFileManager defaultManager] copyItemAtPath:sourceFile toPath:destinationFile error:NULL];
+    }
+
+    // WEAPONS - always overwrite
     if ([[NSFileManager defaultManager] fileExistsAtPath:WEAPONS_DIRECTORY()] == NO)
         [[NSFileManager defaultManager] createDirectoryAtPath:WEAPONS_DIRECTORY()
                                   withIntermediateDirectories:YES
                                                    attributes:nil
-                                                        error:&err];
+                                                        error:NULL];
     createWeaponNamed(@"Default", 0);
     createWeaponNamed(@"Crazy", 1);
     createWeaponNamed(@"Pro mode", 2);
@@ -120,10 +103,7 @@
     createWeaponNamed(@"Clean slate", 4);
     createWeaponNamed(@"Minefield", 5);
 
-    if (err != nil) 
-        DLog(@"%@", err);
-    else
-        DLog(@"Success");
+    DLog(@"Success");
 }
 
 #pragma mark -

@@ -20,8 +20,8 @@
 
 
 #import "TeamSettingsViewController.h"
+#import "CreationChamber.h"
 #import "SingleTeamViewController.h"
-#import "CommodityFunctions.h"
 
 @implementation TeamSettingsViewController
 @synthesize listOfTeams;

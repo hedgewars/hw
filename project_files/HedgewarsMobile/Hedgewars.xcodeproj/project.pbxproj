@@ -25,6 +25,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		61006F95128DE31F00EBA7F7 /* CreationChamber.m in Sources */ = {isa = PBXBuildFile; fileRef = 61006F94128DE31F00EBA7F7 /* CreationChamber.m */; };
 		610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43411E290650040BA66 /* Icon-Small@2x.png */; };
 		610D5FB31270E26C0033333A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43611E290650040BA66 /* Icon@2x.png */; };
 		611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D9BF912497E9800008271 /* SavedGamesViewController.m */; };
@@ -730,6 +731,8 @@
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hedgewars_Prefix.pch; sourceTree = "<group>"; };
+		61006F93128DE31F00EBA7F7 /* CreationChamber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CreationChamber.h; path = Classes/CreationChamber.h; sourceTree = "<group>"; };
+		61006F94128DE31F00EBA7F7 /* CreationChamber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreationChamber.m; path = Classes/CreationChamber.m; sourceTree = "<group>"; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
 		611D9BFA12497E9800008271 /* SavedGamesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SavedGamesViewController.xib; path = ../Resources/SavedGamesViewController.xib; sourceTree = "<group>"; };
@@ -1023,6 +1026,8 @@
 				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
 				61D2059F127CDD1100ABD83E /* ObjcExports.h */,
 				61D205A0127CDD1100ABD83E /* ObjcExports.m */,
+				61006F93128DE31F00EBA7F7 /* CreationChamber.h */,
+				61006F94128DE31F00EBA7F7 /* CreationChamber.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -2284,6 +2289,7 @@
 				61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */,
 				61399013125D19C0003C2DC0 /* uMobile.pas in Sources */,
 				61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */,
+				61006F95128DE31F00EBA7F7 /* CreationChamber.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

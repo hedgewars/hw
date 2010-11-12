@@ -761,15 +761,16 @@ begin
         );
         if trail <> nil then
         begin
-            trail^.dX := Gear^.X.QWordValue / _1.QWordValue;
-            trail^.dY := Gear^.Y.QWordValue / _1.QWordValue;
+            // http://mantis.freepascal.org/view.php?id=17714 hits again
+            trail^.dX := Gear^.X.QWordValue / SignAs(_1,_1).QWordValue;
+            trail^.dY := Gear^.Y.QWordValue / SignAs(_1,_1).QWordValue;
             
             // reached edge of land. assume infinite beam. Extend it way out past camera
             if (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0) 
                 or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
             begin
-                trail^.dX := trail^.dX + (CurrentHedgehog^.Gear^.dX * LAND_WIDTH).QWordValue / _1.QWordValue;
-                trail^.dY := trail^.dY + (CurrentHedgehog^.Gear^.dY * LAND_WIDTH).QWordValue / _1.QWordValue;
+                trail^.dX := trail^.dX + (CurrentHedgehog^.Gear^.dX * LAND_WIDTH).QWordValue / SignAs(_1,_1).QWordValue;
+                trail^.dY := trail^.dY + (CurrentHedgehog^.Gear^.dY * LAND_WIDTH).QWordValue / SignAs(_1,_1).QWordValue;
             end;
             
             trail^.Timer := 200;

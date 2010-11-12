@@ -4,7 +4,6 @@ var i, t: LongInt;
     sign, hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
     dx, dy, ax, ay, aAngle, dAngle, hAngle, lx, ly: real;  // laser, change
     defaultPos, HatVisible: boolean;
-    VertexBuffer: array [0..1] of TVertex2f;
     HH: PHedgehog;
     CurWeapon: PAmmo;
 begin
