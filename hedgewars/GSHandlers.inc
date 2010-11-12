@@ -4044,9 +4044,9 @@ begin
     else
         begin
         i:= Gear^.Health div 5;
-        if i <> Gear^.Tag then
+        if i <> Gear^.Damage then
             begin
-            Gear^.Tag:= i;
+            Gear^.Damage:= i;
             if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
             Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) +
                          '%', cWhiteColor, fntSmall)

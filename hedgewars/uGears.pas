@@ -531,7 +531,7 @@ gtFlamethrower: begin
                 gear^.Tag:= 10;
                 gear^.Timer:= 10;
                 gear^.Health:= 500;
-                gear^.Tag:= 100;
+                gear^.Damage:= 100;
                 end;
  gtPoisonCloud: begin
                 gear^.Timer:= 5000;
