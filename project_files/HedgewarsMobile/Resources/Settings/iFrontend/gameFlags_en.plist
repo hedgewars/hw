@@ -170,5 +170,13 @@
 		<key>title</key>
 		<string>Per Hedgehog Ammo</string>
 	</dict>
+	<dict>
+		<key>description</key>
+		<string>Wind will not affect weapons</string>
+		<key>image</key>
+		<string>NoWind</string>
+		<key>title</key>
+		<string>Disable Wind</string>
+	</dict>
 </array>
 </plist>

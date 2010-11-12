@@ -38,7 +38,7 @@
 // check if some configuration files are already set; if they are present it means that the current copy must be updated
 -(void) createNecessaryFiles {
     NSString *sourceFile, *destinationFile;
-    NSString *resDir = [[NSBundle mainBundle] resourcePath];
+    NSString *resourcesDir = [[NSBundle mainBundle] resourcePath];
     DLog(@"Creating necessary files");
     
     // SAVES - just delete and overwrite
@@ -47,7 +47,7 @@
     [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY() withIntermediateDirectories:NO attributes:nil error:NULL];
     
     // SETTINGS FILE - merge when present
-    NSString *baseSettingsFile = [NSString stringWithFormat:@"%@/Settings/settings.plist",resDir];
+    NSString *baseSettingsFile = [[NSString alloc] initWithFormat:@"%@/Settings/settings.plist",resourcesDir];
     if ([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()]) {
         NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
         NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:baseSettingsFile];
@@ -58,6 +58,7 @@
         [update release];
     } else 
         [[NSFileManager defaultManager] copyItemAtPath:baseSettingsFile toPath:SETTINGS_FILE() error:NULL];
+    [baseSettingsFile release];
 
     // TEAMS - update exisiting teams with new format
     if ([[NSFileManager defaultManager] fileExistsAtPath:TEAMS_DIRECTORY()] == NO) {
@@ -66,12 +67,14 @@
                                                    attributes:nil
                                                         error:NULL];
         // we copy teams only the first time because it's unlikely that newer ones are going to be added
-        NSString *baseTeamsDir = [NSString stringWithFormat:@"%@/Settings/Teams",resDir];
+        NSString *baseTeamsDir = [[NSString alloc] initWithFormat:@"%@/Settings/Teams/",resourcesDir];
         for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:baseTeamsDir error:NULL]) {
             sourceFile = [baseTeamsDir stringByAppendingString:str];
             destinationFile = [TEAMS_DIRECTORY() stringByAppendingString:str];
+            [[NSFileManager defaultManager] removeItemAtPath:destinationFile error:NULL];
             [[NSFileManager defaultManager] copyItemAtPath:sourceFile toPath:destinationFile error:NULL];
-        }  
+        }
+        [baseTeamsDir release];
     }
     // TODO: is merge needed?
 
@@ -83,12 +86,14 @@
                                                         error:NULL];
     // TODO: do the merge if necessary
     // we overwrite the default ones because it is likely that new modes are added every release
-    NSString *baseSchemesDir = [NSString stringWithFormat:@"%@/Settings/Schemes",resDir];
+    NSString *baseSchemesDir = [[NSString alloc] initWithFormat:@"%@/Settings/Schemes/",resourcesDir];
     for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:baseSchemesDir error:NULL]) {
         sourceFile = [baseSchemesDir stringByAppendingString:str];
         destinationFile = [SCHEMES_DIRECTORY() stringByAppendingString:str];
+        [[NSFileManager defaultManager] removeItemAtPath:destinationFile error:NULL];
         [[NSFileManager defaultManager] copyItemAtPath:sourceFile toPath:destinationFile error:NULL];
     }
+    [baseSchemesDir release];
 
     // WEAPONS - always overwrite
     if ([[NSFileManager defaultManager] fileExistsAtPath:WEAPONS_DIRECTORY()] == NO)
@@ -102,6 +107,7 @@
     createWeaponNamed(@"Shoppa", 3);
     createWeaponNamed(@"Clean slate", 4);
     createWeaponNamed(@"Minefield", 5);
+    createWeaponNamed(@"Thinking with Portals", 6);
 
     DLog(@"Success");
 }

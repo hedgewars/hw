@@ -37,6 +37,7 @@
         textField.returnKeyType = UIReturnKeyDone;
         textField.adjustsFontSizeToFitWidth = YES;
         textField.userInteractionEnabled = YES;
+        textField.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
         [textField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
 
         [self.contentView addSubview:textField];
@@ -76,8 +77,6 @@
         skew +=2;
     }
 
-    // sometimes the bold property gets lost
-    textField.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
     textField.frame = CGRectMake(boundsX+offset+10, skew+10, 300, [UIFont labelFontSize] + 4);
 }
 

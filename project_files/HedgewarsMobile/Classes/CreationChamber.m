@@ -76,45 +76,52 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
     switch (type) {
         case 0: //default
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9391929422199121032235111001201000000211110101011",@"ammostore_initialqt",
-                         @"0405040541600655546554464776576666666155510101117",@"ammostore_probability",
-                         @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1311110312111111123114111111111111111211111101111",@"ammostore_crate", nil];
+                         @"93919294221991210322351110012010000002111101010111",@"ammostore_initialqt",
+                         @"04050405416006555465544647765766666661555101011154",@"ammostore_probability",
+                         @"00000000000002055000000400070040000000002000000006",@"ammostore_delay",
+                         @"13111103121111111231141111111111111112111111011111",@"ammostore_crate", nil];
             break;
         case 1: //crazy
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9999999999999999992999999999999999299999999909999",@"ammostore_initialqt",
-                         @"1111110111111111111111111111111111111111111101111",@"ammostore_probability",
-                         @"0000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"1311110312111111123114111111111111111211110101111",@"ammostore_crate", nil];
+                         @"99999999999999999929999999999999992999999999099999",@"ammostore_initialqt",
+                         @"11111101111111111111111111111111111111111111011111",@"ammostore_probability",
+                         @"00000000000000000000000000000000000000000000000000",@"ammostore_delay",
+                         @"13111103121111111231141111111111111112111101011111",@"ammostore_crate", nil];
             break;
         case 2: //pro mode
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9090009000000000000009000000000000000000000000000",@"ammostore_initialqt",
-                         @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
-                         @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111100101111",@"ammostore_crate", nil];
+                         @"90900090000000000000090000000000000000000000000000",@"ammostore_initialqt",
+                         @"00000000000000000000000000000000000000000000000000",@"ammostore_probability",
+                         @"00000000000002055000000400070040000000002000000000",@"ammostore_delay",
+                         @"11111111111111111111111111111111111111111001011111",@"ammostore_crate", nil];
             break;
         case 3: //shoppa
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"0000009900000000000000000000000000000000000000000",@"ammostore_initialqt",
-                         @"4444410044244402210112121222422000000002000400010",@"ammostore_probability",
-                         @"0000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111101101111",@"ammostore_crate", nil];
+                         @"00000099000000000000000000000000000000000000000000",@"ammostore_initialqt",
+                         @"44444100442444022101121212224220000000020004000100",@"ammostore_probability",
+                         @"00000000000000000000000000000000000000000000000000",@"ammostore_delay",
+                         @"11111111111111111111111111111111111111111011011111",@"ammostore_crate", nil];
             break;
         case 4: //clean slate
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"1010009000010000011000000000000000000000000000001",@"ammostore_initialqt",
-                         @"0405040541600655546554464776576666666155510101117",@"ammostore_probability",
-                         @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1311110312111111123114111111111111111211111101111",@"ammostore_crate", nil];
+                         @"10100090000100000110000000000000000000000000000010",@"ammostore_initialqt",
+                         @"04050405416006555465544647765766666661555101011154",@"ammostore_probability",
+                         @"00000000000002055000000400070040000000002000000000",@"ammostore_delay",
+                         @"13111103121111111231141111111111111112111111011111",@"ammostore_crate", nil];
             break;
         case 5: //minefield
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"0000009900090000000300000000000000000000000000000",@"ammostore_initialqt",
-                         @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
-                         @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111111101111",@"ammostore_crate", nil];
+                         @"00000099000900000003000000000000000000000000000000",@"ammostore_initialqt",
+                         @"00000000000000000000000000000000000000000000000000",@"ammostore_probability",
+                         @"00000000000002055000000400070040000000002000000000",@"ammostore_delay",
+                         @"11111111111111111111111111111111111111111111011111",@"ammostore_crate", nil];
+            break;
+        case 6: //thinking with portals
+            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
+                         @"90000090020000000021000000000000001100000900000000",@"ammostore_initialqt",
+                         @"04050405416006555465544647765766666661555101011154",@"ammostore_probability",
+                         @"00000000000002055000000400070040000000002000000006",@"ammostore_delay",
+                         @"13111103121111111231141111111111111112111111011111",@"ammostore_crate", nil];
             break;
         default:
             NSLog(@"Nope");
@@ -176,6 +183,7 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                                    [NSNumber numberWithBool:NO],      //infattack
                                    [NSNumber numberWithBool:NO],      //resetweaps
                                    [NSNumber numberWithBool:NO],      //perhogammo
+                                   [NSNumber numberWithBool:NO],      //nowind
                                    nil];
     
     NSMutableDictionary *theScheme = [[NSMutableDictionary alloc] initWithObjectsAndKeys:

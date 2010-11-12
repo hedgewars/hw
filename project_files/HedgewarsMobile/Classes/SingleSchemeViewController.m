@@ -153,6 +153,7 @@
          
             if (row == 0) {
                 editableCell.textField.text = self.schemeName;
+                editableCell.textField.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
             } else {
                 editableCell.minimumCharacters = 0;
                 editableCell.textField.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];

@@ -144,6 +144,7 @@
         [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
         level = 0;
     }
+    [sections release];
 
     DLog(@"New level is %d",level);
     for (NSMutableDictionary *hog in hogs)
@@ -151,8 +152,6 @@
 
     [self.tableView reloadData];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-
-    [sections release];
 }
 
 
@@ -166,8 +165,10 @@
         if (newRow != oldRow) {
             NSMutableArray *hogs = [self.teamDictionary objectForKey:@"hedgehogs"];
             
+            NSInteger level = newRow + 1;
             for (NSMutableDictionary *hog in hogs)
-                [hog setObject:[NSNumber numberWithInt:newRow+1] forKey:@"level"];
+                [hog setObject:[NSNumber numberWithInt:level] forKey:@"level"];
+            DLog(@"New level is %d",level);
             
             // tell our boss to write this new stuff on disk
             [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];

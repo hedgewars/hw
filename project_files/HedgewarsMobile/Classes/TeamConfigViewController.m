@@ -125,7 +125,12 @@
             [cell addSubview:squareButton];
             [squareButton release];
 
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12+88+6+36, 10, 103, 25)];
+            NSInteger length;
+            if (IS_IPAD())
+                length = 103;
+            else
+                length = 285;
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12+88+6+36, 10, length, 25)];
             label.textAlignment = UITextAlignmentLeft;
             label.minimumFontSize = 11;
             label.adjustsFontSizeToFitWidth = YES;
