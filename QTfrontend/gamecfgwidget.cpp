@@ -157,7 +157,7 @@ quint32 GameCFGWidget::getGameFlags() const
 
 quint32 GameCFGWidget::getInitHealth() const
 {
-    return schemeData(24).toInt();
+    return schemeData(25).toInt();
 }
 
 QStringList GameCFGWidget::getFullConfig() const
@@ -165,18 +165,18 @@ QStringList GameCFGWidget::getFullConfig() const
     QStringList sl;
     sl.append("eseed " + pMapContainer->getCurrentSeed());
     sl.append(QString("e$gmflags %1").arg(getGameFlags()));
-    sl.append(QString("e$damagepct %1").arg(schemeData(22).toInt()));
-    sl.append(QString("e$turntime %1").arg(schemeData(23).toInt() * 1000));
-    sl.append(QString("e$minestime %1").arg(schemeData(27).toInt()));
-    sl.append(QString("e$minesnum %1").arg(schemeData(28).toInt()));
-    sl.append(QString("e$sd_turns %1").arg(schemeData(25).toInt()));
-    sl.append(QString("e$casefreq %1").arg(schemeData(26).toInt()));
-    sl.append(QString("e$minedudpct %1").arg(schemeData(29).toInt()));
-    sl.append(QString("e$explosives %1").arg(schemeData(30).toInt()));
-    sl.append(QString("e$healthprob %1").arg(schemeData(31).toInt()));
-    sl.append(QString("e$hcaseamount %1").arg(schemeData(32).toInt()));
-    sl.append(QString("e$waterrise %1").arg(schemeData(33).toInt()));
-    sl.append(QString("e$healthdec %1").arg(schemeData(34).toInt()));
+    sl.append(QString("e$damagepct %1").arg(schemeData(23).toInt()));
+    sl.append(QString("e$turntime %1").arg(schemeData(24).toInt() * 1000));
+    sl.append(QString("e$sd_turns %1").arg(schemeData(26).toInt()));
+    sl.append(QString("e$casefreq %1").arg(schemeData(27).toInt()));
+    sl.append(QString("e$minestime %1").arg(schemeData(28).toInt()));
+    sl.append(QString("e$minesnum %1").arg(schemeData(29).toInt()));
+    sl.append(QString("e$minedudpct %1").arg(schemeData(30).toInt()));
+    sl.append(QString("e$explosives %1").arg(schemeData(31).toInt()));
+    sl.append(QString("e$healthprob %1").arg(schemeData(32).toInt()));
+    sl.append(QString("e$hcaseamount %1").arg(schemeData(33).toInt()));
+    sl.append(QString("e$waterrise %1").arg(schemeData(34).toInt()));
+    sl.append(QString("e$healthdec %1").arg(schemeData(35).toInt()));
     sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
     sl.append(QString("e$mapgen %1").arg(pMapContainer->get_mapgen()));
     sl.append(QString("e$maze_size %1").arg(pMapContainer->get_maze_size()));

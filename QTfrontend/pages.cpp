@@ -1800,19 +1800,20 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(TBW_infattack, 19);
     mapper->addMapping(TBW_resetweps, 20);
     mapper->addMapping(TBW_perhogammo, 21);
-    mapper->addMapping(SB_DamageModifier, 22);
-    mapper->addMapping(SB_TurnTime, 23);
-    mapper->addMapping(SB_InitHealth, 24);
-    mapper->addMapping(SB_SuddenDeath, 25);
-    mapper->addMapping(SB_CaseProb, 26);
-    mapper->addMapping(SB_MinesTime, 27);
-    mapper->addMapping(SB_Mines, 28);
-    mapper->addMapping(SB_MineDuds, 29);
-    mapper->addMapping(SB_Explosives, 30);
-    mapper->addMapping(SB_HealthCrates, 31);
-    mapper->addMapping(SB_CrateHealth, 32);
-    mapper->addMapping(SB_WaterRise, 33);
-    mapper->addMapping(SB_HealthDecrease, 34);
+    mapper->addMapping(TBW_nowind, 22);
+    mapper->addMapping(SB_DamageModifier, 23);
+    mapper->addMapping(SB_TurnTime, 24);
+    mapper->addMapping(SB_InitHealth, 25);
+    mapper->addMapping(SB_SuddenDeath, 26);
+    mapper->addMapping(SB_CaseProb, 27);
+    mapper->addMapping(SB_MinesTime, 28);
+    mapper->addMapping(SB_Mines, 29);
+    mapper->addMapping(SB_MineDuds, 30);
+    mapper->addMapping(SB_Explosives, 31);
+    mapper->addMapping(SB_HealthCrates, 32);
+    mapper->addMapping(SB_CrateHealth, 33);
+    mapper->addMapping(SB_WaterRise, 34);
+    mapper->addMapping(SB_HealthDecrease, 35);
 
     mapper->toFirst();
 }
