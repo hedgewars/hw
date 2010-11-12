@@ -481,6 +481,7 @@ private:
     ToggleButtonWidget * TBW_infattack;
     ToggleButtonWidget * TBW_resetweps;
     ToggleButtonWidget * TBW_perhogammo;
+    ToggleButtonWidget * TBW_nowind;
 
     QSpinBox * SB_DamageModifier;
     QSpinBox * SB_TurnTime;

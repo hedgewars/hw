@@ -149,6 +149,8 @@ quint32 GameCFGWidget::getGameFlags() const
         result |= 0x00200000;       // reset weaps
     if (schemeData(21).toBool())
         result |= 0x00400000;       // per hog ammo
+    if (schemeData(22).toBool())
+        result |= 0x00800000;       // no wind
 
     return result;
 }

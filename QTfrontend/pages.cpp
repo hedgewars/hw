@@ -1558,6 +1558,10 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_perhogammo->setToolTip("<b>" + ToggleButtonWidget::tr("Per Hedgehog Ammo") + "</b>:<br />" + tr("Each hedgehog has its own ammo. It does not share with the team."));
     glGMLayout->addWidget(TBW_perhogammo,4,0,1,1);
 
+    TBW_nowind = new ToggleButtonWidget(gbGameModes, ":/res/btnNoWind.png");
+    TBW_nowind->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Wind") + "</b>:<br />" + tr("Wind will not affect weapons."));
+    glGMLayout->addWidget(TBW_nowind,4,1,1,1);
+
     // Right
     QLabel * l;
 
