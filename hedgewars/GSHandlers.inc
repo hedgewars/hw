@@ -318,7 +318,7 @@ begin
     if Gear^.AdvBounce > 1 then dec(Gear^.AdvBounce);
 
     if isFalling then Gear^.dY := Gear^.dY + cGravity;
-    if (GameFlags and gfMoreWind) <> 0 then Gear^.dX := Gear^.dX + cWindSpeed * _4 / HHGear^.Radius;
+    if (GameFlags and gfMoreWind) <> 0 then Gear^.dX := Gear^.dX + cWindSpeed * _4 / Gear^.Radius;
 
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
