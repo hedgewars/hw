@@ -376,8 +376,8 @@ or pick another nickname in game config:</source>
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
         <translation>
             <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ёж был убит в течение игры.</numerusform>
-            <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ёжа был убит в течение игры.</numerusform>
-            <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ёжей был убит в течение игры.</numerusform>
+            <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ежа были убиты в течение игры.</numerusform>
+            <numerusform>Всего &lt;b&gt;%1&lt;/b&gt; ежей были убиты в течение игры.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
