@@ -350,19 +350,6 @@
     self.staticMapCommand = staticmap;
     self.missionCommand = mission;
 
-    // nice animation for updating the table when appropriate (on iphone)
-    /*
-    if (IS_IPAD() == NO)
-        if (((oldPage == 0 || oldPage == 2) && (newPage == 1 || newPage == 3)) ||
-            ((oldPage == 1 || oldPage == 3) && (newPage == 0 || newPage == 2)) ||
-            ((oldPage == 1 && newPage == 3) || (oldPage == 3 || newPage == 1))) {
-            self.tableView.frame = CGRectMake(480, 0, 185, 276);
-            [UIView beginAnimations:@"moving in table" context:NULL];
-            self.tableView.frame = CGRectMake(295, 0, 185, 276);
-            [UIView commitAnimations];
-        }
-    */
-
     [self.tableView reloadData];
     [self updatePreview];
     oldPage = newPage;
@@ -385,13 +372,36 @@
     [string release];
     // remove a trailing "" element
     [themeArray removeLastObject];
-    NSArray *mapArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
-    NSArray *missionArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
+    NSArray *mapArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
+    NSMutableArray *mapArray = [[NSMutableArray alloc] init];
+    for (NSString *str in mapArrayFull) {
+        CGSize imgSize = PSPNGSizeFromMetaData([MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
+        //DLog(@"%@ %f %f", str, imgSize.width, imgSize.height);
+        if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
+            continue;
+        if (IS_IPAD() && imgSize.height > 1280.0f)
+            continue;
+        [mapArray addObject:str];
+    }
     
+    NSArray *missionArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
+    NSMutableArray *missionArray = [[NSMutableArray alloc] init];
+    for (NSString *str in missionArrayFull) {
+        CGSize imgSize = PSPNGSizeFromMetaData([MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
+        //DLog(@"%@ %f %f", str, imgSize.width, imgSize.height);
+        if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
+            continue;
+        if (IS_IPAD() && imgSize.height > 1280.0f)
+            continue;
+        [missionArray addObject:str];
+    }
     NSArray *array = [[NSArray alloc] initWithObjects:themeArray,mapArray,themeArray,missionArray,nil];
+    [missionArray release];
+    [themeArray release];
+    [mapArray release];
+
     self.dataSourceArray = array;
     [array release];
-    [themeArray release];
 }
 
 -(void) viewDidLoad {
@@ -469,11 +479,9 @@
 -(void) didReceiveMemoryWarning {
     self.dataSourceArray = nil;
 
-    self.previewButton = nil;
     self.tableView = nil;
     self.maxLabel = nil;
     self.sizeLabel = nil;
-    self.segmentedControl = nil;
     self.slider = nil;
 
     MSG_MEMCLEAN();

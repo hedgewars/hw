@@ -142,3 +142,47 @@ UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWid
     
     return theLabel;
 }
+
+// this routine checks for the PNG size without loading it in memory
+// https://github.com/steipete/PSFramework/blob/master/PSFramework%20Version%200.3/PhotoshopFramework/PSMetaDataFunctions.m
+CGSize PSPNGSizeFromMetaData (NSString *aFileName) {
+    // File Name to C String.
+    const char *fileName = [aFileName UTF8String];
+    // source file
+    FILE *infile = fopen(fileName, "rb");
+    if (infile == NULL) {
+        DLog(@"Can't open the file: %@", aFileName);
+        return CGSizeZero;
+    }
+
+    // Bytes Buffer.
+    unsigned char buffer[30];
+    // Grab Only First Bytes.
+    fread(buffer, 1, 30, infile);
+    // Close File.
+    fclose(infile);
+
+    // PNG Signature.
+    unsigned char png_signature[8] = {137, 80, 78, 71, 13, 10, 26, 10};
+
+    // Compare File signature.
+    if ((int)(memcmp(&buffer[0], &png_signature[0], 8))) {
+        DLog(@"The file (%@) is not a PNG file", aFileName);
+        return CGSizeZero;
+    }
+
+    // Calc Sizes. Isolate only four bytes of each size (width, height).
+    int width[4];
+    int height[4];
+    for (int d = 16; d < (16 + 4); d++) {
+        width[d-16] = buffer[d];
+        height[d-16] = buffer[d+4];
+    }
+
+    // Convert bytes to Long (Integer)
+    long resultWidth = (width[0] << (int)24) | (width[1] << (int)16) | (width[2] << (int)8) | width[3];
+    long resultHeight = (height[0] << (int)24) | (height[1] << (int)16) | (height[2] << (int)8) | height[3];
+
+    // Return Size.
+    return CGSizeMake(resultWidth,resultHeight);
+}
