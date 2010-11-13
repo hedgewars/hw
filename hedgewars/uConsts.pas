@@ -75,7 +75,7 @@ type
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
             sprSMineOff, sprSMineOn, sprHandSMine, sprHammer,
-            sprHandResurrector, sprCross
+            sprHandResurrector, sprCross, sprAirDrill
             );
 
     // Gears that interact with other Gears and/or Land
@@ -825,8 +825,13 @@ const
             (FileName: 'Cross'; Path: ptGraphics; altPath: ptNone;
                 Texture: nil; Surface: nil; Width: 108; Height: 138;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
-                tpMedium; getDimensions: false; getImageDimensions: true)
+                tpMedium; getDimensions: false; getImageDimensions: true),
             //sprCross
+            (FileName:  'AirDrill'; Path: ptGraphics; AltPath: ptNone;
+                Texture: nil; Surface: nil; Width:  16; Height: 16;
+                imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
+                tpMedium; getDimensions: false; getImageDimensions: true)
+            // sprAirDrill
             );
 
 

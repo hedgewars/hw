@@ -696,7 +696,10 @@ while Gear<>nil do
                       DrawRotatedf(sprPortal, x, y, Gear^.Tag, hwSign(Gear^.dX), Gear^.DirAngle)
                  else DrawRotatedf(sprPortal, x, y, 4 + Gear^.Tag div 2, hwSign(Gear^.dX), Gear^.DirAngle);
 
-       gtDrill: DrawRotated(sprDrill, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+           gtDrill: if (Gear^.State and gsttmpFlag) <> 0 then
+                        DrawRotated(sprAirDrill, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX))
+                    else
+                        DrawRotated(sprDrill, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 
         gtHedgehog: DrawHH(Gear, x, y);
 
