@@ -41,6 +41,10 @@
         <source>Edit schemes</source>
         <translation>Upraviť schémy</translation>
     </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
@@ -89,7 +93,7 @@
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation type="unfinished"></translation>
+        <translation>VýchodzíTím</translation>
     </message>
     <message>
         <source>Hedgewars Demo File</source>
@@ -199,7 +203,7 @@
     <name>HWNewNet</name>
     <message>
         <source>The host was not found. Please check the host name and port settings.</source>
-        <translation>Stanica nebola nájdená. Prosím, skontrolujte názov stanice a nastavenia portu.</translation>
+        <translation>Hostiteľ nebol nájdený. Prosím, skontrolujte názov hostiteľa a nastavenia portu.</translation>
     </message>
     <message>
         <source>Connection refused</source>
@@ -376,15 +380,15 @@ or pick another nickname in game config:</source>
     <message numerus="yes">
         <source>(%1 kill)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>(%1 zabitie)</numerusform>
+            <numerusform>(%1 zabití)</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; sa nazdával, že je vhodné strieľať po svojich a získal tak &lt;b&gt;%2&lt;/b&gt; bodov.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -392,7 +396,7 @@ or pick another nickname in game config:</source>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; zabil &lt;b&gt;%2&lt;/b&gt; svojich druhov.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -400,7 +404,7 @@ or pick another nickname in game config:</source>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; sa zľakol a preskočil ťah &lt;b&gt;%2&lt;/b&gt;krát.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -429,7 +433,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ak neviete, čo robiť a nechcete mrhať muníciou, preskočte ťah. Ale nerobte tak príliš často, pretože príde Náhla smrť!</translation>
     </message>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
@@ -639,12 +643,12 @@ or pick another nickname in game config:</source>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Konfiguračné súbory Hedgewars nájdete v &quot;Moje Dokumenty\Hedgewars&quot;. Vytvárajte si zálohy alebo prenášajte si tieto súbory medzi počítačmi, ale needitujte ich ručne.</translation>
     </message>
     <message>
-        <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Konfiguračné súbory Hedgewars nájdete v &quot;.hedgewars&quot; vo vašom domovskom adresári. Vytvárajte si zálohy alebo prenášajte si tieto súbory medzi počítačmi, ale needitujte ich ručne.</translation>
     </message>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
@@ -653,6 +657,11 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation>Chcete ušetriť lano? Kým ste vo vzduchu, uvoľnite ho a opäť vystreľte. Kým sa nedotknete zeme, môžete to isté lano znovu použiť bez toho, aby sa vám míňali jeho zásoby!</translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -963,7 +972,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>AI respawns on death.</source>
-        <translation type="unfinished"></translation>
+        <translation>Počítač po smrti ožije.</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
@@ -1374,7 +1383,7 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvalita</translation>
     </message>
     <message>
         <source>% Health Crates</source>
@@ -1390,6 +1399,10 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bind schemes and weapons</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1447,7 +1460,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie je možné prepísať východziu sadu zbraní &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>All file associations have been set.</source>

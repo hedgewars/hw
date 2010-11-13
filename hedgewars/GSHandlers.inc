@@ -2085,7 +2085,7 @@ begin
             2: for i:= -19 to 19 do
                    FollowGear := AddGear(hwRound(Gear^.X) + i div 3, hwRound(Gear^.Y), gtFlame, 0,
                                  _0_001 * i, _0, 0);
-            3: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtDrill, 0, cBombsSpeed *
+            3: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtDrill, gsttmpFlag, cBombsSpeed *
                              Gear^.Tag, _0, 0);
             //4: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtWaterMelon, 0, cBombsSpeed *
             //                 Gear^.Tag, _0, 5000);
@@ -2730,6 +2730,8 @@ begin
         Gear^.X := Gear^.X + Gear^.dX;
         Gear^.Y := Gear^.Y + Gear^.dY;
         DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 2, 6);
+        if (Gear^.Timer mod 30) = 0 then
+            AddVisualGear(hwRound(Gear^.X + _20 * Gear^.dX), hwRound(Gear^.Y + _20 * Gear^.dY), vgtDust);
         if (CheckGearDrowning(Gear)) then
         begin
             StopSound(Gear^.SoundChannel);
@@ -2748,7 +2750,10 @@ begin
     begin
         //out of time or exited ground
         StopSound(Gear^.SoundChannel);
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+        if (Gear^.State and gsttmpFlag) <> 0 then
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound)
+        else
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
         DeleteGear(Gear);
         exit
     end;
@@ -2764,7 +2769,9 @@ var
 begin
     AllInactive := false;
 
-    Gear^.dX := Gear^.dX + cWindSpeed;
+    if (Gear^.State and gsttmpFlag) = 0 then
+        Gear^.dX := Gear^.dX + cWindSpeed;
+
     oldDx := Gear^.dX;
     oldDy := Gear^.dY;
 
@@ -2790,7 +2797,10 @@ begin
         else
         begin
             //explode right on contact with HH
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+            if (Gear^.State and gsttmpFlag) <> 0 then
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound)
+            else
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
             DeleteGear(Gear);
             exit;
         end;
@@ -4229,7 +4239,7 @@ begin
     Gear^.doStep := @doStepHammerHitWork
 end;
 
-
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepResurrectorWork(Gear: PGear);
 var
     graves: TPGearArray;
@@ -4343,4 +4353,6 @@ begin
         Gear^.doStep := @doStepIdle;
         end
 end;
+
+////////////////////////////////////////////////////////////////////////////////
 
