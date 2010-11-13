@@ -11,7 +11,7 @@
  + New maps: ShoppaKing, Sticks, TrophyRace (Mission)
  + New utilities: Portal Gun, Resurrector
  + New weapons: Flamethrower, Hammer, Old Limburger, Piano Strike, Sticky Mines
- + Weapons' projectiles will how be launched from their barrels instead of the hog's center
+ + Weapons' projectiles will now be launched from their barrels instead of the hog's center
  + Flying Saucers may be used for moving below the water surface
  + New default game schemes: Clean Slate, Fort Mode, Timeless, Thinking with Portals, King Mode
  + New default weapon set: Clean Slate, Thinking with Portals
