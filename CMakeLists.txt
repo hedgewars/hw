@@ -214,6 +214,7 @@ endif(WIN32 AND NOT UNIX)
 
 set(CPACK_SOURCE_IGNORE_FILES
 	"~"
+    "\\\\.hg"
 	"\\\\.svn"
 	"\\\\.exe$"
 	"\\\\.a$"
