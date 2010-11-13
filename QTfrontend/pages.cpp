@@ -1563,7 +1563,7 @@ PageScheme::PageScheme(QWidget* parent) :
     glGMLayout->addWidget(TBW_perhogammo,4,0,1,1);
 
     TBW_nowind = new ToggleButtonWidget(gbGameModes, ":/res/btnNoWind.png");
-    TBW_nowind->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Wind") + "</b>:<br />" + tr("Wind will not affect weapons."));
+    TBW_nowind->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Wind") + "</b>:<br />" + tr("You will not have to worry about wind anymore."));
     glGMLayout->addWidget(TBW_nowind,4,1,1,1);
 
     TBW_morewind = new ToggleButtonWidget(gbGameModes, ":/res/btnMoreWind.png");
