@@ -662,11 +662,22 @@ if isFalling then
    if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then Gear^.dY:= _0;
    Gear^.State:= Gear^.State or gstMoving;
    if isUnderwater then Gear^.dY:= Gear^.dY + cGravity / _2
-   else Gear^.dY:= Gear^.dY + cGravity
+   else
+       begin
+       Gear^.dY:= Gear^.dY + cGravity;
+// this set of circumstances could be less complex if jumping was more clearly identified
+       if ((GameFlags and gfMoreWind) <> 0) and 
+          (Gear^.Damage <> 0) or
+          ((CurAmmoGear <> nil) and
+            ((CurAmmoGear^.AmmoType = amJetpack) or
+            (CurAmmoGear^.AmmoType = amBirdy))) or
+          ((Gear^.dY.QWordValue + Gear^.dX.QWordValue) > _0_55.QWordValue)
+          then Gear^.dX := Gear^.dX + cWindSpeed * _0_2
+       end
    end 
 else
    begin
-   if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_55)
+   if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue)
       and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);
 
    if not Gear^.dY.isNegative then

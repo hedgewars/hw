@@ -320,7 +320,7 @@ begin
     if isFalling then 
         begin
         Gear^.dY := Gear^.dY + cGravity;
-        if (GameFlags and gfMoreWind) <> 0 then Gear^.dX := Gear^.dX + cWindSpeed * _16 / max(12,sqr(Gear^.Radius));
+        if (GameFlags and gfMoreWind) <> 0 then Gear^.dX := Gear^.dX + cWindSpeed * _16 / max(12,sqr(Gear^.Radius))
         end;
 
     Gear^.X := Gear^.X + Gear^.dX;
@@ -1110,6 +1110,7 @@ begin
     HHGear^.X := HHGear^.X + HHGear^.dX;
     HHGear^.Y := HHGear^.Y + HHGear^.dY;
     HHGear^.dY := HHGear^.dY + cGravity;
+    if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _0_2;
 
     if (Gear^.Message and gmAttack) <> 0 then
     begin
@@ -1172,7 +1173,11 @@ begin
     else
         if (Gear^.Message and gmRight <> 0) then HHGear^.dX := HHGear^.dX + _0_0002;
 
-    if not TestCollisionYwithGear(HHGear, 1) then HHGear^.dY := HHGear^.dY + cGravity;
+    if not TestCollisionYwithGear(HHGear, 1) then
+        begin
+        HHGear^.dY := HHGear^.dY + cGravity;
+        if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _0_2
+        end;
 
     ropeDx := HHGear^.X - Gear^.X;
     // vector between hedgehog and rope attaching point
@@ -1373,7 +1378,8 @@ begin
             begin
             HHGear^.Y := HHGear^.Y + HHGear^.dY;
             Gear^.Y := Gear^.Y + HHGear^.dY;
-            HHGear^.dY := HHGear^.dY + cGravity
+            HHGear^.dY := HHGear^.dY + cGravity;
+            if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _0_2
             end;
 
         tt := Gear^.Elasticity;
@@ -3089,7 +3095,6 @@ begin
             Gear^.Timer := GameTicks
             end
         end;
-    if not isUnderwater and ((GameFlags and gfMoreWind) <> 0) then HHGear^.dX := HHGear^.dX + cWindSpeed * _16 / sqr(cHHRadius);
 
     // erases them all at once :-/
     if (Gear^.Timer <> 0) and (GameTicks - Gear^.Timer > 250) then
@@ -3221,7 +3226,6 @@ begin
         dec(Gear^.Health, fuel div 5);
         Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
         end;
-    if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _16 / sqr(cHHRadius);
 
     if Gear^.Health < 0 then Gear^.Health := 0;
     if ((GameTicks and $FF) = 0) and (Gear^.Health < 500) then
