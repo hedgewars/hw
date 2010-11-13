@@ -43,7 +43,7 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kiedy ta opcja jest włączona, wybór ustawnień gry zmienia uzbrojenie na odpowiadające (i vice versa)</translation>
     </message>
 </context>
 <context>
@@ -674,7 +674,7 @@ w ustawieniach gry:</translation>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation>Swoje zespoły i konfigurację gry znajdzie4sz w folderze &quot;Moje Dokumenty\Hedgewars&quot;. Twórz regularnie kopie zapasowe ale nie edytuj tych plików własnoręcznie.</translation>
+        <translation>Swoje zespoły i konfigurację gry znajdziesz w folderze &quot;Moje Dokumenty\Hedgewars&quot;. Twórz regularnie kopie zapasowe, ale nie edytuj tych plików własnoręcznie.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
@@ -694,12 +694,12 @@ w ustawieniach gry:</translation>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Swoje zespoły i konfigurację gry znajdziesz w folderze &quot;Biblioteka/Wsparcie aplikacji/Hedgewars&quot; w towim katalogu domowym. Twórz regularnie kopie zapasowe, ale nie edytuj tych plików własnoręcznie.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Swoje zespoły i konfigurację gry znajdziesz w folderze &quot;.hedgewars&quot; w twoim katalogu domowym. Twórz regularnie kopie zapasowe, ale nie edytuj tych plików własnoręcznie.</translation>
     </message>
 </context>
 <context>
@@ -1474,7 +1474,7 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     </message>
     <message>
         <source>Bind schemes and weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Połącz ustawienia gry z uzbrojeniem</translation>
     </message>
 </context>
 <context>
