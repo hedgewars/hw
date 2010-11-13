@@ -18,7 +18,7 @@
  + Bomb clusters/Melon parts inherit some of the original bomb's speed
  + Extended game statistics
  + Improved health bar updating
- + Hogs that blow themselves up will use triggers in they team color
+ + Hogs that blow themselves up will use triggers in their team color
  + Settings allow better control over the level of details/effects
  + Improved Lua support
  + On empty ammo switch to no weapon rather than the first available one (to avoid shooting by accident)
