@@ -89,7 +89,7 @@ QColor *colors[] = {
                     new QColor( 51, 102, 217), // dark blue
                     new QColor( 62, 147,  33), // classic green
                     new QColor(162,  61, 187), // classic purple
-                    new QColor(255, 147,  41), // classic orange
+                    new QColor(255, 255,  0), // yellow
                     new QColor(115, 115, 115), // classic gray
                     new QColor(0, 255, 255),   // cyan
                     new QColor(255, 136, 136), // peach

@@ -43,7 +43,7 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation type="unfinished"></translation>
+        <translation>При включении этой опции выбор настроек игры автоматически выберет схему оружия (и наоборот)</translation>
     </message>
 </context>
 <context>
@@ -1407,7 +1407,7 @@ Some features might be broken or incomplete. Use at your own risk!</translation>
     </message>
     <message>
         <source>Bind schemes and weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Объединить настройки игры и оружия</translation>
     </message>
 </context>
 <context>

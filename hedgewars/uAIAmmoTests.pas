@@ -297,7 +297,7 @@ var Vx, Vy, r: hwFloat;
     until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t = 0);
     EX:= hwRound(x);
     EY:= hwRound(y);
-    if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 81)
+    if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 41)
               else CheckTrace:= BadTurn
     end;
 begin
@@ -311,7 +311,7 @@ repeat
       Vx:= (int2hwFloat(Targ.X+10) - Me^.X) / int2hwFloat(TestTime + tDelta)
   else
       Vx:= (int2hwFloat(Targ.X-10) - Me^.X) / int2hwFloat(TestTime + tDelta);
-  Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y-25) - Me^.Y) / int2hwFloat(TestTime + tDelta);
+  Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y-150) - Me^.Y) / int2hwFloat(TestTime + tDelta);
   r:= Distance(Vx, Vy);
   if not (r > _1) then
      begin
@@ -319,7 +319,7 @@ repeat
      if valueResult < Score then
         begin
         ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
-        ap.Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 15);
+        ap.Power:= hwRound(r * cMaxPower * _0_9) + AIrndSign(random(Level) * 15);
         ap.Time:= TestTime;
         ap.ExplR:= 90;
         ap.ExplX:= EX;
