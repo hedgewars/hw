@@ -46,19 +46,20 @@ QList<QVariant> defaultScheme = QList<QVariant>()
         << QVariant(false)         // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(false)         // no wind        22
-        << QVariant(100)           // damage modfier 23
-        << QVariant(45)            // turn time      24
-        << QVariant(100)           // init health    25
-        << QVariant(15)            // sudden death   26
-        << QVariant(5)             // case prob      27
-        << QVariant(3)             // mines time     28
-        << QVariant(4)             // mines number   29
-        << QVariant(0)             // mine dud pct   30
-        << QVariant(2)             // explosives     31
-        << QVariant(35)            // health case pct 32
-        << QVariant(25)            // health case amt 33
-        << QVariant(47)            // water rise amt 34
-        << QVariant(5)             // health dec amt 35
+        << QVariant(false)         // more wind      23
+        << QVariant(100)           // damage modfier 24
+        << QVariant(45)            // turn time      25
+        << QVariant(100)           // init health    26
+        << QVariant(15)            // sudden death   27
+        << QVariant(5)             // case prob      28
+        << QVariant(3)             // mines time     29
+        << QVariant(4)             // mines number   30
+        << QVariant(0)             // mine dud pct   31
+        << QVariant(2)             // explosives     32
+        << QVariant(35)            // health case pct 33
+        << QVariant(25)            // health case amt 34
+        << QVariant(47)            // water rise amt 35
+        << QVariant(5)             // health dec amt 36
         ;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -105,19 +106,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << "resetweps"        // 20
         << "perhogammo"       // 21
         << "disablewind"      // 22
-        << "damagefactor"     // 22
-        << "turntime"         // 23
-        << "health"           // 24
-        << "suddendeath"      // 25
-        << "caseprobability"  // 26
-        << "minestime"        // 27
-        << "minesnum"         // 28
-        << "minedudpct"       // 29
-        << "explosives"       // 30
-        << "healthprobability" // 31
-        << "healthcaseamount" // 32
-        << "waterrise"        // 33
-        << "healthdecrease"   // 34
+        << "morewind"         // 23
+        << "damagefactor"     // 24
+        << "turntime"         // 25
+        << "health"           // 26
+        << "suddendeath"      // 27
+        << "caseprobability"  // 28
+        << "minestime"        // 29
+        << "minesnum"         // 30
+        << "minedudpct"       // 31
+        << "explosives"       // 32
+        << "healthprobability" // 33
+        << "healthcaseamount" // 34
+        << "waterrise"        // 35
+        << "healthdecrease"   // 36
         ;
 
     QList<QVariant> proMode;
@@ -145,19 +147,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(false)         // no wind        22
-        << QVariant(100)           // damage modfier 23
-        << QVariant(15)            // turn time      24
-        << QVariant(100)           // init health    25
-        << QVariant(15)            // sudden death   26
-        << QVariant(0)             // case prob      27
-        << QVariant(3)             // mines time     28
-        << QVariant(0)             // mines number   29
-        << QVariant(0)             // mine dud pct   30
-        << QVariant(2)             // explosives     31
-        << QVariant(35)            // health case pct 32
-        << QVariant(25)            // health case amt 33
-        << QVariant(47)            // water rise amt 34
-        << QVariant(5)             // health dec amt 35
+        << QVariant(false)         // more wind      23
+        << QVariant(100)           // damage modfier 24
+        << QVariant(15)            // turn time      25
+        << QVariant(100)           // init health    26
+        << QVariant(15)            // sudden death   27
+        << QVariant(0)             // case prob      28
+        << QVariant(3)             // mines time     29
+        << QVariant(0)             // mines number   30
+        << QVariant(0)             // mine dud pct   31
+        << QVariant(2)             // explosives     32
+        << QVariant(35)            // health case pct 33
+        << QVariant(25)            // health case amt 34
+        << QVariant(47)            // water rise amt 35
+        << QVariant(5)             // health dec amt 36
         ;
 
     QList<QVariant> shoppa;
@@ -185,19 +188,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(false)         // no wind        22
-        << QVariant(100)           // damage modfier 23
-        << QVariant(30)            // turn time      24
-        << QVariant(100)           // init health    25
-        << QVariant(50)            // sudden death   26
-        << QVariant(1)             // case prob      27
-        << QVariant(3)             // mines time     28
-        << QVariant(0)             // mines number   29
-        << QVariant(0)             // mine dud pct   30
-        << QVariant(0)             // explosives     31
-        << QVariant(0)             // health case pct 32
-        << QVariant(25)            // health case amt 33
-        << QVariant(47)            // water rise amt 34
-        << QVariant(5)             // health dec amt 35
+        << QVariant(false)         // more wind      23
+        << QVariant(100)           // damage modfier 24
+        << QVariant(30)            // turn time      25
+        << QVariant(100)           // init health    26
+        << QVariant(50)            // sudden death   27
+        << QVariant(1)             // case prob      28
+        << QVariant(3)             // mines time     29
+        << QVariant(0)             // mines number   30
+        << QVariant(0)             // mine dud pct   31
+        << QVariant(0)             // explosives     32
+        << QVariant(0)             // health case pct 33
+        << QVariant(25)            // health case amt 34
+        << QVariant(47)            // water rise amt 35
+        << QVariant(5)             // health dec amt 36
         ;
 
     QList<QVariant> cleanslate;
@@ -225,19 +229,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(true)          // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(false)         // no wind        22
-        << QVariant(100)           // damage modfier 23
-        << QVariant(45)            // turn time      24
-        << QVariant(100)           // init health    25
-        << QVariant(15)            // sudden death   26
-        << QVariant(5)             // case prob      27
-        << QVariant(3)             // mines time     28
-        << QVariant(4)             // mines number   29
-        << QVariant(0)             // mine dud pct   30
-        << QVariant(2)             // explosives     31
-        << QVariant(35)            // health case pct 32
-        << QVariant(25)            // health case amt 33
-        << QVariant(47)            // water rise amt 34
-        << QVariant(5)             // health dec amt 35
+        << QVariant(false)         // more wind      23
+        << QVariant(100)           // damage modfier 24
+        << QVariant(45)            // turn time      25
+        << QVariant(100)           // init health    26
+        << QVariant(15)            // sudden death   27
+        << QVariant(5)             // case prob      28
+        << QVariant(3)             // mines time     29
+        << QVariant(4)             // mines number   30
+        << QVariant(0)             // mine dud pct   31
+        << QVariant(2)             // explosives     32
+        << QVariant(35)            // health case pct 33
+        << QVariant(25)            // health case amt 34
+        << QVariant(47)            // water rise amt 35
+        << QVariant(5)             // health dec amt 36
         ;
 
     QList<QVariant> minefield;
@@ -265,19 +270,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(false)         // no wind        22
-        << QVariant(150)           // damage modfier 23
-        << QVariant(30)            // turn time      24
-        << QVariant(50)            // init health    25
-        << QVariant(15)            // sudden death   26
-        << QVariant(0)             // case prob      27
-        << QVariant(0)             // mines time     28
-        << QVariant(80)            // mines number   29
-        << QVariant(0)             // mine dud pct   30
-        << QVariant(0)             // explosives     31
-        << QVariant(35)            // health case pct 32
-        << QVariant(25)            // health case amt 33
-        << QVariant(47)            // water rise amt 34
-        << QVariant(5)             // health dec amt 35
+        << QVariant(false)         // more wind      23
+        << QVariant(150)           // damage modfier 24
+        << QVariant(30)            // turn time      25
+        << QVariant(50)            // init health    26
+        << QVariant(15)            // sudden death   27
+        << QVariant(0)             // case prob      28
+        << QVariant(0)             // mines time     29
+        << QVariant(80)            // mines number   30
+        << QVariant(0)             // mine dud pct   31
+        << QVariant(0)             // explosives     32
+        << QVariant(35)            // health case pct 33
+        << QVariant(25)            // health case amt 34
+        << QVariant(47)            // water rise amt 35
+        << QVariant(5)             // health dec amt 36
         ;
 
     QList<QVariant> barrelmayhem;
@@ -305,19 +311,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(false)         // no wind        22
-        << QVariant(100)           // damage modfier 23
-        << QVariant(30)            // turn time      24
-        << QVariant(100)           // init health    25
-        << QVariant(15)            // sudden death   26
-        << QVariant(0)             // case prob      27
-        << QVariant(0)             // mines time     28
-        << QVariant(0)             // mines number   29
-        << QVariant(0)             // mine dud pct   30
-        << QVariant(80)            // explosives     31
-        << QVariant(35)            // health case pct 32
-        << QVariant(25)            // health case amt 33
-        << QVariant(47)            // water rise amt 34
-        << QVariant(5)             // health dec amt 35
+        << QVariant(false)         // more wind      23
+        << QVariant(100)           // damage modfier 24
+        << QVariant(30)            // turn time      25
+        << QVariant(100)           // init health    26
+        << QVariant(15)            // sudden death   27
+        << QVariant(0)             // case prob      28
+        << QVariant(0)             // mines time     29
+        << QVariant(0)             // mines number   30
+        << QVariant(0)             // mine dud pct   31
+        << QVariant(80)            // explosives     32
+        << QVariant(35)            // health case pct 33
+        << QVariant(25)            // health case amt 34
+        << QVariant(47)            // water rise amt 35
+        << QVariant(5)             // health dec amt 36
         ;
 
     QList<QVariant> tunnelhogs;
@@ -345,19 +352,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(false)         // no wind        22
-        << QVariant(100)           // damage modfier 23
-        << QVariant(30)            // turn time      24
-        << QVariant(100)           // init health    25
-        << QVariant(15)            // sudden death   26
-        << QVariant(5)             // case prob      27
-        << QVariant(3)             // mines time     28
-        << QVariant(10)            // mines number   29
-        << QVariant(10)            // mine dud pct   30
-        << QVariant(10)            // explosives     31
-        << QVariant(35)            // health case pct 32
-        << QVariant(25)            // health case amt 33
-        << QVariant(47)            // water rise amt 34
-        << QVariant(5)             // health dec amt 35
+        << QVariant(false)         // more wind      23
+        << QVariant(100)           // damage modfier 24
+        << QVariant(30)            // turn time      25
+        << QVariant(100)           // init health    26
+        << QVariant(15)            // sudden death   27
+        << QVariant(5)             // case prob      28
+        << QVariant(3)             // mines time     29
+        << QVariant(10)            // mines number   30
+        << QVariant(10)            // mine dud pct   31
+        << QVariant(10)            // explosives     32
+        << QVariant(35)            // health case pct 33
+        << QVariant(25)            // health case amt 34
+        << QVariant(47)            // water rise amt 35
+        << QVariant(5)             // health dec amt 36
         ;
 
     QList<QVariant> forts;
@@ -385,19 +393,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(false)         // no wind        22
-        << QVariant(100)           // damage modfier 23
-        << QVariant(45)            // turn time      24
-        << QVariant(100)           // init health    25
-        << QVariant(15)            // sudden death   26
-        << QVariant(5)             // case prob      27
-        << QVariant(3)             // mines time     28
-        << QVariant(0)             // mines number   29
-        << QVariant(0)             // mine dud pct   30
-        << QVariant(0)             // explosives     31
-        << QVariant(35)            // health case pct 32
-        << QVariant(25)            // health case amt 33
-        << QVariant(47)            // water rise amt 34
-        << QVariant(5)             // health dec amt 35
+        << QVariant(false)         // more wind      23
+        << QVariant(100)           // damage modfier 24
+        << QVariant(45)            // turn time      25
+        << QVariant(100)           // init health    26
+        << QVariant(15)            // sudden death   27
+        << QVariant(5)             // case prob      28
+        << QVariant(3)             // mines time     29
+        << QVariant(0)             // mines number   30
+        << QVariant(0)             // mine dud pct   31
+        << QVariant(0)             // explosives     32
+        << QVariant(35)            // health case pct 33
+        << QVariant(25)            // health case amt 34
+        << QVariant(47)            // water rise amt 35
+        << QVariant(5)             // health dec amt 36
         ;
 
     QList<QVariant> timeless;
@@ -425,19 +434,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // reset weps     20
         << QVariant(true)          // per hog ammo   21
         << QVariant(false)         // no wind        22
-        << QVariant(100)           // damage modfier 23
-        << QVariant(9999)          // turn time      24
-        << QVariant(100)           // init health    25
-        << QVariant(15)            // sudden death   26
-        << QVariant(5)             // case prob      27
-        << QVariant(3)             // mines time     28
-        << QVariant(5)             // mines number   29
-        << QVariant(10)            // mine dud pct   30
-        << QVariant(2)             // explosives     31
-        << QVariant(35)            // health case pct 32
-        << QVariant(30)            // health case amt 33
-        << QVariant(0)             // water rise amt 34
-        << QVariant(0)             // health dec amt 35
+        << QVariant(false)         // more wind      23
+        << QVariant(100)           // damage modfier 24
+        << QVariant(9999)          // turn time      25
+        << QVariant(100)           // init health    26
+        << QVariant(15)            // sudden death   27
+        << QVariant(5)             // case prob      28
+        << QVariant(3)             // mines time     29
+        << QVariant(5)             // mines number   30
+        << QVariant(10)            // mine dud pct   31
+        << QVariant(2)             // explosives     32
+        << QVariant(35)            // health case pct 33
+        << QVariant(30)            // health case amt 34
+        << QVariant(0)             // water rise amt 35
+        << QVariant(0)             // health dec amt 36
         ;
 
     QList<QVariant> thinkingportals;
@@ -465,19 +475,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(false)         // no wind        22
-        << QVariant(100)           // damage modfier 23
-        << QVariant(45)            // turn time      24
-        << QVariant(100)           // init health    25
-        << QVariant(15)            // sudden death   26
-        << QVariant(2)             // case prob      27
-        << QVariant(3)             // mines time     28
-        << QVariant(5)             // mines number   29
-        << QVariant(0)             // mine dud pct   30
-        << QVariant(5)             // explosives     31
-        << QVariant(25)            // health case pct 32
-        << QVariant(25)            // health case amt 33
-        << QVariant(47)            // water rise amt 34
-        << QVariant(5)             // health dec amt 35
+        << QVariant(false)         // more wind      23
+        << QVariant(100)           // damage modfier 24
+        << QVariant(45)            // turn time      25
+        << QVariant(100)           // init health    26
+        << QVariant(15)            // sudden death   27
+        << QVariant(2)             // case prob      28
+        << QVariant(3)             // mines time     29
+        << QVariant(5)             // mines number   30
+        << QVariant(0)             // mine dud pct   31
+        << QVariant(5)             // explosives     32
+        << QVariant(25)            // health case pct 33
+        << QVariant(25)            // health case amt 34
+        << QVariant(47)            // water rise amt 35
+        << QVariant(5)             // health dec amt 36
         ;
 
     QList<QVariant> kingmode;
@@ -505,19 +516,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(false)         // no wind        22
-        << QVariant(100)           // damage modfier 23
-        << QVariant(45)            // turn time      24
-        << QVariant(100)           // init health    25
-        << QVariant(15)            // sudden death   26
-        << QVariant(5)             // case prob      27
-        << QVariant(3)             // mines time     28
-        << QVariant(3)             // mines number   29
-        << QVariant(20)            // mine dud pct   30
-        << QVariant(3)             // explosives     31
-        << QVariant(35)            // health case pct 32
-        << QVariant(30)            // health case amt 33
-        << QVariant(30)            // water rise amt 34
-        << QVariant(5)             // health dec amt 35
+        << QVariant(false)         // more wind      23
+        << QVariant(100)           // damage modfier 24
+        << QVariant(45)            // turn time      25
+        << QVariant(100)           // init health    26
+        << QVariant(15)            // sudden death   27
+        << QVariant(5)             // case prob      28
+        << QVariant(3)             // mines time     29
+        << QVariant(3)             // mines number   30
+        << QVariant(20)            // mine dud pct   31
+        << QVariant(3)             // explosives     32
+        << QVariant(35)            // health case pct 33
+        << QVariant(30)            // health case amt 34
+        << QVariant(30)            // water rise amt 35
+        << QVariant(5)             // health dec amt 36
         ;
 
 
