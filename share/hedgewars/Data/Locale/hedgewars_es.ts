@@ -42,7 +42,7 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuando esta opción esté activada escoger un modo de juego escogerá el set de armas correspondiente (y viceversa)</translation>
     </message>
 </context>
 <context>
@@ -670,12 +670,12 @@ o elige otro nick en las preferencias del juego:</translation>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Puedes encontrar los archivos de configuración del juego en la carpeta &quot;Library/Application Support/Hedgewars&quot; dentro de tu directorio personal. Puedes hacer copias de seguridad de los mismos o copiarlos a otro ordenador si lo deseas, pero no intentes editarlos a mano para evitar posibles pérdidas de datos.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Puedes encontrar los archivos de configuración del juego en la carpeta &quot;.hedgewars&quot; dentro de tu directorio personal. Puedes hacer copias de seguridad de los mismos o copiarlos a otro ordenador si lo deseas, pero no intentes editarlos a mano para evitar posibles pérdidas de datos.</translation>
     </message>
 </context>
 <context>
@@ -1415,7 +1415,7 @@ así como carecer de algunas funcionalidades o simplemente funcionar mal.
     </message>
     <message>
         <source>Tip: </source>
-        <translation>Consejo:</translation>
+        <translation>Consejo: </translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
@@ -1441,11 +1441,11 @@ así como carecer de algunas funcionalidades o simplemente funcionar mal.
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation>Decremento de vida en muerte súbita</translation>
+        <translation>Disminución de vida por turno en muerte súbita</translation>
     </message>
     <message>
         <source>Bind schemes and weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Enlazar modos y sets</translation>
     </message>
 </context>
 <context>
