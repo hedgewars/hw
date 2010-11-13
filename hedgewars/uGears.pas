@@ -209,7 +209,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepPoisonCloud,
             @doStepHammer,
             @doStepHammerHit,
-            @doStepResurrector
+            @doStepResurrector,
+            @doStepNapalmBomb
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -544,6 +545,10 @@ gtFlamethrower: begin
                 end;
      gtWaterUp: begin
                 gear^.Tag := 47;
+                end;
+  gtNapalmBomb: begin
+                gear^.Timer:= 1000;
+                gear^.Radius:= 5;
                 end;
     end;
 

@@ -716,9 +716,7 @@ while Gear<>nil do
                         Tint($FF, $FF, $FF, $FF)
                         end
                     end;
-
              gtBee: DrawRotatedF(sprBee, x, y, (GameTicks shr 5) mod 2, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
-
       gtPickHammer: DrawSprite(sprPHammer, x - 16, y - 50 + LongInt(((GameTicks shr 5) and 1) * 2), 0);
             gtRope: DrawRope(Gear);
             gtMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
@@ -848,6 +846,7 @@ while Gear<>nil do
                     DrawTexture(x - 108, y - 108, SpritesData[sprVampiric].Texture, 4.5);
                     Tint($FF, $FF, $FF, $FF);
                     end;
+      gtNapalmBomb: DrawRotated(sprNapalmBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(x + 8, y + 8, Gear^.Tex);
       Gear:= Gear^.NextGear

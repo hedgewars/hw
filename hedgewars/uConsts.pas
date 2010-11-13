@@ -75,7 +75,7 @@ type
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
             sprSMineOff, sprSMineOn, sprHandSMine, sprHammer,
-            sprHandResurrector, sprCross, sprAirDrill
+            sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb
             );
 
     // Gears that interact with other Gears and/or Land
@@ -89,7 +89,8 @@ type
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
-            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector); // 56
+            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
+            gtNapalmBomb); // 57
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -830,8 +831,13 @@ const
             (FileName:  'AirDrill'; Path: ptGraphics; AltPath: ptNone;
                 Texture: nil; Surface: nil; Width:  16; Height: 16;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
-                tpMedium; getDimensions: false; getImageDimensions: true)
+                tpMedium; getDimensions: false; getImageDimensions: true),
             // sprAirDrill
+            (FileName:  'NapalmBomb'; Path: ptGraphics; AltPath: ptNone;
+                Texture: nil; Surface: nil; Width:  16; Height: 16;
+                imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
+                tpMedium; getDimensions: false; getImageDimensions: true)
+            // sprNapalmBomb
             );
 
 

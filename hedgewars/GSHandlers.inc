@@ -2077,8 +2077,8 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepAirAttackWork(Gear: PGear);
-var 
-    i: Longint;
+//var 
+//    i: Longint;
 begin
     AllInactive := false;
     Gear^.X := Gear^.X + cAirPlaneSpeed * Gear^.Tag;
@@ -2091,9 +2091,11 @@ begin
                              Gear^.Tag, _0, 0);
             1: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMine,    0, cBombsSpeed *
                              Gear^.Tag, _0, 0);
-            2: for i:= -19 to 19 do
-                   FollowGear := AddGear(hwRound(Gear^.X) + i div 3, hwRound(Gear^.Y), gtFlame, 0,
-                                 _0_001 * i, _0, 0);
+            2: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtNapalmBomb, 0, cBombsSpeed *
+                             Gear^.Tag, _0, 0);
+            //2: for i:= -19 to 19 do
+            //       FollowGear := AddGear(hwRound(Gear^.X) + i div 3, hwRound(Gear^.Y), gtFlame, 0,
+            //                     _0_001 * i, _0, 0);
             3: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtDrill, gsttmpFlag, cBombsSpeed *
                              Gear^.Tag, _0, 0);
             //4: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtWaterMelon, 0, cBombsSpeed *
@@ -2126,7 +2128,7 @@ begin
     Gear^.Y := int2hwFloat(topY-300);
     Gear^.dX := int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
 
-    if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) and (Gear^.State <> 2) then
+    if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then //and (Gear^.State <> 2) then
         Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /
                     cGravity) * Gear^.Tag;
 
@@ -4359,6 +4361,44 @@ begin
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
         end
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepNapalmBomb(Gear: PGear);
+var
+    i, gX, gY: LongInt;
+    dX, dY: hwFloat;
+begin
+    AllInactive := false;
+    doStepFallingGear(Gear);
+    if (Gear^.Timer > 0) and ((Gear^.State and gstCollision) <> 0) then
+    begin
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, EXPLAutoSound);
+        gX := hwRound(Gear^.X);
+        gY := hwRound(Gear^.Y); 
+        for i:= 0 to 10 do
+        begin
+            dX := AngleCos(i * 2) * ((_0_1*(i div 5))) * (GetRandom + _1);
+            dY := AngleSin(i * 8) * _0_5 * (GetRandom + _1);
+            AddGear(gX, gY, gtFlame, 0, dX, dY, 0);
+            AddGear(gX, gY, gtFlame, 0, dX, -dY, 0);
+            AddGear(gX, gY, gtFlame, 0, -dX, dY, 0);
+            AddGear(gX, gY, gtFlame, 0, -dX, -dY, 0);
+        end;
+        DeleteGear(Gear);
+        exit
+    end;
+    if (Gear^.Timer = 0) then
+    begin
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, EXPLAutoSound);
+        for i:= -19 to 19 do
+           FollowGear := AddGear(hwRound(Gear^.X) + i div 3, hwRound(Gear^.Y), gtFlame, 0, _0_001 * i, _0, 0);
+        DeleteGear(Gear);
+        exit
+    end;
+    if (GameTicks and $3F) = 0 then
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
+    dec(Gear^.Timer)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
