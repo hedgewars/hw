@@ -317,8 +317,11 @@ begin
 
     if Gear^.AdvBounce > 1 then dec(Gear^.AdvBounce);
 
-    if isFalling then Gear^.dY := Gear^.dY + cGravity;
-    if (GameFlags and gfMoreWind) <> 0 then Gear^.dX := Gear^.dX + cWindSpeed * _4 / Gear^.Radius;
+    if isFalling then 
+        begin
+        Gear^.dY := Gear^.dY + cGravity;
+        if (GameFlags and gfMoreWind) <> 0 then Gear^.dX := Gear^.dX + cWindSpeed * _16 / max(12,sqr(Gear^.Radius));
+        end;
 
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
@@ -3086,7 +3089,7 @@ begin
             Gear^.Timer := GameTicks
             end
         end;
-    if not isUnderwater and ((GameFlags and gfMoreWind) <> 0) then HHGear^.dX := HHGear^.dX + cWindSpeed * _4 / HHGear^.Radius;
+    if not isUnderwater and ((GameFlags and gfMoreWind) <> 0) then HHGear^.dX := HHGear^.dX + cWindSpeed * _16 / sqr(cHHRadius);
 
     // erases them all at once :-/
     if (Gear^.Timer <> 0) and (GameTicks - Gear^.Timer > 250) then
@@ -3218,7 +3221,7 @@ begin
         dec(Gear^.Health, fuel div 5);
         Gear^.MsgParam := Gear^.MsgParam or (HHGear^.Message and (gmLeft or gmRight));
         end;
-    if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _4 / HHGear^.Radius;
+    if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _16 / sqr(cHHRadius);
 
     if Gear^.Health < 0 then Gear^.Health := 0;
     if ((GameTicks and $FF) = 0) and (Gear^.Health < 500) then
