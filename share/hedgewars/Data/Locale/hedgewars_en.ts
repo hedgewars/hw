@@ -42,7 +42,7 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation type="unfinished"></translation>
+        <translation>When this option is enabled selecting a game scheme will auto-select a weapon (and vice versa)</translation>
     </message>
 </context>
 <context>
@@ -92,17 +92,17 @@
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation type="unfinished"></translation>
+        <translation>Default Team</translation>
     </message>
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars Demo File</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars Save File</translation>
     </message>
 </context>
 <context>
@@ -156,7 +156,7 @@
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Small tunnels</source>
@@ -347,19 +347,19 @@ or pick another nickname in game config:</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Details</translation>
     </message>
     <message>
         <source>Health graph</source>
-        <translation type="unfinished"></translation>
+        <translation>Health graph</translation>
     </message>
     <message>
         <source>Ranking</source>
-        <translation type="unfinished"></translation>
+        <translation>Ranking</translation>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished"></translation>
+        <translation>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
@@ -377,15 +377,14 @@ or pick another nickname in game config:</translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 kill)</numerusform>
+            <numerusform>(%1 kills)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -393,14 +392,13 @@ or pick another nickname in game config:</translation>
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; time.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</numerusform>
         </translation>
     </message>
 </context>
@@ -724,7 +722,7 @@ or pick another nickname in game config:</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
-        <translation type="unfinished"></translation>
+        <translation>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</translation>
     </message>
 </context>
 <context>
@@ -1549,7 +1547,7 @@ Please check your installation</translation>
     </message>
     <message>
         <source>Associate file extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>Associate file extensions</translation>
     </message>
 </context>
 <context>
@@ -1870,7 +1868,7 @@ info</translation>
     </message>
     <message>
         <source>slot 10</source>
-        <translation type="unfinished">slot 10</translation>
+        <translation>slot 10</translation>
     </message>
 </context>
 <context>
