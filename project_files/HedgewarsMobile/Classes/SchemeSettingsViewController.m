@@ -81,12 +81,14 @@
     createSchemeNamed([fileName stringByDeletingPathExtension]);
 
     [self.listOfSchemes addObject:fileName];
-    [fileName release];
 
     // order the array alphabetically, so schemes will keep their position
     [self.listOfSchemes sortUsingSelector:@selector(compare:)];
-
     [self.tableView reloadData];
+
+    NSInteger index = [self.listOfSchemes indexOfObject:fileName];
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [fileName release];
 }
 
 #pragma mark -

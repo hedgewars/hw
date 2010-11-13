@@ -72,7 +72,7 @@
     // perform as if user clicked on an entry
     [self tableView:self.tableView didSelectRowAtIndexPath:theIndex];
     if (IS_NOT_POWERFUL() == NO)
-        [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionNone animated:YES];
+        [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 -(void) turnOffWidgets {

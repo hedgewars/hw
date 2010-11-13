@@ -103,9 +103,9 @@
                                                         error:NULL];
     createWeaponNamed(@"Default", 0);
     createWeaponNamed(@"Crazy", 1);
-    createWeaponNamed(@"Pro mode", 2);
+    createWeaponNamed(@"Pro Mode", 2);
     createWeaponNamed(@"Shoppa", 3);
-    createWeaponNamed(@"Clean slate", 4);
+    createWeaponNamed(@"Clean Slate", 4);
     createWeaponNamed(@"Minefield", 5);
     createWeaponNamed(@"Thinking with Portals", 6);
 
