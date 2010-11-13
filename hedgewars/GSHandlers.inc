@@ -1261,8 +1261,7 @@ begin
             end;
         nx := nx - tx;
         ny := ny - ty;
-        lx := hwRound(nx);
-        ly := hwRound(ny);
+
         // len := len - _0_3 // should be the same as increase step
         len.QWordValue := len.QWordValue - _0_3.QWordValue;
         end;
