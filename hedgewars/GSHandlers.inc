@@ -2076,8 +2076,6 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepAirAttackWork(Gear: PGear);
-//var 
-//    i: Longint;
 begin
     AllInactive := false;
     Gear^.X := Gear^.X + cAirPlaneSpeed * Gear^.Tag;
@@ -2092,9 +2090,6 @@ begin
                              Gear^.Tag, _0, 0);
             2: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtNapalmBomb, 0, cBombsSpeed *
                              Gear^.Tag, _0, 0);
-            //2: for i:= -19 to 19 do
-            //       FollowGear := AddGear(hwRound(Gear^.X) + i div 3, hwRound(Gear^.Y), gtFlame, 0,
-            //                     _0_001 * i, _0, 0);
             3: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtDrill, gsttmpFlag, cBombsSpeed *
                              Gear^.Tag, _0, 0);
             //4: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtWaterMelon, 0, cBombsSpeed *
@@ -2127,7 +2122,7 @@ begin
     Gear^.Y := int2hwFloat(topY-300);
     Gear^.dX := int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
 
-    if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then //and (Gear^.State <> 2) then
+    if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then
         Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /
                     cGravity) * Gear^.Tag;
 
