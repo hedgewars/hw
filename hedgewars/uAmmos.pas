@@ -171,7 +171,10 @@ for t:= 0 to Pred(TeamsCount) do
           if Hedgehogs[i].Gear <> nil then
              begin
              Hedgehogs[i].Ammo:= GetAmmoByNum(Hedgehogs[i].AmmoStore);
-             Hedgehogs[i].CurAmmoType:= amNothing;
+             if (GameFlags and gfPlaceHog) <> 0 then
+                Hedgehogs[i].CurAmmoType:= amTeleport
+             else
+                Hedgehogs[i].CurAmmoType:= amNothing
              end
       end
 end;
