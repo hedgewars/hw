@@ -430,12 +430,14 @@ void HWMapContainer::setRandomStatic()
 {
     chooseMap->setCurrentIndex(4 + numMissions + rand() % (chooseMap->count() - 4 - numMissions));
     m_seed = QUuid::createUuid().toString();
+    emit seedChanged(m_seed);
 }
 
 void HWMapContainer::setRandomMission()
 {
     chooseMap->setCurrentIndex(3 + rand() % numMissions);
     m_seed = QUuid::createUuid().toString();
+    emit seedChanged(m_seed);
 }
 
 void HWMapContainer::setRandomSeed()
