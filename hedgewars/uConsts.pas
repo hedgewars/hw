@@ -1063,8 +1063,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 0; //20;
-            ejectY: -6),
+            ejectX: 0;
+            ejectY: 0),
 
 // Bee
             (NameId: sidBee;
@@ -1086,7 +1086,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 0; //16;
+            ejectX: 0;
             ejectY: 0),
 
 // Shotgun
@@ -1109,8 +1109,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 0; //26;
-            ejectY: -6),
+            ejectX: 0;
+            ejectY: 0),
 
 // PickHammer
             (NameId: sidPickHammer;
@@ -1228,8 +1228,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 0; //23;
-            ejectY: -6),
+            ejectX: 0;
+            ejectY: 0),
 
 // Dynamite
             (NameId: sidDynamite;
@@ -1531,8 +1531,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 0; //20;
-            ejectY: -6),
+            ejectX: 0;
+            ejectY: 0),
 
 // Kamikaze
             (NameId: sidKamikaze;
@@ -1696,8 +1696,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprDrill;
-            ejectX: 0; //20;
-            ejectY: -6),
+            ejectX: 0;
+            ejectY: 0),
 
 // Ballgun
             (NameId: sidBallgun;
@@ -1719,8 +1719,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 0; //20;
-            ejectY: -3),
+            ejectX: 0;
+            ejectY: 0),
 
 // RC-Plane
             (NameId: sidRCPlane;
@@ -1935,8 +1935,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 0; //40;
-            ejectY: -5),
+            ejectX: 0;
+            ejectY: 0),
 
 // Jetpack ("Flying Saucer")
             (NameId: sidJetpack;
@@ -2038,8 +2038,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: -5; //29;
-            ejectY: -7),
+            ejectX: 0;
+            ejectY: 0),
 
 // Piano
             (NameId: sidPiano;
@@ -2134,8 +2134,8 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 0; //20;
-            ejectY: -3),
+            ejectX: 0;
+            ejectY: 0),
 
 // Sticky Mine
             (NameId: sidSMine;
