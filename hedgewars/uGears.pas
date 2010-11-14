@@ -1447,10 +1447,13 @@ while i > 0 do
     if (Gear^.State and gstNoDamage) = 0 then
         begin
         
-        VGear := AddVisualGear(hwround(Ammo^.X), hwround(Ammo^.Y), vgtBulletHit);
-        if VGear <> nil then
+        if (Ammo^.Kind = gtDEagleShot) or (Ammo^.Kind = gtSniperRifleShot) then 
         begin
-            VGear^.Angle := DxDy2Angle(-Ammo^.dX, Ammo^.dY);
+            VGear := AddVisualGear(hwround(Ammo^.X), hwround(Ammo^.Y), vgtBulletHit);
+            if VGear <> nil then
+            begin
+                VGear^.Angle := DxDy2Angle(-Ammo^.dX, Ammo^.dY);
+            end;
         end;
         
         if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) and (Ammo^.Kind = gtShover) then Gear^.FlightTime:= 1;
