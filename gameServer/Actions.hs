@@ -6,9 +6,9 @@ import Data.IntMap
 import qualified Data.IntSet as IntSet
 import qualified Data.Sequence as Seq
 import System.Log.Logger
-import Monad
+import Control.Monad
 import Data.Time
-import Maybe
+import Data.Maybe
 -----------------------------
 import CoreTypes
 import Utils

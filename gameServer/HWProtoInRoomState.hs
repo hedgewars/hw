@@ -5,7 +5,7 @@ import qualified Data.IntMap as IntMap
 import qualified Data.Map as Map
 import Data.Sequence(Seq, (|>), (><), fromList, empty)
 import Data.List
-import Maybe
+import Data.Maybe
 --------------------------------------
 import CoreTypes
 import Actions

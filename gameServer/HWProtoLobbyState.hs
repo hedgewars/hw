@@ -4,7 +4,7 @@ import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
 import qualified Data.Foldable as Foldable
-import Maybe
+import Data.Maybe
 import Data.List
 import Data.Word
 --------------------------------------

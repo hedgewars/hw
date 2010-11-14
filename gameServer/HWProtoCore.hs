@@ -2,7 +2,7 @@ module HWProtoCore where
 
 import qualified Data.IntMap as IntMap
 import Data.Foldable
-import Maybe
+import Data.Maybe
 --------------------------------------
 import CoreTypes
 import Actions
