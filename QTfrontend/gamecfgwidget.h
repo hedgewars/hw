@@ -68,7 +68,7 @@ private slots:
 
 private:
     QGridLayout mainLayout;
-    QCheckBox * bindEntries;
+
     QString curNetAmmoName;
     QString curNetAmmo;
 

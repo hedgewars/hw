@@ -78,13 +78,6 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 
     connect(goToWeaponPage, SIGNAL(clicked()), this, SLOT(jumpToWeapons()));
 
-    GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Bind schemes and weapons"), GBoxOptions), 2, 0);
-
-    bindEntries = new QCheckBox(GBoxOptions);
-    bindEntries->setToolTip(tr("When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)"));
-    bindEntries->setChecked(true);
-    GBoxOptionsLayout->addWidget(bindEntries, 2, 2);
-
     connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));
     connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
     connect(pMapContainer, SIGNAL(mapgenChanged(MapGenerator)), this, SLOT(mapgenChanged(MapGenerator)));
@@ -270,23 +263,11 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 
 void GameCFGWidget::ammoChanged(int index)
 {
-    if (index >= 0) {
+    if (index >= 0)
         emit paramChanged(
             "AMMO",
             QStringList() << WeaponsName->itemText(index) << WeaponsName->itemData(index).toString()
         );
-        if (bindEntries->isChecked() == true) {
-            QString weapName = WeaponsName->itemText(index);
-            for (int i = 0; i < GameSchemes->count(); i++) {
-                 QString schemeName = GameSchemes->itemText(i);
-                 int res = QString::compare(weapName, schemeName, Qt::CaseSensitive);
-                 if (0 == res) {
-                     GameSchemes->setCurrentIndex(i);
-                     break;
-                 }
-            }
-        }
-    }
 }
 
 void GameCFGWidget::mapChanged(const QString & value)
@@ -295,7 +276,6 @@ void GameCFGWidget::mapChanged(const QString & value)
     {
         GameSchemes->setEnabled(false);
         WeaponsName->setEnabled(false);
-        bindEntries->setEnabled(false);
         GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
     }
@@ -303,7 +283,6 @@ void GameCFGWidget::mapChanged(const QString & value)
     {
         GameSchemes->setEnabled(true);
         WeaponsName->setEnabled(true);
-        bindEntries->setEnabled(true);
     }
     emit paramChanged("MAP", QStringList(value));
 }
@@ -323,7 +302,7 @@ void GameCFGWidget::themeChanged(const QString & value)
     emit paramChanged("THEME", QStringList(value));
 }
 
-void GameCFGWidget::schemeChanged(int index)
+void GameCFGWidget::schemeChanged(int value)
 {
     QStringList sl;
 
@@ -332,18 +311,6 @@ void GameCFGWidget::schemeChanged(int index)
         sl << schemeData(i).toString();
 
     emit paramChanged("SCHEME", sl);
-
-    if (bindEntries->isChecked() == true) {
-        QString schemeName = GameSchemes->itemText(index);
-        for (int i = 0; i < WeaponsName->count(); i++) {
-             QString weapName = WeaponsName->itemText(i);
-             int res = QString::compare(weapName, schemeName, Qt::CaseSensitive);
-             if (0 == res) {
-                 WeaponsName->setCurrentIndex(i);
-                 break;
-             }
-        }
-    }
 }
 
 void GameCFGWidget::mapgenChanged(MapGenerator m)
