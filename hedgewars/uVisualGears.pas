@@ -118,7 +118,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepBigExplosion,
             @doStepChunk,
             @doStepNote,
-            @doStepLineTrail
+            @doStepLineTrail,
+            @doStepBulletHit
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0): PVisualGear;
@@ -317,6 +318,13 @@ vgtBigExplosion: begin
                 Frame:= random(4);
                 FrameTicks:= random(2000) + 1500;
                 end;
+  vgtBulletHit: begin
+                dx:= 0;
+                dy:= 0;
+                FrameTicks:= 350;
+                Frame:= 7;
+                Angle := 0;
+                end;
         end;
 
 if State <> 0 then gear^.State:= State;
@@ -479,6 +487,7 @@ case Layer of
                             end;
                 vgtChunk: DrawRotatedF(sprChunk, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                  vgtNote: DrawRotatedF(sprNote, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                vgtBulletHit: DrawRotatedF(sprBulletHit, round(Gear^.X) + WorldDx - 0, round(Gear^.Y) + WorldDy - 0, 7 - (Gear^.FrameTicks div 50), 1, Gear^.Angle);
             end;
         case Gear^.Kind of
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);

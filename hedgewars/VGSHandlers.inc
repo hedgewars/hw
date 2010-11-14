@@ -618,3 +618,12 @@ if round(Gear^.Y) > cWaterLine then
     DeleteVisualGear(Gear);
     end
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepBulletHit(Gear: PVisualGear; Steps: Longword);
+begin
+  if Gear^.FrameTicks <= Steps then
+      DeleteVisualGear(Gear)
+  else
+      dec(Gear^.FrameTicks, Steps);
+end;

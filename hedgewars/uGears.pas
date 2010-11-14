@@ -1424,6 +1424,7 @@ procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
 var t: PGearArray;
     Gear: PGear;
     i, tmpDmg: LongInt;
+    VGear: PVisualGear;
 begin
 t:= CheckGearsCollision(Ammo);
 // Just to avoid hogs on rope dodging fire.
@@ -1445,6 +1446,13 @@ while i > 0 do
     tmpDmg:= ModifyDamage(Damage, Gear);
     if (Gear^.State and gstNoDamage) = 0 then
         begin
+        
+        VGear := AddVisualGear(hwround(Ammo^.X), hwround(Ammo^.Y), vgtBulletHit);
+        if VGear <> nil then
+        begin
+            VGear^.Angle := DxDy2Angle(-Ammo^.dX, Ammo^.dY);
+        end;
+        
         if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) and (Ammo^.Kind = gtShover) then Gear^.FlightTime:= 1;
 
         case Gear^.Kind of

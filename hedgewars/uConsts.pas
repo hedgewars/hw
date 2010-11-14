@@ -75,7 +75,8 @@ type
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
             sprSMineOff, sprSMineOn, sprHandSMine, sprHammer,
-            sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb
+            sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
+            sprBulletHit
             );
 
     // Gears that interact with other Gears and/or Land
@@ -98,7 +99,8 @@ type
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
-            vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail);
+            vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail,
+            vgtBulletHit);
 
     TGearsType = set of TGearType;
 
@@ -835,6 +837,11 @@ const
             // sprAirDrill
             (FileName:  'NapalmBomb'; Path: ptGraphics; AltPath: ptNone;
                 Texture: nil; Surface: nil; Width:  16; Height: 16;
+                imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
+                tpMedium; getDimensions: false; getImageDimensions: true),
+            // sprNapalmBomb
+            (FileName:  'BulletHit'; Path: ptGraphics; AltPath: ptNone;
+                Texture: nil; Surface: nil; Width:  32; Height: 32;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
                 tpMedium; getDimensions: false; getImageDimensions: true)
             // sprNapalmBomb
