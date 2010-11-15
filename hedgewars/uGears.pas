@@ -993,7 +993,7 @@ begin
         t:= t^.NextGear
         end;
    
-    if (GameFlags and gfResetWeps) <> 0 then
+    if ((GameFlags and gfResetWeps) <> 0) and not PlacingHogs then
         ResetWeapons;
 
     if (GameFlags and gfResetHealth) <> 0 then
