@@ -156,7 +156,7 @@
                 editableCell.minimumCharacters = 0;
                 editableCell.delegate = self;
                 editableCell.textField.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-                editableCell.textField.textColor = [UIColor lightGrayColor];
+                editableCell.textField.textColor = [UIColor blackColor];
             }
             
             if (row == 0) {

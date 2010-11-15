@@ -33,7 +33,7 @@ BOOL inline rotationManager (UIInterfaceOrientation interfaceOrientation) {
         return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
                (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
     else
-        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+        return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
 }
 
 NSInteger inline randomPort () {

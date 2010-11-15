@@ -39,6 +39,7 @@
                       NSLocalizedString(@"Join us on Facebook",@""),
                       NSLocalizedString(@"Follow on Twitter",@""),
                       NSLocalizedString(@"Visit website",@""),
+                      NSLocalizedString(@"Chat with us in IRC",@""),
                       nil];
     self.waysToSupport = array;
     [array release];
@@ -87,6 +88,9 @@
             case 2:
                 imgString = @"Icon-Small.png";
                 break;
+            case 3:
+                imgString = @"irc.png";
+                break;
             default:
                 DLog(@"No way");
                 break;
@@ -116,6 +120,9 @@
                 break;
             case 2:
                 urlString = @"http://www.hedgewars.org";
+                break;
+            case 3:
+                urlString = @"http://webchat.freenode.net/?channels=hedgewars";
                 break;
             default:
                 DLog(@"No way");
