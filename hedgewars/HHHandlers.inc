@@ -41,23 +41,26 @@ else
 end;
 
 // Shouldn't more of this ammo switching stuff be moved to uAmmos ?
-procedure ChangeAmmo(Gear: PGear);
+function ChangeAmmo(Gear: PGear): boolean;
 var slot, i: Longword;
     ammoidx: LongInt;
 begin
+ChangeAmmo:= false;
 slot:= Gear^.MsgParam;
 
 with PHedgehog(Gear^.Hedgehog)^ do
     begin
     Gear^.Message:= Gear^.Message and not gmSlot;
     ammoidx:= 0;
+    if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
+       (TargetPoint.X <> NoPointX) or
+       ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0)) or
+       ((Gear^.State and gstHHDriven) = 0) then exit;
+    ChangeAmmo:= true;
+
     while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do inc(ammoidx);
 
-    if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
-       ((MultiShootAttacks > 0) and (CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) = 0)) or
-       ((Gear^.State and gstHHDriven) = 0) then exit;
-
-    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
+    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
 
     MultiShootAttacks:= 0;
     Gear^.Message:= Gear^.Message and not (gmLJump or gmHJump);
@@ -95,6 +98,7 @@ procedure HHSetWeapon(Gear: PGear);
 var t: LongInt;
     weap: TAmmoType;
     Hedgehog: PHedgehog;
+    s: boolean;
 begin
 weap:= TAmmoType(Gear^.MsgParam);
 Hedgehog:= PHedgehog(Gear^.Hedgehog);
@@ -110,11 +114,11 @@ Gear^.Message:= Gear^.Message and not gmWeapon;
 with Hedgehog^ do
     while (CurAmmoType <> weap) and (t >= 0) do
         begin
-        ChangeAmmo(Gear);
+        s:= ChangeAmmo(Gear);
         dec(t)
         end;
 
-ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^)
+if s then ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^)
 end;
 
 procedure HHSetTimer(Gear: PGear);
@@ -133,9 +137,10 @@ end;
 
 
 procedure Attack(Gear: PGear);
-var xx, yy, lx, ly: hwFloat;
+var xx, yy, newDx, newDy, lx, ly: hwFloat;
     tmpGear: PVisualGear;
     CurWeapon: PAmmo;
+    altUse: boolean;
 begin
 bShowFinger:= false;
 CurWeapon:= GetAmmoEntry(PHedgehog(Gear^.Hedgehog)^);
@@ -178,13 +183,31 @@ with Gear^,
         if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery) then xx:= - xx;
         if Ammoz[CurAmmoType].Ammo.AttackVoice <> sndNone then
            PlaySound(Ammoz[CurAmmoType].Ammo.AttackVoice, CurrentTeam^.voicepack);
+
+// Initiating alt attack
+        if  (CurAmmoGear <> nil) and
+            ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) and
+            ((Gear^.Message and gmLJump) <> 0) and
+            ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
+            begin
+            newDx:= dX / _2; 
+            newDy:= dY / _2;
+            altUse:= true;
+            end
+        else
+            begin
+            newDx:= xx*Power/cPowerDivisor;
+            newDy:= yy*Power/cPowerDivisor;
+            altUse:= false
+            end;
+
              case CurAmmoType of
-                      amGrenade: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtAmmo_Bomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
-                      amMolotov: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtMolotov,      0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
-                  amClusterBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtClusterBomb,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
-                      amGasBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtGasBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
-                      amBazooka: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtAmmo_Grenade, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
-                          amBee: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtBee,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                      amGrenade: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtBomb,         0, newDx, newDy, CurWeapon^.Timer);
+                      amMolotov: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtMolotov,      0, newDx, newDy, 0);
+                  amClusterBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtClusterBomb,  0, newDx, newDy, CurWeapon^.Timer);
+                      amGasBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtGasBomb,      0, newDx, newDy, CurWeapon^.Timer);
+                      amBazooka: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtShell,        0, newDx, newDy, 0);
+                          amBee: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtBee,          0, newDx, newDy, 0);
                       amShotgun: begin
                                  PlaySound(sndShotgunReload);
                                  CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
@@ -192,7 +215,10 @@ with Gear^,
                    amPickHammer: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly) + cHHRadius, gtPickHammer, 0, _0, _0, 0);
                          amSkip: ParseCommand('/skip', true);
                          amRope: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtRope, 0, xx, yy, 0);
-                         amMine: AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtMine, gstWait, SignAs(_0_02, dX), _0, 3000);
+                         amMine: if altUse then
+                                    AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtMine, gstWait, newDx, newDy, 3000)
+                                 else
+                                    AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtMine, gstWait, SignAs(_0_02, dX), _0, 3000);
                         amSMine: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtSMine,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                        amDEagle: CurAmmoGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
                       amSineGun: CurAmmoGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtSineGunShot, 0, xx * _0_5, yy * _0_5, 0);
@@ -237,10 +263,10 @@ with Gear^,
                        amKamikaze: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtKamikaze, 0, xx * _0_5, yy * _0_5, 0);
                          amCake: CurAmmoGear:= AddGear(hwRound(lx) + hwSign(dX) * 3, hwRound(ly), gtCake, 0, xx, _0, 0);
                     amSeduction: CurAmmoGear:= AddGear(hwRound(lx + xx * cHHRadius * 2), hwRound(ly + yy * cHHRadius * 2), gtSeduction, 0, xx * _0_4, yy * _0_4, 0);
-                   amWatermelon: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtWatermelon,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, CurWeapon^.Timer);
-                  amHellishBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtHellishBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                   amWatermelon: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtWatermelon,  0, newDx, newDy, CurWeapon^.Timer);
+                  amHellishBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtHellishBomb,    0, newDx, newDy, 0);
                        amNapalm: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 2, _0, _0, 0);
-                        amDrill: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtDrill, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                        amDrill: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtDrill, 0, newDx, newDy, 0);
                       amBallgun: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBallgun,  0, xx * _0_5, yy * _0_5, 0);
                     amJetpack: CurAmmoGear:= AddGear(hwRound(lx), hwRound(ly), gtJetpack, 0, _0, _0, 0);
                     amBirdy: begin
@@ -251,9 +277,15 @@ with Gear^,
                                     PlaySound(sndLowGravity);
                                     cGravity:= cMaxWindSpeed
                                     end;
-                      amExtraDamage: cDamageModifier:= _1_5;
+                      amExtraDamage:begin 
+                                    PlaySound(sndHellishImpact4);
+                                    cDamageModifier:= _1_5
+                                    end;
                       amInvulnerable: Invulnerable:= true;
-                      amExtraTime: TurnTimeLeft:= TurnTimeLeft + 30000;
+                      amExtraTime:  begin
+                                    PlaySound(sndSwitchHog);
+                                    TurnTimeLeft:= TurnTimeLeft + 30000
+                                    end;
                       amLaserSight: cLaserSighting:= true;
                       amVampiric: begin
                                   PlaySound(sndOw1, Team^.voicepack);
@@ -273,6 +305,8 @@ with Gear^,
                                 gtResurrector, 0, _0, _0, 0);
                         CurAmmoGear^.SoundChannel := LoopSound(sndResurrector);
                     end;
+                   amDrillStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 3, _0, _0, 0);
+                   //amMelonStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 4, _0, _0, 0);
                   end;
 
         uStats.AmmoUsed(CurAmmoType);
@@ -332,10 +366,10 @@ with CurrentHedgehog^.Gear^,
         else
             begin
             OnUsedAmmo(CurrentHedgehog^);
-            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEndHint) = 0) and ((GameFlags and gfInfAttack) = 0) then
+            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and ((GameFlags and gfInfAttack) = 0) then
                 TurnTimeLeft:= Ammoz[a].TimeAfterTurn;
-            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEndHint) = 0) then State:= State or gstAttacked;
-            if (Ammoz[a].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0 then ApplyAmmoChanges(CurrentHedgehog^)
+            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) then State:= State or gstAttacked;
+            if (Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then ApplyAmmoChanges(CurrentHedgehog^)
             end;
         end
     else
@@ -419,7 +453,7 @@ PlaySound(sndShotgunReload);
 case Gear^.Pos of
        posCaseUtility,
        posCaseAmmo: begin
-                    a:= TAmmoType(Gear^.State);
+                    a:= Gear^.AmmoType;
                     AddAmmo(PHedgehog(HH^.Hedgehog)^, a);
 // Possibly needs to check shared clan ammo game flag once added.
 // On the other hand, no obvious reason that clan members shouldn't know what ammo another clan member picked up
@@ -628,11 +662,22 @@ if isFalling then
    if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then Gear^.dY:= _0;
    Gear^.State:= Gear^.State or gstMoving;
    if isUnderwater then Gear^.dY:= Gear^.dY + cGravity / _2
-   else Gear^.dY:= Gear^.dY + cGravity
+   else
+       begin
+       Gear^.dY:= Gear^.dY + cGravity;
+// this set of circumstances could be less complex if jumping was more clearly identified
+       if ((GameFlags and gfMoreWind) <> 0) and 
+          (Gear^.Damage <> 0) or
+          ((CurAmmoGear <> nil) and
+            ((CurAmmoGear^.AmmoType = amJetpack) or
+            (CurAmmoGear^.AmmoType = amBirdy))) or
+          ((Gear^.dY.QWordValue + Gear^.dX.QWordValue) > _0_55.QWordValue)
+          then Gear^.dX := Gear^.dX + cWindSpeed * _0_2
+       end
    end 
 else
    begin
-   if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_55)
+   if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue)
       and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);
 
    if not Gear^.dY.isNegative then
@@ -785,19 +830,16 @@ else
             and ((Gear^.Message and gmLJump) <> 0)
             and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
             begin
-            Gear^.Message:= Gear^.Message and not gmLJump;
-            Attack(Gear)
+            Attack(Gear);
+            Gear^.Message:= Gear^.Message and not gmLJump
             end;
 
 if (CurAmmoGear = nil)
     or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) 
-    or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0) then
+    or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) then
     begin
     if ((Gear^.Message and gmSlot) <> 0) then
-        begin
-        ChangeAmmo(Gear);
-        ApplyAmmoChanges(Hedgehog^)
-        end;
+        if ChangeAmmo(Gear) then ApplyAmmoChanges(Hedgehog^);
 
     if ((Gear^.Message and gmWeapon) <> 0) then HHSetWeapon(Gear);
 
@@ -870,7 +912,7 @@ if (Gear^.State and (gstMoving or gstDrowning)) <> 0 then
 
 if (Gear^.Health = 0) then
     begin
-    if PrvInactive then
+    if PrvInactive or ((GameFlags and gfInfAttack) <> 0) then
         begin
         Gear^.Timer:= 0;
         FollowGear:= Gear;
@@ -879,6 +921,7 @@ if (Gear^.Health = 0) then
 
         if not PHedgehog(Gear^.Hedgehog)^.Team^.hasGone then
             begin
+            PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] := false;
             if PHedgehog(Gear^.Hedgehog)^.Effects[heResurrectable] then begin
                 ResurrectHedgehog(Gear);
             end else begin

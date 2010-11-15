@@ -100,7 +100,7 @@ PageMain::PageMain(QWidget* parent) :
         Tips << tr("Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they'll win or lose together.", "Tips");
         Tips << tr("Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.", "Tips");
         Tips << tr("If you're unsure what to do and don't want to waste ammo, skip one round. But don't let too much time pass as there will be Sudden Death!", "Tips");
-        Tips << tr("Want to save ropse? Release the rope in mid air and then shoot again. As long as you don't touch the ground you'll reuse your rope without wasting ammo!", "Tips");
+        Tips << tr("Want to save ropes? Release the rope in mid air and then shoot again. As long as you don't touch the ground you'll reuse your rope without wasting ammo!", "Tips");
         Tips << tr("If you'd like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.", "Tips");
         Tips << tr("You're bored of default gameplay? Try one of the missions - they'll offer different gameplay depending on the one you picked.", "Tips");
         Tips << tr("By default the game will always record the last game played as a demo. Select 'Local Game' and pick the 'Demos' button on the lower right corner to play or manage them.", "Tips");
@@ -138,18 +138,22 @@ PageMain::PageMain(QWidget* parent) :
         Tips << tr("The Flame Thrower is a weapon but it can be used for tunnel digging as well.", "Tips");
         Tips << tr("Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.", "Tips");
         Tips << tr("Want to know who's behind the game? Click on the Hedgewars logo in the main menu to see the credits.", "Tips");
-        Tips << tr("Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!", "Tips").arg("<a href=\"http://www.facebook.com/Hedgewars\">Facebook</a>").arg("<a href=\"http://steamcommunity.com/groups/hedgewars\">Steam Community</a>").arg("<a href=\"http://twitter.com/hedgewars\">Twitter</a>");
+        Tips << tr("Like Hedgewars? Become a fan on %1 or follow us on %2!", "Tips").arg("<a href=\"http://www.facebook.com/Hedgewars\">Facebook</a>").arg("<a href=\"http://twitter.com/hedgewars\">Twitter</a>");
         Tips << tr("Feel free to draw your own graves, hats, flags or even maps and themes! But note that you'll have to share them somewhere to use them online.", "Tips");
         Tips << tr("Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!", "Tips");
         // The following tip will require links to app store entries first.
         //Tips << tr("Want to play Hedgewars any time? Grab the Mobile version for %1 and %2.", "Tips").arg("").arg("");
         Tips << tr("Keep your video card drivers up to date to avoid issues playing the game.", "Tips");
         //Tips << tr("", "Tips");
+#ifndef __APPLE__
+        Tips << tr("You're able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.", "Tips");
+#endif
 #ifdef _WIN32
         Tips << tr("You can find your Hedgewars configuration files under \"My Documents\\Hedgewars\". Create backups or take the files with you, but don't edit them by hand.", "Tips");
-        Tips << tr("You're able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.", "Tips");
-#else
-        Tips << tr("You can find your Hedgewars configuration files under \"Hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");
+#elif defined __APPLE__                                                                                                                     
+        Tips << tr("You can find your Hedgewars configuration files under \"Library/Application Support/Hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");
+#else  
+        Tips << tr("You can find your Hedgewars configuration files under \".hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");
 #endif
         mainNote->setText(QLabel::tr("Tip: ") + Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()]);
     }
@@ -611,7 +615,7 @@ PageOptions::PageOptions(QWidget* parent) :
             CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
             MiscLayout->addWidget(CBAutoUpdate, 4, 0, 1, 2);
 #endif
-#ifdef _WIN32
+#ifndef __APPLE__
             BtnAssociateFiles = new QPushButton(groupMisc);
             BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
             BtnAssociateFiles->setEnabled(!custom_data && !custom_config);
@@ -1024,8 +1028,9 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
     topLine->addStretch();
 
 
-    BtnCampaignPage = addButton(":/res/SimpleGame.png", middleLine, 0, true);
+    BtnCampaignPage = addButton(":/res/Campaign.png", middleLine, 0, true);
     BtnCampaignPage->setToolTip(tr("Campaign Mode (...). IN DEVELOPMENT"));
+    BtnCampaignPage->setVisible(false);
 
     BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
     BtnTrainPage->setToolTip(tr("Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT"));
@@ -1161,13 +1166,10 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     ruleLabel->setText(tr("Rules:"));
     CBRules = new QComboBox(this);
     CBRules->addItem(QComboBox::tr("Any"));
-    CBRules->addItem(QComboBox::tr("Default"));
-    CBRules->addItem(QComboBox::tr("Pro mode"));
-    CBRules->addItem(QComboBox::tr("Shoppa"));
-    CBRules->addItem(QComboBox::tr("Basketball"));
-    CBRules->addItem(QComboBox::tr("Minefield"));
-    CBRules->addItem(QComboBox::tr("Barrel mayhem"));
-    CBRules->addItem(QComboBox::tr("Tunnel hogs"));
+    // not the most elegant solution but it works
+    ammoSchemeModel = new AmmoSchemeModel(this, NULL);
+    for (int i = 0; i < ammoSchemeModel->predefSchemesNames.count(); i++)
+        CBRules->addItem(ammoSchemeModel->predefSchemesNames.at(i).toAscii().constData());
     filterLayout->addWidget(ruleLabel);
     filterLayout->addWidget(CBRules);
     filterLayout->addSpacing(30);
@@ -1176,12 +1178,10 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     weaponLabel->setText(tr("Weapons:"));
     CBWeapons = new QComboBox(this);
     CBWeapons->addItem(QComboBox::tr("Any"));
-    CBWeapons->addItem(QComboBox::tr("Basketball"));
-    CBWeapons->addItem(QComboBox::tr("Crazy"));
-    CBWeapons->addItem(QComboBox::tr("Default"));
-    CBWeapons->addItem(QComboBox::tr("Minefield"));
-    CBWeapons->addItem(QComboBox::tr("Pro mode"));
-    CBWeapons->addItem(QComboBox::tr("Shoppa"));
+    for (int i = 0; i < cDefaultAmmos.count(); i++) {
+        QPair<QString,QString> ammo = cDefaultAmmos.at(i);
+        CBWeapons->addItem(ammo.first.toAscii().constData());
+    }
     filterLayout->addWidget(weaponLabel);
     filterLayout->addWidget(CBWeapons);
     filterLayout->addSpacing(30);
@@ -1346,12 +1346,14 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         if(list[i + 5] == "+rnd+")
         {
             item = new QTableWidgetItem(tr("Random Map")); // selected map (is randomized)
-            item->setIcon(QIcon(":/res/mapRandom.png"));
+// FIXME - need real icons. Disabling until then
+//            item->setIcon(QIcon(":/res/mapRandom.png"));
         }
         else if (list[i+5] == "+maze+")
         {
             item = new QTableWidgetItem(tr("Random Maze"));
-            item->setIcon(QIcon(":/res/mapMaze.png"));
+// FIXME - need real icons. Disabling until then
+//            item->setIcon(QIcon(":/res/mapMaze.png"));
         }
         else
         {
@@ -1366,8 +1368,9 @@ void PageRoomsList::setRoomsList(const QStringList & list)
             }
             else
             {
-                // todo: mission icon?
-                item->setIcon(QIcon(":/res/mapCustom.png"));
+               // todo: mission icon?
+// FIXME - need real icons. Disabling until then
+//               item->setIcon(QIcon(":/res/mapCustom.png"));
             }
         }
         
@@ -1375,12 +1378,12 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         item->setToolTip(tr("Games may be played on precreated or randomized maps."));
         roomsList->setItem(r, 4, item);
 
-        item = new QTableWidgetItem(list[i + 6].left(20)); // selected game scheme
+        item = new QTableWidgetItem(list[i + 6].left(24)); // selected game scheme
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setToolTip(tr("The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism."));
         roomsList->setItem(r, 5, item);
 
-        item = new QTableWidgetItem(list[i + 7].left(20)); // selected weapon scheme
+        item = new QTableWidgetItem(list[i + 7].left(24)); // selected weapon scheme
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setToolTip(tr("The Weapon Scheme defines available weapons and their ammunition count."));
         roomsList->setItem(r, 6, item);
@@ -1545,9 +1548,9 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_invulnerable->setToolTip("<b>" + ToggleButtonWidget::tr("Invulnerable") + "</b>:<br />" + tr("All hogs have a personal forcefield"));
     glGMLayout->addWidget(TBW_invulnerable,1,1,1,1);
 
-    TBW_mines = new ToggleButtonWidget(gbGameModes, ":/res/btnMines.png");
-    TBW_mines->setToolTip("<b>" + ToggleButtonWidget::tr("Add Mines") + "</b>:<br />" + tr("Enable random mines"));
-    glGMLayout->addWidget(TBW_mines,1,2,1,1);
+    TBW_resethealth = new ToggleButtonWidget(gbGameModes, ":/res/btnResetHealth.png");
+    TBW_resethealth->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Health") + "</b>:<br />" + tr("All (living) hedgehogs are fully restored at the end of turn"));
+    glGMLayout->addWidget(TBW_resethealth,1,2,1,1);
 
     TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric.png");
     TBW_vampiric->setToolTip("<b>" + ToggleButtonWidget::tr("Vampirism") + "</b>:<br />" + tr("Gain 80% of the damage you do back in health"));
@@ -1601,6 +1604,14 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_perhogammo->setToolTip("<b>" + ToggleButtonWidget::tr("Per Hedgehog Ammo") + "</b>:<br />" + tr("Each hedgehog has its own ammo. It does not share with the team."));
     glGMLayout->addWidget(TBW_perhogammo,4,0,1,1);
 
+    TBW_nowind = new ToggleButtonWidget(gbGameModes, ":/res/btnNoWind.png");
+    TBW_nowind->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Wind") + "</b>:<br />" + tr("You will not have to worry about wind anymore."));
+    glGMLayout->addWidget(TBW_nowind,4,1,1,1);
+
+    TBW_morewind = new ToggleButtonWidget(gbGameModes, ":/res/btnMoreWind.png");
+    TBW_morewind->setToolTip("<b>" + ToggleButtonWidget::tr("More Wind") + "</b>:<br />" + tr("Wind will affect almost everything."));
+    glGMLayout->addWidget(TBW_morewind,4,2,1,1);
+
     // Right
     QLabel * l;
 
@@ -1612,7 +1623,6 @@ PageScheme::PageScheme(QWidget* parent) :
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconDamage.png"));
     glBSLayout->addWidget(l,0,1,1,1);
-
     SB_DamageModifier = new QSpinBox(gbBasicSettings);
     SB_DamageModifier->setRange(10, 300);
     SB_DamageModifier->setValue(100);
@@ -1627,7 +1637,6 @@ PageScheme::PageScheme(QWidget* parent) :
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconTime.png"));
     glBSLayout->addWidget(l,1,1,1,1);
-
     SB_TurnTime = new QSpinBox(gbBasicSettings);
     SB_TurnTime->setRange(1, 9999);
     SB_TurnTime->setValue(45);
@@ -1642,7 +1651,6 @@ PageScheme::PageScheme(QWidget* parent) :
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconHealth.png"));
     glBSLayout->addWidget(l,2,1,1,1);
-
     SB_InitHealth = new QSpinBox(gbBasicSettings);
     SB_InitHealth->setRange(50, 200);
     SB_InitHealth->setValue(100);
@@ -1657,7 +1665,6 @@ PageScheme::PageScheme(QWidget* parent) :
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconSuddenDeath.png"));
     glBSLayout->addWidget(l,3,1,1,1);
-
     SB_SuddenDeath = new QSpinBox(gbBasicSettings);
     SB_SuddenDeath->setRange(0, 50);
     SB_SuddenDeath->setValue(15);
@@ -1665,77 +1672,132 @@ PageScheme::PageScheme(QWidget* parent) :
     glBSLayout->addWidget(SB_SuddenDeath,3,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("Crate Drops"));
+    l->setText(QLabel::tr("Sudden Death Water Rise"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,4,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconBox.png"));
+    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png")); // TODO: icon
     glBSLayout->addWidget(l,4,1,1,1);
-
-    SB_CaseProb = new FreqSpinBox(gbBasicSettings);
-    SB_CaseProb->setRange(0, 9);
-    SB_CaseProb->setValue(5);
-    glBSLayout->addWidget(SB_CaseProb,4,2,1,1);
+    SB_WaterRise = new QSpinBox(gbBasicSettings);
+    SB_WaterRise->setRange(0, 100);
+    SB_WaterRise->setValue(47);
+    SB_WaterRise->setSingleStep(5);
+    glBSLayout->addWidget(SB_WaterRise,4,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("Mines Time"));
+    l->setText(QLabel::tr("Sudden Death Health Decrease"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,5,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconSuddenDeath.png")); // TODO: icon
     glBSLayout->addWidget(l,5,1,1,1);
-    SB_MinesTime = new QSpinBox(gbBasicSettings);
-    SB_MinesTime->setRange(-1, 3);
-    SB_MinesTime->setValue(3);
-    SB_MinesTime->setSingleStep(1);
-    SB_MinesTime->setSpecialValueText(tr("Random"));
-    SB_MinesTime->setSuffix(" "+ tr("Seconds"));
-    glBSLayout->addWidget(SB_MinesTime,5,2,1,1);
+    SB_HealthDecrease = new QSpinBox(gbBasicSettings);
+    SB_HealthDecrease->setRange(0, 100);
+    SB_HealthDecrease->setValue(5);
+    SB_HealthDecrease->setSingleStep(1);
+    glBSLayout->addWidget(SB_HealthDecrease,5,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("Mines"));
+    l->setText(QLabel::tr("Crate Drops"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,6,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconBox.png"));
     glBSLayout->addWidget(l,6,1,1,1);
-    SB_Mines = new QSpinBox(gbBasicSettings);
-    SB_Mines->setRange(1, 80);
-    SB_Mines->setValue(1);
-    SB_Mines->setSingleStep(5);
-    glBSLayout->addWidget(SB_Mines,6,2,1,1);
+    SB_CaseProb = new FreqSpinBox(gbBasicSettings);
+    SB_CaseProb->setRange(0, 9);
+    SB_CaseProb->setValue(5);
+    glBSLayout->addWidget(SB_CaseProb,6,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("% Dud Mines"));
+    l->setText(QLabel::tr("% Health Crates"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,7,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconDud.png"));
+    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
     glBSLayout->addWidget(l,7,1,1,1);
+    SB_HealthCrates = new QSpinBox(gbBasicSettings);
+    SB_HealthCrates->setRange(0, 100);
+    SB_HealthCrates->setValue(35);
+    SB_HealthCrates->setSingleStep(5);
+    glBSLayout->addWidget(SB_HealthCrates,7,2,1,1);
+
+    l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("Health in Crates"));
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,8,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
+    glBSLayout->addWidget(l,8,1,1,1);
+    SB_CrateHealth = new QSpinBox(gbBasicSettings);
+    SB_CrateHealth->setRange(0, 200);
+    SB_CrateHealth->setValue(25);
+    SB_CrateHealth->setSingleStep(5);
+    glBSLayout->addWidget(SB_CrateHealth,8,2,1,1);
+
+    l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("Mines Time"));
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,9,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
+    glBSLayout->addWidget(l,9,1,1,1);
+    SB_MinesTime = new QSpinBox(gbBasicSettings);
+    SB_MinesTime->setRange(-1, 5);
+    SB_MinesTime->setValue(3);
+    SB_MinesTime->setSingleStep(1);
+    SB_MinesTime->setSpecialValueText(tr("Random"));
+    SB_MinesTime->setSuffix(" "+ tr("Seconds"));
+    glBSLayout->addWidget(SB_MinesTime,9,2,1,1);
+
+    l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("Mines"));
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,10,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
+    glBSLayout->addWidget(l,10,1,1,1);
+    SB_Mines = new QSpinBox(gbBasicSettings);
+    SB_Mines->setRange(0, 80);
+    SB_Mines->setValue(0);
+    SB_Mines->setSingleStep(5);
+    glBSLayout->addWidget(SB_Mines,10,2,1,1);
+
+    l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("% Dud Mines"));
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,11,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconDud.png"));
+    glBSLayout->addWidget(l,11,1,1,1);
     SB_MineDuds = new QSpinBox(gbBasicSettings);
     SB_MineDuds->setRange(0, 100);
     SB_MineDuds->setValue(0);
     SB_MineDuds->setSingleStep(5);
-    glBSLayout->addWidget(SB_MineDuds,7,2,1,1);
+    glBSLayout->addWidget(SB_MineDuds,11,2,1,1);
 
 
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Explosives"));
     l->setWordWrap(true);
-    glBSLayout->addWidget(l,8,0,1,1);
+    glBSLayout->addWidget(l,12,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconDamage.png"));
-    glBSLayout->addWidget(l,8,1,1,1);
+    glBSLayout->addWidget(l,12,1,1,1);
     SB_Explosives = new QSpinBox(gbBasicSettings);
     SB_Explosives->setRange(0, 40);
     SB_Explosives->setValue(0);
     SB_Explosives->setSingleStep(1);
-    glBSLayout->addWidget(SB_Explosives,8,2,1,1);
+    glBSLayout->addWidget(SB_Explosives,12,2,1,1);
 
 
     l = new QLabel(gbBasicSettings);
@@ -1774,7 +1836,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(TBW_lowGravity, 5);
     mapper->addMapping(TBW_laserSight, 6);
     mapper->addMapping(TBW_invulnerable, 7);
-    mapper->addMapping(TBW_mines, 8);
+    mapper->addMapping(TBW_resethealth, 8);
     mapper->addMapping(TBW_vampiric, 9);
     mapper->addMapping(TBW_karma, 10);
     mapper->addMapping(TBW_artillery, 11);
@@ -1788,15 +1850,21 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(TBW_infattack, 19);
     mapper->addMapping(TBW_resetweps, 20);
     mapper->addMapping(TBW_perhogammo, 21);
-    mapper->addMapping(SB_DamageModifier, 22);
-    mapper->addMapping(SB_TurnTime, 23);
-    mapper->addMapping(SB_InitHealth, 24);
-    mapper->addMapping(SB_SuddenDeath, 25);
-    mapper->addMapping(SB_CaseProb, 26);
-    mapper->addMapping(SB_MinesTime, 27);
-    mapper->addMapping(SB_Mines, 28);
-    mapper->addMapping(SB_MineDuds, 29);
-    mapper->addMapping(SB_Explosives, 30);
+    mapper->addMapping(TBW_nowind, 22);
+    mapper->addMapping(TBW_morewind, 23);
+    mapper->addMapping(SB_DamageModifier, 24);
+    mapper->addMapping(SB_TurnTime, 25);
+    mapper->addMapping(SB_InitHealth, 26);
+    mapper->addMapping(SB_SuddenDeath, 27);
+    mapper->addMapping(SB_CaseProb, 28);
+    mapper->addMapping(SB_MinesTime, 29);
+    mapper->addMapping(SB_Mines, 30);
+    mapper->addMapping(SB_MineDuds, 31);
+    mapper->addMapping(SB_Explosives, 32);
+    mapper->addMapping(SB_HealthCrates, 33);
+    mapper->addMapping(SB_CrateHealth, 34);
+    mapper->addMapping(SB_WaterRise, 35);
+    mapper->addMapping(SB_HealthDecrease, 36);
 
     mapper->toFirst();
 }

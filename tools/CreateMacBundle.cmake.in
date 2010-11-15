@@ -1,3 +1,5 @@
+message(STATUS "Performing standalone bundle creation...")
+
 execute_process(COMMAND mkdir -p ${frameworks_dir})
 
 execute_process(COMMAND ${macdeployqt_EXE} ${CMAKE_BINARY_DIR}/${bundle_name} OUTPUT_QUIET ERROR_QUIET)

@@ -38,7 +38,7 @@ var
     PathPrefix      : shortstring = './';
     cShowFPS        : boolean     = false;
     cAltDamage      : boolean     = true;
-    cReducedQuality : LongInt     = rqNone;
+    cReducedQuality : LongWord    = rqNone;
     //userNick is in uChat
     recordFileName  : shortstring = '';
     cReadyDelay     : Longword    = 0;
@@ -75,6 +75,11 @@ var
     cMinesTime       : LongInt;
     cMaxAIThinkTime  : Longword;
 
+    cHealthCaseProb  : LongInt;
+    cHealthCaseAmount: LongInt;
+    cWaterRise       : LongInt;
+    cHealthDecrease  : LongInt;
+
     cCloudsNumber    : LongInt;
 
     cTagsMask        : byte;
@@ -107,7 +112,7 @@ var
     cScreenSpace          : LongInt;
 
     cCaseFactor     : Longword;
-    cLandAdditions  : Longword;
+    cLandMines      : Longword;
     cExplosives     : Longword;
 
     cSeed           : shortstring;
@@ -116,8 +121,7 @@ var
     cInactDelay     : Longword;
 
     bBetweenTurns   : boolean;
-    cHealthDecrease : LongWord;
-    bWaterRising    : Boolean;
+    bWaterRising    : boolean;
 
     ShowCrosshair   : boolean;
     CursorMovementX : LongInt;
@@ -281,12 +285,12 @@ procedure OutError(Msg: shortstring; isFatalError: boolean);
 begin
 // obsolete? written in WriteLnToConsole() anyway
 // {$IFDEF DEBUGFILE}AddFileLog(Msg);{$ENDIF}
-    WriteLnToConsole(Msg);
-    if isFatalError then
+WriteLnToConsole(Msg);
+if isFatalError then
     begin
-        SendIPC('E' + GetLastConsoleLine);
-        SDL_Quit;
-        halt(1)
+    SendIPC('E' + GetLastConsoleLine);
+    SDL_Quit;
+    halt(1)
     end
 end;
 
@@ -744,7 +748,6 @@ begin
     TimeTrialStopTime   := 0;
     cWaterLine          := LAND_HEIGHT;
     cGearScrEdgesDist   := 240;
-    cHealthDecrease     := 0;
 
     GameFlags           := 0;
     TrainingFlags       := 0;
@@ -753,20 +756,24 @@ begin
     cDamagePercent      := 100;
     cMineDudPercent     := 0;
     cTemplateFilter     := 0;
-    cMapGen             := 0;//MAPGEN_REGULAR
+    cMapGen             := 0;   // MAPGEN_REGULAR
     cMazeSize           := 0;
     cHedgehogTurnTime   := 45000;
-    cMinesTime          := 3000;
+    cMinesTime          := 3;
     cMaxAIThinkTime     := 9000;
     cCloudsNumber       := 9;
+    cHealthCaseProb     := 35;
+    cHealthCaseAmount   := 25;
+    cWaterRise          := 47;
+    cHealthDecrease     := 5;
 
     cTagsMask       := 0;
     KBnum           := 0;
     InitStepsFlags  := 0;
     RealTicks       := 0;
-    AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
+    AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - from weapon
     cCaseFactor     := 5;  {0..9}
-    cLandAdditions  := 4;
+    cLandMines      := 4;
     cExplosives     := 2;
 
     GameState       := Low(TGameState);
@@ -873,7 +880,7 @@ begin
     cReducedQuality := rqNone;
     //userNick is in uChat
     recordFileName  := '';
-    cReadyDelay     := 5000;
+    cReadyDelay     := 0;
 end;
 
 end.

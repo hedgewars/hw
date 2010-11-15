@@ -29,7 +29,7 @@ function onGameInit()
     GameFlags = gfSolidLand + gfDivideTeams
     TurnTime = 10000
     CaseFreq = 0 
-    LandAdds = 0 
+    MinesNum = 0 
     Explosives = 0 
     Delay = 500 
     SuddenDeathTurns = 99999 -- "disable" sudden death

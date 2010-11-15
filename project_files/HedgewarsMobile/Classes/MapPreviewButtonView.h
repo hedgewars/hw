@@ -38,12 +38,12 @@
 
 @property (nonatomic,assign) id<MapPreviewViewDelegate> delegate;
 
-
 -(void) setBackgroundImageRounded:(UIImage *)image forState:(UIControlState)state;
 -(void) setImageRounded:(UIImage *)image forState:(UIControlState)state;
 -(void) setImageRoundedForNormalState:(UIImage *)image;
 -(void) updatePreviewWithSeed:(NSString *)seed;
 -(void) updatePreviewWithFile:(NSString *)filePath;
+-(void) turnOnWidgets;
 -(NSDictionary *)getDataForEngine;
 
 @end

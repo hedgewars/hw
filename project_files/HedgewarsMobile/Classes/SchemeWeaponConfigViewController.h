@@ -31,13 +31,16 @@
 
     NSString *selectedScheme;
     NSString *selectedWeapon;
+
+    UISwitch *syncSwitch;
 }
 
-@property (nonatomic, retain) NSArray *listOfSchemes;
-@property (nonatomic, retain) NSArray *listOfWeapons;
+@property (nonatomic,retain) NSArray *listOfSchemes;
+@property (nonatomic,retain) NSArray *listOfWeapons;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath_sc;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath_we;
 @property (nonatomic,retain) NSString *selectedScheme;
 @property (nonatomic,retain) NSString *selectedWeapon;
+@property (nonatomic,retain) UISwitch *syncSwitch;
 
 @end

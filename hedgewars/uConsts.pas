@@ -43,7 +43,7 @@ type
             ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps);
 
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
-            sprLag, sprArrow, sprGrenade, sprTargetP, sprBee,
+            sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
             sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
             sprMineOn, sprMineDead, sprCase, sprFAid, sprDynamite, sprPower,
             sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
@@ -74,11 +74,13 @@ type
             sprBigExplosion, sprSmokeRing, sprBeeTrace, sprEgg, sprTargetBee, sprHandBee,
             sprFeather, sprPiano, sprHandSineGun, sprPortalGun, sprPortal,
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
-            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer, sprHandResurrector
+            sprSMineOff, sprSMineOn, sprHandSMine, sprHammer,
+            sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
+            sprBulletHit
             );
 
     // Gears that interact with other Gears and/or Land
-    TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtGrave, gtBee, // 4
+    TGearType = (gtBomb, gtHedgehog, gtShell, gtGrave, gtBee, // 4
             gtShotgunShot, gtPickHammer, gtRope, gtMine, gtCase, // 9
             gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 14
             gtFlame, gtFirePunch, gtATStartGame, gtATSmoothWindCh, // 18
@@ -88,7 +90,8 @@ type
             gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
-            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector);
+            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
+            gtNapalmBomb); // 57
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -96,7 +99,8 @@ type
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
-            vgtBigExplosion, vgtChunk, vgtNote);
+            vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail,
+            vgtBulletHit);
 
     TGearsType = set of TGearType;
 
@@ -133,7 +137,7 @@ type
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
-            amResurrector);
+            amResurrector, amDrillStrike);
 
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
 
@@ -189,7 +193,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             PrevTexture, NextTexture: PTexture;
             end;
 
-    THogEffect = (heInvulnerable, heResurrectable, hePoisoned);
+    THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected);
 
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
 const
@@ -341,7 +345,7 @@ const
     gfLowGravity         = $00000020;
     gfLaserSight         = $00000040;
     gfInvulnerable       = $00000080;
-    gfMines              = $00000100;           // redundant? same effect as 'landadds 0'
+    gfResetHealth        = $00000100;
     gfVampiric           = $00000200;
     gfKarma              = $00000400;
     gfArtillery          = $00000800;
@@ -356,6 +360,8 @@ const
     gfInfAttack          = $00100000;
     gfResetWeps          = $00200000;
     gfPerHogAmmo         = $00400000;
+    gfDisableWind        = $00800000;           // only lua for now
+    gfMoreWind           = $01000000;
     // NOTE: When adding new game flags, ask yourself
     // if a "game start notice" would be useful. If so,
     // add one in uWorld.pas - look for "AddGoal".
@@ -412,7 +418,7 @@ const
     ammoprop_NotBorder    = $00000800;
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
-    ammoprop_NoRoundEndHint=$10000000;
+    ammoprop_NoRoundEnd=$10000000;
 
     AMMO_INFINITE = 100;
 
@@ -523,8 +529,8 @@ const
             Width:  65; Height: 65; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpLowest; getDimensions: false; getImageDimensions: true),// sprLag
             (FileName:      'Arrow'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprCursor
-            (FileName:    'Grenade'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprGrenade
+            (FileName:'BazookaShell'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprBazookaShell
             (FileName:    'Targetp'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTargetP
             (FileName:        'Bee'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -820,8 +826,30 @@ const
             (FileName: 'amResurrector'; Path: ptHedgehog; AltPath: ptNone;
                 Texture: nil; Surface: nil; Width: 32; Height: 32;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
-                tpMedium; getDimensions: false; getImageDimensions: true) 
-            ); // sprHandResurrector
+                tpMedium; getDimensions: false; getImageDimensions: true),
+            //sprHandResurrector
+            (FileName: 'Cross'; Path: ptGraphics; altPath: ptNone;
+                Texture: nil; Surface: nil; Width: 108; Height: 138;
+                imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
+                tpMedium; getDimensions: false; getImageDimensions: true),
+            //sprCross
+            (FileName:  'AirDrill'; Path: ptGraphics; AltPath: ptNone;
+                Texture: nil; Surface: nil; Width:  16; Height: 16;
+                imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
+                tpMedium; getDimensions: false; getImageDimensions: true),
+            // sprAirDrill
+            (FileName:  'NapalmBomb'; Path: ptGraphics; AltPath: ptNone;
+                Texture: nil; Surface: nil; Width:  16; Height: 16;
+                imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
+                tpMedium; getDimensions: false; getImageDimensions: true),
+            // sprNapalmBomb
+            (FileName:  'BulletHit'; Path: ptGraphics; AltPath: ptNone;
+                Texture: nil; Surface: nil; Width:  32; Height: 32;
+                imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
+                tpMedium; getDimensions: false; getImageDimensions: true)
+            // sprNapalmBomb
+            );
+
 
     Wavez: array [TWave] of record
             Sprite: TSprite;
@@ -1157,7 +1185,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 3;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
                           ammoprop_Utility or
@@ -1322,7 +1350,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
                           ammoprop_NoCrosshair or
@@ -1428,7 +1456,7 @@ const
             NameTex: nil;
             Probability: 150;
             NumberInCase: 3;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_NeedTarget or
                           ammoprop_Utility or
@@ -1483,7 +1511,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
                           ammoprop_Utility or
@@ -1746,7 +1774,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1774,7 +1802,7 @@ const
             NameTex: nil;
             Probability: 15;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1802,7 +1830,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1830,7 +1858,7 @@ const
             NameTex: nil;
             Probability: 30;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1858,7 +1886,7 @@ const
             NameTex: nil;
             Probability: 15;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1886,7 +1914,7 @@ const
             NameTex: nil;
             Probability: 15;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
@@ -1937,7 +1965,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
                           ammoprop_NoCrosshair or
@@ -2014,7 +2042,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
+            Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_AttackInMove or
                           ammoprop_DontHold or
                           ammoprop_Utility;
@@ -2136,7 +2164,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
                 Count: 1;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -2177,11 +2205,14 @@ const
             ejectX: 0;
             ejectY: 0),
 
+// Ressurrector
         (NameId: sidResurrector;
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_NoRoundEndHint;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_Utility or
+                          ammoprop_NoRoundEnd;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -2196,6 +2227,33 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
+
+// DrillStrike
+            (NameId: sidDrillStrike;
+            NameTex: nil;
+            Probability: 200;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoCrosshair or
+                            ammoprop_NeedTarget or
+                            ammoprop_AttackingPut or
+                            ammoprop_DontHold or
+                            ammoprop_NotBorder;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amDrillStrike;
+                AttackVoice: sndIncoming);
+            Slot: 5;
+            TimeAfterTurn: 0;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 6;
+            PosCount: 2;
+            PosSprite: sprAmAirplane;
             ejectX: 0;
             ejectY: 0)
         );

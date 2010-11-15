@@ -47,6 +47,7 @@ type
             HatVisibility: GLfloat;
             stats: TStatistics;
             Hat: shortstring;
+            InitialHealth: LongInt; // used for gfResetHealth
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
             Timer: Longword;
@@ -101,6 +102,7 @@ var CurrentTeam: PTeam;
     LocalClan: LongInt;  // last non-bot, non-extdriven clan
     LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index
     CurMinAngle, CurMaxAngle: Longword;
+    GameOver: boolean;
 
 procedure initModule;
 procedure freeModule;
@@ -139,31 +141,35 @@ CheckForWin:= true;
 
 TurnTimeLeft:= 0;
 ReadyTimeLeft:= 0;
-if AliveCount = 0 then
-    begin // draw
-    AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
-    SendStat(siGameResult, trmsg[sidDraw]);
-    AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
-    end else // win
-    with AliveClan^ do
-        begin
-        if TeamsNumber = 1 then
-            s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName)  // team wins
-        else
-            s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName); // clan wins
-
-        for j:= 0 to Pred(TeamsNumber) do
-            with Teams[j]^ do
-                for i:= 0 to cMaxHHIndex do
-                    with Hedgehogs[i] do
-                        if (Gear <> nil) then
-                            Gear^.State:= gstWinner;
-
-        AddCaption(s, cWhiteColor, capgrpGameState);
-        SendStat(siGameResult, s);
+if not GameOver then
+    begin
+    if AliveCount = 0 then
+        begin // draw
+        AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
+        SendStat(siGameResult, trmsg[sidDraw]);
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
-        end;
-SendStats
+        end else // win
+        with AliveClan^ do
+            begin
+            if TeamsNumber = 1 then
+                s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName)  // team wins
+            else
+                s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName); // clan wins
+
+            for j:= 0 to Pred(TeamsNumber) do
+                with Teams[j]^ do
+                    for i:= 0 to cMaxHHIndex do
+                        with Hedgehogs[i] do
+                            if (Gear <> nil) then
+                                Gear^.State:= gstWinner;
+
+            AddCaption(s, cWhiteColor, capgrpGameState);
+            SendStat(siGameResult, s);
+            AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+            end;
+    SendStats;
+    end;
+GameOver:= true
 end;
 
 procedure SwitchHedgehog;
@@ -269,15 +275,19 @@ with CurrentHedgehog^ do
 
 ResetKbd;
 
-cWindSpeed:= rndSign(GetRandom * 2 * cMaxWindSpeed);
-// cWindSpeedf:= cWindSpeed.QWordValue / _1.QWordValue throws Internal error 200502052 on fpc 2.5.1
-// see http://mantis.freepascal.org/view.php?id=17714
-cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
-if cWindSpeed.isNegative then
-    CWindSpeedf := -cWindSpeedf;
-g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);
-g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+if (GameFlags and gfDisableWind) = 0 then
+    begin
+    cWindSpeed:= rndSign(GetRandom * 2 * cMaxWindSpeed);
+    // cWindSpeedf:= cWindSpeed.QWordValue / _1.QWordValue throws 'Internal error 200502052' on Darwin
+    // see http://mantis.freepascal.org/view.php?id=17714
+    cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
+    if cWindSpeed.isNegative then
+        CWindSpeedf := -cWindSpeedf;
+    g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);
+    g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
+    end;
+
 ApplyAmmoChanges(CurrentHedgehog^);
 
 if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
@@ -365,35 +375,36 @@ var i, t: LongInt;
 begin
 
 for t:= 0 to Pred(TeamsCount) do
-   with TeamsArray[t]^ do
-      begin
-      if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
-          begin
-          LocalClan:= Clan^.ClanIndex;
-          LocalAmmo:= Hedgehogs[0].AmmoStore
-          end;
-      th:= 0;
-      for i:= 0 to cMaxHHIndex do
-          if Hedgehogs[i].Gear <> nil then
-             inc(th, Hedgehogs[i].Gear^.Health);
-      if th > MaxTeamHealth then MaxTeamHealth:= th;
-      // Some initial King buffs
-      if (GameFlags and gfKing) <> 0 then
-          begin
-          Hedgehogs[0].King:= true;
-          Hedgehogs[0].Hat:= 'crown';
-          Hedgehogs[0].Effects[hePoisoned] := false;
-          h:= Hedgehogs[0].Gear^.Health;
-          Hedgehogs[0].Gear^.Health:= hwRound(int2hwFloat(th)*_0_375);
-          if Hedgehogs[0].Gear^.Health > h then
-              begin
-              dec(th, h);
-              inc(th, Hedgehogs[0].Gear^.Health);
-              if th > MaxTeamHealth then MaxTeamHealth:= th
-              end
-          else Hedgehogs[0].Gear^.Health:= h
-          end;
-      end;
+    with TeamsArray[t]^ do
+        begin
+        if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
+            begin
+            LocalClan:= Clan^.ClanIndex;
+            LocalAmmo:= Hedgehogs[0].AmmoStore
+            end;
+        th:= 0;
+        for i:= 0 to cMaxHHIndex do
+            if Hedgehogs[i].Gear <> nil then
+               inc(th, Hedgehogs[i].Gear^.Health);
+        if th > MaxTeamHealth then MaxTeamHealth:= th;
+        // Some initial King buffs
+        if (GameFlags and gfKing) <> 0 then
+            begin
+            Hedgehogs[0].King:= true;
+            Hedgehogs[0].Hat:= 'crown';
+            Hedgehogs[0].Effects[hePoisoned] := false;
+            h:= Hedgehogs[0].Gear^.Health;
+            Hedgehogs[0].Gear^.Health:= hwRound(int2hwFloat(th)*_0_375);
+            if Hedgehogs[0].Gear^.Health > h then
+                begin
+                dec(th, h);
+                inc(th, Hedgehogs[0].Gear^.Health);
+                if th > MaxTeamHealth then MaxTeamHealth:= th
+                end
+            else Hedgehogs[0].Gear^.Health:= h;
+            Hedgehogs[0].InitialHealth:= Hedgehogs[0].Gear^.Health
+            end;
+        end;
 
 RecountAllTeamsHealth
 end;
@@ -497,6 +508,7 @@ begin
     ClansCount:= 0;
     LocalClan:= -1;
     LocalAmmo:= -1;
+    GameOver:= false
 end;
 
 procedure freeModule;

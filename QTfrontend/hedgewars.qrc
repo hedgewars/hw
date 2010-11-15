@@ -21,6 +21,7 @@
     <file>res/net.png</file>
     <file>res/About.png</file>
     <file>res/SimpleGame.png</file>
+    <file>res/Campaign.png</file>
     <file>res/Multiplayer.png</file>
     <file>res/Trainings.png</file>
     <file>res/Background.png</file>
@@ -54,7 +55,7 @@
     <file>res/btnInvulnerable.png</file>
     <file>res/btnLaserSight.png</file>
     <file>res/btnLowGravity.png</file>
-    <file>res/btnMines.png</file>
+    <file>res/btnResetHealth.png</file>
     <file>res/btnTeamsDivide.png</file>
     <file>res/btnSolid.png</file>
     <file>res/btnVampiric.png</file>
@@ -70,6 +71,8 @@
     <file>res/btnInfAttack.png</file>
     <file>res/btnResetWeps.png</file>
     <file>res/btnPerHogAmmo.png</file>
+    <file>res/btnNoWind.png</file>
+    <file>res/btnMoreWind.png</file>
     <file>res/iconBox.png</file>
     <file>res/iconHealth.png</file>
     <file>res/iconSuddenDeath.png</file>

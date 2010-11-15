@@ -31,13 +31,13 @@
 
         textField = [[UITextField alloc] initWithFrame:CGRectZero];
         textField.backgroundColor = [UIColor clearColor];
-        textField.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
         textField.delegate = self;
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.clearsOnBeginEditing = NO;
         textField.returnKeyType = UIReturnKeyDone;
         textField.adjustsFontSizeToFitWidth = YES;
         textField.userInteractionEnabled = YES;
+        textField.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
         [textField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];
 
         [self.contentView addSubview:textField];

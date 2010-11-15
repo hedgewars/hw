@@ -179,45 +179,34 @@
     [self sendToEngine:flags];
     [flags release];
 
-    NSString *dmgMod = [[NSString alloc] initWithFormat:@"e$damagepct %d",[[basicArray objectAtIndex:i++] intValue]];
-    [self sendToEngine:dmgMod];
-    [dmgMod release];
+    /* basic game flags */
+    NSString *path = [[NSString alloc] initWithFormat:@"%@/basicFlags_en.plist",IFRONTEND_DIRECTORY()];
+    NSArray *mods = [[NSArray alloc] initWithContentsOfFile:path];
+    [path release];
 
-    // support for endless games
-    NSInteger tentativeTurntime = [[basicArray objectAtIndex:i++] intValue];
-    if (tentativeTurntime == 100)
+    // initial health
+    result = [[basicArray objectAtIndex:0] intValue];
+
+    // turn time
+    NSInteger tentativeTurntime = [[basicArray objectAtIndex:1] intValue];
+    if (tentativeTurntime >= 100)
         tentativeTurntime = 9999;
     NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",tentativeTurntime * 1000];
     [self sendToEngine:turnTime];
     [turnTime release];
 
-    result = [[basicArray objectAtIndex:i++] intValue]; // initial health
+    for (i = 2; i < [basicArray count]; i++) {
+        NSDictionary *basicDict = [mods objectAtIndex:i];
+        NSString *command = [basicDict objectForKey:@"command"];
+        NSInteger value = [[basicArray objectAtIndex:i] intValue];
+        if ([basicDict objectForKey:@"checkOverMax"] && value >= [[basicDict objectForKey:@"max"] intValue])
+            value = 9999;
+        NSString *strToSend = [[NSString alloc] initWithFormat:@"%@ %d",command,value];
+        [self sendToEngine:strToSend];
+        [strToSend release];
+    }
+    [mods release];
 
-    NSString *sdTime = [[NSString alloc] initWithFormat:@"e$sd_turns %d",[[basicArray objectAtIndex:i++] intValue]];
-    [self sendToEngine:sdTime];
-    [sdTime release];
-
-    NSString *crateDrops = [[NSString alloc] initWithFormat:@"e$casefreq %d",[[basicArray objectAtIndex:i++] intValue]];
-    [self sendToEngine:crateDrops];
-    [crateDrops release];
-
-    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$minestime %d",[[basicArray objectAtIndex:i++] intValue] * 1000];
-    [self sendToEngine:minesTime];
-    [minesTime release];
-
-    NSString *minesNumber = [[NSString alloc] initWithFormat:@"e$landadds %d",[[basicArray objectAtIndex:i++] intValue]];
-    [self sendToEngine:minesNumber];
-    [minesNumber release];
-
-    NSString *dudMines = [[NSString alloc] initWithFormat:@"e$minedudpct %d",[[basicArray objectAtIndex:i++] intValue]];
-    [self sendToEngine:dudMines];
-    [dudMines release];
-
-    NSString *explosives = [[NSString alloc] initWithFormat:@"e$explosives %d",[[basicArray objectAtIndex:i++] intValue]];
-    [self sendToEngine:explosives];
-    [explosives release];
-
-    DLog(@"Sent %d flags and %d modes", [gamemodArray count], i);
     [schemeDictionary release];
     return result;
 }
@@ -225,7 +214,7 @@
 #pragma mark -
 #pragma mark Thread/Network relevant code
 // select one of GameSetup method and execute it in a seprate thread
--(void) startThread: (NSString *) selector {
+-(void) startThread:(NSString *)selector {
     SEL usage = NSSelectorFromString(selector);
     [NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
 }
@@ -389,7 +378,6 @@
                 //[[NSNotificationCenter defaultCenter] postNotificationName:@"removedSave" object:nil];
                 // and remove + disable the overlay
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
-                setGameRunning(NO);
                 break;
             default:
                 [self dumpRawData:buffer ofSize:msgSize];
@@ -440,7 +428,7 @@
     NSString *modelId = modelType();
     if ([modelId hasPrefix:@"iPhone1"] ||                                   // = iPhone or iPhone 3G
         [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])   // = iPod Touch or iPod Touch 2G
-        tmpQuality = 0x00000001 | 0x00000002 | 0x00000040;  // rqLowRes | rqBlurryLand | rqKillFlakes
+        tmpQuality = 0x00000001 | 0x00000002 | 0x00000008 | 0x00000040;  // rqLowRes | rqBlurryLand | rqSimpleRope | rqKillFlakes
     else if ([modelId hasPrefix:@"iPhone2"] ||                              // = iPhone 3GS
              [modelId hasPrefix:@"iPod3"])                                  // = iPod Touch 3G
             tmpQuality = 0x00000002 | 0x00000040;           // rqBlurryLand | rqKillFlakes

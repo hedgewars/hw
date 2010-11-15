@@ -71,7 +71,8 @@
 
     // perform as if user clicked on an entry
     [self tableView:self.tableView didSelectRowAtIndexPath:theIndex];
-    [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionNone animated:YES];
+    if (IS_NOT_POWERFUL() == NO)
+        [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 -(void) turnOffWidgets {
@@ -126,9 +127,6 @@
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-    if (IS_IPAD())
-        cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
-
     if (self.dataSourceArray == nil)
         [self loadDataSourceArray];
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
@@ -137,6 +135,7 @@
     cell.textLabel.text = labelString;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.minimumFontSize = 7;
+    cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
 
     if (isRandomness()) {
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),labelString]];
@@ -222,7 +221,7 @@
 }
 
 #pragma mark -
-#pragma mark slider & segmentedControl
+#pragma mark slider & segmentedControl & button
 // this updates the label and the command keys when the slider is moved, depending of the selection in segmentedControl
 // no methods are called by this routine and you can pass nil to it
 -(IBAction) sliderChanged:(id) sender {
@@ -351,28 +350,19 @@
     self.staticMapCommand = staticmap;
     self.missionCommand = mission;
 
-    // nice animation for updating the table when appropriate (on iphone)
-    if (IS_IPAD())
-        if (((oldPage == 0 || oldPage == 2) && (newPage == 1 || newPage == 3)) ||
-            ((oldPage == 1 || oldPage == 3) && (newPage == 0 || newPage == 2)) ||
-            ((oldPage == 1 && newPage == 3) || (oldPage == 3 || newPage == 1))) {
-            self.tableView.frame = CGRectMake(480, 0, 185, 276);
-            [UIView beginAnimations:@"moving in table" context:NULL];
-            self.tableView.frame = CGRectMake(295, 0, 185, 276);
-            [UIView commitAnimations];
-        }
-
     [self.tableView reloadData];
     [self updatePreview];
     oldPage = newPage;
 }
 
-#pragma mark -
-#pragma mark calls the parent's function that checks the parameters and starts the game
 -(IBAction) buttonPressed:(id) sender {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"buttonPressed" object:nil userInfo:[NSDictionary dictionaryWithObject:sender forKey:@"sender"]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"buttonPressed"
+                                                        object:nil
+                                                      userInfo:[NSDictionary dictionaryWithObject:sender forKey:@"sender"]];
 }
 
+#pragma mark -
+#pragma mark view management
 -(void) loadDataSourceArray {
     // themes.cfg contains all the user-selectable themes
     NSString *string = [[NSString alloc] initWithContentsOfFile:[THEMES_DIRECTORY() stringByAppendingString:@"/themes.cfg"]
@@ -382,17 +372,38 @@
     [string release];
     // remove a trailing "" element
     [themeArray removeLastObject];
-    NSArray *mapArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
-    NSArray *missionArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
+    NSArray *mapArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
+    NSMutableArray *mapArray = [[NSMutableArray alloc] init];
+    for (NSString *str in mapArrayFull) {
+        CGSize imgSize = PSPNGSizeFromMetaData([MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
+        //DLog(@"%@ %f %f", str, imgSize.width, imgSize.height);
+        if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
+            continue;
+        if (IS_IPAD() && imgSize.height > 1280.0f)
+            continue;
+        [mapArray addObject:str];
+    }
     
+    NSArray *missionArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
+    NSMutableArray *missionArray = [[NSMutableArray alloc] init];
+    for (NSString *str in missionArrayFull) {
+        CGSize imgSize = PSPNGSizeFromMetaData([MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
+        //DLog(@"%@ %f %f", str, imgSize.width, imgSize.height);
+        if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
+            continue;
+        if (IS_IPAD() && imgSize.height > 1280.0f)
+            continue;
+        [missionArray addObject:str];
+    }
     NSArray *array = [[NSArray alloc] initWithObjects:themeArray,mapArray,themeArray,missionArray,nil];
+    [missionArray release];
+    [themeArray release];
+    [mapArray release];
+
     self.dataSourceArray = array;
     [array release];
-    [themeArray release];
 }
 
-#pragma mark -
-#pragma mark view management
 -(void) viewDidLoad {
     [super viewDidLoad];
 
@@ -423,13 +434,11 @@
     self.staticMapCommand = @"";
     self.missionCommand = @"";
 
-    if (IS_IPAD()) {
+    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
         [self.tableView setBackgroundView:nil];
-        self.view.backgroundColor = [UIColor clearColor];
-        self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        self.tableView.rowHeight = 45;
-    }
+    self.view.backgroundColor = [UIColor clearColor];
+    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 -(void) viewWillAppear:(BOOL)animated {
@@ -470,11 +479,9 @@
 -(void) didReceiveMemoryWarning {
     self.dataSourceArray = nil;
 
-    self.previewButton = nil;
     self.tableView = nil;
     self.maxLabel = nil;
     self.sizeLabel = nil;
-    self.segmentedControl = nil;
     self.slider = nil;
 
     MSG_MEMCLEAN();

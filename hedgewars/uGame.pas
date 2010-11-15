@@ -26,7 +26,7 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
    implementation
 ////////////////////
-uses uMisc, uConsts, uKeys, uTeams, uIO, uAI, uGears, uScript, uSound, uMobile;
+uses uMisc, uConsts, uKeys, uTeams, uIO, uAI, uGears, uScript, uSound, uMobile, uVisualGears;
 
 procedure DoGameTick(Lag: LongInt);
 var i: LongInt;
@@ -55,7 +55,11 @@ while (GameState <> gsExit) and (i <= Lag) do
        NetGetNextCmd;
        if isInLag then
           case GameType of
-                gmtNet: break;
+                gmtNet: begin
+                        // just update the health bars
+                        AddVisualGear(0, 0, vgtTeamHealthSorter);
+                        break;
+                        end;
                gmtDemo: begin
                         GameState:= gsExit;
                         exit
@@ -67,7 +71,8 @@ while (GameState <> gsExit) and (i <= Lag) do
                         isSoundEnabled:= isSEBackup;
                         if isSoundEnabled then playMusic;
                         GameType:= gmtLocal;
-                        InitIPC;
+                        AddVisualGear(0, 0, vgtTeamHealthSorter);
+                        {$IFDEF IPHONEOS}InitIPC;{$ENDIF}
                         perfExt_SaveFinishedSynching();
                         end;
                end

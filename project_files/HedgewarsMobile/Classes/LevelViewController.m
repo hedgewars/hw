@@ -95,14 +95,15 @@
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
             UISwitch *theSwitch = [[UISwitch alloc] init];
-            if (numberOfSections == 1)
-                theSwitch.on = NO;
-            else
-                theSwitch.on = YES;
             [theSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = theSwitch;
             [theSwitch release];
         }
+        UISwitch *theSwitch = (UISwitch *)cell.accessoryView;
+        if (numberOfSections == 1)
+            theSwitch.on = NO;
+        else
+            theSwitch.on = YES;
         cell.textLabel.text = NSLocalizedString(@"Hogs controlled by AI",@"");
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier1];
@@ -137,21 +138,20 @@
     if (theSwitch.on) {
         numberOfSections = 2;
         [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        level = random() % [levelArray count];
+        level = 1 + (random() % ([levelArray count] - 1));
     } else {
         numberOfSections = 1;
         [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
         level = 0;
     }
+    [sections release];
 
     DLog(@"New level is %d",level);
     for (NSMutableDictionary *hog in hogs)
-        [hog setObject:[NSNumber numberWithInt:0] forKey:@"level"];
+        [hog setObject:[NSNumber numberWithInt:level] forKey:@"level"];
 
     [self.tableView reloadData];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-
-    [sections release];
 }
 
 
@@ -165,8 +165,10 @@
         if (newRow != oldRow) {
             NSMutableArray *hogs = [self.teamDictionary objectForKey:@"hedgehogs"];
             
+            NSInteger level = newRow + 1;
             for (NSMutableDictionary *hog in hogs)
-                [hog setObject:[NSNumber numberWithInt:newRow+1] forKey:@"level"];
+                [hog setObject:[NSNumber numberWithInt:level] forKey:@"level"];
+            DLog(@"New level is %d",level);
             
             // tell our boss to write this new stuff on disk
             [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];

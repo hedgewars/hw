@@ -26,7 +26,7 @@
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation>Redigera vapen</translation>
+        <translation>Redigera vapenscheman</translation>
     </message>
     <message>
         <source>Error</source>
@@ -38,7 +38,11 @@
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation>Redigera scheman</translation>
+        <translation>Redigera spelscheman</translation>
+    </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -88,7 +92,17 @@
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardlag</translation>
+    </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <comment>File Types</comment>
+        <translation>Demo-fil för Hedgewars</translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <comment>File Types</comment>
+        <translation>Sparfil för Hedgewars</translation>
     </message>
 </context>
 <context>
@@ -241,7 +255,10 @@ eller välj ett annat smeknamn:</translation>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ditt smeknamn (%1) är
+registrerat på Hedgewars.org
+Var god ange ditt lösenord eller välj
+ett annat smeknamn i spelinställningarna:</translation>
     </message>
 </context>
 <context>
@@ -283,7 +300,7 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>MOTD preview:</source>
-        <translation type="unfinished">MOTD-förhandsvisning:</translation>
+        <translation>MOTD-förhandsvisning:</translation>
     </message>
     <message>
         <source>Set data</source>
@@ -330,53 +347,65 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Detaljer</translation>
     </message>
     <message>
         <source>Health graph</source>
-        <translation type="unfinished"></translation>
+        <translation>Livgraf</translation>
     </message>
     <message>
         <source>Ranking</source>
-        <translation type="unfinished"></translation>
+        <translation>Rankning</translation>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bästa skott-priset vanns av &lt;b&gt;%1&lt;/b&gt; med &lt;b&gt;%2&lt;/b&gt; poäng.</translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Bästa dödaren är &lt;b&gt;%1&lt;/b&gt; med &lt;b&gt;%2&lt;/b&gt; döda på en tur.</numerusform>
+            <numerusform>Bästa dödaren är &lt;b&gt;%1&lt;/b&gt; med &lt;b&gt;%2&lt;/b&gt; döda på en tur.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Totalt &lt;b&gt;%1&lt;/b&gt; igelkott(ar) dödades under den här omgången.</numerusform>
+            <numerusform>Totalt &lt;b&gt;%1&lt;/b&gt; igelkott(ar) dödades under den här omgången.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 kill)</source>
+        <translation>
+            <numerusform>(%1 död)</numerusform>
+            <numerusform>(%1 döda)</numerusform>
         </translation>
     </message>
     <message>
-        <source>(%1 kill)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>(%1 kills)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">(%1 döda)</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; tyckte att det var bra att sjuta sina egna igelkottar med &lt;b&gt;%2&lt;/b&gt; poäng.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; tyckte att det var bra att sjuta sina egna igelkottar med &lt;b&gt;%2&lt;/b&gt; poäng.</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; dödade &lt;b&gt;%2&lt;/b&gt; av sina egna igelkottar.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; dödade &lt;b&gt;%2&lt;/b&gt; av sina egna igelkottar.</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; var rädd och hoppade över turer &lt;b&gt;%2&lt;/b&gt; gånger.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; var rädd och hoppade över turer &lt;b&gt;%2&lt;/b&gt; gånger.</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -392,235 +421,255 @@ or pick another nickname in game config:</source>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Välj bara samma färg som en vän för att spela i som ett lag. Varje spelare kontrollerar fortfarande själva sina igelkottar men de vinner eller förlorar tillsammans.</translation>
     </message>
     <message>
         <source>Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Några vapen kanske bara gör liten skada men de kan vara mycket mer förödande i rätt situation. Försök att använda Desert Eagle för att putta ner flera igelkottar ner i vattnet.</translation>
     </message>
     <message>
         <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Om du inte är säker på vad du ska göra och inte vill slösa på ammunition, hoppa över en tur. Men låt inte för lång tid passera eftersom sudden death kommer!</translation>
     </message>
     <message>
         <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Vill du spara rep? Släpp repet i luften och sedan sjut igen. Så länge du inte nuddar marken använder du samma rep utan att slösa på ammunition!</translation>
     </message>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Om du vill förhindra andra från att använda ditt favoritnamn på den officiella servern kan du registrera ett konto på http://www.hedgewars.org/.</translation>
     </message>
     <message>
         <source>You&apos;re bored of default gameplay? Try one of the missions - they&apos;ll offer different gameplay depending on the one you picked.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Är du trött på att spela vanligt? Pröva ett av uppdragen - de erbjuder annorlunda spel beroende på vilken du väljer.</translation>
     </message>
     <message>
         <source>By default the game will always record the last game played as a demo. Select &apos;Local Game&apos; and pick the &apos;Demos&apos; button on the lower right corner to play or manage them.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Som standard spelar spelet alltid in den senaste matchen som en demo. Välj &apos;Lokalt Spel&apos; och tryck på &apos;Demo&apos;-knappen nere till höger för att spela eller hantera dem.</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If you&apos;ve got problems, ask on our forums but please don&apos;t expect 24/7 support!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars är ett öppet källkods- och gratisprogram som vi skapar på vår fritid. Om du har problem, fråga på vårat forum men snälla förvänta dig inte dygnet runt-support!</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If you like it, help us with a small donation or contribute your own work!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars är ett öppet källkods- och gratisprogram som vi skapar på vår fritid. Om du gillar det, hjälp oss med en liten donation eller bidra med något eget!</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. Share it with your family and friends as you like!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars är ett öppet källkods- och gratisprogram som vi skapar på vår fritid. Dela med dig av det till familj och vänner som du vill!</translation>
     </message>
     <message>
         <source>From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Då och då kommer det hållas officiella turneringer. Kommande händelser kommer att annonseras på http://www.hedgewars.org/ några dagar i förväg.</translation>
     </message>
     <message>
         <source>Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars finns på många språk. Om översättningen på ditt språk verkar saknas eller är gammal får du gärna kontakta oss!</translation>
     </message>
     <message>
         <source>Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars kan köras på många operativsystem som Microsoft Windows, Mac OS X och Linux.</translation>
     </message>
     <message>
         <source>Always remember you&apos;re able to set up your own games in local and network/online play. You&apos;re not restricted to the &apos;Simple Game&apos; option.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Kom alltid ihåg att du kan starta en egen match i lokalt och netverk/online-spel. Du är inte begränsad till &apos;Enkelt spel&apos;-valet.</translation>
     </message>
     <message>
         <source>While playing you should give yourself a short break at least once an hour.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>När du spelar borde du ta en pause åt minståne en gång i timman.</translation>
     </message>
     <message>
         <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Om ditt grafikkort inte klarar av att ge hårdvaruaccellererad OpenGL, pröva att sänka kvaliteten för att öka prestandan.</translation>
     </message>
     <message>
         <source>We&apos;re open to suggestions and constructive feedback. If you don&apos;t like something or got a great idea, let us know!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Vi är öppna för förslag och konstruktiv kritik. Om du inte gillar något eller har en bra idé, hör av dig!</translation>
     </message>
     <message>
         <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Speciellt när du spelar över netet, var artig och kom alltid ihåg att det kan vara minderåriga som du spelar mot också!</translation>
     </message>
     <message>
         <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Speciella spellägen som &apos;Vampyrism&apos; eller &apos;Karma&apos; låter dig utveckla helt nya taktiker. Pröva dem i ett eget spel!</translation>
     </message>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Windows-versionen av Hedgewars har stöd för Xfire. Se till att lägga till Hedgewars till spellistan så att dina vänner kan se dig spela.</translation>
     </message>
     <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Du ska aldrig installera Hedgewars på en dator som du inte äger (skola, universitet, arbete, etc.). Fråga den ansvarige personen istället!</translation>
     </message>
     <message>
         <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars kan vara perfekt för korta matcher under raster. Se bara till att du inte lägger till för många igelkottar eller använder en stor bana. Att minska tiden och hälsa kan också hjälpa.</translation>
     </message>
     <message>
         <source>No hedgehogs were harmed in making this game.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Inga igelkottar skadades under produktionen av spelet.</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars är ett öppet källkods- och gratisprogram som vi skapar på vår fritid. Om någon sålde spelet till dig ska du försöka att få pengarna tillbaka!</translation>
     </message>
     <message>
         <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Koppla ihop en eller flera spelplattor innan du startar spelet för att kunna välja att kontrollera era lag med dem.</translation>
     </message>
     <message>
         <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Skapa ett konto på %1 för att förhindra andra från att använda ditt favoritnamn när du spelar på den officiella servern.</translation>
     </message>
     <message>
         <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Om ditt grafikkort inte klarar av att ge hårdvaruaccellererad OpenGL, pröva att uppdatera dina drivrutiner.</translation>
     </message>
     <message>
         <source>There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Det finns tre olika hopp tillgängliga. Tryck på [högt hopp] två gånger för att göra ett ett högt bakåt-hopp.</translation>
     </message>
     <message>
         <source>Afraid of falling off a cliff? Hold down [precise] to turn [left] or [right] without actually moving.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Är du rädd att falla ner för an kant? Håll ner [exakt] för att vrida [vänster] eller [höger] utan att egentligen röra dig.</translation>
     </message>
     <message>
         <source>Some weapons require special strategies or just lots of training, so don&apos;t give up on a particular tool if you miss an enemy once.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Några vapen kräver speciella strategier eller bara mycket träning, så ge inte upp ett vapen bara för att du missade en fiende någon gång.</translation>
     </message>
     <message>
         <source>Most weapons won&apos;t work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>De flesta vapen fungerar inte när de har rört vattenet. Målsökande bi och även Tårta är två undantag.</translation>
     </message>
     <message>
         <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Den gamla Limburgaren skapar bara en liten explosition. Men det vindpåverkade stinkmålnet kan förgifta många igelkottar samtidigt.</translation>
     </message>
     <message>
         <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Pianoanfall är det farligaste luftanfallet. Du blir av med en igelkott när du använder det, så det finns en stor nackdel också.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Målsökande biet kan vara svårt att använda. Biets sväng beror på hastigheten, så försök inte att använda full kraft.</translation>
     </message>
     <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Fästande minor är ett perfekt verktyg för att skapa små kedjereaktioner som slår ner fiender i farliga situationer ... eller vatten.</translation>
     </message>
     <message>
         <source>The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hammaren är mest effektiv när den används på broar eller balkar. När du slår till igelkottarna kommer de att falla nergenom hålet.</translation>
     </message>
     <message>
         <source>If you&apos;re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Om du är fast bakom en fiende, använd hammaren för att göra dig fri utan att skadas av en explosition.</translation>
     </message>
     <message>
         <source>The Cake&apos;s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Tårtans längsta gångsträcka beror på vägen den måste ta. Använd [attack] för att spränga den tidigt.</translation>
     </message>
     <message>
         <source>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Eldkastaren är ett vapen, men den kan användas för att gräva tunnlar också.</translation>
     </message>
     <message>
         <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Använd Molotov för att tillfälligt förhindra igelkottar från att passera terräng såsom tunnlar och platformer.</translation>
     </message>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Vill du veta vilka som ligger bakom spelet? Tryck på Hedgewars-loggan i huvudmenyn för att se medverkande.</translation>
     </message>
     <message>
-        <source>Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!</source>
+        <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Gillar du Hedgewars? Bli ett fan på %1 eller följ oss på %2!</translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Du är välkommen att rita dina egna gravar, hattar, flaggor eller till och med banor eller teman! Men notera att du måste lägga ut dem någonstans för att använda dem online.</translation>
     </message>
     <message>
         <source>Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Vill du verkligen ha en specifik hatt? Ge os en donation och få en exklusiv hatt som du väljer!</translation>
     </message>
     <message>
         <source>Keep your video card drivers up to date to avoid issues playing the game.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Se till att hålla dina grafikdrivrutiner uppdaterade för att undvika problem när du spalar.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Du kan hitta dina konfigurationsfiler under &quot;Mina Dokument\Hedgewars&quot;. Gör en säkerhetskopia eller ta med dig filerna, men redigera dem inte för hand.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="obsolete">Du kan hitta dina konfigurationsfiler under &quot;Hedgewars&quot; i din hem-mapp. Gör en säkerhetskopia eller ta med dig filerna, men redigera dem inte för hand.</translation>
+    </message>
+    <message>
+        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <comment>Tips</comment>
+        <translation>Du kan associera Hedgewars-relaterade filer (sparfiler och demo-inspelningar) med spelet för att köra dem direkt från den filhanterare eller webbläsare du tycker bäst om.</translation>
+    </message>
+    <message>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation>Vill du spara rep? Släpp repet i luften och sedan sjut igen. Så länge du inte nuddar marken använder du samma rep utan att slösa på ammunition!</translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -689,7 +738,7 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du kan inte redigera lag från ett spel. Gå tillbaka till huvudmenyn för att lägga till, redigera eller ta bort lag.</translation>
     </message>
 </context>
 <context>
@@ -813,32 +862,33 @@ Du kan gå med och se på men du måste vänta tills spelet är slut för att ku
     </message>
     <message>
         <source>State:</source>
-        <translation type="unfinished"></translation>
+        <translation>Status:</translation>
     </message>
     <message>
         <source>Rules:</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler:</translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vapen:</translation>
     </message>
     <message>
         <source>Search:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sök:</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Clear</translation>
+        <translation>Rensa</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Varning</translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
-        <translation type="unfinished"></translation>
+        <translation>Spelet du försöker gå med i har startat.
+Vill du fortfarande gå med i rummet?</translation>
     </message>
 </context>
 <context>
@@ -853,7 +903,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>Aktivera slumpade minor</translation>
+        <translation type="obsolete">Aktivera slumpade minor</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -929,7 +979,23 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>AI respawns on death.</source>
-        <translation type="unfinished"></translation>
+        <translation>AI kommer tillbaka när de dör.</translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation>Alla (levande) igelkottar återfår sin hälsa i slutet av varje tur</translation>
+    </message>
+    <message>
+        <source>Attacking does not end your turn.</source>
+        <translation>Att använda vapen avslutar inte din tur.</translation>
+    </message>
+    <message>
+        <source>Weapons are reset to starting values each turn.</source>
+        <translation>Vapnen nollställs till startvärderna varje tur.</translation>
+    </message>
+    <message>
+        <source>Each hedgehog has its own ammo. It does not share with the team.</source>
+        <translation>Varje igelkott har sin egen ammunition. Laget delar inte med varandra.</translation>
     </message>
 </context>
 <context>
@@ -940,7 +1006,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Radera</translation>
+        <translation>Ta bort</translation>
     </message>
 </context>
 <context>
@@ -967,7 +1033,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation type="unfinished"></translation>
+        <translation>Kampanjläge (...). UNDER UTVECKLING</translation>
     </message>
 </context>
 <context>
@@ -1100,51 +1166,51 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Community</source>
-        <translation type="unfinished"></translation>
+        <translation>Gemenskap</translation>
     </message>
     <message>
         <source>Any</source>
-        <translation type="unfinished"></translation>
+        <translation>Vilken som</translation>
     </message>
     <message>
         <source>In lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>I lobby</translation>
     </message>
     <message>
         <source>In progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Pågår</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Standard</translation>
+        <translation type="obsolete">Standard</translation>
     </message>
     <message>
         <source>Pro mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Pro-läge</translation>
     </message>
     <message>
         <source>Shoppa</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Shoppa</translation>
     </message>
     <message>
         <source>Basketball</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Basket</translation>
     </message>
     <message>
         <source>Minefield</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Minfält</translation>
     </message>
     <message>
         <source>Barrel mayhem</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Tunnförödelse</translation>
     </message>
     <message>
         <source>Tunnel hogs</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Tunnelkottar</translation>
     </message>
     <message>
         <source>Crazy</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Galet</translation>
     </message>
 </context>
 <context>
@@ -1344,14 +1410,34 @@ Det kan finnas trasiga eller ofullständiga funktioner. Använd på egen risk!</
     </message>
     <message>
         <source>Tip: </source>
-        <translation type="unfinished"></translation>
+        <translation>Tips:</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translation>Denna utvecklingsversion är inte färdig och kanske inte är kompatibel med andra versioner av spelet. Några delar kan vara trasiga eller ofullständiga. Använd på egen risk!</translation>
     </message>
     <message>
         <source>Quality</source>
+        <translation>Kvalitet</translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation>% förbandslådor</translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
+        <translation>Liv i förbandslådor</translation>
+    </message>
+    <message>
+        <source>Sudden Death Water Rise</source>
+        <translation>Sudden Death vattenhöjning</translation>
+    </message>
+    <message>
+        <source>Sudden Death Health Decrease</source>
+        <translation>Sudden Death livminskning</translation>
+    </message>
+    <message>
+        <source>Bind schemes and weapons</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1409,7 +1495,15 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte skriva över standardvapenschema &apos;%1&apos;!</translation>
+    </message>
+    <message>
+        <source>All file associations have been set.</source>
+        <translation>Alla filassociationer har satts.</translation>
+    </message>
+    <message>
+        <source>File association failed.</source>
+        <translation>Filassociationer har misslyckats.</translation>
     </message>
 </context>
 <context>
@@ -1500,6 +1594,10 @@ Var god kontrollera din installation</translation>
     <message>
         <source>Random Team</source>
         <translation>Slumpat lag</translation>
+    </message>
+    <message>
+        <source>Associate file extensions</source>
+        <translation>Associera filextentioner</translation>
     </message>
 </context>
 <context>
@@ -1611,7 +1709,7 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>Lägg till minor</translation>
+        <translation type="obsolete">Lägg till minor</translation>
     </message>
     <message>
         <source>Random Order</source>
@@ -1639,7 +1737,23 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>AI Survival Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>AI-överlevnad</translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation>Återställ hälsa</translation>
+    </message>
+    <message>
+        <source>Unlimited Attacks</source>
+        <translation>Obegränsade attacker</translation>
+    </message>
+    <message>
+        <source>Reset Weapons</source>
+        <translation>Återställ vapen</translation>
+    </message>
+    <message>
+        <source>Per Hedgehog Ammo</source>
+        <translation>Ammunition per igelkott</translation>
     </message>
 </context>
 <context>
@@ -1803,7 +1917,7 @@ info</source>
     </message>
     <message>
         <source>slot 10</source>
-        <translation type="unfinished">fack 10</translation>
+        <translation>fack 10</translation>
     </message>
 </context>
 <context>

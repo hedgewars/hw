@@ -101,7 +101,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amFlamethrower
             (proc: @TestGrenade;     flags: 0), // amSMine
             (proc: @TestFirePunch;   flags: 0), // amHammer
-            (proc: nil;              flags: 0) // amResurrector
+            (proc: nil;              flags: 0), // amResurrector
+            (proc: nil;              flags: 0) // amDrillStrike
             );
 
 const BadTurn = Low(LongInt) div 4;
@@ -296,7 +297,7 @@ var Vx, Vy, r: hwFloat;
     until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t = 0);
     EX:= hwRound(x);
     EY:= hwRound(y);
-    if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 81)
+    if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 41)
               else CheckTrace:= BadTurn
     end;
 begin
@@ -310,7 +311,7 @@ repeat
       Vx:= (int2hwFloat(Targ.X+10) - Me^.X) / int2hwFloat(TestTime + tDelta)
   else
       Vx:= (int2hwFloat(Targ.X-10) - Me^.X) / int2hwFloat(TestTime + tDelta);
-  Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y-25) - Me^.Y) / int2hwFloat(TestTime + tDelta);
+  Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y-150) - Me^.Y) / int2hwFloat(TestTime + tDelta);
   r:= Distance(Vx, Vy);
   if not (r > _1) then
      begin
@@ -318,7 +319,7 @@ repeat
      if valueResult < Score then
         begin
         ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
-        ap.Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 15);
+        ap.Power:= hwRound(r * cMaxPower * _0_9) + AIrndSign(random(Level) * 15);
         ap.Time:= TestTime;
         ap.ExplR:= 90;
         ap.ExplX:= EX;
@@ -362,7 +363,7 @@ ap.ExplR:= 0;
 repeat
   inc(TestTime, 1000);
   Vx:= (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(TestTime + tDelta);
-  Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y-125) - Me^.Y) / int2hwFloat(TestTime + tDelta);
+  Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y-200) - Me^.Y) / int2hwFloat(TestTime + tDelta);
   r:= Distance(Vx, Vy);
   if not (r > _1) then
      begin
@@ -498,7 +499,12 @@ repeat
                    else dec(valueResult, Level * 4000);
      exit(valueResult)
      end
-until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x.isNegative) or (y.isNegative) or (x.Round > LAND_WIDTH) or (y.Round > LAND_HEIGHT);
+until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4)
+    or (x.isNegative)
+    or (y.isNegative)
+    or (x.Round > LongWord(LAND_WIDTH))
+    or (y.Round > LongWord(LAND_HEIGHT));
+
 TestShotgun:= BadTurn
 end;
 
@@ -526,7 +532,12 @@ repeat
   y:= y + vY;
   if ((hwRound(x) and LAND_WIDTH_MASK) = 0)and((hwRound(y) and LAND_HEIGHT_MASK) = 0)
      and (Land[hwRound(y), hwRound(x)] <> 0) then inc(d);
-until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x.isNegative) or (y.isNegative) or (x.Round > LAND_WIDTH) or (y.Round > LAND_HEIGHT) or (d > 200);
+until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4)
+    or (x.isNegative)
+    or (y.isNegative)
+    or (x.Round > LongWord(LAND_WIDTH))
+    or (y.Round > LongWord(LAND_HEIGHT))
+    or (d > 200);
 
 if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then valueResult:= max(0, (4 - d div 50) * 7 * 1024)
                                                            else valueResult:= BadTurn;

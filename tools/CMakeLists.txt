@@ -17,7 +17,10 @@ if (APPLE AND BUNDLE)
 	find_package(SDL_mixer REQUIRED)
 	find_package(OGGVORBIS REQUIRED)
 	find_package(SPARKLE)
-	find_program(macdeployqt_EXE NAMES macdeployqt macdeployqt-mac)
+
+	#use the associated tool from the libraries we've selected
+	string(REGEX REPLACE "(.*)/include.*" "\\1" qt_base_dir "${QT_INCLUDE_DIR}")
+	find_program(macdeployqt_EXE NAMES macdeployqt macdeployqt-mac PATHS ${qt_base_dir}/bin NO_DEFAULT_PATH)
 
 	if(NOT macdeployqt_EXE)
 		message(FATAL_ERROR "The utility macdeployqt is required to create the bundle!")

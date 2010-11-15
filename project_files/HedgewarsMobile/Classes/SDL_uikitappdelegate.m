@@ -28,7 +28,6 @@
 #import "jumphack.h"
 #import "SDL_video.h"
 #import "SDL_mixer.h"
-
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "GameSetup.h"
@@ -148,7 +147,7 @@ int main (int argc, char *argv[]) {
     refSecondBlackView.alpha = 0;
     [UIView commitAnimations];
     [refBlackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
-    [refSecondBlackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+    [refSecondBlackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:2];
 }
 
 // overlay with controls, become visible later, with a transparency effect
@@ -164,7 +163,9 @@ int main (int argc, char *argv[]) {
     else
         gameWindow = [[UIApplication sharedApplication] keyWindow];
     [gameWindow addSubview:overlayController.view];
-    [overlayController release];
+    //[[[gameWindow subviews] objectAtIndex:0] addSubview:overlayController.view];
+    // don't release a controller according to http://developer.apple.com/library/ios/#qa/qa2010/qa1688.html
+    //[overlayController release];
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (or even using a nib)

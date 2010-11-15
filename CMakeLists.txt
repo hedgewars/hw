@@ -7,7 +7,7 @@ IF(POLICY CMP0012)
 	cmake_policy(SET CMP0012 NEW)
 ENDIF()
 
-#detect subversion revision (if present)
+#detect Mercurial revision (if present)
 set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
 IF(version_suffix MATCHES "-dev")
 	set(HW_DEV true)
@@ -35,7 +35,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
 set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "9")
-set(CPACK_PACKAGE_VERSION_PATCH "14${version_suffix}")
+set(CPACK_PACKAGE_VERSION_PATCH "15${version_suffix}")
 
 #forbid in-tree building
 #IF (${CMAKE_SOURCE_DIR} MATCHES ${CMAKE_BINARY_DIR})
@@ -150,10 +150,6 @@ set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
 set(pascal_compiler_flags_cmn "-B" "-FE../bin" "-Cs2000000" "-vewn" ${pascal_compiler_flags_cmn})
-if(LOWRES)
-	set(pascal_compiler_flags_cmn "-dLOWRES" ${pascal_compiler_flags_cmn})
-	add_definitions(-DLOWRES)
-endif(LOWRES)
 
 if(Optz)
 #	set(pascal_compiler_flags_cmn "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_compiler_flags_cmn})
@@ -173,7 +169,7 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-set(HEDGEWARS_PROTO_VER 32)
+set(HEDGEWARS_PROTO_VER 34)
 
 if(WITH_SERVER)
 	message(STATUS "Server is going to be built! Make sure you have GHC installed")
@@ -218,6 +214,7 @@ endif(WIN32 AND NOT UNIX)
 
 set(CPACK_SOURCE_IGNORE_FILES
 	"~"
+	"\\\\.hg"
 	"\\\\.svn"
 	"\\\\.exe$"
 	"\\\\.a$"
@@ -233,7 +230,11 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"\\\\.tmp$"
 	"\\\\.core$"
 	"\\\\.sh$"
+	"\\\\.sifz$"
+	"\\\\.svg$"
+	"\\\\.svgz$"
 	"\\\\.ppu$"
+	"\\\\.psd$"
 	"\\\\.o$"
 	"Makefile"
 	"Doxyfile"
@@ -246,7 +247,10 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"hwconsts.cpp$"
 	"playlist.inc$"
 	"CPack"
-#	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
+	"cmake_install.cmake$"
+	"config.inc$"
+	"hwengine.desktop$"
+#   "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/project_files/HedgewarsMobile/"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/bin/[a-z]"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/tools/templates"

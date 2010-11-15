@@ -44,8 +44,7 @@ procedure ResetWeapons;
 function  GetAmmoByNum(num: Longword): PHHAmmo;
 function  GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 
-var shoppa: boolean;
-    StoreCnt: Longword;
+var StoreCnt: Longword;
 
 implementation
 uses uMisc, uGears, uWorld, uLocale, uConsole, uMobile;
@@ -93,15 +92,8 @@ const probability: array [0..8] of LongWord = (0,20,30,60,100,200,400,600,800);
 var cnt: Longword;
     a: TAmmoType;
     ammos: TAmmoCounts;
-    substr: shortstring; // TEMPORARY
 begin
 TryDo((byte(ammoLoadout[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoProbability[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoDelay[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoReinforcement[0]) = byte(ord(High(TAmmoType)))), 'Incomplete or missing ammo scheme set (incompatible frontend or demo/save?)', true);
-
-// FIXME - TEMPORARY hardcoded check on shoppa pending creation of crate *type* probability editor
-substr:= Copy(ammoLoadout,1,15);
-if (substr = '000000990000009') or
-   (substr = '000000990000000') then
-    shoppa:= true;
 
 inc(StoreCnt);
 TryDo(StoreCnt <= cMaxHHs, 'Ammo stores overflow', true);
@@ -179,7 +171,10 @@ for t:= 0 to Pred(TeamsCount) do
           if Hedgehogs[i].Gear <> nil then
              begin
              Hedgehogs[i].Ammo:= GetAmmoByNum(Hedgehogs[i].AmmoStore);
-             Hedgehogs[i].CurAmmoType:= amNothing;
+             if (GameFlags and gfPlaceHog) <> 0 then
+                Hedgehogs[i].CurAmmoType:= amTeleport
+             else
+                Hedgehogs[i].CurAmmoType:= amNothing
              end
       end
 end;
@@ -243,6 +238,7 @@ with Hedgehog do
                 begin
                 PackAmmo(Ammo, Ammoz[AmmoType].Slot);
                 //SwitchNotHeldAmmo(Hedgehog);
+                ShowCrossHair:= false;
                 CurAmmoType:= amNothing
                 end
             end
@@ -422,7 +418,10 @@ for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       for i:= 0 to cMaxHHIndex do
           if Hedgehogs[i].Gear <> nil then
+             begin
              FillAmmoStore(Hedgehogs[i].Ammo, InitialCounts[Hedgehogs[i].AmmoStore]);
+             Hedgehogs[i].CurAmmoType:= amNothing
+             end;
 
 for a:= Low(TAmmoType) to High(TAmmoType) do
     if Ammoz[a].SkipTurns >= 10000 then dec(Ammoz[a].SkipTurns,10000)
@@ -430,7 +429,6 @@ end;
 
 procedure initModule;
 begin
-    shoppa:= false;
     StoreCnt:= 0;
     ammoLoadout:= '';
     ammoProbability:= '';

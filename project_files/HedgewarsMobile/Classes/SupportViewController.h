@@ -21,10 +21,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SupportViewController : UIViewController {
-
+@interface SupportViewController : UITableViewController {
+    NSArray *waysToSupport;
 }
 
--(IBAction) buttonPressed:(id) sender;
+@property (nonatomic, retain) NSArray *waysToSupport;
 
 @end

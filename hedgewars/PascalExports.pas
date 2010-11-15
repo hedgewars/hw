@@ -26,6 +26,7 @@ uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat,
 
 {$INCLUDE "config.inc"}
 type PPByte = ^PByte;
+var dummy: boolean;  // avoid compiler hint
 
 implementation
 {$IFDEF HWLIBRARY}
@@ -194,7 +195,8 @@ end;
 
 function HW_isAmmoMenuNotAllowed: boolean; cdecl; export;
 begin;
-    exit ( (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) );
+    exit ( (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or
+           ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) );
 end;
 
 function HW_isPaused: boolean; cdecl; export;

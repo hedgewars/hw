@@ -62,7 +62,7 @@ var VisualGearsList: PVisualGear;
     vobVelocity, vobFallSpeed: LongInt;
 
 implementation
-uses uWorld, uMisc, uStore, uTeams, uSound;
+uses uWorld, uMisc, uStore, uTeams, uSound, uMobile;
 const cExplFrameTicks = 110;
 
 {$INCLUDE "VGSHandlers.inc"}
@@ -117,7 +117,9 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepExplosion,
             @doStepBigExplosion,
             @doStepChunk,
-            @doStepNote
+            @doStepNote,
+            @doStepLineTrail,
+            @doStepBulletHit
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0): PVisualGear;
@@ -316,6 +318,13 @@ vgtBigExplosion: begin
                 Frame:= random(4);
                 FrameTicks:= random(2000) + 1500;
                 end;
+  vgtBulletHit: begin
+                dx:= 0;
+                dy:= 0;
+                FrameTicks:= 350;
+                Frame:= 7;
+                Angle := 0;
+                end;
         end;
 
 if State <> 0 then gear^.State:= State;
@@ -369,7 +378,7 @@ while t <> nil do
       if Gear^.Kind = vgtFlake then
           begin
           // Damage calc from doMakeExplosion
-          dmg:= min(101, int64(Radius) + cHHRadius div 2 - (round(abs(Gear^.X - float(X))+abs(Gear^.Y - float(Y))) div 5));
+          dmg:= min(101, Radius + cHHRadius div 2 - LongInt(abs(round(Gear^.X) - X) + abs(round(Gear^.Y) - Y)) div 5);
           if dmg > 1 then
               begin
               Gear^.tdX:= 0.02 * dmg + 0.01;
@@ -406,6 +415,7 @@ case Layer of
         case Gear^.Kind of
             vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
             vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
+            vgtLineTrail: DrawLine(Gear^.X, Gear^.Y, Gear^.dX, Gear^.dY, 1.0, $FF, min(Gear^.Timer, $C0), min(Gear^.Timer, $80), min(Gear^.Timer, $FF));
         end;
             if (cReducedQuality and rqFancyBoom) = 0 then
                 case Gear^.Kind of
@@ -477,6 +487,7 @@ case Layer of
                             end;
                 vgtChunk: DrawRotatedF(sprChunk, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                  vgtNote: DrawRotatedF(sprNote, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                vgtBulletHit: DrawRotatedF(sprBulletHit, round(Gear^.X) + WorldDx - 0, round(Gear^.Y) + WorldDy - 0, 7 - (Gear^.FrameTicks div 50), 1, Gear^.Angle);
             end;
         case Gear^.Kind of
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);

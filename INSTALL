@@ -23,7 +23,7 @@ add -DWITH_SERVER=1 to compile net server; to create a relocatable bundle under 
 
 $ cmake -DCMAKE_BUILD_TYPE="Release" -DBUNDLE=1 .
 
-if you have QT installed but it is not found you can set it up with -DQT_QMAKE_EXECUTABLE="path_to_qmake"
+if you have Qt installed but it is not found you can set it up with -DQT_QMAKE_EXECUTABLE="path_to_qmake"
 
 2. Compile:
 $ make

@@ -1,5 +1,5 @@
 # Configure for Qt4
-set(QT_MIN_VERSION "4.4.0")
+set(QT_MIN_VERSION "4.5.0")
 
 set(QT_USE_QTCORE TRUE)
 set(QT_USE_QTGUI TRUE)

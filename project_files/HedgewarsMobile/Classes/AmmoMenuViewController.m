@@ -26,7 +26,9 @@
 #import "PascalImports.h"
 
 #define BTNS_PER_ROW         9
-#define DEFAULT_DESCRIPTION  NSLocalizedString(@"Hold your finger on a weapon to see what it does",@"")
+#define DEFAULT_DESCRIPTION  IS_IPAD() ? \
+                             NSLocalizedString(@"Hold your finger on a weapon to see what it does...",@"") : \
+                             NSLocalizedString(@"Hold your finger on a weapon to see what it does.\nTap anywhere to dismiss.",@"")
 
 @implementation AmmoMenuViewController
 @synthesize imagesArray, buttonsArray, nameLabel, extraLabel, captionLabel, isVisible;
@@ -50,7 +52,8 @@
     [self.view.layer setCornerRadius:10];
     [self.view.layer setMasksToBounds:YES];
     self.view.autoresizingMask = UIViewAutoresizingNone;
-    
+    placingPoint = CGPointMake(-1, -1);
+
     self.isVisible = NO;
     delay = (uint8_t *)calloc(HW_getNumberOfWeapons(), sizeof(uint8_t));
     HW_getAmmoDelays(delay);
@@ -68,14 +71,17 @@
 -(void) appearInView:(UIView *)container {
     [self viewWillAppear:YES];
     [container addSubview:self.view];
+
+    if (placingPoint.x == -1 && placingPoint.y == -1)
+        placingPoint = container.center;
     if (IS_DUALHEAD() == NO)
-        self.view.center = CGPointMake(container.center.y, container.center.x);
+        self.view.center = CGPointMake(placingPoint.y, placingPoint.x);
     else {
         UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
         if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight)
-            self.view.center = CGPointMake(container.center.y, container.center.x);
+            self.view.center = CGPointMake(placingPoint.y, placingPoint.x);
         else
-            self.view.center = CGPointMake(container.center.x, container.center.y);
+            self.view.center = CGPointMake(placingPoint.x, placingPoint.y);
     }
     self.isVisible = YES;
 }
@@ -84,6 +90,8 @@
     if (self.isVisible)
         [self.view removeFromSuperview];
     self.isVisible = NO;
+    placingPoint.x = self.view.center.y;
+    placingPoint.y = self.view.center.x;
 }
 
 #pragma mark -
@@ -268,7 +276,7 @@
 
 -(void) buttonCancelled:(id) sender {
     self.nameLabel.text = nil;
-    self.extraLabel.text = DEFAULT_DESCRIPTION;
+    self.extraLabel.text = nil;
     self.captionLabel.text = nil;
 }
 
@@ -278,7 +286,7 @@
         [self loadLabels];
 
     self.nameLabel.text = nil;
-    self.extraLabel.text = DEFAULT_DESCRIPTION;
+    self.extraLabel.text = nil;
     self.captionLabel.text = nil;
     if (theButton.currentTitle == nil) {
         HW_setWeapon(theButton.tag);
@@ -289,27 +297,25 @@
 }
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    /*
     NSSet *allTouches = [event allTouches];
 
-    if ([touches count] == 1) {
+    if (IS_IPAD() && [touches count] == 1) {
         self.view.layer.borderWidth = 3.5;
         startingPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
     }
-    */
+
     if (IS_IPAD() == NO)
         [self disappear];
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    //self.view.layer.borderWidth = 1.3;
+    self.view.layer.borderWidth = 1.3;
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    /*
     NSSet *allTouches = [event allTouches];
 
-    if ([touches count] == 1) {
+    if (IS_IPAD() && [touches count] == 1) {
         CGPoint touchedPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
         CGFloat deltaX = touchedPoint.x - startingPoint.x;
         CGFloat deltaY = touchedPoint.y - startingPoint.y;
@@ -318,18 +324,18 @@
         self.view.frame = CGRectMake(self.view.frame.origin.x + deltaX, self.view.frame.origin.y + deltaY,
                                      self.view.frame.size.width, self.view.frame.size.height);
     }
-    */
 }
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    //[self touchesEnded:touches withEvent:event];
+    [self touchesEnded:touches withEvent:event];
 }
 
 #pragma mark -
 #pragma mark memory
 -(void) didReceiveMemoryWarning {
     self.imagesArray = nil;
-    self.buttonsArray = nil;
+    if (self.isVisible == NO)
+        self.buttonsArray = nil;
     self.nameLabel = nil;
     self.extraLabel = nil;
     self.captionLabel = nil;
@@ -362,7 +368,3 @@
 }
 
 @end
-
-void updateVisualsNewTurn (void) {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateAmmoVisuals" object:nil];
-}

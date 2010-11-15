@@ -30,8 +30,11 @@ foreach(dir
 	Ropes
 	Ruler
 	Sheep
+	ShoppaKing
+	Sticks
 	Trash
 	Tree
+	TrophyRace
 	)
 
 add_subdirectory(${dir})

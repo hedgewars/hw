@@ -90,22 +90,22 @@ var Len: LongInt;
     done: boolean;
 begin
 {$IFNDEF NOCONSOLE}
-    {$IFDEF DEBUGFILE}AddFileLog('Console write: ' + s);{$ENDIF}
-    Write(s);
-    done:= false;
+{$IFDEF DEBUGFILE}AddFileLog('Console write: ' + s);{$ENDIF}
+Write(s);
+done:= false;
 
-    while not done do
+while not done do
     begin
-        Len:= cLineWidth - Length(ConsoleLines[CurrLine].s);
-        SetLine(ConsoleLines[CurrLine], ConsoleLines[CurrLine].s + copy(s, 1, Len));
-        Delete(s, 1, Len);
-        if byte(ConsoleLines[CurrLine].s[0]) = cLineWidth then
+    Len:= cLineWidth - Length(ConsoleLines[CurrLine].s);
+    SetLine(ConsoleLines[CurrLine], ConsoleLines[CurrLine].s + copy(s, 1, Len));
+    Delete(s, 1, Len);
+    if byte(ConsoleLines[CurrLine].s[0]) = cLineWidth then
         begin
-            inc(CurrLine);
-            if CurrLine = cLinesCount then CurrLine:= 0;
-            PByte(@ConsoleLines[CurrLine].s)^:= 0
+        inc(CurrLine);
+        if CurrLine = cLinesCount then CurrLine:= 0;
+        PByte(@ConsoleLines[CurrLine].s)^:= 0
         end;
-        done:= (Length(s) = 0);
+    done:= (Length(s) = 0);
     end;
 {$ENDIF}
 end;
@@ -113,12 +113,12 @@ end;
 procedure WriteLnToConsole(s: shortstring);
 begin
 {$IFNDEF NOCONSOLE}
-    WriteToConsole(s);
-    WriteLn;
-    inc(CurrLine);
-    if CurrLine = cLinesCount then
-        CurrLine:= 0;
-    PByte(@ConsoleLines[CurrLine].s)^:= 0
+WriteToConsole(s);
+WriteLn;
+inc(CurrLine);
+if CurrLine = cLinesCount then
+    CurrLine:= 0;
+PByte(@ConsoleLines[CurrLine].s)^:= 0
 {$ENDIF}
 end;
 
@@ -234,10 +234,14 @@ begin
     RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
     RegisterVariable('ready'   , vtLongInt, @cReadyDelay    , false);
     RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
+    RegisterVariable('healthprob', vtLongInt, @cHealthCaseProb, false);
+    RegisterVariable('hcaseamount', vtLongInt, @cHealthCaseAmount, false);
     RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);
+    RegisterVariable('waterrise', vtLongInt, @cWaterRise    , false);
+    RegisterVariable('healthdec', vtLongInt, @cHealthDecrease, false);
     RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);
     RegisterVariable('minedudpct',vtLongInt,@cMineDudPercent, false);
-    RegisterVariable('landadds', vtLongInt, @cLandAdditions , false);
+    RegisterVariable('minesnum', vtLongInt, @cLandMines     , false);
     RegisterVariable('explosives',vtLongInt,@cExplosives    , false);
     RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
     RegisterVariable('trflags' , vtLongInt, @TrainingFlags  , false);

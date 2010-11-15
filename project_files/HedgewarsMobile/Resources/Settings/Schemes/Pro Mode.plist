@@ -8,9 +8,13 @@
 		<integer>15</integer>
 		<integer>100</integer>
 		<integer>15</integer>
+		<integer>47</integer>
+		<integer>5</integer>
 		<integer>0</integer>
+		<integer>35</integer>
+		<integer>25</integer>
 		<integer>3</integer>
-		<integer>4</integer>
+		<integer>0</integer>
 		<integer>0</integer>
 		<integer>2</integer>
 	</array>
@@ -31,6 +35,7 @@
 		<false/>
 		<false/>
 		<true/>
+		<false/>
 		<false/>
 		<false/>
 		<false/>

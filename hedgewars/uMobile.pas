@@ -22,7 +22,7 @@ unit uMobile;
 interface
 
 {$IFDEF IPHONEOS}
-(*  iOS calls written in C/Objc  *)
+(*  iOS calls written in ObjcExports.m  *)
 procedure clearView; cdecl; external;
 procedure startSpinning; cdecl; external;
 procedure stopSpinning; cdecl; external;
@@ -30,9 +30,10 @@ procedure replayBegan; cdecl; external;
 procedure replayFinished; cdecl; external;
 procedure updateVisualsNewTurn; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
+procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
 {$ENDIF}
 function  isPhone: Boolean; inline;
-procedure doRumble; inline;
+procedure performRumble; inline;
 procedure perfExt_AddProgress; inline;
 procedure perfExt_FinishProgress; inline;
 procedure perfExt_AmmoUpdate; // don't inline
@@ -51,9 +52,12 @@ begin
     exit(false);
 end;
 
-procedure doRumble; inline;
+procedure performRumble; inline;
 begin
-    // fill me!
+{$IFDEF IPHONEOS}
+    // kSystemSoundID_Vibrate = $00000FFF
+    AudioServicesPlaySystemSound($00000FFF);
+{$ENDIF}
 end;
 
 procedure perfExt_AddProgress; inline;

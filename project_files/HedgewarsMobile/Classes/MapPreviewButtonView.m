@@ -196,10 +196,9 @@
     [self setTitle:nil forState:UIControlStateNormal];
     
     // don't display preview on slower device, too slow and memory hog
-    NSString *modelId = modelType();
-    if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"]) {
-        //self.delegate.busy = NO;
+    if (IS_NOT_POWERFUL()) {
         [self setTitle:NSLocalizedString(@"Preview not available",@"") forState:UIControlStateNormal];
+        [self turnOnWidgets];
     } else {        
         // add a very nice spinning wheel
         UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]

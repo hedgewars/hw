@@ -107,7 +107,10 @@
             return 2;
             break;
         case 2:     // other stuff
-            return 2;
+            if (IS_IPAD())
+                return 2;
+            else
+                return 1;
             break;
         default:
             DLog(@"Nope");
@@ -153,7 +156,7 @@
                 editableCell.minimumCharacters = 0;
                 editableCell.delegate = self;
                 editableCell.textField.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-                editableCell.textField.textColor = [UIColor lightGrayColor];
+                editableCell.textField.textColor = [UIColor blackColor];
             }
             
             if (row == 0) {
@@ -207,7 +210,7 @@
             switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
                 cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
-                cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit a hedgehog suffers", @"");
+                cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit", @"");
                 switchContent.on = [[self.settingsDictionary objectForKey:@"alternate"] boolValue];
                 switchContent.tag = 30;
             } else {

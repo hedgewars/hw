@@ -53,15 +53,13 @@
 #define UICOLOR_HW_DARKBLUE     [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:1]
 #define UICOLOR_HW_ALPHABLUE    [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:0.58f]
 
-#define IS_DUALHEAD()           ([[UIScreen screens] count] > 1)
+#define IS_DUALHEAD()           ([[UIScreen class] respondsToSelector:@selector(screens)] && [[UIScreen screens] count] > 1)
 #define IS_IPAD()               (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define IS_NOT_POWERFUL()       ([modelType() hasPrefix:@"iPhone1"] || [modelType() hasPrefix:@"iPod1,1"] || [modelType() hasPrefix:@"iPod2,1"])
 
 #define DEFAULT_NETGAME_PORT    46631
 
 
-void createTeamNamed (NSString *nameWithoutExt);
-void createWeaponNamed (NSString *nameWithoutExt, int type);
-void createSchemeNamed (NSString *nameWithoutExt);
 void print_free_memory (void);
 void playSound (NSString *snd);
 void popError (const char *title, const char *message);
@@ -72,3 +70,5 @@ NSString *modelType (void);
 NSArray *getAvailableColors (void);
 UILabel *createBlueLabel (NSString *title, CGRect frame);
 UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWidth, UIColor *borderColor, UIColor *backgroundColor);
+
+CGSize PSPNGSizeFromMetaData (NSString *aFileName);

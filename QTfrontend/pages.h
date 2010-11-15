@@ -425,6 +425,7 @@ private:
     bool gameInLobby;
     QString gameInLobbyName;
     QStringList listFromServer;
+    AmmoSchemeModel * ammoSchemeModel;
 
 public slots:
     void setRoomsList(const QStringList & list);
@@ -475,7 +476,7 @@ private:
     ToggleButtonWidget * TBW_lowGravity;
     ToggleButtonWidget * TBW_laserSight;
     ToggleButtonWidget * TBW_invulnerable;
-    ToggleButtonWidget * TBW_mines;
+    ToggleButtonWidget * TBW_resethealth;
     ToggleButtonWidget * TBW_vampiric;
     ToggleButtonWidget * TBW_karma;
     ToggleButtonWidget * TBW_artillery;
@@ -489,12 +490,18 @@ private:
     ToggleButtonWidget * TBW_infattack;
     ToggleButtonWidget * TBW_resetweps;
     ToggleButtonWidget * TBW_perhogammo;
+    ToggleButtonWidget * TBW_nowind;
+    ToggleButtonWidget * TBW_morewind;
 
     QSpinBox * SB_DamageModifier;
     QSpinBox * SB_TurnTime;
     QSpinBox * SB_InitHealth;
     QSpinBox * SB_SuddenDeath;
+    QSpinBox * SB_WaterRise;
+    QSpinBox * SB_HealthDecrease;
     FreqSpinBox * SB_CaseProb;
+    QSpinBox * SB_HealthCrates;
+    QSpinBox * SB_CrateHealth;
     QSpinBox * SB_MinesTime;
     QSpinBox * SB_Mines;
     QSpinBox * SB_MineDuds;

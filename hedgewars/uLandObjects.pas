@@ -292,9 +292,9 @@ with Obj do
                    end
                 end;
              inc(y, 3);
-         until y > int64(LAND_HEIGHT) - 1 - Height;
+         until y >= LAND_HEIGHT - Height;
          inc(x, getrandom(6) + 3)
-     until x > int64(LAND_WIDTH) - 1 - Width;
+     until x >= LAND_WIDTH - Width;
      bRes:= cnt <> 0;
      if bRes then
         begin
@@ -341,9 +341,9 @@ with Obj do
                 end
             end;
             inc(y, 12);
-        until y > int64(LAND_HEIGHT) - 1 - Height - 8;
+        until y >= LAND_HEIGHT - Height - 8;
         inc(x, getrandom(12) + 12)
-    until x > int64(LAND_WIDTH) - 1 - Width;
+    until x >= LAND_WIDTH - Width;
     bRes:= cnt <> 0;
     if bRes then
         begin

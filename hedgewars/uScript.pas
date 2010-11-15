@@ -51,7 +51,9 @@ uses LuaPas in 'LuaPas.pas',
     uSound,
     uTeams,
     uKeys,
-    uChat;
+    uChat,
+    uStats,
+    uRandom;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
@@ -115,6 +117,17 @@ begin
     L:= L; // avoid compiler hint
     HideMission;
     lc_hidemission:= 0;
+end;
+
+function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) = 1 then
+        begin
+        AddCaption(lua_tostring(L, 1), cWhiteColor, capgrpMessage);
+        end
+    else
+        LuaError('Lua: Wrong number of parameters passed to AddCaption!');
+    lc_addcaption:= 0;
 end;
 
 function lc_campaignlock(L : Plua_State) : LongInt; Cdecl;
@@ -312,6 +325,27 @@ begin
             lua_pushnil(L);
         end;
     lc_gethogclan:= 1
+end;
+
+function lc_gethogteamname(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetHogTeamName!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            begin
+            lua_pushstring(L, str2pchar(PHedgehog(gear^.Hedgehog)^.Team^.TeamName))
+            end
+        else
+            lua_pushnil(L);
+        end;
+    lc_gethogteamname:= 1
 end;
 
 function lc_gethogname(L : Plua_State) : LongInt; Cdecl;
@@ -765,6 +799,28 @@ begin
         ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
     lc_setammo:= 0
 end;
+
+function lc_getrandom(L : Plua_State) : LongInt; Cdecl;
+var m : LongInt;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetRandom!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        m:= lua_tointeger(L, 1);
+        if (m > 0) then
+            lua_pushinteger(L, GetRandom(m))
+        else
+            begin
+            LuaError('Lua: Tried to pass 0 to GetRandom!');
+            lua_pushnil(L);
+            end
+        end;
+    lc_getrandom:= 1
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -830,11 +886,18 @@ ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TurnTime', cHedgehogTurnTime);
 ScriptSetInteger('CaseFreq', cCaseFactor);
-ScriptSetInteger('LandAdds', cLandAdditions);
+ScriptSetInteger('HealthCaseProb', cHealthCaseProb);
+ScriptSetInteger('HealthCaseAmount', cHealthCaseAmount);
+ScriptSetInteger('DamagePercent', cDamagePercent);
+ScriptSetInteger('MinesNum', cLandMines);
+ScriptSetInteger('MinesTime', cMinesTime);
+ScriptSetInteger('MineDudPercent', cMineDudPercent);
 ScriptSetInteger('Explosives', cExplosives);
 ScriptSetInteger('Delay', cInactDelay);
 ScriptSetInteger('Ready', cReadyDelay);
 ScriptSetInteger('SuddenDeathTurns', cSuddenDTurns);
+ScriptSetInteger('WaterRise', cWaterRise);
+ScriptSetInteger('HealthDecrease', cHealthDecrease);
 ScriptSetString('Map', '');
 ScriptSetString('Theme', '');
 
@@ -851,11 +914,18 @@ ParseCommand('seed ' + ScriptGetString('Seed'), true);
 ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
 ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
 ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
-ParseCommand('$landadds ' + ScriptGetString('LandAdds'), true);
+ParseCommand('$healthprob ' + ScriptGetString('HealthCaseProb'), true);
+ParseCommand('$hcaseamount ' + ScriptGetString('HealthCaseAmount'), true);
+ParseCommand('$damagepct ' + ScriptGetString('DamagePercent'), true);
+ParseCommand('$minesnum ' + ScriptGetString('MinesNum'), true);
+ParseCommand('$minestime ' + ScriptGetString('MinesTime'), true);
+ParseCommand('$minedudpct ' + ScriptGetString('MineDudPercent'), true);
 ParseCommand('$explosives ' + ScriptGetString('Explosives'), true);
 ParseCommand('$delay ' + ScriptGetString('Delay'), true);
 ParseCommand('$ready ' + ScriptGetString('Ready'), true);
 ParseCommand('$sd_turns ' + ScriptGetString('SuddenDeathTurns'), true);
+ParseCommand('$waterrise ' + ScriptGetString('WaterRise'), true);
+ParseCommand('$healthdec ' + ScriptGetString('HealthDecrease'), true);
 if ScriptGetString('Map') <> '' then
     ParseCommand('map ' + ScriptGetString('Map'), true);
 if ScriptGetString('Theme') <> '' then
@@ -868,7 +938,8 @@ if ScriptExists('onAmmoStoreInit') then
     ScriptApplyAmmoStore
     end;
 
-ScriptSetInteger('ClansCount', ClansCount)
+ScriptSetInteger('ClansCount', ClansCount);
+ScriptSetInteger('TeamsCount', TeamsCount)
 end;
 
 procedure ScriptLoad(name : shortstring);
@@ -894,6 +965,7 @@ begin
 ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 ScriptSetInteger('GameTime', GameTicks);
 ScriptSetInteger('RealTime', RealTicks);
+ScriptSetInteger('TotalRounds', TotalRounds);
 if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
     ScriptSetInteger('CurrentHedgehog', CurrentHedgehog^.Gear^.UID)
 else
@@ -1039,7 +1111,6 @@ ScriptSetInteger('gfDivideTeams', gfDivideTeams);
 ScriptSetInteger('gfLowGravity', gfLowGravity);
 ScriptSetInteger('gfLaserSight', gfLaserSight);
 ScriptSetInteger('gfInvulnerable', gfInvulnerable);
-ScriptSetInteger('gfMines', gfMines);
 ScriptSetInteger('gfVampiric', gfVampiric);
 ScriptSetInteger('gfKarma', gfKarma);
 ScriptSetInteger('gfArtillery', gfArtillery);
@@ -1049,6 +1120,13 @@ ScriptSetInteger('gfKing', gfKing);
 ScriptSetInteger('gfPlaceHog', gfPlaceHog);
 ScriptSetInteger('gfSharedAmmo', gfSharedAmmo);
 ScriptSetInteger('gfDisableGirders', gfDisableGirders);
+ScriptSetInteger('gfDisableLandObjects', gfDisableLandObjects);
+ScriptSetInteger('gfAISurvival', gfAISurvival);
+ScriptSetInteger('gfInfAttack', gfInfAttack);
+ScriptSetInteger('gfResetWeps', gfResetWeps);
+ScriptSetInteger('gfPerHogAmmo', gfPerHogAmmo);
+ScriptSetInteger('gfDisableWind', gfDisableWind);
+ScriptSetInteger('gfMoreWind', gfMoreWind);
 
 ScriptSetInteger('gmLeft', gmLeft);
 ScriptSetInteger('gmRight', gmRight);
@@ -1101,13 +1179,16 @@ lua_register(luaState, 'GetGearPosition', @lc_getgearposition);
 lua_register(luaState, 'ParseCommand', @lc_parsecommand);
 lua_register(luaState, 'ShowMission', @lc_showmission);
 lua_register(luaState, 'HideMission', @lc_hidemission);
+lua_register(luaState, 'AddCaption', @lc_addcaption);
 lua_register(luaState, 'SetAmmo', @lc_setammo);
 lua_register(luaState, 'PlaySound', @lc_playsound);
 lua_register(luaState, 'AddTeam', @lc_addteam);
 lua_register(luaState, 'AddHog', @lc_addhog);
 lua_register(luaState, 'SetHealth', @lc_sethealth);
+lua_register(luaState, 'GetHealth', @lc_gethealth);
 lua_register(luaState, 'SetEffect', @lc_seteffect);
 lua_register(luaState, 'GetHogClan', @lc_gethogclan);
+lua_register(luaState, 'GetHogTeamName', @lc_gethogteamname);
 lua_register(luaState, 'GetHogName', @lc_gethogname);
 lua_register(luaState, 'GetHogLevel', @lc_gethoglevel);
 lua_register(luaState, 'GetX', @lc_getx);
@@ -1121,7 +1202,6 @@ lua_register(luaState, 'GetState', @lc_getstate);
 lua_register(luaState, 'SetTag', @lc_settag);
 lua_register(luaState, 'SetTimer', @lc_settimer);
 lua_register(luaState, 'GetTimer', @lc_gettimer);
-lua_register(luaState, 'GetHealth', @lc_gethealth);
 lua_register(luaState, 'SetZoom', @lc_setzoom);
 lua_register(luaState, 'GetZoom', @lc_getzoom);
 lua_register(luaState, 'HogSay', @lc_hogsay);
@@ -1130,6 +1210,7 @@ lua_register(luaState, 'CampaignLock', @lc_campaignlock);
 lua_register(luaState, 'CampaignUnlock', @lc_campaignunlock);
 lua_register(luaState, 'GetGearMessage', @lc_getgearmessage);
 lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
+lua_register(luaState, 'GetRandom', @lc_getrandom);
 
 
 ScriptClearStack; // just to be sure stack is empty

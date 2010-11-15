@@ -3,30 +3,10 @@
 <plist version="1.0">
 <array>
 	<dict>
-		<key>default</key>
-		<integer>100</integer>
-		<key>image</key>
-		<string>Damage</string>
-		<key>max</key>
-		<integer>300</integer>
-		<key>min</key>
-		<integer>10</integer>
-		<key>title</key>
-		<string>Damage Modifier</string>
-	</dict>
-	<dict>
-		<key>default</key>
-		<integer>45</integer>
-		<key>image</key>
-		<string>Time</string>
-		<key>max</key>
-		<integer>100</integer>
-		<key>min</key>
-		<integer>1</integer>
-		<key>title</key>
-		<string>Turn Time</string>
-	</dict>
-	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
+		<string></string>
 		<key>default</key>
 		<integer>100</integer>
 		<key>image</key>
@@ -39,6 +19,42 @@
 		<string>Initial Health</string>
 	</dict>
 	<dict>
+		<key>checkOverMax</key>
+		<true/>
+		<key>command</key>
+		<string>e$turntime</string>
+		<key>default</key>
+		<integer>45</integer>
+		<key>image</key>
+		<string>Time</string>
+		<key>max</key>
+		<integer>100</integer>
+		<key>min</key>
+		<integer>1</integer>
+		<key>title</key>
+		<string>Turn Time</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
+		<string>e$damagepct</string>
+		<key>default</key>
+		<integer>100</integer>
+		<key>image</key>
+		<string>Damage</string>
+		<key>max</key>
+		<integer>300</integer>
+		<key>min</key>
+		<integer>10</integer>
+		<key>title</key>
+		<string>Damage Modifier</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<true/>
+		<key>command</key>
+		<string>e$sd_turns</string>
 		<key>default</key>
 		<integer>15</integer>
 		<key>image</key>
@@ -51,6 +67,42 @@
 		<string>Sudden Death Timeout</string>
 	</dict>
 	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
+		<string>e$waterrise</string>
+		<key>default</key>
+		<integer>47</integer>
+		<key>image</key>
+		<string>SuddenDeath</string>
+		<key>max</key>
+		<integer>100</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Water Rise Amount</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
+		<string>e$healthdec</string>
+		<key>default</key>
+		<integer>5</integer>
+		<key>image</key>
+		<string>SuddenDeath</string>
+		<key>max</key>
+		<integer>100</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Health Decrease</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
+		<string>e$casefreq</string>
 		<key>default</key>
 		<integer>5</integer>
 		<key>image</key>
@@ -60,21 +112,61 @@
 		<key>min</key>
 		<integer>0</integer>
 		<key>title</key>
-		<string>Crate Drops</string>
+		<string>Crate Drop Turns</string>
 	</dict>
 	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
+		<string>e$healthprob</string>
+		<key>default</key>
+		<integer>35</integer>
+		<key>image</key>
+		<string>Health</string>
+		<key>max</key>
+		<integer>100</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Health Kit Probability</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
+		<string>e$hcaseamount</string>
+		<key>default</key>
+		<integer>25</integer>
+		<key>image</key>
+		<string>Health</string>
+		<key>max</key>
+		<integer>200</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Health Amount in Kit</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
+		<string>e$minestime</string>
 		<key>default</key>
 		<integer>3</integer>
 		<key>image</key>
 		<string>Time</string>
 		<key>max</key>
-		<integer>3</integer>
+		<integer>5</integer>
 		<key>min</key>
-		<integer>0</integer>
+		<integer>-1</integer>
 		<key>title</key>
 		<string>Mines Time</string>
 	</dict>
 	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
+		<string>e$minesnum</string>
 		<key>default</key>
 		<integer>4</integer>
 		<key>image</key>
@@ -82,11 +174,15 @@
 		<key>max</key>
 		<integer>80</integer>
 		<key>min</key>
-		<integer>1</integer>
+		<integer>0</integer>
 		<key>title</key>
 		<string>Mines Number</string>
 	</dict>
 	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
+		<string>e$minedudpct</string>
 		<key>default</key>
 		<integer>0</integer>
 		<key>image</key>
@@ -99,6 +195,10 @@
 		<string>Dud Mines Probability</string>
 	</dict>
 	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
+		<string>e$explosives</string>
 		<key>default</key>
 		<integer>2</integer>
 		<key>image</key>

@@ -23,28 +23,46 @@
 #import "CommodityFunctions.h"
 
 @implementation HelpPageViewController
-
+@synthesize scrollView;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 -(void) didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
+    self.scrollView = nil;
+}
+
+// on iPhone the XIBs contain UIScrollView
+-(void) viewDidLoad {
+    if (scrollView.tag == 0)
+        scrollView.contentSize = CGSizeMake(480,650);
+    else
+        scrollView.contentSize = CGSizeMake(480,460);
+    scrollView.maximumZoomScale = 4.0;
+    scrollView.minimumZoomScale = 0.75;
+    scrollView.clipsToBounds = YES;
+    scrollView.delegate = self;
+    [super viewDidLoad];
+}
+
+
+-(void) scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
+    [self.view removeFromSuperview];
 }
 
 -(void) viewDidUnload {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    self.scrollView = nil;
 }
 
 -(void) dealloc {
+    [scrollView release];
     [super dealloc];
 }
 
+// on iPad the XIBs contain UIControl
 -(IBAction) dismiss {
     [UIView beginAnimations:@"helpingame" context:NULL];
     self.view.alpha = 0;

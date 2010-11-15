@@ -7,17 +7,19 @@ local caption = {
 	["pl"] = "Hedgewars-Knockball",
 	["pt_PT"] = "Hedgewars-Knockball",
 	["sk"] = "Hedgewars-Knockball",
-	["sv"] = "Hedgewars-Knockball"
+	["sv"] = "Hedgewars-Knockball",
+	["pt_BR"] = "Hedgewars-Knockball"
 	}
 
 local subcaption = {
 	["en"] = "Not So Friendly Match",
 	["de"] = "Kein-so-Freundschaftsspiel",
 	["es"] = "Partido no-tan-amistoso",
-	["pl"] = "Mecz Nie-Taki-Towarzyski",
+	["pl"] = "Mecz Nie-Do-Końca Towarzyski",
 	["pt_PT"] = "Partida não muito amigável",
 	["sk"] = "Nie tak celkom priateľký zápas",
-	["sv"] = "En inte så vänlig match"
+	["sv"] = "En inte så vänlig match",
+	["pt_BR"] = "Partida não muito amigável"
 	}
 
 local goal = {
@@ -27,7 +29,8 @@ local goal = {
 	["pl"] = "Uderzaj piłkami w swoich przeciwników|i strącaj ich do wody!",
 	["pt_PT"] = "Bate bolas contra os teus|enimigos e empurra-os ao mar!",
 	["sk"] = "Loptami triafajte vašich nepriateľov|a zhoďte ich tak do mora!",
-	["sv"] = "Slå bollar mot dina fiender|och slå ner dem i havet"
+	["sv"] = "Slå bollar mot dina fiender|och slå ner dem i havet",
+	["pt_BR"] = "Rebata as bolas em direção ao seus|e derrube-os no mar!"
 	}
 
 local scored = {
@@ -37,7 +40,8 @@ local scored = {
 	["pl"] = "%s utonął i drużyna %d|zdobyła punkt!| |Punktacja:",
 	["pt_PT"] = "%s está fora e a equipa %d|soma um ponto!| |Pontuação:",
 	["sk"] = "%s je mimo hru a tím %d|získal bod!| |Skóre:",
-	["sv"] = "%s är ute och lag %d|fick ett poäng!| |Poängställning:"
+	["sv"] = "%s är ute och lag %d|fick ett poäng!| |Poängställning:",
+	["pt_BR"] = "%s está fora e a Equipe %d|marcou um ponto!| |Pontuação:"
 	}
 
 local failed = {
@@ -47,7 +51,8 @@ local failed = {
 	["pl"] = "%s utonął i drużyna %d|dostała punkt karny!| |Punktacja:",
 	["pt_PT"] = "%s está fora e a equipa %d|perde um ponto!| |Pontuação:",
 	["sk"] = "%s je mimo hru a tím %d|dostal trestný bod!| |Skóre:",
-	["sv"] = "%s är ute och lag %d|fick ett straff!| |Poängställning:"
+	["sv"] = "%s är ute och lag %d|fick ett straff!| |Poängställning:",
+	["pt_BR"] = "%s está fora e a Equipe %d|sofreu uma penalidade!| |Pontuação:"
 	}
 
 local function loc(text)
@@ -69,7 +74,7 @@ function onGameInit()
 	GameFlags = gfSolidLand + gfInvulnerable + gfDivideTeams
 	TurnTime = 20000
 	CaseFreq = 0
-	LandAdds = 0
+	MinesNum = 0
 	Explosives = 0
 	Delay = 500
 	SuddenDeathTurns = 99999 -- "disable" sudden death

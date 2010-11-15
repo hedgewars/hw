@@ -1,7 +1,7 @@
 ; Swedish locale
 
 00:00=Granat
-00:01=Splitterbomb
+00:01=Splittergranat
 00:02=Raketgevär
 00:03=Målsökande bi
 00:04=Hagelgevär
@@ -49,6 +49,7 @@
 00:46=Eldkastare
 00:47=Fästande mina
 00:48=Hammare
+00:49=Återuppliva
 
 01:00=Nu kör vi!
 01:01=Oavgjort
@@ -127,6 +128,8 @@
 02:00=%1 har kolat vippen
 02:00=%1 har trillat av pinn
 02:00=%1 har kastat in handduken
+02:00=%1 har gått vidare
+02:00=Vi kommer alltid att minnas dig, %1
 
 ; Hog (%1) drowned
 02:01=%1 leker ubåt!
@@ -139,14 +142,14 @@
 ;02:01=%1 forgot his armbands
 02:01=%1 borde verkligen ha tagit simlektioner
 02:01=%1 lämnade sin surfingbräda hemma
-;02:01=%1 is washed up
+02:01=%1 är nu ren
 02:01=%1 är en dyngsur igelkott
 02:01=%1 glömde att ta med sin flytväst
 ;02:01=%1 goes splish splash splish
 02:01=%1 sover med fiskarna
 02:01=%1 tycker vattenfysiken suger i det här spelet
 02:01=%1 ser törstig ut
-;02:01=the sea claims %1
+02:01=Havet tar %1 i besittning
 02:01=%1 är förlorad till havs
 02:01=%1 borde ha tagit med sig sin dykarutrustning
 02:01=%1 blir begraven till havs
@@ -162,12 +165,12 @@
 02:01=%1 härmar en död fisk
 02:01=Du spolades i alla fall inte ner i toaletten, %1
 02:01=Sonic kunde inte simma, och det kunde inte %1 heller
-;02:01=%1 wants to play Ecco the dolphin
+02:01=%1 vill leka Ecco the dolphin
 02:01=%1 har gått för att besöka Aquaria
 02:01=%1 har funnit den förlorade staden Atlantis
 02:01=%1 siktar på huvudrollen i Bioshock 3
 02:01=Du borde träna på ditt hundsim, %1
-;02:01=%1 should have brought a jet ski
+02:01=%1 skulle ha tagit med sig vattenskidor
 02:01=%1 gillar inte vattensporter
 02:01=%1 blåser för alltid bubblor
 02:01=%1 saknar en flotte
@@ -178,14 +181,18 @@
 02:01=%1 är blöt, blöt, blöt
 ;02:01=%1 får sin bläckpenna blöt
 ;02:01=It's Davy Jones' locker for %1
+02:01=%1 tänkte inte på vattnet
+02:01=%1 ville slippa dö synligt
+02:01=%1 tog inte med någon båt
+02:01=%1 lämnar oss för havet
 
 ; Round starts
 02:02=Nu kör vi!
 02:02=Laddad och klar!
 ;02:02=Let's get ready to rumble!
 ;02:02=Let's get it on!
-;02:02=Let's get this party started
-;02:02=Last hog standing wins
+02:02=Nu börjar festen!
+02:02=Sista igelkotten kvar vinner!
 ;02:02=Let's go!
 02:02=Nu rockar vi!
 ;02:02=Let's jam!
@@ -233,6 +240,10 @@
 ;02:02=Bring it to them!
 02:02=Ha ingen rädsla!
 ;02:02=Be brave and conquer
+02:02=Låt spelet börja!
+02:02=Siste man vinner!
+02:02=Ooh, det börjar!
+02:02=Inga mesar tillåtna
 
 ; Round ends (win; unused atm)
 02:03=...
@@ -257,6 +268,8 @@
 02:05=Korrekt dosering: så många du kan hitta!
 02:05=Angelägen leverans
 02:05=Proviant!
+02:05=Ta den medans du kan!
+02:05=Det mest effektiva botemedlet du kan hitta!
 
 ; New ammo crate
 02:06=Mer vapen!
@@ -269,7 +282,7 @@
 02:06=En present!
 ;02:06=Specialleverans!
 02:06=Det var en mardröm att få igenom det här genom tullen
-02:06=Destruktiva leksaker från himmelen
+02:06=Destruktiva leksaker från himlen
 02:06=Varning, brandfarligt!
 02:06=Ta den eller spräng den, valet är ditt
 ;02:06=Goodies!
@@ -281,7 +294,9 @@
 02:06=Vapen inkommandes
 02:06=Låt inte fienden ta den!
 02:06=Gnistrande nya leksaker!
-02:06=En myskisk låda!
+02:06=En mystisk låda!
+02:06=Låt inte dina motståndare få den!
+02:06=Var försiktig med den här
 
 ; New utility crate
 02:07=Verktygsdags!
@@ -298,7 +313,7 @@
 
 ; Hog (%1) skips his turn
 02:08=%1 är såååå tråkig...
-;02:08=%1 couldn't be bothered
+02:08=%1 brydde sig inte
 02:08=%1 är en lat igelkott
 02:08=%1 är tanklös
 02:08=%1 gav upp
@@ -329,10 +344,16 @@
 02:08=Sluta slösa på vår tid, %1
 02:08=Jag är besviken på dig, %1
 02:08=Kom igen, du kan göra bättre än så, %1
-;02:08=%1's will has broken
+02:08=%1s vilja är borta
 02:08=%1 har tydligen bättre saker för sig
 02:08=%1 är förstenad av rädsla
 02:08=%1 har somnat
+02:08=%1 glömde att skjuta först
+02:08=%1 verkar inte vara så kreativ
+02:08=Var inte så tråkig, %1!
+02:08=Hade du inget bättre att komma med, %1?
+02:08=Du borde byta karriär om du ska hålla på så, %1
+02:08=Var det allt?
 
 ; Hog (%1) hurts himself only
 02:09=%1 borde öva sitt sikte!
@@ -362,13 +383,18 @@
 02:09=%1 är klumpig
 02:09=%1 visar fienden vad han kan
 02:09=%1 kan inte förväntas vara perfekt hela tiden
-;02:09=Don't worry %1, pobody's nerfect
+02:09=Oroa dig inte, %1, inngen ärperfekt
 02:09=%1 gjorde det där helt med flit
 02:09=Jag skvallrar inte om du inte gör det, %1
 02:09=Vad pinsamt!
 02:09=Jag är säker på att ingen såg det där, %1
 ;02:09=%1 needs to review his field manual
 02:09=%1s vapen krånglade uppenbarligen
+02:09=%1 borde öva mer
+02:09=%1 råkade visst trycka av för tidigt
+02:09=Håll %1 borta från det där vapnet!
+02:09=Inte ditåt, %1!
+02:09=Haha, såg ni det där?
 
 ; Hog shot an home run (using the bat and another hog)
 02:10=Frivarv!
@@ -380,6 +406,8 @@
 02:11=%1 verkar vara för upptagen för att spela
 ;02:11=Beam him up, Scotty!
 02:11=%1 måste gå
+02:11=Lämna oss inte, %1!
+02:11=%1 fegade ur
 
 ; Weapon Categories
 03:00=Tidsinställd granat
@@ -432,10 +460,11 @@
 03:46=Hett Hett Hett!
 03:47=Fäst de här på ett användbart ställe!
 03:48=Dags att banka järnet!
+03:49=Gör det du tror
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attackera fienden med en enkel granat.|Exploderar när tiden når noll.|1-5: Ställ in granatens tid|Attack: Håll ner för att kasta med mer kraft
-04:01=Attackera fienden med en splitterbomb.|Delas upp i små bomber när tiden når noll.|1-5: Ställ in granatens tid|Attack: Håll ner för att kasta med mer kraft
+04:01=Attackera fienden med en splittergranat.|Delas upp i små bomber när tiden når noll.|1-5: Ställ in granatens tid|Attack: Håll ner för att kasta med mer kraft
 04:02=Attackera fienden med en projektil som kan|påverkas av vinden.|Attack: Håll ner för att skjuta med mer kraft
 04:03=Avfyra ett explosivt bi som låser sig på det valda|målet. Öka precisionen genom att inte skjuta med|full kraft.|Markör: Välj mål|Attack: Håll ner för att skjuta med mer kraft
 04:04=Attackera fienden med ett hagelgevär med två|skott. Tack vare sin spridning behöver du inte|träffa direkt för att skada motståndarna.|Attack: Skjut (flera gånger)
@@ -483,6 +512,7 @@
 04:46=Täck dina fiender med ett fräsande eldhav.|Hjärtvärmande!|Attack: Aktivera|Upp/Ner: Fortsätt sikta|Vänster/Höger: Justera kraft
 04:47=Det är dubbelt så roligt med två farliga, fantastiska,|fästande minor. Skapa en kedjereaktion eller försvara|dig själv (eller både och!)|Attack: Håll ner för att skjuta med mer kraft (två gånger)
 04:48=Varför ska mullvadarna få all misshandel? Att|drämma till en igelkott kan vara minst lika roligt!|Ett rejält slag med den här hammaren kan skala|av en tredjedel av en igelkotts hälsa och slå ner|dem i marken.|Attack: Aktivera
+04:49=Återuppliva dina vänner!|Men tänk på att du också återupplivar dina fiender.|Attack: Håll inne för att återuppliva långsamt|Upp: Accelerera återupplivning
 
 ; Game goal strings
 05:00=Spellägen
@@ -501,4 +531,8 @@
 05:13=Mintider: Minor detoneras direkt
 05:14=Mintider: Minor detoneras efter 0 - 3 sekunder
 05:15=Skademängd: Alla vapen gör %1% skada
-
+05:16=Hälsa för alla igelkottar återställs efter varje tur
+05:17=Datorstyrda igelkottar kommer tillbaka när de dör
+05:18=Obegränsade attacker
+05:19=Vapen nollställs när turen är över
+05:20=Igelkottar delar inte på vapnen

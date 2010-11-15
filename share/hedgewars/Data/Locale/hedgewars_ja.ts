@@ -39,6 +39,10 @@
         <source>Edit schemes</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
@@ -87,6 +91,16 @@
     </message>
     <message>
         <source>DefaultTeam</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <comment>File Types</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <comment>File Types</comment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -323,25 +337,29 @@ or pick another nickname in game config:</source>
             <numerusform></numerusform>
         </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>(%1 kills)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -366,11 +384,6 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
-        <comment>Tips</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -560,7 +573,7 @@ or pick another nickname in game config:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!</source>
+        <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -585,7 +598,22 @@ or pick another nickname in game config:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -833,10 +861,6 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enable random mines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Gain 80% of the damage you do back in health</source>
         <translation type="unfinished"></translation>
     </message>
@@ -890,6 +914,22 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>AI respawns on death.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attacking does not end your turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons are reset to starting values each turn.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1073,35 +1113,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">デフォールト</translation>
-    </message>
-    <message>
-        <source>Pro mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shoppa</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Basketball</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Minefield</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Barrel mayhem</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tunnel hogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Crazy</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">デフォールト</translation>
     </message>
 </context>
 <context>
@@ -1305,6 +1317,26 @@ Do you still want to join the room?</source>
         <source>Quality</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sudden Death Water Rise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sudden Death Health Decrease</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bind schemes and weapons</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -1360,6 +1392,14 @@ Please check your installation</source>
     </message>
     <message>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All file associations have been set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File association failed.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1450,6 +1490,10 @@ Please check your installation</source>
     </message>
     <message>
         <source>Random Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Associate file extensions</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1561,10 +1605,6 @@ Please check your installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add Mines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Random Order</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1590,6 +1630,22 @@ Please check your installation</source>
     </message>
     <message>
         <source>AI Survival Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlimited Attacks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Weapons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Per Hedgehog Ammo</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -269,24 +269,25 @@ begin
 
     LoadLocale(Pathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if cLocaleFName <> 'en.txt' then
-    begin
+        begin
         // Try two letter locale first before trying specific locale overrides
         if (Length(cLocaleFName) > 6) and (Copy(cLocaleFName,1,2)+'.txt' <> 'en.txt') then
             LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocaleFName,1,2)+'.txt');
         LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
-    end;
+        end;
 
     WriteLnToConsole(msgGettingConfig);
+
     if recordFileName = '' then
-    begin
+        begin
         InitIPC;
         SendIPCAndWaitReply('C');        // ask for game config
-    end
+        end
     else
-    begin
+        begin
         LoadRecordFromFile(recordFileName);
         perfExt_SaveBeganSynching();
-    end;
+        end;
 
     ScriptOnGameInit;
 

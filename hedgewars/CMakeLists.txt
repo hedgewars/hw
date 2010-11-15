@@ -91,7 +91,7 @@ endif(BUILD_ENGINE_LIBRARY)
 find_program(fpc_executable ${fpc_tryexe})
 
 if(fpc_executable)
-	 exec_program(${fpc_executable} ARGS "-h" OUTPUT_VARIABLE fpc_output)
+	 exec_program(${fpc_executable} ARGS "-iV" OUTPUT_VARIABLE fpc_output)
 endif(fpc_executable)
 
 set(noexecstack_flags "-k-z" "-knoexecstack")

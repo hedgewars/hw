@@ -78,6 +78,13 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 
     connect(goToWeaponPage, SIGNAL(clicked()), this, SLOT(jumpToWeapons()));
 
+    GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Bind schemes and weapons"), GBoxOptions), 2, 0);
+
+    bindEntries = new QCheckBox(GBoxOptions);
+    bindEntries->setToolTip(tr("When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)"));
+    bindEntries->setChecked(true);
+    GBoxOptionsLayout->addWidget(bindEntries, 2, 2);
+
     connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));
     connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
     connect(pMapContainer, SIGNAL(mapgenChanged(MapGenerator)), this, SLOT(mapgenChanged(MapGenerator)));
@@ -101,54 +108,58 @@ quint32 GameCFGWidget::getGameFlags() const
     quint32 result = 0;
 
     if (schemeData(1).toBool())
-        result |= 0x00001000;
+        result |= 0x00001000;       // fort
     if (schemeData(2).toBool())
-        result |= 0x00000010;
+        result |= 0x00000010;       // divide teams
     if (schemeData(3).toBool())
-        result |= 0x00000004;
+        result |= 0x00000004;       // solid land
     if (schemeData(4).toBool())
-        result |= 0x00000008;
+        result |= 0x00000008;       // border
     if (schemeData(5).toBool())
-        result |= 0x00000020;
+        result |= 0x00000020;       // low gravity
     if (schemeData(6).toBool())
-        result |= 0x00000040;
+        result |= 0x00000040;       // laser sight
     if (schemeData(7).toBool())
-        result |= 0x00000080;
+        result |= 0x00000080;       // invulnerable
     if (schemeData(8).toBool())
-        result |= 0x00000100;
+        result |= 0x00000100;       // mines
     if (schemeData(9).toBool())
-        result |= 0x00000200;
+        result |= 0x00000200;       // vampirism
     if (schemeData(10).toBool())
-        result |= 0x00000400;
+        result |= 0x00000400;       // karma
     if (schemeData(11).toBool())
-        result |= 0x00000800;
+        result |= 0x00000800;       // artillery
     if (schemeData(12).toBool())
-        result |= 0x00002000;
+        result |= 0x00002000;       // random
     if (schemeData(13).toBool())
-        result |= 0x00004000;
+        result |= 0x00004000;       // king
     if (schemeData(14).toBool())
-        result |= 0x00008000;
+        result |= 0x00008000;       // place hogs
     if (schemeData(15).toBool())
-        result |= 0x00010000;
+        result |= 0x00010000;       // shared ammo
     if (schemeData(16).toBool())
-        result |= 0x00020000;
+        result |= 0x00020000;       // disable girders
     if (schemeData(17).toBool())
-        result |= 0x00040000;
+        result |= 0x00040000;       // disable land obj
     if (schemeData(18).toBool())
-        result |= 0x00080000;
+        result |= 0x00080000;       // ai survival
     if (schemeData(19).toBool())
-        result |= 0x00100000;
+        result |= 0x00100000;       // infinite attacks
     if (schemeData(20).toBool())
-        result |= 0x00200000;
+        result |= 0x00200000;       // reset weaps
     if (schemeData(21).toBool())
-        result |= 0x00400000;
+        result |= 0x00400000;       // per hog ammo
+    if (schemeData(22).toBool())
+        result |= 0x00800000;       // no wind
+    if (schemeData(23).toBool())
+        result |= 0x01000000;       // more wind
 
     return result;
 }
 
 quint32 GameCFGWidget::getInitHealth() const
 {
-    return schemeData(24).toInt();
+    return schemeData(26).toInt();
 }
 
 QStringList GameCFGWidget::getFullConfig() const
@@ -156,14 +167,18 @@ QStringList GameCFGWidget::getFullConfig() const
     QStringList sl;
     sl.append("eseed " + pMapContainer->getCurrentSeed());
     sl.append(QString("e$gmflags %1").arg(getGameFlags()));
-    sl.append(QString("e$damagepct %1").arg(schemeData(22).toInt()));
-    sl.append(QString("e$turntime %1").arg(schemeData(23).toInt() * 1000));
-    sl.append(QString("e$minestime %1").arg(schemeData(27).toInt() * 1000));
-    sl.append(QString("e$landadds %1").arg(schemeData(28).toInt()));
-    sl.append(QString("e$sd_turns %1").arg(schemeData(25).toInt()));
-    sl.append(QString("e$casefreq %1").arg(schemeData(26).toInt()));
-    sl.append(QString("e$minedudpct %1").arg(schemeData(29).toInt()));
-    sl.append(QString("e$explosives %1").arg(schemeData(30).toInt()));
+    sl.append(QString("e$damagepct %1").arg(schemeData(24).toInt()));
+    sl.append(QString("e$turntime %1").arg(schemeData(25).toInt() * 1000));
+    sl.append(QString("e$sd_turns %1").arg(schemeData(27).toInt()));
+    sl.append(QString("e$casefreq %1").arg(schemeData(28).toInt()));
+    sl.append(QString("e$minestime %1").arg(schemeData(29).toInt()));
+    sl.append(QString("e$minesnum %1").arg(schemeData(30).toInt()));
+    sl.append(QString("e$minedudpct %1").arg(schemeData(31).toInt()));
+    sl.append(QString("e$explosives %1").arg(schemeData(32).toInt()));
+    sl.append(QString("e$healthprob %1").arg(schemeData(33).toInt()));
+    sl.append(QString("e$hcaseamount %1").arg(schemeData(34).toInt()));
+    sl.append(QString("e$waterrise %1").arg(schemeData(35).toInt()));
+    sl.append(QString("e$healthdec %1").arg(schemeData(36).toInt()));
     sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
     sl.append(QString("e$mapgen %1").arg(pMapContainer->get_mapgen()));
     sl.append(QString("e$maze_size %1").arg(pMapContainer->get_maze_size()));
@@ -259,11 +274,23 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 
 void GameCFGWidget::ammoChanged(int index)
 {
-    if (index >= 0)
+    if (index >= 0) {
         emit paramChanged(
             "AMMO",
             QStringList() << WeaponsName->itemText(index) << WeaponsName->itemData(index).toString()
         );
+        if (bindEntries->isChecked() == true) {
+            QString weapName = WeaponsName->itemText(index);
+            for (int i = 0; i < GameSchemes->count(); i++) {
+                 QString schemeName = GameSchemes->itemText(i);
+                 int res = QString::compare(weapName, schemeName, Qt::CaseSensitive);
+                 if (0 == res) {
+                     GameSchemes->setCurrentIndex(i);
+                     break;
+                 }
+            }
+        }
+    }
 }
 
 void GameCFGWidget::mapChanged(const QString & value)
@@ -272,6 +299,7 @@ void GameCFGWidget::mapChanged(const QString & value)
     {
         GameSchemes->setEnabled(false);
         WeaponsName->setEnabled(false);
+        bindEntries->setEnabled(false);
         GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
     }
@@ -279,6 +307,7 @@ void GameCFGWidget::mapChanged(const QString & value)
     {
         GameSchemes->setEnabled(true);
         WeaponsName->setEnabled(true);
+        bindEntries->setEnabled(true);
     }
     emit paramChanged("MAP", QStringList(value));
 }
@@ -298,7 +327,7 @@ void GameCFGWidget::themeChanged(const QString & value)
     emit paramChanged("THEME", QStringList(value));
 }
 
-void GameCFGWidget::schemeChanged(int value)
+void GameCFGWidget::schemeChanged(int index)
 {
     QStringList sl;
 
@@ -307,6 +336,18 @@ void GameCFGWidget::schemeChanged(int value)
         sl << schemeData(i).toString();
 
     emit paramChanged("SCHEME", sl);
+
+    if (bindEntries->isChecked() == true) {
+        QString schemeName = GameSchemes->itemText(index);
+        for (int i = 0; i < WeaponsName->count(); i++) {
+             QString weapName = WeaponsName->itemText(i);
+             int res = QString::compare(weapName, schemeName, Qt::CaseSensitive);
+             if (0 == res) {
+                 WeaponsName->setCurrentIndex(i);
+                 break;
+             }
+        }
+    }
 }
 
 void GameCFGWidget::mapgenChanged(MapGenerator m)

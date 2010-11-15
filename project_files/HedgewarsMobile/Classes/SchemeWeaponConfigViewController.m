@@ -24,7 +24,7 @@
 #import "SDL_uikitappdelegate.h"
 
 @implementation SchemeWeaponConfigViewController
-@synthesize listOfSchemes, listOfWeapons, lastIndexPath_sc, lastIndexPath_we, selectedScheme, selectedWeapon;
+@synthesize listOfSchemes, listOfWeapons, lastIndexPath_sc, lastIndexPath_we, selectedScheme, selectedWeapon, syncSwitch;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -41,8 +41,20 @@
     self.selectedScheme = nil;
     self.selectedWeapon = nil;
 
-    [self.tableView setBackgroundView:nil];
-    self.view.backgroundColor = [UIColor clearColor];
+    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)]) {
+        if (IS_IPAD())
+            [self.tableView setBackgroundView:nil];
+        else {
+            UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"backgroundCenter.png"];
+            UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
+            [backgroundImage release];
+            [self.tableView setBackgroundView:background];
+            [background release];
+        }
+    } else {
+        self.view.backgroundColor = [UIColor blackColor];
+    }
+
     self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
@@ -69,27 +81,30 @@
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
         return [self.listOfSchemes count];
-    else
+    else if (section == 1)
         return [self.listOfWeapons count];
+    else
+        return 1;
 }
 
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     NSInteger row = [indexPath row];
+    NSInteger section = [indexPath section];
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
 
     cell.accessoryView = nil;
-    if ([indexPath section] == 0) {
+    if (0 == section) {
         cell.textLabel.text = [[self.listOfSchemes objectAtIndex:row] stringByDeletingPathExtension];
         NSString *str = [NSString stringWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),[self.listOfSchemes objectAtIndex:row]];
         NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
@@ -101,7 +116,7 @@
             [checkbox release];
             self.lastIndexPath_sc = indexPath;
         }
-    } else {
+    } else if (1 == section) {
         cell.textLabel.text = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension];
         NSString *str = [NSString stringWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),[self.listOfWeapons objectAtIndex:row]];
         NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
@@ -113,8 +128,19 @@
             [checkbox release];
             self.lastIndexPath_we = indexPath;
         }
+    } else {
+        if (self.syncSwitch == nil) {
+            UISwitch *theSwitch = [[UISwitch alloc] init];
+            [theSwitch setOn:YES];
+            self.syncSwitch = theSwitch;
+            [theSwitch release];
+        }
+        cell.textLabel.text = IS_IPAD() ? NSLocalizedString(@"Sync Schemes",@"") : NSLocalizedString(@"Sync Schemes and Weapons",@"");
+        cell.detailTextLabel.text = IS_IPAD() ? nil : NSLocalizedString(@"Choosing a Scheme will select its associated Weapon",@"");
+        cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+        cell.accessoryView = self.syncSwitch;
     }
-    
+
     cell.backgroundColor = [UIColor blackColor];
     cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
     cell.detailTextLabel.textColor = [UIColor whiteColor];
@@ -130,8 +156,11 @@
     NSString *text;
     if (section == 0) 
         text = NSLocalizedString(@"Schemes",@"");
-    else
+    else if (section == 1)
         text = NSLocalizedString(@"Weapons",@"");
+    else
+        text = NSLocalizedString(@"Options",@"");
+
     UILabel *theLabel = createBlueLabel(text, frame);
     theLabel.center = CGPointMake(self.view.frame.size.width/2, 20);
 
@@ -165,6 +194,17 @@
         if ([indexPath section] == 0) {
             self.lastIndexPath_sc = indexPath;
             self.selectedScheme = [self.listOfSchemes objectAtIndex:newRow];
+            if (self.syncSwitch.on) {
+                for (NSString *str in self.listOfWeapons) {
+                    if ([str isEqualToString:self.selectedScheme]) {
+                        int index = [self.listOfSchemes indexOfObject:str];
+                        self.selectedWeapon = str;
+                        self.lastIndexPath_we = [NSIndexPath indexPathForRow:index inSection:1];
+                        [self.tableView reloadData];
+                        break;
+                    }
+                }
+            }
         } else {
             self.lastIndexPath_we = indexPath;
             self.selectedWeapon = [self.listOfWeapons objectAtIndex:newRow];
@@ -183,6 +223,7 @@
         self.lastIndexPath_we = nil;
         self.listOfSchemes = nil;
         self.listOfWeapons = nil;
+        self.syncSwitch = nil;
         MSG_MEMCLEAN();
     }
     [super didReceiveMemoryWarning];
@@ -195,6 +236,7 @@
     self.lastIndexPath_we = nil;
     self.selectedScheme = nil;
     self.selectedWeapon = nil;
+    self.syncSwitch = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -207,6 +249,7 @@
     [lastIndexPath_we release];
     [selectedScheme release];
     [selectedWeapon release];
+    [syncSwitch release];
     [super dealloc];
 }
 

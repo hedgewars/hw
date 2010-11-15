@@ -38,9 +38,21 @@
 
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-    
-    [self.tableView setBackgroundView:nil];
-    self.view.backgroundColor = [UIColor clearColor];
+
+    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)]) {
+        if (IS_IPAD())
+            [self.tableView setBackgroundView:nil];
+        else {
+            UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"backgroundCenter.png"];
+            UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
+            [backgroundImage release];
+            [self.tableView setBackgroundView:background];
+            [background release];
+        }
+    } else {
+        self.view.backgroundColor = [UIColor blackColor];
+    }
+
     self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
@@ -113,7 +125,12 @@
             [cell addSubview:squareButton];
             [squareButton release];
 
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12+88+6+36, 10, 103, 25)];
+            NSInteger length;
+            if (IS_IPAD())
+                length = 103;
+            else
+                length = 285;
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12+88+6+36, 10, length, 25)];
             label.textAlignment = UITextAlignmentLeft;
             label.minimumFontSize = 11;
             label.adjustsFontSizeToFitWidth = YES;

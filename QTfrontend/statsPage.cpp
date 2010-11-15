@@ -177,72 +177,69 @@ void PageGameStats::GameStats(char type, const QString & info)
                     team.Wins++; // should draws count as wins?
                 //team.SaveToFile(); // don't save yet
             }
-	    break;
-        }
-	
+            break;
+            }
+
         case 'P' : {
             int i = info.indexOf(' ');
-	    playerPosition++;
-	    QString color = info.left(i);
-	    quint32 c = color.toInt();
-	    QColor clanColor = QColor(qRgb((c >> 16) & 255, (c >> 8) & 255, c & 255));
+            playerPosition++;
+            QString color = info.left(i);
+            quint32 c = color.toInt();
+            QColor clanColor = QColor(qRgb((c >> 16) & 255, (c >> 8) & 255, c & 255));
 
-	    QString playerinfo = info.mid(i + 1);
-	    
-	    i = playerinfo.indexOf(' ');
+            QString playerinfo = info.mid(i + 1);
 
-	    QString kills = playerinfo.left(i);
-	    QString playername = playerinfo.mid(i + 1);
-	    QString image;
+            i = playerinfo.indexOf(' ');
 
-            if (lastColor == c && playerPosition <= 2) playerPosition = 1;
-	    lastColor = c;
+            int kills = playerinfo.left(i).toInt();
+            QString playername = playerinfo.mid(i + 1);
+            QString image;
 
-	    switch (playerPosition)
-	    {
-	    	case 1:
-			image = "<img src=\":/res/StatsMedal1.png\">";
-			break;
-		case 2:
-			image = "<img src=\":/res/StatsMedal2.png\">";
-			break;
-		case 3:
-			image = "<img src=\":/res/StatsMedal3.png\">";
-			break;
-		default:
-			image = "<img src=\":/res/StatsMedal4.png\">";
-			break;
-	    }
+            if (lastColor == c) playerPosition--;
+            lastColor = c;
+
+            switch (playerPosition)
+            {
+                case 1:
+                image = "<img src=\":/res/StatsMedal1.png\">";
+                break;
+            case 2:
+                image = "<img src=\":/res/StatsMedal2.png\">";
+                break;
+            case 3:
+                image = "<img src=\":/res/StatsMedal3.png\">";
+                break;
+            default:
+                image = "<img src=\":/res/StatsMedal4.png\">";
+                break;
+            }
 
             QString message;
-	    QString killstring;
-	    if (kills.toInt() == 1)
-	    {
-	    	killstring = PageGameStats::tr("(%1 kill)").arg(kills);
-	    } else {
-	    	killstring = PageGameStats::tr("(%1 kills)").arg(kills);
-            }
-	    
-	    message = QString("<p><h2>%1 %2. <font color=\"%4\">%3</font> ").arg(image, QString::number(playerPosition), playername, clanColor.name()) + killstring + "</h2></p>";
-            
-	    labelGameRank->setText(labelGameRank->text() + message);
-            break;
-	}
+            QString killstring = PageGameStats::tr("(%1 kill)", "", kills).arg(kills);
+
+            message = QString("<p><h2>%1 %2. <font color=\"%4\">%3</font> ").arg(image, QString::number(playerPosition), playername, clanColor.name()) + killstring + "</h2></p>";
+
+            labelGameRank->setText(labelGameRank->text() + message);
+                break;
+        }
         case 's' : {
             int i = info.indexOf(' ');
-            QString message = "<p><img src=\":/res/StatsMostSelfDamage.png\"> " + PageGameStats::tr("<b>%1</b> thought it's good to shoot his own hedgehogs with <b>%2</b> pts.").arg(info.mid(i + 1), info.left(i)) + "</p>";
+            int num = info.left(i).toInt();
+            QString message = "<p><img src=\":/res/StatsMostSelfDamage.png\"> " + PageGameStats::tr("<b>%1</b> thought it's good to shoot his own hedgehogs with <b>%2</b> pts.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
             AddStatText(message);
             break;
         }
         case 'S' : {
             int i = info.indexOf(' ');
-            QString message = "<p><img src=\":/res/StatsSelfKilled.png\"> " + PageGameStats::tr("<b>%1</b> killed <b>%2</b> of his own hedgehogs.").arg(info.mid(i + 1), info.left(i)) + "</p>"; 
+            int num = info.left(i).toInt();
+            QString message = "<p><img src=\":/res/StatsSelfKilled.png\"> " + PageGameStats::tr("<b>%1</b> killed <b>%2</b> of his own hedgehogs.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
             AddStatText(message);
             break;
         }
         case 'B' : {
             int i = info.indexOf(' ');
-            QString message = "<p><img src=\":/res/StatsSkipped.png\"> " + PageGameStats::tr("<b>%1</b> was scared and skipped turn <b>%2</b> times.").arg(info.mid(i + 1), info.left(i)) + "</p>";
+            int num = info.left(i).toInt();
+            QString message = "<p><img src=\":/res/StatsSkipped.png\"> " + PageGameStats::tr("<b>%1</b> was scared and skipped turn <b>%2</b> times.", "", num).arg(info.mid(i + 1)).arg(num) + "</p>";
             AddStatText(message);
             break;
         }

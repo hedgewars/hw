@@ -4,11 +4,15 @@
 <dict>
 	<key>basic</key>
 	<array>
-		<integer>150</integer>
-		<integer>30</integer>
 		<integer>50</integer>
+		<integer>30</integer>
+		<integer>150</integer>
 		<integer>15</integer>
+		<integer>47</integer>
+		<integer>5</integer>
 		<integer>0</integer>
+		<integer>35</integer>
+		<integer>25</integer>
 		<integer>0</integer>
 		<integer>80</integer>
 		<integer>0</integer>
@@ -22,16 +26,17 @@
 		<false/>
 		<false/>
 		<false/>
-		<true/>
 		<false/>
 		<false/>
 		<false/>
-		<false/>
-		<true/>
 		<false/>
 		<false/>
 		<true/>
+		<false/>
+		<false/>
 		<true/>
+		<true/>
+		<false/>
 		<false/>
 		<false/>
 		<false/>

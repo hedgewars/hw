@@ -150,7 +150,7 @@
             break;
         case 2:
             // expand the view (and table) so that the actionsheet can be selected on the iPhone
-            if (IS_IPAD()) {
+            if (IS_IPAD() == NO) {
                 CGRect screen = [[UIScreen mainScreen] bounds];
                 [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
                 [UIView beginAnimations:@"table width more" context:NULL];

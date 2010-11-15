@@ -20,7 +20,6 @@
 
 
 #import "OverlayViewController.h"
-#import "SDL_uikitappdelegate.h"
 #import "InGameMenuViewController.h"
 #import "HelpPageViewController.h"
 #import "AmmoMenuViewController.h"
@@ -29,17 +28,13 @@
 #import "CGPointUtils.h"
 #import "SDL_config_iphoneos.h"
 #import "SDL_mouse.h"
+#import "ObjcExports.h"
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
 #define HIDING_TIME_NEVER   [NSDate dateWithTimeIntervalSinceNow:10000]
 #define doDim()             [dimTimer setFireDate: (IS_DUALHEAD()) ? HIDING_TIME_NEVER : HIDING_TIME_DEFAULT]
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
-#define CONFIRMATION_TAG 5959
-#define GRENADE_TAG 9595
-#define REPLAYBLACKVIEW_TAG 9955
-#define ACTIVITYINDICATOR_TAG 987654
-#define ANIMATION_DURATION 0.25
 #define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
@@ -63,6 +58,19 @@
         wasVisible = NO;
 
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+
+    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
+    switch (toInterfaceOrientation) {
+        case UIDeviceOrientationLandscapeLeft:
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
+            break;
+        default:
+            // a debug log would spam too much
+            break;
+    }
 }
 
 // now restore previous state
@@ -75,47 +83,33 @@
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
-// rotate the sdl view according to the orientation -- the uiview is autorotated
--(void) didRotate:(NSNotification *)notification {
+// while in dual head the above rotation functions are not called
+-(void) dualHeadRotation:(NSNotification *)notification {
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
     
     [UIView beginAnimations:@"rotation" context:NULL];
     [UIView setAnimationDuration:0.7];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
-            if (IS_DUALHEAD()) {
-                self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
-            } else
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
+            self.view.frame = [[UIScreen mainScreen] bounds];
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
             break;
         case UIDeviceOrientationLandscapeRight:
-            if (IS_DUALHEAD()) {
-                self.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-            } else
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
+            self.view.frame = [[UIScreen mainScreen] bounds];
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
             break;
         default:
             // a debug log would spam too much
             break;
     }
     [UIView commitAnimations];
-
-    // for single screens only landscape mode is supported
-    // for dual screen mode the sdlview is not modified, but you can rotate the pad in any direction
 }
 
 #pragma mark -
 #pragma mark View Management
 -(id) initWithCoder:(NSCoder *)aDecoder {
     if ((self = [super initWithCoder:aDecoder])) {
-        isGameRunning = NO;
-        isReplay = NO;
-        cachedGrenadeTime = 2;
-
+        objcExportsInit();
         isAttacking = NO;
         wasVisible = NO;
         isPopoverVisible = NO;    // it is called "popover" even on the iphone
@@ -139,7 +133,10 @@
     }
 
     // get the number of screens to know the previous state whan a display is connected or detached
-    initialScreenCount = [[UIScreen screens] count];
+    if ([UIScreen respondsToSelector:@selector(screens)])
+        initialScreenCount = [[UIScreen screens] count];
+    else
+        initialScreenCount = 1;
 
     // set initial orientation of the controller orientation
     if (IS_DUALHEAD()) {
@@ -154,6 +151,11 @@
                 DLog(@"Nope");
                 break;
         }
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(dualHeadRotation:)
+                                                     name:UIDeviceOrientationDidChangeNotification
+                                                   object:nil];
     }
 
     // the timer used to dim the overlay
@@ -167,12 +169,6 @@
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
 
     // become listener of some notifications
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didRotate:)
-                                                 name:UIDeviceOrientationDidChangeNotification
-                                               object:nil];
-
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(showHelp:)
                                                  name:@"show help ingame"
@@ -182,20 +178,23 @@
                                              selector:@selector(cleanup)
                                                  name:@"remove overlay"
                                                object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(numberOfScreensIncreased)
-                                                 name:UIScreenDidConnectNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(numberOfScreensDecreased)
-                                                 name:UIScreenDidDisconnectNotification
-                                               object:nil];
+
+    // for iOS >= 3.2
+    if ([UIScreen respondsToSelector:@selector(screens)]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(numberOfScreensIncreased)
+                                                     name:UIScreenDidConnectNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(numberOfScreensDecreased)
+                                                     name:UIScreenDidDisconnectNotification
+                                                   object:nil];
+    }
 
     // present the overlay
     [UIView beginAnimations:@"showing overlay" context:NULL];
-    [UIView setAnimationDuration:1];
+    [UIView setAnimationDuration:2];
     self.view.alpha = 1;
     [UIView commitAnimations];
 }
@@ -229,8 +228,14 @@
 
 
 -(void) showHelp:(id) sender {
-    if (self.helpPage == nil)
-        self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageInGameViewController" bundle:nil];
+    if (self.helpPage == nil) {
+        NSString *xib;
+        if (IS_IPAD())
+            xib = @"HelpPageInGameViewController-iPad";
+        else
+            xib = @"HelpPageInGameViewController-iPhone";
+        self.helpPage = [[HelpPageViewController alloc] initWithNibName:xib bundle:nil];
+    }
     self.helpPage.view.alpha = 0;
     [self.view addSubview:helpPage.view];
     [UIView beginAnimations:@"helpingame" context:NULL];
@@ -241,6 +246,7 @@
 
 -(void) cleanup {
     [self dismissPopover];
+    setGameRunning(NO);
     HW_terminate(NO);
     [self.view removeFromSuperview];
 }
@@ -262,6 +268,8 @@
 
 -(void) viewDidUnload {
     // only objects initialized in viewDidLoad should be here
+    if (IS_DUALHEAD())
+        [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [NSObject cancelPreviousPerformRequestsWithTarget:self
                                              selector:@selector(unsetPreciseStatus)
@@ -288,7 +296,7 @@
 #pragma mark overlay user interaction
 // nice transition for dimming, should be called only by the timer himself
 -(void) dimOverlay {
-    if (isGameRunning) {
+    if (isGameRunning()) {
         [UIView beginAnimations:@"overlay dim" context:NULL];
         [UIView setAnimationDuration:0.6];
         self.view.alpha = 0.2;
@@ -304,7 +312,7 @@
 
 // dim the overlay when there's no more input for a certain amount of time
 -(IBAction) buttonReleased:(id) sender {
-    if (isGameRunning == NO)
+    if (isGameRunning() == NO)
         return;
 
     UIButton *theButton = (UIButton *)sender;
@@ -337,7 +345,7 @@
 -(IBAction) buttonPressed:(id) sender {
     [self activateOverlay];
     
-    if (isGameRunning == NO)
+    if (isGameRunning() == NO)
         return;
     
     if (isPopoverVisible)
@@ -422,9 +430,9 @@
 
 -(void) setGrenadeTime:(id) sender {
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
-    if (cachedGrenadeTime != theSegment.selectedSegmentIndex) {
+    if (cachedGrenadeTime() != theSegment.selectedSegmentIndex) {
         HW_setGrenadeTime(theSegment.selectedSegmentIndex + 1);
-        cachedGrenadeTime = theSegment.selectedSegmentIndex;
+        setGrenadeTime(theSegment.selectedSegmentIndex);
     }
 }
 
@@ -490,7 +498,7 @@
     NSSet *allTouches = [event allTouches];
     UITouch *first, *second;
 
-    if (isGameRunning == NO)
+    if (isGameRunning() == NO)
         return;
 
     // hide in-game menu
@@ -529,7 +537,7 @@
     NSSet *allTouches = [event allTouches];
     CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
 
-    if (isGameRunning == NO)
+    if (isGameRunning() == NO)
         return;
     
     switch ([allTouches count]) {
@@ -582,7 +590,7 @@
 
                             [grenadeTime addTarget:self action:@selector(setGrenadeTime:) forControlEvents:UIControlEventValueChanged];
                             grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
-                            grenadeTime.selectedSegmentIndex = cachedGrenadeTime;
+                            grenadeTime.selectedSegmentIndex = cachedGrenadeTime();
                             grenadeTime.tag = GRENADE_TAG;
                             [self.view addSubview:grenadeTime];
                             [grenadeTime release];
@@ -621,7 +629,7 @@
     int x, y, dx, dy;
     UITouch *touch, *first, *second;
 
-    if (isGameRunning == NO)
+    if (isGameRunning() == NO)
         return;
     
     switch ([allTouches count]) {
@@ -672,99 +680,6 @@
             DLog(@"Nope");
             break;
     }
-}
-
-#pragma mark -
-#pragma mark Functions called by pascal code
-void inline setGameRunning(BOOL value) {
-    isGameRunning = value;
-}
-
-// called by uStore from AddProgress
-void startSpinning() {
-    setGameRunning(NO);
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    indicator.tag = ACTIVITYINDICATOR_TAG;
-    int offset;
-    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft)
-        offset = -120;
-    else
-        offset = 120;
-    if (IS_DUALHEAD())
-        indicator.center = CGPointMake(theWindow.frame.size.width/2, theWindow.frame.size.height/2 + offset);
-    else
-        indicator.center = CGPointMake(theWindow.frame.size.width/2 + offset, theWindow.frame.size.height/2);
-    indicator.hidesWhenStopped = YES;
-    [indicator startAnimating];
-    [theWindow addSubview:indicator];
-    [indicator release];
-}
-
-// called by uStore from FinishProgress and by OverlayViewController by replayBegan
-void stopSpinning() {
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[theWindow viewWithTag:ACTIVITYINDICATOR_TAG];
-    [indicator stopAnimating];
-    HW_zoomSet(1.7);
-    if (isReplay == NO)
-        setGameRunning(YES);
-}
-
-// called by CCHandlers from chNextTurn
-void clearView() {
-    UIWindow *theWindow = (IS_DUALHEAD()) ? [SDLUIKitDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow];
-    UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
-    UISegmentedControl *theSegment = (UISegmentedControl *)[theWindow viewWithTag:GRENADE_TAG];
-
-    [UIView beginAnimations:@"remove button" context:NULL];
-    [UIView setAnimationDuration:ANIMATION_DURATION];
-    theButton.alpha = 0;
-    theSegment.alpha = 0;
-    [UIView commitAnimations];
-
-    if (theButton)
-        [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:ANIMATION_DURATION];
-    if (theSegment)
-        [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:ANIMATION_DURATION];
-
-    cachedGrenadeTime = 2;
-}
-
-// called by hwengine
-void replayBegan() {
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIView *blackView = [[UIView alloc] initWithFrame:theWindow.frame];
-    blackView.backgroundColor = [UIColor blackColor];
-    blackView.alpha = 0.6;
-    blackView.tag = REPLAYBLACKVIEW_TAG;
-    blackView.exclusiveTouch = NO;
-    blackView.multipleTouchEnabled = NO;
-    blackView.userInteractionEnabled = NO;
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    indicator.center = theWindow.center;
-    [indicator startAnimating];
-    [blackView addSubview:indicator];
-    [indicator release];
-    [theWindow addSubview:blackView];
-    [blackView release];
-    isReplay = YES;
-    stopSpinning();
-}
-
-// called by uGame
-void replayFinished() {
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIView *blackView = (UIView *)[theWindow viewWithTag:REPLAYBLACKVIEW_TAG];
-    
-    [UIView beginAnimations:@"removing black" context:NULL];
-    [UIView setAnimationDuration:1];
-    blackView.alpha = 0;
-    [UIView commitAnimations];
-    [theWindow performSelector:@selector(removeFromSuperview) withObject:blackView afterDelay:1];
-    
-    setGameRunning(YES);
-    isReplay = NO;
 }
 
 @end

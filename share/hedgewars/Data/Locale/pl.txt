@@ -49,6 +49,7 @@
 00:46=Miotacz ognia
 00:47=Mina samoprzylepna
 00:48=Młotek
+00:49=Wskrzeszacz
 
 01:00=Walczmy!
 01:01=Remis
@@ -64,6 +65,7 @@
 01:11=Ta broń nie jest jeszcze dostępna.
 01:12=To już ostatnia runda przed Nagłą Śmiercią!
 01:13=Zostało %1 rund do Nagłej Śmierci!
+01:14=Bądź gotów, %1!
 
 ; Event messages
 ; Hog (%1) died
@@ -485,9 +487,13 @@
 03:40=Płonący granat
 03:41=Wielki fan Wróbla Ćwirka
 03:42=I'm making a note here...
-; the misspelled "Beethoven" is intentional (-> to beat)
-03:43=Performing Beathoven's deadly sonata
-03:44=Stary i baaaaardzo śmierdzący
+03:43=Chopin to przy tym pikuś
+03:44=Najlepiej spożyć przed: 1923
+03:45=Siła nauki
+03:46=Ciepło! Gorąco! Parzy!
+03:47=Co Kropelka sklei, sklei...
+03:48=Ała! Moja głowa...
+03:49=Powrót z zaświatów
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
@@ -499,42 +505,48 @@
 04:06=Znudzony? Brak motywacji do ataku? Oszczędzasz broń?|No problemo! Po prostu pomiń turę, tchórzu!|Atak: Pomiń turę bez walki
 04:07=Skróć wielkie odległości używając liny. Rozpędź się|by wślizgnąć się w inne jeże lub upuścić na nich|granat albo inną broń.|Atak: Rozwiń albo odłącz linę|Długi skok: Upuść granat lub podobną broń      
 04:08=Trzymaj przeciwników na dystans przez upuszczenie|miny w wąskim przejściu lub zaraz obok ich stóp. I nie|zapomnij ucieć zanim się włączy!|Atak: Upuść minę obok siebie
-04:09=Niepewny co do umiejętności w celowaniu? Weź|pistolet i strzel do czterech razy.|Atak: Strzel (kilka razy)
-04:10=Brutalna siła zawsze jest rozwiązaniem. Upuść ten|klasyczny materiał wybuchowy obok przeciwnika i|uciekaj gdzie pieprz rośnie.|Attack: Upuść dynamit obok siebie
+04:09=Niepewny co do umiejętności w celowaniu?|Weź pistolet i powystrzelaj ich jak kaczki.|Atak: Strzel (kilka razy)
+04:10=Brutalna siła zawsze jest rozwiązaniem. Upuść ten|wybuchową laskę dynamitu obok przeciwnika i|uciekaj gdzie pieprz rośnie.|Atak: Upuść dynamit obok siebie
 04:11=Uwolnij się od przeciwników poprzez spałowanie|ich poza mapę albo do wody. A co powiesz o|strąceniu min w swoich wrogów?|Atak: Spałuj wszystko co jest przed tobą
-04:12=Zbliż się i osobiście wyzwól moc tej|śmiertelnej techniki sztuk walki.|Atak: Przeprowadź ognistą pięść
+04:12=Zbliż się i osobiście wyzwól moc tej|śmiertelnej techniki sztuk walki.|Atak: Użyj swoich pięści
 04:13=UNUSED
 04:14=Masz lęk wysokości? Lepiej weź spadochron.|Rozwinie się kiedy spadasz z wysokości|i ochroni cię przed obrażeniami z upadku.|Atak: Rozwiń spadochron.
 04:15=Wezwij samolot, żeby zrzucił bomby na|twoich przeciwników.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz cel
 04:16=Wezwij samolot, żeby zrzucił kilka min w|określonym miejscu.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz cel
-04:17=Potrzebny schron? Użyj palnika by|wydrążyć tunel w stałym podłożu|co całkowicie cię zakryje.|Atak: Zacznij/Zakończ kopać
+04:17=Potrzebny schron? Użyj palnika by|wydrążyć tunel w stałym podłożu|co pozwoli Ci się ukryć.|Atak: Zacznij/Zakończ kopać
 04:18=Potrzebujesz dodatkowej ochrony albo chcesz|przejść przez teren nie do przejścia? Umieść|konstrukcje gdzie chcesz.|Lewo/Prawo: Wybierz konstrukcję do umieszczenia|Kursor: Umieść konstrukcję w odpowiednim miejscu
-04:19=Teleport użyty w odpowiednim momencie, staje|się potężniejszy niż prawie każda inna broń,|ponieważ potrafi wyzwolić jeża z tarapatów|w przeciągu sekund.|Kursor: Wybierz region
+04:19=Teleport użyty w odpowiednim momencie, staje|się potężniejszy niż każda inna broń,|ponieważ potrafi wyzwolić jeża z tarapatów|w przeciągu sekund.|Kursor: Wybierz region
 04:20=Pozwala w tej turze zagrać innym jeżem.|Atak: Uaktywnij wybieranie jeża
 04:21=Odpal moździerz, który po uderzeniu|wypuści kilka bomb.|Atak: Strzel z całą mocą      
 04:22=Nie tylko dla Indiana Jones! Ten bicz może|być użyteczny w wielu wypadkach. Szczególnie|kiedy chcesz kogoś zrzucić z urwiska.|Atak: Zbiczuj wszystko co jest przed tobą
 04:23=Jeśli nie masz nic do stracenia, ten atak może być|całkiem użyteczny. Poświęć swojego jeża i poślij|go w odpowiednim kierunku, raniąc wszystkich po|drodze i eksplodując na końcu.|Atak: Odpal tę niszczycielską i zabójczą technikę
-04:24=Sto lat! Uruchom ciasto i pozwól mu pójść w stronę|twoich przeciwników dając im wybuchowe przyjęcie.|Może chodzić prawie po wszystkim, ale wtedy może|wcześniej eksplodować.|Atak: Odpal ciasto albo zatrzymaj je, by wybuchło
-04:25=Użyj kostiumu by sprawić, żeby twój wróg poleciał|na ciebie (i w przepaść lub dziurę).|Atak: Użyj kostiumu i uwiedź jeża
-04:26=Rzuć tego smacznego arbuza w przeciwników. Kiedy jego|czas wyniesie zero, podzieli się na mniejsze kawałki.|1-5: Ustawia czas arbuza|Atak: Przytrzymaj by rzucić z większą siłą
+04:24=Sto lat! Uruchom ciasto i pozwól mu pójść w stronę|twoich przeciwników urządzając im wybuchowe przyjęcie.|Może chodzić prawie po wszystkim, ale wtedy|wcześniej eksploduje.|Atak: Odpal ciasto albo zatrzymaj je, by wybuchło
+04:25=Użyj kostiumu by sprawić, żeby twój wróg zakochał się|w Tobie (i spadł w przepaść lub dziurę).|Atak: Użyj kostiumu i uwiedź jeża
+04:26=Rzuć tego smacznego arbuza w przeciwników. Kiedy jego|zapalnik wskaże zero, podzieli się na mniejsze kawałki.|1-5: Ustawia zapalnik arbuza|Atak: Przytrzymaj by rzucić z większą siłą
 04:27=Niech ognie piekielne ogarną twoich przeciwników!|Nie podchodź zbyt blisko po wybuchu, gdyż ogień|pali się przez dłuższy czas|Atak: Przytrzymaj by rzucić z większą siłą
 04:28=Krótko po wystrzeleniu, rakieta zacznie wiercić tunel w ziemi|i eksploduje gdy zapalnik zostanie uruchomiony lub|jeśli pojawi się po drugiej stronie terenu.|Atak: Przytrzymaj by strzelić z większą siłą   
-04:29=Tego nie powinny używać dzieci!|Pistolet na kulki wystrzeliwujetony małych|kolorowych kulek wypełnionych materiałem wybuchowym.|Atak: Strzel z całą mocą|Góra/Dół: Kontynuuj celowanie      
+04:29=Tego nie powinny używać dzieci!|Pistolet na kulki wystrzeliwujetony małych|kolorowych kulek wypełnionych materiałem wybuchowym.|Atak: Strzel kulkami|Góra/Dół: Kontynuuj celowanie      
 04:30=Wezwij samolot, żeby zrzucić dużą ilość|napalmu. Dzięki dobremu celowi ten atak|może zlikwidować dużą część mapy, w tym|znajdujące się tam nieszczęsne jeże.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz region
 04:31=Zaatakuj odległych przeciwników, bądź zbierz|skrzynki! Nie zapomnij o zrzuceniu bomb!|Góra/Dół: Steruj samolotem|Atak: Zrzuć bombę (3x) |Długi skok: Niech walkirie wkroczą na pole bitwy!
-04:32=Niska grawitacja jest lepsza niż diety! Skacz|wyżej i dalej albo pozwól przeciwnikom lecieć|daleko.|Atak: Aktywuj
+04:32=Niska grawitacja jest lepsza od diety! Skacz|wyżej i dalej albo pozwól przeciwnikom fruwać.|Atak: Aktywuj
 04:33=Czasami potrzebujesz dodatkowego kopa|żeby zadawać większe obrażenia.|Atak: Aktywuj
 04:34=Nie dotkniesz mnie!|Atak: Aktywuj
-04:35=Czasami bywa, że czas pędzi za szybko. Weź kilka|dodatkowych sekund by dokończyć swój atak.|Atak: Aktywuj
+04:35=Czasami bywa, że czas pędzi za szybko. Zyskaj kilka|dodatkowych sekund by dokończyć swój atak.|Atak: Aktywuj
 04:36=Czasami z celowaniem u ciebie jest kiepsko.|Zrób użytek ze zdobyczy współczesnej technologii.|Attack: Aktywuj
 04:37=Nie bój się słońca. To potrwa tylko jedną turę,|ale pozwoli pochłonąć część obrażeń, które|zadałeś innym.|Atak: Aktywuj
-04:38=Karabin snajperski może stać się najbardziej niszczycielską|bronią w twoim arsenale. Jednakże jest bardzo nieskuteczny|na małe odległości. Obrażenia zwiększają się wraz z odległością.|Atak: Strzel (dwa strzały)
+04:38=Karabin snajperski może stać się najbardziej niszczycielską|bronią w twoim arsenale. Jednakże jest bardzo nieskuteczny|na krótkie dystanse.| Im dalej od celu tym więcej HP zabierzesz.|Atak: Strzel (dwa strzały)
 04:39=Leć do innych części mapy uzywjąc spodka.|To ciężkie do opanowania narzędzie, może przenieść Ciebie|w prawie każdą pozycje na polu bitwy.|Atak: Aktywuj|Góra/Lewo/Prawo: Wyznacz lot w odpowiednim kierunku
 04:40=Wznieć ogień używając koktajlu z łatwopalnym płynem.|Atak: Przytrzymaj by rzucić z większą siłą
 04:41=Natura może być na równi z technologią!|Ptaszek uniesie Ciebie ponad ziemię oraz|zrzuci jajka w przeciwników|Atak: Atywacja ptaka i zrzucanie jajek|Góra/Lewo/Prawo: Leć w wybranym kierunku
-04:42=HUGE SUCCESS| | |(but missing texts!)
-04:43=(missing text)
-04:44=To nie jest zwykły ser. To broń biologiczna!|Wybuch z pewnością nie będzie potężny, ale gdy|licznik dojdzie do zera, chmura gazu zatruje|każdego nieszczęśnika który będzie w pobliżu|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
+04:42=To urządzenie umożliwia natychmiastowe|przetransportowanie Ciebie, Twoich|wrogów bądź uzbrojenia pomiędzy dwoma|miejscami na mapie|Użyj tego z głową a Twoja|misja zakończy się... WIELKIM SUKCESEM|Atak: Wystrzel portal|Zmiana (Tab): Zmień kolor portalu
+04:43=Niech twój debiut będzie WYBUCHOWY!|Zrzuć pianino z nieba, ale uważaj!|Ktoś musi na nim grać więc prawdopodobnie będziesz|musiał poświęcić swojego jeża|Kursor: Wybierz cel|F1-F9: Graj na pianinie
+04:44=To nie jest zwykły ser. To broń biologiczna!|Wybuch z pewnością nie będzie potężny, ale gdy|licznik dojdzie do zera, chmura gazu zatruje|każdego nieszczęśnika który będzie w pobliżu|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
+04:45=Wszystkie lekcje fizyki w końcu się opłaciły!|Wystrzel niszczącą sinusoidalną falę|która przechodzi przez teren i uderza|w twoich przeciwników|Uważaj! Ta broń ma kopa!|Atak: Strzelaj
+04:46=Pokrywa twoich wrogów ognistą powłoką.|Czy koś zamawiał pieczonego jeża?|Atak: Aktywuj|Góra/Dół: Celowanie|Lewo/Prawo: Ustaw prędkość wystrzeliwania
+04:47=Podwójna zabawa z podwójną ilością kleistych min.|Spróbuj wywołać reakcję łańcuchową lub chroń|samego siebie (lub obydwie rzeczy na raz!)|Atak: Przytrzymaj by rzucić z większą siłą (dwa razy)
+04:48=Czyż walenie jeży po głowach nie|jest zabawne? Dobre uderzenie|z młotka zabierze 1/3 życia|przeciwnika i wkopie go w podłoże|Atak: Uderz
+04:49=Wskrześ swoich przyjaciół!|Jednakże uważaj byś nie pomógł swojemu wrogowi.|Atak: Przytrzymaj by powoli przywracać życie|Góra: Przyspiesz wskrzeszanie
+
 
 ; Game goal strings
 05:00=Ustawienia gry
@@ -553,3 +565,8 @@
 05:13=Detonacja min: Miny wybuchają natychmiast
 05:14=Detonacja min: Miny wybuchają po 0-3 sekundach
 05:15=Modyfikator obrażeń: Wszystkie bronie zadają %1% obrażeń
+05:16=Życie wszystkich jeży jest przywrócone przy kolejnej turze
+05:17=AI odradza się po śmierci.
+05:18=Tura nie kończy się po wykonaniu ataku
+05:19=Uzbrojenie zostaje przywrócone przy kolejnej turze
+05:20=Każdy z jeży ma oddzielne uzbrojenie

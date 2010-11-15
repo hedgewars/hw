@@ -140,6 +140,11 @@ g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
 g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
 g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
 g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
+g:= AddGoal(g, gfResetHealth, gidResetHealth);
+g:= AddGoal(g, gfAISurvival, gidAISurvival);
+g:= AddGoal(g, gfInfAttack, gidInfAttack);
+g:= AddGoal(g, gfResetWeps, gidResetWeps);
+g:= AddGoal(g, gfPerHogAmmo, gidPerHogAmmo);
 
 // modified damage modificator?
 if cDamagePercent <> 100 then
@@ -151,14 +156,14 @@ ScreenFadeValue:= sfMax;
 ScreenFadeSpeed:= 1;
 
 // modified mine timers?
-if cMinesTime <> 3000 then
+if cMinesTime <> 3 then
     begin
     if cMinesTime = 0 then
-        g:= AddGoal(g, gfMines, gidNoMineTimer)
+        g:= AddGoal(g, gfAny, gidNoMineTimer)
     else if cMinesTime < 0 then
-        g:= AddGoal(g, gfMines, gidRandomMineTimer)
+        g:= AddGoal(g, gfAny, gidRandomMineTimer)
     else
-        g:= AddGoal(g, gfMines, gidMineTimer, cMinesTime div 1000);
+        g:= AddGoal(g, gfAny, gidMineTimer, cMinesTime);
     end;
 
 // if the string has been set, show it for (default timeframe) seconds
@@ -765,8 +770,8 @@ begin
                 tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
                 for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
                     DrawSprite(sprPower,
-                            int64(hwRound(Gear^.X)) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + round(WorldDx + tdx * (24 + i * 2)) - 16,
-                            int64(hwRound(Gear^.Y)) + GetLaunchY(CurAmmoType, Gear^.Angle) + round(WorldDy + tdy * (24 + i * 2)) - 16,
+                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + LongInt(round(WorldDx + tdx * (24 + i * 2))) - 16,
+                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + LongInt(round(WorldDy + tdy * (24 + i * 2))) - 16,
                             i)
                 end
         end;

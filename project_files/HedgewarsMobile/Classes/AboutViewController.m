@@ -30,14 +30,23 @@
 }
 
 -(void) viewDidLoad {
-    self.tableView.backgroundView = nil;
+    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
+        self.tableView.backgroundView = nil;
     self.tableView.allowsSelection = NO;
 
     NSString *strPath = [NSString stringWithFormat:@"%@/credits.plist",IFRONTEND_DIRECTORY()];
     NSArray *array = [[NSArray alloc] initWithContentsOfFile:strPath];
     self.people = array;
     [array release];
-    
+
+    NSString *imgName;
+    if (IS_IPAD())
+        imgName = @"smallerBackground~ipad.png";
+    else
+        imgName = @"smallerBackground~iphone.png";
+    UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:img];
+    [img release];
     [super viewDidLoad];
 }
 

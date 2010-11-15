@@ -38,6 +38,7 @@ enum GameState {
     gsDestroyed = 5
 };
 
+bool checkForDir(const QString & dir);
 
 class HWGame : public TCPBase
 {

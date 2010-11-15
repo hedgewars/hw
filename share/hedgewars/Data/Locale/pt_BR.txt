@@ -45,10 +45,11 @@
 00:42=Gerador de Portais
 00:43=Ataque com Piano
 00:44=Queijo Fedorento
-00:45=Arma Senóide
+00:45=Arma Senóide (beta)
 00:46=Lança Chamas
-00:47=Mina aderente
+00:47=Mina Adesiva
 00:48=Martelo
+00:49=Ressucitador
 
 01:00=Hora de lutar!
 01:01=Partida empatou
@@ -211,6 +212,8 @@
 02:09=%1 não sabe para quem está jogando
 02:09=%1 é um vira casaca
 02:09=%1 mudou de equipe
+02:09=%1 acha que ninguém viu
+02:09=%1 devia procurar outro jogo
 
 ; Hog shot an home run (using the bat and another hog)
 02:10=Humilhooooouuu!
@@ -274,8 +277,9 @@
 03:44=Velho e fedorento
 03:45=Trigonometria pura
 03:46=Incendiário
-03:47=Bomba de proximidade
-03:48=Não desgrude
+03:47=Grudenta
+03:48=Tanto bate até que fura!
+03:49=Faz o que você imagina
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Ataque seus inimigos usando uma granada simples|Ela explodirá assim que o tempo passar|1-5: Escolha o tempo da granada|Ataque: Quanto mais tempo, mais forte o lançamento.
@@ -316,28 +320,29 @@
 04:31=O Aeromodelo é a arma ideal para coletar caixas ou|atacar ouriços distantes. Jogue o em algum inimigo ou|bombardeie primeiro.|Ataque: Lança o avião ou bombardeia|Salto Longo: Desconhecido|Esquerda/Direita: Manobra o aeromodelo
 04:32=Baixa gravidade é mais efetiva que uma dieta!|Salte mais alto e por longas distâncias ou faça|seu inimigo voar mais longe!.|Ataque: Ativa
 04:33=Algumas vezes você precisa de um pouco mais de efeito|para causar mais danos em seus ataques.|Ataque: Ativa
-04:34=Não me toque!|ataque: Ativa
-04:35=Algumas vezes o tempo parece passar muito rápido.|Ganhe alguns segundos para concluir sua jogada.|Ataque: Ativar
+04:34=Não me toque!|Ataque: Ativa
+04:35=Algumas vezes o tempo voa. Ganhe alguns|segundos para concluir sua jogada.|Ataque: Ativar
 04:36=As vezes você não é tão bom de mira.|Use a tecnologia moderna para auxílio.|Ataque: Ativa
 04:37=Não tema a luz do dia! Isto durará somente um turno|mas permitirá que você absorva os danos causados|a outros ouriços|Ataque: Ativa
 04:38=O rifle sniper é uma arma devastadora do seu|arsenal, mas é inefetiva a curto alcance pois o dano|causado aumenta com a distancia do alvo.|Ataque: Dispara (duas vezes)
-04:39=Voe para outras partes do mapa usando o disco voador.|Este veículo difícil de manobrar permite chegar a quase|qualquer posição do campo de batalha|Ataque: Ativa|Cima/Esquerda/Direita: Desloca o veículo na direção|Salto Longo: Joga granadas ou armas similares
+04:39=Voe para outras partes do mapa usando o disco voador.|Este veículo difícil de manobrar permite chegar a quase|qualquer posição do campo de batalha|Ataque: Ativa|Acima/Esquerda/Direita: Desloca o veículo na direção|Salto Longo: Joga granadas ou armas similares
 
-04:40=Ponha um pouco de fogo no chão com esta garrafa|cheia de líquido inflamável.|Ataque: Quanto mais tempo, mais forte o lançamento
+04:40=Deixe o chão em chamas com esta garrafa|cheia de líquido inflamável.|Ataque: Quanto mais tempo, mais forte o lançamento
 04:41=A natureza é mais poderosa que um disco voador.|O pássaro pode carregar seu ouriço e jogar ovos|no inimigo!|Ataque: Ativa e joga ovos|Cima/Esquerda/Direita: Bate asas na respectiva direção
-04:42=Utilize o gerador para criar portais, por onde você|poderá mover caixas, ouriços até disparar armas|através deles.|Ataque: Dispara o portal|Tab: Alterna a cor do portal.
-04:43=Execute a sonata Mortal de Bethoven, caindo dos |céus e destruindo tudo abaixo. Seu ouriço não|irá resistir ao esforço exigido!|Ataque: Venha do céu e destrua tudo abaixo
+04:42=Utilize o gerador para criar portais por onde você|poderá transportar caixas, ouriços e até armas|através deles.|Ataque: Dispara o portal|Tab: Alterna a cor do portal.
+04:43=Execute a Sonata Mortal de Bethoven, caindo dos |céus e destruindo tudo abaixo. Seu ouriço não|irá resistir ao esforço exigido!|Ataque: Venha do céu e destrua tudo abaixo
 04:44=Isso não é somente um queijo, é uma arma biológioca!|Não causa muitos danos mas envenenará ouriços|próximos quando detonar|1-5: Ajusta o tempo de detonação|Ataque: Quanto mais tempo, mais forte o lançamento.
-04:45=Use as suas aulas de trigonometria nesta poderosa |arma. Ela irá disparar um raio em forma de seno.| Ataque: Disapara a arma de raio
+04:45=Use as suas aulas de trigonometria nesta poderosa |arma. Ela irá disparar um raio com caminho em seno|Mas tome cuidado, o coice é forte.|Ataque: Dispara a arma de raio
 04:46=Que tal um churrasco? Use o lança chamas para|torrar o inimigo ou destruir o solo.|Ataque: Ativa o lança chamas
-04:47=Uma simples mina não basta? A mina aderente pode|ser arremessada e ficará aderida ao tocar no solo,| em um objeto, e até em um ouriço!|Ataque:Quanto mais tempo, mais forte o lançamento.
-04:48=Vamos a obra? Use esta arma para martelar|o inimigo no solo, ou através dele!!|Ataque: ativa o martelo
+04:47=Uma simples mina não basta? A mina aderente pode|ser arremessada e ficará aderida ao tocar no solo,|em um objeto, e até em um ouriço!|Ataque:Quanto mais tempo, mais forte o lançamento (duas vezes).
+04:48=Vamos a obra? Use esta arma para martelar|o inimigo no solo, ou através dele e tirando um terço da vida dele!|Ataque: Ativa
+04:49=Ressucite seus amigos, mas preste atenção|para não ressucitar seus inimigos!|Ataque: Mantenha pressionado para transferir|sua vida|Acima:Acelera a transferência de vida
 
 ; Game goal strings
 05:00=Modos de Jogo
-05:01=As seguintes regras se aplicam
-05:02=Fortes: Proteja o seu forte, vença seus inimigos!
-05:03=Baixa Gravidade: Cuidado com seus passos
+05:01=As seguintes regras aplicam
+05:02=Fortes: Proteja o seu forte, destrua seus inimigos!
+05:03=Baixa Gravidade: Olhe seus passos
 05:04=Invulnerabilidade: Ouriços são (quase) invulneráveis
 05:05=Vampirismo: Ouriços serão curados pelos danos causados
 05:06=Carma: Ouriços serão machucados pelos danos causados
@@ -350,3 +355,8 @@
 05:13=Temporizador de mina: Minas detonarão imediatamente
 05:14=Temporizador de mina: Minas detonarão em 0 - 3 segundos
 05:15=Modificador de Dano: Todas as armas farão %1% danos
+05:16=A vida dos ouriços é reiniciada ao fim de cada turno
+05:17=Ouriços da IA renascem após morrerem
+05:18=Ataque ilimitado
+05:19=Armas são reiniciadas ao fim do turno
+05:20=Armas não são compartilhadas entre os ouriços

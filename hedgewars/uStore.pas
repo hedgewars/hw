@@ -61,6 +61,7 @@ procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
+procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte); 
 procedure DrawFillRect(r: TSDL_Rect);
 procedure DrawCircle(X, Y, Radius: LongInt; Width: Single; r, g, b, a: Byte); 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
@@ -795,6 +796,32 @@ glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 glPopMatrix
 end;
 
+procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
+var VertexBuffer: array [0..3] of TVertex2f;
+begin
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_LINE_SMOOTH);
+
+    glPushMatrix;
+    glTranslatef(WorldDx, WorldDy, 0);
+    glLineWidth(Width);
+
+    Tint(r, g, b, a);
+    VertexBuffer[0].X:= X0;
+    VertexBuffer[0].Y:= Y0;
+    VertexBuffer[1].X:= X1;
+    VertexBuffer[1].Y:= Y1;
+
+    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
+    Tint($FF, $FF, $FF, $FF);
+    
+    glPopMatrix;
+    
+    glEnable(GL_TEXTURE_2D);
+    glDisable(GL_LINE_SMOOTH);
+end;
+
 procedure DrawFillRect(r: TSDL_Rect);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
@@ -836,7 +863,6 @@ begin
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_LINE_SMOOTH);
     glPushMatrix;
-    glTranslatef(WorldDx, WorldDy, 0);
     glLineWidth(Width);
     Tint(r, g, b, a);
     glVertexPointer(2, GL_FLOAT, 0, @CircleVertex[0]);
@@ -1596,7 +1622,7 @@ if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNu
     extra:= trmsg[sidNotYetAvailable];
     extracolor:= LongInt($ffc77070);
     end
-else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0 then // weapon or utility won't end your turn
+else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then // weapon or utility won't end your turn
     begin
     extra:= trmsg[sidNoEndTurn];
     extracolor:= LongInt($ff70c770);

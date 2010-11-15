@@ -20,11 +20,11 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Teams will start on opposite sides of the terrain (two teams only)</string>
+		<string>Teams will start on opposite sides of the terrain</string>
 		<key>image</key>
 		<string>TeamsDivide</string>
 		<key>title</key>
-		<string>Divide Team</string>
+		<string>Divide Team (max 2 teams)</string>
 	</dict>
 	<dict>
 		<key>description</key>
@@ -52,11 +52,11 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Enable random mines</string>
+		<string>All (living) hedgehogs are fully restored at the end of turn</string>
 		<key>image</key>
-		<string>Mines</string>
+		<string>ResetHealth</string>
 		<key>title</key>
-		<string>Add Mines</string>
+		<string>Reset Health</string>
 	</dict>
 	<dict>
 		<key>description</key>
@@ -84,7 +84,7 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Defend your fort and destroy the opponents (two teams only)</string>
+		<string>Defend your fort and destroy the opponents</string>
 		<key>image</key>
 		<string>Forts</string>
 		<key>title</key>
@@ -100,7 +100,7 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Play with a King. If he dies, your side loses</string>
+		<string>Play with a King; when he dies, your side loses</string>
 		<key>image</key>
 		<string>King</string>
 		<key>title</key>
@@ -164,11 +164,19 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Each hedgehog has its own ammo.</string>
+		<string>Each hedgehog has its own ammo</string>
 		<key>image</key>
 		<string>PerHogAmmo</string>
 		<key>title</key>
 		<string>Per Hedgehog Ammo</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Wind will not affect weapons</string>
+		<key>image</key>
+		<string>NoWind</string>
+		<key>title</key>
+		<string>Disable Wind</string>
 	</dict>
 </array>
 </plist>

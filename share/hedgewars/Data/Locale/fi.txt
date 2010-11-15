@@ -3,7 +3,7 @@
 00:00=Kranaatti
 00:01=Sirpalekranaatti
 00:02=Sinko
-00:03=UFO
+00:03=Mehiläinen
 00:04=Haulikko
 00:05=Pora
 00:06=Hyppää yli
@@ -41,6 +41,15 @@
 00:38=Tarkkuuskivääri
 00:39=Lentävä lautanen
 00:40=Polttopullo
+00:41=Lintu
+00:42=Siirrettävä portaalilaite
+00:43=Piano-isku
+00:44=Vanha Limburger-juusto
+00:45=Sini-aaltopyssy
+00:46=Liekinheitin
+00:47=Tarttuva pommi
+00:48=Vasara
+00:49=Henkiinherättäjä
 
 01:00=Taistelu alkakoon!
 01:01=Tasapeli
@@ -54,6 +63,10 @@
 01:09=Synkronoidaan...
 01:10=Tämän apuvälineen käyttäminen ei päätä vuoroasi!
 01:11=Tämä ase tai apuväline ei ole vielä käytettävissä!
+01:12=Viimeinen kierros ennen äkkikuolemaa!
+01:13=%1 kierrosta jäljellä äkkikuolemaan!
+01:14=Valmistaudu, %1!
+
 
 ; Event messages
 ; Hog (%1) died
@@ -69,7 +82,7 @@
 02:00=%1 poistuu kuolevaisten keskuudesta!
 02:00=%1:ltä loppui aika!
 02:00=%1 toivottaa päivän jatkot!
-02:00=%1:stä muistellaan hartaasti!
+02:00=%1:a muistellaan hartaasti!
 02:00=%1:llä on valtimonpullistuma!
 02:00=%1 jättää jälkeensä puolisonsa ja lapsensa
 02:00=%1 on laukaissut viimeisen sinkonsa
@@ -102,13 +115,14 @@
 02:00=Viimeinen esirippu laskeutuu %1:en ylle
 02:00=%1 kärsii Spontaanista Massiivisesta Olemassaolokohtauksesta
 02:00=%1 on kuollut kuin kivi
-02:00=%1 ei ole enää
+02:00=%1 lakkasi olemasta
 02:00=%1:n eräpäivä on mennyt
 02:00=%1 liittyy näkymättömään kuoroon
 02:00=Voi hyvin, %1, emme koskaan oppineet tuntemaan sinua!
 02:00=%1 ei kestänyt ammutuksi joutumista
 02:00=%1 olisi tarvinnut ylimääräistä elämää
 02:00=Onko lääkäriä lähellä?
+02:00=%1 heitti lusikan nurkkaan.
 
 ; Hog (%1) drowned
 02:01=%1 leikkii sukellusvenettä!
@@ -167,6 +181,7 @@
 02:02=Nyt se alkaa...
 02:02=Tästä alkaa jotain isoa
 02:02=Tervetuloa Hedgewarsiin
+02:02=Tervetuloa siilisotaan
 02:02=Tervetuloa eturiveihin
 02:02=Murskatkaa vihollisenne!
 02:02=Paras siili voittakoon
@@ -189,7 +204,7 @@
 02:02=Päivän taistelu alkakoon
 02:02=Tunnin taistelu alkakoon
 02:02=Tehkää parhaanne!
-02:02=Tuhotkaa vihollisensa!
+02:02=Tuhotkaa vihollisenne!
 02:02=Hyvää onnea!
 02:02=Pitäkää hauskaa
 02:02=Taistelkaa hyvä taistelu
@@ -197,12 +212,12 @@
 02:02=Taistelkaa kunniasta
 02:02=Älkää antako periksi
 02:02=Älkää luovuttako
-02:02=Murhanäyttely alkakoon!
+02:02=Murhanäytelmä alkakoon!
 02:02=Toivottavasti olette valmiina tappeluun!
 02:02=Go Go Go!
 02:02=Siilit, eteenpäin!
-02:02=Älkää pelatko!
-02:02=Olkaa urheita ja valloittakaa
+02:02=Älkää pelätko!
+02:02=Olkaa urheita ja voittakaa
 
 ; Round ends (win; unused atm)
 02:03=...
@@ -219,7 +234,7 @@
 02:05=Tohtori soittaa
 02:05=Tuoreita siteitä!
 02:05=Tämä saa sinut tuntemaan itsesi terveemmäksi
-02:05=Hi-Potion! Eiku väärä päeli
+02:05=Hi-Potion! Eiku väärä peli
 02:05=Hae se!
 02:05=Terveellinen välipala
 02:05=Helpotus kipuun
@@ -385,12 +400,22 @@
 03:38=Ase (useita laukauksia)
 03:39=Kuljetusväline
 03:40=Polttava kranaatti
+03:41=Kääkkyvä kaveri
+03:42=I'm making a note here...
+; the misspelled "Beethoven" is intentional (-> to beat)
+03:43=Soittaa Beathovenin tappavan soneetin
+03:44=Parasta ennen: 1923
+03:45=Tieteen voima
+03:46=Kuuma kuuma kuuma!
+03:47=Kiinnitä nämä hyödylliseen paikkaan!
+03:48=Vasarointiaika.
+03:49=Tekee sitä mitä luulet sen tekevän.
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Hyökkää yksinkertaisella kranaatilla.|Se räjähtää kun ajastimesta loppuu aika.|1-5: Säädä kranaatin ajastin|Hyökkää: Pidä pohjassa lisätäksesi heittovoimaa
 04:01=Hyökkää sirpalepommilla.|Se jakaantuu pienemmiksi pommeiksi ajan|loppuessa ajastimesta|1-5: Säädä kranaatin ajastin|Hyökkää: Pidä pohjassa lisätäksesi heittovoimaa
 04:02=Hyökkää ballistisella ammuksella|johon tuuli saattaa vaikuttaa|Hyökkää: Pidä pohjassa lisätäksesi voimaa
-04:03=Laukaise ohjattu pommi joka lukittuu|valittuun kohteeseen. Älä ammu täydellä voimalla|lisätäksesi tarkkuutta|Kursori: Valitse kohde|Hyökkää: Pidä pohjassa lisätäksesi voimaa
+04:03=Laukaise ohjattu mehiläinen joka lukittuu|valittuun kohteeseen. Älä ammu täydellä voimalla|lisätäksesi tarkkuutta|Kursori: Valitse kohde|Hyökkää: Pidä pohjassa lisätäksesi voimaa
 04:04=Ammu vihollisiasi kahdesti laukeavalla haulikolla.|Kiitos leviämisen sinun ei tarvitse tähdätä suoraan|vahingoittaeksi vihollisiasi.|Hyökkää: Ammu (useita kertoja)                   
 04:05=Siirry maan alle! Käytä maaporaa porataksesi|reiän maahan päästäksesi muille alueille.|Hyökkää: Aloita ja lopeta kaivaminen
 04:06=Tylsää? Ei mitään tapaa hyökätä? Säästät ammuksiasi?|Ei hätää! Jätä vuoro väliin, pelkuri!|Hyökkää: Jätä vuorosi väliin ilman tappelua
@@ -428,6 +453,15 @@
 04:38=Tarkkuuskivääri on tuhoisin ase arsenaalissasi,|mutta tehoton lähietäisyydellä.|Tehty vahinko lisääntyy etäisyyden mukaan|Hyökkää: Ammu (kahdesti)
 04:39=Lennä kartan muihin osiin lentävällä lautasella|Tämä vaikeasti omaksuttava apuväline vie sinut melkein minne tahansa|Hyökkää: Aktivoi|Ylös/Vasen/Oikea: Liiku tiettyyn suuntaan
 04:40=Sytytä maa tuleen tällä pullolla (kohta) palavaa nestettä|Hyökkää: Pidä pohjassa lisätäksesi voimaa
+04:41=Todiste siitä että luonto on lentävää lautastakin|parempi. Lintu voi kuljettaa siiliä ympäriinsä ja|pudottaa munia vihollisten päälle|Hyökkää: Aktivoi ja pudota munia|Ylös/Vasen/Oikea: Räpytä yhteen suuntaan
+04:42=Tämä siirrettävä portaalilaite pystyy välittömästi|siirtämään sinut, vihollisesi tai ammuksesi|kahden paikan välillä.|Käytä sitä viisaasti ja kampanjasi tulee olemaan...|HUGE SUCCESS!|Hyökkää: Ammu portaali|Vaihto: Vaihda portaalien välillä
+04:43=Tee musikaalisesta debyytistäsi räjähtävä menestys!|Pudota piano taivaista, mutta varo...|Jonkun täytyy soittaa sitä, ja se voi maksaa elämäsi!|Kursori: Valitse kohdealue|F1-F9: Soita pianoa
+04:44=Tämä ei ole vain juustoa, vaan biologista sodankäyntiä!|Se ei tuota suurta vahinkoa kerralla|mutta ajastimen saavuttaessa nollan se taatusti|myrkyttää kaikki epäonniset jotka haistaa sen!|1-5: Aseta ajastin|Hyökkää: Pidä pohjassa heittääksesi isommalla voimalla
+04:45=Istuminen kaikilla niillä fysiikan tunneilla|kannatti viimein, laukaise tuhoisa|sini-aalto vihollisiasi päin.|Varo, tämä ase potkaisee aika kovaa.|Hyökkää: Ammu
+04:46=Peitä vastustajasi sähisevällä liekehtivällä nesteellä.|Sydäntä lämmittävää!|Hyökkää: Aktivoi|Ylös/Alas: Jatka tähtäystä|Vasen/Oikea: Muuta sylkyvoimaa.
+04:47=Kaksinkertaista hauskuus kahdella piikikkäällä,|petollisella, tarttuvalla miinalla.|Viritä ketjureaktio tai puolusta itseäsi (tai molempia!)|Hyökkää: Pidä pohjassa ampuaksesi kovemmalla voimalla (kahdesti)
+04:48=Miksi vain myyrät saa kaiken pahoinpitelyn?|Siilien hakkaaminen voi olla ihan yhtä kivaa!|Sopiva isku tällä vasaralla iskee pois kolmanneksen|siilin terveydestä ja lyö ne maan alle.|Hyökkää: Aktivoi
+04:49=Herätä ystäväsi henkiin!|Mutta varo, tämä herättää myös vihollisesi henkiin.|Hyökkää: Pidä hyökkäysnappia pohjassa herättääksesi henkiin hitaasti.|Ylös: Kiihdytä henkiin herätystä
 
 ; Game goal strings
 05:00=Pelimoodit

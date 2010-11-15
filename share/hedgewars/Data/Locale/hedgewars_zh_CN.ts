@@ -39,6 +39,10 @@
         <source>Edit weapons</source>
         <translation>修改武器</translation>
     </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
@@ -87,7 +91,17 @@
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation type="unfinished"></translation>
+        <translation>默认团队</translation>
+    </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <comment>File Types</comment>
+        <translation>刺猬杀演示文件</translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <comment>File Types</comment>
+        <translation>刺猬杀存储文件</translation>
     </message>
 </context>
 <context>
@@ -187,7 +201,7 @@
     <name>HWNewNet</name>
     <message>
         <source>The host was not found. Please check the host name and port settings.</source>
-        <translation>错误没找到这个主机。请检查主机名和端口设置。</translation>
+        <translation>没有这个主机。请检查主机名和端口设置。</translation>
     </message>
     <message>
         <source>Connection refused</source>
@@ -195,7 +209,7 @@
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>退出原因：</translation>
+        <translation>退出原因:  </translation>
     </message>
     <message>
         <source>Room destroyed</source>
@@ -273,11 +287,11 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Server message for latest version:</source>
-        <translation>最新版本的服务器信息</translation>
+        <translation>最新版本的服务器信息:  </translation>
     </message>
     <message>
         <source>Server message for previous versions:</source>
-        <translation>之前版本的服务器信息</translation>
+        <translation>之前版本的服务器信息:  </translation>
     </message>
     <message>
         <source>Latest version protocol number:</source>
@@ -330,51 +344,59 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>细节</translation>
     </message>
     <message>
         <source>Health graph</source>
-        <translation type="unfinished"></translation>
+        <translation>生命值图表</translation>
     </message>
     <message>
         <source>Ranking</source>
-        <translation type="unfinished"></translation>
+        <translation>等级</translation>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished"></translation>
+        <translation>最佳射手奖给与 &lt;b&gt;%1&lt;/b&gt;：伤害 &lt;b&gt;%2&lt;/b&gt;点。&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>最佳杀手是 &lt;b&gt;%1&lt;/b&gt;单回合击杀 &lt;b&gt;%2&lt;/b&gt; 只刺猬.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
+        <translation>
+            <numerusform>本轮总共有 &lt;b&gt;%1&lt;/b&gt; 只刺猬被击杀.&lt;/p&gt;</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 kill)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>(%1 灭杀)</numerusform>
         </translation>
     </message>
     <message>
-        <source>(%1 kill)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>(%1 kills)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">(%1 灭杀)</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;另外，射击己方刺猬损失&lt;b&gt;%2&lt;/b&gt;点血。</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;个刺猬被&lt;b&gt;%2&lt;/b&gt;己方的刺猬误伤.</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform>&lt;b&gt;%1&lt;/b&gt;被迫跳过&lt;b&gt;%2&lt;/b&gt;回合。</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -400,62 +422,62 @@ or pick another nickname in game config:</source>
     <message>
         <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
         <comment>Tips</comment>
-        <translation>加入不确定怎么做，不要浪费弹药，跳过此回合。但是注意突然时间！</translation>
+        <translation>如果不确定该怎么做，不要浪费弹药，跳过此回合。但是注意突然死亡的时间!</translation>
     </message>
     <message>
         <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation>保存绳子？在半空释放然后再次射出。只要不接触地面停止就可以继续使用同一根不会浪费！</translation>
+        <translation type="obsolete">想节省绳子数量？在半空释放然后再次射出。只要不触地即可继续使用同一根而不浪费!</translation>
     </message>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
         <comment>Tips</comment>
-        <translation>如果您确定好了一个昵称不想让别人使用，那么在  http://www.hedgewars.org/. 注册一个帐号吧</translation>
+        <translation>如果您让自己的昵称不被别人使用，请到  http://www.hedgewars.org/. 注册一个帐号吧.</translation>
     </message>
     <message>
         <source>You&apos;re bored of default gameplay? Try one of the missions - they&apos;ll offer different gameplay depending on the one you picked.</source>
         <comment>Tips</comment>
-        <translation>厌倦了默认的玩法？试试任务——</translation>
+        <translation>厌倦了默认的游戏？试试做任务吧——多种游戏模式让你无限选择.</translation>
     </message>
     <message>
         <source>By default the game will always record the last game played as a demo. Select &apos;Local Game&apos; and pick the &apos;Demos&apos; button on the lower right corner to play or manage them.</source>
         <comment>Tips</comment>
-        <translation>默认情况下游戏记录最后的游戏作为Demo，选择单机游戏——然后Demo——然后点击右下角开始回放或者整理。</translation>
+        <translation>默认时记录中最后的一次被称做Demo，选择单机游戏——然后选Demo——然后点击右下角开始回放或整理。</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If you&apos;ve got problems, ask on our forums but please don&apos;t expect 24/7 support!</source>
         <comment>Tips</comment>
-        <translation>刺猬大作战是一个开放源代码的免费软件，它充分利用了我们的业余时间。如果您有问题，到论坛来吧，不过7×24小时支持不可能！</translation>
+        <translation>“刺猬杀”是一个开源的免费软件，它充分利用了我们的业余时间。如果您有问题，到论坛来吧，不过不要期待全天候支持!</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If you like it, help us with a small donation or contribute your own work!</source>
         <comment>Tips</comment>
-        <translation>刺猬大作战是一个开放源代码的免费软件，它充分利用了我们的业余时间。如果您喜欢它，我们接受您的捐赠/感谢！</translation>
+        <translation>“刺猬杀”是一个开源的免费软件，它充分利用了我们的业余时间。如果您你喜欢它就来贡献你的力量吧!</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. Share it with your family and friends as you like!</source>
         <comment>Tips</comment>
-        <translation>刺猬大作战是一个开放源代码的免费软件，它充分利用了我们的业余时间。与他人分享它吧！</translation>
+        <translation>“刺猬杀”是一个开源的免费软件，它充分利用了我们的业余时间。如果您你喜欢它，与别人分享吧!</translation>
     </message>
     <message>
         <source>From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.</source>
         <comment>Tips</comment>
-        <translation>官方的竞赛一直存在。临近时去  http://www.hedgewars.org/  即可看到。</translation>
+        <translation>官方一直就有不断的对战，随时可以去  http://www.hedgewars.org/  参加。</translation>
     </message>
     <message>
         <source>Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!</source>
         <comment>Tips</comment>
-        <translation>Hedgewars 被翻译成多种语言，中文是刺猬大作战——同样为翻译名。如果您的语言翻译有什么缺失/过时/遗漏或任何问题，来联系我们吧！</translation>
+        <translation>Hedgewars 被翻译成多种语言，中文是“刺猬杀”——同样为翻译名。如果您觉得语言翻译有什么缺失/过时/遗漏或任何问题，请联系我们吧!</translation>
     </message>
     <message>
         <source>Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.</source>
         <comment>Tips</comment>
-        <translation>刺猬大作战可以运行的操作系统包括：GNU/Linux、Mac OS X、MicroSoft Windows。</translation>
+        <translation>“刺猬杀”是一款跨平台游戏，可以运行的操作系统包括：GNU/Linux、Mac OS X、MicroSoft Windows、iOS等。</translation>
     </message>
     <message>
         <source>Always remember you&apos;re able to set up your own games in local and network/online play. You&apos;re not restricted to the &apos;Simple Game&apos; option.</source>
         <comment>Tips</comment>
-        <translation>您可以建立自己的网络游戏/局域网游戏。不仅限于 &quot;简单游戏&quot; 选项。</translation>
+        <translation>您可以建立自己的网络游戏/局域网游戏。不仅限于 &quot;简单游戏&quot; 模式。</translation>
     </message>
     <message>
         <source>Create an account on http://www.hedgewars.org/ to keep others from using your most favourite nickname while playing on the official server.</source>
@@ -470,42 +492,42 @@ or pick another nickname in game config:</source>
     <message>
         <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</source>
         <comment>Tips</comment>
-        <translation>假如你的显卡不能提供OpenGL硬件加速，试着用降低效果的方式运行</translation>
+        <translation>假如你的显卡不能提供OpenGL硬件加速，试着用降低效果的方式运行。</translation>
     </message>
     <message>
         <source>We&apos;re open to suggestions and constructive feedback. If you don&apos;t like something or got a great idea, let us know!</source>
         <comment>Tips</comment>
-        <translation>我们接受意见和建设性反馈。假如您有好电子或者不喜欢的东西，告诉我们！</translation>
+        <translation>我们接受意见和建设性反馈。假如您有好点子或者不喜欢的东西，请告诉我们!</translation>
     </message>
     <message>
         <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
         <comment>Tips</comment>
-        <translation>特别是网络游戏，请有礼貌记住对方也和您一样是人！</translation>
+        <translation>特别是网络游戏，请注意礼节。记住：对方也和您一样是人!</translation>
     </message>
     <message>
         <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
         <comment>Tips</comment>
-        <translation>特别游戏模式“吸血“、”因果报应“需要全新的战术。现在自定义游戏里试试！</translation>
+        <translation>特别游戏模式“吸血“、”因果报应“需要全新的战术。来&quot;自定义游戏&quot;里试试!</translation>
     </message>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation>Windows版本的刺猬大作战支持Xfire。添加它到游戏列表里让您的朋友看到。</translation>
+        <translation>Windows版本的&quot;刺猬杀&quot;支持Xfire。添加它到游戏列表里让您的朋友看到。</translation>
     </message>
     <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
         <comment>Tips</comment>
-        <translation>您不应该在不属于您的计算机上安装刺猬大作战——比如学校/工作场所。</translation>
+        <translation>您不应该在不属于您的计算机上安装“刺猬杀”——比如学校/工作场所!</translation>
     </message>
     <message>
         <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
         <comment>Tips</comment>
-        <translation>刺猬大作战适合短时间休息，不需要太多刺猬挤在大地图上。</translation>
+        <translation>“刺猬杀”适合短时间休闲游戏，不需要将大量刺猬挤在一幅超大地图上。</translation>
     </message>
     <message>
         <source>No hedgehogs were harmed in making this game.</source>
         <comment>Tips</comment>
-        <translation>制作这个游戏时不曾伤害任何刺猬</translation>
+        <translation>制作这个游戏时不曾伤害任何刺猬。</translation>
     </message>
     <message>
         <source>Connect one or more gamepads before launching the game to be able to assign their controls to your teams.</source>
@@ -515,120 +537,140 @@ or pick another nickname in game config:</source>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>“刺猬杀”是一个开源的免费软件，它充分利用了我们的业余时间。如果有人想要将它卖给你，请你拒绝他!</translation>
     </message>
     <message>
         <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>游戏运行前连上游戏板，让你的团队充分控制刺猬.</translation>
     </message>
     <message>
         <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>在官方服务器 %1 建立自己的帐号，就可以在官方服务器使用你最喜欢的昵称了.</translation>
     </message>
     <message>
         <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>假如你的显卡不能提供OpenGL硬件加速，试着用降低效果的方式运行。</translation>
     </message>
     <message>
         <source>There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>三种跳跃模式，快速按两次 [长跳] 键可以跳到非常高/向后跳.</translation>
     </message>
     <message>
         <source>Afraid of falling off a cliff? Hold down [precise] to turn [left] or [right] without actually moving.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>害怕掉进深渊？一直按住[精确控制]建并按[左][右]不用移动.</translation>
     </message>
     <message>
         <source>Some weapons require special strategies or just lots of training, so don&apos;t give up on a particular tool if you miss an enemy once.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>一些武器需要特别的技能与足够的训练，因此不要放弃练习，即便是失败。是曰：屡败屡战。</translation>
     </message>
     <message>
         <source>Most weapons won&apos;t work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>大多数武器在碰到水面的时候就失效了，除了“野蜂飞舞”和“蛋糕”。</translation>
     </message>
     <message>
         <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>毒奶酪只能造成不大的杀伤，不过能形成一片毒云并杀伤一片的刺猬.</translation>
     </message>
     <message>
         <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>钢琴攻击能产生极大的空袭杀伤，同时你将失去这个刺猬，所以这招实在是个下下策.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>“野蜂飞舞”可以蓄力使用，它旋转时的精度依赖于其速度，所以没必要发全力.</translation>
     </message>
     <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>近身地雷完美的构建了一个链子因此可以将敌人打入地下或者...水里.</translation>
     </message>
     <message>
         <source>The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>大捶主要用在桥梁或者薄板，可以将敌人敲下去.</translation>
     </message>
     <message>
         <source>If you&apos;re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>如果你被敌人围困，可以用大锤来解围。</translation>
     </message>
     <message>
         <source>The Cake&apos;s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>蛋糕最大行走距离取决于地形边缘，用[攻击]键尽早结束它。</translation>
     </message>
     <message>
         <source>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>[钻洞器]既可以当作武器，也可以用做为打洞器。</translation>
     </message>
     <message>
         <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>可以用“飞碟”让刺猬暂时离开洞穴等地形环境.</translation>
     </message>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>想知道是谁贡献的这个游戏？请在主界面点击“Hedgewars”LOGO就可以看到“制作团队”.</translation>
     </message>
     <message>
-        <source>Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!</source>
+        <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>喜欢刺猬杀？ 来做我们的粉丝吧可以到%1或者%2!</translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>你可以自由的构建自己的头像、帽子、旗帜甚至是地图和主题！但是请注意：你需要将这些在线分享出来。</translation>
     </message>
     <message>
         <source>Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>喜欢一个很特别的帽子图案？贡献你的力量吧，你将得到一个属于自己的帽子图案!</translation>
     </message>
     <message>
         <source>Keep your video card drivers up to date to avoid issues playing the game.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>让你的显卡保持更新以便避免一些已知的游戏问题。</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>你可以在“我的文档\Hedgewars”文件夹下找到“刺猬杀”的配置文件，可以新建和备份但不要随便修改。</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="obsolete">你可以在你的主文件夹下下找到“Hedgewars”文件夹，里面又配置文件，你可以新建和备份这个文件，但请不要随便编辑它.</translation>
+    </message>
+    <message>
+        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <comment>Tips</comment>
+        <translation>你可以组织刺猬杀的相关文件（保存的游戏和演示还有录像），通过收藏夹或者浏览器.</translation>
+    </message>
+    <message>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -796,7 +838,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
         <translation>
-            <numerusform>有 %1 个客户端连接到这个房间。</numerusform>
+            <numerusform>有 %1 个客户端连接到这个房间.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -819,32 +861,33 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>State:</source>
-        <translation type="unfinished"></translation>
+        <translation>状态: </translation>
     </message>
     <message>
         <source>Rules:</source>
-        <translation type="unfinished"></translation>
+        <translation>规则: </translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation>武器: </translation>
     </message>
     <message>
         <source>Search:</source>
-        <translation type="unfinished"></translation>
+        <translation>搜索: </translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Num Lock / Clear</translation>
+        <translation>清除：</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告：</translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
-        <translation type="unfinished"></translation>
+        <translation>游戏正在大厅中。
+你是否想去观战?</translation>
     </message>
 </context>
 <context>
@@ -859,19 +902,19 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>保卫你的城堡，破坏对手的，努力吧！</translation>
+        <translation>保卫你的城堡，破坏对手的，对战努力吧!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>队伍开始在对手的地盘，努力！</translation>
+        <translation>队伍开始在对手的地盘，努力!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
-        <translation>地面无法破坏！</translation>
+        <translation>地面无法破坏!</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>添加不可毁坏地边界</translation>
+        <translation>添加不可毁坏地形</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -887,7 +930,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>开启随机地雷</translation>
+        <translation type="obsolete">开启随机地雷</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -911,15 +954,15 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation>随机出场顺序</translation>
+        <translation>随机出场顺序。</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation>国王不能死!!</translation>
+        <translation>国王不能死!!否则自动输。</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation>在开局前手动放置刺猬</translation>
+        <translation>在开局前手动放置刺猬。</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
@@ -927,15 +970,31 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation>禁止随机生成地图使用梁</translation>
+        <translation>禁止随机生成地图使用梁。</translation>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation>禁止随机生成地图使用地面物体</translation>
+        <translation>禁止随机生成地图使用地面物体。</translation>
     </message>
     <message>
         <source>AI respawns on death.</source>
-        <translation type="unfinished"></translation>
+        <translation>AI死后重生。</translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation>所有或者的刺猬结局的时候都会被保存</translation>
+    </message>
+    <message>
+        <source>Attacking does not end your turn.</source>
+        <translation>不会终结你的回合.</translation>
+    </message>
+    <message>
+        <source>Weapons are reset to starting values each turn.</source>
+        <translation>每轮武器的配置都会重置.</translation>
+    </message>
+    <message>
+        <source>Each hedgehog has its own ammo. It does not share with the team.</source>
+        <translation>每个刺猬都有其自己的武器. 并在奔队中不共享.</translation>
     </message>
 </context>
 <context>
@@ -973,7 +1032,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation type="unfinished"></translation>
+        <translation>对战模式(...)开发中</translation>
     </message>
 </context>
 <context>
@@ -1098,7 +1157,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>generated maze...</source>
-        <translation>生成的迷宫</translation>
+        <translation>生成的迷宫...</translation>
     </message>
     <message>
         <source>Mission</source>
@@ -1106,51 +1165,51 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Community</source>
-        <translation type="unfinished"></translation>
+        <translation>社区</translation>
     </message>
     <message>
         <source>Any</source>
-        <translation type="unfinished"></translation>
+        <translation>任何</translation>
     </message>
     <message>
         <source>In lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>在线状态</translation>
     </message>
     <message>
         <source>In progress</source>
-        <translation type="unfinished"></translation>
+        <translation>使用中</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">默认</translation>
+        <translation type="obsolete">默认</translation>
     </message>
     <message>
         <source>Pro mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Pro 模式</translation>
     </message>
     <message>
         <source>Shoppa</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">绳索模式</translation>
     </message>
     <message>
         <source>Basketball</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">篮球模式</translation>
     </message>
     <message>
         <source>Minefield</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">地雷模式</translation>
     </message>
     <message>
         <source>Barrel mayhem</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">武器不共享</translation>
     </message>
     <message>
         <source>Tunnel hogs</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">洞穴刺猬</translation>
     </message>
     <message>
         <source>Crazy</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">疯狂模式</translation>
     </message>
 </context>
 <context>
@@ -1212,7 +1271,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation>This program is distributed under the GNU General Public License</translation>
+        <translation>这款程序遵守GPL协议的保护</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -1228,7 +1287,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Art:</source>
-        <translation>艺术:</translation>
+        <translation>美化:</translation>
     </message>
     <message>
         <source>Translations:</source>
@@ -1288,7 +1347,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Scheme Name:</source>
-        <translation>设置名称：</translation>
+        <translation>设置名称:  </translation>
     </message>
     <message>
         <source>Crate Drops</source>
@@ -1332,7 +1391,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Locale</source>
-        <translation>Locale</translation>
+        <translation>本土化</translation>
     </message>
     <message>
         <source>Restart game to apply</source>
@@ -1348,10 +1407,30 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation>开发版本。自己承担风险使用。</translation>
+        <translation>开发版本，尚不能和其他版本兼容，仍有不足。请谨慎使用!!</translation>
     </message>
     <message>
         <source>Quality</source>
+        <translation>价值</translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation>% 健康包裹</translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
+        <translation>包裹里有血</translation>
+    </message>
+    <message>
+        <source>Sudden Death Water Rise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sudden Death Health Decrease</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bind schemes and weapons</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1366,7 +1445,7 @@ Do you still want to join the room?</source>
     <name>QMainWindow</name>
     <message>
         <source>Hedgewars %1</source>
-        <translation>刺猬大作战 %1</translation>
+        <translation>刺猬杀 %1</translation>
     </message>
 </context>
 <context>
@@ -1409,7 +1488,15 @@ Please check your installation</source>
     </message>
     <message>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation>不能覆盖默认的武器配置 &apos;%1&apos;</translation>
+        <translation>不能覆盖默认的武器配置 &apos;%1&apos;!</translation>
+    </message>
+    <message>
+        <source>All file associations have been set.</source>
+        <translation>文件联合已经存储完毕. </translation>
+    </message>
+    <message>
+        <source>File association failed.</source>
+        <translation>文件联合失败.</translation>
     </message>
 </context>
 <context>
@@ -1451,7 +1538,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Go!</source>
-        <translation>上场！</translation>
+        <translation>上场!!</translation>
     </message>
     <message>
         <source>Start</source>
@@ -1501,6 +1588,10 @@ Please check your installation</source>
         <source>Random Team</source>
         <translation>随机分配队伍</translation>
     </message>
+    <message>
+        <source>Associate file extensions</source>
+        <translation>连接文件扩展</translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
@@ -1545,7 +1636,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Ammo in boxes</source>
-        <translation>弹药箱</translation>
+        <translation>弹药数</translation>
     </message>
     <message>
         <source>Delays</source>
@@ -1599,7 +1690,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>布置地雷</translation>
+        <translation type="obsolete">布置地雷</translation>
     </message>
     <message>
         <source>Vampirism</source>
@@ -1639,7 +1730,23 @@ Please check your installation</source>
     </message>
     <message>
         <source>AI Survival Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>AI 复活模式</translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation>重置健康值</translation>
+    </message>
+    <message>
+        <source>Unlimited Attacks</source>
+        <translation>无限攻击</translation>
+    </message>
+    <message>
+        <source>Reset Weapons</source>
+        <translation>重置所有武器</translation>
+    </message>
+    <message>
+        <source>Per Hedgehog Ammo</source>
+        <translation>每个刺猬的武器</translation>
     </message>
 </context>
 <context>
@@ -1763,7 +1870,7 @@ Please check your installation</source>
     <message>
         <source>hedgehogs
 info</source>
-        <translation>刺猬大作战
+        <translation>刺猬杀
 信息</translation>
     </message>
     <message>
@@ -1830,67 +1937,67 @@ info</source>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation>移动您的刺猬同时瞄准：</translation>
+        <translation>移动您的刺猬同时瞄准: </translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation>使用跳跃越过沟渠、障碍：</translation>
+        <translation>使用跳跃越过沟渠、障碍: </translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation>使用选择的武器开火、使用物品：</translation>
+        <translation>使用选择的武器开火、使用物品: </translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation>失去一个武器、或者瞄准光标下的地点：</translation>
+        <translation>选择一个武器、或者瞄准光标下的某点:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation>切换到您当前活动的刺猬（如果可用）：</translation>
+        <translation>切换到您当前活动的刺猬（如果可用）: </translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation>选择一个武器或物品：</translation>
+        <translation>选择一个武器或物品: </translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation>设置定时炸弹等武器起爆时间：</translation>
+        <translation>设置定时炸弹等武器起爆时间: </translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation>移动镜头到选中的刺猬：</translation>
+        <translation>移动镜头到选中的刺猬: </translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation>不用鼠标移动光标或镜头：</translation>
+        <translation>不用鼠标移动光标或镜头: </translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation>调整镜头放大倍数：</translation>
+        <translation>调整镜头放大倍数: </translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation>同队友或全部参与者对话：</translation>
+        <translation>同队友或全部参与者对话: </translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation>暂停、继续或离开游戏：</translation>
+        <translation>暂停、继续或离开游戏: </translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation>调整游戏时音量：</translation>
+        <translation>调整游戏时音量: </translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation>全屏模式：</translation>
+        <translation>全屏模式: </translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation>截图：</translation>
+        <translation>截图: </translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation>切换刺猬头顶标签的显示方式：</translation>
+        <translation>切换刺猬标签的显示方式: </translation>
     </message>
 </context>
 <context>
@@ -1953,7 +2060,7 @@ info</source>
     </message>
     <message>
         <source>Tab</source>
-        <translation>Tab</translation>
+        <translation>Tab 键</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -2169,43 +2276,43 @@ info</source>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>左摇杆(右)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>左摇杆(左)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>左摇杆(下)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>左摇杆(上)</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>左触发</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>右触发</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>右摇杆(下)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>右摇杆(上)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>右摇杆(右)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>右摇杆(左)</translation>
     </message>
     <message>
         <source>DPad</source>

@@ -49,7 +49,8 @@
 00:46=Flamethrower
 00:47=Sticky Mine
 00:48=Hammer
-00:49=Resurrector (beta)
+00:49=Resurrector
+00:50=Drill Strike
 
 01:00=Let's fight!
 01:01=Round draw
@@ -431,6 +432,7 @@
 03:47=Stick these somewhere useful!
 03:48=It's Hammer time!
 03:49=Does what you guess
+03:50=Moles fan
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
@@ -499,5 +501,10 @@
 05:11=Shared Ammo: All teams of the same color share their ammunition
 05:12=Mine Timers: Mines will detonate after %1 second(s)
 05:13=Mine Timers: Mines will detonate instantly
-05:14=Mine Timers: Mines will detonate after 0 - 3 seconds
+05:14=Mine Timers: Mines will detonate after 0 - 5 seconds
 05:15=Damage Modifier: All weapons will do %1% damage
+05:16=Health of all hogs is reset on end of turn
+05:17=AI hogs respawn on death
+05:18=Unlimited Attacks
+05:19=Weapons are reset on end of turn
+05:20=Weapons are not shared between hogs

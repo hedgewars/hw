@@ -28,165 +28,12 @@
 #import "AudioToolbox/AudioToolbox.h"
 #import "PascalImports.h"
 
-void createTeamNamed (NSString *nameWithoutExt) {
-    NSString *teamsDirectory = TEAMS_DIRECTORY();
-
-    if (![[NSFileManager defaultManager] fileExistsAtPath: teamsDirectory]) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:teamsDirectory
-                                  withIntermediateDirectories:NO
-                                                   attributes:nil
-                                                        error:NULL];
-    }
-
-    NSMutableArray *hedgehogs = [[NSMutableArray alloc] initWithCapacity: HW_getMaxNumberOfHogs()];
-
-    for (int i = 0; i < HW_getMaxNumberOfHogs(); i++) {
-        NSString *hogName = [[NSString alloc] initWithFormat:@"hedgehog %d",i];
-        NSDictionary *hog = [[NSDictionary alloc] initWithObjectsAndKeys: [NSNumber numberWithInt:0],@"level",
-                             hogName,@"hogname", @"NoHat",@"hat", nil];
-        [hogName release];
-        [hedgehogs addObject:hog];
-        [hog release];
-    }
-
-    NSDictionary *theTeam = [[NSDictionary alloc] initWithObjectsAndKeys:@"0",@"hash",
-                             @"Statue",@"grave", @"Plane",@"fort", @"Default",@"voicepack",
-                             @"hedgewars",@"flag", hedgehogs,@"hedgehogs", nil];
-    [hedgehogs release];
-
-    NSString *teamFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", teamsDirectory, nameWithoutExt];
-
-    [theTeam writeToFile:teamFile atomically:YES];
-    [teamFile release];
-    [theTeam release];
-}
-
-void createWeaponNamed (NSString *nameWithoutExt, int type) {
-    NSString *weaponsDirectory = WEAPONS_DIRECTORY();
-
-    if (![[NSFileManager defaultManager] fileExistsAtPath: weaponsDirectory]) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:weaponsDirectory
-                                  withIntermediateDirectories:NO
-                                                   attributes:nil
-                                                        error:NULL];
-    }
-
-    NSDictionary *theWeapon = nil;
-    switch (type) {
-        case 0: //default
-            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9391929422199121032235111001201000000211110101010",@"ammostore_initialqt",
-                         @"0405040541600655546554464776576666666155510101110",@"ammostore_probability",
-                         @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1311110312111111123114111111111111111211111101110",@"ammostore_crate", nil];
-            break;
-        case 1: //crazy
-            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9999999999999999992999999999999999299999999909990",@"ammostore_initialqt",
-                         @"1111110111111111111111111111111111111111111101110",@"ammostore_probability",
-                         @"0000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"1311110312111111123114111111111111111211110101110",@"ammostore_crate", nil];
-            break;
-        case 2: //pro mode
-            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9090009000000000000009000000000000000000000000000",@"ammostore_initialqt",
-                         @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
-                         @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111100101110",@"ammostore_crate", nil];
-            break;
-        case 3: //shoppa
-            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"0000009900000000000000000000000000000000000000000",@"ammostore_initialqt",
-                         @"4444410044244402210112121222422000000002000400010",@"ammostore_probability",
-                         @"0000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111101101110",@"ammostore_crate", nil];
-            break;
-        case 4: //basketball
-            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"9391929422199121032235111001201000000211110101000",@"ammostore_initialqt",
-                         @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
-                         @"0000000000000005500000040007004000000000200000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111111101110",@"ammostore_crate", nil];
-            break;
-        case 5: //minefield
-            theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"0000009900090000000300000000000000000000000000000",@"ammostore_initialqt",
-                         @"0000000000000000000000000000000000000000000000000",@"ammostore_probability",
-                         @"0000000000000205500000040007004000000000200000000",@"ammostore_delay",
-                         @"1111111111111111111111111111111111111111111101110",@"ammostore_crate", nil];
-            break;
-        default:
-            NSLog(@"Nope");
-            break;
-    }
-    
-    NSString *weaponFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", weaponsDirectory, nameWithoutExt];
-
-    [theWeapon writeToFile:weaponFile atomically:YES];
-    [weaponFile release];
-    [theWeapon release];
-}
-
-void createSchemeNamed (NSString *nameWithoutExt) {
-    NSString *schemesDirectory = SCHEMES_DIRECTORY();
-
-    if (![[NSFileManager defaultManager] fileExistsAtPath: schemesDirectory]) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:schemesDirectory
-                                  withIntermediateDirectories:NO
-                                                   attributes:nil
-                                                        error:NULL];
-    }
-    
-    NSMutableArray *basicArray  = [[NSMutableArray alloc] initWithObjects:
-                                   [NSNumber numberWithInt:100],      //damagemodifier
-                                   [NSNumber numberWithInt:45],       //turntime
-                                   [NSNumber numberWithInt:100],      //initialhealth
-                                   [NSNumber numberWithInt:15],       //suddendeathtimeout
-                                   [NSNumber numberWithInt:5],        //cratedrops
-                                   [NSNumber numberWithInt:3],        //minestime
-                                   [NSNumber numberWithInt:4],        //mines
-                                   [NSNumber numberWithInt:0],        //dudmines
-                                   [NSNumber numberWithInt:2],        //explosives
-                                   nil];
-    
-    NSMutableArray *gamemodArray= [[NSMutableArray alloc] initWithObjects:
-                                   [NSNumber numberWithBool:NO],      //fortmode
-                                   [NSNumber numberWithBool:NO],      //divideteam
-                                   [NSNumber numberWithBool:NO],      //solidland
-                                   [NSNumber numberWithBool:NO],      //addborder
-                                   [NSNumber numberWithBool:NO],      //lowgravity
-                                   [NSNumber numberWithBool:NO],      //lasersight
-                                   [NSNumber numberWithBool:NO],      //invulnerable
-                                   [NSNumber numberWithBool:YES],     //addmines
-                                   [NSNumber numberWithBool:NO],      //vampirism
-                                   [NSNumber numberWithBool:NO],      //karma
-                                   [NSNumber numberWithBool:NO],      //artillery
-                                   [NSNumber numberWithBool:YES],     //randomorder
-                                   [NSNumber numberWithBool:NO],      //king
-                                   [NSNumber numberWithBool:NO],      //placehedgehogs
-                                   [NSNumber numberWithBool:NO],      //clansharesammo
-                                   [NSNumber numberWithBool:NO],      //disablegirders
-                                   [NSNumber numberWithBool:NO],      //disablelandobjects
-                                   [NSNumber numberWithBool:NO],      //aisurvival
-                                   nil];
-    
-    NSMutableDictionary *theScheme = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                      basicArray,@"basic",
-                                      gamemodArray,@"gamemod",
-                                      nil];
-    [gamemodArray release];
-    [basicArray release];
-    
-    NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", schemesDirectory, nameWithoutExt];
-    
-    [theScheme writeToFile:schemeFile atomically:YES];
-    [schemeFile release];
-    [theScheme release];
-}
-
 BOOL inline rotationManager (UIInterfaceOrientation interfaceOrientation) {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
-           (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+    if (IS_IPAD())
+        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
+               (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+    else
+        return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
 }
 
 NSInteger inline randomPort () {
@@ -262,14 +109,14 @@ void playSound (NSString *snd) {
 }
 
 NSArray inline *getAvailableColors (void) {
-    return [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInt:0x4376e9],     // bluette
+    return [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInt:0x3376E9],     // bluette
                                      [NSNumber numberWithUnsignedInt:0x3e9321],     // greeeen
                                      [NSNumber numberWithUnsignedInt:0xa23dbb],     // violett
                                      [NSNumber numberWithUnsignedInt:0xff9329],     // oranngy
                                      [NSNumber numberWithUnsignedInt:0xdd0000],     // reddish
                                      [NSNumber numberWithUnsignedInt:0x737373],     // graaaay
-                                     [NSNumber numberWithUnsignedInt:0xbba23d],     // gold$$$
-                                     [NSNumber numberWithUnsignedInt:0x3da2bb],     // cyannnn  
+                                     [NSNumber numberWithUnsignedInt:0x00FFFF],     // cyannnn  
+                                     [NSNumber numberWithUnsignedInt:0xFF8888],     // peachyj
                                      nil];
 }
 
@@ -294,4 +141,48 @@ UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWid
     [theLabel.layer setMasksToBounds:YES];
     
     return theLabel;
+}
+
+// this routine checks for the PNG size without loading it in memory
+// https://github.com/steipete/PSFramework/blob/master/PSFramework%20Version%200.3/PhotoshopFramework/PSMetaDataFunctions.m
+CGSize PSPNGSizeFromMetaData (NSString *aFileName) {
+    // File Name to C String.
+    const char *fileName = [aFileName UTF8String];
+    // source file
+    FILE *infile = fopen(fileName, "rb");
+    if (infile == NULL) {
+        DLog(@"Can't open the file: %@", aFileName);
+        return CGSizeZero;
+    }
+
+    // Bytes Buffer.
+    unsigned char buffer[30];
+    // Grab Only First Bytes.
+    fread(buffer, 1, 30, infile);
+    // Close File.
+    fclose(infile);
+
+    // PNG Signature.
+    unsigned char png_signature[8] = {137, 80, 78, 71, 13, 10, 26, 10};
+
+    // Compare File signature.
+    if ((int)(memcmp(&buffer[0], &png_signature[0], 8))) {
+        DLog(@"The file (%@) is not a PNG file", aFileName);
+        return CGSizeZero;
+    }
+
+    // Calc Sizes. Isolate only four bytes of each size (width, height).
+    int width[4];
+    int height[4];
+    for (int d = 16; d < (16 + 4); d++) {
+        width[d-16] = buffer[d];
+        height[d-16] = buffer[d+4];
+    }
+
+    // Convert bytes to Long (Integer)
+    long resultWidth = (width[0] << (int)24) | (width[1] << (int)16) | (width[2] << (int)8) | width[3];
+    long resultHeight = (height[0] << (int)24) | (height[1] << (int)16) | (height[2] << (int)8) | height[3];
+
+    // Return Size.
+    return CGSizeMake(resultWidth,resultHeight);
 }

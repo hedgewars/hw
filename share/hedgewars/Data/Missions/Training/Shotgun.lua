@@ -153,7 +153,7 @@ function onGameInit()
 	-- The frequency of crate drops
 	CaseFreq = 0
 	-- The number of mines being placed
-	LandAdds = 0
+	MinesNum = 0
 	-- The number of explosives being placed
 	Explosives = 0
 	-- The delay between each round

@@ -153,7 +153,7 @@
                 break;
             case 4:
                 if (nil == supportViewController)
-                    supportViewController = [[SupportViewController alloc] initWithNibName:@"SupportViewController" bundle:nil];
+                    supportViewController = [[SupportViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 nextController = supportViewController;
                 break;
         }

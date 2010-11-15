@@ -40,6 +40,10 @@
         <source>Edit weapons</source>
         <translation>Editar armas</translation>
     </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
@@ -88,7 +92,17 @@
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation type="unfinished"></translation>
+        <translation>EquipaPorOmissão</translation>
+    </message>
+    <message>
+        <source>Hedgewars Demo File</source>
+        <comment>File Types</comment>
+        <translation>Ficheiro de demo Hedgewars</translation>
+    </message>
+    <message>
+        <source>Hedgewars Save File</source>
+        <comment>File Types</comment>
+        <translation>Ficheiro de jogo Hedgewars</translation>
     </message>
 </context>
 <context>
@@ -333,53 +347,65 @@ outro nome de utilizador no menu de configuração:</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Detalhes</translation>
     </message>
     <message>
         <source>Health graph</source>
-        <translation type="unfinished"></translation>
+        <translation>Gráfico de vida</translation>
     </message>
     <message>
         <source>Ranking</source>
-        <translation type="unfinished"></translation>
+        <translation>Ranking</translation>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished"></translation>
+        <translation>O título de melhor tiro foi para &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; pontos de dano.</translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>O extreminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; morto num unico turno.</numerusform>
+            <numerusform>O extreminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; mortes num unico turno.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Apenas &lt;b&gt;%1&lt;/b&gt; ouriço perdeu a vida durante esta ronda.</numerusform>
+            <numerusform>Um total de &lt;b&gt;%1&lt;/b&gt; ouriços perderam a vida durante esta ronda.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 kill)</source>
+        <translation>
+            <numerusform>(%1 morto)</numerusform>
+            <numerusform>(%1 mortos)</numerusform>
         </translation>
     </message>
     <message>
-        <source>(%1 kill)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>(%1 kills)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">(%1 mortos)</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; axou que seria divertido atacar a sua própria equipa fazendo &lt;b&gt;%2&lt;/b&gt; ponto de dano.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; axou que seria divertido atacar a sua própria equipa fazendo &lt;b&gt;%2&lt;/b&gt; pontos de dano.</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; matou &lt;b&gt;%2&lt;/b&gt; ouriço da sua própria equipa.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; matou &lt;b&gt;%2&lt;/b&gt; ouriços da sua própria equipa.</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; estava tão intimidado que passou &lt;b&gt;%2&lt;/b&gt; turno.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; estava tão intimidado que passou &lt;b&gt;%2&lt;/b&gt; turnos.</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -406,11 +432,6 @@ outro nome de utilizador no menu de configuração:</translation>
         <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
         <comment>Tips</comment>
         <translation>Se não tens a certeza do que fazer a seguir não desperdiçes munições, passa o turno. Mas não desperdices muito tempo, a Morte Súbita aproxima-se.</translation>
-    </message>
-    <message>
-        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Precisas de poupar as cordas? Solta a corda enquanto no ar e dispara-a novamente. Enquanto não tocares no solo podes usar a mesma corda novamente sem desperdiar outras!</translation>
     </message>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
@@ -463,11 +484,6 @@ outro nome de utilizador no menu de configuração:</translation>
         <translation>Lembra-te que tens sempre a opção de poder jogar na tua rede local ou online. Não estás restrito ao modo de Jogo Local.</translation>
     </message>
     <message>
-        <source>Create an account on http://www.hedgewars.org/ to keep others from using your most favourite nickname while playing on the official server.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Cria uma conta em http://www.hedgewars.org/ para prevenir que outros usem o teu nome de utilizador favorito no servidor oficial.</translation>
-    </message>
-    <message>
         <source>While playing you should give yourself a short break at least once an hour.</source>
         <comment>Tips</comment>
         <translation>Lembra-te de fazer pequenos intervalos durante sessões de jogo prolongadas.</translation>
@@ -513,132 +529,147 @@ outro nome de utilizador no menu de configuração:</translation>
         <translation>Nenhum ouriço foi mal tratado durante a produção deste jogo.</translation>
     </message>
     <message>
-        <source>Connect one or more gamepads before launching the game to be able to assign their controls to your teams.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Conecta um ou mais comandos antes de lançar o jogo para que seja possível configura-los nas opções das tuas equipas.</translation>
-    </message>
-    <message>
         <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Precisas de poupar as cordas? Solta a corda enquanto no ar e dispara-a novamente. Enquanto não tocares no solo podes usar a mesma corda novamente sem desperdiar outras!</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>O Hedgewars é Open Source e Freeware desenvolvido durante o tempo livre. Se alguem te vendeu o jogo, tente obter o reembolso!</translation>
     </message>
     <message>
         <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Conecta um ou mais comandos antes de lançar o jogo para que seja possível configura-los com as tuas equipas.</translation>
     </message>
     <message>
         <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Cria uma conta em http://www.hedgewars.org/ para prevenir que outros usem o teu nome de utilizador favorito no servidor oficial.</translation>
     </message>
     <message>
         <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Se a tua placa gráfica se está a demonstrar incapaz de fornecer aceleração gráfica em OpenGL, experimenta actualizar os drivers da mesma.</translation>
     </message>
     <message>
         <source>There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Existem três diferentes tipos de salto. Pressiona [salto alto] duas vezes para fazer um salto muito alto para trás.</translation>
     </message>
     <message>
         <source>Afraid of falling off a cliff? Hold down [precise] to turn [left] or [right] without actually moving.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Com medo de cair de um penhasco? Deixa o [botão de precisão] pressionado e vira-te para a [direita] ou [esquerda] sem sair do sitio.</translation>
     </message>
     <message>
         <source>Some weapons require special strategies or just lots of training, so don&apos;t give up on a particular tool if you miss an enemy once.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Algumas armas requerem estratégias especiais ou imensa prática, por isso não desistas imediatamente dessa ferramenta em particular se falhares o alvo.</translation>
     </message>
     <message>
         <source>Most weapons won&apos;t work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>A maiora das armas deixa de funcionar se tocarem na água. A Abelha Teleguiada e o Bolo são excepções a esta regra.</translation>
     </message>
     <message>
         <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>O Limburger Venho causa apenas uma pequena explosão. No entanto a pequena nuvem malcheirosa, afectada pelo vento, pode envenenar vários ouriços de uma vez.</translation>
     </message>
     <message>
         <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>O Piano é o ataque aéreo que mais potencial dano causa. No entanto uma enorme desvantagem, é necessario sacrificar um ouriço para o utilizar.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>A Abelha Teleguiada é uma arma difícil de usar. O grau a que pode virar depende da sua velocidade, por isso tenta não a usar com o poder máximo.</translation>
     </message>
     <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>As Minas Pegajosas são a arma ideal para com pequenas explosões em cadeia empurrar ouriços para situações terríveis... ou para a água.</translation>
     </message>
     <message>
         <source>The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>O melhor local para usar o Martelo é em pontes ou vigas. Os ouriços atingidos nestes locais vão simplesmente furar pelo chão.</translation>
     </message>
     <message>
         <source>If you&apos;re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Se ficares preso atrás de um ouriço inimigo utiliza o Martelo para te libertares sem ser necessário levar dano de uma explosão.</translation>
     </message>
     <message>
         <source>The Cake&apos;s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>A distancia máxima que o Bolo é capaz de alcançar depende do terreno que tenha de ultrapassar. Podes também utilizar [ataque] para o detonar a qualquer altura.</translation>
     </message>
     <message>
         <source>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Embora o Lança-chamas seja uma arma, pode também ser usado para escavar túneis.</translation>
     </message>
     <message>
         <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Utiliza o Coquetail Molotov para temporariamente impedir outros ouriços de passar por áreas no terreno como túneis e plataformas.</translation>
     </message>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Gostavas de saber quem está por traz deste jogo? Clica no logótipo do Hedgewars no menu inicial para aceder aos créditos.</translation>
     </message>
     <message>
-        <source>Like Hedgewars? Become a fan on %1 or join our group at %2. You could follow us on %3 as well!</source>
+        <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Gostas do Hedgewars? Torna-te fã no %1 ou segue-nos pelo %!</translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Está à vontade para desenhar as tuas próprias sepulturas, chapéus, bandeiras ou mesmo mapas e temas! Tem em nota que vai ser necessário partilha-los algures para que os consigas usar online.</translation>
     </message>
     <message>
         <source>Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Gostavas poder usar um chapéu em particular que ainda não existe? Faz uma pequena doação para este projecto e recebe um chapéu exclusivo à tua escolha!</translation>
     </message>
     <message>
         <source>Keep your video card drivers up to date to avoid issues playing the game.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Mantém os drivers da placa gráfica actualizados de forma a evitar problemas com o jogo.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;Documentos\Hedgewars&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="obsolete">Podes encontrar os ficheiros de configuração do Hedgewars na pasta &quot;Hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
+    </message>
+    <message>
+        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <comment>Tips</comment>
+        <translation>É possivel associar os ficheiros relacionados com o Hedgewars (partidas e demonstrações) directamente com o jogo para que seja possivel lançalos directamente do teu explorador de ficheiros ou internet favorito.</translation>
+    </message>
+    <message>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
+        <comment>Tips</comment>
+        <translation>Gostavas de poupar algumas cordas? Solta a corda enquanto no ar e dispara-a novamente. Desde que não toques no solo podes reutilizar a usar a mesma corda quantas vezes quiseres!</translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -831,32 +862,33 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>State:</source>
-        <translation type="unfinished"></translation>
+        <translation>Estado:</translation>
     </message>
     <message>
         <source>Rules:</source>
-        <translation type="unfinished"></translation>
+        <translation>Regras</translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation>Armas:</translation>
     </message>
     <message>
         <source>Search:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pesquisa:</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Clear</translation>
+        <translation>Limpar</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Atenção</translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
-        <translation type="unfinished"></translation>
+        <translation>O jogo a que te estas a tentar juntar já começou.
+Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
 </context>
 <context>
@@ -891,7 +923,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>Adiciona minas aleatoriamente</translation>
+        <translation type="obsolete">Adiciona minas aleatoriamente</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -947,7 +979,23 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>AI respawns on death.</source>
-        <translation type="unfinished"></translation>
+        <translation>O computador ressuscita ao morrer.</translation>
+    </message>
+    <message>
+        <source>All (living) hedgehogs are fully restored at the end of turn</source>
+        <translation>Todos os ouriços (vivos) são completamente restaurados no final do turn</translation>
+    </message>
+    <message>
+        <source>Attacking does not end your turn.</source>
+        <translation>Atacar não faz o turno terminar.</translation>
+    </message>
+    <message>
+        <source>Weapons are reset to starting values each turn.</source>
+        <translation>O armamento é redefinido para os valores iniciais todos os turnos.</translation>
+    </message>
+    <message>
+        <source>Each hedgehog has its own ammo. It does not share with the team.</source>
+        <translation>Cada ouriço tem as suas próprias armas. Não são partilhadas com a equipa.</translation>
     </message>
 </context>
 <context>
@@ -973,7 +1021,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation>Modo de Treino (pratica as tuas capacidades numa variedade de missões de treino)</translation>
+        <translation>Modo de Treino (pratica as tuas capacidades numa variedade de missões de treino). EM DESENVOLVIMENTO</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
@@ -981,11 +1029,11 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Load (Load a previously saved game)</source>
-        <translation>Carregar (carregar um jogo salvo previamente)</translation>
+        <translation>Carregar (carrega um jogo salvo previamente)</translation>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo Campanha (...) EM DESENVOLVIMENTO</translation>
     </message>
 </context>
 <context>
@@ -1118,51 +1166,23 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Community</source>
-        <translation type="unfinished"></translation>
+        <translation>Comunidade</translation>
     </message>
     <message>
         <source>Any</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualquer</translation>
     </message>
     <message>
         <source>In lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>No lobby</translation>
     </message>
     <message>
         <source>In progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Em progresso</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Predefinido</translation>
-    </message>
-    <message>
-        <source>Pro mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Shoppa</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Basketball</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Minefield</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Barrel mayhem</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tunnel hogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Crazy</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Predefinido</translation>
     </message>
 </context>
 <context>
@@ -1248,7 +1268,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Translations:</source>
-        <translation>Traduções:</translation>
+        <translation>Tradutores:</translation>
     </message>
     <message>
         <source>Special thanks:</source>
@@ -1348,7 +1368,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation>Reiniciar o jogo para aplicar as definições</translation>
+        <translation>Reinicie o jogo para aplicar as alterações</translation>
     </message>
     <message>
         <source>Explosives</source>
@@ -1364,6 +1384,26 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Quality</source>
+        <translation>Qualidade</translation>
+    </message>
+    <message>
+        <source>% Health Crates</source>
+        <translation>% de Caixas de Vida</translation>
+    </message>
+    <message>
+        <source>Health in Crates</source>
+        <translation>Vida por Caixa</translation>
+    </message>
+    <message>
+        <source>Sudden Death Water Rise</source>
+        <translation>Súbida da água durante Morte Súbita</translation>
+    </message>
+    <message>
+        <source>Sudden Death Health Decrease</source>
+        <translation>Vida perdida durante Morte Súbita</translation>
+    </message>
+    <message>
+        <source>Bind schemes and weapons</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1422,6 +1462,14 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
         <translation>Não é possivel sobrescrever o esquema de armas por omissão &apos;%1&apos;!</translation>
+    </message>
+    <message>
+        <source>All file associations have been set.</source>
+        <translation>Os ficheiros foram associados com sucesso.</translation>
+    </message>
+    <message>
+        <source>File association failed.</source>
+        <translation>Não foi possivel associar os ficheiros.</translation>
     </message>
 </context>
 <context>
@@ -1483,7 +1531,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Go!</source>
-        <translation>Ir!</translation>
+        <translation>Começar!</translation>
     </message>
     <message>
         <source>Play demo</source>
@@ -1512,6 +1560,10 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>Random Team</source>
         <translation>Equipa aleatória</translation>
+    </message>
+    <message>
+        <source>Associate file extensions</source>
+        <translation>Associar com as extensões dos ficheiros</translation>
     </message>
 </context>
 <context>
@@ -1599,19 +1651,19 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Divide Teams</source>
-        <translation>Separar equipas</translation>
+        <translation>Separar Equipas</translation>
     </message>
     <message>
         <source>Solid Land</source>
-        <translation>Terreno sólido</translation>
+        <translation>Terreno Sólido</translation>
     </message>
     <message>
         <source>Add Border</source>
-        <translation>Adicionar borda</translation>
+        <translation>Adicionar Borda</translation>
     </message>
     <message>
         <source>Low Gravity</source>
-        <translation>Baixa gravidade</translation>
+        <translation>Baixa Gravidade</translation>
     </message>
     <message>
         <source>Laser Sight</source>
@@ -1619,11 +1671,11 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Invulnerable</source>
-        <translation>Invulnerável</translation>
+        <translation>Invulnerabilidade</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation>Adicionar minas</translation>
+        <translation type="obsolete">Adicionar minas</translation>
     </message>
     <message>
         <source>Random Order</source>
@@ -1639,7 +1691,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
-        <translation>Clãs partilham armamento</translation>
+        <translation>Clãs Partilham Armamento</translation>
     </message>
     <message>
         <source>Disable Girders</source>
@@ -1651,7 +1703,23 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>AI Survival Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo de Sobrevivência</translation>
+    </message>
+    <message>
+        <source>Reset Health</source>
+        <translation>Restaurar a Vida</translation>
+    </message>
+    <message>
+        <source>Unlimited Attacks</source>
+        <translation>Ataques Ilimitados</translation>
+    </message>
+    <message>
+        <source>Reset Weapons</source>
+        <translation>Restaurar o Armamento</translation>
+    </message>
+    <message>
+        <source>Per Hedgehog Ammo</source>
+        <translation>Armamento Por Ouriço</translation>
     </message>
 </context>
 <context>
