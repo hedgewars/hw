@@ -432,7 +432,7 @@ v nastaveniach hry:</translation>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
         <comment>Tips</comment>
-        <translation>Ak chcete hrať s priateľom ako team, jednoducho si zvoľte tú istú farbu. I naďalej budete ovládať svojich vlastných ježkov, ale víťazstvá či prehry budú spoločné.</translation>
+        <translation>Ak chcete hrať s priateľom ako tím, jednoducho si zvoľte tú istú farbu. I naďalej budete ovládať svojich vlastných ježkov, ale víťazstvá či prehry budú spoločné.</translation>
     </message>
     <message>
         <source>Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.</source>
@@ -730,11 +730,11 @@ v nastaveniach hry:</translation>
     <name>PageOptions</name>
     <message>
         <source>New team</source>
-        <translation>Nový team</translation>
+        <translation>Nový tím</translation>
     </message>
     <message>
         <source>Edit team</source>
-        <translation>Upraviť team</translation>
+        <translation>Upraviť tím</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -754,7 +754,7 @@ v nastaveniach hry:</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
-        <translation>Z výberu tímov nemôžete upravovať teamytímy. Vráťte sa do hlavného menu, odkiaľ môžete pridávať, upravovať alebo mazať tímy.</translation>
+        <translation>Z výberu tímov nemôžete upravovať tímy. Vráťte sa do hlavného menu, odkiaľ môžete pridávať, upravovať alebo mazať tímy.</translation>
     </message>
 </context>
 <context>
@@ -861,9 +861,9 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
         <translation>
-            <numerusform>V tejto miestnosti je jeden hrajúci team.</numerusform>
-            <numerusform>V tejto miestnosti sú %1 hrajúce teamy.</numerusform>
-            <numerusform>V tejto miestnosti je %1 hrajúcich teamov.</numerusform>
+            <numerusform>V tejto miestnosti je jeden hrajúci tím.</numerusform>
+            <numerusform>V tejto miestnosti sú %1 hrajúce tímy.</numerusform>
+            <numerusform>V tejto miestnosti je %1 hrajúcich tímov.</numerusform>
         </translation>
     </message>
     <message>
@@ -917,7 +917,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation>Pridať 80% škody, ktorú spôsobíte k vášmu zdraviu</translation>
+        <translation>K vášmu zdraviu sa priráta 80 % škody, ktorú spôsobíte</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
@@ -945,11 +945,11 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Ubráňte pevnosť a znižte nepriateľov, maximálne dve teamové farby!</translation>
+        <translation>Ubráňte pevnosť a zničte nepriateľov, maximálne dve tímové farby!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Teamy začnú na opačných stranách terénu, maximálne dve teamové farby!</translation>
+        <translation>Tímy začnú na opačných stranách terénu, maximálne dve tímové farby!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -1013,7 +1013,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation>Každý ježko má vlastnú výzbroj. Nie je zdieľaná so zvyškom teamu.</translation>
+        <translation>Každý ježko má vlastnú výzbroj. Nie je zdieľaná so zvyškom tímu.</translation>
     </message>
 </context>
 <context>
@@ -1035,7 +1035,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation>Multiplayer (hrať hru, pri ktorej sa striedate s hráčmi pri počítači alebo proti počítačovým teamom)</translation>
+        <translation>Multiplayer (hrať hru, pri ktorej sa striedate s hráčmi pri počítači alebo proti počítačovým tímom)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
@@ -1070,7 +1070,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Restrict Team Additions</source>
-        <translation>Obmedziť pripojenie k teamu</translation>
+        <translation>Obmedziť pripojenie k tímu</translation>
     </message>
     <message>
         <source>Info</source>
@@ -1235,7 +1235,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <name>QGroupBox</name>
     <message>
         <source>Team Members</source>
-        <translation>Členovia teamu</translation>
+        <translation>Členovia tímu</translation>
     </message>
     <message>
         <source>Key binds</source>
@@ -1247,7 +1247,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Teams</source>
-        <translation>Teamy</translation>
+        <translation>Tímy</translation>
     </message>
     <message>
         <source>Audio/Graphic options</source>
@@ -1263,7 +1263,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Playing teams</source>
-        <translation>Hrajúce teamy</translation>
+        <translation>Hrajúce tímy</translation>
     </message>
     <message>
         <source>Game Modifiers</source>
@@ -1378,7 +1378,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Crate Drops</source>
-        <translation>Zhadzovanie krabíc</translation>
+        <translation>Padanie krabíc</translation>
     </message>
     <message>
         <source>Scheme Name:</source>
@@ -1386,7 +1386,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation>% Falošné míny</translation>
+        <translation>% falošných mín</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1445,11 +1445,11 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation>Stúpanie vody pri rýchlej smrti</translation>
+        <translation>Stúpanie vody počas rýchlej smrti</translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation>Klesanie vody pri rýchlej smrti</translation>
+        <translation>Klesanie zdravia počas rýchlej smrti</translation>
     </message>
     <message>
         <source>% Health Crates</source>
@@ -1704,7 +1704,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Divide Teams</source>
-        <translation>Rozdeliť teamy</translation>
+        <translation>Rozdeliť tímy</translation>
     </message>
     <message>
         <source>Solid Land</source>
@@ -2003,7 +2003,7 @@ ježkov</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation>Umožní vám rozhovor s vašim teamom alebo všetkými účastníkmi hry:</translation>
+        <translation>Umožní vám rozhovor s vašim tímom alebo všetkými účastníkmi hry:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
