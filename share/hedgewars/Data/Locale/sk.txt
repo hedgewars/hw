@@ -93,6 +93,7 @@
 02:00=Škoda, že %1 nemá ešte jeden život
 02:00=%1 odišiel za lepším
 02:00=%1 už nespotrebováva pamäť tohto počítača
+02:00=%1 odišiel a už sa nevrátil
 ; Ježko (%1) sa utopil
 02:01=%1 sa hrá na ponorku!
 02:01=%1 napodobnil Titanik!
