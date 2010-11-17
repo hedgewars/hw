@@ -82,7 +82,7 @@ procedure Tint(r, g, b, a: Byte); inline;
 procedure Tint(c: Longword); inline;
 
 implementation
-uses uMisc, uConsole, uLocale, uMobile;
+uses uMisc, uConsole, uLocale, uMobile, uVariables;
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 

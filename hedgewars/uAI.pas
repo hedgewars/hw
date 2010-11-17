@@ -30,7 +30,8 @@ procedure FreeActionsList;
 
 implementation
 uses uTeams, uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions, uMisc,
-     uAmmos, uConsole, SysUtils{$IFDEF UNIX}, cthreads{$ENDIF}, uTypes;
+     uAmmos, uConsole, SysUtils{$IFDEF UNIX}, cthreads{$ENDIF}, uTypes,
+     uVariables;
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;

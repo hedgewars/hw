@@ -119,7 +119,7 @@ procedure TeamGoneEffect(var Team: TTeam);
 function  GetTeamStatString(p: PTeam): shortstring;
 
 implementation
-uses uMisc, uWorld, uLocale, uAmmos, uChat, uMobile;
+uses uMisc, uWorld, uLocale, uAmmos, uChat, uMobile, uVariables;
 const MaxTeamHealth: LongInt = 0;
 
 function CheckForWin: boolean;

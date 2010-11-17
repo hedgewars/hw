@@ -85,7 +85,7 @@ procedure setiPhoneBinds;
 {$ENDIF}
 {$ENDIF}
 implementation
-uses uTeams, uConsole, uMisc;
+uses uTeams, uConsole, uMisc, uVariables;
 //const KeyNumber = 1024;
 
 var tkbd, tkbdn: TKeyboardState;

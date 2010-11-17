@@ -52,7 +52,7 @@ function  AskForVoicepack(name: shortstring): Pointer;
 
 
 implementation
-uses uMisc, uConsole;
+uses uMisc, uVariables, uConsole;
 
 const chanTPU = 32;
 var Volume: LongInt;

@@ -39,7 +39,7 @@ procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet: boolean);
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
 
 implementation
-uses SDLh, uMisc, uLand, uLandTexture;
+uses SDLh, uMisc, uLand, uLandTexture, uVariables;
 
 procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;

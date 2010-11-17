@@ -68,7 +68,7 @@ var ThinkingHH: PGear;
              end;
 
 implementation
-uses uTeams, uMisc, uLand, uCollisions;
+uses uTeams, uMisc, uLand, uCollisions, uVariables;
 
 
 const KillScore = 200;

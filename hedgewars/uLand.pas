@@ -52,7 +52,8 @@ procedure CheckLandDigest(s: shortstring);
 function  LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
-uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, Adler32, uIO, uLandTexture, sysutils, uTypes;
+uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, Adler32, uIO, uLandTexture, sysutils,
+    uTypes, uVariables;
 
 operator=(const a, b: direction) c: Boolean;
 begin

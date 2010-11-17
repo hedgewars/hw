@@ -51,7 +51,22 @@ procedure ShakeCamera(amount: LongWord);
 procedure MoveCamera;
 
 implementation
-uses    uStore, uMisc, uTeams, uIO, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand, GLunit;
+uses
+    uStore,
+    uMisc,
+    uTeams,
+    uIO,
+    uKeys,
+    uLocale,
+    uSound,
+    uAmmos,
+    uVisualGears,
+    uChat,
+    uLandTexture,
+    uLand,
+    GLunit,
+    uVariables
+    ;
 
 type TCaptionStr = record
                    Tex: PTexture;

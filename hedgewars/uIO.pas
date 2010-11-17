@@ -42,7 +42,7 @@ procedure CloseIPC;
 procedure NetGetNextCmd;
 
 implementation
-uses uConsole, uConsts, uWorld, uMisc, uLand, uChat, uTeams, uTypes;
+uses uConsole, uConsts, uWorld, uMisc, uLand, uChat, uTeams, uTypes, uVariables;
 
 type PCmd = ^TCmd;
      TCmd = packed record

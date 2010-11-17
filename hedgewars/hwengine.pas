@@ -31,7 +31,7 @@ program hwengine;
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, uMobile,
-    sysutils, uTypes;
+     sysutils, uTypes, uVariables;
 
 var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
@@ -112,6 +112,7 @@ begin
         flagMakeCapture:= false;
         s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
         WriteLnToConsole('Saving ' + s + '...');
+        playSound(sndShutter);
         MakeScreenshot(s);
         //SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
     end;
@@ -319,6 +320,7 @@ begin
 
     // uConsts does not need initialization as they are all consts
     uMisc.initModule;
+    uVariables.initModule;
     uConsole.initModule;    // MUST happen after uMisc
 
     uLand.initModule;
@@ -387,6 +389,7 @@ begin
     uLand.freeModule;
 
     uConsole.freeModule;
+    uVariables.freeModule;
     uMisc.freeModule;           // uMisc closes the debug log.
 end;
 
