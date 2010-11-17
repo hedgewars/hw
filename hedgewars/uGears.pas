@@ -22,19 +22,6 @@ unit uGears;
 interface
 uses SDLh, uConsts, uFloat, Math, uTypes;
 
-
-var AllInactive: boolean;
-    PrvInactive: boolean;
-    KilledHHs: Longword;
-    SuddenDeathDmg: Boolean;
-    SpeechType: Longword;
-    SpeechText: shortstring;
-    TrainingTargetGear: PGear;
-    skipFlag: boolean;
-    PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
-    StepSoundTimer: LongInt;
-    StepSoundChannel: LongInt;
-
 procedure initModule;
 procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;

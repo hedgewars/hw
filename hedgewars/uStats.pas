@@ -20,7 +20,7 @@
 
 unit uStats;
 interface
-uses uGears, uConsts, uTypes;
+uses uConsts, uTypes;
 
 var TotalRounds: LongInt;
     FinishedTurnsTotal: LongInt;

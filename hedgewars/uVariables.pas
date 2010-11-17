@@ -2000,6 +2000,17 @@ var
     digest: shortstring;
     CurAmmoGear: PGear;
     GearsList: PGear;
+    AllInactive: boolean;
+    PrvInactive: boolean;
+    KilledHHs: Longword;
+    SuddenDeathDmg: Boolean;
+    SpeechType: Longword;
+    SpeechText: shortstring;
+    TrainingTargetGear: PGear;
+    skipFlag: boolean;
+    PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
+    StepSoundTimer: LongInt;
+    StepSoundChannel: LongInt;
 
     CurrentTeam: PTeam;
     PreviousTeam: PTeam;
@@ -2026,7 +2037,6 @@ var
     cntTicks: LongWord;
 {$ENDIF}
     cOffsetY: LongInt;
-
 
 procedure initModule;
 procedure freeModule;
