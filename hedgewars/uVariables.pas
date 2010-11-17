@@ -141,6 +141,8 @@ var
     SDLwindow       : PSDL_Window;
 {$ENDIF}
 
+    WorldDx: LongInt;
+    WorldDy: LongInt;
 
 const
     cHHFileName = 'Hedgehog';
@@ -1984,6 +1986,19 @@ const
         colorkey: 0;
         alpha : 255
     );
+
+
+var
+    Land: TCollisionArray;
+    LandPixels: TLandArray;
+    LandDirty: TDirtyTag;
+    hasBorder: boolean;
+    hasGirders: boolean;
+    isMap: boolean;
+    playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
+    LandBackSurface: PSDL_Surface;
+    digest: shortstring;
+
 
 procedure initModule;
 procedure freeModule;

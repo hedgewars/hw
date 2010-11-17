@@ -30,8 +30,6 @@ var FollowGear: PGear;
     bShowFinger: boolean;
     Frames: Longword;
     WaterColor, DeepWaterColor: TSDL_Color;
-    WorldDx: LongInt;
-    WorldDy: LongInt;
     SkyOffset: LongInt;
     HorizontOffset: LongInt;
 {$IFDEF COUNTTICKS}
@@ -63,7 +61,6 @@ uses
     uVisualGears,
     uChat,
     uLandTexture,
-    uLand,
     GLunit,
     uVariables
     ;

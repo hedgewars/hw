@@ -35,11 +35,12 @@ procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt;
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet: boolean);
+function  LandBackPixel(x, y: LongInt): LongWord;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
 
 implementation
-uses SDLh, uMisc, uLand, uLandTexture, uVariables;
+uses SDLh, uMisc, uLandTexture, uVariables;
 
 procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;
@@ -772,4 +773,17 @@ function CheckLandValue(X, Y: LongInt; LandFlag: Word): boolean;
 begin
      CheckLandValue:= ((X and LAND_WIDTH_MASK <> 0) or (Y and LAND_HEIGHT_MASK <> 0)) or ((Land[Y, X] and LandFlag) = 0)
 end;
+
+function LandBackPixel(x, y: LongInt): LongWord;
+var p: PLongWordArray;
+begin
+    if LandBackSurface = nil then LandBackPixel:= 0
+    else
+    begin
+        p:= LandBackSurface^.pixels;
+        LandBackPixel:= p^[LandBackSurface^.w * (y mod LandBackSurface^.h) + (x mod LandBackSurface^.w)];// or $FF000000;
+    end
+end;
+
+
 end.

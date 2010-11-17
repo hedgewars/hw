@@ -14,8 +14,6 @@ extractUnits :: PascalUnit -> (String, [String])
 extractUnits (Program (Identificator name) (Implementation (Uses idents) _ _) _) = ("program " ++ name, map unident idents)
 extractUnits (Unit (Identificator name) (Interface (Uses idents1) _) (Implementation (Uses idents2) _ _) _ _) = (name, map unident $ idents1 ++ idents2)
 
--- stronglyConnComp :: Ord key => [(node, key, [key])] -> [SCC node]
-
 f :: [(String, [String])] -> String
 f = unlines . map showSCC . stronglyConnComp . map (\(a, b) -> (a, a, b))
     where

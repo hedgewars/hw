@@ -52,7 +52,7 @@ function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: L
 function  calcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): Boolean;
 
 implementation
-uses uMisc, uConsts, uLand, uLandGraphics, uVariables;
+uses uMisc, uConsts, uLandGraphics, uVariables;
 
 type TCollisionEntry = record
             X, Y, Radius: LongInt;

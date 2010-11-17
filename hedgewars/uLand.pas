@@ -20,23 +20,7 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat, uConsts, GLunit;
-
-type
-    TLandArray = packed array of array of LongWord;
-    TCollisionArray = packed array of array of Word;
-    TPreview  = packed array[0..127, 0..31] of byte;
-    TDirtyTag = packed array of array of byte;
-
-var Land: TCollisionArray;
-    LandPixels: TLandArray;
-    LandDirty: TDirtyTag;
-    hasBorder: boolean;
-    hasGirders: boolean;
-    isMap: boolean;
-    playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
-    LandBackSurface: PSDL_Surface;
-    digest: shortstring;
+uses SDLh, uLandTemplates, uFloat, uConsts, GLunit, uTypes;
 
 type direction = record x, y: LongInt; end;
 const DIR_N: direction = (x: 0; y: -1);
@@ -49,11 +33,10 @@ procedure freeModule;
 procedure GenMap;
 function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
-function  LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
 uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, Adler32, uIO, uLandTexture, sysutils,
-    uTypes, uVariables;
+     uVariables;
 
 operator=(const a, b: direction) c: Boolean;
 begin
@@ -318,17 +301,6 @@ while Stack.Count > 0 do
                end;
             end;
       end;
-end;
-
-function LandBackPixel(x, y: LongInt): LongWord;
-var p: PLongWordArray;
-begin
-    if LandBackSurface = nil then LandBackPixel:= 0
-    else
-    begin
-        p:= LandBackSurface^.pixels;
-        LandBackPixel:= p^[LandBackSurface^.w * (y mod LandBackSurface^.h) + (x mod LandBackSurface^.w)];// or $FF000000;
-    end
 end;
 
 procedure ColorizeLand(Surface: PSDL_Surface);

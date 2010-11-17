@@ -357,6 +357,12 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer,
             gidDamageModifier, gidResetHealth, gidAISurvival, gidInfAttack, gidResetWeps, gidPerHogAmmo);
 
+    TLandArray = packed array of array of LongWord;
+    TCollisionArray = packed array of array of Word;
+    TPreview  = packed array[0..127, 0..31] of byte;
+    TDirtyTag = packed array of array of byte;
+
+
 implementation
 
 end.
