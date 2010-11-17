@@ -33,6 +33,7 @@
     NSString *selectedWeapon;
 
     UISwitch *syncSwitch;
+    BOOL hideSections;
 }
 
 @property (nonatomic,retain) NSArray *listOfSchemes;
@@ -42,5 +43,8 @@
 @property (nonatomic,retain) NSString *selectedScheme;
 @property (nonatomic,retain) NSString *selectedWeapon;
 @property (nonatomic,retain) UISwitch *syncSwitch;
+
+-(void) fillSections;
+-(void) emptySections;
 
 @end

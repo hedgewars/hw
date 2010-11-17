@@ -157,7 +157,6 @@
     int hogs = 0;
     for (NSDictionary *teamData in teamConfigViewController.listOfSelectedTeams)
         hogs += [[teamData objectForKey:@"number"] intValue];
-    
     if (hogs > self.mapConfigViewController.maxHogs) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many hogs",@"")
                                                         message:NSLocalizedString(@"The map is too small for that many hogs",@"")
@@ -193,7 +192,7 @@
         return NO;
     }
 
-    // play if the gameflags are set correctly (divideteam works only with 2 teams
+    // play if the gameflags are set correctly (divideteam works only with 2 teams)
     NSString *schemePath = [[NSString alloc] initWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),self.schemeWeaponConfigViewController.selectedScheme];
     NSArray *gameFlags = [[NSDictionary dictionaryWithContentsOfFile:schemePath] objectForKey:@"gamemod"];
     [schemePath release];
@@ -367,6 +366,7 @@
         [self.view addSubview:self.schemeWeaponConfigViewController.view];
     }
     [self.view addSubview:self.mapConfigViewController.view];
+    self.mapConfigViewController.externalController = schemeWeaponConfigViewController;
 
     [super viewDidLoad];
 }
