@@ -22,21 +22,6 @@ unit uWorld;
 interface
 uses SDLh, uGears, uConsts, uFloat, uRandom, uTypes;
 
-
-var FollowGear: PGear;
-    WindBarWidth: LongInt;
-    bShowAmmoMenu: boolean;
-    bSelected: boolean;
-    bShowFinger: boolean;
-    Frames: Longword;
-    WaterColor, DeepWaterColor: TSDL_Color;
-    SkyOffset: LongInt;
-    HorizontOffset: LongInt;
-{$IFDEF COUNTTICKS}
-    cntTicks: LongWord;
-{$ENDIF}
-    cOffsetY: LongInt;
-
 procedure initModule;
 procedure freeModule;
 

@@ -2013,6 +2013,20 @@ var
     CurMinAngle, CurMaxAngle: Longword;
     GameOver: boolean;
 
+    FollowGear: PGear;
+    WindBarWidth: LongInt;
+    bShowAmmoMenu: boolean;
+    bSelected: boolean;
+    bShowFinger: boolean;
+    Frames: Longword;
+    WaterColor, DeepWaterColor: TSDL_Color;
+    SkyOffset: LongInt;
+    HorizontOffset: LongInt;
+{$IFDEF COUNTTICKS}
+    cntTicks: LongWord;
+{$ENDIF}
+    cOffsetY: LongInt;
+
 
 procedure initModule;
 procedure freeModule;
