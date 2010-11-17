@@ -20,7 +20,7 @@
 
 unit uSound;
 interface
-uses SDLh, uConsts;
+uses SDLh, uConsts, uTypes;
 
 type PVoicepack = ^TVoicepack;
     TVoicepack = record

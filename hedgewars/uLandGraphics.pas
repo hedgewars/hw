@@ -20,7 +20,7 @@
 
 unit uLandGraphics;
 interface
-uses uFloat, uConsts;
+uses uFloat, uConsts, uTypes;
 
 type PRangeArray = ^TRangeArray;
      TRangeArray = array[0..31] of record

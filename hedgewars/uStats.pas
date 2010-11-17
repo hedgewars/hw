@@ -20,7 +20,7 @@
 
 unit uStats;
 interface
-uses uGears, uConsts;
+uses uGears, uConsts, uTypes;
 
 type TStatistics = record
                    DamageRecv,

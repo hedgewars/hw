@@ -20,7 +20,7 @@
 
 unit uAmmos;
 interface
-uses uConsts, uTeams;
+uses uConsts, uTeams, uTypes;
 
 procedure initModule;
 procedure freeModule;

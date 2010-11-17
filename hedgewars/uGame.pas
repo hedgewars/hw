@@ -26,7 +26,7 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
    implementation
 ////////////////////
-uses uMisc, uConsts, uKeys, uTeams, uIO, uAI, uGears, uScript, uSound, uMobile, uVisualGears;
+uses uMisc, uKeys, uTeams, uIO, uAI, uGears, uScript, uSound, uMobile, uVisualGears, uTypes;
 
 procedure DoGameTick(Lag: LongInt);
 var i: LongInt;

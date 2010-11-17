@@ -20,7 +20,7 @@
 
 unit uTeams;
 interface
-uses uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound;
+uses uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound, uTypes;
 
 type 
     PHHAmmo = ^THHAmmo;

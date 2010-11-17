@@ -53,7 +53,8 @@ uses LuaPas in 'LuaPas.pas',
     uKeys,
     uChat,
     uStats,
-    uRandom;
+    uRandom,
+    uTypes;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;

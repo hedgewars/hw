@@ -20,49 +20,8 @@
 
 unit uGears;
 interface
-uses SDLh, uConsts, uFloat, Math;
+uses SDLh, uConsts, uFloat, Math, uTypes;
 
-
-type
-    PGear = ^TGear;
-    TGearStepProcedure = procedure (Gear: PGear);
-    TGear = record
-            NextGear, PrevGear: PGear;
-            Active: Boolean;
-            AdvBounce: Longword;
-            Invulnerable: Boolean;
-            RenderTimer: Boolean;
-            AmmoType : TAmmoType;
-            State : Longword;
-            X : hwFloat;
-            Y : hwFloat;
-            dX: hwFloat;
-            dY: hwFloat;
-            Kind: TGearType;
-            Pos: Longword;
-            doStep: TGearStepProcedure;
-            Radius: LongInt;
-            Angle, Power : Longword;
-            DirAngle: real;
-            Timer : LongWord;
-            Elasticity: hwFloat;
-            Friction  : hwFloat;
-            Message, MsgParam : Longword;
-            Hedgehog: pointer;
-            Health, Damage, Karma: LongInt;
-            CollisionIndex: LongInt;
-            Tag: LongInt;
-            Tex: PTexture;
-            Z: Longword;
-            IntersectGear: PGear;
-            FlightTime: Longword;
-            uid: Longword;
-            ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
-            nImpactSounds: Word; // count of ImpactSounds
-            SoundChannel: LongInt;
-            PortalCounter: LongWord  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
-        end;
-    TPGearArray = Array of PGear;
 
 var AllInactive: boolean;
     PrvInactive: boolean;

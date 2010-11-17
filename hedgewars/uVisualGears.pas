@@ -20,7 +20,7 @@
 
 unit uVisualGears;
 interface
-uses uConsts, uFloat, Math, GLunit;
+uses uConsts, uFloat, Math, GLunit, uTypes;
 
 type PVisualGear = ^TVisualGear;
     TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);

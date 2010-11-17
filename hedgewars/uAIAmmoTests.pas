@@ -20,7 +20,7 @@
 
 unit uAIAmmoTests;
 interface
-uses SDLh, uGears, uConsts, uFloat;
+uses SDLh, uConsts, uFloat, uTypes;
 const amtest_OnTurn = $00000001;
 
 type TAttackParams = record

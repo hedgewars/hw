@@ -20,7 +20,7 @@
 
 unit uWorld;
 interface
-uses SDLh, uGears, uConsts, uFloat, uRandom;
+uses SDLh, uGears, uConsts, uFloat, uRandom, uTypes;
 
 
 var FollowGear: PGear;

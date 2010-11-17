@@ -21,7 +21,7 @@
 unit uMisc;
 interface
 
-uses    SDLh, uConsts, uFloat, GLunit, Math;
+uses    SDLh, uConsts, uFloat, GLunit, Math, uTypes;
 
 var
 /////// init flags ///////

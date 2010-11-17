@@ -20,7 +20,7 @@
 
 unit uCollisions;
 interface
-uses uGears, uFloat;
+uses uFloat, uTypes;
 
 const cMaxGearArrayInd = 255;
 

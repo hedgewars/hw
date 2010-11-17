@@ -29,8 +29,8 @@ procedure ProcessBot;
 procedure FreeActionsList;
 
 implementation
-uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
-     uAmmos, uConsole, SysUtils{$IFDEF UNIX}, cthreads{$ENDIF};
+uses uTeams, uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions, uMisc,
+     uAmmos, uConsole, SysUtils{$IFDEF UNIX}, cthreads{$ENDIF}, uTypes;
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;

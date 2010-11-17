@@ -20,7 +20,7 @@
 
 unit uAIMisc;
 interface
-uses SDLh, uConsts, uGears, uFloat;
+uses SDLh, uConsts, uGears, uFloat, uTypes;
 
 const MAXBONUS = 1024;
 
