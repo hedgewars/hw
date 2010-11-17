@@ -22,22 +22,6 @@ unit uStore;
 interface
 uses sysutils, uConsts, SDLh, GLunit, uTypes;
 
-
-var PixelFormat: PSDL_PixelFormat;
-    SDLPrimSurface: PSDL_Surface;
-    PauseTexture,
-    SyncTexture,
-    ConfirmTexture: PTexture;
-    cScaleFactor: GLfloat;
-    SupportNPOTT: Boolean;
-    Step: LongInt;
-    squaresize : LongInt;
-    numsquares : LongInt;
-    ProgrTex: PTexture;
-    MissionIcons: PSDL_Surface;
-    ropeIconTex: PTexture;
-    rotationQt: GLfloat;
-
 procedure initModule;
 procedure freeModule;
 

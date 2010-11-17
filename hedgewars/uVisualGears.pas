@@ -33,10 +33,6 @@ procedure DeleteVisualGear(Gear: PVisualGear);
 procedure AddClouds;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 
-var VisualGearsList: PVisualGear;
-    vobFrameTicks, vobFramesCount, vobCount: Longword;
-    vobVelocity, vobFallSpeed: LongInt;
-
 implementation
 uses uWorld, uMisc, uStore, uSound, uMobile, uVariables;
 

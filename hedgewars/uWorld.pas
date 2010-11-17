@@ -38,7 +38,6 @@ uses
     uStore,
     uMisc,
     uIO,
-    uKeys,
     uLocale,
     uSound,
     uAmmos,

@@ -67,7 +67,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uConsole, uStore, uIO, typinfo, sysutils, uVariables;
+uses uConsole, uIO, typinfo, sysutils, uVariables;
 
 var KBnum: Longword;
 {$IFDEF DEBUGFILE}

@@ -2038,6 +2038,65 @@ var
 {$ENDIF}
     cOffsetY: LongInt;
 
+    PixelFormat: PSDL_PixelFormat;
+    SDLPrimSurface: PSDL_Surface;
+    PauseTexture,
+    SyncTexture,
+    ConfirmTexture: PTexture;
+    cScaleFactor: GLfloat;
+    SupportNPOTT: Boolean;
+    Step: LongInt;
+    squaresize : LongInt;
+    numsquares : LongInt;
+    ProgrTex: PTexture;
+    MissionIcons: PSDL_Surface;
+    ropeIconTex: PTexture;
+    rotationQt: GLfloat;
+
+
+    VisualGearsList: PVisualGear;
+    vobFrameTicks, vobFramesCount, vobCount: Longword;
+    vobVelocity, vobFallSpeed: LongInt;
+
+
+    hideAmmoMenu: boolean;
+    wheelUp: boolean;
+    wheelDown: boolean;
+
+    ControllerNumControllers: Integer;
+    ControllerEnabled: Integer;
+    ControllerNumAxes: array[0..5] of Integer;
+    //ControllerNumBalls: array[0..5] of Integer;
+    ControllerNumHats: array[0..5] of Integer;
+    ControllerNumButtons: array[0..5] of Integer;
+    ControllerAxes: array[0..5] of array[0..19] of Integer;
+    //ControllerBalls: array[0..5] of array[0..19] of array[0..1] of Integer;
+    ControllerHats: array[0..5] of array[0..19] of Byte;
+    ControllerButtons: array[0..5] of array[0..19] of Byte;
+
+    DefaultBinds, CurrentBinds: TBinds;
+
+    coeff: LongInt;
+{$IFDEF HWLIBRARY}
+    leftClick: boolean;
+    middleClick: boolean;
+    rightClick: boolean;
+
+    upKey: boolean;
+    downKey: boolean;
+    rightKey: boolean;
+    leftKey: boolean;
+    preciseKey: boolean;
+
+    backspaceKey: boolean;
+    spaceKey: boolean;
+    enterKey: boolean;
+    tabKey: boolean;
+
+    chatAction: boolean;
+    pauseAction: boolean;
+{$ENDIF}
+
 procedure initModule;
 procedure freeModule;
 
