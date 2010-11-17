@@ -20,7 +20,7 @@
 
 unit uAmmos;
 interface
-uses uConsts, uTeams, uTypes;
+uses uConsts, uTypes;
 
 procedure initModule;
 procedure freeModule;
@@ -47,7 +47,7 @@ function  GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 var StoreCnt: Longword;
 
 implementation
-uses uMisc, uGears, uWorld, uLocale, uConsole, uMobile, uVariables;
+uses uMisc, uWorld, uLocale, uConsole, uMobile, uVariables;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;

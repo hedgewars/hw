@@ -20,7 +20,7 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, uTeams, SDLh, GLunit, uTypes;
+uses sysutils, uConsts, SDLh, GLunit, uTypes;
 
 
 var PixelFormat: PSDL_PixelFormat;

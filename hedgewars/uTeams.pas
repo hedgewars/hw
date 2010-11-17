@@ -22,18 +22,6 @@ unit uTeams;
 interface
 uses uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound, uTypes;
 
-var CurrentTeam: PTeam;
-    PreviousTeam: PTeam;
-    CurrentHedgehog: PHedgehog;
-    TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
-    TeamsCount: Longword;
-    ClansArray: array[0..Pred(cMaxTeams)] of PClan;
-    ClansCount: Longword;
-    LocalClan: LongInt;  // last non-bot, non-extdriven clan
-    LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index
-    CurMinAngle, CurMaxAngle: Longword;
-    GameOver: boolean;
-
 procedure initModule;
 procedure freeModule;
 function  AddTeam(TeamColor: Longword): PTeam;

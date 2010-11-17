@@ -20,7 +20,7 @@
 
 unit uAIMisc;
 interface
-uses SDLh, uConsts, uGears, uFloat, uTypes;
+uses SDLh, uConsts, uFloat, uTypes;
 
 const MAXBONUS = 1024;
 
@@ -68,7 +68,7 @@ var ThinkingHH: PGear;
              end;
 
 implementation
-uses uTeams, uMisc, uCollisions, uVariables;
+uses uMisc, uCollisions, uVariables;
 
 
 const KillScore = 200;

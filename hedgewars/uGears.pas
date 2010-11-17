@@ -25,8 +25,6 @@ uses SDLh, uConsts, uFloat, Math, uTypes;
 
 var AllInactive: boolean;
     PrvInactive: boolean;
-    CurAmmoGear: PGear;
-    GearsList: PGear;
     KilledHHs: Longword;
     SuddenDeathDmg: Boolean;
     SpeechType: Longword;

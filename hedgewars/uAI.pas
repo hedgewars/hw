@@ -29,7 +29,7 @@ procedure ProcessBot;
 procedure FreeActionsList;
 
 implementation
-uses uTeams, uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions, uMisc,
+uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions, uMisc,
      uAmmos, uConsole, SysUtils{$IFDEF UNIX}, cthreads{$ENDIF}, uTypes,
      uVariables;
 

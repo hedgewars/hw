@@ -52,7 +52,6 @@ implementation
 uses
     uStore,
     uMisc,
-    uTeams,
     uIO,
     uKeys,
     uLocale,

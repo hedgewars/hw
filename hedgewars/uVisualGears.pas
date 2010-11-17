@@ -38,7 +38,8 @@ var VisualGearsList: PVisualGear;
     vobVelocity, vobFallSpeed: LongInt;
 
 implementation
-uses uWorld, uMisc, uStore, uTeams, uSound, uMobile, uVariables;
+uses uWorld, uMisc, uStore, uSound, uMobile, uVariables;
+
 const cExplFrameTicks = 110;
 
 {$INCLUDE "VGSHandlers.inc"}
