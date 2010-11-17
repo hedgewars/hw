@@ -3,7 +3,7 @@
 unit uTypes;
 interface
 
-uses SDLh, uFloat, GLunit;
+uses SDLh, uFloat, GLunit, uConsts, Math;
 
 type
     HwColor4f = record
@@ -171,6 +171,10 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
 
     PGear = ^TGear;
+    PHedgehog = ^THedgehog;
+    PTeam     = ^TTeam;
+    PClan     = ^TClan;
+
     TGearStepProcedure = procedure (Gear: PGear);
     TGear = record
             NextGear, PrevGear: PGear;
@@ -194,7 +198,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Elasticity: hwFloat;
             Friction  : hwFloat;
             Message, MsgParam : Longword;
-            Hedgehog: pointer;
+            Hedgehog: PHedgehog;
             Health, Damage, Karma: LongInt;
             CollisionIndex: LongInt;
             Tag: LongInt;
@@ -209,6 +213,149 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             PortalCounter: LongWord  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
         end;
     TPGearArray = Array of PGear;
+
+    PVisualGear = ^TVisualGear;
+    TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);
+    TVisualGear = record
+        NextGear, PrevGear: PVisualGear;
+        Frame,
+        FrameTicks: Longword;
+        X : float;
+        Y : float;
+        dX: float;
+        dY: float;
+        tdX: float;
+        tdY: float;
+        State : Longword;
+        Timer: Longword;
+        Angle, dAngle: real;
+        Kind: TVisualGearType;
+        doStep: TVGearStepProcedure;
+        Tex: PTexture;
+        alpha, scale: GLfloat;
+        Hedgehog: pointer;
+        Text: shortstring;
+        Tint: Longword;
+        end;
+
+    TStatistics = record
+        DamageRecv,
+        DamageGiven: Longword;
+        StepDamageRecv,
+        StepDamageGiven,
+        StepKills: Longword;
+        MaxStepDamageRecv,
+        MaxStepDamageGiven,
+        MaxStepKills: Longword;
+        FinishedTurns: Longword;
+        end;
+
+    TTeamStats = record
+        Kills : Longword;
+        AIKills : Longword;
+        TeamKills : Longword;
+        TurnSkips : Longword;
+        TeamDamage : Longword;
+        end;
+
+    TBinds = array[0..cKeyMaxIndex] of shortstring;
+    TKeyboardState = array[0..cKeyMaxIndex] of Byte;
+
+    PVoicepack = ^TVoicepack;
+    TVoicepack = record
+        name: shortstring;
+        chunks: array [TSound] of PMixChunk;
+        end;
+
+    PHHAmmo = ^THHAmmo;
+    THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
+
+    THedgehog = record
+            Name: string[MAXNAMELEN];
+            Gear: PGear;
+            SpeechGear: PVisualGear;
+            NameTagTex,
+            HealthTagTex,
+            HatTex: PTexture;
+            Ammo: PHHAmmo;
+            CurAmmoType: TAmmoType;
+            AmmoStore: Longword;
+            Team: PTeam;
+            MultiShootAttacks: Longword;
+            visStepPos: LongWord;
+            BotLevel  : Byte; // 0 - Human player
+            HatVisibility: GLfloat;
+            stats: TStatistics;
+            Hat: shortstring;
+            InitialHealth: LongInt; // used for gfResetHealth
+            King: boolean;  // Flag for a bunch of hedgehog attributes
+            Unplaced: boolean;  // Flag for hog placing mode
+            Timer: Longword;
+            Effects: Array[THogEffect] of boolean;
+            end;
+
+    TTeam = record
+            Clan: PClan;
+            TeamName: string[MAXNAMELEN];
+            ExtDriven: boolean;
+            Binds: TBinds;
+            Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
+            CurrHedgehog: LongWord;
+            NameTagTex: PTexture;
+            CrosshairTex,
+            GraveTex,
+            HealthTex,
+            AIKillsTex,
+            FlagTex: PTexture;
+            Flag: shortstring;
+            GraveName: shortstring;
+            FortName: shortstring;
+            TeamHealth: LongInt;
+            TeamHealthBarWidth,
+            NewTeamHealthBarWidth: LongInt;
+            DrawHealthY: LongInt;
+            AttackBar: LongWord;
+            HedgehogsNumber: Longword;
+            hasGone: boolean;
+            voicepack: PVoicepack;
+            PlayerHash: shortstring;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
+            stats: TTeamStats;
+            end;
+
+    TClan = record
+            Color: Longword;
+            Teams: array[0..Pred(cMaxTeams)] of PTeam;
+            TeamsNumber: Longword;
+            CurrTeam: LongWord;
+            ClanHealth: LongInt;
+            ClanIndex: LongInt;
+            TurnNumber: LongWord;
+            end;
+
+     TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidBee, sidShotgun,
+            sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
+            sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
+            sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
+            sidGirder, sidTeleport, sidSwitch, sidMortar, sidWhip,
+            sidKamikaze, sidCake, sidSeduction, sidWatermelon,
+            sidHellishBomb, sidDrill, sidBallgun, sidNapalm, sidRCPlane,
+            sidLowGravity, sidExtraDamage, sidInvulnerable, sidExtraTime,
+            sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack,
+            sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb, sidSineGun, sidFlamethrower,
+            sidSMine, sidHammer, sidResurrector, sidDrillStrike);
+
+    TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
+            sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
+            sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady);
+
+    TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
+            eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
+            eidHomerun, eidGone);
+
+    TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
+            gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
+            gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer,
+            gidDamageModifier, gidResetHealth, gidAISurvival, gidInfAttack, gidResetWeps, gidPerHogAmmo);
 
 implementation
 

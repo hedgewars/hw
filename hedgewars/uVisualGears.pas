@@ -22,30 +22,6 @@ unit uVisualGears;
 interface
 uses uConsts, uFloat, Math, GLunit, uTypes;
 
-type PVisualGear = ^TVisualGear;
-    TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);
-    TVisualGear = record
-        NextGear, PrevGear: PVisualGear;
-        Frame,
-        FrameTicks: Longword;
-        X : float;
-        Y : float;
-        dX: float;
-        dY: float;
-        tdX: float;
-        tdY: float;
-        State : Longword;
-        Timer: Longword;
-        Angle, dAngle: real;
-        Kind: TVisualGearType;
-        doStep: TVGearStepProcedure;
-        Tex: PTexture;
-        alpha, scale: GLfloat;
-        Hedgehog: pointer;
-        Text: shortstring;
-        Tint: Longword;
-        end;
-
 procedure initModule;
 procedure freeModule;
 

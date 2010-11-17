@@ -22,26 +22,6 @@ unit uStats;
 interface
 uses uGears, uConsts, uTypes;
 
-type TStatistics = record
-                   DamageRecv,
-                   DamageGiven: Longword;
-                   StepDamageRecv,
-                   StepDamageGiven,
-                   StepKills: Longword;
-                   MaxStepDamageRecv,
-                   MaxStepDamageGiven,
-                   MaxStepKills: Longword;
-                   FinishedTurns: Longword;
-                   end;
-
-type TTeamStats = record
-    Kills : Longword;
-    AIKills : Longword;
-    TeamKills : Longword;
-    TurnSkips : Longword;
-    TeamDamage : Longword;
-end;
-
 var TotalRounds: LongInt;
     FinishedTurnsTotal: LongInt;
 

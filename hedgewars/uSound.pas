@@ -22,12 +22,6 @@ unit uSound;
 interface
 uses SDLh, uConsts, uTypes;
 
-type PVoicepack = ^TVoicepack;
-    TVoicepack = record
-        name: shortstring;
-        chunks: array [TSound] of PMixChunk;
-        end;
-
 var MusicFN: shortstring;
 
 procedure initModule;

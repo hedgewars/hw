@@ -20,10 +20,7 @@
 
 unit uKeys;
 interface
-uses uConsts, SDLh;
-
-type TBinds = array[0..cKeyMaxIndex] of shortstring;
-type TKeyboardState = array[0..cKeyMaxIndex] of Byte;
+uses uConsts, SDLh, uTypes;
 
 procedure initModule;
 procedure freeModule;

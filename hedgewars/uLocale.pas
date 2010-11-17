@@ -20,30 +20,7 @@
 
 unit uLocale;
 interface
-type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidBee, sidShotgun,
-            sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
-            sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
-            sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
-            sidGirder, sidTeleport, sidSwitch, sidMortar, sidWhip,
-            sidKamikaze, sidCake, sidSeduction, sidWatermelon,
-            sidHellishBomb, sidDrill, sidBallgun, sidNapalm, sidRCPlane,
-            sidLowGravity, sidExtraDamage, sidInvulnerable, sidExtraTime,
-            sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack,
-            sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb, sidSineGun, sidFlamethrower,
-            sidSMine, sidHammer, sidResurrector, sidDrillStrike);
-
-    TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
-            sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
-            sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady);
-
-    TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
-            eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
-            eidHomerun, eidGone);
-
-    TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
-            gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
-            gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer,
-            gidDamageModifier, gidResetHealth, gidAISurvival, gidInfAttack, gidResetWeps, gidPerHogAmmo);
+uses uTypes;
 
 const MAX_EVENT_STRINGS = 100;
 var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
