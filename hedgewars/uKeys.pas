@@ -20,7 +20,7 @@
 
 unit uKeys;
 interface
-uses uConsts, SDLh, uTypes;
+uses SDLh, uTypes;
 
 procedure initModule;
 procedure freeModule;
@@ -82,7 +82,7 @@ procedure setiPhoneBinds;
 {$ENDIF}
 {$ENDIF}
 implementation
-uses uTeams, uConsole, uMisc, uVariables;
+uses uTeams, uConsole, uMisc, uVariables, uConsts;
 //const KeyNumber = 1024;
 
 var tkbd, tkbdn: TKeyboardState;
