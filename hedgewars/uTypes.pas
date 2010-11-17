@@ -233,7 +233,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         doStep: TVGearStepProcedure;
         Tex: PTexture;
         alpha, scale: GLfloat;
-        Hedgehog: pointer;
+        Hedgehog: PHedgehog;
         Text: shortstring;
         Tint: Longword;
         end;

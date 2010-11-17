@@ -3,7 +3,7 @@
 unit uVariables;
 interface
 
-uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile, uGlobalStructs;
+uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile;
 
 var
 /////// init flags ///////

@@ -52,10 +52,10 @@ var DamageGiven : Longword = 0;
 
 procedure HedgehogDamaged(Gear: PGear);
 begin
-if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then
+if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
     vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack
 else
-    vpHurtEnemy:= PHedgehog(Gear^.Hedgehog)^.Team^.voicepack;
+    vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
 
 if bBetweenTurns then exit;
 
@@ -64,7 +64,7 @@ if bBetweenTurns then exit;
 if Gear <> CurrentHedgehog^.Gear then
     inc(CurrentHedgehog^.stats.StepDamageGiven, Gear^.Damage);
 
-if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(DamageClan, Gear^.Damage);
+if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(DamageClan, Gear^.Damage);
 
 if Gear^.Health <= Gear^.Damage then
     begin
@@ -73,14 +73,14 @@ if Gear^.Health <= Gear^.Damage then
     inc(KillsTotal);
     inc(CurrentHedgehog^.Team^.stats.Kills);
     if (CurrentHedgehog^.Team^.TeamName =
-            PHedgehog(Gear^.Hedgehog)^.Team^.TeamName) then begin
+            Gear^.Hedgehog^.Team^.TeamName) then begin
         inc(CurrentHedgehog^.Team^.stats.TeamKills);
         inc(CurrentHedgehog^.Team^.stats.TeamDamage, Gear^.Damage);
     end;
-    if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(KillsClan);
+    if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(KillsClan);
     end;
 
-inc(PHedgehog(Gear^.Hedgehog)^.stats.StepDamageRecv, Gear^.Damage);
+inc(Gear^.Hedgehog^.stats.StepDamageRecv, Gear^.Damage);
 inc(DamageGiven, Gear^.Damage);
 inc(DamageTotal, Gear^.Damage)
 end;

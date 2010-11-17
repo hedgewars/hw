@@ -444,16 +444,16 @@ procedure doStepSpeechBubbleWork(Gear: PVisualGear; Steps: Longword);
 begin
 if Gear^.Timer > Steps then dec(Gear^.Timer, Steps) else Gear^.Timer:= 0;
 
-if (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
+if (Gear^.Hedgehog^.Gear <> nil) then
     begin
-    Gear^.X:= PHedgehog(Gear^.Hedgehog)^.Gear^.X.QWordValue/4294967296 + (Gear^.Tex^.w div 2  - Gear^.FrameTicks);
-    Gear^.Y:= PHedgehog(Gear^.Hedgehog)^.Gear^.Y.QWordValue/4294967296 - (16 + Gear^.Tex^.h);
+    Gear^.X:= Gear^.Hedgehog^.Gear^.X.QWordValue/4294967296 + (Gear^.Tex^.w div 2  - Gear^.FrameTicks);
+    Gear^.Y:= Gear^.Hedgehog^.Gear^.Y.QWordValue/4294967296 - (16 + Gear^.Tex^.h);
     end;
 
 if Gear^.Timer = 0 then
     begin
-    if PHedgehog(Gear^.Hedgehog)^.SpeechGear = Gear then
-        PHedgehog(Gear^.Hedgehog)^.SpeechGear:= nil;
+    if Gear^.Hedgehog^.SpeechGear = Gear then
+        Gear^.Hedgehog^.SpeechGear:= nil;
     DeleteVisualGear(Gear)
     end;
 end;
@@ -462,10 +462,10 @@ procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
 begin
 Steps:= Steps; // avoid compiler hint
 
-with PHedgehog(Gear^.Hedgehog)^ do
+with Gear^.Hedgehog^ do
     if SpeechGear <> nil then SpeechGear^.Timer:= 0;
 
-PHedgehog(Gear^.Hedgehog)^.SpeechGear:= Gear;
+Gear^.Hedgehog^.SpeechGear:= Gear;
 
 Gear^.Timer:= max(Length(Gear^.Text) * 150, 3000);
 
@@ -512,7 +512,7 @@ Gear^.dY:= -0.08;
 
 str(Gear^.State, s);
 if Gear^.Hedgehog <> nil then
-    Gear^.Tex:= RenderStringTex(s, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color, fnt16)
+    Gear^.Tex:= RenderStringTex(s, Gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
 else
     Gear^.Tex:= RenderStringTex(s, cWhiteColor, fnt16);
 

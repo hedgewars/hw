@@ -150,7 +150,7 @@ while Gear <> nil do
                           AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
                       else
                           if isAfterAttack and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog) then
-                              if (MyClan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan) then
+                              if (MyClan = Gear^.Hedgehog^.Team^.Clan) then
                                   AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -3) // hedgehog-friend
                               else
                                   AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, 3)

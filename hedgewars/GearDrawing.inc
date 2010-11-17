@@ -7,7 +7,7 @@ var i, t: LongInt;
     HH: PHedgehog;
     CurWeapon: PAmmo;
 begin
-HH:= PHedgehog(Gear^.Hedgehog);
+HH:= Gear^.Hedgehog;
 if HH^.Unplaced then exit;
 m:= 1;
 if ((Gear^.State and gstHHHJump) <> 0) and not cArtillery then m:= -1;
@@ -706,7 +706,7 @@ while Gear<>nil do
            gtShell: DrawRotated(sprBazookaShell, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 
            gtGrave: begin 
-                    DrawTextureF(PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex, 1, x, y, (GameTicks shr 7+Gear^.uid) and 7, 1, 32, 32);
+                    DrawTextureF(Gear^.Hedgehog^.Team^.GraveTex, 1, x, y, (GameTicks shr 7+Gear^.uid) and 7, 1, 32, 32);
                     if Gear^.Health > 0 then
                         begin
                         //Tint($33, $33, $FF, max($40, floor($FF * abs(1 - (GameTicks mod (6000 div Gear^.Health)) / 750))));
@@ -771,8 +771,8 @@ while Gear<>nil do
                                      else DrawSprite(sprAirplane, x - SpritesData[sprAirplane].Width div 2, y - SpritesData[sprAirplane].Height div 2, 1);
          gtAirBomb: DrawRotated(sprAirBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
         gtTeleport: begin
-                    HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
-                    if not PHedgehog(Gear^.Hedgehog)^.Unplaced then DrawRotatedF(sprTeleport, x + 1, y - 3, Gear^.Pos, hwSign(Gear^.dX), 0);
+                    HHGear:= Gear^.Hedgehog^.Gear;
+                    if not Gear^.Hedgehog^.Unplaced then DrawRotatedF(sprTeleport, x + 1, y - 3, Gear^.Pos, hwSign(Gear^.dX), 0);
                     DrawRotatedF(sprTeleport, hwRound(HHGear^.X) + 1 + WorldDx, hwRound(HHGear^.Y) - 3 + WorldDy, 11 - Gear^.Pos, hwSign(HHGear^.dX), 0);
                     end;
         gtSwitcher: DrawSprite(sprSwitch, x - 16, y - 56, (GameTicks shr 6) mod 12);

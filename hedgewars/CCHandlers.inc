@@ -160,7 +160,7 @@ with CurrentTeam^ do
     SplitBySpace(s, id);
     val(s, Gear^.Health);
     TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
-    PHedgehog(Gear^.Hedgehog)^.Team:= CurrentTeam;
+    Gear^.Hedgehog^.Team:= CurrentTeam;
     if (GameFlags and gfSharedAmmo) <> 0 then CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
     else if (GameFlags and gfPerHogAmmo) <> 0 then
         begin
