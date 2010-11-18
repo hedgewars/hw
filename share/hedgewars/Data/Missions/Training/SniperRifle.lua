@@ -22,7 +22,8 @@ local caption = {
 	["pl"] = "Trening Snajperski",
 	["pt_PT"] = "Treino com Sniper",
 	["pt_BR"] = "Treino com o Rifle Sniper",
-	["sv"] = "Prickskyttesträning"
+	["sv"] = "Prickskyttesträning",
+	["sk"] = "Tréning pre ostreľovačov"
 	-- To add other languages, just add lines similar to the
 	-- existing ones - don't forget the trailing ","!
 	}
@@ -34,7 +35,8 @@ local subcaption = {
 	["pl"] = "Potrenuj celność",
 	["pt_PT"] = "Pratica a tua pontaria",
 	["pt_BR"] = "Pratique a sua pontaria",
-	["sv"] = "Siktesövning"
+	["sv"] = "Siktesövning",
+	["sk"] = "Tréning presnosti"
 	}
 
 local goal = {
@@ -44,7 +46,8 @@ local goal = {
 	["pl"] = "Zniszcz wszystkie cele zanim upłynie czas.|W tej misji masz nieskończoną ilość amunicji.",
 	["pt_PT"] = "Destrói todos os alvos antes do tempo terminar.|Tens munições infinitas para esta missão.",
 	["pt_BR"] = "Destrua todos os alvos antes que o tempo acabe.|Você tem munição infinita para esta missão.",
-	["sv"] = "Förstör alla målen innan din tid tar slut.|Du har obegränsad ammunition för deta uppdrag"
+	["sv"] = "Förstör alla målen innan din tid tar slut.|Du har obegränsad ammunition för deta uppdrag",
+	["sk"] = "Zneškodnite všetky ciele pred vypršaním času.|Na túto misiu máte neobmedzené množstvo streliva."
 	}
 
 local timeout = {
@@ -54,7 +57,8 @@ local timeout = {
 	["pl"] = "Ajajaj! Koniec czasu! Spróbuj jeszcze raz.",
 	["pt_PT"] = "Oh não! Acabou o tempo! Tenta novamente.",
 	["pt_BR"] = "Oh não! O tempo acabou! Tente novamente.",
-	["sv"] = "Åh nej! Tiden är ute! Pröva igen."
+	["sv"] = "Åh nej! Tiden är ute! Pröva igen.",
+	["sk"] = "Ale nie! Čas vypršal! Tak to skúste znovu."
 	}
 
 local success = {
@@ -64,7 +68,8 @@ local success = {
 	["pl"] = "Gratulacje! Zniszczyłeś wszystkie cele przed upłynięciem czasu.",
 	["pt_PT"] = "Parabéns! Eliminaste todos os alvos|dentro do tempo limite.",
 	["pt_BR"] = "Parabéns! Você eliminou todos os alvos|dentro do tempo limite.",
-	["sv"] = "Grattis! Du har förstört alla målen inom den|tillåtna tidsramen."
+	["sv"] = "Grattis! Du har förstört alla målen inom den|tillåtna tidsramen.",
+	["sk"] = "Gratulujem! Zneškodnili ste všetky ciele|v stanovenom čase."
 	}
 
 local teamname = {
@@ -73,7 +78,8 @@ local teamname = {
 	["es"] = "Fusileros",
 	["pl"] = "Snajperzy",
 	["pt_BR"] = "Franco-Atiradores",
-	["sv"] = "Prickskyttarna"
+	["sv"] = "Prickskyttarna",
+	["sk"] = "Ostreľovači"
 	}
 
 local hogname = {
@@ -83,7 +89,8 @@ local hogname = {
 	["pl"] = "Strzelec",
 	["pt_PT"] = "Comando",
 	["pt_BR"] = "Caçador",
-	["sv"] = "Jägare"
+	["sv"] = "Jägare",
+	["sk"] = "Lovec"
 	}
 
 -- To handle missing texts we define a small wrapper function that
