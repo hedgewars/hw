@@ -6,6 +6,7 @@ import Control.Monad
 import Data.Either
 import Data.List
 import Data.Graph
+import Data.Maybe
 
 unident :: Identificator -> String
 unident (Identificator s) = s
@@ -20,7 +21,26 @@ f = unlines . map showSCC . stronglyConnComp . map (\(a, b) -> (a, a, b))
     showSCC (AcyclicSCC v) = v
     showSCC (CyclicSCC vs) = intercalate ", " vs
 
+myf :: [(String, [String])] -> String
+myf d = unlines . map (findCycle . fst) $ d
+    where
+    findCycle :: String -> String
+    findCycle searched = intercalate ", " $ fc searched [searched]
+        where
+        fc :: String -> [String] -> [String]
+        fc curSearch visited = let uses = curSearch `lookup` d in if isNothing uses then [] else concatMap t $ fromJust uses
+            where
+            t u =
+                if u == searched then
+                    [u]
+                    else
+                    if u `elem` visited then
+                        []
+                        else
+                        let chain = fc u (u:visited) in if null chain then [] else u:chain
+
+
 main = do
     fileNames <- getArgs
     files <- mapM readFile fileNames
-    putStrLn . f . map extractUnits . rights . map parsePascalUnit $ files
+    putStrLn . myf . map extractUnits . rights . map parsePascalUnit $ files
