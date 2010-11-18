@@ -45,6 +45,7 @@ set(engine_sources
     uAmmos.pas
     uChat.pas
     uCollisions.pas
+    uCommands.pas
     uConsole.pas
     uConsts.pas
     uFloat.pas

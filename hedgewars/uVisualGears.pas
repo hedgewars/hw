@@ -34,7 +34,7 @@ procedure AddClouds;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 
 implementation
-uses uWorld, uMisc, uStore, uSound, uMobile, uVariables;
+uses uMisc, uStore, uSound, uMobile, uVariables;
 
 const cExplFrameTicks = 110;
 
