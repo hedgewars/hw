@@ -35,7 +35,7 @@ function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
 
 implementation
-uses uConsole, uStore, uMisc, uRandom, uLandObjects, Adler32, uIO, uLandTexture, sysutils,
+uses uConsole, uStore, uRandom, uLandObjects, Adler32, uIO, uLandTexture, sysutils,
      uVariables, uUtils;
 
 operator=(const a, b: direction) c: Boolean;

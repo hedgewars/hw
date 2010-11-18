@@ -28,6 +28,10 @@ var ipcPort: Word = 0;
 procedure initModule;
 procedure freeModule;
 
+procedure OutError(Msg: shortstring; isFatalError: boolean);
+procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
+procedure SDLTry(Assert: boolean; isFatal: boolean);
+
 procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
@@ -43,7 +47,7 @@ procedure CloseIPC;
 procedure NetGetNextCmd;
 
 implementation
-uses uConsole, uConsts, uMisc, uLand, uChat, uTeams, uVariables, uCommands, uUtils;
+uses uConsole, uConsts, uLand, uChat, uTeams, uVariables, uCommands, uUtils;
 
 type PCmd = ^TCmd;
      TCmd = packed record
@@ -65,6 +69,27 @@ var IPCSock: PTCPSocket;
 
     SendEmptyPacketTicks: LongWord;
 
+
+procedure OutError(Msg: shortstring; isFatalError: boolean);
+begin
+WriteLnToConsole(Msg);
+if isFatalError then
+    begin
+    SendIPC('E' + GetLastConsoleLine);
+    SDL_Quit;
+    halt(1)
+    end
+end;
+
+procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean);
+begin
+if not Assert then OutError(Msg, isFatal)
+end;
+
+procedure SDLTry(Assert: boolean; isFatal: boolean);
+begin
+if not Assert then OutError(SDL_GetError, isFatal)
+end;
 
 function AddCmd(Time: Word; str: shortstring): PCmd;
 var command: PCmd;
@@ -211,6 +236,7 @@ begin
 buf:= 'i' + stc[sit] + s;
 SendIPCRaw(@buf[0], length(buf) + 1)
 end;
+
 
 procedure SendIPC(s: shortstring);
 begin

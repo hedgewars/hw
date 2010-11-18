@@ -41,7 +41,6 @@ implementation
 {$IFNDEF LUA_DISABLED}
 uses LuaPas in 'LuaPas.pas',
     uConsole,
-    uMisc,
     uConsts,
     uVisualGears,
     uGears,
@@ -55,7 +54,8 @@ uses LuaPas in 'LuaPas.pas',
     uTypes,
     uVariables,
     uCommands,
-    uUtils;
+    uUtils,
+    uIO;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;

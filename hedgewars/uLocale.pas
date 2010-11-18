@@ -35,7 +35,7 @@ function  Format(fmt: ansistring; var arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): ansistring;
 
 implementation
-uses uMisc, uRandom, uUtils;
+uses uRandom, uUtils, uIO;
 
 var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;

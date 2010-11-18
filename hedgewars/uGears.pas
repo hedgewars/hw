@@ -45,7 +45,7 @@ function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
 implementation
-uses uWorld, uMisc, uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
+uses uWorld, uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
      uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
      uCommands, uUtils, uTextures;
 

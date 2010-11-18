@@ -26,16 +26,13 @@ uses    SDLh, uConsts, GLunit, uTypes;
 
 procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
-procedure OutError(Msg: shortstring; isFatalError: boolean);
-procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
-procedure SDLTry(Assert: boolean; isFatal: boolean);
 procedure MakeScreenshot(filename: shortstring);
 
 procedure initModule;
 procedure freeModule;
 
 implementation
-uses uConsole, uIO, typinfo, sysutils, uVariables;
+uses typinfo, sysutils, uVariables;
 
 procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
@@ -48,29 +45,6 @@ Inc(y, dy);
 SDL_WarpMouse(x, y);
 end;
 
-
-procedure OutError(Msg: shortstring; isFatalError: boolean);
-begin
-// obsolete? written in WriteLnToConsole() anyway
-// {$IFDEF DEBUGFILE}AddFileLog(Msg);{$ENDIF}
-WriteLnToConsole(Msg);
-if isFatalError then
-    begin
-    SendIPC('E' + GetLastConsoleLine);
-    SDL_Quit;
-    halt(1)
-    end
-end;
-
-procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean);
-begin
-if not Assert then OutError(Msg, isFatal)
-end;
-
-procedure SDLTry(Assert: boolean; isFatal: boolean);
-begin
-if not Assert then OutError(SDL_GetError, isFatal)
-end;
 
 procedure MakeScreenshot(filename: shortstring);
 var p: Pointer;

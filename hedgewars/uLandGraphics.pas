@@ -30,7 +30,7 @@ type PRangeArray = ^TRangeArray;
 function  SweepDirty: boolean;
 function  Despeckle(X, Y: LongInt): boolean;
 function  CheckLandValue(X, Y: LongInt; LandFlag: Word): boolean;
-function DrawExplosion(X, Y, Radius: LongInt): Longword;
+function  DrawExplosion(X, Y, Radius: LongInt): Longword;
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
@@ -40,7 +40,7 @@ function  LandBackPixel(x, y: LongInt): LongWord;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
 
 implementation
-uses SDLh, uMisc, uLandTexture, uVariables, uUtils;
+uses SDLh, uLandTexture, uVariables, uUtils, uIO;
 
 procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;

@@ -17,7 +17,7 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 implementation
 uses uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uMobile,
      uRandom, uAmmos, uStats, uChat, SDLh, uSound, uVisualGears, uScript, uTypes,
-     uVariables, uConsole, uFloat, uMisc, uUtils;
+     uVariables, uConsole, uFloat, uUtils;
 
 type  PVariable = ^TVariable;
       TVariable = record

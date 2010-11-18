@@ -12,7 +12,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses GLunit, uUtils, uVariables, uConsts, uMisc;
+uses GLunit, uUtils, uVariables, uConsts, uMisc, uIO;
 
 var TextureList: PTexture;
 

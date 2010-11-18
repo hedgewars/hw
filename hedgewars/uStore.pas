@@ -66,7 +66,7 @@ procedure Tint(r, g, b, a: Byte); inline;
 procedure Tint(c: Longword); inline;
 
 implementation
-uses uMisc, uConsole, uLocale, uMobile, uVariables, uUtils, uTextures;
+uses uMisc, uConsole, uLocale, uMobile, uVariables, uUtils, uTextures, uIO;
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
