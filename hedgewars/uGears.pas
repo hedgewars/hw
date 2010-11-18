@@ -47,7 +47,7 @@ function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 implementation
 uses uWorld, uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
      uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
-     uCommands, uUtils, uTextures;
+     uCommands, uUtils, uTextures, uRender;
 
 const MAXROPEPOINTS = 384;
 var RopePoints: record

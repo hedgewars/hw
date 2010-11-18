@@ -47,7 +47,8 @@ uses
     GLunit,
     uVariables,
     uUtils,
-    uTextures
+    uTextures,
+    uRender
     ;
 
 type TCaptionStr = record

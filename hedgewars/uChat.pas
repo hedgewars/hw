@@ -34,7 +34,7 @@ var UserNick: shortstring = '';
     showAll: boolean;
 
 implementation
-uses uStore, SDLh, uKeys, uTypes, uVariables, uCommands, uUtils, uTextures;
+uses uStore, SDLh, uKeys, uTypes, uVariables, uCommands, uUtils, uTextures, uRender;
 
 const MaxStrIndex = 27;
 

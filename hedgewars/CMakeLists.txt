@@ -62,8 +62,8 @@ set(engine_sources
     uMisc.pas
     uMobile.pas
     uRandom.pas
+    uRender.pas
     uScript.pas
-    adler32.pas
     uSound.pas
     uStats.pas
     uStore.pas
@@ -81,6 +81,7 @@ set(engine_sources
     SinTable.inc
     ArgParsers.inc
     options.inc
+    adler32.pas
     ${CMAKE_CURRENT_BINARY_DIR}/config.inc
     )
 
