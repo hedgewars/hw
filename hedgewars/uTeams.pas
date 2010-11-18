@@ -37,7 +37,7 @@ procedure TeamGoneEffect(var Team: TTeam);
 function  GetTeamStatString(p: PTeam): shortstring;
 
 implementation
-uses uMisc, uWorld, uLocale, uAmmos, uChat, uMobile, uVariables, uUtils;
+uses uMisc, uWorld, uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO;
 const MaxTeamHealth: LongInt = 0;
 
 function CheckForWin: boolean;

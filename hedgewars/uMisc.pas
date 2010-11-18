@@ -25,12 +25,6 @@ uses    SDLh, uConsts, GLunit, uTypes;
 
 
 procedure movecursor(dx, dy: LongInt);
-(*
-procedure AdjustColor(var Color: Longword);
-procedure SetKB(n: Longword);
-*)
-procedure SendKB;
-procedure SendStat(sit: TStatInfoType; s: shortstring);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 procedure OutError(Msg: shortstring; isFatalError: boolean);
 procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
@@ -41,10 +35,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uConsole, uIO, typinfo, sysutils, uVariables, uUtils;
-
-var KBnum: Longword;
-
+uses uConsole, uIO, typinfo, sysutils, uVariables;
 
 procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
@@ -80,38 +71,6 @@ procedure SDLTry(Assert: boolean; isFatal: boolean);
 begin
 if not Assert then OutError(SDL_GetError, isFatal)
 end;
-
-(*
-procedure AdjustColor(var Color: Longword);
-begin
-Color:= SDL_MapRGB(PixelFormat, (Color shr 16) and $FF, (Color shr 8) and $FF, Color and $FF)
-end;
-
-procedure SetKB(n: Longword);
-begin
-KBnum:= n
-end;
-*)
-
-
-procedure SendKB;
-var s: shortstring;
-begin
-if KBnum <> 0 then
-begin
-s:= 'K' + inttostr(KBnum);
-SendIPCRaw(@s, Length(s) + 1)
-end
-end;
-
-procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = 'rDkKHTPsSB';
-var buf: shortstring;
-begin
-buf:= 'i' + stc[sit] + s;
-SendIPCRaw(@buf[0], length(buf) + 1)
-end;
-
 
 procedure MakeScreenshot(filename: shortstring);
 var p: Pointer;
@@ -200,7 +159,6 @@ end;
 
 procedure initModule;
 begin
-    KBnum           := 0;
 end;
 
 procedure freeModule;

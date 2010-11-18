@@ -125,7 +125,6 @@ begin
     FreeActionsList();
     StoreRelease();
     ControllerClose();
-    SendKB();
     CloseIPC();
     TTF_Quit();
 {$IFDEF SDL13}

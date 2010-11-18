@@ -20,7 +20,7 @@
 
 unit uIO;
 interface
-uses SDLh;
+uses SDLh, uTypes;
 
 var ipcPort: Word = 0;
     hiTicks: Word;
@@ -35,6 +35,7 @@ procedure SendIPCAndWaitReply(s: shortstring);
 procedure SendIPCTimeInc;
 procedure SendKeepAliveMessage(Lag: Longword);
 procedure LoadRecordFromFile(fileName: shortstring);
+procedure SendStat(sit: TStatInfoType; s: shortstring);
 procedure IPCWaitPongEvent;
 procedure IPCCheckSock;
 procedure InitIPC;
@@ -42,7 +43,7 @@ procedure CloseIPC;
 procedure NetGetNextCmd;
 
 implementation
-uses uConsole, uConsts, uMisc, uLand, uChat, uTeams, uTypes, uVariables, uCommands, uUtils;
+uses uConsole, uConsts, uMisc, uLand, uChat, uTeams, uVariables, uCommands, uUtils;
 
 type PCmd = ^TCmd;
      TCmd = packed record
@@ -201,6 +202,14 @@ repeat
 until i = 0;
 
 close(f)
+end;
+
+procedure SendStat(sit: TStatInfoType; s: shortstring);
+const stc: array [TStatInfoType] of char = 'rDkKHTPsSB';
+var buf: shortstring;
+begin
+buf:= 'i' + stc[sit] + s;
+SendIPCRaw(@buf[0], length(buf) + 1)
 end;
 
 procedure SendIPC(s: shortstring);
