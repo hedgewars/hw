@@ -66,7 +66,7 @@ var BotLevel: Byte;
     Score, i: LongInt;
     a, aa: TAmmoType;
 begin
-BotLevel:= PHedgehog(Me^.Hedgehog)^.BotLevel;
+BotLevel:= Me^.Hedgehog^.BotLevel;
 
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
@@ -195,7 +195,7 @@ Actions.Count:= 0;
 Actions.Pos:= 0;
 Actions.Score:= 0;
 Stack.Count:= 0;
-BotLevel:= PHedgehog(Me^.Hedgehog)^.BotLevel;
+BotLevel:= Me^.Hedgehog^.BotLevel;
 
 tmp:= random(2) + 1;
 Push(0, Actions, Me^, tmp);
@@ -322,7 +322,7 @@ if Targets.Count = 0 then
 
 FillBonuses((Me^.State and gstAttacked) <> 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
-    CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(PHedgehog(Me^.Hedgehog)^, a);
+    CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(Me^.Hedgehog^, a);
 {$IFDEF DEBUGFILE}AddFileLog('Enter Think Thread');{$ENDIF}
 BeginThread(@Think, Me, ThinkThread)
 end;

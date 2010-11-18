@@ -454,16 +454,16 @@ case Gear^.Pos of
        posCaseUtility,
        posCaseAmmo: begin
                     a:= Gear^.AmmoType;
-                    AddAmmo(PHedgehog(HH^.Hedgehog)^, a);
+                    AddAmmo(HH^.Hedgehog^, a);
 // Possibly needs to check shared clan ammo game flag once added.
 // On the other hand, no obvious reason that clan members shouldn't know what ammo another clan member picked up
-                    if (not (PHedgehog(HH^.Hedgehog)^.Team^.ExtDriven 
-                      or (PHedgehog(HH^.Hedgehog)^.BotLevel > 0)))
-                      or (PHedgehog(HH^.Hedgehog)^.Team^.Clan^.ClanIndex = LocalClan)
+                    if (not (HH^.Hedgehog^.Team^.ExtDriven 
+                      or (HH^.Hedgehog^.BotLevel > 0)))
+                      or (HH^.Hedgehog^.Team^.Clan^.ClanIndex = LocalClan)
                       or (GameType = gmtDemo)  then
                         begin
                         s:= trammo[Ammoz[a].NameId] + ' (+' + IntToStr(Ammoz[a].NumberInCase) + ')';
-                        AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
+                        AddCaption(s, HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
 
                         // show ammo icon
                         vga:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtAmmo);
@@ -474,12 +474,12 @@ case Gear^.Pos of
                     end;
      posCaseHealth: begin
                     inc(HH^.Health, Gear^.Health);
-                    PHedgehog(HH^.Hedgehog)^.Effects[hePoisoned] := false;
+                    HH^.Hedgehog^.Effects[hePoisoned] := false;
                     str(Gear^.Health, s);
                     s:= '+' + s;
-                    AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
-                    RenderHealth(PHedgehog(HH^.Hedgehog)^);
-                    RecountTeamHealth(PHedgehog(HH^.Hedgehog)^.Team);
+                    AddCaption(s, HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    RenderHealth(HH^.Hedgehog^);
+                    RecountTeamHealth(HH^.Hedgehog^.Team);
 
                     i:= 0;
                     while i < Gear^.Health do

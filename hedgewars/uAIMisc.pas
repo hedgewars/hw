@@ -131,7 +131,7 @@ var Gear: PGear;
 
 begin
 bonuses.Count:= 0;
-MyClan:= PHedgehog(ThinkingHH^.Hedgehog)^.Team^.Clan;
+MyClan:= ThinkingHH^.Hedgehog^.Team^.Clan;
 Gear:= GearsList;
 while Gear <> nil do
     begin

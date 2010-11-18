@@ -78,15 +78,15 @@ begin
             if (d > 1) and not gi^.Invulnerable and (GetRandom(2) = 0) then
             begin
                 if (CurrentHedgehog^.Gear = gi) then
-                    PlaySound(sndOops, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
+                    PlaySound(sndOops, gi^.Hedgehog^.Team^.voicepack)
                 else
                 begin
                     if (gi^.State and gstMoving) = 0 then
                         gi^.State := gi^.State or gstLoser;
                     if d > r div 2 then
-                        PlaySound(sndNooo, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
+                        PlaySound(sndNooo, gi^.Hedgehog^.Team^.voicepack)
                     else
-                        PlaySound(sndUhOh, PHedgehog(gi^.Hedgehog)^.Team^.voicepack);
+                        PlaySound(sndUhOh, gi^.Hedgehog^.Team^.voicepack);
                 end;
             end;
         end;
@@ -1109,7 +1109,7 @@ begin
     begin
         DeleteGear(Gear);
         isCursorVisible := false;
-        ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         exit
     end;
 
@@ -1356,10 +1356,10 @@ procedure RemoveFromAmmo;
 begin
     if (Gear^.State and gstAttacked) = 0 then
     begin
-        OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
+        OnUsedAmmo(HHGear^.Hedgehog^);
         Gear^.State := Gear^.State or gstAttacked
     end;
-    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
+    ApplyAmmoChanges(HHGear^.Hedgehog^)
 end;
 
 begin
@@ -2021,7 +2021,7 @@ begin
     Gear^.doStep := @doStepFirePunchWork;
     DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y + _1, _0_5, _0, cHHRadius * 4, 5);
 
-    PlaySound(TSound(ord(sndFirePunch1) + GetRandom(6)), PHedgehog(HHGear^.Hedgehog)^.Team^.
+    PlaySound(TSound(ord(sndFirePunch1) + GetRandom(6)), HHGear^.Hedgehog^.Team^.
     voicepack)
 end;
 
@@ -2049,7 +2049,7 @@ begin
         end;
         DeleteGear(Gear);
         isCursorVisible := false;
-        ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         exit
     end;
 
@@ -2278,11 +2278,11 @@ begin
         HHGear := Gear^.Hedgehog^.Gear;
         Msg := Gear^.Message and not gmSwitch;
         DeleteGear(Gear);
-        OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-        ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+        OnUsedAmmo(HHGear^.Hedgehog^);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
 
         HHGear := CurrentHedgehog^.Gear;
-        ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         HHGear^.Message := Msg;
         exit
     end;
@@ -3152,7 +3152,7 @@ begin
             end;
         DeleteGear(Gear);
         isCursorVisible := false;
-        ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         //    if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
 
 //    Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
@@ -4321,13 +4321,13 @@ begin
                 resgear^.Health := graves[i]^.Health;
                 PHedgehog(graves[i]^.Hedgehog)^.Gear := resgear;
                 DeleteGear(graves[i]);
-                RenderHealth(PHedgehog(resgear^.Hedgehog)^);
-                RecountTeamHealth(Phedgehog(resgear^.Hedgehog)^.Team);
-                PHedgehog(resgear^.Hedgehog)^.Effects[heResurrected]:= true;
-                if PHedgehog(resgear^.Hedgehog)^.Hat = 'NoHat' then
+                RenderHealth(resgear^.Hedgehog^);
+                RecountTeamHealth(resgear^.Hedgehog^.Team);
+                resgear^.Hedgehog^.Effects[heResurrected]:= true;
+                if resgear^.Hedgehog^.Hat = 'NoHat' then
                     begin
-                    FreeTexture(PHedgehog(resgear^.Hedgehog)^.HatTex);
-                    PHedgehog(resgear^.Hedgehog)^.HatTex := Surface2Tex(
+                    FreeTexture(resgear^.Hedgehog^.HatTex);
+                    resgear^.Hedgehog^.HatTex := Surface2Tex(
                         LoadImage(Pathz[ptHats] + '/Reserved/Zombie', ifNone),
                         True)
                     end

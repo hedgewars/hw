@@ -197,7 +197,7 @@ var tag: PVisualGear;
 begin
 tag:= AddVisualGear(hwRound(HHGear^.X), hwRound(HHGear^.Y), vgtHealthTag, dmg);
 if (tag <> nil) then
-    tag^.Hedgehog:= PHedgehog(HHGear^.Hedgehog); // the tag needs the tag to determine the text color
+    tag^.Hedgehog:= HHGear^.Hedgehog; // the tag needs the tag to determine the text color
 AllInactive:= false;
 HHGear^.Active:= true;
 end;
@@ -267,8 +267,8 @@ case Kind of
                 gear^.Angle:= cMaxAngle div 2;
                 gear^.Z:= cHHZ;
                 if (GameFlags and gfAISurvival) <> 0 then
-                    if PHedgehog(gear^.Hedgehog)^.BotLevel > 0 then
-                        PHedgehog(gear^.Hedgehog)^.Effects[heResurrectable] := true;
+                    if gear^.Hedgehog^.BotLevel > 0 then
+                        gear^.Hedgehog^.Effects[heResurrectable] := true;
                 end;
        gtShell: begin
                 gear^.Radius:= 4;
@@ -929,10 +929,10 @@ begin
     while t <> nil do
         begin
         t^.PortalCounter:= 0;
-        if ((GameFlags and gfResetHealth) <> 0) and (t^.Kind = gtHedgehog) and (t^.Health < PHedgehog(t^.Hedgehog)^.InitialHealth) then
+        if ((GameFlags and gfResetHealth) <> 0) and (t^.Kind = gtHedgehog) and (t^.Health < t^.Hedgehog^.InitialHealth) then
             begin
-            t^.Health:= PHedgehog(t^.Hedgehog)^.InitialHealth;
-            RenderHealth(PHedgehog(t^.Hedgehog)^);
+            t^.Health:= t^.Hedgehog^.InitialHealth;
+            RenderHealth(t^.Hedgehog^);
             end;
         t:= t^.NextGear
         end;
@@ -1613,11 +1613,11 @@ begin
         if Team^.AIKillsTex <> nil then FreeTexture(Team^.AIKillsTex);
         Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
     end;
-    tempTeam := PHedgehog(gear^.Hedgehog)^.Team;
+    tempTeam := gear^.Hedgehog^.Team;
     DeleteCI(gear);
     FindPlace(gear, false, 0, LAND_WIDTH); 
     if gear <> nil then begin
-        RenderHealth(PHedgehog(gear^.Hedgehog)^);
+        RenderHealth(gear^.Hedgehog^);
         ScriptCall('onGearResurrect', gear^.uid);
     end;
     RecountTeamHealth(tempTeam);
