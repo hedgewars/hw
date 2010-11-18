@@ -63,6 +63,7 @@ set(engine_sources
     uMobile.pas
     uRandom.pas
     uRender.pas
+    uRenderUtils.pas
     uScript.pas
     uSound.pas
     uStats.pas

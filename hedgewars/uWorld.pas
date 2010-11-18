@@ -48,7 +48,8 @@ uses
     uVariables,
     uUtils,
     uTextures,
-    uRender
+    uRender,
+    uRenderUtils
     ;
 
 type TCaptionStr = record

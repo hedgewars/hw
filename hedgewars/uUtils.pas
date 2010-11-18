@@ -32,6 +32,8 @@ function  toPowerOf2(i: Longword): Longword; inline;
 
 function  endian(independent: LongWord): LongWord; inline;
 
+function  CheckCJKFont(s: ansistring; font: THWFont): THWFont;
+
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
 {$ENDIF}
@@ -227,6 +229,40 @@ flush(f)
 end;
 {$ENDIF}
 
+
+function CheckCJKFont(s: ansistring; font: THWFont): THWFont;
+var l, i : LongInt;
+    u: WideChar;
+    tmpstr: array[0..256] of WideChar;
+begin
+
+{$IFNDEF IPHONEOS}
+// remove chinese fonts for now
+if (font >= CJKfnt16) or (length(s) = 0) then
+{$ENDIF}
+    exit(font);
+
+l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), length(s))-1;
+i:= 0;
+while i < l do
+    begin
+    u:= tmpstr[i];
+    if (#$2E80  <= u) and  (
+                           (u <= #$2FDF )  or // CJK Radicals Supplement / Kangxi Radicals
+       ((#$2FF0  <= u) and (u <= #$303F))  or // Ideographic Description Characters / CJK Radicals Supplement
+       ((#$31C0  <= u) and (u <= #$31EF))  or // CJK Strokes
+       ((#$3200  <= u) and (u <= #$4DBF))  or // Enclosed CJK Letters and Months / CJK Compatibility / CJK Unified Ideographs Extension A
+       ((#$4E00  <= u) and (u <= #$9FFF))  or // CJK Unified Ideographs
+       ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
+       ((#$FE30  <= u) and (u <= #$FE4F)))    // CJK Compatibility Forms
+       then exit(THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) ));
+    inc(i)
+    end;
+exit(font);
+(* two more to check. pascal WideChar is only 16 bit though
+       ((#$20000 <= u) and (u >= #$2A6DF)) or // CJK Unified Ideographs Extension B
+       ((#$2F800 <= u) and (u >= #$2FA1F)))   // CJK Compatibility Ideographs Supplement *)
+end;
 
 procedure initModule;
 {$IFDEF DEBUGFILE}{$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}{$ENDIF}
