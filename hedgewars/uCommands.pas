@@ -15,9 +15,9 @@ procedure StopMessages(Message: Longword);
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uMobile,
+uses uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uMobile,
      uRandom, uAmmos, uStats, uChat, SDLh, uSound, uVisualGears, uScript, uTypes,
-     uVariables, uConsole, uFloat;
+     uVariables, uConsole, uFloat, uMisc, uUtils;
 
 type  PVariable = ^TVariable;
       TVariable = record

@@ -21,103 +21,33 @@
 unit uMisc;
 interface
 
-uses    SDLh, uConsts, uFloat, GLunit, Math, uTypes;
+uses    SDLh, uConsts, GLunit, uTypes;
 
 
-procedure SplitBySpace(var a, b: shortstring);
-procedure SplitByChar(var a, b: ansistring; c: char);
-function  EnumToStr(const en : TGearType) : shortstring; overload;
-function  EnumToStr(const en : TSound) : shortstring; overload;
-function  EnumToStr(const en : TAmmoType) : shortstring; overload;
-function  EnumToStr(const en : THogEffect) : shortstring; overload;
 procedure movecursor(dx, dy: LongInt);
-function  hwSign(r: hwFloat): LongInt; inline;
-function  Min(a, b: LongInt): LongInt; inline;
-function  Max(a, b: LongInt): LongInt; inline;
-procedure OutError(Msg: shortstring; isFatalError: boolean);
-procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
-procedure SDLTry(Assert: boolean; isFatal: boolean);
-function  IntToStr(n: LongInt): shortstring;
-function  FloatToStr(n: hwFloat): shortstring;
-function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
-function  DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
-function  DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 (*
 procedure AdjustColor(var Color: Longword);
 procedure SetKB(n: Longword);
 *)
 procedure SendKB;
-procedure SetLittle(var r: hwFloat);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-function  Str2PChar(const s: shortstring): PChar;
 function  NewTexture(width, height: Longword; buf: Pointer): PTexture;
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture(tex: PTexture);
-function  toPowerOf2(i: Longword): Longword; inline;
-function  DecodeBase64(s: shortstring): shortstring;
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
-function  endian(independent: LongWord): LongWord; inline;
-{$IFDEF DEBUGFILE}
-procedure AddFileLog(s: shortstring);
-(* function  RectToStr(Rect: TSDL_Rect): shortstring; *)
-{$ENDIF}
+procedure OutError(Msg: shortstring; isFatalError: boolean);
+procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
+procedure SDLTry(Assert: boolean; isFatal: boolean);
 procedure MakeScreenshot(filename: shortstring);
 
 procedure initModule;
 procedure freeModule;
 
 implementation
-uses uConsole, uIO, typinfo, sysutils, uVariables;
+uses uConsole, uIO, typinfo, sysutils, uVariables, uUtils;
 
 var KBnum: Longword;
-{$IFDEF DEBUGFILE}
-    f: textfile;
-{$ENDIF}
 
-// should this include "strtolower()" for the split string?
-procedure SplitBySpace(var a, b: shortstring);
-var i, t: LongInt;
-begin
-i:= Pos(' ', a);
-if i > 0 then
-    begin
-    for t:= 1 to Pred(i) do
-        if (a[t] >= 'A')and(a[t] <= 'Z') then Inc(a[t], 32);
-    b:= copy(a, i + 1, Length(a) - i);
-    byte(a[0]):= Pred(i)
-    end else b:= '';
-end;
-
-procedure SplitByChar(var a, b: ansistring; c: char);
-var i: LongInt;
-begin
-i:= Pos(c, a);
-if i > 0 then
-    begin
-    b:= copy(a, i + 1, Length(a) - i);
-    setlength(a, Pred(i));
-    end else b:= '';
-end;
-
-function EnumToStr(const en : TGearType) : shortstring; overload;
-begin
-EnumToStr:= GetEnumName(TypeInfo(TGearType), ord(en))
-end;
-
-function EnumToStr(const en : TSound) : shortstring; overload;
-begin
-EnumToStr:= GetEnumName(TypeInfo(TSound), ord(en))
-end;
-
-function EnumToStr(const en : TAmmoType) : shortstring; overload;
-begin
-EnumToStr:= GetEnumName(TypeInfo(TAmmoType), ord(en))
-end;
-
-function EnumToStr(const en: THogEffect) : shortstring; overload;
-begin
-    EnumToStr := GetEnumName(TypeInfo(THogEffect), ord(en))
-end;
 
 procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
@@ -130,21 +60,6 @@ Inc(y, dy);
 SDL_WarpMouse(x, y);
 end;
 
-function hwSign(r: hwFloat): LongInt;
-begin
-// yes, we have negative zero for a reason
-if r.isNegative then hwSign:= -1 else hwSign:= 1
-end;
-
-function Min(a, b: LongInt): LongInt;
-begin
-if a < b then Min:= a else Min:= b
-end;
-
-function Max(a, b: LongInt): LongInt;
-begin
-if a > b then Max:= a else Max:= b
-end;
 
 procedure OutError(Msg: shortstring; isFatalError: boolean);
 begin
@@ -182,16 +97,6 @@ end;
 *)
 
 
-function IntToStr(n: LongInt): shortstring;
-begin
-str(n, IntToStr)
-end;
-
-function FloatToStr(n: hwFloat): shortstring;
-begin
-FloatToStr:= cstr(n) + '_' + inttostr(Lo(n.QWordValue))
-end;
-
 procedure SetTextureParameters(enableClamp: Boolean);
 begin
     if enableClamp and ((cReducedQuality and rqClampLess) = 0) then
@@ -203,37 +108,6 @@ begin
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 end;
 
-function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
-var dY, dX: Extended;
-begin
-dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then dY:= - dY;
-dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then dX:= - dX;
-DxDy2Angle:= arctan2(dY, dX) * 180 / pi
-end;
-
-function DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
-const _16divPI: Extended = 16/pi;
-var dY, dX: Extended;
-begin
-dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then dY:= - dY;
-dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then dX:= - dX;
-DxDy2Angle32:= trunc(arctan2(dY, dX) * _16divPI) and $1f
-end;
-
-function DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
-const MaxAngleDivPI: Extended = cMaxAngle/pi;
-var dY, dX: Extended;
-begin
-dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then dY:= - dY;
-dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then dX:= - dX;
-DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI)
-end;
 
 procedure SendKB;
 var s: shortstring;
@@ -245,11 +119,6 @@ SendIPCRaw(@s, Length(s) + 1)
 end
 end;
 
-procedure SetLittle(var r: hwFloat);
-begin
-r:= SignAs(cLittle, r)
-end;
-
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 const stc: array [TStatInfoType] of char = 'rDkKHTPsSB';
 var buf: shortstring;
@@ -258,26 +127,6 @@ buf:= 'i' + stc[sit] + s;
 SendIPCRaw(@buf[0], length(buf) + 1)
 end;
 
-function Str2PChar(const s: shortstring): PChar;
-const CharArray: array[byte] of Char = '';
-begin
-CharArray:= s;
-CharArray[Length(s)]:= #0;
-Str2PChar:= @CharArray
-end;
-
-function isPowerOf2(i: Longword): boolean;
-begin
-if i = 0 then exit(true);
-while (i and 1) = 0 do i:= i shr 1;
-isPowerOf2:= (i = 1)
-end;
-
-function toPowerOf2(i: Longword): Longword;
-begin
-toPowerOf2:= 1;
-while (toPowerOf2 < i) do toPowerOf2:= toPowerOf2 shl 1
-end;
 
 procedure ResetVertexArrays(texture: PTexture);
 begin
@@ -425,33 +274,6 @@ begin
     end
 end;
 
-function DecodeBase64(s: shortstring): shortstring;
-const table = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-var i, t, c: Longword;
-begin
-c:= 0;
-for i:= 1 to Length(s) do
-    begin
-    t:= Pos(s[i], table);
-    if s[i] = '=' then inc(c);
-    if t > 0 then byte(s[i]):= t - 1 else byte(s[i]):= 0
-    end;
-
-i:= 1;
-t:= 1;
-while i <= length(s) do
-    begin
-    DecodeBase64[t    ]:= char((byte(s[i    ]) shl 2) or (byte(s[i + 1]) shr 4));
-    DecodeBase64[t + 1]:= char((byte(s[i + 1]) shl 4) or (byte(s[i + 2]) shr 2));
-    DecodeBase64[t + 2]:= char((byte(s[i + 2]) shl 6) or (byte(s[i + 3])      ));
-    inc(t, 3);
-    inc(i, 4)
-    end;
-
-if c < 3 then t:= t - c;
-
-byte(DecodeBase64[0]):= t - 1
-end;
 
 procedure MakeScreenshot(filename: shortstring);
 var p: Pointer;
@@ -523,20 +345,6 @@ if IOResult = 0 then
 FreeMem(p)
 end;
 
-{$IFDEF DEBUGFILE}
-procedure AddFileLog(s: shortstring);
-begin
-writeln(f, GameTicks: 6, ': ', s);
-flush(f)
-end;
-(*
-function RectToStr(Rect: TSDL_Rect): shortstring;
-begin
-RectToStr:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
-end;
-*)
-{$ENDIF}
-
 function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 {* for more information http://www.idevgames.com/forum/showpost.php?p=85864&postcount=7 *}
 var convertedSurf: PSDL_Surface = nil;
@@ -551,69 +359,16 @@ begin
     exit(tmpsurf);
 end;
 
-function endian(independent: LongWord): LongWord; inline;
-begin
-{$IFDEF ENDIAN_LITTLE}
-endian:= independent;
-{$ELSE}
-endian:= (((independent and $FF000000) shr 24) or
-          ((independent and $00FF0000) shr 8) or
-          ((independent and $0000FF00) shl 8) or
-          ((independent and $000000FF) shl 24))
-{$ENDIF}
-end;
-
 
 procedure initModule;
-{$IFDEF DEBUGFILE}{$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}{$ENDIF}
 begin
     KBnum           := 0;
-
-{$IFDEF DEBUGFILE}
-{$I-}
-{$IFDEF IPHONEOS}
-    Assign(f,'../Documents/hw-' + cLogfileBase + '.log');
-    Rewrite(f);
-{$ELSE}
-    if (ParamStr(1) <> '') and (ParamStr(2) <> '') then
-        if (ParamCount <> 3) and (ParamCount <> cDefaultParamNum) then
-        begin
-            for i:= 0 to 7 do
-            begin
-                assign(f, ExtractFileDir(ParamStr(2)) + '/' + cLogfileBase + inttostr(i) + '.log');
-                rewrite(f);
-                if IOResult = 0 then break;
-            end;
-            if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
-        end
-        else
-        begin
-            for i:= 0 to 7 do
-            begin
-                assign(f, ParamStr(1) + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
-                rewrite(f);
-                if IOResult = 0 then break;
-            end;
-            if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
-        end
-    else
-        f:= stderr;
-{$ENDIF}
-{$I+}
-{$ENDIF}
-
 end;
 
 procedure freeModule;
 begin
     recordFileName:= '';
     while TextureList <> nil do FreeTexture(TextureList);
-
-{$IFDEF DEBUGFILE}
-    writeln(f, 'halt at ', GameTicks, ' ticks. TurnTimeLeft = ', TurnTimeLeft);
-    flush(f);
-    close(f);
-{$ENDIF}
 end;
 
 end.

@@ -45,7 +45,8 @@ uses
     uChat,
     uLandTexture,
     GLunit,
-    uVariables
+    uVariables,
+    uUtils
     ;
 
 type TCaptionStr = record
@@ -385,7 +386,7 @@ if (WeaponTooltipTex <> nil) and (AMxShift = 0) then
 {$IFDEF IPHONEOS}
     ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, AMyOffset - 1);
 {$ELSE}
-    ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, min(y + 1, cScreenHeight - WeaponTooltipTex^.h - 40));
+    ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, Min(y + 1, cScreenHeight - WeaponTooltipTex^.h - 40));
 {$ENDIF}
 
 bSelected:= false;
@@ -570,7 +571,7 @@ begin
     begin
         // Offsets relative to camera - spare them to wimpier cpus, no bg or flakes for them anyway
         ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
-        offsetY:= 10 * min(0, -145 - ScreenBottom);
+        offsetY:= 10 * Min(0, -145 - ScreenBottom);
         SkyOffset:= offsetY div 35 + cWaveHeight;
         HorizontOffset:= SkyOffset;
         if ScreenBottom > SkyOffset then
@@ -864,7 +865,7 @@ if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (Game
     if (ReadyTimeLeft = 0) and (missionTimer > 0) then dec(missionTimer, Lag);
     if missionTimer < 0 then missionTimer:= 0; // avoid subtracting below 0
     if missionTex <> nil then
-        DrawCentered(0, min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
+        DrawCentered(0, Min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
     end;
 
 // fps
@@ -1155,7 +1156,7 @@ end;
 
 procedure ShakeCamera(amount: LongWord);
 begin
-    amount:= max(1, amount);
+    amount:= Max(1, amount);
     WorldDx:= WorldDx - amount + LongInt(getRandom(1 + amount * 2));
     WorldDy:= WorldDy - amount + LongInt(getRandom(1 + amount * 2));
 end;

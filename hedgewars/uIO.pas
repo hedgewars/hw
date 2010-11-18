@@ -42,7 +42,7 @@ procedure CloseIPC;
 procedure NetGetNextCmd;
 
 implementation
-uses uConsole, uConsts, uMisc, uLand, uChat, uTeams, uTypes, uVariables, uCommands;
+uses uConsole, uConsts, uMisc, uLand, uChat, uTeams, uTypes, uVariables, uCommands, uUtils;
 
 type PCmd = ^TCmd;
      TCmd = packed record
@@ -138,7 +138,7 @@ case s[1] of
      else
      loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
      AddCmd(loTicks, s);
-     {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+inttostr(lastcmd^.loTime));{$ENDIF}
+     {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+IntToStr(lastcmd^.loTime));{$ENDIF}
      end
 end;
 
@@ -311,7 +311,7 @@ while (headcmd <> nil)
         'F': TeamGone(copy(headcmd^.str, 2, Pred(headcmd^.len)));
         'N': begin
             tmpflag:= false;
-            {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(hiTicks shl 16 + headcmd^.loTime)){$ENDIF}
+            {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime)){$ENDIF}
             end;
         'p': begin
             x16:= SDLNet_Read16(@(headcmd^.X));
@@ -342,8 +342,8 @@ while (headcmd <> nil)
 if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
     TryDo(GameTicks < hiTicks shl 16 + headcmd^.loTime,
             'oops, queue error. in buffer: ' + headcmd^.cmd +
-            ' (' + inttostr(GameTicks) + ' > ' +
-            inttostr(hiTicks shl 16 + headcmd^.loTime) + ')',
+            ' (' + IntToStr(GameTicks) + ' > ' +
+            IntToStr(hiTicks shl 16 + headcmd^.loTime) + ')',
             true);
 
 isInLag:= (headcmd = nil) and tmpflag and (not CurrentTeam^.hasGone);

@@ -31,7 +31,7 @@ procedure FreeActionsList;
 implementation
 uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions, uMisc,
      uAmmos, SysUtils{$IFDEF UNIX}, cthreads{$ENDIF}, uTypes,
-     uVariables, uCommands;
+     uVariables, uCommands, uUtils;
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
@@ -201,12 +201,12 @@ tmp:= random(2) + 1;
 Push(0, Actions, Me^, tmp);
 Push(0, Actions, Me^, tmp xor 3);
 
-if (Me^.State and gstAttacked) = 0 then maxticks:= max(0, TurnTimeLeft - 5000 - LongWord(4000 * BotLevel))
+if (Me^.State and gstAttacked) = 0 then maxticks:= Max(0, TurnTimeLeft - 5000 - LongWord(4000 * BotLevel))
                                    else maxticks:= TurnTimeLeft;
 
 if (Me^.State and gstAttacked) = 0 then TestAmmos(Actions, Me, false);
 BestRate:= RatePlace(Me);
-BaseRate:= max(BestRate, 0);
+BaseRate:= Max(BestRate, 0);
 
 while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 0) do
     begin

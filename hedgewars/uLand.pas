@@ -36,7 +36,7 @@ procedure CheckLandDigest(s: shortstring);
 
 implementation
 uses uConsole, uStore, uMisc, uRandom, uLandObjects, Adler32, uIO, uLandTexture, sysutils,
-     uVariables;
+     uVariables, uUtils;
 
 operator=(const a, b: direction) c: Boolean;
 begin
@@ -358,7 +358,7 @@ begin
                 r.x:= x mod tmpsurf^.w;
                 r.y:= 0;
                 r.w:= 1;
-                r.h:= min(16, yd - yu + 1);
+                r.h:= Min(16, yd - yu + 1);
                 SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
             end;
             yd:= yu - 1;

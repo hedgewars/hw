@@ -28,7 +28,7 @@ procedure WriteLnToConsole(s: shortstring);
 function  GetLastConsoleLine: shortstring;
 
 implementation
-uses uMisc, Types, uVariables;
+uses uMisc, Types, uVariables, uUtils;
 
 const cLineWidth: LongInt = 0;
       cLinesCount = 256;

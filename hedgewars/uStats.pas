@@ -35,7 +35,7 @@ procedure TurnReaction;
 procedure SendStats;
 
 implementation
-uses uTeams, uSound, uMisc, uLocale, uWorld, uVariables;
+uses uTeams, uSound, uMisc, uLocale, uWorld, uVariables, uUtils;
 
 var DamageGiven : Longword = 0;
     DamageClan  : Longword = 0;
@@ -158,7 +158,7 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
 for t:= 0 to Pred(ClansCount) do
     with ClansArray[t]^ do
         begin
-        SendStat(siClanHealth, inttostr(Color) + ' ' + inttostr(ClanHealth));
+        SendStat(siClanHealth, IntToStr(Color) + ' ' + IntToStr(ClanHealth));
         end;
 
 Kills:= 0;
@@ -218,8 +218,8 @@ for t:= 0 to Pred(TeamsCount) do
 
         { send player stats for winner teams }
         if Clan^.ClanHealth > 0 then begin
-            SendStat(siPlayerKills, inttostr(Clan^.Color) + ' ' +
-                inttostr(stats.Kills) + ' ' + TeamName);
+            SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
+                IntToStr(stats.Kills) + ' ' + TeamName);
         end;
 
         { determine maximum values of TeamKills, TurnSkips, TeamDamage }
@@ -242,25 +242,25 @@ for t:= 0 to Pred(TeamsCount) do
 for t:= 0 to Pred(TeamsCount) do begin
     with TeamsArray[t]^ do begin
         if Clan^.ClanHealth = 0 then begin
-            SendStat(siPlayerKills, inttostr(Clan^.Color) + ' ' +
-                inttostr(stats.Kills) + ' ' + TeamName);
+            SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
+                IntToStr(stats.Kills) + ' ' + TeamName);
         end;
     end;
 end;
 
 if msdhh <> nil then
-    SendStat(siMaxStepDamage, inttostr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
+    SendStat(siMaxStepDamage, IntToStr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
 if mskcnt = 1 then
-    SendStat(siMaxStepKills, inttostr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
+    SendStat(siMaxStepKills, IntToStr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
 
 if maxTeamKills > 1 then
-    SendStat(siMaxTeamKills, inttostr(maxTeamKills) + ' ' + maxTeamKillsName);
+    SendStat(siMaxTeamKills, IntToStr(maxTeamKills) + ' ' + maxTeamKillsName);
 if maxTurnSkips > 2 then
-    SendStat(siMaxTurnSkips, inttostr(maxTurnSkips) + ' ' + maxTurnSkipsName);
+    SendStat(siMaxTurnSkips, IntToStr(maxTurnSkips) + ' ' + maxTurnSkipsName);
 if maxTeamDamage > 30 then
-    SendStat(siMaxTeamDamage, inttostr(maxTeamDamage) + ' ' + maxTeamDamageName);
+    SendStat(siMaxTeamDamage, IntToStr(maxTeamDamage) + ' ' + maxTeamDamageName);
 
-if KilledHHs > 0 then SendStat(siKilledHHs, inttostr(KilledHHs));
+if KilledHHs > 0 then SendStat(siKilledHHs, IntToStr(KilledHHs));
 end;
 
 procedure initModule;

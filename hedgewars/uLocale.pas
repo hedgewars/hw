@@ -35,7 +35,7 @@ function  Format(fmt: ansistring; var arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): ansistring;
 
 implementation
-uses uMisc, uRandom;
+uses uMisc, uRandom, uUtils;
 
 var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;
@@ -77,7 +77,7 @@ if loaded then
            0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b+1)]:= s;
            1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
            2: if (b >=0) and (b <= ord(High(TEventId))) then begin
-               TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + inttostr(a) + ':' + inttostr(b), false);
+               TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + IntToStr(a) + ':' + IntToStr(b), false);
                if first[TEventId(b)] then
                    begin
                    trevt_n[TEventId(b)]:= 0;

@@ -40,25 +40,25 @@ function  LandBackPixel(x, y: LongInt): LongWord;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
 
 implementation
-uses SDLh, uMisc, uLandTexture, uVariables;
+uses SDLh, uMisc, uLandTexture, uVariables, uUtils;
 
 procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if (Land[y + dy, i] and lfIndestructible) = 0 then
             Land[y + dy, i]:= Value;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+   for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if (Land[y - dy, i] and lfIndestructible) = 0 then
             Land[y - dy, i]:= Value;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if (Land[y + dx, i] and lfIndestructible) = 0 then
             Land[y + dx, i]:= Value;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if (Land[y - dx, i] and lfIndestructible) = 0 then
             Land[y - dx, i]:= Value;
 end;
@@ -69,33 +69,33 @@ begin
 if not doSet then
    begin
    if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+      for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
           if (Land[y + dy, i] > 0) and (Land[y + dy, i] < 256) then dec(Land[y + dy, i]); // check > 0 because explosion can erase collision data
    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+      for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
           if (Land[y - dy, i] > 0) and (Land[y - dy, i] < 256) then dec(Land[y - dy, i]);
    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+      for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
           if (Land[y + dx, i] > 0) and (Land[y + dx, i] < 256) then dec(Land[y + dx, i]);
    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+      for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
           if (Land[y - dx, i] > 0) and (Land[y - dx, i] < 256) then dec(Land[y - dx, i]);
    end else
    begin
    if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+      for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
           if (Land[y + dy, i] < 256) then
               inc(Land[y + dy, i]);
    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+      for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
           if (Land[y - dy, i] < 256) then
               inc(Land[y - dy, i]);
    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+      for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
           if (Land[y + dx, i] < 256) then
               inc(Land[y + dx, i]);
    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+      for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
           if (Land[y - dx, i] < 256) then
               inc(Land[y - dx, i]);
    end
@@ -146,7 +146,7 @@ var i, t: LongInt;
 begin
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if (not isMap and ((Land[t, i] and lfIndestructible) = 0)) or ((Land[t, i] and lfBasic) <> 0) then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
@@ -155,7 +155,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if (not isMap and ((Land[t, i] and lfIndestructible) = 0)) or ((Land[t, i] and lfBasic) <> 0) then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
@@ -164,7 +164,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if (not isMap and ((Land[t, i] and lfIndestructible) = 0)) or ((Land[t, i] and lfBasic) <> 0) then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
@@ -173,7 +173,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if (not isMap and ((Land[t, i] and lfIndestructible) = 0)) or ((Land[t, i] and lfBasic) <> 0) then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
@@ -189,7 +189,7 @@ begin
 cnt:= 0;
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+   for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) then
            begin
            inc(cnt);
@@ -207,7 +207,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+   for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) then
            begin
            inc(cnt);
@@ -225,7 +225,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+   for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) then
            begin
            inc(cnt);
@@ -243,7 +243,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+   for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) then
            begin
            inc(cnt);
@@ -266,7 +266,7 @@ var i, t: LongInt;
 begin
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+   for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
           begin
            if (cReducedQuality and rqBlurryLand) = 0 then
@@ -281,7 +281,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+   for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
           begin
            if (cReducedQuality and rqBlurryLand) = 0 then
@@ -295,7 +295,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+   for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
            begin
            if (cReducedQuality and rqBlurryLand) = 0 then
@@ -310,7 +310,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+   for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
        if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
           begin
            if (cReducedQuality and rqBlurryLand) = 0 then
@@ -394,10 +394,10 @@ if Radius > 20 then
     if (dx = dy) then FillLandCircleLinesEBC(x, y, dx, dy);
     end;
 
-tx:= max(X - Radius - 1, 0);
-dx:= min(X + Radius + 1, LAND_WIDTH) - tx;
-ty:= max(Y - Radius - 1, 0);
-dy:= min(Y + Radius + 1, LAND_HEIGHT) - ty;
+tx:= Max(X - Radius - 1, 0);
+dx:= Min(X + Radius + 1, LAND_WIDTH) - tx;
+ty:= Max(Y - Radius - 1, 0);
+dy:= Min(Y + Radius + 1, LAND_HEIGHT) - ty;
 UpdateLandTexture(tx, dx, ty, dy);
 DrawExplosion:= cnt
 end;
@@ -407,8 +407,8 @@ var tx, ty, i: LongInt;
 begin
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
-        for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
+    for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
+        for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
             if (Land[ty, tx] and lfBasic) <> 0 then
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     LandPixels[ty, tx]:= LandBackPixel(tx, ty)
@@ -428,8 +428,8 @@ dec(y, Count * dY);
 
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
-        for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
+    for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
+        for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
             if ((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0) then
                 begin
                     if (cReducedQuality and rqBlurryLand) = 0 then
@@ -585,10 +585,10 @@ for i:= 0 to 7 do
     ny:= ny + dX;
     end;
 
-tx:= max(stX - HalfWidth * 2 - 4 - abs(hwRound(dX * ticks)), 0);
-ty:= max(stY - HalfWidth * 2 - 4 - abs(hwRound(dY * ticks)), 0);
-ddx:= min(stX + HalfWidth * 2 + 4 + abs(hwRound(dX * ticks)), LAND_WIDTH) - tx;
-ddy:= min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - ty;
+tx:= Max(stX - HalfWidth * 2 - 4 - abs(hwRound(dX * ticks)), 0);
+ty:= Max(stY - HalfWidth * 2 - 4 - abs(hwRound(dY * ticks)), 0);
+ddx:= Min(stX + HalfWidth * 2 + 4 + abs(hwRound(dX * ticks)), LAND_WIDTH) - tx;
+ddy:= Min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - ty;
 
 UpdateLandTexture(tx, ddx, ty, ddy)
 end;
@@ -661,10 +661,10 @@ case bpp of
 if SDL_MustLock(Image) then
    SDL_UnlockSurface(Image);
 
-x:= max(cpX, leftX);
-w:= min(cpX + Image^.w, LAND_WIDTH) - x;
-y:= max(cpY, topY);
-h:= min(cpY + Image^.h, LAND_HEIGHT) - y;
+x:= Max(cpX, leftX);
+w:= Min(cpX + Image^.w, LAND_WIDTH) - x;
+y:= Max(cpY, topY);
+h:= Min(cpY + Image^.h, LAND_HEIGHT) - y;
 UpdateLandTexture(x, w, y, h)
 end;
 

@@ -31,7 +31,7 @@ program hwengine;
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, uMobile,
-     sysutils, uTypes, uVariables, uCommands;
+     sysutils, uTypes, uVariables, uCommands, uUtils;
 
 var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
@@ -319,6 +319,7 @@ begin
     Randomize();
 
     // uConsts does not need initialization as they are all consts
+    uUtils.initModule;
     uMisc.initModule;
     uVariables.initModule;
     uConsole.initModule;    // MUST happen after uMisc
@@ -392,6 +393,7 @@ begin
     uCommands.freeModule;
     uConsole.freeModule;
     uVariables.freeModule;
+    uUtils.freeModule;
     uMisc.freeModule;           // uMisc closes the debug log.
 end;
 
