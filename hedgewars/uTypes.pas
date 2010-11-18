@@ -220,12 +220,12 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         NextGear, PrevGear: PVisualGear;
         Frame,
         FrameTicks: Longword;
-        X : float;
-        Y : float;
-        dX: float;
-        dY: float;
-        tdX: float;
-        tdY: float;
+        X : real;
+        Y : real;
+        dX: real;
+        dY: real;
+        tdX: real;
+        tdY: real;
         State : Longword;
         Timer: Longword;
         Angle, dAngle: real;

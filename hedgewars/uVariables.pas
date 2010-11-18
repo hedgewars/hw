@@ -108,12 +108,12 @@ var
     CursorMovementX : LongInt;
     CursorMovementY : LongInt;
     cDrownSpeed     : hwFloat;
-    cDrownSpeedf    : float;
+    cDrownSpeedf    : real;
     cMaxWindSpeed   : hwFloat;
     cWindSpeed      : hwFloat;
-    cWindSpeedf     : float;
+    cWindSpeedf     : real;
     cGravity        : hwFloat;
-    cGravityf       : float;
+    cGravityf       : real;
     cDamageModifier : hwFloat;
     cLaserSighting  : boolean;
     cVampiric       : boolean;

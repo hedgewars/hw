@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
-var sign: float;
+var sign: real;
 begin
 if vobCount = 0 then exit;
 
@@ -59,8 +59,8 @@ with Gear^ do
         begin
         if round(X) < cLeftScreenBorder then X:= X + cScreenSpace else
         if round(X) > cRightScreenBorder then X:= X - cScreenSpace;
-        // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + float(25); // For if flag is set for flakes rising upwards?
-        if round(Y) - 75 > LAND_HEIGHT then Y:= Y - float(1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
+        // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + 25.0; // For if flag is set for flakes rising upwards?
+        if round(Y) - 75 > LAND_HEIGHT then Y:= Y - (1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
         Timer:= 0;
         tdX:= 0;
         tdY:= 0
@@ -81,7 +81,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
 var s: Longword;
-    t: float;
+    t: real;
 begin
 Gear^.X:= Gear^.X + (cWindSpeedf * 750 * Gear^.dX) * Steps;
 
@@ -479,7 +479,7 @@ case Gear^.FrameTicks of
 
 Gear^.doStep:= @doStepSpeechBubbleWork;
 
-Gear^.Y:= Gear^.Y - float(Gear^.Tex^.h)
+Gear^.Y:= Gear^.Y - Gear^.Tex^.h
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -521,7 +521,7 @@ if round(Gear^.Y) < cWaterLine then
 else
     Gear^.doStep:= @doStepHealthTagWorkUnderWater;
 
-Gear^.Y:= Gear^.Y - float(Gear^.Tex^.h);
+Gear^.Y:= Gear^.Y - Gear^.Tex^.h;
 
 if Steps > 1 then Gear^.doStep(Gear, Steps-1);
 end;
