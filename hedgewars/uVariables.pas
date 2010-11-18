@@ -131,8 +131,6 @@ var
     CursorPoint     : TPoint;
     TargetPoint     : TPoint;
 
-    TextureList     : PTexture;
-
     ScreenFade      : TScreenFade;
     ScreenFadeValue : LongInt;
     ScreenFadeSpeed : LongInt;
@@ -2135,7 +2133,6 @@ begin
     cGravityf               := 0.00025 * 2;
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
-    TextureList             := nil;
 
     // int, longint longword and byte
     CursorMovementX     := 0;

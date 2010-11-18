@@ -46,7 +46,8 @@ uses
     uLandTexture,
     GLunit,
     uVariables,
-    uUtils
+    uUtils,
+    uTextures
     ;
 
 type TCaptionStr = record

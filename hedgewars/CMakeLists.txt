@@ -68,6 +68,7 @@ set(engine_sources
     uStats.pas
     uStore.pas
     uTeams.pas
+    uTextures.pas
     uTypes.pas
     uUtils.pas
     uVisualGears.pas
