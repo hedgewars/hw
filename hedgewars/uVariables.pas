@@ -2095,6 +2095,13 @@ var
     pauseAction: boolean;
 {$ENDIF}
 
+var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
+    trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
+    trammod: array[TAmmoStrId] of ansistring;   // description of the weapon
+    trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
+    trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
+
+
 procedure initModule;
 procedure freeModule;
 

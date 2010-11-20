@@ -23,11 +23,6 @@ interface
 uses uTypes;
 
 const MAX_EVENT_STRINGS = 100;
-var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
-    trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
-    trammod: array[TAmmoStrId] of ansistring;   // description of the weapon
-    trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
-    trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
 
 procedure LoadLocale(FileName: shortstring);
 function  Format(fmt: shortstring; var arg: shortstring): shortstring;
@@ -35,7 +30,7 @@ function  Format(fmt: ansistring; var arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): ansistring;
 
 implementation
-uses uRandom, uUtils, uIO;
+uses uRandom, uUtils, uIO, uVariables;
 
 var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;

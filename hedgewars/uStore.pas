@@ -39,7 +39,7 @@ procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
 
 implementation
-uses uMisc, uConsole, uLocale, uMobile, uVariables, uUtils, uTextures, uIO, uRender, uRenderUtils;
+uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uIO, uRender, uRenderUtils;
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
