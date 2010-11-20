@@ -51,6 +51,7 @@ set(engine_sources
     uFloat.pas
     uGame.pas
     uGears.pas
+    uGearsRender.pas
     uIO.pas
     uKeys.pas
     uLand.pas
@@ -77,7 +78,6 @@ set(engine_sources
     CCHandlers.inc
     GSHandlers.inc
     VGSHandlers.inc
-    GearDrawing.inc
     HHHandlers.inc
     SinTable.inc
     ArgParsers.inc
