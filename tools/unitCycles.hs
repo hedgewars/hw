@@ -25,10 +25,10 @@ myf :: [(String, [String])] -> String
 myf d = unlines . map (findCycle . fst) $ d
     where
     findCycle :: String -> String
-    findCycle searched = intercalate ", " $ fc searched [searched]
+    findCycle searched = searched ++ ": " ++ (intercalate ", " $ fc searched [])
         where
         fc :: String -> [String] -> [String]
-        fc curSearch visited = let uses = curSearch `lookup` d in if isNothing uses then [] else concatMap t $ fromJust uses
+        fc curSearch visited = let uses = curSearch `lookup` d; res = dropWhile null . map t $ fromJust uses in if isNothing uses || null res then [] else head res
             where
             t u =
                 if u == searched then
