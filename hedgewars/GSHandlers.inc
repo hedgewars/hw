@@ -4266,8 +4266,11 @@ begin
 
     AllInactive := false;
     hh := Gear^.Hedgehog;
-    DrawCentered(hwRound(hh^.Gear^.X) + WorldDx, hwRound(hh^.Gear^.Y) + WorldDy -
+
+    // no, you can't do that here
+    {DrawCentered(hwRound(hh^.Gear^.X) + WorldDx, hwRound(hh^.Gear^.Y) + WorldDy -
             cHHRadius - 14 - hh^.HealthTagTex^.h, hh^.HealthTagTex);
+    }
     (*DrawCircle(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, 1.5, 0, 0, $FF,
             $FF);*)
 
