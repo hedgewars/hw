@@ -103,6 +103,7 @@ const
     cPowerDivisor = 1500;
 
     MAXNAMELEN = 192;
+    MAXROPEPOINTS = 384;
 
     // some opengl headers do not have these macros
     GL_BGR              = $80E0;

@@ -41,6 +41,9 @@ procedure AddFileLog(s: shortstring);
 procedure initModule;
 procedure freeModule;
 
+function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
+function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
+
 implementation
 uses typinfo, Math, uConsts, uVariables, SysUtils;
 
@@ -263,6 +266,24 @@ exit(font);
        ((#$20000 <= u) and (u >= #$2A6DF)) or // CJK Unified Ideographs Extension B
        ((#$2F800 <= u) and (u >= #$2FA1F)))   // CJK Compatibility Ideographs Supplement *)
 end;
+
+
+function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
+begin
+    if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
+        GetLaunchX:= sign(dir) * (8 + hwRound(AngleSin(angle) * Ammoz[at].ejectX) + hwRound(AngleCos(angle) * Ammoz[at].ejectY))
+    else
+        GetLaunchX:= 0
+end;
+
+function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
+begin
+    if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
+        GetLaunchY:= hwRound(AngleSin(angle) * Ammoz[at].ejectY) - hwRound(AngleCos(angle) * Ammoz[at].ejectX) - 2
+    else
+        GetLaunchY:= 0
+end;
+
 
 procedure initModule;
 {$IFDEF DEBUGFILE}{$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}{$ENDIF}

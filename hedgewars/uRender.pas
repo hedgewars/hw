@@ -21,8 +21,12 @@ procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 procedure DrawFillRect(r: TSDL_Rect);
 procedure DrawCircle(X, Y, Radius: LongInt; Width: Single; r, g, b, a: Byte);
+procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure Tint(r, g, b, a: Byte); inline;
 procedure Tint(c: Longword); inline;
+
+var
+    HHTexture: PTexture;
 
 implementation
 uses uVariables;
@@ -367,6 +371,58 @@ begin
     glPopMatrix;
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_LINE_SMOOTH);
+end;
+
+
+procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
+const VertexBuffer: array [0..3] of TVertex2f = (
+        (x: -16; y: -16),
+        (x:  16; y: -16),
+        (x:  16; y:  16),
+        (x: -16; y:  16));
+var l, r, t, b: real;
+    TextureBuffer: array [0..3] of TVertex2f;
+begin
+    // don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+    if (abs(X) > 32) and ((abs(X) - 16) * cScaleFactor > cScreenWidth) then
+        exit;
+    if (abs(Y) > 32) and ((abs(Y - 0.5 * cScreenHeight) - 16) * cScaleFactor > cScreenHeight) then
+        exit;
+
+    t:= Pos * 32 / HHTexture^.h;
+    b:= (Pos + 1) * 32 / HHTexture^.h;
+
+    if Dir = -1 then
+    begin
+    l:= (Step + 1) * 32 / HHTexture^.w;
+    r:= Step * 32 / HHTexture^.w
+    end else
+    begin
+    l:= Step * 32 / HHTexture^.w;
+    r:= (Step + 1) * 32 / HHTexture^.w
+    end;
+
+
+    glPushMatrix();
+    glTranslatef(X, Y, 0);
+    glRotatef(Angle, 0, 0, 1);
+
+    glBindTexture(GL_TEXTURE_2D, HHTexture^.id);
+
+    TextureBuffer[0].X:= l;
+    TextureBuffer[0].Y:= t;
+    TextureBuffer[1].X:= r;
+    TextureBuffer[1].Y:= t;
+    TextureBuffer[2].X:= r;
+    TextureBuffer[2].Y:= b;
+    TextureBuffer[3].X:= l;
+    TextureBuffer[3].Y:= b;
+
+    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+    glPopMatrix
 end;
 
 

@@ -20,7 +20,7 @@
 
 unit uGears;
 interface
-uses SDLh, uConsts, uFloat, Math, uTypes;
+uses SDLh, uConsts, uFloat, uTypes;
 
 procedure initModule;
 procedure freeModule;
@@ -41,25 +41,13 @@ procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
-function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
-function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
+
 
 implementation
 uses uWorld, uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
      uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
-     uCommands, uUtils, uTextures, uRender, uRenderUtils;
+     uCommands, uUtils, uTextures, uRender, uRenderUtils, uGearsRender;
 
-const MAXROPEPOINTS = 384;
-var RopePoints: record
-                Count: Longword;
-                HookAngle: GLfloat;
-                ar: array[0..MAXROPEPOINTS] of record
-                                  X, Y: hwFloat;
-                                  dLen: hwFloat;
-                                  b: boolean;
-                                  end;
-                rounded: array[0..MAXROPEPOINTS + 2] of TVertex2f;
-                end;
 
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
@@ -77,22 +65,6 @@ procedure ShotgunShot(Gear: PGear); forward;
 procedure PickUp(HH, Gear: PGear); forward;
 procedure HHSetWeapon(Gear: PGear); forward;
 procedure doStepCase(Gear: PGear); forward;
-
-function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
-begin
-    if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
-        GetLaunchX:= sign(dir) * (8 + hwRound(AngleSin(angle) * Ammoz[at].ejectX) + hwRound(AngleCos(angle) * Ammoz[at].ejectY))
-    else
-        GetLaunchX:= 0
-end;
-
-function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
-begin
-    if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
-        GetLaunchY:= hwRound(AngleSin(angle) * Ammoz[at].ejectY) - hwRound(AngleCos(angle) * Ammoz[at].ejectX) - 2
-    else
-        GetLaunchY:= 0
-end;
 
 {$INCLUDE "GSHandlers.inc"}
 {$INCLUDE "HHHandlers.inc"}
@@ -1017,150 +989,20 @@ while t <> nil do
     end
 end;
 
-procedure DrawAltWeapon(Gear: PGear; sx, sy: LongInt);
+
+procedure DrawGears;
+var Gear: PGear;
+    x, y: LongInt;
 begin
-with Gear^.Hedgehog^ do
+Gear:= GearsList;
+while Gear <> nil do
     begin
-    if not (((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and ((Gear^.State and gstAttacked) = 0)) then
-        exit;
-    DrawTexture(sx + 16, sy + 16, ropeIconTex);
-    DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, sx + 30, sy + 30, ord(CurAmmoType) - 1, 1, 32, 32);
+    x:= hwRound(Gear^.X) + WorldDx;
+    y:= hwRound(Gear^.Y) + WorldDy;
+    RenderGear(Gear, x, y);
+    Gear:= Gear^.NextGear
     end;
 end;
-
-procedure DrawRopeLinesRQ(Gear: PGear);
-begin
-with RopePoints do
-    begin
-    rounded[Count].X:= hwRound(Gear^.X);
-    rounded[Count].Y:= hwRound(Gear^.Y);
-    rounded[Count + 1].X:= hwRound(Gear^.Hedgehog^.Gear^.X);
-    rounded[Count + 1].Y:= hwRound(Gear^.Hedgehog^.Gear^.Y);
-    end;
-
-if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
-    begin
-    glDisable(GL_TEXTURE_2D);
-    //glEnable(GL_LINE_SMOOTH);
-
-    glPushMatrix;
-
-    glTranslatef(WorldDx, WorldDy, 0);
-
-    glLineWidth(4.0);
-
-    Tint($C0, $C0, $C0, $FF);
-
-    glVertexPointer(2, GL_FLOAT, 0, @RopePoints.rounded[0]);
-    glDrawArrays(GL_LINE_STRIP, 0, RopePoints.Count + 2);
-    Tint($FF, $FF, $FF, $FF);
-
-    glPopMatrix;
-
-    glEnable(GL_TEXTURE_2D);
-    //glDisable(GL_LINE_SMOOTH)
-    end
-end;
-
-procedure DrawRope(Gear: PGear);
-var roplen: LongInt;
-    i: Longword;
-
-    procedure DrawRopeLine(X1, Y1, X2, Y2: LongInt);
-    var  eX, eY, dX, dY: LongInt;
-        i, sX, sY, x, y, d: LongInt;
-        b: boolean;
-    begin
-    if (X1 = X2) and (Y1 = Y2) then
-    begin
-    //OutError('WARNING: zero length rope line!', false);
-    exit
-    end;
-    eX:= 0;
-    eY:= 0;
-    dX:= X2 - X1;
-    dY:= Y2 - Y1;
-
-    if (dX > 0) then sX:= 1
-    else
-    if (dX < 0) then
-        begin
-        sX:= -1;
-        dX:= -dX
-        end else sX:= dX;
-
-    if (dY > 0) then sY:= 1
-    else
-    if (dY < 0) then
-        begin
-        sY:= -1;
-        dY:= -dY
-        end else sY:= dY;
-
-        if (dX > dY) then d:= dX
-                    else d:= dY;
-
-        x:= X1;
-        y:= Y1;
-
-        for i:= 0 to d do
-            begin
-            inc(eX, dX);
-            inc(eY, dY);
-            b:= false;
-            if (eX > d) then
-                begin
-                dec(eX, d);
-                inc(x, sX);
-                b:= true
-                end;
-            if (eY > d) then
-                begin
-                dec(eY, d);
-                inc(y, sY);
-                b:= true
-                end;
-            if b then
-                begin
-                inc(roplen);
-                if (roplen mod 4) = 0 then DrawSprite(sprRopeNode, x - 2, y - 2, 0)
-                end
-        end
-    end;
-begin
-    if (cReducedQuality and rqSimpleRope) <> 0 then
-        DrawRopeLinesRQ(Gear)
-    else
-        begin
-        roplen:= 0;
-        if RopePoints.Count > 0 then
-            begin
-            i:= 0;
-            while i < Pred(RopePoints.Count) do
-                    begin
-                    DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
-                                hwRound(RopePoints.ar[Succ(i)].X) + WorldDx, hwRound(RopePoints.ar[Succ(i)].Y) + WorldDy);
-                    inc(i)
-                    end;
-            DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
-                        hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy);
-            DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-                        hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy);
-            end else
-            if Gear^.Elasticity.QWordValue > 0 then
-            DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-                        hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy);
-        end;
-
-
-if RopePoints.Count > 0 then
-    DrawRotated(sprRopeHook, hwRound(RopePoints.ar[0].X) + WorldDx, hwRound(RopePoints.ar[0].Y) + WorldDy, 1, RopePoints.HookAngle)
-    else
-    if Gear^.Elasticity.QWordValue > 0 then
-        DrawRotated(sprRopeHook, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
-end;
-
-{$INCLUDE "GearDrawing.inc"}
 
 procedure FreeGearsList;
 var t, tt: PGear;
