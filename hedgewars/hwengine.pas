@@ -56,6 +56,7 @@ begin
     case GameState of
         gsLandGen: begin
                 GenMap;
+                ParseCommand('sendlanddigest', true);
                 GameState:= gsStart;
                 end;
         gsStart: begin

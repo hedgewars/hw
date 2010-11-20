@@ -32,10 +32,9 @@ procedure initModule;
 procedure freeModule;
 procedure GenMap;
 function  GenPreview: TPreview;
-procedure CheckLandDigest(s: shortstring);
 
 implementation
-uses uConsole, uStore, uRandom, uLandObjects, Adler32, uIO, uLandTexture, sysutils,
+uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
      uVariables, uUtils;
 
 operator=(const a, b: direction) c: Boolean;
@@ -47,30 +46,6 @@ type TPixAr = record
               Count: Longword;
               ar: array[0..Pred(cMaxEdgePoints)] of TPoint;
               end;
-
-procedure LogLandDigest;
-var s: shortstring;
-    adler, i: LongInt;
-begin
-adler:= 1;
-for i:= 0 to LAND_HEIGHT-1 do
-    Adler32Update(adler, @Land[i,0], LAND_WIDTH);
-s:= 'M'+inttostr(adler);
-
-CheckLandDigest(s);
-SendIPCRaw(@s[0], Length(s) + 1)
-end;
-
-procedure CheckLandDigest(s: shortstring);
-begin
-{$IFDEF DEBUGFILE}
-    AddFileLog('CheckLandDigest: ' + s + ' digest : ' + digest);
-{$ENDIF}
-    if digest = '' then
-        digest:= s
-    else
-        TryDo(s = digest, 'Different maps generated, sorry', true);
-end;
 
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 var
@@ -1211,8 +1186,6 @@ begin
         MakeFortsMap;
 
     AddProgress;
-
-{$IFDEF DEBUGFILE}LogLandDigest;{$ENDIF}
 
 // check for land near top
 c:= 0;

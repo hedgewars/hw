@@ -17,7 +17,7 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 implementation
 uses uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uMobile,
      uRandom, uAmmos, uStats, uChat, SDLh, uSound, uVisualGears, uScript, uTypes,
-     uVariables, uConsole, uFloat, uUtils;
+     uVariables, uConsole, uFloat, uUtils, Adler32;
 
 type  PVariable = ^TVariable;
       TVariable = record
@@ -125,6 +125,8 @@ begin
     isDeveloperMode:= true;
 
     // NOTE: please, keep most frequently used commands on bottom
+    RegisterVariable('landcheck',vtCommand, @chLandCheck    , false);
+    RegisterVariable('sendlanddigest',vtCommand, @chSendLandDigest, false);
     RegisterVariable('flag'    , vtCommand, @chFlag         , false);
     RegisterVariable('script'  , vtCommand, @chScript       , false);
     RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );

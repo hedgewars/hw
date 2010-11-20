@@ -47,7 +47,7 @@ procedure CloseIPC;
 procedure NetGetNextCmd;
 
 implementation
-uses uConsole, uConsts, uLand, uChat, uTeams, uVariables, uCommands, uUtils;
+uses uConsole, uConsts, uChat, uTeams, uVariables, uCommands, uUtils;
 
 type PCmd = ^TCmd;
      TCmd = packed record
@@ -154,7 +154,7 @@ case s[1] of
      'e': ParseCommand(copy(s, 2, Length(s) - 1), true);
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
-     'M': CheckLandDigest(s);
+     'M': ParseCommand('landcheck ' + s, true);
      'T': case s[2] of
                'L': GameType:= gmtLocal;
                'D': GameType:= gmtDemo;

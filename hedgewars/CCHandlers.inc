@@ -847,3 +847,26 @@ begin
     s:= s; // avoid compiler hint
     uChat.showAll:= not uChat.showAll
 end;
+
+procedure chLandCheck(var s: shortstring);
+begin
+{$IFDEF DEBUGFILE}
+    AddFileLog('CheckLandDigest: ' + s + ' digest : ' + digest);
+{$ENDIF}
+    if digest = '' then
+        digest:= s
+    else
+        TryDo(s = digest, 'Different maps generated, sorry', true);
+end;
+
+procedure chSendLandDigest(var s: shortstring);
+var adler, i: LongInt;
+begin
+    adler:= 1;
+    for i:= 0 to LAND_HEIGHT-1 do
+        Adler32Update(adler, @Land[i,0], LAND_WIDTH);
+    s:= 'M' + IntToStr(adler);
+
+    chLandCheck(s);
+    SendIPCRaw(@s[0], Length(s) + 1)
+end;
