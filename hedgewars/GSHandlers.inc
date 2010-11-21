@@ -1330,8 +1330,35 @@ begin
         HHGear^.dY := HHGear^.dY * len;
         end;
 
-
-    if (Gear^.Message and gmAttack) <> 0 then
+    haveCollision:= false;
+    if RopePoints.Count > 0 then
+        begin
+        ly:= hwRound(RopePoints.ar[0].Y);
+        lx:= hwRound(RopePoints.ar[0].X)
+        end
+    else if Gear^.Elasticity.QWordValue > 0 then
+        begin
+        ly:= hwRound(Gear^.Y);
+        lx:= hwRound(Gear^.X)
+        end;
+(* // just in case it turns out we have rounding problems
+    i:= -1;
+    while not haveCollision and (i < 2) do
+        begin
+        j:= -1;
+        while not haveCollision and (j < 2) do
+            begin
+            haveCollision:= ((((ly + i) and LAND_HEIGHT_MASK) = 0) and 
+                            (((lx + j) and LAND_WIDTH_MASK) = 0) and 
+                            ((Land[ly + i, lx + j] and $FF00) <> 0));
+            inc(j)
+            end;
+        inc(i)
+        end; *)
+    if ((Gear^.Message and gmAttack) <> 0) or
+           (((ly and LAND_HEIGHT_MASK) = 0) and 
+           ((lx and LAND_WIDTH_MASK) = 0) and 
+           ((Land[ly, lx] and $FF00) = 0)) then
         if (Gear^.State and gsttmpFlag) <> 0 then
             with Gear^.Hedgehog^ do
                 begin
