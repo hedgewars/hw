@@ -797,6 +797,9 @@ begin
             end;
         if (Gear^.State and gstHHDriven) <> 0 then // Current hedgehog
             begin
+            if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtResurrector) then
+                DrawCentered(ox, sy - cHHRadius - 7 - HealthTagTex^.h, HealthTagTex);
+
             if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
                 DrawSprite(sprFinger, ox - 16, oy - 64,
                             GameTicks div 32 mod 16);
