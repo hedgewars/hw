@@ -173,7 +173,7 @@ begin
         CheckGearDrowning := false;
 end;
 
-procedure CheckCollision(Gear: PGear);
+procedure CheckCollision(Gear: PGear); inline;
 begin
     if TestCollisionXwithGear(Gear, hwSign(Gear^.X)) or TestCollisionYwithGear(Gear, hwSign(Gear^.Y)
        )
@@ -1240,7 +1240,7 @@ begin
         begin
         lx := hwRound(nx);
         ly := hwRound(ny);
-        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and (Land[ly, lx] <> 0) then
+        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and ((Land[ly, lx] and $FF00) <> 0) then
             begin
             ny := _1 / Distance(ropeDx, ropeDy);
             // old rope pos
@@ -1397,8 +1397,7 @@ begin
         ty := _0;
         while tt > _20 do
             begin
-            if  TestCollisionXwithXYShift(Gear, tx, hwRound(ty), -hwSign(Gear^.dX))
-               or TestCollisionYwithXYShift(Gear, hwRound(tx), hwRound(ty), -hwSign(Gear^.dY)) then
+            if ((hwRound(ty) and LAND_HEIGHT_MASK) = 0) and ((hwRound(tx) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(ty), hwRound(tx)] and $F0) <> 0) then
                 begin
                 Gear^.X := Gear^.X + tx;
                 Gear^.Y := Gear^.Y + ty;
@@ -1422,7 +1421,9 @@ begin
             end;
         end;
 
-    CheckCollision(Gear);
+    if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) <> 0) then
+        Gear^.State:= Gear^.State or gstCollision
+    else Gear^.State:= Gear^.State and not gstCollision;
 
     if (Gear^.State and gstCollision) <> 0 then
         if Gear^.Elasticity < _10 then
