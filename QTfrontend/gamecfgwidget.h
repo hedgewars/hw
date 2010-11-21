@@ -44,6 +44,7 @@ public:
     QComboBox * WeaponsName;
     HWMapContainer* pMapContainer;
     QTableView * tv;
+    QVariant schemeData(int column) const;
 
 public slots:
     void setParam(const QString & param, const QStringList & value);
@@ -74,7 +75,6 @@ private:
 
     void setNetAmmo(const QString& name, const QString& ammo);
 
-    QVariant schemeData(int column) const;
 };
 
 #endif // GAMECONFIGWIDGET_H
