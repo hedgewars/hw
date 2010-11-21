@@ -355,7 +355,6 @@ begin
         uVisualGears.initModule;
         uWorld.initModule;
         uCaptions.initModule;
-        uChat.initModule;
     end;
 end;
 
