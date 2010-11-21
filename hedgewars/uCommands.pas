@@ -17,7 +17,7 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
 uses Types, uConsts, uIO, uMobile,
-     uRandom, uChat, SDLh, uScript, uTypes,
+     uRandom, SDLh, uScript, uTypes,
      uVariables, uConsole, uUtils;
 
 type  PVariable = ^TVariable;
@@ -163,10 +163,6 @@ begin
     RegisterVariable('zoomin'  , vtCommand, @chZoomIn       , true );
     RegisterVariable('zoomout' , vtCommand, @chZoomOut      , true );
     RegisterVariable('zoomreset',vtCommand, @chZoomReset    , true );
-    RegisterVariable('history' , vtCommand, @chHistory      , true );
-    RegisterVariable('chat'    , vtCommand, @chChat         , true );
-    RegisterVariable('say'     , vtCommand, @chSay          , true );
-    RegisterVariable('team'    , vtCommand, @chTeamSay      , true );
     RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , true);
     RegisterVariable('+precise', vtCommand, @chPrecise_p    , false);
     RegisterVariable('-precise', vtCommand, @chPrecise_m    , false);

@@ -38,16 +38,7 @@ if GameState = gsConfirm then
     GameState:= gsExit
     end
 else
-    begin
-    GameState:= gsChat;
-    KeyPressChat(27);
-    KeyPressChat(47);
-    KeyPressChat(116);
-    KeyPressChat(101);
-    KeyPressChat(97);
-    KeyPressChat(109);
-    KeyPressChat(32)
-    end
+    ParseCommand('chat team', true);
 end;
 
 procedure chCheckProto(var s: shortstring);
@@ -339,27 +330,6 @@ begin
     perfExt_NewTurnBeginning();
 end;
 
-procedure chSay(var s: shortstring);
-begin
-SendIPC('s' + s);
-
-if copy(s, 1, 4) = '/me ' then
-    s:= #2'* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
-else
-    s:= #1 + UserNick + ': ' + s;
-
-AddChatString(s)
-end;
-
-procedure chTeamSay(var s: shortstring);
-begin
-SendIPC('b' + s);
-
-s:= #4 + '[Team] ' + UserNick + ': ' + s;
-
-AddChatString(s)
-end;
-
 procedure chTimer(var s: shortstring);
 begin
 if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or CheckNoTeamOrHH then exit;
@@ -592,16 +562,4 @@ begin
     ZoomValue:= cDefaultZoomLevel;
 end;
 
-procedure chChat(var s: shortstring);
-begin
-    s:= s; // avoid compiler hint
-    GameState:= gsChat;
-    KeyPressChat(27)
-end;
-
-procedure chHistory(var s: shortstring);
-begin
-    s:= s; // avoid compiler hint
-    uChat.showAll:= not uChat.showAll
-end;
 

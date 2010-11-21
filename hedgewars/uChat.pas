@@ -34,7 +34,7 @@ var UserNick: shortstring = '';
     showAll: boolean;
 
 implementation
-uses SDLh, uKeys, uTypes, uVariables, uCommands, uUtils, uTextures, uRender;
+uses SDLh, uKeys, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
 
 const MaxStrIndex = 27;
 
@@ -308,8 +308,58 @@ if Key <> 0 then
     end
 end;
 
+procedure chSay(var s: shortstring);
+begin
+    SendIPC('s' + s);
+
+    if copy(s, 1, 4) = '/me ' then
+        s:= #2'* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
+    else
+        s:= #1 + UserNick + ': ' + s;
+
+    AddChatString(s)
+end;
+
+procedure chTeamSay(var s: shortstring);
+begin
+    SendIPC('b' + s);
+
+    s:= #4 + '[Team] ' + UserNick + ': ' + s;
+
+    AddChatString(s)
+end;
+
+procedure chHistory(var s: shortstring);
+begin
+    s:= s; // avoid compiler hint
+    uChat.showAll:= not uChat.showAll
+end;
+
+procedure chChat(var s: shortstring);
+begin
+    s:= s; // avoid compiler hint
+    GameState:= gsChat;
+    if length(s) = 0 then
+        KeyPressChat(27)
+    else
+        begin
+        KeyPressChat(27);
+        KeyPressChat(47);
+        KeyPressChat(116);
+        KeyPressChat(101);
+        KeyPressChat(97);
+        KeyPressChat(109);
+        KeyPressChat(32)
+        end
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('say', vtCommand, @chSay, true);
+    RegisterVariable('team', vtCommand, @chTeamSay, true);
+    RegisterVariable('history', vtCommand, @chHistory, true );
+    RegisterVariable('chat', vtCommand, @chChat, true );
+
     lastStr:= 0;
     visibleCount:= 0;
     showAll:= false;
