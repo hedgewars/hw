@@ -33,7 +33,6 @@ function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
 function  CheckForWin: boolean;
-procedure TeamGone(s: shortstring);
 procedure TeamGoneEffect(var Team: TTeam);
 function  GetTeamStatString(p: PTeam): shortstring;
 
@@ -394,24 +393,6 @@ for t:= 0 to Pred(TeamsCount) do
    TeamsArray[t]^.ExtDriven:= false
 end;
 
-procedure TeamGone(s: shortstring);
-var t: LongInt;
-begin
-t:= 0;
-while (t < cMaxTeams)
-    and (TeamsArray[t] <> nil)
-    and (TeamsArray[t]^.TeamName <> s) do inc(t);
-if (t = cMaxTeams) or (TeamsArray[t] = nil) then exit;
-
-with TeamsArray[t]^ do
-    begin
-    AddChatString('** '+ TeamName + ' is gone');
-    hasGone:= true
-    end;
-
-RecountTeamHealth(TeamsArray[t])
-end;
-
 procedure TeamGoneEffect(var Team: TTeam);
 var i: LongInt;
 begin
@@ -515,12 +496,32 @@ if b = 0 then OutError(errmsgUnknownVariable + ' "' + id + '"', false)
         else CurrentTeam^.Binds[b]:= s
 end;
 
+procedure chTeamGone(var s:shortstring);
+var t: LongInt;
+begin
+t:= 0;
+while (t < cMaxTeams)
+    and (TeamsArray[t] <> nil)
+    and (TeamsArray[t]^.TeamName <> s) do inc(t);
+if (t = cMaxTeams) or (TeamsArray[t] = nil) then exit;
+
+with TeamsArray[t]^ do
+    begin
+    AddChatString('** '+ TeamName + ' is gone');
+    hasGone:= true
+    end;
+
+RecountTeamHealth(TeamsArray[t])
+end;
+
+
 procedure initModule;
 begin
     RegisterVariable('addhh', vtCommand, @chAddHH, false);
     RegisterVariable('addteam', vtCommand, @chAddTeam, false);
     RegisterVariable('hhcoords', vtCommand, @chSetHHCoords, false);
     RegisterVariable('bind', vtCommand, @chBind, true );
+    RegisterVariable('teamgone', vtCommand, @chTeamGone, true );
 
     CurrentTeam:= nil;
     PreviousTeam:= nil;

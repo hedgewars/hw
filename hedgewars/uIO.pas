@@ -43,7 +43,7 @@ procedure CloseIPC;
 procedure NetGetNextCmd;
 
 implementation
-uses uConsole, uConsts, uChat, uTeams, uVariables, uCommands, uUtils, uDebug;
+uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
 
 type PCmd = ^TCmd;
      TCmd = packed record
@@ -309,15 +309,16 @@ while (headcmd <> nil)
         ',': ParseCommand('skip', true);
         's': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            AddChatString(s);
+            ParseCommand('chatmsg' + s, true);
             WriteLnToConsole(s)
             end;
         'b': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            AddChatString(#4 + s);
+            ParseCommand('chatmsg'#4 + s, true);
             WriteLnToConsole(s)
             end;
-        'F': TeamGone(copy(headcmd^.str, 2, Pred(headcmd^.len)));
+// TODO: deprecate 'F'
+        'F': ParseCommand('teamgone ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'N': begin
             tmpflag:= false;
             {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime)){$ENDIF}

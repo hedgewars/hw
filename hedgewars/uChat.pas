@@ -308,6 +308,11 @@ if Key <> 0 then
     end
 end;
 
+procedure chChatMessage(var s: shortstring);
+begin
+    AddChatString(s)
+end;
+
 procedure chSay(var s: shortstring);
 begin
     SendIPC('s' + s);
@@ -355,6 +360,7 @@ end;
 
 procedure initModule;
 begin
+    RegisterVariable('chatmsg', vtCommand, @chChatMessage, true);
     RegisterVariable('say', vtCommand, @chSay, true);
     RegisterVariable('team', vtCommand, @chTeamSay, true);
     RegisterVariable('history', vtCommand, @chHistory, true );
