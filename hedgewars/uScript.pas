@@ -56,6 +56,7 @@ uses LuaPas in 'LuaPas.pas',
     uCommands,
     uUtils,
     uIO,
+    uKeys,
     uCaptions;
 
 var luaState : Plua_State;
@@ -824,6 +825,21 @@ begin
         end;
     lc_getrandom:= 1
 end;
+
+function lc_setwind(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then
+        LuaError('Lua: Wrong number of parameters passed to SetWind!')
+    else
+        begin
+        cWindSpeed:= int2hwfloat(lua_tointeger(L, 1)) / 100 * cMaxWindSpeed;
+        cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
+        if cWindSpeed.isNegative then
+            CWindSpeedf := -cWindSpeedf;
+        AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1)^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+        end;
+    lc_setwind:= 0
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -1214,6 +1230,7 @@ lua_register(luaState, 'CampaignUnlock', @lc_campaignunlock);
 lua_register(luaState, 'GetGearMessage', @lc_getgearmessage);
 lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
 lua_register(luaState, 'GetRandom', @lc_getrandom);
+lua_register(luaState, 'SetWind', @lc_setwind);
 
 
 ScriptClearStack; // just to be sure stack is empty
