@@ -44,9 +44,9 @@ procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 
 
 implementation
-uses uWorld, uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
+uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
      uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
-     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender;
+     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions;
 
 
 procedure DeleteGear(Gear: PGear); forward;

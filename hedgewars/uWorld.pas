@@ -27,7 +27,6 @@ procedure freeModule;
 
 procedure InitWorld;
 procedure DrawWorld(Lag: LongInt);
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
 procedure ShakeCamera(amount: LongWord);
@@ -49,16 +48,10 @@ uses
     uUtils,
     uTextures,
     uRender,
-    uRenderUtils
+    uCaptions
     ;
 
-type TCaptionStr = record
-                   Tex: PTexture;
-                   EndTime: LongWord;
-                   end;
-
 var cWaveWidth, cWaveHeight: LongInt;
-    Captions: array[TCapGroup] of TCaptionStr;
     AMSlotSize, AMxOffset, AMyOffset, AMWidth, AMxShift, SlotsNum: LongInt;
     tmpSurface: PSDL_Surface;
     fpsTexture: PTexture;
@@ -537,10 +530,9 @@ procedure DrawWorld(Lag: LongInt);
 var i, t: LongInt;
     r: TSDL_Rect;
     tdx, tdy: Double;
-    grp: TCapGroup;
     s: string[15];
     highlight: Boolean;
-    offset, offsetX, offsetY, ScreenBottom: LongInt;
+    offsetX, offsetY, ScreenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
     if not isPaused then
@@ -741,26 +733,7 @@ if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
 {$ENDIF}
 
 // Captions
-{$IFDEF IPHONEOS}
-offset:= 40;
-{$ELSE}
-if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then offset:= 48
-else offset:= 8;
-{$ENDIF}
-
-    for grp:= Low(TCapGroup) to High(TCapGroup) do
-        with Captions[grp] do
-            if Tex <> nil then
-            begin
-                DrawCentered(0, offset, Tex);
-                inc(offset, Tex^.h + 2);
-                if EndTime <= RealTicks then
-                begin
-                    FreeTexture(Tex);
-                    Tex:= nil;
-                    EndTime:= 0
-                end;
-            end;
+DrawCaptions;
 
 // Teams Healths
 for t:= 0 to Pred(TeamsCount) do
@@ -1004,22 +977,6 @@ if isCursorVisible then
 isFirstFrame:= false
 end;
 
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
-begin
-//if Group in [capgrpGameState] then WriteLnToConsole(s);
-    if Captions[Group].Tex <> nil then
-        FreeTexture(Captions[Group].Tex);
-    Captions[Group].Tex:= nil;
-
-    Captions[Group].Tex:= RenderStringTex(s, Color, fntBig);
-
-    case Group of
-        capgrpGameState: Captions[Group].EndTime:= RealTicks + 2200
-    else
-        Captions[Group].EndTime:= RealTicks + 1400 + LongWord(Captions[Group].Tex^.w) * 3;
-    end;
-end;
-
 procedure MoveCamera;
 var EdgesDist,  wdy: LongInt;
     PrevSentPointTime: LongWord = 0;
@@ -1184,8 +1141,6 @@ begin
     missionTimer:= 0;
     missionTex:= nil;
     cOffsetY:= 0;
-
-    FillChar(Captions, sizeof(Captions), 0)
 end;
 
 procedure freeModule;

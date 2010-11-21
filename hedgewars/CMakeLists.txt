@@ -43,6 +43,7 @@ set(engine_sources
     uAIAmmoTests.pas
     uAIMisc.pas
     uAmmos.pas
+    uCaptions.pas
     uChat.pas
     uCollisions.pas
     uCommands.pas
