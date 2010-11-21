@@ -1711,8 +1711,51 @@ while gear <> nil do
     end
 end;
 
+
+procedure chSkip(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+if not CurrentTeam^.ExtDriven then SendIPC(',');
+uStats.Skipped;
+skipFlag:= true
+end;
+
+procedure chHogSay(var s: shortstring);
+var Gear: PVisualGear;
+    text: shortstring;
+begin
+    text:= copy(s, 2, Length(s) - 1);
+    if CheckNoTeamOrHH
+    or ((CurrentHedgehog^.Gear^.State and gstHHDriven) = 0) then
+        begin
+        ParseCommand('say ' + text, true);
+        exit
+        end;
+
+    if not CurrentTeam^.ExtDriven then SendIPC('h' + s);
+
+    if byte(s[1]) < 4 then
+        begin
+        Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
+        if Gear <> nil then
+            begin
+            Gear^.Hedgehog:= CurrentHedgehog;
+            Gear^.Text:= text;
+            Gear^.FrameTicks:= byte(s[1])
+            end
+        end
+    else
+        begin
+        SpeechType:= byte(s[1])-3;
+        SpeechText:= text
+        end;
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('skip', vtCommand, @chSkip, false);
+    RegisterVariable('hogsay', vtCommand, @chHogSay, true );
+
     CurAmmoGear:= nil;
     GearsList:= nil;
     KilledHHs:= 0;

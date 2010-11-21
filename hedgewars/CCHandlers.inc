@@ -16,17 +16,6 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
 *)
 
-function CheckNoTeamOrHH: boolean;
-var bRes: boolean;
-begin
-bRes:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
-{$IFDEF DEBUGFILE}
-if bRes then
-if CurrentTeam = nil then AddFileLog('CONSOLE: CurTeam = nil')
-                        else AddFileLog('CONSOLE: CurTeam <> nil, Gear = nil');
-{$ENDIF}
-CheckNoTeamOrHH:= bRes;
-end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure chQuit(var s: shortstring);
 const prevGState: TGameState = gsConfirm;
@@ -73,31 +62,6 @@ TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new', tru
 end
 end;
 
-procedure chAddTeam(var s: shortstring);
-var Color: Longword;
-    ts, cs: shortstring;
-begin
-cs:= '';
-ts:= '';
-if isDeveloperMode then
-begin
-SplitBySpace(s, cs);
-SplitBySpace(cs, ts);
-val(cs, Color);
-TryDo(Color <> 0, 'Error: black team color', true);
-
-// color is always little endian so the mask must be constant also in big endian archs
-Color:= Color or $FF000000;
-    
-AddTeam(Color);
-CurrentTeam^.TeamName:= ts;
-CurrentTeam^.PlayerHash:= s;
-if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true;
-
-CurrentTeam^.voicepack:= AskForVoicepack('Default')
-end
-end;
-
 procedure chTeamLocal(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
@@ -122,14 +86,6 @@ if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 CurrentTeam^.FortName:= s
 end;
 
-procedure chVoicepack(var s: shortstring);
-begin
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/voicepack"', true);
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
-CurrentTeam^.voicepack:= AskForVoicepack(s)
-end;
-
 procedure chFlag(var s: shortstring);
 begin
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/flag"', true);
@@ -145,37 +101,6 @@ if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 ScriptLoad(s)
 end;
 
-procedure chAddHH(var id: shortstring);
-var s: shortstring;
-    Gear: PGear;
-begin
-s:= '';
-if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
-with CurrentTeam^ do
-    begin
-    SplitBySpace(id, s);
-    CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
-    val(id, CurrentHedgehog^.BotLevel);
-    Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
-    SplitBySpace(s, id);
-    val(s, Gear^.Health);
-    TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
-    Gear^.Hedgehog^.Team:= CurrentTeam;
-    if (GameFlags and gfSharedAmmo) <> 0 then CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
-    else if (GameFlags and gfPerHogAmmo) <> 0 then
-        begin
-        AddAmmoStore;
-        CurrentHedgehog^.AmmoStore:= StoreCnt - 1
-        end
-    else CurrentHedgehog^.AmmoStore:= TeamsCount - 1;
-    CurrentHedgehog^.Gear:= Gear;
-    CurrentHedgehog^.Name:= id;
-    CurrentHedgehog^.InitialHealth:= Gear^.Health;
-    CurrHedgehog:= HedgehogsNumber;
-    inc(HedgehogsNumber)
-    end
-end;
-
 procedure chSetHat(var s: shortstring);
 begin
 if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
@@ -189,19 +114,6 @@ with CurrentTeam^ do
     else
         CurrentHedgehog^.Hat:= s
     end;
-end;
-
-procedure chSetHHCoords(var x: shortstring);
-var y: shortstring;
-    t: Longint;
-begin
-y:= '';
-if (not isDeveloperMode) or (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then exit;
-SplitBySpace(x, y);
-val(x, t);
-CurrentHedgehog^.Gear^.X:= int2hwFloat(t);
-val(y, t);
-CurrentHedgehog^.Gear^.Y:= int2hwFloat(t)
 end;
 
 procedure chSetAmmoLoadout(var descr: shortstring);
@@ -548,38 +460,6 @@ with CurrentHedgehog^.Gear^ do
     end
 end;
 
-procedure chHogSay(var s: shortstring);
-var Gear: PVisualGear;
-    text: shortstring;
-begin
-text:= copy(s, 2, Length(s)-1);
-if CheckNoTeamOrHH
-or ((CurrentHedgehog^.Gear^.State and gstHHDriven) = 0) then
-    begin
-    chSay(text);
-    exit
-    end;
-
-if not CurrentTeam^.ExtDriven then SendIPC('h' + s);
-
-if byte(s[1]) < 4 then
-    begin
-    Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
-    if Gear <> nil then
-    begin
-    Gear^.Hedgehog:= CurrentHedgehog;
-    Gear^.Text:= text;
-    Gear^.FrameTicks:= byte(s[1])
-    end
-    end
-else
-    begin
-    SpeechType:= byte(s[1])-3;
-    SpeechText:= text
-    end;
-
-end;
-
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
 if CheckNoTeamOrHH or isPaused then exit;
@@ -636,14 +516,6 @@ s:= s; // avoid compiler hint
 flagMakeCapture:= true
 end;
 
-procedure chSkip(var s: shortstring);
-begin
-s:= s; // avoid compiler hint
-if not CurrentTeam^.ExtDriven then SendIPC(',');
-uStats.Skipped;
-skipFlag:= true
-end;
-
 procedure chSetMap(var s: shortstring);
 begin
 if isDeveloperMode then
@@ -691,81 +563,6 @@ else
             end;
     if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1
     end
-end;
-
-procedure chFullScr(var s: shortstring);
-var flags: Longword = 0;
-    ico: PSDL_Surface;
-{$IFDEF DEBUGFILE}
-    buf: array[byte] of char;
-{$ENDIF}
-begin
-    s:= s; // avoid compiler hint
-    if Length(s) = 0 then cFullScreen:= not cFullScreen
-    else cFullScreen:= s = '1';
-
-{$IFDEF DEBUGFILE}
-    buf[0]:= char(0); // avoid compiler hint
-    AddFileLog('Prepare to change video parameters...');
-{$ENDIF}
-
-    flags:= SDL_OPENGL;// or SDL_RESIZABLE;
-
-    if cFullScreen then
-        flags:= flags or SDL_FULLSCREEN;
-
-{$IFDEF SDL_IMAGE_NEWER}
-    WriteToConsole('Init SDL_image... ');
-    SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
-    WriteLnToConsole(msgOK);
-{$ENDIF}
-    // load engine icon
-{$IFDEF DARWIN}
-    ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
-{$ELSE}
-    ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
-{$ENDIF}
-    if ico <> nil then
-    begin
-        SDL_WM_SetIcon(ico, 0);
-        SDL_FreeSurface(ico)
-    end;
-    
-    // set window caption
-    SDL_WM_SetCaption('Hedgewars', nil);
-    
-    if SDLPrimSurface <> nil then
-    begin
-{$IFDEF DEBUGFILE}
-        AddFileLog('Freeing old primary surface...');
-{$ENDIF}
-        SDL_FreeSurface(SDLPrimSurface);
-        SDLPrimSurface:= nil;
-    end;
-    
-{$IFDEF SDL13}
-    if SDLwindow = nil then
-    begin
-        SDLwindow:= SDL_CreateWindow('Hedgewars', 0, 0, cScreenWidth, cScreenHeight,
-                        SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN    
-                        {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});     
-        SDL_CreateRenderer(SDLwindow, -1, 0);
-    end;
-    
-    SDL_SetRenderDrawColor(0, 0, 0, 255);    
-    SDL_RenderFill(nil);     
-    SDL_RenderPresent();
-{$ELSE}
-    SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
-    SDLTry(SDLPrimSurface <> nil, true);
-    PixelFormat:= SDLPrimSurface^.format;
-{$ENDIF}
-
-{$IFDEF DEBUGFILE}
-    AddFileLog('Setting up OpenGL...');
-    AddFileLog('SDL video driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))));
-{$ENDIF}
-    SetupOpenGL();
 end;
 
 procedure chVol_p(var s: shortstring);
@@ -848,25 +645,3 @@ begin
     uChat.showAll:= not uChat.showAll
 end;
 
-procedure chLandCheck(var s: shortstring);
-begin
-{$IFDEF DEBUGFILE}
-    AddFileLog('CheckLandDigest: ' + s + ' digest : ' + digest);
-{$ENDIF}
-    if digest = '' then
-        digest:= s
-    else
-        TryDo(s = digest, 'Different maps generated, sorry', true);
-end;
-
-procedure chSendLandDigest(var s: shortstring);
-var adler, i: LongInt;
-begin
-    adler:= 1;
-    for i:= 0 to LAND_HEIGHT-1 do
-        Adler32Update(adler, @Land[i,0], LAND_WIDTH);
-    s:= 'M' + IntToStr(adler);
-
-    chLandCheck(s);
-    SendIPCRaw(@s[0], Length(s) + 1)
-end;

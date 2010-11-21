@@ -10,14 +10,15 @@ type TVariableType = (vtCommand, vtLongInt, vthwFloat, vtBoolean);
 
 procedure initModule;
 procedure freeModule;
+procedure RegisterVariable(Name: shortstring; VType: TVariableType; p: pointer; Trusted: boolean);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 procedure StopMessages(Message: Longword);
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uMobile,
-     uRandom, uAmmos, uStats, uChat, SDLh, uSound, uVisualGears, uScript, uTypes,
-     uVariables, uConsole, uFloat, uUtils, Adler32;
+uses Types, uConsts, uIO, uKeys, uMobile,
+     uRandom, uAmmos, uChat, SDLh, uScript, uTypes,
+     uVariables, uConsole, uUtils;
 
 type  PVariable = ^TVariable;
       TVariable = record
@@ -31,7 +32,7 @@ type  PVariable = ^TVariable;
 var
       Variables: PVariable;
 
-function RegisterVariable(Name: shortstring; VType: TVariableType; p: pointer; Trusted: boolean): PVariable;
+procedure RegisterVariable(Name: shortstring; VType: TVariableType; p: pointer; Trusted: boolean);
 var value: PVariable;
 begin
 New(value);
@@ -47,8 +48,6 @@ if Variables = nil then Variables:= value
                         value^.Next:= Variables;
                         Variables:= value
                         end;
-
-RegisterVariable:= value;
 end;
 
 
@@ -125,15 +124,12 @@ begin
     isDeveloperMode:= true;
 
     // NOTE: please, keep most frequently used commands on bottom
-    RegisterVariable('landcheck',vtCommand, @chLandCheck    , false);
-    RegisterVariable('sendlanddigest',vtCommand, @chSendLandDigest, false);
     RegisterVariable('flag'    , vtCommand, @chFlag         , false);
     RegisterVariable('script'  , vtCommand, @chScript       , false);
     RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
     RegisterVariable('spectate', vtBoolean, @fastUntilLag   , false);
     RegisterVariable('capture' , vtCommand, @chCapture      , true );
     RegisterVariable('rotmask' , vtCommand, @chRotateMask   , true );
-    RegisterVariable('addteam' , vtCommand, @chAddTeam      , false);
     RegisterVariable('rdriven' , vtCommand, @chTeamLocal    , false);
     RegisterVariable('map'     , vtCommand, @chSetMap       , false);
     RegisterVariable('theme'   , vtCommand, @chSetTheme     , false);
@@ -159,12 +155,9 @@ begin
     RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);
     RegisterVariable('minestime',vtLongInt, @cMinesTime     , false);
     RegisterVariable('fort'    , vtCommand, @chFort         , false);
-    RegisterVariable('voicepack',vtCommand, @chVoicepack    , false);
     RegisterVariable('grave'   , vtCommand, @chGrave        , false);
     RegisterVariable('bind'    , vtCommand, @chBind         , true );
-    RegisterVariable('addhh'   , vtCommand, @chAddHH        , false);
     RegisterVariable('hat'     , vtCommand, @chSetHat       , false);
-    RegisterVariable('hhcoords', vtCommand, @chSetHHCoords  , false);
     RegisterVariable('ammloadt', vtCommand, @chSetAmmoLoadout, false);
     RegisterVariable('ammdelay', vtCommand, @chSetAmmoDelay, false);
     RegisterVariable('ammprob',  vtCommand, @chSetAmmoProbability, false);
@@ -177,11 +170,9 @@ begin
     RegisterVariable('zoomin'  , vtCommand, @chZoomIn       , true );
     RegisterVariable('zoomout' , vtCommand, @chZoomOut      , true );
     RegisterVariable('zoomreset',vtCommand, @chZoomReset    , true );
-    RegisterVariable('skip'    , vtCommand, @chSkip         , false);
     RegisterVariable('history' , vtCommand, @chHistory      , true );
     RegisterVariable('chat'    , vtCommand, @chChat         , true );
     RegisterVariable('say'     , vtCommand, @chSay          , true );
-    RegisterVariable('hogsay'  , vtCommand, @chHogSay       , true );
     RegisterVariable('team'    , vtCommand, @chTeamSay      , true );
     RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , true);
     RegisterVariable('+precise', vtCommand, @chPrecise_p    , false);
@@ -205,7 +196,6 @@ begin
     RegisterVariable('put'     , vtCommand, @chPut          , false);
     RegisterVariable('ljump'   , vtCommand, @chLJump        , false);
     RegisterVariable('hjump'   , vtCommand, @chHJump        , false);
-    RegisterVariable('fullscr' , vtCommand, @chFullScr      , true );
     RegisterVariable('+volup'  , vtCommand, @chVol_p        , true );
     RegisterVariable('-volup'  , vtCommand, @chVol_m        , true );
     RegisterVariable('+voldown', vtCommand, @chVol_m        , true );

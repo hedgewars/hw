@@ -38,6 +38,8 @@ function  CheckCJKFont(s: ansistring; font: THWFont): THWFont;
 procedure AddFileLog(s: shortstring);
 {$ENDIF}
 
+function CheckNoTeamOrHH: boolean; inline;
+
 procedure initModule;
 procedure freeModule;
 
@@ -284,6 +286,11 @@ begin
         GetLaunchY:= 0
 end;
 
+function CheckNoTeamOrHH: boolean;
+var bRes: boolean;
+begin
+CheckNoTeamOrHH:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
+end;
 
 procedure initModule;
 {$IFDEF DEBUGFILE}{$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}{$ENDIF}

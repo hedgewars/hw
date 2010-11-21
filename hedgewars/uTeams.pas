@@ -24,6 +24,7 @@ uses uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions,
 
 procedure initModule;
 procedure freeModule;
+
 function  AddTeam(TeamColor: Longword): PTeam;
 procedure SwitchHedgehog;
 procedure AfterSwitchHedgehog;
@@ -37,7 +38,7 @@ procedure TeamGoneEffect(var Team: TTeam);
 function  GetTeamStatString(p: PTeam): shortstring;
 
 implementation
-uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions;
+uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions, uCommands;
 
 const MaxTeamHealth: LongInt = 0;
 
@@ -431,8 +432,81 @@ begin
     GetTeamStatString:= s;
 end;
 
+procedure chAddHH(var id: shortstring);
+var s: shortstring;
+    Gear: PGear;
+begin
+    s:= '';
+    if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
+    with CurrentTeam^ do
+        begin
+        SplitBySpace(id, s);
+        CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
+        val(id, CurrentHedgehog^.BotLevel);
+        Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
+        SplitBySpace(s, id);
+        val(s, Gear^.Health);
+        TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
+        Gear^.Hedgehog^.Team:= CurrentTeam;
+        if (GameFlags and gfSharedAmmo) <> 0 then CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
+        else if (GameFlags and gfPerHogAmmo) <> 0 then
+            begin
+            AddAmmoStore;
+            CurrentHedgehog^.AmmoStore:= StoreCnt - 1
+            end
+        else CurrentHedgehog^.AmmoStore:= TeamsCount - 1;
+        CurrentHedgehog^.Gear:= Gear;
+        CurrentHedgehog^.Name:= id;
+        CurrentHedgehog^.InitialHealth:= Gear^.Health;
+        CurrHedgehog:= HedgehogsNumber;
+        inc(HedgehogsNumber)
+        end
+end;
+
+procedure chAddTeam(var s: shortstring);
+var Color: Longword;
+    ts, cs: shortstring;
+begin
+    cs:= '';
+    ts:= '';
+    if isDeveloperMode then
+        begin
+        SplitBySpace(s, cs);
+        SplitBySpace(cs, ts);
+        val(cs, Color);
+        TryDo(Color <> 0, 'Error: black team color', true);
+
+        // color is always little endian so the mask must be constant also in big endian archs
+        Color:= Color or $FF000000;
+
+        AddTeam(Color);
+        CurrentTeam^.TeamName:= ts;
+        CurrentTeam^.PlayerHash:= s;
+        if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true;
+
+        CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        end
+end;
+
+procedure chSetHHCoords(var x: shortstring);
+var y: shortstring;
+    t: Longint;
+begin
+y:= '';
+if (not isDeveloperMode) or (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then exit;
+SplitBySpace(x, y);
+val(x, t);
+CurrentHedgehog^.Gear^.X:= int2hwFloat(t);
+val(y, t);
+CurrentHedgehog^.Gear^.Y:= int2hwFloat(t)
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('addhh', vtCommand, @chAddHH, false);
+    RegisterVariable('addteam', vtCommand, @chAddTeam, false);
+    RegisterVariable('hhcoords', vtCommand, @chSetHHCoords  , false);
+
     CurrentTeam:= nil;
     PreviousTeam:= nil;
     CurrentHedgehog:= nil;

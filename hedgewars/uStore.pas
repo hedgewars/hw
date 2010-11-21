@@ -39,7 +39,7 @@ procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
 
 implementation
-uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uIO, uRender, uRenderUtils;
+uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uIO, uRender, uRenderUtils, uCommands;
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -778,8 +778,85 @@ FreeTexture(WeaponTooltipTex);
 WeaponTooltipTex:= nil
 end;
 
+procedure chFullScr(var s: shortstring);
+var flags: Longword = 0;
+    ico: PSDL_Surface;
+{$IFDEF DEBUGFILE}
+    buf: array[byte] of char;
+{$ENDIF}
+begin
+    s:= s; // avoid compiler hint
+    if Length(s) = 0 then cFullScreen:= not cFullScreen
+    else cFullScreen:= s = '1';
+
+{$IFDEF DEBUGFILE}
+    buf[0]:= char(0); // avoid compiler hint
+    AddFileLog('Prepare to change video parameters...');
+{$ENDIF}
+
+    flags:= SDL_OPENGL;// or SDL_RESIZABLE;
+
+    if cFullScreen then
+        flags:= flags or SDL_FULLSCREEN;
+
+{$IFDEF SDL_IMAGE_NEWER}
+    WriteToConsole('Init SDL_image... ');
+    SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
+    WriteLnToConsole(msgOK);
+{$ENDIF}
+    // load engine icon
+{$IFDEF DARWIN}
+    ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
+{$ELSE}
+    ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+{$ENDIF}
+    if ico <> nil then
+    begin
+        SDL_WM_SetIcon(ico, 0);
+        SDL_FreeSurface(ico)
+    end;
+
+    // set window caption
+    SDL_WM_SetCaption('Hedgewars', nil);
+
+    if SDLPrimSurface <> nil then
+    begin
+{$IFDEF DEBUGFILE}
+        AddFileLog('Freeing old primary surface...');
+{$ENDIF}
+        SDL_FreeSurface(SDLPrimSurface);
+        SDLPrimSurface:= nil;
+    end;
+
+{$IFDEF SDL13}
+    if SDLwindow = nil then
+    begin
+        SDLwindow:= SDL_CreateWindow('Hedgewars', 0, 0, cScreenWidth, cScreenHeight,
+                        SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN
+                        {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});
+        SDL_CreateRenderer(SDLwindow, -1, 0);
+    end;
+
+    SDL_SetRenderDrawColor(0, 0, 0, 255);
+    SDL_RenderFill(nil);
+    SDL_RenderPresent();
+{$ELSE}
+    SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
+    SDLTry(SDLPrimSurface <> nil, true);
+    PixelFormat:= SDLPrimSurface^.format;
+{$ENDIF}
+
+{$IFDEF DEBUGFILE}
+    AddFileLog('Setting up OpenGL...');
+    AddFileLog('SDL video driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))));
+{$ENDIF}
+    SetupOpenGL();
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('fullscr', vtCommand, @chFullScr, true);
+
     PixelFormat:= nil;
     SDLPrimSurface:= nil;
 
