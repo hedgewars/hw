@@ -1397,7 +1397,7 @@ begin
         ty := _0;
         while tt > _20 do
             begin
-            if ((hwRound(ty) and LAND_HEIGHT_MASK) = 0) and ((hwRound(tx) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(ty), hwRound(tx)] and $F0) <> 0) then
+            if ((hwRound(Gear^.Y+ty) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X+tx) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y+ty), hwRound(Gear^.X+tx)] and $FF00) <> 0) then
                 begin
                 Gear^.X := Gear^.X + tx;
                 Gear^.Y := Gear^.Y + ty;
