@@ -116,46 +116,6 @@ with CurrentTeam^ do
     end;
 end;
 
-procedure chSetAmmoLoadout(var descr: shortstring);
-begin
-SetAmmoLoadout(descr)
-end;
-
-procedure chSetAmmoDelay(var descr: shortstring);
-begin
-SetAmmoDelay(descr)
-end;
-
-procedure chSetAmmoProbability(var descr: shortstring);
-begin
-SetAmmoProbability(descr)
-end;
-
-procedure chSetAmmoReinforcement(var descr: shortstring);
-begin
-SetAmmoReinforcement(descr)
-end;
-
-procedure chAddAmmoStore(var descr: shortstring);
-begin
-descr:= ''; // avoid compiler hint
-AddAmmoStore
-end;
-
-procedure chBind(var id: shortstring);
-var s: shortstring;
-    b: LongInt;
-begin
-s:= '';
-if CurrentTeam = nil then exit;
-SplitBySpace(id, s);
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
-b:= KeyNameToCode(id);
-if b = 0 then OutError(errmsgUnknownVariable + ' "' + id + '"', false)
-        else CurrentTeam^.Binds[b]:= s
-end;
-
 procedure chCurU_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint

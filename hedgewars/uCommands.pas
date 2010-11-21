@@ -16,8 +16,8 @@ procedure StopMessages(Message: Longword);
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses Types, uConsts, uIO, uKeys, uMobile,
-     uRandom, uAmmos, uChat, SDLh, uScript, uTypes,
+uses Types, uConsts, uIO, uMobile,
+     uRandom, uChat, SDLh, uScript, uTypes,
      uVariables, uConsole, uUtils;
 
 type  PVariable = ^TVariable;
@@ -146,7 +146,6 @@ begin
     RegisterVariable('waterrise', vtLongInt, @cWaterRise    , false);
     RegisterVariable('healthdec', vtLongInt, @cHealthDecrease, false);
     RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);
-    RegisterVariable('ropepct' , vtLongInt, @cRopePercent   , false);
     RegisterVariable('minedudpct',vtLongInt,@cMineDudPercent, false);
     RegisterVariable('minesnum', vtLongInt, @cLandMines     , false);
     RegisterVariable('explosives',vtLongInt,@cExplosives    , false);
@@ -156,13 +155,7 @@ begin
     RegisterVariable('minestime',vtLongInt, @cMinesTime     , false);
     RegisterVariable('fort'    , vtCommand, @chFort         , false);
     RegisterVariable('grave'   , vtCommand, @chGrave        , false);
-    RegisterVariable('bind'    , vtCommand, @chBind         , true );
     RegisterVariable('hat'     , vtCommand, @chSetHat       , false);
-    RegisterVariable('ammloadt', vtCommand, @chSetAmmoLoadout, false);
-    RegisterVariable('ammdelay', vtCommand, @chSetAmmoDelay, false);
-    RegisterVariable('ammprob',  vtCommand, @chSetAmmoProbability, false);
-    RegisterVariable('ammreinf', vtCommand, @chSetAmmoReinforcement, false);
-    RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
     RegisterVariable('quit'    , vtCommand, @chQuit         , true );
     RegisterVariable('confirm' , vtCommand, @chConfirm      , true );
     RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );

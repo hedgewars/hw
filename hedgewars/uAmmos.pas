@@ -418,8 +418,22 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     if Ammoz[a].SkipTurns >= 10000 then dec(Ammoz[a].SkipTurns,10000)
 end;
 
+
+
+procedure chAddAmmoStore(var descr: shortstring);
+begin
+descr:= ''; // avoid compiler hint
+AddAmmoStore
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('ammloadt', vtCommand, @SetAmmoLoadout, false);
+    RegisterVariable('ammdelay', vtCommand, @SetAmmoDelay, false);
+    RegisterVariable('ammprob',  vtCommand, @SetAmmoProbability, false);
+    RegisterVariable('ammreinf', vtCommand, @SetAmmoReinforcement, false);
+    RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
+
     StoreCnt:= 0;
     ammoLoadout:= '';
     ammoProbability:= '';

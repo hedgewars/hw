@@ -501,11 +501,26 @@ val(y, t);
 CurrentHedgehog^.Gear^.Y:= int2hwFloat(t)
 end;
 
+procedure chBind(var id: shortstring);
+var s: shortstring;
+    b: LongInt;
+begin
+s:= '';
+if CurrentTeam = nil then exit;
+SplitBySpace(id, s);
+if s[1]='"' then Delete(s, 1, 1);
+if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+b:= KeyNameToCode(id);
+if b = 0 then OutError(errmsgUnknownVariable + ' "' + id + '"', false)
+        else CurrentTeam^.Binds[b]:= s
+end;
+
 procedure initModule;
 begin
     RegisterVariable('addhh', vtCommand, @chAddHH, false);
     RegisterVariable('addteam', vtCommand, @chAddTeam, false);
-    RegisterVariable('hhcoords', vtCommand, @chSetHHCoords  , false);
+    RegisterVariable('hhcoords', vtCommand, @chSetHHCoords, false);
+    RegisterVariable('bind', vtCommand, @chBind, true );
 
     CurrentTeam:= nil;
     PreviousTeam:= nil;
