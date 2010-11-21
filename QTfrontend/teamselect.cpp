@@ -233,10 +233,6 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
     p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
     addScrArea(framePlaying, p.color(QPalette::Window).light(105), 250);
     addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
-    QPushButton * btnSetup = new QPushButton(this);
-    btnSetup->setText(QPushButton::tr("Setup"));
-    connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
-    mainLayout.addWidget(btnSetup);
 }
 
 void TeamSelWidget::setAcceptOuter(bool acceptOuter)

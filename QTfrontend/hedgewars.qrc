@@ -103,6 +103,8 @@
     <file>res/follow.png</file>
     <file>res/info.png</file>
     <file>res/kick.png</file>
+    <file>res/lock.png</file>
+    <file>res/unlock.png</file>
     <file>res/StatsMedal1.png</file>
     <file>res/StatsMedal2.png</file>
     <file>res/StatsMedal3.png</file>

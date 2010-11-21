@@ -127,8 +127,8 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageMultiplayer->BtnStartMPGame, SIGNAL(clicked()), this, SLOT(StartMPGame()));
     connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)),
         ui.pageMultiplayer->BtnStartMPGame, SLOT(setEnabled(bool)));
-    connect(ui.pageMultiplayer->teamsSelect, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
-    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToSchemes()), this, SLOT(GoToSchemes()));
+    connect(ui.pageMultiplayer, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
+    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToSchemes(int)), this, SLOT(GoToScheme(int)));
     connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToWeapons(const QString &)), this, SLOT(GoToSelectWeaponSet(const QString &)));
 
     connect(ui.pagePlayDemo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
@@ -146,7 +146,9 @@ HWForm::HWForm(QWidget *parent)
 #endif
 
     connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
-    connect(ui.pageOptions->WeaponsButt, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
+    connect(ui.pageOptions->WeaponNew, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
+    connect(ui.pageOptions->SchemeEdit, SIGNAL(clicked()), this, SLOT(GoToEditScheme()));
+    connect(ui.pageOptions->SchemeNew, SIGNAL(clicked()), this, SLOT(GoToNewScheme()));
     connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
 
     connect(ui.pageNet->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
@@ -162,8 +164,8 @@ HWForm::HWForm(QWidget *parent)
         ui.pageNetGame->BtnGo, SLOT(setEnabled(bool)));
     connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
         ui.pageNetGame->BtnStart, SLOT(setEnabled(bool)));
-    connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
-    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToSchemes()), this, SLOT(GoToSchemes()));
+    connect(ui.pageNetGame, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
+    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToSchemes(int)), this, SLOT(GoToScheme(int)));
     connect(ui.pageNetGame->pGameCFG, SIGNAL(goToWeapons(const QString &)), this, SLOT(GoToSelectWeaponSet(const QString &)));
 
     connect(ui.pageRoomsList->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
@@ -209,6 +211,7 @@ HWForm::HWForm(QWidget *parent)
     ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");
     ui.pageScheme->setModel(ammoSchemeModel);
     ui.pageMultiplayer->gameCFG->GameSchemes->setModel(ammoSchemeModel);
+    ui.pageOptions->SchemesName->setModel(ammoSchemeModel);
 
     wBackground = NULL;
     if (config->isFrontendEffects()) {
@@ -420,8 +423,21 @@ void HWForm::GoToNetServer()
     GoToPage(ID_PAGE_NETSERVER);
 }
 
-void HWForm::GoToSchemes()
+void HWForm::GoToScheme(int index)
 {
+    ui.pageScheme->selectScheme->setCurrentIndex(index);
+    GoToPage(ID_PAGE_SCHEME);
+}
+
+void HWForm::GoToNewScheme()
+{
+    ui.pageScheme->newRow();
+    GoToPage(ID_PAGE_SCHEME);
+}
+
+void HWForm::GoToEditScheme()
+{
+    ui.pageScheme->selectScheme->setCurrentIndex(ui.pageOptions->SchemesName->currentIndex());
     GoToPage(ID_PAGE_SCHEME);
 }
 

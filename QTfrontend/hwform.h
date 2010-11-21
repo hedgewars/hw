@@ -74,7 +74,9 @@ private slots:
     void GoToSelectWeaponSet(const QString & name);
     void GoToSelectNewWeapon();
     void GoToNetServer();
-    void GoToSchemes();
+    void GoToScheme(int index);
+    void GoToEditScheme();
+    void GoToNewScheme();
     void GoToAdmin();
     void GoToPage(quint8 id);
     void GoBack();

@@ -53,7 +53,7 @@ public slots:
 
 signals:
     void paramChanged(const QString & param, const QStringList & value);
-    void goToSchemes();
+    void goToSchemes(int);
     void goToWeapons(const QString & name);
 
 private slots:
@@ -63,6 +63,7 @@ private slots:
     void seedChanged(const QString &);
     void themeChanged(const QString &);
     void schemeChanged(int);
+    void jumpToSchemes();
     void jumpToWeapons();
     void mapgenChanged(MapGenerator m);
     void maze_sizeChanged(int s);
