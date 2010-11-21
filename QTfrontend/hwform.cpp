@@ -276,7 +276,7 @@ void HWForm::onFrontendFullscreen(bool value)
 
 void HWForm::keyReleaseEvent(QKeyEvent *event)
 {
-  if (event->key() == Qt::Key_Escape /*|| event->key() == Qt::Key_Backspace*/ )
+  if (event->key() == Qt::Key_Escape /*|| event->key() == Qt::Key_Backspace*/ ) 
     this->GoBack();
 }
 
@@ -521,6 +521,7 @@ void HWForm::GoBack()
             GoBack();
 
     if (curid == ID_PAGE_ROOMSLIST) NetDisconnect();
+    if (curid == ID_PAGE_NETGAME) hwnet->partRoom();
 
     if (curid == ID_PAGE_SCHEME)
         ammoSchemeModel->Save();
@@ -678,7 +679,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
     connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
     connect(hwnet, SIGNAL(LeftRoom()), this, SLOT(NetLeftRoom()));
     connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
-    connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
+    //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
 
 // rooms list page stuff
     connect(hwnet, SIGNAL(roomsList(const QStringList&)),
