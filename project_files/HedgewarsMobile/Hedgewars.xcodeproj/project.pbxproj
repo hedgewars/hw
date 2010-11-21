@@ -1469,7 +1469,7 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* Hedgewars */ = {
+		1D6058900D05DD3D006BFB54 /* Test Lua */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Hedgewars" */;
 			buildPhases = (
@@ -1560,7 +1560,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* Hedgewars */,
+				1D6058900D05DD3D006BFB54 /* Test Lua */,
 				928301160F10CAFC00CC5A3C /* fpc */,
 				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
 			);

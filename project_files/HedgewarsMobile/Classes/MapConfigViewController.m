@@ -23,13 +23,14 @@
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
+#import "SchemeWeaponConfigViewController.h"
 
 #define scIndex         self.segmentedControl.selectedSegmentIndex
 #define isRandomness()  (segmentedControl.selectedSegmentIndex == 0 || segmentedControl.selectedSegmentIndex == 2)
 
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
-            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy;
+            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy, externalController;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -320,16 +321,17 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
+            [externalController fillSections];
             break;
 
         case 1: // Map
-        case 3: // Mission
             mapgen = @"e$mapgen 0";
             // dummy values, these are set by -updatePreview -> -didSelectRowAtIndexPath -> -setDetailsForStaticMap
             staticmap = @"map Bamboo";
             mission = @"";
             self.slider.enabled = NO;
             self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
+            [externalController fillSections];
             break;
 
         case 2: // Maze
@@ -338,6 +340,17 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
+            [externalController fillSections];
+            break;
+
+        case 3: // Mission
+            mapgen = @"e$mapgen 0";
+            // dummy values, these are set by -updatePreview -> -didSelectRowAtIndexPath -> -setDetailsForStaticMap
+            staticmap = @"map Bamboo";
+            mission = @"";
+            self.slider.enabled = NO;
+            self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
+            [externalController emptySections];
             break;
 
         default:
