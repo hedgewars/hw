@@ -273,7 +273,7 @@ case Kind of
                 end;
         gtRope: begin
                 gear^.Radius:= 3;
-                gear^.Friction:= _450;
+                gear^.Friction:= _450 * _0_01 * cRopePercent;
                 RopePoints.Count:= 0;
                 end;
         gtMine: begin

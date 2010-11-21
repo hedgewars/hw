@@ -51,6 +51,7 @@ var
     cTemplateFilter : LongInt;
     cMapGen         : LongInt;
     cMazeSize       : LongInt;
+    cRopePercent    : LongWord;
 
     cHedgehogTurnTime: Longword;
     cMinesTime       : LongInt;
@@ -2159,6 +2160,7 @@ begin
     TurnTimeLeft        := 0;
     cSuddenDTurns       := 15;
     cDamagePercent      := 100;
+    cRopePercent        := 100;
     cMineDudPercent     := 0;
     cTemplateFilter     := 0;
     cMapGen             := 0;   // MAPGEN_REGULAR

@@ -497,6 +497,7 @@ private:
     QSpinBox * SB_Mines;
     QSpinBox * SB_MineDuds;
     QSpinBox * SB_Explosives;
+    QSpinBox * SB_RopeModifier;
     QLineEdit * LE_name;
     QComboBox * selectScheme;
 

@@ -1132,7 +1132,7 @@ begin
 
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle), HHGear^.dX);
         Gear^.dY := -AngleCos(HHGear^.Angle);
-        Gear^.Friction := _450;
+        Gear^.Friction := _450 * _0_01 * cRopePercent;
         Gear^.Elasticity := _0;
         Gear^.State := Gear^.State and not gsttmpflag;
         Gear^.doStep := @doStepRope;

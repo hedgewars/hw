@@ -179,6 +179,7 @@ QStringList GameCFGWidget::getFullConfig() const
     sl.append(QString("e$hcaseamount %1").arg(schemeData(34).toInt()));
     sl.append(QString("e$waterrise %1").arg(schemeData(35).toInt()));
     sl.append(QString("e$healthdec %1").arg(schemeData(36).toInt()));
+    sl.append(QString("e$ropepct %1").arg(schemeData(37).toInt()));
     sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
     sl.append(QString("e$mapgen %1").arg(pMapContainer->get_mapgen()));
     sl.append(QString("e$maze_size %1").arg(pMapContainer->get_maze_size()));

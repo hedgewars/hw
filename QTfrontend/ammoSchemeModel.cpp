@@ -60,6 +60,7 @@ QList<QVariant> defaultScheme = QList<QVariant>()
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -120,6 +121,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << "healthcaseamount" // 34
         << "waterrise"        // 35
         << "healthdecrease"   // 36
+        << "ropepct"          // 37
         ;
 
     QList<QVariant> proMode;
@@ -161,6 +163,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> shoppa;
@@ -202,6 +205,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> cleanslate;
@@ -243,6 +247,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> minefield;
@@ -284,6 +289,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> barrelmayhem;
@@ -325,6 +331,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> tunnelhogs;
@@ -366,6 +373,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> forts;
@@ -407,6 +415,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> timeless;
@@ -448,6 +457,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(30)            // health case amt 34
         << QVariant(0)             // water rise amt 35
         << QVariant(0)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> thinkingportals;
@@ -489,6 +499,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> kingmode;
@@ -530,6 +541,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(30)            // health case amt 34
         << QVariant(30)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
 
