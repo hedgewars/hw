@@ -309,12 +309,12 @@ while (headcmd <> nil)
         ',': ParseCommand('skip', true);
         's': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            ParseCommand('chatmsg' + s, true);
+            ParseCommand('chatmsg ' + s, true);
             WriteLnToConsole(s)
             end;
         'b': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            ParseCommand('chatmsg'#4 + s, true);
+            ParseCommand('chatmsg '#4 + s, true);
             WriteLnToConsole(s)
             end;
 // TODO: deprecate 'F'
