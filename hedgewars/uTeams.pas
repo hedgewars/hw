@@ -122,6 +122,19 @@ with CurrentHedgehog^ do
         InsertGearToList(Gear)
         end
     end;
+// Try to make the ammo menu viewed when not your turn be a bit more useful for per-hog-ammo mode
+with CurrentTeam^ do
+    if ((GameFlags and gfPerHogAmmo) <> 0) and (not ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then
+        begin
+        c:= CurrHedgehog;
+        repeat
+            begin
+            inc(c);
+            if c > cMaxHHIndex then c:= 0
+            end
+        until (c = CurrHedgehog) or (Hedgehogs[c].Gear <> nil);
+        LocalAmmo:= Hedgehogs[c].AmmoStore
+        end;
 
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
