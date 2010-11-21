@@ -68,7 +68,7 @@ var ThinkingHH: PGear;
              end;
 
 implementation
-uses uCollisions, uVariables, uUtils, uIO;
+uses uCollisions, uVariables, uUtils, uDebug;
 
 const KillScore = 200;
 

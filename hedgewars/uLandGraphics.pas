@@ -40,7 +40,7 @@ function  LandBackPixel(x, y: LongInt): LongWord;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
 
 implementation
-uses SDLh, uLandTexture, uVariables, uUtils, uIO;
+uses SDLh, uLandTexture, uVariables, uUtils, uDebug;
 
 procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;

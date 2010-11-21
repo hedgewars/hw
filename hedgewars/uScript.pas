@@ -55,9 +55,9 @@ uses LuaPas in 'LuaPas.pas',
     uVariables,
     uCommands,
     uUtils,
-    uIO,
     uKeys,
-    uCaptions;
+    uCaptions,
+    uDebug;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;

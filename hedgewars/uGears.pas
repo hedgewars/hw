@@ -46,7 +46,7 @@ procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 implementation
 uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
      uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
-     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions;
+     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug;
 
 
 procedure DeleteGear(Gear: PGear); forward;
@@ -273,7 +273,7 @@ case Kind of
                 end;
         gtRope: begin
                 gear^.Radius:= 3;
-                gear^.Friction:= _450 * _0_01 * cRopePercent;
+                gear^.Friction:= _450;
                 RopePoints.Count:= 0;
                 end;
         gtMine: begin

@@ -30,7 +30,7 @@ procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
 uses uStore, uConsts, uConsole, uRandom, uVisualGears, uSound, GLunit,
-     uTypes, uVariables, uUtils, uIO;
+     uTypes, uVariables, uUtils, uDebug;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;

@@ -49,6 +49,7 @@ set(engine_sources
     uCommands.pas
     uConsole.pas
     uConsts.pas
+    uDebug.pas
     uFloat.pas
     uGame.pas
     uGears.pas

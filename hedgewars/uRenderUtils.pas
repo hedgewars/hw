@@ -12,7 +12,7 @@ function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFo
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 
 implementation
-uses uIO, uUtils, uVariables, uConsts, uTextures, sysutils;
+uses uIO, uUtils, uVariables, uConsts, uTextures, sysutils, uDebug;
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 var r: TSDL_Rect;

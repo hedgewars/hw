@@ -40,11 +40,12 @@ procedure AddFileLog(s: shortstring);
 
 function CheckNoTeamOrHH: boolean; inline;
 
+function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
+function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
+
 procedure initModule;
 procedure freeModule;
 
-function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
-function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
 implementation
 uses typinfo, Math, uConsts, uVariables, SysUtils;
@@ -287,7 +288,6 @@ begin
 end;
 
 function CheckNoTeamOrHH: boolean;
-var bRes: boolean;
 begin
 CheckNoTeamOrHH:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
 end;
