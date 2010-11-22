@@ -563,7 +563,6 @@ PageOptions::PageOptions(QWidget* parent) :
             SchemeDelete->setIcon(pmDelete);
             SchemeDelete->setMaximumWidth(pmDelete.width() + 6);
             SchemeDelete->setEnabled(false);
-            SchemeDelete->setVisible(false); // hide for now
             WeaponsLayout->addWidget(SchemeDelete, 1, 4);
 
             QLabel* WeaponLabel = new QLabel(groupWeapons);
@@ -592,8 +591,6 @@ PageOptions::PageOptions(QWidget* parent) :
             WeaponDelete->setIconSize(pmDelete.size());
             WeaponDelete->setIcon(pmDelete);
             WeaponDelete->setMaximumWidth(pmDelete.width() + 6);
-            WeaponDelete->setEnabled(false);
-            WeaponDelete->setVisible(false); // hide for now
             WeaponsLayout->addWidget(WeaponDelete, 2, 4);
 
             WeaponTooltip = new QCheckBox(this);
@@ -1106,18 +1103,24 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
     QGridLayout * pageLayout = new QGridLayout(this);
 
     pWeapons = new SelWeaponWidget(cAmmoNumber, this);
-    pageLayout->addWidget(pWeapons, 0, 0, 1, 4);
+    pageLayout->addWidget(pWeapons, 0, 0, 1, 6);
 
     BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
-    BtnDefault = addButton(tr("Default"), pageLayout, 1, 1);
-    BtnDelete = addButton(tr("Delete"), pageLayout, 1, 2);
-    BtnSave = addButton(":/res/Save.png", pageLayout, 1, 3, true);
+    BtnDefault = addButton(tr("Default"), pageLayout, 1, 2);
+    BtnNew = addButton(tr("New"), pageLayout, 1, 3);
+    BtnDelete = addButton(tr("Delete"), pageLayout, 1, 4);
+    BtnSave = addButton(":/res/Save.png", pageLayout, 1, 5, true);
     BtnSave->setStyleSheet("QPushButton{margin: 24px 0px 0px 0px;}");
     BtnBack->setFixedHeight(BtnSave->height());
     BtnBack->setStyleSheet("QPushButton{margin-top: 31px;}");
 
+    selectWeaponSet = new QComboBox(this);
+    pageLayout->addWidget(selectWeaponSet, 1, 1);
+
     connect(BtnDefault, SIGNAL(clicked()), pWeapons, SLOT(setDefault()));
     connect(BtnSave, SIGNAL(clicked()), pWeapons, SLOT(save()));
+    connect(BtnNew, SIGNAL(clicked()), pWeapons, SLOT(newWeaponsName()));
+    connect(selectWeaponSet, SIGNAL(currentIndexChanged(const QString&)), pWeapons, SLOT(setWeaponsName(const QString&)));
 }
 
 PageInGame::PageInGame(QWidget* parent) :
@@ -1893,8 +1896,12 @@ void PageScheme::newRow()
 
 void PageScheme::deleteRow()
 {
-    QAbstractItemModel * model = mapper->model();
-    model->removeRow(selectScheme->currentIndex());
+    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Schemes"), QMessageBox::tr("Really delete this game scheme?"), QMessageBox::Ok | QMessageBox::Cancel);
+
+    if (reallyDelete.exec() == QMessageBox::Ok) {
+        QAbstractItemModel * model = mapper->model();
+        model->removeRow(selectScheme->currentIndex());
+    }
 }
 
 void PageScheme::schemeSelected(int n)

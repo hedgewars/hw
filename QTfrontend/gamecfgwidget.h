@@ -54,7 +54,7 @@ public slots:
 signals:
     void paramChanged(const QString & param, const QStringList & value);
     void goToSchemes(int);
-    void goToWeapons(const QString & name);
+    void goToWeapons(int);
 
 private slots:
     void ammoChanged(int index);

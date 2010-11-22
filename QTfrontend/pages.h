@@ -390,8 +390,10 @@ public:
     QPushButton *BtnSave;
     QPushButton *BtnDefault;
     QPushButton *BtnDelete;
+    QPushButton *BtnNew;
     QPushButton *BtnBack;
     SelWeaponWidget* pWeapons;
+    QComboBox* selectWeaponSet;
 };
 
 class PageInGame : public AbstractPage

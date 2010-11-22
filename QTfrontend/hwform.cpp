@@ -129,7 +129,7 @@ HWForm::HWForm(QWidget *parent)
         ui.pageMultiplayer->BtnStartMPGame, SLOT(setEnabled(bool)));
     connect(ui.pageMultiplayer, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
     connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToSchemes(int)), this, SLOT(GoToScheme(int)));
-    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToWeapons(const QString &)), this, SLOT(GoToSelectWeaponSet(const QString &)));
+    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToSelectWeaponSet(int)));
 
     connect(ui.pagePlayDemo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pagePlayDemo->BtnPlayDemo, SIGNAL(clicked()), this, SLOT(PlayDemo()));
@@ -147,8 +147,10 @@ HWForm::HWForm(QWidget *parent)
 
     connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
     connect(ui.pageOptions->WeaponNew, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
+    connect(ui.pageOptions->WeaponDelete, SIGNAL(clicked()), this, SLOT(DeleteWeaponSet()));
     connect(ui.pageOptions->SchemeEdit, SIGNAL(clicked()), this, SLOT(GoToEditScheme()));
     connect(ui.pageOptions->SchemeNew, SIGNAL(clicked()), this, SLOT(GoToNewScheme()));
+    connect(ui.pageOptions->SchemeDelete, SIGNAL(clicked()), this, SLOT(DeleteScheme()));
     connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
 
     connect(ui.pageNet->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
@@ -166,7 +168,7 @@ HWForm::HWForm(QWidget *parent)
         ui.pageNetGame->BtnStart, SLOT(setEnabled(bool)));
     connect(ui.pageNetGame, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
     connect(ui.pageNetGame->pGameCFG, SIGNAL(goToSchemes(int)), this, SLOT(GoToScheme(int)));
-    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToWeapons(const QString &)), this, SLOT(GoToSelectWeaponSet(const QString &)));
+    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToSelectWeaponSet(int)));
 
     connect(ui.pageRoomsList->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), this, SLOT(GoToAdmin()));
@@ -196,8 +198,8 @@ HWForm::HWForm(QWidget *parent)
         ui.pageSelectWeapon->pWeapons, SLOT(deleteWeaponsName())); // executed first
     connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
         this, SLOT(UpdateWeapons())); // executed second
-    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
-        this, SLOT(GoBack())); // executed third
+    //connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
+    //    this, SLOT(GoBack())); // executed third
 
     connect(ui.pageScheme->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
@@ -302,6 +304,7 @@ void HWForm::UpdateWeapons()
     combos.push_back(ui.pageOptions->WeaponsName);
     combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
     combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
+    combos.push_back(ui.pageSelectWeapon->selectWeaponSet);
 
     QStringList names = ui.pageSelectWeapon->pWeapons->getWeaponNames();
 
@@ -366,19 +369,19 @@ void HWForm::GoToSetup()
 
 void HWForm::GoToSelectNewWeapon()
 {
-    ui.pageSelectWeapon->pWeapons->setWeaponsName(tr("new"));
+    ui.pageSelectWeapon->pWeapons->newWeaponsName();
     GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
 void HWForm::GoToSelectWeapon()
 {
-    ui.pageSelectWeapon->pWeapons->setWeaponsName(ui.pageOptions->WeaponsName->currentText());
+    ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(ui.pageOptions->WeaponsName->currentIndex());
     GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
-void HWForm::GoToSelectWeaponSet(const QString & name)
+void HWForm::GoToSelectWeaponSet(int index)
 {
-    ui.pageSelectWeapon->pWeapons->setWeaponsName(name);
+    ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(index);
     GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
@@ -605,11 +608,15 @@ void HWForm::EditTeam()
 
 void HWForm::DeleteTeam()
 {
-    editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
-    editedTeam->DeleteFile();
+    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Teams"), QMessageBox::tr("Really delete this team?"), QMessageBox::Ok | QMessageBox::Cancel);
 
-    // Remove from lists
-    ui.pageOptions->CBTeamName->removeItem(ui.pageOptions->CBTeamName->currentIndex());
+    if (reallyDelete.exec() == QMessageBox::Ok) {
+        editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
+        editedTeam->DeleteFile();
+
+        // Remove from lists
+        ui.pageOptions->CBTeamName->removeItem(ui.pageOptions->CBTeamName->currentIndex());
+    }
 }
 
 void HWForm::RandomNames()
@@ -641,6 +648,22 @@ void HWForm::TeamDiscard()
     delete editedTeam;
     editedTeam=0;
     GoBack();
+}
+
+void HWForm::DeleteScheme()
+{
+    ui.pageScheme->selectScheme->setCurrentIndex(ui.pageOptions->SchemesName->currentIndex());
+    if (ui.pageOptions->SchemesName->currentIndex() < ammoSchemeModel->numberOfDefaultSchemes) {
+        QMessageBox::warning(0, QMessageBox::tr("Schemes"), QMessageBox::tr("Can not delete default scheme '%1'!").arg(ui.pageOptions->SchemesName->currentText()));
+    } else {
+        ui.pageScheme->deleteRow();
+    }
+}
+
+void HWForm::DeleteWeaponSet()
+{
+    ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(ui.pageOptions->WeaponsName->currentIndex());
+    ui.pageSelectWeapon->pWeapons->deleteWeaponsName();
 }
 
 void HWForm::SimpleGame()

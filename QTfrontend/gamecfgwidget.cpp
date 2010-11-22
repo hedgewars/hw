@@ -103,7 +103,7 @@ void GameCFGWidget::jumpToSchemes()
 
 void GameCFGWidget::jumpToWeapons()
 {
-    emit goToWeapons(WeaponsName->currentText());
+    emit goToWeapons(WeaponsName->currentIndex());
 }
 
 QVariant GameCFGWidget::schemeData(int column) const

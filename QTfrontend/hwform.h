@@ -71,7 +71,7 @@ private slots:
     void GoToTraining();
     void GoToCampaign();
     void GoToSelectWeapon();
-    void GoToSelectWeaponSet(const QString & name);
+    void GoToSelectWeaponSet(int index);
     void GoToSelectNewWeapon();
     void GoToNetServer();
     void GoToScheme(int index);
@@ -91,6 +91,8 @@ private slots:
     void RandomName(const int &i);
     void TeamSave();
     void TeamDiscard();
+    void DeleteScheme();
+    void DeleteWeaponSet();
     void SimpleGame();
     void PlayDemo();
     void StartTraining();

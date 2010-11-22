@@ -247,6 +247,11 @@ void SelWeaponWidget::deleteWeaponsName()
     }
 }
 
+void SelWeaponWidget::newWeaponsName()
+{
+    setWeaponsName(tr("new"));
+}
+
 void SelWeaponWidget::setWeaponsName(const QString& name)
 {
     m_name->setText(name);
@@ -255,6 +260,8 @@ void SelWeaponWidget::setWeaponsName(const QString& name)
 
     if(name != "" && wconf->contains(name)) {
         setWeapons(wconf->value(name).toString());
+    } else {
+        setWeapons(*cDefaultAmmoStore);
     }
 }
 

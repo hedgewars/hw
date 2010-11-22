@@ -108,4 +108,5 @@ void ItemNum::setInfinityState(bool value)
 void ItemNum::setEnabled(bool value)
 {
   enabled=value;
+  repaint();
 }

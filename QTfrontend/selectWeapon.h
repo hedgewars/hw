@@ -57,6 +57,7 @@ class SelWeaponWidget : public QFrame
   void setWeapons(const QString& ammo);
   void setWeaponsName(const QString& name);
   void deleteWeaponsName();
+  void newWeaponsName();
   void save();
 
  signals:
