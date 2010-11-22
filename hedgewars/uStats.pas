@@ -35,7 +35,7 @@ procedure TurnReaction;
 procedure SendStats;
 
 implementation
-uses uTeams, uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uDebug;
+uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uDebug, uMisc;
 
 var DamageGiven : Longword = 0;
     DamageClan  : Longword = 0;

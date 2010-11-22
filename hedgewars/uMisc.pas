@@ -27,6 +27,7 @@ uses    SDLh, uConsts, GLunit, uTypes;
 procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 procedure MakeScreenshot(filename: shortstring);
+function  GetTeamStatString(p: PTeam): shortstring;
 
 procedure initModule;
 procedure freeModule;
@@ -130,6 +131,13 @@ begin
     exit(tmpsurf);
 end;
 
+
+function GetTeamStatString(p: PTeam): shortstring;
+var s: ansistring;
+begin
+    s:= p^.TeamName + ':' + IntToStr(p^.TeamHealth) + ':';
+    GetTeamStatString:= s;
+end;
 
 procedure initModule;
 begin

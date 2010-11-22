@@ -34,7 +34,6 @@ procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
 function  CheckForWin: boolean;
 procedure TeamGoneEffect(var Team: TTeam);
-function  GetTeamStatString(p: PTeam): shortstring;
 
 implementation
 uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug;
@@ -404,13 +403,6 @@ with Team do
                 Gear^.Invulnerable:= false;
                 Gear^.Damage:= Gear^.Health
                 end
-end;
-
-function GetTeamStatString(p: PTeam): shortstring;
-var s: ansistring;
-begin
-    s:= p^.TeamName + ':' + IntToStr(p^.TeamHealth) + ':';
-    GetTeamStatString:= s;
 end;
 
 procedure chAddHH(var id: shortstring);

@@ -47,6 +47,7 @@ set(engine_sources
     uChat.pas
     uCollisions.pas
     uCommands.pas
+    uCommandHandlers.pas
     uConsole.pas
     uConsts.pas
     uDebug.pas
@@ -77,7 +78,6 @@ set(engine_sources
     uUtils.pas
     uVisualGears.pas
     uWorld.pas
-    CCHandlers.inc
     GSHandlers.inc
     VGSHandlers.inc
     HHHandlers.inc

@@ -1,22 +1,14 @@
-(*
-* Hedgewars, a free turn based strategy game
-* Copyright (c) 2004-2010 Andrey Korotaev <unC0Rr@gmail.com>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; version 2 of the License
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-*)
+{$INCLUDE "options.inc"}
+unit uCommandHandlers;
 
-////////////////////////////////////////////////////////////////////////////////
+interface
+
+procedure initModule;
+procedure freeModule;
+
+implementation
+uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uMobile, uRandom;
+
 procedure chQuit(var s: shortstring);
 const prevGState: TGameState = gsConfirm;
 begin
@@ -98,7 +90,7 @@ if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
 with CurrentTeam^ do
     begin
     if not CurrentHedgehog^.King then
-    if (s = '') or 
+    if (s = '') or
         (((GameFlags and gfKing) <> 0) and (s = 'crown')) or
         ((Length(s) > 39) and (Copy(s,1,8) = 'Reserved') and (Copy(s,9,32) <> PlayerHash)) then
         CurrentHedgehog^.Hat:= 'NoHat'
@@ -390,50 +382,6 @@ with CurrentHedgehog^.Gear^ do
     end
 end;
 
-procedure doPut(putX, putY: LongInt; fromAI: boolean);
-begin
-if CheckNoTeamOrHH or isPaused then exit;
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
-bShowFinger:= false;
-if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
-    begin
-    bSelected:= true;
-    exit
-    end;
-
-with CurrentHedgehog^.Gear^,
-    CurrentHedgehog^ do
-    if (State and gstHHChooseTarget) <> 0 then
-        begin
-        isCursorVisible:= false;
-        if not CurrentTeam^.ExtDriven then
-            begin
-            if fromAI then
-                begin
-                TargetPoint.X:= putX;
-                TargetPoint.Y:= putY
-                end else
-                begin
-                TargetPoint.X:= CursorPoint.X - WorldDx;
-                TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
-                end;
-            SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
-            end
-        else
-            begin
-            TargetPoint.X:= putX;
-            TargetPoint.Y:= putY
-            end;
-        {$IFDEF DEBUGFILE}AddFilelog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));{$ENDIF}
-        State:= State and not gstHHChooseTarget;
-        if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
-            Message:= Message or gmAttack;
-        end
-    else
-        if CurrentTeam^.ExtDriven then
-            OutError('got /put while not being in choose target mode', false)
-end;
-
 procedure chPut(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
@@ -487,7 +435,7 @@ else
             bSelected:= false;
 
             if bShowAmmoMenu then bShowAmmoMenu:= false
-            else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or 
+            else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
                     ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0)) or
                     ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
             end;
@@ -563,3 +511,88 @@ begin
 end;
 
 
+procedure initModule;
+begin
+    RegisterVariable('flag'    , vtCommand, @chFlag         , false);
+    RegisterVariable('script'  , vtCommand, @chScript       , false);
+    RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
+    RegisterVariable('spectate', vtBoolean, @fastUntilLag   , false);
+    RegisterVariable('capture' , vtCommand, @chCapture      , true );
+    RegisterVariable('rotmask' , vtCommand, @chRotateMask   , true );
+    RegisterVariable('rdriven' , vtCommand, @chTeamLocal    , false);
+    RegisterVariable('map'     , vtCommand, @chSetMap       , false);
+    RegisterVariable('theme'   , vtCommand, @chSetTheme     , false);
+    RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
+    RegisterVariable('template_filter', vtLongInt, @cTemplateFilter, false);
+    RegisterVariable('mapgen'  , vtLongInt, @cMapGen        , false);
+    RegisterVariable('maze_size',vtLongInt, @cMazeSize      , false);
+    RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
+    RegisterVariable('ready'   , vtLongInt, @cReadyDelay    , false);
+    RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
+    RegisterVariable('healthprob', vtLongInt, @cHealthCaseProb, false);
+    RegisterVariable('hcaseamount', vtLongInt, @cHealthCaseAmount, false);
+    RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);
+    RegisterVariable('waterrise', vtLongInt, @cWaterRise    , false);
+    RegisterVariable('healthdec', vtLongInt, @cHealthDecrease, false);
+    RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);
+    RegisterVariable('ropepct' , vtLongInt, @cRopePercent   , false);
+    RegisterVariable('minedudpct',vtLongInt,@cMineDudPercent, false);
+    RegisterVariable('minesnum', vtLongInt, @cLandMines     , false);
+    RegisterVariable('explosives',vtLongInt,@cExplosives    , false);
+    RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
+    RegisterVariable('trflags' , vtLongInt, @TrainingFlags  , false);
+    RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);
+    RegisterVariable('minestime',vtLongInt, @cMinesTime     , false);
+    RegisterVariable('fort'    , vtCommand, @chFort         , false);
+    RegisterVariable('grave'   , vtCommand, @chGrave        , false);
+    RegisterVariable('hat'     , vtCommand, @chSetHat       , false);
+    RegisterVariable('quit'    , vtCommand, @chQuit         , true );
+    RegisterVariable('confirm' , vtCommand, @chConfirm      , true );
+    RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );
+    RegisterVariable('-speedup', vtCommand, @chSpeedup_m    , true );
+    RegisterVariable('zoomin'  , vtCommand, @chZoomIn       , true );
+    RegisterVariable('zoomout' , vtCommand, @chZoomOut      , true );
+    RegisterVariable('zoomreset',vtCommand, @chZoomReset    , true );
+    RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , true);
+    RegisterVariable('+precise', vtCommand, @chPrecise_p    , false);
+    RegisterVariable('-precise', vtCommand, @chPrecise_m    , false);
+    RegisterVariable('+left'   , vtCommand, @chLeft_p       , false);
+    RegisterVariable('-left'   , vtCommand, @chLeft_m       , false);
+    RegisterVariable('+right'  , vtCommand, @chRight_p      , false);
+    RegisterVariable('-right'  , vtCommand, @chRight_m      , false);
+    RegisterVariable('+up'     , vtCommand, @chUp_p         , false);
+    RegisterVariable('-up'     , vtCommand, @chUp_m         , false);
+    RegisterVariable('+down'   , vtCommand, @chDown_p       , false);
+    RegisterVariable('-down'   , vtCommand, @chDown_m       , false);
+    RegisterVariable('+attack' , vtCommand, @chAttack_p     , false);
+    RegisterVariable('-attack' , vtCommand, @chAttack_m     , false);
+    RegisterVariable('switch'  , vtCommand, @chSwitch       , false);
+    RegisterVariable('nextturn', vtCommand, @chNextTurn     , false);
+    RegisterVariable('timer'   , vtCommand, @chTimer        , false);
+    RegisterVariable('taunt'   , vtCommand, @chTaunt        , false);
+    RegisterVariable('setweap' , vtCommand, @chSetWeapon    , false);
+    RegisterVariable('slot'    , vtCommand, @chSlot         , false);
+    RegisterVariable('put'     , vtCommand, @chPut          , false);
+    RegisterVariable('ljump'   , vtCommand, @chLJump        , false);
+    RegisterVariable('hjump'   , vtCommand, @chHJump        , false);
+    RegisterVariable('+volup'  , vtCommand, @chVol_p        , true );
+    RegisterVariable('-volup'  , vtCommand, @chVol_m        , true );
+    RegisterVariable('+voldown', vtCommand, @chVol_m        , true );
+    RegisterVariable('-voldown', vtCommand, @chVol_p        , true );
+    RegisterVariable('findhh'  , vtCommand, @chFindhh       , true );
+    RegisterVariable('pause'   , vtCommand, @chPause        , true );
+    RegisterVariable('+cur_u'  , vtCommand, @chCurU_p       , true );
+    RegisterVariable('-cur_u'  , vtCommand, @chCurU_m       , true );
+    RegisterVariable('+cur_d'  , vtCommand, @chCurD_p       , true );
+    RegisterVariable('-cur_d'  , vtCommand, @chCurD_m       , true );
+    RegisterVariable('+cur_l'  , vtCommand, @chCurL_p       , true );
+    RegisterVariable('-cur_l'  , vtCommand, @chCurL_m       , true );
+    RegisterVariable('+cur_r'  , vtCommand, @chCurR_p       , true );
+    RegisterVariable('-cur_r'  , vtCommand, @chCurR_m       , true );
+end;
+
+procedure freeModule;
+begin
+end;
+
+end.

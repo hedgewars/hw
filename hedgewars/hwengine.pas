@@ -31,7 +31,7 @@ program hwengine;
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, uMobile,
-     sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug;
+     sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers;
 
 var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
@@ -324,6 +324,7 @@ begin
     uVariables.initModule;
     uConsole.initModule;    // MUST happen after uMisc
     uCommands.initModule;
+    uCommandHandlers.initModule;
 
     uLand.initModule;
     uIO.initModule;
@@ -392,6 +393,7 @@ begin
     uIO.freeModule;             //stub
     uLand.freeModule;
 
+    uCommandHandlers.freeModule;
     uCommands.freeModule;
     uConsole.freeModule;
     uVariables.freeModule;
