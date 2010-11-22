@@ -28,7 +28,7 @@ class CHedgehogerWidget : public ItemNum
   Q_OBJECT
 
  public:
-  CHedgehogerWidget(const QImage& im, QWidget * parent);
+  CHedgehogerWidget(const QImage& im, const QImage& img, QWidget * parent);
   virtual ~CHedgehogerWidget();
   unsigned char getHedgehogsNum() const;
   void setHHNum (unsigned int num);

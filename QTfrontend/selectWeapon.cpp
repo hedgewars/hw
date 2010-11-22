@@ -40,7 +40,7 @@ QImage getAmmoImage(int num)
     return ammo.copy(x, y, 32, 32);
 }
 
-SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage image, QWidget* parent) :
+SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage image, QImage imagegrey, QWidget* parent) :
     QWidget(parent)
 {
     QHBoxLayout* hbLayout = new QHBoxLayout(this);
@@ -53,7 +53,7 @@ SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage i
     lbl->setGeometry(0, 0, 30, 30);
     hbLayout->addWidget(lbl);
 
-    item = new WeaponItem(image, this);
+    item = new WeaponItem(image, imagegrey, this);
     item->setItemsNum(wNum);
     item->setInfinityState(allowInfinite);
     hbLayout->addWidget(item);
@@ -72,6 +72,11 @@ void SelWeaponItem::setItemsNum(const unsigned char num)
 unsigned char SelWeaponItem::getItemsNum() const
 {
     return item->getItemsNum();
+}
+
+void SelWeaponItem::setEnabled(bool value)
+{
+    item->setEnabled(value);
 }
 
 SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
@@ -124,19 +129,19 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     for(; i < m_numItems; ++i) {
         if (i == 6) continue;
         if (k % 4 == 0) ++j;
-        SelWeaponItem * swi = new SelWeaponItem(true, i, currentState[i].digitValue(), QImage(":/res/ammopic.png"), this);
+        SelWeaponItem * swi = new SelWeaponItem(true, i, currentState[i].digitValue(), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
         weaponItems[i].append(swi);
         p1Layout->addWidget(swi, j, k % 4);
 
-        SelWeaponItem * pwi = new SelWeaponItem(false, i, currentState[numItems + i].digitValue(), QImage(":/res/ammopicbox.png"), this);
+        SelWeaponItem * pwi = new SelWeaponItem(false, i, currentState[numItems + i].digitValue(), QImage(":/res/ammopicbox.png"), QImage(":/res/ammopicboxgrey.png"), this);
         weaponItems[i].append(pwi);
         p2Layout->addWidget(pwi, j, k % 4);
 
-        SelWeaponItem * dwi = new SelWeaponItem(false, i, currentState[numItems*2 + i].digitValue(), QImage(":/res/ammopicdelay.png"), this);
+        SelWeaponItem * dwi = new SelWeaponItem(false, i, currentState[numItems*2 + i].digitValue(), QImage(":/res/ammopicdelay.png"), QImage(":/res/ammopicdelaygrey.png"), this);
         weaponItems[i].append(dwi);
         p3Layout->addWidget(dwi, j, k % 4);
 
-        SelWeaponItem * awi = new SelWeaponItem(false, i, currentState[numItems*3 + i].digitValue(), QImage(":/res/ammopic.png"), this);
+        SelWeaponItem * awi = new SelWeaponItem(false, i, currentState[numItems*3 + i].digitValue(), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
         weaponItems[i].append(awi);
         p4Layout->addWidget(awi, j, k % 4);
 
@@ -150,6 +155,11 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 
 void SelWeaponWidget::setWeapons(const QString& ammo)
 {
+    bool enable = true;
+    for(int i = 0; i < cDefaultAmmos.size(); i++)
+        if (!cDefaultAmmos[i].first.compare(m_name->text())) {
+            enable = false;
+        }
     for(int i = 0; i < m_numItems; ++i) {
         twi::iterator it = weaponItems.find(i);
         if (it == weaponItems.end()) continue;
@@ -157,12 +167,20 @@ void SelWeaponWidget::setWeapons(const QString& ammo)
         it.value()[1]->setItemsNum(ammo[m_numItems + i].digitValue());
         it.value()[2]->setItemsNum(ammo[m_numItems*2 + i].digitValue());
         it.value()[3]->setItemsNum(ammo[m_numItems*3 + i].digitValue());
+        it.value()[0]->setEnabled(enable);
+        it.value()[1]->setEnabled(enable);
+        it.value()[2]->setEnabled(enable);
+        it.value()[3]->setEnabled(enable);
     }
-    update();
+    m_name->setEnabled(enable);
 }
 
 void SelWeaponWidget::setDefault()
 {
+    for(int i = 0; i < cDefaultAmmos.size(); i++)
+        if (!cDefaultAmmos[i].first.compare(m_name->text())) {
+            return;
+        }
     setWeapons(*cDefaultAmmoStore);
 }
 
@@ -215,11 +233,11 @@ void SelWeaponWidget::deleteWeaponsName()
 {
     if (curWeaponsName == "") return;
 
-    if (curWeaponsName == "Default") {
-        QMessageBox impossible(QMessageBox::Warning, QMessageBox::tr("Weapons"), QMessageBox::tr("Can not delete default weapon set"));
-        impossible.exec();
-        return;
-    }
+    for(int i = 0; i < cDefaultAmmos.size(); i++)
+        if (!cDefaultAmmos[i].first.compare(m_name->text())) {
+            QMessageBox::warning(0, QMessageBox::tr("Weapons"), QMessageBox::tr("Can not delete default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+            return;
+        }
 
     QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Weapons"), QMessageBox::tr("Really delete this weapon set?"), QMessageBox::Ok | QMessageBox::Cancel);
 
@@ -231,13 +249,13 @@ void SelWeaponWidget::deleteWeaponsName()
 
 void SelWeaponWidget::setWeaponsName(const QString& name)
 {
-    if(name != "" && wconf->contains(name)) {
-        setWeapons(wconf->value(name).toString());
-    }
+    m_name->setText(name);
 
     curWeaponsName = name;
 
-    m_name->setText(name);
+    if(name != "" && wconf->contains(name)) {
+        setWeapons(wconf->value(name).toString());
+    }
 }
 
 QStringList SelWeaponWidget::getWeaponNames() const

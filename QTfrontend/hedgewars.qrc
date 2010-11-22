@@ -2,8 +2,15 @@
 <qresource>
     <file alias="Ammos.png">../share/hedgewars/Data/Graphics/AmmoMenu/Ammos.png</file>
     <file>res/hh25x25.png</file>
+    <file>res/hh25x25grey.png</file>
     <file>res/ammopic.png</file>
+    <file>res/ammopicgrey.png</file>
+    <file>res/ammopicbox.png</file>
+    <file>res/ammopicboxgrey.png</file>
+    <file>res/ammopicdelay.png</file>
+    <file>res/ammopicdelaygrey.png</file>
     <file>res/infinity.png</file>
+    <file>res/infinitygrey.png</file>
     <file>res/botlevels/0.png</file>
     <file>res/botlevels/1.png</file>
     <file>res/botlevels/2.png</file>
@@ -94,8 +101,6 @@
     <file>res/chat_default_off.png</file>
     <file>res/chat_ignore_off.png</file>
     <file>res/chat_friend_off.png</file>
-    <file>res/ammopicbox.png</file>
-    <file>res/ammopicdelay.png</file>
     <file>res/addfriend.png</file>
     <file>res/remfriend.png</file>
     <file>res/ignore.png</file>
