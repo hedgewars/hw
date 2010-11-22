@@ -13,10 +13,9 @@ procedure freeModule;
 procedure RegisterVariable(Name: shortstring; VType: TVariableType; p: pointer; Trusted: boolean);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 procedure StopMessages(Message: Longword);
-procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses Types, uConsts, uIO, uVariables, uConsole, uUtils, uDebug;
+uses Types, uConsts, uVariables, uConsole, uUtils, uDebug;
 
 type  PVariable = ^TVariable;
       TVariable = record
@@ -112,51 +111,6 @@ if (Message and gmRight) <> 0 then ParseCommand('/-right', true) else
 if (Message and gmUp) <> 0 then ParseCommand('/-up', true) else
 if (Message and gmDown) <> 0 then ParseCommand('/-down', true) else
 if (Message and gmAttack) <> 0 then ParseCommand('/-attack', true)
-end;
-
-
-procedure doPut(putX, putY: LongInt; fromAI: boolean);
-begin
-if CheckNoTeamOrHH or isPaused then exit;
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
-bShowFinger:= false;
-if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
-    begin
-    bSelected:= true;
-    exit
-    end;
-
-with CurrentHedgehog^.Gear^,
-    CurrentHedgehog^ do
-    if (State and gstHHChooseTarget) <> 0 then
-        begin
-        isCursorVisible:= false;
-        if not CurrentTeam^.ExtDriven then
-            begin
-            if fromAI then
-                begin
-                TargetPoint.X:= putX;
-                TargetPoint.Y:= putY
-                end else
-                begin
-                TargetPoint.X:= CursorPoint.X - WorldDx;
-                TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
-                end;
-            SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
-            end
-        else
-            begin
-            TargetPoint.X:= putX;
-            TargetPoint.Y:= putY
-            end;
-        {$IFDEF DEBUGFILE}AddFilelog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));{$ENDIF}
-        State:= State and not gstHHChooseTarget;
-        if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
-            Message:= Message or gmAttack;
-        end
-    else
-        if CurrentTeam^.ExtDriven then
-            OutError('got /put while not being in choose target mode', false)
 end;
 
 procedure initModule;

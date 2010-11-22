@@ -41,6 +41,7 @@ procedure IPCCheckSock;
 procedure InitIPC;
 procedure CloseIPC;
 procedure NetGetNextCmd;
+procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
 uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
@@ -364,6 +365,50 @@ end;
 procedure chFatalError(var s: shortstring);
 begin
     SendIPC('E' + s);
+end;
+
+procedure doPut(putX, putY: LongInt; fromAI: boolean);
+begin
+if CheckNoTeamOrHH or isPaused then exit;
+if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
+bShowFinger:= false;
+if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
+    begin
+    bSelected:= true;
+    exit
+    end;
+
+with CurrentHedgehog^.Gear^,
+    CurrentHedgehog^ do
+    if (State and gstHHChooseTarget) <> 0 then
+        begin
+        isCursorVisible:= false;
+        if not CurrentTeam^.ExtDriven then
+            begin
+            if fromAI then
+                begin
+                TargetPoint.X:= putX;
+                TargetPoint.Y:= putY
+                end else
+                begin
+                TargetPoint.X:= CursorPoint.X - WorldDx;
+                TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
+                end;
+            SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
+            end
+        else
+            begin
+            TargetPoint.X:= putX;
+            TargetPoint.Y:= putY
+            end;
+        {$IFDEF DEBUGFILE}AddFilelog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));{$ENDIF}
+        State:= State and not gstHHChooseTarget;
+        if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
+            Message:= Message or gmAttack;
+        end
+    else
+        if CurrentTeam^.ExtDriven then
+            OutError('got /put while not being in choose target mode', false)
 end;
 
 procedure initModule;

@@ -62,7 +62,7 @@ procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; Tim
 procedure ProcessAction(var Actions: TActions; Me: PGear);
 
 implementation
-uses uAIMisc, uAI, uAmmos, uVariables, uCommands, uUtils, uDebug;
+uses uAIMisc, uAI, uAmmos, uVariables, uCommands, uUtils, uDebug, uIO;
 
 const ActionIdToStr: array[0..6] of string[16] = (
 {aia_none}           '',
