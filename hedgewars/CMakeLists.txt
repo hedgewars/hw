@@ -69,6 +69,7 @@ set(engine_sources
     uRender.pas
     uRenderUtils.pas
     uScript.pas
+    uSinTable.pas
     uSound.pas
     uStats.pas
     uStore.pas
@@ -81,7 +82,6 @@ set(engine_sources
     GSHandlers.inc
     VGSHandlers.inc
     HHHandlers.inc
-    SinTable.inc
     ArgParsers.inc
     options.inc
     adler32.pas

@@ -16,6 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+unit uSinTable;
+
+interface
+
 const SinTable: array[0..1024] of QWord = (
      $00000000,
      $006487EB,
@@ -1043,3 +1047,7 @@ const SinTable: array[0..1024] of QWord = (
      $FFFFEC43,
     $100000000
      );
+
+implementation
+
+end.

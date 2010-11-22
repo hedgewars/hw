@@ -148,7 +148,7 @@ type hwFloat = Extended;
 {$ENDIF}
 
 implementation
-//uses uMisc;
+uses uSinTable;
 
 
 {$IFDEF FPC}
@@ -349,7 +349,6 @@ begin
 if r.isNegative then hwSign:= -1 else hwSign:= 1
 end;
 
-{$INCLUDE "SinTable.inc"}
 
 function AngleSin(const Angle: Longword): hwFloat;
 begin
