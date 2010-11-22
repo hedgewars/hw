@@ -574,7 +574,7 @@ begin
     else begin
         gear := GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            gear^.Hedgehog^.Effects[THogEffect(lua_tointeger(L, 2))]:= lua_tointeger(L, 3) <> 0;
+            gear^.Hedgehog^.Effects[THogEffect(lua_tointeger(L, 2))]:= lua_toboolean(L, 3);
     end;
     lc_seteffect := 0;
 end;
