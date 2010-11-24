@@ -57,7 +57,7 @@ int main (int argc, char *argv[]) {
 }
 
 @implementation SDLUIKitDelegate
-@synthesize mainViewController, uiwindow, secondWindow, isInGame;
+@synthesize mainViewController, overlayController, uiwindow, secondWindow, isInGame;
 
 // convenience method
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -77,6 +77,7 @@ int main (int argc, char *argv[]) {
 
 -(void) dealloc {
     [mainViewController release];
+    [overlayController release];
     [uiwindow release];
     [secondWindow release];
     [super dealloc];
@@ -153,19 +154,16 @@ int main (int argc, char *argv[]) {
 // overlay with controls, become visible later, with a transparency effect
 -(void) displayOverlayLater:(id) object {
     NSDictionary *dict = (NSDictionary *)object;
-    OverlayViewController *overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
-    overlayController.isNetGame = [[dict objectForKey:@"net"] boolValue];
-    overlayController.useClassicMenu = [[dict objectForKey:@"menu"] boolValue];
+    self.overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
+    self.overlayController.isNetGame = [[dict objectForKey:@"net"] boolValue];
+    self.overlayController.useClassicMenu = [[dict objectForKey:@"menu"] boolValue];
     
     UIWindow *gameWindow;
     if (IS_DUALHEAD())
         gameWindow = self.uiwindow;
     else
         gameWindow = [[UIApplication sharedApplication] keyWindow];
-    [gameWindow addSubview:overlayController.view];
-    //[[[gameWindow subviews] objectAtIndex:0] addSubview:overlayController.view];
-    // don't release a controller according to http://developer.apple.com/library/ios/#qa/qa2010/qa1688.html
-    //[overlayController release];
+    [gameWindow addSubview:self.overlayController.view];
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (or even using a nib)
