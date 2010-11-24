@@ -856,6 +856,7 @@ if ((GameTicks and $FFFF) = $FFFF) then
         inc(hiTicks) // we do not recieve a message for this
     end;
 
+ScriptCall('onGameTick');
 inc(GameTicks)
 end;
 
