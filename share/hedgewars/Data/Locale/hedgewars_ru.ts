@@ -43,7 +43,11 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation>При включении этой опции выбор настроек игры автоматически выберет схему оружия (и наоборот)</translation>
+        <translation type="obsolete">При включении этой опции выбор настроек игры автоматически выберет схему оружия (и наоборот)</translation>
+    </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -85,7 +89,7 @@
     </message>
     <message>
         <source>new</source>
-        <translation>новый</translation>
+        <translation type="obsolete">новый</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
@@ -721,19 +725,43 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Новая схема оружия</translation>
+        <translation type="obsolete">Новая схема оружия</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Редактировать схему оружия</translation>
+        <translation type="obsolete">Редактировать схему оружия</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Удалить схему оружия</translation>
+        <translation type="obsolete">Удалить схему оружия</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation>Невозможно редактировать команды со страницы выбора команд. Вернитесь в главное меню для добавления, редактирования или удаления команд.</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -994,6 +1022,14 @@ Do you still want to join the room?</source>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation>У каждого ежа свой набор оружия, не являющийся общим для команды.</translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1004,6 +1040,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Delete</source>
         <translation>Удалить</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Новая</translation>
     </message>
 </context>
 <context>
@@ -1214,7 +1254,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Оружие</translation>
+        <translation type="obsolete">Оружие</translation>
     </message>
     <message>
         <source>Game Modifiers</source>
@@ -1231,6 +1271,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Misc</source>
         <translation>Разное</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1407,7 +1451,11 @@ Some features might be broken or incomplete. Use at your own risk!</translation>
     </message>
     <message>
         <source>Bind schemes and weapons</source>
-        <translation>Объединить настройки игры и оружия</translation>
+        <translation type="obsolete">Объединить настройки игры и оружия</translation>
+    </message>
+    <message>
+        <source>% Rope Length</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1452,7 +1500,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Невозможно удалить набор оружия по умолчанию</translation>
+        <translation type="obsolete">Невозможно удалить набор оружия по умолчанию</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1473,6 +1521,30 @@ Please check your installation</source>
     <message>
         <source>File association failed.</source>
         <translation>Сопоставление не удалось.</translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">Команды</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1618,6 +1690,10 @@ Please check your installation</source>
         <source>Delays</source>
         <translation>Задержки</translation>
     </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">новый</translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
@@ -1723,6 +1799,14 @@ Please check your installation</source>
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation>Индивидуальный набор оружия</translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

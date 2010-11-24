@@ -43,7 +43,11 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation>Ak je táto voľba vybraná, zvolením hernej schémy budú automaticky vybrané aj zbrane (a naopak)</translation>
+        <translation type="obsolete">Ak je táto voľba vybraná, zvolením hernej schémy budú automaticky vybrané aj zbrane (a naopak)</translation>
+    </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -85,7 +89,7 @@
     </message>
     <message>
         <source>new</source>
-        <translation>nový</translation>
+        <translation type="obsolete">nový</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
@@ -742,19 +746,43 @@ v nastaveniach hry:</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Nová schéma pre zbrane</translation>
+        <translation type="obsolete">Nová schéma pre zbrane</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Upraviť schému pre zbrane</translation>
+        <translation type="obsolete">Upraviť schému pre zbrane</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Vymazať schému pre zbrane</translation>
+        <translation type="obsolete">Vymazať schému pre zbrane</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation>Z výberu tímov nemôžete upravovať tímy. Vráťte sa do hlavného menu, odkiaľ môžete pridávať, upravovať alebo mazať tímy.</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1015,6 +1043,14 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation>Každý ježko má vlastnú výzbroj. Nie je zdieľaná so zvyškom tímu.</translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1025,6 +1061,10 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>Delete</source>
         <translation>Vymazať</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Nová</translation>
     </message>
 </context>
 <context>
@@ -1255,7 +1295,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Zbrane</translation>
+        <translation type="obsolete">Zbrane</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -1280,6 +1320,10 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>Misc</source>
         <translation>Rozličné</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1441,7 +1485,7 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>Bind schemes and weapons</source>
-        <translation>Prepojiť schémy a zbrane</translation>
+        <translation type="obsolete">Prepojiť schémy a zbrane</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
@@ -1458,6 +1502,10 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     <message>
         <source>Health in Crates</source>
         <translation>Zdravie v bedniach</translation>
+    </message>
+    <message>
+        <source>% Rope Length</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1506,7 +1554,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Nie je možné vymazať východziu sadu zbraní</translation>
+        <translation type="obsolete">Nie je možné vymazať východziu sadu zbraní</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1523,6 +1571,30 @@ Skontrolujte si vašu inštaláciu</translation>
     <message>
         <source>File association failed.</source>
         <translation>Nastavenie súborových asociácii zlyhalo.</translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">Tímy</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1668,6 +1740,10 @@ Skontrolujte si vašu inštaláciu</translation>
         <source>Delays</source>
         <translation>Oneskorenie</translation>
     </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">nový</translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
@@ -1773,6 +1849,14 @@ Skontrolujte si vašu inštaláciu</translation>
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation>Individuálne zbrane</translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

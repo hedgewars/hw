@@ -41,7 +41,7 @@
         <translation>Modifica schemi</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -84,7 +84,7 @@
     </message>
     <message>
         <source>new</source>
-        <translation>nuovo</translation>
+        <translation type="obsolete">nuovo</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
@@ -713,18 +713,42 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Nuovo schema armi</translation>
+        <translation type="obsolete">Nuovo schema armi</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Modifica schema armi</translation>
+        <translation type="obsolete">Modifica schema armi</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Elimina schema armi</translation>
+        <translation type="obsolete">Elimina schema armi</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -983,6 +1007,14 @@ Do you still want to join the room?</source>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -993,6 +1025,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Delete</source>
         <translation>Elimina</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Nuovo</translation>
     </message>
 </context>
 <context>
@@ -1195,7 +1231,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Armi</translation>
+        <translation type="obsolete">Armi</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -1220,6 +1256,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Misc</source>
         <translation>Varie</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1395,7 +1435,7 @@ Alcune feature potrebbero essere incomplete o non funzionanti. Usatela a vostro 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bind schemes and weapons</source>
+        <source>% Rope Length</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1445,7 +1485,7 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Non è possibile eliminare il set di armi predefinito</translation>
+        <translation type="obsolete">Non è possibile eliminare il set di armi predefinito</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1461,6 +1501,30 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>File association failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">Squadre</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1607,6 +1671,10 @@ Controllare la propria installazione</translation>
         <source>Delays</source>
         <translation>Ritardi</translation>
     </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">nuovo</translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
@@ -1711,6 +1779,14 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Per Hedgehog Ammo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

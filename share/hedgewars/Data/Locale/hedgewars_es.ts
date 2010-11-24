@@ -42,7 +42,11 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation>Cuando esta opción esté activada escoger un modo de juego escogerá el set de armas correspondiente (y viceversa)</translation>
+        <translation type="obsolete">Cuando esta opción esté activada escoger un modo de juego escogerá el set de armas correspondiente (y viceversa)</translation>
+    </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -84,7 +88,7 @@
     </message>
     <message>
         <source>new</source>
-        <translation>Nuevo</translation>
+        <translation type="obsolete">Nuevo</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
@@ -730,19 +734,43 @@ o elige otro nick en las preferencias del juego:</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Nuevo set de armas</translation>
+        <translation type="obsolete">Nuevo set de armas</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Editar set de armas</translation>
+        <translation type="obsolete">Editar set de armas</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Borrar set de armas</translation>
+        <translation type="obsolete">Borrar set de armas</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation>No es posible editar equipos desde la pantalla de elección de equipo. Vuelve al menú principal para añadir, editar o borrar equipos.</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1001,6 +1029,14 @@ Do you still want to join the room?</source>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
         <translation>La salud de todos los erizos en pie es restaurada al final de cada turno</translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1011,6 +1047,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Delete</source>
         <translation>Borrar</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Nuevo</translation>
     </message>
 </context>
 <context>
@@ -1241,7 +1281,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Sets de armas</translation>
+        <translation type="obsolete">Sets de armas</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -1266,6 +1306,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Misc</source>
         <translation>Otras opciones</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1445,7 +1489,11 @@ así como carecer de algunas funcionalidades o simplemente funcionar mal.
     </message>
     <message>
         <source>Bind schemes and weapons</source>
-        <translation>Enlazar modos y sets</translation>
+        <translation type="obsolete">Enlazar modos y sets</translation>
+    </message>
+    <message>
+        <source>% Rope Length</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1494,7 +1542,7 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>No se puede borrar el set de armas predefinido</translation>
+        <translation type="obsolete">No se puede borrar el set de armas predefinido</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1511,6 +1559,30 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     <message>
         <source>File association failed.</source>
         <translation>No se pudieron asociar los tipos de fichero.</translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">Equipos</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1656,6 +1728,10 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
         <source>Delays</source>
         <translation>Retraso</translation>
     </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">Nuevo</translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
@@ -1761,6 +1837,14 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     <message>
         <source>Reset Health</source>
         <translation>Restaurar salud</translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
