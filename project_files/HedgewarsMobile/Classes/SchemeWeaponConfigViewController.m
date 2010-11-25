@@ -47,7 +47,7 @@
         if (IS_IPAD())
             [self.tableView setBackgroundView:nil];
         else {
-            UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"backgroundCenter.png"];
+            UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
             UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
             [backgroundImage release];
             [self.tableView setBackgroundView:background];

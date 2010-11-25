@@ -128,7 +128,11 @@ int main (int argc, char *argv[]) {
     [setup release];
 
     // since the sdlwindow is not yet created, we add the overlayController with a delay
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:isNetGameNum,@"net",menuStyle,@"menu",nil];
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                          isNetGameNum,@"net",
+                          menuStyle,@"menu",
+                          [[gameDictionary objectForKey:@"game_dictionary"] objectForKey:@"orientation"],@"orientation",
+                          nil];
     [self performSelector:@selector(displayOverlayLater:) withObject:dict afterDelay:1];
 
     // this is the pascal fuction that starts the game (wrapped around isInGame)
@@ -157,6 +161,7 @@ int main (int argc, char *argv[]) {
     self.overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
     self.overlayController.isNetGame = [[dict objectForKey:@"net"] boolValue];
     self.overlayController.useClassicMenu = [[dict objectForKey:@"menu"] boolValue];
+    self.overlayController.initialOrientation = [[dict objectForKey:@"orientation"] intValue];
     
     UIWindow *gameWindow;
     if (IS_DUALHEAD())

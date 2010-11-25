@@ -53,11 +53,12 @@
 #pragma mark -
 #pragma mark image wrappers
 -(void) setBackgroundImageRounded:(UIImage *)image forState:(UIControlState)state {
-    [self setBackgroundImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:UIControlStateNormal];    
+    // TODO:http://stackoverflow.com/questions/4272476/setbackgroundimage-behaviour-changed-on-ipad-4-2
+    [self setBackgroundImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:state];
 }
 
 -(void) setImageRounded:(UIImage *)image forState:(UIControlState)state {
-    [self setImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:UIControlStateNormal];    
+    [self setImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:state];
 }
 
 -(void) setImageRoundedForNormalState:(UIImage *)image {

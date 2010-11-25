@@ -25,8 +25,12 @@
 
 @interface SplitViewRootController: UIViewController {
     MasterViewController *activeController;
+    UINavigationController *rightNavController;
+    UISplitViewController *splitViewRootController;
 }
 
 @property (nonatomic,retain) MasterViewController *activeController;
+@property (nonatomic,retain) UINavigationController *rightNavController;
+@property (nonatomic,retain) UISplitViewController *splitViewRootController;
 
 @end

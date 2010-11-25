@@ -27,7 +27,7 @@
 
 #define BTNS_PER_ROW         9
 #define DEFAULT_DESCRIPTION  IS_IPAD() ? \
-                             NSLocalizedString(@"Hold your finger on a weapon to see what it does...",@"") : \
+                             NSLocalizedString(@"Hold your finger on a weapon to see what it does.\nYou can move this window anywhere on the screen.",@"") : \
                              NSLocalizedString(@"Hold your finger on a weapon to see what it does.\nTap anywhere to dismiss.",@"")
 
 @implementation AmmoMenuViewController

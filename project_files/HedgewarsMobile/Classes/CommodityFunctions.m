@@ -29,11 +29,8 @@
 #import "PascalImports.h"
 
 BOOL inline rotationManager (UIInterfaceOrientation interfaceOrientation) {
-    if (IS_IPAD())
-        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
-               (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
-    else
-        return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
+           (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
 }
 
 NSInteger inline randomPort () {

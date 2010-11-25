@@ -232,16 +232,22 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
 }
 
 +(UIImage *)whiteImage:(CGSize) ofSize {
-    UIGraphicsBeginImageContext(ofSize);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    UIGraphicsPushContext(context);
+    CGFloat w = ofSize.width;
+    CGFloat h = ofSize.height;
 
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
+
+    CGContextBeginPath(context);
     CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
     CGContextFillRect(context,CGRectMake(0,0,ofSize.width,ofSize.height));
 
-    UIGraphicsPopContext();
-    UIImage *bkgImg = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    CGImageRef image = CGBitmapContextCreateImage(context);
+    CGContextRelease(context);
+    CGColorSpaceRelease(colorSpace);
+
+    UIImage *bkgImg = [UIImage imageWithCGImage:image];
+    CGImageRelease(image);
     return bkgImg;
 }
 

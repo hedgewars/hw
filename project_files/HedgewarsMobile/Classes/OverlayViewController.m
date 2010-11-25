@@ -38,16 +38,22 @@
 #define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu;
+@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu, initialOrientation;
 
 #pragma mark -
 #pragma mark rotation
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+    // don't rotate until the game is running for performance and synchronization with the sdlview
+    if (isGameRunning() == NO)
+        return (interfaceOrientation == (UIInterfaceOrientation) self.initialOrientation);
     return rotationManager(interfaceOrientation);
 }
 
 // pause the game and remove objc menus so that animation is smoother
 -(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval) duration{
+    if (isGameRunning() == NO)
+        return;
+
     [self dismissPopover];
     if (HW_isPaused() == NO)
         HW_pause();
@@ -75,6 +81,9 @@
 
 // now restore previous state
 -(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation {
+    if (isGameRunning() == NO)
+        return;
+
     if (wasVisible || IS_DUALHEAD())
         [self.amvc appearInView:self.view];
     if (HW_isPaused() == YES)
@@ -85,6 +94,9 @@
 
 // while in dual head the above rotation functions are not called
 -(void) dualHeadRotation:(NSNotification *)notification {
+    if (isGameRunning() == NO)
+        return;
+
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     
     [UIView beginAnimations:@"rotation" context:NULL];

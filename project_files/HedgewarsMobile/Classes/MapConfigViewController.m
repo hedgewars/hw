@@ -389,10 +389,10 @@
     NSMutableArray *mapArray = [[NSMutableArray alloc] init];
     for (NSString *str in mapArrayFull) {
         CGSize imgSize = PSPNGSizeFromMetaData([MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
-        //DLog(@"%@ %f %f", str, imgSize.width, imgSize.height);
+        // remove images that are too big for certain devices
         if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
             continue;
-        if (IS_IPAD() && imgSize.height > 1280.0f)
+        if ([modelType() hasPrefix:@"iPad1"] && [[[UIDevice currentDevice] systemVersion] intValue] < 4 && imgSize.height > 1280.0f)
             continue;
         [mapArray addObject:str];
     }
@@ -401,10 +401,10 @@
     NSMutableArray *missionArray = [[NSMutableArray alloc] init];
     for (NSString *str in missionArrayFull) {
         CGSize imgSize = PSPNGSizeFromMetaData([MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
-        //DLog(@"%@ %f %f", str, imgSize.width, imgSize.height);
+        // remove images that are too big for certain devices
         if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
             continue;
-        if (IS_IPAD() && imgSize.height > 1280.0f)
+        if ([modelType() hasPrefix:@"iPad1"] && [[[UIDevice currentDevice] systemVersion] intValue] < 4 && imgSize.height > 1280.0f)
             continue;
         [missionArray addObject:str];
     }
@@ -449,7 +449,7 @@
 
     if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
         [self.tableView setBackgroundView:nil];
-    self.view.backgroundColor = [UIColor clearColor];
+    self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
@@ -491,14 +491,16 @@
 
 -(void) didReceiveMemoryWarning {
     self.dataSourceArray = nil;
+    [super didReceiveMemoryWarning];
 
-    self.tableView = nil;
-    self.maxLabel = nil;
-    self.sizeLabel = nil;
-    self.slider = nil;
+    if (self.view.superview == nil) {
+        self.tableView = nil;
+        self.maxLabel = nil;
+        self.sizeLabel = nil;
+        self.slider = nil;
+    }
 
     MSG_MEMCLEAN();
-    [super didReceiveMemoryWarning];
 }
 
 -(void) dealloc {
