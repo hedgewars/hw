@@ -631,19 +631,21 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepCircle(Gear: PVisualGear; Steps: Longword);
 var tmp: byte;
+    i: LongWord;
 begin
 with Gear^ do
     if Frame <> 0 then
-        begin
-        inc(FrameTicks, Steps);
-        if (FrameTicks mod Frame) = 0 then
+        for i:= 1 to Steps do
             begin
-            tmp:= Gear^.Tint and $FF;
-            if tdY >= 0 then inc(tmp)
-            else dec(tmp);
-            if tmp < round(dX) then tdY:= 1;
-            if tmp > round(dY) then tdY:= -1;
-            Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or tmp
+            inc(FrameTicks);
+            if (FrameTicks mod Frame) = 0 then
+                begin
+                tmp:= Gear^.Tint and $FF;
+                if tdY >= 0 then inc(tmp)
+                else dec(tmp);
+                if tmp < round(dX) then tdY:= 1;
+                if tmp > round(dY) then tdY:= -1;
+                Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or tmp
+                end
             end
-        end
 end;
