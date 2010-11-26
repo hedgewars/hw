@@ -235,6 +235,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         Hedgehog: PHedgehog;
         Text: shortstring;
         Tint: Longword;
+        uid: Longword;
         end;
 
     TStatistics = record

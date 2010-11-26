@@ -97,6 +97,7 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0; Critical: Boolean = false): PVisualGear;
+const VGCounter: Longword = 0;
 var gear: PVisualGear;
     t: Longword;
     sp: real;
@@ -124,6 +125,7 @@ if ((cReducedQuality and rqFancyBoom) <> 0) and
       exit
     end;
 
+inc(VGCounter);
 New(gear);
 FillChar(gear^, sizeof(TVisualGear), 0);
 gear^.X:= real(X);
@@ -132,6 +134,7 @@ gear^.Kind := Kind;
 gear^.doStep:= doStepHandlers[Kind];
 gear^.State:= 0;
 gear^.Tint:= $FFFFFFFF;
+gear^.uid:= VGCounter;
 
 with gear^ do
     case Kind of
