@@ -20,7 +20,7 @@ procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real)
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 procedure DrawFillRect(r: TSDL_Rect);
-procedure DrawCircle(X, Y, Radius: LongInt; Width: Single; r, g, b, a: Byte);
+procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure Tint(r, g, b, a: Byte); inline;
 procedure Tint(c: Longword); inline;
@@ -351,7 +351,7 @@ Tint($FF, $FF, $FF, $FF);
 glEnable(GL_TEXTURE_2D)
 end;
 
-procedure DrawCircle(X, Y, Radius: LongInt; Width: Single; r, g, b, a: Byte); 
+procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte); 
 var
     i: LongInt;
     CircleVertex: array [0..359] of TVertex2f;

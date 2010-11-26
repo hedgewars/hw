@@ -25,7 +25,7 @@ uses uConsts, uFloat, GLunit, uTypes;
 procedure initModule;
 procedure freeModule;
 
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0): PVisualGear;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0; Critical: Boolean = false): PVisualGear;
 procedure ProcessVisualGears(Steps: Longword);
 procedure KickFlakes(Radius, X, Y: LongInt);
 procedure DrawVisualGears(Layer: LongWord);
@@ -92,22 +92,24 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepChunk,
             @doStepNote,
             @doStepLineTrail,
-            @doStepBulletHit
+            @doStepBulletHit,
+            @doStepCircle
         );
 
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0): PVisualGear;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0; Critical: Boolean = false): PVisualGear;
 var gear: PVisualGear;
     t: Longword;
     sp: real;
 begin
 if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we are scrolling now
-    if Kind <> vgtCloud then
+    if (Kind <> vgtCloud) and not Critical then
         begin
         AddVisualGear:= nil;
         exit
         end;
 
 if ((cReducedQuality and rqFancyBoom) <> 0) and
+   not Critical and
    not (Kind in
    [vgtTeamHealthSorter,
     vgtSmallDamageTag,
@@ -466,6 +468,9 @@ case Layer of
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtSpeechBubble: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+            vgtCircle: DrawCircle(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State, Gear^.Timer, 
+                      ((Gear^.Tint shr 24) and $FF), ((Gear^.Tint shr 16) and $FF), ((Gear^.Tint shr 8) and $FF), Gear^.Tint and $FF); 
+// Consider adding a version of DrawCircle that does not set Tint internally, and just call it here...
         end;
         Gear:= Gear^.NextGear
         end
