@@ -190,11 +190,11 @@
             if (nil == self.aboutViewController) {
                 AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
                 about.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                about.modalPresentationStyle = UIModalPresentationFormSheet;
+                if ([about respondsToSelector:@selector(setModalPresentationStyle:)])
+                     about.modalPresentationStyle = UIModalPresentationFormSheet;
                 self.aboutViewController = about;
                 [about release];
             }
-            
             [self presentModalViewController:self.aboutViewController animated:YES];
 #endif
             break;
@@ -202,7 +202,8 @@
             if (nil == self.savedGamesViewController) {
                 SavedGamesViewController *savedgames = [[SavedGamesViewController alloc] initWithNibName:@"SavedGamesViewController" bundle:nil];
                 savedgames.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                savedgames.modalPresentationStyle = UIModalPresentationPageSheet;
+                if ([savedgames respondsToSelector:@selector(setModalPresentationStyle:)])
+                    savedgames.modalPresentationStyle = UIModalPresentationPageSheet;
                 self.savedGamesViewController = savedgames;
                 [savedgames release];
             }

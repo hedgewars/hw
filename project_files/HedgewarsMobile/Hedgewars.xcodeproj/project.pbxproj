@@ -1024,21 +1024,21 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */,
+				6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */,
 				61DE91561258B76800B80214 /* Custom Buttons */,
 				32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */,
 				6165922911CA9BD500D6E256 /* PascalImports.h */,
-				6165922411CA9BD500D6E256 /* CGPointUtils.h */,
-				6165922311CA9BD500D6E256 /* CGPointUtils.c */,
-				6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */,
-				6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */,
-				6165922511CA9BD500D6E256 /* CommodityFunctions.h */,
-				6165922611CA9BD500D6E256 /* CommodityFunctions.m */,
-				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
-				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
 				61D2059F127CDD1100ABD83E /* ObjcExports.h */,
 				61D205A0127CDD1100ABD83E /* ObjcExports.m */,
+				6165922511CA9BD500D6E256 /* CommodityFunctions.h */,
+				6165922611CA9BD500D6E256 /* CommodityFunctions.m */,
 				61006F93128DE31F00EBA7F7 /* CreationChamber.h */,
 				61006F94128DE31F00EBA7F7 /* CreationChamber.m */,
+				6165922411CA9BD500D6E256 /* CGPointUtils.h */,
+				6165922311CA9BD500D6E256 /* CGPointUtils.c */,
+				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
+				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";

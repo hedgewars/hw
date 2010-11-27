@@ -185,7 +185,7 @@
 #pragma mark -
 #pragma mark actionSheet methods
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
-    if (IS_IPAD()){
+    if (IS_IPAD() == NO){
         CGRect screen = [[UIScreen mainScreen] bounds];
         [UIView beginAnimations:@"table width less" context:NULL];
         [UIView setAnimationDuration:0.2];
