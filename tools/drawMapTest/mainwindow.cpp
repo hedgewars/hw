@@ -8,10 +8,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    DrawMapScene * scene = new DrawMapScene(this);
+    scene = new DrawMapScene(this);
     ui->graphicsView->setScene(scene);
 
     connect(ui->pbUndo, SIGNAL(clicked()), scene, SLOT(undo()));
+    connect(scene, SIGNAL(pathChanged()), this, SLOT(scene_pathChanged()));
 }
 
 MainWindow::~MainWindow()
@@ -37,4 +38,9 @@ void MainWindow::resizeEvent(QResizeEvent * event)
 
     if(ui->graphicsView)
         ui->graphicsView->fitInView(ui->graphicsView->scene()->sceneRect(), Qt::KeepAspectRatio);
+}
+
+void MainWindow::scene_pathChanged()
+{
+    ui->plainTextEdit->setPlainText(scene->encode().toBase64());
 }

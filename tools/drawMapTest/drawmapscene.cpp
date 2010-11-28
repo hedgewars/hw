@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPathItem>
+#include <QtEndian>
 
 #include "drawmapscene.h"
 
@@ -31,8 +32,10 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
     {
         QPainterPath path = m_currPath->path();
         path.lineTo(mouseEvent->scenePos());
+        paths.last().append(mouseEvent->scenePos().toPoint());
         m_currPath->setPath(path);
-        //drawFigure(mouseEvent->scenePos());
+
+        emit pathChanged();
     }
 }
 
@@ -47,9 +50,10 @@ void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     p += QPointF(0.01, 0.01);
     path.moveTo(p);
     path.lineTo(mouseEvent->scenePos());
+    paths.append(QList<QPoint>() << mouseEvent->scenePos().toPoint());
     m_currPath->setPath(path);
 
-    //drawFigure(mouseEvent->scenePos());
+    emit pathChanged();
 }
 
 void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
@@ -62,5 +66,35 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 void DrawMapScene::undo()
 {
     if(items().size())
+    {
         removeItem(items().first());
+        paths.removeLast();
+
+        emit pathChanged();
+    }
+}
+
+QByteArray DrawMapScene::encode()
+{
+    QByteArray b;
+
+    foreach(QList<QPoint> points, paths)
+    {
+        int cnt = 0;
+        foreach(QPoint point, points)
+        {
+            qint16 px = qToBigEndian((qint16)point.x());
+            qint16 py = qToBigEndian((qint16)point.y());
+            quint8 flags = 2;
+            if(cnt) flags |= 0x80;
+            b.append((const char *)&flags, 1);
+            b.append((const char *)&px, 2);
+            b.append((const char *)&py, 2);
+
+            ++cnt;
+        }
+
+    }
+
+    return b;
 }

@@ -7,6 +7,8 @@ namespace Ui {
     class MainWindow;
 }
 
+class DrawMapScene;
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
@@ -18,8 +20,12 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+    DrawMapScene * scene;
 
     virtual void resizeEvent(QResizeEvent * event);
+
+private slots:
+    void scene_pathChanged();
 };
 
 #endif // MAINWINDOW_H
