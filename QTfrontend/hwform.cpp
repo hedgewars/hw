@@ -547,7 +547,7 @@ void HWForm::GoBack()
             GoBack();
 
     if (curid == ID_PAGE_ROOMSLIST) NetDisconnect();
-    if (curid == ID_PAGE_NETGAME) hwnet->partRoom();
+    if (curid == ID_PAGE_NETGAME && (!game || game->gameState != gsStarted)) hwnet->partRoom();
 
     if (curid == ID_PAGE_SCHEME)
         ammoSchemeModel->Save();
