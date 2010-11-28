@@ -547,7 +547,9 @@ void HWForm::GoBack()
             GoBack();
 
     if (curid == ID_PAGE_ROOMSLIST) NetDisconnect();
-    if (curid == ID_PAGE_NETGAME && (!game || game->gameState != gsStarted)) hwnet->partRoom();
+    if (curid == ID_PAGE_NETGAME) hwnet->partRoom();
+    // need to work on this, can cause invalid state for admin quit trying to prevent bad state message on kick
+    //if (curid == ID_PAGE_NETGAME && (!game || game->gameState != gsStarted)) hwnet->partRoom();
 
     if (curid == ID_PAGE_SCHEME)
         ammoSchemeModel->Save();
