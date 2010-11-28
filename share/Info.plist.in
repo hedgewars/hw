@@ -17,31 +17,35 @@
 	<key>CFBundleSignature</key>
 	<string>Hedge</string>
 	<key>CFBundleVersion</key>
+	<string>${HEDGEWARS_REVISION}</string>
+	<key>CFBundleShortVersionString</key>
 	<string>${HEDGEWARS_VERSION}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>GPL</string>
+	<string>© 2004-2010 Hedgewars Project</string>
 	<key>NSAppleScriptEnabled</key>
 	<false/>
 	<key>LSRequiresNativeExecution</key>
-        <true/>
+	<true/>
 	<key>LSMinimumSystemVersionByArchitecture</key>
 	<dict>
-	  <key>x86_64</key>
-	  <string>10.6.0</string>
-	  <key>i386</key>
-	  <string>10.4.0</string>
-	  <key>ppc</key>
-	  <string>10.4.0</string>	    
+		<key>x86_64</key>
+		<string>10.6.0</string>
+		<key>i386</key>
+		<string>10.4.0</string>
+		<key>ppc</key>
+		<string>10.4.0</string>
 	</dict>
 	<key>LSArchitecturePriority</key>
 	<array>
-   	  <string>x86_64</string>
-   	  <string>i386</string>
-   	  <string>ppc</string>
+		<string>x86_64</string>
+		<string>i386</string>
+		<string>ppc</string>
 	</array>
 	<key>LSMinimumSystemVersion</key>
 	<string>${minimum_macosx}</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.strategy-games</string>
 </dict>
 </plist>
