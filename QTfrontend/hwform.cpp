@@ -509,8 +509,13 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 
     if(id == ID_PAGE_NETGAME) // joining a room
         ui.pageNetGame->pChatWidget->loadLists(ui.pageOptions->editNetNick->text());
-    else if(id == ID_PAGE_ROOMSLIST) // joining the lobby
+// joining the lobby 
+    else if(id == ID_PAGE_ROOMSLIST) {
+        if ( game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
+            game->KillAllTeams();
+        }
         ui.pageRoomsList->chatWidget->loadLists(ui.pageOptions->editNetNick->text());
+    }
 }
 
 void HWForm::GoToPage(quint8 id)
@@ -936,7 +941,7 @@ void HWForm::GameStateChanged(GameState gameState)
         case gsStarted: {
             Music(false);
             if (wBackground) wBackground->stopAnimation();
-            GoToPage(ID_PAGE_INGAME);
+            if (!hwnet || (!hwnet->isRoomChief() || !hwnet->isInRoom())) GoToPage(ID_PAGE_INGAME);
             ui.pageGameStats->clear();
             if (pRegisterServer)
             {
@@ -950,7 +955,7 @@ void HWForm::GameStateChanged(GameState gameState)
         case gsFinished: {
             //setVisible(true);
             setFocusPolicy(Qt::StrongFocus);
-            GoBack();
+            if (!hwnet || (!hwnet->isRoomChief() || !hwnet->isInRoom())) GoBack();
             Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
             if (wBackground) wBackground->startAnimation();
             GoToPage(ID_PAGE_GAMESTATS);
@@ -961,8 +966,11 @@ void HWForm::GameStateChanged(GameState gameState)
             //setVisible(true);
             setFocusPolicy(Qt::StrongFocus);
             quint8 id = ui.Pages->currentIndex();
-            if (id == ID_PAGE_INGAME) {
-                GoBack();
+            if (id == ID_PAGE_INGAME ||
+// was room chief and the game was aborted
+                (hwnet && hwnet->isRoomChief() && hwnet->isInRoom() && 
+                    (gameState == gsInterrupted || gameState == gsStopped || gameState == gsDestroyed))) {
+                if (!hwnet || (!hwnet->isRoomChief() || !hwnet->isInRoom())) GoBack();
                 Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
                 if (wBackground) wBackground->startAnimation();
                 if (hwnet) hwnet->gameFinished();
