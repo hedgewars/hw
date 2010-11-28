@@ -24,13 +24,15 @@
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
 #import "SchemeWeaponConfigViewController.h"
+#import "GameConfigViewController.h"
 
 #define scIndex         self.segmentedControl.selectedSegmentIndex
 #define isRandomness()  (segmentedControl.selectedSegmentIndex == 0 || segmentedControl.selectedSegmentIndex == 2)
 
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
-            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy, externalController;
+            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy,
+            externalController, parentController;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -369,9 +371,7 @@
 }
 
 -(IBAction) buttonPressed:(id) sender {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"buttonPressed"
-                                                        object:nil
-                                                      userInfo:[NSDictionary dictionaryWithObject:sender forKey:@"sender"]];
+    [self.parentController buttonPressed:sender];
 }
 
 #pragma mark -
@@ -392,7 +392,7 @@
         // remove images that are too big for certain devices
         if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
             continue;
-        if ([modelType() hasPrefix:@"iPad1"] && [[[UIDevice currentDevice] systemVersion] intValue] < 4 && imgSize.height > 1280.0f)
+        if ([modelType() hasPrefix:@"iPad1"] && imgSize.height > 1280.0f)
             continue;
         [mapArray addObject:str];
     }
@@ -404,7 +404,7 @@
         // remove images that are too big for certain devices
         if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
             continue;
-        if ([modelType() hasPrefix:@"iPad1"] && [[[UIDevice currentDevice] systemVersion] intValue] < 4 && imgSize.height > 1280.0f)
+        if ([modelType() hasPrefix:@"iPad1"] && imgSize.height > 1280.0f)
             continue;
         [missionArray addObject:str];
     }

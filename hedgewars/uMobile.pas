@@ -77,7 +77,9 @@ end;
 procedure perfExt_AmmoUpdate; // don't inline
 begin
 {$IFDEF IPHONEOS}
-    if (CurrentTeam^.ExtDriven) or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
+    if (CurrentTeam = nil) or
+       (CurrentTeam^.ExtDriven) or
+       (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
         exit(); // the other way around throws a compiler error
     updateVisualsNewTurn();
 {$ENDIF}

@@ -410,7 +410,7 @@
             if (IS_DUALHEAD() || self.useClassicMenu == NO) {
                 if (self.amvc == nil)
                     self.amvc = [[AmmoMenuViewController alloc] init];
-
+                setAmmoMenuInstance(amvc);
                 if (self.amvc.isVisible) {
                     doDim();
                     [self.amvc disappear];
@@ -421,6 +421,7 @@
                     }
                 }
             } else {
+                setAmmoMenuInstance(nil);
                 HW_ammoMenu();
             }
             break;

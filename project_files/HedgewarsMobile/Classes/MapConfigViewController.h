@@ -23,6 +23,7 @@
 #import "MapPreviewButtonView.h"
 
 @class SchemeWeaponConfigViewController;
+@class GameConfigViewController;
 
 @interface MapConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, MapPreviewViewDelegate> {
     NSInteger oldValue;     // for the slider
@@ -53,6 +54,7 @@
 
     // controller for mission state
     SchemeWeaponConfigViewController *externalController;
+    GameConfigViewController *parentController;
 }
 
 
@@ -77,6 +79,7 @@
 @property (nonatomic,retain) NSArray *dataSourceArray;
 
 @property (nonatomic,assign) SchemeWeaponConfigViewController *externalController;
+@property (nonatomic,assign) GameConfigViewController *parentController;
 
 
 -(IBAction) buttonPressed:(id) sender;

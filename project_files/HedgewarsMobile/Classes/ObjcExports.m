@@ -20,6 +20,7 @@
 
 
 #import "ObjcExports.h"
+#import "AmmoMenuViewController.h"
 
 #pragma mark -
 #pragma mark internal variables
@@ -29,6 +30,8 @@ BOOL gameRunning;
 BOOL savedGame;
 // cache the grenade time
 NSInteger grenadeTime;
+// the reference to the newMenu instance
+AmmoMenuViewController *amvc_instance;
 
 #pragma mark -
 #pragma mark functions called like oop
@@ -52,6 +55,10 @@ NSInteger cachedGrenadeTime() {
 
 void inline setGrenadeTime(NSInteger value) {
     grenadeTime = value;
+}
+
+void inline setAmmoMenuInstance(AmmoMenuViewController *instance) {
+    amvc_instance = instance;
 }
 
 #pragma mark -
@@ -141,5 +148,6 @@ void replayFinished() {
 }
 
 void updateVisualsNewTurn(void) {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateAmmoVisuals" object:nil];
+    DLog(@"updating visuals");
+    [amvc_instance updateAmmoVisuals];
 }

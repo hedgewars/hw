@@ -40,11 +40,6 @@
 #pragma mark -
 #pragma mark view handling
 -(void) viewDidLoad {    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updateAmmoVisuals)
-                                                 name:@"updateAmmoVisuals"
-                                               object:nil];
-     
     self.view.frame = CGRectMake(0, 0, 480, 320);
     self.view.backgroundColor = [UIColor blackColor];
     self.view.layer.borderColor = [[UIColor whiteColor] CGColor];
@@ -344,7 +339,6 @@
 }
 
 -(void) viewDidUnload {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.imagesArray = nil;
     self.buttonsArray = nil;
     self.nameLabel = nil;

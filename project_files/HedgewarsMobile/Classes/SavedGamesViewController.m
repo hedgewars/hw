@@ -111,7 +111,11 @@
                                                     cancelButtonTitle:cancelStr
                                                destructiveButtonTitle:confirmStr
                                                     otherButtonTitles:nil];
-    [actionSheet showInView:self.view];
+
+    if (IS_IPAD())
+        [actionSheet showFromBarButtonItem:(UIBarButtonItem *)sender animated:YES];
+    else
+        [actionSheet showInView:self.view];
     [actionSheet release];
 }
 

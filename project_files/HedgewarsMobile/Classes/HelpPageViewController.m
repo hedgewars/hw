@@ -47,11 +47,6 @@
     [super viewDidLoad];
 }
 
-
--(void) scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
-    [self.view removeFromSuperview];
-}
-
 -(void) viewDidUnload {
     [super viewDidUnload];
     self.scrollView = nil;

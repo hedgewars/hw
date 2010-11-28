@@ -37,7 +37,7 @@ function  GetLastConsoleLine: shortstring;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uMobile,
+uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld,
      uRandom, uAmmos, uStats, uChat, SDLh, uSound, uVisualGears, uScript;
 
 const cLineWidth: LongInt = 0;
