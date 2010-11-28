@@ -77,6 +77,7 @@ HWForm::HWForm(QWidget *parent)
 #ifdef USE_XFIRE
     xfire_init();
 #endif
+    game = NULL;
     gameSettings = new QSettings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
     frontendEffects = gameSettings->value("frontend/effects", true).toBool();
     playerHash = QString(QCryptographicHash::hash(gameSettings->value("net/nick","").toString().toLatin1(), QCryptographicHash::Md5).toHex());
@@ -511,7 +512,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         ui.pageNetGame->pChatWidget->loadLists(ui.pageOptions->editNetNick->text());
 // joining the lobby 
     else if(id == ID_PAGE_ROOMSLIST) {
-        if ( game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
+        if ( hwnet && game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
             game->KillAllTeams();
         }
         ui.pageRoomsList->chatWidget->loadLists(ui.pageOptions->editNetNick->text());
