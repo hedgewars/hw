@@ -3,6 +3,8 @@
 
 #include <QGraphicsScene>
 
+class QGraphicsPathItem;
+
 class DrawMapScene : public QGraphicsScene
 {
 Q_OBJECT
@@ -12,17 +14,16 @@ public:
 signals:
 
 public slots:
+    void undo();
 
 private:
-    qreal m_halfWidth;
     QPen m_pen;
     QBrush m_brush;
+    QGraphicsPathItem  * m_currPath;
 
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
-
-    void drawFigure(const QPointF & point);
 };
 
 #endif // DRAWMAPSCENE_H

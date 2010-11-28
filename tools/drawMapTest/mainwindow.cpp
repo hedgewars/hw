@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     DrawMapScene * scene = new DrawMapScene(this);
     ui->graphicsView->setScene(scene);
+
+    connect(ui->pbUndo, SIGNAL(clicked()), scene, SLOT(undo()));
 }
 
 MainWindow::~MainWindow()
