@@ -40,6 +40,7 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, Tea
     this->config = config;
     this->gamecfg = gamecfg;
     TeamCount = 0;
+    netSuspend = false;
 }
 
 HWGame::~HWGame()
@@ -245,7 +246,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
             break;
         }
         default: {
-            if (gameType == gtNet)
+            if (gameType == gtNet && !netSuspend)
             {
                 emit SendNet(msg);
             }

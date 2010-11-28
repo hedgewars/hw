@@ -55,6 +55,7 @@ public:
     void StartCampaign(const QString & file);
     void KillAllTeams();
     GameState gameState;
+    bool netSuspend;
 
  protected:
     virtual QStringList setArguments();

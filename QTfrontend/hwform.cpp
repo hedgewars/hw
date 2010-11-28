@@ -513,6 +513,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 // joining the lobby 
     else if(id == ID_PAGE_ROOMSLIST) {
         if ( hwnet && game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
+            game->netSuspend = true;
             game->KillAllTeams();
         }
         ui.pageRoomsList->chatWidget->loadLists(ui.pageOptions->editNetNick->text());
@@ -938,6 +939,7 @@ void HWForm::StartMPGame()
 
 void HWForm::GameStateChanged(GameState gameState)
 {
+    quint8 id = ui.Pages->currentIndex();
     switch(gameState) {
         case gsStarted: {
             Music(false);
@@ -956,11 +958,12 @@ void HWForm::GameStateChanged(GameState gameState)
         case gsFinished: {
             //setVisible(true);
             setFocusPolicy(Qt::StrongFocus);
-            if (!hwnet || (!hwnet->isRoomChief() || !hwnet->isInRoom())) GoBack();
+            if (id == ID_PAGE_INGAME) GoBack();
             Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
             if (wBackground) wBackground->startAnimation();
             GoToPage(ID_PAGE_GAMESTATS);
-            if (hwnet) hwnet->gameFinished();
+            if (hwnet && (!game || !game->netSuspend)) hwnet->gameFinished();
+            if (game) game->netSuspend = false;
             break;
         }
         default: {
@@ -971,7 +974,7 @@ void HWForm::GameStateChanged(GameState gameState)
 // was room chief and the game was aborted
                 (hwnet && hwnet->isRoomChief() && hwnet->isInRoom() && 
                     (gameState == gsInterrupted || gameState == gsStopped || gameState == gsDestroyed))) {
-                if (!hwnet || (!hwnet->isRoomChief() || !hwnet->isInRoom())) GoBack();
+                if (id == ID_PAGE_INGAME) GoBack();
                 Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
                 if (wBackground) wBackground->startAnimation();
                 if (hwnet) hwnet->gameFinished();
