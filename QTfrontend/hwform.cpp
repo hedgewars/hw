@@ -1143,7 +1143,7 @@ void HWForm::selectFirstNetScheme()
 
 void HWForm::NetLeftRoom()
 {
-    if (ui.Pages->currentIndex() == ID_PAGE_NETGAME)
+    if (ui.Pages->currentIndex() == ID_PAGE_NETGAME || ui.Pages->currentIndex() == ID_PAGE_INGAME)
         GoBack();
     else
         qWarning("Left room while not in room");
