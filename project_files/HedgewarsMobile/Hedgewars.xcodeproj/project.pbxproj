@@ -688,7 +688,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 618E27B612A2C30700C20EF0 /* SDL_net.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = BE48FF6F07AFA9A900BB41DA /* libSDL_net.a */;
+			remoteGlobalIDString = BE48FF6F07AFA9A900BB41DA;
 			remoteInfo = "Static Library";
 		};
 		619C5AC9124F7DDF00D041AE /* PBXContainerItemProxy */ = {
@@ -2388,8 +2388,8 @@
 			buildSettings = {
 				APPLY_RULES_IN_COPY_FILES = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Vittorio Giovara";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Vittorio Giovara";
+				CODE_SIGN_IDENTITY = "Don't Code Sign";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
@@ -2415,13 +2415,14 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
-				PROVISIONING_PROFILE = "450C4020-346A-4F44-8DDE-E71300796C94";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "450C4020-346A-4F44-8DDE-E71300796C94";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
