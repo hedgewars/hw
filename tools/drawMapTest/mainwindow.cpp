@@ -44,3 +44,8 @@ void MainWindow::scene_pathChanged()
 {
     ui->plainTextEdit->setPlainText(scene->encode().toBase64());
 }
+
+void MainWindow::on_pbSimplify_clicked()
+{
+    scene->simplify();
+}

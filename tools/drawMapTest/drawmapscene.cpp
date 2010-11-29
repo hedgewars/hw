@@ -5,6 +5,11 @@
 
 #include "drawmapscene.h"
 
+template <class T> T sqr(const T & x)
+{
+    return x*x;
+}
+
 DrawMapScene::DrawMapScene(QObject *parent) :
     QGraphicsScene(parent),
     m_pen(Qt::yellow),
@@ -97,4 +102,26 @@ QByteArray DrawMapScene::encode()
     }
 
     return b;
+}
+
+void DrawMapScene::simplify()
+{
+    for(int pit = 0; pit < paths.size(); ++pit)
+    {
+        QList<QPoint> points = paths[pit];
+
+        QPoint prevPoint = points.first();
+        int i = 1;
+        while(i < points.size())
+        {
+            if(sqr(prevPoint.x() - points[i].x()) + sqr(prevPoint.y() - points[i].y()) < 1000)
+                points.removeAt(i);
+            else
+                ++i;
+        }
+
+        paths[pit] = points;
+    }
+
+    emit pathChanged();
 }
