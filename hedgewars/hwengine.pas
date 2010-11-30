@@ -33,9 +33,6 @@ uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, uMobile,
      sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers;
 
-var isTerminated: boolean = false;
-    alsoShutdownFrontend: boolean = false;
-
 {$IFDEF HWLIBRARY}
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);

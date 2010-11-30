@@ -50,9 +50,8 @@ procedure freeModule;
 implementation
 uses typinfo, Math, uConsts, uVariables, SysUtils;
 
-var
 {$IFDEF DEBUGFILE}
-    f: textfile;
+var f: textfile;
 {$ENDIF}
 
 // should this include "strtolower()" for the split string?

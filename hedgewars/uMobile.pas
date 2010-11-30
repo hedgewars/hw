@@ -42,6 +42,7 @@ procedure perfExt_SaveBeganSynching; inline;
 procedure perfExt_SaveFinishedSynching; inline;
 
 implementation
+uses uVariables;
 
 function isPhone: Boolean; inline;
 begin

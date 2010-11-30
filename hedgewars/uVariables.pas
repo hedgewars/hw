@@ -26,7 +26,9 @@ var
     cReadyDelay     : Longword    = 0;
     cLogfileBase    : shortstring = 'debug';
 //////////////////////////
-    
+
+    alsoShutdownFrontend: boolean = false;
+
     isCursorVisible : boolean;
     isTerminated    : boolean;
     isInLag         : boolean;
@@ -2101,7 +2103,6 @@ var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trammod: array[TAmmoStrId] of ansistring;   // description of the weapon
     trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
     trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
-
 
 procedure initModule;
 procedure freeModule;

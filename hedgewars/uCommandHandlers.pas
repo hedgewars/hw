@@ -7,7 +7,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uMobile, uRandom;
+uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom;
 
 procedure chQuit(var s: shortstring);
 const prevGState: TGameState = gsConfirm;
@@ -319,7 +319,6 @@ begin
 {$IFDEF DEBUGFILE}
     AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));
 {$ENDIF}
-    perfExt_NewTurnBeginning();
 end;
 
 procedure chTimer(var s: shortstring);

@@ -21,8 +21,8 @@
 unit PascalExports;
 
 interface
-uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat, 
-     uGears, uSound, hwengine, uAmmos, uLocale; // don't change the order!
+uses uTypes, uConsts, uVariables, GLunit, uKeys, uChat, uSound, uAmmos, uUtils,
+     uCommands;
 
 {$INCLUDE "config.inc"}
 type PPByte = ^PByte;
