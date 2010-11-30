@@ -44,6 +44,7 @@ public:
     QComboBox * WeaponsName;
     HWMapContainer* pMapContainer;
     QTableView * tv;
+    QVariant schemeData(int column) const;
 
 public slots:
     void setParam(const QString & param, const QStringList & value);
@@ -52,8 +53,8 @@ public slots:
 
 signals:
     void paramChanged(const QString & param, const QStringList & value);
-    void goToSchemes();
-    void goToWeapons(const QString & name);
+    void goToSchemes(int);
+    void goToWeapons(int);
 
 private slots:
     void ammoChanged(int index);
@@ -62,6 +63,7 @@ private slots:
     void seedChanged(const QString &);
     void themeChanged(const QString &);
     void schemeChanged(int);
+    void jumpToSchemes();
     void jumpToWeapons();
     void mapgenChanged(MapGenerator m);
     void maze_sizeChanged(int s);
@@ -74,7 +76,6 @@ private:
 
     void setNetAmmo(const QString& name, const QString& ammo);
 
-    QVariant schemeData(int column) const;
 };
 
 #endif // GAMECONFIGWIDGET_H

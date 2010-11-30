@@ -150,7 +150,6 @@ set(	hwfr_moc_hdrs
 set(	hwfr_hdrs
 	binds.h
 	ui_hwform.h
-	predefteams.h
 	KB.h
 	hwconsts.h
 	)

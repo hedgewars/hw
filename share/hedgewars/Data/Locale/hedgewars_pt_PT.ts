@@ -41,7 +41,7 @@
         <translation>Editar armas</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -68,7 +68,7 @@
     <name>HWForm</name>
     <message>
         <source>new</source>
-        <translation>novo</translation>
+        <translation type="obsolete">novo</translation>
     </message>
     <message>
         <source>Error</source>
@@ -726,19 +726,43 @@ outro nome de utilizador no menu de configuração:</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Novo esquema de armas</translation>
+        <translation type="obsolete">Novo esquema de armas</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Editar esquema de armas</translation>
+        <translation type="obsolete">Editar esquema de armas</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Apagar esquema de armas</translation>
+        <translation type="obsolete">Apagar esquema de armas</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation>Não é possível editar equipas do menu de selecção de equipa. Volte ao menu principal se pretender adicionar, editar ou apagar equipas.</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -997,6 +1021,14 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation>Cada ouriço tem as suas próprias armas. Não são partilhadas com a equipa.</translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1007,6 +1039,10 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message>
         <source>Delete</source>
         <translation>Eliminar</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Novo</translation>
     </message>
 </context>
 <context>
@@ -1205,7 +1241,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Armas</translation>
+        <translation type="obsolete">Armas</translation>
     </message>
     <message>
         <source>Audio/Graphic options</source>
@@ -1234,6 +1270,10 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message>
         <source>Misc</source>
         <translation>Diversos</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1403,7 +1443,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
         <translation>Vida perdida durante Morte Súbita</translation>
     </message>
     <message>
-        <source>Bind schemes and weapons</source>
+        <source>% Rope Length</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1453,7 +1493,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Não é possível eliminar o esquema de armas predefinido</translation>
+        <translation type="obsolete">Não é possível eliminar o esquema de armas predefinido</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1470,6 +1510,30 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>File association failed.</source>
         <translation>Não foi possivel associar os ficheiros.</translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">Equipas</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1615,6 +1679,10 @@ Por favor verifique a sua instalação</translation>
         <source>Delays</source>
         <translation>Atrasos</translation>
     </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">novo</translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
@@ -1720,6 +1788,14 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation>Armamento Por Ouriço</translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

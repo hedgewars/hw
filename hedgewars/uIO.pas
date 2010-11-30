@@ -20,7 +20,7 @@
 
 unit uIO;
 interface
-uses SDLh;
+uses SDLh, uTypes;
 
 var ipcPort: Word = 0;
     hiTicks: Word;
@@ -35,14 +35,16 @@ procedure SendIPCAndWaitReply(s: shortstring);
 procedure SendIPCTimeInc;
 procedure SendKeepAliveMessage(Lag: Longword);
 procedure LoadRecordFromFile(fileName: shortstring);
+procedure SendStat(sit: TStatInfoType; s: shortstring);
 procedure IPCWaitPongEvent;
 procedure IPCCheckSock;
 procedure InitIPC;
 procedure CloseIPC;
 procedure NetGetNextCmd;
+procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses uConsole, uConsts, uWorld, uMisc, uLand, uChat, uTeams;
+uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
 
 type PCmd = ^TCmd;
      TCmd = packed record
@@ -63,7 +65,6 @@ var IPCSock: PTCPSocket;
     lastcmd: PCmd;
 
     SendEmptyPacketTicks: LongWord;
-
 
 function AddCmd(Time: Word; str: shortstring): PCmd;
 var command: PCmd;
@@ -128,7 +129,7 @@ case s[1] of
      'e': ParseCommand(copy(s, 2, Length(s) - 1), true);
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
-     'M': CheckLandDigest(s);
+     'M': ParseCommand('landcheck ' + s, true);
      'T': case s[2] of
                'L': GameType:= gmtLocal;
                'D': GameType:= gmtDemo;
@@ -138,7 +139,7 @@ case s[1] of
      else
      loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
      AddCmd(loTicks, s);
-     {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+inttostr(lastcmd^.loTime));{$ENDIF}
+     {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+IntToStr(lastcmd^.loTime));{$ENDIF}
      end
 end;
 
@@ -202,6 +203,15 @@ until i = 0;
 
 close(f)
 end;
+
+procedure SendStat(sit: TStatInfoType; s: shortstring);
+const stc: array [TStatInfoType] of char = 'rDkKHTPsSB';
+var buf: shortstring;
+begin
+buf:= 'i' + stc[sit] + s;
+SendIPCRaw(@buf[0], length(buf) + 1)
+end;
+
 
 procedure SendIPC(s: shortstring);
 begin
@@ -300,18 +310,19 @@ while (headcmd <> nil)
         ',': ParseCommand('skip', true);
         's': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            AddChatString(s);
+            ParseCommand('chatmsg ' + s, true);
             WriteLnToConsole(s)
             end;
         'b': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            AddChatString(#4 + s);
+            ParseCommand('chatmsg '#4 + s, true);
             WriteLnToConsole(s)
             end;
-        'F': TeamGone(copy(headcmd^.str, 2, Pred(headcmd^.len)));
+// TODO: deprecate 'F'
+        'F': ParseCommand('teamgone ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'N': begin
             tmpflag:= false;
-            {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(hiTicks shl 16 + headcmd^.loTime)){$ENDIF}
+            {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime)){$ENDIF}
             end;
         'p': begin
             x16:= SDLNet_Read16(@(headcmd^.X));
@@ -342,8 +353,8 @@ while (headcmd <> nil)
 if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
     TryDo(GameTicks < hiTicks shl 16 + headcmd^.loTime,
             'oops, queue error. in buffer: ' + headcmd^.cmd +
-            ' (' + inttostr(GameTicks) + ' > ' +
-            inttostr(hiTicks shl 16 + headcmd^.loTime) + ')',
+            ' (' + IntToStr(GameTicks) + ' > ' +
+            IntToStr(hiTicks shl 16 + headcmd^.loTime) + ')',
             true);
 
 isInLag:= (headcmd = nil) and tmpflag and (not CurrentTeam^.hasGone);
@@ -351,8 +362,59 @@ isInLag:= (headcmd = nil) and tmpflag and (not CurrentTeam^.hasGone);
 if isInLag then fastUntilLag:= false
 end;
 
+procedure chFatalError(var s: shortstring);
+begin
+    SendIPC('E' + s);
+end;
+
+procedure doPut(putX, putY: LongInt; fromAI: boolean);
+begin
+if CheckNoTeamOrHH or isPaused then exit;
+if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
+bShowFinger:= false;
+if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
+    begin
+    bSelected:= true;
+    exit
+    end;
+
+with CurrentHedgehog^.Gear^,
+    CurrentHedgehog^ do
+    if (State and gstHHChooseTarget) <> 0 then
+        begin
+        isCursorVisible:= false;
+        if not CurrentTeam^.ExtDriven then
+            begin
+            if fromAI then
+                begin
+                TargetPoint.X:= putX;
+                TargetPoint.Y:= putY
+                end else
+                begin
+                TargetPoint.X:= CursorPoint.X - WorldDx;
+                TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
+                end;
+            SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
+            end
+        else
+            begin
+            TargetPoint.X:= putX;
+            TargetPoint.Y:= putY
+            end;
+        {$IFDEF DEBUGFILE}AddFilelog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));{$ENDIF}
+        State:= State and not gstHHChooseTarget;
+        if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
+            Message:= Message or gmAttack;
+        end
+    else
+        if CurrentTeam^.ExtDriven then
+            OutError('got /put while not being in choose target mode', false)
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('fatal', vtCommand, @chFatalError, true );
+
     IPCSock:= nil;
 
     headcmd:= nil;

@@ -196,6 +196,9 @@ public:
     GameCFGWidget *gameCFG;
     TeamSelWidget *teamsSelect;
     QPushButton *BtnStartMPGame;
+
+signals:
+    void SetupClicked();
 };
 
 class PageOptions : public AbstractPage
@@ -205,11 +208,16 @@ class PageOptions : public AbstractPage
 public:
     PageOptions(QWidget* parent = 0);
 
-    QPushButton *WeaponsButt;
+    QCheckBox *WeaponTooltip;
+    QPushButton *WeaponNew;
     QPushButton *WeaponEdit;
     QPushButton *WeaponDelete;
     QComboBox *WeaponsName;
-    QCheckBox *WeaponTooltip;
+    QPushButton *SchemeNew;
+    QPushButton *SchemeEdit;
+    QPushButton *SchemeDelete;
+    QComboBox *SchemesName;
+
     QComboBox *CBLanguage;
 
     QPushButton *BtnBack;
@@ -314,6 +322,9 @@ public:
 public slots:
     void setReadyStatus(bool isReady);
     void setMasterMode(bool isMaster);
+
+signals:
+    void SetupClicked();
 };
 
 class PageInfo : public AbstractPage
@@ -379,8 +390,10 @@ public:
     QPushButton *BtnSave;
     QPushButton *BtnDefault;
     QPushButton *BtnDelete;
+    QPushButton *BtnNew;
     QPushButton *BtnBack;
     SelWeaponWidget* pWeapons;
+    QComboBox* selectWeaponSet;
 };
 
 class PageInGame : public AbstractPage
@@ -455,8 +468,13 @@ public:
     QPushButton * BtnNew;
     QPushButton * BtnDelete;
     QPushButton * BtnSave;
+    QComboBox * selectScheme;
 
     void setModel(QAbstractItemModel * model);
+
+public slots:
+    void newRow();
+    void deleteRow();
 
 private:
     QDataWidgetMapper * mapper;
@@ -497,16 +515,15 @@ private:
     QSpinBox * SB_Mines;
     QSpinBox * SB_MineDuds;
     QSpinBox * SB_Explosives;
+    QSpinBox * SB_RopeModifier;
     QLineEdit * LE_name;
-    QComboBox * selectScheme;
 
     QGroupBox * gbGameModes;
     QGroupBox * gbBasicSettings;
 
 private slots:
-    void newRow();
-    void deleteRow();
     void schemeSelected(int);
+
 };
 
 class PageAdmin : public AbstractPage

@@ -20,27 +20,7 @@
 
 unit uStats;
 interface
-uses uGears, uConsts;
-
-type TStatistics = record
-                   DamageRecv,
-                   DamageGiven: Longword;
-                   StepDamageRecv,
-                   StepDamageGiven,
-                   StepKills: Longword;
-                   MaxStepDamageRecv,
-                   MaxStepDamageGiven,
-                   MaxStepKills: Longword;
-                   FinishedTurns: Longword;
-                   end;
-
-type TTeamStats = record
-    Kills : Longword;
-    AIKills : Longword;
-    TeamKills : Longword;
-    TurnSkips : Longword;
-    TeamDamage : Longword;
-end;
+uses uConsts, uTypes;
 
 var TotalRounds: LongInt;
     FinishedTurnsTotal: LongInt;
@@ -55,7 +35,8 @@ procedure TurnReaction;
 procedure SendStats;
 
 implementation
-uses uTeams, uSound, uMisc, uLocale, uWorld;
+uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uDebug, uMisc;
+
 var DamageGiven : Longword = 0;
     DamageClan  : Longword = 0;
     DamageTotal : Longword = 0;
@@ -71,10 +52,10 @@ var DamageGiven : Longword = 0;
 
 procedure HedgehogDamaged(Gear: PGear);
 begin
-if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then
+if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
     vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack
 else
-    vpHurtEnemy:= PHedgehog(Gear^.Hedgehog)^.Team^.voicepack;
+    vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
 
 if bBetweenTurns then exit;
 
@@ -83,7 +64,7 @@ if bBetweenTurns then exit;
 if Gear <> CurrentHedgehog^.Gear then
     inc(CurrentHedgehog^.stats.StepDamageGiven, Gear^.Damage);
 
-if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(DamageClan, Gear^.Damage);
+if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(DamageClan, Gear^.Damage);
 
 if Gear^.Health <= Gear^.Damage then
     begin
@@ -92,14 +73,14 @@ if Gear^.Health <= Gear^.Damage then
     inc(KillsTotal);
     inc(CurrentHedgehog^.Team^.stats.Kills);
     if (CurrentHedgehog^.Team^.TeamName =
-            PHedgehog(Gear^.Hedgehog)^.Team^.TeamName) then begin
+            Gear^.Hedgehog^.Team^.TeamName) then begin
         inc(CurrentHedgehog^.Team^.stats.TeamKills);
         inc(CurrentHedgehog^.Team^.stats.TeamDamage, Gear^.Damage);
     end;
-    if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(KillsClan);
+    if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(KillsClan);
     end;
 
-inc(PHedgehog(Gear^.Hedgehog)^.stats.StepDamageRecv, Gear^.Damage);
+inc(Gear^.Hedgehog^.stats.StepDamageRecv, Gear^.Damage);
 inc(DamageGiven, Gear^.Damage);
 inc(DamageTotal, Gear^.Damage)
 end;
@@ -177,7 +158,7 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
 for t:= 0 to Pred(ClansCount) do
     with ClansArray[t]^ do
         begin
-        SendStat(siClanHealth, inttostr(Color) + ' ' + inttostr(ClanHealth));
+        SendStat(siClanHealth, IntToStr(Color) + ' ' + IntToStr(ClanHealth));
         end;
 
 Kills:= 0;
@@ -237,8 +218,8 @@ for t:= 0 to Pred(TeamsCount) do
 
         { send player stats for winner teams }
         if Clan^.ClanHealth > 0 then begin
-            SendStat(siPlayerKills, inttostr(Clan^.Color) + ' ' +
-                inttostr(stats.Kills) + ' ' + TeamName);
+            SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
+                IntToStr(stats.Kills) + ' ' + TeamName);
         end;
 
         { determine maximum values of TeamKills, TurnSkips, TeamDamage }
@@ -261,25 +242,25 @@ for t:= 0 to Pred(TeamsCount) do
 for t:= 0 to Pred(TeamsCount) do begin
     with TeamsArray[t]^ do begin
         if Clan^.ClanHealth = 0 then begin
-            SendStat(siPlayerKills, inttostr(Clan^.Color) + ' ' +
-                inttostr(stats.Kills) + ' ' + TeamName);
+            SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
+                IntToStr(stats.Kills) + ' ' + TeamName);
         end;
     end;
 end;
 
 if msdhh <> nil then
-    SendStat(siMaxStepDamage, inttostr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
+    SendStat(siMaxStepDamage, IntToStr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
 if mskcnt = 1 then
-    SendStat(siMaxStepKills, inttostr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
+    SendStat(siMaxStepKills, IntToStr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
 
 if maxTeamKills > 1 then
-    SendStat(siMaxTeamKills, inttostr(maxTeamKills) + ' ' + maxTeamKillsName);
+    SendStat(siMaxTeamKills, IntToStr(maxTeamKills) + ' ' + maxTeamKillsName);
 if maxTurnSkips > 2 then
-    SendStat(siMaxTurnSkips, inttostr(maxTurnSkips) + ' ' + maxTurnSkipsName);
+    SendStat(siMaxTurnSkips, IntToStr(maxTurnSkips) + ' ' + maxTurnSkipsName);
 if maxTeamDamage > 30 then
-    SendStat(siMaxTeamDamage, inttostr(maxTeamDamage) + ' ' + maxTeamDamageName);
+    SendStat(siMaxTeamDamage, IntToStr(maxTeamDamage) + ' ' + maxTeamDamageName);
 
-if KilledHHs > 0 then SendStat(siKilledHHs, inttostr(KilledHHs));
+if KilledHHs > 0 then SendStat(siKilledHHs, IntToStr(KilledHHs));
 end;
 
 procedure initModule;

@@ -17,7 +17,7 @@ local subcaption = {
 	["es"] = "Partido no-tan-amistoso",
 	["pl"] = "Mecz Nie-Do-Końca Towarzyski",
 	["pt_PT"] = "Partida não muito amigável",
-	["sk"] = "Nie tak celkom priateľký zápas",
+	["sk"] = "Nie tak celkom priateľský zápas",
 	["sv"] = "En inte så vänlig match",
 	["pt_BR"] = "Partida não muito amigável"
 	}

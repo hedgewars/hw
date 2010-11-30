@@ -20,54 +20,13 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, uTeams, SDLh, GLunit, uWorld;
-
-
-var PixelFormat: PSDL_PixelFormat;
-    SDLPrimSurface: PSDL_Surface;
-    PauseTexture,
-    SyncTexture,
-    ConfirmTexture: PTexture;
-    cScaleFactor: GLfloat;
-    SupportNPOTT: Boolean;
-    Step: LongInt;
-    squaresize : LongInt;
-    numsquares : LongInt;
-    ProgrTex: PTexture;
-    MissionIcons: PSDL_Surface;
-    ropeIconTex: PTexture;
-    rotationQt: GLfloat;
+uses sysutils, uConsts, SDLh, GLunit, uTypes;
 
 procedure initModule;
 procedure freeModule;
 
 procedure StoreLoad;
 procedure StoreRelease;
-procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
-procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
-procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
-procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
-procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat = 1.0);
-procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
-procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
-procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
-procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
-procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
-procedure DrawCentered(X, Top: LongInt; Source: PTexture);
-procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
-procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte); 
-procedure DrawFillRect(r: TSDL_Rect);
-procedure DrawCircle(X, Y, Radius: LongInt; Width: Single; r, g, b, a: Byte); 
-procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
-function  CheckCJKFont(s: ansistring; font: THWFont): THWFont;
-function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
-function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
-procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);
-//procedure rotateSurface(Surface: PSDL_Surface);
-procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary since width/height are read only in SDL
-procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt);
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
@@ -78,91 +37,14 @@ function  RenderHelpWindow(caption, subcaption, description, extra: ansistring; 
 procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
-procedure Tint(r, g, b, a: Byte); inline;
-procedure Tint(c: Longword); inline;
 
 implementation
-uses uMisc, uConsole, uLocale, uMobile;
+uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands, uDebug;
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
-var HHTexture: PTexture;
-    MaxTextureSize: LongInt;
+var MaxTextureSize: LongInt;
     cGPUVendor: TGPUVendor;
-    lastTint: Longword;
-
-procedure Tint(r, g, b, a: Byte); inline;
-var nc: Longword;
-begin
-nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
-if nc = lastTint then
-    exit;
-glColor4ub(r, g, b, a);
-lastTint:= nc;
-end;
-
-procedure Tint(c: Longword); inline;
-begin
-Tint(((c shr 16) and $FF), ((c shr 8) and $FF), (c and $FF), $FF);
-end;
-
-procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
-var r: TSDL_Rect;
-begin
-r:= rect^;
-if Clear then SDL_FillRect(Surface, @r, 0);
-
-BorderColor:= SDL_MapRGB(Surface^.format, BorderColor shr 16, BorderColor shr 8, BorderColor and $FF);
-FillColor:= SDL_MapRGB(Surface^.format, FillColor shr 16, FillColor shr 8, FillColor and $FF);
-
-r.y:= rect^.y + 1;
-r.h:= rect^.h - 2;
-SDL_FillRect(Surface, @r, BorderColor);
-r.x:= rect^.x + 1;
-r.w:= rect^.w - 2;
-r.y:= rect^.y;
-r.h:= rect^.h;
-SDL_FillRect(Surface, @r, BorderColor);
-r.x:= rect^.x + 2;
-r.y:= rect^.y + 1;
-r.w:= rect^.w - 4;
-r.h:= rect^.h - 2;
-SDL_FillRect(Surface, @r, FillColor);
-r.x:= rect^.x + 1;
-r.y:= rect^.y + 2;
-r.w:= rect^.w - 2;
-r.h:= rect^.h - 4;
-SDL_FillRect(Surface, @r, FillColor)
-end;
-
-function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
-var w, h: LongInt;
-    tmpsurf: PSDL_Surface;
-    clr: TSDL_Color;
-    finalRect: TSDL_Rect;
-begin
-w:= 0; h:= 0; // avoid compiler hints
-TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
-finalRect.x:= X;
-finalRect.y:= Y;
-finalRect.w:= w + FontBorder * 2 + 4;
-finalRect.h:= h + FontBorder * 2;
-DrawRoundRect(@finalRect, cWhiteColor, endian(cNearBlackColorChannels.value), Surface, true);
-clr.r:= (Color shr 16) and $FF;
-clr.g:= (Color shr 8) and $FF;
-clr.b:= Color and $FF;
-tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr);
-finalRect.x:= X + FontBorder + 2;
-finalRect.y:= Y + FontBorder;
-SDLTry(tmpsurf <> nil, true);
-SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
-SDL_FreeSurface(tmpsurf);
-finalRect.x:= X;
-finalRect.y:= Y;
-finalRect.w:= w + FontBorder * 2 + 4;
-finalRect.h:= h + FontBorder * 2;
-WriteInRoundRect:= finalRect;
-end;
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
 var w, h: LongInt;
@@ -479,396 +361,6 @@ IMG_Quit();
 {$ENDIF}
 end;
 
-procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-begin
-DrawFromRect(X, Y, r^.w, r^.h, r, SourceTexture)
-end;
-
-procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-var rr: TSDL_Rect;
-    _l, _r, _t, _b: real;
-    VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
-begin
-if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
-
-// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
-    exit;
-if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) > cScreenHeight / cScaleFactor) then
-    exit;
-
-rr.x:= X;
-rr.y:= Y;
-rr.w:= W;
-rr.h:= H;
-
-_l:= r^.x / SourceTexture^.w * SourceTexture^.rx;
-_r:= (r^.x + r^.w) / SourceTexture^.w * SourceTexture^.rx;
-_t:= r^.y / SourceTexture^.h * SourceTexture^.ry;
-_b:= (r^.y + r^.h) / SourceTexture^.h * SourceTexture^.ry;
-
-glBindTexture(GL_TEXTURE_2D, SourceTexture^.id);
-
-VertexBuffer[0].X:= X;
-VertexBuffer[0].Y:= Y;
-VertexBuffer[1].X:= rr.w + X;
-VertexBuffer[1].Y:= Y;
-VertexBuffer[2].X:= rr.w + X;
-VertexBuffer[2].Y:= rr.h + Y;
-VertexBuffer[3].X:= X;
-VertexBuffer[3].Y:= rr.h + Y;
-
-TextureBuffer[0].X:= _l;
-TextureBuffer[0].Y:= _t;
-TextureBuffer[1].X:= _r;
-TextureBuffer[1].Y:= _t;
-TextureBuffer[2].X:= _r;
-TextureBuffer[2].Y:= _b;
-TextureBuffer[3].X:= _l;
-TextureBuffer[3].Y:= _b;
-
-
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-end;
-
-procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
-begin
-
-glPushMatrix;
-glTranslatef(X, Y, 0);
-glScalef(Scale, Scale, 1);
-
-glBindTexture(GL_TEXTURE_2D, Texture^.id);
-
-glVertexPointer(2, GL_FLOAT, 0, @Texture^.vb);
-glTexCoordPointer(2, GL_FLOAT, 0, @Texture^.tb);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
-
-glPopMatrix
-end;
-
-procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
-begin
-    DrawRotatedTextureF(Texture, Scale, 0, 0, X, Y, Frame, Dir, w, h, 0)
-end;
-
-procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
-var ft, fb, fl, fr: GLfloat;
-    hw, nx, ny: LongInt;
-    VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
-begin
-// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWidth) then
-    exit;
-if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScaleFactor > cScreenHeight) then
-    exit;
-
-glPushMatrix;
-glTranslatef(X, Y, 0);
-
-if Dir < 0 then
-   glRotatef(Angle, 0, 0, -1)
-else
-   glRotatef(Angle, 0, 0,  1);
-
-glTranslatef(Dir*OffsetX, OffsetY, 0);
-glScalef(Scale, Scale, 1);
-
-// Any reason for this call? And why only in t direction, not s?
-//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-if Dir < 0 then
-    hw:= w div -2
-else
-    hw:= w div 2;
-
-nx:= round(Texture^.w / w); // number of horizontal frames
-ny:= round(Texture^.h / h); // number of vertical frames
-
-ft:= (Frame mod ny) * Texture^.ry / ny;
-fb:= ((Frame mod ny) + 1) * Texture^.ry / ny;
-fl:= (Frame div ny) * Texture^.rx / nx;
-fr:= ((Frame div ny) + 1) * Texture^.rx / nx;
-
-glBindTexture(GL_TEXTURE_2D, Texture^.id);
-
-VertexBuffer[0].X:= -hw;
-VertexBuffer[0].Y:= w / -2;
-VertexBuffer[1].X:= hw;
-VertexBuffer[1].Y:= w / -2;
-VertexBuffer[2].X:= hw;
-VertexBuffer[2].Y:= w / 2;
-VertexBuffer[3].X:= -hw;
-VertexBuffer[3].Y:= w / 2;
-
-TextureBuffer[0].X:= fl;
-TextureBuffer[0].Y:= ft;
-TextureBuffer[1].X:= fr;
-TextureBuffer[1].Y:= ft;
-TextureBuffer[2].X:= fr;
-TextureBuffer[2].Y:= fb;
-TextureBuffer[3].X:= fl;
-TextureBuffer[3].Y:= fb;
-
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-glPopMatrix
-end;
-
-procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
-begin
-    DrawRotatedTex(SpritesData[Sprite].Texture,
-        SpritesData[Sprite].Width,
-        SpritesData[Sprite].Height,
-        X, Y, Dir, Angle)
-end;
-
-procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
-begin
-glPushMatrix;
-glTranslatef(X, Y, 0);
-
-if Dir < 0 then
-   glRotatef(Angle, 0, 0, -1)
-else
-   glRotatef(Angle, 0, 0,  1);
-if Dir < 0 then glScalef(-1.0, 1.0, 1.0);
-
-DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
-
-glPopMatrix
-end;
-
-procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
-var VertexBuffer: array [0..3] of TVertex2f;
-begin
-// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > 2 * hw) and ((abs(X) - hw) > cScreenWidth / cScaleFactor) then
-    exit;
-if (abs(Y) > 2 * hh) and ((abs(Y - 0.5 * cScreenHeight) - hh) > cScreenHeight / cScaleFactor) then
-    exit;
-
-glPushMatrix;
-glTranslatef(X, Y, 0);
-
-if Dir < 0 then
-   begin
-   hw:= - hw;
-   glRotatef(Angle, 0, 0, -1);
-   end else
-   glRotatef(Angle, 0, 0,  1);
-
-
-glBindTexture(GL_TEXTURE_2D, Tex^.id);
-
-VertexBuffer[0].X:= -hw;
-VertexBuffer[0].Y:= -hh;
-VertexBuffer[1].X:= hw;
-VertexBuffer[1].Y:= -hh;
-VertexBuffer[2].X:= hw;
-VertexBuffer[2].Y:= hh;
-VertexBuffer[3].X:= -hw;
-VertexBuffer[3].Y:= hh;
-
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @Tex^.tb);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-glPopMatrix
-end;
-
-procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
-begin
-r.y:= r.y + Height * Position;
-r.h:= Height;
-DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
-end;
-
-procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
-var row, col, numFramesFirstCol: LongInt;
-begin
-numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
-row:= Frame mod numFramesFirstCol;
-col:= Frame div numFramesFirstCol;
-DrawSprite2 (Sprite, X, Y, col, row);
-end;
-
-procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
-var r: TSDL_Rect;
-begin
-r.x:= 0;
-r.y:= 0;
-r.w:= SpritesData[Sprite].Width;
-r.h:= SpritesData[Sprite].Height;
-
-if (X < LeftX) then
-    r.x:= LeftX - X;
-if (Y < TopY) then
-    r.y:= TopY - Y;
-
-if (Y + SpritesData[Sprite].Height > BottomY) then
-    r.h:= BottomY - Y + 1;
-if (X + SpritesData[Sprite].Width > RightX) then
-    r.w:= RightX - X + 1;
-
-dec(r.h, r.y);
-dec(r.w, r.x);
-
-DrawFromRect(X + r.x, Y + r.y, @r, SpritesData[Sprite].Texture)
-end;
-
-procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
-var r: TSDL_Rect;
-begin
-    r.x:= FrameX * SpritesData[Sprite].Width;
-    r.w:= SpritesData[Sprite].Width;
-    r.y:= FrameY * SpritesData[Sprite].Height;
-    r.h:= SpritesData[Sprite].Height;
-    DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
-end;
-
-procedure DrawCentered(X, Top: LongInt; Source: PTexture);
-var scale: GLfloat;
-begin
-    if (Source^.w + 20) > cScreenWidth then
-        scale:= cScreenWidth / (Source^.w + 20)
-    else
-        scale:= 1.0;
-    DrawTexture(X - round(Source^.w * scale) div 2, Top, Source, scale)
-end;
-
-procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
-const VertexBuffer: array [0..3] of TVertex2f = (
-        (x: -16; y: -16),
-        (x:  16; y: -16),
-        (x:  16; y:  16),
-        (x: -16; y:  16));
-var l, r, t, b: real;
-    TextureBuffer: array [0..3] of TVertex2f;
-begin
-// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > 32) and ((abs(X) - 16) * cScaleFactor > cScreenWidth) then
-    exit;
-if (abs(Y) > 32) and ((abs(Y - 0.5 * cScreenHeight) - 16) * cScaleFactor > cScreenHeight) then
-    exit;
-
-t:= Pos * 32 / HHTexture^.h;
-b:= (Pos + 1) * 32 / HHTexture^.h;
-
-if Dir = -1 then
-   begin
-   l:= (Step + 1) * 32 / HHTexture^.w;
-   r:= Step * 32 / HHTexture^.w
-   end else
-   begin
-   l:= Step * 32 / HHTexture^.w;
-   r:= (Step + 1) * 32 / HHTexture^.w
-   end;
-
-
-glPushMatrix();
-glTranslatef(X, Y, 0);
-glRotatef(Angle, 0, 0, 1);
-
-glBindTexture(GL_TEXTURE_2D, HHTexture^.id);
-
-TextureBuffer[0].X:= l;
-TextureBuffer[0].Y:= t;
-TextureBuffer[1].X:= r;
-TextureBuffer[1].Y:= t;
-TextureBuffer[2].X:= r;
-TextureBuffer[2].Y:= b;
-TextureBuffer[3].X:= l;
-TextureBuffer[3].Y:= b;
-
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-glPopMatrix
-end;
-
-procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
-var VertexBuffer: array [0..3] of TVertex2f;
-begin
-    glDisable(GL_TEXTURE_2D);
-    glEnable(GL_LINE_SMOOTH);
-
-    glPushMatrix;
-    glTranslatef(WorldDx, WorldDy, 0);
-    glLineWidth(Width);
-
-    Tint(r, g, b, a);
-    VertexBuffer[0].X:= X0;
-    VertexBuffer[0].Y:= Y0;
-    VertexBuffer[1].X:= X1;
-    VertexBuffer[1].Y:= Y1;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
-    Tint($FF, $FF, $FF, $FF);
-    
-    glPopMatrix;
-    
-    glEnable(GL_TEXTURE_2D);
-    glDisable(GL_LINE_SMOOTH);
-end;
-
-procedure DrawFillRect(r: TSDL_Rect);
-var VertexBuffer: array [0..3] of TVertex2f;
-begin
-// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(r.x) > r.w) and ((abs(r.x + r.w / 2) - r.w / 2) * cScaleFactor > cScreenWidth) then
-    exit;
-if (abs(r.y) > r.h) and ((abs(r.y + r.h / 2 - (0.5 * cScreenHeight)) - r.h / 2) * cScaleFactor > cScreenHeight) then
-    exit;
-
-glDisable(GL_TEXTURE_2D);
-
-Tint($00, $00, $00, $80);
-
-VertexBuffer[0].X:= r.x;
-VertexBuffer[0].Y:= r.y;
-VertexBuffer[1].X:= r.x + r.w;
-VertexBuffer[1].Y:= r.y;
-VertexBuffer[2].X:= r.x + r.w;
-VertexBuffer[2].Y:= r.y + r.h;
-VertexBuffer[3].X:= r.x;
-VertexBuffer[3].Y:= r.y + r.h;
-
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-Tint($FF, $FF, $FF, $FF);
-glEnable(GL_TEXTURE_2D)
-end;
-
-procedure DrawCircle(X, Y, Radius: LongInt; Width: Single; r, g, b, a: Byte); 
-var
-    i: LongInt;
-    CircleVertex: array [0..359] of TVertex2f;
-begin
-    for i := 0 to 359 do begin
-        CircleVertex[i].X := X + Radius*cos(i*pi/180);
-        CircleVertex[i].Y := Y + Radius*sin(i*pi/180);
-    end;
-    glDisable(GL_TEXTURE_2D);
-    glEnable(GL_LINE_SMOOTH);
-    glPushMatrix;
-    glLineWidth(Width);
-    Tint(r, g, b, a);
-    glVertexPointer(2, GL_FLOAT, 0, @CircleVertex[0]);
-    glDrawArrays(GL_LINE_LOOP, 0, 360);
-    Tint($FF, $FF, $FF, $FF);
-    glPopMatrix;
-    glEnable(GL_TEXTURE_2D);
-    glDisable(GL_LINE_SMOOTH);
-end;
-
 procedure StoreRelease;
 var ii: TSprite;
 begin
@@ -885,247 +377,6 @@ begin
     FreeTexture(HHTexture);
 end;
 
-
-function CheckCJKFont(s: ansistring; font: THWFont): THWFont;
-var l, i : LongInt;
-    u: WideChar;
-    tmpstr: array[0..256] of WideChar;
-begin
-
-{$IFNDEF IPHONEOS}
-// remove chinese fonts for now
-if (font >= CJKfnt16) or (length(s) = 0) then
-{$ENDIF}
-    exit(font);
-
-l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), length(s))-1;
-i:= 0;
-while i < l do
-    begin
-    u:= tmpstr[i];
-    if (#$2E80  <= u) and  (
-                           (u <= #$2FDF )  or // CJK Radicals Supplement / Kangxi Radicals
-       ((#$2FF0  <= u) and (u <= #$303F))  or // Ideographic Description Characters / CJK Radicals Supplement
-       ((#$31C0  <= u) and (u <= #$31EF))  or // CJK Strokes
-       ((#$3200  <= u) and (u <= #$4DBF))  or // Enclosed CJK Letters and Months / CJK Compatibility / CJK Unified Ideographs Extension A
-       ((#$4E00  <= u) and (u <= #$9FFF))  or // CJK Unified Ideographs
-       ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
-       ((#$FE30  <= u) and (u <= #$FE4F)))    // CJK Compatibility Forms
-       then exit(THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) ));
-    inc(i)
-    end;
-exit(font);
-(* two more to check. pascal WideChar is only 16 bit though
-       ((#$20000 <= u) and (u >= #$2A6DF)) or // CJK Unified Ideographs Extension B
-       ((#$2F800 <= u) and (u >= #$2FA1F)))   // CJK Compatibility Ideographs Supplement *)
-end;
-
-function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
-var w, h: LongInt;
-    finalSurface: PSDL_Surface;
-begin
-if length(s) = 0 then s:= ' ';
-font:= CheckCJKFont(s, font);
-w:= 0; h:= 0; // avoid compiler hints
-TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
-
-finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
-         32, RMask, GMask, BMask, AMask);
-
-TryDo(finalSurface <> nil, 'RenderString: fail to create surface', true);
-
-WriteInRoundRect(finalSurface, 0, 0, Color, font, s);
-
-TryDo(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-
-RenderStringTex:= Surface2Tex(finalSurface, false);
-
-SDL_FreeSurface(finalSurface);
-end;
-
-function RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
-var textWidth, textHeight, x, y, w, h, i, j, pos, prevpos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
-    finalSurface, tmpsurf, rotatedEdge: PSDL_Surface;
-    rect: TSDL_Rect;
-    chars: TSysCharSet = [#9,' ','.',';',':','?','!',','];
-    substr: shortstring;
-    edge, corner, tail: TSPrite;
-begin
-
-case SpeechType of
-    1: begin;
-       edge:= sprSpeechEdge;
-       corner:= sprSpeechCorner;
-       tail:= sprSpeechTail;
-       end;
-    2: begin;
-       edge:= sprThoughtEdge;
-       corner:= sprThoughtCorner;
-       tail:= sprThoughtTail;
-       end;
-    3: begin;
-       edge:= sprShoutEdge;
-       corner:= sprShoutCorner;
-       tail:= sprShoutTail;
-       end;
-    end;
-edgeHeight:= SpritesData[edge].Height;
-edgeWidth:= SpritesData[edge].Width;
-cornerWidth:= SpritesData[corner].Width;
-cornerHeight:= SpritesData[corner].Height;
-// This one screws up WrapText
-//s:= 'This is the song that never ends.  ''cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they''ll just go on singing it forever just because... This is the song that never ends...';
-// This one does not
-//s:= 'This is the song that never ends.  cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they will go on singing it forever just because... This is the song that never ends... ';
-
-numLines:= 0;
-
-if length(s) = 0 then s:= '...';
-font:= CheckCJKFont(s, font);
-w:= 0; h:= 0; // avoid compiler hints
-TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
-if w<8 then w:= 8;
-j:= 0;
-if (length(s) > 20) then
-    begin
-    w:= 0;
-    i:= round(Sqrt(length(s)) * 2);
-    s:= WrapText(s, #1, chars, i);
-    pos:= 1; prevpos:= 0; line:= 0;
-// Find the longest line for the purposes of centring the text.  Font dependant.
-    while pos <= length(s) do
-        begin
-        if (s[pos] = #1) or (pos = length(s)) then
-            begin
-            inc(numlines);
-            if s[pos] <> #1 then inc(pos);
-            while s[prevpos+1] = ' ' do inc(prevpos);
-            substr:= copy(s, prevpos+1, pos-prevpos-1);
-            i:= 0; j:= 0;
-            TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(substr), i, j);
-            if i > w then w:= i;
-            prevpos:= pos;
-            end;
-        inc(pos);
-        end;
-    end
-else numLines := 1;
-
-textWidth:=((w-(cornerWidth-edgeWidth)*2) div edgeWidth)*edgeWidth+edgeWidth;
-textHeight:=(((numlines * h + 2)-((cornerHeight-edgeWidth)*2)) div edgeWidth)*edgeWidth;
-
-textHeight:=max(textHeight,edgeWidth);
-//textWidth:=max(textWidth,SpritesData[tail].Width);
-rect.x:= 0;
-rect.y:= 0;
-rect.w:= textWidth + (cornerWidth * 2);
-rect.h:= textHeight + cornerHeight*2 - edgeHeight + SpritesData[tail].Height;
-//s:= inttostr(w) + ' ' + inttostr(numlines) + ' ' + inttostr(rect.x) + ' '+inttostr(rect.y) + ' ' + inttostr(rect.w) + ' ' + inttostr(rect.h);
-
-finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, rect.w, rect.h, 32, RMask, GMask, BMask, AMask);
-
-TryDo(finalSurface <> nil, 'RenderString: fail to create surface', true);
-
-//////////////////////////////// CORNERS ///////////////////////////////
-copyToXY(SpritesData[corner].Surface, finalSurface, 0, 0); /////////////////// NW
-
-flipSurface(SpritesData[corner].Surface, true); // store all 4 versions in memory to avoid repeated flips?
-x:= 0;
-y:= textHeight + cornerHeight -1;
-copyToXY(SpritesData[corner].Surface, finalSurface, x, y); /////////////////// SW
-
-flipSurface(SpritesData[corner].Surface, false);
-x:= rect.w-cornerWidth-1;
-y:= textHeight + cornerHeight -1;
-copyToXY(SpritesData[corner].Surface, finalSurface, x, y); /////////////////// SE
-
-flipSurface(SpritesData[corner].Surface, true);
-x:= rect.w-cornerWidth-1;
-y:= 0;
-copyToXY(SpritesData[corner].Surface, finalSurface, x, y); /////////////////// NE
-flipSurface(SpritesData[corner].Surface, false); // restore original position
-//////////////////////////////// END CORNERS ///////////////////////////////
-
-//////////////////////////////// EDGES //////////////////////////////////////
-x:= cornerWidth;
-y:= 0;
-while x < rect.w-cornerWidth-1 do
-    begin
-    copyToXY(SpritesData[edge].Surface, finalSurface, x, y); ///////////////// top edge
-    inc(x,edgeWidth);
-    end;
-flipSurface(SpritesData[edge].Surface, true);
-x:= cornerWidth;
-y:= textHeight + cornerHeight*2 - edgeHeight-1;
-while x < rect.w-cornerWidth-1 do
-    begin
-    copyToXY(SpritesData[edge].Surface, finalSurface, x, y); ///////////////// bottom edge
-    inc(x,edgeWidth);
-    end;
-flipSurface(SpritesData[edge].Surface, true); // restore original position
-
-rotatedEdge:= SDL_CreateRGBSurface(SDL_SWSURFACE, edgeHeight, edgeWidth, 32, RMask, GMask, BMask, AMask);
-x:= rect.w - edgeHeight - 1;
-y:= cornerHeight;
-//// initially was going to rotate in place, but the SDL spec claims width/height are read only
-copyRotatedSurface(SpritesData[edge].Surface,rotatedEdge);
-while y < textHeight + cornerHeight do
-    begin
-    copyToXY(rotatedEdge, finalSurface, x, y);
-    inc(y,edgeWidth);
-    end;
-flipSurface(rotatedEdge, false); // restore original position
-x:= 0;
-y:= cornerHeight;
-while y < textHeight + cornerHeight do
-    begin
-    copyToXY(rotatedEdge, finalSurface, x, y);
-    inc(y,edgeWidth);
-    end;
-//////////////////////////////// END EDGES //////////////////////////////////////
-
-x:= cornerWidth;
-y:= textHeight + cornerHeight * 2 - edgeHeight - 1;
-copyToXY(SpritesData[tail].Surface, finalSurface, x, y);
-
-rect.x:= edgeHeight;
-rect.y:= edgeHeight;
-rect.w:= rect.w - edgeHeight * 2;
-rect.h:= textHeight + cornerHeight * 2 - edgeHeight * 2;
-i:= rect.w;
-j:= rect.h;
-SDL_FillRect(finalSurface, @rect, cWhiteColor);
-
-pos:= 1; prevpos:= 0; line:= 0;
-while pos <= length(s) do
-    begin
-    if (s[pos] = #1) or (pos = length(s)) then
-        begin
-        if s[pos] <> #1 then inc(pos);
-        while s[prevpos+1] = ' 'do inc(prevpos);
-        substr:= copy(s, prevpos+1, pos-prevpos-1);
-        if Length(substr) <> 0 then
-           begin
-           tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cNearBlackColorChannels);
-           rect.x:= edgeHeight + 1 + ((i - w) div 2);
-           // trying to more evenly position the text, vertically
-           rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;
-           SDLTry(tmpsurf <> nil, true);
-           SDL_UpperBlit(tmpsurf, nil, finalSurface, @rect);
-           SDL_FreeSurface(tmpsurf);
-           inc(line);
-           prevpos:= pos;
-           end;
-        end;
-    inc(pos);
-    end;
-
-//TryDo(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-RenderSpeechBubbleTex:= Surface2Tex(finalSurface, true);
-
-SDL_FreeSurface(rotatedEdge);
-SDL_FreeSurface(finalSurface);
-end;
 
 procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
@@ -1352,82 +603,6 @@ begin
     perfExt_FinishProgress();
 end;
 
-procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);
-var y, x, i, j: LongInt;
-    tmpPixel: Longword;
-    pixels: PLongWordArray;
-begin
-TryDo(Surface^.format^.BytesPerPixel = 4, 'flipSurface failed, expecting 32 bit surface', true);
-pixels:= Surface^.pixels;
-if Vertical then
-   for y := 0 to (Surface^.h div 2) - 1 do
-       for x := 0 to Surface^.w - 1 do
-           begin
-           i:= y * Surface^.w + x;
-           j:= (Surface^.h - y - 1) * Surface^.w + x;
-           tmpPixel:= pixels^[i];
-           pixels^[i]:= pixels^[j];
-           pixels^[j]:= tmpPixel;
-           end
-else
-   for x := 0 to (Surface^.w div 2) - 1 do
-       for y := 0 to Surface^.h -1 do
-           begin
-           i:= y*Surface^.w + x;
-           j:= y*Surface^.w + (Surface^.w - x - 1);
-           tmpPixel:= pixels^[i];
-           pixels^[i]:= pixels^[j];
-           pixels^[j]:= tmpPixel;
-           end;
-end;
-
-procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt);
-var srcX, srcY, i, j, maxDest: LongInt;
-    srcPixels, destPixels: PLongWordArray;
-    r0, g0, b0, a0, r1, g1, b1, a1: Byte;
-begin
-maxDest:= (dest^.pitch div 4) * dest^.h;
-srcPixels:= src^.pixels;
-destPixels:= dest^.pixels;
-
-for srcX:= 0 to src^.w - 1 do
-   for srcY:= 0 to src^.h - 1 do
-      begin
-      i:= (destY + srcY) * (dest^.pitch div 4) + destX + srcX;
-      j:= srcY * (src^.pitch div 4) + srcX;
-      if (i < maxDest) and (srcPixels^[j] and AMask <> 0) then
-         begin
-         SDL_GetRGBA(destPixels^[i], dest^.format, @r0, @g0, @b0, @a0);
-         SDL_GetRGBA(srcPixels^[j], src^.format, @r1, @g1, @b1, @a1);
-         r0:= (r0 * (255 - LongInt(a1)) + r1 * LongInt(a1)) div 255;
-         g0:= (g0 * (255 - LongInt(a1)) + g1 * LongInt(a1)) div 255;
-         b0:= (b0 * (255 - LongInt(a1)) + b1 * LongInt(a1)) div 255;
-         a0:= (a0 * (255 - LongInt(a1)) + a1 * LongInt(a1)) div 255;
-         destPixels^[i]:= SDL_MapRGBA(dest^.format, r0, g0, b0, a0);
-         end;
-      end;
-end;
-
-procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary since width/height are read only in SDL, apparently
-var y, x, i, j: LongInt;
-    srcPixels, destPixels: PLongWordArray;
-begin
-TryDo(src^.format^.BytesPerPixel = 4, 'rotateSurface failed, expecting 32 bit surface', true);
-TryDo(dest^.format^.BytesPerPixel = 4, 'rotateSurface failed, expecting 32 bit surface', true);
-
-srcPixels:= src^.pixels;
-destPixels:= dest^.pixels;
-
-j:= 0;
-for x := 0 to src^.w - 1 do
-    for y := 0 to src^.h - 1 do
-        begin
-        i:= (src^.h - 1 - y) * (src^.pitch div 4) + x;
-        destPixels^[j]:= srcPixels^[i];
-        inc(j)
-        end;
-end;
-
 function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 var tmpsurf: PSDL_SURFACE;
     w, h, i, j: LongInt;
@@ -1603,8 +778,85 @@ FreeTexture(WeaponTooltipTex);
 WeaponTooltipTex:= nil
 end;
 
+procedure chFullScr(var s: shortstring);
+var flags: Longword = 0;
+    ico: PSDL_Surface;
+{$IFDEF DEBUGFILE}
+    buf: array[byte] of char;
+{$ENDIF}
+begin
+    s:= s; // avoid compiler hint
+    if Length(s) = 0 then cFullScreen:= not cFullScreen
+    else cFullScreen:= s = '1';
+
+{$IFDEF DEBUGFILE}
+    buf[0]:= char(0); // avoid compiler hint
+    AddFileLog('Prepare to change video parameters...');
+{$ENDIF}
+
+    flags:= SDL_OPENGL;// or SDL_RESIZABLE;
+
+    if cFullScreen then
+        flags:= flags or SDL_FULLSCREEN;
+
+{$IFDEF SDL_IMAGE_NEWER}
+    WriteToConsole('Init SDL_image... ');
+    SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
+    WriteLnToConsole(msgOK);
+{$ENDIF}
+    // load engine icon
+{$IFDEF DARWIN}
+    ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
+{$ELSE}
+    ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+{$ENDIF}
+    if ico <> nil then
+    begin
+        SDL_WM_SetIcon(ico, 0);
+        SDL_FreeSurface(ico)
+    end;
+
+    // set window caption
+    SDL_WM_SetCaption('Hedgewars', nil);
+
+    if SDLPrimSurface <> nil then
+    begin
+{$IFDEF DEBUGFILE}
+        AddFileLog('Freeing old primary surface...');
+{$ENDIF}
+        SDL_FreeSurface(SDLPrimSurface);
+        SDLPrimSurface:= nil;
+    end;
+
+{$IFDEF SDL13}
+    if SDLwindow = nil then
+    begin
+        SDLwindow:= SDL_CreateWindow('Hedgewars', 0, 0, cScreenWidth, cScreenHeight,
+                        SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN
+                        {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});
+        SDL_CreateRenderer(SDLwindow, -1, 0);
+    end;
+
+    SDL_SetRenderDrawColor(0, 0, 0, 255);
+    SDL_RenderFill(nil);
+    SDL_RenderPresent();
+{$ELSE}
+    SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
+    SDLTry(SDLPrimSurface <> nil, true);
+    PixelFormat:= SDLPrimSurface^.format;
+{$ENDIF}
+
+{$IFDEF DEBUGFILE}
+    AddFileLog('Setting up OpenGL...');
+    AddFileLog('SDL video driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))));
+{$ENDIF}
+    SetupOpenGL();
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('fullscr', vtCommand, @chFullScr, true);
+
     PixelFormat:= nil;
     SDLPrimSurface:= nil;
 

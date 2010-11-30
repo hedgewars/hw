@@ -20,7 +20,7 @@
 
 unit uAmmos;
 interface
-uses uConsts, uTeams;
+uses uConsts, uTypes;
 
 procedure initModule;
 procedure freeModule;
@@ -47,7 +47,7 @@ function  GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 var StoreCnt: Longword;
 
 implementation
-uses uMisc, uGears, uWorld, uLocale, uConsole, uMobile;
+uses uLocale, uMobile, uVariables, uCommands, uUtils, uCaptions, uDebug;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
@@ -326,7 +326,7 @@ with Hedgehog do
             if (Count <> AMMO_INFINITE) and not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0)) then
                 s:= s + ' (' + IntToStr(Count) + ')';
             if (Propz and ammoprop_Timerable) <> 0 then
-                s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
+                s:= s + ', ' + IntToStr(Timer div 1000) + ' ' + trammo[sidSeconds];
             AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
             end;
         if (Propz and ammoprop_NeedTarget) <> 0
@@ -418,8 +418,22 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     if Ammoz[a].SkipTurns >= 10000 then dec(Ammoz[a].SkipTurns,10000)
 end;
 
+
+
+procedure chAddAmmoStore(var descr: shortstring);
+begin
+descr:= ''; // avoid compiler hint
+AddAmmoStore
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('ammloadt', vtCommand, @SetAmmoLoadout, false);
+    RegisterVariable('ammdelay', vtCommand, @SetAmmoDelay, false);
+    RegisterVariable('ammprob',  vtCommand, @SetAmmoProbability, false);
+    RegisterVariable('ammreinf', vtCommand, @SetAmmoReinforcement, false);
+    RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
+
     StoreCnt:= 0;
     ammoLoadout:= '';
     ammoProbability:= '';

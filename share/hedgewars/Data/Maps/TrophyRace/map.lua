@@ -6,7 +6,8 @@ local caption = {
 	["pt_PT"] = "TrophyRace",
 	["pl"] = "TrophyRace",
 	["es"] = "TrophyRace",
-	["pt_BR"] = "TrophyRace"
+	["pt_BR"] = "TrophyRace",
+	["sk"] = "Preteky o trofej"
 	}
 
 local goal = {
@@ -15,7 +16,8 @@ local goal = {
 	["pt_PT"] = "Utilizando a corda, percorre o percurso do inicio ao fim o mais rápido que conseguires!",
 	["pl"] = "Użyj liny by jak najszybciej dotrzec od startu do mety",
 	["es"] = "¡Usa tu cuerda para llegar a la salida lo más rápido que puedas!",
-	["pt_BR"] = "Use sua corda para ir do início ao fim o mais rápido que você puder!"
+	["pt_BR"] = "Use sua corda para ir do início ao fim o mais rápido que você puder!",
+	["sk"] = "Použite lano na presun zo štartovnej pozície do cieľa tak rýchlo, ako to len viete!"
 	}
 
 local done = {
@@ -24,7 +26,8 @@ local done = {
 	["pt_PT"] = "Chegaste ao fim!| |Tempo: ",
 	["pl"] = "Dotarłeś do celu!| |Czas: ",
 	["es"] = "¡Has llegado a la meta!| |Tiempo: ",
-	["pt_BR"] = "Você alcançou o objetivo!| |Tempo: "
+	["pt_BR"] = "Você alcançou o objetivo!| |Tempo: ",
+	["sk"] = "Dosiahli ste cieľ!| |Čas: "
 	}
 
 local eliminated = {
@@ -33,7 +36,8 @@ local eliminated = {
 	["pt_PT"] = "A eliminar o pior ouriço da ronda...| |% está FORA!",
 	["pl"] = "Eliminujemy najgorszego jeża tej rundy...| |%s ODPADŁ!",
 	["es"] = "Eliminando al peor erizo de esta ronda...| |¡%s está FUERA!",
-	["pt_BR"] = "Eliminando o ouriço mais lento...| |%s vai para o chuveiro!"
+	["pt_BR"] = "Eliminando o ouriço mais lento...| |%s vai para o chuveiro!",
+	["sk"] = "Eliminujem najhoršieho ježka tohto kola...| |%s je mimo hru!"
 	}
 
 local newbesttime = {
@@ -42,7 +46,8 @@ local newbesttime = {
 	["pt_PT"] = "NOVA volta recorde: ",
 	["pl"] = "NOWE najszybsze okrążenie: ",
 	["es"] = "NUEVA vuelta rápida: ",
-	["pt_BR"] = "NOVA volta mais rápida: "
+	["pt_BR"] = "NOVA volta mais rápida: ",
+	["sk"] = "NOVÉ najrýchlejšie kolo: "
 	}
 
 local oldbesttime = {
@@ -51,7 +56,8 @@ local oldbesttime = {
 	["pt_PT"] = "Volta mais rápida: ",
 	["pl"] = "Najszybsze okrążenie: ",
 	["es"] = "Vuelta rápida: ",
-	["pt_BR"] = "Volta mais rápida: "
+	["pt_BR"] = "Volta mais rápida: ",
+	["sk"] = "Najrýchlejšie kolo: "
 	}
 
 local bestclantimes = {
@@ -60,7 +66,8 @@ local bestclantimes = {
 	["pt_PT"] = "Melhores voltas por equipa: ",
 	["pl"] = "Najszybsze okrążenie drużyny: ",
 	["es"] = "Mejores tiempos por equipo: ",
-	["pt_BR"] = "Melhor volta por equipe: "
+	["pt_BR"] = "Melhor volta por equipe: ",
+	["sk"] = "Najrýchlejšie kolá podľa tímov: "
 	}
 
 local clantime = {
@@ -69,7 +76,8 @@ local clantime = {
 	["pt_PT"] = "Equipa %d: ",
 	["pl"] = "Drużyna %d: ",
 	["es"] = "Equipo %d",
-	["pt_BR"] = "Equipe %d: "
+	["pt_BR"] = "Equipe %d: ",
+	["sk"] = "Tím %d: "
 	}
 
 local function loc(text)

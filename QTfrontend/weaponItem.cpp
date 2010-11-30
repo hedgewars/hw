@@ -18,8 +18,8 @@
 
 #include "weaponItem.h"
 
-WeaponItem::WeaponItem(const QImage& im, QWidget * parent) :
-  ItemNum(im, parent, 0)
+WeaponItem::WeaponItem(const QImage& im, const QImage& img, QWidget * parent) :
+  ItemNum(im, img, parent, 0)
 {
 }
 

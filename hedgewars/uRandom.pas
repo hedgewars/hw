@@ -30,12 +30,8 @@ procedure SetRandomSeed(Seed: shortstring);
 function  GetRandom: hwFloat; overload;
 function  GetRandom(m: LongWord): LongWord; overload;
 function  rndSign(num: hwFloat): hwFloat;
-{$IFDEF DEBUGFILE}
-procedure DumpBuffer;
-{$ENDIF}
 
 implementation
-uses uMisc;
 
 var cirbuf: array[0..63] of Longword;
     n: byte;
@@ -76,7 +72,6 @@ end;
 
 function GetRandom(m: LongWord): LongWord;
 begin
-TryDo((m > 0),'GetRandom(0) called! Please report this to the developers!',true);
 GetNext;
 GetRandom:= GetNext mod m
 end;
@@ -86,15 +81,6 @@ begin
 num.isNegative:= odd(GetNext);
 rndSign:= num
 end;
-
-{$IFDEF DEBUGFILE}
-procedure DumpBuffer;
-var i: LongInt;
-begin
-for i:= 0 to 63 do
-    AddFileLog('[' + inttostr(i) + '] = ' + inttostr(cirbuf[i]))
-end;
-{$ENDIF}
 
 procedure initModule;
 begin

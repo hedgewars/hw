@@ -41,7 +41,6 @@ implementation
 {$IFNDEF LUA_DISABLED}
 uses LuaPas in 'LuaPas.pas',
     uConsole,
-    uMisc,
     uConsts,
     uVisualGears,
     uGears,
@@ -49,11 +48,16 @@ uses LuaPas in 'LuaPas.pas',
     uWorld,
     uAmmos,
     uSound,
-    uTeams,
-    uKeys,
     uChat,
     uStats,
-    uRandom;
+    uRandom,
+    uTypes,
+    uVariables,
+    uCommands,
+    uUtils,
+    uKeys,
+    uCaptions,
+    uDebug;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
@@ -299,7 +303,7 @@ begin
     else begin
         gear := GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
-            lua_pushinteger(L, PHedgehog(gear^.Hedgehog)^.BotLevel)
+            lua_pushinteger(L, gear^.Hedgehog^.BotLevel)
         else
             lua_pushnil(L);
     end;
@@ -319,7 +323,7 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             begin
-            lua_pushinteger(L, PHedgehog(gear^.Hedgehog)^.Team^.Clan^.ClanIndex)
+            lua_pushinteger(L, gear^.Hedgehog^.Team^.Clan^.ClanIndex)
             end
         else
             lua_pushnil(L);
@@ -340,7 +344,7 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             begin
-            lua_pushstring(L, str2pchar(PHedgehog(gear^.Hedgehog)^.Team^.TeamName))
+            lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.TeamName))
             end
         else
             lua_pushnil(L);
@@ -361,7 +365,7 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             begin
-            lua_pushstring(L, str2pchar(PHedgehog(gear^.Hedgehog)^.Name))
+            lua_pushstring(L, str2pchar(gear^.Hedgehog^.Name))
             end
         else
             lua_pushnil(L);
@@ -570,7 +574,7 @@ begin
     else begin
         gear := GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            PHedgehog(gear^.Hedgehog)^.Effects[THogEffect(lua_tointeger(L, 2))]:= lua_tointeger(L, 3) <> 0;
+            gear^.Hedgehog^.Effects[THogEffect(lua_tointeger(L, 2))]:= lua_toboolean(L, 3);
     end;
     lc_seteffect := 0;
 end;
@@ -820,6 +824,21 @@ begin
             end
         end;
     lc_getrandom:= 1
+end;
+
+function lc_setwind(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then
+        LuaError('Lua: Wrong number of parameters passed to SetWind!')
+    else
+        begin
+        cWindSpeed:= int2hwfloat(lua_tointeger(L, 1)) / 100 * cMaxWindSpeed;
+        cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
+        if cWindSpeed.isNegative then
+            CWindSpeedf := -cWindSpeedf;
+        AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1)^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+        end;
+    lc_setwind:= 0
 end;
 ///////////////////
 
@@ -1211,6 +1230,7 @@ lua_register(luaState, 'CampaignUnlock', @lc_campaignunlock);
 lua_register(luaState, 'GetGearMessage', @lc_getgearmessage);
 lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
 lua_register(luaState, 'GetRandom', @lc_getrandom);
+lua_register(luaState, 'SetWind', @lc_setwind);
 
 
 ScriptClearStack; // just to be sure stack is empty

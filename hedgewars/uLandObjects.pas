@@ -29,7 +29,8 @@ procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PS
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
-uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uSound, GLunit;
+uses uStore, uConsts, uConsole, uRandom, uVisualGears, uSound, GLunit,
+     uTypes, uVariables, uUtils, uDebug;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;

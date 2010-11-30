@@ -20,63 +20,7 @@
 
 unit uGears;
 interface
-uses SDLh, uConsts, uFloat, Math;
-
-
-type
-    PGear = ^TGear;
-    TGearStepProcedure = procedure (Gear: PGear);
-    TGear = record
-            NextGear, PrevGear: PGear;
-            Active: Boolean;
-            AdvBounce: Longword;
-            Invulnerable: Boolean;
-            RenderTimer: Boolean;
-            AmmoType : TAmmoType;
-            State : Longword;
-            X : hwFloat;
-            Y : hwFloat;
-            dX: hwFloat;
-            dY: hwFloat;
-            Kind: TGearType;
-            Pos: Longword;
-            doStep: TGearStepProcedure;
-            Radius: LongInt;
-            Angle, Power : Longword;
-            DirAngle: real;
-            Timer : LongWord;
-            Elasticity: hwFloat;
-            Friction  : hwFloat;
-            Message, MsgParam : Longword;
-            Hedgehog: pointer;
-            Health, Damage, Karma: LongInt;
-            CollisionIndex: LongInt;
-            Tag: LongInt;
-            Tex: PTexture;
-            Z: Longword;
-            IntersectGear: PGear;
-            FlightTime: Longword;
-            uid: Longword;
-            ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
-            nImpactSounds: Word; // count of ImpactSounds
-            SoundChannel: LongInt;
-            PortalCounter: LongWord  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
-        end;
-    TPGearArray = Array of PGear;
-
-var AllInactive: boolean;
-    PrvInactive: boolean;
-    CurAmmoGear: PGear;
-    GearsList: PGear;
-    KilledHHs: Longword;
-    SuddenDeathDmg: Boolean;
-    SpeechType: Longword;
-    SpeechText: shortstring;
-    TrainingTargetGear: PGear;
-    skipFlag: boolean;
-    PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
-    StepSoundTimer: LongInt;
-    StepSoundChannel: LongInt;
+uses SDLh, uConsts, uFloat, uTypes;
 
 procedure initModule;
 procedure freeModule;
@@ -97,24 +41,13 @@ procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
-function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
-function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
+
 
 implementation
-uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics,
-     uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile;
+uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
+     uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
+     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug;
 
-const MAXROPEPOINTS = 384;
-var RopePoints: record
-                Count: Longword;
-                HookAngle: GLfloat;
-                ar: array[0..MAXROPEPOINTS] of record
-                                  X, Y: hwFloat;
-                                  dLen: hwFloat;
-                                  b: boolean;
-                                  end;
-                rounded: array[0..MAXROPEPOINTS + 2] of TVertex2f;
-                end;
 
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
@@ -132,22 +65,6 @@ procedure ShotgunShot(Gear: PGear); forward;
 procedure PickUp(HH, Gear: PGear); forward;
 procedure HHSetWeapon(Gear: PGear); forward;
 procedure doStepCase(Gear: PGear); forward;
-
-function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
-begin
-    if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
-        GetLaunchX:= sign(dir) * (8 + hwRound(AngleSin(angle) * Ammoz[at].ejectX) + hwRound(AngleCos(angle) * Ammoz[at].ejectY))
-    else
-        GetLaunchX:= 0
-end;
-
-function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
-begin
-    if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
-        GetLaunchY:= hwRound(AngleSin(angle) * Ammoz[at].ejectY) - hwRound(AngleCos(angle) * Ammoz[at].ejectX) - 2
-    else
-        GetLaunchY:= 0
-end;
 
 {$INCLUDE "GSHandlers.inc"}
 {$INCLUDE "HHHandlers.inc"}
@@ -253,7 +170,7 @@ var tag: PVisualGear;
 begin
 tag:= AddVisualGear(hwRound(HHGear^.X), hwRound(HHGear^.Y), vgtHealthTag, dmg);
 if (tag <> nil) then
-    tag^.Hedgehog:= PHedgehog(HHGear^.Hedgehog); // the tag needs the tag to determine the text color
+    tag^.Hedgehog:= HHGear^.Hedgehog; // the tag needs the tag to determine the text color
 AllInactive:= false;
 HHGear^.Active:= true;
 end;
@@ -323,8 +240,8 @@ case Kind of
                 gear^.Angle:= cMaxAngle div 2;
                 gear^.Z:= cHHZ;
                 if (GameFlags and gfAISurvival) <> 0 then
-                    if PHedgehog(gear^.Hedgehog)^.BotLevel > 0 then
-                        PHedgehog(gear^.Hedgehog)^.Effects[heResurrectable] := true;
+                    if gear^.Hedgehog^.BotLevel > 0 then
+                        gear^.Hedgehog^.Effects[heResurrectable] := true;
                 end;
        gtShell: begin
                 gear^.Radius:= 4;
@@ -356,7 +273,7 @@ case Kind of
                 end;
         gtRope: begin
                 gear^.Radius:= 3;
-                gear^.Friction:= _450;
+                gear^.Friction:= _450 * _0_01 * cRopePercent;
                 RopePoints.Count:= 0;
                 end;
         gtMine: begin
@@ -599,12 +516,12 @@ else if Gear^.Kind = gtHedgehog then
             uStats.HedgehogDamaged(Gear)
             end;
 
-        team:= PHedgehog(Gear^.Hedgehog)^.Team;
+        team:= Gear^.Hedgehog^.Team;
         if CurrentHedgehog^.Gear = Gear then
             FreeActionsList; // to avoid ThinkThread on drawned gear
 
-        PHedgehog(Gear^.Hedgehog)^.Gear:= nil;
-        if PHedgehog(Gear^.Hedgehog)^.King then
+        Gear^.Hedgehog^.Gear:= nil;
+        if Gear^.Hedgehog^.King then
             begin
             // are there any other kings left? Just doing nil check.  Presumably a mortally wounded king will get reaped soon enough
             k:= false;
@@ -655,17 +572,17 @@ while Gear <> nil do
             else
                 dec(Gear^.Health, dmg);
 
-            if (PHedgehog(Gear^.Hedgehog)^.Team = CurrentTeam) and
+            if (Gear^.Hedgehog^.Team = CurrentTeam) and
                (Gear^.Damage <> Gear^.Karma) and
-                not PHedgehog(Gear^.Hedgehog)^.King and
-                not PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] and
+                not Gear^.Hedgehog^.King and
+                not Gear^.Hedgehog^.Effects[hePoisoned] and
                 not SuddenDeathDmg then
                 Gear^.State:= Gear^.State or gstLoser;
 
             spawnHealthTagForHH(Gear, dmg);
 
-            RenderHealth(PHedgehog(Gear^.Hedgehog)^);
-            RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
+            RenderHealth(Gear^.Hedgehog^);
+            RecountTeamHealth(Gear^.Hedgehog^.Team);
 
             end;
         if (not isInMultiShoot) then Gear^.Karma:= 0;
@@ -689,20 +606,20 @@ begin
         if Gear^.Kind = gtHedgehog then
             begin
             tmp:= 0;
-            if PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] then
+            if Gear^.Hedgehog^.Effects[hePoisoned] then
                 begin
                 inc(tmp, ModifyDamage(5, Gear));
-                if (GameFlags and gfResetHealth) <> 0 then dec(PHedgehog(Gear^.Hedgehog)^.InitialHealth)  // does not need a minimum check since <= 1 basically disables it
+                if (GameFlags and gfResetHealth) <> 0 then dec(Gear^.Hedgehog^.InitialHealth)  // does not need a minimum check since <= 1 basically disables it
                 end;
             if (TotalRounds > cSuddenDTurns - 1) then
                 begin
                 inc(tmp, cHealthDecrease);
-                if (GameFlags and gfResetHealth) <> 0 then dec(PHedgehog(Gear^.Hedgehog)^.InitialHealth, cHealthDecrease)
+                if (GameFlags and gfResetHealth) <> 0 then dec(Gear^.Hedgehog^.InitialHealth, cHealthDecrease)
                 end;
-            if PHedgehog(Gear^.Hedgehog)^.King then
+            if Gear^.Hedgehog^.King then
                 begin
                 flag:= false;
-                team:= PHedgehog(Gear^.Hedgehog)^.Team;
+                team:= Gear^.Hedgehog^.Team;
                 for i:= 0 to Pred(team^.HedgehogsNumber) do
                     if (team^.Hedgehogs[i].Gear <> nil) and
                         (not team^.Hedgehogs[i].King) and
@@ -711,7 +628,7 @@ begin
                 if not flag then
                     begin
                     inc(tmp, 5);
-                    if (GameFlags and gfResetHealth) <> 0 then dec(PHedgehog(Gear^.Hedgehog)^.InitialHealth, 5)
+                    if (GameFlags and gfResetHealth) <> 0 then dec(Gear^.Hedgehog^.InitialHealth, 5)
                     end
                 end;
             if tmp > 0 then 
@@ -939,6 +856,7 @@ if ((GameTicks and $FFFF) = $FFFF) then
         inc(hiTicks) // we do not recieve a message for this
     end;
 
+ScriptCall('onGameTick');
 inc(GameTicks)
 end;
 
@@ -985,10 +903,10 @@ begin
     while t <> nil do
         begin
         t^.PortalCounter:= 0;
-        if ((GameFlags and gfResetHealth) <> 0) and (t^.Kind = gtHedgehog) and (t^.Health < PHedgehog(t^.Hedgehog)^.InitialHealth) then
+        if ((GameFlags and gfResetHealth) <> 0) and (t^.Kind = gtHedgehog) and (t^.Health < t^.Hedgehog^.InitialHealth) then
             begin
-            t^.Health:= PHedgehog(t^.Hedgehog)^.InitialHealth;
-            RenderHealth(PHedgehog(t^.Hedgehog)^);
+            t^.Health:= t^.Hedgehog^.InitialHealth;
+            RenderHealth(t^.Hedgehog^);
             end;
         t:= t^.NextGear
         end;
@@ -1009,7 +927,7 @@ begin
     if (Gear^.Kind = gtHedgehog) and (Damage>=1) then
     begin
     HHHurt(Gear^.Hedgehog, Source);
-    AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color);
+    AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, Gear^.Hedgehog^.Team^.Clan^.Color);
     tmpDmg:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
     if (Gear <> CurrentHedgehog^.Gear) and (CurrentHedgehog^.Gear <> nil) and (tmpDmg >= 1) then
         begin
@@ -1072,150 +990,20 @@ while t <> nil do
     end
 end;
 
-procedure DrawAltWeapon(Gear: PGear; sx, sy: LongInt);
+
+procedure DrawGears;
+var Gear: PGear;
+    x, y: LongInt;
 begin
-with PHedgehog(Gear^.Hedgehog)^ do
+Gear:= GearsList;
+while Gear <> nil do
     begin
-    if not (((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and ((Gear^.State and gstAttacked) = 0)) then
-        exit;
-    DrawTexture(sx + 16, sy + 16, ropeIconTex);
-    DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, sx + 30, sy + 30, ord(CurAmmoType) - 1, 1, 32, 32);
+    x:= hwRound(Gear^.X) + WorldDx;
+    y:= hwRound(Gear^.Y) + WorldDy;
+    RenderGear(Gear, x, y);
+    Gear:= Gear^.NextGear
     end;
 end;
-
-procedure DrawRopeLinesRQ(Gear: PGear);
-begin
-with RopePoints do
-    begin
-    rounded[Count].X:= hwRound(Gear^.X);
-    rounded[Count].Y:= hwRound(Gear^.Y);
-    rounded[Count + 1].X:= hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.X);
-    rounded[Count + 1].Y:= hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.Y);
-    end;
-
-if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
-    begin
-    glDisable(GL_TEXTURE_2D);
-    //glEnable(GL_LINE_SMOOTH);
-
-    glPushMatrix;
-
-    glTranslatef(WorldDx, WorldDy, 0);
-
-    glLineWidth(4.0);
-
-    Tint($C0, $C0, $C0, $FF);
-
-    glVertexPointer(2, GL_FLOAT, 0, @RopePoints.rounded[0]);
-    glDrawArrays(GL_LINE_STRIP, 0, RopePoints.Count + 2);
-    Tint($FF, $FF, $FF, $FF);
-
-    glPopMatrix;
-
-    glEnable(GL_TEXTURE_2D);
-    //glDisable(GL_LINE_SMOOTH)
-    end
-end;
-
-procedure DrawRope(Gear: PGear);
-var roplen: LongInt;
-    i: Longword;
-
-    procedure DrawRopeLine(X1, Y1, X2, Y2: LongInt);
-    var  eX, eY, dX, dY: LongInt;
-        i, sX, sY, x, y, d: LongInt;
-        b: boolean;
-    begin
-    if (X1 = X2) and (Y1 = Y2) then
-    begin
-    //OutError('WARNING: zero length rope line!', false);
-    exit
-    end;
-    eX:= 0;
-    eY:= 0;
-    dX:= X2 - X1;
-    dY:= Y2 - Y1;
-
-    if (dX > 0) then sX:= 1
-    else
-    if (dX < 0) then
-        begin
-        sX:= -1;
-        dX:= -dX
-        end else sX:= dX;
-
-    if (dY > 0) then sY:= 1
-    else
-    if (dY < 0) then
-        begin
-        sY:= -1;
-        dY:= -dY
-        end else sY:= dY;
-
-        if (dX > dY) then d:= dX
-                    else d:= dY;
-
-        x:= X1;
-        y:= Y1;
-
-        for i:= 0 to d do
-            begin
-            inc(eX, dX);
-            inc(eY, dY);
-            b:= false;
-            if (eX > d) then
-                begin
-                dec(eX, d);
-                inc(x, sX);
-                b:= true
-                end;
-            if (eY > d) then
-                begin
-                dec(eY, d);
-                inc(y, sY);
-                b:= true
-                end;
-            if b then
-                begin
-                inc(roplen);
-                if (roplen mod 4) = 0 then DrawSprite(sprRopeNode, x - 2, y - 2, 0)
-                end
-        end
-    end;
-begin
-    if (cReducedQuality and rqSimpleRope) <> 0 then
-        DrawRopeLinesRQ(Gear)
-    else
-        begin
-        roplen:= 0;
-        if RopePoints.Count > 0 then
-            begin
-            i:= 0;
-            while i < Pred(RopePoints.Count) do
-                    begin
-                    DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
-                                hwRound(RopePoints.ar[Succ(i)].X) + WorldDx, hwRound(RopePoints.ar[Succ(i)].Y) + WorldDy);
-                    inc(i)
-                    end;
-            DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
-                        hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy);
-            DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-                        hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.X) + WorldDx, hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.Y) + WorldDy);
-            end else
-            if Gear^.Elasticity.QWordValue > 0 then
-            DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-                        hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.X) + WorldDx, hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.Y) + WorldDy);
-        end;
-
-
-if RopePoints.Count > 0 then
-    DrawRotated(sprRopeHook, hwRound(RopePoints.ar[0].X) + WorldDx, hwRound(RopePoints.ar[0].Y) + WorldDy, 1, RopePoints.HookAngle)
-    else
-    if Gear^.Elasticity.QWordValue > 0 then
-        DrawRotated(sprRopeHook, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
-end;
-
-{$INCLUDE "GearDrawing.inc"}
 
 procedure FreeGearsList;
 var t, tt: PGear;
@@ -1349,7 +1137,7 @@ while Gear <> nil do
                                 if Gear^.Kind <> gtFlame then FollowGear:= Gear
                                 end;
                             if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) then
-                                PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] := true;
+                                Gear^.Hedgehog^.Effects[hePoisoned] := true;
                             end;
 
                         end;
@@ -1473,7 +1261,7 @@ while i > 0 do
                     if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then ApplyDamage(Gear, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
 
                     DeleteCI(Gear);
-                    if (Gear^.Kind = gtHedgehog) and PHedgehog(Gear^.Hedgehog)^.King then
+                    if (Gear^.Kind = gtHedgehog) and Gear^.Hedgehog^.King then
                         begin
                         Gear^.dX:= Ammo^.dX * Power * _0_005;
                         Gear^.dY:= Ammo^.dY * Power * _0_005
@@ -1669,11 +1457,11 @@ begin
         if Team^.AIKillsTex <> nil then FreeTexture(Team^.AIKillsTex);
         Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
     end;
-    tempTeam := PHedgehog(gear^.Hedgehog)^.Team;
+    tempTeam := gear^.Hedgehog^.Team;
     DeleteCI(gear);
     FindPlace(gear, false, 0, LAND_WIDTH); 
     if gear <> nil then begin
-        RenderHealth(PHedgehog(gear^.Hedgehog)^);
+        RenderHealth(gear^.Hedgehog^);
         ScriptCall('onGearResurrect', gear^.uid);
     end;
     RecountTeamHealth(tempTeam);
@@ -1887,7 +1675,7 @@ if cnt2 > 0 then
     else
     begin
     OutError('Can''t find place for Gear', false);
-    if Gear^.Kind = gtHedgehog then PHedgehog(Gear^.Hedgehog)^.Effects[heResurrectable] := false;
+    if Gear^.Kind = gtHedgehog then Gear^.Hedgehog^.Effects[heResurrectable] := false;
     DeleteGear(Gear);
     Gear:= nil
     end
@@ -1902,7 +1690,7 @@ begin
 *)
 i:= _1;
 if (CurrentHedgehog <> nil) and CurrentHedgehog^.King then i:= _1_5;
-if (Gear^.Hedgehog <> nil) and (PHedgehog(Gear^.Hedgehog)^.King) then
+if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.King) then
    ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent * _0_5)
 else
    ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent)
@@ -1924,8 +1712,51 @@ while gear <> nil do
     end
 end;
 
+
+procedure chSkip(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+if not CurrentTeam^.ExtDriven then SendIPC(',');
+uStats.Skipped;
+skipFlag:= true
+end;
+
+procedure chHogSay(var s: shortstring);
+var Gear: PVisualGear;
+    text: shortstring;
+begin
+    text:= copy(s, 2, Length(s) - 1);
+    if CheckNoTeamOrHH
+    or ((CurrentHedgehog^.Gear^.State and gstHHDriven) = 0) then
+        begin
+        ParseCommand('say ' + text, true);
+        exit
+        end;
+
+    if not CurrentTeam^.ExtDriven then SendIPC('h' + s);
+
+    if byte(s[1]) < 4 then
+        begin
+        Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
+        if Gear <> nil then
+            begin
+            Gear^.Hedgehog:= CurrentHedgehog;
+            Gear^.Text:= text;
+            Gear^.FrameTicks:= byte(s[1])
+            end
+        end
+    else
+        begin
+        SpeechType:= byte(s[1])-3;
+        SpeechText:= text
+        end;
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('skip', vtCommand, @chSkip, false);
+    RegisterVariable('hogsay', vtCommand, @chHogSay, true );
+
     CurAmmoGear:= nil;
     GearsList:= nil;
     KilledHHs:= 0;

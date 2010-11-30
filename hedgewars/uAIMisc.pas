@@ -20,7 +20,7 @@
 
 unit uAIMisc;
 interface
-uses SDLh, uConsts, uGears, uFloat;
+uses SDLh, uConsts, uFloat, uTypes;
 
 const MAXBONUS = 1024;
 
@@ -68,8 +68,7 @@ var ThinkingHH: PGear;
              end;
 
 implementation
-uses uTeams, uMisc, uLand, uCollisions;
-
+uses uCollisions, uVariables, uUtils, uDebug;
 
 const KillScore = 200;
 
@@ -131,7 +130,7 @@ var Gear: PGear;
 
 begin
 bonuses.Count:= 0;
-MyClan:= PHedgehog(ThinkingHH^.Hedgehog)^.Team^.Clan;
+MyClan:= ThinkingHH^.Hedgehog^.Team^.Clan;
 Gear:= GearsList;
 while Gear <> nil do
     begin
@@ -150,7 +149,7 @@ while Gear <> nil do
                           AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
                       else
                           if isAfterAttack and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog) then
-                              if (MyClan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan) then
+                              if (MyClan = Gear^.Hedgehog^.Team^.Clan) then
                                   AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -3) // hedgehog-friend
                               else
                                   AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, 3)

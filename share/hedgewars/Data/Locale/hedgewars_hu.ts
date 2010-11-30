@@ -40,7 +40,7 @@
         <translation>Sémák szerkesztése</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -67,7 +67,7 @@
     <name>HWForm</name>
     <message>
         <source>new</source>
-        <translation>új</translation>
+        <translation type="obsolete">új</translation>
     </message>
     <message>
         <source>Error</source>
@@ -700,18 +700,42 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Új fegyverséma</translation>
+        <translation type="obsolete">Új fegyverséma</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Fegyverséma szerkesztése</translation>
+        <translation type="obsolete">Fegyverséma szerkesztése</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Fegyverséma törlése</translation>
+        <translation type="obsolete">Fegyverséma törlése</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -968,6 +992,14 @@ Do you still want to join the room?</source>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -978,6 +1010,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Delete</source>
         <translation>Törlés</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Új</translation>
     </message>
 </context>
 <context>
@@ -1176,7 +1212,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Fegyverek</translation>
+        <translation type="obsolete">Fegyverek</translation>
     </message>
     <message>
         <source>Audio/Graphic options</source>
@@ -1205,6 +1241,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Misc</source>
         <translation>Egyéb</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1380,7 +1420,7 @@ Néhány részlet esetleg nem működik vagy nincs készen. Csak saját felelős
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bind schemes and weapons</source>
+        <source>% Rope Length</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1430,7 +1470,7 @@ Kérlek, ellenőrizd a telepítésed</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Az alap fegyverkeszléet nem törölhető</translation>
+        <translation type="obsolete">Az alap fegyverkeszléet nem törölhető</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1446,6 +1486,30 @@ Kérlek, ellenőrizd a telepítésed</translation>
     </message>
     <message>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">Csapatok</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1592,6 +1656,10 @@ Kérlek, ellenőrizd a telepítésed</translation>
         <source>Delays</source>
         <translation>Késleltetések</translation>
     </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">új</translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
@@ -1696,6 +1764,14 @@ Kérlek, ellenőrizd a telepítésed</translation>
     </message>
     <message>
         <source>Per Hedgehog Ammo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

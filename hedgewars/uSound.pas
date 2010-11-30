@@ -20,13 +20,7 @@
 
 unit uSound;
 interface
-uses SDLh, uConsts;
-
-type PVoicepack = ^TVoicepack;
-    TVoicepack = record
-        name: shortstring;
-        chunks: array [TSound] of PMixChunk;
-        end;
+uses SDLh, uConsts, uTypes;
 
 var MusicFN: shortstring;
 
@@ -52,7 +46,7 @@ function  AskForVoicepack(name: shortstring): Pointer;
 
 
 implementation
-uses uMisc, uConsole;
+uses uVariables, uConsole, uUtils, uCommands, uDebug;
 
 const chanTPU = 32;
 var Volume: LongInt;
@@ -323,8 +317,17 @@ begin
     Mix_ResumeMusic(Mus);
 end;
 
+procedure chVoicepack(var s: shortstring);
+begin
+    if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/voicepack"', true);
+    if s[1]='"' then Delete(s, 1, 1);
+    if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+    CurrentTeam^.voicepack:= AskForVoicepack(s)
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('voicepack', vtCommand, @chVoicepack, false);
     MusicFN:='';
 end;
 

@@ -48,7 +48,7 @@ begin
 ChangeAmmo:= false;
 slot:= Gear^.MsgParam;
 
-with PHedgehog(Gear^.Hedgehog)^ do
+with Gear^.Hedgehog^ do
     begin
     Gear^.Message:= Gear^.Message and not gmSlot;
     ammoidx:= 0;
@@ -60,7 +60,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 
     while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do inc(ammoidx);
 
-    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
+    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(Gear^.Hedgehog^);
 
     MultiShootAttacks:= 0;
     Gear^.Message:= Gear^.Message and not (gmLJump or gmHJump);
@@ -101,7 +101,7 @@ var t: LongInt;
     s: boolean;
 begin
 weap:= TAmmoType(Gear^.MsgParam);
-Hedgehog:= PHedgehog(Gear^.Hedgehog);
+Hedgehog:= Gear^.Hedgehog;
 
 if Hedgehog^.Team^.Clan^.TurnNumber <= Ammoz[weap].SkipTurns then exit; // weapon is not activated yet
 
@@ -118,15 +118,15 @@ with Hedgehog^ do
         dec(t)
         end;
 
-if s then ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^)
+if s then ApplyAmmoChanges(Gear^.Hedgehog^)
 end;
 
 procedure HHSetTimer(Gear: PGear);
 var CurWeapon: PAmmo;
 begin
 Gear^.Message:= Gear^.Message and not gmTimer;
-CurWeapon:= GetAmmoEntry(PHedgehog(Gear^.Hedgehog)^);
-with PHedgehog(Gear^.Hedgehog)^ do
+CurWeapon:= GetAmmoEntry(Gear^.Hedgehog^);
+with Gear^.Hedgehog^ do
     if (CurWeapon^.Propz and ammoprop_Timerable) <> 0 then
         begin
         CurWeapon^.Timer:= 1000 * Gear^.MsgParam;
@@ -143,9 +143,9 @@ var xx, yy, newDx, newDy, lx, ly: hwFloat;
     altUse: boolean;
 begin
 bShowFinger:= false;
-CurWeapon:= GetAmmoEntry(PHedgehog(Gear^.Hedgehog)^);
+CurWeapon:= GetAmmoEntry(Gear^.Hedgehog^);
 with Gear^,
-     PHedgehog(Gear^.Hedgehog)^ do
+     Gear^.Hedgehog^ do
      begin
      if ((State and gstHHDriven) <> 0)and
         ((State and (gstAttacked or gstHHChooseTarget)) = 0) and
@@ -386,7 +386,7 @@ procedure doStepHedgehogDead(Gear: PGear);
 const frametime = 200;
       timertime = frametime * 6;
 begin
-if PHedgehog(Gear^.Hedgehog)^.Unplaced then exit;
+if Gear^.Hedgehog^.Unplaced then exit;
 if Gear^.Timer > 1 then
     begin
     AllInactive:= false;
@@ -406,7 +406,7 @@ if Gear^.Timer = 1 then
     Gear^.Z:= cCurrHHZ;
     RemoveGearFromList(Gear);
     InsertGearToList(Gear);
-    PlaySound(sndByeBye, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+    PlaySound(sndByeBye, Gear^.Hedgehog^.Team^.voicepack);
     Gear^.Pos:= 0;
     Gear^.Timer:= timertime
     end
@@ -417,7 +417,7 @@ procedure doStepHedgehogGone(Gear: PGear);
 const frametime = 65;
       timertime = frametime * 11;
 begin
-if PHedgehog(Gear^.Hedgehog)^.Unplaced then exit;
+if Gear^.Hedgehog^.Unplaced then exit;
 if Gear^.Timer > 1 then
     begin
     AllInactive:= false;
@@ -434,7 +434,7 @@ if Gear^.Timer = 1 then
     Gear^.Z:= cCurrHHZ;
     RemoveGearFromList(Gear);
     InsertGearToList(Gear);
-    PlaySound(sndByeBye, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+    PlaySound(sndByeBye, Gear^.Hedgehog^.Team^.voicepack);
     PlaySound(sndWarp);
     Gear^.Pos:= 0;
     Gear^.Timer:= timertime
@@ -454,16 +454,16 @@ case Gear^.Pos of
        posCaseUtility,
        posCaseAmmo: begin
                     a:= Gear^.AmmoType;
-                    AddAmmo(PHedgehog(HH^.Hedgehog)^, a);
+                    AddAmmo(HH^.Hedgehog^, a);
 // Possibly needs to check shared clan ammo game flag once added.
 // On the other hand, no obvious reason that clan members shouldn't know what ammo another clan member picked up
-                    if (not (PHedgehog(HH^.Hedgehog)^.Team^.ExtDriven 
-                      or (PHedgehog(HH^.Hedgehog)^.BotLevel > 0)))
-                      or (PHedgehog(HH^.Hedgehog)^.Team^.Clan^.ClanIndex = LocalClan)
+                    if (not (HH^.Hedgehog^.Team^.ExtDriven 
+                      or (HH^.Hedgehog^.BotLevel > 0)))
+                      or (HH^.Hedgehog^.Team^.Clan^.ClanIndex = LocalClan)
                       or (GameType = gmtDemo)  then
                         begin
                         s:= trammo[Ammoz[a].NameId] + ' (+' + IntToStr(Ammoz[a].NumberInCase) + ')';
-                        AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
+                        AddCaption(s, HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
 
                         // show ammo icon
                         vga:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtAmmo);
@@ -474,12 +474,12 @@ case Gear^.Pos of
                     end;
      posCaseHealth: begin
                     inc(HH^.Health, Gear^.Health);
-                    PHedgehog(HH^.Hedgehog)^.Effects[hePoisoned] := false;
+                    HH^.Hedgehog^.Effects[hePoisoned] := false;
                     str(Gear^.Health, s);
                     s:= '+' + s;
-                    AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
-                    RenderHealth(PHedgehog(HH^.Hedgehog)^);
-                    RecountTeamHealth(PHedgehog(HH^.Hedgehog)^.Team);
+                    AddCaption(s, HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    RenderHealth(HH^.Hedgehog^);
+                    RecountTeamHealth(HH^.Hedgehog^.Team);
 
                     i:= 0;
                     while i < Gear^.Health do
@@ -497,11 +497,11 @@ procedure HedgehogStep(Gear: PGear);
 var PrevdX: LongInt;
     CurWeapon: PAmmo;
 begin
-CurWeapon:= GetAmmoEntry(PHedgehog(Gear^.Hedgehog)^);
+CurWeapon:= GetAmmoEntry(Gear^.Hedgehog^);
 if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
    begin
    if isCursorVisible then
-      with PHedgehog(Gear^.Hedgehog)^ do
+      with Gear^.Hedgehog^ do
         with CurWeapon^ do
           begin
           if (Gear^.Message and gmLeft  ) <> 0 then
@@ -536,7 +536,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
          Gear^.dY:= -_0_15;
          if not cArtillery then Gear^.dX:= SignAs(_0_15, Gear^.dX);
          Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
-         PlaySound(sndJump1, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+         PlaySound(sndJump1, Gear^.Hedgehog^.Team^.voicepack);
          exit
          end;
       end;
@@ -549,7 +549,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
       Gear^.dY:= -_0_2;
       SetLittle(Gear^.dX);
       Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
-      PlaySound(sndJump3, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+      PlaySound(sndJump3, Gear^.Hedgehog^.Team^.voicepack);
       exit
       end;
 
@@ -570,7 +570,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
       end;
    DeleteCI(Gear); // must be after exit!! (see previous line)
 
-   PHedgehog(Gear^.Hedgehog)^.visStepPos:= (PHedgehog(Gear^.Hedgehog)^.visStepPos + 1) and 7;
+   Gear^.Hedgehog^.visStepPos:= (Gear^.Hedgehog^.visStepPos + 1) and 7;
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
       begin
       if not (TestCollisionXwithXYShift(Gear, _0, -6, hwSign(Gear^.dX))
@@ -630,7 +630,7 @@ end;
 procedure HedgehogChAngle(Gear: PGear);
 var da: LongWord;
 begin
-with PHedgehog(Gear^.Hedgehog)^ do
+with Gear^.Hedgehog^ do
     if (CurAmmoType = amRope)
     and ((Gear^.State and (gstMoving or gstHHJumping)) = gstMoving) then da:= 2 else da:= 1;
 
@@ -649,7 +649,7 @@ isUnderwater:= cWaterLine < hwRound(Gear^.Y) + Gear^.Radius;
 if Gear^.dX.QWordValue > 8160437862 then Gear^.dX.QWordValue:= 8160437862;
 if Gear^.dY.QWordValue > 8160437862 then Gear^.dY.QWordValue:= 8160437862;
 
-if PHedgehog(Gear^.Hedgehog)^.Unplaced then
+if Gear^.Hedgehog^.Unplaced then
    begin
    Gear^.dY:= _0;
    Gear^.dX:= _0;
@@ -773,7 +773,7 @@ var t: PGear;
     wasJumping: boolean;
     Hedgehog: PHedgehog;
 begin
-Hedgehog:= PHedgehog(Gear^.Hedgehog);
+Hedgehog:= Gear^.Hedgehog;
 if not isInMultiShoot then
    AllInactive:= false
 else
@@ -919,16 +919,16 @@ if (Gear^.Health = 0) then
         PrvInactive:= false;
         AllInactive:= false;
 
-        if not PHedgehog(Gear^.Hedgehog)^.Team^.hasGone then
+        if not Gear^.Hedgehog^.Team^.hasGone then
             begin
-            PHedgehog(Gear^.Hedgehog)^.Effects[hePoisoned] := false;
-            if PHedgehog(Gear^.Hedgehog)^.Effects[heResurrectable] then begin
+            Gear^.Hedgehog^.Effects[hePoisoned] := false;
+            if Gear^.Hedgehog^.Effects[heResurrectable] then begin
                 ResurrectHedgehog(Gear);
             end else begin
                 Gear^.State:= Gear^.State or gstHHDeath;
                 Gear^.doStep:= @doStepHedgehogDead;
                 // Death message
-                AddCaption(Format(GetEventString(eidDied), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
+                AddCaption(Format(GetEventString(eidDied), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
             end;
             end
         else
@@ -936,7 +936,7 @@ if (Gear^.Health = 0) then
             Gear^.State:= Gear^.State or gstHHGone;
             Gear^.doStep:= @doStepHedgehogGone;
             // Gone message
-            AddCaption(Format(GetEventString(eidGone), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
+            AddCaption(Format(GetEventString(eidGone), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
             end
         end;
     exit
@@ -974,7 +974,7 @@ if (Gear^.State and gstHHDriven) = 0 then
     doStepHedgehogFree(Gear)
 else
     begin
-    with PHedgehog(Gear^.Hedgehog)^ do
+    with Gear^.Hedgehog^ do
         if Team^.hasGone then TeamGoneEffect(Team^);
     doStepHedgehogDriven(Gear)
     end;

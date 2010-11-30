@@ -20,10 +20,7 @@
 
 unit uKeys;
 interface
-uses uConsts, SDLh;
-
-type TBinds = array[0..cKeyMaxIndex] of shortstring;
-type TKeyboardState = array[0..cKeyMaxIndex] of Byte;
+uses SDLh, uTypes;
 
 procedure initModule;
 procedure freeModule;
@@ -85,8 +82,7 @@ procedure setiPhoneBinds;
 {$ENDIF}
 {$ENDIF}
 implementation
-uses uTeams, uConsole, uMisc;
-//const KeyNumber = 1024;
+uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug;
 
 var tkbd, tkbdn: TKeyboardState;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
@@ -196,7 +192,7 @@ begin
 k:= SDL_GetMouseState(nil, nil);
 {$IFNDEF IPHONEOS}pkbd:={$ENDIF}SDL_GetKeyState(@j);
 
-TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(j) + ')', true);
+TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + IntToStr(j) + ')', true);
 
 {$IFNDEF IPHONEOS}
 for i:= 1 to pred(j) do
@@ -265,7 +261,7 @@ KeyNames[5]:= 'wheeldown';
 for i:= 6 to cKeyMaxIndex do
     begin
     s:= shortstring(sdl_getkeyname(i));
-    //writeln(stdout,inttostr(i) + ': ' + s);
+    //writeln(stdout,IntToStr(i) + ': ' + s);
     if s = 'unknown key' then KeyNames[i]:= ''
     else 
         begin
@@ -275,7 +271,7 @@ for i:= 6 to cKeyMaxIndex do
         end;
     end;
 
-//for i:= 0 to cKeyMaxIndex do writeln(stdout,inttostr(i) + ': ' + KeyNames[i]);
+//for i:= 0 to cKeyMaxIndex do writeln(stdout,IntToStr(i) + ': ' + KeyNames[i]);
 
 // get the size of keyboard array
 SDL_GetKeyState(@k);
@@ -285,21 +281,21 @@ for j:= 0 to Pred(ControllerNumControllers) do
     begin
     for i:= 0 to Pred(ControllerNumAxes[j]) do
         begin
-        keynames[k + 0]:= 'j' + inttostr(j) + 'a' + inttostr(i) + 'u';
-        keynames[k + 1]:= 'j' + inttostr(j) + 'a' + inttostr(i) + 'd';
+        keynames[k + 0]:= 'j' + IntToStr(j) + 'a' + IntToStr(i) + 'u';
+        keynames[k + 1]:= 'j' + IntToStr(j) + 'a' + IntToStr(i) + 'd';
         inc(k, 2);
         end;
     for i:= 0 to Pred(ControllerNumHats[j]) do
         begin
-        keynames[k + 0]:= 'j' + inttostr(j) + 'h' + inttostr(i) + 'u';
-        keynames[k + 1]:= 'j' + inttostr(j) + 'h' + inttostr(i) + 'r';
-        keynames[k + 2]:= 'j' + inttostr(j) + 'h' + inttostr(i) + 'd';
-        keynames[k + 3]:= 'j' + inttostr(j) + 'h' + inttostr(i) + 'l';
+        keynames[k + 0]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'u';
+        keynames[k + 1]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'r';
+        keynames[k + 2]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'd';
+        keynames[k + 3]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'l';
         inc(k, 4);
         end;
     for i:= 0 to Pred(ControllerNumButtons[j]) do
         begin
-        keynames[k]:= 'j' + inttostr(j) + 'b' + inttostr(i);
+        keynames[k]:= 'j' + IntToStr(j) + 'b' + IntToStr(i);
         inc(k, 1);
         end;
     end;
@@ -350,7 +346,7 @@ DefaultBinds[KeyNameToCode('right')]:= '+right';
 DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
 {$ENDIF}
 
-for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+inttostr(i))]:= 'slot '+inttostr(i);
+for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+IntToStr(i);
 
 SetDefaultBinds();
 end;
@@ -425,7 +421,7 @@ SDL_InitSubSystem(SDL_INIT_JOYSTICK);
 ControllerNumControllers:= SDL_NumJoysticks();
 if ControllerNumControllers > 6 then ControllerNumControllers:= 6;
 
-WriteLnToConsole('Number of game controllers: ' + inttostr(ControllerNumControllers));
+WriteLnToConsole('Number of game controllers: ' + IntToStr(ControllerNumControllers));
 
 if ControllerNumControllers > 0 then
     begin
@@ -441,10 +437,10 @@ if ControllerNumControllers > 0 then
             //ControllerNumBalls[j]:= SDL_JoystickNumBalls(Controller[j]);
             ControllerNumHats[j]:= SDL_JoystickNumHats(Controller[j]);
             ControllerNumButtons[j]:= SDL_JoystickNumButtons(Controller[j]);
-            WriteLnToConsole('* Number of axes: ' + inttostr(ControllerNumAxes[j]));
-            //WriteLnToConsole('* Number of balls: ' + inttostr(ControllerNumBalls[j]));
-            WriteLnToConsole('* Number of hats: ' + inttostr(ControllerNumHats[j]));
-            WriteLnToConsole('* Number of buttons: ' + inttostr(ControllerNumButtons[j]));
+            WriteLnToConsole('* Number of axes: ' + IntToStr(ControllerNumAxes[j]));
+            //WriteLnToConsole('* Number of balls: ' + IntToStr(ControllerNumBalls[j]));
+            WriteLnToConsole('* Number of hats: ' + IntToStr(ControllerNumHats[j]));
+            WriteLnToConsole('* Number of buttons: ' + IntToStr(ControllerNumButtons[j]));
             ControllerEnabled:= 1;
 
             if ControllerNumAxes[j] > 20 then ControllerNumAxes[j]:= 20;

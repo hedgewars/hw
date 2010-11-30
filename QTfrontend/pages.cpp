@@ -440,17 +440,22 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) :
 {
     QGridLayout * pageLayout = new QGridLayout(this);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
 
     gameCFG = new GameCFGWidget(this);
     pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
 
-    pageLayout->setRowStretch(1, 1);
+    QPushButton * btnSetup = new QPushButton(this);
+    btnSetup->setText(QPushButton::tr("Setup"));
+    connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
+    pageLayout->addWidget(btnSetup, 1, 0, 1, 2);
+
+    pageLayout->setRowStretch(2, 1);
 
     teamsSelect = new TeamSelWidget(this);
-    pageLayout->addWidget(teamsSelect, 0, 2, 2, 2);
+    pageLayout->addWidget(teamsSelect, 0, 2, 3, 2);
 
-    BtnStartMPGame = addButton(tr("Start"), pageLayout, 2, 3);
+    BtnStartMPGame = addButton(tr("Start"), pageLayout, 3, 3);
 }
 
 PageOptions::PageOptions(QWidget* parent) :
@@ -522,45 +527,75 @@ PageOptions::PageOptions(QWidget* parent) :
         }
 
         {
-            // TODO: This box should contain controls for all schemes: game modes and weapons
-
             IconedGroupBox* groupWeapons = new IconedGroupBox(this);
+            
             //groupWeapons->setContentTopPadding(0);
             //groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             groupWeapons->setIcon(QIcon(":/res/weaponsicon.png"));
             groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            groupWeapons->setTitle(QGroupBox::tr("Weapons"));
+            groupWeapons->setTitle(QGroupBox::tr("Schemes and Weapons"));
             QGridLayout * WeaponsLayout = new QGridLayout(groupWeapons);
 
-            WeaponsName = new QComboBox(groupWeapons);
-            WeaponsLayout->addWidget(WeaponsName, 0, 0);
+            QLabel* SchemeLabel = new QLabel(groupWeapons);
+            SchemeLabel->setText(QLabel::tr("Game scheme"));
+            WeaponsLayout->addWidget(SchemeLabel, 1, 0);
 
-            WeaponsButt = new QPushButton(groupWeapons);
-            WeaponsButt->setToolTip(tr("New weapon scheme"));
-            WeaponsButt->setIconSize(pmNew.size());
-            WeaponsButt->setIcon(pmNew);
-            WeaponsButt->setMaximumWidth(pmNew.width() + 6);
-            WeaponsLayout->addWidget(WeaponsButt, 0, 1);
+            SchemesName = new QComboBox(groupWeapons);
+            WeaponsLayout->addWidget(SchemesName, 1, 1);
+
+            SchemeNew = new QPushButton(groupWeapons);
+            SchemeNew->setToolTip(tr("New scheme"));
+            SchemeNew->setIconSize(pmNew.size());
+            SchemeNew->setIcon(pmNew);
+            SchemeNew->setMaximumWidth(pmNew.width() + 6);
+            WeaponsLayout->addWidget(SchemeNew, 1, 2);
+
+            SchemeEdit = new QPushButton(groupWeapons);
+            SchemeEdit->setToolTip(tr("Edit scheme"));
+            SchemeEdit->setIconSize(pmEdit.size());
+            SchemeEdit->setIcon(pmEdit);
+            SchemeEdit->setMaximumWidth(pmEdit.width() + 6);
+            WeaponsLayout->addWidget(SchemeEdit, 1, 3);
+
+            SchemeDelete = new QPushButton(groupWeapons);
+            SchemeDelete->setToolTip(tr("Delete scheme"));
+            SchemeDelete->setIconSize(pmDelete.size());
+            SchemeDelete->setIcon(pmDelete);
+            SchemeDelete->setMaximumWidth(pmDelete.width() + 6);
+            SchemeDelete->setEnabled(false);
+            WeaponsLayout->addWidget(SchemeDelete, 1, 4);
+
+            QLabel* WeaponLabel = new QLabel(groupWeapons);
+            WeaponLabel->setText(QLabel::tr("Weapons"));
+            WeaponsLayout->addWidget(WeaponLabel, 2, 0);
+
+            WeaponsName = new QComboBox(groupWeapons);
+            WeaponsLayout->addWidget(WeaponsName, 2, 1);
+
+            WeaponNew = new QPushButton(groupWeapons);
+            WeaponNew->setToolTip(tr("New weapon set"));
+            WeaponNew->setIconSize(pmNew.size());
+            WeaponNew->setIcon(pmNew);
+            WeaponNew->setMaximumWidth(pmNew.width() + 6);
+            WeaponsLayout->addWidget(WeaponNew, 2, 2);
 
             WeaponEdit = new QPushButton(groupWeapons);
-            WeaponEdit->setToolTip(tr("Edit weapon scheme"));
+            WeaponEdit->setToolTip(tr("Edit weapon set"));
             WeaponEdit->setIconSize(pmEdit.size());
             WeaponEdit->setIcon(pmEdit);
             WeaponEdit->setMaximumWidth(pmEdit.width() + 6);
-            WeaponsLayout->addWidget(WeaponEdit, 0, 2);
+            WeaponsLayout->addWidget(WeaponEdit, 2, 3);
 
             WeaponDelete = new QPushButton(groupWeapons);
-            WeaponDelete->setToolTip(tr("Delete weapon scheme"));
+            WeaponDelete->setToolTip(tr("Delete weapon set"));
             WeaponDelete->setIconSize(pmDelete.size());
             WeaponDelete->setIcon(pmDelete);
             WeaponDelete->setMaximumWidth(pmDelete.width() + 6);
-            WeaponDelete->setEnabled(false);
-            WeaponDelete->setVisible(false); // hide for now
-            WeaponsLayout->addWidget(WeaponDelete, 0, 3);
+            WeaponsLayout->addWidget(WeaponDelete, 2, 4);
 
             WeaponTooltip = new QCheckBox(this);
             WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
-            WeaponsLayout->addWidget(WeaponTooltip, 1, 0, 1, 3);
+            WeaponsLayout->addWidget(WeaponTooltip, 3, 0, 1, 4);
 
             gbTBLayout->addWidget(groupWeapons, 1, 0);
         }
@@ -730,7 +765,7 @@ PageOptions::PageOptions(QWidget* parent) :
             hr->setFixedHeight(10);
             GBAlayout->addWidget(hr);
 
-                QLabel *restartNote = new QLabel(this);
+            QLabel *restartNote = new QLabel(this);
             restartNote->setText(QString("* ") + QLabel::tr("Restart game to apply"));
             restartNote->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
             GBAlayout->addWidget(restartNote);
@@ -895,19 +930,24 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
     // chatwidget
     pChatWidget = new HWChatWidget(this, gameSettings, sdli, true);
     pChatWidget->setShowReady(true); // show status bulbs by default
-    pageLayout->addWidget(pChatWidget, 1, 0, 1, 2);
+    pageLayout->addWidget(pChatWidget, 2, 0, 1, 2);
     pageLayout->setRowStretch(1, 100);
 
     pGameCFG = new GameCFGWidget(this);
     pageLayout->addWidget(pGameCFG, 0, 0);
 
+    QPushButton * btnSetup = new QPushButton(this);
+    btnSetup->setText(QPushButton::tr("Setup"));
+    connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
+    pageLayout->addWidget(btnSetup, 1, 0);
+
     pNetTeamsWidget = new TeamSelWidget(this);
     pNetTeamsWidget->setAcceptOuter(true);
-    pageLayout->addWidget(pNetTeamsWidget, 0, 1);
+    pageLayout->addWidget(pNetTeamsWidget, 0, 1, 2, 1);
 
 
     QHBoxLayout * bottomLayout = new QHBoxLayout;
-    pageLayout->addLayout(bottomLayout, 3, 0, 1, 2);
+    pageLayout->addLayout(bottomLayout, 4, 0, 1, 2);
 
     BtnBack = addButton(":/res/Exit.png", bottomLayout, 0, true);
 
@@ -988,7 +1028,7 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 
     BtnCampaignPage = addButton(":/res/Campaign.png", middleLine, 0, true);
     BtnCampaignPage->setToolTip(tr("Campaign Mode (...). IN DEVELOPMENT"));
-    BtnCampaignPage->setVisible(false);
+    //BtnCampaignPage->setVisible(false);
 
     BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
     BtnTrainPage->setToolTip(tr("Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT"));
@@ -1063,18 +1103,24 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
     QGridLayout * pageLayout = new QGridLayout(this);
 
     pWeapons = new SelWeaponWidget(cAmmoNumber, this);
-    pageLayout->addWidget(pWeapons, 0, 0, 1, 4);
+    pageLayout->addWidget(pWeapons, 0, 0, 1, 6);
 
     BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
-    BtnDefault = addButton(tr("Default"), pageLayout, 1, 1);
-    BtnDelete = addButton(tr("Delete"), pageLayout, 1, 2);
-    BtnSave = addButton(":/res/Save.png", pageLayout, 1, 3, true);
+    BtnDefault = addButton(tr("Default"), pageLayout, 1, 2);
+    BtnNew = addButton(tr("New"), pageLayout, 1, 3);
+    BtnDelete = addButton(tr("Delete"), pageLayout, 1, 4);
+    BtnSave = addButton(":/res/Save.png", pageLayout, 1, 5, true);
     BtnSave->setStyleSheet("QPushButton{margin: 24px 0px 0px 0px;}");
     BtnBack->setFixedHeight(BtnSave->height());
     BtnBack->setStyleSheet("QPushButton{margin-top: 31px;}");
 
+    selectWeaponSet = new QComboBox(this);
+    pageLayout->addWidget(selectWeaponSet, 1, 1);
+
     connect(BtnDefault, SIGNAL(clicked()), pWeapons, SLOT(setDefault()));
     connect(BtnSave, SIGNAL(clicked()), pWeapons, SLOT(save()));
+    connect(BtnNew, SIGNAL(clicked()), pWeapons, SLOT(newWeaponsName()));
+    connect(selectWeaponSet, SIGNAL(currentIndexChanged(const QString&)), pWeapons, SLOT(setWeaponsName(const QString&)));
 }
 
 PageInGame::PageInGame(QWidget* parent) :
@@ -1658,105 +1704,118 @@ PageScheme::PageScheme(QWidget* parent) :
     glBSLayout->addWidget(SB_HealthDecrease,5,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("Crate Drops"));
+    l->setText(QLabel::tr("% Rope Length"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,6,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconBox.png"));
+    l->setPixmap(QPixmap(":/res/iconRope.png"));
     glBSLayout->addWidget(l,6,1,1,1);
-    SB_CaseProb = new FreqSpinBox(gbBasicSettings);
-    SB_CaseProb->setRange(0, 9);
-    SB_CaseProb->setValue(5);
-    glBSLayout->addWidget(SB_CaseProb,6,2,1,1);
+    SB_RopeModifier = new QSpinBox(gbBasicSettings);
+    SB_RopeModifier->setRange(25, 999);
+    SB_RopeModifier->setValue(100);
+    SB_RopeModifier->setSingleStep(25);
+    glBSLayout->addWidget(SB_RopeModifier,6,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("% Health Crates"));
+    l->setText(QLabel::tr("Crate Drops"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,7,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconBox.png"));
     glBSLayout->addWidget(l,7,1,1,1);
-    SB_HealthCrates = new QSpinBox(gbBasicSettings);
-    SB_HealthCrates->setRange(0, 100);
-    SB_HealthCrates->setValue(35);
-    SB_HealthCrates->setSingleStep(5);
-    glBSLayout->addWidget(SB_HealthCrates,7,2,1,1);
+    SB_CaseProb = new FreqSpinBox(gbBasicSettings);
+    SB_CaseProb->setRange(0, 9);
+    SB_CaseProb->setValue(5);
+    glBSLayout->addWidget(SB_CaseProb,7,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("Health in Crates"));
+    l->setText(QLabel::tr("% Health Crates"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,8,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
     glBSLayout->addWidget(l,8,1,1,1);
-    SB_CrateHealth = new QSpinBox(gbBasicSettings);
-    SB_CrateHealth->setRange(0, 200);
-    SB_CrateHealth->setValue(25);
-    SB_CrateHealth->setSingleStep(5);
-    glBSLayout->addWidget(SB_CrateHealth,8,2,1,1);
+    SB_HealthCrates = new QSpinBox(gbBasicSettings);
+    SB_HealthCrates->setRange(0, 100);
+    SB_HealthCrates->setValue(35);
+    SB_HealthCrates->setSingleStep(5);
+    glBSLayout->addWidget(SB_HealthCrates,8,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("Mines Time"));
+    l->setText(QLabel::tr("Health in Crates"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,9,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
+    l->setPixmap(QPixmap(":/res/iconHealth.png")); // TODO: icon
     glBSLayout->addWidget(l,9,1,1,1);
+    SB_CrateHealth = new QSpinBox(gbBasicSettings);
+    SB_CrateHealth->setRange(0, 200);
+    SB_CrateHealth->setValue(25);
+    SB_CrateHealth->setSingleStep(5);
+    glBSLayout->addWidget(SB_CrateHealth,9,2,1,1);
+
+    l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("Mines Time"));
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,10,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
+    glBSLayout->addWidget(l,10,1,1,1);
     SB_MinesTime = new QSpinBox(gbBasicSettings);
     SB_MinesTime->setRange(-1, 5);
     SB_MinesTime->setValue(3);
     SB_MinesTime->setSingleStep(1);
     SB_MinesTime->setSpecialValueText(tr("Random"));
     SB_MinesTime->setSuffix(" "+ tr("Seconds"));
-    glBSLayout->addWidget(SB_MinesTime,9,2,1,1);
+    glBSLayout->addWidget(SB_MinesTime,10,2,1,1);
 
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Mines"));
     l->setWordWrap(true);
-    glBSLayout->addWidget(l,10,0,1,1);
+    glBSLayout->addWidget(l,11,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
-    glBSLayout->addWidget(l,10,1,1,1);
+    glBSLayout->addWidget(l,11,1,1,1);
     SB_Mines = new QSpinBox(gbBasicSettings);
     SB_Mines->setRange(0, 80);
     SB_Mines->setValue(0);
     SB_Mines->setSingleStep(5);
-    glBSLayout->addWidget(SB_Mines,10,2,1,1);
+    glBSLayout->addWidget(SB_Mines,11,2,1,1);
 
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("% Dud Mines"));
     l->setWordWrap(true);
-    glBSLayout->addWidget(l,11,0,1,1);
+    glBSLayout->addWidget(l,12,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconDud.png"));
-    glBSLayout->addWidget(l,11,1,1,1);
+    glBSLayout->addWidget(l,12,1,1,1);
     SB_MineDuds = new QSpinBox(gbBasicSettings);
     SB_MineDuds->setRange(0, 100);
     SB_MineDuds->setValue(0);
     SB_MineDuds->setSingleStep(5);
-    glBSLayout->addWidget(SB_MineDuds,11,2,1,1);
+    glBSLayout->addWidget(SB_MineDuds,12,2,1,1);
 
 
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Explosives"));
     l->setWordWrap(true);
-    glBSLayout->addWidget(l,12,0,1,1);
+    glBSLayout->addWidget(l,13,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconDamage.png"));
-    glBSLayout->addWidget(l,12,1,1,1);
+    glBSLayout->addWidget(l,13,1,1,1);
     SB_Explosives = new QSpinBox(gbBasicSettings);
     SB_Explosives->setRange(0, 40);
     SB_Explosives->setValue(0);
     SB_Explosives->setSingleStep(1);
-    glBSLayout->addWidget(SB_Explosives,12,2,1,1);
-
+    glBSLayout->addWidget(SB_Explosives,13,2,1,1);
 
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Scheme Name:"));
@@ -1823,6 +1882,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(SB_CrateHealth, 34);
     mapper->addMapping(SB_WaterRise, 35);
     mapper->addMapping(SB_HealthDecrease, 36);
+    mapper->addMapping(SB_RopeModifier, 37);
 
     mapper->toFirst();
 }
@@ -1836,8 +1896,12 @@ void PageScheme::newRow()
 
 void PageScheme::deleteRow()
 {
-    QAbstractItemModel * model = mapper->model();
-    model->removeRow(selectScheme->currentIndex());
+    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Schemes"), QMessageBox::tr("Really delete this game scheme?"), QMessageBox::Ok | QMessageBox::Cancel);
+
+    if (reallyDelete.exec() == QMessageBox::Ok) {
+        QAbstractItemModel * model = mapper->model();
+        model->removeRow(selectScheme->currentIndex());
+    }
 }
 
 void PageScheme::schemeSelected(int n)

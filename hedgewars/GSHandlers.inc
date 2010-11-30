@@ -78,15 +78,15 @@ begin
             if (d > 1) and not gi^.Invulnerable and (GetRandom(2) = 0) then
             begin
                 if (CurrentHedgehog^.Gear = gi) then
-                    PlaySound(sndOops, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
+                    PlaySound(sndOops, gi^.Hedgehog^.Team^.voicepack)
                 else
                 begin
                     if (gi^.State and gstMoving) = 0 then
                         gi^.State := gi^.State or gstLoser;
                     if d > r div 2 then
-                        PlaySound(sndNooo, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
+                        PlaySound(sndNooo, gi^.Hedgehog^.Team^.voicepack)
                     else
-                        PlaySound(sndUhOh, PHedgehog(gi^.Hedgehog)^.Team^.voicepack);
+                        PlaySound(sndUhOh, gi^.Hedgehog^.Team^.voicepack);
                 end;
             end;
         end;
@@ -131,13 +131,13 @@ begin
                 if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot) and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
                     if Gear^.Kind = gtHedgehog then 
                         begin
-                        if PHedgehog(Gear^.Hedgehog)^.Effects[heResurrectable] then
+                        if Gear^.Hedgehog^.Effects[heResurrectable] then
                             ResurrectHedgehog(Gear)
                         else
                             begin
                             Gear^.doStep := @doStepDrowningGear;
                             Gear^.State := Gear^.State and (not gstHHDriven);
-                            AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
+                            AddCaption(Format(GetEventString(eidDrowned), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
                             end
                         end
                     else
@@ -173,7 +173,7 @@ begin
         CheckGearDrowning := false;
 end;
 
-procedure CheckCollision(Gear: PGear);
+procedure CheckCollision(Gear: PGear); inline;
 begin
     if TestCollisionXwithGear(Gear, hwSign(Gear^.X)) or TestCollisionYwithGear(Gear, hwSign(Gear^.Y)
        )
@@ -203,9 +203,9 @@ begin
         if (Gear^.Invulnerable) then exit;
 
         //if _0_6 < Gear^.dY then
-        //    PlaySound(sndOw4, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
+        //    PlaySound(sndOw4, Gear^.Hedgehog^.Team^.voicepack)
         //else
-        //    PlaySound(sndOw1, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+        //    PlaySound(sndOw1, Gear^.Hedgehog^.Team^.voicepack);
 
         ApplyDamage(Gear, dmg, dsFall);
     end
@@ -626,8 +626,8 @@ begin
     dec(Gear^.Timer);
     if Gear^.Timer = 0 then
     begin
-        PHedgehog(Gear^.Hedgehog)^.Gear^.Message:= PHedgehog(Gear^.Hedgehog)^.Gear^.Message and not gmAttack;
-        PHedgehog(Gear^.Hedgehog)^.Gear^.State:= PHedgehog(Gear^.Hedgehog)^.Gear^.State and not gstAttacking;
+        Gear^.Hedgehog^.Gear^.Message:= Gear^.Hedgehog^.Gear^.Message and not gmAttack;
+        Gear^.Hedgehog^.Gear^.State:= Gear^.Hedgehog^.Gear^.State and not gstAttacking;
         AttackBar:= 0;
         
         Gear^.SoundChannel := LoopSound(sndBee);
@@ -806,7 +806,7 @@ var
     shell: PVisualGear;
 begin
     cArtillery := true;
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.State := HHGear^.State or gstNotKickable;
     HedgehogChAngle(HHGear);
     if not cLaserSighting then
@@ -899,7 +899,7 @@ var
     HHGear: PGear;
 begin
     AllInactive := false;
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     dec(Gear^.Timer);
     if (Gear^.Timer = 0)or((Gear^.Message and gmDestroy) <> 0)or((HHGear^.State and gstHHDriven) =
        0) then
@@ -973,7 +973,7 @@ var
     HHGear: PGear;
 begin
     i := 0;
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
 
     y := hwRound(Gear^.Y) - cHHRadius * 2;
     while y < hwRound(Gear^.Y) do
@@ -1005,7 +1005,7 @@ var
 begin
     AllInactive := false;
     dec(Gear^.Timer);
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
 
     HedgehogChAngle(HHGear);
 
@@ -1087,7 +1087,7 @@ var
 begin
     BTPrevAngle := High(LongInt);
     BTSteps := 0;
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := 0;
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.doStep := @doStepBlowTorchWork
@@ -1102,14 +1102,14 @@ procedure doStepRopeAfterAttack(Gear: PGear);
 var 
     HHGear: PGear;
 begin
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     if ((HHGear^.State and gstHHDriven) = 0)
        or (CheckGearDrowning(HHGear))
        or TestCollisionYwithGear(HHGear, 1) then
     begin
         DeleteGear(Gear);
         isCursorVisible := false;
-        ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         exit
     end;
 
@@ -1128,11 +1128,11 @@ begin
         Gear^.X := HHGear^.X;
         Gear^.Y := HHGear^.Y;
 
-        ApplyAngleBounds(PHedgehog(Gear^.Hedgehog)^, amRope);
+        ApplyAngleBounds(Gear^.Hedgehog^, amRope);
 
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle), HHGear^.dX);
         Gear^.dY := -AngleCos(HHGear^.Angle);
-        Gear^.Friction := _450;
+        Gear^.Friction := _450 * _0_01 * cRopePercent;
         Gear^.Elasticity := _0;
         Gear^.State := Gear^.State and not gsttmpflag;
         Gear^.doStep := @doStepRope;
@@ -1170,7 +1170,7 @@ begin
 end;
 
 begin
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
 
     if ((HHGear^.State and gstHHDriven) = 0)
        or (CheckGearDrowning(HHGear)) then
@@ -1240,7 +1240,7 @@ begin
         begin
         lx := hwRound(nx);
         ly := hwRound(ny);
-        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and (Land[ly, lx] <> 0) then
+        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and ((Land[ly, lx] and $FF00) <> 0) then
             begin
             ny := _1 / Distance(ropeDx, ropeDy);
             // old rope pos
@@ -1330,10 +1330,37 @@ begin
         HHGear^.dY := HHGear^.dY * len;
         end;
 
-
-    if (Gear^.Message and gmAttack) <> 0 then
+    haveCollision:= false;
+    if RopePoints.Count > 0 then
+        begin
+        ly:= hwRound(RopePoints.ar[0].Y);
+        lx:= hwRound(RopePoints.ar[0].X)
+        end
+    else if Gear^.Elasticity.QWordValue > 0 then
+        begin
+        ly:= hwRound(Gear^.Y);
+        lx:= hwRound(Gear^.X)
+        end;
+(* // just in case it turns out we have rounding problems
+    i:= -1;
+    while not haveCollision and (i < 2) do
+        begin
+        j:= -1;
+        while not haveCollision and (j < 2) do
+            begin
+            haveCollision:= ((((ly + i) and LAND_HEIGHT_MASK) = 0) and 
+                            (((lx + j) and LAND_WIDTH_MASK) = 0) and 
+                            ((Land[ly + i, lx + j] and $FF00) <> 0));
+            inc(j)
+            end;
+        inc(i)
+        end; *)
+    if ((Gear^.Message and gmAttack) <> 0) or
+           (((ly and LAND_HEIGHT_MASK) = 0) and 
+           ((lx and LAND_WIDTH_MASK) = 0) and 
+           ((Land[ly, lx] and $FF00) = 0)) then
         if (Gear^.State and gsttmpFlag) <> 0 then
-            with PHedgehog(Gear^.Hedgehog)^ do
+            with Gear^.Hedgehog^ do
                 begin
                 PlaySound(sndRopeRelease);
                 if CurAmmoType <> amParachute then
@@ -1356,10 +1383,10 @@ procedure RemoveFromAmmo;
 begin
     if (Gear^.State and gstAttacked) = 0 then
     begin
-        OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
+        OnUsedAmmo(HHGear^.Hedgehog^);
         Gear^.State := Gear^.State or gstAttacked
     end;
-    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
+    ApplyAmmoChanges(HHGear^.Hedgehog^)
 end;
 
 begin
@@ -1367,7 +1394,7 @@ begin
     Gear^.Y := Gear^.Y - Gear^.dY;
     Gear^.Elasticity := Gear^.Elasticity + _1;
 
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     DeleteCI(HHGear);
 
     if (HHGear^.State and gstMoving) <> 0 then
@@ -1397,8 +1424,7 @@ begin
         ty := _0;
         while tt > _20 do
             begin
-            if  TestCollisionXwithXYShift(Gear, tx, hwRound(ty), -hwSign(Gear^.dX))
-               or TestCollisionYwithXYShift(Gear, hwRound(tx), hwRound(ty), -hwSign(Gear^.dY)) then
+            if ((hwRound(Gear^.Y+ty) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X+tx) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y+ty), hwRound(Gear^.X+tx)] and $FF00) <> 0) then
                 begin
                 Gear^.X := Gear^.X + tx;
                 Gear^.Y := Gear^.Y + ty;
@@ -1422,7 +1448,9 @@ begin
             end;
         end;
 
-    CheckCollision(Gear);
+    if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) <> 0) then
+        Gear^.State:= Gear^.State or gstCollision
+    else Gear^.State:= Gear^.State and not gstCollision;
 
     if (Gear^.State and gstCollision) <> 0 then
         if Gear^.Elasticity < _10 then
@@ -1447,7 +1475,7 @@ begin
        or ((HHGear^.State and gstHHDriven) = 0)
        or (HHGear^.Damage > 0) then
         begin
-        with PHedgehog(Gear^.Hedgehog)^.Gear^ do
+        with Gear^.Hedgehog^.Gear^ do
             begin
             State := State and not gstAttacking;
             Message := Message and not gmAttack
@@ -1808,7 +1836,7 @@ procedure doStepShover(Gear: PGear);
 var 
     HHGear: PGear;
 begin
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.State := HHGear^.State or gstNoDamage;
     DeleteCI(HHGear);
 
@@ -1825,7 +1853,7 @@ var
     HHGear: PGear;
     i: LongInt;
 begin
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.State := HHGear^.State or gstNoDamage;
     DeleteCI(HHGear);
 
@@ -1978,7 +2006,7 @@ begin
         exit
     end;
 
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     if hwRound(HHGear^.Y) <= Gear^.Tag - 2 then
     begin
         Gear^.Tag := hwRound(HHGear^.Y);
@@ -2008,7 +2036,7 @@ var
     HHGear: PGear;
 begin
     AllInactive := false;
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     DeleteCI(HHGear);
     HHGear^.X := int2hwFloat(hwRound(HHGear^.X)) - _0_5;
     HHGear^.dX := SignAs(cLittle, Gear^.dX);
@@ -2021,7 +2049,7 @@ begin
     Gear^.doStep := @doStepFirePunchWork;
     DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y + _1, _0_5, _0, cHHRadius * 4, 5);
 
-    PlaySound(TSound(ord(sndFirePunch1) + GetRandom(6)), PHedgehog(HHGear^.Hedgehog)^.Team^.
+    PlaySound(TSound(ord(sndFirePunch1) + GetRandom(6)), HHGear^.Hedgehog^.Team^.
     voicepack)
 end;
 
@@ -2031,7 +2059,7 @@ procedure doStepParachuteWork(Gear: PGear);
 var 
     HHGear: PGear;
 begin
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
 
     inc(Gear^.Timer);
 
@@ -2049,7 +2077,7 @@ begin
         end;
         DeleteGear(Gear);
         isCursorVisible := false;
-        ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         exit
     end;
 
@@ -2070,7 +2098,7 @@ procedure doStepParachute(Gear: PGear);
 var 
     HHGear: PGear;
 begin
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
 
     DeleteCI(HHGear);
 
@@ -2167,7 +2195,7 @@ var
 begin
     AllInactive := false;
 
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     tx := int2hwFloat(TargetPoint.X);
     ty := int2hwFloat(TargetPoint.Y);
     x := HHGear^.X;
@@ -2202,8 +2230,8 @@ procedure doStepTeleportAfter(Gear: PGear);
 var 
     HHGear: PGear;
 begin
-    PHedgehog(Gear^.Hedgehog)^.Unplaced := false;
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    Gear^.Hedgehog^.Unplaced := false;
+    HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Y := HHGear^.Y + HHGear^.dY;
     // hedgehog falling to collect cases
     HHGear^.dY := HHGear^.dY + cGravity;
@@ -2233,7 +2261,7 @@ var
 begin
     AllInactive := false;
 
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
        TargetPoint.Y - SpritesData[sprHHTelepMask].Height div 2,
        sprHHTelepMask, 0, false) then
@@ -2275,14 +2303,14 @@ begin
 
     if ((Gear^.Message and not gmSwitch) <> 0) or (TurnTimeLeft = 0) then
     begin
-        HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+        HHGear := Gear^.Hedgehog^.Gear;
         Msg := Gear^.Message and not gmSwitch;
         DeleteGear(Gear);
-        OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-        ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+        OnUsedAmmo(HHGear^.Hedgehog^);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
 
         HHGear := CurrentHedgehog^.Gear;
-        ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         HHGear^.Message := Msg;
         exit
     end;
@@ -2326,7 +2354,7 @@ var
 begin
     Gear^.doStep := @doStepSwitcherWork;
 
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     with HHGear^ do
     begin
         State := State and not gstAttacking;
@@ -2377,7 +2405,7 @@ var
 begin
     AllInactive := false;
 
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.State := HHGear^.State or gstNoDamage;
     DeleteCI(HHGear);
 
@@ -2437,7 +2465,7 @@ begin
     if Gear^.Timer = 0 then
     begin
         Gear^.Pos := 1;
-        PlaySound(sndKamikaze, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+        PlaySound(sndKamikaze, Gear^.Hedgehog^.Team^.voicepack);
         Gear^.doStep := @doStepKamikazeWork
     end
 end;
@@ -2448,7 +2476,7 @@ var
 begin
     AllInactive := false;
 
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
 
     HHGear^.dX := Gear^.dX;
     HHGear^.dY := Gear^.dY;
@@ -2637,7 +2665,7 @@ var
 begin
     AllInactive := false;
 
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := HHGear^.Message and (not gmAttack);
     DeleteCI(HHGear);
     Gear^.IntersectGear:= nil;
@@ -2687,7 +2715,7 @@ begin
         Gear^.Timer := 0;
         inc(Gear^.Pos);
         if Gear^.Pos = 5 then
-            PlaySound(sndYoohoo, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
+            PlaySound(sndYoohoo, Gear^.Hedgehog^.Team^.voicepack)
     end;
 
     if Gear^.Pos = 14 then
@@ -2697,7 +2725,7 @@ end;
 procedure doStepSeduction(Gear: PGear);
 begin
     AllInactive := false;
-    DeleteCI(PHedgehog(Gear^.Hedgehog)^.Gear);
+    DeleteCI(Gear^.Hedgehog^.Gear);
     Gear^.doStep := @doStepSeductionWear
 end;
 
@@ -2836,7 +2864,7 @@ var
 begin
     AllInactive := false;
     dec(Gear^.Timer);
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     HedgehogChAngle(HHGear);
     gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
     gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
@@ -2864,7 +2892,7 @@ procedure doStepBallgun(Gear: PGear);
 var 
     HHGear: PGear;
 begin
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := HHGear^.Message and not (gmUp or gmDown);
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.doStep := @doStepBallgunWork
@@ -2889,7 +2917,7 @@ begin
     if ((TrainingFlags and tfRCPlane) <> 0) and ((TrainingFlags and tfTimeTrial) <> 0 ) and (
        TimeTrialStartTime = 0) then TimeTrialStartTime := RealTicks;
 
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     FollowGear := Gear;
 
     fChanged := false;
@@ -3025,7 +3053,7 @@ procedure doStepRCPlane(Gear: PGear);
 var 
     HHGear: PGear;
 begin
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := 0;
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.Angle := HHGear^.Angle;
@@ -3045,7 +3073,7 @@ begin
     isUnderwater:= cWaterLine < hwRound(Gear^.Y) + Gear^.Radius;
     if Gear^.Pos > 0 then dec(Gear^.Pos);
     AllInactive := false;
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     //dec(Gear^.Timer);
     move := _0_2;
     fuel := 50;
@@ -3152,7 +3180,7 @@ begin
             end;
         DeleteGear(Gear);
         isCursorVisible := false;
-        ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
         //    if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
 
 //    Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
@@ -3169,7 +3197,7 @@ begin
     Gear^.Pos:= 0;
     Gear^.doStep := @doStepJetpackWork;
 
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     FollowGear := HHGear;
     AfterAttack;
     with HHGear^ do
@@ -3427,7 +3455,7 @@ begin
     // destroy portal if ground it was attached too is gone
     if ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0)
        or (Gear^.Timer < 1)
-       or (PHedgehog(Gear^.Hedgehog) <> CurrentHedgehog)
+       or (Gear^.Hedgehog <> CurrentHedgehog)
        or (hwRound(Gear^.Y) > cWaterLine) then
     begin
         deleteGear(Gear);
@@ -3754,7 +3782,7 @@ begin
     doPortalColorSwitch();
     doStepPerPixel(Gear, @doStepMovingPortal_real, true);
     if (Gear^.Timer < 1)
-       or (PHedgehog(Gear^.Hedgehog) <> CurrentHedgehog) then
+       or (Gear^.Hedgehog <> CurrentHedgehog) then
             deleteGear(Gear);
 end;
 
@@ -4047,7 +4075,7 @@ var
     Fire: PGear;
 begin
     AllInactive := false;
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     HedgehogChAngle(HHGear);
     gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
     gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
@@ -4111,7 +4139,7 @@ procedure doStepFlamethrower(Gear: PGear);
 var 
     HHGear: PGear;
 begin
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := HHGear^.Message and not (gmUp or gmDown or gmLeft or gmRight);
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.doStep := @doStepFlamethrowerWork
@@ -4140,7 +4168,7 @@ var HHGear, tmp, tmp2: PGear;
          t: PGearArray;
          i: LongInt;
 begin
-HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+HHGear:= Gear^.Hedgehog^.Gear;
 HHGear^.State:= HHGear^.State or gstNoDamage;
 DeleteCI(HHGear);
 
@@ -4181,7 +4209,7 @@ var
     HHGear: PGear;
 begin
     AllInactive := false;
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
     dec(Gear^.Timer);
     if (HHGear = nil) or (Gear^.Timer = 0) or ((Gear^.Message and gmDestroy) <> 0) then
     begin
@@ -4234,7 +4262,7 @@ var
     HHGear: PGear;
 begin
     i := 0;
-    HHGear := PHedgehog(Gear^.Hedgehog)^.Gear;
+    HHGear := Gear^.Hedgehog^.Gear;
 
     y := hwRound(Gear^.Y) - cHHRadius * 2;
     while y < hwRound(Gear^.Y) do
@@ -4265,9 +4293,12 @@ begin
         dec(TurnTimeLeft);
 
     AllInactive := false;
-    hh := PHedgehog(Gear^.Hedgehog);
-    DrawCentered(hwRound(hh^.Gear^.X) + WorldDx, hwRound(hh^.Gear^.Y) + WorldDy -
+    hh := Gear^.Hedgehog;
+
+    // no, you can't do that here
+    {DrawCentered(hwRound(hh^.Gear^.X) + WorldDx, hwRound(hh^.Gear^.Y) + WorldDy -
             cHHRadius - 14 - hh^.HealthTagTex^.h, hh^.HealthTagTex);
+    }
     (*DrawCircle(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Radius, 1.5, 0, 0, $FF,
             $FF);*)
 
@@ -4321,13 +4352,13 @@ begin
                 resgear^.Health := graves[i]^.Health;
                 PHedgehog(graves[i]^.Hedgehog)^.Gear := resgear;
                 DeleteGear(graves[i]);
-                RenderHealth(PHedgehog(resgear^.Hedgehog)^);
-                RecountTeamHealth(Phedgehog(resgear^.Hedgehog)^.Team);
-                PHedgehog(resgear^.Hedgehog)^.Effects[heResurrected]:= true;
-                if PHedgehog(resgear^.Hedgehog)^.Hat = 'NoHat' then
+                RenderHealth(resgear^.Hedgehog^);
+                RecountTeamHealth(resgear^.Hedgehog^.Team);
+                resgear^.Hedgehog^.Effects[heResurrected]:= true;
+                if resgear^.Hedgehog^.Hat = 'NoHat' then
                     begin
-                    FreeTexture(PHedgehog(resgear^.Hedgehog)^.HatTex);
-                    PHedgehog(resgear^.Hedgehog)^.HatTex := Surface2Tex(
+                    FreeTexture(resgear^.Hedgehog^.HatTex);
+                    resgear^.Hedgehog^.HatTex := Surface2Tex(
                         LoadImage(Pathz[ptHats] + '/Reserved/Zombie', ifNone),
                         True)
                     end

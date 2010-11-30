@@ -370,7 +370,8 @@ void HWMapContainer::resizeEvent ( QResizeEvent * event )
 void HWMapContainer::setSeed(const QString & seed)
 {
     m_seed = seed;
-    changeImage();
+    if (chooseMap->currentIndex() < MAPGEN_LAST)
+        changeImage();
 }
 
 void HWMapContainer::setMap(const QString & map)
@@ -410,11 +411,11 @@ void HWMapContainer::setTheme(const QString & theme)
 #include <QMessageBox>
 void HWMapContainer::setRandomMap()
 {
+    setRandomSeed();
     switch(chooseMap->currentIndex())
     {
     case MAPGEN_REGULAR:
     case MAPGEN_MAZE:
-        setRandomSeed();
         setRandomTheme();
         break;
     default:
@@ -429,20 +430,21 @@ void HWMapContainer::setRandomMap()
 void HWMapContainer::setRandomStatic()
 {
     chooseMap->setCurrentIndex(4 + numMissions + rand() % (chooseMap->count() - 4 - numMissions));
-    m_seed = QUuid::createUuid().toString();
+    setRandomSeed();
 }
 
 void HWMapContainer::setRandomMission()
 {
     chooseMap->setCurrentIndex(3 + rand() % numMissions);
-    m_seed = QUuid::createUuid().toString();
+    setRandomSeed();
 }
 
 void HWMapContainer::setRandomSeed()
 {
     m_seed = QUuid::createUuid().toString();
     emit seedChanged(m_seed);
-    changeImage();
+    if (chooseMap->currentIndex() < MAPGEN_LAST)
+        changeImage();
 }
 
 void HWMapContainer::setRandomTheme()

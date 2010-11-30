@@ -41,7 +41,7 @@
         <translation>Redigera spelscheman</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -84,7 +84,7 @@
     </message>
     <message>
         <source>new</source>
-        <translation>ny</translation>
+        <translation type="obsolete">ny</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
@@ -726,19 +726,43 @@ ett annat smeknamn i spelinställningarna:</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Nytt vapenschema</translation>
+        <translation type="obsolete">Nytt vapenschema</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Redigera vapenschema</translation>
+        <translation type="obsolete">Redigera vapenschema</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Ta bort vapenschema</translation>
+        <translation type="obsolete">Ta bort vapenschema</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation>Du kan inte redigera lag från ett spel. Gå tillbaka till huvudmenyn för att lägga till, redigera eller ta bort lag.</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -997,6 +1021,14 @@ Vill du fortfarande gå med i rummet?</translation>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation>Varje igelkott har sin egen ammunition. Laget delar inte med varandra.</translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1007,6 +1039,10 @@ Vill du fortfarande gå med i rummet?</translation>
     <message>
         <source>Delete</source>
         <translation>Ta bort</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Ny</translation>
     </message>
 </context>
 <context>
@@ -1237,7 +1273,7 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Vapen</translation>
+        <translation type="obsolete">Vapen</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -1262,6 +1298,10 @@ Vill du fortfarande gå med i rummet?</translation>
     <message>
         <source>Misc</source>
         <translation>Diverse</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1437,7 +1477,7 @@ Det kan finnas trasiga eller ofullständiga funktioner. Använd på egen risk!</
         <translation>Sudden Death livminskning</translation>
     </message>
     <message>
-        <source>Bind schemes and weapons</source>
+        <source>% Rope Length</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1487,7 +1527,7 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Kan inte ta bort ursprungliga vapenscheman</translation>
+        <translation type="obsolete">Kan inte ta bort ursprungliga vapenscheman</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1504,6 +1544,30 @@ Var god kontrollera din installation</translation>
     <message>
         <source>File association failed.</source>
         <translation>Filassociationer har misslyckats.</translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">Lag</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1649,6 +1713,10 @@ Var god kontrollera din installation</translation>
         <source>Delays</source>
         <translation>Fördröjning</translation>
     </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">ny</translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
@@ -1754,6 +1822,14 @@ Var god kontrollera din installation</translation>
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation>Ammunition per igelkott</translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

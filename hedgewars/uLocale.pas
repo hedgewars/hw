@@ -20,37 +20,9 @@
 
 unit uLocale;
 interface
-type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidBee, sidShotgun,
-            sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
-            sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
-            sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
-            sidGirder, sidTeleport, sidSwitch, sidMortar, sidWhip,
-            sidKamikaze, sidCake, sidSeduction, sidWatermelon,
-            sidHellishBomb, sidDrill, sidBallgun, sidNapalm, sidRCPlane,
-            sidLowGravity, sidExtraDamage, sidInvulnerable, sidExtraTime,
-            sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack,
-            sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb, sidSineGun, sidFlamethrower,
-            sidSMine, sidHammer, sidResurrector, sidDrillStrike);
-
-    TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
-            sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
-            sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady);
-
-    TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
-            eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
-            eidHomerun, eidGone);
-
-    TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
-            gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
-            gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer,
-            gidDamageModifier, gidResetHealth, gidAISurvival, gidInfAttack, gidResetWeps, gidPerHogAmmo);
+uses uTypes;
 
 const MAX_EVENT_STRINGS = 100;
-var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
-    trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
-    trammod: array[TAmmoStrId] of ansistring;   // description of the weapon
-    trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
-    trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
 
 procedure LoadLocale(FileName: shortstring);
 function  Format(fmt: shortstring; var arg: shortstring): shortstring;
@@ -58,7 +30,7 @@ function  Format(fmt: ansistring; var arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): ansistring;
 
 implementation
-uses uMisc, uRandom;
+uses uRandom, uUtils, uVariables, uDebug;
 
 var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;
@@ -100,7 +72,7 @@ if loaded then
            0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b+1)]:= s;
            1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
            2: if (b >=0) and (b <= ord(High(TEventId))) then begin
-               TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + inttostr(a) + ':' + inttostr(b), false);
+               TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + IntToStr(a) + ':' + IntToStr(b), false);
                if first[TEventId(b)] then
                    begin
                    trevt_n[TEventId(b)]:= 0;

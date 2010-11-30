@@ -20,46 +20,38 @@
 
 unit uWorld;
 interface
-uses SDLh, uGears, uConsts, uFloat, uRandom;
-
-
-var FollowGear: PGear;
-    WindBarWidth: LongInt;
-    bShowAmmoMenu: boolean;
-    bSelected: boolean;
-    bShowFinger: boolean;
-    Frames: Longword;
-    WaterColor, DeepWaterColor: TSDL_Color;
-    WorldDx: LongInt;
-    WorldDy: LongInt;
-    SkyOffset: LongInt;
-    HorizontOffset: LongInt;
-{$IFDEF COUNTTICKS}
-    cntTicks: LongWord;
-{$ENDIF}
-    cOffsetY: LongInt;
+uses SDLh, uGears, uConsts, uFloat, uRandom, uTypes;
 
 procedure initModule;
 procedure freeModule;
 
 procedure InitWorld;
 procedure DrawWorld(Lag: LongInt);
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
 procedure ShakeCamera(amount: LongWord);
 procedure MoveCamera;
 
 implementation
-uses    uStore, uMisc, uTeams, uIO, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand, GLunit;
-
-type TCaptionStr = record
-                   Tex: PTexture;
-                   EndTime: LongWord;
-                   end;
+uses
+    uStore,
+    uMisc,
+    uIO,
+    uLocale,
+    uSound,
+    uAmmos,
+    uVisualGears,
+    uChat,
+    uLandTexture,
+    GLunit,
+    uVariables,
+    uUtils,
+    uTextures,
+    uRender,
+    uCaptions
+    ;
 
 var cWaveWidth, cWaveHeight: LongInt;
-    Captions: array[TCapGroup] of TCaptionStr;
     AMSlotSize, AMxOffset, AMyOffset, AMWidth, AMxShift, SlotsNum: LongInt;
     tmpSurface: PSDL_Surface;
     fpsTexture: PTexture;
@@ -390,7 +382,7 @@ if (WeaponTooltipTex <> nil) and (AMxShift = 0) then
 {$IFDEF IPHONEOS}
     ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, AMyOffset - 1);
 {$ELSE}
-    ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, min(y + 1, cScreenHeight - WeaponTooltipTex^.h - 40));
+    ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, Min(y + 1, cScreenHeight - WeaponTooltipTex^.h - 40));
 {$ENDIF}
 
 bSelected:= false;
@@ -538,10 +530,9 @@ procedure DrawWorld(Lag: LongInt);
 var i, t: LongInt;
     r: TSDL_Rect;
     tdx, tdy: Double;
-    grp: TCapGroup;
     s: string[15];
     highlight: Boolean;
-    offset, offsetX, offsetY, ScreenBottom: LongInt;
+    offsetX, offsetY, ScreenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
     if not isPaused then
@@ -575,7 +566,7 @@ begin
     begin
         // Offsets relative to camera - spare them to wimpier cpus, no bg or flakes for them anyway
         ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
-        offsetY:= 10 * min(0, -145 - ScreenBottom);
+        offsetY:= 10 * Min(0, -145 - ScreenBottom);
         SkyOffset:= offsetY div 35 + cWaveHeight;
         HorizontOffset:= SkyOffset;
         if ScreenBottom > SkyOffset then
@@ -742,26 +733,7 @@ if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
 {$ENDIF}
 
 // Captions
-{$IFDEF IPHONEOS}
-offset:= 40;
-{$ELSE}
-if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then offset:= 48
-else offset:= 8;
-{$ENDIF}
-
-    for grp:= Low(TCapGroup) to High(TCapGroup) do
-        with Captions[grp] do
-            if Tex <> nil then
-            begin
-                DrawCentered(0, offset, Tex);
-                inc(offset, Tex^.h + 2);
-                if EndTime <= RealTicks then
-                begin
-                    FreeTexture(Tex);
-                    Tex:= nil;
-                    EndTime:= 0
-                end;
-            end;
+DrawCaptions;
 
 // Teams Healths
 for t:= 0 to Pred(TeamsCount) do
@@ -869,7 +841,7 @@ if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (Game
     if (ReadyTimeLeft = 0) and (missionTimer > 0) then dec(missionTimer, Lag);
     if missionTimer < 0 then missionTimer:= 0; // avoid subtracting below 0
     if missionTex <> nil then
-        DrawCentered(0, min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
+        DrawCentered(0, Min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
     end;
 
 // fps
@@ -1003,22 +975,6 @@ if isCursorVisible then
      end
    end;
 isFirstFrame:= false
-end;
-
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
-begin
-//if Group in [capgrpGameState] then WriteLnToConsole(s);
-    if Captions[Group].Tex <> nil then
-        FreeTexture(Captions[Group].Tex);
-    Captions[Group].Tex:= nil;
-
-    Captions[Group].Tex:= RenderStringTex(s, Color, fntBig);
-
-    case Group of
-        capgrpGameState: Captions[Group].EndTime:= RealTicks + 2200
-    else
-        Captions[Group].EndTime:= RealTicks + 1400 + LongWord(Captions[Group].Tex^.w) * 3;
-    end;
 end;
 
 procedure MoveCamera;
@@ -1160,7 +1116,7 @@ end;
 
 procedure ShakeCamera(amount: LongWord);
 begin
-    amount:= max(1, amount);
+    amount:= Max(1, amount);
     WorldDx:= WorldDx - amount + LongInt(getRandom(1 + amount * 2));
     WorldDy:= WorldDy - amount + LongInt(getRandom(1 + amount * 2));
 end;
@@ -1185,8 +1141,6 @@ begin
     missionTimer:= 0;
     missionTex:= nil;
     cOffsetY:= 0;
-
-    FillChar(Captions, sizeof(Captions), 0)
 end;
 
 procedure freeModule;

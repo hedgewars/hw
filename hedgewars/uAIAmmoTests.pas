@@ -20,7 +20,7 @@
 
 unit uAIAmmoTests;
 interface
-uses SDLh, uGears, uConsts, uFloat;
+uses SDLh, uConsts, uFloat, uTypes;
 const amtest_OnTurn = $00000001;
 
 type TAttackParams = record
@@ -108,7 +108,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
 const BadTurn = Low(LongInt) div 4;
 
 implementation
-uses uMisc, uAIMisc, uLand;
+uses uAIMisc, uVariables, uUtils;
 
 function Metric(x1, y1, x2, y2: LongInt): LongInt;
 begin
@@ -539,7 +539,7 @@ until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4)
     or (y.Round > LongWord(LAND_HEIGHT))
     or (d > 200);
 
-if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then valueResult:= max(0, (4 - d div 50) * 7 * 1024)
+if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then valueResult:= Max(0, (4 - d div 50) * 7 * 1024)
                                                            else valueResult:= BadTurn;
 TestDesertEagle:= valueResult
 end;

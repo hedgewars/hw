@@ -40,7 +40,7 @@
         <translation>修改武器</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -83,7 +83,7 @@
     </message>
     <message>
         <source>new</source>
-        <translation>新</translation>
+        <translation type="obsolete">新</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
@@ -727,19 +727,43 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>新武器配置</translation>
+        <translation type="obsolete">新武器配置</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>修改武器配置</translation>
+        <translation type="obsolete">修改武器配置</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>删除武器配置</translation>
+        <translation type="obsolete">删除武器配置</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation>您不能在队伍选择界面修改队伍，请返回主页面添加/修改/删除队伍。</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -996,6 +1020,14 @@ Do you still want to join the room?</source>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation>每个刺猬都有其自己的武器. 并在奔队中不共享.</translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1006,6 +1038,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Delete</source>
         <translation>删除</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">新模式</translation>
     </message>
 </context>
 <context>
@@ -1244,7 +1280,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>武器</translation>
+        <translation type="obsolete">武器</translation>
     </message>
     <message>
         <source>Game Modifiers</source>
@@ -1261,6 +1297,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Misc</source>
         <translation>杂项</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1430,7 +1470,7 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bind schemes and weapons</source>
+        <source>% Rope Length</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1476,7 +1516,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>不能删除默认武器设定</translation>
+        <translation type="obsolete">不能删除默认武器设定</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1497,6 +1537,30 @@ Please check your installation</source>
     <message>
         <source>File association failed.</source>
         <translation>文件联合失败.</translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">队伍</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1642,6 +1706,10 @@ Please check your installation</source>
         <source>Delays</source>
         <translation>延迟</translation>
     </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">新</translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
@@ -1747,6 +1815,14 @@ Please check your installation</source>
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation>每个刺猬的武器</translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

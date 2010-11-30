@@ -41,7 +41,7 @@
         <translation>Spielprofile bearbeiten</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -84,7 +84,7 @@
     </message>
     <message>
         <source>new</source>
-        <translation>Neu</translation>
+        <translation type="obsolete">Neu</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
@@ -732,19 +732,43 @@ wähle einen anderen Spitznamen:</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Neue Waffenzusammenstellung</translation>
+        <translation type="obsolete">Neue Waffenzusammenstellung</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Waffenzusammenstellung bearbeiten</translation>
+        <translation type="obsolete">Waffenzusammenstellung bearbeiten</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Waffenzusammenstellung löschen</translation>
+        <translation type="obsolete">Waffenzusammenstellung löschen</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation>Du kannst keine Teams bei der Team-Auswahl ändern. Gehe zum Hauptmenü zurück um Teams hinzuzufügen, zu editieren oder zu löschen.</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1003,6 +1027,14 @@ Willst du trotzdem den Raum betreten?</translation>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation>Jeder igel hat sein eigenes Waffenarsenal. Es wird nicht mit dem Team geteilt.</translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1013,6 +1045,10 @@ Willst du trotzdem den Raum betreten?</translation>
     <message>
         <source>Delete</source>
         <translation>Löschen</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Neu</translation>
     </message>
 </context>
 <context>
@@ -1215,7 +1251,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Waffen</translation>
+        <translation type="obsolete">Waffen</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -1240,6 +1276,10 @@ Willst du trotzdem den Raum betreten?</translation>
     <message>
         <source>Misc</source>
         <translation>Verschiedenes</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1415,7 +1455,7 @@ Einige Dinge könnten nicht funktionieren oder unvollständig sein. Benutzung au
         <translation>Schaden bei Sudden Death</translation>
     </message>
     <message>
-        <source>Bind schemes and weapons</source>
+        <source>% Rope Length</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1465,7 +1505,7 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Das Standard-Waffen-Set kann nicht gelöscht werden</translation>
+        <translation type="obsolete">Das Standard-Waffen-Set kann nicht gelöscht werden</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1482,6 +1522,30 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <source>File association failed.</source>
         <translation>Dateizuordnung fehlgeschlagen.</translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">Teams</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1627,6 +1691,10 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
         <source>Delays</source>
         <translation>Verzögerungen</translation>
     </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">Neu</translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
@@ -1732,6 +1800,14 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation>Waffen pro Igel</translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

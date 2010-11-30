@@ -20,23 +20,7 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat, uConsts, GLunit;
-
-type
-    TLandArray = packed array of array of LongWord;
-    TCollisionArray = packed array of array of Word;
-    TPreview  = packed array[0..127, 0..31] of byte;
-    TDirtyTag = packed array of array of byte;
-
-var Land: TCollisionArray;
-    LandPixels: TLandArray;
-    LandDirty: TDirtyTag;
-    hasBorder: boolean;
-    hasGirders: boolean;
-    isMap: boolean;
-    playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
-    LandBackSurface: PSDL_Surface;
-    digest: shortstring;
+uses SDLh, uLandTemplates, uFloat, uConsts, GLunit, uTypes;
 
 type direction = record x, y: LongInt; end;
 const DIR_N: direction = (x: 0; y: -1);
@@ -48,11 +32,10 @@ procedure initModule;
 procedure freeModule;
 procedure GenMap;
 function  GenPreview: TPreview;
-procedure CheckLandDigest(s: shortstring);
-function  LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
-uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, Adler32, uIO, uLandTexture, sysutils;
+uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
+     uVariables, uUtils, uCommands, Adler32, uDebug;
 
 operator=(const a, b: direction) c: Boolean;
 begin
@@ -63,30 +46,6 @@ type TPixAr = record
               Count: Longword;
               ar: array[0..Pred(cMaxEdgePoints)] of TPoint;
               end;
-
-procedure LogLandDigest;
-var s: shortstring;
-    adler, i: LongInt;
-begin
-adler:= 1;
-for i:= 0 to LAND_HEIGHT-1 do
-    Adler32Update(adler, @Land[i,0], LAND_WIDTH);
-s:= 'M'+inttostr(adler);
-
-CheckLandDigest(s);
-SendIPCRaw(@s[0], Length(s) + 1)
-end;
-
-procedure CheckLandDigest(s: shortstring);
-begin
-{$IFDEF DEBUGFILE}
-    AddFileLog('CheckLandDigest: ' + s + ' digest : ' + digest);
-{$ENDIF}
-    if digest = '' then
-        digest:= s
-    else
-        TryDo(s = digest, 'Different maps generated, sorry', true);
-end;
 
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 var
@@ -319,17 +278,6 @@ while Stack.Count > 0 do
       end;
 end;
 
-function LandBackPixel(x, y: LongInt): LongWord;
-var p: PLongWordArray;
-begin
-    if LandBackSurface = nil then LandBackPixel:= 0
-    else
-    begin
-        p:= LandBackSurface^.pixels;
-        LandBackPixel:= p^[LandBackSurface^.w * (y mod LandBackSurface^.h) + (x mod LandBackSurface^.w)];// or $FF000000;
-    end
-end;
-
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
@@ -385,7 +333,7 @@ begin
                 r.x:= x mod tmpsurf^.w;
                 r.y:= 0;
                 r.w:= 1;
-                r.h:= min(16, yd - yu + 1);
+                r.h:= Min(16, yd - yu + 1);
                 SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
             end;
             yd:= yu - 1;
@@ -1239,8 +1187,6 @@ begin
 
     AddProgress;
 
-{$IFDEF DEBUGFILE}LogLandDigest;{$ENDIF}
-
 // check for land near top
 c:= 0;
 if (GameFlags and gfBorder) <> 0 then
@@ -1348,8 +1294,35 @@ begin
     GenPreview:= Preview
 end;
 
+
+procedure chLandCheck(var s: shortstring);
+begin
+{$IFDEF DEBUGFILE}
+    AddFileLog('CheckLandDigest: ' + s + ' digest : ' + digest);
+{$ENDIF}
+    if digest = '' then
+        digest:= s
+    else
+        TryDo(s = digest, 'Different maps generated, sorry', true);
+end;
+
+procedure chSendLandDigest(var s: shortstring);
+var adler, i: LongInt;
+begin
+    adler:= 1;
+    for i:= 0 to LAND_HEIGHT-1 do
+        Adler32Update(adler, @Land[i,0], LAND_WIDTH);
+    s:= 'M' + IntToStr(adler);
+
+    chLandCheck(s);
+    SendIPCRaw(@s[0], Length(s) + 1)
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('landcheck', vtCommand, @chLandCheck, false);
+    RegisterVariable('sendlanddigest', vtCommand, @chSendLandDigest, false);
+
     LandBackSurface:= nil;
     digest:= '';
 
