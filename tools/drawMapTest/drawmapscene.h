@@ -20,7 +20,7 @@ signals:
 
 public slots:
     void undo();
-    void simplify();
+    void simplifyLast();
 
 private:
     QPen m_pen;

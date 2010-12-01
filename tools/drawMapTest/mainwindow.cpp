@@ -42,10 +42,12 @@ void MainWindow::resizeEvent(QResizeEvent * event)
 
 void MainWindow::scene_pathChanged()
 {
-    ui->plainTextEdit->setPlainText(scene->encode().toBase64());
+    QString str = scene->encode().toBase64();
+    ui->plainTextEdit->setPlainText(str);
+    ui->sbBytes->setValue(str.size());
 }
 
 void MainWindow::on_pbSimplify_clicked()
 {
-    scene->simplify();
+    scene->simplifyLast();
 }

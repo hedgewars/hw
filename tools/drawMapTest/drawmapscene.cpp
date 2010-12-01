@@ -37,7 +37,7 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
     {
         QPainterPath path = m_currPath->path();
         path.lineTo(mouseEvent->scenePos());
-        paths.last().append(mouseEvent->scenePos().toPoint());
+        paths.first().append(mouseEvent->scenePos().toPoint());
         m_currPath->setPath(path);
 
         emit pathChanged();
@@ -55,7 +55,7 @@ void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     p += QPointF(0.01, 0.01);
     path.moveTo(p);
     path.lineTo(mouseEvent->scenePos());
-    paths.append(QList<QPoint>() << mouseEvent->scenePos().toPoint());
+    paths.prepend(QList<QPoint>() << mouseEvent->scenePos().toPoint());
     m_currPath->setPath(path);
 
     emit pathChanged();
@@ -65,6 +65,8 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
     qDebug() << "release" << mouseEvent->scenePos();
 
+    simplifyLast();
+
     m_currPath = 0;
 }
 
@@ -73,7 +75,7 @@ void DrawMapScene::undo()
     if(items().size())
     {
         removeItem(items().first());
-        paths.removeLast();
+        paths.removeFirst();
 
         emit pathChanged();
     }
@@ -104,23 +106,40 @@ QByteArray DrawMapScene::encode()
     return b;
 }
 
-void DrawMapScene::simplify()
+void DrawMapScene::simplifyLast()
 {
-    for(int pit = 0; pit < paths.size(); ++pit)
+    QList<QPoint> points = paths[0];
+
+    QPoint prevPoint = points.first();
+    int i = 1;
+    while(i < points.size())
     {
-        QList<QPoint> points = paths[pit];
-
-        QPoint prevPoint = points.first();
-        int i = 1;
-        while(i < points.size())
+        if(sqr(prevPoint.x() - points[i].x()) + sqr(prevPoint.y() - points[i].y()) < 1000)
+            points.removeAt(i);
+        else
         {
-            if(sqr(prevPoint.x() - points[i].x()) + sqr(prevPoint.y() - points[i].y()) < 1000)
-                points.removeAt(i);
-            else
-                ++i;
+            prevPoint = points[i];
+            ++i;
         }
+    }
 
-        paths[pit] = points;
+    paths[0] = points;
+
+
+    // redraw path
+    {
+
+        QPainterPath path;
+        QPointF p = paths[0][0] + QPointF(0.01, 0.01);
+        path.moveTo(p);
+
+        foreach(QPoint p, paths[0])
+            path.lineTo(p);
+
+        QGraphicsPathItem * pathItem = static_cast<QGraphicsPathItem *>(items()[0]);
+        pathItem->setPath(path);
+
+        ++i;
     }
 
     emit pathChanged();
