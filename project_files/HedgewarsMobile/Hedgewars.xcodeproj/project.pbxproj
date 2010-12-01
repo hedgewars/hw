@@ -29,16 +29,6 @@
 		6103D414129B417500911D8D /* plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6103D413129B417500911D8D /* plus@2x.png */; };
 		610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43411E290650040BA66 /* Icon-Small@2x.png */; };
 		610D5FB31270E26C0033333A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43611E290650040BA66 /* Icon@2x.png */; };
-		6111586E12A5AB26000EB889 /* uCaptions.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6111586312A5AB26000EB889 /* uCaptions.pas */; };
-		6111587012A5AB26000EB889 /* uCommands.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6111586512A5AB26000EB889 /* uCommands.pas */; };
-		6111587112A5AB26000EB889 /* uDebug.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6111586612A5AB26000EB889 /* uDebug.pas */; };
-		6111587312A5AB26000EB889 /* uRender.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6111586812A5AB26000EB889 /* uRender.pas */; };
-		6111587412A5AB26000EB889 /* uRenderUtils.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6111586912A5AB26000EB889 /* uRenderUtils.pas */; };
-		6111587512A5AB26000EB889 /* uTextures.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6111586A12A5AB26000EB889 /* uTextures.pas */; };
-		6111587612A5AB26000EB889 /* uTypes.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6111586B12A5AB26000EB889 /* uTypes.pas */; };
-		6111587712A5AB26000EB889 /* uUtils.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6111586C12A5AB26000EB889 /* uUtils.pas */; };
-		6111587812A5AB26000EB889 /* uVariables.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6111586D12A5AB26000EB889 /* uVariables.pas */; };
-		611158CC12A5B11D000EB889 /* uSinTable.pas in Sources */ = {isa = PBXBuildFile; fileRef = 611158CB12A5B11D000EB889 /* uSinTable.pas */; };
 		611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D9BF912497E9800008271 /* SavedGamesViewController.m */; };
 		611D9BFC12497E9800008271 /* SavedGamesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611D9BFA12497E9800008271 /* SavedGamesViewController.xib */; };
 		611DA1D0124E5C6300008271 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 611DA1CF124E5C6300008271 /* plus.png */; };
@@ -55,6 +45,7 @@
 		611EEBC4122B355700DF6938 /* helpbottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC2122B355700DF6938 /* helpbottom.png */; };
 		611EEBC5122B355700DF6938 /* helpright.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC3122B355700DF6938 /* helpright.png */; };
 		611EEC31122B54D700DF6938 /* helpplain.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEC30122B54D700DF6938 /* helpplain.png */; };
+		611F4D4B11B27A9900F9759A /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 611F4D4A11B27A9900F9759A /* uScript.pas */; };
 		61272334117DF764005B90CF /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272333117DF752005B90CF /* libSDL_image.a */; };
 		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
 		6129B9F711EFB04D0017E305 /* denied.png in Resources */ = {isa = PBXBuildFile; fileRef = 6129B9F611EFB04D0017E305 /* denied.png */; };
@@ -103,17 +94,37 @@
 		6172FEEF1298D25D00D73365 /* mediumBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FEEB1298D25D00D73365 /* mediumBackground~ipad.png */; };
 		6172FEF11298D25D00D73365 /* smallerBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FEED1298D25D00D73365 /* smallerBackground~ipad.png */; };
 		6172FEF21298D25D00D73365 /* smallerBackground~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FEEE1298D25D00D73365 /* smallerBackground~iphone.png */; };
+		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
+		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
+		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
 		6179881C114AA34C00BA94A9 /* SDLh.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987ED114AA34C00BA94A9 /* SDLh.pas */; };
+		6179881F114AA34C00BA94A9 /* uAI.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F1114AA34C00BA94A9 /* uAI.pas */; };
+		61798820114AA34C00BA94A9 /* uAIActions.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F2114AA34C00BA94A9 /* uAIActions.pas */; };
+		61798821114AA34C00BA94A9 /* uAIAmmoTests.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F3114AA34C00BA94A9 /* uAIAmmoTests.pas */; };
+		61798822114AA34C00BA94A9 /* uAIMisc.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F4114AA34C00BA94A9 /* uAIMisc.pas */; };
 		61798823114AA34C00BA94A9 /* uAmmos.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F5114AA34C00BA94A9 /* uAmmos.pas */; };
 		61798824114AA34C00BA94A9 /* uChat.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F6114AA34C00BA94A9 /* uChat.pas */; };
+		61798825114AA34C00BA94A9 /* uCollisions.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F7114AA34C00BA94A9 /* uCollisions.pas */; };
 		61798826114AA34C00BA94A9 /* uConsole.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F8114AA34C00BA94A9 /* uConsole.pas */; };
 		61798827114AA34C00BA94A9 /* uConsts.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F9114AA34C00BA94A9 /* uConsts.pas */; };
 		61798828114AA34C00BA94A9 /* uFloat.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FA114AA34C00BA94A9 /* uFloat.pas */; };
+		61798829114AA34C00BA94A9 /* uGame.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FB114AA34C00BA94A9 /* uGame.pas */; };
+		6179882A114AA34C00BA94A9 /* uGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FC114AA34C00BA94A9 /* uGears.pas */; };
 		6179882B114AA34C00BA94A9 /* uIO.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FD114AA34C00BA94A9 /* uIO.pas */; };
+		6179882D114AA34C00BA94A9 /* uLand.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FF114AA34C00BA94A9 /* uLand.pas */; };
+		6179882E114AA34C00BA94A9 /* uLandGraphics.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798800114AA34C00BA94A9 /* uLandGraphics.pas */; };
+		6179882F114AA34C00BA94A9 /* uLandObjects.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798801114AA34C00BA94A9 /* uLandObjects.pas */; };
+		61798830114AA34C00BA94A9 /* uLandTemplates.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798802114AA34C00BA94A9 /* uLandTemplates.pas */; };
+		61798831114AA34C00BA94A9 /* uLandTexture.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798803114AA34C00BA94A9 /* uLandTexture.pas */; };
 		61798832114AA34C00BA94A9 /* uLocale.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798804114AA34C00BA94A9 /* uLocale.pas */; };
 		61798833114AA34C00BA94A9 /* uMisc.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798805114AA34C00BA94A9 /* uMisc.pas */; };
 		61798834114AA34C00BA94A9 /* uRandom.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798806114AA34C00BA94A9 /* uRandom.pas */; };
 		61798837114AA34C00BA94A9 /* uSound.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798809114AA34C00BA94A9 /* uSound.pas */; };
+		61798838114AA34C00BA94A9 /* uStats.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880A114AA34C00BA94A9 /* uStats.pas */; };
+		61798839114AA34C00BA94A9 /* uStore.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880B114AA34C00BA94A9 /* uStore.pas */; };
+		6179883A114AA34C00BA94A9 /* uTeams.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880C114AA34C00BA94A9 /* uTeams.pas */; };
+		6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880E114AA34C00BA94A9 /* uVisualGears.pas */; };
+		6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880F114AA34C00BA94A9 /* uWorld.pas */; };
 		617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */; };
 		61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798934114AB25F00BA94A9 /* AudioToolbox.framework */; };
 		61798996114AB3FF00BA94A9 /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798993114AB3FA00BA94A9 /* libSDL_mixer.a */; };
@@ -131,9 +142,21 @@
 		6199E839124647DE00DADF8C /* SupportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6199E837124647DE00DADF8C /* SupportViewController.m */; };
 		6199E86D12464A8E00DADF8C /* surprise.png in Resources */ = {isa = PBXBuildFile; fileRef = 6199E86C12464A8E00DADF8C /* surprise.png */; };
 		619C5ACF124F7DE200D041AE /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619C5ACE124F7DDF00D041AE /* libLua.a */; };
+		619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619C5AF3124F7E3100D041AE /* LuaPas.pas */; };
 		619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		61A47A5B12A5C4FF0094AA6A /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A47A5A12A5C4FF0094AA6A /* hwengine.pas */; };
+		61A4A39412A5CCC2004D81E6 /* uCommandHandlers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38912A5CCC2004D81E6 /* uCommandHandlers.pas */; };
+		61A4A39512A5CCC2004D81E6 /* uCommands.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38A12A5CCC2004D81E6 /* uCommands.pas */; };
+		61A4A39612A5CCC2004D81E6 /* uDebug.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38B12A5CCC2004D81E6 /* uDebug.pas */; };
+		61A4A39712A5CCC2004D81E6 /* uGearsRender.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38C12A5CCC2004D81E6 /* uGearsRender.pas */; };
+		61A4A39812A5CCC2004D81E6 /* uRender.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38D12A5CCC2004D81E6 /* uRender.pas */; };
+		61A4A39912A5CCC2004D81E6 /* uRenderUtils.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38E12A5CCC2004D81E6 /* uRenderUtils.pas */; };
+		61A4A39A12A5CCC2004D81E6 /* uSinTable.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38F12A5CCC2004D81E6 /* uSinTable.pas */; };
+		61A4A39B12A5CCC2004D81E6 /* uTextures.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A39012A5CCC2004D81E6 /* uTextures.pas */; };
+		61A4A39C12A5CCC2004D81E6 /* uTypes.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A39112A5CCC2004D81E6 /* uTypes.pas */; };
+		61A4A39D12A5CCC2004D81E6 /* uUtils.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A39212A5CCC2004D81E6 /* uUtils.pas */; };
+		61A4A39E12A5CCC2004D81E6 /* uVariables.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A39312A5CCC2004D81E6 /* uVariables.pas */; };
+		61A4A3A212A5CD56004D81E6 /* uCaptions.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A3A112A5CD56004D81E6 /* uCaptions.pas */; };
 		61A670C012747D9B00B06CE7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6183D83D11E2BCE200A88903 /* Default.png */; };
 		61A670C112747DB900B06CE7 /* MainMenuViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */; };
 		61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
@@ -141,33 +164,10 @@
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
 		61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D205A0127CDD1100ABD83E /* ObjcExports.m */; };
 		61D3D2A51290E03A003CE7C3 /* irc.png in Resources */ = {isa = PBXBuildFile; fileRef = 61D3D2A41290E03A003CE7C3 /* irc.png */; };
-		61D78E8912A5B961005099A1 /* uWorld.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880F114AA34C00BA94A9 /* uWorld.pas */; };
-		61D78E8A12A5B962005099A1 /* uVisualGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880E114AA34C00BA94A9 /* uVisualGears.pas */; };
-		61D78E8B12A5B965005099A1 /* uTeams.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880C114AA34C00BA94A9 /* uTeams.pas */; };
-		61D78E8C12A5B966005099A1 /* uStore.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880B114AA34C00BA94A9 /* uStore.pas */; };
-		61D78E8D12A5B967005099A1 /* uStats.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880A114AA34C00BA94A9 /* uStats.pas */; };
-		61D78E8E12A5B969005099A1 /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 611F4D4A11B27A9900F9759A /* uScript.pas */; };
-		61D78E8F12A5B96B005099A1 /* uLandTexture.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798803114AA34C00BA94A9 /* uLandTexture.pas */; };
-		61D78E9012A5B96D005099A1 /* uLandTemplates.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798802114AA34C00BA94A9 /* uLandTemplates.pas */; };
-		61D78E9112A5B96E005099A1 /* uLandObjects.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798801114AA34C00BA94A9 /* uLandObjects.pas */; };
-		61D78E9212A5B96E005099A1 /* uLandGraphics.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798800114AA34C00BA94A9 /* uLandGraphics.pas */; };
-		61D78E9312A5B970005099A1 /* uLand.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FF114AA34C00BA94A9 /* uLand.pas */; };
-		61D78E9712A5B98C005099A1 /* uGearsRender.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6111586712A5AB26000EB889 /* uGearsRender.pas */; };
-		61D78E9812A5B98D005099A1 /* uGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FC114AA34C00BA94A9 /* uGears.pas */; };
-		61D78E9912A5B98E005099A1 /* uGame.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FB114AA34C00BA94A9 /* uGame.pas */; };
-		61D78E9A12A5B992005099A1 /* uCommandHandlers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6111586412A5AB26000EB889 /* uCommandHandlers.pas */; };
-		61D78E9B12A5B993005099A1 /* uCollisions.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F7114AA34C00BA94A9 /* uCollisions.pas */; };
-		61D78E9C12A5B996005099A1 /* uAIMisc.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F4114AA34C00BA94A9 /* uAIMisc.pas */; };
-		61D78E9D12A5B996005099A1 /* uAIAmmoTests.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F3114AA34C00BA94A9 /* uAIAmmoTests.pas */; };
-		61D78E9E12A5B997005099A1 /* uAIActions.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F2114AA34C00BA94A9 /* uAIActions.pas */; };
-		61D78E9F12A5B998005099A1 /* uAI.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F1114AA34C00BA94A9 /* uAI.pas */; };
-		61D78EA012A5B99D005099A1 /* LuaPas.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619C5AF3124F7E3100D041AE /* LuaPas.pas */; };
-		61D78EA112A5B99E005099A1 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
-		61D78EA212A5B9A5005099A1 /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
-		61D78EB212A5BBA5005099A1 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
 		61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */; };
 		61DF0EDC1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61DF0EDB1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib */; };
 		61DF0F211284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61DF0F201284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib */; };
+		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
 		61E2F7441283752C00E12521 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = 61E2F7421283752C00E12521 /* fb.png */; };
 		61E2F7451283752C00E12521 /* tw.png in Resources */ = {isa = PBXBuildFile; fileRef = 61E2F7431283752C00E12521 /* tw.png */; };
 		61EBA62A11DFF2BC0048B68A /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62811DFF2BC0048B68A /* title.png */; };
@@ -755,18 +755,6 @@
 		6103D39D129B350700911D8D /* arrowUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrowUp@2x.png"; path = "Resources/Overlay/arrowUp@2x.png"; sourceTree = "<group>"; };
 		6103D39E129B350700911D8D /* cornerButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cornerButton@2x.png"; path = "Resources/Overlay/cornerButton@2x.png"; sourceTree = "<group>"; };
 		6103D413129B417500911D8D /* plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "plus@2x.png"; path = "Resources/Icons/plus@2x.png"; sourceTree = "<group>"; };
-		6111586312A5AB26000EB889 /* uCaptions.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCaptions.pas; path = ../../hedgewars/uCaptions.pas; sourceTree = SOURCE_ROOT; };
-		6111586412A5AB26000EB889 /* uCommandHandlers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCommandHandlers.pas; path = ../../hedgewars/uCommandHandlers.pas; sourceTree = SOURCE_ROOT; };
-		6111586512A5AB26000EB889 /* uCommands.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCommands.pas; path = ../../hedgewars/uCommands.pas; sourceTree = SOURCE_ROOT; };
-		6111586612A5AB26000EB889 /* uDebug.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uDebug.pas; path = ../../hedgewars/uDebug.pas; sourceTree = SOURCE_ROOT; };
-		6111586712A5AB26000EB889 /* uGearsRender.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsRender.pas; path = ../../hedgewars/uGearsRender.pas; sourceTree = SOURCE_ROOT; };
-		6111586812A5AB26000EB889 /* uRender.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uRender.pas; path = ../../hedgewars/uRender.pas; sourceTree = SOURCE_ROOT; };
-		6111586912A5AB26000EB889 /* uRenderUtils.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uRenderUtils.pas; path = ../../hedgewars/uRenderUtils.pas; sourceTree = SOURCE_ROOT; };
-		6111586A12A5AB26000EB889 /* uTextures.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTextures.pas; path = ../../hedgewars/uTextures.pas; sourceTree = SOURCE_ROOT; };
-		6111586B12A5AB26000EB889 /* uTypes.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTypes.pas; path = ../../hedgewars/uTypes.pas; sourceTree = SOURCE_ROOT; };
-		6111586C12A5AB26000EB889 /* uUtils.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uUtils.pas; path = ../../hedgewars/uUtils.pas; sourceTree = SOURCE_ROOT; };
-		6111586D12A5AB26000EB889 /* uVariables.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVariables.pas; path = ../../hedgewars/uVariables.pas; sourceTree = SOURCE_ROOT; };
-		611158CB12A5B11D000EB889 /* uSinTable.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uSinTable.pas; path = ../../hedgewars/uSinTable.pas; sourceTree = SOURCE_ROOT; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
 		611D9BFA12497E9800008271 /* SavedGamesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SavedGamesViewController.xib; path = ../Resources/SavedGamesViewController.xib; sourceTree = "<group>"; };
@@ -878,6 +866,7 @@
 		6172FEEE1298D25D00D73365 /* smallerBackground~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "smallerBackground~iphone.png"; path = "Resources/Frontend/smallerBackground~iphone.png"; sourceTree = "<group>"; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E5114AA34C00BA94A9 /* HHHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = HHHandlers.inc; path = ../../hedgewars/HHHandlers.inc; sourceTree = SOURCE_ROOT; };
+		617987E7114AA34C00BA94A9 /* hwengine.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = hwengine.pas; path = ../../hedgewars/hwengine.pas; sourceTree = SOURCE_ROOT; };
 		617987E9114AA34C00BA94A9 /* hwLibrary.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = hwLibrary.pas; path = ../../hedgewars/hwLibrary.pas; sourceTree = SOURCE_ROOT; };
 		617987EB114AA34C00BA94A9 /* options.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = options.inc; path = ../../hedgewars/options.inc; sourceTree = SOURCE_ROOT; };
 		617987EC114AA34C00BA94A9 /* PascalExports.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = PascalExports.pas; path = ../../hedgewars/PascalExports.pas; sourceTree = SOURCE_ROOT; };
@@ -935,7 +924,18 @@
 		619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapPreviewButtonView.h; path = Classes/MapPreviewButtonView.h; sourceTree = "<group>"; };
 		619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapPreviewButtonView.m; path = Classes/MapPreviewButtonView.m; sourceTree = "<group>"; };
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		61A47A5A12A5C4FF0094AA6A /* hwengine.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = hwengine.pas; path = ../../hedgewars/hwengine.pas; sourceTree = SOURCE_ROOT; };
+		61A4A38912A5CCC2004D81E6 /* uCommandHandlers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCommandHandlers.pas; path = ../../hedgewars/uCommandHandlers.pas; sourceTree = SOURCE_ROOT; };
+		61A4A38A12A5CCC2004D81E6 /* uCommands.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCommands.pas; path = ../../hedgewars/uCommands.pas; sourceTree = SOURCE_ROOT; };
+		61A4A38B12A5CCC2004D81E6 /* uDebug.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uDebug.pas; path = ../../hedgewars/uDebug.pas; sourceTree = SOURCE_ROOT; };
+		61A4A38C12A5CCC2004D81E6 /* uGearsRender.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsRender.pas; path = ../../hedgewars/uGearsRender.pas; sourceTree = SOURCE_ROOT; };
+		61A4A38D12A5CCC2004D81E6 /* uRender.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uRender.pas; path = ../../hedgewars/uRender.pas; sourceTree = SOURCE_ROOT; };
+		61A4A38E12A5CCC2004D81E6 /* uRenderUtils.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uRenderUtils.pas; path = ../../hedgewars/uRenderUtils.pas; sourceTree = SOURCE_ROOT; };
+		61A4A38F12A5CCC2004D81E6 /* uSinTable.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uSinTable.pas; path = ../../hedgewars/uSinTable.pas; sourceTree = SOURCE_ROOT; };
+		61A4A39012A5CCC2004D81E6 /* uTextures.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTextures.pas; path = ../../hedgewars/uTextures.pas; sourceTree = SOURCE_ROOT; };
+		61A4A39112A5CCC2004D81E6 /* uTypes.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTypes.pas; path = ../../hedgewars/uTypes.pas; sourceTree = SOURCE_ROOT; };
+		61A4A39212A5CCC2004D81E6 /* uUtils.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uUtils.pas; path = ../../hedgewars/uUtils.pas; sourceTree = SOURCE_ROOT; };
+		61A4A39312A5CCC2004D81E6 /* uVariables.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVariables.pas; path = ../../hedgewars/uVariables.pas; sourceTree = SOURCE_ROOT; };
+		61A4A3A112A5CD56004D81E6 /* uCaptions.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCaptions.pas; path = ../../hedgewars/uCaptions.pas; sourceTree = SOURCE_ROOT; };
 		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableCellView.h; sourceTree = "<group>"; };
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableCellView.m; sourceTree = "<group>"; };
 		61D2059F127CDD1100ABD83E /* ObjcExports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjcExports.h; path = Classes/ObjcExports.h; sourceTree = "<group>"; };
@@ -1473,13 +1473,26 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
-				61798892114AA56300BA94A9 /* inc */,
-				61A47A5A12A5C4FF0094AA6A /* hwengine.pas */,
-				617987ED114AA34C00BA94A9 /* SDLh.pas */,
+				61A4A3A112A5CD56004D81E6 /* uCaptions.pas */,
+				61A4A38912A5CCC2004D81E6 /* uCommandHandlers.pas */,
+				61A4A38A12A5CCC2004D81E6 /* uCommands.pas */,
+				61A4A38B12A5CCC2004D81E6 /* uDebug.pas */,
+				61A4A38C12A5CCC2004D81E6 /* uGearsRender.pas */,
+				61A4A38D12A5CCC2004D81E6 /* uRender.pas */,
+				61A4A38E12A5CCC2004D81E6 /* uRenderUtils.pas */,
+				61A4A38F12A5CCC2004D81E6 /* uSinTable.pas */,
+				61A4A39012A5CCC2004D81E6 /* uTextures.pas */,
+				61A4A39112A5CCC2004D81E6 /* uTypes.pas */,
+				61A4A39212A5CCC2004D81E6 /* uUtils.pas */,
+				61A4A39312A5CCC2004D81E6 /* uVariables.pas */,
+				61399012125D19C0003C2DC0 /* uMobile.pas */,
 				619C5AF3124F7E3100D041AE /* LuaPas.pas */,
+				61798892114AA56300BA94A9 /* inc */,
 				61E1F4F711D004240016A5AA /* adler32.pas */,
+				617987E7114AA34C00BA94A9 /* hwengine.pas */,
 				617987E9114AA34C00BA94A9 /* hwLibrary.pas */,
 				617987EC114AA34C00BA94A9 /* PascalExports.pas */,
+				617987ED114AA34C00BA94A9 /* SDLh.pas */,
 				617987F1114AA34C00BA94A9 /* uAI.pas */,
 				617987F2114AA34C00BA94A9 /* uAIActions.pas */,
 				617987F3114AA34C00BA94A9 /* uAIAmmoTests.pas */,
@@ -1494,19 +1507,6 @@
 				617987FC114AA34C00BA94A9 /* uGears.pas */,
 				617987FD114AA34C00BA94A9 /* uIO.pas */,
 				617987FE114AA34C00BA94A9 /* uKeys.pas */,
-				611158CB12A5B11D000EB889 /* uSinTable.pas */,
-				6111586312A5AB26000EB889 /* uCaptions.pas */,
-				6111586412A5AB26000EB889 /* uCommandHandlers.pas */,
-				6111586512A5AB26000EB889 /* uCommands.pas */,
-				6111586612A5AB26000EB889 /* uDebug.pas */,
-				6111586712A5AB26000EB889 /* uGearsRender.pas */,
-				6111586812A5AB26000EB889 /* uRender.pas */,
-				6111586912A5AB26000EB889 /* uRenderUtils.pas */,
-				6111586A12A5AB26000EB889 /* uTextures.pas */,
-				6111586B12A5AB26000EB889 /* uTypes.pas */,
-				6111586C12A5AB26000EB889 /* uUtils.pas */,
-				6111586D12A5AB26000EB889 /* uVariables.pas */,
-				61399012125D19C0003C2DC0 /* uMobile.pas */,
 				617987FF114AA34C00BA94A9 /* uLand.pas */,
 				61798800114AA34C00BA94A9 /* uLandGraphics.pas */,
 				61798801114AA34C00BA94A9 /* uLandObjects.pas */,
@@ -2275,54 +2275,38 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61798816114AA34C00BA94A9 /* hwengine.pas in Sources */,
+				61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */,
+				6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */,
 				6179881C114AA34C00BA94A9 /* SDLh.pas in Sources */,
+				6179881F114AA34C00BA94A9 /* uAI.pas in Sources */,
+				61798820114AA34C00BA94A9 /* uAIActions.pas in Sources */,
+				61798821114AA34C00BA94A9 /* uAIAmmoTests.pas in Sources */,
+				61798822114AA34C00BA94A9 /* uAIMisc.pas in Sources */,
 				61798823114AA34C00BA94A9 /* uAmmos.pas in Sources */,
-				61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */,
-				61399013125D19C0003C2DC0 /* uMobile.pas in Sources */,
-				61A47A5B12A5C4FF0094AA6A /* hwengine.pas in Sources */,
 				61798824114AA34C00BA94A9 /* uChat.pas in Sources */,
+				61798825114AA34C00BA94A9 /* uCollisions.pas in Sources */,
 				61798826114AA34C00BA94A9 /* uConsole.pas in Sources */,
 				61798827114AA34C00BA94A9 /* uConsts.pas in Sources */,
 				61798828114AA34C00BA94A9 /* uFloat.pas in Sources */,
+				61798829114AA34C00BA94A9 /* uGame.pas in Sources */,
+				6179882A114AA34C00BA94A9 /* uGears.pas in Sources */,
 				6179882B114AA34C00BA94A9 /* uIO.pas in Sources */,
+				6179882D114AA34C00BA94A9 /* uLand.pas in Sources */,
+				6179882E114AA34C00BA94A9 /* uLandGraphics.pas in Sources */,
+				6179882F114AA34C00BA94A9 /* uLandObjects.pas in Sources */,
+				61798830114AA34C00BA94A9 /* uLandTemplates.pas in Sources */,
+				61798831114AA34C00BA94A9 /* uLandTexture.pas in Sources */,
 				61798832114AA34C00BA94A9 /* uLocale.pas in Sources */,
 				61798833114AA34C00BA94A9 /* uMisc.pas in Sources */,
 				61798834114AA34C00BA94A9 /* uRandom.pas in Sources */,
 				61798837114AA34C00BA94A9 /* uSound.pas in Sources */,
-				6111586E12A5AB26000EB889 /* uCaptions.pas in Sources */,
-				6111587012A5AB26000EB889 /* uCommands.pas in Sources */,
-				6111587112A5AB26000EB889 /* uDebug.pas in Sources */,
-				6111587312A5AB26000EB889 /* uRender.pas in Sources */,
-				6111587412A5AB26000EB889 /* uRenderUtils.pas in Sources */,
-				6111587512A5AB26000EB889 /* uTextures.pas in Sources */,
-				6111587612A5AB26000EB889 /* uTypes.pas in Sources */,
-				6111587712A5AB26000EB889 /* uUtils.pas in Sources */,
-				6111587812A5AB26000EB889 /* uVariables.pas in Sources */,
-				611158CC12A5B11D000EB889 /* uSinTable.pas in Sources */,
-				61D78E8912A5B961005099A1 /* uWorld.pas in Sources */,
-				61D78E8A12A5B962005099A1 /* uVisualGears.pas in Sources */,
-				61D78E8B12A5B965005099A1 /* uTeams.pas in Sources */,
-				61D78E8C12A5B966005099A1 /* uStore.pas in Sources */,
-				61D78E8D12A5B967005099A1 /* uStats.pas in Sources */,
-				61D78E8E12A5B969005099A1 /* uScript.pas in Sources */,
-				61D78E8F12A5B96B005099A1 /* uLandTexture.pas in Sources */,
-				61D78E9012A5B96D005099A1 /* uLandTemplates.pas in Sources */,
-				61D78E9112A5B96E005099A1 /* uLandObjects.pas in Sources */,
-				61D78E9212A5B96E005099A1 /* uLandGraphics.pas in Sources */,
-				61D78E9312A5B970005099A1 /* uLand.pas in Sources */,
-				61D78E9712A5B98C005099A1 /* uGearsRender.pas in Sources */,
-				61D78E9812A5B98D005099A1 /* uGears.pas in Sources */,
-				61D78E9912A5B98E005099A1 /* uGame.pas in Sources */,
-				61D78E9A12A5B992005099A1 /* uCommandHandlers.pas in Sources */,
-				61D78E9B12A5B993005099A1 /* uCollisions.pas in Sources */,
-				61D78E9C12A5B996005099A1 /* uAIMisc.pas in Sources */,
-				61D78E9D12A5B996005099A1 /* uAIAmmoTests.pas in Sources */,
-				61D78E9E12A5B997005099A1 /* uAIActions.pas in Sources */,
-				61D78E9F12A5B998005099A1 /* uAI.pas in Sources */,
-				61D78EA012A5B99D005099A1 /* LuaPas.pas in Sources */,
-				61D78EA112A5B99E005099A1 /* hwLibrary.pas in Sources */,
-				61D78EA212A5B9A5005099A1 /* adler32.pas in Sources */,
-				61D78EB212A5BBA5005099A1 /* PascalExports.pas in Sources */,
+				61798838114AA34C00BA94A9 /* uStats.pas in Sources */,
+				61798839114AA34C00BA94A9 /* uStore.pas in Sources */,
+				6179883A114AA34C00BA94A9 /* uTeams.pas in Sources */,
+				6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */,
+				6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */,
+				611F4D4B11B27A9900F9759A /* uScript.pas in Sources */,
 				6165920D11CA9BA200D6E256 /* FlagsViewController.m in Sources */,
 				6165920E11CA9BA200D6E256 /* FortsViewController.m in Sources */,
 				6165920F11CA9BA200D6E256 /* GameConfigViewController.m in Sources */,
@@ -2352,16 +2336,32 @@
 				6165923211CA9BD500D6E256 /* UIImageExtra.m in Sources */,
 				6165929E11CA9E2F00D6E256 /* SDL_uikitappdelegate.m in Sources */,
 				6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */,
+				61E1F4F811D004240016A5AA /* adler32.pas in Sources */,
 				61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */,
+				61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */,
 				61C079E411F35A300072BF46 /* EditableCellView.m in Sources */,
 				61F2E7CE1205EDE0005734F7 /* AboutViewController.m in Sources */,
 				611EEAEE122B2A4D00DF6938 /* HelpPageViewController.m in Sources */,
 				6199E839124647DE00DADF8C /* SupportViewController.m in Sources */,
 				611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */,
+				619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */,
 				619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */,
 				61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */,
+				61399013125D19C0003C2DC0 /* uMobile.pas in Sources */,
 				61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */,
 				61006F95128DE31F00EBA7F7 /* CreationChamber.m in Sources */,
+				61A4A39412A5CCC2004D81E6 /* uCommandHandlers.pas in Sources */,
+				61A4A39512A5CCC2004D81E6 /* uCommands.pas in Sources */,
+				61A4A39612A5CCC2004D81E6 /* uDebug.pas in Sources */,
+				61A4A39712A5CCC2004D81E6 /* uGearsRender.pas in Sources */,
+				61A4A39812A5CCC2004D81E6 /* uRender.pas in Sources */,
+				61A4A39912A5CCC2004D81E6 /* uRenderUtils.pas in Sources */,
+				61A4A39A12A5CCC2004D81E6 /* uSinTable.pas in Sources */,
+				61A4A39B12A5CCC2004D81E6 /* uTextures.pas in Sources */,
+				61A4A39C12A5CCC2004D81E6 /* uTypes.pas in Sources */,
+				61A4A39D12A5CCC2004D81E6 /* uUtils.pas in Sources */,
+				61A4A39E12A5CCC2004D81E6 /* uVariables.pas in Sources */,
+				61A4A3A212A5CD56004D81E6 /* uCaptions.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2432,7 +2432,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "Don't Code Sign";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi  -Sgix -B";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -2527,7 +2527,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi  -Sgix -B";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -2619,7 +2619,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi  -Sgix -B";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -2755,7 +2755,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi  -Sgix -B";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -2799,7 +2799,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi  -Sgix -B";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
