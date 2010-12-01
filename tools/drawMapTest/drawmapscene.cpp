@@ -93,7 +93,7 @@ QByteArray DrawMapScene::encode()
             qint16 px = qToBigEndian((qint16)point.x());
             qint16 py = qToBigEndian((qint16)point.y());
             quint8 flags = 2;
-            if(cnt) flags |= 0x80;
+            if(!cnt) flags |= 0x80;
             b.append((const char *)&flags, 1);
             b.append((const char *)&px, 2);
             b.append((const char *)&py, 2);
@@ -104,6 +104,39 @@ QByteArray DrawMapScene::encode()
     }
 
     return b;
+}
+
+void DrawMapScene::decode(QByteArray data)
+{
+    clear();
+    paths.clear();
+
+    QList<QPoint> points;
+
+    while(data.size() >= 5)
+    {
+        quint8 flags = *(quint8 *)data.data();
+        data.remove(0, 1);
+        qint16 px = qFromBigEndian(*(qint16 *)data.data());
+        data.remove(0, 2);
+        qint16 py = qFromBigEndian(*(qint16 *)data.data());
+        data.remove(0, 2);
+
+        //last chunk or first point
+        if((data.size() < 5) || (flags & 0x80))
+        {
+            if(points.size())
+            {
+                qDebug() << points;
+                addPath(pointsToPath(points), m_pen);
+                paths.prepend(points);
+
+                points.clear();
+            }
+        }
+
+        points.append(QPoint(px, py));
+    }
 }
 
 void DrawMapScene::simplifyLast()
@@ -128,19 +161,25 @@ void DrawMapScene::simplifyLast()
 
     // redraw path
     {
-
-        QPainterPath path;
-        QPointF p = paths[0][0] + QPointF(0.01, 0.01);
-        path.moveTo(p);
-
-        foreach(QPoint p, paths[0])
-            path.lineTo(p);
-
         QGraphicsPathItem * pathItem = static_cast<QGraphicsPathItem *>(items()[0]);
-        pathItem->setPath(path);
-
-        ++i;
+        pathItem->setPath(pointsToPath(paths[0]));
     }
 
     emit pathChanged();
+}
+
+QPainterPath DrawMapScene::pointsToPath(const QList<QPoint> points)
+{
+    QPainterPath path;
+
+    if(points.size())
+    {
+        QPointF p = points[0] + QPointF(0.01, 0.01);
+        path.moveTo(p);
+
+        foreach(QPoint p, points)
+            path.lineTo(p);
+    }
+
+    return path;
 }

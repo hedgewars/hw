@@ -1,3 +1,5 @@
+#include <QFileDialog>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "drawmapscene.h"
@@ -50,4 +52,31 @@ void MainWindow::scene_pathChanged()
 void MainWindow::on_pbSimplify_clicked()
 {
     scene->simplifyLast();
+}
+
+void MainWindow::on_pbSave_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save map"), ".");
+
+    if(!fileName.isEmpty())
+    {
+        QFile f(fileName);
+
+        f.open(QIODevice::WriteOnly);
+        f.write(qCompress(scene->encode()).toBase64());
+    }
+}
+
+void MainWindow::on_pbLoad_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open map file"), ".");
+
+    if(!fileName.isEmpty())
+    {
+        QFile f(fileName);
+
+        f.open(QIODevice::ReadOnly);
+        QByteArray data = qUncompress(QByteArray::fromBase64(f.readAll()));
+        scene->decode(data);
+    }
 }

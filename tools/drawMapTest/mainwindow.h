@@ -25,6 +25,8 @@ private:
     virtual void resizeEvent(QResizeEvent * event);
 
 private slots:
+    void on_pbLoad_clicked();
+    void on_pbSave_clicked();
     void on_pbSimplify_clicked();
     void scene_pathChanged();
 };

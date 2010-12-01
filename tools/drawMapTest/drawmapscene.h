@@ -2,6 +2,7 @@
 #define DRAWMAPSCENE_H
 
 #include <QGraphicsScene>
+#include <QPainterPath>
 
 class QGraphicsPathItem;
 
@@ -14,6 +15,7 @@ public:
     explicit DrawMapScene(QObject *parent = 0);
 
     QByteArray encode();
+    void decode(QByteArray data);
 
 signals:
     void pathChanged();
@@ -31,6 +33,8 @@ private:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
+
+    QPainterPath pointsToPath(const QList<QPoint> points);
 };
 
 #endif // DRAWMAPSCENE_H

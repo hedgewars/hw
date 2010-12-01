@@ -44,6 +44,20 @@
        </spacer>
       </item>
       <item>
+       <widget class="QPushButton" name="pbSave">
+        <property name="text">
+         <string>Save</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbLoad">
+        <property name="text">
+         <string>Load</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QSpinBox" name="sbBytes">
         <property name="readOnly">
          <bool>true</bool>
