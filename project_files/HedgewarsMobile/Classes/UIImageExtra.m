@@ -24,6 +24,13 @@
 
 @implementation UIImage (extra)
 
+CGFloat getScreenScale(void) {
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+        return [UIScreen mainScreen].scale;
+    else
+        return 1.0f;
+}
+
 -(UIImage *)scaleToSize:(CGSize) size {
     DLog(@"warning - this is a very expensive operation, you should avoid using it");
 
@@ -193,8 +200,9 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
 -(UIImage *)makeRoundCornersOfSize:(CGSize) sizewh {
     CGFloat cornerWidth = sizewh.width;
     CGFloat cornerHeight = sizewh.height;
-    CGFloat w = self.size.width;
-    CGFloat h = self.size.height;
+    CGFloat theScale = getScreenScale();
+    CGFloat w = self.size.width * theScale;
+    CGFloat h = self.size.height * theScale;
 
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
@@ -211,7 +219,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
     CGContextRelease(context);
     CGColorSpaceRelease(colorSpace);
 
-    UIImage *newImage = [UIImage imageWithCGImage:imageMasked];
+    UIImage *newImage = [UIImage imageWithCGImage:imageMasked scale:theScale orientation:UIImageOrientationUp];
     CGImageRelease(imageMasked);
 
     return newImage;

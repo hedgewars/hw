@@ -23,7 +23,9 @@
 
 
 @interface UIImage (extra)
- 
+
+CGFloat getScreenScale(void);
+
 -(UIImage *)scaleToSize:(CGSize) size;
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint;
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint ofSize:(CGSize) resultingSize;
