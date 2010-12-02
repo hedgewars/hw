@@ -1885,13 +1885,12 @@ begin
 
         if ((GameTicks mod 100) = 0) then
             begin
-            vgt:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFire);
+            vgt:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFire, gstTmpFlag);
             if vgt <> nil then
                 begin
                 vgt^.dx:= 0;
                 vgt^.dy:= 0;
                 vgt^.FrameTicks:= 1800 div (Gear^.Tag mod 3 + 2);
-                vgt^.State:= gstTmpFlag;
                 end;
             end;
 

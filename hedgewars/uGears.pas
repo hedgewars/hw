@@ -40,7 +40,8 @@ function  GearByUID(uid : Longword) : PGear;
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
-procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean = false);
+procedure DeleteGear(Gear: PGear); 
 
 
 implementation
@@ -49,7 +50,6 @@ uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
      uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug;
 
 
-procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask, Tint: LongWord); forward;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
@@ -1459,7 +1459,7 @@ begin
     end;
     tempTeam := gear^.Hedgehog^.Team;
     DeleteCI(gear);
-    FindPlace(gear, false, 0, LAND_WIDTH); 
+    FindPlace(gear, false, 0, LAND_WIDTH, true); 
     if gear <> nil then begin
         RenderHealth(gear^.Hedgehog^);
         ScriptCall('onGearResurrect', gear^.uid);
@@ -1589,7 +1589,7 @@ if (FollowGear <> nil) then
     end
 end;
 
-procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean = false);
 
     function CountNonZeroz(x, y, r, c: LongInt): LongInt;
     var i: LongInt;
@@ -1611,57 +1611,66 @@ var x: LongInt;
     ar2: array[0..1023] of TPoint;
     cnt, cnt2: Longword;
     delta: LongInt;
+    reallySkip, tryAgain: boolean;
 begin
-delta:= 250;
-cnt2:= 0;
-repeat
-    x:= Left + LongInt(GetRandom(Delta));
+reallySkip:= false; // try not skipping proximity at first
+tryAgain:= true;
+while tryAgain do
+    begin
+    delta:= 250;
+    cnt2:= 0;
     repeat
-        inc(x, Delta);
-        cnt:= 0;
-        y:= min(1024, topY) - 2 * Gear^.Radius;
-        while y < cWaterLine do
-            begin
-            repeat
-                inc(y, 2);
-            until (y >= cWaterLine) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) = 0);
-
-            sy:= y;
-
-            repeat
-                inc(y);
-            until (y >= cWaterLine) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) <> 0);
-
-            if (y - sy > Gear^.Radius * 2) and
-               (((Gear^.Kind = gtExplosives)
-                   and (y < cWaterLine)
-                   and (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 60, 60) = nil)
-                   and (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1) > Gear^.Radius))
-               or
-                 ((Gear^.Kind <> gtExplosives)
-                   and (y < cWaterLine)
-                   and (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 110, 110) = nil))) then
+        x:= Left + LongInt(GetRandom(Delta));
+        repeat
+            inc(x, Delta);
+            cnt:= 0;
+            y:= min(1024, topY) - 2 * Gear^.Radius;
+            while y < cWaterLine do
                 begin
-                ar[cnt].X:= x;
-                if withFall then ar[cnt].Y:= sy + Gear^.Radius
-                            else ar[cnt].Y:= y - Gear^.Radius;
-                inc(cnt)
+                repeat
+                    inc(y, 2);
+                until (y >= cWaterLine) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) = 0);
+
+                sy:= y;
+
+                repeat
+                    inc(y);
+                until (y >= cWaterLine) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) <> 0);
+
+                if (y - sy > Gear^.Radius * 2) and
+                   (((Gear^.Kind = gtExplosives)
+                       and (y < cWaterLine)
+                       and (reallySkip or (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 60, 60) = nil))
+                       and (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1) > Gear^.Radius))
+                   or
+                     ((Gear^.Kind <> gtExplosives)
+                       and (y < cWaterLine)
+                       and (reallySkip or (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 110, 110) = nil)))) then
+                    begin
+                    ar[cnt].X:= x;
+                    if withFall then ar[cnt].Y:= sy + Gear^.Radius
+                                else ar[cnt].Y:= y - Gear^.Radius;
+                    inc(cnt)
+                    end;
+
+                inc(y, 45)
                 end;
 
-            inc(y, 45)
-            end;
+            if cnt > 0 then
+                with ar[GetRandom(cnt)] do
+                    begin
+                    ar2[cnt2].x:= x;
+                    ar2[cnt2].y:= y;
+                    inc(cnt2)
+                    end
+        until (x + Delta > Right);
 
-        if cnt > 0 then
-            with ar[GetRandom(cnt)] do
-                begin
-                ar2[cnt2].x:= x;
-                ar2[cnt2].y:= y;
-                inc(cnt2)
-                end
-    until (x + Delta > Right);
-
-    dec(Delta, 60)
-until (cnt2 > 0) or (Delta < 70);
+        dec(Delta, 60)
+    until (cnt2 > 0) or (Delta < 70);
+    if (cnt2 = 0) and skipProximity and not reallySkip then tryAgain:= true
+    else tryAgain:= false;
+    reallySkip:= true;
+    end;
 
 if cnt2 > 0 then
     with ar2[GetRandom(cnt2)] do

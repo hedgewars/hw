@@ -30,6 +30,7 @@ procedure ProcessVisualGears(Steps: Longword);
 procedure KickFlakes(Radius, X, Y: LongInt);
 procedure DrawVisualGears(Layer: LongWord);
 procedure DeleteVisualGear(Gear: PVisualGear);
+function  VisualGearByUID(uid : Longword) : PVisualGear;
 procedure AddClouds;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 
@@ -477,6 +478,22 @@ case Layer of
         end;
         Gear:= Gear^.NextGear
         end
+    end
+end;
+
+function  VisualGearByUID(uid : Longword) : PVisualGear;
+var vg: PVisualGear;
+begin
+VisualGearByUID:= nil;
+vg:= VisualGearsList;
+while vg <> nil do
+    begin
+    if vg^.uid = uid then
+        begin
+            VisualGearByUID:= vg;
+            exit
+        end;
+    vg:= vg^.NextGear
     end
 end;
 

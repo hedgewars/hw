@@ -228,6 +228,118 @@ begin
     lc_addgear:= 1; // 1 return value
 end;
 
+function lc_deletegear(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to DeleteGear!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then DeleteGear(gear);
+        end;
+    lc_deletegear:= 0
+end;
+
+function lc_addvisualgear(L : Plua_State) : LongInt; Cdecl;
+var vg : PVisualGear;
+    x, y, s: LongInt;
+    c: Boolean;
+    vgt: TVisualGearType;
+begin
+    if lua_gettop(L) <> 5 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to AddVisualGear!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        x:= lua_tointeger(L, 1);
+        y:= lua_tointeger(L, 2);
+        vgt:= TVisualGearType(lua_tointeger(L, 3));
+        s:= lua_tointeger(L, 4);
+        c:= lua_toboolean(L, 5);
+
+        vg:= AddVisualGear(x, y, vgt, s, c); 
+        lua_pushnumber(L, vg^.uid)
+        end;
+    lc_addvisualgear:= 1; // 1 return value
+end;
+
+function lc_deletevisualgear(L : Plua_State) : LongInt; Cdecl;
+var vg : PVisualGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to DeleteVisualGear!');
+        end
+    else
+        begin
+        vg:= VisualGearByUID(lua_tointeger(L, 1));
+        if vg <> nil then DeleteVisualGear(vg);
+        end;
+    lc_deletevisualgear:= 0
+end;
+
+function lc_getvisualgearvalues(L : Plua_State) : LongInt; Cdecl;
+var vg: PVisualGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetVisualGearValues!');
+        lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
+        lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L)
+        end
+    else
+        begin
+        vg:= VisualGearByUID(lua_tointeger(L, 1));
+        if vg <> nil then
+            begin
+            lua_pushinteger(L, round(vg^.X));
+            lua_pushinteger(L, round(vg^.Y));
+            lua_pushnumber(L, vg^.dX);
+            lua_pushnumber(L, vg^.dY);
+            lua_pushnumber(L, vg^.Angle);
+            lua_pushinteger(L, vg^.Frame);
+            lua_pushinteger(L, vg^.FrameTicks);
+            lua_pushinteger(L, vg^.State);
+            lua_pushinteger(L, vg^.Timer);
+            lua_pushinteger(L, vg^.Tint);
+            end
+        end;
+    lc_getvisualgearvalues:= 10;
+end;
+
+function lc_setvisualgearvalues(L : Plua_State) : LongInt; Cdecl;
+var vg : PVisualGear;
+begin
+    if lua_gettop(L) <> 10 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to SetVisualGearValues!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        vg:= VisualGearByUID(lua_tointeger(L, 1));
+        if vg <> nil then
+            begin
+            vg^.X:= lua_tointeger(L, 1);
+            vg^.Y:= lua_tointeger(L, 2);
+            vg^.dX:= lua_tonumber(L, 3);
+            vg^.dY:= lua_tonumber(L, 4);
+            vg^.Angle:= lua_tonumber(L, 5);
+            vg^.Frame:= lua_tointeger(L, 6);
+            vg^.FrameTicks:= lua_tointeger(L, 7);
+            vg^.State:= lua_tointeger(L, 8);
+            vg^.Timer:= lua_tointeger(L, 9);
+            vg^.Tint:= lua_tointeger(L, 10);
+            end
+        end;
+    lc_setvisualgearvalues:= 0;
+end;
+
 function lc_getfollowgear(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 0 then
@@ -1186,6 +1298,11 @@ for he:= Low(THogEffect) to High(THogEffect) do
 
 // register functions
 lua_register(luaState, 'AddGear', @lc_addgear);
+lua_register(luaState, 'DeleteGear', @lc_deletegear);
+lua_register(luaState, 'AddVisualGear', @lc_addvisualgear);
+lua_register(luaState, 'DeleteVisualGear', @lc_deletevisualgear);
+lua_register(luaState, 'GetVisualGearValues', @lc_getvisualgearvalues);
+lua_register(luaState, 'SetVisualGearValues', @lc_setvisualgearvalues);
 lua_register(luaState, 'SpawnHealthCrate', @lc_spawnhealthcrate);
 lua_register(luaState, 'SpawnAmmoCrate', @lc_spawnammocrate);
 lua_register(luaState, 'SpawnUtilityCrate', @lc_spawnutilitycrate);
