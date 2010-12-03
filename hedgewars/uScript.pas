@@ -1215,6 +1215,7 @@ end;
 
 procedure initModule;
 var at : TGearType;
+    vgt: TVisualGearType;
     am : TAmmoType;
     st : TSound;
     he: THogEffect;
@@ -1284,6 +1285,9 @@ ScriptSetInteger('SAY_SHOUT', 3);
 // register gear types
 for at:= Low(TGearType) to High(TGearType) do
     ScriptSetInteger(EnumToStr(at), ord(at));
+
+for vgt:= Low(TVisualGearType) to High(TVisualGearType) do
+    ScriptSetInteger(EnumToStr(vgt), ord(vgt));
 
 // register sounds
 for st:= Low(TSound) to High(TSound) do

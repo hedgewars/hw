@@ -8,6 +8,7 @@ procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: ansistring; c: char);
 
 function  EnumToStr(const en : TGearType) : shortstring; overload;
+function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
 function  EnumToStr(const en : TSound) : shortstring; overload;
 function  EnumToStr(const en : TAmmoType) : shortstring; overload;
 function  EnumToStr(const en : THogEffect) : shortstring; overload;
@@ -82,6 +83,10 @@ end;
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TGearType), ord(en))
+end;
+function EnumToStr(const en : TVisualGearType) : shortstring; overload;
+begin
+EnumToStr:= GetEnumName(TypeInfo(TVisualGearType), ord(en))
 end;
 
 function EnumToStr(const en : TSound) : shortstring; overload;
