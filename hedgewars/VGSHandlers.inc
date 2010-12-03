@@ -630,7 +630,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepCircle(Gear: PVisualGear; Steps: Longword);
-var tmp: byte;
+var tmp: LongInt;
     i: LongWord;
 begin
 with Gear^ do
@@ -645,6 +645,8 @@ with Gear^ do
                 else dec(tmp);
                 if tmp < round(dX) then tdY:= 1;
                 if tmp > round(dY) then tdY:= -1;
+		if tmp > 255 then tmp := 255;
+		if tmp < 0 then tmp := 0;
                 Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or tmp
                 end
             end

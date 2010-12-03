@@ -386,7 +386,6 @@ case Layer of
                           DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
             vgtCloud: DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
             end;
-	Tint($FFFFFFFF);
         Gear:= Gear^.NextGear
         end;
     1: while Gear <> nil do
@@ -408,7 +407,6 @@ case Layer of
                             DrawRotatedF(sprFeather, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                             end;
                  end;
-	Tint($FFFFFFFF);
         Gear:= Gear^.NextGear
         end;
     2: while Gear <> nil do
@@ -476,10 +474,10 @@ case Layer of
             vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtCircle: DrawCircle(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State, Gear^.Timer);
         end;
-	Tint($FFFFFFFF);
         Gear:= Gear^.NextGear
         end
-    end
+    end;
+Tint($FFFFFFFF);
 end;
 
 function  VisualGearByUID(uid : Longword) : PVisualGear;

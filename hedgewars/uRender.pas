@@ -444,7 +444,7 @@ end;
 
 procedure Tint(c: Longword); inline;
 begin
-Tint(((c shr 16) and $FF), ((c shr 8) and $FF), (c and $FF), $FF);
+Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
 end;
 
 end.
