@@ -315,7 +315,7 @@ end;
 function lc_setvisualgearvalues(L : Plua_State) : LongInt; Cdecl;
 var vg : PVisualGear;
 begin
-    if lua_gettop(L) <> 10 then
+    if lua_gettop(L) <> 11 then
         begin
         LuaError('Lua: Wrong number of parameters passed to SetVisualGearValues!');
         lua_pushnil(L); // return value on stack (nil)
@@ -325,16 +325,16 @@ begin
         vg:= VisualGearByUID(lua_tointeger(L, 1));
         if vg <> nil then
             begin
-            vg^.X:= lua_tointeger(L, 1);
-            vg^.Y:= lua_tointeger(L, 2);
-            vg^.dX:= lua_tonumber(L, 3);
-            vg^.dY:= lua_tonumber(L, 4);
-            vg^.Angle:= lua_tonumber(L, 5);
-            vg^.Frame:= lua_tointeger(L, 6);
-            vg^.FrameTicks:= lua_tointeger(L, 7);
-            vg^.State:= lua_tointeger(L, 8);
-            vg^.Timer:= lua_tointeger(L, 9);
-            vg^.Tint:= lua_tointeger(L, 10);
+            vg^.X:= lua_tointeger(L, 2);
+            vg^.Y:= lua_tointeger(L, 3);
+            vg^.dX:= lua_tonumber(L, 4);
+            vg^.dY:= lua_tonumber(L, 5);
+            vg^.Angle:= lua_tonumber(L, 6);
+            vg^.Frame:= lua_tointeger(L, 7);
+            vg^.FrameTicks:= lua_tointeger(L, 8);
+            vg^.State:= lua_tointeger(L, 9);
+            vg^.Timer:= lua_tointeger(L, 10);
+            vg^.Tint:= lua_tointeger(L, 11);
             end
         end;
     lc_setvisualgearvalues:= 0;
