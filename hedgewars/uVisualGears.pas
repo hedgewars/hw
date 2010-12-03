@@ -386,6 +386,7 @@ case Layer of
                           DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
             vgtCloud: DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
             end;
+	Tint($FFFFFFFF);
         Gear:= Gear^.NextGear
         end;
     1: while Gear <> nil do
@@ -407,6 +408,7 @@ case Layer of
                             DrawRotatedF(sprFeather, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                             end;
                  end;
+	Tint($FFFFFFFF);
         Gear:= Gear^.NextGear
         end;
     2: while Gear <> nil do
@@ -472,10 +474,9 @@ case Layer of
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtSpeechBubble: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtCircle: DrawCircle(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State, Gear^.Timer, 
-                      ((Gear^.Tint shr 24) and $FF), ((Gear^.Tint shr 16) and $FF), ((Gear^.Tint shr 8) and $FF), Gear^.Tint and $FF); 
-// Consider adding a version of DrawCircle that does not set Tint internally, and just call it here...
+            vgtCircle: DrawCircle(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State, Gear^.Timer);
         end;
+	Tint($FFFFFFFF);
         Gear:= Gear^.NextGear
         end
     end

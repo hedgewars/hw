@@ -21,6 +21,7 @@ procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 procedure DrawFillRect(r: TSDL_Rect);
 procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
+procedure DrawCircle(X, Y, Radius, Width: LongInt);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure Tint(r, g, b, a: Byte); inline;
 procedure Tint(c: Longword); inline;
@@ -352,6 +353,13 @@ glEnable(GL_TEXTURE_2D)
 end;
 
 procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte); 
+begin
+    Tint(r, g, b, a);
+    DrawCircle(X, Y, Radius, Width); 
+    Tint($FF, $FF, $FF, $FF);
+end;
+
+procedure DrawCircle(X, Y, Radius, Width: LongInt); 
 var
     i: LongInt;
     CircleVertex: array [0..359] of TVertex2f;
@@ -364,10 +372,8 @@ begin
     glEnable(GL_LINE_SMOOTH);
     glPushMatrix;
     glLineWidth(Width);
-    Tint(r, g, b, a);
     glVertexPointer(2, GL_FLOAT, 0, @CircleVertex[0]);
     glDrawArrays(GL_LINE_LOOP, 0, 360);
-    Tint($FF, $FF, $FF, $FF);
     glPopMatrix;
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_LINE_SMOOTH);
