@@ -518,8 +518,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // artillery      11
         << QVariant(true)          // random order   12
         << QVariant(true)          // king           13
-        << QVariant(true)          // place hog      14
-        << QVariant(true)          // shared ammo    15
+        << QVariant(false)         // place hog      14
+        << QVariant(false)         // shared ammo    15
         << QVariant(false)         // disable girders 16
         << QVariant(false)         // disable land objects 17
         << QVariant(false)         // AI survival    18
@@ -534,12 +534,12 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(15)            // sudden death   27
         << QVariant(5)             // case prob      28
         << QVariant(3)             // mines time     29
-        << QVariant(3)             // mines number   30
-        << QVariant(20)            // mine dud pct   31
-        << QVariant(3)             // explosives     32
+        << QVariant(4)             // mines number   30
+        << QVariant(0)             // mine dud pct   31
+        << QVariant(2)             // explosives     32
         << QVariant(35)            // health case pct 33
-        << QVariant(30)            // health case amt 34
-        << QVariant(30)            // water rise amt 35
+        << QVariant(25)            // health case amt 34
+        << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
         << QVariant(100)           // rope modfier   37
         ;
