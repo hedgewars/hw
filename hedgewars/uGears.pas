@@ -535,7 +535,14 @@ else if Gear^.Kind = gtHedgehog then
                     end
             end;
         inc(KilledHHs);
-        RecountTeamHealth(team)
+        RecountTeamHealth(team);
+        if (CurrentHedgehog <> nil) and CurrentHedgehog^.Effects[heResurrectable] and not Gear^.Hedgehog^.Effects[heResurrectable] then
+            with CurrentHedgehog^ do 
+                begin
+                inc(Team^.stats.AIKills);
+                if Team^.AIKillsTex <> nil then FreeTexture(Team^.AIKillsTex);
+                Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
+                end
         end;
 {$IFDEF DEBUGFILE}
 with Gear^ do AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
@@ -1451,12 +1458,15 @@ begin
     gear^.State := gstWait;
     uStats.HedgehogDamaged(gear);
     gear^.Damage := 0;
-    gear^.Health := 100;
-    with CurrentHedgehog^ do begin
-        inc(Team^.stats.AIKills);
-        if Team^.AIKillsTex <> nil then FreeTexture(Team^.AIKillsTex);
-        Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
-    end;
+    gear^.Health := gear^.Hedgehog^.InitialHealth;
+    gear^.Hedgehog^.Effects[hePoisoned] := false;
+    if not CurrentHedgehog^.Effects[heResurrectable] then
+        with CurrentHedgehog^ do 
+            begin
+            inc(Team^.stats.AIKills);
+            if Team^.AIKillsTex <> nil then FreeTexture(Team^.AIKillsTex);
+            Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
+            end;
     tempTeam := gear^.Hedgehog^.Team;
     DeleteCI(gear);
     FindPlace(gear, false, 0, LAND_WIDTH, true); 
