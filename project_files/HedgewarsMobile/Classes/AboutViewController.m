@@ -91,6 +91,37 @@
     // do nothing
 }
 
+-(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 95;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    char *fullver;
+    short int proto = 20;
+    HW_versionInfo(&proto, &fullver);
+
+    NSString *footerString = [[NSString alloc] initWithFormat:
+                              @"You are running Hedgewars-iOS %@ based on Hedgewars version %s (protocol %d)",
+                              version, fullver, proto];
+
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 50)];
+    footer.backgroundColor = [UIColor clearColor];
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width*80/100, 90)];
+    label.center = CGPointMake(self.tableView.frame.size.width/2, 45);
+    label.textAlignment = UITextAlignmentCenter;
+    label.font = [UIFont systemFontOfSize:16];
+    label.textColor = [UIColor lightGrayColor];
+    label.numberOfLines = 5;
+    label.text = footerString;
+
+    label.backgroundColor = [UIColor clearColor];
+    [footer addSubview:label];
+    [label release];
+    return [footer autorelease];
+}
+
 #pragma mark -
 #pragma mark Memory Management
 -(void) didReceiveMemoryWarning {

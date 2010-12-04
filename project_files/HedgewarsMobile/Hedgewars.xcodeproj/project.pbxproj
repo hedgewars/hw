@@ -193,6 +193,7 @@
 		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
 		61E2F7441283752C00E12521 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = 61E2F7421283752C00E12521 /* fb.png */; };
 		61E2F7451283752C00E12521 /* tw.png in Resources */ = {isa = PBXBuildFile; fileRef = 61E2F7431283752C00E12521 /* tw.png */; };
+		61E5D68D12AB006F00566F29 /* uLandPainted.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E5D68C12AB006F00566F29 /* uLandPainted.pas */; };
 		61EBA62A11DFF2BC0048B68A /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62811DFF2BC0048B68A /* title.png */; };
 		61EF920E11DF57AC003441C4 /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920511DF57AC003441C4 /* arrowDown.png */; };
 		61EF920F11DF57AC003441C4 /* arrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920611DF57AC003441C4 /* arrowLeft.png */; };
@@ -971,6 +972,7 @@
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
 		61E2F7421283752C00E12521 /* fb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fb.png; path = Resources/Icons/fb.png; sourceTree = "<group>"; };
 		61E2F7431283752C00E12521 /* tw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tw.png; path = Resources/Icons/tw.png; sourceTree = "<group>"; };
+		61E5D68C12AB006F00566F29 /* uLandPainted.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandPainted.pas; path = ../../hedgewars/uLandPainted.pas; sourceTree = SOURCE_ROOT; };
 		61EBA62811DFF2BC0048B68A /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = Resources/Frontend/title.png; sourceTree = "<group>"; };
 		61EF920511DF57AC003441C4 /* arrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowDown.png; path = Resources/Overlay/arrowDown.png; sourceTree = "<group>"; };
 		61EF920611DF57AC003441C4 /* arrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowLeft.png; path = Resources/Overlay/arrowLeft.png; sourceTree = "<group>"; };
@@ -1496,6 +1498,7 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61E5D68C12AB006F00566F29 /* uLandPainted.pas */,
 				61A4A3A112A5CD56004D81E6 /* uCaptions.pas */,
 				61A4A38912A5CCC2004D81E6 /* uCommandHandlers.pas */,
 				61A4A38A12A5CCC2004D81E6 /* uCommands.pas */,
@@ -2408,6 +2411,7 @@
 				61A4A39D12A5CCC2004D81E6 /* uUtils.pas in Sources */,
 				61A4A39E12A5CCC2004D81E6 /* uVariables.pas in Sources */,
 				61A4A3A212A5CD56004D81E6 /* uCaptions.pas in Sources */,
+				61E5D68D12AB006F00566F29 /* uLandPainted.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

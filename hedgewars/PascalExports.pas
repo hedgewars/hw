@@ -36,9 +36,8 @@ var cZoomVal: GLfloat;
 // retrieve protocol information
 procedure HW_versionInfo(netProto: PShortInt; versionStr: PPChar); cdecl; export;
 begin
-// http://bugs.freepascal.org/view.php?id=16156
-    if netProto <> nil then netProto^:= cNetProtoVersion;
-    if versionStr <> nil then versionStr^:= cVersionString;
+    netProto^:= cNetProtoVersion;
+    versionStr^:= cVersionString;
 end;
 
 procedure HW_click; cdecl; export;
