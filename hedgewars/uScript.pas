@@ -263,7 +263,8 @@ begin
         c:= lua_toboolean(L, 5);
 
         vg:= AddVisualGear(x, y, vgt, s, c); 
-        lua_pushnumber(L, vg^.uid)
+        if vg <> nil then lua_pushnumber(L, vg^.uid)
+        else lua_pushnumber(L, 0)
         end;
     lc_addvisualgear:= 1; // 1 return value
 end;
