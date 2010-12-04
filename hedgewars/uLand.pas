@@ -35,7 +35,7 @@ function  GenPreview: TPreview;
 
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
-     uVariables, uUtils, uCommands, Adler32, uDebug;
+     uVariables, uUtils, uCommands, Adler32, uDebug, uLandPainted;
 
 operator=(const a, b: direction) c: Boolean;
 begin
@@ -496,57 +496,57 @@ var pa: TPixAr;
     i: Longword;
     y, x: Longword;
 begin
-for y:= 0 to LAND_HEIGHT - 1 do
-    for x:= 0 to LAND_WIDTH - 1 do
-        Land[y, x]:= lfBasic;
-
-{$HINTS OFF}
-SetPoints(Template, pa);
-{$HINTS ON}
-for i:= 1 to Template.BezierizeCount do
-    begin
-    BezierizeEdge(pa, _0_5);
-    RandomizePoints(pa);
-    RandomizePoints(pa)
-    end;
-for i:= 1 to Template.RandPassesCount do RandomizePoints(pa);
-BezierizeEdge(pa, _0_1);
-
-DrawEdge(pa, 0);
-
-with Template do
-     for i:= 0 to pred(FillPointsCount) do
-         with FillPoints^[i] do
-              FillLand(x, y);
-
-DrawEdge(pa, lfBasic);
-
-MaxHedgehogs:= Template.MaxHedgehogs;
-hasGirders:= Template.hasGirders;
-playHeight:= Template.TemplateHeight;
-playWidth:= Template.TemplateWidth;
-leftX:= ((LAND_WIDTH - playWidth) div 2);
-rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
-topY:= LAND_HEIGHT - playHeight;
-
-// force to only cavern even if a cavern map is invertable if cTemplateFilter = 4 ?
-if (cTemplateFilter = 4) or
-   (Template.canInvert and (getrandom(2) = 0)) or
-    (not Template.canInvert and Template.isNegative) then
-    begin
-    hasBorder:= true;
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
-            if (y < topY) or (x < leftX) or (x > rightX) then
-                Land[y, x]:= 0
-            else
-            begin
-               if Land[y, x] = 0 then
-                   Land[y, x]:= lfBasic
-               else if Land[y, x] = lfBasic then
-                   Land[y, x]:= 0;
-            end;
-    end;
+            Land[y, x]:= lfBasic;
+    {$HINTS OFF}
+    SetPoints(Template, pa);
+    {$HINTS ON}
+    for i:= 1 to Template.BezierizeCount do
+        begin
+        BezierizeEdge(pa, _0_5);
+        RandomizePoints(pa);
+        RandomizePoints(pa)
+        end;
+    for i:= 1 to Template.RandPassesCount do RandomizePoints(pa);
+    BezierizeEdge(pa, _0_1);
+
+
+    DrawEdge(pa, 0);
+
+    with Template do
+        for i:= 0 to pred(FillPointsCount) do
+            with FillPoints^[i] do
+                FillLand(x, y);
+
+    DrawEdge(pa, lfBasic);
+
+    MaxHedgehogs:= Template.MaxHedgehogs;
+    hasGirders:= Template.hasGirders;
+    playHeight:= Template.TemplateHeight;
+    playWidth:= Template.TemplateWidth;
+    leftX:= ((LAND_WIDTH - playWidth) div 2);
+    rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
+    topY:= LAND_HEIGHT - playHeight;
+
+    // HACK: force to only cavern even if a cavern map is invertable if cTemplateFilter = 4 ?
+    if (cTemplateFilter = 4) or
+    (Template.canInvert and (getrandom(2) = 0)) or
+        (not Template.canInvert and Template.isNegative) then
+        begin
+        hasBorder:= true;
+        for y:= 0 to LAND_HEIGHT - 1 do
+            for x:= 0 to LAND_WIDTH - 1 do
+                if (y < topY) or (x < leftX) or (x > rightX) then
+                    Land[y, x]:= 0
+                else
+                begin
+                if Land[y, x] = 0 then
+                    Land[y, x]:= lfBasic
+                else if Land[y, x] = lfBasic then
+                    Land[y, x]:= 0;
+                end;
+        end;
 end;
 
 function SelectTemplate: LongInt;

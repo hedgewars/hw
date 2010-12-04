@@ -25,18 +25,83 @@ interface
 procedure LoadFromFile(fileName: shortstring);
 
 implementation
+uses uLandGraphics, uConsts, uUtils, SDLh;
 
 type PointRec = packed record
-    x, y: ShortInt;
+    X, Y: SmallInt;
     flags: byte;
     end;
+
+procedure DrawLineOnLand(X1, Y1, X2, Y2: LongInt);
+var  eX, eY, dX, dY: LongInt;
+    i, sX, sY, x, y, d: LongInt;
+    b: boolean;
+    len: LongWord;
+begin
+    len:= 0;
+    if (X1 = X2) and (Y1 = Y2) then
+        begin
+        exit
+        end;
+    eX:= 0;
+    eY:= 0;
+    dX:= X2 - X1;
+    dY:= Y2 - Y1;
+
+    if (dX > 0) then sX:= 1
+    else
+    if (dX < 0) then
+        begin
+        sX:= -1;
+        dX:= -dX
+        end else sX:= dX;
+
+    if (dY > 0) then sY:= 1
+    else
+    if (dY < 0) then
+        begin
+        sY:= -1;
+        dY:= -dY
+        end else sY:= dY;
+
+        if (dX > dY) then d:= dX
+                    else d:= dY;
+
+        x:= X1;
+        y:= Y1;
+
+        for i:= 0 to d do
+            begin
+            inc(eX, dX);
+            inc(eY, dY);
+            b:= false;
+            if (eX > d) then
+                begin
+                dec(eX, d);
+                inc(x, sX);
+                b:= true
+                end;
+            if (eY > d) then
+                begin
+                dec(eY, d);
+                inc(y, sY);
+                b:= true
+                end;
+            if b then
+                begin
+                inc(len);
+                if (len mod 4) = 0 then FillRoundInLand(X, Y, 34, lfBasic)
+                end
+        end
+end;
+
 
 procedure LoadFromFile(fileName: shortstring);
 var
     f: file of PointRec;
-    rec: PointRec;
+    rec, prevRec: PointRec;
 begin
-    fileMode = foReadOnly;
+    fileMode:= 0;
 
     assignFile(f, fileName);
     reset(f);
@@ -44,6 +109,15 @@ begin
     while not eof(f) do
         begin
         read(f, rec);
+        rec.X:= SDLNet_Read16(@rec.X);
+        rec.Y:= SDLNet_Read16(@rec.Y);
+
+        // FIXME: handle single point
+        if eof(f) or (rec.flags and $80 <> 0) then
+            else
+            DrawLineOnLand(prevRec.X, prevRec.Y, rec.X, rec.Y);
+
+        prevRec:= rec;
         end;
 
     closeFile(f);

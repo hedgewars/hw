@@ -63,7 +63,7 @@ void MainWindow::on_pbSave_clicked()
         QFile f(fileName);
 
         f.open(QIODevice::WriteOnly);
-        f.write(qCompress(scene->encode()).toBase64());
+        f.write(scene->encode());
     }
 }
 
@@ -76,7 +76,7 @@ void MainWindow::on_pbLoad_clicked()
         QFile f(fileName);
 
         f.open(QIODevice::ReadOnly);
-        QByteArray data = qUncompress(QByteArray::fromBase64(f.readAll()));
+        QByteArray data = f.readAll();
         scene->decode(data);
     }
 }
