@@ -60,6 +60,7 @@ set(engine_sources
     uLand.pas
     uLandGraphics.pas
     uLandObjects.pas
+    uLandPainted.pas
     uLandTemplates.pas
     uLandTexture.pas
     uLocale.pas

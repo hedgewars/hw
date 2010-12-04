@@ -94,9 +94,9 @@ QByteArray DrawMapScene::encode()
             qint16 py = qToBigEndian((qint16)point.y());
             quint8 flags = 2;
             if(!cnt) flags |= 0x80;
-            b.append((const char *)&flags, 1);
             b.append((const char *)&px, 2);
             b.append((const char *)&py, 2);
+            b.append((const char *)&flags, 1);
 
             ++cnt;
         }
@@ -115,12 +115,12 @@ void DrawMapScene::decode(QByteArray data)
 
     while(data.size() >= 5)
     {
-        quint8 flags = *(quint8 *)data.data();
-        data.remove(0, 1);
         qint16 px = qFromBigEndian(*(qint16 *)data.data());
         data.remove(0, 2);
         qint16 py = qFromBigEndian(*(qint16 *)data.data());
         data.remove(0, 2);
+        quint8 flags = *(quint8 *)data.data();
+        data.remove(0, 1);
 
         //last chunk or first point
         if((data.size() < 5) || (flags & 0x80))
