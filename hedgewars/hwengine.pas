@@ -48,7 +48,8 @@ procedure freeEverything(complete:boolean); forward;
 procedure DoTimer(Lag: LongInt);
 var s: shortstring;
 begin
-    if not isPaused then inc(RealTicks, Lag);
+    if isPaused = false then
+        inc(RealTicks, Lag);
 
     case GameState of
         gsLandGen: begin
@@ -97,6 +98,7 @@ begin
         gsExit: begin
                 isTerminated:= true;
                 end;
+        gsSuspend: exit;
         end;
 
 {$IFDEF SDL13}
@@ -104,7 +106,7 @@ begin
 {$ELSE}
     SDL_GL_SwapBuffers();
 {$ENDIF}
-    // not going to make captures on the iPhone
+
     if flagMakeCapture then
     begin
         flagMakeCapture:= false;
@@ -146,19 +148,16 @@ begin
         begin
             case event.type_ of
                 SDL_KEYDOWN: if GameState = gsChat then
-{$IFDEF IPHONEOS}
+{$IFDEF SDL13}
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                     KeyPressChat(event.key.keysym.sym);
-{$ELSE}
-                    KeyPressChat(event.key.keysym.unicode);
-                SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
-                SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
-{$ENDIF}
-{$IFDEF SDL13}
                 SDL_WINDOWEVENT:
                     if event.wevent.event = SDL_WINDOWEVENT_SHOWN then
                         cHasFocus:= true;
 {$ELSE}
+                    KeyPressChat(event.key.keysym.unicode);
+                SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
+                SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
                         cHasFocus:= event.active.gain = 1;
@@ -168,8 +167,8 @@ begin
                 SDL_JOYBUTTONDOWN: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, true);
                 SDL_JOYBUTTONUP: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
                 SDL_QUITEV: isTerminated:= true
-            end; // end case event.type_
-        end; // end while SDL_PollEvent(@event) <> 0
+            end; //end case event.type_ of
+        end; //end while SDL_PollEvent(@event) <> 0 do
 
         if isTerminated = false then
         begin

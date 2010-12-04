@@ -31,8 +31,6 @@
 	<string>1.2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>UIApplicationExitsOnSuspend</key>
-	<true/>
 	<key>UILaunchImageFile~ipad</key>
 	<string>Default-ipad</string>
 	<key>UIStatusBarHidden</key>

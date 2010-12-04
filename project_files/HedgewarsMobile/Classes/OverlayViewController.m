@@ -38,7 +38,7 @@
 #define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu, initialOrientation;
+@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu, initialOrientation, containerWindow;
 
 #pragma mark -
 #pragma mark rotation
@@ -54,9 +54,9 @@
     if (isGameRunning() == NO)
         return;
 
+    HW_pause();
     [self dismissPopover];
-    if (HW_isPaused() == NO)
-        HW_pause();
+
     if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
         [self.amvc disappear];
         wasVisible = YES;
@@ -86,8 +86,7 @@
 
     if (wasVisible || IS_DUALHEAD())
         [self.amvc appearInView:self.view];
-    if (HW_isPaused() == YES)
-        HW_pause();
+    HW_pauseToggle();
 
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
@@ -203,6 +202,8 @@
                                                      name:UIScreenDidDisconnectNotification
                                                    object:nil];
     }
+    
+    self.containerWindow = [[UIApplication sharedApplication] keyWindow];
 
     // present the overlay
     [UIView beginAnimations:@"showing overlay" context:NULL];
@@ -220,8 +221,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         [alert release];
-        if (HW_isPaused() == NO)
-            HW_pause();
+        HW_pause();
     }
 }
 
@@ -493,7 +493,7 @@
     if (YES == isPopoverVisible) {
         isPopoverVisible = NO;
         if (HW_isPaused())
-            HW_pause();
+            HW_pauseToggle();
 
         if (IS_IPAD()) {
             [(InGameMenuViewController *)[[self popoverController] contentViewController] removeChat];

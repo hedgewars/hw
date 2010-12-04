@@ -63,16 +63,20 @@ extern "C" {
     void HW_chat(void);
     void HW_chatEnd(void);
     void HW_tab(void);
+
     void HW_pause(void);
+    void HW_pauseToggle(void);
+    BOOL HW_isPaused(void);
 
     void HW_terminate(BOOL andCloseFrontend);
+    void HW_suspend(void);
+    void HW_resume(void);
 
     void HW_setCursor(int x, int y);
     void HW_getCursor(int *x, int *y);
 
     BOOL HW_isAmmoMenuOpen(void);
     BOOL HW_isAmmoMenuNotAllowed(void);
-    BOOL HW_isPaused(void);
     BOOL HW_isWeaponRequiringClick(void);
     BOOL HW_isWeaponTimerable(void);
     BOOL HW_isWeaponSwitch(void);

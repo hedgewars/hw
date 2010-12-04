@@ -29,6 +29,7 @@
 #import "SDL_video.h"
 #import "SDL_mixer.h"
 #import "PascalImports.h"
+#import "ObjcExports.h"
 #import "CommodityFunctions.h"
 #import "GameSetup.h"
 #import "MainMenuViewController.h"
@@ -222,40 +223,33 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationWillResignActive:(UIApplication *)application {
-    if (self.isInGame) {
-        HW_pause();
-
-        // Send every window on every screen a MINIMIZED event.
-        SDL_VideoDevice *_this = SDL_GetVideoDevice();
-        if (!_this)
-            return;
-
-        int i;
-        for (i = 0; i < _this->num_displays; i++) {
-            const SDL_VideoDisplay *display = &_this->displays[i];
-            SDL_Window *window;
-            for (window = display->windows; window != nil; window = window->next)
-                SDL_SendWindowEvent(window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
+    UIDevice* device = [UIDevice currentDevice];
+    if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
+         device.multitaskingSupported &&
+         self.isInGame) {
+        // there is a bug on iphone that presents a sdl view with a black screen, so it returns to frontend
+        if (IS_IPAD())
+            HW_suspend();
+        else {
+            // while screen is loading you can't call HW_terminate() so we close the app
+            if (isGameRunning())
+                HW_terminate(NO);
+            else {
+                // force app closure
+                SDL_SendQuit();
+                HW_terminate(YES);
+                longjmp(*(jump_env()), 1);
+            }
         }
     }
 }
 
 -(void) applicationDidBecomeActive:(UIApplication *)application {
-    if (self.isInGame) {
-        HW_pause();
-
-        // Send every window on every screen a RESTORED event.
-        SDL_VideoDevice *_this = SDL_GetVideoDevice();
-        if (!_this)
-            return;
-
-        int i;
-        for (i = 0; i < _this->num_displays; i++) {
-            const SDL_VideoDisplay *display = &_this->displays[i];
-            SDL_Window *window;
-            for (window = display->windows; window != nil; window = window->next)
-                SDL_SendWindowEvent(window, SDL_WINDOWEVENT_RESTORED, 0, 0);
-        }
+    UIDevice* device = [UIDevice currentDevice];
+    if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
+         device.multitaskingSupported &&
+         self.isInGame) {
+        HW_resume();
     }
 }
 

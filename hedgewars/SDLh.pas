@@ -511,6 +511,17 @@ type
 {$ENDIF}
         end;
 
+    TSDL_UserEvent = record
+{$IFDEF SDL13}
+        type_: LongInt;
+        windowID: LongInt;
+{$ELSE}
+        type_: Byte;
+{$ENDIF}
+        code: LongInt;
+        data1, data2: Pointer;
+        end;
+
     PSDL_Event = ^TSDL_Event;
     TSDL_Event = record
 {$IFDEF SDL13}
@@ -531,6 +542,7 @@ type
             SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
             SDL_JOYBUTTONDOWN,
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
+            SDL_USEREVENT: (user: TSDL_UserEvent);
 {$ELSE}
         case Byte of
             SDL_NOEVENT: (type_: byte);

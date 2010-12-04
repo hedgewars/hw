@@ -10,7 +10,7 @@ type
         r, g, b, a: byte
         end;
 
-    TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit);
+    TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit, gsSuspend);
 
     TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax);
 

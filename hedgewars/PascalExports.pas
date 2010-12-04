@@ -31,6 +31,7 @@ var dummy: boolean;  // avoid compiler hint
 implementation
 {$IFDEF HWLIBRARY}
 var cZoomVal: GLfloat;
+    previousGameState: TGameState;
 
 // retrieve protocol information
 procedure HW_versionInfo(netProto: PShortInt; versionStr: PPChar); cdecl; export;
@@ -167,7 +168,29 @@ end;
 
 procedure HW_pause; cdecl; export;
 begin
+    if isPaused = false then
+        pauseAction:= true;
+end;
+
+procedure HW_pauseToggle; cdecl; export;
+begin
     pauseAction:= true;
+end;
+
+function HW_isPaused: boolean; cdecl; export;
+begin
+    exit( isPaused );
+end;
+
+procedure HW_suspend; cdecl; export;
+begin
+    previousGameState:= GameState;
+    GameState:= gsSuspend;
+end;
+
+procedure HW_resume; cdecl; export;
+begin
+    GameState:= previousGameState;
 end;
 
 procedure HW_terminate(closeFrontend: boolean); cdecl; export;
@@ -197,11 +220,6 @@ function HW_isAmmoMenuNotAllowed: boolean; cdecl; export;
 begin;
     exit ( (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or
            ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) );
-end;
-
-function HW_isPaused: boolean; cdecl; export;
-begin
-    exit( isPaused );
 end;
 
 function HW_isWaiting: boolean; cdecl; export;
