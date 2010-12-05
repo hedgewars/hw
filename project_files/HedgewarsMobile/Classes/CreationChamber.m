@@ -152,6 +152,7 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                                    [NSNumber numberWithInt:15],       //suddendeathtimeout
                                    [NSNumber numberWithInt:47],       //waterrise
                                    [NSNumber numberWithInt:5],        //healthdecrease
+                                   [NSNumber numberWithInt:100],      //ropelength
                                    [NSNumber numberWithInt:5],        //cratedrops
                                    [NSNumber numberWithInt:35],       //healthprob
                                    [NSNumber numberWithInt:25],       //healthamount
@@ -184,6 +185,7 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                                    [NSNumber numberWithBool:NO],      //resetweaps
                                    [NSNumber numberWithBool:NO],      //perhogammo
                                    [NSNumber numberWithBool:NO],      //nowind
+                                   [NSNumber numberWithBool:NO],      //morewind
                                    nil];
     
     NSMutableDictionary *theScheme = [[NSMutableDictionary alloc] initWithObjectsAndKeys:

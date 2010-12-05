@@ -102,6 +102,22 @@
 		<key>checkOverMax</key>
 		<false/>
 		<key>command</key>
+		<string>e$ropepct</string>
+		<key>default</key>
+		<integer>100</integer>
+		<key>image</key>
+		<string>Rope</string>
+		<key>max</key>
+		<integer>999</integer>
+		<key>min</key>
+		<integer>25</integer>
+		<key>title</key>
+		<string>Rope Length</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
 		<string>e$casefreq</string>
 		<key>default</key>
 		<integer>5</integer>

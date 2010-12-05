@@ -172,11 +172,19 @@
 	</dict>
 	<dict>
 		<key>description</key>
-		<string>Wind will not affect weapons</string>
+		<string>You will not have to worry about wind any more</string>
 		<key>image</key>
 		<string>NoWind</string>
 		<key>title</key>
 		<string>Disable Wind</string>
+	</dict>
+	<dict>
+		<key>description</key>
+		<string>Wind will affect almost everything</string>
+		<key>image</key>
+		<string>MoreWind</string>
+		<key>title</key>
+		<string>More Wind</string>
 	</dict>
 </array>
 </plist>
