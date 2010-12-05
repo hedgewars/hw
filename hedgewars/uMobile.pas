@@ -30,9 +30,11 @@ procedure replayBegan; cdecl; external;
 procedure replayFinished; cdecl; external;
 procedure updateVisualsNewTurn; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
+function  isAppleDeviceMuted: Boolean; cdecl; external;
 procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
 {$ENDIF}
 function  isPhone: Boolean; inline;
+function  isDeviceMute: Boolean; inline;
 procedure performRumble; inline;
 procedure perfExt_AddProgress; inline;
 procedure perfExt_FinishProgress; inline;
@@ -48,6 +50,14 @@ function isPhone: Boolean; inline;
 begin
 {$IFDEF IPHONEOS}
     exit(isApplePhone());
+{$ENDIF}
+    exit(false);
+end;
+
+function isDeviceMute: Boolean; inline;
+begin
+{$IFDEF IPHONEOS}
+    exit(isAppleDeviceMuted());
 {$ENDIF}
     exit(false);
 end;

@@ -219,7 +219,12 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
     CGContextRelease(context);
     CGColorSpaceRelease(colorSpace);
 
-    UIImage *newImage = [UIImage imageWithCGImage:imageMasked scale:theScale orientation:UIImageOrientationUp];
+    UIImage *newImage;
+    if ([self respondsToSelector:@selector(imageWithCGImage:scale:orientation:)])
+        newImage = [UIImage imageWithCGImage:imageMasked scale:theScale orientation:UIImageOrientationUp];
+    else
+        newImage = [UIImage imageWithCGImage:imageMasked];
+
     CGImageRelease(imageMasked);
 
     return newImage;

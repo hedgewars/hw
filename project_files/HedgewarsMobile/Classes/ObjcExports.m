@@ -21,6 +21,7 @@
 
 #import "ObjcExports.h"
 #import "AmmoMenuViewController.h"
+#import "AudioToolbox/AudioToolbox.h"
 
 #pragma mark -
 #pragma mark internal variables
@@ -32,6 +33,8 @@ BOOL savedGame;
 NSInteger grenadeTime;
 // the reference to the newMenu instance
 AmmoMenuViewController *amvc_instance;
+// the audiosession must be initialized before using properties
+BOOL gAudioSessionInited = NO;
 
 #pragma mark -
 #pragma mark functions called like oop
@@ -150,4 +153,35 @@ void replayFinished() {
 void updateVisualsNewTurn(void) {
     DLog(@"updating visuals");
     [amvc_instance updateAmmoVisuals];
+}
+
+// http://stackoverflow.com/questions/287543/how-to-programatically-sense-the-iphone-mute-switch
+BOOL isAppleDeviceMuted(void) {
+    if (!gAudioSessionInited) {
+        AudioSessionInterruptionListener inInterruptionListener = NULL;
+        OSStatus error;
+        if ((error = AudioSessionInitialize (NULL, NULL, inInterruptionListener, NULL)))
+            DLog(@"*** Error *** error in AudioSessionInitialize: %d", error);
+        else
+            gAudioSessionInited = YES;
+    }
+    UInt32 propertySize = sizeof(CFStringRef);
+
+    // this checks if there is volume
+    Float32 volume;
+    OSStatus n = AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareOutputVolume, &propertySize, &volume);
+    if (n != 0)
+        DLog( @"AudioSessionGetProperty: %d", n );
+    BOOL volumeResult = (volume == 0.0);
+    
+    // this checks if the device is muted
+    CFStringRef state;
+    n = AudioSessionGetProperty(kAudioSessionProperty_AudioRoute, &propertySize, &state);
+    if (n != 0)
+        DLog( @"AudioSessionGetProperty: %d", n );
+    NSString *result = (NSString *)state;
+    BOOL muteResult = ([result length] == 0);
+    releaseAndNil(result);
+    
+    return volumeResult || muteResult;
 }

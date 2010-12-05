@@ -46,7 +46,7 @@ function  AskForVoicepack(name: shortstring): Pointer;
 
 
 implementation
-uses uVariables, uConsole, uUtils, uCommands, uDebug;
+uses uVariables, uConsole, uUtils, uCommands, uDebug, uMobile;
 
 const chanTPU = 32;
 var Volume: LongInt;
@@ -147,7 +147,8 @@ begin
     begin
         defVoicepack^.chunks[i]:= nil;
         // preload all the big sound files (>32k) that would otherwise lockup the game
-        if (i in [sndBeeWater, sndBee, sndCake, sndHellishImpact1, sndHellish, sndHomerun, sndMolotov, sndMortar, sndRideOfTheValkyries, sndYoohoo])
+        if (i in [sndBeeWater, sndBee, sndCake, sndHellishImpact1, sndHellish, sndHomerun,
+                  sndMolotov, sndMortar, sndRideOfTheValkyries, sndYoohoo])
             and (Soundz[i].Path <> ptVoices) and (Soundz[i].FileName <> '') then
         begin
             s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
@@ -178,7 +179,7 @@ end;
 procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 var s:shortstring;
 begin
-    if (not isSoundEnabled) or fastUntilLag then
+    if (not isSoundEnabled) or fastUntilLag or isDeviceMute() then
         exit;
 
     if keepPlaying and (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
@@ -220,7 +221,7 @@ end;
 function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
 var s: shortstring;
 begin
-    if (not isSoundEnabled) or fastUntilLag then
+    if (not isSoundEnabled) or fastUntilLag or isDeviceMute() then
     begin
         LoopSound:= -1;
         exit
