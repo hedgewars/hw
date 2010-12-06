@@ -3403,7 +3403,7 @@ begin
 
     if (Gear^.State and gstCollision) <> 0 then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 11, EXPLPoisoned, $C0E0FFE0);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, EXPLPoisoned, $C0E0FFE0);
         PlaySound(sndEggBreak);
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg);
         vg := AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg);

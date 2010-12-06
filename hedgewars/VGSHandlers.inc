@@ -558,11 +558,16 @@ end;
 
 procedure doStepExplosion(Gear: PVisualGear; Steps: Longword);
 var i: LongWord;
-gX,gY: LongInt;
+    gX,gY: LongInt;
+    vg: PVisualGear;
 begin
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
-for i:= 0 to 31 do AddVisualGear(gX, gY, vgtFire);
+for i:= 0 to 31 do 
+    begin
+    vg:= AddVisualGear(gX, gY, vgtFire);
+    if vg <> nil then vg^.State:= 1;
+    end;
 for i:= 0 to  8 do AddVisualGear(gX, gY, vgtExplPart);
 for i:= 0 to  8 do AddVisualGear(gX, gY, vgtExplPart2);
 Gear^.doStep:= @doStepExplosionWork;
@@ -590,12 +595,17 @@ end;
 
 procedure doStepBigExplosion(Gear: PVisualGear; Steps: Longword);
 var i: LongWord;
-gX,gY: LongInt;
+    gX,gY: LongInt;
+    vg: PVisualGear;
 begin
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
 AddVisualGear(gX, gY, vgtSmokeRing);
-for i:= 0 to 46 do AddVisualGear(gX, gY, vgtFire);
+for i:= 0 to 46 do 
+    begin
+    vg:= AddVisualGear(gX, gY, vgtFire);
+    if vg <> nil then vg^.State:= 1;
+    end;
 for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart);
 for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart2);
 Gear^.doStep:= @doStepBigExplosionWork;
