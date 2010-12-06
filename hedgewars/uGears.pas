@@ -1764,11 +1764,13 @@ begin
     else if x < 4 then text:= copy(s, 3, Length(s) - 1)
     else text:= copy(s, 2, Length(s) - 1);
 
+    (*
     if CheckNoTeamOrHH then
         begin
         ParseCommand('say ' + text, true);
         exit
         end;
+    *)
 
     if (x < 4) and (TeamsArray[t] <> nil) then
         begin
@@ -1799,7 +1801,7 @@ begin
             end
         else ParseCommand('say ' + text, true)
         end
-    else
+    else if (x >= 4) then
         begin
         SpeechType:= x-3;
         SpeechText:= text
