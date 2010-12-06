@@ -2021,7 +2021,8 @@ var
     ClansArray: array[0..Pred(cMaxTeams)] of PClan;
     ClansCount: Longword;
     LocalClan: LongInt;  // last non-bot, non-extdriven clan
-    LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index
+    LocalTeam: LongInt;  // last non-bot, non-extdriven clan first team
+    LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index, updated to next upcoming hog for per-hog-ammo
     CurMinAngle, CurMaxAngle: Longword;
     GameOver: boolean;
 

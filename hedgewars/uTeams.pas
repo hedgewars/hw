@@ -311,6 +311,7 @@ for t:= 0 to Pred(TeamsCount) do
         if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
             begin
             LocalClan:= Clan^.ClanIndex;
+            LocalTeam:= t;
             LocalAmmo:= Hedgehogs[0].AmmoStore
             end;
         th:= 0;
@@ -521,6 +522,7 @@ begin
     TeamsCount:= 0;
     ClansCount:= 0;
     LocalClan:= -1;
+    LocalTeam:= -1;
     LocalAmmo:= -1;
     GameOver:= false
 end;

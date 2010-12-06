@@ -183,33 +183,40 @@ end;
 
 procedure AcceptChatString(s: shortstring);
 var i: TWave;
-
+    c, t: LongInt;
 begin
+t:= LocalTeam;
+if not CurrentTeam^.ExtDriven and
+   ((s[1] = '"') and (s[Length(s)] = '"') or
+    (s[1] = '''') and (s[Length(s)] = '''') or
+    (s[1] = '-') and (s[Length(s)] = '-')) then
+    for c:= 0 to Pred(TeamsCount) do
+        if (TeamsArray[c] = CurrentTeam) then t:= c;
 // "Make hedgehog say something"
 if (s[1] = '"') and (s[Length(s)] = '"') then
     begin
-    if CurrentTeam^.ExtDriven then
+    if t = -1 then
         ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
     else
-        ParseCommand('/hogsay '#1 + copy(s, 2, Length(s)-2), true);
+        ParseCommand('/hogsay '#1 + char(t) + copy(s, 2, Length(s)-2), true);
     exit
     end;
 // 'Make hedgehog think something'
 if (s[1] = '''') and (s[Length(s)] = '''') then
     begin
-    if CurrentTeam^.ExtDriven then
+    if t = -1 then
         ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
     else
-        ParseCommand('/hogsay '#2 + copy(s, 2, Length(s)-2), true);
+        ParseCommand('/hogsay '#2 + char(t) + copy(s, 2, Length(s)-2), true);
     exit
     end;
 // -Make hedgehog yell something-
 if (s[1] = '-') and (s[Length(s)] = '-') then
     begin
-    if CurrentTeam^.ExtDriven then
+    if t = -1 then
         ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
     else
-        ParseCommand('/hogsay '#3 + copy(s, 2, Length(s)-2), true);
+        ParseCommand('/hogsay '#3 + char(t) + copy(s, 2, Length(s)-2), true);
     exit
     end;
 // These 3 are same as above, only are to make the hedgehog say it on next attack

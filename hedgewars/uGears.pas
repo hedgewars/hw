@@ -894,11 +894,13 @@ begin
             for i:= 0 to cMaxHHIndex do
                 with Hedgehogs[i] do
                     begin
+(*
                     if (SpeechGear <> nil) then
                         begin
                         DeleteVisualGear(SpeechGear);  // remove to restore persisting beyond end of turn. Tiy says was too much of a gameplay issue
                         SpeechGear:= nil
                         end;
+*)
 
                     if (Gear <> nil) then
                         begin
@@ -1743,10 +1745,20 @@ end;
 procedure chHogSay(var s: shortstring);
 var Gear: PVisualGear;
     text: shortstring;
+    hh: PHedgehog;
+    i, x, t, h: byte;
+    c, j: LongInt;
 begin
-    text:= copy(s, 2, Length(s) - 1);
-    if CheckNoTeamOrHH
-    or ((CurrentHedgehog^.Gear^.State and gstHHDriven) = 0) then
+    hh:= nil;
+    i:= 0;
+    x:= byte(s[1]);  // speech type
+    t:= byte(s[2]);  // team
+    h:= byte(s[3]);  // target hog
+    // allow targetting a hog by specifying a number as the first portion of the text
+    if (h > byte('0')) and (h < byte('9')) then i:= h - 48;
+    if i <> 0 then text:= copy(s, 4, Length(s) - 1)
+    else text:= copy(s, 3, Length(s) - 1);
+    if CheckNoTeamOrHH then
         begin
         ParseCommand('say ' + text, true);
         exit
@@ -1754,19 +1766,38 @@ begin
 
     if not CurrentTeam^.ExtDriven then SendIPC('h' + s);
 
-    if byte(s[1]) < 4 then
+    if (x < 4) and (TeamsArray[t] <> nil) then
         begin
-        Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
+            // if team matches current hedgehog team, default to current hedgehog
+            if (i = 0) and (CurrentHedgehog^.Team = TeamsArray[t]) then hh:= CurrentHedgehog
+            else 
+                begin
+            // otherwise use the first living hog or the hog amongs the remaining ones indicated by i
+                j:= 0;
+                c:= 0;
+                while (j <= cMaxHHIndex) and (hh = nil) do
+                    begin
+                    if (TeamsArray[t]^.Hedgehogs[j].Gear <> nil) then
+                        begin
+                        inc(c);
+                        if (i=0) or (i=c) then
+                            hh:= @TeamsArray[t]^.Hedgehogs[j]
+                        end;
+                    inc(j)
+                    end
+                end;
+        if hh <> nil then Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
         if Gear <> nil then
             begin
-            Gear^.Hedgehog:= CurrentHedgehog;
+            Gear^.Hedgehog:= hh;
             Gear^.Text:= text;
-            Gear^.FrameTicks:= byte(s[1])
+            Gear^.FrameTicks:= x
             end
+        else ParseCommand('say ' + text, true)
         end
     else
         begin
-        SpeechType:= byte(s[1])-3;
+        SpeechType:= x-3;
         SpeechText:= text
         end;
 end;
