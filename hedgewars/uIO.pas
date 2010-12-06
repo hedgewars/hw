@@ -285,6 +285,7 @@ while (headcmd <> nil)
     and (tmpflag or (headcmd^.cmd = '#')) // '#' is the only cmd which can be sent within same tick after 'N'
     and ((GameTicks = hiTicks shl 16 + headcmd^.loTime)
         or (headcmd^.cmd = 's') // for these commands time is not specified
+        or (headcmd^.cmd = 'h') // seems the hedgewars protocol does not allow remote synced commands
         or (headcmd^.cmd = '#')
         or (headcmd^.cmd = 'b')
         or (headcmd^.cmd = 'F')) do

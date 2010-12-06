@@ -181,51 +181,42 @@ while
 visibleCount:= cnt;
 end;
 
+procedure SendHogSpeech(s: shortstring);
+begin
+SendIPC('h' + s);
+ParseCommand('/hogsay '+s, true)
+end;
+
 procedure AcceptChatString(s: shortstring);
 var i: TWave;
     c, t: LongInt;
+    x: byte;
 begin
 t:= LocalTeam;
-if not CurrentTeam^.ExtDriven and
-   ((s[1] = '"') and (s[Length(s)] = '"') or
-    (s[1] = '''') and (s[Length(s)] = '''') or
-    (s[1] = '-') and (s[Length(s)] = '-')) then
+x:= 0;
+if (s[1] = '"') and (s[Length(s)] = '"') then x:= 1
+else if (s[1] = '''') and (s[Length(s)] = '''') then x:= 2
+else if (s[1] = '-') and (s[Length(s)] = '-') then x:= 3;
+if not CurrentTeam^.ExtDriven and (x <> 0) then
     for c:= 0 to Pred(TeamsCount) do
         if (TeamsArray[c] = CurrentTeam) then t:= c;
-// "Make hedgehog say something"
-if (s[1] = '"') and (s[Length(s)] = '"') then
+
+if x <> 0 then
     begin
     if t = -1 then
         ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
     else
-        ParseCommand('/hogsay '#1 + char(t) + copy(s, 2, Length(s)-2), true);
+        SendHogSpeech(char(x) + char(t) + copy(s, 2, Length(s)-2));
     exit
     end;
-// 'Make hedgehog think something'
-if (s[1] = '''') and (s[Length(s)] = '''') then
-    begin
-    if t = -1 then
-        ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
-    else
-        ParseCommand('/hogsay '#2 + char(t) + copy(s, 2, Length(s)-2), true);
-    exit
-    end;
-// -Make hedgehog yell something-
-if (s[1] = '-') and (s[Length(s)] = '-') then
-    begin
-    if t = -1 then
-        ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
-    else
-        ParseCommand('/hogsay '#3 + char(t) + copy(s, 2, Length(s)-2), true);
-    exit
-    end;
+
 // These 3 are same as above, only are to make the hedgehog say it on next attack
 if (s[1] = '/') and (copy(s, 1, 5) = '/hsa ') then
     begin
     if CurrentTeam^.ExtDriven then
         ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
     else
-        ParseCommand('/hogsay '#4 + copy(s, 6, Length(s)-5), true);
+        SendHogSpeech(#4 + copy(s, 6, Length(s)-5));
     exit
     end;
 if (s[1] = '/') and (copy(s, 1, 5) = '/hta ') then
@@ -233,7 +224,7 @@ if (s[1] = '/') and (copy(s, 1, 5) = '/hta ') then
     if CurrentTeam^.ExtDriven then
         ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
     else
-        ParseCommand('/hogsay '#5 + copy(s, 6, Length(s)-5), true);
+        SendHogSpeech(#5 + copy(s, 6, Length(s)-5));
     exit
     end;
 if (s[1] = '/') and (copy(s, 1, 5) = '/hya ') then
@@ -241,7 +232,7 @@ if (s[1] = '/') and (copy(s, 1, 5) = '/hya ') then
     if CurrentTeam^.ExtDriven then
         ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
     else
-        ParseCommand('/hogsay '#6 + copy(s, 6, Length(s)-5), true);
+        SendHogSpeech(#6 + copy(s, 6, Length(s)-5));
     exit
     end;
 

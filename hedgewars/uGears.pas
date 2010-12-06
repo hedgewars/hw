@@ -1764,8 +1764,6 @@ begin
         exit
         end;
 
-    SendIPC('h' + s);
-
     if (x < 4) and (TeamsArray[t] <> nil) then
         begin
             // if team matches current hedgehog team, default to current hedgehog
