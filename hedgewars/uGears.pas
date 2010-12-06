@@ -1751,9 +1751,13 @@ var Gear: PVisualGear;
 begin
     hh:= nil;
     i:= 0;
+    t:= 0;
     x:= byte(s[1]);  // speech type
-    t:= byte(s[2]);  // team
-    h:= byte(s[3]);  // target hog
+    if x < 4 then
+        begin
+        t:= byte(s[2]);  // team
+        if Length(s) > 2 then h:= byte(s[3])  // target hog
+        end;
     // allow targetting a hog by specifying a number as the first portion of the text
     if (x < 4) and (h > byte('0')) and (h < byte('9')) then i:= h - 48;
     if i <> 0 then text:= copy(s, 4, Length(s) - 1)
