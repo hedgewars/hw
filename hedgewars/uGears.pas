@@ -1764,7 +1764,7 @@ begin
         exit
         end;
 
-    if not CurrentTeam^.ExtDriven then SendIPC('h' + s);
+    SendIPC('h' + s);
 
     if (x < 4) and (TeamsArray[t] <> nil) then
         begin
