@@ -1755,9 +1755,11 @@ begin
     t:= byte(s[2]);  // team
     h:= byte(s[3]);  // target hog
     // allow targetting a hog by specifying a number as the first portion of the text
-    if (h > byte('0')) and (h < byte('9')) then i:= h - 48;
+    if (x < 4) and (h > byte('0')) and (h < byte('9')) then i:= h - 48;
     if i <> 0 then text:= copy(s, 4, Length(s) - 1)
-    else text:= copy(s, 3, Length(s) - 1);
+    else if x < 4 then text:= copy(s, 3, Length(s) - 1)
+    else text:= copy(s, 2, Length(s) - 1);
+
     if CheckNoTeamOrHH then
         begin
         ParseCommand('say ' + text, true);
