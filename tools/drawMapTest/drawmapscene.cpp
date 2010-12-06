@@ -147,7 +147,9 @@ void DrawMapScene::simplifyLast()
     int i = 1;
     while(i < points.size())
     {
-        if(sqr(prevPoint.x() - points[i].x()) + sqr(prevPoint.y() - points[i].y()) < 1000)
+        if( (i != points.size() - 1)
+            && (sqr(prevPoint.x() - points[i].x()) + sqr(prevPoint.y() - points[i].y()) < 1000)
+          )
             points.removeAt(i);
         else
         {
