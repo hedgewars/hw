@@ -15,9 +15,6 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout" rowstretch="3,1">
-    <item row="0" column="2">
-     <widget class="QGraphicsView" name="graphicsView"/>
-    </item>
     <item row="1" column="2">
      <widget class="QPlainTextEdit" name="plainTextEdit"/>
     </item>
@@ -75,10 +72,21 @@
       </item>
      </layout>
     </item>
+    <item row="0" column="2">
+     <widget class="DrawMapWidget" name="drawMapWidget" native="true"/>
+    </item>
    </layout>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>DrawMapWidget</class>
+   <extends>QWidget</extends>
+   <header>drawmapwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

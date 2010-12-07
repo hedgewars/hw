@@ -5,7 +5,11 @@ TARGET = drawMapTest
 TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
-    drawmapscene.cpp
+    drawmapscene.cpp \
+    qaspectratiolayout.cpp \
+    drawmapwidget.cpp
 HEADERS += mainwindow.h \
-    drawmapscene.h
+    drawmapscene.h \
+    qaspectratiolayout.h \
+    drawmapwidget.h
 FORMS += mainwindow.ui
