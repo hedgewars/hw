@@ -248,6 +248,7 @@ else
     end;
 
 perfExt_NewTurnBeginning();
+ScriptCall('onNewTurn');
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;
@@ -291,7 +292,6 @@ with team^.Clan^ do
 
 CurrentTeam:= team;
 AddTeam:= team;
-ScriptCall('onNewTurn');
 end;
 
 procedure RecountAllTeamsHealth;
