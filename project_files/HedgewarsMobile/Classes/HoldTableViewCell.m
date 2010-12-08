@@ -18,8 +18,6 @@
  * File created on 03/07/2010.
  */
 
-//http://devblog.wm-innovations.com/2010/03/30/custom-swipe-uitableviewcell/
-
 
 #import "HoldTableViewCell.h"
 #import "CGPointUtils.h"
@@ -38,17 +36,25 @@
 }
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [self performSelector:@selector(holdAction) withObject:nil afterDelay:0.4];
+    UITouch *touch = [[event allTouches] anyObject];
+    
+    time = touch.timestamp; 
+    [self performSelector:@selector(holdAction) withObject:nil afterDelay:0.25];
 
     [super touchesBegan:touches withEvent:event];
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self
-                                             selector:@selector(holdAction)
-                                               object:nil];
-
-    [super touchesEnded:touches withEvent:event];
+    UITouch *touch = [[event allTouches] anyObject];
+    
+    if ( touch.timestamp - time < 0.25 ) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                                 selector:@selector(holdAction)
+                                                   object:nil];
+        
+        [super touchesEnded:touches withEvent:event];
+    } else
+        [super touchesCancelled:touches withEvent:event];
 }
 
 -(void) holdAction {

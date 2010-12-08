@@ -253,19 +253,7 @@
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
 
-    if (section == 0) {
-        NSMutableDictionary *selectedRow = [self.listOfSelectedTeams objectAtIndex:[indexPath row]];
-        UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
-        SquareButtonView *squareButton = (SquareButtonView *)cell.accessoryView;
-
-        NSInteger increaseNumber = [[selectedRow objectForKey:@"number"] intValue] + 1;
-        NSNumber *newNumber = [NSNumber numberWithInt:[self filterNumberOfHogs:increaseNumber]];
-        [squareButton setTitle:[newNumber stringValue] forState:UIControlStateNormal];
-        [selectedRow setObject:newNumber forKey:@"number"];
-
-        cell.imageView.image = [self drawHogsRepeated:[newNumber intValue]];
-        [cell setNeedsLayout];
-    } else {
+    if (section == 1 && [self.listOfTeams count] > row) {
         [self.listOfSelectedTeams addObject:[self.listOfTeams objectAtIndex:row]];
         [self.listOfTeams removeObjectAtIndex:row];
 
@@ -276,6 +264,18 @@
         [aTableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationRight];
         [aTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
         [aTableView endUpdates];
+    }
+    if (section == 0 && [self.listOfSelectedTeams count] > row) {
+        NSMutableDictionary *selectedRow = [self.listOfSelectedTeams objectAtIndex:row];
+        UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
+        SquareButtonView *squareButton = (SquareButtonView *)cell.accessoryView;
+
+        NSInteger increaseNumber = [[selectedRow objectForKey:@"number"] intValue] + 1;
+        NSNumber *newNumber = [NSNumber numberWithInt:[self filterNumberOfHogs:increaseNumber]];
+        [squareButton setTitle:[newNumber stringValue] forState:UIControlStateNormal];
+        [selectedRow setObject:newNumber forKey:@"number"];
+
+        cell.imageView.image = [self drawHogsRepeated:[newNumber intValue]];
     }
 }
 

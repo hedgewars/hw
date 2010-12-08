@@ -29,6 +29,7 @@
 
 @interface HoldTableViewCell : UITableViewCell {
     id<HoldTableViewCellDelegate> delegate;
+    NSTimeInterval time;
 }
 
 @property (nonatomic,assign) id<HoldTableViewCellDelegate> delegate;
