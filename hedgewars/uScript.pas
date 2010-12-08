@@ -645,6 +645,22 @@ begin
     lc_hogsay:= 0
 end;
 
+function lc_addammo(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to AddAmmo!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Hedgehog <> nil) then
+            AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)));
+        end;
+    lc_addammo:= 0
+end;
+
 function lc_sethealth(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1325,6 +1341,7 @@ lua_register(luaState, 'SetAmmo', @lc_setammo);
 lua_register(luaState, 'PlaySound', @lc_playsound);
 lua_register(luaState, 'AddTeam', @lc_addteam);
 lua_register(luaState, 'AddHog', @lc_addhog);
+lua_register(luaState, 'AddAmmo', @lc_addammo);
 lua_register(luaState, 'SetHealth', @lc_sethealth);
 lua_register(luaState, 'GetHealth', @lc_gethealth);
 lua_register(luaState, 'SetEffect', @lc_seteffect);
