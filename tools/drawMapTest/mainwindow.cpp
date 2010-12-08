@@ -11,7 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     scene = new DrawMapScene(this);
-    ui->graphicsView->setScene(scene);
+    //ui->graphicsView->setScene(scene);
+    ui->drawMapWidget->setScene(scene);
 
     connect(ui->pbUndo, SIGNAL(clicked()), scene, SLOT(undo()));
     connect(scene, SIGNAL(pathChanged()), this, SLOT(scene_pathChanged()));
@@ -34,24 +35,11 @@ void MainWindow::changeEvent(QEvent *e)
     }
 }
 
-void MainWindow::resizeEvent(QResizeEvent * event)
-{
-    Q_UNUSED(event);
-
-    if(ui->graphicsView)
-        ui->graphicsView->fitInView(ui->graphicsView->scene()->sceneRect(), Qt::KeepAspectRatio);
-}
-
 void MainWindow::scene_pathChanged()
 {
     QString str = scene->encode().toBase64();
     ui->plainTextEdit->setPlainText(str);
     ui->sbBytes->setValue(str.size());
-}
-
-void MainWindow::on_pbSimplify_clicked()
-{
-    scene->simplifyLast();
 }
 
 void MainWindow::on_pbSave_clicked()

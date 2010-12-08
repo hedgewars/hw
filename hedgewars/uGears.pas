@@ -285,7 +285,7 @@ case Kind of
                 if cMinesTime < 0 then
                     gear^.Timer:= getrandom(51)*100
                 else
-                    gear^.Timer:= cMinesTime*1000;
+                    gear^.Timer:= cMinesTime;
                 end;
        gtSMine: begin
                 gear^.Health:= 10;

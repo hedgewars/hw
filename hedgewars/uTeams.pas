@@ -36,7 +36,7 @@ function  CheckForWin: boolean;
 procedure TeamGoneEffect(var Team: TTeam);
 
 implementation
-uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug;
+uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug, uScript;
 
 const MaxTeamHealth: LongInt = 0;
 
@@ -248,6 +248,7 @@ else
     end;
 
 perfExt_NewTurnBeginning();
+ScriptCall('onNewTurn');
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;

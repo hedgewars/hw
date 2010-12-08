@@ -179,7 +179,7 @@ QStringList GameCFGWidget::getFullConfig() const
     sl.append(QString("e$turntime %1").arg(schemeData(25).toInt() * 1000));
     sl.append(QString("e$sd_turns %1").arg(schemeData(27).toInt()));
     sl.append(QString("e$casefreq %1").arg(schemeData(28).toInt()));
-    sl.append(QString("e$minestime %1").arg(schemeData(29).toInt()));
+    sl.append(QString("e$minestime %1").arg(schemeData(29).toInt() * 1000));
     sl.append(QString("e$minesnum %1").arg(schemeData(30).toInt()));
     sl.append(QString("e$minedudpct %1").arg(schemeData(31).toInt()));
     sl.append(QString("e$explosives %1").arg(schemeData(32).toInt()));

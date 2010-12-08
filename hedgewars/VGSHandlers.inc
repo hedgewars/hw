@@ -566,7 +566,11 @@ gY:= round(Gear^.Y);
 for i:= 0 to 31 do 
     begin
     vg:= AddVisualGear(gX, gY, vgtFire);
-    if vg <> nil then vg^.State:= 1;
+    if vg <> nil then 
+        begin
+        vg^.State:= gstTmpFlag;
+        inc(vg^.FrameTicks, vg^.FrameTicks)
+        end
     end;
 for i:= 0 to  8 do AddVisualGear(gX, gY, vgtExplPart);
 for i:= 0 to  8 do AddVisualGear(gX, gY, vgtExplPart2);
@@ -604,7 +608,11 @@ AddVisualGear(gX, gY, vgtSmokeRing);
 for i:= 0 to 46 do 
     begin
     vg:= AddVisualGear(gX, gY, vgtFire);
-    if vg <> nil then vg^.State:= 1;
+    if vg <> nil then 
+        begin
+        vg^.State:= gstTmpFlag;
+        inc(vg^.FrameTicks, vg^.FrameTicks)
+        end
     end;
 for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart);
 for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart2);
