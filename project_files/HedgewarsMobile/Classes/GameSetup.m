@@ -195,6 +195,10 @@
     [self sendToEngine:turnTime];
     [turnTime release];
 
+    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$turntime %d",[[basicArray objectAtIndex:2] intValue] * 1000];
+    [self sendToEngine:minesTime];
+    [minesTime release];
+
     for (i = 2; i < [basicArray count]; i++) {
         NSDictionary *basicDict = [mods objectAtIndex:i];
         NSString *command = [basicDict objectForKey:@"command"];

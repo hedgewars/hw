@@ -54,18 +54,13 @@ CGFloat getScreenScale(void) {
 }
 
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint {
-    // create a contex of size of the background image
-    return [self mergeWith:secondImage atPoint:secondImagePoint ofSize:self.size];
-}
-
--(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint ofSize:(CGSize) resultingSize {
     if (secondImage == nil) {
         DLog(@"Warning, secondImage == nil");
         return self;
     }
     CGFloat screenScale = getScreenScale();
-    int w = resultingSize.width * screenScale;
-    int h = resultingSize.height * screenScale;
+    int w = self.size.width * screenScale;
+    int h = self.size.height * screenScale;
     
     if (w == 0 || h == 0) {
         DLog(@"Can have 0 dimesions");
@@ -255,6 +250,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
 +(UIImage *)whiteImage:(CGSize) ofSize {
     CGFloat w = ofSize.width;
     CGFloat h = ofSize.height;
+    DLog(@"w: %f, h: %f", w, h);
 
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);

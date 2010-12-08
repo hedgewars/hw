@@ -20,7 +20,7 @@
 	</dict>
 	<dict>
 		<key>checkOverMax</key>
-		<true/>
+		<false/>
 		<key>command</key>
 		<string>e$turntime</string>
 		<key>default</key>

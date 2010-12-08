@@ -28,7 +28,6 @@ CGFloat getScreenScale(void);
 
 -(UIImage *)scaleToSize:(CGSize) size;
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint;
--(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint ofSize:(CGSize) resultingSize;
 -(id) initWithContentsOfFile:(NSString *)path andCutAt:(CGRect) rect;
 -(UIImage *)cutAt:(CGRect) rect;
 -(UIImage *)convertToGrayScale;
