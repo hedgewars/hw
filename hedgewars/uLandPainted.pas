@@ -23,9 +23,10 @@ unit uLandPainted;
 interface
 
 procedure LoadFromFile(fileName: shortstring);
+procedure initModule;
 
 implementation
-uses uLandGraphics, uConsts, uUtils, SDLh;
+uses uLandGraphics, uConsts, uUtils, SDLh, uCommands;
 
 type PointRec = packed record
     X, Y: SmallInt;
@@ -121,6 +122,15 @@ begin
         end;
 
     closeFile(f);
+end;
+
+procedure chDraw(var s: shortstring);
+begin
+end;
+
+procedure initModule;
+begin
+    RegisterVariable('draw', vtCommand, @chDraw, false);
 end;
 
 end.
