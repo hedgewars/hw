@@ -15,24 +15,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
- * File created on 20/04/2010.
+ * File created on 03/07/2010.
  */
 
 
 #import <UIKit/UIKit.h>
 
+@protocol HoldTableViewCellDelegate <NSObject>
 
-@interface HogButtonView : UIButton {
-    NSInteger numberOfHogs;
-    UIImage *singleHog;
-    NSMutableDictionary *ownerDictionary;
+-(void) holdAction:(NSString *)content;
+
+@end
+
+@interface HoldTableViewCell : UITableViewCell {
+    id<HoldTableViewCellDelegate> delegate;
 }
 
-@property (nonatomic,retain) UIImage *singleHog;
-@property (nonatomic) NSInteger numberOfHogs;
-@property (nonatomic,retain) NSMutableDictionary *ownerDictionary;
+@property (nonatomic,assign) id<HoldTableViewCellDelegate> delegate;
 
--(void) drawManyHogs:(NSInteger) hogs;
--(void) addOne;
+-(void) holdAction;
 
 @end

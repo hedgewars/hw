@@ -139,6 +139,7 @@
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.minimumFontSize = 7;
     cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+    cell.textLabel.backgroundColor = [UIColor clearColor];
 
     if (isRandomness()) {
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),labelString]];
@@ -154,7 +155,7 @@
     } else
         cell.accessoryView = nil;
 
-    cell.backgroundColor = [UIColor blackColor];
+    cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
     return cell;
 }
 

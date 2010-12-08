@@ -35,7 +35,10 @@ CGFloat getScreenScale(void) {
     DLog(@"warning - this is a very expensive operation, you should avoid using it");
 
     // Create a bitmap graphics context; this will also set it as the current context
-    UIGraphicsBeginImageContext(size);
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+        UIGraphicsBeginImageContextWithOptions(size, NO, getScreenScale());
+    else
+        UIGraphicsBeginImageContext(size);
 
     // Draw the scaled image in the current context
     [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
@@ -60,8 +63,9 @@ CGFloat getScreenScale(void) {
         DLog(@"Warning, secondImage == nil");
         return self;
     }
-    int w = resultingSize.width;
-    int h = resultingSize.height;
+    CGFloat screenScale = getScreenScale();
+    int w = resultingSize.width * screenScale;
+    int h = resultingSize.height * screenScale;
     
     if (w == 0 || h == 0) {
         DLog(@"Can have 0 dimesions");
@@ -73,14 +77,18 @@ CGFloat getScreenScale(void) {
     CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
     
     // draw the two images in the current context
-    CGContextDrawImage(context, CGRectMake(0, 0, self.size.width, self.size.height), [self CGImage]);
-    CGContextDrawImage(context, CGRectMake(secondImagePoint.x, secondImagePoint.y, secondImage.size.width, secondImage.size.height), [secondImage CGImage]);
+    CGContextDrawImage(context, CGRectMake(0, 0, self.size.width*screenScale, self.size.height*screenScale), [self CGImage]);
+    CGContextDrawImage(context, CGRectMake(secondImagePoint.x*screenScale, secondImagePoint.y*screenScale, secondImage.size.width*screenScale, secondImage.size.height*screenScale), [secondImage CGImage]);
     
     // Create bitmap image info from pixel data in current context
     CGImageRef imageRef = CGBitmapContextCreateImage(context);
     
     // Create a new UIImage object
-    UIImage *resultImage = [UIImage imageWithCGImage:imageRef];
+    UIImage *resultImage;
+    if ([self respondsToSelector:@selector(imageWithCGImage:scale:orientation:)])
+        resultImage = [UIImage imageWithCGImage:imageRef scale:screenScale orientation:UIImageOrientationUp];
+    else
+        resultImage = [UIImage imageWithCGImage:imageRef];
 
     // Release colorspace, context and bitmap information
     CGColorSpaceRelease(colorSpace);
@@ -200,9 +208,9 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
 -(UIImage *)makeRoundCornersOfSize:(CGSize) sizewh {
     CGFloat cornerWidth = sizewh.width;
     CGFloat cornerHeight = sizewh.height;
-    CGFloat theScale = getScreenScale();
-    CGFloat w = self.size.width * theScale;
-    CGFloat h = self.size.height * theScale;
+    CGFloat screenScale = getScreenScale();
+    CGFloat w = self.size.width * screenScale;
+    CGFloat h = self.size.height * screenScale;
 
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
@@ -221,7 +229,7 @@ void addRoundedRectToPath(CGContextRef context, CGRect rect, CGFloat ovalWidth, 
 
     UIImage *newImage;
     if ([self respondsToSelector:@selector(imageWithCGImage:scale:orientation:)])
-        newImage = [UIImage imageWithCGImage:imageMasked scale:theScale orientation:UIImageOrientationUp];
+        newImage = [UIImage imageWithCGImage:imageMasked scale:screenScale orientation:UIImageOrientationUp];
     else
         newImage = [UIImage imageWithCGImage:imageMasked];
 

@@ -177,7 +177,6 @@
             self.lastIndexPath = indexPath;
             [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
         }
-        [self.navigationController popViewControllerAnimated:YES];
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

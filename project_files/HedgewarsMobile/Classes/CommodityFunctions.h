@@ -25,6 +25,7 @@
 
 #define SETTINGS_FILE()         [DOCUMENTS_FOLDER() stringByAppendingString:@"/settings.plist"]
 #define DEBUG_FILE()            [DOCUMENTS_FOLDER() stringByAppendingString:@"/hw-game.log"]
+#define HEDGEHOG_FILE()         [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/Images/hedgehog.png"]
 
 #define TEAMS_DIRECTORY()       [DOCUMENTS_FOLDER() stringByAppendingString:@"/Teams/"]
 #define WEAPONS_DIRECTORY()     [DOCUMENTS_FOLDER() stringByAppendingString:@"/Weapons/"]
@@ -52,6 +53,7 @@
 #define UICOLOR_HW_YELLOW_TEXT  [UIColor colorWithRed:(CGFloat)0xF0/255 green:(CGFloat)0xD0/255 blue:0 alpha:1]
 #define UICOLOR_HW_DARKBLUE     [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:1]
 #define UICOLOR_HW_ALPHABLUE    [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:0.58f]
+#define UICOLOR_HW_ALMOSTBLACK  (IS_NOT_POWERFUL()) ? [UIColor blackColor] : [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6]
 
 #define IS_DUALHEAD()           ([[UIScreen class] respondsToSelector:@selector(screens)] && [[UIScreen screens] count] > 1)
 #define IS_IPAD()               (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)

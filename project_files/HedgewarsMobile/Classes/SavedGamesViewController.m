@@ -174,7 +174,7 @@
     label.font = [UIFont systemFontOfSize:16];
     label.textColor = [UIColor lightGrayColor];
     label.numberOfLines = 5;
-    label.text = NSLocalizedString(@"Games are automatically saved and can be resumed by selecting an entry above.\nYou can modify this list by pressing the 'Edit' button.\nNotice that completed games are deleted, so make backups.",@"");
+    label.text = NSLocalizedString(@"Games are automatically saved and can be resumed by selecting an entry above.\nYou can modify this list by pressing the 'Edit' button.\nCompleted games are removed at the end of the match.",@"");
 
     label.backgroundColor = [UIColor clearColor];
     [footer addSubview:label];

@@ -21,15 +21,10 @@
 
 #import "TeamConfigViewController.h"
 #import "CommodityFunctions.h"
-#import "HogButtonView.h"
 #import "SquareButtonView.h"
 
 @implementation TeamConfigViewController
 @synthesize listOfTeams, listOfSelectedTeams, cachedContentsOfDir;
-
-#define NUMBERBUTTON_TAG 123456
-#define SQUAREBUTTON_TAG 654321
-#define LABEL_TAG        456123
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -49,9 +44,8 @@
             [self.tableView setBackgroundView:background];
             [background release];
         }
-    } else {
+    } else
         self.view.backgroundColor = [UIColor blackColor];
-    }
 
     self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -79,8 +73,11 @@
         NSMutableArray *emptyArray = [[NSMutableArray alloc] initWithObjects:nil];
         self.listOfSelectedTeams = emptyArray;
         [emptyArray release];
-        
-        cachedContentsOfDir = [[NSArray alloc] initWithArray:contentsOfDir copyItems:YES];
+
+        selectedTeamsCount = [self.listOfSelectedTeams count];
+        allTeamsCount = [self.listOfTeams count];
+
+        self.cachedContentsOfDir = [[NSArray alloc] initWithArray:contentsOfDir copyItems:YES];
     }
     [self.tableView reloadData];
 }
@@ -89,6 +86,49 @@
     return rotationManager(interfaceOrientation);
 }
 
+-(NSInteger) filterNumberOfHogs:(NSInteger) hogs {
+    NSInteger numberOfHogs;
+    if (hogs <= HW_getMaxNumberOfHogs() && hogs >= 1)
+        numberOfHogs = hogs;
+    else {
+        if (hogs > HW_getMaxNumberOfHogs())
+            numberOfHogs = 1;
+        else
+            numberOfHogs = HW_getMaxNumberOfHogs();
+    }
+    return numberOfHogs;
+}
+
+-(UIImage *)drawHogsRepeated:(NSInteger) manyTimes {
+    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:HEDGEHOG_FILE()];
+    CGFloat screenScale = getScreenScale();
+    int w = hogSprite.size.width * screenScale;
+    int h = hogSprite.size.height * screenScale;
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(NULL, w * 3, h, 8, 4 * w * 3, colorSpace, kCGImageAlphaPremultipliedFirst);
+    
+    // draw the two images in the current context
+    for (int i = 0; i < manyTimes; i++)
+        CGContextDrawImage(context, CGRectMake(i*8*screenScale, 0, w, h), [hogSprite CGImage]);
+    [hogSprite release];
+    
+    // Create bitmap image info from pixel data in current context
+    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    
+    // Create a new UIImage object
+    UIImage *resultImage;
+    if ([self respondsToSelector:@selector(imageWithCGImage:scale:orientation:)])
+        resultImage = [UIImage imageWithCGImage:imageRef scale:screenScale orientation:UIImageOrientationUp];
+    else
+        resultImage = [UIImage imageWithCGImage:imageRef];
+    
+    // Release colorspace, context and bitmap information
+    CGColorSpaceRelease(colorSpace);
+    CGContextRelease(context);
+    CFRelease(imageRef);
+
+    return resultImage;
+}
 
 #pragma mark -
 #pragma mark Table view data source
@@ -98,9 +138,9 @@
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
-        return [listOfSelectedTeams count] ;
+        return selectedTeamsCount;
     else
-        return [listOfTeams count];
+        return allTeamsCount;
 }
 
 // Customize the appearance of table view cells.
@@ -113,52 +153,36 @@
     if (section == 0) {
         cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
+            cell = [[[HoldTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
 
-            UIButton *numberButton = [[HogButtonView alloc] initWithFrame:CGRectMake(12, 5, 88, 32)];
-            numberButton.tag = NUMBERBUTTON_TAG;
-            [cell addSubview:numberButton];
-            [numberButton release];
-
-            SquareButtonView *squareButton = [[SquareButtonView alloc] initWithFrame:CGRectMake(12+88+6, 5, 36, 36)];
-            squareButton.tag = SQUAREBUTTON_TAG;
-            [cell addSubview:squareButton];
+            SquareButtonView *squareButton = [[SquareButtonView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
+            cell.accessoryView = squareButton;
             [squareButton release];
-
-            NSInteger length;
-            if (IS_IPAD())
-                length = 103;
-            else
-                length = 285;
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12+88+6+36, 10, length, 25)];
-            label.textAlignment = UITextAlignmentLeft;
-            label.minimumFontSize = 11;
-            label.adjustsFontSizeToFitWidth = YES;
-            label.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-            label.backgroundColor = [UIColor clearColor];
-            label.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
-            label.textColor = UICOLOR_HW_YELLOW_TEXT;
-            label.tag = LABEL_TAG;
-            [cell.contentView addSubview:label];
-            [label release];
         }
 
         NSMutableDictionary *selectedRow = [listOfSelectedTeams objectAtIndex:[indexPath row]];
+        cell.textLabel.text = [[selectedRow objectForKey:@"team"] stringByDeletingPathExtension];
+        cell.textLabel.backgroundColor = [UIColor clearColor];
 
-        UILabel *cellLabel = (UILabel *)[cell viewWithTag:LABEL_TAG];
-        cellLabel.text = [[selectedRow objectForKey:@"team"] stringByDeletingPathExtension];
-
-        HogButtonView *numberButton = (HogButtonView *)[cell viewWithTag:NUMBERBUTTON_TAG];
-        [numberButton drawManyHogs:[[selectedRow objectForKey:@"number"] intValue]];
-        numberButton.ownerDictionary = selectedRow;
-
-        SquareButtonView *squareButton = (SquareButtonView *)[cell viewWithTag:SQUAREBUTTON_TAG];
+        SquareButtonView *squareButton = (SquareButtonView *)cell.accessoryView;
         [squareButton selectColor:[[selectedRow objectForKey:@"color"] intValue]];
+        NSNumber *hogNumber = [selectedRow objectForKey:@"number"];
+        [squareButton setTitle:[hogNumber stringValue] forState:UIControlStateNormal];
         squareButton.ownerDictionary = selectedRow;
+
+        cell.imageView.image = [self drawHogsRepeated:[hogNumber intValue]];
+        ((HoldTableViewCell *)cell).delegate = self;
+    } else {
+        cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
+        if (cell == nil)
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
+
+        cell.textLabel.text = [[[listOfTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
+        cell.textLabel.backgroundColor = [UIColor clearColor];
         
-        NSString *teamPath = [NSString stringWithFormat:@"%@/%@",TEAMS_DIRECTORY(),[selectedRow objectForKey:@"team"]];
+        NSString *teamPath = [NSString stringWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),cell.textLabel.text];
         NSDictionary *firstHog = [[[NSDictionary dictionaryWithContentsOfFile:teamPath] objectForKey:@"hedgehogs"] objectAtIndex:0];
-        if ([[firstHog objectForKey:@"level"] intValue]> 0) {
+        if ([[firstHog objectForKey:@"level"] intValue] != 0) {
             NSString *filePath = [NSString stringWithFormat:@"%@/cyborg.png",HATS_DIRECTORY()];
             UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath andCutAt:CGRectMake(0, 2, 32, 32)];
             UIImageView *spriteView = [[UIImageView alloc] initWithImage:sprite];
@@ -168,18 +192,12 @@
             [spriteView release];
         } else
             cell.accessoryView = nil;
-    } else {
-        cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
-        if (cell == nil)
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
-
-        cell.textLabel.text = [[[listOfTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
-        cell.accessoryView = nil;
     }
-    
+
     cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
-    cell.backgroundColor = [UIColor blackColor];
-    
+    cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     return cell;
 }
 
@@ -190,7 +208,7 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
     NSString *text;
-    if (section == 0) 
+    if (section == 0)
         text = NSLocalizedString(@"Playing Teams",@"");
     else
         text = NSLocalizedString(@"Available Teams",@"");
@@ -203,6 +221,32 @@
     return theView;
 }
 
+-(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 20;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
+    footer.backgroundColor = [UIColor clearColor];
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width*80/100, 20)];
+    label.center = CGPointMake(self.tableView.frame.size.width/2, 20/2);
+    label.textAlignment = UITextAlignmentCenter;
+    label.font = [UIFont italicSystemFontOfSize:12];
+    label.textColor = [UIColor whiteColor];
+    label.numberOfLines = 1;
+    if (section == 0)
+        label.text = NSLocalizedString(@"Tap to add hogs or change color, hold tap to remove team.",@"");
+    else
+        label.text = NSLocalizedString(@"The robot badge indicates an AI-controlled team.",@"");
+
+    label.backgroundColor = [UIColor clearColor];
+    [footer addSubview:label];
+    [label release];
+    return [footer autorelease];
+}
+
+
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -210,15 +254,49 @@
     NSInteger section = [indexPath section];
 
     if (section == 0) {
-        [self.listOfTeams addObject:[self.listOfSelectedTeams objectAtIndex:row]];
-        [self.listOfSelectedTeams removeObjectAtIndex:row];
+        NSMutableDictionary *selectedRow = [self.listOfSelectedTeams objectAtIndex:[indexPath row]];
+        UITableViewCell *cell = [aTableView cellForRowAtIndexPath:indexPath];
+        SquareButtonView *squareButton = (SquareButtonView *)cell.accessoryView;
+
+        NSInteger increaseNumber = [[selectedRow objectForKey:@"number"] intValue] + 1;
+        NSNumber *newNumber = [NSNumber numberWithInt:[self filterNumberOfHogs:increaseNumber]];
+        [squareButton setTitle:[newNumber stringValue] forState:UIControlStateNormal];
+        [selectedRow setObject:newNumber forKey:@"number"];
+
+        cell.imageView.image = [self drawHogsRepeated:[newNumber intValue]];
+        [cell setNeedsLayout];
     } else {
         [self.listOfSelectedTeams addObject:[self.listOfTeams objectAtIndex:row]];
         [self.listOfTeams removeObjectAtIndex:row];
+
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:selectedTeamsCount inSection:0];
+        allTeamsCount--;
+        selectedTeamsCount++;
+        [aTableView beginUpdates];
+        [aTableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationRight];
+        [aTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
+        [aTableView endUpdates];
     }
-    [aTableView reloadData];
 }
 
+-(void) holdAction:(NSString *)content {
+    NSInteger row;
+    for (row = 0; row < [self.listOfSelectedTeams count]; row++) {
+        NSDictionary *dict = [self.listOfSelectedTeams objectAtIndex:row];
+        if ([content isEqualToString:[[dict objectForKey:@"team"] stringByDeletingPathExtension]])
+            break;
+    }
+
+    [self.listOfTeams addObject:[self.listOfSelectedTeams objectAtIndex:row]];
+    [self.listOfSelectedTeams removeObjectAtIndex:row];
+
+    [self.tableView beginUpdates];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:allTeamsCount inSection:1]] withRowAnimation:UITableViewRowAnimationLeft];
+    allTeamsCount++;
+    selectedTeamsCount--;
+    [self.tableView endUpdates];
+}
 
 #pragma mark -
 #pragma mark Memory management

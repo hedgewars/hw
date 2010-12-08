@@ -146,7 +146,7 @@
         cell.accessoryView = self.syncSwitch;
     }
 
-    cell.backgroundColor = [UIColor blackColor];
+    cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
     cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
     cell.detailTextLabel.textColor = [UIColor whiteColor];
     return cell;

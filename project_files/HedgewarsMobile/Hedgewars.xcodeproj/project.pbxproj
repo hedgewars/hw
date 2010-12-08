@@ -107,7 +107,6 @@
 		6165922211CA9BA200D6E256 /* WeaponSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920B11CA9BA200D6E256 /* WeaponSettingsViewController.m */; };
 		6165922E11CA9BD500D6E256 /* CGPointUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 6165922311CA9BD500D6E256 /* CGPointUtils.c */; };
 		6165922F11CA9BD500D6E256 /* CommodityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922611CA9BD500D6E256 /* CommodityFunctions.m */; };
-		6165923011CA9BD500D6E256 /* HogButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922811CA9BD500D6E256 /* HogButtonView.m */; };
 		6165923111CA9BD500D6E256 /* SquareButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922B11CA9BD500D6E256 /* SquareButtonView.m */; };
 		6165923211CA9BD500D6E256 /* UIImageExtra.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922D11CA9BD500D6E256 /* UIImageExtra.m */; };
 		6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */; };
@@ -205,6 +204,7 @@
 		61F2E7CE1205EDE0005734F7 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F2E7CC1205EDE0005734F7 /* AboutViewController.m */; };
 		61F2E7CF1205EDE0005734F7 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */; };
 		61F2E7EC12060E31005734F7 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F2E7EB12060E31005734F7 /* checkbox.png */; };
+		61F544C712AF1748007FD913 /* HoldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F544C612AF1748007FD913 /* HoldTableViewCell.m */; };
 		61F7A43811E290650040BA66 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43111E290650040BA66 /* Icon-72.png */; };
 		61F7A43911E290650040BA66 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43211E290650040BA66 /* Icon-Small-50.png */; };
 		61F7A43A11E290650040BA66 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43311E290650040BA66 /* Icon-Small.png */; };
@@ -863,8 +863,6 @@
 		6165922411CA9BD500D6E256 /* CGPointUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGPointUtils.h; path = Classes/CGPointUtils.h; sourceTree = "<group>"; };
 		6165922511CA9BD500D6E256 /* CommodityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommodityFunctions.h; path = Classes/CommodityFunctions.h; sourceTree = "<group>"; };
 		6165922611CA9BD500D6E256 /* CommodityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommodityFunctions.m; path = Classes/CommodityFunctions.m; sourceTree = "<group>"; };
-		6165922711CA9BD500D6E256 /* HogButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HogButtonView.h; path = Classes/HogButtonView.h; sourceTree = "<group>"; };
-		6165922811CA9BD500D6E256 /* HogButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HogButtonView.m; path = Classes/HogButtonView.m; sourceTree = "<group>"; };
 		6165922911CA9BD500D6E256 /* PascalImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PascalImports.h; path = Classes/PascalImports.h; sourceTree = "<group>"; };
 		6165922A11CA9BD500D6E256 /* SquareButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SquareButtonView.h; path = Classes/SquareButtonView.h; sourceTree = "<group>"; };
 		6165922B11CA9BD500D6E256 /* SquareButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SquareButtonView.m; path = Classes/SquareButtonView.m; sourceTree = "<group>"; };
@@ -960,8 +958,8 @@
 		61A4A39212A5CCC2004D81E6 /* uUtils.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uUtils.pas; path = ../../hedgewars/uUtils.pas; sourceTree = SOURCE_ROOT; };
 		61A4A39312A5CCC2004D81E6 /* uVariables.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVariables.pas; path = ../../hedgewars/uVariables.pas; sourceTree = SOURCE_ROOT; };
 		61A4A3A112A5CD56004D81E6 /* uCaptions.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCaptions.pas; path = ../../hedgewars/uCaptions.pas; sourceTree = SOURCE_ROOT; };
-		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableCellView.h; sourceTree = "<group>"; };
-		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableCellView.m; sourceTree = "<group>"; };
+		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditableCellView.h; path = Classes/EditableCellView.h; sourceTree = "<group>"; };
+		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditableCellView.m; path = Classes/EditableCellView.m; sourceTree = "<group>"; };
 		61D2059F127CDD1100ABD83E /* ObjcExports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjcExports.h; path = Classes/ObjcExports.h; sourceTree = "<group>"; };
 		61D205A0127CDD1100ABD83E /* ObjcExports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObjcExports.m; path = Classes/ObjcExports.m; sourceTree = "<group>"; };
 		61D3D2A41290E03A003CE7C3 /* irc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = irc.png; path = Resources/Icons/irc.png; sourceTree = "<group>"; };
@@ -985,6 +983,8 @@
 		61F2E7CC1205EDE0005734F7 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AboutViewController.xib; path = ../Resources/AboutViewController.xib; sourceTree = "<group>"; };
 		61F2E7EB12060E31005734F7 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkbox.png; path = Resources/Icons/checkbox.png; sourceTree = "<group>"; };
+		61F544C512AF1748007FD913 /* HoldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HoldTableViewCell.h; path = Classes/HoldTableViewCell.h; sourceTree = "<group>"; };
+		61F544C612AF1748007FD913 /* HoldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HoldTableViewCell.m; path = Classes/HoldTableViewCell.m; sourceTree = "<group>"; };
 		61F7A43111E290650040BA66 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Resources/Icons/Icon-72.png"; sourceTree = "<group>"; };
 		61F7A43211E290650040BA66 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small-50.png"; path = "Resources/Icons/Icon-Small-50.png"; sourceTree = "<group>"; };
 		61F7A43311E290650040BA66 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "Resources/Icons/Icon-Small.png"; sourceTree = "<group>"; };
@@ -995,8 +995,8 @@
 		61F9040811DF58B00068B24D /* settingsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settingsButton.png; path = Resources/Frontend/settingsButton.png; sourceTree = "<group>"; };
 		61F9040A11DF59370068B24D /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = Resources/Frontend/background.png; sourceTree = "<group>"; };
 		61F9040D11DF59D10068B24D /* netplayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = netplayButton.png; path = Resources/Frontend/netplayButton.png; sourceTree = "<group>"; };
-		61F904D511DF7DA30068B24D /* WeaponCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeaponCellView.h; sourceTree = "<group>"; };
-		61F904D611DF7DA30068B24D /* WeaponCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeaponCellView.m; sourceTree = "<group>"; };
+		61F904D511DF7DA30068B24D /* WeaponCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeaponCellView.h; path = Classes/WeaponCellView.h; sourceTree = "<group>"; };
+		61F904D611DF7DA30068B24D /* WeaponCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeaponCellView.m; path = Classes/WeaponCellView.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -1076,7 +1076,7 @@
 			children = (
 				6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */,
 				6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */,
-				61DE91561258B76800B80214 /* Custom Buttons */,
+				61DE91561258B76800B80214 /* Custom UIs */,
 				32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */,
 				6165922911CA9BD500D6E256 /* PascalImports.h */,
 				61D2059F127CDD1100ABD83E /* ObjcExports.h */,
@@ -1299,10 +1299,6 @@
 				6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */,
 				616591FE11CA9BA200D6E256 /* SingleSchemeViewController.h */,
 				616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */,
-				61C079E211F35A300072BF46 /* EditableCellView.h */,
-				61C079E311F35A300072BF46 /* EditableCellView.m */,
-				61F904D511DF7DA30068B24D /* WeaponCellView.h */,
-				61F904D611DF7DA30068B24D /* WeaponCellView.m */,
 			);
 			name = "Second Level";
 			sourceTree = "<group>";
@@ -1426,17 +1422,21 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		61DE91561258B76800B80214 /* Custom Buttons */ = {
+		61DE91561258B76800B80214 /* Custom UIs */ = {
 			isa = PBXGroup;
 			children = (
-				6165922711CA9BD500D6E256 /* HogButtonView.h */,
-				6165922811CA9BD500D6E256 /* HogButtonView.m */,
-				6165922A11CA9BD500D6E256 /* SquareButtonView.h */,
-				6165922B11CA9BD500D6E256 /* SquareButtonView.m */,
 				619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */,
 				619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */,
+				61F544C512AF1748007FD913 /* HoldTableViewCell.h */,
+				61F544C612AF1748007FD913 /* HoldTableViewCell.m */,
+				6165922A11CA9BD500D6E256 /* SquareButtonView.h */,
+				6165922B11CA9BD500D6E256 /* SquareButtonView.m */,
+				61C079E211F35A300072BF46 /* EditableCellView.h */,
+				61C079E311F35A300072BF46 /* EditableCellView.m */,
+				61F904D511DF7DA30068B24D /* WeaponCellView.h */,
+				61F904D611DF7DA30068B24D /* WeaponCellView.m */,
 			);
-			name = "Custom Buttons";
+			name = "Custom UIs";
 			sourceTree = "<group>";
 		};
 		61F7A42811E2905C0040BA66 /* Icons */ = {
@@ -2380,7 +2380,6 @@
 				6165922211CA9BA200D6E256 /* WeaponSettingsViewController.m in Sources */,
 				6165922E11CA9BD500D6E256 /* CGPointUtils.c in Sources */,
 				6165922F11CA9BD500D6E256 /* CommodityFunctions.m in Sources */,
-				6165923011CA9BD500D6E256 /* HogButtonView.m in Sources */,
 				6165923111CA9BD500D6E256 /* SquareButtonView.m in Sources */,
 				6165923211CA9BD500D6E256 /* UIImageExtra.m in Sources */,
 				6165929E11CA9E2F00D6E256 /* SDL_uikitappdelegate.m in Sources */,
@@ -2412,6 +2411,7 @@
 				61A4A39E12A5CCC2004D81E6 /* uVariables.pas in Sources */,
 				61A4A3A212A5CD56004D81E6 /* uCaptions.pas in Sources */,
 				61E5D68D12AB006F00566F29 /* uLandPainted.pas in Sources */,
+				61F544C712AF1748007FD913 /* HoldTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
