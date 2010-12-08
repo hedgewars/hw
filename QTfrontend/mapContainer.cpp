@@ -70,6 +70,10 @@ QComboBox::tr("generated map..."));
 // FIXME - need real icons. Disabling until then
 //QIcon(":/res/mapMaze.png"), 
 QComboBox::tr("generated maze..."));
+
+    chooseMap->addItem(QComboBox::tr("hand drawn map..."));
+    chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
+
     chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
 
     int missionindex = chooseMap->count();
@@ -252,6 +256,18 @@ void HWMapContainer::mapChanged(int index)
         emit mapgenChanged(mapgen);
         emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
         break;
+    case MAPGEN_DRAWN:
+        mapgen = MAPGEN_DRAWN;
+        changeImage();
+        gbThemes->show();
+        lblFilter->hide();
+        CB_TemplateFilter->hide();
+        maze_size_label->hide();
+        maze_size_selection->hide();
+        emit mapChanged("+drawn+");
+        emit mapgenChanged(mapgen);
+        emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
+        break;
     default:
         loadMap(index);
         gbThemes->hide();
@@ -314,18 +330,16 @@ void HWMapContainer::changeImage()
 void HWMapContainer::themeSelected(int currentRow)
 {
     QString theme = Themes->at(currentRow);
-    QList<QVariant> mapInfoRegular;
-    mapInfoRegular.push_back(QString("+rnd+"));
-    mapInfoRegular.push_back(theme);
-    mapInfoRegular.push_back(18);
-    mapInfoRegular.push_back(false);
-    chooseMap->setItemData(0, mapInfoRegular);
-    QList<QVariant> mapInfoMaze;
-    mapInfoMaze.push_back(QString("+maze+"));
-    mapInfoMaze.push_back(theme);
-    mapInfoMaze.push_back(18);
-    mapInfoMaze.push_back(false);
-    chooseMap->setItemData(1, mapInfoMaze);
+    QList<QVariant> mapInfo;
+    mapInfo.push_back(QString("+rnd+"));
+    mapInfo.push_back(theme);
+    mapInfo.push_back(18);
+    mapInfo.push_back(false);
+    chooseMap->setItemData(0, mapInfo);
+    mapInfo[0] = QString("+maze+");
+    chooseMap->setItemData(1, mapInfo);
+    mapInfo[0] = QString("+drawn+");
+    chooseMap->setItemData(2, mapInfo);
     gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(theme)));
     emit themeChanged(theme);
 }
@@ -376,7 +390,7 @@ void HWMapContainer::setSeed(const QString & seed)
 
 void HWMapContainer::setMap(const QString & map)
 {
-    if(map == "+rnd+" || map == "+maze+")
+    if(map == "+rnd+" || map == "+maze+" || map == "+drawn+")
     {
         changeImage();
         return;
@@ -416,10 +430,11 @@ void HWMapContainer::setRandomMap()
     {
     case MAPGEN_REGULAR:
     case MAPGEN_MAZE:
+    case MAPGEN_DRAWN:
         setRandomTheme();
         break;
     default:
-        if(chooseMap->currentIndex() < numMissions + 3)
+        if(chooseMap->currentIndex() < numMissions + 4)
             setRandomMission();
         else
             setRandomStatic();

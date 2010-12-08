@@ -31,6 +31,7 @@ enum MapGenerator
 {
     MAPGEN_REGULAR,
     MAPGEN_MAZE,
+    MAPGEN_DRAWN,
     MAPGEN_LAST
 };
 
