@@ -173,6 +173,8 @@ quint32 GameCFGWidget::getInitHealth() const
 QStringList GameCFGWidget::getFullConfig() const
 {
     QStringList sl;
+    int mapgen = pMapContainer->get_mapgen();
+    
     sl.append("eseed " + pMapContainer->getCurrentSeed());
     sl.append(QString("e$gmflags %1").arg(getGameFlags()));
     sl.append(QString("e$damagepct %1").arg(schemeData(24).toInt()));
@@ -189,8 +191,26 @@ QStringList GameCFGWidget::getFullConfig() const
     sl.append(QString("e$healthdec %1").arg(schemeData(36).toInt()));
     sl.append(QString("e$ropepct %1").arg(schemeData(37).toInt()));
     sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
-    sl.append(QString("e$mapgen %1").arg(pMapContainer->get_mapgen()));
-    sl.append(QString("e$maze_size %1").arg(pMapContainer->get_maze_size()));
+    sl.append(QString("e$mapgen %1").arg(mapgen));
+
+    switch (mapgen)
+    {
+        case MAPGEN_MAZE:
+            sl.append(QString("e$maze_size %1").arg(pMapContainer->get_maze_size()));
+
+        case MAPGEN_DRAWN:
+        {
+            QByteArray data = pMapContainer->getDrawnMapData();
+            while(data.size() > 0)
+            {
+                QByteArray tmp = data;
+                tmp.truncate(230);
+                sl << QString("edraw %1").arg(QString(tmp));
+                data.remove(0, 230);
+            }
+        }
+        default: ;
+    }
 
     QString currentMap = pMapContainer->getCurrentMap();
     if (currentMap.size() > 0)

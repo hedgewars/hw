@@ -23,6 +23,7 @@
 #include <QGridLayout>
 #include <QComboBox>
 #include <QLabel>
+#include <QByteArray>
 
 #include "hwmap.h"
 
@@ -48,6 +49,7 @@ class HWMapContainer : public QWidget
   MapGenerator get_mapgen(void) const;
   int get_maze_size(void) const;
   bool getCurrentIsMission() const;
+  QByteArray getDrawnMapData();
 
  public slots:
   void changeImage();
@@ -98,6 +100,7 @@ class HWMapContainer : public QWidget
   QLabel *maze_size_label;
   QComboBox *maze_size_selection;
   MapGenerator mapgen;
+  QByteArray drawnMapData;
   int numMissions;
   int maze_size;
 

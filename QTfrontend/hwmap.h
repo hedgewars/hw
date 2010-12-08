@@ -42,7 +42,7 @@ class HWMap : public TCPBase
  public:
   HWMap();
   virtual ~HWMap();
-  void getImage(std::string seed, int templateFilter, MapGenerator mapgen, int maze_size);
+  void getImage(std::string seed, int templateFilter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData);
 
  protected:
   virtual QStringList setArguments();
@@ -58,6 +58,7 @@ class HWMap : public TCPBase
   int templateFilter;
   MapGenerator m_mapgen;
   int m_maze_size;
+  QByteArray m_drawMapData;
 
  private slots:
 };

@@ -27,12 +27,13 @@ HWMap::~HWMap()
 {
 }
 
-void HWMap::getImage(std::string seed, int filter, MapGenerator mapgen, int maze_size)
+void HWMap::getImage(std::string seed, int filter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData)
 {
     m_seed = seed;
     templateFilter = filter;
     m_mapgen = mapgen;
     m_maze_size = maze_size;
+    m_drawMapData = drawMapData;
     Start();
 }
 
@@ -62,6 +63,25 @@ void HWMap::SendToClientFirst()
     SendIPC(QString("eseed %1").arg(m_seed.c_str()).toLatin1());
     SendIPC(QString("e$template_filter %1").arg(templateFilter).toLatin1());
     SendIPC(QString("e$mapgen %1").arg(m_mapgen).toLatin1());
-    SendIPC(QString("e$maze_size %1").arg(m_maze_size).toLatin1());
+
+    switch (m_mapgen)
+    {
+        case MAPGEN_MAZE:
+            SendIPC(QString("e$maze_size %1").arg(m_maze_size).toLatin1());
+
+        case MAPGEN_DRAWN:
+        {
+            QByteArray data = m_drawMapData;
+            while(data.size() > 0)
+            {
+                QByteArray tmp = data;
+                tmp.truncate(230);
+                SendIPC("edraw " + tmp);
+                data.remove(0, 230);
+            }
+        }
+        default: ;
+    }
+
     SendIPC("!");
 }
