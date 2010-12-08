@@ -83,6 +83,39 @@ end;
 // where L contains the state, returns the number of return values on the stack
 // call lua_gettop(L) to receive number of parameters passed
 
+function lc_band(L: PLua_State): LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 2 then 
+        begin
+        LuaError('Lua: Wrong number of parameters passed to band!');
+        lua_pushnil(L);
+        end
+    else lua_pushinteger(L, lua_tointeger(L, 2) and lua_tointeger(L, 1));
+    lc_band := 1;
+end;
+
+function lc_bor(L: PLua_State): LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 2 then 
+        begin
+        LuaError('Lua: Wrong number of parameters passed to bor!');
+        lua_pushnil(L);
+        end
+    else lua_pushinteger(L, lua_tointeger(L, 2) or lua_tointeger(L, 1));
+    lc_bor := 1;
+end;
+
+function lc_bnot(L: PLua_State): LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then 
+        begin
+        LuaError('Lua: Wrong number of parameters passed to bnot!');
+        lua_pushnil(L);
+        end
+    else lua_pushinteger(L, not lua_tointeger(L, 1));
+    lc_bnot := 1;
+end;
+
 function lc_writelntoconsole(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 1 then
@@ -1318,6 +1351,9 @@ for he:= Low(THogEffect) to High(THogEffect) do
     ScriptSetInteger(EnumToStr(he), ord(he));
 
 // register functions
+lua_register(luaState, 'band', @lc_band);
+lua_register(luaState, 'bor', @lc_bor);
+lua_register(luaState, 'bnot', @lc_bnot);
 lua_register(luaState, 'AddGear', @lc_addgear);
 lua_register(luaState, 'DeleteGear', @lc_deletegear);
 lua_register(luaState, 'AddVisualGear', @lc_addvisualgear);
