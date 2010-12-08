@@ -688,7 +688,7 @@ while t <> nil do
             end;
         Gear^.doStep(Gear);
         // might be useful later
-        //ScriptCall('OnGearStep', Gear^.uid);
+        //ScriptCall('onGearStep', Gear^.uid);
         end
     end;
 
@@ -972,7 +972,7 @@ begin
         end;
     end;
     inc(Gear^.Damage, Damage);
-    ScriptCall('OnGearDamage', Gear^.UID, Damage);
+    ScriptCall('onGearDamage', Gear^.UID, Damage);
 end;
 
 procedure SetAllToActive;
