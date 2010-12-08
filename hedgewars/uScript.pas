@@ -199,7 +199,7 @@ begin
     else begin
         gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
             HealthCrate, 0);
-        lua_pushnumber(L, gear^.uid);
+        lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnhealthcrate := 1;        
 end;
@@ -214,7 +214,7 @@ begin
     else begin
         gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
             AmmoCrate, lua_tointeger(L, 3));
-        lua_pushnumber(L, gear^.uid);
+        lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnammocrate := 1;
 end;
@@ -229,7 +229,7 @@ begin
     else begin  
         gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
             UtilityCrate, lua_tointeger(L, 3));
-        lua_pushnumber(L, gear^.uid);
+        lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnutilitycrate := 1;
 end;
@@ -256,7 +256,7 @@ begin
         t:= lua_tointeger(L, 7);
 
         gear:= AddGear(x, y, gt, s, dx, dy, t);
-        lua_pushnumber(L, gear^.uid)
+        lua_pushinteger(L, gear^.uid)
         end;
     lc_addgear:= 1; // 1 return value
 end;
@@ -296,8 +296,8 @@ begin
         c:= lua_toboolean(L, 5);
 
         vg:= AddVisualGear(x, y, vgt, s, c); 
-        if vg <> nil then lua_pushnumber(L, vg^.uid)
-        else lua_pushnumber(L, 0)
+        if vg <> nil then lua_pushinteger(L, vg^.uid)
+        else lua_pushinteger(L, 0)
         end;
     lc_addvisualgear:= 1; // 1 return value
 end;
@@ -385,7 +385,7 @@ begin
         if FollowGear = nil then
             lua_pushnil(L)
         else
-            lua_pushnumber(L, FollowGear^.uid);
+            lua_pushinteger(L, FollowGear^.uid);
     lc_getfollowgear:= 1; // 1 return value
 end;
 
@@ -531,7 +531,7 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            lua_pushnumber(L, gear^.Timer)
+            lua_pushinteger(L, gear^.Timer)
         else
             lua_pushnil(L);
         end;
@@ -550,7 +550,7 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            lua_pushnumber(L, gear^.Health)
+            lua_pushinteger(L, gear^.Health)
         else
             lua_pushnil(L);
         end;
@@ -569,7 +569,7 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            lua_pushnumber(L, hwRound(gear^.X))
+            lua_pushinteger(L, hwRound(gear^.X))
         else
             lua_pushnil(L);
         end;
@@ -588,7 +588,7 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            lua_pushnumber(L, hwRound(gear^.Y))
+            lua_pushinteger(L, hwRound(gear^.Y))
         else
             lua_pushnil(L);
         end;
