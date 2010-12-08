@@ -174,7 +174,7 @@ function onGameInit()
 	AddTeam(loc(teamname), 14483456, "Simple", "Island", "Default")
 	-- And add a hog to it
 	player = AddHog(loc(hogname), 0, 1, "NoHat")
-	SetGearPosition(player, 1960, 1160);
+	SetGearPosition(player, 1960, 1160)
 end
 
 -- This function is called when the round starts
@@ -190,7 +190,7 @@ function onGameStart()
 	-- A negative icon parameter (-n) represents the n-th weapon icon
 	-- A positive icon paramter (n) represents the (n+1)-th mission icon
 	-- A timeframe of 0 is replaced with the default time to show.
-	ShowMission(loc(caption), loc(subcaption), loc(goal), -amBazooka, 0);
+	ShowMission(loc(caption), loc(subcaption), loc(goal), -amBazooka, 0)
 end
 
 -- This function is called every game tick.
@@ -204,9 +204,9 @@ function onGameTick()
 	if TurnTimeLeft == 1 and score < score_goal then
 		game_lost = true
 		-- ... and show a short message.
-		ShowMission(loc(caption), loc(subcaption), loc(timeout), -amSkip, 0);
+		ShowMission(loc(caption), loc(subcaption), loc(timeout), -amSkip, 0)
 		-- How about killing our poor hog due to his poor performance?
-		SetHealth(player, 0);
+		SetHealth(player, 0)
 		-- Just to be sure set the goal time to 1 ms
 		time_goal = 1
 	end
@@ -253,7 +253,7 @@ function onGearDelete(gear)
 		else
 			if not game_lost then
 			-- Otherwise show that the goal was accomplished
-			ShowMission(loc(caption), loc(subcaption), loc(success), 0, 0);
+			ShowMission(loc(caption), loc(subcaption), loc(success), 0, 0)
 			-- Also let the hogs shout "victory!"
 			PlaySound(sndVictory)
 			-- Save the time left so we may keep it.

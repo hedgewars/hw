@@ -111,7 +111,7 @@ function onGameInit()
 end
 
 function onGameStart()
-	ShowMission(loc(caption), loc(subcaption), loc(goal), -amBaseballBat, 0);
+	ShowMission(loc(caption), loc(subcaption), loc(goal), -amBaseballBat, 0)
 	started = true
 end
 
