@@ -549,6 +549,19 @@ begin
         end;
 end;
 
+procedure GenDrawnMap;
+begin
+    uLandPainted.Draw;
+
+    MaxHedgehogs:= 18;
+    hasGirders:= true;
+    playHeight:= 2048;
+    playWidth:= 4096;
+    leftX:= ((LAND_WIDTH - playWidth) div 2);
+    rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
+    topY:= LAND_HEIGHT - playHeight;
+end;
+
 function SelectTemplate: LongInt;
 begin
     if (cReducedQuality and rqLowRes) <> 0 then
@@ -1031,6 +1044,7 @@ begin
     case cMapGen of
         0: GenBlank(EdgeTemplates[SelectTemplate]);
         1: GenMaze;
+        2: GenDrawnMap;
     end;
     AddProgress();
 
@@ -1271,6 +1285,7 @@ begin
     case cMapGen of
         0: GenBlank(EdgeTemplates[SelectTemplate]);
         1: GenMaze;
+        2: GenDrawnMap;
     end;
 
     lh:= LAND_HEIGHT div 128;

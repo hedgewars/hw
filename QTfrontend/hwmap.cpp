@@ -68,6 +68,7 @@ void HWMap::SendToClientFirst()
     {
         case MAPGEN_MAZE:
             SendIPC(QString("e$maze_size %1").arg(m_maze_size).toLatin1());
+            break;
 
         case MAPGEN_DRAWN:
         {
@@ -75,10 +76,11 @@ void HWMap::SendToClientFirst()
             while(data.size() > 0)
             {
                 QByteArray tmp = data;
-                tmp.truncate(230);
+                tmp.truncate(200);
                 SendIPC("edraw " + tmp);
-                data.remove(0, 230);
+                data.remove(0, 200);
             }
+            break;
         }
         default: ;
     }

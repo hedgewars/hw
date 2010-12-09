@@ -30,6 +30,7 @@
 #include "igbox.h"
 #include "hwconsts.h"
 #include "ammoSchemeModel.h"
+#include "proto.h"
 
 GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
   QGroupBox(parent), mainLayout(this)
@@ -170,33 +171,33 @@ quint32 GameCFGWidget::getInitHealth() const
     return schemeData(26).toInt();
 }
 
-QStringList GameCFGWidget::getFullConfig() const
+QByteArray GameCFGWidget::getFullConfig() const
 {
-    QStringList sl;
+    QList<QByteArray> bcfg;
     int mapgen = pMapContainer->get_mapgen();
-    
-    sl.append("eseed " + pMapContainer->getCurrentSeed());
-    sl.append(QString("e$gmflags %1").arg(getGameFlags()));
-    sl.append(QString("e$damagepct %1").arg(schemeData(24).toInt()));
-    sl.append(QString("e$turntime %1").arg(schemeData(25).toInt() * 1000));
-    sl.append(QString("e$sd_turns %1").arg(schemeData(27).toInt()));
-    sl.append(QString("e$casefreq %1").arg(schemeData(28).toInt()));
-    sl.append(QString("e$minestime %1").arg(schemeData(29).toInt() * 1000));
-    sl.append(QString("e$minesnum %1").arg(schemeData(30).toInt()));
-    sl.append(QString("e$minedudpct %1").arg(schemeData(31).toInt()));
-    sl.append(QString("e$explosives %1").arg(schemeData(32).toInt()));
-    sl.append(QString("e$healthprob %1").arg(schemeData(33).toInt()));
-    sl.append(QString("e$hcaseamount %1").arg(schemeData(34).toInt()));
-    sl.append(QString("e$waterrise %1").arg(schemeData(35).toInt()));
-    sl.append(QString("e$healthdec %1").arg(schemeData(36).toInt()));
-    sl.append(QString("e$ropepct %1").arg(schemeData(37).toInt()));
-    sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
-    sl.append(QString("e$mapgen %1").arg(mapgen));
+
+    bcfg << QString("eseed " + pMapContainer->getCurrentSeed()).toUtf8();
+    bcfg << QString("e$gmflags %1").arg(getGameFlags()).toUtf8();
+    bcfg << QString("e$damagepct %1").arg(schemeData(24).toInt()).toUtf8();
+    bcfg << QString("e$turntime %1").arg(schemeData(25).toInt() * 1000).toUtf8();
+    bcfg << QString("e$sd_turns %1").arg(schemeData(27).toInt()).toUtf8();
+    bcfg << QString("e$casefreq %1").arg(schemeData(28).toInt()).toUtf8();
+    bcfg << QString("e$minestime %1").arg(schemeData(29).toInt() * 1000).toUtf8();
+    bcfg << QString("e$minesnum %1").arg(schemeData(30).toInt()).toUtf8();
+    bcfg << QString("e$minedudpct %1").arg(schemeData(31).toInt()).toUtf8();
+    bcfg << QString("e$explosives %1").arg(schemeData(32).toInt()).toUtf8();
+    bcfg << QString("e$healthprob %1").arg(schemeData(33).toInt()).toUtf8();
+    bcfg << QString("e$hcaseamount %1").arg(schemeData(34).toInt()).toUtf8();
+    bcfg << QString("e$waterrise %1").arg(schemeData(35).toInt()).toUtf8();
+    bcfg << QString("e$healthdec %1").arg(schemeData(36).toInt()).toUtf8();
+    bcfg << QString("e$ropepct %1").arg(schemeData(37).toInt()).toUtf8();
+    bcfg << QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()).toUtf8();
+    bcfg << QString("e$mapgen %1").arg(mapgen).toUtf8();
 
     switch (mapgen)
     {
         case MAPGEN_MAZE:
-            sl.append(QString("e$maze_size %1").arg(pMapContainer->get_maze_size()));
+            bcfg << QString("e$maze_size %1").arg(pMapContainer->get_maze_size()).toUtf8();
 
         case MAPGEN_DRAWN:
         {
@@ -204,9 +205,10 @@ QStringList GameCFGWidget::getFullConfig() const
             while(data.size() > 0)
             {
                 QByteArray tmp = data;
-                tmp.truncate(230);
-                sl << QString("edraw %1").arg(QString(tmp));
-                data.remove(0, 230);
+                tmp.truncate(200);
+                tmp.prepend("edraw ");
+                bcfg << tmp;
+                data.remove(0, 200);
             }
         }
         default: ;
@@ -215,13 +217,18 @@ QStringList GameCFGWidget::getFullConfig() const
     QString currentMap = pMapContainer->getCurrentMap();
     if (currentMap.size() > 0)
     {
-        sl.append("emap " + currentMap);
+        bcfg << QString("emap " + currentMap).toUtf8();
         if(pMapContainer->getCurrentIsMission())
-            sl.append(QString("escript Maps/%1/map.lua")
-                .arg(currentMap));
+            bcfg << QString("escript Maps/%1/map.lua").arg(currentMap).toUtf8();
     }
-    sl.append("etheme " + pMapContainer->getCurrentTheme());
-    return sl;
+    bcfg << QString("etheme " + pMapContainer->getCurrentTheme()).toUtf8();
+
+    QByteArray result;
+
+    foreach(QByteArray ba, bcfg)
+        HWProto::addByteArrayToBuffer(result, ba);
+
+    return result;
 }
 
 void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
