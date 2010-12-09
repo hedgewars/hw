@@ -23,14 +23,25 @@ unit uLandPainted;
 interface
 
 procedure LoadFromFile(fileName: shortstring);
+procedure Draw;
+procedure initModule;
 
 implementation
-uses uLandGraphics, uConsts, uUtils, SDLh;
+uses uLandGraphics, uConsts, uUtils, SDLh, uCommands;
 
 type PointRec = packed record
     X, Y: SmallInt;
     flags: byte;
     end;
+
+type
+    PPointEntry = ^PointEntry;
+    PointEntry = record
+        point: PointRec;
+        next: PPointEntry;
+        end;
+
+var pointsListHead, pointsListLast: PPointEntry;
 
 procedure DrawLineOnLand(X1, Y1, X2, Y2: LongInt);
 var  eX, eY, dX, dY: LongInt;
@@ -121,6 +132,61 @@ begin
         end;
 
     closeFile(f);
+end;
+
+procedure chDraw(var s: shortstring);
+var rec: PointRec;
+    prec: ^PointRec;
+    pe: PPointEntry;
+    i, l: byte;
+begin
+    i:= 1;
+    l:= length(s);
+    while i < l do
+        begin
+        prec:= @s[i];
+        rec:= prec^;
+        rec.X:= SDLNet_Read16(@rec.X);
+        rec.Y:= SDLNet_Read16(@rec.Y);
+
+        pe:= new(PPointEntry);
+        if pointsListLast = nil then
+            pointsListHead:= pe
+        else
+            pointsListLast^.next:= pe;
+        pointsListLast:= pe;
+
+        pe^.point:= rec;
+        pe^.next:= nil;
+
+        inc(i, 5)
+        end;
+end;
+
+procedure Draw;
+var pe: PPointEntry;
+    prevPoint: PointRec;
+begin
+    pe:= pointsListHead;
+
+    while(pe <> nil) do
+        begin
+        if (pe^.point.flags and $80 <> 0) then
+            FillRoundInLand(pe^.point.X, pe^.point.Y, 34, lfBasic)
+            else
+            DrawLineOnLand(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y);
+
+        prevPoint:= pe^.point;
+        pe:= pe^.next;
+        end;
+end;
+
+procedure initModule;
+begin
+    pointsListHead:= nil;
+    pointsListLast:= nil;
+
+    RegisterVariable('draw', vtCommand, @chDraw, false);
 end;
 
 end.

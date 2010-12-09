@@ -39,7 +39,9 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mainLayout(this),
     pMap(0),
     mapgen(MAPGEN_REGULAR),
-    maze_size(0)
+    maze_size(0),
+    drawnMapData(QByteArray::fromBase64("BHoGw4IEegbjAgR6BuwCCnYEaIIJKwRIgglLBEgCCXgERAIJoQQ/AgnBBDsCCeUEMgIKCQQpAgopBCQCCk0ELQIKXwRIAgo/BE0CCiAEVgIJ+wRfAgnOBGgCCaoEbQIJfQRxAgldBHYCCTkEdgIJFARxAgj+BIgCCOwEqAIJEASsAgkwBJ8CCV0ElgIJhgSWAgmqBJYCCcoElgIJ7gSMAgoOBIwCCNAE2YII2QS1AgjsBJYCCPUEdgIJAgRWAgkQBDYCCScEIAIJSwQXAgl0BAkCCZgEAAIJuAP3AgncA/ICCgUD7gIKJAPlAgo/A/cCClYEDgIKbQQkAgqDBDsCCpoEUgIKrARbAghIBP6CCGgE/gIIjAT1AgixBOwCCNUE5wII9QTjAgkUBNkCCTkE0AIJWATHAgl4BMMCCZgEvgIJvAS1AgncBKwCCgAEowIKIASaAgo/BJECCl8EiAIKfwSDAgqfBHYCCscEbQIK5wRoAgr5BGQCCLUGcYIIzAaIAgjnBpoCCQcGrAIJKwa1AglUBroCCXgGvgIJmAa+Agm8Br4CCeAGvgIKAAa6AgogBrUCCj8GqAIKXwaWAgp6Bn8CCpEGaAIKnwZSAgotBZOCCjIFjwIJIgWTggk0BZwCCSsFmIIHYQeBggdhBNmCB2EFBwIHYQUrAgdhBUsCB2EFbwIHYQWqAgdhBc4CB2EF9wIHYQYgAgdhBlICB2EGegIHYQaaAgdhBswCB2EG/gIHYQcQAgZ/BimCBoMGKQIGfwaMggaDBrECBn8G1QIGfwb1AgZ/BwsCBbMFaoIFrgWKAgWqBa4CBaUF6QIFnAYSAgWYBjICBYoGbQIFfQaMAgV0BrUCBWoG3gIFagb+AgVhByICBWEHGQIEmgY2ggS+BkQCBOwGRAIFEAZEAgUwBj8CBVQGOwIFWAY7AgS1BUuCBLUFbwIErAWTAgSjBcECBJ8F+wIEkQYpAgSIBk0CBH8GegIEfwaoAgR6BrUC")
+    )
 {
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
@@ -70,6 +72,10 @@ QComboBox::tr("generated map..."));
 // FIXME - need real icons. Disabling until then
 //QIcon(":/res/mapMaze.png"), 
 QComboBox::tr("generated maze..."));
+
+    chooseMap->addItem(QComboBox::tr("hand drawn map..."));
+    chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
+
     chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
 
     int missionindex = chooseMap->count();
@@ -252,6 +258,18 @@ void HWMapContainer::mapChanged(int index)
         emit mapgenChanged(mapgen);
         emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
         break;
+    case MAPGEN_DRAWN:
+        mapgen = MAPGEN_DRAWN;
+        changeImage();
+        gbThemes->show();
+        lblFilter->hide();
+        CB_TemplateFilter->hide();
+        maze_size_label->hide();
+        maze_size_selection->hide();
+        emit mapChanged("+drawn+");
+        emit mapgenChanged(mapgen);
+        emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
+        break;
     default:
         loadMap(index);
         gbThemes->hide();
@@ -308,24 +326,22 @@ void HWMapContainer::changeImage()
     pMap = new HWMap();
     connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
     connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
-    pMap->getImage(m_seed.toStdString(), getTemplateFilter(), mapgen, maze_size);
+    pMap->getImage(m_seed.toStdString(), getTemplateFilter(), mapgen, maze_size, drawnMapData);
 }
 
 void HWMapContainer::themeSelected(int currentRow)
 {
     QString theme = Themes->at(currentRow);
-    QList<QVariant> mapInfoRegular;
-    mapInfoRegular.push_back(QString("+rnd+"));
-    mapInfoRegular.push_back(theme);
-    mapInfoRegular.push_back(18);
-    mapInfoRegular.push_back(false);
-    chooseMap->setItemData(0, mapInfoRegular);
-    QList<QVariant> mapInfoMaze;
-    mapInfoMaze.push_back(QString("+maze+"));
-    mapInfoMaze.push_back(theme);
-    mapInfoMaze.push_back(18);
-    mapInfoMaze.push_back(false);
-    chooseMap->setItemData(1, mapInfoMaze);
+    QList<QVariant> mapInfo;
+    mapInfo.push_back(QString("+rnd+"));
+    mapInfo.push_back(theme);
+    mapInfo.push_back(18);
+    mapInfo.push_back(false);
+    chooseMap->setItemData(0, mapInfo);
+    mapInfo[0] = QString("+maze+");
+    chooseMap->setItemData(1, mapInfo);
+    mapInfo[0] = QString("+drawn+");
+    chooseMap->setItemData(2, mapInfo);
     gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(theme)));
     emit themeChanged(theme);
 }
@@ -337,7 +353,7 @@ QString HWMapContainer::getCurrentSeed() const
 
 QString HWMapContainer::getCurrentMap() const
 {
-    if(chooseMap->currentIndex() <= 1) return QString();
+    if(chooseMap->currentIndex() <= 2) return QString();
     return chooseMap->itemData(chooseMap->currentIndex()).toList()[0].toString();
 }
 
@@ -376,7 +392,7 @@ void HWMapContainer::setSeed(const QString & seed)
 
 void HWMapContainer::setMap(const QString & map)
 {
-    if(map == "+rnd+" || map == "+maze+")
+    if(map == "+rnd+" || map == "+maze+" || map == "+drawn+")
     {
         changeImage();
         return;
@@ -416,10 +432,11 @@ void HWMapContainer::setRandomMap()
     {
     case MAPGEN_REGULAR:
     case MAPGEN_MAZE:
+    case MAPGEN_DRAWN:
         setRandomTheme();
         break;
     default:
-        if(chooseMap->currentIndex() < numMissions + 3)
+        if(chooseMap->currentIndex() < numMissions + 4)
             setRandomMission();
         else
             setRandomStatic();
@@ -488,4 +505,9 @@ void HWMapContainer::setMapgen(MapGenerator m)
     mapgen = m;
     emit mapgenChanged(m);
     changeImage();
+}
+
+QByteArray HWMapContainer::getDrawnMapData()
+{
+    return drawnMapData;
 }

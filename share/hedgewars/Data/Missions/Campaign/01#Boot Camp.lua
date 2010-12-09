@@ -250,12 +250,12 @@ function onGameTick()
 		
 	elseif progress > 0 and ((TurnTimeLeft == 0) or (GetHealth(player) ~= player_health) or (GetHealth(instructor) ~= instructor_health)) then
 		progress = -1
-		ShowMission(loc(caption), loc(subcaption), loc(failed), -amBazooka, 0);
+		ShowMission(loc(caption), loc(subcaption), loc(failed), -amBazooka, 0)
 		time_start = GameTime
 		PlaySound(sndNooo)
 		TurnTimeLeft = 0
 	elseif GameTime == 0 then
-		ShowMission(loc(caption), loc(subcaption), loc(goals[0]), -amBazooka, 0);
+		ShowMission(loc(caption), loc(subcaption), loc(goals[0]), -amBazooka, 0)
 		TurnTimeLeft = 60000
 	elseif GameTime == 2500 then
 		FollowGear(instructor)
@@ -269,7 +269,7 @@ function onGameTick()
 		progress = 1
 		TurnTimeLeft = 10000
 	elseif progress == 1 then
-		local x, y = GetGearPosition(player);
+		local x, y = GetGearPosition(player)
 		if x < player_start_x - 50 then
 			progress = 2
 			FollowGear(instructor)
@@ -277,7 +277,7 @@ function onGameTick()
 			TurnTimeLeft = 10000
 		end
 	elseif progress == 2 then
-		local x, y = GetGearPosition(player);
+		local x, y = GetGearPosition(player)
 		if x > player_start_x then
 			progress = 3
 			FollowGear(instructor)
@@ -291,7 +291,7 @@ function onGameTick()
 		HogTurnLeft(player, true)
 		TurnTimeLeft = 10000
 	elseif progress == 4 then
-		local x, y = GetGearPosition(player);
+		local x, y = GetGearPosition(player)
 		if y < player_start_y then
 			progress = 5
 			FollowGear(instructor)
@@ -308,15 +308,15 @@ function onGameTick()
 	elseif progress == 5 and (time_start + 7500 == GameTime) then
 		FollowGear(instructor)
 		HogSay(instructor, loc(drill[8]), SAY_SHOUT)
-		ShowMission(loc(caption), loc(subcaption), loc(goals[1]), 1, 0);
+		ShowMission(loc(caption), loc(subcaption), loc(goals[1]), 1, 0)
 		target = AddGear(target_x, target_y, gtTarget, 0, 0, 0, 0)
 		TurnTimeLeft = 60000
 	elseif progress == 5 and (time_start + 10000 == GameTime) then
 		FollowGear(target)
 	elseif progress == 6 then
 		progress = 7
-		ShowMission(loc(caption), loc(subcaption), loc(goals[2]), 0, 0);
-		PlaySound(sndVictory);
+		ShowMission(loc(caption), loc(subcaption), loc(goals[2]), 0, 0)
+		PlaySound(sndVictory)
 		time_start = GameTime
 	elseif progress == 7 and (time_start + 2500 == GameTime) then
 		EndGame()
@@ -336,14 +336,14 @@ function onGameInit()
 	
 	AddTeam(loc(teamnames[0]), teamcolor, "Simple", "Island", "Default")
 	player = AddHog(loc(hognames[0]), 0, player_health, "NoHat")
-	SetGearPosition(player, player_start_x, player_start_y);
+	SetGearPosition(player, player_start_x, player_start_y)
 	
 	AddTeam(loc(teamnames[1]), teamcolor + 1, "Simple", "Island", "Default")
 	instructor = AddHog(loc(hognames[1]), 0, instructor_health, "NoHat")
 	SetGearPosition(instructor, player_start_x + 100, player_start_y)
 	HogTurnLeft(instructor, true)
 
-	FollowGear(player);
+	FollowGear(player)
 end
 
 function onAmmoStoreInit()

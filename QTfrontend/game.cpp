@@ -78,7 +78,7 @@ void HWGame::commonConfig()
     }
     HWProto::addStringToBuffer(buf, gt);
 
-    HWProto::addStringListToBuffer(buf, gamecfg->getFullConfig());
+    buf += gamecfg->getFullConfig();
 
     if (m_pTeamSelWidget)
     {

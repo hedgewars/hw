@@ -39,7 +39,7 @@ public:
     GameCFGWidget(QWidget* parent, bool externalControl=false);
     quint32 getGameFlags() const;
     quint32 getInitHealth() const;
-    QStringList getFullConfig() const;
+    QByteArray getFullConfig() const;
     QComboBox * GameSchemes;
     QComboBox * WeaponsName;
     HWMapContainer* pMapContainer;

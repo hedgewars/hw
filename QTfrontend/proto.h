@@ -31,6 +31,7 @@ class HWProto : public QObject
 public:
     HWProto();
     static QByteArray & addStringToBuffer(QByteArray & buf, const QString & string);
+    static QByteArray & addByteArrayToBuffer(QByteArray & buf, const QByteArray & msg);
     static QByteArray & addStringListToBuffer(QByteArray & buf, const QStringList & strList);
     static QString formatChatMsg(const QString & nick, const QString & msg);
 };
