@@ -456,6 +456,20 @@ begin
     lc_gethoglevel := 1;
 end;
 
+function lc_sethoglevel(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        LuaError('Lua: Wrong number of parameters passed to SetHogLevel!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            gear^.Hedgehog^.BotLevel:= lua_tointeger(L, 2);
+        end;
+    lc_sethoglevel:= 0
+end;
+
 function lc_gethogclan(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1385,6 +1399,7 @@ lua_register(luaState, 'GetHogClan', @lc_gethogclan);
 lua_register(luaState, 'GetHogTeamName', @lc_gethogteamname);
 lua_register(luaState, 'GetHogName', @lc_gethogname);
 lua_register(luaState, 'GetHogLevel', @lc_gethoglevel);
+lua_register(luaState, 'SetHogLevel', @lc_sethoglevel);
 lua_register(luaState, 'GetX', @lc_getx);
 lua_register(luaState, 'GetY', @lc_gety);
 lua_register(luaState, 'CopyPV', @lc_copypv);
