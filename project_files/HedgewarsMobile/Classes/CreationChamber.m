@@ -148,6 +148,7 @@ void createSchemeNamed (NSString *nameWithoutExt) {
     NSMutableArray *basicArray  = [[NSMutableArray alloc] initWithObjects:
                                    [NSNumber numberWithInt:100],      //initialhealth
                                    [NSNumber numberWithInt:45],       //turntime
+                                   [NSNumber numberWithInt:3],        //minestime
                                    [NSNumber numberWithInt:100],      //damagemodifier
                                    [NSNumber numberWithInt:15],       //suddendeathtimeout
                                    [NSNumber numberWithInt:47],       //waterrise
@@ -156,7 +157,6 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                                    [NSNumber numberWithInt:5],        //cratedrops
                                    [NSNumber numberWithInt:35],       //healthprob
                                    [NSNumber numberWithInt:25],       //healthamount
-                                   [NSNumber numberWithInt:3],        //minestime
                                    [NSNumber numberWithInt:4],        //minesnumber
                                    [NSNumber numberWithInt:0],        //dudmines
                                    [NSNumber numberWithInt:2],        //explosives

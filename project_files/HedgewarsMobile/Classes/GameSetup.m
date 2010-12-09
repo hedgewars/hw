@@ -165,7 +165,6 @@
     [schemePath release];
     NSArray *basicArray = [schemeDictionary objectForKey:@"basic"];
     NSArray *gamemodArray = [schemeDictionary objectForKey:@"gamemod"];
-    int i = 0;
     int result = 0;
     int mask = 0x00000004;
 
@@ -184,22 +183,23 @@
     NSArray *mods = [[NSArray alloc] initWithContentsOfFile:path];
     [path release];
 
+    int i = 0;
     // initial health
-    result = [[basicArray objectAtIndex:0] intValue];
+    result = [[basicArray objectAtIndex:i++] intValue];
 
     // turn time
-    NSInteger tentativeTurntime = [[basicArray objectAtIndex:1] intValue];
+    NSInteger tentativeTurntime = [[basicArray objectAtIndex:i++] intValue];
     if (tentativeTurntime >= 100)
         tentativeTurntime = 9999;
     NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",tentativeTurntime * 1000];
     [self sendToEngine:turnTime];
     [turnTime release];
 
-    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$turntime %d",[[basicArray objectAtIndex:2] intValue] * 1000];
+    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$turntime %d",[[basicArray objectAtIndex:i++] intValue] * 1000];
     [self sendToEngine:minesTime];
     [minesTime release];
 
-    for (i = 2; i < [basicArray count]; i++) {
+    for (; i < [basicArray count]; i++) {
         NSDictionary *basicDict = [mods objectAtIndex:i];
         NSString *command = [basicDict objectForKey:@"command"];
         NSInteger value = [[basicArray objectAtIndex:i] intValue];

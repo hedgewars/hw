@@ -38,6 +38,22 @@
 		<key>checkOverMax</key>
 		<false/>
 		<key>command</key>
+		<string>e$minestime</string>
+		<key>default</key>
+		<integer>3</integer>
+		<key>image</key>
+		<string>Time</string>
+		<key>max</key>
+		<integer>5</integer>
+		<key>min</key>
+		<integer>-1</integer>
+		<key>title</key>
+		<string>Mines Time</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>command</key>
 		<string>e$damagepct</string>
 		<key>default</key>
 		<integer>100</integer>
@@ -161,22 +177,6 @@
 		<integer>0</integer>
 		<key>title</key>
 		<string>Health Amount in Kit</string>
-	</dict>
-	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$minestime</string>
-		<key>default</key>
-		<integer>3</integer>
-		<key>image</key>
-		<string>Time</string>
-		<key>max</key>
-		<integer>5</integer>
-		<key>min</key>
-		<integer>-1</integer>
-		<key>title</key>
-		<string>Mines Time</string>
 	</dict>
 	<dict>
 		<key>checkOverMax</key>

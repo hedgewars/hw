@@ -171,14 +171,14 @@ BOOL isAppleDeviceMuted(void) {
     Float32 volume;
     OSStatus n = AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareOutputVolume, &propertySize, &volume);
     if (n != 0)
-        DLog( @"AudioSessionGetProperty: %d", n );
+        DLog( @"AudioSessionGetProperty 'volume': %d", n );
     BOOL volumeResult = (volume == 0.0);
     
     // this checks if the device is muted
     CFStringRef state;
     n = AudioSessionGetProperty(kAudioSessionProperty_AudioRoute, &propertySize, &state);
     if (n != 0)
-        DLog( @"AudioSessionGetProperty: %d", n );
+        DLog( @"AudioSessionGetProperty 'audioRoute': %d", n );
     NSString *result = (NSString *)state;
     BOOL muteResult = ([result length] == 0);
     releaseAndNil(result);
