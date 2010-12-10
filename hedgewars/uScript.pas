@@ -499,7 +499,7 @@ begin
         LuaError('Lua: Wrong number of parameters passed to GetClanColor!');
         lua_pushnil(L); // return value on stack (nil)
         end
-    else lua_pushinteger(L, ClansArray[lua_tointeger(L, 1)]^.Color);
+    else lua_pushinteger(L, ClansArray[lua_tointeger(L, 1)]^.Color shl 8 or $FF);
     lc_getclancolor:= 1
 end;
 
