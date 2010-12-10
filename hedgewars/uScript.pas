@@ -491,6 +491,18 @@ begin
     lc_gethogclan:= 1
 end;
 
+function lc_getclancolor(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetClanColor!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else lua_pushinteger(L, ClansArray[lua_tointeger(L, 1)]^.Color);
+    lc_getclancolor:= 1
+end;
+
 function lc_gethogteamname(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1396,6 +1408,7 @@ lua_register(luaState, 'SetHealth', @lc_sethealth);
 lua_register(luaState, 'GetHealth', @lc_gethealth);
 lua_register(luaState, 'SetEffect', @lc_seteffect);
 lua_register(luaState, 'GetHogClan', @lc_gethogclan);
+lua_register(luaState, 'GetClanColor', @lc_getclancolor);
 lua_register(luaState, 'GetHogTeamName', @lc_gethogteamname);
 lua_register(luaState, 'GetHogName', @lc_gethogname);
 lua_register(luaState, 'GetHogLevel', @lc_gethoglevel);
