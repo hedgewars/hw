@@ -386,14 +386,15 @@
     [string release];
     // remove a trailing "" element
     [themeArray removeLastObject];
+
+    // remove images that are too big for certain devices without loading the whole image
     NSArray *mapArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
     NSMutableArray *mapArray = [[NSMutableArray alloc] init];
     for (NSString *str in mapArrayFull) {
         CGSize imgSize = PSPNGSizeFromMetaData([MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
-        // remove images that are too big for certain devices
         if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
             continue;
-        if ([modelType() hasPrefix:@"iPad1"] && imgSize.height > 1280.0f)
+        if (IS_NOT_VERY_POWERFUL() && imgSize.height > 1280.0f)
             continue;
         [mapArray addObject:str];
     }
@@ -402,10 +403,9 @@
     NSMutableArray *missionArray = [[NSMutableArray alloc] init];
     for (NSString *str in missionArrayFull) {
         CGSize imgSize = PSPNGSizeFromMetaData([MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
-        // remove images that are too big for certain devices
         if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
             continue;
-        if ([modelType() hasPrefix:@"iPad1"] && imgSize.height > 1280.0f)
+        if (IS_NOT_VERY_POWERFUL() && imgSize.height > 1280.0f)
             continue;
         [missionArray addObject:str];
     }
