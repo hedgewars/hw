@@ -153,7 +153,8 @@ private:
         ID_PAGE_SCHEME          = 16,
         ID_PAGE_ADMIN           = 17,
         ID_PAGE_NETTYPE         = 18,
-        ID_PAGE_CAMPAIGN        = 19
+        ID_PAGE_CAMPAIGN        = 19,
+        ID_PAGE_DRAWMAP         = 20
         };
     HWGame * game;
     HWNetServer* pnetserver;

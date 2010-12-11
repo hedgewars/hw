@@ -2010,3 +2010,12 @@ PageNetType::PageNetType(QWidget* parent) : AbstractPage(parent)
 
     BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 }
+
+/////////////////////////////////////////////////
+
+PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)
+{
+    QGridLayout * pageLayout = new QGridLayout(this);
+
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 0, 0, true);
+}

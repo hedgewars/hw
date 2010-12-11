@@ -572,4 +572,16 @@ public:
     QPushButton * BtnOfficialServer;
 };
 
+
+class PageDrawMap : public AbstractPage
+{
+    Q_OBJECT
+
+public:
+    PageDrawMap(QWidget* parent = 0);
+
+    QPushButton * BtnBack;
+
+};
+
 #endif // PAGES_H

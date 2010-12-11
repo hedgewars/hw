@@ -40,6 +40,7 @@ class PageConnecting;
 class PageScheme;
 class PageAdmin;
 class PageNetType;
+class PageDrawMap;
 class QStackedLayout;
 class QFont;
 class QWidget;
@@ -72,6 +73,7 @@ public:
     PageAdmin *pageAdmin;
     PageNetType *pageNetType;
     PageCampaign *pageCampaign;
+    PageDrawMap *pageDrawMap;
 
     QStackedLayout *Pages;
     QFont *font14;
@@ -79,8 +81,6 @@ public:
     void setupUi(HWForm *HWForm);
     void SetupFonts();
     void SetupPages(QWidget *Parent, HWForm *HWForm);
-    void SetupPageNetChat(QWidget *Parent);
-    void SetupPageNetGame(QWidget *Parent);
 };
 
 #endif // UI_HWFORM_H
