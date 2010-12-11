@@ -31,5 +31,6 @@ void objcExportsInit();
 BOOL isGameRunning();
 void setGameRunning(BOOL value);
 NSInteger cachedGrenadeTime();
+void clearView();
 void setGrenadeTime(NSInteger value);
 void setAmmoMenuInstance(AmmoMenuViewController *instance);

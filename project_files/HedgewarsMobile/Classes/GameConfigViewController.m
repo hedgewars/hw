@@ -226,9 +226,6 @@
                                     [NSNumber numberWithInt:self.interfaceOrientation],@"orientation",
                                     nil];
 
-    // finally launch game and remove this controller
-    DLog(@"sending config %@", gameDictionary);
-
     NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:gameDictionary,@"game_dictionary", @"",@"savefile",
                                       [NSNumber numberWithBool:NO],@"netgame", nil];
     if (IS_IPAD())

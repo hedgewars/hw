@@ -395,6 +395,7 @@
             break;
         case 10:
             playSound(@"clickSound");
+            clearView();
             HW_pause();
             if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
                 doDim();
@@ -405,6 +406,7 @@
             break;
         case 11:
             playSound(@"clickSound");
+            clearView();
             removeConfirmationInput();
             
             if (IS_DUALHEAD() || self.useClassicMenu == NO) {

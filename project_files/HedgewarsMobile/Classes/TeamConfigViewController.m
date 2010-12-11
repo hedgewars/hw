@@ -236,7 +236,7 @@
     label.textColor = [UIColor whiteColor];
     label.numberOfLines = 1;
     if (section == 0)
-        label.text = NSLocalizedString(@"Tap to add hogs or change color, hold tap to remove team.",@"");
+        label.text = NSLocalizedString(@"Tap to add hogs or change color, touch and hold to remove team.",@"");
     else
         label.text = NSLocalizedString(@"The robot badge indicates an AI-controlled team.",@"");
 
