@@ -24,7 +24,6 @@
 #import "SDL_uikitopenglview.h"
 #import "SDL_uikitwindow.h"
 #import "SDL_events_c.h"
-#import "../SDL_sysvideo.h"
 #import "jumphack.h"
 #import "SDL_video.h"
 #import "SDL_mixer.h"
@@ -34,6 +33,8 @@
 #import "GameSetup.h"
 #import "MainMenuViewController.h"
 #import "OverlayViewController.h"
+#import "Appirater.h"
+#include <unistd.h>
 
 #ifdef main
 #undef main
@@ -41,16 +42,15 @@
 
 #define BLACKVIEW_TAG 17935
 #define SECONDBLACKVIEW_TAG 48620
-#define VALGRIND "/opt/valgrind/bin/valgrind"
+#define VALGRIND "/opt/fink/bin/valgrind"
 
 int main (int argc, char *argv[]) {
 #ifdef VALGRIND_REXEC
     // Using the valgrind build config, rexec ourself in valgrind
     // from http://landonf.bikemonkey.org/code/iphone/iPhone_Simulator_Valgrind.20081224.html
     if (argc < 2 || (argc >= 2 && strcmp(argv[1], "-valgrind") != 0))
-        execl(VALGRIND, VALGRIND, "--leak-check=full", argv[0], "-valgrind", NULL);
+        execl(VALGRIND, VALGRIND, "--leak-check=full", "--dsymutil=yes", argv[0], "-valgrind", NULL);
 #endif
-
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     int retVal = UIApplicationMain(argc, argv, nil, @"SDLUIKitDelegate");
     [pool release];
@@ -173,7 +173,7 @@ int main (int argc, char *argv[]) {
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (or even using a nib)
--(void) applicationDidFinishLaunching:(UIApplication *)application {
+-(BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [application setStatusBarHidden:YES];
 
     self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -204,6 +204,9 @@ int main (int argc, char *argv[]) {
         [titleView release];
         [self.secondWindow makeKeyAndVisible];
     }
+
+    [Appirater appLaunched];
+    return YES;
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {
@@ -227,15 +230,15 @@ int main (int argc, char *argv[]) {
     if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
          device.multitaskingSupported &&
          self.isInGame) {
-        // there is a bug on iphone that presents a sdl view with a black screen, so it returns to frontend
-        if (IS_IPAD())
+        // multiasking in-game works only for ios >= 4.2, returns a black screen on other verions
+        if (NSClassFromString(@"UIPrintInfo"))
             HW_suspend();
         else {
-            // while screen is loading you can't call HW_terminate() so we close the app
+            // so the game returns to the configuration view
             if (isGameRunning())
                 HW_terminate(NO);
             else {
-                // force app closure
+                // while screen is loading you can't call HW_terminate() so we close the app
                 SDL_SendQuit();
                 HW_terminate(YES);
                 longjmp(*(jump_env()), 1);

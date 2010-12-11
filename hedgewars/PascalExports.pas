@@ -25,7 +25,6 @@ uses uTypes, uConsts, uVariables, GLunit, uKeys, uChat, uSound, uAmmos, uUtils,
      uCommands;
 
 {$INCLUDE "config.inc"}
-type PPByte = ^PByte;
 var dummy: boolean;  // avoid compiler hint
 
 implementation

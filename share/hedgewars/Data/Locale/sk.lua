@@ -1,0 +1,27 @@
+locale = {
+	["Aiming Practice"] = "Tréning presnosti", --Bazooka, Shotgun, SniperRifle
+	["Eliminate all targets before your time runs out.|You have unlimited ammo for this mission."] = "Zneškodnite všetky ciele pred vypršaním času.|Na túto misiu máte neobmedzené množstvo streliva.", --Bazooka, Shotgun, SniperRifle
+	["Oh no! Time's up! Just try again."] = "Ale nie! Čas vypršal! Tak to skúste znovu.", --Bazooka, Shotgun, SniperRifle
+	["Congratulations! You've eliminated all targets|within the allowed time frame."] = "Gratulujem! Zneškodnili ste všetky ciele|v stanovenom čase.", --Bazooka, Shotgun, SniperRifle
+	["Hunter"] = "Lovec", --Bazooka, Shotgun, SniperRifle
+	["Bazooka Training"] = "Tréning s bazukou",
+	["'Zooka Team"] = "Bazuka tím",
+	["Shotgun Training"] = "Tréning s brokovnicou",
+	["Shotgun Team"] = "Shotgun tím",
+	["Sniper Training"] = "Tréning pre ostreľovačov",
+	["Sniperz"] = "Ostreľovači",
+	["Not So Friendly Match"] = "Nie tak celkom priateľský zápas", -- Basketball, Knockball
+	["%s is out and Team %d|scored a point!| |Score:"] = "%s je mimo hru a tím %d|získal bod!| |Skóre:", -- Basketball, Knockball
+	["%s is out and Team %d|scored a penalty!| |Score:"] = "%s je mimo hru a tím %d|dostal trestný bod!| |Skóre:", -- Basketball, Knockball
+	["Hedgewars-Basketball"] = "Hedgewars-Basketbal",
+	["Bat your opponents through the|baskets and out of the map!"] = "Odpálkujte vašich súperov do koša|a von z mapy!",
+	["Hedgewars-Knockball"] = "Hedgewars-Knockball",
+	["Bat balls at your enemies and|push them into the sea!"] = "Loptami triafajte vašich nepriateľov|a zhoďte ich tak do mora!",
+	["TrophyRace"] = "Preteky o trofej",
+	["Use your rope to get from start to finish as fast as you can!"] = "Použite lano na presun zo štartovnej pozície do cieľa tak rýchlo, ako to len viete!",
+	["You've reached the goal!| |Time: "] = "Dosiahli ste cieľ!| |Čas: ",
+	["NEW fastest lap: "] = "NOVÉ najrýchlejšie kolo: ",
+	["Fastest lap: "] = "Najrýchlejšie kolo: ",
+	["Best laps per team: "] = "Najrýchlejšie kolá podľa tímov: ",
+	["Team %d: "] = "Tím %d: ",
+    }

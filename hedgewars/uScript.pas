@@ -1028,6 +1028,18 @@ begin
         end;
     lc_setwind:= 0
 end;
+
+function lc_getdatapath(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 0 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetDataPath!');
+        lua_pushnil(L);
+        end
+    else
+        lua_pushstring(L, str2pchar(Pathz[ptData]));
+    lc_getdatapath:= 1
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -1082,7 +1094,6 @@ lua_pop(luaState, 1);
 end;
 
 procedure ScriptOnGameInit;
-var s, t : ansistring;
 begin
 // not required if there is no script to run
 if not ScriptLoaded then
@@ -1107,12 +1118,6 @@ ScriptSetInteger('WaterRise', cWaterRise);
 ScriptSetInteger('HealthDecrease', cHealthDecrease);
 ScriptSetString('Map', '');
 ScriptSetString('Theme', '');
-
-// import locale
-s:= cLocaleFName;
-t:= '';
-SplitByChar(s, t, '.');
-ScriptSetString('L', s);
 
 ScriptCall('onGameInit');
 
@@ -1295,6 +1300,7 @@ var at : TGearType;
     am : TAmmoType;
     st : TSound;
     he: THogEffect;
+    s, t : ansistring;
 begin
 // initialize lua
 luaState:= lua_open;
@@ -1309,6 +1315,12 @@ luaopen_table(luaState);
 // import some variables
 ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
 ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
+
+// import locale
+s:= cLocaleFName;
+t:= '';
+SplitByChar(s, t, '.');
+ScriptSetString('L', s);
 
 // import game flags
 ScriptSetInteger('gfForts', gfForts);
@@ -1434,6 +1446,7 @@ lua_register(luaState, 'GetGearMessage', @lc_getgearmessage);
 lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
 lua_register(luaState, 'GetRandom', @lc_getrandom);
 lua_register(luaState, 'SetWind', @lc_setwind);
+lua_register(luaState, 'GetDataPath', @lc_getdatapath);
 
 
 ScriptClearStack; // just to be sure stack is empty

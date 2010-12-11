@@ -57,7 +57,7 @@ end;
 function isDeviceMute: Boolean; inline;
 begin
 {$IFDEF IPHONEOS}
-    exit(isAppleDeviceMuted());
+//    exit(isAppleDeviceMuted());
 {$ENDIF}
     exit(false);
 end;

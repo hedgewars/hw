@@ -1,0 +1,27 @@
+locale = {
+	["Aiming Practice"] = "Zielübung", --Bazooka, Shotgun, SniperRifle
+	["Eliminate all targets before your time runs out.|You have unlimited ammo for this mission."] = "Eliminiere alle Ziele bevor die Zeit ausläuft.|Du hast in dieser Mission unbegrenzte Munition.", --Bazooka, Shotgun, SniperRifle
+	["Oh no! Time's up! Just try again."] = "Oh nein! Die Zeit ist um! Versuche es nochmal.", --Bazooka, Shotgun, SniperRifle
+	["Congratulations! You've eliminated all targets|within the allowed time frame."] = "Gratulation! Du hast alle Ziele innerhalb der|verfügbaren Zeit ausgeschaltet.", --Bazooka, Shotgun, SniperRifle
+	["Hunter"] = "Jäger", --Bazooka, Shotgun, SniperRifle
+	["Bazooka Training"] = "Bazooka-Training",
+	["'Zooka Team"] = "Die Knalltüten",
+	["Shotgun Training"] = "Schrotflinten-Training",
+	["Shotgun Team"] = "Entrenamiento con escopeta",
+	["Sniper Training"] = "Scharfschützen-Training",
+	["Sniperz"] = "Heckenschützen",
+	["Not So Friendly Match"] = "Kein-so-Freundschaftsspiel", -- Basketball, Knockball
+	["%s is out and Team %d|scored a point!| |Score:"] = "%s ist draußen und Team %d|erhält einen Punkt!| |Punktestand:", -- Basketball, Knockball
+	["%s is out and Team %d|scored a penalty!| |Score:"] = "%s ist draußen und Team %d|erhält eine Strafe!| |Punktestand:", -- Basketball, Knockball
+	["Hedgewars-Basketball"] = "Hedgewars-Basketball",
+	["Bat your opponents through the|baskets and out of the map!"] = "Schlage deine Widersacher durch|die Körbe und aus der Karte hinaus!",
+	["Hedgewars-Knockball"] = "Hedgewars-Knockball",
+	["Bat balls at your enemies and|push them into the sea!"] = "Schlage Bälle auf deine Widersacher|und lass sie ins Meer fallen!",
+--	["TrophyRace"] = 
+--	["Use your rope to get from start to finish as fast as you can!"] = 
+--	["You've reached the goal!| |Time: "] = 
+--	["NEW fastest lap: "] = 
+--	["Fastest lap: "] = 
+--	["Best laps per team: "] = 
+--	["Team %d: "] = 
+    }
