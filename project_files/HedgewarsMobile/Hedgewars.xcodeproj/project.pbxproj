@@ -113,6 +113,7 @@
 		6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */; };
 		6165925811CA9CB400D6E256 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165925011CA9CB400D6E256 /* OverlayViewController.xib */; };
 		6165929E11CA9E2F00D6E256 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */; };
+		6172555A12B3DD4A0098D069 /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6172555912B3DCEE0098D069 /* libLua.a */; };
 		6172FED91298CF9800D73365 /* background~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FED71298CF9800D73365 /* background~iphone.png */; };
 		6172FEEF1298D25D00D73365 /* mediumBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FEEB1298D25D00D73365 /* mediumBackground~ipad.png */; };
 		6172FEF11298D25D00D73365 /* smallerBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FEED1298D25D00D73365 /* smallerBackground~ipad.png */; };
@@ -163,7 +164,6 @@
 		6199E81A12463EC400DADF8C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81912463EC400DADF8C /* SystemConfiguration.framework */; };
 		6199E839124647DE00DADF8C /* SupportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6199E837124647DE00DADF8C /* SupportViewController.m */; };
 		6199E86D12464A8E00DADF8C /* surprise.png in Resources */ = {isa = PBXBuildFile; fileRef = 6199E86C12464A8E00DADF8C /* surprise.png */; };
-		619C5ACF124F7DE200D041AE /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619C5ACE124F7DDF00D041AE /* libLua.a */; };
 		619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619C5AF3124F7E3100D041AE /* LuaPas.pas */; };
 		619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -693,6 +693,27 @@
 			remoteGlobalIDString = BE1FA74107AF4C45004B6283;
 			remoteInfo = "Static Library";
 		};
+		6172555412B3DCEE0098D069 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6172554E12B3DCEE0098D069 /* Lua.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1D6058910D05DD3D006BFB54 /* Lua.app */;
+			remoteInfo = "Test Lua";
+		};
+		6172555612B3DCEE0098D069 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6172554E12B3DCEE0098D069 /* Lua.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 506EE05E10304ED200A389B3 /* libcocos2d libraries.a */;
+			remoteInfo = "cocos2d libraries";
+		};
+		6172555812B3DCEE0098D069 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6172554E12B3DCEE0098D069 /* Lua.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E14CF7C110ABC177005470B6 /* libLua.a */;
+			remoteInfo = Lua;
+		};
 		617988D9114AAA3900BA94A9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */;
@@ -727,27 +748,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = BE48FF6F07AFA9A900BB41DA;
 			remoteInfo = "Static Library";
-		};
-		619C5AC9124F7DDF00D041AE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1D6058910D05DD3D006BFB54;
-			remoteInfo = "Test Lua";
-		};
-		619C5ACB124F7DDF00D041AE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 506EE05E10304ED200A389B3;
-			remoteInfo = "cocos2d libraries";
-		};
-		619C5ACD124F7DDF00D041AE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E14CF7C110ABC177005470B6;
-			remoteInfo = Lua;
 		};
 		928301590F10E41300CC5A3C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -877,6 +877,7 @@
 		6165925011CA9CB400D6E256 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = Resources/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
 		6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_uikitappdelegate.h; path = Classes/SDL_uikitappdelegate.h; sourceTree = "<group>"; };
 		6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDL_uikitappdelegate.m; path = Classes/SDL_uikitappdelegate.m; sourceTree = "<group>"; };
+		6172554E12B3DCEE0098D069 /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../../Library/Lua/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6172FEA21298C7F900D73365 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Icons/Default@2x.png"; sourceTree = "<group>"; };
 		6172FEC81298CE4800D73365 /* savesButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "savesButton@2x.png"; path = "Resources/Frontend/savesButton@2x.png"; sourceTree = "<group>"; };
 		6172FECA1298CE4E00D73365 /* settingsButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settingsButton@2x.png"; path = "Resources/Frontend/settingsButton@2x.png"; sourceTree = "<group>"; };
@@ -942,7 +943,6 @@
 		6199E836124647DE00DADF8C /* SupportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupportViewController.h; sourceTree = "<group>"; };
 		6199E837124647DE00DADF8C /* SupportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SupportViewController.m; sourceTree = "<group>"; };
 		6199E86C12464A8E00DADF8C /* surprise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = surprise.png; path = Resources/surprise.png; sourceTree = "<group>"; };
-		619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../../Library/Lua/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
 		619C5AF3124F7E3100D041AE /* LuaPas.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = LuaPas.pas; path = ../../hedgewars/LuaPas.pas; sourceTree = SOURCE_ROOT; };
 		619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapPreviewButtonView.h; path = Classes/MapPreviewButtonView.h; sourceTree = "<group>"; };
 		619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapPreviewButtonView.m; path = Classes/MapPreviewButtonView.m; sourceTree = "<group>"; };
@@ -1014,10 +1014,10 @@
 				61272334117DF764005B90CF /* libSDL_image.a in Frameworks */,
 				61798996114AB3FF00BA94A9 /* libSDL_mixer.a in Frameworks */,
 				617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */,
+				6172555A12B3DD4A0098D069 /* libLua.a in Frameworks */,
 				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
 				611E03E711FA747C0077A41E /* libvorbis.a in Frameworks */,
 				611E0E5111FA92170077A41E /* libfreetype.a in Frameworks */,
-				619C5ACF124F7DE200D041AE /* libLua.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
@@ -1125,7 +1125,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */,
+				6172554E12B3DCEE0098D069 /* Lua.xcodeproj */,
 				611E02EC11FA74580077A41E /* cocos2d-iphone.xcodeproj */,
 				611E0E4B11FA92130077A41E /* freetype.xcodeproj */,
 				617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */,
@@ -1347,6 +1347,16 @@
 			name = Overlay;
 			sourceTree = "<group>";
 		};
+		6172554F12B3DCEE0098D069 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6172555512B3DCEE0098D069 /* Lua.app */,
+				6172555712B3DCEE0098D069 /* libcocos2d libraries.a */,
+				6172555912B3DCEE0098D069 /* libLua.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		61798892114AA56300BA94A9 /* inc */ = {
 			isa = PBXGroup;
 			children = (
@@ -1413,16 +1423,6 @@
 			isa = PBXGroup;
 			children = (
 				618E27BB12A2C30700C20EF0 /* libSDL_net.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		619C5AC1124F7DDF00D041AE /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				619C5ACA124F7DDF00D041AE /* Lua.app */,
-				619C5ACC124F7DDF00D041AE /* libcocos2d libraries.a */,
-				619C5ACE124F7DDF00D041AE /* libLua.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1560,7 +1560,7 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* Test Lua */ = {
+		1D6058900D05DD3D006BFB54 /* Hedgewars */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Hedgewars" */;
 			buildPhases = (
@@ -1625,8 +1625,8 @@
 					ProjectRef = 611E0E4B11FA92130077A41E /* freetype.xcodeproj */;
 				},
 				{
-					ProductGroup = 619C5AC1124F7DDF00D041AE /* Products */;
-					ProjectRef = 619C5AC0124F7DDF00D041AE /* Lua.xcodeproj */;
+					ProductGroup = 6172554F12B3DCEE0098D069 /* Products */;
+					ProjectRef = 6172554E12B3DCEE0098D069 /* Lua.xcodeproj */;
 				},
 				{
 					ProductGroup = 6127232F117DF752005B90CF /* Products */;
@@ -1651,7 +1651,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* Test Lua */,
+				1D6058900D05DD3D006BFB54 /* Hedgewars */,
 				928301160F10CAFC00CC5A3C /* fpc */,
 				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
 			);
@@ -2121,6 +2121,27 @@
 			remoteRef = 61272332117DF752005B90CF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		6172555512B3DCEE0098D069 /* Lua.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Lua.app;
+			remoteRef = 6172555412B3DCEE0098D069 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6172555712B3DCEE0098D069 /* libcocos2d libraries.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcocos2d libraries.a";
+			remoteRef = 6172555612B3DCEE0098D069 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6172555912B3DCEE0098D069 /* libLua.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libLua.a;
+			remoteRef = 6172555812B3DCEE0098D069 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -2154,27 +2175,6 @@
 			fileType = archive.ar;
 			path = libSDL_net.a;
 			remoteRef = 618E27BA12A2C30700C20EF0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		619C5ACA124F7DDF00D041AE /* Lua.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = Lua.app;
-			remoteRef = 619C5AC9124F7DDF00D041AE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		619C5ACC124F7DDF00D041AE /* libcocos2d libraries.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libcocos2d libraries.a";
-			remoteRef = 619C5ACB124F7DDF00D041AE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		619C5ACE124F7DDF00D041AE /* libLua.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libLua.a;
-			remoteRef = 619C5ACD124F7DDF00D041AE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
