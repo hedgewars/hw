@@ -1,6 +1,6 @@
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
-
 -- Hedgewars - Roperace for 2+ Players
+
+loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 
 -- store number of hedgehogs
 local numhhs = 0

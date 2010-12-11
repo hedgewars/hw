@@ -8,102 +8,12 @@
 -- following "--" is ignored.
 
 ---------------------------------------------------------------
--- At first we put all text we'd like to use in some arrays.
--- This way we're able to localize the text to be shown without
--- modifying other files.
--- The language to be used is stored in the global variable
--- 'L' that is set by the game (string).
--- Text may then be accessed using "arrayname[L]".
+-- At first we implement the localization library using loadfile.
+-- This allows us to localize strings without needing to think
+-- about translations.
+-- We can use the function loc(text) to localize a string.
 
-local caption = {
-	["en"] = "Shotgun Training",
-	["de"] = "Schrotflinten-Training",
-	["es"] = "Entrenamiento con escopeta",
-	["pl"] = "Trening strzelecki",
-	["pt_PT"] = "Treino com Caçadeira",
-	["pt_BR"] = "Treino com a Escopeta",
-	["sv"] = "Hagelgevärsträning",
-	["sk"] = "Tréning s brokovnicou"
-	-- To add other languages, just add lines similar to the
-	-- existing ones - don't forget the trailing ","!
-	}
-
-local subcaption = {
-	["en"] = "Aiming Practice",
-	["de"] = "Zielübung",
-	["es"] = "Practica tu puntería",
-	["pl"] = "Potrenuj celność",
-	["pt_PT"] = "Pratica a tua pontaria",
-	["pt_BR"] = "Pratique a sua pontaria",
-	["sv"] = "Siktesövning",
-	["sk"] = "Tréning presnosti"
-	}
-
-local goal = {
-	["en"] = "Eliminate all targets before your time runs out.|You have unlimited ammo for this mission.",
-	["de"] = "Eliminiere alle Ziele bevor die Zeit ausläuft.|Du hast in dieser Mission unbegrenzte Munition.",
-	["es"] = "Destruye todos los objetivos antes de que se agote el tiempo.|La munición en esta misión es ilimitada.",
-	["pl"] = "Zniszcz wszystkie cele zanim upłynie czas.|W tej misji masz nieskończoną ilość amunicji.",
-	["pt_PT"] = "Destrói todos os alvos antes do tempo terminar.|Tens munições infinitas para esta missão.",
-	["pt_BR"] = "Destrua todos os alvos antes que o tempo acabe.|Você tem munição infinita para esta missão.",
-	["sv"] = "Förstör alla målen innan din tid tar slut.|Du har obegränsad ammunition för deta uppdrag",
-	["sk"] = "Zneškodnite všetky ciele pred vypršaním času.|Na túto misiu máte neobmedzené množstvo streliva."
-	}
-
-local timeout = {
-	["en"] = "Oh no! Time's up! Just try again.",
-	["de"] = "Oh nein! Die Zeit ist um! Versuche es nochmal.",
-	["es"] = "¡Oh, no, se te acabó el tiempo! ¿Por qué no lo intentas de nuevo?",
-	["pl"] = "Ajajaj! Koniec czasu! Spróbuj jeszcze raz.",
-	["pt_PT"] = "Oh não! Acabou o tempo! Tenta novamente.",
-	["pt_BR"] = "Oh não! O tempo acabou! Tente novamente.",
-	["sv"] = "Åh nej! Tiden är ute! Pröva igen.",
-	["sk"] = "Ale nie! Čas vypršal! Tak to skúste znovu."
-	}
-
-local success = {
-	["en"] = "Congratulations! You've eliminated all targets|within the allowed time frame.",
-	["de"] = "Gratulation! Du hast alle Ziele innerhalb der|verfügbaren Zeit ausgeschaltet.",
-	["es"] = "¡Felicidades! Has destruido todos los objectivos|dentro del tiempo establecido.",
-	["pl"] = "Gratulacje! Zniszczyłeś wszystkie cele przed upłynięciem czasu.",
-	["pt_PT"] = "Parabéns! Eliminaste todos os alvos|dentro do tempo limite.",
-	["pt_BR"] = "Parabéns! Você eliminou todos os alvos|dentro do tempo limite.",
-	["sv"] = "Grattis! Du har förstört alla målen inom den|tillåtna tidsramen.",
-	["sk"] = "Gratulujem! Zneškodnili ste všetky ciele|v stanovenom čase."
-	}
-
-local teamname = {
-	["en"] = "Shotgun Team",
-	["de"] = "Die Knalltüten",
-	["es"] = "Escopeteros",
-	["pl"] = "Shotgun Team",
-	["pt_PT"] = "Caçadores",
-	["pt_PT"] = "Carabineiros",
-	["sv"] = "Hagelgevärslaget",
-	["sk"] = "Shotgun tím"
-	}
-
-local hogname = {
-	["en"] = "Hunter",
-	["de"] = "Jäger",
-	["es"] = "Cazador",
-	["pl"] = "Strzelec",
-	["pt_PT"] = "Comando",
-	["pt_BR"] = "Caçador",
-	["sv"] = "Jägare",
-	["sk"] = "Lovec"
-	}
-
--- To handle missing texts we define a small wrapper function that
--- we'll use to retrieve text.
-local function loc(text)
-	if text == nil then return "**missing**"
-	elseif text[L] == nil then return text["en"]
-	else return text[L]
-	end
-end
-
----------------------------------------------------------------
+loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 
 -- This variable will hold the number of destroyed targets.
 local score = 0
@@ -171,9 +81,9 @@ function onGameInit()
 	Theme = "Nature"
 
 	-- Create the player team
-	AddTeam(loc(teamname), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("Shotgun Team"), 14483456, "Simple", "Island", "Default")
 	-- And add a hog to it
-	player = AddHog(loc(hogname), 0, 1, "NoHat")
+	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
 	SetGearPosition(player, 2334, 1254)
 end
 
@@ -190,7 +100,7 @@ function onGameStart()
 	-- A negative icon parameter (-n) represents the n-th weapon icon
 	-- A positive icon paramter (n) represents the (n+1)-th mission icon
 	-- A timeframe of 0 is replaced with the default time to show.
-	ShowMission(loc(caption), loc(subcaption), loc(goal), -amShotgun, 0)
+	ShowMission(loc("Shotgun Training"), loc("Aiming Practice"), loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission."), -amShotgun, 0)
 end
 
 -- This function is called every game tick.
@@ -204,7 +114,7 @@ function onGameTick()
 	if TurnTimeLeft == 1 and score < score_goal then
 		game_lost = true
 		-- ... and show a short message.
-		ShowMission(loc(caption), loc(subcaption), loc(timeout), -amSkip, 0)
+		ShowMission(loc("Shotgun Training"), loc("Aiming Practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
 		-- How about killing our poor hog due to his poor performance?
 		SetHealth(player, 0)
 		-- Just to be sure set the goal time to 1 ms
@@ -253,7 +163,7 @@ function onGearDelete(gear)
 		else
 			if not game_lost then
 			-- Otherwise show that the goal was accomplished
-			ShowMission(loc(caption), loc(subcaption), loc(success), 0, 0)
+			ShowMission(loc("Shotgun Training"), loc("Aiming Practice"), loc("Congratulations! You've eliminated all targets|within the allowed time frame."), 0, 0)
 			-- Also let the hogs shout "victory!"
 			PlaySound(sndVictory)
 			-- Save the time left so we may keep it.
