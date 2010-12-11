@@ -42,6 +42,7 @@ class HWNetRegisterServer;
 class QCloseEvent;
 class AmmoSchemeModel;
 class QSettings;
+class QSignalMapper;
 
 extern bool frontendEffects;
 extern QString playerHash;
@@ -59,17 +60,11 @@ public:
     void updateXfire();
 
 private slots:
-    void GoToMain();
-    void GoToSinglePlayer();
-    void GoToSetup();
     void GoToMultiplayer();
     void GoToSaves();
     void GoToDemos();
     void GoToNet();
     void GoToNetType();
-    void GoToInfo();
-    void GoToTraining();
-    void GoToCampaign();
     void GoToSelectWeapon();
     void GoToSelectWeaponSet(int index);
     void GoToSelectNewWeapon();
@@ -78,7 +73,7 @@ private slots:
     void GoToEditScheme();
     void GoToNewScheme();
     void GoToAdmin();
-    void GoToPage(quint8 id);
+    void GoToPage(int id);
     void GoBack();
     void AssociateFiles();
     void btnExitPressed();
@@ -163,9 +158,10 @@ private:
     HWNewNet * hwnet;
     HWNamegen * namegen;
     AmmoSchemeModel * ammoSchemeModel;
-    QStack<quint8> PagesStack;
+    QStack<int> PagesStack;
     QTime eggTimer;
     BGWidget * wBackground;
+    QSignalMapper * pageSwitchMapper;
 
 #ifdef __APPLE__
         InstallController * panel;

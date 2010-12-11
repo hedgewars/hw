@@ -35,6 +35,7 @@
 #include <QDataWidgetMapper>
 #include <QTableView>
 #include <QCryptographicHash>
+#include <QSignalMapper>
 
 #include "hwform.h"
 #include "game.h"
@@ -108,13 +109,22 @@ HWForm::HWForm(QWidget *parent)
     UpdateCampaignPage(0);
     UpdateWeapons();
 
+    pageSwitchMapper = new QSignalMapper(this);
+    connect(pageSwitchMapper, SIGNAL(mapped(int)), this, SLOT(GoToPage(int)));
+
     connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
     onFrontendFullscreen(config->isFrontendFullscreen());
 
-    connect(ui.pageMain->BtnSinglePlayer, SIGNAL(clicked()), this, SLOT(GoToSinglePlayer()));
-    connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), this, SLOT(GoToSetup()));
+    connect(ui.pageMain->BtnSinglePlayer, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnSinglePlayer, ID_PAGE_SINGLEPLAYER);
+
+    connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnSetup, ID_PAGE_SETUP);
+    
     connect(ui.pageMain->BtnNet, SIGNAL(clicked()), this, SLOT(GoToNetType()));
-    connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), this, SLOT(GoToInfo()));
+    connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnInfo, ID_PAGE_INFO);
+
     connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
 
@@ -179,8 +189,12 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageGameStats->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageSinglePlayer->BtnSimpleGamePage, SIGNAL(clicked()), this, SLOT(SimpleGame()));
-    connect(ui.pageSinglePlayer->BtnTrainPage, SIGNAL(clicked()), this, SLOT(GoToTraining()));
-    connect(ui.pageSinglePlayer->BtnCampaignPage, SIGNAL(clicked()), this, SLOT(GoToCampaign()));
+    connect(ui.pageSinglePlayer->BtnTrainPage, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnTrainPage, ID_PAGE_TRAINING);
+    
+    connect(ui.pageSinglePlayer->BtnCampaignPage, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnCampaignPage, ID_PAGE_CAMPAIGN);
+
     connect(ui.pageSinglePlayer->BtnMultiplayer, SIGNAL(clicked()), this, SLOT(GoToMultiplayer()));
     connect(ui.pageSinglePlayer->BtnLoad, SIGNAL(clicked()), this, SLOT(GoToSaves()));
     connect(ui.pageSinglePlayer->BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
@@ -209,6 +223,7 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageNetType->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageNetType->BtnLAN, SIGNAL(clicked()), this, SLOT(GoToNet()));
     connect(ui.pageNetType->BtnOfficialServer, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
+
 
 
     ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");
@@ -343,31 +358,6 @@ void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
     ui.pageCampaign->CBTeam->addItems(teamslist);
 }
 
-void HWForm::GoToMain()
-{
-    GoToPage(ID_PAGE_MAIN);
-}
-
-void HWForm::GoToSinglePlayer()
-{
-    GoToPage(ID_PAGE_SINGLEPLAYER);
-}
-
-void HWForm::GoToTraining()
-{
-    GoToPage(ID_PAGE_TRAINING);
-}
-
-void HWForm::GoToCampaign()
-{
-    GoToPage(ID_PAGE_CAMPAIGN);
-}
-
-void HWForm::GoToSetup()
-{
-    GoToPage(ID_PAGE_SETUP);
-}
-
 void HWForm::GoToSelectNewWeapon()
 {
     ui.pageSelectWeapon->pWeapons->newWeaponsName();
@@ -384,11 +374,6 @@ void HWForm::GoToSelectWeaponSet(int index)
 {
     ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(index);
     GoToPage(ID_PAGE_SELECTWEAPON);
-}
-
-void HWForm::GoToInfo()
-{
-    GoToPage(ID_PAGE_INFO);
 }
 
 void HWForm::GoToMultiplayer()
@@ -520,9 +505,9 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     }
 }
 
-void HWForm::GoToPage(quint8 id)
+void HWForm::GoToPage(int id)
 {
-    quint8 lastid = ui.Pages->currentIndex();
+    int lastid = ui.Pages->currentIndex();
     PagesStack.push(ui.Pages->currentIndex());
     OnPageShown(id, lastid);
     ui.Pages->setCurrentIndex(id);
@@ -530,8 +515,8 @@ void HWForm::GoToPage(quint8 id)
 
 void HWForm::GoBack()
 {
-    quint8 id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
-    quint8 curid = ui.Pages->currentIndex();
+    int id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
+    int curid = ui.Pages->currentIndex();
     ui.Pages->setCurrentIndex(id);
     OnPageShown(id, curid);
 
