@@ -432,8 +432,10 @@ void HWMapContainer::setRandomMap()
     {
     case MAPGEN_REGULAR:
     case MAPGEN_MAZE:
-    case MAPGEN_DRAWN:
         setRandomTheme();
+        break;
+    case MAPGEN_DRAWN:
+        emit drawMapRequested();
         break;
     default:
         if(chooseMap->currentIndex() < numMissions + 4)

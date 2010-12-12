@@ -55,6 +55,7 @@ signals:
     void paramChanged(const QString & param, const QStringList & value);
     void goToSchemes(int);
     void goToWeapons(int);
+    void goToDrawMap();
 
 private slots:
     void ammoChanged(int index);

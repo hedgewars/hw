@@ -95,6 +95,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
     connect(pMapContainer, SIGNAL(maze_sizeChanged(int)), this, SLOT(maze_sizeChanged(int)));
     connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
     connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
+    connect(pMapContainer, SIGNAL(drawMapRequested()), this, SIGNAL(goToDrawMap()));
 }
 
 void GameCFGWidget::jumpToSchemes()

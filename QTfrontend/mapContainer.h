@@ -67,6 +67,7 @@ class HWMapContainer : public QWidget
   void newTemplateFilter(int filter);
   void mapgenChanged(MapGenerator m);
   void maze_sizeChanged(int s);
+  void drawMapRequested();
 
  private slots:
   void setImage(const QImage newImage);
