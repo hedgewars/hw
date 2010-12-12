@@ -122,8 +122,10 @@ int main (int argc, char *argv[]) {
     GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
     NSNumber *isNetGameNum = [gameDictionary objectForKey:@"netgame"];
     
-    if ([isNetGameNum boolValue] == NO)
-        [setup startThread:@"engineProtocol"];
+    [setup startThread:@"engineProtocol"];
+    if ([isNetGameNum boolValue] == YES)
+        [setup startThread:@"serverProtocol"];
+
     const char **gameArgs = [setup getSettings:[gameDictionary objectForKey:@"savefile"]];
     NSNumber *menuStyle = [NSNumber numberWithBool:setup.menuStyle];
     [setup release];

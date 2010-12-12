@@ -250,6 +250,114 @@
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
+-(void) serverProtocol {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    TCPsocket sd;
+    IPaddress ip;
+    BOOL clientQuit = NO;
+    uint8_t buffer[BUFFER_SIZE];
+    uint8_t msgSize;
+    NSString *message = nil;
+
+    if (SDLNet_Init() < 0) {
+        DLog(@"SDLNet_Init: %s", SDLNet_GetError());
+        clientQuit = YES;
+    }
+
+    // Resolving the host using NULL make network interface to listen
+    if (SDLNet_ResolveHost(&ip, "netserver.hedgewars.org", DEFAULT_NETGAME_PORT) < 0 && !clientQuit) {
+        DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
+        clientQuit = YES;
+    }
+
+    // Open a connection with the IP provided (listen on the host's port)
+    if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
+        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), ipcPort);
+        clientQuit = YES;
+    }
+
+    DLog(@"Found server on port %d", DEFAULT_NETGAME_PORT);
+    while (!clientQuit) {
+        memset(buffer, '\0', BUFFER_SIZE);
+        msgSize = SDLNet_TCP_Recv(sd, buffer, BUFFER_SIZE);
+        if (msgSize <= 0) {
+            DLog(@"SDLNet_TCP_Recv: %s", SDLNet_GetError());
+            clientQuit = YES;
+            break;
+        }
+
+        NSString *bufferedMessage = [[NSString alloc] initWithBytes:buffer length:msgSize encoding:NSASCIIStringEncoding];
+        NSMutableArray *listOfCommands = [NSMutableArray arrayWithArray:[bufferedMessage componentsSeparatedByString:@"\n"]];
+        [listOfCommands removeLastObject];
+        [listOfCommands removeLastObject];
+        NSString *command = [listOfCommands objectAtIndex:0];
+        DLog(@"size = %d, %@", msgSize, listOfCommands);
+        [bufferedMessage release];
+        if ([command isEqualToString:@"CONNECTED"]) {
+            message = [[NSString alloc] initWithFormat:@"NICK\nkoda\n\n"];
+            SDLNet_TCP_Send(sd, [message UTF8String], [message length]);
+            [message release];
+
+            message = [[NSString alloc] initWithFormat:@"PROTO\n34\n\n"];
+            SDLNet_TCP_Send(sd, [message UTF8String], [message length]);
+            [message release];
+        }
+        else if ([command isEqualToString:@"PING"]) {
+            if ([listOfCommands count] > 1)
+                message = [[NSString alloc] initWithFormat:@"PONG\n%@\n\n",[listOfCommands objectAtIndex:1]];
+            else
+                message = [[NSString alloc] initWithString:@"PONG\n\n"];
+
+            SDLNet_TCP_Send(sd, [message UTF8String], [message length]);
+            [message release];
+        }
+        else if ([command isEqualToString:@"NICK"]) {
+            //TODO: what is this for?
+        }
+        else if ([command isEqualToString:@"PROTO"]) {
+            if ([[listOfCommands objectAtIndex:1] intValue] == 34) {
+                //TODO: unused
+            }
+        }
+        else if ([command isEqualToString:@"ROOM"]) {
+            //TODO: stub
+        }
+        else if ([command isEqualToString:@"LOBBY:LEFT"]) {
+            //TODO: stub
+        }
+        else if ([command isEqualToString:@"LOBBY:JOINED"]) {
+            //TODO: stub
+        }
+        else if ([command isEqualToString:@"SERVER_MESSAGE"]) {
+            DLog(@"%@", [listOfCommands objectAtIndex:1]);
+        }
+        else if ([command isEqualToString:@"WARNING"]) {
+            if ([listOfCommands count] > 1)
+                DLog(@"Server warning - %@", [listOfCommands objectAtIndex:1]);
+            else
+                DLog(@"Server warning - unknown");
+        }
+        else if ([command isEqualToString:@"ERROR"]) {
+            DLog(@"Server error - %@", [listOfCommands objectAtIndex:1]);
+        }
+        else if ([command isEqualToString:@"BYE"]) {
+            //TODO: handle "Reconnected too fast"
+            DLog(@"Server disconnected, reason: %@", [listOfCommands objectAtIndex:1]);
+            clientQuit = YES;
+        }
+        else {
+            DLog(@"Unknown/Unsupported message received: %@", command);
+        }
+    }
+    DLog(@"Server exited, ending thread");
+
+    // Close the client socket
+    SDLNet_TCP_Close(sd);
+    SDLNet_Quit();
+
+    [pool release];
+}
+
 // method that handles net setup with engine and keeps connection alive
 -(void) engineProtocol {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -388,7 +496,7 @@
                 break;
         }
     }
-    DLog(@"Engine exited, closing server");
+    DLog(@"Engine exited, ending thread");
     // wait a little to let the client close cleanly
     [NSThread sleepForTimeInterval:2];
     // Close the client socket

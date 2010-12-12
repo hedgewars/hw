@@ -697,21 +697,21 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 6172554E12B3DCEE0098D069 /* Lua.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 1D6058910D05DD3D006BFB54 /* Lua.app */;
+			remoteGlobalIDString = 1D6058910D05DD3D006BFB54;
 			remoteInfo = "Test Lua";
 		};
 		6172555612B3DCEE0098D069 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6172554E12B3DCEE0098D069 /* Lua.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 506EE05E10304ED200A389B3 /* libcocos2d libraries.a */;
+			remoteGlobalIDString = 506EE05E10304ED200A389B3;
 			remoteInfo = "cocos2d libraries";
 		};
 		6172555812B3DCEE0098D069 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6172554E12B3DCEE0098D069 /* Lua.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = E14CF7C110ABC177005470B6 /* libLua.a */;
+			remoteGlobalIDString = E14CF7C110ABC177005470B6;
 			remoteInfo = Lua;
 		};
 		617988D9114AAA3900BA94A9 /* PBXContainerItemProxy */ = {

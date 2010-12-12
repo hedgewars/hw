@@ -28,6 +28,7 @@
 
     NSInteger ipcPort;  // Port on which engine will listen
     TCPsocket csd;      // Client socket descriptor
+    TCPsocket esd;      // External socket descriptor
     
     NSString *savePath;
     BOOL isNetGame;

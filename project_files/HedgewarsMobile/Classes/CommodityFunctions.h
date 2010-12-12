@@ -75,3 +75,10 @@ UILabel *createBlueLabel (NSString *title, CGRect frame);
 UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWidth, UIColor *borderColor, UIColor *backgroundColor);
 
 CGSize PSPNGSizeFromMetaData (NSString *aFileName);
+
+@interface NSString (extra)
+
+-(NSString *) getMD5hash;
+
+@end
+
