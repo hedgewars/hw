@@ -63,6 +63,7 @@
 #include "togglebutton.h"
 #include "hwform.h"
 #include "SDLs.h"
+#include "drawmapwidget.h"
 
 PageMain::PageMain(QWidget* parent) :
   AbstractPage(parent)
@@ -2017,5 +2018,8 @@ PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)
 {
     QGridLayout * pageLayout = new QGridLayout(this);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 0, 0, true);
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+
+    drawMapWidget = new DrawMapWidget(this);
+    pageLayout->addWidget(drawMapWidget, 0, 0, 1, 2);
 }

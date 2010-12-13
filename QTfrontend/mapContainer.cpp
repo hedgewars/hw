@@ -40,9 +40,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mainLayout(this),
     pMap(0),
     mapgen(MAPGEN_REGULAR),
-    maze_size(0),
-    drawnMapData(QByteArray::fromBase64("BHoGw4IEegbjAgR6BuwCCnYEaIIJKwRIgglLBEgCCXgERAIJoQQ/AgnBBDsCCeUEMgIKCQQpAgopBCQCCk0ELQIKXwRIAgo/BE0CCiAEVgIJ+wRfAgnOBGgCCaoEbQIJfQRxAgldBHYCCTkEdgIJFARxAgj+BIgCCOwEqAIJEASsAgkwBJ8CCV0ElgIJhgSWAgmqBJYCCcoElgIJ7gSMAgoOBIwCCNAE2YII2QS1AgjsBJYCCPUEdgIJAgRWAgkQBDYCCScEIAIJSwQXAgl0BAkCCZgEAAIJuAP3AgncA/ICCgUD7gIKJAPlAgo/A/cCClYEDgIKbQQkAgqDBDsCCpoEUgIKrARbAghIBP6CCGgE/gIIjAT1AgixBOwCCNUE5wII9QTjAgkUBNkCCTkE0AIJWATHAgl4BMMCCZgEvgIJvAS1AgncBKwCCgAEowIKIASaAgo/BJECCl8EiAIKfwSDAgqfBHYCCscEbQIK5wRoAgr5BGQCCLUGcYIIzAaIAgjnBpoCCQcGrAIJKwa1AglUBroCCXgGvgIJmAa+Agm8Br4CCeAGvgIKAAa6AgogBrUCCj8GqAIKXwaWAgp6Bn8CCpEGaAIKnwZSAgotBZOCCjIFjwIJIgWTggk0BZwCCSsFmIIHYQeBggdhBNmCB2EFBwIHYQUrAgdhBUsCB2EFbwIHYQWqAgdhBc4CB2EF9wIHYQYgAgdhBlICB2EGegIHYQaaAgdhBswCB2EG/gIHYQcQAgZ/BimCBoMGKQIGfwaMggaDBrECBn8G1QIGfwb1AgZ/BwsCBbMFaoIFrgWKAgWqBa4CBaUF6QIFnAYSAgWYBjICBYoGbQIFfQaMAgV0BrUCBWoG3gIFagb+AgVhByICBWEHGQIEmgY2ggS+BkQCBOwGRAIFEAZEAgUwBj8CBVQGOwIFWAY7AgS1BUuCBLUFbwIErAWTAgSjBcECBJ8F+wIEkQYpAgSIBk0CBH8GegIEfwaoAgR6BrUC")
-    )
+    maze_size(0)
 {
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
@@ -345,7 +343,7 @@ void HWMapContainer::changeImage()
     pMap = new HWMap();
     connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
     connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
-    pMap->getImage(m_seed.toStdString(), getTemplateFilter(), mapgen, maze_size, drawnMapData);
+    pMap->getImage(m_seed.toStdString(), getTemplateFilter(), mapgen, maze_size, getDrawnMapData());
 }
 
 void HWMapContainer::themeSelected(int currentRow)
@@ -543,7 +541,7 @@ void HWMapContainer::setMapgen(MapGenerator m)
 
 QByteArray HWMapContainer::getDrawnMapData()
 {
-    return drawnMapData;
+    return drawMapScene.encode();
 }
 
 void HWMapContainer::seedEdited(const QString & seed)
@@ -555,4 +553,9 @@ void HWMapContainer::seedEdited(const QString & seed)
         setSeed(seed);
         emit seedChanged(seed);
     }
+}
+
+DrawMapScene * HWMapContainer::getDrawMapScene()
+{
+    return &drawMapScene;
 }

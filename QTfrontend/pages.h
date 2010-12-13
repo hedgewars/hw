@@ -61,6 +61,8 @@ class SelWeaponWidget;
 class IconedGroupBox;
 class FreqSpinBox;
 
+class DrawMapWidget;
+
 class AbstractPage : public QWidget
 {
     Q_OBJECT
@@ -582,6 +584,7 @@ public:
 
     QPushButton * BtnBack;
 
+    DrawMapWidget * drawMapWidget;
 };
 
 #endif // PAGES_H

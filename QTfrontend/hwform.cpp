@@ -57,6 +57,7 @@
 #include "ammoSchemeModel.h"
 #include "bgwidget.h"
 #include "xfire.h"
+#include "drawmapwidget.h"
 
 #ifdef __APPLE__
 #include "CocoaInitializer.h"
@@ -432,6 +433,24 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 #ifdef USE_XFIRE
     updateXfire();
 #endif
+    if(id == ID_PAGE_DRAWMAP)
+    {
+        DrawMapScene * scene;
+        if(lastid = ID_PAGE_MULTIPLAYER)
+            scene = ui.pageMultiplayer->gameCFG->pMapContainer->getDrawMapScene();
+        else
+            scene = ui.pageNetGame->pGameCFG->pMapContainer->getDrawMapScene();
+
+        ui.pageDrawMap->drawMapWidget->setScene(scene);
+    }
+    if(lastid == ID_PAGE_DRAWMAP)
+    {
+        if(id = ID_PAGE_MULTIPLAYER)
+            ui.pageMultiplayer->gameCFG->pMapContainer->changeImage();
+        else
+            ui.pageNetGame->pGameCFG->pMapContainer->changeImage();
+    }
+
     if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) {
         QStringList tmNames = config->GetTeamsList();
         TeamSelWidget* curTeamSelWidget;

@@ -27,6 +27,7 @@
 #include <QLineEdit>
 
 #include "hwmap.h"
+#include "drawmapscene.h"
 
 class QPushButton;
 class IconedGroupBox;
@@ -53,6 +54,7 @@ class HWMapContainer : public QWidget
   int get_maze_size(void) const;
   bool getCurrentIsMission() const;
   QByteArray getDrawnMapData();
+  DrawMapScene * getDrawMapScene();
 
  public slots:
   void changeImage();
@@ -106,9 +108,9 @@ class HWMapContainer : public QWidget
   QLabel *maze_size_label;
   QComboBox *maze_size_selection;
   MapGenerator mapgen;
-  QByteArray drawnMapData;
   int numMissions;
   int maze_size;
+  DrawMapScene drawMapScene;
 
   void loadMap(int index);
 };
