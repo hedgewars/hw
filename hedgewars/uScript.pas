@@ -642,28 +642,6 @@ begin
     lc_copypv:= 1
 end;
 
-function lc_copypv2(L : Plua_State) : LongInt; Cdecl;
-var gears, geard : PGear;
-begin
-    if lua_gettop(L) <> 2 then
-        begin
-        LuaError('Lua: Wrong number of parameters passed to CopyPV2!');
-        end
-    else
-        begin
-        gears:= GearByUID(lua_tointeger(L, 1));
-        geard:= GearByUID(lua_tointeger(L, 2));
-        if (gears <> nil) and (geard <> nil) then
-            begin
-            geard^.X:= gears^.X;
-            geard^.Y:= gears^.Y;
-            geard^.dX:= gears^.dX * 2;
-            geard^.dY:= gears^.dY * 2;
-            end
-        end;
-    lc_copypv2:= 1
-end;
-
 function lc_followgear(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -864,8 +842,10 @@ begin
 end;
 
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
+var np: LongInt;
 begin
-    if lua_gettop(L) <> 5 then
+    np:= lua_gettop(L);
+    if (np < 5) or (np > 6) then
         begin
         LuaError('Lua: Wrong number of parameters passed to AddTeam!');
         //lua_pushnil(L)
@@ -876,6 +856,7 @@ begin
         ParseCommand('grave ' + lua_tostring(L, 3), true);
         ParseCommand('fort ' + lua_tostring(L, 4), true);
         ParseCommand('voicepack ' + lua_tostring(L, 5), true);
+        if (np = 6) then ParseCommand('flag ' + lua_tostring(L, 6), true);
         CurrentTeam^.Binds:= DefaultBinds
         // fails on x64
         //lua_pushinteger(L, LongInt(CurrentTeam));
@@ -957,6 +938,45 @@ begin
             end
         end;
     lc_setgearposition:= 0
+end;
+
+function lc_getgearvelocity(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetGearVelocity!');
+        lua_pushnil(L);
+        lua_pushnil(L)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            begin
+            lua_pushnumber(L, hwRound(gear^.dX * 1000) / 1000);
+            lua_pushnumber(L, hwRound(gear^.dY * 1000) / 1000)
+            end
+        end;
+    lc_getgearvelocity:= 2;
+end;
+
+function lc_setgearvelocity(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 3 then
+        LuaError('Lua: Wrong number of parameters passed to SetGearVelocity!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            begin
+            gear^.dX:= int2hwFloat(round(lua_tonumber(L, 2) * 1000)) / 1000;
+            gear^.dY:= int2hwFloat(round(lua_tonumber(L, 3) * 1000)) / 1000;
+            SetAllToActive;
+            end
+        end;
+    lc_setgearvelocity:= 0
 end;
 
 function lc_setzoom(L : Plua_State) : LongInt; Cdecl;
@@ -1412,6 +1432,8 @@ lua_register(luaState, 'EndGame', @lc_endgame);
 lua_register(luaState, 'FindPlace', @lc_findplace);
 lua_register(luaState, 'SetGearPosition', @lc_setgearposition);
 lua_register(luaState, 'GetGearPosition', @lc_getgearposition);
+lua_register(luaState, 'SetGearVelocity', @lc_setgearvelocity);
+lua_register(luaState, 'GetGearVelocity', @lc_getgearvelocity);
 lua_register(luaState, 'ParseCommand', @lc_parsecommand);
 lua_register(luaState, 'ShowMission', @lc_showmission);
 lua_register(luaState, 'HideMission', @lc_hidemission);
@@ -1433,7 +1455,6 @@ lua_register(luaState, 'SetHogLevel', @lc_sethoglevel);
 lua_register(luaState, 'GetX', @lc_getx);
 lua_register(luaState, 'GetY', @lc_gety);
 lua_register(luaState, 'CopyPV', @lc_copypv);
-lua_register(luaState, 'CopyPV2', @lc_copypv2);
 lua_register(luaState, 'FollowGear', @lc_followgear);
 lua_register(luaState, 'GetFollowGear', @lc_getfollowgear);
 lua_register(luaState, 'SetState', @lc_setstate);

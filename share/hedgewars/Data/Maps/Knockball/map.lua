@@ -36,7 +36,8 @@ function onGearAdd(gear)
 	if GetGearType(gear) == gtShover then
 		ball = AddGear(GetX(gear), GetY(gear), gtBall, 0, 0, 0, 0)
 		if ball ~= nil then
-			CopyPV2(gear, ball)
+			local dx, dy = GetGearVelocity(gear)
+			SetGearVelocity(ball, dx * 2, dy * 2)
 			SetState(ball, 0x200) -- temporary - might change!
 			SetTag(ball, 8) -- baseball skin
 			FollowGear(ball)

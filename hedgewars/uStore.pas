@@ -120,7 +120,7 @@ var s: shortstring;
 
         // overwrite flag for cpu teams and keep players from using it
         if (Hedgehogs[0].Gear <> nil) and (Hedgehogs[0].BotLevel > 0) then
-            Flag:= 'cpu'
+            if Flag = 'hedgewars' then Flag:= 'cpu'
         else if Flag = 'cpu' then
             Flag:= 'hedgewars';
 
