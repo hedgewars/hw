@@ -492,7 +492,6 @@ begin
 end;
 
 function lc_getclancolor(L : Plua_State) : LongInt; Cdecl;
-var gear : PGear;
 begin
     if lua_gettop(L) <> 1 then
         begin
@@ -850,11 +849,17 @@ begin
 end;
 
 function lc_playsound(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
 begin
-    if lua_gettop(L) <> 1 then
-        LuaError('Lua: Wrong number of parameters passed to PlaySound!')
-    else
-        PlaySound(TSound(lua_tointeger(L, 1)));
+    if lua_gettop(L) = 1 then
+        PlaySound(TSound(lua_tointeger(L, 1)))
+    else if lua_gettop(L) = 2 then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 2));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            PlaySound(TSound(lua_tointeger(L, 1)),gear^.Hedgehog^.Team^.Voicepack)
+        end
+    else LuaError('Lua: Wrong number of parameters passed to PlaySound!');
     lc_playsound:= 0;
 end;
 
