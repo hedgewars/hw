@@ -40,6 +40,7 @@ public:
     quint32 getGameFlags() const;
     quint32 getInitHealth() const;
     QByteArray getFullConfig() const;
+    QComboBox * Scripts;
     QComboBox * GameSchemes;
     QComboBox * WeaponsName;
     HWMapContainer* pMapContainer;
@@ -64,6 +65,7 @@ private slots:
     void seedChanged(const QString &);
     void themeChanged(const QString &);
     void schemeChanged(int);
+    void scriptChanged(int);
     void jumpToSchemes();
     void jumpToWeapons();
     void mapgenChanged(MapGenerator m);

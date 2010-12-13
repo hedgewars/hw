@@ -94,10 +94,14 @@ QComboBox::tr("generated maze..."));
         if (mapCfgFile.open(QFile::ReadOnly)) {
             QString theme;
             quint32 limit = 0;
+            QString scheme;
+            QString weapons;
             QList<QVariant> mapInfo;
             QTextStream input(&mapCfgFile);
             input >> theme;
             input >> limit;
+            input >> scheme;
+            input >> weapons;
             mapInfo.push_back(map);
             mapInfo.push_back(theme);
             if (limit)
@@ -105,6 +109,14 @@ QComboBox::tr("generated maze..."));
             else
                 mapInfo.push_back(18);
             mapInfo.push_back(mapLuaFile.exists());
+            if (scheme.isEmpty())
+                scheme = "locked";
+            scheme.replace("_", " ");
+            if (weapons.isEmpty())
+                weapons = "locked";
+            weapons.replace("_", " ");
+            mapInfo.push_back(scheme);
+            mapInfo.push_back(weapons);
             if(mapLuaFile.exists())
             {
                 chooseMap->insertItem(missionindex++, 
@@ -371,6 +383,16 @@ bool HWMapContainer::getCurrentIsMission() const
 int HWMapContainer::getCurrentHHLimit() const
 {
     return hhLimit;
+}
+
+QString HWMapContainer::getCurrentScheme() const
+{
+    return chooseMap->itemData(chooseMap->currentIndex()).toList()[4].toString();
+}
+
+QString HWMapContainer::getCurrentWeapons() const
+{
+    return chooseMap->itemData(chooseMap->currentIndex()).toList()[5].toString();
 }
 
 quint32 HWMapContainer::getTemplateFilter() const

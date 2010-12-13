@@ -399,6 +399,11 @@ int main(int argc, char *argv[]) {
     tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     mapList = new QStringList(tmpdir.entryList(QStringList("*")));
 
+    tmpdir.cd(datadir->absolutePath());
+    tmpdir.cd("Scripts/Multiplayer");
+    tmpdir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+    scriptList = new QStringList(tmpdir.entryList(QStringList("*.lua")));
+
 
     QTranslator Translator;
     {

@@ -29,6 +29,7 @@ QDir * datadir = new QDir();
 
 QStringList * Themes;
 QStringList * mapList;
+QStringList * scriptList;
 
 bool custom_config = false;
 bool custom_data = false;

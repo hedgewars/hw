@@ -38,6 +38,7 @@ extern int cMaxTeams;
 
 extern QStringList * Themes;
 extern QStringList * mapList;
+extern QStringList * scriptList;
 
 extern QString * cDefaultAmmoStore;
 extern int cAmmoNumber;

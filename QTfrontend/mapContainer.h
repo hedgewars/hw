@@ -45,6 +45,8 @@ class HWMapContainer : public QWidget
   QString getCurrentMap() const;
   QString getCurrentTheme() const;
   int     getCurrentHHLimit() const;
+  QString getCurrentScheme() const;
+  QString getCurrentWeapons() const;
   quint32 getTemplateFilter() const;
   MapGenerator get_mapgen(void) const;
   int get_maze_size(void) const;
