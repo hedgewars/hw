@@ -398,7 +398,7 @@ case Layer of
             vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
             vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
             vgtLineTrail: DrawLine(Gear^.X, Gear^.Y, Gear^.dX, Gear^.dY, 1.0, $FF, min(Gear^.Timer, $C0), min(Gear^.Timer, $80), min(Gear^.Timer, $FF));
-            vgtSpeechBubble: if (Gear^.Hedgehog^.Team <> CurrentTeam) and (Gear^.Tex <> nil) then 
+            vgtSpeechBubble: if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog^.Team <> CurrentTeam)) or (Gear^.State = 1)) then 
                     begin
                     tinted:= true;
                     Tint($FF, $FF, $FF,  $66);
@@ -495,7 +495,7 @@ case Layer of
             end;
         case Gear^.Kind of
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtSpeechBubble: if (Gear^.Hedgehog^.Team = CurrentTeam) and (Gear^.Tex <> nil) then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+            vgtSpeechBubble: if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog^.Team = CurrentTeam)) or (Gear^.State = 2)) then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtCircle: DrawCircle(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State, Gear^.Timer);
         end;
