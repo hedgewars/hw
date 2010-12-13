@@ -78,7 +78,7 @@ CGSize PSPNGSizeFromMetaData (NSString *aFileName);
 
 @interface NSString (extra)
 
--(NSString *) getMD5hash;
+-(NSString *) MD5hash;
 
 @end
 

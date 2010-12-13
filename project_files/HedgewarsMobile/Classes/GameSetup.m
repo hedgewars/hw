@@ -234,7 +234,7 @@
 }
 
 // wrapper that computes the length of the message and then sends the command string, saving the command on a file
--(int) sendToEngine: (NSString *)string {
+-(int) sendToEngine:(NSString *)string {
     uint8_t length = [string length];
 
     [self dumpRawData:(const uint8_t *)[string UTF8String] ofSize:length];
@@ -243,21 +243,35 @@
 }
 
 // wrapper that computes the length of the message and then sends the command string, skipping file writing
--(int) sendToEngineNoSave: (NSString *)string {
+-(int) sendToEngineNoSave:(NSString *)string {
     uint8_t length = [string length];
 
     SDLNet_TCP_Send(csd, &length, 1);
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
+-(int) sendToServer:(NSString *)command withArgument:(NSString *)argument {
+    NSString *message = [[NSString alloc] initWithFormat:@"%@\n%@\n\n",command,argument];
+    int result = SDLNet_TCP_Send(esd, [message UTF8String], [message length]);
+    [message release];
+    return result;
+}
+
+-(int) sendToServer:(NSString *)command {
+    NSString *message = [[NSString alloc] initWithFormat:@"%@\n\n",command];
+    int result = SDLNet_TCP_Send(esd, [message UTF8String], [message length]);
+    [message release];
+    return result;
+}
+
 -(void) serverProtocol {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    TCPsocket sd;
     IPaddress ip;
     BOOL clientQuit = NO;
-    uint8_t buffer[BUFFER_SIZE];
+    char *buffer = (char *)malloc(sizeof(char)*BUFFER_SIZE);
+    int dim = BUFFER_SIZE;
     uint8_t msgSize;
-    NSString *message = nil;
+    NSString *arg = nil;
 
     if (SDLNet_Init() < 0) {
         DLog(@"SDLNet_Init: %s", SDLNet_GetError());
@@ -271,45 +285,56 @@
     }
 
     // Open a connection with the IP provided (listen on the host's port)
-    if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), ipcPort);
+    if (!(esd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
+        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), DEFAULT_NETGAME_PORT);
         clientQuit = YES;
     }
 
     DLog(@"Found server on port %d", DEFAULT_NETGAME_PORT);
     while (!clientQuit) {
-        memset(buffer, '\0', BUFFER_SIZE);
-        msgSize = SDLNet_TCP_Recv(sd, buffer, BUFFER_SIZE);
-        if (msgSize <= 0) {
-            DLog(@"SDLNet_TCP_Recv: %s", SDLNet_GetError());
-            clientQuit = YES;
-            break;
+        int index = 0;
+        BOOL exitBufferLoop = NO;
+        memset(buffer, '\0', dim);
+        
+        while (exitBufferLoop != YES) {
+            msgSize = SDLNet_TCP_Recv(esd, &buffer[index], 2);
+            
+            // exit in case of error
+            if (msgSize <= 0) {
+                DLog(@"SDLNet_TCP_Recv: %s", SDLNet_GetError());
+                clientQuit = YES;
+                break;
+            }
+            
+            // update index position and check for End-Of-Message
+            index += msgSize;
+            if (strncmp(&buffer[index-2], "\n\n", 2) == 0) {
+                exitBufferLoop = YES;
+            }
+            
+            // if message is too big allocate new space
+            if (index >= dim) {
+                dim += BUFFER_SIZE;
+                buffer = (char *)realloc(buffer, dim);
+                if (buffer == NULL) {
+                    clientQuit = YES;
+                    break;
+                }
+            }
         }
 
-        NSString *bufferedMessage = [[NSString alloc] initWithBytes:buffer length:msgSize encoding:NSASCIIStringEncoding];
-        NSMutableArray *listOfCommands = [NSMutableArray arrayWithArray:[bufferedMessage componentsSeparatedByString:@"\n"]];
-        [listOfCommands removeLastObject];
-        [listOfCommands removeLastObject];
-        NSString *command = [listOfCommands objectAtIndex:0];
-        DLog(@"size = %d, %@", msgSize, listOfCommands);
+        NSString *bufferedMessage = [[NSString alloc] initWithBytes:buffer length:index-2 encoding:NSASCIIStringEncoding];
+        NSArray *listOfCommands = [bufferedMessage componentsSeparatedByString:@"\n"];
         [bufferedMessage release];
-        if ([command isEqualToString:@"CONNECTED"]) {
-            message = [[NSString alloc] initWithFormat:@"NICK\nkoda\n\n"];
-            SDLNet_TCP_Send(sd, [message UTF8String], [message length]);
-            [message release];
-
-            message = [[NSString alloc] initWithFormat:@"PROTO\n34\n\n"];
-            SDLNet_TCP_Send(sd, [message UTF8String], [message length]);
-            [message release];
-        }
-        else if ([command isEqualToString:@"PING"]) {
+        NSString *command = [listOfCommands objectAtIndex:0];
+        DLog(@"size = %d, %@", index-2, listOfCommands);
+        if ([command isEqualToString:@"PING"]) {
             if ([listOfCommands count] > 1)
-                message = [[NSString alloc] initWithFormat:@"PONG\n%@\n\n",[listOfCommands objectAtIndex:1]];
+                [self sendToServer:@"PONG" withArgument:[listOfCommands objectAtIndex:1]];
             else
-                message = [[NSString alloc] initWithString:@"PONG\n\n"];
+                [self sendToServer:@"PONG"];
 
-            SDLNet_TCP_Send(sd, [message UTF8String], [message length]);
-            [message release];
+            [arg release];
         }
         else if ([command isEqualToString:@"NICK"]) {
             //TODO: what is this for?
@@ -327,6 +352,14 @@
         }
         else if ([command isEqualToString:@"LOBBY:JOINED"]) {
             //TODO: stub
+        }
+        else if ([command isEqualToString:@"ASKPASSWORD"]) {
+            //TODO: store hashed password in settings.plist (nil here will vouluntary trigger an exception)
+            [self sendToServer:@"PASSWORD" withArgument:nil];
+        }
+        else if ([command isEqualToString:@"CONNECTED"]) {
+            [self sendToServer:@"NICK" withArgument:@"koda"];
+            [self sendToServer:@"PROTO" withArgument:@"34"];
         }
         else if ([command isEqualToString:@"SERVER_MESSAGE"]) {
             DLog(@"%@", [listOfCommands objectAtIndex:1]);
@@ -351,8 +384,9 @@
     }
     DLog(@"Server exited, ending thread");
 
+    free(buffer);
     // Close the client socket
-    SDLNet_TCP_Close(sd);
+    SDLNet_TCP_Close(esd);
     SDLNet_Quit();
 
     [pool release];
