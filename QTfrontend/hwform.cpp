@@ -121,7 +121,8 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnSetup, ID_PAGE_SETUP);
     
-    connect(ui.pageMain->BtnNet, SIGNAL(clicked()), this, SLOT(GoToNetType()));
+    connect(ui.pageMain->BtnNet, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnNet, ID_PAGE_NETTYPE);
     connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnInfo, ID_PAGE_INFO);
 
@@ -169,7 +170,9 @@ HWForm::HWForm(QWidget *parent)
 
     connect(ui.pageNet->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
-    connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(GoToNetServer()));
+    connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageNet->BtnNetSvrStart, ID_PAGE_NETSERVER);
+
     connect(ui.pageNet, SIGNAL(connectClicked(const QString &, quint16)), this, SLOT(NetConnectServer(const QString &, quint16)));
 
     connect(ui.pageNetServer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
@@ -187,7 +190,8 @@ HWForm::HWForm(QWidget *parent)
     pageSwitchMapper->setMapping(ui.pageNetGame->pGameCFG, ID_PAGE_DRAWMAP);
 
     connect(ui.pageRoomsList->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
-    connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), this, SLOT(GoToAdmin()));
+    connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageRoomsList->BtnAdmin, ID_PAGE_ADMIN);
 
     connect(ui.pageInfo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
@@ -196,11 +200,13 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageSinglePlayer->BtnSimpleGamePage, SIGNAL(clicked()), this, SLOT(SimpleGame()));
     connect(ui.pageSinglePlayer->BtnTrainPage, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnTrainPage, ID_PAGE_TRAINING);
-    
+
     connect(ui.pageSinglePlayer->BtnCampaignPage, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnCampaignPage, ID_PAGE_CAMPAIGN);
 
-    connect(ui.pageSinglePlayer->BtnMultiplayer, SIGNAL(clicked()), this, SLOT(GoToMultiplayer()));
+    connect(ui.pageSinglePlayer->BtnMultiplayer, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnMultiplayer, ID_PAGE_MULTIPLAYER);
+
     connect(ui.pageSinglePlayer->BtnLoad, SIGNAL(clicked()), this, SLOT(GoToSaves()));
     connect(ui.pageSinglePlayer->BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
     connect(ui.pageSinglePlayer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
@@ -382,11 +388,6 @@ void HWForm::GoToSelectWeaponSet(int index)
     GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
-void HWForm::GoToMultiplayer()
-{
-    GoToPage(ID_PAGE_MULTIPLAYER);
-}
-
 void HWForm::GoToSaves()
 {
     ui.pagePlayDemo->FillFromDir(PagePlayDemo::RT_Save);
@@ -408,16 +409,6 @@ void HWForm::GoToNet()
     GoToPage(ID_PAGE_NET);
 }
 
-void HWForm::GoToNetType()
-{
-    GoToPage(ID_PAGE_NETTYPE);
-}
-
-void HWForm::GoToNetServer()
-{
-    GoToPage(ID_PAGE_NETSERVER);
-}
-
 void HWForm::GoToScheme(int index)
 {
     ui.pageScheme->selectScheme->setCurrentIndex(index);
@@ -434,11 +425,6 @@ void HWForm::GoToEditScheme()
 {
     ui.pageScheme->selectScheme->setCurrentIndex(ui.pageOptions->SchemesName->currentIndex());
     GoToPage(ID_PAGE_SCHEME);
-}
-
-void HWForm::GoToAdmin()
-{
-    GoToPage(ID_PAGE_ADMIN);
 }
 
 void HWForm::OnPageShown(quint8 id, quint8 lastid)

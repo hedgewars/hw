@@ -60,19 +60,15 @@ public:
     void updateXfire();
 
 private slots:
-    void GoToMultiplayer();
     void GoToSaves();
     void GoToDemos();
     void GoToNet();
-    void GoToNetType();
     void GoToSelectWeapon();
     void GoToSelectWeaponSet(int index);
     void GoToSelectNewWeapon();
-    void GoToNetServer();
     void GoToScheme(int index);
     void GoToEditScheme();
     void GoToNewScheme();
-    void GoToAdmin();
     void GoToPage(int id);
     void GoBack();
     void AssociateFiles();
