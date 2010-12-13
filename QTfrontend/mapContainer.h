@@ -24,6 +24,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QByteArray>
+#include <QLineEdit>
 
 #include "hwmap.h"
 
@@ -83,6 +84,7 @@ class HWMapContainer : public QWidget
   void themeSelected(int currentRow);
   void addInfoToPreview(QPixmap image);
   void templateFilterChanged(int filter);
+  void seedEdited(const QString & seed);
 
  protected:
   virtual void resizeEvent ( QResizeEvent * event );
@@ -95,6 +97,7 @@ class HWMapContainer : public QWidget
   QListWidget* lwThemes;
   HWMap* pMap;
   QString m_seed;
+  QLineEdit* seedEdit;
   int hhLimit;
   int templateFilter;
   QPixmap hhSmall;

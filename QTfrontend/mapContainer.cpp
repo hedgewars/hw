@@ -29,6 +29,7 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 #include <QIcon>
+#include <QLineEdit>
 
 #include "hwconsts.h"
 #include "mapContainer.h"
@@ -210,6 +211,12 @@ map, mapInfo);
 
     gbTLayout->addWidget(lwThemes);
     lwThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
+
+    QLabel* seedLabel = new QLabel(tr("Seed"), this);
+    mainLayout.addWidget(seedLabel, 3, 0);
+    seedEdit = new QLineEdit(this);
+    mainLayout.addWidget(seedEdit, 3, 1, 1, 2);
+    connect(seedEdit, SIGNAL(textChanged(const QString&)), this, SLOT(seedEdited(const QString&)));
 
     mainLayout.setSizeConstraint(QLayout::SetFixedSize);//SetMinimumSize
 
@@ -408,6 +415,8 @@ void HWMapContainer::resizeEvent ( QResizeEvent * event )
 void HWMapContainer::setSeed(const QString & seed)
 {
     m_seed = seed;
+    if (seed != seedEdit->text())
+        seedEdit->setText(seed);
     if (chooseMap->currentIndex() < MAPGEN_LAST)
         changeImage();
 }
@@ -483,6 +492,7 @@ void HWMapContainer::setRandomMission()
 void HWMapContainer::setRandomSeed()
 {
     m_seed = QUuid::createUuid().toString();
+    seedEdit->setText(m_seed);
     emit seedChanged(m_seed);
     if (chooseMap->currentIndex() < MAPGEN_LAST)
         changeImage();
@@ -534,4 +544,15 @@ void HWMapContainer::setMapgen(MapGenerator m)
 QByteArray HWMapContainer::getDrawnMapData()
 {
     return drawnMapData;
+}
+
+void HWMapContainer::seedEdited(const QString & seed)
+{
+    if (seed.isEmpty() || seed.size() > 54)
+        seedEdit->setText(m_seed);
+    else
+    {
+        setSeed(seed);
+        emit seedChanged(seed);
+    }
 }
