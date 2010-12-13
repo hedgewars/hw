@@ -379,7 +379,7 @@ with team^ do
         begin
         MaxTeamHealth:= NewTeamHealthBarWidth;
         RecountAllTeamsHealth;
-        end else NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
+        end else if NewTeamHealthBarWidth > 0 then NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
     end;
 
 RecountClanHealth(team^.Clan);
