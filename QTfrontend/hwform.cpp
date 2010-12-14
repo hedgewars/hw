@@ -473,7 +473,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
           teamsList.push_back(team);
         }
 
-        if(lastid == ID_PAGE_SETUP) { // _TEAM
+        if(lastid == ID_PAGE_SETUP || lastid == ID_PAGE_DRAWMAP) { // _TEAM
           if (editedTeam) {
             curTeamSelWidget->addTeam(*editedTeam);
           }
