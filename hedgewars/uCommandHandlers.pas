@@ -155,7 +155,7 @@ if not CurrentTeam^.ExtDriven then SendIPC('L');
 if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
-    Message:= Message or gmLeft
+    Message:= Message or (gmLeft and InputMask)
 end;
 
 procedure chLeft_m(var s: shortstring);
@@ -164,7 +164,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('l');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not gmLeft
+    Message:= Message and not (gmLeft and InputMask)
 end;
 
 procedure chRight_p(var s: shortstring);
@@ -175,7 +175,7 @@ if not CurrentTeam^.ExtDriven then SendIPC('R');
 if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
-    Message:= Message or gmRight
+    Message:= Message or (gmRight and InputMask)
 end;
 
 procedure chRight_m(var s: shortstring);
@@ -184,7 +184,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('r');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not gmRight
+    Message:= Message and not (gmRight and InputMask)
 end;
 
 procedure chUp_p(var s: shortstring);
@@ -195,7 +195,7 @@ if not CurrentTeam^.ExtDriven then SendIPC('U');
 if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
-    Message:= Message or gmUp
+    Message:= Message or (gmUp and InputMask)
 end;
 
 procedure chUp_m(var s: shortstring);
@@ -204,7 +204,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('u');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not gmUp
+    Message:= Message and not (gmUp and InputMask);
 end;
 
 procedure chDown_p(var s: shortstring);
@@ -215,7 +215,7 @@ if not CurrentTeam^.ExtDriven then SendIPC('D');
 if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
-    Message:= Message or gmDown
+    Message:= Message or (gmDown and InputMask)
 end;
 
 procedure chDown_m(var s: shortstring);
@@ -224,7 +224,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('d');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not gmDown
+    Message:= Message and not (gmDown and InputMask)
 end;
 
 procedure chPrecise_p(var s: shortstring);
@@ -235,7 +235,7 @@ if not CurrentTeam^.ExtDriven then SendIPC('Z');
 if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
-    Message:= Message or gmPrecise
+    Message:= Message or (gmPrecise and InputMask);
 end;
 
 procedure chPrecise_m(var s: shortstring);
@@ -244,7 +244,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('z');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not gmPrecise
+    Message:= Message and not (gmPrecise and InputMask);
 end;
 
 procedure chLJump(var s: shortstring);
@@ -255,7 +255,7 @@ if not CurrentTeam^.ExtDriven then SendIPC('j');
 if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
-    Message:= Message or gmLJump
+    Message:= Message or (gmLJump and InputMask)
 end;
 
 procedure chHJump(var s: shortstring);
@@ -266,7 +266,7 @@ if not CurrentTeam^.ExtDriven then SendIPC('J');
 if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
-    Message:= Message or gmHJump
+    Message:= Message or (gmHJump and InputMask)
 end;
 
 procedure chAttack_p(var s: shortstring);
@@ -282,7 +282,7 @@ with CurrentHedgehog^.Gear^ do
         begin
         FollowGear:= CurrentHedgehog^.Gear;
         if not CurrentTeam^.ExtDriven then SendIPC('A');
-        Message:= Message or gmAttack
+        Message:= Message or (gmAttack and InputMask)
         end
     end
 end;
@@ -295,7 +295,7 @@ with CurrentHedgehog^.Gear^ do
     begin
     if not CurrentTeam^.ExtDriven and
         ((Message and gmAttack) <> 0) then SendIPC('a');
-    Message:= Message and not gmAttack
+    Message:= Message and not (gmAttack and InputMask)
     end
 end;
 
@@ -307,7 +307,7 @@ if not CurrentTeam^.ExtDriven then SendIPC('S');
 if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
-    Message:= Message or gmSwitch
+    Message:= Message or (gmSwitch and InputMask)
 end;
 
 procedure chNextTurn(var s: shortstring);
@@ -330,7 +330,7 @@ if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
-    Message:= Message or gmTimer;
+    Message:= Message or (gmTimer and InputMask);
     MsgParam:= byte(s[1]) - ord('0')
     end
 end;
@@ -346,7 +346,7 @@ if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
-    Message:= Message or gmSlot;
+    Message:= Message or (gmSlot and InputMask);
     MsgParam:= slot
     end
 end;
@@ -361,7 +361,7 @@ begin
 
     with CurrentHedgehog^.Gear^ do
     begin
-        Message:= Message or gmWeapon;
+        Message:= Message or (gmWeapon and InputMask);
         MsgParam:= byte(s[1]);
     end;
 end;
@@ -376,7 +376,7 @@ if not CurrentTeam^.ExtDriven then SendIPC('t' + s);
 
 with CurrentHedgehog^.Gear^ do
     begin
-    Message:= Message or gmAnimate;
+    Message:= Message or (gmAnimate and InputMask);
     MsgParam:= byte(s[1])
     end
 end;

@@ -116,6 +116,15 @@ begin
     lc_bnot := 1;
 end;
 
+function lc_setinputmask(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        LuaError('Lua: Wrong number of parameters passed to SetInputMask!')
+    else InputMask:= lua_tointeger(L, 1);
+    lc_setinputmask:= 0
+end;
+
 function lc_writelntoconsole(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 1 then
@@ -1417,6 +1426,7 @@ for he:= Low(THogEffect) to High(THogEffect) do
 lua_register(luaState, 'band', @lc_band);
 lua_register(luaState, 'bor', @lc_bor);
 lua_register(luaState, 'bnot', @lc_bnot);
+lua_register(luaState, 'SetInputMask', @lc_setinputmask);
 lua_register(luaState, 'AddGear', @lc_addgear);
 lua_register(luaState, 'DeleteGear', @lc_deletegear);
 lua_register(luaState, 'AddVisualGear', @lc_addvisualgear);

@@ -43,6 +43,7 @@ var
 
     GameState       : TGameState;
     GameType        : TGameType;
+    InputMask       : LongWord;
     GameFlags       : Longword;
     TrainingFlags   : Longword;
     TurnTimeLeft    : Longword;
@@ -2157,6 +2158,7 @@ begin
     cWaterLine          := LAND_HEIGHT;
     cGearScrEdgesDist   := 240;
 
+    InputMask           := $FFFFFFFF;
     GameFlags           := 0;
     TrainingFlags       := 0;
     TurnTimeLeft        := 0;

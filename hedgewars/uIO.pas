@@ -405,7 +405,7 @@ with CurrentHedgehog^.Gear^,
         {$IFDEF DEBUGFILE}AddFilelog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));{$ENDIF}
         State:= State and not gstHHChooseTarget;
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
-            Message:= Message or gmAttack;
+            Message:= Message or (gmAttack and InputMask);
         end
     else
         if CurrentTeam^.ExtDriven then
