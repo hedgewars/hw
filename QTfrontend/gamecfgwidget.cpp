@@ -535,5 +535,5 @@ void GameCFGWidget::resendSchemeData()
 void GameCFGWidget::onDrawnMapChanged(const QByteArray & data)
 {
     qDebug("GameCFGWidget::onDrawnMapChanged");
-    emit paramChanged("DRAWNMAP", QStringList(qCompress(data).toBase64()));
+    emit paramChanged("DRAWNMAP", QStringList(qCompress(data, 9).toBase64()));
 }
