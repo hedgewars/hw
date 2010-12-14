@@ -446,9 +446,9 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     if(lastid == ID_PAGE_DRAWMAP)
     {
         if(id = ID_PAGE_MULTIPLAYER)
-            ui.pageMultiplayer->gameCFG->pMapContainer->changeImage();
+            ui.pageMultiplayer->gameCFG->pMapContainer->mapDrawingFinished();
         else
-            ui.pageNetGame->pGameCFG->pMapContainer->changeImage();
+            ui.pageNetGame->pGameCFG->pMapContainer->mapDrawingFinished();
     }
 
     if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) {

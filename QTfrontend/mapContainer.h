@@ -58,6 +58,7 @@ class HWMapContainer : public QWidget
 
  public slots:
   void changeImage();
+  void mapDrawingFinished();
   void setSeed(const QString & seed);
   void setMap(const QString & map);
   void setTheme(const QString & theme);
@@ -73,6 +74,7 @@ class HWMapContainer : public QWidget
   void mapgenChanged(MapGenerator m);
   void maze_sizeChanged(int s);
   void drawMapRequested();
+  void drawnMapChanged(const QByteArray & data);
 
  private slots:
   void setImage(const QImage newImage);

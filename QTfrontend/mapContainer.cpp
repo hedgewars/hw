@@ -559,3 +559,10 @@ DrawMapScene * HWMapContainer::getDrawMapScene()
 {
     return &drawMapScene;
 }
+
+void HWMapContainer::mapDrawingFinished()
+{
+    changeImage();
+
+    emit drawnMapChanged(getDrawnMapData());
+}

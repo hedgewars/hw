@@ -70,6 +70,7 @@ private slots:
     void jumpToWeapons();
     void mapgenChanged(MapGenerator m);
     void maze_sizeChanged(int s);
+    void onDrawnMapChanged(const QByteArray & data);
 
 private:
     QGridLayout mainLayout;

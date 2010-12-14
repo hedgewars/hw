@@ -140,6 +140,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
     connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
     connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
     connect(pMapContainer, SIGNAL(drawMapRequested()), this, SIGNAL(goToDrawMap()));
+    connect(pMapContainer, SIGNAL(drawnMapChanged(const QByteArray &)), this, SLOT(onDrawnMapChanged(const QByteArray &)));
 }
 
 void GameCFGWidget::jumpToSchemes()
@@ -528,4 +529,11 @@ void GameCFGWidget::maze_sizeChanged(int s)
 void GameCFGWidget::resendSchemeData()
 {
     schemeChanged(GameSchemes->currentIndex());
+}
+
+void GameCFGWidget::onDrawnMapChanged(const QByteArray & data)
+{
+    QStringList sl;
+    sl << QString(qCompress(data).toBase64());
+    emit paramChanged("DRAWNMAP", sl);
 }
