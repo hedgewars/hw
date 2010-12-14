@@ -309,6 +309,10 @@ while (headcmd <> nil)
         'j': ParseCommand('ljump', true);
         'J': ParseCommand('hjump', true);
         ',': ParseCommand('skip', true);
+        'c': begin
+            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
+            ParseCommand('gencmd ' + s, true);
+            end;
         's': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('chatmsg ' + s, true);
@@ -371,7 +375,6 @@ end;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
 if CheckNoTeamOrHH or isPaused then exit;
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
     begin

@@ -9,6 +9,18 @@ procedure freeModule;
 implementation
 uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom;
 
+procedure chGenCmd(var s: shortstring);
+begin
+AddFileLog('uhoh');
+case s[1] of
+     'R': if ReadyTimeLeft > 1 then 
+          begin
+          ReadyTimeLeft:= 1;
+          if not CurrentTeam^.ExtDriven then SendIPC('c'+s);
+          end
+    end
+end;
+
 procedure chQuit(var s: shortstring);
 const prevGState: TGameState = gsConfirm;
 begin
@@ -152,7 +164,6 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('L');
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmLeft and InputMask)
@@ -172,7 +183,6 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('R');
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmRight and InputMask)
@@ -192,7 +202,6 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('U');
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmUp and InputMask)
@@ -212,7 +221,6 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('D');
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmDown and InputMask)
@@ -232,7 +240,6 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('Z');
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmPrecise and InputMask);
@@ -252,7 +259,6 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('j');
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmLJump and InputMask)
@@ -263,7 +269,6 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('J');
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmHJump and InputMask)
@@ -273,7 +278,6 @@ procedure chAttack_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
@@ -304,7 +308,6 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('S');
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmSwitch and InputMask)
@@ -326,7 +329,6 @@ begin
 if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or CheckNoTeamOrHH then exit;
 
 if not CurrentTeam^.ExtDriven then SendIPC(s);
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
@@ -342,7 +344,6 @@ if (s[0] <> #1) or CheckNoTeamOrHH then exit;
 slot:= byte(s[1]) - 49;
 if slot > cMaxSlotIndex then exit;
 if not CurrentTeam^.ExtDriven then SendIPC(char(byte(s[1]) + 79));
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
@@ -438,7 +439,6 @@ else
                     ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0)) or
                     ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
             end;
-    if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1
     end
 end;
 
@@ -465,7 +465,6 @@ end;
 procedure chPause(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 if gameType <> gmtNet then
     isPaused:= not isPaused;
 SDL_ShowCursor(ord(isPaused))
@@ -529,6 +528,7 @@ begin
     RegisterVariable('slot'    , vtCommand, @chSlot         , false);
     RegisterVariable('setweap' , vtCommand, @chSetWeapon    , false);
 //////// End top by freq analysis
+    RegisterVariable('gencmd'  , vtCommand, @chGenCmd       , false);
     RegisterVariable('flag'    , vtCommand, @chFlag         , false);
     RegisterVariable('script'  , vtCommand, @chScript       , false);
     RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );

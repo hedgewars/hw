@@ -171,14 +171,19 @@ for i:= 0 to cKeyMaxIndex do
 if CurrentBinds[i][0] <> #0 then
     begin
     if (i > 3) and (tkbdn[i] <> 0) and not ((CurrentBinds[i] = 'put') or (CurrentBinds[i] = 'ammomenu') or (CurrentBinds[i] = '+cur_u') or (CurrentBinds[i] = '+cur_d') or (CurrentBinds[i] = '+cur_l') or (CurrentBinds[i] = '+cur_r')) then hideAmmoMenu:= true;
-    if (tkbd[i] = 0) and (tkbdn[i] <> 0) then ParseCommand(CurrentBinds[i], Trusted)
+    if (tkbd[i] = 0) and (tkbdn[i] <> 0) then
+         begin
+         ParseCommand(CurrentBinds[i], Trusted);
+         if (CurrentTeam <> nil) and not CurrentTeam^.ExtDriven and (ReadyTimeLeft > 1) then ParseCommand('gencmd R', true)
+         end
     else if (CurrentBinds[i][1] = '+')
             and (tkbdn[i] = 0)
             and (tkbd[i] <> 0) then
             begin
             s:= CurrentBinds[i];
             s[1]:= '-';
-            ParseCommand(s, Trusted)
+            ParseCommand(s, Trusted);
+            if (CurrentTeam <> nil) and not CurrentTeam^.ExtDriven and (ReadyTimeLeft > 1) then ParseCommand('gencmd R', true)
             end;
     tkbd[i]:= tkbdn[i]
     end
