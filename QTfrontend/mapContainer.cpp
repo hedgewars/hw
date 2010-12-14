@@ -562,7 +562,7 @@ DrawMapScene * HWMapContainer::getDrawMapScene()
 
 void HWMapContainer::mapDrawingFinished()
 {
-    changeImage();
-
     emit drawnMapChanged(getDrawnMapData());
+
+    changeImage();
 }

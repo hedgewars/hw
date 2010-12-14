@@ -433,6 +433,7 @@ void GameCFGWidget::templateFilterChanged(int value)
 
 void GameCFGWidget::seedChanged(const QString & value)
 {
+    qDebug("GameCFGWidget::seedChanged");
     emit paramChanged("SEED", QStringList(value));
 }
 
@@ -533,7 +534,6 @@ void GameCFGWidget::resendSchemeData()
 
 void GameCFGWidget::onDrawnMapChanged(const QByteArray & data)
 {
-    QStringList sl;
-    sl << QString(qCompress(data).toBase64());
-    emit paramChanged("DRAWNMAP", sl);
+    qDebug("GameCFGWidget::onDrawnMapChanged");
+    emit paramChanged("DRAWNMAP", QStringList(qCompress(data).toBase64()));
 }
