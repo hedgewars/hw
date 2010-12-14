@@ -512,6 +512,23 @@ end;
 
 procedure initModule;
 begin
+//////// Begin top sorted by freq analysis not including chatmsg
+    RegisterVariable('+right'  , vtCommand, @chRight_p      , false);
+    RegisterVariable('-right'  , vtCommand, @chRight_m      , false);
+    RegisterVariable('+up'     , vtCommand, @chUp_p         , false);
+    RegisterVariable('-up'     , vtCommand, @chUp_m         , false);
+    RegisterVariable('+left'   , vtCommand, @chLeft_p       , false);
+    RegisterVariable('-left'   , vtCommand, @chLeft_m       , false);
+    RegisterVariable('+attack' , vtCommand, @chAttack_p     , false);
+    RegisterVariable('+down'   , vtCommand, @chDown_p       , false);
+    RegisterVariable('-down'   , vtCommand, @chDown_m       , false);
+    RegisterVariable('hjump'   , vtCommand, @chHJump        , false);
+    RegisterVariable('ljump'   , vtCommand, @chLJump        , false);
+    RegisterVariable('nextturn', vtCommand, @chNextTurn     , false);
+    RegisterVariable('-attack' , vtCommand, @chAttack_m     , false);
+    RegisterVariable('slot'    , vtCommand, @chSlot         , false);
+    RegisterVariable('setweap' , vtCommand, @chSetWeapon    , false);
+//////// End top by freq analysis
     RegisterVariable('flag'    , vtCommand, @chFlag         , false);
     RegisterVariable('script'  , vtCommand, @chScript       , false);
     RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
@@ -555,25 +572,10 @@ begin
     RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , true);
     RegisterVariable('+precise', vtCommand, @chPrecise_p    , false);
     RegisterVariable('-precise', vtCommand, @chPrecise_m    , false);
-    RegisterVariable('+left'   , vtCommand, @chLeft_p       , false);
-    RegisterVariable('-left'   , vtCommand, @chLeft_m       , false);
-    RegisterVariable('+right'  , vtCommand, @chRight_p      , false);
-    RegisterVariable('-right'  , vtCommand, @chRight_m      , false);
-    RegisterVariable('+up'     , vtCommand, @chUp_p         , false);
-    RegisterVariable('-up'     , vtCommand, @chUp_m         , false);
-    RegisterVariable('+down'   , vtCommand, @chDown_p       , false);
-    RegisterVariable('-down'   , vtCommand, @chDown_m       , false);
-    RegisterVariable('+attack' , vtCommand, @chAttack_p     , false);
-    RegisterVariable('-attack' , vtCommand, @chAttack_m     , false);
     RegisterVariable('switch'  , vtCommand, @chSwitch       , false);
-    RegisterVariable('nextturn', vtCommand, @chNextTurn     , false);
     RegisterVariable('timer'   , vtCommand, @chTimer        , false);
     RegisterVariable('taunt'   , vtCommand, @chTaunt        , false);
-    RegisterVariable('setweap' , vtCommand, @chSetWeapon    , false);
-    RegisterVariable('slot'    , vtCommand, @chSlot         , false);
     RegisterVariable('put'     , vtCommand, @chPut          , false);
-    RegisterVariable('ljump'   , vtCommand, @chLJump        , false);
-    RegisterVariable('hjump'   , vtCommand, @chHJump        , false);
     RegisterVariable('+volup'  , vtCommand, @chVol_p        , true );
     RegisterVariable('-volup'  , vtCommand, @chVol_m        , true );
     RegisterVariable('+voldown', vtCommand, @chVol_m        , true );
