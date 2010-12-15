@@ -27,7 +27,7 @@ HWMap::~HWMap()
 {
 }
 
-void HWMap::getImage(std::string seed, int filter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData)
+void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData)
 {
     m_seed = seed;
     templateFilter = filter;
@@ -60,14 +60,14 @@ void HWMap::onClientDisconnect()
 
 void HWMap::SendToClientFirst()
 {
-    SendIPC(QString("eseed %1").arg(m_seed.c_str()).toLatin1());
-    SendIPC(QString("e$template_filter %1").arg(templateFilter).toLatin1());
-    SendIPC(QString("e$mapgen %1").arg(m_mapgen).toLatin1());
+    SendIPC(QString("eseed %1").arg(m_seed).toUtf8());
+    SendIPC(QString("e$template_filter %1").arg(templateFilter).toUtf8());
+    SendIPC(QString("e$mapgen %1").arg(m_mapgen).toUtf8());
 
     switch (m_mapgen)
     {
         case MAPGEN_MAZE:
-            SendIPC(QString("e$maze_size %1").arg(m_maze_size).toLatin1());
+            SendIPC(QString("e$maze_size %1").arg(m_maze_size).toUtf8());
             break;
 
         case MAPGEN_DRAWN:

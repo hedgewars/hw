@@ -55,10 +55,10 @@ class HWMapContainer : public QWidget
   bool getCurrentIsMission() const;
   QByteArray getDrawnMapData();
   DrawMapScene * getDrawMapScene();
+  void mapDrawingFinished();
 
  public slots:
   void changeImage();
-  void mapDrawingFinished();
   void setSeed(const QString & seed);
   void setMap(const QString & map);
   void setTheme(const QString & theme);

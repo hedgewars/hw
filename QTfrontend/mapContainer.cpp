@@ -343,7 +343,7 @@ void HWMapContainer::changeImage()
     pMap = new HWMap();
     connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
     connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
-    pMap->getImage(m_seed.toStdString(), getTemplateFilter(), mapgen, maze_size, getDrawnMapData());
+    pMap->getImage(m_seed, getTemplateFilter(), mapgen, maze_size, getDrawnMapData());
 }
 
 void HWMapContainer::themeSelected(int currentRow)
