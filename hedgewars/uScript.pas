@@ -674,17 +674,17 @@ end;
 function lc_hogsay(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
    vgear : PVisualGear;
+       s : LongWord;
 begin
-    if lua_gettop(L) <> 3 then
-        begin
-        LuaError('Lua: Wrong number of parameters passed to HogSay!');
-        end
-    else
+    if lua_gettop(L) = 4 then s:= lua_tointeger(L, 4)
+    else s:= 0;
+
+    if (lua_gettop(L) = 4) or (lua_gettop(L) = 3) then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
             begin
-            vgear:= AddVisualGear(0, 0, vgtSpeechBubble);
+            vgear:= AddVisualGear(0, 0, vgtSpeechBubble, s, true);
             if vgear <> nil then
                begin
                vgear^.Text:= lua_tostring(L, 2);
@@ -693,7 +693,8 @@ begin
                if (vgear^.FrameTicks < 1) or (vgear^.FrameTicks > 3) then vgear^.FrameTicks:= 1;
                end;
             end
-        end;
+        end
+    else LuaError('Lua: Wrong number of parameters passed to HogSay!');
     lc_hogsay:= 0
 end;
 
