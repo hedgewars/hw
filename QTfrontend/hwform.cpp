@@ -897,8 +897,9 @@ void HWForm::ForcedDisconnect()
 {
     if(pnetserver) return; // we have server - let it care of all things
     if (hwnet) {
-        hwnet->deleteLater();
+        HWNewNet * tmp = hwnet;
         hwnet = 0;
+        tmp->deleteLater();
         QMessageBox::warning(this, QMessageBox::tr("Network"),
                 QMessageBox::tr("Connection to server is lost"));
 
