@@ -11,7 +11,6 @@ uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh,
 
 procedure chGenCmd(var s: shortstring);
 begin
-AddFileLog('uhoh');
 case s[1] of
      'R': if ReadyTimeLeft > 1 then 
           begin
