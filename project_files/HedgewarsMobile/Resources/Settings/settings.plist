@@ -14,5 +14,7 @@
 	<string></string>
 	<key>menu</key>
 	<false/>
+	<key>password_length</key>
+	<integer>0</integer>
 </dict>
 </plist>

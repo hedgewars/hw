@@ -88,8 +88,10 @@
 -(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
     if (tagValue == 40)
         [self.settingsDictionary setObject:textString forKey:@"username"];
-    else
-        [self.settingsDictionary setObject:textString forKey:@"password"];
+    else {
+        [self.settingsDictionary setObject:[NSNumber numberWithInt:[textString length]] forKey:@"password_length"];
+        [self.settingsDictionary setObject:[textString MD5hash] forKey:@"password"];
+    }
 }
 
 #pragma mark -
@@ -98,7 +100,7 @@
     return 3;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger )section {
     switch (section) {
         case 0:     // user and pass
             return 1;   // set 2 here for the password field
@@ -166,11 +168,19 @@
                 editableCell.textField.secureTextEntry = NO;
                 editableCell.tag = 40;
             } else {
+                // create a dummy password for setting some visual content for the password
+                int pwdLength = [[self.settingsDictionary objectForKey:@"password_length"] intValue];
+                char *dummyStr = (char *)malloc(sizeof(char)*pwdLength);
+                for (int i = 0; i < pwdLength; i++)
+                    dummyStr[i] = i;
+                NSString *dummy = [[NSString alloc] initWithBytes:dummyStr length:pwdLength encoding:NSASCIIStringEncoding];
+                free(dummyStr);
                 editableCell.titleLabel.text = NSLocalizedString(@"Password","from the settings table");
                 editableCell.textField.placeholder = NSLocalizedString(@"Insert your password",@"");
-                editableCell.textField.text = [self.settingsDictionary objectForKey:@"password"];
+                editableCell.textField.text = dummy;
                 editableCell.textField.secureTextEntry = YES;
                 editableCell.tag = 50;
+                [dummy release];
             }
             
             editableCell.accessoryView = nil;
