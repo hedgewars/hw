@@ -608,7 +608,6 @@ void HWNewNet::onTeamColorChanged(const HWTeam& team)
 
 void HWNewNet::onParamChanged(const QString & param, const QStringList & value)
 {
-    qDebug() << param;
     if (isChief)
         RawSendNet(
                 QString("CFG%1%2%1%3")

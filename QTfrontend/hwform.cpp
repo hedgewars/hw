@@ -436,7 +436,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     if(id == ID_PAGE_DRAWMAP)
     {
         DrawMapScene * scene;
-        if(lastid = ID_PAGE_MULTIPLAYER)
+        if(lastid == ID_PAGE_MULTIPLAYER)
             scene = ui.pageMultiplayer->gameCFG->pMapContainer->getDrawMapScene();
         else
             scene = ui.pageNetGame->pGameCFG->pMapContainer->getDrawMapScene();
@@ -445,7 +445,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     }
     if(lastid == ID_PAGE_DRAWMAP)
     {
-        if(id = ID_PAGE_MULTIPLAYER)
+        if(id == ID_PAGE_MULTIPLAYER)
             ui.pageMultiplayer->gameCFG->pMapContainer->mapDrawingFinished();
         else
             ui.pageNetGame->pGameCFG->pMapContainer->mapDrawingFinished();
@@ -875,7 +875,6 @@ void HWForm::AsyncNetServerStart()
 
 void HWForm::NetDisconnect()
 {
-    //qDebug("NetDisconnect");
     if(hwnet) {
         hwnet->Disconnect();
         delete hwnet;
