@@ -351,6 +351,10 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
             Scripts->setCurrentIndex(Scripts->findText(value));
             return;
         }
+        if (param == "DRAWNMAP") {
+            pMapContainer->setDrawnMapData(qUncompress(QByteArray::fromBase64(slValue[0].toLatin1())));
+            return;
+        }
     }
 
     if (slValue.size() == 2)

@@ -65,6 +65,7 @@ class HWMapContainer : public QWidget
   void setTemplateFilter(int);
   void setMapgen(MapGenerator m);
   void setMaze_size(int size);
+  void setDrawnMapData(const QByteArray & ar);
 
  signals:
   void seedChanged(const QString & seed);

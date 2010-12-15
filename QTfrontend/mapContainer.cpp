@@ -539,6 +539,12 @@ void HWMapContainer::setMapgen(MapGenerator m)
     changeImage();
 }
 
+void HWMapContainer::setDrawnMapData(const QByteArray & ar)
+{
+    drawMapScene.decode(ar);
+    changeImage();
+}
+
 QByteArray HWMapContainer::getDrawnMapData()
 {
     return drawMapScene.encode();
