@@ -501,7 +501,7 @@ case Layer of
             vgtCircle:  if gear^.Angle = 1 then 
                             begin
                             tmp:= Gear^.State / 100;
-                            DrawTexture(round(Gear^.X-24*tmp), round(Gear^.Y-24*tmp), SpritesData[sprVampiric].Texture, tmp)
+                            DrawTexture(round(Gear^.X-24*tmp) + WorldDx, round(Gear^.Y-24*tmp) + WorldDy, SpritesData[sprVampiric].Texture, tmp)
                             end
                         else DrawCircle(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State, Gear^.Timer);
         end;

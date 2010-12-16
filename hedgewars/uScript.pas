@@ -381,7 +381,7 @@ begin
             vg^.dY:= lua_tonumber(L, 5);
             vg^.Angle:= lua_tonumber(L, 6);
             vg^.Frame:= lua_tointeger(L, 7);
-            vg^.FrameTicks:= lua_tointeger(L, 8);
+            if lua_tointeger(L, 8) <> 0 then vg^.FrameTicks:= lua_tointeger(L, 8);  // find a better way to do this. maybe need to break all these up.
             vg^.State:= lua_tointeger(L, 9);
             vg^.Timer:= lua_tointeger(L, 10);
             vg^.Tint:= lua_tointeger(L, 11);
