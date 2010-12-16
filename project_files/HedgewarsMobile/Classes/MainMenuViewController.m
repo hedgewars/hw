@@ -27,6 +27,7 @@
 #import "SplitViewRootController.h"
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
+#import "ServerSetup.h"
 
 @implementation MainMenuViewController
 @synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController;
@@ -124,6 +125,15 @@
         [userDefaults synchronize];
         [self createNecessaryFiles];
     }
+    
+    ServerSetup *setup = [[ServerSetup alloc] init];
+    if ([setup isNetworkReachable]) {
+        DLog(@"network is reachable");
+        [NSThread detachNewThreadSelector:@selector(serverProtocol)
+                                 toTarget:setup
+                               withObject:nil];
+    }
+    [setup release];
 }
 
 

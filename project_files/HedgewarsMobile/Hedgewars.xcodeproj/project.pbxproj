@@ -191,6 +191,7 @@
 		61DF0EDC1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61DF0EDB1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib */; };
 		61DF0F211284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61DF0F201284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib */; };
 		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
+		61E2E12E12BAAEE30051B659 /* ServerSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 61E2E12D12BAAEE30051B659 /* ServerSetup.m */; };
 		61E2F7441283752C00E12521 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = 61E2F7421283752C00E12521 /* fb.png */; };
 		61E2F7451283752C00E12521 /* tw.png in Resources */ = {isa = PBXBuildFile; fileRef = 61E2F7431283752C00E12521 /* tw.png */; };
 		61E5D68D12AB006F00566F29 /* uLandPainted.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E5D68C12AB006F00566F29 /* uLandPainted.pas */; };
@@ -971,6 +972,8 @@
 		61DF0EDB1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageLobbyViewController-iPhone.xib"; path = "../Resources/HelpPageLobbyViewController-iPhone.xib"; sourceTree = "<group>"; };
 		61DF0F201284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageInGameViewController-iPhone.xib"; path = "Resources/HelpPageInGameViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
+		61E2E12C12BAAEE30051B659 /* ServerSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerSetup.h; sourceTree = "<group>"; };
+		61E2E12D12BAAEE30051B659 /* ServerSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerSetup.m; sourceTree = "<group>"; };
 		61E2F7421283752C00E12521 /* fb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fb.png; path = Resources/Icons/fb.png; sourceTree = "<group>"; };
 		61E2F7431283752C00E12521 /* tw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tw.png; path = Resources/Icons/tw.png; sourceTree = "<group>"; };
 		61E5D68C12AB006F00566F29 /* uLandPainted.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandPainted.pas; path = ../../hedgewars/uLandPainted.pas; sourceTree = SOURCE_ROOT; };
@@ -1046,6 +1049,8 @@
 				6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */,
 				616591E611CA9BA200D6E256 /* GameSetup.h */,
 				616591E711CA9BA200D6E256 /* GameSetup.m */,
+				61E2E12C12BAAEE30051B659 /* ServerSetup.h */,
+				61E2E12D12BAAEE30051B659 /* ServerSetup.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -2418,6 +2423,7 @@
 				61E5D68D12AB006F00566F29 /* uLandPainted.pas in Sources */,
 				61F544C712AF1748007FD913 /* HoldTableViewCell.m in Sources */,
 				61AC067412B2E32D000B52A2 /* Appirater.m in Sources */,
+				61E2E12E12BAAEE30051B659 /* ServerSetup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

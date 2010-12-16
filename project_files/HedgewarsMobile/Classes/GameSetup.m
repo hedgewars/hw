@@ -21,7 +21,6 @@
 
 #import "GameSetup.h"
 #import "SDL_uikitappdelegate.h"
-#import "SDL_net.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "OverlayViewController.h"
@@ -216,13 +215,7 @@
 }
 
 #pragma mark -
-#pragma mark Thread/Network relevant code
-// select one of GameSetup method and execute it in a seprate thread
--(void) startThread:(NSString *)selector {
-    SEL usage = NSSelectorFromString(selector);
-    [NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
-}
-
+#pragma mark Network relevant code
 -(void) dumpRawData:(const uint8_t*)buffer ofSize:(uint8_t) length {
     // is it performant to reopen the stream every time?
     NSOutputStream *os = [[NSOutputStream alloc] initToFileAtPath:self.savePath append:YES];
@@ -248,148 +241,6 @@
 
     SDLNet_TCP_Send(csd, &length, 1);
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
-}
-
--(int) sendToServer:(NSString *)command withArgument:(NSString *)argument {
-    NSString *message = [[NSString alloc] initWithFormat:@"%@\n%@\n\n",command,argument];
-    int result = SDLNet_TCP_Send(esd, [message UTF8String], [message length]);
-    [message release];
-    return result;
-}
-
--(int) sendToServer:(NSString *)command {
-    NSString *message = [[NSString alloc] initWithFormat:@"%@\n\n",command];
-    int result = SDLNet_TCP_Send(esd, [message UTF8String], [message length]);
-    [message release];
-    return result;
-}
-
--(void) serverProtocol {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    IPaddress ip;
-    BOOL clientQuit = NO;
-    char *buffer = (char *)malloc(sizeof(char)*BUFFER_SIZE);
-    int dim = BUFFER_SIZE;
-    uint8_t msgSize;
-    NSString *arg = nil;
-
-    if (SDLNet_Init() < 0) {
-        DLog(@"SDLNet_Init: %s", SDLNet_GetError());
-        clientQuit = YES;
-    }
-
-    // Resolving the host using NULL make network interface to listen
-    if (SDLNet_ResolveHost(&ip, "netserver.hedgewars.org", DEFAULT_NETGAME_PORT) < 0 && !clientQuit) {
-        DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
-        clientQuit = YES;
-    }
-
-    // Open a connection with the IP provided (listen on the host's port)
-    if (!(esd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), DEFAULT_NETGAME_PORT);
-        clientQuit = YES;
-    }
-
-    DLog(@"Found server on port %d", DEFAULT_NETGAME_PORT);
-    while (!clientQuit) {
-        int index = 0;
-        BOOL exitBufferLoop = NO;
-        memset(buffer, '\0', dim);
-        
-        while (exitBufferLoop != YES) {
-            msgSize = SDLNet_TCP_Recv(esd, &buffer[index], 2);
-            
-            // exit in case of error
-            if (msgSize <= 0) {
-                DLog(@"SDLNet_TCP_Recv: %s", SDLNet_GetError());
-                clientQuit = YES;
-                break;
-            }
-            
-            // update index position and check for End-Of-Message
-            index += msgSize;
-            if (strncmp(&buffer[index-2], "\n\n", 2) == 0) {
-                exitBufferLoop = YES;
-            }
-            
-            // if message is too big allocate new space
-            if (index >= dim) {
-                dim += BUFFER_SIZE;
-                buffer = (char *)realloc(buffer, dim);
-                if (buffer == NULL) {
-                    clientQuit = YES;
-                    break;
-                }
-            }
-        }
-
-        NSString *bufferedMessage = [[NSString alloc] initWithBytes:buffer length:index-2 encoding:NSASCIIStringEncoding];
-        NSArray *listOfCommands = [bufferedMessage componentsSeparatedByString:@"\n"];
-        [bufferedMessage release];
-        NSString *command = [listOfCommands objectAtIndex:0];
-        DLog(@"size = %d, %@", index-2, listOfCommands);
-        if ([command isEqualToString:@"PING"]) {
-            if ([listOfCommands count] > 1)
-                [self sendToServer:@"PONG" withArgument:[listOfCommands objectAtIndex:1]];
-            else
-                [self sendToServer:@"PONG"];
-
-            [arg release];
-        }
-        else if ([command isEqualToString:@"NICK"]) {
-            //TODO: what is this for?
-        }
-        else if ([command isEqualToString:@"PROTO"]) {
-            if ([[listOfCommands objectAtIndex:1] intValue] == 34) {
-                //TODO: unused
-            }
-        }
-        else if ([command isEqualToString:@"ROOM"]) {
-            //TODO: stub
-        }
-        else if ([command isEqualToString:@"LOBBY:LEFT"]) {
-            //TODO: stub
-        }
-        else if ([command isEqualToString:@"LOBBY:JOINED"]) {
-            //TODO: stub
-        }
-        else if ([command isEqualToString:@"ASKPASSWORD"]) {
-            //TODO: store hashed password in settings.plist (nil here will vouluntary trigger an exception)
-            [self sendToServer:@"PASSWORD" withArgument:nil];
-        }
-        else if ([command isEqualToString:@"CONNECTED"]) {
-            [self sendToServer:@"NICK" withArgument:@"koda"];
-            [self sendToServer:@"PROTO" withArgument:@"34"];
-        }
-        else if ([command isEqualToString:@"SERVER_MESSAGE"]) {
-            DLog(@"%@", [listOfCommands objectAtIndex:1]);
-        }
-        else if ([command isEqualToString:@"WARNING"]) {
-            if ([listOfCommands count] > 1)
-                DLog(@"Server warning - %@", [listOfCommands objectAtIndex:1]);
-            else
-                DLog(@"Server warning - unknown");
-        }
-        else if ([command isEqualToString:@"ERROR"]) {
-            DLog(@"Server error - %@", [listOfCommands objectAtIndex:1]);
-        }
-        else if ([command isEqualToString:@"BYE"]) {
-            //TODO: handle "Reconnected too fast"
-            DLog(@"Server disconnected, reason: %@", [listOfCommands objectAtIndex:1]);
-            clientQuit = YES;
-        }
-        else {
-            DLog(@"Unknown/Unsupported message received: %@", command);
-        }
-    }
-    DLog(@"Server exited, ending thread");
-
-    free(buffer);
-    // Close the client socket
-    SDLNet_TCP_Close(esd);
-    SDLNet_Quit();
-
-    [pool release];
 }
 
 // method that handles net setup with engine and keeps connection alive
@@ -494,7 +345,7 @@
                 [self dumpRawData:buffer ofSize:msgSize];
 
                 sscanf((char *)buffer, "%*s %d", &eProto);
-                short int netProto = 0;
+                short int netProto;
                 char *versionStr;
 
                 HW_versionInfo(&netProto, &versionStr);

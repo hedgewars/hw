@@ -121,10 +121,10 @@ int main (int argc, char *argv[]) {
     // pull out useful configuration info from various files
     GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
     NSNumber *isNetGameNum = [gameDictionary objectForKey:@"netgame"];
-    
-    [setup startThread:@"engineProtocol"];
-    if ([isNetGameNum boolValue] == YES)
-        [setup startThread:@"serverProtocol"];
+
+    [NSThread detachNewThreadSelector:@selector(engineProtocol)
+                             toTarget:setup
+                           withObject:nil];
 
     const char **gameArgs = [setup getSettings:[gameDictionary objectForKey:@"savefile"]];
     NSNumber *menuStyle = [NSNumber numberWithBool:setup.menuStyle];
