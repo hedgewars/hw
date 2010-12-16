@@ -374,6 +374,7 @@ end;
 procedure DrawVisualGears(Layer: LongWord);
 var Gear: PVisualGear;
     tinted: boolean;
+    tmp: real;
 begin
 Gear:= VisualGearsList;
 case Layer of
@@ -497,7 +498,11 @@ case Layer of
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtSpeechBubble: if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog^.Team = CurrentTeam)) or (Gear^.State = 2)) then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtCircle:  if gear^.Angle = 1 then DrawTexture(round(Gear^.X), round(Gear^.Y), SpritesData[sprVampiric].Texture, Gear^.State / 100)
+            vgtCircle:  if gear^.Angle = 1 then 
+                            begin
+                            tmp:= Gear^.State / 100;
+                            DrawTexture(round(Gear^.X-24*tmp), round(Gear^.Y-24*tmp), SpritesData[sprVampiric].Texture, tmp)
+                            end
                         else DrawCircle(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State, Gear^.Timer);
         end;
         if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
