@@ -76,7 +76,13 @@
         case 30:    //alternateSwitch
             [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];
             break;
-        case 60:    //getReady
+        case 70:    //enhanced graphics
+            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"enhanced"];
+            break;
+        case 80:    //nomultitasking
+            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"multitasking"];
+            break;
+        case 60:    //classic menu
             [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"menu"];
             break;
         default:
@@ -109,10 +115,10 @@
             return 2;
             break;
         case 2:     // other stuff
-            if (IS_IPAD())
-                return 2;
+            if (IS_IPAD() == YES)
+                return 4;
             else
-                return 1;
+                return 3;
             break;
         default:
             DLog(@"Nope");
@@ -218,16 +224,34 @@
             }
             
             switchContent = (UISwitch *)cell.accessoryView;
-            if (row == 0) {
-                cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
-                cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit", @"");
-                switchContent.on = [[self.settingsDictionary objectForKey:@"alternate"] boolValue];
-                switchContent.tag = 30;
-            } else {
-                cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
-                cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
-                switchContent.on = [[self.settingsDictionary objectForKey:@"menu"] boolValue];
-                switchContent.tag = 60;
+            switch (row) {
+                case 0:
+                    cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit", @"");
+                    switchContent.on = [[self.settingsDictionary objectForKey:@"alternate"] boolValue];
+                    switchContent.tag = 30;
+                    break;
+                case 1:
+                    cell.textLabel.text = NSLocalizedString(@"Enanched Graphics Mode", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"The game will use more memory so it could crash!", @"");
+                    switchContent.on = [[self.settingsDictionary objectForKey:@"enhanced"] boolValue];
+                    switchContent.tag = 70;
+                    break;
+                case 2:
+                    cell.textLabel.text = NSLocalizedString(@"Multitasking Enabled", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Disable it in case of issues when returing in game", @"");
+                    switchContent.on = [[self.settingsDictionary objectForKey:@"multitasking"] boolValue];
+                    switchContent.tag = 80;
+                    break;
+                case 3:
+                    cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
+                    switchContent.on = [[self.settingsDictionary objectForKey:@"menu"] boolValue];
+                    switchContent.tag = 60;
+                    break;
+                default:
+                    DLog(@"Nope");
+                    break;
             }
             break;
         default:
