@@ -509,11 +509,25 @@
 
 #pragma mark -
 #pragma mark Custom touch event handling
+-(BOOL) shouldIgnoreTouch:(NSSet *)allTouches {
+    if (isGameRunning() == NO)
+        return YES;
+
+    // ignore activity near the dpad and buttons
+    CGPoint touchPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
+    CGSize screen = [[UIScreen mainScreen] bounds].size;
+
+    if ((touchPoint.x < 160 && touchPoint.y > screen.width - 155 ) || 
+        (touchPoint.x > screen.height - 135 && touchPoint.y > screen.width - 140))
+        return YES;
+    return NO;
+}
+
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     NSSet *allTouches = [event allTouches];
     UITouch *first, *second;
 
-    if (isGameRunning() == NO)
+    if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
 
     // hide in-game menu
@@ -552,9 +566,9 @@
     NSSet *allTouches = [event allTouches];
     CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
 
-    if (isGameRunning() == NO)
+    if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
-    
+
     switch ([allTouches count]) {
         case 1:
             // if we're in the menu we just click in the point
@@ -644,9 +658,9 @@
     int x, y, dx, dy;
     UITouch *touch, *first, *second;
 
-    if (isGameRunning() == NO)
+    if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
-    
+
     switch ([allTouches count]) {
         case 1:
             touch = [[allTouches allObjects] objectAtIndex:0];
