@@ -58,6 +58,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
     for (int i = 0; i < scriptList->size(); ++i) {
         QString script = (*scriptList)[i].remove(".lua", Qt::CaseInsensitive);
         QList<QVariant> scriptInfo;
+        scriptInfo.push_back(script);
         QFile scriptCfgFile(QString("%1/Scripts/Multiplayer/%2.cfg").arg(datadir->absolutePath()).arg(script));
         if (scriptCfgFile.exists() && scriptCfgFile.open(QFile::ReadOnly)) {
             QString scheme;
@@ -80,7 +81,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
             scriptInfo.push_back("locked");
             scriptInfo.push_back("locked");
         }
-        Scripts->addItem(script, scriptInfo);
+        Scripts->addItem(script.replace("_", " "), scriptInfo);
     }
 
     connect(Scripts, SIGNAL(currentIndexChanged(int)), this, SLOT(scriptChanged(int)));
@@ -271,7 +272,7 @@ QByteArray GameCFGWidget::getFullConfig() const
 
     if (Scripts->currentIndex() > 0)
     {
-        bcfg << QString("escript Scripts/Multiplayer/%1.lua").arg(Scripts->currentText()).toUtf8();
+        bcfg << QString("escript Scripts/Multiplayer/%1.lua").arg(Scripts->itemData(Scripts->currentIndex()).toList()[0].toString()).toUtf8();
     }
 
     QByteArray result;
@@ -473,8 +474,8 @@ void GameCFGWidget::scriptChanged(int index)
 {
     if(index > 0)
     {
-        QString scheme = Scripts->itemData(Scripts->currentIndex()).toList()[0].toString();
-        QString weapons = Scripts->itemData(Scripts->currentIndex()).toList()[1].toString();
+        QString scheme = Scripts->itemData(Scripts->currentIndex()).toList()[1].toString();
+        QString weapons = Scripts->itemData(Scripts->currentIndex()).toList()[2].toString();
 
         if (scheme == "locked")
         {
