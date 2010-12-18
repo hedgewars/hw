@@ -32,7 +32,7 @@
 #include "ammoSchemeModel.h"
 #include "proto.h"
 
-GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
+GameCFGWidget::GameCFGWidget(QWidget* parent) :
   QGroupBox(parent), mainLayout(this)
 {
     mainLayout.setMargin(0);

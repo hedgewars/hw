@@ -57,6 +57,8 @@ void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
 void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
+    Q_UNUSED(mouseEvent);
+
     simplifyLast();
 
     m_currPath = 0;
@@ -71,6 +73,14 @@ void DrawMapScene::undo()
 
         emit pathChanged();
     }
+}
+
+void DrawMapScene::clearMap()
+{
+    clear();
+    paths.clear();
+
+    emit pathChanged();
 }
 
 QByteArray DrawMapScene::encode()
@@ -128,11 +138,15 @@ void DrawMapScene::decode(QByteArray data)
 
         points.append(QPoint(px, py));
     }
+
+    emit pathChanged();
 }
 
 void DrawMapScene::simplifyLast()
 {
-    QList<QPoint> points = paths[0];
+    if(!paths.size()) return;
+
+    QList<QPoint> points = paths.at(0);
 
     QPoint prevPoint = points.first();
     int i = 1;

@@ -22,6 +22,7 @@ signals:
 
 public slots:
     void undo();
+    void clearMap();
     void simplifyLast();
 
 private:

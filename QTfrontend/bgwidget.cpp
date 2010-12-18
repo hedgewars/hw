@@ -103,6 +103,8 @@ BGWidget::~BGWidget()
 
 void BGWidget::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     QPainter p;
     p.begin(this);
     //p.setRenderHint(QPainter::Antialiasing);

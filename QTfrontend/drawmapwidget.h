@@ -15,7 +15,6 @@ namespace Ui {
     {
     public:
         QGraphicsView *graphicsView;
-        QPushButton *pbUndo;
 
         void setupUi(QWidget *drawMapWidget)
         {
@@ -50,6 +49,12 @@ public:
 
     void setScene(DrawMapScene * scene);
 
+public slots:
+    void undo();
+    void clear();
+    void save(const QString & fileName);
+    void load(const QString & fileName);
+
 protected:
     void changeEvent(QEvent *e);
     virtual void resizeEvent(QResizeEvent * event);
@@ -57,6 +62,8 @@ protected:
 
 private:
     Ui::DrawMapWidget *ui;
+
+    DrawMapScene * m_scene;
 };
 
 #endif // DRAWMAPWIDGET_H

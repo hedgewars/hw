@@ -68,6 +68,8 @@ QSize ItemNum::sizeHint () const
 
 void ItemNum::paintEvent(QPaintEvent* event)
 {
+  Q_UNUSED(event);
+
   QPainter painter(this);
 
   if (numItems==maxItems+1) {

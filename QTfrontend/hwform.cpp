@@ -1157,6 +1157,8 @@ void HWForm::resizeEvent(QResizeEvent * event)
 
 void HWForm::UpdateCampaignPage(int index)
 {
+    Q_UNUSED(index);
+
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     ui.pageCampaign->CBSelect->clear();
 

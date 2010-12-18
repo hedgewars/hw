@@ -24,6 +24,7 @@
 #include "igbox.h"
 
 IconedGroupBox::IconedGroupBox(QWidget * parent)
+    : QGroupBox(parent)
 {
 // Has issues with border-radius on children
 //    setAttribute(Qt::WA_PaintOnScreen, true);
@@ -56,6 +57,8 @@ void IconedGroupBox::setIcon(const QIcon & icon)
 
 void IconedGroupBox::paintEvent(QPaintEvent * event)
 {
+    Q_UNUSED(event);
+
     QStylePainter painter(this);
 
     QStyleOptionGroupBox option;

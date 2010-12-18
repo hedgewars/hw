@@ -36,7 +36,7 @@ class GameCFGWidget : public QGroupBox
     Q_OBJECT
 
 public:
-    GameCFGWidget(QWidget* parent, bool externalControl=false);
+    GameCFGWidget(QWidget* parent);
     quint32 getGameFlags() const;
     quint32 getInitHealth() const;
     QByteArray getFullConfig() const;

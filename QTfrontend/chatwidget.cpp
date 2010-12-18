@@ -341,6 +341,8 @@ void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
 
 void HWChatWidget::chatNickSelected(int index)
 {
+    Q_UNUSED(index);
+
     QListWidgetItem* item = chatNicks->currentItem();
     if (!item)
         return;

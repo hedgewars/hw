@@ -1,3 +1,5 @@
+#include <QFile>
+
 #include "drawmapwidget.h"
 
 DrawMapWidget::DrawMapWidget(QWidget *parent) :
@@ -5,6 +7,8 @@ DrawMapWidget::DrawMapWidget(QWidget *parent) :
     ui(new Ui::DrawMapWidget)
 {
     ui->setupUi(this);
+
+    m_scene = 0;
 }
 
 DrawMapWidget::~DrawMapWidget()
@@ -42,4 +46,24 @@ void DrawMapWidget::showEvent(QShowEvent * event)
     Q_UNUSED(event);
 
     resizeEvent(0);
+}
+
+void DrawMapWidget::undo()
+{
+    if(m_scene) m_scene->undo();
+}
+
+void DrawMapWidget::clear()
+{
+    if(m_scene) m_scene->clear();
+}
+
+void DrawMapWidget::save(const QString & fileName)
+{
+    Q_UNUSED(fileName);
+}
+
+void DrawMapWidget::load(const QString & fileName)
+{
+    Q_UNUSED(fileName);
 }

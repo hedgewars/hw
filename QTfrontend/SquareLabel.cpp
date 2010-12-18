@@ -29,6 +29,8 @@ SquareLabel::SquareLabel(QWidget * parent) :
 
 void SquareLabel::paintEvent(QPaintEvent * event)
 {
+    Q_UNUSED(event);
+
     QPainter painter(this);
     int pixsize;
     if (width() > height()) {

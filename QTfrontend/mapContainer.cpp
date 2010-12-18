@@ -426,6 +426,7 @@ quint32 HWMapContainer::getTemplateFilter() const
 
 void HWMapContainer::resizeEvent ( QResizeEvent * event )
 {
+    Q_UNUSED(event);
   //imageButt->setIconSize(imageButt->size());
 }
 
