@@ -23,7 +23,7 @@ var
     cReducedQuality : LongWord    = rqNone;
     //userNick is in uChat
     recordFileName  : shortstring = '';
-    cReadyDelay     : Longword    = 5000;
+    cReadyDelay     : Longword    = 0;
     cLogfileBase    : shortstring = 'debug';
 //////////////////////////
 
@@ -2248,7 +2248,7 @@ begin
     cReducedQuality := rqNone;
     //userNick is in uChat
     recordFileName  := '';
-    cReadyDelay     := 5000;
+    cReadyDelay     := 0;
 end;
 
 end.

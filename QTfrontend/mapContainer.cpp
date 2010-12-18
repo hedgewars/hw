@@ -176,7 +176,7 @@ map, mapInfo);
     gbThemes->setTitle(tr("Themes"));
 
     //gbThemes->setStyleSheet("padding: 0px"); // doesn't work - stylesheet is set with icon
-    mainLayout.addWidget(gbThemes, 0, 2, 3, 1);
+    mainLayout.addWidget(gbThemes, 0, 2, 3, 2);
 
     QVBoxLayout * gbTLayout = new QVBoxLayout(gbThemes);
     gbTLayout->setContentsMargins(0, 0, 0 ,0);
@@ -213,8 +213,12 @@ map, mapInfo);
     QLabel* seedLabel = new QLabel(tr("Seed"), this);
     mainLayout.addWidget(seedLabel, 3, 0);
     seedEdit = new QLineEdit(this);
+    connect(seedEdit, SIGNAL(returnPressed()), this, SLOT(seedEdited()));
     mainLayout.addWidget(seedEdit, 3, 1, 1, 2);
-    connect(seedEdit, SIGNAL(textChanged(const QString&)), this, SLOT(seedEdited(const QString&)));
+    seedSet = new QPushButton(this);
+    seedSet->setText(QPushButton::tr("Set"));
+    connect(seedSet, SIGNAL(clicked()), this, SLOT(seedEdited()));
+    mainLayout.addWidget(seedSet, 3, 3);
 
     mainLayout.setSizeConstraint(QLayout::SetFixedSize);//SetMinimumSize
 
@@ -550,14 +554,14 @@ QByteArray HWMapContainer::getDrawnMapData()
     return drawMapScene.encode();
 }
 
-void HWMapContainer::seedEdited(const QString & seed)
+void HWMapContainer::seedEdited()
 {
-    if (seed.isEmpty() || seed.size() > 54)
+    if (seedEdit->text().isEmpty() || seedEdit->text().size() > 54)
         seedEdit->setText(m_seed);
     else
     {
-        setSeed(seed);
-        emit seedChanged(seed);
+        setSeed(seedEdit->text());
+        emit seedChanged(seedEdit->text());
     }
 }
 

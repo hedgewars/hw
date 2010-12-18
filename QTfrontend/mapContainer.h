@@ -89,7 +89,7 @@ class HWMapContainer : public QWidget
   void themeSelected(int currentRow);
   void addInfoToPreview(QPixmap image);
   void templateFilterChanged(int filter);
-  void seedEdited(const QString & seed);
+  void seedEdited();
 
  protected:
   virtual void resizeEvent ( QResizeEvent * event );
@@ -103,6 +103,7 @@ class HWMapContainer : public QWidget
   HWMap* pMap;
   QString m_seed;
   QLineEdit* seedEdit;
+  QPushButton* seedSet;
   int hhLimit;
   int templateFilter;
   QPixmap hhSmall;
