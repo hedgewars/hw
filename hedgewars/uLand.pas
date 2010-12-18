@@ -553,7 +553,7 @@ procedure GenDrawnMap;
 begin
     uLandPainted.Draw;
 
-    MaxHedgehogs:= 18;
+    MaxHedgehogs:= 48;
     hasGirders:= true;
     playHeight:= 2048;
     playWidth:= 4096;
