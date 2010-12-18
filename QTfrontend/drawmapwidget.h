@@ -53,6 +53,7 @@ public:
 protected:
     void changeEvent(QEvent *e);
     virtual void resizeEvent(QResizeEvent * event);
+    virtual void showEvent(QShowEvent * event);
 
 private:
     Ui::DrawMapWidget *ui;

@@ -36,3 +36,10 @@ void DrawMapWidget::resizeEvent(QResizeEvent * event)
     if(ui->graphicsView && ui->graphicsView->scene())
         ui->graphicsView->fitInView(ui->graphicsView->scene()->sceneRect(), Qt::KeepAspectRatio);
 }
+
+void DrawMapWidget::showEvent(QShowEvent * event)
+{
+    Q_UNUSED(event);
+
+    resizeEvent(0);
+}
