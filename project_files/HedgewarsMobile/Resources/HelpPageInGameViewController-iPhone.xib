@@ -360,7 +360,7 @@
 						<string key="NSFrame">{{-1, 0}, {481, 44}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<object class="NSMutableArray" key="IBUIItems">
+						<object class="NSArray" key="IBUIItems">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBUINavigationItem" id="477618874">
 								<reference key="IBUINavigationBar" ref="126317414"/>
@@ -368,6 +368,7 @@
 								<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="843591489">
 									<string key="IBUITitle">Back</string>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+									<int key="IBUIStyle">1</int>
 									<reference key="IBUINavigationItem" ref="477618874"/>
 								</object>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>

@@ -361,11 +361,35 @@
                     case 'r':
                         DLog(@"Winning team: %s", &buffer[2]);
                         break;
+                    case 'D':
+                        DLog(@"Best Shot: %s", &buffer[2]);
+                        break;
                     case 'k':
                         DLog(@"Best Hedgehog: %s", &buffer[2]);
                         break;
+                    case 'K':
+                        DLog(@"Hogs Killed: %s", &buffer[2]);
+                        break;
+                    case 'H':
+                        //something about team health
+                        break;
+                    case 'T':
+                        // local team stats
+                        break;
+                    case 'P':
+                        // player postion
+                        break;
+                    case 's':
+                        DLog(@"Most self damage: %s", &buffer[2]);
+                        break;
+                    case 'S':
+                        DLog(@"Most friendly fire: %s", &buffer[2]);
+                        break;
+                    case 'B':
+                        DLog(@"Most turn skipped by: %s", &buffer[2]);
+                        break;
                     default:
-                        // TODO: losta stats stuff
+                        DLog(@"Unhandled stat message, see statsPage.cpp");
                         break;
                 }
                 break;
