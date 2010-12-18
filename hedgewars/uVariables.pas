@@ -23,7 +23,7 @@ var
     cReducedQuality : LongWord    = rqNone;
     //userNick is in uChat
     recordFileName  : shortstring = '';
-    cReadyDelay     : Longword    = 0;
+    cReadyDelay     : Longword    = 5000;
     cLogfileBase    : shortstring = 'debug';
 //////////////////////////
 
@@ -591,6 +591,9 @@ const
             (FileName:                'Jump2.ogg'; Path: ptVoices),// sndJump2
             (FileName:                'Jump3.ogg'; Path: ptVoices),// sndJump3
             (FileName:               'Yessir.ogg'; Path: ptVoices),// sndYesSir
+            (FileName:               'Yessir1.ogg'; Path: ptVoices),// sndYesSir1
+            (FileName:               'Yessir2.ogg'; Path: ptVoices),// sndYesSir2
+            (FileName:               'Yessir3.ogg'; Path: ptVoices),// sndYesSir3
             (FileName:                'Laugh.ogg'; Path: ptVoices),// sndLaugh
             (FileName:            'Illgetyou.ogg'; Path: ptVoices),// sndIllGetYou
             (FileName:             'Incoming.ogg'; Path: ptVoices),// sndIncoming
@@ -2248,7 +2251,7 @@ begin
     cReducedQuality := rqNone;
     //userNick is in uChat
     recordFileName  := '';
-    cReadyDelay     := 0;
+    cReadyDelay     := 5000;
 end;
 
 end.
