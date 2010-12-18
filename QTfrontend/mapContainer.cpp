@@ -51,17 +51,23 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
         QApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin),
         QApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
 
-    imageButt = new QPushButton(this);
+    QWidget* mapWidget = new QWidget(this);
+    mainLayout.addWidget(mapWidget, 0, 0, Qt::AlignHCenter);
+
+    QGridLayout* mapLayout = new QGridLayout(mapWidget);
+    mapLayout->setMargin(0);
+
+    imageButt = new QPushButton(mapWidget);
     imageButt->setObjectName("imageButt");
     imageButt->setFixedSize(256 + 6, 128 + 6);
     imageButt->setFlat(true);
     imageButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);//QSizePolicy::Minimum, QSizePolicy::Minimum);
-    mainLayout.addWidget(imageButt, 0, 0, 1, 2);
+    mapLayout->addWidget(imageButt, 0, 0, 1, 2);
     //connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomSeed()));
     //connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomTheme()));
     connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomMap()));
 
-    chooseMap = new QComboBox(this);
+    chooseMap = new QComboBox(mapWidget);
     chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     chooseMap->addItem(
 // FIXME - need real icons. Disabling until then
@@ -135,29 +141,29 @@ map, mapInfo);
     chooseMap->insertSeparator(missionindex); // separator between missions and maps
 
     connect(chooseMap, SIGNAL(currentIndexChanged(int)), this, SLOT(mapChanged(int)));
-    mainLayout.addWidget(chooseMap, 1, 1);
+    mapLayout->addWidget(chooseMap, 1, 1);
 
-    QLabel * lblMap = new QLabel(tr("Map"), this);
-    mainLayout.addWidget(lblMap, 1, 0);
+    QLabel * lblMap = new QLabel(tr("Map"), mapWidget);
+    mapLayout->addWidget(lblMap, 1, 0);
 
-    lblFilter = new QLabel(tr("Filter"), this);
-    mainLayout.addWidget(lblFilter, 2, 0);
+    lblFilter = new QLabel(tr("Filter"), mapWidget);
+    mapLayout->addWidget(lblFilter, 2, 0);
 
-    CB_TemplateFilter = new QComboBox(this);
+    CB_TemplateFilter = new QComboBox(mapWidget);
     CB_TemplateFilter->addItem(tr("All"), 0);
     CB_TemplateFilter->addItem(tr("Small"), 1);
     CB_TemplateFilter->addItem(tr("Medium"), 2);
     CB_TemplateFilter->addItem(tr("Large"), 3);
     CB_TemplateFilter->addItem(tr("Cavern"), 4);
     CB_TemplateFilter->addItem(tr("Wacky"), 5);
-    mainLayout.addWidget(CB_TemplateFilter, 2, 1);
+    mapLayout->addWidget(CB_TemplateFilter, 2, 1);
 
     connect(CB_TemplateFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(templateFilterChanged(int)));
 
-    maze_size_label = new QLabel(tr("Type"), this);
+    maze_size_label = new QLabel(tr("Type"), mapWidget);
     mainLayout.addWidget(maze_size_label, 2, 0);
     maze_size_label->hide();
-    maze_size_selection = new QComboBox(this);
+    maze_size_selection = new QComboBox(mapWidget);
     maze_size_selection->addItem(tr("Small tunnels"), 0);
     maze_size_selection->addItem(tr("Medium tunnels"), 1);
     maze_size_selection->addItem(tr("Large tunnels"), 2);
@@ -166,22 +172,22 @@ map, mapInfo);
     maze_size_selection->addItem(tr("Large floating islands"), 5);
     maze_size_selection->setCurrentIndex(1);
     maze_size = 1;
-    mainLayout.addWidget(maze_size_selection, 2, 1);
+    mapLayout->addWidget(maze_size_selection, 2, 1);
     maze_size_selection->hide();
     connect(maze_size_selection, SIGNAL(currentIndexChanged(int)), this, SLOT(setMaze_size(int)));
 
-    gbThemes = new IconedGroupBox(this);
+    gbThemes = new IconedGroupBox(mapWidget);
     gbThemes->setTitleTextPadding(60);
     gbThemes->setContentTopPadding(6);
     gbThemes->setTitle(tr("Themes"));
 
     //gbThemes->setStyleSheet("padding: 0px"); // doesn't work - stylesheet is set with icon
-    mainLayout.addWidget(gbThemes, 0, 2, 3, 2);
+    mapLayout->addWidget(gbThemes, 0, 2, 3, 1);
 
     QVBoxLayout * gbTLayout = new QVBoxLayout(gbThemes);
     gbTLayout->setContentsMargins(0, 0, 0 ,0);
     gbTLayout->setSpacing(0);
-    lwThemes = new QListWidget(this);
+    lwThemes = new QListWidget(mapWidget);
     lwThemes->setMinimumHeight(30);
     lwThemes->setFixedWidth(140);
     for (int i = 0; i < Themes->size(); ++i) {
@@ -210,17 +216,26 @@ map, mapInfo);
     gbTLayout->addWidget(lwThemes);
     lwThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
 
-    QLabel* seedLabel = new QLabel(tr("Seed"), this);
-    mainLayout.addWidget(seedLabel, 3, 0);
-    seedEdit = new QLineEdit(this);
+    mapLayout->setSizeConstraint(QLayout::SetFixedSize);
+
+    QWidget* seedWidget = new QWidget(this);
+    mainLayout.addWidget(seedWidget, 1, 0);
+
+    QGridLayout* seedLayout = new QGridLayout(seedWidget);
+    seedLayout->setMargin(0);
+
+    QLabel* seedLabel = new QLabel(tr("Seed"), seedWidget);
+    seedLayout->addWidget(seedLabel, 3, 0);
+    seedEdit = new QLineEdit(seedWidget);
+    seedEdit->setMaxLength(54);
     connect(seedEdit, SIGNAL(returnPressed()), this, SLOT(seedEdited()));
-    mainLayout.addWidget(seedEdit, 3, 1, 1, 2);
-    seedSet = new QPushButton(this);
+    seedLayout->addWidget(seedEdit, 3, 1);
+    seedLayout->setColumnStretch(1, 5);
+    seedSet = new QPushButton(seedWidget);
     seedSet->setText(QPushButton::tr("Set"));
     connect(seedSet, SIGNAL(clicked()), this, SLOT(seedEdited()));
-    mainLayout.addWidget(seedSet, 3, 3);
-
-    mainLayout.setSizeConstraint(QLayout::SetFixedSize);//SetMinimumSize
+    seedLayout->setColumnStretch(2, 1);
+    seedLayout->addWidget(seedSet, 3, 2);
 
     setRandomSeed();
     setRandomTheme();
@@ -556,7 +571,7 @@ QByteArray HWMapContainer::getDrawnMapData()
 
 void HWMapContainer::seedEdited()
 {
-    if (seedEdit->text().isEmpty() || seedEdit->text().size() > 54)
+    if (seedEdit->text().isEmpty())
         seedEdit->setText(m_seed);
     else
     {

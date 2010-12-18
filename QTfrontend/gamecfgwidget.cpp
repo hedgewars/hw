@@ -43,7 +43,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 
     IconedGroupBox *GBoxOptions = new IconedGroupBox(this);
     GBoxOptions->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    mainLayout.addWidget(GBoxOptions);
+    mainLayout.addWidget(GBoxOptions, 1, 0);
 
     QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
 
