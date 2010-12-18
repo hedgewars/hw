@@ -56,11 +56,11 @@ var ii: LongInt;
 begin
 //WriteLnToConsole(CmdStr);
 if CmdStr[0]=#0 then exit;
-{$IFDEF DEBUGFILE}AddFileLog('ParseCommand "' + CmdStr + '"');{$ENDIF}
 c:= CmdStr[1];
 if c in ['/', '$'] then Delete(CmdStr, 1, 1) else c:= '/';
 s:= '';
 SplitBySpace(CmdStr, s);
+{$IFDEF DEBUGFILE}AddFileLog('[Cmd] ' + c + CmdStr + ' (' + inttostr(length(CmdStr)) + ')');{$ENDIF}
 t:= Variables;
 while t <> nil do
       begin
