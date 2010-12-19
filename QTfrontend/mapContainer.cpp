@@ -446,7 +446,6 @@ void HWMapContainer::setMap(const QString & map)
         {
             disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
             disconnect(pMap, 0, this, SLOT(setHHLimit(int)));
-            pMap->deleteLater();
             pMap = 0;
         }
         chooseMap->setCurrentIndex(id);
