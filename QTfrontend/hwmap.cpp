@@ -33,7 +33,7 @@ void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int 
     templateFilter = filter;
     m_mapgen = mapgen;
     m_maze_size = maze_size;
-    m_drawMapData = drawMapData;
+    if(mapgen == MAPGEN_MAZE) m_drawMapData = drawMapData;
     Start();
 }
 

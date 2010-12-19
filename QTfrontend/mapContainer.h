@@ -58,7 +58,7 @@ class HWMapContainer : public QWidget
   void mapDrawingFinished();
 
  public slots:
-  void changeImage();
+  void askForGeneratedPreview();
   void setSeed(const QString & seed);
   void setMap(const QString & map);
   void setTheme(const QString & theme);
@@ -113,10 +113,9 @@ class HWMapContainer : public QWidget
   QComboBox *maze_size_selection;
   MapGenerator mapgen;
   int numMissions;
-  int maze_size;
   DrawMapScene drawMapScene;
 
-  void loadMap(int index);
+  void updatePreview();
 };
 
 #endif // _HWMAP_CONTAINER_INCLUDED
