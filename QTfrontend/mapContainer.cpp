@@ -473,7 +473,7 @@ void HWMapContainer::setRandomMap()
         emit drawMapRequested();
         break;
     default:
-        if(chooseMap->currentIndex() <= numMissions + MAPGEN_MAP)
+        if(chooseMap->currentIndex() <= numMissions + MAPGEN_MAP + 1)
             setRandomMission();
         else
             setRandomStatic();
@@ -483,13 +483,16 @@ void HWMapContainer::setRandomMap()
 
 void HWMapContainer::setRandomStatic()
 {
-    chooseMap->setCurrentIndex(MAPGEN_MAP + 2 + numMissions + rand() % (chooseMap->count() - MAPGEN_MAP - 2 - numMissions));
+    int i = MAPGEN_MAP + 3 + numMissions + rand() % (chooseMap->count() - MAPGEN_MAP - 3 - numMissions);
+    chooseMap->setCurrentIndex(i);
     setRandomSeed();
 }
 
 void HWMapContainer::setRandomMission()
 {
-    chooseMap->setCurrentIndex(MAPGEN_MAP + rand() % numMissions);
+    int i = MAPGEN_MAP + 2 + rand() % numMissions;
+    qDebug() << i << MAPGEN_MAP << numMissions;
+    chooseMap->setCurrentIndex(i);
     setRandomSeed();
 }
 
