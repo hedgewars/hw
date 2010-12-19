@@ -14,7 +14,7 @@ import CoreTypes
 listenLoop :: Handle -> Int -> [String] -> Chan CoreMessage -> Int -> IO ()
 listenLoop handle linesNumber buf chan clientID = do
     str <- liftM BUTF8.toString $ B.hGetLine handle
-    if (linesNumber > 50) || (length str > 450) then
+    if (linesNumber > 50) || (length str > 20000) then
         writeChan chan $ ClientMessage (clientID, ["QUIT", "Protocol violation"])
         else
         if str == "" then do

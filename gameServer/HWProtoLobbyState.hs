@@ -101,8 +101,8 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
 
         toAnswer (paramName, paramStrs) = AnswerThisClient $ "CFG" : paramName : paramStrs
         
-        answerFullConfig = map toAnswer (leftConfigPart ++ rightConfigPart)
-        (leftConfigPart, rightConfigPart) = partition (\(p, _) -> p /= "MAP") (Map.toList $ params jRoom)
+        answerFullConfig = map toAnswer ((Data.List.reverse . Data.List.sort $ leftConfigPart) ++ rightConfigPart)
+        (leftConfigPart, rightConfigPart) = partition (\(p, _) -> p == "MAP" || p == "MAPGEN") (Map.toList $ params jRoom)
 
         watchRound = if not $ gameinprogress jRoom then
                     []
