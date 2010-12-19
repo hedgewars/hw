@@ -258,7 +258,7 @@ void HWMapContainer::setImage(const QImage newImage)
     p.drawPixmap(QPoint(0, 0), px);
 
     addInfoToPreview(pxres);
-    chooseMap->setCurrentIndex(mapgen);
+    //chooseMap->setCurrentIndex(mapgen);
     pMap = 0;
 }
 
