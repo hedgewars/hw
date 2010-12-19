@@ -474,7 +474,7 @@ void HWMapContainer::setRandomMap()
         emit drawMapRequested();
         break;
     default:
-        if(chooseMap->currentIndex() < numMissions + 4)
+        if(chooseMap->currentIndex() <= numMissions + MAPGEN_MAP)
             setRandomMission();
         else
             setRandomStatic();
@@ -484,13 +484,13 @@ void HWMapContainer::setRandomMap()
 
 void HWMapContainer::setRandomStatic()
 {
-    chooseMap->setCurrentIndex(4 + numMissions + rand() % (chooseMap->count() - 4 - numMissions));
+    chooseMap->setCurrentIndex(MAPGEN_MAP + 1 + numMissions + rand() % (chooseMap->count() - MAPGEN_MAP - 1 - numMissions));
     setRandomSeed();
 }
 
 void HWMapContainer::setRandomMission()
 {
-    chooseMap->setCurrentIndex(3 + rand() % numMissions);
+    chooseMap->setCurrentIndex(MAPGEN_MAP + rand() % numMissions);
     setRandomSeed();
 }
 
@@ -500,7 +500,7 @@ void HWMapContainer::setRandomSeed()
     seedEdit->setText(m_seed);
     emit seedChanged(m_seed);
     if (chooseMap->currentIndex() < MAPGEN_MAP)
-        askForGeneratedPreview();
+        updatePreview();
 }
 
 void HWMapContainer::setRandomTheme()
@@ -582,7 +582,9 @@ void HWMapContainer::mapDrawingFinished()
 
 void HWMapContainer::updatePreview()
 {
-    switch(chooseMap->currentIndex())
+    int curIndex = chooseMap->currentIndex();
+
+    switch(curIndex)
     {
     case MAPGEN_REGULAR:
         askForGeneratedPreview();
@@ -594,8 +596,8 @@ void HWMapContainer::updatePreview()
         askForGeneratedPreview();
         break;
     default:
-        int curIndex = chooseMap->currentIndex();
         QPixmap mapImage;
+        qDebug() << "Map data" << curIndex << chooseMap->currentText() << chooseMap->itemData(curIndex);
         if(!mapImage.load(datadir->absolutePath() + "/Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png")) {
             imageButt->setIcon(QIcon());
             return;
