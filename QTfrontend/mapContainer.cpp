@@ -483,7 +483,7 @@ void HWMapContainer::setRandomMap()
 
 void HWMapContainer::setRandomStatic()
 {
-    chooseMap->setCurrentIndex(MAPGEN_MAP + 1 + numMissions + rand() % (chooseMap->count() - MAPGEN_MAP - 1 - numMissions));
+    chooseMap->setCurrentIndex(MAPGEN_MAP + 2 + numMissions + rand() % (chooseMap->count() - MAPGEN_MAP - 2 - numMissions));
     setRandomSeed();
 }
 
