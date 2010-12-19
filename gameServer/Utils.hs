@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 module Utils where
 
 import Control.Concurrent
@@ -17,30 +16,33 @@ import Control.Monad
 import Data.Maybe
 -------------------------------------------------
 import qualified Codec.Binary.Base64 as Base64
-import qualified Data.ByteString.Char8 as B
-import qualified Data.ByteString as BW
+import qualified Data.ByteString.UTF8 as BUTF8
+import qualified Data.ByteString as B
 import CoreTypes
 
 
-sockAddr2String :: SockAddr -> IO B.ByteString
-sockAddr2String (SockAddrInet _ hostAddr) = liftM B.pack $ inet_ntoa hostAddr
+sockAddr2String :: SockAddr -> IO String
+sockAddr2String (SockAddrInet _ hostAddr) = inet_ntoa hostAddr
 sockAddr2String (SockAddrInet6 _ _ (a, b, c, d) _) =
-    return $ B.pack $ (foldr1 (.)
+    return $ (foldr1 (.)
         $ List.intersperse (\a -> ':':a)
         $ concatMap (\n -> (\(a, b) -> [showHex a, showHex b]) $ divMod n 65536) [a, b, c, d]) []
 
-toEngineMsg :: B.ByteString -> B.ByteString
-toEngineMsg msg = B.pack $ Base64.encode (fromIntegral (BW.length msg) : (BW.unpack msg))
+toEngineMsg :: String -> String
+toEngineMsg msg = Base64.encode (fromIntegral (B.length encodedMsg) : (B.unpack encodedMsg))
+    where
+    encodedMsg = BUTF8.fromString msg
 
-fromEngineMsg :: B.ByteString -> Maybe B.ByteString
-fromEngineMsg msg = Base64.decode (B.unpack msg) >>= removeLength >>= return . BW.pack
+fromEngineMsg :: String -> Maybe String
+fromEngineMsg msg = liftM (map w2c) (Base64.decode msg >>= removeLength)
     where
         removeLength (x:xs) = if length xs == fromIntegral x then Just xs else Nothing
         removeLength _ = Nothing
 
-checkNetCmd :: B.ByteString -> (Bool, Bool)
-checkNetCmd = check . liftM B.unpack . fromEngineMsg
+checkNetCmd :: String -> (Bool, Bool)
+checkNetCmd msg = check decoded
     where
+        decoded = fromEngineMsg msg
         check Nothing = (False, False)
         check (Just (m:ms)) = (m `Set.member` legalMessages, m == '+')
         check _ = (False, False)
@@ -52,17 +54,29 @@ maybeRead s = case reads s of
     [(x, rest)] | all isSpace rest -> Just x
     _         -> Nothing
 
-teamToNet :: TeamInfo -> [B.ByteString]
-teamToNet team =
-        "ADD_TEAM"
-        : teamname team
-        : teamgrave team
-        : teamfort team
-        : teamvoicepack team
-        : teamflag team
-        : teamowner team
-        : (B.pack $ show $ difficulty team)
-        : hhsInfo
+teamToNet :: Word16 -> TeamInfo -> [String]
+teamToNet protocol team 
+    | protocol < 30 = [
+        "ADD_TEAM",
+        teamname team,
+        teamgrave team,
+        teamfort team,
+        teamvoicepack team,
+        teamowner team,
+        show $ difficulty team
+        ]
+        ++ hhsInfo
+    | otherwise = [
+        "ADD_TEAM",
+        teamname team,
+        teamgrave team,
+        teamfort team,
+        teamvoicepack team,
+        teamflag team,
+        teamowner team,
+        show $ difficulty team
+        ]
+        ++ hhsInfo
     where
         hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 
@@ -76,10 +90,10 @@ modifyTeam team room = room{teams = replaceTeam team $ teams room}
         else
             t : replaceTeam team teams
 
-illegalName :: B.ByteString -> Bool
-illegalName = all isSpace . B.unpack
+illegalName :: String -> Bool
+illegalName = all isSpace
 
-protoNumber2ver :: Word16 -> B.ByteString
+protoNumber2ver :: Word16 -> String
 protoNumber2ver 17 = "0.9.7-dev"
 protoNumber2ver 19 = "0.9.7"
 protoNumber2ver 20 = "0.9.8-dev"
@@ -105,13 +119,3 @@ askFromConsole msg = do
     putStr msg
     hFlush stdout
     getLine
-
-
-unfoldrE :: (b -> Either b (a, b)) -> b -> ([a], b)
-unfoldrE f b  =
-    case f b of
-        Right (a, new_b) -> let (a', b') = unfoldrE f new_b in (a : a', b')
-        Left new_b       -> ([], new_b)
-
-showB :: Show a => a -> B.ByteString
-showB = B.pack .show
