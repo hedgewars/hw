@@ -245,6 +245,7 @@ QByteArray GameCFGWidget::getFullConfig() const
     {
         case MAPGEN_MAZE:
             bcfg << QString("e$maze_size %1").arg(pMapContainer->get_maze_size()).toUtf8();
+            break;
 
         case MAPGEN_DRAWN:
         {
@@ -257,6 +258,7 @@ QByteArray GameCFGWidget::getFullConfig() const
                 bcfg << tmp;
                 data.remove(0, 200);
             }
+            break;
         }
         default: ;
     }
