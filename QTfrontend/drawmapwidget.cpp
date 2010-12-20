@@ -1,4 +1,5 @@
 #include <QFile>
+#include <QMessageBox>
 
 #include "drawmapwidget.h"
 
@@ -31,6 +32,7 @@ void DrawMapWidget::changeEvent(QEvent *e)
 void DrawMapWidget::setScene(DrawMapScene * scene)
 {
     ui->graphicsView->setScene(scene);
+    m_scene = scene;
 }
 
 void DrawMapWidget::resizeEvent(QResizeEvent * event)
@@ -55,15 +57,31 @@ void DrawMapWidget::undo()
 
 void DrawMapWidget::clear()
 {
-    if(m_scene) m_scene->clear();
+    if(m_scene) m_scene->clearMap();
 }
 
 void DrawMapWidget::save(const QString & fileName)
 {
-    Q_UNUSED(fileName);
+    if(m_scene)
+    {
+        QFile file(fileName);
+
+        if(!file.open(QIODevice::WriteOnly))
+            QMessageBox::warning(this, tr("File error"), tr("Cannot open file '%1' for writing").arg(fileName));
+        else
+            file.write(qCompress(m_scene->encode()).toBase64());
+    }
 }
 
 void DrawMapWidget::load(const QString & fileName)
 {
-    Q_UNUSED(fileName);
+    if(m_scene)
+    {
+        QFile f(fileName);
+
+        if(!f.open(QIODevice::ReadOnly))
+            QMessageBox::warning(this, tr("File error"), tr("Cannot read file '%1'").arg(fileName));
+        else
+            m_scene->decode(qUncompress(QByteArray::fromBase64(f.readAll())));
+    }
 }

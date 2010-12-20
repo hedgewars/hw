@@ -587,6 +587,10 @@ public:
     QPushButton * BtnBack;
 
     DrawMapWidget * drawMapWidget;
+
+private slots:
+    void load();
+    void save();
 };
 
 #endif // PAGES_H
