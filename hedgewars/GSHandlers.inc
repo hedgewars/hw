@@ -553,7 +553,7 @@ begin
         end;
     if ((GameTicks and $1F) = 0) and (Random(3) = 0) then
         begin
-        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust);
+        particle:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust);
         if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480)
         end
 end;
