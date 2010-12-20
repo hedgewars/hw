@@ -563,7 +563,6 @@ PageOptions::PageOptions(QWidget* parent) :
             SchemeDelete->setIconSize(pmDelete.size());
             SchemeDelete->setIcon(pmDelete);
             SchemeDelete->setMaximumWidth(pmDelete.width() + 6);
-            SchemeDelete->setEnabled(false);
             WeaponsLayout->addWidget(SchemeDelete, 1, 4);
 
             QLabel* WeaponLabel = new QLabel(groupWeapons);

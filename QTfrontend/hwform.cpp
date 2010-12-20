@@ -662,6 +662,7 @@ void HWForm::DeleteScheme()
         QMessageBox::warning(0, QMessageBox::tr("Schemes"), QMessageBox::tr("Can not delete default scheme '%1'!").arg(ui.pageOptions->SchemesName->currentText()));
     } else {
         ui.pageScheme->deleteRow();
+        ammoSchemeModel->Save();
     }
 }
 
