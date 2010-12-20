@@ -452,7 +452,7 @@
         tmpQuality = 0x00000001 | 0x00000002 | 0x00000008 | 0x00000040;                 // rqLowRes | rqBlurryLand | rqSimpleRope | rqKillFlakes
     else if ([modelId hasPrefix:@"iPhone2"] || [modelId hasPrefix:@"iPod3"])                                    // = iPhone 3GS or iPod Touch 3G
         tmpQuality = 0x00000002 | 0x00000040;                                           // rqBlurryLand | rqKillFlakes
-    else if ([modelId hasPrefix:@"iPad1"] || enhanced == NO)                                                    // = iPad 1G or not enhanced mode
+    else if ([modelId hasPrefix:@"iPad1"] || [modelId hasPrefix:@"iPod4"] || enhanced == NO)                    // = iPad 1G or iPod Touch 4G or not enhanced mode
         tmpQuality = 0x00000002;                                                        // rqBlurryLand
     else                                                                                                        // = everything else
         tmpQuality = 0;                                                                 // full quality

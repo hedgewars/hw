@@ -42,9 +42,8 @@
 
 -(id) initWithDictionary:(NSDictionary *)gameDictionary;
 -(void) engineProtocol;
--(void) startThread:(NSString *)selector;
--(int)  sendToEngine:(NSString *)string;
--(int)  sendToEngineNoSave:(NSString *)string;
+-(int) sendToEngine:(NSString *)string;
+-(int) sendToEngineNoSave:(NSString *)string;
 -(void) provideTeamData:(NSString *)teamName forHogs:(NSInteger) numberOfPlayingHogs withHealth:(NSInteger) initialHealth ofColor:(NSNumber *)teamColor;
 -(void) provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger) numberOfTeams;
 -(NSInteger) provideScheme:(NSString *)schemeName;
