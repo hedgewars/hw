@@ -28,32 +28,32 @@ begin
 
     // Gear is still on the same Pixel it was before
     if steps < 1 then
-    begin
-        if onlyCheckIfChanged then
         begin
+        if onlyCheckIfChanged then
+            begin
             Gear^.X := Gear^.X + dX;
             Gear^.Y := Gear^.Y + dY;
             EXIT;
-        end
+            end
         else
             steps := 1;
-    end;
+        end;
 
     if steps > 1 then
-    begin
+        begin
         sX:= dX / steps;
         sY:= dY / steps;
-    end
+        end
     else
-    begin
+        begin
         sX:= dX;
         sY:= dY;
-    end;
+        end;
 
     caller:= Gear^.doStep;
 
     for i:= 1 to steps do
-    begin
+        begin
         Gear^.X := Gear^.X + sX;
         Gear^.Y := Gear^.Y + sY;
         step(Gear);
@@ -61,7 +61,7 @@ begin
         or ((Gear^.State and gstCollision) <> 0)
         or ((Gear^.State and gstMoving) = 0) then
             break;
-    end;
+        end;
 end;
 
 procedure makeHogsWorry(x, y: hwFloat; r: LongInt);
@@ -71,27 +71,27 @@ var
 begin
     gi := GearsList;
     while gi <> nil do
-    begin
-        if (gi^.Kind = gtHedgehog) then
         begin
+        if (gi^.Kind = gtHedgehog) then
+            begin
             d := r - hwRound(Distance(gi^.X - x, gi^.Y - y));
             if (d > 1) and not gi^.Invulnerable and (GetRandom(2) = 0) then
-            begin
+                begin
                 if (CurrentHedgehog^.Gear = gi) then
                     PlaySound(sndOops, gi^.Hedgehog^.Team^.voicepack)
                 else
-                begin
+                    begin
                     if (gi^.State and gstMoving) = 0 then
                         gi^.State := gi^.State or gstLoser;
                     if d > r div 2 then
                         PlaySound(sndNooo, gi^.Hedgehog^.Team^.voicepack)
                     else
                         PlaySound(sndUhOh, gi^.Hedgehog^.Team^.voicepack);
+                    end;
                 end;
             end;
-        end;
         gi := gi^.NextGear
-    end;
+        end;
 end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDrowningGear(Gear: PGear);
@@ -107,28 +107,29 @@ begin
     isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);
     // probably needs tweaking. might need to be in a case statement based upon gear type
     if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
-    begin
+        begin
         skipSpeed := _0_25;
         skipAngle := _1_9;
         skipDecay := _0_87;
         // this could perhaps be a tiny bit higher.
         if  (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed) and
            (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)) then
-        begin
+            begin
             Gear^.dY.isNegative := true;
             Gear^.dY := Gear^.dY * skipDecay;
             Gear^.dX := Gear^.dX * skipDecay;
             CheckGearDrowning := false;
             PlaySound(sndSkip)
-        end
+            end
         else
-        begin
-            if not isSubmersible then
             begin
+            if not isSubmersible then
+                begin
                 CheckGearDrowning := true;
                 Gear^.State := gstDrowning;
                 Gear^.RenderTimer := false;
-                if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot) and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
+                if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot) and 
+                   (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
                     if Gear^.Kind = gtHedgehog then 
                         begin
                         if Gear^.Hedgehog^.Effects[heResurrectable] then
@@ -152,21 +153,21 @@ begin
         if ((cReducedQuality and rqPlainSplash) = 0) and 
            (((not isSubmersible) and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius)) or
              (isSubmersible and (hwRound(Gear^.Y) < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01)))) then
-        begin
+            begin
             AddVisualGear(hwRound(Gear^.X), cWaterLine, vgtSplash);
 
             maxDrops := (Gear^.Radius div 2) + hwRound(Gear^.dX * Gear^.Radius * 2) + hwRound(Gear^.
                         dY * Gear^.Radius * 2);
             for i:= max(maxDrops div 3, min(32, Random(maxDrops))) downto 0 do
-            begin
+                begin
                 particle := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
                 if particle <> nil then
-                begin
+                    begin
                     particle^.dX := particle^.dX - (Gear^.dX.QWordValue / 42949672960);
                     particle^.dY := particle^.dY - (Gear^.dY.QWordValue / 21474836480)
+                    end
                 end
-            end
-        end;
+            end;
         if isSubmersible and (CurAmmoGear^.Pos = 0) then CurAmmoGear^.Pos := 1000
     end
     else
@@ -188,17 +189,16 @@ var
     particle: PVisualGear;
 begin
     if _0_4 < Gear^.dY then
-    begin
+        begin
         dmg := ModifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70), Gear);
         PlaySound(sndBump);
         if dmg < 1 then exit;
 
         for i:= min(12, (3 + dmg div 10)) downto 0 do
-        begin
-            particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12,
-                        vgtDust);
+            begin
+            particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
             if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480);
-        end;
+            end;
 
         if (Gear^.Invulnerable) then exit;
 
@@ -267,53 +267,53 @@ begin
     if (hwRound(Gear^.X) < LAND_WIDTH div -2) or (hwRound(Gear^.X) > LAND_WIDTH * 3 div 2) then Gear^.State := Gear^.State or gstCollision;
 
     if Gear^.dY.isNegative then
-    begin
+        begin
         isFalling := true;
         if TestCollisionYwithGear(Gear, -1) then
-        begin
+            begin
             collV := -1;
             Gear^.dX :=   Gear^.dX * Gear^.Friction;
             Gear^.dY := - Gear^.dY * Gear^.Elasticity;
             Gear^.State := Gear^.State or gstCollision
-        end
+            end
         else if (Gear^.AdvBounce=1) and TestCollisionYwithGear(Gear, 1) then collV := 1;
-    end
+        end
     else if TestCollisionYwithGear(Gear, 1) then
         begin
-            collV := 1;
-            isFalling := false;
-            Gear^.dX :=   Gear^.dX * Gear^.Friction;
-            Gear^.dY := - Gear^.dY * Gear^.Elasticity;
-            Gear^.State := Gear^.State or gstCollision
+        collV := 1;
+        isFalling := false;
+        Gear^.dX :=   Gear^.dX * Gear^.Friction;
+        Gear^.dY := - Gear^.dY * Gear^.Elasticity;
+        Gear^.State := Gear^.State or gstCollision
         end
     else
-    begin
+        begin
         isFalling := true;
         if (Gear^.AdvBounce=1) and not Gear^.dY.isNegative and TestCollisionYwithGear(Gear, -1) then
             collV := -1;
-    end;
+        end;
 
 
     if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
-    begin
+        begin
         collH := hwSign(Gear^.dX);
         Gear^.dX := - Gear^.dX * Gear^.Elasticity;
         Gear^.dY :=   Gear^.dY * Gear^.Elasticity;
         Gear^.State := Gear^.State or gstCollision
-    end
+        end
     else if (Gear^.AdvBounce=1) and TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) then 
         collH := -hwSign(Gear^.dX); 
     //if Gear^.AdvBounce and (collV <>0) and (collH <> 0) and (hwSqr(tdX) + hwSqr(tdY) > _0_08) then
     if (Gear^.AdvBounce=1) and (collV <>0) and (collH <> 0) and ((collV=-1) or ((tdX.QWordValue +
        tdY.QWordValue) > _0_2.QWordValue)) then
-    begin
+        begin
         Gear^.dX := tdY*Gear^.Elasticity*Gear^.Friction;
         Gear^.dY := tdX*Gear^.Elasticity;
         //*Gear^.Friction;
         Gear^.dY.isNegative := not tdY.isNegative;
         isFalling := false;
         Gear^.AdvBounce := 10;
-    end;
+        end;
 
     if Gear^.AdvBounce > 1 then dec(Gear^.AdvBounce);
 
@@ -519,13 +519,43 @@ begin
     if (GameFlags and gfMoreWind) = 0 then Gear^.dX := Gear^.dX + cWindSpeed;
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
-    begin
+        begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
         DeleteGear(Gear);
         exit
-    end;
+        end;
     if (GameTicks and $3F) = 0 then
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepSnowball(Gear: PGear);
+var kick, i: LongInt;
+    particle: PVisualGear;
+begin
+    AllInactive := false;
+    if (GameFlags and gfMoreWind) = 0 then Gear^.dX := Gear^.dX + cWindSpeed;
+    doStepFallingGear(Gear);
+    CalcRotationDirAngle(Gear);
+    if (Gear^.State and gstCollision) <> 0 then
+        begin
+        kick:= hwRound((hwAbs(Gear^.dX)+hwAbs(Gear^.dY)) * _20);
+        Gear^.dY.isNegative:= not Gear^.dY.isNegative;
+        Gear^.dX.isNegative:= not Gear^.dX.isNegative;
+        AmmoShove(Gear, 1, kick);
+        for i:= 15 + kick div 10 downto 0 do
+            begin
+            particle := AddVisualGear(hwRound(Gear^.X) + Random(25), hwRound(Gear^.Y) + Random(25), vgtDust);
+            if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480)
+            end;
+        DeleteGear(Gear);
+        exit
+        end;
+    if ((GameTicks and $1F) = 0) and (Random(3) = 0) then
+        begin
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust);
+        if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480)
+        end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -895,7 +925,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepPickHammerWork(Gear: PGear);
 var 
-    i, ei: LongInt;
+    i, ei, x, y: LongInt;
     HHGear: PGear;
 begin
     AllInactive := false;
@@ -903,53 +933,58 @@ begin
     dec(Gear^.Timer);
     if (Gear^.Timer = 0)or((Gear^.Message and gmDestroy) <> 0)or((HHGear^.State and gstHHDriven) =
        0) then
-    begin
+        begin
         StopSound(Gear^.SoundChannel);
         DeleteGear(Gear);
         AfterAttack;
         doStepHedgehogMoving(HHGear);  // for gfInfAttack
         exit
-    end;
+        end;
 
+    x:= hwRound(Gear^.X);
+    y:= hwRound(Gear^.Y);
     if (Gear^.Timer mod 33) = 0 then
-    begin
+        begin
         HHGear^.State := HHGear^.State or gstNoDamage;
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y) + 7, 6, EXPLDontDraw);
+        doMakeExplosion(x, y + 7, 6, EXPLDontDraw);
         HHGear^.State := HHGear^.State and not gstNoDamage
-    end;
+        end;
 
     if (Gear^.Timer mod 47) = 0 then
-    begin
-        for i:= 0 to 1 do
-            AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
-        i := hwRound(Gear^.X) - Gear^.Radius - LongInt(GetRandom(2));
-        ei := hwRound(Gear^.X) + Gear^.Radius + LongInt(GetRandom(2));
-        while i <= ei do
         begin
-            DrawExplosion(i, hwRound(Gear^.Y) + 3, 3);
+        // ok. this was an attempt to turn off dust if not actually drilling land.  I have no idea why it isn't working as expected
+        //if ((y + 12 and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y + 12, x] > 255) then 
+            for i:= 0 to 1 do
+                AddVisualGear(x - 5 + Random(10), y + 12, vgtDust);
+
+        i := x - Gear^.Radius - LongInt(GetRandom(2));
+        ei := x + Gear^.Radius + LongInt(GetRandom(2));
+        while i <= ei do
+            begin
+            DrawExplosion(i, y + 3, 3);
             inc(i, 1)
-        end;
+            end;
 
         if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9)
            , lfIndestructible) then
-        begin
+            begin
             Gear^.X := Gear^.X + Gear^.dX;
             Gear^.Y := Gear^.Y + _1_9;
-        end;
+            end;
         SetAllHHToActive;
-    end;
+        end;
     if TestCollisionYwithGear(Gear, 1) then
-    begin
+        begin
         Gear^.dY := _0;
         SetLittle(HHGear^.dX);
         HHGear^.dY := _0;
-    end
+        end
     else
-    begin
+        begin
         Gear^.dY := Gear^.dY + cGravity;
         Gear^.Y := Gear^.Y + Gear^.dY;
         if hwRound(Gear^.Y) > cWaterLine then Gear^.Timer := 1
-    end;
+        end;
 
     Gear^.X := Gear^.X + HHGear^.dX;
     HHGear^.X := Gear^.X;
@@ -1858,10 +1893,10 @@ begin
     DeleteCI(HHGear);
 
     for i:= 0 to 3 do
-    begin
+        begin
         AmmoShove(Gear, 30, 25);
         Gear^.X := Gear^.X + Gear^.dX * 5
-    end;
+        end;
 
     HHGear^.State := (HHGear^.State and (not gstNoDamage)) or gstMoving;
 
@@ -2688,7 +2723,7 @@ begin
 
     if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) then
         if (Land[y, x] <> 0) then
-        begin
+            begin
             Gear^.dX.isNegative := not Gear^.dX.isNegative;
             Gear^.dY.isNegative := not Gear^.dY.isNegative;
             Gear^.dX := Gear^.dX * _1_5;
@@ -2696,13 +2731,13 @@ begin
             AmmoShove(Gear, 0, 40);
             AfterAttack;
             DeleteGear(Gear)
-        end
+            end
+        else
     else
-    else
-    begin
+        begin
         AfterAttack;
         DeleteGear(Gear)
-    end
+        end
 end;
 
 procedure doStepSeductionWear(Gear: PGear);
