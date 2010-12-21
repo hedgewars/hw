@@ -24,4 +24,7 @@ locale = {
 	["Fastest lap: "] = "Snabbast varv: ",
 	["Best laps per team: "] = "Bästa varv per lag: ",
 	["Team %d: "] = "Lag %d: ",
+	["Random Weapons"] = "Slumpade vapen",
+	["A game of luck"] = "Ett lyckospel",
+	["There has been a mix-up with your gear and now you|have to utilize whatever is coming your way!"] = "Det har uppstått ett missförstånd om din utrustning|och nu måste du använda vad du kan hitta!",
     }

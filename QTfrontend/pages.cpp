@@ -1507,7 +1507,7 @@ PageScheme::PageScheme(QWidget* parent) :
     sp.setVerticalPolicy(QSizePolicy::MinimumExpanding);
     sp.setHorizontalPolicy(QSizePolicy::Expanding);
 
-    pageLayout->addWidget(gb, 1,0,13,4);
+    pageLayout->addWidget(gb, 1,0,13,5);
 
     gbGameModes = new QGroupBox(QGroupBox::tr("Game Modifiers"), gb);
     gbBasicSettings = new QGroupBox(QGroupBox::tr("Basic Settings"), gb);
@@ -1834,12 +1834,14 @@ PageScheme::PageScheme(QWidget* parent) :
     mapper = new QDataWidgetMapper(this);
 
     BtnBack = addButton(":/res/Exit.png", pageLayout, 15, 0, true);
-    BtnNew = addButton(tr("New"), pageLayout, 15, 2);
-    BtnDelete = addButton(tr("Delete"), pageLayout, 15, 3);
+    BtnCopy = addButton(tr("Copy"), pageLayout, 15, 2);
+    BtnNew = addButton(tr("New"), pageLayout, 15, 3);
+    BtnDelete = addButton(tr("Delete"), pageLayout, 15, 4);
 
     selectScheme = new QComboBox(this);
     pageLayout->addWidget(selectScheme, 15, 1);
 
+    connect(BtnCopy, SIGNAL(clicked()), this, SLOT(copyRow()));
     connect(BtnNew, SIGNAL(clicked()), this, SLOT(newRow()));
     connect(BtnDelete, SIGNAL(clicked()), this, SLOT(deleteRow()));
     connect(selectScheme, SIGNAL(currentIndexChanged(int)), mapper, SLOT(setCurrentIndex(int)));
@@ -1896,7 +1898,14 @@ void PageScheme::setModel(QAbstractItemModel * model)
 void PageScheme::newRow()
 {
     QAbstractItemModel * model = mapper->model();
-    model->insertRow(model->rowCount());
+    model->insertRow(-1);
+    selectScheme->setCurrentIndex(model->rowCount() - 1);
+}
+
+void PageScheme::copyRow()
+{
+    QAbstractItemModel * model = mapper->model();
+    model->insertRow(selectScheme->currentIndex());
     selectScheme->setCurrentIndex(model->rowCount() - 1);
 }
 

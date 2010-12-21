@@ -628,12 +628,20 @@ bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
 {
     Q_UNUSED(count);
 
-    beginInsertRows(parent, row, row);
+    beginInsertRows(parent, schemes.size(), schemes.size());
 
-    QList<QVariant> newScheme = defaultScheme;
-    newScheme[0] = QVariant(tr("new"));
-
-    schemes.insert(row, newScheme);
+    if (row == -1)
+    {
+        QList<QVariant> newScheme = defaultScheme;
+        newScheme[0] = QVariant(tr("new"));
+        schemes.insert(schemes.size(), newScheme);
+    }
+    else
+    {
+        QList<QVariant> newScheme = schemes[row];
+        newScheme[0] = QVariant(tr("copy of") + " " + newScheme[0].toString());
+        schemes.insert(schemes.size(), newScheme);
+    }
 
     endInsertRows();
 

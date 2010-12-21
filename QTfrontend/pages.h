@@ -470,6 +470,7 @@ public:
     PageScheme(QWidget* parent = 0);
 
     QPushButton * BtnBack;
+    QPushButton * BtnCopy;
     QPushButton * BtnNew;
     QPushButton * BtnDelete;
     QPushButton * BtnSave;
@@ -479,6 +480,7 @@ public:
 
 public slots:
     void newRow();
+    void copyRow();
     void deleteRow();
 
 private:
