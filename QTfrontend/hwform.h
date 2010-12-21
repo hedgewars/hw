@@ -122,7 +122,7 @@ private:
     void closeEvent(QCloseEvent *event);
     void CustomizePalettes();
     void resizeEvent(QResizeEvent * event);
-    void keyReleaseEvent(QKeyEvent *event);
+    //void keyReleaseEvent(QKeyEvent *event);
     
     enum PageIDs {
         ID_PAGE_SETUP_TEAM      =  0,

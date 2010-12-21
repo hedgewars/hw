@@ -86,7 +86,7 @@ HWForm::HWForm(QWidget *parent)
 
     ui.setupUi(this);
     setMinimumSize(760, 580);
-    setFocusPolicy(Qt::StrongFocus);
+    //setFocusPolicy(Qt::StrongFocus);
     CustomizePalettes();
 
     ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
@@ -308,11 +308,13 @@ void HWForm::onFrontendFullscreen(bool value)
   }
 }
 
+/*
 void HWForm::keyReleaseEvent(QKeyEvent *event)
 {
-  if (event->key() == Qt::Key_Escape /*|| event->key() == Qt::Key_Backspace*/ ) 
+  if (event->key() == Qt::Key_Escape) 
     this->GoBack();
 }
+*/
 
 void HWForm::CustomizePalettes()
 {
