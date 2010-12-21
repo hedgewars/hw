@@ -1,15 +1,27 @@
+loadfile(GetDataPath() .. "Scripts/Locale.lua")()
+
 local weapons = { amGrenade, amClusterBomb, amBazooka, amBee, amShotgun,
             amMine, amDEagle, amDynamite, amFirePunch, amWhip, amPickHammer,
-            amBaseballBat, amAirAttack, amMineStrike, amTeleport, amMortar, amCake,
-            amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
-            amRCPlane, amSniperRifle, amMolotov, amBirdy, amBlowTorch,
-            amGasBomb, amFlamethrower, amSMine, amHammer, amDrillStrike }
+            amBaseballBat, amTeleport, amMortar, amCake, amSeduction,
+            amWatermelon, amHellishBomb, amDrill, amBallgun, amRCPlane,
+            amSniperRifle, amMolotov, amBirdy, amBlowTorch, amGasBomb,
+            amFlamethrower, amSMine, amHammer, amSnowball }
 
-local lastRound = -1
-local weapon = 0
+local airweapons = { amAirAttack, amMineStrike, amNapalm, amDrillStrike }
+
 
 function onGameInit()
     GameFlags = band(bor(GameFlags, gfResetWeps), bnot(gfInfAttack + gfPerHogAmmo))
+end
+
+function onGameStart()
+    if MapHasBorder() == false then
+        for i, w in pairs(airweapons) do
+            table.insert(weapons, w)
+        end
+    end
+
+    ShowMission(loc("Random Weapons"), loc("A game of luck"), loc("There has been a mix-up with your gear and now you|have to utilize whatever is coming your way!"), -amSkip, 0)
 end
 
 function onAmmoStoreInit()
@@ -31,12 +43,12 @@ function onAmmoStoreInit()
     for i, w in pairs(weapons) do
         SetAmmo(w, 0, 0, 0, 1)
     end
+
+    for i, w in pairs(airweapons) do
+        SetAmmo(w, 0, 0, 0, 1)
+    end
 end
 
 function onNewTurn()
-    if lastRound ~= TotalRounds then
-        weapon = GetRandom(table.maxn(weapons)) + 1
-        lastRound = TotalRounds
-    end
-    AddAmmo(CurrentHedgehog, weapons[weapon])
+    AddAmmo(CurrentHedgehog, weapons[GetRandom(table.maxn(weapons)) + 1])
 end

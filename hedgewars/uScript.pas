@@ -1082,6 +1082,18 @@ begin
         lua_pushstring(L, str2pchar(Pathz[ptData]));
     lc_getdatapath:= 1
 end;
+
+function lc_maphasborder(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 0 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to MapHasBorder!');
+        lua_pushnil(L);
+        end
+    else
+        lua_pushboolean(L, hasBorder);
+    lc_maphasborder:= 1
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -1492,6 +1504,7 @@ lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
 lua_register(luaState, 'GetRandom', @lc_getrandom);
 lua_register(luaState, 'SetWind', @lc_setwind);
 lua_register(luaState, 'GetDataPath', @lc_getdatapath);
+lua_register(luaState, 'MapHasBorder', @lc_maphasborder);
 
 
 ScriptClearStack; // just to be sure stack is empty

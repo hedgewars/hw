@@ -74,7 +74,7 @@ class AbstractPage : public QWidget
     Q_UNUSED(parent);
 
     font14 = new QFont("MS Shell Dlg", 14);
-    setFocusPolicy(Qt::StrongFocus);
+    //setFocusPolicy(Qt::StrongFocus);
   }
   virtual ~AbstractPage() {};
 
