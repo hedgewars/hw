@@ -59,6 +59,7 @@ class SelWeaponWidget : public QFrame
   void deleteWeaponsName();
   void newWeaponsName();
   void save();
+  void copy();
 
  signals:
   void weaponsChanged();
