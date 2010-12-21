@@ -1063,7 +1063,10 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     tmpdir.setFilter(QDir::Files);
     CBSelect->addItems(tmpdir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1"));
     for(int i = 0; i < CBSelect->count(); i++)
+    {
         CBSelect->setItemData(i, CBSelect->itemText(i));
+        CBSelect->setItemText(i, CBSelect->itemText(i).replace("_", " "));
+    }
 
     pageLayout->addWidget(CBSelect, 1, 1);
     

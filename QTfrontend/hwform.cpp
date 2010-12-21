@@ -1172,7 +1172,7 @@ void HWForm::UpdateCampaignPage(int index)
     QStringList entries = tmpdir.entryList(QStringList("*#*.lua"));
     //entries.sort();
     for(int i = 0; (i < entries.count()) && (i <= team.CampaignProgress); i++)
-        ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2"), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
+        ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
 }
 
 void HWForm::AssociateFiles()
