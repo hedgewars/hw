@@ -599,7 +599,7 @@ if GameTicks and $7 = 0 then
             else i:= 1;
             if (yy > 0) and ((Land[yy-1, xx] and $FF00) = 0) then dec(yy)
             else dec(xx, i);
-            dec(yy,4);
+            dec(yy,2);
             dec(xx,i);
             if (((cReducedQuality and rqBlurryLand) = 0) and 
                     (xx >= 0) and (xx < LAND_WIDTH-4) and (yy >= 0) and (yy < LAND_HEIGHT)) or
@@ -623,7 +623,7 @@ if GameTicks and $7 = 0 then
                     end;
                 UpdateLandTexture(xx, 4, yy, 4)
                 end;
-            inc(yy,4);
+            inc(yy,2);
             inc(xx,i);
             if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfBasic;
             if yy > 0 then
