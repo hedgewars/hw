@@ -181,7 +181,7 @@
             [self sendToServer:@"PASSWORD" withArgument:pwd];
         }
         else if ([command isEqualToString:@"CONNECTED"]) {
-            short int netProto;
+            int netProto;
             char *versionStr;
             HW_versionInfo(&netProto, &versionStr);
             NSString *nick = [self.systemSettings objectForKey:@"username"];

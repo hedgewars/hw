@@ -391,7 +391,7 @@ function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surf
 var tmpsurf: PSDL_Surface;
     s: shortstring;
 begin
-    WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + ']');
+    WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
 
     s:= filename + '.png';
     tmpsurf:= IMG_Load(Str2PChar(s));

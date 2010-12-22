@@ -25,7 +25,6 @@ uses uTypes, uConsts, uVariables, GLunit, uKeys, uChat, uSound, uAmmos, uUtils,
      uCommands;
 
 {$INCLUDE "config.inc"}
-var dummy: boolean;  // avoid compiler hint
 
 implementation
 {$IFDEF HWLIBRARY}
@@ -33,7 +32,7 @@ var cZoomVal: GLfloat;
     previousGameState: TGameState;
 
 // retrieve protocol information
-procedure HW_versionInfo(netProto: PShortInt; versionStr: PPChar); cdecl; export;
+procedure HW_versionInfo(netProto: PLongInt; versionStr: PPChar); cdecl; export;
 begin
     netProto^:= cNetProtoVersion;
     versionStr^:= cVersionString;

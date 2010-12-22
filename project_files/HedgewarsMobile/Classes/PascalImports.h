@@ -34,7 +34,7 @@ extern "C" {
     void GenLandPreview(void);
     void LoadLocaleWrapper(const char *filename);
 
-    void HW_versionInfo(short int *netProto, char **versionStr);
+    void HW_versionInfo(int *protoNum, char **versionStr);
 
     void HW_click(void);
     void HW_ammoMenu(void);

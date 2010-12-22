@@ -194,7 +194,7 @@
     [self sendToEngine:turnTime];
     [turnTime release];
 
-    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$turntime %d",[[basicArray objectAtIndex:i++] intValue] * 1000];
+    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$minestime %d",[[basicArray objectAtIndex:i++] intValue] * 1000];
     [self sendToEngine:minesTime];
     [minesTime release];
 
@@ -345,14 +345,14 @@
                 [self dumpRawData:buffer ofSize:msgSize];
 
                 sscanf((char *)buffer, "%*s %d", &eProto);
-                short int netProto;
+                int netProto;
                 char *versionStr;
 
                 HW_versionInfo(&netProto, &versionStr);
                 if (netProto == eProto) {
                     DLog(@"Setting protocol version %d (%s)", eProto, versionStr);
                 } else {
-                    DLog(@"ERROR - wrong protocol number: [%s] - expecting %d", &buffer[1], eProto);
+                    DLog(@"ERROR - wrong protocol number: %d (expecting %d)", netProto, eProto);
                     clientQuit = YES;
                 }
                 break;
