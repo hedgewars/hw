@@ -827,9 +827,11 @@ end;
 function lc_findplace(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
     fall: boolean;
+    tryhard: boolean;
     left, right: LongInt;
 begin
-    if lua_gettop(L) <> 4 then
+    tryhard:= false;
+    if (lua_gettop(L) <> 4) and (lua_gettop(L) <> 5) then
         LuaError('Lua: Wrong number of parameters passed to FindPlace!')
     else
         begin
@@ -837,10 +839,13 @@ begin
         fall:= lua_toboolean(L, 2);
         left:= lua_tointeger(L, 3);
         right:= lua_tointeger(L, 4);
+        if lua_gettop(L) = 5 then tryhard:= lua_toboolean(L, 5);
         if gear <> nil then
-            FindPlace(gear, fall, left, right)
+            FindPlace(gear, fall, left, right, tryhard);
+        if gear <> nil then lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
         end;
-    lc_findplace:= 0
+    lc_findplace:= 1
 end;
 
 function lc_playsound(L : Plua_State) : LongInt; Cdecl;
