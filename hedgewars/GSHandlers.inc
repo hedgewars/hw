@@ -559,7 +559,7 @@ begin
 end;
 
 procedure doStepSnowflake(Gear: PGear);
-var xx, yy, px, py: LongInt;
+var xx, yy, px, py, i: LongInt;
     move: Boolean;
     s: PSDL_Surface;
     p: PLongwordArray;
@@ -595,27 +595,23 @@ if GameTicks and $7 = 0 then
             // we've collided with land. draw some stuff and get back into the clouds
             move:= true;
 ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
-            Land[yy, xx]:= Land[yy, xx] or lfBasic;
-            if yy > 1 then
+            if cWindSpeed * 1600 + dX < _0 then i:= -1
+            else i:= 1;
+            if (yy > 0) and ((Land[yy-1, xx] and $FF00) = 0) then dec(yy)
+            else dec(xx, i);
+            if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfBasic;
+            if yy > 0 then
                 begin 
                 Land[yy-1, xx]:= Land[yy-1, xx] or lfBasic;
-                if (cWindSpeed * 1600 + dX < _0) and (xx > 1) then
-                    begin
-                    Land[yy-1, xx-1]:= Land[yy-1, xx-1] or lfBasic;
-                    Land[yy, xx-1]:= Land[yy, xx-1] or lfBasic
-                    end
-                else if xx < LAND_WIDTH then
-                    begin
-                    Land[yy-1, xx+1]:= Land[yy-1, xx+1] or lfBasic;
-                    Land[yy, xx+1]:= Land[yy, xx+1] or lfBasic
-                    end
+                if ((xx-i and LAND_WIDTH_MASK) = 0) then Land[yy-1, xx-i]:= Land[yy-1, xx-i] or lfBasic;
                 end;
+            if ((xx-i and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx-i]:= Land[yy, xx-i] or lfBasic;
             dec(yy,4);
-            dec(xx,2);
+            dec(xx,i);
             if (((cReducedQuality and rqBlurryLand) = 0) and 
-                    (xx >= 0) and (xx < LAND_WIDTH-2) and (yy >= 0) and (yy < LAND_HEIGHT)) or
+                    (xx >= 0) and (xx < LAND_WIDTH-4) and (yy >= 0) and (yy < LAND_HEIGHT)) or
                (((cReducedQuality and rqBlurryLand) <> 0) and
-                    (xx >= 0) and (xx < (LAND_WIDTH div 2)-2) and (yy >= 0) and (yy < LAND_HEIGHT div 2)) then
+                    (xx >= 0) and (xx < (LAND_WIDTH div 2)-4) and (yy >= 0) and (yy < LAND_HEIGHT div 2)) then
                 begin
                 s:= SpritesData[sprSnow].Surface;
                 p:= s^.pixels;
