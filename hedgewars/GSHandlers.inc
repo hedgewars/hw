@@ -574,7 +574,7 @@ if GameTicks and $7 = 0 then
         yy:= hwRound(Y);
         if vobVelocity <> 0 then
             begin
-            DirAngle := DirAngle + (Angle / 125000000);
+            DirAngle := DirAngle + (Angle / 1250000000);
             if DirAngle < 0 then DirAngle := DirAngle + 360
             else if 360 < DirAngle then DirAngle := DirAngle - 360;
             end;
