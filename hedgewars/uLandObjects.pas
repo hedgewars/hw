@@ -364,7 +364,7 @@ end;
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
 var s: shortstring;
     f: textfile;
-    i, ii: LongInt;
+    i, ii, numFlakes: LongInt;
     c1, c2: TSDL_Color;
 
     procedure CheckRect(Width, Height, x, y, w, h: LongWord);
@@ -456,16 +456,17 @@ if vobCount > 0 then
     Readln(f, vobFramesCount, vobFrameTicks, vobVelocity, vobFallSpeed);
 
 // adjust amount of flakes scaled by screen space
-vobCount:= longint(vobCount) * cScreenSpace div LAND_WIDTH;
+vobCount:= longint(vobCount);
+numFlakes:= vobCount * cScreenSpace div LAND_WIDTH;
 
 if (cReducedQuality and rqKillFlakes) <> 0 then
-    vobCount:= 0;
+    numFlakes:= 0;
 
 if Theme <> 'Snow' then
-    for i:= 0 to Pred(vobCount) do
+    for i:= 0 to Pred(numFlakes) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
 else
-    for i:= 0 to Pred(vobCount div 3) do
+    for i:= 0 to Pred(numFlakes div 3) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
 
 Close(f);
