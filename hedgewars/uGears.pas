@@ -220,6 +220,7 @@ case Kind of
                 gear^.Radius:= 5;
                 gear^.Elasticity:= _0_8;
                 gear^.Friction:= _0_8;
+                gear^.Density:= _1_5;
                 gear^.RenderTimer:= true;
                 if gear^.Timer = 0 then gear^.Timer:= 3000
                 end;
@@ -230,8 +231,12 @@ case Kind of
                 gear^.Radius:= 6;
                 gear^.Elasticity:= _0_8;
                 gear^.Friction:= _0_995;
+                gear^.Density:= _2;
                 gear^.RenderTimer:= true;
                 if gear^.Timer = 0 then gear^.Timer:= 3000
+                end;
+  gtMelonPiece: begin
+                gear^.Density:= _2;
                 end;
     gtHedgehog: begin
                 gear^.AdvBounce:= 1;
@@ -246,11 +251,13 @@ case Kind of
                 end;
        gtShell: begin
                 gear^.Radius:= 4;
+                gear^.Density:= _1;
                 end;
        gtSnowball: begin
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _1;
                 gear^.Friction:= _1;
+                gear^.Density:= _0_5;
                 end;
        gtGrave: begin
                 gear^.ImpactSound:= sndGraveImpact;
@@ -288,6 +295,7 @@ case Kind of
                 gear^.Radius:= 2;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
+                gear^.Density:= _0_9;
                 if cMinesTime < 0 then
                     gear^.Timer:= getrandom(51)*100
                 else
@@ -299,6 +307,7 @@ case Kind of
                 gear^.Radius:= 2;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
+                gear^.Density:= _0_9;
                 gear^.Timer:= 500;
                 end;
         gtCase: begin
@@ -313,6 +322,7 @@ case Kind of
                 gear^.Radius:= 16;
                 gear^.Elasticity:= _0_4;
                 gear^.Friction:= _0_995;
+                gear^.Density:= _16;
                 gear^.Health:= cBarrelHealth
                 end;
   gtDEagleShot: begin
@@ -327,10 +337,12 @@ case Kind of
                 gear^.Radius:= 3;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_03;
+                gear^.Density:= _0_8;
                 gear^.Timer:= 5000;
                 end;
      gtCluster: begin
                 gear^.Radius:= 2;
+                gear^.Density:= _0_8;
                 gear^.RenderTimer:= true
                 end;
       gtShover: gear^.Radius:= 20;
@@ -350,6 +362,7 @@ case Kind of
                 end;
      gtAirBomb: begin
                 gear^.Radius:= 5;
+                gear^.Density:= _1_5;
                 end;
    gtBlowTorch: begin
                 gear^.Radius:= cHHRadius + cBlowTorchC;
@@ -368,7 +381,8 @@ case Kind of
       gtMortar: begin
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_2;
-                gear^.Friction:= _0_08
+                gear^.Friction:= _0_08;
+                gear^.Density:= _1;
                 end;
         gtWhip: gear^.Radius:= 20;
       gtHammer: gear^.Radius:= 20;
@@ -391,12 +405,14 @@ case Kind of
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_5;
                 gear^.Friction:= _0_96;
+                gear^.Density:= _1_5;
                 gear^.RenderTimer:= true;
                 gear^.Timer:= 5000
                 end;
        gtDrill: begin
                 gear^.Timer:= 5000;
-                gear^.Radius:= 4
+                gear^.Radius:= 4;
+                gear^.Density:= _1;
                 end;
         gtBall: begin
                 gear^.ImpactSound:= sndGrenadeImpact;
@@ -407,6 +423,7 @@ case Kind of
                 gear^.Timer:= 5000;
                 gear^.Elasticity:= _0_7;
                 gear^.Friction:= _0_995;
+                gear^.Density:= _1_5;
                 end;
      gtBallgun: begin
                 gear^.Timer:= 5001;
@@ -422,6 +439,7 @@ case Kind of
                 end;
      gtMolotov: begin
                 gear^.Radius:= 6;
+                gear^.Density:= _2;
                 end;
        gtBirdy: begin
                 gear^.Radius:= 16; // todo: check
@@ -433,6 +451,7 @@ case Kind of
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_6;
                 gear^.Friction:= _0_96;
+                gear^.Density:= _1;
                 if gear^.Timer = 0 then gear^.Timer:= 3000
                 end;
       gtPortal: begin
@@ -446,7 +465,8 @@ case Kind of
                 gear^.Health:= 100;
                 end;
        gtPiano: begin
-                gear^.Radius:= 32
+                gear^.Radius:= 32;
+                gear^.Density:= _50;
                 end;
  gtSineGunShot: begin
                 gear^.Radius:= 5;
@@ -472,6 +492,7 @@ gtFlamethrower: begin
   gtNapalmBomb: begin
                 gear^.Timer:= 1000;
                 gear^.Radius:= 5;
+                gear^.Density:= _1_5;
                 end;
     end;
 

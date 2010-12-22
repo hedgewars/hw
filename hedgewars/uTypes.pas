@@ -196,6 +196,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Timer : LongWord;
             Elasticity: hwFloat;
             Friction  : hwFloat;
+            Density   : hwFloat;
             Message, MsgParam : Longword;
             Hedgehog: PHedgehog;
             Health, Damage, Karma: LongInt;

@@ -320,7 +320,7 @@ begin
     if isFalling then 
         begin
         Gear^.dY := Gear^.dY + cGravity;
-        if (GameFlags and gfMoreWind) <> 0 then Gear^.dX := Gear^.dX + cWindSpeed * _16 / max(12,sqr(Gear^.Radius))
+        if (GameFlags and gfMoreWind) <> 0 then Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density
         end;
 
     Gear^.X := Gear^.X + Gear^.dX;
