@@ -669,11 +669,11 @@ if isFalling then
        Gear^.dY:= Gear^.dY + cGravity;
 // this set of circumstances could be less complex if jumping was more clearly identified
        if ((GameFlags and gfMoreWind) <> 0) and 
-          (Gear^.Damage <> 0) or
+          (((Gear^.Damage <> 0) or
           ((CurAmmoGear <> nil) and
             ((CurAmmoGear^.AmmoType = amJetpack) or
             (CurAmmoGear^.AmmoType = amBirdy))) or
-          ((Gear^.dY.QWordValue + Gear^.dX.QWordValue) > _0_55.QWordValue)
+          ((Gear^.dY.QWordValue + Gear^.dX.QWordValue) > _0_55.QWordValue)))
           then Gear^.dX := Gear^.dX + cWindSpeed * _0_2
        end
    end 
