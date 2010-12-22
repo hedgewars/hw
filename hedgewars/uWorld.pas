@@ -75,7 +75,7 @@ var cWaveWidth, cWaveHeight: LongInt;
     missionTimer: LongInt;
     stereoDepth: GLfloat = 0;
 
-const cStereo_Sky     = 0.0750;
+const cStereo_Sky     = 0.0500;
       cStereo_Horizon = 0.0250;
       cStereo_Water   = 0.0125;
 

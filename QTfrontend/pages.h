@@ -247,6 +247,7 @@ public:
 private:
     bool previousFullscreenValue;
     int previousResolutionIndex;
+    int previousQuality;
 
 private slots:
     void forceFullscreen(int index);

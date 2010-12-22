@@ -774,9 +774,14 @@ void PageOptions::forceFullscreen(int index)
         previousFullscreenValue = this->CBFullscreen->isChecked();
         this->CBFullscreen->setChecked(true);
         this->CBFullscreen->setEnabled(false);
+        previousQuality = this->SLQuality->value();
+        this->SLQuality->setValue(this->SLQuality->maximum());
+        this->SLQuality->setEnabled(false);
     } else {
         this->CBFullscreen->setChecked(previousFullscreenValue);
         this->CBFullscreen->setEnabled(true);
+        this->SLQuality->setValue(previousQuality);
+        this->SLQuality->setEnabled(true);
     }
 }
 
