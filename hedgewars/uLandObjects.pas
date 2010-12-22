@@ -461,9 +461,12 @@ vobCount:= longint(vobCount) * cScreenSpace div LAND_WIDTH;
 if (cReducedQuality and rqKillFlakes) <> 0 then
     vobCount:= 0;
 
-
-for i:= 0 to Pred(vobCount) do
-    AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
+if Theme <> 'Snow' then
+    for i:= 0 to Pred(vobCount) do
+        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
+else
+    for i:= 0 to Pred(vobCount div 3) do
+        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
 
 Close(f);
 {$I+}
