@@ -637,7 +637,7 @@ if GameTicks and $7 = 0 then
         if move then
             begin
             X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
-            Y:= int2hwFloat(1000+(GetRandom(25)-50))
+            Y:= int2hwFloat(650+(GetRandom(50)-25))
             end
         end
     end
