@@ -625,13 +625,13 @@ if GameTicks and $7 = 0 then
                 end;
             inc(yy,2);
             inc(xx,i);
-            if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfBasic;
+            if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfObject;
             if yy > 0 then
                 begin 
-                Land[yy-1, xx]:= Land[yy-1, xx] or lfBasic;
-                if ((xx-i and LAND_WIDTH_MASK) = 0) then Land[yy-1, xx-i]:= Land[yy-1, xx-i] or lfBasic;
+                Land[yy-1, xx]:= Land[yy-1, xx] or lfObject;
+                if ((xx-i and LAND_WIDTH_MASK) = 0) then Land[yy-1, xx-i]:= Land[yy-1, xx-i] or lfObject;
                 end;
-            if ((xx-i and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx-i]:= Land[yy, xx-i] or lfBasic
+            if ((xx-i and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx-i]:= Land[yy, xx-i] or lfObject
 ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
             end;
         if move then

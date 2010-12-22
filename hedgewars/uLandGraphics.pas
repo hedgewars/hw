@@ -198,9 +198,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
            else
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
-       else
-           if ((Land[t, i] and lfObject) <> 0) then
-               if (cReducedQuality and rqBlurryLand) = 0 then
+       else if (cReducedQuality and rqBlurryLand) = 0 then
                    LandPixels[t, i]:= 0
                else
                    LandPixels[t div 2, i div 2]:= 0;
@@ -216,9 +214,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
            else
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
-       else
-           if ((Land[t, i] and lfObject) <> 0) then
-               if (cReducedQuality and rqBlurryLand) = 0 then
+       else if (cReducedQuality and rqBlurryLand) = 0 then
                    LandPixels[t, i]:= 0
                else
                    LandPixels[t div 2, i div 2]:= 0;
@@ -234,12 +230,10 @@ if (t and LAND_HEIGHT_MASK) = 0 then
             else
            LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
-       else
-            if ((Land[t, i] and lfObject) <> 0) then
-            if (cReducedQuality and rqBlurryLand) = 0 then
-          LandPixels[t, i]:= 0
+       else if (cReducedQuality and rqBlurryLand) = 0 then
+          	LandPixels[t, i]:= 0
             else
-           LandPixels[t div 2, i div 2]:= 0;
+           	LandPixels[t div 2, i div 2]:= 0;
 
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
@@ -252,9 +246,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
            else
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
-       else
-          if ((Land[t, i] and lfObject) <> 0) then
-              if (cReducedQuality and rqBlurryLand) = 0 then
+       else if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
               else
                 LandPixels[t div 2, i div 2]:= 0;
@@ -267,7 +259,7 @@ begin
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
+       if (Land[t, i] and (lfBasic or lfObject)) <> 0 then
           begin
            if (cReducedQuality and rqBlurryLand) = 0 then
             LandPixels[t, i]:= cExplosionBorderColor
@@ -282,7 +274,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
+       if (Land[t, i] and (lfBasic or lfObject)) <> 0 then
           begin
            if (cReducedQuality and rqBlurryLand) = 0 then
               LandPixels[t, i]:= cExplosionBorderColor
@@ -296,7 +288,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
+       if (Land[t, i] and (lfBasic or lfObject)) <> 0 then
            begin
            if (cReducedQuality and rqBlurryLand) = 0 then
            LandPixels[t, i]:= cExplosionBorderColor
@@ -311,7 +303,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
+       if (Land[t, i] and (lfBasic or lfObject)) <> 0 then
           begin
            if (cReducedQuality and rqBlurryLand) = 0 then
           LandPixels[t, i]:= cExplosionBorderColor
@@ -430,7 +422,7 @@ for i:= 0 to Pred(Count) do
     begin
     for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
         for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
-            if ((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0) then
+            if (Land[ty, tx] and (lfBasic or lfObject)) <> 0 then
                 begin
                     if (cReducedQuality and rqBlurryLand) = 0 then
                         LandPixels[ty, tx]:= cExplosionBorderColor
