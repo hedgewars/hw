@@ -182,28 +182,16 @@
     NSArray *mods = [[NSArray alloc] initWithContentsOfFile:path];
     [path release];
 
-    int i = 0;
-    // initial health
-    result = [[basicArray objectAtIndex:i++] intValue];
+    result = [[basicArray objectAtIndex:0] intValue];
 
-    // turn time
-    NSInteger tentativeTurntime = [[basicArray objectAtIndex:i++] intValue];
-    if (tentativeTurntime >= 100)
-        tentativeTurntime = 9999;
-    NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",tentativeTurntime * 1000];
-    [self sendToEngine:turnTime];
-    [turnTime release];
-
-    NSString *minesTime = [[NSString alloc] initWithFormat:@"e$minestime %d",[[basicArray objectAtIndex:i++] intValue] * 1000];
-    [self sendToEngine:minesTime];
-    [minesTime release];
-
-    for (; i < [basicArray count]; i++) {
-        NSDictionary *basicDict = [mods objectAtIndex:i];
-        NSString *command = [basicDict objectForKey:@"command"];
+    for (int i = 1; i < [basicArray count]; i++) {
+        NSDictionary *dict = [mods objectAtIndex:i];
+        NSString *command = [dict objectForKey:@"command"];
         NSInteger value = [[basicArray objectAtIndex:i] intValue];
-        if ([basicDict objectForKey:@"checkOverMax"] && value >= [[basicDict objectForKey:@"max"] intValue])
+        if ([[dict objectForKey:@"checkOverMax"] boolValue] && value >= [[dict objectForKey:@"max"] intValue])
             value = 9999;
+        if ([[dict objectForKey:@"times1000"] boolValue])
+            value = value * 1000;
         NSString *strToSend = [[NSString alloc] initWithFormat:@"%@ %d",command,value];
         [self sendToEngine:strToSend];
         [strToSend release];

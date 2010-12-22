@@ -6,7 +6,6 @@
 	<array>
 		<integer>100</integer>
 		<integer>100</integer>
-		<integer>5</integer>
 		<integer>100</integer>
 		<integer>100</integer>
 		<integer>47</integer>
@@ -15,6 +14,7 @@
 		<integer>5</integer>
 		<integer>35</integer>
 		<integer>30</integer>
+		<integer>5</integer>
 		<integer>3</integer>
 		<integer>10</integer>
 		<integer>2</integer>
