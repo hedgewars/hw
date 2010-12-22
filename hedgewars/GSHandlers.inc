@@ -599,13 +599,6 @@ if GameTicks and $7 = 0 then
             else i:= 1;
             if (yy > 0) and ((Land[yy-1, xx] and $FF00) = 0) then dec(yy)
             else dec(xx, i);
-            if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfBasic;
-            if yy > 0 then
-                begin 
-                Land[yy-1, xx]:= Land[yy-1, xx] or lfBasic;
-                if ((xx-i and LAND_WIDTH_MASK) = 0) then Land[yy-1, xx-i]:= Land[yy-1, xx-i] or lfBasic;
-                end;
-            if ((xx-i and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx-i]:= Land[yy, xx-i] or lfBasic;
             dec(yy,4);
             dec(xx,i);
             if (((cReducedQuality and rqBlurryLand) = 0) and 
@@ -619,21 +612,26 @@ if GameTicks and $7 = 0 then
                 for py:= 0 to Pred(s^.h) do
                     begin
                     for px:= 0 to Pred(s^.w) do
-                        begin
+                        if (Land[yy + py, xx + px] and $FF00) = 0 then
+                            begin
                             if (cReducedQuality and rqBlurryLand) = 0 then
-                                begin
-                                if LandPixels[yy + py, xx + py] = 0 then
-                                    LandPixels[yy + py, xx + px]:= p^[px];
-                                end
+                                LandPixels[yy + py, xx + px]:= p^[px]
                             else
-                                if LandPixels[(yy + py) div 2, (xx + px) div 2] = 0 then
-                                    LandPixels[(yy + py) div 2, (xx + px) div 2]:= p^[px];
-
-                        end;
+                                LandPixels[(yy + py) div 2, (xx + px) div 2]:= p^[px]
+                            end;
                     p:= @(p^[s^.pitch shr 2])
                     end;
                 UpdateLandTexture(xx, 4, yy, 4)
-                end
+                end;
+            inc(yy,4);
+            inc(xx,i);
+            if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfBasic;
+            if yy > 0 then
+                begin 
+                Land[yy-1, xx]:= Land[yy-1, xx] or lfBasic;
+                if ((xx-i and LAND_WIDTH_MASK) = 0) then Land[yy-1, xx-i]:= Land[yy-1, xx-i] or lfBasic;
+                end;
+            if ((xx-i and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx-i]:= Land[yy, xx-i] or lfBasic
 ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
             end;
         if move then
