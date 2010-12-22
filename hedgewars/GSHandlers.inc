@@ -558,6 +558,97 @@ begin
         end
 end;
 
+procedure doStepSnowflake(Gear: PGear);
+var xx, yy, px, py: LongInt;
+    move: Boolean;
+    s: PSDL_Surface;
+    p: PLongwordArray;
+begin
+if GameTicks and $7 = 0 then
+    begin
+    with Gear^ do
+        begin
+        X:= X + cWindSpeed * 1600 + dX;
+        Y:= Y + dY + cGravity * vobFallSpeed * 8;  // using same value as flakes to try and get similar results
+        xx:= hwRound(X);
+        yy:= hwRound(Y);
+        if vobVelocity <> 0 then
+            begin
+            DirAngle := DirAngle + (Angle / 12500000);
+            if DirAngle < 0 then DirAngle := DirAngle + 360
+            else if 360 < DirAngle then DirAngle := DirAngle - 360;
+            end;
+
+        inc(Health, 8);
+        if Health > vobFrameTicks then
+            begin
+            dec(Health, vobFrameTicks);
+            inc(Timer);
+            if Timer = vobFramesCount then Timer:= 0
+            end;
+
+        move:= false;
+    // move back to cloud layer
+        if yy > cWaterLine then move:= true
+        else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] > 255) then
+            begin
+            // we've collided with land. draw some stuff and get back into the clouds
+            move:= true;
+////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+            Land[yy, xx]:= Land[yy, xx] or lfBasic;
+            if yy > 1 then
+                begin 
+                Land[yy-1, xx]:= Land[yy-1, xx] or lfBasic;
+                if (cWindSpeed * 1600 + dX < _0) and (xx > 1) then
+                    begin
+                    Land[yy-1, xx-1]:= Land[yy-1, xx-1] or lfBasic;
+                    Land[yy, xx-1]:= Land[yy, xx-1] or lfBasic
+                    end
+                else if xx < LAND_WIDTH then
+                    begin
+                    Land[yy-1, xx+1]:= Land[yy-1, xx+1] or lfBasic;
+                    Land[yy, xx+1]:= Land[yy, xx+1] or lfBasic
+                    end
+                end;
+            dec(yy,4);
+            dec(xx,2);
+            if (((cReducedQuality and rqBlurryLand) = 0) and 
+                    (xx >= 0) and (xx < LAND_WIDTH-2) and (yy >= 0) and (yy < LAND_HEIGHT)) or
+               (((cReducedQuality and rqBlurryLand) <> 0) and
+                    (xx >= 0) and (xx < (LAND_WIDTH div 2)-2) and (yy >= 0) and (yy < LAND_HEIGHT div 2)) then
+                begin
+                s:= SpritesData[sprSnow].Surface;
+                p:= s^.pixels;
+
+                for py:= 0 to Pred(s^.h) do
+                    begin
+                    for px:= 0 to Pred(s^.w) do
+                        begin
+                            if (cReducedQuality and rqBlurryLand) = 0 then
+                                begin
+                                if LandPixels[yy + py, xx + py] = 0 then
+                                    LandPixels[yy + py, xx + px]:= p^[px];
+                                end
+                            else
+                                if LandPixels[(yy + py) div 2, (xx + px) div 2] = 0 then
+                                    LandPixels[(yy + py) div 2, (xx + px) div 2]:= p^[px];
+
+                        end;
+                    p:= @(p^[s^.pitch shr 2])
+                    end;
+                UpdateLandTexture(xx, 4, yy, 4)
+                end
+////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+            end;
+        if move then
+            begin
+            X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
+            Y:= int2hwFloat(1000+(GetRandom(25)-50))
+            end
+        end
+    end
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepGrave(Gear: PGear);
 begin

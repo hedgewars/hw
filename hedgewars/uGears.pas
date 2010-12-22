@@ -47,7 +47,7 @@ procedure DeleteGear(Gear: PGear);
 implementation
 uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
      uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
-     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug;
+     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture;
 
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
@@ -128,7 +128,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepHammerHit,
             @doStepResurrector,
             @doStepNapalmBomb,
-            @doStepSnowball
+            @doStepSnowball,
+            @doStepSnowflake
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -258,6 +259,21 @@ case Kind of
                 gear^.Elasticity:= _1;
                 gear^.Friction:= _1;
                 gear^.Density:= _0_5;
+                end;
+
+     gtFlake: begin
+                with Gear^ do
+                    begin
+                    DirAngle:= random * 360;
+                    dx.isNegative:= GetRandom(2) = 0;
+                    dx.QWordValue:= GetRandom(100000000);
+                    dy.isNegative:= false;
+                    dy.QWordValue:= GetRandom(70000000);
+                    if GetRandom(2) = 0 then dx := -dx;
+                    Health:= random(vobFrameTicks);
+                    Timer:= random(vobFramesCount);
+                    Angle:= (random(2) * 2 - 1) * (1 + random(10000)) * vobVelocity
+                    end
                 end;
        gtGrave: begin
                 gear^.ImpactSound:= sndGraveImpact;
@@ -1095,7 +1111,11 @@ if (GameFlags and gfLaserSight) <> 0 then
     cLaserSighting:= true;
 
 if (GameFlags and gfArtillery) <> 0 then
-    cArtillery:= true
+    cArtillery:= true;
+
+if (Theme = 'Snow') or (Theme = 'Hell') then
+    for i:= 0 to Pred(vobCount) do
+        AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(1024), gtFlake, 0, _0, _0, 0);
 end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);
