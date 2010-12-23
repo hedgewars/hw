@@ -148,9 +148,15 @@ begin
     while(pe <> nil) do
         begin
         if (pe^.point.flags and $80 <> 0) then
+            begin
+            AddFileLog('[DRAW] Move to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');
             FillRoundInLand(pe^.point.X, pe^.point.Y, 34, lfBasic)
+            end
             else
+            begin
+            AddFileLog('[DRAW] Line to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');
             DrawLineOnLand(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y);
+            end;
 
         prevPoint:= pe^.point;
         pe:= pe^.next;  
