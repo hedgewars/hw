@@ -198,7 +198,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
            else
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
-       else if not isMap then
+       else if not isMap or ((Land[t, i] and lfObject) <> 0) then
            begin
            if (cReducedQuality and rqBlurryLand) = 0 then
                LandPixels[t, i]:= 0
@@ -217,7 +217,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
            else
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
-       else if not isMap then
+       else if not isMap or ((Land[t, i] and lfObject) <> 0) then
            begin
            if (cReducedQuality and rqBlurryLand) = 0 then
                LandPixels[t, i]:= 0
@@ -236,12 +236,12 @@ if (t and LAND_HEIGHT_MASK) = 0 then
            else
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
-       else if not isMap then
+       else if not isMap or ((Land[t, i] and lfObject) <> 0) then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
-          	LandPixels[t, i]:= 0
+          	    LandPixels[t, i]:= 0
             else
-           	LandPixels[t div 2, i div 2]:= 0
+           	    LandPixels[t div 2, i div 2]:= 0
             end;
 
 t:= y - dx;
@@ -255,7 +255,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
            else
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
-       else if not isMap then
+       else if not isMap or ((Land[t, i] and lfObject) <> 0) then
            begin
            if (cReducedQuality and rqBlurryLand) = 0 then
                LandPixels[t, i]:= 0
@@ -507,11 +507,10 @@ for i:= -HalfWidth to HalfWidth do
        ((Land[ty, tx] and (lfBasic or lfObject)) <> 0) then
         begin
         Land[ty, tx]:= Land[ty, tx] or lfDamaged;
-        if (cReducedQuality and rqBlurryLand) = 0 then
-	    LandPixels[ty, tx]:= cExplosionBorderColor
-	else
+        if (cReducedQuality and rqBlurryLand) = 0 then 
+            LandPixels[ty, tx]:= cExplosionBorderColor
+	    else
             LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
-
         end
     end;
     X:= nx;
@@ -529,9 +528,9 @@ for i:= -HalfWidth to HalfWidth do
                     LandPixels[ty, tx]:= LandBackPixel(tx, ty)
                 else
                     LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
-            else if not isMap then
+            else if not isMap or ((Land[ty, tx] and lfObject) <> 0) then
                 begin
-		if (cReducedQuality and rqBlurryLand) = 0 then
+                if (cReducedQuality and rqBlurryLand) = 0 then
                      LandPixels[ty, tx]:= 0
                 else
                      LandPixels[ty div 2, tx div 2]:= 0
@@ -693,13 +692,13 @@ if ((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)
             begin
             if (Land[Y, X] and lfBasic) <> 0 then
                 LandPixels[Y, X]:= LandBackPixel(X, Y)
-            else if not isMap then
+            else if not isMap or ((Land[Y, X] and lfObject) <> 0) then
                 LandPixels[Y, X]:= 0
             end
         else
             if (Land[Y, X] and lfBasic) <> 0 then
                 LandPixels[Y div 2, X div 2]:= LandBackPixel(X, Y)
-            else if not isMap then
+            else if not isMap or ((Land[Y, X] and lfObject) <> 0) then
                 LandPixels[Y div 2, X div 2]:= 0;
 
         Land[Y, X]:= 0;
