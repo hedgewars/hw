@@ -1119,7 +1119,7 @@ if (GameFlags and gfLaserSight) <> 0 then
 if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
 
-if (Theme = 'Snow') then// or (Theme = 'Hell') then
+if (Theme = 'Snow') or (Theme = 'Christmas') then
     for i:= 0 to Pred(vobCount*2) do
         AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(1024), gtFlake, 0, _0, _0, 0);
 end;
