@@ -9,7 +9,7 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation>kópia z</translation>
     </message>
 </context>
 <context>
@@ -193,7 +193,7 @@
     </message>
     <message>
         <source>Seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Zrno</translation>
     </message>
 </context>
 <context>
@@ -333,31 +333,31 @@ v nastaveniach hry:</translation>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Odvolať</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyčistiť</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Načítať</translation>
+        <translation>Načítať</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložiť</translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Načítať nakreslenú mapu</translation>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nakreslené mapy (*.hwmap);;Všetky súbory (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložiť nakreslenú mapu</translation>
     </message>
 </context>
 <context>
@@ -1092,7 +1092,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopírovať</translation>
     </message>
 </context>
 <context>
@@ -1111,7 +1111,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopírovať</translation>
     </message>
 </context>
 <context>
@@ -1319,11 +1319,11 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normálna</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
-        <translation type="unfinished"></translation>
+        <translation>ručne kreslená mapa...</translation>
     </message>
 </context>
 <context>
@@ -1564,7 +1564,7 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>Gameplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Hra</translation>
     </message>
 </context>
 <context>
@@ -1751,7 +1751,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastaviť</translation>
     </message>
 </context>
 <context>
@@ -1809,7 +1809,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation>kópia z</translation>
     </message>
 </context>
 <context>
