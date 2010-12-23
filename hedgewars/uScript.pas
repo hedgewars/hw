@@ -381,7 +381,7 @@ begin
             vg^.dY:= lua_tonumber(L, 5);
             vg^.Angle:= lua_tonumber(L, 6);
             vg^.Frame:= lua_tointeger(L, 7);
-            vg^.FrameTicks:= lua_tointeger(L, 8);
+            if lua_tointeger(L, 8) <> 0 then vg^.FrameTicks:= lua_tointeger(L, 8);  // find a better way to do this. maybe need to break all these up.
             vg^.State:= lua_tointeger(L, 9);
             vg^.Timer:= lua_tointeger(L, 10);
             vg^.Tint:= lua_tointeger(L, 11);
@@ -674,17 +674,17 @@ end;
 function lc_hogsay(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
    vgear : PVisualGear;
+       s : LongWord;
 begin
-    if lua_gettop(L) <> 3 then
-        begin
-        LuaError('Lua: Wrong number of parameters passed to HogSay!');
-        end
-    else
+    if lua_gettop(L) = 4 then s:= lua_tointeger(L, 4)
+    else s:= 0;
+
+    if (lua_gettop(L) = 4) or (lua_gettop(L) = 3) then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
             begin
-            vgear:= AddVisualGear(0, 0, vgtSpeechBubble);
+            vgear:= AddVisualGear(0, 0, vgtSpeechBubble, s, true);
             if vgear <> nil then
                begin
                vgear^.Text:= lua_tostring(L, 2);
@@ -693,7 +693,8 @@ begin
                if (vgear^.FrameTicks < 1) or (vgear^.FrameTicks > 3) then vgear^.FrameTicks:= 1;
                end;
             end
-        end;
+        end
+    else LuaError('Lua: Wrong number of parameters passed to HogSay!');
     lc_hogsay:= 0
 end;
 

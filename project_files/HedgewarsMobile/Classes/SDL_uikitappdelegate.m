@@ -121,10 +121,10 @@ int main (int argc, char *argv[]) {
     // pull out useful configuration info from various files
     GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
     NSNumber *isNetGameNum = [gameDictionary objectForKey:@"netgame"];
-    
-    [setup startThread:@"engineProtocol"];
-    if ([isNetGameNum boolValue] == YES)
-        [setup startThread:@"serverProtocol"];
+
+    [NSThread detachNewThreadSelector:@selector(engineProtocol)
+                             toTarget:setup
+                           withObject:nil];
 
     const char **gameArgs = [setup getSettings:[gameDictionary objectForKey:@"savefile"]];
     NSNumber *menuStyle = [NSNumber numberWithBool:setup.menuStyle];
@@ -232,8 +232,9 @@ int main (int argc, char *argv[]) {
     if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
          device.multitaskingSupported &&
          self.isInGame) {
-        // multiasking in-game works only for ios >= 4.2, returns a black screen on other verions
-        if (NSClassFromString(@"UIPrintInfo"))
+        // let's try to be permissive with multitasking here...
+        NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
+        if ([[settings objectForKey:@"multitasking"] boolValue])
             HW_suspend();
         else {
             // so the game returns to the configuration view
@@ -246,6 +247,7 @@ int main (int argc, char *argv[]) {
                 longjmp(*(jump_env()), 1);
             }
         }
+        [settings release];
     }
 }
 

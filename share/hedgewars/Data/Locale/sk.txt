@@ -50,6 +50,8 @@
 00:47=Lepkavá mína
 00:48=Kladivo
 00:49=Oživovač
+00:50=Útok raketovými vŕtačkami
+00:51=Blatová guľa
 
 01:00=Do boja!
 01:01=Remíza

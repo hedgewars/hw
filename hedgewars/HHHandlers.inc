@@ -207,6 +207,7 @@ with Gear^,
                   amClusterBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtClusterBomb,  0, newDx, newDy, CurWeapon^.Timer);
                       amGasBomb: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtGasBomb,      0, newDx, newDy, CurWeapon^.Timer);
                       amBazooka: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtShell,        0, newDx, newDy, 0);
+                     amSnowball: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtSnowball,     0, newDx, newDy, 0);
                           amBee: FollowGear:= AddGear(hwRound(lx), hwRound(ly), gtBee,          0, newDx, newDy, 0);
                       amShotgun: begin
                                  PlaySound(sndShotgunReload);

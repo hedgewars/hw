@@ -1,6 +1,6 @@
 /*
- * Hedgewars, a free turn based strategy game
- * Copyright (c) 2007-2010 Andrey Korotaev <unC0Rr@gmail.com>
+ * Hedgewars-iOS, a Hedgewars port for iOS devices
+ * Copyright (c) 2009-2010 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,19 +13,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 16/12/2010.
  */
 
-#include "netregister.h"
 
-HWNetRegisterServer::HWNetRegisterServer(QObject *parent, const QString & descr, quint16 port) :
-  QObject(parent)
-{
-    Q_UNUSED(descr);
-    Q_UNUSED(port);
+#import <Foundation/Foundation.h>
+#import "SDL_net.h"
+
+@interface ServerSetup : NSObject {
+    NSDictionary *systemSettings;
+
+    TCPsocket sd;      // External socket descriptor
 }
 
-void HWNetRegisterServer::unregister()
-{
+@property (nonatomic, retain) NSDictionary *systemSettings;
 
-}
+-(BOOL) isNetworkReachable;
+
+@end

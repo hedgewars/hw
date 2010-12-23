@@ -31,6 +31,8 @@ FitGraphicsView::FitGraphicsView(QWidget* parent) : QGraphicsView(parent)
 
 void FitGraphicsView::resizeEvent(QResizeEvent * event)
 {
+    Q_UNUSED(event);
+
     fitInView(sceneRect());
 }
 

@@ -553,7 +553,7 @@ procedure GenDrawnMap;
 begin
     uLandPainted.Draw;
 
-    MaxHedgehogs:= 18;
+    MaxHedgehogs:= 48;
     hasGirders:= true;
     playHeight:= 2048;
     playWidth:= 4096;
@@ -1045,6 +1045,8 @@ begin
         0: GenBlank(EdgeTemplates[SelectTemplate]);
         1: GenMaze;
         2: GenDrawnMap;
+    else
+        OutError('Unknown mapgen', true);
     end;
     AddProgress();
 
@@ -1286,6 +1288,8 @@ begin
         0: GenBlank(EdgeTemplates[SelectTemplate]);
         1: GenMaze;
         2: GenDrawnMap;
+    else
+        OutError('Unknown mapgen', true);
     end;
 
     lh:= LAND_HEIGHT div 128;

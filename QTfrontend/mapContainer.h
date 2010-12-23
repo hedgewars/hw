@@ -55,16 +55,17 @@ class HWMapContainer : public QWidget
   bool getCurrentIsMission() const;
   QByteArray getDrawnMapData();
   DrawMapScene * getDrawMapScene();
+  void mapDrawingFinished();
 
  public slots:
-  void changeImage();
-  void mapDrawingFinished();
+  void askForGeneratedPreview();
   void setSeed(const QString & seed);
   void setMap(const QString & map);
   void setTheme(const QString & theme);
   void setTemplateFilter(int);
   void setMapgen(MapGenerator m);
   void setMaze_size(int size);
+  void setDrawnMapData(const QByteArray & ar);
 
  signals:
   void seedChanged(const QString & seed);
@@ -88,7 +89,7 @@ class HWMapContainer : public QWidget
   void themeSelected(int currentRow);
   void addInfoToPreview(QPixmap image);
   void templateFilterChanged(int filter);
-  void seedEdited(const QString & seed);
+  void seedEdited();
 
  protected:
   virtual void resizeEvent ( QResizeEvent * event );
@@ -102,6 +103,7 @@ class HWMapContainer : public QWidget
   HWMap* pMap;
   QString m_seed;
   QLineEdit* seedEdit;
+  QPushButton* seedSet;
   int hhLimit;
   int templateFilter;
   QPixmap hhSmall;
@@ -111,10 +113,9 @@ class HWMapContainer : public QWidget
   QComboBox *maze_size_selection;
   MapGenerator mapgen;
   int numMissions;
-  int maze_size;
   DrawMapScene drawMapScene;
 
-  void loadMap(int index);
+  void updatePreview();
 };
 
 #endif // _HWMAP_CONTAINER_INCLUDED

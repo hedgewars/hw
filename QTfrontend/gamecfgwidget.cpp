@@ -32,7 +32,7 @@
 #include "ammoSchemeModel.h"
 #include "proto.h"
 
-GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
+GameCFGWidget::GameCFGWidget(QWidget* parent) :
   QGroupBox(parent), mainLayout(this)
 {
     mainLayout.setMargin(0);
@@ -43,7 +43,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 
     IconedGroupBox *GBoxOptions = new IconedGroupBox(this);
     GBoxOptions->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    mainLayout.addWidget(GBoxOptions);
+    mainLayout.addWidget(GBoxOptions, 1, 0);
 
     QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
 
@@ -58,6 +58,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
     for (int i = 0; i < scriptList->size(); ++i) {
         QString script = (*scriptList)[i].remove(".lua", Qt::CaseInsensitive);
         QList<QVariant> scriptInfo;
+        scriptInfo.push_back(script);
         QFile scriptCfgFile(QString("%1/Scripts/Multiplayer/%2.cfg").arg(datadir->absolutePath()).arg(script));
         if (scriptCfgFile.exists() && scriptCfgFile.open(QFile::ReadOnly)) {
             QString scheme;
@@ -80,7 +81,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
             scriptInfo.push_back("locked");
             scriptInfo.push_back("locked");
         }
-        Scripts->addItem(script, scriptInfo);
+        Scripts->addItem(script.replace("_", " "), scriptInfo);
     }
 
     connect(Scripts, SIGNAL(currentIndexChanged(int)), this, SLOT(scriptChanged(int)));
@@ -244,6 +245,7 @@ QByteArray GameCFGWidget::getFullConfig() const
     {
         case MAPGEN_MAZE:
             bcfg << QString("e$maze_size %1").arg(pMapContainer->get_maze_size()).toUtf8();
+            break;
 
         case MAPGEN_DRAWN:
         {
@@ -256,6 +258,7 @@ QByteArray GameCFGWidget::getFullConfig() const
                 bcfg << tmp;
                 data.remove(0, 200);
             }
+            break;
         }
         default: ;
     }
@@ -271,7 +274,7 @@ QByteArray GameCFGWidget::getFullConfig() const
 
     if (Scripts->currentIndex() > 0)
     {
-        bcfg << QString("escript Scripts/Multiplayer/%1.lua").arg(Scripts->currentText()).toUtf8();
+        bcfg << QString("escript Scripts/Multiplayer/%1.lua").arg(Scripts->itemData(Scripts->currentIndex()).toList()[0].toString()).toUtf8();
     }
 
     QByteArray result;
@@ -349,6 +352,10 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
         if (param == "SCRIPT") {
             Scripts->setCurrentIndex(Scripts->findText(value));
+            return;
+        }
+        if (param == "DRAWNMAP") {
+            pMapContainer->setDrawnMapData(qUncompress(QByteArray::fromBase64(slValue[0].toLatin1())));
             return;
         }
     }
@@ -433,7 +440,6 @@ void GameCFGWidget::templateFilterChanged(int value)
 
 void GameCFGWidget::seedChanged(const QString & value)
 {
-    qDebug("GameCFGWidget::seedChanged");
     emit paramChanged("SEED", QStringList(value));
 }
 
@@ -470,8 +476,8 @@ void GameCFGWidget::scriptChanged(int index)
 {
     if(index > 0)
     {
-        QString scheme = Scripts->itemData(Scripts->currentIndex()).toList()[0].toString();
-        QString weapons = Scripts->itemData(Scripts->currentIndex()).toList()[1].toString();
+        QString scheme = Scripts->itemData(Scripts->currentIndex()).toList()[1].toString();
+        QString weapons = Scripts->itemData(Scripts->currentIndex()).toList()[2].toString();
 
         if (scheme == "locked")
         {
@@ -534,6 +540,5 @@ void GameCFGWidget::resendSchemeData()
 
 void GameCFGWidget::onDrawnMapChanged(const QByteArray & data)
 {
-    qDebug("GameCFGWidget::onDrawnMapChanged");
     emit paramChanged("DRAWNMAP", QStringList(qCompress(data, 9).toBase64()));
 }

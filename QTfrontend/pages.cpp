@@ -40,6 +40,7 @@
 #include <QDataWidgetMapper>
 #include <QTime>
 #include <QSlider>
+#include <QFileDialog>
 
 #include "ammoSchemeModel.h"
 #include "pages.h"
@@ -563,7 +564,6 @@ PageOptions::PageOptions(QWidget* parent) :
             SchemeDelete->setIconSize(pmDelete.size());
             SchemeDelete->setIcon(pmDelete);
             SchemeDelete->setMaximumWidth(pmDelete.width() + 6);
-            SchemeDelete->setEnabled(false);
             WeaponsLayout->addWidget(SchemeDelete, 1, 4);
 
             QLabel* WeaponLabel = new QLabel(groupWeapons);
@@ -2018,8 +2018,34 @@ PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)
 {
     QGridLayout * pageLayout = new QGridLayout(this);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+    QPushButton * pbUndo = addButton(tr("Undo"), pageLayout, 0, 0);
+    QPushButton * pbClear = addButton(tr("Clear"), pageLayout, 1, 0);
+    QPushButton * pbLoad = addButton(tr("Load"), pageLayout, 2, 0);
+    QPushButton * pbSave = addButton(tr("Save"), pageLayout, 3, 0);
+
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 5, 0, true);
 
     drawMapWidget = new DrawMapWidget(this);
-    pageLayout->addWidget(drawMapWidget, 0, 0, 1, 2);
+    pageLayout->addWidget(drawMapWidget, 0, 1, 5, 1);
+
+    connect(pbUndo, SIGNAL(clicked()), drawMapWidget, SLOT(undo()));
+    connect(pbClear, SIGNAL(clicked()), drawMapWidget, SLOT(clear()));
+    connect(pbLoad, SIGNAL(clicked()), this, SLOT(load()));
+    connect(pbSave, SIGNAL(clicked()), this, SLOT(save()));
+}
+
+void PageDrawMap::load()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load drawn map"), ".", tr("Drawn Maps (*.hwmap);;All files (*.*)"));
+
+    if(!fileName.isEmpty())
+        drawMapWidget->load(fileName);
+}
+
+void PageDrawMap::save()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save drawn map"), ".", tr("Drawn Maps (*.hwmap);;All files (*.*)"));
+
+    if(!fileName.isEmpty())
+        drawMapWidget->save(fileName);
 }

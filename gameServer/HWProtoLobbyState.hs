@@ -1,102 +1,73 @@
-{-# LANGUAGE OverloadedStrings #-}
 module HWProtoLobbyState where
 
 import qualified Data.Map as Map
+import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
 import qualified Data.Foldable as Foldable
 import Data.Maybe
 import Data.List
 import Data.Word
-import Control.Monad.Reader
-import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
 import Utils
-import HandlerUtils
-import RoomsAndClients
 
-{-answerAllTeams protocol teams = concatMap toAnswer teams
+answerAllTeams protocol teams = concatMap toAnswer teams
     where
         toAnswer team =
             [AnswerThisClient $ teamToNet protocol team,
             AnswerThisClient ["TEAM_COLOR", teamname team, teamcolor team],
             AnswerThisClient ["HH_NUM", teamname team, show $ hhnum team]]
--}
+
 handleCmd_lobby :: CmdHandler
 
-
-handleCmd_lobby ["LIST"] = do
-    (ci, irnc) <- ask
-    let cl = irnc `client` ci
-    rooms <- allRoomInfos
-    let roomsInfoList = concatMap (roomInfo irnc) . filter (\r -> (roomProto r == clientProto cl) && not (isRestrictedJoins r))
-    return [AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
+handleCmd_lobby clID clients rooms ["LIST"] =
+    [AnswerThisClient ("ROOMS" : roomsInfoList)]
     where
-        roomInfo irnc room = [
-                showB $ gameinprogress room,
+        roomsInfoList = concatMap roomInfo sameProtoRooms
+        sameProtoRooms = filter (\r -> (roomProto r == protocol) && not (isRestrictedJoins r)) roomsList
+        roomsList = IntMap.elems rooms
+        protocol = clientProto client
+        client = clients IntMap.! clID
+        roomInfo room
+            | clientProto client < 28 = [
                 name room,
-                showB $ playersIn room,
-                showB $ length $ teams room,
-                nick $ irnc `client` masterID room,
+                show (playersIn room) ++ "(" ++ show (length $ teams room) ++ ")",
+                show $ gameinprogress room
+                ]
+            | otherwise = [
+                show $ gameinprogress room,
+                name room,
+                show $ playersIn room,
+                show $ length $ teams room,
+                nick $ clients IntMap.! (masterID room),
                 head (Map.findWithDefault ["+gen+"] "MAP" (params room)),
                 head (Map.findWithDefault ["Default"] "SCHEME" (params room)),
                 head (Map.findWithDefault ["Default"] "AMMO" (params room))
                 ]
 
-
-handleCmd_lobby ["CHAT", msg] = do
-    n <- clientNick
-    s <- roomOthersChans
-    return [AnswerClients s ["CHAT", n, msg]]
-
-handleCmd_lobby ["CREATE_ROOM", newRoom, roomPassword]
-    | illegalName newRoom = return [Warning "Illegal room name"]
-    | otherwise = do
-        rs <- allRoomInfos
-        cl <- thisClient
-        return $ if isJust $ find (\room -> newRoom == name room) rs then 
-            [Warning "Room exists"]
-            else
-            [
-                AddRoom newRoom roomPassword,
-                AnswerClients [sendChan cl] ["NOT_READY", nick cl]
-            ]
-
-
-handleCmd_lobby ["CREATE_ROOM", newRoom] =
-    handleCmd_lobby ["CREATE_ROOM", newRoom, ""]
-
-
-handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
-    (ci, irnc) <- ask
-    let ris = allRooms irnc
-    cl <- thisClient
-    let maybeRI = find (\ri -> roomName == name (irnc `room` ri)) ris
-    let jRI = fromJust maybeRI
-    let jRoom = irnc `room` jRI
-    let jRoomClients = map (client irnc) $! roomClients irnc jRI -- no lazyness here!
-    return $
-        if isNothing maybeRI then 
-            [Warning "No such rooms"]
-            else if isRestrictedJoins jRoom then
-            [Warning "Joining restricted"]
-            else if roomPassword /= password jRoom then
-            [Warning "Wrong password"]
-            else
-            [
-                MoveToRoom jRI,
-                AnswerClients (map sendChan $ cl : jRoomClients) ["NOT_READY", nick cl]
-            ]
-            ++ [ AnswerClients [sendChan cl] $ "JOINED" : map nick jRoomClients | playersIn jRoom /= 0]
-            ++ (map (readynessMessage cl) jRoomClients)
-
+handleCmd_lobby clID clients _ ["CHAT", msg] =
+    [AnswerOthersInRoom ["CHAT", clientNick, msg]]
     where
-        readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
+        clientNick = nick $ clients IntMap.! clID
 
 
+handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, roomPassword]
+    | haveSameRoom = [Warning "Room exists"]
+    | illegalName newRoom = [Warning "Illegal room name"]
+    | otherwise =
+        [RoomRemoveThisClient "", -- leave lobby
+        AddRoom newRoom roomPassword,
+        AnswerThisClient ["NOT_READY", clientNick]
+        ]
+    where
+        clientNick = nick $ clients IntMap.! clID
+        haveSameRoom = isJust $ find (\room -> newRoom == name room) $ IntMap.elems rooms
 
-{-
+
+handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom] =
+    handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, ""]
+
 
 handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
     | noSuchRoom = [Warning "No such room"]
@@ -112,6 +83,12 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
         ++ answerTeams
         ++ watchRound
     where
+        noSuchRoom = isNothing mbRoom
+        mbRoom = find (\r -> roomName == name r && roomProto r == clientProto client) $ IntMap.elems rooms
+        jRoom = fromJust mbRoom
+        rID = roomUID jRoom
+        client = clients IntMap.! clID
+        roomClientsIDs = IntSet.elems $ playersIDs jRoom
         answerNicks =
             [AnswerThisClient $ "JOINED" :
             map (\clID -> nick $ clients IntMap.! clID) roomClientsIDs | playersIn jRoom /= 0]
@@ -123,9 +100,9 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
             roomClientsIDs
 
         toAnswer (paramName, paramStrs) = AnswerThisClient $ "CFG" : paramName : paramStrs
-
-        answerFullConfig = map toAnswer (leftConfigPart ++ rightConfigPart)
-        (leftConfigPart, rightConfigPart) = partition (\(p, _) -> p /= "MAP") (Map.toList $ params jRoom)
+        
+        answerFullConfig = map toAnswer ((Data.List.reverse . Data.List.sort $ leftConfigPart) ++ rightConfigPart)
+        (leftConfigPart, rightConfigPart) = partition (\(p, _) -> p == "MAP" || p == "MAPGEN") (Map.toList $ params jRoom)
 
         watchRound = if not $ gameinprogress jRoom then
                     []
@@ -137,12 +114,12 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
                 answerAllTeams (clientProto client) (teamsAtStart jRoom)
             else
                 answerAllTeams (clientProto client) (teams jRoom)
--}
 
-handleCmd_lobby ["JOIN_ROOM", roomName] =
-    handleCmd_lobby ["JOIN_ROOM", roomName, ""]
 
-{-
+handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName] =
+    handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, ""]
+    
+
 handleCmd_lobby clID clients rooms ["FOLLOW", asknick] =
     if noSuchClient || roomID followClient == 0 then
         []
@@ -203,7 +180,6 @@ handleCmd_lobby clID clients rooms ["CLEAR_ACCOUNTS_CACHE"] =
         [ClearAccountsCache | isAdministrator client]
     where
         client = clients IntMap.! clID
--}
 
 
-handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]
+handleCmd_lobby clID _ _ _ = [ProtocolError "Incorrect command (state: in lobby)"]

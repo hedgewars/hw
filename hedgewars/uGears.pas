@@ -127,7 +127,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepHammer,
             @doStepHammerHit,
             @doStepResurrector,
-            @doStepNapalmBomb
+            @doStepNapalmBomb,
+            @doStepSnowball
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -245,6 +246,11 @@ case Kind of
                 end;
        gtShell: begin
                 gear^.Radius:= 4;
+                end;
+       gtSnowball: begin
+                gear^.Radius:= 4;
+                gear^.Elasticity:= _1;
+                gear^.Friction:= _1;
                 end;
        gtGrave: begin
                 gear^.ImpactSound:= sndGraveImpact;
@@ -1245,13 +1251,10 @@ while i > 0 do
         begin
         
         if (Ammo^.Kind = gtDEagleShot) or (Ammo^.Kind = gtSniperRifleShot) then 
-        begin
-            VGear := AddVisualGear(hwround(Ammo^.X), hwround(Ammo^.Y), vgtBulletHit);
-            if VGear <> nil then
             begin
-                VGear^.Angle := DxDy2Angle(-Ammo^.dX, Ammo^.dY);
+            VGear := AddVisualGear(hwround(Ammo^.X), hwround(Ammo^.Y), vgtBulletHit);
+            if VGear <> nil then VGear^.Angle := DxDy2Angle(-Ammo^.dX, Ammo^.dY);
             end;
-        end;
         
         if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) and (Ammo^.Kind = gtShover) then Gear^.FlightTime:= 1;
 

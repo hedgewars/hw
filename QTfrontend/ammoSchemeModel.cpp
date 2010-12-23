@@ -577,6 +577,10 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 
 QVariant AmmoSchemeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
+
     return QVariant();
 }
 
@@ -598,6 +602,8 @@ int AmmoSchemeModel::columnCount(const QModelIndex & parent) const
 
 Qt::ItemFlags AmmoSchemeModel::flags(const QModelIndex & index) const
 {
+    Q_UNUSED(index);
+
     return
         Qt::ItemIsEnabled
         | Qt::ItemIsSelectable
@@ -620,6 +626,8 @@ bool AmmoSchemeModel::setData(const QModelIndex & index, const QVariant & value,
 
 bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
 {
+    Q_UNUSED(count);
+
     beginInsertRows(parent, row, row);
 
     QList<QVariant> newScheme = defaultScheme;
@@ -684,6 +692,10 @@ NetAmmoSchemeModel::NetAmmoSchemeModel(QObject * parent) :
 
 QVariant NetAmmoSchemeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
+
     return QVariant();
 }
 

@@ -71,6 +71,8 @@ class AbstractPage : public QWidget
 
  protected:
   AbstractPage(QWidget* parent = 0) {
+    Q_UNUSED(parent);
+
     font14 = new QFont("MS Shell Dlg", 14);
     setFocusPolicy(Qt::StrongFocus);
   }
@@ -585,6 +587,10 @@ public:
     QPushButton * BtnBack;
 
     DrawMapWidget * drawMapWidget;
+
+private slots:
+    void load();
+    void save();
 };
 
 #endif // PAGES_H

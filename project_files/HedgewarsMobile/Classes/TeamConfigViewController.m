@@ -222,21 +222,22 @@
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 20;
+    return IS_IPAD() ? 40 : 20;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
-    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
+    NSInteger height = IS_IPAD() ? 40 : 20;
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, height)];
     footer.backgroundColor = [UIColor clearColor];
 
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width*80/100, 20)];
-    label.center = CGPointMake(self.tableView.frame.size.width/2, 20/2);
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width*80/100, height)];
+    label.center = CGPointMake(self.tableView.frame.size.width/2, height/2);
     label.textAlignment = UITextAlignmentCenter;
     label.font = [UIFont italicSystemFontOfSize:12];
     label.textColor = [UIColor whiteColor];
-    label.numberOfLines = 1;
+    label.numberOfLines = 2;
     if (section == 0)
-        label.text = NSLocalizedString(@"Tap to add hogs or change color, touch and hold to remove team.",@"");
+        label.text = NSLocalizedString(@"Tap to add hogs or change color, touch and hold to remove a team.",@"");
     else
         label.text = NSLocalizedString(@"The robot badge indicates an AI-controlled team.",@"");
 

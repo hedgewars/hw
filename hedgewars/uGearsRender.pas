@@ -543,6 +543,7 @@ begin
             CurWeapon:= GetAmmoEntry(HH^);
             case amt of
                 amBazooka: DrawRotated(sprHandBazooka, hx, hy, sign, aangle);
+                amSnowball: DrawRotated(sprHandSnowball, hx, hy, sign, aangle);
                 amMortar: DrawRotated(sprHandMortar, hx, hy, sign, aangle);
                 amMolotov: DrawRotated(sprHandMolotov, hx, hy, sign, aangle);
                 amBallgun: DrawRotated(sprHandBallgun, hx, hy, sign, aangle);
@@ -845,6 +846,7 @@ var
 begin
     case Gear^.Kind of
           gtBomb: DrawRotated(sprBomb, x, y, 0, Gear^.DirAngle);
+      gtSnowball: DrawRotated(sprSnowball, x, y, 0, Gear^.DirAngle);
        gtGasBomb: DrawRotated(sprCheese, x, y, 0, Gear^.DirAngle);
        gtMolotov: DrawRotated(sprMolotov, x, y, 0, Gear^.DirAngle);
 

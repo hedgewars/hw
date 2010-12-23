@@ -139,7 +139,7 @@ case s[1] of
      else
      loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
      AddCmd(loTicks, s);
-     {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+IntToStr(lastcmd^.loTime));{$ENDIF}
+     {$IFDEF DEBUGFILE}AddFileLog('[IPC in] '+s[1]+' ticks '+IntToStr(lastcmd^.loTime));{$ENDIF}
      end
 end;
 
@@ -220,7 +220,7 @@ if IPCSock <> nil then
     SendEmptyPacketTicks:= 0;
     if s[0]>#251 then s[0]:= #251;
     SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
-    {$IFDEF DEBUGFILE}AddFileLog('IPC send: '+ s[1]);{$ENDIF}
+    {$IFDEF DEBUGFILE}AddFileLog('[IPC out] '+ s[1]);{$ENDIF}
     inc(s[0], 2);
     SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
     end
@@ -247,7 +247,7 @@ end;
 procedure SendIPCTimeInc;
 const timeinc: shortstring = '#';
 begin
-{$IFDEF DEBUGFILE}AddFileLog('IPC Send #');{$ENDIF}
+{$IFDEF DEBUGFILE}AddFileLog('[IPC out] <time increment>');{$ENDIF}
 SendIPCRaw(@timeinc, 2)
 end;
 
@@ -309,6 +309,10 @@ while (headcmd <> nil)
         'j': ParseCommand('ljump', true);
         'J': ParseCommand('hjump', true);
         ',': ParseCommand('skip', true);
+        'c': begin
+            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
+            ParseCommand('gencmd ' + s, true);
+            end;
         's': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('chatmsg ' + s, true);
@@ -371,7 +375,6 @@ end;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
 if CheckNoTeamOrHH or isPaused then exit;
-if ReadyTimeLeft > 1 then ReadyTimeLeft:= 1;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
     begin

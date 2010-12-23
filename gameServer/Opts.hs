@@ -3,12 +3,10 @@ module Opts
     getOpts,
 ) where
 
-import System.Environment
+import System.Environment ( getArgs )
 import System.Console.GetOpt
 import Network
 import Data.Maybe ( fromMaybe )
-import qualified Data.ByteString.Char8 as B
-
 import CoreTypes
 import Utils
 
@@ -32,9 +30,9 @@ readDedicated str opts = opts{isDedicated = readDedicated}
     where
         readDedicated = fromMaybe True (maybeRead str :: Maybe Bool)
 
-readDbLogin str opts = opts{dbLogin = B.pack str}
-readDbPassword str opts = opts{dbPassword = B.pack str}
-readDbHost str opts = opts{dbHost = B.pack str}
+readDbLogin str opts = opts{dbLogin = str}
+readDbPassword str opts = opts{dbPassword = str}
+readDbHost str opts = opts{dbHost = str}
 
 getOpts :: ServerInfo -> IO ServerInfo
 getOpts opts = do

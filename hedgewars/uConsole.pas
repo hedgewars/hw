@@ -31,7 +31,7 @@ implementation
 uses Types, uVariables, uUtils;
 
 const cLineWidth: LongInt = 0;
-      cLinesCount = 256;
+      cLinesCount = 8;
 
 type
       TTextLine = record
@@ -52,7 +52,7 @@ var Len: LongInt;
     done: boolean;
 begin
 {$IFNDEF NOCONSOLE}
-{$IFDEF DEBUGFILE}AddFileLog('Console write: ' + s);{$ENDIF}
+{$IFDEF DEBUGFILE}AddFileLog('[Con] ' + s);{$ENDIF}
 Write(s);
 done:= false;
 
