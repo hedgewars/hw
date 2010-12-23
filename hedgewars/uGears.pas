@@ -245,6 +245,7 @@ case Kind of
                 gear^.Elasticity:= _0_35;
                 gear^.Friction:= _0_999;
                 gear^.Angle:= cMaxAngle div 2;
+                gear^.Density:= _3;
                 gear^.Z:= cHHZ;
                 if (GameFlags and gfAISurvival) <> 0 then
                     if gear^.Hedgehog^.BotLevel > 0 then
@@ -338,7 +339,7 @@ case Kind of
                 gear^.Radius:= 16;
                 gear^.Elasticity:= _0_4;
                 gear^.Friction:= _0_995;
-                gear^.Density:= _16;
+                gear^.Density:= _6;
                 gear^.Health:= cBarrelHealth
                 end;
   gtDEagleShot: begin
@@ -353,12 +354,12 @@ case Kind of
                 gear^.Radius:= 3;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_03;
-                gear^.Density:= _0_8;
+                gear^.Density:= _2;
                 gear^.Timer:= 5000;
                 end;
      gtCluster: begin
                 gear^.Radius:= 2;
-                gear^.Density:= _0_8;
+                gear^.Density:= _1_5;
                 gear^.RenderTimer:= true
                 end;
       gtShover: gear^.Radius:= 20;
@@ -366,6 +367,7 @@ case Kind of
                 gear^.Tag:= GetRandom(32);
                 gear^.Radius:= 1;
                 gear^.Health:= 5;
+                gear^.Density:= _1;
                 if (gear^.dY.QWordValue = 0) and (gear^.dX.QWordValue = 0) then
                     begin
                     gear^.dY:= (getrandom - _0_8) * _0_03;
@@ -378,7 +380,7 @@ case Kind of
                 end;
      gtAirBomb: begin
                 gear^.Radius:= 5;
-                gear^.Density:= _1_5;
+                gear^.Density:= _2;
                 end;
    gtBlowTorch: begin
                 gear^.Radius:= cHHRadius + cBlowTorchC;

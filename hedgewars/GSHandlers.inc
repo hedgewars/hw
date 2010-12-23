@@ -1241,7 +1241,7 @@ begin
     HHGear^.X := HHGear^.X + HHGear^.dX;
     HHGear^.Y := HHGear^.Y + HHGear^.dY;
     HHGear^.dY := HHGear^.dY + cGravity;
-    if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _0_2;
+    if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
 
     if (Gear^.Message and gmAttack) <> 0 then
     begin
@@ -1307,7 +1307,7 @@ begin
     if not TestCollisionYwithGear(HHGear, 1) then
         begin
         HHGear^.dY := HHGear^.dY + cGravity;
-        if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _0_2
+        if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
         end;
 
     ropeDx := HHGear^.X - Gear^.X;
@@ -1536,7 +1536,7 @@ begin
             HHGear^.Y := HHGear^.Y + HHGear^.dY;
             Gear^.Y := Gear^.Y + HHGear^.dY;
             HHGear^.dY := HHGear^.dY + cGravity;
-            if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _0_2
+            if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density
             end;
 
         tt := Gear^.Elasticity;

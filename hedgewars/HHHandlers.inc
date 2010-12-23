@@ -674,7 +674,7 @@ if isFalling then
             ((CurAmmoGear^.AmmoType = amJetpack) or
             (CurAmmoGear^.AmmoType = amBirdy))) or
           ((Gear^.dY.QWordValue + Gear^.dX.QWordValue) > _0_55.QWordValue)))
-          then Gear^.dX := Gear^.dX + cWindSpeed * _0_2
+          then Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density
        end
    end 
 else
