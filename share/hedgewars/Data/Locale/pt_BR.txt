@@ -50,6 +50,8 @@
 00:47=Mina Adesiva
 00:48=Martelo
 00:49=Ressucitador
+00:50=Ataque Perfurador
+00:51=Bola de Lama
 
 01:00=Hora de lutar!
 01:01=Partida empatou
@@ -65,6 +67,7 @@
 01:11=Esta arma ou utilidade ainda não está disponível
 01:12=Último round antes da Morte Súbita!
 01:13=%1 rounds até a Morte Súbita
+01:14=Se prepare, %1!
 
 ; Event messages
 ; Hog (%1) died
@@ -87,6 +90,9 @@
 02:00=%1 foi embora para Passárgada
 02:00=%1 foi comprar cigarros
 02:00=%1 empacotou
+02:00=%1 não aguentou o tranco
+02:00=%1 será conhecido postumamente
+02:00=%1 balbuceou palavras incompreensíveis
 
 ; Hog (%1) drowned
 02:01=%1 bebeu água até não poder mais
@@ -280,6 +286,8 @@
 03:47=Grudenta
 03:48=Tanto bate até que fura!
 03:49=Faz o que você imagina
+03:50=Contra covardes
+03:51=Devagar, e sempre....
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Ataque seus inimigos usando uma granada simples|Ela explodirá assim que o tempo passar|1-5: Escolha o tempo da granada|Ataque: Quanto mais tempo, mais forte o lançamento.
