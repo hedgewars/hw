@@ -7,6 +7,7 @@ foreach(dir
 	Cake
 	Castle
 	Cheese
+	Christmas
 	Deepspace
 	City
 	CrazyMission
