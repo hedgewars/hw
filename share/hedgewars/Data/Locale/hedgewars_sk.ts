@@ -1089,13 +1089,10 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>Wind will affect almost everything.</source>
         <translation>Vietor bude ovplyvňovať takmer všetko.</translation>
-<<<<<<< local
-=======
     </message>
     <message>
         <source>Copy</source>
         <translation type="unfinished"></translation>
->>>>>>> other
     </message>
 </context>
 <context>
@@ -1111,13 +1108,10 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>New</source>
         <translation>Nová</translation>
-<<<<<<< local
-=======
     </message>
     <message>
         <source>Copy</source>
         <translation type="unfinished"></translation>
->>>>>>> other
     </message>
 </context>
 <context>
@@ -1567,13 +1561,10 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     <message>
         <source>% Rope Length</source>
         <translation>% dĺžka lana</translation>
-<<<<<<< local
-=======
     </message>
     <message>
         <source>Gameplay</source>
         <translation type="unfinished"></translation>
->>>>>>> other
     </message>
 </context>
 <context>
@@ -1815,13 +1806,10 @@ Skontrolujte si vašu inštaláciu</translation>
     <message>
         <source>new</source>
         <translation>nový</translation>
-<<<<<<< local
-=======
     </message>
     <message>
         <source>copy of</source>
         <translation type="unfinished"></translation>
->>>>>>> other
     </message>
 </context>
 <context>
