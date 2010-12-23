@@ -226,7 +226,9 @@ tmpx:= rect.x;
 tmpx2:= bx;
 while (tmpx <= bx - rect.w div 2 - 1) and bRes do
       begin
-      bRes:= (Land[rect.y, tmpx] = Color) and (Land[by, tmpx] = Color) and
+      bRes:= ((rect.y and LAND_HEIGHT_MASK) = 0) and ((by and LAND_HEIGHT_MASK) = 0) and
+             ((tmpx and LAND_WIDTH_MASK) = 0) and ((tmpx2 and LAND_WIDTH_MASK) = 0) and
+             (Land[rect.y, tmpx] = Color) and (Land[by, tmpx] = Color) and
              (Land[rect.y, tmpx2] = Color) and (Land[by, tmpx2] = Color);
       inc(tmpx);
       dec(tmpx2)
@@ -235,7 +237,9 @@ tmpy:= rect.y+1;
 tmpy2:= by-1;
 while (tmpy <= by - rect.h div 2 - 1) and bRes do
       begin
-      bRes:= (Land[tmpy, rect.x] = Color) and (Land[tmpy, bx] = Color) and
+      bRes:= ((tmpy and LAND_HEIGHT_MASK) = 0) and ((tmpy2 and LAND_HEIGHT_MASK) = 0) and
+             ((rect.x and LAND_WIDTH_MASK) = 0) and ((bx and LAND_WIDTH_MASK) = 0) and
+             (Land[tmpy, rect.x] = Color) and (Land[tmpy, bx] = Color) and
              (Land[tmpy2, rect.x] = Color) and (Land[tmpy2, bx] = Color);
       inc(tmpy);
       dec(tmpy2)
