@@ -22,12 +22,11 @@ unit uLandPainted;
 
 interface
 
-procedure LoadFromFile(fileName: shortstring);
 procedure Draw;
 procedure initModule;
 
 implementation
-uses uLandGraphics, uConsts, uUtils, SDLh, uCommands;
+uses uLandGraphics, uConsts, uUtils, SDLh, uCommands, uDebug;
 
 type PointRec = packed record
     X, Y: SmallInt;
@@ -106,34 +105,6 @@ begin
         end
 end;
 
-
-procedure LoadFromFile(fileName: shortstring);
-var
-    f: file of PointRec;
-    rec, prevRec: PointRec;
-begin
-    fileMode:= 0;
-
-    assignFile(f, fileName);
-    reset(f);
-
-    while not eof(f) do
-        begin
-        read(f, rec);
-        rec.X:= SDLNet_Read16(@rec.X);
-        rec.Y:= SDLNet_Read16(@rec.Y);
-
-        // FIXME: handle single point
-        if eof(f) or (rec.flags and $80 <> 0) then
-            else
-            DrawLineOnLand(prevRec.X, prevRec.Y, rec.X, rec.Y);
-
-        prevRec:= rec;
-        end;
-
-    closeFile(f);
-end;
-
 procedure chDraw(var s: shortstring);
 var rec: PointRec;
     prec: ^PointRec;
@@ -167,7 +138,12 @@ procedure Draw;
 var pe: PPointEntry;
     prevPoint: PointRec;
 begin
+    // shutup compiler
+    prevPoint.X:= 0;
+    prevPoint.Y:= 0;
+
     pe:= pointsListHead;
+    TryDo((pe = nil) or (pe^.point.flags and $80 <> 0), 'Corrupted draw data', true);
 
     while(pe <> nil) do
         begin
@@ -177,7 +153,7 @@ begin
             DrawLineOnLand(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y);
 
         prevPoint:= pe^.point;
-        pe:= pe^.next;
+        pe:= pe^.next;  
         end;
 end;
 
