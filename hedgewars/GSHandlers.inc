@@ -3783,7 +3783,7 @@ begin
             iterator^.dY:= iterator^.dY + hwAbs(cGravity * (iterator^.Y - conPortal^.Y))
         end;
 
-        if not isbullet then
+        if not isbullet and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
 //AddFileLog('portal''d');
 
