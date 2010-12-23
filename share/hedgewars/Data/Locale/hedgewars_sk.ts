@@ -51,7 +51,7 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
-        <translation type="unfinished"></translation>
+        <translation>Keď je vybraná táto voľba výberom hernej schémy vyberiete automaticky aj zbraň</translation>
     </message>
 </context>
 <context>
@@ -801,27 +801,27 @@ v nastaveniach hry:</translation>
     </message>
     <message>
         <source>New scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Nová schéma</translation>
     </message>
     <message>
         <source>Edit scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Upraviť schému</translation>
     </message>
     <message>
         <source>Delete scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazať schému</translation>
     </message>
     <message>
         <source>New weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Nová sada zbraní</translation>
     </message>
     <message>
         <source>Edit weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Upraviť sadu zbraní</translation>
     </message>
     <message>
         <source>Delete weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazať sadu zbraní</translation>
     </message>
 </context>
 <context>
@@ -1084,11 +1084,11 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>You will not have to worry about wind anymore.</source>
-        <translation type="unfinished"></translation>
+        <translation>Už sa viac nebudete musieť zaujímať o vietor.</translation>
     </message>
     <message>
         <source>Wind will affect almost everything.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vietor bude ovplyvňovať takmer všetko.</translation>
     </message>
     <message>
         <source>Copy</source>
@@ -1107,7 +1107,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nová</translation>
+        <translation>Nová</translation>
     </message>
     <message>
         <source>Copy</source>
@@ -1378,7 +1378,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Schemes and Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Schémy a zbrane</translation>
     </message>
 </context>
 <context>
@@ -1560,7 +1560,7 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>% Rope Length</source>
-        <translation type="unfinished"></translation>
+        <translation>% dĺžka lana</translation>
     </message>
     <message>
         <source>Gameplay</source>
@@ -1633,27 +1633,27 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Teams</source>
-        <translation type="unfinished">Tímy</translation>
+        <translation>Tímy</translation>
     </message>
     <message>
         <source>Really delete this team?</source>
-        <translation type="unfinished"></translation>
+        <translation>Naozaj vymazať tento tím?</translation>
     </message>
     <message>
         <source>Schemes</source>
-        <translation type="unfinished"></translation>
+        <translation>Schémy</translation>
     </message>
     <message>
         <source>Can not delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie je možné vymazať východziu schému &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Really delete this game scheme?</source>
-        <translation type="unfinished"></translation>
+        <translation>Naozaj chcete vymazať túto hernú schému?</translation>
     </message>
     <message>
         <source>Can not delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie je možné vymazať východziu sadu zbraní &apos;%1&apos;!</translation>
     </message>
 </context>
 <context>
@@ -1805,7 +1805,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>new</source>
-        <translation type="unfinished">nový</translation>
+        <translation>nový</translation>
     </message>
     <message>
         <source>copy of</source>
@@ -1919,11 +1919,11 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Disable Wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Vypnúť vietor</translation>
     </message>
     <message>
         <source>More Wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Viac vetra</translation>
     </message>
 </context>
 <context>
