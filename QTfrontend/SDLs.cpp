@@ -166,7 +166,7 @@ void SDLInteraction::StartMusic()
     SDLMusicInit();
 
     if (music == NULL) {
-        music = Mix_LoadMUS((datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
+        music = Mix_LoadMUS((datadir->absolutePath() + "/Music/main_theme.ogg").toLocal8Bit().constData());
 
     }
     Mix_VolumeMusic(MIX_MAX_VOLUME - 28);

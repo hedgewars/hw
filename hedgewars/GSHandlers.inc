@@ -320,7 +320,7 @@ begin
     if isFalling then 
         begin
         Gear^.dY := Gear^.dY + cGravity;
-        if (GameFlags and gfMoreWind) <> 0 then Gear^.dX := Gear^.dX + cWindSpeed * _16 / max(12,sqr(Gear^.Radius))
+        if (GameFlags and gfMoreWind) <> 0 then Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density
         end;
 
     Gear^.X := Gear^.X + Gear^.dX;
@@ -556,6 +556,88 @@ begin
         particle:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust);
         if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480)
         end
+end;
+
+procedure doStepSnowflake(Gear: PGear);
+var xx, yy, px, py, i: LongInt;
+    move, allpx: Boolean;
+    s: PSDL_Surface;
+    p: PLongwordArray;
+begin
+if GameTicks and $7 = 0 then
+    begin
+    with Gear^ do
+        begin
+        X:= X + cWindSpeed * 1600 + dX;
+        Y:= Y + dY + cGravity * vobFallSpeed * 8;  // using same value as flakes to try and get similar results
+        xx:= hwRound(X);
+        yy:= hwRound(Y);
+        if vobVelocity <> 0 then
+            begin
+            DirAngle := DirAngle + (Angle / 1250000000);
+            if DirAngle < 0 then DirAngle := DirAngle + 360
+            else if 360 < DirAngle then DirAngle := DirAngle - 360;
+            end;
+
+        inc(Health, 8);
+        if Health > vobFrameTicks then
+            begin
+            dec(Health, vobFrameTicks);
+            inc(Timer);
+            if Timer = vobFramesCount then Timer:= 0
+            end;
+
+        move:= false;
+    // move back to cloud layer
+        if yy > cWaterLine then move:= true
+        else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] > 255) then
+            begin
+            // we've collided with land. draw some stuff and get back into the clouds
+            move:= true;
+////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+            if cWindSpeed * 1600 + dX < _0 then i:= -1
+            else i:= 1;
+            if (yy > 0) and ((Land[yy-1, xx] and $FF00) = 0) then dec(yy)
+            else dec(xx, i);
+            dec(yy,2);
+            dec(xx,i);
+            s:= SpritesData[sprSnow].Surface;
+            p:= s^.pixels;
+            allpx:= true;
+            for py:= 0 to Pred(s^.h) do
+                begin
+                for px:= 0 to Pred(s^.w) do
+                    if ((yy + py and LAND_HEIGHT_MASK) = 0) and ((xx + px and LAND_WIDTH_MASK) = 0) and 
+                       ((Land[yy + py, xx + px] and $FF00) = 0) then
+                        begin
+                        if (cReducedQuality and rqBlurryLand) = 0 then
+                            LandPixels[yy + py, xx + px]:= p^[px]
+                        else
+                            LandPixels[(yy + py) div 2, (xx + px) div 2]:= p^[px]
+                        end
+                    else allpx:= false;
+                p:= @(p^[s^.pitch shr 2])
+                end;
+            if allpx then UpdateLandTexture(xx, 4, yy, 4)
+            else UpdateLandTexture(xx, 1, yy, 1);
+            inc(yy,2);
+            inc(xx,i);
+            if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfObject;
+            if yy > 0 then
+                begin 
+                Land[yy-1, xx]:= Land[yy-1, xx] or lfObject;
+                if ((xx-i and LAND_WIDTH_MASK) = 0) then Land[yy-1, xx-i]:= Land[yy-1, xx-i] or lfObject;
+                end;
+            if ((xx-i and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx-i]:= Land[yy, xx-i] or lfObject
+////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+            end;
+        if move then
+            begin
+            X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
+            Y:= int2hwFloat(750+(GetRandom(50)-25))
+            end
+        end
+    end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1156,7 +1238,7 @@ begin
     HHGear^.X := HHGear^.X + HHGear^.dX;
     HHGear^.Y := HHGear^.Y + HHGear^.dY;
     HHGear^.dY := HHGear^.dY + cGravity;
-    if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _0_2;
+    if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
 
     if (Gear^.Message and gmAttack) <> 0 then
     begin
@@ -1222,7 +1304,7 @@ begin
     if not TestCollisionYwithGear(HHGear, 1) then
         begin
         HHGear^.dY := HHGear^.dY + cGravity;
-        if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _0_2
+        if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
         end;
 
     ropeDx := HHGear^.X - Gear^.X;
@@ -1451,7 +1533,7 @@ begin
             HHGear^.Y := HHGear^.Y + HHGear^.dY;
             Gear^.Y := Gear^.Y + HHGear^.dY;
             HHGear^.dY := HHGear^.dY + cGravity;
-            if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed * _0_2
+            if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density
             end;
 
         tt := Gear^.Elasticity;
@@ -3698,7 +3780,7 @@ begin
             iterator^.dY:= iterator^.dY + hwAbs(cGravity * (iterator^.Y - conPortal^.Y))
         end;
 
-        if not isbullet then
+        if not isbullet and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
 //AddFileLog('portal''d');
 

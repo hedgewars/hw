@@ -7,6 +7,10 @@
         <source>new</source>
         <translation>nový</translation>
     </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -187,6 +191,10 @@
         <source>Large floating islands</source>
         <translation>Veľké plávajúce ostrovčeky</translation>
     </message>
+    <message>
+        <source>Seed</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -319,6 +327,37 @@ v nastaveniach hry:</translation>
     <message>
         <source>Connecting...</source>
         <translation>Pripájam sa...</translation>
+    </message>
+</context>
+<context>
+    <name>PageDrawMap</name>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Načítať</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load drawn map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save drawn map</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1050,6 +1089,13 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>Wind will affect almost everything.</source>
         <translation>Vietor bude ovplyvňovať takmer všetko.</translation>
+<<<<<<< local
+=======
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+>>>>>>> other
     </message>
 </context>
 <context>
@@ -1065,6 +1111,13 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>New</source>
         <translation>Nová</translation>
+<<<<<<< local
+=======
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+>>>>>>> other
     </message>
 </context>
 <context>
@@ -1269,6 +1322,14 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>Crazy</source>
         <translation type="obsolete">Šialené</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hand drawn map...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1506,6 +1567,13 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     <message>
         <source>% Rope Length</source>
         <translation>% dĺžka lana</translation>
+<<<<<<< local
+=======
+    </message>
+    <message>
+        <source>Gameplay</source>
+        <translation type="unfinished"></translation>
+>>>>>>> other
     </message>
 </context>
 <context>
@@ -1690,6 +1758,10 @@ Skontrolujte si vašu inštaláciu</translation>
         <source>Associate file extensions</source>
         <translation>Asociovať prípony súborov.</translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
@@ -1743,6 +1815,13 @@ Skontrolujte si vašu inštaláciu</translation>
     <message>
         <source>new</source>
         <translation>nový</translation>
+<<<<<<< local
+=======
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
+>>>>>>> other
     </message>
 </context>
 <context>

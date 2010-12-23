@@ -175,7 +175,7 @@ function RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFon
 var textWidth, textHeight, x, y, w, h, i, j, pos, prevpos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
     finalSurface, tmpsurf, rotatedEdge: PSDL_Surface;
     rect: TSDL_Rect;
-    chars: set of char = [#9,' ','.',';',':','?','!',','];
+    chars: set of char = [#9,' ',';',':','?','!',','];
     substr: shortstring;
     edge, corner, tail: TSPrite;
 begin

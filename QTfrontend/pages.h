@@ -74,7 +74,7 @@ class AbstractPage : public QWidget
     Q_UNUSED(parent);
 
     font14 = new QFont("MS Shell Dlg", 14);
-    setFocusPolicy(Qt::StrongFocus);
+    //setFocusPolicy(Qt::StrongFocus);
   }
   virtual ~AbstractPage() {};
 
@@ -395,6 +395,7 @@ public:
     QPushButton *BtnDefault;
     QPushButton *BtnDelete;
     QPushButton *BtnNew;
+    QPushButton *BtnCopy;
     QPushButton *BtnBack;
     SelWeaponWidget* pWeapons;
     QComboBox* selectWeaponSet;
@@ -469,6 +470,7 @@ public:
     PageScheme(QWidget* parent = 0);
 
     QPushButton * BtnBack;
+    QPushButton * BtnCopy;
     QPushButton * BtnNew;
     QPushButton * BtnDelete;
     QPushButton * BtnSave;
@@ -478,6 +480,7 @@ public:
 
 public slots:
     void newRow();
+    void copyRow();
     void deleteRow();
 
 private:

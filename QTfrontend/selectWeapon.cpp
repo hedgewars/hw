@@ -269,3 +269,10 @@ QStringList SelWeaponWidget::getWeaponNames() const
 {
     return wconf->allKeys();
 }
+
+void SelWeaponWidget::copy()
+{
+    QString ammo = getWeaponsString(curWeaponsName);
+    setWeaponsName(tr("copy of") + " " + curWeaponsName);
+    setWeapons(ammo);
+}

@@ -827,9 +827,11 @@ end;
 function lc_findplace(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
     fall: boolean;
+    tryhard: boolean;
     left, right: LongInt;
 begin
-    if lua_gettop(L) <> 4 then
+    tryhard:= false;
+    if (lua_gettop(L) <> 4) and (lua_gettop(L) <> 5) then
         LuaError('Lua: Wrong number of parameters passed to FindPlace!')
     else
         begin
@@ -837,10 +839,13 @@ begin
         fall:= lua_toboolean(L, 2);
         left:= lua_tointeger(L, 3);
         right:= lua_tointeger(L, 4);
+        if lua_gettop(L) = 5 then tryhard:= lua_toboolean(L, 5);
         if gear <> nil then
-            FindPlace(gear, fall, left, right)
+            FindPlace(gear, fall, left, right, tryhard);
+        if gear <> nil then lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
         end;
-    lc_findplace:= 0
+    lc_findplace:= 1
 end;
 
 function lc_playsound(L : Plua_State) : LongInt; Cdecl;
@@ -1081,6 +1086,18 @@ begin
     else
         lua_pushstring(L, str2pchar(Pathz[ptData]));
     lc_getdatapath:= 1
+end;
+
+function lc_maphasborder(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 0 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to MapHasBorder!');
+        lua_pushnil(L);
+        end
+    else
+        lua_pushboolean(L, hasBorder);
+    lc_maphasborder:= 1
 end;
 ///////////////////
 
@@ -1492,6 +1509,7 @@ lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
 lua_register(luaState, 'GetRandom', @lc_getrandom);
 lua_register(luaState, 'SetWind', @lc_setwind);
 lua_register(luaState, 'GetDataPath', @lc_getdatapath);
+lua_register(luaState, 'MapHasBorder', @lc_maphasborder);
 
 
 ScriptClearStack; // just to be sure stack is empty

@@ -98,7 +98,7 @@
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     char *fullver;
-    short int proto = 20;
+    int proto;
     HW_versionInfo(&proto, &fullver);
 
     NSString *footerString = [[NSString alloc] initWithFormat:

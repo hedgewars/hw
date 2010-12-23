@@ -7,6 +7,10 @@
         <source>new</source>
         <translation>Nouveau</translation>
     </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -182,6 +186,10 @@
         <source>Large floating islands</source>
         <translation>Grandes îles flottantes</translation>
     </message>
+    <message>
+        <source>Seed</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -309,6 +317,37 @@ or pick another nickname in game config:</source>
     <message>
         <source>Connecting...</source>
         <translation>En connexion...</translation>
+    </message>
+</context>
+<context>
+    <name>PageDrawMap</name>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Charger</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load drawn map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save drawn map</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -999,6 +1038,10 @@ Do you still want to join the room?</source>
         <source>Wind will affect almost everything.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1013,6 +1056,10 @@ Do you still want to join the room?</source>
     <message>
         <source>New</source>
         <translation type="unfinished">Nouveau</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1189,6 +1236,14 @@ Do you still want to join the room?</source>
     <message>
         <source>Default</source>
         <translation type="obsolete">Défaut</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hand drawn map...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1416,6 +1471,10 @@ Do you still want to join the room?</source>
         <source>% Rope Length</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Gameplay</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -1599,6 +1658,10 @@ Veuillez vérifier votre installation</translation>
         <source>Associate file extensions</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
@@ -1651,6 +1714,10 @@ Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <source>new</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>copy of</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

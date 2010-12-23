@@ -52,7 +52,7 @@ type
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
             sprSMineOff, sprSMineOn, sprHandSMine, sprHammer,
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
-            sprBulletHit, sprSnowball, sprHandSnowball
+            sprBulletHit, sprSnowball, sprHandSnowball, sprSnow
             );
 
     // Gears that interact with other Gears and/or Land
@@ -67,7 +67,7 @@ type
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
-            gtNapalmBomb, gtSnowball); // 58
+            gtNapalmBomb, gtSnowball, gtFlake); // 58
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -196,6 +196,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Timer : LongWord;
             Elasticity: hwFloat;
             Friction  : hwFloat;
+            Density   : hwFloat;
             Message, MsgParam : Longword;
             Hedgehog: PHedgehog;
             Health, Damage, Karma: LongInt;

@@ -1017,6 +1017,16 @@ begin
                     Tint($FF, $FF, $FF, $FF);
                     end;
       gtNapalmBomb: DrawRotated(sprNapalmBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+           gtFlake: if not isInLag then
+                   begin
+                        if vobVelocity = 0 then
+                      //DrawSprite(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer)
+                      DrawSprite(sprFlake, x, y, Gear^.Timer)
+                  else
+                      //DrawRotatedF(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer, 1, Gear^.DirAngle);
+                      DrawRotatedF(sprFlake, x, y, Gear^.Timer, 1, Gear^.DirAngle)
+                  end;
+
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(x + 8, y + 8, Gear^.Tex);
 end;

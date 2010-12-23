@@ -10,7 +10,7 @@ teamnames[0] = {
 	["sv"] = "Blodiga nybörjare",
 	["es"] = "Reclutas",
 	["pt_PT"] = "Recrutas",
-	["pt_BR"] = "Maldito Recrutas",
+	["pt_BR"] = "Malditos Recrutas",
 	["sk"] = "Regruti"
 }
 

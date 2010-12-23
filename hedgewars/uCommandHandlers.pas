@@ -407,6 +407,7 @@ begin
 if isDeveloperMode then
 begin
 Pathz[ptCurrTheme]:= Pathz[ptThemes] + '/' + s;
+Theme:= s;
 InitStepsFlags:= InitStepsFlags or cifTheme
 end
 end;

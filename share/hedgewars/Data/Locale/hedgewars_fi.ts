@@ -7,6 +7,10 @@
         <source>new</source>
         <translation>uusi</translation>
     </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -182,6 +186,10 @@
         <source>Large floating islands</source>
         <translation>Suuria kelluvia saaria</translation>
     </message>
+    <message>
+        <source>Seed</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -312,6 +320,37 @@ tai aseta eri nimimerkki asetuksissa:</translation>
     <message>
         <source>Connecting...</source>
         <translation>Yhdistetään...</translation>
+    </message>
+</context>
+<context>
+    <name>PageDrawMap</name>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished">Tyhjennä</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Lataa</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load drawn map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save drawn map</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1029,6 +1068,10 @@ Haluatko silti liittyä huoneeseen?</translation>
         <source>Wind will affect almost everything.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1043,6 +1086,10 @@ Haluatko silti liittyä huoneeseen?</translation>
     <message>
         <source>New</source>
         <translation type="unfinished">Uusi</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1247,6 +1294,14 @@ Haluatko silti liittyä huoneeseen?</translation>
     <message>
         <source>Crazy</source>
         <translation type="obsolete">Sekopäinen</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hand drawn map...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1474,6 +1529,10 @@ Haluatko silti liittyä huoneeseen?</translation>
         <source>% Rope Length</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Gameplay</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -1657,6 +1716,10 @@ Ole hyvä ja tarkista asennuksesi</translation>
         <source>Associate file extensions</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
@@ -1710,6 +1773,10 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <source>new</source>
         <translation type="unfinished">uusi</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

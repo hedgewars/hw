@@ -3,10 +3,6 @@
 <plist version="1.0">
 <array>
 	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string></string>
 		<key>default</key>
 		<integer>100</integer>
 		<key>image</key>
@@ -21,37 +17,7 @@
 	<dict>
 		<key>checkOverMax</key>
 		<false/>
-		<key>command</key>
-		<string>e$turntime</string>
-		<key>default</key>
-		<integer>45</integer>
-		<key>image</key>
-		<string>Time</string>
-		<key>max</key>
-		<integer>100</integer>
-		<key>min</key>
-		<integer>1</integer>
-		<key>title</key>
-		<string>Turn Time</string>
-	</dict>
-	<dict>
-		<key>checkOverMax</key>
-		<false/>
-		<key>command</key>
-		<string>e$minestime</string>
-		<key>default</key>
-		<integer>3</integer>
-		<key>image</key>
-		<string>Time</string>
-		<key>max</key>
-		<integer>5</integer>
-		<key>min</key>
-		<integer>-1</integer>
-		<key>title</key>
-		<string>Mines Time</string>
-	</dict>
-	<dict>
-		<key>checkOverMax</key>
+		<key>times1000</key>
 		<false/>
 		<key>command</key>
 		<string>e$damagepct</string>
@@ -69,6 +35,26 @@
 	<dict>
 		<key>checkOverMax</key>
 		<true/>
+		<key>times1000</key>
+		<true/>
+		<key>command</key>
+		<string>e$turntime</string>
+		<key>default</key>
+		<integer>45</integer>
+		<key>image</key>
+		<string>Time</string>
+		<key>max</key>
+		<integer>100</integer>
+		<key>min</key>
+		<integer>1</integer>
+		<key>title</key>
+		<string>Turn Time</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<true/>
+		<key>times1000</key>
+		<false/>
 		<key>command</key>
 		<string>e$sd_turns</string>
 		<key>default</key>
@@ -84,6 +70,8 @@
 	</dict>
 	<dict>
 		<key>checkOverMax</key>
+		<false/>
+		<key>times1000</key>
 		<false/>
 		<key>command</key>
 		<string>e$waterrise</string>
@@ -101,6 +89,8 @@
 	<dict>
 		<key>checkOverMax</key>
 		<false/>
+		<key>times1000</key>
+		<false/>
 		<key>command</key>
 		<string>e$healthdec</string>
 		<key>default</key>
@@ -116,6 +106,8 @@
 	</dict>
 	<dict>
 		<key>checkOverMax</key>
+		<false/>
+		<key>times1000</key>
 		<false/>
 		<key>command</key>
 		<string>e$ropepct</string>
@@ -133,6 +125,8 @@
 	<dict>
 		<key>checkOverMax</key>
 		<false/>
+		<key>times1000</key>
+		<false/>
 		<key>command</key>
 		<string>e$casefreq</string>
 		<key>default</key>
@@ -148,6 +142,8 @@
 	</dict>
 	<dict>
 		<key>checkOverMax</key>
+		<false/>
+		<key>times1000</key>
 		<false/>
 		<key>command</key>
 		<string>e$healthprob</string>
@@ -165,6 +161,8 @@
 	<dict>
 		<key>checkOverMax</key>
 		<false/>
+		<key>times1000</key>
+		<false/>
 		<key>command</key>
 		<string>e$hcaseamount</string>
 		<key>default</key>
@@ -180,6 +178,26 @@
 	</dict>
 	<dict>
 		<key>checkOverMax</key>
+		<false/>
+		<key>times1000</key>
+		<true/>
+		<key>command</key>
+		<string>e$minestime</string>
+		<key>default</key>
+		<integer>3</integer>
+		<key>image</key>
+		<string>Time</string>
+		<key>max</key>
+		<integer>5</integer>
+		<key>min</key>
+		<integer>-1</integer>
+		<key>title</key>
+		<string>Mines Time</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>times1000</key>
 		<false/>
 		<key>command</key>
 		<string>e$minesnum</string>
@@ -197,6 +215,8 @@
 	<dict>
 		<key>checkOverMax</key>
 		<false/>
+		<key>times1000</key>
+		<false/>
 		<key>command</key>
 		<string>e$minedudpct</string>
 		<key>default</key>
@@ -212,6 +232,8 @@
 	</dict>
 	<dict>
 		<key>checkOverMax</key>
+		<false/>
+		<key>times1000</key>
 		<false/>
 		<key>command</key>
 		<string>e$explosives</string>

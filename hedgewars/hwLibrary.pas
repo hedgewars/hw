@@ -16,6 +16,5 @@ uses cmem, uVariables, PascalExports, hwengine;
 begin
     // avoid compiler warnings about units not being used
     isTerminated:= isTerminated;
-    dummy:= dummy;
 end.
 

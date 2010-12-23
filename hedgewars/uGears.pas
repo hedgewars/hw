@@ -47,7 +47,7 @@ procedure DeleteGear(Gear: PGear);
 implementation
 uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
      uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
-     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug;
+     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture;
 
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
@@ -128,7 +128,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepHammerHit,
             @doStepResurrector,
             @doStepNapalmBomb,
-            @doStepSnowball
+            @doStepSnowball,
+            @doStepSnowflake
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -220,6 +221,7 @@ case Kind of
                 gear^.Radius:= 5;
                 gear^.Elasticity:= _0_8;
                 gear^.Friction:= _0_8;
+                gear^.Density:= _1_5;
                 gear^.RenderTimer:= true;
                 if gear^.Timer = 0 then gear^.Timer:= 3000
                 end;
@@ -230,8 +232,12 @@ case Kind of
                 gear^.Radius:= 6;
                 gear^.Elasticity:= _0_8;
                 gear^.Friction:= _0_995;
+                gear^.Density:= _2;
                 gear^.RenderTimer:= true;
                 if gear^.Timer = 0 then gear^.Timer:= 3000
+                end;
+  gtMelonPiece: begin
+                gear^.Density:= _2;
                 end;
     gtHedgehog: begin
                 gear^.AdvBounce:= 1;
@@ -239,6 +245,7 @@ case Kind of
                 gear^.Elasticity:= _0_35;
                 gear^.Friction:= _0_999;
                 gear^.Angle:= cMaxAngle div 2;
+                gear^.Density:= _3;
                 gear^.Z:= cHHZ;
                 if (GameFlags and gfAISurvival) <> 0 then
                     if gear^.Hedgehog^.BotLevel > 0 then
@@ -246,11 +253,28 @@ case Kind of
                 end;
        gtShell: begin
                 gear^.Radius:= 4;
+                gear^.Density:= _1;
                 end;
        gtSnowball: begin
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _1;
                 gear^.Friction:= _1;
+                gear^.Density:= _0_5;
+                end;
+
+     gtFlake: begin
+                with Gear^ do
+                    begin
+                    DirAngle:= random * 360;
+                    dx.isNegative:= GetRandom(2) = 0;
+                    dx.QWordValue:= GetRandom(100000000);
+                    dy.isNegative:= false;
+                    dy.QWordValue:= GetRandom(70000000);
+                    if GetRandom(2) = 0 then dx := -dx;
+                    Health:= random(vobFrameTicks);
+                    Timer:= random(vobFramesCount);
+                    Angle:= (random(2) * 2 - 1) * (1 + random(10000)) * vobVelocity
+                    end
                 end;
        gtGrave: begin
                 gear^.ImpactSound:= sndGraveImpact;
@@ -288,6 +312,7 @@ case Kind of
                 gear^.Radius:= 2;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
+                gear^.Density:= _0_9;
                 if cMinesTime < 0 then
                     gear^.Timer:= getrandom(51)*100
                 else
@@ -299,6 +324,7 @@ case Kind of
                 gear^.Radius:= 2;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
+                gear^.Density:= _0_9;
                 gear^.Timer:= 500;
                 end;
         gtCase: begin
@@ -313,6 +339,7 @@ case Kind of
                 gear^.Radius:= 16;
                 gear^.Elasticity:= _0_4;
                 gear^.Friction:= _0_995;
+                gear^.Density:= _6;
                 gear^.Health:= cBarrelHealth
                 end;
   gtDEagleShot: begin
@@ -327,10 +354,12 @@ case Kind of
                 gear^.Radius:= 3;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_03;
+                gear^.Density:= _2;
                 gear^.Timer:= 5000;
                 end;
      gtCluster: begin
                 gear^.Radius:= 2;
+                gear^.Density:= _1_5;
                 gear^.RenderTimer:= true
                 end;
       gtShover: gear^.Radius:= 20;
@@ -338,6 +367,7 @@ case Kind of
                 gear^.Tag:= GetRandom(32);
                 gear^.Radius:= 1;
                 gear^.Health:= 5;
+                gear^.Density:= _1;
                 if (gear^.dY.QWordValue = 0) and (gear^.dX.QWordValue = 0) then
                     begin
                     gear^.dY:= (getrandom - _0_8) * _0_03;
@@ -350,6 +380,7 @@ case Kind of
                 end;
      gtAirBomb: begin
                 gear^.Radius:= 5;
+                gear^.Density:= _2;
                 end;
    gtBlowTorch: begin
                 gear^.Radius:= cHHRadius + cBlowTorchC;
@@ -368,7 +399,8 @@ case Kind of
       gtMortar: begin
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_2;
-                gear^.Friction:= _0_08
+                gear^.Friction:= _0_08;
+                gear^.Density:= _1;
                 end;
         gtWhip: gear^.Radius:= 20;
       gtHammer: gear^.Radius:= 20;
@@ -391,12 +423,14 @@ case Kind of
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_5;
                 gear^.Friction:= _0_96;
+                gear^.Density:= _1_5;
                 gear^.RenderTimer:= true;
                 gear^.Timer:= 5000
                 end;
        gtDrill: begin
                 gear^.Timer:= 5000;
-                gear^.Radius:= 4
+                gear^.Radius:= 4;
+                gear^.Density:= _1;
                 end;
         gtBall: begin
                 gear^.ImpactSound:= sndGrenadeImpact;
@@ -407,6 +441,7 @@ case Kind of
                 gear^.Timer:= 5000;
                 gear^.Elasticity:= _0_7;
                 gear^.Friction:= _0_995;
+                gear^.Density:= _1_5;
                 end;
      gtBallgun: begin
                 gear^.Timer:= 5001;
@@ -422,6 +457,7 @@ case Kind of
                 end;
      gtMolotov: begin
                 gear^.Radius:= 6;
+                gear^.Density:= _2;
                 end;
        gtBirdy: begin
                 gear^.Radius:= 16; // todo: check
@@ -433,6 +469,7 @@ case Kind of
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_6;
                 gear^.Friction:= _0_96;
+                gear^.Density:= _1;
                 if gear^.Timer = 0 then gear^.Timer:= 3000
                 end;
       gtPortal: begin
@@ -446,7 +483,8 @@ case Kind of
                 gear^.Health:= 100;
                 end;
        gtPiano: begin
-                gear^.Radius:= 32
+                gear^.Radius:= 32;
+                gear^.Density:= _50;
                 end;
  gtSineGunShot: begin
                 gear^.Radius:= 5;
@@ -472,6 +510,7 @@ gtFlamethrower: begin
   gtNapalmBomb: begin
                 gear^.Timer:= 1000;
                 gear^.Radius:= 5;
+                gear^.Density:= _1_5;
                 end;
     end;
 
@@ -882,7 +921,10 @@ begin
     SpeechText:= ''; // in case it has not been consumed
 
     if (GameFlags and gfLowGravity) = 0 then
+        begin
         cGravity:= cMaxWindSpeed * 2;
+        cGravityf:= 0.00025 * 2
+        end;
 
     if (GameFlags and gfVampiric) = 0 then
         cVampiric:= false;
@@ -1057,7 +1099,10 @@ for i:= 0 to Pred(cExplosives) do
     end;
 
 if (GameFlags and gfLowGravity) <> 0 then
+    begin
     cGravity:= cMaxWindSpeed;
+    cGravityf:= 0.00025
+    end;
 
 if (GameFlags and gfVampiric) <> 0 then
     cVampiric:= true;
@@ -1074,7 +1119,11 @@ if (GameFlags and gfLaserSight) <> 0 then
     cLaserSighting:= true;
 
 if (GameFlags and gfArtillery) <> 0 then
-    cArtillery:= true
+    cArtillery:= true;
+
+if (Theme = 'Snow') or (Theme = 'Christmas') then
+    for i:= 0 to Pred(vobCount*2) do
+        AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(1024), gtFlake, 0, _0, _0, 0);
 end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);
