@@ -560,7 +560,7 @@ end;
 
 procedure doStepSnowflake(Gear: PGear);
 var xx, yy, px, py, i: LongInt;
-    move: Boolean;
+    move, allpx: Boolean;
     s: PSDL_Surface;
     p: PLongwordArray;
 begin
@@ -601,28 +601,25 @@ if GameTicks and $7 = 0 then
             else dec(xx, i);
             dec(yy,2);
             dec(xx,i);
-            if (((cReducedQuality and rqBlurryLand) = 0) and 
-                    (xx >= 0) and (xx < LAND_WIDTH-4) and (yy >= 0) and (yy < LAND_HEIGHT)) or
-               (((cReducedQuality and rqBlurryLand) <> 0) and
-                    (xx >= 0) and (xx < (LAND_WIDTH div 2)-4) and (yy >= 0) and (yy < LAND_HEIGHT div 2)) then
+            s:= SpritesData[sprSnow].Surface;
+            p:= s^.pixels;
+            allpx:= true;
+            for py:= 0 to Pred(s^.h) do
                 begin
-                s:= SpritesData[sprSnow].Surface;
-                p:= s^.pixels;
-
-                for py:= 0 to Pred(s^.h) do
-                    begin
-                    for px:= 0 to Pred(s^.w) do
-                        if (Land[yy + py, xx + px] and $FF00) = 0 then
-                            begin
-                            if (cReducedQuality and rqBlurryLand) = 0 then
-                                LandPixels[yy + py, xx + px]:= p^[px]
-                            else
-                                LandPixels[(yy + py) div 2, (xx + px) div 2]:= p^[px]
-                            end;
-                    p:= @(p^[s^.pitch shr 2])
-                    end;
-                UpdateLandTexture(xx, 4, yy, 4)
+                for px:= 0 to Pred(s^.w) do
+                    if ((yy + py and LAND_HEIGHT_MASK) = 0) and ((xx + px and LAND_WIDTH_MASK) = 0) and 
+                       ((Land[yy + py, xx + px] and $FF00) = 0) then
+                        begin
+                        if (cReducedQuality and rqBlurryLand) = 0 then
+                            LandPixels[yy + py, xx + px]:= p^[px]
+                        else
+                            LandPixels[(yy + py) div 2, (xx + px) div 2]:= p^[px]
+                        end
+                    else allpx:= false;
+                p:= @(p^[s^.pitch shr 2])
                 end;
+            if allpx then UpdateLandTexture(xx, 4, yy, 4)
+            else UpdateLandTexture(xx, 1, yy, 1);
             inc(yy,2);
             inc(xx,i);
             if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfObject;
