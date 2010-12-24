@@ -29,7 +29,6 @@ locale = {
 --      ["- Eliminate Unit 3378 |- Feeble Resistance must survive"] = "",
 --      ["- Eliminate Unit 3378 |- Feeble Resistance must survive"] = "",
 --      ["Enjoy the swim..."] = "",
---      ["Fastest lap:"] = "",
 --	["Fastest lap: "] = "",
 --      ["Feeble Resistance"] = "",
 --      ["Flag captured!"] = "",

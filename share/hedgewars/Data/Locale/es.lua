@@ -28,7 +28,6 @@ locale = {
 	["Eliminate the Blue Team"] = "Elimina al Equipo azul",
 	["- Eliminate Unit 3378 |- Feeble Resistance must survive"] = "- Elimina a la Unidad 3378 |- Resustencia Fútil debe sobrevivir",
 	["Enjoy the swim..."] = "Disfruta del baño...",
-	["Fastest lap:"] = "Vuelta rápida:",
 	["Fastest lap: "] = "Vuelta rápida: ",
 	["Feeble Resistance"] = "Resistencia Fútil",
 	["Flag captured!"] = "¡Bandera capturada!",
