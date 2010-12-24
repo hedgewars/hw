@@ -50,6 +50,10 @@ function blowUp(x, y)
 	gear = AddGear(x, y, gtDynamite, 0, 0, 0, 0)
 end
 
+function onNewTurn()
+	ParseCommand("setweap " .. string.char(amSniperRifle))
+end
+
 -- This function is called before the game loads its
 -- resources.
 -- It's one of the predefined function names that will

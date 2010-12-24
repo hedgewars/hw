@@ -1,4 +1,4 @@
--- Hedgewars Shotgun Training
+-- Hedgewars Bazooka Training
 -- Scripting Example
 
 -- Lines such as this one are comments - they are ignored
@@ -64,9 +64,9 @@ function onGameInit()
 	-- The base number for the random number generator
 	Seed = 0
 	-- Game settings and rules
-	GameFlags = gfMultiWeapon + gfOneClanMode
+	GameFlags = gfMultiWeapon + gfOneClanMode + gfSolidLand
 	-- The time the player has to move each round (in ms)
-	TurnTime = 25000
+	TurnTime = 60000
 	-- The frequency of crate drops
 	CaseFreq = 0
 	-- The number of mines being placed
@@ -76,15 +76,15 @@ function onGameInit()
 	-- The delay between each round
 	Delay = 0
 	-- The map to be played
-	Map = "Mushrooms"
+	Map = "Bamboo"
 	-- The theme to be used
-	Theme = "Nature"
+	Theme = "Bamboo"
 
 	-- Create the player team
-	AddTeam(loc("Shotgun Team"), 14483456, "Simple", "Island", "Default")
+	AddTeam(loc("'Zooka Team"), 14483456, "Simple", "Island", "Default")
 	-- And add a hog to it
 	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
-	SetGearPosition(player, 2334, 1254)
+	SetGearPosition(player, 1960, 1160)
 end
 
 -- This function is called when the round starts
@@ -100,7 +100,11 @@ function onGameStart()
 	-- A negative icon parameter (-n) represents the n-th weapon icon
 	-- A positive icon paramter (n) represents the (n+1)-th mission icon
 	-- A timeframe of 0 is replaced with the default time to show.
-	ShowMission(loc("Shotgun Training"), loc("Aiming Practice"), loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission."), -amShotgun, 0)
+	ShowMission(loc("Bazooka Training"), loc("Aiming Practice"), loc("Eliminate all targets before your time runs out.|You have unlimited ammo for this mission."), -amBazooka, 0)
+end
+
+function onNewTurn()
+	ParseCommand("setweap " .. string.char(amBazooka))
 end
 
 -- This function is called every game tick.
@@ -114,7 +118,7 @@ function onGameTick()
 	if TurnTimeLeft == 1 and score < score_goal then
 		game_lost = true
 		-- ... and show a short message.
-		ShowMission(loc("Shotgun Training"), loc("Aiming Practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
+		ShowMission(loc("Bazooka Training"), loc("Aiming Practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
 		-- How about killing our poor hog due to his poor performance?
 		SetHealth(player, 0)
 		-- Just to be sure set the goal time to 1 ms
@@ -139,8 +143,8 @@ end
 -- This function is called when the game is initialized
 -- to request the available ammo and probabilities
 function onAmmoStoreInit()
-	-- add an unlimited supply of shotgun ammo
-	SetAmmo(amShotgun, 9, 0, 0, 0)
+	-- add an unlimited supply of bazooka ammo
+	SetAmmo(amBazooka, 9, 0, 0, 0)
 end
 
 -- This function is called when a new gear is added.
@@ -163,7 +167,7 @@ function onGearDelete(gear)
 		else
 			if not game_lost then
 			-- Otherwise show that the goal was accomplished
-			ShowMission(loc("Shotgun Training"), loc("Aiming Practice"), loc("Congratulations! You've eliminated all targets|within the allowed time frame."), 0, 0)
+			ShowMission(loc("Bazooka Training"), loc("Aiming Practice"), loc("Congratulations! You've eliminated all targets|within the allowed time frame."), 0, 0)
 			-- Also let the hogs shout "victory!"
 			PlaySound(sndVictory)
 			-- Save the time left so we may keep it.
