@@ -9,7 +9,7 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia de</translation>
     </message>
 </context>
 <context>
@@ -50,7 +50,7 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuando esta opción esté activada escoger un modo de juego escogerá el set de armas correspondiente</translation>
     </message>
 </context>
 <context>
@@ -196,7 +196,7 @@
     </message>
     <message>
         <source>Seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Semilla</translation>
     </message>
 </context>
 <context>
@@ -334,31 +334,31 @@ o elige otro nick en las preferencias del juego:</translation>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Deshacer</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Limpiar</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Cargar</translation>
+        <translation>Cargar</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar</translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Cargar mapa</translation>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapas dibujados a mano (*.hwmap);;Todos los ficheros (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar mapa</translation>
     </message>
 </context>
 <context>
@@ -789,27 +789,27 @@ o elige otro nick en las preferencias del juego:</translation>
     </message>
     <message>
         <source>New scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuevo modo de juego</translation>
     </message>
     <message>
         <source>Edit scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar modo de juego</translation>
     </message>
     <message>
         <source>Delete scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar modo de juego</translation>
     </message>
     <message>
         <source>New weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuevo set de armas</translation>
     </message>
     <message>
         <source>Edit weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar set de armas</translation>
     </message>
     <message>
         <source>Delete weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar set de armas</translation>
     </message>
 </context>
 <context>
@@ -1070,15 +1070,15 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>You will not have to worry about wind anymore.</source>
-        <translation type="unfinished"></translation>
+        <translation>No tendrás que volver a preocuparte del viento.</translation>
     </message>
     <message>
         <source>Wind will affect almost everything.</source>
-        <translation type="unfinished"></translation>
+        <translation>El viento afectará a (casi) todo.</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar</translation>
     </message>
 </context>
 <context>
@@ -1093,11 +1093,11 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nuevo</translation>
+        <translation>Nuevo</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar</translation>
     </message>
 </context>
 <context>
@@ -1305,11 +1305,11 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapa dibujado a mano...</translation>
     </message>
 </context>
 <context>
@@ -1364,7 +1364,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Schemes and Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Modos de juego y sets de armas</translation>
     </message>
 </context>
 <context>
@@ -1548,11 +1548,11 @@ así como carecer de algunas funcionalidades o simplemente funcionar mal.
     </message>
     <message>
         <source>% Rope Length</source>
-        <translation type="unfinished"></translation>
+        <translation>% longitud de las cuerdas</translation>
     </message>
     <message>
         <source>Gameplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de juego</translation>
     </message>
 </context>
 <context>
@@ -1621,27 +1621,27 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Teams</source>
-        <translation type="unfinished">Equipos</translation>
+        <translation>Equipos</translation>
     </message>
     <message>
         <source>Really delete this team?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿De verdad quieres eliminar este equipo?</translation>
     </message>
     <message>
         <source>Schemes</source>
-        <translation type="unfinished"></translation>
+        <translation>Modos de juego</translation>
     </message>
     <message>
         <source>Can not delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>¡No se puede eliminar el modo de juego predefinido &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Really delete this game scheme?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿De verdad quieres eliminar este modo de juego?</translation>
     </message>
     <message>
         <source>Can not delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>¡No se puede eliminar el set de armas predefinido &apos;%1&apos;!</translation>
     </message>
 </context>
 <context>
@@ -1739,7 +1739,7 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Establecer</translation>
     </message>
 </context>
 <context>
@@ -1781,7 +1781,7 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation>Probabilidad</translation>
+        <translation>Probabilidades</translation>
     </message>
     <message>
         <source>Ammo in boxes</source>
@@ -1793,11 +1793,11 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>new</source>
-        <translation type="unfinished">Nuevo</translation>
+        <translation>Nuevo</translation>
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia de</translation>
     </message>
 </context>
 <context>
@@ -1907,11 +1907,11 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Disable Wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Deshabilitar viento</translation>
     </message>
     <message>
         <source>More Wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Más viento</translation>
     </message>
 </context>
 <context>
