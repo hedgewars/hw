@@ -42,7 +42,7 @@
 00:39=Latający Talerz
 00:40=Koktajl Mołotowa
 00:41=Ptaszek
-00:42=Podręczne Urządzenie Teleportujące
+00:42=Wyrzutnik portali
 00:43=Zrzut pianina
 00:44=Cuchnący ser
 00:45=Sinusoidalna giwera
@@ -50,6 +50,8 @@
 00:47=Mina samoprzylepna
 00:48=Młotek
 00:49=Wskrzeszacz
+00:50=Wiertniczy nalot
+00:51=Kula błotna
 
 01:00=Walczmy!
 01:01=Remis
@@ -135,6 +137,12 @@
 02:00=%1 wydał ostatnie tchnienie
 02:00=%1 przeszedł do historii
 02:00=%1 ewakuował się z tego świata
+02:00=%1, machamy na pożegnanie!
+02:00=%1 zatruł się ołowiem
+02:00=%1 się wykrwawił
+02:00=%1 zginął za słuszną sprawę
+02:00=%1 zostawił w domu kamizelkę kuloodporną
+ 
 
 ; Hog (%1) drowned
 02:01=%1 robi za łódź podwodną!
@@ -161,7 +169,7 @@
 02:01=%1 czuje, że tonie
 02:01=%1 ćwiczy pływanie na plecach
 02:01=%1 szuka Titanica
-02:01=%1 to z pewnością nie jest Jezus.
+02:01=%1, do Jezusa ci jeszcze daleko
 02:01=%1 postanowił odnaleźć Nemo!
 02:01=%1 wyczuwa przeciek
 02:01=Nie uwierzysz ile ich już utonęło!
@@ -352,9 +360,10 @@
 02:08=%1 nie wierzy we własne możliwości.
 02:08=%1 decyduje się nic nie robić
 02:08=%1 pozwala przeciwnikowi zniszczyć się samemu.
-02:08=%1 byłby marny w imprezowaniu
-02:08=%1 ukrywa się
-02:08=%1 skorzystał z okazji
+02:08=%1 nie nadaje się na wodzireja...
+02:08=%1 się ukrył
+02:08=%1 minimalizuje szanse na pudło
+02:08=%1 nie skorzystał z okazji
 02:08=%1 uważa, że najlepszą rzeczą jaką może zrobić to... nic
 02:08=%1 jest mięczakiem
 02:08=Niuch, Niuch, %1 śmierdzi tchórzem
@@ -415,7 +424,10 @@
 02:09=Nie można się spodziewać by %1 był cały czas perfekcyjny.
 02:09=Nie martw się %1, Dikt nie jest noskonały...
 02:09=%1 zrobił to celowo.
-;02:09=Jeśli ty o tym nie powiesz, ja też dotrzymam tajemnicy %1
+02:09=%1, ta wpadka zostanie między nami
+02:09=%1 zapomniał przeczyścić lufę
+02:09=%1, te kulki to nie guma do żucia!
+02:09=%1, granat po wyjęciu zawleczki przestaje być przyjacielem
 02:09=ŻENUA!!!
 02:09=Na pewno nikt tego nie zobaczył, %1
 02:09=%1 powinien przejrzeć podręcznik walki na froncie...
@@ -494,6 +506,7 @@
 03:47=Co Kropelka sklei, sklei...
 03:48=Ała! Moja głowa...
 03:49=Powrót z zaświatów
+03:50=Krecia brygada
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
@@ -542,8 +555,8 @@
 04:43=Niech twój debiut będzie WYBUCHOWY!|Zrzuć pianino z nieba, ale uważaj!|Ktoś musi na nim grać więc prawdopodobnie będziesz|musiał poświęcić swojego jeża|Kursor: Wybierz cel|F1-F9: Graj na pianinie
 04:44=To nie jest zwykły ser. To broń biologiczna!|Wybuch z pewnością nie będzie potężny, ale gdy|licznik dojdzie do zera, chmura gazu zatruje|każdego nieszczęśnika który będzie w pobliżu|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
 04:45=Wszystkie lekcje fizyki w końcu się opłaciły!|Wystrzel niszczącą sinusoidalną falę|która przechodzi przez teren i uderza|w twoich przeciwników|Uważaj! Ta broń ma kopa!|Atak: Strzelaj
-04:46=Pokrywa twoich wrogów ognistą powłoką.|Czy koś zamawiał pieczonego jeża?|Atak: Aktywuj|Góra/Dół: Celowanie|Lewo/Prawo: Ustaw prędkość wystrzeliwania
-04:47=Podwójna zabawa z podwójną ilością kleistych min.|Spróbuj wywołać reakcję łańcuchową lub chroń|samego siebie (lub obydwie rzeczy na raz!)|Atak: Przytrzymaj by rzucić z większą siłą (dwa razy)
+04:46=Pokrywa twoich wrogów ognistą powłoką.|Czy ktoś zamawiał pieczonego jeża?|Atak: Aktywuj|Góra/Dół: Celowanie|Lewo/Prawo: Ustaw prędkość wystrzeliwania
+04:47=Podwójna zabawa z podwójną ilością lepkich min.|Spróbuj wywołać reakcję łańcuchową lub chroń|samego siebie (albo zrób obydwie rzeczy na raz!)|Atak: Przytrzymaj by rzucić z większą siłą (dwa razy)
 04:48=Czyż walenie jeży po głowach nie|jest zabawne? Dobre uderzenie|z młotka zabierze 1/3 życia|przeciwnika i wkopie go w podłoże|Atak: Uderz
 04:49=Wskrześ swoich przyjaciół!|Jednakże uważaj byś nie pomógł swojemu wrogowi.|Atak: Przytrzymaj by powoli przywracać życie|Góra: Przyspiesz wskrzeszanie
 
