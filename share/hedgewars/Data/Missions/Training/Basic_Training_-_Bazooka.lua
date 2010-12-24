@@ -62,7 +62,7 @@ function onGameInit()
 	-- Things we don't modify here will use their default values.
 
 	-- The base number for the random number generator
-	Seed = 0
+	Seed = 1
 	-- Game settings and rules
 	GameFlags = gfMultiWeapon + gfOneClanMode + gfSolidLand
 	-- The time the player has to move each round (in ms)
