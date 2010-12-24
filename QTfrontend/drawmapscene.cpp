@@ -136,7 +136,7 @@ void DrawMapScene::decode(QByteArray data)
                 points.clear();
             }
         }
-	if (data.size() > 5) points.append(QPoint(px, py));
+	if (data.size() >= 5) points.append(QPoint(px, py));
     }
 
     emit pathChanged();
