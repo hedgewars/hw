@@ -420,10 +420,10 @@ for i:= 0 to Pred(Count) do
                     LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
             else if not isMap then
                 begin
-	        if (cReducedQuality and rqBlurryLand) = 0 then
-	     	    LandPixels[ty, tx]:= 0
-	        else
-		    LandPixels[ty div 2, tx div 2]:= 0
+                if (cReducedQuality and rqBlurryLand) = 0 then
+                    LandPixels[ty, tx]:= 0
+                else
+                    LandPixels[ty div 2, tx div 2]:= 0
                 end;
     inc(y, dY)
     end;
@@ -670,9 +670,21 @@ end;
 
 // was experimenting with applying as damage occurred.
 function Despeckle(X, Y: LongInt): boolean;
-var nx, ny, i, j, c: LongInt;
+var nx, ny, i, j, c, xx, yy: LongInt;
+    pixelsweep: boolean;
 begin
-if ((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0) then // check neighbours
+if (cReducedQuality and rqBlurryLand) = 0 then
+   begin
+   xx:= X;
+   yy:= Y;
+   end
+else
+   begin
+   xx:= X div 2;
+   yy:= Y div 2;
+   end;
+pixelsweep:= not isMap and ((Land[Y, X] and $FF00) = 0) and (LandPixels[yy, xx] <> 0);
+if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
     begin
     c:= 0;
     for i:= -1 to 1 do
@@ -682,24 +694,25 @@ if ((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)
                 ny:= Y + i;
                 nx:= X + j;
                 if ((ny and LAND_HEIGHT_MASK) = 0) and ((nx and LAND_WIDTH_MASK) = 0) then
-                    if Land[ny, nx] > 255 then
-                        inc(c);
+                    begin
+                    if pixelsweep then
+                        begin
+                        if ((cReducedQuality and rqBlurryLand) <> 0) then
+                            begin
+                            nx:= nx div 2;
+                            ny:= ny div 2
+                            end;
+                        if LandPixels[ny, nx] <> 0 then inc(c);
+                        end
+                    else if Land[ny, nx] > 255 then inc(c);
+                    end
                 end;
 
     if c < 4 then // 0-3 neighbours
         begin
-        if (cReducedQuality and rqBlurryLand) = 0 then
-            begin
             if (Land[Y, X] and lfBasic) <> 0 then
-                LandPixels[Y, X]:= LandBackPixel(X, Y)
-            else if not isMap or ((Land[Y, X] and lfObject) <> 0) then
-                LandPixels[Y, X]:= 0
-            end
-        else
-            if (Land[Y, X] and lfBasic) <> 0 then
-                LandPixels[Y div 2, X div 2]:= LandBackPixel(X, Y)
-            else if not isMap or ((Land[Y, X] and lfObject) <> 0) then
-                LandPixels[Y div 2, X div 2]:= 0;
+                LandPixels[yy, xx]:= LandBackPixel(X, Y)
+            else LandPixels[yy, xx]:= 0;
 
         Land[Y, X]:= 0;
         exit(true);
