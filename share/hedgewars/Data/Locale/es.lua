@@ -6,7 +6,6 @@ locale = {
 	["Bat balls at your enemies and|push them into the sea!"] = "¡Batea pelotas hacia tus enemigos|y hazlos caer al agua!",
 	["Bat your opponents through the|baskets and out of the map!"] = "¡Batea a tus enemigos fuera del campo de juego|a través de las canastas laterales!",
 	["Bazooka Training"] = "Entrenamiento con bazuca",
-	["Best laps per team:"] = "Mejores tiempos por equipo:",
 	["Best laps per team: "] = "Mejores tiempos por equipo: ",
 	["Bloody Rookies"] = "Reclutas", -- 01#Boot_Camp, User_Mission_-_Dangerous_Ducklings, User_Mission_-_Diver, User_Mission_-_Spooky_Tree
 	["by mikade"] = "por mikade", -- Control, User_Mission_-_Dangerous_Ducklings, User_Mission_-_Diver, User_Mission_-_Spooky_Tree, User_Mission_-_Teamwork, Capture_the_Flag
