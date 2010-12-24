@@ -124,19 +124,19 @@ void DrawMapScene::decode(QByteArray data)
         quint8 flags = *(quint8 *)data.data();
         data.remove(0, 1);
 
+	if (data.size() < 5) points.append(QPoint(px, py));
         //last chunk or first point
         if((data.size() < 5) || (flags & 0x80))
         {
             if(points.size())
             {
                 addPath(pointsToPath(points), m_pen);
-                paths.prepend(points);
+                paths.append(points);
 
                 points.clear();
             }
         }
-
-        points.append(QPoint(px, py));
+	if (data.size() > 5) points.append(QPoint(px, py));
     }
 
     emit pathChanged();
