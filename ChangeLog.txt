@@ -2,14 +2,29 @@
 * bugfixes
 
 0.9.14 -> 0.9.15:
- - Christmas theme
- - Draw map mode
- - CTF and other game modes
- - Ready timer
- - Drill strike
- - New modes: more wind, no
- - Ability to define PRNG seed
- - New hats
+ + Ability to create, save and load hand drawn maps
+ + New maps: Capture the Flag (Blizzard) Map
+ + New themes: Christmas
+ + Snowflakes on Christmas/Snow themes accumulates on the ground
+ + New game modifiers: No wind, More wind
+ + New missions: Dangerous ducklings, Diver, Spooky tree, Teamwork
+ + New weapons: Mudball, Drill strike
+ + Many more Lua hooks
+ + Readytimer
+ + Ability to edit seed
+ + Ability to select gameplay scripts
+ + New gameplay scripts: Capture the Flag, No jumping, Random weapon
+ + New Lua unified translation framework
+ + Code refactoring
+ + Max teams upped to 8
+ + Cosmetic enhancements to Napalm strike
+ + Selecting a game scheme selects the corresponding weapon set (and viceversa)
+ + Dust when drills dig
+ + New hats: beaver, porkey, sheep
+ + Add density property to Gears
+ + Ability to copy schemes and weapon sets
+ + Explosions detach rope from land
+ + Allow hog speech when not your turn
 
 0.9.13 -> 0.9.14:
  + New audio tracks
