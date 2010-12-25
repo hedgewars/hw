@@ -1,6 +1,16 @@
 + features
 * bugfixes
 
+0.9.14 -> 0.9.15:
+ - Christmas theme
+ - Draw map mode
+ - CTF and other game modes
+ - Ready timer
+ - Drill strike
+ - New modes: more wind, no
+ - Ability to define PRNG seed
+ - New hats
+
 0.9.13 -> 0.9.14:
  + New audio tracks
  + New forts: EvilChicken, Tank

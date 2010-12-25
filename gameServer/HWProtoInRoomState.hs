@@ -37,7 +37,7 @@ handleCmd_inRoom clID clients rooms ("CFG" : paramName : paramStrs)
 handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : difStr : hhsInfo)
     | length hhsInfo == 15 && clientProto client < 30 = handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : " " : flag : difStr : hhsInfo)
     | length hhsInfo /= 16 = [ProtocolError "Corrupted hedgehogs info"]
-    | length (teams room) == 6 = [Warning "too many teams"]
+    | length (teams room) == 8 = [Warning "too many teams"]
     | canAddNumber <= 0 = [Warning "too many hedgehogs"]
     | isJust findTeam = [Warning "There's already a team with same name in the list"]
     | gameinprogress room = [Warning "round in progress"]
