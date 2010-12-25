@@ -79,7 +79,7 @@ function onGameStart()
 	GirderCrate = SpawnAmmoCrate(2813,1538,amShotgun) -- final shotgun
 	SpawnAmmoCrate(2205,1443,amBee)
 
-	ShowMission(loc("Spooky Tree"), loc("by mikade"), loc("Eliminate all enemies"), -amBee, 0);
+	ShowMission(loc("Spooky Tree"), loc("by mikade"), loc("Eliminate all enemies") .. loc("|- Mines Time:") .. " " .. 0 .. " " .. loc("sec"), -amBee, 0)
 
 	SetWind(-75)
 

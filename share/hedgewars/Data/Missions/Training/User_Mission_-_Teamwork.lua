@@ -65,7 +65,7 @@ function onGameStart()
 	SpawnUtilityCrate(2567,1768,amJetpack)
 	SpawnAmmoCrate(1251,1466,amDrill)
 
-	ShowMission(loc("Codename: Teamwork"), loc("by mikade"), loc("- Eliminate Unit 3378 |- Feeble Resistance must survive"), 0, 0)
+	ShowMission(loc("Codename: Teamwork"), loc("by mikade"), loc("- Eliminate Unit 3378 |- Feeble Resistance must survive") .. loc("|- Mines Time:") .. " " .. 0 .. " " .. loc("sec"), 0, 0)
 
 end
 
@@ -107,13 +107,13 @@ function onGearDelete(gear)
 	end
 
 	if (gear == enemy) and (GameOver == false) then
-		ShowMission(loc("Codename: Teamwork"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0);
-	elseif (gear == player) or (gear == p2) then
+		ShowMission(loc("Codename: Teamwork"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
+		GameOver = true
+	elseif  ( ((gear == player) or (gear == p2)) and (GameOver == false)) then
 		ShowMission(loc("Codename: Teamwork"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
 		GameOver = true
 		SetHealth(p2,0)
 		SetHealth(player,0)
-
 	end
 
 end
