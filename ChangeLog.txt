@@ -18,11 +18,11 @@
  + Code refactoring
  + Max teams upped to 8
  + Cosmetic enhancements to Napalm strike
- + Selecting a game scheme selects the corresponding weapon set (and viceversa)
+ + Selecting a game scheme selects the corresponding weapon set
  + Dust when drills dig
  + New hats: beaver, porkey, sheep
  + Add density property to Gears
- + Ability to copy schemes and weapon sets
+ + Reworked management of schemes and weapon sets
  + Explosions detach rope from land
  + Allow hog speech when not your turn
 
