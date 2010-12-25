@@ -11,6 +11,7 @@ foreach(dir
 	Cave
 	Cheese
 	Cogs
+	Control
 	CrazyMission
 	EarthRise
 	Eyes
