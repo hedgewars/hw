@@ -13,6 +13,7 @@ foreach(dir
 	Cogs
 	Control
 	CrazyMission
+	CTF_Blizzard
 	EarthRise
 	Eyes
 	Hammock
