@@ -3,4 +3,4 @@ install(FILES
 	map.lua
 	map.png
 	preview.png
-	DESTINATION ${SHAREPATH}Data/Maps/Cogs)
+	DESTINATION ${SHAREPATH}Data/Maps/Control)

@@ -443,6 +443,25 @@ begin
     lc_getgearmessage:= 1
 end;
 
+function lc_getgearelasticity(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetGearElasticity!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushinteger(L, hwRound(gear^.elasticity * _10000))
+        else
+            lua_pushnil(L);
+        end;
+    lc_getgearelasticity:= 1
+end;
+
 function lc_setgearmessage(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1504,6 +1523,7 @@ lua_register(luaState, 'HogSay', @lc_hogsay);
 lua_register(luaState, 'HogTurnLeft', @lc_hogturnleft);
 lua_register(luaState, 'CampaignLock', @lc_campaignlock);
 lua_register(luaState, 'CampaignUnlock', @lc_campaignunlock);
+lua_register(luaState, 'GetGearElasticity', @lc_getgearelasticity);
 lua_register(luaState, 'GetGearMessage', @lc_getgearmessage);
 lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
 lua_register(luaState, 'GetRandom', @lc_getrandom);
