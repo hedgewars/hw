@@ -1038,7 +1038,7 @@ begin
     if (Gear^.Timer mod 47) = 0 then
         begin
         // ok. this was an attempt to turn off dust if not actually drilling land.  I have no idea why it isn't working as expected
-        //if ((y + 12 and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y + 12, x] > 255) then 
+        if (( (y + 12) and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y + 12, x] > 255) then 
             for i:= 0 to 1 do
                 AddVisualGear(x - 5 + Random(10), y + 12, vgtDust);
 
