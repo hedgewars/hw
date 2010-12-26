@@ -256,7 +256,7 @@ case Kind of
                 gear^.Density:= _1;
                 end;
        gtSnowball: begin
-                gear^.Radius:= 7;
+                gear^.Radius:= 4;
                 gear^.Elasticity:= _1;
                 gear^.Friction:= _1;
                 gear^.Density:= _0_5;
