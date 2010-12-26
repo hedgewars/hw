@@ -199,7 +199,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
        else
-           if ((Land[t, i] and lfObject) <> 0) or disableLandBack then
+           if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) then
                if (cReducedQuality and rqBlurryLand) = 0 then
                    LandPixels[t, i]:= 0
                else
@@ -217,7 +217,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
        else
-           if ((Land[t, i] and lfObject) <> 0) or disableLandBack then
+           if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) then
                if (cReducedQuality and rqBlurryLand) = 0 then
                    LandPixels[t, i]:= 0
                else
@@ -235,7 +235,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
        else
-           if ((Land[t, i] and lfObject) <> 0) or disableLandBack then
+           if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) then
                if (cReducedQuality and rqBlurryLand) = 0 then
                    LandPixels[t, i]:= 0
                else
@@ -253,7 +253,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
            end
        else
-           if ((Land[t, i] and lfObject) <> 0) or disableLandBack then
+           if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) then
               if (cReducedQuality and rqBlurryLand) = 0 then
                   LandPixels[t, i]:= 0
               else
@@ -415,7 +415,7 @@ for i:= 0 to Pred(Count) do
                 else
                     LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
             else
-                if ((Land[ty, tx] and lfObject) <> 0) or disableLandBack then
+                if ((Land[ty, tx] and lfObject) <> 0) or (disableLandBack and ((Land[ty, tx] and lfIndestructible) = 0)) then
                     if (cReducedQuality and rqBlurryLand) = 0 then
                         LandPixels[ty, tx]:= 0
                     else
@@ -527,7 +527,7 @@ for i:= -HalfWidth to HalfWidth do
                 else
                     LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
             else
-              if ((Land[ty, tx] and lfObject) <> 0) or disableLandBack then
+              if ((Land[ty, tx] and lfObject) <> 0) or (disableLandBack and ((Land[ty, tx] and lfIndestructible) = 0)) then
                 if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[ty, tx]:= 0
                 else
