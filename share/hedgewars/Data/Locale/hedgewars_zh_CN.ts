@@ -189,6 +189,10 @@
         <source>Seed</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -1726,7 +1730,7 @@ Please check your installation</source>
         <translation>相关文件扩展</translation>
     </message>
     <message>
-        <source>Set</source>
+        <source>more</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

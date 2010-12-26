@@ -16,15 +16,15 @@
     <name>DrawMapWidget</name>
     <message>
         <source>File error</source>
-        <translation>Błąd pliku</translation>
+        <translation type="obsolete">Błąd pliku</translation>
     </message>
     <message>
         <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation>Nie można otworzyć &apos;%1&apos; do zapisu</translation>
+        <translation type="obsolete">Nie można otworzyć &apos;%1&apos; do zapisu</translation>
     </message>
     <message>
         <source>Cannot read file &apos;%1&apos;</source>
-        <translation>Nie można odczytać pliku &apos;%1&apos;</translation>
+        <translation type="obsolete">Nie można odczytać pliku &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -213,6 +213,10 @@
     <message>
         <source>Seed</source>
         <translation>Ziarno</translation>
+    </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished">Ustaw</translation>
     </message>
 </context>
 <context>
@@ -1783,7 +1787,11 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation>Ustaw</translation>
+        <translation type="obsolete">Ustaw</translation>
+    </message>
+    <message>
+        <source>more</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

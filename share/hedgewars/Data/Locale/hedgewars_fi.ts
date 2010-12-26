@@ -190,6 +190,10 @@
         <source>Seed</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -1717,7 +1721,7 @@ Ole hyvä ja tarkista asennuksesi</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set</source>
+        <source>more</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

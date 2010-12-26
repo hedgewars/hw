@@ -195,6 +195,10 @@
         <source>Seed</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -1700,7 +1704,7 @@ Please check your installation</source>
         <translation>Сопоставить расширения файлов</translation>
     </message>
     <message>
-        <source>Set</source>
+        <source>more</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
