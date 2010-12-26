@@ -140,6 +140,7 @@ var
     ScreenFadeSpeed : LongInt;
 
     Theme           : shortstring;
+    disableLandBack : boolean;
 
 {$IFDEF SDL13}
     SDLwindow       : PSDL_Window;
@@ -2240,6 +2241,8 @@ begin
     cHasFocus       := true;
     cInactDelay     := 1250;
     ReadyTimeLeft   := 0;
+    
+    disableLandBack := false;
 
     ScreenFade      := sfNone;
 
