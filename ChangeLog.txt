@@ -23,6 +23,7 @@
  + New hats: beaver, porkey, sheep
  + Add density property to Gears
  + Reworked management of schemes and weapon sets
+ + Will ask before deleting teams, schemes and weapon sets
  + Explosions detach rope from land
  + Allow hog speech when not your turn
 
