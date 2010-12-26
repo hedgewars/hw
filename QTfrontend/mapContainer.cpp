@@ -177,8 +177,8 @@ map, mapInfo);
     connect(maze_size_selection, SIGNAL(currentIndexChanged(int)), this, SLOT(setMaze_size(int)));
 
     gbThemes = new IconedGroupBox(mapWidget);
-    gbThemes->setTitleTextPadding(60);
-    gbThemes->setContentTopPadding(6);
+    gbThemes->setTitleTextPadding(80);
+    gbThemes->setContentTopPadding(15);
     gbThemes->setTitle(tr("Themes"));
 
     //gbThemes->setStyleSheet("padding: 0px"); // doesn't work - stylesheet is set with icon
@@ -373,7 +373,7 @@ void HWMapContainer::themeSelected(int currentRow)
     chooseMap->setItemData(1, mapInfo);
     mapInfo[0] = QString("+drawn+");
     chooseMap->setItemData(2, mapInfo);
-    gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(theme)));
+    gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon@2x.png").arg(datadir->absolutePath()).arg(theme)));
     emit themeChanged(theme);
 }
 
