@@ -49,30 +49,19 @@
 -- removed poisoning of flag carriers
 -- removed health adjustments for flag carriers due to aforementioned poisons
 
---------------
---game text
---------------
+---------
+-- 0.5
+---------
 
-local caption = {
-	["en"] = "CTF: Blizzard v0.4"
-	}
+-- added translation support, hopefully
+-- added ctf rules
+-- added effects to the teleporters
+-- added aura round spawning area
+-- changed the aura around the flag carrier / flag to an aura and added some support for this
+-- changed things so the seed is no longer always the same...
 
-local subcaption = {
-	["en"] = "by Mikade"
-	}
 
-local goal = {
-	["en"] = "Capture the enemy flag."
-	}
-
--- To handle missing texts we define a small wrapper function that
--- we'll use to retrieve text.
-local function loc(text)
-	if text == nil then return "**missing**"
-	elseif text[L] == nil then return text["en"]
-	else return text[L]
-	end
-end
+loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 
 ---------------------------------------------------------------
 ----------lots of bad variables and things
@@ -85,6 +74,7 @@ local actionReset = 0 -- used in CheckTeleporters()
 local roundsCounter = 0	-- used to determine when to spawn more crates
 						-- currently every 6 TURNS, should this work
 						-- on ROUNDS instead?
+local effectTimer = 0
 
 --------------------------
 -- hog and team tracking variales
@@ -115,8 +105,21 @@ local fThiefY = {}
 local FTTC = 0 -- flag thief tracker counter
 --local fThiefsHealed = false
 
+local fSpawnC = {}
 local fCirc = {} -- flag/carrier marker circles
 local fCol = {} -- colour of the clans
+
+local vCircX = {}
+local vCircY = {}
+local vCircMinA = {}
+local vCircMaxA = {}
+local vCircType = {}
+local vCircPulse = {}
+local vCircFuckAll = {}
+local vCircRadius = {}
+local vCircWidth = {}
+local vCircCol = {}
+
 
 --------------------------------
 --zone and teleporter variables
@@ -137,6 +140,25 @@ local zCount = 0
 -- zone methods
 ------------------------
 -- see on gameTick also
+
+function ManageTeleporterEffects()
+	effectTimer = effectTimer + 1
+	if effectTimer > 50 then -- 100
+		effectTimer = 0
+		
+		for i = 0,1 do		
+			eX = 10 + zXMin[i] + GetRandom(zWidth[i]-10)
+			eY = 50 + zYMin[i] + GetRandom(zHeight[i]-110)
+
+	-- steam and smoke and DUST look good, smokering looks trippy 
+	-- smoketrace and eviltrace are not effected by wind?
+	-- chunk is a LR falling gear
+			tempE = AddVisualGear(eX, eY, vgtDust, 0, false)		
+			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+			SetVisualGearValues(tempE, eX, eY, g3, g4, g5, g6, g7, g8, g9, fCol[i])
+		end
+	end 
+end
 
 function CreateZone(xMin, yMin, width, height)
 
@@ -179,14 +201,15 @@ function CheckScore(teamID)
 		winner = "Blue"
 	end
 
-	if fCaptures[teamID] == 3 then
+	if fCaptures[teamID] == 2 then
 		for i = 0, (numhhs-1) do
 			if GetHogClan(hhs[i]) == alt then
 				SetEffect(hhs[i], heResurrectable, false)
 				SetHealth(hhs[i],0)
 			end
 		end
-		ShowMission("GAME OVER!", "Victory for the " .. winner .. " Team!", "Hooray!", 0, 0)
+		--ShowMission("GAME OVER!", "Victory for the " .. winner .. " Team!", "Hooray!", 0, 0)
+		ShowMission(loc("GAME OVER!"), loc("Victory for the ") .. GetHogTeamName(CurrentHedgehog), loc("Hooray!"), 0, 0)
 	end
 
 end
@@ -200,7 +223,7 @@ function HandleRespawns()
 			--fGear[i] = SpawnHealthCrate(fSpawnX[i],fSpawnY[i])
 			fNeedsRespawn[i] = false
 			fIsMissing[i] = false -- new, this should solve problems of a respawned flag being "returned" when a player tries to score
-			AddCaption("Flag respawned!")
+			AddCaption(loc("Flag respawned!"))
 		end
 
 	end
@@ -234,7 +257,10 @@ function FlagDeleted(gear)
 				fIsMissing[bbq] = false
 				fNeedsRespawn[bbq] = true
 				fCaptures[wtf] = fCaptures[wtf] +1					--fCaptures[wtf]
-				ShowMission("You have SCORED!!", "Red Team: " .. fCaptures[0], "Blue Team: " .. fCaptures[1], -amBazooka, 0)
+				
+				--ShowMission(loc("You have SCORED!!"), "Red Team: " .. fCaptures[0], "Blue Team: " .. fCaptures[1], -amBazooka, 0)
+				ShowMission(loc("You have SCORED!!"), GetHogTeamName(CurrentHedgehog) .. ": " .. fCaptures[wtf], loc("Opposing Team: ") .. fCaptures[bbq], 0, 0)
+
 				PlaySound(sndVictory)
 				--SetEffect(fThief[bbq], hePoisoned, false)
 				fThief[bbq] = nil -- player no longer has the enemy flag
@@ -248,9 +274,9 @@ function FlagDeleted(gear)
 				-- NEW ADDIITON, does this work? Should make it possible to return your flag and then score in the same turn
 				if fIsMissing[wtf] == true then
 					HandleRespawns() -- this will set fIsMissing[wtf] to false :)
-					AddCaption("Flag returned!")
+					AddCaption(loc("Flag returned!"))
 				elseif fIsMissing[wtf] == false then
-					AddCaption("That was pointless. The flag will respawn next round.")
+					AddCaption(loc("That was pointless.") .. loc("The flag will respawn next round."))
 				end
 
 				--fIsMissing[wtf] = false
@@ -266,7 +292,7 @@ function FlagDeleted(gear)
 					end
 				end
 
-				AddCaption("Flag captured!")
+				AddCaption(loc("Flag captured!"))
 
 			else --below line doesnt usually get called
 				AddCaption("Hmm... that wasn't supposed to happen...")
@@ -285,7 +311,7 @@ function FlagDeleted(gear)
 				fGear[wtf] = nil
 				fIsMissing[wtf] = true
 				fNeedsRespawn[wtf] = true
-				AddCaption("Boom! The flag will respawn next round.")
+				AddCaption(loc("Boom!") .. " " .. loc("The flag will respawn next round."))
 			end
 
 		end
@@ -298,7 +324,7 @@ function FlagDeleted(gear)
 		fGear[wtf] = nil
 		fIsMissing[wtf] = true
 		fNeedsRespawn[wtf] = true
-		AddCaption("The flag will respawn next round.")
+		AddCaption(loc("The flag will respawn next round."))
 	end
 
 end
@@ -326,12 +352,15 @@ function HandleCircles()
 	
 	for i = 0, 1 do
 		if fIsMissing[i] == false then -- draw a circle at the flag's spawning place
-			SetVisualGearValues(fCirc[i], fSpawnX[i],fSpawnY[i], 20, 200, 0, 0, 100, 33, 2, fCol[i])
+			--SetVisualGearValues(fCirc[i], fSpawnX[i],fSpawnY[i], 20, 200, 0, 0, 100, 33, 2, fCol[i])
+			SetVisualGearValues(fCirc[i], fSpawnX[i],fSpawnY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], vCircCol[i])
 		elseif (fIsMissing[i] == true) and (fNeedsRespawn[i] == false) then
 			if fThief[i] ~= nil then -- draw circle round flag carrier
-				SetVisualGearValues(fCirc[i], fThiefX[i], fThiefY[i], 20, 200, 0, 0, 100, 33, 2, fCol[i])
+				--SetVisualGearValues(fCirc[i], fThiefX[i], fThiefY[i], 20, 200, 0, 0, 100, 33, 2, fCol[i])
+				SetVisualGearValues(fCirc[i], fThiefX[i], fThiefY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], vCircCol[i])
 			elseif fThief[i] == nil then -- draw cirle round dropped flag
-				SetVisualGearValues(fCirc[i], GetX(fGear[i]), GetY(fGear[i]), 20, 200, 0, 0, 100, 33, 2, fCol[i])
+				--SetVisualGearValues(fCirc[i], GetX(fGear[i]), GetY(fGear[i]), 20, 200, 0, 0, 100, 33, 2, fCol[i])
+				SetVisualGearValues(fCirc[i], GetX(fGear[i]),GetY(fGear[i]), vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], vCircCol[i])
 			end
 		end
 		
@@ -466,21 +495,21 @@ function HandleCrateDrops()
 
 		r = GetRandom(8)
 		if r == 0 then
-			SpawnAmmoCrate(0,0,amSwitch)
+			SpawnUtilityCrate(0,0,amSwitch)
 		elseif r == 1 then
-			SpawnAmmoCrate(0,0,amTeleport)
+			SpawnUtilityCrate(0,0,amTeleport)
 		elseif r == 2 then
-			SpawnAmmoCrate(0,0,amJetpack)
+			SpawnUtilityCrate(0,0,amJetpack)
 		elseif r == 3 then
 			SpawnUtilityCrate(0,0,amExtraTime)
 		elseif r == 4 then
-			SpawnAmmoCrate(0,0,amGirder)
+			SpawnUtilityCrate(0,0,amGirder)
 		elseif r == 5 then
 			SpawnAmmoCrate(0,0,amDynamite)
 		elseif r == 6 then
 			SpawnAmmoCrate(0,0,amFlamethrower)
 		elseif r == 7 then
-			SpawnAmmoCrate(0,0,amPortalGun)
+			SpawnUtilityCrate(0,0,amPortalGun)
 		end
 
 	end
@@ -494,7 +523,6 @@ end
 function onGameInit()
 
 	-- Things we don't modify here will use their default values.
-	Seed = 0 -- The base number for the random number generator
 	GameFlags = gfDivideTeams -- Game settings and rules
 	TurnTime = 30000 -- (was 30) The time the player has to move each round (in ms)
 	CaseFreq = 0 -- The frequency of crate drops
@@ -503,7 +531,7 @@ function onGameInit()
 	Explosives = 0 -- The number of explosives being placed
 	Delay = 10 -- The delay between each round
 	SuddenDeathTurns = 99 -- suddendeath is off, effectively
-	Map = "CTF_Blizzard" -- The map to be played
+	Map = "Blizzard" -- The map to be played
 	Theme = "Snow" -- The theme to be used "Nature"
 
 end
@@ -511,7 +539,9 @@ end
 
 function onGameStart()
 
-	ShowMission(loc(caption), loc(subcaption), loc(goal), 0, 0)
+	--ShowMission(loc(caption), loc(subcaption), loc(goal), 0, 0)
+	ShowMission(loc("CTF_BLIZZARD") .. " 0.5", loc("by mikade"), loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
+
 
 	-- initialize teleporters
 	redTel = CreateZone(342,1316,42,449)	-- red teleporter
@@ -556,10 +586,27 @@ function onGameStart()
 	for i = 0, 1 do
 		fGear[i] = SpawnAmmoCrate(fSpawnX[i],fSpawnY[i],amSkip)
 		fCirc[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
-		fCol[i] = GetClanColor(i)		
+		fCol[i] = GetClanColor(i)	
+
+		fSpawnC[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
+		SetVisualGearValues(fSpawnC[i], fSpawnX[i],fSpawnY[i], 10, 200, 1, 10, 0, 300, 5, fCol[i])		
+		
+	
 		fIsMissing[i] = false
 		fNeedsRespawn[i] = false
 		fCaptures[i] = 0
+
+		vCircMinA[i] = 20
+		vCircMaxA[i] = 255
+		vCircType[i] = 1
+		vCircPulse[i] = 10
+		vCircFuckAll[i] = 0
+		vCircRadius[i] = 150
+		vCircWidth[i] = 5
+		vCircCol[i] = fCol[i]
+
+		SetVisualGearValues(fCirc[i], fSpawnX[i],fSpawnY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], vCircCol[i])
+
 	end
 
 end
@@ -612,6 +659,7 @@ function onGameTick()
 	end
 
 	HandleCircles()
+	ManageTeleporterEffects()
 
 end
 
@@ -641,7 +689,7 @@ function onAmmoStoreInit()
 
 	SetAmmo(amParachute, 9, 0, 0, 0)
 	SetAmmo(amRope, 9, 0, 0, 0)
-	SetAmmo(amTeleport, 0, 0, 0, 1)
+	SetAmmo(amTeleport, 1, 0, 0, 1)
 	SetAmmo(amJetpack, 1, 0, 0, 1)
 
 	SetAmmo(amSwitch, 2, 0, 0, 1)

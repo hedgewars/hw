@@ -4,6 +4,7 @@ foreach(dir
 	Basketball
 	Bath
 	Battlefield
+	Blizzard
 	Blox
 	Bubbleflow
 	Cake
