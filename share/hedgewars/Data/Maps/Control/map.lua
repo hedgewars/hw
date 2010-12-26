@@ -24,6 +24,12 @@
 
 -- added translation support
 
+--------
+-- 0.4
+--------
+
+-- added scaling scoring based on clans: 300 points to win - 25 per team in game
+
 -----------------
 --script begins
 -----------------
@@ -37,6 +43,7 @@ loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 ------------------ "Oh well, they probably have the memory"
 
 local gameWon = false
+local pointLimit = 300
 
 local vCirc = {}
 local vCircCount = 0
@@ -279,8 +286,7 @@ end
 
 function onGameStart()
 
-	ShowMission(loc("CONTROL v0.3"), loc("by mikade"), loc("Control pillars to score points."), 0, 0)
-
+	
 
 	-- build zones
 	cPoint[0] = CreateZone(571,47,120,80)
@@ -318,7 +324,9 @@ function onGameStart()
 	--new improved placement schematics aw yeah
 	RebuildTeamInfo()
 
-
+	for i = 0, (numTeams-1) do
+		pointLimit = pointLimit - 25
+	end
 	--SetGearPosition(hhs[0], 631, 82)
 	--SetGearPosition(hhs[1], 1088, 684)
 	--SetGearPosition(hhs[2], 381, 1569)
@@ -337,6 +345,9 @@ function onGameStart()
 		--AddCaption(zz) -- number of times it took to work
 	end
 
+	ShowMission(loc("CONTROL v0.3"), loc("by mikade"), loc("Control pillars to score points.") .. "|" .. loc("Goal:") .. " " .. pointLimit .. " " .. loc("points"), 0, 0)
+
+
 end
 
 
@@ -350,7 +361,7 @@ function onNewTurn()
 	if gameWon == false then
 	
 		for i = 0, (numTeams-1) do
-			if teamScore[i] >= 150 then
+			if teamScore[i] >= pointLimit then --150
 				gameWon = true
 				winnerClan = i			
 			end
