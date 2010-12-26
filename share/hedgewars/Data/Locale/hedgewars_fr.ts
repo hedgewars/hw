@@ -1242,10 +1242,6 @@ Do you still want to join the room?</source>
         <translation type="obsolete">Défaut</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>hand drawn map...</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1360,7 +1360,7 @@ Você ainda quer entrar na sala?</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation type="obsolete">Normal</translation>
     </message>
     <message>
         <source>hand drawn map...</source>

@@ -1309,7 +1309,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="obsolete">Normal</translation>
     </message>
     <message>
         <source>hand drawn map...</source>

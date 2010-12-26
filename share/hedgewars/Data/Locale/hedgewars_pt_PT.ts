@@ -1272,10 +1272,6 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
         <translation type="obsolete">Predefinido</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>hand drawn map...</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1278,10 +1278,6 @@ Willst du trotzdem den Raum betreten?</translation>
         <translation type="obsolete">Standard</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>hand drawn map...</source>
         <translation type="unfinished"></translation>
     </message>

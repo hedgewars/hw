@@ -1301,7 +1301,7 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Vanligt</translation>
+        <translation type="obsolete">Vanligt</translation>
     </message>
     <message>
         <source>hand drawn map...</source>

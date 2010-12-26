@@ -1323,7 +1323,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normálna</translation>
+        <translation type="obsolete">Normálna</translation>
     </message>
     <message>
         <source>hand drawn map...</source>

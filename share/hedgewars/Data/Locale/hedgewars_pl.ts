@@ -1350,7 +1350,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normalna</translation>
+        <translation type="obsolete">Normalna</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
