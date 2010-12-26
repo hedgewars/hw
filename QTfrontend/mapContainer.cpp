@@ -224,7 +224,7 @@ map, mapInfo);
     QGridLayout* seedLayout = new QGridLayout(seedWidget);
     seedLayout->setMargin(0);
 
-    QLabel* seedLabel = new QLabel(tr("Seed"), seedWidget);
+    seedLabel = new QLabel(tr("Seed"), seedWidget);
     seedLayout->addWidget(seedLabel, 3, 0);
     seedEdit = new QLineEdit(seedWidget);
     seedEdit->setMaxLength(54);
@@ -232,10 +232,13 @@ map, mapInfo);
     seedLayout->addWidget(seedEdit, 3, 1);
     seedLayout->setColumnStretch(1, 5);
     seedSet = new QPushButton(seedWidget);
-    seedSet->setText(QPushButton::tr("Set"));
+    seedSet->setText(QPushButton::tr("more"));
     connect(seedSet, SIGNAL(clicked()), this, SLOT(seedEdited()));
     seedLayout->setColumnStretch(2, 1);
     seedLayout->addWidget(seedSet, 3, 2);
+
+    seedLabel->setVisible(false);
+    seedEdit->setVisible(false);
 
     setRandomSeed();
     setRandomTheme();
@@ -561,6 +564,14 @@ QByteArray HWMapContainer::getDrawnMapData()
 
 void HWMapContainer::seedEdited()
 {
+    if (seedLabel->isVisible() == false )
+    {
+        seedLabel->setVisible(true);
+        seedEdit->setVisible(true);
+        seedSet->setText(tr("Set"));
+        return;
+    }
+
     if (seedEdit->text().isEmpty())
         seedEdit->setText(m_seed);
     else

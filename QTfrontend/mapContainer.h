@@ -104,6 +104,7 @@ class HWMapContainer : public QWidget
   QString m_seed;
   QLineEdit* seedEdit;
   QPushButton* seedSet;
+  QLabel* seedLabel;
   int hhLimit;
   int templateFilter;
   QPixmap hhSmall;
