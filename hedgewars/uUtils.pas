@@ -254,15 +254,19 @@ if (font >= CJKfnt16) or (length(s) = 0) then
 
 l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), length(s))-1;
 i:= 0;
+
 while i < l do
     begin
     u:= tmpstr[i];
-    if (#$2E80  <= u) and  (
-                           (u <= #$2FDF )  or // CJK Radicals Supplement / Kangxi Radicals
+    if (#$1100  <= u) and  (
+                           (u <= #$11FF )  or // Hangul Jamo
+       ((#$2E80  <= u) and (u <= #$2FDF))  or // CJK Radicals Supplement / Kangxi Radicals
        ((#$2FF0  <= u) and (u <= #$303F))  or // Ideographic Description Characters / CJK Radicals Supplement
+       ((#$3130  <= u) and (u <= #$318F))  or // Hangul Compatibility Jamo
        ((#$31C0  <= u) and (u <= #$31EF))  or // CJK Strokes
        ((#$3200  <= u) and (u <= #$4DBF))  or // Enclosed CJK Letters and Months / CJK Compatibility / CJK Unified Ideographs Extension A
        ((#$4E00  <= u) and (u <= #$9FFF))  or // CJK Unified Ideographs
+       ((#$AC00  <= u) and (u <= #$D7AF))  or // Hangul Syllables
        ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
        ((#$FE30  <= u) and (u <= #$FE4F)))    // CJK Compatibility Forms
        then exit(THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) ));
