@@ -575,6 +575,7 @@ begin
         glClear(GL_COLOR_BUFFER_BIT);
         DrawWorldStereo(Lag, rmDefault)
         end
+{$IFNDEF S3D_DISABLED}
     else if (cStereoMode = smAFR) then
         begin
         AFRToggle:= not AFRToggle;
@@ -682,26 +683,35 @@ begin
             glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
         DrawWorldStereo(Lag, rmRightEye);
         end
+{$ENDIF}
 end;
 
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
 begin
+{$IFDEF S3D_DISABLED}
+    exit;
+{$ELSE}
     d:= d / 5;
     if rm = rmDefault then exit
     else if rm = rmLeftEye then d:= -d;
     stereoDepth:= stereoDepth + d;
     glMatrixMode(GL_PROJECTION);
     glTranslatef(d, 0, 0);
-    glMatrixMode(GL_MODELVIEW)
+    glMatrixMode(GL_MODELVIEW);
+{$ENDIF}
 end;
  
 procedure ResetDepth(rm: TRenderMode);
 begin
+{$IFDEF S3D_DISABLED}
+    exit;
+{$ELSE}
     if rm = rmDefault then exit;
     glMatrixMode(GL_PROJECTION);
     glTranslatef(-stereoDepth, 0, 0);
     glMatrixMode(GL_MODELVIEW);
     stereoDepth:= 0;
+{$ENDIF}
 end;
  
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);

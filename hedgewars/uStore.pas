@@ -887,6 +887,7 @@ begin
     SDL_FreeSurface(MissionIcons);
     FreeTexture(ropeIconTex);
     FreeTexture(HHTexture);
+{$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
     begin
         glDeleteTextures(1, @texl);
@@ -896,6 +897,7 @@ begin
         glDeleteRenderbuffersEXT(1, @depthr);
         glDeleteFramebuffersEXT(1, @framer)
     end
+{$ENDIF}
 end;
 
 
@@ -1193,10 +1195,10 @@ begin
 {$ELSE}
     glLoadExtension:= glext_LoadExtension(extension);
 {$IFDEF DEBUGFILE}
-    if not glLoadExtension then
-        AddFileLog('OpenGL - "' + extension + '" failed to load')
+    if glLoadExtension then
+        AddFileLog('OpenGL - "' + extension + '" loaded')
     else
-        AddFileLog('OpenGL - "' + extension + '" loaded');
+        AddFileLog('OpenGL - "' + extension + '" failed to load');
 {$ENDIF}
 {$ENDIF}
 end;
@@ -1263,43 +1265,47 @@ begin
         cGPUVendor:= gvATI
     else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
         cGPUVendor:= gvIntel;
+{$ENDIF}
 //SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
-
+{$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
     begin
         // prepare left and right frame buffers and associated textures
-        glLoadExtension('GL_EXT_framebuffer_object');
+        if glLoadExtension('GL_EXT_framebuffer_object') then
+        begin
+            // left
+            glGenFramebuffersEXT(1, @framel);
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framel);
+            glGenRenderbuffersEXT(1, @depthl);
+            glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthl);
+            glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
+            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthl);
+            glGenTextures(1, @texl);
+            glBindTexture(GL_TEXTURE_2D, texl);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texl, 0);
 
-        // left
-        glGenFramebuffersEXT(1, @framel);
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framel);
-        glGenRenderbuffersEXT(1, @depthl);
-        glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthl);
-        glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
-        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthl);
-        glGenTextures(1, @texl);
-        glBindTexture(GL_TEXTURE_2D, texl);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texl, 0);
+            // right
+            glGenFramebuffersEXT(1, @framer);
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framer);
+            glGenRenderbuffersEXT(1, @depthr);
+            glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthr);
+            glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
+            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthr);
+            glGenTextures(1, @texr);
+            glBindTexture(GL_TEXTURE_2D, texr);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texr, 0);
 
-        // right
-        glGenFramebuffersEXT(1, @framer);
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framer);
-        glGenRenderbuffersEXT(1, @depthr);
-        glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthr);
-        glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
-        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthr);
-        glGenTextures(1, @texr);
-        glBindTexture(GL_TEXTURE_2D, texr);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texr, 0);
-
-        // reset
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+            // reset
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+        end
+        else
+            cStereoMode:= smNone;
     end;
 {$ENDIF}
 

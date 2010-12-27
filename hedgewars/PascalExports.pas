@@ -25,7 +25,7 @@ uses uKeys, GLunit, uWorld, uMisc, uConsole, uTeams, uConsts, uChat,
      uGears, uSound, hwengine, uAmmos, uLocale; // don't change the order!
 
 {$INCLUDE "config.inc"}
-type PPByte = ^PByte;
+
 var dummy: boolean;  // avoid compiler hint
 
 implementation
