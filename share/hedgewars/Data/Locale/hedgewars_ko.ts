@@ -108,7 +108,7 @@
     <name>HWGame</name>
     <message>
         <source>en.txt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ko.txt</translation>
     </message>
     <message>
         <source>Cannot open demofile %1</source>
