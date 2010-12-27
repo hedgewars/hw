@@ -191,6 +191,10 @@
         <translatorcomment>checar</translatorcomment>
         <translation type="unfinished">Semeie</translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished">Esquema</translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -1356,7 +1360,7 @@ Você ainda quer entrar na sala?</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation type="obsolete">Normal</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
@@ -1790,7 +1794,11 @@ Por favor verifique sua instalação</translation>
     <message>
         <source>Set</source>
         <translatorcomment>Esquema esta muito genérico</translatorcomment>
-        <translation type="unfinished">Esquema</translation>
+        <translation type="obsolete">Esquema</translation>
+    </message>
+    <message>
+        <source>more</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

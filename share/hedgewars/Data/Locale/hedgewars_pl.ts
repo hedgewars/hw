@@ -214,6 +214,10 @@
         <source>Seed</source>
         <translation>Ziarno</translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation>Ustaw</translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -1346,7 +1350,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normalna</translation>
+        <translation type="obsolete">Normalna</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
@@ -1783,7 +1787,11 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation>Ustaw</translation>
+        <translation type="obsolete">Ustaw</translation>
+    </message>
+    <message>
+        <source>more</source>
+        <translation>Więcej</translation>
     </message>
 </context>
 <context>

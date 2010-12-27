@@ -45,10 +45,6 @@
         <translation>Edit schemes</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation type="obsolete">When this option is enabled selecting a game scheme will auto-select a weapon (and vice versa)</translation>
-    </message>
-    <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
@@ -192,6 +188,10 @@
     </message>
     <message>
         <source>Seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1258,10 +1258,6 @@ Do you still want to join the room?</translation>
         <translation type="obsolete">Default</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>hand drawn map...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1679,7 +1675,7 @@ Please check your installation</translation>
         <translation>Associate file extensions</translation>
     </message>
     <message>
-        <source>Set</source>
+        <source>more</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

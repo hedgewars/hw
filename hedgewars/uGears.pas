@@ -1854,7 +1854,7 @@ begin
             Gear^.Text:= text;
             Gear^.FrameTicks:= x
             end
-        else ParseCommand('say ' + text, true)
+        //else ParseCommand('say ' + text, true)
         end
     else if (x >= 4) then
         begin

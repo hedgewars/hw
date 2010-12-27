@@ -52,7 +52,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     Scripts = new QComboBox(GBoxOptions);
     GBoxOptionsLayout->addWidget(Scripts, 0, 1);
 
-    Scripts->addItem(QComboBox::tr("Normal"));
+    Scripts->addItem("Normal");
     Scripts->insertSeparator(1);
 
     for (int i = 0; i < scriptList->size(); ++i) {
@@ -332,6 +332,9 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
         if (param == "SEED") {
             pMapContainer->setSeed(value);
+            if (!QRegExp("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\}").exactMatch(value)) {
+                pMapContainer->seedEdit->setVisible(true);
+                }
             return;
         }
         if (param == "THEME") {
@@ -383,7 +386,7 @@ void GameCFGWidget::ammoChanged(int index)
 
 void GameCFGWidget::mapChanged(const QString & value)
 {
-    if(pMapContainer->getCurrentIsMission())
+    if(isEnabled() && pMapContainer->getCurrentIsMission())
     {
         Scripts->setEnabled(false);
         Scripts->setCurrentIndex(0);
@@ -458,7 +461,7 @@ void GameCFGWidget::schemeChanged(int index)
 
     emit paramChanged("SCHEME", sl);
 
-    if (bindEntries->isEnabled() && bindEntries->isChecked()) {
+    if (isEnabled() && bindEntries->isEnabled() && bindEntries->isChecked()) {
         QString schemeName = GameSchemes->itemText(index);
         for (int i = 0; i < WeaponsName->count(); i++) {
              QString weapName = WeaponsName->itemText(i);
@@ -474,7 +477,7 @@ void GameCFGWidget::schemeChanged(int index)
 
 void GameCFGWidget::scriptChanged(int index)
 {
-    if(index > 0)
+    if(isEnabled() && index > 0)
     {
         QString scheme = Scripts->itemData(Scripts->currentIndex()).toList()[1].toString();
         QString weapons = Scripts->itemData(Scripts->currentIndex()).toList()[2].toString();

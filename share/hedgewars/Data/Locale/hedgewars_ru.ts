@@ -195,6 +195,10 @@
         <source>Seed</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -1269,10 +1273,6 @@ Do you still want to join the room?</source>
         <translation type="obsolete">По умолчанию</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>hand drawn map...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1700,7 +1700,7 @@ Please check your installation</source>
         <translation>Сопоставить расширения файлов</translation>
     </message>
     <message>
-        <source>Set</source>
+        <source>more</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

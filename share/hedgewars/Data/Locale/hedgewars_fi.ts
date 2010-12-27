@@ -190,6 +190,10 @@
         <source>Seed</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -1296,10 +1300,6 @@ Haluatko silti liittyä huoneeseen?</translation>
         <translation type="obsolete">Sekopäinen</translation>
     </message>
     <message>
-        <source>Normal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>hand drawn map...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1717,7 +1717,7 @@ Ole hyvä ja tarkista asennuksesi</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set</source>
+        <source>more</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

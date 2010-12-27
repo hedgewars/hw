@@ -195,6 +195,10 @@
         <source>Seed</source>
         <translation>Zrno</translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished">Nastaviť</translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -1319,7 +1323,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normálna</translation>
+        <translation type="obsolete">Normálna</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
@@ -1751,7 +1755,11 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation>Nastaviť</translation>
+        <translation type="obsolete">Nastaviť</translation>
+    </message>
+    <message>
+        <source>more</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

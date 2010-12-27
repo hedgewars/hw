@@ -177,8 +177,8 @@ map, mapInfo);
     connect(maze_size_selection, SIGNAL(currentIndexChanged(int)), this, SLOT(setMaze_size(int)));
 
     gbThemes = new IconedGroupBox(mapWidget);
-    gbThemes->setTitleTextPadding(60);
-    gbThemes->setContentTopPadding(6);
+    gbThemes->setTitleTextPadding(80);
+    gbThemes->setContentTopPadding(15);
     gbThemes->setTitle(tr("Themes"));
 
     //gbThemes->setStyleSheet("padding: 0px"); // doesn't work - stylesheet is set with icon
@@ -224,7 +224,7 @@ map, mapInfo);
     QGridLayout* seedLayout = new QGridLayout(seedWidget);
     seedLayout->setMargin(0);
 
-    QLabel* seedLabel = new QLabel(tr("Seed"), seedWidget);
+    seedLabel = new QLabel(tr("Seed"), seedWidget);
     seedLayout->addWidget(seedLabel, 3, 0);
     seedEdit = new QLineEdit(seedWidget);
     seedEdit->setMaxLength(54);
@@ -232,10 +232,13 @@ map, mapInfo);
     seedLayout->addWidget(seedEdit, 3, 1);
     seedLayout->setColumnStretch(1, 5);
     seedSet = new QPushButton(seedWidget);
-    seedSet->setText(QPushButton::tr("Set"));
+    seedSet->setText(QPushButton::tr("more"));
     connect(seedSet, SIGNAL(clicked()), this, SLOT(seedEdited()));
     seedLayout->setColumnStretch(2, 1);
     seedLayout->addWidget(seedSet, 3, 2);
+
+    seedLabel->setVisible(false);
+    seedEdit->setVisible(false);
 
     setRandomSeed();
     setRandomTheme();
@@ -370,7 +373,7 @@ void HWMapContainer::themeSelected(int currentRow)
     chooseMap->setItemData(1, mapInfo);
     mapInfo[0] = QString("+drawn+");
     chooseMap->setItemData(2, mapInfo);
-    gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(theme)));
+    gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon@2x.png").arg(datadir->absolutePath()).arg(theme)));
     emit themeChanged(theme);
 }
 
@@ -561,6 +564,14 @@ QByteArray HWMapContainer::getDrawnMapData()
 
 void HWMapContainer::seedEdited()
 {
+    if (seedLabel->isVisible() == false )
+    {
+        seedLabel->setVisible(true);
+        seedEdit->setVisible(true);
+        seedSet->setText(tr("Set"));
+        return;
+    }
+
     if (seedEdit->text().isEmpty())
         seedEdit->setText(m_seed);
     else

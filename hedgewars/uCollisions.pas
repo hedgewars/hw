@@ -103,7 +103,7 @@ if Count = 0 then exit;
 mx:= hwRound(Gear^.X);
 my:= hwRound(Gear^.Y);
 
-tr:= Gear^.Radius;
+tr:= Gear^.Radius + 2;
 
 for i:= 0 to Pred(Count) do
     with cinfos[i] do

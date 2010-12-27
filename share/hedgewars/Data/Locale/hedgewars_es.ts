@@ -198,6 +198,10 @@
         <source>Seed</source>
         <translation>Semilla</translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished">Establecer</translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -1305,7 +1309,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="obsolete">Normal</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
@@ -1739,7 +1743,11 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation>Establecer</translation>
+        <translation type="obsolete">Establecer</translation>
+    </message>
+    <message>
+        <source>more</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
