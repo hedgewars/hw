@@ -56,6 +56,7 @@ class HWMapContainer : public QWidget
   QByteArray getDrawnMapData();
   DrawMapScene * getDrawMapScene();
   void mapDrawingFinished();
+  QLineEdit* seedEdit;
 
  public slots:
   void askForGeneratedPreview();
@@ -102,7 +103,6 @@ class HWMapContainer : public QWidget
   QListWidget* lwThemes;
   HWMap* pMap;
   QString m_seed;
-  QLineEdit* seedEdit;
   QPushButton* seedSet;
   QLabel* seedLabel;
   int hhLimit;

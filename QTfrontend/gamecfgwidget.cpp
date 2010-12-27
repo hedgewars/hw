@@ -332,6 +332,9 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
         if (param == "SEED") {
             pMapContainer->setSeed(value);
+            if (!QRegExp("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\}").exactMatch(value)) {
+                pMapContainer->seedEdit->setVisible(true);
+                }
             return;
         }
         if (param == "THEME") {
