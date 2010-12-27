@@ -9,7 +9,7 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation>copia de</translation>
     </message>
 </context>
 <context>
@@ -46,7 +46,7 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
-        <translation type="unfinished"></translation>
+        <translation>Com esta opção activada o esquema de jogo irá automaticamente seleccionar uma arma</translation>
     </message>
 </context>
 <context>
@@ -188,11 +188,11 @@
     </message>
     <message>
         <source>Seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Semente</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Definir</translation>
     </message>
 </context>
 <context>
@@ -330,31 +330,31 @@ outro nome de utilizador no menu de configuração:</translation>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Anular</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Limpar</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Carregar</translation>
+        <translation>Carregar</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Gravar</translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Carregar mapa desenhado</translation>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapas Desenhados (*.hwmap);;Todos os ficheiros (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Gravar mapa desenhado</translation>
     </message>
 </context>
 <context>
@@ -424,10 +424,6 @@ outro nome de utilizador no menu de configuração:</translation>
             <numerusform>(%1 morto)</numerusform>
             <numerusform>(%1 mortos)</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>(%1 kills)</source>
-        <translation type="obsolete">(%1 mortos)</translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
@@ -572,11 +568,6 @@ outro nome de utilizador no menu de configuração:</translation>
         <translation>Nenhum ouriço foi mal tratado durante a produção deste jogo.</translation>
     </message>
     <message>
-        <source>Want to save ropse? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Precisas de poupar as cordas? Solta a corda enquanto no ar e dispara-a novamente. Enquanto não tocares no solo podes usar a mesma corda novamente sem desperdiar outras!</translation>
-    </message>
-    <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
         <comment>Tips</comment>
         <translation>O Hedgewars é Open Source e Freeware desenvolvido durante o tempo livre. Se alguem te vendeu o jogo, tente obter o reembolso!</translation>
@@ -669,7 +660,7 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation>Gostas do Hedgewars? Torna-te fã no %1 ou segue-nos pelo %!</translation>
+        <translation>Gostas do Hedgewars? Torna-te fã no %1 ou segue-nos pelo %2!</translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
@@ -692,11 +683,6 @@ outro nome de utilizador no menu de configuração:</translation>
         <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;Documentos\Hedgewars&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
     </message>
     <message>
-        <source>You can find your Hedgewars configuration files under &quot;Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Podes encontrar os ficheiros de configuração do Hedgewars na pasta &quot;Hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
-    </message>
-    <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
         <translation>É possivel associar os ficheiros relacionados com o Hedgewars (partidas e demonstrações) directamente com o jogo para que seja possivel lançalos directamente do teu explorador de ficheiros ou internet favorito.</translation>
@@ -709,12 +695,12 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;Library/Application Support/Hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, mas não os edites manualmente.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;.hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, mas não os edites manualmente.</translation>
     </message>
 </context>
 <context>
@@ -785,27 +771,27 @@ outro nome de utilizador no menu de configuração:</translation>
     </message>
     <message>
         <source>New scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Novo esquema</translation>
     </message>
     <message>
         <source>Edit scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar esquema</translation>
     </message>
     <message>
         <source>Delete scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar esquema</translation>
     </message>
     <message>
         <source>New weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Novo esquema de armas</translation>
     </message>
     <message>
         <source>Edit weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar esquema de armas</translation>
     </message>
     <message>
         <source>Delete weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar esquema de armas</translation>
     </message>
 </context>
 <context>
@@ -1066,15 +1052,15 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>You will not have to worry about wind anymore.</source>
-        <translation type="unfinished"></translation>
+        <translation>Não vais ter de te preocupar mais com o vento.</translation>
     </message>
     <message>
         <source>Wind will affect almost everything.</source>
-        <translation type="unfinished"></translation>
+        <translation>O vento afecta quase tudo.</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar</translation>
     </message>
 </context>
 <context>
@@ -1089,11 +1075,11 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar</translation>
     </message>
 </context>
 <context>
@@ -1273,7 +1259,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
-        <translation type="unfinished"></translation>
+        <translation>mapa desenhado à mão...</translation>
     </message>
 </context>
 <context>
@@ -1328,7 +1314,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Schemes and Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Esquemas e Armamento</translation>
     </message>
 </context>
 <context>
@@ -1499,11 +1485,11 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>% Rope Length</source>
-        <translation type="unfinished"></translation>
+        <translation>% Comprimento da Corda</translation>
     </message>
     <message>
         <source>Gameplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Jogabilidade</translation>
     </message>
 </context>
 <context>
@@ -1572,27 +1558,27 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Teams</source>
-        <translation type="unfinished">Equipas</translation>
+        <translation>Equipas</translation>
     </message>
     <message>
         <source>Really delete this team?</source>
-        <translation type="unfinished"></translation>
+        <translation>Deseja mesmo apagar esta equipa?</translation>
     </message>
     <message>
         <source>Schemes</source>
-        <translation type="unfinished"></translation>
+        <translation>Esquemas</translation>
     </message>
     <message>
         <source>Can not delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Não é possível eliminar o esquema por omisão &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Really delete this game scheme?</source>
-        <translation type="unfinished"></translation>
+        <translation>Deseja mesmo apagar este esquema de jogo?</translation>
     </message>
     <message>
         <source>Can not delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Não é possível eliminar o esquema de armas por omisão &apos;%1&apos;!</translation>
     </message>
 </context>
 <context>
@@ -1690,7 +1676,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>more</source>
-        <translation type="unfinished"></translation>
+        <translation>mais</translation>
     </message>
 </context>
 <context>
@@ -1744,11 +1730,11 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>new</source>
-        <translation type="unfinished">novo</translation>
+        <translation>novo</translation>
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation>copia de</translation>
     </message>
 </context>
 <context>
@@ -1858,11 +1844,11 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Disable Wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Desactivar Vento</translation>
     </message>
     <message>
         <source>More Wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Mais Vento</translation>
     </message>
 </context>
 <context>

@@ -45,10 +45,6 @@
         <translation>Edit schemes</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation type="obsolete">When this option is enabled selecting a game scheme will auto-select a weapon (and vice versa)</translation>
-    </message>
-    <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>

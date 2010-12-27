@@ -50,6 +50,8 @@
 00:47=Mina Pegajosa
 00:48=Martelo
 00:49=Ressuscitador
+00:50=Ataque Perfurador
+00:51=Bola de Lama
 
 01:00=Vamos lutar!
 01:01=Ronda empatada
@@ -431,6 +433,7 @@
 03:47=Cola-as onde achares mais útil!
 03:48=Garantia vitalícia!
 03:49=Funciona tal como anunciado
+03:50=Coleccionador de toupeiras
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Ataca os teus inimigos usando uma simples granada.|Explodirá quando o tempo chegar a zero.|1-5: Define o temporizador da granada|Ataque: Deixa premido para lançar com mais força
