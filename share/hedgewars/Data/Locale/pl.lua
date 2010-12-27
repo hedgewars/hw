@@ -75,7 +75,6 @@ locale = {
     ["Sniper Training"] = "Trening Snajperski",
     ["Sniperz"] = "Snajperzy",
     ["Spooky Tree"] = "Straszne drzewo",
-    ["Team %d:"] = "Drużyna %d:",
     ["Team %d: "] = "Drużyna %d: ",
     ["Team Scores:"] = "Punktacja",
     ["That was pointless."] = "To było bezcelowe",
@@ -90,7 +89,6 @@ locale = {
     ["Victory for the"] = "Zwycięstwo przypadło",
     ["You have SCORED!!"] = "Zdobyłeś PUNKT",
     ["You've failed. Try again."] = "Przegrałeś. Spróbuj jeszcze raz",
-    ["You've reached the goal!| |Time:"] = "Dotarłeś do celu!| |Czas:",
     ["You've reached the goal!| |Time: "] = "Dotarłeś do celu!| |Czas: ",
     ["'Zooka Team"] = "Bazookinierzy",
     }
