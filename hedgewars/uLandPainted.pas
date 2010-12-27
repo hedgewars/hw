@@ -149,12 +149,12 @@ begin
         begin
         if (pe^.point.flags and $80 <> 0) then
             begin
-            AddFileLog('[DRAW] Move to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');
+            {$IFDEF DEBUGFILE}AddFileLog('[DRAW] Move to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');{$ENDIF}
             FillRoundInLand(pe^.point.X, pe^.point.Y, 34, lfBasic)
             end
             else
             begin
-            AddFileLog('[DRAW] Line to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');
+            {$IFDEF DEBUGFILE}AddFileLog('[DRAW] Line to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');{$ENDIF}
             DrawLineOnLand(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y);
             end;
 
