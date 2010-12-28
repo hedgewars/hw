@@ -4,6 +4,7 @@ foreach(dir
 	Basketball
 	Bath
 	Battlefield
+	Blizzard
 	Blox
 	Bubbleflow
 	Cake
@@ -11,7 +12,9 @@ foreach(dir
 	Cave
 	Cheese
 	Cogs
+	Control
 	CrazyMission
+	CTF_Blizzard
 	EarthRise
 	Eyes
 	Hammock

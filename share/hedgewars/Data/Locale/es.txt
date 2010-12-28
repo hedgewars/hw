@@ -1,5 +1,5 @@
 ; Spanish locale
-; Revision 3987
+; Revision 4632
 
 00:00=Granada
 00:01=Granada de frag.
@@ -51,6 +51,8 @@
 00:47=Bomba lapa
 00:48=Mazo
 00:49=Resurrección
+00:50=Bombardeo perforador aéreo
+00:51=Bola de tierra
 
 01:00=¡Luchad!
 01:01=Empate
@@ -430,6 +432,7 @@
 03:47=¡Pégalo en un buen sitio!
 03:48=Pablo clavó un clavito
 03:49=Hace exactamente lo que dice
+03:50=Para los amantes de los topos
 
 ; Descripciones de armamento ( líneas delimitadas con | )
 04:00=Ataca a tus enemigos usando una sencilla granada.|Explotará una vez el temporizador llegue a cero.|1-5: ajustar temporizador.|Atacar: mantener presionado para lanzar más lejos.

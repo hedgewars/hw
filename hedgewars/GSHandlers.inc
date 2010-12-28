@@ -594,42 +594,45 @@ if GameTicks and $7 = 0 then
             begin
             // we've collided with land. draw some stuff and get back into the clouds
             move:= true;
-////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
-            if cWindSpeed * 1600 + dX < _0 then i:= -1
-            else i:= 1;
-            if (yy > 0) and ((Land[yy-1, xx] and $FF00) = 0) then dec(yy)
-            else dec(xx, i);
-            dec(yy,2);
-            dec(xx,i);
-            s:= SpritesData[sprSnow].Surface;
-            p:= s^.pixels;
-            allpx:= true;
-            for py:= 0 to Pred(s^.h) do
+            if (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope) then
                 begin
-                for px:= 0 to Pred(s^.w) do
-                    if ((yy + py and LAND_HEIGHT_MASK) = 0) and ((xx + px and LAND_WIDTH_MASK) = 0) and 
-                       ((Land[yy + py, xx + px] and $FF00) = 0) then
-                        begin
-                        if (cReducedQuality and rqBlurryLand) = 0 then
-                            LandPixels[yy + py, xx + px]:= p^[px]
-                        else
-                            LandPixels[(yy + py) div 2, (xx + px) div 2]:= p^[px]
-                        end
-                    else allpx:= false;
-                p:= @(p^[s^.pitch shr 2])
-                end;
-            if allpx then UpdateLandTexture(xx, 4, yy, 4)
-            else UpdateLandTexture(xx, 1, yy, 1);
-            inc(yy,2);
-            inc(xx,i);
-            if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfObject;
-            if yy > 0 then
-                begin 
-                Land[yy-1, xx]:= Land[yy-1, xx] or lfObject;
-                if ((xx-i and LAND_WIDTH_MASK) = 0) then Land[yy-1, xx-i]:= Land[yy-1, xx-i] or lfObject;
-                end;
-            if ((xx-i and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx-i]:= Land[yy, xx-i] or lfObject
 ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+                if cWindSpeed * 1600 + dX < _0 then i:= -1
+                else i:= 1;
+                if (yy > 0) and ((Land[yy-1, xx] and $FF00) = 0) then dec(yy)
+                else dec(xx, i);
+                dec(yy,2);
+                dec(xx,i);
+                s:= SpritesData[sprSnow].Surface;
+                p:= s^.pixels;
+                allpx:= true;
+                for py:= 0 to Pred(s^.h) do
+                    begin
+                    for px:= 0 to Pred(s^.w) do
+                        if (((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0) and 
+                           ((Land[yy + py, xx + px] and $FF00) = 0) then
+                            begin
+                            if (cReducedQuality and rqBlurryLand) = 0 then
+                                LandPixels[yy + py, xx + px]:= p^[px]
+                            else
+                                LandPixels[(yy + py) div 2, (xx + px) div 2]:= p^[px]
+                            end
+                        else allpx:= false;
+                    p:= @(p^[s^.pitch shr 2])
+                    end;
+                if allpx then UpdateLandTexture(xx, 4, yy, 4)
+                else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) then UpdateLandTexture(xx, 1, yy, 1);
+                inc(yy,2);
+                inc(xx,i);
+                if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfObject;
+                if yy > 0 then
+                    begin 
+                    Land[yy-1, xx]:= Land[yy-1, xx] or lfObject;
+                    if ((xx-i and LAND_WIDTH_MASK) = 0) then Land[yy-1, xx-i]:= Land[yy-1, xx-i] or lfObject;
+                    end;
+                if ((xx-i and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx-i]:= Land[yy, xx-i] or lfObject
+////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+                end
             end;
         if move then
             begin
@@ -909,6 +912,9 @@ end;
 procedure doStepDEagleShot(Gear: PGear);
 begin
     PlaySound(sndGun);
+    // add an initial step to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths
+    Gear^.X := Gear^.X + Gear^.dX;  
+    Gear^.Y := Gear^.Y + Gear^.dY;
     Gear^.doStep := @doStepBulletWork
 end;
 
@@ -942,6 +948,9 @@ begin
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _0_5;
         Gear^.dY := -AngleCos(HHGear^.Angle) * _0_5;
         PlaySound(sndGun);
+        // add an initial step to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths
+        Gear^.X := Gear^.X + Gear^.dX;  
+        Gear^.Y := Gear^.Y + Gear^.dY;
         Gear^.doStep := @doStepBulletWork;
     end
     else
@@ -1035,7 +1044,7 @@ begin
     if (Gear^.Timer mod 47) = 0 then
         begin
         // ok. this was an attempt to turn off dust if not actually drilling land.  I have no idea why it isn't working as expected
-        //if ((y + 12 and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y + 12, x] > 255) then 
+        if (( (y + 12) and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y + 12, x] > 255) then 
             for i:= 0 to 1 do
                 AddVisualGear(x - 5 + Random(10), y + 12, vgtDust);
 

@@ -49,6 +49,10 @@ function spawnTarget()
 	SetGearPosition(gear, x, 500)
 end
 
+function onNewTurn()
+	ParseCommand("setweap " .. string.char(amShotgun))
+end
+
 -- This function is called before the game loads its
 -- resources.
 -- It's one of the predefined function names that will
@@ -62,11 +66,11 @@ function onGameInit()
 	-- Things we don't modify here will use their default values.
 
 	-- The base number for the random number generator
-	Seed = 0
+	Seed = 1
 	-- Game settings and rules
 	GameFlags = gfMultiWeapon + gfOneClanMode
 	-- The time the player has to move each round (in ms)
-	TurnTime = 25000
+	TurnTime = 30000
 	-- The frequency of crate drops
 	CaseFreq = 0
 	-- The number of mines being placed

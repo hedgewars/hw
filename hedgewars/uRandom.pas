@@ -58,7 +58,7 @@ for i:= 0 to Pred(Length(Seed)) do
     cirbuf[i]:= byte(Seed[i + 1]);
 
 for i:= Length(Seed) to 54 do
-    cirbuf[i]:= $A98765 + (cNetProtoVersion * 2); // odd number
+    cirbuf[i]:= $A98765 + 68; // odd number
 
 for i:= 0 to 1023 do GetNext
 end;

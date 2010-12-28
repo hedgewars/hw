@@ -17,7 +17,7 @@
 	<key>password_length</key>
 	<integer>0</integer>
 	<key>enhanced</key>
-	<false/>
+	<true/>
 	<key>multitasking</key>
 	<true/>
 </dict>

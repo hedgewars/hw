@@ -190,6 +190,10 @@
         <source>Seed</source>
         <translation>Frö</translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished">Ange</translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -1297,7 +1301,7 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Vanligt</translation>
+        <translation type="obsolete">Vanligt</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
@@ -1724,7 +1728,11 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation>Ange</translation>
+        <translation type="obsolete">Ange</translation>
+    </message>
+    <message>
+        <source>more</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -87,9 +87,10 @@ QByteArray DrawMapScene::encode()
 {
     QByteArray b;
 
-    foreach(QList<QPoint> points, paths)
+    for(int i = paths.size() - 1; i >= 0; --i)
     {
         int cnt = 0;
+        QList<QPoint> points = paths.at(i);
         foreach(QPoint point, points)
         {
             qint16 px = qToBigEndian((qint16)point.x());
@@ -124,19 +125,21 @@ void DrawMapScene::decode(QByteArray data)
         quint8 flags = *(quint8 *)data.data();
         data.remove(0, 1);
 
-        //last chunk or first point
-        if((data.size() < 5) || (flags & 0x80))
+        if((flags & 0x80) && points.size())
         {
-            if(points.size())
-            {
-                addPath(pointsToPath(points), m_pen);
-                paths.prepend(points);
+            addPath(pointsToPath(points), m_pen);
+            paths.prepend(points);
 
-                points.clear();
-            }
+            points.clear();
         }
 
         points.append(QPoint(px, py));
+    }
+
+    if(points.size())
+    {
+        addPath(pointsToPath(points), m_pen);
+        paths.prepend(points);
     }
 
     emit pathChanged();

@@ -1121,9 +1121,12 @@ if (GameFlags and gfLaserSight) <> 0 then
 if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
 
-if (Theme = 'Snow') or (Theme = 'Christmas') then
+if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
+    begin
     for i:= 0 to Pred(vobCount*2) do
         AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(1024), gtFlake, 0, _0, _0, 0);
+    disableLandBack:= true
+    end
 end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);
@@ -1851,7 +1854,7 @@ begin
             Gear^.Text:= text;
             Gear^.FrameTicks:= x
             end
-        else ParseCommand('say ' + text, true)
+        //else ParseCommand('say ' + text, true)
         end
     else if (x >= 4) then
         begin
