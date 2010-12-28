@@ -25,6 +25,7 @@
  + Reworked management of schemes and weapon sets
  + Will ask before deleting teams, schemes and weapon sets
  + Explosions detach rope from land
+ + Variable rope length in scheme
  + Allow hog speech when not your turn
 
 0.9.13 -> 0.9.14:
