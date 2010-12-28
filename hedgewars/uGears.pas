@@ -795,7 +795,9 @@ case step of
                     begin
                     SuddenDeathDmg:= true;
                     AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
-                    playSound(sndSuddenDeath)
+                    playSound(sndSuddenDeath);
+                    MusicFN:= SDMusic;
+                    ChangeMusic
                     end
                 else if (TotalRounds < cSuddenDTurns) and not isInMultiShoot then
                     begin

@@ -394,10 +394,20 @@ var VertexBuffer: array [0..3] of TVertex2f;
     r: TSDL_Rect;
     lw, lh: GLfloat;
 begin
-    WaterColorArray[0].a := Alpha;
-    WaterColorArray[1].a := Alpha;
-    WaterColorArray[2].a := Alpha;
-    WaterColorArray[3].a := Alpha;
+    if SuddenDeathDmg then
+        begin
+        SDWaterColorArray[0].a := Alpha;
+        SDWaterColorArray[1].a := Alpha;
+        SDWaterColorArray[2].a := Alpha;
+        SDWaterColorArray[3].a := Alpha
+        end
+    else
+        begin
+        WaterColorArray[0].a := Alpha;
+        WaterColorArray[1].a := Alpha;
+        WaterColorArray[2].a := Alpha;
+        WaterColorArray[3].a := Alpha
+        end;
 
     lw:= cScreenWidth / cScaleFactor;
     lh:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 + 16;
@@ -421,7 +431,10 @@ begin
 
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
-        glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
+        if SuddenDeathDmg then
+            glColorPointer(4, GL_UNSIGNED_BYTE, 0, @SDWaterColorArray[0])
+        else
+            glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
 
         glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 
@@ -437,24 +450,39 @@ end;
 procedure DrawWaves(Dir, dX, dY: LongInt; tnt: Byte);
 var VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
     lw, waves, shift: GLfloat;
+    sprite: TSprite;
 begin
+if SuddenDeathDmg then
+    sprite:= sprSDWater
+else
+    sprite:= sprWater;
+
+cWaveWidth:= SpritesData[sprite].Width;
+
 lw:= cScreenWidth / cScaleFactor;
 waves:= lw * 2 / cWaveWidth;
 
-Tint(LongInt(tnt) * WaterColorArray[2].r div 255 + 255 - tnt,
-     LongInt(tnt) * WaterColorArray[2].g div 255 + 255 - tnt,
-     LongInt(tnt) * WaterColorArray[2].b div 255 + 255 - tnt,
-     255
-);
+if SuddenDeathDmg then
+    Tint(LongInt(tnt) * SDWaterColorArray[2].r div 255 + 255 - tnt,
+         LongInt(tnt) * SDWaterColorArray[2].g div 255 + 255 - tnt,
+         LongInt(tnt) * SDWaterColorArray[2].b div 255 + 255 - tnt,
+         255
+    )
+else
+    Tint(LongInt(tnt) * WaterColorArray[2].r div 255 + 255 - tnt,
+         LongInt(tnt) * WaterColorArray[2].g div 255 + 255 - tnt,
+         LongInt(tnt) * WaterColorArray[2].b div 255 + 255 - tnt,
+         255
+    );
 
-glBindTexture(GL_TEXTURE_2D, SpritesData[sprWater].Texture^.id);
+glBindTexture(GL_TEXTURE_2D, SpritesData[sprite].Texture^.id);
 
 VertexBuffer[0].X:= -lw;
 VertexBuffer[0].Y:= cWaterLine + WorldDy + dY;
 VertexBuffer[1].X:= lw;
 VertexBuffer[1].Y:= VertexBuffer[0].Y;
 VertexBuffer[2].X:= lw;
-VertexBuffer[2].Y:= VertexBuffer[0].Y + SpritesData[sprWater].Height;
+VertexBuffer[2].Y:= VertexBuffer[0].Y + SpritesData[sprite].Height;
 VertexBuffer[3].X:= -lw;
 VertexBuffer[3].Y:= VertexBuffer[2].Y;
 
@@ -464,7 +492,7 @@ TextureBuffer[0].Y:= 0;
 TextureBuffer[1].X:= TextureBuffer[0].X + waves;
 TextureBuffer[1].Y:= TextureBuffer[0].Y;
 TextureBuffer[2].X:= TextureBuffer[1].X;
-TextureBuffer[2].Y:= SpritesData[sprWater].Texture^.ry;
+TextureBuffer[2].Y:= SpritesData[sprite].Texture^.ry;
 TextureBuffer[3].X:= TextureBuffer[0].X;
 TextureBuffer[3].Y:= TextureBuffer[2].Y;
 

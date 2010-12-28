@@ -131,6 +131,8 @@ var
     AttackBar       : LongInt;
 
     WaterColorArray : array[0..3] of HwColor4f;
+    SDWaterColorArray : array[0..3] of HwColor4f;
+    SDMusic         : shortstring;
 
     CursorPoint     : TPoint;
     TargetPoint     : TPoint;
@@ -175,7 +177,8 @@ const
         'Sounds/voices',                 // ptVoices
         'Graphics/Hats',                 // ptHats
         'Graphics/Flags',                // ptFlags
-        'Missions/Maps'                  // ptMissionMaps
+        'Missions/Maps',                 // ptMissionMaps
+        'Graphics/SuddenDeath'           // ptSuddenDeath
     );
 
     cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
@@ -558,7 +561,11 @@ const
             (FileName:  'amSnowball'; Path: ptCurrTheme; AltPath: ptHedgehog; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandSnowball
             (FileName:  'Snow'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
-            Width:  4; Height: 4; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprSnow
+            Width:  4; Height: 4; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSnow
+            (FileName:      'Flake'; Path: ptSuddenDeath; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprSDFlake
+            (FileName:  'BlueWater'; Path: ptSuddenDeath; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true) // sprSDWater
             );
 
 
@@ -2164,6 +2171,19 @@ begin
         LAND_WIDTH_MASK:= $FFFFF000;
         LAND_HEIGHT_MASK:= $FFFFF800
     end;
+
+    SDWaterColorArray[0].r := 184;
+    SDWaterColorArray[0].g := 152;
+    SDWaterColorArray[0].b := 195;
+    SDWaterColorArray[0].a := 255;
+    SDWaterColorArray[2].r := 152;
+    SDWaterColorArray[2].g := 120;
+    SDWaterColorArray[2].b := 163;
+    SDWaterColorArray[2].a := 255;
+    SDWaterColorArray[1]:= SDWaterColorArray[0];
+    SDWaterColorArray[3]:= SDWaterColorArray[2];
+
+    SDMusic:= 'main_theme.ogg';
 
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
     cDrownSpeedf            := 0.06;
