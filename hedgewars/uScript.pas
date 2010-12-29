@@ -358,6 +358,11 @@ begin
             lua_pushinteger(L, vg^.Timer);
             lua_pushinteger(L, vg^.Tint);
             end
+        else
+            begin
+            lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
+            lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L)
+            end
         end;
     lc_getvisualgearvalues:= 10;
 end;
