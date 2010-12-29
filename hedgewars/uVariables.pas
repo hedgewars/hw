@@ -2190,8 +2190,8 @@ begin
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
     cDrownSpeedf            := 0.06;
     cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
-    cWindSpeed.QWordValue   := 429496;      // 0.0001
-    cWindSpeedf             := 0.0001;
+    cWindSpeed.QWordValue   := 0;      // 0.0
+    cWindSpeedf             := 0.0;
     cGravity                := cMaxWindSpeed * 2;
     cGravityf               := 0.00025 * 2;
     cDamageModifier         := _1;

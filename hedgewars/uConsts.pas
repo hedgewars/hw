@@ -194,7 +194,7 @@ const
     gfInfAttack          = $00100000;
     gfResetWeps          = $00200000;
     gfPerHogAmmo         = $00400000;
-    gfDisableWind        = $00800000;           // only lua for now
+    gfDisableWind        = $00800000;
     gfMoreWind           = $01000000;
     // NOTE: When adding new game flags, ask yourself
     // if a "game start notice" would be useful. If so,
