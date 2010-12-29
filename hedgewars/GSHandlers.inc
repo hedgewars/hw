@@ -2885,6 +2885,9 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepDrill(Gear: PGear);
+forward;
+
 procedure doStepDrillDrilling(Gear: PGear);
 var 
     t: PGearArray;
@@ -2913,10 +2916,11 @@ begin
     if (Gear^.Timer = 0)
        or (t^.Count <> 0)
        or (not TestCollisionYWithGear(Gear, hwSign(Gear^.dY))
-       and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)))
+       and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX))
+       and ((Gear^.State and gsttmpFlag) = 0)) 
 // CheckLandValue returns true if the type isn't matched
        or not CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y), lfIndestructible) then
-    begin
+        begin
         //out of time or exited ground
         StopSound(Gear^.SoundChannel);
         if (Gear^.State and gsttmpFlag) <> 0 then
@@ -2925,7 +2929,12 @@ begin
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
         DeleteGear(Gear);
         exit
-    end;
+        end
+    else if not TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) then
+        begin
+        StopSound(Gear^.SoundChannel);
+        Gear^.doStep := @doStepDrill
+        end;
 
     dec(Gear^.Timer);
 end;
