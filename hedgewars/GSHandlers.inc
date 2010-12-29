@@ -2206,14 +2206,16 @@ begin
         exit
     end;
 
-    if not TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
-        HHGear^.X := HHGear^.X + cWindSpeed * 200;
+    HHGear^.X := HHGear^.X + cWindSpeed * 200;
 
     if (Gear^.Message and gmLeft) <> 0 then HHGear^.X := HHGear^.X - cMaxWindSpeed * 80
     else if (Gear^.Message and gmRight) <> 0 then HHGear^.X := HHGear^.X + cMaxWindSpeed * 80;
     if (Gear^.Message and gmUp) <> 0 then HHGear^.Y := HHGear^.Y - cGravity * 40
     else if (Gear^.Message and gmDown) <> 0 then HHGear^.Y := HHGear^.Y + cGravity * 40;
 
+    // don't drift into obstacles
+    if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+        HHGear^.X := HHGear^.X - int2hwFloat(hwSign(HHGear^.dX));
     HHGear^.Y := HHGear^.Y + cGravity * 100;
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y
