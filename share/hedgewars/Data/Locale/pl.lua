@@ -53,7 +53,6 @@ locale = {
     ["|- Mines Time:"] = "|- Czas detonacji min:",
     ["MISSION FAILED"] = "MISJA ZAKOŃCZONA NIEPOWODZENIEM", 
     ["MISSION SUCCESSFUL"] = "MISJA POWIODŁA SIĘ",  
-    ["MISSION SUCCESS"] = "MISJA POWIODŁA SIĘ",
     ["NEW fastest lap: "] = "NOWE najszybsze okrążenie: ",
     ["NO JUMPING"] = "BEZ SKAKANIA",
     ["Not So Friendly Match"] = "Mecz Nie-Do-Końca Towarzyski",  
