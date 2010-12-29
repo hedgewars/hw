@@ -2288,9 +2288,13 @@ begin
     Gear^.Y := int2hwFloat(topY-300);
     Gear^.dX := int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
 
-    if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then
-        Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /
-                    cGravity) * Gear^.Tag;
+    // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
+    if (Gear^.State = 2) then
+        Gear^.dX := Gear^.dX - cBombsSpeed * Gear^.Tag * 1000 // ^.Timer of gtNapalmBomb, make it a constant var if you prefer that :P
+    // calcs for regular falling gears
+    else if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then
+            Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /
+                cGravity) * Gear^.Tag;
 
     Gear^.Health := 6;
     Gear^.doStep := @doStepAirAttackWork;
