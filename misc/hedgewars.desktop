@@ -12,6 +12,7 @@ GenericName[sv]=Stridande igelkottar
 GenericName[es]=Batallas entre erizos
 GenericName[it]=Ricci combattenti
 GenericName[pt]=Batalhas entre ouriços
+GenericName[ko]=고슴도치 싸우기
 Icon=hedgewars.png
 Exec=hedgewars
 Terminal=false

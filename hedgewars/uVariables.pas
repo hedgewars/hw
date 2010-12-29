@@ -2040,6 +2040,7 @@ var
     LandBackSurface: PSDL_Surface;
     digest: shortstring;
     CurAmmoGear: PGear;
+    lastGearByUID: PGear;
     GearsList: PGear;
     AllInactive: boolean;
     PrvInactive: boolean;
@@ -2097,6 +2098,7 @@ var
 
 
     VisualGearsList: PVisualGear;
+    lastVisualGearByUID: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
     vobVelocity, vobFallSpeed: LongInt;
 
@@ -2153,6 +2155,9 @@ implementation
 
 procedure initModule;
 begin
+    lastVisualGearByUID:= nil;
+    lastGearByUID:= nil;
+    
     Pathz:= cPathz;
         {*  REFERENCE
       4096 -> $FFFFF000
@@ -2160,19 +2165,19 @@ begin
       1024 -> $FFFFFC00
        512 -> $FFFFFE00  *}
     if (cReducedQuality and rqLowRes) <> 0 then
-    begin
+        begin
         LAND_WIDTH:= 2048;
         LAND_HEIGHT:= 1024;
         LAND_WIDTH_MASK:= $FFFFF800;
         LAND_HEIGHT_MASK:= $FFFFFC00;
-    end
+        end
     else
-    begin
+        begin
         LAND_WIDTH:= 4096;
         LAND_HEIGHT:= 2048;
         LAND_WIDTH_MASK:= $FFFFF000;
         LAND_HEIGHT_MASK:= $FFFFF800
-    end;
+        end;
 
     SDWaterColorArray[0].r := 184;
     SDWaterColorArray[0].g := 152;

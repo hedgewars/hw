@@ -595,6 +595,7 @@ with Gear^ do AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x
 
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
+if lastGearByUID = Gear then lastGearByUID := nil;
 RemoveGearFromList(Gear);
 Dispose(Gear)
 end;
@@ -1778,13 +1779,20 @@ function GearByUID(uid : Longword) : PGear;
 var gear: PGear;
 begin
 GearByUID:= nil;
+if uid = 0 then exit;
+if (lastGearByUID <> nil) and (lastGearByUID^.uid = uid) then
+    begin
+    GearByUID:= lastGearByUID;
+    exit
+    end;
 gear:= GearsList;
 while gear <> nil do
     begin
     if gear^.uid = uid then
         begin
-            GearByUID:= gear;
-            exit
+        lastGearByUID:= gear;
+        GearByUID:= gear;
+        exit
         end;
     gear:= gear^.NextGear
     end

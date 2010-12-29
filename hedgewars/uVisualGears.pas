@@ -328,6 +328,8 @@ begin
     if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
     else VisualGearsList:= Gear^.NextGear;
 
+    if lastVisualGearByUID = Gear then lastVisualGearByUID:= nil;
+
     Dispose(Gear);
 end;
 
@@ -524,13 +526,20 @@ function  VisualGearByUID(uid : Longword) : PVisualGear;
 var vg: PVisualGear;
 begin
 VisualGearByUID:= nil;
+if uid = 0 then exit;
+if (lastVisualGearByUID <> nil) and (lastVisualGearByUID^.uid = uid) then
+    begin
+    VisualGearByUID:= lastVisualGearByUID;
+    exit
+    end;
 vg:= VisualGearsList;
 while vg <> nil do
     begin
     if vg^.uid = uid then
         begin
-            VisualGearByUID:= vg;
-            exit
+        lastVisualGearByUID:= vg;
+        VisualGearByUID:= vg;
+        exit
         end;
     vg:= vg^.NextGear
     end
