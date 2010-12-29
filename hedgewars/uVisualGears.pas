@@ -392,7 +392,10 @@ case Layer of
                             DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
                         else
                             DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
-            vgtCloud: DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
+            vgtCloud: if SuddenDeathDmg then
+                          DrawSprite(sprSDCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                      else
+                          DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
             end;
         if Gear^.Tint <> $FFFFFFFF then Tint($FF,$FF,$FF,$FF);
         Gear:= Gear^.NextGear
