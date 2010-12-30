@@ -1840,7 +1840,7 @@ begin
     if (x < 4) and (TeamsArray[t] <> nil) then
         begin
             // if team matches current hedgehog team, default to current hedgehog
-            if (i = 0) and (CurrentHedgehog^.Team = TeamsArray[t]) then hh:= CurrentHedgehog
+            if (i = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Team = TeamsArray[t]) then hh:= CurrentHedgehog
             else 
                 begin
             // otherwise use the first living hog or the hog amongs the remaining ones indicated by i
