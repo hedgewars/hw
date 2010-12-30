@@ -595,6 +595,7 @@ with Gear^ do AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x
 
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
+if lastGearByUID = Gear then lastGearByUID := nil;
 RemoveGearFromList(Gear);
 Dispose(Gear)
 end;
@@ -795,7 +796,9 @@ case step of
                     begin
                     SuddenDeathDmg:= true;
                     AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
-                    playSound(sndSuddenDeath)
+                    playSound(sndSuddenDeath);
+                    MusicFN:= SDMusic;
+                    ChangeMusic
                     end
                 else if (TotalRounds < cSuddenDTurns) and not isInMultiShoot then
                     begin
@@ -1776,13 +1779,20 @@ function GearByUID(uid : Longword) : PGear;
 var gear: PGear;
 begin
 GearByUID:= nil;
+if uid = 0 then exit;
+if (lastGearByUID <> nil) and (lastGearByUID^.uid = uid) then
+    begin
+    GearByUID:= lastGearByUID;
+    exit
+    end;
 gear:= GearsList;
 while gear <> nil do
     begin
     if gear^.uid = uid then
         begin
-            GearByUID:= gear;
-            exit
+        lastGearByUID:= gear;
+        GearByUID:= gear;
+        exit
         end;
     gear:= gear^.NextGear
     end
@@ -1830,7 +1840,7 @@ begin
     if (x < 4) and (TeamsArray[t] <> nil) then
         begin
             // if team matches current hedgehog team, default to current hedgehog
-            if (i = 0) and (CurrentHedgehog^.Team = TeamsArray[t]) then hh:= CurrentHedgehog
+            if (i = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Team = TeamsArray[t]) then hh:= CurrentHedgehog
             else 
                 begin
             // otherwise use the first living hog or the hog amongs the remaining ones indicated by i
@@ -1847,12 +1857,15 @@ begin
                     inc(j)
                     end
                 end;
-        if hh <> nil then Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
-        if Gear <> nil then
+        if hh <> nil then 
             begin
-            Gear^.Hedgehog:= hh;
-            Gear^.Text:= text;
-            Gear^.FrameTicks:= x
+            Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
+            if Gear <> nil then
+                begin
+                Gear^.Hedgehog:= hh;
+                Gear^.Text:= text;
+                Gear^.FrameTicks:= x
+                end
             end
         //else ParseCommand('say ' + text, true)
         end

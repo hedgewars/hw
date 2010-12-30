@@ -153,9 +153,11 @@ function ManageTeleporterEffects()
 	-- steam and smoke and DUST look good, smokering looks trippy 
 	-- smoketrace and eviltrace are not effected by wind?
 	-- chunk is a LR falling gear
-			tempE = AddVisualGear(eX, eY, vgtDust, 0, false)		
-			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
-			SetVisualGearValues(tempE, eX, eY, g3, g4, g5, g6, g7, g8, g9, fCol[i])
+			tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
+			if tempE ~= 0 then
+				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+				SetVisualGearValues(tempE, eX, eY, g3, g4, g5, g6, g7, g8, g9, fCol[i])
+			end
 		end
 	end 
 end

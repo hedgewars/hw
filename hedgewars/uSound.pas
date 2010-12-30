@@ -39,6 +39,7 @@ function  LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
 procedure PlayMusic;
 procedure PauseMusic;
 procedure ResumeMusic;
+procedure ChangeMusic;
 procedure StopSound(snd: TSound);
 procedure StopSound(chn: LongInt);
 function  ChangeVolume(voldelta: LongInt): LongInt;
@@ -316,6 +317,17 @@ begin
         exit;
 
     Mix_ResumeMusic(Mus);
+end;
+
+procedure ChangeMusic;
+begin
+    if (MusicFN = '') or (not isMusicEnabled) then
+        exit;
+
+    if Mus <> nil then
+        Mix_FreeMusic(Mus);
+
+    PlayMusic;
 end;
 
 procedure chVoicepack(var s: shortstring);

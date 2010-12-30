@@ -152,7 +152,6 @@ void replayFinished() {
 }
 
 void updateVisualsNewTurn(void) {
-    DLog(@"updating visuals");
     [amvc_instance updateAmmoVisuals];
 }
 

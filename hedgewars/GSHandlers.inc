@@ -2206,14 +2206,16 @@ begin
         exit
     end;
 
-    if not TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
-        HHGear^.X := HHGear^.X + cWindSpeed * 200;
+    HHGear^.X := HHGear^.X + cWindSpeed * 200;
 
     if (Gear^.Message and gmLeft) <> 0 then HHGear^.X := HHGear^.X - cMaxWindSpeed * 80
     else if (Gear^.Message and gmRight) <> 0 then HHGear^.X := HHGear^.X + cMaxWindSpeed * 80;
     if (Gear^.Message and gmUp) <> 0 then HHGear^.Y := HHGear^.Y - cGravity * 40
     else if (Gear^.Message and gmDown) <> 0 then HHGear^.Y := HHGear^.Y + cGravity * 40;
 
+    // don't drift into obstacles
+    if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+        HHGear^.X := HHGear^.X - int2hwFloat(hwSign(HHGear^.dX));
     HHGear^.Y := HHGear^.Y + cGravity * 100;
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y
@@ -2286,9 +2288,13 @@ begin
     Gear^.Y := int2hwFloat(topY-300);
     Gear^.dX := int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
 
-    if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then
-        Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /
-                    cGravity) * Gear^.Tag;
+    // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
+    if (Gear^.State = 2) then
+        Gear^.dX := Gear^.dX - cBombsSpeed * Gear^.Tag * 1000 // ^.Timer of gtNapalmBomb, make it a constant var if you prefer that :P
+    // calcs for regular falling gears
+    else if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then
+            Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /
+                cGravity) * Gear^.Tag;
 
     Gear^.Health := 6;
     Gear^.doStep := @doStepAirAttackWork;
@@ -2885,6 +2891,9 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepDrill(Gear: PGear);
+forward;
+
 procedure doStepDrillDrilling(Gear: PGear);
 var 
     t: PGearArray;
@@ -2913,10 +2922,11 @@ begin
     if (Gear^.Timer = 0)
        or (t^.Count <> 0)
        or (not TestCollisionYWithGear(Gear, hwSign(Gear^.dY))
-       and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)))
+       and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX))
+       and ((Gear^.State and gsttmpFlag) = 0)) 
 // CheckLandValue returns true if the type isn't matched
        or not CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y), lfIndestructible) then
-    begin
+        begin
         //out of time or exited ground
         StopSound(Gear^.SoundChannel);
         if (Gear^.State and gsttmpFlag) <> 0 then
@@ -2925,7 +2935,12 @@ begin
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
         DeleteGear(Gear);
         exit
-    end;
+        end
+    else if not TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) then
+        begin
+        StopSound(Gear^.SoundChannel);
+        Gear^.doStep := @doStepDrill
+        end;
 
     dec(Gear^.Timer);
 end;

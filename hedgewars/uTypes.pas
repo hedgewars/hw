@@ -16,7 +16,7 @@ type
 
     TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
             ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps);
+            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps, ptSuddenDeath);
 
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
             sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
@@ -52,7 +52,8 @@ type
             sprCheese, sprHandCheese, sprHandFlamethrower, sprChunk, sprNote,
             sprSMineOff, sprSMineOn, sprHandSMine, sprHammer,
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
-            sprBulletHit, sprSnowball, sprHandSnowball, sprSnow
+            sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
+            sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet
             );
 
     // Gears that interact with other Gears and/or Land

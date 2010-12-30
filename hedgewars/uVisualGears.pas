@@ -328,6 +328,8 @@ begin
     if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
     else VisualGearsList:= Gear^.NextGear;
 
+    if lastVisualGearByUID = Gear then lastVisualGearByUID:= nil;
+
     Dispose(Gear);
 end;
 
@@ -383,10 +385,19 @@ case Layer of
         if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
         case Gear^.Kind of
             vgtFlake: if vobVelocity = 0 then
-                          DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                        if SuddenDeathDmg then
+                            DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                        else
+                            DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                       else
-                          DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
-            vgtCloud: DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
+                        if SuddenDeathDmg then
+                            DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                        else
+                            DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+            vgtCloud: if SuddenDeathDmg then
+                          DrawSprite(sprSDCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                      else
+                          DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
             end;
         if Gear^.Tint <> $FFFFFFFF then Tint($FF,$FF,$FF,$FF);
         Gear:= Gear^.NextGear
@@ -475,8 +486,14 @@ case Layer of
                                 end;
                             DrawRotatedF(sprEgg, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                             end;
-                vgtSplash: DrawSprite(sprSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
-                vgtDroplet: DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
+                 vgtSplash: if SuddenDeathDmg then
+                                DrawSprite(sprSDSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37))
+                            else
+                                DrawSprite(sprSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
+                vgtDroplet: if SuddenDeathDmg then
+                                DrawSprite(sprSDDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame)
+                            else
+                                DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                vgtBeeTrace: begin
                             if Gear^.FrameTicks < $FF then
                                 Tint($FF, $FF, $FF, Gear^.FrameTicks div 2)
@@ -515,13 +532,20 @@ function  VisualGearByUID(uid : Longword) : PVisualGear;
 var vg: PVisualGear;
 begin
 VisualGearByUID:= nil;
+if uid = 0 then exit;
+if (lastVisualGearByUID <> nil) and (lastVisualGearByUID^.uid = uid) then
+    begin
+    VisualGearByUID:= lastVisualGearByUID;
+    exit
+    end;
 vg:= VisualGearsList;
 while vg <> nil do
     begin
     if vg^.uid = uid then
         begin
-            VisualGearByUID:= vg;
-            exit
+        lastVisualGearByUID:= vg;
+        VisualGearByUID:= vg;
+        exit
         end;
     vg:= vg^.NextGear
     end

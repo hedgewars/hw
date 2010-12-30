@@ -274,7 +274,7 @@ AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
     with SpritesData[ii] do
         // FIXME - add a sprite attribute
-        if ((cReducedQuality and rqNoBackground) = 0) or (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR, sprFlake, sprSplash, sprDroplet])) then // FIXME: hack
+        if ((cReducedQuality and rqNoBackground) = 0) or (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR, sprFlake, sprSplash, sprDroplet, sprSDSplash, sprSDDroplet]) or (((Theme = 'Snow') or (Theme = 'Christmas')) and ((ii = sprFlake) or (ii = sprSDFlake)))) then // FIXME: hack
         begin
             if AltPath = ptNone then
                 if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR] then // FIXME: hack
@@ -307,7 +307,7 @@ for ii:= Low(TSprite) to High(TSprite) do
                 else
                 begin
                     Texture:= Surface2Tex(tmpsurf, false);
-                    if (ii = sprWater) and ((cReducedQuality and (rq2DWater or rqClampLess)) = 0) then // HACK: We should include some sprite attribute to define the texture wrap directions
+                    if ((ii = sprWater) or (ii = sprSDWater)) and ((cReducedQuality and (rq2DWater or rqClampLess)) = 0) then // HACK: We should include some sprite attribute to define the texture wrap directions
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
                 end;
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, priority);

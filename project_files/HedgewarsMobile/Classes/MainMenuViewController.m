@@ -125,7 +125,8 @@
         [userDefaults synchronize];
         [self createNecessaryFiles];
     }
-    
+
+    /*
     ServerSetup *setup = [[ServerSetup alloc] init];
     if ([setup isNetworkReachable]) {
         DLog(@"network is reachable");
@@ -134,6 +135,7 @@
                                withObject:nil];
     }
     [setup release];
+    */
 }
 
 
