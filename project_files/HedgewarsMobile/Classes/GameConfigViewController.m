@@ -239,12 +239,15 @@
         StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
         [self presentModalViewController:statsPage animated:NO];
 
-        statsPage.statsDictionary = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-        if (statsPage.statsDictionary == nil)
+        NSArray *stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+        if ([stats count] == 0)
             [statsPage dismissModalViewControllerAnimated:NO];
-        else
+        else {
+            statsPage.statsArray = stats;
             [statsPage.tableView reloadData];
-        DLog(@"%@",statsPage.statsDictionary);
+            [statsPage viewWillAppear:YES];
+        }
+
         [statsPage release];
     }
 

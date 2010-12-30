@@ -22,9 +22,9 @@
 #import <UIKit/UIKit.h>
 
 @interface StatsPageViewController : UITableViewController {
-    NSDictionary *statsDictionary;
+    NSArray *statsArray;
 }
 
-@property (nonatomic,retain) NSDictionary *statsDictionary;
+@property (nonatomic,retain) NSArray *statsArray;
 
 @end

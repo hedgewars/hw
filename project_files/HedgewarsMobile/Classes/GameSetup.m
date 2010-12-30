@@ -28,7 +28,7 @@
 #define BUFFER_SIZE 255     // like in original frontend
 
 @implementation GameSetup
-@synthesize systemSettings, gameConfig, statsDictionary, savePath, menuStyle;
+@synthesize systemSettings, gameConfig, statsArray, savePath, menuStyle;
 
 -(id) initWithDictionary:(NSDictionary *)gameDictionary {
     if (self = [super init]) {
@@ -58,13 +58,13 @@
         } else
             self.savePath = path;
 
-        self.statsDictionary = nil;
+        self.statsArray = nil;
     }
     return self;
 }
 
 -(void) dealloc {
-    [statsDictionary release];
+    [statsArray release];
     [gameConfig release];
     [systemSettings release];
     [savePath release];
@@ -349,50 +349,35 @@
                 }
                 break;
             case 'i':
+                if (self.statsArray == nil)
+                    self.statsArray = [[NSMutableArray alloc] initWithCapacity:statMaxCapacity];
                 switch (buffer[1]) {
-                    case 'r':
-                        if (self.statsDictionary == nil)
-                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
-                        [self.statsDictionary setObject:[NSString stringWithUTF8String:&buffer[2]] forKey:@"winning_team"];
+                    case 'r':           // winning team
+                        [self.statsArray insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:0];
                         break;
-                    case 'D':
-                        if (self.statsDictionary == nil)
-                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
-                        [self.statsDictionary setObject:[NSString stringWithFormat:@"Best shot: %s", &buffer[2]] forKey:@"best_shot"];
+                    case 'D':           // best shot
+                        [self.statsArray addObject:[NSString stringWithFormat:@"Best shot by %s", &buffer[2]]];
                         break;
-                    case 'k':
-                        if (self.statsDictionary == nil)
-                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
-                        [self.statsDictionary setObject:[NSString stringWithFormat:@"Best hedgehog: %s", &buffer[2]] forKey:@"best_hog"];
+                    case 'k':           // best hedgehog
+                        [self.statsArray addObject:[NSString stringWithFormat:@"Best hedgehog: %s", &buffer[2]]];
                         break;
-                    case 'K':
-                        if (self.statsDictionary == nil)
-                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
-                        [self.statsDictionary setObject:[NSString stringWithFormat:@"%s hogs killed", &buffer[2]] forKey:@"kills"];
+                    case 'K':           // number of hogs killed
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%s hogs killed", &buffer[2]]];
                         break;
-                    case 'H':
-                        //something about team health
+                    case 'H':           //something about team health
                         break;
-                    case 'T':
-                        // local team stats
+                    case 'T':           // local team stats
                         break;
-                    case 'P':
-                        // player postion
+                    case 'P':           // player postion
                         break;
-                    case 's':
-                        if (self.statsDictionary == nil)
-                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
-                        [self.statsDictionary setObject:[NSString stringWithFormat:@"%s hit himself", &buffer[2]] forKey:@"self_dmg"];
+                    case 's':           // self damage
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%s hit himself", &buffer[2]]];
                         break;
-                    case 'S':
-                        if (self.statsDictionary == nil)
-                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
-                        [self.statsDictionary setObject:[NSString stringWithFormat:@"%s hit his friends", &buffer[2]] forKey:@"friendly_fire"];
+                    case 'S':           // friendly fire
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%s hit his friends", &buffer[2]]];
                         break;
-                    case 'B':
-                        if (self.statsDictionary == nil)
-                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
-                        [self.statsDictionary setObject:[NSString stringWithFormat:@"%s skipped most turns", &buffer[2]] forKey:@"turn_skips"];
+                    case 'B':           // turn skipped
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%s skipped most turns", &buffer[2]]];
                         break;
                     default:
                         DLog(@"Unhandled stat message, see statsPage.cpp");

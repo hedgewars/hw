@@ -85,7 +85,7 @@ int main (int argc, char *argv[]) {
 }
 
 // main routine for calling the actual game engine
--(NSDictionary *)startSDLgame:(NSDictionary *)gameDictionary {
+-(NSArray *)startSDLgame:(NSDictionary *)gameDictionary {
     UIWindow *gameWindow;
     if (IS_DUALHEAD())
         gameWindow = self.secondWindow;
@@ -144,7 +144,7 @@ int main (int argc, char *argv[]) {
     self.isInGame = NO;
     free(gameArgs);
     
-    NSDictionary *stat = setup.statsDictionary;
+    NSArray *stats = setup.statsArray;
     [setup release];
 
 
@@ -161,7 +161,7 @@ int main (int argc, char *argv[]) {
     [refBlackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
     [refSecondBlackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:2];
 
-    return stat;
+    return stats;
 }
 
 // overlay with controls, become visible later, with a transparency effect since the sdlwindow is not yet created

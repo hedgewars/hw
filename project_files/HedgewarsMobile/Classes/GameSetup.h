@@ -25,7 +25,7 @@
 @interface GameSetup : NSObject {
     NSDictionary *systemSettings;
     NSDictionary *gameConfig;
-    NSMutableDictionary *statsDictionary;
+    NSMutableArray *statsArray;
 
     NSInteger ipcPort;  // Port on which engine will listen
     TCPsocket csd;      // Client socket descriptor
@@ -38,7 +38,7 @@
 
 @property (nonatomic, retain) NSDictionary *systemSettings;
 @property (nonatomic, retain) NSDictionary *gameConfig;
-@property (nonatomic, retain) NSMutableDictionary *statsDictionary;
+@property (nonatomic, retain) NSMutableArray *statsArray;
 @property (nonatomic, retain) NSString *savePath;
 @property (assign) BOOL menuStyle;
 

@@ -23,7 +23,7 @@
 #import "CommodityFunctions.h"
 
 @implementation StatsPageViewController
-@synthesize statsDictionary;
+@synthesize statsArray;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -32,33 +32,36 @@
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0)
-        return [[self.statsDictionary allValues] count];
-    else
+    if (section == 0 || section == 2)
         return 1;
+    else
+        return [self.statsArray count] - 1;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier0 = @"Cell0";
+    NSInteger section = [indexPath section];
+    NSInteger row = [indexPath row];
 
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
 
     cell.textLabel.textAlignment = UITextAlignmentCenter;
-    if ([indexPath section] == 0) {
-        cell.textLabel.text = [[self.statsDictionary allValues] objectAtIndex:[indexPath row]];
+    if (section == 0) {
+        cell.textLabel.text = [self.statsArray objectAtIndex:row];
+    } else if (section == 1) {
+        cell.textLabel.text = [self.statsArray objectAtIndex:row + 1];
     } else {
         cell.textLabel.text = NSLocalizedString(@"Back",@"");
     }
 
     return cell;
 }
-
 
 #pragma mark -
 #pragma mark Table view delegate
@@ -72,11 +75,11 @@
 -(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    // Relinquish ownership any cached data, images, etc. that aren't in use.
+    self.statsArray = nil;
 }
 
 -(void) dealloc {
-    [statsDictionary release];
+    [statsArray release];
     [super dealloc];
 }
 
