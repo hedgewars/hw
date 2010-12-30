@@ -1857,12 +1857,15 @@ begin
                     inc(j)
                     end
                 end;
-        if hh <> nil then Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
-        if Gear <> nil then
+        if hh <> nil then 
             begin
-            Gear^.Hedgehog:= hh;
-            Gear^.Text:= text;
-            Gear^.FrameTicks:= x
+            Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
+            if Gear <> nil then
+                begin
+                Gear^.Hedgehog:= hh;
+                Gear^.Text:= text;
+                Gear^.FrameTicks:= x
+                end
             end
         //else ParseCommand('say ' + text, true)
         end
