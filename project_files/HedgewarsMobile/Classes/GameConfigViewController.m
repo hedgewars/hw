@@ -25,6 +25,7 @@
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
 #import "HelpPageViewController.h"
+#import "StatsPageViewController.h"
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
 #import "PascalImports.h"
@@ -226,19 +227,25 @@
                                     [NSNumber numberWithInt:self.interfaceOrientation],@"orientation",
                                     nil];
 
-    NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:gameDictionary,@"game_dictionary",
-                                      @"",@"savefile",
+    NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      gameDictionary,@"game_dictionary",
                                       [NSNumber numberWithBool:NO],@"netgame",
+                                      @"",@"savefile",
                                       nil];
     if (IS_IPAD())
         [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
     else {
         // this causes a sporadic crash on the ipad but without this rotation doesn't work on iphone
-        UIViewController *dummy = [[UIViewController alloc] init];
-        [self presentModalViewController:dummy animated:NO];
-        [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-        [self dismissModalViewControllerAnimated:NO];
-        [dummy release];
+        StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        [self presentModalViewController:statsPage animated:NO];
+
+        statsPage.statsDictionary = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+        if (statsPage.statsDictionary == nil)
+            [statsPage dismissModalViewControllerAnimated:NO];
+        else
+            [statsPage.tableView reloadData];
+        DLog(@"%@",statsPage.statsDictionary);
+        [statsPage release];
     }
 
 }

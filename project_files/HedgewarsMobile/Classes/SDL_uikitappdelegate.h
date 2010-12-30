@@ -40,7 +40,7 @@
 @property (nonatomic,retain) UIWindow *secondWindow;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
--(void) startSDLgame:(NSDictionary *)gameDictionary;
+-(NSDictionary *)startSDLgame:(NSDictionary *)gameDictionary;
 -(void) displayOverlayLater:(id) object;
 
 @end

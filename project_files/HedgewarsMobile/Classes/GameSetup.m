@@ -243,6 +243,7 @@
     BOOL clientQuit;
     char const buffer[BUFFER_SIZE];
     uint8_t msgSize;
+    int statMaxCapacity = 10-3;
 
     clientQuit = NO;
     csd = NULL;
@@ -348,25 +349,26 @@
                 }
                 break;
             case 'i':
-                // initialized with maximum
-                if (self.statsDictionary == nil)
-                    self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:10];
                 switch (buffer[1]) {
                     case 'r':
-                        DLog(@"Winning team: %s", &buffer[2]);
+                        if (self.statsDictionary == nil)
+                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
                         [self.statsDictionary setObject:[NSString stringWithUTF8String:&buffer[2]] forKey:@"winning_team"];
                         break;
                     case 'D':
-                        DLog(@"Best Shot: %s", &buffer[2]);
-                        [self.statsDictionary setObject:[NSString stringWithUTF8String:&buffer[2]] forKey:@"best_shot"];
+                        if (self.statsDictionary == nil)
+                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
+                        [self.statsDictionary setObject:[NSString stringWithFormat:@"Best shot: %s", &buffer[2]] forKey:@"best_shot"];
                         break;
                     case 'k':
-                        DLog(@"Best Hedgehog: %s", &buffer[2]);
-                        [self.statsDictionary setObject:[NSString stringWithUTF8String:&buffer[2]] forKey:@"best_hog"];
+                        if (self.statsDictionary == nil)
+                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
+                        [self.statsDictionary setObject:[NSString stringWithFormat:@"Best hedgehog: %s", &buffer[2]] forKey:@"best_hog"];
                         break;
                     case 'K':
-                        DLog(@"Hogs Killed: %s", &buffer[2]);
-                        [self.statsDictionary setObject:[NSString stringWithUTF8String:&buffer[2]] forKey:@"kills"];
+                        if (self.statsDictionary == nil)
+                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
+                        [self.statsDictionary setObject:[NSString stringWithFormat:@"%s hogs killed", &buffer[2]] forKey:@"kills"];
                         break;
                     case 'H':
                         //something about team health
@@ -378,16 +380,19 @@
                         // player postion
                         break;
                     case 's':
-                        DLog(@"Most self damage: %s", &buffer[2]);
-                        [self.statsDictionary setObject:[NSString stringWithUTF8String:&buffer[2]] forKey:@"self_dmg"];
+                        if (self.statsDictionary == nil)
+                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
+                        [self.statsDictionary setObject:[NSString stringWithFormat:@"%s hit himself", &buffer[2]] forKey:@"self_dmg"];
                         break;
                     case 'S':
-                        DLog(@"Most friendly fire: %s", &buffer[2]);
-                        [self.statsDictionary setObject:[NSString stringWithUTF8String:&buffer[2]] forKey:@"friendly_fire"];
+                        if (self.statsDictionary == nil)
+                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
+                        [self.statsDictionary setObject:[NSString stringWithFormat:@"%s hit his friends", &buffer[2]] forKey:@"friendly_fire"];
                         break;
                     case 'B':
-                        DLog(@"Most turn skipped by: %s", &buffer[2]);
-                        [self.statsDictionary setObject:[NSString stringWithUTF8String:&buffer[2]] forKey:@"turn_skips"];
+                        if (self.statsDictionary == nil)
+                            self.statsDictionary = [[NSMutableDictionary alloc] initWithCapacity:statMaxCapacity];
+                        [self.statsDictionary setObject:[NSString stringWithFormat:@"%s skipped most turns", &buffer[2]] forKey:@"turn_skips"];
                         break;
                     default:
                         DLog(@"Unhandled stat message, see statsPage.cpp");
