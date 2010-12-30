@@ -30,7 +30,7 @@ procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
 uses uStore, uConsts, uConsole, uRandom, uVisualGears, uSound, GLunit,
-     uTypes, uVariables, uUtils, uDebug;
+     uTypes, uVariables, uUtils, uDebug, sysutils;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
@@ -366,7 +366,7 @@ TryPut:= bRes;
 end;
 
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
-var s: shortstring;
+var s, key: shortstring;
     f: textfile;
     i, ii, numFlakes: LongInt;
     c1, c2: TSDL_Color;
@@ -388,76 +388,184 @@ Assign(f, s);
 filemode:= 0; // readonly
 Reset(f);
 
-// read sky and explosion border colors
-Readln(f, c1.r, c1.g, c1. b);
-Readln(f, c2.r, c2.g, c2. b);
-// read water gradient colors
-Readln(f, WaterColorArray[0].r, WaterColorArray[0].g, WaterColorArray[0].b);
-Readln(f, WaterColorArray[2].r, WaterColorArray[2].g, WaterColorArray[2].b, cWaterOpacity);
-WaterColorArray[0].a := 255;
-WaterColorArray[2].a := 255;
-WaterColorArray[1]:= WaterColorArray[0];
-WaterColorArray[3]:= WaterColorArray[2];
+ThemeObjects.Count:= 0;
+SprayObjects.Count:= 0;
 
-glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99); // sky color
-cExplosionBorderColor:= c2.value or AMask;
-
-ReadLn(f, s);
-if MusicFN = '' then MusicFN:= s;
-
-ReadLn(f, cCloudsNumber);
-
-// TODO - adjust all the theme cloud numbers. This should not be a permanent fix
-//cCloudsNumber:= cCloudsNumber * (LAND_WIDTH div 2048);
-
-// scale number of clouds depending on screen space (two times land width)
-cCloudsNumber:= cCloudsNumber * cScreenSpace div LAND_WIDTH;
-
-Readln(f, ThemeObjects.Count);
-for i:= 0 to Pred(ThemeObjects.Count) do
+while not eof(f) do
     begin
-    Readln(f, s); // filename
-    with ThemeObjects.objs[i] do
+    Readln(f, s);
+    if Length(s) = 0 then continue;
+    if s[1] = ';' then continue;
+
+    i:= Pos('=', s);
+    key:= Trim(Copy(s, 1, i - 1));
+    Delete(s, 1, i);
+
+    if key = 'sky' then
+        begin
+        i:= Pos(',', s);
+        c1.r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        c1.g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        c1.b:= StrToInt(Trim(s));
+        glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99);
+        end
+    else if key = 'border' then
+        begin
+        i:= Pos(',', s);
+        c2.r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        c2.g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        c2.b:= StrToInt(Trim(s));
+        cExplosionBorderColor:= c2.value or AMask;
+        end
+    else if key = 'water-top' then
+        begin
+        i:= Pos(',', s);
+        WaterColorArray[0].r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        WaterColorArray[0].g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        WaterColorArray[0].b:= StrToInt(Trim(s));
+        WaterColorArray[0].a := 255;
+        WaterColorArray[1]:= WaterColorArray[0];
+        end
+    else if key = 'water-bottom' then
+        begin
+        i:= Pos(',', s);
+        WaterColorArray[2].r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        WaterColorArray[2].g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        WaterColorArray[2].b:= StrToInt(Trim(s));
+        WaterColorArray[2].a := 255;
+        WaterColorArray[3]:= WaterColorArray[2];
+        end
+    else if key = 'water-opacity' then cWaterOpacity:= StrToInt(Trim(s))
+    else if key = 'music' then MusicFN:= Trim(s)
+    else if key = 'clouds' then cCloudsNumber:= StrToInt(Trim(s)) * cScreenSpace div LAND_WIDTH
+    else if key = 'object' then
+        begin
+        inc(ThemeObjects.Count);
+        with ThemeObjects.objs[Pred(ThemeObjects.Count)] do
             begin
-            Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, ifCritical or ifTransparent or ifIgnoreCaps);
+            i:= Pos(',', s);
+            Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, i - 1)), ifCritical or ifTransparent or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
-            Read(f, Maxcnt);
+            Delete(s, 1, i);
+            i:= Pos(',', s);
+            Maxcnt:= StrToInt(Trim(Copy(s, 1, i - 1)));
+            Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
             with inland do
                 begin
-                Read(f, x, y, w, h);
+                i:= Pos(',', s);
+                x:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                Delete(s, 1, i);
+                i:= Pos(',', s);
+                y:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                Delete(s, 1, i);
+                i:= Pos(',', s);
+                w:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                Delete(s, 1, i);
+                i:= Pos(',', s);
+                h:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                Delete(s, 1, i);
                 CheckRect(Width, Height, x, y, w, h)
                 end;
-            Read(f, rectcnt);
+            i:= Pos(',', s);
+            rectcnt:= StrToInt(Trim(Copy(s, 1, i - 1)));
+            Delete(s, 1, i);
             for ii:= 1 to rectcnt do
                 with outland[ii] do
                     begin
-                    Read(f, x, y, w, h);
+                    i:= Pos(',', s);
+                    x:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                    Delete(s, 1, i);
+                    i:= Pos(',', s);
+                    y:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                    Delete(s, 1, i);
+                    i:= Pos(',', s);
+                    w:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                    Delete(s, 1, i);
+                    if ii = rectcnt then h:= StrToInt(Trim(s))
+                    else
+                        begin
+                        i:= Pos(',', s);
+                        h:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                        Delete(s, 1, i)
+                        end;
                     CheckRect(Width, Height, x, y, w, h)
                     end;
-            ReadLn(f)
             end;
+        end
+    else if key = 'spray' then
+        begin
+        inc(SprayObjects.Count);
+        with SprayObjects.objs[Pred(SprayObjects.Count)] do
+            begin
+            i:= Pos(',', s);
+            Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, i - 1)), ifCritical or ifTransparent or ifIgnoreCaps);
+            Width:= Surf^.w;
+            Height:= Surf^.h;
+            Delete(s, 1, i);
+            Maxcnt:= StrToInt(Trim(s));
+            end;
+        end
+    else if key = 'flakes' then
+        begin
+        i:= Pos(',', s);
+        vobCount:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        if vobCount > 0 then
+            begin
+            i:= Pos(',', s);
+            vobFramesCount:= StrToInt(Trim(Copy(s, 1, i - 1)));
+            Delete(s, 1, i);
+            i:= Pos(',', s);
+            vobFrameTicks:= StrToInt(Trim(Copy(s, 1, i - 1)));
+            Delete(s, 1, i);
+            i:= Pos(',', s);
+            vobVelocity:= StrToInt(Trim(Copy(s, 1, i - 1)));
+            Delete(s, 1, i);
+            vobFallSpeed:= StrToInt(Trim(s));
+            end;
+        end
+    else if key = 'sd-water-top' then
+        begin
+        i:= Pos(',', s);
+        SDWaterColorArray[0].r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        SDWaterColorArray[0].g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        SDWaterColorArray[0].b:= StrToInt(Trim(s));
+        SDWaterColorArray[0].a := 255;
+        SDWaterColorArray[1]:= SDWaterColorArray[0];
+        end
+    else if key = 'sd-water-bottom' then
+        begin
+        i:= Pos(',', s);
+        SDWaterColorArray[2].r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        SDWaterColorArray[2].g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        Delete(s, 1, i);
+        SDWaterColorArray[2].b:= StrToInt(Trim(s));
+        SDWaterColorArray[2].a := 255;
+        SDWaterColorArray[3]:= SDWaterColorArray[2];
+        end
+    else if key = 'sd-water-opacity' then continue //cSDWaterOpacity:= StrToInt(Trim(s))
+    else if key = 'sd-clouds' then continue //cSDCloudsNumber:= StrToInt(Trim(s)) * cScreenSpace div LAND_WIDTH
+    else if key = 'sd-flakes' then continue //TODO: make :P
     end;
-
-// sprays
-Readln(f, SprayObjects.Count);
-for i:= 0 to Pred(SprayObjects.Count) do
-    begin
-    Readln(f, s); // filename
-    with SprayObjects.objs[i] do
-         begin
-         Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, ifCritical or ifTransparent or ifIgnoreCaps);
-         Width:= Surf^.w;
-         Height:= Surf^.h;
-         ReadLn(f, Maxcnt)
-         end;
-    end;
-
-// snowflakes
-Readln(f, vobCount);
-if vobCount > 0 then
-    Readln(f, vobFramesCount, vobFrameTicks, vobVelocity, vobFallSpeed);
 
 // adjust amount of flakes scaled by screen space
 vobCount:= longint(vobCount);

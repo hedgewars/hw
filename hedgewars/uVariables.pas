@@ -567,7 +567,11 @@ const
             (FileName:    'SDWater'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprSDWater
             (FileName:   'SDClouds'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
-            Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true) // sprSDCloud
+            Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprSDCloud
+            (FileName:   'SDSplash'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
+            Width:  80; Height: 50; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSDSplash
+            (FileName:  'SDDroplet'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true)// sprSDDroplet
             );
 
 
@@ -2179,13 +2183,13 @@ begin
         LAND_HEIGHT_MASK:= $FFFFF800
         end;
 
-    SDWaterColorArray[0].r := 184;
-    SDWaterColorArray[0].g := 152;
-    SDWaterColorArray[0].b := 195;
+    SDWaterColorArray[0].r := 182;
+    SDWaterColorArray[0].g := 144;
+    SDWaterColorArray[0].b := 201;
     SDWaterColorArray[0].a := 255;
-    SDWaterColorArray[2].r := 152;
-    SDWaterColorArray[2].g := 120;
-    SDWaterColorArray[2].b := 163;
+    SDWaterColorArray[2].r := 150;
+    SDWaterColorArray[2].g := 112;
+    SDWaterColorArray[2].b := 169;
     SDWaterColorArray[2].a := 255;
     SDWaterColorArray[1]:= SDWaterColorArray[0];
     SDWaterColorArray[3]:= SDWaterColorArray[2];
