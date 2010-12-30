@@ -226,8 +226,10 @@
                                     [NSNumber numberWithInt:self.interfaceOrientation],@"orientation",
                                     nil];
 
-    NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:gameDictionary,@"game_dictionary", @"",@"savefile",
-                                      [NSNumber numberWithBool:NO],@"netgame", nil];
+    NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:gameDictionary,@"game_dictionary",
+                                      @"",@"savefile",
+                                      [NSNumber numberWithBool:NO],@"netgame",
+                                      nil];
     if (IS_IPAD())
         [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
     else {

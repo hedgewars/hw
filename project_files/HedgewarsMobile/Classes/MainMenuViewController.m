@@ -99,8 +99,6 @@
     createWeaponNamed(@"Minefield", 5);
     createWeaponNamed(@"Thinking with Portals", 6);
     // merge not needed because weapons not present in the set are 0ed by GameSetup
-
-    DLog(@"Success");
 }
 
 #pragma mark -

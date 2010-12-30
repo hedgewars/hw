@@ -118,6 +118,7 @@ int main (int argc, char *argv[]) {
     }
     [blackView release];
 
+
     // pull out useful configuration info from various files
     GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
     NSNumber *isNetGameNum = [gameDictionary objectForKey:@"netgame"];
@@ -126,23 +127,26 @@ int main (int argc, char *argv[]) {
                              toTarget:setup
                            withObject:nil];
 
-    const char **gameArgs = [setup getSettings:[gameDictionary objectForKey:@"savefile"]];
     NSNumber *menuStyle = [NSNumber numberWithBool:setup.menuStyle];
-    [setup release];
-
-    // since the sdlwindow is not yet created, we add the overlayController with a delay
+    NSNumber *orientation = [[gameDictionary objectForKey:@"game_dictionary"] objectForKey:@"orientation"];
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                           isNetGameNum,@"net",
                           menuStyle,@"menu",
-                          [[gameDictionary objectForKey:@"game_dictionary"] objectForKey:@"orientation"],@"orientation",
+                          orientation,@"orientation",
                           nil];
     [self performSelector:@selector(displayOverlayLater:) withObject:dict afterDelay:1];
 
-    // this is the pascal fuction that starts the game (wrapped around isInGame)
+    // need to set again [gameDictionary objectForKey:@"savefile"] because if it's empty it means it's a normal game
+    const char **gameArgs = [setup getGameSettings:[gameDictionary objectForKey:@"savefile"]];
     self.isInGame = YES;
+    // this is the pascal fuction that starts the game
     Game(gameArgs);
     self.isInGame = NO;
     free(gameArgs);
+    
+    NSDictionary *stat = setup.statsDictionary;
+    [setup release];
+
 
     [self.uiwindow makeKeyAndVisible];
     [self.uiwindow bringSubviewToFront:self.mainViewController.view];
@@ -156,9 +160,11 @@ int main (int argc, char *argv[]) {
     [UIView commitAnimations];
     [refBlackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
     [refSecondBlackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:2];
+
+    DLog(@"%@",stat);
 }
 
-// overlay with controls, become visible later, with a transparency effect
+// overlay with controls, become visible later, with a transparency effect since the sdlwindow is not yet created
 -(void) displayOverlayLater:(id) object {
     NSDictionary *dict = (NSDictionary *)object;
     self.overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
