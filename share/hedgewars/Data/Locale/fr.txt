@@ -42,6 +42,16 @@
 00:39=Soucoupe Volante
 00:40=Cocktail Molotov
 00:41=Piaf
+00:42=Fusil à portails
+00:43=Attaque du Piano
+00:44=Vieux Limburger
+00:45=Fusil Sinus (bêta)
+00:46=Lance-flammes
+00:47=Mines adhésives
+00:48=Marteau
+00:49=Resurrecteur
+00:50=Attaque perforante
+00:51=Boule de terre
 
 01:00=C'est parti !
 01:01=Round ex-aequo
@@ -137,7 +147,7 @@
 02:01=%1 est parti visiter l'aquarium
 02:01=%1 a trouvé la cité perdue d'Atlantide
 02:01=%1 se propose pour le rôle principal de Bioshock 3
-02:01=Ta paggaie pour chiens aurait pû servir, %1
+02:01=Ta pagaie pour chiens aurait pû servir, %1
 02:01=%1 aurait dû acheter un jet ski
 02:01=%1 n'aime pas les sports aquatiques
 02:01=%1 va faire des bulles pour toujours
@@ -178,7 +188,7 @@
 02:02=Que la bataille du jour commence !
 02:02=Que la bataille de l'heure commence !
 02:02=Faites de votre mieux !
-02:02=Detruisez l'ennemi !
+02:02=Détruisez l'ennemi !
 02:02=Bonne chance !
 02:02=Amusez-vous bien !
 02:02=Combattez avec honneur !
@@ -265,7 +275,7 @@
 02:08=%1 est une vache !
 02:08=%1 attend la mort subite
 02:08=%1 n'est pas du genre bagarreur
-02:08=%1 réflechit au sens de la vie
+02:08=%1 réfléchit au sens de la vie
 02:08=%1 n'était pas un bon tireur de toutes manières
 02:08=%1 ne voulait pas rejoindre l'armée au début
 02:08=Arrête de perdre ton temps, %1
@@ -299,7 +309,7 @@
 02:09=%1 montre à l'ennemi de quoi il est capable
 02:09=%1 ne peut pas être parfait tout le temps
 02:09=Ne t'inquiète pas %1, personne p'est narfait
-02:09=%1 a fait cela totallement intentionnellement
+02:09=%1 a fait cela totalement intentionnellement
 02:09=Je ne le dirais à personne, %1
 02:09=C'est embarrassant !
 02:09=Je suis sûr que personne n'a vu cela %1
@@ -397,7 +407,15 @@
 04:38= Le fusil à lunettes peut être une de armes les plus dévastatrices|de tout votre arsenal, toutefois il est totalement inefficace|en combat rapproché. Les dommages qu'il cause augmentent suivant|la distance de la cible.|Attaque : Tirez (deux fois) 
 04:39=Volez vers d'autres secteurs de la carte en utilisant une soucoupe|volante. Ce moyen de transport pas facile à dompter est capable de vous|emporter vers presque tous les lieux du champ de bataille|Attaque : Activer|Haut/Gauche/Droite : appliquez la force dans une direction 
 04:40=Mettez le feu à un territoire en utilisant cette bouteille remplie|de liquide inflammable.|Attaque : maintenez pour tirer avec plus de force 
-04:41=Une arme naturelle qui peut suffire à dégommer même la soucoupe|volante.  Le piaf peut transporter votre hérisson et|balancer de soeufs sur vos ennemis !|Attaque : Activez et larguez des oeufs|Haut/Gauche/Droite: voltigez vers une direction.
+04:41=Une arme naturelle qui peut suffire à dégommer même la soucoupe|volante.  Le piaf peut transporter votre hérisson et|balancer des œufs sur vos ennemis !|Attaque : Activez et larguez des œufs|Haut/Gauche/Droite: voltigez vers une direction.
+04:42=Ce fusil à portails est capable de vous transporter instantanément,| ainsi que vos ennemis ou des armes entre deux points du terrain. |Utilisez-le intelligemment et votre campagne sera un ... GRAND SUCCÈS !|Attaque : Crée un portail|Modificateur : Change la couleur du portail
+04:43=Faites de vos débuts musicaux un succès explosif !| Lâchez un piano depuis les cieux, mais attention ... quelqu'un doit|jouer dessus, et cela pourrait lui coûter sa vie !|Curseur : Choix de la cible|F1-F9 : Jouer du piano
+04:44=Ce n'est pas juste un fromage, c'est une arme biologique !|Il ne provoquera de gros dommages une fois que le compteur|atteindra zéro mais il empoisonnera tous les malchanceux touchés par l'odeur !|1-5 : Lancez le minuteur de la grenade|Attaque : maintenez pour la lancer avec plus de force 
+04:45=Tous ces cours de physique ont finalement payé,|lancez une onde Sinus dévastatrice à vos ennemis.|Attention au recul ! (cette arme est incomplète)|Attaque : Activez
+04:46=Recouvrez vos ennemis de sifflantes flammes liquides.|Hauts les cœurs !|Attaque : Activez|Haut/Bas : Continuez à viser|Droite/Gauche : Changer la puissance de tir
+04:47=Doublez le fun avec deux mines, piquantes, furtives et collantes.|Provoquez une réaction en chaine ou défendez-vous ! (ou les deux)|Attaque : maintenez pour tirer avec plus de force (deux fois)
+04:48=Pourquoi les taupes auraient tous le fun ?|Un bon coup de ce marteau enlèvera un tiers de la santé du hérisson et l'enverra dans le sol|Attaque : Activez
+04:49=Ressuscite vos amis !Mais méfiez-vous, cela ressuscite également vos ennemis.|Attaque : Maintenez attaque pressée pour ressusciter lentement|Haut : Accélérer la résurrection
 
 ; Game goal strings 
 05:00=Modes de jeu 
