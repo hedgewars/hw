@@ -563,6 +563,7 @@ var xx, yy, px, py, i: LongInt;
     move, allpx: Boolean;
     s: PSDL_Surface;
     p: PLongwordArray;
+    oAlpha, nAlpha: byte;
 begin
 if GameTicks and $7 = 0 then
     begin
@@ -590,49 +591,89 @@ if GameTicks and $7 = 0 then
         move:= false;
     // move back to cloud layer
         if yy > cWaterLine then move:= true
-        else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] > 255) then
+        else if ((yy and LAND_HEIGHT_MASK) <> 0) or ((xx and LAND_WIDTH_MASK) <> 0) then move:=true
+        // Solid pixel encountered
+        else if (Land[yy, xx] > 255) then
             begin
-            // we've collided with land. draw some stuff and get back into the clouds
-            move:= true;
-            if (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope) then
+            // If there's room below keep falling
+            if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (Land[yy-1, xx] = 0) then
                 begin
-////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
-                if cWindSpeed * 1600 + dX < _0 then i:= -1
-                else i:= 1;
-                if (yy > 0) and ((Land[yy-1, xx] and $FF00) = 0) then dec(yy)
-                else dec(xx, i);
-                dec(yy,2);
-                dec(xx,i);
-                s:= SpritesData[sprSnow].Surface;
-                p:= s^.pixels;
-                allpx:= true;
-                for py:= 0 to Pred(s^.h) do
-                    begin
-                    for px:= 0 to Pred(s^.w) do
-                        if (((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0) and 
-                           ((Land[yy + py, xx + px] and $FF00) = 0) then
-                            begin
-                            if (cReducedQuality and rqBlurryLand) = 0 then
-                                LandPixels[yy + py, xx + px]:= p^[px]
-                            else
-                                LandPixels[(yy + py) div 2, (xx + px) div 2]:= p^[px]
-                            end
-                        else allpx:= false;
-                    p:= @(p^[s^.pitch shr 2])
-                    end;
-                if allpx then UpdateLandTexture(xx, 4, yy, 4)
-                else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) then UpdateLandTexture(xx, 1, yy, 1);
-                inc(yy,2);
-                inc(xx,i);
-                if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfObject;
-                if yy > 0 then
-                    begin 
-                    Land[yy-1, xx]:= Land[yy-1, xx] or lfObject;
-                    if ((xx-i and LAND_WIDTH_MASK) = 0) then Land[yy-1, xx-i]:= Land[yy-1, xx-i] or lfObject;
-                    end;
-                if ((xx-i and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx-i]:= Land[yy, xx-i] or lfObject
-////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+                X:= X - cWindSpeed * 1600 - dX;
                 end
+            // If there's room below, on the sides, fill the gaps
+            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx-(1*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx-(1*hwSign(cWindSpeed)))] = 0) then
+                begin
+                X:= X - _0_8 * hwSign(cWindSpeed);
+                Y:= Y - dY - cGravity * vobFallSpeed * 8;
+                end
+            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx-(2*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx-(2*hwSign(cWindSpeed)))] = 0) then
+                begin
+                X:= X - _0_8 * 2 * hwSign(cWindSpeed);
+                Y:= Y - dY - cGravity * vobFallSpeed * 8;
+                end
+            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx+(1*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx+(1*hwSign(cWindSpeed)))] = 0) then
+                begin
+                X:= X + _0_8 * hwSign(cWindSpeed);
+                Y:= Y - dY - cGravity * vobFallSpeed * 8;
+                end
+            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx+(2*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx+(2*hwSign(cWindSpeed)))] = 0) then
+                begin
+                X:= X + _0_8 * 2 * hwSign(cWindSpeed);
+                Y:= Y - dY - cGravity * vobFallSpeed * 8;
+                end
+            else
+                begin
+                // we've collided with land. draw some stuff and get back into the clouds
+                move:= true;
+                if (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope) then
+                    begin
+    ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+                    dec(yy,3);
+                    dec(xx,2);
+                    s:= SpritesData[sprSnow].Surface;
+                    p:= s^.pixels;
+                    allpx:= true;
+                    for py:= 0 to Pred(s^.h) do
+                        begin
+                        for px:= 0 to Pred(s^.w) do
+                            if (((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0) then
+                                begin
+                                if (cReducedQuality and rqBlurryLand) = 0 then
+                                    begin
+                                    LandPixels[yy + py, xx + px]:= addBgColor(LandPixels[yy + py, xx + px], p^[px]);
+                                    Land[yy + py, xx + px]:= Land[yy + py, xx + px] or lfObject;
+                                    end
+                                else
+                                    begin
+                                    LandPixels[(yy + py) div 2, (xx + px) div 2]:= addBgColor(LandPixels[(yy + py) div 2, (xx + px) div 2], p^[px]);
+                                    Land[(yy + py) div 2, (xx + px) div 2]:= Land[(yy + py) div 2, (xx + px) div 2] or lfObject;
+                                    end;
+                                end
+                            else allpx:= false;
+                        p:= @(p^[s^.pitch shr 2])
+                        end;
+                    
+                    for py:= (yy) to (yy+1) do
+                        begin
+                        for px:= (xx+2) to (xx+3) do
+                            begin
+                            Land[py, px]:= lfBasic;
+                            end;
+                        end;
+                    
+                    if allpx then UpdateLandTexture(xx, Pred(s^.h), yy, Pred(s^.w))
+                    else
+                        begin
+                        UpdateLandTexture(
+                            max(0, min(LAND_WIDTH, xx)),
+                            min(LAND_WIDTH - xx, Pred(s^.w)),
+                            max(0, min(LAND_WIDTH, yy)),
+                            min(LAND_HEIGHT - yy, Pred(s^.h))
+                        );
+                        end;
+    ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+                    end
+                end;
             end;
         if move then
             begin
