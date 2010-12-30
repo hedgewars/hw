@@ -555,7 +555,7 @@ begin
                 amPortalGun: if (CurWeapon^.Timer and 2) <> 0 then // Add a new Hedgehog value instead of abusing timer?
                                 DrawRotatedF(sprPortalGun, hx, hy, 0, sign, aangle)
                         else
-                                DrawRotatedF(sprPortalGun, hx, hy, 1+(CurWeapon^.Timer and 1), sign, aangle);
+                                DrawRotatedF(sprPortalGun, hx, hy, 1+CurWeapon^.Pos, sign, aangle);
                 amSniperRifle: DrawRotatedF(sprSniperRifle, hx, hy, 0, sign, aangle);
                 amBlowTorch: DrawRotated(sprHandBlowTorch, hx, hy, sign, aangle);
                 amCake: DrawRotated(sprHandCake, hx, hy, sign, aangle);

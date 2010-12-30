@@ -3564,8 +3564,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doPortalColorSwitch();
-var flags: LongWord;
-    CurWeapon: PAmmo;
+var CurWeapon: PAmmo;
 begin
     if (CurrentHedgehog <> nil)
        and (CurrentHedgehog^.Gear <> nil)
@@ -3576,11 +3575,10 @@ begin
                 CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gmSwitch;
                 
                 CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
-                flags := CurWeapon^.Timer and not 2;
-                if (flags and 1) = 0 then
-                    CurWeapon^.Timer := flags or 1
+                if CurWeapon^.Pos <> 0 then
+                    CurWeapon^.Pos := 0
                 else
-                    CurWeapon^.Timer := flags and not 1;
+                    CurWeapon^.Pos := 1;
             end;
 end;
 
@@ -3849,8 +3847,7 @@ var
     s: hwFloat;
 
 procedure loadNewPortalBall(oldPortal: PGear; destroyGear: Boolean);
-var 
-    flags: LongWord;
+var
     CurWeapon: PAmmo;
 begin
     if CurrentHedgehog <> nil then
@@ -3859,18 +3856,19 @@ begin
             CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
             if (CurAmmoType = amPortalGun) then
                 begin
-                flags := CurWeapon^.Timer;
+                if not destroyGear then
+                    begin
+                    // switch color of ball to opposite of oldPortal
+                    if (oldPortal^.Tag and 2) = 0 then
+                        CurWeapon^.Pos:= 1
+                    else
+                        CurWeapon^.Pos:= 0;
+                    end;
 
-                if destroyGear xor ((oldPortal^.Tag and 2) = 0) then
-                    flags := flags or 1
-                else
-                    flags := flags and not 1;
-
-                CurWeapon^.Timer := flags and not 2;
                 // make the ball visible
+                CurWeapon^.Timer := 0;
                 end
             end;
-
     if destroyGear then oldPortal^.Timer:= 0;
 end;
 
@@ -3955,11 +3953,8 @@ begin
                 newPortal^.Elasticity.isNegative := not newPortal^.Elasticity.isNegative;
 
             // make portal gun look unloaded
-            CurWeapon^.Timer := CurWeapon^.Timer or 2;
-
-            // set portal to the currently chosen color
-            if ((CurWeapon^.Timer and 1) <> 0) then
-                newPortal^.Tag := newPortal^.Tag or 2;
+            if (CurWeapon <> nil) and (CurAmmoType = amPortalGun) then
+                CurWeapon^.Timer := CurWeapon^.Timer or 2;
 
             iterator := GearsList;
             while iterator <> nil do

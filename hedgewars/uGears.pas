@@ -477,7 +477,8 @@ case Kind of
                 gear^.nImpactSounds:= 1;
                 gear^.AdvBounce:= 0;
                 gear^.Radius:= 16;
-                gear^.Tag:= 0;
+                // set color
+                gear^.Tag:= 2 * gear^.Timer;
                 gear^.Timer:= 15000;
                 gear^.RenderTimer:= false;
                 gear^.Health:= 100;
