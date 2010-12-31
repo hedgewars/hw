@@ -9,7 +9,22 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation>备份</translation>
+    </message>
+</context>
+<context>
+    <name>DrawMapWidget</name>
+    <message>
+        <source>File error</source>
+        <translation>文件错误</translation>
+    </message>
+    <message>
+        <source>Cannot open file &apos;%1&apos; for writing</source>
+        <translation>无法打开文件 &apos;%1&apos; 写入</translation>
+    </message>
+    <message>
+        <source>Cannot read file &apos;%1&apos;</source>
+        <translation>无法读取文件 &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -187,11 +202,11 @@
     </message>
     <message>
         <source>Seed</source>
-        <translation type="unfinished"></translation>
+        <translation>作种</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished"></translation>
+        <translation>设定</translation>
     </message>
 </context>
 <context>
@@ -329,31 +344,31 @@ or pick another nickname in game config:</source>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>清除</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">读取</translation>
+        <translation>读取</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>保存</translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>读取已经绘制的地图</translation>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>绘制的地图 (*.hwmap);;全部文件 (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>保存绘制的地图</translation>
     </message>
 </context>
 <context>
@@ -1083,7 +1098,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>备份</translation>
     </message>
 </context>
 <context>
@@ -1102,7 +1117,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>备份</translation>
     </message>
 </context>
 <context>
@@ -1310,7 +1325,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>hand drawn map...</source>
-        <translation type="unfinished"></translation>
+        <translation>手绘地图</translation>
     </message>
 </context>
 <context>
@@ -1540,7 +1555,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Gameplay</source>
-        <translation type="unfinished"></translation>
+        <translation>游戏</translation>
     </message>
 </context>
 <context>

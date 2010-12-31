@@ -233,10 +233,10 @@ begin
     AllInactive := false;
     Gear^.Y := Gear^.Y + cDrownSpeed;
     Gear^.X := Gear^.X + Gear^.dX * cDrownSpeed;
-    if (cWaterOpacity > $FE) or (hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater) then
+    if (not SuddenDeathDmg and (cWaterOpacity > $FE)) or (SuddenDeathDmg and (cSDWaterOpacity > $FE)) or (hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater) then
         DeleteGear(Gear);
     // Create some bubbles (0.5% might be better but causes too few bubbles sometimes)
-    if (cWaterOpacity < $FF) and ((GameTicks and $1F) = 0) then
+    if ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cSDWaterOpacity < $FF))) and ((GameTicks and $1F) = 0) then
         if (Gear^.Kind = gtHedgehog) and (Random(4) = 0) then
             AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius,
             vgtBubble)
@@ -563,6 +563,7 @@ var xx, yy, px, py, i: LongInt;
     move, allpx: Boolean;
     s: PSDL_Surface;
     p: PLongwordArray;
+    oAlpha, nAlpha: byte;
 begin
 if GameTicks and $7 = 0 then
     begin
@@ -590,49 +591,89 @@ if GameTicks and $7 = 0 then
         move:= false;
     // move back to cloud layer
         if yy > cWaterLine then move:= true
-        else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] > 255) then
+        else if ((yy and LAND_HEIGHT_MASK) <> 0) or ((xx and LAND_WIDTH_MASK) <> 0) then move:=true
+        // Solid pixel encountered
+        else if (Land[yy, xx] > 255) then
             begin
-            // we've collided with land. draw some stuff and get back into the clouds
-            move:= true;
-            if (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope) then
+            // If there's room below keep falling
+            if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (Land[yy-1, xx] = 0) then
                 begin
-////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
-                if cWindSpeed * 1600 + dX < _0 then i:= -1
-                else i:= 1;
-                if (yy > 0) and ((Land[yy-1, xx] and $FF00) = 0) then dec(yy)
-                else dec(xx, i);
-                dec(yy,2);
-                dec(xx,i);
-                s:= SpritesData[sprSnow].Surface;
-                p:= s^.pixels;
-                allpx:= true;
-                for py:= 0 to Pred(s^.h) do
-                    begin
-                    for px:= 0 to Pred(s^.w) do
-                        if (((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0) and 
-                           ((Land[yy + py, xx + px] and $FF00) = 0) then
-                            begin
-                            if (cReducedQuality and rqBlurryLand) = 0 then
-                                LandPixels[yy + py, xx + px]:= p^[px]
-                            else
-                                LandPixels[(yy + py) div 2, (xx + px) div 2]:= p^[px]
-                            end
-                        else allpx:= false;
-                    p:= @(p^[s^.pitch shr 2])
-                    end;
-                if allpx then UpdateLandTexture(xx, 4, yy, 4)
-                else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) then UpdateLandTexture(xx, 1, yy, 1);
-                inc(yy,2);
-                inc(xx,i);
-                if ((xx and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx]:= Land[yy, xx] or lfObject;
-                if yy > 0 then
-                    begin 
-                    Land[yy-1, xx]:= Land[yy-1, xx] or lfObject;
-                    if ((xx-i and LAND_WIDTH_MASK) = 0) then Land[yy-1, xx-i]:= Land[yy-1, xx-i] or lfObject;
-                    end;
-                if ((xx-i and LAND_WIDTH_MASK) = 0) and ((yy and LAND_HEIGHT_MASK) = 0) then Land[yy, xx-i]:= Land[yy, xx-i] or lfObject
-////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+                X:= X - cWindSpeed * 1600 - dX;
                 end
+            // If there's room below, on the sides, fill the gaps
+            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx-(1*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx-(1*hwSign(cWindSpeed)))] = 0) then
+                begin
+                X:= X - _0_8 * hwSign(cWindSpeed);
+                Y:= Y - dY - cGravity * vobFallSpeed * 8;
+                end
+            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx-(2*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx-(2*hwSign(cWindSpeed)))] = 0) then
+                begin
+                X:= X - _0_8 * 2 * hwSign(cWindSpeed);
+                Y:= Y - dY - cGravity * vobFallSpeed * 8;
+                end
+            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx+(1*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx+(1*hwSign(cWindSpeed)))] = 0) then
+                begin
+                X:= X + _0_8 * hwSign(cWindSpeed);
+                Y:= Y - dY - cGravity * vobFallSpeed * 8;
+                end
+            else if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (((xx+(2*hwSign(cWindSpeed))) and LAND_WIDTH_MASK) = 0) and (Land[yy-1, (xx+(2*hwSign(cWindSpeed)))] = 0) then
+                begin
+                X:= X + _0_8 * 2 * hwSign(cWindSpeed);
+                Y:= Y - dY - cGravity * vobFallSpeed * 8;
+                end
+            else
+                begin
+                // we've collided with land. draw some stuff and get back into the clouds
+                move:= true;
+                if (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope) then
+                    begin
+    ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+                    dec(yy,3);
+                    dec(xx,2);
+                    s:= SpritesData[sprSnow].Surface;
+                    p:= s^.pixels;
+                    allpx:= true;
+                    for py:= 0 to Pred(s^.h) do
+                        begin
+                        for px:= 0 to Pred(s^.w) do
+                            if (((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0) then
+                                begin
+                                if (cReducedQuality and rqBlurryLand) = 0 then
+                                    begin
+                                    LandPixels[yy + py, xx + px]:= addBgColor(LandPixels[yy + py, xx + px], p^[px]);
+                                    Land[yy + py, xx + px]:= Land[yy + py, xx + px] or lfObject;
+                                    end
+                                else
+                                    begin
+                                    LandPixels[(yy + py) div 2, (xx + px) div 2]:= addBgColor(LandPixels[(yy + py) div 2, (xx + px) div 2], p^[px]);
+                                    Land[(yy + py) div 2, (xx + px) div 2]:= Land[(yy + py) div 2, (xx + px) div 2] or lfObject;
+                                    end;
+                                end
+                            else allpx:= false;
+                        p:= @(p^[s^.pitch shr 2])
+                        end;
+                    
+                    for py:= (yy) to (yy+1) do
+                        begin
+                        for px:= (xx+2) to (xx+3) do
+                            begin
+                            Land[py, px]:= lfBasic;
+                            end;
+                        end;
+                    
+                    if allpx then UpdateLandTexture(xx, Pred(s^.h), yy, Pred(s^.w))
+                    else
+                        begin
+                        UpdateLandTexture(
+                            max(0, min(LAND_WIDTH, xx)),
+                            min(LAND_WIDTH - xx, Pred(s^.w)),
+                            max(0, min(LAND_WIDTH, yy)),
+                            min(LAND_HEIGHT - yy, Pred(s^.h))
+                        );
+                        end;
+    ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+                    end
+                end;
             end;
         if move then
             begin
@@ -851,7 +892,7 @@ begin
         dec(Gear^.Health, Gear^.Damage);
         Gear^.Damage := 0
     end;
-    if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Damage < Gear^.Health) and (cWaterOpacity < $FF) then
+    if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Damage < Gear^.Health) and ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cSDWaterOpacity < $FF))) then
     begin
         for i:=(Gear^.Health - Gear^.Damage) * 4 downto 0 do
         begin
@@ -2206,14 +2247,16 @@ begin
         exit
     end;
 
-    if not TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
-        HHGear^.X := HHGear^.X + cWindSpeed * 200;
+    HHGear^.X := HHGear^.X + cWindSpeed * 200;
 
     if (Gear^.Message and gmLeft) <> 0 then HHGear^.X := HHGear^.X - cMaxWindSpeed * 80
     else if (Gear^.Message and gmRight) <> 0 then HHGear^.X := HHGear^.X + cMaxWindSpeed * 80;
     if (Gear^.Message and gmUp) <> 0 then HHGear^.Y := HHGear^.Y - cGravity * 40
     else if (Gear^.Message and gmDown) <> 0 then HHGear^.Y := HHGear^.Y + cGravity * 40;
 
+    // don't drift into obstacles
+    if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+        HHGear^.X := HHGear^.X - int2hwFloat(hwSign(HHGear^.dX));
     HHGear^.Y := HHGear^.Y + cGravity * 100;
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y
@@ -2286,9 +2329,13 @@ begin
     Gear^.Y := int2hwFloat(topY-300);
     Gear^.dX := int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
 
-    if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then
-        Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /
-                    cGravity) * Gear^.Tag;
+    // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
+    if (Gear^.State = 2) then
+        Gear^.dX := Gear^.dX - cBombsSpeed * Gear^.Tag * 1000 // ^.Timer of gtNapalmBomb, make it a constant var if you prefer that :P
+    // calcs for regular falling gears
+    else if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then
+            Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /
+                cGravity) * Gear^.Tag;
 
     Gear^.Health := 6;
     Gear^.doStep := @doStepAirAttackWork;
@@ -2885,6 +2932,9 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepDrill(Gear: PGear);
+forward;
+
 procedure doStepDrillDrilling(Gear: PGear);
 var 
     t: PGearArray;
@@ -2913,10 +2963,11 @@ begin
     if (Gear^.Timer = 0)
        or (t^.Count <> 0)
        or (not TestCollisionYWithGear(Gear, hwSign(Gear^.dY))
-       and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)))
+       and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX))
+       and ((Gear^.State and gsttmpFlag) = 0)) 
 // CheckLandValue returns true if the type isn't matched
        or not CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y), lfIndestructible) then
-    begin
+        begin
         //out of time or exited ground
         StopSound(Gear^.SoundChannel);
         if (Gear^.State and gsttmpFlag) <> 0 then
@@ -2925,7 +2976,12 @@ begin
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
         DeleteGear(Gear);
         exit
-    end;
+        end
+    else if not TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) then
+        begin
+        StopSound(Gear^.SoundChannel);
+        Gear^.doStep := @doStepDrill
+        end;
 
     dec(Gear^.Timer);
 end;
@@ -3549,8 +3605,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doPortalColorSwitch();
-var flags: LongWord;
-    CurWeapon: PAmmo;
+var CurWeapon: PAmmo;
 begin
     if (CurrentHedgehog <> nil)
        and (CurrentHedgehog^.Gear <> nil)
@@ -3561,11 +3616,10 @@ begin
                 CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gmSwitch;
                 
                 CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
-                flags := CurWeapon^.Timer and not 2;
-                if (flags and 1) = 0 then
-                    CurWeapon^.Timer := flags or 1
+                if CurWeapon^.Pos <> 0 then
+                    CurWeapon^.Pos := 0
                 else
-                    CurWeapon^.Timer := flags and not 1;
+                    CurWeapon^.Pos := 1;
             end;
 end;
 
@@ -3834,8 +3888,7 @@ var
     s: hwFloat;
 
 procedure loadNewPortalBall(oldPortal: PGear; destroyGear: Boolean);
-var 
-    flags: LongWord;
+var
     CurWeapon: PAmmo;
 begin
     if CurrentHedgehog <> nil then
@@ -3844,18 +3897,19 @@ begin
             CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
             if (CurAmmoType = amPortalGun) then
                 begin
-                flags := CurWeapon^.Timer;
+                if not destroyGear then
+                    begin
+                    // switch color of ball to opposite of oldPortal
+                    if (oldPortal^.Tag and 2) = 0 then
+                        CurWeapon^.Pos:= 1
+                    else
+                        CurWeapon^.Pos:= 0;
+                    end;
 
-                if destroyGear xor ((oldPortal^.Tag and 2) = 0) then
-                    flags := flags or 1
-                else
-                    flags := flags and not 1;
-
-                CurWeapon^.Timer := flags and not 2;
                 // make the ball visible
+                CurWeapon^.Timer := 0;
                 end
             end;
-
     if destroyGear then oldPortal^.Timer:= 0;
 end;
 
@@ -3940,11 +3994,8 @@ begin
                 newPortal^.Elasticity.isNegative := not newPortal^.Elasticity.isNegative;
 
             // make portal gun look unloaded
-            CurWeapon^.Timer := CurWeapon^.Timer or 2;
-
-            // set portal to the currently chosen color
-            if ((CurWeapon^.Timer and 1) <> 0) then
-                newPortal^.Tag := newPortal^.Tag or 2;
+            if (CurWeapon <> nil) and (CurAmmoType = amPortalGun) then
+                CurWeapon^.Timer := CurWeapon^.Timer or 2;
 
             iterator := GearsList;
             while iterator <> nil do

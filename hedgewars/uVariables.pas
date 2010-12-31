@@ -66,6 +66,7 @@ var
     cHealthDecrease  : LongInt;
 
     cCloudsNumber    : LongInt;
+    cSDCloudsNumber  : LongInt;
 
     cTagsMask        : byte;
     zoom             : GLfloat;
@@ -562,10 +563,16 @@ const
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandSnowball
             (FileName:  'Snow'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width:  4; Height: 4; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSnow
-            (FileName:      'Flake'; Path: ptSuddenDeath; AltPath: ptNone; Texture: nil; Surface: nil;
+            (FileName:    'SDFlake'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprSDFlake
-            (FileName:  'BlueWater'; Path: ptSuddenDeath; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true) // sprSDWater
+            (FileName:    'SDWater'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
+            Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprSDWater
+            (FileName:   'SDClouds'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
+            Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprSDCloud
+            (FileName:   'SDSplash'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
+            Width:  80; Height: 50; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSDSplash
+            (FileName:  'SDDroplet'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true)// sprSDDroplet
             );
 
 
@@ -2038,10 +2045,12 @@ var
     LandBackSurface: PSDL_Surface;
     digest: shortstring;
     CurAmmoGear: PGear;
+    lastGearByUID: PGear;
     GearsList: PGear;
     AllInactive: boolean;
     PrvInactive: boolean;
     KilledHHs: Longword;
+    SuddenDeath: Boolean;
     SuddenDeathDmg: Boolean;
     SpeechType: Longword;
     SpeechText: shortstring;
@@ -2095,6 +2104,7 @@ var
 
 
     VisualGearsList: PVisualGear;
+    lastVisualGearByUID: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
     vobVelocity, vobFallSpeed: LongInt;
 
@@ -2151,6 +2161,9 @@ implementation
 
 procedure initModule;
 begin
+    lastVisualGearByUID:= nil;
+    lastGearByUID:= nil;
+    
     Pathz:= cPathz;
         {*  REFERENCE
       4096 -> $FFFFF000
@@ -2158,27 +2171,27 @@ begin
       1024 -> $FFFFFC00
        512 -> $FFFFFE00  *}
     if (cReducedQuality and rqLowRes) <> 0 then
-    begin
+        begin
         LAND_WIDTH:= 2048;
         LAND_HEIGHT:= 1024;
         LAND_WIDTH_MASK:= $FFFFF800;
         LAND_HEIGHT_MASK:= $FFFFFC00;
-    end
+        end
     else
-    begin
+        begin
         LAND_WIDTH:= 4096;
         LAND_HEIGHT:= 2048;
         LAND_WIDTH_MASK:= $FFFFF000;
         LAND_HEIGHT_MASK:= $FFFFF800
-    end;
+        end;
 
-    SDWaterColorArray[0].r := 184;
-    SDWaterColorArray[0].g := 152;
-    SDWaterColorArray[0].b := 195;
+    SDWaterColorArray[0].r := 182;
+    SDWaterColorArray[0].g := 144;
+    SDWaterColorArray[0].b := 201;
     SDWaterColorArray[0].a := 255;
-    SDWaterColorArray[2].r := 152;
-    SDWaterColorArray[2].g := 120;
-    SDWaterColorArray[2].b := 163;
+    SDWaterColorArray[2].r := 150;
+    SDWaterColorArray[2].g := 112;
+    SDWaterColorArray[2].b := 169;
     SDWaterColorArray[2].a := 255;
     SDWaterColorArray[1]:= SDWaterColorArray[0];
     SDWaterColorArray[3]:= SDWaterColorArray[2];
@@ -2188,8 +2201,8 @@ begin
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
     cDrownSpeedf            := 0.06;
     cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
-    cWindSpeed.QWordValue   := 429496;      // 0.0001
-    cWindSpeedf             := 0.0001;
+    cWindSpeed.QWordValue   := 0;      // 0.0
+    cWindSpeedf             := 0.0;
     cGravity                := cMaxWindSpeed * 2;
     cGravityf               := 0.00025 * 2;
     cDamageModifier         := _1;
@@ -2223,6 +2236,7 @@ begin
     cMinesTime          := 3000;
     cMaxAIThinkTime     := 9000;
     cCloudsNumber       := 9;
+    cSDCloudsNumber     := 9;
     cHealthCaseProb     := 35;
     cHealthCaseAmount   := 25;
     cWaterRise          := 47;

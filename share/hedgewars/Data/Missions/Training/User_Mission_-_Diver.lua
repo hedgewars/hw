@@ -87,7 +87,7 @@ end
 function onGearDelete(gear)
 
 	if (gear == enemy) and (GameOver == false) then
-		ShowMission(loc("Operation Diver"), loc("MISSION SUCCESS"), loc("Congratulations!"), 0, 0)
+		ShowMission(loc("Operation Diver"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
 	elseif gear == player then
 		ShowMission(loc("Operation Diver"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)		
 		GameOver = true

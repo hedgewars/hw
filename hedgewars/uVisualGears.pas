@@ -32,6 +32,7 @@ procedure DrawVisualGears(Layer: LongWord);
 procedure DeleteVisualGear(Gear: PVisualGear);
 function  VisualGearByUID(uid : Longword) : PVisualGear;
 procedure AddClouds;
+procedure ChangeToSDClouds;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 
 implementation
@@ -328,6 +329,8 @@ begin
     if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
     else VisualGearsList:= Gear^.NextGear;
 
+    if lastVisualGearByUID = Gear then lastVisualGearByUID:= nil;
+
     Dispose(Gear);
 end;
 
@@ -392,7 +395,10 @@ case Layer of
                             DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
                         else
                             DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
-            vgtCloud: DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
+            vgtCloud: if SuddenDeathDmg then
+                          DrawSprite(sprSDCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                      else
+                          DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
             end;
         if Gear^.Tint <> $FFFFFFFF then Tint($FF,$FF,$FF,$FF);
         Gear:= Gear^.NextGear
@@ -481,8 +487,14 @@ case Layer of
                                 end;
                             DrawRotatedF(sprEgg, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                             end;
-                vgtSplash: DrawSprite(sprSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
-                vgtDroplet: DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
+                 vgtSplash: if SuddenDeathDmg then
+                                DrawSprite(sprSDSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37))
+                            else
+                                DrawSprite(sprSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
+                vgtDroplet: if SuddenDeathDmg then
+                                DrawSprite(sprSDDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame)
+                            else
+                                DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                vgtBeeTrace: begin
                             if Gear^.FrameTicks < $FF then
                                 Tint($FF, $FF, $FF, Gear^.FrameTicks div 2)
@@ -521,13 +533,20 @@ function  VisualGearByUID(uid : Longword) : PVisualGear;
 var vg: PVisualGear;
 begin
 VisualGearByUID:= nil;
+if uid = 0 then exit;
+if (lastVisualGearByUID <> nil) and (lastVisualGearByUID^.uid = uid) then
+    begin
+    VisualGearByUID:= lastVisualGearByUID;
+    exit
+    end;
 vg:= VisualGearsList;
 while vg <> nil do
     begin
     if vg^.uid = uid then
         begin
-            VisualGearByUID:= vg;
-            exit
+        lastVisualGearByUID:= vg;
+        VisualGearByUID:= vg;
+        exit
         end;
     vg:= vg^.NextGear
     end
@@ -538,6 +557,24 @@ var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber - 1 do
     AddVisualGear(cLeftScreenBorder + i * cScreenSpace div (cCloudsNumber + 1), LAND_HEIGHT-1184, vgtCloud)
+end;
+
+procedure ChangeToSDClouds;
+var       i: LongInt;
+    vg, tmp: PVisualGear;
+begin
+if cCloudsNumber = cSDCloudsNumber then exit;
+vg:= VisualGearsList;
+while vg <> nil do
+    if vg^.Kind = vgtCloud then
+        begin
+        tmp:= vg^.NextGear;
+        DeleteVisualGear(vg);
+        vg:= tmp
+        end
+    else vg:= vg^.NextGear;
+for i:= 0 to cSDCloudsNumber - 1 do
+    AddVisualGear(cLeftScreenBorder + i * cScreenSpace div (cSDCloudsNumber + 1), LAND_HEIGHT-1184, vgtCloud)
 end;
 
 procedure initModule;

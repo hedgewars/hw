@@ -272,6 +272,7 @@ begin
         t:= lua_tointeger(L, 7);
 
         gear:= AddGear(x, y, gt, s, dx, dy, t);
+        lastGearByUID:= gear;
         lua_pushinteger(L, gear^.uid)
         end;
     lc_addgear:= 1; // 1 return value
@@ -311,8 +312,12 @@ begin
         s:= lua_tointeger(L, 4);
         c:= lua_toboolean(L, 5);
 
-        vg:= AddVisualGear(x, y, vgt, s, c); 
-        if vg <> nil then lua_pushinteger(L, vg^.uid)
+        vg:= AddVisualGear(x, y, vgt, s, c);
+        if vg <> nil then 
+            begin
+            lastVisualGearByUID:= vg;
+            lua_pushinteger(L, vg^.uid)
+            end
         else lua_pushinteger(L, 0)
         end;
     lc_addvisualgear:= 1; // 1 return value
@@ -357,6 +362,11 @@ begin
             lua_pushinteger(L, vg^.State);
             lua_pushinteger(L, vg^.Timer);
             lua_pushinteger(L, vg^.Tint);
+            end
+        else
+            begin
+            lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
+            lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L)
             end
         end;
     lc_getvisualgearvalues:= 10;

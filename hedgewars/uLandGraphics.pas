@@ -27,6 +27,7 @@ type PRangeArray = ^TRangeArray;
                                    Left, Right: LongInt;
                                    end;
 
+function  addBgColor(OldColor, NewColor: LongWord): LongWord;
 function  SweepDirty: boolean;
 function  Despeckle(X, Y: LongInt): boolean;
 function  CheckLandValue(X, Y: LongInt; LandFlag: Word): boolean;
@@ -41,6 +42,31 @@ function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace
 
 implementation
 uses SDLh, uLandTexture, uVariables, uUtils, uDebug;
+
+function addBgColor(OldColor, NewColor: LongWord): LongWord;
+// Factor ranges from 0 to 100% NewColor
+var
+    oRed, oBlue, oGreen, oAlpha, nRed, nBlue, nGreen, nAlpha: Byte;
+begin
+    // Get colors
+    oAlpha := (OldColor shr 24) and $FF;
+    oRed   := (OldColor shr 16) and $FF;
+    oGreen := (OldColor shr 8) and $FF;
+    oBlue  := (OldColor) and $FF;
+
+    nAlpha := (NewColor shr 24) and $FF;
+    nRed   := (NewColor shr 16) and $FF;
+    nGreen := (NewColor shr 8) and $FF;
+    nBlue  := (NewColor) and $FF;
+
+    // Mix colors
+    nAlpha := min(255, oAlpha + nAlpha);
+    nRed   := ((oRed * oAlpha) + (nRed * (255-oAlpha))) div 255;
+    nGreen := ((oGreen * oAlpha) + (nGreen * (255-oAlpha))) div 255;
+    nBlue  := ((oBlue * oAlpha) + (nBlue * (255-oAlpha))) div 255;
+
+    addBgColor := (nAlpha shl 24) or (nRed shl 16) or (nGreen shl 8) or (nBlue);
+end;
 
 procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;

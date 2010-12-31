@@ -477,7 +477,8 @@ case Kind of
                 gear^.nImpactSounds:= 1;
                 gear^.AdvBounce:= 0;
                 gear^.Radius:= 16;
-                gear^.Tag:= 0;
+                // set color
+                gear^.Tag:= 2 * gear^.Timer;
                 gear^.Timer:= 15000;
                 gear^.RenderTimer:= false;
                 gear^.Health:= 100;
@@ -556,7 +557,7 @@ else if Gear^.Kind = gtHedgehog then
             begin
             t:= max(Gear^.Damage, Gear^.Health);
             Gear^.Damage:= t;
-            if (cWaterOpacity < $FF) and (hwRound(Gear^.Y) < cWaterLine + 256) then
+            if ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cWaterOpacity < $FF))) and (hwRound(Gear^.Y) < cWaterLine + 256) then
                 spawnHealthTagForHH(Gear, t);
             uStats.HedgehogDamaged(Gear)
             end;
@@ -595,6 +596,7 @@ with Gear^ do AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x
 
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
+if lastGearByUID = Gear then lastGearByUID := nil;
 RemoveGearFromList(Gear);
 Dispose(Gear)
 end;
@@ -791,9 +793,14 @@ case step of
     stHealth: begin
             if (cWaterRise <> 0) or (cHealthDecrease <> 0) then
                 begin
-                if (TotalRounds = cSuddenDTurns) and not SuddenDeathDmg and not isInMultiShoot then
+                if (TotalRounds = cSuddenDTurns) and not SuddenDeath and not isInMultiShoot then
                     begin
-                    SuddenDeathDmg:= true;
+                    SuddenDeath:= true;
+                    if cHealthDecrease <> 0 then
+                        begin
+                        SuddenDeathDmg:= true;
+                        ChangeToSDClouds
+                        end;
                     AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                     playSound(sndSuddenDeath);
                     MusicFN:= SDMusic;
@@ -1778,13 +1785,20 @@ function GearByUID(uid : Longword) : PGear;
 var gear: PGear;
 begin
 GearByUID:= nil;
+if uid = 0 then exit;
+if (lastGearByUID <> nil) and (lastGearByUID^.uid = uid) then
+    begin
+    GearByUID:= lastGearByUID;
+    exit
+    end;
 gear:= GearsList;
 while gear <> nil do
     begin
     if gear^.uid = uid then
         begin
-            GearByUID:= gear;
-            exit
+        lastGearByUID:= gear;
+        GearByUID:= gear;
+        exit
         end;
     gear:= gear^.NextGear
     end
@@ -1832,7 +1846,7 @@ begin
     if (x < 4) and (TeamsArray[t] <> nil) then
         begin
             // if team matches current hedgehog team, default to current hedgehog
-            if (i = 0) and (CurrentHedgehog^.Team = TeamsArray[t]) then hh:= CurrentHedgehog
+            if (i = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Team = TeamsArray[t]) then hh:= CurrentHedgehog
             else 
                 begin
             // otherwise use the first living hog or the hog amongs the remaining ones indicated by i
@@ -1849,12 +1863,15 @@ begin
                     inc(j)
                     end
                 end;
-        if hh <> nil then Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
-        if Gear <> nil then
+        if hh <> nil then 
             begin
-            Gear^.Hedgehog:= hh;
-            Gear^.Text:= text;
-            Gear^.FrameTicks:= x
+            Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
+            if Gear <> nil then
+                begin
+                Gear^.Hedgehog:= hh;
+                Gear^.Text:= text;
+                Gear^.FrameTicks:= x
+                end
             end
         //else ParseCommand('say ' + text, true)
         end
@@ -1873,6 +1890,7 @@ begin
     CurAmmoGear:= nil;
     GearsList:= nil;
     KilledHHs:= 0;
+    SuddenDeath:= false;
     SuddenDeathDmg:= false;
     SpeechType:= 1;
     TrainingTargetGear:= nil;
