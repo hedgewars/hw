@@ -629,7 +629,7 @@ if GameTicks and $7 = 0 then
                     begin
     ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
                     dec(yy,3);
-                    dec(xx,2);
+                    dec(xx,1);
                     s:= SpritesData[sprSnow].Surface;
                     p:= s^.pixels;
                     allpx:= true;
@@ -653,13 +653,8 @@ if GameTicks and $7 = 0 then
                         p:= @(p^[s^.pitch shr 2])
                         end;
                     
-                    for py:= (yy) to (yy+1) do
-                        begin
-                        for px:= (xx+2) to (xx+3) do
-                            begin
-                            Land[py, px]:= lfBasic;
-                            end;
-                        end;
+                    
+                    Land[py, px+1]:= lfBasic;
                     
                     if allpx then UpdateLandTexture(xx, Pred(s^.h), yy, Pred(s^.w))
                     else

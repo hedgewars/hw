@@ -13,8 +13,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.0 r9654"
-   width="5"
-   height="5"
+   width="3"
+   height="3"
    sodipodi:docname="Snow.svg"
    inkscape:export-filename="/mnt/y/src/hedgewars/share/hedgewars/Data/Graphics/Snow.png"
    inkscape:export-xdpi="90"
@@ -27,7 +27,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -36,15 +36,15 @@
     <linearGradient
        id="linearGradient3757">
       <stop
-         style="stop-color:#ffffff;stop-opacity:1;"
+         style="stop-color:#dce6f0;stop-opacity:1;"
          offset="0"
          id="stop3759" />
       <stop
          id="stop3765"
-         offset="0.47515857"
-         style="stop-color:#ffffff;stop-opacity:1;" />
+         offset="0.2429187"
+         style="stop-color:#dce6f0;stop-opacity:1;" />
       <stop
-         style="stop-color:#cedcea;stop-opacity:1;"
+         style="stop-color:#ffffff;stop-opacity:1;"
          offset="1"
          id="stop3761" />
     </linearGradient>
@@ -52,12 +52,13 @@
        inkscape:collect="always"
        xlink:href="#linearGradient3757"
        id="radialGradient3763"
-       cx="2.9785273"
-       cy="2.015959"
-       fx="2.9785273"
-       fy="2.015959"
+       cx="2.6450942"
+       cy="3.2419963"
+       fx="2.6450942"
+       fy="3.2419963"
        r="2.6945455"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.95584669,0,0.10793976)" />
   </defs>
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -72,9 +73,9 @@
      inkscape:window-height="770"
      id="namedview4"
      showgrid="false"
-     inkscape:zoom="45.254834"
-     inkscape:cx="3.4892683"
-     inkscape:cy="1.3238902"
+     inkscape:zoom="64"
+     inkscape:cx="1.8295265"
+     inkscape:cy="0.046304751"
      inkscape:window-x="169"
      inkscape:window-y="99"
      inkscape:window-maximized="0"
@@ -88,5 +89,5 @@
      sodipodi:rx="2.6945455"
      sodipodi:ry="2.6945455"
      d="m 5.4545455,2.8036363 a 2.6945455,2.6945455 0 1 1 -5.38909102,0 2.6945455,2.6945455 0 1 1 5.38909102,0 z"
-     transform="matrix(0.92780025,0,0,0.92780025,-0.06072869,-0.10121454)" />
+     transform="matrix(0.55668015,0,0,0.55668015,-0.03643721,-0.06072873)" />
 </svg>
