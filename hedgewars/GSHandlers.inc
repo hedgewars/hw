@@ -646,7 +646,7 @@ if GameTicks and $7 = 0 then
                     for py:= 0 to Pred(s^.h) do
                         begin
                         for px:= 0 to Pred(s^.w) do
-                            if (((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0) and if ((Land[yy + py, xx + px] and $FF) = 0) then
+                            if ((((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0)) and ((Land[yy + py, xx + px] and $FF) = 0) then
                                 begin
                                 if (cReducedQuality and rqBlurryLand) = 0 then
                                     begin
