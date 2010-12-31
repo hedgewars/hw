@@ -116,6 +116,7 @@ const
     cCursorEdgesDist    : LongInt = 100;
     cTeamHealthWidth    : LongInt = 128;
     cWaterOpacity       : byte = $80;
+    cSDWaterOpacity     : byte = $80;
 
     cifRandomize = $00000001;
     cifTheme     = $00000002;

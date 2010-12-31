@@ -32,6 +32,7 @@ procedure DrawVisualGears(Layer: LongWord);
 procedure DeleteVisualGear(Gear: PVisualGear);
 function  VisualGearByUID(uid : Longword) : PVisualGear;
 procedure AddClouds;
+procedure ChangeToSDClouds;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 
 implementation
@@ -556,6 +557,24 @@ var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber - 1 do
     AddVisualGear(cLeftScreenBorder + i * cScreenSpace div (cCloudsNumber + 1), LAND_HEIGHT-1184, vgtCloud)
+end;
+
+procedure ChangeToSDClouds;
+var       i: LongInt;
+    vg, tmp: PVisualGear;
+begin
+if cCloudsNumber = cSDCloudsNumber then exit;
+vg:= VisualGearsList;
+while vg <> nil do
+    if vg^.Kind = vgtCloud then
+        begin
+        tmp:= vg^.NextGear;
+        DeleteVisualGear(vg);
+        vg:= tmp
+        end
+    else vg:= vg^.NextGear;
+for i:= 0 to cSDCloudsNumber - 1 do
+    AddVisualGear(cLeftScreenBorder + i * cScreenSpace div (cSDCloudsNumber + 1), LAND_HEIGHT-1184, vgtCloud)
 end;
 
 procedure initModule;

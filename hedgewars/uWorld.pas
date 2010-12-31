@@ -651,7 +651,10 @@ begin
 
     DrawVisualGears(2);
 
-    DrawWater(cWaterOpacity, 0);
+    if SuddenDeathDmg then
+        DrawWater(cSDWaterOpacity, 0)
+    else
+        DrawWater(cWaterOpacity, 0);
 
     // Waves
     DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
@@ -660,9 +663,15 @@ begin
     begin
         //DrawWater(cWaterOpacity, - offsetY div 40);
         DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 8);
-        DrawWater(cWaterOpacity, - offsetY div 20);
+        if SuddenDeathDmg then
+            DrawWater(cSDWaterOpacity, - offsetY div 20)
+        else
+            DrawWater(cWaterOpacity, - offsetY div 20);
         DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 2);
-        DrawWater(cWaterOpacity, - offsetY div 10);
+        if SuddenDeathDmg then
+            DrawWater(cSDWaterOpacity, - offsetY div 10)
+        else
+            DrawWater(cWaterOpacity, - offsetY div 10);
         DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
     end
     else

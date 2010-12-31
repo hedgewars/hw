@@ -449,7 +449,11 @@ while not eof(f) do
         end
     else if key = 'water-opacity' then cWaterOpacity:= StrToInt(Trim(s))
     else if key = 'music' then MusicFN:= Trim(s)
-    else if key = 'clouds' then cCloudsNumber:= StrToInt(Trim(s)) * cScreenSpace div LAND_WIDTH
+    else if key = 'clouds' then
+        begin
+        cCloudsNumber:= StrToInt(Trim(s)) * cScreenSpace div LAND_WIDTH;
+        cSDCloudsNumber:= cCloudsNumber
+        end
     else if key = 'object' then
         begin
         inc(ThemeObjects.Count);
@@ -562,8 +566,8 @@ while not eof(f) do
         SDWaterColorArray[2].a := 255;
         SDWaterColorArray[3]:= SDWaterColorArray[2];
         end
-    else if key = 'sd-water-opacity' then continue //cSDWaterOpacity:= StrToInt(Trim(s))
-    else if key = 'sd-clouds' then continue //cSDCloudsNumber:= StrToInt(Trim(s)) * cScreenSpace div LAND_WIDTH
+    else if key = 'sd-water-opacity' then cSDWaterOpacity:= StrToInt(Trim(s))
+    else if key = 'sd-clouds' then cSDCloudsNumber:= StrToInt(Trim(s)) * cScreenSpace div LAND_WIDTH
     else if key = 'sd-flakes' then continue //TODO: make :P
     end;
 

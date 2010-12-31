@@ -557,7 +557,7 @@ else if Gear^.Kind = gtHedgehog then
             begin
             t:= max(Gear^.Damage, Gear^.Health);
             Gear^.Damage:= t;
-            if (cWaterOpacity < $FF) and (hwRound(Gear^.Y) < cWaterLine + 256) then
+            if ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cWaterOpacity < $FF))) and (hwRound(Gear^.Y) < cWaterLine + 256) then
                 spawnHealthTagForHH(Gear, t);
             uStats.HedgehogDamaged(Gear)
             end;
@@ -793,9 +793,14 @@ case step of
     stHealth: begin
             if (cWaterRise <> 0) or (cHealthDecrease <> 0) then
                 begin
-                if (TotalRounds = cSuddenDTurns) and not SuddenDeathDmg and not isInMultiShoot then
+                if (TotalRounds = cSuddenDTurns) and not SuddenDeath and not isInMultiShoot then
                     begin
-                    SuddenDeathDmg:= true;
+                    SuddenDeath:= true;
+                    if cHealthDecrease <> 0 then
+                        begin
+                        SuddenDeathDmg:= true;
+                        ChangeToSDClouds
+                        end;
                     AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                     playSound(sndSuddenDeath);
                     MusicFN:= SDMusic;
@@ -1885,6 +1890,7 @@ begin
     CurAmmoGear:= nil;
     GearsList:= nil;
     KilledHHs:= 0;
+    SuddenDeath:= false;
     SuddenDeathDmg:= false;
     SpeechType:= 1;
     TrainingTargetGear:= nil;

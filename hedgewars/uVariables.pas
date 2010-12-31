@@ -66,6 +66,7 @@ var
     cHealthDecrease  : LongInt;
 
     cCloudsNumber    : LongInt;
+    cSDCloudsNumber  : LongInt;
 
     cTagsMask        : byte;
     zoom             : GLfloat;
@@ -2049,6 +2050,7 @@ var
     AllInactive: boolean;
     PrvInactive: boolean;
     KilledHHs: Longword;
+    SuddenDeath: Boolean;
     SuddenDeathDmg: Boolean;
     SpeechType: Longword;
     SpeechText: shortstring;
@@ -2234,6 +2236,7 @@ begin
     cMinesTime          := 3000;
     cMaxAIThinkTime     := 9000;
     cCloudsNumber       := 9;
+    cSDCloudsNumber     := 9;
     cHealthCaseProb     := 35;
     cHealthCaseAmount   := 25;
     cWaterRise          := 47;
