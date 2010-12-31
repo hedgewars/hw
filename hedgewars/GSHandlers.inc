@@ -592,6 +592,8 @@ if GameTicks and $7 = 0 then
     // move back to cloud layer
         if yy > cWaterLine then move:= true
         else if ((yy and LAND_HEIGHT_MASK) <> 0) or ((xx and LAND_WIDTH_MASK) <> 0) then move:=true
+        // Hog encountered
+        else if ((Land[yy, xx] and $FF) <> 0) then move:=true
         // Solid pixel encountered
         else if (Land[yy, xx] > 255) then
             begin
@@ -636,7 +638,7 @@ if GameTicks and $7 = 0 then
                     for py:= 0 to Pred(s^.h) do
                         begin
                         for px:= 0 to Pred(s^.w) do
-                            if (((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0) then
+                            if (((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0) and if ((Land[yy + py, xx + px] and $FF) = 0) then
                                 begin
                                 if (cReducedQuality and rqBlurryLand) = 0 then
                                     begin
