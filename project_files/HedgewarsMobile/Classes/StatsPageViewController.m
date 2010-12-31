@@ -29,6 +29,31 @@
     return rotationManager(interfaceOrientation);
 }
 
+-(void) viewDidLoad {
+    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
+        self.tableView.backgroundView = nil;
+
+    NSString *imgName;
+    if (IS_IPAD())
+        imgName = @"mediumBackground~ipad.png";
+    else
+        imgName = @"smallerBackground~iphone.png";
+
+    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)]) {
+        UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:imgName];
+        UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
+        [backgroundImage release];
+        [self.tableView setBackgroundView:background];
+        [background release];
+    } else
+        self.view.backgroundColor = [UIColor blackColor];
+
+    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+    [super viewDidLoad];
+}
+
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
@@ -54,13 +79,37 @@
     cell.textLabel.textAlignment = UITextAlignmentCenter;
     if (section == 0) {
         cell.textLabel.text = [self.statsArray objectAtIndex:row];
+        cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
     } else if (section == 1) {
         cell.textLabel.text = [self.statsArray objectAtIndex:row + 1];
+        cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
     } else {
         cell.textLabel.text = NSLocalizedString(@"Done",@"");
+        cell.textLabel.textColor = [UIColor whiteColor];
     }
+    cell.backgroundColor = [UIColor blackColor];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     return cell;
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 160;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 160)];
+        UIImage *img = [[UIImage alloc] initWithContentsOfFile:@"smallerTitle.png"];
+        UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
+        [img release];
+        imgView.center = CGPointMake(self.tableView.frame.size.height/2, 160/2);
+        [header addSubview:imgView];
+        [imgView release];
+
+        return [header autorelease];
+    } else
+        return nil;
 }
 
 #pragma mark -
