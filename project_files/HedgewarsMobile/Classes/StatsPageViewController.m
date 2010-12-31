@@ -57,7 +57,7 @@
     } else if (section == 1) {
         cell.textLabel.text = [self.statsArray objectAtIndex:row + 1];
     } else {
-        cell.textLabel.text = NSLocalizedString(@"Back",@"");
+        cell.textLabel.text = NSLocalizedString(@"Done",@"");
     }
 
     return cell;

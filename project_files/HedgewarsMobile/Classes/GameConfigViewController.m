@@ -232,25 +232,25 @@
                                       [NSNumber numberWithBool:NO],@"netgame",
                                       @"",@"savefile",
                                       nil];
-    if (IS_IPAD())
-        [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+
+
+    StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
+        statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
+    [self presentModalViewController:statsPage animated:NO];
+
+    NSArray *stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+    if ([stats count] == 0)
+        [statsPage dismissModalViewControllerAnimated:NO];
     else {
-        // this causes a sporadic crash on the ipad but without this rotation doesn't work on iphone
-        StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        [self presentModalViewController:statsPage animated:NO];
-
-        NSArray *stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-        if ([stats count] == 0)
-            [statsPage dismissModalViewControllerAnimated:NO];
-        else {
-            statsPage.statsArray = stats;
-            [statsPage.tableView reloadData];
-            [statsPage viewWillAppear:YES];
-        }
-
-        [statsPage release];
+        statsPage.statsArray = stats;
+        [statsPage.tableView reloadData];
+        [statsPage viewWillAppear:YES];
     }
 
+
+    [statsPage release];
 }
 
 -(void) loadNiceHogs {

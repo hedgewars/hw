@@ -21,6 +21,7 @@
 
 #import "SavedGamesViewController.h"
 #import "SDL_uikitappdelegate.h"
+#import "StatsPageViewController.h"
 #import "CommodityFunctions.h"
 
 @implementation SavedGamesViewController
@@ -217,8 +218,23 @@
                                       [NSNumber numberWithBool:NO],@"netgame",
                                       [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:@"orientation"],@"game_dictionary",
                                       nil];
-    [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-    [self.parentViewController dismissModalViewControllerAnimated:NO];
+
+    StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
+        statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
+    [self presentModalViewController:statsPage animated:NO];
+
+    NSArray *stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+    if ([stats count] == 0) {
+        [statsPage dismissModalViewControllerAnimated:NO];
+    } else {
+        statsPage.statsArray = stats;
+        [statsPage.tableView reloadData];
+        [statsPage viewWillAppear:YES];
+    }
+    // reload needed because when ending game the entry remains there
+    [self.tableView reloadData];
 }
 
 #pragma mark -
