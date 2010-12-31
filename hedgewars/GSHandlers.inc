@@ -182,6 +182,14 @@ begin
     else Gear^.State := Gear^.State and not gstCollision
 end;
 
+procedure CheckCollisionWithLand(Gear: PGear); inline;
+begin
+    if TestCollisionX(Gear, hwSign(Gear^.X)) or TestCollisionY(Gear, hwSign(Gear^.Y)
+       )
+        then Gear^.State := Gear^.State or      gstCollision
+    else Gear^.State := Gear^.State and not gstCollision
+end;
+
 procedure CheckHHDamage(Gear: PGear);
 var 
     dmg: Longword;
@@ -1585,9 +1593,7 @@ begin
             end;
         end;
 
-    if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) <> 0) then
-        Gear^.State:= Gear^.State or gstCollision
-    else Gear^.State:= Gear^.State and not gstCollision;
+    CheckCollisionWithLand(Gear);
 
     if (Gear^.State and gstCollision) <> 0 then
         if Gear^.Elasticity < _10 then

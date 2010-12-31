@@ -44,6 +44,7 @@ function  TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionXKick(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
 
+function  TestCollisionX(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
 
 function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
@@ -288,6 +289,24 @@ Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
 TestCollisionXwithXYShift:= TestCollisionXwithGear(Gear, Dir);
 Gear^.X:= Gear^.X - ShiftX;
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
+end;
+function TestCollisionX(Gear: PGear; Dir: LongInt): boolean;
+var x, y, i: LongInt;
+begin
+x:= hwRound(Gear^.X);
+if Dir < 0 then x:= x - Gear^.Radius
+           else x:= x + Gear^.Radius;
+if (x and LAND_WIDTH_MASK) = 0 then
+   begin
+   y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
+   i:= y + Gear^.Radius * 2 - 2;
+   repeat
+     if (y and LAND_HEIGHT_MASK) = 0 then
+        if Land[y, x] > 255 then exit(true);
+     inc(y)
+   until (y > i);
+   end;
+TestCollisionX:= false
 end;
 
 function TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
