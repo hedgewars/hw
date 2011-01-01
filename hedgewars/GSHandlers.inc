@@ -600,7 +600,7 @@ if GameTicks and $7 = 0 then
     // move back to cloud layer
         if yy > cWaterLine then move:= true
         else if ((yy and LAND_HEIGHT_MASK) <> 0) or ((xx and LAND_WIDTH_MASK) <> 0) then move:=true
-        // Hog encountered
+        // Hog/Object encountered
         else if ((Land[yy, xx] and $FF) <> 0) then move:=true
         // Solid pixel encountered
         else if (Land[yy, xx] > 255) then
@@ -648,15 +648,14 @@ if GameTicks and $7 = 0 then
                         for px:= 0 to Pred(s^.w) do
                             if ((((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0)) and ((Land[yy + py, xx + px] and $FF) = 0) then
                                 begin
+                                Land[yy + py, xx + px]:= Land[yy + py, xx + px] or lfObject;
                                 if (cReducedQuality and rqBlurryLand) = 0 then
                                     begin
                                     LandPixels[yy + py, xx + px]:= addBgColor(LandPixels[yy + py, xx + px], p^[px]);
-                                    Land[yy + py, xx + px]:= Land[yy + py, xx + px] or lfObject;
                                     end
                                 else
                                     begin
                                     LandPixels[(yy + py) div 2, (xx + px) div 2]:= addBgColor(LandPixels[(yy + py) div 2, (xx + px) div 2], p^[px]);
-                                    Land[(yy + py) div 2, (xx + px) div 2]:= Land[(yy + py) div 2, (xx + px) div 2] or lfObject;
                                     end;
                                 end
                             else allpx:= false;
