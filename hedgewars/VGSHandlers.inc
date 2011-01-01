@@ -24,14 +24,23 @@ sign:= 1;
 with Gear^ do
     begin
     inc(FrameTicks, Steps);
-    if FrameTicks > vobFrameTicks then
+    if not SuddenDeathDmg and (FrameTicks > vobFrameTicks) then
         begin
         dec(FrameTicks, vobFrameTicks);
         inc(Frame);
         if Frame = vobFramesCount then Frame:= 0
+        end
+    else if SuddenDeathDmg and (FrameTicks > vobSDFrameTicks) then
+        begin
+        dec(FrameTicks, vobSDFrameTicks);
+        inc(Frame);
+        if Frame = vobSDFramesCount then Frame:= 0
         end;
     X:= X + (cWindSpeedf * 200 + dX + tdX) * Steps;
-    Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps;
+    if SuddenDeathDmg then
+        Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps
+    else
+        Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps;
     Angle:= Angle + dAngle * Steps;
     if Angle > 360 then
         Angle:= Angle - 360

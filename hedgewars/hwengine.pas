@@ -60,6 +60,7 @@ begin
         gsStart: begin
                 if HasBorder then DisableSomeWeapons;
                 AddClouds;
+                AddFlakes;
                 AssignHHCoords;
                 AddMiscGears;
                 StoreLoad;

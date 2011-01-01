@@ -33,6 +33,8 @@ procedure DeleteVisualGear(Gear: PVisualGear);
 function  VisualGearByUID(uid : Longword) : PVisualGear;
 procedure AddClouds;
 procedure ChangeToSDClouds;
+procedure AddFlakes;
+procedure ChangeToSDFlakes;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 
 implementation
@@ -144,13 +146,22 @@ with gear^ do
                 Timer:= 0;
                 tdX:= 0;
                 tdY:= 0;
-                FrameTicks:= random(vobFrameTicks);
-                Frame:= random(vobFramesCount);
+                if SuddenDeathDmg then
+                    begin
+                    FrameTicks:= random(vobSDFrameTicks);
+                    Frame:= random(vobSDFramesCount);
+                    end
+                else
+                    begin
+                    FrameTicks:= random(vobFrameTicks);
+                    Frame:= random(vobFramesCount);
+                    end;
                 Angle:= random * 360;
                 dx:= 0.0000038654705 * random(10000);
                 dy:= 0.000003506096 * random(7000);
                 if random(2) = 0 then dx := -dx;
-                dAngle:= (random(2) * 2 - 1) * (1 + random) * vobVelocity / 1000
+                if SuddenDeathDmg then dAngle:= (random(2) * 2 - 1) * (1 + random) * vobSDVelocity / 1000
+                else dAngle:= (random(2) * 2 - 1) * (1 + random) * vobVelocity / 1000
                 end;
     vgtCloud: begin
                 Frame:= random(4);
@@ -385,14 +396,14 @@ case Layer of
         begin
         if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
         case Gear^.Kind of
-            vgtFlake: if vobVelocity = 0 then
-                        if SuddenDeathDmg then
+            vgtFlake: if SuddenDeathDmg then
+                        if vobSDVelocity = 0 then
                             DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                         else
-                            DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                      else
-                        if SuddenDeathDmg then
                             DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                      else
+                        if vobVelocity = 0 then
+                            DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                         else
                             DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
             vgtCloud: if SuddenDeathDmg then
@@ -575,6 +586,42 @@ while vg <> nil do
     else vg:= vg^.NextGear;
 for i:= 0 to cSDCloudsNumber - 1 do
     AddVisualGear(cLeftScreenBorder + i * cScreenSpace div (cSDCloudsNumber + 1), LAND_HEIGHT-1184, vgtCloud)
+end;
+
+procedure AddFlakes;
+var i: LongInt;
+begin
+if (cReducedQuality and rqKillFlakes) <> 0 then exit;
+
+if ((GameFlags and gfBorder) <> 0) or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
+    for i:= 0 to Pred(vobCount) do
+        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
+else
+    for i:= 0 to Pred(vobCount div 3) do
+        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
+end;
+
+procedure ChangeToSDFlakes;
+var       i: LongInt;
+    vg, tmp: PVisualGear;
+begin
+if (cReducedQuality and rqKillFlakes) <> 0 then exit;
+if vobCount = vobSDCount then exit;
+vg:= VisualGearsList;
+while vg <> nil do
+    if vg^.Kind = vgtFlake then
+        begin
+        tmp:= vg^.NextGear;
+        DeleteVisualGear(vg);
+        vg:= tmp
+        end
+    else vg:= vg^.NextGear;
+if ((GameFlags and gfBorder) <> 0) or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
+    for i:= 0 to Pred(vobSDCount) do
+        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
+else
+    for i:= 0 to Pred(vobSDCount div 3) do
+        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
 end;
 
 procedure initModule;

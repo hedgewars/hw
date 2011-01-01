@@ -799,7 +799,8 @@ case step of
                     if cHealthDecrease <> 0 then
                         begin
                         SuddenDeathDmg:= true;
-                        ChangeToSDClouds
+                        ChangeToSDClouds;
+                        ChangeToSDFlakes;
                         end;
                     AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                     playSound(sndSuddenDeath);

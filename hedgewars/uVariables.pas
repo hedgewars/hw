@@ -2107,6 +2107,8 @@ var
     lastVisualGearByUID: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
     vobVelocity, vobFallSpeed: LongInt;
+    vobSDFrameTicks, vobSDFramesCount, vobSDCount: Longword;
+    vobSDVelocity, vobSDFallSpeed: LongInt;
 
 
     hideAmmoMenu: boolean;
@@ -2127,6 +2129,7 @@ var
     DefaultBinds, CurrentBinds: TBinds;
 
     coeff: LongInt;
+
 {$IFDEF HWLIBRARY}
     leftClick: boolean;
     middleClick: boolean;
@@ -2293,6 +2296,12 @@ begin
         cMaxCaptions:= 3
     else
         cMaxCaptions:= 4;
+
+    vobSDFrameTicks:= 0;
+    vobSDFramesCount:= 0;
+    vobSDCount:= 30 * cScreenSpace div LAND_WIDTH;
+    vobSDVelocity:= 0;
+    vobSDFallSpeed:= 0;
 end;
 
 procedure freeModule;

@@ -398,16 +398,16 @@ while not eof(f) do
     if s[1] = ';' then continue;
 
     i:= Pos('=', s);
-    key:= Trim(Copy(s, 1, i - 1));
+    key:= Trim(Copy(s, 1, Pred(i)));
     Delete(s, 1, i);
 
     if key = 'sky' then
         begin
         i:= Pos(',', s);
-        c1.r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        c1.r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         i:= Pos(',', s);
-        c1.g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        c1.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         c1.b:= StrToInt(Trim(s));
         glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99);
@@ -415,10 +415,10 @@ while not eof(f) do
     else if key = 'border' then
         begin
         i:= Pos(',', s);
-        c2.r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        c2.r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         i:= Pos(',', s);
-        c2.g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        c2.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         c2.b:= StrToInt(Trim(s));
         cExplosionBorderColor:= c2.value or AMask;
@@ -426,10 +426,10 @@ while not eof(f) do
     else if key = 'water-top' then
         begin
         i:= Pos(',', s);
-        WaterColorArray[0].r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        WaterColorArray[0].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         i:= Pos(',', s);
-        WaterColorArray[0].g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        WaterColorArray[0].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         WaterColorArray[0].b:= StrToInt(Trim(s));
         WaterColorArray[0].a := 255;
@@ -438,16 +438,20 @@ while not eof(f) do
     else if key = 'water-bottom' then
         begin
         i:= Pos(',', s);
-        WaterColorArray[2].r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        WaterColorArray[2].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         i:= Pos(',', s);
-        WaterColorArray[2].g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        WaterColorArray[2].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         WaterColorArray[2].b:= StrToInt(Trim(s));
         WaterColorArray[2].a := 255;
         WaterColorArray[3]:= WaterColorArray[2];
         end
-    else if key = 'water-opacity' then cWaterOpacity:= StrToInt(Trim(s))
+    else if key = 'water-opacity' then
+        begin
+        cWaterOpacity:= StrToInt(Trim(s));
+        cSDWaterOpacity:= cWaterOpacity
+        end
     else if key = 'music' then MusicFN:= Trim(s)
     else if key = 'clouds' then
         begin
@@ -460,50 +464,50 @@ while not eof(f) do
         with ThemeObjects.objs[Pred(ThemeObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, i - 1)), ifCritical or ifTransparent or ifIgnoreCaps);
+            Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
             Delete(s, 1, i);
             i:= Pos(',', s);
-            Maxcnt:= StrToInt(Trim(Copy(s, 1, i - 1)));
+            Maxcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
             with inland do
                 begin
                 i:= Pos(',', s);
-                x:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                x:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                 Delete(s, 1, i);
                 i:= Pos(',', s);
-                y:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                 Delete(s, 1, i);
                 i:= Pos(',', s);
-                w:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                 Delete(s, 1, i);
                 i:= Pos(',', s);
-                h:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                h:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                 Delete(s, 1, i);
                 CheckRect(Width, Height, x, y, w, h)
                 end;
             i:= Pos(',', s);
-            rectcnt:= StrToInt(Trim(Copy(s, 1, i - 1)));
+            rectcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             for ii:= 1 to rectcnt do
                 with outland[ii] do
                     begin
                     i:= Pos(',', s);
-                    x:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                    x:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                     Delete(s, 1, i);
                     i:= Pos(',', s);
-                    y:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                    y:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                     Delete(s, 1, i);
                     i:= Pos(',', s);
-                    w:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                    w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                     Delete(s, 1, i);
                     if ii = rectcnt then h:= StrToInt(Trim(s))
                     else
                         begin
                         i:= Pos(',', s);
-                        h:= StrToInt(Trim(Copy(s, 1, i - 1)));
+                        h:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                         Delete(s, 1, i)
                         end;
                     CheckRect(Width, Height, x, y, w, h)
@@ -516,7 +520,7 @@ while not eof(f) do
         with SprayObjects.objs[Pred(SprayObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, i - 1)), ifCritical or ifTransparent or ifIgnoreCaps);
+            Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
             Delete(s, 1, i);
@@ -526,29 +530,30 @@ while not eof(f) do
     else if key = 'flakes' then
         begin
         i:= Pos(',', s);
-        vobCount:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        vobCount:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         if vobCount > 0 then
             begin
             i:= Pos(',', s);
-            vobFramesCount:= StrToInt(Trim(Copy(s, 1, i - 1)));
+            vobFramesCount:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             i:= Pos(',', s);
-            vobFrameTicks:= StrToInt(Trim(Copy(s, 1, i - 1)));
+            vobFrameTicks:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             i:= Pos(',', s);
-            vobVelocity:= StrToInt(Trim(Copy(s, 1, i - 1)));
+            vobVelocity:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             vobFallSpeed:= StrToInt(Trim(s));
+            vobCount:= vobCount * cScreenSpace div LAND_WIDTH;
             end;
         end
     else if key = 'sd-water-top' then
         begin
         i:= Pos(',', s);
-        SDWaterColorArray[0].r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        SDWaterColorArray[0].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         i:= Pos(',', s);
-        SDWaterColorArray[0].g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        SDWaterColorArray[0].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         SDWaterColorArray[0].b:= StrToInt(Trim(s));
         SDWaterColorArray[0].a := 255;
@@ -557,10 +562,10 @@ while not eof(f) do
     else if key = 'sd-water-bottom' then
         begin
         i:= Pos(',', s);
-        SDWaterColorArray[2].r:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        SDWaterColorArray[2].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         i:= Pos(',', s);
-        SDWaterColorArray[2].g:= StrToInt(Trim(Copy(s, 1, i - 1)));
+        SDWaterColorArray[2].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         SDWaterColorArray[2].b:= StrToInt(Trim(s));
         SDWaterColorArray[2].a := 255;
@@ -568,22 +573,27 @@ while not eof(f) do
         end
     else if key = 'sd-water-opacity' then cSDWaterOpacity:= StrToInt(Trim(s))
     else if key = 'sd-clouds' then cSDCloudsNumber:= StrToInt(Trim(s)) * cScreenSpace div LAND_WIDTH
-    else if key = 'sd-flakes' then continue //TODO: make :P
+    else if key = 'sd-flakes' then
+        begin
+        i:= Pos(',', s);
+        vobSDCount:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        if vobSDCount > 0 then
+            begin
+            i:= Pos(',', s);
+            vobSDFramesCount:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            Delete(s, 1, i);
+            i:= Pos(',', s);
+            vobSDFrameTicks:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            Delete(s, 1, i);
+            i:= Pos(',', s);
+            vobSDVelocity:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            Delete(s, 1, i);
+            vobSDFallSpeed:= StrToInt(Trim(s));
+            vobSDCount:= vobSDCount * cScreenSpace div LAND_WIDTH;
+            end;
+        end
     end;
-
-// adjust amount of flakes scaled by screen space
-vobCount:= longint(vobCount);
-numFlakes:= vobCount * cScreenSpace div LAND_WIDTH;
-
-if (cReducedQuality and rqKillFlakes) <> 0 then
-    numFlakes:= 0;
-
-if ((GameFlags and gfBorder) <> 0) or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
-    for i:= 0 to Pred(numFlakes) do
-        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
-else
-    for i:= 0 to Pred(numFlakes div 3) do
-        AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
 
 Close(f);
 {$I+}
