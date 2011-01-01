@@ -176,7 +176,7 @@ end;
 
 procedure CheckCollision(Gear: PGear); inline;
 begin
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.X)) or TestCollisionYwithGear(Gear, hwSign(Gear^.Y)
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) or TestCollisionYwithGear(Gear, hwSign(Gear^.dY)
        )
         then Gear^.State := Gear^.State or      gstCollision
     else Gear^.State := Gear^.State and not gstCollision
@@ -184,7 +184,7 @@ end;
 
 procedure CheckCollisionWithLand(Gear: PGear); inline;
 begin
-    if TestCollisionX(Gear, hwSign(Gear^.X)) or TestCollisionY(Gear, hwSign(Gear^.Y)
+    if TestCollisionX(Gear, hwSign(Gear^.dX)) or TestCollisionY(Gear, hwSign(Gear^.dY)
        )
         then Gear^.State := Gear^.State or      gstCollision
     else Gear^.State := Gear^.State and not gstCollision
