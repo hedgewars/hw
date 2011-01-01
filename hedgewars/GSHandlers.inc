@@ -1362,19 +1362,19 @@ begin
         if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
         end;
 
-    ropeDx := HHGear^.X - Gear^.X;
     // vector between hedgehog and rope attaching point
+    ropeDx := HHGear^.X - Gear^.X;
     ropeDy := HHGear^.Y - Gear^.Y;
 
     mdX := ropeDx + HHGear^.dX;
     mdY := ropeDy + HHGear^.dY;
     len := _1 / Distance(mdX, mdY);
-    mdX := mdX * len;
     // rope vector plus hedgehog direction vector normalized
+    mdX := mdX * len;
     mdY := mdY * len;
 
-    Gear^.dX := mdX;
     // for visual purposes only
+    Gear^.dX := mdX;
     Gear^.dY := mdY;
 
     /////
@@ -1502,8 +1502,27 @@ begin
         HHGear^.dY := HHGear^.dY * len;
         end;
 
+    if RopePoints.Count > 0 then
+        begin
+        // backup gear location
+        tx:= Gear^.X;
+        ty:= Gear^.Y;
 
-    if (Gear^.Message and gmAttack) <> 0 then
+        // set gear location to the remote end of the rope, the attachment point
+        Gear^.X:= RopePoints.ar[0].X;
+        Gear^.Y:= RopePoints.ar[0].Y;
+
+        CheckCollisionWithLand(Gear);
+
+        // restore gear location
+        Gear^.X:= tx;
+        Gear^.Y:= ty;
+        end
+    else
+        CheckCollisionWithLand(Gear);
+
+    if ((Gear^.Message and gmAttack) <> 0)
+    or ((Gear^.State and gstCollision) = 0) then
         if (Gear^.State and gsttmpFlag) <> 0 then
             with Gear^.Hedgehog^ do
                 begin
@@ -1517,6 +1536,7 @@ begin
     else
         if (Gear^.State and gsttmpFlag) = 0 then
             Gear^.State := Gear^.State or gsttmpFlag;
+
 end;
 
 procedure doStepRopeAttach(Gear: PGear);
