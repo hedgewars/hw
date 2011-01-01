@@ -197,7 +197,7 @@
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished">Nastaviť</translation>
+        <translation>Nastaviť</translation>
     </message>
 </context>
 <context>
@@ -1759,7 +1759,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>more</source>
-        <translation type="unfinished"></translation>
+        <translation>viac</translation>
     </message>
 </context>
 <context>
