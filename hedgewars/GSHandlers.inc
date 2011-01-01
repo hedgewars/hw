@@ -1502,27 +1502,45 @@ begin
         HHGear^.dY := HHGear^.dY * len;
         end;
 
-    if RopePoints.Count > 0 then
+    haveCollision:= ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) <> 0);
+
+    if not haveCollision then
         begin
         // backup gear location
         tx:= Gear^.X;
         ty:= Gear^.Y;
 
-        // set gear location to the remote end of the rope, the attachment point
-        Gear^.X:= RopePoints.ar[0].X;
-        Gear^.Y:= RopePoints.ar[0].Y;
+        if RopePoints.Count > 0 then
+            begin
+            // set gear location to the remote end of the rope, the attachment point
+            Gear^.X:= RopePoints.ar[0].X;
+            Gear^.Y:= RopePoints.ar[0].Y;
+            end;
 
         CheckCollisionWithLand(Gear);
+        // if we haven't found any collision yet then check the otheer side too
+        if (Gear^.State and gstCollision) = 0 then
+            begin
+            Gear^.dX.isNegative:= not Gear^.dX.isNegative;
+            Gear^.dY.isNegative:= not Gear^.dY.isNegative;
+            CheckCollisionWithLand(Gear);
+            Gear^.dX.isNegative:= not Gear^.dX.isNegative;
+            Gear^.dY.isNegative:= not Gear^.dY.isNegative;
+            end;
+
+        haveCollision:= (Gear^.State and gstCollision) <> 0;
 
         // restore gear location
         Gear^.X:= tx;
         Gear^.Y:= ty;
-        end
-    else
-        CheckCollisionWithLand(Gear);
+        end;
 
-    if ((Gear^.Message and gmAttack) <> 0)
-    or ((Gear^.State and gstCollision) = 0) then
+    // if the attack key is pressed, lose rope contact as well
+    if (Gear^.Message and gmAttack) <> 0 then
+        haveCollision:= false;
+
+    if not haveCollision then
+        begin
         if (Gear^.State and gsttmpFlag) <> 0 then
             with Gear^.Hedgehog^ do
                 begin
@@ -1532,7 +1550,7 @@ begin
                 else
                     DeleteMe
                 end
-    else
+        end
     else
         if (Gear^.State and gsttmpFlag) = 0 then
             Gear^.State := Gear^.State or gsttmpFlag;
