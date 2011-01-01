@@ -600,10 +600,8 @@ if GameTicks and $7 = 0 then
     // move back to cloud layer
         if yy > cWaterLine then move:= true
         else if ((yy and LAND_HEIGHT_MASK) <> 0) or ((xx and LAND_WIDTH_MASK) <> 0) then move:=true
-        // Hog/Object encountered
-        else if ((Land[yy, xx] and $FF) <> 0) then move:=true
         // Solid pixel encountered
-        else if (Land[yy, xx] > 255) then
+        else if (Land[yy, xx] <> 0) then
             begin
             // If there's room below keep falling
             if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (Land[yy-1, xx] = 0) then
@@ -631,6 +629,9 @@ if GameTicks and $7 = 0 then
                 X:= X + _0_8 * 2 * hwSign(cWindSpeed);
                 Y:= Y - dY - cGravity * vobFallSpeed * 8;
                 end
+            // if there's an hog/object below do nothing
+            else if ((((yy+1) and LAND_HEIGHT_MASK) = 0) and ((Land[yy+1, xx] and $FF) <> 0))
+                then move:=true
             else
                 begin
                 // we've collided with land. draw some stuff and get back into the clouds
