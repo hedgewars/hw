@@ -1125,10 +1125,10 @@ if (GameFlags and gfLaserSight) <> 0 then
 if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
 
-if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
+if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) and ((cReducedQuality and rqLowRes) = 0) then
     begin
     for i:= 0 to Pred(vobCount*2) do
-        AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(1024), gtFlake, 0, _0, _0, 0);
+        AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(LAND_HEIGHT div 2), gtFlake, 0, _0, _0, 0);
     disableLandBack:= true
     end
 end;

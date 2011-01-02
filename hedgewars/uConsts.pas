@@ -69,7 +69,7 @@ const
     rqNoBackground= $00000004;  // don't draw background
     rqSimpleRope  = $00000008;  // draw rope using lines only
     rq2DWater     = $00000010;  // disable 3D water effect
-    rqFancyBoom   = $00000020;  // no fancy explosion effects
+    rqAntiBoom    = $00000020;  // no fancy explosion effects
     rqKillFlakes  = $00000040;  // no flakes
     rqSlowMenu    = $00000080;  // ammomenu appears with no animation
     rqPlainSplash = $00000100;  // no droplets

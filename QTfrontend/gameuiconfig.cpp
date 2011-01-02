@@ -183,7 +183,7 @@ quint32 GameUIConfig::translateQuality()
     quint32 rqNoBackground = 0x00000004;  // don't draw background
     quint32 rqSimpleRope = 0x00000008;  // avoid drawing rope
     quint32 rq2DWater = 0x00000010;  // disabe 3D water effect
-    quint32 rqFancyBoom = 0x00000020;  // no fancy explosion effects
+    quint32 rqAntiBoom = 0x00000020;  // no fancy explosion effects
     quint32 rqKillFlakes = 0x00000040;  // no flakes
     quint32 rqSlowMenu = 0x00000080;  // ammomenu appears with no animation
     quint32 rqPlainSplash = 0x00000100;  // no droplets
@@ -204,15 +204,15 @@ quint32 GameUIConfig::translateQuality()
         break;
       case 2:
         result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
-                  rqFancyBoom | rqSlowMenu;
+                  rqAntiBoom | rqSlowMenu;
         break;
       case 1:
         result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
-                  rqFancyBoom | rqSlowMenu | rqSimpleRope | rqDesyncVBlank;
+                  rqAntiBoom | rqSlowMenu | rqSimpleRope | rqDesyncVBlank;
         break;
       case 0:
         result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
-                  rqFancyBoom | rqSlowMenu | rqSimpleRope | rqDesyncVBlank |
+                  rqAntiBoom | rqSlowMenu | rqSimpleRope | rqDesyncVBlank |
                   rqNoBackground | rqClampLess;
         break;
       default:

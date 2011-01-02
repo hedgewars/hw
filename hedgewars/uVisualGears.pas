@@ -113,7 +113,7 @@ if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we are
         exit
         end;
 
-if ((cReducedQuality and rqFancyBoom) <> 0) and
+if ((cReducedQuality and rqAntiBoom) <> 0) and
    not Critical and
    not (Kind in
    [vgtTeamHealthSorter,
@@ -429,7 +429,7 @@ case Layer of
                     DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
                     end
         end;
-            if (cReducedQuality and rqFancyBoom) = 0 then
+            if (cReducedQuality and rqAntiBoom) = 0 then
                 case Gear^.Kind of
                     vgtSmoke: DrawSprite(sprSmoke, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                     vgtSmokeWhite: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
@@ -458,7 +458,7 @@ case Layer of
                              DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
                              end;
             end;
-        if (cReducedQuality and rqFancyBoom) = 0 then
+        if (cReducedQuality and rqAntiBoom) = 0 then
             case Gear^.Kind of
                 vgtExplPart: DrawSprite(sprExplPart, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
                 vgtExplPart2: DrawSprite(sprExplPart2, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
