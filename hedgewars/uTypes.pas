@@ -334,7 +334,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             TurnNumber: LongWord;
             end;
 
-     TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidBee, sidShotgun,
+     TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidBee, sidShotgun,
             sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
             sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
             sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
@@ -344,7 +344,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             sidLowGravity, sidExtraDamage, sidInvulnerable, sidExtraTime,
             sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack,
             sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb, sidSineGun, sidFlamethrower,
-            sidSMine, sidHammer, sidResurrector, sidDrillStrike, sidSnowball);
+            sidSMine, sidHammer, sidResurrector, sidDrillStrike, sidSnowball, sidNothing);
 
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,

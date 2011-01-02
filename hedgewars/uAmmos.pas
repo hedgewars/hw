@@ -320,15 +320,12 @@ with Hedgehog do
 
     with CurWeapon^ do
         begin
-        if AmmoType <> amNothing then
-            begin
-            s:= trammo[Ammoz[AmmoType].NameId];
-            if (Count <> AMMO_INFINITE) and not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0)) then
-                s:= s + ' (' + IntToStr(Count) + ')';
-            if (Propz and ammoprop_Timerable) <> 0 then
-                s:= s + ', ' + IntToStr(Timer div 1000) + ' ' + trammo[sidSeconds];
-            AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
-            end;
+        s:= trammo[Ammoz[AmmoType].NameId];
+        if (Count <> AMMO_INFINITE) and not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0)) then
+            s:= s + ' (' + IntToStr(Count) + ')';
+        if (Propz and ammoprop_Timerable) <> 0 then
+            s:= s + ', ' + IntToStr(Timer div 1000) + ' ' + trammo[sidSeconds];
+        AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
         if (Propz and ammoprop_NeedTarget) <> 0
             then begin
             Gear^.State:= Gear^.State or      gstHHChooseTarget;

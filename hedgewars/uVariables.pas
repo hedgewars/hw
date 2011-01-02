@@ -1981,7 +1981,7 @@ const
             PosSprite: sprAmAirplane;
             ejectX: 0;
             ejectY: 0),
-// Snowball
+// Snowball/Mudball
             (NameId: sidSnowball;
             NameTex: nil;
             Probability: 0;

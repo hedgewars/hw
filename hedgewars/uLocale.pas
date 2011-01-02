@@ -44,7 +44,6 @@ var s: ansistring;
     loaded: boolean;
 begin
 loaded:= false;
-trammo[sidNothing]:= ' ';
 for e:= Low(TEventId) to High(TEventId) do first[e]:= true;
 
 {$I-} // iochecks off
@@ -69,7 +68,7 @@ if loaded then
        TryDo(s[6] = '=', 'Load locale: "=" expected', true);
        Delete(s, 1, 6);
        case a of
-           0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b+1)]:= s;
+           0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b)]:= s;
            1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
            2: if (b >=0) and (b <= ord(High(TEventId))) then begin
                TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + IntToStr(a) + ':' + IntToStr(b), false);
@@ -81,8 +80,8 @@ if loaded then
                trevt[TEventId(b)][trevt_n[TEventId(b)]]:= s;
                inc(trevt_n[TEventId(b)]);
                end;
-           3: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammoc[TAmmoStrId(b+1)]:= s;
-           4: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammod[TAmmoStrId(b+1)]:= s;
+           3: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammoc[TAmmoStrId(b)]:= s;
+           4: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammod[TAmmoStrId(b)]:= s;
            5: if (b >=0) and (b <= ord(High(TGoalStrId))) then trgoal[TGoalStrId(b)]:= s;
            end;
        end;

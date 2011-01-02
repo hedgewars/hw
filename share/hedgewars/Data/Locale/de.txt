@@ -50,6 +50,9 @@
 00:47=Haftmine
 00:48=Hammer
 00:49=Totenbeschwörung
+00:50=Bohr-Luftangriff
+00:51=Schlammball
+00:52=Keine Waffe ausgewählt
 
 
 01:00=Auf in die Schlacht!
