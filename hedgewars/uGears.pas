@@ -1091,12 +1091,6 @@ var i: LongInt;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 
-if (TrainingFlags and tfSpawnTargets) <> 0 then
-    begin
-    TrainingTargetGear:= AddGear(0, 0, gtTarget, 0, _0, _0, 0);
-    FindPlace(TrainingTargetGear, false, 0, LAND_WIDTH);
-    end;
-
 for i:= 0 to Pred(cLandMines) do
     begin
     Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
@@ -1894,7 +1888,6 @@ begin
     SuddenDeath:= false;
     SuddenDeathDmg:= false;
     SpeechType:= 1;
-    TrainingTargetGear:= nil;
     skipFlag:= false;
 
     AllInactive:= false;

@@ -723,52 +723,6 @@ if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) th
    DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4 + offsetY, cScreenHeight - offsetX, 0);
    end;
 
-{$IFNDEF IPHONEOS}
-// Timetrial
-if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
-    begin
-    if TimeTrialStopTime = 0 then i:= RealTicks - TimeTrialStartTime else i:= TimeTrialStopTime - TimeTrialStartTime;
-    t:= 272;
-    // right frame
-    DrawSprite(sprFrame, -cScreenWidth div 2 + t, 8, 1);
-    dec(t, 32);
-    // 1 ms
-    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
-    dec(t, 32);
-    i:= i div 10;
-    // 10 ms
-    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
-    dec(t, 32);
-    i:= i div 10;
-    // 100 ms
-    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
-    dec(t, 16);
-    // Point
-    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, 11);
-    dec(t, 32);
-    i:= i div 10;
-    // 1 s
-    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
-    dec(t, 32);
-    i:= i div 10;
-    // 10s
-    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 6);
-    dec(t, 16);
-    // Point
-    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, 10);
-    dec(t, 32);
-    i:= i div 6;
-    // 1 m
-    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
-    dec(t, 32);
-    i:= i div 10;
-    // 10 m
-    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
-    // left frame
-    DrawSprite(sprFrame, -cScreenWidth div 2 + t - 4, 8, 0);
-    end;
-{$ENDIF}
-
 // Captions
 DrawCaptions;
 

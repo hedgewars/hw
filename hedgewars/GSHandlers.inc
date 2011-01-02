@@ -1972,28 +1972,12 @@ begin
     if (Gear^.Tag = 0) and (Gear^.Timer < 1000) then
         inc(Gear^.Timer)
     else if Gear^.Tag = 1 then
-        begin
-            Gear^.Tag := 2;
-            if (TrainingFlags and tfTimeTrial) <> 0 then
-            begin
-                inc(TurnTimeLeft, TrainingTimeInc);
-
-                if TrainingTimeInc > TrainingTimeInM then
-                    dec(TrainingTimeInc, TrainingTimeInD);
-                if TurnTimeLeft > TrainingTimeMax then
-                    TurnTimeLeft := TrainingTimeMax;
-            end;
-        end
+        Gear^.Tag := 2
     else if Gear^.Tag = 2 then
              if Gear^.Timer > 0 then
                  dec(Gear^.Timer)
     else
     begin
-        if (TrainingFlags and tfTargetRespawn) <> 0 then
-        begin
-            TrainingTargetGear := AddGear(0, 0, gtTarget, 0, _0, _0, 0);
-            FindPlace(TrainingTargetGear, false, 0, LAND_WIDTH);
-        end;
         DeleteGear(Gear);
         exit;
     end;
@@ -3107,11 +3091,6 @@ var
 begin
     AllInactive := false;
 
-    if ((TrainingFlags and tfRCPlane) = 0) and (Gear^.Timer > 0) then dec(Gear^.Timer);
-
-    if ((TrainingFlags and tfRCPlane) <> 0) and ((TrainingFlags and tfTimeTrial) <> 0 ) and (
-       TimeTrialStartTime = 0) then TimeTrialStartTime := RealTicks;
-
     HHGear := Gear^.Hedgehog^.Gear;
     FollowGear := Gear;
 
@@ -3154,71 +3133,42 @@ begin
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
 
-    if (TrainingFlags and tfRCPlane) = 0 then
-    begin
-        if (GameTicks and $FF) = 0 then
-            if Gear^.Timer < 3500 then
-                AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEvilTrace)
-        else
-            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
-
-        if ((HHGear^.Message and gmAttack) <> 0) and (Gear^.Health <> 0) then
-        begin
-            HHGear^.Message := HHGear^.Message and not gmAttack;
-            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.dX * _0_5, Gear^.dY *
-            _0_5, 0);
-            dec(Gear^.Health)
-        end;
-
-        if ((HHGear^.Message and gmLJump) <> 0)
-           and ((Gear^.State and gsttmpFlag) = 0) then
-        begin
-            Gear^.State := Gear^.State or gsttmpFlag;
-            PauseMusic;
-            playSound(sndRideOfTheValkyries);
-        end;
-
-        // pickup bonuses
-        t := CheckGearNear(Gear, gtCase, 36, 36);
-        if t <> nil then
-            PickUp(HHGear, t);
-    end
+    if (GameTicks and $FF) = 0 then
+        if Gear^.Timer < 3500 then
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEvilTrace)
     else
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
+
+    if ((HHGear^.Message and gmAttack) <> 0) and (Gear^.Health <> 0) then
     begin
-        if (GameTicks and $FF) = 0 then
-            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
-
-        // pickup targets
-        t := CheckGearNear(Gear, gtTarget, 36, 36);
-        if t <> nil then
-        begin
-            if t^.Tag <> 0 then // collect it only once
-                exit;
-            PlaySound(sndShotgunReload);
-            t^.Tag := 1;
-            TrainingTargetGear := nil;
-            // remove target cursor
-            exit;
-        end;
-
-        if (TurnTimeLeft > 0) then
-            dec(TurnTimeLeft)
+        HHGear^.Message := HHGear^.Message and not gmAttack;
+        AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.dX * _0_5, Gear^.dY *
+        _0_5, 0);
+        dec(Gear^.Health)
     end;
+
+    if ((HHGear^.Message and gmLJump) <> 0)
+       and ((Gear^.State and gsttmpFlag) = 0) then
+    begin
+        Gear^.State := Gear^.State or gsttmpFlag;
+        PauseMusic;
+        playSound(sndRideOfTheValkyries);
+    end;
+
+    // pickup bonuses
+    t := CheckGearNear(Gear, gtCase, 36, 36);
+    if t <> nil then
+        PickUp(HHGear, t);
 
     CheckCollision(Gear);
 
-    if ((Gear^.State and gstCollision) <> 0) or (((TrainingFlags and tfRCPlane) <> 0) and (
-       TurnTimeLeft = 0))
-       or CheckGearDrowning(Gear) then
+    if ((Gear^.State and gstCollision) <> 0) or CheckGearDrowning(Gear) then
     begin
-        if ((TrainingFlags and tfRCPlane) <> 0) and ((TrainingFlags and tfTimeTrial) <> 0 ) and (
-           TimeTrialStopTime = 0) then TimeTrialStopTime := RealTicks;
         StopSound(Gear^.SoundChannel);
         StopSound(sndRideOfTheValkyries);
         ResumeMusic;
 
-        if ((Gear^.State and gstCollision) <> 0) or (((TrainingFlags and tfRCPlane) <> 0) and (
-           TurnTimeLeft = 0)) then
+        if ((Gear^.State and gstCollision) <> 0) then
         begin
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
             for i:= 0 to 32 do
@@ -3234,10 +3184,6 @@ begin
         AfterAttack;
         CurAmmoGear := nil;
         if (GameFlags and gfInfAttack) = 0 then TurnTimeLeft := 14 * 125;
-
-        if (TrainingFlags and tfRCPlane) <> 0 then
-            TurnTimeLeft := 0;
-        // HACK: RCPlane training allows unlimited plane starts in last 2 seconds
 
         HHGear^.Message := 0;
         ParseCommand('/taunt '#1, true)

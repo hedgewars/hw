@@ -39,14 +39,11 @@ var
     grp: TCapGroup;
     offset: LongInt;
 begin
-    {$IFDEF IPHONEOS}
+{$IFDEF IPHONEOS}
     offset:= 40;
-    {$ELSE}
-    if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
-        offset:= 48
-    else
-        offset:= 8;
-    {$ENDIF}
+{$ELSE}
+    offset:= 8;
+{$ENDIF}
 
     for grp:= Low(TCapGroup) to High(TCapGroup) do
         with Captions[grp] do

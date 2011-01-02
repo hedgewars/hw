@@ -94,7 +94,6 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         Ammoz[a].Probability:= probability[byte(ammoProbability[ord(a)]) - byte('0')];
         Ammoz[a].SkipTurns:= (byte(ammoDelay[ord(a)]) - byte('0'));
         Ammoz[a].NumberInCase:= (byte(ammoReinforcement[ord(a)]) - byte('0'));
-        if (TrainingFlags and tfIgnoreDelays) <> 0 then Ammoz[a].SkipTurns:= 0;
         cnt:= byte(ammoLoadout[ord(a)]) - byte('0');
         // avoid things we already have infinite number
         if cnt = 9 then

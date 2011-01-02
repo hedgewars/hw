@@ -163,14 +163,6 @@ const
     cSendEmptyPacketTime = 1000;
     trigTurns = $80000001;
 
-    // Training Flags
-    tfNone          = $00000000;
-    tfTimeTrial     = $00000001;
-    tfRCPlane       = $00000002;
-    tfSpawnTargets  = $00000004;
-    tfIgnoreDelays  = $00000008;
-    tfTargetRespawn = $00000010;
-
     gfAny                = $FFFFFFFF;
     gfOneClanMode        = $00000001;           // used in trainings
     gfMultiWeapon        = $00000002;           // used in trainings

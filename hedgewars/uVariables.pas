@@ -45,7 +45,6 @@ var
     GameType        : TGameType;
     InputMask       : LongWord;
     GameFlags       : Longword;
-    TrainingFlags   : Longword;
     TurnTimeLeft    : Longword;
     ReadyTimeLeft   : Longword;
     cSuddenDTurns   : LongInt;
@@ -76,13 +75,6 @@ var
     cGearScrEdgesDist: LongInt;
 
     GameTicks   : LongWord;
-    TrainingTimeInc : Longword;
-    TrainingTimeInD : Longword;
-    TrainingTimeInM : Longword;
-    TrainingTimeMax : Longword;
-
-    TimeTrialStartTime: Longword;
-    TimeTrialStopTime : Longword;
 
     // originally from uConsts
     Pathz: array[TPathType] of shortstring;
@@ -2054,7 +2046,6 @@ var
     SuddenDeathDmg: Boolean;
     SpeechType: Longword;
     SpeechText: shortstring;
-    TrainingTargetGear: PGear;
     skipFlag: boolean;
     PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
     StepSoundTimer: LongInt;
@@ -2215,18 +2206,11 @@ begin
     CursorMovementX     := 0;
     CursorMovementY     := 0;
     GameTicks           := 0;
-    TrainingTimeInc     := 10000;
-    TrainingTimeInD     := 500;
-    TrainingTimeInM     := 5000;
-    TrainingTimeMax     := 60000;
-    TimeTrialStartTime  := 0;
-    TimeTrialStopTime   := 0;
     cWaterLine          := LAND_HEIGHT;
     cGearScrEdgesDist   := 240;
 
     InputMask           := $FFFFFFFF;
     GameFlags           := 0;
-    TrainingFlags       := 0;
     TurnTimeLeft        := 0;
     cSuddenDTurns       := 15;
     cDamagePercent      := 100;
