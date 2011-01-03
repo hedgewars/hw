@@ -186,7 +186,7 @@ begin
     if (Gear^.State and gstHHDeath) <> 0 then
         begin
         DrawSprite(sprHHDeath, ox - 16, oy - 26, Gear^.Pos);
-        Tint(HH^.Team^.Clan^.Color);
+        Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
         DrawSprite(sprHHDeath, ox - 16, oy - 26, Gear^.Pos + 8);
         Tint($FF, $FF, $FF, $FF);
         exit
@@ -353,7 +353,7 @@ begin
                                 i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
                             if HatTex^.w > 64 then
                                 begin
-                                Tint(HH^.Team^.Clan^.Color);
+                                Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
                                 DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, ox, oy, 32, i, 32, 32,
                                     i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
                                 Tint($FF, $FF, $FF, $FF)
@@ -383,7 +383,7 @@ begin
                                 32);
                             if HatTex^.w > 64 then
                                 begin
-                                Tint(HH^.Team^.Clan^.Color);
+                                Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
                                 DrawTextureF(HatTex,
                                     1,
                                     sx,
@@ -705,7 +705,7 @@ begin
                     32);
                 if HatTex^.w > 64 then
                     begin
-                    Tint(HH^.Team^.Clan^.Color);
+                    Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
                     DrawTextureF(HatTex,
                         HatVisibility,
                         sx,
@@ -729,7 +729,7 @@ begin
                     32);
                 if HatTex^.w > 64 then
                     begin
-                    Tint(HH^.Team^.Clan^.Color);
+                    Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
                     DrawTextureF(HatTex,
                         HatVisibility,
                         sx,
