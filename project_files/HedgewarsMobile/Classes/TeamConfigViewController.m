@@ -183,8 +183,8 @@
         NSString *teamPath = [NSString stringWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),cell.textLabel.text];
         NSDictionary *firstHog = [[[NSDictionary dictionaryWithContentsOfFile:teamPath] objectForKey:@"hedgehogs"] objectAtIndex:0];
         if ([[firstHog objectForKey:@"level"] intValue] != 0) {
-            NSString *filePath = [NSString stringWithFormat:@"%@/cyborg.png",HATS_DIRECTORY()];
-            UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath andCutAt:CGRectMake(0, 2, 32, 32)];
+            NSString *filePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/Images/robotBadge.png"];
+            UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath];
             UIImageView *spriteView = [[UIImageView alloc] initWithImage:sprite];
             [sprite release];
             
