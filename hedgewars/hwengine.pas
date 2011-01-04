@@ -226,7 +226,7 @@ begin
     cAltDamage:= gameArgs[8] = '1';
     val(gameArgs[9], rotationQt);
     recordFileName:= gameArgs[10];
-    cStereoMode:= smNone; // TODO: Enable anaglyph rendering on iPhone?
+    cStereoMode:= smNone;
 {$ENDIF}
 
     cLogfileBase:= 'game';

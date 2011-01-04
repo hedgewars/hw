@@ -10,7 +10,7 @@ var
     cScreenWidth    : LongInt     = 1024;
     cScreenHeight   : LongInt     = 768;
     cBits           : LongInt     = 32;
-    //ipcPort is in uIO
+    ipcPort         : Word        = 0;
     cFullScreen     : boolean     = false;
     isSoundEnabled  : boolean     = true;
     isMusicEnabled  : boolean     = false;
@@ -21,7 +21,7 @@ var
     cShowFPS        : boolean     = false;
     cAltDamage      : boolean     = true;
     cReducedQuality : LongWord    = rqNone;
-    //userNick is in uChat
+    UserNick        : shortstring = '';
     recordFileName  : shortstring = '';
     cReadyDelay     : Longword    = 5000;
     cLogfileBase    : shortstring = 'debug';
@@ -144,6 +144,8 @@ var
 
     WorldDx: LongInt;
     WorldDy: LongInt;
+
+    hiTicks: Word;
 
 const
     cHHFileName = 'Hedgehog';
@@ -2302,18 +2304,18 @@ begin
     cScreenWidth    := 1024;
     cScreenHeight   := 768;
     cBits           := 32;
-    //ipcPort is in uIO
+    ipcPort         := 0;
     cFullScreen     := false;
     isSoundEnabled  := true;
     isMusicEnabled  := false;
     cLocaleFName    := 'en.txt';
     cInitVolume     := 100;
     cTimerInterval  := 8;
-    PathPrefix := './';
+    PathPrefix      := './';
     cShowFPS        := false;
     cAltDamage      := true;
     cReducedQuality := rqNone;
-    //userNick is in uChat
+    UserNick        := '';
     recordFileName  := '';
     cReadyDelay     := 5000;
     cStereoMode     := smNone;
