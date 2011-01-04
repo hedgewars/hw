@@ -23,14 +23,19 @@ HWProto::HWProto()
 
 }
 
+QByteArray & HWProto::addByteArrayToBuffer(QByteArray & buf, const QByteArray & msg)
+{
+    QByteArray bmsg = msg;
+    bmsg = bmsg.left(250);
+    quint8 sz = bmsg.size();
+    buf.append(QByteArray((char *)&sz, 1));
+    buf.append(bmsg);
+    return buf;
+}
+
 QByteArray & HWProto::addStringToBuffer(QByteArray & buf, const QString & string)
 {
-    QByteArray strmsg = string.toUtf8();
-    strmsg = strmsg.left(250);
-    quint8 sz = strmsg.size();
-    buf.append(QByteArray((char *)&sz, 1));
-    buf.append(strmsg);
-    return buf;
+    return addByteArrayToBuffer(buf, string.toUtf8());
 }
 
 QByteArray & HWProto::addStringListToBuffer(QByteArray & buf, const QStringList & strList)

@@ -40,6 +40,7 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, Tea
     this->config = config;
     this->gamecfg = gamecfg;
     TeamCount = 0;
+    netSuspend = false;
 }
 
 HWGame::~HWGame()
@@ -77,7 +78,7 @@ void HWGame::commonConfig()
     }
     HWProto::addStringToBuffer(buf, gt);
 
-    HWProto::addStringListToBuffer(buf, gamecfg->getFullConfig());
+    buf += gamecfg->getFullConfig();
 
     if (m_pTeamSelWidget)
     {
@@ -88,7 +89,7 @@ void HWGame::commonConfig()
             HWProto::addStringToBuffer(buf, QString("eammprob %1").arg(ammostr.mid(cAmmoNumber, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammdelay %1").arg(ammostr.mid(2 * cAmmoNumber, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammreinf %1").arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
-            HWProto::addStringToBuffer(buf, QString("eammstore"));
+            if(!gamecfg->schemeData(21).toBool()) HWProto::addStringToBuffer(buf, QString("eammstore"));
             HWProto::addStringListToBuffer(buf,
                 (*it).TeamGameConfig(gamecfg->getInitHealth()));
         }
@@ -245,7 +246,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
             break;
         }
         default: {
-            if (gameType == gtNet)
+            if (gameType == gtNet && !netSuspend)
             {
                 emit SendNet(msg);
             }
@@ -377,4 +378,16 @@ void HWGame::SetGameState(GameState state)
 {
     gameState = state;
     emit GameStateChanged(state);
+}
+
+void HWGame::KillAllTeams()
+{
+    if (m_pTeamSelWidget)
+    {
+        QByteArray buf;
+        QList<HWTeam> teams = m_pTeamSelWidget->getPlayingTeams();
+        for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it)
+            HWProto::addStringToBuffer(buf, QString("eteamgone %1").arg((*it).TeamName));
+        RawSendIPC(buf);
+    }
 }

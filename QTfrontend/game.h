@@ -53,6 +53,9 @@ public:
     void StartNet();
     void StartTraining(const QString & file);
     void StartCampaign(const QString & file);
+    void KillAllTeams();
+    GameState gameState;
+    bool netSuspend;
 
  protected:
     virtual QStringList setArguments();
@@ -89,7 +92,6 @@ private:
     GameCFGWidget * gamecfg;
     TeamSelWidget* m_pTeamSelWidget;
     GameType gameType;
-    GameState gameState;
 
     void commonConfig();
     void SendConfig();

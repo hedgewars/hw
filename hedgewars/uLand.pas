@@ -20,23 +20,7 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat, uConsts, GLunit;
-
-type
-    TLandArray = packed array of array of LongWord;
-    TCollisionArray = packed array of array of Word;
-    TPreview  = packed array[0..127, 0..31] of byte;
-    TDirtyTag = packed array of array of byte;
-
-var Land: TCollisionArray;
-    LandPixels: TLandArray;
-    LandDirty: TDirtyTag;
-    hasBorder: boolean;
-    hasGirders: boolean;
-    isMap: boolean;
-    playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
-    LandBackSurface: PSDL_Surface;
-    digest: shortstring;
+uses SDLh, uLandTemplates, uFloat, uConsts, GLunit, uTypes;
 
 type direction = record x, y: LongInt; end;
 const DIR_N: direction = (x: 0; y: -1);
@@ -48,11 +32,10 @@ procedure initModule;
 procedure freeModule;
 procedure GenMap;
 function  GenPreview: TPreview;
-procedure CheckLandDigest(s: shortstring);
-function  LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
-uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, Adler32, uIO, uLandTexture, sysutils;
+uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
+     uVariables, uUtils, uCommands, Adler32, uDebug, uLandPainted;
 
 operator=(const a, b: direction) c: Boolean;
 begin
@@ -63,30 +46,6 @@ type TPixAr = record
               Count: Longword;
               ar: array[0..Pred(cMaxEdgePoints)] of TPoint;
               end;
-
-procedure LogLandDigest;
-var s: shortstring;
-    adler, i: LongInt;
-begin
-adler:= 1;
-for i:= 0 to LAND_HEIGHT-1 do
-    Adler32Update(adler, @Land[i,0], LAND_WIDTH);
-s:= 'M'+inttostr(adler);
-
-CheckLandDigest(s);
-SendIPCRaw(@s[0], Length(s) + 1)
-end;
-
-procedure CheckLandDigest(s: shortstring);
-begin
-{$IFDEF DEBUGFILE}
-    AddFileLog('CheckLandDigest: ' + s + ' digest : ' + digest);
-{$ENDIF}
-    if digest = '' then
-        digest:= s
-    else
-        TryDo(s = digest, 'Different maps generated, sorry', true);
-end;
 
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 var
@@ -319,17 +278,6 @@ while Stack.Count > 0 do
       end;
 end;
 
-function LandBackPixel(x, y: LongInt): LongWord;
-var p: PLongWordArray;
-begin
-    if LandBackSurface = nil then LandBackPixel:= 0
-    else
-    begin
-        p:= LandBackSurface^.pixels;
-        LandBackPixel:= p^[LandBackSurface^.w * (y mod LandBackSurface^.h) + (x mod LandBackSurface^.w)];// or $FF000000;
-    end
-end;
-
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
@@ -385,7 +333,7 @@ begin
                 r.x:= x mod tmpsurf^.w;
                 r.y:= 0;
                 r.w:= 1;
-                r.h:= min(16, yd - yu + 1);
+                r.h:= Min(16, yd - yu + 1);
                 SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
             end;
             yd:= yu - 1;
@@ -548,57 +496,70 @@ var pa: TPixAr;
     i: Longword;
     y, x: Longword;
 begin
-for y:= 0 to LAND_HEIGHT - 1 do
-    for x:= 0 to LAND_WIDTH - 1 do
-        Land[y, x]:= lfBasic;
-
-{$HINTS OFF}
-SetPoints(Template, pa);
-{$HINTS ON}
-for i:= 1 to Template.BezierizeCount do
-    begin
-    BezierizeEdge(pa, _0_5);
-    RandomizePoints(pa);
-    RandomizePoints(pa)
-    end;
-for i:= 1 to Template.RandPassesCount do RandomizePoints(pa);
-BezierizeEdge(pa, _0_1);
-
-DrawEdge(pa, 0);
-
-with Template do
-     for i:= 0 to pred(FillPointsCount) do
-         with FillPoints^[i] do
-              FillLand(x, y);
-
-DrawEdge(pa, lfBasic);
-
-MaxHedgehogs:= Template.MaxHedgehogs;
-hasGirders:= Template.hasGirders;
-playHeight:= Template.TemplateHeight;
-playWidth:= Template.TemplateWidth;
-leftX:= ((LAND_WIDTH - playWidth) div 2);
-rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
-topY:= LAND_HEIGHT - playHeight;
-
-// force to only cavern even if a cavern map is invertable if cTemplateFilter = 4 ?
-if (cTemplateFilter = 4) or
-   (Template.canInvert and (getrandom(2) = 0)) or
-    (not Template.canInvert and Template.isNegative) then
-    begin
-    hasBorder:= true;
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
-            if (y < topY) or (x < leftX) or (x > rightX) then
-                Land[y, x]:= 0
-            else
-            begin
-               if Land[y, x] = 0 then
-                   Land[y, x]:= lfBasic
-               else if Land[y, x] = lfBasic then
-                   Land[y, x]:= 0;
-            end;
-    end;
+            Land[y, x]:= lfBasic;
+    {$HINTS OFF}
+    SetPoints(Template, pa);
+    {$HINTS ON}
+    for i:= 1 to Template.BezierizeCount do
+        begin
+        BezierizeEdge(pa, _0_5);
+        RandomizePoints(pa);
+        RandomizePoints(pa)
+        end;
+    for i:= 1 to Template.RandPassesCount do RandomizePoints(pa);
+    BezierizeEdge(pa, _0_1);
+
+
+    DrawEdge(pa, 0);
+
+    with Template do
+        for i:= 0 to pred(FillPointsCount) do
+            with FillPoints^[i] do
+                FillLand(x, y);
+
+    DrawEdge(pa, lfBasic);
+
+    MaxHedgehogs:= Template.MaxHedgehogs;
+    hasGirders:= Template.hasGirders;
+    playHeight:= Template.TemplateHeight;
+    playWidth:= Template.TemplateWidth;
+    leftX:= ((LAND_WIDTH - playWidth) div 2);
+    rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
+    topY:= LAND_HEIGHT - playHeight;
+
+    // HACK: force to only cavern even if a cavern map is invertable if cTemplateFilter = 4 ?
+    if (cTemplateFilter = 4) or
+    (Template.canInvert and (getrandom(2) = 0)) or
+        (not Template.canInvert and Template.isNegative) then
+        begin
+        hasBorder:= true;
+        for y:= 0 to LAND_HEIGHT - 1 do
+            for x:= 0 to LAND_WIDTH - 1 do
+                if (y < topY) or (x < leftX) or (x > rightX) then
+                    Land[y, x]:= 0
+                else
+                begin
+                if Land[y, x] = 0 then
+                    Land[y, x]:= lfBasic
+                else if Land[y, x] = lfBasic then
+                    Land[y, x]:= 0;
+                end;
+        end;
+end;
+
+procedure GenDrawnMap;
+begin
+    uLandPainted.Draw;
+
+    MaxHedgehogs:= 48;
+    hasGirders:= true;
+    playHeight:= 2048;
+    playWidth:= 4096;
+    leftX:= ((LAND_WIDTH - playWidth) div 2);
+    rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
+    topY:= LAND_HEIGHT - playHeight;
 end;
 
 function SelectTemplate: LongInt;
@@ -1083,6 +1044,9 @@ begin
     case cMapGen of
         0: GenBlank(EdgeTemplates[SelectTemplate]);
         1: GenMaze;
+        2: GenDrawnMap;
+    else
+        OutError('Unknown mapgen', true);
     end;
     AddProgress();
 
@@ -1239,8 +1203,6 @@ begin
 
     AddProgress;
 
-{$IFDEF DEBUGFILE}LogLandDigest;{$ENDIF}
-
 // check for land near top
 c:= 0;
 if (GameFlags and gfBorder) <> 0 then
@@ -1325,6 +1287,9 @@ begin
     case cMapGen of
         0: GenBlank(EdgeTemplates[SelectTemplate]);
         1: GenMaze;
+        2: GenDrawnMap;
+    else
+        OutError('Unknown mapgen', true);
     end;
 
     lh:= LAND_HEIGHT div 128;
@@ -1348,8 +1313,35 @@ begin
     GenPreview:= Preview
 end;
 
+
+procedure chLandCheck(var s: shortstring);
+begin
+{$IFDEF DEBUGFILE}
+    AddFileLog('CheckLandDigest: ' + s + ' digest : ' + digest);
+{$ENDIF}
+    if digest = '' then
+        digest:= s
+    else
+        TryDo(s = digest, 'Different maps generated, sorry', true);
+end;
+
+procedure chSendLandDigest(var s: shortstring);
+var adler, i: LongInt;
+begin
+    adler:= 1;
+    for i:= 0 to LAND_HEIGHT-1 do
+        Adler32Update(adler, @Land[i,0], LAND_WIDTH);
+    s:= 'M' + IntToStr(adler);
+
+    chLandCheck(s);
+    SendIPCRaw(@s[0], Length(s) + 1)
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('landcheck', vtCommand, @chLandCheck, false);
+    RegisterVariable('sendlanddigest', vtCommand, @chSendLandDigest, false);
+
     LandBackSurface:= nil;
     digest:= '';
 

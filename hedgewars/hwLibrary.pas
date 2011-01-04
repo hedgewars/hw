@@ -12,10 +12,9 @@ Library hwLibrary;
 // these procedures/functions to the PascalImports.h file (also in the "Pascal Sources" group)
 // to make these functions available in the C/C++/Objective-C source files
 // (add "#include PascalImports.h" near the top of these files if it's not there yet)
-uses cmem, hwengine, PascalExports;
+uses cmem, uVariables, PascalExports, hwengine;
 begin
     // avoid compiler warnings about units not being used
     isTerminated:= isTerminated;
-    dummy:= dummy;
 end.
 

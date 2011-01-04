@@ -20,11 +20,14 @@
 
 
 #import <UIKit/UIKit.h>
+#import "HoldTableViewCell.h"
 
+@interface TeamConfigViewController : UITableViewController <HoldTableViewCellDelegate> {
+    NSInteger selectedTeamsCount;
+    NSInteger allTeamsCount;
 
-@interface TeamConfigViewController : UITableViewController {
-    NSMutableArray *listOfTeams;
     NSMutableArray *listOfSelectedTeams;
+    NSMutableArray *listOfTeams;
     NSArray *cachedContentsOfDir;
 }
 

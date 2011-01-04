@@ -42,6 +42,7 @@ public:
 
     int numberOfDefaultSchemes;
     QStringList predefSchemesNames;
+    QStringList spNames;
 
 public slots:
     void Save();
@@ -54,8 +55,6 @@ protected:
 
 private:
     QSettings fileConfig;
-
-    QStringList spNames;
 };
 
 class NetAmmoSchemeModel : public QAbstractTableModel

@@ -25,6 +25,7 @@
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
 #import "HelpPageViewController.h"
+#import "StatsPageViewController.h"
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
 #import "PascalImports.h"
@@ -38,12 +39,7 @@
 }
 
 -(IBAction) buttonPressed:(id) sender {
-    // works even if it's not actually a button
-    UIButton *theButton;
-    if (IS_IPAD())
-        theButton = [[(NSNotification *)sender userInfo] objectForKey:@"sender"];
-    else
-        theButton = (UIButton *)sender;
+    UIButton *theButton = (UIButton *)sender;
 
     switch (theButton.tag) {
         case 0:
@@ -157,7 +153,6 @@
     int hogs = 0;
     for (NSDictionary *teamData in teamConfigViewController.listOfSelectedTeams)
         hogs += [[teamData objectForKey:@"number"] intValue];
-    
     if (hogs > self.mapConfigViewController.maxHogs) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many hogs",@"")
                                                         message:NSLocalizedString(@"The map is too small for that many hogs",@"")
@@ -172,7 +167,7 @@
     // play if there aren't too many teams
     if ([self.teamConfigViewController.listOfSelectedTeams count] > HW_getMaxNumberOfTeams()) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many teams",@"")
-                                                        message:NSLocalizedString(@"Max six teams are allowed in the same game",@"")
+                                                        message:NSLocalizedString(@"You exceeded the maximum number of tems allowed in a game",@"")
                                                        delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
                                               otherButtonTitles:nil];
@@ -193,7 +188,7 @@
         return NO;
     }
 
-    // play if the gameflags are set correctly (divideteam works only with 2 teams
+    // play if the gameflags are set correctly (divideteam works only with 2 teams)
     NSString *schemePath = [[NSString alloc] initWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),self.schemeWeaponConfigViewController.selectedScheme];
     NSArray *gameFlags = [[NSDictionary dictionaryWithContentsOfFile:schemePath] objectForKey:@"gamemod"];
     [schemePath release];
@@ -232,43 +227,30 @@
                                     [NSNumber numberWithInt:self.interfaceOrientation],@"orientation",
                                     nil];
 
-    // finally launch game and remove this controller
-    DLog(@"sending config %@", gameDictionary);
+    NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      gameDictionary,@"game_dictionary",
+                                      [NSNumber numberWithBool:NO],@"netgame",
+                                      @"",@"savefile",
+                                      nil];
 
-    if ([[gameDictionary allKeys] count] == 11) {
-        NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:gameDictionary,@"game_dictionary", @"",@"savefile",
-                                                                                    [NSNumber numberWithBool:NO],@"netgame", nil];
-        // let's hide all the views while the game is on
-        UIViewController *dummy = [[UIViewController alloc] init];
-        [self presentModalViewController:dummy animated:NO];
-        [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-        [self dismissModalViewControllerAnimated:NO];
-        [dummy release];
-    } else {
-        DLog(@"gameconfig data not complete!!");
-        [self.parentViewController dismissModalViewControllerAnimated:YES];
 
-        // present an alert to the user, with an image on the ipad (too big for the iphone)
-        NSString *msg = NSLocalizedString(@"Something went wrong with your configuration. Please try again.",@"");
-        if (IS_IPAD())
-            msg = [msg stringByAppendingString:@"\n\n\n\n\n\n\n\n"];    // this makes space for the image
+    StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
+        statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
+    [self presentModalViewController:statsPage animated:NO];
 
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Whoops"
-                                                        message:msg
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles:nil];
-
-        if (IS_IPAD()) {
-            UIImageView *deniedImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"denied.png"]];
-            deniedImg.frame = CGRectMake(25, 80, 240, 160);
-            [alert addSubview:deniedImg];
-            [deniedImg release];
-        }
-        [alert show];
-        [alert release];
+    NSArray *stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+    if ([stats count] == 0)
+        [statsPage dismissModalViewControllerAnimated:NO];
+    else {
+        statsPage.statsArray = stats;
+        [statsPage.tableView reloadData];
+        [statsPage viewWillAppear:YES];
     }
 
+
+    [statsPage release];
 }
 
 -(void) loadNiceHogs {
@@ -312,12 +294,6 @@
     self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
 
     if (IS_IPAD()) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(buttonPressed:)
-                                                     name:@"buttonPressed"
-                                                   object:nil];
-        srandom(time(NULL));
-
         // load other controllers
         if (self.mapConfigViewController == nil)
             self.mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
@@ -358,6 +334,7 @@
         self.teamConfigViewController.view.frame = CGRectMake(348, 200, 328, 480);
         self.schemeWeaponConfigViewController.view.frame = CGRectMake(10, 70, 300, 600);
 
+        self.mapConfigViewController.parentController = self;
     } else {
         // this is the visible controller
         if (self.mapConfigViewController == nil)
@@ -367,6 +344,7 @@
         [self.view addSubview:self.schemeWeaponConfigViewController.view];
     }
     [self.view addSubview:self.mapConfigViewController.view];
+    self.mapConfigViewController.externalController = schemeWeaponConfigViewController;
 
     [super viewDidLoad];
 }
@@ -420,7 +398,6 @@
 }
 
 -(void) viewDidUnload {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.imgContainer = nil;
     self.mapConfigViewController = nil;
     self.teamConfigViewController = nil;

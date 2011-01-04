@@ -20,7 +20,7 @@
 
 unit uAmmos;
 interface
-uses uConsts, uTeams, uStats;
+uses uConsts, uTypes;
 
 procedure initModule;
 procedure freeModule;
@@ -47,7 +47,7 @@ function  GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 var StoreCnt: Longword;
 
 implementation
-uses uMisc, uGears, uWorld, uLocale, uConsole, uMobile;
+uses uLocale, uMobile, uVariables, uCommands, uUtils, uCaptions, uDebug;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
@@ -68,20 +68,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
        begin
        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
-       with Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]] do
-           begin
-           Count:= cnts[a];
-           if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then Count:= AMMO_INFINITE;
-           end;
-       inc(mi[Ammoz[a].Slot])
-       end
-    else if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
-       begin
-       TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
-
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
-
+       with Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]] do Count:= cnts[a];
        inc(mi[Ammoz[a].Slot])
        end
     end
@@ -107,7 +94,6 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         Ammoz[a].Probability:= probability[byte(ammoProbability[ord(a)]) - byte('0')];
         Ammoz[a].SkipTurns:= (byte(ammoDelay[ord(a)]) - byte('0'));
         Ammoz[a].NumberInCase:= (byte(ammoReinforcement[ord(a)]) - byte('0'));
-        if (TrainingFlags and tfIgnoreDelays) <> 0 then Ammoz[a].SkipTurns:= 0;
         cnt:= byte(ammoLoadout[ord(a)]) - byte('0');
         // avoid things we already have infinite number
         if cnt = 9 then
@@ -134,10 +120,14 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 
         if ((GameFlags and gfPlaceHog) <> 0) and
             (a <> amTeleport) and (a <> amSkip) and
-            (Ammoz[a].SkipTurns < 10000) then inc(Ammoz[a].SkipTurns,10000)
+            (Ammoz[a].SkipTurns < 10000) then inc(Ammoz[a].SkipTurns,10000);
+	if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then ammos[a]:= AMMO_INFINITE
         end 
     else ammos[a]:= AMMO_INFINITE;
-    InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
+    if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
+    	InitialCounts[Pred(StoreCnt)][a]:= cnt
+    else
+    	InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
     end;
 FillAmmoStore(StoresList[Pred(StoreCnt)], ammos)
 end;
@@ -329,15 +319,12 @@ with Hedgehog do
 
     with CurWeapon^ do
         begin
-        if AmmoType <> amNothing then
-            begin
-            s:= trammo[Ammoz[AmmoType].NameId];
-            if (Count <> AMMO_INFINITE) and not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0)) then
-                s:= s + ' (' + IntToStr(Count) + ')';
-            if (Propz and ammoprop_Timerable) <> 0 then
-                s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
-            AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
-            end;
+        s:= trammo[Ammoz[AmmoType].NameId];
+        if (Count <> AMMO_INFINITE) and not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0)) then
+            s:= s + ' (' + IntToStr(Count) + ')';
+        if (Propz and ammoprop_Timerable) <> 0 then
+            s:= s + ', ' + IntToStr(Timer div 1000) + ' ' + trammo[sidSeconds];
+        AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
         if (Propz and ammoprop_NeedTarget) <> 0
             then begin
             Gear^.State:= Gear^.State or      gstHHChooseTarget;
@@ -427,8 +414,22 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     if Ammoz[a].SkipTurns >= 10000 then dec(Ammoz[a].SkipTurns,10000)
 end;
 
+
+
+procedure chAddAmmoStore(var descr: shortstring);
+begin
+descr:= ''; // avoid compiler hint
+AddAmmoStore
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('ammloadt', vtCommand, @SetAmmoLoadout, false);
+    RegisterVariable('ammdelay', vtCommand, @SetAmmoDelay, false);
+    RegisterVariable('ammprob',  vtCommand, @SetAmmoProbability, false);
+    RegisterVariable('ammreinf', vtCommand, @SetAmmoReinforcement, false);
+    RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
+
     StoreCnt:= 0;
     ammoLoadout:= '';
     ammoProbability:= '';

@@ -20,6 +20,8 @@
 
 
 #import "ObjcExports.h"
+#import "AmmoMenuViewController.h"
+#import "AudioToolbox/AudioToolbox.h"
 
 #pragma mark -
 #pragma mark internal variables
@@ -29,6 +31,10 @@ BOOL gameRunning;
 BOOL savedGame;
 // cache the grenade time
 NSInteger grenadeTime;
+// the reference to the newMenu instance
+AmmoMenuViewController *amvc_instance;
+// the audiosession must be initialized before using properties
+BOOL gAudioSessionInited = NO;
 
 #pragma mark -
 #pragma mark functions called like oop
@@ -52,6 +58,10 @@ NSInteger cachedGrenadeTime() {
 
 void inline setGrenadeTime(NSInteger value) {
     grenadeTime = value;
+}
+
+void inline setAmmoMenuInstance(AmmoMenuViewController *instance) {
+    amvc_instance = instance;
 }
 
 #pragma mark -
@@ -86,6 +96,7 @@ void stopSpinning() {
 }
 
 void clearView() {
+    // don't use any engine calls here as this function is called every time the ammomenu is opened
     UIWindow *theWindow = (IS_DUALHEAD()) ? [SDLUIKitDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow];
     UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
     UISegmentedControl *theSegment = (UISegmentedControl *)[theWindow viewWithTag:GRENADE_TAG];
@@ -141,5 +152,40 @@ void replayFinished() {
 }
 
 void updateVisualsNewTurn(void) {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateAmmoVisuals" object:nil];
+    [amvc_instance updateAmmoVisuals];
 }
+
+/*
+// http://stackoverflow.com/questions/287543/how-to-programatically-sense-the-iphone-mute-switch
+BOOL isAppleDeviceMuted(void) {
+    if (!gAudioSessionInited) {
+        AudioSessionInterruptionListener inInterruptionListener = NULL;
+        OSStatus error;
+        if ((error = AudioSessionInitialize(NULL, NULL, inInterruptionListener, NULL)))
+            DLog(@"*** Error *** error in AudioSessionInitialize: %d", error);
+        else
+            gAudioSessionInited = YES;
+    }
+    UInt32 propertySize = sizeof(CFStringRef);
+    BOOL muteResult = NO;
+
+    // this checks if there is volume
+    Float32 volume;
+    OSStatus n = AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareOutputVolume, &propertySize, &volume);
+    if (n != 0)
+        DLog( @"AudioSessionGetProperty 'volume': %d", n );
+    BOOL volumeResult = (volume == 0.0f);
+    
+    // this checks if the device is muted
+    CFStringRef state;
+    n = AudioSessionGetProperty(kAudioSessionProperty_AudioRoute, &propertySize, &state);
+    if (n != 0)
+        DLog( @"AudioSessionGetProperty 'audioRoute': %d", n );
+    else {
+        NSString *result = (NSString *)state;
+        muteResult = ([result length] == 0);
+        releaseAndNil(result);
+    }
+    return volumeResult || muteResult;
+}
+*/

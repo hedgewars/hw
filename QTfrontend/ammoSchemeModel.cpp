@@ -60,6 +60,7 @@ QList<QVariant> defaultScheme = QList<QVariant>()
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -120,6 +121,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << "healthcaseamount" // 34
         << "waterrise"        // 35
         << "healthdecrease"   // 36
+        << "ropepct"          // 37
         ;
 
     QList<QVariant> proMode;
@@ -161,6 +163,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> shoppa;
@@ -202,6 +205,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> cleanslate;
@@ -243,6 +247,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> minefield;
@@ -284,6 +289,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> barrelmayhem;
@@ -325,6 +331,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> tunnelhogs;
@@ -366,6 +373,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> forts;
@@ -407,6 +415,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> timeless;
@@ -448,6 +457,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(30)            // health case amt 34
         << QVariant(0)             // water rise amt 35
         << QVariant(0)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> thinkingportals;
@@ -489,6 +499,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(25)            // health case amt 34
         << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
     QList<QVariant> kingmode;
@@ -507,8 +518,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // artillery      11
         << QVariant(true)          // random order   12
         << QVariant(true)          // king           13
-        << QVariant(true)          // place hog      14
-        << QVariant(true)          // shared ammo    15
+        << QVariant(false)         // place hog      14
+        << QVariant(false)         // shared ammo    15
         << QVariant(false)         // disable girders 16
         << QVariant(false)         // disable land objects 17
         << QVariant(false)         // AI survival    18
@@ -523,13 +534,14 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(15)            // sudden death   27
         << QVariant(5)             // case prob      28
         << QVariant(3)             // mines time     29
-        << QVariant(3)             // mines number   30
-        << QVariant(20)            // mine dud pct   31
-        << QVariant(3)             // explosives     32
+        << QVariant(4)             // mines number   30
+        << QVariant(0)             // mine dud pct   31
+        << QVariant(2)             // explosives     32
         << QVariant(35)            // health case pct 33
-        << QVariant(30)            // health case amt 34
-        << QVariant(30)            // water rise amt 35
+        << QVariant(25)            // health case amt 34
+        << QVariant(47)            // water rise amt 35
         << QVariant(5)             // health dec amt 36
+        << QVariant(100)           // rope modfier   37
         ;
 
 
@@ -565,6 +577,10 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 
 QVariant AmmoSchemeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
+
     return QVariant();
 }
 
@@ -586,6 +602,8 @@ int AmmoSchemeModel::columnCount(const QModelIndex & parent) const
 
 Qt::ItemFlags AmmoSchemeModel::flags(const QModelIndex & index) const
 {
+    Q_UNUSED(index);
+
     return
         Qt::ItemIsEnabled
         | Qt::ItemIsSelectable
@@ -608,12 +626,22 @@ bool AmmoSchemeModel::setData(const QModelIndex & index, const QVariant & value,
 
 bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
 {
-    beginInsertRows(parent, row, row);
+    Q_UNUSED(count);
 
-    QList<QVariant> newScheme = defaultScheme;
-    newScheme[0] = QVariant(tr("new"));
+    beginInsertRows(parent, schemes.size(), schemes.size());
 
-    schemes.insert(row, newScheme);
+    if (row == -1)
+    {
+        QList<QVariant> newScheme = defaultScheme;
+        newScheme[0] = QVariant(tr("new"));
+        schemes.insert(schemes.size(), newScheme);
+    }
+    else
+    {
+        QList<QVariant> newScheme = schemes[row];
+        newScheme[0] = QVariant(tr("copy of") + " " + newScheme[0].toString());
+        schemes.insert(schemes.size(), newScheme);
+    }
 
     endInsertRows();
 
@@ -672,6 +700,10 @@ NetAmmoSchemeModel::NetAmmoSchemeModel(QObject * parent) :
 
 QVariant NetAmmoSchemeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
+
     return QVariant();
 }
 

@@ -30,9 +30,11 @@ procedure replayBegan; cdecl; external;
 procedure replayFinished; cdecl; external;
 procedure updateVisualsNewTurn; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
+function  isAppleDeviceMuted: Boolean; cdecl; external;
 procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
 {$ENDIF}
 function  isPhone: Boolean; inline;
+function  isDeviceMute: Boolean; inline;
 procedure performRumble; inline;
 procedure perfExt_AddProgress; inline;
 procedure perfExt_FinishProgress; inline;
@@ -42,12 +44,20 @@ procedure perfExt_SaveBeganSynching; inline;
 procedure perfExt_SaveFinishedSynching; inline;
 
 implementation
-uses uTeams, uConsole;
+uses uVariables;
 
 function isPhone: Boolean; inline;
 begin
 {$IFDEF IPHONEOS}
     exit(isApplePhone());
+{$ENDIF}
+    exit(false);
+end;
+
+function isDeviceMute: Boolean; inline;
+begin
+{$IFDEF IPHONEOS}
+//    exit(isAppleDeviceMuted());
 {$ENDIF}
     exit(false);
 end;
@@ -77,7 +87,9 @@ end;
 procedure perfExt_AmmoUpdate; // don't inline
 begin
 {$IFDEF IPHONEOS}
-    if (CurrentTeam^.ExtDriven) or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
+    if (CurrentTeam = nil) or
+       (CurrentTeam^.ExtDriven) or
+       (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
         exit(); // the other way around throws a compiler error
     updateVisualsNewTurn();
 {$ENDIF}

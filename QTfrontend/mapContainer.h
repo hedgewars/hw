@@ -23,8 +23,11 @@
 #include <QGridLayout>
 #include <QComboBox>
 #include <QLabel>
+#include <QByteArray>
+#include <QLineEdit>
 
 #include "hwmap.h"
+#include "drawmapscene.h"
 
 class QPushButton;
 class IconedGroupBox;
@@ -44,19 +47,26 @@ class HWMapContainer : public QWidget
   QString getCurrentMap() const;
   QString getCurrentTheme() const;
   int     getCurrentHHLimit() const;
+  QString getCurrentScheme() const;
+  QString getCurrentWeapons() const;
   quint32 getTemplateFilter() const;
   MapGenerator get_mapgen(void) const;
   int get_maze_size(void) const;
   bool getCurrentIsMission() const;
+  QByteArray getDrawnMapData();
+  DrawMapScene * getDrawMapScene();
+  void mapDrawingFinished();
+  QLineEdit* seedEdit;
 
  public slots:
-  void changeImage();
+  void askForGeneratedPreview();
   void setSeed(const QString & seed);
   void setMap(const QString & map);
   void setTheme(const QString & theme);
   void setTemplateFilter(int);
   void setMapgen(MapGenerator m);
   void setMaze_size(int size);
+  void setDrawnMapData(const QByteArray & ar);
 
  signals:
   void seedChanged(const QString & seed);
@@ -65,6 +75,8 @@ class HWMapContainer : public QWidget
   void newTemplateFilter(int filter);
   void mapgenChanged(MapGenerator m);
   void maze_sizeChanged(int s);
+  void drawMapRequested();
+  void drawnMapChanged(const QByteArray & data);
 
  private slots:
   void setImage(const QImage newImage);
@@ -78,6 +90,7 @@ class HWMapContainer : public QWidget
   void themeSelected(int currentRow);
   void addInfoToPreview(QPixmap image);
   void templateFilterChanged(int filter);
+  void seedEdited();
 
  protected:
   virtual void resizeEvent ( QResizeEvent * event );
@@ -90,6 +103,8 @@ class HWMapContainer : public QWidget
   QListWidget* lwThemes;
   HWMap* pMap;
   QString m_seed;
+  QPushButton* seedSet;
+  QLabel* seedLabel;
   int hhLimit;
   int templateFilter;
   QPixmap hhSmall;
@@ -99,9 +114,9 @@ class HWMapContainer : public QWidget
   QComboBox *maze_size_selection;
   MapGenerator mapgen;
   int numMissions;
-  int maze_size;
+  DrawMapScene drawMapScene;
 
-  void loadMap(int index);
+  void updatePreview();
 };
 
 #endif // _HWMAP_CONTAINER_INCLUDED

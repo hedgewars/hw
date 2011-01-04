@@ -1,10 +1,8 @@
-{-# LANGUAGE OverloadedStrings #-}
 module HWProtoCore where
 
 import qualified Data.IntMap as IntMap
 import Data.Foldable
 import Data.Maybe
-import Control.Monad.Reader
 --------------------------------------
 import CoreTypes
 import Actions
@@ -12,37 +10,35 @@ import Utils
 import HWProtoNEState
 import HWProtoLobbyState
 import HWProtoInRoomState
-import HandlerUtils
-import RoomsAndClients
 
 handleCmd, handleCmd_loggedin :: CmdHandler
 
+handleCmd clID _ _ ["PING"] = [AnswerThisClient ["PONG"]]
 
-handleCmd ["PING"] = answerClient ["PONG"]
-
-
-handleCmd ("QUIT" : xs) = return [ByeClient msg]
+handleCmd clID clients rooms ("QUIT" : xs) =
+    [ByeClient msg]
     where
         msg = if not $ null xs then head xs else ""
 
-{-
-handleCmd ["PONG"] =
+
+handleCmd clID clients _ ["PONG"] =
     if pingsQueue client == 0 then
         [ProtocolError "Protocol violation"]
     else
         [ModifyClient (\cl -> cl{pingsQueue = pingsQueue cl - 1})]
     where
         client = clients IntMap.! clID
--}
 
-handleCmd cmd = do
-    (ci, irnc) <- ask
-    if logonPassed (irnc `client` ci) then
-        handleCmd_loggedin cmd
-        else
-        handleCmd_NotEntered cmd
 
-{-
+handleCmd clID clients rooms cmd =
+    if not $ logonPassed client then
+        handleCmd_NotEntered clID clients rooms cmd
+    else
+        handleCmd_loggedin clID clients rooms cmd
+    where
+        client = clients IntMap.! clID
+
+
 handleCmd_loggedin clID clients rooms ["INFO", asknick] =
     if noSuchClient then
         []
@@ -66,12 +62,11 @@ handleCmd_loggedin clID clients rooms ["INFO", asknick] =
             then if teamsInGame client > 0 then "(playing)" else "(spectating)"
             else ""
 
--}
 
-
-handleCmd_loggedin cmd = do
-    (ci, rnc) <- ask
-    if clientRoom rnc ci == lobbyId then
-        handleCmd_lobby cmd
-        else
-        handleCmd_inRoom cmd
+handleCmd_loggedin clID clients rooms cmd =
+    if roomID client == 0 then
+        handleCmd_lobby clID clients rooms cmd
+    else
+        handleCmd_inRoom clID clients rooms cmd
+    where
+        client = clients IntMap.! clID

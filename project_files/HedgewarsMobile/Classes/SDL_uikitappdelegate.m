@@ -24,15 +24,17 @@
 #import "SDL_uikitopenglview.h"
 #import "SDL_uikitwindow.h"
 #import "SDL_events_c.h"
-#import "../SDL_sysvideo.h"
 #import "jumphack.h"
 #import "SDL_video.h"
 #import "SDL_mixer.h"
 #import "PascalImports.h"
+#import "ObjcExports.h"
 #import "CommodityFunctions.h"
 #import "GameSetup.h"
 #import "MainMenuViewController.h"
 #import "OverlayViewController.h"
+#import "Appirater.h"
+#include <unistd.h>
 
 #ifdef main
 #undef main
@@ -40,16 +42,15 @@
 
 #define BLACKVIEW_TAG 17935
 #define SECONDBLACKVIEW_TAG 48620
-#define VALGRIND "/opt/valgrind/bin/valgrind"
+#define VALGRIND "/opt/fink/bin/valgrind"
 
 int main (int argc, char *argv[]) {
 #ifdef VALGRIND_REXEC
     // Using the valgrind build config, rexec ourself in valgrind
     // from http://landonf.bikemonkey.org/code/iphone/iPhone_Simulator_Valgrind.20081224.html
     if (argc < 2 || (argc >= 2 && strcmp(argv[1], "-valgrind") != 0))
-        execl(VALGRIND, VALGRIND, "--leak-check=full", argv[0], "-valgrind", NULL);
+        execl(VALGRIND, VALGRIND, "--leak-check=full", "--dsymutil=yes", argv[0], "-valgrind", NULL);
 #endif
-
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     int retVal = UIApplicationMain(argc, argv, nil, @"SDLUIKitDelegate");
     [pool release];
@@ -57,7 +58,7 @@ int main (int argc, char *argv[]) {
 }
 
 @implementation SDLUIKitDelegate
-@synthesize mainViewController, uiwindow, secondWindow, isInGame;
+@synthesize mainViewController, overlayController, uiwindow, secondWindow, isInGame;
 
 // convenience method
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -77,13 +78,14 @@ int main (int argc, char *argv[]) {
 
 -(void) dealloc {
     [mainViewController release];
+    [overlayController release];
     [uiwindow release];
     [secondWindow release];
     [super dealloc];
 }
 
 // main routine for calling the actual game engine
--(void) startSDLgame:(NSDictionary *)gameDictionary {
+-(NSArray *)startSDLgame:(NSDictionary *)gameDictionary {
     UIWindow *gameWindow;
     if (IS_DUALHEAD())
         gameWindow = self.secondWindow;
@@ -116,25 +118,35 @@ int main (int argc, char *argv[]) {
     }
     [blackView release];
 
+
     // pull out useful configuration info from various files
     GameSetup *setup = [[GameSetup alloc] initWithDictionary:gameDictionary];
     NSNumber *isNetGameNum = [gameDictionary objectForKey:@"netgame"];
-    
-    if ([isNetGameNum boolValue] == NO)
-        [setup startThread:@"engineProtocol"];
-    const char **gameArgs = [setup getSettings:[gameDictionary objectForKey:@"savefile"]];
-    NSNumber *menuStyle = [NSNumber numberWithBool:setup.menuStyle];
-    [setup release];
 
-    // since the sdlwindow is not yet created, we add the overlayController with a delay
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:isNetGameNum,@"net",menuStyle,@"menu",nil];
+    [NSThread detachNewThreadSelector:@selector(engineProtocol)
+                             toTarget:setup
+                           withObject:nil];
+
+    NSNumber *menuStyle = [NSNumber numberWithBool:setup.menuStyle];
+    NSNumber *orientation = [[gameDictionary objectForKey:@"game_dictionary"] objectForKey:@"orientation"];
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                          isNetGameNum,@"net",
+                          menuStyle,@"menu",
+                          orientation,@"orientation",
+                          nil];
     [self performSelector:@selector(displayOverlayLater:) withObject:dict afterDelay:1];
 
-    // this is the pascal fuction that starts the game (wrapped around isInGame)
+    // need to set again [gameDictionary objectForKey:@"savefile"] because if it's empty it means it's a normal game
+    const char **gameArgs = [setup getGameSettings:[gameDictionary objectForKey:@"savefile"]];
     self.isInGame = YES;
+    // this is the pascal fuction that starts the game
     Game(gameArgs);
     self.isInGame = NO;
     free(gameArgs);
+    
+    NSArray *stats = setup.statsArray;
+    [setup release];
+
 
     [self.uiwindow makeKeyAndVisible];
     [self.uiwindow bringSubviewToFront:self.mainViewController.view];
@@ -148,28 +160,28 @@ int main (int argc, char *argv[]) {
     [UIView commitAnimations];
     [refBlackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
     [refSecondBlackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:2];
+
+    return stats;
 }
 
-// overlay with controls, become visible later, with a transparency effect
+// overlay with controls, become visible later, with a transparency effect since the sdlwindow is not yet created
 -(void) displayOverlayLater:(id) object {
     NSDictionary *dict = (NSDictionary *)object;
-    OverlayViewController *overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
-    overlayController.isNetGame = [[dict objectForKey:@"net"] boolValue];
-    overlayController.useClassicMenu = [[dict objectForKey:@"menu"] boolValue];
+    self.overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
+    self.overlayController.isNetGame = [[dict objectForKey:@"net"] boolValue];
+    self.overlayController.useClassicMenu = [[dict objectForKey:@"menu"] boolValue];
+    self.overlayController.initialOrientation = [[dict objectForKey:@"orientation"] intValue];
     
     UIWindow *gameWindow;
     if (IS_DUALHEAD())
         gameWindow = self.uiwindow;
     else
         gameWindow = [[UIApplication sharedApplication] keyWindow];
-    [gameWindow addSubview:overlayController.view];
-    //[[[gameWindow subviews] objectAtIndex:0] addSubview:overlayController.view];
-    // don't release a controller according to http://developer.apple.com/library/ios/#qa/qa2010/qa1688.html
-    //[overlayController release];
+    [gameWindow addSubview:self.overlayController.view];
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (or even using a nib)
--(void) applicationDidFinishLaunching:(UIApplication *)application {
+-(BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [application setStatusBarHidden:YES];
 
     self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -200,6 +212,9 @@ int main (int argc, char *argv[]) {
         [titleView release];
         [self.secondWindow makeKeyAndVisible];
     }
+
+    [Appirater appLaunched];
+    return YES;
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {
@@ -219,40 +234,35 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationWillResignActive:(UIApplication *)application {
-    if (self.isInGame) {
-        HW_pause();
-
-        // Send every window on every screen a MINIMIZED event.
-        SDL_VideoDevice *_this = SDL_GetVideoDevice();
-        if (!_this)
-            return;
-
-        int i;
-        for (i = 0; i < _this->num_displays; i++) {
-            const SDL_VideoDisplay *display = &_this->displays[i];
-            SDL_Window *window;
-            for (window = display->windows; window != nil; window = window->next)
-                SDL_SendWindowEvent(window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
+    UIDevice* device = [UIDevice currentDevice];
+    if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
+         device.multitaskingSupported &&
+         self.isInGame) {
+        // let's try to be permissive with multitasking here...
+        NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
+        if ([[settings objectForKey:@"multitasking"] boolValue])
+            HW_suspend();
+        else {
+            // so the game returns to the configuration view
+            if (isGameRunning())
+                HW_terminate(NO);
+            else {
+                // while screen is loading you can't call HW_terminate() so we close the app
+                SDL_SendQuit();
+                HW_terminate(YES);
+                longjmp(*(jump_env()), 1);
+            }
         }
+        [settings release];
     }
 }
 
 -(void) applicationDidBecomeActive:(UIApplication *)application {
-    if (self.isInGame) {
-        HW_pause();
-
-        // Send every window on every screen a RESTORED event.
-        SDL_VideoDevice *_this = SDL_GetVideoDevice();
-        if (!_this)
-            return;
-
-        int i;
-        for (i = 0; i < _this->num_displays; i++) {
-            const SDL_VideoDisplay *display = &_this->displays[i];
-            SDL_Window *window;
-            for (window = display->windows; window != nil; window = window->next)
-                SDL_SendWindowEvent(window, SDL_WINDOWEVENT_RESTORED, 0, 0);
-        }
+    UIDevice* device = [UIDevice currentDevice];
+    if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
+         device.multitaskingSupported &&
+         self.isInGame) {
+        HW_resume();
     }
 }
 

@@ -22,10 +22,11 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-ItemNum::ItemNum(const QImage& im, QWidget * parent, unsigned char min, unsigned char max) :
-  QFrame(parent), m_im(im), infinityState(false), nonInteractive(false), minItems(min), maxItems(max),
+ItemNum::ItemNum(const QImage& im, const QImage& img, QWidget * parent, unsigned char min, unsigned char max) :
+  QFrame(parent), m_im(im), m_img(img), infinityState(false), nonInteractive(false), minItems(min), maxItems(max),
   numItems(min+2 >= max ? min : min+2)
 {
+    enabled = true;
     if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
 }
 
@@ -36,7 +37,7 @@ ItemNum::~ItemNum()
 void ItemNum::mousePressEvent ( QMouseEvent * event )
 {
   if(nonInteractive) return;
-  if(event->button()==Qt::LeftButton) {
+  if(event->button()==Qt::LeftButton && enabled) {
     event->accept();
     if((infinityState && numItems <= maxItems) || (!infinityState && numItems < maxItems)) {
       incItems();
@@ -45,7 +46,7 @@ void ItemNum::mousePressEvent ( QMouseEvent * event )
       // appears there's an emit in there
       decItems();
     }
-  } else if (event->button()==Qt::RightButton) {
+  } else if (event->button()==Qt::RightButton && enabled) {
     event->accept();
     if(numItems > minItems) {
       decItems();
@@ -67,15 +68,25 @@ QSize ItemNum::sizeHint () const
 
 void ItemNum::paintEvent(QPaintEvent* event)
 {
+  Q_UNUSED(event);
+
   QPainter painter(this);
 
   if (numItems==maxItems+1) {
     QRect target(0, 0, 100, 32);
-    painter.drawImage(target, QImage(":/res/infinity.png"));
+    if (enabled) {
+        painter.drawImage(target, QImage(":/res/infinity.png"));
+    } else {
+        painter.drawImage(target, QImage(":/res/infinitygrey.png"));
+    }
   } else {
     for(int i=0; i<numItems; i++) {
       QRect target(11 * i, i % 2, 25, 35);
-      painter.drawImage(target, m_im);
+      if (enabled) {
+        painter.drawImage(target, m_im);
+      } else {
+        painter.drawImage(target, m_img);
+      }
     }
   }
 }
@@ -88,9 +99,16 @@ unsigned char ItemNum::getItemsNum() const
 void ItemNum::setItemsNum(const unsigned char num)
 {
   numItems=num;
+  repaint();
 }
 
 void ItemNum::setInfinityState(bool value)
 {
   infinityState=value;
+}
+
+void ItemNum::setEnabled(bool value)
+{
+  enabled=value;
+  repaint();
 }

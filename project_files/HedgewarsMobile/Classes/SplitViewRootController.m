@@ -24,7 +24,7 @@
 #import "CommodityFunctions.h"
 
 @implementation SplitViewRootController
-@synthesize activeController;
+@synthesize activeController, rightNavController, splitViewRootController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -49,7 +49,7 @@
         self.activeController = rightController;
         [rightController release];
     }
-    UINavigationController *rightNavController = [[UINavigationController alloc] initWithRootViewController:self.activeController];
+    self.rightNavController = [[UINavigationController alloc] initWithRootViewController:self.activeController];
 
     if (IS_IPAD()) {
         MasterViewController *leftController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -57,18 +57,18 @@
         UINavigationController *leftNavController = [[UINavigationController alloc] initWithRootViewController:leftController];
         [leftController release];
 
-        UISplitViewController *splitViewRootController = [[UISplitViewController alloc] init];
-        splitViewRootController.delegate = nil;
-        splitViewRootController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
-        splitViewRootController.viewControllers = [NSArray arrayWithObjects: leftNavController, rightNavController, nil];
+        self.splitViewRootController = [[UISplitViewController alloc] init];
+        self.splitViewRootController.delegate = nil;
+        self.splitViewRootController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
+        self.splitViewRootController.viewControllers = [NSArray arrayWithObjects: leftNavController, self.rightNavController, nil];
         [leftNavController release];
-        [rightNavController release];
+        [self.rightNavController release];
 
         // add view to main controller
-        [self.view addSubview:splitViewRootController.view];
+        [self.view addSubview:self.splitViewRootController.view];
     } else {
-        rightNavController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
-        [self.view addSubview:rightNavController.view];
+        self.rightNavController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
+        [self.view addSubview:self.rightNavController.view];
     }
 
     [super viewDidLoad];
@@ -76,12 +76,16 @@
 
 -(void) viewDidUnload {
     self.activeController = nil;
+    self.rightNavController = nil;
+    self.splitViewRootController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
 -(void) dealloc {
-    [self.activeController release];
+    [activeController release];
+    [rightNavController release];
+    [splitViewRootController release];
     [super dealloc];
 }
 

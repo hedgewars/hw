@@ -61,6 +61,8 @@ class SelWeaponWidget;
 class IconedGroupBox;
 class FreqSpinBox;
 
+class DrawMapWidget;
+
 class AbstractPage : public QWidget
 {
     Q_OBJECT
@@ -69,8 +71,10 @@ class AbstractPage : public QWidget
 
  protected:
   AbstractPage(QWidget* parent = 0) {
+    Q_UNUSED(parent);
+
     font14 = new QFont("MS Shell Dlg", 14);
-    setFocusPolicy(Qt::StrongFocus);
+    //setFocusPolicy(Qt::StrongFocus);
   }
   virtual ~AbstractPage() {};
 
@@ -196,6 +200,9 @@ public:
     GameCFGWidget *gameCFG;
     TeamSelWidget *teamsSelect;
     QPushButton *BtnStartMPGame;
+
+signals:
+    void SetupClicked();
 };
 
 class PageOptions : public AbstractPage
@@ -205,11 +212,16 @@ class PageOptions : public AbstractPage
 public:
     PageOptions(QWidget* parent = 0);
 
-    QPushButton *WeaponsButt;
+    QCheckBox *WeaponTooltip;
+    QPushButton *WeaponNew;
     QPushButton *WeaponEdit;
     QPushButton *WeaponDelete;
     QComboBox *WeaponsName;
-    QCheckBox *WeaponTooltip;
+    QPushButton *SchemeNew;
+    QPushButton *SchemeEdit;
+    QPushButton *SchemeDelete;
+    QComboBox *SchemesName;
+
     QComboBox *CBLanguage;
 
     QPushButton *BtnBack;
@@ -324,6 +336,9 @@ public:
 public slots:
     void setReadyStatus(bool isReady);
     void setMasterMode(bool isMaster);
+
+signals:
+    void SetupClicked();
 };
 
 class PageInfo : public AbstractPage
@@ -389,8 +404,11 @@ public:
     QPushButton *BtnSave;
     QPushButton *BtnDefault;
     QPushButton *BtnDelete;
+    QPushButton *BtnNew;
+    QPushButton *BtnCopy;
     QPushButton *BtnBack;
     SelWeaponWidget* pWeapons;
+    QComboBox* selectWeaponSet;
 };
 
 class PageInGame : public AbstractPage
@@ -462,11 +480,18 @@ public:
     PageScheme(QWidget* parent = 0);
 
     QPushButton * BtnBack;
+    QPushButton * BtnCopy;
     QPushButton * BtnNew;
     QPushButton * BtnDelete;
     QPushButton * BtnSave;
+    QComboBox * selectScheme;
 
     void setModel(QAbstractItemModel * model);
+
+public slots:
+    void newRow();
+    void copyRow();
+    void deleteRow();
 
 private:
     QDataWidgetMapper * mapper;
@@ -507,16 +532,15 @@ private:
     QSpinBox * SB_Mines;
     QSpinBox * SB_MineDuds;
     QSpinBox * SB_Explosives;
+    QSpinBox * SB_RopeModifier;
     QLineEdit * LE_name;
-    QComboBox * selectScheme;
 
     QGroupBox * gbGameModes;
     QGroupBox * gbBasicSettings;
 
 private slots:
-    void newRow();
-    void deleteRow();
     void schemeSelected(int);
+
 };
 
 class PageAdmin : public AbstractPage
@@ -563,6 +587,23 @@ public:
     QPushButton * BtnBack;
     QPushButton * BtnLAN;
     QPushButton * BtnOfficialServer;
+};
+
+
+class PageDrawMap : public AbstractPage
+{
+    Q_OBJECT
+
+public:
+    PageDrawMap(QWidget* parent = 0);
+
+    QPushButton * BtnBack;
+
+    DrawMapWidget * drawMapWidget;
+
+private slots:
+    void load();
+    void save();
 };
 
 #endif // PAGES_H

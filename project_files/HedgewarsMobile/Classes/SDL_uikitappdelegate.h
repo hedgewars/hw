@@ -23,9 +23,11 @@
 #import <UIKit/UIKit.h>
 
 @class MainMenuViewController;
+@class OverlayViewController;
 
 @interface SDLUIKitDelegate:NSObject<UIApplicationDelegate> {
     MainMenuViewController *mainViewController;
+    OverlayViewController *overlayController;
     UIWindow *uiwindow;
     UIWindow *secondWindow;
     BOOL isInGame;
@@ -33,11 +35,12 @@
 
 @property (assign) BOOL isInGame;
 @property (nonatomic,retain) MainMenuViewController *mainViewController;
+@property (nonatomic,retain) OverlayViewController *overlayController;
 @property (nonatomic,retain) UIWindow *uiwindow;
 @property (nonatomic,retain) UIWindow *secondWindow;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
--(void) startSDLgame:(NSDictionary *)gameDictionary;
+-(NSArray *)startSDLgame:(NSDictionary *)gameDictionary;
 -(void) displayOverlayLater:(id) object;
 
 @end

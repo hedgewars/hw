@@ -18,13 +18,9 @@ IF(version_suffix MATCHES "-dev")
 				     ARGS identify -in ${CMAKE_CURRENT_SOURCE_DIR}
 				     OUTPUT_VARIABLE version_suffix
 				     )
-			STRING(REGEX REPLACE "(.*) +(.*)" "\\2:\\1" version_suffix ${version_suffix})
+			STRING(REGEX REPLACE "([0-9a-zA-Z]+)(.*) ([0-9]+)(.*)" "\\3:\\1" version_suffix ${version_suffix})
 			MESSAGE(STATUS "Building revision ${version_suffix}")
-			set(version_suffix ".${version_suffix}")
-#			#truncate to numbers only - trying to fix a problem described in http://www.hedgewars.org/node/2019
-#			STRING(REGEX REPLACE "^\\.(\\d+)" ".\\1" version_suffix ${version_suffix})
-#			# screw whole suffix if there's no number
-#			STRING(REGEX REPLACE "^\\.([a-z]+.*)" "-dev" version_suffix ${version_suffix})
+			set(version_suffix "-${version_suffix}")
 		ENDIF()
 	ENDIF()
 ELSE()
@@ -243,13 +239,14 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"release$"
 	"Debug$"
 	"Release$"
-	"proto.inc$"
-	"hwconsts.cpp$"
-	"playlist.inc$"
+	"proto\\\\.inc$"
+	"hwconsts\\\\.cpp$"
+	"playlist\\\\.inc$"
 	"CPack"
-	"cmake_install.cmake$"
-	"config.inc$"
-	"hwengine.desktop$"
+	"cmake_install\\\\.cmake$"
+	"config\\\\.inc$"
+	"hwengine\\\\.desktop$"
+	"CMakeCache\\\\.txt$"
 #   "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/project_files/HedgewarsMobile/"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/bin/[a-z]"

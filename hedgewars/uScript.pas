@@ -41,7 +41,6 @@ implementation
 {$IFNDEF LUA_DISABLED}
 uses LuaPas in 'LuaPas.pas',
     uConsole,
-    uMisc,
     uConsts,
     uVisualGears,
     uGears,
@@ -49,11 +48,16 @@ uses LuaPas in 'LuaPas.pas',
     uWorld,
     uAmmos,
     uSound,
-    uTeams,
-    uKeys,
     uChat,
     uStats,
-    uRandom;
+    uRandom,
+    uTypes,
+    uVariables,
+    uCommands,
+    uUtils,
+    uKeys,
+    uCaptions,
+    uDebug;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
@@ -78,6 +82,55 @@ end;
 // function(L : Plua_State) : LongInt; Cdecl;
 // where L contains the state, returns the number of return values on the stack
 // call lua_gettop(L) to receive number of parameters passed
+
+function lc_band(L: PLua_State): LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 2 then 
+        begin
+        LuaError('Lua: Wrong number of parameters passed to band!');
+        lua_pushnil(L);
+        end
+    else lua_pushinteger(L, lua_tointeger(L, 2) and lua_tointeger(L, 1));
+    lc_band := 1;
+end;
+
+function lc_bor(L: PLua_State): LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 2 then 
+        begin
+        LuaError('Lua: Wrong number of parameters passed to bor!');
+        lua_pushnil(L);
+        end
+    else lua_pushinteger(L, lua_tointeger(L, 2) or lua_tointeger(L, 1));
+    lc_bor := 1;
+end;
+
+function lc_bnot(L: PLua_State): LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then 
+        begin
+        LuaError('Lua: Wrong number of parameters passed to bnot!');
+        lua_pushnil(L);
+        end
+    else lua_pushinteger(L, not lua_tointeger(L, 1));
+    lc_bnot := 1;
+end;
+
+function lc_getinputmask(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 0 then
+        LuaError('Lua: Wrong number of parameters passed to GetInputMask!')
+    else lua_pushinteger(L, InputMask);
+    lc_getinputmask:= 1
+end;
+
+function lc_setinputmask(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then
+        LuaError('Lua: Wrong number of parameters passed to SetInputMask!')
+    else InputMask:= lua_tointeger(L, 1);
+    lc_setinputmask:= 0
+end;
 
 function lc_writelntoconsole(L : Plua_State) : LongInt; Cdecl;
 begin
@@ -162,7 +215,7 @@ begin
     else begin
         gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
             HealthCrate, 0);
-        lua_pushnumber(L, gear^.uid);
+        lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnhealthcrate := 1;        
 end;
@@ -177,7 +230,7 @@ begin
     else begin
         gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
             AmmoCrate, lua_tointeger(L, 3));
-        lua_pushnumber(L, gear^.uid);
+        lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnammocrate := 1;
 end;
@@ -192,7 +245,7 @@ begin
     else begin  
         gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
             UtilityCrate, lua_tointeger(L, 3));
-        lua_pushnumber(L, gear^.uid);
+        lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnutilitycrate := 1;
 end;
@@ -219,9 +272,132 @@ begin
         t:= lua_tointeger(L, 7);
 
         gear:= AddGear(x, y, gt, s, dx, dy, t);
-        lua_pushnumber(L, gear^.uid)
+        lastGearByUID:= gear;
+        lua_pushinteger(L, gear^.uid)
         end;
     lc_addgear:= 1; // 1 return value
+end;
+
+function lc_deletegear(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to DeleteGear!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then DeleteGear(gear);
+        end;
+    lc_deletegear:= 0
+end;
+
+function lc_addvisualgear(L : Plua_State) : LongInt; Cdecl;
+var vg : PVisualGear;
+    x, y, s: LongInt;
+    c: Boolean;
+    vgt: TVisualGearType;
+begin
+    if lua_gettop(L) <> 5 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to AddVisualGear!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        x:= lua_tointeger(L, 1);
+        y:= lua_tointeger(L, 2);
+        vgt:= TVisualGearType(lua_tointeger(L, 3));
+        s:= lua_tointeger(L, 4);
+        c:= lua_toboolean(L, 5);
+
+        vg:= AddVisualGear(x, y, vgt, s, c);
+        if vg <> nil then 
+            begin
+            lastVisualGearByUID:= vg;
+            lua_pushinteger(L, vg^.uid)
+            end
+        else lua_pushinteger(L, 0)
+        end;
+    lc_addvisualgear:= 1; // 1 return value
+end;
+
+function lc_deletevisualgear(L : Plua_State) : LongInt; Cdecl;
+var vg : PVisualGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to DeleteVisualGear!');
+        end
+    else
+        begin
+        vg:= VisualGearByUID(lua_tointeger(L, 1));
+        if vg <> nil then DeleteVisualGear(vg);
+        end;
+    lc_deletevisualgear:= 0
+end;
+
+function lc_getvisualgearvalues(L : Plua_State) : LongInt; Cdecl;
+var vg: PVisualGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetVisualGearValues!');
+        lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
+        lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L)
+        end
+    else
+        begin
+        vg:= VisualGearByUID(lua_tointeger(L, 1));
+        if vg <> nil then
+            begin
+            lua_pushinteger(L, round(vg^.X));
+            lua_pushinteger(L, round(vg^.Y));
+            lua_pushnumber(L, vg^.dX);
+            lua_pushnumber(L, vg^.dY);
+            lua_pushnumber(L, vg^.Angle);
+            lua_pushinteger(L, vg^.Frame);
+            lua_pushinteger(L, vg^.FrameTicks);
+            lua_pushinteger(L, vg^.State);
+            lua_pushinteger(L, vg^.Timer);
+            lua_pushinteger(L, vg^.Tint);
+            end
+        else
+            begin
+            lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L);
+            lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L); lua_pushnil(L)
+            end
+        end;
+    lc_getvisualgearvalues:= 10;
+end;
+
+function lc_setvisualgearvalues(L : Plua_State) : LongInt; Cdecl;
+var vg : PVisualGear;
+begin
+    if lua_gettop(L) <> 11 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to SetVisualGearValues!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        vg:= VisualGearByUID(lua_tointeger(L, 1));
+        if vg <> nil then
+            begin
+            vg^.X:= lua_tointeger(L, 2);
+            vg^.Y:= lua_tointeger(L, 3);
+            vg^.dX:= lua_tonumber(L, 4);
+            vg^.dY:= lua_tonumber(L, 5);
+            vg^.Angle:= lua_tonumber(L, 6);
+            vg^.Frame:= lua_tointeger(L, 7);
+            if lua_tointeger(L, 8) <> 0 then vg^.FrameTicks:= lua_tointeger(L, 8);  // find a better way to do this. maybe need to break all these up.
+            vg^.State:= lua_tointeger(L, 9);
+            vg^.Timer:= lua_tointeger(L, 10);
+            vg^.Tint:= lua_tointeger(L, 11);
+            end
+        end;
+    lc_setvisualgearvalues:= 0;
 end;
 
 function lc_getfollowgear(L : Plua_State) : LongInt; Cdecl;
@@ -235,7 +411,7 @@ begin
         if FollowGear = nil then
             lua_pushnil(L)
         else
-            lua_pushnumber(L, FollowGear^.uid);
+            lua_pushinteger(L, FollowGear^.uid);
     lc_getfollowgear:= 1; // 1 return value
 end;
 
@@ -277,6 +453,25 @@ begin
     lc_getgearmessage:= 1
 end;
 
+function lc_getgearelasticity(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetGearElasticity!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushinteger(L, hwRound(gear^.elasticity * _10000))
+        else
+            lua_pushnil(L);
+        end;
+    lc_getgearelasticity:= 1
+end;
+
 function lc_setgearmessage(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -299,11 +494,25 @@ begin
     else begin
         gear := GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
-            lua_pushinteger(L, PHedgehog(gear^.Hedgehog)^.BotLevel)
+            lua_pushinteger(L, gear^.Hedgehog^.BotLevel)
         else
             lua_pushnil(L);
     end;
     lc_gethoglevel := 1;
+end;
+
+function lc_sethoglevel(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        LuaError('Lua: Wrong number of parameters passed to SetHogLevel!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            gear^.Hedgehog^.BotLevel:= lua_tointeger(L, 2);
+        end;
+    lc_sethoglevel:= 0
 end;
 
 function lc_gethogclan(L : Plua_State) : LongInt; Cdecl;
@@ -319,12 +528,23 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             begin
-            lua_pushinteger(L, PHedgehog(gear^.Hedgehog)^.Team^.Clan^.ClanIndex)
+            lua_pushinteger(L, gear^.Hedgehog^.Team^.Clan^.ClanIndex)
             end
         else
             lua_pushnil(L);
         end;
     lc_gethogclan:= 1
+end;
+
+function lc_getclancolor(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetClanColor!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else lua_pushinteger(L, ClansArray[lua_tointeger(L, 1)]^.Color shl 8 or $FF);
+    lc_getclancolor:= 1
 end;
 
 function lc_gethogteamname(L : Plua_State) : LongInt; Cdecl;
@@ -340,7 +560,7 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             begin
-            lua_pushstring(L, str2pchar(PHedgehog(gear^.Hedgehog)^.Team^.TeamName))
+            lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.TeamName))
             end
         else
             lua_pushnil(L);
@@ -361,7 +581,7 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             begin
-            lua_pushstring(L, str2pchar(PHedgehog(gear^.Hedgehog)^.Name))
+            lua_pushstring(L, str2pchar(gear^.Hedgehog^.Name))
             end
         else
             lua_pushnil(L);
@@ -381,7 +601,7 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            lua_pushnumber(L, gear^.Timer)
+            lua_pushinteger(L, gear^.Timer)
         else
             lua_pushnil(L);
         end;
@@ -400,7 +620,7 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            lua_pushnumber(L, gear^.Health)
+            lua_pushinteger(L, gear^.Health)
         else
             lua_pushnil(L);
         end;
@@ -419,7 +639,7 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            lua_pushnumber(L, hwRound(gear^.X))
+            lua_pushinteger(L, hwRound(gear^.X))
         else
             lua_pushnil(L);
         end;
@@ -438,7 +658,7 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            lua_pushnumber(L, hwRound(gear^.Y))
+            lua_pushinteger(L, hwRound(gear^.Y))
         else
             lua_pushnil(L);
         end;
@@ -467,28 +687,6 @@ begin
     lc_copypv:= 1
 end;
 
-function lc_copypv2(L : Plua_State) : LongInt; Cdecl;
-var gears, geard : PGear;
-begin
-    if lua_gettop(L) <> 2 then
-        begin
-        LuaError('Lua: Wrong number of parameters passed to CopyPV2!');
-        end
-    else
-        begin
-        gears:= GearByUID(lua_tointeger(L, 1));
-        geard:= GearByUID(lua_tointeger(L, 2));
-        if (gears <> nil) and (geard <> nil) then
-            begin
-            geard^.X:= gears^.X;
-            geard^.Y:= gears^.Y;
-            geard^.dX:= gears^.dX * 2;
-            geard^.dY:= gears^.dY * 2;
-            end
-        end;
-    lc_copypv2:= 1
-end;
-
 function lc_followgear(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -505,17 +703,17 @@ end;
 function lc_hogsay(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
    vgear : PVisualGear;
+       s : LongWord;
 begin
-    if lua_gettop(L) <> 3 then
-        begin
-        LuaError('Lua: Wrong number of parameters passed to HogSay!');
-        end
-    else
+    if lua_gettop(L) = 4 then s:= lua_tointeger(L, 4)
+    else s:= 0;
+
+    if (lua_gettop(L) = 4) or (lua_gettop(L) = 3) then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
             begin
-            vgear:= AddVisualGear(0, 0, vgtSpeechBubble);
+            vgear:= AddVisualGear(0, 0, vgtSpeechBubble, s, true);
             if vgear <> nil then
                begin
                vgear^.Text:= lua_tostring(L, 2);
@@ -524,8 +722,25 @@ begin
                if (vgear^.FrameTicks < 1) or (vgear^.FrameTicks > 3) then vgear^.FrameTicks:= 1;
                end;
             end
-        end;
+        end
+    else LuaError('Lua: Wrong number of parameters passed to HogSay!');
     lc_hogsay:= 0
+end;
+
+function lc_addammo(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to AddAmmo!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Hedgehog <> nil) then
+            AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)));
+        end;
+    lc_addammo:= 0
 end;
 
 function lc_sethealth(L : Plua_State) : LongInt; Cdecl;
@@ -570,7 +785,7 @@ begin
     else begin
         gear := GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            PHedgehog(gear^.Hedgehog)^.Effects[THogEffect(lua_tointeger(L, 2))]:= lua_tointeger(L, 3) <> 0;
+            gear^.Hedgehog^.Effects[THogEffect(lua_tointeger(L, 2))]:= lua_toboolean(L, 3);
     end;
     lc_seteffect := 0;
 end;
@@ -641,9 +856,11 @@ end;
 function lc_findplace(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
     fall: boolean;
+    tryhard: boolean;
     left, right: LongInt;
 begin
-    if lua_gettop(L) <> 4 then
+    tryhard:= false;
+    if (lua_gettop(L) <> 4) and (lua_gettop(L) <> 5) then
         LuaError('Lua: Wrong number of parameters passed to FindPlace!')
     else
         begin
@@ -651,24 +868,35 @@ begin
         fall:= lua_toboolean(L, 2);
         left:= lua_tointeger(L, 3);
         right:= lua_tointeger(L, 4);
+        if lua_gettop(L) = 5 then tryhard:= lua_toboolean(L, 5);
         if gear <> nil then
-            FindPlace(gear, fall, left, right)
+            FindPlace(gear, fall, left, right, tryhard);
+        if gear <> nil then lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
         end;
-    lc_findplace:= 0
+    lc_findplace:= 1
 end;
 
 function lc_playsound(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
 begin
-    if lua_gettop(L) <> 1 then
-        LuaError('Lua: Wrong number of parameters passed to PlaySound!')
-    else
-        PlaySound(TSound(lua_tointeger(L, 1)));
+    if lua_gettop(L) = 1 then
+        PlaySound(TSound(lua_tointeger(L, 1)))
+    else if lua_gettop(L) = 2 then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 2));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            PlaySound(TSound(lua_tointeger(L, 1)),gear^.Hedgehog^.Team^.Voicepack)
+        end
+    else LuaError('Lua: Wrong number of parameters passed to PlaySound!');
     lc_playsound:= 0;
 end;
 
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
+var np: LongInt;
 begin
-    if lua_gettop(L) <> 5 then
+    np:= lua_gettop(L);
+    if (np < 5) or (np > 6) then
         begin
         LuaError('Lua: Wrong number of parameters passed to AddTeam!');
         //lua_pushnil(L)
@@ -679,6 +907,7 @@ begin
         ParseCommand('grave ' + lua_tostring(L, 3), true);
         ParseCommand('fort ' + lua_tostring(L, 4), true);
         ParseCommand('voicepack ' + lua_tostring(L, 5), true);
+        if (np = 6) then ParseCommand('flag ' + lua_tostring(L, 6), true);
         CurrentTeam^.Binds:= DefaultBinds
         // fails on x64
         //lua_pushinteger(L, LongInt(CurrentTeam));
@@ -762,6 +991,45 @@ begin
     lc_setgearposition:= 0
 end;
 
+function lc_getgearvelocity(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetGearVelocity!');
+        lua_pushnil(L);
+        lua_pushnil(L)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            begin
+            lua_pushnumber(L, hwRound(gear^.dX * 1000) / 1000);
+            lua_pushnumber(L, hwRound(gear^.dY * 1000) / 1000)
+            end
+        end;
+    lc_getgearvelocity:= 2;
+end;
+
+function lc_setgearvelocity(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 3 then
+        LuaError('Lua: Wrong number of parameters passed to SetGearVelocity!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            begin
+            gear^.dX:= int2hwFloat(round(lua_tonumber(L, 2) * 1000)) / 1000;
+            gear^.dY:= int2hwFloat(round(lua_tonumber(L, 3) * 1000)) / 1000;
+            SetAllToActive;
+            end
+        end;
+    lc_setgearvelocity:= 0
+end;
+
 function lc_setzoom(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 1 then
@@ -821,6 +1089,45 @@ begin
         end;
     lc_getrandom:= 1
 end;
+
+function lc_setwind(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then
+        LuaError('Lua: Wrong number of parameters passed to SetWind!')
+    else
+        begin
+        cWindSpeed:= int2hwfloat(lua_tointeger(L, 1)) / 100 * cMaxWindSpeed;
+        cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
+        if cWindSpeed.isNegative then
+            CWindSpeedf := -cWindSpeedf;
+        AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1)^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+        end;
+    lc_setwind:= 0
+end;
+
+function lc_getdatapath(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 0 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetDataPath!');
+        lua_pushnil(L);
+        end
+    else
+        lua_pushstring(L, str2pchar(Pathz[ptData]));
+    lc_getdatapath:= 1
+end;
+
+function lc_maphasborder(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 0 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to MapHasBorder!');
+        lua_pushnil(L);
+        end
+    else
+        lua_pushboolean(L, hasBorder);
+    lc_maphasborder:= 1
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -875,7 +1182,6 @@ lua_pop(luaState, 1);
 end;
 
 procedure ScriptOnGameInit;
-var s, t : ansistring;
 begin
 // not required if there is no script to run
 if not ScriptLoaded then
@@ -900,12 +1206,6 @@ ScriptSetInteger('WaterRise', cWaterRise);
 ScriptSetInteger('HealthDecrease', cHealthDecrease);
 ScriptSetString('Map', '');
 ScriptSetString('Theme', '');
-
-// import locale
-s:= cLocaleFName;
-t:= '';
-SplitByChar(s, t, '.');
-ScriptSetString('L', s);
 
 ScriptCall('onGameInit');
 
@@ -1084,9 +1384,11 @@ end;
 
 procedure initModule;
 var at : TGearType;
+    vgt: TVisualGearType;
     am : TAmmoType;
     st : TSound;
     he: THogEffect;
+    s, t : ansistring;
 begin
 // initialize lua
 luaState:= lua_open;
@@ -1101,6 +1403,12 @@ luaopen_table(luaState);
 // import some variables
 ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
 ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
+
+// import locale
+s:= cLocaleFName;
+t:= '';
+SplitByChar(s, t, '.');
+ScriptSetString('L', s);
 
 // import game flags
 ScriptSetInteger('gfForts', gfForts);
@@ -1154,6 +1462,9 @@ ScriptSetInteger('SAY_SHOUT', 3);
 for at:= Low(TGearType) to High(TGearType) do
     ScriptSetInteger(EnumToStr(at), ord(at));
 
+for vgt:= Low(TVisualGearType) to High(TVisualGearType) do
+    ScriptSetInteger(EnumToStr(vgt), ord(vgt));
+
 // register sounds
 for st:= Low(TSound) to High(TSound) do
     ScriptSetInteger(EnumToStr(st), ord(st));
@@ -1166,7 +1477,17 @@ for he:= Low(THogEffect) to High(THogEffect) do
     ScriptSetInteger(EnumToStr(he), ord(he));
 
 // register functions
+lua_register(luaState, 'band', @lc_band);
+lua_register(luaState, 'bor', @lc_bor);
+lua_register(luaState, 'bnot', @lc_bnot);
+lua_register(luaState, 'GetInputMask', @lc_getinputmask);
+lua_register(luaState, 'SetInputMask', @lc_setinputmask);
 lua_register(luaState, 'AddGear', @lc_addgear);
+lua_register(luaState, 'DeleteGear', @lc_deletegear);
+lua_register(luaState, 'AddVisualGear', @lc_addvisualgear);
+lua_register(luaState, 'DeleteVisualGear', @lc_deletevisualgear);
+lua_register(luaState, 'GetVisualGearValues', @lc_getvisualgearvalues);
+lua_register(luaState, 'SetVisualGearValues', @lc_setvisualgearvalues);
 lua_register(luaState, 'SpawnHealthCrate', @lc_spawnhealthcrate);
 lua_register(luaState, 'SpawnAmmoCrate', @lc_spawnammocrate);
 lua_register(luaState, 'SpawnUtilityCrate', @lc_spawnutilitycrate);
@@ -1176,6 +1497,8 @@ lua_register(luaState, 'EndGame', @lc_endgame);
 lua_register(luaState, 'FindPlace', @lc_findplace);
 lua_register(luaState, 'SetGearPosition', @lc_setgearposition);
 lua_register(luaState, 'GetGearPosition', @lc_getgearposition);
+lua_register(luaState, 'SetGearVelocity', @lc_setgearvelocity);
+lua_register(luaState, 'GetGearVelocity', @lc_getgearvelocity);
 lua_register(luaState, 'ParseCommand', @lc_parsecommand);
 lua_register(luaState, 'ShowMission', @lc_showmission);
 lua_register(luaState, 'HideMission', @lc_hidemission);
@@ -1184,17 +1507,19 @@ lua_register(luaState, 'SetAmmo', @lc_setammo);
 lua_register(luaState, 'PlaySound', @lc_playsound);
 lua_register(luaState, 'AddTeam', @lc_addteam);
 lua_register(luaState, 'AddHog', @lc_addhog);
+lua_register(luaState, 'AddAmmo', @lc_addammo);
 lua_register(luaState, 'SetHealth', @lc_sethealth);
 lua_register(luaState, 'GetHealth', @lc_gethealth);
 lua_register(luaState, 'SetEffect', @lc_seteffect);
 lua_register(luaState, 'GetHogClan', @lc_gethogclan);
+lua_register(luaState, 'GetClanColor', @lc_getclancolor);
 lua_register(luaState, 'GetHogTeamName', @lc_gethogteamname);
 lua_register(luaState, 'GetHogName', @lc_gethogname);
 lua_register(luaState, 'GetHogLevel', @lc_gethoglevel);
+lua_register(luaState, 'SetHogLevel', @lc_sethoglevel);
 lua_register(luaState, 'GetX', @lc_getx);
 lua_register(luaState, 'GetY', @lc_gety);
 lua_register(luaState, 'CopyPV', @lc_copypv);
-lua_register(luaState, 'CopyPV2', @lc_copypv2);
 lua_register(luaState, 'FollowGear', @lc_followgear);
 lua_register(luaState, 'GetFollowGear', @lc_getfollowgear);
 lua_register(luaState, 'SetState', @lc_setstate);
@@ -1208,9 +1533,13 @@ lua_register(luaState, 'HogSay', @lc_hogsay);
 lua_register(luaState, 'HogTurnLeft', @lc_hogturnleft);
 lua_register(luaState, 'CampaignLock', @lc_campaignlock);
 lua_register(luaState, 'CampaignUnlock', @lc_campaignunlock);
+lua_register(luaState, 'GetGearElasticity', @lc_getgearelasticity);
 lua_register(luaState, 'GetGearMessage', @lc_getgearmessage);
 lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
 lua_register(luaState, 'GetRandom', @lc_getrandom);
+lua_register(luaState, 'SetWind', @lc_setwind);
+lua_register(luaState, 'GetDataPath', @lc_getdatapath);
+lua_register(luaState, 'MapHasBorder', @lc_maphasborder);
 
 
 ScriptClearStack; // just to be sure stack is empty

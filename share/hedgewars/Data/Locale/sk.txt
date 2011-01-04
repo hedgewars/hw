@@ -50,6 +50,8 @@
 00:47=Lepkavá mína
 00:48=Kladivo
 00:49=Oživovač
+00:50=Útok raketovými vŕtačkami
+00:51=Blatová guľa
 
 01:00=Do boja!
 01:01=Remíza
@@ -93,6 +95,7 @@
 02:00=Škoda, že %1 nemá ešte jeden život
 02:00=%1 odišiel za lepším
 02:00=%1 už nespotrebováva pamäť tohto počítača
+02:00=%1 odišiel a už sa nevrátil
 ; Ježko (%1) sa utopil
 02:01=%1 sa hrá na ponorku!
 02:01=%1 napodobnil Titanik!
@@ -238,7 +241,7 @@
 03:41=Skalný fanúšik škriekania
 03:42=Tu si urobím poznámku...
 03:43=Zahrať Beathovenovu smrteľnú sonátu
-03:44=Spotrebovať do: 1923
+03:44=Spotrebujte do: 1923
 03:45=Sila vedy
 03:46=Hot Hot Hot!
 03:47=Prilepte ich niekam šikovne!
@@ -253,14 +256,14 @@
 04:04=Zaútočte na vašich nepriateľov brokovnicou s dvoma|výstrelmi. Vďaka jej rozptylu nepotrebujete|zasiahnuť protivníkov priamym zásahom|Útok: Výstrel (viacnásobný)|
 04:05=Rýchlo pod zem! Použite zbíjačku na vyvŕtanie|dieri v zemi a dosiahnutie ďalších miest.|Útok: Začatie alebo skončenie vŕtania|
 04:06=Unudený? Útok nie je možný? Chcete ušetriť náboje?|Nie je problém! Stačí preskočiť ťah, zbabelec!|Útok: Ukončí ťah bez boja|
-04:07=Zdolajte veľké vzdialenosti pomocou dobre|načasovaných výstrelov lana. Využite zotrvačnosť|na posúvanie ostatných ježkov alebo z výšky|zhadzujte bomby a iné zbrane|Útok: Vystrelenie alebo pustenie sa lana Dlhý|skok: Zhodenie granátov alebo podobných zbraní|
+04:07=Zdolajte veľké vzdialenosti pomocou dobre|načasovaných výstrelov lana. Využite zotrvačnosť|na posúvanie ostatných ježkov alebo z výšky|zhadzujte bomby a iné zbrane|Útok: Vystrelenie alebo pustenie sa lana|Dlhý skok: Zhodenie granátov alebo podobných zbraní|
 04:08=Udržujte nepriateľov v bezpečnej vzdialenosti|položením míny na rovinu alebo priamo pod nich.|Uistite sa, že ste v dostatočnej vzdialenosti, keď|sa aktivujú!|Útok: Položí mínu na vašu aktuálnu pozíciu|
 04:09=Nie ste si istý svojou muškou? Použite Desert|Eagle, ktorý má až štyri výstrely.|Útok: Výstrel (viacnásobný)|
 04:10=Útok hrubou silou sa dá použiť vždy. Umiestnite|túto klasickú trhavinu vedľa vášho nepriateľa a|vzdiaľte sa.|Útok: Položí mínu na vašu aktuálnu pozíciu|
 04:11=Zbavte sa nepriateľských ježkov tak, že ich|odpálkujete mimo hranice mapy alebo do vody. Alebo|máte chuť svojim kamarátom poslať nejaké míny?|Útok: Odpálkuje čokoľvek, čo stojí pred vami|
 04:12=Aby ste mohli použiť túto takmer smrtiacu techniku|bojového umenia musíte stáť blízko nepriateľa.|Útok: Vykoná Úder ohňa|
 04:13=UNUSED|
-04:14=Máte strach z výšok? Radšej si vezmite padák. Sám|sa otvorí, keď spadnete príliš hlboko a uchráni|vášho ježka pred zranením pádom.|Útok: Otvorenie padáku Dlhý skok: Zhodenie|granátov alebo podobných zbraní|
+04:14=Máte strach z výšok? Radšej si vezmite padák. Sám|sa otvorí, keď spadnete príliš hlboko a uchráni|vášho ježka pred zranením pádom.|Útok: Otvorenie padáku|Dlhý skok: Zhodenie granátov alebo podobných zbraní|
 04:15=Privolajte leteckú podporu a zdecimujte vašich|nepriateľov bombardovaním.|Vľavo/Vpravo: Určenie smeru útoku|Kurzor: Výber cieľa bombardovania|
 04:16=Privolajte leteckú podporu, ktorá do cieľovej|oblasti vypustí niekoľko mín.|Vľavo/Vpravo: Určenie smeru útoku|Kurzor: Výber cieľa útoku|
 04:17=Hľadáte úkryt? Použitie lampu na vyhĺbenie tunela|do zeme, ktorá vám poskytne ochranu.|Útok: Začatie alebo skončenie kopania|
@@ -274,10 +277,10 @@
 04:25=Použite túto maskovaciu súpravu, aby ste prinútili|nepriateľských ježkov skočiť smerom k vášmu|ježkovi (do vody alebo priepasti).|Útok: Použije súpravu a skúsi zviesť iného ježka|
 04:26=Hodí tento šťavnatý melón na vašich nepriateľov.|Po vypršaní časomiery sa rozpadne na niekoľko|vybuchujúcich kúskov.|1‐5: Nastaví časovač melóna|Útok: Držanie tlačidla zvyšuje silu hodu|
 04:27=Zošlite pekelné plamene na vašich súperov vďaka|tejto nepriateľskej výbušnine. Nezostaňte príliš|blízko k explózii, pretože malé plamienky môžu|horieť dlhšie.|Útok: Držanie tlačidla zvyšuje silu hodu|
-04:28=Chvíľku po vypustení tejto rakety sa začne|prevŕtavať do zeme a vybuchne vtedy, keď vyprší|jej časová poistka alebo sa objaví znova na|povrchu.|Útok: Držanie tlačidla zvyšuje silu výstrelu|
+04:28=Chvíľku po vypustení sa táto raketa začne|prevŕtavať do zeme a vybuchne vtedy, keď vyprší|jej časová poistka alebo sa objaví znova na|povrchu.|Útok: Držanie tlačidla zvyšuje silu výstrelu|
 04:29=Toto nie je nič pre malé deti! Loptičkový guľomet|vypáli množstvo malých farebných guličiek|naplnených výbušninami.|Útok: Výstrel v plnej sile|Hore/Dole: Mierenie počas pálenia guličiek|
-04:30=Privolajte leteckú podporu, ktorá spustí silný|napalmový útok. S dobrým mierením dokáže tento|útok odstrániť veľké časti krajiny vrátane ježkov,|ktorý majú smolu v tom, že na nej stoja.|Vľavo/Vpravo: Určenie smeru útoku|Kurzor: Výber cieľovej oblasti|
-04:31=Bezpilotný bombardér je ideálnou zbraňou na|pozbieranie krabíc alebo na zaútočenie ježkov,|ktorí sú príliš ďaleko. Buď ho navigujte priamo na|nepriateľov alebo najprv zhoďte zopár bômb.|Útok: Vypustenie lietadla alebo zhodenie bômb Dlhý|skok: Umožní vstup do boja valkýram|Hore/Dole: Navigovanie lietadla|
+04:30=Privolajte leteckú podporu, ktorá vypustí silný|napalmový útok. S dobrým mierením dokáže tento|útok odstrániť veľké časti krajiny vrátane ježkov,|ktorý majú smolu v tom, že na nej stoja.|Vľavo/Vpravo: Určenie smeru útoku|Kurzor: Výber cieľovej oblasti|
+04:31=Bezpilotný bombardér je ideálnou zbraňou na|pozbieranie krabíc alebo na zaútočenie na ježkov,|ktorí sú príliš ďaleko. Buď ho navigujte priamo na|nepriateľov alebo najprv zhoďte zopár bômb.|Útok: Vypustenie lietadla alebo zhodenie bômb|Dlhý skok: Umožní vstup do boja valkýram|Hore/Dole: Navigovanie lietadla|
 04:32=Nízka gravitácia je účinnejšia ako ktorákoľvek|diéta! Skáčte vyššie a ďalej alebo nechajte vašich|nepriateľov letieť ešte ďalej.|Útok: Aktivácia|
 04:33=Niekedy všetko čo potrebujete je len o trošku|väčšia sila, aby ste spôsobili ešte väčšiu škodu.|Útok: Aktivácia|
 04:34=Nedotýkaj sa ma!|Útok: Aktivácia|
@@ -285,7 +288,7 @@
 04:36=No, niekedy proste nemáte mušku. Zapnite si|podporu mierenia, ktorá podporuje najmodernejšie|technológie.|Útok: Aktivácia|
 04:37=Nebojte sa denného svetla. Vydrží len jeden ťah,|ale umožní vám vstrebať škodu, ktorú spôsobíte|iným ježkom.|Útok: Aktivácia|
 04:38=Ostreľovačka dokáže byť najdrvivejšou zbraňou v|celom vašom arzenále, je však veľmi neefektívna|pre blízke ciele. Škoda, ktorú spôsobí sa zvyšuje|so zvyšujúcou sa vzdialenosťou k cieľu.|Útok: Výstrel (dvakrát)|
-04:39=Preleťte na iné miesta mapy v lietajúcom tanieri.|Táto komplikovane sa ovládajúca pomôcka je schopná|vás preniesť na takmer akúkoľvek pozíciu na mape.|Útok: Aktivácia|Hore/Vľavo/Vpravo: Použiť silu v jednom smere Dlhý|skok: Zhodiť granáty alebo iné zbrane|
+04:39=Preleťte na iné miesta mapy v lietajúcom tanieri.|Táto komplikovane sa ovládajúca pomôcka je schopná|vás preniesť na takmer akúkoľvek pozíciu na mape.|Útok: Aktivácia|Hore/Vľavo/Vpravo: Použiť silu v jednom smere|Dlhý skok: Zhodiť granáty alebo iné zbrane|
 04:40=Podpáľte kúsok zeme použitím tejto fľaše naplnenej|zápalnou tekutinou.|Útok: Držanie tlačidla zvyšuje silu hodu|
 04:41=Dôkaz, že príroda môže dokonca predčiť lietajúci|tanier. Vtáčisko dokáže niesť vášho ježka a znášať|vajcia na vašich nepriateľov!|Útok: Aktivácia a zhadzovanie vajec|Hore/Vľavo/Vpravo: Mávanie krídiel v jednom smere|
 04:42=Toto prenosné portálové zariadenie je schopné|okamžite preniesť vás, vašich nepriateľov alebo|zbrane medzi miestami na mape. Použite ho rozvážne|a vaše ťaženie bude...  OBROVSKÝM ÚSPECHOM|Útok: Vystrelenie portálu|Prepnutie: Rotovanie portálových farieb|

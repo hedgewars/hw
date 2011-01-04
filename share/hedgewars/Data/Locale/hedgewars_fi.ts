@@ -7,6 +7,10 @@
         <source>new</source>
         <translation>uusi</translation>
     </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -41,7 +45,7 @@
         <translation>Muokkaa kaavaa</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -68,7 +72,7 @@
     <name>HWForm</name>
     <message>
         <source>new</source>
-        <translation>uusi</translation>
+        <translation type="obsolete">uusi</translation>
     </message>
     <message>
         <source>Error</source>
@@ -181,6 +185,14 @@
     <message>
         <source>Large floating islands</source>
         <translation>Suuria kelluvia saaria</translation>
+    </message>
+    <message>
+        <source>Seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -312,6 +324,37 @@ tai aseta eri nimimerkki asetuksissa:</translation>
     <message>
         <source>Connecting...</source>
         <translation>Yhdistetään...</translation>
+    </message>
+</context>
+<context>
+    <name>PageDrawMap</name>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished">Tyhjennä</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Lataa</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load drawn map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save drawn map</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -726,19 +769,43 @@ tai aseta eri nimimerkki asetuksissa:</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Uusi ase</translation>
+        <translation type="obsolete">Uusi ase</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Muokkaa asesuunnitelmaa</translation>
+        <translation type="obsolete">Muokkaa asesuunnitelmaa</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Poista asesuunnitelma</translation>
+        <translation type="obsolete">Poista asesuunnitelma</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation>Et voi muokata joukkueita joukkuevalinnassa. Mene takaisin päävalikkoon lisätäksesi, muokataksesi tai poistaaksesi joukkueita.</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -997,6 +1064,18 @@ Haluatko silti liittyä huoneeseen?</translation>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1007,6 +1086,14 @@ Haluatko silti liittyä huoneeseen?</translation>
     <message>
         <source>Delete</source>
         <translation>Poista</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Uusi</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1212,6 +1299,10 @@ Haluatko silti liittyä huoneeseen?</translation>
         <source>Crazy</source>
         <translation type="obsolete">Sekopäinen</translation>
     </message>
+    <message>
+        <source>hand drawn map...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -1233,7 +1324,7 @@ Haluatko silti liittyä huoneeseen?</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Aseet</translation>
+        <translation type="obsolete">Aseet</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -1262,6 +1353,10 @@ Haluatko silti liittyä huoneeseen?</translation>
     <message>
         <source>Misc</source>
         <translation>Muut</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1431,7 +1526,11 @@ Haluatko silti liittyä huoneeseen?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bind schemes and weapons</source>
+        <source>% Rope Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gameplay</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1481,7 +1580,7 @@ Ole hyvä ja tarkista asennuksesi</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Oletus-asesettiä ei voi poistaa</translation>
+        <translation type="obsolete">Oletus-asesettiä ei voi poistaa</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1497,6 +1596,30 @@ Ole hyvä ja tarkista asennuksesi</translation>
     </message>
     <message>
         <source>File association failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">Joukkueet</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1593,6 +1716,10 @@ Ole hyvä ja tarkista asennuksesi</translation>
         <source>Associate file extensions</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>more</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
@@ -1642,6 +1769,14 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <source>Delays</source>
         <translation>Viipeet</translation>
+    </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">uusi</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1747,6 +1882,14 @@ Ole hyvä ja tarkista asennuksesi</translation>
     </message>
     <message>
         <source>Per Hedgehog Ammo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

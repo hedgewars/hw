@@ -21,3 +21,9 @@
 CGFloat distanceBetweenPoints (CGPoint first, CGPoint second);
 CGFloat angleBetweenPoints(CGPoint first, CGPoint second);
 CGFloat angleBetweenLines(CGPoint line1Start, CGPoint line1End, CGPoint line2Start, CGPoint line2End);
+
+CGFloat CGPointDot(CGPoint a, CGPoint b);
+CGFloat CGPointLen(CGPoint a);
+CGPoint CGPointSub(CGPoint a, CGPoint b);
+CGFloat CGPointDist(CGPoint a, CGPoint b);
+CGPoint CGPointNorm(CGPoint a);

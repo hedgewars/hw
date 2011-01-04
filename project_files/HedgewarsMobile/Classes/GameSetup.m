@@ -21,7 +21,6 @@
 
 #import "GameSetup.h"
 #import "SDL_uikitappdelegate.h"
-#import "SDL_net.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "OverlayViewController.h"
@@ -29,7 +28,7 @@
 #define BUFFER_SIZE 255     // like in original frontend
 
 @implementation GameSetup
-@synthesize systemSettings, gameConfig, savePath, menuStyle;
+@synthesize systemSettings, gameConfig, statsArray, savePath, menuStyle;
 
 -(id) initWithDictionary:(NSDictionary *)gameDictionary {
     if (self = [super init]) {
@@ -58,11 +57,14 @@
             [outputFormatter release];
         } else
             self.savePath = path;
+
+        self.statsArray = nil;
     }
     return self;
 }
 
 -(void) dealloc {
+    [statsArray release];
     [gameConfig release];
     [systemSettings release];
     [savePath release];
@@ -165,7 +167,6 @@
     [schemePath release];
     NSArray *basicArray = [schemeDictionary objectForKey:@"basic"];
     NSArray *gamemodArray = [schemeDictionary objectForKey:@"gamemod"];
-    int i = 0;
     int result = 0;
     int mask = 0x00000004;
 
@@ -184,23 +185,16 @@
     NSArray *mods = [[NSArray alloc] initWithContentsOfFile:path];
     [path release];
 
-    // initial health
     result = [[basicArray objectAtIndex:0] intValue];
 
-    // turn time
-    NSInteger tentativeTurntime = [[basicArray objectAtIndex:1] intValue];
-    if (tentativeTurntime >= 100)
-        tentativeTurntime = 9999;
-    NSString *turnTime = [[NSString alloc] initWithFormat:@"e$turntime %d",tentativeTurntime * 1000];
-    [self sendToEngine:turnTime];
-    [turnTime release];
-
-    for (i = 2; i < [basicArray count]; i++) {
-        NSDictionary *basicDict = [mods objectAtIndex:i];
-        NSString *command = [basicDict objectForKey:@"command"];
+    for (int i = 1; i < [basicArray count]; i++) {
+        NSDictionary *dict = [mods objectAtIndex:i];
+        NSString *command = [dict objectForKey:@"command"];
         NSInteger value = [[basicArray objectAtIndex:i] intValue];
-        if ([basicDict objectForKey:@"checkOverMax"] && value >= [[basicDict objectForKey:@"max"] intValue])
+        if ([[dict objectForKey:@"checkOverMax"] boolValue] && value >= [[dict objectForKey:@"max"] intValue])
             value = 9999;
+        if ([[dict objectForKey:@"times1000"] boolValue])
+            value = value * 1000;
         NSString *strToSend = [[NSString alloc] initWithFormat:@"%@ %d",command,value];
         [self sendToEngine:strToSend];
         [strToSend release];
@@ -212,34 +206,28 @@
 }
 
 #pragma mark -
-#pragma mark Thread/Network relevant code
-// select one of GameSetup method and execute it in a seprate thread
--(void) startThread:(NSString *)selector {
-    SEL usage = NSSelectorFromString(selector);
-    [NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
-}
-
--(void) dumpRawData:(const uint8_t*)buffer ofSize:(uint8_t) length {
+#pragma mark Network relevant code
+-(void) dumpRawData:(const char *)buffer ofSize:(uint8_t) length {
     // is it performant to reopen the stream every time?
     NSOutputStream *os = [[NSOutputStream alloc] initToFileAtPath:self.savePath append:YES];
     [os open];
     [os write:&length maxLength:1];
-    [os write:buffer maxLength:length];
+    [os write:(const uint8_t *)buffer maxLength:length];
     [os close];
     [os release];
 }
 
 // wrapper that computes the length of the message and then sends the command string, saving the command on a file
--(int) sendToEngine: (NSString *)string {
+-(int) sendToEngine:(NSString *)string {
     uint8_t length = [string length];
 
-    [self dumpRawData:(const uint8_t *)[string UTF8String] ofSize:length];
+    [self dumpRawData:[string UTF8String] ofSize:length];
     SDLNet_TCP_Send(csd, &length, 1);
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
 // wrapper that computes the length of the message and then sends the command string, skipping file writing
--(int) sendToEngineNoSave: (NSString *)string {
+-(int) sendToEngineNoSave:(NSString *)string {
     uint8_t length = [string length];
 
     SDLNet_TCP_Send(csd, &length, 1);
@@ -253,8 +241,9 @@
     IPaddress ip;
     int eProto;
     BOOL clientQuit;
-    uint8_t buffer[BUFFER_SIZE];
+    char const buffer[BUFFER_SIZE];
     uint8_t msgSize;
+    int statMaxCapacity = 10-3;
 
     clientQuit = NO;
     csd = NULL;
@@ -283,10 +272,10 @@
 
     while (!clientQuit) {
         msgSize = 0;
-        memset(buffer, '\0', BUFFER_SIZE);
+        memset((void *)buffer, '\0', BUFFER_SIZE);
         if (SDLNet_TCP_Recv(csd, &msgSize, sizeof(uint8_t)) <= 0)
             break;
-        if (SDLNet_TCP_Recv(csd, buffer, msgSize) <=0)
+        if (SDLNet_TCP_Recv(csd, (void *)buffer, msgSize) <= 0)
             break;
 
         switch (buffer[0]) {
@@ -298,7 +287,7 @@
                 else
                     [self sendToEngineNoSave:@"TL"];
                 NSString *saveHeader = @"TS";
-                [self dumpRawData:(const uint8_t *)[saveHeader UTF8String] ofSize:[saveHeader length]];
+                [self dumpRawData:[saveHeader UTF8String] ofSize:[saveHeader length]];
 
                 // seed info
                 [self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
@@ -348,34 +337,59 @@
                 [self dumpRawData:buffer ofSize:msgSize];
 
                 sscanf((char *)buffer, "%*s %d", &eProto);
-                short int netProto = 0;
+                int netProto;
                 char *versionStr;
 
                 HW_versionInfo(&netProto, &versionStr);
                 if (netProto == eProto) {
                     DLog(@"Setting protocol version %d (%s)", eProto, versionStr);
                 } else {
-                    DLog(@"ERROR - wrong protocol number: [%s] - expecting %d", &buffer[1], eProto);
+                    DLog(@"ERROR - wrong protocol number: %d (expecting %d)", netProto, eProto);
                     clientQuit = YES;
                 }
                 break;
             case 'i':
+                if (self.statsArray == nil)
+                    self.statsArray = [[NSMutableArray alloc] initWithCapacity:statMaxCapacity];
+                NSString *tempStr = [NSString stringWithUTF8String:&buffer[2]];
+                NSString *arg = [[tempStr componentsSeparatedByString:@" "] objectAtIndex:0];
+                int index = [arg length] + 3;
                 switch (buffer[1]) {
-                    case 'r':
-                        DLog(@"Winning team: %s", &buffer[2]);
+                    case 'r':           // winning team
+                        [self.statsArray insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:0];
                         break;
-                    case 'k':
-                        DLog(@"Best Hedgehog: %s", &buffer[2]);
+                    case 'D':           // best shot
+                        [self.statsArray addObject:[NSString stringWithFormat:@"The best shot award was won by %s with %@ points", &buffer[index], arg]];
+                        break;
+                    case 'k':           // best hedgehog
+                        [self.statsArray addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kills in a turn", &buffer[index], arg]];
+                        break;
+                    case 'K':           // number of hogs killed
+                        [self.statsArray addObject:[NSString stringWithFormat:@"A total of %@ hedgehog(s) were killed during this round", arg]];
+                        break;
+                    case 'H':           //something about team health
+                        break;
+                    case 'T':           // local team stats
+                        break;
+                    case 'P':           // player postion
+                        break;
+                    case 's':           // self damage
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%s thought it's good to shoot his own hedgehogs with %@ points", &buffer[index], arg]];
+                        break;
+                    case 'S':           // friendly fire
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%s killed %@ of his own hedgehogs", &buffer[index], arg]];
+                        break;
+                    case 'B':           // turn skipped
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%s was scared and skipped turn %@ times", &buffer[index], arg]];
                         break;
                     default:
-                        // TODO: losta stats stuff
+                        DLog(@"Unhandled stat message, see statsPage.cpp");
                         break;
                 }
                 break;
             case 'q':
                 // game ended, can remove the savefile
                 [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
-                //[[NSNotificationCenter defaultCenter] postNotificationName:@"removedSave" object:nil];
                 // and remove + disable the overlay
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
                 break;
@@ -384,7 +398,7 @@
                 break;
         }
     }
-    DLog(@"Engine exited, closing server");
+    DLog(@"Engine exited, ending thread");
     // wait a little to let the client close cleanly
     [NSThread sleepForTimeInterval:2];
     // Close the client socket
@@ -399,7 +413,7 @@
 #pragma mark -
 #pragma mark Setting methods
 // returns an array of c-strings that are read by engine at startup
--(const char **)getSettings: (NSString *)recordFile {
+-(const char **)getGameSettings:(NSString *)recordFile {
     NSInteger width, height;
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
@@ -422,21 +436,21 @@
         
     NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width];
     NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height];
-    const char **gameArgs = (const char**) malloc(sizeof(char *) * 10);
-    NSInteger tmpQuality;
+    const char **gameArgs = (const char **)malloc(sizeof(char *) * 10);
+    BOOL enhanced = [[self.systemSettings objectForKey:@"enhanced"] boolValue];
 
     NSString *modelId = modelType();
-    if ([modelId hasPrefix:@"iPhone1"] ||                                   // = iPhone or iPhone 3G
-        [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])   // = iPod Touch or iPod Touch 2G
-        tmpQuality = 0x00000001 | 0x00000002 | 0x00000008 | 0x00000040;  // rqLowRes | rqBlurryLand | rqSimpleRope | rqKillFlakes
-    else if ([modelId hasPrefix:@"iPhone2"] ||                              // = iPhone 3GS
-             [modelId hasPrefix:@"iPod3"])                                  // = iPod Touch 3G
-            tmpQuality = 0x00000002 | 0x00000040;           // rqBlurryLand | rqKillFlakes
-        else if ([modelId hasPrefix:@"iPad1"])                              // = iPad
-                tmpQuality = 0x00000002;                    // rqBlurryLand
-            else                                                            // = everything else
-                tmpQuality = 0;                             // full quality
-    if (IS_IPAD() == NO)             // = disable tooltips on phone
+    NSInteger tmpQuality;
+    if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])     // = iPhone and iPhone 3G or iPod Touch or iPod Touch 2G
+        tmpQuality = 0x00000001 | 0x00000002 | 0x00000008 | 0x00000040;                 // rqLowRes | rqBlurryLand | rqSimpleRope | rqKillFlakes
+    else if ([modelId hasPrefix:@"iPhone2"] || [modelId hasPrefix:@"iPod3"])                                    // = iPhone 3GS or iPod Touch 3G
+        tmpQuality = 0x00000002 | 0x00000040;                                           // rqBlurryLand | rqKillFlakes
+    else if ([modelId hasPrefix:@"iPad1"] || [modelId hasPrefix:@"iPod4"] || enhanced == NO)                    // = iPad 1G or iPod Touch 4G or not enhanced mode
+        tmpQuality = 0x00000002;                                                        // rqBlurryLand
+    else                                                                                                        // = everything else
+        tmpQuality = 0;                                                                 // full quality
+
+    if (IS_IPAD() == NO)                                                                                        // = disable tooltips on phone
         tmpQuality = tmpQuality | 0x00000400;
 
     // prevents using an empty nickname

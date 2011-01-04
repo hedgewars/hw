@@ -42,6 +42,7 @@ class HWNetRegisterServer;
 class QCloseEvent;
 class AmmoSchemeModel;
 class QSettings;
+class QSignalMapper;
 
 extern bool frontendEffects;
 extern QString playerHash;
@@ -59,24 +60,16 @@ public:
     void updateXfire();
 
 private slots:
-    void GoToMain();
-    void GoToSinglePlayer();
-    void GoToSetup();
-    void GoToMultiplayer();
     void GoToSaves();
     void GoToDemos();
     void GoToNet();
-    void GoToNetType();
-    void GoToInfo();
-    void GoToTraining();
-    void GoToCampaign();
     void GoToSelectWeapon();
-    void GoToSelectWeaponSet(const QString & name);
+    void GoToSelectWeaponSet(int index);
     void GoToSelectNewWeapon();
-    void GoToNetServer();
-    void GoToSchemes();
-    void GoToAdmin();
-    void GoToPage(quint8 id);
+    void GoToScheme(int index);
+    void GoToEditScheme();
+    void GoToNewScheme();
+    void GoToPage(int id);
     void GoBack();
     void AssociateFiles();
     void btnExitPressed();
@@ -89,6 +82,8 @@ private slots:
     void RandomName(const int &i);
     void TeamSave();
     void TeamDiscard();
+    void DeleteScheme();
+    void DeleteWeaponSet();
     void SimpleGame();
     void PlayDemo();
     void StartTraining();
@@ -127,7 +122,7 @@ private:
     void closeEvent(QCloseEvent *event);
     void CustomizePalettes();
     void resizeEvent(QResizeEvent * event);
-    void keyReleaseEvent(QKeyEvent *event);
+    //void keyReleaseEvent(QKeyEvent *event);
     
     enum PageIDs {
         ID_PAGE_SETUP_TEAM      =  0,
@@ -149,7 +144,8 @@ private:
         ID_PAGE_SCHEME          = 16,
         ID_PAGE_ADMIN           = 17,
         ID_PAGE_NETTYPE         = 18,
-        ID_PAGE_CAMPAIGN        = 19
+        ID_PAGE_CAMPAIGN        = 19,
+        ID_PAGE_DRAWMAP         = 20
         };
     HWGame * game;
     HWNetServer* pnetserver;
@@ -158,9 +154,10 @@ private:
     HWNewNet * hwnet;
     HWNamegen * namegen;
     AmmoSchemeModel * ammoSchemeModel;
-    QStack<quint8> PagesStack;
+    QStack<int> PagesStack;
     QTime eggTimer;
     BGWidget * wBackground;
+    QSignalMapper * pageSwitchMapper;
 
 #ifdef __APPLE__
         InstallController * panel;

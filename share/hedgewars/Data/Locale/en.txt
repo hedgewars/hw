@@ -51,6 +51,8 @@
 00:48=Hammer
 00:49=Resurrector
 00:50=Drill Strike
+00:51=Mudball
+00:52=No weapon selected
 
 01:00=Let's fight!
 01:01=Round draw

@@ -74,57 +74,54 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
 
     NSDictionary *theWeapon = nil;
     switch (type) {
-        case 0: //default
+        default: //default
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"93919294221991210322351110012010000002111101010111",@"ammostore_initialqt",
-                         @"04050405416006555465544647765766666661555101011154",@"ammostore_probability",
-                         @"00000000000002055000000400070040000000002000000006",@"ammostore_delay",
-                         @"13111103121111111231141111111111111112111111011111",@"ammostore_crate", nil];
+                         @"939192942219912103223511100120100000021111010101112",@"ammostore_initialqt",
+                         @"040504054160065554655446477657666666615551010111541",@"ammostore_probability",
+                         @"000000000000020550000004000700400000000020000000060",@"ammostore_delay",
+                         @"131111031211111112311411111111111111121111110111112",@"ammostore_crate", nil];
             break;
         case 1: //crazy
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"99999999999999999929999999999999992999999999099999",@"ammostore_initialqt",
-                         @"11111101111111111111111111111111111111111111011111",@"ammostore_probability",
-                         @"00000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"13111103121111111231141111111111111112111101011111",@"ammostore_crate", nil];
+                         @"999999999999999999299999999999999929999999990999999",@"ammostore_initialqt",
+                         @"111111011111111111111111111111111111111111110111111",@"ammostore_probability",
+                         @"000000000000000000000000000000000000000000000000000",@"ammostore_delay",
+                         @"131111031211111112311411111111111111121111010111111",@"ammostore_crate", nil];
             break;
         case 2: //pro mode
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"90900090000000000000090000000000000000000000000000",@"ammostore_initialqt",
-                         @"00000000000000000000000000000000000000000000000000",@"ammostore_probability",
-                         @"00000000000002055000000400070040000000002000000000",@"ammostore_delay",
-                         @"11111111111111111111111111111111111111111001011111",@"ammostore_crate", nil];
+                         @"909000900000000000000900000000000000000000000000000",@"ammostore_initialqt",
+                         @"000000000000000000000000000000000000000000000000000",@"ammostore_probability",
+                         @"000000000000020550000004000700400000000020000000000",@"ammostore_delay",
+                         @"111111111111111111111111111111111111111110010111111",@"ammostore_crate", nil];
             break;
         case 3: //shoppa
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"00000099000000000000000000000000000000000000000000",@"ammostore_initialqt",
-                         @"44444100442444022101121212224220000000020004000100",@"ammostore_probability",
-                         @"00000000000000000000000000000000000000000000000000",@"ammostore_delay",
-                         @"11111111111111111111111111111111111111111011011111",@"ammostore_crate", nil];
+                         @"000000990000000000000000000000000000000000000000000",@"ammostore_initialqt",
+                         @"444441004424440221011212122242200000000200040001001",@"ammostore_probability",
+                         @"000000000000000000000000000000000000000000000000000",@"ammostore_delay",
+                         @"111111111111111111111111111111111111111110110111111",@"ammostore_crate", nil];
             break;
         case 4: //clean slate
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"10100090000100000110000000000000000000000000000010",@"ammostore_initialqt",
-                         @"04050405416006555465544647765766666661555101011154",@"ammostore_probability",
-                         @"00000000000002055000000400070040000000002000000000",@"ammostore_delay",
-                         @"13111103121111111231141111111111111112111111011111",@"ammostore_crate", nil];
+                         @"101000900001000001100000000000000000000000000000100",@"ammostore_initialqt",
+                         @"040504054160065554655446477657666666615551010111541",@"ammostore_probability",
+                         @"000000000000020550000004000700400000000020000000000",@"ammostore_delay",
+                         @"131111031211111112311411111111111111121111110111111",@"ammostore_crate", nil];
             break;
         case 5: //minefield
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"00000099000900000003000000000000000000000000000000",@"ammostore_initialqt",
-                         @"00000000000000000000000000000000000000000000000000",@"ammostore_probability",
-                         @"00000000000002055000000400070040000000002000000000",@"ammostore_delay",
-                         @"11111111111111111111111111111111111111111111011111",@"ammostore_crate", nil];
+                         @"000000990009000000030000000000000000000000000000000",@"ammostore_initialqt",
+                         @"000000000000000000000000000000000000000000000000000",@"ammostore_probability",
+                         @"000000000000020550000004000700400000000020000000000",@"ammostore_delay",
+                         @"111111111111111111111111111111111111111111110111111",@"ammostore_crate", nil];
             break;
         case 6: //thinking with portals
             theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys:
-                         @"90000090020000000021000000000000001100000900000000",@"ammostore_initialqt",
-                         @"04050405416006555465544647765766666661555101011154",@"ammostore_probability",
-                         @"00000000000002055000000400070040000000002000000006",@"ammostore_delay",
-                         @"13111103121111111231141111111111111112111111011111",@"ammostore_crate", nil];
-            break;
-        default:
-            NSLog(@"Nope");
+                         @"900000900200000000210000000000000011000009000000000",@"ammostore_initialqt",
+                         @"040504054160065554655446477657666666615551010111541",@"ammostore_probability",
+                         @"000000000000020550000004000700400000000020000000060",@"ammostore_delay",
+                         @"131111031211111112311411111111111111121111110111111",@"ammostore_crate", nil];
             break;
     }
 
@@ -145,45 +142,51 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                                                         error:NULL];
     }
 
+    int basicFlags[] = {100, 100, 45, 15, 47, 5, 100, 5, 35, 25, 3, 4, 0, 2};
+    BOOL gameFlags[] = {NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, YES, NO, NO, NO, NO,
+        NO, NO, NO, NO, NO, NO, NO};
+
     NSMutableArray *basicArray  = [[NSMutableArray alloc] initWithObjects:
-                                   [NSNumber numberWithInt:100],      //initialhealth
-                                   [NSNumber numberWithInt:45],       //turntime
-                                   [NSNumber numberWithInt:100],      //damagemodifier
-                                   [NSNumber numberWithInt:15],       //suddendeathtimeout
-                                   [NSNumber numberWithInt:47],       //waterrise
-                                   [NSNumber numberWithInt:5],        //healthdecrease
-                                   [NSNumber numberWithInt:5],        //cratedrops
-                                   [NSNumber numberWithInt:35],       //healthprob
-                                   [NSNumber numberWithInt:25],       //healthamount
-                                   [NSNumber numberWithInt:3],        //minestime
-                                   [NSNumber numberWithInt:4],        //minesnumber
-                                   [NSNumber numberWithInt:0],        //dudmines
-                                   [NSNumber numberWithInt:2],        //explosives
+                                   [NSNumber numberWithInt:basicFlags[0]],          //initialhealth
+                                   [NSNumber numberWithInt:basicFlags[1]],          //damagemodifier
+                                   [NSNumber numberWithInt:basicFlags[2]],          //turntime
+                                   [NSNumber numberWithInt:basicFlags[3]],          //suddendeathtimeout
+                                   [NSNumber numberWithInt:basicFlags[4]],          //waterrise
+                                   [NSNumber numberWithInt:basicFlags[5]],          //healthdecrease
+                                   [NSNumber numberWithInt:basicFlags[6]],          //ropelength
+                                   [NSNumber numberWithInt:basicFlags[7]],          //cratedrops
+                                   [NSNumber numberWithInt:basicFlags[8]],          //healthprob
+                                   [NSNumber numberWithInt:basicFlags[9]],          //healthamount
+                                   [NSNumber numberWithInt:basicFlags[10]],         //minestime
+                                   [NSNumber numberWithInt:basicFlags[11]],         //minesnumber
+                                   [NSNumber numberWithInt:basicFlags[12]],         //dudmines
+                                   [NSNumber numberWithInt:basicFlags[13]],         //explosives
                                    nil];
 
     NSMutableArray *gamemodArray= [[NSMutableArray alloc] initWithObjects:
-                                   [NSNumber numberWithBool:NO],      //fortmode
-                                   [NSNumber numberWithBool:NO],      //divideteam
-                                   [NSNumber numberWithBool:NO],      //solidland
-                                   [NSNumber numberWithBool:NO],      //addborder
-                                   [NSNumber numberWithBool:NO],      //lowgravity
-                                   [NSNumber numberWithBool:NO],      //lasersight
-                                   [NSNumber numberWithBool:NO],      //invulnerable
-                                   [NSNumber numberWithBool:NO],      //resethealth
-                                   [NSNumber numberWithBool:NO],      //vampirism
-                                   [NSNumber numberWithBool:NO],      //karma
-                                   [NSNumber numberWithBool:NO],      //artillery
-                                   [NSNumber numberWithBool:YES],     //randomorder
-                                   [NSNumber numberWithBool:NO],      //king
-                                   [NSNumber numberWithBool:NO],      //placehedgehogs
-                                   [NSNumber numberWithBool:NO],      //clansharesammo
-                                   [NSNumber numberWithBool:NO],      //disablegirders
-                                   [NSNumber numberWithBool:NO],      //disablelandobjects
-                                   [NSNumber numberWithBool:NO],      //aisurvival
-                                   [NSNumber numberWithBool:NO],      //infattack
-                                   [NSNumber numberWithBool:NO],      //resetweaps
-                                   [NSNumber numberWithBool:NO],      //perhogammo
-                                   [NSNumber numberWithBool:NO],      //nowind
+                                   [NSNumber numberWithBool:gameFlags[0]],          //fortmode
+                                   [NSNumber numberWithBool:gameFlags[1]],          //divideteam
+                                   [NSNumber numberWithBool:gameFlags[2]],          //solidland
+                                   [NSNumber numberWithBool:gameFlags[3]],          //addborder
+                                   [NSNumber numberWithBool:gameFlags[4]],          //lowgravity
+                                   [NSNumber numberWithBool:gameFlags[5]],          //lasersight
+                                   [NSNumber numberWithBool:gameFlags[6]],          //invulnerable
+                                   [NSNumber numberWithBool:gameFlags[7]],          //resethealth
+                                   [NSNumber numberWithBool:gameFlags[8]],          //vampirism
+                                   [NSNumber numberWithBool:gameFlags[9]],          //karma
+                                   [NSNumber numberWithBool:gameFlags[10]],         //artillery
+                                   [NSNumber numberWithBool:gameFlags[11]],         //randomorder
+                                   [NSNumber numberWithBool:gameFlags[12]],         //king
+                                   [NSNumber numberWithBool:gameFlags[13]],         //placehedgehogs
+                                   [NSNumber numberWithBool:gameFlags[14]],         //clansharesammo
+                                   [NSNumber numberWithBool:gameFlags[15]],         //disablegirders
+                                   [NSNumber numberWithBool:gameFlags[16]],         //disablelandobjects
+                                   [NSNumber numberWithBool:gameFlags[17]],         //aisurvival
+                                   [NSNumber numberWithBool:gameFlags[18]],         //infattack
+                                   [NSNumber numberWithBool:gameFlags[19]],         //resetweaps
+                                   [NSNumber numberWithBool:gameFlags[20]],         //perhogammo
+                                   [NSNumber numberWithBool:gameFlags[21]],         //nowind
+                                   [NSNumber numberWithBool:gameFlags[22]],         //morewind
                                    nil];
     
     NSMutableDictionary *theScheme = [[NSMutableDictionary alloc] initWithObjectsAndKeys:

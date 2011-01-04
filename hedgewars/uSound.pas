@@ -20,13 +20,7 @@
 
 unit uSound;
 interface
-uses SDLh, uConsts;
-
-type PVoicepack = ^TVoicepack;
-    TVoicepack = record
-        name: shortstring;
-        chunks: array [TSound] of PMixChunk;
-        end;
+uses SDLh, uConsts, uTypes;
 
 var MusicFN: shortstring;
 
@@ -45,6 +39,7 @@ function  LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
 procedure PlayMusic;
 procedure PauseMusic;
 procedure ResumeMusic;
+procedure ChangeMusic;
 procedure StopSound(snd: TSound);
 procedure StopSound(chn: LongInt);
 function  ChangeVolume(voldelta: LongInt): LongInt;
@@ -52,7 +47,7 @@ function  AskForVoicepack(name: shortstring): Pointer;
 
 
 implementation
-uses uMisc, uConsole;
+uses uVariables, uConsole, uUtils, uCommands, uDebug, uMobile;
 
 const chanTPU = 32;
 var Volume: LongInt;
@@ -153,7 +148,8 @@ begin
     begin
         defVoicepack^.chunks[i]:= nil;
         // preload all the big sound files (>32k) that would otherwise lockup the game
-        if (i in [sndBeeWater, sndBee, sndCake, sndHellishImpact1, sndHellish, sndHomerun, sndMolotov, sndMortar, sndRideOfTheValkyries, sndYoohoo])
+        if (i in [sndBeeWater, sndBee, sndCake, sndHellishImpact1, sndHellish, sndHomerun,
+                  sndMolotov, sndMortar, sndRideOfTheValkyries, sndYoohoo])
             and (Soundz[i].Path <> ptVoices) and (Soundz[i].FileName <> '') then
         begin
             s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
@@ -184,7 +180,7 @@ end;
 procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 var s:shortstring;
 begin
-    if (not isSoundEnabled) or fastUntilLag then
+    if (not isSoundEnabled) or fastUntilLag or isDeviceMute() then
         exit;
 
     if keepPlaying and (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
@@ -226,7 +222,7 @@ end;
 function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
 var s: shortstring;
 begin
-    if (not isSoundEnabled) or fastUntilLag then
+    if (not isSoundEnabled) or fastUntilLag or isDeviceMute() then
     begin
         LoopSound:= -1;
         exit
@@ -323,8 +319,28 @@ begin
     Mix_ResumeMusic(Mus);
 end;
 
+procedure ChangeMusic;
+begin
+    if (MusicFN = '') or (not isMusicEnabled) then
+        exit;
+
+    if Mus <> nil then
+        Mix_FreeMusic(Mus);
+
+    PlayMusic;
+end;
+
+procedure chVoicepack(var s: shortstring);
+begin
+    if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/voicepack"', true);
+    if s[1]='"' then Delete(s, 1, 1);
+    if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+    CurrentTeam^.voicepack:= AskForVoicepack(s)
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('voicepack', vtCommand, @chVoicepack, false);
     MusicFN:='';
 end;
 

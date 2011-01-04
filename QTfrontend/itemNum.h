@@ -28,15 +28,18 @@ class ItemNum : public QFrame
 
   public:
     void setInfinityState(bool value);
+    void setEnabled(bool value);
     unsigned char getItemsNum() const;
     void setItemsNum(const unsigned char num);
 
   private:
     QImage m_im;
+    QImage m_img;
     bool infinityState;
+    bool enabled;
 
   protected:
-    ItemNum(const QImage& im, QWidget * parent, unsigned char min=2, unsigned char max=8);
+    ItemNum(const QImage& im, const QImage& img, QWidget * parent, unsigned char min=2, unsigned char max=8);
     virtual QSize sizeHint () const;
     virtual ~ItemNum()=0;
 

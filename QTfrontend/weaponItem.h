@@ -26,7 +26,7 @@ class WeaponItem : public ItemNum
   Q_OBJECT
 
  public:
-  WeaponItem(const QImage& im, QWidget * parent);
+  WeaponItem(const QImage& im, const QImage& img, QWidget * parent);
   virtual ~WeaponItem();
 
  signals:

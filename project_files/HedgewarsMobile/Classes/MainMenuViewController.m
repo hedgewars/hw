@@ -27,6 +27,7 @@
 #import "SplitViewRootController.h"
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
+#import "ServerSetup.h"
 
 @implementation MainMenuViewController
 @synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController;
@@ -37,7 +38,6 @@
 
 // check if some configuration files are already set; if they are present it means that the current copy must be updated
 -(void) createNecessaryFiles {
-    NSString *sourceFile, *destinationFile;
     NSString *resourcesDir = [[NSBundle mainBundle] resourcePath];
     DLog(@"Creating necessary files");
     
@@ -69,31 +69,21 @@
         // we copy teams only the first time because it's unlikely that newer ones are going to be added
         NSString *baseTeamsDir = [[NSString alloc] initWithFormat:@"%@/Settings/Teams/",resourcesDir];
         for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:baseTeamsDir error:NULL]) {
-            sourceFile = [baseTeamsDir stringByAppendingString:str];
-            destinationFile = [TEAMS_DIRECTORY() stringByAppendingString:str];
+            NSString *sourceFile = [baseTeamsDir stringByAppendingString:str];
+            NSString *destinationFile = [TEAMS_DIRECTORY() stringByAppendingString:str];
             [[NSFileManager defaultManager] removeItemAtPath:destinationFile error:NULL];
             [[NSFileManager defaultManager] copyItemAtPath:sourceFile toPath:destinationFile error:NULL];
         }
         [baseTeamsDir release];
     }
-    // TODO: is merge needed?
+    // merge not needed as format rarely changes
 
-    // SCHEMES - update old stuff and add new stuff
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == NO)
-        [[NSFileManager defaultManager] createDirectoryAtPath:SCHEMES_DIRECTORY()
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:NULL];
-    // TODO: do the merge if necessary
-    // we overwrite the default ones because it is likely that new modes are added every release
+    // SCHEMES - always overwrite and delete custom ones
+    if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == YES)
+        [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
     NSString *baseSchemesDir = [[NSString alloc] initWithFormat:@"%@/Settings/Schemes/",resourcesDir];
-    for (NSString *str in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:baseSchemesDir error:NULL]) {
-        sourceFile = [baseSchemesDir stringByAppendingString:str];
-        destinationFile = [SCHEMES_DIRECTORY() stringByAppendingString:str];
-        [[NSFileManager defaultManager] removeItemAtPath:destinationFile error:NULL];
-        [[NSFileManager defaultManager] copyItemAtPath:sourceFile toPath:destinationFile error:NULL];
-    }
-    [baseSchemesDir release];
+    [[NSFileManager defaultManager] copyItemAtPath:baseSchemesDir toPath:SCHEMES_DIRECTORY() error:NULL];
+    
 
     // WEAPONS - always overwrite
     if ([[NSFileManager defaultManager] fileExistsAtPath:WEAPONS_DIRECTORY()] == NO)
@@ -108,8 +98,7 @@
     createWeaponNamed(@"Clean Slate", 4);
     createWeaponNamed(@"Minefield", 5);
     createWeaponNamed(@"Thinking with Portals", 6);
-
-    DLog(@"Success");
+    // merge not needed because weapons not present in the set are 0ed by GameSetup
 }
 
 #pragma mark -
@@ -134,6 +123,17 @@
         [userDefaults synchronize];
         [self createNecessaryFiles];
     }
+
+    /*
+    ServerSetup *setup = [[ServerSetup alloc] init];
+    if ([setup isNetworkReachable]) {
+        DLog(@"network is reachable");
+        [NSThread detachNewThreadSelector:@selector(serverProtocol)
+                                 toTarget:setup
+                               withObject:nil];
+    }
+    [setup release];
+    */
 }
 
 
@@ -190,11 +190,11 @@
             if (nil == self.aboutViewController) {
                 AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
                 about.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                about.modalPresentationStyle = UIModalPresentationFormSheet;
+                if ([about respondsToSelector:@selector(setModalPresentationStyle:)])
+                     about.modalPresentationStyle = UIModalPresentationFormSheet;
                 self.aboutViewController = about;
                 [about release];
             }
-            
             [self presentModalViewController:self.aboutViewController animated:YES];
 #endif
             break;
@@ -202,7 +202,8 @@
             if (nil == self.savedGamesViewController) {
                 SavedGamesViewController *savedgames = [[SavedGamesViewController alloc] initWithNibName:@"SavedGamesViewController" bundle:nil];
                 savedgames.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                savedgames.modalPresentationStyle = UIModalPresentationPageSheet;
+                if ([savedgames respondsToSelector:@selector(setModalPresentationStyle:)])
+                    savedgames.modalPresentationStyle = UIModalPresentationPageSheet;
                 self.savedGamesViewController = savedgames;
                 [savedgames release];
             }

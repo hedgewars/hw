@@ -28,8 +28,7 @@ procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
 procedure DrawLand(dX, dY: LongInt);
 
 implementation
-uses uMisc, uLand, uStore, uConsts, GLunit;
-
+uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender;
 
 const TEXSIZE = 256;
 

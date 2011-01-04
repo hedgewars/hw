@@ -76,7 +76,13 @@
         case 30:    //alternateSwitch
             [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];
             break;
-        case 60:    //getReady
+        case 70:    //enhanced graphics
+            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"enhanced"];
+            break;
+        case 80:    //nomultitasking
+            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"multitasking"];
+            break;
+        case 60:    //classic menu
             [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"menu"];
             break;
         default:
@@ -88,8 +94,10 @@
 -(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
     if (tagValue == 40)
         [self.settingsDictionary setObject:textString forKey:@"username"];
-    else
-        [self.settingsDictionary setObject:textString forKey:@"password"];
+    else {
+        [self.settingsDictionary setObject:[NSNumber numberWithInt:[textString length]] forKey:@"password_length"];
+        [self.settingsDictionary setObject:[textString MD5hash] forKey:@"password"];
+    }
 }
 
 #pragma mark -
@@ -98,7 +106,7 @@
     return 3;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger )section {
     switch (section) {
         case 0:     // user and pass
             return 1;   // set 2 here for the password field
@@ -107,10 +115,10 @@
             return 2;
             break;
         case 2:     // other stuff
-            if (IS_IPAD())
-                return 2;
+            if (IS_IPAD() == YES)
+                return 4;
             else
-                return 1;
+                return 3;
             break;
         default:
             DLog(@"Nope");
@@ -166,11 +174,19 @@
                 editableCell.textField.secureTextEntry = NO;
                 editableCell.tag = 40;
             } else {
+                // create a dummy password for setting some visual content for the password
+                int pwdLength = [[self.settingsDictionary objectForKey:@"password_length"] intValue];
+                char *dummyStr = (char *)malloc(sizeof(char)*pwdLength);
+                for (int i = 0; i < pwdLength; i++)
+                    dummyStr[i] = i;
+                NSString *dummy = [[NSString alloc] initWithBytes:dummyStr length:pwdLength encoding:NSASCIIStringEncoding];
+                free(dummyStr);
                 editableCell.titleLabel.text = NSLocalizedString(@"Password","from the settings table");
                 editableCell.textField.placeholder = NSLocalizedString(@"Insert your password",@"");
-                editableCell.textField.text = [self.settingsDictionary objectForKey:@"password"];
+                editableCell.textField.text = dummy;
                 editableCell.textField.secureTextEntry = YES;
                 editableCell.tag = 50;
+                [dummy release];
             }
             
             editableCell.accessoryView = nil;
@@ -208,16 +224,34 @@
             }
             
             switchContent = (UISwitch *)cell.accessoryView;
-            if (row == 0) {
-                cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
-                cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit", @"");
-                switchContent.on = [[self.settingsDictionary objectForKey:@"alternate"] boolValue];
-                switchContent.tag = 30;
-            } else {
-                cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
-                cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
-                switchContent.on = [[self.settingsDictionary objectForKey:@"menu"] boolValue];
-                switchContent.tag = 60;
+            switch (row) {
+                case 0:
+                    cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit", @"");
+                    switchContent.on = [[self.settingsDictionary objectForKey:@"alternate"] boolValue];
+                    switchContent.tag = 30;
+                    break;
+                case 1:
+                    cell.textLabel.text = NSLocalizedString(@"Enanched Graphics Mode", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"The game will use more memory so it could crash!", @"");
+                    switchContent.on = [[self.settingsDictionary objectForKey:@"enhanced"] boolValue];
+                    switchContent.tag = 70;
+                    break;
+                case 2:
+                    cell.textLabel.text = NSLocalizedString(@"Multitasking Enabled", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Disable it in case of issues when returing in game", @"");
+                    switchContent.on = [[self.settingsDictionary objectForKey:@"multitasking"] boolValue];
+                    switchContent.tag = 80;
+                    break;
+                case 3:
+                    cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
+                    switchContent.on = [[self.settingsDictionary objectForKey:@"menu"] boolValue];
+                    switchContent.tag = 60;
+                    break;
+                default:
+                    DLog(@"Nope");
+                    break;
             }
             break;
         default:

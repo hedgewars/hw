@@ -20,7 +20,7 @@
 
 unit uAIAmmoTests;
 interface
-uses SDLh, uGears, uConsts, uFloat;
+uses SDLh, uConsts, uFloat, uTypes;
 const amtest_OnTurn = $00000001;
 
 type TAttackParams = record
@@ -31,6 +31,7 @@ type TAttackParams = record
             end;
 
 function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestSnowball(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestMolotov(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestClusterBomb(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -102,13 +103,14 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestGrenade;     flags: 0), // amSMine
             (proc: @TestFirePunch;   flags: 0), // amHammer
             (proc: nil;              flags: 0), // amResurrector
-            (proc: nil;              flags: 0) // amDrillStrike
+            (proc: nil;              flags: 0),// amDrillStrike
+            (proc: @TestSnowball;    flags: 0) // amSnowball
             );
 
 const BadTurn = Low(LongInt) div 4;
 
 implementation
-uses uMisc, uAIMisc, uLand;
+uses uAIMisc, uVariables, uUtils;
 
 function Metric(x1, y1, x2, y2: LongInt): LongInt;
 begin
@@ -170,6 +172,63 @@ repeat
      end
 until (rTime > 4250);
 TestBazooka:= valueResult
+end;
+
+function TestSnowball(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+var Vx, Vy, r: hwFloat;
+    rTime: LongInt;
+    Score, EX, EY: LongInt;
+    valueResult: LongInt;
+
+    function CheckTrace: LongInt;
+    var x, y, dX, dY: hwFloat;
+        t: LongInt;
+        value: LongInt;
+    begin
+    x:= Me^.X;
+    y:= Me^.Y;
+    dX:= Vx;
+    dY:= -Vy;
+    t:= rTime;
+    repeat
+      x:= x + dX;
+      y:= y + dY;
+      dX:= dX + cWindSpeed;
+      dY:= dY + cGravity;
+      dec(t)
+    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t <= 0);
+    EX:= hwRound(x);
+    EY:= hwRound(y);
+    value:= RateExplosion(Me, EX, EY, 5);
+    if value = 0 then value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
+    CheckTrace:= value;
+    end;
+
+begin
+ap.Time:= 0;
+rTime:= 350;
+ap.ExplR:= 0;
+valueResult:= BadTurn;
+repeat
+  rTime:= rTime + 300 + Level * 50 + random(300);
+  Vx:= - cWindSpeed * rTime * _0_5 + (int2hwFloat(Targ.X + AIrndSign(2)) - Me^.X) / int2hwFloat(rTime);
+  Vy:= cGravity * rTime * _0_5 - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(rTime);
+  r:= Distance(Vx, Vy);
+  if not (r > _1) then
+     begin
+     Score:= CheckTrace;
+     if valueResult <= Score then
+        begin
+        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
+        ap.Power:= hwRound(r * cMaxPower) - random((Level - 1) * 17 + 1);
+        ap.ExplR:= 100;
+        ap.ExplX:= EX;
+        ap.ExplY:= EY;
+        valueResult:= Score
+        end;
+     end
+until (rTime > 4250);
+TestSnowball:= valueResult
 end;
 
 function TestMolotov(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -539,7 +598,7 @@ until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4)
     or (y.Round > LongWord(LAND_HEIGHT))
     or (d > 200);
 
-if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then valueResult:= max(0, (4 - d div 50) * 7 * 1024)
+if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then valueResult:= Max(0, (4 - d div 50) * 7 * 1024)
                                                            else valueResult:= BadTurn;
 TestDesertEagle:= valueResult
 end;

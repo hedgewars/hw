@@ -34,7 +34,7 @@ var UserNick: shortstring = '';
     showAll: boolean;
 
 implementation
-uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys, uTeams;
+uses SDLh, uKeys, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
 
 const MaxStrIndex = 27;
 
@@ -181,44 +181,42 @@ while
 visibleCount:= cnt;
 end;
 
+procedure SendHogSpeech(s: shortstring);
+begin
+SendIPC('h' + s);
+ParseCommand('/hogsay '+s, true)
+end;
+
 procedure AcceptChatString(s: shortstring);
 var i: TWave;
-
+    c, t: LongInt;
+    x: byte;
 begin
-// "Make hedgehog say something"
-if (s[1] = '"') and (s[Length(s)] = '"') then
+t:= LocalTeam;
+x:= 0;
+if (s[1] = '"') and (s[Length(s)] = '"') then x:= 1
+else if (s[1] = '''') and (s[Length(s)] = '''') then x:= 2
+else if (s[1] = '-') and (s[Length(s)] = '-') then x:= 3;
+if not CurrentTeam^.ExtDriven and (x <> 0) then
+    for c:= 0 to Pred(TeamsCount) do
+        if (TeamsArray[c] = CurrentTeam) then t:= c;
+
+if x <> 0 then
     begin
-    if CurrentTeam^.ExtDriven then
+    if t = -1 then
         ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
     else
-        ParseCommand('/hogsay '#1 + copy(s, 2, Length(s)-2), true);
+        SendHogSpeech(char(x) + char(t) + copy(s, 2, Length(s)-2));
     exit
     end;
-// 'Make hedgehog think something'
-if (s[1] = '''') and (s[Length(s)] = '''') then
-    begin
-    if CurrentTeam^.ExtDriven then
-        ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
-    else
-        ParseCommand('/hogsay '#2 + copy(s, 2, Length(s)-2), true);
-    exit
-    end;
-// -Make hedgehog yell something-
-if (s[1] = '-') and (s[Length(s)] = '-') then
-    begin
-    if CurrentTeam^.ExtDriven then
-        ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
-    else
-        ParseCommand('/hogsay '#3 + copy(s, 2, Length(s)-2), true);
-    exit
-    end;
+
 // These 3 are same as above, only are to make the hedgehog say it on next attack
 if (s[1] = '/') and (copy(s, 1, 5) = '/hsa ') then
     begin
     if CurrentTeam^.ExtDriven then
         ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
     else
-        ParseCommand('/hogsay '#4 + copy(s, 6, Length(s)-5), true);
+        SendHogSpeech(#4 + copy(s, 6, Length(s)-5));
     exit
     end;
 if (s[1] = '/') and (copy(s, 1, 5) = '/hta ') then
@@ -226,7 +224,7 @@ if (s[1] = '/') and (copy(s, 1, 5) = '/hta ') then
     if CurrentTeam^.ExtDriven then
         ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
     else
-        ParseCommand('/hogsay '#5 + copy(s, 6, Length(s)-5), true);
+        SendHogSpeech(#5 + copy(s, 6, Length(s)-5));
     exit
     end;
 if (s[1] = '/') and (copy(s, 1, 5) = '/hya ') then
@@ -234,7 +232,7 @@ if (s[1] = '/') and (copy(s, 1, 5) = '/hya ') then
     if CurrentTeam^.ExtDriven then
         ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
     else
-        ParseCommand('/hogsay '#6 + copy(s, 6, Length(s)-5), true);
+        SendHogSpeech(#6 + copy(s, 6, Length(s)-5));
     exit
     end;
 
@@ -308,8 +306,64 @@ if Key <> 0 then
     end
 end;
 
+procedure chChatMessage(var s: shortstring);
+begin
+    AddChatString(s)
+end;
+
+procedure chSay(var s: shortstring);
+begin
+    SendIPC('s' + s);
+
+    if copy(s, 1, 4) = '/me ' then
+        s:= #2'* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
+    else
+        s:= #1 + UserNick + ': ' + s;
+
+    AddChatString(s)
+end;
+
+procedure chTeamSay(var s: shortstring);
+begin
+    SendIPC('b' + s);
+
+    s:= #4 + '[Team] ' + UserNick + ': ' + s;
+
+    AddChatString(s)
+end;
+
+procedure chHistory(var s: shortstring);
+begin
+    s:= s; // avoid compiler hint
+    uChat.showAll:= not uChat.showAll
+end;
+
+procedure chChat(var s: shortstring);
+begin
+    s:= s; // avoid compiler hint
+    GameState:= gsChat;
+    if length(s) = 0 then
+        KeyPressChat(27)
+    else
+        begin
+        KeyPressChat(27);
+        KeyPressChat(47);
+        KeyPressChat(116);
+        KeyPressChat(101);
+        KeyPressChat(97);
+        KeyPressChat(109);
+        KeyPressChat(32)
+        end
+end;
+
 procedure initModule;
 begin
+    RegisterVariable('chatmsg', vtCommand, @chChatMessage, true);
+    RegisterVariable('say', vtCommand, @chSay, true);
+    RegisterVariable('team', vtCommand, @chTeamSay, true);
+    RegisterVariable('history', vtCommand, @chHistory, true );
+    RegisterVariable('chat', vtCommand, @chChat, true );
+
     lastStr:= 0;
     visibleCount:= 0;
     showAll:= false;

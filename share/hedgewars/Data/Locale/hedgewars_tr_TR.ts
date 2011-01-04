@@ -7,6 +7,10 @@
         <source>new</source>
         <translation>yeni</translation>
     </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -40,7 +44,7 @@
         <translation>Düzeni değiştir</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -67,7 +71,7 @@
     <name>HWForm</name>
     <message>
         <source>new</source>
-        <translation>yeni</translation>
+        <translation type="obsolete">yeni</translation>
     </message>
     <message>
         <source>Error</source>
@@ -179,6 +183,14 @@
     </message>
     <message>
         <source>Large floating islands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -298,6 +310,37 @@ or pick another nickname in game config:</source>
     <message>
         <source>Connecting...</source>
         <translation>Bağlanıyor...</translation>
+    </message>
+</context>
+<context>
+    <name>PageDrawMap</name>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Yükle</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load drawn map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save drawn map</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -677,19 +720,31 @@ or pick another nickname in game config:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>New weapon scheme</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit weapon scheme</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete weapon scheme</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -944,6 +999,18 @@ Do you still want to join the room?</source>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -954,6 +1021,14 @@ Do you still want to join the room?</source>
     <message>
         <source>Delete</source>
         <translation>Sil</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Yeni</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1127,6 +1202,10 @@ Do you still want to join the room?</source>
         <source>Default</source>
         <translation type="obsolete">Öntanımlı</translation>
     </message>
+    <message>
+        <source>hand drawn map...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -1148,7 +1227,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Silahlar</translation>
+        <translation type="obsolete">Silahlar</translation>
     </message>
     <message>
         <source>Audio/Graphic options</source>
@@ -1176,6 +1255,10 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Misc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1346,7 +1429,11 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Bind schemes and weapons</source>
+        <source>% Rope Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gameplay</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1396,7 +1483,7 @@ Lütfen kurulumunuzu kontrol edin</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Öntanımlı silah seti silinemez</translation>
+        <translation type="obsolete">Öntanımlı silah seti silinemez</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1412,6 +1499,30 @@ Lütfen kurulumunuzu kontrol edin</translation>
     </message>
     <message>
         <source>File association failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">Takımlar</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1508,6 +1619,10 @@ Lütfen kurulumunuzu kontrol edin</translation>
         <source>Associate file extensions</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>more</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
@@ -1556,6 +1671,14 @@ Lütfen kurulumunuzu kontrol edin</translation>
     </message>
     <message>
         <source>Delays</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">yeni</translation>
+    </message>
+    <message>
+        <source>copy of</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1662,6 +1785,14 @@ Lütfen kurulumunuzu kontrol edin</translation>
     </message>
     <message>
         <source>Per Hedgehog Ammo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

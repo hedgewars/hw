@@ -23,6 +23,8 @@
 #import "CommodityFunctions.h"
 #import "SDL_uikitappdelegate.h"
 
+#define LABEL_TAG 57423
+
 @implementation SchemeWeaponConfigViewController
 @synthesize listOfSchemes, listOfWeapons, lastIndexPath_sc, lastIndexPath_we, selectedScheme, selectedWeapon, syncSwitch;
 
@@ -45,7 +47,7 @@
         if (IS_IPAD())
             [self.tableView setBackgroundView:nil];
         else {
-            UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"backgroundCenter.png"];
+            UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
             UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
             [backgroundImage release];
             [self.tableView setBackgroundView:background];
@@ -81,7 +83,10 @@
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    if (hideSections)
+        return 0;
+    else
+        return 3;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -141,7 +146,7 @@
         cell.accessoryView = self.syncSwitch;
     }
 
-    cell.backgroundColor = [UIColor blackColor];
+    cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
     cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
     cell.detailTextLabel.textColor = [UIColor whiteColor];
     return cell;
@@ -213,6 +218,45 @@
         [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+-(void) fillSections {
+    if (hideSections == YES) {
+        hideSections = NO;
+        NSRange range;
+        range.location = 0;
+        range.length = 3;
+        NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
+        [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        self.selectedScheme = @"Default.plist";
+        self.selectedWeapon = @"Default.plist";
+
+        self.tableView.scrollEnabled = YES;
+
+        [[self.view viewWithTag:LABEL_TAG] removeFromSuperview];
+    }
+}
+
+-(void) emptySections {
+    hideSections = YES;
+    NSRange range;
+    range.location = 0;
+    range.length = 3;
+    NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
+    [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+    self.selectedScheme = @"Default.plist";
+    self.selectedWeapon = @"Default.plist";
+
+    self.tableView.scrollEnabled = NO;
+
+    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 60);
+    UILabel *theLabel = createBlueLabel(NSLocalizedString(@"Missions don't need further configuration",@""), frame);
+    theLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
+    theLabel.numberOfLines = 2;
+    theLabel.tag = LABEL_TAG;
+
+    [self.view addSubview:theLabel];
+    [theLabel release];
 }
 
 #pragma mark -

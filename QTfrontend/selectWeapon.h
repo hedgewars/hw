@@ -33,10 +33,11 @@ class SelWeaponItem : public QWidget
   Q_OBJECT
 
 public:
-  SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage image, QWidget* parent=0);
+  SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage image, QImage imagegrey, QWidget* parent=0);
 
   unsigned char getItemsNum() const;
   void setItemsNum(const unsigned char num);
+  void setEnabled(bool value);
 
  private:
   WeaponItem* item;
@@ -56,7 +57,9 @@ class SelWeaponWidget : public QFrame
   void setWeapons(const QString& ammo);
   void setWeaponsName(const QString& name);
   void deleteWeaponsName();
+  void newWeaponsName();
   void save();
+  void copy();
 
  signals:
   void weaponsChanged();

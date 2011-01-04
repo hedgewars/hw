@@ -22,10 +22,13 @@
 #import <UIKit/UIKit.h>
 #import "MapPreviewButtonView.h"
 
+@class SchemeWeaponConfigViewController;
+@class GameConfigViewController;
+
 @interface MapConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, MapPreviewViewDelegate> {
-    NSInteger oldValue;  //slider
-    NSInteger oldPage;   //segmented control
-    BOOL busy;
+    NSInteger oldValue;     // for the slider
+    NSInteger oldPage;      // for the segmented control
+    BOOL busy;              // for the preview button
 
     // objects read (mostly) by parent view
     NSInteger maxHogs;
@@ -48,6 +51,10 @@
     // internal objects
     NSIndexPath *lastIndexPath;
     NSArray *dataSourceArray;
+
+    // controller for mission state
+    SchemeWeaponConfigViewController *externalController;
+    GameConfigViewController *parentController;
 }
 
 
@@ -70,6 +77,10 @@
 
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
 @property (nonatomic,retain) NSArray *dataSourceArray;
+
+@property (nonatomic,assign) SchemeWeaponConfigViewController *externalController;
+@property (nonatomic,assign) GameConfigViewController *parentController;
+
 
 -(IBAction) buttonPressed:(id) sender;
 

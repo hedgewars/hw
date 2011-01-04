@@ -25,6 +25,7 @@
 
 #define SETTINGS_FILE()         [DOCUMENTS_FOLDER() stringByAppendingString:@"/settings.plist"]
 #define DEBUG_FILE()            [DOCUMENTS_FOLDER() stringByAppendingString:@"/hw-game.log"]
+#define HEDGEHOG_FILE()         [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/Images/hedgehog.png"]
 
 #define TEAMS_DIRECTORY()       [DOCUMENTS_FOLDER() stringByAppendingString:@"/Teams/"]
 #define WEAPONS_DIRECTORY()     [DOCUMENTS_FOLDER() stringByAppendingString:@"/Weapons/"]
@@ -52,10 +53,12 @@
 #define UICOLOR_HW_YELLOW_TEXT  [UIColor colorWithRed:(CGFloat)0xF0/255 green:(CGFloat)0xD0/255 blue:0 alpha:1]
 #define UICOLOR_HW_DARKBLUE     [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:1]
 #define UICOLOR_HW_ALPHABLUE    [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:0.58f]
+#define UICOLOR_HW_ALMOSTBLACK  (IS_NOT_POWERFUL()) ? [UIColor blackColor] : [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6]
 
 #define IS_DUALHEAD()           ([[UIScreen class] respondsToSelector:@selector(screens)] && [[UIScreen screens] count] > 1)
 #define IS_IPAD()               (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define IS_NOT_POWERFUL()       ([modelType() hasPrefix:@"iPhone1"] || [modelType() hasPrefix:@"iPod1,1"] || [modelType() hasPrefix:@"iPod2,1"])
+#define IS_NOT_VERY_POWERFUL()  ([modelType() hasPrefix:@"iPad1"] || [modelType() hasPrefix:@"iPhone2"] || [modelType() hasPrefix:@"iPod3"] || [modelType() hasPrefix:@"iPod4"] )
 
 #define DEFAULT_NETGAME_PORT    46631
 
@@ -72,3 +75,10 @@ UILabel *createBlueLabel (NSString *title, CGRect frame);
 UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWidth, UIColor *borderColor, UIColor *backgroundColor);
 
 CGSize PSPNGSizeFromMetaData (NSString *aFileName);
+
+@interface NSString (extra)
+
+-(NSString *) MD5hash;
+
+@end
+

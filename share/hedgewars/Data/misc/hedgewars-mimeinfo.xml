@@ -8,13 +8,14 @@
     -->
     <comment>Hedgewars Demo</comment>
     <comment xml:lang="de">Hedgewars Demo</comment>
-    <comment xml:lang="fr">Hedgewars Démonstration</comment>
+    <comment xml:lang="es">Demo de Hedgewars</comment>
+    <comment xml:lang="fr">Démonstration d'Hedgewars</comment>
+    <comment xml:lang="it">Demo di Hedgewars</comment>
+	<comment xml:lang="ko">헤즈와스 데모</comment>
     <comment xml:lang="pl">Demo gry Hedgewars</comment>
+	<comment xml:lang="pt">Hedgewars Demo</comment>
     <comment xml:lang="sk">Demo hry Hedgewars</comment>
     <comment xml:lang="sv">Demo för Hedgewars</comment>
-    <comment xml:lang="es">Demo de Hedgewars</comment>
-    <comment xml:lang="it">Demo di Hedgewars</comment>
-	<comment xml:lang="pt">Hedgewars Demo</comment>
     <magic priority="50">
       <match required="yes" type="byte" offset="0" value="2"/>
       <match required="yes" type="big16" offset="1" value="21572"/>
@@ -26,12 +27,14 @@
     <!--<generic-icon name="applications-games"/>-->
     <comment>Hedgewars Save</comment>
     <comment xml:lang="de">Hedgewars gespeichertes Spiel</comment>
+    <comment xml:lang="es">Partida guardada de Hedgewars</comment>
+    <comment xml:lang="fr">Parties enregistrées d'Hedgewars</comment>
+	<comment xml:lang="ko">헤즈와스 저장된 게임</comment>
+    <comment xml:lang="it">Partita salvata di Hedgewars</comment>
     <comment xml:lang="pl">Zapis gry Hedgewars</comment>
+	<comment xml:lang="pt">Partida guardada de Hedgewars</comment>
     <comment xml:lang="sk">Uložená hra Hedgewars</comment>
     <comment xml:lang="sv">Sparfil för Hedgewars</comment>
-    <comment xml:lang="es">Partida guardada de Hedgewars</comment>
-    <comment xml:lang="it">Partita salvata di Hedgewars</comment>
-	<comment xml:lang="pt">Partida guardada de Hedgewars</comment>
     <magic priority="50">
       <match required="yes" type="byte" offset="0" value="2"/>
       <match required="yes" type="big16" offset="1" value="21587"/>

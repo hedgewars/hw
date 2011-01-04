@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
-var sign: float;
+var sign: real;
 begin
 if vobCount = 0 then exit;
 
@@ -24,14 +24,23 @@ sign:= 1;
 with Gear^ do
     begin
     inc(FrameTicks, Steps);
-    if FrameTicks > vobFrameTicks then
+    if not SuddenDeathDmg and (FrameTicks > vobFrameTicks) then
         begin
         dec(FrameTicks, vobFrameTicks);
         inc(Frame);
         if Frame = vobFramesCount then Frame:= 0
+        end
+    else if SuddenDeathDmg and (FrameTicks > vobSDFrameTicks) then
+        begin
+        dec(FrameTicks, vobSDFrameTicks);
+        inc(Frame);
+        if Frame = vobSDFramesCount then Frame:= 0
         end;
     X:= X + (cWindSpeedf * 200 + dX + tdX) * Steps;
-    Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps;
+    if SuddenDeathDmg then
+        Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps
+    else
+        Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps;
     Angle:= Angle + dAngle * Steps;
     if Angle > 360 then
         Angle:= Angle - 360
@@ -59,8 +68,8 @@ with Gear^ do
         begin
         if round(X) < cLeftScreenBorder then X:= X + cScreenSpace else
         if round(X) > cRightScreenBorder then X:= X - cScreenSpace;
-        // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + float(25); // For if flag is set for flakes rising upwards?
-        if round(Y) - 75 > LAND_HEIGHT then Y:= Y - float(1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
+        // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + 25.0; // For if flag is set for flakes rising upwards?
+        if round(Y) - 75 > LAND_HEIGHT then Y:= Y - (1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
         Timer:= 0;
         tdX:= 0;
         tdY:= 0
@@ -81,7 +90,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
 var s: Longword;
-    t: float;
+    t: real;
 begin
 Gear^.X:= Gear^.X + (cWindSpeedf * 750 * Gear^.dX) * Steps;
 
@@ -444,16 +453,16 @@ procedure doStepSpeechBubbleWork(Gear: PVisualGear; Steps: Longword);
 begin
 if Gear^.Timer > Steps then dec(Gear^.Timer, Steps) else Gear^.Timer:= 0;
 
-if (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
+if (Gear^.Hedgehog^.Gear <> nil) then
     begin
-    Gear^.X:= PHedgehog(Gear^.Hedgehog)^.Gear^.X.QWordValue/4294967296 + (Gear^.Tex^.w div 2  - Gear^.FrameTicks);
-    Gear^.Y:= PHedgehog(Gear^.Hedgehog)^.Gear^.Y.QWordValue/4294967296 - (16 + Gear^.Tex^.h);
+    Gear^.X:= Gear^.Hedgehog^.Gear^.X.QWordValue/4294967296 + (Gear^.Tex^.w div 2  - Gear^.FrameTicks);
+    Gear^.Y:= Gear^.Hedgehog^.Gear^.Y.QWordValue/4294967296 - (16 + Gear^.Tex^.h);
     end;
 
 if Gear^.Timer = 0 then
     begin
-    if PHedgehog(Gear^.Hedgehog)^.SpeechGear = Gear then
-        PHedgehog(Gear^.Hedgehog)^.SpeechGear:= nil;
+    if Gear^.Hedgehog^.SpeechGear = Gear then
+        Gear^.Hedgehog^.SpeechGear:= nil;
     DeleteVisualGear(Gear)
     end;
 end;
@@ -462,10 +471,10 @@ procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
 begin
 Steps:= Steps; // avoid compiler hint
 
-with PHedgehog(Gear^.Hedgehog)^ do
+with Gear^.Hedgehog^ do
     if SpeechGear <> nil then SpeechGear^.Timer:= 0;
 
-PHedgehog(Gear^.Hedgehog)^.SpeechGear:= Gear;
+Gear^.Hedgehog^.SpeechGear:= Gear;
 
 Gear^.Timer:= max(Length(Gear^.Text) * 150, 3000);
 
@@ -479,7 +488,7 @@ case Gear^.FrameTicks of
 
 Gear^.doStep:= @doStepSpeechBubbleWork;
 
-Gear^.Y:= Gear^.Y - float(Gear^.Tex^.h)
+Gear^.Y:= Gear^.Y - Gear^.Tex^.h
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -512,7 +521,7 @@ Gear^.dY:= -0.08;
 
 str(Gear^.State, s);
 if Gear^.Hedgehog <> nil then
-    Gear^.Tex:= RenderStringTex(s, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color, fnt16)
+    Gear^.Tex:= RenderStringTex(s, Gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
 else
     Gear^.Tex:= RenderStringTex(s, cWhiteColor, fnt16);
 
@@ -521,7 +530,7 @@ if round(Gear^.Y) < cWaterLine then
 else
     Gear^.doStep:= @doStepHealthTagWorkUnderWater;
 
-Gear^.Y:= Gear^.Y - float(Gear^.Tex^.h);
+Gear^.Y:= Gear^.Y - Gear^.Tex^.h;
 
 if Steps > 1 then Gear^.doStep(Gear, Steps-1);
 end;
@@ -558,11 +567,20 @@ end;
 
 procedure doStepExplosion(Gear: PVisualGear; Steps: Longword);
 var i: LongWord;
-gX,gY: LongInt;
+    gX,gY: LongInt;
+    vg: PVisualGear;
 begin
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
-for i:= 0 to 31 do AddVisualGear(gX, gY, vgtFire);
+for i:= 0 to 31 do 
+    begin
+    vg:= AddVisualGear(gX, gY, vgtFire);
+    if vg <> nil then 
+        begin
+        vg^.State:= gstTmpFlag;
+        inc(vg^.FrameTicks, vg^.FrameTicks)
+        end
+    end;
 for i:= 0 to  8 do AddVisualGear(gX, gY, vgtExplPart);
 for i:= 0 to  8 do AddVisualGear(gX, gY, vgtExplPart2);
 Gear^.doStep:= @doStepExplosionWork;
@@ -590,12 +608,21 @@ end;
 
 procedure doStepBigExplosion(Gear: PVisualGear; Steps: Longword);
 var i: LongWord;
-gX,gY: LongInt;
+    gX,gY: LongInt;
+    vg: PVisualGear;
 begin
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
 AddVisualGear(gX, gY, vgtSmokeRing);
-for i:= 0 to 46 do AddVisualGear(gX, gY, vgtFire);
+for i:= 0 to 46 do 
+    begin
+    vg:= AddVisualGear(gX, gY, vgtFire);
+    if vg <> nil then 
+        begin
+        vg^.State:= gstTmpFlag;
+        inc(vg^.FrameTicks, vg^.FrameTicks)
+        end
+    end;
 for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart);
 for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart2);
 Gear^.doStep:= @doStepBigExplosionWork;
@@ -626,4 +653,28 @@ begin
       DeleteVisualGear(Gear)
   else
       dec(Gear^.FrameTicks, Steps);
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepCircle(Gear: PVisualGear; Steps: Longword);
+var tmp: LongInt;
+    i: LongWord;
+begin
+with Gear^ do
+    if Frame <> 0 then
+        for i:= 1 to Steps do
+            begin
+            inc(FrameTicks);
+            if (FrameTicks mod Frame) = 0 then
+                begin
+                tmp:= Gear^.Tint and $FF;
+                if tdY >= 0 then inc(tmp)
+                else dec(tmp);
+                if tmp < round(dX) then tdY:= 1;
+                if tmp > round(dY) then tdY:= -1;
+		if tmp > 255 then tmp := 255;
+		if tmp < 0 then tmp := 0;
+                Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or tmp
+                end
+            end
 end;

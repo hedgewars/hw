@@ -1,0 +1,233 @@
+; Korean locale
+
+00:00=수류탄
+00:01=산탄식 폭탄
+00:02=로켓탄 발사기
+00:03=살인벌
+00:04=엽총
+00:05=잭 해머
+00:06=통과
+00:07=밧줄
+00:08=지뢰
+00:09=권총
+00:10=다이너마이트
+00:11=야구 방망이
+00:12=올려치기
+00:13=초	
+00:14=낙하산
+00:15=폭탄 공습
+00:16=지뢰 공습
+00:17=발염 장치
+00:18=벽건설
+00:19=텔레포트
+00:20=고슴도치 바꾸기
+00:21=박격포
+00:22=채찍
+00:23=가미가제 공격
+00:24=케이크
+00:25=유혹
+00:26=소박폭탄
+00:27=불지옥 수류탄
+00:28=드릴 발사기
+00:29=구체의 폭탄 발사기
+00:30=네이팜 공습
+00:31=원격조종비행기
+00:32=저중력
+00:33=손상 증가
+00:34=정복 불능
+00:35=시간연장
+00:36=레이저 조준기
+00:37=흡혈귀
+00:38=저격용 소총
+00:39=비행접시
+00:40=화염병
+00:41=못생긴 앵무새
+00:42=포털 건
+00:43=피아노
+00:44=악취가 나는 치즈
+00:45=사인 건
+00:46=화염 방사기
+00:47=접착지뢰
+00:48=망치
+00:49=소생시키기
+
+01:00=시~작!
+01:01=무승부
+01:02=%1 승리!
+01:03=음량 %1%
+01:04=정지
+01:05=그만둘까요? (Y/Esc)?
+01:06=단판 결승!
+01:07=%1 발 남는다
+01:08=연료
+01:09=동시에 발생하고 있다...
+01:10=사용하면 회전 계속할 수 있다
+01:11=아직 사용할 수가 없다
+01:12=1 회전 후에 단판 결승 시작하겠다!
+01:13=%1 회전 후에 단판 결승 시작하겠다!
+01:14=%1 준비됐나요?
+
+; Event messages
+; Hog (%1) died
+02:00=%1 죽었다!
+
+; Hog (%1) drowned
+02:01=%1 !
+
+; Round starts
+02:02=시~작!
+
+; Round ends (win; unused atm)
+02:03=...
+
+; Round ends (draw; unused atm)
+02:04=...
+
+; New health crate
+02:05=구급상자!
+
+; New ammo crate
+02:06=무기상자!
+
+; New utility crate
+02:07=장치상자!
+
+; Hog (%1) skips his turn
+02:08=%1 통과했다.
+
+; Hog (%1) hurts himself only
+02:09=%1 피학대 성애자인 것 캍아...
+
+; Hog shot an home run (using the bat and another hog)
+02:10=홈런!
+
+; Hog (%1) has to leave (team is gone)
+02:11=%1 포기했다!
+
+; Weapon Categories
+03:00=Timed Grenade
+03:01=Timed Grenade
+03:02=Ballistic Weapon
+03:03=Guided Weapon
+03:04=Gun (multiple shots)
+03:05=Digging Tool
+03:06=Action
+03:07=Transport Utility
+03:08=Proximity Bomb
+03:09=Gun (multiple shots)
+03:10=BOOM!
+03:11=Bonk!
+03:12=Martial Arts
+03:13=UNUSED
+03:14=Transport Utility
+03:15=Airborne Attack
+03:16=Airborne Attack
+03:17=Digging Tool
+03:18=Utility
+03:19=Transport Utility
+03:20=Action
+03:21=Ballistic Weapon
+03:22=Call me Indiana!
+03:23=(Really) Martial Arts
+03:24=The cake is NOT a lie!
+03:25=Costume Kit
+03:26=Juicy Grenade
+03:27=Fiery Grenade
+03:28=Ballistic Weapon
+03:29=Ballistic Weapon
+03:30=Airborne Attack
+03:31=Remote Controlled Bomb
+03:32=Temporary Effect
+03:33=Temporary Effect
+03:34=Temporary Effect
+03:35=Temporary Effect
+03:36=Temporary Effect
+03:37=Temporary Effect
+03:38=Gun (multiple shots)
+03:39=Transport Utility
+03:40=Incinerating Grenade
+03:41=Huge fan of Squawks
+03:42=I'm making a note here...
+; the misspelled "Beethoven" is intentional (-> to beat)
+03:43=Performing Beathoven's deadly sonata
+03:44=Best before: 1923
+03:45=The power of science
+03:46=Hot Hot Hot!
+03:47=Stick these somewhere useful!
+03:48=It's Hammer time!
+03:49=Does what you guess
+
+; Weapon Descriptions (use | as line breaks)
+04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
+04:01=Attack your enemies using a cluster bomb.|It will split into smaller bombs once its timer|reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
+04:02=Attack your enemies using a ballistic projectile|that might be influenced by wind.|Attack: Hold to shoot with more power
+04:03=Launch an explosive bee that will lock on|the selected target. Don't shoot with full power|to improve its precision.|Cursor: Pick target|Attack: Hold to shoot with more power
+04:04=Attack your enemy using a shotgun with two shots.|Thanks to its spread you don't need direct hits|to harm your opponents.|Attack: Shoot (multiple times)
+04:05=Move underground! Use the pickhammer to drill|a hole into the ground and reach other areas.|Attack: Start or stop digging
+04:06=Bored? No way to attack? Save your ammo?|No problem! Just skip your turn, coward!|Attack: Skip your turn without fighting
+04:07=Bridge huge distances using timed shots with the|rope. Use your momentum to slide into other hogs|or drop grenades and other weapons on them.|Attack: Shoot or release the rope|Long Jump: Drop grenades or similar weapons
+04:08=Keep your enemies away by dropping a mine in|narrow passages or right below their feet. Be|sure to retreat before you trigger it yourself!|Attack: Drop mine next to your feet
+04:09=Not sure about your aiming? Use the Desert|Eagle to attack using up to four shots.|Attack: Shoot (multiple times)
+04:10=Brute force is always an option. Drop this classic|explosive next to your enemies and retreat.|Attack: Drop dynamite next to your feet
+04:11=Get rid of enemy hogs by batting them over|the map borders or into water. Or how about|knocking some mines to your friends?|Attack: Bat everything in front of you
+04:12=Get close and personal to unleash the power of|this almost deadly martial arts technique.|Attack: Perform the Fire Punch
+04:13=UNUSED
+04:14=Fear of heights? Better grab a parachute.|It will unfold once|you fall too far and|save your hog from taking fall damage.|Attack: Unfold the parachute|Long Jump: Drop grenades or similar weapons
+04:15=Call in an airplane to attack your enemies|using a bombing run.|Left/Right: Determine attack direction|Cursor: Select target region
+04:16=Call in an airplane to drop several mines|in the target area.|Left/Right: Determine attack direction|Cursor: Select target region
+04:17=Need shelter? Use the blow torch to dig|a tunnel into solid ground granting you|cover.|Attack: Start or stop digging
+04:18=Need additional protection or want to pass|unpassable ground? Place some girders as you|like.|Left/Right: Select girder to place|Cursor: Place girder in a valid position
+04:19=Used at the right moment teleportation can|be more powerful than almost all weapons as|it allows you to save hogs from dangerous|situations within seconds.|Cursor: Select target region
+04:20=Allows you to play the current turn with|a different hog.|Attack: Enable switching hogs
+04:21=Shoot a grenade-like projectile that will|release multiple bombs upon impact.|Attack: Shoot at full power
+04:22=Not just for Indiana Jones! The whip is a|useful weapon in many situations. Especially|when you'd like to shove someone off a cliff.|Attack: Strike everything in front of you
+04:23=If you have nothing to lose, this might be|quite handy. Sacrifice your hog by launching|him into a specific direction hurting everything|on his way and exploding at the end.|Attack: Launch the devastating and deadly attack
+04:24=Happy Birthday! Launch this cake, let it walk right|next to your enemies and let them have an explosive|party. The cake is able to pass almost all terrain|but he might detonate earlier this way.|Attack: Start the cake or let it stop and explode
+04:25=Use this disguise kit to get your enemies to jump|towards your hog (and into some gap or hole).|Attack: Use the kit and try to seduce another hog
+04:26=Throw this juicy watermelon at your enemies. Once|the timer expires, it will split into several|explosive pieces.|1-5: Set watermelon's timer|Attack: Hold to shoot with more power
+04:27=Let hellfire rain onto your opponents by using|this fiendish explosive. Don't get too close to|the explosion as smaller fires might last longer.|Attack: Hold to shoot with more power
+04:28=Short time after launching this rocket, it will|start drilling through solid ground and explode|once its fuse is triggered or it resurfaces again.|Attack: Hold to shoot with more power
+04:29=This is nothing for small kids! The ball gun fires|tons of small colored balls filled with explosives.|Attack: Shoot at full power|Up/Down: Continue aiming
+04:30=Call in an airplane to launch a powerful napalm|strike. With proper aiming this attack can eradicate|huge parts of landscape including unlucky hogs|sitting there.|Left/Right: Determine attack direction|Cursor: Select target region
+04:31=The RC plane is the ideal weapon to collect crates or|attack far away hogs. Either steer it into enemies or|drop some bombs first.|Attack: Launch the plane or drop bombs|Long Jump: Let the valkyries ride into battle|Up/Down: Steer the plane
+04:32=Low gravity is more effective than any diet! Jump|higher and over greater distances or let your enemies|fly even further.|Attack: Activate
+04:33=Sometimes you just need that little extra boost to|deal some more damage.|Attack: Activate
+04:34=Can't touch me!|Attack: Activate
+04:35=Sometimes time's running too fast. Grab some extra|seconds to finish your attack.|Attack: Activate
+04:36=Well, sometimes you're just too bad in aiming. Get|some assistance using modern day technology.|Attack: Activate
+04:37=Don't fear the daylight. It will just last one turn|but will enable you to absorb the damage you do to|other hogs.|Attack: Activate
+04:38=The sniper rifle can be the most devastating weapon|in your whole arsenal, however it's very ineffective|at close quarters. The damage dealt increases with|the distance to its target.|Attack: Shoot (twice)
+04:39=Fly to other parts of the map using the flying|saucer. This hard to master utility is able to|take you to almost any position on the battlefield.|Attack: Activate|Up/Left/Right: Apply force in one direction|Long Jump: Drop grenades or similar weapons
+04:40=Set some ground on fire using this bottle filled|with (soon to be) burning liquid.|Attack: Hold to shoot with more power
+04:41=The evidence nature might even top the flying|saucer. Birdy can carry your hog around and|drop eggs on your enemies!|Attack: Activate and drop eggs|Up/Left/Right: Flap in one direction
+04:42=This portable portal device is capable|of instantly transporting you, your enemies,|or your weaponry between two points on the|terrain.|Use it wisely and your campaign will be a...|HUGE SUCCESS!|Attack: Shoot a portal|Switch: Cycle portal colours
+04:43=Make your musical debut an explosive success!|Drop a piano from the heavens, but beware...|someone needs to play it, and that may cost you|your life!|Cursor: Select target region|F1-F9: Play the piano
+04:44=This isn't just cheese, it's biological warfare!|It won't cause an huge amount of damage once|the timer reaches zero but it will definitely|poison anyone unlucky to touch the smell!|1-5: Set grenade's timer|Attack: Hold to throw with more power
+04:45=All those physics classes have finally|paid off, launch a devastating Sine|wave at your foes.|Watch out, this weapon packs quite a kick. (This weapon is incomplete)|Attack: Shoot
+04:46=Cover your foes with sizzling liquid flame.|Heartwarming!|Attack: Activate|Up/Down: Continue aiming|Left/Right: Modify spitting power
+04:47=Double the fun with two spiky, sneaky, sticky mines.|Set up a chain reaction or defend yourself (or both!)|Attack: Hold to shoot with more power (twice)
+04:48=Why should the moles get all the abuse?|Wacking a hog can be just as fun! A good|blow from this hammer will shave off one|third of a hog's health and plunge them|underground.|Attack: Activate
+04:49=Resurrect your friends!|But beware that this also resurrects your foes.|Attack: Keep attack pressed to resurrect slowly|Up: Accelerate resurrection
+
+; Game goal strings
+05:00=게임 수정 모드
+05:01=이 규칙은 제정할 것입니다.
+05:02=성 공격 모드
+05:03=저중력
+05:04=정복 불능
+05:05=흡혈귀: Hogs will be healed for the damage dealt
+05:06=카르마: Hogs will be damaged for the damage dealt
+05:07=킹 모드: Don't let your king die!|킹을 배치함: Pick a protected starting point for your King
+05:08=고슴도치를 배치하기
+05:09=움직이지 못함
+05:10=굳은 지반: Most weapons won't destroy terrain
+05:11=공용탄약: All teams of the same color share their ammunition
+05:12=지뢰 타임스위치: %1 초
+05:13=지뢰 타임스위치: 즉각적이다
+05:14=지뢰 타임스위치: 0 - 5 초
+05:15=손상 수정: %1% 손상
+05:16=회전 후에 건강을 재건함
+05:17=컴퓨터 고슴도치들이 자동 소새시킴
+05:18=무한한 탄약
+05:19=회전 후에 탄약을 재건함
+05:20=탄약 종목별기준

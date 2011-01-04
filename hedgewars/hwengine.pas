@@ -30,10 +30,8 @@ program hwengine;
 {$ENDIF}
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
-     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, uMobile, sysutils;
-
-var isTerminated: boolean = false;
-    alsoShutdownFrontend: boolean = false;
+     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, uMobile,
+     sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted;
 
 {$IFDEF HWLIBRARY}
 procedure initEverything(complete:boolean);
@@ -50,16 +48,19 @@ procedure freeEverything(complete:boolean); forward;
 procedure DoTimer(Lag: LongInt);
 var s: shortstring;
 begin
-    if not isPaused then inc(RealTicks, Lag);
+    if isPaused = false then
+        inc(RealTicks, Lag);
 
     case GameState of
         gsLandGen: begin
                 GenMap;
+                ParseCommand('sendlanddigest', true);
                 GameState:= gsStart;
                 end;
         gsStart: begin
                 if HasBorder then DisableSomeWeapons;
                 AddClouds;
+                AddFlakes;
                 AssignHHCoords;
                 AddMiscGears;
                 StoreLoad;
@@ -98,6 +99,7 @@ begin
         gsExit: begin
                 isTerminated:= true;
                 end;
+        gsSuspend: exit;
         end;
 
 {$IFDEF SDL13}
@@ -105,12 +107,13 @@ begin
 {$ELSE}
     SDL_GL_SwapBuffers();
 {$ENDIF}
-    // not going to make captures on the iPhone
+
     if flagMakeCapture then
     begin
         flagMakeCapture:= false;
         s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
         WriteLnToConsole('Saving ' + s + '...');
+        playSound(sndShutter);
         MakeScreenshot(s);
         //SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
     end;
@@ -123,7 +126,6 @@ begin
     FreeActionsList();
     StoreRelease();
     ControllerClose();
-    SendKB();
     CloseIPC();
     TTF_Quit();
 {$IFDEF SDL13}
@@ -147,19 +149,16 @@ begin
         begin
             case event.type_ of
                 SDL_KEYDOWN: if GameState = gsChat then
-{$IFDEF IPHONEOS}
+{$IFDEF SDL13}
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                     KeyPressChat(event.key.keysym.sym);
-{$ELSE}
-                    KeyPressChat(event.key.keysym.unicode);
-                SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
-                SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
-{$ENDIF}
-{$IFDEF SDL13}
                 SDL_WINDOWEVENT:
                     if event.wevent.event = SDL_WINDOWEVENT_SHOWN then
                         cHasFocus:= true;
 {$ELSE}
+                    KeyPressChat(event.key.keysym.unicode);
+                SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
+                SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
                         cHasFocus:= event.active.gain = 1;
@@ -169,8 +168,8 @@ begin
                 SDL_JOYBUTTONDOWN: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, true);
                 SDL_JOYBUTTONUP: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
                 SDL_QUITEV: isTerminated:= true
-            end; // end case event.type_
-        end; // end while SDL_PollEvent(@event) <> 0
+            end; //end case event.type_ of
+        end; //end while SDL_PollEvent(@event) <> 0 do
 
         if isTerminated = false then
         begin
@@ -319,10 +318,16 @@ begin
     Randomize();
 
     // uConsts does not need initialization as they are all consts
+    uUtils.initModule;
     uMisc.initModule;
+    uVariables.initModule;
     uConsole.initModule;    // MUST happen after uMisc
+    uCommands.initModule;
+    uCommandHandlers.initModule;
 
     uLand.initModule;
+    uLandPainted.initModule;
+
     uIO.initModule;
 
     if complete then
@@ -351,6 +356,7 @@ begin
         uTeams.initModule;
         uVisualGears.initModule;
         uWorld.initModule;
+        uCaptions.initModule;
     end;
 end;
 
@@ -358,6 +364,7 @@ procedure freeEverything (complete:boolean);
 begin
     if complete then
     begin
+        uCaptions.freeModule;
         uWorld.freeModule;
         uVisualGears.freeModule;
         uTeams.freeModule;
@@ -387,7 +394,11 @@ begin
     uIO.freeModule;             //stub
     uLand.freeModule;
 
+    uCommandHandlers.freeModule;
+    uCommands.freeModule;
     uConsole.freeModule;
+    uVariables.freeModule;
+    uUtils.freeModule;
     uMisc.freeModule;           // uMisc closes the debug log.
 end;
 

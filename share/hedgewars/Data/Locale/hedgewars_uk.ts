@@ -7,6 +7,10 @@
         <source>new</source>
         <translation>нова</translation>
     </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -43,7 +47,11 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Коли ввімкнена ця опція при виборі схеми гри зброя буде вибрана автоматично (and viceversa)</translation>
+    </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
+        <translation>Коли ввімкнена ця опція при виборі схеми гри зброя буде вибрана автоматично</translation>
     </message>
 </context>
 <context>
@@ -69,7 +77,7 @@
     <name>HWForm</name>
     <message>
         <source>new</source>
-        <translation>нова</translation>
+        <translation type="obsolete">нова</translation>
     </message>
     <message>
         <source>Error</source>
@@ -93,17 +101,17 @@
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation type="unfinished"></translation>
+        <translation>Команда за замовчуванням</translation>
     </message>
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Демо Файл Hedgewars</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
-        <translation type="unfinished"></translation>
+        <translation>Файл Збереження Hedgewars</translation>
     </message>
 </context>
 <context>
@@ -183,6 +191,14 @@
         <source>Large floating islands</source>
         <translation>Великі плавучі острова</translation>
     </message>
+    <message>
+        <source>Seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -256,7 +272,10 @@ or pick another nickname:</source>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваш нік %1 вже
+зареєстрований на Hedgewars.org
+Введіть ваш пароль нижче або
+виберіть інший нік в налаштуваннях гри:</translation>
     </message>
 </context>
 <context>
@@ -313,6 +332,37 @@ or pick another nickname in game config:</source>
     </message>
 </context>
 <context>
+    <name>PageDrawMap</name>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished">Очистити</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Завантажити</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load drawn map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save drawn map</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageEditTeam</name>
     <message>
         <source>General</source>
@@ -347,64 +397,64 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Деталі</translation>
     </message>
     <message>
         <source>Health graph</source>
-        <translation type="unfinished"></translation>
+        <translation>Графа здоров&apos;я</translation>
     </message>
     <message>
         <source>Ranking</source>
-        <translation type="unfinished"></translation>
+        <translation>Позиції</translation>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нагороду за кращий постріл отримує &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; пунктами нанесених втрат.</translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Кращим вбивцею є &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; вбивством за хід.</numerusform>
+            <numerusform>Кращим вбивцею є &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; вбивствами за хід.</numerusform>
+            <numerusform>Кращим вбивцею є &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; вбивствами за хід.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Загалом протягом цього раунду було вбито &lt;b&gt;%1&lt;/b&gt; їжака.</numerusform>
+            <numerusform>Загалом протягом цього раунду було вбито &lt;b&gt;%1&lt;/b&gt; їжаки.</numerusform>
+            <numerusform>Загалом протягом цього раунду було вбито &lt;b&gt;%1&lt;/b&gt; їжаків.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 вбивство)</numerusform>
+            <numerusform>(%1 вбивства)</numerusform>
+            <numerusform>(%1 вбивств)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; обстріляв напарників на &lt;b&gt;%2&lt;/b&gt; пункт нанесених втрат.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; обстріляв напарників на &lt;b&gt;%2&lt;/b&gt; пункти нанесених втрат.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; обстріляв напарників на &lt;b&gt;%2&lt;/b&gt; пунктів нанесених втрат.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; вбив &lt;b&gt;%2&lt;/b&gt; їжака зі своєї команди.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; вбив &lt;b&gt;%2&lt;/b&gt; їжаків зі своєї команди.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; вбив &lt;b&gt;%2&lt;/b&gt; їжаків зі своєї команди.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; злякався і пропустив хід &lt;b&gt;%2&lt;/b&gt; разів.</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -423,247 +473,247 @@ or pick another nickname in game config:</source>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть той же колір що і в друга щоб грати в одній команді. Кожен з вас буде керувати власними їжаками але вони виграють чи програють разом.</translation>
     </message>
     <message>
         <source>Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Деяка зброя наносить мало шкоди, але вона може бути більш руйнівною в правильній ситуації. Спробуйте використати Пустельного Орла для скидання кількох їжаків у воду.</translation>
     </message>
     <message>
         <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Якщо ви не знаєте що робити і не хочете витрачати боєприпаси, пропустіть один раунд. Але не марнуйте занадто багато часу, тому-що прийде Раптова Смерть!</translation>
     </message>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Якщо ви хочете закріпити за собою нік на офіційному сервері, зареєструйте аккаунт на http://www.hedgewars.org/.</translation>
     </message>
     <message>
         <source>You&apos;re bored of default gameplay? Try one of the missions - they&apos;ll offer different gameplay depending on the one you picked.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ви втомилися від гри за замовчуванням? Спробуйте одну з місій - вони пропонують різні види гри залежно від вашого вибору.</translation>
     </message>
     <message>
         <source>By default the game will always record the last game played as a demo. Select &apos;Local Game&apos; and pick the &apos;Demos&apos; button on the lower right corner to play or manage them.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>За замовчуванням остання гра завжди буде записуватись в якості демо. Виберіть &apos;Локальну Гру&apos; і натисніть кнопку &apos;Демонстрації&apos; у нижньому правому куті щоб грати або керувати ними.</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If you&apos;ve got problems, ask on our forums but please don&apos;t expect 24/7 support!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars є відкритою та безплатною, ми створюємо її у вільний час. Якщо у вас є проблеми, запитайте на нашому форумі, але будь-ласка, не чекайте підтримки 24/7!</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If you like it, help us with a small donation or contribute your own work!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars є відкритою та безплатною, ми створюємо її у вільний час. Якщо вона вам подобається, допоможіть нам невеликим внеском або вкладіть свою роботу!</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. Share it with your family and friends as you like!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars є відкритою та безплатною, ми створюємо її у вільний час. Поділіться грою з родиною та друзями!</translation>
     </message>
     <message>
         <source>From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Час від часу проводяться офіційні турніри. Майбутні події будуть оголошені на http://www.hedgewars.org/ за кілька днів перед проведенням.</translation>
     </message>
     <message>
         <source>Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars доступна на багатьох мовах. Якщо переклад на вашу мову застарів чи відсутній, не соромтеся звертатися до нас!</translation>
     </message>
     <message>
         <source>Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars може бути запущений на багатьох операційних системах, включаючи Microsoft Windows, Mac OS X і Linux.</translation>
     </message>
     <message>
         <source>Always remember you&apos;re able to set up your own games in local and network/online play. You&apos;re not restricted to the &apos;Simple Game&apos; option.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Завжди пам&apos;ятайте, ви можете створити свою власну гру в локальному та мережному/онлайн-режимах. Ви не обмежені опцією &apos;Проста Гра&apos;.</translation>
     </message>
     <message>
         <source>While playing you should give yourself a short break at least once an hour.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Поки граєте гру зробіть коротку перерву хоча б раз на годину.</translation>
     </message>
     <message>
         <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Якщо ваша відеокарта не може забезпечити апаратне прискорення OpenGL, спробуйте включити режим низької якості для підвищення продуктивності.</translation>
     </message>
     <message>
         <source>We&apos;re open to suggestions and constructive feedback. If you don&apos;t like something or got a great idea, let us know!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ми відкриті для пропозицій і конструктивного зворотнього зв&apos;язку. Якщо вам не подобається щось або є відмінна ідея, дайте нам знати!</translation>
     </message>
     <message>
         <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Особливо під час гри онлайн будьте ввічливі і завжди пам&apos;ятайте, з вами чи проти вас можуть грати неповнолітні!</translation>
     </message>
     <message>
         <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Спеціальні режими гри, такі як &apos;Вампіризм&apos; чи &apos;Карма&apos; дозволяють розробляти цілком нову тактику. Спробуйте їх в налаштованій грі!</translation>
     </message>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Windows-версія Hedgewars підтримує Xfire. Переконайтеся в тому, що ви додали Hedgwars до списку ігор, щоб ваші друзі могли бачити вас в грі.</translation>
     </message>
     <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ви не повинні встановлювати Hedgewars на комп&apos;ютерах, які вам не належать (школа, університет, робота тощо). Будь ласка, звертайтесь до відповідальної особи!</translation>
     </message>
     <message>
         <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars чудово підходить для короткої гри під час перерв. Переконайтеся, що ви не додали занадто багато їжаків і не взяли велику карту. Скорочення часу і здоров&apos;я також підійде.</translation>
     </message>
     <message>
         <source>No hedgehogs were harmed in making this game.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Під час розробки гри не постраждав жодний їжак.</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars є відкритою та безплатною, ми створюємо її у вільний час. Якщо хтось продав вам гру, ви повинні спробувати отримати відшкодування!</translation>
     </message>
     <message>
         <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Підключіть один або кілька геймпадів перед початком гри, щоб ваші команди могли ними користуватись.</translation>
     </message>
     <message>
         <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Створіть акаунт на %1 щоб запобігти використанню іншими особами вашого улюбленого ніку під час гри на офіційному сервері.</translation>
     </message>
     <message>
         <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Якщо ваша відеокарта не може забезпечити апаратне прискорення OpenGL, спробуйте оновити відповідні драйвери.</translation>
     </message>
     <message>
         <source>There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>В грі існують три різних види стрибків. Натисніть [високий стрибок] двічі щоб зробити дуже високий стрибок назад.</translation>
     </message>
     <message>
         <source>Afraid of falling off a cliff? Hold down [precise] to turn [left] or [right] without actually moving.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Боїтесь падіння зі скелі? Утримуйте [точно] щоб повернутись [вліво] чи [вправо] без фактичного переміщення.</translation>
     </message>
     <message>
         <source>Some weapons require special strategies or just lots of training, so don&apos;t give up on a particular tool if you miss an enemy once.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Деяка зброя вимагає спеціальних стратегій або просто багато тренувань, тому не відмовляйтесь від конкретного інструменту, якщо ви раз не знешкодили ворога.</translation>
     </message>
     <message>
         <source>Most weapons won&apos;t work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Більшість зброї не буде працювати після торкання води. Бджола та Торт є виключеннями з цього правила.</translation>
     </message>
     <message>
         <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Старий лімбургський сир викликає лише невеликий вибух. Однак смердюча хмара, яку відносить вітер, може отруїти багато їжаків за раз.</translation>
     </message>
     <message>
         <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Напад піаніно є найбільш руйнівним повітряним ударом. Але ви втратите їжака, тому він має і негативну сторону.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Навідна Бджілка може бути складною у керуванні. Радіус повороту залежить від її швидкості, тому постарайтеся не стріляти на повну силу.</translation>
     </message>
     <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Липкі Міни чудовий інструмент створення малих ланцюгових реакцій для закидання ворогів у складні ситуації ... або у воду.</translation>
     </message>
     <message>
         <source>The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Молоток найбільш ефективний при використанні на мостах чи балках. Удар їжака просто провалить його крізь землю.</translation>
     </message>
     <message>
         <source>If you&apos;re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Якщо ви застрягли за ворожим їжаком, використайте Молоток, щоб звільнити себе без пошкоджень від вибуху.</translation>
     </message>
     <message>
         <source>The Cake&apos;s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Найбільший шлях ходьби Торта залежить від землі, по якій він повинен пройти. Використовуйте [атака] щоб підірвати його раніше.</translation>
     </message>
     <message>
         <source>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Вогнемет це зброя, але його можна також використати для риття тунелю.</translation>
     </message>
     <message>
         <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Використайте Горючу Гранату щоб тимчасово утримати їжаків від проходження такої місцевості як тунелі або платформи.</translation>
     </message>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Хочете знати хто робить гру? Натисніть на логотип Hedgewars в головному меню, щоб побачити список.</translation>
     </message>
     <message>
         <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Подобається Hedgewars? Станьте фанатом на %1 або слідуйте за нами на %2!</translation>
     </message>
     <message>
         <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ви можете самі намалювати надгробки, шапки, прапори та навіть мапи і теми! Але врахуйте, вам доведеться поділитися ними з кимось щоб використати їх в інтернет-грі.</translation>
     </message>
     <message>
         <source>Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Хочете носити особливий капелюх? Внесіть пожертву і отримайте ексклюзивний капелюх на ваш вибір!</translation>
     </message>
     <message>
         <source>Keep your video card drivers up to date to avoid issues playing the game.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Використовуйте останні відео драйвери щоб уникнути проблем під час гри.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ви можете знайти файли конфігурації Hedgewars в &quot;My Documents\Hedgewars&quot;. Ви можете створити резервні копії або взяти файли з собою, але не редагуйте їх.</translation>
     </message>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ви можете зв&apos;язати відповідні файли Hedgewars (файли збереження та демо-записи) з грою щоб запускати їх з вашої улюбленої теки чи інтернет-браузеру.</translation>
     </message>
     <message>
         <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Хочете заощадити мотузки? Випустіть мотузку в повітря а потім знову стріляйте. Поки ви не торкнулись грунту ви можете знову використовувати мотузку, не витрачаючи боєприпаси!</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ви можете знайти файли конфігурації Hedgewars в &quot;Library/Application Support/Hedgewars&quot; в домашній теці. Ви можете створити резервні копії або взяти файли з собою, але не редагуйте їх.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ви можете знайти файли конфігурації Hedgewars в &quot;.hedgewars&quot; в домашній теці. Ви можете створити резервні копії або взяти файли з собою, але не редагуйте їх.</translation>
     </message>
 </context>
 <context>
@@ -718,19 +768,43 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Нова схема зброї</translation>
+        <translation type="obsolete">Нова схема зброї</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Редагувати схему зброї</translation>
+        <translation type="obsolete">Редагувати схему зброї</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Видалити схему зброї</translation>
+        <translation type="obsolete">Видалити схему зброї</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не можна редагувати команду з меню вибору. Перейдіть в головне меню щоб додати, редагувати чи видалити команду.</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation>Нова схема</translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation>Редагувати схему</translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation>Видалити схему</translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation>Новий набір зброї</translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation>Редагувати набір зброї</translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation>Видалити набір зброї</translation>
     </message>
 </context>
 <context>
@@ -856,32 +930,33 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>State:</source>
-        <translation type="unfinished"></translation>
+        <translation>Стан:</translation>
     </message>
     <message>
         <source>Rules:</source>
-        <translation type="unfinished"></translation>
+        <translation>Правила:</translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation>Зброя:</translation>
     </message>
     <message>
         <source>Search:</source>
-        <translation type="unfinished"></translation>
+        <translation>Пошук:</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Увага</translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
-        <translation type="unfinished"></translation>
+        <translation>Гра, до якої ви хочети при&apos;єднатись вже почалась.
+Ви все ще хочете ввійти в кімнату?</translation>
     </message>
 </context>
 <context>
@@ -972,22 +1047,34 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>AI respawns on death.</source>
-        <translation type="unfinished"></translation>
+        <translation>AI відроджуються після смерті</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Всі (живі) їжаки повністю відновлюються на кінці ходу</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>Атака не завершує ваш хід</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation type="unfinished"></translation>
+        <translation>Зброя скидається до початкової після кожного ходу.</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
+        <translation>Кожен їжак має свої боєприпаси. Він не ділить їх з командою.</translation>
+    </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation>Більше не треба хвилюватись через вітер.</translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation>Вітер вплине майже на все.</translation>
+    </message>
+    <message>
+        <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1000,6 +1087,14 @@ Do you still want to join the room?</source>
     <message>
         <source>Delete</source>
         <translation>Видалити</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>Нова</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1026,7 +1121,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим Кампанії (...). В РОЗРОБЦІ</translation>
     </message>
 </context>
 <context>
@@ -1159,23 +1254,27 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Community</source>
-        <translation type="unfinished"></translation>
+        <translation>Спільнота</translation>
     </message>
     <message>
         <source>Any</source>
-        <translation type="unfinished"></translation>
+        <translation>Усі</translation>
     </message>
     <message>
         <source>In lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>В вестибюлі</translation>
     </message>
     <message>
         <source>In progress</source>
-        <translation type="unfinished"></translation>
+        <translation>В процесі</translation>
     </message>
     <message>
         <source>Default</source>
         <translation type="obsolete">За замовчуванням</translation>
+    </message>
+    <message>
+        <source>hand drawn map...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1198,7 +1297,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Зброя</translation>
+        <translation type="obsolete">Зброя</translation>
     </message>
     <message>
         <source>Audio/Graphic options</source>
@@ -1227,6 +1326,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Misc</source>
         <translation>Різне</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation>Схеми та Зброя</translation>
     </message>
 </context>
 <context>
@@ -1293,7 +1396,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Server name:</source>
-        <translation>Назва серверу:</translation>
+        <translation>Назва сервера:</translation>
     </message>
     <message>
         <source>Server port:</source>
@@ -1368,41 +1471,39 @@ Do you still want to join the room?</source>
         <translation>Вибухівка</translation>
     </message>
     <message>
-        <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
-Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="obsolete">Ця збірка SVN є проміжною і може бути несумісною з іншими версіями гри.
-Деякі функції можуть бути зламані чи неповні. Використовуйте її на свій страх і ризик!</translation>
-    </message>
-    <message>
         <source>Tip: </source>
-        <translation type="unfinished"></translation>
+        <translation>Порада: </translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ця розробницька збірка є проміжною і може бути несумісною з іншими версіями гри. Деякі функції можуть бути зламані чи неповні. Використовуйте її на свій страх і ризик!</translation>
     </message>
     <message>
         <source>Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Якість</translation>
     </message>
     <message>
         <source>% Health Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>% Ящиків Здоров&apos;я</translation>
     </message>
     <message>
         <source>Health in Crates</source>
-        <translation type="unfinished"></translation>
+        <translation>Здоров&apos;я в Ящиках</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation type="unfinished"></translation>
+        <translation>Підйом Води Раптової Смерті</translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation type="unfinished"></translation>
+        <translation>Зменшення Здоров&apos;я Раптової Смерті</translation>
     </message>
     <message>
-        <source>Bind schemes and weapons</source>
+        <source>% Rope Length</source>
+        <translation>% Довжина Мотузки</translation>
+    </message>
+    <message>
+        <source>Gameplay</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1452,7 +1553,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Неможливо видалити набір зброї за замовчуванням</translation>
+        <translation type="obsolete">Неможливо видалити набір зброї за замовчуванням</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1460,15 +1561,39 @@ Please check your installation</source>
     </message>
     <message>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Не можу перезаписати стандартний набір зброї &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>All file associations have been set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Всі асоціації файлів були встановлені</translation>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Файлове асоціювання не вдалось</translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation>Команди</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation>Справді видалити цю команду?</translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation>Схеми</translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation>Не можу видалити стандартну схему &apos;%1&apos;!</translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation>Справді видалити цю схему гри?</translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation>Не можу видалити стандартний набір зброї &apos;%1&apos;!</translation>
     </message>
 </context>
 <context>
@@ -1562,6 +1687,10 @@ Please check your installation</source>
     </message>
     <message>
         <source>Associate file extensions</source>
+        <translation>Асоціювати файлові розширення</translation>
+    </message>
+    <message>
+        <source>more</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1573,11 +1702,11 @@ Please check your installation</source>
     </message>
     <message>
         <source>C</source>
-        <translation>C</translation>
+        <translation>Кл</translation>
     </message>
     <message>
         <source>T</source>
-        <translation>T</translation>
+        <translation>Км</translation>
     </message>
     <message>
         <source>Owner</source>
@@ -1613,6 +1742,14 @@ Please check your installation</source>
     <message>
         <source>Delays</source>
         <translation>Затримки</translation>
+    </message>
+    <message>
+        <source>new</source>
+        <translation>нова</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1702,23 +1839,31 @@ Please check your installation</source>
     </message>
     <message>
         <source>AI Survival Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим AI Виживання</translation>
     </message>
     <message>
         <source>Reset Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Скинути Здоров&apos;я</translation>
     </message>
     <message>
         <source>Unlimited Attacks</source>
-        <translation type="unfinished"></translation>
+        <translation>Необмежені Атаки</translation>
     </message>
     <message>
         <source>Reset Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Скинути Зброю</translation>
     </message>
     <message>
         <source>Per Hedgehog Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation>Боєприпаси на Їжака</translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation>Вимкнути Вітер</translation>
+    </message>
+    <message>
+        <source>More Wind</source>
+        <translation>Більше Вітру</translation>
     </message>
 </context>
 <context>
@@ -1745,7 +1890,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>precise aim</source>
-        <translation>precise aim</translation>
+        <translation>точна ціль</translation>
     </message>
     <message>
         <source>put</source>
@@ -1883,7 +2028,7 @@ info</source>
     </message>
     <message>
         <source>slot 10</source>
-        <translation type="unfinished">слот 10</translation>
+        <translation>слот 10</translation>
     </message>
 </context>
 <context>
@@ -2040,7 +2185,7 @@ info</source>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Очистити</translation>
     </message>
     <message>
         <source>Return</source>

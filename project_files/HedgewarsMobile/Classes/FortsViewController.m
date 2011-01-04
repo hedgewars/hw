@@ -23,6 +23,8 @@
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
 
+#define IMGNUM_PER_FORT 4
+
 @implementation FortsViewController
 @synthesize teamDictionary, fortArray, lastIndexPath;
 
@@ -41,7 +43,7 @@
     NSMutableArray *filteredContents = [[NSMutableArray alloc] initWithCapacity:([directoryContents count] / 3)];
     // we need to remove the double entries and the L.png suffix
     for (int i = 0; i < [directoryContents count]; i++) {
-        if (i % 3 == 1) {
+        if (i % IMGNUM_PER_FORT == 3) {
             NSString *currentName = [directoryContents objectAtIndex:i];
             NSString *correctName = [currentName substringToIndex:([currentName length] - 5)];
             [filteredContents addObject:correctName];
@@ -51,13 +53,13 @@
     [filteredContents release];
 
     // statically set row height instead of using delegate method for performance reasons
-    self.tableView.rowHeight = 200;
+    self.tableView.rowHeight = 128;
 
     self.title = NSLocalizedString(@"Choose team fort",@"");
 }
 
 
-- (void)viewWillAppear:(BOOL)animated {
+-(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tableView reloadData];
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
@@ -79,10 +81,9 @@
     static NSString *CellIdentifier = @"Cell";
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
+    if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                        reuseIdentifier:CellIdentifier] autorelease];
-    }
 
     NSString *fortName = [fortArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = fortName;
@@ -151,7 +152,6 @@
     [teamDictionary release];
     [lastIndexPath release];
     [fortArray release];
-//    [fortSprites release];
     [super dealloc];
 }
 

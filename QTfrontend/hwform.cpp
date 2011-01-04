@@ -35,6 +35,7 @@
 #include <QDataWidgetMapper>
 #include <QTableView>
 #include <QCryptographicHash>
+#include <QSignalMapper>
 
 #include "hwform.h"
 #include "game.h"
@@ -56,6 +57,7 @@
 #include "ammoSchemeModel.h"
 #include "bgwidget.h"
 #include "xfire.h"
+#include "drawmapwidget.h"
 
 #ifdef __APPLE__
 #include "CocoaInitializer.h"
@@ -77,13 +79,14 @@ HWForm::HWForm(QWidget *parent)
 #ifdef USE_XFIRE
     xfire_init();
 #endif
+    game = NULL;
     gameSettings = new QSettings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
     frontendEffects = gameSettings->value("frontend/effects", true).toBool();
     playerHash = QString(QCryptographicHash::hash(gameSettings->value("net/nick","").toString().toLatin1(), QCryptographicHash::Md5).toHex());
 
     ui.setupUi(this);
     setMinimumSize(760, 580);
-    setFocusPolicy(Qt::StrongFocus);
+    //setFocusPolicy(Qt::StrongFocus);
     CustomizePalettes();
 
     ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
@@ -107,13 +110,23 @@ HWForm::HWForm(QWidget *parent)
     UpdateCampaignPage(0);
     UpdateWeapons();
 
+    pageSwitchMapper = new QSignalMapper(this);
+    connect(pageSwitchMapper, SIGNAL(mapped(int)), this, SLOT(GoToPage(int)));
+
     connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
     onFrontendFullscreen(config->isFrontendFullscreen());
 
-    connect(ui.pageMain->BtnSinglePlayer, SIGNAL(clicked()), this, SLOT(GoToSinglePlayer()));
-    connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), this, SLOT(GoToSetup()));
-    connect(ui.pageMain->BtnNet, SIGNAL(clicked()), this, SLOT(GoToNetType()));
-    connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), this, SLOT(GoToInfo()));
+    connect(ui.pageMain->BtnSinglePlayer, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnSinglePlayer, ID_PAGE_SINGLEPLAYER);
+
+    connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnSetup, ID_PAGE_SETUP);
+    
+    connect(ui.pageMain->BtnNet, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnNet, ID_PAGE_NETTYPE);
+    connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnInfo, ID_PAGE_INFO);
+
     connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
 
@@ -127,9 +140,12 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageMultiplayer->BtnStartMPGame, SIGNAL(clicked()), this, SLOT(StartMPGame()));
     connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)),
         ui.pageMultiplayer->BtnStartMPGame, SLOT(setEnabled(bool)));
-    connect(ui.pageMultiplayer->teamsSelect, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
-    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToSchemes()), this, SLOT(GoToSchemes()));
-    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToWeapons(const QString &)), this, SLOT(GoToSelectWeaponSet(const QString &)));
+    connect(ui.pageMultiplayer, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
+    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToSchemes(int)), this, SLOT(GoToScheme(int)));
+    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToSelectWeaponSet(int)));
+    connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMultiplayer->gameCFG, ID_PAGE_DRAWMAP);
+    
 
     connect(ui.pagePlayDemo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pagePlayDemo->BtnPlayDemo, SIGNAL(clicked()), this, SLOT(PlayDemo()));
@@ -146,12 +162,18 @@ HWForm::HWForm(QWidget *parent)
 #endif
 
     connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
-    connect(ui.pageOptions->WeaponsButt, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
+    connect(ui.pageOptions->WeaponNew, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
+    connect(ui.pageOptions->WeaponDelete, SIGNAL(clicked()), this, SLOT(DeleteWeaponSet()));
+    connect(ui.pageOptions->SchemeEdit, SIGNAL(clicked()), this, SLOT(GoToEditScheme()));
+    connect(ui.pageOptions->SchemeNew, SIGNAL(clicked()), this, SLOT(GoToNewScheme()));
+    connect(ui.pageOptions->SchemeDelete, SIGNAL(clicked()), this, SLOT(DeleteScheme()));
     connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
 
     connect(ui.pageNet->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
-    connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(GoToNetServer()));
+    connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageNet->BtnNetSvrStart, ID_PAGE_NETSERVER);
+
     connect(ui.pageNet, SIGNAL(connectClicked(const QString &, quint16)), this, SLOT(NetConnectServer(const QString &, quint16)));
 
     connect(ui.pageNetServer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
@@ -162,21 +184,30 @@ HWForm::HWForm(QWidget *parent)
         ui.pageNetGame->BtnGo, SLOT(setEnabled(bool)));
     connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
         ui.pageNetGame->BtnStart, SLOT(setEnabled(bool)));
-    connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
-    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToSchemes()), this, SLOT(GoToSchemes()));
-    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToWeapons(const QString &)), this, SLOT(GoToSelectWeaponSet(const QString &)));
+    connect(ui.pageNetGame, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
+    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToSchemes(int)), this, SLOT(GoToScheme(int)));
+    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToSelectWeaponSet(int)));
+    connect(ui.pageNetGame->pGameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageNetGame->pGameCFG, ID_PAGE_DRAWMAP);
 
     connect(ui.pageRoomsList->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
-    connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), this, SLOT(GoToAdmin()));
+    connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageRoomsList->BtnAdmin, ID_PAGE_ADMIN);
 
     connect(ui.pageInfo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageGameStats->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageSinglePlayer->BtnSimpleGamePage, SIGNAL(clicked()), this, SLOT(SimpleGame()));
-    connect(ui.pageSinglePlayer->BtnTrainPage, SIGNAL(clicked()), this, SLOT(GoToTraining()));
-    connect(ui.pageSinglePlayer->BtnCampaignPage, SIGNAL(clicked()), this, SLOT(GoToCampaign()));
-    connect(ui.pageSinglePlayer->BtnMultiplayer, SIGNAL(clicked()), this, SLOT(GoToMultiplayer()));
+    connect(ui.pageSinglePlayer->BtnTrainPage, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnTrainPage, ID_PAGE_TRAINING);
+
+    connect(ui.pageSinglePlayer->BtnCampaignPage, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnCampaignPage, ID_PAGE_CAMPAIGN);
+
+    connect(ui.pageSinglePlayer->BtnMultiplayer, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageSinglePlayer->BtnMultiplayer, ID_PAGE_MULTIPLAYER);
+
     connect(ui.pageSinglePlayer->BtnLoad, SIGNAL(clicked()), this, SLOT(GoToSaves()));
     connect(ui.pageSinglePlayer->BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
     connect(ui.pageSinglePlayer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
@@ -194,8 +225,8 @@ HWForm::HWForm(QWidget *parent)
         ui.pageSelectWeapon->pWeapons, SLOT(deleteWeaponsName())); // executed first
     connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
         this, SLOT(UpdateWeapons())); // executed second
-    connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
-        this, SLOT(GoBack())); // executed third
+    //connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
+    //    this, SLOT(GoBack())); // executed third
 
     connect(ui.pageScheme->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
@@ -205,10 +236,13 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageNetType->BtnLAN, SIGNAL(clicked()), this, SLOT(GoToNet()));
     connect(ui.pageNetType->BtnOfficialServer, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
 
+    connect(ui.pageDrawMap->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+
 
     ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");
     ui.pageScheme->setModel(ammoSchemeModel);
     ui.pageMultiplayer->gameCFG->GameSchemes->setModel(ammoSchemeModel);
+    ui.pageOptions->SchemesName->setModel(ammoSchemeModel);
 
     wBackground = NULL;
     if (config->isFrontendEffects()) {
@@ -274,11 +308,13 @@ void HWForm::onFrontendFullscreen(bool value)
   }
 }
 
+/*
 void HWForm::keyReleaseEvent(QKeyEvent *event)
 {
-  if (event->key() == Qt::Key_Escape /*|| event->key() == Qt::Key_Backspace*/ )
+  if (event->key() == Qt::Key_Escape) 
     this->GoBack();
 }
+*/
 
 void HWForm::CustomizePalettes()
 {
@@ -299,6 +335,7 @@ void HWForm::UpdateWeapons()
     combos.push_back(ui.pageOptions->WeaponsName);
     combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
     combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
+    combos.push_back(ui.pageSelectWeapon->selectWeaponSet);
 
     QStringList names = ui.pageSelectWeapon->pWeapons->getWeaponNames();
 
@@ -336,57 +373,22 @@ void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
     ui.pageCampaign->CBTeam->addItems(teamslist);
 }
 
-void HWForm::GoToMain()
-{
-    GoToPage(ID_PAGE_MAIN);
-}
-
-void HWForm::GoToSinglePlayer()
-{
-    GoToPage(ID_PAGE_SINGLEPLAYER);
-}
-
-void HWForm::GoToTraining()
-{
-    GoToPage(ID_PAGE_TRAINING);
-}
-
-void HWForm::GoToCampaign()
-{
-    GoToPage(ID_PAGE_CAMPAIGN);
-}
-
-void HWForm::GoToSetup()
-{
-    GoToPage(ID_PAGE_SETUP);
-}
-
 void HWForm::GoToSelectNewWeapon()
 {
-    ui.pageSelectWeapon->pWeapons->setWeaponsName(tr("new"));
+    ui.pageSelectWeapon->pWeapons->newWeaponsName();
     GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
 void HWForm::GoToSelectWeapon()
 {
-    ui.pageSelectWeapon->pWeapons->setWeaponsName(ui.pageOptions->WeaponsName->currentText());
+    ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(ui.pageOptions->WeaponsName->currentIndex());
     GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
-void HWForm::GoToSelectWeaponSet(const QString & name)
+void HWForm::GoToSelectWeaponSet(int index)
 {
-    ui.pageSelectWeapon->pWeapons->setWeaponsName(name);
+    ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(index);
     GoToPage(ID_PAGE_SELECTWEAPON);
-}
-
-void HWForm::GoToInfo()
-{
-    GoToPage(ID_PAGE_INFO);
-}
-
-void HWForm::GoToMultiplayer()
-{
-    GoToPage(ID_PAGE_MULTIPLAYER);
 }
 
 void HWForm::GoToSaves()
@@ -410,24 +412,22 @@ void HWForm::GoToNet()
     GoToPage(ID_PAGE_NET);
 }
 
-void HWForm::GoToNetType()
+void HWForm::GoToScheme(int index)
 {
-    GoToPage(ID_PAGE_NETTYPE);
-}
-
-void HWForm::GoToNetServer()
-{
-    GoToPage(ID_PAGE_NETSERVER);
-}
-
-void HWForm::GoToSchemes()
-{
+    ui.pageScheme->selectScheme->setCurrentIndex(index);
     GoToPage(ID_PAGE_SCHEME);
 }
 
-void HWForm::GoToAdmin()
+void HWForm::GoToNewScheme()
 {
-    GoToPage(ID_PAGE_ADMIN);
+    ui.pageScheme->newRow();
+    GoToPage(ID_PAGE_SCHEME);
+}
+
+void HWForm::GoToEditScheme()
+{
+    ui.pageScheme->selectScheme->setCurrentIndex(ui.pageOptions->SchemesName->currentIndex());
+    GoToPage(ID_PAGE_SCHEME);
 }
 
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
@@ -435,6 +435,24 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 #ifdef USE_XFIRE
     updateXfire();
 #endif
+    if(id == ID_PAGE_DRAWMAP)
+    {
+        DrawMapScene * scene;
+        if(lastid == ID_PAGE_MULTIPLAYER)
+            scene = ui.pageMultiplayer->gameCFG->pMapContainer->getDrawMapScene();
+        else
+            scene = ui.pageNetGame->pGameCFG->pMapContainer->getDrawMapScene();
+
+        ui.pageDrawMap->drawMapWidget->setScene(scene);
+    }
+    if(lastid == ID_PAGE_DRAWMAP)
+    {
+        if(id == ID_PAGE_MULTIPLAYER)
+            ui.pageMultiplayer->gameCFG->pMapContainer->mapDrawingFinished();
+        else
+            ui.pageNetGame->pGameCFG->pMapContainer->mapDrawingFinished();
+    }
+
     if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) {
         QStringList tmNames = config->GetTeamsList();
         TeamSelWidget* curTeamSelWidget;
@@ -457,7 +475,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
           teamsList.push_back(team);
         }
 
-        if(lastid == ID_PAGE_SETUP) { // _TEAM
+        if(lastid == ID_PAGE_SETUP || lastid == ID_PAGE_DRAWMAP) { // _TEAM
           if (editedTeam) {
             curTeamSelWidget->addTeam(*editedTeam);
           }
@@ -490,13 +508,19 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 
     if(id == ID_PAGE_NETGAME) // joining a room
         ui.pageNetGame->pChatWidget->loadLists(ui.pageOptions->editNetNick->text());
-    else if(id == ID_PAGE_ROOMSLIST) // joining the lobby
+// joining the lobby 
+    else if(id == ID_PAGE_ROOMSLIST) {
+        if ( hwnet && game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
+            game->netSuspend = true;
+            game->KillAllTeams();
+        }
         ui.pageRoomsList->chatWidget->loadLists(ui.pageOptions->editNetNick->text());
+    }
 }
 
-void HWForm::GoToPage(quint8 id)
+void HWForm::GoToPage(int id)
 {
-    quint8 lastid = ui.Pages->currentIndex();
+    int lastid = ui.Pages->currentIndex();
     PagesStack.push(ui.Pages->currentIndex());
     OnPageShown(id, lastid);
     ui.Pages->setCurrentIndex(id);
@@ -504,8 +528,8 @@ void HWForm::GoToPage(quint8 id)
 
 void HWForm::GoBack()
 {
-    quint8 id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
-    quint8 curid = ui.Pages->currentIndex();
+    int id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
+    int curid = ui.Pages->currentIndex();
     ui.Pages->setCurrentIndex(id);
     OnPageShown(id, curid);
 
@@ -521,6 +545,9 @@ void HWForm::GoBack()
             GoBack();
 
     if (curid == ID_PAGE_ROOMSLIST) NetDisconnect();
+    if (curid == ID_PAGE_NETGAME) hwnet->partRoom();
+    // need to work on this, can cause invalid state for admin quit trying to prevent bad state message on kick
+    //if (curid == ID_PAGE_NETGAME && (!game || game->gameState != gsStarted)) hwnet->partRoom();
 
     if (curid == ID_PAGE_SCHEME)
         ammoSchemeModel->Save();
@@ -588,11 +615,15 @@ void HWForm::EditTeam()
 
 void HWForm::DeleteTeam()
 {
-    editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
-    editedTeam->DeleteFile();
+    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Teams"), QMessageBox::tr("Really delete this team?"), QMessageBox::Ok | QMessageBox::Cancel);
 
-    // Remove from lists
-    ui.pageOptions->CBTeamName->removeItem(ui.pageOptions->CBTeamName->currentIndex());
+    if (reallyDelete.exec() == QMessageBox::Ok) {
+        editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
+        editedTeam->DeleteFile();
+
+        // Remove from lists
+        ui.pageOptions->CBTeamName->removeItem(ui.pageOptions->CBTeamName->currentIndex());
+    }
 }
 
 void HWForm::RandomNames()
@@ -624,6 +655,23 @@ void HWForm::TeamDiscard()
     delete editedTeam;
     editedTeam=0;
     GoBack();
+}
+
+void HWForm::DeleteScheme()
+{
+    ui.pageScheme->selectScheme->setCurrentIndex(ui.pageOptions->SchemesName->currentIndex());
+    if (ui.pageOptions->SchemesName->currentIndex() < ammoSchemeModel->numberOfDefaultSchemes) {
+        QMessageBox::warning(0, QMessageBox::tr("Schemes"), QMessageBox::tr("Can not delete default scheme '%1'!").arg(ui.pageOptions->SchemesName->currentText()));
+    } else {
+        ui.pageScheme->deleteRow();
+        ammoSchemeModel->Save();
+    }
+}
+
+void HWForm::DeleteWeaponSet()
+{
+    ui.pageSelectWeapon->selectWeaponSet->setCurrentIndex(ui.pageOptions->WeaponsName->currentIndex());
+    ui.pageSelectWeapon->pWeapons->deleteWeaponsName();
 }
 
 void HWForm::SimpleGame()
@@ -678,7 +726,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
     connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
     connect(hwnet, SIGNAL(LeftRoom()), this, SLOT(NetLeftRoom()));
     connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
-    connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
+    //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
 
 // rooms list page stuff
     connect(hwnet, SIGNAL(roomsList(const QStringList&)),
@@ -830,7 +878,6 @@ void HWForm::AsyncNetServerStart()
 
 void HWForm::NetDisconnect()
 {
-    //qDebug("NetDisconnect");
     if(hwnet) {
         hwnet->Disconnect();
         delete hwnet;
@@ -853,8 +900,9 @@ void HWForm::ForcedDisconnect()
 {
     if(pnetserver) return; // we have server - let it care of all things
     if (hwnet) {
-        hwnet->deleteLater();
+        HWNewNet * tmp = hwnet;
         hwnet = 0;
+        tmp->deleteLater();
         QMessageBox::warning(this, QMessageBox::tr("Network"),
                 QMessageBox::tr("Connection to server is lost"));
 
@@ -892,11 +940,12 @@ void HWForm::StartMPGame()
 
 void HWForm::GameStateChanged(GameState gameState)
 {
+    quint8 id = ui.Pages->currentIndex();
     switch(gameState) {
         case gsStarted: {
             Music(false);
             if (wBackground) wBackground->stopAnimation();
-            GoToPage(ID_PAGE_INGAME);
+            if (!hwnet || (!hwnet->isRoomChief() || !hwnet->isInRoom())) GoToPage(ID_PAGE_INGAME);
             ui.pageGameStats->clear();
             if (pRegisterServer)
             {
@@ -910,19 +959,23 @@ void HWForm::GameStateChanged(GameState gameState)
         case gsFinished: {
             //setVisible(true);
             setFocusPolicy(Qt::StrongFocus);
-            GoBack();
+            if (id == ID_PAGE_INGAME) GoBack();
             Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
             if (wBackground) wBackground->startAnimation();
             GoToPage(ID_PAGE_GAMESTATS);
-            if (hwnet) hwnet->gameFinished();
+            if (hwnet && (!game || !game->netSuspend)) hwnet->gameFinished();
+            if (game) game->netSuspend = false;
             break;
         }
         default: {
             //setVisible(true);
             setFocusPolicy(Qt::StrongFocus);
             quint8 id = ui.Pages->currentIndex();
-            if (id == ID_PAGE_INGAME) {
-                GoBack();
+            if (id == ID_PAGE_INGAME ||
+// was room chief and the game was aborted
+                (hwnet && hwnet->isRoomChief() && hwnet->isInRoom() && 
+                    (gameState == gsInterrupted || gameState == gsStopped || gameState == gsDestroyed))) {
+                if (id == ID_PAGE_INGAME) GoBack();
                 Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
                 if (wBackground) wBackground->startAnimation();
                 if (hwnet) hwnet->gameFinished();
@@ -1089,7 +1142,7 @@ void HWForm::selectFirstNetScheme()
 
 void HWForm::NetLeftRoom()
 {
-    if (ui.Pages->currentIndex() == ID_PAGE_NETGAME)
+    if (ui.Pages->currentIndex() == ID_PAGE_NETGAME || ui.Pages->currentIndex() == ID_PAGE_INGAME)
         GoBack();
     else
         qWarning("Left room while not in room");
@@ -1107,6 +1160,8 @@ void HWForm::resizeEvent(QResizeEvent * event)
 
 void HWForm::UpdateCampaignPage(int index)
 {
+    Q_UNUSED(index);
+
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     ui.pageCampaign->CBSelect->clear();
 
@@ -1117,7 +1172,7 @@ void HWForm::UpdateCampaignPage(int index)
     QStringList entries = tmpdir.entryList(QStringList("*#*.lua"));
     //entries.sort();
     for(int i = 0; (i < entries.count()) && (i <= team.CampaignProgress); i++)
-        ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2"), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
+        ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
 }
 
 void HWForm::AssociateFiles()

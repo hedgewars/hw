@@ -1,6 +1,7 @@
 file(GLOB txttrans2 ??.txt)
 file(GLOB txttrans5 ?????.txt)
 file(GLOB tsfiles *.ts)
+file(GLOB luafiles *.lua)
 
 QT4_ADD_TRANSLATION(QM ${tsfiles})
 
@@ -13,6 +14,7 @@ install(FILES
 	${txttrans2}
 	${txttrans5}
 	${QM}
+	${luafiles}
 	DESTINATION ${SHAREPATH}Data/Locale
 )
 

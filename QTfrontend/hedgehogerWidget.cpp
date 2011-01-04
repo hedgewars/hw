@@ -20,8 +20,8 @@
 
 #include "frameTeam.h"
 
-CHedgehogerWidget::CHedgehogerWidget(const QImage& im, QWidget * parent) :
-    ItemNum(im, parent, 1)
+CHedgehogerWidget::CHedgehogerWidget(const QImage& im, const QImage& img, QWidget * parent) :
+    ItemNum(im, img, parent, 1)
 {
   // TODO: maxHedgehogsPerGame doesn't reset properly and won't match map limits for now
   /*if(parent) {

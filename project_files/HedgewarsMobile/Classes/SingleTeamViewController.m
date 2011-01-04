@@ -20,6 +20,7 @@
 
 
 #import "SingleTeamViewController.h"
+#import <QuartzCore/QuartzCore.h>
 #import "HogHatViewController.h"
 #import "GravesViewController.h"
 #import "VoicesViewController.h"
@@ -263,6 +264,7 @@
                     accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png",
                                                                               FLAGS_DIRECTORY(),[teamDictionary objectForKey:@"flag"]]];
                     cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(27, 19)];
+                    cell.imageView.layer.borderWidth = 0.3;
                     [accessoryImage release];
                     break;
                 case 4: // level

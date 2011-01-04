@@ -116,4 +116,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 
     pageCampaign = new PageCampaign();
     Pages->addWidget(pageCampaign);
+
+    pageDrawMap = new PageDrawMap();
+    Pages->addWidget(pageDrawMap);
 }

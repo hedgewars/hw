@@ -62,6 +62,7 @@ function DistanceI(const dx, dy: LongInt): hwFloat;
 function AngleSin(const Angle: Longword): hwFloat;
 function AngleCos(const Angle: Longword): hwFloat;
 function SignAs(const num, signum: hwFloat): hwFloat; inline;
+function hwSign(r: hwFloat): LongInt; inline;
 
 {$IFDEF FPC}
 {$J-}
@@ -147,7 +148,7 @@ type hwFloat = Extended;
 {$ENDIF}
 
 implementation
-//uses uMisc;
+uses uSinTable;
 
 
 {$IFDEF FPC}
@@ -342,7 +343,12 @@ SignAs.QWordValue:= num.QWordValue;
 SignAs.isNegative:= signum.isNegative
 end;
 
-{$INCLUDE "SinTable.inc"}
+function hwSign(r: hwFloat): LongInt;
+begin
+// yes, we have negative zero for a reason
+if r.isNegative then hwSign:= -1 else hwSign:= 1
+end;
+
 
 function AngleSin(const Angle: Longword): hwFloat;
 begin

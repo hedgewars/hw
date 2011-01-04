@@ -7,6 +7,10 @@
         <source>new</source>
         <translation>nový</translation>
     </message>
+    <message>
+        <source>copy of</source>
+        <translation>kópia z</translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -43,7 +47,11 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation>Ak je táto voľba vybraná, zvolením hernej schémy budú automaticky vybrané aj zbrane (a naopak)</translation>
+        <translation type="obsolete">Ak je táto voľba vybraná, zvolením hernej schémy budú automaticky vybrané aj zbrane (a naopak)</translation>
+    </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
+        <translation>Keď je vybraná táto voľba výberom hernej schémy vyberiete automaticky aj zbraň</translation>
     </message>
 </context>
 <context>
@@ -85,7 +93,7 @@
     </message>
     <message>
         <source>new</source>
-        <translation>nový</translation>
+        <translation type="obsolete">nový</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
@@ -182,6 +190,14 @@
     <message>
         <source>Large floating islands</source>
         <translation>Veľké plávajúce ostrovčeky</translation>
+    </message>
+    <message>
+        <source>Seed</source>
+        <translation>Zrno</translation>
+    </message>
+    <message>
+        <source>Set</source>
+        <translation>Nastaviť</translation>
     </message>
 </context>
 <context>
@@ -318,6 +334,37 @@ v nastaveniach hry:</translation>
     </message>
 </context>
 <context>
+    <name>PageDrawMap</name>
+    <message>
+        <source>Undo</source>
+        <translation>Odvolať</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Vyčistiť</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation>Načítať</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Uložiť</translation>
+    </message>
+    <message>
+        <source>Load drawn map</source>
+        <translation>Načítať nakreslenú mapu</translation>
+    </message>
+    <message>
+        <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
+        <translation>Nakreslené mapy (*.hwmap);;Všetky súbory (*.*)</translation>
+    </message>
+    <message>
+        <source>Save drawn map</source>
+        <translation>Uložiť nakreslenú mapu</translation>
+    </message>
+</context>
+<context>
     <name>PageEditTeam</name>
     <message>
         <source>General</source>
@@ -432,7 +479,7 @@ v nastaveniach hry:</translation>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
         <comment>Tips</comment>
-        <translation>Ak chcete hrať s priateľom ako team, jednoducho si zvoľte tú istú farbu. I naďalej budete ovládať svojich vlastných ježkov, ale víťazstvá či prehry budú spoločné.</translation>
+        <translation>Ak chcete hrať s priateľom ako tím, jednoducho si zvoľte tú istú farbu. I naďalej budete ovládať svojich vlastných ježkov, ale víťazstvá či prehry budú spoločné.</translation>
     </message>
     <message>
         <source>Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.</source>
@@ -730,11 +777,11 @@ v nastaveniach hry:</translation>
     <name>PageOptions</name>
     <message>
         <source>New team</source>
-        <translation>Nový team</translation>
+        <translation>Nový tím</translation>
     </message>
     <message>
         <source>Edit team</source>
-        <translation>Upraviť team</translation>
+        <translation>Upraviť tím</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -742,19 +789,43 @@ v nastaveniach hry:</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Nová schéma pre zbrane</translation>
+        <translation type="obsolete">Nová schéma pre zbrane</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Upraviť schému pre zbrane</translation>
+        <translation type="obsolete">Upraviť schému pre zbrane</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Vymazať schému pre zbrane</translation>
+        <translation type="obsolete">Vymazať schému pre zbrane</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
-        <translation>Z výberu tímov nemôžete upravovať teamytímy. Vráťte sa do hlavného menu, odkiaľ môžete pridávať, upravovať alebo mazať tímy.</translation>
+        <translation>Z výberu tímov nemôžete upravovať tímy. Vráťte sa do hlavného menu, odkiaľ môžete pridávať, upravovať alebo mazať tímy.</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation>Nová schéma</translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation>Upraviť schému</translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation>Vymazať schému</translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation>Nová sada zbraní</translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation>Upraviť sadu zbraní</translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation>Vymazať sadu zbraní</translation>
     </message>
 </context>
 <context>
@@ -861,9 +932,9 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
         <translation>
-            <numerusform>V tejto miestnosti je jeden hrajúci team.</numerusform>
-            <numerusform>V tejto miestnosti sú %1 hrajúce teamy.</numerusform>
-            <numerusform>V tejto miestnosti je %1 hrajúcich teamov.</numerusform>
+            <numerusform>V tejto miestnosti je jeden hrajúci tím.</numerusform>
+            <numerusform>V tejto miestnosti sú %1 hrajúce tímy.</numerusform>
+            <numerusform>V tejto miestnosti je %1 hrajúcich tímov.</numerusform>
         </translation>
     </message>
     <message>
@@ -917,7 +988,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation>Pridať 80% škody, ktorú spôsobíte k vášmu zdraviu</translation>
+        <translation>K vášmu zdraviu sa priráta 80 % škody, ktorú spôsobíte</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
@@ -945,11 +1016,11 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Ubráňte pevnosť a znižte nepriateľov, maximálne dve teamové farby!</translation>
+        <translation>Ubráňte pevnosť a zničte nepriateľov, maximálne dve tímové farby!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Teamy začnú na opačných stranách terénu, maximálne dve teamové farby!</translation>
+        <translation>Tímy začnú na opačných stranách terénu, maximálne dve tímové farby!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -1013,7 +1084,19 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation>Každý ježko má vlastnú výzbroj. Nie je zdieľaná so zvyškom teamu.</translation>
+        <translation>Každý ježko má vlastnú výzbroj. Nie je zdieľaná so zvyškom tímu.</translation>
+    </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation>Už sa viac nebudete musieť zaujímať o vietor.</translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation>Vietor bude ovplyvňovať takmer všetko.</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopírovať</translation>
     </message>
 </context>
 <context>
@@ -1026,6 +1109,14 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
         <source>Delete</source>
         <translation>Vymazať</translation>
     </message>
+    <message>
+        <source>New</source>
+        <translation>Nová</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopírovať</translation>
+    </message>
 </context>
 <context>
     <name>PageSinglePlayer</name>
@@ -1035,7 +1126,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation>Multiplayer (hrať hru, pri ktorej sa striedate s hráčmi pri počítači alebo proti počítačovým teamom)</translation>
+        <translation>Multiplayer (hrať hru, pri ktorej sa striedate s hráčmi pri počítači alebo proti počítačovým tímom)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
@@ -1070,7 +1161,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Restrict Team Additions</source>
-        <translation>Obmedziť pripojenie k teamu</translation>
+        <translation>Obmedziť pripojenie k tímu</translation>
     </message>
     <message>
         <source>Info</source>
@@ -1230,12 +1321,20 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
         <source>Crazy</source>
         <translation type="obsolete">Šialené</translation>
     </message>
+    <message>
+        <source>Normal</source>
+        <translation type="obsolete">Normálna</translation>
+    </message>
+    <message>
+        <source>hand drawn map...</source>
+        <translation>ručne kreslená mapa...</translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
     <message>
         <source>Team Members</source>
-        <translation>Členovia teamu</translation>
+        <translation>Členovia tímu</translation>
     </message>
     <message>
         <source>Key binds</source>
@@ -1247,7 +1346,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Teams</source>
-        <translation>Teamy</translation>
+        <translation>Tímy</translation>
     </message>
     <message>
         <source>Audio/Graphic options</source>
@@ -1255,7 +1354,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Zbrane</translation>
+        <translation type="obsolete">Zbrane</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -1263,7 +1362,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Playing teams</source>
-        <translation>Hrajúce teamy</translation>
+        <translation>Hrajúce tímy</translation>
     </message>
     <message>
         <source>Game Modifiers</source>
@@ -1280,6 +1379,10 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>Misc</source>
         <translation>Rozličné</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation>Schémy a zbrane</translation>
     </message>
 </context>
 <context>
@@ -1378,7 +1481,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Crate Drops</source>
-        <translation>Zhadzovanie krabíc</translation>
+        <translation>Padanie krabíc</translation>
     </message>
     <message>
         <source>Scheme Name:</source>
@@ -1386,7 +1489,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation>% Falošné míny</translation>
+        <translation>% falošných mín</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1441,15 +1544,15 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>Bind schemes and weapons</source>
-        <translation>Prepojiť schémy a zbrane</translation>
+        <translation type="obsolete">Prepojiť schémy a zbrane</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation>Stúpanie vody pri rýchlej smrti</translation>
+        <translation>Stúpanie vody počas rýchlej smrti</translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation>Klesanie vody pri rýchlej smrti</translation>
+        <translation>Klesanie zdravia počas rýchlej smrti</translation>
     </message>
     <message>
         <source>% Health Crates</source>
@@ -1458,6 +1561,14 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     <message>
         <source>Health in Crates</source>
         <translation>Zdravie v bedniach</translation>
+    </message>
+    <message>
+        <source>% Rope Length</source>
+        <translation>% dĺžka lana</translation>
+    </message>
+    <message>
+        <source>Gameplay</source>
+        <translation>Hra</translation>
     </message>
 </context>
 <context>
@@ -1506,7 +1617,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Nie je možné vymazať východziu sadu zbraní</translation>
+        <translation type="obsolete">Nie je možné vymazať východziu sadu zbraní</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1523,6 +1634,30 @@ Skontrolujte si vašu inštaláciu</translation>
     <message>
         <source>File association failed.</source>
         <translation>Nastavenie súborových asociácii zlyhalo.</translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation>Tímy</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation>Naozaj vymazať tento tím?</translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation>Schémy</translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation>Nie je možné vymazať východziu schému &apos;%1&apos;!</translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation>Naozaj chcete vymazať túto hernú schému?</translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation>Nie je možné vymazať východziu sadu zbraní &apos;%1&apos;!</translation>
     </message>
 </context>
 <context>
@@ -1618,6 +1753,14 @@ Skontrolujte si vašu inštaláciu</translation>
         <source>Associate file extensions</source>
         <translation>Asociovať prípony súborov.</translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="obsolete">Nastaviť</translation>
+    </message>
+    <message>
+        <source>more</source>
+        <translation>viac</translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
@@ -1668,6 +1811,14 @@ Skontrolujte si vašu inštaláciu</translation>
         <source>Delays</source>
         <translation>Oneskorenie</translation>
     </message>
+    <message>
+        <source>new</source>
+        <translation>nový</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation>kópia z</translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
@@ -1704,7 +1855,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Divide Teams</source>
-        <translation>Rozdeliť teamy</translation>
+        <translation>Rozdeliť tímy</translation>
     </message>
     <message>
         <source>Solid Land</source>
@@ -1773,6 +1924,14 @@ Skontrolujte si vašu inštaláciu</translation>
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation>Individuálne zbrane</translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation>Vypnúť vietor</translation>
+    </message>
+    <message>
+        <source>More Wind</source>
+        <translation>Viac vetra</translation>
     </message>
 </context>
 <context>
@@ -2003,7 +2162,7 @@ ježkov</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation>Umožní vám rozhovor s vašim teamom alebo všetkými účastníkmi hry:</translation>
+        <translation>Umožní vám rozhovor s vašim tímom alebo všetkými účastníkmi hry:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>

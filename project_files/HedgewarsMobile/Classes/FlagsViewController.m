@@ -20,6 +20,7 @@
 
 
 #import "FlagsViewController.h"
+#import <QuartzCore/QuartzCore.h>
 #import "CommodityFunctions.h"
 
 @implementation FlagsViewController
@@ -99,6 +100,7 @@
     UIImage *flagSprite = [[UIImage alloc] initWithContentsOfFile:flagFile];
     [flagFile release];
     cell.imageView.image = flagSprite;
+    cell.imageView.layer.borderWidth = 0.3;
     [flagSprite release];
 
     cell.textLabel.text = [[source objectAtIndex:row] stringByDeletingPathExtension];

@@ -23,13 +23,16 @@
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
+#import "SchemeWeaponConfigViewController.h"
+#import "GameConfigViewController.h"
 
 #define scIndex         self.segmentedControl.selectedSegmentIndex
 #define isRandomness()  (segmentedControl.selectedSegmentIndex == 0 || segmentedControl.selectedSegmentIndex == 2)
 
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
-            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy;
+            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy,
+            externalController, parentController;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -136,6 +139,7 @@
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.minimumFontSize = 7;
     cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+    cell.textLabel.backgroundColor = [UIColor clearColor];
 
     if (isRandomness()) {
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),labelString]];
@@ -151,7 +155,7 @@
     } else
         cell.accessoryView = nil;
 
-    cell.backgroundColor = [UIColor blackColor];
+    cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
     return cell;
 }
 
@@ -320,16 +324,17 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
+            [externalController fillSections];
             break;
 
         case 1: // Map
-        case 3: // Mission
             mapgen = @"e$mapgen 0";
             // dummy values, these are set by -updatePreview -> -didSelectRowAtIndexPath -> -setDetailsForStaticMap
             staticmap = @"map Bamboo";
             mission = @"";
             self.slider.enabled = NO;
             self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
+            [externalController fillSections];
             break;
 
         case 2: // Maze
@@ -338,6 +343,17 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
+            [externalController fillSections];
+            break;
+
+        case 3: // Mission
+            mapgen = @"e$mapgen 0";
+            // dummy values, these are set by -updatePreview -> -didSelectRowAtIndexPath -> -setDetailsForStaticMap
+            staticmap = @"map Bamboo";
+            mission = @"";
+            self.slider.enabled = NO;
+            self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
+            [externalController emptySections];
             break;
 
         default:
@@ -356,9 +372,7 @@
 }
 
 -(IBAction) buttonPressed:(id) sender {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"buttonPressed"
-                                                        object:nil
-                                                      userInfo:[NSDictionary dictionaryWithObject:sender forKey:@"sender"]];
+    [self.parentController buttonPressed:sender];
 }
 
 #pragma mark -
@@ -372,14 +386,15 @@
     [string release];
     // remove a trailing "" element
     [themeArray removeLastObject];
+
+    // remove images that are too big for certain devices without loading the whole image
     NSArray *mapArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
     NSMutableArray *mapArray = [[NSMutableArray alloc] init];
     for (NSString *str in mapArrayFull) {
         CGSize imgSize = PSPNGSizeFromMetaData([MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
-        //DLog(@"%@ %f %f", str, imgSize.width, imgSize.height);
         if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
             continue;
-        if (IS_IPAD() && imgSize.height > 1280.0f)
+        if (IS_NOT_VERY_POWERFUL() && imgSize.height > 1280.0f)
             continue;
         [mapArray addObject:str];
     }
@@ -388,10 +403,9 @@
     NSMutableArray *missionArray = [[NSMutableArray alloc] init];
     for (NSString *str in missionArrayFull) {
         CGSize imgSize = PSPNGSizeFromMetaData([MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
-        //DLog(@"%@ %f %f", str, imgSize.width, imgSize.height);
         if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
             continue;
-        if (IS_IPAD() && imgSize.height > 1280.0f)
+        if (IS_NOT_VERY_POWERFUL() && imgSize.height > 1280.0f)
             continue;
         [missionArray addObject:str];
     }
@@ -436,7 +450,7 @@
 
     if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
         [self.tableView setBackgroundView:nil];
-    self.view.backgroundColor = [UIColor clearColor];
+    self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
@@ -478,14 +492,16 @@
 
 -(void) didReceiveMemoryWarning {
     self.dataSourceArray = nil;
+    [super didReceiveMemoryWarning];
 
-    self.tableView = nil;
-    self.maxLabel = nil;
-    self.sizeLabel = nil;
-    self.slider = nil;
+    if (self.view.superview == nil) {
+        self.tableView = nil;
+        self.maxLabel = nil;
+        self.sizeLabel = nil;
+        self.slider = nil;
+    }
 
     MSG_MEMCLEAN();
-    [super didReceiveMemoryWarning];
 }
 
 -(void) dealloc {

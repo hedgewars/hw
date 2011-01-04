@@ -20,92 +20,11 @@
 
 unit uTeams;
 interface
-uses uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound;
-
-type 
-    PHHAmmo = ^THHAmmo;
-    THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
-
-    PHedgehog = ^THedgehog;
-    PTeam     = ^TTeam;
-    PClan     = ^TClan;
-
-    THedgehog = record
-            Name: string[MAXNAMELEN];
-            Gear: PGear;
-            SpeechGear: PVisualGear;
-            NameTagTex,
-            HealthTagTex,
-            HatTex: PTexture;
-            Ammo: PHHAmmo;
-            CurAmmoType: TAmmoType;
-            AmmoStore: Longword;
-            Team: PTeam;
-            MultiShootAttacks: Longword;
-            visStepPos: LongWord;
-            BotLevel  : Byte; // 0 - Human player
-            HatVisibility: GLfloat;
-            stats: TStatistics;
-            Hat: shortstring;
-            InitialHealth: LongInt; // used for gfResetHealth
-            King: boolean;  // Flag for a bunch of hedgehog attributes
-            Unplaced: boolean;  // Flag for hog placing mode
-            Timer: Longword;
-            Effects: Array[THogEffect] of boolean;
-            end;
-
-    TTeam = record
-            Clan: PClan;
-            TeamName: string[MAXNAMELEN];
-            ExtDriven: boolean;
-            Binds: TBinds;
-            Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
-            CurrHedgehog: LongWord;
-            NameTagTex: PTexture;
-            CrosshairTex,
-            GraveTex,
-            HealthTex,
-            AIKillsTex,
-            FlagTex: PTexture;
-            Flag: shortstring;
-            GraveName: shortstring;
-            FortName: shortstring;
-            TeamHealth: LongInt;
-            TeamHealthBarWidth,
-            NewTeamHealthBarWidth: LongInt;
-            DrawHealthY: LongInt;
-            AttackBar: LongWord;
-            HedgehogsNumber: Longword;
-            hasGone: boolean;
-            voicepack: PVoicepack;
-            PlayerHash: shortstring;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
-            stats: TTeamStats;
-            end;
-
-    TClan = record
-            Color: Longword;
-            Teams: array[0..Pred(cMaxTeams)] of PTeam;
-            TeamsNumber: Longword;
-            CurrTeam: LongWord;
-            ClanHealth: LongInt;
-            ClanIndex: LongInt;
-            TurnNumber: LongWord;
-            end;
-
-var CurrentTeam: PTeam;
-    PreviousTeam: PTeam;
-    CurrentHedgehog: PHedgehog;
-    TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
-    TeamsCount: Longword;
-    ClansArray: array[0..Pred(cMaxTeams)] of PClan;
-    ClansCount: Longword;
-    LocalClan: LongInt;  // last non-bot, non-extdriven clan
-    LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index
-    CurMinAngle, CurMaxAngle: Longword;
-    GameOver: boolean;
+uses uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound, uTypes;
 
 procedure initModule;
 procedure freeModule;
+
 function  AddTeam(TeamColor: Longword): PTeam;
 procedure SwitchHedgehog;
 procedure AfterSwitchHedgehog;
@@ -114,12 +33,11 @@ function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
 function  CheckForWin: boolean;
-procedure TeamGone(s: shortstring);
 procedure TeamGoneEffect(var Team: TTeam);
-function  GetTeamStatString(p: PTeam): shortstring;
 
 implementation
-uses uMisc, uWorld, uLocale, uAmmos, uChat, uMobile;
+uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug, uScript;
+
 const MaxTeamHealth: LongInt = 0;
 
 function CheckForWin: boolean;
@@ -203,6 +121,19 @@ with CurrentHedgehog^ do
         InsertGearToList(Gear)
         end
     end;
+// Try to make the ammo menu viewed when not your turn be a bit more useful for per-hog-ammo mode
+with CurrentTeam^ do
+    if ((GameFlags and gfPerHogAmmo) <> 0) and (not ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then
+        begin
+        c:= CurrHedgehog;
+        repeat
+            begin
+            inc(c);
+            if c > cMaxHHIndex then c:= 0
+            end
+        until (c = CurrHedgehog) or (Hedgehogs[c].Gear <> nil);
+        LocalAmmo:= Hedgehogs[c].AmmoStore
+        end;
 
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
@@ -317,6 +248,7 @@ else
     end;
 
 perfExt_NewTurnBeginning();
+ScriptCall('onNewTurn');
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;
@@ -380,6 +312,7 @@ for t:= 0 to Pred(TeamsCount) do
         if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
             begin
             LocalClan:= Clan^.ClanIndex;
+            LocalTeam:= t;
             LocalAmmo:= Hedgehogs[0].AmmoStore
             end;
         th:= 0;
@@ -446,7 +379,7 @@ with team^ do
         begin
         MaxTeamHealth:= NewTeamHealthBarWidth;
         RecountAllTeamsHealth;
-        end else NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
+        end else if NewTeamHealthBarWidth > 0 then NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
     end;
 
 RecountClanHealth(team^.Clan);
@@ -461,7 +394,103 @@ for t:= 0 to Pred(TeamsCount) do
    TeamsArray[t]^.ExtDriven:= false
 end;
 
-procedure TeamGone(s: shortstring);
+procedure TeamGoneEffect(var Team: TTeam);
+var i: LongInt;
+begin
+with Team do
+    for i:= 0 to cMaxHHIndex do
+        with Hedgehogs[i] do
+            if Gear <> nil then
+                begin
+                Gear^.Invulnerable:= false;
+                Gear^.Damage:= Gear^.Health
+                end
+end;
+
+procedure chAddHH(var id: shortstring);
+var s: shortstring;
+    Gear: PGear;
+begin
+    s:= '';
+    if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
+    with CurrentTeam^ do
+        begin
+        SplitBySpace(id, s);
+        CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
+        val(id, CurrentHedgehog^.BotLevel);
+        Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
+        SplitBySpace(s, id);
+        val(s, Gear^.Health);
+        TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
+        Gear^.Hedgehog^.Team:= CurrentTeam;
+        if (GameFlags and gfSharedAmmo) <> 0 then CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
+        else if (GameFlags and gfPerHogAmmo) <> 0 then
+            begin
+            AddAmmoStore;
+            CurrentHedgehog^.AmmoStore:= StoreCnt - 1
+            end
+        else CurrentHedgehog^.AmmoStore:= TeamsCount - 1;
+        CurrentHedgehog^.Gear:= Gear;
+        CurrentHedgehog^.Name:= id;
+        CurrentHedgehog^.InitialHealth:= Gear^.Health;
+        CurrHedgehog:= HedgehogsNumber;
+        inc(HedgehogsNumber)
+        end
+end;
+
+procedure chAddTeam(var s: shortstring);
+var Color: Longword;
+    ts, cs: shortstring;
+begin
+    cs:= '';
+    ts:= '';
+    if isDeveloperMode then
+        begin
+        SplitBySpace(s, cs);
+        SplitBySpace(cs, ts);
+        val(cs, Color);
+        TryDo(Color <> 0, 'Error: black team color', true);
+
+        // color is always little endian so the mask must be constant also in big endian archs
+        Color:= Color or $FF000000;
+
+        AddTeam(Color);
+        CurrentTeam^.TeamName:= ts;
+        CurrentTeam^.PlayerHash:= s;
+        if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true;
+
+        CurrentTeam^.voicepack:= AskForVoicepack('Default')
+        end
+end;
+
+procedure chSetHHCoords(var x: shortstring);
+var y: shortstring;
+    t: Longint;
+begin
+y:= '';
+if (not isDeveloperMode) or (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then exit;
+SplitBySpace(x, y);
+val(x, t);
+CurrentHedgehog^.Gear^.X:= int2hwFloat(t);
+val(y, t);
+CurrentHedgehog^.Gear^.Y:= int2hwFloat(t)
+end;
+
+procedure chBind(var id: shortstring);
+var s: shortstring;
+    b: LongInt;
+begin
+s:= '';
+if CurrentTeam = nil then exit;
+SplitBySpace(id, s);
+if s[1]='"' then Delete(s, 1, 1);
+if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+b:= KeyNameToCode(id);
+if b = 0 then OutError(errmsgUnknownVariable + ' "' + id + '"', false)
+        else CurrentTeam^.Binds[b]:= s
+end;
+
+procedure chTeamGone(var s:shortstring);
 var t: LongInt;
 begin
 t:= 0;
@@ -479,34 +508,22 @@ with TeamsArray[t]^ do
 RecountTeamHealth(TeamsArray[t])
 end;
 
-procedure TeamGoneEffect(var Team: TTeam);
-var i: LongInt;
-begin
-with Team do
-    for i:= 0 to cMaxHHIndex do
-        with Hedgehogs[i] do
-            if Gear <> nil then
-                begin
-                Gear^.Invulnerable:= false;
-                Gear^.Damage:= Gear^.Health
-                end
-end;
-
-function GetTeamStatString(p: PTeam): shortstring;
-var s: ansistring;
-begin
-    s:= p^.TeamName + ':' + inttostr(p^.TeamHealth) + ':';
-    GetTeamStatString:= s;
-end;
 
 procedure initModule;
 begin
+    RegisterVariable('addhh', vtCommand, @chAddHH, false);
+    RegisterVariable('addteam', vtCommand, @chAddTeam, false);
+    RegisterVariable('hhcoords', vtCommand, @chSetHHCoords, false);
+    RegisterVariable('bind', vtCommand, @chBind, true );
+    RegisterVariable('teamgone', vtCommand, @chTeamGone, true );
+
     CurrentTeam:= nil;
     PreviousTeam:= nil;
     CurrentHedgehog:= nil;
     TeamsCount:= 0;
     ClansCount:= 0;
     LocalClan:= -1;
+    LocalTeam:= -1;
     LocalAmmo:= -1;
     GameOver:= false
 end;

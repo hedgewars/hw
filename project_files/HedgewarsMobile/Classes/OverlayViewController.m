@@ -38,19 +38,25 @@
 #define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu;
+@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu, initialOrientation, containerWindow;
 
 #pragma mark -
 #pragma mark rotation
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+    // don't rotate until the game is running for performance and synchronization with the sdlview
+    if (isGameRunning() == NO)
+        return (interfaceOrientation == (UIInterfaceOrientation) self.initialOrientation);
     return rotationManager(interfaceOrientation);
 }
 
 // pause the game and remove objc menus so that animation is smoother
 -(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval) duration{
+    if (isGameRunning() == NO)
+        return;
+
+    HW_pause();
     [self dismissPopover];
-    if (HW_isPaused() == NO)
-        HW_pause();
+
     if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
         [self.amvc disappear];
         wasVisible = YES;
@@ -75,16 +81,21 @@
 
 // now restore previous state
 -(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation {
+    if (isGameRunning() == NO)
+        return;
+
     if (wasVisible || IS_DUALHEAD())
         [self.amvc appearInView:self.view];
-    if (HW_isPaused() == YES)
-        HW_pause();
+    HW_pauseToggle();
 
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 // while in dual head the above rotation functions are not called
 -(void) dualHeadRotation:(NSNotification *)notification {
+    if (isGameRunning() == NO)
+        return;
+
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     
     [UIView beginAnimations:@"rotation" context:NULL];
@@ -191,6 +202,8 @@
                                                      name:UIScreenDidDisconnectNotification
                                                    object:nil];
     }
+    
+    self.containerWindow = [[UIApplication sharedApplication] keyWindow];
 
     // present the overlay
     [UIView beginAnimations:@"showing overlay" context:NULL];
@@ -208,8 +221,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         [alert release];
-        if (HW_isPaused() == NO)
-            HW_pause();
+        HW_pause();
     }
 }
 
@@ -383,6 +395,7 @@
             break;
         case 10:
             playSound(@"clickSound");
+            clearView();
             HW_pause();
             if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
                 doDim();
@@ -393,12 +406,13 @@
             break;
         case 11:
             playSound(@"clickSound");
+            clearView();
             removeConfirmationInput();
             
             if (IS_DUALHEAD() || self.useClassicMenu == NO) {
                 if (self.amvc == nil)
                     self.amvc = [[AmmoMenuViewController alloc] init];
-
+                setAmmoMenuInstance(amvc);
                 if (self.amvc.isVisible) {
                     doDim();
                     [self.amvc disappear];
@@ -409,6 +423,7 @@
                     }
                 }
             } else {
+                setAmmoMenuInstance(nil);
                 HW_ammoMenu();
             }
             break;
@@ -480,7 +495,7 @@
     if (YES == isPopoverVisible) {
         isPopoverVisible = NO;
         if (HW_isPaused())
-            HW_pause();
+            HW_pauseToggle();
 
         if (IS_IPAD()) {
             [(InGameMenuViewController *)[[self popoverController] contentViewController] removeChat];
@@ -494,11 +509,25 @@
 
 #pragma mark -
 #pragma mark Custom touch event handling
+-(BOOL) shouldIgnoreTouch:(NSSet *)allTouches {
+    if (isGameRunning() == NO)
+        return YES;
+
+    // ignore activity near the dpad and buttons
+    CGPoint touchPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
+    CGSize screen = [[UIScreen mainScreen] bounds].size;
+
+    if ((touchPoint.x < 160 && touchPoint.y > screen.width - 155 ) || 
+        (touchPoint.x > screen.height - 135 && touchPoint.y > screen.width - 140))
+        return YES;
+    return NO;
+}
+
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     NSSet *allTouches = [event allTouches];
     UITouch *first, *second;
 
-    if (isGameRunning() == NO)
+    if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
 
     // hide in-game menu
@@ -537,9 +566,9 @@
     NSSet *allTouches = [event allTouches];
     CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
 
-    if (isGameRunning() == NO)
+    if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
-    
+
     switch ([allTouches count]) {
         case 1:
             // if we're in the menu we just click in the point
@@ -629,9 +658,9 @@
     int x, y, dx, dy;
     UITouch *touch, *first, *second;
 
-    if (isGameRunning() == NO)
+    if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
-    
+
     switch ([allTouches count]) {
         case 1:
             touch = [[allTouches allObjects] objectAtIndex:0];

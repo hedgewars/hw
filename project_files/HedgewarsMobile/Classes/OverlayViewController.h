@@ -51,6 +51,10 @@
     // stuff initialized externally
     BOOL isNetGame;
     BOOL useClassicMenu;
+    NSInteger initialOrientation;
+    
+    // the containing window
+    UIWindow *containerWindow;
     
     // dual head support
     NSInteger initialScreenCount;
@@ -63,6 +67,8 @@
 @property (nonatomic,retain) AmmoMenuViewController *amvc;
 @property (assign) BOOL isNetGame;
 @property (assign) BOOL useClassicMenu;
+@property (assign) NSInteger initialOrientation;
+@property (assign) UIWindow *containerWindow;
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;

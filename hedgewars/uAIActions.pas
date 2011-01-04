@@ -20,7 +20,7 @@
 
 unit uAIActions;
 interface
-uses uGears, uFloat;
+uses uFloat, uTypes;
 
 const MAXACTIONS     = 96;
       aia_none       = 0;
@@ -62,7 +62,7 @@ procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; Tim
 procedure ProcessAction(var Actions: TActions; Me: PGear);
 
 implementation
-uses uMisc, uConsts, uConsole, uAIMisc, uAI, uAmmos;
+uses uAIMisc, uAI, uAmmos, uVariables, uCommands, uUtils, uDebug, uIO;
 
 const ActionIdToStr: array[0..6] of string[16] = (
 {aia_none}           '',
@@ -95,8 +95,8 @@ if (Action.Action and ai_specmask) = 0 then
 else begin
    WriteLnToConsole('AI action: '+SpecActionIdToStr[Action.Action]);
    if (Action.Action = aia_WaitXL) or (Action.Action = aia_WaitXR) then
-      WriteLnToConsole('AI action Wait X = '+inttostr(Action.Param)+', current X = '+inttostr(hwRound(Me^.X)))
-   else if (Action.Action = aia_AwareExpl) then WriteLnToConsole('Aware X = ' + inttostr(Action.X) + ', Y = ' + inttostr(Action.Y));
+      WriteLnToConsole('AI action Wait X = '+IntToStr(Action.Param)+', current X = '+IntToStr(hwRound(Me^.X)))
+   else if (Action.Action = aia_AwareExpl) then WriteLnToConsole('Aware X = ' + IntToStr(Action.X) + ', Y = ' + IntToStr(Action.Y));
    end
 end;
 {$ENDIF}
@@ -199,7 +199,7 @@ with Actions.actions[Actions.Pos] do
              aim_push: s:= '+' + s;
           aim_release: s:= '-' + s;
              end
-          else if Param <> 0 then s:= s + ' ' + inttostr(Param);
+          else if Param <> 0 then s:= s + ' ' + IntToStr(Param);
         ParseCommand(s, true)
         end
      end;

@@ -19,6 +19,7 @@
 #include "togglebutton.h"
 
 ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
+    : QPushButton(parent)
 {
     setCheckable(true);
 

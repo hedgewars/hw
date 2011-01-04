@@ -7,6 +7,10 @@
         <source>new</source>
         <translation>ny</translation>
     </message>
+    <message>
+        <source>copy of</source>
+        <translation>kopia av</translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -26,7 +30,7 @@
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation>Redigera vapenscheman</translation>
+        <translation>Redigera vapenset</translation>
     </message>
     <message>
         <source>Error</source>
@@ -41,8 +45,8 @@
         <translation>Redigera spelscheman</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation type="unfinished"></translation>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
+        <translation>När det här valet är aktivt kommer vapnen att ändras när du ändrar spelschema</translation>
     </message>
 </context>
 <context>
@@ -84,7 +88,7 @@
     </message>
     <message>
         <source>new</source>
-        <translation>ny</translation>
+        <translation type="obsolete">ny</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
@@ -181,6 +185,14 @@
     <message>
         <source>Large floating islands</source>
         <translation>Stora flytande öar</translation>
+    </message>
+    <message>
+        <source>Seed</source>
+        <translation>Frö</translation>
+    </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished">Ange</translation>
     </message>
 </context>
 <context>
@@ -312,6 +324,37 @@ ett annat smeknamn i spelinställningarna:</translation>
     <message>
         <source>Connecting...</source>
         <translation>Ansluter...</translation>
+    </message>
+</context>
+<context>
+    <name>PageDrawMap</name>
+    <message>
+        <source>Undo</source>
+        <translation>Ångra</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Rensa</translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation>Läs in</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Spara</translation>
+    </message>
+    <message>
+        <source>Load drawn map</source>
+        <translation>Läs in ritad karta</translation>
+    </message>
+    <message>
+        <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
+        <translation>Ritade kartor (*.hwmap);;Alla filer (*.*)</translation>
+    </message>
+    <message>
+        <source>Save drawn map</source>
+        <translation>Spara ritad karta</translation>
     </message>
 </context>
 <context>
@@ -666,12 +709,12 @@ ett annat smeknamn i spelinställningarna:</translation>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Du kan hitta dina konfigurationsfiler under &quot;Library/Application Support/Hedgewars&quot; i din hem-mapp. Gör en säkerhetskopia eller ta med dig filerna, men redigera dem inte för hand.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Du kan hitta dina konfigurationsfiler under &quot;.hedgewars&quot; i din hem-mapp. Gör en säkerhetskopia eller ta med dig filerna, men redigera dem inte för hand.</translation>
     </message>
 </context>
 <context>
@@ -726,19 +769,43 @@ ett annat smeknamn i spelinställningarna:</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation>Nytt vapenschema</translation>
+        <translation type="obsolete">Nytt vapenschema</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation>Redigera vapenschema</translation>
+        <translation type="obsolete">Redigera vapenschema</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation>Ta bort vapenschema</translation>
+        <translation type="obsolete">Ta bort vapenschema</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation>Du kan inte redigera lag från ett spel. Gå tillbaka till huvudmenyn för att lägga till, redigera eller ta bort lag.</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation>Nytt schema</translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation>Redigera schema</translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation>Ta bort schema</translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation>Nytt vapenset</translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation>Redigera vapenset</translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation>Ta bort vapenset</translation>
     </message>
 </context>
 <context>
@@ -997,6 +1064,18 @@ Vill du fortfarande gå med i rummet?</translation>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation>Varje igelkott har sin egen ammunition. Laget delar inte med varandra.</translation>
     </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation>Nu behöver du inte oroa dig för vinden längre.</translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation>Vind påverkar nästan allting.</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopiera</translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1007,6 +1086,14 @@ Vill du fortfarande gå med i rummet?</translation>
     <message>
         <source>Delete</source>
         <translation>Ta bort</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation>Ny</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopiera</translation>
     </message>
 </context>
 <context>
@@ -1212,6 +1299,14 @@ Vill du fortfarande gå med i rummet?</translation>
         <source>Crazy</source>
         <translation type="obsolete">Galet</translation>
     </message>
+    <message>
+        <source>Normal</source>
+        <translation type="obsolete">Vanligt</translation>
+    </message>
+    <message>
+        <source>hand drawn map...</source>
+        <translation>handritad karta...</translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -1237,7 +1332,7 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Vapen</translation>
+        <translation type="obsolete">Vapen</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -1262,6 +1357,10 @@ Vill du fortfarande gå med i rummet?</translation>
     <message>
         <source>Misc</source>
         <translation>Diverse</translation>
+    </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation>Scheman och vapen</translation>
     </message>
 </context>
 <context>
@@ -1437,8 +1536,12 @@ Det kan finnas trasiga eller ofullständiga funktioner. Använd på egen risk!</
         <translation>Sudden Death livminskning</translation>
     </message>
     <message>
-        <source>Bind schemes and weapons</source>
-        <translation type="unfinished"></translation>
+        <source>% Rope Length</source>
+        <translation>% replängd</translation>
+    </message>
+    <message>
+        <source>Gameplay</source>
+        <translation>Speltyp</translation>
     </message>
 </context>
 <context>
@@ -1487,7 +1590,7 @@ Var god kontrollera din installation</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Kan inte ta bort ursprungliga vapenscheman</translation>
+        <translation type="obsolete">Kan inte ta bort ursprungliga vapenscheman</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
@@ -1504,6 +1607,30 @@ Var god kontrollera din installation</translation>
     <message>
         <source>File association failed.</source>
         <translation>Filassociationer har misslyckats.</translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation>Lag</translation>
+    </message>
+    <message>
+        <source>Really delete this team?</source>
+        <translation>Vill du verkligen ta bort detta lag?</translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation>Scheman</translation>
+    </message>
+    <message>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation>Kan inte ta bort standardschema &apos;%1&apos;!</translation>
+    </message>
+    <message>
+        <source>Really delete this game scheme?</source>
+        <translation>Vill du verkligen ta bort detta spelschema?</translation>
+    </message>
+    <message>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation>Kan inte ta bort standardvapenset &apos;%1&apos;!</translation>
     </message>
 </context>
 <context>
@@ -1599,6 +1726,14 @@ Var god kontrollera din installation</translation>
         <source>Associate file extensions</source>
         <translation>Associera filextentioner</translation>
     </message>
+    <message>
+        <source>Set</source>
+        <translation type="obsolete">Ange</translation>
+    </message>
+    <message>
+        <source>more</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
@@ -1648,6 +1783,14 @@ Var god kontrollera din installation</translation>
     <message>
         <source>Delays</source>
         <translation>Fördröjning</translation>
+    </message>
+    <message>
+        <source>new</source>
+        <translation>ny</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation>kopia av</translation>
     </message>
 </context>
 <context>
@@ -1754,6 +1897,14 @@ Var god kontrollera din installation</translation>
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation>Ammunition per igelkott</translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation>Avaktivera vind</translation>
+    </message>
+    <message>
+        <source>More Wind</source>
+        <translation>Mer vind</translation>
     </message>
 </context>
 <context>

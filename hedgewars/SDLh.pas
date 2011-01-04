@@ -511,6 +511,17 @@ type
 {$ENDIF}
         end;
 
+    TSDL_UserEvent = record
+{$IFDEF SDL13}
+        type_: LongInt;
+        windowID: LongInt;
+{$ELSE}
+        type_: Byte;
+{$ENDIF}
+        code: LongInt;
+        data1, data2: Pointer;
+        end;
+
     PSDL_Event = ^TSDL_Event;
     TSDL_Event = record
 {$IFDEF SDL13}
@@ -531,6 +542,7 @@ type
             SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
             SDL_JOYBUTTONDOWN,
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
+            SDL_USEREVENT: (user: TSDL_UserEvent);
 {$ELSE}
         case Byte of
             SDL_NOEVENT: (type_: byte);
@@ -774,7 +786,7 @@ procedure CGLSetParameter(context: Pointer; option: LongInt; value: Pointer); cd
 function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
 procedure TTF_Quit; cdecl; external SDL_TTFLibName;
 
-function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
+function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; out w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
 
 function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;

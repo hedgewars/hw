@@ -32,3 +32,29 @@ CGFloat angleBetweenLines(CGPoint line1Start, CGPoint line1End, CGPoint line2Sta
     CGFloat rads = acos(((a*c) + (b*d)) / ((sqrt(a*a + b*b)) * (sqrt(c*c + d*d))));
     return radiansToDegrees(rads);
 }
+
+CGFloat CGPointDot(CGPoint a,CGPoint b) {
+    return a.x*b.x+a.y*b.y;
+}
+
+CGFloat CGPointLen(CGPoint a) {
+    return sqrtf(a.x*a.x+a.y*a.y);
+}
+
+CGPoint CGPointSub(CGPoint a,CGPoint b) {
+    CGPoint c = {a.x-b.x,a.y-b.y};
+    return c;
+}
+
+CGFloat CGPointDist(CGPoint a,CGPoint b) {
+    CGPoint c = CGPointSub(a,b);
+    return CGPointLen(c);
+}
+
+CGPoint CGPointNorm(CGPoint a) {
+    CGFloat m = sqrtf(a.x*a.x+a.y*a.y);
+    CGPoint c;
+    c.x = a.x/m;
+    c.y = a.y/m;
+    return c;
+}
