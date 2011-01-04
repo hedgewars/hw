@@ -1052,7 +1052,7 @@ AllInactive:= false;
 t:= GearsList;
 while t <> nil do
     begin
-    if t^.Kind = gtHedgehog then t^.Active:= true;
+    if (t^.Kind = gtHedgehog) or (t^.Kind = gtExplosives) then t^.Active:= true;
     t:= t^.NextGear
     end
 end;
