@@ -87,6 +87,7 @@
         cell.textLabel.text = NSLocalizedString(@"Done",@"");
         cell.textLabel.textColor = [UIColor whiteColor];
     }
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.backgroundColor = [UIColor blackColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
