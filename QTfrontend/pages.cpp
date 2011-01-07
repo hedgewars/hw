@@ -1307,6 +1307,9 @@ void PageRoomsList::setRoomsList(const QStringList & list)
                 } else if (a == 5 && compString == "+maze+") {
                     compString = "Random Maze";
                 }
+                } else if (a == 5 && compString == "+drawn+") {
+                    compString = "Drawn Map";
+                }
                 if (compString.contains(searchText->text(), Qt::CaseInsensitive)) {
                     found = true;
                     break;
