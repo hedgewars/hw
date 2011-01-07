@@ -1306,7 +1306,6 @@ void PageRoomsList::setRoomsList(const QStringList & list)
                     compString = "Random Map";
                 } else if (a == 5 && compString == "+maze+") {
                     compString = "Random Maze";
-                }
                 } else if (a == 5 && compString == "+drawn+") {
                     compString = "Drawn Map";
                 }
