@@ -117,6 +117,7 @@ About::About(QWidget * parent) :
             "Finnish: Nina Kuisma &lt;<a href=\"mailto:ninnnu@gmail.com\">ninnnu@gmail.com</a>&gt;<br>"
             "French: Antoine Turmel &lt;<a href=\"mailto:geekshadow@gmail.com\">geekshadow@gmail.com</a>&gt;<br>"
             "German: Peter Hüwe &lt;<a href=\"mailto:PeterHuewe@gmx.de\">PeterHuewe@gmx.de</a>&gt;, Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@gmail.com\">mario.liebisch@gmail.com</a>&gt;<br>"
+            "Greek: &lt;<a href=\"mailto:talos_kriti@yahoo.gr\">talos_kriti@yahoo.gr</a>&gt;"
             "Italian: Luca Bonora &lt;<a href=\"mailto:bonora.luca@gmail.com\">bonora.luca@gmail.com</a>&gt;<br>"
             "Japanese: ADAM Etienne &lt;<a href=\"mailto:etienne.adam@gmail.com\">etienne.adam@gmail.com</a>&gt;<br>"
             "Korean: Anthony Bellew &lt;<a href=\"mailto:webmaster@anthonybellew.com\">webmaster@anthonybellew.com</a>&gt;<br>"
