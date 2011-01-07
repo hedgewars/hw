@@ -29,7 +29,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure AmmoUsed(am: TAmmoType);
-procedure HedgehogDamaged(Gear: PGear);
+procedure HedgehogDamaged(Gear, Attacker: PGear);
 procedure Skipped;
 procedure TurnReaction;
 procedure SendStats;
@@ -50,14 +50,12 @@ var DamageGiven : Longword = 0;
     vpHurtSameClan: PVoicepack = nil;
     vpHurtEnemy: PVoicepack = nil;
 
-procedure HedgehogDamaged(Gear: PGear);
+procedure HedgehogDamaged(Gear, Attacker: PGear);
 begin
-if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
+if Attacker^.Hedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
     vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack
 else
     vpHurtEnemy:= Gear^.Hedgehog^.Team^.voicepack;
-
-if bBetweenTurns then exit;
 
 //////////////////////////
 
