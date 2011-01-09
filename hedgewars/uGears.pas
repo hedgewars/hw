@@ -558,6 +558,8 @@ else if Gear^.Kind = gtHedgehog then
             Gear^.Damage:= t;
             if ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cWaterOpacity < $FF))) and (hwRound(Gear^.Y) < cWaterLine + 256) then
                 spawnHealthTagForHH(Gear, t);
+
+            // should be CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog
             uStats.HedgehogDamaged(Gear, CurrentHedgehog^.Gear)
             end;
 
@@ -1028,7 +1030,8 @@ begin
            spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
            end;
         end;
-    end;
+    end else // not gtHedgehog
+        Gear^.Hedgehog:= Attacker^.Hedgehog;
     inc(Gear^.Damage, Damage);
     ScriptCall('onGearDamage', Gear^.UID, Damage);
 end;
