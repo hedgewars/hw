@@ -100,6 +100,8 @@ var t: LongInt;
     Hedgehog: PHedgehog;
     s: boolean;
 begin
+s:= false;
+
 weap:= TAmmoType(Gear^.MsgParam);
 Hedgehog:= Gear^.Hedgehog;
 
