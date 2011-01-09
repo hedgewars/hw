@@ -104,7 +104,7 @@ begin
     fds:= SDLNet_AllocSocketSet(1);
     SDLTry(fds <> nil, true);
     WriteLnToConsole(msgOK);
-    WriteToConsole('Establishing IPC connection to tcp 127.0.0.1:' + IntToStr(ipcPort));
+    WriteToConsole('Establishing IPC connection to tcp 127.0.0.1:' + IntToStr(ipcPort) + ' ');
     {$HINTS OFF}
     SDLTry(SDLNet_ResolveHost(ipaddr, '127.0.0.1', ipcPort) = 0, true);
     {$HINTS ON}
