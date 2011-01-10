@@ -178,7 +178,7 @@ processAction (MoveToRoom ri) = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
     liftIO $ do
-        modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = false, isMaster = false}) ci
+        modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = False, isMaster = False}) ci
         modifyRoom rnc (\r -> r{playersIn = (playersIn r) + 1}) ri
 
     liftIO $ moveClientToRoom rnc ri ci
