@@ -80,25 +80,29 @@ illegalName :: B.ByteString -> Bool
 illegalName = all isSpace . B.unpack
 
 protoNumber2ver :: Word16 -> B.ByteString
-protoNumber2ver 17 = "0.9.7-dev"
-protoNumber2ver 19 = "0.9.7"
-protoNumber2ver 20 = "0.9.8-dev"
-protoNumber2ver 21 = "0.9.8"
-protoNumber2ver 22 = "0.9.9-dev"
-protoNumber2ver 23 = "0.9.9"
-protoNumber2ver 24 = "0.9.10-dev"
-protoNumber2ver 25 = "0.9.10"
-protoNumber2ver 26 = "0.9.11-dev"
-protoNumber2ver 27 = "0.9.11"
-protoNumber2ver 28 = "0.9.12-dev"
-protoNumber2ver 29 = "0.9.12"
-protoNumber2ver 30 = "0.9.13-dev"
-protoNumber2ver 31 = "0.9.13"
-protoNumber2ver 32 = "0.9.14-dev"
-protoNumber2ver 33 = "0.9.14"
-protoNumber2ver 34 = "0.9.15-dev"
-protoNumber2ver 35 = "0.9.14.1"
-protoNumber2ver _ = "Unknown"
+protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
+    where
+        vermap = Map.fromList [
+            (17, "0.9.7-dev"),
+            (19, "0.9.7"),
+            (20, "0.9.8-dev"),
+            (21, "0.9.8"),
+            (22, "0.9.9-dev"),
+            (23, "0.9.9"),
+            (24, "0.9.10-dev"),
+            (25, "0.9.10"),
+            (26, "0.9.11-dev"),
+            (27, "0.9.11"),
+            (28, "0.9.12-dev"),
+            (29, "0.9.12"),
+            (30, "0.9.13-dev"),
+            (31, "0.9.13"),
+            (32, "0.9.14-dev"),
+            (33, "0.9.14"),
+            (34, "0.9.15-dev"),
+            (35, "0.9.14.1"),
+            (37, "0.9.15"),
+            (38, "0.9.15-dev")]
 
 askFromConsole :: String -> IO String
 askFromConsole msg = do
