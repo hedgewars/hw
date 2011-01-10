@@ -29,7 +29,7 @@ handleCmd_NotEntered ["NICK", newNick] = do
                     AnswerClients [sendChan cl] ["NICK", newNick] :
                     [CheckRegistered | clientProto cl /= 0]
     where
-    haveSameNick irnc clNick = isJust $ find (\cl -> newNick == clNick) $ map (client irnc) $ allClients irnc
+    haveSameNick irnc clNick = isJust $ find (\cl -> newNick == cl) $ map (nick . client irnc) $ allClients irnc
 
 handleCmd_NotEntered ["PROTO", protoNum] = do
     (ci, irnc) <- ask
