@@ -20,7 +20,7 @@ handleCmd_NotEntered ["NICK", newNick] = do
     let cl = irnc `client` ci
     if not . B.null $ nick cl then return [ProtocolError "Nickname already chosen"]
         else
-        if haveSameNick irnc then return [AnswerClients [sendChan cl] ["WARNING", "Nickname already in use"], ByeClient ""]
+        if haveSameNick irnc then return [{-AnswerClients [sendChan cl] ["WARNING", "Nickname already in use"], -}ByeClient "Nickname already in use"]
             else
             if illegalName newNick then return [ByeClient "Illegal nickname"]
                 else

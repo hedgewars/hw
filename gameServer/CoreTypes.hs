@@ -2,6 +2,7 @@
 module CoreTypes where
 
 import System.IO
+import Control.Concurrent
 import Control.Concurrent.Chan
 import Control.Concurrent.STM
 import Data.Word
