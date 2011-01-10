@@ -86,9 +86,9 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             else
             [
                 MoveToRoom jRI,
-                AnswerClients (map sendChan $ cl : jRoomClients) ["NOT_READY", nick cl]
+                AnswerClients (map sendChan $ cl : jRoomClients) ["NOT_READY", nick cl],
+                AnswerClients [sendChan cl] $ "JOINED" : map nick jRoomClients
             ]
-            ++ [ AnswerClients [sendChan cl] $ "JOINED" : map nick jRoomClients | playersIn jRoom /= 0]
             ++ (map (readynessMessage cl) jRoomClients)
 
     where
