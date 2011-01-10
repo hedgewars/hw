@@ -1094,15 +1094,22 @@ var i: LongInt;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 
-for i:= 0 to Pred(cLandMines) do
+i:= 0;
+Gear:= PGear(1);
+while (i < cLandMines) and (Gear <> nil) do
     begin
     Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
+    inc(i)
     end;
-for i:= 0 to Pred(cExplosives) do
+
+i:= 0;
+Gear:= PGear(1);
+while (i < cExplosives) and (Gear <> nil) do
     begin
     Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
+    inc(i)
     end;
 
 if (GameFlags and gfLowGravity) <> 0 then
@@ -1426,12 +1433,13 @@ function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray;
 var
     t: PGear;
 begin
+    r:= r*r;
     GearsNear := nil;
     t := GearsList;
     while t <> nil do begin
         if (t^.Kind = Kind) then begin
             if (X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) <
-                int2hwFloat(r)*int2hwFloat(r) then
+                int2hwFloat(r) then
             begin
                 SetLength(GearsNear, Length(GearsNear)+1);
                 GearsNear[High(GearsNear)] := t;
