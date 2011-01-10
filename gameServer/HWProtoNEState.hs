@@ -20,7 +20,7 @@ handleCmd_NotEntered ["NICK", newNick] = do
     let cl = irnc `client` ci
     if not . B.null $ nick cl then return [ProtocolError "Nickname already chosen"]
         else
-        if haveSameNick irnc (nick cl) then return [AnswerClients [sendChan cl] ["WARNING", "Nickname already in use"], ByeClient ""]
+        if haveSameNick irnc then return [AnswerClients [sendChan cl] ["WARNING", "Nickname already in use"], ByeClient ""]
             else
             if illegalName newNick then return [ByeClient "Illegal nickname"]
                 else
@@ -29,7 +29,7 @@ handleCmd_NotEntered ["NICK", newNick] = do
                     AnswerClients [sendChan cl] ["NICK", newNick] :
                     [CheckRegistered | clientProto cl /= 0]
     where
-    haveSameNick irnc clNick = isJust $ find (\cl -> newNick == cl) $ map (nick . client irnc) $ allClients irnc
+    haveSameNick irnc = isJust . find (== newNick) . map (nick . client irnc) $ allClients irnc
 
 handleCmd_NotEntered ["PROTO", protoNum] = do
     (ci, irnc) <- ask
