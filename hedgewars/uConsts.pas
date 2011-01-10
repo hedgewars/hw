@@ -245,7 +245,7 @@ const
     ammoprop_NotBorder    = $00000800;
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
-    ammoprop_NoRoundEnd=$10000000;
+    ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;
 
