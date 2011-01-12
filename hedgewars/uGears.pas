@@ -1096,7 +1096,7 @@ AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 
 i:= 0;
 Gear:= PGear(1);
-while (i < cLandMines) and (Gear <> nil) do
+while (i < cLandMines) and {(Gear <> nil)} do // disable this check until better solution found
     begin
     Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
@@ -1105,7 +1105,7 @@ while (i < cLandMines) and (Gear <> nil) do
 
 i:= 0;
 Gear:= PGear(1);
-while (i < cExplosives) and (Gear <> nil) do
+while (i < cExplosives){ and (Gear <> nil)} do
     begin
     Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
