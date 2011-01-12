@@ -601,8 +601,10 @@ begin
             HorizontOffset:= HorizontOffset + ((ScreenBottom-SkyOffset) div 20);
 
         // background
+        if SuddenDeathDmg then Tint(SDTint, SDTint, SDTint, $FF);
         DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, SkyOffset);
         DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
+        if SuddenDeathDmg then Tint($FF, $FF, $FF, $FF);
     end;
 
     DrawVisualGears(0);

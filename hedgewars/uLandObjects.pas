@@ -411,6 +411,9 @@ while not eof(f) do
         Delete(s, 1, i);
         c1.b:= StrToInt(Trim(s));
         glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99);
+        SDSkyColor.r:= byte(c1.r * SDTint div 255);
+        SDSkyColor.g:= byte(c1.g * SDTint div 255);
+        SDSkyColor.b:= byte(c1.b * SDTint div 255);
         end
     else if key = 'border' then
         begin
@@ -592,6 +595,23 @@ while not eof(f) do
             vobSDFallSpeed:= StrToInt(Trim(s));
             vobSDCount:= vobSDCount * cScreenSpace div LAND_WIDTH;
             end;
+        end
+    else if key = 'rq-sky' then
+        begin
+        if ((cReducedQuality and rqNoBackground) <> 0) then
+            begin
+            i:= Pos(',', s);
+            c1.r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            Delete(s, 1, i);
+            i:= Pos(',', s);
+            c1.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            Delete(s, 1, i);
+            c1.b:= StrToInt(Trim(s));
+            glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99);
+            SDSkyColor.r:= byte(c1.r * SDTint div 255);
+            SDSkyColor.g:= byte(c1.g * SDTint div 255);
+            SDSkyColor.b:= byte(c1.b * SDTint div 255);
+            end
         end
     end;
 

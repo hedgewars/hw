@@ -802,6 +802,7 @@ case step of
                         SuddenDeathDmg:= true;
                         ChangeToSDClouds;
                         ChangeToSDFlakes;
+                        glClearColor(SDSkyColor.r / 255, SDSkyColor.g / 255, SDSkyColor.b / 255, 0.99);
                         end;
                     AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                     playSound(sndSuddenDeath);
