@@ -32,6 +32,13 @@ if GameState <> gsConfirm then
         GameState:= prevGState
 end;
 
+procedure chForceQuit(var s: shortstring);
+begin
+    s:= s; // avoid compiler hint
+    SendIPC('Q');
+    GameState:= gsExit
+end;
+
 procedure chConfirm(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
@@ -582,6 +589,7 @@ begin
     RegisterVariable('grave'   , vtCommand, @chGrave        , false);
     RegisterVariable('hat'     , vtCommand, @chSetHat       , false);
     RegisterVariable('quit'    , vtCommand, @chQuit         , true );
+    RegisterVariable('forcequit', vtCommand, @chForceQuit   , true );
     RegisterVariable('confirm' , vtCommand, @chConfirm      , true );
     RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );
     RegisterVariable('-speedup', vtCommand, @chSpeedup_m    , true );

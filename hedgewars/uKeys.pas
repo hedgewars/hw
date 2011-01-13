@@ -40,47 +40,10 @@ procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
 procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
-var hideAmmoMenu: boolean;
-    wheelUp: boolean;
-    wheelDown: boolean;
-
-    ControllerNumControllers: Integer;
-    ControllerEnabled: Integer;
-    ControllerNumAxes: array[0..5] of Integer;
-    //ControllerNumBalls: array[0..5] of Integer;
-    ControllerNumHats: array[0..5] of Integer;
-    ControllerNumButtons: array[0..5] of Integer;
-    ControllerAxes: array[0..5] of array[0..19] of Integer;
-    //ControllerBalls: array[0..5] of array[0..19] of array[0..1] of Integer;
-    ControllerHats: array[0..5] of array[0..19] of Byte;
-    ControllerButtons: array[0..5] of array[0..19] of Byte;
-
-    DefaultBinds, CurrentBinds: TBinds;
-
-    coeff: LongInt;
-{$IFDEF HWLIBRARY}
-    leftClick: boolean;
-    middleClick: boolean;
-    rightClick: boolean;
-
-    upKey: boolean;
-    downKey: boolean;
-    rightKey: boolean;
-    leftKey: boolean;
-    preciseKey: boolean;
-
-    backspaceKey: boolean;
-    spaceKey: boolean;
-    enterKey: boolean;
-    tabKey: boolean;
-
-    chatAction: boolean;
-    pauseAction: boolean;
-
 {$IFDEF IPHONEOS}
 procedure setiPhoneBinds;
 {$ENDIF}
-{$ENDIF}
+
 implementation
 uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug;
 
@@ -109,7 +72,7 @@ Trusted:= (CurrentTeam <> nil)
 
 // move cursor/camera
 // TODO: Scale on screen dimensions and/or axis value (game controller)?
-movecursor(coeff * CursorMovementX, coeff * CursorMovementY);
+movecursor(5 * CursorMovementX, 5 * CursorMovementY);
 
 k:= SDL_GetMouseState(nil, nil);
 
@@ -139,8 +102,7 @@ wheelDown:= false;
 
 {$IFDEF IPHONEOS}
 setiPhoneBinds();
-{$ENDIF}
-
+{$ELSE}
 // Controller(s)
 k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
 for j:= 0 to Pred(ControllerNumControllers) do
@@ -164,6 +126,18 @@ for j:= 0 to Pred(ControllerNumControllers) do
         tkbdn[k]:= ControllerButtons[j][i];
         inc(k, 1);
         end;
+    end;
+{$ENDIF}
+
+// ctrl/cmd + w/q to close engine and/or frontend
+{$IFDEF DARWIN}
+    if ((tkbdn[KeyNameToCode('left_meta')] = 1) or (tkbdn[KeyNameToCode('right_meta')] = 1)) then
+{$ELSE}
+    if ((tkbdn[KeyNameToCode('left_ctrl')] = 1) or (tkbdn[KeyNameToCode('right_ctrl')] = 1)) then
+{$ENDIF}
+    begin
+        if tkbdn[KeyNameToCode('q')] = 1 then writelntoconsole ('cmd+q pressed')
+        else if tkbdn[KeyNameToCode('w')] = 1 then writelntoconsole ('cmd+w pressed')
     end;
 
 // now process strokes
@@ -222,8 +196,7 @@ wheelDown:= false;
 
 {$IFDEF IPHONEOS}
 setiPhoneBinds();
-{$ENDIF}
-
+{$ELSE}
 // Controller(s)
 k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
 for j:= 0 to Pred(ControllerNumControllers) do
@@ -248,6 +221,7 @@ for j:= 0 to Pred(ControllerNumControllers) do
         inc(k, 1);
         end;
     end;
+{$ENDIF}
 
 for t:= 0 to cKeyMaxIndex do
     tkbd[i]:= tkbdn[i]
@@ -350,6 +324,7 @@ DefaultBinds[KeyNameToCode('left')]:= '+left';
 DefaultBinds[KeyNameToCode('right')]:= '+right';
 DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
 {$ENDIF}
+DefaultBinds[1000]:= 'forcequit';
 
 for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+IntToStr(i);
 
@@ -502,7 +477,6 @@ procedure initModule;
 begin
     wheelUp:= false;
     wheelDown:= false;
-    coeff:= 5;
 {$IFDEF HWLIBRARY}
     // this function is called by HW_allKeysUp so be careful
 

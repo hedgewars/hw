@@ -2109,7 +2109,6 @@ var
 
     DefaultBinds, CurrentBinds: TBinds;
 
-    coeff: LongInt;
 {$IFDEF HWLIBRARY}
     leftClick: boolean;
     middleClick: boolean;
