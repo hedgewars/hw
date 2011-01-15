@@ -66,9 +66,11 @@ var cWaveWidth, cWaveHeight: LongInt;
     missionTimer: LongInt;
     stereoDepth: GLfloat = 0;
 
-const cStereo_Sky     = 0.0500;
-      cStereo_Horizon = 0.0250;
-      cStereo_Water   = 0.0125;
+const cStereo_Sky           = 0.0500;
+      cStereo_Horizon       = 0.0250;
+      cStereo_Water_distant = 0.0125;
+      cStereo_Land          = 0.0075;
+      cStereo_Water_near    = 0.0025;
 
 procedure InitWorld;
 var i, t: LongInt;
@@ -766,19 +768,19 @@ begin
     begin
         // Waves
         DrawWater(255, SkyOffset); 
-        ChangeDepth(RM, -cStereo_Water);
+        ChangeDepth(RM, -cStereo_Water_distant);
         DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 64);
-        ChangeDepth(RM, -cStereo_Water);
+        ChangeDepth(RM, -cStereo_Water_distant);
         DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 48);
-        ChangeDepth(RM, -cStereo_Water);
+        ChangeDepth(RM, -cStereo_Water_distant);
         DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 32);
-        ChangeDepth(RM, -cStereo_Water);
+        ChangeDepth(RM, -cStereo_Water_distant);
         DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 24);
-        ResetDepth(RM);
     end
     else
         DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)), 0);
 
+    changeDepth(RM, cStereo_Land);
     DrawLand(WorldDx, WorldDy);
 
     DrawWater(255, 0);
@@ -809,39 +811,42 @@ begin
 
     DrawGears;
 
-    DrawVisualGears(2);
-
     if SuddenDeathDmg then
         DrawWater(cSDWaterOpacity, 0)
     else
         DrawWater(cWaterOpacity, 0);
 
     // Waves
-    ChangeDepth(RM, cStereo_Water);
+    ChangeDepth(RM, cStereo_Water_near);
     DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
 
     if (cReducedQuality and rq2DWater) = 0 then
     begin
         //DrawWater(cWaterOpacity, - offsetY div 40);
-        ChangeDepth(RM, cStereo_Water);
+        ChangeDepth(RM, cStereo_Water_near);
         DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 8);
         if SuddenDeathDmg then
             DrawWater(cSDWaterOpacity, - offsetY div 20)
         else
             DrawWater(cWaterOpacity, - offsetY div 20);
-        ChangeDepth(RM, cStereo_Water);
+        ChangeDepth(RM, cStereo_Water_near);
         DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 2);
         if SuddenDeathDmg then
             DrawWater(cSDWaterOpacity, - offsetY div 10)
         else
             DrawWater(cWaterOpacity, - offsetY div 10);
-        ChangeDepth(RM, cStereo_Water);
+        ChangeDepth(RM, cStereo_Water_near);
         DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
-        ResetDepth(RM);
     end
     else
         DrawWaves(-1, 50, - (cWaveHeight shr 1), 0);
 
+// everything after this ChangeDepth will be drawn outside the screen
+    ChangeDepth(RM, 0.045);
+    DrawVisualGears(2);
+
+// everything after this ResetDepth will be drawn at screen level (depth = 0)
+    ResetDepth(RM);
 
 {$WARNINGS OFF}
 // Target
@@ -859,7 +864,6 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
 
 // this scale is used to keep the various widgets at the same dimension at all zoom levels
 SetScale(cDefaultZoomLevel);
-
 
 // Turn time
 {$IFDEF IPHONEOS}
@@ -913,7 +917,7 @@ for t:= 0 to Pred(TeamsCount) do
       r.h:= HealthTex^.h;
       DrawFromRect(14, cScreenHeight + DrawHealthY, @r, HealthTex);
 
-      // draw health bar's right border
+      // draw health bars right border
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
       DrawFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY, @r, HealthTex);
@@ -988,8 +992,10 @@ if (AMxShift < AMWidth) or bShowAmmoMenu then ShowAmmoMenu;
 if isCursorVisible and bShowAmmoMenu then
    DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
 
+// Chat
 DrawChat;
 
+// confirmation caption
 if fastUntilLag then DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
 if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then
