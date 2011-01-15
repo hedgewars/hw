@@ -980,7 +980,7 @@ void HWForm::GameStateChanged(GameState gameState)
                 if (wBackground) wBackground->startAnimation();
                 if (hwnet) hwnet->gameFinished();
             }
-            if (gameState == gsHalted) close();
+            if (gameState == gsHalted) close();   
         };
     }
 }
