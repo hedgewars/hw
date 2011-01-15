@@ -35,7 +35,8 @@ enum GameState {
     gsInterrupted = 2,
     gsFinished = 3,
     gsStopped = 4,
-    gsDestroyed = 5
+    gsDestroyed = 5,
+    gsHalted = 6
 };
 
 bool checkForDir(const QString & dir);

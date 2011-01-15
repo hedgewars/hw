@@ -136,8 +136,8 @@ for j:= 0 to Pred(ControllerNumControllers) do
     if ((tkbdn[KeyNameToCode('left_ctrl')] = 1) or (tkbdn[KeyNameToCode('right_ctrl')] = 1)) then
 {$ENDIF}
     begin
-        if tkbdn[KeyNameToCode('q')] = 1 then writelntoconsole ('cmd+q pressed')
-        else if tkbdn[KeyNameToCode('w')] = 1 then writelntoconsole ('cmd+w pressed')
+        if tkbdn[KeyNameToCode('q')] = 1 then ParseCommand ('shutdown', true)
+        else if tkbdn[KeyNameToCode('w')] = 1 then ParseCommand ('forcequit', true);
     end;
 
 // now process strokes

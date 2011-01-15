@@ -51,6 +51,13 @@ else
     ParseCommand('chat team', true);
 end;
 
+procedure chShutdown (var s: shortstring);
+begin
+    s:= s; // avoid compiler hint
+    SendIPC('H');
+    GameState:= gsExit
+end;
+
 procedure chCheckProto(var s: shortstring);
 var i, c: LongInt;
 begin
@@ -591,6 +598,7 @@ begin
     RegisterVariable('quit'    , vtCommand, @chQuit         , true );
     RegisterVariable('forcequit', vtCommand, @chForceQuit   , true );
     RegisterVariable('confirm' , vtCommand, @chConfirm      , true );
+    RegisterVariable('shutdown', vtCommand, @chShutdown     , true );
     RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );
     RegisterVariable('-speedup', vtCommand, @chSpeedup_m    , true );
     RegisterVariable('zoomin'  , vtCommand, @chZoomIn       , true );
