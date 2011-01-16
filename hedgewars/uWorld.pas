@@ -71,6 +71,7 @@ const cStereo_Sky           = 0.0500;
       cStereo_Water_distant = 0.0125;
       cStereo_Land          = 0.0075;
       cStereo_Water_near    = 0.0025;
+      cStereo_Outside       = 0.0400;
 
 procedure InitWorld;
 var i, t: LongInt;
@@ -808,7 +809,6 @@ begin
         end;
 
     DrawVisualGears(1);
-
     DrawGears;
 
     if SuddenDeathDmg then
@@ -842,11 +842,14 @@ begin
         DrawWaves(-1, 50, - (cWaveHeight shr 1), 0);
 
 // everything after this ChangeDepth will be drawn outside the screen
-    ChangeDepth(RM, 0.045);
+// note: negative parallax gears should last very little for a smooth stereo effect
+    ChangeDepth(RM, cStereo_Outside);
     DrawVisualGears(2);
 
 // everything after this ResetDepth will be drawn at screen level (depth = 0)
+// note: everything that needs to be readable should be on this level
     ResetDepth(RM);
+    DrawVisualGears(3);
 
 {$WARNINGS OFF}
 // Target

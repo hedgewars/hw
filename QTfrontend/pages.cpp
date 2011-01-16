@@ -733,7 +733,7 @@ PageOptions::PageOptions(QWidget* parent) :
             CBStereoMode->addItem(QComboBox::tr("Green/Red"));
             CBStereoMode->addItem(QComboBox::tr("Side-by-side"));
             CBStereoMode->addItem(QComboBox::tr("Top-Bottom"));
-            CBStereoMode->addItem(QComboBox::tr("Frame Alternate"));
+            CBStereoMode->addItem(QComboBox::tr("Wiggle"));
             connect(CBStereoMode, SIGNAL(currentIndexChanged(int)), this, SLOT(forceFullscreen(int)));
 
             GBAstereolayout->addWidget(CBStereoMode);
