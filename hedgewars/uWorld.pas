@@ -17,6 +17,7 @@
  *)
 
 {$INCLUDE "options.inc"}
+{$IF GLunit = GL}{$DEFINE GLunit:=GL,GLext}{$ENDIF}
 
 unit uWorld;
 interface
@@ -64,7 +65,7 @@ var cWaveWidth, cWaveHeight: LongInt;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
-    stereoDepth: GLfloat = 0;
+    stereoDepth: GLfloat;
 
 const cStereo_Sky           = 0.0500;
       cStereo_Horizon       = 0.0250;
@@ -711,6 +712,7 @@ end;
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
 begin
 {$IFDEF S3D_DISABLED}
+    rm:= rm; d:= d; // avoid hint
     exit;
 {$ELSE}
     d:= d / 5;
@@ -726,6 +728,7 @@ end;
 procedure ResetDepth(rm: TRenderMode);
 begin
 {$IFDEF S3D_DISABLED}
+    rm:= rm; // avoid hint
     exit;
 {$ELSE}
     if rm = rmDefault then exit;
@@ -740,10 +743,9 @@ procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 var i, t: LongInt;
     r: TSDL_Rect;
     tdx, tdy: Double;
-    grp: TCapGroup;
     s: string[15];
     highlight: Boolean;
-    offset, offsetX, offsetY, screenBottom: LongInt;
+    offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
     if (cReducedQuality and rqNoBackground) = 0 then
@@ -1313,10 +1315,12 @@ begin
     missionTimer:= 0;
     missionTex:= nil;
     cOffsetY:= 0;
+    stereoDepth:= 0;
 end;
 
 procedure freeModule;
 begin
+    stereoDepth:= stereoDepth; // avoid hint
 end;
 
 end.

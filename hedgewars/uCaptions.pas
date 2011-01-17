@@ -10,7 +10,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uTextures, uRenderUtils, uVariables, uRender, uConsts;
+uses uTextures, uRenderUtils, uVariables, uRender;
 
 type TCaptionStr = record
                    Tex: PTexture;

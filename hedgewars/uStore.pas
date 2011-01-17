@@ -17,6 +17,7 @@
  *)
 
 {$INCLUDE "options.inc"}
+{$IF GLunit = GL}{$DEFINE GLunit:=GL,GLext}{$ENDIF}
 
 unit uStore;
 interface
@@ -436,7 +437,8 @@ end;
 
 function glLoadExtension(extension : shortstring) : boolean;
 begin
-{$IFDEF IPHONEOS}
+{$IF GLunit = gles11}
+    // FreePascal doesn't come with OpenGL ES 1.1 Extension headers
     extension:= extension; // avoid hint
     glLoadExtension:= false;
 {$IFDEF DEBUGFILE}

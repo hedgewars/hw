@@ -164,8 +164,11 @@ if CurrentBinds[i][0] <> #0 then
 end;
 
 procedure ResetKbd;
-var i, j, k, t: LongInt;
-{$IFNDEF IPHONEOS}pkbd: PByteArray;{$ENDIF}
+var j, k, t: LongInt;
+{$IFNDEF IPHONEOS}
+    i: LongInt;
+    pkbd: PByteArray;
+{$ENDIF}
 begin
 
 k:= SDL_GetMouseState(nil, nil);
@@ -223,8 +226,9 @@ for j:= 0 to Pred(ControllerNumControllers) do
     end;
 {$ENDIF}
 
+// what is this final loop for?
 for t:= 0 to cKeyMaxIndex do
-    tkbd[i]:= tkbdn[i]
+    tkbd[t]:= tkbdn[t]
 end;
 
 procedure InitKbdKeyTable;

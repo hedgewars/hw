@@ -55,7 +55,6 @@ uses LuaPas in 'LuaPas.pas',
     uVariables,
     uCommands,
     uUtils,
-    uKeys,
     uCaptions,
     uDebug,
     uCollisions;
