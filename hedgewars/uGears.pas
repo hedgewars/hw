@@ -29,7 +29,7 @@ function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword 
 procedure ResurrectHedgehog(gear: PGear);
 procedure ProcessGears;
 procedure EndTurnCleanup;
-procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
+procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
 procedure SetAllToActive;
 procedure SetAllHHToActive;
 procedure DrawGears;
@@ -50,8 +50,7 @@ uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
      uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture;
 
 
-procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
-procedure doMakeExplosion(X, Y, Radius: LongInt; Mask, Tint: LongWord); forward;
+procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord = $FFFFFFFF); forward;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 //procedure AmmoFlameWork(Ammo: PGear); forward;
 function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray; forward;
@@ -205,7 +204,7 @@ gear^.SoundChannel:= -1;
 gear^.ImpactSound:= sndNone;
 gear^.nImpactSounds:= 0;
 
-if CurrentTeam <> nil then
+if CurrentHedgehog <> nil then
     begin
     gear^.Hedgehog:= CurrentHedgehog;
     gear^.IntersectGear:= CurrentHedgehog^.Gear
@@ -559,7 +558,10 @@ else if Gear^.Kind = gtHedgehog then
             Gear^.Damage:= t;
             if ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cWaterOpacity < $FF))) and (hwRound(Gear^.Y) < cWaterLine + 256) then
                 spawnHealthTagForHH(Gear, t);
-            uStats.HedgehogDamaged(Gear)
+
+            // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog
+            // same stand for CheckHHDamage
+            uStats.HedgehogDamaged(Gear, CurrentHedgehog)
             end;
 
         team:= Gear^.Hedgehog^.Team;
@@ -616,7 +618,7 @@ while Gear <> nil do
         (not Gear^.Invulnerable) then
             begin
             CheckNoDamage:= false;
-            uStats.HedgehogDamaged(Gear);
+
             dmg:= Gear^.Damage;
             if Gear^.Health < dmg then
                 begin
@@ -801,6 +803,7 @@ case step of
                         SuddenDeathDmg:= true;
                         ChangeToSDClouds;
                         ChangeToSDFlakes;
+                        glClearColor(SDSkyColor.r / 255, SDSkyColor.g / 255, SDSkyColor.b / 255, 0.99);
                         end;
                     AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                     playSound(sndSuddenDeath);
@@ -986,13 +989,14 @@ begin
             RecountTeamHealth(TeamsArray[i])
 end;
 
-procedure ApplyDamage(Gear: PGear; Damage: Longword; Source: TDamageSource);
+procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
 var s: shortstring;
     vampDmg, tmpDmg, i: Longword;
     vg: PVisualGear;
 begin
     if (Gear^.Kind = gtHedgehog) and (Damage>=1) then
     begin
+    uStats.HedgehogDamaged(Gear, AttackerHog);
     HHHurt(Gear^.Hedgehog, Source);
     AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, Gear^.Hedgehog^.Team^.Clan^.Color);
     tmpDmg:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
@@ -1028,7 +1032,11 @@ begin
            spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
            end;
         end;
-    end;
+    end else // not gtHedgehog
+        begin
+        AddFileLog('Assigning hedgehog ' + inttostr(LongInt(AttackerHog)) + ' to gear ' + inttostr(Gear^.uid));
+        Gear^.Hedgehog:= AttackerHog;
+        end;
     inc(Gear^.Damage, Damage);
     ScriptCall('onGearDamage', Gear^.UID, Damage);
 end;
@@ -1052,7 +1060,7 @@ AllInactive:= false;
 t:= GearsList;
 while t <> nil do
     begin
-    if t^.Kind = gtHedgehog then t^.Active:= true;
+    if (t^.Kind = gtHedgehog) or (t^.Kind = gtExplosives) then t^.Active:= true;
     t:= t^.NextGear
     end
 end;
@@ -1091,15 +1099,22 @@ var i: LongInt;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 
-for i:= 0 to Pred(cLandMines) do
+i:= 0;
+Gear:= PGear(1);
+while (i < cLandMines) {and (Gear <> nil)} do // disable this check until better solution found
     begin
     Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
+    inc(i)
     end;
-for i:= 0 to Pred(cExplosives) do
+
+i:= 0;
+Gear:= PGear(1);
+while (i < cExplosives){ and (Gear <> nil)} do
     begin
     Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
+    inc(i)
     end;
 
 if (GameFlags and gfLowGravity) <> 0 then
@@ -1133,12 +1148,7 @@ if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) and ((cReducedQ
     end
 end;
 
-procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);
-begin
-doMakeExplosion(X, Y, Radius, Mask, $FFFFFFFF);
-end;
-
-procedure doMakeExplosion(X, Y, Radius: LongInt; Mask, Tint: LongWord);
+procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
 var Gear: PGear;
     dmg, dmgRadius, dmgBase: LongInt;
     fX, fY: hwFloat;
@@ -1192,7 +1202,7 @@ while Gear <> nil do
                             if (Mask and EXPLNoDamage) = 0 then
                                 begin
                                 if not Gear^.Invulnerable then
-                                    ApplyDamage(Gear, dmg, dsExplosion)
+                                    ApplyDamage(Gear, AttackingHog, dmg, dsExplosion)
                                 else
                                     Gear^.State:= Gear^.State or gstWinner;
                                 end;
@@ -1258,7 +1268,7 @@ while t <> nil do
             gtTarget,
             gtExplosives: begin
                     if (not t^.Invulnerable) then
-                        ApplyDamage(t, dmg, dsBullet)
+                        ApplyDamage(t, Gear^.Hedgehog, dmg, dsBullet)
                     else
                         Gear^.State:= Gear^.State or gstWinner;
 
@@ -1305,13 +1315,13 @@ while i > 0 do
     tmpDmg:= ModifyDamage(Damage, Gear);
     if (Gear^.State and gstNoDamage) = 0 then
         begin
-        
+
         if (Ammo^.Kind = gtDEagleShot) or (Ammo^.Kind = gtSniperRifleShot) then 
             begin
             VGear := AddVisualGear(hwround(Ammo^.X), hwround(Ammo^.Y), vgtBulletHit);
             if VGear <> nil then VGear^.Angle := DxDy2Angle(-Ammo^.dX, Ammo^.dY);
             end;
-        
+
         if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) and (Ammo^.Kind = gtShover) then Gear^.FlightTime:= 1;
 
         case Gear^.Kind of
@@ -1323,10 +1333,10 @@ while i > 0 do
             gtExplosives: begin
                     if (Ammo^.Kind = gtDrill) then begin Ammo^.Timer:= 0; exit; end;
                     if (not Gear^.Invulnerable) then
-                        ApplyDamage(Gear, tmpDmg, dsShove)
+                        ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg, dsShove)
                     else
                         Gear^.State:= Gear^.State or gstWinner;
-                    if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then ApplyDamage(Gear, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
+                    if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
 
                     DeleteCI(Gear);
                     if (Gear^.Kind = gtHedgehog) and Gear^.Hedgehog^.King then
@@ -1428,12 +1438,13 @@ function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray;
 var
     t: PGear;
 begin
+    r:= r*r;
     GearsNear := nil;
     t := GearsList;
     while t <> nil do begin
         if (t^.Kind = Kind) then begin
             if (X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) <
-                int2hwFloat(r)*int2hwFloat(r) then
+                int2hwFloat(r) then
             begin
                 SetLength(GearsNear, Length(GearsNear)+1);
                 GearsNear[High(GearsNear)] := t;
@@ -1517,7 +1528,6 @@ begin
     gear^.dX := _0;
     gear^.dY := _0;
     gear^.State := gstWait;
-    uStats.HedgehogDamaged(gear);
     gear^.Damage := 0;
     gear^.Health := gear^.Hedgehog^.InitialHealth;
     gear^.Hedgehog^.Effects[hePoisoned] := false;

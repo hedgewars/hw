@@ -100,6 +100,8 @@ var t: LongInt;
     Hedgehog: PHedgehog;
     s: boolean;
 begin
+s:= false;
+
 weap:= TAmmoType(Gear^.MsgParam);
 Hedgehog:= Gear^.Hedgehog;
 
@@ -402,7 +404,7 @@ if Gear^.Timer > 1 then
 if Gear^.Timer = 1 then
     begin
     Gear^.State:= Gear^.State or gstNoDamage;
-    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
+    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, CurrentHedgehog, EXPLAutoSound);
     AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
     DeleteGear(Gear);
     SetAllToActive

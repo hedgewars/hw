@@ -127,6 +127,7 @@ var
     WaterColorArray : array[0..3] of HwColor4f;
     SDWaterColorArray : array[0..3] of HwColor4f;
     SDMusic         : shortstring;
+    SDTint          : LongInt;
 
     CursorPoint     : TPoint;
     TargetPoint     : TPoint;
@@ -2074,6 +2075,7 @@ var
     bShowFinger: boolean;
     Frames: Longword;
     WaterColor, DeepWaterColor: TSDL_Color;
+    SDSkyColor: TSDL_Color;
     SkyOffset: LongInt;
     HorizontOffset: LongInt;
 {$IFDEF COUNTTICKS}
@@ -2201,6 +2203,7 @@ begin
     SDWaterColorArray[3]:= SDWaterColorArray[2];
 
     SDMusic:= 'main_theme.ogg';
+    SDTint:= $80;
 
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
     cDrownSpeedf            := 0.06;

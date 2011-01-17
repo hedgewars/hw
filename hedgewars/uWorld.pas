@@ -758,9 +758,11 @@ begin
 
         // background
         ChangeDepth(RM, cStereo_Sky);
+        if SuddenDeathDmg then Tint(SDTint, SDTint, SDTint, $FF);
         DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, SkyOffset);
         ChangeDepth(RM, -cStereo_Horizon);
         DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
+        if SuddenDeathDmg then Tint($FF, $FF, $FF, $FF);
     end;
 
     DrawVisualGears(0);

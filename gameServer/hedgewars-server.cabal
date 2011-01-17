@@ -1,0 +1,33 @@
+Name:                hedgewars-server
+Version:             0.1
+Synopsis:            hedgewars server
+Description:         hedgewars server
+Homepage:            http://www.hedgewars.org/
+License:             GPL-2
+Author:              unC0Rr
+Maintainer:          unC0Rr@hedgewars.org
+Category:            Game
+Build-type:          Simple
+Cabal-version:       >=1.2
+
+
+Executable hedgewars-server
+  main-is: hedgewars-server.hs
+
+  Build-depends:
+    base >= 4,
+    unix,
+    containers,
+    array,
+    bytestring,
+    network-bytestring,
+    network,
+    time,
+    stm,
+    mtl,
+    dataenc,
+    hslogger,
+    process,
+    utf8-string
+  
+  ghc-options: -O2

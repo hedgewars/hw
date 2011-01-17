@@ -215,7 +215,7 @@ begin
         //else
         //    PlaySound(sndOw1, Gear^.Hedgehog^.Team^.voicepack);
 
-        ApplyDamage(Gear, dmg, dsFall);
+        ApplyDamage(Gear, CurrentHedgehog, dmg, dsFall);
     end
 end;
 
@@ -375,7 +375,7 @@ begin
     begin
         CheckCollision(Gear);
         if (Gear^.State and gstCollision) <> 0 then
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLDontDraw or EXPLNoGfx);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLDontDraw or EXPLNoGfx);
     end;
 
     if (Gear^.Kind = gtGasBomb) and ((GameTicks mod 200) = 0) then
@@ -388,13 +388,13 @@ begin
     if Gear^.Timer = 0 then
     begin
         case Gear^.Kind of 
-            gtBomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
-            gtBall: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 40, EXPLAutoSound);
+            gtBomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
+            gtBall: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 40, Gear^.Hedgehog, EXPLAutoSound);
             gtClusterBomb: 
                 begin
                     x := hwRound(Gear^.X);
                     y := hwRound(Gear^.Y);
-                    doMakeExplosion(x, y, 20, EXPLAutoSound);
+                    doMakeExplosion(x, y, 20, Gear^.Hedgehog, EXPLAutoSound);
                     for i:= 0 to 4 do
                         begin
                         dX := rndSign(GetRandom * _0_1) + Gear^.dX / 5;
@@ -406,7 +406,7 @@ begin
                 begin
                 x := hwRound(Gear^.X);
                 y := hwRound(Gear^.Y);
-                doMakeExplosion(x, y, 75, EXPLAutoSound);
+                doMakeExplosion(x, y, 75, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 5 do
                     begin
                     dX := rndSign(GetRandom * _0_1) + Gear^.dX / 5;
@@ -418,7 +418,7 @@ begin
                 begin
                 x := hwRound(Gear^.X);
                 y := hwRound(Gear^.Y);
-                doMakeExplosion(x, y, 90, EXPLAutoSound);
+                doMakeExplosion(x, y, 90, Gear^.Hedgehog, EXPLAutoSound);
 
                 for i:= 0 to 127 do
                     begin
@@ -432,7 +432,7 @@ begin
                 end;
             gtGasBomb:
                 begin
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 2 do
                     begin
                     x:= GetRandom(60);
@@ -509,7 +509,7 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Timer, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Timer, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         exit
     end;
@@ -528,7 +528,7 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         exit
         end;
@@ -766,7 +766,7 @@ begin
     if ((Gear^.State and gstCollision) <> 0) or (Gear^.Timer = 0) then
     begin
         StopSound(Gear^.SoundChannel);
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
     end;
 end;
@@ -780,7 +780,7 @@ begin
     CheckCollision(Gear);
     if (Gear^.State and gstCollision) <> 0 then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         exit
     end;
@@ -1083,7 +1083,7 @@ begin
     if (Gear^.Timer mod 33) = 0 then
         begin
         HHGear^.State := HHGear^.State or gstNoDamage;
-        doMakeExplosion(x, y + 7, 6, EXPLDontDraw);
+        doMakeExplosion(x, y + 7, 6, Gear^.Hedgehog, EXPLDontDraw);
         HHGear^.State := HHGear^.State and not gstNoDamage
         end;
 
@@ -1710,7 +1710,7 @@ begin
                    (cMineDudPercent = 0) or
                    (getRandom(100) > cMineDudPercent) then
                     begin
-                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
                     DeleteGear(Gear)
                     end
                 else
@@ -1761,7 +1761,7 @@ begin
         if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick);
         if Gear^.Timer = 0 then
         begin
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
             DeleteGear(Gear);
             exit
         end;
@@ -1781,7 +1781,7 @@ begin
         makeHogsWorry(Gear^.X, Gear^.Y, 75);
     if Gear^.Timer = 0 then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 75, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 75, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         exit
     end;
@@ -1874,6 +1874,7 @@ var
     k: TGearType;
     exBoom: boolean;
     dX, dY: HWFloat;
+    hog: PHedgehog;
 begin
     k := Gear^.Kind;
     exBoom := false;
@@ -1910,18 +1911,20 @@ begin
     begin
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
+        hog:= Gear^.Hedgehog;
+
         DeleteGear(Gear);
         // <-- delete gear!
 
         if k = gtCase then
         begin
-            doMakeExplosion(x, y, 25, EXPLAutoSound);
+            doMakeExplosion(x, y, 25, hog, EXPLAutoSound);
             for i:= 0 to 63 do
                 AddGear(x, y, gtFlame, 0, _0, _0, 0);
         end
         else if k = gtExplosives then
             begin
-                doMakeExplosion(x, y, 75, EXPLAutoSound);
+                doMakeExplosion(x, y, 75, hog, EXPLAutoSound);
                 for i:= 0 to 31 do
                 begin
                     dX := AngleCos(i * 64) * _0_5 * (getrandom + _1);
@@ -2106,7 +2109,7 @@ begin
                     AmmoShove(Gear, 4, 150);
                     Gear^.Radius := 1;
                     end
-                else if ((GameTicks and $3) = 3) then doMakeExplosion(gX, gY, 6, 0);//, EXPLNoDamage); 
+                else if ((GameTicks and $3) = 3) then doMakeExplosion(gX, gY, 6, Gear^.Hedgehog, 0);//, EXPLNoDamage); 
                 //DrawExplosion(gX, gY, 4);
                 if ((GameTicks and $7) = 0) and (Random(2) = 0) then
                     for i:= 1 to Random(2)+1 do
@@ -2347,7 +2350,7 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         performRumble();
         exit
@@ -2546,7 +2549,7 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLAutoSound);
 
         Gear^.dX.isNegative := not dxn;
         Gear^.dY.isNegative := not dyn;
@@ -2616,7 +2619,7 @@ begin
 
     if Gear^.Health < Gear^.Damage then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
         AfterAttack;
         DeleteGear(Gear);
         DeleteGear(HHGear);
@@ -2676,7 +2679,7 @@ begin
     inc(Gear^.Tag);
     if Gear^.Tag < 2250 then exit;
 
-    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), cakeDmg, EXPLAutoSound);
+    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), cakeDmg, Gear^.Hedgehog, EXPLAutoSound);
     AfterAttack;
     DeleteGear(Gear)
 end;
@@ -2969,9 +2972,9 @@ begin
         //out of time or exited ground
         StopSound(Gear^.SoundChannel);
         if (Gear^.State and gsttmpFlag) <> 0 then
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound)
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound)
         else
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
         exit
         end
@@ -3021,9 +3024,9 @@ begin
         begin
             //explode right on contact with HH
             if (Gear^.State and gsttmpFlag) <> 0 then
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound)
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound)
             else
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
             DeleteGear(Gear);
             exit;
         end;
@@ -3170,7 +3173,7 @@ begin
 
         if ((Gear^.State and gstCollision) <> 0) then
         begin
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, Gear^.Hedgehog, EXPLAutoSound);
             for i:= 0 to 32 do
             begin
                 dX := AngleCos(i * 64) * _0_5 * (GetRandom + _1);
@@ -3545,7 +3548,7 @@ begin
 
     if (Gear^.State and gstCollision) <> 0 then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, EXPLPoisoned, $C0E0FFE0);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, Gear^.Hedgehog, EXPLPoisoned, $C0E0FFE0);
         PlaySound(sndEggBreak);
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg);
         vg := AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEgg);
@@ -4051,9 +4054,9 @@ begin
         begin
             r0 := GetRandom(21);
             r1 := GetRandom(21);
-            doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, 0);
-            doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, 0);
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, EXPLAutoSound);
+            doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, Gear^.Hedgehog, 0);
+            doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, Gear^.Hedgehog, 0);
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, Gear^.Hedgehog, EXPLAutoSound);
             for r0:= 0 to 4 do
                 AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
             Gear^.dY := odY * -1 + cGravity * 2;
@@ -4294,7 +4297,7 @@ begin
     Gear^.dX := Gear^.dX + cWindSpeed / 4;
     Gear^.dY := Gear^.dY + cGravity / 100;
     if (GameTicks mod 250) = 0 then
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLDontDraw or EXPLNoGfx or EXPLNoDamage or EXPLDoNotTouchAny or EXPLPoisoned);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLDontDraw or EXPLNoGfx or EXPLNoDamage or EXPLDoNotTouchAny or EXPLPoisoned);
     AllInactive:= false;
 end;
 
@@ -4322,7 +4325,7 @@ while i > 0 do
         if (tmp^.Kind = gtHedgehog) then
             begin
             //tmp^.State:= tmp^.State or gstFlatened;
-            ApplyDamage(tmp, tmp^.Health div 3, dsUnknown);
+            ApplyDamage(tmp, CurrentHedgehog, tmp^.Health div 3, dsUnknown);
             //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
             tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
             tmp2^.Hedgehog:= tmp^.Hedgehog;
@@ -4545,7 +4548,7 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.Timer > 0) and ((Gear^.State and gstCollision) <> 0) then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, Gear^.Hedgehog, EXPLAutoSound);
         gX := hwRound(Gear^.X);
         gY := hwRound(Gear^.Y); 
         for i:= 0 to 10 do
@@ -4562,7 +4565,7 @@ begin
     end;
     if (Gear^.Timer = 0) then
     begin
-        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, EXPLAutoSound);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 10, Gear^.Hedgehog, EXPLAutoSound);
         for i:= -19 to 19 do
            FollowGear := AddGear(hwRound(Gear^.X) + i div 3, hwRound(Gear^.Y), gtFlame, 0, _0_001 * i, _0, 0);
         DeleteGear(Gear);

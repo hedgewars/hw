@@ -57,7 +57,8 @@ uses LuaPas in 'LuaPas.pas',
     uUtils,
     uKeys,
     uCaptions,
-    uDebug;
+    uDebug,
+    uCollisions;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
@@ -972,6 +973,7 @@ end;
 
 function lc_setgearposition(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
+    col: boolean;
     x, y: LongInt;
 begin
     if lua_gettop(L) <> 3 then
@@ -981,11 +983,14 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
             begin
+            col:= gear^.CollisionIndex >= 0;
             x:= lua_tointeger(L, 2);
             y:= lua_tointeger(L, 3);
+            if col then DeleteCI(gear);
             gear^.X:= int2hwfloat(x);
             gear^.Y:= int2hwfloat(y);
-            SetAllToActive;
+            if col then AddGearCI(gear);
+            SetAllToActive
             end
         end;
     lc_setgearposition:= 0

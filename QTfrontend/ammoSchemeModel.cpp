@@ -188,7 +188,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
         << QVariant(false)         // disable land objects 17
         << QVariant(false)         // AI survival    18
         << QVariant(false)         // inf. attack    19
-        << QVariant(false)         // reset weps     20
+        << QVariant(true)          // reset weps     20
         << QVariant(false)         // per hog ammo   21
         << QVariant(false)         // no wind        22
         << QVariant(false)         // more wind      23

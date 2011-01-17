@@ -94,7 +94,7 @@ QStringList GameUIConfig::GetTeamsList()
 {
     QDir teamdir;
     teamdir.cd(cfgdir->absolutePath() + "/Teams");
-    QStringList teamslist = teamdir.entryList(QStringList("*.hwt"));
+    QStringList teamslist = teamdir.entryList(QStringList("*.hwt"),QDir::Files|QDir::Hidden);
     QStringList cleanedList;
     for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
             QString tmpTeamStr=(*it).replace(QRegExp("^(.*)\\.hwt$"), "\\1");

@@ -1,5 +1,5 @@
 --------------------------------
--- CTF_BLIZZARD 0.4
+-- CTF_BLIZZARD 0.6
 --------------------------------
 
 ---------
@@ -60,6 +60,13 @@
 -- changed the aura around the flag carrier / flag to an aura and added some support for this
 -- changed things so the seed is no longer always the same...
 
+---------
+-- 0.6
+---------
+
+-- removed branding and version number
+-- removed teleport from starting weapons
+-- increased captures to 3
 
 loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 
@@ -145,12 +152,12 @@ function ManageTeleporterEffects()
 	effectTimer = effectTimer + 1
 	if effectTimer > 50 then -- 100
 		effectTimer = 0
-		
-		for i = 0,1 do		
+
+		for i = 0,1 do
 			eX = 10 + zXMin[i] + GetRandom(zWidth[i]-10)
 			eY = 50 + zYMin[i] + GetRandom(zHeight[i]-110)
 
-	-- steam and smoke and DUST look good, smokering looks trippy 
+	-- steam and smoke and DUST look good, smokering looks trippy
 	-- smoketrace and eviltrace are not effected by wind?
 	-- chunk is a LR falling gear
 			tempE = AddVisualGear(eX, eY, vgtDust, 0, false)
@@ -159,7 +166,7 @@ function ManageTeleporterEffects()
 				SetVisualGearValues(tempE, eX, eY, g3, g4, g5, g6, g7, g8, g9, fCol[i])
 			end
 		end
-	end 
+	end
 end
 
 function CreateZone(xMin, yMin, width, height)
@@ -203,7 +210,7 @@ function CheckScore(teamID)
 		winner = "Blue"
 	end
 
-	if fCaptures[teamID] == 2 then
+	if fCaptures[teamID] == 3 then
 		for i = 0, (numhhs-1) do
 			if GetHogClan(hhs[i]) == alt then
 				SetEffect(hhs[i], heResurrectable, false)
@@ -259,7 +266,7 @@ function FlagDeleted(gear)
 				fIsMissing[bbq] = false
 				fNeedsRespawn[bbq] = true
 				fCaptures[wtf] = fCaptures[wtf] +1					--fCaptures[wtf]
-				
+
 				--ShowMission(loc("You have SCORED!!"), "Red Team: " .. fCaptures[0], "Blue Team: " .. fCaptures[1], -amBazooka, 0)
 				ShowMission(loc("You have SCORED!!"), GetHogTeamName(CurrentHedgehog) .. ": " .. fCaptures[wtf], loc("Opposing Team: ") .. fCaptures[bbq], 0, 0)
 
@@ -351,7 +358,7 @@ function FlagThiefDead(gear)
 end
 
 function HandleCircles()
-	
+
 	for i = 0, 1 do
 		if fIsMissing[i] == false then -- draw a circle at the flag's spawning place
 			--SetVisualGearValues(fCirc[i], fSpawnX[i],fSpawnY[i], 20, 200, 0, 0, 100, 33, 2, fCol[i])
@@ -365,7 +372,7 @@ function HandleCircles()
 				SetVisualGearValues(fCirc[i], GetX(fGear[i]),GetY(fGear[i]), vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], vCircCol[i])
 			end
 		end
-		
+
 		if fNeedsRespawn[i] == true then -- if the flag has been destroyed, no need for a circle
 			SetVisualGearValues(fCirc[i], fSpawnX[i],fSpawnY[i], 20, 200, 0, 0, 100, 0, 0, fCol[i])
 		end
@@ -542,7 +549,7 @@ end
 function onGameStart()
 
 	--ShowMission(loc(caption), loc(subcaption), loc(goal), 0, 0)
-	ShowMission(loc("CTF_BLIZZARD") .. " 0.5", loc("by mikade"), loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
+	ShowMission(loc("CTF_BLIZZARD"), "", loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
 
 
 	-- initialize teleporters
@@ -588,12 +595,12 @@ function onGameStart()
 	for i = 0, 1 do
 		fGear[i] = SpawnAmmoCrate(fSpawnX[i],fSpawnY[i],amSkip)
 		fCirc[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
-		fCol[i] = GetClanColor(i)	
+		fCol[i] = GetClanColor(i)
 
 		fSpawnC[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
-		SetVisualGearValues(fSpawnC[i], fSpawnX[i],fSpawnY[i], 10, 200, 1, 10, 0, 300, 5, fCol[i])		
-		
-	
+		SetVisualGearValues(fSpawnC[i], fSpawnX[i],fSpawnY[i], 10, 200, 1, 10, 0, 300, 5, fCol[i])
+
+
 		fIsMissing[i] = false
 		fNeedsRespawn[i] = false
 		fCaptures[i] = 0
@@ -633,7 +640,7 @@ function onNewTurn()
 	HandleCrateDrops()
 
 	--myC = AddVisualGear(GetX(CurrentHedgehog),GetY(CurrentHedgehog),vgtCircle,0,true)
-	--SetVisualGearValues(myC, GetX(CurrentHedgehog),GetY(CurrentHedgehog), 20, 200, 0, 0, 100, 50, 3, GetClanColor(GetHogClan(CurrentHedgehog)))	
+	--SetVisualGearValues(myC, GetX(CurrentHedgehog),GetY(CurrentHedgehog), 20, 200, 0, 0, 100, 50, 3, GetClanColor(GetHogClan(CurrentHedgehog)))
 
 end
 
@@ -691,7 +698,7 @@ function onAmmoStoreInit()
 
 	SetAmmo(amParachute, 9, 0, 0, 0)
 	SetAmmo(amRope, 9, 0, 0, 0)
-	SetAmmo(amTeleport, 1, 0, 0, 1)
+	SetAmmo(amTeleport, 0, 0, 0, 1)
 	SetAmmo(amJetpack, 1, 0, 0, 1)
 
 	SetAmmo(amSwitch, 2, 0, 0, 1)
@@ -719,17 +726,17 @@ function onGearResurrect(gear)
 	elseif GetHogClan(gear) == 1 then
 		FindPlace(gear, false, 2048, LAND_WIDTH)
 	end
-	
+
 	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 
 end
 
 function onGearDamage(gear, damage)
 
-	-- >_< damn, occurs too fast, before the hog has finished moving / updated his health	
+	-- >_< damn, occurs too fast, before the hog has finished moving / updated his health
 	--if GetGearType(gear) == gtHedgehog then
 	--	if damage > GetHealth(gear) then
-	--		AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)		
+	--		AddVisualGear(GetX(gear), GetY(gear), vgtExplosion, 0, false)
 	--	end
 	--end
 
