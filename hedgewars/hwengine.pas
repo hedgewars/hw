@@ -157,8 +157,8 @@ begin
                         cHasFocus:= true;
 {$ELSE}
                     KeyPressChat(event.key.keysym.unicode);
-                SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
-                SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
+                SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then wheelDown:= true;
+                SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then wheelUp:= true;
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
                         cHasFocus:= event.active.gain = 1;

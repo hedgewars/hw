@@ -23,25 +23,39 @@ end;
 procedure chQuit(var s: shortstring);
 const prevGState: TGameState = gsConfirm;
 begin
-s:= s; // avoid compiler hint
-if GameState <> gsConfirm then
-        begin
+    s:= s; // avoid compiler hint
+    if GameState <> gsConfirm then
+    begin
         prevGState:= GameState;
         GameState:= gsConfirm
-        end else
-        GameState:= prevGState
+    end else
+    GameState:= prevGState
+end;
+
+procedure chForceQuit(var s: shortstring);
+begin
+    s:= s; // avoid compiler hint
+    GameState:= gsConfirm;
+    ParseCommand('confirm', true);
 end;
 
 procedure chConfirm(var s: shortstring);
 begin
-s:= s; // avoid compiler hint
-if GameState = gsConfirm then
+    s:= s; // avoid compiler hint
+    if GameState = gsConfirm then
     begin
-    SendIPC('Q');
-    GameState:= gsExit
+        SendIPC('Q');
+        GameState:= gsExit
     end
 else
     ParseCommand('chat team', true);
+end;
+
+procedure chHalt (var s: shortstring);
+begin
+    s:= s; // avoid compiler hint
+    SendIPC('H');
+    GameState:= gsExit
 end;
 
 procedure chCheckProto(var s: shortstring);
@@ -581,7 +595,9 @@ begin
     RegisterVariable('grave'   , vtCommand, @chGrave        , false);
     RegisterVariable('hat'     , vtCommand, @chSetHat       , false);
     RegisterVariable('quit'    , vtCommand, @chQuit         , true );
+    RegisterVariable('forcequit', vtCommand, @chForceQuit   , true );
     RegisterVariable('confirm' , vtCommand, @chConfirm      , true );
+    RegisterVariable('halt',     vtCommand, @chHalt         , true );
     RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );
     RegisterVariable('-speedup', vtCommand, @chSpeedup_m    , true );
     RegisterVariable('zoomin'  , vtCommand, @chZoomIn       , true );

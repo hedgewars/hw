@@ -974,12 +974,13 @@ void HWForm::GameStateChanged(GameState gameState)
             if (id == ID_PAGE_INGAME ||
 // was room chief and the game was aborted
                 (hwnet && hwnet->isRoomChief() && hwnet->isInRoom() && 
-                    (gameState == gsInterrupted || gameState == gsStopped || gameState == gsDestroyed))) {
+                    (gameState == gsInterrupted || gameState == gsStopped || gameState == gsDestroyed || gameState == gsHalted))) {
                 if (id == ID_PAGE_INGAME) GoBack();
                 Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
                 if (wBackground) wBackground->startAnimation();
                 if (hwnet) hwnet->gameFinished();
             }
+            if (gameState == gsHalted) close();
         };
     }
 }
