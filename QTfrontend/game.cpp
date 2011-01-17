@@ -304,6 +304,7 @@ QStringList HWGame::setArguments()
     arguments << (config->isAltDamageEnabled() ? "1" : "0");
     arguments << config->netNick().toUtf8().toBase64();
     arguments << QString::number(config->translateQuality());
+    arguments << QString::number(config->stereoMode());
     arguments << tr("en.txt");
 
     return arguments;

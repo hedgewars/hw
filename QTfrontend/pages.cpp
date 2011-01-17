@@ -669,6 +669,7 @@ PageOptions::PageOptions(QWidget* parent) :
 
             QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
             QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
+            QHBoxLayout * GBAstereolayout = new QHBoxLayout(0);
             QHBoxLayout * GBAqualayout = new QHBoxLayout(0);
 
             CBFrontendFullscreen = new QCheckBox(AGGroupBox);
@@ -704,6 +705,7 @@ PageOptions::PageOptions(QWidget* parent) :
             CBFullscreen = new QCheckBox(AGGroupBox);
             CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
             GBAlayout->addWidget(CBFullscreen);
+            connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(void)));
 
             QLabel * quality = new QLabel(AGGroupBox);
             quality->setText(QLabel::tr("Quality"));
@@ -717,6 +719,25 @@ PageOptions::PageOptions(QWidget* parent) :
             SLQuality->setFixedWidth(150);
             GBAqualayout->addWidget(SLQuality);
             GBAlayout->addLayout(GBAqualayout);
+            QLabel * stereo = new QLabel(AGGroupBox);
+            stereo->setText(QLabel::tr("Stereo rendering"));
+            GBAstereolayout->addWidget(stereo);
+
+            CBStereoMode = new QComboBox(AGGroupBox);
+            CBStereoMode->addItem(QComboBox::tr("Disabled"));
+            CBStereoMode->addItem(QComboBox::tr("Red/Cyan"));
+            CBStereoMode->addItem(QComboBox::tr("Cyan/Red"));
+            CBStereoMode->addItem(QComboBox::tr("Red/Blue"));
+            CBStereoMode->addItem(QComboBox::tr("Blue/Red"));
+            CBStereoMode->addItem(QComboBox::tr("Red/Green"));
+            CBStereoMode->addItem(QComboBox::tr("Green/Red"));
+            CBStereoMode->addItem(QComboBox::tr("Side-by-side"));
+            CBStereoMode->addItem(QComboBox::tr("Top-Bottom"));
+            CBStereoMode->addItem(QComboBox::tr("Wiggle"));
+            connect(CBStereoMode, SIGNAL(currentIndexChanged(int)), this, SLOT(forceFullscreen(int)));
+
+            GBAstereolayout->addWidget(CBStereoMode);
+            GBAlayout->addLayout(GBAstereolayout);
 
             hr = new QFrame(AGGroupBox);
             hr->setFrameStyle(QFrame::HLine);
@@ -781,8 +802,34 @@ PageOptions::PageOptions(QWidget* parent) :
     BtnBack->setFixedHeight(BtnSaveOptions->height());
     BtnBack->setFixedWidth(BtnBack->width()+2);
     BtnBack->setStyleSheet("QPushButton{margin: 22px 0 9px 2px;}");
+}
 
-//    BtnAssociateFiles = addButton("");
+void PageOptions::forceFullscreen(int index)
+{
+    if (index != 0) {
+        previousFullscreenValue = this->CBFullscreen->isChecked();
+        this->CBFullscreen->setChecked(true);
+        this->CBFullscreen->setEnabled(false);
+        previousQuality = this->SLQuality->value();
+        this->SLQuality->setValue(this->SLQuality->maximum());
+        this->SLQuality->setEnabled(false);
+    } else {
+        this->CBFullscreen->setChecked(previousFullscreenValue);
+        this->CBFullscreen->setEnabled(true);
+        this->SLQuality->setValue(previousQuality);
+        this->SLQuality->setEnabled(true);
+    }
+}
+
+void PageOptions::setFullscreen(void)
+{
+    int tmp = this->CBResolution->currentIndex();
+    if (this->CBFullscreen->isChecked())
+        this->CBResolution->setCurrentIndex(0);
+    else
+        this->CBResolution->setCurrentIndex(previousResolutionIndex);
+    previousResolutionIndex = tmp;
+    this->CBResolution->setEnabled(!this->CBFullscreen->isChecked());
 }
 
 PageNet::PageNet(QWidget* parent) : AbstractPage(parent)

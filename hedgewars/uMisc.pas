@@ -23,7 +23,6 @@ interface
 
 uses    SDLh, uConsts, GLunit, uTypes;
 
-
 procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 procedure MakeScreenshot(filename: shortstring);
