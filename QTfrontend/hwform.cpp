@@ -36,6 +36,7 @@
 #include <QTableView>
 #include <QCryptographicHash>
 #include <QSignalMapper>
+#include <QShortcut>
 
 #include "hwform.h"
 #include "game.h"
@@ -104,6 +105,10 @@ HWForm::HWForm(QWidget *parent)
     if (updater && config->isAutoUpdateEnabled())
         updater->checkForUpdates();
 #endif
+#else
+    // ctrl+q closes frontend for consistency
+    QShortcut *closeFrontend = new QShortcut(QKeySequence("Ctrl+Q"), this);
+    connect (closeFrontend, SIGNAL(activated()), this, SLOT(close()));
 #endif
 
     UpdateTeamsLists();
