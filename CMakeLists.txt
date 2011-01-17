@@ -77,7 +77,6 @@ if(APPLE)
 
 	set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")
 
-
 	#create universal binaries only when it's time to bundle the application, also build server
 	IF(BUNDLE)
 		set(WITH_SERVER true)
@@ -86,7 +85,11 @@ if(APPLE)
 			set(CMAKE_CXX_COMPILER "g++-4.0")
 		else()
 			if(current_macosx_version MATCHES "10.6")
-				set(CMAKE_OSX_ARCHITECTURES "x86_64")
+				if(MACAPPSTORE)
+					set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
+				else()
+					set(CMAKE_OSX_ARCHITECTURES "x86_64")
+				endif()
 			endif()
 		endif()
 	ELSE()
