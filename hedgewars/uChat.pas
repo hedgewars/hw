@@ -29,10 +29,6 @@ procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
-var UserNick: shortstring = '';
-    ChatReady: boolean;
-    showAll: boolean;
-
 implementation
 uses SDLh, uKeys, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
 
@@ -52,6 +48,8 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     visibleCount: LongWord;
     InputStr: TChatLine;
     InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
+    ChatReady: boolean;
+    showAll: boolean;
 
 const colors: array[#1..#5] of TSDL_Color = (
     (r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
@@ -373,7 +371,6 @@ end;
 
 procedure freeModule;
 begin
-    UserNick:= '';
 end;
 
 end.

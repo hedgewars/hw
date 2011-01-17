@@ -27,6 +27,7 @@ procedure freeModule;
 
 procedure InitWorld;
 procedure DrawWorld(Lag: LongInt);
+procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
 procedure ShakeCamera(amount: LongWord);
@@ -63,6 +64,14 @@ var cWaveWidth, cWaveHeight: LongInt;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
+    stereoDepth: GLfloat = 0;
+
+const cStereo_Sky           = 0.0500;
+      cStereo_Horizon       = 0.0250;
+      cStereo_Water_distant = 0.0125;
+      cStereo_Land          = 0.0075;
+      cStereo_Water_near    = 0.0025;
+      cStereo_Outside       = 0.0400;
 
 procedure InitWorld;
 var i, t: LongInt;
@@ -555,13 +564,6 @@ end;
 
 
 procedure DrawWorld(Lag: LongInt);
-var i, t: LongInt;
-    r: TSDL_Rect;
-    tdx, tdy: Double;
-    s: string[15];
-    highlight: Boolean;
-    offsetX, offsetY, ScreenBottom: LongInt;
-    VertexBuffer: array [0..3] of TVertex2f;
 begin
     if not isPaused then
     begin
@@ -590,6 +592,160 @@ begin
     if not isPaused then
         MoveCamera;
 
+    if cStereoMode = smNone then
+        begin
+        glClear(GL_COLOR_BUFFER_BIT);
+        DrawWorldStereo(Lag, rmDefault)
+        end
+{$IFNDEF S3D_DISABLED}
+    else if (cStereoMode = smAFR) then
+        begin
+        AFRToggle:= not AFRToggle;
+        glClear(GL_COLOR_BUFFER_BIT);
+        if AFRToggle then
+            DrawWorldStereo(Lag, rmLeftEye)
+        else
+            DrawWorldStereo(Lag, rmRightEye)
+        end
+    else if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
+        begin
+        // create left fb
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framel);
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
+        DrawWorldStereo(Lag, rmLeftEye);
+
+        // create right fb
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framer);
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
+        DrawWorldStereo(0, rmRightEye);
+
+        // detatch drawing from fbs
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
+        SetScale(cDefaultZoomLevel);
+
+        // draw left frame
+        glBindTexture(GL_TEXTURE_2D, texl);
+        glBegin(GL_QUADS);
+            if cStereoMode = smHorizontal then
+                begin
+                glTexCoord2f(0.0, 0.0);
+                glVertex2d(cScreenWidth / -2, cScreenHeight);
+                glTexCoord2f(1.0, 0.0);
+                glVertex2d(0, cScreenHeight);
+                glTexCoord2f(1.0, 1.0);
+                glVertex2d(0, 0);
+                glTexCoord2f(0.0, 1.0);
+                glVertex2d(cScreenWidth / -2, 0);
+                end
+            else
+                begin
+                glTexCoord2f(0.0, 0.0);
+                glVertex2d(cScreenWidth / -2, cScreenHeight / 2);
+                glTexCoord2f(1.0, 0.0);
+                glVertex2d(cScreenWidth / 2, cScreenHeight / 2);
+                glTexCoord2f(1.0, 1.0);
+                glVertex2d(cScreenWidth / 2, 0);
+                glTexCoord2f(0.0, 1.0);
+                glVertex2d(cScreenWidth / -2, 0);
+                end;
+        glEnd();
+
+        // draw right frame
+        glBindTexture(GL_TEXTURE_2D, texr);
+        glBegin(GL_QUADS);
+            if cStereoMode = smHorizontal then
+                begin
+                glTexCoord2f(0.0, 0.0);
+                glVertex2d(0, cScreenHeight);
+                glTexCoord2f(1.0, 0.0);
+                glVertex2d(cScreenWidth / 2, cScreenHeight);
+                glTexCoord2f(1.0, 1.0);
+                glVertex2d(cScreenWidth / 2, 0);
+                glTexCoord2f(0.0, 1.0);
+                glVertex2d(0, 0);
+                end
+            else
+                begin
+                glTexCoord2f(0.0, 0.0);
+                glVertex2d(cScreenWidth / -2, cScreenHeight);
+                glTexCoord2f(1.0, 0.0);
+                glVertex2d(cScreenWidth / 2, cScreenHeight);
+                glTexCoord2f(1.0, 1.0);
+                glVertex2d(cScreenWidth / 2, cScreenHeight / 2);
+                glTexCoord2f(0.0, 1.0);
+                glVertex2d(cScreenWidth / -2, cScreenHeight / 2);
+                end;
+        glEnd();
+        SetScale(zoom);
+        end
+    else
+        begin
+        // clear scene
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
+        // draw left eye in red channel only
+        if cStereoMode = smGreenRed then
+            glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE)
+        else if cStereoMode = smBlueRed then
+            glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_TRUE)
+        else if cStereoMode = smCyanRed then
+            glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE)
+        else
+            glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+        DrawWorldStereo(Lag, rmLeftEye);
+        // draw right eye in selected channel(s) only
+        if cStereoMode = smRedGreen then
+            glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE)
+        else if cStereoMode = smRedBlue then
+            glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_TRUE)
+        else if cStereoMode = smRedCyan then
+            glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE)
+        else
+            glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+        DrawWorldStereo(Lag, rmRightEye);
+        end
+{$ENDIF}
+end;
+
+procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
+begin
+{$IFDEF S3D_DISABLED}
+    exit;
+{$ELSE}
+    d:= d / 5;
+    if rm = rmDefault then exit
+    else if rm = rmLeftEye then d:= -d;
+    stereoDepth:= stereoDepth + d;
+    glMatrixMode(GL_PROJECTION);
+    glTranslatef(d, 0, 0);
+    glMatrixMode(GL_MODELVIEW);
+{$ENDIF}
+end;
+ 
+procedure ResetDepth(rm: TRenderMode);
+begin
+{$IFDEF S3D_DISABLED}
+    exit;
+{$ELSE}
+    if rm = rmDefault then exit;
+    glMatrixMode(GL_PROJECTION);
+    glTranslatef(-stereoDepth, 0, 0);
+    glMatrixMode(GL_MODELVIEW);
+    stereoDepth:= 0;
+{$ENDIF}
+end;
+ 
+procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
+var i, t: LongInt;
+    r: TSDL_Rect;
+    tdx, tdy: Double;
+    grp: TCapGroup;
+    s: string[15];
+    highlight: Boolean;
+    offset, offsetX, offsetY, screenBottom: LongInt;
+    VertexBuffer: array [0..3] of TVertex2f;
+begin
     if (cReducedQuality and rqNoBackground) = 0 then
     begin
         // Offsets relative to camera - spare them to wimpier cpus, no bg or flakes for them anyway
@@ -601,8 +757,10 @@ begin
             HorizontOffset:= HorizontOffset + ((ScreenBottom-SkyOffset) div 20);
 
         // background
+        ChangeDepth(RM, cStereo_Sky);
         if SuddenDeathDmg then Tint(SDTint, SDTint, SDTint, $FF);
         DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, SkyOffset);
+        ChangeDepth(RM, -cStereo_Horizon);
         DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
         if SuddenDeathDmg then Tint($FF, $FF, $FF, $FF);
     end;
@@ -612,15 +770,20 @@ begin
     if (cReducedQuality and rq2DWater) = 0 then
     begin
         // Waves
-        DrawWater(255, SkyOffset);
+        DrawWater(255, SkyOffset); 
+        ChangeDepth(RM, -cStereo_Water_distant);
         DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 64);
+        ChangeDepth(RM, -cStereo_Water_distant);
         DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 48);
+        ChangeDepth(RM, -cStereo_Water_distant);
         DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 32);
+        ChangeDepth(RM, -cStereo_Water_distant);
         DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 24);
     end
     else
         DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)), 0);
 
+    changeDepth(RM, cStereo_Land);
     DrawLand(WorldDx, WorldDy);
 
     DrawWater(255, 0);
@@ -648,10 +811,7 @@ begin
         end;
 
     DrawVisualGears(1);
-
     DrawGears;
-
-    DrawVisualGears(2);
 
     if SuddenDeathDmg then
         DrawWater(cSDWaterOpacity, 0)
@@ -659,26 +819,39 @@ begin
         DrawWater(cWaterOpacity, 0);
 
     // Waves
+    ChangeDepth(RM, cStereo_Water_near);
     DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
 
     if (cReducedQuality and rq2DWater) = 0 then
     begin
         //DrawWater(cWaterOpacity, - offsetY div 40);
+        ChangeDepth(RM, cStereo_Water_near);
         DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 8);
         if SuddenDeathDmg then
             DrawWater(cSDWaterOpacity, - offsetY div 20)
         else
             DrawWater(cWaterOpacity, - offsetY div 20);
+        ChangeDepth(RM, cStereo_Water_near);
         DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 2);
         if SuddenDeathDmg then
             DrawWater(cSDWaterOpacity, - offsetY div 10)
         else
             DrawWater(cWaterOpacity, - offsetY div 10);
+        ChangeDepth(RM, cStereo_Water_near);
         DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
     end
     else
         DrawWaves(-1, 50, - (cWaveHeight shr 1), 0);
 
+// everything after this ChangeDepth will be drawn outside the screen
+// note: negative parallax gears should last very little for a smooth stereo effect
+    ChangeDepth(RM, cStereo_Outside);
+    DrawVisualGears(2);
+
+// everything after this ResetDepth will be drawn at screen level (depth = 0)
+// note: everything that needs to be readable should be on this level
+    ResetDepth(RM);
+    DrawVisualGears(3);
 
 {$WARNINGS OFF}
 // Target
@@ -696,7 +869,6 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
 
 // this scale is used to keep the various widgets at the same dimension at all zoom levels
 SetScale(cDefaultZoomLevel);
-
 
 // Turn time
 {$IFDEF IPHONEOS}
@@ -750,7 +922,7 @@ for t:= 0 to Pred(TeamsCount) do
       r.h:= HealthTex^.h;
       DrawFromRect(14, cScreenHeight + DrawHealthY, @r, HealthTex);
 
-      // draw health bar's right border
+      // draw health bars right border
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
       DrawFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY, @r, HealthTex);
@@ -825,8 +997,10 @@ if (AMxShift < AMWidth) or bShowAmmoMenu then ShowAmmoMenu;
 if isCursorVisible and bShowAmmoMenu then
    DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
 
+// Chat
 DrawChat;
 
+// confirmation caption
 if fastUntilLag then DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
 if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then
@@ -844,58 +1018,63 @@ offsetX:= 8;
 offsetX:= 10;
 {$ENDIF}
 offsetY:= cOffsetY;
-inc(Frames);
+if (RM = rmDefault) or (RM = rmRightEye) then
+begin
+    inc(Frames);
 
-if cShowFPS or (GameType = gmtDemo) then inc(CountTicks, Lag);
-if (GameType = gmtDemo) and (CountTicks >= 1000) then
-   begin
-   i:=GameTicks div 1000;
-   t:= i mod 60;
-   s:= inttostr(t);
-   if t < 10 then s:= '0' + s;
-   i:= i div 60;
-   t:= i mod 60;
-   s:= inttostr(t) + ':' + s;
-   if t < 10 then s:= '0' + s;
-   s:= inttostr(i div 60) + ':' + s;
+    if cShowFPS or (GameType = gmtDemo) then
+        inc(CountTicks, Lag);
+    if (GameType = gmtDemo) and (CountTicks >= 1000) then
+    begin
+        i:=GameTicks div 1000;
+        t:= i mod 60;
+        s:= inttostr(t);
+        if t < 10 then s:= '0' + s;
+        i:= i div 60;
+        t:= i mod 60;
+        s:= inttostr(t) + ':' + s;
+        if t < 10 then s:= '0' + s;
+        s:= inttostr(i div 60) + ':' + s;
+   
+        if timeTexture <> nil then
+            FreeTexture(timeTexture);
+        timeTexture:= nil;
+    
+        tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
+        tmpSurface:= doSurfaceConversion(tmpSurface);
+        timeTexture:= Surface2Tex(tmpSurface, false);
+        SDL_FreeSurface(tmpSurface)
+    end;
 
-   if timeTexture <> nil then
-        FreeTexture(timeTexture);
-    timeTexture:= nil;
+    if timeTexture <> nil then
+        DrawTexture((cScreenWidth shr 1) - 20 - timeTexture^.w - offsetY, offsetX + timeTexture^.h+5, timeTexture);
 
-   tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
-   tmpSurface:= doSurfaceConversion(tmpSurface);
-   timeTexture:= Surface2Tex(tmpSurface, false);
-   SDL_FreeSurface(tmpSurface)
-   end;
+    if cShowFPS then
+    begin
+        if CountTicks >= 1000 then
+        begin
+            FPS:= Frames;
+            Frames:= 0;
+            CountTicks:= 0;
+            s:= inttostr(FPS) + ' fps';
+            if fpsTexture <> nil then
+                FreeTexture(fpsTexture);
+            fpsTexture:= nil;
+            tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
+            tmpSurface:= doSurfaceConversion(tmpSurface);
+            fpsTexture:= Surface2Tex(tmpSurface, false);
+            SDL_FreeSurface(tmpSurface)
+        end;
+        if fpsTexture <> nil then
+            DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);
+    end;
 
-if timeTexture <> nil then
-   DrawTexture((cScreenWidth shr 1) - 20 - timeTexture^.w - offsetY, offsetX + timeTexture^.h+5, timeTexture);
+    if CountTicks >= 1000 then CountTicks:= 0;
 
-if cShowFPS then
-   begin
-   if CountTicks >= 1000 then
-      begin
-      FPS:= Frames;
-      Frames:= 0;
-      CountTicks:= 0;
-      s:= inttostr(FPS) + ' fps';
-      if fpsTexture <> nil then
-        FreeTexture(fpsTexture);
-    fpsTexture:= nil;
-      tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
-      tmpSurface:= doSurfaceConversion(tmpSurface);
-      fpsTexture:= Surface2Tex(tmpSurface, false);
-      SDL_FreeSurface(tmpSurface)
-      end;
-   if fpsTexture <> nil then
-      DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);
-   end;
+    // lag warning (?)
+    inc(SoundTimerTicks, Lag);
+end;
 
-if CountTicks >= 1000 then CountTicks:= 0;
-
-// lag warning (?)
-inc(SoundTimerTicks, Lag);
 if SoundTimerTicks >= 50 then
    begin
    SoundTimerTicks:= 0;

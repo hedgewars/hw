@@ -934,7 +934,7 @@
 		61798934114AB25F00BA94A9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = "../../../Library/SDL-1.3/SDL_mixer/Xcode-iPhoneOS/SDL_mixer.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_ttf.xcodeproj; path = "../../../Library/SDL-1.3/SDL_ttf/Xcode-iPhoneOS/SDL_ttf.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		61798A5E114AE08600BA94A9 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
+		61798A5E114AE08600BA94A9 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Data; path = ../../../trunk/project_files/HedgewarsMobile/Data; sourceTree = "<group>"; };
 		6183D83C11E2BCE200A88903 /* Default-ipad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-ipad-Landscape.png"; path = "Resources/Icons/Default-ipad-Landscape.png"; sourceTree = "<group>"; };
 		6183D83D11E2BCE200A88903 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Icons/Default.png; sourceTree = "<group>"; };
 		61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageInGameViewController-iPad.xib"; path = "../Resources/HelpPageInGameViewController-iPad.xib"; sourceTree = "<group>"; };

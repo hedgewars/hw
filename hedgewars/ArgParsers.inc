@@ -8,6 +8,7 @@ begin
 end;
 
 procedure internalStartGameWithParameters();
+var tmp: LongInt;
 begin
     val(ParamStr(2), cScreenWidth);
     val(ParamStr(3), cScreenHeight);
@@ -23,7 +24,9 @@ begin
     cAltDamage:= ParamStr(13) = '1';
     UserNick:= DecodeBase64(ParamStr(14));
     val(ParamStr(15), cReducedQuality);
-    cLocaleFName:= ParamStr(16)
+    val(ParamStr(16), tmp);
+    cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp)));
+    cLocaleFName:= ParamStr(17);
 end;
 
 procedure setVideo(screenWidth: LongInt; screenHeight: LongInt; bitsStr: LongInt);

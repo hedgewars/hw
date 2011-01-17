@@ -52,6 +52,7 @@ public:
     bool isFrontendEffects() const;
     bool isFrontendFullscreen() const;
     void resizeToConfigValues();
+    quint32 stereoMode() const;
 
 #ifdef __APPLE__
 #ifdef SPARKLE_ENABLED

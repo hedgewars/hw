@@ -10,7 +10,7 @@ var
     cScreenWidth    : LongInt     = 1024;
     cScreenHeight   : LongInt     = 768;
     cBits           : LongInt     = 32;
-    //ipcPort is in uIO
+    ipcPort         : Word        = 0;
     cFullScreen     : boolean     = false;
     isSoundEnabled  : boolean     = true;
     isMusicEnabled  : boolean     = false;
@@ -21,10 +21,11 @@ var
     cShowFPS        : boolean     = false;
     cAltDamage      : boolean     = true;
     cReducedQuality : LongWord    = rqNone;
-    //userNick is in uChat
+    UserNick        : shortstring = '';
     recordFileName  : shortstring = '';
     cReadyDelay     : Longword    = 5000;
     cLogfileBase    : shortstring = 'debug';
+    cStereoMode     : TStereoMode = smNone;
 //////////////////////////
 
     alsoShutdownFrontend: boolean = false;
@@ -144,6 +145,8 @@ var
 
     WorldDx: LongInt;
     WorldDy: LongInt;
+
+    hiTicks: Word;
 
 const
     cHHFileName = 'Hedgehog';
@@ -2079,6 +2082,9 @@ var
     cntTicks: LongWord;
 {$ENDIF}
     cOffsetY: LongInt;
+    AFRToggle: Boolean;
+    bAFRRight: Boolean;
+
 
     PixelFormat: PSDL_PixelFormat;
     SDLPrimSurface: PSDL_Surface;
@@ -2093,7 +2099,11 @@ var
     ProgrTex: PTexture;
     MissionIcons: PSDL_Surface;
     ropeIconTex: PTexture;
+    // orientation of the viewport
     rotationQt: GLfloat;
+    // stereoscopic framebuffer and textures
+    framel, framer, depthl, depthr: GLuint;
+    texl, texr: GLuint;
 
 
     VisualGearsList: PVisualGear;
@@ -2274,7 +2284,7 @@ begin
     SDLwindow       := nil;
 {$ENDIF}
 
-    // those values still aren't perfect
+    // those values still are not perfect
     cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
     cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
     cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
@@ -2297,20 +2307,21 @@ begin
     cScreenWidth    := 1024;
     cScreenHeight   := 768;
     cBits           := 32;
-    //ipcPort is in uIO
+    ipcPort         := 0;
     cFullScreen     := false;
     isSoundEnabled  := true;
     isMusicEnabled  := false;
     cLocaleFName    := 'en.txt';
     cInitVolume     := 100;
     cTimerInterval  := 8;
-    PathPrefix := './';
+    PathPrefix      := './';
     cShowFPS        := false;
     cAltDamage      := true;
     cReducedQuality := rqNone;
-    //userNick is in uChat
+    UserNick        := '';
     recordFileName  := '';
     cReadyDelay     := 5000;
+    cStereoMode     := smNone;
 end;
 
 end.

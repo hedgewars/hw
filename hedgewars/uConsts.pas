@@ -23,15 +23,11 @@ interface
 
 uses    SDLh, uFloat, GLunit;
 
-
 {$INCLUDE "config.inc"}
-
-// typed const is a variable despite const qualifier
-// in freepascal you may actually use var for the same purpose
 
 const
     sfMax = 1000;
-    cDefaultParamNum = 16;
+    cDefaultParamNum = 17;
 
     // message constants
     errmsgCreateSurface   = 'Error creating SDL surface';

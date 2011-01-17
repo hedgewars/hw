@@ -5,6 +5,9 @@ interface
 
 uses SDLh, uFloat, GLunit, uConsts, Math;
 
+// NOTE: typed const is a variable despite const qualifier
+// in freepascal you may actually use var for the same purpose
+
 type
     HwColor4f = record
         r, g, b, a: byte
@@ -127,6 +130,9 @@ type
             siMaxTeamKills, siMaxTurnSkips );
 
     TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
+
+    TRenderMode = (rmDefault, rmLeftEye, rmRightEye);
+    TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical, smAFR);
 
     THHFont = record
             Handle: PTTF_Font;
