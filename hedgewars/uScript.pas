@@ -727,6 +727,38 @@ begin
     lc_hogsay:= 0
 end;
 
+function lc_switchhog(L : Plua_State) : LongInt; Cdecl;
+var gear, prevgear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        LuaError('Lua: Wrong number of parameters passed to SwitchHog!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+// should we allow this when there is no current hedgehog? might do some odd(er) things to turn sequence.
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) and (CurrentHedgehog <> nil) then
+            begin
+            prevgear := CurrentHedgehog^.Gear;
+            prevgear^.Active := false;
+            prevgear^.State:= prevgear^.State and not gstHHDriven;
+            prevgear^.Z := cHHZ;
+            RemoveGearFromList(prevgear);
+            InsertGearToList(prevgear);
+
+            CurrentHedgehog := gear^.Hedgehog;
+// yes, this will muck up turn sequence
+            CurrentTeam := gear^.Hedgehog^.Team;
+
+            gear^.State:= gear^.State or gstHHDriven;
+            gear^.Active := true;
+            gear^.Z := cCurrHHZ;
+            RemoveGearFromList(gear);
+            InsertGearToList(gear);
+            end
+        end;
+    lc_switchhog:= 0
+end;
+
 function lc_addammo(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1534,6 +1566,7 @@ lua_register(luaState, 'GetTimer', @lc_gettimer);
 lua_register(luaState, 'SetZoom', @lc_setzoom);
 lua_register(luaState, 'GetZoom', @lc_getzoom);
 lua_register(luaState, 'HogSay', @lc_hogsay);
+lua_register(luaState, 'SwitchHog', @lc_switchhog);
 lua_register(luaState, 'HogTurnLeft', @lc_hogturnleft);
 lua_register(luaState, 'CampaignLock', @lc_campaignlock);
 lua_register(luaState, 'CampaignUnlock', @lc_campaignunlock);
