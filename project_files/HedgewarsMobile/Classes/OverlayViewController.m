@@ -35,7 +35,8 @@
 #define doDim()             [dimTimer setFireDate: (IS_DUALHEAD()) ? HIDING_TIME_NEVER : HIDING_TIME_DEFAULT]
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
-#define removeConfirmationInput()   [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview];
+#define removeInputWidget() [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview]; \
+                            [[self.view viewWithTag:GRENADE_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
 @synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu, initialOrientation, containerWindow;
@@ -210,6 +211,8 @@
     [UIView setAnimationDuration:2];
     self.view.alpha = 1;
     [UIView commitAnimations];
+    
+    doDim();
 }
 
 -(void) numberOfScreensIncreased {
@@ -401,13 +404,13 @@
                 doDim();
                 [self.amvc disappear];
             }
-            removeConfirmationInput();
+            removeInputWidget();
             [self showPopover];
             break;
         case 11:
             playSound(@"clickSound");
             clearView();
-            removeConfirmationInput();
+            removeInputWidget();
             
             if (IS_DUALHEAD() || self.useClassicMenu == NO) {
                 if (self.amvc == nil)
@@ -439,7 +442,7 @@
 
 -(void) sendHWClick {
     HW_click();
-    removeConfirmationInput();
+    removeInputWidget();
     doDim();
 }
 
@@ -541,11 +544,13 @@
     // reset default dimming
     doDim();
 
+    // remove other widgets
+    removeInputWidget();
+
     HW_setPianoSound([allTouches count]);
 
     switch ([allTouches count]) {
         case 1:
-            removeConfirmationInput();
             startingPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
             if (2 == [[[allTouches allObjects] objectAtIndex:0] tapCount])
                 HW_zoomReset();
