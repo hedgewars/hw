@@ -79,6 +79,8 @@
             self.view.center = CGPointMake(placingPoint.x, placingPoint.y);
     }
     self.isVisible = YES;
+    if (IS_IPAD() == NO)
+        HW_pause();
 }
 
 -(void) disappear {
@@ -87,6 +89,8 @@
     self.isVisible = NO;
     placingPoint.x = self.view.center.y;
     placingPoint.y = self.view.center.x;
+    if (IS_IPAD() == NO)
+        HW_pauseToggle();
 }
 
 #pragma mark -
