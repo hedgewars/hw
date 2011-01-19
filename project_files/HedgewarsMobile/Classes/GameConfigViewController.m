@@ -240,10 +240,12 @@
         statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
     [self presentModalViewController:statsPage animated:NO];
 
+    // also modify SavedGamesViewController.m
     NSArray *stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-    if ([stats count] == 0)
+    if ([stats count] <= 1) {
+        DLog(@"%@",stats);
         [statsPage dismissModalViewControllerAnimated:NO];
-    else {
+    } else {
         statsPage.statsArray = stats;
         [statsPage.tableView reloadData];
         [statsPage viewWillAppear:YES];

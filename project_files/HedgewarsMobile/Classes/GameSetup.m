@@ -243,7 +243,6 @@
     BOOL clientQuit;
     char const buffer[BUFFER_SIZE];
     uint8_t msgSize;
-    int statMaxCapacity = 10-3;
 
     clientQuit = NO;
     csd = NULL;
@@ -349,29 +348,36 @@
                 }
                 break;
             case 'i':
-                if (self.statsArray == nil)
-                    self.statsArray = [[NSMutableArray alloc] initWithCapacity:statMaxCapacity];
+                if (self.statsArray == nil) {
+                    self.statsArray = [[NSMutableArray alloc] initWithCapacity:10 - 2];
+                    NSMutableArray *ranking = [[NSMutableArray alloc] initWithCapacity:4];
+                    [self.statsArray insertObject:ranking atIndex:0];
+                    [ranking release];
+                }
                 NSString *tempStr = [NSString stringWithUTF8String:&buffer[2]];
-                NSString *arg = [[tempStr componentsSeparatedByString:@" "] objectAtIndex:0];
+                NSArray *info = [tempStr componentsSeparatedByString:@" "];
+                NSString *arg = [info objectAtIndex:0];
                 int index = [arg length] + 3;
                 switch (buffer[1]) {
                     case 'r':           // winning team
-                        [self.statsArray insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:0];
+                        [self.statsArray insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:1];
                         break;
                     case 'D':           // best shot
-                        [self.statsArray addObject:[NSString stringWithFormat:@"The best shot award was won by %s with %@ points", &buffer[index], arg]];
+                        [self.statsArray addObject:[NSString stringWithFormat:@"The best shot award won by %s (with %@ points)", &buffer[index], arg]];
                         break;
                     case 'k':           // best hedgehog
                         [self.statsArray addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kills in a turn", &buffer[index], arg]];
                         break;
                     case 'K':           // number of hogs killed
-                        [self.statsArray addObject:[NSString stringWithFormat:@"A total of %@ hedgehog(s) were killed during this round", arg]];
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%@ hedgehog(s) were killed during this round", arg]];
                         break;
-                    case 'H':           //something about team health
+                    case 'H':           // team health/graph
                         break;
                     case 'T':           // local team stats
+                        // still WIP in statsPage.cpp
                         break;
-                    case 'P':           // player postion
+                    case 'P':           // teams ranking
+                        [[self.statsArray objectAtIndex:0] addObject:tempStr];
                         break;
                     case 's':           // self damage
                         [self.statsArray addObject:[NSString stringWithFormat:@"%s thought it's good to shoot his own hedgehogs with %@ points", &buffer[index], arg]];

@@ -211,8 +211,6 @@
     [UIView setAnimationDuration:2];
     self.view.alpha = 1;
     [UIView commitAnimations];
-    
-    doDim();
 }
 
 -(void) numberOfScreensIncreased {

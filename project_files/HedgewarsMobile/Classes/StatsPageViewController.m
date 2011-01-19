@@ -57,36 +57,61 @@
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0 || section == 2)
+    if (section == 0 || section == 3)
         return 1;
+    else if (section == 1)
+        return [[self.statsArray objectAtIndex:0] count];
     else
-        return [self.statsArray count] - 1;
+        return [self.statsArray count] - 2;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier0 = @"Cell0";
     NSInteger section = [indexPath section];
     NSInteger row = [indexPath row];
+    NSString *imgString = @"";
 
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
 
-    cell.textLabel.textAlignment = UITextAlignmentCenter;
-    if (section == 0) {
-        cell.textLabel.text = [self.statsArray objectAtIndex:row];
+    if (section == 0) {         // winning team
+        imgString = @"StatsStar";
+        cell.textLabel.text = [self.statsArray objectAtIndex:1];
         cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
-    } else if (section == 1) {
-        cell.textLabel.text = [self.statsArray objectAtIndex:row + 1];
+    } else if (section == 1) {  // teams ranking
+        // color, # kills, teamname
+        NSArray *info = [[[self.statsArray objectAtIndex:0] objectAtIndex:row] componentsSeparatedByString:@" "];
+        NSUInteger color = [[info objectAtIndex:0] intValue];
+        cell.textLabel.textColor = [UIColor colorWithRed:((color >> 16) & 0xFF)/255.0f
+                                                   green:((color >> 8) & 0xFF)/255.0f
+                                                    blue:(color & 0xFF)/255.0f
+                                                   alpha:1.0f];
+        cell.textLabel.text = [NSString stringWithFormat:@"%d. %@ (%@ kills)", row+1, [info objectAtIndex:2], [info objectAtIndex:1]];
+        imgString = [NSString stringWithFormat:@"statsMedal%d",row+1];
+    } else if (section == 2) {  // general info
+        imgString = @"iconDamage";
+        cell.textLabel.text = [self.statsArray objectAtIndex:row + 2];
         cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
-    } else {
+    } else {                    // exit button
         cell.textLabel.text = NSLocalizedString(@"Done",@"");
         cell.textLabel.textColor = [UIColor whiteColor];
+        cell.accessoryView = nil;
+        cell.imageView.image = nil;
     }
+
+    UIImage *img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png",BTN_DIRECTORY(),imgString]];
+    UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
+    cell.imageView.image = img;
+    [img release];
+    cell.accessoryView = imgView;
+    [imgView release];
+
+    cell.textLabel.textAlignment = UITextAlignmentCenter;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.backgroundColor = [UIColor blackColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -116,7 +141,7 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 2)
+    if ([indexPath section] == 3)
         [self dismissModalViewControllerAnimated:YES];
 }
 

@@ -91,7 +91,6 @@
     [self.listOfSavegames addObject:newSaveName];
     [self.listOfSavegames sortUsingSelector:@selector(compare:)];
 
-    //[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[self.listOfSavegames indexOfObject:newSaveName] inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView reloadData];
 }
 
@@ -225,8 +224,10 @@
         statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
     [self presentModalViewController:statsPage animated:NO];
 
+    // also modify GameConfigViewController.m
     NSArray *stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-    if ([stats count] == 0) {
+    if ([stats count] <= 1) {
+        DLog(@"%@",stats);
         [statsPage dismissModalViewControllerAnimated:NO];
     } else {
         statsPage.statsArray = stats;
