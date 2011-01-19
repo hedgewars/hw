@@ -12,7 +12,7 @@
 00:09=DEagle
 00:10=Dynamit
 00:11=Bejzbolka
-00:12=Úder ohňa
+00:12=Shoryuken
 00:13=sek
 00:14=Padák
 00:15=Vzdušné posily

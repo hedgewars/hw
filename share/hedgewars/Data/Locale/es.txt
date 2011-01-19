@@ -13,7 +13,7 @@
 00:09=Desert Eagle
 00:10=Dinamita
 00:11=Bate de béisbol
-00:12=Puño de fuego
+00:12=Shoryuken
 00:13=seg.
 00:14=Paracaídas
 00:15=Bombardeo aéreo

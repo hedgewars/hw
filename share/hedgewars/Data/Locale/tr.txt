@@ -12,7 +12,7 @@
 00:09=Çöl Kartalı
 00:10=Dinamit
 00:11=Beyzbol Sopası
-00:12=Alev Yumruğu
+00:12=Shoryuken
 00:13=san
 00:14=Paraşüt
 00:15=Hava Saldırısı

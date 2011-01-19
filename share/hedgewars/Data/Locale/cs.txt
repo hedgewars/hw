@@ -12,7 +12,7 @@
 00:09=DEagle
 00:10=Dynamit
 00:11=Basebalová pálka
-00:12=Ohnivý úder
+00:12=Shoryuken
 00:13=sec
 00:14=Padák
 00:15=Nálet

@@ -12,7 +12,7 @@
 00:09=DEagle
 00:10=Dynamiitti
 00:11=Pesäpallomaila
-00:12=Fire Punch
+00:12=Shoryuken
 00:13=sek
 00:14=Laskuvarjo
 00:15=Ilmaisku

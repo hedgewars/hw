@@ -12,7 +12,7 @@
 00:09=DEagle
 00:10=Dinamite
 00:11=Mazza da Baseball
-00:12=Pugno di Fuoco
+00:12=Shoryuken
 00:13=sec
 00:14=Paracadute
 00:15=Attacco Missilistico

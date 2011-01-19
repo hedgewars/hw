@@ -12,7 +12,7 @@
 00:09=Révolver
 00:10=Dynamite
 00:11=Batte de baseball
-00:12=Poing de feu
+00:12=Shoryuken
 00:13=sec
 00:14=Parachute
 00:15=Attaque aérienne

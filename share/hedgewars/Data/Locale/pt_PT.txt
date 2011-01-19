@@ -12,7 +12,7 @@
 00:09=Desert Eagle
 00:10=Dinamite
 00:11=Taco de Basebol
-00:12=Soco de Fogo
+00:12=Shoryuken
 00:13=seg
 00:14=Paraquedas
 00:15=Ataque Aéreo

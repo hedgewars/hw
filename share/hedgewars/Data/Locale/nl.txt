@@ -12,7 +12,7 @@
 00:09=Desert Eagle
 00:10=Dynamite
 00:11=Baseball Bat
-00:12=Fire Punch
+00:12=Shoryuken
 00:13=sec
 00:14=Parachute
 00:15=Air Attack
