@@ -391,8 +391,10 @@ processAction (clID, serverInfo, clients, rooms) (MoveToLobby) =
         answerLobbyNicks = [AnswerThisClient ("LOBBY:JOINED": lobbyNicks) | not $ Prelude.null lobbyNicks]
 
 
-processAction (clID, serverInfo, clients, rooms) (KickClient kickID) =
-    liftM2 replaceID (return clID) (processAction (kickID, serverInfo, clients, rooms) $ ByeClient "Kicked")
+processAction (clID, serverInfo, clients, rooms) (KickClient kickID) = do
+    let client = clients ! clID
+    currentTime <- getCurrentTime
+    liftM2 replaceID (return clID) (processAction (kickID, serverInfo{lastLogins = (host client, (addUTCTime 60 $ currentTime, "60 seconds ban")) : lastLogins serverInfo}, clients, rooms) $ ByeClient "Kicked")
 
 
 processAction (clID, serverInfo, clients, rooms) (BanClient banNick) =
@@ -419,12 +421,13 @@ processAction (clID, serverInfo, clients, rooms) (AddClient client) = do
     infoM "Clients" (show (clientUID client) ++ ": New client. Time: " ++ show (connectTime client))
     writeChan (sendChan client) ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 
-    let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 11) $ lastLogins serverInfo
+    let newLogins = takeWhile (\(_ , (time, _)) -> (connectTime client) `diffUTCTime` time <= 0) $ lastLogins serverInfo
 
-    if isJust $ host client `Prelude.lookup` newLogins then
-        processAction (clID, serverInfo{lastLogins = newLogins}, updatedClients, rooms) $ ByeClient "Reconnected too fast"
+    let info = host client `Prelude.lookup` newLogins
+    if isJust info then
+        processAction (clID, serverInfo{lastLogins = newLogins}, updatedClients, rooms) $ ByeClient (snd .  fromJust $ info)
         else
-        return (clID, serverInfo{lastLogins = (host client, connectTime client) : newLogins}, updatedClients, rooms)
+        return (clID, serverInfo{lastLogins = (host client, (addUTCTime 10 $ connectTime client, "Reconnected too fast")) : newLogins}, updatedClients, rooms)
 
 
 processAction (clID, serverInfo, clients, rooms) PingAll = do
