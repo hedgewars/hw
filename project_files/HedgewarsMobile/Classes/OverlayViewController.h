@@ -82,6 +82,5 @@
 -(void) dismissPopover;
 -(void) dimOverlay;
 -(void) activateOverlay;
--(void) cleanup;
 
 @end

@@ -186,11 +186,6 @@
                                                  name:@"show help ingame"
                                                object:nil];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(cleanup)
-                                                 name:@"remove overlay"
-                                               object:nil];
-
     // for iOS >= 3.2
     if ([UIScreen respondsToSelector:@selector(screens)]) {
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -235,7 +230,7 @@
                                               otherButtonTitles:nil];
         [alert show];
         [alert release];
-        [self cleanup];
+        HW_terminate(NO);
     }
 }
 
@@ -255,13 +250,6 @@
     self.helpPage.view.alpha = 1;
     [UIView commitAnimations];
     doNotDim();
-}
-
--(void) cleanup {
-    [self dismissPopover];
-    setGameRunning(NO);
-    HW_terminate(NO);
-    [self.view removeFromSuperview];
 }
 
 -(void) didReceiveMemoryWarning {
@@ -457,7 +445,7 @@
 // present a further check before closing game
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
     if ([actionSheet cancelButtonIndex] != buttonIndex)
-        [self cleanup];
+        HW_terminate(NO);
     else
         HW_pause();
 }

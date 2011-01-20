@@ -28,6 +28,7 @@ procedure startSpinning; cdecl; external;
 procedure stopSpinning; cdecl; external;
 procedure replayBegan; cdecl; external;
 procedure replayFinished; cdecl; external;
+procedure setGameRunning(arg: boolean); cdecl; external;
 procedure updateVisualsNewTurn; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
 function  isAppleDeviceMuted: Boolean; cdecl; external;

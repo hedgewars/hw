@@ -218,13 +218,14 @@
                                       [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:@"orientation"],@"game_dictionary",
                                       nil];
 
+    // also modify GameConfigViewController.m
     StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
     statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
         statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
-    [self presentModalViewController:statsPage animated:NO];
+    // avoid showing the stat page immediately, but wait for 3 seconds
+    [self performSelector:@selector(presentModalViewController:animated:) withObject:statsPage afterDelay:3];
 
-    // also modify GameConfigViewController.m
     NSArray *stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
     if ([stats count] <= 1) {
         DLog(@"%@",stats);

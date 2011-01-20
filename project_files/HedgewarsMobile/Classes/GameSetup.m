@@ -396,8 +396,9 @@
             case 'q':
                 // game ended, can remove the savefile
                 [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
-                // and remove + disable the overlay
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
+                break;
+            case 'Q':
+                // game exited but not completed, nothing to do (just don't save the message)
                 break;
             default:
                 [self dumpRawData:buffer ofSize:msgSize];
@@ -405,14 +406,14 @@
         }
     }
     DLog(@"Engine exited, ending thread");
-    // wait a little to let the client close cleanly
-    [NSThread sleepForTimeInterval:2];
+
     // Close the client socket
     SDLNet_TCP_Close(csd);
     SDLNet_Quit();
 
     [pool release];
-    //Invoking this method should be avoided as it does not give your thread a chance to clean up any resources it allocated during its execution.
+    // Invoking this method should be avoided as it does not give your thread a chance
+    // to clean up any resources it allocated during its execution.
     //[NSThread exit];
 }
 

@@ -43,7 +43,6 @@
 
     switch (theButton.tag) {
         case 0:
-            playSound(@"backSound");
             if ([self.mapConfigViewController busy]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Wait for the Preview",@"")
                                                                 message:NSLocalizedString(@"Before returning the preview needs to be generated",@"")
@@ -52,8 +51,10 @@
                                                       otherButtonTitles:nil];
                 [alert show];
                 [alert release];
-            } else
+            } else {
+                playSound(@"backSound");
                 [[self parentViewController] dismissModalViewControllerAnimated:YES];
+            }
             break;
         case 1:
             playSound(@"clickSound");
@@ -233,14 +234,14 @@
                                       @"",@"savefile",
                                       nil];
 
-
+    // also modify SavedGamesViewController.m
     StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
     statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
         statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
-    [self presentModalViewController:statsPage animated:NO];
+    // avoid showing the stat page immediately, but wait for 3 seconds
+    [self performSelector:@selector(presentModalViewController:animated:) withObject:statsPage afterDelay:3];
 
-    // also modify SavedGamesViewController.m
     NSArray *stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
     if ([stats count] <= 1) {
         DLog(@"%@",stats);
@@ -250,7 +251,6 @@
         [statsPage.tableView reloadData];
         [statsPage viewWillAppear:YES];
     }
-
 
     [statsPage release];
 }
