@@ -92,7 +92,7 @@
                                                     blue:(color & 0xFF)/255.0f
                                                    alpha:1.0f];
         cell.textLabel.text = [NSString stringWithFormat:@"%d. %@ (%@ kills)", row+1, [info objectAtIndex:2], [info objectAtIndex:1]];
-        imgString = [NSString stringWithFormat:@"statsMedal%d",row+1];
+        imgString = [NSString stringWithFormat:@"StatsMedal%d",row+1];
     } else if (section == 2) {  // general info
         imgString = @"iconDamage";
         cell.textLabel.text = [self.statsArray objectAtIndex:row + 2];
