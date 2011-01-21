@@ -559,7 +559,7 @@ tai aseta eri nimimerkki asetuksissa:</translation>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation>Windows-versio Hedgewarsista tukee Xfireä. Lisää Hedgewars sen pelilistaan niin kaverisi näkee kun pelaat.</translation>
+        <translation type="obsolete">Windows-versio Hedgewarsista tukee Xfireä. Lisää Hedgewars sen pelilistaan niin kaverisi näkee kun pelaat.</translation>
     </message>
     <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
@@ -629,7 +629,7 @@ tai aseta eri nimimerkki asetuksissa:</translation>
     <message>
         <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation>Mehiläinen voi olla hankala käyttää. Sen säde riippuu nopeudesta, joten älä käytä sitä täydellä voimalla</translation>
+        <translation type="obsolete">Mehiläinen voi olla hankala käyttää. Sen säde riippuu nopeudesta, joten älä käytä sitä täydellä voimalla</translation>
     </message>
     <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
@@ -659,7 +659,7 @@ tai aseta eri nimimerkki asetuksissa:</translation>
     <message>
         <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation>Käytä palavaa kranaattia estämään siilia kulkemasta esimerkiksi tunneleihin ja tasoille.</translation>
+        <translation type="obsolete">Käytä palavaa kranaattia estämään siilia kulkemasta esimerkiksi tunneleihin ja tasoille.</translation>
     </message>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
@@ -713,6 +713,21 @@ tai aseta eri nimimerkki asetuksissa:</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -1303,6 +1318,46 @@ Haluatko silti liittyä huoneeseen?</translation>
         <source>hand drawn map...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Cyan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cyan/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Blue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side-by-side</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Top-Bottom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wiggle</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -1531,6 +1586,10 @@ Haluatko silti liittyä huoneeseen?</translation>
     </message>
     <message>
         <source>Gameplay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo rendering</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

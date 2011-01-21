@@ -122,7 +122,7 @@ PageMain::PageMain(QWidget* parent) :
         Tips << tr("We're open to suggestions and constructive feedback. If you don't like something or got a great idea, let us know!", "Tips");
         Tips << tr("Especially while playing online be polite and always remember there might be some minors playing with or against you as well!", "Tips");
         Tips << tr("Special game modes such as 'Vampirism' or 'Karma' allow you to develop completely new tactics. Try them in a custom game!", "Tips");
-        Tips << tr("The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.", "Tips");
+        Tips << tr("The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.", "Tips");
         Tips << tr("You should never install Hedgewars on computers you don't own (school, university, work, etc.). Please ask the responsible person instead!", "Tips");
         Tips << tr("Hedgewars can be perfect for short games during breaks. Just ensure you don't add too many hedgehogs or use an huge map. Reducing time and health might help as well.", "Tips");
         Tips << tr("No hedgehogs were harmed in making this game.", "Tips");
@@ -132,13 +132,13 @@ PageMain::PageMain(QWidget* parent) :
         Tips << tr("Most weapons won't work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.", "Tips");
         Tips << tr("The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.", "Tips");
         Tips << tr("The Piano Strike is the most damaging air strike. You'll lose the hedgehog performing it, so there's a huge downside as well.", "Tips");
-        Tips << tr("The Homing Bee can be tricky to use. It's turn radius depends on it's velocity, so try to not use full power.", "Tips");
+        Tips << tr("The Homing Bee can be tricky to use. Its turn radius depends on it's velocity, so try to not use full power.", "Tips");
         Tips << tr("Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.", "Tips");
         Tips << tr("The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.", "Tips");
         Tips << tr("If you're stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.", "Tips");
         Tips << tr("The Cake's maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.", "Tips");
         Tips << tr("The Flame Thrower is a weapon but it can be used for tunnel digging as well.", "Tips");
-        Tips << tr("Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.", "Tips");
+        Tips << tr("Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.", "Tips");
         Tips << tr("Want to know who's behind the game? Click on the Hedgewars logo in the main menu to see the credits.", "Tips");
         Tips << tr("Like Hedgewars? Become a fan on %1 or follow us on %2!", "Tips").arg("<a href=\"http://www.facebook.com/Hedgewars\">Facebook</a>").arg("<a href=\"http://twitter.com/hedgewars\">Twitter</a>");
         Tips << tr("Feel free to draw your own graves, hats, flags or even maps and themes! But note that you'll have to share them somewhere to use them online.", "Tips");

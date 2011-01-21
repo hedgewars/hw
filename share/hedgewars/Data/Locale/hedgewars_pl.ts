@@ -16,15 +16,15 @@
     <name>DrawMapWidget</name>
     <message>
         <source>File error</source>
-        <translation>Błąd pliku</translation>
+        <translation type="obsolete">Błąd pliku</translation>
     </message>
     <message>
         <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation>Nie można otworzyć &apos;%1&apos; do zapisu</translation>
+        <translation type="obsolete">Nie można otworzyć &apos;%1&apos; do zapisu</translation>
     </message>
     <message>
         <source>Cannot read file &apos;%1&apos;</source>
-        <translation>Nie można odczytać pliku &apos;%1&apos;</translation>
+        <translation type="obsolete">Nie można odczytać pliku &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -601,7 +601,7 @@ w ustawieniach gry:</translation>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation>Wersja Hedgewars dla systemu Windows wspiera XFire. Upewnij się, że dodałeś Hedgewars do listy gier by Twoi znajomi mogli zobaczyć Ciebie w czasie gry.</translation>
+        <translation type="obsolete">Wersja Hedgewars dla systemu Windows wspiera XFire. Upewnij się, że dodałeś Hedgewars do listy gier by Twoi znajomi mogli zobaczyć Ciebie w czasie gry.</translation>
     </message>
     <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
@@ -676,7 +676,7 @@ w ustawieniach gry:</translation>
     <message>
         <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation>Pszczoła potrafi być ciężka w użyciu. Jej promień skrętu zależy od prędkości lotu, więc nie staraj się nie używać pełnej mocy podczas strzału.</translation>
+        <translation type="obsolete">Pszczoła potrafi być ciężka w użyciu. Jej promień skrętu zależy od prędkości lotu, więc nie staraj się nie używać pełnej mocy podczas strzału.</translation>
     </message>
     <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
@@ -706,7 +706,7 @@ w ustawieniach gry:</translation>
     <message>
         <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation>Użyj koktajlu Mołotowa by powstrzymać przeciwnika przed przedostaniem się przez tunele lub platformy.</translation>
+        <translation type="obsolete">Użyj koktajlu Mołotowa by powstrzymać przeciwnika przed przedostaniem się przez tunele lub platformy.</translation>
     </message>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
@@ -762,6 +762,21 @@ w ustawieniach gry:</translation>
         <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
         <translation>Swoje zespoły i konfigurację gry znajdziesz w folderze &quot;.hedgewars&quot; w twoim katalogu domowym. Twórz regularnie kopie zapasowe, ale nie edytuj tych plików własnoręcznie.</translation>
+    </message>
+    <message>
+        <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1356,6 +1371,46 @@ Czy chcesz dołączyć do pokoju?</translation>
         <source>hand drawn map...</source>
         <translation>Mapa rysowana ręcznie...</translation>
     </message>
+    <message>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Cyan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cyan/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Blue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side-by-side</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Top-Bottom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wiggle</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -1601,6 +1656,10 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     <message>
         <source>Gameplay</source>
         <translation>Rozgrywka</translation>
+    </message>
+    <message>
+        <source>Stereo rendering</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

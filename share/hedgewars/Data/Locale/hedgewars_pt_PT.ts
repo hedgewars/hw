@@ -550,7 +550,7 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation>A versão do Hedgewars para Windows suporta Xfire. Não te esqueças de adicionar o Hedgewars à tua lista de jogos para que os teus amigos te possam ver a jogar.</translation>
+        <translation type="obsolete">A versão do Hedgewars para Windows suporta Xfire. Não te esqueças de adicionar o Hedgewars à tua lista de jogos para que os teus amigos te possam ver a jogar.</translation>
     </message>
     <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
@@ -620,7 +620,7 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation>A Abelha Teleguiada é uma arma difícil de usar. O grau a que pode virar depende da sua velocidade, por isso tenta não a usar com o poder máximo.</translation>
+        <translation type="obsolete">A Abelha Teleguiada é uma arma difícil de usar. O grau a que pode virar depende da sua velocidade, por isso tenta não a usar com o poder máximo.</translation>
     </message>
     <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
@@ -650,7 +650,7 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation>Utiliza o Coquetail Molotov para temporariamente impedir outros ouriços de passar por áreas no terreno como túneis e plataformas.</translation>
+        <translation type="obsolete">Utiliza o Coquetail Molotov para temporariamente impedir outros ouriços de passar por áreas no terreno como túneis e plataformas.</translation>
     </message>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
@@ -701,6 +701,21 @@ outro nome de utilizador no menu de configuração:</translation>
         <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
         <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;.hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, mas não os edites manualmente.</translation>
+    </message>
+    <message>
+        <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1261,6 +1276,46 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
         <source>hand drawn map...</source>
         <translation>mapa desenhado à mão...</translation>
     </message>
+    <message>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Cyan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cyan/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Blue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side-by-side</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Top-Bottom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wiggle</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -1490,6 +1545,10 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message>
         <source>Gameplay</source>
         <translation>Jogabilidade</translation>
+    </message>
+    <message>
+        <source>Stereo rendering</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
