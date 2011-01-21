@@ -91,6 +91,5 @@ locale = {
 	["You have SCORED!!"] = "¡Has anotado!",
 	["You've failed. Try again."] = "Has fracasado. Inténtalo de nuevo.",
 	["You've reached the goal!| |Time: "] = "¡Has llegado a la meta!| |Tiempo: ",
-	["You've reached the goal!| |Time:"] = "¡Has llegado a la meta!| |Tiempo:",
 	["'Zooka Team"] = "Bazuqueros",
     }

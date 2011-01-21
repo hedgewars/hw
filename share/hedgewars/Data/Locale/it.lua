@@ -72,7 +72,7 @@ locale = {
 	["Shotgun Team"] = "Squadra FaP",
 	["Shotgun Training"] = "Allenamento con il Fucile a Pompa",
 	["%s is out and Team %d|scored a penalty!| |Score:"] = "%s è fuori dal campo e la squadra %d|prende una penalità!| |Punteggio:", -- Basketball, Knockball
-	["%s is out and Team %d|scored a point!| |Score:"] = "�s è fuori dal campo e la squadra %d|guadagna un punto!| |Puntuación:", -- Basketball, Knockball
+	["%s is out and Team %d|scored a point!| |Score:"] = "?s è fuori dal campo e la squadra %d|guadagna un punto!| |Puntuación:", -- Basketball, Knockball
 	["Sniper Training"] = "Addestramento con il Fucile di Precisione",
 	["Sniperz"] = "Squadra FdP",
 	["Spooky Tree"] = "Albero stregato",
@@ -91,6 +91,5 @@ locale = {
 	["You have SCORED!!"] = "Hai guadagnato un PUNTO!",
 	["You've failed. Try again."] = "Hai fallito. Prova di nuovo!",
 	["You've reached the goal!| |Time: "] = "Hai raggiunto il traguardo!| |Tempo: ",
-	["You've reached the goal!| |Time:"] = "Hai raggiunto il traguardo!| |Tempo:",
 	["'Zooka Team"] = "Squadra 'zooka",
     }

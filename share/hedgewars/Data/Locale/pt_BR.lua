@@ -89,7 +89,6 @@ locale = {
 --      ["Victory for the "] = "", -- CTF_Blizzard, Capture_the_Flag
 --      ["You have SCORED!!"] = "",
 --      ["You've failed. Try again."] = "",
---      ["You've reached the goal!| |Time:"] = "",
 	["You've reached the goal!| |Time: "] = "Você alcançou o objetivo!| |Tempo: ",
 	["'Zooka Team"] = "Bazuqueiros",
     }
