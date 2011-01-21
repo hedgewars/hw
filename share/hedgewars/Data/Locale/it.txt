@@ -12,7 +12,7 @@
 00:09=DEagle
 00:10=Dinamite
 00:11=Mazza da Baseball
-00:12=Shoryuken
+00:12=Pugno di Fuoco
 00:13=sec
 00:14=Paracadute
 00:15=Attacco Missilistico
@@ -38,10 +38,21 @@
 00:35=Tempo Extra
 00:36=Mirino Laser
 00:37=Vampirismo
-00:38=Fucile di precisione
+00:38=Fucile di Precisione
 00:39=Disco Volante
 00:40=Bomba Molotov
 00:41=Uccellino
+00:42=Dispositivo Portatile per Portali
+00:43=Ultima Sonata
+00:44=Vecchio Limburger
+00:45=Pistola Sinusoidale (beta)
+00:46=Lanciafiamme
+00:47=Mine Adesive
+00:48=Martello
+00:49=Risurrettore
+00:50=Attacco Perforante
+00:51=Palla di Fango
+00:52=Nessuna arma selezionata
 
 01:00=Combattiamo!
 01:01=Round in parità
@@ -52,7 +63,12 @@
 01:06=Sudden death!
 01:07=%1 rimanenti
 01:08=Carburante
-01:09=Sincronizzo...
+01:09=Sincronizzazione...
+01:10=L'utilizzo di questa utilità non farà finire il turno!
+01:11=Questa arma o utilità non è ancora disponibile!
+01:12=Ultimo turno prima del Sudden Death!
+01:13=%1 turni rimanenti prima del Sudden Death!
+01:14=Preparati, %1!
 
 ; Event messages
 ; Hog (%1) died
@@ -97,6 +113,16 @@
 02:00=%1 è spirato
 02:00=%1 riposa in pace
 02:00=Dottore, chiami un dottore!
+02:00=%1 preferisce giocare a Wormux
+02:00=%1 ha perso la sua partita!
+02:00=%1 è morto con (poco) onore!
+02:00=%1 va verso il Giudizio Universale!
+02:00=%1 non meritava di giocare questa partita!
+02:00=È la fine per %1
+02:00=I gatti hanno sette vite, %1 no!
+02:00=%1 è caduto per l'onore della sua squadra!
+02:00=%1 non ama questo gioco
+
 ; Hog (%1) drowned
 02:01=%1 gioca a fare il sottomarino!
 02:01=%1 imita il Titanic!
@@ -138,6 +164,13 @@
 02:01=%1 si sta allenando nel nuoto a dorso
 02:01=%1 ha scoperto che l'acqua è bagnata
 02:01=%1 ha perso il battello
+02:01=%1 va a visitare la Fossa delle Marianne
+02:01=%1 è cibo per i pesci
+02:01=Ooops! %1 can't swim without flippers!
+02:01=%1 pare amare l'acqua più di ogni altra cosa
+02:01=%1 avrebbe dovuto fare qualche lezione di nuoto
+02:01=E' abbastanza salata l'acqua, %1?
+02:01=%1 sprofonda nei più neri abissi
 ; Match starts
 02:02=Combattiamo!
 02:02=Armato e pronto!
@@ -189,6 +222,9 @@
 02:05=Corretto dosaggio: tutti quelli che trovi!
 02:05=Consegna urgente!
 02:05=Rifornimenti!
+02:05=Direttamente dall'ospedale!
+02:05=Correte! Casse salute in omaggio!
+02:05=Una superpozione! Ops... gioco sbagliato!
 ; New ammo crate
 02:06=Altre armi!
 02:06=È qui la festa?!
@@ -210,6 +246,10 @@
 02:06=Non farlo prendere al nemico!
 02:06=Una cassa misteriosa!
 02:06=Giochi nuovi di zecca!
+02:06=Attenzione! Fragile!
+02:06=Regali per ricci simpatici!
+02:06=Con questo non avrai più problemi!
+02:06=Nuove armi solo per te!
 ; New utility crate
 02:07=Attrezzi per tutti!
 02:07=Nuovi accessori per la casa!
@@ -220,6 +260,7 @@
 02:07=Usalo con saggezza
 02:07=Oooh questa cassa è pesante
 02:07=Potrebbe servirti
+02:07=Utilissime queste utilità!
 ; Hog (%1) skips his turn
 02:08=%1 è così noioso...
 02:08=%1 deve riordinare le idee
@@ -250,6 +291,11 @@
 02:08=Forza, puoi fare di meglio, %1!
 02:08=%1 ha apparentemente cose migliori da fare
 02:08=%1 s'è addormentato
+02:08=%1 vuole rispondere al telefono
+02:08=%1 adotta una nuova strategia
+02:08=%1 preferisce rimanere neutrale
+02:08=%1 ha alzato la bandiera bianca
+
 ; Hog (%1) hurts himself only
 02:09=%1 dovrebbe migliorare la sua mira!
 02:09=%1 sembra odiarsi...
@@ -279,9 +325,14 @@
 02:09=%1 l'ha fatto chiaramente di proposito
 02:09=Non lo dirò a nessuno se non vuoi, %1
 02:09=Imbarazzante!
-02:09=Sono sicuro che nessuno ti ha visto %1
+02:09=Sono sicuro che nessuno ti abbia visto, %1
 02:09=%1 dovrebbe riguardarsi qualche manuale
 02:09=Chiaramente è l'arma di %1 che non funziona
+02:09=%1 non ama molto la sua vita
+02:09=%1 imita i kamikaze
+02:09=Il colpo peggiore. Della storia.
+02:09=%1 fa la figura del peracottaio
+02:09=%1 fa la figura del cioccolataio
 
 ; Hog shot an home run (using the bat and another hog)
 02:10=Un fuori campo!
@@ -295,21 +346,21 @@
 03:03=Arma Guidata
 03:04=Arma da Fuoco (colpi multipli)
 03:05=Strumento di Scavo
-03:06=Azione
+03:06=Azione (da Codardi)
 03:07=Mezzo di Trasporto
 03:08=Bomba di Prossimità
 03:09=Arma da Fuoco (colpi multipli)
-03:10=BOOM!
-03:11=Bonk!
+03:10=Pericoloso Esplosivo!
+03:11=Arma da Sportivi (Bonk!)
 03:12=Arti Marziali
 03:13=NON USATO
 03:14=Mezzo di Trasporto
 03:15=Attacco Aereo
 03:16=Attacco Aereo
 03:17=Strumeno di Scavo
-03:18=Utilità
+03:18=Utilitàdi costruzione
 03:19=Mezzo di Trasporto
-03:20=Azione
+03:20=Azione di Cambio
 03:21=Arma Balistica
 03:22=Chiamatemi Indiana!
 03:23=(Vera) Arte Marziale
@@ -331,6 +382,16 @@
 03:39=Mezzo di Trasporto
 03:40=Granata ad Incenerimento
 03:41=Grande fan di Squawks
+03:42=Portali ovunque!
+; the misspelled "Beethoven" is intentional (-> to beat)
+03:43=La mortale sonata di Beathoven!
+03:44=Il meglio prima del 1923
+03:45=Arma Scientifica (beta)
+03:46=Arma da Fuoco (quello vero!)
+03:47=Arma da Lancio
+03:48=E' tempo di martellate!
+03:49=Antica Arte Mistica
+03:50=Attacco Aereo
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attacca i tuoi nemici con una semplice granata.|Esploderà quando il suo timer arriverà a zero.|1-5: Imposta il timer della granata|Attacco: Tieni premuto per lanciare con più forza
@@ -342,7 +403,7 @@
 04:06=Annoiato? Non hai modo di attaccare? Non vuoi|sprecare munizioni? Nessun problema!|Salta il turno, codardo!|Attacco: Salta il turno senza combattere
 04:07=Copri lunghe distanze usando colpi precisi del|rampino. Usa la tua inerzia per scivolare contro altri|ricci o fai cadere granate o altre armi|su di loro.|Attacco: Spara o rilascia il rampino|Salto Lungo: Lascia granate o armi simili
 04:08=Tieni i tuoi nemici alla larga lasciando una|mina in passaggi stretti o proprio sotto i loro|piedi. Assicurati di scappare prima di azionarla|tu stesso!|Attacco: Lascia la mina davanti a te
-04:09=Non confidi nella tua mira? Usa la Desert|Eagle per attaccare usando fino a quattro colpi.|Attacco: Spara (più volte)
+04:09=Non confidi nella tua mira? Usa la Desert|Eagle per attaccare usando fino a quattro colpi.|Attacco: Spara (quattro volte)
 04:10=La forza bruta è sempre un'opzione. Lascia questo|classico esplosivo vicino ai tuoi nemici e|batti in ritirata.|Attacco: Lascia la dinamite davanti a te
 04:11=Liberati dei ricci nemici battendoli oltre|i bordi della mappa o nell'acqua. Oppure che|ne diresti di buttare alcune mine ai|tuoi amici?|Attacco: colpisci qualunque cosa di fronte a te
 04:12=Avvicinati faccia a faccia per scatenare il|potere di questa mortale tecnica di arti marziali.|Attacco: esegue il Pugno di Fuoco
@@ -359,7 +420,7 @@
 04:23=Se non avete niente da perdere, questo può|esservi d'aiuto. Sacrificate il vostro riccio|lanciandolo in una direzione, facendogli urtare|tutto ciò che incontra per poi esplodere alla fine.|Attacco: Lancia il mortale e devastante attacco
 04:24=Buon Compleanno! Lancia questa torta, falla camminare|fino ai tuoi nemici e lasciagli avere un party|esplosivo. La torta può passare quasi tutti i terreni|ma potrebbe detonare prima in questo modo.|Attacco: Avvia la torta o fermala per farla esplodere
 04:25=Usa questo kit di travestimento per far saltare|i nemici verso il tuo riccio (e in qualche|precipzio o buco).|Attacco: Usa il kit e cerca di sedurre un altro riccio
-04:26=Lancia questa succosa anguria ai tuoi nemici.|Quando il timer finirà, si dividerà in molti altri|pezzi esplosivi.|1-5: Imposta il timer del'anguria|Attacco: Tieni premuto per lanciare con più forza
+04:26=Lancia questa succosa anguria ai tuoi nemici.|Quando il timer finirà, si dividerà in molti altri|pezzi esplosivi.|1-5: Imposta il timer dell'anguria|Attacco: Tieni premuto per lanciare con più forza
 04:27=Lascia che il fuoco dell'inferno cada sui nemici|usando questo diabolico esplosivo. Non|avvicinarti troppo all'esplosione dato che piccoli|fuochi possono perdurare di più.|Attacco: Tieni premuto per lanciare con più forza
 04:28=Poco dopo averlo lanciato, questo razzo inizierà|a scavare attraverso il terreno ed esploderà|quando la sua spoletta verrà azionata o tornerà|di nuovo in superficie.|Attacco: Tieni premuto per lanciare con più forza
 04:29=Questa non è adatta ai bambini! La Sparapalle spara|tonnellate di piccole palline colorate riempite di|esplosivo.|Attacco: Spara alla massima potenza|Su/Giu: Continua a mirare
@@ -372,9 +433,19 @@
 04:36=Beh, a volte si è davvero uno schifo a mirare.|Sfruttate un po' di assistenza usando la moderna|tecnologia.|Attacco: Attiva
 04:37=Non temete la luce del giorno. Durerà solo un turno|ma vi permetterà di assorbire il danno che farete|agli altri ricci.|Attacco: Attiva
 04:38=Il fucile di precisione può essere l'arma più|devastante del vostro arsenale, tuttavia è molto debole|a distanza ravvicinata. Il danno inflitto aumenta con|la distanza dall'obiettivo.|Attacco: Spara (due volte)
-04:39=Vola in un'altra parte della mappa usando il|disco volante. Questo veicolo difficile da imparare|è in grado di portarvi quasi in ogni zona del|campo di battaglia.|Attacco: Attiva|Su/Destra/Sinistra: Applica forza in una direzione
+04:39=Vola in un'altra parte della mappa usando il|disco volante. Questo veicolo difficile da imparare|è in grado di portarvi quasi in ogni zona del|campo di battaglia.|Lo potete usare anche per andare sott'acqua!|Attacco: Attiva|Su/Destra/Sinistra: Applica forza in una direzione
 04:40=Dai fuoco a una parte di terreno usando questa|bottiglia piena di liquido infiammabile.|Attacco: Tieni premuto per lanciare con più potenza
 04:41=La prova che la natura può persino fare meglio|del disco volante. L'uccellino può trasportare|il vostro riccio e bombardare di uova i nemici!|Attacco: Attiva e lancia le uova|Su/Giu/Destra/Sinistra: Vola in una direzione
+04:42=Questo creatore portatile di portali|può trasferire all'istante voi, i vostri nemici|o le vostre armi da un punto all'altro del|terreno.|Usatelo con accortezza e potrà riverlarsi|la vostra arma vincente!|Attacco: Lancia un portale|Tab: Cambia il colore del portale
+04:43=Do! Re! Mi! Fa! Sol! La! Si!|Suonate il mitico pianoforte di Beathoven e|sarà un successo esplosivo!|Il pianoforte cadrà dal cielo ma|qualcuno deve suonarlo e questo costerà|la sua vita!|Cursore: Sceglie la zona da attaccare|F1-F9: Suona il pianoforte
+04:44=Questo non è normale formaggio, è guerriglia biologica!| Non farà un gran danno al momento dell'esplosione|ma avvelenerà chiunque ne senta lo spiacevole odore!|1-5: Imposta il timer del limburger|Attacco: Tieni premuto per lanciare con più forza
+04:45=Tutto il potere della fisica e della scienza in|mano vostra con questa potente arma|in grado di generare una potente curva|sinusoidale di pura energia.|Attenzione! Questa arma vi darà un forte|contraccolpo (ancora in versione beta)|Attacco: Spara
+04:46=Lanciate delle brucianti fiamme contro i vostri nemici.|Assolutamente scottante!|Attacco: Attiva|Su/Giù: Continua a mirare|Sinistra/Destra: Modifica la potenza di fuoriuscita delle fiamme
+04:47=Raddoppiate il divertimento con due appiccicose mine.|Usatele per difendervi o creare potenti reazioni a catena (o ambedue le cose!)|Attacco: Tieni premuto per lanciare con più forza (due volte)
+04:48=Colpite i vostri nemici con forza!|Un buon colpo di questo martello toglierà|un terzo della vita della vittima e la farà|sprofondare nel terreno.|Attacco: Attiva
+04:49=Risuscitate i vostri ricci morti in battaglia.|Ma attenzione a non risuscitare i vostri nemici!|Attacco: Tieni premuto per risuscitare lentamente|Su: Accelera la risurrezione
+04:50=Scavate dall'alto verso il basso!|Con questo attacco aereo è possibile scavare a fondo grazie|a cinque razzi trivella lanciati dall'alto, che colpiranno|tutto quello che sarà a tiro.|Cursore: Sceglie la zona da attaccare
+04:51=Spingete i nemici in acqua o sopra le mine!|Questa semplice arma non farà molti danni ma|spingerà con forza i nemici che colpisce!|Nei temi Snow e Christmas è una palla di neve!|Attacco: Tieni premuto per lanciare con più forza
 
 ; Game goal strings
 05:00=Modalità di Gioco
@@ -393,3 +464,8 @@
 05:13=Timer delle Mine: Le mine esploderanno all'istante
 05:14=Timer delle Mine: Le mine esploderanno dopo 0 - 3 secondi
 05:15=Modificatore Danni: Tutte le armi faranno il %1% di danni
+05:16=La vita di tutti i ricci verrà resettata allo stato di partenza alla fine di ogni turno
+05:17=I ricci AI risorgono dalla morte
+05:18=Attacchi illimitati
+05:19=Le armi verranno resettate allo stato di partenza alla fine di ogni turno
+05:20=Le armi non sono condivise tra i ricci della stessa squadra
