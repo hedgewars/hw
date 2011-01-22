@@ -617,6 +617,7 @@ PageOptions::PageOptions(QWidget* parent) :
             editNetNick = new QLineEdit(groupMisc);
             editNetNick->setMaxLength(20);
             editNetNick->setText(QLineEdit::tr("unnamed"));
+            connect(editNetNick, SIGNAL(editingFinished()), this, SLOT(trimNetNick()));
             MiscLayout->addWidget(editNetNick, 0, 1);
 
             QLabel *labelLanguage = new QLabel(groupMisc);
@@ -830,6 +831,11 @@ void PageOptions::setFullscreen(void)
         this->CBResolution->setCurrentIndex(previousResolutionIndex);
     previousResolutionIndex = tmp;
     this->CBResolution->setEnabled(!this->CBFullscreen->isChecked());
+}
+
+void PageOptions::trimNetNick()
+{
+    editNetNick->setText(editNetNick->text().trimmed());
 }
 
 PageNet::PageNet(QWidget* parent) : AbstractPage(parent)

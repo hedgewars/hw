@@ -697,7 +697,7 @@ void HWForm::PlayDemo()
 
 void HWForm::NetConnectServer(const QString & host, quint16 port)
 {
-    _NetConnect(host, port, ui.pageOptions->editNetNick->text());
+    _NetConnect(host, port, ui.pageOptions->editNetNick->text().trimmed());
 }
 
 void HWForm::NetConnectOfficialServer()
