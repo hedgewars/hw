@@ -91,7 +91,7 @@ modifyTeam team room = room{teams = replaceTeam team $ teams room}
             t : replaceTeam team teams
 
 illegalName :: String -> Bool
-illegalName = all isSpace
+illegalName s = null s || all isSpace s || isSpace (head s) || isSpace (last s)
 
 protoNumber2ver :: Word16 -> String
 protoNumber2ver 17 = "0.9.7-dev"
