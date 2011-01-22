@@ -1926,7 +1926,7 @@ const
             ejectX: 0;
             ejectY: 0),
 
-// Ressurrector
+// Resurrector
         (NameId: sidResurrector;
             NameTex: nil;
             Probability: 0;
@@ -1960,10 +1960,11 @@ const
                             ammoprop_NeedTarget or
                             ammoprop_AttackingPut or
                             ammoprop_DontHold or
+                            ammoprop_Timerable or
                             ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
-                Timer: 0;
+                Timer: 5000;
                 Pos: 0;
                 AmmoType: amDrillStrike;
                 AttackVoice: sndIncoming);
@@ -1977,6 +1978,7 @@ const
             PosSprite: sprAmAirplane;
             ejectX: 0;
             ejectY: 0),
+
 // Snowball/Mudball
             (NameId: sidSnowball;
             NameTex: nil;
