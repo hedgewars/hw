@@ -313,7 +313,7 @@ with Gear^,
                                 gtResurrector, 0, _0, _0, 0);
                         CurAmmoGear^.SoundChannel := LoopSound(sndResurrector);
                     end;
-                   amDrillStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 3, _0, _0, 0);
+                   amDrillStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 3, _0, _0, CurWeapon^.Timer);
                    //amMelonStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 4, _0, _0, 0);
                   end;
 

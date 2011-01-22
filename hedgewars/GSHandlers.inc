@@ -2299,7 +2299,7 @@ begin
             2: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtNapalmBomb, 0, cBombsSpeed *
                              Gear^.Tag, _0, 0);
             3: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtDrill, gsttmpFlag, cBombsSpeed *
-                             Gear^.Tag, _0, 0);
+                             Gear^.Tag, _0, Gear^.Timer + 1);
             //4: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtWaterMelon, 0, cBombsSpeed *
             //                 Gear^.Tag, _0, 5000);
         end;
@@ -2981,6 +2981,7 @@ begin
     else if not TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) then
         begin
         StopSound(Gear^.SoundChannel);
+        Gear^.Tag := 1;
         Gear^.doStep := @doStepDrill
         end;
 
@@ -3033,8 +3034,20 @@ begin
 
         Gear^.SoundChannel := LoopSound(sndDrillRocket);
         Gear^.doStep := @doStepDrillDrilling;
+        if (Gear^.State and gsttmpFlag) <> 0 then
+            gear^.RenderTimer:= true;
         dec(Gear^.Timer)
     end
+    else if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Tag <> 0) then
+         begin
+            if Gear^.Timer = 0 then
+            begin
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
+                DeleteGear(Gear);
+            end
+            else
+                dec(Gear^.Timer);
+         end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

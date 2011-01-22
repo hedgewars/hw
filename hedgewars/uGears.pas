@@ -427,7 +427,9 @@ case Kind of
                 gear^.Timer:= 5000
                 end;
        gtDrill: begin
-                gear^.Timer:= 5000;
+                if gear^.Timer = 0 then gear^.Timer:= 5000;
+                // Tag for drill strike. if 1 then first impact occured already
+                gear^.Tag := 0;
                 gear^.Radius:= 4;
                 gear^.Density:= _1;
                 end;
