@@ -77,7 +77,9 @@ modifyTeam team room = room{teams = replaceTeam team $ teams room}
             t : replaceTeam team teams
 
 illegalName :: B.ByteString -> Bool
-illegalName = all isSpace . B.unpack
+illegalName b = null s || all isSpace s || isSpace (head s) || isSpace (last s)
+    where
+        s = B.unpack b
 
 protoNumber2ver :: Word16 -> B.ByteString
 protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
