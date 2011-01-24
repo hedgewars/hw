@@ -68,6 +68,15 @@
 -- removed teleport from starting weapons
 -- increased captures to 3
 
+-----------
+-- 0.7
+------------
+
+-- hopefully fixed a bug with the teleporters
+
+-- added a fix for crate possibly getting imbedded in land when it was near
+-- the water line
+
 loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 
 ---------------------------------------------------------------
@@ -82,6 +91,8 @@ local roundsCounter = 0	-- used to determine when to spawn more crates
 						-- currently every 6 TURNS, should this work
 						-- on ROUNDS instead?
 local effectTimer = 0
+
+local ropeGear = nil
 
 --------------------------
 -- hog and team tracking variales
@@ -349,8 +360,13 @@ function FlagThiefDead(gear)
 	end
 
 	if fThief[wtf] ~= nil then
-		--SetEffect(fThief[wtf], hePoisoned, false)
-		fGear[wtf] = SpawnAmmoCrate(fThiefX[wtf],fThiefY[wtf]-50,amSkip)
+		
+		if fThiefY[wtf] > 2040 then
+			fGear[wtf] = SpawnAmmoCrate(fThiefX[wtf],(fThiefY[wtf]+10),amSkip)
+		else
+			fGear[wtf] = SpawnAmmoCrate(fThiefX[wtf],(fThiefY[wtf]-50),amSkip)
+		end
+
 		AddVisualGear(fThiefX[wtf], fThiefY[wtf], vgtBigExplosion, 0, false)
 		fThief[wtf] = nil
 	end
@@ -417,7 +433,11 @@ function CheckTeleporters()
 
 	if teleportActive == true then
 		if actionReset == 0 then
-			SetGearMessage(CurrentHedgehog, gmAttack)
+			if ropeGear ~= nil then
+				if GetGearElasticity(ropeGear) ~= 0 then
+					SetGearMessage(CurrentHedgehog, gmAttack)
+				end
+			end
 			--AddCaption(actionReset .. ";" .. "attack")
 		elseif actionReset == 10 then
 			SetGearMessage(CurrentHedgehog, 0)
@@ -752,12 +772,20 @@ function onGearAdd(gear)
 
 	end
 
+	if GetGearType(gear) == gtRope then
+		ropeGear = gear
+	end
+
 end
 
 function onGearDelete(gear)
 
 	if (gear == fGear[0]) or (gear == fGear[1]) then
 		FlagDeleted(gear)
+	end
+
+	if GetGearType(gear) == gtRope then
+		ropeGear = nil
 	end
 
 end
