@@ -104,7 +104,7 @@ protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
             (34, "0.9.15-dev"),
             (35, "0.9.14.1"),
             (37, "0.9.15"),
-            (38, "0.9.15-dev")]
+            (38, "0.9.16-dev")]
 
 askFromConsole :: String -> IO String
 askFromConsole msg = do
