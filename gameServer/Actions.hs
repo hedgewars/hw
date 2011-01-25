@@ -428,7 +428,7 @@ processAction (AddClient client) = do
     liftIO $ do
         ci <- addClient rnc client
         t <- forkIO $ clientRecvLoop (clientSocket client) (coreChan si) ci
-        forkIO $ clientSendLoop (clientSocket client) t (sendChan client) ci
+        forkIO $ clientSendLoop (clientSocket client) t (coreChan si) (sendChan client) ci
 
         infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime client))
 

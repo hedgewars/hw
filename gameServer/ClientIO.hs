@@ -52,13 +52,13 @@ clientRecvLoop :: Socket -> Chan CoreMessage -> ClientIndex -> IO ()
 clientRecvLoop s chan ci = do
     msg <- (listenLoop s chan ci >> return "Connection closed") `catch` (return . B.pack . show)
     clientOff msg
-    where 
-        clientOff msg = mapM_ (writeChan chan) [ClientMessage (ci, ["QUIT", msg]), Remove ci]
+    where
+        clientOff msg = writeChan chan $ ClientMessage (ci, ["QUIT", msg])
 
 
 
-clientSendLoop :: Socket -> ThreadId -> Chan [B.ByteString] -> ClientIndex -> IO ()
-clientSendLoop s tId chan ci = do
+clientSendLoop :: Socket -> ThreadId -> Chan CoreMessage -> Chan [B.ByteString] -> ClientIndex -> IO ()
+clientSendLoop s tId coreChan chan ci = do
     answer <- readChan chan
     Exception.handle
         (\(e :: Exception.IOException) -> when (not $ isQuit answer) $ sendQuit e) $ do
@@ -66,10 +66,11 @@ clientSendLoop s tId chan ci = do
 
     if (isQuit answer) then
         do
-        killThread tId
         Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on sClose") $ sClose s
+        killThread tId
+        writeChan coreChan $ Remove ci
         else
-        clientSendLoop s tId chan ci
+        clientSendLoop s tId coreChan chan ci
 
     where
         --sendQuit e = writeChan coreChan $ ClientMessage (ci, ["QUIT", B.pack $ show e])
