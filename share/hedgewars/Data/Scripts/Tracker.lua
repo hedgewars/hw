@@ -224,27 +224,6 @@ function runOnGears(func)
     end
 end
 
--- Run a function on all gears within a box
-function runOnGearsInBox(func, x, y, w, h)
-    for k, gear in ipairs(gears) do
-        gx, gy = GetGearPosition(gear)
-        if gx >= x and gy >= y and gx <= x + w and gy <= y + h then
-            func(gear)
-        end
-    end
-end
-
--- Run a function on all gears within a circle
-function runOnGearsInCircle(func, x, y, r)
-    for k, gear in ipairs(gears) do
-        gx, gy = GetGearPosition(gear)
-        gr = GetGearRadius(gear)
-        if (r + gr) ^ 2 >= (x - gx) ^ 2 + (y - gy) ^ 2 then
-            func(gear)
-        end
-    end
-end
-
 -- Run a function on all tracked hogs
 function runOnHogs(func)
     for k, hogs in pairs(teams) do
