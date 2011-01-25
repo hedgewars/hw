@@ -90,9 +90,16 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                 AnswerClients [sendChan cl] $ "JOINED" : map nick jRoomClients
             ]
             ++ (map (readynessMessage cl) jRoomClients)
+            ++ (answerFullConfig cl $ params jRoom)
 
-    where
+        where
         readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
+
+        toAnswer cl (paramName, paramStrs) = AnswerClients [sendChan cl] $ "CFG" : paramName : paramStrs
+
+        answerFullConfig cl params = map (toAnswer cl) (leftConfigPart ++ rightConfigPart)
+            where
+            (leftConfigPart, rightConfigPart) = partition (\(p, _) -> p /= "MAP") $ Map.toList params
 
 
 

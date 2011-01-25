@@ -188,6 +188,7 @@ processAction (MoveToRoom ri) = do
 
     processAction $ AnswerClients chans ["JOINED", clNick]
 
+
 processAction (MoveToLobby msg) = do
     (Just ci) <- gets clientIndex
     ri <- clientRoomA
