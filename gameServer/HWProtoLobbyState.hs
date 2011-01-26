@@ -16,13 +16,14 @@ import Utils
 import HandlerUtils
 import RoomsAndClients
 
-{-answerAllTeams protocol teams = concatMap toAnswer teams
+answerAllTeams cl = concatMap toAnswer
     where
+        clChan = sendChan cl
         toAnswer team =
-            [AnswerThisClient $ teamToNet protocol team,
-            AnswerThisClient ["TEAM_COLOR", teamname team, teamcolor team],
-            AnswerThisClient ["HH_NUM", teamname team, show $ hhnum team]]
--}
+            [AnswerClients [clChan] $ teamToNet team,
+            AnswerClients [clChan] ["TEAM_COLOR", teamname team, teamcolor team],
+            AnswerClients [clChan] ["HH_NUM", teamname team, B.pack . show $ hhnum team]]
+
 handleCmd_lobby :: CmdHandler
 
 
@@ -91,6 +92,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             ]
             ++ (map (readynessMessage cl) jRoomClients)
             ++ (answerFullConfig cl $ params jRoom)
+            ++ (answerTeams cl jRoom)
 
         where
         readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
@@ -100,6 +102,8 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
         answerFullConfig cl params = map (toAnswer cl) (leftConfigPart ++ rightConfigPart)
             where
             (leftConfigPart, rightConfigPart) = partition (\(p, _) -> p /= "MAP") $ Map.toList params
+
+        answerTeams cl jRoom = let f = if gameinprogress jRoom then teamsAtStart else teams in answerAllTeams cl $ f jRoom
 
 
 
