@@ -93,6 +93,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             ++ (map (readynessMessage cl) jRoomClients)
             ++ (answerFullConfig cl $ params jRoom)
             ++ (answerTeams cl jRoom)
+            ++ (watchRound cl jRoom)
 
         where
         readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
@@ -104,6 +105,12 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             (leftConfigPart, rightConfigPart) = partition (\(p, _) -> p /= "MAP") $ Map.toList params
 
         answerTeams cl jRoom = let f = if gameinprogress jRoom then teamsAtStart else teams in answerAllTeams cl $ f jRoom
+
+        watchRound cl jRoom = if not $ gameinprogress jRoom then
+                    []
+                else
+                    [AnswerClients [sendChan cl]  ["RUN_GAME"],
+                    AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs jRoom)]
 
 
 
