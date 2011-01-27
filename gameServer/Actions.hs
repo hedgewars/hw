@@ -68,7 +68,7 @@ processAction :: Action -> StateT ServerState IO ()
 
 
 processAction (AnswerClients chans msg) = do
-    liftIO $ mapM_ (flip writeChan msg) chans
+    io $ mapM_ (flip writeChan msg) chans
 
 
 processAction SendServerMessage = do
@@ -116,7 +116,7 @@ processAction (ByeClient msg) = do
         processAction $ MoveToLobby ("quit: " `B.append` msg)
         return ()
 
-    liftIO $ do
+    io $ do
         infoM "Clients" (show ci ++ " quits: " ++ (B.unpack msg))
 
         --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
@@ -128,7 +128,7 @@ processAction (ByeClient msg) = do
 
 processAction (DeleteClient ci) = do
     rnc <- gets roomsClients
-    liftIO $ removeClient rnc ci
+    io $ removeClient rnc ci
 
     s <- get
     put $! s{removedClients = ci `Set.delete` removedClients s}
@@ -158,19 +158,19 @@ processAction (DeleteClient ci) = do
 processAction (ModifyClient f) = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
-    liftIO $ modifyClient rnc f ci
+    io $ modifyClient rnc f ci
     return ()
 
 processAction (ModifyClient2 ci f) = do
     rnc <- gets roomsClients
-    liftIO $ modifyClient rnc f ci
+    io $ modifyClient rnc f ci
     return ()
 
 
 processAction (ModifyRoom f) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
-    liftIO $ modifyRoom rnc f ri
+    io $ modifyRoom rnc f ri
     return ()
 
 {-
@@ -184,7 +184,7 @@ processAction (MoveToRoom ri) = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
 
-    liftIO $ do
+    io $ do
         modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = False, isMaster = False}) ci
         modifyRoom rnc (\r -> r{playersIn = (playersIn r) + 1}) ri
         moveClientToRoom rnc ri ci
@@ -213,7 +213,7 @@ processAction (MoveToLobby msg) = do
         chans <- othersChans
         mapM_ processAction [AnswerClients chans ["LEFT", clNick, msg], RemoveClientTeams ci]
 
-    liftIO $ do
+    io $ do
             modifyRoom rnc (\r -> r{
                     playersIn = (playersIn r) - 1,
                     readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
@@ -272,7 +272,7 @@ processAction (MoveToLobby msg) = do
 processAction (AddRoom roomName roomPassword) = do
     Just clId <- gets clientIndex
     rnc <- gets roomsClients
-    proto <- liftIO $ client'sM rnc clientProto clId
+    proto <- io $ client'sM rnc clientProto clId
 
     let room = newRoom{
             masterID = clId,
@@ -281,7 +281,7 @@ processAction (AddRoom roomName roomPassword) = do
             roomProto = proto
             }
 
-    rId <- liftIO $ addRoom rnc room
+    rId <- io $ addRoom rnc room
 
     processAction $ MoveToRoom rId
 
@@ -296,8 +296,8 @@ processAction (AddRoom roomName roomPassword) = do
 processAction RemoveRoom = do
     Just clId <- gets clientIndex
     rnc <- gets roomsClients
-    ri <- liftIO $ clientRoomM rnc clId
-    roomName <- liftIO $ room'sM rnc name ri
+    ri <- io $ clientRoomM rnc clId
+    roomName <- io $ room'sM rnc name ri
     others <- othersChans
     lobbyChans <- liftM (map sendChan) $! roomClientsS lobbyId
 
@@ -306,16 +306,16 @@ processAction RemoveRoom = do
             AnswerClients others ["ROOMABANDONED", roomName]
         ]
 
-    liftIO $ removeRoom rnc ri
+    io $ removeRoom rnc ri
 
 
 processAction (UnreadyRoomClients) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     roomPlayers <- roomClientsS ri
-    roomClIDs <- liftIO $ roomClientsIndicesM rnc ri
+    roomClIDs <- io $ roomClientsIndicesM rnc ri
     processAction $ AnswerClients (map sendChan roomPlayers) ("NOT_READY" : map nick roomPlayers)
-    liftIO $ mapM_ (modifyClient rnc (\cl -> cl{isReady = False})) roomClIDs
+    io $ mapM_ (modifyClient rnc (\cl -> cl{isReady = False})) roomClIDs
     processAction $ ModifyRoom (\r -> r{readyPlayers = 0})
 
 
@@ -323,7 +323,7 @@ processAction (RemoveTeam teamName) = do
     rnc <- gets roomsClients
     cl <- client's id
     ri <- clientRoomA
-    inGame <- liftIO $ room'sM rnc gameinprogress ri
+    inGame <- io $ room'sM rnc gameinprogress ri
     chans <- othersChans
     if inGame then
             mapM_ processAction [
@@ -346,7 +346,7 @@ processAction (RemoveTeam teamName) = do
 processAction (RemoveClientTeams clId) = do
     rnc <- gets roomsClients
 
-    removeTeamActions <- liftIO $ do
+    removeTeamActions <- io $ do
         clNick <- client'sM rnc nick clId
         rId <- clientRoomM rnc clId
         roomTeams <- room'sM rnc teams rId
@@ -361,13 +361,13 @@ processAction CheckRegistered = do
     n <- client's nick
     h <- client's host
     db <- gets (dbQueries . serverInfo)
-    liftIO $ writeChan db $ CheckAccount ci n h
+    io $ writeChan db $ CheckAccount ci n h
     return ()
 
 
 processAction ClearAccountsCache = do
     dbq <- gets (dbQueries . serverInfo)
-    liftIO $ writeChan dbq ClearCache
+    io $ writeChan dbq ClearCache
     return ()
 
 
@@ -426,7 +426,7 @@ processAction (clID, serverInfo, rnc) (KickRoomClient kickID) = do
 processAction (AddClient client) = do
     rnc <- gets roomsClients
     si <- gets serverInfo
-    liftIO $ do
+    io $ do
         ci <- addClient rnc client
         t <- forkIO $ clientRecvLoop (clientSocket client) (coreChan si) ci
         forkIO $ clientSendLoop (clientSocket client) t (coreChan si) (sendChan client) ci
@@ -446,14 +446,14 @@ processAction (AddClient client) = do
 
 processAction PingAll = do
     rnc <- gets roomsClients
-    liftIO (allClientsM rnc) >>= mapM_ (kickTimeouted rnc)
-    cis <- liftIO $ allClientsM rnc
-    chans <- liftIO $ mapM (client'sM rnc sendChan) cis
-    liftIO $ mapM_ (modifyClient rnc (\cl -> cl{pingsQueue = pingsQueue cl + 1})) cis
+    io (allClientsM rnc) >>= mapM_ (kickTimeouted rnc)
+    cis <- io $ allClientsM rnc
+    chans <- io $ mapM (client'sM rnc sendChan) cis
+    io $ mapM_ (modifyClient rnc (\cl -> cl{pingsQueue = pingsQueue cl + 1})) cis
     processAction $ AnswerClients chans ["PING"]
     where
         kickTimeouted rnc ci = do
-            pq <- liftIO $ client'sM rnc pingsQueue ci
+            pq <- io $ client'sM rnc pingsQueue ci
             when (pq > 0) $
                 withStateT (\as -> as{clientIndex = Just ci}) $
                     processAction (ByeClient "Ping timeout")
@@ -462,8 +462,8 @@ processAction PingAll = do
 processAction (StatsAction) = do
     rnc <- gets roomsClients
     si <- gets serverInfo
-    (roomsNum, clientsNum) <- liftIO $ withRoomsAndClients rnc stats
-    liftIO $ writeChan (dbQueries si) $ SendStats clientsNum (roomsNum - 1)
+    (roomsNum, clientsNum) <- io $ withRoomsAndClients rnc stats
+    io $ writeChan (dbQueries si) $ SendStats clientsNum (roomsNum - 1)
     where
           stats irnc = (length $ allRooms irnc, length $ allClients irnc)
 

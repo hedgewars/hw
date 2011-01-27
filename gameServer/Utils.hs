@@ -14,6 +14,7 @@ import Network.Socket
 import System.IO
 import qualified Data.List as List
 import Control.Monad
+import Control.Monad.Trans
 import Data.Maybe
 -------------------------------------------------
 import qualified Codec.Binary.Base64 as Base64
@@ -121,5 +122,3 @@ unfoldrE f b  =
 
 showB :: Show a => a -> B.ByteString
 showB = B.pack .show
-
-io = liftIO
