@@ -13,6 +13,7 @@ import Data.Maybe
 import Control.Monad.Reader
 import Control.Monad.State.Strict
 import qualified Data.ByteString.Char8 as B
+import Control.DeepSeq
 -----------------------------
 import CoreTypes
 import Utils
@@ -52,6 +53,12 @@ data Action =
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
 
+instance NFData Action where
+    rnf (AnswerClients chans msg) = chans `deepseq` msg `deepseq` ()
+    rnf a = a `seq` ()
+
+instance NFData B.ByteString
+instance NFData (Chan a)
 
 othersChans = do
     cl <- client's id
@@ -62,7 +69,7 @@ processAction :: Action -> StateT ServerState IO ()
 
 
 processAction (AnswerClients chans msg) = do
-    liftIO $ map (flip seq ()) chans `seq` map (flip seq ()) msg `seq` mapM_ (flip writeChan msg) chans
+    liftIO $ mapM_ (flip writeChan msg) chans
 
 
 processAction SendServerMessage = do
@@ -177,11 +184,11 @@ processAction (clID, serverInfo, rnc) (ModifyServerInfo func) =
 processAction (MoveToRoom ri) = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
+
     liftIO $ do
         modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = False, isMaster = False}) ci
         modifyRoom rnc (\r -> r{playersIn = (playersIn r) + 1}) ri
-
-    liftIO $ moveClientToRoom rnc ri ci
+        moveClientToRoom rnc ri ci
 
     chans <- liftM (map sendChan) $ roomClientsS ri
     clNick <- client's nick

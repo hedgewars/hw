@@ -10,6 +10,7 @@ import Control.Monad.Reader
 import Control.Monad.State.Strict
 import Data.Set as Set
 import qualified Data.ByteString.Char8 as B
+import Control.DeepSeq
 --------------------------------------
 import CoreTypes
 import NetRoutines
@@ -28,7 +29,7 @@ reactCmd cmd = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
     actions <- liftIO $ withRoomsAndClients rnc (\irnc -> runReader (handleCmd cmd) (ci, irnc))
-    forM_ actions processAction
+    forM_ (actions `deepseq` actions) processAction
 
 mainLoop :: StateT ServerState IO ()
 mainLoop = forever $ do

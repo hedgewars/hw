@@ -9,6 +9,7 @@ import Data.List
 import Data.Word
 import Control.Monad.Reader
 import qualified Data.ByteString.Char8 as B
+import Control.DeepSeq
 --------------------------------------
 import CoreTypes
 import Actions
@@ -76,7 +77,9 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let maybeRI = find (\ri -> roomName == name (irnc `room` ri)) ris
     let jRI = fromJust maybeRI
     let jRoom = irnc `room` jRI
-    let jRoomClients = map (client irnc) $! roomClients irnc jRI -- no lazyness here!
+    let jRoomClients = map (client irnc) $ roomClients irnc jRI
+    let nicks = map nick jRoomClients
+    let chans = map sendChan (cl : jRoomClients)
     return $
         if isNothing maybeRI then 
             [Warning "No such rooms"]
@@ -87,8 +90,8 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             else
             [
                 MoveToRoom jRI,
-                AnswerClients (map sendChan $ cl : jRoomClients) ["NOT_READY", nick cl],
-                AnswerClients [sendChan cl] $ "JOINED" : map nick jRoomClients
+                AnswerClients [sendChan cl] $ "JOINED" : nicks,
+                AnswerClients chans ["NOT_READY", nick cl]
             ]
             ++ (map (readynessMessage cl) jRoomClients)
             ++ (answerFullConfig cl $ params jRoom)
@@ -112,50 +115,6 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                     [AnswerClients [sendChan cl]  ["RUN_GAME"],
                     AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs jRoom)]
 
-
-
-{-
-
-handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
-    | noSuchRoom = [Warning "No such room"]
-    | isRestrictedJoins jRoom = [Warning "Joining restricted"]
-    | roomPassword /= password jRoom = [Warning "Wrong password"]
-    | otherwise =
-        [RoomRemoveThisClient "", -- leave lobby
-        RoomAddThisClient rID] -- join room
-        ++ answerNicks
-        ++ answerReady
-        ++ [AnswerThisRoom ["NOT_READY", nick client]]
-        ++ answerFullConfig
-        ++ answerTeams
-        ++ watchRound
-    where
-        answerNicks =
-            [AnswerThisClient $ "JOINED" :
-            map (\clID -> nick $ clients IntMap.! clID) roomClientsIDs | playersIn jRoom /= 0]
-        answerReady = map
-            ((\ c ->
-                AnswerThisClient
-                [if isReady c then "READY" else "NOT_READY", nick c])
-            . (\ clID -> clients IntMap.! clID))
-            roomClientsIDs
-
-        toAnswer (paramName, paramStrs) = AnswerThisClient $ "CFG" : paramName : paramStrs
-
-        answerFullConfig = map toAnswer (leftConfigPart ++ rightConfigPart)
-        (leftConfigPart, rightConfigPart) = partition (\(p, _) -> p /= "MAP") (Map.toList $ params jRoom)
-
-        watchRound = if not $ gameinprogress jRoom then
-                    []
-                else
-                    [AnswerThisClient  ["RUN_GAME"],
-                    AnswerThisClient $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs jRoom)]
-
-        answerTeams = if gameinprogress jRoom then
-                answerAllTeams (clientProto client) (teamsAtStart jRoom)
-            else
-                answerAllTeams (clientProto client) (teams jRoom)
--}
 
 handleCmd_lobby ["JOIN_ROOM", roomName] =
     handleCmd_lobby ["JOIN_ROOM", roomName, ""]
