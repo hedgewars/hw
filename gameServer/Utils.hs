@@ -121,3 +121,5 @@ unfoldrE f b  =
 
 showB :: Show a => a -> B.ByteString
 showB = B.pack .show
+
+io = liftIO

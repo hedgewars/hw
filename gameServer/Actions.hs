@@ -45,7 +45,6 @@ data Action =
     | CheckRegistered
     | ClearAccountsCache
     | ProcessAccountInfo AccountInfo
-    | Dump
     | AddClient ClientInfo
     | DeleteClient ClientIndex
     | PingAll
@@ -365,18 +364,12 @@ processAction CheckRegistered = do
     liftIO $ writeChan db $ CheckAccount ci n h
     return ()
 
-{-
-processAction (clID, serverInfo, rnc) (ClearAccountsCache) = do
-    writeChan (dbQueries serverInfo) ClearCache
-    return (clID, serverInfo, rnc)
-    where
-        client = clients ! clID
 
+processAction ClearAccountsCache = do
+    dbq <- gets (dbQueries . serverInfo)
+    liftIO $ writeChan dbq ClearCache
+    return ()
 
-processAction (clID, serverInfo, rnc) (Dump) = do
-    writeChan (sendChan $ clients ! clID) ["DUMP", show serverInfo, showTree clients, showTree rooms]
-    return (clID, serverInfo, rnc)
--}
 
 processAction (ProcessAccountInfo info) =
     case info of
