@@ -392,7 +392,7 @@ processAction (clID, serverInfo, clients, rooms) (MoveToLobby) =
 
 
 processAction (clID, serverInfo, clients, rooms) (KickClient kickID) = do
-    let client = clients ! clID
+    let client = clients ! kickID
     currentTime <- getCurrentTime
     liftM2 replaceID (return clID) (processAction (kickID, serverInfo{lastLogins = (host client, (addUTCTime 60 $ currentTime, "60 seconds ban")) : lastLogins serverInfo}, clients, rooms) $ ByeClient "Kicked")
 
