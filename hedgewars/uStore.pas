@@ -32,6 +32,7 @@ procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+procedure LoadHedgehogHat(HHGear: PGear; newHat: shortstring);
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
 function  RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
@@ -141,6 +142,7 @@ var s: shortstring;
 
         FlagTex:= Surface2Tex(texsurf, false);
         SDL_FreeSurface(texsurf);
+        texsurf:= nil;
 
         AIKillsTex := RenderStringTex(inttostr(stats.AIKills), Clan^.Color, fnt16);
 
@@ -154,15 +156,9 @@ var s: shortstring;
                     if Hat <> 'NoHat' then
                         begin
                         if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
-                            texsurf:= LoadImage(Pathz[ptHats] + '/Reserved/' + Copy(Hat,9,Length(s)-8), ifNone)
+                            LoadHedgehogHat(Gear, 'Reserved/' + Copy(Hat,9,Length(s)-8))
                         else
-                            texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
-                        if texsurf <> nil then
-                            begin
-                            HatTex:= Surface2Tex(texsurf, true);
-                            SDL_FreeSurface(texsurf)
-                            end;
-                        texsurf:= nil;
+                            LoadHedgehogHat(Gear, Hat);
                         end
                     end;
         end;
@@ -433,6 +429,25 @@ begin
     WriteLnToConsole(msgOK + ' (' + inttostr(tmpsurf^.w) + 'x' + inttostr(tmpsurf^.h) + ')');
 
     LoadImage:= tmpsurf //Result
+end;
+
+procedure LoadHedgehogHat(HHGear: PGear; newHat: shortstring);
+var texsurf: PSDL_Surface;
+begin
+    texsurf:= LoadImage(Pathz[ptHats] + '/' + newHat, ifNone);
+
+    // only do something if the hat could be loaded
+    if texsurf <> nil then
+        begin
+        // free the mem of any previously assigned texture
+        FreeTexture(HHGear^.Hedgehog^.HatTex);
+
+        // assign new hat to hedgehog
+        HHGear^.Hedgehog^.HatTex:= Surface2Tex(texsurf, true);
+
+        // cleanup: free temporary surface mem
+        SDL_FreeSurface(texsurf)
+        end;
 end;
 
 function glLoadExtension(extension : shortstring) : boolean;

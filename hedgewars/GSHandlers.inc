@@ -4507,13 +4507,9 @@ begin
                 RenderHealth(resgear^.Hedgehog^);
                 RecountTeamHealth(resgear^.Hedgehog^.Team);
                 resgear^.Hedgehog^.Effects[heResurrected]:= true;
+                // only make hat-less hedgehogs look like zombies, preserve existing hats
                 if resgear^.Hedgehog^.Hat = 'NoHat' then
-                    begin
-                    FreeTexture(resgear^.Hedgehog^.HatTex);
-                    resgear^.Hedgehog^.HatTex := Surface2Tex(
-                        LoadImage(Pathz[ptHats] + '/Reserved/Zombie', ifNone),
-                        True)
-                    end
+                    LoadHedgehogHat(resgear, 'Reserved/Zombie');
                 end;
 
         hh^.Gear^.dY := _0;
