@@ -80,21 +80,19 @@ processAction SendServerMessage = do
             else
             serverMessage si
     processAction $ AnswerClients [chan] ["SERVER_MESSAGE", message]
-{-
 
-processAction (clID, serverInfo, rnc) SendServerVars = do
-    writeChan (sendChan $ clients ! clID) ("SERVER_VARS" : vars)
-    return (clID, serverInfo, rnc)
+
+processAction SendServerVars = do
+    chan <- client's sendChan
+    si <- gets serverInfo
+    io $ writeChan chan ("SERVER_VARS" : vars si)
     where
-        client = clients ! clID
-        vars = [
-            "MOTD_NEW", serverMessage serverInfo,
-            "MOTD_OLD", serverMessageForOldVersions serverInfo,
-            "LATEST_PROTO", show $ latestReleaseVersion serverInfo
+        vars si = [
+            "MOTD_NEW", serverMessage si,
+            "MOTD_OLD", serverMessageForOldVersions si,
+            "LATEST_PROTO", B.pack . show $ latestReleaseVersion si
             ]
 
-
--}
 
 processAction (ProtocolError msg) = do
     chan <- client's sendChan
@@ -111,17 +109,18 @@ processAction (ByeClient msg) = do
     ri <- clientRoomA
 
     chan <- client's sendChan
+    clNick <- client's nick
 
     when (ri /= lobbyId) $ do
         processAction $ MoveToLobby ("quit: " `B.append` msg)
         return ()
 
+    clientsChans <- liftM (Prelude.map sendChan . Prelude.filter logonPassed) $! allClientsS
     io $ do
         infoM "Clients" (show ci ++ " quits: " ++ (B.unpack msg))
 
-        --mapM_ (processAction (ci, serverInfo, rnc)) $ answerOthersQuit ++ answerInformRoom
-
     processAction $ AnswerClients [chan] ["BYE", msg]
+    processAction $ AnswerClients clientsChans ["LOBBY:LEFT", clNick, msg]
 
     s <- get
     put $! s{removedClients = ci `Set.insert` removedClients s}
@@ -132,28 +131,6 @@ processAction (DeleteClient ci) = do
 
     s <- get
     put $! s{removedClients = ci `Set.delete` removedClients s}
-
-{-
-    where
-        client = clients ! clID
-        clientNick = nick client
-        answerInformRoom =
-            if roomID client /= 0 then
-                if not $ Prelude.null msg then
-                    [AnswerThisRoom ["LEFT", clientNick, msg]]
-                else
-                    [AnswerThisRoom ["LEFT", clientNick]]
-            else
-                []
-        answerOthersQuit =
-            if logonPassed client then
-                if not $ Prelude.null msg then
-                    [AnswerAll ["LOBBY:LEFT", clientNick, msg]]
-                else
-                    [AnswerAll ["LOBBY:LEFT", clientNick]]
-            else
-            [] 
--}
 
 processAction (ModifyClient f) = do
     (Just ci) <- gets clientIndex
@@ -173,12 +150,10 @@ processAction (ModifyRoom f) = do
     io $ modifyRoom rnc f ri
     return ()
 
-{-
 
-processAction (clID, serverInfo, rnc) (ModifyServerInfo func) =
-    return (clID, func serverInfo, rnc)
+processAction (ModifyServerInfo f) =
+    modify (\s -> s{serverInfo = f $ serverInfo s})
 
--}
 
 processAction (MoveToRoom ri) = do
     (Just ci) <- gets clientIndex
