@@ -68,7 +68,7 @@ processAction :: Action -> StateT ServerState IO ()
 
 
 processAction (AnswerClients chans msg) = do
-    io $ mapM_ (flip writeChan msg) chans
+    io $ mapM_ (flip writeChan (msg `deepseq` msg)) (chans `deepseq` chans)
 
 
 processAction SendServerMessage = do
