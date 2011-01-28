@@ -73,7 +73,8 @@ clientSendLoop s tId coreChan chan ci = do
         clientSendLoop s tId coreChan chan ci
 
     where
-        --sendQuit e = writeChan coreChan $ ClientMessage (ci, ["QUIT", B.pack $ show e])
-        sendQuit e = putStrLn $ show e
+        sendQuit e = do
+            putStrLn $ show e
+            writeChan coreChan $ ClientMessage (ci, ["QUIT", B.pack $ show e])
         isQuit ("BYE":xs) = True
         isQuit _ = False
