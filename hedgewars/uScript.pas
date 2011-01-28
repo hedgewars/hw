@@ -50,6 +50,7 @@ uses LuaPas in 'LuaPas.pas',
     uSound,
     uChat,
     uStats,
+    uStore,
     uRandom,
     uTypes,
     uVariables,
@@ -1183,6 +1184,41 @@ begin
         end;
     lc_getgearradius:= 1
 end;
+
+function lc_gethoghat(L : Plua_State): LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        LuaError('Lua: Wrong number of parameters passed to GetHogHat!')
+    else begin
+        gear := GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            lua_pushstring(L, str2pchar(gear^.Hedgehog^.Hat))
+        else
+            lua_pushnil(L);
+    end;
+    lc_gethoghat := 1;
+end;
+
+function lc_sethoghat(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+    hat: ShortString;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to SetHogHat!');
+        lua_pushnil(L)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            hat:= lua_tostring(L, 2);
+            gear^.Hedgehog^.Hat:= hat;
+            LoadHedgehogHat(gear, hat);
+        end;
+    lc_sethoghat:= 0;
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -1597,6 +1633,8 @@ lua_register(luaState, 'GetRandom', @lc_getrandom);
 lua_register(luaState, 'SetWind', @lc_setwind);
 lua_register(luaState, 'GetDataPath', @lc_getdatapath);
 lua_register(luaState, 'MapHasBorder', @lc_maphasborder);
+lua_register(luaState, 'GetHogHat', @lc_gethoghat);
+lua_register(luaState, 'SetHogHat', @lc_sethoghat);
 
 
 ScriptClearStack; // just to be sure stack is empty
