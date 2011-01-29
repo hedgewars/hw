@@ -26,11 +26,20 @@
 
 #include "SDLs.h"
 
+class ListWidgetNickItem;
 class QTextBrowser;
 class QLineEdit;
 class QListWidget;
 class QSettings;
 class SDLInteraction;
+
+// this class is for custom nick sorting
+class ListWidgetNickItem : public QListWidgetItem
+{
+public:
+  ListWidgetNickItem(const QString& nick);
+  bool operator<(const QListWidgetItem & other) const;
+};
 
 class HWChatWidget : public QWidget
 {

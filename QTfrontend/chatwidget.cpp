@@ -32,6 +32,14 @@
 #include "gameuiconfig.h"
 #include "chatwidget.h"
 
+ListWidgetNickItem::ListWidgetNickItem(const QString& nick) : QListWidgetItem(nick) {}
+
+bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
+{
+    // case in-sensitive comparison of the associated strings
+    return (text().compare(other.text(), Qt::CaseInsensitive) < 0);
+}
+
 HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify) :
   QWidget(parent),
   mainLayout(this)
@@ -241,7 +249,7 @@ void HWChatWidget::onServerMessage(const QString& str)
 
 void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
 {
-    QListWidgetItem * item = new QListWidgetItem(nick);
+    QListWidgetItem * item = new ListWidgetNickItem(nick);
     updateIcon(item);
     chatNicks->addItem(item);
 
