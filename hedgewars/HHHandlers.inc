@@ -41,29 +41,29 @@ else
 end;
 
 // Shouldn't more of this ammo switching stuff be moved to uAmmos ?
-function ChangeAmmo(Gear: PGear): boolean;
+function ChangeAmmo(HHGear: PGear): boolean;
 var slot, i: Longword;
     ammoidx: LongInt;
 begin
 ChangeAmmo:= false;
-slot:= Gear^.MsgParam;
+slot:= HHGear^.MsgParam;
 
-with Gear^.Hedgehog^ do
+with HHGear^.Hedgehog^ do
     begin
-    Gear^.Message:= Gear^.Message and not gmSlot;
+    HHGear^.Message:= HHGear^.Message and not gmSlot;
     ammoidx:= 0;
-    if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
+    if ((HHGear^.State and (gstAttacking or gstAttacked)) <> 0) or
        (TargetPoint.X <> NoPointX) or
        ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0)) or
-       ((Gear^.State and gstHHDriven) = 0) then exit;
+       ((HHGear^.State and gstHHDriven) = 0) then exit;
     ChangeAmmo:= true;
 
     while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do inc(ammoidx);
 
-    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(Gear^.Hedgehog^);
+    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (MultiShootAttacks > 0) then OnUsedAmmo(HHGear^.Hedgehog^);
 
     MultiShootAttacks:= 0;
-    Gear^.Message:= Gear^.Message and not (gmLJump or gmHJump);
+    HHGear^.Message:= HHGear^.Message and not (gmLJump or gmHJump);
     
     if Ammoz[CurAmmoType].Slot = slot then
         begin
@@ -94,7 +94,7 @@ with Gear^.Hedgehog^ do
     end
 end;
 
-procedure HHSetWeapon(Gear: PGear);
+procedure HHSetWeapon(HHGear: PGear);
 var t: LongInt;
     weap: TAmmoType;
     Hedgehog: PHedgehog;
@@ -102,25 +102,25 @@ var t: LongInt;
 begin
 s:= false;
 
-weap:= TAmmoType(Gear^.MsgParam);
-Hedgehog:= Gear^.Hedgehog;
+weap:= TAmmoType(HHGear^.MsgParam);
+Hedgehog:= HHGear^.Hedgehog;
 
 if Hedgehog^.Team^.Clan^.TurnNumber <= Ammoz[weap].SkipTurns then exit; // weapon is not activated yet
 
-Gear^.MsgParam:= Ammoz[weap].Slot;
+HHGear^.MsgParam:= Ammoz[weap].Slot;
 
 t:= cMaxSlotAmmoIndex;
 
-Gear^.Message:= Gear^.Message and not gmWeapon;
+HHGear^.Message:= HHGear^.Message and not gmWeapon;
 
 with Hedgehog^ do
     while (CurAmmoType <> weap) and (t >= 0) do
         begin
-        s:= ChangeAmmo(Gear);
+        s:= ChangeAmmo(HHGear);
         dec(t)
         end;
 
-if s then ApplyAmmoChanges(Gear^.Hedgehog^)
+if s then ApplyAmmoChanges(HHGear^.Hedgehog^)
 end;
 
 procedure HHSetTimer(Gear: PGear);
@@ -315,6 +315,10 @@ with Gear^,
                     end;
                    amDrillStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 3, _0, _0, CurWeapon^.Timer);
                    //amMelonStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 4, _0, _0, 0);
+                     amStructure: begin
+                                  FollowGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtStructure, 0, SignAs(_0_03, dX), _0, 0);
+                                  FollowGear^.Hedgehog:= Gear^.Hedgehog;
+                                  end;
                   end;
 
         uStats.AmmoUsed(CurAmmoType);
@@ -635,17 +639,17 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
    end
 end;
 
-procedure HedgehogChAngle(Gear: PGear);
+procedure HedgehogChAngle(HHGear: PGear);
 var da: LongWord;
 begin
-with Gear^.Hedgehog^ do
+with HHGear^.Hedgehog^ do
     if (CurAmmoType = amRope)
-    and ((Gear^.State and (gstMoving or gstHHJumping)) = gstMoving) then da:= 2 else da:= 1;
+    and ((HHGear^.State and (gstMoving or gstHHJumping)) = gstMoving) then da:= 2 else da:= 1;
 
-if (((Gear^.Message and gmPrecise) = 0) or ((GameTicks mod 5) = 1)) then
-    if ((Gear^.Message and gmUp) <> 0) and (Gear^.Angle >= CurMinAngle + da) then dec(Gear^.Angle, da)
+if (((HHGear^.Message and gmPrecise) = 0) or ((GameTicks mod 5) = 1)) then
+    if ((HHGear^.Message and gmUp) <> 0) and (HHGear^.Angle >= CurMinAngle + da) then dec(HHGear^.Angle, da)
     else
-    if ((Gear^.Message and gmDown) <> 0) and (Gear^.Angle + da <= CurMaxAngle) then inc(Gear^.Angle, da)
+    if ((HHGear^.Message and gmDown) <> 0) and (HHGear^.Angle + da <= CurMaxAngle) then inc(HHGear^.Angle, da)
 end;
 
 procedure doStepHedgehog(Gear: PGear); forward;
@@ -776,118 +780,118 @@ else
 
 end;
 
-procedure doStepHedgehogDriven(Gear: PGear);
+procedure doStepHedgehogDriven(HHGear: PGear);
 var t: PGear;
     wasJumping: boolean;
     Hedgehog: PHedgehog;
 begin
-Hedgehog:= Gear^.Hedgehog;
+Hedgehog:= HHGear^.Hedgehog;
 if not isInMultiShoot then
    AllInactive:= false
 else
-   Gear^.Message:= 0;
+   HHGear^.Message:= 0;
 
-if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
+if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
     begin
     TurnTimeLeft:= 0;
     isCursorVisible:= false;
-    Gear^.State:= Gear^.State and not (gstHHDriven or gstAnimation or gstAttacking);
+    HHGear^.State:= HHGear^.State and not (gstHHDriven or gstAnimation or gstAttacking);
     AttackBar:= 0;
-    if Gear^.Damage > 0 then
-        Gear^.State:= Gear^.State and not (gstHHJumping or gstHHHJump);
+    if HHGear^.Damage > 0 then
+        HHGear^.State:= HHGear^.State and not (gstHHJumping or gstHHHJump);
     exit
     end;
 
-if (Gear^.State and gstAnimation) <> 0 then
+if (HHGear^.State and gstAnimation) <> 0 then
     begin
-    Gear^.Message:= 0;
-    if (Gear^.Pos = Wavez[TWave(Gear^.Tag)].VoiceDelay) and (Gear^.Timer = 0) then PlaySound(Wavez[TWave(Gear^.Tag)].Voice, Hedgehog^.Team^.voicepack);
-    inc(Gear^.Timer);
-    if Gear^.Timer = Wavez[TWave(Gear^.Tag)].Interval then
+    HHGear^.Message:= 0;
+    if (HHGear^.Pos = Wavez[TWave(HHGear^.Tag)].VoiceDelay) and (HHGear^.Timer = 0) then PlaySound(Wavez[TWave(HHGear^.Tag)].Voice, Hedgehog^.Team^.voicepack);
+    inc(HHGear^.Timer);
+    if HHGear^.Timer = Wavez[TWave(HHGear^.Tag)].Interval then
         begin
-        Gear^.Timer:= 0;
-        inc(Gear^.Pos);
-        if Gear^.Pos = Wavez[TWave(Gear^.Tag)].FramesCount then
-            Gear^.State:= Gear^.State and not gstAnimation
+        HHGear^.Timer:= 0;
+        inc(HHGear^.Pos);
+        if HHGear^.Pos = Wavez[TWave(HHGear^.Tag)].FramesCount then
+            HHGear^.State:= HHGear^.State and not gstAnimation
         end;
     exit
     end;
 
-if ((Gear^.State and gstMoving) <> 0)
+if ((HHGear^.State and gstMoving) <> 0)
     or (StepTicks = cHHStepTicks)
     or (CurAmmoGear <> nil) then // we are moving
     begin
     with Hedgehog^ do
         if (CurAmmoGear = nil)
-        and (Gear^.dY > _0_39)
-        and (CurAmmoType = amParachute) then Gear^.Message:= Gear^.Message or gmAttack;
+        and (HHGear^.dY > _0_39)
+        and (CurAmmoType = amParachute) then HHGear^.Message:= HHGear^.Message or gmAttack;
     // check for case with ammo
-    t:= CheckGearNear(Gear, gtCase, 36, 36);
+    t:= CheckGearNear(HHGear, gtCase, 36, 36);
     if t <> nil then
-        PickUp(Gear, t)
+        PickUp(HHGear, t)
     end;
 
 if (CurAmmoGear = nil) then
-    if (((Gear^.Message and gmAttack) <> 0)
-        or ((Gear^.State and gstAttacking) <> 0)) then
-        Attack(Gear) // should be before others to avoid desync with '/put' msg and changing weapon msgs
+    if (((HHGear^.Message and gmAttack) <> 0)
+        or ((HHGear^.State and gstAttacking) <> 0)) then
+        Attack(HHGear) // should be before others to avoid desync with '/put' msg and changing weapon msgs
     else
 else 
     with Hedgehog^ do
         if ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0)
-            and ((Gear^.Message and gmLJump) <> 0)
+            and ((HHGear^.Message and gmLJump) <> 0)
             and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
             begin
-            Attack(Gear);
-            Gear^.Message:= Gear^.Message and not gmLJump
+            Attack(HHGear);
+            HHGear^.Message:= HHGear^.Message and not gmLJump
             end;
 
 if (CurAmmoGear = nil)
     or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) 
     or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) then
     begin
-    if ((Gear^.Message and gmSlot) <> 0) then
-        if ChangeAmmo(Gear) then ApplyAmmoChanges(Hedgehog^);
+    if ((HHGear^.Message and gmSlot) <> 0) then
+        if ChangeAmmo(HHGear) then ApplyAmmoChanges(Hedgehog^);
 
-    if ((Gear^.Message and gmWeapon) <> 0) then HHSetWeapon(Gear);
+    if ((HHGear^.Message and gmWeapon) <> 0) then HHSetWeapon(HHGear);
 
-    if ((Gear^.Message and gmTimer) <> 0) then HHSetTimer(Gear);
+    if ((HHGear^.Message and gmTimer) <> 0) then HHSetTimer(HHGear);
     end;
 
 if CurAmmoGear <> nil then
    begin
-   CurAmmoGear^.Message:= Gear^.Message;
+   CurAmmoGear^.Message:= HHGear^.Message;
    exit
    end;
 
 if not isInMultiShoot then
-   HedgehogChAngle(Gear);
+   HedgehogChAngle(HHGear);
 
-if (Gear^.State and gstMoving) <> 0 then
+if (HHGear^.State and gstMoving) <> 0 then
     begin
-    wasJumping:= ((Gear^.State and gstHHJumping) <> 0);
+    wasJumping:= ((HHGear^.State and gstHHJumping) <> 0);
 
-    if ((Gear^.Message and gmHJump) <> 0) and
+    if ((HHGear^.Message and gmHJump) <> 0) and
         wasJumping and
-        ((Gear^.State and gstHHHJump) = 0) then
-        if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
+        ((HHGear^.State and gstHHHJump) = 0) then
+        if (not (hwAbs(HHGear^.dX) > cLittle)) and (HHGear^.dY < -_0_02) then
             begin
-            Gear^.State:= Gear^.State or gstHHHJump;
-            Gear^.dY:= -_0_25;
-            if not cArtillery then Gear^.dX:= -SignAs(_0_02, Gear^.dX);
+            HHGear^.State:= HHGear^.State or gstHHHJump;
+            HHGear^.dY:= -_0_25;
+            if not cArtillery then HHGear^.dX:= -SignAs(_0_02, HHGear^.dX);
             PlaySound(sndJump2, Hedgehog^.Team^.voicepack)
             end;
 
-    Gear^.Message:= Gear^.Message and not (gmLJump or gmHJump);
+    HHGear^.Message:= HHGear^.Message and not (gmLJump or gmHJump);
 
     if (not cArtillery) and wasJumping and
-        TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
+        TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
 
-    doStepHedgehogMoving(Gear);
+    if Hedgehog^.Gear <> nil then doStepHedgehogMoving(HHGear);
 
-    if ((Gear^.State and (gstMoving or gstDrowning)) = 0) then
+    if ((HHGear^.State and (gstMoving or gstDrowning)) = 0) then
         begin
-        AddGearCI(Gear);
+        AddGearCI(HHGear);
         if wasJumping then
             StepTicks:= 410
         else
@@ -896,10 +900,10 @@ if (Gear^.State and gstMoving) <> 0 then
     exit
     end;
 
-    if not isInMultiShoot then
+    if not isInMultiShoot and (Hedgehog^.Gear <> nil) then
         begin
         if StepTicks > 0 then dec(StepTicks);
-        if (StepTicks = 0) then HedgehogStep(Gear)
+        if (StepTicks = 0) then HedgehogStep(HHGear)
         end
 end;
 

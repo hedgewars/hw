@@ -59,10 +59,10 @@ procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
 procedure HedgehogStep(Gear: PGear); forward;
 procedure doStepHedgehogMoving(Gear: PGear); forward;
-procedure HedgehogChAngle(Gear: PGear); forward;
+procedure HedgehogChAngle(HHGear: PGear); forward;
 procedure ShotgunShot(Gear: PGear); forward;
 procedure PickUp(HH, Gear: PGear); forward;
-procedure HHSetWeapon(Gear: PGear); forward;
+procedure HHSetWeapon(HHGear: PGear); forward;
 procedure doStepCase(Gear: PGear); forward;
 
 {$INCLUDE "GSHandlers.inc"}
@@ -128,7 +128,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepResurrector,
             @doStepNapalmBomb,
             @doStepSnowball,
-            @doStepSnowflake
+            @doStepSnowflake,
+            @doStepStructure
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -513,6 +514,14 @@ gtFlamethrower: begin
                 gear^.Timer:= 1000;
                 gear^.Radius:= 5;
                 gear^.Density:= _1_5;
+                end;
+   gtStructure: begin
+                gear^.ImpactSound:= sndGrenadeImpact;
+                gear^.nImpactSounds:= 1;
+                gear^.Radius:= 13;
+                gear^.Elasticity:= _0_3;
+                gear^.Timer:= 5000;
+                gear^.Health:= 50;
                 end;
     end;
 
@@ -1034,7 +1043,7 @@ begin
            spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
            end;
         end;
-    end else // not gtHedgehog
+    end else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
         begin
         AddFileLog('Assigning hedgehog ' + inttostr(LongInt(AttackerHog)) + ' to gear ' + inttostr(Gear^.uid));
         Gear^.Hedgehog:= AttackerHog;
@@ -1193,7 +1202,8 @@ while Gear <> nil do
                 gtCase,
                 gtTarget,
                 gtFlame,
-                gtExplosives: begin
+                gtExplosives,
+                gtStructure: begin
 // Run the calcs only once we know we have a type that will need damage
                         if hwRound(hwAbs(Gear^.X-fX)+hwAbs(Gear^.Y-fY)) < dmgBase then
                             dmg:= dmgBase - hwRound(Distance(Gear^.X - fX, Gear^.Y - fY));
@@ -1268,7 +1278,8 @@ while t <> nil do
             gtSMine,
             gtCase,
             gtTarget,
-            gtExplosives: begin
+            gtExplosives,
+            gtStructure: begin
                     if (not t^.Invulnerable) then
                         ApplyDamage(t, Gear^.Hedgehog, dmg, dsBullet)
                     else
@@ -1332,7 +1343,8 @@ while i > 0 do
             gtSMine,
             gtTarget,
             gtCase,
-            gtExplosives: begin
+            gtExplosives,
+            gtStructure: begin
                     if (Ammo^.Kind = gtDrill) then begin Ammo^.Timer:= 0; exit; end;
                     if (not Gear^.Invulnerable) then
                         ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg, dsShove)

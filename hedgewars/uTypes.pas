@@ -71,7 +71,7 @@ type
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
-            gtNapalmBomb, gtSnowball, gtFlake); // 58
+            gtNapalmBomb, gtSnowball, gtFlake, gtStructure); // 60
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -116,7 +116,7 @@ type
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
-            amResurrector, amDrillStrike, amSnowball);
+            amResurrector, amDrillStrike, amSnowball, amStructure);
 
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
 
@@ -281,6 +281,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     THedgehog = record
             Name: string[MAXNAMELEN];
             Gear: PGear;
+            GearHidden: PGear;
             SpeechGear: PVisualGear;
             NameTagTex,
             HealthTagTex,
@@ -350,7 +351,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             sidLowGravity, sidExtraDamage, sidInvulnerable, sidExtraTime,
             sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack,
             sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb, sidSineGun, sidFlamethrower,
-            sidSMine, sidHammer, sidResurrector, sidDrillStrike, sidSnowball, sidNothing);
+            sidSMine, sidHammer, sidResurrector, sidDrillStrike, sidSnowball, sidNothing, sidStructure);
 
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,

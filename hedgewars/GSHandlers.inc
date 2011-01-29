@@ -2410,6 +2410,7 @@ begin
     Gear^.Hedgehog^.Unplaced := false;
     HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Y := HHGear^.Y + HHGear^.dY;
+    HHGear^.X := HHGear^.X + HHGear^.dX;
     // hedgehog falling to collect cases
     HHGear^.dY := HHGear^.dY + cGravity;
     if TestCollisionYwithGear(HHGear, 1)
@@ -4590,4 +4591,79 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepStructure(Gear: PGear);
+var 
+    i, x, y: LongInt;
+    dX, dY: HWFloat;
+    hog: PHedgehog;
+begin
+    if Gear^.Hedgehog <> nil then
+        if Gear^.Tag = 0 then
+        begin
+            hog:= Gear^.Hedgehog;
+            hog^.GearHidden:= hog^.Gear;
+            RemoveGearFromList(hog^.Gear);
+            hog^.Gear:= nil;
+            Gear^.Tag:= TotalRounds + 3;
+        end
+        else if Gear^.Tag = TotalRounds then
+        begin
+            hog:= Gear^.Hedgehog;
+            hog^.Gear:= hog^.GearHidden;
+            hog^.Gear^.X:= Gear^.X;
+            hog^.Gear^.Y:= Gear^.Y - Int2hwFloat(Gear^.Radius);
+            hog^.Gear^.Active:= false;
+            hog^.Gear^.State:= hog^.Gear^.State And not gstHHdriven;
+            InsertGearToList(hog^.Gear);
+            hog^.GearHidden:= nil;
+            Gear^.Hedgehog:= nil;
+        end;
+
+    if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
+    begin
+        AllInactive := false;
+        Gear^.dY := Gear^.dY + cGravity;
+        Gear^.Y := Gear^.Y + Gear^.dY;
+        if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then SetAllHHToActive;
+        if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY := _0;
+        if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
+        begin
+            if Gear^.dY > _0_2 then
+                for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do
+                    AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
+            Gear^.dY := - Gear^.dY * Gear^.Elasticity;
+            if Gear^.dY > - _0_001 then Gear^.dY := _0
+            else if Gear^.dY < - _0_03 then
+                    PlaySound(Gear^.ImpactSound);
+        end;
+        CheckGearDrowning(Gear);
+    end;
+
+    if (Gear^.dY.QWordValue = 0) then AddGearCI(Gear)
+    else if (Gear^.dY.QWordValue <> 0) then DeleteCI(Gear);
+
+    dec(Gear^.Health, Gear^.Damage);
+    Gear^.Damage := 0;
+
+    if Gear^.Health <= 0 then
+    begin
+        if Gear^.Hedgehog <> nil then
+        begin
+            hog:= Gear^.Hedgehog;
+            hog^.Gear:= hog^.GearHidden;
+            hog^.Gear^.X:= Gear^.X;
+            hog^.Gear^.Y:= Gear^.Y;
+            InsertGearToList(hog^.Gear);
+            hog^.GearHidden:= nil;
+            Gear^.Hedgehog:= nil;
+        end;
+
+        x := hwRound(Gear^.X);
+        y := hwRound(Gear^.Y);
+
+        DeleteGear(Gear);
+
+        doMakeExplosion(x, y, 50, CurrentHedgehog, EXPLAutoSound);
+    end;
+end;
 

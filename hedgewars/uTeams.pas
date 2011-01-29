@@ -529,11 +529,17 @@ begin
 end;
 
 procedure freeModule;
-var i: LongWord;
+var i, h: LongWord;
 begin
    if TeamsCount > 0 then
      begin
-     for i:= 0 to Pred(TeamsCount) do Dispose(TeamsArray[i]);
+     for i:= 0 to Pred(TeamsCount) do
+        begin
+            for h:= 0 to cMaxHHIndex do
+                if TeamsArray[i]^.Hedgehogs[h].GearHidden <> nil then
+                    Dispose(TeamsArray[i]^.Hedgehogs[h].GearHidden);
+            Dispose(TeamsArray[i]);
+        end;
      for i:= 0 to Pred(ClansCount) do Dispose(ClansArray[i]);
      end;
    TeamsCount:= 0;

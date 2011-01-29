@@ -53,6 +53,7 @@
 00:50=Drill Strike
 00:51=Mudball
 00:52=No weapon selected
+00:53=Structure
 
 01:00=Let's fight!
 01:01=Round draw

@@ -2000,6 +2000,29 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; 
+            ejectY: 0),
+
+// Structure
+            (NameId: sidStructure;
+            NameTex: nil;
+            Probability: 0;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_Utility;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amStructure;
+                AttackVoice: sndNone);
+            Slot: 6;
+            TimeAfterTurn: 0;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: false;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
             ejectY: 0)
         );
 
