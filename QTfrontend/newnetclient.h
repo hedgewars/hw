@@ -86,6 +86,7 @@ class HWNewNet : public QObject
   void RawSendNet(const QString & buf);
   void RawSendNet(const QByteArray & buf);
   void ParseCmd(const QStringList & lst);
+  void handleNotice(int n);
 
   int loginStep;
   int netClientState;
@@ -161,7 +162,7 @@ class HWNewNet : public QObject
   void ClientRead();
   void OnConnect();
   void OnDisconnect();
-  void displayError(QAbstractSocket::SocketError socketError);
+  void displayError(QAbstractSocket::SocketError socketError); 
 };
 
 #endif // _NEW_NETCLIENT_INCLUDED

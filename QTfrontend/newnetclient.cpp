@@ -489,6 +489,26 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
+    if (lst[0] == "NOTICE") {
+        if(lst.size() < 2)
+        {
+            qWarning("Net: Bad NOTICE message");
+            return;
+        }
+
+        bool ok;
+        int n = lst[1].toInt(&ok);
+        if(!ok)
+        {
+            qWarning("Net: Bad NOTICE message");
+            return;
+        }
+
+        handleNotice(n);
+
+        return;
+    }
+
     if (lst[0] == "TEAM_ACCEPTED") {
         if (lst.size() != 2)
         {
@@ -751,4 +771,29 @@ void HWNewNet::setLatestProtocolVar(int proto)
 void HWNewNet::askServerVars()
 {
     RawSendNet(QString("GET_SERVER_VAR"));
+}
+
+void HWNewNet::handleNotice(int n)
+{
+    switch(n)
+    {
+        case 0:
+        {
+            bool ok = false;
+            QString newNick = QInputDialog::getText(0, tr("Nickname"), tr("Some one already uses\n your nickname %1\non the server.\nPlease pick another nickname:").arg(mynick), QLineEdit::Normal, mynick, &ok);
+
+            if (!ok || newNick.isEmpty()) {
+                Disconnect();
+                emit Disconnected();
+                return;
+            }
+
+            config->setValue("net/nick", newNick);
+            mynick = newNick;
+
+            RawSendNet(QString("NICK%1%2").arg(delimeter).arg(newNick));
+
+            break;
+        }
+    }
 }
