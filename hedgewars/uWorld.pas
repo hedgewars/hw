@@ -122,6 +122,9 @@ if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
 // if special game flags/settings are changed, add them to the game mode notice window and then show it
 g:= ''; // no text/things to note yet
 
+// add custom goals from lua script if there are any
+if LuaGoals <> '' then g:= LuaGoals + '|';
+
 // check different game flags (goals/game modes first for now)
 g:= AddGoal(g, gfKing, gidKing); // king?
 

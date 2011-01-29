@@ -1307,6 +1307,8 @@ ScriptSetInteger('HealthDecrease', cHealthDecrease);
 ScriptSetString('Map', '');
 ScriptSetString('Theme', '');
 
+ScriptSetString('Goals', '');
+
 ScriptCall('onGameInit');
 
 // pop game variables
@@ -1330,6 +1332,7 @@ if ScriptGetString('Map') <> '' then
     ParseCommand('map ' + ScriptGetString('Map'), true);
 if ScriptGetString('Theme') <> '' then
     ParseCommand('theme ' + ScriptGetString('Theme'), true);
+LuaGoals:= ScriptGetString('Goals');
 
 if ScriptExists('onAmmoStoreInit') then
     begin

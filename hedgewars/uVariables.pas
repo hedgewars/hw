@@ -148,6 +148,8 @@ var
 
     hiTicks: Word;
 
+    LuaGoals        : shortstring;
+
 const
     cHHFileName = 'Hedgehog';
     cCHFileName = 'Crosshair';
@@ -2002,6 +2004,34 @@ const
             ejectX: 0; 
             ejectY: 0),
 
+// Tardis (just a copy of teleport til nemo arives)
+            (NameId: sidTardis;
+            NameTex: nil;
+            Probability: 200;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NoCrosshair or
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_Utility or
+                          ammoprop_DontHold;
+                Count: 2;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amTardis;
+                AttackVoice: sndNone);
+            Slot: 7;
+            TimeAfterTurn: 0;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: false;
+            SkipTurns: 0;
+            PosCount: 2;
+            PosSprite: sprAmTeleport;
+            ejectX: 0;
+            ejectY: 0),
+
 // Structure
             (NameId: sidStructure;
             NameTex: nil;
@@ -2324,6 +2354,8 @@ begin
     vobSDCount:= 30 * cScreenSpace div LAND_WIDTH;
     vobSDVelocity:= 0;
     vobSDFallSpeed:= 0;
+
+    LuaGoals:= '';
 end;
 
 procedure freeModule;

@@ -520,7 +520,6 @@ gtFlamethrower: begin
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 13;
                 gear^.Elasticity:= _0_3;
-                gear^.Timer:= 5000;
                 gear^.Health:= 50;
                 end;
     end;

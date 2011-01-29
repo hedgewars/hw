@@ -105,6 +105,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amResurrector
             (proc: nil;              flags: 0), // amDrillStrike
             (proc: @TestSnowball;    flags: 0), // amSnowball
+            (proc: nil;              flags: 0), // amTardis
             (proc: nil;              flags: 0) // amStructure
             );
 

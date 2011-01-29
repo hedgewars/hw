@@ -944,7 +944,6 @@ begin
                     DrawRotatedF(sprTeleport, hwRound(HHGear^.X) + 1 + WorldDx, hwRound(HHGear^.Y) - 3 + WorldDy, 11 - Gear^.Pos, hwSign(HHGear^.dX), 0);
                     end;
         gtSwitcher: DrawSprite(sprSwitch, x - 16, y - 56, (GameTicks shr 6) mod 12);
-       gtStructure,
           gtTarget: begin
                     Tint($FF, $FF, $FF, round($FF * Gear^.Timer / 1000));
                     DrawSprite(sprTarget, x - 16, y - 16, 0);
@@ -1025,6 +1024,7 @@ begin
                       //DrawRotatedF(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer, 1, Gear^.DirAngle);
                       DrawRotatedF(sprFlake, x, y, Gear^.Timer, 1, Gear^.DirAngle)
                   end;
+       gtStructure: DrawSprite(sprTarget, x - 16, y - 16, 0);
 
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(x + 8, y + 8, Gear^.Tex);
