@@ -20,7 +20,7 @@ handleCmd_NotEntered ["NICK", newNick] = do
     let cl = irnc `client` ci
     if not . B.null $ nick cl then return [ProtocolError "Nickname already chosen"]
         else
-        if haveSameNick irnc then return [{-AnswerClients [sendChan cl] ["WARNING", "Nickname already in use"], -}ByeClient "Nickname already in use"]
+        if haveSameNick irnc then return [NoticeMessage NickAlreadyInUse]
             else
             if illegalName newNick then return [ByeClient "Illegal nickname"]
                 else
@@ -57,10 +57,5 @@ handleCmd_NotEntered ["PASSWORD", passwd] = do
         else
         return [ByeClient "Authentication failed"]
 
-{-
-
-handleCmd_NotEntered clID clients _ ["DUMP"] =
-    if isAdministrator (clients IntMap.! clID) then [Dump] else []
--}
 
 handleCmd_NotEntered _ = return [ProtocolError "Incorrect command (state: not entered)"]

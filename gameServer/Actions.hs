@@ -32,6 +32,7 @@ data Action =
     | JoinLobby
     | ProtocolError B.ByteString
     | Warning B.ByteString
+    | NoticeMessage Notice
     | ByeClient B.ByteString
     | KickClient ClientIndex
     | KickRoomClient ClientIndex
@@ -102,6 +103,10 @@ processAction (ProtocolError msg) = do
 processAction (Warning msg) = do
     chan <- client's sendChan
     processAction $ AnswerClients [chan] ["WARNING", msg]
+
+processAction (NoticeMessage n) = do
+    chan <- client's sendChan
+    processAction $ AnswerClients [chan] ["NOTICE", B.pack . show . fromEnum $ n]
 
 processAction (ByeClient msg) = do
     (Just ci) <- gets clientIndex

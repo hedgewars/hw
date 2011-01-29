@@ -179,7 +179,9 @@ instance Show CoreMessage where
     show (ClientAccountInfo _) = "ClientAccountInfo"
     show (TimerAction _) = "TimerAction"
     show (Remove _) = "Remove"
-    
+
 type MRnC = MRoomsAndClients RoomInfo ClientInfo
 type IRnC = IRoomsAndClients RoomInfo ClientInfo
 
+data Notice = NickAlreadyInUse
+    deriving Enum
