@@ -2,6 +2,8 @@ TEMPLATE = app
 TARGET = hedgewars
 DEPENDPATH += ../QTfrontend/
 INCLUDEPATH += ../QTfrontend/
+INCLUDEPATH += /usr/local/include/SDL
+
 DESTDIR = .
 
 win32 {
@@ -22,18 +24,21 @@ HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h \
 	../QTfrontend/igbox.h ../QTfrontend/input_ip.h \
 	../QTfrontend/itemNum.h ../QTfrontend/mapContainer.h \
 	../QTfrontend/misc.h ../QTfrontend/namegen.h \
-	../QTfrontend/netregister.h ../QTfrontend/netserver.h \
+        ../QTfrontend/netregister.h ../QTfrontend/netserver.h \
 	../QTfrontend/netserverslist.h ../QTfrontend/netudpserver.h \
 	../QTfrontend/netudpwidget.h ../QTfrontend/newnetclient.h \
 	../QTfrontend/pages.h ../QTfrontend/playrecordpage.h \
-	../QTfrontend/predefteams.h ../QTfrontend/proto.h \
+        ../QTfrontend/proto.h \
 	../QTfrontend/sdlkeys.h ../QTfrontend/selectWeapon.h \
 	../QTfrontend/statsPage.h ../QTfrontend/tcpBase.h \
 	../QTfrontend/team.h ../QTfrontend/teamselect.h \
 	../QTfrontend/teamselhelper.h ../QTfrontend/togglebutton.h \
 	../QTfrontend/ui_hwform.h ../QTfrontend/vertScrollArea.h \
 	../QTfrontend/weaponItem.h ../QTfrontend/xfire.h \
-	../QTfrontend/achievements.h
+	../QTfrontend/achievements.h \
+    ../QTfrontend/drawmapwidget.h \
+    ../QTfrontend/drawmapscene.h \
+    ../QTfrontend/qaspectratiolayout.h
 
 SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/about.cpp ../QTfrontend/ammoSchemeModel.cpp \
@@ -56,7 +61,11 @@ SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/teamselect.cpp ../QTfrontend/teamselhelper.cpp \
 	../QTfrontend/togglebutton.cpp ../QTfrontend/ui_hwform.cpp \
 	../QTfrontend/vertScrollArea.cpp ../QTfrontend/weaponItem.cpp \
-	../QTfrontend/achievements.cpp
+	../QTfrontend/achievements.cpp \
+    ../QTfrontend/hwconsts.cpp \
+    ../QTfrontend/drawmapwidget.cpp \
+    ../QTfrontend/drawmapscene.cpp \
+    ../QTfrontend/qaspectratiolayout.cpp
 
 win32 {
 	SOURCES += ../QTfrontend/xfire.cpp
@@ -89,7 +98,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
 !macx {
-	LIBS += -lSDL -lSDL_Mixer
+        LIBS += -lSDL -lSDL_mixer
 } else {
 	QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
 	QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
