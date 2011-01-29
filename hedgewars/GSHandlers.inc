@@ -1731,41 +1731,45 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSMine(Gear: PGear);
 begin
-    DeleteCI(Gear);
     // TODO: do real calculation?
     if TestCollisionXwithGear(Gear, 2) or TestCollisionYwithGear(Gear, -2) or TestCollisionXwithGear(Gear, -2) or TestCollisionYwithGear(Gear, 2) then
     begin
         if (hwAbs(Gear^.dX) > _0) or (hwAbs(Gear^.dY) > _0) then
+        begin
             PlaySound(sndRopeAttach);
-        Gear^.dX:= _0;
-        Gear^.dY:= _0;
+            Gear^.dX:= _0;
+            Gear^.dY:= _0;
+            AddGearCI(Gear);
+        end;
     end
     else
     begin
+        DeleteCI(Gear);
         doStepFallingGear(Gear);
         AllInactive := false;
         CalcRotationDirAngle(Gear);
     end;
-    AddGearCI(Gear);
 
     if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
+    begin
         if ((Gear^.State and gstAttacking) = 0) then
         begin
             if ((GameTicks and $1F) = 0) then
                 if CheckGearNear(Gear, gtHedgehog, 46, 32) <> nil then Gear^.State := Gear^.State or
                                                                                       gstAttacking
         end
-    else // gstAttacking <> 0
-    begin
-        AllInactive := false;
-        if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick);
-        if Gear^.Timer = 0 then
+        else // gstAttacking <> 0
         begin
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
-            DeleteGear(Gear);
-            exit
-        end;
-        dec(Gear^.Timer);
+            AllInactive := false;
+            if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick);
+            if Gear^.Timer = 0 then
+            begin
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
+                DeleteGear(Gear);
+                exit
+            end;
+            dec(Gear^.Timer);
+        end
     end
     else // gsttmpFlag = 0
         if TurnTimeLeft = 0 then Gear^.State := Gear^.State or gsttmpFlag;
