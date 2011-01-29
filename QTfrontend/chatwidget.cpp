@@ -37,7 +37,24 @@ ListWidgetNickItem::ListWidgetNickItem(const QString& nick) : QListWidgetItem(ni
 bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
 {
     // case in-sensitive comparison of the associated strings
-    return (text().compare(other.text(), Qt::CaseInsensitive) < 0);
+    // chars that are no letters are sorted at the end of the list
+
+    QString txt1 = text().toLower();
+    QString txt2 = other.text().toLower();
+
+    bool firstIsShorter = (txt1.size() < txt2.size());
+    int len = firstIsShorter?txt1.size():txt2.size();
+
+    for (int i = 0; i < len; i++)
+    {
+        if (txt1[i] == txt2[i])
+            continue;
+        if (txt1[i].isLetter() != txt2[i].isLetter())
+            return txt1[i].isLetter();
+        return (txt1[i] < txt2[i]);
+    }
+
+    return firstIsShorter;
 }
 
 HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify) :
