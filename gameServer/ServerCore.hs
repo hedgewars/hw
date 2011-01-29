@@ -2,9 +2,7 @@ module ServerCore where
 
 import Network
 import Control.Concurrent
-import Control.Concurrent.Chan
 import Control.Monad
-import qualified Data.IntMap as IntMap
 import System.Log.Logger
 import Control.Monad.Reader
 import Control.Monad.State.Strict
@@ -21,7 +19,7 @@ import ServerState
 
 
 timerLoop :: Int -> Chan CoreMessage -> IO ()
-timerLoop tick messagesChan = threadDelay (30 * 10^6) >> writeChan messagesChan (TimerAction tick) >> timerLoop (tick + 1) messagesChan
+timerLoop tick messagesChan = threadDelay 30000000 >> writeChan messagesChan (TimerAction tick) >> timerLoop (tick + 1) messagesChan
 
 
 reactCmd :: [B.ByteString] -> StateT ServerState IO ()
@@ -74,22 +72,22 @@ mainLoop = forever $ do
 
 
 startServer :: ServerInfo -> Socket -> IO ()
-startServer serverInfo serverSocket = do
-    putStrLn $ "Listening on port " ++ show (listenPort serverInfo)
+startServer si serverSocket = do
+    putStrLn $ "Listening on port " ++ show (listenPort si)
 
     forkIO $
         acceptLoop
             serverSocket
-            (coreChan serverInfo)
+            (coreChan si)
 
     return ()
 
-    --forkIO $ timerLoop 0 $ coreChan serverInfo
+    forkIO $ timerLoop 0 $ coreChan si
 
-    startDBConnection serverInfo
+    startDBConnection si
 
     rnc <- newRoomsAndClients newRoom
 
-    forkIO $ evalStateT mainLoop (ServerState Nothing serverInfo Set.empty rnc)
+    forkIO $ evalStateT mainLoop (ServerState Nothing si Set.empty rnc)
 
-    forever $ threadDelay (60 * 60 * 10^6)
+    forever $ threadDelay 3600000000 -- one hour
