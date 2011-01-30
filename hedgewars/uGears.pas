@@ -1004,7 +1004,9 @@ var s: shortstring;
     vampDmg, tmpDmg, i: Longword;
     vg: PVisualGear;
 begin
-    if (Gear^.Kind = gtHedgehog) and (Damage>=1) then
+  if Damage = 0 then exit; // nothing to apply
+
+    if (Gear^.Kind = gtHedgehog) then
     begin
     uStats.HedgehogDamaged(Gear, AttackerHog);
     HHHurt(Gear^.Hedgehog, Source);
