@@ -49,6 +49,7 @@ bool checkForDir(const QString & dir)
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
+    app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
     QStringList arguments = app.arguments();
     QMap<QString, QString> parsedArgs;
