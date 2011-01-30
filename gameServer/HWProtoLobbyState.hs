@@ -119,19 +119,18 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
 handleCmd_lobby ["JOIN_ROOM", roomName] =
     handleCmd_lobby ["JOIN_ROOM", roomName, ""]
 
+
+handleCmd_lobby ["FOLLOW", asknick] = do
+    (_, rnc) <- ask
+    ci <- clientByNick asknick
+    let ri = clientRoom rnc $ fromJust ci
+    let clRoom = room rnc ri
+    if isNothing ci || ri == lobbyId then
+        return []
+        else
+        handleCmd_lobby ["JOIN_ROOM", name clRoom]
+
 {-
-handleCmd_lobby clID clients rooms ["FOLLOW", asknick] =
-    if noSuchClient || roomID followClient == 0 then
-        []
-    else
-        handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName]
-    where
-        maybeClient = Foldable.find (\cl -> asknick == nick cl) clients
-        noSuchClient = isNothing maybeClient
-        followClient = fromJust maybeClient
-        roomName = name $ rooms IntMap.! roomID followClient
-
-
     ---------------------------
     -- Administrator's stuff --
 
