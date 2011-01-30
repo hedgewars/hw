@@ -3,7 +3,6 @@ module HWProtoCore where
 
 import Control.Monad.Reader
 import Data.Maybe
-import Data.List
 import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
@@ -43,8 +42,7 @@ handleCmd cmd = do
 
 handleCmd_loggedin ["INFO", asknick] = do
     (_, rnc) <- ask
-    let allClientIDs = allClients rnc
-    let maybeClientId = find (\clId -> asknick == nick (client rnc clId)) allClientIDs
+    maybeClientId <- clientByNick asknick
     let noSuchClient = isNothing maybeClientId
     let clientId = fromJust maybeClientId
     let cl = rnc `client` fromJust maybeClientId

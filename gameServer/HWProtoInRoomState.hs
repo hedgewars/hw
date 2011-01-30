@@ -1,9 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module HWProtoInRoomState where
 
-import qualified Data.Foldable as Foldable
 import qualified Data.Map as Map
-import Data.Sequence(Seq, (|>), (><), fromList, empty)
+import Data.Sequence((|>), empty)
 import Data.List
 import Data.Maybe
 import qualified Data.ByteString.Char8 as B
@@ -234,21 +233,22 @@ handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = do
         else
             [ModifyRoom (\r -> r{isRestrictedTeams = not $ isRestrictedTeams r})]
 
-{-
-handleCmd_inRoom clID clients rooms ["KICK", kickNick] =
-    [KickRoomClient kickID | isMaster client && not noSuchClient && (kickID /= clID) && (roomID client == roomID kickClient)]
-    where
-        client = clients IntMap.! clID
-        maybeClient = Foldable.find (\cl -> kickNick == nick cl) clients
-        noSuchClient = isNothing maybeClient
-        kickClient = fromJust maybeClient
-        kickID = clientUID kickClient
+
+handleCmd_inRoom ["KICK", kickNick] = do
+    (thisClientId, rnc) <- ask
+    maybeClientId <- clientByNick kickNick
+    master <- liftM isMaster thisClient
+    let kickId = fromJust maybeClientId
+    let sameRoom = (clientRoom rnc thisClientId) == (clientRoom rnc kickId)
+    return
+        [KickRoomClient kickId | master && isJust maybeClientId && (kickId /= thisClientId) && sameRoom]
 
 
-handleCmd_inRoom clID clients _ ["TEAMCHAT", msg] =
-    [AnswerSameClan ["EM", engineMsg]]
+handleCmd_inRoom ["TEAMCHAT", msg] = do
+    cl <- thisClient
+    chans <- roomSameClanChans
+    return [AnswerClients chans ["EM", engineMsg cl]]
     where
-        client = clients IntMap.! clID
-        engineMsg = toEngineMsg $ 'b' : ((nick client) ++ "(team): " ++ msg ++ "\x20\x20")
--}
+        engineMsg cl = toEngineMsg $ "b" `B.append` (nick cl) `B.append` "(team): " `B.append` msg `B.append` "\x20\x20"
+
 handleCmd_inRoom _ = return [ProtocolError "Incorrect command (state: in room)"]
