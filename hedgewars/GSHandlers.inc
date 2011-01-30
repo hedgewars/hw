@@ -2381,7 +2381,7 @@ begin
     if (Distance(tx - x, ty - y) > _256) or
        not TryPlaceOnLand(TargetPoint.X - SpritesData[sprAmGirder].Width div 2,
        TargetPoint.Y - SpritesData[sprAmGirder].Height div 2,
-       sprAmGirder, Gear^.State, true) then
+       sprAmGirder, Gear^.State, true, false) then
     begin
         PlaySound(sndDenied);
         HHGear^.Message := HHGear^.Message and not gmAttack;
@@ -2442,7 +2442,7 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
     if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
        TargetPoint.Y - SpritesData[sprHHTelepMask].Height div 2,
-       sprHHTelepMask, 0, false) then
+       sprHHTelepMask, 0, false, false) then
     begin
         HHGear^.Message := HHGear^.Message and not gmAttack;
         HHGear^.State := HHGear^.State and not gstAttacking;
@@ -3114,6 +3114,8 @@ begin
 
     HHGear := Gear^.Hedgehog^.Gear;
     FollowGear := Gear;
+
+    if Gear^.Timer > 0 then dec(Gear^.Timer);
 
     fChanged := false;
     if ((HHGear^.State and gstHHDriven) = 0) or (Gear^.Timer = 0) then
@@ -4591,6 +4593,43 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepPlaceStructure(Gear: PGear);
+var 
+    HHGear: PGear;
+    x, y, tx, ty: hwFloat;
+begin
+    AllInactive := false;
+
+    HHGear := Gear^.Hedgehog^.Gear;
+    tx := int2hwFloat(TargetPoint.X);
+    ty := int2hwFloat(TargetPoint.Y);
+    x := HHGear^.X;
+    y := HHGear^.Y;
+
+    if (Distance(tx - x, ty - y) > _256) or
+       not TryPlaceOnLand(TargetPoint.X - SpritesData[sprAmGirder].Width div 2,
+       TargetPoint.Y - SpritesData[sprAmGirder].Height div 2,
+       sprAmGirder, Gear^.State, true, false) then
+    begin
+        PlaySound(sndDenied);
+        HHGear^.Message := HHGear^.Message and not gmAttack;
+        HHGear^.State := HHGear^.State and not gstAttacking;
+        HHGear^.State := HHGear^.State or gstHHChooseTarget;
+        isCursorVisible := true;
+        DeleteGear(Gear)
+    end
+    else 
+    begin
+        PlaySound(sndPlaced);
+        DeleteGear(Gear);
+        AfterAttack;
+    end;
+
+    HHGear^.State := HHGear^.State and not (gstAttacking or gstAttacked);
+    HHGear^.Message := HHGear^.Message and not gmAttack;
+    TargetPoint.X := NoPointX
+end;
+
 procedure doStepStructure(Gear: PGear);
 var 
     i, x, y: LongInt;
