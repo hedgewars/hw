@@ -372,7 +372,9 @@ with team^ do
     if not hasGone then
         for i:= 0 to cMaxHHIndex do
             if Hedgehogs[i].Gear <> nil then
-                inc(NewTeamHealthBarWidth, Hedgehogs[i].Gear^.Health);
+                inc(NewTeamHealthBarWidth, Hedgehogs[i].Gear^.Health)
+            else if Hedgehogs[i].GearHidden <> nil then
+                inc(NewTeamHealthBarWidth, Hedgehogs[i].GearHidden^.Health);
 
     TeamHealth:= NewTeamHealthBarWidth;
     if NewTeamHealthBarWidth > MaxTeamHealth then

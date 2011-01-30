@@ -39,6 +39,7 @@ function  RenderHelpWindow(caption, subcaption, description, extra: ansistring; 
 procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
+procedure MakeCrossHairs;
 
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands, uDebug;
@@ -73,6 +74,47 @@ finalRect.y:= Y;
 finalRect.w:= w + FontBorder * 2 + 4;
 finalRect.h:= h + FontBorder * 2;
 WriteInRect:= finalRect
+end;
+
+procedure MakeCrossHairs;
+var t: LongInt;
+    tmpsurf, texsurf: PSDL_Surface;
+    Color, i: Longword;
+    s : shortstring;
+begin
+s:= Pathz[ptGraphics] + '/' + cCHFileName;
+tmpsurf:= LoadImage(s, ifAlpha or ifCritical);
+
+for t:= 0 to Pred(TeamsCount) do
+    with TeamsArray[t]^ do
+    begin
+    texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, tmpsurf^.w, tmpsurf^.h, 32, RMask, GMask, BMask, AMask);
+    TryDo(texsurf <> nil, errmsgCreateSurface, true);
+
+    Color:= Clan^.Color;
+    Color:= SDL_MapRGB(texsurf^.format, Color shr 16, Color shr 8, Color and $FF);
+    SDL_FillRect(texsurf, nil, Color);
+
+    SDL_UpperBlit(tmpsurf, nil, texsurf, nil);
+
+    TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Ooops', true);
+
+    if SDL_MustLock(texsurf) then
+        SDLTry(SDL_LockSurface(texsurf) >= 0, true);
+
+    // make black pixel be alpha-transparent
+    for i:= 0 to texsurf^.w * texsurf^.h - 1 do
+        if PLongwordArray(texsurf^.pixels)^[i] = AMask then PLongwordArray(texsurf^.pixels)^[i]:= (RMask or GMask or BMask) and Color;
+
+    if SDL_MustLock(texsurf) then
+        SDL_UnlockSurface(texsurf);
+
+    if CrosshairTex <> nil then FreeTexture(CrosshairTex);
+    CrosshairTex:= Surface2Tex(texsurf, false);
+    SDL_FreeSurface(texsurf)
+    end;
+
+SDL_FreeSurface(tmpsurf)
 end;
 
 procedure StoreLoad;
@@ -152,7 +194,7 @@ var s: shortstring;
             with Hedgehogs[i] do
                 if Gear <> nil then
                     begin
-                    NameTagTex:= RenderStringTex(Name, Clan^.Color, CheckCJKFont(Name,fnt16));
+                    NameTagTex:= RenderStringTex(Name, Clan^.Color, fnt16);
                     if Hat <> 'NoHat' then
                         begin
                         if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
@@ -175,45 +217,6 @@ var s: shortstring;
         SDL_FreeSurface(iconsurf);
         iconsurf:= nil;
         end;
-    end;
-
-    procedure MakeCrossHairs;
-    var t: LongInt;
-        tmpsurf, texsurf: PSDL_Surface;
-        Color, i: Longword;
-    begin
-    s:= Pathz[ptGraphics] + '/' + cCHFileName;
-    tmpsurf:= LoadImage(s, ifAlpha or ifCritical);
-
-    for t:= 0 to Pred(TeamsCount) do
-        with TeamsArray[t]^ do
-        begin
-        texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, tmpsurf^.w, tmpsurf^.h, 32, RMask, GMask, BMask, AMask);
-        TryDo(texsurf <> nil, errmsgCreateSurface, true);
-
-        Color:= Clan^.Color;
-        Color:= SDL_MapRGB(texsurf^.format, Color shr 16, Color shr 8, Color and $FF);
-        SDL_FillRect(texsurf, nil, Color);
-
-        SDL_UpperBlit(tmpsurf, nil, texsurf, nil);
-
-        TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Ooops', true);
-
-        if SDL_MustLock(texsurf) then
-            SDLTry(SDL_LockSurface(texsurf) >= 0, true);
-
-        // make black pixel be alpha-transparent
-        for i:= 0 to texsurf^.w * texsurf^.h - 1 do
-            if PLongwordArray(texsurf^.pixels)^[i] = AMask then PLongwordArray(texsurf^.pixels)^[i]:= (RMask or GMask or BMask) and Color;
-
-        if SDL_MustLock(texsurf) then
-            SDL_UnlockSurface(texsurf);
-
-        CrosshairTex:= Surface2Tex(texsurf, false);
-        SDL_FreeSurface(texsurf)
-        end;
-
-    SDL_FreeSurface(tmpsurf)
     end;
 
     procedure InitHealth;
