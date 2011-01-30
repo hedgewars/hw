@@ -26,18 +26,53 @@
 #include <QSettings>
 #include <QFile>
 #include <QTextStream>
+#include <QScrollBar>
 
 #include "hwconsts.h"
 #include "SDLs.h"
 #include "gameuiconfig.h"
 #include "chatwidget.h"
 
-ListWidgetNickItem::ListWidgetNickItem(const QString& nick) : QListWidgetItem(nick) {}
+ListWidgetNickItem::ListWidgetNickItem(const QString& nick, bool isFriend, bool isIgnored) : QListWidgetItem(nick)
+{
+    this->aFriend = isFriend;
+    this->isIgnored = isIgnored;
+}
+
+void ListWidgetNickItem::setFriend(bool isFriend)
+{
+    this->aFriend = isFriend;
+}
+
+void ListWidgetNickItem::setIgnored(bool isIgnored)
+{
+    this->isIgnored = isIgnored;
+}
+
+bool ListWidgetNickItem::isFriend()
+{
+    return aFriend;
+}
+
+bool ListWidgetNickItem::ignored()
+{
+    return isIgnored;
+}
 
 bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
 {
     // case in-sensitive comparison of the associated strings
     // chars that are no letters are sorted at the end of the list
+
+    ListWidgetNickItem otherNick = const_cast<ListWidgetNickItem &>(dynamic_cast<const ListWidgetNickItem &>(other));
+
+    // ignored always down
+    if (isIgnored != otherNick.ignored())
+        return !isIgnored;
+
+    // friends always up
+    if (aFriend != otherNick.isFriend())
+        return aFriend;
 
     QString txt1 = text().toLower();
     QString txt2 = other.text().toLower();
@@ -170,16 +205,20 @@ void HWChatWidget::saveList(QStringList & list, const QString & file)
     txt.close();
 }
 
-void HWChatWidget::updateIcon(QListWidgetItem *item)
+void HWChatWidget::updateNickItem(QListWidgetItem *nickItem)
 {
-    QString nick = item->text();
+    QString nick = nickItem->text();
+    ListWidgetNickItem * item = dynamic_cast<ListWidgetNickItem*>(nickItem);
 
-    if(ignoreList.contains(nick, Qt::CaseInsensitive))
+    item->setFriend(friendsList.contains(nick, Qt::CaseInsensitive));
+    item->setIgnored(ignoreList.contains(nick, Qt::CaseInsensitive));
+
+    if(item->ignored())
     {
         item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_ignore_on.png" : ":/res/chat_ignore_off.png") : ":/res/chat_ignore.png"));
         item->setForeground(Qt::gray);
     }
-    else if(friendsList.contains(nick, Qt::CaseInsensitive))
+    else if(item->isFriend())
     {
         item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_friend_on.png" : ":/res/chat_friend_off.png") : ":/res/chat_friend.png"));
         item->setForeground(Qt::green);
@@ -191,17 +230,19 @@ void HWChatWidget::updateIcon(QListWidgetItem *item)
     }
 }
 
-void HWChatWidget::updateIcons()
+void HWChatWidget::updateNickItems()
 {
     for(int i = 0; i < chatNicks->count(); i++)
-        updateIcon(chatNicks->item(i));
+        updateNickItem(chatNicks->item(i));
+
+    chatNicks->sortItems();
 }
 
 void HWChatWidget::loadLists(const QString & nick)
 {
     loadList(ignoreList, nick.toLower() + "_ignore.txt");
     loadList(friendsList, nick.toLower() + "_friends.txt");
-    updateIcons();
+    updateNickItems();
 }
 
 void HWChatWidget::saveLists(const QString & nick)
@@ -266,8 +307,8 @@ void HWChatWidget::onServerMessage(const QString& str)
 
 void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
 {
-    QListWidgetItem * item = new ListWidgetNickItem(nick);
-    updateIcon(item);
+    QListWidgetItem * item = new ListWidgetNickItem(nick, friendsList.contains(nick, Qt::CaseInsensitive), ignoreList.contains(nick, Qt::CaseInsensitive));
+    updateNickItem(item);
     chatNicks->addItem(item);
 
     if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool()) {
@@ -332,10 +373,19 @@ void HWChatWidget::onIgnore()
     }
     else // not on list - add
     {
+        // don't consider ignored people friends
+        if(friendsList.contains(curritem->text(), Qt::CaseInsensitive))
+            emit onFriend();
+
+        // scroll down on first ignore added so that people see where that nick went to
+        if (ignoreList.isEmpty())
+            emit chatNicks->verticalScrollBar()->setValue(chatNicks->verticalScrollBar()->maximum());
+
         ignoreList << curritem->text().toLower();
         onChatString(HWChatWidget::tr("%1 *** %2 has been added to your ignore list").arg('\x03').arg(curritem->text()));
     }
-    updateIcon(curritem); // update icon
+    updateNickItem(curritem); // update icon/sort order/etc
+    chatNicks->sortItems();
     chatNickSelected(0); // update context menu
 }
 
@@ -352,10 +402,19 @@ void HWChatWidget::onFriend()
     }
     else // not on list - add
     {
+        // don't ignore the new friend
+        if(ignoreList.contains(curritem->text(), Qt::CaseInsensitive))
+            emit onIgnore();
+
+        // scroll up on first friend added so that people see where that nick went to
+        if (friendsList.isEmpty())
+            emit chatNicks->verticalScrollBar()->setValue(chatNicks->verticalScrollBar()->minimum());
+
         friendsList << curritem->text().toLower();
         onChatString(HWChatWidget::tr("%1 *** %2 has been added to your friends list").arg('\x03').arg(curritem->text()));
     }
-    updateIcon(curritem); // update icon
+    updateNickItem(curritem); // update icon/sort order/etc
+    chatNicks->sortItems();
     chatNickSelected(0); // update context menu
 }
 
@@ -411,7 +470,7 @@ void HWChatWidget::setReadyStatus(const QString & nick, bool isReady)
     }
 
     items[0]->setData(Qt::UserRole, isReady); // bulb status
-    updateIcon(items[0]);
+    updateNickItem(items[0]);
 
     // ensure we're still showing the status bulbs
     showReady = true;

@@ -37,8 +37,16 @@ class SDLInteraction;
 class ListWidgetNickItem : public QListWidgetItem
 {
 public:
-  ListWidgetNickItem(const QString& nick);
+  ListWidgetNickItem(const QString& nick, bool isFriend, bool isIgnored);
   bool operator<(const QListWidgetItem & other) const;
+  void setFriend(bool isFriend);
+  void setIgnored(bool isIgnored);
+  bool isFriend();
+  bool ignored();
+
+private:
+  bool aFriend;
+  bool isIgnored;
 };
 
 class HWChatWidget : public QWidget
@@ -54,8 +62,8 @@ class HWChatWidget : public QWidget
 private:
   void loadList(QStringList & list, const QString & file);
   void saveList(QStringList & list, const QString & file);
-  void updateIcon(QListWidgetItem *item);
-  void updateIcons();
+  void updateNickItem(QListWidgetItem *item);
+  void updateNickItems();
 
  public slots:
   void onChatString(const QString& str);
