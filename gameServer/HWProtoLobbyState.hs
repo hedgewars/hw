@@ -147,36 +147,32 @@ handleCmd_lobby clID clients rooms ["BAN", banNick] =
         BanClient banNick : handleCmd_lobby clID clients rooms ["KICK", banNick]
     where
         client = clients IntMap.! clID
+        -}
 
 
+handleCmd_lobby ["SET_SERVER_VAR", "MOTD_NEW", newMessage] = do
+    cl <- thisClient
+    return [ModifyServerInfo (\si -> si{serverMessage = newMessage}) | isAdministrator cl]
 
-handleCmd_lobby clID clients rooms ["SET_SERVER_VAR", "MOTD_NEW", newMessage] =
-        [ModifyServerInfo (\si -> si{serverMessage = newMessage}) | isAdministrator client]
+handleCmd_lobby ["SET_SERVER_VAR", "MOTD_OLD", newMessage] = do
+    cl <- thisClient
+    return [ModifyServerInfo (\si -> si{serverMessageForOldVersions = newMessage}) | isAdministrator cl]
+
+handleCmd_lobby ["SET_SERVER_VAR", "LATEST_PROTO", protoNum] = do
+    cl <- thisClient
+    return [ModifyServerInfo (\si -> si{latestReleaseVersion = readNum}) | isAdministrator cl && readNum > 0]
     where
-        client = clients IntMap.! clID
+        readNum = case B.readInt protoNum of
+                       Just (i, t) | B.null t -> fromIntegral i
+                       otherwise -> 0
 
-handleCmd_lobby clID clients rooms ["SET_SERVER_VAR", "MOTD_OLD", newMessage] =
-        [ModifyServerInfo (\si -> si{serverMessageForOldVersions = newMessage}) | isAdministrator client]
-    where
-        client = clients IntMap.! clID
+handleCmd_lobby ["GET_SERVER_VAR"] = do
+    cl <- thisClient
+    return [SendServerVars | isAdministrator cl]
 
-handleCmd_lobby clID clients rooms ["SET_SERVER_VAR", "LATEST_PROTO", protoNum] =
-    [ModifyServerInfo (\si -> si{latestReleaseVersion = fromJust readNum}) | isAdministrator client && isJust readNum]
-    where
-        client = clients IntMap.! clID
-        readNum = maybeRead protoNum :: Maybe Word16
-
-handleCmd_lobby clID clients rooms ["GET_SERVER_VAR"] =
-    [SendServerVars | isAdministrator client]
-    where
-        client = clients IntMap.! clID
-
-
-handleCmd_lobby clID clients rooms ["CLEAR_ACCOUNTS_CACHE"] =
-        [ClearAccountsCache | isAdministrator client]
-    where
-        client = clients IntMap.! clID
--}
+handleCmd_lobby ["CLEAR_ACCOUNTS_CACHE"] = do
+    cl <- thisClient
+    return [ClearAccountsCache | isAdministrator cl]
 
 
 handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]
