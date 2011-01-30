@@ -571,7 +571,7 @@ begin
             for j:= 0 to 7 do
                 begin
                 hh:= team^.Hedgehogs[i];
-                if (hh.Gear <> nil) and (hh.GearHidden <> nil) then 
+                if (hh.Gear <> nil) or (hh.GearHidden <> nil) then 
                     begin
                     FreeTexture(hh.NameTagTex);
                     hh.NameTagTex:= RenderStringTex(hh.Name, clan^.Color, fnt16);
