@@ -130,19 +130,16 @@ handleCmd_lobby ["FOLLOW", asknick] = do
         else
         handleCmd_lobby ["JOIN_ROOM", name clRoom]
 
-{-
     ---------------------------
     -- Administrator's stuff --
 
-handleCmd_lobby clID clients rooms ["KICK", kickNick] =
-        [KickClient kickID | isAdministrator client && (not noSuchClient) && kickID /= clID]
-    where
-        client = clients IntMap.! clID
-        maybeClient = Foldable.find (\cl -> kickNick == nick cl) clients
-        noSuchClient = isNothing maybeClient
-        kickID = clientUID $ fromJust maybeClient
+handleCmd_lobby ["KICK", kickNick] = do
+    (ci, _) <- ask
+    cl <- thisClient
+    kickId <- clientByNick kickNick
+    return [KickClient $ fromJust kickId | isAdministrator cl && isJust kickId && fromJust kickId /= ci]
 
-
+{-
 handleCmd_lobby clID clients rooms ["BAN", banNick] =
     if not $ isAdministrator client then
         []
