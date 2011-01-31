@@ -240,7 +240,7 @@ begin
         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
 
     WriteToConsole('Init SDL... ');
-    SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);
+    SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
     WriteLnToConsole(msgOK);
 
     SDL_EnableUNICODE(1);
