@@ -570,7 +570,7 @@ begin
             team:= clan^.Teams[i];
             for j:= 0 to 7 do
                 begin
-                hh:= team^.Hedgehogs[i];
+                hh:= team^.Hedgehogs[j];
                 if (hh.Gear <> nil) or (hh.GearHidden <> nil) then 
                     begin
                     FreeTexture(hh.NameTagTex);
