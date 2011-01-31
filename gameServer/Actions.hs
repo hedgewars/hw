@@ -36,7 +36,8 @@ data Action =
     | ByeClient B.ByteString
     | KickClient ClientIndex
     | KickRoomClient ClientIndex
-    | BanClient B.ByteString -- nick
+    | BanClient B.ByteString
+    | ChangeMaster
     | RemoveClientTeams ClientIndex
     | ModifyClient (ClientInfo -> ClientInfo)
     | ModifyClient2 ClientIndex (ClientInfo -> ClientInfo)
@@ -179,18 +180,19 @@ processAction (MoveToLobby msg) = do
     (Just ci) <- gets clientIndex
     ri <- clientRoomA
     rnc <- gets roomsClients
-    room <- clientRoomA
+    (gameProgress, playersNum) <- io $ room'sM rnc (\r -> (gameinprogress r, playersIn r)) ri
     ready <- client's isReady
     master <- client's isMaster
-    client <- client's id
+--    client <- client's id
+    clNick <- client's nick
+    chans <- othersChans
 
     if master then
-        processAction RemoveRoom
+        if gameProgress && playersNum > 1 then
+            mapM_ processAction [ChangeMaster, AnswerClients chans ["LEFT", clNick, msg], NoticeMessage AdminLeft, RemoveClientTeams ci]
+            else
+            processAction RemoveRoom
         else
-        do
-        clNick <- client's nick
-        clChan <- client's sendChan
-        chans <- othersChans
         mapM_ processAction [AnswerClients chans ["LEFT", clNick, msg], RemoveClientTeams ci]
 
     io $ do
@@ -200,54 +202,17 @@ processAction (MoveToLobby msg) = do
                     }) ri
             moveClientToLobby rnc ci
 
-{-
-    (_, _, newClients, newRooms) <-
-            if isMaster client then
-                if (gameinprogress room) && (playersIn room > 1) then
-                    (changeMaster >>= (\state -> foldM processAction state
-                        [AnswerOthersInRoom ["LEFT", nick client, msg],
-                        AnswerOthersInRoom ["WARNING", "Admin left the room"],
-                        RemoveClientTeams clID]))
-                else -- not in game
-                    processAction (clID, serverInfo, rnc) RemoveRoom
-            else -- not master
-                foldM
-                    processAction
-                        (clID, serverInfo, rnc)
-                        [AnswerOthersInRoom ["LEFT", nick client, msg],
-                        RemoveClientTeams clID]
-
-
-    return (
-        clID,
-        serverInfo,
-        adjust resetClientFlags clID newClients,
-        adjust removeClientFromRoom rID $ adjust insertClientToRoom 0 newRooms
-        )
-    where
-        rID = roomID client
-        client = clients ! clID
-        room = rooms ! rID
-        resetClientFlags cl = cl{roomID = 0, isMaster = False, isReady = False, teamsInGame = undefined}
-        removeClientFromRoom r = r{
-                playersIDs = otherPlayersSet,
-                playersIn = (playersIn r) - 1,
-                readyPlayers = if isReady client then (readyPlayers r) - 1 else readyPlayers r
-                }
-        insertClientToRoom r = r{playersIDs = IntSet.insert clID (playersIDs r)}
-        changeMaster = do
-            processAction (newMasterId, serverInfo, rnc) $ AnswerThisClient ["ROOM_CONTROL_ACCESS", "1"]
-            return (
-                clID,
-                serverInfo,
-                adjust (\cl -> cl{isMaster = True}) newMasterId clients,
-                adjust (\r -> r{masterID = newMasterId, name = newRoomName}) rID rooms
-                )
-        newRoomName = nick newMasterClient
-        otherPlayersSet = IntSet.delete clID (playersIDs room)
-        newMasterId = IntSet.findMin otherPlayersSet
-        newMasterClient = clients ! newMasterId
--}
+processAction ChangeMaster = do
+    ri <- clientRoomA
+    rnc <- gets roomsClients
+    newMasterId <- liftM head . io $ roomClientsIndicesM rnc ri
+    newMaster <- io $ client'sM rnc id newMasterId
+    let newRoomName = nick newMaster
+    mapM_ processAction [
+        ModifyRoom (\r -> r{masterID = newMasterId, name = newRoomName}),
+        ModifyClient2 newMasterId (\c -> c{isMaster = True}),
+        AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
+        ]
 
 processAction (AddRoom roomName roomPassword) = do
     Just clId <- gets clientIndex

@@ -183,5 +183,7 @@ instance Show CoreMessage where
 type MRnC = MRoomsAndClients RoomInfo ClientInfo
 type IRnC = IRoomsAndClients RoomInfo ClientInfo
 
-data Notice = NickAlreadyInUse
+data Notice =
+    NickAlreadyInUse
+    | AdminLeft
     deriving Enum

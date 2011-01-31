@@ -27,13 +27,13 @@ clientRoomA :: StateT ServerState IO RoomIndex
 clientRoomA = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
-    liftIO $ clientRoomM rnc ci
+    io $ clientRoomM rnc ci
 
 client's :: (ClientInfo -> a) -> StateT ServerState IO a
 client's f = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
-    liftIO $ client'sM rnc f ci
+    io $ client'sM rnc f ci
 
 allClientsS :: StateT ServerState IO [ClientInfo]
 allClientsS = gets roomsClients >>= liftIO . clientsM
@@ -41,7 +41,7 @@ allClientsS = gets roomsClients >>= liftIO . clientsM
 roomClientsS :: RoomIndex -> StateT ServerState IO [ClientInfo]
 roomClientsS ri = do
     rnc <- gets roomsClients
-    liftIO $ roomClientsM rnc ri
+    io $ roomClientsM rnc ri
 
 io :: IO a -> StateT ServerState IO a
 io = liftIO
