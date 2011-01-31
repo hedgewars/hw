@@ -5,13 +5,14 @@ local weapons = { amGrenade, amClusterBomb, amBazooka, amBee, amShotgun,
             amBaseballBat, amTeleport, amMortar, amCake, amSeduction,
             amWatermelon, amHellishBomb, amDrill, amBallgun, amRCPlane,
             amSniperRifle, amMolotov, amBirdy, amBlowTorch, amGasBomb,
-            amFlamethrower, amSMine, amHammer, amSnowball }
+            amFlamethrower, amSMine, amHammer, amSnowball, amTardis, amStructure }
 
 local airweapons = { amAirAttack, amMineStrike, amNapalm, amDrillStrike }
 
 
 function onGameInit()
     GameFlags = band(bor(GameFlags, gfResetWeps), bnot(gfInfAttack + gfPerHogAmmo))
+    Goals = loc("Each turn you get one random weapon")
 end
 
 function onGameStart()
@@ -20,8 +21,7 @@ function onGameStart()
             table.insert(weapons, w)
         end
     end
-
-    ShowMission(loc("Random Weapons"), loc("A game of luck"), loc("There has been a mix-up with your gear and now you|have to utilize whatever is coming your way!"), -amSkip, 0)
+    --ShowMission(loc("Random Weapons"), loc("A game of luck"), loc("There has been a mix-up with your gear and now you|have to utilize whatever is coming your way!"), -amSkip, 0)
 end
 
 function onAmmoStoreInit()

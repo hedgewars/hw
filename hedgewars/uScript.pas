@@ -1350,7 +1350,6 @@ ScriptSetInteger('WaterRise', cWaterRise);
 ScriptSetInteger('HealthDecrease', cHealthDecrease);
 ScriptSetString('Map', '');
 ScriptSetString('Theme', '');
-
 ScriptSetString('Goals', '');
 
 ScriptCall('onGameInit');
