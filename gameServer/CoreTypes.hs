@@ -136,14 +136,14 @@ data ServerInfo =
         dbHost :: String,
         dbLogin :: String,
         dbPassword :: String,
-        lastLogins :: [(String, UTCTime)],
+        lastLogins :: [(String, (UTCTime, String))],
         stats :: TMVar StatisticsInfo,
         coreChan :: Chan CoreMessage,
         dbQueries :: Chan DBQuery
     }
 
 instance Show ServerInfo where
-    show si = "Server Info"
+    show _ = "Server Info"
 
 newServerInfo = (
     ServerInfo
