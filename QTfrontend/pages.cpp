@@ -2024,6 +2024,7 @@ PageAdmin::PageAdmin(QWidget* parent) :
     pageLayout->addWidget(lblPreview, 4, 0);
 
     tb = new QTextBrowser(this);
+    tb->setOpenExternalLinks(true);
     pageLayout->addWidget(tb, 4, 1, 1, 2);
     connect(leServerMessageNew, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
     connect(leServerMessageOld, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
