@@ -1046,7 +1046,9 @@ begin
         end;
     end else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
         begin
+        {$IFDEF DEBUGFILE}
         AddFileLog('Assigning hedgehog ' + inttostr(LongInt(AttackerHog)) + ' to gear ' + inttostr(Gear^.uid));
+        {$ENDIF}
         Gear^.Hedgehog:= AttackerHog;
         end;
     inc(Gear^.Damage, Damage);
