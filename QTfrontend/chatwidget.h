@@ -58,6 +58,7 @@ class HWChatWidget : public QWidget
   void loadLists(const QString & nick);
   void saveLists(const QString & nick);
   void setShowReady(bool s);
+  void setShowFollow(bool enabled);
 
 private:
   void loadList(QStringList & list, const QString & file);

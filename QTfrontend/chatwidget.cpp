@@ -162,12 +162,24 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     acFriend->setIcon(QIcon(":/res/addfriend.png"));
     connect(acFriend, SIGNAL(triggered(bool)), this, SLOT(onFriend()));
 
-    chatNicks->insertAction(0, acInfo);
-    chatNicks->insertAction(0, acFollow);
-    chatNicks->insertAction(0, acIgnore);
     chatNicks->insertAction(0, acFriend);
+    chatNicks->insertAction(0, acInfo);
+    chatNicks->insertAction(0, acIgnore);
 
     showReady = false;
+    setShowFollow(true);
+}
+
+void HWChatWidget::setShowFollow(bool enabled)
+{
+    if (enabled) {
+        if (!(chatNicks->actions().contains(acFollow)))
+            chatNicks->insertAction(acFriend, acFollow);
+    }
+    else {
+        if (chatNicks->actions().contains(acFollow))
+            chatNicks->removeAction(acFollow);
+    }
 }
 
 void HWChatWidget::loadList(QStringList & list, const QString & file)
@@ -420,7 +432,8 @@ void HWChatWidget::onFriend()
 
 void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
 {
-    if (item) onFollow();
+    QList<QAction *> actions = chatNicks->actions();
+    actions.first()->activate(QAction::Trigger);
 }
 
 void HWChatWidget::chatNickSelected(int index)

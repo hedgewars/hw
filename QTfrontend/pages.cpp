@@ -984,6 +984,7 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
     // chatwidget
     pChatWidget = new HWChatWidget(this, gameSettings, sdli, true);
     pChatWidget->setShowReady(true); // show status bulbs by default
+    pChatWidget->setShowFollow(false); // don't show follow in nicks' context menus
     pageLayout->addWidget(pChatWidget, 2, 0, 1, 2);
     pageLayout->setRowStretch(1, 100);
 
