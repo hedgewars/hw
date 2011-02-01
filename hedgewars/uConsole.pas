@@ -52,7 +52,7 @@ var Len: LongInt;
     done: boolean;
 begin
 {$IFNDEF NOCONSOLE}
-{$IFDEF DEBUGFILE}AddFileLog('[Con] ' + s);{$ENDIF}
+AddFileLog('[Con] ' + s);
 Write(s);
 done:= false;
 

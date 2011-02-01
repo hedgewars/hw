@@ -352,9 +352,7 @@ end;
 
 function AngleSin(const Angle: Longword): hwFloat;
 begin
-{$IFDEF DEBUGFILE}
 //TryDo((Angle >= 0) and (Angle <= 2048), 'Sin param exceeds limits', true);
-{$ENDIF}
 AngleSin.isNegative:= false;
 if Angle < 1024 then AngleSin.QWordValue:= SinTable[Angle]
                 else AngleSin.QWordValue:= SinTable[2048 - Angle]
@@ -362,9 +360,7 @@ end;
 
 function AngleCos(const Angle: Longword): hwFloat;
 begin
-{$IFDEF DEBUGFILE}
 //TryDo((Angle >= 0) and (Angle <= 2048), 'Cos param exceeds limits', true);
-{$ENDIF}
 AngleCos.isNegative:= Angle > 1024;
 if Angle < 1024 then AngleCos.QWordValue:= SinTable[1024 - Angle]
                 else AngleCos.QWordValue:= SinTable[Angle - 1024]

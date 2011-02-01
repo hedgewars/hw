@@ -216,7 +216,7 @@ if (GameFlags and gfDisableWind) = 0 then
         CWindSpeedf := -cWindSpeedf;
     g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);
     g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
-{$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
+    AddFileLog('Wind = '+FloatToStr(cWindSpeed));
     end;
 
 ApplyAmmoChanges(CurrentHedgehog^);

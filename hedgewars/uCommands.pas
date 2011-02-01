@@ -60,7 +60,7 @@ c:= CmdStr[1];
 if c in ['/', '$'] then Delete(CmdStr, 1, 1) else c:= '/';
 s:= '';
 SplitBySpace(CmdStr, s);
-{$IFDEF DEBUGFILE}AddFileLog('[Cmd] ' + c + CmdStr + ' (' + inttostr(length(s)) + ')');{$ENDIF}
+AddFileLog('[Cmd] ' + c + CmdStr + ' (' + inttostr(length(s)) + ')');
 t:= Variables;
 while t <> nil do
       begin

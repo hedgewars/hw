@@ -41,10 +41,10 @@ var BestActions: TActions;
 
 procedure FreeActionsList;
 begin
-{$IFDEF DEBUGFILE}AddFileLog('FreeActionsList called');{$ENDIF}
+AddFileLog('FreeActionsList called');
 if hasThread <> 0 then
    begin
-   {$IFDEF DEBUGFILE}AddFileLog('Waiting AI thread to finish');{$ENDIF}
+   AddFileLog('Waiting AI thread to finish');
    StopThinking:= true;
    repeat
      SDL_Delay(10)
@@ -323,7 +323,7 @@ if Targets.Count = 0 then
 FillBonuses((Me^.State and gstAttacked) <> 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
     CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(Me^.Hedgehog^, a);
-{$IFDEF DEBUGFILE}AddFileLog('Enter Think Thread');{$ENDIF}
+AddFileLog('Enter Think Thread');
 BeginThread(@Think, Me, ThinkThread)
 end;
 

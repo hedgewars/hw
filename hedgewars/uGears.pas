@@ -182,9 +182,7 @@ const Counter: Longword = 0;
 var gear: PGear;
 begin
 inc(Counter);
-{$IFDEF DEBUGFILE}
 AddFileLog('AddGear: #' + inttostr(Counter) + ' (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
-{$ENDIF}
 
 New(gear);
 FillChar(gear^, sizeof(TGear), 0);
@@ -602,9 +600,8 @@ else if Gear^.Kind = gtHedgehog then
                 Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
                 end
         end;
-{$IFDEF DEBUGFILE}
-with Gear^ do AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
-{$ENDIF}
+with Gear^ do
+    AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
 
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
@@ -1046,9 +1043,7 @@ begin
         end;
     end else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
         begin
-        {$IFDEF DEBUGFILE}
         AddFileLog('Assigning hedgehog ' + inttostr(LongInt(AttackerHog)) + ' to gear ' + inttostr(Gear^.uid));
-        {$ENDIF}
         Gear^.Hedgehog:= AttackerHog;
         end;
     inc(Gear^.Damage, Damage);
@@ -1170,7 +1165,7 @@ var Gear: PGear;
     i, cnt: LongInt;
 begin
 TargetPoint.X:= NoPointX;
-{$IFDEF DEBUGFILE}if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
+if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');
 if Radius > 25 then KickFlakes(Radius, X, Y);
 
 if ((Mask and EXPLNoGfx) = 0) then
@@ -1213,7 +1208,7 @@ while Gear <> nil do
                         if dmg > 1 then
                             begin
                             dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
-                            //{$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
+                            //AddFileLog('Damage: ' + inttostr(dmg));
                             if (Mask and EXPLNoDamage) = 0 then
                                 begin
                                 if not Gear^.Invulnerable then
@@ -1775,9 +1770,7 @@ if cnt2 > 0 then
         begin
         Gear^.X:= int2hwFloat(x);
         Gear^.Y:= int2hwFloat(y);
-        {$IFDEF DEBUGFILE}
         AddFileLog('Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
-        {$ENDIF}
         end
     else
     begin

@@ -35,11 +35,9 @@ function  endian(independent: LongWord): LongWord; inline;
 
 function  CheckCJKFont(s: ansistring; font: THWFont): THWFont;
 
-{$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
-{$ENDIF}
 
-function CheckNoTeamOrHH: boolean; inline;
+function  CheckNoTeamOrHH: boolean; inline;
 
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
@@ -231,13 +229,14 @@ endian:= (((independent and $FF000000) shr 24) or
 end;
 
 
-{$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
 begin
+s:= s;
+{$IFDEF DEBUGFILE}
 writeln(f, GameTicks: 6, ': ', s);
 flush(f)
-end;
 {$ENDIF}
+end;
 
 
 function CheckCJKFont(s: ansistring; font: THWFont): THWFont;

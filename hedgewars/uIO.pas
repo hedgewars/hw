@@ -121,7 +121,7 @@ procedure ParseIPCCommand(s: shortstring);
 var loTicks: Word;
 begin
 case s[1] of
-     '!': begin {$IFDEF DEBUGFILE}AddFileLog('Ping? Pong!');{$ENDIF}isPonged:= true; end;
+     '!': begin AddFileLog('Ping? Pong!'); isPonged:= true; end;
      '?': SendIPC('!');
      'e': ParseCommand(copy(s, 2, Length(s) - 1), true);
      'E': OutError(copy(s, 2, Length(s) - 1), true);
@@ -136,7 +136,7 @@ case s[1] of
      else
      loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
      AddCmd(loTicks, s);
-     {$IFDEF DEBUGFILE}AddFileLog('[IPC in] '+s[1]+' ticks '+IntToStr(lastcmd^.loTime));{$ENDIF}
+     AddFileLog('[IPC in] '+s[1]+' ticks '+IntToStr(lastcmd^.loTime));
      end
 end;
 
@@ -217,7 +217,7 @@ if IPCSock <> nil then
     SendEmptyPacketTicks:= 0;
     if s[0]>#251 then s[0]:= #251;
     SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
-    {$IFDEF DEBUGFILE}AddFileLog('[IPC out] '+ s[1]);{$ENDIF}
+    AddFileLog('[IPC out] '+ s[1]);
     inc(s[0], 2);
     SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
     end
@@ -244,7 +244,7 @@ end;
 procedure SendIPCTimeInc;
 const timeinc: shortstring = '#';
 begin
-{$IFDEF DEBUGFILE}AddFileLog('[IPC out] <time increment>');{$ENDIF}
+AddFileLog('[IPC out] <time increment>');
 SendIPCRaw(@timeinc, 2)
 end;
 
@@ -324,7 +324,7 @@ while (headcmd <> nil)
         'F': ParseCommand('teamgone ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'N': begin
             tmpflag:= false;
-            {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime)){$ENDIF}
+            AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime))
             end;
         'p': begin
             x16:= SDLNet_Read16(@(headcmd^.X));
@@ -402,7 +402,7 @@ with CurrentHedgehog^.Gear^,
             TargetPoint.X:= putX;
             TargetPoint.Y:= putY
             end;
-        {$IFDEF DEBUGFILE}AddFilelog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));{$ENDIF}
+        AddFileLog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));
         State:= State and not gstHHChooseTarget;
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
             Message:= Message or (gmAttack and InputMask);

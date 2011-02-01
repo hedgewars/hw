@@ -306,7 +306,7 @@ if CheckNoTeamOrHH or isPaused then exit;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
-    {$IFDEF DEBUGFILE}AddFileLog('/+attack: hedgehog''s Gear^.State = '+inttostr(State));{$ENDIF}
+    AddFileLog('/+attack: hedgehog''s Gear^.State = '+inttostr(State));
     if ((State and gstHHDriven) <> 0) then
         begin
         FollowGear:= CurrentHedgehog^.Gear;
@@ -347,9 +347,7 @@ begin
     TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
 
     if not CurrentTeam^.ExtDriven then SendIPC('N');
-{$IFDEF DEBUGFILE}
     AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));
-{$ENDIF}
 end;
 
 procedure chTimer(var s: shortstring);

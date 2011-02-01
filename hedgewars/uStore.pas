@@ -456,20 +456,16 @@ end;
 function glLoadExtension(extension : shortstring) : boolean;
 begin
 {$IF GLunit = gles11}
-    // FreePascal doesn't come with OpenGL ES 1.1 Extension headers
+    // FreePascal doesnt come with OpenGL ES 1.1 Extension headers
     extension:= extension; // avoid hint
     glLoadExtension:= false;
-{$IFDEF DEBUGFILE}
     AddFileLog('OpenGL - "' + extension + '" skipped')
-{$ENDIF}
 {$ELSE}
     glLoadExtension:= glext_LoadExtension(extension);
-{$IFDEF DEBUGFILE}
     if glLoadExtension then
         AddFileLog('OpenGL - "' + extension + '" loaded')
     else
         AddFileLog('OpenGL - "' + extension + '" failed to load');
-{$ENDIF}
 {$ENDIF}
 end;
 
@@ -511,19 +507,15 @@ begin
 
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 
-{$IFDEF DEBUGFILE}
     AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
     AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
     AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
     AddFileLog('  \----- GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
-{$ENDIF}
 
     if MaxTextureSize <= 0 then
     begin
         MaxTextureSize:= 1024;
-{$IFDEF DEBUGFILE}
         AddFileLog('OpenGL Warning - driver didn''t provide any valid max texture size; assuming 1024');
-{$ENDIF}
     end;
 
 {$IFDEF IPHONEOS}
@@ -579,13 +571,8 @@ begin
     end;
 {$ENDIF}
 
-{$IFDEF DEBUGFILE}
     if cGPUVendor = gvUnknown then
         AddFileLog('OpenGL Warning - unknown hardware vendor; please report');
-{$ELSE}
-    // just avoid 'never used' compiler warning for now
-    if cGPUVendor = gvUnknown then cGPUVendor:= gvUnknown;
-{$ENDIF}
 
     // set view port to whole window
     if (rotationQt = 0) or (rotationQt = 180) then
@@ -856,18 +843,14 @@ end;
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
     ico: PSDL_Surface;
-{$IFDEF DEBUGFILE}
     buf: array[byte] of char;
-{$ENDIF}
 begin
     s:= s; // avoid compiler hint
     if Length(s) = 0 then cFullScreen:= not cFullScreen
     else cFullScreen:= s = '1';
 
-{$IFDEF DEBUGFILE}
     buf[0]:= char(0); // avoid compiler hint
     AddFileLog('Prepare to change video parameters...');
-{$ENDIF}
 
     flags:= SDL_OPENGL;// or SDL_RESIZABLE;
 
@@ -896,9 +879,7 @@ begin
 
     if SDLPrimSurface <> nil then
     begin
-{$IFDEF DEBUGFILE}
         AddFileLog('Freeing old primary surface...');
-{$ENDIF}
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
     end;
@@ -921,10 +902,7 @@ begin
     PixelFormat:= SDLPrimSurface^.format;
 {$ENDIF}
 
-{$IFDEF DEBUGFILE}
-    AddFileLog('Setting up OpenGL...');
-    AddFileLog('SDL video driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))));
-{$ENDIF}
+    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
     SetupOpenGL();
 end;
 

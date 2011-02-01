@@ -1189,7 +1189,7 @@ begin
     LoadThemeConfig;
     isMap:= false;
 
-    // is this not needed any more? let's hope setlength sets also 0s
+    // is this not needed any more? lets hope setlength sets also 0s
     //if ((GameFlags and gfForts) <> 0) or (Pathz[ptMapCurrent] <> '') then
     //    FillChar(Land,SizeOf(TCollisionArray),0);*)
 
@@ -1316,9 +1316,7 @@ end;
 
 procedure chLandCheck(var s: shortstring);
 begin
-{$IFDEF DEBUGFILE}
     AddFileLog('CheckLandDigest: ' + s + ' digest : ' + digest);
-{$ENDIF}
     if digest = '' then
         digest:= s
     else

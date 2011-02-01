@@ -201,9 +201,7 @@ procedure Game;
 {$ENDIF}
 var p: TPathType;
     s: shortstring;
-{$IFDEF DEBUGFILE}
     i: LongInt;
-{$ENDIF}
 begin
 {$IFDEF HWLIBRARY}
     cBits:= 32;
@@ -233,11 +231,9 @@ begin
     initEverything(true);
 
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
-{$IFDEF DEBUGFILE}
     AddFileLog('Prefix: "' + PathPrefix +'"');
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
-{$ENDIF}
 
     for p:= Succ(Low(TPathType)) to High(TPathType) do
         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
