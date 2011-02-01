@@ -23,6 +23,7 @@
 #include <QListWidget>
 #include <QString>
 #include <QGridLayout>
+#include <QRegExp>
 
 #include "SDLs.h"
 
@@ -66,6 +67,7 @@ private:
   void saveList(QStringList & list, const QString & file);
   void updateNickItem(QListWidgetItem *item);
   void updateNickItems();
+  static const QRegExp URLREGEXP;
 
  public slots:
   void onChatString(const QString& str);

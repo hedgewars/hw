@@ -325,6 +325,8 @@ void HWChatWidget::onChatString(const QString& str)
     onChatString("", str);
 }
 
+const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http://)?(www\\.)?(hedgewars\\.org(/[^ ]*)?)");
+
 void HWChatWidget::onChatString(const QString& nick, const QString& str)
 {
     bool isFriend = false;
@@ -341,6 +343,8 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
         chatStrings.removeFirst();
 
     QString formattedStr = Qt::escape(str.mid(1));
+    // make hedgewars.org urls actual links
+    formattedStr = formattedStr.replace(URLREGEXP, "<a href=\"http://\\3\">\\3</a>");
 
     // "link" nick, but before that encode it in base64 to make sure it can't intefere with html/url syntax
     // the nick is put as querystring as putting it as host would convert it to it's lower case variant
