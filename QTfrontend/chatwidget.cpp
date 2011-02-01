@@ -96,7 +96,22 @@ bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
     return firstIsShorter;
 }
 
-const char* HWChatWidget::STYLE = "a {color:white;} a.nick {text-decoration: none;}";
+const char* HWChatWidget::STYLE = 
+"\
+a { color:#c8c8ff; }\
+.nick { text-decoration: none; }\
+.UserChat .nick { color:#ffec20; }\
+.FriendChat { color: #08e008; }\
+.FriendChat .nick { color: #20ff20; }\
+.UserJoin { color: #c0c0c0; }\
+.UserJoin .nick { color: #d0d0d0; }\
+.FriendJoin { color: #c0e0c0; }\
+.FriendJoin .nick { color: #d0f0d0; }\
+.UserAction { color: #ff80ff; }\
+.UserAction .nick { color: #ffa0ff; }\
+.FriendAction { color: #ff00ff; }\
+.FriendAction .nick { color: #ff30ff; }\
+";
 
 HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify) :
   QWidget(parent),
@@ -332,23 +347,22 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
     if(!nick.isEmpty())
         formattedStr.replace("|nick|",QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(QString(nick.toUtf8().toBase64())).arg(nick));
 
-    QString color("");
+    QString cssClass("UserChat");
 
     // check first character for color code and set color properly
     switch (str[0].toAscii()) {
         case 3:
-            color = QString("#c0c0c0");
+            cssClass = (isFriend ? "FriendJoin" : "UserJoin");
             break;
         case 2:
-            color = QString(isFriend ? "#00ff00" : "#ff00ff");
+            cssClass = (isFriend ? "FriendAction" : "UserAction");
             break;
         default:
             if (isFriend)
-                color = QString("#00c000");
+                cssClass = "FriendChat";
     }
 
-    if (!color.isEmpty())
-        formattedStr = QString("<font color=\"%2\">%1</font>").arg(formattedStr).arg(color);
+    formattedStr = QString("<span class=\"%2\">%1</span>").arg(formattedStr).arg(cssClass);
 
     chatStrings.append(formattedStr);
 
