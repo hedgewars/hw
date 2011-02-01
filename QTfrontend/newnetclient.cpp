@@ -276,7 +276,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             return;
         }
         if (netClientState == 2)
-            emit chatStringLobby(HWProto::formatChatMsg(lst[1], lst[2]));
+            emit chatStringLobby(lst[1], HWProto::formatChatMsgForFrontend(lst[2]));
         else
             emit chatStringFromNet(HWProto::formatChatMsg(lst[1], lst[2]));
         return;
@@ -418,7 +418,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             }
 
             emit nickAddedLobby(lst[i], false);
-            emit chatStringLobby(tr("%1 *** %2 has joined").arg('\x03').arg(lst[i]));
+            emit chatStringLobby(lst[i], tr("%1 *** %2 has joined").arg('\x03').arg("|nick|"));
         }
         return;
     }

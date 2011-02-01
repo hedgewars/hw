@@ -34,6 +34,7 @@ public:
     static QByteArray & addByteArrayToBuffer(QByteArray & buf, const QByteArray & msg);
     static QByteArray & addStringListToBuffer(QByteArray & buf, const QStringList & strList);
     static QString formatChatMsg(const QString & nick, const QString & msg);
+    static QString formatChatMsgForFrontend(const QString & msg);
 };
 
 #endif // _PROTO_H

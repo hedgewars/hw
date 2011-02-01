@@ -59,6 +59,7 @@ class HWChatWidget : public QWidget
   void saveLists(const QString & nick);
   void setShowReady(bool s);
   void setShowFollow(bool enabled);
+  static const char* STYLE;
 
 private:
   void loadList(QStringList & list, const QString & file);
@@ -68,6 +69,7 @@ private:
 
  public slots:
   void onChatString(const QString& str);
+  void onChatString(const QString& nick, const QString& str);
   void onServerMessage(const QString& str);
   void nickAdded(const QString& nick, bool notifyNick);
   void nickRemoved(const QString& nick);
@@ -111,6 +113,7 @@ private:
   void onFriend();
   void chatNickDoubleClicked(QListWidgetItem * item);
   void chatNickSelected(int index);
+  void linkClicked(const QUrl & link);
 };
 
 #endif // _CHAT_WIDGET_INCLUDED

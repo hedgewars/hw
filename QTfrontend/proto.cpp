@@ -45,6 +45,11 @@ QByteArray & HWProto::addStringListToBuffer(QByteArray & buf, const QStringList 
     return buf;
 }
 
+QString HWProto::formatChatMsgForFrontend(const QString & msg)
+{
+    return formatChatMsg("|nick|", msg);
+}
+
 QString HWProto::formatChatMsg(const QString & nick, const QString & msg)
 {
     if(msg.left(4) == "/me ")

@@ -797,6 +797,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
         hwnet, SLOT(chatLineToLobby(const QString&)));
     connect(hwnet, SIGNAL(chatStringLobby(const QString&)),
         ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&)));
+    connect(hwnet, SIGNAL(chatStringLobby(const QString&, const QString&)),
+        ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&, const QString&)));
     connect(hwnet, SIGNAL(chatStringFromMeLobby(const QString&)),
         ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&)));
 

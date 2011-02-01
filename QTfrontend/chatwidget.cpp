@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <QDesktopServices>
 #include <QTextBrowser>
 #include <QLineEdit>
 #include <QAction>
@@ -26,7 +27,10 @@
 #include <QSettings>
 #include <QFile>
 #include <QTextStream>
+#include <QMenu>
+#include <QCursor>
 #include <QScrollBar>
+#include <QItemSelectionModel>
 
 #include "hwconsts.h"
 #include "SDLs.h"
@@ -92,6 +96,8 @@ bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
     return firstIsShorter;
 }
 
+const char* HWChatWidget::STYLE = "a {color:white;} a.nick {text-decoration: none;}";
+
 HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify) :
   QWidget(parent),
   mainLayout(this)
@@ -124,10 +130,13 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     mainLayout.addWidget(chatEditLine, 1, 0);
 
     chatText = new QTextBrowser(this);
+    chatText->document()->setDefaultStyleSheet(STYLE);
     chatText->setMinimumHeight(20);
     chatText->setMinimumWidth(10);
     chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    chatText->setOpenExternalLinks(true);
+    chatText->setOpenLinks(false);
+    connect(chatText, SIGNAL(anchorClicked(const QUrl&)),
+        this, SLOT(linkClicked(const QUrl&)));
     mainLayout.addWidget(chatText, 0, 0);
 
     chatNicks = new QListWidget(this);
@@ -168,6 +177,32 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
 
     showReady = false;
     setShowFollow(true);
+}
+
+void HWChatWidget::linkClicked(const QUrl & link)
+{
+    if (link.scheme() == "http")
+        QDesktopServices::openUrl(link);
+    if (link.scheme() == "hwnick")
+    {
+        // decode nick
+        const QString& nick = QString::fromUtf8(QByteArray::fromBase64(link.encodedQuery()));
+        QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
+        if (items.size() < 1)
+            return;
+        QMenu * popup = new QMenu();
+        // selecting an item will automatically scroll there, so let's save old position
+        QScrollBar * scrollBar = chatNicks->verticalScrollBar();
+        int oldScrollPos = scrollBar->sliderPosition();
+        // select the nick which we want to see the actions for
+        chatNicks->setCurrentItem(items[0], QItemSelectionModel::Clear);
+        // selecting an item will automatically scroll there, so let's save old position
+        scrollBar->setSliderPosition(oldScrollPos);
+        // load actions
+        popup->addActions(chatNicks->actions());
+        // display menu popup at mouse cursor position
+        popup->popup(QCursor::pos());
+    }
 }
 
 void HWChatWidget::setShowFollow(bool enabled)
@@ -269,33 +304,50 @@ void HWChatWidget::returnPressed()
     chatEditLine->clear();
 }
 
+
 void HWChatWidget::onChatString(const QString& str)
 {
+    onChatString("", str);
+}
+
+void HWChatWidget::onChatString(const QString& nick, const QString& str)
+{
+    bool isFriend = false;
+
+    if (!nick.isEmpty()) {
+        // don't show chat lines that are from ignored nicks
+        if (ignoreList.contains(nick, Qt::CaseInsensitive))
+            return;
+        // friends will get special treatment, of course
+        isFriend = friendsList.contains(nick, Qt::CaseInsensitive);
+    }
+
     if (chatStrings.size() > 250)
         chatStrings.removeFirst();
 
     QString formattedStr = Qt::escape(str.mid(1));
-    QStringList parts = formattedStr.split(QRegExp("\\W+"), QString::SkipEmptyParts);
 
-    if (!formattedStr.startsWith(" ***")) // don't ignore status messages
-    {
-        if (formattedStr.startsWith(" *")) // emote
-            parts[0] = parts[1];
-        if(parts.size() > 0 && ignoreList.contains(parts[0], Qt::CaseInsensitive))
-            return;
-    }
+    // "link" nick, but before that encode it in base64 to make sure it can't intefere with html/url syntax
+    // the nick is put as querystring as putting it as host would convert it to it's lower case variant
+    if(!nick.isEmpty())
+        formattedStr.replace("|nick|",QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(QString(nick.toUtf8().toBase64())).arg(nick));
 
     QString color("");
-    bool isFriend = friendsList.contains(parts[0], Qt::CaseInsensitive);
 
-    if (str.startsWith("\x03"))
-        color = QString("#c0c0c0");
-    else if (str.startsWith("\x02"))
-        color = QString(isFriend ? "#00ff00" : "#ff00ff");
-    else if (isFriend)
-        color = QString("#00c000");
+    // check first character for color code and set color properly
+    switch (str[0].toAscii()) {
+        case 3:
+            color = QString("#c0c0c0");
+            break;
+        case 2:
+            color = QString(isFriend ? "#00ff00" : "#ff00ff");
+            break;
+        default:
+            if (isFriend)
+                color = QString("#00c000");
+    }
 
-    if(color.compare("") != 0)
+    if (!color.isEmpty())
         formattedStr = QString("<font color=\"%2\">%1</font>").arg(formattedStr).arg(color);
 
     chatStrings.append(formattedStr);
@@ -391,7 +443,7 @@ void HWChatWidget::onIgnore()
 
         // scroll down on first ignore added so that people see where that nick went to
         if (ignoreList.isEmpty())
-            emit chatNicks->verticalScrollBar()->setValue(chatNicks->verticalScrollBar()->maximum());
+            chatNicks->scrollToBottom();
 
         ignoreList << curritem->text().toLower();
         onChatString(HWChatWidget::tr("%1 *** %2 has been added to your ignore list").arg('\x03').arg(curritem->text()));
@@ -420,7 +472,7 @@ void HWChatWidget::onFriend()
 
         // scroll up on first friend added so that people see where that nick went to
         if (friendsList.isEmpty())
-            emit chatNicks->verticalScrollBar()->setValue(chatNicks->verticalScrollBar()->minimum());
+            chatNicks->scrollToTop();
 
         friendsList << curritem->text().toLower();
         onChatString(HWChatWidget::tr("%1 *** %2 has been added to your friends list").arg('\x03').arg(curritem->text()));

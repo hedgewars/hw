@@ -2025,6 +2025,7 @@ PageAdmin::PageAdmin(QWidget* parent) :
 
     tb = new QTextBrowser(this);
     tb->setOpenExternalLinks(true);
+    tb->document()->setDefaultStyleSheet(HWChatWidget::STYLE);
     pageLayout->addWidget(tb, 4, 1, 1, 2);
     connect(leServerMessageNew, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
     connect(leServerMessageOld, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
