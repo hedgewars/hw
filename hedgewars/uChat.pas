@@ -370,7 +370,13 @@ begin
 end;
 
 procedure freeModule;
+var i: ShortInt;
 begin
+    FreeTexture(InputStr.Tex);
+    for i:= 0 to MaxStrIndex do
+    begin
+        FreeTexture(Strs[i].Tex);
+    end;
 end;
 
 end.

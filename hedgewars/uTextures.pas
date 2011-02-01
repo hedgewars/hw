@@ -159,6 +159,8 @@ if SDL_MustLock(surf) then
 SetTextureParameters(enableClamp);
 end;
 
+// deletes texture and frees the memory allocated for it.
+// if nil is passed nothing is done
 procedure FreeTexture(tex: PTexture);
 begin
     if tex <> nil then

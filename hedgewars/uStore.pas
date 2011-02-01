@@ -329,7 +329,6 @@ SDL_FreeSurface(tmpsurf);
 
 InitHealth;
 
-// TODO: are those textures ever freed?
 PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
 ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
 SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
@@ -344,6 +343,8 @@ for ai:= Low(TAmmoType) to High(TAmmoType) do
         tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
         TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
+        if (NameTex <> nil) then
+            FreeTexture(NameTex);
         NameTex:= Surface2Tex(tmpsurf, false);
         SDL_FreeSurface(tmpsurf)
     end;
@@ -353,6 +354,8 @@ for i:= Low(CountTexz) to High(CountTexz) do
 begin
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
     tmpsurf:= doSurfaceConversion(tmpsurf);
+    if (CountTexz[i] <> nil) then
+        FreeTexture(CountTexz[i]);
     CountTexz[i]:= Surface2Tex(tmpsurf, false);
     SDL_FreeSurface(tmpsurf)
 end;
@@ -366,6 +369,8 @@ end;
 
 procedure StoreRelease;
 var ii: TSprite;
+    ai: TAmmoType;
+    i, t: LongInt;
 begin
     for ii:= Low(TSprite) to High(TSprite) do
     begin
@@ -378,6 +383,38 @@ begin
     SDL_FreeSurface(MissionIcons);
     FreeTexture(ropeIconTex);
     FreeTexture(HHTexture);
+    FreeTexture(PauseTexture);
+    FreeTexture(ConfirmTexture);
+    FreeTexture(SyncTexture);
+    // free all ammo name textures
+    for ai:= Low(TAmmoType) to High(TAmmoType) do
+    begin
+        FreeTexture(Ammoz[ai].NameTex);
+    end;
+    // free all count textures
+    for i:= Low(CountTexz) to High(CountTexz) do
+    begin
+        FreeTexture(CountTexz[i]);
+    end;
+    // free all team and hedgehog textures
+    for t:= 0 to Pred(TeamsCount) do
+    begin
+        if TeamsArray[t] <> nil then
+        begin
+            FreeTexture(TeamsArray[t]^.NameTagTex);
+            FreeTexture(TeamsArray[t]^.CrosshairTex);
+            FreeTexture(TeamsArray[t]^.GraveTex);
+            FreeTexture(TeamsArray[t]^.HealthTex);
+            FreeTexture(TeamsArray[t]^.AIKillsTex);
+            FreeTexture(TeamsArray[t]^.FlagTex);
+            for i:= 0 to cMaxHHIndex do
+            begin
+                FreeTexture(TeamsArray[t]^.Hedgehogs[i].NameTagTex);
+                FreeTexture(TeamsArray[t]^.Hedgehogs[i].HealthTagTex);
+                FreeTexture(TeamsArray[t]^.Hedgehogs[i].HatTex);
+            end;
+        end;
+    end;
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
     begin

@@ -1324,6 +1324,9 @@ end;
 procedure freeModule;
 begin
     stereoDepth:= stereoDepth; // avoid hint
+    FreeTexture(fpsTexture);
+    FreeTexture(timeTexture);
+    FreeTexture(missionTex);
 end;
 
 end.

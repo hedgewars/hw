@@ -379,7 +379,7 @@ begin
         //uGame does not need to be freed
         //uFloat does not need to be freed
         uCollisions.freeModule;     //stub
-        uChat.freeModule;           //stub
+        uChat.freeModule;
         uAmmos.freeModule;
         uAIMisc.freeModule;         //stub
         //uAIAmmoTests does not need to be freed

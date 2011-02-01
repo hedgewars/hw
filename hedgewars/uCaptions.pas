@@ -66,7 +66,13 @@ begin
 end;
 
 procedure freeModule;
+var
+    group: TCapGroup;
 begin
+    for group:= Low(TCapGroup) to High(TCapGroup) do
+    begin
+        FreeTexture(Captions[group].Tex);
+    end;
 end;
 
 end.
