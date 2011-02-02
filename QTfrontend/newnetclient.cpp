@@ -693,10 +693,10 @@ bool HWNewNet::isRoomChief()
     return isChief;
 }
 
-void HWNewNet::gameFinished()
+void HWNewNet::gameFinished(bool correctly)
 {
     if (netClientState == 5) netClientState = 3;
-    RawSendNet(QString("ROUNDFINISHED"));
+    RawSendNet(QString("ROUNDFINISHED%1%2").arg(delimeter).arg(correctly ? "1" : "0"));
 }
 
 void HWNewNet::banPlayer(const QString & nick)

@@ -195,7 +195,7 @@ handleCmd_inRoom ["EM", msg] = do
         (isLegal, isKeepAlive) = checkNetCmd msg
 
 
-handleCmd_inRoom ["ROUNDFINISHED"] = do
+handleCmd_inRoom ["ROUNDFINISHED", _] = do
     cl <- thisClient
     r <- thisRoom
     chans <- roomClientsChans

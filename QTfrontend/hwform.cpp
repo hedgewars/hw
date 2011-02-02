@@ -970,7 +970,7 @@ void HWForm::GameStateChanged(GameState gameState)
             Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
             if (wBackground) wBackground->startAnimation();
             GoToPage(ID_PAGE_GAMESTATS);
-            if (hwnet && (!game || !game->netSuspend)) hwnet->gameFinished();
+            if (hwnet && (!game || !game->netSuspend)) hwnet->gameFinished(true);
             if (game) game->netSuspend = false;
             break;
         }
@@ -985,7 +985,7 @@ void HWForm::GameStateChanged(GameState gameState)
                 if (id == ID_PAGE_INGAME) GoBack();
                 Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
                 if (wBackground) wBackground->startAnimation();
-                if (hwnet) hwnet->gameFinished();
+                if (hwnet) hwnet->gameFinished(false);
             }
             if (gameState == gsHalted) close();
         };
