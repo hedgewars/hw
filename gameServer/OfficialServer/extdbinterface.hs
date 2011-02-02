@@ -1,4 +1,4 @@
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 
 module Main where
 
@@ -26,7 +26,7 @@ dbInteractionLoop dbConn = forever $ do
     case q of
         CheckAccount clUid clNick _ -> do
                 statement <- prepare dbConn dbQueryAccount
-                execute statement [SqlString $ clNick]
+                execute statement [SqlByteString $ clNick]
                 passAndRole <- fetchRow statement
                 finish statement
                 let response = 
@@ -47,7 +47,7 @@ dbInteractionLoop dbConn = forever $ do
 
 
 dbConnectionLoop mySQLConnectionInfo =
-    Control.Exception.handle (\(_ :: IOException) -> return ()) $ handleSqlError $
+    Control.Exception.handle (\(e :: IOException) -> hPutStrLn stderr $ show e) $ handleSqlError $
         bracket
             (connectMySQL mySQLConnectionInfo)
             (disconnect)
