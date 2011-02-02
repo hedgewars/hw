@@ -922,6 +922,11 @@ begin
     end;
 
 {$IFDEF SDL13}
+{$IFDEF IPHONEOS}
+    // ipad can have 2 monitors, display sdl window on the second one
+    SDL_SelectVideoDisplay(SDL_GetNumVideoDisplays() - 1);
+{$ENDIF}
+
     if SDLwindow = nil then
     begin
         SDLwindow:= SDL_CreateWindow('Hedgewars', 0, 0, cScreenWidth, cScreenHeight,

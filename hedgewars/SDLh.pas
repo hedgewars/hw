@@ -719,6 +719,8 @@ function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): LongIn
 function  SDL_SetRenderDrawColor(r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyRenderer(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
+function  SDL_SelectVideoDisplay(index: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_GetNumVideoDisplays: LongInt; cdecl; external SDLLibName;
 
 function  SDL_RenderFill(rect: PSDL_Rect): LongInt;
 function  SDL_RenderFillRect(rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
