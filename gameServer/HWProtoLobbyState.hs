@@ -139,15 +139,12 @@ handleCmd_lobby ["KICK", kickNick] = do
     kickId <- clientByNick kickNick
     return [KickClient $ fromJust kickId | isAdministrator cl && isJust kickId && fromJust kickId /= ci]
 
-{-
-handleCmd_lobby clID clients rooms ["BAN", banNick] =
-    if not $ isAdministrator client then
-        []
-    else
-        BanClient banNick : handleCmd_lobby clID clients rooms ["KICK", banNick]
-    where
-        client = clients IntMap.! clID
-        -}
+
+handleCmd_lobby ["BAN", banNick, reason] = do
+    (ci, _) <- ask
+    cl <- thisClient
+    banId <- clientByNick banNick
+    return [BanClient 60 reason (fromJust banId) | isAdministrator cl && isJust banId && fromJust banId /= ci]
 
 
 handleCmd_lobby ["SET_SERVER_VAR", "MOTD_NEW", newMessage] = do

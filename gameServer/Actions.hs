@@ -366,7 +366,10 @@ processAction (BanClient seconds reason banId) = do
     clHost <- client's host
     currentTime <- io $ getCurrentTime
     let msg = "Ban for " `B.append` (B.pack . show $ seconds) `B.append` "seconds (" `B.append` msg` B.append` ")"
-    processAction $ ModifyServerInfo (\s -> s{lastLogins = (clHost, (addUTCTime seconds $ currentTime, msg)) : lastLogins s})
+    mapM_ processAction [
+        ModifyServerInfo (\s -> s{lastLogins = (clHost, (addUTCTime seconds $ currentTime, msg)) : lastLogins s})
+        , KickClient banId
+        ]
 
 
 processAction (KickRoomClient kickId) = do
