@@ -1,72 +1,75 @@
+{-# LANGUAGE OverloadedStrings #-}
 module HWProtoCore where
 
-import qualified Data.IntMap as IntMap
-import Data.Foldable
+import Control.Monad.Reader
 import Data.Maybe
+import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
-import Utils
 import HWProtoNEState
 import HWProtoLobbyState
 import HWProtoInRoomState
+import HandlerUtils
+import RoomsAndClients
+import Utils
 
 handleCmd, handleCmd_loggedin :: CmdHandler
 
-handleCmd clID _ _ ["PING"] = [AnswerThisClient ["PONG"]]
 
-handleCmd clID clients rooms ("QUIT" : xs) =
-    [ByeClient msg]
+handleCmd ["PING"] = answerClient ["PONG"]
+
+
+handleCmd ("QUIT" : xs) = return [ByeClient msg]
     where
-        msg = if not $ null xs then head xs else ""
+        msg = if not $ null xs then head xs else "bye"
 
 
-handleCmd clID clients _ ["PONG"] =
-    if pingsQueue client == 0 then
-        [ProtocolError "Protocol violation"]
-    else
-        [ModifyClient (\cl -> cl{pingsQueue = pingsQueue cl - 1})]
-    where
-        client = clients IntMap.! clID
+handleCmd ["PONG"] = do
+    cl <- thisClient
+    if pingsQueue cl == 0 then
+        return [ProtocolError "Protocol violation"]
+        else
+        return [ModifyClient (\c -> c{pingsQueue = pingsQueue c - 1})]
+
+handleCmd cmd = do
+    (ci, irnc) <- ask
+    if logonPassed (irnc `client` ci) then
+        handleCmd_loggedin cmd
+        else
+        handleCmd_NotEntered cmd
 
 
-handleCmd clID clients rooms cmd =
-    if not $ logonPassed client then
-        handleCmd_NotEntered clID clients rooms cmd
-    else
-        handleCmd_loggedin clID clients rooms cmd
-    where
-        client = clients IntMap.! clID
-
-
-handleCmd_loggedin clID clients rooms ["INFO", asknick] =
+handleCmd_loggedin ["INFO", asknick] = do
+    (_, rnc) <- ask
+    maybeClientId <- clientByNick asknick
+    let noSuchClient = isNothing maybeClientId
+    let clientId = fromJust maybeClientId
+    let cl = rnc `client` fromJust maybeClientId
+    let roomId = clientRoom rnc clientId
+    let clRoom = room rnc roomId
+    let roomMasterSign = if isMaster cl then "@" else ""
+    let adminSign = if isAdministrator cl then "@" else ""
+    let roomInfo = if roomId /= lobbyId then roomMasterSign `B.append` "room " `B.append` (name clRoom) else adminSign `B.append` "lobby"
+    let roomStatus = if gameinprogress clRoom then
+            if teamsInGame cl > 0 then "(playing)" else "(spectating)"
+            else
+            ""
     if noSuchClient then
-        []
-    else
-        [AnswerThisClient
-            ["INFO",
-            nick client,
-            "[" ++ host client ++ "]",
-            protoNumber2ver $ clientProto client,
-            "[" ++ roomInfo ++ "]" ++ roomStatus]]
-    where
-        maybeClient = find (\cl -> asknick == nick cl) clients
-        noSuchClient = isNothing maybeClient
-        client = fromJust maybeClient
-        room = rooms IntMap.! roomID client
-        roomInfo = if roomID client /= 0 then roomMasterSign ++ "room " ++ (name room) else adminSign ++ "lobby"
-        roomMasterSign = if isMaster client then "@" else ""
-        adminSign = if isAdministrator client then "@" else ""
-        roomStatus =
-            if gameinprogress room
-            then if teamsInGame client > 0 then "(playing)" else "(spectating)"
-            else ""
+        return []
+        else
+        answerClient [
+            "INFO",
+            nick cl,
+            "[" `B.append` host cl `B.append` "]",
+            protoNumber2ver $ clientProto cl,
+            "[" `B.append` roomInfo `B.append` "]" `B.append` roomStatus
+            ]
 
 
-handleCmd_loggedin clID clients rooms cmd =
-    if roomID client == 0 then
-        handleCmd_lobby clID clients rooms cmd
-    else
-        handleCmd_inRoom clID clients rooms cmd
-    where
-        client = clients IntMap.! clID
+handleCmd_loggedin cmd = do
+    (ci, rnc) <- ask
+    if clientRoom rnc ci == lobbyId then
+        handleCmd_lobby cmd
+        else
+        handleCmd_inRoom cmd
