@@ -226,7 +226,15 @@
     // avoid showing the stat page immediately, but wait for 3 seconds
     [self performSelector:@selector(presentModalViewController:animated:) withObject:statsPage afterDelay:3];
 
-    NSArray *stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+    NSArray *stats;
+    if (IS_DUALHEAD()) {
+        stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+        [self presentModalViewController:statsPage animated:NO];
+    } else {
+        [self performSelector:@selector(presentModalViewController:animated:) withObject:statsPage afterDelay:3];
+        stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+    }
+
     if ([stats count] <= 1) {
         DLog(@"%@",stats);
         [statsPage dismissModalViewControllerAnimated:NO];

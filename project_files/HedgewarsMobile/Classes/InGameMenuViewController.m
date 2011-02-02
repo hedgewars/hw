@@ -96,11 +96,13 @@
 }
 
 -(void) dismiss {
-    CGRect screen = [[UIScreen mainScreen] bounds];
-    [UIView beginAnimations:@"hiding popover" context:NULL];
-    [UIView setAnimationDuration:0.35];
-    self.view.frame = CGRectMake(screen.size.height, 0, 200, 170);
-    [UIView commitAnimations];
+    if (IS_IPAD() == NO) {
+        CGRect screen = [[UIScreen mainScreen] bounds];
+        [UIView beginAnimations:@"hiding popover" context:NULL];
+        [UIView setAnimationDuration:0.35];
+        self.view.frame = CGRectMake(screen.size.height, 0, 200, 170);
+        [UIView commitAnimations];
+    }
 
     [self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.35];
 
@@ -185,7 +187,7 @@
 #pragma mark -
 #pragma mark actionSheet methods
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
-    if (IS_IPAD() == NO){
+    if (IS_IPAD() == NO) {
         CGRect screen = [[UIScreen mainScreen] bounds];
         [UIView beginAnimations:@"table width less" context:NULL];
         [UIView setAnimationDuration:0.2];
