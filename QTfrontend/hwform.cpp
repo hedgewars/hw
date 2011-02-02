@@ -1017,6 +1017,10 @@ void HWForm::GetRecord(bool isDemo, const QByteArray & record)
                 QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm") :
                 "LastRound";
 
+    QStringList versionParts = cVersionString->split('-');
+    if ( (versionParts.size() == 2) && (!versionParts[1].isEmpty()) && (versionParts[1].contains(':')) )
+        recordFileName = recordFileName + "_" + versionParts[1].replace(':','-');
+
     if (isDemo)
     {
         demo.replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
