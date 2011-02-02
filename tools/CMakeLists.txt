@@ -16,7 +16,14 @@ if (APPLE AND BUNDLE)
 	find_package(SDL_ttf REQUIRED)
 	find_package(SDL_mixer REQUIRED)
 	find_package(OGGVORBIS REQUIRED)
-	find_package(SPARKLE)
+        if(NOT NOAUTOUPDATE)
+		find_package(SPARKLE)
+		if(SPARKLE_FOUND)
+			set(SPARKLE_FOUND 1)
+		else()
+			set(SPARKLE_FOUND 0)
+		endif()
+	endif()
 
 	#use the associated tool from the libraries we've selected
 	string(REGEX REPLACE "(.*)/include.*" "\\1" qt_base_dir "${QT_INCLUDE_DIR}")
@@ -34,12 +41,6 @@ if (APPLE AND BUNDLE)
 	set(frameworks_dir ${bundle_name}/Contents/Frameworks/)
 
 	string(REGEX REPLACE "(.*);-.*" "\\1" sdl_dir "${SDL_LIBRARY}")
-
-	if(SPARKLE_FOUND)
-		set(SPARKLE_FOUND 1)
-	else()
-		set(SPARKLE_FOUND 0)
-	endif()
 
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/CreateMacBundle.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/CreateMacBundle.cmake)
 
