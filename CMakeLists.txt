@@ -9,6 +9,7 @@ ENDIF()
 
 #detect Mercurial revision (if present)
 set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
+set(HGCHANGED "")
 IF(version_suffix MATCHES "-dev")
 	set(HW_DEV true)
 	IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.hg)
@@ -18,8 +19,13 @@ IF(version_suffix MATCHES "-dev")
 				     ARGS identify -in ${CMAKE_CURRENT_SOURCE_DIR}
 				     OUTPUT_VARIABLE version_suffix
 				     )
+			STRING(REGEX REPLACE "[^+]" "" HGCHANGED ${version_suffix})
 			STRING(REGEX REPLACE "([0-9a-zA-Z]+)(.*) ([0-9]+)(.*)" "\\3:\\1" version_suffix ${version_suffix})
-			MESSAGE(STATUS "Building revision ${version_suffix}")
+			IF (HGCHANGED)
+				MESSAGE(STATUS "Building revision ${version_suffix} (SOURCE CODE MODIFIED)")
+			ELSE()
+				MESSAGE(STATUS "Building revision ${version_suffix}")
+			ENDIF()
 			set(version_suffix "-${version_suffix}")
 		ENDIF()
 	ENDIF()

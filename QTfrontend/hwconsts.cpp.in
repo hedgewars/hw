@@ -21,7 +21,7 @@
 QString * cProtoVer = new QString("${HEDGEWARS_PROTO_VER}");
 QString * cDataDir = new QString("${HEDGEWARS_DATADIR}");
 QString * cConfigDir = new QString("");
-QString * cVersionString = new QString("${HEDGEWARS_VERSION}");
+QString * cVersionString = new QString("${HEDGEWARS_VERSION}${HGCHANGED}");
 
 QDir * bindir = new QDir("${HEDGEWARS_BINDIR}");
 QDir * cfgdir = new QDir();
