@@ -14,6 +14,8 @@ import Control.Monad.Reader
 import Control.Monad.State.Strict
 import qualified Data.ByteString.Char8 as B
 import Control.DeepSeq
+import Data.Time
+import Text.Printf
 -----------------------------
 import CoreTypes
 import Utils
@@ -36,7 +38,7 @@ data Action =
     | ByeClient B.ByteString
     | KickClient ClientIndex
     | KickRoomClient ClientIndex
-    | BanClient B.ByteString
+    | BanClient NominalDiffTime B.ByteString ClientIndex
     | ChangeMaster
     | RemoveClientTeams ClientIndex
     | ModifyClient (ClientInfo -> ClientInfo)
@@ -353,40 +355,48 @@ processAction (clID, serverInfo, rnc) (RoomAddThisClient rID) =
                 AnswerAllOthers ["LOBBY:JOINED", nick client]
             else
                 AnswerThisRoom ["JOINED", nick client]
-
-processAction (clID, serverInfo, rnc) (KickClient kickID) =
-    liftM2 replaceID (return clID) (processAction (kickID, serverInfo, rnc) $ ByeClient "Kicked")
-
-
-processAction (clID, serverInfo, rnc) (BanClient banNick) =
-    return (clID, serverInfo, rnc)
+                -}
+processAction (KickClient kickId) = do
+    modify (\s -> s{clientIndex = Just kickId})
+    processAction $ ByeClient "Kicked"
 
 
-processAction (clID, serverInfo, rnc) (KickRoomClient kickID) = do
-    writeChan (sendChan $ clients ! kickID) ["KICKED"]
-    liftM2 replaceID (return clID) (processAction (kickID, serverInfo, rnc) $ RoomRemoveThisClient "kicked")
+processAction (BanClient seconds reason banId) = do
+    modify (\s -> s{clientIndex = Just banId})
+    clHost <- client's host
+    currentTime <- io $ getCurrentTime
+    let msg = "Ban for " `B.append` (B.pack . show $ seconds) `B.append` "seconds (" `B.append` msg` B.append` ")"
+    processAction $ ModifyServerInfo (\s -> s{lastLogins = (clHost, (addUTCTime seconds $ currentTime, msg)) : lastLogins s})
 
--}
 
-processAction (AddClient client) = do
+processAction (KickRoomClient kickId) = do
+    modify (\s -> s{clientIndex = Just kickId})
+    ch <- client's sendChan
+    mapM_ processAction [AnswerClients [ch] ["KICKED"], MoveToLobby "kicked"]
+
+
+processAction (AddClient cl) = do
     rnc <- gets roomsClients
     si <- gets serverInfo
-    io $ do
-        ci <- addClient rnc client
-        t <- forkIO $ clientRecvLoop (clientSocket client) (coreChan si) ci
-        forkIO $ clientSendLoop (clientSocket client) t (coreChan si) (sendChan client) ci
+    newClId <- io $ do
+        ci <- addClient rnc cl
+        t <- forkIO $ clientRecvLoop (clientSocket cl) (coreChan si) ci
+        forkIO $ clientSendLoop (clientSocket cl) t (coreChan si) (sendChan cl) ci
 
-        infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime client))
+        infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime cl))
 
-    processAction $ AnswerClients [sendChan client] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
-{-        let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 11) $ lastLogins serverInfo
+        return ci
 
-        if False && (isJust $ host client `Prelude.lookup` newLogins) then
-            processAction (ci, serverInfo{lastLogins = newLogins}, rnc) $ ByeClient "Reconnected too fast"
-            else
-            return (ci, serverInfo)
--}
+    modify (\s -> s{clientIndex = Just newClId})
+    processAction $ AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 
+    si <- gets serverInfo
+    let newLogins = takeWhile (\(_ , (time, _)) -> (connectTime cl) `diffUTCTime` time <= 0) $ lastLogins si
+    let info = host cl `Prelude.lookup` newLogins
+    if isJust info then
+        mapM_ processAction [ModifyServerInfo (\s -> s{lastLogins = newLogins}), ByeClient (snd .  fromJust $ info)]
+        else
+        processAction $ ModifyServerInfo (\s -> s{lastLogins = (host cl, (addUTCTime 10 $ connectTime cl, "Reconnected too fast")) : newLogins})
 
 
 processAction PingAll = do

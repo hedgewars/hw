@@ -130,7 +130,7 @@ data ServerInfo =
         dbHost :: B.ByteString,
         dbLogin :: B.ByteString,
         dbPassword :: B.ByteString,
-        lastLogins :: [(B.ByteString, UTCTime)],
+        lastLogins :: [(B.ByteString, (UTCTime, B.ByteString))],
         stats :: TMVar StatisticsInfo,
         coreChan :: Chan CoreMessage,
         dbQueries :: Chan DBQuery
