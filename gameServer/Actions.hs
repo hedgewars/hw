@@ -53,6 +53,7 @@ data Action =
     | DeleteClient ClientIndex
     | PingAll
     | StatsAction
+    | RestartServer Bool
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
 
@@ -417,7 +418,7 @@ processAction PingAll = do
                     processAction (ByeClient "Ping timeout")
 
 
-processAction (StatsAction) = do
+processAction StatsAction = do
     rnc <- gets roomsClients
     si <- gets serverInfo
     (roomsNum, clientsNum) <- io $ withRoomsAndClients rnc stats
@@ -425,3 +426,5 @@ processAction (StatsAction) = do
     where
           stats irnc = (length $ allRooms irnc, length $ allClients irnc)
 
+processAction (RestartServer useForce) = do
+    return ()
