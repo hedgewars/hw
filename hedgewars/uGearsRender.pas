@@ -551,7 +551,7 @@ begin
                 amRope: DrawRotated(sprHandRope, hx, hy, sign, aangle);
                 amShotgun: DrawRotated(sprHandShotgun, hx, hy, sign, aangle);
                 amDEagle: DrawRotated(sprHandDEagle, hx, hy, sign, aangle);
-                amSineGun: DrawRotated(sprHandShotgun, hx, hy, sign, aangle);
+                amSineGun: DrawRotatedF(sprHandSinegun, hx, hy, 73+(sign * (RealTicks div 73)) mod 8, sign, aangle);
                 amPortalGun: if (CurWeapon^.Timer and 2) <> 0 then // Add a new Hedgehog value instead of abusing timer?
                                 DrawRotatedF(sprPortalGun, hx, hy, 0, sign, aangle)
                         else
