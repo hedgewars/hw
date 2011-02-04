@@ -9,7 +9,7 @@
 00:06=Salta il turno
 00:07=Corda
 00:08=Mina
-00:09=DEagle
+00:09=Desert Eagle
 00:10=Dinamite
 00:11=Mazza da Baseball
 00:12=Pugno di Fuoco
@@ -20,7 +20,7 @@
 00:17=Torcia Infuocata
 00:18=Trave
 00:19=Teletrasporto
-00:20=Cambia Hedgehog
+00:20=Cambia Riccio
 00:21=Mortaio
 00:22=Frusta
 00:23=Attacco Kamikaze
@@ -36,7 +36,7 @@
 00:33=Danno Extra
 00:34=Invulnerabilità
 00:35=Tempo Extra
-00:36=Mirino Laser
+00:36=Mirino LASER
 00:37=Vampirismo
 00:38=Fucile di Precisione
 00:39=Disco Volante
@@ -60,7 +60,7 @@
 01:03=Volume %1%
 01:04=In pausa
 01:05=Vuoi davvero uscire (Y/Esc)?
-01:06=Sudden death!
+01:06=Sudden Death!
 01:07=%1 rimanenti
 01:08=Carburante
 01:09=Sincronizzazione...
@@ -166,7 +166,7 @@
 02:01=%1 ha perso il battello
 02:01=%1 va a visitare la Fossa delle Marianne
 02:01=%1 è cibo per i pesci
-02:01=Ooops! %1 can't swim without flippers!
+02:01=Ooops! %1 non può nuotare senza pinne!
 02:01=%1 pare amare l'acqua più di ogni altra cosa
 02:01=%1 avrebbe dovuto fare qualche lezione di nuoto
 02:01=E' abbastanza salata l'acqua, %1?
@@ -177,7 +177,7 @@
 02:02=Alle armi!
 02:02=Armiamoci... e partite!
 02:02=Al mio segnale, scatenate l'inferno!
-02:02=È il momento di fare casino...C A S I...no?Mi dispiace,lo facciamo!
+02:02=È il momento di fare casino...C A S I...no? Mi dispiace, lo facciamo!
 02:02=Cominciamo!
 02:02=Benvenuti nella prima linea
 02:02=Distruggete i nemici!
@@ -229,7 +229,7 @@
 02:06=Altre armi!
 02:06=È qui la festa?!
 02:06=Rifornimenti!
-02:06=Armi!Armi!Armi!
+02:06=Armi! Armi! Armi!
 02:06=È ora di ravvivare la serata!
 02:06=Mi chiedo che arma ci sia là...
 02:06=Il natale arriva presto in Hedgewars
@@ -284,7 +284,7 @@
 02:08=%1 si nasconde
 02:08=%1 decide di lasciar passare la sua opportunità
 02:08=%1 lascia che il nemico lo distrugga
-02:08=%1 decide che la cosa migliore da fare sia...niente
+02:08=%1 decide che la cosa migliore da fare sia... niente
 02:08=Co-co-co-codèè, %1 è una gallina
 02:08=%1 aspetta il sudden death
 02:08=%1 sta riconsiderando il suo scopo di vita
