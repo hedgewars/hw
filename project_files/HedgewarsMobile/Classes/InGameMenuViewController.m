@@ -48,31 +48,11 @@
     self.menuList = array;
     [array release];
 
-    // save the sdl window (!= uikit window) for future reference
-    SDL_VideoDevice *videoDevice = SDL_GetVideoDevice();
-    if (videoDevice) {
-        SDL_VideoDisplay *display = &videoDevice->displays[0];
-        if (display)
-            sdlwindow = display->windows;
-    }
     [super viewDidLoad];
-}
-
--(void) viewWillAppear:(BOOL)animated {
-    if (sdlwindow == NULL) {
-        SDL_VideoDevice *_this = SDL_GetVideoDevice();
-        if (_this) {
-            SDL_VideoDisplay *display = &_this->displays[0];
-            if (display)
-                sdlwindow = display->windows;
-        }
-    }
-    [super viewWillAppear:animated];
 }
 
 -(void) viewDidUnload {
     self.menuList = nil;
-    sdlwindow = NULL;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -106,7 +86,8 @@
 
     [self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.35];
 
-    [self removeChat];
+    HW_chatEnd();
+    SDL_iPhoneKeyboardHide((SDL_Window *)HW_getSDLWindow());
 }
 
 #pragma mark -
@@ -127,7 +108,7 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:cellIdentifier] autorelease];
     }
-    cell.textLabel.text = [menuList objectAtIndex:[indexPath row]];
+    cell.textLabel.text = [self.menuList objectAtIndex:[indexPath row]];
 
     if (IS_IPAD())
         cell.textLabel.textAlignment = UITextAlignmentCenter;
@@ -143,12 +124,8 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"show help ingame" object:nil];
             break;
         case 1:
-            if (SDL_iPhoneKeyboardIsShown(sdlwindow))
-                [self removeChat];
-            else {
-                HW_chat();
-                SDL_iPhoneKeyboardShow(sdlwindow);
-            }
+            HW_chat();
+            SDL_iPhoneKeyboardShow((SDL_Window *)HW_getSDLWindow());
             break;
         case 2:
             // expand the view (and table) so that the actionsheet can be selected on the iPhone
@@ -175,13 +152,6 @@
     }
 
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
--(void) removeChat {
-    if (SDL_iPhoneKeyboardIsShown(sdlwindow)) {
-        SDL_iPhoneKeyboardHide(sdlwindow);
-        HW_chatEnd();
-    }
 }
 
 #pragma mark -

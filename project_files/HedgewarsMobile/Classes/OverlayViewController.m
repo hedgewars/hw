@@ -486,12 +486,10 @@
         if (HW_isPaused())
             HW_pauseToggle();
 
-        if (IS_IPAD()) {
-            [(InGameMenuViewController *)[[self popoverController] contentViewController] removeChat];
+        [self.popupMenu dismiss];
+        if (IS_IPAD())
             [self.popoverController dismissPopoverAnimated:YES];
-        } else {
-            [self.popupMenu dismiss];
-        }
+
         [self buttonReleased:nil];
     }
 }

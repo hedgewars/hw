@@ -343,8 +343,9 @@ for ai:= Low(TAmmoType) to High(TAmmoType) do
         tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
         TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
-        if (NameTex <> nil) then
-            FreeTexture(NameTex);
+        // these two lines lines crash when run multiple times?
+        //if (NameTex <> nil) then
+        //    FreeTexture(NameTex);
         NameTex:= Surface2Tex(tmpsurf, false);
         SDL_FreeSurface(tmpsurf)
     end;
@@ -354,8 +355,9 @@ for i:= Low(CountTexz) to High(CountTexz) do
 begin
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
     tmpsurf:= doSurfaceConversion(tmpsurf);
-    if (CountTexz[i] <> nil) then
-        FreeTexture(CountTexz[i]);
+    // these two lines lines crash when run multiple times?
+    //if (CountTexz[i] <> nil) then
+    //    FreeTexture(CountTexz[i]);
     CountTexz[i]:= Surface2Tex(tmpsurf, false);
     SDL_FreeSurface(tmpsurf)
 end;

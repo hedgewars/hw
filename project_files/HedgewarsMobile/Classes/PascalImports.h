@@ -68,6 +68,7 @@ extern "C" {
     void HW_pauseToggle(void);
     BOOL HW_isPaused(void);
 
+    void *HW_getSDLWindow(void);
     void HW_terminate(BOOL andCloseFrontend);
     void HW_suspend(void);
     void HW_resume(void);

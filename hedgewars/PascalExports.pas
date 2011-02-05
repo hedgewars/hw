@@ -199,6 +199,11 @@ begin
     ParseCommand('forcequit', true);
 end;
 
+function HW_getSDLWindow: pointer; cdecl; export;
+begin
+    exit( SDLwindow );
+end;
+
 // cursor handling
 procedure HW_setCursor(x,y: LongInt); cdecl; export;
 begin

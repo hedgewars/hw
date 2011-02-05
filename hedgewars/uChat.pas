@@ -65,9 +65,9 @@ var strSurface, resSurface: PSDL_Surface;
     color: TSDL_Color;
     font: THWFont;
 begin
-if cl.Tex <> nil then
-    FreeTexture(cl.Tex);
-
+// these two lines lines crash when run multiple times?
+//if cl.Tex <> nil then
+//    FreeTexture(cl.Tex);
 
 cl.s:= str;
 

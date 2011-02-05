@@ -77,7 +77,9 @@
         selectedTeamsCount = [self.listOfSelectedTeams count];
         allTeamsCount = [self.listOfTeams count];
 
-        self.cachedContentsOfDir = [[NSArray alloc] initWithArray:contentsOfDir copyItems:YES];
+        NSArray *contents = [[NSArray alloc] initWithArray:contentsOfDir copyItems:YES];
+        self.cachedContentsOfDir = contents;
+        [contents release];
     }
     [self.tableView reloadData];
 }

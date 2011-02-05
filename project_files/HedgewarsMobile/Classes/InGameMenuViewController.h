@@ -24,13 +24,11 @@
 
 @interface InGameMenuViewController : UITableViewController <UIActionSheetDelegate> {
     NSArray *menuList;
-    SDL_Window *sdlwindow;
 }
 
 @property (nonatomic,retain) NSArray *menuList;
 
 -(void) present;
 -(void) dismiss;
--(void) removeChat;
 
 @end
