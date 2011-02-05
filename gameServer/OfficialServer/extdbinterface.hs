@@ -22,9 +22,9 @@ dbQueryStats =
 dbInteractionLoop dbConn = forever $ do
     q <- (getLine >>= return . read)
     hPutStrLn stderr $ show q
-    
+
     case q of
-        CheckAccount clUid clNick _ -> do
+        CheckAccount clId clUid clNick _ -> do
                 statement <- prepare dbConn dbQueryAccount
                 execute statement [SqlByteString $ clNick]
                 passAndRole <- fetchRow statement
@@ -32,13 +32,14 @@ dbInteractionLoop dbConn = forever $ do
                 let response = 
                         if isJust passAndRole then
                         (
+                            clId,
                             clUid,
                             HasAccount
                                 (fromSql $ head $ fromJust $ passAndRole)
                                 ((fromSql $ last $ fromJust $ passAndRole) == (Just (3 :: Int)))
                         )
                         else
-                        (clUid, Guest)
+                        (clId, clUid, Guest)
                 putStrLn (show response)
                 hFlush stdout
 
@@ -54,8 +55,8 @@ dbConnectionLoop mySQLConnectionInfo =
             (dbInteractionLoop)
 
 
-processRequest :: DBQuery -> IO String
-processRequest (CheckAccount clUid clNick clHost) = return $ show (clUid, Guest)
+--processRequest :: DBQuery -> IO String
+--processRequest (CheckAccount clId clUid clNick clHost) = return $ show (clclId, clUid, Guest)
 
 main = do
         dbHost <- getLine

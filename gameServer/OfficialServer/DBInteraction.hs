@@ -6,7 +6,7 @@ module OfficialServer.DBInteraction
 
 import Prelude hiding (catch);
 import System.Process
-import System.IO
+import System.IO as SIO
 import Control.Concurrent
 import qualified Control.Exception as Exception
 import Control.Monad
@@ -14,6 +14,8 @@ import qualified Data.Map as Map
 import Data.Maybe
 import System.Log.Logger
 import Data.Time
+import Data.ByteString.Char8 as B
+import Data.List as L
 ------------------------
 import CoreTypes
 import Utils
@@ -24,7 +26,7 @@ fakeDbConnection serverInfo = forever $ do
     q <- readChan $ dbQueries serverInfo
     case q of
         CheckAccount clId clUid _ clHost -> do
-            writeChan (coreChan serverInfo) $ ClientAccountInfo clId clUid (if clHost `elem` localAddressList then Admin else Guest)
+            writeChan (coreChan serverInfo) $ ClientAccountInfo clId clUid (if clHost `L.elem` localAddressList then Admin else Guest)
         ClearCache -> return ()
         SendStats {} -> return ()
 
@@ -35,29 +37,29 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
     do
     q <- readChan queries
     updatedCache <- case q of
-        CheckAccount clId clNick _ -> do
+        CheckAccount clId clUid clNick _ -> do
             let cacheEntry = clNick `Map.lookup` accountsCache
             currentTime <- getCurrentTime
             if (isNothing cacheEntry) || (currentTime `diffUTCTime` (fst . fromJust) cacheEntry > 2 * 24 * 60 * 60) then
                 do
-                    hPutStrLn hIn $ show q
+                    SIO.hPutStrLn hIn $ show q
                     hFlush hIn
 
-                    (clId', accountInfo) <- hGetLine hOut >>= (maybeException . maybeRead)
+                    (clId', clUid', accountInfo) <- SIO.hGetLine hOut >>= (maybeException . maybeRead)
 
-                    writeChan coreChan $ ClientAccountInfo (clId', accountInfo)
+                    writeChan coreChan $ ClientAccountInfo clId' clUid' accountInfo
 
                     return $ Map.insert clNick (currentTime, accountInfo) accountsCache
                 `Exception.onException`
                     (unGetChan queries q)
                 else
                 do
-                    writeChan coreChan $ ClientAccountInfo (clId, snd $ fromJust cacheEntry)
+                    writeChan coreChan $ ClientAccountInfo clId clUid (snd $ fromJust cacheEntry)
                     return accountsCache
 
         ClearCache -> return Map.empty
         SendStats {} -> (
-                (hPutStrLn hIn $ show q) >>
+                (SIO.hPutStrLn hIn $ show q) >>
                 hFlush hIn >>
                 return accountsCache)
                 `Exception.onException`
@@ -69,7 +71,7 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
         maybeException Nothing = ioError (userError "Can't read")
 
 
-pipeDbConnection accountsCache serverInfo = do
+pipeDbConnection accountsCache si = do
     updatedCache <-
         Exception.handle (\(e :: Exception.IOException) -> warningM "Database" (show e) >> return accountsCache) $ do
             (Just hIn, Just hOut, _, _) <- createProcess (proc "./OfficialServer/extdbinterface" [])
@@ -78,19 +80,19 @@ pipeDbConnection accountsCache serverInfo = do
             hSetBuffering hIn LineBuffering
             hSetBuffering hOut LineBuffering
 
-            hPutStrLn hIn $ dbHost serverInfo
-            hPutStrLn hIn $ dbLogin serverInfo
-            hPutStrLn hIn $ dbPassword serverInfo
-            pipeDbConnectionLoop (dbQueries serverInfo) (coreChan serverInfo) hIn hOut accountsCache
+            B.hPutStrLn hIn $ dbHost si
+            B.hPutStrLn hIn $ dbLogin si
+            B.hPutStrLn hIn $ dbPassword si
+            pipeDbConnectionLoop (dbQueries si) (coreChan si) hIn hOut accountsCache
 
     threadDelay (3 * 10^6)
-    pipeDbConnection updatedCache serverInfo
+    pipeDbConnection updatedCache si
 
-dbConnectionLoop serverInfo =
-        if (not . null $ dbHost serverInfo) then
-            pipeDbConnection Map.empty serverInfo
+dbConnectionLoop si =
+        if (not . B.null $ dbHost si) then
+            pipeDbConnection Map.empty si
         else
-            fakeDbConnection serverInfo
+            fakeDbConnection si
 #else
 dbConnectionLoop = fakeDbConnection
 #endif

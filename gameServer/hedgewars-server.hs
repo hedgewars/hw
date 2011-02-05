@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, ScopedTypeVariables #-}
+{-# LANGUAGE CPP, ScopedTypeVariables, OverloadedStrings #-}
 
 module Main where
 
@@ -12,6 +12,9 @@ import System.Log.Logger
 import Opts
 import CoreTypes
 import ServerCore
+#if defined(OFFICIAL_SERVER)
+import Utils
+#endif
 
 
 #if !defined(mingw32_HOST_OS)

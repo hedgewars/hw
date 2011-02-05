@@ -107,11 +107,11 @@ protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
             (37, "0.9.15"),
             (38, "0.9.16-dev")]
 
-askFromConsole :: String -> IO String
+askFromConsole :: B.ByteString -> IO B.ByteString
 askFromConsole msg = do
-    putStr msg
+    B.putStr msg
     hFlush stdout
-    getLine
+    B.getLine
 
 
 unfoldrE :: (b -> Either b (a, b)) -> b -> ([a], b)
