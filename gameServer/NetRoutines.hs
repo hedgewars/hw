@@ -2,11 +2,11 @@
 module NetRoutines where
 
 import Network.Socket
-import System.IO
 import Control.Concurrent.Chan
 import qualified Control.Exception as Exception
 import Data.Time
 import Control.Monad
+import Data.Unique
 -----------------------------
 import CoreTypes
 import Utils
@@ -25,8 +25,11 @@ acceptLoop servSock chan = forever $ do
 
         sendChan' <- newChan
 
+        uid <- newUnique
+
         let newClient =
                 (ClientInfo
+                    uid
                     sendChan'
                     sock
                     clientHost

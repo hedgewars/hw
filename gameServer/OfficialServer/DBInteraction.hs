@@ -23,9 +23,8 @@ localAddressList = ["127.0.0.1", "0:0:0:0:0:0:0:1", "0:0:0:0:0:ffff:7f00:1"]
 fakeDbConnection serverInfo = forever $ do
     q <- readChan $ dbQueries serverInfo
     case q of
-        CheckAccount clUid _ clHost -> do
-            writeChan (coreChan serverInfo) $ ClientAccountInfo (clUid,
-                if clHost `elem` localAddressList then Admin else Guest)
+        CheckAccount clId clUid _ clHost -> do
+            writeChan (coreChan serverInfo) $ ClientAccountInfo clId clUid (if clHost `elem` localAddressList then Admin else Guest)
         ClearCache -> return ()
         SendStats {} -> return ()
 
@@ -36,7 +35,7 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
     do
     q <- readChan queries
     updatedCache <- case q of
-        CheckAccount clUid clNick _ -> do
+        CheckAccount clId clNick _ -> do
             let cacheEntry = clNick `Map.lookup` accountsCache
             currentTime <- getCurrentTime
             if (isNothing cacheEntry) || (currentTime `diffUTCTime` (fst . fromJust) cacheEntry > 2 * 24 * 60 * 60) then
@@ -44,16 +43,16 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
                     hPutStrLn hIn $ show q
                     hFlush hIn
 
-                    (clId, accountInfo) <- hGetLine hOut >>= (maybeException . maybeRead)
+                    (clId', accountInfo) <- hGetLine hOut >>= (maybeException . maybeRead)
 
-                    writeChan coreChan $ ClientAccountInfo (clId, accountInfo)
+                    writeChan coreChan $ ClientAccountInfo (clId', accountInfo)
 
                     return $ Map.insert clNick (currentTime, accountInfo) accountsCache
                 `Exception.onException`
                     (unGetChan queries q)
                 else
                 do
-                    writeChan coreChan $ ClientAccountInfo (clUid, snd $ fromJust cacheEntry)
+                    writeChan coreChan $ ClientAccountInfo (clId, snd $ fromJust cacheEntry)
                     return accountsCache
 
         ClearCache -> return Map.empty

@@ -9,6 +9,7 @@ import Control.Monad.State.Strict
 import Data.Set as Set
 import qualified Data.ByteString.Char8 as B
 import Control.DeepSeq
+import Data.Unique
 --------------------------------------
 import CoreTypes
 import NetRoutines
@@ -57,13 +58,14 @@ mainLoop = forever $ do
                 --debugM "Clients" "Message from dead client"
                 --return (serverInfo, rnc)
 
-        ClientAccountInfo (ci, info) -> do
+        ClientAccountInfo ci uid info -> do
             rnc <- gets roomsClients
             exists <- liftIO $ clientExists rnc ci
             when (exists) $ do
                 as <- get
                 put $! as{clientIndex = Just ci}
-                processAction (ProcessAccountInfo info)
+                uid' <- client's clUID
+                when (uid == (hashUnique uid')) $ processAction (ProcessAccountInfo info)
                 return ()
 
         TimerAction tick ->

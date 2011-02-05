@@ -16,6 +16,7 @@ import qualified Data.ByteString.Char8 as B
 import Control.DeepSeq
 import Data.Time
 import Text.Printf
+import Data.Unique
 -----------------------------
 import CoreTypes
 import Utils
@@ -308,8 +309,9 @@ processAction CheckRegistered = do
     (Just ci) <- gets clientIndex
     n <- client's nick
     h <- client's host
+    uid <- client's clUID
     db <- gets (dbQueries . serverInfo)
-    io $ writeChan db $ CheckAccount ci n h
+    io $ writeChan db $ CheckAccount ci (hashUnique uid) n h
     return ()
 
 

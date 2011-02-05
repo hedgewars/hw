@@ -13,6 +13,7 @@ import Data.Time
 import Network
 import Data.Function
 import Data.ByteString.Char8 as B
+import Data.Unique
 
 import RoomsAndClients
 
@@ -21,6 +22,7 @@ type ClientChan = Chan [B.ByteString]
 data ClientInfo =
     ClientInfo
     {
+        clUID :: Unique,
         sendChan :: ClientChan,
         clientSocket :: Socket,
         host :: B.ByteString,
@@ -161,7 +163,7 @@ data AccountInfo =
     deriving (Show, Read)
 
 data DBQuery =
-    CheckAccount ClientIndex B.ByteString B.ByteString
+    CheckAccount ClientIndex Int B.ByteString B.ByteString
     | ClearCache
     | SendStats Int Int
     deriving (Show, Read)
@@ -169,14 +171,14 @@ data DBQuery =
 data CoreMessage =
     Accept ClientInfo
     | ClientMessage (ClientIndex, [B.ByteString])
-    | ClientAccountInfo (ClientIndex, AccountInfo)
+    | ClientAccountInfo ClientIndex Int AccountInfo
     | TimerAction Int
     | Remove ClientIndex
 
 instance Show CoreMessage where
     show (Accept _) = "Accept"
     show (ClientMessage _) = "ClientMessage"
-    show (ClientAccountInfo _) = "ClientAccountInfo"
+    show (ClientAccountInfo {}) = "ClientAccountInfo"
     show (TimerAction _) = "TimerAction"
     show (Remove _) = "Remove"
 
