@@ -312,33 +312,36 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "READY") {
-        if(lst.size() < 2)
+    if (lst[0] == "CLIENT_FLAGS")
+    {
+        if(lst.size() < 3 || lst[1].size() < 2)
         {
-            qWarning("Net: Malformed READY message");
+            qWarning("Net: Malformed CLIENT_FLAGS message");
             return;
         }
-        for(int i = 1; i < lst.size(); ++i)
-        {
-            if (lst[i] == mynick)
-                emit setMyReadyStatus(true);
-            emit setReadyStatus(lst[i], true);
-        }
-        return;
-    }
 
-    if (lst[0] == "NOT_READY") {
-        if(lst.size() < 2)
+        QString flags = lst[1];
+        bool setFlag = flags[0] == '+';
+
+        while(flags.size() > 1)
         {
-            qWarning("Net: Malformed NOT_READY message");
-            return;
+            flags.remove(0, 1);
+            char c = flags[0].toAscii();
+
+            switch(c)
+            {
+            case 'r':
+                {
+                    for(int i = 2; i < lst.size(); ++i)
+                    {
+                        if (lst[i] == mynick)
+                            emit setMyReadyStatus(setFlag);
+                        emit setReadyStatus(lst[i], setFlag);
+                    }
+                }
+            }
         }
-        for(int i = 1; i < lst.size(); ++i)
-        {
-            if (lst[i] == mynick)
-                emit setMyReadyStatus(false);
-            emit setReadyStatus(lst[i], false);
-        }
+
         return;
     }
 

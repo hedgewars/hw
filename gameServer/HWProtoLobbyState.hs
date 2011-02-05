@@ -62,7 +62,7 @@ handleCmd_lobby ["CREATE_ROOM", newRoom, roomPassword]
             else
             [
                 AddRoom newRoom roomPassword,
-                AnswerClients [sendChan cl] ["NOT_READY", nick cl]
+                AnswerClients [sendChan cl] ["CLIENT_FLAGS", "-r", nick cl]
             ]
 
 
@@ -91,7 +91,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             [
                 MoveToRoom jRI,
                 AnswerClients [sendChan cl] $ "JOINED" : nicks,
-                AnswerClients chans ["NOT_READY", nick cl]
+                AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
             ]
             ++ (map (readynessMessage cl) jRoomClients)
             ++ (answerFullConfig cl $ params jRoom)
@@ -99,7 +99,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             ++ (watchRound cl jRoom)
 
         where
-        readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
+        readynessMessage cl c = AnswerClients [sendChan cl] ["CLIENT_FLAGS", if isReady c then "+r" else "-r", nick c]
 
         toAnswer cl (paramName, paramStrs) = AnswerClients [sendChan cl] $ "CFG" : paramName : paramStrs
 

@@ -502,6 +502,8 @@ void HWChatWidget::onFriend()
 
 void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
 {
+    Q_UNUSED(item);
+
     QList<QAction *> actions = chatNicks->actions();
     actions.first()->activate(QAction::Trigger);
 }

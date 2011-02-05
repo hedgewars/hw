@@ -262,7 +262,7 @@ processAction (UnreadyRoomClients) = do
     ri <- clientRoomA
     roomPlayers <- roomClientsS ri
     roomClIDs <- io $ roomClientsIndicesM rnc ri
-    processAction $ AnswerClients (map sendChan roomPlayers) ("NOT_READY" : map nick roomPlayers)
+    processAction $ AnswerClients (map sendChan roomPlayers) ("CLIENT_FLAGS" : "-r" : map nick roomPlayers)
     io $ mapM_ (modifyClient rnc (\cl -> cl{isReady = False})) roomClIDs
     processAction $ ModifyRoom (\r -> r{readyPlayers = 0})
 

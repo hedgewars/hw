@@ -154,7 +154,7 @@ handleCmd_inRoom ["TOGGLE_READY"] = do
     return [
         ModifyClient (\c -> c{isReady = not $ isReady cl}),
         ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
-        AnswerClients chans [if isReady cl then "NOT_READY" else "READY", nick cl]
+        AnswerClients chans ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
         ]
 
 handleCmd_inRoom ["START_GAME"] = do
