@@ -52,6 +52,9 @@
 00:49=Oživovač
 00:50=Útok raketovými vŕtačkami
 00:51=Blatová guľa
+00:52=Žiadna zbraň nie je vybraná
+00:53=TARDIS
+00:54=Budova
 
 01:00=Do boja!
 01:01=Remíza
@@ -247,6 +250,11 @@
 03:47=Prilepte ich niekam šikovne!
 03:48=A je tu Hammer-time!
 03:49=Je dobrý na to, na čo si myslíte
+03:50=Krtkov fanúšik
+03:51=Nájdené na zemi
+03:52=NEPOUŽÍVANÉ
+03:53=Typ 40
+03:54=Postavte niečo
 
 ; Popis zbraní (ako oddeľovač riadkov použite |)
 04:00=Zaútočte na vašich nepriateľov obyčajným granátom.|Vybuchne vtedy, keď vyprší časomiera.|1‐5: Nastavenie časovača granátu|Útok: Držanie tlačidla zvyšuje silu hodu|
