@@ -325,7 +325,7 @@ processAction (ProcessAccountInfo info) =
     case info of
         HasAccount passwd isAdmin -> do
             chan <- client's sendChan
-            processAction $ AnswerClients [chan] ["ASKPASSWORD"]
+            mapM_ processAction [AnswerClients [chan] ["ASKPASSWORD"], ModifyClient (\c -> c{webPassword = passwd})]
         Guest -> do
             processAction JoinLobby
         Admin -> do
