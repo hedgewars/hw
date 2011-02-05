@@ -394,8 +394,10 @@
                 }
                 break;
             case 'q':
-                // game ended, can remove the savefile
+                // game ended, can remove the savefile and the trailing overlay (when dualhead)
                 [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
+                if (IS_DUALHEAD())
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
                 break;
             case 'Q':
                 // game exited but not completed, nothing to do (just don't save the message)

@@ -201,7 +201,11 @@ end;
 
 function HW_getSDLWindow: pointer; cdecl; export;
 begin
+{$IFDEF SDL13}
     exit( SDLwindow );
+{$ELSE}
+    exit( nil );
+{$ENDIF}
 end;
 
 // cursor handling

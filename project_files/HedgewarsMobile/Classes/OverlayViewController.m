@@ -180,10 +180,16 @@
     // add timer to runloop, otherwise it doesn't work
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
 
-    // become listener of some notifications
+    // display the help page, required by the popover on ipad
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(showHelp:)
                                                  name:@"show help ingame"
+                                               object:nil];
+
+    // remove the view, required by the dual head version
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(removeOverlay:)
+                                                 name:@"remove overlay"
                                                object:nil];
 
     // for iOS >= 3.2
@@ -250,6 +256,13 @@
     self.helpPage.view.alpha = 1;
     [UIView commitAnimations];
     doNotDim();
+}
+
+-(void) removeOverlay:(id) sender {
+    [self.popupMenu performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:YES];
+    [self.popoverController performSelectorOnMainThread:@selector(dismissPopoverAnimated:) withObject:nil waitUntilDone:YES];
+    [self.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+    HW_terminate(NO);
 }
 
 -(void) didReceiveMemoryWarning {

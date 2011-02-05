@@ -82,9 +82,8 @@
         [UIView setAnimationDuration:0.35];
         self.view.frame = CGRectMake(screen.size.height, 0, 200, 170);
         [UIView commitAnimations];
+        [self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.35];
     }
-
-    [self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.35];
 
     HW_chatEnd();
     SDL_iPhoneKeyboardHide((SDL_Window *)HW_getSDLWindow());
@@ -165,8 +164,11 @@
         [UIView commitAnimations];
     }
 
-    if ([actionSheet cancelButtonIndex] != buttonIndex)
+    if ([actionSheet cancelButtonIndex] != buttonIndex) {
+        if (IS_DUALHEAD())
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
         HW_terminate(NO);
+    }
 }
 
 @end
