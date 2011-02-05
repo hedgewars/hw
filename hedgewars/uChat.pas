@@ -65,9 +65,8 @@ var strSurface, resSurface: PSDL_Surface;
     color: TSDL_Color;
     font: THWFont;
 begin
-// these two lines lines crash when run multiple times?
-//if cl.Tex <> nil then
-//    FreeTexture(cl.Tex);
+if cl.Tex <> nil then
+    FreeTexture(cl.Tex);
 
 cl.s:= str;
 
@@ -355,6 +354,7 @@ begin
 end;
 
 procedure initModule;
+var i: ShortInt;
 begin
     RegisterVariable('chatmsg', vtCommand, @chChatMessage, true);
     RegisterVariable('say', vtCommand, @chSay, true);
@@ -367,6 +367,12 @@ begin
     showAll:= false;
     ChatReady:= false;
     missedCount:= 0;
+
+    inputStr.Tex := nil;
+    for i:= 0 to MaxStrIndex do
+    begin
+        Strs[i].Tex := nil;
+    end;
 end;
 
 procedure freeModule;

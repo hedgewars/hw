@@ -343,9 +343,8 @@ for ai:= Low(TAmmoType) to High(TAmmoType) do
         tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
         TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
-        // these two lines lines crash when run multiple times?
-        //if (NameTex <> nil) then
-        //    FreeTexture(NameTex);
+        if (NameTex <> nil) then
+            FreeTexture(NameTex);
         NameTex:= Surface2Tex(tmpsurf, false);
         SDL_FreeSurface(tmpsurf)
     end;
@@ -355,9 +354,8 @@ for i:= Low(CountTexz) to High(CountTexz) do
 begin
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
     tmpsurf:= doSurfaceConversion(tmpsurf);
-    // these two lines lines crash when run multiple times?
-    //if (CountTexz[i] <> nil) then
-    //    FreeTexture(CountTexz[i]);
+    if (CountTexz[i] <> nil) then
+        FreeTexture(CountTexz[i]);
     CountTexz[i]:= Surface2Tex(tmpsurf, false);
     SDL_FreeSurface(tmpsurf)
 end;
@@ -951,6 +949,8 @@ begin
 end;
 
 procedure initModule;
+var ai: TAmmoType;
+    i: LongInt;
 begin
     RegisterVariable('fullscr', vtCommand, @chFullScr, true);
 
@@ -966,6 +966,17 @@ begin
     SupportNPOTT:= false;
     Step:= 0;
     ProgrTex:= nil;
+
+    // init all ammo name texture pointers
+    for ai:= Low(TAmmoType) to High(TAmmoType) do
+    begin
+        Ammoz[ai].NameTex := nil;
+    end;
+    // init all count texture pointers
+    for i:= Low(CountTexz) to High(CountTexz) do
+    begin
+        CountTexz[i] := nil;
+    end;
 end;
 
 procedure freeModule;
