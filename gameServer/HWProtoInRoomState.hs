@@ -186,8 +186,8 @@ handleCmd_inRoom ["EM", msg] = do
     cl <- thisClient
     r <- thisRoom
     chans <- roomOthersChans
-    
-    if (teamsInGame cl > 0) && isLegal then
+
+    if (teamsInGame cl > 0) && (gameinprogress r) && isLegal then
         return $ (AnswerClients chans ["EM", msg]) : [ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}) | not isKeepAlive]
         else
         return []
