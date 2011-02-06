@@ -6,24 +6,30 @@
  - this executable expect a save file "Save.hws" and the data folder "Data" to be in the same launching directory
  */
 
-#import <stdio.h>
 #import <stdlib.h>
 
 extern void Game (const char **);
 
-int SDL_main (int argc, const char **argv) {
+int SDL_main (int argc, const char **argv)
+{
+    // Note: if you get a segfault or other unexpected crashes on startup
+    // make sure that these arguments are up-to-date with the ones actual needed
 
-    const char **gameArgs = (const char**) malloc(sizeof(char *) * 9);
+    // Note: Data dir is expected to be in current working directory
 
-    gameArgs[0] = "wrapper";    //UserNick
-	gameArgs[1] = "0";          //ipcPort
-	gameArgs[2] = "0";          //isSoundEnabled
-	gameArgs[3] = "0";          //isMusicEnabled
-	gameArgs[4] = "en.txt";     //cLocaleFName
-	gameArgs[5] = "0";          //cAltDamage
-	gameArgs[6] = "768";        //cScreenHeight
-    gameArgs[7] = "1024";       //cScreenHeight
-    gameArgs[8] = "Save.hws";   //recordFileName
+    const char **gameArgs = (const char**) malloc(sizeof(char *) * 11);
+
+    gameArgs[ 0] = "0";          //ipcPort
+    gameArgs[ 1] = "1024";       //cScreenWidth
+    gameArgs[ 2] = "768";        //cScreenHeight
+    gameArgs[ 3] = "0";          //cReducedQuality
+    gameArgs[ 4] = "en.txt";     //cLocaleFName
+    gameArgs[ 5] = "wrapper";    //UserNick
+    gameArgs[ 6] = "1";          //isSoundEnabled
+    gameArgs[ 7] = "1";          //isMusicEnabled
+    gameArgs[ 8] = "1";          //cAltDamage
+    gameArgs[ 9] = "0.0";        //rotationQt
+    gameArgs[10] = "Save.hws";   //recordFileName
 
     Game(gameArgs);
     free(gameArgs);
