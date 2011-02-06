@@ -5,32 +5,38 @@ module OfficialServer.DBInteraction
 ) where
 
 import Prelude hiding (catch);
+import Control.Concurrent
+import Control.Monad
+import Data.List as L
+import Data.ByteString.Char8 as B
+#if defined(OFFICIAL_SERVER)
 import System.Process
 import System.IO as SIO
-import Control.Concurrent
 import qualified Control.Exception as Exception
-import Control.Monad
 import qualified Data.Map as Map
 import Data.Maybe
-import System.Log.Logger
 import Data.Time
-import Data.ByteString.Char8 as B
-import Data.List as L
+import System.Log.Logger
+#endif
 ------------------------
 import CoreTypes
+#if defined(OFFICIAL_SERVER)
 import Utils
+#endif
 
+localAddressList :: [B.ByteString]
 localAddressList = ["127.0.0.1", "0:0:0:0:0:0:0:1", "0:0:0:0:0:ffff:7f00:1"]
 
+fakeDbConnection :: forall b. ServerInfo -> IO b
 fakeDbConnection serverInfo = forever $ do
     q <- readChan $ dbQueries serverInfo
     case q of
-        CheckAccount clId clUid _ clHost -> do
+        CheckAccount clId clUid _ clHost ->
             writeChan (coreChan serverInfo) $ ClientAccountInfo clId clUid (if clHost `L.elem` localAddressList then Admin else Guest)
         ClearCache -> return ()
         SendStats {} -> return ()
 
-
+dbConnectionLoop :: forall b. ServerInfo -> IO b
 #if defined(OFFICIAL_SERVER)
 pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
     Exception.handle (\(e :: Exception.IOException) -> warningM "Database" (show e) >> return accountsCache) $
@@ -97,5 +103,6 @@ dbConnectionLoop si =
 dbConnectionLoop = fakeDbConnection
 #endif
 
+startDBConnection :: ServerInfo -> IO ()
 startDBConnection serverInfo =
-    forkIO $ dbConnectionLoop serverInfo
+    forkIO (dbConnectionLoop serverInfo) >> return ()

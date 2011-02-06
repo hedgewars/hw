@@ -30,8 +30,8 @@ setupLoggers =
 main :: IO ()
 main = withSocketsDo $ do
 #if !defined(mingw32_HOST_OS)
-    installHandler sigPIPE Ignore Nothing;
-    installHandler sigCHLD Ignore Nothing;
+    _ <- installHandler sigPIPE Ignore Nothing
+    _ <- installHandler sigCHLD Ignore Nothing
 #endif
 
     setupLoggers

@@ -6,7 +6,7 @@ import Prelude hiding (catch)
 import Control.Monad
 import Control.Exception
 import System.IO
-import Maybe
+import Data.Maybe
 import Database.HDBC
 import Database.HDBC.MySQL
 --------------------------
@@ -20,13 +20,13 @@ dbQueryStats =
     "UPDATE gameserver_stats SET players = ?, rooms = ?, last_update = UNIX_TIMESTAMP()"
 
 dbInteractionLoop dbConn = forever $ do
-    q <- (getLine >>= return . read)
+    q <- liftM read getLine
     hPutStrLn stderr $ show q
 
     case q of
         CheckAccount clId clUid clNick _ -> do
                 statement <- prepare dbConn dbQueryAccount
-                execute statement [SqlByteString $ clNick]
+                execute statement [SqlByteString clNick]
                 passAndRole <- fetchRow statement
                 finish statement
                 let response = 
@@ -35,12 +35,12 @@ dbInteractionLoop dbConn = forever $ do
                             clId,
                             clUid,
                             HasAccount
-                                (fromSql $ head $ fromJust $ passAndRole)
-                                ((fromSql $ last $ fromJust $ passAndRole) == (Just (3 :: Int)))
+                                (fromSql . head . fromJust $ passAndRole)
+                                (fromSql (last . fromJust $ passAndRole) == Just (3 :: Int))
                         )
                         else
                         (clId, clUid, Guest)
-                putStrLn (show response)
+                print response
                 hFlush stdout
 
         SendStats clients rooms ->
@@ -51,8 +51,8 @@ dbConnectionLoop mySQLConnectionInfo =
     Control.Exception.handle (\(e :: IOException) -> hPutStrLn stderr $ show e) $ handleSqlError $
         bracket
             (connectMySQL mySQLConnectionInfo)
-            (disconnect)
-            (dbInteractionLoop)
+            disconnect
+            dbInteractionLoop
 
 
 --processRequest :: DBQuery -> IO String

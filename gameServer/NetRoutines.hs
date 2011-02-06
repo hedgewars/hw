@@ -13,7 +13,7 @@ import Utils
 import RoomsAndClients
 
 acceptLoop :: Socket -> Chan CoreMessage -> IO ()
-acceptLoop servSock chan = forever $ do
+acceptLoop servSock chan = forever $
     Exception.handle
         (\(_ :: Exception.IOException) -> putStrLn "exception on connect") $
         do

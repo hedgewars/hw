@@ -41,10 +41,10 @@ mainLoop = forever $ do
         Accept ci -> processAction (AddClient ci)
 
         ClientMessage (ci, cmd) -> do
-            liftIO $ debugM "Clients" $ (show ci) ++ ": " ++ (show cmd)
+            liftIO $ debugM "Clients" $ show ci ++ ": " ++ show cmd
 
             removed <- gets removedClients
-            when (not $ ci `Set.member` removed) $ do
+            unless (ci `Set.member` removed) $ do
                 as <- get
                 put $! as{clientIndex = Just ci}
                 reactCmd cmd
@@ -61,11 +61,11 @@ mainLoop = forever $ do
         ClientAccountInfo ci uid info -> do
             rnc <- gets roomsClients
             exists <- liftIO $ clientExists rnc ci
-            when (exists) $ do
+            when exists $ do
                 as <- get
                 put $! as{clientIndex = Just ci}
                 uid' <- client's clUID
-                when (uid == (hashUnique uid')) $ processAction (ProcessAccountInfo info)
+                when (uid == hashUnique uid') $ processAction (ProcessAccountInfo info)
                 return ()
 
         TimerAction tick ->
@@ -77,19 +77,19 @@ startServer :: ServerInfo -> Socket -> IO ()
 startServer si serverSocket = do
     putStrLn $ "Listening on port " ++ show (listenPort si)
 
-    forkIO $
+    _ <- forkIO $
         acceptLoop
             serverSocket
             (coreChan si)
 
     return ()
 
-    forkIO $ timerLoop 0 $ coreChan si
+    _ <- forkIO $ timerLoop 0 $ coreChan si
 
     startDBConnection si
 
     rnc <- newRoomsAndClients newRoom
 
-    forkIO $ evalStateT mainLoop (ServerState Nothing si Set.empty rnc)
+    _ <- forkIO $ evalStateT mainLoop (ServerState Nothing si Set.empty rnc)
 
     forever $ threadDelay 3600000000 -- one hour

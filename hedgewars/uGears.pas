@@ -1262,13 +1262,14 @@ end;
 
 procedure ShotgunShot(Gear: PGear);
 var t: PGear;
-    dmg: LongInt;
+    dmg, dist: LongInt;
 begin
 Gear^.Radius:= cShotgunRadius;
 t:= GearsList;
 while t <> nil do
     begin
-    dmg:= ModifyDamage(min(Gear^.Radius + t^.Radius - hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y)), 25), t);
+    dist:= hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y));
+    dmg:= ModifyDamage(min(Gear^.Radius + t^.Radius - dist, 25), t);
     if dmg > 0 then
     case t^.Kind of
         gtHedgehog,
@@ -1278,6 +1279,7 @@ while t <> nil do
             gtTarget,
             gtExplosives,
             gtStructure: begin
+addFileLog('ShotgunShot radius: ' + inttostr(Gear^.Radius) + ', t^.Radius = ' + inttostr(t^.Radius) + ', distance = ' + inttostr(dist) + ', dmg = ' + inttostr(dmg));
                     if (not t^.Invulnerable) then
                         ApplyDamage(t, Gear^.Hedgehog, dmg, dsBullet)
                     else

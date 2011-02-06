@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 module Opts
 (
     getOpts,
@@ -5,36 +6,44 @@ module Opts
 
 import System.Environment
 import System.Console.GetOpt
-import Network
 import Data.Maybe ( fromMaybe )
+#if defined(OFFICIAL_SERVER)
 import qualified Data.ByteString.Char8 as B
-
+import Network
+#endif
+-------------------
 import CoreTypes
 import Utils
 
 options :: [OptDescr (ServerInfo -> ServerInfo)]
 options = [
-    Option ['p'] ["port"] (ReqArg readListenPort "PORT") "listen on PORT",
-    Option ['d'] ["dedicated"] (ReqArg readDedicated "BOOL") "start as dedicated (True or False)"
+    Option "p" ["port"] (ReqArg readListenPort "PORT") "listen on PORT",
+    Option "d" ["dedicated"] (ReqArg readDedicated "BOOL") "start as dedicated (True or False)"
     ]
 
-readListenPort,
-    readDedicated,
-    readDbLogin,
-    readDbPassword,
-    readDbHost :: String -> ServerInfo -> ServerInfo
+readListenPort
+    , readDedicated
+#if defined(OFFICIAL_SERVER)
+    , readDbLogin
+    , readDbPassword
+    readDbHost
+#endif
+    :: String -> ServerInfo -> ServerInfo
+
 
 readListenPort str opts = opts{listenPort = readPort}
     where
         readPort = fromInteger $ fromMaybe 46631 (maybeRead str :: Maybe Integer)
 
-readDedicated str opts = opts{isDedicated = readDedicated}
+readDedicated str opts = opts{isDedicated = readDed}
     where
-        readDedicated = fromMaybe True (maybeRead str :: Maybe Bool)
+        readDed = fromMaybe True (maybeRead str :: Maybe Bool)
 
+#if defined(OFFICIAL_SERVER)
 readDbLogin str opts = opts{dbLogin = B.pack str}
 readDbPassword str opts = opts{dbPassword = B.pack str}
 readDbHost str opts = opts{dbHost = B.pack str}
+#endif
 
 getOpts :: ServerInfo -> IO ServerInfo
 getOpts opts = do

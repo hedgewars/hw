@@ -2,7 +2,6 @@
 
 module Main where
 
-import IO
 import System.IO
 import Control.Concurrent
 import Network

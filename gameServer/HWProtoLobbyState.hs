@@ -2,14 +2,11 @@
 module HWProtoLobbyState where
 
 import qualified Data.Map as Map
-import qualified Data.IntSet as IntSet
 import qualified Data.Foldable as Foldable
 import Data.Maybe
 import Data.List
-import Data.Word
 import Control.Monad.Reader
 import qualified Data.ByteString.Char8 as B
-import Control.DeepSeq
 --------------------------------------
 import CoreTypes
 import Actions
@@ -17,6 +14,8 @@ import Utils
 import HandlerUtils
 import RoomsAndClients
 
+
+answerAllTeams :: ClientInfo -> [TeamInfo] -> [Action]
 answerAllTeams cl = concatMap toAnswer
     where
         clChan = sendChan cl
@@ -35,15 +34,15 @@ handleCmd_lobby ["LIST"] = do
     let roomsInfoList = concatMap (roomInfo irnc) . filter (\r -> (roomProto r == clientProto cl) && not (isRestrictedJoins r))
     return [AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
     where
-        roomInfo irnc room = [
-                showB $ gameinprogress room,
-                name room,
-                showB $ playersIn room,
-                showB $ length $ teams room,
-                nick $ irnc `client` masterID room,
-                head (Map.findWithDefault ["+gen+"] "MAP" (params room)),
-                head (Map.findWithDefault ["Default"] "SCHEME" (params room)),
-                head (Map.findWithDefault ["Default"] "AMMO" (params room))
+        roomInfo irnc r = [
+                showB $ gameinprogress r,
+                name r,
+                showB $ playersIn r,
+                showB $ length $ teams r,
+                nick $ irnc `client` masterID r,
+                head (Map.findWithDefault ["+gen+"] "MAP" (params r)),
+                head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
+                head (Map.findWithDefault ["Default"] "AMMO" (params r))
                 ]
 
 
@@ -52,26 +51,26 @@ handleCmd_lobby ["CHAT", msg] = do
     s <- roomOthersChans
     return [AnswerClients s ["CHAT", n, msg]]
 
-handleCmd_lobby ["CREATE_ROOM", newRoom, roomPassword]
-    | illegalName newRoom = return [Warning "Illegal room name"]
+handleCmd_lobby ["CREATE_ROOM", rName, roomPassword]
+    | illegalName rName = return [Warning "Illegal room name"]
     | otherwise = do
         rs <- allRoomInfos
         cl <- thisClient
-        return $ if isJust $ find (\room -> newRoom == name room) rs then 
+        return $ if isJust $ find (\r -> rName == name r) rs then
             [Warning "Room exists"]
             else
             [
-                AddRoom newRoom roomPassword,
+                AddRoom rName roomPassword,
                 AnswerClients [sendChan cl] ["CLIENT_FLAGS", "-r", nick cl]
             ]
 
 
-handleCmd_lobby ["CREATE_ROOM", newRoom] =
-    handleCmd_lobby ["CREATE_ROOM", newRoom, ""]
+handleCmd_lobby ["CREATE_ROOM", rName] =
+    handleCmd_lobby ["CREATE_ROOM", rName, ""]
 
 
 handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
-    (ci, irnc) <- ask
+    (_, irnc) <- ask
     let ris = allRooms irnc
     cl <- thisClient
     let maybeRI = find (\ri -> roomName == name (irnc `room` ri)) ris
@@ -93,19 +92,19 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                 AnswerClients [sendChan cl] $ "JOINED" : nicks,
                 AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
             ]
-            ++ (map (readynessMessage cl) jRoomClients)
-            ++ (answerFullConfig cl $ params jRoom)
-            ++ (answerTeams cl jRoom)
-            ++ (watchRound cl jRoom)
+            ++ map (readynessMessage cl) jRoomClients
+            ++ answerFullConfig cl (params jRoom)
+            ++ answerTeams cl jRoom
+            ++ watchRound cl jRoom
 
         where
         readynessMessage cl c = AnswerClients [sendChan cl] ["CLIENT_FLAGS", if isReady c then "+r" else "-r", nick c]
 
         toAnswer cl (paramName, paramStrs) = AnswerClients [sendChan cl] $ "CFG" : paramName : paramStrs
 
-        answerFullConfig cl params = map (toAnswer cl) (leftConfigPart ++ rightConfigPart)
+        answerFullConfig cl pr = map (toAnswer cl) (leftConfigPart ++ rightConfigPart)
             where
-            (leftConfigPart, rightConfigPart) = partition (\(p, _) -> p /= "MAP") $ Map.toList params
+            (leftConfigPart, rightConfigPart) = partition (\(p, _) -> p /= "MAP") $ Map.toList pr
 
         answerTeams cl jRoom = let f = if gameinprogress jRoom then teamsAtStart else teams in answerAllTeams cl $ f jRoom
 
@@ -161,7 +160,7 @@ handleCmd_lobby ["SET_SERVER_VAR", "LATEST_PROTO", protoNum] = do
     where
         readNum = case B.readInt protoNum of
                        Just (i, t) | B.null t -> fromIntegral i
-                       otherwise -> 0
+                       _ -> 0
 
 handleCmd_lobby ["GET_SERVER_VAR"] = do
     cl <- thisClient

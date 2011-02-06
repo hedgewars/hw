@@ -82,27 +82,27 @@ newRoomsAndClients r = do
 
 
 roomAddClient :: ClientIndex -> Room r -> Room r
-roomAddClient cl room = let cls = cl : roomClients' room; nr = room{roomClients' = cls} in cls `seq` nr `seq` nr
+roomAddClient cl rm = let cls = cl : roomClients' rm; nr = rm{roomClients' = cls} in cls `seq` nr
 
 roomRemoveClient :: ClientIndex -> Room r -> Room r
-roomRemoveClient cl room = let cls = filter (/= cl) $ roomClients' room; nr = room{roomClients' = cls} in cls `seq` nr `seq` nr
+roomRemoveClient cl rm = let cls = filter (/= cl) $ roomClients' rm; nr = rm{roomClients' = cls} in cls `seq` nr
 
 
 addRoom :: MRoomsAndClients r c -> r -> IO RoomIndex
-addRoom (MRoomsAndClients (rooms, _)) room = do
-    i <- addElem rooms (Room  [] room)
+addRoom (MRoomsAndClients (rooms, _)) rm = do
+    i <- addElem rooms (Room  [] rm)
     return $ RoomIndex i
 
 
 addClient :: MRoomsAndClients r c -> c -> IO ClientIndex
-addClient (MRoomsAndClients (rooms, clients)) client = do
-    i <- addElem clients (Client lobbyId client)
+addClient (MRoomsAndClients (rooms, clients)) cl = do
+    i <- addElem clients (Client lobbyId cl)
     modifyElem rooms (roomAddClient (ClientIndex i)) (unRoomIndex lobbyId)
     return $ ClientIndex i
 
 removeRoom :: MRoomsAndClients r c -> RoomIndex -> IO ()
-removeRoom rnc@(MRoomsAndClients (rooms, _)) room@(RoomIndex ri) 
-    | room == lobbyId = error "Cannot delete lobby"
+removeRoom rnc@(MRoomsAndClients (rooms, _)) rm@(RoomIndex ri)
+    | rm == lobbyId = error "Cannot delete lobby"
     | otherwise = do
         clIds <- liftM roomClients' $ readElem rooms ri
         forM_ clIds (moveClientToLobby rnc)
@@ -131,12 +131,12 @@ moveClientInRooms (MRoomsAndClients (rooms, clients)) (RoomIndex riFrom) rt@(Roo
 
 moveClientToLobby :: MRoomsAndClients r c -> ClientIndex -> IO ()
 moveClientToLobby rnc ci = do
-    room <- clientRoomM rnc ci
-    moveClientInRooms rnc room lobbyId ci
+    rm <- clientRoomM rnc ci
+    moveClientInRooms rnc rm lobbyId ci
 
 
 moveClientToRoom :: MRoomsAndClients r c -> RoomIndex -> ClientIndex -> IO ()
-moveClientToRoom rnc ri ci = moveClientInRooms rnc lobbyId ri ci
+moveClientToRoom rnc = moveClientInRooms rnc lobbyId
 
 
 clientExists :: MRoomsAndClients r c -> ClientIndex -> IO Bool
@@ -155,10 +155,10 @@ allClientsM :: MRoomsAndClients r c -> IO [ClientIndex]
 allClientsM (MRoomsAndClients (_, clients)) = liftM (map ClientIndex) $ indicesM clients
 
 clientsM :: MRoomsAndClients r c -> IO [c]
-clientsM (MRoomsAndClients (_, clients)) = indicesM clients >>= mapM (\ci -> liftM client' $ readElem clients ci)
+clientsM (MRoomsAndClients (_, clients)) = indicesM clients >>= mapM (liftM client' . readElem clients)
 
 roomClientsIndicesM :: MRoomsAndClients r c -> RoomIndex -> IO [ClientIndex]
-roomClientsIndicesM (MRoomsAndClients (rooms, clients)) (RoomIndex ri) = liftM roomClients' (rooms `readElem` ri)
+roomClientsIndicesM (MRoomsAndClients (rooms, _)) (RoomIndex ri) = liftM roomClients' (rooms `readElem` ri)
 
 roomClientsM :: MRoomsAndClients r c -> RoomIndex -> IO [c]
 roomClientsM (MRoomsAndClients (rooms, clients)) (RoomIndex ri) = liftM roomClients' (rooms `readElem` ri) >>= mapM (\(ClientIndex ci) -> liftM client' $ readElem clients ci)
@@ -173,8 +173,8 @@ withRoomsAndClients (MRoomsAndClients (rooms, clients)) f =
 showRooms :: (Show r, Show c) => IRoomsAndClients r c -> String
 showRooms rnc@(IRoomsAndClients (rooms, clients)) = concatMap showRoom (allRooms rnc)
     where
-    showRoom r = unlines $ ((show r) ++ ": " ++ (show $ room' $ rooms ! (unRoomIndex r))) : (map showClient (roomClients' $ rooms ! (unRoomIndex r)))
-    showClient c = "    " ++ (show c) ++ ": " ++ (show $ client' $ clients ! (unClientIndex c))
+    showRoom r = unlines $ (show r ++ ": " ++ (show . room' $ rooms ! unRoomIndex r)) : map showClient (roomClients' $ rooms ! unRoomIndex r)
+    showClient c = "    " ++ show c ++ ": " ++ (show . client' $ clients ! unClientIndex c)
 
 
 allRooms :: IRoomsAndClients r c -> [RoomIndex]
@@ -193,4 +193,4 @@ room :: IRoomsAndClients r c -> RoomIndex -> r
 room (IRoomsAndClients (rooms, _)) (RoomIndex ri) = room' (rooms ! ri)
 
 roomClients :: IRoomsAndClients r c -> RoomIndex -> [ClientIndex]
-roomClients (IRoomsAndClients (rooms, _)) (RoomIndex ri) = roomClients' $ (rooms ! ri)
+roomClients (IRoomsAndClients (rooms, _)) (RoomIndex ri) = roomClients' (rooms ! ri)

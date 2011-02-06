@@ -1,21 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Utils where
 
-import Control.Concurrent
-import Control.Concurrent.STM
 import Data.Char
 import Data.Word
 import qualified Data.Map as Map
-import qualified Data.IntMap as IntMap
 import qualified Data.Set as Set
-import Data.ByteString.Internal (w2c)
 import Numeric
 import Network.Socket
 import System.IO
 import qualified Data.List as List
 import Control.Monad
-import Control.Monad.Trans
-import Data.Maybe
 -------------------------------------------------
 import qualified Codec.Binary.Base64 as Base64
 import qualified Data.ByteString.Char8 as B
@@ -27,14 +21,14 @@ sockAddr2String :: SockAddr -> IO B.ByteString
 sockAddr2String (SockAddrInet _ hostAddr) = liftM B.pack $ inet_ntoa hostAddr
 sockAddr2String (SockAddrInet6 _ _ (a, b, c, d) _) =
     return $ B.pack $ (foldr1 (.)
-        $ List.intersperse (\a -> ':':a)
-        $ concatMap (\n -> (\(a, b) -> [showHex a, showHex b]) $ divMod n 65536) [a, b, c, d]) []
+        $ List.intersperse (':':)
+        $ concatMap (\n -> (\(a0, a1) -> [showHex a0, showHex a1]) $ divMod n 65536) [a, b, c, d]) []
 
 toEngineMsg :: B.ByteString -> B.ByteString
-toEngineMsg msg = B.pack $ Base64.encode (fromIntegral (BW.length msg) : (BW.unpack msg))
+toEngineMsg msg = B.pack $ Base64.encode (fromIntegral (BW.length msg) : BW.unpack msg)
 
 fromEngineMsg :: B.ByteString -> Maybe B.ByteString
-fromEngineMsg msg = Base64.decode (B.unpack msg) >>= removeLength >>= return . BW.pack
+fromEngineMsg msg = liftM BW.pack (Base64.decode (B.unpack msg) >>= removeLength)
     where
         removeLength (x:xs) = if length xs == fromIntegral x then Just xs else Nothing
         removeLength _ = Nothing
@@ -43,7 +37,7 @@ checkNetCmd :: B.ByteString -> (Bool, Bool)
 checkNetCmd = check . liftM B.unpack . fromEngineMsg
     where
         check Nothing = (False, False)
-        check (Just (m:ms)) = (m `Set.member` legalMessages, m == '+')
+        check (Just (m:_)) = (m `Set.member` legalMessages, m == '+')
         check _ = (False, False)
         legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghb12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
@@ -62,20 +56,20 @@ teamToNet team =
         : teamvoicepack team
         : teamflag team
         : teamowner team
-        : (B.pack $ show $ difficulty team)
+        : (B.pack . show $ difficulty team)
         : hhsInfo
     where
-        hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
+        hhsInfo = concatMap (\(HedgehogInfo n hat) -> [n, hat]) $ hedgehogs team
 
 modifyTeam :: TeamInfo -> RoomInfo -> RoomInfo
 modifyTeam team room = room{teams = replaceTeam team $ teams room}
     where
     replaceTeam _ [] = error "modifyTeam: no such team"
-    replaceTeam team (t:teams) =
-        if teamname team == teamname t then
-            team : teams
+    replaceTeam tm (t:ts) =
+        if teamname tm == teamname t then
+            tm : ts
         else
-            t : replaceTeam team teams
+            t : replaceTeam tm ts
 
 illegalName :: B.ByteString -> Bool
 illegalName b = null s || all isSpace s || isSpace (head s) || isSpace (last s)

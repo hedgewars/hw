@@ -5,7 +5,6 @@ import qualified Control.Exception as Exception
 import Control.Concurrent.Chan
 import Control.Concurrent
 import Control.Monad
-import System.IO
 import Network
 import Network.Socket.ByteString
 import qualified Data.ByteString.Char8 as B
@@ -19,10 +18,10 @@ pDelim :: B.ByteString
 pDelim = B.pack "\n\n"
 
 bs2Packets :: B.ByteString -> ([[B.ByteString]], B.ByteString)
-bs2Packets buf = unfoldrE extractPackets buf
+bs2Packets = unfoldrE extractPackets
     where
     extractPackets :: B.ByteString -> Either B.ByteString ([B.ByteString], B.ByteString)
-    extractPackets buf = 
+    extractPackets buf =
         let buf' = until (not . B.isPrefixOf pDelim) (B.drop 2) buf in
             let (bsPacket, bufTail) = B.breakSubstring pDelim buf' in
                 if B.null bufTail then
@@ -58,23 +57,23 @@ clientRecvLoop s chan ci = do
 
 
 clientSendLoop :: Socket -> ThreadId -> Chan CoreMessage -> Chan [B.ByteString] -> ClientIndex -> IO ()
-clientSendLoop s tId coreChan chan ci = do
+clientSendLoop s tId cChan chan ci = do
     answer <- readChan chan
     Exception.handle
-        (\(e :: Exception.IOException) -> when (not $ isQuit answer) $ sendQuit e) $ do
-            sendAll s $ (B.unlines answer) `B.append` (B.singleton '\n')
+        (\(e :: Exception.IOException) -> unless (isQuit answer) $ sendQuit e) $
+            sendAll s $ B.unlines answer `B.append` B.singleton '\n'
 
-    if (isQuit answer) then
+    if isQuit answer then
         do
         Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on sClose") $ sClose s
         killThread tId
-        writeChan coreChan $ Remove ci
+        writeChan cChan $ Remove ci
         else
-        clientSendLoop s tId coreChan chan ci
+        clientSendLoop s tId cChan chan ci
 
     where
         sendQuit e = do
-            putStrLn $ show e
-            writeChan coreChan $ ClientMessage (ci, ["QUIT", B.pack $ show e])
-        isQuit ("BYE":xs) = True
+            print e
+            writeChan cChan $ ClientMessage (ci, ["QUIT", B.pack $ show e])
+        isQuit ("BYE":_) = True
         isQuit _ = False

@@ -1,13 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 module CoreTypes where
 
-import System.IO
 import Control.Concurrent
-import Control.Concurrent.Chan
 import Control.Concurrent.STM
 import Data.Word
 import qualified Data.Map as Map
-import qualified Data.IntSet as IntSet
 import Data.Sequence(Seq, empty)
 import Data.Time
 import Network
@@ -41,7 +38,7 @@ data ClientInfo =
     }
 
 instance Show ClientInfo where
-    show ci = " nick: " ++ (unpack $ nick ci) ++ " host: " ++ (unpack $ host ci)
+    show ci = " nick: " ++ unpack (nick ci) ++ " host: " ++ unpack (host ci)
 
 instance Eq ClientInfo where
     (==) = (==) `on` clientSocket
@@ -66,9 +63,9 @@ data TeamInfo =
     }
 
 instance Show TeamInfo where
-    show ti = "owner: " ++ (unpack $ teamowner ti)
-            ++ "name: " ++ (unpack $ teamname ti)
-            ++ "color: " ++ (unpack $ teamcolor ti)
+    show ti = "owner: " ++ unpack (teamowner ti)
+            ++ "name: " ++ unpack (teamname ti)
+            ++ "color: " ++ unpack (teamcolor ti)
 
 data RoomInfo =
     RoomInfo
@@ -95,7 +92,7 @@ instance Show RoomInfo where
             ++ ", teams: " ++ show (teams ri)
 
 newRoom :: RoomInfo
-newRoom = (
+newRoom =
     RoomInfo
         undefined
         ""
@@ -111,7 +108,6 @@ newRoom = (
         []
         []
         (Map.singleton "MAP" ["+rnd+"])
-    )
 
 data StatisticsInfo =
     StatisticsInfo
@@ -142,7 +138,7 @@ instance Show ServerInfo where
     show _ = "Server Info"
 
 newServerInfo :: TMVar StatisticsInfo -> Chan CoreMessage -> Chan DBQuery -> ServerInfo
-newServerInfo = (
+newServerInfo =
     ServerInfo
         True
         "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
@@ -154,7 +150,6 @@ newServerInfo = (
         ""
         ""
         []
-    )
 
 data AccountInfo =
     HasAccount B.ByteString Bool

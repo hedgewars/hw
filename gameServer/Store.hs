@@ -56,7 +56,7 @@ growStore (MStore ref) = do
     let newM' = growFunc (m' + 1) - 1
     newArr <- IOA.newArray_ (0, newM')
     sequence_ [IOA.readArray arr i >>= IOA.writeArray newArr i | i <- [0..m']]
-    writeIORef ref (busyElems, freeElems `IntSet.union` (IntSet.fromAscList [m'+1..newM']), newArr)
+    writeIORef ref (busyElems, freeElems `IntSet.union` IntSet.fromAscList [m'+1..newM'], newArr)
 
 
 growIfNeeded :: MStore e -> IO ()
@@ -113,7 +113,7 @@ m2i (MStore ref) = do
     c <- IOA.unsafeFreeze c'
     return $ IStore (a, c)
 
-i2m :: (MStore e) -> IStore e -> IO ()
+i2m :: MStore e -> IStore e -> IO ()
 i2m (MStore ref) (IStore (_, arr)) = do
     (b, e, _) <- readIORef ref
     a <- IOA.unsafeThaw arr

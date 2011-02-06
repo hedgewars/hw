@@ -38,46 +38,46 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
             else
             return [ProtocolError "Not room master"]
 
-handleCmd_inRoom ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : difStr : hhsInfo)
+handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag : difStr : hhsInfo)
     | length hhsInfo /= 16 = return [ProtocolError "Corrupted hedgehogs info"]
     | otherwise = do
-        (ci, rnc) <- ask
-        r <- thisRoom
+        (ci, _) <- ask
+        rm <- thisRoom
         clNick <- clientNick
         clChan <- thisClientChans
-        othersChans <- roomOthersChans
+        othChans <- roomOthersChans
         return $
-            if not . null . drop 5 $ teams r then
+            if not . null . drop 5 $ teams rm then
                 [Warning "too many teams"]
-            else if canAddNumber r <= 0 then
+            else if canAddNumber rm <= 0 then
                 [Warning "too many hedgehogs"]
-            else if isJust $ findTeam r then
+            else if isJust $ findTeam rm then
                 [Warning "There's already a team with same name in the list"]
-            else if gameinprogress r then
+            else if gameinprogress rm then
                 [Warning "round in progress"]
-            else if isRestrictedTeams r then
+            else if isRestrictedTeams rm then
                 [Warning "restricted"]
             else
                 [ModifyRoom (\r -> r{teams = teams r ++ [newTeam ci clNick r]}),
                 ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = color}),
-                AnswerClients clChan ["TEAM_ACCEPTED", name],
-                AnswerClients othersChans $ teamToNet $ newTeam ci clNick r,
-                AnswerClients othersChans ["TEAM_COLOR", name, color]
+                AnswerClients clChan ["TEAM_ACCEPTED", tName],
+                AnswerClients othChans $ teamToNet $ newTeam ci clNick rm,
+                AnswerClients othChans ["TEAM_COLOR", tName, color]
                 ]
         where
         canAddNumber r = 48 - (sum . map hhnum $ teams r)
-        findTeam = find (\t -> name == teamname t) . teams
-        newTeam ci clNick r = (TeamInfo ci clNick name color grave fort voicepack flag difficulty (newTeamHHNum r) (hhsList hhsInfo))
-        difficulty = case B.readInt difStr of
-                           Just (i, t) | B.null t -> fromIntegral i
-                           otherwise -> 0
+        findTeam = find (\t -> tName == teamname t) . teams
+        newTeam ci clNick r = TeamInfo ci clNick tName color grave fort voicepack flag dif (newTeamHHNum r) (hhsList hhsInfo)
+        dif = case B.readInt difStr of
+                    Just (i, t) | B.null t -> fromIntegral i
+                    _ -> 0
         hhsList [] = []
         hhsList [_] = error "Hedgehogs list with odd elements number"
         hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
         newTeamHHNum r = min 4 (canAddNumber r)
 
-handleCmd_inRoom ["REMOVE_TEAM", name] = do
-        (ci, rnc) <- ask
+handleCmd_inRoom ["REMOVE_TEAM", tName] = do
+        (ci, _) <- ask
         r <- thisRoom
         clNick <- clientNick
 
@@ -90,7 +90,7 @@ handleCmd_inRoom ["REMOVE_TEAM", name] = do
             else if clNick /= teamowner team then
                 [ProtocolError "Not team owner!"]
             else
-                [RemoveTeam name,
+                [RemoveTeam tName,
                 ModifyClient
                     (\c -> c{
                         teamsInGame = teamsInGame c - 1,
@@ -99,7 +99,7 @@ handleCmd_inRoom ["REMOVE_TEAM", name] = do
                 ]
     where
         anotherTeamClan ci = teamcolor . fromJust . find (\t -> teamownerId t == ci) . teams
-        findTeam = find (\t -> name == teamname t) . teams
+        findTeam = find (\t -> tName == teamname t) . teams
 
 
 handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
@@ -113,7 +113,7 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
     return $
         if not $ isMaster cl then
             [ProtocolError "Not room master"]
-        else if hhNumber < 1 || hhNumber > 8 || isNothing maybeTeam || hhNumber > (canAddNumber r) + (hhnum team) then
+        else if hhNumber < 1 || hhNumber > 8 || isNothing maybeTeam || hhNumber > canAddNumber r + hhnum team then
             []
         else
             [ModifyRoom $ modifyTeam team{hhnum = hhNumber},
@@ -121,7 +121,7 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
     where
         hhNumber = case B.readInt numberStr of
                            Just (i, t) | B.null t -> fromIntegral i
-                           otherwise -> 0
+                           _ -> 0
         findTeam = find (\t -> teamName == teamname t) . teams
         canAddNumber = (-) 48 . sum . map hhnum . teams
 
@@ -159,11 +159,11 @@ handleCmd_inRoom ["TOGGLE_READY"] = do
 
 handleCmd_inRoom ["START_GAME"] = do
     cl <- thisClient
-    r <- thisRoom
+    rm <- thisRoom
     chans <- roomClientsChans
 
-    if isMaster cl && (playersIn r == readyPlayers r) && (not $ gameinprogress r) then
-        if enoughClans r then
+    if isMaster cl && playersIn rm == readyPlayers rm && not (gameinprogress rm) then
+        if enoughClans rm then
             return [
                 ModifyRoom
                     (\r -> r{
@@ -184,11 +184,11 @@ handleCmd_inRoom ["START_GAME"] = do
 
 handleCmd_inRoom ["EM", msg] = do
     cl <- thisClient
-    r <- thisRoom
+    rm <- thisRoom
     chans <- roomOthersChans
 
-    if (teamsInGame cl > 0) && (gameinprogress r) && isLegal then
-        return $ (AnswerClients chans ["EM", msg]) : [ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}) | not isKeepAlive]
+    if teamsInGame cl > 0 && gameinprogress rm && isLegal then
+        return $ AnswerClients chans ["EM", msg] : [ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}) | not isKeepAlive]
         else
         return []
     where
@@ -197,20 +197,20 @@ handleCmd_inRoom ["EM", msg] = do
 
 handleCmd_inRoom ["ROUNDFINISHED", _] = do
     cl <- thisClient
-    r <- thisRoom
+    rm <- thisRoom
     chans <- roomClientsChans
 
-    if isMaster cl && (gameinprogress r) then
-        return $ (ModifyRoom
+    if isMaster cl && gameinprogress rm then
+        return $ ModifyRoom
                 (\r -> r{
                     gameinprogress = False,
                     readyPlayers = 0,
                     roundMsgs = empty,
                     leftTeams = [],
                     teamsAtStart = []}
-                ))
+                )
             : UnreadyRoomClients
-            : answerRemovedTeams chans r
+            : answerRemovedTeams chans rm
         else
         return []
     where
@@ -239,7 +239,7 @@ handleCmd_inRoom ["KICK", kickNick] = do
     maybeClientId <- clientByNick kickNick
     master <- liftM isMaster thisClient
     let kickId = fromJust maybeClientId
-    let sameRoom = (clientRoom rnc thisClientId) == (clientRoom rnc kickId)
+    let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
     return
         [KickRoomClient kickId | master && isJust maybeClientId && (kickId /= thisClientId) && sameRoom]
 
@@ -249,6 +249,6 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
     chans <- roomSameClanChans
     return [AnswerClients chans ["EM", engineMsg cl]]
     where
-        engineMsg cl = toEngineMsg $ "b" `B.append` (nick cl) `B.append` "(team): " `B.append` msg `B.append` "\x20\x20"
+        engineMsg cl = toEngineMsg $ "b" `B.append` nick cl `B.append` "(team): " `B.append` msg `B.append` "\x20\x20"
 
 handleCmd_inRoom _ = return [ProtocolError "Incorrect command (state: in room)"]

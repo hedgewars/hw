@@ -1,10 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module HWProtoNEState where
 
-import qualified Data.IntMap as IntMap
 import Data.Maybe
 import Data.List
-import Data.Word
 import Control.Monad.Reader
 import qualified Data.ByteString.Char8 as B
 --------------------------------------
@@ -45,7 +43,7 @@ handleCmd_NotEntered ["PROTO", protoNum] = do
     where
         parsedProto = case B.readInt protoNum of
                            Just (i, t) | B.null t -> fromIntegral i
-                           otherwise -> 0
+                           _ -> 0
 
 
 handleCmd_NotEntered ["PASSWORD", passwd] = do

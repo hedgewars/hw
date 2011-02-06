@@ -2,8 +2,6 @@
 module Actions where
 
 import Control.Concurrent
-import Control.Concurrent.Chan
-import qualified Data.IntSet as IntSet
 import qualified Data.Set as Set
 import qualified Data.Sequence as Seq
 import System.Log.Logger
@@ -14,9 +12,8 @@ import Control.Monad.Reader
 import Control.Monad.State.Strict
 import qualified Data.ByteString.Char8 as B
 import Control.DeepSeq
-import Data.Time
-import Text.Printf
 import Data.Unique
+import Control.Arrow
 -----------------------------
 import CoreTypes
 import Utils
@@ -65,6 +62,8 @@ instance NFData Action where
 instance NFData B.ByteString
 instance NFData (Chan a)
 
+
+othersChans :: StateT ServerState IO [ClientChan]
 othersChans = do
     cl <- client's id
     ri <- clientRoomA
@@ -73,8 +72,8 @@ othersChans = do
 processAction :: Action -> StateT ServerState IO ()
 
 
-processAction (AnswerClients chans msg) = do
-    io $ mapM_ (flip writeChan (msg `deepseq` msg)) (chans `deepseq` chans)
+processAction (AnswerClients chans msg) =
+    io $ mapM_ (`writeChan` (msg `deepseq` msg)) (chans `deepseq` chans)
 
 
 processAction SendServerMessage = do
@@ -115,7 +114,6 @@ processAction (NoticeMessage n) = do
 
 processAction (ByeClient msg) = do
     (Just ci) <- gets clientIndex
-    rnc <- gets roomsClients
     ri <- clientRoomA
 
     chan <- client's sendChan
@@ -126,8 +124,8 @@ processAction (ByeClient msg) = do
         return ()
 
     clientsChans <- liftM (Prelude.map sendChan . Prelude.filter logonPassed) $! allClientsS
-    io $ do
-        infoM "Clients" (show ci ++ " quits: " ++ (B.unpack msg))
+    io $
+        infoM "Clients" (show ci ++ " quits: " ++ B.unpack msg)
 
     processAction $ AnswerClients [chan] ["BYE", msg]
     processAction $ AnswerClients clientsChans ["LOBBY:LEFT", clNick, msg]
@@ -171,7 +169,7 @@ processAction (MoveToRoom ri) = do
 
     io $ do
         modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = False, isMaster = False}) ci
-        modifyRoom rnc (\r -> r{playersIn = (playersIn r) + 1}) ri
+        modifyRoom rnc (\r -> r{playersIn = playersIn r + 1}) ri
         moveClientToRoom rnc ri ci
 
     chans <- liftM (map sendChan) $ roomClientsS ri
@@ -184,7 +182,7 @@ processAction (MoveToLobby msg) = do
     (Just ci) <- gets clientIndex
     ri <- clientRoomA
     rnc <- gets roomsClients
-    (gameProgress, playersNum) <- io $ room'sM rnc (\r -> (gameinprogress r, playersIn r)) ri
+    (gameProgress, playersNum) <- io $ room'sM rnc (gameinprogress &&& playersIn) ri
     ready <- client's isReady
     master <- client's isMaster
 --    client <- client's id
@@ -201,7 +199,7 @@ processAction (MoveToLobby msg) = do
 
     io $ do
             modifyRoom rnc (\r -> r{
-                    playersIn = (playersIn r) - 1,
+                    playersIn = playersIn r - 1,
                     readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
                     }) ri
             moveClientToLobby rnc ci
@@ -223,14 +221,14 @@ processAction (AddRoom roomName roomPassword) = do
     rnc <- gets roomsClients
     proto <- io $ client'sM rnc clientProto clId
 
-    let room = newRoom{
+    let rm = newRoom{
             masterID = clId,
             name = roomName,
             password = roomPassword,
             roomProto = proto
             }
 
-    rId <- io $ addRoom rnc room
+    rId <- io $ addRoom rnc rm
 
     processAction $ MoveToRoom rId
 
@@ -270,7 +268,6 @@ processAction (UnreadyRoomClients) = do
 
 processAction (RemoveTeam teamName) = do
     rnc <- gets roomsClients
-    cl <- client's id
     ri <- clientRoomA
     inGame <- io $ room'sM rnc gameinprogress ri
     chans <- othersChans
@@ -289,7 +286,7 @@ processAction (RemoveTeam teamName) = do
                     })
                 ]
     where
-        rmTeamMsg = toEngineMsg $ (B.singleton 'F') `B.append` teamName
+        rmTeamMsg = toEngineMsg $ B.singleton 'F' `B.append` teamName
 
 
 processAction (RemoveClientTeams clId) = do
@@ -326,10 +323,10 @@ processAction (ProcessAccountInfo info) =
         HasAccount passwd isAdmin -> do
             chan <- client's sendChan
             mapM_ processAction [AnswerClients [chan] ["ASKPASSWORD"], ModifyClient (\c -> c{webPassword = passwd, isAdministrator = isAdmin})]
-        Guest -> do
+        Guest ->
             processAction JoinLobby
         Admin -> do
-            mapM processAction [ModifyClient (\cl -> cl{isAdministrator = True}), JoinLobby]
+            mapM_ processAction [ModifyClient (\cl -> cl{isAdministrator = True}), JoinLobby]
             chan <- client's sendChan
             processAction $ AnswerClients [chan] ["ADMIN_ACCESS"]
 
@@ -337,11 +334,11 @@ processAction (ProcessAccountInfo info) =
 processAction JoinLobby = do
     chan <- client's sendChan
     clientNick <- client's nick
-    (lobbyNicks, clientsChans) <- liftM (unzip . Prelude.map (\c -> (nick c, sendChan c)) . Prelude.filter logonPassed) $! allClientsS
+    (lobbyNicks, clientsChans) <- liftM (unzip . Prelude.map (nick &&& sendChan) . Prelude.filter logonPassed) $! allClientsS
     mapM_ processAction $
-        (AnswerClients clientsChans ["LOBBY:JOINED", clientNick])
-        : [AnswerClients [chan] ("LOBBY:JOINED" : clientNick : lobbyNicks)]
-        ++ [ModifyClient (\cl -> cl{logonPassed = True}), SendServerMessage]
+        AnswerClients clientsChans ["LOBBY:JOINED", clientNick]
+        : AnswerClients [chan] ("LOBBY:JOINED" : clientNick : lobbyNicks)
+        : [ModifyClient (\cl -> cl{logonPassed = True}), SendServerMessage]
 
 {-
 processAction (clID, serverInfo, rnc) (RoomAddThisClient rID) =
@@ -367,10 +364,10 @@ processAction (KickClient kickId) = do
 processAction (BanClient seconds reason banId) = do
     modify (\s -> s{clientIndex = Just banId})
     clHost <- client's host
-    currentTime <- io $ getCurrentTime
-    let msg = "Ban for " `B.append` (B.pack . show $ seconds) `B.append` "seconds (" `B.append` msg` B.append` ")"
+    currentTime <- io getCurrentTime
+    let msg = "Ban for " `B.append` (B.pack . show $ seconds) `B.append` "seconds (" `B.append` reason ` B.append` ")"
     mapM_ processAction [
-        ModifyServerInfo (\s -> s{lastLogins = (clHost, (addUTCTime seconds $ currentTime, msg)) : lastLogins s})
+        ModifyServerInfo (\s -> s{lastLogins = (clHost, (addUTCTime seconds currentTime, msg)) : lastLogins s})
         , KickClient banId
         ]
 
@@ -387,7 +384,7 @@ processAction (AddClient cl) = do
     newClId <- io $ do
         ci <- addClient rnc cl
         t <- forkIO $ clientRecvLoop (clientSocket cl) (coreChan si) ci
-        forkIO $ clientSendLoop (clientSocket cl) t (coreChan si) (sendChan cl) ci
+        _ <- forkIO $ clientSendLoop (clientSocket cl) t (coreChan si) (sendChan cl) ci
 
         infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime cl))
 
@@ -396,8 +393,7 @@ processAction (AddClient cl) = do
     modify (\s -> s{clientIndex = Just newClId})
     processAction $ AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 
-    si <- gets serverInfo
-    let newLogins = takeWhile (\(_ , (time, _)) -> (connectTime cl) `diffUTCTime` time <= 0) $ lastLogins si
+    let newLogins = takeWhile (\(_ , (time, _)) -> connectTime cl `diffUTCTime` time <= 0) $ lastLogins si
     let info = host cl `Prelude.lookup` newLogins
     if isJust info then
         mapM_ processAction [ModifyServerInfo (\s -> s{lastLogins = newLogins}), ByeClient (snd .  fromJust $ info)]
@@ -423,10 +419,10 @@ processAction PingAll = do
 processAction StatsAction = do
     rnc <- gets roomsClients
     si <- gets serverInfo
-    (roomsNum, clientsNum) <- io $ withRoomsAndClients rnc stats
+    (roomsNum, clientsNum) <- io $ withRoomsAndClients rnc st
     io $ writeChan (dbQueries si) $ SendStats clientsNum (roomsNum - 1)
     where
-          stats irnc = (length $ allRooms irnc, length $ allClients irnc)
+          st irnc = (length $ allRooms irnc, length $ allClients irnc)
 
-processAction (RestartServer useForce) = do
+processAction (RestartServer _) =
     return ()
