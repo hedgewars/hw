@@ -15,8 +15,6 @@ int SDL_main (int argc, const char **argv)
     // Note: if you get a segfault or other unexpected crashes on startup
     // make sure that these arguments are up-to-date with the ones actual needed
 
-    // Note: Data dir is expected to be in current working directory
-
     const char **gameArgs = (const char**) malloc(sizeof(char *) * 11);
 
     gameArgs[ 0] = "0";          //ipcPort
