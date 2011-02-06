@@ -36,6 +36,7 @@ uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears,
 {$IFDEF HWLIBRARY}
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
+procedure Game(gameArgs: PPChar); cdecl; export;
 
 implementation
 {$ELSE}
