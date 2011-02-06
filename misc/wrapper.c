@@ -6,7 +6,7 @@
  - this executable expect a save file "Save.hws" and the data folder "Data" to be in the same launching directory
  */
 
-#import <stdlib.h>
+#include <stdlib.h>
 
 extern void Game (const char **);
 

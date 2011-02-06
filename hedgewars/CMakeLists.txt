@@ -34,6 +34,7 @@ endif()
 #SOURCE AND PROGRAMS SECTION
 set(fpc_tryexe fpc)
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
+set(engine_output_name "hwengine")
 
 set(engine_sources
     ${hwengine_project}
@@ -104,6 +105,10 @@ if(BUILD_ENGINE_LIBRARY)
     if(APPLE AND current_macosx_version MATCHES "10.6")
         set(pascal_compiler_flags_cmn "-k-no_order_inits" ${pascal_compiler_flags_cmn})
     endif(APPLE AND current_macosx_version MATCHES "10.6")
+
+    if (APPLE)
+        set(engine_output_name "hwengine.dylib")
+    endif (APPLE)
 endif(BUILD_ENGINE_LIBRARY)
 
 find_program(fpc_executable ${fpc_tryexe})
@@ -161,9 +166,9 @@ set(pascal_compiler_flags ${noexecstack_flags} ${pascal_compiler_flags_cmn} ${hw
 
 
 #DEPENDECIES AND EXECUTABLES SECTION
-IF(NOT APPLE OR BUILD_ENGINE_LIBRARY)
+IF(NOT APPLE)
     #here is the command for standard executables or for shared library
-    add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
+    add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}"
         COMMAND "${pascal_compiler}"
         ARGS ${pascal_compiler_flags}
         MAIN_DEPENDENCY ${hwengine_project}
@@ -191,15 +196,15 @@ ELSE()
         add_custom_target(hwengine.${build_arch} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
     endforeach()
 
-    add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine"
+    add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}"
         COMMAND "lipo"
-        ARGS ${lipo_args_list} -create -output ${EXECUTABLE_OUTPUT_PATH}/hwengine
+        ARGS ${lipo_args_list} -create -output ${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}
         DEPENDS ${lipo_args_list}
         )
 ENDIF()
 
 
-add_custom_target(hwengine ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}")
+add_custom_target(${engine_output_name} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}")
 
-install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
 
