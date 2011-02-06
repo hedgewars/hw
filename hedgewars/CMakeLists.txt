@@ -93,9 +93,18 @@ if(BUILD_ENGINE_LIBRARY)
     message(STATUS "Engine will be built as library (experimental)")
     set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas)
     set(engine_sources ${hwengine_project} PascalExports.pas ${engine_sources})
-    set(pascal_compiler_flags_cmn "-dHWLIBRARY" "-k-no_order_inits" "-fPIC" ${pascal_compiler_flags_cmn})
-endif(BUILD_ENGINE_LIBRARY)
+    set(pascal_compiler_flags_cmn "-dHWLIBRARY" ${pascal_compiler_flags_cmn})
 
+    # create position independent code, only required for x68_64 builds, similar to -fPIC
+    if(CMAKE_SIZEOF_VOID_P MATCHES "8")
+        set(pascal_compiler_flags_cmn "-Cg" ${pascal_compiler_flags_cmn})
+    endif(CMAKE_SIZEOF_VOID_P MATCHES "8")
+
+    # due to compiling/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
+    if(APPLE AND current_macosx_version MATCHES "10.6")
+        set(pascal_compiler_flags_cmn "-k-no_order_inits" ${pascal_compiler_flags_cmn})
+    endif(APPLE AND current_macosx_version MATCHES "10.6")
+endif(BUILD_ENGINE_LIBRARY)
 
 find_program(fpc_executable ${fpc_tryexe})
 
