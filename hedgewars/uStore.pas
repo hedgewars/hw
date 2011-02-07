@@ -689,7 +689,7 @@ begin
 
     SDL_GL_SwapBuffers();
 {$IFDEF SDL13}
-    SDL_RenderPresent();
+    SDL_RenderPresent(SDLrender);
 {$ENDIF}
     inc(Step);
 
@@ -932,12 +932,12 @@ begin
         SDLwindow:= SDL_CreateWindow('Hedgewars', 0, 0, cScreenWidth, cScreenHeight,
                         SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN
                         {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});
-        SDL_CreateRenderer(SDLwindow, -1, 0);
+        SDLrender:= SDL_CreateRenderer(SDLwindow, -1, 1 and 2);
     end;
 
-    SDL_SetRenderDrawColor(0, 0, 0, 255);
-    SDL_RenderFill(nil);
-    SDL_RenderPresent();
+    SDL_SetRenderDrawColor(SDLrender,0, 0, 0, 255);
+    SDL_RenderClear(SDLrender);
+    SDL_RenderPresent(SDLrender);
 {$ELSE}
     SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
     SDLTry(SDLPrimSurface <> nil, true);

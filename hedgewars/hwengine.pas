@@ -104,7 +104,7 @@ begin
         end;
 
 {$IFDEF SDL13}
-    SDL_RenderPresent();
+    SDL_RenderPresent(SDLrender);
 {$ELSE}
     SDL_GL_SwapBuffers();
 {$ENDIF}
@@ -130,7 +130,8 @@ begin
     CloseIPC();
     TTF_Quit();
 {$IFDEF SDL13}
-    SDL_DestroyRenderer(SDLwindow);
+    SDL_RenderClear(SDLrender);
+    SDL_DestroyRenderer(SDLrender);
     SDL_DestroyWindow(SDLwindow);
 {$ENDIF}
     SDL_Quit();

@@ -358,6 +358,7 @@ type
 
 {$IFDEF SDL13}
     PSDL_Window = pointer;
+    PSDL_Renderer = pointer;
     PSDL_Texture = pointer;
 
     TSDL_WindowEvent = record
@@ -715,24 +716,23 @@ function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongIn
 
 {$IFDEF SDL13}
 function  SDL_CreateWindow(title: PChar; x,y,w,h, flags: LongInt): PSDL_Window; cdecl; external SDLLibName;
-function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): LongInt; cdecl; external SDLLibName;
-function  SDL_SetRenderDrawColor(r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
-function  SDL_DestroyRenderer(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
+function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): PSDL_Renderer; cdecl; external SDLLibName;
+function  SDL_DestroyRenderer(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
+procedure SDL_VideoQuit; cdecl; external SDLLibName;
 function  SDL_SelectVideoDisplay(index: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_GetNumVideoDisplays: LongInt; cdecl; external SDLLibName;
 
-function  SDL_RenderFill(rect: PSDL_Rect): LongInt;
-function  SDL_RenderFillRect(rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
-function  SDL_RenderClear: LongInt; cdecl; external SDLLibName;
-procedure SDL_RenderPresent; cdecl; external SDLLibName;
-procedure SDL_VideoQuit; cdecl; external SDLLibName;
+function  SDL_SetRenderDrawColor(renderer: PSDL_Renderer; r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
+function  SDL_RenderFillRect(renderer: PSDL_Renderer; rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
+function  SDL_RenderClear(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
+procedure SDL_RenderPresent(renderer: PSDL_Renderer); cdecl; external SDLLibName;
+function  SDL_RenderReadPixels(renderer: PSDL_Renderer; rect: PSDL_Rect; format: LongInt; pixels: pointer; pitch: LongInt): LongInt; cdecl; external SDLLibName;
 
 function  SDL_SelectMouse(index: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRelativeMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetNumMice: LongInt; cdecl; external SDLLibName;
 function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): boolean; cdecl; external SDLLibName;
-function  SDL_RenderReadPixels(rect: PSDL_Rect; format: LongInt; pixels: pointer; pitch: LongInt): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
 
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
@@ -890,16 +890,6 @@ begin
                   (PByteArray(buf)^[1] shl 16) or
                   (PByteArray(buf)^[0] shl 24)
 end;
-
-{$IFDEF SDL13}
-function SDL_RenderFill(rect: PSDL_Rect): LongInt;
-var res: LongInt;
-begin
-    if (rect <> nil) then res:= SDL_RenderFillRect(rect)
-    else res:= SDL_RenderClear();
-    exit(res);
-end;
-{$ENDIF}
 
 end.
 

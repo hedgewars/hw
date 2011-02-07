@@ -141,6 +141,7 @@ var
 
 {$IFDEF SDL13}
     SDLwindow       : PSDL_Window;
+    SDLrender       : PSDL_Renderer;
 {$ENDIF}
 
     WorldDx: LongInt;
@@ -2337,6 +2338,7 @@ begin
 
 {$IFDEF SDL13}
     SDLwindow       := nil;
+    SDLrender       := nil;
 {$ENDIF}
 
     // those values still are not perfect
