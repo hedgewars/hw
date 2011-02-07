@@ -141,8 +141,10 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 3)
+    if ([indexPath section] == 3) {
+        playSound(@"backSound");
         [self dismissModalViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark -
