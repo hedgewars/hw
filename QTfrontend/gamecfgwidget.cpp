@@ -33,7 +33,9 @@
 #include "proto.h"
 
 GameCFGWidget::GameCFGWidget(QWidget* parent) :
-  QGroupBox(parent), mainLayout(this)
+  QGroupBox(parent)
+  , mainLayout(this)
+  , seedRegexp("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\}")
 {
     mainLayout.setMargin(0);
 //  mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
@@ -332,7 +334,7 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
         if (param == "SEED") {
             pMapContainer->setSeed(value);
-            if (!QRegExp("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\}").exactMatch(value)) {
+            if (!seedRegexp.exactMatch(value)) {
                 pMapContainer->seedEdit->setVisible(true);
                 }
             return;
@@ -367,6 +369,19 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
     {
         if (param == "AMMO") {
             setNetAmmo(slValue[0], slValue[1]);
+            return;
+        }
+    }
+
+    if (slValue.size() == 3)
+    {
+        if (param == "FULLGENCFG")
+        {
+            QString seed = slValue[2];
+            if (!seedRegexp.exactMatch(seed))
+                pMapContainer->seedEdit->setVisible(true);
+
+            pMapContainer->setMapMapgenSeed(slValue[0], (MapGenerator)slValue[1].toUInt(), seed);
             return;
         }
     }

@@ -67,6 +67,7 @@ class HWMapContainer : public QWidget
   void setMapgen(MapGenerator m);
   void setMaze_size(int size);
   void setDrawnMapData(const QByteArray & ar);
+  void setMapMapgenSeed(const QString & map, MapGenerator m, const QString & seed);
 
  signals:
   void seedChanged(const QString & seed);
@@ -116,6 +117,9 @@ class HWMapContainer : public QWidget
   int numMissions;
   DrawMapScene drawMapScene;
 
+  void intSetSeed(const QString & seed);
+  void intSetMap(const QString & map);
+  void intSetMapgen(MapGenerator m);
   void updatePreview();
 };
 

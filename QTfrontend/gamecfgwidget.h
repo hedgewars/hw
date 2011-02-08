@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <QGroupBox>
 #include <QSpinBox>
+#include <QRegExp>
 
 #include "mapContainer.h"
 
@@ -77,6 +78,7 @@ private:
     QCheckBox * bindEntries;
     QString curNetAmmoName;
     QString curNetAmmo;
+    QRegExp seedRegexp;
 
     void setNetAmmo(const QString& name, const QString& ammo);
 

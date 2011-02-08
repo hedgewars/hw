@@ -425,16 +425,21 @@ void HWMapContainer::resizeEvent ( QResizeEvent * event )
   //imageButt->setIconSize(imageButt->size());
 }
 
-void HWMapContainer::setSeed(const QString & seed)
+void HWMapContainer::intSetSeed(const QString & seed)
 {
     m_seed = seed;
     if (seed != seedEdit->text())
         seedEdit->setText(seed);
+}
+
+void HWMapContainer::setSeed(const QString & seed)
+{
+    intSetSeed(seed);
     if (chooseMap->currentIndex() < MAPGEN_MAP)
         updatePreview();
 }
 
-void HWMapContainer::setMap(const QString & map)
+void HWMapContainer::intSetMap(const QString & map)
 {
     int id = 0;
     for(int i = 0; i < chooseMap->count(); i++)
@@ -452,8 +457,13 @@ void HWMapContainer::setMap(const QString & map)
             pMap = 0;
         }
         chooseMap->setCurrentIndex(id);
-        updatePreview();
     }
+}
+
+void HWMapContainer::setMap(const QString &map)
+{
+    intSetMap(map);
+    updatePreview();
 }
 
 void HWMapContainer::setTheme(const QString & theme)
@@ -543,11 +553,16 @@ void HWMapContainer::setMaze_size(int size)
     updatePreview();
 }
 
-void HWMapContainer::setMapgen(MapGenerator m)
+void HWMapContainer::intSetMapgen(MapGenerator m)
 {
     mapgen = m;
     chooseMap->setCurrentIndex(m);
     emit mapgenChanged(m);
+}
+
+void HWMapContainer::setMapgen(MapGenerator m)
+{
+    intSetMapgen(m);
     updatePreview();
 }
 
@@ -619,4 +634,13 @@ void HWMapContainer::updatePreview()
         hhLimit = chooseMap->itemData(curIndex).toList()[2].toInt();
         addInfoToPreview(mapImage);
     }
+}
+
+void HWMapContainer::setMapMapgenSeed(const QString & map, MapGenerator m, const QString & seed)
+{
+    setMap(map);
+    setMapgen(m);
+    setSeed(seed);
+
+    updatePreview();
 }
