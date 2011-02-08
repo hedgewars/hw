@@ -474,7 +474,7 @@
             self.popupMenu = [[InGameMenuViewController alloc] initWithStyle:UITableViewStylePlain];
         if (self.popoverController == nil) {
             self.popoverController = [[UIPopoverController alloc] initWithContentViewController:self.popupMenu];
-            [self.popoverController setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
+            [self.popoverController setPopoverContentSize:CGSizeMake(220, 200) animated:YES];
             [self.popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
         }
 

@@ -116,7 +116,6 @@ begin
         WriteLnToConsole('Saving ' + s + '...');
         playSound(sndShutter);
         MakeScreenshot(s);
-        //SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
     end;
 end;
 
