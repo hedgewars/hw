@@ -1,6 +1,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPathItem>
 #include <QtEndian>
+#include <QDebug>
 
 #include "drawmapscene.h"
 
@@ -32,8 +33,18 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
     if(m_currPath && (mouseEvent->buttons() & Qt::LeftButton))
     {
         QPainterPath path = m_currPath->path();
-        path.lineTo(mouseEvent->scenePos());
-        paths.first().append(mouseEvent->scenePos().toPoint());
+
+        if(mouseEvent->modifiers() & Qt::AltModifier)
+        {
+            int c = path.elementCount();
+            QPointF pos = mouseEvent->scenePos();
+            path.setElementPositionAt(c - 1, pos.x(), pos.y());
+
+        } else
+        {
+            path.lineTo(mouseEvent->scenePos());
+            paths.first().append(mouseEvent->scenePos().toPoint());
+        }
         m_currPath->setPath(path);
 
         emit pathChanged();
