@@ -34,7 +34,7 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
     {
         QPainterPath path = m_currPath->path();
 
-        if(mouseEvent->modifiers() & Qt::AltModifier)
+        if(mouseEvent->modifiers() & Qt::ControlModifier)
         {
             int c = path.elementCount();
             QPointF pos = mouseEvent->scenePos();
