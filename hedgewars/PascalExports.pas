@@ -164,6 +164,11 @@ begin
     KeyPressChat(13); // enter - removes chat
 end;
 
+procedure HW_screenshot; cdecl; export;
+begin
+    flagMakeCapture:= true;
+end;
+
 procedure HW_pause; cdecl; export;
 begin
     if isPaused = false then

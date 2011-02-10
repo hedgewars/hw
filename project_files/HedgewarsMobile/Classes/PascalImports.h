@@ -63,6 +63,7 @@ extern "C" {
     void HW_chat(void);
     void HW_chatEnd(void);
     void HW_tab(void);
+    void HW_screenshot(void);
 
     void HW_pause(void);
     void HW_pauseToggle(void);

@@ -115,7 +115,7 @@ begin
         s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
         WriteLnToConsole('Saving ' + s + '...');
         playSound(sndShutter);
-        MakeScreenshot(s);
+        {$IFNDEF IPHONEOS}MakeScreenshot(s);{$ENDIF}
     end;
 end;
 

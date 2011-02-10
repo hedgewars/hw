@@ -237,7 +237,7 @@ void releaseData(void *info, const void *data, size_t dataSize) {
     GLubyte *buffer_flipped = (GLubyte *) malloc(size * sizeof(GLubyte));
 
     glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-
+    HW_screenshot();
     // flip the data as glReadPixels here reads upside down
     for(int y = 0; y <height; y++)
         for(int x = 0; x <width * 4; x++)
