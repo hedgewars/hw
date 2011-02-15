@@ -33,10 +33,15 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
         cl <- thisClient
         if isMaster cl then
            return [
-                ModifyRoom (\r -> r{params = Map.insert paramName paramStrs (params r)}),
+                ModifyRoom f,
                 AnswerClients chans ("CFG" : paramName : paramStrs)]
             else
             return [ProtocolError "Not room master"]
+    where
+        f r = if paramName `Map.member` (mapParams r) then
+                r{mapParams = Map.insert paramName (head paramStrs) (mapParams r)}
+                else
+                r{params = Map.insert paramName paramStrs (params r)}
 
 handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag : difStr : hhsInfo)
     | length hhsInfo /= 16 = return [ProtocolError "Corrupted hedgehogs info"]

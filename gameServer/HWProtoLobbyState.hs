@@ -40,12 +40,9 @@ handleCmd_lobby ["LIST"] = do
                 showB $ playersIn r,
                 showB $ length $ teams r,
                 nick $ irnc `client` masterID r,
-                head (Map.findWithDefault ["+gen+"] "MAP" (params r)),
+                head (Map.findWithDefault ["+rnd+"] "MAP" (mapParams r)),
                 head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
-                head (Map.findWithDefault ["Default"] "AMMO" (params r)),
-                head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
-                head (Map.findWithDefault ["0"] "MAPGEN" (params r)),
-                head (Map.findWithDefault ["seed"] "SEED" (params r))
+                head (Map.findWithDefault ["Default"] "AMMO" (params r))
                 ]
 
 
@@ -96,7 +93,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                 AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
             ]
             ++ map (readynessMessage cl) jRoomClients
-            ++ answerFullConfig cl (params jRoom)
+            ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
             ++ answerTeams cl jRoom
             ++ watchRound cl jRoom
 
@@ -105,10 +102,10 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
 
         toAnswer cl (paramName, paramStrs) = AnswerClients [sendChan cl] $ "CFG" : paramName : paramStrs
 
-        answerFullConfig cl pr = map (toAnswer cl) $
-                 ("FULLMAPCONFIG", concatMap ((Map.!) pr) ["MAP", "MAPGEN", "SEED"])
+        answerFullConfig cl mpr pr = map (toAnswer cl) $
+                 ("FULLMAPCONFIG", Map.elems mpr)
                  : ("SCHEME", pr Map.! "SCHEME")
-                 : (filter (\(p, _) -> p /= "SCHEME" && p /= "MAP" && p /= "MAPGEN" && p /= "SEED") $ Map.toList pr)
+                 : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr)
 
         answerTeams cl jRoom = let f = if gameinprogress jRoom then teamsAtStart else teams in answerAllTeams cl $ f jRoom
 

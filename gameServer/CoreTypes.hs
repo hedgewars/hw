@@ -83,6 +83,7 @@ data RoomInfo =
         roundMsgs :: Seq B.ByteString,
         leftTeams :: [B.ByteString],
         teamsAtStart :: [TeamInfo],
+        mapParams :: Map.Map B.ByteString B.ByteString,
         params :: Map.Map B.ByteString [B.ByteString]
     }
 
@@ -107,7 +108,12 @@ newRoom =
         Data.Sequence.empty
         []
         []
-        (Map.singleton "MAP" ["+rnd+"])
+        (
+            Map.fromList $ Prelude.zipWith (,)
+                ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
+                ["+rnd+", "0", "0", "seed", "0"]
+        )
+        (Map.singleton "SCHEME" ["Default"])
 
 data StatisticsInfo =
     StatisticsInfo

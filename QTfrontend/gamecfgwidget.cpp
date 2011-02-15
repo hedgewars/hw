@@ -139,7 +139,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));
     connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
     connect(pMapContainer, SIGNAL(mapgenChanged(MapGenerator)), this, SLOT(mapgenChanged(MapGenerator)));
-    connect(pMapContainer, SIGNAL(maze_sizeChanged(int)), this, SLOT(maze_sizeChanged(int)));
+    connect(pMapContainer, SIGNAL(mazeSizeChanged(int)), this, SLOT(maze_sizeChanged(int)));
     connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
     connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
     connect(pMapContainer, SIGNAL(drawMapRequested()), this, SIGNAL(goToDrawMap()));
@@ -246,7 +246,7 @@ QByteArray GameCFGWidget::getFullConfig() const
     switch (mapgen)
     {
         case MAPGEN_MAZE:
-            bcfg << QString("e$maze_size %1").arg(pMapContainer->get_maze_size()).toUtf8();
+            bcfg << QString("e$maze_size %1").arg(pMapContainer->getMazeSize()).toUtf8();
             break;
 
         case MAPGEN_DRAWN:
@@ -315,7 +315,7 @@ void GameCFGWidget::fullNetConfig()
     scriptChanged(Scripts->currentIndex());
 
     mapgenChanged(pMapContainer->get_mapgen());
-    maze_sizeChanged(pMapContainer->get_maze_size());
+    maze_sizeChanged(pMapContainer->getMazeSize());
 
     // map must be the last
     QString map = pMapContainer->getCurrentMap();
@@ -352,7 +352,7 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
             return;
         }
         if (param == "MAZE_SIZE") {
-            pMapContainer->setMaze_size(value.toUInt());
+            pMapContainer->setMazeSize(value.toUInt());
             return;
         }
         if (param == "SCRIPT") {
@@ -373,15 +373,21 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
     }
 
-    if (slValue.size() == 3)
+    if (slValue.size() == 5)
     {
-        if (param == "FULLGENCFG")
+        if (param == "FULLMAPCONFIG")
         {
-            QString seed = slValue[2];
+            QString seed = slValue[3];
             if (!seedRegexp.exactMatch(seed))
                 pMapContainer->seedEdit->setVisible(true);
 
-            pMapContainer->setMapMapgenSeed(slValue[0], (MapGenerator)slValue[1].toUInt(), seed);
+            pMapContainer->setAllMapParameters(
+                    slValue[0],
+                    (MapGenerator)slValue[1].toUInt(),
+                    slValue[2].toUInt(),
+                    seed,
+                    slValue[4].toUInt()
+                    );
             return;
         }
     }
