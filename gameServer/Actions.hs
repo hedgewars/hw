@@ -261,9 +261,12 @@ processAction (UnreadyRoomClients) = do
     ri <- clientRoomA
     roomPlayers <- roomClientsS ri
     roomClIDs <- io $ roomClientsIndicesM rnc ri
-    processAction $ AnswerClients (map sendChan roomPlayers) ("CLIENT_FLAGS" : "-r" : map nick roomPlayers)
+    pr <- client's clientProto
+    processAction $ AnswerClients (map sendChan roomPlayers) $ notReadyMessage pr (map nick roomPlayers)
     io $ mapM_ (modifyClient rnc (\cl -> cl{isReady = False})) roomClIDs
     processAction $ ModifyRoom (\r -> r{readyPlayers = 0})
+    where
+        notReadyMessage p nicks = if p < 38 then "NOT_READY" : nicks else "CLIENT_FLAGS" : "-r" : nicks
 
 
 processAction (RemoveTeam teamName) = do
@@ -340,22 +343,7 @@ processAction JoinLobby = do
         : AnswerClients [chan] ("LOBBY:JOINED" : clientNick : lobbyNicks)
         : [ModifyClient (\cl -> cl{logonPassed = True}), SendServerMessage]
 
-{-
-processAction (clID, serverInfo, rnc) (RoomAddThisClient rID) =
-    processAction (
-        clID,
-        serverInfo,
-        adjust (\cl -> cl{roomID = rID, teamsInGame = if rID == 0 then teamsInGame cl else 0}) clID clients,
-        adjust (\r -> r{playersIDs = IntSet.insert clID (playersIDs r), playersIn = (playersIn r) + 1}) rID $
-            adjust (\r -> r{playersIDs = IntSet.delete clID (playersIDs r)}) 0 rooms
-        ) joinMsg
-    where
-        client = clients ! clID
-        joinMsg = if rID == 0 then
-                AnswerAllOthers ["LOBBY:JOINED", nick client]
-            else
-                AnswerThisRoom ["JOINED", nick client]
-                -}
+
 processAction (KickClient kickId) = do
     modify (\s -> s{clientIndex = Just kickId})
     processAction $ ByeClient "Kicked"

@@ -40,7 +40,7 @@ handleCmd_lobby ["LIST"] = do
                 showB $ playersIn r,
                 showB $ length $ teams r,
                 nick $ irnc `client` masterID r,
-                head (Map.findWithDefault ["+rnd+"] "MAP" (mapParams r)),
+                Map.findWithDefault "+rnd+" "MAP" (mapParams r),
                 head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
                 head (Map.findWithDefault ["Default"] "AMMO" (params r))
                 ]
@@ -98,11 +98,21 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             ++ watchRound cl jRoom
 
         where
-        readynessMessage cl c = AnswerClients [sendChan cl] ["CLIENT_FLAGS", if isReady c then "+r" else "-r", nick c]
+        readynessMessage cl c = AnswerClients [sendChan cl] $
+                if clientProto cl < 38 then
+                    [if isReady c then "READY" else "NOT_READY", nick c]
+                    else
+                    ["CLIENT_FLAGS", if isReady c then "+r" else "-r", nick c]
 
         toAnswer cl (paramName, paramStrs) = AnswerClients [sendChan cl] $ "CFG" : paramName : paramStrs
 
-        answerFullConfig cl mpr pr = map (toAnswer cl) $
+        answerFullConfig cl mpr pr
+            | clientProto cl < 38 = map (toAnswer cl) $
+                 (map (\(a, b) -> (a, [b])) $ Map.toList mpr)
+                 ++ (("SCHEME", pr Map.! "SCHEME")
+                 : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr))
+
+            | otherwise = map (toAnswer cl) $
                  ("FULLMAPCONFIG", Map.elems mpr)
                  : ("SCHEME", pr Map.! "SCHEME")
                  : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr)

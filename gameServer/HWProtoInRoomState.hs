@@ -159,7 +159,10 @@ handleCmd_inRoom ["TOGGLE_READY"] = do
     return [
         ModifyClient (\c -> c{isReady = not $ isReady cl}),
         ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
-        AnswerClients chans ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
+        AnswerClients chans $ if clientProto cl < 38 then
+                [if isReady cl then "NOT_READY" else "READY", nick cl]
+                else
+                ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
         ]
 
 handleCmd_inRoom ["START_GAME"] = do
@@ -220,6 +223,10 @@ handleCmd_inRoom ["ROUNDFINISHED", _] = do
         return []
     where
         answerRemovedTeams chans = map (\t -> AnswerClients chans ["REMOVE_TEAM", t]) . leftTeams
+
+-- compatibility with clients with protocol < 38
+handleCmd_inRoom ["ROUNDFINISHED"] =
+    handleCmd_inRoom ["ROUNDFINISHED", "1"]
 
 handleCmd_inRoom ["TOGGLE_RESTRICT_JOINS"] = do
     cl <- thisClient
