@@ -50,12 +50,12 @@ flushRequests si = do
             SendStats {} -> return ()
         flushRequests si
 
-pipeDbConnectionLoop :: Chan DBQuery -> Chan CoreMessage -> Handle -> Handle -> Map.Map ByteString (UTCTime, AccountInfo) -> IO (Map.Map ByteString (UTCTime, AccountInfo))
-pipeDbConnectionLoop queries cChan hIn hOut accountsCache =
-    Exception.handle (\(e :: Exception.IOException) -> warningM "Database" (show e) >> return accountsCache) $
+pipeDbConnectionLoop :: Chan DBQuery -> Chan CoreMessage -> Handle -> Handle -> Map.Map ByteString (UTCTime, AccountInfo) -> Int -> IO (Map.Map ByteString (UTCTime, AccountInfo), Int)
+pipeDbConnectionLoop queries cChan hIn hOut accountsCache req =
+    Exception.handle (\(e :: Exception.IOException) -> warningM "Database" (show e) >> return (accountsCache, req)) $
     do
     q <- readChan queries
-    updatedCache <- case q of
+    (updatedCache, newReq) <- case q of
         CheckAccount clId clUid clNick _ -> do
             let cacheEntry = clNick `Map.lookup` accountsCache
             currentTime <- getCurrentTime
@@ -68,25 +68,23 @@ pipeDbConnectionLoop queries cChan hIn hOut accountsCache =
 
                     writeChan cChan $ ClientAccountInfo clId' clUid' accountInfo
 
-                    return $ Map.insert clNick (currentTime, accountInfo) accountsCache
+                    return $ (Map.insert clNick (currentTime, accountInfo) accountsCache, req + 1)
                 `Exception.onException`
-                    (unGetChan queries q
-                    >> writeChan cChan (ClientAccountInfo clId clUid Guest)
-                    )
+                    (unGetChan queries q)
                 else
                 do
                     writeChan cChan $ ClientAccountInfo clId clUid (snd $ fromJust cacheEntry)
-                    return accountsCache
+                    return (accountsCache, req)
 
-        ClearCache -> return Map.empty
+        ClearCache -> return (Map.empty, req)
         SendStats {} -> (
                 (SIO.hPutStrLn hIn $ show q) >>
                 hFlush hIn >>
-                return accountsCache)
+                return (accountsCache, req))
                 `Exception.onException`
                 (unGetChan queries q)
 
-    pipeDbConnectionLoop queries cChan hIn hOut updatedCache
+    pipeDbConnectionLoop queries cChan hIn hOut updatedCache newReq
     where
         maybeException (Just a) = return a
         maybeException Nothing = ioError (userError "Can't read")
@@ -104,8 +102,8 @@ pipeDbConnection accountsCache si errNum = do
             B.hPutStrLn hIn $ dbHost si
             B.hPutStrLn hIn $ dbLogin si
             B.hPutStrLn hIn $ dbPassword si
-            c <- pipeDbConnectionLoop (dbQueries si) (coreChan si) hIn hOut accountsCache
-            return (c, 0)
+            (c, r) <- pipeDbConnectionLoop (dbQueries si) (coreChan si) hIn hOut accountsCache 0
+            return (c, if r > 0 then 0 else errNum + 1)
 
     when (newErrNum > 1) $ flushRequests si
     threadDelay (3000000)
