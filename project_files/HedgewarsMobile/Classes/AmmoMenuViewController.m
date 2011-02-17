@@ -316,7 +316,7 @@
 
     if (IS_IPAD() && [touches count] == 1) {
         self.view.layer.borderWidth = 3.5;
-        startingPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
+        currentPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
     }
 
     if (IS_IPAD() == NO)
@@ -327,17 +327,31 @@
     self.view.layer.borderWidth = 1.3;
 }
 
+// better window dragging implementation by
+// http://iphonedevelopertips.com/graphics/drag-an-image-within-the-bounds-of-superview.html
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSSet *allTouches = [event allTouches];
-
     if (IS_IPAD() && [touches count] == 1) {
-        CGPoint touchedPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
-        CGFloat deltaX = touchedPoint.x - startingPoint.x;
-        CGFloat deltaY = touchedPoint.y - startingPoint.y;
+        // Get active location upon move
+        CGPoint activePoint = [[touches anyObject] locationInView:self.view];
 
-        //startingPoint = touchedPoint;
-        self.view.frame = CGRectMake(self.view.frame.origin.x + deltaX, self.view.frame.origin.y + deltaY,
-                                     self.view.frame.size.width, self.view.frame.size.height);
+        // Determine new point based on where the touch is now located
+        CGPoint newPoint = CGPointMake(self.view.center.x + (activePoint.x - currentPoint.x),
+                                       self.view.center.y + (activePoint.y - currentPoint.y));
+
+        // Make sure we stay within the bounds of the parent view
+        float midPointX = CGRectGetMidX(self.view.bounds);
+        if (newPoint.x > self.view.superview.bounds.size.width  - midPointX)
+            newPoint.x = self.view.superview.bounds.size.width - midPointX;
+        else if (newPoint.x < midPointX)
+            newPoint.x = midPointX;
+
+        float midPointY = CGRectGetMidY(self.view.bounds);
+        if (newPoint.y > self.view.superview.bounds.size.height  - midPointY)
+            newPoint.y = self.view.superview.bounds.size.height - midPointY;
+        else if (newPoint.y < midPointY)
+            newPoint.y = midPointY;
+
+        self.view.center = newPoint;
     }
 }
 

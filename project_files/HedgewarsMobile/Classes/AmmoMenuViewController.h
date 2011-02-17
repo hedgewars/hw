@@ -32,7 +32,7 @@
 
     uint8_t *delay;
     BOOL *shouldUpdateImage;
-    CGPoint startingPoint;
+    CGPoint currentPoint;
     CGPoint placingPoint;
     BOOL isVisible;
 }
