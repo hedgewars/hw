@@ -116,7 +116,7 @@
     [self.view addSubview:self.captionLabel];
     [caption release];
 
-    UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(x+2, y+20, 410, 53)];
+    UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(x+2, y+20, 415, 53)];
     description.backgroundColor = [UIColor clearColor];
     description.textColor = [UIColor whiteColor];
     description.text = DEFAULT_DESCRIPTION;
@@ -271,12 +271,30 @@
         self.captionLabel.text = NSLocalizedString(@"This weapon is locked",@"");
     else
         self.captionLabel.text = [NSString stringWithUTF8String:HW_getWeaponCaptionByIndex(theButton.tag)];
+    
+    self.nameLabel.backgroundColor = [UIColor blackColor];
+    self.captionLabel.backgroundColor = [UIColor blackColor];
+    self.extraLabel.backgroundColor = [UIColor blackColor];
+
+    int y, x = 8;
+    // display labels on top for lower buttons
+    if (theButton.tag > 41)
+        y = 5;
+    else
+        y = (HW_getNumberOfWeapons()/BTNS_PER_ROW)*44 + 18;
+
+    self.nameLabel.frame = CGRectMake(x, y, 200, 20);
+    self.captionLabel.frame = CGRectMake(x+200, y, 220, 20);
+    self.extraLabel.frame = CGRectMake(x+2, y+20, 415, 53);
 }
 
 -(void) buttonCancelled:(id) sender {
     self.nameLabel.text = nil;
     self.extraLabel.text = nil;
     self.captionLabel.text = nil;
+    self.extraLabel.backgroundColor = [UIColor clearColor];
+    self.captionLabel.backgroundColor = [UIColor clearColor];
+    self.nameLabel.backgroundColor = [UIColor clearColor];
 }
 
 -(void) buttonReleased:(id) sender {
@@ -284,15 +302,13 @@
     if (self.nameLabel == nil || self.extraLabel == nil)
         [self loadLabels];
 
-    self.nameLabel.text = nil;
-    self.extraLabel.text = nil;
-    self.captionLabel.text = nil;
     if (theButton.currentTitle == nil) {
         HW_setWeapon(theButton.tag);
         playSound(@"clickSound");
         if (IS_DUALHEAD() == NO)
             [self disappear];
     }
+    [self buttonCancelled:sender];
 }
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
