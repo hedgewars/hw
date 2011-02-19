@@ -47,7 +47,7 @@ function  AskForVoicepack(name: shortstring): Pointer;
 
 
 implementation
-uses uVariables, uConsole, uUtils, uCommands, uDebug, uMobile;
+uses uVariables, uConsole, uUtils, uCommands, uDebug;
 
 const chanTPU = 32;
 var Volume: LongInt;
@@ -180,7 +180,7 @@ end;
 procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 var s:shortstring;
 begin
-    if (not isSoundEnabled) or fastUntilLag or isDeviceMute() then
+    if (not isSoundEnabled) or fastUntilLag then
         exit;
 
     if keepPlaying and (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
@@ -222,7 +222,7 @@ end;
 function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
 var s: shortstring;
 begin
-    if (not isSoundEnabled) or fastUntilLag or isDeviceMute() then
+    if (not isSoundEnabled) or fastUntilLag then
     begin
         LoopSound:= -1;
         exit

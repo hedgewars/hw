@@ -31,11 +31,9 @@ procedure replayFinished; cdecl; external;
 procedure setGameRunning(arg: boolean); cdecl; external;
 procedure updateVisualsNewTurn; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
-function  isAppleDeviceMuted: Boolean; cdecl; external;
 procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
 {$ENDIF}
 function  isPhone: Boolean; inline;
-function  isDeviceMute: Boolean; inline;
 procedure performRumble; inline;
 procedure perfExt_AddProgress; inline;
 procedure perfExt_FinishProgress; inline;
@@ -47,6 +45,8 @@ procedure perfExt_SaveFinishedSynching; inline;
 implementation
 uses uVariables;
 
+const kSystemSoundID_Vibrate = $00000FFF;
+
 function isPhone: Boolean; inline;
 begin
 {$IFDEF IPHONEOS}
@@ -55,19 +55,10 @@ begin
     exit(false);
 end;
 
-function isDeviceMute: Boolean; inline;
-begin
-{$IFDEF IPHONEOS}
-//    exit(isAppleDeviceMuted());
-{$ENDIF}
-    exit(false);
-end;
-
 procedure performRumble; inline;
 begin
 {$IFDEF IPHONEOS}
-    // kSystemSoundID_Vibrate = $00000FFF
-    AudioServicesPlaySystemSound($00000FFF);
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 {$ENDIF}
 end;
 

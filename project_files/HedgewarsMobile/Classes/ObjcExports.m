@@ -154,38 +154,3 @@ void replayFinished() {
 void updateVisualsNewTurn(void) {
     [amvc_instance updateAmmoVisuals];
 }
-
-/*
-// http://stackoverflow.com/questions/287543/how-to-programatically-sense-the-iphone-mute-switch
-BOOL isAppleDeviceMuted(void) {
-    if (!gAudioSessionInited) {
-        AudioSessionInterruptionListener inInterruptionListener = NULL;
-        OSStatus error;
-        if ((error = AudioSessionInitialize(NULL, NULL, inInterruptionListener, NULL)))
-            DLog(@"*** Error *** error in AudioSessionInitialize: %d", error);
-        else
-            gAudioSessionInited = YES;
-    }
-    UInt32 propertySize = sizeof(CFStringRef);
-    BOOL muteResult = NO;
-
-    // this checks if there is volume
-    Float32 volume;
-    OSStatus n = AudioSessionGetProperty(kAudioSessionProperty_CurrentHardwareOutputVolume, &propertySize, &volume);
-    if (n != 0)
-        DLog( @"AudioSessionGetProperty 'volume': %d", n );
-    BOOL volumeResult = (volume == 0.0f);
-    
-    // this checks if the device is muted
-    CFStringRef state;
-    n = AudioSessionGetProperty(kAudioSessionProperty_AudioRoute, &propertySize, &state);
-    if (n != 0)
-        DLog( @"AudioSessionGetProperty 'audioRoute': %d", n );
-    else {
-        NSString *result = (NSString *)state;
-        muteResult = ([result length] == 0);
-        releaseAndNil(result);
-    }
-    return volumeResult || muteResult;
-}
-*/
