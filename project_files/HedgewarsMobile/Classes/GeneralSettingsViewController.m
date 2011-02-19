@@ -49,6 +49,11 @@
 -(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.settingsDictionary writeToFile:SETTINGS_FILE() atomically:YES];
+
+    // we save the sound settings to respect that flag everywhere
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setObject:[NSNumber numberWithBool:[[self.settingsDictionary objectForKey:@"sound"] boolValue]] forKey:@"audio"];
+    [prefs synchronize];
 }
 
 #pragma mark -

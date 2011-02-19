@@ -90,20 +90,21 @@ NSString *modelType () {
 }
 
 void playSound (NSString *snd) {
-    //Get the filename of the sound file:
-    NSString *path = [NSString stringWithFormat:@"%@/%@.wav",[[NSBundle mainBundle] resourcePath],snd];
-    
-    //declare a system sound id
-    SystemSoundID soundID;
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSNumber *audio = [prefs objectForKey:@"audio"];
 
-    //Get a URL for the sound file
-    NSURL *filePath = [NSURL fileURLWithPath:path isDirectory:NO];
+    if (audio == nil || [audio boolValue] == YES) {
+        // get the filename of the sound file:
+        NSString *path = [NSString stringWithFormat:@"%@/%@.wav",[[NSBundle mainBundle] resourcePath],snd];
 
-    //Use audio sevices to create the sound
-    AudioServicesCreateSystemSoundID((CFURLRef)filePath, &soundID);
+        // declare a system sound id and get a URL for the sound file
+        SystemSoundID soundID;
+        NSURL *filePath = [NSURL fileURLWithPath:path isDirectory:NO];
 
-    //Use audio services to play the sound
-    AudioServicesPlaySystemSound(soundID);
+        // use audio sevices to create and play the sound
+        AudioServicesCreateSystemSoundID((CFURLRef)filePath, &soundID);
+        AudioServicesPlaySystemSound(soundID);
+    }
 }
 
 NSArray inline *getAvailableColors (void) {
