@@ -135,6 +135,7 @@ data ServerInfo =
         dbLogin :: B.ByteString,
         dbPassword :: B.ByteString,
         lastLogins :: [(B.ByteString, (UTCTime, B.ByteString))],
+        restartPending :: Bool,
         stats :: TMVar StatisticsInfo,
         coreChan :: Chan CoreMessage,
         dbQueries :: Chan DBQuery
@@ -156,6 +157,7 @@ newServerInfo =
         ""
         ""
         []
+        False
 
 data AccountInfo =
     HasAccount B.ByteString Bool

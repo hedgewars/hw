@@ -53,6 +53,7 @@ data Action =
     | StatsAction
     | RestartServer Bool
 
+
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
 
 instance NFData Action where
@@ -412,5 +413,8 @@ processAction StatsAction = do
     where
           st irnc = (length $ allRooms irnc, length $ allClients irnc)
 
-processAction (RestartServer _) =
-    return ()
+processAction (RestartServer force) = do
+    if force then do
+        return ()
+        else
+        processAction $ ModifyServerInfo (\s -> s{restartPending=True})

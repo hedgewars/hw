@@ -32,7 +32,7 @@ reactCmd cmd = do
 
 mainLoop :: StateT ServerState IO ()
 mainLoop = forever $ do
-    get >>= \s -> put $! s
+    -- get >>= \s -> put $! s
 
     si <- gets serverInfo
     r <- liftIO $ readChan $ coreChan si
@@ -52,11 +52,6 @@ mainLoop = forever $ do
         Remove ci -> do
             liftIO $ debugM "Clients"  $ "DeleteClient: " ++ show ci
             processAction (DeleteClient ci)
-
-                --else
-                --do
-                --debugM "Clients" "Message from dead client"
-                --return (serverInfo, rnc)
 
         ClientAccountInfo ci uid info -> do
             rnc <- gets roomsClients
@@ -90,6 +85,4 @@ startServer si serverSocket = do
 
     rnc <- newRoomsAndClients newRoom
 
-    _ <- forkIO $ evalStateT mainLoop (ServerState Nothing si Set.empty rnc)
-
-    forever $ threadDelay 3600000000 -- one hour
+    evalStateT mainLoop (ServerState Nothing si Set.empty rnc)
