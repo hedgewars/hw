@@ -136,7 +136,6 @@ data ServerInfo =
         dbPassword :: B.ByteString,
         lastLogins :: [(B.ByteString, (UTCTime, B.ByteString))],
         restartPending :: Bool,
-        stats :: TMVar StatisticsInfo,
         coreChan :: Chan CoreMessage,
         dbQueries :: Chan DBQuery
     }
@@ -144,7 +143,7 @@ data ServerInfo =
 instance Show ServerInfo where
     show _ = "Server Info"
 
-newServerInfo :: TMVar StatisticsInfo -> Chan CoreMessage -> Chan DBQuery -> ServerInfo
+newServerInfo :: Chan CoreMessage -> Chan DBQuery -> ServerInfo
 newServerInfo =
     ServerInfo
         True

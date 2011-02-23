@@ -4,7 +4,6 @@ module Main where
 
 import Network.Socket
 import Network.BSD
-import Control.Concurrent.STM
 import Control.Concurrent.Chan
 import qualified Control.Exception as Exception
 import System.Log.Logger
@@ -36,10 +35,9 @@ main = withSocketsDo $ do
 
     setupLoggers
 
-    stats' <- atomically $ newTMVar (StatisticsInfo 0 0)
     dbQueriesChan <- newChan
     coreChan' <- newChan
-    serverInfo' <- getOpts $ newServerInfo stats' coreChan' dbQueriesChan
+    serverInfo' <- getOpts $ newServerInfo coreChan' dbQueriesChan
 
 #if defined(OFFICIAL_SERVER)
     dbHost' <- askFromConsole "DB host: "
