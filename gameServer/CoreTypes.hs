@@ -1,8 +1,7 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
 module CoreTypes where
 
 import Control.Concurrent
-import Control.Concurrent.STM
 import Data.Word
 import qualified Data.Map as Map
 import Data.Sequence(Seq, empty)
@@ -11,7 +10,9 @@ import Network
 import Data.Function
 import Data.ByteString.Char8 as B
 import Data.Unique
-
+import Control.Exception
+import Data.Typeable
+-----------------------
 import RoomsAndClients
 
 type ClientChan = Chan [B.ByteString]
@@ -191,3 +192,8 @@ data Notice =
     NickAlreadyInUse
     | AdminLeft
     deriving Enum
+
+data ShutdownException = ShutdownException
+     deriving (Show, Typeable)
+
+instance Exception ShutdownException

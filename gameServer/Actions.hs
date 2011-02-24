@@ -14,6 +14,7 @@ import qualified Data.ByteString.Char8 as B
 import Control.DeepSeq
 import Data.Unique
 import Control.Arrow
+import Control.Exception
 -----------------------------
 import CoreTypes
 import Utils
@@ -415,6 +416,6 @@ processAction StatsAction = do
 
 processAction (RestartServer force) = do
     if force then do
-        return ()
+        io $ throwIO ShutdownException
         else
         processAction $ ModifyServerInfo (\s -> s{restartPending=True})
