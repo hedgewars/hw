@@ -61,6 +61,7 @@ class HWChatWidget : public QWidget
   void setShowReady(bool s);
   void setShowFollow(bool enabled);
   static const char* STYLE;
+  QStringList ignoreList, friendsList;
 
 private:
   void loadList(QStringList & list, const QString & file);
@@ -90,7 +91,6 @@ private:
   QGridLayout mainLayout;
   QTextBrowser* chatText;
   QStringList chatStrings;
-  QStringList ignoreList, friendsList;
   QListWidget* chatNicks;
   QLineEdit* chatEditLine;
   QAction * acInfo;
