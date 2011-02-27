@@ -127,7 +127,7 @@ About::About(QWidget * parent) :
             "Slovak: Jose Riha<br>"
             "Spanish: Carlos Vives &lt;<a href=\"mailto:mail@carlosvives.es\">mail@carlosvives.es</a>&gt;<br>"
             "Swedish: Niklas Grahn &lt;<a href=\"mailto:raewolusjoon@yaoo.com\">raewolusjoon@yaoo.com</a>&gt;, Henrik Rostedt &lt;<a href=\"mailto:henrik.rostedt@gmail.com\">henrik.rostedt@gmail.com</a>&gt;<br>"
-            "Ukrainian: Eugene V. Lyubimkin &lt;<a href=\"mailto:jackyf.devel@gmail.com\">jackyf.devel@gmail.com</a>&gt;, Igor Paliychuk &lt;<a href=\"mailto:igor-hkr@mail.ru\">igor-hkr@mail.ru</a>&gt;, Yevhen Sakara &lt;<a href=\"mailto:eresid@gmail.com\">eresid@gmail.com</a>&gt;"
+            "Ukrainian: Eugene V. Lyubimkin &lt;<a href=\"mailto:jackyf.devel@gmail.com\">jackyf.devel@gmail.com</a>&gt;, Igor Paliychuk &lt;<a href=\"mailto:mansonigor@gmail.com\">mansonigor@gmail.com</a>&gt;, Eugene Sakara &lt;<a href=\"mailto:eresid@gmail.com\">eresid@gmail.com</a>&gt;"
             "</p><h2>") +
 
             QLabel::tr("Special thanks:") + "</h2><p>"

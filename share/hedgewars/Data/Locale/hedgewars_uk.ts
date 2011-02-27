@@ -9,7 +9,7 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation>копія</translation>
     </message>
 </context>
 <context>
@@ -21,7 +21,7 @@
     <message numerus="yes">
         <source>Every %1 turn</source>
         <translation>
-            <numerusform>Хожного ходу</numerusform>
+            <numerusform>Кожного ходу</numerusform>
             <numerusform>Кожних %1 ходи</numerusform>
             <numerusform>Кожних %1 ходів</numerusform>
         </translation>
@@ -44,10 +44,6 @@
     <message>
         <source>Edit schemes</source>
         <translation>Редагувати схеми</translation>
-    </message>
-    <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation type="obsolete">Коли ввімкнена ця опція при виборі схеми гри зброя буде вибрана автоматично (and viceversa)</translation>
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
@@ -193,11 +189,11 @@
     </message>
     <message>
         <source>Seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Перемішати</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Задати</translation>
     </message>
 </context>
 <context>
@@ -335,31 +331,31 @@ or pick another nickname in game config:</source>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Повернути</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Очистити</translation>
+        <translation>Очистити</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Завантажити</translation>
+        <translation>Завантажити</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Завантажити намальовану мапу</translation>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Намальовані мапи (*.hwmap);;Всі файли (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти намальовану мапу</translation>
     </message>
 </context>
 <context>
@@ -561,11 +557,6 @@ or pick another nickname in game config:</source>
         <translation>Спеціальні режими гри, такі як &apos;Вампіризм&apos; чи &apos;Карма&apos; дозволяють розробляти цілком нову тактику. Спробуйте їх в налаштованій грі!</translation>
     </message>
     <message>
-        <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Windows-версія Hedgewars підтримує Xfire. Переконайтеся в тому, що ви додали Hedgwars до списку ігор, щоб ваші друзі могли бачити вас в грі.</translation>
-    </message>
-    <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
         <comment>Tips</comment>
         <translation>Ви не повинні встановлювати Hedgewars на комп&apos;ютерах, які вам не належать (школа, університет, робота тощо). Будь ласка, звертайтесь до відповідальної особи!</translation>
@@ -631,11 +622,6 @@ or pick another nickname in game config:</source>
         <translation>Напад піаніно є найбільш руйнівним повітряним ударом. Але ви втратите їжака, тому він має і негативну сторону.</translation>
     </message>
     <message>
-        <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Навідна Бджілка може бути складною у керуванні. Радіус повороту залежить від її швидкості, тому постарайтеся не стріляти на повну силу.</translation>
-    </message>
-    <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
         <comment>Tips</comment>
         <translation>Липкі Міни чудовий інструмент створення малих ланцюгових реакцій для закидання ворогів у складні ситуації ... або у воду.</translation>
@@ -659,11 +645,6 @@ or pick another nickname in game config:</source>
         <source>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</source>
         <comment>Tips</comment>
         <translation>Вогнемет це зброя, але його можна також використати для риття тунелю.</translation>
-    </message>
-    <message>
-        <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Використайте Горючу Гранату щоб тимчасово утримати їжаків від проходження такої місцевості як тунелі або платформи.</translation>
     </message>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
@@ -718,17 +699,17 @@ or pick another nickname in game config:</source>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Windows-версія Hedgewars підтримує Xfire. Переконайтеся в тому, що ви додали Hedgewars до списку ігор, щоб ваші друзі могли бачити вас в грі.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Навідна Бджілка може бути складною у керуванні. Радіус повороту залежить від її швидкості, тому постарайтеся не стріляти на повну силу.</translation>
     </message>
     <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Використайте Коктейль Молотова або Вогнемет щоб тимчасово утримати їжаків від проходження такої місцевості як тунелі або платформи.</translation>
     </message>
 </context>
 <context>
@@ -1090,7 +1071,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Копіювати</translation>
     </message>
 </context>
 <context>
@@ -1109,7 +1090,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Копіювати</translation>
     </message>
 </context>
 <context>
@@ -1289,47 +1270,47 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>hand drawn map...</source>
-        <translation type="unfinished"></translation>
+        <translation>вручну намальована мапа...</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Вимкнено</translation>
     </message>
     <message>
         <source>Red/Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Червоний/Блакитний</translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Блакитний/Червоний</translation>
     </message>
     <message>
         <source>Red/Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Червоний/Синій</translation>
     </message>
     <message>
         <source>Blue/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Синій/Червоний</translation>
     </message>
     <message>
         <source>Red/Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Червоний/Зелений</translation>
     </message>
     <message>
         <source>Green/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Зелений/Червоний</translation>
     </message>
     <message>
         <source>Side-by-side</source>
-        <translation type="unfinished"></translation>
+        <translation>Пліч-о-пліч</translation>
     </message>
     <message>
         <source>Top-Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Верх-низ</translation>
     </message>
     <message>
         <source>Wiggle</source>
-        <translation type="unfinished"></translation>
+        <translation>Погойдування</translation>
     </message>
 </context>
 <context>
@@ -1559,11 +1540,11 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Gameplay</source>
-        <translation type="unfinished"></translation>
+        <translation>Геймплей</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
-        <translation type="unfinished"></translation>
+        <translation>Стерео рендеринг</translation>
     </message>
 </context>
 <context>
@@ -1750,7 +1731,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>more</source>
-        <translation type="unfinished"></translation>
+        <translation>більше</translation>
     </message>
 </context>
 <context>
@@ -1808,7 +1789,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation>копія</translation>
     </message>
 </context>
 <context>
@@ -2212,7 +2193,7 @@ info</source>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation>Видалити</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
@@ -2244,7 +2225,7 @@ info</source>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Очистити</translation>
+        <translation>Очистити</translation>
     </message>
     <message>
         <source>Return</source>
