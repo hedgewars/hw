@@ -29,6 +29,10 @@
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 #include "misc.h"
+/* only to get the ignoreList from the chat widget */
+#include "hwform.h"
+#include "pages.h"
+#include "chatwidget.h"
 
 char delimeter='\n';
 
@@ -398,8 +402,15 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 if (isChief)
                     emit configAsked();
             }
-            emit nickAdded(lst[i], isChief && (lst[i] != mynick));
-            emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
+            if (lst[i] != mynick && isChief && config->Form->ui.pageRoomsList->chatWidget->ignoreList.contains(lst[i], Qt::CaseInsensitive) && !config->Form->ui.pageRoomsList->chatWidget->friendsList.contains(lst[i], Qt::CaseInsensitive))
+            {
+                kickPlayer(lst[i]);
+            }
+            else
+            {
+                emit nickAdded(lst[i], isChief && (lst[i] != mynick));
+                emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
+            }
         }
         return;
     }

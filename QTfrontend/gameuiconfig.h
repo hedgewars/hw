@@ -31,6 +31,7 @@ class GameUIConfig : public QSettings
     Q_OBJECT
 
 public:
+    HWForm * Form;
     GameUIConfig(HWForm * FormWidgets, const QString & fileName);
     QStringList GetTeamsList();
     QRect vid_Resolution();
@@ -67,7 +68,6 @@ public slots:
     void SaveOptions();
 
 private:
-    HWForm * Form;
     quint8 depth;
 };
 
