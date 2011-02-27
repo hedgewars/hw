@@ -8,14 +8,11 @@ import Control.Concurrent.Chan
 import qualified Control.Exception as E
 import System.Log.Logger
 import System.Process
+import Control.Monad
 -----------------------------------
 import Opts
 import CoreTypes
 import ServerCore
-#if defined(OFFICIAL_SERVER)
-import Utils
-#endif
-
 
 #if !defined(mingw32_HOST_OS)
 import System.Posix
@@ -61,9 +58,7 @@ main = withSocketsDo $ do
     serverInfo' <- getOpts $ newServerInfo coreChan' dbQueriesChan
 
 #if defined(OFFICIAL_SERVER)
-    dbHost' <- askFromConsole "DB host: "
-    dbLogin' <- askFromConsole "login: "
-    dbPassword' <- askFromConsole "password: "
+    [dbHost', dbLogin', dbPassword'] <- liftM read $ readFile "hedgewars-server.ini"
     let si = serverInfo'{dbHost = dbHost', dbLogin = dbLogin', dbPassword = dbPassword'}
 #else
     let si = serverInfo'
