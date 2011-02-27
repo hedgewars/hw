@@ -39,7 +39,7 @@ checkNetCmd = check . liftM B.unpack . fromEngineMsg
         check Nothing = (False, False)
         check (Just (m:_)) = (m `Set.member` legalMessages, m == '+')
         check _ = (False, False)
-        legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghb12345" ++ slotMessages
+        legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
 
 maybeRead :: Read a => String -> Maybe a
