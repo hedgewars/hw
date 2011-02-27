@@ -5,7 +5,7 @@ module Main where
 import Network.Socket
 import Network.BSD
 import Control.Concurrent.Chan
-import qualified Control.Exception as Exception
+import qualified Control.Exception as E
 import System.Log.Logger
 -----------------------------------
 import Opts
@@ -26,6 +26,26 @@ setupLoggers =
     updateGlobalLogger "Clients"
         (setLevel INFO)
 
+
+server :: ServerInfo -> IO ()
+server si = do
+    proto <- getProtocolNumber "tcp"
+    E.bracket
+        (socket AF_INET Stream proto)
+        sClose
+        (\sock -> do
+            setSocketOption sock ReuseAddr 1
+            bindSocket sock (SockAddrInet (listenPort si) iNADDR_ANY)
+            listen sock maxListenQueue
+            startServer si sock
+        )
+
+handleRestart :: ShutdownException -> IO ()
+handleRestart ShutdownException = return ()
+handleRestart RestartException = do
+    
+    return ()
+
 main :: IO ()
 main = withSocketsDo $ do
 #if !defined(mingw32_HOST_OS)
@@ -43,19 +63,9 @@ main = withSocketsDo $ do
     dbHost' <- askFromConsole "DB host: "
     dbLogin' <- askFromConsole "login: "
     dbPassword' <- askFromConsole "password: "
-    let serverInfo = serverInfo'{dbHost = dbHost', dbLogin = dbLogin', dbPassword = dbPassword'}
+    let si = serverInfo'{dbHost = dbHost', dbLogin = dbLogin', dbPassword = dbPassword'}
 #else
-    let serverInfo = serverInfo'
+    let si = serverInfo'
 #endif
 
-
-    proto <- getProtocolNumber "tcp"
-    Exception.bracket
-        (socket AF_INET Stream proto)
-        sClose
-        (\sock -> do
-            setSocketOption sock ReuseAddr 1
-            bindSocket sock (SockAddrInet (listenPort serverInfo) iNADDR_ANY)
-            listen sock maxListenQueue
-            startServer serverInfo sock
-        )
+    (server si) `E.catch` handleRestart

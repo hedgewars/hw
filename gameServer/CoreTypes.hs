@@ -193,7 +193,9 @@ data Notice =
     | AdminLeft
     deriving Enum
 
-data ShutdownException = ShutdownException
+data ShutdownException =
+    ShutdownException
+    | RestartException
      deriving (Show, Typeable)
 
 instance Exception ShutdownException
