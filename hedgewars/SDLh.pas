@@ -826,6 +826,9 @@ function  Mix_PauseMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLi
 function  Mix_ResumeMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_HaltChannel(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
+function  Mix_FadeInChannelTimed(channel: LongInt; chunk: PMixChunk; loops: LongInt; fadems: LongInt; ticks: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_FadeOutChannel(channel: LongInt; fadems: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+
 (*  SDL_image  *)
 function  IMG_Init(flags: LongInt): LongInt; cdecl; external SDL_ImageLibName;
 procedure IMG_Quit; cdecl; external SDL_ImageLibName;

@@ -2307,13 +2307,19 @@ begin
             //4: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtWaterMelon, 0, cBombsSpeed *
             //                 Gear^.Tag, _0, 5000);
         end;
-        Gear^.dX := Gear^.dX + int2hwFloat(30 * Gear^.Tag)
+        Gear^.dX := Gear^.dX + int2hwFloat(30 * Gear^.Tag);
+        StopSound(Gear^.SoundChannel, 4000);
     end;
 
     if (GameTicks and $3F) = 0 then
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
-    if (hwRound(Gear^.X) > (LAND_WIDTH+1024)) or (hwRound(Gear^.X) < -1024) then DeleteGear(Gear)
+    if (hwRound(Gear^.X) > (LAND_WIDTH+1024)) or (hwRound(Gear^.X) < -1024) then
+    begin
+        // avoid to play forever (is this necessary?)
+        StopSound(Gear^.SoundChannel);
+        DeleteGear(Gear)
+    end;
 end;
 
 procedure doStepAirAttack(Gear: PGear);
@@ -2344,6 +2350,8 @@ begin
 
     Gear^.Health := 6;
     Gear^.doStep := @doStepAirAttackWork;
+    Gear^.SoundChannel := LoopSound(sndPlane, 4000);
+
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

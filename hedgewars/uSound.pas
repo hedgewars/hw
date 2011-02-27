@@ -35,7 +35,9 @@ procedure PlaySound(snd: TSound; keepPlaying: boolean);
 procedure PlaySound(snd: TSound; voicepack: PVoicepack);
 procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 function  LoopSound(snd: TSound): LongInt;
+function  LoopSound(snd: TSound; fadems: LongInt): LongInt;
 function  LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
+function  LoopSound(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
 procedure PlayMusic;
 procedure PauseMusic;
 procedure ResumeMusic;
@@ -219,7 +221,17 @@ begin
     LoopSound:= LoopSound(snd, nil)
 end;
 
+function LoopSound(snd: TSound; fadems: LongInt): LongInt;
+begin
+    LoopSound:= LoopSound(snd, nil, fadems)
+end;
+
 function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
+begin
+    LoopSound:= LoopSound(snd, nil, 0)
+end;
+
+function LoopSound(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
 var s: shortstring;
 begin
     if (not isSoundEnabled) or fastUntilLag then
@@ -252,13 +264,17 @@ begin
             TryDo(defVoicepack^.chunks[snd] <> nil, msgFailed, true);
             WriteLnToConsole(msgOK);
         end;
-        LoopSound:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], -1, -1);
+        if fadems > 0 then
+            LoopSound:= Mix_FadeInChannelTimed(-1, defVoicepack^.chunks[snd], -1, fadems, -1)
+        else
+            LoopSound:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], -1, -1);
     end;
 end;
 
 procedure StopSound(snd: TSound);
 begin
     if not isSoundEnabled then exit;
+
     if (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
     begin
         Mix_HaltChannel(lastChan[snd]);
@@ -272,6 +288,14 @@ begin
 
     if (chn <> -1) and (Mix_Playing(chn) <> 0) then
         Mix_HaltChannel(chn);
+end;
+
+procedure StopSound(chn, fadems: LongInt);
+begin
+    if not isSoundEnabled then exit;
+
+    if (chn <> -1) and (Mix_Playing(chn) <> 0) then
+        Mix_FadeOutChannel(chn, fadems);
 end;
 
 procedure PlayMusic;
