@@ -44,6 +44,7 @@ procedure ResumeMusic;
 procedure ChangeMusic;
 procedure StopSound(snd: TSound);
 procedure StopSound(chn: LongInt);
+procedure StopSound(chn, fadems: LongInt);
 function  ChangeVolume(voldelta: LongInt): LongInt;
 function  AskForVoicepack(name: shortstring): Pointer;
 

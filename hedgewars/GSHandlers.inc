@@ -1692,6 +1692,27 @@ begin
     else
         if ((GameTicks and $3F) = 25) then
             doStepFallingGear(Gear);
+    if (Gear^.Health = 0) then
+        begin
+            if not Gear^.dY.isNegative and (Gear^.dY > _0_2) and TestCollisionYwithGear(Gear, 1) then
+                inc(Gear^.Damage, hwRound(Gear^.dY * _70))
+            else if not Gear^.dX.isNegative and (Gear^.dX > _0_2) and TestCollisionXwithGear(Gear, 1) then
+                 inc(Gear^.Damage, hwRound(Gear^.dX * _70))
+            else if Gear^.dY.isNegative and (Gear^.dY < -_0_2) and TestCollisionYwithGear(Gear, -1) then
+                 inc(Gear^.Damage, hwRound(Gear^.dY * -_70))
+            else if Gear^.dX.isNegative and (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1) then
+                 inc(Gear^.Damage, hwRound(Gear^.dX * -_70));
+        
+        if (Gear^.Damage > random(10)) and ((GameTicks and $FF) = 0) then
+            AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y), vgtSmoke);
+
+        if (Gear^.Damage > 35) then
+            begin
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
+            DeleteGear(Gear);
+            exit
+            end
+        end;
 
     if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
         if ((Gear^.State and gstAttacking) = 0) then
@@ -1719,6 +1740,8 @@ begin
                     vgtSmoke);
                     PlaySound(sndVaporize);
                     Gear^.Health := 0;
+                    Gear^.Damage := 0;
+AddFileLog('initial mine damage:'+IntToStr(Gear^.Damage));
                     end;
                 exit
                 end;
