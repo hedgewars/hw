@@ -1703,8 +1703,8 @@ begin
             else if Gear^.dX.isNegative and (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1) then
                  inc(Gear^.Damage, hwRound(Gear^.dX * -_70));
         
-        if (Gear^.Damage > random(10)) and ((GameTicks and $FF) = 0) then
-            AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y), vgtSmoke);
+        if (Gear^.Damage > random(30)) and ((GameTicks and $FF) = 0) then
+            AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSmoke);
 
         if (Gear^.Damage > 35) then
             begin
