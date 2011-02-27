@@ -1,8 +1,7 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
 module CoreTypes where
 
 import Control.Concurrent
-import Control.Concurrent.STM
 import Data.Word
 import qualified Data.Map as Map
 import Data.Sequence(Seq, empty)
@@ -11,7 +10,9 @@ import Network
 import Data.Function
 import Data.ByteString.Char8 as B
 import Data.Unique
-
+import Control.Exception
+import Data.Typeable
+-----------------------
 import RoomsAndClients
 
 type ClientChan = Chan [B.ByteString]
@@ -135,7 +136,7 @@ data ServerInfo =
         dbLogin :: B.ByteString,
         dbPassword :: B.ByteString,
         lastLogins :: [(B.ByteString, (UTCTime, B.ByteString))],
-        stats :: TMVar StatisticsInfo,
+        restartPending :: Bool,
         coreChan :: Chan CoreMessage,
         dbQueries :: Chan DBQuery
     }
@@ -143,7 +144,7 @@ data ServerInfo =
 instance Show ServerInfo where
     show _ = "Server Info"
 
-newServerInfo :: TMVar StatisticsInfo -> Chan CoreMessage -> Chan DBQuery -> ServerInfo
+newServerInfo :: Chan CoreMessage -> Chan DBQuery -> ServerInfo
 newServerInfo =
     ServerInfo
         True
@@ -156,6 +157,7 @@ newServerInfo =
         ""
         ""
         []
+        False
 
 data AccountInfo =
     HasAccount B.ByteString Bool
@@ -190,3 +192,10 @@ data Notice =
     NickAlreadyInUse
     | AdminLeft
     deriving Enum
+
+data ShutdownException =
+    ShutdownException
+    | RestartException
+     deriving (Show, Typeable)
+
+instance Exception ShutdownException

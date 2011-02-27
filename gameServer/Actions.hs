@@ -14,6 +14,7 @@ import qualified Data.ByteString.Char8 as B
 import Control.DeepSeq
 import Data.Unique
 import Control.Arrow
+import Control.Exception
 -----------------------------
 import CoreTypes
 import Utils
@@ -52,6 +53,7 @@ data Action =
     | PingAll
     | StatsAction
     | RestartServer Bool
+
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
 
@@ -412,5 +414,8 @@ processAction StatsAction = do
     where
           st irnc = (length $ allRooms irnc, length $ allClients irnc)
 
-processAction (RestartServer _) =
-    return ()
+processAction (RestartServer force) = do
+    if force then do
+        throw ShutdownException
+        else
+        processAction $ ModifyServerInfo (\s -> s{restartPending=True})

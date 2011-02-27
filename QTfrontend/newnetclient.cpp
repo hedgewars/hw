@@ -402,7 +402,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 if (isChief)
                     emit configAsked();
             }
-            if (lst[i] != mynick && isChief && config->Form->ui.pageRoomsList->chatWidget->ignoreList.contains(lst[i], Qt::CaseInsensitive))
+            if (lst[i] != mynick && isChief && config->Form->ui.pageRoomsList->chatWidget->ignoreList.contains(lst[i], Qt::CaseInsensitive) && !config->Form->ui.pageRoomsList->chatWidget->friendsList.contains(lst[i], Qt::CaseInsensitive))
             {
                 kickPlayer(lst[i]);
             }
