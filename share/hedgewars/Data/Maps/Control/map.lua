@@ -1,8 +1,6 @@
 --------------------------------
--- CONTROL 0.3
+-- CONTROL 0.5
 --------------------------------
-
--- in this version
 
 ---------
 -- 0.2
@@ -30,6 +28,13 @@
 
 -- added scaling scoring based on clans: 300 points to win - 25 per team in game
 
+--------
+-- 0.5
+--------
+
+-- removed user branding
+-- fixed infinite attack time exploit
+
 -----------------
 --script begins
 -----------------
@@ -42,13 +47,15 @@ loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 ----------to read about tables properly
 ------------------ "Oh well, they probably have the memory"
 
+local TimeCounter = 0
+
 local gameWon = false
 local pointLimit = 300
 
 local vCirc = {}
 local vCircCount = 0
 
-local hGCount = 0
+--local hGCount = 0
 
 local vCircX = {}
 local vCircY = {}
@@ -288,8 +295,6 @@ end
 
 function onGameStart()
 
-	
-
 	-- build zones
 	cPoint[0] = CreateZone(571,47,120,80)
 	cPoint[1] = CreateZone(1029,643,120,80)
@@ -347,7 +352,7 @@ function onGameStart()
 		--AddCaption(zz) -- number of times it took to work
 	end
 
-	ShowMission(loc("CONTROL v0.3"), loc("by mikade"), loc("Control pillars to score points.") .. "|" .. loc("Goal:") .. " " .. pointLimit .. " " .. loc("points"), 0, 0)
+	ShowMission(loc("CONTROL v0.3"), loc(""), loc("Control pillars to score points.") .. "|" .. loc("Goal:") .. " " .. pointLimit .. " " .. loc("points"), 0, 0)
 
 
 end
@@ -355,6 +360,8 @@ end
 
 function onNewTurn()
 
+	-- reset the time counter so that it will get set to TurnTimeLeft in onGameTick	
+	TimeCounter = 0
 		
 	if lastTeam ~= GetHogTeamName(CurrentHedgehog) then
 		lastTeam = GetHogTeamName(CurrentHedgehog)
@@ -426,11 +433,26 @@ function onGameTick()
 
 	end
 
-	hGCount = hGCount + 1
-	if (hGCount >= 2000) and (gameWon == false) then
-		hGCount = 0
-		AwardPoints()
-	end
+	-- set TimeCounter to starting time if it is uninitialised (from onNewTurn)	
+	if (TimeCounter == 0) and (TurnTimeLeft > 0) then
+		TimeCounter = TurnTimeLeft	
+	end	
+	
+	-- has it ACTUALLY been 2 seconds since we last did this?	
+	if (TimeCounter - TurnTimeLeft) >= 2000 then
+		TimeCounter = TurnTimeLeft
+		
+		if (gameWon == false) then
+			AwardPoints()		
+		end	
+	end	
+	
+	--AddCaption(TimeCounter)	
+	--hGCount = hGCount + 1
+	--if (hGCount >= 2000) and (gameWon == false) then
+	--	hGCount = 0
+	--	AwardPoints()
+	--end
 
 end
 

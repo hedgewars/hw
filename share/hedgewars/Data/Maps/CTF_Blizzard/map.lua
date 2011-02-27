@@ -1,5 +1,5 @@
 --------------------------------
--- CTF_BLIZZARD 0.6
+-- CTF_BLIZZARD 0.8
 --------------------------------
 
 ---------
@@ -73,9 +73,16 @@
 ------------
 
 -- hopefully fixed a bug with the teleporters
+-- added a fix for crate possibly getting imbedded in land when it was near the water line
 
--- added a fix for crate possibly getting imbedded in land when it was near
--- the water line
+-----------
+-- 0.8
+------------
+
+-- fixed version control fail with missing check on onGearDelete
+
+-- changed hog placements code so that they start in the same place for both teams
+-- and hogs move in the same order, not backwards to each other.
 
 loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 
@@ -591,7 +598,7 @@ function onGameStart()
 					team1Placed = 0
 				end
 			elseif GetHogClan(hhs[g]) == 1 then
-				SetGearPosition(hhs[g],2230+ ((team2Placed+1)*50),1570)
+				SetGearPosition(hhs[g],2691- ((team2Placed+1)*50),1570)
 				team2Placed = team2Placed +1
 				if team2Placed > 6 then
 					team2Placed = 0
@@ -707,6 +714,8 @@ function onAmmoStoreInit()
 
 	SetAmmo(amFirePunch, 9, 0, 0, 0)
 	SetAmmo(amBaseballBat, 2, 0, 0, 0)
+	--SetAmmo(amKamikaze, 2, 0, 0, 0)
+
 
 	SetAmmo(amDynamite,2,0,0,1)
 	SetAmmo(amSMine,4,0,0,0)
@@ -786,6 +795,20 @@ function onGearDelete(gear)
 
 	if GetGearType(gear) == gtRope then
 		ropeGear = nil
+	end
+
+	if GetGearType(gear) == gtHedgehog then
+		for i = 0, (numhhs-1) do
+			if gear == hhs[i] then
+				
+				for k = 0,1 do
+					if gear == fThief[k] then
+						FlagThiefDead(gear)
+					end
+				end				
+				hhs[i] = nil	
+			end		
+		end
 	end
 
 end
