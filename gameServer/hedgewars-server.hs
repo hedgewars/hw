@@ -7,6 +7,7 @@ import Network.BSD
 import Control.Concurrent.Chan
 import qualified Control.Exception as E
 import System.Log.Logger
+import System.Process
 -----------------------------------
 import Opts
 import CoreTypes
@@ -43,7 +44,7 @@ server si = do
 handleRestart :: ShutdownException -> IO ()
 handleRestart ShutdownException = return ()
 handleRestart RestartException = do
-    
+    _ <- createProcess (proc "./hedgewars-server" [])
     return ()
 
 main :: IO ()

@@ -416,6 +416,6 @@ processAction StatsAction = do
 
 processAction (RestartServer force) = do
     if force then do
-        throw ShutdownException
+        throw RestartException
         else
         processAction $ ModifyServerInfo (\s -> s{restartPending=True})
