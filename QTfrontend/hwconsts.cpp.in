@@ -35,6 +35,7 @@ bool custom_config = false;
 bool custom_data = false;
 
 int cMaxTeams = 6;
+int cMinServerVersion = 0;
 
 QString * cDefaultAmmoStore = new QString(
         "93919294221991210322351110012010000002111101010111299"

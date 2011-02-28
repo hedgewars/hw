@@ -8,7 +8,9 @@ import Control.Concurrent.Chan
 import qualified Control.Exception as E
 import System.Log.Logger
 import System.Process
+#if defined(OFFICIAL_SERVER)
 import Control.Monad
+#endif
 -----------------------------------
 import Opts
 import CoreTypes

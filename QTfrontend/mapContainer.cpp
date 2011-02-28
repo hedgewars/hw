@@ -616,7 +616,6 @@ void HWMapContainer::mapDrawingFinished()
 
 void HWMapContainer::updatePreview()
 {
-    qDebug("updating a preview");
     int curIndex = chooseMap->currentIndex();
 
     switch(curIndex)

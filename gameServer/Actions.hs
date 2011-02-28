@@ -20,6 +20,7 @@ import CoreTypes
 import Utils
 import ClientIO
 import ServerState
+import Consts
 
 data Action =
     AnswerClients ![ClientChan] ![B.ByteString]
@@ -381,7 +382,7 @@ processAction (AddClient cl) = do
         return ci
 
     modify (\s -> s{clientIndex = Just newClId})
-    processAction $ AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
+    processAction $ AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
 
     let newLogins = takeWhile (\(_ , (time, _)) -> connectTime cl `diffUTCTime` time <= 0) $ lastLogins si
     let info = host cl `Prelude.lookup` newLogins

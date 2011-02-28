@@ -35,6 +35,7 @@ extern bool custom_config;
 extern bool custom_data;
 
 extern int cMaxTeams;
+extern int cMinServerVersion;
 
 extern QStringList * Themes;
 extern QStringList * mapList;

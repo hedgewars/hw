@@ -240,6 +240,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     }
 
     if (lst[0] == "CONNECTED") {
+        if(lst.size() < 3 || lst[2].toInt() < cMinServerVersion)
+        {
+            // TODO: Warn user, disconnect
+            qWarning() << "Server too old";
+        }
+
         RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
         RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
         netClientState = 1;
