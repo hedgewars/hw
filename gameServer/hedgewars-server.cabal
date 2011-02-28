@@ -28,6 +28,7 @@ Executable hedgewars-server
     dataenc,
     hslogger,
     process,
-    deepseq
+    deepseq,
+    tconfig
 
   ghc-options: -O2

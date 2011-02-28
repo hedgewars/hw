@@ -15,6 +15,7 @@ import Control.Monad
 import Opts
 import CoreTypes
 import ServerCore
+import ConfigFile
 
 #if !defined(mingw32_HOST_OS)
 import System.Posix
