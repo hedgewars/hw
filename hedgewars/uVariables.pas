@@ -685,7 +685,7 @@ const
             (FileName:           'ropeattach.ogg'; Path: ptSounds),// sndRopeAttach
             (FileName:          'roperelease.ogg'; Path: ptSounds),// sndRopeRelease
             (FileName:            'switchhog.ogg'; Path: ptSounds),// sndSwitchHog
-            (FileName:              'victory.ogg'; Path: ptVoices),// sndVictory
+            (FileName:              'Victory.ogg'; Path: ptVoices),// sndVictory
             (FileName:             'Flawless.ogg'; Path: ptVoices),// sndFlawless
             (FileName:         'sniperreload.ogg'; Path: ptSounds),// sndSniperReload
             (FileName:                'steps.ogg'; Path: ptSounds),// sndSteps
