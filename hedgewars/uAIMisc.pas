@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2005-2011 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,10 +139,13 @@ while Gear <> nil do
           gtCase: AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 33, 25);
           gtFlame: if (Gear^.State and gsttmpFlag) <> 0 then
                   AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);
-          gtMine: if (Gear^.State and gstAttacking) = 0 then
-                  AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
-              else
-                  AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
+// avoid mines unless they are very likely to be duds, or are duds. also avoid if they are about to blow 
+          gtMine:  if ((Gear^.State and gstAttacking) = 0) and 
+                      (((cMineDudPercent < 90) and (Gear^.Health <> 0)) or
+                       ((Gear^.Health = 0) and (Gear^.Damage > 30))) then
+                          AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
+                      else if (Gear^.State and gstAttacking) <> 0 then
+                          AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
           gtDynamite: AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -75);
           gtHedgehog: begin
                       if Gear^.Damage >= Gear^.Health then

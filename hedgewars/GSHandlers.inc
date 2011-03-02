@@ -1741,7 +1741,7 @@ begin
                     PlaySound(sndVaporize);
                     Gear^.Health := 0;
                     Gear^.Damage := 0;
-AddFileLog('initial mine damage:'+IntToStr(Gear^.Damage));
+                    Gear^.State := Gear^.State and not gstAttacking
                     end;
                 exit
                 end;
