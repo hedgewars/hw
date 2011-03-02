@@ -1005,6 +1005,7 @@ begin
 
     if (Gear^.Kind = gtHedgehog) then
     begin
+    Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
     uStats.HedgehogDamaged(Gear, AttackerHog);
     HHHurt(Gear^.Hedgehog, Source);
     AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, Gear^.Hedgehog^.Team^.Clan^.Color);

@@ -80,6 +80,10 @@ if not GameOver then
                         with Hedgehogs[i] do
                             if (Gear <> nil) then
                                 Gear^.State:= gstWinner;
+            if Flawless then
+                PlaySound(sndFlawless, Teams[0]^.voicepack) 
+            else
+                PlaySound(sndVictory, Teams[0]^.voicepack);
 
             AddCaption(s, cWhiteColor, capgrpGameState);
             SendStat(siGameResult, s);
@@ -278,6 +282,7 @@ if c < 0 then
         begin
         ClanIndex:= Pred(ClansCount);
         Color:= TeamColor;
+        Flawless:= true
         end
    end else
    begin

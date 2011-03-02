@@ -118,7 +118,7 @@ type
             sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter,
             sndHomerun, sndMolotov, sndCover, sndUhOh, sndOops,
             sndNooo, sndHello, sndRopeShot, sndRopeAttach, sndRopeRelease,
-            sndSwitchHog, sndVictory, sndSniperReload, sndSteps, sndLowGravity,
+            sndSwitchHog, sndVictory, sndFlawless, sndSniperReload, sndSteps, sndLowGravity,
             sndHellishImpact1, sndHellishImpact2, sndHellishImpact3, sndHellishImpact4,
             sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket,
             sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle, sndBeeWater,
@@ -357,6 +357,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             ClanHealth: LongInt;
             ClanIndex: LongInt;
             TurnNumber: LongWord;
+            Flawless: boolean;
             end;
 
      TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidBee, sidShotgun,
