@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2010 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1005,7 +1005,7 @@ if isCursorVisible and bShowAmmoMenu then
 // Chat
 DrawChat;
 
-// confirmation caption
+// various captions
 if fastUntilLag then DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
 if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2010 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1741,7 +1741,7 @@ begin
                     PlaySound(sndVaporize);
                     Gear^.Health := 0;
                     Gear^.Damage := 0;
-AddFileLog('initial mine damage:'+IntToStr(Gear^.Damage));
+                    Gear^.State := Gear^.State and not gstAttacking
                     end;
                 exit
                 end;

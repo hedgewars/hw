@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2008 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,6 +80,10 @@ if not GameOver then
                         with Hedgehogs[i] do
                             if (Gear <> nil) then
                                 Gear^.State:= gstWinner;
+            if Flawless then
+                PlaySound(sndFlawless, Teams[0]^.voicepack) 
+            else
+                PlaySound(sndVictory, Teams[0]^.voicepack);
 
             AddCaption(s, cWhiteColor, capgrpGameState);
             SendStat(siGameResult, s);
@@ -278,6 +282,7 @@ if c < 0 then
         begin
         ClanIndex:= Pred(ClansCount);
         Color:= TeamColor;
+        Flawless:= true
         end
    end else
    begin
