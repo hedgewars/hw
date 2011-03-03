@@ -15,7 +15,7 @@ import Utils
 import HandlerUtils
 import RoomsAndClients
 
-handleCmd_inRoom :: CmdHandler
+handleCmd_inRoom :: CmdHandler c
 
 handleCmd_inRoom ["CHAT", msg] = do
     n <- clientNick

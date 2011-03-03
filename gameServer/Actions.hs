@@ -22,7 +22,7 @@ import ClientIO
 import ServerState
 import Consts
 
-data Action =
+data Action c =
     AnswerClients ![ClientChan] ![B.ByteString]
     | SendServerMessage
     | SendServerVars
@@ -44,7 +44,7 @@ data Action =
     | ModifyClient (ClientInfo -> ClientInfo)
     | ModifyClient2 ClientIndex (ClientInfo -> ClientInfo)
     | ModifyRoom (RoomInfo -> RoomInfo)
-    | ModifyServerInfo (ServerInfo -> ServerInfo)
+    | ModifyServerInfo (ServerInfo c -> ServerInfo c)
     | AddRoom B.ByteString B.ByteString
     | CheckRegistered
     | ClearAccountsCache
@@ -56,9 +56,9 @@ data Action =
     | RestartServer Bool
 
 
-type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
+type CmdHandler c = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action c]
 
-instance NFData Action where
+instance NFData (Action c) where
     rnf (AnswerClients chans msg) = chans `deepseq` msg `deepseq` ()
     rnf a = a `seq` ()
 
@@ -66,13 +66,13 @@ instance NFData B.ByteString
 instance NFData (Chan a)
 
 
-othersChans :: StateT ServerState IO [ClientChan]
+othersChans :: StateT (ServerState c) IO [ClientChan]
 othersChans = do
     cl <- client's id
     ri <- clientRoomA
     liftM (map sendChan . filter (/= cl)) $ roomClientsS ri
 
-processAction :: Action -> StateT ServerState IO ()
+processAction :: Action c -> StateT (ServerState c) IO ()
 
 
 processAction (AnswerClients chans msg) =

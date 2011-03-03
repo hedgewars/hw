@@ -15,7 +15,7 @@ import HandlerUtils
 import RoomsAndClients
 
 
-answerAllTeams :: ClientInfo -> [TeamInfo] -> [Action]
+answerAllTeams :: ClientInfo -> [TeamInfo] -> [Action c]
 answerAllTeams cl = concatMap toAnswer
     where
         clChan = sendChan cl
@@ -24,7 +24,7 @@ answerAllTeams cl = concatMap toAnswer
             AnswerClients [clChan] ["TEAM_COLOR", teamname team, teamcolor team],
             AnswerClients [clChan] ["HH_NUM", teamname team, B.pack . show $ hhnum team]]
 
-handleCmd_lobby :: CmdHandler
+handleCmd_lobby :: CmdHandler c
 
 
 handleCmd_lobby ["LIST"] = do

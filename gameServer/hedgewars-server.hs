@@ -8,6 +8,8 @@ import Control.Concurrent.Chan
 import qualified Control.Exception as E
 import System.Log.Logger
 import System.Process
+import Data.TConfig
+import Data.Maybe
 #if defined(OFFICIAL_SERVER)
 import Control.Monad
 #endif
@@ -28,7 +30,7 @@ setupLoggers =
         (setLevel INFO)
 
 
-server :: ServerInfo -> IO ()
+server :: ServerInfo c -> IO ()
 server si = do
     proto <- getProtocolNumber "tcp"
     E.bracket
@@ -58,11 +60,10 @@ main = withSocketsDo $ do
 
     dbQueriesChan <- newChan
     coreChan' <- newChan
-    serverInfo' <- getOpts $ newServerInfo coreChan' dbQueriesChan
+    serverInfo' <- getOpts $ newServerInfo coreChan' dbQueriesChan Nothing
 
 #if defined(OFFICIAL_SERVER)
-    [dbHost', dbLogin', dbPassword'] <- liftM read $ readFile "hedgewars-server.ini"
-    let si = serverInfo'{dbHost = dbHost', dbLogin = dbLogin', dbPassword = dbPassword'}
+    si <- readServerConfig serverInfo'
 #else
     let si = serverInfo'
 #endif

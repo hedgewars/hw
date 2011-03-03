@@ -12,6 +12,7 @@ import Data.ByteString.Char8 as B
 import Data.Unique
 import Control.Exception
 import Data.Typeable
+import Data.TConfig
 -----------------------
 import RoomsAndClients
 
@@ -123,7 +124,7 @@ data StatisticsInfo =
         roomsNumber :: Int
     }
 
-data ServerInfo =
+data ServerInfo c =
     ServerInfo
     {
         isDedicated :: Bool,
@@ -138,13 +139,14 @@ data ServerInfo =
         lastLogins :: [(B.ByteString, (UTCTime, B.ByteString))],
         restartPending :: Bool,
         coreChan :: Chan CoreMessage,
-        dbQueries :: Chan DBQuery
+        dbQueries :: Chan DBQuery,
+        serverConfig :: Maybe c
     }
 
-instance Show ServerInfo where
+instance Show (ServerInfo c) where
     show _ = "Server Info"
 
-newServerInfo :: Chan CoreMessage -> Chan DBQuery -> ServerInfo
+newServerInfo :: Chan CoreMessage -> Chan DBQuery -> Maybe c -> ServerInfo c
 newServerInfo =
     ServerInfo
         True
