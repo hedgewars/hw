@@ -185,9 +185,7 @@ end;
 
 function isPowerOf2(i: Longword): boolean;
 begin
-if i = 0 then exit(true);
-while not odd(i) do i:= i shr 1;
-isPowerOf2:= (i = 1)
+isPowerOf2:= (i and (i - 1)) = 0
 end;
 
 function toPowerOf2(i: Longword): Longword;
