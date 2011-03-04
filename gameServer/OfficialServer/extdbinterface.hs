@@ -60,9 +60,10 @@ dbConnectionLoop mySQLConnectionInfo =
 
 main = do
         dbHost <- getLine
+        dbName <- getLine
         dbLogin <- getLine
         dbPassword <- getLine
 
-        let mySQLConnectInfo = defaultMySQLConnectInfo {mysqlHost = dbHost, mysqlDatabase = "hedge_main", mysqlUser = dbLogin, mysqlPassword = dbPassword}
+        let mySQLConnectInfo = defaultMySQLConnectInfo {mysqlHost = dbHost, mysqlDatabase = dbName, mysqlUser = dbLogin, mysqlPassword = dbPassword}
 
         dbConnectionLoop mySQLConnectInfo

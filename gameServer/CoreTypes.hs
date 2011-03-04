@@ -12,7 +12,6 @@ import Data.ByteString.Char8 as B
 import Data.Unique
 import Control.Exception
 import Data.Typeable
-import Data.TConfig
 -----------------------
 import RoomsAndClients
 
@@ -134,6 +133,7 @@ data ServerInfo c =
         listenPort :: PortNumber,
         nextRoomID :: Int,
         dbHost :: B.ByteString,
+        dbName :: B.ByteString,
         dbLogin :: B.ByteString,
         dbPassword :: B.ByteString,
         lastLogins :: [(B.ByteString, (UTCTime, B.ByteString))],
@@ -155,6 +155,7 @@ newServerInfo =
         35
         46631
         0
+        ""
         ""
         ""
         ""

@@ -27,7 +27,7 @@ import Utils
 localAddressList :: [B.ByteString]
 localAddressList = ["127.0.0.1", "0:0:0:0:0:0:0:1", "0:0:0:0:0:ffff:7f00:1"]
 
---fakeDbConnection :: forall b. (ServerInfo c)-> IO b
+fakeDbConnection :: forall b c. ServerInfo c -> IO b
 fakeDbConnection si = forever $ do
     q <- readChan $ dbQueries si
     case q of
@@ -89,7 +89,13 @@ pipeDbConnectionLoop queries cChan hIn hOut accountsCache req =
         maybeException (Just a) = return a
         maybeException Nothing = ioError (userError "Can't read")
 
---pipeDbConnection :: forall b. Map.Map ByteString (UTCTime, AccountInfo) -> (ServerInfo c) -> Int -> IO b
+pipeDbConnection :: forall a c b.
+        (Num a, Ord a) =>
+        Map.Map ByteString (UTCTime, AccountInfo)
+        -> ServerInfo c
+        -> a
+        -> IO b
+
 pipeDbConnection accountsCache si errNum = do
     (updatedCache, newErrNum) <-
         Exception.handle (\(e :: Exception.IOException) -> warningM "Database" (show e) >> return (accountsCache, errNum + 1)) $ do
@@ -100,6 +106,7 @@ pipeDbConnection accountsCache si errNum = do
             hSetBuffering hOut LineBuffering
 
             B.hPutStrLn hIn $ dbHost si
+            B.hPutStrLn hIn $ dbName si
             B.hPutStrLn hIn $ dbLogin si
             B.hPutStrLn hIn $ dbPassword si
             (c, r) <- pipeDbConnectionLoop (dbQueries si) (coreChan si) hIn hOut accountsCache 0
@@ -109,6 +116,7 @@ pipeDbConnection accountsCache si errNum = do
     threadDelay (3000000)
     pipeDbConnection updatedCache si newErrNum
 
+dbConnectionLoop :: forall c b. ServerInfo c -> IO b
 dbConnectionLoop si =
         if (not . B.null $ dbHost si) then
             pipeDbConnection Map.empty si 0

@@ -8,11 +8,6 @@ import Control.Concurrent.Chan
 import qualified Control.Exception as E
 import System.Log.Logger
 import System.Process
-import Data.TConfig
-import Data.Maybe
-#if defined(OFFICIAL_SERVER)
-import Control.Monad
-#endif
 -----------------------------------
 import Opts
 import CoreTypes

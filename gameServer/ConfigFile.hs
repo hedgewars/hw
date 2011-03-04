@@ -11,6 +11,7 @@ readServerConfig serverInfo' = do
     cfg <- readConfig "hedgewars-server.ini"
     let si = serverInfo'{
         dbHost = value "dbHost" cfg
+        , dbName = value "dbName" cfg
         , dbLogin = value "dbLogin" cfg
         , dbPassword = value "dbPassword" cfg
         , serverConfig = Just cfg
