@@ -44,7 +44,7 @@ acceptLoop servSock chan = forever $
                     False
                     False
                     Nothing
-                    undefined
+                    0
                     )
 
         writeChan chan $ Accept newClient

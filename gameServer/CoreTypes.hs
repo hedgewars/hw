@@ -96,7 +96,7 @@ instance Show RoomInfo where
 newRoom :: RoomInfo
 newRoom =
     RoomInfo
-        undefined
+        (error "No room master defined")
         ""
         ""
         0
