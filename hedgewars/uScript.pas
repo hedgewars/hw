@@ -61,6 +61,7 @@ uses LuaPas in 'LuaPas.pas',
     uCollisions,
     uRenderUtils,
     uTextures,
+    uLandGraphics,
     SDLh; 
 
 var luaState : Plua_State;
@@ -1272,6 +1273,18 @@ begin
         end;
     lc_sethoghat:= 0;
 end;
+
+function lc_placegirder(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 3 then
+        LuaError('Lua: Wrong number of parameters passed to PlaceGirder!')
+    else
+        TryPlaceOnLand(
+            lua_tointeger(L, 1) - SpritesData[sprAmGirder].Width div 2,
+            lua_tointeger(L, 2) - SpritesData[sprAmGirder].Height div 2,
+            sprAmGirder, lua_tointeger(L, 3), true, false);
+    lc_placegirder:= 0
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -1691,6 +1704,7 @@ lua_register(luaState, 'GetDataPath', @lc_getdatapath);
 lua_register(luaState, 'MapHasBorder', @lc_maphasborder);
 lua_register(luaState, 'GetHogHat', @lc_gethoghat);
 lua_register(luaState, 'SetHogHat', @lc_sethoghat);
+lua_register(luaState, 'PlaceGirder', @lc_placegirder);
 
 
 ScriptClearStack; // just to be sure stack is empty
