@@ -43,7 +43,7 @@ acceptLoop servSock chan = forever $
                     False
                     False
                     False
-                    undefined
+                    Nothing
                     undefined
                     )
 

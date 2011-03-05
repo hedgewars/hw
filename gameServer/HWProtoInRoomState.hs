@@ -64,7 +64,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 [Warning "restricted"]
             else
                 [ModifyRoom (\r -> r{teams = teams r ++ [newTeam ci clNick r]}),
-                ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = color}),
+                ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = Just color}),
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
                 AnswerClients othChans $ teamToNet $ newTeam ci clNick rm,
                 AnswerClients othChans ["TEAM_COLOR", tName, color]
@@ -99,7 +99,7 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
                 ModifyClient
                     (\c -> c{
                         teamsInGame = teamsInGame c - 1,
-                        clientClan = if teamsInGame c == 1 then undefined else anotherTeamClan ci r
+                            clientClan = if teamsInGame c == 1 then Nothing else Just $ anotherTeamClan ci r
                         })
                 ]
     where
@@ -148,7 +148,7 @@ handleCmd_inRoom ["TEAM_COLOR", teamName, newColor] = do
         else
             [ModifyRoom $ modifyTeam team{teamcolor = newColor},
             AnswerClients others ["TEAM_COLOR", teamName, newColor],
-            ModifyClient2 (teamownerId team) (\c -> c{clientClan = newColor})]
+            ModifyClient2 (teamownerId team) (\c -> c{clientClan = Just newColor})]
     where
         findTeam = find (\t -> teamName == teamname t) . teams
 

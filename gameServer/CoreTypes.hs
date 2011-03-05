@@ -34,7 +34,7 @@ data ClientInfo =
         isMaster :: Bool,
         isReady :: !Bool,
         isAdministrator :: Bool,
-        clientClan :: B.ByteString,
+        clientClan :: Maybe B.ByteString,
         teamsInGame :: Word
     }
 

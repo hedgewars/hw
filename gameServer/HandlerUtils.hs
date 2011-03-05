@@ -34,11 +34,8 @@ roomSameClanChans = do
     let ri = clientRoom rnc ci
     let otherRoomClients = map (client rnc) . filter (/= ci) $ roomClients rnc ri
     let cl = rnc `client` ci
-    let thisClan = clientClan cl
-    let sameClanClients = Prelude.filter (\c -> teamsInGame cl > 0 && clientClan c == thisClan) otherRoomClients
-    let spectators = Prelude.filter (\c -> teamsInGame c == 0) otherRoomClients
-    let sameClanOrSpec = if teamsInGame cl > 0 then sameClanClients else spectators
-    return $ map sendChan sameClanOrSpec
+    let sameClanClients = Prelude.filter (\c -> clientClan c == clientClan cl) otherRoomClients
+    return $ map sendChan sameClanClients
 
 roomClientsChans :: Reader (ClientIndex, IRnC) [ClientChan]
 roomClientsChans = do
