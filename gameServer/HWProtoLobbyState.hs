@@ -108,10 +108,9 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
 
         answerFullConfig cl mpr pr
             | clientProto cl < 38 = map (toAnswer cl) $
-                 (map (\(a, b) -> (a, [b])) $ Map.toList mpr)
+                 (reverse . map (\(a, b) -> (a, [b])) $ Map.toList mpr)
                  ++ (("SCHEME", pr Map.! "SCHEME")
-                 ++ (("SEED", pr Map.! "SEED")
-                 : (filter (\(p, _) -> p /= "SCHEME" && p /= "SEED") $ Map.toList pr))
+                 : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr))
 
             | otherwise = map (toAnswer cl) $
                  ("FULLMAPCONFIG", Map.elems mpr)
