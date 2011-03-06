@@ -40,7 +40,7 @@ writeServerConfig ServerInfo{
     serverConfig = Just cfg}
         = do
     let newCfg = foldl (\c (n, v) -> repConfig n (B.unpack v) c) cfg entries
-    writeConfig cfgFileName newCfg
+    writeConfig cfgFileName (repConfig "sv_latestProto" (show ver) cfg)
     where
         entries = [
             ("dbHost", dh)
