@@ -23,14 +23,14 @@ timerLoop :: Int -> Chan CoreMessage -> IO ()
 timerLoop tick messagesChan = threadDelay 30000000 >> writeChan messagesChan (TimerAction tick) >> timerLoop (tick + 1) messagesChan
 
 
-reactCmd :: [B.ByteString] -> StateT (ServerState c) IO ()
+reactCmd :: [B.ByteString] -> StateT ServerState IO ()
 reactCmd cmd = do
     (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
     actions <- liftIO $ withRoomsAndClients rnc (\irnc -> runReader (handleCmd cmd) (ci, irnc))
     forM_ (actions `deepseq` actions) processAction
 
-mainLoop :: StateT (ServerState c) IO ()
+mainLoop :: StateT ServerState IO ()
 mainLoop = forever $ do
     -- get >>= \s -> put $! s
 
@@ -68,7 +68,7 @@ mainLoop = forever $ do
                     PingAll : [StatsAction | even tick]
 
 
-startServer :: ServerInfo c -> Socket -> IO ()
+startServer :: ServerInfo -> Socket -> IO ()
 startServer si serverSocket = do
     putStrLn $ "Listening on port " ++ show (listenPort si)
 

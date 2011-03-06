@@ -7,8 +7,10 @@ import qualified Data.ByteString.Char8 as B
 -------------------
 import CoreTypes
 
+cfgFileName = "hedgewars-server.ini"
+
 readServerConfig serverInfo' = do
-    cfg <- readConfig "hedgewars-server.ini"
+    cfg <- readConfig cfgFileName
     let si = serverInfo'{
         dbHost = value "dbHost" cfg
         , dbName = value "dbName" cfg
@@ -25,5 +27,26 @@ readServerConfig serverInfo' = do
         fromJust2 n Nothing = error $ "Missing config entry " ++ n
         fromJust2 _ (Just a) = a
 
-writeServerConfig :: ServerInfo c -> IO ()
-writeServerConfig = undefined
+
+writeServerConfig ServerInfo{serverConfig = Nothing} = return ()
+writeServerConfig ServerInfo{
+    dbHost = dh,
+    dbName = dn,
+    dbLogin = dl,
+    dbPassword = dp,
+    serverMessage = sm,
+    serverMessageForOldVersions = smo,
+    latestReleaseVersion = ver,
+    serverConfig = Just cfg}
+        = do
+    let newCfg = foldl (\c (n, v) -> repConfig n (B.unpack v) c) cfg entries
+    writeConfig cfgFileName newCfg
+    where
+        entries = [
+            ("dbHost", dh)
+            , ("dbName", dn)
+            , ("dbLogin", dl)
+            , ("dbPassword", dp)
+            , ("sv_message", sm)
+            , ("sv_messageOld", smo)
+            ]

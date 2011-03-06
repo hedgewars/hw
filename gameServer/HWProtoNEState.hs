@@ -11,7 +11,7 @@ import Actions
 import Utils
 import RoomsAndClients
 
-handleCmd_NotEntered :: CmdHandler c
+handleCmd_NotEntered :: CmdHandler
 
 handleCmd_NotEntered ["NICK", newNick] = do
     (ci, irnc) <- ask

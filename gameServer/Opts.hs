@@ -11,7 +11,7 @@ import Data.Maybe ( fromMaybe )
 import CoreTypes
 import Utils
 
-options :: [OptDescr (ServerInfo c -> ServerInfo c)]
+options :: [OptDescr (ServerInfo -> ServerInfo)]
 options = [
     Option "p" ["port"] (ReqArg readListenPort "PORT") "listen on PORT",
     Option "d" ["dedicated"] (ReqArg readDedicated "BOOL") "start as dedicated (True or False)"
@@ -19,7 +19,7 @@ options = [
 
 readListenPort
     , readDedicated
-    :: String -> ServerInfo c -> ServerInfo c
+    :: String -> ServerInfo -> ServerInfo
 
 
 readListenPort str opts = opts{listenPort = readPort}
@@ -30,7 +30,7 @@ readDedicated str opts = opts{isDedicated = readDed}
     where
         readDed = fromMaybe True (maybeRead str :: Maybe Bool)
 
-getOpts :: ServerInfo c -> IO (ServerInfo c)
+getOpts :: ServerInfo -> IO ServerInfo
 getOpts opts = do
     args <- getArgs
     case getOpt Permute options args of

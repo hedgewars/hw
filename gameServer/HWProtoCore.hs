@@ -14,7 +14,7 @@ import HandlerUtils
 import RoomsAndClients
 import Utils
 
-handleCmd, handleCmd_loggedin :: CmdHandler c
+handleCmd, handleCmd_loggedin :: CmdHandler
 
 
 handleCmd ["PING"] = answerClient ["PONG"]

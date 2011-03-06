@@ -15,7 +15,7 @@ import Utils
 import HandlerUtils
 import RoomsAndClients
 
-handleCmd_inRoom :: CmdHandler c
+handleCmd_inRoom :: CmdHandler
 
 handleCmd_inRoom ["CHAT", msg] = do
     n <- clientNick
@@ -99,8 +99,8 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
                 ModifyClient
                     (\c -> c{
                         teamsInGame = teamsInGame c - 1,
-                            clientClan = if teamsInGame c == 1 then Nothing else Just $ anotherTeamClan ci r
-                        })
+                        clientClan = if teamsInGame c == 1 then Nothing else Just $ anotherTeamClan ci r
+                    })
                 ]
     where
         anotherTeamClan ci = teamcolor . fromJust . find (\t -> teamownerId t == ci) . teams

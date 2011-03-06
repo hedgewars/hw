@@ -25,7 +25,7 @@ setupLoggers =
         (setLevel INFO)
 
 
-server :: ServerInfo c -> IO ()
+server :: ServerInfo -> IO ()
 server si = do
     proto <- getProtocolNumber "tcp"
     E.bracket

@@ -48,7 +48,7 @@ thisClientChans = do
     (ci, rnc) <- ask
     return [sendChan (rnc `client` ci)]
 
-answerClient :: [B.ByteString] -> Reader (ClientIndex, IRnC) [Action c]
+answerClient :: [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
 answerClient msg = liftM ((: []) . flip AnswerClients msg) thisClientChans
 
 allRoomInfos :: Reader (a, IRnC) [RoomInfo]

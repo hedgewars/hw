@@ -27,7 +27,7 @@ import Utils
 localAddressList :: [B.ByteString]
 localAddressList = ["127.0.0.1", "0:0:0:0:0:0:0:1", "0:0:0:0:0:ffff:7f00:1"]
 
-fakeDbConnection :: forall b c. ServerInfo c -> IO b
+fakeDbConnection :: forall b. ServerInfo -> IO b
 fakeDbConnection si = forever $ do
     q <- readChan $ dbQueries si
     case q of
@@ -38,7 +38,7 @@ fakeDbConnection si = forever $ do
 
 --dbConnectionLoop :: forall b. (ServerInfo c) -> IO b
 #if defined(OFFICIAL_SERVER)
-flushRequests :: (ServerInfo c) -> IO ()
+flushRequests :: ServerInfo -> IO ()
 flushRequests si = do
     e <- isEmptyChan $ dbQueries si
     unless e $ do
@@ -89,10 +89,10 @@ pipeDbConnectionLoop queries cChan hIn hOut accountsCache req =
         maybeException (Just a) = return a
         maybeException Nothing = ioError (userError "Can't read")
 
-pipeDbConnection :: forall a c b.
+pipeDbConnection :: forall a b.
         (Num a, Ord a) =>
         Map.Map ByteString (UTCTime, AccountInfo)
-        -> ServerInfo c
+        -> ServerInfo
         -> a
         -> IO b
 
@@ -116,7 +116,7 @@ pipeDbConnection accountsCache si errNum = do
     threadDelay (3000000)
     pipeDbConnection updatedCache si newErrNum
 
-dbConnectionLoop :: forall c b. ServerInfo c -> IO b
+dbConnectionLoop :: forall b. ServerInfo -> IO b
 dbConnectionLoop si =
         if (not . B.null $ dbHost si) then
             pipeDbConnection Map.empty si 0
@@ -126,6 +126,6 @@ dbConnectionLoop si =
 dbConnectionLoop = fakeDbConnection
 #endif
 
-startDBConnection :: (ServerInfo c) -> IO ()
+startDBConnection :: ServerInfo -> IO ()
 startDBConnection serverInfo =
     forkIO (dbConnectionLoop serverInfo) >> return ()
