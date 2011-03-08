@@ -321,6 +321,9 @@ with Gear^,
                                   end;
                   end;
 
+        // Clear FollowGear if using on a rope/parachute/saucer etc so focus stays with the hog's movement
+        if altUse then FollowGear:= nil;
+
         uStats.AmmoUsed(CurAmmoType);
 
         if not (SpeechText = '') then
