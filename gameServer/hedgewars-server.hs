@@ -12,7 +12,9 @@ import System.Process
 import Opts
 import CoreTypes
 import ServerCore
+#if defined(OFFICIAL_SERVER)
 import ConfigFile
+#endif
 
 #if !defined(mingw32_HOST_OS)
 import System.Posix

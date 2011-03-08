@@ -315,10 +315,21 @@ processAction CheckRegistered = do
     (Just ci) <- gets clientIndex
     n <- client's nick
     h <- client's host
+    p <- client's clientProto
     uid <- client's clUID
-    db <- gets (dbQueries . serverInfo)
-    io $ writeChan db $ CheckAccount ci (hashUnique uid) n h
-    return ()
+    haveSameNick <- liftM (not . null . tail . filter (\c -> nick c == n)) allClientsS
+    if haveSameNick then
+        if p < 38 then
+            mapM_ processAction [ByeClient "Nickname is already in use", removeNick]
+            else
+            mapM_ processAction [NoticeMessage NickAlreadyInUse, removeNick]
+        else
+        do
+        db <- gets (dbQueries . serverInfo)
+        io $ writeChan db $ CheckAccount ci (hashUnique uid) n h
+        return ()
+   where
+       removeNick = ModifyClient (\c -> c{nick = ""})
 
 
 processAction ClearAccountsCache = do

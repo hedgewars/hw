@@ -1,8 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module HWProtoNEState where
 
-import Data.Maybe
-import Data.List
 import Control.Monad.Reader
 import qualified Data.ByteString.Char8 as B
 --------------------------------------
@@ -18,16 +16,12 @@ handleCmd_NotEntered ["NICK", newNick] = do
     let cl = irnc `client` ci
     if not . B.null $ nick cl then return [ProtocolError "Nickname already chosen"]
         else
-        if haveSameNick irnc then if clientProto cl < 38 then return [ByeClient "Nickname is already in use"] else return [NoticeMessage NickAlreadyInUse]
+        if illegalName newNick then return [ByeClient "Illegal nickname"]
             else
-            if illegalName newNick then return [ByeClient "Illegal nickname"]
-                else
-                return $
-                    ModifyClient (\c -> c{nick = newNick}) :
-                    AnswerClients [sendChan cl] ["NICK", newNick] :
-                    [CheckRegistered | clientProto cl /= 0]
-    where
-    haveSameNick irnc = isJust . find (== newNick) . map (nick . client irnc) $ allClients irnc
+            return $
+                ModifyClient (\c -> c{nick = newNick}) :
+                AnswerClients [sendChan cl] ["NICK", newNick] :
+                [CheckRegistered | clientProto cl /= 0]
 
 handleCmd_NotEntered ["PROTO", protoNum] = do
     (ci, irnc) <- ask
