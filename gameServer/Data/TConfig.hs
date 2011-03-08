@@ -56,7 +56,7 @@ repConfig k rv conf = let f _ = Just rv
 
 -- |Reads a file and parses to a Map String String.
 readConfig :: FilePath -> IO Conf
-readConfig path = liftM (M.fromList . map ((\(a, b) -> (filter (not . isSpace) a, dropWhile isSpace b)) . break (== '=')) . filter (not . null) . lines) $ readFile path
+readConfig path = liftM (M.fromList . map ((\(a, b) -> (filter (not . isSpace) a, dropWhile isSpace $ tail b)) . break (== '=')) . filter (not . null) . lines) $ readFile path
 
 -- |Parses a parsed configuration back to a file.
 writeConfig :: FilePath -> Conf -> IO ()
