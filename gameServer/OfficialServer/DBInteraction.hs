@@ -89,12 +89,11 @@ pipeDbConnectionLoop queries cChan hIn hOut accountsCache req =
         maybeException (Just a) = return a
         maybeException Nothing = ioError (userError "Can't read")
 
-pipeDbConnection :: forall a b.
-        (Num a, Ord a) =>
+pipeDbConnection ::
         Map.Map ByteString (UTCTime, AccountInfo)
         -> ServerInfo
-        -> a
-        -> IO b
+        -> Int
+        -> IO ()
 
 pipeDbConnection accountsCache si errNum = do
     (updatedCache, newErrNum) <-
@@ -116,7 +115,7 @@ pipeDbConnection accountsCache si errNum = do
     threadDelay (3000000)
     pipeDbConnection updatedCache si newErrNum
 
-dbConnectionLoop :: forall b. ServerInfo -> IO b
+dbConnectionLoop :: ServerInfo -> IO ()
 dbConnectionLoop si =
         if (not . B.null $ dbHost si) then
             pipeDbConnection Map.empty si 0

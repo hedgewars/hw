@@ -7,8 +7,11 @@ import qualified Data.ByteString.Char8 as B
 -------------------
 import CoreTypes
 
+cfgFileName :: String
 cfgFileName = "hedgewars-server.ini"
 
+
+readServerConfig :: ServerInfo -> IO ServerInfo
 readServerConfig serverInfo' = do
     cfg <- readConfig cfgFileName
     let si = serverInfo'{
@@ -28,6 +31,7 @@ readServerConfig serverInfo' = do
         fromJust2 _ (Just a) = a
 
 
+writeServerConfig :: ServerInfo -> IO ()
 writeServerConfig ServerInfo{serverConfig = Nothing} = return ()
 writeServerConfig ServerInfo{
     dbHost = dh,
@@ -40,7 +44,7 @@ writeServerConfig ServerInfo{
     serverConfig = Just cfg}
         = do
     let newCfg = foldl (\c (n, v) -> repConfig n (B.unpack v) c) cfg entries
-    writeConfig cfgFileName (repConfig "sv_latestProto" (show ver) cfg)
+    writeConfig cfgFileName (repConfig "sv_latestProto" (show ver) newCfg)
     where
         entries = [
             ("dbHost", dh)
