@@ -36,7 +36,8 @@ fakeDbConnection si = forever $ do
         ClearCache -> return ()
         SendStats {} -> return ()
 
---dbConnectionLoop :: forall b. (ServerInfo c) -> IO b
+dbConnectionLoop :: ServerInfo -> IO ()
+
 #if defined(OFFICIAL_SERVER)
 flushRequests :: ServerInfo -> IO ()
 flushRequests si = do
@@ -115,7 +116,6 @@ pipeDbConnection accountsCache si errNum = do
     threadDelay (3000000)
     pipeDbConnection updatedCache si newErrNum
 
-dbConnectionLoop :: ServerInfo -> IO ()
 dbConnectionLoop si =
         if (not . B.null $ dbHost si) then
             pipeDbConnection Map.empty si 0

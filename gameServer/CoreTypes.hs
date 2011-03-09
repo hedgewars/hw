@@ -205,3 +205,8 @@ data ShutdownException =
      deriving (Show, Typeable)
 
 instance Exception ShutdownException
+
+data ShutdownThreadException = ShutdownThreadException
+     deriving (Show, Typeable)
+
+instance Exception ShutdownThreadException
