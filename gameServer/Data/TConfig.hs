@@ -39,12 +39,12 @@ addKey :: Key -> Value -> Conf -> Conf
 addKey = M.insert
 
 -- |Utility function.
--- Removes a key and it's value from the configuration.
+-- Removes a key and its value from the configuration.
 remKey :: Key -> Conf -> Conf
 remKey = M.delete
 
 -- |Utility function. Searches a configuration for a
--- key, and returns it's value.
+-- key, and returns its value.
 getValue :: Key -> Conf -> Maybe Value
 getValue = M.lookup
 
