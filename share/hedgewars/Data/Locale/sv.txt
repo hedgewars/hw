@@ -475,7 +475,7 @@
 04:09=Har du svårt att sikta? Använd den här pistolen|till att attackera med upp till fyra skott.|Attack: Skjut (flera gånger)
 04:10=Brutalt våld är alltid en möjlighet. Släpp ner den|här klassiska dynamiten bredvid fienden och fly.|Attack: Släpp ner dynamit på marken bredvid
 04:11=Bli av med fientliga igelkottar genom att slå dem|över kartans kanter eller ner i vattnet. Eller kanske|slå iväg några minor till vännerna?|Attack: Slå till allt framför dig
-04:12=Gå nära och var intim för att släppa lös kraften|från den här nästan dödliga kampsportstekniken.|Attack: Utför den Flammande näven
+04:12=Gå nära och var intim för att släppa lös kraften|från den här nästan dödliga kampsportstekniken.|Attack: Utför Shoryuken
 04:13=UNUSED
 04:14=Höjdrädd? Då borde du greppa tag i en fallskärm.|Den fälls ut när du faller för långt och|igelkotten tar ingen fallskada.|Attack: Utveckla fallskärmen|Långhopp: Släpp granater eller liknande vapen
 04:15=Kalla på ett flygplan som attackerar fienden med|ett bombnedslag.|Vänster/Höger: Bestäm attackriktning|Markör: Välj målområde
@@ -494,7 +494,7 @@
 04:28=Strax efter att den skjutits iväg kommer den här|raketen att börja borra igenom solid mark och|explodera när tiden tar slut eller den kommer ut|på andra sidan.|Attack: Håll ner för att skjuta med mer kraft
 04:29=Den här är inget för småbarn! Bollgeväret skjuter|massvis av små färgglada bollar fyllda med|sprängämnen.|Attack: Skjut med full kraft|Upp/Ner: Fortsätt att sikta
 04:30=Kalla på ett flygplan som utför ett kraftfullt|napalmanfall. Med bra precision kan den här|attacken utplåna stora delar av landskapet|inklusive otursamma igelkottar som är där.|Vänster/Höger: Bestäm attackriktning|Markör: Välj målområde
-04:31=Det radiostyrda flygplanet är det idealiska vapnet|för att samla lådor eller attackera igelkottar på|avstånd. Antingen krascha in i fiender eller släpp|några bomber på dem först.|Attack: Skicka iväg planet eller släpp bomber|Långhopp: Låt valkyriorna rida till strid|Upp/Ner: Styr planet
+04:31=Det radiostyrda flygplanet är det idealiska vapnet|för att samla lådor eller attackera igelkottar på|avstånd. Antingen krascha in i fiender eller släpp|några bomber på dem först.|Attack: Skicka iväg planet eller släpp bomber|Långhopp: Låt valkyriorna rida till strid|Vänster/Höger: Styr planet
 04:32=Låg gravitation är effektivare än vilken bantning|som helst! Hoppa högra och längre sträckor eller|låt fienden flyga längre.|Attack: Aktivera
 04:33=Ibland behöver man bara den där lilla extra|kraften för att göra aningen mer skada.|Attack: Aktivera
 04:34=Can't touch me!|Attack: Aktivera

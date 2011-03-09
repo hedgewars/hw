@@ -455,7 +455,7 @@
 04:09=Not sure about your aiming? Use the Desert|Eagle to attack using up to four shots.|Attack: Shoot (multiple times)
 04:10=Brute force is always an option. Drop this classic|explosive next to your enemies and retreat.|Attack: Drop dynamite next to your feet
 04:11=Get rid of enemy hogs by batting them over|the map borders or into water. Or how about|knocking some mines to your friends?|Attack: Bat everything in front of you
-04:12=Get close and personal to unleash the power of|this almost deadly martial arts technique.|Attack: Perform the Fire Punch
+04:12=Get close and personal to unleash the power of|this almost deadly martial arts technique.|Attack: Perform the amazing Shoryuken.
 04:13=UNUSED
 04:14=Fear of heights? Better grab a parachute.|It will unfold once|you fall too far and|save your hog from taking fall damage.|Attack: Unfold the parachute|Long Jump: Drop grenades or similar weapons
 04:15=Call in an airplane to attack your enemies|using a bombing run.|Left/Right: Determine attack direction|Cursor: Select target region
@@ -474,7 +474,7 @@
 04:28=Short time after launching this rocket, it will|start drilling through solid ground and explode|once its fuse is triggered or it resurfaces again.|Attack: Hold to shoot with more power
 04:29=This is nothing for small kids! The ball gun fires|tons of small colored balls filled with explosives.|Attack: Shoot at full power|Up/Down: Continue aiming
 04:30=Call in an airplane to launch a powerful napalm|strike. With proper aiming this attack can eradicate|huge parts of landscape including unlucky hogs|sitting there.|Left/Right: Determine attack direction|Cursor: Select target region
-04:31=The RC plane is the ideal weapon to collect crates or|attack far away hogs. Either steer it into enemies or|drop some bombs first.|Attack: Launch the plane or drop bombs|Long Jump: Let the valkyries ride into battle|Up/Down: Steer the plane
+04:31=The RC plane is the ideal weapon to collect crates or|attack far away hogs. Either steer it into enemies or|drop some bombs first.|Attack: Launch the plane or drop bombs|Long Jump: Let the valkyries ride into battle|Left/Right: Steer the plane
 04:32=Low gravity is more effective than any diet! Jump|higher and over greater distances or let your enemies|fly even further.|Attack: Activate
 04:33=Sometimes you just need that little extra boost to|deal some more damage.|Attack: Activate
 04:34=Can't touch me!|Attack: Activate
