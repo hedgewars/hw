@@ -51,6 +51,8 @@ clientRecvLoop s chan ci =
         msg <- (listenLoop s chan ci >> return "Connection closed") `catch` (return . B.pack . show)
         clientOff msg
     `Exception.finally`
+    do
+        clientOff "Connection closed ()"
         remove
     where
         clientOff msg = writeChan chan $ ClientMessage (ci, ["QUIT", msg])

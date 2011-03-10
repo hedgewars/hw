@@ -49,8 +49,7 @@ mainLoop = forever $ do
                 put $! as{clientIndex = Just ci}
                 reactCmd cmd
 
-        Remove ci -> do
-            liftIO $ debugM "Clients"  $ "DeleteClient: " ++ show ci
+        Remove ci ->
             processAction (DeleteClient ci)
 
         ClientAccountInfo ci uid info -> do

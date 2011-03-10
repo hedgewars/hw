@@ -138,6 +138,8 @@ processAction (ByeClient msg) = do
     put $! s{removedClients = ci `Set.insert` removedClients s}
 
 processAction (DeleteClient ci) = do
+    io $ debugM "Clients"  $ "DeleteClient: " ++ show ci
+
     rnc <- gets roomsClients
     io $ removeClient rnc ci
 
