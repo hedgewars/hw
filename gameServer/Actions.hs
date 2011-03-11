@@ -206,11 +206,11 @@ processAction (MoveToLobby msg) = do
         mapM_ processAction [AnswerClients chans ["LEFT", clNick, msg], RemoveClientTeams ci]
 
     io $ do
-            modifyRoom rnc (\r -> r{
-                    playersIn = playersIn r - 1,
-                    readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
-                    }) ri
-            moveClientToLobby rnc ci
+        modifyRoom rnc (\r -> r{
+                playersIn = playersIn r - 1,
+                readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
+                }) ri
+        moveClientToLobby rnc ci
 
 processAction ChangeMaster = do
     ri <- clientRoomA
@@ -282,7 +282,7 @@ processAction (RemoveTeam teamName) = do
     ri <- clientRoomA
     inGame <- io $ room'sM rnc gameinprogress ri
     chans <- othersChans
-    if inGame then
+    if not $ inGame then
             mapM_ processAction [
                 AnswerClients chans ["REMOVE_TEAM", teamName],
                 ModifyRoom (\r -> r{teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r})
