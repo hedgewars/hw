@@ -46,13 +46,9 @@ listenLoop sock chan ci = recieveWithBufferLoop B.empty
         sendPacket packet = writeChan chan $ ClientMessage (ci, packet)
 
 clientRecvLoop :: Socket -> Chan CoreMessage -> ClientIndex -> IO ()
-clientRecvLoop s chan ci =
-    do
-        msg <- (listenLoop s chan ci >> return "Connection closed") `catch` (return . B.pack . show)
-        clientOff msg
+clientRecvLoop s chan ci = Exception.block $
+        ((Exception.unblock $ listenLoop s chan ci >> return "Connection closed") `catch` (return . B.pack . show) >>= clientOff)
     `Exception.finally`
-    do
-        clientOff "Connection closed ()"
         remove
     where
         clientOff msg = writeChan chan $ ClientMessage (ci, ["QUIT", msg])
@@ -64,19 +60,17 @@ clientSendLoop :: Socket -> ThreadId -> Chan CoreMessage -> Chan [B.ByteString] 
 clientSendLoop s tId cChan chan ci = do
     answer <- readChan chan
     Exception.handle
-        (\(e :: Exception.IOException) -> unless (isQuit answer) $ sendQuit e) $
+        (\(e :: Exception.IOException) -> unless (isQuit answer) . killReciever $ show e) $
             sendAll s $ B.unlines answer `B.append` B.singleton '\n'
 
     if isQuit answer then
         do
         Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on sClose") $ sClose s
-        Exception.throwTo tId ShutdownThreadException
+        killReciever "Connection closed"
         else
         clientSendLoop s tId cChan chan ci
 
     where
-        sendQuit e = do
-            print e
-            writeChan cChan $ ClientMessage (ci, ["QUIT", B.pack $ show e])
+        killReciever = Exception.throwTo tId . ShutdownThreadException
         isQuit ("BYE":_) = True
         isQuit _ = False
