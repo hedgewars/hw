@@ -210,5 +210,5 @@ data ShutdownThreadException = ShutdownThreadException String
      deriving Typeable
 
 instance Show ShutdownThreadException where
-    show (ShutdownThreadException s) = "kill: " ++ s
+    show (ShutdownThreadException s) = s
 instance Exception ShutdownThreadException

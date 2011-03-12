@@ -66,11 +66,14 @@ clientSendLoop s tId cChan chan ci = do
     if isQuit answer then
         do
         Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on sClose") $ sClose s
-        killReciever "Connection closed"
+        killReciever . B.unpack $ quitMessage answer
         else
         clientSendLoop s tId cChan chan ci
 
     where
         killReciever = Exception.throwTo tId . ShutdownThreadException
+        quitMessage ["BYE"] = "bye"
+        quitMessage ("BYE":msg:_) = msg
+        quitMessage _ = error "quitMessage"
         isQuit ("BYE":_) = True
         isQuit _ = False
