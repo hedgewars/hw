@@ -93,10 +93,6 @@ const
 /////////////////////  CONSTANT DEFINITIONS /////////////////////
 /////////////////////////////////////////////////////////////////
 
-    SDL_SWSURFACE     = $00000000;
-    SDL_HWSURFACE     = $00000001;
-    SDL_SRCALPHA      = $00010000;
-
     SDL_INIT_TIMER    = $00000001;
     SDL_INIT_AUDIO    = $00000010;
     SDL_INIT_VIDEO    = $00000020;
@@ -114,75 +110,113 @@ const
     SDL_BUTTON_WHEELUP   = 4;
     SDL_BUTTON_WHEELDOWN = 5;
 
-
-{*begin SDL_Event binding*}
-
 {$IFDEF SDL13}
-    SDL_FIRSTEVENT = 0;
-    SDL_QUITEV = $100;
-    SDL_WINDOWEVENT = $200;
-    SDL_SYSWMEVENT = $201;
-    SDL_KEYDOWN = $300;
-    SDL_KEYUP = $301;
-    SDL_TEXTEDITING = $302;
-    SDL_TEXTINPUT = $303;
-    SDL_MOUSEMOTION  = $400;
+    // SDL_Event types
+    SDL_FIRSTEVENT      = 0;
+    SDL_QUITEV          = $100;
+    SDL_WINDOWEVENT     = $200;
+    SDL_SYSWMEVENT      = $201;
+    SDL_KEYDOWN         = $300;
+    SDL_KEYUP           = $301;
+    SDL_TEXTEDITING     = $302;
+    SDL_TEXTINPUT       = $303;
+    SDL_MOUSEMOTION     = $400;
     SDL_MOUSEBUTTONDOWN = $401;
-    SDL_MOUSEBUTTONUP = $402;
-    SDL_MOUSEWHEEL = $403;
-    SDL_PROXIMITYIN = $500;
-    SDL_PROXIMITYOUT = $501;
-    SDL_JOYAXISMOTION = $600;
-    SDL_JOYBALLMOTION = $601;
-    SDL_JOYHATMOTION = $602;
-    SDL_JOYBUTTONDOWN = $603;
-    SDL_JOYBUTTONUP = $604;
-    SDL_USEREVENT = $8000;
-    SDL_LASTEVENT = $FFFF;
-{$ELSE}
-    SDL_NOEVENT = 0;
-    SDL_ACTIVEEVENT = 1;
-    SDL_KEYDOWN = 2;
-    SDL_KEYUP = 3;
-    SDL_MOUSEMOTION  = 4;
-    SDL_MOUSEBUTTONDOWN = 5;
-    SDL_MOUSEBUTTONUP   = 6;
-    SDL_JOYAXISMOTION = 7;
-    SDL_JOYBALLMOTION = 8;
-    SDL_JOYHATMOTION = 9;
-    SDL_JOYBUTTONDOWN = 10;
-    SDL_JOYBUTTONUP = 11;
-    SDL_QUITEV = 12;
-    SDL_VIDEORESIZE = 16; // TODO: outdated? no longer in SDL 1.3?
-{$ENDIF}
-{*end SDL_Event binding*}
+    SDL_MOUSEBUTTONUP   = $402;
+    SDL_MOUSEWHEEL      = $403;
+    SDL_PROXIMITYIN     = $500;
+    SDL_PROXIMITYOUT    = $501;
+    SDL_JOYAXISMOTION   = $600;
+    SDL_JOYBALLMOTION   = $601;
+    SDL_JOYHATMOTION    = $602;
+    SDL_JOYBUTTONDOWN   = $603;
+    SDL_JOYBUTTONUP     = $604;
+    SDL_USEREVENT       = $8000;
+    SDL_LASTEVENT       = $FFFF;
 
-{$IFDEF SDL13}
-    SDL_ASYNCBLIT   = $08000000;
-    SDL_ANYFORMAT   = $10000000;
+    // SDL_Surface flags
+    SDL_SWSURFACE   = $00000000;  //*< Not used */
+    SDL_PREALLOC    = $00000001;  //*< Surface uses preallocated memory */
+    SDL_RLEACCEL    = $00000002;  //*< Surface is RLE encoded */
+    SDL_DONTFREE    = $00000004;  //*< Surface is referenced internally */
+    SDL_SRCALPHA    = $00010000;
+    SDL_SRCCOLORKEY = $00020000;
+    SDL_ANYFORMAT   = $00100000;
     SDL_HWPALETTE   = $00200000;
     SDL_DOUBLEBUF   = $00400000;
     SDL_FULLSCREEN  = $00800000;
-    SDL_HWACCEL     = $08000000;
-    SDL_SRCCOLORKEY = $00020000;
-    SDL_RLEACCEL    = $08000000;
+    SDL_RESIZABLE   = $01000000;
     SDL_NOFRAME     = $02000000;
     SDL_OPENGL      = $04000000;
-    SDL_RESIZABLE   = $01000000;
+    SDL_HWSURFACE   = $08000001;  //*< Not used */
+    SDL_ASYNCBLIT   = $08000000;  //*< Not used */
+    SDL_RLEACCELOK  = $08000000;  //*< Not used */
+    SDL_HWACCEL     = $08000000;  //*< Not used */
+
+    // SDL_WindowFlags (enum)
+    SDL_WINDOW_FULLSCREEN    = $00000001;      //*< fullscreen window, implies borderless */
+    SDL_WINDOW_OPENGL        = $00000002;      //*< window usable with OpenGL context */
+    SDL_WINDOW_SHOWN         = $00000004;      //*< window is visible */
+//  SDL_WINDOW_HIDDEN        = $00000008;      //*< window is not visible */
+    SDL_WINDOW_BORDERLESS    = $00000008;      //*< no window decoration */
+    SDL_WINDOW_RESIZABLE     = $00000010;      //*< window can be resized */
+    SDL_WINDOW_MINIMIZED     = $00000020;      //*< window is minimized */
+    SDL_WINDOW_MAXIMIZED     = $00000040;      //*< window is maximized */
+    SDL_WINDOW_INPUT_GRABBED = $00000100;      //*< window has grabbed input focus */
+    SDL_WINDOW_INPUT_FOCUS   = $00000200;      //*< window has input focus */
+    SDL_WINDOW_MOUSE_FOCUS   = $00000400;      //*< window has mouse focus */
+    SDL_WINDOW_FOREIGN       = $00000800;      //*< window not created by SDL */
+
+    SDL_WINDOWPOS_CENTERED_MASK = $2FFF0000;
+
+    // SDL_WindowEventID (enum)
+    SDL_WINDOWEVENT_NONE         = 0;    //*< Never used
+    SDL_WINDOWEVENT_SHOWN        = 1;    //*< Window has been shown
+    SDL_WINDOWEVENT_HIDDEN       = 2;    //*< Window has been hidden
+    SDL_WINDOWEVENT_EXPOSED      = 3;    //*< Window has been exposed and should be redrawn
+    SDL_WINDOWEVENT_MOVED        = 4;    //*< Window has been moved to data1, data2
+    SDL_WINDOWEVENT_RESIZED      = 5;    //*< Window size changed to data1xdata2
+    SDL_WINDOWEVENT_MINIMIZED    = 6;    //*< Window has been minimized
+    SDL_WINDOWEVENT_MAXIMIZED    = 7;    //*< Window has been maximized
+    SDL_WINDOWEVENT_RESTORED     = 8;    //*< Window has been restored to normal size and position
+    SDL_WINDOWEVENT_ENTER        = 9;    //*< Window has gained mouse focus
+    SDL_WINDOWEVENT_LEAVE        = 10;   //*< Window has lost mouse focus
+    SDL_WINDOWEVENT_FOCUS_GAINED = 11;   //*< Window has gained keyboard focus
+    SDL_WINDOWEVENT_FOCUS_LOST   = 12;   //*< Window has lost keyboard focus
+    SDL_WINDOWEVENT_CLOSE        = 13;   //*< The window manager requests that the window be closed */
 {$ELSE}
+    // SDL_Event types
+    SDL_NOEVENT         = 0;
+    SDL_ACTIVEEVENT     = 1;
+    SDL_KEYDOWN         = 2;
+    SDL_KEYUP           = 3;
+    SDL_MOUSEMOTION     = 4;
+    SDL_MOUSEBUTTONDOWN = 5;
+    SDL_MOUSEBUTTONUP   = 6;
+    SDL_JOYAXISMOTION   = 7;
+    SDL_JOYBALLMOTION   = 8;
+    SDL_JOYHATMOTION    = 9;
+    SDL_JOYBUTTONDOWN   = 10;
+    SDL_JOYBUTTONUP     = 11;
+    SDL_QUITEV          = 12;
+    SDL_VIDEORESIZE     = 16; // TODO: outdated? no longer in SDL 1.3?
+
+    // SDL_Surface flags
+    SDL_SWSURFACE   = $00000000;
+    SDL_HWSURFACE   = $00000001;
+    SDL_OPENGL      = $00000002;
     SDL_ASYNCBLIT   = $00000004;
+    SDL_RESIZABLE   = $00000010;
+    SDL_NOFRAME     = $00000020;
+    SDL_HWACCEL     = $00000100;
+    SDL_SRCCOLORKEY = $00001000;
+    SDL_RLEACCEL    = $00004000;
+    SDL_SRCALPHA    = $00010000;
     SDL_ANYFORMAT   = $00100000;
     SDL_HWPALETTE   = $20000000;
     SDL_DOUBLEBUF   = $40000000;
     SDL_FULLSCREEN  = $80000000;
-    SDL_HWACCEL     = $00000100;
-    SDL_SRCCOLORKEY = $00001000;
-    SDL_RLEACCEL    = $00004000;
-    SDL_NOFRAME     = $00000020;
-    SDL_OPENGL      = $00000002;
-    SDL_RESIZABLE   = $00000010;
 {$ENDIF}
-
 
 {$IFDEF ENDIAN_LITTLE}
     RMask = $000000FF;
@@ -196,43 +230,12 @@ const
     AMask = $000000FF;
 {$ENDIF}
 
-{$IFDEF SDL13}
-    // SDL_WindowFlags (enum)
-    SDL_WINDOW_FULLSCREEN = $00000001;         //*< fullscreen window, implies borderless */
-    SDL_WINDOW_OPENGL = $00000002;             //*< window usable with OpenGL context */
-    SDL_WINDOW_SHOWN = $00000004;              //*< window is visible */
-    SDL_WINDOW_BORDERLESS = $00000008;         //*< no window decoration */
-    SDL_WINDOW_RESIZABLE = $00000010;          //*< window can be resized */
-    SDL_WINDOW_MINIMIZED = $00000020;          //*< window is minimized */
-    SDL_WINDOW_MAXIMIZED = $00000040;          //*< window is maximized */
-    SDL_WINDOW_INPUT_GRABBED = $00000100;      //*< window has grabbed input focus */
-    SDL_WINDOW_INPUT_FOCUS = $00000200;        //*< window has input focus */
-    SDL_WINDOW_MOUSE_FOCUS = $00000400;        //*< window has mouse focus */
-    SDL_WINDOW_FOREIGN = $00000800;            //*< window not created by SDL */
-
-    // SDL_WindowEventID (enum)
-    SDL_WINDOWEVENT_NONE = 0;            //*< Never used
-    SDL_WINDOWEVENT_SHOWN = 1;           //*< Window has been shown
-    SDL_WINDOWEVENT_HIDDEN = 2;          //*< Window has been hidden
-    SDL_WINDOWEVENT_EXPOSED = 3;         //*< Window has been exposed and should be redrawn
-    SDL_WINDOWEVENT_MOVED = 4;           //*< Window has been moved to data1, data2
-    SDL_WINDOWEVENT_RESIZED = 5;         //*< Window size changed to data1xdata2
-    SDL_WINDOWEVENT_MINIMIZED = 6;       //*< Window has been minimized
-    SDL_WINDOWEVENT_MAXIMIZED = 7;       //*< Window has been maximized
-    SDL_WINDOWEVENT_RESTORED = 8;        //*< Window has been restored to normal size and position
-    SDL_WINDOWEVENT_ENTER = 9;           //*< Window has gained mouse focus
-    SDL_WINDOWEVENT_LEAVE = 10;          //*< Window has lost mouse focus
-    SDL_WINDOWEVENT_FOCUS_GAINED = 11;   //*< Window has gained keyboard focus
-    SDL_WINDOWEVENT_FOCUS_LOST = 12;     //*< Window has lost keyboard focus
-    SDL_WINDOWEVENT_CLOSE = 13;          //*< The window manager requests that the window be closed */
-{$ENDIF}
-
     {* SDL_mixer *}
     MIX_MAX_VOLUME = 128;
-    MIX_INIT_FLAC = $00000001;
-    MIX_INIT_MOD  = $00000002;
-    MIX_INIT_MP3  = $00000004;
-    MIX_INIT_OGG  = $00000008;
+    MIX_INIT_FLAC  = $00000001;
+    MIX_INIT_MOD   = $00000002;
+    MIX_INIT_MP3   = $00000004;
+    MIX_INIT_OGG   = $00000008;
 
     {* SDL_TTF *}
     TTF_STYLE_NORMAL = 0;
@@ -247,8 +250,8 @@ const
     SDL_HAT_LEFT      = $08;
     SDL_HAT_RIGHTUP   = SDL_HAT_RIGHT or SDL_HAT_UP;
     SDL_HAT_RIGHTDOWN = SDL_HAT_RIGHT or SDL_HAT_DOWN;
-    SDL_HAT_LEFTUP    = SDL_HAT_LEFT or SDL_HAT_UP;
-    SDL_HAT_LEFTDOWN  = SDL_HAT_LEFT or SDL_HAT_DOWN;
+    SDL_HAT_LEFTUP    = SDL_HAT_LEFT  or SDL_HAT_UP;
+    SDL_HAT_LEFTDOWN  = SDL_HAT_LEFT  or SDL_HAT_DOWN;
 
     {* SDL_image *}
     IMG_INIT_JPG = $00000001;
@@ -277,6 +280,9 @@ type
 
     PSDL_PixelFormat = ^TSDL_PixelFormat;
     TSDL_PixelFormat = record
+{$IFDEF SDL13}
+        format: Longword;
+{$ENDIF}
         palette: Pointer;
         BitsPerPixel : Byte;
         BytesPerPixel: Byte;
@@ -292,8 +298,13 @@ type
         GMask : Longword;
         BMask : Longword;
         AMask : Longword;
+{$IFDEF SDL13}
+        refcount: LongInt;
+        next: Pointer;
+{$ELSE}
         colorkey: Longword;
-        alpha : Byte;
+        alpha: Byte;
+{$ENDIF}
         end;
 
 
@@ -720,7 +731,6 @@ function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): PSDL_R
 function  SDL_DestroyRenderer(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
 procedure SDL_VideoQuit; cdecl; external SDLLibName;
-function  SDL_SelectVideoDisplay(index: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_GetNumVideoDisplays: LongInt; cdecl; external SDLLibName;
 
 function  SDL_SetRenderDrawColor(renderer: PSDL_Renderer; r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
@@ -733,6 +743,9 @@ function  SDL_SelectMouse(index: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRelativeMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetNumMice: LongInt; cdecl; external SDLLibName;
 function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): boolean; cdecl; external SDLLibName;
+
+function  SDL_AllocFormat(format: Longword): PSDL_PixelFormat; cdecl; external SDLLibName;
+procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat); cdecl; external SDLLibName;
 {$ENDIF}
 
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
@@ -863,7 +876,11 @@ implementation
 
 function SDL_MustLock(Surface: PSDL_Surface): Boolean;
 begin
+{$IFDEF SDL13}
+    SDL_MustLock:= ((surface^.flags and SDL_RLEACCEL) <> 0)
+{$ELSE}
     SDL_MustLock:= ( surface^.offset <> 0 ) or (( surface^.flags and (SDL_HWSURFACE or SDL_ASYNCBLIT or SDL_RLEACCEL)) <> 0)
+{$ENDIF}
 end;
 
 procedure SDLNet_Write16(value: Word; buf: pointer);

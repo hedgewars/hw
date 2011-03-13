@@ -881,6 +881,7 @@ procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
     ico: PSDL_Surface;
     buf: array[byte] of char;
+    x, y: LongInt;
 begin
     s:= s; // avoid compiler hint
     if Length(s) = 0 then cFullScreen:= not cFullScreen
@@ -922,20 +923,17 @@ begin
     end;
 
 {$IFDEF SDL13}
-{$IFDEF IPHONEOS}
-    // ipad can have 2 monitors, display sdl window on the second one
-    SDL_SelectVideoDisplay(SDL_GetNumVideoDisplays() - 1);
-{$ENDIF}
-
     if SDLwindow = nil then
     begin
-        SDLwindow:= SDL_CreateWindow('Hedgewars', 0, 0, cScreenWidth, cScreenHeight,
-                        SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN
-                        {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});
+        // on ipad, when second monitor is attached, display window in second monitor always
+        x:= {$IFDEF IPHONEOS}(SDL_WINDOWPOS_CENTERED_MASK or (SDL_GetNumVideoDisplays() - 1)){$ELSE}0{$ENDIF};
+        y:= {$IFDEF IPHONEOS}(SDL_WINDOWPOS_CENTERED_MASK or (SDL_GetNumVideoDisplays() - 1)){$ELSE}0{$ENDIF};
+        SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN
+                        {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS {$ENDIF});
         SDLrender:= SDL_CreateRenderer(SDLwindow, -1, 1 and 2);
     end;
 
-    SDL_SetRenderDrawColor(SDLrender,0, 0, 0, 255);
+    SDL_SetRenderDrawColor(SDLrender, 0, 0, 0, 255);
     SDL_RenderClear(SDLrender);
     SDL_RenderPresent(SDLrender);
 {$ELSE}
