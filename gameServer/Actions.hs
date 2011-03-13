@@ -411,10 +411,13 @@ processAction (AddClient cl) = do
 
 
 processAction (AddNick2Bans n reason expiring) = do
-        processAction $ ModifyServerInfo (\s -> s{bans = BanByNick n reason expiring : bans s})
+    processAction $ ModifyServerInfo (\s -> s{bans = BanByNick n reason expiring : bans s})
 
 processAction (AddIP2Bans ip reason expiring) = do
-        processAction $ ModifyServerInfo (\s -> s{bans = BanByIP ip reason expiring : bans s})
+    (Just ci) <- gets clientIndex
+    rc <- gets removedClients
+    when (not $ ci `Set.member` rc)
+        $ processAction $ ModifyServerInfo (\s -> s{bans = BanByIP ip reason expiring : bans s})
 
 processAction CheckBanned = do
     clTime <- client's connectTime
