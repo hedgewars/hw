@@ -21,7 +21,6 @@
 
 #import "SchemeWeaponConfigViewController.h"
 #import "CommodityFunctions.h"
-#import "SDL_uikitappdelegate.h"
 
 #define LABEL_TAG 57423
 
@@ -262,7 +261,7 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    if ([[SDLUIKitDelegate sharedAppDelegate] isInGame]) {
+    if ([[HedgewarsAppDelegate sharedAppDelegate] isInGame]) {
         self.lastIndexPath_sc = nil;
         self.lastIndexPath_we = nil;
         self.listOfSchemes = nil;

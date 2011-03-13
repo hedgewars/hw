@@ -23,7 +23,7 @@
 #import "PascalImports.h"
 #import "UIImageExtra.h"
 #import "CommodityFunctions.h"
-#import "SDL_uikitappdelegate.h"
+#import "HedgewarsAppDelegate.h"
 #import "SDL.h"
 #import "SDL_video.h"
 #import "SDL_net.h"

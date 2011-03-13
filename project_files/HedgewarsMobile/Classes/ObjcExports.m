@@ -97,7 +97,7 @@ void stopSpinning() {
 
 void clearView() {
     // don't use any engine calls here as this function is called every time the ammomenu is opened
-    UIWindow *theWindow = (IS_DUALHEAD()) ? [SDLUIKitDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow];
+    UIWindow *theWindow = (IS_DUALHEAD()) ? [HedgewarsAppDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow];
     UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
     UISegmentedControl *theSegment = (UISegmentedControl *)[theWindow viewWithTag:GRENADE_TAG];
 

@@ -111,7 +111,7 @@
 		6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */; };
 		6165925511CA9CB400D6E256 /* MapConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */; };
 		6165925811CA9CB400D6E256 /* OverlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165925011CA9CB400D6E256 /* OverlayViewController.xib */; };
-		6165929E11CA9E2F00D6E256 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */; };
+		6165929E11CA9E2F00D6E256 /* HedgewarsAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165929D11CA9E2F00D6E256 /* HedgewarsAppDelegate.m */; };
 		6172555A12B3DD4A0098D069 /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6172555912B3DCEE0098D069 /* libLua.a */; };
 		6172FED91298CF9800D73365 /* background~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FED71298CF9800D73365 /* background~iphone.png */; };
 		6172FEEF1298D25D00D73365 /* mediumBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FEEB1298D25D00D73365 /* mediumBackground~ipad.png */; };
@@ -182,7 +182,7 @@
 		61AC067412B2E32D000B52A2 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 61AC067312B2E32D000B52A2 /* Appirater.m */; };
 		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
 		61B7A33812CC21080086B604 /* StatsPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B7A33712CC21080086B604 /* StatsPageViewController.m */; };
-		61B7A61512FA13B00051E14E /* libSDLiPhoneOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A54E12FA129F0051E14E /* libSDLiPhoneOS.a */; };
+		61B7A61512FA13B00051E14E /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A54E12FA129F0051E14E /* libSDL.a */; };
 		61B7A61612FA13B00051E14E /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A55812FA12AD0051E14E /* libSDL_image.a */; };
 		61B7A61712FA13B00051E14E /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A56012FA12BF0051E14E /* libSDL_mixer.a */; };
 		61B7A61812FA13B00051E14E /* libSDL_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A56812FA12D00051E14E /* libSDL_net.a */; };
@@ -879,8 +879,8 @@
 		6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapConfigViewController-iPad.xib"; path = "Resources/MapConfigViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
 		6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapConfigViewController-iPhone.xib"; path = "Resources/MapConfigViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
 		6165925011CA9CB400D6E256 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = Resources/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
-		6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_uikitappdelegate.h; path = Classes/SDL_uikitappdelegate.h; sourceTree = "<group>"; };
-		6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDL_uikitappdelegate.m; path = Classes/SDL_uikitappdelegate.m; sourceTree = "<group>"; };
+		6165929C11CA9E2F00D6E256 /* HedgewarsAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HedgewarsAppDelegate.h; path = Classes/HedgewarsAppDelegate.h; sourceTree = "<group>"; };
+		6165929D11CA9E2F00D6E256 /* HedgewarsAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HedgewarsAppDelegate.m; path = Classes/HedgewarsAppDelegate.m; sourceTree = "<group>"; };
 		6172554E12B3DCEE0098D069 /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../../Library/Lua/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6172FEA21298C7F900D73365 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Icons/Default@2x.png"; sourceTree = "<group>"; };
 		6172FEC81298CE4800D73365 /* savesButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "savesButton@2x.png"; path = "Resources/Frontend/savesButton@2x.png"; sourceTree = "<group>"; };
@@ -1023,7 +1023,7 @@
 				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
 				611E03E711FA747C0077A41E /* libvorbis.a in Frameworks */,
 				611E0E5111FA92170077A41E /* libfreetype.a in Frameworks */,
-				61B7A61512FA13B00051E14E /* libSDLiPhoneOS.a in Frameworks */,
+				61B7A61512FA13B00051E14E /* libSDL.a in Frameworks */,
 				61B7A61612FA13B00051E14E /* libSDL_image.a in Frameworks */,
 				61B7A61712FA13B00051E14E /* libSDL_mixer.a in Frameworks */,
 				61B7A61812FA13B00051E14E /* libSDL_net.a in Frameworks */,
@@ -1089,10 +1089,10 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				6165929C11CA9E2F00D6E256 /* SDL_uikitappdelegate.h */,
-				6165929D11CA9E2F00D6E256 /* SDL_uikitappdelegate.m */,
 				61AC067212B2E32D000B52A2 /* Appirater.h */,
 				61AC067312B2E32D000B52A2 /* Appirater.m */,
+				6165929C11CA9E2F00D6E256 /* HedgewarsAppDelegate.h */,
+				6165929D11CA9E2F00D6E256 /* HedgewarsAppDelegate.m */,
 				61DE91561258B76800B80214 /* Custom UIs */,
 				32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */,
 				6165922911CA9BD500D6E256 /* PascalImports.h */,
@@ -1403,7 +1403,7 @@
 		61B7A54712FA129F0051E14E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61B7A54E12FA129F0051E14E /* libSDLiPhoneOS.a */,
+				61B7A54E12FA129F0051E14E /* libSDL.a */,
 				61B7A55012FA129F0051E14E /* testsdl.app */,
 			);
 			name = Products;
@@ -2151,10 +2151,10 @@
 			remoteRef = 6172555812B3DCEE0098D069 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		61B7A54E12FA129F0051E14E /* libSDLiPhoneOS.a */ = {
+		61B7A54E12FA129F0051E14E /* libSDL.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libSDLiPhoneOS.a;
+			path = libSDL.a;
 			remoteRef = 61B7A54D12FA129F0051E14E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -2405,7 +2405,7 @@
 				6165922F11CA9BD500D6E256 /* CommodityFunctions.m in Sources */,
 				6165923111CA9BD500D6E256 /* SquareButtonView.m in Sources */,
 				6165923211CA9BD500D6E256 /* UIImageExtra.m in Sources */,
-				6165929E11CA9E2F00D6E256 /* SDL_uikitappdelegate.m in Sources */,
+				6165929E11CA9E2F00D6E256 /* HedgewarsAppDelegate.m in Sources */,
 				6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */,
 				61E1F4F811D004240016A5AA /* adler32.pas in Sources */,
 				61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */,

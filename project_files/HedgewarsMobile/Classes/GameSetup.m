@@ -20,7 +20,6 @@
 
 
 #import "GameSetup.h"
-#import "SDL_uikitappdelegate.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "OverlayViewController.h"
