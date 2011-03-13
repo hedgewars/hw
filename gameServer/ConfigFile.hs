@@ -21,6 +21,7 @@ readServerConfig serverInfo' = do
         , dbPassword = value "dbPassword" cfg
         , serverMessage = value "sv_message" cfg
         , serverMessageForOldVersions = value "sv_messageOld" cfg
+        , bans = read . fromJust2 "bans" $ getValue "bans" cfg
         , latestReleaseVersion = read . fromJust $ getValue "sv_latestProto" cfg
         , serverConfig = Just cfg
     }
@@ -40,13 +41,16 @@ writeServerConfig ServerInfo{
     dbPassword = dp,
     serverMessage = sm,
     serverMessageForOldVersions = smo,
+    bans = b,
     latestReleaseVersion = ver,
     serverConfig = Just cfg}
-        = do
-    let newCfg = foldl (\c (n, v) -> repConfig n (B.unpack v) c) cfg entries
-    writeConfig cfgFileName (repConfig "sv_latestProto" (show ver) newCfg)
+        =
+    writeConfig cfgFileName $ foldl1 (.) entries cfg
     where
-        entries = [
+        entries =
+            repConfig "sv_latestProto" (show ver)
+            : repConfig "bans" (show b)
+            : map (\(n, v) -> repConfig n (B.unpack v)) [
             ("dbHost", dh)
             , ("dbName", dn)
             , ("dbLogin", dl)
@@ -54,3 +58,4 @@ writeServerConfig ServerInfo{
             , ("sv_message", sm)
             , ("sv_messageOld", smo)
             ]
+        
