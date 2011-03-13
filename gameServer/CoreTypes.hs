@@ -125,7 +125,7 @@ data ServerInfo =
         dbName :: B.ByteString,
         dbLogin :: B.ByteString,
         dbPassword :: B.ByteString,
-        lastLogins :: [(B.ByteString, (UTCTime, B.ByteString))],
+        bans :: [BanInfo],
         restartPending :: Bool,
         coreChan :: Chan CoreMessage,
         dbQueries :: Chan DBQuery,
@@ -192,6 +192,6 @@ instance Show ShutdownThreadException where
 instance Exception ShutdownThreadException
 
 data BanInfo =
-    BanByIP String UTCTime
-    | BanByNickname String UTCTime
+    BanByIP B.ByteString B.ByteString UTCTime
+    | BanByNick B.ByteString B.ByteString UTCTime
     deriving (Show, Read)

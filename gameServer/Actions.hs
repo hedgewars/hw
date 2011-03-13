@@ -4,6 +4,7 @@ module Actions where
 import Control.Concurrent
 import qualified Data.Set as Set
 import qualified Data.Sequence as Seq
+import qualified Data.List as L
 import System.Log.Logger
 import Control.Monad
 import Data.Time
@@ -55,6 +56,9 @@ data Action =
     | PingAll
     | StatsAction
     | RestartServer Bool
+    | AddNick2Bans B.ByteString B.ByteString UTCTime
+    | AddIP2Bans B.ByteString B.ByteString UTCTime
+    | CheckBanned
 
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
@@ -374,7 +378,7 @@ processAction (BanClient seconds reason banId) = do
     currentTime <- io getCurrentTime
     let msg = "Ban for " `B.append` (B.pack . show $ seconds) `B.append` "seconds (" `B.append` reason ` B.append` ")"
     mapM_ processAction [
-        ModifyServerInfo (\s -> s{lastLogins = (clHost, (addUTCTime seconds currentTime, msg)) : lastLogins s})
+        AddIP2Bans clHost msg (addUTCTime seconds currentTime)
         , KickClient banId
         ]
 
@@ -398,15 +402,39 @@ processAction (AddClient cl) = do
         return ci
 
     modify (\s -> s{clientIndex = Just newClId})
-    processAction $ AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
+    mapM_ processAction
+        [
+            AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
+            , CheckBanned
+            , AddIP2Bans (host cl) "Reconnected too fast" (addUTCTime 10 $ connectTime cl)
+        ]
 
-    let newLogins = takeWhile (\(_ , (time, _)) -> connectTime cl `diffUTCTime` time <= 0) $ lastLogins si
-    let info = host cl `Prelude.lookup` newLogins
-    if isJust info then
-        mapM_ processAction [ModifyServerInfo (\s -> s{lastLogins = newLogins}), ByeClient (snd .  fromJust $ info)]
-        else
-        processAction $ ModifyServerInfo (\s -> s{lastLogins = (host cl, (addUTCTime 10 $ connectTime cl, "Reconnected too fast")) : newLogins})
 
+processAction (AddNick2Bans n reason expiring) = do
+        processAction $ ModifyServerInfo (\s -> s{bans = BanByNick n reason expiring : bans s})
+
+processAction (AddIP2Bans ip reason expiring) = do
+        processAction $ ModifyServerInfo (\s -> s{bans = BanByIP ip reason expiring : bans s})
+
+processAction CheckBanned = do
+    clTime <- client's connectTime
+    clNick <- client's nick
+    clHost <- client's host
+    si <- gets serverInfo
+    let validBans = filter (checkNotExpired clTime) $ bans si
+    let ban = L.find (checkBan clHost clNick) $ validBans
+    when (isJust ban) $
+        mapM_ processAction [
+        ModifyServerInfo (\s -> s{bans = validBans})
+        , ByeClient (getBanReason $ fromJust ban)
+        ]
+    where
+        checkNotExpired testTime (BanByIP _ _ time) = testTime `diffUTCTime` time <= 0
+        checkNotExpired testTime (BanByNick _ _ time) = testTime `diffUTCTime` time <= 0
+        checkBan ip _ (BanByIP bip _ _) = bip == ip
+        checkBan _ n (BanByNick bn _ _) = bn == n
+        getBanReason (BanByIP _ msg _) = msg
+        getBanReason (BanByNick _ msg _) = msg
 
 processAction PingAll = do
     rnc <- gets roomsClients
