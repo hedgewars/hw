@@ -405,7 +405,7 @@ processAction (AddClient cl) = do
     if isJust info then
         mapM_ processAction [ModifyServerInfo (\s -> s{lastLogins = newLogins}), ByeClient (snd .  fromJust $ info)]
         else
-        processAction $ ModifyServerInfo (\s -> s{lastLogins = (host cl, (addUTCTime 10 $ connectTime cl, "Reconnected too fast")) : newLogins})
+        processAction $ ModifyServerInfo (\s -> s{lastLogins = (host cl, (addUTCTime 0 $ connectTime cl, "Reconnected too fast")) : newLogins})
 
 
 processAction PingAll = do

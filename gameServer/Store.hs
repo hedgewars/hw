@@ -35,11 +35,15 @@ firstIndex = ElemIndex 0
 
 -- MStore code
 initialSize :: Int
-initialSize = 10
+initialSize = 16
 
 
 growFunc :: Int -> Int
 growFunc a = a * 3 `div` 2
+
+truncFunc :: Int -> Int
+truncFunc a | a > growFunc initialSize = (a `div` 2)
+            | otherwise = a
 
 
 newStore :: IO (MStore e)
@@ -65,6 +69,25 @@ growIfNeeded m@(MStore ref) = do
     when (IntSet.null freeElems) $ growStore m
 
 
+truncateStore :: MStore e -> IO ()
+truncateStore (MStore ref) = do
+    (busyElems, freeElems, arr) <- readIORef ref
+    (_, m') <- IOA.getBounds arr
+    let newM' = truncFunc (m' + 1) - 1
+    newArr <- IOA.newArray_ (0, newM')
+    sequence_ [IOA.readArray arr i >>= IOA.writeArray newArr i | i <- IntSet.toList busyElems]
+    writeIORef ref (busyElems, freeElems `IntSet.difference` IntSet.fromAscList [newM'..m'+1], newArr)
+
+
+truncateIfNeeded :: MStore e -> IO ()
+truncateIfNeeded m@(MStore ref) = do
+    (busyElems, _, arr) <- readIORef ref
+    (_, m') <- IOA.getBounds arr
+    let newM' = truncFunc (m' + 1) - 1
+    let allLessM = all (< newM') $ IntSet.elems busyElems
+    when (newM' < m' && allLessM) $ truncateStore m
+
+
 addElem :: MStore e -> e -> IO ElemIndex
 addElem m@(MStore ref) element = do
     growIfNeeded m
@@ -76,10 +99,11 @@ addElem m@(MStore ref) element = do
 
 
 removeElem :: MStore e -> ElemIndex -> IO ()
-removeElem (MStore ref) (ElemIndex n) = do
+removeElem m@(MStore ref) (ElemIndex n) = do
     (busyElems, freeElems, arr) <- readIORef ref
     IOA.writeArray arr n (error $ "Store: no element " ++ show n)
     writeIORef ref (IntSet.delete n busyElems, IntSet.insert n freeElems, arr)
+    truncateIfNeeded m
 
 
 readElem :: MStore e -> ElemIndex -> IO e
