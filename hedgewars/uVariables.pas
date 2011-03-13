@@ -2077,35 +2077,6 @@ const
             ejectY: 0)
         );
 
-
-    conversionFormat: TSDL_PixelFormat = (
-        palette: nil;
-        BitsPerPixel : 32;
-        BytesPerPixel: 4;
-        Rloss : 0;
-        Gloss : 0;
-        Bloss : 0;
-        Aloss : 0;
-{$IFDEF ENDIAN_LITTLE}
-        Rshift: 0;
-        Gshift: 8;
-        Bshift: 16;
-        Ashift: 24;
-{$ELSE}
-        Rshift: 24;
-        Gshift: 16;
-        Bshift: 8;
-        Ashift: 0;
-{$ENDIF}
-        RMask : RMask;
-        GMask : GMask;
-        BMask : BMask;
-        AMask : AMask;
-        colorkey: 0;
-        alpha : 255
-    );
-
-
 var
     Land: TCollisionArray;
     LandPixels: TLandArray;

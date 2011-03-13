@@ -21,11 +21,12 @@
 */
 
 #import <UIKit/UIKit.h>
+#import "SDL_uikitappdelegate.h"
 
 @class MainMenuViewController;
 @class OverlayViewController;
 
-@interface SDLUIKitDelegate:NSObject<UIApplicationDelegate> {
+@interface HedgewarsAppDelegate:SDLUIKitDelegate {
     MainMenuViewController *mainViewController;
     OverlayViewController *overlayController;
     UIWindow *uiwindow;
@@ -39,7 +40,7 @@
 @property (nonatomic,retain) UIWindow *uiwindow;
 @property (nonatomic,retain) UIWindow *secondWindow;
 
-+(SDLUIKitDelegate *)sharedAppDelegate;
++(HedgewarsAppDelegate *)sharedAppDelegate;
 -(NSArray *)startSDLgame:(NSDictionary *)gameDictionary;
 -(void) displayOverlayLater:(id) object;
 

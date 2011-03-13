@@ -21,7 +21,6 @@
 
 #import "MainMenuViewController.h"
 #import "CreationChamber.h"
-#import "SDL_uikitappdelegate.h"
 #import "PascalImports.h"
 #import "GameConfigViewController.h"
 #import "SplitViewRootController.h"

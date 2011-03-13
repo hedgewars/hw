@@ -1,45 +1,25 @@
-diff -r 1fbe1c202501 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
---- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Mon Feb 07 10:40:21 2011 -0800
-+++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Fri Feb 18 00:09:03 2011 +0100
-@@ -1603,11 +1603,15 @@
- 			isa = XCBuildConfiguration;
- 			buildSettings = {
- 				ALWAYS_SEARCH_USER_PATHS = NO;
-+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+diff -r 48067bfc300c Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
+--- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Mon Feb 14 11:50:18 2011 -0600
++++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Sun Mar 13 18:22:16 2011 +0100
+@@ -1695,6 +1695,7 @@
  				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
  				GCC_C_LANGUAGE_STANDARD = c99;
  				GCC_DEBUGGING_SYMBOLS = full;
 +				GCC_THUMB_SUPPORT = NO;
-+				GCC_VERSION = com.apple.compilers.llvmgcc42;
  				GCC_WARN_ABOUT_RETURN_TYPE = YES;
  				GCC_WARN_UNUSED_VARIABLE = NO;
-+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../include\"";
  				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
- 				ONLY_ACTIVE_ARCH = NO;
- 				PREBINDING = NO;
-@@ -1620,12 +1624,18 @@
- 			isa = XCBuildConfiguration;
- 			buildSettings = {
- 				ALWAYS_SEARCH_USER_PATHS = NO;
--				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
-+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+@@ -1712,6 +1713,7 @@
+ 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
  				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
  				GCC_C_LANGUAGE_STANDARD = c99;
-+				GCC_OPTIMIZATION_LEVEL = s;
 +				GCC_THUMB_SUPPORT = NO;
-+				GCC_UNROLL_LOOPS = NO;
-+				GCC_VERSION = com.apple.compilers.llvmgcc42;
  				GCC_WARN_ABOUT_RETURN_TYPE = YES;
  				GCC_WARN_UNUSED_VARIABLE = NO;
-+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../include\"";
  				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
-+				OTHER_CFLAGS = "";
- 				PREBINDING = NO;
- 				SDKROOT = iphoneos;
- 				TARGETED_DEVICE_FAMILY = "1,2";
-diff -r 1fbe1c202501 include/SDL_config_iphoneos.h
---- a/include/SDL_config_iphoneos.h	Mon Feb 07 10:40:21 2011 -0800
-+++ b/include/SDL_config_iphoneos.h	Fri Feb 18 00:09:03 2011 +0100
+diff -r 48067bfc300c include/SDL_config_iphoneos.h
+--- a/include/SDL_config_iphoneos.h	Mon Feb 14 11:50:18 2011 -0600
++++ b/include/SDL_config_iphoneos.h	Sun Mar 13 18:22:16 2011 +0100
 @@ -119,7 +119,7 @@
  /* enable iPhone version of Core Audio driver */
  #define SDL_AUDIO_DRIVER_COREAUDIOIPHONE 1
@@ -79,24 +59,28 @@ diff -r 1fbe1c202501 include/SDL_config_iphoneos.h
 +#define SDL_VIEW_TAG 456987
 +
  #endif /* _SDL_config_iphoneos_h */
-diff -r 1fbe1c202501 src/video/SDL_video.c
---- a/src/video/SDL_video.c	Mon Feb 07 10:40:21 2011 -0800
-+++ b/src/video/SDL_video.c	Fri Feb 18 00:09:03 2011 +0100
-@@ -1657,9 +1657,11 @@
-         SDL_MinimizeWindow(window);
-     }
+diff -r 48067bfc300c src/video/uikit/SDL_uikitappdelegate.m
+--- a/src/video/uikit/SDL_uikitappdelegate.m	Mon Feb 14 11:50:18 2011 -0600
++++ b/src/video/uikit/SDL_uikitappdelegate.m	Sun Mar 13 18:22:16 2011 +0100
+@@ -35,6 +35,7 @@
+ static int forward_argc;
+ static char **forward_argv;
  
-+    /*
-     if (display->gamma && _this->SetDisplayGammaRamp) {
-         _this->SetDisplayGammaRamp(_this, display, display->saved_gamma);
-     }
-+    */
-     if ((window->flags & (SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_FULLSCREEN))
-         && _this->SetWindowGrab) {
-         _this->SetWindowGrab(_this, window);
-diff -r 1fbe1c202501 src/video/uikit/SDL_uikitopengles.m
---- a/src/video/uikit/SDL_uikitopengles.m	Mon Feb 07 10:40:21 2011 -0800
-+++ b/src/video/uikit/SDL_uikitopengles.m	Fri Feb 18 00:09:03 2011 +0100
++#if 0
+ int main(int argc, char **argv) {
+ 
+     int i;
+@@ -55,6 +56,7 @@
+     [pool release];
+     
+ }
++#endif
+ 
+ @implementation SDLUIKitDelegate
+ 
+diff -r 48067bfc300c src/video/uikit/SDL_uikitopengles.m
+--- a/src/video/uikit/SDL_uikitopengles.m	Mon Feb 14 11:50:18 2011 -0600
++++ b/src/video/uikit/SDL_uikitopengles.m	Sun Mar 13 18:22:16 2011 +0100
 @@ -117,6 +117,7 @@
                                      majorVersion: _this->gl_config.major_version];
      

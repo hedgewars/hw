@@ -20,13 +20,7 @@
  slouken@libsdl.org, vittorio.giovara@gmail.com
 */
 
-#import "SDL_uikitappdelegate.h"
-#import "SDL_uikitopenglview.h"
-#import "SDL_uikitwindow.h"
-#import "SDL_events_c.h"
-#import "jumphack.h"
-#import "SDL_video.h"
-#import "SDL_mixer.h"
+#import "HedgewarsAppDelegate.h"
 #import "PascalImports.h"
 #import "ObjcExports.h"
 #import "CommodityFunctions.h"
@@ -52,18 +46,22 @@ int main (int argc, char *argv[]) {
         execl(VALGRIND, VALGRIND, "--leak-check=full", "--dsymutil=yes", argv[0], "-valgrind", NULL);
 #endif
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    int retVal = UIApplicationMain(argc, argv, nil, @"SDLUIKitDelegate");
+    int retVal = UIApplicationMain(argc, argv, nil, @"HedgewarsAppDelegate");
     [pool release];
     return retVal;
 }
 
-@implementation SDLUIKitDelegate
+int SDL_main(int argc, char **argv) {
+    // dummy function to prevent linkage fail
+    return 0;
+}
+
+@implementation HedgewarsAppDelegate
 @synthesize mainViewController, overlayController, uiwindow, secondWindow, isInGame;
 
 // convenience method
-+(SDLUIKitDelegate *)sharedAppDelegate {
-    // the delegate is set in UIApplicationMain(), which is guaranteed to be called before this method
-    return (SDLUIKitDelegate *)[[UIApplication sharedApplication] delegate];
++(HedgewarsAppDelegate *)sharedAppDelegate {
+    return (HedgewarsAppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
 -(id) init {
@@ -96,14 +94,14 @@ int main (int argc, char *argv[]) {
     blackView.backgroundColor = [UIColor blackColor];
     blackView.opaque = YES;
     blackView.tag = BLACKVIEW_TAG;
-    [gameWindow addSubview:blackView];    
+    [gameWindow addSubview:blackView];
     if (IS_DUALHEAD()) {
         blackView.alpha = 0;
         [UIView beginAnimations:@"fading to game first" context:NULL];
         [UIView setAnimationDuration:1];
         blackView.alpha = 1;
         [UIView commitAnimations];
-        
+
         UIView *secondBlackView = [[UIView alloc] initWithFrame:self.uiwindow.frame];
         secondBlackView.backgroundColor = [UIColor blackColor];
         secondBlackView.opaque = YES;
@@ -143,14 +141,14 @@ int main (int argc, char *argv[]) {
     Game(gameArgs);
     self.isInGame = NO;
     free(gameArgs);
-    
+
     NSArray *stats = setup.statsArray;
     [setup release];
 
 
     [self.uiwindow makeKeyAndVisible];
     [self.uiwindow bringSubviewToFront:self.mainViewController.view];
-    
+
     UIView *refBlackView = [gameWindow viewWithTag:BLACKVIEW_TAG];
     UIView *refSecondBlackView = [self.uiwindow viewWithTag:SECONDBLACKVIEW_TAG];
     [UIView beginAnimations:@"fading in from ingame" context:NULL];
@@ -171,7 +169,7 @@ int main (int argc, char *argv[]) {
     self.overlayController.isNetGame = [[dict objectForKey:@"net"] boolValue];
     self.overlayController.useClassicMenu = [[dict objectForKey:@"menu"] boolValue];
     self.overlayController.initialOrientation = [[dict objectForKey:@"orientation"] intValue];
-    
+
     UIWindow *gameWindow;
     if (IS_DUALHEAD())
         gameWindow = self.uiwindow;
@@ -180,9 +178,10 @@ int main (int argc, char *argv[]) {
     [gameWindow addSubview:self.overlayController.view];
 }
 
-// override the direct execution of SDL_main to allow us to implement the frontend (or even using a nib)
--(BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [application setStatusBarHidden:YES];
+// override the direct execution of SDL_main to allow us to implement our own frontend
+-(void) postFinishLaunch {
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    [Appirater appLaunched];
 
     self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
@@ -195,9 +194,6 @@ int main (int argc, char *argv[]) {
     [self.mainViewController release];
     self.uiwindow.backgroundColor = [UIColor blackColor];
     [self.uiwindow makeKeyAndVisible];
-
-    // set working directory to resource path
-    [[NSFileManager defaultManager] changeCurrentDirectoryPath:[[NSBundle mainBundle] resourcePath]];
 
     // check for dual monitor support
     if (IS_DUALHEAD()) {
@@ -212,19 +208,13 @@ int main (int argc, char *argv[]) {
         [titleView release];
         [self.secondWindow makeKeyAndVisible];
     }
-
-    [Appirater appLaunched];
-    return YES;
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {
-    SDL_SendQuit();
-
-    if (self.isInGame) {
+    if (self.isInGame)
         HW_terminate(YES);
-        // hack to prevent automatic termination. See SDL_uikitevents.m for details
-        longjmp(*(jump_env()), 1);
-    }
+
+    [super applicationWillTerminate:application];
 }
 
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
@@ -234,6 +224,8 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationWillResignActive:(UIApplication *)application {
+    [super applicationWillResignActive: application];
+
     UIDevice* device = [UIDevice currentDevice];
     if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
          device.multitaskingSupported &&
@@ -248,9 +240,7 @@ int main (int argc, char *argv[]) {
                 HW_terminate(NO);
             else {
                 // while screen is loading you can't call HW_terminate() so we close the app
-                SDL_SendQuit();
-                HW_terminate(YES);
-                longjmp(*(jump_env()), 1);
+                [self applicationWillTerminate:application];
             }
         }
         [settings release];
@@ -258,6 +248,8 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationDidBecomeActive:(UIApplication *)application {
+    [super applicationDidBecomeActive:application];
+
     UIDevice* device = [UIDevice currentDevice];
     if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
          device.multitaskingSupported &&

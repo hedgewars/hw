@@ -20,7 +20,6 @@
 
 
 #import "SavedGamesViewController.h"
-#import "SDL_uikitappdelegate.h"
 #import "StatsPageViewController.h"
 #import "CommodityFunctions.h"
 
@@ -228,11 +227,11 @@
 
     NSArray *stats;
     if (IS_DUALHEAD()) {
-        stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+        stats = [[HedgewarsAppDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
         [self presentModalViewController:statsPage animated:NO];
     } else {
         [self performSelector:@selector(presentModalViewController:animated:) withObject:statsPage afterDelay:3];
-        stats = [[SDLUIKitDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
+        stats = [[HedgewarsAppDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
     }
 
     if ([stats count] <= 1) {

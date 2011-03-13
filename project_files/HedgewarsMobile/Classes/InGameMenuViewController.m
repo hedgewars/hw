@@ -19,7 +19,6 @@
  */
 
 
-#import "SDL_uikitappdelegate.h"
 #import "InGameMenuViewController.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
