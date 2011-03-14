@@ -46,10 +46,8 @@ listenLoop sock chan ci = recieveWithBufferLoop B.empty
         sendPacket packet = writeChan chan $ ClientMessage (ci, packet)
 
 clientRecvLoop :: Socket -> Chan CoreMessage -> ClientIndex -> IO ()
-clientRecvLoop s chan ci = Exception.block $
-        ((Exception.unblock $ listenLoop s chan ci >> return "Connection closed") `catch` (return . B.pack . show) >>= clientOff)
-    `Exception.finally`
-        remove
+clientRecvLoop s chan ci =
+        (Exception.unblock $ listenLoop s chan ci >> return "Connection closed") `catch` (return . B.pack . show) >>= clientOff >> remove
     where
         clientOff msg = writeChan chan $ ClientMessage (ci, ["QUIT", msg])
         remove = writeChan chan $ Remove ci
