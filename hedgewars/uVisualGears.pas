@@ -610,10 +610,10 @@ begin
 if (cReducedQuality and rqKillFlakes) <> 0 then exit;
 
 if ((GameFlags and gfBorder) <> 0) or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
-    for i:= 0 to Pred(vobCount) do
+    for i:= 0 to Pred(vobCount * cScreenSpace div LAND_WIDTH) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
 else
-    for i:= 0 to Pred(vobCount div 3) do
+    for i:= 0 to Pred((vobCount * cScreenSpace div LAND_WIDTH) div 3) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
 end;
 
@@ -633,10 +633,10 @@ while vg <> nil do
         end
     else vg:= vg^.NextGear;
 if ((GameFlags and gfBorder) <> 0) or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
-    for i:= 0 to Pred(vobSDCount) do
+    for i:= 0 to Pred(vobSDCount * cScreenSpace div LAND_WIDTH) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
 else
-    for i:= 0 to Pred(vobSDCount div 3) do
+    for i:= 0 to Pred((vobSDCount * cScreenSpace div LAND_WIDTH) div 3) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
 end;
 

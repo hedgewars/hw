@@ -547,7 +547,6 @@ while not eof(f) do
             vobVelocity:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             vobFallSpeed:= StrToInt(Trim(s));
-            vobCount:= vobCount * cScreenSpace div LAND_WIDTH;
             end;
         end
     else if key = 'sd-water-top' then
@@ -593,7 +592,6 @@ while not eof(f) do
             vobSDVelocity:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             vobSDFallSpeed:= StrToInt(Trim(s));
-            vobSDCount:= vobSDCount * cScreenSpace div LAND_WIDTH;
             end;
         end
     else if key = 'rq-sky' then
