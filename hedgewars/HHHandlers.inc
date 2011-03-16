@@ -315,10 +315,7 @@ with Gear^,
                     end;
                    amDrillStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 3, _0, _0, CurWeapon^.Timer);
                    //amMelonStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 4, _0, _0, 0);
-                     amStructure: begin
-                                  FollowGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtStructure, 0, SignAs(_0_03, dX), _0, 0);
-                                  FollowGear^.Hedgehog:= Gear^.Hedgehog;
-                                  end;
+                     amStructure: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtStructure, 0, _0, _0, 0);
                   end;
 
         // Clear FollowGear if using on a rope/parachute/saucer etc so focus stays with the hog's movement

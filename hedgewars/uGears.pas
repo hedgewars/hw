@@ -129,7 +129,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepNapalmBomb,
             @doStepSnowball,
             @doStepSnowflake,
-            @doStepStructure
+            @doStepPlaceStructure
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -519,6 +519,7 @@ gtFlamethrower: begin
                 gear^.Radius:= 13;
                 gear^.Elasticity:= _0_3;
                 gear^.Health:= 50;
+                gear^.Tag:= 3;
                 end;
     end;
 

@@ -2058,7 +2058,12 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_Utility;
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NoCrosshair or
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_Utility or
+                          ammoprop_DontHold;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -2071,8 +2076,8 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 1;
-            PosSprite: sprWater;
+            PosCount: 2;
+            PosSprite: sprAmTeleport;
             ejectX: 0;
             ejectY: 0)
         );

@@ -4624,59 +4624,13 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepPlaceStructure(Gear: PGear);
-var 
-    HHGear: PGear;
-    x, y, tx, ty: hwFloat;
-begin
-    AllInactive := false;
-
-    HHGear := Gear^.Hedgehog^.Gear;
-    tx := int2hwFloat(TargetPoint.X);
-    ty := int2hwFloat(TargetPoint.Y);
-    x := HHGear^.X;
-    y := HHGear^.Y;
-
-    if (Distance(tx - x, ty - y) > _256) or
-       not TryPlaceOnLand(TargetPoint.X - SpritesData[sprAmGirder].Width div 2,
-       TargetPoint.Y - SpritesData[sprAmGirder].Height div 2,
-       sprAmGirder, Gear^.State, true, false) then
-    begin
-        PlaySound(sndDenied);
-        HHGear^.Message := HHGear^.Message and not gmAttack;
-        HHGear^.State := HHGear^.State and not gstAttacking;
-        HHGear^.State := HHGear^.State or gstHHChooseTarget;
-        isCursorVisible := true;
-        DeleteGear(Gear)
-    end
-    else 
-    begin
-        PlaySound(sndPlaced);
-        DeleteGear(Gear);
-        AfterAttack;
-    end;
-
-    HHGear^.State := HHGear^.State and not (gstAttacking or gstAttacked);
-    HHGear^.Message := HHGear^.Message and not gmAttack;
-    TargetPoint.X := NoPointX
-end;
-
 procedure doStepStructure(Gear: PGear);
 var 
     i, x, y: LongInt;
     dX, dY: HWFloat;
     hog: PHedgehog;
 begin
-    if Gear^.Hedgehog <> nil then
-        if Gear^.Tag = 0 then
-        begin
-            hog:= Gear^.Hedgehog;
-            hog^.GearHidden:= hog^.Gear;
-            RemoveGearFromList(hog^.Gear);
-            hog^.Gear:= nil;
-            Gear^.Tag:= TotalRounds + 3;
-        end
-        else if Gear^.Tag = TotalRounds then
+    if (Gear^.Hedgehog <> nil) and (Gear^.Tag = TotalRounds) then
         begin
             hog:= Gear^.Hedgehog;
             hog^.Gear:= hog^.GearHidden;
@@ -4688,29 +4642,6 @@ begin
             hog^.GearHidden:= nil;
             Gear^.Hedgehog:= nil;
         end;
-
-    if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
-    begin
-        AllInactive := false;
-        Gear^.dY := Gear^.dY + cGravity;
-        Gear^.Y := Gear^.Y + Gear^.dY;
-        if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then SetAllHHToActive;
-        if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY := _0;
-        if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
-        begin
-            if Gear^.dY > _0_2 then
-                for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do
-                    AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
-            Gear^.dY := - Gear^.dY * Gear^.Elasticity;
-            if Gear^.dY > - _0_001 then Gear^.dY := _0
-            else if Gear^.dY < - _0_03 then
-                    PlaySound(Gear^.ImpactSound);
-        end;
-        CheckGearDrowning(Gear);
-    end;
-
-    if (Gear^.dY.QWordValue = 0) then AddGearCI(Gear)
-    else if (Gear^.dY.QWordValue <> 0) then DeleteCI(Gear);
 
     dec(Gear^.Health, Gear^.Damage);
     Gear^.Damage := 0;
@@ -4735,5 +4666,52 @@ begin
 
         doMakeExplosion(x, y, 50, CurrentHedgehog, EXPLAutoSound);
     end;
+end;
+
+procedure doStepPlaceStructure(Gear: PGear);
+var 
+    hog: PHedgehog;
+    HHGear: PGear;
+    x, y, tx, ty: hwFloat;
+begin
+    AllInactive := false;
+
+    HHGear := Gear^.Hedgehog^.Gear;
+    tx := int2hwFloat(TargetPoint.X);
+    ty := int2hwFloat(TargetPoint.Y);
+    x := HHGear^.X;
+    y := HHGear^.Y;
+
+    HHGear := Gear^.Hedgehog^.Gear;
+    if (Distance(tx - x, ty - y) > _256) or
+       not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
+       TargetPoint.Y - SpritesData[sprHHTelepMask].Height div 2,
+       sprHHTelepMask, 0, false, false) then
+    begin
+        HHGear^.Message := HHGear^.Message and not gmAttack;
+        HHGear^.State := HHGear^.State and not gstAttacking;
+        HHGear^.State := HHGear^.State or gstHHChooseTarget;
+        DeleteGear(Gear);
+        isCursorVisible := true;
+        PlaySound(sndDenied)
+    end
+    else
+    begin
+        DeleteCI(HHGear);
+        SetAllHHToActive;
+        PlaySound(sndPlaced);
+        CurAmmoGear:= nil;
+        AfterAttack;
+        Gear^.X := tx;
+        Gear^.Y := ty;
+        Gear^.Tag := TotalRounds + Gear^.Tag;
+        hog:= CurrentHedgehog;
+        hog^.GearHidden:= hog^.Gear;
+        RemoveGearFromList(hog^.Gear);
+        hog^.Gear:= nil;
+        Gear^.Hedgehog := hog;
+        Gear^.doStep := @doStepStructure;
+    end;
+    TargetPoint.X := NoPointX;
 end;
 

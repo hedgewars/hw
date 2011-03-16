@@ -1285,6 +1285,16 @@ begin
             sprAmGirder, lua_tointeger(L, 3), true, false);
     lc_placegirder:= 0
 end;
+
+function lc_getcurammotype(L : Plua_State): LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 0 then
+        LuaError('Lua: Wrong number of parameters passed to GetCurAmmoType!')
+    else
+        lua_pushinteger(L, ord(CurrentHedgehog^.CurAmmoType));
+    lc_getcurammotype := 1;
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -1705,6 +1715,7 @@ lua_register(luaState, 'MapHasBorder', @lc_maphasborder);
 lua_register(luaState, 'GetHogHat', @lc_gethoghat);
 lua_register(luaState, 'SetHogHat', @lc_sethoghat);
 lua_register(luaState, 'PlaceGirder', @lc_placegirder);
+lua_register(luaState, 'GetCurAmmoType', @lc_getcurammotype);
 
 
 ScriptClearStack; // just to be sure stack is empty
