@@ -930,7 +930,7 @@ begin
         y:= {$IFDEF IPHONEOS}(SDL_WINDOWPOS_CENTERED_MASK or (SDL_GetNumVideoDisplays() - 1)){$ELSE}0{$ENDIF};
         SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN
                         {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS {$ENDIF});
-        SDLrender:= SDL_CreateRenderer(SDLwindow, -1, 1 and 2);
+        SDLrender:= SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
     end;
 
     SDL_SetRenderDrawColor(SDLrender, 0, 0, 0, 255);

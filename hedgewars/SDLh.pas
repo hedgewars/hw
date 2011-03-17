@@ -184,6 +184,9 @@ const
     SDL_WINDOWEVENT_FOCUS_GAINED = 11;   //*< Window has gained keyboard focus
     SDL_WINDOWEVENT_FOCUS_LOST   = 12;   //*< Window has lost keyboard focus
     SDL_WINDOWEVENT_CLOSE        = 13;   //*< The window manager requests that the window be closed */
+
+    SDL_RENDERER_ACCELERATED  = $00000001;   //*< The renderer uses hardware acceleration
+    SDL_RENDERER_PRESENTVSYNC = $00000002;   //*< Present is synchronized with the refresh rate
 {$ELSE}
     // SDL_Event types
     SDL_NOEVENT         = 0;
