@@ -1678,6 +1678,10 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_morewind->setToolTip("<b>" + ToggleButtonWidget::tr("More Wind") + "</b>:<br />" + tr("Wind will affect almost everything."));
     glGMLayout->addWidget(TBW_morewind,4,2,1,1);
 
+    TBW_tagteam = new ToggleButtonWidget(gbGameModes, ":/res/btnMoreWind.png");
+    TBW_tagteam->setToolTip("<b>" + ToggleButtonWidget::tr("Tag Team") + "</b>:<br />" + tr("Teams in each clan takes successive turns but have to share turn time."));
+    glGMLayout->addWidget(TBW_tagteam,4,3,1,1);
+
     // Right
     QLabel * l;
 
@@ -1933,20 +1937,21 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(TBW_perhogammo, 21);
     mapper->addMapping(TBW_nowind, 22);
     mapper->addMapping(TBW_morewind, 23);
-    mapper->addMapping(SB_DamageModifier, 24);
-    mapper->addMapping(SB_TurnTime, 25);
-    mapper->addMapping(SB_InitHealth, 26);
-    mapper->addMapping(SB_SuddenDeath, 27);
-    mapper->addMapping(SB_CaseProb, 28);
-    mapper->addMapping(SB_MinesTime, 29);
-    mapper->addMapping(SB_Mines, 30);
-    mapper->addMapping(SB_MineDuds, 31);
-    mapper->addMapping(SB_Explosives, 32);
-    mapper->addMapping(SB_HealthCrates, 33);
-    mapper->addMapping(SB_CrateHealth, 34);
-    mapper->addMapping(SB_WaterRise, 35);
-    mapper->addMapping(SB_HealthDecrease, 36);
-    mapper->addMapping(SB_RopeModifier, 37);
+    mapper->addMapping(TBW_tagteam, 24);
+    mapper->addMapping(SB_DamageModifier, 25);
+    mapper->addMapping(SB_TurnTime, 26);
+    mapper->addMapping(SB_InitHealth, 27);
+    mapper->addMapping(SB_SuddenDeath, 28);
+    mapper->addMapping(SB_CaseProb, 29);
+    mapper->addMapping(SB_MinesTime, 30);
+    mapper->addMapping(SB_Mines, 31);
+    mapper->addMapping(SB_MineDuds, 32);
+    mapper->addMapping(SB_Explosives, 33);
+    mapper->addMapping(SB_HealthCrates, 34);
+    mapper->addMapping(SB_CrateHealth, 35);
+    mapper->addMapping(SB_WaterRise, 36);
+    mapper->addMapping(SB_HealthDecrease, 37);
+    mapper->addMapping(SB_RopeModifier, 38);
 
     mapper->toFirst();
 }

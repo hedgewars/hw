@@ -353,6 +353,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Color: Longword;
             Teams: array[0..Pred(cMaxTeams)] of PTeam;
             TeamsNumber: Longword;
+            TagTeamIndex: Longword;
             CurrTeam: LongWord;
             ClanHealth: LongInt;
             ClanIndex: LongInt;

@@ -57,6 +57,7 @@ if (AliveCount > 1)
 or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then exit(false);
 CheckForWin:= true;
 
+if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
 TurnTimeLeft:= 0;
 ReadyTimeLeft:= 0;
 if not GameOver then
@@ -141,12 +142,22 @@ with CurrentTeam^ do
 
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
-    inc(c);
-    if c = ClansCount then
+    if (GameFlags And gfTagTeam) = 0 then inc(c);
+
+    if (c = ClansCount) and ((GameFlags And gfTagTeam) = 0) then
         begin
         if not PlacingHogs then inc(TotalRounds);
         c:= 0
         end;
+
+    with ClansArray[c]^ do
+        if (CurrTeam = TagTeamIndex) and ((GameFlags And gfTagTeam) <> 0) then
+            begin
+            TagTeamIndex:= Succ(TagTeamIndex) mod TeamsNumber;
+            CurrTeam:= Succ(CurrTeam) mod TeamsNumber;
+            c:= Succ(c) mod ClansCount;
+            NextClan:= true;
+            end;
 
     with ClansArray[c]^ do
         begin
@@ -230,11 +241,21 @@ if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
 bShowFinger:= true;
 
 if PlacingHogs then
-   begin
-   if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 15000
-   else TurnTimeLeft:= 0
-   end
-else TurnTimeLeft:= cHedgehogTurnTime;
+    begin
+    if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 15000
+    else TurnTimeLeft:= 0
+    end
+else if ((GameFlags And gfTagTeam) <> 0) and not NextClan then
+    begin
+    TurnTimeLeft:= TagTurnTimeLeft;
+    TagTurnTimeLeft:= 0;
+    end
+else
+    begin
+    TurnTimeLeft:= cHedgehogTurnTime;
+    TagTurnTimeLeft:= 0;
+    NextClan:= false;
+    end;
 if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     begin
     if CurrentTeam^.ExtDriven then
@@ -282,6 +303,7 @@ if c < 0 then
         begin
         ClanIndex:= Pred(ClansCount);
         Color:= TeamColor;
+        TagTeamIndex:= 0;
         Flawless:= true
         end
    end else
@@ -532,7 +554,8 @@ begin
     LocalClan:= -1;
     LocalTeam:= -1;
     LocalAmmo:= -1;
-    GameOver:= false
+    GameOver:= false;
+    NextClan:= true;
 end;
 
 procedure freeModule;
@@ -550,7 +573,7 @@ begin
      for i:= 0 to Pred(ClansCount) do Dispose(ClansArray[i]);
      end;
    TeamsCount:= 0;
-   ClansCount:= 0
+   ClansCount:= 0;
 end;
 
 end.

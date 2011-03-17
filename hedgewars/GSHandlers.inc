@@ -3237,7 +3237,11 @@ begin
 
         AfterAttack;
         CurAmmoGear := nil;
-        if (GameFlags and gfInfAttack) = 0 then TurnTimeLeft := 14 * 125;
+        if (GameFlags and gfInfAttack) = 0 then
+            begin
+            if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
+            TurnTimeLeft:= 14 * 125;
+            end;
 
         HHGear^.Message := 0;
         ParseCommand('/taunt '#1, true)
@@ -4078,6 +4082,7 @@ begin
                 CurrentHedgehog^.Gear^.X := Gear^.X;
                 CurrentHedgehog^.Gear^.Y := int2hwFloat(cWaterLine+cVisibleWater)+_128;
                 CurrentHedgehog^.Unplaced := false;
+                if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
                 TurnTimeLeft:= 0
             end;
             ResumeMusic
@@ -4097,6 +4102,7 @@ begin
             CurrentHedgehog^.Gear^.X := Gear^.X;
             CurrentHedgehog^.Gear^.Y := int2hwFloat(cWaterLine+cVisibleWater)+_128;
             CurrentHedgehog^.Unplaced := false;
+            if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
             TurnTimeLeft:= 0
         end;
         ResumeMusic

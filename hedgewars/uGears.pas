@@ -886,6 +886,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
             if (AliveCount <= 1) and ((GameFlags and gfOneClanMode) = 0) then
                 begin
                 step:= stChDmg;
+                if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
                 TurnTimeLeft:= 0
                 end
             end
@@ -915,6 +916,7 @@ if TurnTimeLeft > 0 then
 
 if skipFlag then
     begin
+    if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
     TurnTimeLeft:= 0;
     skipFlag:= false;
     inc(CurrentHedgehog^.Team^.stats.TurnSkips);

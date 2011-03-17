@@ -185,6 +185,7 @@ const
     gfPerHogAmmo         = $00400000;
     gfDisableWind        = $00800000;
     gfMoreWind           = $01000000;
+    gfTagTeam            = $02000000;
     // NOTE: When adding new game flags, ask yourself
     // if a "game start notice" would be useful. If so,
     // add one in uWorld.pas - look for "AddGoal".

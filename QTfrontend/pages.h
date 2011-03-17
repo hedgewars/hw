@@ -519,6 +519,7 @@ private:
     ToggleButtonWidget * TBW_perhogammo;
     ToggleButtonWidget * TBW_nowind;
     ToggleButtonWidget * TBW_morewind;
+    ToggleButtonWidget * TBW_tagteam;
 
     QSpinBox * SB_DamageModifier;
     QSpinBox * SB_TurnTime;

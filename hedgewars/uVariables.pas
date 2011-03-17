@@ -65,6 +65,7 @@ var
     InputMask       : LongWord;
     GameFlags       : Longword;
     TurnTimeLeft    : Longword;
+    TagTurnTimeLeft : Longword;
     ReadyTimeLeft   : Longword;
     cSuddenDTurns   : LongInt;
     cDamagePercent  : LongInt;
@@ -2119,6 +2120,7 @@ var
     LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index, updated to next upcoming hog for per-hog-ammo
     CurMinAngle, CurMaxAngle: Longword;
     GameOver: boolean;
+    NextClan: boolean;
 
     FollowGear: PGear;
     WindBarWidth: LongInt;
@@ -2277,6 +2279,7 @@ begin
     InputMask           := $FFFFFFFF;
     GameFlags           := 0;
     TurnTimeLeft        := 0;
+    TagTurnTimeLeft     := 0;
     cSuddenDTurns       := 15;
     cDamagePercent      := 100;
     cRopePercent        := 100;
