@@ -1604,6 +1604,7 @@ ScriptSetInteger('gfResetWeps', gfResetWeps);
 ScriptSetInteger('gfPerHogAmmo', gfPerHogAmmo);
 ScriptSetInteger('gfDisableWind', gfDisableWind);
 ScriptSetInteger('gfMoreWind', gfMoreWind);
+ScriptSetInteger('gfTagTeam', gfTagTeam);
 
 ScriptSetInteger('gmLeft', gmLeft);
 ScriptSetInteger('gmRight', gmRight);

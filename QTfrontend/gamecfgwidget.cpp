@@ -211,13 +211,15 @@ quint32 GameCFGWidget::getGameFlags() const
         result |= 0x00800000;       // no wind
     if (schemeData(23).toBool())
         result |= 0x01000000;       // more wind
+    if (schemeData(24).toBool())
+        result |= 0x02000000;       // tag team
 
     return result;
 }
 
 quint32 GameCFGWidget::getInitHealth() const
 {
-    return schemeData(26).toInt();
+    return schemeData(27).toInt();
 }
 
 QByteArray GameCFGWidget::getFullConfig() const
@@ -227,19 +229,19 @@ QByteArray GameCFGWidget::getFullConfig() const
 
     bcfg << QString("eseed " + pMapContainer->getCurrentSeed()).toUtf8();
     bcfg << QString("e$gmflags %1").arg(getGameFlags()).toUtf8();
-    bcfg << QString("e$damagepct %1").arg(schemeData(24).toInt()).toUtf8();
-    bcfg << QString("e$turntime %1").arg(schemeData(25).toInt() * 1000).toUtf8();
-    bcfg << QString("e$sd_turns %1").arg(schemeData(27).toInt()).toUtf8();
-    bcfg << QString("e$casefreq %1").arg(schemeData(28).toInt()).toUtf8();
-    bcfg << QString("e$minestime %1").arg(schemeData(29).toInt() * 1000).toUtf8();
-    bcfg << QString("e$minesnum %1").arg(schemeData(30).toInt()).toUtf8();
-    bcfg << QString("e$minedudpct %1").arg(schemeData(31).toInt()).toUtf8();
-    bcfg << QString("e$explosives %1").arg(schemeData(32).toInt()).toUtf8();
-    bcfg << QString("e$healthprob %1").arg(schemeData(33).toInt()).toUtf8();
-    bcfg << QString("e$hcaseamount %1").arg(schemeData(34).toInt()).toUtf8();
-    bcfg << QString("e$waterrise %1").arg(schemeData(35).toInt()).toUtf8();
-    bcfg << QString("e$healthdec %1").arg(schemeData(36).toInt()).toUtf8();
-    bcfg << QString("e$ropepct %1").arg(schemeData(37).toInt()).toUtf8();
+    bcfg << QString("e$damagepct %1").arg(schemeData(25).toInt()).toUtf8();
+    bcfg << QString("e$turntime %1").arg(schemeData(26).toInt() * 1000).toUtf8();
+    bcfg << QString("e$sd_turns %1").arg(schemeData(28).toInt()).toUtf8();
+    bcfg << QString("e$casefreq %1").arg(schemeData(29).toInt()).toUtf8();
+    bcfg << QString("e$minestime %1").arg(schemeData(30).toInt() * 1000).toUtf8();
+    bcfg << QString("e$minesnum %1").arg(schemeData(31).toInt()).toUtf8();
+    bcfg << QString("e$minedudpct %1").arg(schemeData(32).toInt()).toUtf8();
+    bcfg << QString("e$explosives %1").arg(schemeData(33).toInt()).toUtf8();
+    bcfg << QString("e$healthprob %1").arg(schemeData(34).toInt()).toUtf8();
+    bcfg << QString("e$hcaseamount %1").arg(schemeData(35).toInt()).toUtf8();
+    bcfg << QString("e$waterrise %1").arg(schemeData(36).toInt()).toUtf8();
+    bcfg << QString("e$healthdec %1").arg(schemeData(37).toInt()).toUtf8();
+    bcfg << QString("e$ropepct %1").arg(schemeData(38).toInt()).toUtf8();
     bcfg << QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()).toUtf8();
     bcfg << QString("e$mapgen %1").arg(mapgen).toUtf8();
 
