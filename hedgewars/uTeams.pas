@@ -57,7 +57,6 @@ if (AliveCount > 1)
 or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then exit(false);
 CheckForWin:= true;
 
-if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
 TurnTimeLeft:= 0;
 ReadyTimeLeft:= 0;
 if not GameOver then
@@ -97,7 +96,7 @@ end;
 
 procedure SwitchHedgehog;
 var c: LongWord;
-    PrevHH, PrevTeam: LongWord;
+    PrevHH, PrevTeam, PrevClan: LongWord;
 begin
 TargetPoint.X:= NoPointX;
 TryDo(CurrentTeam <> nil, 'nil Team', true);
@@ -142,22 +141,22 @@ with CurrentTeam^ do
 
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
+    with ClansArray[c]^ do
+        if (CurrTeam = TagTeamIndex) and ((GameFlags And gfTagTeam) <> 0) then
+            begin
+            TagTeamIndex:= Pred(TagTeamIndex) mod TeamsNumber;
+            CurrTeam:= Pred(CurrTeam) mod TeamsNumber;
+            inc(c);
+            NextClan:= true;
+            end;
+
     if (GameFlags And gfTagTeam) = 0 then inc(c);
 
-    if (c = ClansCount) and ((GameFlags And gfTagTeam) = 0) then
+    if c = ClansCount then
         begin
         if not PlacingHogs then inc(TotalRounds);
         c:= 0
         end;
-
-    with ClansArray[c]^ do
-        if (CurrTeam = TagTeamIndex) and ((GameFlags And gfTagTeam) <> 0) then
-            begin
-            TagTeamIndex:= Succ(TagTeamIndex) mod TeamsNumber;
-            CurrTeam:= Succ(CurrTeam) mod TeamsNumber;
-            c:= Succ(c) mod ClansCount;
-            NextClan:= true;
-            end;
 
     with ClansArray[c]^ do
         begin
@@ -172,7 +171,7 @@ repeat
                     CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
                 until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
                 end
-        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam);
+        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam) or ((CurrTeam = TagTeamIndex) and ((GameFlags And gfTagTeam) <> 0));
         end
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
 
