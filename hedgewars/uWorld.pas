@@ -127,6 +127,7 @@ if LuaGoals <> '' then g:= LuaGoals + '|';
 
 // check different game flags (goals/game modes first for now)
 g:= AddGoal(g, gfKing, gidKing); // king?
+g:= AddGoal(g, gfTagTeam, gidTagTeam); // tag team mode?
 
 // other important flags
 g:= AddGoal(g, gfForts, gidForts); // forts?

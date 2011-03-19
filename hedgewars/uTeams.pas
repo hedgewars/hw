@@ -246,7 +246,7 @@ if PlacingHogs then
     end
 else if ((GameFlags And gfTagTeam) <> 0) and not NextClan then
     begin
-    TurnTimeLeft:= TagTurnTimeLeft;
+    if TagTurnTimeLeft <> 0 then TurnTimeLeft:= TagTurnTimeLeft;
     TagTurnTimeLeft:= 0;
     end
 else

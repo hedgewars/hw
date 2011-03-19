@@ -1678,7 +1678,7 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_morewind->setToolTip("<b>" + ToggleButtonWidget::tr("More Wind") + "</b>:<br />" + tr("Wind will affect almost everything."));
     glGMLayout->addWidget(TBW_morewind,4,2,1,1);
 
-    TBW_tagteam = new ToggleButtonWidget(gbGameModes, ":/res/btnMoreWind.png");
+    TBW_tagteam = new ToggleButtonWidget(gbGameModes, ":/res/btnTagTeam.png");
     TBW_tagteam->setToolTip("<b>" + ToggleButtonWidget::tr("Tag Team") + "</b>:<br />" + tr("Teams in each clan takes successive turns but have to share turn time."));
     glGMLayout->addWidget(TBW_tagteam,4,3,1,1);
 
