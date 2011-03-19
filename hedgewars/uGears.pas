@@ -129,7 +129,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepNapalmBomb,
             @doStepSnowball,
             @doStepSnowflake,
-            @doStepPlaceStructure
+            @doStepPlaceStructure,
+            @doStepLandGun
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -263,6 +264,7 @@ case Kind of
      gtFlake: begin
                 with Gear^ do
                     begin
+                    Radius:= 1;
                     DirAngle:= random * 360;
                     dx.isNegative:= GetRandom(2) = 0;
                     dx.QWordValue:= GetRandom(100000000);
@@ -495,6 +497,12 @@ gtFlamethrower: begin
                 gear^.Tag:= 10;
                 gear^.Timer:= 10;
                 gear^.Health:= 500;
+                gear^.Damage:= 100;
+                end;
+     gtLandGun: begin
+                gear^.Tag:= 10;
+                gear^.Timer:= 10;
+                gear^.Health:= 1000;
                 gear^.Damage:= 100;
                 end;
  gtPoisonCloud: begin

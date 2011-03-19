@@ -568,12 +568,22 @@ end;
 
 procedure doStepSnowflake(Gear: PGear);
 var xx, yy, px, py, i: LongInt;
-    move, allpx: Boolean;
+    move, draw, allpx: Boolean;
     s: PSDL_Surface;
     p: PLongwordArray;
     oAlpha, nAlpha: byte;
 begin
-if GameTicks and $7 = 0 then
+move:= false;
+draw:= false;
+if (Gear^.State and gstTmpFlag) <> 0 then
+    begin
+    doStepFallingGear(Gear);
+    CheckCollision(Gear);
+    if ((Gear^.State and gstCollision) <> 0) or ((Gear^.State and gstMoving) = 0) then draw:= true;
+    xx:= hwRound(Gear^.X);
+    yy:= hwRound(Gear^.Y);
+    end
+else if GameTicks and $7 = 0 then
     begin
     with Gear^ do
         begin
@@ -595,8 +605,6 @@ if GameTicks and $7 = 0 then
             inc(Timer);
             if Timer = vobFramesCount then Timer:= 0
             end;
-
-        move:= false;
     // move back to cloud layer
         if yy > cWaterLine then move:= true
         else if ((yy and LAND_HEIGHT_MASK) <> 0) or ((xx and LAND_WIDTH_MASK) <> 0) then move:=true
@@ -632,60 +640,75 @@ if GameTicks and $7 = 0 then
             // if there's an hog/object below do nothing
             else if ((((yy+1) and LAND_HEIGHT_MASK) = 0) and ((Land[yy+1, xx] and $FF) <> 0))
                 then move:=true
-            else
-                begin
-                // we've collided with land. draw some stuff and get back into the clouds
-                move:= true;
-                if (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope) then
-                    begin
-    ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
-                    dec(yy,3);
-                    dec(xx,1);
-                    s:= SpritesData[sprSnow].Surface;
-                    p:= s^.pixels;
-                    allpx:= true;
-                    for py:= 0 to Pred(s^.h) do
-                        begin
-                        for px:= 0 to Pred(s^.w) do
-                            if ((((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0)) and ((Land[yy + py, xx + px] and $FF) = 0) then
-                                begin
-                                Land[yy + py, xx + px]:= Land[yy + py, xx + px] or lfObject;
-                                if (cReducedQuality and rqBlurryLand) = 0 then
-                                    begin
-                                    LandPixels[yy + py, xx + px]:= addBgColor(LandPixels[yy + py, xx + px], p^[px]);
-                                    end
-                                else
-                                    begin
-                                    LandPixels[(yy + py) div 2, (xx + px) div 2]:= addBgColor(LandPixels[(yy + py) div 2, (xx + px) div 2], p^[px]);
-                                    end;
-                                end
-                            else allpx:= false;
-                        p:= @(p^[s^.pitch shr 2])
-                        end;
-                    
-                    
-                    Land[py, px+1]:= lfBasic;
-                    
-                    if allpx then UpdateLandTexture(xx, Pred(s^.h), yy, Pred(s^.w))
-                    else
-                        begin
-                        UpdateLandTexture(
-                            max(0, min(LAND_WIDTH, xx)),
-                            min(LAND_WIDTH - xx, Pred(s^.w)),
-                            max(0, min(LAND_WIDTH, yy)),
-                            min(LAND_HEIGHT - yy, Pred(s^.h))
-                        );
-                        end;
-    ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
-                    end
-                end;
-            end;
-        if move then
-            begin
-            X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
-            Y:= int2hwFloat(750+(GetRandom(50)-25))
+            else draw:= true
             end
         end
+    end;
+if draw then 
+    with Gear^ do
+        begin
+        // we've collided with land. draw some stuff and get back into the clouds
+        move:= true;
+        if (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope) then
+            begin
+////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+            if (State and gstTmpFlag) = 0 then
+                begin
+                dec(yy,3);
+                dec(xx,1)
+                end;
+            s:= SpritesData[sprSnow].Surface;
+            p:= s^.pixels;
+            allpx:= true;
+            for py:= 0 to Pred(s^.h) do
+                begin
+                for px:= 0 to Pred(s^.w) do
+                    if ((((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0)) and ((Land[yy + py, xx + px] and $FF) = 0) then
+                        begin
+                        Land[yy + py, xx + px]:= Land[yy + py, xx + px] or lfObject;
+                        if (cReducedQuality and rqBlurryLand) = 0 then
+                            begin
+                            if (State and gstTmpFlag) <> 0 then
+                                LandPixels[yy + py, xx + px]:= addBgColor(LandPixels[yy + py, xx + px], (cExplosionBorderColor and $00FFFFFF) or (p^[px] and $FF000000))
+                            else LandPixels[yy + py, xx + px]:= addBgColor(LandPixels[yy + py, xx + px], p^[px]);
+                            end
+                        else
+                            begin
+                            if (State and gstTmpFlag) <> 0 then
+                                LandPixels[(yy + py) div 2, (xx + px) div 2]:= addBgColor(LandPixels[(yy + py) div 2, (xx + px) div 2], (cExplosionBorderColor and $00FFFFFF) or (p^[px] and $FF000000))
+                            else LandPixels[(yy + py) div 2, (xx + px) div 2]:= addBgColor(LandPixels[(yy + py) div 2, (xx + px) div 2], p^[px]);
+                            end;
+                        end
+                    else allpx:= false;
+                p:= @(p^[s^.pitch shr 2])
+                end;
+            
+            
+            Land[py, px+1]:= lfBasic;
+            
+            if allpx then UpdateLandTexture(xx, Pred(s^.h), yy, Pred(s^.w))
+            else
+                begin
+                UpdateLandTexture(
+                    max(0, min(LAND_WIDTH, xx)),
+                    min(LAND_WIDTH - xx, Pred(s^.w)),
+                    max(0, min(LAND_WIDTH, yy)),
+                    min(LAND_HEIGHT - yy, Pred(s^.h))
+                );
+                end;
+////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
+            end
+        end;
+
+if move then
+    begin
+    if ((Gear^.State and gstTmpFlag) <> 0) then
+        begin
+        DeleteGear(Gear);
+        exit
+        end;
+    Gear^.X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
+    Gear^.Y:= int2hwFloat(750+(GetRandom(50)-25))
     end
 end;
 
@@ -2113,23 +2136,23 @@ begin
     else
     begin
         if sticky then
-        begin
+            begin
             Gear^.Radius := 7;
             AmmoShove(Gear, 2, 30);
             Gear^.Radius := 1
-        end;
+            end;
         if Gear^.Timer > 0 then
-        begin
+            begin
             dec(Gear^.Timer);
             inc(Gear^.Damage)
-        end
+            end
         else
         begin
             gX := hwRound(Gear^.X);
             gY := hwRound(Gear^.Y);
             // Standard fire
             if not sticky then
-            begin
+                begin
                 if ((GameTicks and $1) = 0) then
                     begin
                     Gear^.Radius := 7;
@@ -2143,17 +2166,17 @@ begin
                         AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
                 if Gear^.Health > 0 then dec(Gear^.Health);
                 Gear^.Timer := 450 - Gear^.Tag * 8
-            end
+                end
             else
-            begin
+                begin
                 // Modified fire
                 if ((GameTicks and $7FF) = 0) and ((GameFlags and gfSolidLand) = 0) then
-                begin
+                    begin
                     DrawExplosion(gX, gY, 4);
 
                     for i:= 0 to Random(3) do
                         AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
-                end;
+                    end;
 
 // This one is interesting.  I think I understand the purpose, but I wonder if a bit more fuzzy of kicking could be done with getrandom.
                 Gear^.Timer := 100 - Gear^.Tag * 3;
@@ -4339,6 +4362,80 @@ begin
     HHGear^.Message := HHGear^.Message and not (gmUp or gmDown or gmLeft or gmRight);
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.doStep := @doStepFlamethrowerWork
+end;
+
+procedure doStepLandGunWork(Gear: PGear);
+var 
+    HHGear: PGear;
+    rx, ry, speed: hwFloat;
+    i, gX, gY: LongInt;
+    Flake: PGear;
+begin
+    AllInactive := false;
+    HHGear := Gear^.Hedgehog^.Gear;
+    HedgehogChAngle(HHGear);
+    gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
+    gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
+    
+    if (GameTicks and $FF) = 0 then
+        begin
+        if (HHGear^.Message and gmRight) <> 0 then
+            begin
+            if HHGear^.dX.isNegative and (Gear^.Tag < 20) then inc(Gear^.Tag)
+            else if Gear^.Tag > 5 then dec(Gear^.Tag);
+            end
+        else if (HHGear^.Message and gmLeft) <> 0 then
+            begin
+            if HHGear^.dX.isNegative and (Gear^.Tag > 5) then dec(Gear^.Tag)
+            else if Gear^.Tag < 20 then inc(Gear^.Tag);
+            end
+        end;
+    
+    dec(Gear^.Timer);
+    if Gear^.Timer = 0 then
+        begin
+        dec(Gear^.Health);
+        if (Gear^.Health mod 5) = 0 then
+            begin
+            rx := rndSign(getRandom * _0_1);
+            ry := rndSign(getRandom * _0_1);
+            speed := (_3 / Gear^.Tag);
+    
+            Flake := AddGear(gx, gy, gtFlake, 0, _0, _0, 0);
+            Flake^.dX:= SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx;
+            Flake^.dY:= AngleCos(HHGear^.Angle) * ( - speed) + ry;
+            Flake^.State := Flake^.State or gsttmpFlag;
+            
+            end;
+        Gear^.Timer:= Gear^.Tag
+        end;
+
+    if (Gear^.Health = 0) or (HHGear^.Damage <> 0) then
+        begin
+        DeleteGear(Gear);
+        AfterAttack
+        end
+    else
+        begin
+        i:= Gear^.Health div 10;
+        if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+            begin
+            Gear^.Damage:= i;
+            if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
+            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) +
+                         '%', cWhiteColor, fntSmall)
+            end
+        end
+end;
+
+procedure doStepLandGun(Gear: PGear);
+var 
+    HHGear: PGear;
+begin
+    HHGear := Gear^.Hedgehog^.Gear;
+    HHGear^.Message := HHGear^.Message and not (gmUp or gmDown or gmLeft or gmRight);
+    HHGear^.State := HHGear^.State or gstNotKickable;
+    Gear^.doStep := @doStepLandGunWork
 end;
 
 procedure doStepPoisonCloud(Gear: PGear);

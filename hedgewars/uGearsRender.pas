@@ -489,6 +489,7 @@ begin
                     DrawRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                     if CurAmmoGear^.Tex <> nil then DrawCentered(sx, sy - 40, CurAmmoGear^.Tex)
                     end;
+                gtLandGun: DrawRotated(sprHandBallgun, hx, hy, sign, aangle);
             end;
 
             case CurAmmoGear^.Kind of
@@ -605,6 +606,7 @@ begin
                     end;
                 amBee: DrawRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amFlamethrower: DrawRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
+                amLandGun: DrawRotated(sprHandBallgun, hx, hy, sign, aangle);
                 amResurrector: DrawCircle(ox, oy, 98, 4, $F5, $DB, $35, $AA); // I'd rather not like to hardcode 100 here
             end;
 
@@ -1034,15 +1036,22 @@ begin
                     Tint($FF, $FF, $FF, $FF);
                     end;
       gtNapalmBomb: DrawRotated(sprNapalmBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
-           gtFlake: if not isInLag then
-                   begin
+           gtFlake: if (Gear^.State and gstTmpFlag) <> 0 then
+                        //DrawRotatedTextureF(SpritesData[sprSnowBall].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle)
+                        begin
+                        Tint(cExplosionBorderColor);
+                        DrawRotated(sprSnow, x, y, 0, Gear^.DirAngle);
+                        Tint($FF, $FF, $FF, $FF);
+                        end
+                    else if not isInLag then
+                        begin
                         if vobVelocity = 0 then
-                      //DrawSprite(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer)
-                      DrawSprite(sprFlake, x, y, Gear^.Timer)
-                  else
-                      //DrawRotatedF(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer, 1, Gear^.DirAngle);
-                      DrawRotatedF(sprFlake, x, y, Gear^.Timer, 1, Gear^.DirAngle)
-                  end;
+                            DrawSprite(sprFlake, x, y, Gear^.Timer)
+                        else
+                            DrawRotatedF(sprFlake, x, y, Gear^.Timer, 1, Gear^.DirAngle)
+//DrawSprite(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer)
+//DrawRotatedF(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer, 1, Gear^.DirAngle);
+                        end;
        gtStructure: DrawSprite(sprTarget, x - 16, y - 16, 0);
 
          end;

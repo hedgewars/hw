@@ -55,6 +55,7 @@
 00:52=No weapon selected
 00:53=TARDIS
 00:54=Structure
+00:55=Land Gun
 
 01:00=Let's fight!
 01:01=Round draw

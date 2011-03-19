@@ -2080,7 +2080,29 @@ const
             PosCount: 2;
             PosSprite: sprAmTeleport;
             ejectX: 0;
-            ejectY: 0)
+            ejectY: 0),
+// Land Gun
+            (NameId: sidLandGun;
+            NameTex: nil;
+            Probability: 20;
+            NumberInCase: 1;
+            Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 5001;
+                Pos: 0;
+                AmmoType: amLandGun;
+                AttackVoice: sndNone);
+            Slot: 2;
+            TimeAfterTurn: 0;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0; //20;
+            ejectY: -3)
         );
 
 var
