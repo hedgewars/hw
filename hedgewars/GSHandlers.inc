@@ -141,8 +141,12 @@ begin
                             AddCaption(Format(GetEventString(eidDrowned), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
                             end
                         end
-                    else
-                        Gear^.doStep := @doStepDrowningGear
+                    else if Gear^.Kind = gtFlake then
+                        begin
+                        DeleteGear(Gear);
+                        exit
+                        end
+                    else Gear^.doStep := @doStepDrowningGear
             end;
             if ((not isSubmersible) and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius)) or
                (isSubmersible and (hwRound(Gear^.Y) < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01))) then
@@ -568,14 +572,15 @@ end;
 
 procedure doStepSnowflake(Gear: PGear);
 var xx, yy, px, py, i: LongInt;
-    move, draw, allpx: Boolean;
+    move, draw, allpx, gun: Boolean;
     s: PSDL_Surface;
     p: PLongwordArray;
     oAlpha, nAlpha: byte;
 begin
+gun:= (Gear^.State and gstTmpFlag) <> 0;
 move:= false;
 draw:= false;
-if (Gear^.State and gstTmpFlag) <> 0 then
+if gun then
     begin
     doStepFallingGear(Gear);
     CheckCollision(Gear);
@@ -652,7 +657,7 @@ if draw then
         if (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope) then
             begin
 ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
-            if (State and gstTmpFlag) = 0 then
+            if not gun then
                 begin
                 dec(yy,3);
                 dec(xx,1)
@@ -665,17 +670,23 @@ if draw then
                 for px:= 0 to Pred(s^.w) do
                     if ((((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0)) and ((Land[yy + py, xx + px] and $FF) = 0) then
                         begin
+                        if gun then
+                            begin
+                            // try to avoid speckles. might need disabling
+                            LandDirty[yy div 32, xx div 32]:= 1;
+                            Land[yy + py, xx + px]:= Land[yy + py, xx + px] or lfDamaged;
+                            end;
                         Land[yy + py, xx + px]:= Land[yy + py, xx + px] or lfObject;
                         if (cReducedQuality and rqBlurryLand) = 0 then
                             begin
-                            if (State and gstTmpFlag) <> 0 then
-                                LandPixels[yy + py, xx + px]:= addBgColor(LandPixels[yy + py, xx + px], (cExplosionBorderColor and $00FFFFFF) or (p^[px] and $FF000000))
+                            if gun then
+                                LandPixels[yy + py, xx + px]:= (cExplosionBorderColor and $00FFFFFF) or (p^[px] and $FF000000)
                             else LandPixels[yy + py, xx + px]:= addBgColor(LandPixels[yy + py, xx + px], p^[px]);
                             end
                         else
                             begin
-                            if (State and gstTmpFlag) <> 0 then
-                                LandPixels[(yy + py) div 2, (xx + px) div 2]:= addBgColor(LandPixels[(yy + py) div 2, (xx + px) div 2], (cExplosionBorderColor and $00FFFFFF) or (p^[px] and $FF000000))
+                            if gun then
+                                LandPixels[(yy + py) div 2, (xx + px) div 2]:= (cExplosionBorderColor and $00FFFFFF) or (p^[px] and $FF000000)
                             else LandPixels[(yy + py) div 2, (xx + px) div 2]:= addBgColor(LandPixels[(yy + py) div 2, (xx + px) div 2], p^[px]);
                             end;
                         end
@@ -702,7 +713,7 @@ if draw then
 
 if move then
     begin
-    if ((Gear^.State and gstTmpFlag) <> 0) then
+    if gun then
         begin
         DeleteGear(Gear);
         exit
@@ -4410,8 +4421,9 @@ begin
         Gear^.Timer:= Gear^.Tag
         end;
 
-    if (Gear^.Health = 0) or (HHGear^.Damage <> 0) then
+    if (Gear^.Health = 0) or (HHGear^.Damage <> 0) or ((HHGear^.Message and gmAttack) <> 0) then
         begin
+        HHGear^.Message:= HHGear^.Message and not gmAttack;
         DeleteGear(Gear);
         AfterAttack
         end
@@ -4433,7 +4445,7 @@ var
     HHGear: PGear;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    HHGear^.Message := HHGear^.Message and not (gmUp or gmDown or gmLeft or gmRight);
+    HHGear^.Message := HHGear^.Message and not (gmUp or gmDown or gmLeft or gmRight or gmAttack);
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.doStep := @doStepLandGunWork
 end;

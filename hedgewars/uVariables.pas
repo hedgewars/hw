@@ -2008,7 +2008,9 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_AltUse or
+                          ammoprop_NoRoundEnd;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -2086,7 +2088,8 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_NoRoundEnd or
+                          ammoprop_Utility;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 5001;

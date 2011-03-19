@@ -489,7 +489,9 @@ begin
                     DrawRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                     if CurAmmoGear^.Tex <> nil then DrawCentered(sx, sy - 40, CurAmmoGear^.Tex)
                     end;
-                gtLandGun: DrawRotated(sprHandBallgun, hx, hy, sign, aangle);
+                gtLandGun: begin DrawRotated(sprHandBallgun, hx, hy, sign, aangle);
+                    if CurAmmoGear^.Tex <> nil then DrawCentered(sx, sy - 40, CurAmmoGear^.Tex)
+                    end;
             end;
 
             case CurAmmoGear^.Kind of
@@ -1040,7 +1042,9 @@ begin
                         //DrawRotatedTextureF(SpritesData[sprSnowBall].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle)
                         begin
                         Tint(cExplosionBorderColor);
-                        DrawRotated(sprSnow, x, y, 0, Gear^.DirAngle);
+                        //DrawRotated(sprSnow, x, y, 0, Gear^.DirAngle);
+                        // Needs a nicer white texture to tint
+                        DrawTexture(x, y, SpritesData[sprVampiric].Texture, 0.1);
                         Tint($FF, $FF, $FF, $FF);
                         end
                     else if not isInLag then
