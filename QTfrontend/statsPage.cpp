@@ -57,6 +57,7 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
     l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     labelGameStats->setTextFormat(Qt::RichText);
     labelGameStats->setAlignment(Qt::AlignTop);
+    labelGameStats->setWordWrap(true);
     gbl->addWidget(l);
     gbl->addWidget(labelGameStats);
     gb->setLayout(gbl);
