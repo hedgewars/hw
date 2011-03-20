@@ -583,7 +583,10 @@ else if Gear^.Kind = gtHedgehog then
 
         team:= Gear^.Hedgehog^.Team;
         if CurrentHedgehog^.Gear = Gear then
+            begin
             FreeActionsList; // to avoid ThinkThread on drawned gear
+            if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (CurrentHedgehog^.MultiShootAttacks > 0) then OnUsedAmmo(CurrentHedgehog^);
+            end;
 
         Gear^.Hedgehog^.Gear:= nil;
         if Gear^.Hedgehog^.King then
