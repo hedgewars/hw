@@ -2,6 +2,7 @@
 module ClientIO where
 
 import qualified Control.Exception as Exception
+import Control.Monad.State
 import Control.Concurrent.Chan
 import Control.Concurrent
 import Control.Monad
@@ -17,21 +18,17 @@ import Utils
 pDelim :: B.ByteString
 pDelim = "\n\n"
 
-bs2Packets :: B.ByteString -> ([[B.ByteString]], B.ByteString)
-bs2Packets = unfoldrE extractPackets
-    where
-    extractPackets :: B.ByteString -> Either B.ByteString ([B.ByteString], B.ByteString)
-    extractPackets buf =
-        let buf' = until (not . B.isPrefixOf pDelim) (B.drop 2) buf in
-            let (bsPacket, bufTail) = B.breakSubstring pDelim buf' in
-                if B.null bufTail then
-                    Left bsPacket
-                    else
-                    if B.null bsPacket then 
-                        Left bufTail
-                        else
-                        Right (B.splitWith (== '\n') bsPacket, bufTail)
+bs2Packets = runState takePacks
 
+takePacks :: State B.ByteString [[B.ByteString]]
+takePacks
+  = do modify (until (not . B.isPrefixOf pDelim) (B.drop 2))
+       packet <- state $ B.breakSubstring pDelim
+       buf <- get
+       if B.null buf then put packet >> return [] else
+        if B.null packet then  return [] else
+         do packets <- takePacks
+            return (B.splitWith (== '\n') packet : packets)
 
 listenLoop :: Socket -> Chan CoreMessage -> ClientIndex -> IO ()
 listenLoop sock chan ci = recieveWithBufferLoop B.empty
