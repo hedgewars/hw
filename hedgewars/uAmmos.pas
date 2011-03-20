@@ -295,6 +295,10 @@ with Hedgehog do
         end;
     TryDo(slot <= cMaxSlotIndex, 'Ammo slot index overflow', true);
     CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
+    if (CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) then
+        ShowCrosshair:= (Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoCrossHair) = 0
+    else
+        ShowCrosshair:= (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoCrosshair) = 0;
     end
 end;
 
@@ -333,10 +337,6 @@ with Hedgehog do
             Gear^.State:= Gear^.State and not gstHHChooseTarget;
             isCursorVisible:= false
             end;
-        if (CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) then
-            ShowCrosshair:= (Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoCrossHair) = 0
-        else
-            ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0;
         end
     end;
 end;
