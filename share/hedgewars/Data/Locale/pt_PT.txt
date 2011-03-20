@@ -52,6 +52,9 @@
 00:49=Ressuscitador
 00:50=Ataque Perfurador
 00:51=Bola de Lama
+00:52=Nenhuma arma selecionada
+00:53=TARDIS
+00:54=Estrutura
 
 01:00=Vamos lutar!
 01:01=Ronda empatada
@@ -434,6 +437,10 @@
 03:48=Garantia vitalícia!
 03:49=Funciona tal como anunciado
 03:50=Coleccionador de toupeiras
+03:51=Encontrado no chão
+03:52=UNUSED
+03:53=Modelo 40
+03:54=Constroi qualquer coisa
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Ataca os teus inimigos usando uma simples granada.|Explodirá quando o tempo chegar a zero.|1-5: Define o temporizador da granada|Ataque: Deixa premido para lançar com mais força
@@ -448,7 +455,7 @@
 04:09=Não te estás a sentir confiante com tua pontaria?|Utiliza a Desert Eagle para atacar disparando até quatro tiros.|Ataque: Disparar (múltiplas vezes)
 04:10=Força bruta é sempre uma opção. Larga este clássico|explosivo próximo dos teus inimigos e refugia-te.|Ataque: Larga um dinamite aos teus pés
 04:11=Livra-te de ouriços inimigos atirando-os por cima das|bordas do mapa e para dentro de água. Ou que tal|bater numas minas para os teus amigos?|Ataque: Bater em tudo o que estiver à tua frente
-04:12=Chega-te bem pertinho e solta o poder desta|quase mortal técnica de artes marciais.|Ataque: Faz um Soco de Fogo
+04:12=Chega-te bem pertinho e solta o poder desta|quase mortal técnica de artes marciais.|Ataque: Executa o espectacular Shoryuken.
 04:13=UNUSED
 04:14=Tens medo de alturas? É melhor agarrares um pára-quedas.|Abrir-se-á assim que caíres de demasiado alto salvando o|teu ouriço do dano da queda.|Ataque: Abrir o pára-quedas|Saltar: Larga granadas ou armas similares
 04:15=Chama um avião para atacar os teus inimigos|largando bombas sobre eles.|Esquerda/Direita: Determina a direcção do ataque|Cursor: Selecciona a zona alvo
@@ -467,7 +474,7 @@
 04:28=Pouco depois de lançares este rocket, ira começar a|escavar através do solo e explodir assim que o rastilho|acabe ou alcance a superfície novamente.|Ataque: Deixa premido para disparar com mais força
 04:29=Não recomendada para crianças!|A arma de bolas disparamontes de pequenas|e coloridas bolas recheadas de explosivos.|Ataque: Dispara com a força máxima|Cima/Baixo: Continua a apontar
 04:30=Chama um avião para lançar um poderoso ataque de|napalm. Com alguma portaria este ataque pode erradicar|ouriços menos sortudos e enormes partes da paisagem.|Esquerda/Direita: Determina a direcção do ataque|Cursor: Selecciona a zona alvo
-04:31=O avião telecomandado é a ferramenta ideal para recolher|caixas ou atacar ouriços distantes. Espeta-o contras os|teus inimigos ou larga-lhes umas bombas primeiro.|Ataque: Lançar o avião ou largar bombas|Salto: Ride of the Valkyries|Cima/Baixo: Guiar o avião
+04:31=O avião telecomandado é a ferramenta ideal para recolher|caixas ou atacar ouriços distantes. Espeta-o contras os|teus inimigos ou larga-lhes umas bombas primeiro.|Ataque: Lançar o avião ou largar bombas|Salto: Ride of the Valkyries|Direita/Esquerda: Guiar o avião
 04:32=A baixa gravidade funciona melhor que qualquer dieta!|Salta mais alto, enormes distancias ou deixa os teus|inimigos voar ainda mais longe.|Ataque: Activar
 04:33=Por vezes só precisas daquele pequeno impulso|extra para lidar mais dano.|Ataque: Activar
 04:34=Não me podes tocar!|Ataque: Activar

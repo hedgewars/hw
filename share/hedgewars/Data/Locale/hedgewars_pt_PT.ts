@@ -548,11 +548,6 @@ outro nome de utilizador no menu de configuração:</translation>
         <translation>Modos de jogo especiais como &apos;Vampirismo&apos; ou &apos;Karma&apos; permitem-te desenvolver tácticas completamente novas! Experimenta-os num jogo personalizado!</translation>
     </message>
     <message>
-        <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">A versão do Hedgewars para Windows suporta Xfire. Não te esqueças de adicionar o Hedgewars à tua lista de jogos para que os teus amigos te possam ver a jogar.</translation>
-    </message>
-    <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
         <comment>Tips</comment>
         <translation>Não deves instalar o Hedgewars em computadores que não te pertençam (escola, universidade, trabalho, etc.). Por favor contacta o responsável caso o pretendas fazer.</translation>
@@ -618,11 +613,6 @@ outro nome de utilizador no menu de configuração:</translation>
         <translation>O Piano é o ataque aéreo que mais potencial dano causa. No entanto uma enorme desvantagem, é necessario sacrificar um ouriço para o utilizar.</translation>
     </message>
     <message>
-        <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">A Abelha Teleguiada é uma arma difícil de usar. O grau a que pode virar depende da sua velocidade, por isso tenta não a usar com o poder máximo.</translation>
-    </message>
-    <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
         <comment>Tips</comment>
         <translation>As Minas Pegajosas são a arma ideal para com pequenas explosões em cadeia empurrar ouriços para situações terríveis... ou para a água.</translation>
@@ -646,11 +636,6 @@ outro nome de utilizador no menu de configuração:</translation>
         <source>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</source>
         <comment>Tips</comment>
         <translation>Embora o Lança-chamas seja uma arma, pode também ser usado para escavar túneis.</translation>
-    </message>
-    <message>
-        <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Utiliza o Coquetail Molotov para temporariamente impedir outros ouriços de passar por áreas no terreno como túneis e plataformas.</translation>
     </message>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
@@ -705,17 +690,17 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>A versão do Hedgewars para Windows suporta Xfire. Não te esqueças de adicionar o Hedgewars à tua lista de jogos para que os teus amigos te possam ver a jogar.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>A Abelha Teleguiada pode-se demonstrar complicada de utilizar. O grau a que consegue virar depende da sua velocidade, por isso experimenta larga-la com diferentes níveis de força.</translation>
     </message>
     <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Utiliza um Molotov ou o Lança-chamas para temporariamente impedir outros ouriços de passar por áreas no terreno como túneis ou plataformas.</translation>
     </message>
 </context>
 <context>
