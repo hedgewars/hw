@@ -602,6 +602,7 @@ begin
     RegisterVariable('healthdec', vtLongInt, @cHealthDecrease, false);
     RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);
     RegisterVariable('ropepct' , vtLongInt, @cRopePercent   , false);
+    RegisterVariable('getawaytime' , vtLongInt, @cGetAwayTime , false);
     RegisterVariable('minedudpct',vtLongInt,@cMineDudPercent, false);
     RegisterVariable('minesnum', vtLongInt, @cLandMines     , false);
     RegisterVariable('explosives',vtLongInt,@cExplosives    , false);

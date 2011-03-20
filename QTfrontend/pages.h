@@ -535,6 +535,7 @@ private:
     QSpinBox * SB_MineDuds;
     QSpinBox * SB_Explosives;
     QSpinBox * SB_RopeModifier;
+    QSpinBox * SB_GetAwayTime;
     QLineEdit * LE_name;
 
     QGroupBox * gbGameModes;

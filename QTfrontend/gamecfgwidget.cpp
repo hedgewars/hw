@@ -242,6 +242,7 @@ QByteArray GameCFGWidget::getFullConfig() const
     bcfg << QString("e$waterrise %1").arg(schemeData(36).toInt()).toUtf8();
     bcfg << QString("e$healthdec %1").arg(schemeData(37).toInt()).toUtf8();
     bcfg << QString("e$ropepct %1").arg(schemeData(38).toInt()).toUtf8();
+    bcfg << QString("e$getawaytime %1").arg(schemeData(39).toInt()).toUtf8();
     bcfg << QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()).toUtf8();
     bcfg << QString("e$mapgen %1").arg(mapgen).toUtf8();
 

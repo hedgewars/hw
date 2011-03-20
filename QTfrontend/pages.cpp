@@ -1868,7 +1868,6 @@ PageScheme::PageScheme(QWidget* parent) :
     SB_MineDuds->setSingleStep(5);
     glBSLayout->addWidget(SB_MineDuds,12,2,1,1);
 
-
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Explosives"));
     l->setWordWrap(true);
@@ -1884,22 +1883,36 @@ PageScheme::PageScheme(QWidget* parent) :
     glBSLayout->addWidget(SB_Explosives,13,2,1,1);
 
     l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("% Get Away Time"));
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,14,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconTime.png"));
+    glBSLayout->addWidget(l,14,1,1,1);
+    SB_GetAwayTime = new QSpinBox(gbBasicSettings);
+    SB_GetAwayTime->setRange(0, 999);
+    SB_GetAwayTime->setValue(100);
+    SB_GetAwayTime->setSingleStep(25);
+    glBSLayout->addWidget(SB_GetAwayTime,14,2,1,1);
+ 
+    l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Scheme Name:"));
 
     LE_name = new QLineEdit(this);
 
-    gl->addWidget(LE_name,14,1,1,5);
-    gl->addWidget(l,14,0,1,1);
+    gl->addWidget(LE_name,15,1,1,5);
+    gl->addWidget(l,15,0,1,1);
 
     mapper = new QDataWidgetMapper(this);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 15, 0, true);
-    BtnCopy = addButton(tr("Copy"), pageLayout, 15, 2);
-    BtnNew = addButton(tr("New"), pageLayout, 15, 3);
-    BtnDelete = addButton(tr("Delete"), pageLayout, 15, 4);
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 16, 0, true);
+    BtnCopy = addButton(tr("Copy"), pageLayout, 16, 2);
+    BtnNew = addButton(tr("New"), pageLayout, 16, 3);
+    BtnDelete = addButton(tr("Delete"), pageLayout, 16, 4);
 
     selectScheme = new QComboBox(this);
-    pageLayout->addWidget(selectScheme, 15, 1);
+    pageLayout->addWidget(selectScheme, 16, 1);
 
     connect(BtnCopy, SIGNAL(clicked()), this, SLOT(copyRow()));
     connect(BtnNew, SIGNAL(clicked()), this, SLOT(newRow()));
@@ -1952,6 +1965,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(SB_WaterRise, 36);
     mapper->addMapping(SB_HealthDecrease, 37);
     mapper->addMapping(SB_RopeModifier, 38);
+		mapper->addMapping(SB_GetAwayTime, 39);
 
     mapper->toFirst();
 }
