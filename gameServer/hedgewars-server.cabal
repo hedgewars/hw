@@ -25,7 +25,7 @@ Executable hedgewars-server
     network,
     time,
     stm,
-    mtl,
+    mtl >= 2,
     dataenc,
     hslogger,
     process,
