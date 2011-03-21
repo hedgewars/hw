@@ -11,6 +11,8 @@ import System.IO
 import qualified Data.List as List
 import Control.Monad
 import qualified Codec.Binary.Base64 as Base64
+import qualified Data.ByteString.Lazy as BL
+import qualified Text.Show.ByteString as BS
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BW
 -------------------------------------------------
@@ -34,11 +36,12 @@ fromEngineMsg msg = liftM BW.pack (Base64.decode (B.unpack msg) >>= removeLength
         removeLength _ = Nothing
 
 checkNetCmd :: B.ByteString -> (Bool, Bool)
-checkNetCmd = check . liftM B.unpack . fromEngineMsg
+checkNetCmd msg = check decoded
     where
+        decoded = fromEngineMsg msg
         check Nothing = (False, False)
-        check (Just (m:_)) = (m `Set.member` legalMessages, m == '+')
-        check _ = (False, False)
+        check (Just ms) | B.length ms > 0 = let m = B.head ms in (m `Set.member` legalMessages, m == '+')
+                        | otherwise        = (False, False)
         legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
 
@@ -56,7 +59,7 @@ teamToNet team =
         : teamvoicepack team
         : teamflag team
         : teamowner team
-        : (B.pack . show $ difficulty team)
+        : (showB . difficulty $ team)
         : hhsInfo
     where
         hhsInfo = concatMap (\(HedgehogInfo n hat) -> [n, hat]) $ hedgehogs team
@@ -72,9 +75,7 @@ modifyTeam team room = room{teams = replaceTeam team $ teams room}
             t : replaceTeam tm ts
 
 illegalName :: B.ByteString -> Bool
-illegalName b = null s || all isSpace s || isSpace (head s) || isSpace (last s)
-    where
-        s = B.unpack b
+illegalName s = B.null s || B.all isSpace s || isSpace (B.head s) || isSpace (B.last s)
 
 protoNumber2ver :: Word16 -> B.ByteString
 protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
@@ -115,5 +116,11 @@ unfoldrE f b  =
         Right (a, new_b) -> let (a', b') = unfoldrE f new_b in (a : a', b')
         Left new_b       -> ([], new_b)
 
-showB :: Show a => a -> B.ByteString
-showB = B.pack .show
+showB :: (BS.Show a) => a -> B.ByteString
+showB = B.concat . BL.toChunks . BS.show
+
+readInt_ :: (Num a) => B.ByteString -> a
+readInt_ str =
+  case B.readInt str of
+       Just (i, t) | B.null t -> fromIntegral i
+       _                      -> 0 

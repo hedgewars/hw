@@ -22,7 +22,7 @@ answerAllTeams cl = concatMap toAnswer
         toAnswer team =
             [AnswerClients [clChan] $ teamToNet team,
             AnswerClients [clChan] ["TEAM_COLOR", teamname team, teamcolor team],
-            AnswerClients [clChan] ["HH_NUM", teamname team, B.pack . show $ hhnum team]]
+            AnswerClients [clChan] ["HH_NUM", teamname team, showB $ hhnum team]]
 
 handleCmd_lobby :: CmdHandler
 
@@ -169,10 +169,8 @@ handleCmd_lobby ["SET_SERVER_VAR", "LATEST_PROTO", protoNum] = do
     cl <- thisClient
     return [ModifyServerInfo (\si -> si{latestReleaseVersion = readNum}) | isAdministrator cl && readNum > 0]
     where
-        readNum = case B.readInt protoNum of
-                       Just (i, t) | B.null t -> fromIntegral i
-                       _ -> 0
-
+        readNum = readInt_ protoNum
+ 
 handleCmd_lobby ["GET_SERVER_VAR"] = do
     cl <- thisClient
     return [SendServerVars | isAdministrator cl]

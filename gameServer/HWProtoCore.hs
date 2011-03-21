@@ -50,7 +50,7 @@ handleCmd_loggedin ["INFO", asknick] = do
     let clRoom = room rnc roomId
     let roomMasterSign = if isMaster cl then "@" else ""
     let adminSign = if isAdministrator cl then "@" else ""
-    let roomInfo = if roomId /= lobbyId then roomMasterSign `B.append` "room " `B.append` name clRoom else adminSign `B.append` "lobby"
+    let roomInfo = if roomId /= lobbyId then B.concat [roomMasterSign, "room ", name clRoom] else adminSign `B.append` "lobby"
     let roomStatus = if gameinprogress clRoom then
             if teamsInGame cl > 0 then "(playing)" else "(spectating)"
             else
@@ -61,9 +61,9 @@ handleCmd_loggedin ["INFO", asknick] = do
         answerClient [
             "INFO",
             nick cl,
-            "[" `B.append` host cl `B.append` "]",
+            B.concat ["[", host cl, "]"],
             protoNumber2ver $ clientProto cl,
-            "[" `B.append` roomInfo `B.append` "]" `B.append` roomStatus
+            B.concat ["[", roomInfo, "]", roomStatus]
             ]
 
 

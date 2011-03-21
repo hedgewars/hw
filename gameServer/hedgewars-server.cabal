@@ -20,6 +20,7 @@ Executable hedgewars-server
     containers,
     array,
     bytestring,
+    bytestring-show,
     network-bytestring,
     network,
     time,

@@ -15,7 +15,7 @@ import Utils
 
 
 pDelim :: B.ByteString
-pDelim = B.pack "\n\n"
+pDelim = "\n\n"
 
 bs2Packets :: B.ByteString -> ([[B.ByteString]], B.ByteString)
 bs2Packets = unfoldrE extractPackets
@@ -59,7 +59,7 @@ clientSendLoop s tId cChan chan ci = do
     answer <- readChan chan
     Exception.handle
         (\(e :: Exception.IOException) -> unless (isQuit answer) . killReciever $ show e) $
-            sendAll s $ B.unlines answer `B.append` B.singleton '\n'
+            sendAll s $ B.unlines answer `B.snoc` '\n'
 
     if isQuit answer then
         do

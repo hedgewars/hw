@@ -73,9 +73,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         canAddNumber r = 48 - (sum . map hhnum $ teams r)
         findTeam = find (\t -> tName == teamname t) . teams
         newTeam ci clNick r = TeamInfo ci clNick tName color grave fort voicepack flag dif (newTeamHHNum r) (hhsList hhsInfo)
-        dif = case B.readInt difStr of
-                    Just (i, t) | B.null t -> fromIntegral i
-                    _ -> 0
+        dif = readInt_ difStr
         hhsList [] = []
         hhsList [_] = error "Hedgehogs list with odd elements number"
         hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
@@ -122,11 +120,9 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
             []
         else
             [ModifyRoom $ modifyTeam team{hhnum = hhNumber},
-            AnswerClients others ["HH_NUM", teamName, B.pack $ show hhNumber]]
+            AnswerClients others ["HH_NUM", teamName, showB hhNumber]]
     where
-        hhNumber = case B.readInt numberStr of
-                           Just (i, t) | B.null t -> fromIntegral i
-                           _ -> 0
+        hhNumber = readInt_ numberStr
         findTeam = find (\t -> teamName == teamname t) . teams
         canAddNumber = (-) 48 . sum . map hhnum . teams
 
@@ -261,6 +257,6 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
     chans <- roomSameClanChans
     return [AnswerClients chans ["EM", engineMsg cl]]
     where
-        engineMsg cl = toEngineMsg $ "b" `B.append` nick cl `B.append` "(team): " `B.append` msg `B.append` "\x20\x20"
+        engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "(team): ", msg, "\x20\x20"]
 
 handleCmd_inRoom _ = return [ProtocolError "Incorrect command (state: in room)"]

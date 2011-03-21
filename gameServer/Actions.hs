@@ -103,7 +103,7 @@ processAction SendServerVars = do
         vars si = [
             "MOTD_NEW", serverMessage si,
             "MOTD_OLD", serverMessageForOldVersions si,
-            "LATEST_PROTO", B.pack . show $ latestReleaseVersion si
+            "LATEST_PROTO", showB $ latestReleaseVersion si
             ]
 
 
@@ -118,7 +118,7 @@ processAction (Warning msg) = do
 
 processAction (NoticeMessage n) = do
     chan <- client's sendChan
-    processAction $ AnswerClients [chan] ["NOTICE", B.pack . show . fromEnum $ n]
+    processAction $ AnswerClients [chan] ["NOTICE", showB . fromEnum $ n]
 
 processAction (ByeClient msg) = do
     (Just ci) <- gets clientIndex
@@ -301,7 +301,7 @@ processAction (RemoveTeam teamName) = do
                     })
                 ]
     where
-        rmTeamMsg = toEngineMsg $ B.singleton 'F' `B.append` teamName
+        rmTeamMsg = toEngineMsg $ 'F' `B.cons` teamName
 
 
 processAction (RemoveClientTeams clId) = do
@@ -376,7 +376,7 @@ processAction (BanClient seconds reason banId) = do
     modify (\s -> s{clientIndex = Just banId})
     clHost <- client's host
     currentTime <- io getCurrentTime
-    let msg = "Ban for " `B.append` (B.pack . show $ seconds) `B.append` "seconds (" `B.append` reason ` B.append` ")"
+    let msg = B.concat ["Ban for ", B.pack . show $ seconds, "seconds (", reason, ")"]
     mapM_ processAction [
         AddIP2Bans clHost msg (addUTCTime seconds currentTime)
         , KickClient banId

@@ -32,7 +32,7 @@ handleCmd_NotEntered ["PROTO", protoNum] = do
             else
             return $
                 ModifyClient (\c -> c{clientProto = parsedProto}) :
-                AnswerClients [sendChan cl] ["PROTO", B.pack $ show parsedProto] :
+                AnswerClients [sendChan cl] ["PROTO", showB parsedProto] :
                 [CheckRegistered | not . B.null $ nick cl]
     where
         parsedProto = case B.readInt protoNum of
