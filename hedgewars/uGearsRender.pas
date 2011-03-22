@@ -1041,7 +1041,7 @@ begin
            gtFlake: if (Gear^.State and gstTmpFlag) <> 0 then
                         //DrawRotatedTextureF(SpritesData[sprSnowBall].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle)
                         begin
-                        Tint(cExplosionBorderColor);
+                        Tint(cExplosionBorderColor shl 8 or $000000FF);
                         //DrawRotated(sprSnow, x, y, 0, Gear^.DirAngle);
                         // Needs a nicer white texture to tint
                         DrawTexture(x, y, SpritesData[sprVampiric].Texture, 0.1);
