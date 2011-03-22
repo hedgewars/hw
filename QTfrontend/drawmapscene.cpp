@@ -86,7 +86,10 @@ void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
 void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
-    Q_UNUSED(mouseEvent);
+    QPainterPath path = m_currPath->path();
+    path.lineTo(mouseEvent->scenePos());
+    paths.first().append(mouseEvent->scenePos().toPoint());
+    m_currPath->setPath(path);
 
     simplifyLast();
 
