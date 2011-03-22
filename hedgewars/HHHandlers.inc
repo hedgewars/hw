@@ -390,12 +390,11 @@ with CurrentHedgehog^.Gear^,
                 begin
                 if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
                 TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
+                if (CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) then
+                    ShowCrosshair:= (Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoCrossHair) = 0
+                else ShowCrosshair:= false;
                 end;
             if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) then State:= State or gstAttacked;
-            if (CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) then
-                ShowCrosshair:= (Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoCrossHair) = 0
-            else
-                ShowCrosshair:= (Ammoz[a].Ammo.Propz and ammoprop_NoCrosshair) = 0;
             if (Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then ApplyAmmoChanges(CurrentHedgehog^)
             end;
         end
