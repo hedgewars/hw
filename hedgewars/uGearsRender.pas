@@ -21,7 +21,7 @@
 unit uGearsRender;
 
 interface
-uses uTypes, uConsts, GLunit, uFloat;
+uses uTypes, uConsts, GLunit, uFloat, SDLh;
 
 procedure RenderGear(Gear: PGear; x, y: LongInt);
 
@@ -1041,7 +1041,10 @@ begin
            gtFlake: if (Gear^.State and gstTmpFlag) <> 0 then
                         //DrawRotatedTextureF(SpritesData[sprSnowBall].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle)
                         begin
-                        Tint(cExplosionBorderColor shl 8 or $000000FF);
+                        Tint((cExplosionBorderColor shr RShift) and $FF, 
+                             (cExplosionBorderColor shr GShift) and $FF, 
+                             (cExplosionBorderColor shr BShift) and $FF, 
+                             (cExplosionBorderColor shr AShift) and $FF);
                         //DrawRotated(sprSnow, x, y, 0, Gear^.DirAngle);
                         // Needs a nicer white texture to tint
                         DrawTexture(x, y, SpritesData[sprVampiric].Texture, 0.1);

@@ -226,11 +226,19 @@ const
     GMask = $0000FF00;
     BMask = $00FF0000;
     AMask = $FF000000;
+    RShift = 0;
+    GShift = 8;
+    BShift = 16;
+    AShift = 24;
 {$ELSE}
     RMask = $FF000000;
     GMask = $00FF0000;
     BMask = $0000FF00;
     AMask = $000000FF;
+    RShift = 24;
+    GShift = 16;
+    BShift = 8;
+    AShift = 0;
 {$ENDIF}
 
     {* SDL_mixer *}

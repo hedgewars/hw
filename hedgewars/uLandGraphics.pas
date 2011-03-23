@@ -49,15 +49,15 @@ var
     oRed, oBlue, oGreen, oAlpha, nRed, nBlue, nGreen, nAlpha: Byte;
 begin
     // Get colors
-    oAlpha := (OldColor shr 24) and $FF;
-    oRed   := (OldColor shr 16) and $FF;
-    oGreen := (OldColor shr 8) and $FF;
-    oBlue  := (OldColor) and $FF;
+    oAlpha := (OldColor shr AShift) and $FF;
+    oRed   := (OldColor shr RShift) and $FF;
+    oGreen := (OldColor shr GShift) and $FF;
+    oBlue  := (OldColor shr BShift) and $FF;
 
-    nAlpha := (NewColor shr 24) and $FF;
-    nRed   := (NewColor shr 16) and $FF;
-    nGreen := (NewColor shr 8) and $FF;
-    nBlue  := (NewColor) and $FF;
+    nAlpha := (NewColor shr AShift) and $FF;
+    nRed   := (NewColor shr RShift) and $FF;
+    nGreen := (NewColor shr GShift) and $FF;
+    nBlue  := (NewColor shr BShift) and $FF;
 
     // Mix colors
     nAlpha := min(255, oAlpha + nAlpha);
@@ -65,7 +65,7 @@ begin
     nGreen := ((oGreen * oAlpha) + (nGreen * (255-oAlpha))) div 255;
     nBlue  := ((oBlue * oAlpha) + (nBlue * (255-oAlpha))) div 255;
 
-    addBgColor := (nAlpha shl 24) or (nRed shl 16) or (nGreen shl 8) or (nBlue);
+    addBgColor := (nAlpha shl AShift) or (nRed shl RShift) or (nGreen shl GShift) or (nBlue shl BShift);
 end;
 
 procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);

@@ -680,13 +680,13 @@ if draw then
                         if (cReducedQuality and rqBlurryLand) = 0 then
                             begin
                             if gun then
-                                LandPixels[yy + py, xx + px]:= (cExplosionBorderColor and $00FFFFFF) or (p^[px] and $FF000000)
+                                LandPixels[yy + py, xx + px]:= (cExplosionBorderColor and not AMask) or (p^[px] and AMask)
                             else LandPixels[yy + py, xx + px]:= addBgColor(LandPixels[yy + py, xx + px], p^[px]);
                             end
                         else
                             begin
                             if gun then
-                                LandPixels[(yy + py) div 2, (xx + px) div 2]:= (cExplosionBorderColor and $00FFFFFF) or (p^[px] and $FF000000)
+                                LandPixels[(yy + py) div 2, (xx + px) div 2]:= (cExplosionBorderColor and not AMask) or (p^[px] and AMask)
                             else LandPixels[(yy + py) div 2, (xx + px) div 2]:= addBgColor(LandPixels[(yy + py) div 2, (xx + px) div 2], p^[px]);
                             end;
                         end
