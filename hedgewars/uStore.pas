@@ -687,9 +687,10 @@ begin
 
     DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
 
-    SDL_GL_SwapBuffers();
 {$IFDEF SDL13}
     SDL_RenderPresent(SDLrender);
+{$ELSE}
+    SDL_GL_SwapBuffers();
 {$ENDIF}
     inc(Step);
 
@@ -925,9 +926,10 @@ begin
 {$IFDEF SDL13}
     if SDLwindow = nil then
     begin
-        // on ipad, when second monitor is attached, display window in second monitor always
-        x:= {$IFDEF IPHONEOS}(SDL_WINDOWPOS_CENTERED_MASK or (SDL_GetNumVideoDisplays() - 1)){$ELSE}0{$ENDIF};
-        y:= {$IFDEF IPHONEOS}(SDL_WINDOWPOS_CENTERED_MASK or (SDL_GetNumVideoDisplays() - 1)){$ELSE}0{$ENDIF};
+        // the values in x and y make the window appear in the center
+        // on ios, make the sdl window appear on the second monitor when present
+        x:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
+        y:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
         SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN
                         {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS {$ENDIF});
         SDLrender:= SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
