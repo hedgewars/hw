@@ -3679,6 +3679,7 @@ procedure doStepPortal(Gear: PGear);
 var 
     iterator, conPortal: PGear;
     s, r, nx, ny, ox, oy, poffs, noffs, pspeed, nspeed: hwFloat;
+    o_x,o_y,r_x,r_y,rr_x,rr_y: LongInt;
     hasdxy, isbullet, iscake: Boolean;
 begin
     doPortalColorSwitch();
@@ -3749,6 +3750,56 @@ begin
            or (iterator^.Y < Gear^.Y - r)
            or (iterator^.Y > Gear^.Y + r) then
             continue;
+
+        //Will if fit through?
+
+        o_x := hwRound(conPortal^.X + conPortal^.dX);
+        o_y := hwRound(conPortal^.Y + conPortal^.dY);
+        r_x := hwRound(conPortal^.X+r*conPortal^.dX);
+        r_y := hwRound(conPortal^.Y+r*conPortal^.dY);
+        rr_x := hwRound(conPortal^.X+r*conPortal^.dX*2);
+        rr_y := hwRound(conPortal^.Y+r*conPortal^.dY*2);
+
+        //check outer edge
+        if (((rr_y and LAND_HEIGHT_MASK) <> 0) or ((rr_x and LAND_WIDTH_MASK) <> 0)) then
+            begin
+            if hasBorder then continue;
+            end
+        else
+            if ((Land[rr_y,rr_x] and $FF00) <> 0) then
+                continue;
+        //check middle bound
+        if (((r_y and LAND_HEIGHT_MASK) <> 0) or ((r_x and LAND_WIDTH_MASK) <> 0)) then
+            begin
+            if hasBorder then continue;
+            end
+        else
+        if ((Land[r_y, r_x] and $FF00) <> 0) then
+                continue;
+        //check inner bound
+        if (((o_y and LAND_HEIGHT_MASK) <> 0) or ((o_x and LAND_WIDTH_MASK) <> 0)) then
+            begin
+            if hasBorder then continue;
+            end
+        else
+        if ((Land[o_y, o_x] and $FF00) <> 0) then
+                continue;
+        //check left bound
+        if (((rr_y and LAND_HEIGHT_MASK) <> 0) or ((o_x and LAND_WIDTH_MASK) <> 0)) then
+            begin
+            if hasBorder then continue;
+            end
+        else
+        if ((Land[rr_y, o_x] and $FF00) <> 0) then
+                continue;
+        //Check Right Bound
+        if (((o_y and LAND_HEIGHT_MASK) <> 0) or ((rr_x and LAND_WIDTH_MASK) <> 0)) then
+            begin
+            if hasBorder then continue;
+            end
+        else
+        if ((Land[o_y, rr_x] and $FF00) <> 0) then
+                continue;
 
         hasdxy := (((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0))
                     or ((iterator^.State or gstMoving) = 0));
