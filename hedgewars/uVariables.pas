@@ -158,6 +158,7 @@ var
 
     Theme           : shortstring;
     disableLandBack : boolean;
+    conversionFormat: PSDL_PixelFormat;
 
 {$IFDEF SDL13}
     SDLwindow       : PSDL_Window;

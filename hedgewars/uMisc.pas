@@ -118,21 +118,12 @@ end;
 
 // http://www.idevgames.com/forums/thread-5602-post-21860.html#pid21860
 function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
-const conversionFormat: TSDL_PixelFormat = (
-{$IFDEF SDL13}format: 0;{$ENDIF}
-        palette: nil; BitsPerPixel: 32; BytesPerPixel: 4;
-        Rloss: 0; Gloss: 0; Bloss: 0; Aloss: 0;
-{$IFDEF ENDIAN_LITTLE}Rshift: 0; Gshift: 8; Bshift: 16; Ashift: 24;
-{$ELSE} Rshift: 24; Gshift: 16; Bshift: 8; Ashift: 0;{$ENDIF}
-        RMask: RMask; GMask: GMask; BMask: BMask; AMask: AMask;
-{$IFDEF SDL13}refcount: 0; next: nil;
-{$ELSE} colorkey: 0; alpha: 255{$ENDIF});
 var convertedSurf: PSDL_Surface;
 begin
     if ((tmpsurf^.format^.bitsperpixel = 32) and (tmpsurf^.format^.rshift > tmpsurf^.format^.bshift)) or
        (tmpsurf^.format^.bitsperpixel = 24) then
         begin
-        convertedSurf:= SDL_ConvertSurface(tmpsurf, @conversionFormat, SDL_SWSURFACE);
+        convertedSurf:= SDL_ConvertSurface(tmpsurf, conversionFormat, SDL_SWSURFACE);
         SDL_FreeSurface(tmpsurf);
         exit(convertedSurf);
         end;
@@ -150,11 +141,14 @@ end;
 
 procedure initModule;
 begin
+    // SDL_PIXELFORMAT_RGB8888
+    conversionFormat:= SDL_AllocFormat($86462004);
 end;
 
 procedure freeModule;
 begin
     recordFileName:= '';
+    SDL_FreeFormat(conversionFormat);
 end;
 
 end.

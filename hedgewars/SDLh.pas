@@ -93,46 +93,52 @@ const
 /////////////////////  CONSTANT DEFINITIONS /////////////////////
 /////////////////////////////////////////////////////////////////
 
-    SDL_INIT_TIMER    = $00000001;
-    SDL_INIT_AUDIO    = $00000010;
-    SDL_INIT_VIDEO    = $00000020;
-    SDL_INIT_JOYSTICK = $00000200;
+    // SDL_Init() flags
+    SDL_INIT_TIMER       = $00000001;
+    SDL_INIT_AUDIO       = $00000010;
+    SDL_INIT_VIDEO       = $00000020;
+    SDL_INIT_JOYSTICK    = $00000200;
 {$IFDEF SDL13}
-    SDL_INIT_HAPTIC   = $00001000;
+    SDL_INIT_HAPTIC      = $00001000;
 {$ELSE}
-    SDL_INIT_CDROM    = $00000100;
+    SDL_INIT_CDROM       = $00000100;
+    SDL_INIT_EVENTTHREAD = $01000000;
 {$ENDIF}
     SDL_INIT_NOPARACHUTE = $00100000;
-    SDL_INIT_EVENTTHREAD = $01000000;
     SDL_INIT_EVERYTHING  = $0000FFFF;
 
-    SDL_APPINPUTFOCUS    = 2;
+    SDL_APPINPUTFOCUS    = $02;
     SDL_BUTTON_WHEELUP   = 4;
     SDL_BUTTON_WHEELDOWN = 5;
 
 {$IFDEF SDL13}
     // SDL_Event types
-    SDL_FIRSTEVENT      = 0;
-    SDL_QUITEV          = $100;
-    SDL_WINDOWEVENT     = $200;
-    SDL_SYSWMEVENT      = $201;
-    SDL_KEYDOWN         = $300;
-    SDL_KEYUP           = $301;
-    SDL_TEXTEDITING     = $302;
-    SDL_TEXTINPUT       = $303;
-    SDL_MOUSEMOTION     = $400;
-    SDL_MOUSEBUTTONDOWN = $401;
-    SDL_MOUSEBUTTONUP   = $402;
-    SDL_MOUSEWHEEL      = $403;
-    SDL_PROXIMITYIN     = $500;
-    SDL_PROXIMITYOUT    = $501;
-    SDL_JOYAXISMOTION   = $600;
-    SDL_JOYBALLMOTION   = $601;
-    SDL_JOYHATMOTION    = $602;
-    SDL_JOYBUTTONDOWN   = $603;
-    SDL_JOYBUTTONUP     = $604;
-    SDL_USEREVENT       = $8000;
-    SDL_LASTEVENT       = $FFFF;
+    SDL_FIRSTEVENT        = 0;
+    SDL_QUITEV            = $100;
+    SDL_WINDOWEVENT       = $200;
+    SDL_SYSWMEVENT        = $201;
+    SDL_KEYDOWN           = $300;
+    SDL_KEYUP             = $301;
+    SDL_TEXTEDITING       = $302;
+    SDL_TEXTINPUT         = $303;
+    SDL_MOUSEMOTION       = $400;
+    SDL_MOUSEBUTTONDOWN   = $401;
+    SDL_MOUSEBUTTONUP     = $402;
+    SDL_MOUSEWHEEL        = $403;
+    SDL_INPUTMOTION       = $500;
+    SDL_INPUTBUTTONDOWN   = $501;
+    SDL_INPUTBUTTONUP     = $502;
+    SDL_INPUTWHEEL        = $503;
+    SDL_INPUTPROXIMITYIN  = $504;
+    SDL_INPUTPROXIMITYOUT = $505;
+    SDL_JOYAXISMOTION     = $600;
+    SDL_JOYBALLMOTION     = $601;
+    SDL_JOYHATMOTION      = $602;
+    SDL_JOYBUTTONDOWN     = $603;
+    SDL_JOYBUTTONUP       = $604;
+    //TODO: implement otheer event types
+    SDL_USEREVENT         = $8000;
+    SDL_LASTEVENT         = $FFFF;
 
     // SDL_Surface flags
     SDL_SWSURFACE   = $00000000;  //*< Not used */
@@ -153,15 +159,20 @@ const
     SDL_RLEACCELOK  = $08000000;  //*< Not used */
     SDL_HWACCEL     = $08000000;  //*< Not used */
 
+    // SDL_Renderer flags
+    SDL_RENDERER_SOFTWARE     = $00000001;     //*< The renderer is a software fallback */
+    SDL_RENDERER_ACCELERATED  = $00000002;     //*< The renderer uses hardware acceleration */
+    SDL_RENDERER_PRESENTVSYNC = $00000004;
+
     // SDL_WindowFlags (enum)
     SDL_WINDOW_FULLSCREEN    = $00000001;      //*< fullscreen window, implies borderless */
     SDL_WINDOW_OPENGL        = $00000002;      //*< window usable with OpenGL context */
     SDL_WINDOW_SHOWN         = $00000004;      //*< window is visible */
-//  SDL_WINDOW_HIDDEN        = $00000008;      //*< window is not visible */
-    SDL_WINDOW_BORDERLESS    = $00000008;      //*< no window decoration */
-    SDL_WINDOW_RESIZABLE     = $00000010;      //*< window can be resized */
-    SDL_WINDOW_MINIMIZED     = $00000020;      //*< window is minimized */
-    SDL_WINDOW_MAXIMIZED     = $00000040;      //*< window is maximized */
+    SDL_WINDOW_HIDDEN        = $00000008;      //*< window is not visible */
+    SDL_WINDOW_BORDERLESS    = $00000010;      //*< no window decoration */
+    SDL_WINDOW_RESIZABLE     = $00000020;      //*< window can be resized */
+    SDL_WINDOW_MINIMIZED     = $00000040;      //*< window is minimized */
+    SDL_WINDOW_MAXIMIZED     = $00000080;      //*< window is maximized */
     SDL_WINDOW_INPUT_GRABBED = $00000100;      //*< window has grabbed input focus */
     SDL_WINDOW_INPUT_FOCUS   = $00000200;      //*< window has input focus */
     SDL_WINDOW_MOUSE_FOCUS   = $00000400;      //*< window has mouse focus */
@@ -176,17 +187,15 @@ const
     SDL_WINDOWEVENT_EXPOSED      = 3;    //*< Window has been exposed and should be redrawn
     SDL_WINDOWEVENT_MOVED        = 4;    //*< Window has been moved to data1, data2
     SDL_WINDOWEVENT_RESIZED      = 5;    //*< Window size changed to data1xdata2
-    SDL_WINDOWEVENT_MINIMIZED    = 6;    //*< Window has been minimized
-    SDL_WINDOWEVENT_MAXIMIZED    = 7;    //*< Window has been maximized
-    SDL_WINDOWEVENT_RESTORED     = 8;    //*< Window has been restored to normal size and position
-    SDL_WINDOWEVENT_ENTER        = 9;    //*< Window has gained mouse focus
-    SDL_WINDOWEVENT_LEAVE        = 10;   //*< Window has lost mouse focus
-    SDL_WINDOWEVENT_FOCUS_GAINED = 11;   //*< Window has gained keyboard focus
-    SDL_WINDOWEVENT_FOCUS_LOST   = 12;   //*< Window has lost keyboard focus
-    SDL_WINDOWEVENT_CLOSE        = 13;   //*< The window manager requests that the window be closed */
-
-    SDL_RENDERER_ACCELERATED  = $00000001;   //*< The renderer uses hardware acceleration
-    SDL_RENDERER_PRESENTVSYNC = $00000002;   //*< Present is synchronized with the refresh rate
+    SDL_WINDOWEVENT_SIZE_CHANGED = 6;    //*< The window size has changed, [...] */
+    SDL_WINDOWEVENT_MINIMIZED    = 7;    //*< Window has been minimized
+    SDL_WINDOWEVENT_MAXIMIZED    = 8;    //*< Window has been maximized
+    SDL_WINDOWEVENT_RESTORED     = 9;    //*< Window has been restored to normal size and position
+    SDL_WINDOWEVENT_ENTER        = 10;   //*< Window has gained mouse focus
+    SDL_WINDOWEVENT_LEAVE        = 11;   //*< Window has lost mouse focus
+    SDL_WINDOWEVENT_FOCUS_GAINED = 12;   //*< Window has gained keyboard focus
+    SDL_WINDOWEVENT_FOCUS_LOST   = 13;   //*< Window has lost keyboard focus
+    SDL_WINDOWEVENT_CLOSE        = 14;   //*< The window manager requests that the window be closed */
 {$ELSE}
     // SDL_Event types
     SDL_NOEVENT         = 0;
@@ -274,6 +283,12 @@ const
 /////////////////////////////////////////////////////////////////
 
 type
+{$IFDEF SDL13}
+    PSDL_Window   = Pointer;
+    PSDL_Renderer = Pointer;
+    PSDL_Texture  = Pointer;
+{$ENDIF}
+
     PSDL_Rect = ^TSDL_Rect;
     TSDL_Rect = record
 {$IFDEF SDL13}
@@ -285,15 +300,32 @@ type
         end;
 
     TPoint = record
-        X: LongInt;
-        Y: LongInt;
+        X, Y: LongInt;
         end;
 
     PSDL_PixelFormat = ^TSDL_PixelFormat;
     TSDL_PixelFormat = record
 {$IFDEF SDL13}
         format: Longword;
-{$ENDIF}
+        palette: Pointer;   // actually it is a PSDL_Palette
+        BitsPerPixel : Byte;
+        BytesPerPixel: Byte;
+        padding: array[0..1] of Byte;
+        RMask : Longword;
+        GMask : Longword;
+        BMask : Longword;
+        AMask : Longword;
+        Rloss : Byte;
+        Gloss : Byte;
+        Bloss : Byte;
+        Aloss : Byte;
+        Rshift: Byte;
+        Gshift: Byte;
+        Bshift: Byte;
+        Ashift: Byte;
+        refcount: LongInt;
+        next: PSDL_PixelFormat;
+{$ELSE}
         palette: Pointer;
         BitsPerPixel : Byte;
         BytesPerPixel: Byte;
@@ -309,10 +341,6 @@ type
         GMask : Longword;
         BMask : Longword;
         AMask : Longword;
-{$IFDEF SDL13}
-        refcount: LongInt;
-        next: Pointer;
-{$ELSE}
         colorkey: Longword;
         alpha: Byte;
 {$ENDIF}
@@ -327,18 +355,25 @@ type
         pitch : Word;
         pixels: Pointer;
         offset: LongInt;
+{$IFDEF SDL13}
+        userdata: Pointer;
+        locked: LongInt;
+        lock_data: Pointer;
+        clip_rect: TSDL_Rect;
+        map: Pointer;
+        refcount: LongInt;
+{$ENDIF}
         end;
 
 
     PSDL_Color = ^TSDL_Color;
     TSDL_Color = record
         case byte of
-            0: (    r: Byte;
-                g: Byte;
-                b: Byte;
-                unused: Byte;
-               );
-            1: (    value: Longword);
+            0: ( r: Byte;
+                 g: Byte;
+                 b: Byte;
+                 unused: Byte; );
+            1: ( value: Longword; );
         end;
 
 
@@ -349,7 +384,7 @@ type
     TClose = function( context: PSDL_RWops ): LongInt; cdecl;
 
     TStdio = record
-        autoclose: LongInt;
+        autoclose: {$IFDEF SDL13}boolean{$ELSE}LongInt{$ENDIF};
         fp: pointer;
         end;
 
@@ -379,9 +414,12 @@ type
 {* SDL_Event type definition *}
 
 {$IFDEF SDL13}
-    PSDL_Window = pointer;
-    PSDL_Renderer = pointer;
-    PSDL_Texture = pointer;
+    TSDL_KeySym = record
+        scancode: LongInt;
+        sym: LongInt;
+        modifier: Smallint;
+        unicode: LongInt;
+        end;
 
     TSDL_WindowEvent = record
         type_: LongInt;
@@ -390,15 +428,6 @@ type
         padding1, padding2, padding3: byte;
         data1, data2: LongInt;
         end;
-
-    TSDL_KeySym = record
-        scancode,
-        sym,
-        modifier,
-        unicode: LongInt;
-        end;
-
-// implement SDL_TextEditingEvent + SDL_TextInputEvent for sdl13
 {$ELSE}
     TSDL_KeySym = record
         scancode: Byte;
@@ -421,6 +450,22 @@ type
         end;
 {$ENDIF}
 
+    TSDL_KeyboardEvent = record
+{$IFDEF SDL13}
+        type_: LongInt;
+        windowID: LongInt;
+        state, repeat_, padding2, padding3: byte;
+{$ELSE}
+        type_: byte;
+        which: byte;
+        state: byte;
+{$ENDIF}
+        keysym: TSDL_KeySym;
+        end;
+
+//TODO: implement SDL_TextEditingEvent + SDL_TextInputEvent for sdl13
+
+    // this structure is wrong but the correct version makes the game hang
     TSDL_MouseMotionEvent = record
         which: byte;
         state: byte;
@@ -437,27 +482,14 @@ type
 {$ENDIF}
         end;
 
-    TSDL_KeyboardEvent = record
-{$IFDEF SDL13}
-        type_: LongInt;
-        windowID: LongInt;
-        padding1, padding2: byte;
-{$ELSE}
-        type_: byte;
-{$ENDIF}
-        which: byte;
-        state: byte;
-        keysym: TSDL_KeySym;
-        end;
-
     TSDL_MouseButtonEvent = record
 {$IFDEF SDL13}
-        _type: LongInt;
+        type_: LongInt;
         windowID: LongInt;
         x, y: LongInt;
         padding1: byte;
 {$ELSE}
-        _type,
+        type_,
         which,
         button,
         state: byte;
@@ -471,21 +503,17 @@ type
         windowID: LongInt;
         which: Byte;
         x, y: LongInt;
-        padding1, padding2, padding3: byte;
         end;
 
-    // implement SDL_ProximityEvent
+//TODO: implement SDL_ProximityEvent
 {$ENDIF}
 
     TSDL_JoyAxisEvent = record
-{$IFDEF SDL13}
-        type_: LongInt;
-{$ELSE}
-        type_: Byte;
-{$ENDIF}
+        type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
         which: Byte;
         axis: Byte;
 {$IFDEF SDL13}
+        padding1, padding2: Byte;
         value: LongInt;
 {$ELSE}
         value: Smallint;
@@ -493,45 +521,41 @@ type
         end;
 
     TSDL_JoyBallEvent = record
+        type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
         which: Byte;
         ball: Byte;
 {$IFDEF SDL13}
-        type_: LongInt;
+        padding1, padding2: Byte;
         xrel, yrel: LongInt;
 {$ELSE}
-        type_: Byte;
         xrel, yrel: Smallint;
 {$ENDIF}
         end;
 
     TSDL_JoyHatEvent = record
-{$IFDEF SDL13}
-        type_: LongInt;
-{$ELSE}
-        type_: Byte;
-{$ENDIF}
+        type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
         which: Byte;
         hat: Byte;
         value: Byte;
+{$IFDEF SDL13}
+        padding1: Byte;
+{$ENDIF}
         end;
 
     TSDL_JoyButtonEvent = record
-{$IFDEF SDL13}
-        type_: LongInt;
-{$ELSE}
-        type_: Byte;
-{$ENDIF}
+        type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
         which: Byte;
         button: Byte;
         state: Byte;
+{$IFDEF SDL13}
+        padding1: Byte;
+{$ENDIF}
         end;
 
+//TODO: implement SDL_TouchButtonEvent, SDL_MultiGestureEvent, SDL_DollarGestureEvent
+
     TSDL_QuitEvent = record
-{$IFDEF SDL13}
-        type_: LongInt;
-{$ELSE}
-        type_: Byte;
-{$ENDIF}
+        type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
         end;
 
     TSDL_UserEvent = record
@@ -550,7 +574,6 @@ type
 {$IFDEF SDL13}
         case LongInt of
             SDL_FIRSTEVENT: (type_: LongInt);
-            SDL_QUITEV: (quit: TSDL_QuitEvent);
             SDL_WINDOWEVENT: (wevent: TSDL_WindowEvent);
             SDL_KEYDOWN,
             SDL_KEYUP: (key: TSDL_KeyboardEvent);
@@ -565,7 +588,9 @@ type
             SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
             SDL_JOYBUTTONDOWN,
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
+            SDL_QUITEV: (quit: TSDL_QuitEvent);
             SDL_USEREVENT: (user: TSDL_UserEvent);
+            //TODO: implement other events
 {$ELSE}
         case Byte of
             SDL_NOEVENT: (type_: byte);
@@ -757,12 +782,19 @@ function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt;
 
 function  SDL_AllocFormat(format: Longword): PSDL_PixelFormat; cdecl; external SDLLibName;
 procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat); cdecl; external SDLLibName;
+procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; external SDLLibName;
+
+procedure SDL_WarpMouse(x, y: Word);
+{$ELSE}
+procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
+
+function  SDL_AllocFormat(format: Longword): PSDL_PixelFormat;
+procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat);
 {$ENDIF}
 
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
-procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
 
 procedure SDL_PumpEvents; cdecl; external SDLLibName;
 function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
@@ -860,7 +892,7 @@ procedure IMG_Quit; cdecl; external SDL_ImageLibName;
 function  IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
 function  IMG_Load_RW(rwop: PSDL_RWops; freesrc: LongInt): PSDL_Surface; cdecl; external SDL_ImageLibName;
 function  IMG_LoadPNG_RW(rwop: PSDL_RWops): PSDL_Surface; cdecl; external SDL_ImageLibName;
-function  IMG_LoadTyped_RW(rwop: PSDL_RWops; freesrc: LongInt; _type: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
+function  IMG_LoadTyped_RW(rwop: PSDL_RWops; freesrc: LongInt; type_: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
 
 (*  SDL_net  *)
 function  SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;
@@ -884,6 +916,31 @@ function  SDLNet_Read16(buf: pointer): Word;
 function  SDLNet_Read32(buf: pointer): LongWord;
 
 implementation
+uses uVariables;
+
+{$IFDEF SDL13}
+procedure SDL_WarpMouse(x, y: Word);
+begin
+    SDL_WarpMouseInWindow(SDLwindow, x, y);
+end;
+{$ELSE}
+function SDL_AllocFormat(format: Longword): PSDL_PixelFormat;
+const conversionFormat: TSDL_PixelFormat = (
+        palette: nil; BitsPerPixel: 32; BytesPerPixel: 4;
+        Rloss: 0; Gloss: 0; Bloss: 0; Aloss: 0;
+        Rshift: RShift; Gshift: GShift; Bshift: BShift; Ashift: AShift;
+        RMask: RMask; GMask: GMask; BMask: BMask; AMask: AMask;
+        colorkey: 0; alpha: 255);
+begin
+    format:= format;
+    exit(@conversionFormat);
+end;
+
+procedure SDL_FreeFormat;
+begin
+    // yay free space
+end;
+{$ENDIF}
 
 function SDL_MustLock(Surface: PSDL_Surface): Boolean;
 begin
