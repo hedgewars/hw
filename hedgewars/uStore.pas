@@ -627,7 +627,7 @@ begin
     // enable alpha blending
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    // disable/lower perspective correction (won't need it anyway)
+    // disable/lower perspective correction (will not need it anyway)
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     // disable dithering
     glDisable(GL_DITHER);
@@ -871,7 +871,7 @@ end;
 
 procedure FreeWeaponTooltip;
 begin
-// free the existing texture (if there's any)
+// free the existing texture (if there is any)
 if WeaponTooltipTex = nil then
     exit;
 FreeTexture(WeaponTooltipTex);
@@ -938,10 +938,13 @@ begin
     SDL_SetRenderDrawColor(SDLrender, 0, 0, 0, 255);
     SDL_RenderClear(SDLrender);
     SDL_RenderPresent(SDLrender);
+
+    // we need to reset the gl context from the one created by SDL as we have our own drawing system
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
 {$ELSE}
     SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
     SDLTry(SDLPrimSurface <> nil, true);
-    PixelFormat:= SDLPrimSurface^.format;
 {$ENDIF}
 
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
@@ -954,7 +957,6 @@ var ai: TAmmoType;
 begin
     RegisterVariable('fullscr', vtCommand, @chFullScr, true);
 
-    PixelFormat:= nil;
     SDLPrimSurface:= nil;
 
 {$IFNDEF IPHONEOS}

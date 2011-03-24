@@ -2166,7 +2166,6 @@ var
     bAFRRight: Boolean;
 
 
-    PixelFormat: PSDL_PixelFormat;
     SDLPrimSurface: PSDL_Surface;
     PauseTexture,
     SyncTexture,
