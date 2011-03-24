@@ -3752,6 +3752,8 @@ begin
             continue;
 
         //Will if fit through?
+        //set r to be portal distance
+        r := Int2hwFloat(Gear^.Radius +1);
 
         o_x := hwRound(conPortal^.X + conPortal^.dX);
         o_y := hwRound(conPortal^.Y + conPortal^.dY);
@@ -3800,6 +3802,9 @@ begin
         else
         if ((Land[o_y, rr_x] and $FF00) <> 0) then
                 continue;
+
+        //Okay reset r in case something uses it
+        r := Int2hwFloat(iterator^.Radius+Gear^.Radius);
 
         hasdxy := (((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0))
                     or ((iterator^.State or gstMoving) = 0));
