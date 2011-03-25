@@ -56,6 +56,7 @@ class SelWeaponWidget : public QFrame
  public slots:
   void setDefault();
   void setWeapons(const QString& ammo);
+  //sets the name of the current set
   void setWeaponsName(const QString& name);
   void deleteWeaponsName();
   void newWeaponsName();
@@ -67,10 +68,12 @@ class SelWeaponWidget : public QFrame
   void weaponsDeleted();
 
  private:
+  //the name of the current weapon set
   QString curWeaponsName;
 
   QLineEdit* m_name;
 
+  //storage for all the weapons sets
   QSettings* wconf;
 
   const int m_numItems;
@@ -79,6 +82,7 @@ class SelWeaponWidget : public QFrame
   typedef QList<SelWeaponItem*> ItemsList;
   typedef QMap<int, ItemsList> twi;
   twi weaponItems;
+  //layout element for each tab:
   QGridLayout* p1Layout;
   QGridLayout* p2Layout;
   QGridLayout* p3Layout;
