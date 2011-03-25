@@ -789,7 +789,7 @@ procedure SDL_WarpMouse(x, y: Word);
 procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
 
 function  SDL_AllocFormat(format: Longword): PSDL_PixelFormat;
-procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat);
+//procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat);
 {$ENDIF}
 
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};

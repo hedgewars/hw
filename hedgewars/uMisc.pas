@@ -148,7 +148,9 @@ end;
 procedure freeModule;
 begin
     recordFileName:= '';
+{$IFDEF SDL13}
     SDL_FreeFormat(conversionFormat);
+{$ENDIF}
 end;
 
 end.
