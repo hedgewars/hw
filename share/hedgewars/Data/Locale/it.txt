@@ -113,7 +113,7 @@
 02:00=%1 è spirato
 02:00=%1 riposa in pace
 02:00=Dottore, chiami un dottore!
-02:00=%1 preferisce giocare a Wormux
+02:00=%1 preferisce giocare a Warmux
 02:00=%1 ha perso la sua partita!
 02:00=%1 è morto con (poco) onore!
 02:00=%1 va verso il Giudizio Universale!

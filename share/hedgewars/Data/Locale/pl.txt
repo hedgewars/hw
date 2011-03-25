@@ -100,7 +100,7 @@
 02:00=%1 przytupnął nóżką i umarł
 02:00=%1 poniósł całkowitą klęskę.
 02:00=Biedny %1 ...
-02:00=%1 woli grać w Wormux
+02:00=%1 woli grać w Warmux
 02:00=%1 blokuje strzały własną twarzą
 02:00=%1 znajduje miejsce w Valhalli
 02:00=%1 opuścił budynek

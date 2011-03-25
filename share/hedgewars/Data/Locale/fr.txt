@@ -92,7 +92,7 @@
 02:00=%1 est mauvais joueur !
 02:00=%1 a échoué
 02:00=Pauvre %1...
-02:00=%1 préfère Wormux
+02:00=%1 préfère Warmux
 02:00=%1 a bloqué les balles avec sa tête
 02:00=%1 s'en va à la façon des dinosaures
 02:00=%1 fait avancer les hérissons d'un pas vers l'extinction

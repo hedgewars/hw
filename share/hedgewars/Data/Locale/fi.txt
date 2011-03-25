@@ -99,7 +99,7 @@
 02:00=%1 raivopoistui elämästä
 02:00=%1 ei vain osaa
 02:00=Voi %1 parkaa...
-02:00=%1 pitää enemmän Wormuxista
+02:00=%1 pitää enemmän Warmuxista
 02:00=%1 on pysäyttänyt luoteja kasvoillaan
 02:00=%1 on sankari ih...siilien joukossa
 02:00=%1 löytää paikkansa Valhallasta

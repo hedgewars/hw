@@ -132,7 +132,7 @@
 ; 02:00=Poor poor %1...
 02:00=可怜的 %1...
 ; 02:00=%1 prefers wormux
-02:00=%1 更喜欢 Wormux
+02:00=%1 更喜欢 Warmux
 ; 02:00=%1 has been blocking shots with his face
 02:00=%1 勇于面对，结果相当惨烈
 ; 02:00=%1 is a hero amongst me...err..hogs

@@ -104,7 +104,7 @@
 02:00=%1 desligou-se da vida
 02:00=%1 falhou
 02:00=Pobrezinho do %1...
-02:00=%1 prefere Wormux
+02:00=%1 prefere Warmux
 02:00=%1 esteve a bloquear tiros com a tromba
 02:00=%1 é um herói agora... no céu
 02:00=%1 encontrou o seu descanso

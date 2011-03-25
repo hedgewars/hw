@@ -101,7 +101,7 @@
 02:00=%1 se ha picado
 02:00=%1 falló
 02:00=Pobrecito %1...
-02:00=%1 prefiere Wormux
+02:00=%1 prefiere Warmux
 02:00=%1 intentó parar las balas con su cara
 02:00=%1 es un héroe entre los hom... digo.. erizos
 02:00=%1 encontró el camino al Valhala
