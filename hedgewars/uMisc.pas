@@ -140,17 +140,15 @@ begin
 end;
 
 procedure initModule;
+const SDL_PIXELFORMAT_ABGR8888 = ((1 shl 31) or (6 shl 24) or (7 shl 20) or (6 shl 16) or (32 shl 8) or 4);
 begin
-    // SDL_PIXELFORMAT_RGB8888
-    conversionFormat:= SDL_AllocFormat($86462004);
+    conversionFormat:= SDL_AllocFormat(SDL_PIXELFORMAT_ABGR8888);
 end;
 
 procedure freeModule;
 begin
     recordFileName:= '';
-{$IFDEF SDL13}
     SDL_FreeFormat(conversionFormat);
-{$ENDIF}
 end;
 
 end.

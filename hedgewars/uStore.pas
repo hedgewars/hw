@@ -882,7 +882,7 @@ procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
     ico: PSDL_Surface;
     buf: array[byte] of char;
-    x, y: LongInt;
+    {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
 begin
     s:= s; // avoid compiler hint
     if Length(s) = 0 then cFullScreen:= not cFullScreen
@@ -928,8 +928,8 @@ begin
     begin
         // the values in x and y make the window appear in the center
         // on ios, make the sdl window appear on the second monitor when present
-        x:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
-        y:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
+        x:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}(SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
+        y:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}(SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
         SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN
                         {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS {$ENDIF});
         SDLrender:= SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);

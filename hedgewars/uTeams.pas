@@ -96,7 +96,7 @@ end;
 
 procedure SwitchHedgehog;
 var c: LongWord;
-    PrevHH, PrevTeam, PrevClan: LongWord;
+    PrevHH, PrevTeam : LongWord;
 begin
 TargetPoint.X:= NoPointX;
 TryDo(CurrentTeam <> nil, 'nil Team', true);

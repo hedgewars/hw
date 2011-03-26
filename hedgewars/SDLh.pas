@@ -574,18 +574,18 @@ type
 {$IFDEF SDL13}
         case LongInt of
             SDL_FIRSTEVENT: (type_: LongInt);
-            SDL_WINDOWEVENT: (wevent: TSDL_WindowEvent);
+            SDL_WINDOWEVENT: (window: TSDL_WindowEvent);
             SDL_KEYDOWN,
             SDL_KEYUP: (key: TSDL_KeyboardEvent);
             SDL_TEXTEDITING,
-            SDL_TEXTINPUT: (txtin: byte);
+            SDL_TEXTINPUT: (edit: byte);
             SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
             SDL_MOUSEBUTTONDOWN,
             SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
             SDL_MOUSEWHEEL: (wheel: TSDL_MouseWheelEvent);
             SDL_JOYAXISMOTION: (jaxis: TSDL_JoyAxisEvent);
-            SDL_JOYHATMOTION: (jhat: TSDL_JoyHatEvent);
             SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
+            SDL_JOYHATMOTION: (jhat: TSDL_JoyHatEvent);
             SDL_JOYBUTTONDOWN,
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
             SDL_QUITEV: (quit: TSDL_QuitEvent);
@@ -780,19 +780,9 @@ function  SDL_GetRelativeMouseState(x, y: PLongInt): Byte; cdecl; external SDLLi
 function  SDL_GetNumMice: LongInt; cdecl; external SDLLibName;
 function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): boolean; cdecl; external SDLLibName;
 
-function  SDL_AllocFormat(format: Longword): PSDL_PixelFormat; cdecl; external SDLLibName;
-procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat); cdecl; external SDLLibName;
 procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; external SDLLibName;
-
-procedure SDL_WarpMouse(x, y: Word);
-{$ELSE}
-procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
-
-function  SDL_AllocFormat(format: Longword): PSDL_PixelFormat;
-//procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat);
 {$ENDIF}
 
-function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 
@@ -834,13 +824,19 @@ procedure SDL_JoystickClose(joy: PSDL_Joystick); cdecl; external SDLLibName;
 function SDL_putenv(const text: PChar): LongInt; cdecl; external SDLLibName;
 function SDL_getenv(const text: PChar): PChar; cdecl; external SDLLibName;
 
+{* Compatibility between SDL-1.2 and SDL-1.3 *}
+procedure SDL_WarpMouse(x, y: Word); {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
+function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
+function  SDL_AllocFormat(format: Longword): PSDL_PixelFormat; {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
+procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat); {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
+
 {* OpenGL *}
 {$IFDEF DARWIN}
 function CGLGetCurrentContext(): Pointer; cdecl; external 'OpenGL';
 procedure CGLSetParameter(context: Pointer; option: LongInt; value: Pointer); cdecl; external 'OpenGL';
 {$ENDIF}
 
-(*  SDL_TTF  *)
+(*  SDL_ttf  *)
 function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
 procedure TTF_Quit; cdecl; external SDL_TTFLibName;
 
@@ -919,6 +915,8 @@ implementation
 uses uVariables;
 
 {$IFDEF SDL13}
+// this needs to be reimplemented because in SDL_compat.c the window is the one created in the SDL_SetVideoMode
+// compatible function, but we use SDL_CreateWindow, so the window would be NULL
 procedure SDL_WarpMouse(x, y: Word);
 begin
     SDL_WarpMouseInWindow(SDLwindow, x, y);
@@ -936,9 +934,9 @@ begin
     exit(@conversionFormat);
 end;
 
-procedure SDL_FreeFormat;
+procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat);
 begin
-    // yay free space
+    pixelformat:= pixelformat;
 end;
 {$ENDIF}
 

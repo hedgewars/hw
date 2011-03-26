@@ -229,6 +229,7 @@ end;
 
 function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
 begin
+    voicepack:= voicepack;    // avoid compiler hint
     LoopSound:= LoopSound(snd, nil, 0)
 end;
 

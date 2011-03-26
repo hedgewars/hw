@@ -571,11 +571,10 @@ begin
 end;
 
 procedure doStepSnowflake(Gear: PGear);
-var xx, yy, px, py, i: LongInt;
+var xx, yy, px, py: LongInt;
     move, draw, allpx, gun: Boolean;
     s: PSDL_Surface;
     p: PLongwordArray;
-    oAlpha, nAlpha: byte;
 begin
 gun:= (Gear^.State and gstTmpFlag) <> 0;
 move:= false;
@@ -4797,7 +4796,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepStructure(Gear: PGear);
 var 
-    i, x, y: LongInt;
+    x, y: LongInt;
     dX, dY: HWFloat;
     hog: PHedgehog;
 begin

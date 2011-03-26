@@ -1287,7 +1287,6 @@ begin
 end;
 
 function lc_getcurammotype(L : Plua_State): LongInt; Cdecl;
-var gear : PGear;
 begin
     if lua_gettop(L) <> 0 then
         LuaError('Lua: Wrong number of parameters passed to GetCurAmmoType!')

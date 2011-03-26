@@ -154,7 +154,7 @@ begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                     KeyPressChat(event.key.keysym.sym);
                 SDL_WINDOWEVENT:
-                    if event.wevent.event = SDL_WINDOWEVENT_SHOWN then
+                    if event.window.event = SDL_WINDOWEVENT_SHOWN then
                         cHasFocus:= true;
 {$ELSE}
                     KeyPressChat(event.key.keysym.unicode);
