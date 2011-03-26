@@ -250,7 +250,13 @@ void SelWeaponWidget::deleteWeaponsName()
 
 void SelWeaponWidget::newWeaponsName()
 {
-    setWeaponsName(tr("new"));
+    QString newName = tr("new");
+    if(wconf->contains(newName)) {
+        //name already used -> look for an appropriate name:
+        int i=2;
+        while(wconf->contains(newName = tr("new")+QString::number(i++)));
+    }
+    setWeaponsName(newName);
 }
 
 void SelWeaponWidget::setWeaponsName(const QString& name)
@@ -273,7 +279,15 @@ QStringList SelWeaponWidget::getWeaponNames() const
 
 void SelWeaponWidget::copy()
 {
-    QString ammo = getWeaponsString(curWeaponsName);
-    setWeaponsName(tr("copy of") + " " + curWeaponsName);
-    setWeapons(ammo);
+    if(wconf->contains(curWeaponsName)) {
+        QString ammo = getWeaponsString(curWeaponsName);
+        QString newName = tr("copy of") + " " + curWeaponsName;
+        if(wconf->contains(newName)) {
+            //name already used -> look for an appropriate name:
+            int i=2;
+            while(wconf->contains(newName = tr("copy of") + " " + curWeaponsName+QString::number(i++)));
+        }
+        setWeaponsName(newName);
+        setWeapons(ammo);
+    }
 }
