@@ -7,8 +7,7 @@ if (NOT APPLE)
 	ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 endif()
 
-if (APPLE AND BUNDLE)
-
+if (APPLE)
 	find_package(Qt4 REQUIRED)
 	find_package(SDL REQUIRED)
 	find_package(SDL_image REQUIRED)
@@ -44,4 +43,4 @@ if (APPLE AND BUNDLE)
 
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/CreateMacBundle.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/CreateMacBundle.cmake)
 
-endif(APPLE AND BUNDLE)
+endif()

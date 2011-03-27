@@ -1,5 +1,5 @@
 To compile and install you need:
- - Qt >= 4.4
+ - Qt >= 4.5
  - FreePascal >= 2.2.4
  - SDL >= 1.2.5
  - SDL_net >= 1.2.5
@@ -9,21 +9,19 @@ To compile and install you need:
  - CMake >= 2.6.0
  - Lua >= 5.1.0
 For server:
- - Glasgow Haskell Compiler 6.10
+ - Glasgow Haskell Compiler >= 6.10
+ - bytestring-show package
  - dataenc package
  - hslogger package
- - utf8-string package
 
 1. Configure:
 $ cmake .
 or
-$ cmake -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX="install_prefix" -DDATA_INSTALL_DIR="data_dir" .
+$ cmake -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX="install_prefix" \
+-DDATA_INSTALL_DIR="data_dir" .
 
-add -DWITH_SERVER=1 to compile net server; to create a relocatable bundle under Mac OS X you can do
-
-$ cmake -DCMAKE_BUILD_TYPE="Release" -DBUNDLE=1 .
-
-if you have Qt installed but it is not found you can set it up with -DQT_QMAKE_EXECUTABLE="path_to_qmake"
+add -DWITH_SERVER=1 to compile net server; if you have Qt installed but it is
+not found you can set it up with -DQT_QMAKE_EXECUTABLE="path_to_qmake"
 
 2. Compile:
 $ make

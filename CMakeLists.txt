@@ -39,13 +39,6 @@ set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "9")
 set(CPACK_PACKAGE_VERSION_PATCH "16${version_suffix}")
 
-#forbid in-tree building
-#IF (${CMAKE_SOURCE_DIR} MATCHES ${CMAKE_BINARY_DIR})
-#	MESSAGE(STATUS "Please do an out-of-tree build:")
-#	MESSAGE(STATUS "rm CMakeCache.txt; mkdir build; cd build; cmake ..; make")
-#	MESSAGE(FATAL_ERROR "In-tree-build detected!")
-#ENDIF (${CMAKE_SOURCE_DIR} MATCHES ${CMAKE_BINARY_DIR})
-
 #set some safe values
 IF(NOT WITH_SERVER)
 	SET(WITH_SERVER 0)
@@ -72,8 +65,8 @@ if(APPLE)
 	STRING(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" MACOSX_VERSION_TMP "${MACOSX_VERSION_TMP}")
 	STRING(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${MACOSX_VERSION_TMP})
 
+	#if nothing is set, we deploy only for the current system
 	if(NOT minimum_macosx)
-		#if nothing is set, we deploy only for the current system
 		set(minimum_macosx ${current_macosx_version})
 	endif()
 
@@ -81,30 +74,21 @@ if(APPLE)
 		set(FATAL "Hedgewars is not supported for pre-10.4 systems")
 	endif()
 
-	set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")
-
-	#create universal binaries only when it's time to bundle the application, also build server
-	IF(BUNDLE)
-		set(WITH_SERVER true)
-		if(NOT minimum_macosx MATCHES "10.6")
-			set(CMAKE_C_COMPILER "gcc-4.0")
-			set(CMAKE_CXX_COMPILER "g++-4.0")
-		else()
-			if(current_macosx_version MATCHES "10.6")
-				if(MACAPPSTORE)
-					set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
-				else()
-					set(CMAKE_OSX_ARCHITECTURES "x86_64")
-				endif()
-			endif()
-		endif()
-	ELSE()
+	if(NOT CMAKE_OSX_ARCHITECTURES)
 		if(current_macosx_version MATCHES "10.6")
-			set(CMAKE_OSX_ARCHITECTURES "x86_64")
+			set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
+		else()
+			set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")
 		endif()
-	ENDIF()
+	endif()
 
-	message(STATUS "Target system: Mac OS X ${minimum_macosx} ${CMAKE_OSX_ARCHITECTURES}")
+	message(STATUS "Build system: Mac OS X ${current_macosx_version} - Target ${minimum_macosx} ${CMAKE_OSX_ARCHITECTURES}")
+
+	#be sure to select ppc-compatible toolchains just in case
+	if(NOT minimum_macosx MATCHES "10.6")
+		set(CMAKE_C_COMPILER "gcc-4.0")
+		set(CMAKE_CXX_COMPILER "g++-4.0")
+	endif()
 
 	if(minimum_macosx MATCHES "10.4")
 		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
@@ -129,9 +113,6 @@ endif(APPLE)
 
 
 #this snippet sets "Release" mode by default
-#IF (NOT CMAKE_BUILD_TYPE)
-#	SET(CMAKE_BUILD_TYPE "Release")
-#ENDIF (NOT CMAKE_BUILD_TYPE)
 if (NOT CMAKE_BUILD_TYPE)
 	set (CMAKE_BUILD_TYPE RELEASE CACHE STRING "Choose the type of build, options are: None Debug Release." FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
@@ -141,7 +122,6 @@ if(CMAKE_BUILD_TYPE MATCHES RELEASE OR CMAKE_BUILD_TYPE MATCHES "Release")
 	set(Optz true)
 else()
 	message(STATUS "Building Debug")
-	#set(CMAKE_VERBOSE_MAKEFILE true)
 	set(Optz false)
 endif()
 
@@ -177,16 +157,22 @@ set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MI
 set(HEDGEWARS_PROTO_VER 38)
 
 if(WITH_SERVER)
-	message(STATUS "Server is going to be built! Make sure you have GHC installed")
-	set(HAVE_NETSERVER true)
-	add_subdirectory(gameServer)
+	find_program(ghc_executable ghc)
+
+	if(ghc_executable)
+		set(HAVE_NETSERVER true)
+		add_subdirectory(gameServer)
+	else()
+		message(STATUS "No GHC executable found, server will *not* be built")
+		set(HAVE_NETSERVER false)
+	endif()
 else(WITH_SERVER)
 	set(HAVE_NETSERVER false)
 endif(WITH_SERVER)
 
 add_subdirectory(misc/liblua)
 add_subdirectory(hedgewars)
-#add_subdirectory(misc/libopenalbridge)
+
 if(NOT BUILD_ENGINE_LIBRARY)
 	add_subdirectory(bin)
 	add_subdirectory(QTfrontend)
