@@ -578,7 +578,10 @@ else if Gear^.Kind = gtHedgehog then
 
             // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog
             // same stand for CheckHHDamage
-            uStats.HedgehogDamaged(Gear, CurrentHedgehog)
+            if (Gear^.LastDamage <> nil) then
+                uStats.HedgehogDamaged(Gear, Gear^.LastDamage)
+            else
+                uStats.HedgehogDamaged(Gear, CurrentHedgehog)
             end;
 
         team:= Gear^.Hedgehog^.Team;
@@ -1019,6 +1022,9 @@ begin
 
     if (Gear^.Kind = gtHedgehog) then
     begin
+
+    Gear^.LastDamage := AttackerHog;
+
     Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
     uStats.HedgehogDamaged(Gear, AttackerHog);
     HHHurt(Gear^.Hedgehog, Source);
@@ -1053,6 +1059,7 @@ begin
            not CurrentHedgehog^.Gear^.Invulnerable then
            begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
            inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
+           CurrentHedgehog^.Gear^.LastDamage := CurrentHedgehog;
            spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
            end;
         end;

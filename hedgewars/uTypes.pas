@@ -235,7 +235,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
             nImpactSounds: Word; // count of ImpactSounds
             SoundChannel: LongInt;
-            PortalCounter: LongWord  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
+            PortalCounter: LongWord;  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
+            LastDamage: PHedgehog;
         end;
     TPGearArray = Array of PGear;
 
