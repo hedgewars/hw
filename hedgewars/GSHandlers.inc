@@ -219,7 +219,10 @@ begin
         //else
         //    PlaySound(sndOw1, Gear^.Hedgehog^.Team^.voicepack);
 
-        ApplyDamage(Gear, CurrentHedgehog, dmg, dsFall);
+        if Gear^.LastDamage <> nil then
+            ApplyDamage(Gear, Gear^.LastDamage, dmg, dsFall)
+            else
+            ApplyDamage(Gear, CurrentHedgehog, dmg, dsFall);
     end
 end;
 

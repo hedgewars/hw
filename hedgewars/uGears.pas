@@ -1022,7 +1022,6 @@ begin
 
     if (Gear^.Kind = gtHedgehog) then
     begin
-
     Gear^.LastDamage := AttackerHog;
 
     Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;

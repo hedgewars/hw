@@ -211,7 +211,8 @@ with CurrentHedgehog^ do
         begin
         Z:= cCurrHHZ;
         State:= gstHHDriven;
-        Active:= true
+        Active:= true;
+        LastDamage:= nil
         end;
     RemoveGearFromList(Gear);
     InsertGearToList(Gear);
