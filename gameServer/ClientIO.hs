@@ -5,19 +5,18 @@ import qualified Control.Exception as Exception
 import Control.Monad.State
 import Control.Concurrent.Chan
 import Control.Concurrent
-import Control.Monad
 import Network
 import Network.Socket.ByteString
 import qualified Data.ByteString.Char8 as B
 ----------------
 import CoreTypes
 import RoomsAndClients
-import Utils
 
 
 pDelim :: B.ByteString
 pDelim = "\n\n"
 
+bs2Packets :: B.ByteString -> ([[B.ByteString]], B.ByteString)
 bs2Packets = runState takePacks
 
 takePacks :: State B.ByteString [[B.ByteString]]
@@ -31,7 +30,7 @@ takePacks
             return (B.splitWith (== '\n') packet : packets)
 
 listenLoop :: Socket -> Chan CoreMessage -> ClientIndex -> IO ()
-listenLoop sock chan ci = recieveWithBufferLoop B.empty
+listenLoop sock chan ci = Exception.unblock $ recieveWithBufferLoop B.empty
     where
         recieveWithBufferLoop recvBuf = do
             recvBS <- recv sock 4096
@@ -42,11 +41,13 @@ listenLoop sock chan ci = recieveWithBufferLoop B.empty
 
         sendPacket packet = writeChan chan $ ClientMessage (ci, packet)
 
-clientRecvLoop :: Socket -> Chan CoreMessage -> ClientIndex -> IO ()
-clientRecvLoop s chan ci =
-        (listenLoop s chan ci >> return "Connection closed")
-        `Exception.catch` (\(e :: ShutdownThreadException) -> return . B.pack . show $ e)
+clientRecvLoop :: Socket -> Chan CoreMessage -> Chan [B.ByteString] -> ClientIndex -> IO ()
+clientRecvLoop s chan clChan ci =
+    myThreadId >>=
+    \t -> forkIO (clientSendLoop s t clChan ci) >>
+    (listenLoop s chan ci >> return "Connection closed")
         `Exception.catch` (\(e :: Exception.IOException) -> return . B.pack . show $ e)
+        `Exception.catch` (\(e :: ShutdownThreadException) -> return . B.pack . show $ e)
         >>= clientOff >> remove
     where
         clientOff msg = writeChan chan $ ClientMessage (ci, ["QUIT", msg])
@@ -54,8 +55,8 @@ clientRecvLoop s chan ci =
 
 
 
-clientSendLoop :: Socket -> ThreadId -> Chan CoreMessage -> Chan [B.ByteString] -> ClientIndex -> IO ()
-clientSendLoop s tId cChan chan ci = do
+clientSendLoop :: Socket -> ThreadId -> Chan [B.ByteString] -> ClientIndex -> IO ()
+clientSendLoop s tId chan ci = do
     answer <- readChan chan
     Exception.handle
         (\(e :: Exception.IOException) -> unless (isQuit answer) . killReciever $ show e) $
@@ -66,7 +67,7 @@ clientSendLoop s tId cChan chan ci = do
         Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on sClose") $ sClose s
         killReciever . B.unpack $ quitMessage answer
         else
-        clientSendLoop s tId cChan chan ci
+        clientSendLoop s tId chan ci
 
     where
         killReciever = Exception.throwTo tId . ShutdownThreadException

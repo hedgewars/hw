@@ -5,6 +5,7 @@ import Control.Concurrent
 import qualified Data.Set as Set
 import qualified Data.Sequence as Seq
 import qualified Data.List as L
+import qualified Control.Exception as Exception
 import System.Log.Logger
 import Control.Monad
 import Data.Time
@@ -394,8 +395,7 @@ processAction (AddClient cl) = do
     si <- gets serverInfo
     newClId <- io $ do
         ci <- addClient rnc cl
-        t <- forkIO $ clientRecvLoop (clientSocket cl) (coreChan si) ci
-        _ <- forkIO $ clientSendLoop (clientSocket cl) t (coreChan si) (sendChan cl) ci
+        _ <- Exception.block . forkIO $ clientRecvLoop (clientSocket cl) (coreChan si) (sendChan cl) ci
 
         infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime cl))
 
@@ -406,7 +406,7 @@ processAction (AddClient cl) = do
         [
             AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
             , CheckBanned
-            , AddIP2Bans (host cl) "Reconnected too fast" (addUTCTime 10 $ connectTime cl)
+--            , AddIP2Bans (host cl) "Reconnected too fast" (addUTCTime 10 $ connectTime cl)
         ]
 
 
