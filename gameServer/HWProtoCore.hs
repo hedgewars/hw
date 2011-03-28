@@ -43,6 +43,7 @@ handleCmd cmd = do
 handleCmd_loggedin ["INFO", asknick] = do
     (_, rnc) <- ask
     maybeClientId <- clientByNick asknick
+    isAdminAsking <- liftM isAdministrator thisClient
     let noSuchClient = isNothing maybeClientId
     let clientId = fromJust maybeClientId
     let cl = rnc `client` fromJust maybeClientId
@@ -55,13 +56,14 @@ handleCmd_loggedin ["INFO", asknick] = do
             if teamsInGame cl > 0 then "(playing)" else "(spectating)"
             else
             ""
+    let hostStr = if isAdminAsking then host cl else cutHost $ host cl
     if noSuchClient then
         return []
         else
         answerClient [
             "INFO",
             nick cl,
-            B.concat ["[", host cl, "]"],
+            B.concat ["[", hostStr, "]"],
             protoNumber2ver $ clientProto cl,
             B.concat ["[", roomInfo, "]", roomStatus]
             ]

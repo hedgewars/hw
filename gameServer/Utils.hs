@@ -124,3 +124,6 @@ readInt_ str =
   case B.readInt str of
        Just (i, t) | B.null t -> fromIntegral i
        _                      -> 0 
+
+cutHost :: B.ByteString -> B.ByteString
+cutHost = B.intercalate "." .  flip (++) ["*","*"] . List.take 2 . B.split '.'
