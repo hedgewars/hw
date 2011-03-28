@@ -19,7 +19,7 @@ session2 nick room = ["NICK", nick, "", "PROTO", "32", "", "LIST", "", "JOIN_ROO
 session3 nick room = ["NICK", nick, "", "PROTO", "32", "", "LIST", "", "JOIN_ROON", room, "", "CHAT", "room 2", "", "QUIT", "quit", ""]
 
 emulateSession sock s = do
-    mapM_ (\x -> hPutStrLn sock x >> hFlush sock >> randomRIO (3000000::Int, 5900000) >>= threadDelay) s
+    mapM_ (\x -> hPutStrLn sock x >> hFlush sock >> randomRIO (1000000::Int, 3000000) >>= threadDelay) s
     hFlush sock
     threadDelay 225000
 
@@ -40,7 +40,7 @@ testing = Control.OldException.handle print $ do
     putStrLn "Finish"
 
 forks = forever $ do
-    delay <- randomRIO (30000::Int, 59000)
+    delay <- randomRIO (30000::Int, 69000)
     threadDelay delay
     forkIO testing
 

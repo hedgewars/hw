@@ -62,8 +62,8 @@ testing = Control.OldException.handle print $ do
     putStr "-"
     hFlush stdout
 
-forks = forM_ [1..100] $ const $ do
-    delay <- randomRIO (10000::Int, 30000)
+forks = forever $ do
+    delay <- randomRIO (0::Int, 80000)
     threadDelay delay
     forkIO testing
 
