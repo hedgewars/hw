@@ -64,7 +64,7 @@ type
             sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
             sprShoutCorner, sprShoutEdge, sprShoutTail,
             sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov,
-            sprSmoke, sprSmokeWhite, sprShell, sprDust, sprExplosives, sprExplosivesRoll,
+            sprSmoke, sprSmokeWhite, sprShell, sprDust, sprSnowDust, sprExplosives, sprExplosivesRoll,
             sprAmTeleport, sprSplash, sprDroplet, sprBirdy, sprHandCake, sprHandConstruction,
             sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
