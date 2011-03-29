@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!-- There is, at present, no official xsd for (X)HTML5. A pity. Usefulness would depend on the parser and extensions made by the site.  -->
+    <title>Hedgewars Hats</title>
+
+    <style type="text/css">
+* {padding: 0; margin: 0; }
+body 
+{
+    background: url('http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/Nature/Sky.png') fixed no-repeat bottom left;
+    -moz-background-size: 200%;
+    background-size: 200%;
+    font-family: sans-serif;
+    overflow: hidden;
+}
+h1 { text-shadow: 0 0 2px white; }
+a 
+{
+    margin-top: 12px;
+    margin-left: 20px;
+    float: left;
+    height: 32px;
+    width: 32px;
+    color: transparent;
+    background-image: url("http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Graphics/Hedgehog/Idle.png");
+}
+.girder
+{
+    width: 100%;
+    height: 30px;
+    clear: left;
+    background-image: url('http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/Nature/Girder.png');
+    background-repeat: repeat-x;
+}
+.hide { visibility: hidden; }
+a div
+{
+    margin-top: -5px;
+    height: 32px;
+    width: 32px;
+}
+    </style>
+    <script type="application/ecmascript">
+//<![CDATA[
+/* javascript version of a sprite sheet - this could be pretty trivially done in pure HTML, but maintenance
+would be easier with a server-side portion. list of sprites could be gotten from googlecode, but would require XSS whitelisting */
+var masks = [
+'4gsuif',          'Coonskin3',     'jigglypuff',   'NinjaStraight',       'Ryu',              'sth_Super',
+'AkuAku',          'Cororon',       'judo',         'NinjaTriangle',       'Samurai',          'sth_Tails',
+'android',         'Cowboy',        'junior',       'OldMan',              'Samus',            'stormcloud',
+'angel',           'crown',         'Ken',          'OrangeHair',          'Santa',            'stormtrooper',
+'anzac',           'cyborg',        'KirbyMask',    'orange',              'SauceBoatSilver',  'StrawHatEyes',
+'apple',           'darthvader',    'kiss_criss',   'Pantsu',              'ShaggyYeti',       'StrawHatFacial',
+'ash',             'Deer',          'kiss_frehley', 'Pig',                 'sheep',            'StrawHat',
+'Balrog',          'diglett',       'kiss_simmons', 'pikachu',             'ShortHair_Black',  'Sunglasses',
+'banana',          'Disguise',      'kiss_stanley', 'PinkHair',            'ShortHair_Brown',  'SunWukong',
+'Bandit',          'Dragon',        'knight',       'pinksunhat',          'ShortHair_Grey',   'Teacup',
+'beaver',          'dwarf',         'Kululun',      'pirate_jack_bandana', 'ShortHair_Red',    'Teapot',
+'beefeater',       'eastertop',     'Ladle',        'pirate_jack',         'ShortHair_Yellow', 'Terminator_Glasses',
+'Blanka',          'Elvis',         'lambda',       'Plunger',             'Skull',            'test',
+'BlankaToothless', 'Eva_00b',       'Laminaria',    'policecap',           'Sleepwalker',      'thug',
+'BlueCap',         'Eva_00y',       'laurel',       'porkey',              'slowpoke',         'Toad',
+'BlueHair',        'Falcon',        'lemon',        'PrincessDaisy',       'Sniper',           'tophats',
+'Bob',             'Gasmask',       'link',         'PrincessPeach',       'Sonic',            'ushanka',
+'BrainSlugMouth',  'Geordi',        'lugia',        'Pumpkin_Hat',         'SparkleSuperFun',  'Vega',
+'BrainSlug',       'Glasses',       'Luigi',        'PurpleHair',          'spartan',          'venom',
+'Bub',             'GreenCap',      'Mario',        'quotecap',            'spidey',           'Viking',
+'Bunny',           'GreenHair',     'MegaHogX',     'Rain',                'squirtle',         'voltorb',
+'charmander',      'GreyHair',      'mickey_ears',  'Rambo',               'sth_AmyClassic',   'Wario',
+'chef',            'Guile',         'Moose',        'rasta',               'sth_Amy',          'WhySoSerious',
+'chikorita',       'HogInTheHat',   'mp3',          'RedCap',              'sth_Eggman',       'WizardHat',
+'Chunli',          'Honda',         'mudkip',       'RedHair',             'sth_Knux',         'YellowCap',
+'clown-copper',    'IndianChief',   'Mummy',        'RobinHood',           'sth_Metal',        'YellowHair',
+'clown-crossed',   'InfernalHorns', 'naruto',       'royalguard',          'sth_Shadow',       'Zombi',
+'clown',           'Jason',         'NinjaFull',    'RSR',                 'sth_Sonic'];
+var themes = {
+"Stage":1,
+"Island":0,
+"Eyes":0,
+"Deepspace":0,
+"Jungle":1,
+"Cake":0,
+"Compost":1,
+"Planes":0,
+"Olympics":1,
+"Bath":1,
+"Cheese":0,
+"Desert":1,
+"Christmas":1,
+"CrazyMission":0,
+"Sheep":1,
+"Brick":0,
+"Underwater":1,
+"City":1,
+"EarthRise":0,
+"Blox":0,
+"Hell":0,
+"Bamboo":1,
+"Freeway":0,
+"Nature":1,
+"Art":1,
+"Halloween":1,
+"Snow":1,
+"Castle":1};
+var girder;
+var animationInterval;
+window.onload = function()
+{
+    var opt = document.createElement("option");
+    opt.appendChild(document.createTextNode(""));
+    var sel = document.body.appendChild(document.createElement("select"));
+    sel.onchange = switchTheme;
+    for(var theme in themes)
+    {
+        sel.appendChild(opt.cloneNode(true));
+        sel.lastChild.value = theme;
+        sel.lastChild.lastChild.data = theme;
+        if(theme == "Nature") sel.lastChild.selected = true;
+    }
+    var chk = document.createElement("input");
+    chk.type = "checkbox";
+    chk.onclick = switchAnim;
+    document.body.appendChild(chk);
+    chk = chk.cloneNode(false);
+    chk.onclick = hideGirders;
+    document.body.appendChild(chk);
+    var s = document.styleSheets[0].cssRules;
+    for(var i=0;i<s.length;i++)
+        if (s[i].selectorText.toLowerCase()==".girder") girder = s[i];
+        
+    var a = document.createElement("a");
+    var g = document.createElement("div");
+    g.className="girder";
+    a.appendChild(document.createElement("div"));
+    a.lastChild.appendChild(document.createTextNode(""));
+    for (var i=0;i<masks.length;i++)
+    {
+        var h = document.body.appendChild(a.cloneNode(true));
+        h.href = "http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Graphics/Hats/"+masks[i]+".png";
+        h.lastChild.style.backgroundImage = 'url("'+h.href+'")';
+        h.lastChild.lastChild.data = masks[i];
+        h.title = masks[i];
+        h.idle = Math.floor(Math.random()*19);
+        if (i%17==16 || i==masks.length-1) document.body.appendChild(g.cloneNode(false));
+    }
+    
+/* quick and dirty animation */
+animationInterval = setInterval(animateHogs, 128);
+}
+
+function animateHogs()
+{
+    var a = document.getElementsByTagName("a");
+    for (var i=0;i<a.length;i++)
+    {
+        a[i].style.backgroundPosition=Math.floor(a[i].idle/16)*-32+"px "+(a[i].idle%16)*-32+"px";
+        a[i].firstChild.style.backgroundPosition=Math.floor(a[i].idle/16)*-32+"px "+(a[i].idle%16)*-32+"px";
+        a[i].idle++;
+        if (a[i].idle > 18) a[i].idle = 0;
+    }
+}
+
+function switchAnim()
+{
+    if (animationInterval) 
+    {
+        clearInterval(animationInterval);
+        animationInterval = null;
+    }
+    else animationInterval = setInterval(animateHogs, 128);
+}
+
+function hideGirders()
+{
+    var g = document.getElementsByClassName("girder");
+    for(var i=0;i<g.length;i++) 
+        if (this.checked)
+            g[i].className = "girder hide";
+        else
+            g[i].className = "girder";
+    
+}
+
+function switchTheme()
+{
+    document.body.style.backgroundImage='url("http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/'+this.value+'/Sky.png")';
+    if (themes[this.value])
+        girder.style.backgroundImage='url("http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Themes/'+this.value+'/Girder.png")';
+    else
+        girder.style.backgroundImage='url("http://hedgewars.googlecode.com/hg/share/hedgewars/Data/Graphics/Girder.png")';
+}
+//]]>
+    </script>
+</head>
+<body>
+<h1>List of Hedgewars hats</h1>
+</body>
+</html>
