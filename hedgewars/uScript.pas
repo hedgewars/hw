@@ -359,8 +359,8 @@ begin
             begin
             lua_pushinteger(L, round(vg^.X));
             lua_pushinteger(L, round(vg^.Y));
-            lua_pushnumber(L, vg^.dX);
-            lua_pushnumber(L, vg^.dY);
+            lua_pushnumber(L, vg^.dX * 100000);
+            lua_pushnumber(L, vg^.dY * 100000);
             lua_pushnumber(L, vg^.Angle);
             lua_pushinteger(L, vg^.Frame);
             lua_pushinteger(L, vg^.FrameTicks);
