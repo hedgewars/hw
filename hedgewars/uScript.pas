@@ -272,8 +272,8 @@ begin
         y:= lua_tointeger(L, 2);
         gt:= TGearType(lua_tointeger(L, 3));
         s:= lua_tointeger(L, 4);
-        dx:= int2hwFloat(lua_tointeger(L, 5)) / 100000;
-        dy:= int2hwFloat(lua_tointeger(L, 6)) / 100000;
+        dx:= int2hwFloat(lua_tointeger(L, 5)) / 1000000;
+        dy:= int2hwFloat(lua_tointeger(L, 6)) / 1000000;
         t:= lua_tointeger(L, 7);
 
         gear:= AddGear(x, y, gt, s, dx, dy, t);
@@ -359,8 +359,8 @@ begin
             begin
             lua_pushinteger(L, round(vg^.X));
             lua_pushinteger(L, round(vg^.Y));
-            lua_pushnumber(L, vg^.dX * 100000);
-            lua_pushnumber(L, vg^.dY * 100000);
+            lua_pushnumber(L, vg^.dX * 1000000);
+            lua_pushnumber(L, vg^.dY * 1000000);
             lua_pushnumber(L, vg^.Angle);
             lua_pushinteger(L, vg^.Frame);
             lua_pushinteger(L, vg^.FrameTicks);
@@ -392,8 +392,8 @@ begin
             begin
             vg^.X:= lua_tointeger(L, 2);
             vg^.Y:= lua_tointeger(L, 3);
-            vg^.dX:= lua_tonumber(L, 4) / 100000;  // divide by 100,000 just for consistency
-            vg^.dY:= lua_tonumber(L, 5) / 100000;
+            vg^.dX:= lua_tonumber(L, 4) / 1000000;  // divide by 100,000 just for consistency
+            vg^.dY:= lua_tonumber(L, 5) / 1000000;
             vg^.Angle:= lua_tonumber(L, 6);
             vg^.Frame:= lua_tointeger(L, 7);
             if lua_tointeger(L, 8) <> 0 then vg^.FrameTicks:= lua_tointeger(L, 8);  // find a better way to do this. maybe need to break all these up.
@@ -1096,8 +1096,8 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
             begin
-            lua_pushinteger(L, hwRound(gear^.dX * 100000));
-            lua_pushinteger(L, hwRound(gear^.dY * 100000))
+            lua_pushinteger(L, hwRound(gear^.dX * 1000000));
+            lua_pushinteger(L, hwRound(gear^.dY * 1000000))
             end
         end;
     lc_getgearvelocity:= 2;
@@ -1113,8 +1113,8 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
             begin
-            gear^.dX:= int2hwFloat(lua_tointeger(L, 2)) / 100000;
-            gear^.dY:= int2hwFloat(lua_tointeger(L, 3)) / 100000;
+            gear^.dX:= int2hwFloat(lua_tointeger(L, 2)) / 1000000;
+            gear^.dY:= int2hwFloat(lua_tointeger(L, 3)) / 1000000;
             SetAllToActive;
             end
         end;
