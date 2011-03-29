@@ -24,6 +24,7 @@ interface
 
 procedure Draw;
 procedure initModule;
+procedure freeModule;
 
 implementation
 uses uLandGraphics, uConsts, uUtils, SDLh, uCommands, uDebug;
@@ -169,6 +170,18 @@ begin
     pointsListLast:= nil;
 
     RegisterVariable('draw', vtCommand, @chDraw, false);
+end;
+
+procedure freeModule;
+var pe, pp: PPointEntry;
+begin
+    pe:= pointsListHead;
+    while(pe <> nil) do
+        begin
+        pp:= pe;
+        pe:= pe^.next;
+        dispose(pp);
+        end;
 end;
 
 end.

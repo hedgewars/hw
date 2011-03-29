@@ -390,6 +390,7 @@ begin
 
     uIO.freeModule;             //stub
     uLand.freeModule;
+    uLandPainted.freeModule;
 
     uCommandHandlers.freeModule;
     uCommands.freeModule;
