@@ -2373,7 +2373,7 @@ begin
     if (GameTicks and $3F) = 0 then
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
-    if (hwRound(Gear^.X) > (LAND_WIDTH+1024)) or (hwRound(Gear^.X) < -1024) then
+    if (hwRound(Gear^.X) > (LAND_WIDTH+2048)) or (hwRound(Gear^.X) < -2048) then
     begin
         // avoid to play forever (is this necessary?)
         StopSound(Gear^.SoundChannel);
@@ -2388,12 +2388,12 @@ begin
     if Gear^.X.QWordValue = 0 then
     begin
         Gear^.Tag :=  1;
-        Gear^.X := -_1024;
+        Gear^.X := -_2048;
     end
     else
     begin
         Gear^.Tag := -1;
-        Gear^.X := int2hwFloat(LAND_WIDTH + 1024);
+        Gear^.X := int2hwFloat(LAND_WIDTH + 2048);
     end;
 
     Gear^.Y := int2hwFloat(topY-300);
