@@ -359,8 +359,8 @@ begin
             begin
             lua_pushinteger(L, round(vg^.X));
             lua_pushinteger(L, round(vg^.Y));
-            lua_pushnumber(L, vg^.dX * 1000000);
-            lua_pushnumber(L, vg^.dY * 1000000);
+            lua_pushnumber(L, vg^.dX);
+            lua_pushnumber(L, vg^.dY);
             lua_pushnumber(L, vg^.Angle);
             lua_pushinteger(L, vg^.Frame);
             lua_pushinteger(L, vg^.FrameTicks);
@@ -392,8 +392,8 @@ begin
             begin
             vg^.X:= lua_tointeger(L, 2);
             vg^.Y:= lua_tointeger(L, 3);
-            vg^.dX:= lua_tonumber(L, 4) / 1000000;  // divide by 100,000 just for consistency
-            vg^.dY:= lua_tonumber(L, 5) / 1000000;
+            vg^.dX:= lua_tonumber(L, 4);
+            vg^.dY:= lua_tonumber(L, 5);
             vg^.Angle:= lua_tonumber(L, 6);
             vg^.Frame:= lua_tointeger(L, 7);
             if lua_tointeger(L, 8) <> 0 then vg^.FrameTicks:= lua_tointeger(L, 8);  // find a better way to do this. maybe need to break all these up.
