@@ -963,30 +963,32 @@ begin
                 VGear^.Angle := DxDy2Angle(-Gear^.dX, Gear^.dY);
             end;
         end;
-        
-        // Bullet trail
-        VGear := AddVisualGear(
-            hwround(CurrentHedgehog^.Gear^.X) + GetLaunchX(CurrentHedgehog^.CurAmmoType, hwSign(CurrentHedgehog^.Gear^.dX), CurrentHedgehog^.Gear^.Angle), 
-            hwround(CurrentHedgehog^.Gear^.Y) + GetLaunchY(CurrentHedgehog^.CurAmmoType, CurrentHedgehog^.Gear^.Angle),
-            vgtLineTrail
-        );
-        if VGear <> nil then
-        begin
-            // http://mantis.freepascal.org/view.php?id=17714 hits again
-            VGear^.dX := Gear^.X.QWordValue / SignAs(_1,_1).QWordValue;
-            VGear^.dY := Gear^.Y.QWordValue / SignAs(_1,_1).QWordValue;
-            
-            // reached edge of land. assume infinite beam. Extend it way out past camera
-            if (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0) 
-                or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
-            begin
-                VGear^.dX := VGear^.dX + (CurrentHedgehog^.Gear^.dX * LAND_WIDTH).QWordValue / SignAs(_1,_1).QWordValue;
-                VGear^.dY := VGear^.dY + (CurrentHedgehog^.Gear^.dY * LAND_WIDTH).QWordValue / SignAs(_1,_1).QWordValue;
+       
+        if Gear^.PortalCounter = 0 then
+            begin 
+            // Bullet trail
+            VGear := AddVisualGear(
+                hwround(CurrentHedgehog^.Gear^.X) + GetLaunchX(CurrentHedgehog^.CurAmmoType, hwSign(CurrentHedgehog^.Gear^.dX), CurrentHedgehog^.Gear^.Angle), 
+                hwround(CurrentHedgehog^.Gear^.Y) + GetLaunchY(CurrentHedgehog^.CurAmmoType, CurrentHedgehog^.Gear^.Angle),
+                vgtLineTrail
+            );
+            if VGear <> nil then
+                begin
+                // http://mantis.freepascal.org/view.php?id=17714 hits again
+                VGear^.dX := Gear^.X.QWordValue / SignAs(_1,_1).QWordValue;
+                VGear^.dY := Gear^.Y.QWordValue / SignAs(_1,_1).QWordValue;
+                
+                // reached edge of land. assume infinite beam. Extend it way out past camera
+                if (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0) 
+                    or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
+                    begin
+                    VGear^.dX := VGear^.dX + (CurrentHedgehog^.Gear^.dX * LAND_WIDTH).QWordValue / SignAs(_1,_1).QWordValue;
+                    VGear^.dY := VGear^.dY + (CurrentHedgehog^.Gear^.dY * LAND_WIDTH).QWordValue / SignAs(_1,_1).QWordValue;
+                    end;
+                
+                VGear^.Timer := 200;
+                end
             end;
-            
-            VGear^.Timer := 200;
-        end;
-        
         Gear^.doStep := @doStepShotIdle
     end;
 end;
