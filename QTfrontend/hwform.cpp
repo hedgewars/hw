@@ -98,6 +98,7 @@ HWForm::HWForm(QWidget *parent)
 
 #ifdef __APPLE__
     panel = new M3Panel;
+
 #ifdef SPARKLE_ENABLED
     AutoUpdater* updater;
     CocoaInitializer initializer;
@@ -105,6 +106,9 @@ HWForm::HWForm(QWidget *parent)
     if (updater && config->isAutoUpdateEnabled())
         updater->checkForUpdates();
 #endif
+
+    QShortcut *hideFrontend = new QShortcut(QKeySequence("Ctrl+M"), this);
+    connect (hideFrontend, SIGNAL(activated()), this, SLOT(showMinimized()));
 #else
     // ctrl+q closes frontend for consistency
     QShortcut *closeFrontend = new QShortcut(QKeySequence("Ctrl+Q"), this);
