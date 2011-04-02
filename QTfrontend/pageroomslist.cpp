@@ -1,0 +1,382 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ */
+
+#include <QGridLayout>
+#include <QPushButton>
+#include <QComboBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QHeaderView>
+#include <QTableWidget>
+
+#include "ammoSchemeModel.h"
+#include "pages.h"
+#include "hwconsts.h"
+#include "chatwidget.h"
+
+PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli) :
+  AbstractPage(parent)
+{
+    QGridLayout * pageLayout = new QGridLayout(this);
+
+    QHBoxLayout * newRoomLayout = new QHBoxLayout();
+    QLabel * roomNameLabel = new QLabel(this);
+    roomNameLabel->setText(tr("Room Name:"));
+    roomName = new QLineEdit(this);
+    roomName->setMaxLength(60);
+    newRoomLayout->addWidget(roomNameLabel);
+    newRoomLayout->addWidget(roomName);
+    pageLayout->addLayout(newRoomLayout, 0, 0);
+
+    roomsList = new QTableWidget(this);
+    roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
+    roomsList->verticalHeader()->setVisible(false);
+    roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+    roomsList->setAlternatingRowColors(true);
+    roomsList->setShowGrid(false);
+    roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
+    pageLayout->addWidget(roomsList, 1, 0, 3, 1);
+    pageLayout->setRowStretch(2, 100);
+    
+    QHBoxLayout * filterLayout = new QHBoxLayout();
+    
+    QLabel * stateLabel = new QLabel(this);
+    stateLabel->setText(tr("State:"));
+    CBState = new QComboBox(this);
+    CBState->addItem(QComboBox::tr("Any"));
+    CBState->addItem(QComboBox::tr("In lobby"));
+    CBState->addItem(QComboBox::tr("In progress"));
+    filterLayout->addWidget(stateLabel);
+    filterLayout->addWidget(CBState);
+    filterLayout->addSpacing(30);
+    
+    QLabel * ruleLabel = new QLabel(this);
+    ruleLabel->setText(tr("Rules:"));
+    CBRules = new QComboBox(this);
+    CBRules->addItem(QComboBox::tr("Any"));
+    // not the most elegant solution but it works
+    ammoSchemeModel = new AmmoSchemeModel(this, NULL);
+    for (int i = 0; i < ammoSchemeModel->predefSchemesNames.count(); i++)
+        CBRules->addItem(ammoSchemeModel->predefSchemesNames.at(i).toAscii().constData());
+    filterLayout->addWidget(ruleLabel);
+    filterLayout->addWidget(CBRules);
+    filterLayout->addSpacing(30);
+    
+    QLabel * weaponLabel = new QLabel(this);
+    weaponLabel->setText(tr("Weapons:"));
+    CBWeapons = new QComboBox(this);
+    CBWeapons->addItem(QComboBox::tr("Any"));
+    for (int i = 0; i < cDefaultAmmos.count(); i++) {
+        QPair<QString,QString> ammo = cDefaultAmmos.at(i);
+        CBWeapons->addItem(ammo.first.toAscii().constData());
+    }
+    filterLayout->addWidget(weaponLabel);
+    filterLayout->addWidget(CBWeapons);
+    filterLayout->addSpacing(30);
+
+    QLabel * searchLabel = new QLabel(this);
+    searchLabel->setText(tr("Search:"));
+    searchText = new QLineEdit(this);
+    searchText->setMaxLength(60);
+    filterLayout->addWidget(searchLabel);
+    filterLayout->addWidget(searchText);
+
+    pageLayout->addLayout(filterLayout, 4, 0);
+
+    chatWidget = new HWChatWidget(this, gameSettings, sdli, false);
+    pageLayout->addWidget(chatWidget, 5, 0, 1, 2);
+    pageLayout->setRowStretch(5, 350);
+
+    BtnCreate = addButton(tr("Create"), pageLayout, 0, 1);
+    BtnJoin = addButton(tr("Join"), pageLayout, 1, 1);
+    BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 1);
+    BtnClear = addButton(tr("Clear"), pageLayout, 4, 1);
+
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 6, 0, true);
+    BtnAdmin = addButton(tr("Admin features"), pageLayout, 6, 1);
+
+    connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
+    connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
+    connect(BtnRefresh, SIGNAL(clicked()), this, SLOT(onRefreshClick()));
+    connect(BtnClear, SIGNAL(clicked()), this, SLOT(onClearClick()));
+    connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
+    connect(CBState, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
+    connect(CBRules, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
+    connect(CBWeapons, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
+    connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onRefreshClick()));
+    connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
+    
+    gameInLobby = false;
+}
+
+void PageRoomsList::setAdmin(bool flag)
+{
+    BtnAdmin->setVisible(flag);
+}
+
+void PageRoomsList::setRoomsList(const QStringList & list)
+{
+    QBrush red(QColor(255, 0, 0));
+    QBrush orange(QColor(127, 127, 0));
+    QBrush yellow(QColor(255, 255, 0));
+    QBrush green(QColor(0, 255, 0));
+
+    listFromServer = list;
+    
+    QString selection = "";
+    
+    if(QTableWidgetItem *item = roomsList->item(roomsList->currentRow(), 0))
+        selection = item->text();
+    
+    roomsList->clear();
+    roomsList->setColumnCount(7);
+    roomsList->setHorizontalHeaderLabels(
+            QStringList() <<
+            QTableWidget::tr("Room Name") <<
+            QTableWidget::tr("C") <<
+            QTableWidget::tr("T") <<
+            QTableWidget::tr("Owner") <<
+            QTableWidget::tr("Map") <<
+            QTableWidget::tr("Rules") <<
+            QTableWidget::tr("Weapons")
+            );
+
+    // set minimum sizes
+//  roomsList->horizontalHeader()->resizeSection(0, 200);
+//  roomsList->horizontalHeader()->resizeSection(1, 50);
+//  roomsList->horizontalHeader()->resizeSection(2, 50);
+//  roomsList->horizontalHeader()->resizeSection(3, 100);
+//  roomsList->horizontalHeader()->resizeSection(4, 100);
+//  roomsList->horizontalHeader()->resizeSection(5, 100);
+//  roomsList->horizontalHeader()->resizeSection(6, 100);
+
+    // set resize modes
+//  roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+
+    bool gameCanBeJoined = true;
+
+    if (list.size() % 8)
+        return;
+
+    roomsList->setRowCount(list.size() / 8);
+    for(int i = 0, r = 0; i < list.size(); i += 8, r++)
+    {
+        // if we are joining a game
+        // TODO: Should NOT be done here
+        if (gameInLobby) {
+            if (gameInLobbyName == list[i + 1]) {
+                gameCanBeJoined = list[i].compare("True");
+            }
+        }
+        
+        // check filter settings
+        #define NO_FILTER_MATCH roomsList->setRowCount(roomsList->rowCount() - 1); --r; continue
+        
+        if (list[i].compare("True") && CBState->currentIndex() == 2) { NO_FILTER_MATCH; }
+        if (list[i].compare("False") && CBState->currentIndex() == 1) { NO_FILTER_MATCH; }
+        if (CBRules->currentIndex() != 0 && list[i + 6].compare(CBRules->currentText())) { NO_FILTER_MATCH; }
+        if (CBWeapons->currentIndex() != 0 && list[i + 7].compare(CBWeapons->currentText())) { NO_FILTER_MATCH; }
+        bool found = list[i + 1].contains(searchText->text(), Qt::CaseInsensitive);
+        if (!found) {
+            for (int a = 4; a <= 7; ++a) {
+                QString compString = list[i + a];
+                if (a == 5 && compString == "+rnd+") {
+                    compString = "Random Map";
+                } else if (a == 5 && compString == "+maze+") {
+                    compString = "Random Maze";
+                } else if (a == 5 && compString == "+drawn+") {
+                    compString = "Drawn Map";
+                }
+                if (compString.contains(searchText->text(), Qt::CaseInsensitive)) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (!searchText->text().isEmpty() && !found) { NO_FILTER_MATCH; }
+        
+        QTableWidgetItem * item;
+        item = new QTableWidgetItem(list[i + 1]); // room name
+        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        
+        // pick appropriate room icon and tooltip (game in progress yes/no; later maybe locked rooms etc.)
+        if(list[i].compare("True"))
+        {
+            item->setIcon(QIcon(":/res/iconTime.png"));// game is in lobby
+            item->setToolTip(tr("This game is in lobby.\nYou may join and start playing once the game starts."));
+        }
+        else
+        {
+            item->setIcon(QIcon(":/res/iconDamage.png"));// game has started
+            item->setToolTip(tr("This game is in progress.\nYou may join and spectate now but you'll have to wait for the game to end to start playing."));
+        }
+
+        roomsList->setItem(r, 0, item);
+
+        item = new QTableWidgetItem(list[i + 2]); // number of clients
+        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        item->setTextAlignment(Qt::AlignCenter);
+        item->setToolTip(tr("There are %1 clients connected to this room.", "", list[i + 2].toInt()).arg(list[i + 2]));
+        roomsList->setItem(r, 1, item);
+
+        item = new QTableWidgetItem(list[i + 3]); // number of teams
+        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        item->setTextAlignment(Qt::AlignCenter);
+        item->setToolTip(tr("There are %1 teams participating in this room.", "", list[i + 3].toInt()).arg(list[i + 3]));
+        //Should we highlight "full" games? Might get misinterpreted
+        //if(list[i + 3].toInt() >= cMaxTeams)
+        //    item->setForeground(red);
+        roomsList->setItem(r, 2, item);
+
+        item = new QTableWidgetItem(list[i + 4].left(15)); // name of host
+        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        item->setToolTip(tr("%1 is the host. He may adjust settings and start the game.").arg(list[i + 4]));
+        roomsList->setItem(r, 3, item);
+
+        if(list[i + 5] == "+rnd+")
+        {
+            item = new QTableWidgetItem(tr("Random Map")); // selected map (is randomized)
+// FIXME - need real icons. Disabling until then
+//            item->setIcon(QIcon(":/res/mapRandom.png"));
+        }
+        else if (list[i+5] == "+maze+")
+        {
+            item = new QTableWidgetItem(tr("Random Maze"));
+// FIXME - need real icons. Disabling until then
+//            item->setIcon(QIcon(":/res/mapMaze.png"));
+        }
+        else
+        {
+            item = new QTableWidgetItem(list[i + 5]); // selected map
+            
+            // check to see if we've got this map
+            // not perfect but a start
+            if(!mapList->contains(list[i + 5]))
+            {
+                item->setForeground(red);
+                item->setIcon(QIcon(":/res/mapMissing.png"));
+            }
+            else
+            {
+               // todo: mission icon?
+// FIXME - need real icons. Disabling until then
+//               item->setIcon(QIcon(":/res/mapCustom.png"));
+            }
+        }
+        
+        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        item->setToolTip(tr("Games may be played on precreated or randomized maps."));
+        roomsList->setItem(r, 4, item);
+
+        item = new QTableWidgetItem(list[i + 6].left(24)); // selected game scheme
+        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        item->setToolTip(tr("The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism."));
+        roomsList->setItem(r, 5, item);
+
+        item = new QTableWidgetItem(list[i + 7].left(24)); // selected weapon scheme
+        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        item->setToolTip(tr("The Weapon Scheme defines available weapons and their ammunition count."));
+        roomsList->setItem(r, 6, item);
+
+        if(!list[i + 1].compare(selection) && !selection.isEmpty())
+            roomsList->selectionModel()->setCurrentIndex(roomsList->model()->index(r, 0), QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+    }
+
+    roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
+    roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
+
+    // TODO: Should NOT be done here
+    if (gameInLobby) {
+        gameInLobby = false;
+        if (gameCanBeJoined) {
+            emit askForJoinRoom(gameInLobbyName);
+        } else {
+            emit askJoinConfirmation(gameInLobbyName);
+        }
+    }
+
+//  roomsList->resizeColumnsToContents();
+}
+
+void PageRoomsList::onCreateClick()
+{
+    if (roomName->text().size())
+        emit askForCreateRoom(roomName->text());
+    else
+        QMessageBox::critical(this,
+                tr("Error"),
+                tr("Please enter room name"),
+                tr("OK"));
+}
+
+void PageRoomsList::onJoinClick()
+{
+    QTableWidgetItem * curritem = roomsList->item(roomsList->currentRow(), 0);
+    if (!curritem)
+    {
+        QMessageBox::critical(this,
+                tr("Error"),
+                tr("Please select room from the list"),
+                tr("OK"));
+        return;
+    }
+
+    for (int i = 0; i < listFromServer.size(); i += 8) {
+        if (listFromServer[i + 1] == curritem->data(Qt::DisplayRole).toString()) {
+            gameInLobby = listFromServer[i].compare("True");
+            break;
+        }
+    }
+    
+    if (gameInLobby) {
+        gameInLobbyName = curritem->data(Qt::DisplayRole).toString();
+        emit askForRoomList();
+    } else {
+        emit askForJoinRoom(curritem->data(Qt::DisplayRole).toString());
+    }
+}
+
+void PageRoomsList::onRefreshClick()
+{
+    emit askForRoomList();
+}
+
+void PageRoomsList::onClearClick()
+{
+    CBState->setCurrentIndex(0);
+    CBRules->setCurrentIndex(0);
+    CBWeapons->setCurrentIndex(0);
+    searchText->clear();
+}
+
+void PageRoomsList::onJoinConfirmation(const QString & room)
+{
+    if (QMessageBox::warning(this,
+        tr("Warning"),
+        tr("The game you are trying to join has started.\nDo you still want to join the room?"),
+        QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+    {
+        emit askForJoinRoom(room);
+    }
+}

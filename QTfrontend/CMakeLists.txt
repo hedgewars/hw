@@ -54,7 +54,25 @@ set(hwfr_src
     gameuiconfig.cpp
     ui_hwform.cpp
     gamecfgwidget.cpp
-    pages.cpp
+    pagemain.cpp
+    pageeditteam.cpp
+    pagemultiplayer.cpp
+    pageoptions.cpp
+    pagenet.cpp
+    pagenetserver.cpp
+    pagenetgame.cpp
+    pageinfo.cpp
+    pagesingleplayer.cpp
+    pagetraining.cpp
+    pagecampaign.cpp
+    pageselectweapon.cpp
+    pageingame.cpp
+    pageroomslist.cpp
+    pageconnecting.cpp
+    pagescheme.cpp
+    pageadmin.cpp
+    pagenettype.cpp
+    pagedrawmap.cpp
     SquareLabel.cpp
     hats.cpp
     hedgehogerWidget.cpp
