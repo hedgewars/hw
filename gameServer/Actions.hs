@@ -395,7 +395,7 @@ processAction (AddClient cl) = do
     si <- gets serverInfo
     newClId <- io $ do
         ci <- addClient rnc cl
-        _ <- Exception.block . forkIO $ clientRecvLoop (clientSocket cl) (coreChan si) (sendChan cl) ci
+        _ <- Exception.mask (forkIO . clientRecvLoop (clientSocket cl) (coreChan si) (sendChan cl) ci)
 
         infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime cl))
 

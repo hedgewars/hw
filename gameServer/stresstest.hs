@@ -40,7 +40,7 @@ testing = Control.OldException.handle print $ do
     putStrLn "Finish"
 
 forks = forever $ do
-    delay <- randomRIO (30000::Int, 69000)
+    delay <- randomRIO (0::Int, 90000)
     threadDelay delay
     forkIO testing
 
