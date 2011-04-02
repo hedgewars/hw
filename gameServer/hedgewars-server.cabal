@@ -23,7 +23,6 @@ Executable hedgewars-server
     bytestring-show,
     network >= 2.3,
     time,
-    stm,
     mtl >= 2,
     dataenc,
     hslogger,
