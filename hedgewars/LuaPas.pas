@@ -46,7 +46,7 @@ const
 *)
 type
   LUA_NUMBER_  = type Double;            // ending underscore is needed in Pascal
-  LUA_INTEGER_ = type LongInt;
+  LUA_INTEGER_ = type PtrInt;
 
 (*
 @@ LUA_IDSIZE gives the maximum size for the description of the source
@@ -241,7 +241,7 @@ function lua_lessthan(L : Plua_State; idx1, idx2 : LongInt) : LongBool;
 
 function lua_tonumber(L : Plua_State; idx : LongInt) : lua_Number;
   cdecl; external LuaLibName;
-function lua_tointeger(L : Plua_State; idx : LongInt) : lua_Integer;
+function lua_tointeger(L : Plua_State; idx : PtrInt) : lua_Integer;
   cdecl; external LuaLibName;
 function lua_toboolean(L : Plua_State; idx : LongInt) : LongBool;
   cdecl; external LuaLibName;
@@ -618,9 +618,9 @@ function luaL_optnumber(L : Plua_State; nArg : LongInt;
                         def : lua_Number) : lua_Number;
   cdecl; external LuaLibName;
 
-function luaL_checkinteger(L : Plua_State; numArg : LongInt) : lua_Integer;
+function luaL_checkinteger(L : Plua_State; numArg : PtrInt) : lua_Integer;
   cdecl; external LuaLibName;
-function luaL_optinteger(L : Plua_State; nArg : LongInt;
+function luaL_optinteger(L : Plua_State; nArg : PtrInt;
                         def : lua_Integer) : lua_Integer;
   cdecl; external LuaLibName;
 
@@ -935,22 +935,22 @@ begin
   luaL_optstring := luaL_optlstring(L, n, d, nil);
 end;
 
-function luaL_checkint(L : Plua_State; n : LongInt) : LongInt;
+function luaL_checkint(L : Plua_State; n : PtrInt) : PtrInt;
 begin
   luaL_checkint := luaL_checkinteger(L, n);
 end;
 
-function luaL_optint(L : Plua_State; n, d : LongInt): LongInt;
+function luaL_optint(L : Plua_State; n, d : PtrInt): PtrInt;
 begin
   luaL_optint := luaL_optinteger(L, n, d);
 end;
 
-function luaL_checklong(L : Plua_State; n : LongInt) : LongInt;
+function luaL_checklong(L : Plua_State; n : PtrInt) : PtrInt;
 begin
   luaL_checklong := luaL_checkinteger(L, n);
 end;
 
-function luaL_optlong(L : Plua_State; n : LongInt; d : LongInt) : LongInt;
+function luaL_optlong(L : Plua_State; n : PtrInt; d : PtrInt) : PtrInt;
 begin
   luaL_optlong := luaL_optinteger(L, n, d);
 end;
