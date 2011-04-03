@@ -241,7 +241,7 @@ function lua_lessthan(L : Plua_State; idx1, idx2 : LongInt) : LongBool;
 
 function lua_tonumber(L : Plua_State; idx : LongInt) : lua_Number;
   cdecl; external LuaLibName;
-function lua_tointeger(L : Plua_State; idx : PtrInt) : lua_Integer;
+function lua_tointeger(L : Plua_State; idx : LongInt) : lua_Integer;
   cdecl; external LuaLibName;
 function lua_toboolean(L : Plua_State; idx : LongInt) : LongBool;
   cdecl; external LuaLibName;
@@ -618,9 +618,9 @@ function luaL_optnumber(L : Plua_State; nArg : LongInt;
                         def : lua_Number) : lua_Number;
   cdecl; external LuaLibName;
 
-function luaL_checkinteger(L : Plua_State; numArg : PtrInt) : lua_Integer;
+function luaL_checkinteger(L : Plua_State; numArg : LongInt) : lua_Integer;
   cdecl; external LuaLibName;
-function luaL_optinteger(L : Plua_State; nArg : PtrInt;
+function luaL_optinteger(L : Plua_State; nArg : LongInt;
                         def : lua_Integer) : lua_Integer;
   cdecl; external LuaLibName;
 
@@ -681,10 +681,10 @@ function luaL_argcheck(L : Plua_State; cond : Boolean; numarg : LongInt;
                        extramsg : PChar): LongInt;
 function luaL_checkstring(L : Plua_State; n : LongInt) : PChar;
 function luaL_optstring(L : Plua_State; n : LongInt; d : PChar) : PChar;
-function luaL_checkint(L : Plua_State; n : LongInt) : LongInt;
-function luaL_optint(L : Plua_State; n, d : LongInt): LongInt;
-function luaL_checklong(L : Plua_State; n : LongInt) : LongInt;
-function luaL_optlong(L : Plua_State; n : LongInt; d : LongInt) : LongInt;
+function luaL_checkint(L : Plua_State; n : LongInt) : lua_Integer;
+function luaL_optint(L : Plua_State; n : LongInt; d : lua_Integer): lua_Integer;
+function luaL_checklong(L : Plua_State; n : LongInt) : lua_Integer;
+function luaL_optlong(L : Plua_State; n : LongInt; d : lua_Integer) : lua_Integer;
 
 function luaL_typename(L : Plua_State; idx : LongInt) : PChar;
 
@@ -935,22 +935,22 @@ begin
   luaL_optstring := luaL_optlstring(L, n, d, nil);
 end;
 
-function luaL_checkint(L : Plua_State; n : PtrInt) : PtrInt;
+function luaL_checkint(L : Plua_State; n : LongInt) : lua_Integer;
 begin
   luaL_checkint := luaL_checkinteger(L, n);
 end;
 
-function luaL_optint(L : Plua_State; n, d : PtrInt): PtrInt;
+function luaL_optint(L : Plua_State; n : LongInt; d : lua_Integer): lua_Integer;
 begin
   luaL_optint := luaL_optinteger(L, n, d);
 end;
 
-function luaL_checklong(L : Plua_State; n : PtrInt) : PtrInt;
+function luaL_checklong(L : Plua_State; n : LongInt) : lua_Integer;
 begin
   luaL_checklong := luaL_checkinteger(L, n);
 end;
 
-function luaL_optlong(L : Plua_State; n : PtrInt; d : PtrInt) : PtrInt;
+function luaL_optlong(L : Plua_State; n : LongInt; d : lua_Integer) : lua_Integer;
 begin
   luaL_optlong := luaL_optinteger(L, n, d);
 end;
