@@ -35,9 +35,7 @@ handleCmd_NotEntered ["PROTO", protoNum] = do
                 AnswerClients [sendChan cl] ["PROTO", showB parsedProto] :
                 [CheckRegistered | not . B.null $ nick cl]
     where
-        parsedProto = case B.readInt protoNum of
-                           Just (i, t) | B.null t -> fromIntegral i
-                           _ -> 0
+        parsedProto = readInt_ protoNum
 
 
 handleCmd_NotEntered ["PASSWORD", passwd] = do
