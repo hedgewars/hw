@@ -24,6 +24,10 @@
 
 #include <QApplication>
 
+#ifdef __APPLE__
+#include "CocoaInitializer.h"
+#endif
+
 
 extern char sdlkeys[1024][2][128];
 extern char xb360buttons[][128];
@@ -33,7 +37,11 @@ extern char xbox360axes[][128];
 
 SDLInteraction::SDLInteraction()
 {
-
+#ifdef __APPLE__
+    // SDL_Init needs a NSAutoreleasePool set up
+    CocoaInitializer initializer;
+#endif
+    
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
 
     musicInitialized = 0;
