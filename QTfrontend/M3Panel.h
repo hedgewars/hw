@@ -22,7 +22,7 @@
 #include "InstallController.h"
 
 class M3Panel : public InstallController
-        {
+{
     public:
         M3Panel(void);
         ~M3Panel();
@@ -32,6 +32,6 @@ class M3Panel : public InstallController
     private:
         class Private;
         Private* c;
-        };
+};
 
 #endif
