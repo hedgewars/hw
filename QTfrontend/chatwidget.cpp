@@ -31,6 +31,7 @@
 #include <QCursor>
 #include <QScrollBar>
 #include <QItemSelectionModel>
+#include <QLabel>
 
 #include "hwconsts.h"
 #include "SDLs.h"
@@ -142,7 +143,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     chatEditLine->setMaxLength(300);
     connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
 
-    mainLayout.addWidget(chatEditLine, 1, 0);
+    mainLayout.addWidget(chatEditLine, 2, 0);
 
     chatText = new QTextBrowser(this);
     chatText->document()->setDefaultStyleSheet(STYLE);
@@ -152,7 +153,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     chatText->setOpenLinks(false);
     connect(chatText, SIGNAL(anchorClicked(const QUrl&)),
         this, SLOT(linkClicked(const QUrl&)));
-    mainLayout.addWidget(chatText, 0, 0);
+    mainLayout.addWidget(chatText, 0, 0, 2, 1);
 
     chatNicks = new QListWidget(this);
     chatNicks->setMinimumHeight(10);
@@ -165,7 +166,12 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     connect(chatNicks, SIGNAL(currentRowChanged(int)),
         this, SLOT(chatNickSelected(int)));
 
-    mainLayout.addWidget(chatNicks, 0, 1, -1, 1);
+    mainLayout.addWidget(chatNicks, 1, 1, 2, 1);
+
+    lblCount = new QLabel(this);
+    mainLayout.addWidget(lblCount, 0, 1);
+    lblCount->setText("0");
+    lblCount->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
     acInfo = new QAction(QAction::tr("Info"), chatNicks);
     acInfo->setIcon(QIcon(":/res/info.png"));
@@ -393,6 +399,8 @@ void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
     updateNickItem(item);
     chatNicks->addItem(item);
 
+    lblCount->setText(QString::number(chatNicks->count()));
+
     if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool()) {
        Mix_PlayChannel(-1, sound[rand()%4], 0);
     }
@@ -405,6 +413,8 @@ void HWChatWidget::nickRemoved(const QString& nick)
         chatNicks->takeItem(chatNicks->row(*it));
         ++it;
     }
+
+    lblCount->setText(QString::number(chatNicks->count()));
 }
 
 void HWChatWidget::clear()

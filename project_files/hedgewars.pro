@@ -54,7 +54,7 @@ SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/namegen.cpp ../QTfrontend/netregister.cpp \
 	../QTfrontend/netserver.cpp ../QTfrontend/netserverslist.cpp \
 	../QTfrontend/netudpserver.cpp ../QTfrontend/netudpwidget.cpp \
-	../QTfrontend/newnetclient.cpp ../QTfrontend/pages.cpp \
+        ../QTfrontend/newnetclient.cpp \
 	../QTfrontend/playrecordpage.cpp ../QTfrontend/proto.cpp \
 	../QTfrontend/selectWeapon.cpp ../QTfrontend/statsPage.cpp \
 	../QTfrontend/tcpBase.cpp ../QTfrontend/team.cpp \
@@ -65,7 +65,26 @@ SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
     ../QTfrontend/hwconsts.cpp \
     ../QTfrontend/drawmapwidget.cpp \
     ../QTfrontend/drawmapscene.cpp \
-    ../QTfrontend/qaspectratiolayout.cpp
+    ../QTfrontend/qaspectratiolayout.cpp \
+    ../QTfrontend/pagetraining.cpp \
+    ../QTfrontend/pagesingleplayer.cpp \
+    ../QTfrontend/pageselectweapon.cpp \
+    ../QTfrontend/pagescheme.cpp \
+    ../QTfrontend/pageroomslist.cpp \
+    ../QTfrontend/pageoptions.cpp \
+    ../QTfrontend/pagenettype.cpp \
+    ../QTfrontend/pagenetserver.cpp \
+    ../QTfrontend/pagenetgame.cpp \
+    ../QTfrontend/pagenet.cpp \
+    ../QTfrontend/pagemultiplayer.cpp \
+    ../QTfrontend/pagemain.cpp \
+    ../QTfrontend/pageingame.cpp \
+    ../QTfrontend/pageinfo.cpp \
+    ../QTfrontend/pageeditteam.cpp \
+    ../QTfrontend/pagedrawmap.cpp \
+    ../QTfrontend/pageconnecting.cpp \
+    ../QTfrontend/pagecampaign.cpp \
+    ../QTfrontend/pageadmin.cpp
 
 win32 {
 	SOURCES += ../QTfrontend/xfire.cpp

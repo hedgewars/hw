@@ -34,6 +34,7 @@ class QLineEdit;
 class QListWidget;
 class QSettings;
 class SDLInteraction;
+class QLabel;
 
 // this class is for custom nick sorting
 class ListWidgetNickItem : public QListWidgetItem
@@ -101,6 +102,7 @@ private:
   QAction * acIgnore;
   QAction * acFriend;
   QSettings * gameSettings;
+  QLabel * lblCount;
   SDLInteraction * sdli;
   Mix_Chunk *sound[4];
   bool notify;
