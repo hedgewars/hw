@@ -127,6 +127,7 @@ processAction (ByeClient msg) = do
 
     chan <- client's sendChan
     clNick <- client's nick
+    loggedIn <- client's logonPassed
 
     when (ri /= lobbyId) $ do
         processAction $ MoveToLobby ("quit: " `B.append` msg)
@@ -137,7 +138,7 @@ processAction (ByeClient msg) = do
         infoM "Clients" (show ci ++ " quits: " ++ B.unpack msg)
 
     processAction $ AnswerClients [chan] ["BYE", msg]
-    processAction $ AnswerClients clientsChans ["LOBBY:LEFT", clNick, msg]
+    when loggedIn $ processAction $ AnswerClients clientsChans ["LOBBY:LEFT", clNick, msg]
 
     s <- get
     put $! s{removedClients = ci `Set.insert` removedClients s}
