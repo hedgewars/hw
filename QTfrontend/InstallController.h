@@ -20,11 +20,11 @@
 #define INSTALLCONTROLLER_H
 
 class InstallController
-        {
+{
     public:
         virtual ~InstallController();
 
         virtual void showInstallController() = 0;
-        };
+};
 
 #endif

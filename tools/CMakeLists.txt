@@ -28,6 +28,7 @@ if (APPLE)
 	string(REGEX REPLACE "(.*)/include.*" "\\1" qt_base_dir "${QT_INCLUDE_DIR}")
 	find_program(macdeployqt_EXE NAMES macdeployqt macdeployqt-mac PATHS ${qt_base_dir}/bin NO_DEFAULT_PATH)
 
+	#this tool is present in qt 4.5 but only if you compile from sources; from qt 4.6 is present also in the binary version
 	if(NOT macdeployqt_EXE)
 		message(FATAL_ERROR "The utility macdeployqt is required to create the bundle!")
 	endif()

@@ -31,6 +31,9 @@
 #ifdef _WIN32
 #include <Shlobj.h>
 #endif
+#ifdef __APPLE__
+#include "CocoaInitializer.h"
+#endif
 
 bool checkForDir(const QString & dir)
 {
@@ -424,6 +427,10 @@ int main(int argc, char *argv[]) {
         registry_hklm.setValue("Software/Hedgewars/Frontend", bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe");
         registry_hklm.setValue("Software/Hedgewars/Path", bindir->absolutePath().replace("/", "\\"));
     }
+#endif
+#ifdef __APPLE__
+    // this creates the autoreleasepool that prevents leaking
+    CocoaInitializer initializer;
 #endif
 
     HWForm *Form = new HWForm();
