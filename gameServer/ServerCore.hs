@@ -42,11 +42,10 @@ mainLoop = forever $ do
 
         ClientMessage (ci, cmd) -> do
             liftIO $ debugM "Clients" $ show ci ++ ": " ++ show cmd
-
+            
             removed <- gets removedClients
             unless (ci `Set.member` removed) $ do
-                as <- get
-                put $! as{clientIndex = Just ci}
+                modify (\s -> s{clientIndex = Just ci})
                 reactCmd cmd
 
         Remove ci ->
@@ -56,8 +55,7 @@ mainLoop = forever $ do
             rnc <- gets roomsClients
             exists <- liftIO $ clientExists rnc ci
             when exists $ do
-                as <- get
-                put $! as{clientIndex = Just ci}
+                modify (\s -> s{clientIndex = Just ci})
                 uid' <- client's clUID
                 when (uid == hashUnique uid') $ processAction (ProcessAccountInfo info)
                 return ()

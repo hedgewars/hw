@@ -6,7 +6,6 @@ import qualified Data.Foldable as Foldable
 import Data.Maybe
 import Data.List
 import Control.Monad.Reader
-import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
