@@ -219,9 +219,10 @@ processAction (MoveToLobby msg) = do
         moveClientToLobby rnc ci
 
 processAction ChangeMaster = do
+    (Just ci) <- gets clientIndex
     ri <- clientRoomA
     rnc <- gets roomsClients
-    newMasterId <- liftM head . io $ roomClientsIndicesM rnc ri
+    newMasterId <- liftM (head . filter (/= ci)) . io $ roomClientsIndicesM rnc ri
     newMaster <- io $ client'sM rnc id newMasterId
     let newRoomName = nick newMaster
     mapM_ processAction [
@@ -407,7 +408,7 @@ processAction (AddClient cl) = do
         [
             AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
             , CheckBanned
-            , AddIP2Bans (host cl) "Reconnected too fast" (addUTCTime 10 $ connectTime cl)
+--            , AddIP2Bans (host cl) "Reconnected too fast" (addUTCTime 10 $ connectTime cl)
         ]
 
 
