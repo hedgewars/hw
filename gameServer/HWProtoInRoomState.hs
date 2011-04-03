@@ -242,6 +242,20 @@ handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = do
             [ModifyRoom (\r -> r{isRestrictedTeams = not $ isRestrictedTeams r})]
 
 
+handleCmd_inRoom ["ROOM_NAME", newName] = do
+    cl <- thisClient
+    rs <- allRoomInfos
+    
+    return $
+        if not $ isMaster cl then
+            [ProtocolError "Not room master"]
+        else
+        if isJust $ find (\r -> newName == name r) rs then
+            [Warning "Room with such name already exists"]
+        else
+            [ModifyRoom (\r -> r{name = newName})]
+
+
 handleCmd_inRoom ["KICK", kickNick] = do
     (thisClientId, rnc) <- ask
     maybeClientId <- clientByNick kickNick
