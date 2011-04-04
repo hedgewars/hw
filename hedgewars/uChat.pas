@@ -278,7 +278,8 @@ if Key <> 0 then
                 SetLine(InputStr, '', false)
                 end;
             FreezeEnterKey;
-            GameState:= gsGame
+            SDL_EnableKeyRepeat(0,0);
+            GameState:= gsGame;
             end;
     else
     if (Key < $80) then btw:= 1
@@ -339,6 +340,7 @@ procedure chChat(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     GameState:= gsChat;
+    SDL_EnableKeyRepeat(200,45);
     if length(s) = 0 then
         KeyPressChat(27)
     else
