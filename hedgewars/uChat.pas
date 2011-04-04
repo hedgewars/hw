@@ -269,7 +269,13 @@ if Key <> 0 then
                 SetLine(InputStr, InputStr.s, true)
                 end;
         {Esc}
-        27: SetLine(InputStr, '', true);
+        27: if Length(InputStr.s) > 0 then SetLine(InputStr, '', true)
+            else
+                begin
+                FreezeEnterKey;
+                SDL_EnableKeyRepeat(0,0);
+                GameState:= gsGame;
+                end;
         {Return}
         3, 13, 271: begin
             if Length(InputStr.s) > 0 then
@@ -342,9 +348,10 @@ begin
     GameState:= gsChat;
     SDL_EnableKeyRepeat(200,45);
     if length(s) = 0 then
-        KeyPressChat(27)
+        SetLine(InputStr, '', true)
     else
         begin
+        // err, does anyone have any documentation on this sequence?
         KeyPressChat(27);
         KeyPressChat(47);
         KeyPressChat(116);
