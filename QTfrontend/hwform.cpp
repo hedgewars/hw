@@ -61,7 +61,6 @@
 #include "drawmapwidget.h"
 
 #ifdef __APPLE__
-#include "CocoaInitializer.h"
 #include "M3Panel.h"
 #ifdef SPARKLE_ENABLED
 #define SPARKLE_APPCAST_URL "http://www.hedgewars.org/download/appcast.xml"
@@ -98,13 +97,17 @@ HWForm::HWForm(QWidget *parent)
 
 #ifdef __APPLE__
     panel = new M3Panel;
+
 #ifdef SPARKLE_ENABLED
     AutoUpdater* updater;
-    CocoaInitializer initializer;
+
     updater = new SparkleAutoUpdater(SPARKLE_APPCAST_URL);
     if (updater && config->isAutoUpdateEnabled())
         updater->checkForUpdates();
 #endif
+
+    QShortcut *hideFrontend = new QShortcut(QKeySequence("Ctrl+M"), this);
+    connect (hideFrontend, SIGNAL(activated()), this, SLOT(showMinimized()));
 #else
     // ctrl+q closes frontend for consistency
     QShortcut *closeFrontend = new QShortcut(QKeySequence("Ctrl+Q"), this);

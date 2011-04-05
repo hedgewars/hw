@@ -726,7 +726,8 @@ function  SDL_InitSubSystem(flags: LongWord): LongInt; cdecl; external SDLLibNam
 procedure SDL_Quit; cdecl; external SDLLibName;
 
 function  SDL_VideoDriverName(var namebuf; maxlen: LongInt): PChar; cdecl; external SDLLibName;
-procedure SDL_EnableUNICODE(enable: LongInt); cdecl; external SDLLibName;
+function  SDL_EnableUNICODE(enable: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_EnableKeyRepeat(delay_, interval: LongInt): LongInt; cdecl; external SDLLibName;
 
 procedure SDL_Delay(msec: Longword); cdecl; external SDLLibName;
 function  SDL_GetTicks: Longword; cdecl; external SDLLibName;

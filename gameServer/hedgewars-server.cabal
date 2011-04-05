@@ -15,21 +15,18 @@ Executable hedgewars-server
   main-is: hedgewars-server.hs
 
   Build-depends:
-    base >= 4,
+    base >= 4.3,
     unix,
     containers,
     array,
     bytestring,
     bytestring-show,
-    network-bytestring,
-    network,
+    network >= 2.3,
     time,
-    stm,
     mtl >= 2,
     dataenc,
     hslogger,
     process,
-    deepseq,
-    tconfig
+    deepseq
 
   ghc-options: -O2

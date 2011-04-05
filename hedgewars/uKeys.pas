@@ -386,7 +386,9 @@ end;
 
 procedure FreezeEnterKey;
 begin
+    tkbd[3]:= 1;
     tkbd[13]:= 1;
+    tkbd[27]:= 1;
     tkbd[271]:= 1;
 end;
 

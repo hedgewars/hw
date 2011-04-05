@@ -127,6 +127,7 @@ processAction (ByeClient msg) = do
 
     chan <- client's sendChan
     clNick <- client's nick
+    loggedIn <- client's logonPassed
 
     when (ri /= lobbyId) $ do
         processAction $ MoveToLobby ("quit: " `B.append` msg)
@@ -137,7 +138,7 @@ processAction (ByeClient msg) = do
         infoM "Clients" (show ci ++ " quits: " ++ B.unpack msg)
 
     processAction $ AnswerClients [chan] ["BYE", msg]
-    processAction $ AnswerClients clientsChans ["LOBBY:LEFT", clNick, msg]
+    when loggedIn $ processAction $ AnswerClients clientsChans ["LOBBY:LEFT", clNick, msg]
 
     s <- get
     put $! s{removedClients = ci `Set.insert` removedClients s}
@@ -218,9 +219,10 @@ processAction (MoveToLobby msg) = do
         moveClientToLobby rnc ci
 
 processAction ChangeMaster = do
+    (Just ci) <- gets clientIndex
     ri <- clientRoomA
     rnc <- gets roomsClients
-    newMasterId <- liftM head . io $ roomClientsIndicesM rnc ri
+    newMasterId <- liftM (head . filter (/= ci)) . io $ roomClientsIndicesM rnc ri
     newMaster <- io $ client'sM rnc id newMasterId
     let newRoomName = nick newMaster
     mapM_ processAction [
@@ -395,7 +397,7 @@ processAction (AddClient cl) = do
     si <- gets serverInfo
     newClId <- io $ do
         ci <- addClient rnc cl
-        _ <- Exception.block . forkIO $ clientRecvLoop (clientSocket cl) (coreChan si) (sendChan cl) ci
+        _ <- Exception.mask (forkIO . clientRecvLoop (clientSocket cl) (coreChan si) (sendChan cl) ci)
 
         infoM "Clients" (show ci ++ ": New client. Time: " ++ show (connectTime cl))
 

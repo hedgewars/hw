@@ -269,7 +269,13 @@ if Key <> 0 then
                 SetLine(InputStr, InputStr.s, true)
                 end;
         {Esc}
-        27: SetLine(InputStr, '', true);
+        27: if Length(InputStr.s) > 0 then SetLine(InputStr, '', true)
+            else
+                begin
+                FreezeEnterKey;
+                SDL_EnableKeyRepeat(0,0);
+                GameState:= gsGame;
+                end;
         {Return}
         3, 13, 271: begin
             if Length(InputStr.s) > 0 then
@@ -278,7 +284,8 @@ if Key <> 0 then
                 SetLine(InputStr, '', false)
                 end;
             FreezeEnterKey;
-            GameState:= gsGame
+            SDL_EnableKeyRepeat(0,0);
+            GameState:= gsGame;
             end;
     else
     if (Key < $80) then btw:= 1
@@ -339,10 +346,12 @@ procedure chChat(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     GameState:= gsChat;
+    SDL_EnableKeyRepeat(200,45);
     if length(s) = 0 then
-        KeyPressChat(27)
+        SetLine(InputStr, '', true)
     else
         begin
+        // err, does anyone have any documentation on this sequence?
         KeyPressChat(27);
         KeyPressChat(47);
         KeyPressChat(116);

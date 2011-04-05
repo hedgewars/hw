@@ -1,4 +1,4 @@
-{-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables, OverloadedStrings, Rank2Types #-}
 module ClientIO where
 
 import qualified Control.Exception as Exception
@@ -30,7 +30,7 @@ takePacks
             return (B.splitWith (== '\n') packet : packets)
 
 listenLoop :: Socket -> Chan CoreMessage -> ClientIndex -> IO ()
-listenLoop sock chan ci = Exception.unblock $ recieveWithBufferLoop B.empty
+listenLoop sock chan ci = recieveWithBufferLoop B.empty
     where
         recieveWithBufferLoop recvBuf = do
             recvBS <- recv sock 4096
@@ -41,11 +41,11 @@ listenLoop sock chan ci = Exception.unblock $ recieveWithBufferLoop B.empty
 
         sendPacket packet = writeChan chan $ ClientMessage (ci, packet)
 
-clientRecvLoop :: Socket -> Chan CoreMessage -> Chan [B.ByteString] -> ClientIndex -> IO ()
-clientRecvLoop s chan clChan ci =
+clientRecvLoop :: Socket -> Chan CoreMessage -> Chan [B.ByteString] -> ClientIndex -> (forall a. IO a -> IO a) -> IO ()
+clientRecvLoop s chan clChan ci restore =
     myThreadId >>=
-    \t -> forkIO (clientSendLoop s t clChan ci) >>
-    (listenLoop s chan ci >> return "Connection closed")
+    \t -> (restore $ forkIO (clientSendLoop s t clChan ci) >>
+        listenLoop s chan ci >> return "Connection closed")
         `Exception.catch` (\(e :: Exception.IOException) -> return . B.pack . show $ e)
         `Exception.catch` (\(e :: ShutdownThreadException) -> return . B.pack . show $ e)
         >>= clientOff >> remove
