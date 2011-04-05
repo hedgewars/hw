@@ -209,11 +209,7 @@ begin
     cFullScreen:= false;
     cTimerInterval:= 8;
     PathPrefix:= 'Data';
-{$IFDEF DEBUGFILE}
-    cShowFPS:= true;
-{$ELSE}
-    cShowFPS:= false;
-{$ENDIF}
+    cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     val(gameArgs[0], ipcPort);
     val(gameArgs[1], cScreenWidth);
     val(gameArgs[2], cScreenHeight);

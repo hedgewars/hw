@@ -931,7 +931,7 @@ begin
         x:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}(SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
         y:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}(SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
         SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN
-                        {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS {$ENDIF});
+                          {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS {$ENDIF});  // do not set SDL_WINDOW_RESIZABLE on iOS
         SDLrender:= SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
     end;
 

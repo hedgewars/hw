@@ -211,8 +211,12 @@
     print_free_memory();
 }
 
+//TODO: when the SDLUIKitDelegate methods applicationWillResignActive and applicationDidBecomeActive do work
+// you'll be able to remove the methods below and just handle the SDL_WINDOWEVENT_MINIMIZED/SDL_WINDOWEVENT_RESTORED
+// events in the MainLoop
+
 -(void) applicationWillResignActive:(UIApplication *)application {
-    [super applicationWillResignActive: application];
+    //[super applicationWillResignActive:application];
 
     UIDevice* device = [UIDevice currentDevice];
     if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
@@ -236,7 +240,7 @@
 }
 
 -(void) applicationDidBecomeActive:(UIApplication *)application {
-    [super applicationDidBecomeActive:application];
+    //[super applicationDidBecomeActive:application];
 
     UIDevice* device = [UIDevice currentDevice];
     if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&

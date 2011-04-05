@@ -39,10 +39,11 @@
                             [[self.view viewWithTag:GRENADE_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu, initialOrientation, containerWindow;
+@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu, initialOrientation;
 
 #pragma mark -
 #pragma mark rotation
+
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     // don't rotate until the game is running for performance and synchronization with the sdlview
     if (isGameRunning() == NO)
@@ -98,17 +99,20 @@
         return;
 
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    
+    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
+
     [UIView beginAnimations:@"rotation" context:NULL];
     [UIView setAnimationDuration:0.7];
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
             self.view.frame = [[UIScreen mainScreen] bounds];
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
             break;
         case UIDeviceOrientationLandscapeRight:
             self.view.frame = [[UIScreen mainScreen] bounds];
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
+            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
             break;
         default:
             // a debug log would spam too much
@@ -151,7 +155,6 @@
         initialScreenCount = 1;
 
     // set initial orientation of the controller orientation
-    if (IS_DUALHEAD()) {
         switch (self.interfaceOrientation) {
             case UIDeviceOrientationLandscapeLeft:
                 self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
@@ -168,7 +171,6 @@
                                                  selector:@selector(dualHeadRotation:)
                                                      name:UIDeviceOrientationDidChangeNotification
                                                    object:nil];
-    }
 
     // the timer used to dim the overlay
     dimTimer = [[NSTimer alloc] initWithFireDate:(IS_DUALHEAD()) ? HIDING_TIME_NEVER : [NSDate dateWithTimeIntervalSinceNow:6]
@@ -205,8 +207,6 @@
                                                    object:nil];
     }
     
-    self.containerWindow = [[UIApplication sharedApplication] keyWindow];
-
     // present the overlay
     [UIView beginAnimations:@"showing overlay" context:NULL];
     [UIView setAnimationDuration:2];
