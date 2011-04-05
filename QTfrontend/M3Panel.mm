@@ -18,7 +18,6 @@
 
 #include "M3Panel.h"
 #include "M3InstallController.h"
-#include "CocoaInitializer.h"
 
 #include <Cocoa/Cocoa.h>
 
@@ -31,8 +30,7 @@ public:
 M3Panel::M3Panel(void)
 {
 	c = new Private;
-    
-    CocoaInitializer initializer;
+
 	c->install = [[M3InstallController alloc] init];
 	[c->install retain];
 
