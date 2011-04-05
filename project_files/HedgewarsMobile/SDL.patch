@@ -1,26 +1,26 @@
-diff -r 48067bfc300c Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
---- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Mon Feb 14 11:50:18 2011 -0600
-+++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Sun Mar 13 18:22:16 2011 +0100
-@@ -1695,6 +1695,7 @@
+diff -r 8a04b596b472 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
+--- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Tue Apr 05 09:50:25 2011 -0700
++++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Tue Apr 05 22:19:33 2011 +0200
+@@ -1602,6 +1602,7 @@
  				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
  				GCC_C_LANGUAGE_STANDARD = c99;
  				GCC_DEBUGGING_SYMBOLS = full;
 +				GCC_THUMB_SUPPORT = NO;
  				GCC_WARN_ABOUT_RETURN_TYPE = YES;
  				GCC_WARN_UNUSED_VARIABLE = NO;
- 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
-@@ -1712,6 +1713,7 @@
+ 				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
+@@ -1619,6 +1620,7 @@
  				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
  				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
  				GCC_C_LANGUAGE_STANDARD = c99;
 +				GCC_THUMB_SUPPORT = NO;
  				GCC_WARN_ABOUT_RETURN_TYPE = YES;
  				GCC_WARN_UNUSED_VARIABLE = NO;
- 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
-diff -r 48067bfc300c include/SDL_config_iphoneos.h
---- a/include/SDL_config_iphoneos.h	Mon Feb 14 11:50:18 2011 -0600
-+++ b/include/SDL_config_iphoneos.h	Sun Mar 13 18:22:16 2011 +0100
-@@ -119,7 +119,7 @@
+ 				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
+diff -r 8a04b596b472 include/SDL_config_iphoneos.h
+--- a/include/SDL_config_iphoneos.h	Tue Apr 05 09:50:25 2011 -0700
++++ b/include/SDL_config_iphoneos.h	Tue Apr 05 22:19:33 2011 +0200
+@@ -107,7 +107,7 @@
  /* enable iPhone version of Core Audio driver */
  #define SDL_AUDIO_DRIVER_COREAUDIOIPHONE 1
  /* Enable the dummy audio driver (src/audio/dummy/\*.c) */
@@ -29,7 +29,7 @@ diff -r 48067bfc300c include/SDL_config_iphoneos.h
  
  /* Enable the stub haptic driver (src/haptic/dummy/\*.c) */
  #define SDL_HAPTIC_DISABLED	1
-@@ -140,15 +140,18 @@
+@@ -128,15 +128,18 @@
  
  /* Supported video drivers */
  #define SDL_VIDEO_DRIVER_UIKIT	1
@@ -51,7 +51,7 @@ diff -r 48067bfc300c include/SDL_config_iphoneos.h
  
  /* enable iPhone keyboard support */
  #define SDL_IPHONE_KEYBOARD 1
-@@ -158,4 +161,7 @@
+@@ -146,4 +149,7 @@
   */
  #define SDL_IPHONE_MAX_GFORCE 5.0
  
@@ -59,33 +59,14 @@ diff -r 48067bfc300c include/SDL_config_iphoneos.h
 +#define SDL_VIEW_TAG 456987
 +
  #endif /* _SDL_config_iphoneos_h */
-diff -r 48067bfc300c src/video/uikit/SDL_uikitappdelegate.m
---- a/src/video/uikit/SDL_uikitappdelegate.m	Mon Feb 14 11:50:18 2011 -0600
-+++ b/src/video/uikit/SDL_uikitappdelegate.m	Sun Mar 13 18:22:16 2011 +0100
-@@ -35,6 +35,7 @@
- static int forward_argc;
- static char **forward_argv;
- 
-+#if 0
- int main(int argc, char **argv) {
- 
-     int i;
-@@ -55,6 +56,7 @@
-     [pool release];
-     
- }
-+#endif
- 
- @implementation SDLUIKitDelegate
- 
-diff -r 48067bfc300c src/video/uikit/SDL_uikitopengles.m
---- a/src/video/uikit/SDL_uikitopengles.m	Mon Feb 14 11:50:18 2011 -0600
-+++ b/src/video/uikit/SDL_uikitopengles.m	Sun Mar 13 18:22:16 2011 +0100
+diff -r 8a04b596b472 src/video/uikit/SDL_uikitopengles.m
+--- a/src/video/uikit/SDL_uikitopengles.m	Tue Apr 05 09:50:25 2011 -0700
++++ b/src/video/uikit/SDL_uikitopengles.m	Tue Apr 05 22:19:33 2011 +0200
 @@ -117,6 +117,7 @@
                                      majorVersion: _this->gl_config.major_version];
      
      data->view = view;
 +    view.tag = SDL_VIEW_TAG;
-     
-     /* add the view to our window */
-     [uiwindow addSubview: view ];
+     view->viewcontroller = data->viewcontroller;
+     if (view->viewcontroller != nil) {
+         [view->viewcontroller setView:view];

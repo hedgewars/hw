@@ -35,25 +35,14 @@
 
 #define BLACKVIEW_TAG 17935
 #define SECONDBLACKVIEW_TAG 48620
-#define VALGRIND "/opt/fink/bin/valgrind"
 
-int main (int argc, char *argv[]) {
-#ifdef VALGRIND_REXEC
-    // Using the valgrind build config, rexec ourself in valgrind
-    // from http://landonf.bikemonkey.org/code/iphone/iPhone_Simulator_Valgrind.20081224.html
-    if (argc < 2 || (argc >= 2 && strcmp(argv[1], "-valgrind") != 0))
-        execl(VALGRIND, VALGRIND, "--leak-check=full", "--dsymutil=yes", argv[0], "-valgrind", NULL);
-#endif
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    int retVal = UIApplicationMain(argc, argv, nil, @"HedgewarsAppDelegate");
-    [pool release];
-    return retVal;
+@implementation SDLUIKitDelegate (customDelegate)
+
++(NSString *)getAppDelegateClassName {
+    return @"HedgewarsAppDelegate";
 }
 
-int SDL_main(int argc, char **argv) {
-    // dummy function to prevent linkage fail
-    return 0;
-}
+@end
 
 @implementation HedgewarsAppDelegate
 @synthesize mainViewController, overlayController, uiwindow, secondWindow, isInGame;

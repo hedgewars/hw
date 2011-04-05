@@ -154,3 +154,10 @@ void replayFinished() {
 void updateVisualsNewTurn(void) {
     [amvc_instance updateAmmoVisuals];
 }
+
+// dummy function to prevent linkage fail
+int SDL_main(int argc, char **argv) {
+    return 0;
+}
+
+
