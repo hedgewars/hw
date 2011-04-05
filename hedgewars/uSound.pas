@@ -20,7 +20,7 @@
 
 unit uSound;
 interface
-uses SDLh, uConsts, uTypes;
+uses SDLh, uConsts, uTypes, sysutils;
 
 var MusicFN: shortstring;
 
@@ -61,13 +61,29 @@ var Volume: LongInt;
 
 function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
+    locName, path: shortstring;
 begin
 i:= 0;
+    // First, attempt to locate a localised version of the voice
+    if cLocale <> 'en' then
+        begin
+        locName:= name+'_'+cLocale;
+        path:= Pathz[ptVoices] + '/' + locName;
+        if DirectoryExists(path) then name:= locName
+        else if Length(cLocale) > 2 then
+            begin
+            locName:= name+'_'+Copy(cLocale,1,2);
+            path:= Pathz[ptVoices] + '/' + locName;
+            if DirectoryExists(path) then name:= locName
+            end
+        end;
+
+    // If that fails, use the unmodified one
     while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') do
-    begin
+        begin
         inc(i);
         TryDo(i <= cMaxTeams, 'Engine bug: AskForVoicepack i > cMaxTeams', true)
-    end;
+        end;
 
     voicepacks[i].name:= name;
     AskForVoicepack:= @voicepacks[i]

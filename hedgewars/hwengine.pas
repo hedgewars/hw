@@ -266,11 +266,14 @@ begin
     LoadLocale(Pathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if cLocaleFName <> 'en.txt' then
         begin
+        if (Length(cLocaleFName) > 6) then cLocale := Copy(cLocaleFName,1,5)
+        else cLocale := Copy(cLocaleFName,1,2);
         // Try two letter locale first before trying specific locale overrides
         if (Length(cLocaleFName) > 6) and (Copy(cLocaleFName,1,2)+'.txt' <> 'en.txt') then
             LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocaleFName,1,2)+'.txt');
         LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
-        end;
+        end
+    else cLocale := 'en';
 
     WriteLnToConsole(msgGettingConfig);
 

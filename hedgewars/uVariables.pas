@@ -33,6 +33,7 @@ var
     isSoundEnabled  : boolean     = true;
     isMusicEnabled  : boolean     = false;
     cLocaleFName    : shortstring = 'en.txt';
+    cLocale         : shortstring = 'en';
     cInitVolume     : LongInt     = 100;
     cTimerInterval  : LongInt     = 8;
     PathPrefix      : shortstring = './';
