@@ -264,13 +264,13 @@ begin
     InitKbdKeyTable();
 
     LoadLocale(Pathz[ptLocale] + '/en.txt');  // Do an initial load with english
+    if (Length(cLocaleFName) > 6) then cLocale := Copy(cLocaleFName,1,5)
+    else cLocale := Copy(cLocaleFName,1,2);
     if cLocaleFName <> 'en.txt' then
         begin
-        if (Length(cLocaleFName) > 6) then cLocale := Copy(cLocaleFName,1,5)
-        else cLocale := Copy(cLocaleFName,1,2);
         // Try two letter locale first before trying specific locale overrides
-        if (Length(cLocaleFName) > 6) and (Copy(cLocaleFName,1,2)+'.txt' <> 'en.txt') then
-            LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocaleFName,1,2)+'.txt');
+        if (Length(cLocale) > 2) and (Copy(cLocale,1,2) <> 'en') then
+            LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocale,1,2)+'.txt');
         LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
         end
     else cLocale := 'en';
