@@ -86,14 +86,17 @@ void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
 void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
-    QPainterPath path = m_currPath->path();
-    path.lineTo(mouseEvent->scenePos());
-    paths.first().append(mouseEvent->scenePos().toPoint());
-    m_currPath->setPath(path);
+    if (m_currPath)
+    {
+        QPainterPath path = m_currPath->path();
+        path.lineTo(mouseEvent->scenePos());
+        paths.first().append(mouseEvent->scenePos().toPoint());
+        m_currPath->setPath(path);
 
-    simplifyLast();
+        simplifyLast();
 
-    m_currPath = 0;
+        m_currPath = 0;
+    }
 }
 
 void DrawMapScene::undo()
