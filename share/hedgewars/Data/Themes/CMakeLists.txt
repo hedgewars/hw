@@ -9,7 +9,10 @@ foreach(dir
 	Castle
 	Cheese
 	Christmas
+	Compost
 	Deepspace
+	Desert
+	Digital
 	City
 	CrazyMission
 	EarthRise
@@ -20,14 +23,12 @@ foreach(dir
 	Island
 	Jungle
 	Nature
+	Olympics
 	Planes
 	Sheep
 	Snow
 	Stage
 	Underwater
-	Compost
-	Olympics
-	Desert
 	)
 	add_subdirectory(${dir})
 endforeach(dir)
