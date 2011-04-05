@@ -8,6 +8,7 @@ foreach(dir
 	Russian
 	Singer
 	Surfer
+	Default_uk
 	)
 	add_subdirectory(${dir})
 endforeach(dir)
