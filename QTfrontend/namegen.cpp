@@ -60,8 +60,8 @@ void HWNamegen::TeamRandomNames(HWTeam*& team, const bool changeteamname)
             team->Voicepack = "Default";
         }
 
-		//give each hedgehog a random name:
-		//TODO: load the dictionary only once! (right now it's loaded once for each hedgehog)
+        //give each hedgehog a random name:
+        //TODO: load the dictionary only once! (right now it's loaded once for each hedgehog)
         for(int i = 0; i < 8; i++)
         {
             if ((TypesHatnames[kind].size()) > 0){
@@ -169,42 +169,42 @@ void HWNamegen::TypesLoad()
 
 QString HWNamegen::GetRandomGrave()
 {
-	QStringList Graves;
-	
-	//list all available Graves
-	QDir tmpdir;
+    QStringList Graves;
+
+    //list all available Graves
+    QDir tmpdir;
     tmpdir.cd(datadir->absolutePath());
     tmpdir.cd("Graphics/Graves");
     tmpdir.setFilter(QDir::Files);
     Graves.append(tmpdir.entryList(QStringList("*.png")).replaceInStrings(QRegExp("^(.*)\\.png"), "\\1"));
 
-	if(Graves.size()==0)
-	{
-		//do some serious error handling
-		return "Error";
-	}
+    if(Graves.size()==0)
+    {
+        //do some serious error handling
+        return "Error";
+    }
 
-	//pick a random grave
-	return Graves[rand()%(Graves.size())];
+    //pick a random grave
+    return Graves[rand()%(Graves.size())];
 }
 
 QString HWNamegen::GetRandomFort()
 {
-	QStringList Forts;
+    QStringList Forts;
 
-	//list all available Forts
-	QDir tmpdir;
+    //list all available Forts
+    QDir tmpdir;
     tmpdir.cd(datadir->absolutePath());
     tmpdir.cd("Forts");
     tmpdir.setFilter(QDir::Files);
     Forts.append(tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1"));
 
-	if(Forts.size()==0)
-	{
-		//do some serious error handling
-		return "Error";
-	}
-	
-	//pick a random fort
-	return Forts[rand()%(Forts.size())];
+    if(Forts.size()==0)
+    {
+        //do some serious error handling
+        return "Error";
+    }
+
+    //pick a random fort
+    return Forts[rand()%(Forts.size())];
 }
