@@ -44,7 +44,7 @@ void SpritePosition::reset()
     fY = -1 * iSpriteHeight;
     fX = (qrand() % ((int)(wParent->width() * 1.5))) - wParent->width()/2;
     fYMov = ((qrand() % 400)+300) / 100.0f;
-    fXMov = fYMov * 0.5f;
+    fXMov = fYMov * 0.2f+((qrand()%100)/100.0f * 0.6f); //so between 0.2 and 0.6, or 0.5 +/- 0.3
     iAngle = qrand() % 360;
 }
 
