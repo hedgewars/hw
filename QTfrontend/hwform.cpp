@@ -635,7 +635,7 @@ void HWForm::DeleteTeam()
 void HWForm::RandomNames()
 {
     editedTeam->GetFromPage(this);
-    namegen->TeamRandomNames(editedTeam,FALSE);
+    namegen->TeamRandomNames(editedTeam, true);
     editedTeam->SetToPage(this);
 }
 

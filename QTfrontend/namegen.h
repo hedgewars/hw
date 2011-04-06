@@ -31,9 +31,9 @@ public:
     HWNamegen();
     ~HWNamegen();
 
-    void TeamRandomName(HWTeam*& team, const int &i);
+    void TeamRandomName(HWTeam*& team, const int HedgehogNumber);
     void TeamRandomNames(HWTeam*& team, const bool changeteamname);
-    void RandomNameByHat(HWTeam*& team, const int &i);
+    void RandomNameByHat(HWTeam*& team, const int HedgehogNumber);
 
 private:
 
@@ -43,6 +43,9 @@ private:
         void TypesLoad();
         void DictLoad(const QString filename, QStringList &list);
         void HatCfgLoad(const QString hatname, QStringList &list);
+
+		QString GetRandomGrave();
+		QString GetRandomFort();
 };
 
 
