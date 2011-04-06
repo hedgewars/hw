@@ -35,7 +35,7 @@
 QImage getAmmoImage(int num)
 {
     static QImage ammo(":Ammos.png");
-    int x = floor(num/(ammo.height()/32));
+    int x = num/(ammo.height()/32);
     int y = (num-((ammo.height()/32)*x))*32;
     x*=32;
     return ammo.copy(x, y, 32, 32);
