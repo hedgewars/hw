@@ -19,6 +19,19 @@
 {$INCLUDE "options.inc"}
 
 unit uGears;
+(*
+ * This unit defines the behavior of gears.
+ *
+ * Gears are "things"/"objects" that may be visible to the player or not,
+ * but always have an effect on the course of the game.
+ *
+ * E.g.: weapons, hedgehogs, etc.
+ *
+ * Note: The visual appearance of gears is defined in the unit "uGearsRender".
+ *
+ * Note: Gears that do not have an effect on the game but are just visual
+ *       effects are called "Visual Gears" and defined in the respective unit!
+ *)
 interface
 uses SDLh, uConsts, uFloat, uTypes;
 
@@ -65,6 +78,10 @@ procedure PickUp(HH, Gear: PGear); forward;
 procedure HHSetWeapon(HHGear: PGear); forward;
 procedure doStepCase(Gear: PGear); forward;
 
+// For better maintainability the step handlers of gears are stored in
+// separate files.
+// Note: step handlers of gears that are hedgehogs are in a different file
+//       than the handlers for all other gears.
 {$INCLUDE "GSHandlers.inc"}
 {$INCLUDE "HHHandlers.inc"}
 

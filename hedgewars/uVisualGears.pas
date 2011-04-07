@@ -19,6 +19,15 @@
 {$INCLUDE "options.inc"}
 
 unit uVisualGears;
+(*
+ * This unit defines the behavior and the appearance of visual gears.
+ *
+ * Visual gears are "things"/"objects" in the game that do not need to be
+ * perfectly synchronized over all clients since their effect is only
+ * of visual nature.
+ *
+ * E.g.: background flakes, visual effects: explosion, smoke trails, etc.
+ *)
 interface
 uses uConsts, uFloat, GLunit, uTypes;
 
@@ -42,6 +51,8 @@ uses uSound, uMobile, uVariables, uTextures, uRender, Math, uRenderUtils;
 
 const cExplFrameTicks = 110;
 
+// For better maintainability the step handlers of visual gears are stored
+// in a separate file.
 {$INCLUDE "VGSHandlers.inc"}
 
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);

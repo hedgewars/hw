@@ -15,6 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
+
+(*
+ * This file contains the step handlers for visual gears.
+ *
+ * Since the effects of visual gears do not affect the course of the game,
+ * no "synchronization" between players is required.
+ * => The usage of safe functions or data types (e.g. GetRandom() or hwFloat)
+ * is usually not necessary and therefore undesirable.
+ *)
+
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
 begin

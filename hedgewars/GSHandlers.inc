@@ -16,6 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+(*
+ * This file contains the step handlers for gears.
+ *
+ * Important: Since gears change the course of the game, calculations that
+ *            lead to different results for different clients/players/machines
+ *            should NOT occur!
+ *            Use safe functions and data types! (e.g. GetRandom() and hwFloat)
+ *)
+
 procedure doStepPerPixel(Gear: PGear; step: TGearStepProcedure; onlyCheckIfChanged: boolean);
 var
     dX, dY, sX, sY: hwFloat;
