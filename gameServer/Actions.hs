@@ -211,7 +211,8 @@ processAction (MoveToLobby msg) = do
         else
         mapM_ processAction [AnswerClients chans ["LEFT", clNick, msg], RemoveClientTeams ci]
 
-    io $ do
+    -- when not removing room
+    when (not master || (gameProgress && playersNum > 1)) . io $ do
         modifyRoom rnc (\r -> r{
                 playersIn = playersIn r - 1,
                 readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
@@ -408,7 +409,7 @@ processAction (AddClient cl) = do
         [
             AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
             , CheckBanned
---            , AddIP2Bans (host cl) "Reconnected too fast" (addUTCTime 10 $ connectTime cl)
+            , AddIP2Bans (host cl) "Reconnected too fast" (addUTCTime 10 $ connectTime cl)
         ]
 
 

@@ -24,7 +24,7 @@ import System.Posix
 setupLoggers :: IO ()
 setupLoggers =
     updateGlobalLogger "Clients"
-        (setLevel INFO)
+        (setLevel NOTICE)
 
 
 server :: ServerInfo -> IO ()

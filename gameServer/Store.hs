@@ -69,23 +69,15 @@ growIfNeeded m@(MStore ref) = do
     when (IntSet.null freeElems) $ growStore m
 
 
-truncateStore :: MStore e -> IO ()
-truncateStore (MStore ref) = do
-    (busyElems, freeElems, arr) <- readIORef ref
-    (_, m') <- IOA.getBounds arr
-    let newM' = truncFunc (m' + 1) - 1
-    newArr <- IOA.newArray_ (0, newM')
-    sequence_ [IOA.readArray arr i >>= IOA.writeArray newArr i | i <- IntSet.toList busyElems]
-    writeIORef ref (busyElems, freeElems `IntSet.difference` IntSet.fromAscList [newM'..m'+1], newArr)
-
-
 truncateIfNeeded :: MStore e -> IO ()
-truncateIfNeeded m@(MStore ref) = do
+truncateIfNeeded (MStore ref) = do
     (busyElems, _, arr) <- readIORef ref
     (_, m') <- IOA.getBounds arr
     let newM' = truncFunc (m' + 1) - 1
-    let allLessM = all (< newM') $ IntSet.elems busyElems
-    when (newM' < m' && allLessM) $ truncateStore m
+    when (newM' < m' && (not $ IntSet.null busyElems) && IntSet.findMax busyElems <= newM') $ do
+        newArr <- IOA.newArray_ (0, newM')
+        sequence_ [IOA.readArray arr i >>= IOA.writeArray newArr i | i <- IntSet.toList busyElems]
+        writeIORef ref (busyElems, IntSet.fromAscList [0..newM'] `IntSet.difference` busyElems, newArr)
 
 
 addElem :: MStore e -> e -> IO ElemIndex
