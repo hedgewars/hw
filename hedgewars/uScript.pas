@@ -1559,7 +1559,6 @@ var at : TGearType;
     st : TSound;
     he : THogEffect;
     cg : TCapGroup;
-    s, t : ansistring;
 begin
 // initialize lua
 luaState:= lua_open;
@@ -1575,11 +1574,7 @@ luaopen_table(luaState);
 ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
 ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
 
-// import locale
-s:= cLocaleFName;
-t:= '';
-SplitByChar(s, t, '.');
-ScriptSetString('L', s);
+ScriptSetString('L', cLocale);
 
 // import game flags
 ScriptSetInteger('gfForts', gfForts);
