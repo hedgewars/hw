@@ -141,7 +141,7 @@ type
     THWFont = (fnt16, fntBig, fntSmall {$IFNDEF IPHONEOS}, CJKfnt16, CJKfntBig, CJKfntSmall{$ENDIF});
 
     TCapGroup = (capgrpGameState, capgrpAmmoinfo, capgrpVolume,
-            capgrpMessage, capgrpAmmostate);
+            capgrpMessage, capgrpMessage2, capgrpAmmostate);
 
     TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs,
             siClanHealth, siTeamStats, siPlayerKills, siMaxTeamDamage,

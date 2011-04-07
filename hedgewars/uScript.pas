@@ -180,8 +180,10 @@ end;
 function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 1 then
+        AddCaption(lua_tostring(L, 1), cWhiteColor, capgrpMessage)
+    else if lua_gettop(L) = 3 then
         begin
-        AddCaption(lua_tostring(L, 1), cWhiteColor, capgrpMessage);
+        AddCaption(lua_tostring(L, 1), lua_tointeger(L, 2) shr 8, TCapGroup(lua_tointeger(L, 3)));
         end
     else
         LuaError('Lua: Wrong number of parameters passed to AddCaption!');
@@ -1555,7 +1557,8 @@ var at : TGearType;
     vgt: TVisualGearType;
     am : TAmmoType;
     st : TSound;
-    he: THogEffect;
+    he : THogEffect;
+    cg : TCapGroup;
     s, t : ansistring;
 begin
 // initialize lua
@@ -1644,6 +1647,9 @@ for am:= Low(TAmmoType) to High(TAmmoType) do
 
 for he:= Low(THogEffect) to High(THogEffect) do
     ScriptSetInteger(EnumToStr(he), ord(he));
+
+for cg:= Low(TCapGroup) to High(TCapGroup) do
+    ScriptSetInteger(EnumToStr(cg), ord(cg));
 
 // register functions
 lua_register(luaState, 'band', @lc_band);
