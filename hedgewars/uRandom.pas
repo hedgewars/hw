@@ -19,6 +19,14 @@
 {$INCLUDE "options.inc"}
 
 unit uRandom;
+(*
+ * This unit supplies platform-independent functions for getting various
+ * pseudo-random values based on a shared seed.
+ *
+ * This is necessary for accomplishing pseudo-random behavior in the game
+ * without causing a desynchronisation of different clients when playing over
+ * a network.
+ *)
 interface
 uses uFloat;
 {$INCLUDE "config.inc"}
@@ -26,10 +34,10 @@ uses uFloat;
 procedure initModule;
 procedure freeModule;
 
-procedure SetRandomSeed(Seed: shortstring);
-function  GetRandom: hwFloat; overload;
-function  GetRandom(m: LongWord): LongWord; overload;
-function  rndSign(num: hwFloat): hwFloat;
+procedure SetRandomSeed(Seed: shortstring); // Sets the seed that should be used for generating pseudo-random values.
+function  GetRandom: hwFloat; overload; // Returns a pseudo-random hwFloat.
+function  GetRandom(m: LongWord): LongWord; overload; // Returns a positive pseudo-random integer smaller than m.
+function  rndSign(num: hwFloat): hwFloat; // Returns num with a random chance of having a inverted sign.
 
 implementation
 
