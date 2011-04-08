@@ -19,6 +19,10 @@
 {$INCLUDE "options.inc"}
 
 unit uTypes;
+(*
+ * This unit defines various types and enumerations for usage in different
+ * places in the engine code.
+ *)
 interface
 
 uses SDLh, uFloat, GLunit, uConsts, Math;
@@ -31,14 +35,18 @@ type
         r, g, b, a: byte
         end;
 
+    // Possible states of the game
     TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit, gsSuspend);
 
+    // Game types that help determining what the engine is actually supposed to do
     TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax);
 
+    // Different files are stored in different folders, this enumeration is used to tell which folder to use
     TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
             ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
             ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps, ptSuddenDeath);
 
+    // Available sprites for displaying stuff
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
             sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
             sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
@@ -101,8 +109,10 @@ type
 
     TGearsType = set of TGearType;
 
+    // Damage can be caused by different sources
     TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison);
 
+    // Available sounds
     TSound = (sndNone,
             sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,
             sndSplash, sndShotgunReload, sndShotgunFire, sndGraveImpact,
@@ -126,6 +136,7 @@ type
             sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
             sndComeonthen, sndParachute, sndBump, sndResurrector, sndPlane);
 
+    // Available ammo types to be used by hedgehogs
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer, // 6
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip, // 13
             amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch, // 18
@@ -136,6 +147,7 @@ type
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
             amResurrector, amDrillStrike, amSnowball, amTardis, amStructure, amLandGun); // 54
 
+    // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
 
     THWFont = (fnt16, fntBig, fntSmall {$IFNDEF IPHONEOS}, CJKfnt16, CJKfntBig, CJKfntSmall{$ENDIF});
@@ -147,6 +159,7 @@ type
             siClanHealth, siTeamStats, siPlayerKills, siMaxTeamDamage,
             siMaxTeamKills, siMaxTurnSkips );
 
+    // Various "emote" animations a hedgehog can do
     TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
 
     TRenderMode = (rmDefault, rmLeftEye, rmRightEye);
@@ -378,6 +391,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
             sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady);
 
+    // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
             eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
             eidHomerun, eidGone);

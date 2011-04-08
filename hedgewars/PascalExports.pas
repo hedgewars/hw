@@ -19,7 +19,14 @@
 {$INCLUDE "options.inc"}
 
 unit PascalExports;
-
+(*
+ * If the engine is compiled as library this unit will export functions
+ * as C declarations for convenient library usage in your application and
+ * language of choice.
+ *
+ * See also: C declarations on wikipedia
+ *           http://en.wikipedia.org/wiki/X86_calling_conventions#cdecl
+ *)
 interface
 uses uTypes, uConsts, uVariables, GLunit, uKeys, uChat, uSound, uAmmos, uUtils,
      uCommands, uMobile;
