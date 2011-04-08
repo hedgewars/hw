@@ -325,6 +325,9 @@ public:
     QPushButton *BtnGo;
     QPushButton *BtnMaster;
     QPushButton *BtnStart;
+    QPushButton *BtnUpdate;
+
+    QLineEdit * leRoomName;
 
     QAction * restrictJoins;
     QAction * restrictTeamAdds;
@@ -336,10 +339,12 @@ public:
 
 public slots:
     void setReadyStatus(bool isReady);
+    void onUpdateClick();
     void setMasterMode(bool isMaster);
 
 signals:
     void SetupClicked();
+    void askForUpdateRoomName(const QString &);
 };
 
 class PageInfo : public AbstractPage

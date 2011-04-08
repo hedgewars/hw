@@ -20,6 +20,7 @@
 #include <QPushButton>
 #include <QAction>
 #include <QMenu>
+#include <QMessageBox>
 
 #include "pages.h"
 #include "gamecfgwidget.h"
@@ -59,6 +60,13 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
 
     BtnBack = addButton(":/res/Exit.png", bottomLayout, 0, true);
 
+    leRoomName = new QLineEdit(this);
+    leRoomName->setMaxLength(60);
+    leRoomName->setMinimumWidth(200);
+    leRoomName->setMaximumWidth(400);
+    bottomLayout->addWidget(leRoomName, 8,0);
+    BtnUpdate = addButton(QAction::tr("Update"), bottomLayout, 1, false);
+
     BtnGo = new QPushButton(this);
     BtnGo->setToolTip(QPushButton::tr("Ready"));
     BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
@@ -82,7 +90,9 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
 
     BtnStart = addButton(QAction::tr("Start"), bottomLayout, 3);
 
-    bottomLayout->insertStretch(1, 100);
+    bottomLayout->insertStretch(3, 100);
+
+    connect(BtnUpdate, SIGNAL(clicked()), this, SLOT(onUpdateClick()));
 }
 
 void PageNetGame::setReadyStatus(bool isReady)
@@ -93,8 +103,21 @@ void PageNetGame::setReadyStatus(bool isReady)
         BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
 }
 
+void PageNetGame::onUpdateClick()
+{
+    if (leRoomName->text().size())
+        emit askForUpdateRoomName(leRoomName->text());
+    else
+        QMessageBox::critical(this,
+                tr("Error"),
+                tr("Please enter room name"),
+                tr("OK"));
+}
+
 void PageNetGame::setMasterMode(bool isMaster)
 {
     BtnMaster->setVisible(isMaster);
     BtnStart->setVisible(isMaster);
+    BtnUpdate->setVisible(isMaster);
+    leRoomName->setVisible(isMaster);
 }

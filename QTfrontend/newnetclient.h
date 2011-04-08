@@ -148,6 +148,7 @@ class HWNewNet : public QObject
 
   void JoinRoom(const QString & room);
   void CreateRoom(const QString & room);
+  void updateRoomName(const QString &);
   void askRoomsList();
   void gameFinished(bool correcly);
   void banPlayer(const QString &);

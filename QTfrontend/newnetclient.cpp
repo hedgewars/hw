@@ -747,6 +747,12 @@ void HWNewNet::startGame()
     RawSendNet(QString("START_GAME"));
 }
 
+void HWNewNet::updateRoomName(const QString & name)
+{
+    RawSendNet(QString("ROOM_NAME%1%2").arg(delimeter).arg(name));
+}
+
+
 void HWNewNet::toggleRestrictJoins()
 {
     RawSendNet(QString("TOGGLE_RESTRICT_JOINS"));
