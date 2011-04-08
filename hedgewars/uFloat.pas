@@ -19,6 +19,24 @@
 {$INCLUDE "options.inc"}
 
 unit uFloat;
+(*
+ * This unit provides a custom data type, hwFloat.
+ *
+ * hwFloat represents a floating point number - the value and operations
+ * of this numbers are independent from the hardware architecture
+ * the game runs on.
+ *
+ * This is important for calculations that affect the course of the game
+ * and would lead to different results if based on a hardware dependent
+ * data type.
+ *
+ * Note: Not all comparisons are implemented.
+ *
+ * Note: Below you'll find a list of hwFloat constants:
+ *       E.g. _1 is an hwFloat with value 1.0, and -_0_9 is -0.9
+ *       Use and extend the list if needed, rather then using hwFloat() with
+ *       integer constants.
+ *)
 interface
 
 {$IFDEF FPC}
@@ -38,7 +56,10 @@ type hwFloat = record
                end;
 {$ENDIF}
 
+// Returns an hwFloat that represents the value of integer parameter i
 function int2hwFloat (const i: LongInt) : hwFloat; inline;
+
+// The implemented operators
 
 operator + (const z1, z2: hwFloat) z : hwFloat; inline;
 operator - (const z1, z2: hwFloat) z : hwFloat; inline;
@@ -52,22 +73,29 @@ operator / (const z1: hwFloat; const z2: LongInt) z : hwFloat; inline;
 operator < (const z1, z2: hwFloat) b : boolean; inline;
 operator > (const z1, z2: hwFloat) b : boolean; inline;
 
-function cstr(const z: hwFloat): shortstring;
-function hwRound(const t: hwFloat): LongInt; inline;
-function hwAbs(const t: hwFloat): hwFloat; inline;
-function hwSqr(const t: hwFloat): hwFloat; inline;
-function hwSqrt(const t: hwFloat): hwFloat; inline;
-function Distance(const dx, dy: hwFloat): hwFloat;
-function DistanceI(const dx, dy: LongInt): hwFloat;
+
+// Various functions for hwFloat (some are inlined in the resulting code for better performance)
+
+function cstr(const z: hwFloat): shortstring; // Returns a shortstring representations of the hwFloat.
+function hwRound(const t: hwFloat): LongInt; inline; // Does NOT really round but returns the integer representation of the hwFloat without fractional digits. (-_0_9 -> -0, _1_5 -> _1)
+function hwAbs(const t: hwFloat): hwFloat; inline; // Returns the value of t with positive sign.
+function hwSqr(const t: hwFloat): hwFloat; inline; // Returns the square value of parameter t.
+function hwSqrt(const t: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
+function Distance(const dx, dy: hwFloat): hwFloat; // Returns the distance between two points in 2-dimensional space, of which the parameters are the horizontal and vertical distance.
+function DistanceI(const dx, dy: LongInt): hwFloat; // Same as above for integer parameters.
 function AngleSin(const Angle: Longword): hwFloat;
 function AngleCos(const Angle: Longword): hwFloat;
-function SignAs(const num, signum: hwFloat): hwFloat; inline;
-function hwSign(r: hwFloat): LongInt; inline;
+function SignAs(const num, signum: hwFloat): hwFloat; inline; // Returns an hwFloat with the value of parameter num and the sign of signum.
+function hwSign(r: hwFloat): LongInt; inline; // Returns an integer with value 1 and sign of parameter r.
 
 {$IFDEF FPC}
 {$J-}
 {$ENDIF}
 {$WARNINGS OFF}
+
+
+// some hwFloat constants
+
 const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
       _1div10000: hwFloat = (isNegative: false; QWordValue:      429496);
       _1div50000: hwFloat = (isNegative: false; QWordValue:       85899);
