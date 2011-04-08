@@ -34,8 +34,8 @@ unit uFloat;
  *
  * Note: Below you'll find a list of hwFloat constants:
  *       E.g. _1 is an hwFloat with value 1.0, and -_0_9 is -0.9
- *       Use and extend the list if needed, rather then using hwFloat() with
- *       integer constants.
+ *       Use and extend the list if needed, rather than using int2hwFloat()
+ *       with integer constants.
  *)
 interface
 

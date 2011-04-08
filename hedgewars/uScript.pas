@@ -19,6 +19,16 @@
 {$INCLUDE "options.inc"}
 
 unit uScript;
+(*
+ * This unit defines, implements and registers functions and
+ * variables/constants bindings for usage in Lua scripts.
+ *
+ * Please keep http://code.google.com/p/hedgewars/wiki/LuaAPI up to date!
+ *
+ * Note: If you add a new function, make sure to test if _all_ parameters
+ *       work as intended! (Especially conversions errors can sneak in
+ *       unnoticed and render the parameter useless!)
+ *)
 interface
 
 procedure ScriptPrintStack;
