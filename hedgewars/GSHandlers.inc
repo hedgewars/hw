@@ -1930,7 +1930,7 @@ Attempt to make a barrel knock itself over an edge.  Would need more checks to a
         ^.dY := _0;
     if hwAbs(Gear^.dX) < _0_001 then Gear^.dX := _0;
 
-    if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
+    if (Gear^.Health > 0) and ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
         if (cBarrelHealth div Gear^.Health) > 2 then
             AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke)
     else
@@ -1970,7 +1970,7 @@ begin
         if (hwAbs(Gear^.dX) > _0_15) or ((hwAbs(Gear^.dY) > _0_15) and (hwAbs(Gear^.dX) > _0_02))
             then Gear^.doStep := @doStepRollingBarrel;
 
-        if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
+        if (Gear^.Health > 0) and ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
             if (cBarrelHealth div Gear^.Health) > 2 then
                 AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke)
         else
