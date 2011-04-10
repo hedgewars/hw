@@ -124,7 +124,7 @@ var
     bBetweenTurns   : boolean;
     bWaterRising    : boolean;
 
-    ShowCrosshair   : boolean;
+    //ShowCrosshair   : boolean;  This variable is inconvenient to set.  Easier to decide when rendering
     CursorMovementX : LongInt;
     CursorMovementY : LongInt;
     cDrownSpeed     : hwFloat;
