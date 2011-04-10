@@ -380,7 +380,7 @@ begin
     dec(Gear^.Timer);
     if Gear^.Timer = 1000 then // might need adjustments
         case Gear^.Kind of 
-            gtGrenade: makeHogsWorry(Gear^.X, Gear^.Y, 47);
+            gtGrenade: makeHogsWorry(Gear^.X, Gear^.Y, 50);
             gtClusterBomb: makeHogsWorry(Gear^.X, Gear^.Y, 20);
             gtWatermelon: makeHogsWorry(Gear^.X, Gear^.Y, 75);
             gtHellishBomb: makeHogsWorry(Gear^.X, Gear^.Y, 90);
@@ -404,7 +404,7 @@ begin
     if Gear^.Timer = 0 then
     begin
         case Gear^.Kind of 
-            gtGrenade: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 47, Gear^.Hedgehog, EXPLAutoSound);
+            gtGrenade: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
             gtBall: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 40, Gear^.Hedgehog, EXPLAutoSound);
             gtClusterBomb: 
                 begin

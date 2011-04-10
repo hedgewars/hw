@@ -1242,7 +1242,7 @@ while Gear <> nil do
                 gtStructure: begin
 // Run the calcs only once we know we have a type that will need damage
                         if hwRound(hwAbs(Gear^.X-fX)+hwAbs(Gear^.Y-fY)) < dmgBase then
-                            dmg:= dmgBase - hwRound(Distance(Gear^.X - fX, Gear^.Y - fY));
+                            dmg:= dmgBase - max(hwRound(Distance(Gear^.X - fX, Gear^.Y - fY)),Gear^.Radius);
                         if dmg > 1 then
                             begin
                             dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
