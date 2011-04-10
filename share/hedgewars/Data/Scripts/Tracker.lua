@@ -274,15 +274,3 @@ function runOnHogsInOtherClans(func, clan)
         end
     end
 end
-
-function numGears()
-    return table.maxn(gears)
-end
-
-function numTeams()
-    num = 0
-    for team, hogs in pairs(teams) do
-        num = num + 1
-    end
-    return num
-end
