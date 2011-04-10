@@ -19,33 +19,71 @@
 {$INCLUDE "options.inc"}
 
 unit uSound;
+(*
+ * This unit controls the sounds and music of the game.
+ * Doesn't really do anything if isSoundEnabled = false.
+ *
+ * There are three basic types of sound controls:
+ *    Music        - The background music of the game:
+ *                   * will only be played if isMusicEnabled = true
+ *                   * can be started, changed, paused and resumed
+ *    Sound        - Can be started and stopped
+ *    Looped Sound - Subtype of sound: plays in a loop using a
+ *                   "channel", of which the id is returned on start.
+ *                   The channel id can be used to stop a specific sound loop.
+ *)
 interface
 uses SDLh, uConsts, uTypes, sysutils;
 
-var MusicFN: shortstring;
+var MusicFN: shortstring; // music file name
 
 procedure initModule;
 procedure freeModule;
 
-procedure InitSound;
-procedure ReleaseSound;
-procedure SoundLoad;
+procedure InitSound; // Initiates sound-system if isSoundEnabled.
+procedure ReleaseSound; // Releases sound-system and used resources.
+procedure SoundLoad; // Preloads some sounds for performance reasons.
+
+
+// MUSIC
+
+// Obvious music commands for music track specified in MusicFN.
+procedure PlayMusic;
+procedure PauseMusic;
+procedure ResumeMusic;
+procedure ChangeMusic; // Replaces music track with current MusicFN and plays it.
+
+
+// SOUNDS
+
+// Plays the sound snd [from a given voicepack],
+// if keepPlaying is given and true,
+// then the sound's playback won't be interrupted if asked to play again.
 procedure PlaySound(snd: TSound);
 procedure PlaySound(snd: TSound; keepPlaying: boolean);
 procedure PlaySound(snd: TSound; voicepack: PVoicepack);
 procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
+
+// Plays sound snd [of voicepack] in a loop, but starts with fadems milliseconds of fade-in.
+// Returns sound channel of the looped sound.
 function  LoopSound(snd: TSound): LongInt;
 function  LoopSound(snd: TSound; fadems: LongInt): LongInt;
-function  LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
+function  LoopSound(snd: TSound; voicepack: PVoicepack): LongInt; // WTF?
 function  LoopSound(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
-procedure PlayMusic;
-procedure PauseMusic;
-procedure ResumeMusic;
-procedure ChangeMusic;
+
+// Stops the normal/looped sound of the given type/in the given channel
+// [with a fade-out effect for fadems milliseconds].
 procedure StopSound(snd: TSound);
 procedure StopSound(chn: LongInt);
 procedure StopSound(chn, fadems: LongInt);
+
+
+// MISC
+
+// Modifies the sound volume of the game by voldelta and returns the new volume level.
 function  ChangeVolume(voldelta: LongInt): LongInt;
+
+// Returns a pointer to the voicepack with the given name.
 function  AskForVoicepack(name: shortstring): Pointer;
 
 
@@ -366,6 +404,7 @@ begin
     if (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
+    // get rid of current music
     if Mus <> nil then
         Mix_FreeMusic(Mus);
 
