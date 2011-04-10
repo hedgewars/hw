@@ -53,7 +53,7 @@ var Len: LongInt;
 begin
 {$IFNDEF NOCONSOLE}
 AddFileLog('[Con] ' + s);
-Write(s);
+Write(stderr, s);
 done:= false;
 
 while not done do
@@ -76,7 +76,7 @@ procedure WriteLnToConsole(s: shortstring);
 begin
 {$IFNDEF NOCONSOLE}
 WriteToConsole(s);
-WriteLn;
+WriteLn(stderr);
 inc(CurrLine);
 if CurrLine = cLinesCount then
     CurrLine:= 0;
