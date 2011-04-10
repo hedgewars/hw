@@ -872,7 +872,7 @@ var
     startX, endX, startY, endY: LongInt;
 begin
     case Gear^.Kind of
-          gtBomb: DrawRotated(sprBomb, x, y, 0, Gear^.DirAngle);
+          gtGrenade: DrawRotated(sprBomb, x, y, 0, Gear^.DirAngle);
       gtSnowball: DrawRotated(sprSnowball, x, y, 0, Gear^.DirAngle);
        gtGasBomb: DrawRotated(sprCheese, x, y, 0, Gear^.DirAngle);
        gtMolotov: DrawRotated(sprMolotov, x, y, 0, Gear^.DirAngle);

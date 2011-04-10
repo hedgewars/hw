@@ -228,7 +228,7 @@ if CurrentHedgehog <> nil then
     end;
 
 case Kind of
-     gtBomb,
+     gtGrenade,
      gtClusterBomb,
      gtGasBomb: begin
                 gear^.ImpactSound:= sndGrenadeImpact;

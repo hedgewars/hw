@@ -86,7 +86,7 @@ type
             );
 
     // Gears that interact with other Gears and/or Land
-    TGearType = (gtBomb, gtHedgehog, gtShell, gtGrave, gtBee, // 4
+    TGearType = (gtGrenade, gtHedgehog, gtShell, gtGrave, gtBee, // 4
             gtShotgunShot, gtPickHammer, gtRope, gtMine, gtCase, // 9
             gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 14
             gtFlame, gtFirePunch, gtATStartGame, gtATSmoothWindCh, // 18
