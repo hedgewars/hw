@@ -437,6 +437,7 @@ begin
     WriteLn(' --set-other [language file] [full screen] [show FPS]');
     WriteLn(' --set-multimedia [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
     WriteLn(' --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
+    WriteLn(' --stats-only');
     WriteLn();
     WriteLn('Read documentation online at http://code.google.com/p/hedgewars/wiki/CommandLineOptions for more information');
     WriteLn();

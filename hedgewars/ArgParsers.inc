@@ -16,12 +16,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+procedure playReplayFileWithParameters(); forward;
+
 procedure internalSetGameTypeLandPreviewFromParameters();
 begin
-    val(ParamStr(2), ipcPort);
-    GameType:= gmtLandPreview;
-    if ParamStr(3) <> 'landpreview' then
-        GameType:= gmtSyntax
+    if ParamStr(3) = '--stats-only' then
+        playReplayFileWithParameters()
+    else
+        begin
+        val(ParamStr(2), ipcPort);
+        GameType:= gmtLandPreview;
+        if ParamStr(3) <> 'landpreview' then
+            GameType:= gmtSyntax
+        end
 end;
 
 procedure internalStartGameWithParameters();
@@ -210,10 +217,19 @@ begin
                             paramIndex:= paramIndex + 13
                             end
                         else
-                            begin
-                            wrongParameter:= true;
-                            GameType:= gmtSyntax
-                            end
+                            if ParamStr(paramIndex) = '--stats-only'  then
+                                begin
+                                cOnlyStats:= true;
+                                isSoundEnabled:= false;
+                                isMusicEnabled:= false;
+                                cReducedQuality:= $FFFFFFFF xor rqLowRes; // HACK
+                                paramIndex:= paramIndex + 1
+                                end
+                            else
+                                begin
+                                wrongParameter:= true;
+                                GameType:= gmtSyntax
+                                end
     end
 end;
 

@@ -40,7 +40,11 @@ if (not CurrentTeam^.ExtDriven) then
     end;
 if Lag > 100 then Lag:= 100
 else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then Lag:= 2500;
-if (GameType = gmtDemo) and isSpeed then Lag:= Lag * 10;
+
+if (GameType = gmtDemo) then 
+    if isSpeed then Lag:= Lag * 10
+    else
+        if cOnlyStats then Lag:= High(LongInt);
 
 i:= 1;
 while (GameState <> gsExit) and (i <= Lag) do

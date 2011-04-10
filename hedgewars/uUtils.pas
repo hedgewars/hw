@@ -338,23 +338,27 @@ begin
     if (ParamStr(1) <> '') and (ParamStr(2) <> '') then
         if (ParamCount <> 3) and (ParamCount <> cDefaultParamNum) then
         begin
-            for i:= 0 to 7 do
+            i:= 0;
+            while(i < 7) do
             begin
                 assign(f, ExtractFileDir(ParamStr(2)) + '/' + cLogfileBase + inttostr(i) + '.log');
                 rewrite(f);
                 if IOResult = 0 then break;
+                inc(i)
             end;
-            if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
+            if i = 7 then f:= stderr; // if everything fails, write to stderr
         end
         else
         begin
-            for i:= 0 to 7 do
+            i:= 0;
+            while(i < 7) do
             begin
                 assign(f, ParamStr(1) + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
                 rewrite(f);
                 if IOResult = 0 then break;
+                inc(i)
             end;
-            if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
+            if i = 7 then f:= stderr; // if everything fails, write to stderr
         end
     else
         f:= stderr;

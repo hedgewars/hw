@@ -943,8 +943,11 @@ begin
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 {$ELSE}
-    SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
-    SDLTry(SDLPrimSurface <> nil, true);
+    if not cOnlyStats then
+        begin
+        SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
+        SDLTry(SDLPrimSurface <> nil, true);
+        end;
 {$ENDIF}
 
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');

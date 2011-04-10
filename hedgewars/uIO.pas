@@ -178,9 +178,11 @@ begin
 
 // set RDNLY on file open
 filemode:= 0;
-
+{$I-}
 assign(f, fileName);
 reset(f, 1);
+
+tryDo(IOResult = 0, 'Error opening file ' + fileName, true);
 
 i:= 0; // avoid compiler hints
 buf[0]:= 0;
@@ -199,6 +201,7 @@ repeat
 until i = 0;
 
 close(f)
+{$I+}
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);

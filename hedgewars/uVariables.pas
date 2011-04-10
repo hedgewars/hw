@@ -45,6 +45,7 @@ var
     cReadyDelay     : Longword    = 5000;
     cLogfileBase    : shortstring = 'debug';
     cStereoMode     : TStereoMode = smNone;
+    cOnlyStats      : boolean = False;
 //////////////////////////
 
     alsoShutdownFrontend: boolean = false;
