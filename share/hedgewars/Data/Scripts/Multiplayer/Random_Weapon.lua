@@ -18,17 +18,30 @@ local weapons = { amGrenade, amClusterBomb, amBazooka, amBee, amShotgun,
 local airweapons = { amAirAttack, amMineStrike, amNapalm, amDrillStrike }
 
 -- Function that assigns the team their weapon
--- Due to the fact that the gameplay uses reset weapons and no inf attack there is no point in limiting the ammo count
-function assignWeapon(hog)
-    -- Get the ammo for this hog's team
-    local ammo = getTeamValue(GetHogTeamName(hog), "ammo")
-    -- If there is no ammo, get a random one from the list and store it
-    if ammo == nil then
-        ammo = weapons[GetRandom(table.maxn(weapons)) + 1]
-        setTeamValue(GetHogTeamName(hog), "ammo", ammo)
+function assignAmmo(hog)
+    -- Get name of the current team
+    local name = GetHogTeamName(hog)
+    -- Get whither the team has been processed
+    local processed = getTeamValue(name, "processed")
+    -- If it has not, process it
+    if processed == nil or not processed then
+        -- Get the ammo for this hog's team
+        local ammo = getTeamValue(name, "ammo")
+        -- If there is no ammo, get a random one from the list and store it
+        if ammo == nil then
+            ammo = weapons[GetRandom(table.maxn(weapons)) + 1]
+            setTeamValue(name, "ammo", ammo)
+        end
+        -- Add the ammo for the hog
+        AddAmmo(hog, ammo)
+        -- Mark as processed
+        setTeamValue(name, "processed", true)
     end
-    -- Add the ammo for the hog
-    AddAmmo(hog, ammo)
+end
+
+-- Mark team as not processed
+function reset(hog)
+    setTeamValue(GetHogTeamName(hog), "processed", false)
 end
 
 function onGameInit()
@@ -80,7 +93,9 @@ end
 
 function onNewTurn()
     -- Give every team their weapons, so one can plan during anothers turn
-    runOnGears(assignWeapon)
+    runOnGears(assignAmmo)
+    -- Mark all teams as not processed
+    runOnGears(reset)
     -- Set the current teams weapons to nil so they will get new after the turn has ended
     setTeamValue(GetHogTeamName(CurrentHedgehog), "ammo", nil)
 end
