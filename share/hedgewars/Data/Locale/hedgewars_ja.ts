@@ -116,7 +116,7 @@
     </message>
     <message>
         <source>Cannot open demofile %1</source>
-        <translation>でもファイル%1を開くことが出来なかった</translation>
+        <translation>デモファイル%1を開くことが出来なかった</translation>
     </message>
 </context>
 <context>
