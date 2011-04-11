@@ -593,11 +593,10 @@ void HWForm::IntermediateSetup()
         curTeamSelWidget = ui.pageNetGame->pNetTeamsWidget;
     }
 
-    QList<HWTeam> teams = curTeamSelWidget->getDontPlayingTeams();
     QStringList tmnames;
-    for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it) {
-        tmnames += it->TeamName;
-    }
+    QListIterator<HWTeam> it(curTeamSelWidget->getDontPlayingTeams());
+    while(it.hasNext()) tmnames += it.next().TeamName;
+
     //UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
     UpdateTeamsLists();
 

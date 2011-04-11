@@ -82,8 +82,8 @@ void HWGame::commonConfig()
 
     if (m_pTeamSelWidget)
     {
-        QList<HWTeam> teams = m_pTeamSelWidget->getPlayingTeams();
-        for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it)
+        QListIterator<HWTeam> it(m_pTeamSelWidget->getPlayingTeams());
+        while(it.hasNext())
         {
             HWProto::addStringToBuffer(buf, QString("eammloadt %1").arg(ammostr.mid(0, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammprob %1").arg(ammostr.mid(cAmmoNumber, cAmmoNumber)));
@@ -91,7 +91,8 @@ void HWGame::commonConfig()
             HWProto::addStringToBuffer(buf, QString("eammreinf %1").arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
             if(!gamecfg->schemeData(21).toBool()) HWProto::addStringToBuffer(buf, QString("eammstore"));
             HWProto::addStringListToBuffer(buf,
-                (*it).TeamGameConfig(gamecfg->getInitHealth()));
+                it.next().TeamGameConfig(gamecfg->getInitHealth()));
+            ;
         }
     }
     RawSendIPC(buf);
@@ -389,9 +390,9 @@ void HWGame::KillAllTeams()
     if (m_pTeamSelWidget)
     {
         QByteArray buf;
-        QList<HWTeam> teams = m_pTeamSelWidget->getPlayingTeams();
-        for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it)
-            HWProto::addStringToBuffer(buf, QString("eteamgone %1").arg((*it).TeamName));
+        QListIterator<HWTeam> it(m_pTeamSelWidget->getPlayingTeams());
+        while(it.hasNext())
+            HWProto::addStringToBuffer(buf, QString("eteamgone %1").arg(it.next().TeamName));
         RawSendIPC(buf);
     }
 }

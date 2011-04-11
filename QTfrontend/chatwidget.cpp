@@ -409,10 +409,8 @@ void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
 void HWChatWidget::nickRemoved(const QString& nick)
 {
     QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
-    for(QList<QListWidgetItem *>::iterator it=items.begin(); it!=items.end();) {
-        chatNicks->takeItem(chatNicks->row(*it));
-        ++it;
-    }
+    QListIterator<QListWidgetItem *> it(items);
+    while(it.hasNext()) chatNicks->takeItem(chatNicks->row(it.next()));
 
     lblCount->setText(QString::number(chatNicks->count()));
 }
