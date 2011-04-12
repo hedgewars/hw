@@ -44,6 +44,7 @@ instance Eq ClientInfo where
 
 data HedgehogInfo =
     HedgehogInfo B.ByteString B.ByteString
+    deriving (Show, Read)
 
 data TeamInfo =
     TeamInfo
@@ -60,6 +61,7 @@ data TeamInfo =
         hhnum :: Int,
         hedgehogs :: [HedgehogInfo]
     }
+    deriving (Show, Read)
 
 data RoomInfo =
     RoomInfo

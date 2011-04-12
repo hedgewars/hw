@@ -205,7 +205,8 @@ handleCmd_inRoom ["ROUNDFINISHED", _] = do
     chans <- roomClientsChans
 
     if isMaster cl && gameinprogress rm then
-        return $ ModifyRoom
+        return $ 
+            ModifyRoom
                 (\r -> r{
                     gameinprogress = False,
                     readyPlayers = 0,

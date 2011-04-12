@@ -17,6 +17,7 @@ import Control.DeepSeq
 import Data.Unique
 import Control.Arrow
 import Control.Exception
+import OfficialServer.GameReplayStore
 -----------------------------
 import CoreTypes
 import Utils
@@ -60,6 +61,7 @@ data Action =
     | AddNick2Bans B.ByteString B.ByteString UTCTime
     | AddIP2Bans B.ByteString B.ByteString UTCTime
     | CheckBanned
+    | SaveReplay
 
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
@@ -470,3 +472,10 @@ processAction (RestartServer force) = do
         throw RestartException
         else
         processAction $ ModifyServerInfo (\s -> s{restartPending=True})
+
+processAction SaveReplay = do
+    ri <- clientRoomA
+    rnc <- gets roomsClients
+    io $ do
+        r <- room'sM rnc id ri
+        saveReplay r
