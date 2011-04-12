@@ -66,16 +66,16 @@ if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(DamageClan,
 
 if Gear^.Health <= Gear^.Damage then
     begin
-    inc(CurrentHedgehog^.stats.StepKills);
+    inc(Attacker^.stats.StepKills);
     inc(Kills);
     inc(KillsTotal);
-    inc(CurrentHedgehog^.Team^.stats.Kills);
-    if (CurrentHedgehog^.Team^.TeamName =
+    inc(Attacker^.Team^.stats.Kills);
+    if (Attacker^.Team^.TeamName =
             Gear^.Hedgehog^.Team^.TeamName) then begin
-        inc(CurrentHedgehog^.Team^.stats.TeamKills);
-        inc(CurrentHedgehog^.Team^.stats.TeamDamage, Gear^.Damage);
+        inc(Attacker^.Team^.stats.TeamKills);
+        inc(Attacker^.Team^.stats.TeamDamage, Gear^.Damage);
     end;
-    if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(KillsClan);
+    if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(KillsClan);
     end;
 
 inc(Gear^.Hedgehog^.stats.StepDamageRecv, Gear^.Damage);
@@ -184,6 +184,7 @@ var i, t: LongInt;
     maxTurnSkipsName : shortstring;
     maxTeamDamage : Longword;
     maxTeamDamageName : shortstring;
+    winnersClan : PClan;
 begin
 msd:= 0; msdhh:= nil;
 msk:= 0; mskhh:= nil;
@@ -191,6 +192,7 @@ mskcnt:= 0;
 maxTeamKills := 0;
 maxTurnSkips := 0;
 maxTeamDamage := 0;
+winnersClan:= nil;
 
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
@@ -216,6 +218,7 @@ for t:= 0 to Pred(TeamsCount) do
 
         { send player stats for winner teams }
         if Clan^.ClanHealth > 0 then begin
+            winnersClan:= Clan;
             SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
                 IntToStr(stats.Kills) + ' ' + TeamName);
         end;
@@ -259,6 +262,16 @@ if maxTeamDamage > 30 then
     SendStat(siMaxTeamDamage, IntToStr(maxTeamDamage) + ' ' + maxTeamDamageName);
 
 if KilledHHs > 0 then SendStat(siKilledHHs, IntToStr(KilledHHs));
+
+// now to console
+if winnersClan <> nil then 
+    begin
+    writeln('WINNERS');
+    for t:= 0 to winnersClan^.TeamsNumber - 1 do
+        writeln(winnersClan^.Teams[t]^.TeamName);
+    writeln;
+    end else
+    writeln('DRAW');
 end;
 
 procedure initModule;
