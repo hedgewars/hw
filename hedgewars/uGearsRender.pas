@@ -258,13 +258,12 @@ begin
 
     if (Gear^.State and gstHHDriven) <> 0 then
         begin
-        if ((Gear^.State and gstHHThinking) = 0) and
+        if ((Gear^.State and (gstHHThinking or gstAnimation)) = 0) and
 /// If current ammo is active, and current ammo has alt attack and uses a crosshair  (rope, basically, right now, with no crosshair for parachute/saucer
-            (((CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) and
+           (((CurAmmoGear <> nil) and //((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) and
              ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoCrossHair) = 0)) or
 /// If no current ammo is active, and the selected ammo uses a crosshair
-             (CurAmmoGear = nil) and ((Ammoz[HH^.CurAmmoType].Ammo.Propz and ammoprop_NoCrosshair) = 0)) and
-        ((Gear^.State and gstAnimation) = 0) then
+             ((CurAmmoGear = nil) and ((Ammoz[HH^.CurAmmoType].Ammo.Propz and ammoprop_NoCrosshair) = 0) and ((Gear^.State and gstAttacked) = 0))) then
             begin
     (* These calculations are a little complex for a few reasons:
     1: I need to draw the laser from weapon origin to nearest land
