@@ -40,6 +40,7 @@ class HWNetUdpServer : public HWNetRegisterServer
 
  private:
   QUdpSocket* pUdpSocket;
+  QString m_descr;
 };
 
 #endif // _NET_UDPSERVER_INCLUDED

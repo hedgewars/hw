@@ -22,7 +22,8 @@
 #include "netudpserver.h"
 
 HWNetUdpServer::HWNetUdpServer(QObject *parent, const QString & descr, quint16 port) :
-  HWNetRegisterServer(parent, descr, port)
+  HWNetRegisterServer(parent, descr, port),
+  m_descr(descr)
 {
   pUdpSocket = new QUdpSocket(this);
   pUdpSocket->bind(46631);
@@ -37,9 +38,9 @@ void HWNetUdpServer::onClientRead()
     QHostAddress clientAddr;
     quint16 clientPort;
     pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
-    if(QString("%1").arg(datagram.data())==QString("hedgewars client")) {
+    if(datagram.startsWith("hedgewars client")) {
       // send answer to client
-      pUdpSocket->writeDatagram("hedgewars server", clientAddr, clientPort);
+      pUdpSocket->writeDatagram(QString("hedgewars server\n%1").arg(m_descr).toUtf8(), clientAddr, clientPort);
     }
   }
 }

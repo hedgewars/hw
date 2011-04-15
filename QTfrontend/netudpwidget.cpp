@@ -37,6 +37,7 @@ void HWNetUdpModel::updateList()
     reset();
 
     pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, 46631);
+    pUdpSocket->writeDatagram("hedgewars client", QHostAddress("127.0.0.1"), 46631);
 }
 
 void HWNetUdpModel::onClientRead()
@@ -49,9 +50,10 @@ void HWNetUdpModel::onClientRead()
 
         pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
 
-        if(QString("%1").arg(datagram.data())==QString("hedgewars server")) {
+        QString packet = QString::fromUtf8(datagram.data());
+        if(packet.startsWith("hedgewars server")) {
             QStringList sl;
-            sl << "-" << clientAddr.toString() << "46631";
+            sl << packet.remove(0, 17) << clientAddr.toString() << "46631";
             games.append(sl);
         }
     }
