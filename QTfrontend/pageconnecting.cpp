@@ -29,4 +29,9 @@ PageConnecting::PageConnecting(QWidget* parent) :
     QLabel * lblConnecting = new QLabel(this);
     lblConnecting->setText(tr("Connecting..."));
     pageLayout->addWidget(lblConnecting);
+
+    QPushButton * pbCancel = new QPushButton(this);
+    pbCancel->setText(tr("Cancel"));
+    pageLayout->addWidget(pbCancel);
+    connect(pbCancel, SIGNAL(clicked()), this, SIGNAL(cancelConnection()));
 }

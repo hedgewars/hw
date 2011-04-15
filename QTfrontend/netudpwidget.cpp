@@ -37,7 +37,6 @@ void HWNetUdpModel::updateList()
     reset();
 
     pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, 46631);
-    pUdpSocket->writeDatagram("hedgewars client", QHostAddress("127.0.0.1"), 46631);
 }
 
 void HWNetUdpModel::onClientRead()

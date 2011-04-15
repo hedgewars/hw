@@ -476,6 +476,9 @@ class PageConnecting : public AbstractPage
 
 public:
     PageConnecting(QWidget* parent = 0);
+
+signals:
+    void cancelConnection();
 };
 
 class PageScheme : public AbstractPage

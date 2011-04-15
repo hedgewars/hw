@@ -244,6 +244,8 @@ HWForm::HWForm(QWidget *parent)
 
     connect(ui.pageDrawMap->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
+    connect(ui.pageConnecting, SIGNAL(cancelConnection()), this, SLOT(GoBack()));
+
 
     ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");
     ui.pageScheme->setModel(ammoSchemeModel);
@@ -550,7 +552,7 @@ void HWForm::GoBack()
         if (id == ID_PAGE_NETGAME || id == ID_PAGE_NETGAME)
             GoBack();
 
-    if (curid == ID_PAGE_ROOMSLIST) NetDisconnect();
+    if (curid == ID_PAGE_ROOMSLIST || curid == ID_PAGE_CONNECTING) NetDisconnect();
     if (curid == ID_PAGE_NETGAME && hwnet) hwnet->partRoom();
     // need to work on this, can cause invalid state for admin quit trying to prevent bad state message on kick
     //if (curid == ID_PAGE_NETGAME && (!game || game->gameState != gsStarted)) hwnet->partRoom();
