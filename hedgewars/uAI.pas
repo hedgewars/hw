@@ -208,6 +208,9 @@ if (Me^.State and gstAttacked) = 0 then TestAmmos(Actions, Me, false);
 BestRate:= RatePlace(Me);
 BaseRate:= Max(BestRate, 0);
 
+if (Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
+    AddAction(Actions, aia_Weapon, Longword(amNothing), 100 + random(200), 0, 0);
+
 while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 0) do
     begin
     Pop(ticks, Actions, Me^);
