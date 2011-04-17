@@ -20,13 +20,13 @@
 
 
 #import <Foundation/Foundation.h>
+#import "EngineProtocolNetwork.h"
 
 typedef enum {gtNone, gtLocal, gtSave, gtNet} TGameType;
 
 @class OverlayViewController;
-@class EngineProtocolNetwork;
 
-@interface GameInterfaceBridge : NSObject {
+@interface GameInterfaceBridge : NSObject <EngineProtocolDelegate> {
     UIViewController *parentController;
     OverlayViewController *overlayController;
 
@@ -49,25 +49,11 @@ typedef enum {gtNone, gtLocal, gtSave, gtNet} TGameType;
 @property (assign) TGameType gameType;
 
 
--(id) initWithController:(id) viewController;
+-(id)   initWithController:(id) viewController;
 -(void) startLocalGame:(NSDictionary *)withDictionary;
 -(void) startSaveGame:(NSString *)atPath;
--(const char **)gatherGameSettings;
+-(void) prepareEngineLaunch;
 -(void) startGameEngine;
-
-/*
-@property (nonatomic, retain) NSDictionary *systemSettings;
-@property (nonatomic, retain) NSMutableArray *statsArray;
-@property (assign) BOOL menuStyle;
-
--(id) initWithDictionary:(NSDictionary *)gameDictionary;
--(void) engineProtocol;
--(int) sendToEngine:(NSString *)string;
--(int) sendToEngineNoSave:(NSString *)string;
--(void) provideTeamData:(NSString *)teamName forHogs:(NSInteger) numberOfPlayingHogs withHealth:(NSInteger) initialHealth ofColor:(NSNumber *)teamColor;
--(void) provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger) numberOfTeams;
--(NSInteger) provideScheme:(NSString *)schemeName;
-
--(const char **)getGameSettings:(NSString *)recordFile;*/
+-(void) gameHasEndedWithStats:(NSArray *)stats;
 
 @end

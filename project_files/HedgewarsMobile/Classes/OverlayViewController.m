@@ -188,12 +188,6 @@
                                                  name:@"show help ingame"
                                                object:nil];
 
-    // remove the view, required by the dual head version
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(removeOverlay:)
-                                                 name:@"remove overlay"
-                                               object:nil];
-
     // for iOS >= 3.2
     if ([UIScreen respondsToSelector:@selector(screens)]) {
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -243,12 +237,8 @@
 
 -(void) showHelp:(id) sender {
     if (self.helpPage == nil) {
-        NSString *xib;
-        if (IS_IPAD())
-            xib = @"HelpPageInGameViewController-iPad";
-        else
-            xib = @"HelpPageInGameViewController-iPhone";
-        self.helpPage = [[HelpPageViewController alloc] initWithNibName:xib bundle:nil];
+        NSString *xibName = (IS_IPAD() ? @"HelpPageInGameViewController-iPad" : @"HelpPageInGameViewController-iPhone");
+        self.helpPage = [[HelpPageViewController alloc] initWithNibName:xibName bundle:nil];
     }
     self.helpPage.view.alpha = 0;
     [self.view addSubview:helpPage.view];
@@ -258,7 +248,7 @@
     doNotDim();
 }
 
--(void) removeOverlay:(id) sender {
+-(void) removeOverlay {
     [self.popupMenu performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:YES];
     [self.popoverController performSelectorOnMainThread:@selector(dismissPopoverAnimated:) withObject:nil waitUntilDone:YES];
     [self.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];

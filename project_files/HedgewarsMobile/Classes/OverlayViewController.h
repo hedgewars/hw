@@ -61,7 +61,6 @@
 @property (nonatomic,retain) InGameMenuViewController *popupMenu;
 @property (nonatomic,retain) HelpPageViewController *helpPage;
 @property (nonatomic,retain) AmmoMenuViewController *amvc;
-@property (assign) BOOL isNetGame;
 @property (assign) BOOL useClassicMenu;
 @property (assign) NSInteger initialOrientation;
 
@@ -77,5 +76,6 @@
 -(void) dismissPopover;
 -(void) dimOverlay;
 -(void) activateOverlay;
+-(void) removeOverlay;
 
 @end

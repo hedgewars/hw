@@ -27,31 +27,50 @@
 #define BUFFER_SIZE 255     // like in original frontend
 
 @implementation EngineProtocolNetwork
-@synthesize statsArray, savePath, gameConfig, ipcPort, csd;
+@synthesize delegate, stream, ipcPort, csd;
 
 -(id) init {
     if (self = [super init]) {
-        self.savePath = nil;
-        self.statsArray = nil;
-        self.gameConfig = nil;
+        self.delegate = nil;
+
         self.ipcPort = 0;
+        self.csd = NULL;
+        self.stream = nil;
     }
     return self;
 }
 
+-(id) initOnPort:(NSInteger) port {
+    if (self = [self init])
+        self.ipcPort = port;
+    return self;
+}
+
+-(void) gameHasEndedWithStats:(NSArray *)stats {
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(gameHasEndedWithStats:)])
+        [self.delegate gameHasEndedWithStats:stats];
+    else
+        DLog(@"Error! delegate == nil");
+}
+
 -(void) dealloc {
-    [statsArray release];
-    [savePath release];
-    [gameConfig release];
+    self.delegate = nil;
+    releaseAndNil(stream);
     [super dealloc];
 }
 
--(void) spawnThreadOnPort:(NSInteger) port {
-    self.ipcPort = port;
+#pragma mark -
+#pragma mark Spawner functions
+-(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
+    self.stream = [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES];
 
     [NSThread detachNewThreadSelector:@selector(engineProtocol)
                              toTarget:self
-                           withObject:nil];
+                           withObject:dictionary];
+}
+
+-(void) spawnThread:(NSString *)onSaveFile {
+    [self spawnThread:onSaveFile withOptions:nil];
 }
 
 #pragma mark -
@@ -191,13 +210,10 @@
 #pragma mark -
 #pragma mark Network relevant code
 -(void) dumpRawData:(const char *)buffer ofSize:(uint8_t) length {
-    // is it performant to reopen the stream every time?
-    NSOutputStream *os = [[NSOutputStream alloc] initToFileAtPath:self.savePath append:YES];
-    [os open];
-    [os write:&length maxLength:1];
-    [os write:(const uint8_t *)buffer maxLength:length];
-    [os close];
-    [os release];
+    [self.stream open];
+    [self.stream write:&length maxLength:1];
+    [self.stream write:(const uint8_t *)buffer maxLength:length];
+    [self.stream close];
 }
 
 // wrapper that computes the length of the message and then sends the command string, saving the command on a file
@@ -218,8 +234,10 @@
 }
 
 // this is launched as thread and handles all IPC with engine
--(void) engineProtocol {
+-(void) engineProtocol:(id) object {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSDictionary *gameConfig = (NSDictionary *)object;
+    NSMutableArray *statsArray = nil;
     TCPsocket sd;
     IPaddress ip;
     int eProto;
@@ -262,7 +280,7 @@
 
         switch (buffer[0]) {
             case 'C':
-                DLog(@"Sending game config...\n%@", self.gameConfig);
+                DLog(@"Sending game config...\n%@", gameConfig);
 
                 /*if (isNetGame == YES)
                     [self sendToEngineNoSave:@"TN"];
@@ -272,32 +290,32 @@
                 [self dumpRawData:[saveHeader UTF8String] ofSize:[saveHeader length]];
 
                 // seed info
-                [self sendToEngine:[self.gameConfig objectForKey:@"seed_command"]];
+                [self sendToEngine:[gameConfig objectForKey:@"seed_command"]];
 
                 // dimension of the map
-                [self sendToEngine:[self.gameConfig objectForKey:@"templatefilter_command"]];
-                [self sendToEngine:[self.gameConfig objectForKey:@"mapgen_command"]];
-                [self sendToEngine:[self.gameConfig objectForKey:@"mazesize_command"]];
+                [self sendToEngine:[gameConfig objectForKey:@"templatefilter_command"]];
+                [self sendToEngine:[gameConfig objectForKey:@"mapgen_command"]];
+                [self sendToEngine:[gameConfig objectForKey:@"mazesize_command"]];
 
                 // static land (if set)
-                NSString *staticMap = [self.gameConfig objectForKey:@"staticmap_command"];
+                NSString *staticMap = [gameConfig objectForKey:@"staticmap_command"];
                 if ([staticMap length] != 0)
                     [self sendToEngine:staticMap];
 
                 // lua script (if set)
-                NSString *script = [self.gameConfig objectForKey:@"mission_command"];
+                NSString *script = [gameConfig objectForKey:@"mission_command"];
                 if ([script length] != 0)
                     [self sendToEngine:script];
 
                 // theme info
-                [self sendToEngine:[self.gameConfig objectForKey:@"theme_command"]];
+                [self sendToEngine:[gameConfig objectForKey:@"theme_command"]];
 
                 // scheme (returns initial health)
-                NSInteger health = [self provideScheme:[self.gameConfig objectForKey:@"scheme"]];
+                NSInteger health = [self provideScheme:[gameConfig objectForKey:@"scheme"]];
 
                 // send an ammostore for each team
-                NSArray *teamsConfig = [self.gameConfig objectForKey:@"teams_list"];
-                [self provideAmmoData:[self.gameConfig objectForKey:@"weapon"] forPlayingTeams:[teamsConfig count]];
+                NSArray *teamsConfig = [gameConfig objectForKey:@"teams_list"];
+                [self provideAmmoData:[gameConfig objectForKey:@"weapon"] forPlayingTeams:[teamsConfig count]];
 
                 // finally add hogs
                 for (NSDictionary *teamData in teamsConfig) {
@@ -331,10 +349,10 @@
                 }
                 break;
             case 'i':
-                if (self.statsArray == nil) {
-                    self.statsArray = [[NSMutableArray alloc] initWithCapacity:10 - 2];
+                if (statsArray == nil) {
+                    statsArray = [[NSMutableArray alloc] initWithCapacity:10 - 2];
                     NSMutableArray *ranking = [[NSMutableArray alloc] initWithCapacity:4];
-                    [self.statsArray insertObject:ranking atIndex:0];
+                    [statsArray insertObject:ranking atIndex:0];
                     [ranking release];
                 }
                 NSString *tempStr = [NSString stringWithUTF8String:&buffer[2]];
@@ -343,16 +361,16 @@
                 int index = [arg length] + 3;
                 switch (buffer[1]) {
                     case 'r':           // winning team
-                        [self.statsArray insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:1];
+                        [statsArray insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:1];
                         break;
                     case 'D':           // best shot
-                        [self.statsArray addObject:[NSString stringWithFormat:@"The best shot award won by %s (with %@ points)", &buffer[index], arg]];
+                        [statsArray addObject:[NSString stringWithFormat:@"The best shot award won by %s (with %@ points)", &buffer[index], arg]];
                         break;
                     case 'k':           // best hedgehog
-                        [self.statsArray addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kills in a turn", &buffer[index], arg]];
+                        [statsArray addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kills in a turn", &buffer[index], arg]];
                         break;
                     case 'K':           // number of hogs killed
-                        [self.statsArray addObject:[NSString stringWithFormat:@"%@ hedgehog(s) were killed during this round", arg]];
+                        [statsArray addObject:[NSString stringWithFormat:@"%@ hedgehog(s) were killed during this round", arg]];
                         break;
                     case 'H':           // team health/graph
                         break;
@@ -360,16 +378,16 @@
                         // still WIP in statsPage.cpp
                         break;
                     case 'P':           // teams ranking
-                        [[self.statsArray objectAtIndex:0] addObject:tempStr];
+                        [[statsArray objectAtIndex:0] addObject:tempStr];
                         break;
                     case 's':           // self damage
-                        [self.statsArray addObject:[NSString stringWithFormat:@"%s thought it's good to shoot his own hedgehogs with %@ points", &buffer[index], arg]];
+                        [statsArray addObject:[NSString stringWithFormat:@"%s thought it's good to shoot his own hedgehogs with %@ points", &buffer[index], arg]];
                         break;
                     case 'S':           // friendly fire
-                        [self.statsArray addObject:[NSString stringWithFormat:@"%s killed %@ of his own hedgehogs", &buffer[index], arg]];
+                        [statsArray addObject:[NSString stringWithFormat:@"%s killed %@ of his own hedgehogs", &buffer[index], arg]];
                         break;
                     case 'B':           // turn skipped
-                        [self.statsArray addObject:[NSString stringWithFormat:@"%s was scared and skipped turn %@ times", &buffer[index], arg]];
+                        [statsArray addObject:[NSString stringWithFormat:@"%s was scared and skipped turn %@ times", &buffer[index], arg]];
                         break;
                     default:
                         DLog(@"Unhandled stat message, see statsPage.cpp");
@@ -378,9 +396,7 @@
                 break;
             case 'q':
                 // game ended, can remove the savefile and the trailing overlay (when dualhead)
-                [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
-                if (IS_DUALHEAD())
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
+                [self gameHasEndedWithStats:statsArray];
                 break;
             case 'Q':
                 // game exited but not completed, nothing to do (just don't save the message)

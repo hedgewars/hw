@@ -24,23 +24,21 @@
 #import "EngineProtocolNetwork.h"
 #import "OverlayViewController.h"
 
-#define BUFFER_SIZE 255     // like in original frontend
-
 @implementation GameInterfaceBridge
 @synthesize parentController, systemSettings, savePath, overlayController, ipcPort, gameType, engineProtocol;
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
-        self.parentController = (UIViewController *)viewController;
-        self.engineProtocol = [[EngineProtocolNetwork alloc] init];
-;
+        self.ipcPort = randomPort();
+        self.gameType = gtNone;
         self.savePath = nil;
+
+        self.parentController = (UIViewController *)viewController;
+        self.engineProtocol = [[EngineProtocolNetwork alloc] initOnPort:self.ipcPort];
+        self.engineProtocol.delegate = self;
 
         self.systemSettings = [NSDictionary dictionaryWithContentsOfFile:SETTINGS_FILE()];
         self.overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
-        self.ipcPort = randomPort();
-
-        self.gameType = gtNone;
     }
     return self;
 }
@@ -68,59 +66,6 @@
 
 // main routine for calling the actual game engine
 -(void) startGameEngine {
-    self.parentController.view.opaque = YES;
-    self.parentController.view.backgroundColor = [UIColor blackColor];
-    self.parentController.view.alpha = 0;
-
-    [UIView beginAnimations:@"fade out to black" context:NULL];
-    [UIView setAnimationDuration:1];
-    self.parentController.view.alpha = 1;
-    [UIView commitAnimations];
-
-    self.engineProtocol.savePath = self.savePath;
-    [self.engineProtocol spawnThreadOnPort:self.ipcPort];
-
-    NSDictionary *overlayOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    [NSNumber numberWithInt:self.parentController.interfaceOrientation],@"orientation",
-                                    [self.systemSettings objectForKey:@"menu"],@"menu",
-                                    nil];
-    [self performSelector:@selector(displayOverlayLater:) withObject:overlayOptions afterDelay:1];
-    [overlayOptions release];
-
-    // this is the pascal fuction that starts the game, wrapped around isInGame
-    [HedgewarsAppDelegate sharedAppDelegate].isInGame = YES;
-    Game([self gatherGameSettings]);
-    [HedgewarsAppDelegate sharedAppDelegate].isInGame = NO;
-
-    [UIView beginAnimations:@"fade in" context:NULL];
-    [UIView setAnimationDuration:1];
-    self.parentController.view.alpha = 0;
-    [UIView commitAnimations];
-}
-
--(void) startLocalGame:(NSDictionary *)withDictionary {
-    self.gameType = gtLocal;
-    [self.engineProtocol setGameConfig:withDictionary];
-    
-    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
-    NSString *newDateString = [outputFormatter stringFromDate:[NSDate date]];
-    self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", newDateString];
-    [outputFormatter release];
-    
-    [self startGameEngine];
-}
-
--(void) startSaveGame:(NSString *)atPath {
-    self.gameType = gtSave;
-    self.savePath = atPath;
-    [self.engineProtocol setGameConfig:nil];
-
-    [self startGameEngine];
-}
-
-#pragma mark -
--(const char **)gatherGameSettings {
     const char *gameArgs[10];
     NSInteger width, height, orientation;
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.ipcPort];
@@ -180,8 +125,69 @@
     [rotation release];
     [localeString release];
     [ipcString release];
-    return gameArgs;
+
+    // this is the pascal fuction that starts the game, wrapped around isInGame
+    [HedgewarsAppDelegate sharedAppDelegate].isInGame = YES;
+    Game(gameArgs);
+    [HedgewarsAppDelegate sharedAppDelegate].isInGame = NO;
 }
 
+// prepares the controllers for hosting a game
+-(void) prepareEngineLaunch {
+    self.parentController.view.opaque = YES;
+    self.parentController.view.backgroundColor = [UIColor blackColor];
+    self.parentController.view.alpha = 0;
+
+    [UIView beginAnimations:@"fade out to black" context:NULL];
+    [UIView setAnimationDuration:1];
+    self.parentController.view.alpha = 1;
+    [UIView commitAnimations];
+
+    NSDictionary *overlayOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    [NSNumber numberWithInt:self.parentController.interfaceOrientation],@"orientation",
+                                    [self.systemSettings objectForKey:@"menu"],@"menu",
+                                    nil];
+    [self performSelector:@selector(displayOverlayLater:) withObject:overlayOptions afterDelay:1];
+    [overlayOptions release];
+
+    [self startGameEngine];
+
+    [UIView beginAnimations:@"fade in" context:NULL];
+    [UIView setAnimationDuration:1];
+    self.parentController.view.alpha = 0;
+    [UIView commitAnimations];
+}
+
+// set up variables for a local game
+-(void) startLocalGame:(NSDictionary *)withDictionary {
+    self.gameType = gtLocal;
+
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
+    NSString *newDateString = [outputFormatter stringFromDate:[NSDate date]];
+    self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", newDateString];
+    [outputFormatter release];
+
+    [self.engineProtocol spawnThread:self.savePath withOptions:withDictionary];
+    [self prepareEngineLaunch];
+}
+
+// set up variables for a save game
+-(void) startSaveGame:(NSString *)atPath {
+    self.gameType = gtSave;
+    self.savePath = atPath;
+
+    [self.engineProtocol spawnThread:self.savePath];
+    [self prepareEngineLaunch];
+}
+
+-(void) gameHasEndedWithStats:(NSArray *)stats {
+    DLog(@"%@",stats);
+
+    [self.overlayController removeOverlay];
+    // can remove the file if the replay has ended
+    if (self.gameType == gtSave)
+        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:NULL];
+}
 
 @end
