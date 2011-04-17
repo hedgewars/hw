@@ -39,7 +39,7 @@
                             [[self.view viewWithTag:GRENADE_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu, initialOrientation;
+@synthesize popoverController, popupMenu, helpPage, amvc, useClassicMenu, initialOrientation;
 
 #pragma mark -
 #pragma mark rotation

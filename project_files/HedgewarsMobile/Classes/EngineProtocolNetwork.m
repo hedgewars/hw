@@ -19,55 +19,39 @@
  */
 
 
-#import "GameSetup.h"
+#import "EngineProtocolNetwork.h"
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "OverlayViewController.h"
 
 #define BUFFER_SIZE 255     // like in original frontend
 
-@implementation GameSetup
-@synthesize systemSettings, gameConfig, statsArray, savePath, menuStyle;
+@implementation EngineProtocolNetwork
+@synthesize statsArray, savePath, gameConfig, ipcPort, csd;
 
--(id) initWithDictionary:(NSDictionary *)gameDictionary {
+-(id) init {
     if (self = [super init]) {
-        ipcPort = randomPort();
-
-        // the general settings file + menu style (read by the overlay)
-        NSDictionary *dictSett = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
-        self.menuStyle = [[dictSett objectForKey:@"menu"] boolValue];
-        self.systemSettings = dictSett;
-        [dictSett release];
-
-        // this game run settings
-        self.gameConfig = [gameDictionary objectForKey:@"game_dictionary"];
-
-        // is it a netgame?
-        isNetGame = [[gameDictionary objectForKey:@"netgame"] boolValue];
-
-        // is it a Save?
-        NSString *path = [gameDictionary objectForKey:@"savefile"];
-        // if path is empty it means that you have to create a new file, otherwise read from that file
-        if ([path isEqualToString:@""] == YES) {
-            NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-            [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
-            NSString *newDateString = [outputFormatter stringFromDate:[NSDate date]];
-            self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", newDateString];
-            [outputFormatter release];
-        } else
-            self.savePath = path;
-
+        self.savePath = nil;
         self.statsArray = nil;
+        self.gameConfig = nil;
+        self.ipcPort = 0;
     }
     return self;
 }
 
 -(void) dealloc {
     [statsArray release];
-    [gameConfig release];
-    [systemSettings release];
     [savePath release];
+    [gameConfig release];
     [super dealloc];
+}
+
+-(void) spawnThreadOnPort:(NSInteger) port {
+    self.ipcPort = port;
+
+    [NSThread detachNewThreadSelector:@selector(engineProtocol)
+                             toTarget:self
+                           withObject:nil];
 }
 
 #pragma mark -
@@ -233,7 +217,7 @@
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
-// method that handles net setup with engine and keeps connection alive
+// this is launched as thread and handles all IPC with engine
 -(void) engineProtocol {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     TCPsocket sd;
@@ -278,11 +262,11 @@
 
         switch (buffer[0]) {
             case 'C':
-                DLog(@"sending game config...\n%@",self.gameConfig);
+                DLog(@"Sending game config...\n%@", self.gameConfig);
 
-                if (isNetGame == YES)
+                /*if (isNetGame == YES)
                     [self sendToEngineNoSave:@"TN"];
-                else
+                else*/
                     [self sendToEngineNoSave:@"TL"];
                 NSString *saveHeader = @"TS";
                 [self dumpRawData:[saveHeader UTF8String] ofSize:[saveHeader length]];
@@ -304,7 +288,7 @@
                 NSString *script = [self.gameConfig objectForKey:@"mission_command"];
                 if ([script length] != 0)
                     [self sendToEngine:script];
-                
+
                 // theme info
                 [self sendToEngine:[self.gameConfig objectForKey:@"theme_command"]];
 
@@ -417,77 +401,5 @@
     // to clean up any resources it allocated during its execution.
     //[NSThread exit];
 }
-
-#pragma mark -
-#pragma mark Setting methods
-// returns an array of c-strings that are read by engine at startup
--(const char **)getGameSettings:(NSString *)recordFile {
-    NSInteger width, height;
-    NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
-    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
-    NSString *rotation;
-    if (IS_DUALHEAD()) {
-        CGRect screenBounds = [[[UIScreen screens] objectAtIndex:1] bounds];
-        width = (int) screenBounds.size.width;
-        height = (int) screenBounds.size.height;
-        rotation = @"0";
-    } else {
-        CGRect screenBounds = [[UIScreen mainScreen] bounds];
-        width = (int) screenBounds.size.height;
-        height = (int) screenBounds.size.width;
-        UIDeviceOrientation orientation = (UIDeviceOrientation) [[self.gameConfig objectForKey:@"orientation"] intValue];
-        if (orientation == UIDeviceOrientationLandscapeLeft)
-            rotation = @"-90";
-        else
-            rotation = @"90";
-    }
-        
-    NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width];
-    NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height];
-    const char **gameArgs = (const char **)malloc(sizeof(char *) * 10);
-    BOOL enhanced = [[self.systemSettings objectForKey:@"enhanced"] boolValue];
-
-    NSString *modelId = modelType();
-    NSInteger tmpQuality;
-    if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])     // = iPhone and iPhone 3G or iPod Touch or iPod Touch 2G
-        tmpQuality = 0x00000001 | 0x00000002 | 0x00000008 | 0x00000040;                 // rqLowRes | rqBlurryLand | rqSimpleRope | rqKillFlakes
-    else if ([modelId hasPrefix:@"iPhone2"] || [modelId hasPrefix:@"iPod3"])                                    // = iPhone 3GS or iPod Touch 3G
-        tmpQuality = 0x00000002 | 0x00000040;                                           // rqBlurryLand | rqKillFlakes
-    else if ([modelId hasPrefix:@"iPad1"] || [modelId hasPrefix:@"iPod4"] || enhanced == NO)                    // = iPad 1G or iPod Touch 4G or not enhanced mode
-        tmpQuality = 0x00000002;                                                        // rqBlurryLand
-    else                                                                                                        // = everything else
-        tmpQuality = 0;                                                                 // full quality
-
-    if (IS_IPAD() == NO)                                                                                        // = disable tooltips on phone
-        tmpQuality = tmpQuality | 0x00000400;
-
-    // prevents using an empty nickname
-    NSString *username;
-    NSString *originalUsername = [self.systemSettings objectForKey:@"username"];
-    if ([originalUsername length] == 0)
-        username = [[NSString alloc] initWithFormat:@"MobileUser-%@",ipcString];
-    else
-        username = [[NSString alloc] initWithString:originalUsername];
-
-    gameArgs[ 0] = [ipcString UTF8String];                                                       //ipcPort
-    gameArgs[ 1] = [horizontalSize UTF8String];                                                  //cScreenWidth
-    gameArgs[ 2] = [verticalSize UTF8String];                                                    //cScreenHeight
-    gameArgs[ 3] = [[[NSNumber numberWithInteger:tmpQuality] stringValue] UTF8String];           //quality
-    gameArgs[ 4] = "en.txt";//[localeString UTF8String];                                                    //cLocaleFName
-    gameArgs[ 5] = [username UTF8String];                                                        //UserNick
-    gameArgs[ 6] = [[[self.systemSettings objectForKey:@"sound"] stringValue] UTF8String];       //isSoundEnabled
-    gameArgs[ 7] = [[[self.systemSettings objectForKey:@"music"] stringValue] UTF8String];       //isMusicEnabled
-    gameArgs[ 8] = [[[self.systemSettings objectForKey:@"alternate"] stringValue] UTF8String];   //cAltDamage
-    gameArgs[ 9] = [rotation UTF8String];                                                        //rotateQt
-    gameArgs[10] = [recordFile UTF8String];                                                      //recordFileName
-
-    [verticalSize release];
-    [horizontalSize release];
-    [localeString release];
-    [ipcString release];
-    [username release];
-    return gameArgs;
-}
-
 
 @end

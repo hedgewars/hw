@@ -85,7 +85,7 @@
 		6165920D11CA9BA200D6E256 /* FlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E111CA9BA200D6E256 /* FlagsViewController.m */; };
 		6165920E11CA9BA200D6E256 /* FortsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E311CA9BA200D6E256 /* FortsViewController.m */; };
 		6165920F11CA9BA200D6E256 /* GameConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E511CA9BA200D6E256 /* GameConfigViewController.m */; };
-		6165921011CA9BA200D6E256 /* GameSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E711CA9BA200D6E256 /* GameSetup.m */; };
+		6165921011CA9BA200D6E256 /* EngineProtocolNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E711CA9BA200D6E256 /* EngineProtocolNetwork.m */; };
 		6165921111CA9BA200D6E256 /* GeneralSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E911CA9BA200D6E256 /* GeneralSettingsViewController.m */; };
 		6165921211CA9BA200D6E256 /* GravesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591EB11CA9BA200D6E256 /* GravesViewController.m */; };
 		6165921311CA9BA200D6E256 /* HogHatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591ED11CA9BA200D6E256 /* HogHatViewController.m */; };
@@ -199,6 +199,7 @@
 		61E2F7451283752C00E12521 /* tw.png in Resources */ = {isa = PBXBuildFile; fileRef = 61E2F7431283752C00E12521 /* tw.png */; };
 		61E5D68D12AB006F00566F29 /* uLandPainted.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E5D68C12AB006F00566F29 /* uLandPainted.pas */; };
 		61EBA62A11DFF2BC0048B68A /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EBA62811DFF2BC0048B68A /* title.png */; };
+		61EDB5B0135B3F97009B29A6 /* GameInterfaceBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 61EDB5AF135B3F97009B29A6 /* GameInterfaceBridge.m */; };
 		61EF920E11DF57AC003441C4 /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920511DF57AC003441C4 /* arrowDown.png */; };
 		61EF920F11DF57AC003441C4 /* arrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920611DF57AC003441C4 /* arrowLeft.png */; };
 		61EF921011DF57AC003441C4 /* arrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 61EF920711DF57AC003441C4 /* arrowRight.png */; };
@@ -826,8 +827,8 @@
 		616591E311CA9BA200D6E256 /* FortsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FortsViewController.m; sourceTree = "<group>"; };
 		616591E411CA9BA200D6E256 /* GameConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameConfigViewController.h; sourceTree = "<group>"; };
 		616591E511CA9BA200D6E256 /* GameConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameConfigViewController.m; sourceTree = "<group>"; };
-		616591E611CA9BA200D6E256 /* GameSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameSetup.h; sourceTree = "<group>"; };
-		616591E711CA9BA200D6E256 /* GameSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameSetup.m; sourceTree = "<group>"; };
+		616591E611CA9BA200D6E256 /* EngineProtocolNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineProtocolNetwork.h; sourceTree = "<group>"; };
+		616591E711CA9BA200D6E256 /* EngineProtocolNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EngineProtocolNetwork.m; sourceTree = "<group>"; };
 		616591E811CA9BA200D6E256 /* GeneralSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralSettingsViewController.h; sourceTree = "<group>"; };
 		616591E911CA9BA200D6E256 /* GeneralSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneralSettingsViewController.m; sourceTree = "<group>"; };
 		616591EA11CA9BA200D6E256 /* GravesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GravesViewController.h; sourceTree = "<group>"; };
@@ -985,6 +986,8 @@
 		61E2F7431283752C00E12521 /* tw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tw.png; path = Resources/Icons/tw.png; sourceTree = "<group>"; };
 		61E5D68C12AB006F00566F29 /* uLandPainted.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandPainted.pas; path = ../../hedgewars/uLandPainted.pas; sourceTree = SOURCE_ROOT; };
 		61EBA62811DFF2BC0048B68A /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = Resources/Frontend/title.png; sourceTree = "<group>"; };
+		61EDB5AE135B3F97009B29A6 /* GameInterfaceBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameInterfaceBridge.h; sourceTree = "<group>"; };
+		61EDB5AF135B3F97009B29A6 /* GameInterfaceBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameInterfaceBridge.m; sourceTree = "<group>"; };
 		61EF920511DF57AC003441C4 /* arrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowDown.png; path = Resources/Overlay/arrowDown.png; sourceTree = "<group>"; };
 		61EF920611DF57AC003441C4 /* arrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowLeft.png; path = Resources/Overlay/arrowLeft.png; sourceTree = "<group>"; };
 		61EF920711DF57AC003441C4 /* arrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowRight.png; path = Resources/Overlay/arrowRight.png; sourceTree = "<group>"; };
@@ -1054,8 +1057,10 @@
 				616591F111CA9BA200D6E256 /* MainMenuViewController.m */,
 				6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */,
 				6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */,
-				616591E611CA9BA200D6E256 /* GameSetup.h */,
-				616591E711CA9BA200D6E256 /* GameSetup.m */,
+				61EDB5AE135B3F97009B29A6 /* GameInterfaceBridge.h */,
+				61EDB5AF135B3F97009B29A6 /* GameInterfaceBridge.m */,
+				616591E611CA9BA200D6E256 /* EngineProtocolNetwork.h */,
+				616591E711CA9BA200D6E256 /* EngineProtocolNetwork.m */,
 				61E2E12C12BAAEE30051B659 /* ServerSetup.h */,
 				61E2E12D12BAAEE30051B659 /* ServerSetup.m */,
 			);
@@ -2382,7 +2387,7 @@
 				6165920D11CA9BA200D6E256 /* FlagsViewController.m in Sources */,
 				6165920E11CA9BA200D6E256 /* FortsViewController.m in Sources */,
 				6165920F11CA9BA200D6E256 /* GameConfigViewController.m in Sources */,
-				6165921011CA9BA200D6E256 /* GameSetup.m in Sources */,
+				6165921011CA9BA200D6E256 /* EngineProtocolNetwork.m in Sources */,
 				6165921111CA9BA200D6E256 /* GeneralSettingsViewController.m in Sources */,
 				6165921211CA9BA200D6E256 /* GravesViewController.m in Sources */,
 				6165921311CA9BA200D6E256 /* HogHatViewController.m in Sources */,
@@ -2438,6 +2443,7 @@
 				61AC067412B2E32D000B52A2 /* Appirater.m in Sources */,
 				61E2E12E12BAAEE30051B659 /* ServerSetup.m in Sources */,
 				61B7A33812CC21080086B604 /* StatsPageViewController.m in Sources */,
+				61EDB5B0135B3F97009B29A6 /* GameInterfaceBridge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

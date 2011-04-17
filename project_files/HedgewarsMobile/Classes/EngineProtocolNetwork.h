@@ -22,34 +22,29 @@
 #import <Foundation/Foundation.h>
 #import "SDL_net.h"
 
-@interface GameSetup : NSObject {
-    NSDictionary *systemSettings;
-    NSDictionary *gameConfig;
+@interface EngineProtocolNetwork : NSObject {
     NSMutableArray *statsArray;
-
-    NSInteger ipcPort;  // Port on which engine will listen
-    TCPsocket csd;      // Client socket descriptor
-    TCPsocket esd;      // External socket descriptor
-
     NSString *savePath;
-    BOOL isNetGame;
-    BOOL menuStyle;
+    NSDictionary *gameConfig;
+
+    NSInteger ipcPort;              // Port on which engine will listen
+    TCPsocket csd;                  // Client socket descriptor
 }
 
-@property (nonatomic, retain) NSDictionary *systemSettings;
-@property (nonatomic, retain) NSDictionary *gameConfig;
-@property (nonatomic, retain) NSMutableArray *statsArray;
-@property (nonatomic, retain) NSString *savePath;
-@property (assign) BOOL menuStyle;
+@property (nonatomic,retain) NSMutableArray *statsArray;
+@property (nonatomic,retain) NSString *savePath;
+@property (nonatomic,retain) NSDictionary *gameConfig;
+@property (assign) NSInteger ipcPort;
+@property (assign) TCPsocket csd;
 
--(id) initWithDictionary:(NSDictionary *)gameDictionary;
+
+-(id)   init;
 -(void) engineProtocol;
--(int) sendToEngine:(NSString *)string;
--(int) sendToEngineNoSave:(NSString *)string;
+-(void) spawnThreadOnPort:(NSInteger) port;
+-(int)  sendToEngine:(NSString *)string;
+-(int)  sendToEngineNoSave:(NSString *)string;
 -(void) provideTeamData:(NSString *)teamName forHogs:(NSInteger) numberOfPlayingHogs withHealth:(NSInteger) initialHealth ofColor:(NSNumber *)teamColor;
 -(void) provideAmmoData:(NSString *)ammostoreName forPlayingTeams:(NSInteger) numberOfTeams;
 -(NSInteger) provideScheme:(NSString *)schemeName;
-
--(const char **)getGameSettings:(NSString *)recordFile;
 
 @end

@@ -49,7 +49,6 @@
     BOOL isAttacking;
     
     // stuff initialized externally
-    BOOL isNetGame;
     BOOL useClassicMenu;
     NSInteger initialOrientation;
     
