@@ -121,52 +121,54 @@ Metric:= abs(x1 - x2) + abs(y1 - y2)
 end;
 
 function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-var Vx, Vy, r: hwFloat;
+var Vx, Vy, r, mX, mY: real;
     rTime: LongInt;
     Score, EX, EY: LongInt;
     valueResult: LongInt;
 
     function CheckTrace: LongInt;
-    var x, y, dX, dY: hwFloat;
+    var x, y, dX, dY: real;
         t: LongInt;
         value: LongInt;
     begin
-    x:= Me^.X;
-    y:= Me^.Y;
+    x:= mX;
+    y:= mY;
     dX:= Vx;
     dY:= -Vy;
     t:= rTime;
     repeat
       x:= x + dX;
       y:= y + dY;
-      dX:= dX + cWindSpeed;
-      dY:= dY + cGravity;
+      dX:= dX + cWindSpeedf;
+      dY:= dY + cGravityf;
       dec(t)
-    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t <= 0);
-    EX:= hwRound(x);
-    EY:= hwRound(y);
+    until TestCollExcludingMe(Me, trunc(x), trunc(y), 5) or (t <= 0);
+    EX:= trunc(x);
+    EY:= trunc(y);
     value:= RateExplosion(Me, EX, EY, 101);
     if value = 0 then value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
     CheckTrace:= value;
     end;
 
 begin
+mX:= hwFloat2Float(Me^.X);
+mY:= hwFloat2Float(Me^.Y);
 ap.Time:= 0;
 rTime:= 350;
 ap.ExplR:= 0;
 valueResult:= BadTurn;
 repeat
   rTime:= rTime + 300 + Level * 50 + random(300);
-  Vx:= - cWindSpeed * rTime * _0_5 + (int2hwFloat(Targ.X + AIrndSign(2)) - Me^.X) / int2hwFloat(rTime);
-  Vy:= cGravity * rTime * _0_5 - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(rTime);
-  r:= Distance(Vx, Vy);
-  if not (r > _1) then
+  Vx:= - cWindSpeedf * rTime * 0.5 + (Targ.X + AIrndSign(2) - mX) / rTime;
+  Vy:= cGravityf * rTime * 0.5 - (Targ.Y - mY) / rTime;
+  r:= sqrt(sqr(Vx) + sqr(Vy));
+  if not (r > 1) then
      begin
      Score:= CheckTrace;
      if valueResult <= Score then
         begin
         ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
-        ap.Power:= hwRound(r * cMaxPower) - random((Level - 1) * 17 + 1);
+        ap.Power:= trunc(r * cMaxPower) - random((Level - 1) * 17 + 1);
         ap.ExplR:= 100;
         ap.ExplX:= EX;
         ap.ExplY:= EY;

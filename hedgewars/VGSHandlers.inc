@@ -106,7 +106,7 @@ Gear^.X:= Gear^.X + (cWindSpeedf * 750 * Gear^.dX) * Steps;
 
 // up-and-down-bounce magic
 s := (GameTicks + Gear^.Timer) mod 4096;
-t := 8 * AngleSin(s mod 2048).QWordValue / 4294967296;
+t := 8 * hwFloat2Float(AngleSin(s mod 2048));
 if (s < 2048) then t := -t;
 
 Gear^.Y := LAND_HEIGHT - 1184 + LongInt(Gear^.Timer mod 8) + t;
@@ -465,8 +465,8 @@ if Gear^.Timer > Steps then dec(Gear^.Timer, Steps) else Gear^.Timer:= 0;
 
 if (Gear^.Hedgehog^.Gear <> nil) then
     begin
-    Gear^.X:= Gear^.Hedgehog^.Gear^.X.QWordValue/4294967296 + (Gear^.Tex^.w div 2  - Gear^.FrameTicks);
-    Gear^.Y:= Gear^.Hedgehog^.Gear^.Y.QWordValue/4294967296 - (16 + Gear^.Tex^.h);
+    Gear^.X:= hwFloat2Float(Gear^.Hedgehog^.Gear^.X) + (Gear^.Tex^.w div 2  - Gear^.FrameTicks);
+    Gear^.Y:= hwFloat2Float(Gear^.Hedgehog^.Gear^.Y) - (16 + Gear^.Tex^.h);
     end;
 
 if Gear^.Timer = 0 then

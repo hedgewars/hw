@@ -176,8 +176,8 @@ begin
                 particle := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
                 if particle <> nil then
                     begin
-                    particle^.dX := particle^.dX - (Gear^.dX.QWordValue / 42949672960);
-                    particle^.dY := particle^.dY - (Gear^.dY.QWordValue / 21474836480)
+                    particle^.dX := particle^.dX - hwFloat2Float(Gear^.dX);
+                    particle^.dY := particle^.dY - hwFloat2Float(Gear^.dY)
                     end
                 end
             end;
