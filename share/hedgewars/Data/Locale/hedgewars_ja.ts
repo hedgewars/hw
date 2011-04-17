@@ -9,19 +9,19 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">模写</translation>
     </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>ない</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1番ごとに</numerusform>
         </translation>
     </message>
 </context>
@@ -29,7 +29,7 @@
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>武器を編集</translation>
     </message>
     <message>
         <source>Error</source>
@@ -37,34 +37,34 @@
     </message>
     <message>
         <source>Illegal ammo scheme</source>
-        <translation>ammo調略は不規則</translation>
+        <translation>弾薬配分は不規則</translation>
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation type="unfinished"></translation>
+        <translation>しくみを編集</translation>
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
-        <translation type="unfinished"></translation>
+        <translation>このオプションを有効にして、しくみを選ぶと武器を自動選択</translation>
     </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 さんは無視リストから削除されています</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 さんは無視リストに追加されています</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 さんは友達リストから削除されています</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 さんは友達リストに追加されています</translation>
     </message>
 </context>
 <context>
@@ -79,7 +79,7 @@
     </message>
     <message>
         <source>OK</source>
-        <translation>オケ</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <source>Unable to start the server</source>
@@ -87,11 +87,11 @@
     </message>
     <message>
         <source>Cannot save record to file %1</source>
-        <translation>ファイル%1に保存することができなかった</translation>
+        <translation>ファイル%1に保存することができません</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
-        <translation type="unfinished"></translation>
+        <translation>上方のリストからレコードを選んで下さい</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
@@ -116,7 +116,7 @@
     </message>
     <message>
         <source>Cannot open demofile %1</source>
-        <translation>demofile %1を開くことが出来なかった</translation>
+        <translation>デモファイル%1を開くことが出来なかった</translation>
     </message>
 </context>
 <context>
@@ -127,35 +127,35 @@
     </message>
     <message>
         <source>Themes</source>
-        <translation>外見</translation>
+        <translation>テーマ</translation>
     </message>
     <message>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>濾過</translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>全部</translation>
     </message>
     <message>
         <source>Small</source>
-        <translation type="unfinished"></translation>
+        <translation>小</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>中</translation>
     </message>
     <message>
         <source>Large</source>
-        <translation type="unfinished"></translation>
+        <translation>大</translation>
     </message>
     <message>
         <source>Cavern</source>
-        <translation type="unfinished"></translation>
+        <translation>洞窟</translation>
     </message>
     <message>
         <source>Wacky</source>
-        <translation type="unfinished"></translation>
+        <translation>むちゃくちゃ</translation>
     </message>
     <message>
         <source>Type</source>
@@ -163,31 +163,31 @@
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>小トンネル</translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>中トンネル</translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>大トンネル</translation>
     </message>
     <message>
         <source>Small floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>子浮く島</translation>
     </message>
     <message>
         <source>Medium floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>中浮く島</translation>
     </message>
     <message>
         <source>Large floating islands</source>
-        <translation type="unfinished"></translation>
+        <translation>大浮く島</translation>
     </message>
     <message>
         <source>Seed</source>
-        <translation type="unfinished"></translation>
+        <translation>乱数シード</translation>
     </message>
     <message>
         <source>Set</source>
@@ -202,18 +202,18 @@
     </message>
     <message>
         <source>IP</source>
-        <translation>IP</translation>
+        <translation>ホスト名／ＩＰ</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation>Port</translation>
+        <translation>ポート番号</translation>
     </message>
 </context>
 <context>
     <name>HWNewNet</name>
     <message>
         <source>The host was not found. Please check the host name and port settings.</source>
-        <translation>hostが見つかりませんでした. host名とportを確認下さい</translation>
+        <translation>ホストが見つかりませんでした。ホスト名とポート番号を確認して下さい。</translation>
     </message>
     <message>
         <source>Connection refused</source>
@@ -221,42 +221,46 @@
     </message>
     <message>
         <source>Room destroyed</source>
-        <translation>ルームが崩壊した</translation>
+        <translation>ルームが崩壊しました</translation>
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>退出の理由:</translation>
+        <translation>退出の理由：</translation>
     </message>
     <message>
         <source>You got kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>けとばされました</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>パスワード</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 さんはルームに参加しています</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 さんは参加</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 さんは退室（%3）</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 さんは退室</translation>
     </message>
     <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished"></translation>
+        <translation>あなたの「%1」というニック名は
+Hedgewars.orgに登録されました。
+下にパスワードを入力して、または
+ゲーム構成に別の名を選択してください：
+</translation>
     </message>
 </context>
 <context>
@@ -748,7 +752,7 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>OK</source>
-        <translation>オケ</translation>
+        <translation>ＯＫ</translation>
     </message>
     <message>
         <source>Rename dialog</source>
@@ -791,20 +795,20 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>OK</source>
-        <translation>オケ</translation>
+        <translation>ＯＫ</translation>
     </message>
     <message>
         <source>Admin features</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">アドミン機能</translation>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ルーム名：</translation>
     </message>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">このゲームはロビー中。</translation>
     </message>
     <message>
         <source>This game is in progress.
@@ -1200,27 +1204,27 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Red/Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>赤／水</translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>水／赤</translation>
     </message>
     <message>
         <source>Red/Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>赤／青</translation>
     </message>
     <message>
         <source>Blue/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>青／赤</translation>
     </message>
     <message>
         <source>Red/Green</source>
-        <translation type="unfinished"></translation>
+        <translation>赤／緑</translation>
     </message>
     <message>
         <source>Green/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>緑／赤</translation>
     </message>
     <message>
         <source>Side-by-side</source>
@@ -1255,7 +1259,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="obsolete">兵器</translation>
+        <translation>武器</translation>
     </message>
     <message>
         <source>Audio/Graphic options</source>
@@ -1263,7 +1267,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Net game</source>
-        <translation>ネット　ゲーム</translation>
+        <translation>ネットゲーム</translation>
     </message>
     <message>
         <source>Playing teams</source>
@@ -1330,7 +1334,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>兵器</translation>
+        <translation>武器</translation>
     </message>
     <message>
         <source>Host:</source>
@@ -1507,7 +1511,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>兵器</translation>
+        <translation>武器</translation>
     </message>
     <message>
         <source>Can not edit default weapon set</source>
@@ -1684,7 +1688,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">兵器</translation>
+        <translation type="unfinished">武器</translation>
     </message>
 </context>
 <context>
@@ -1828,7 +1832,7 @@ Please check your installation</source>
     <name>binds</name>
     <message>
         <source>up</source>
-        <translation>アップ</translation>
+        <translation>上</translation>
     </message>
     <message>
         <source>left</source>
@@ -1848,7 +1852,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>precise aim</source>
-        <translation>精密狙い</translation>
+        <translation>精密な狙い</translation>
     </message>
     <message>
         <source>put</source>
@@ -1860,67 +1864,67 @@ Please check your installation</source>
     </message>
     <message>
         <source>find hedgehog</source>
-        <translation>針鼠を見つけて移動</translation>
+        <translation>針鼠を見つける</translation>
     </message>
     <message>
         <source>ammo menu</source>
-        <translation>兵器メニュー</translation>
+        <translation>武器メニュー</translation>
     </message>
     <message>
         <source>slot 1</source>
-        <translation>スロット 1</translation>
+        <translation>スロット１</translation>
     </message>
     <message>
         <source>slot 2</source>
-        <translation>スロット 2</translation>
+        <translation>スロット２</translation>
     </message>
     <message>
         <source>slot 3</source>
-        <translation>スロット 3</translation>
+        <translation>スロット３</translation>
     </message>
     <message>
         <source>slot 4</source>
-        <translation>スロット 4</translation>
+        <translation>スロット４</translation>
     </message>
     <message>
         <source>slot 5</source>
-        <translation>スロット 5</translation>
+        <translation>スロット５</translation>
     </message>
     <message>
         <source>slot 6</source>
-        <translation>スロット 6</translation>
+        <translation>スロット６</translation>
     </message>
     <message>
         <source>slot 7</source>
-        <translation>スロット 7</translation>
+        <translation>スロット７</translation>
     </message>
     <message>
         <source>slot 8</source>
-        <translation>スロット 8</translation>
+        <translation>スロット８</translation>
     </message>
     <message>
         <source>slot 9</source>
-        <translation>スロット 9</translation>
+        <translation>スロット９</translation>
     </message>
     <message>
         <source>timer 1 sec</source>
-        <translation>タイマー 1 sec</translation>
+        <translation>タイマー１秒</translation>
     </message>
     <message>
         <source>timer 2 sec</source>
-        <translation>タイマー 2 sec</translation>
+        <translation>タイマー２秒</translation>
     </message>
     <message>
         <source>timer 3 sec</source>
-        <translation>タイマー 3 sec</translation>
+        <translation>タイマー３秒</translation>
     </message>
     <message>
         <source>timer 4 sec</source>
-        <translation>タイマー 4 sec</translation>
+        <translation>タイマー４秒</translation>
     </message>
     <message>
         <source>timer 5 sec</source>
-        <translation>タイマー 5 sec</translation>
+        <translation>タイマー５秒</translation>
     </message>
     <message>
         <source>chat</source>
@@ -1952,7 +1956,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>capture</source>
-        <translation>録画する</translation>
+        <translation>録画</translation>
     </message>
     <message>
         <source>hedgehogs
@@ -1966,42 +1970,42 @@ info</source>
     </message>
     <message>
         <source>zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">画面を拡大する</translation>
     </message>
     <message>
         <source>zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">画面を縮小する</translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">画面をリセット</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">幅跳び</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">高跳び</translation>
     </message>
     <message>
         <source>slot 10</source>
-        <translation type="unfinished">スロット 10</translation>
+        <translation type="unfinished">スロットＸ</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Basic controls</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">基本コントロール</translation>
     </message>
     <message>
         <source>Weapon controls</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">武器コントロール</translation>
     </message>
     <message>
         <source>Camera and cursor controls</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">カメラとカーソルのコントロール</translation>
     </message>
     <message>
         <source>Other</source>
@@ -2012,19 +2016,19 @@ info</source>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation type="unfinished"></translation>
+        <translation>‘ズミをうごかすとねらう：</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished"></translation>
+        <translation>穴と障害を跳んで超える：</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>武器を撃つかアイテムを使う：</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished"></translation>
+        <translation>武器やターゲットを選択：</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
