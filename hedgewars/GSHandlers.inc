@@ -1549,7 +1549,7 @@ begin
         HHGear^.dY := HHGear^.dY * len;
         end;
 
-    haveCollision:= ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) <> 0);
+    haveCollision:= ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)]) <> 0);
 
     if not haveCollision then
         begin
@@ -1564,13 +1564,13 @@ begin
             Gear^.Y:= RopePoints.ar[0].Y;
             end;
 
-        CheckCollisionWithLand(Gear);
+        CheckCollision(Gear);
         // if we haven't found any collision yet then check the otheer side too
         if (Gear^.State and gstCollision) = 0 then
             begin
             Gear^.dX.isNegative:= not Gear^.dX.isNegative;
             Gear^.dY.isNegative:= not Gear^.dY.isNegative;
-            CheckCollisionWithLand(Gear);
+            CheckCollision(Gear);
             Gear^.dX.isNegative:= not Gear^.dX.isNegative;
             Gear^.dY.isNegative:= not Gear^.dY.isNegative;
             end;
@@ -1678,7 +1678,7 @@ begin
             end;
         end;
 
-    CheckCollisionWithLand(Gear);
+    CheckCollision(Gear);
 
     if (Gear^.State and gstCollision) <> 0 then
         if Gear^.Elasticity < _10 then

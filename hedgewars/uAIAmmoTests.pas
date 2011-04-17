@@ -115,7 +115,7 @@ const BadTurn = Low(LongInt) div 4;
 implementation
 uses uAIMisc, uVariables, uUtils;
 
-function Metric(x1, y1, x2, y2: LongInt): LongInt;
+function Metric(x1, y1, x2, y2: LongInt): LongInt; inline;
 begin
 Metric:= abs(x1 - x2) + abs(y1 - y2)
 end;
