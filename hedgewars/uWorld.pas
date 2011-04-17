@@ -1156,7 +1156,7 @@ isFirstFrame:= false
 end;
 
 procedure MoveCamera;
-var EdgesDist,  wdy: LongInt;
+var EdgesDist, wdy, shs: LongInt;
     PrevSentPointTime: LongWord = 0;
 begin
 {$IFNDEF IPHONEOS}
@@ -1230,10 +1230,12 @@ begin
             WorldDx:= WorldDx - CursorPoint.X + cScreenWidth div 2 - EdgesDist;
             CursorPoint.X:= cScreenWidth div 2 - EdgesDist
         end;
-    if CursorPoint.Y < EdgesDist then
+
+    shs:= cScreenHeight div 2 - trunc(cScreenHeight / cScaleFactor) + EdgesDist;
+    if CursorPoint.Y < shs then
     begin
-        WorldDy:= WorldDy + CursorPoint.Y - EdgesDist;
-        CursorPoint.Y:= EdgesDist
+        WorldDy:= WorldDy + CursorPoint.Y - shs;
+        CursorPoint.Y:= shs;
     end
     else
         if CursorPoint.Y > cScreenHeight - EdgesDist then
