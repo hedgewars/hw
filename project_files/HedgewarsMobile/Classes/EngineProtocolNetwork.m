@@ -63,8 +63,9 @@
 #pragma mark Spawner functions
 -(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
     self.stream = [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES];
+    [self.stream open];
 
-    [NSThread detachNewThreadSelector:@selector(engineProtocol)
+    [NSThread detachNewThreadSelector:@selector(engineProtocol:)
                              toTarget:self
                            withObject:dictionary];
 }
@@ -210,10 +211,8 @@
 #pragma mark -
 #pragma mark Network relevant code
 -(void) dumpRawData:(const char *)buffer ofSize:(uint8_t) length {
-    [self.stream open];
     [self.stream write:&length maxLength:1];
     [self.stream write:(const uint8_t *)buffer maxLength:length];
-    [self.stream close];
 }
 
 // wrapper that computes the length of the message and then sends the command string, saving the command on a file
@@ -407,6 +406,7 @@
         }
     }
     DLog(@"Engine exited, ending thread");
+    [self.stream close];
 
     // Close the client socket
     SDLNet_TCP_Close(csd);

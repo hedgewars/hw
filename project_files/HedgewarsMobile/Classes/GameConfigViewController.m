@@ -24,7 +24,7 @@
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
 #import "HelpPageViewController.h"
-#import "StatsPageViewController.h"
+#import "GameInterfaceBridge.h"
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
 #import "PascalImports.h"
@@ -227,14 +227,13 @@
                                     [NSNumber numberWithInt:self.interfaceOrientation],@"orientation",
                                     nil];
 
-    NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      gameDictionary,@"game_dictionary",
-                                      [NSNumber numberWithBool:NO],@"netgame",
-                                      @"",@"savefile",
-                                      nil];
+    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
 
+    [bridge startLocalGame:gameDictionary];
+
+    [bridge release];
     // also modify SavedGamesViewController.m
-    StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
+   /* StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
     statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
         statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
@@ -257,7 +256,7 @@
         [statsPage viewWillAppear:YES];
     }
 
-    [statsPage release];
+    [statsPage release];*/
 }
 
 -(void) loadNiceHogs {

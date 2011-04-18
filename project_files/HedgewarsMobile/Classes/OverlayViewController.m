@@ -252,7 +252,6 @@
     [self.popupMenu performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:YES];
     [self.popoverController performSelectorOnMainThread:@selector(dismissPopoverAnimated:) withObject:nil waitUntilDone:YES];
     [self.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
-    HW_terminate(NO);
 }
 
 -(void) didReceiveMemoryWarning {
@@ -265,7 +264,7 @@
     if (IS_IPAD())
         if (((UIPopoverController *)self.popoverController).contentViewController.view.superview == nil)
             self.popoverController = nil;
-    
+
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }

@@ -25,12 +25,13 @@
 #import "OverlayViewController.h"
 
 @implementation GameInterfaceBridge
-@synthesize parentController, systemSettings, savePath, overlayController, ipcPort, gameType, engineProtocol;
+@synthesize parentController, systemSettings, savePath, overlayController, engineProtocol, ipcPort, gameType, gameStatus;
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
         self.ipcPort = randomPort();
         self.gameType = gtNone;
+        self.gameStatus = gsNone;
         self.savePath = nil;
 
         self.parentController = (UIViewController *)viewController;
@@ -66,7 +67,7 @@
 
 // main routine for calling the actual game engine
 -(void) startGameEngine {
-    const char *gameArgs[10];
+    const char *gameArgs[11];
     NSInteger width, height, orientation;
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.ipcPort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
@@ -127,35 +128,46 @@
     [ipcString release];
 
     // this is the pascal fuction that starts the game, wrapped around isInGame
+    self.gameStatus = gsInGame;
     [HedgewarsAppDelegate sharedAppDelegate].isInGame = YES;
     Game(gameArgs);
     [HedgewarsAppDelegate sharedAppDelegate].isInGame = NO;
+    if (self.gameStatus != gsEnded)
+        self.gameStatus = gsInterrupted;
 }
 
 // prepares the controllers for hosting a game
 -(void) prepareEngineLaunch {
-    self.parentController.view.opaque = YES;
-    self.parentController.view.backgroundColor = [UIColor blackColor];
-    self.parentController.view.alpha = 0;
-
-    [UIView beginAnimations:@"fade out to black" context:NULL];
-    [UIView setAnimationDuration:1];
-    self.parentController.view.alpha = 1;
-    [UIView commitAnimations];
-
     NSDictionary *overlayOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     [NSNumber numberWithInt:self.parentController.interfaceOrientation],@"orientation",
                                     [self.systemSettings objectForKey:@"menu"],@"menu",
                                     nil];
-    [self performSelector:@selector(displayOverlayLater:) withObject:overlayOptions afterDelay:1];
+    [self performSelector:@selector(displayOverlayLater:) withObject:overlayOptions afterDelay:4];
     [overlayOptions release];
 
     [self startGameEngine];
 
+    CGRect theFrame = CGRectMake(0, 0, self.parentController.view.frame.size.height, self.parentController.view.frame.size.width);
+    UIView *blackView = [[UIView alloc] initWithFrame:theFrame];
+    [self.parentController.view addSubview:blackView];
+    blackView.opaque = YES;
+    blackView.backgroundColor = [UIColor blackColor];
+    blackView.alpha = 1;
+
     [UIView beginAnimations:@"fade in" context:NULL];
     [UIView setAnimationDuration:1];
-    self.parentController.view.alpha = 0;
+    blackView.alpha = 0;
     [UIView commitAnimations];
+    [blackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+    [blackView release];
+    NSError *error = nil;
+    // can remove the savefile if the replay has ended
+    if (self.gameType == gtSave && self.gameStatus == gsEnded)
+        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:&error];
+    DLog(@"%@",error);
+
+    if (IS_DUALHEAD())
+        [self.overlayController removeOverlay];
 }
 
 // set up variables for a local game
@@ -183,11 +195,9 @@
 
 -(void) gameHasEndedWithStats:(NSArray *)stats {
     DLog(@"%@",stats);
+    self.gameStatus = gsEnded;
 
     [self.overlayController removeOverlay];
-    // can remove the file if the replay has ended
-    if (self.gameType == gtSave)
-        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:NULL];
 }
 
 @end

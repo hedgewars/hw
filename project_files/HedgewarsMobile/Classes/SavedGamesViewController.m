@@ -20,7 +20,7 @@
 
 
 #import "SavedGamesViewController.h"
-#import "StatsPageViewController.h"
+#import "GameInterfaceBridge.h"
 #import "CommodityFunctions.h"
 
 @implementation SavedGamesViewController
@@ -208,16 +208,14 @@
         [self updateTable];
 
     [(EditableCellView *)[self.tableView cellForRowAtIndexPath:indexPath] save:nil];
-    
-    NSString *filePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:[indexPath row]]];
-    
-    NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      filePath,@"savefile",
-                                      [NSNumber numberWithBool:NO],@"netgame",
-                                      [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:@"orientation"],@"game_dictionary",
-                                      nil];
 
-    // also modify GameConfigViewController.m
+    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
+
+    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:[indexPath row]]];
+    [bridge startSaveGame:filePath];
+    [filePath release];
+    [bridge release];
+   /* // also modify GameConfigViewController.m
     StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
     statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
@@ -241,7 +239,7 @@
         statsPage.statsArray = stats;
         [statsPage.tableView reloadData];
         [statsPage viewWillAppear:YES];
-    }
+    }*/
     // reload needed because when ending game the entry remains there
     [self.tableView reloadData];
 }

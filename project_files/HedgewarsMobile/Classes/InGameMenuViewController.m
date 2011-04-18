@@ -88,8 +88,8 @@
         [self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.35];
     }
 
-    HW_chatEnd();
-    SDL_iPhoneKeyboardHide((SDL_Window *)HW_getSDLWindow());
+//    HW_chatEnd();
+//    SDL_iPhoneKeyboardHide((SDL_Window *)HW_getSDLWindow());
 
     if (shouldTakeScreenshot) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please wait"
