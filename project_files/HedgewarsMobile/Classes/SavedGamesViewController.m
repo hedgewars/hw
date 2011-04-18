@@ -215,7 +215,11 @@
     [bridge startSaveGame:filePath];
     [filePath release];
     [bridge release];
-   /* // also modify GameConfigViewController.m
+
+    // reload needed because when ending game the entry remains there
+    [self viewWillAppear:YES];
+
+    /* // also modify GameConfigViewController.m
     StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
     statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
@@ -240,8 +244,7 @@
         [statsPage.tableView reloadData];
         [statsPage viewWillAppear:YES];
     }*/
-    // reload needed because when ending game the entry remains there
-    [self.tableView reloadData];
+
 }
 
 #pragma mark -

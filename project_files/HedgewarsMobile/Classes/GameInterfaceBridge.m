@@ -25,13 +25,12 @@
 #import "OverlayViewController.h"
 
 @implementation GameInterfaceBridge
-@synthesize parentController, systemSettings, savePath, overlayController, engineProtocol, ipcPort, gameType, gameStatus;
+@synthesize parentController, systemSettings, savePath, overlayController, engineProtocol, ipcPort, gameType;
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
         self.ipcPort = randomPort();
         self.gameType = gtNone;
-        self.gameStatus = gsNone;
         self.savePath = nil;
 
         self.parentController = (UIViewController *)viewController;
@@ -128,46 +127,50 @@
     [ipcString release];
 
     // this is the pascal fuction that starts the game, wrapped around isInGame
-    self.gameStatus = gsInGame;
     [HedgewarsAppDelegate sharedAppDelegate].isInGame = YES;
     Game(gameArgs);
     [HedgewarsAppDelegate sharedAppDelegate].isInGame = NO;
-    if (self.gameStatus != gsEnded)
-        self.gameStatus = gsInterrupted;
 }
 
 // prepares the controllers for hosting a game
 -(void) prepareEngineLaunch {
-    NSDictionary *overlayOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    [NSNumber numberWithInt:self.parentController.interfaceOrientation],@"orientation",
-                                    [self.systemSettings objectForKey:@"menu"],@"menu",
-                                    nil];
-    [self performSelector:@selector(displayOverlayLater:) withObject:overlayOptions afterDelay:4];
-    [overlayOptions release];
-
-    [self startGameEngine];
-
+    // we add a black view hiding the background
     CGRect theFrame = CGRectMake(0, 0, self.parentController.view.frame.size.height, self.parentController.view.frame.size.width);
     UIView *blackView = [[UIView alloc] initWithFrame:theFrame];
     [self.parentController.view addSubview:blackView];
     blackView.opaque = YES;
     blackView.backgroundColor = [UIColor blackColor];
-    blackView.alpha = 1;
+    blackView.alpha = 0;
+    // when dual screen we apply a little transition
+    if (IS_DUALHEAD()) {
+        [UIView beginAnimations:@"fade out" context:NULL];
+        [UIView setAnimationDuration:1];
+        blackView.alpha = 1;
+        [UIView commitAnimations];
+    }
 
+    // prepare options for overlay and add it to the future sdl uiwindow
+    NSDictionary *overlayOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    [NSNumber numberWithInt:self.parentController.interfaceOrientation],@"orientation",
+                                    [self.systemSettings objectForKey:@"menu"],@"menu",
+                                    nil];
+    [self performSelector:@selector(displayOverlayLater:) withObject:overlayOptions afterDelay:3];
+    [overlayOptions release];
+
+    // SYSTEMS ARE GO!!
+    [self startGameEngine];
+
+    // now we can remove the cover with a transition
+    blackView.alpha = 1;
     [UIView beginAnimations:@"fade in" context:NULL];
     [UIView setAnimationDuration:1];
     blackView.alpha = 0;
     [UIView commitAnimations];
     [blackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
     [blackView release];
-    NSError *error = nil;
-    // can remove the savefile if the replay has ended
-    if (self.gameType == gtSave && self.gameStatus == gsEnded)
-        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:&error];
-    DLog(@"%@",error);
 
-    if (IS_DUALHEAD())
-        [self.overlayController removeOverlay];
+    // the overlay is not needed any more and can be removed
+    [self.overlayController removeOverlay];
 }
 
 // set up variables for a local game
@@ -195,9 +198,10 @@
 
 -(void) gameHasEndedWithStats:(NSArray *)stats {
     DLog(@"%@",stats);
-    self.gameStatus = gsEnded;
 
-    [self.overlayController removeOverlay];
+    // can remove the savefile if the replay has ended
+    if (self.gameType == gtSave)
+        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
 }
 
 @end
