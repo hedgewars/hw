@@ -224,7 +224,6 @@
                                     self.teamConfigViewController.listOfSelectedTeams,@"teams_list",
                                     self.schemeWeaponConfigViewController.selectedScheme,@"scheme",
                                     self.schemeWeaponConfigViewController.selectedWeapon,@"weapon",
-                                    [NSNumber numberWithInt:self.interfaceOrientation],@"orientation",
                                     nil];
 
     GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
@@ -232,31 +231,6 @@
     [bridge startLocalGame:gameDictionary];
 
     [bridge release];
-    // also modify SavedGamesViewController.m
-   /* StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
-        statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
-
-    NSArray *stats;
-    if (IS_DUALHEAD()) {
-        stats = [[HedgewarsAppDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-        [self presentModalViewController:statsPage animated:NO];
-    } else {
-        [self performSelector:@selector(presentModalViewController:animated:) withObject:statsPage afterDelay:3];
-        stats = [[HedgewarsAppDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-    }
-
-    if ([stats count] <= 1) {
-        DLog(@"%@",stats);
-        [statsPage dismissModalViewControllerAnimated:NO];
-    } else {
-        statsPage.statsArray = stats;
-        [statsPage.tableView reloadData];
-        [statsPage viewWillAppear:YES];
-    }
-
-    [statsPage release];*/
 }
 
 -(void) loadNiceHogs {

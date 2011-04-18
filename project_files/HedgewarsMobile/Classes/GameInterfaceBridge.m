@@ -23,6 +23,7 @@
 #import "PascalImports.h"
 #import "EngineProtocolNetwork.h"
 #import "OverlayViewController.h"
+#import "StatsPageViewController.h"
 
 @implementation GameInterfaceBridge
 @synthesize parentController, systemSettings, savePath, overlayController, engineProtocol, ipcPort, gameType;
@@ -171,6 +172,9 @@
 
     // the overlay is not needed any more and can be removed
     [self.overlayController removeOverlay];
+
+    // warn our host that it's going to be visible again
+    [self.parentController viewWillAppear:YES];
 }
 
 // set up variables for a local game
@@ -182,6 +186,10 @@
     NSString *newDateString = [outputFormatter stringFromDate:[NSDate date]];
     self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", newDateString];
     [outputFormatter release];
+
+    // in the rare case in which a savefile with the same name exists the older one must be removed (or it gets corrupted)
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.savePath])
+        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
 
     [self.engineProtocol spawnThread:self.savePath withOptions:withDictionary];
     [self prepareEngineLaunch];
@@ -197,7 +205,17 @@
 }
 
 -(void) gameHasEndedWithStats:(NSArray *)stats {
-    DLog(@"%@",stats);
+    // display stats page
+    if (stats != nil) {
+        StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        statsPage.statsArray = stats;
+        statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
+            statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
+
+        [self.parentController presentModalViewController:statsPage animated:YES];
+        [statsPage release];
+    }
 
     // can remove the savefile if the replay has ended
     if (self.gameType == gtSave)

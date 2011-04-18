@@ -214,37 +214,8 @@
     NSString *filePath = [[NSString alloc] initWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:[indexPath row]]];
     [bridge startSaveGame:filePath];
     [filePath release];
+
     [bridge release];
-
-    // reload needed because when ending game the entry remains there
-    [self viewWillAppear:YES];
-
-    /* // also modify GameConfigViewController.m
-    StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
-        statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
-    // avoid showing the stat page immediately, but wait for 3 seconds
-    [self performSelector:@selector(presentModalViewController:animated:) withObject:statsPage afterDelay:3];
-
-    NSArray *stats;
-    if (IS_DUALHEAD()) {
-        stats = [[HedgewarsAppDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-        [self presentModalViewController:statsPage animated:NO];
-    } else {
-        [self performSelector:@selector(presentModalViewController:animated:) withObject:statsPage afterDelay:3];
-        stats = [[HedgewarsAppDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-    }
-
-    if ([stats count] <= 1) {
-        DLog(@"%@",stats);
-        [statsPage dismissModalViewControllerAnimated:NO];
-    } else {
-        statsPage.statsArray = stats;
-        [statsPage.tableView reloadData];
-        [statsPage viewWillAppear:YES];
-    }*/
-
 }
 
 #pragma mark -
