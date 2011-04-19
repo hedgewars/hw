@@ -467,9 +467,9 @@ var Vx, Vy: hwFloat;
             dY:= dY + cGravity;
             EX:= hwRound(x);
             EY:= hwRound(y);
-        until TestCollExcludingMe(Me, EX, EY, 5) or (EY > 1000);
+        until TestCollExcludingMe(Me, EX, EY, 5) or (EY > cWaterLine);
 
-        if (EY < 1000) and not dY.isNegative then
+        if (EY < cWaterLine) and not dY.isNegative then
             begin
             value:= RateExplosion(Me, EX, EY, 91);
             if (value = 0) then
@@ -622,7 +622,7 @@ ap.Power:= 1;
 x:= Me^.X;
 y:= Me^.Y;
 if (Targ.X) - hwRound(x) >= 0 then ap.Angle:=   cMaxAngle div 4
-                                  else ap.Angle:= - cMaxAngle div 4;
+                              else ap.Angle:= - cMaxAngle div 4;
 valueResult:= RateShove(Me, hwRound(x) + 10 * hwSign(int2hwFloat(Targ.X) - x), hwRound(y), 15, 30);
 if valueResult <= 0 then valueResult:= BadTurn else inc(valueResult);
 TestBaseballBat:= valueResult;
@@ -706,7 +706,7 @@ repeat
           // 58 (instead of 60) for better prediction (hh moves after explosion of one of the rockets)
           end
        end;
-until fexit or (Y > _1024);
+until fexit or (Y.Round > cWaterLine);
 
 for i:= 0 to 5 do inc(valueResult, dmg[i]);
 t:= valueResult;
