@@ -177,7 +177,7 @@ begin
                 if particle <> nil then
                     begin
                     particle^.dX := particle^.dX - hwFloat2Float(Gear^.dX);
-                    particle^.dY := particle^.dY - hwFloat2Float(Gear^.dY)
+                    particle^.dY := particle^.dY - hwFloat2Float(Gear^.dY) / 2;
                     end
                 end
             end;
