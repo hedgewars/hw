@@ -368,7 +368,7 @@ end;
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
 var s, key: shortstring;
     f: textfile;
-    i, ii, numFlakes: LongInt;
+    i, ii: LongInt;
     c1, c2: TSDL_Color;
 
     procedure CheckRect(Width, Height, x, y, w, h: LongWord);

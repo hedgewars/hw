@@ -2507,13 +2507,13 @@
 			};
 			name = Release;
 		};
-		61022D7C12305A2800B08935 /* DistributionAppStore */ = {
+		61022D7C12305A2800B08935 /* Distro AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLY_RULES_IN_COPY_FILES = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "Don't Code Sign";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
@@ -2552,9 +2552,9 @@
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 armv6";
 			};
-			name = DistributionAppStore;
+			name = "Distro AppStore";
 		};
-		61022D7D12305A2800B08935 /* DistributionAppStore */ = {
+		61022D7D12305A2800B08935 /* Distro AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2575,9 +2575,9 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
-			name = DistributionAppStore;
+			name = "Distro AppStore";
 		};
-		61022D7E12305A2800B08935 /* DistributionAppStore */ = {
+		61022D7E12305A2800B08935 /* Distro AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2588,9 +2588,9 @@
 				PRODUCT_NAME = fpc;
 				ZERO_LINK = NO;
 			};
-			name = DistributionAppStore;
+			name = "Distro AppStore";
 		};
-		61022D7F12305A2800B08935 /* DistributionAppStore */ = {
+		61022D7F12305A2800B08935 /* Distro AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -2599,9 +2599,9 @@
 				PRODUCT_NAME = UpdateDataFolder;
 				ZERO_LINK = NO;
 			};
-			name = DistributionAppStore;
+			name = "Distro AppStore";
 		};
-		6137064B117B1CB3004EE44A /* DistributionAdHoc */ = {
+		6137064B117B1CB3004EE44A /* Distro Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLY_RULES_IN_COPY_FILES = YES;
@@ -2646,9 +2646,9 @@
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 armv6";
 			};
-			name = DistributionAdHoc;
+			name = "Distro Adhoc";
 		};
-		6137064C117B1CB3004EE44A /* DistributionAdHoc */ = {
+		6137064C117B1CB3004EE44A /* Distro Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2667,9 +2667,9 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
-			name = DistributionAdHoc;
+			name = "Distro Adhoc";
 		};
-		6137064D117B1CB3004EE44A /* DistributionAdHoc */ = {
+		6137064D117B1CB3004EE44A /* Distro Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2680,9 +2680,9 @@
 				PRODUCT_NAME = fpc;
 				ZERO_LINK = NO;
 			};
-			name = DistributionAdHoc;
+			name = "Distro Adhoc";
 		};
-		6137064F117B1CB3004EE44A /* DistributionAdHoc */ = {
+		6137064F117B1CB3004EE44A /* Distro Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -2691,97 +2691,7 @@
 				PRODUCT_NAME = UpdateDataFolder;
 				ZERO_LINK = NO;
 			};
-			name = DistributionAdHoc;
-		};
-		6164429D11B5CDE500B9A6F3 /* Valgrind */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLY_RULES_IN_COPY_FILES = YES;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
-				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
-				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
-				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -O- -g -gl -gw2 -gt -ghttt -Xs-";
-				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
-				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_FAST_MATH = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					VALGRIND_REXEC,
-					DEBUG,
-				);
-				GCC_STRICT_ALIASING = YES;
-				GCC_THUMB_SUPPORT = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../../Library/SDL/src/events\"",
-					"\"$(SRCROOT)/../../../Library/SDL/src/video\"/**",
-					"\"$(SRCROOT)/../../../Library/SDL/include/\"",
-					"\"$(SRCROOT)/../../../Library/SDL_net/\"",
-					"\"$(SRCROOT)/../../../Library/SDL_mixer/\"",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-Wl,-no_order_inits",
-				);
-				PREBINDING = NO;
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6";
-			};
-			name = Valgrind;
-		};
-		6164429E11B5CDE500B9A6F3 /* Valgrind */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
-				PRODUCT_NAME = Hedgewars;
-				TARGETED_DEVICE_FAMILY = "$(inherited)";
-			};
-			name = Valgrind;
-		};
-		6164429F11B5CDE500B9A6F3 /* Valgrind */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PREBINDING = NO;
-				PRODUCT_NAME = fpc;
-			};
-			name = Valgrind;
-		};
-		616442A111B5CDE500B9A6F3 /* Valgrind */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = UpdateDataFolder;
-			};
-			name = Valgrind;
+			name = "Distro Adhoc";
 		};
 		6179928C114AE0C800BA94A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2834,8 +2744,8 @@
 			buildSettings = {
 				APPLY_RULES_IN_COPY_FILES = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Vittorio Giovara (DC2BRETXAC)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
@@ -2867,6 +2777,8 @@
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
@@ -2928,9 +2840,8 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
-				6137064C117B1CB3004EE44A /* DistributionAdHoc */,
-				61022D7D12305A2800B08935 /* DistributionAppStore */,
-				6164429E11B5CDE500B9A6F3 /* Valgrind */,
+				6137064C117B1CB3004EE44A /* Distro Adhoc */,
+				61022D7D12305A2800B08935 /* Distro AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2940,9 +2851,8 @@
 			buildConfigurations = (
 				6179928C114AE0C800BA94A9 /* Debug */,
 				6179928D114AE0C800BA94A9 /* Release */,
-				6137064F117B1CB3004EE44A /* DistributionAdHoc */,
-				61022D7F12305A2800B08935 /* DistributionAppStore */,
-				616442A111B5CDE500B9A6F3 /* Valgrind */,
+				6137064F117B1CB3004EE44A /* Distro Adhoc */,
+				61022D7F12305A2800B08935 /* Distro AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2952,9 +2862,8 @@
 			buildConfigurations = (
 				928301180F10CAFD00CC5A3C /* Debug */,
 				928301190F10CAFD00CC5A3C /* Release */,
-				6137064D117B1CB3004EE44A /* DistributionAdHoc */,
-				61022D7E12305A2800B08935 /* DistributionAppStore */,
-				6164429F11B5CDE500B9A6F3 /* Valgrind */,
+				6137064D117B1CB3004EE44A /* Distro Adhoc */,
+				61022D7E12305A2800B08935 /* Distro AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2964,9 +2873,8 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
-				6137064B117B1CB3004EE44A /* DistributionAdHoc */,
-				61022D7C12305A2800B08935 /* DistributionAppStore */,
-				6164429D11B5CDE500B9A6F3 /* Valgrind */,
+				6137064B117B1CB3004EE44A /* Distro Adhoc */,
+				61022D7C12305A2800B08935 /* Distro AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

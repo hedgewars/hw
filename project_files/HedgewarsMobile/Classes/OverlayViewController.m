@@ -39,7 +39,7 @@
                             [[self.view viewWithTag:GRENADE_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, useClassicMenu, initialOrientation;
+@synthesize popoverController, popupMenu, helpPage, amvc, useClassicMenu, initialScreenCount, initialOrientation;
 
 #pragma mark -
 #pragma mark rotation
@@ -51,74 +51,39 @@
     return rotationManager(interfaceOrientation);
 }
 
-// pause the game and remove objc menus so that animation is smoother
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval) duration{
-    if (isGameRunning() == NO)
-        return;
-
-    HW_pause();
-    [self dismissPopover];
-
-    if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
-        [self.amvc disappear];
-        wasVisible = YES;
-    } else
-        wasVisible = NO;
-
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-
-    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
-    switch (toInterfaceOrientation) {
-        case UIDeviceOrientationLandscapeLeft:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
-            break;
-        case UIDeviceOrientationLandscapeRight:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
-            break;
-        default:
-            // a debug log would spam too much
-            break;
-    }
-}
-
-// now restore previous state
--(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation {
-    if (isGameRunning() == NO)
-        return;
-
-    if (wasVisible || IS_DUALHEAD())
-        [self.amvc appearInView:self.view];
-    HW_pauseToggle();
-
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-}
-
 // while in dual head the above rotation functions are not called
--(void) dualHeadRotation:(NSNotification *)notification {
+-(void) handleRotationEvent:(NSNotification *)notification {
     if (isGameRunning() == NO)
         return;
 
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
+    NSInteger angle_left = (self.initialOrientation == UIInterfaceOrientationLandscapeLeft) ? 180 : 0;
+    NSInteger angle_right = (self.initialOrientation == UIInterfaceOrientationLandscapeLeft) ? 0 : 180;
 
-    [UIView beginAnimations:@"rotation" context:NULL];
-    [UIView setAnimationDuration:0.7];
+    if (IS_VERY_POWERFUL()) {
+        [UIView beginAnimations:@"overlay rotation" context:NULL];
+        [UIView setAnimationDuration:0.7];
+    }
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
             self.view.frame = [[UIScreen mainScreen] bounds];
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
+            if (IS_DUALHEAD() == NO)
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(angle_left));
             break;
         case UIDeviceOrientationLandscapeRight:
             self.view.frame = [[UIScreen mainScreen] bounds];
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
+            if (IS_DUALHEAD() == NO)
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(angle_right));
             break;
         default:
             // a debug log would spam too much
             break;
     }
-    [UIView commitAnimations];
+    if (IS_VERY_POWERFUL())
+        [UIView commitAnimations];
 }
 
 #pragma mark -
@@ -127,8 +92,9 @@
     if ((self = [super initWithCoder:aDecoder])) {
         objcExportsInit();
         isAttacking = NO;
-        wasVisible = NO;
-        isPopoverVisible = NO;    // it is called "popover" even on the iphone
+        isPopoverVisible = NO;
+        initialScreenCount = (IS_DUALHEAD() ? 2 : 1);
+        initialOrientation = 0;
     }
     return self;
 }
@@ -137,41 +103,25 @@
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0, 0, screenRect.size.height, screenRect.size.width);
     self.view.center = CGPointMake(self.view.frame.size.height/2, self.view.frame.size.width/2);
-    self.view.alpha = 0;
-
-    // detrmine the quanitiy and direction of the rotation
-    if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
-        a = 180;
-        b = 0;
-    } else {
-        a = 0;
-        b = 180;
-    }
-
-    // get the number of screens to know the previous state whan a display is connected or detached
-    if ([UIScreen respondsToSelector:@selector(screens)])
-        initialScreenCount = [[UIScreen screens] count];
-    else
-        initialScreenCount = 1;
 
     // set initial orientation of the controller orientation
-        switch (self.interfaceOrientation) {
-            case UIDeviceOrientationLandscapeLeft:
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
-                break;
-            case UIDeviceOrientationLandscapeRight:
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-                break;
-            default:
-                DLog(@"Nope");
-                break;
-        }
-        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(dualHeadRotation:)
-                                                     name:UIDeviceOrientationDidChangeNotification
-                                                   object:nil];
-
+    switch (self.interfaceOrientation) {
+        case UIDeviceOrientationLandscapeLeft:
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
+            break;
+        default:
+            DLog(@"Nope");
+            break;
+    }
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleRotationEvent:)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
+    
     // the timer used to dim the overlay
     dimTimer = [[NSTimer alloc] initWithFireDate:(IS_DUALHEAD()) ? HIDING_TIME_NEVER : [NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
@@ -202,56 +152,29 @@
     }
     
     // present the overlay
+    self.view.alpha = 0;
     [UIView beginAnimations:@"showing overlay" context:NULL];
     [UIView setAnimationDuration:2];
     self.view.alpha = 1;
     [UIView commitAnimations];
 }
 
--(void) numberOfScreensIncreased {
-    if (initialScreenCount == 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New display detected"
-                                                        message:NSLocalizedString(@"Hedgewars supports multi-monitor configurations, but the screen has to be connected before launching the game.",@"")
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        HW_pause();
-    }
-}
+-(void) viewDidUnload {
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 
--(void) numberOfScreensDecreased {
-    if (initialScreenCount == 2) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh noes! Display disconnected"
-                                                        message:NSLocalizedString(@"A monitor has been disconnected while playing and this has ended the match! You need to restart the game if you wish to use the second display again.",@"")
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        HW_terminate(NO);
-    }
-}
+    [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                             selector:@selector(unsetPreciseStatus)
+                                               object:nil];
 
-
--(void) showHelp:(id) sender {
-    if (self.helpPage == nil) {
-        NSString *xibName = (IS_IPAD() ? @"HelpPageInGameViewController-iPad" : @"HelpPageInGameViewController-iPhone");
-        self.helpPage = [[HelpPageViewController alloc] initWithNibName:xibName bundle:nil];
-    }
-    self.helpPage.view.alpha = 0;
-    [self.view addSubview:helpPage.view];
-    [UIView beginAnimations:@"helpingame" context:NULL];
-    self.helpPage.view.alpha = 1;
-    [UIView commitAnimations];
-    doNotDim();
-}
-
--(void) removeOverlay {
-    [self.popupMenu performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:YES];
-    [self.popoverController performSelectorOnMainThread:@selector(dismissPopoverAnimated:) withObject:nil waitUntilDone:YES];
-    [self.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+    // only objects initialized in viewDidLoad should be here
+    dimTimer = nil;
+    self.helpPage = nil;
+    [self dismissPopover];
+    self.popoverController = nil;
+    self.amvc = nil;
+    MSG_DIDUNLOAD();
+    [super viewDidUnload];
 }
 
 -(void) didReceiveMemoryWarning {
@@ -269,23 +192,6 @@
     [super didReceiveMemoryWarning];
 }
 
--(void) viewDidUnload {
-    // only objects initialized in viewDidLoad should be here
-    if (IS_DUALHEAD())
-        [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [NSObject cancelPreviousPerformRequestsWithTarget:self
-                                             selector:@selector(unsetPreciseStatus)
-                                               object:nil];
-    dimTimer = nil;
-    self.helpPage = nil;
-    [self dismissPopover];
-    self.popoverController = nil;
-    self.amvc = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
 -(void) dealloc {
     [popupMenu release];
     [helpPage release];
@@ -295,8 +201,34 @@
     [super dealloc];
 }
 
+-(void) numberOfScreensIncreased {
+    if (self.initialScreenCount == 1) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New display detected"
+                                                        message:NSLocalizedString(@"Hedgewars supports multi-monitor configurations, but the screen has to be connected before launching the game.",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        HW_pause();
+    }
+}
+
+-(void) numberOfScreensDecreased {
+    if (self.initialScreenCount == 2) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh noes! Display disconnected"
+                                                        message:NSLocalizedString(@"A monitor has been disconnected while playing and this has ended the match! You need to restart the game if you wish to use the second display again.",@"")
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        HW_terminate(NO);
+    }
+}
+
 #pragma mark -
-#pragma mark overlay user interaction
+#pragma mark overlay appearance
 // nice transition for dimming, should be called only by the timer himself
 -(void) dimOverlay {
     if (isGameRunning()) {
@@ -313,6 +245,14 @@
     doNotDim();
 }
 
+-(void) removeOverlay {
+    [self.popupMenu performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:YES];
+    [self.popoverController performSelectorOnMainThread:@selector(dismissPopoverAnimated:) withObject:nil waitUntilDone:YES];
+    [self.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+}
+
+#pragma mark -
+#pragma mark overlay user interaction
 // dim the overlay when there's no more input for a certain amount of time
 -(IBAction) buttonReleased:(id) sender {
     if (isGameRunning() == NO)
@@ -443,7 +383,20 @@
 }
 
 #pragma mark -
-#pragma mark other menu
+#pragma mark in-game menu and help page
+-(void) showHelp:(id) sender {
+    if (self.helpPage == nil) {
+        NSString *xibName = (IS_IPAD() ? @"HelpPageInGameViewController-iPad" : @"HelpPageInGameViewController-iPhone");
+        self.helpPage = [[HelpPageViewController alloc] initWithNibName:xibName bundle:nil];
+    }
+    self.helpPage.view.alpha = 0;
+    [self.view addSubview:helpPage.view];
+    [UIView beginAnimations:@"helpingame" context:NULL];
+    self.helpPage.view.alpha = 1;
+    [UIView commitAnimations];
+    doNotDim();
+}
+
 // present a further check before closing game
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
     if ([actionSheet cancelButtonIndex] != buttonIndex)

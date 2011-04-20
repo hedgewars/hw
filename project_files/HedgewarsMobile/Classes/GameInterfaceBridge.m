@@ -148,7 +148,8 @@
         [UIView setAnimationDuration:1];
         blackView.alpha = 1;
         [UIView commitAnimations];
-    }
+    } else
+        blackView.alpha = 1;
 
     // prepare options for overlay and add it to the future sdl uiwindow
     NSDictionary *overlayOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -162,7 +163,6 @@
     [self startGameEngine];
 
     // now we can remove the cover with a transition
-    blackView.alpha = 1;
     [UIView beginAnimations:@"fade in" context:NULL];
     [UIView setAnimationDuration:1];
     blackView.alpha = 0;

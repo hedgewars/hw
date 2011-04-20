@@ -27,12 +27,6 @@
 #import "Appirater.h"
 #include <unistd.h>
 
-#ifdef main
-#undef main
-#endif
-
-#define BLACKVIEW_TAG 17935
-#define SECONDBLACKVIEW_TAG 48620
 
 @implementation SDLUIKitDelegate (customDelegate)
 

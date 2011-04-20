@@ -132,6 +132,8 @@ begin
     SDL_RenderClear(SDLrender);
     SDL_DestroyRenderer(SDLrender);
     SDL_DestroyWindow(SDLwindow);
+    SDLrender:= nil;
+    SDLwindow:= nil;
 {$ENDIF}
     SDL_Quit();
     isTerminated:= false;

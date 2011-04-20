@@ -40,7 +40,6 @@
 
     // the objc ammomenu
     AmmoMenuViewController *amvc;
-    BOOL wasVisible;
     
     // ths touch section
     CGFloat initialDistanceForPinching;
@@ -54,7 +53,6 @@
     
     // dual head support
     NSInteger initialScreenCount;
-    NSInteger a, b;
 }
 
 @property (nonatomic,retain) id popoverController;
@@ -63,6 +61,7 @@
 @property (nonatomic,retain) AmmoMenuViewController *amvc;
 @property (assign) BOOL useClassicMenu;
 @property (assign) NSInteger initialOrientation;
+@property (assign) NSInteger initialScreenCount;
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;

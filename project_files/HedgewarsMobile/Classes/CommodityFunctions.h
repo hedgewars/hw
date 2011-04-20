@@ -59,6 +59,7 @@
 #define IS_IPAD()               (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define IS_NOT_POWERFUL()       ([modelType() hasPrefix:@"iPhone1"] || [modelType() hasPrefix:@"iPod1,1"] || [modelType() hasPrefix:@"iPod2,1"])
 #define IS_NOT_VERY_POWERFUL()  ([modelType() hasPrefix:@"iPad1"] || [modelType() hasPrefix:@"iPhone2"] || [modelType() hasPrefix:@"iPod3"] || [modelType() hasPrefix:@"iPod4"] )
+#define IS_VERY_POWERFUL()      (IS_NOT_POWERFUL() == NO && IS_NOT_VERY_POWERFUL() == NO)
 
 #define DEFAULT_NETGAME_PORT    46631
 
