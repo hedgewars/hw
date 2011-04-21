@@ -46,8 +46,6 @@ procedure SaveFinishedSynching; inline;
 implementation
 uses uVariables;
 
-const kSystemSoundID_Vibrate = $00000FFF;
-
 function isPhone: Boolean; inline;
 begin
 {$IFDEF IPHONEOS}
@@ -57,6 +55,7 @@ begin
 end;
 
 procedure performRumble; inline;
+const kSystemSoundID_Vibrate = $00000FFF;
 begin
 {$IFDEF IPHONEOS}
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
