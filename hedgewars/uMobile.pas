@@ -35,12 +35,13 @@ procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
 {$ENDIF}
 function  isPhone: Boolean; inline;
 procedure performRumble; inline;
-procedure perfExt_AddProgress; inline;
-procedure perfExt_FinishProgress; inline;
-procedure perfExt_AmmoUpdate; // don't inline
-procedure perfExt_NewTurnBeginning; inline;
-procedure perfExt_SaveBeganSynching; inline;
-procedure perfExt_SaveFinishedSynching; inline;
+
+procedure AddProgress; inline;
+procedure FinishProgress; inline;
+procedure AmmoUpdate; // don't inline
+procedure NewTurnBeginning; inline;
+procedure SaveBeganSynching; inline;
+procedure SaveFinishedSynching; inline;
 
 implementation
 uses uVariables;
@@ -62,21 +63,21 @@ begin
 {$ENDIF}
 end;
 
-procedure perfExt_AddProgress; inline;
+procedure AddProgress; inline;
 begin
 {$IFDEF IPHONEOS}
     startSpinning();
 {$ENDIF}
 end;
 
-procedure perfExt_FinishProgress; inline;
+procedure FinishProgress; inline;
 begin
 {$IFDEF IPHONEOS}
     stopSpinning();
 {$ENDIF}
 end;
 
-procedure perfExt_AmmoUpdate; // don't inline
+procedure AmmoUpdate; // don't inline
 begin
 {$IFDEF IPHONEOS}
     if (CurrentTeam = nil) or
@@ -87,22 +88,22 @@ begin
 {$ENDIF}
 end;
 
-procedure perfExt_NewTurnBeginning; inline;
+procedure NewTurnBeginning; inline;
 begin
 {$IFDEF IPHONEOS}
     clearView();
-    perfExt_AmmoUpdate();
 {$ENDIF}
+    AmmoUpdate();
 end;
 
-procedure perfExt_SaveBeganSynching; inline;
+procedure SaveBeganSynching; inline;
 begin
 {$IFDEF IPHONEOS}
     replayBegan();
 {$ENDIF}
 end;
 
-procedure perfExt_SaveFinishedSynching; inline;
+procedure SaveFinishedSynching; inline;
 begin
 {$IFDEF IPHONEOS}
     replayFinished();

@@ -76,7 +76,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         GameType:= gmtLocal;
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
                         {$IFDEF IPHONEOS}InitIPC;{$ENDIF}
-                        perfExt_SaveFinishedSynching();
+                        uMobile.SaveFinishedSynching();
                         end;
                end
           else ProcessGears

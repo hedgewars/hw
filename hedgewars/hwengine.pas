@@ -283,7 +283,7 @@ begin
     else
         begin
         LoadRecordFromFile(recordFileName);
-        perfExt_SaveBeganSynching();
+        uMobile.SaveBeganSynching();
         end;
 
     ScriptOnGameInit;
