@@ -178,7 +178,7 @@
 	<key>FavBarConfig</key>
 	<dict>
 		<key>PBXProjectModuleGUID</key>
-		<string>619598B81364C73500B429B6</string>
+		<string>611E0B7211FA8F650077A41E</string>
 		<key>XCBarModuleItemNames</key>
 		<dict/>
 		<key>XCBarModuleItems</key>
@@ -266,14 +266,14 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 							<array>
 								<string>0867D691FE84028FC02AAC07</string>
+								<string>08FB77AEFE84172EC02AAC07</string>
 								<string>1C37FBAC04509CD000000102</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>6</integer>
-									<integer>5</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
@@ -296,7 +296,7 @@
 							<real>186</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>668 248 788 504 0 0 1920 1178 </string>
+						<string>586 569 788 504 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -312,7 +312,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>lvm.c</string>
+								<string>ftconfig.h</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -320,14 +320,16 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>lvm.c</string>
+										<string>ftconfig.h</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>6195995E1364C95D00B429B6</string>
+										<string>619599D11364E6FE00B429B6</string>
 										<key>history</key>
 										<array>
-											<string>619599331364C7D300B429B6</string>
+											<string>611E0E5811FA92660077A41E</string>
+											<string>619599AE1364E63300B429B6</string>
+											<string>619599C11364E6C400B429B6</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -339,14 +341,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {580, 269}}</string>
+								<string>{{0, 0}, {580, 211}}</string>
 								<key>RubberWindowFrame</key>
-								<string>668 248 788 504 0 0 1920 1178 </string>
+								<string>586 569 788 504 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>269pt</string>
+							<string>211pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -359,14 +361,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 274}, {580, 189}}</string>
+								<string>{{0, 216}, {580, 247}}</string>
 								<key>RubberWindowFrame</key>
-								<string>668 248 788 504 0 0 1920 1178 </string>
+								<string>586 569 788 504 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
 							<key>Proportion</key>
-							<string>189pt</string>
+							<string>247pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
@@ -385,9 +387,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>619598C31364C7AE00B429B6</string>
+				<string>619599D21364E6FE00B429B6</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>619598C41364C7AE00B429B6</string>
+				<string>619599D31364E6FE00B429B6</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -525,11 +527,11 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>619598B91364C73500B429B6</string>
-		<string>/Users/vittorio/hedgewars/trunk/misc/liblua/Xcode/Lua.xcodeproj</string>
+		<string>611E0B7311FA8F650077A41E</string>
+		<string>/Users/vittorio/hedgewars/trunk/misc/libfreetype/Xcode-iPhoneOS/Freetype.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>668 248 788 504 0 0 1920 1178 </string>
+	<string>586 569 788 504 0 0 1920 1178 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -550,25 +552,23 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>lvm.c</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {500, 218}}</string>
+								<string>{{0, 0}, {1145, 432}}</string>
 								<key>RubberWindowFrame</key>
-								<string>358 625 500 500 0 0 1920 1178 </string>
+								<string>1167 248 1145 714 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>218pt</string>
+							<string>432pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -583,9 +583,9 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 223}, {500, 236}}</string>
+								<string>{{0, 437}, {1145, 236}}</string>
 								<key>RubberWindowFrame</key>
-								<string>358 625 500 500 0 0 1920 1178 </string>
+								<string>1167 248 1145 714 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXBuildResultsModule</string>
@@ -594,7 +594,7 @@
 						</dict>
 					</array>
 					<key>Proportion</key>
-					<string>459pt</string>
+					<string>673pt</string>
 				</dict>
 			</array>
 			<key>Name</key>
@@ -607,8 +607,8 @@
 			<true/>
 			<key>TableOfContents</key>
 			<array>
-				<string>619598B91364C73500B429B6</string>
-				<string>619598C51364C7AE00B429B6</string>
+				<string>611E0B7311FA8F650077A41E</string>
+				<string>619599D41364E6FE00B429B6</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -617,9 +617,9 @@
 			<key>WindowContentMinSize</key>
 			<string>486 300</string>
 			<key>WindowString</key>
-			<string>358 625 500 500 0 0 1920 1178 </string>
+			<string>1167 248 1145 714 0 0 1920 1178 </string>
 			<key>WindowToolGUID</key>
-			<string>619598B91364C73500B429B6</string>
+			<string>611E0B7311FA8F650077A41E</string>
 			<key>WindowToolIsVisible</key>
 			<false/>
 		</dict>

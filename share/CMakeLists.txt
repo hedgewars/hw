@@ -18,8 +18,8 @@ IF(APPLE)
 		${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
 	install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/Info.plist"
 		DESTINATION ../)
-	install(PROGRAMS "${hedgewars_SOURCE_DIR}/misc/Icon.icns"
+	install(PROGRAMS "${hedgewars_SOURCE_DIR}/share/Icon.icns"
 		DESTINATION ../Resources/)
-	install(PROGRAMS "${hedgewars_SOURCE_DIR}/misc/dsa_pub.pem"
+	install(PROGRAMS "${hedgewars_SOURCE_DIR}/share/dsa_pub.pem"
 		DESTINATION ../Resources/)
 ENDIF(APPLE)

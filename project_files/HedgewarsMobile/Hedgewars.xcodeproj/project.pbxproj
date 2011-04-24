@@ -56,7 +56,6 @@
 		611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D9BF912497E9800008271 /* SavedGamesViewController.m */; };
 		611D9BFC12497E9800008271 /* SavedGamesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611D9BFA12497E9800008271 /* SavedGamesViewController.xib */; };
 		611DA1D0124E5C6300008271 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 611DA1CF124E5C6300008271 /* plus.png */; };
-		611E0E5111FA92170077A41E /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 611E0E5011FA92130077A41E /* libfreetype.a */; };
 		611E0EE711FB20610077A41E /* ammoButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE511FB20610077A41E /* ammoButton.png */; };
 		611E0EE811FB20610077A41E /* cornerButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE611FB20610077A41E /* cornerButton.png */; };
 		611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */; };
@@ -157,6 +156,7 @@
 		61889985129995B500D55FD6 /* title~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61889984129995B500D55FD6 /* title~ipad.png */; };
 		6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6195981D1364BCD200B429B6 /* libTremor.a */; };
 		619599451364C83D00B429B6 /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619599441364C82B00B429B6 /* libLua.a */; };
+		619599C01364E66B00B429B6 /* libFreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619599BF1364E65900B429B6 /* libFreetype.a */; };
 		6199E81612463EA800DADF8C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81512463EA800DADF8C /* CFNetwork.framework */; };
 		6199E81A12463EC400DADF8C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81912463EC400DADF8C /* SystemConfiguration.framework */; };
 		6199E839124647DE00DADF8C /* SupportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6199E837124647DE00DADF8C /* SupportViewController.m */; };
@@ -236,13 +236,6 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
-		611E0E4F11FA92130077A41E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 611E0E4B11FA92130077A41E /* freetype.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
-			remoteInfo = freetype;
-		};
 		6195981C1364BCD200B429B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 619598181364BCD200B429B6 /* Tremor.xcodeproj */;
@@ -256,6 +249,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = D2AAC07E0554694100DB518D /* libLua.a */;
 			remoteInfo = libLua;
+		};
+		619599BE1364E65900B429B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 619599BA1364E65900B429B6 /* Freetype.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D /* libFreetype.a */;
+			remoteInfo = libFreetype;
 		};
 		61B7A54D12FA129F0051E14E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -334,7 +334,6 @@
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
 		611D9BFA12497E9800008271 /* SavedGamesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SavedGamesViewController.xib; path = ../Resources/SavedGamesViewController.xib; sourceTree = "<group>"; };
 		611DA1CF124E5C6300008271 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = plus.png; path = Resources/Icons/plus.png; sourceTree = "<group>"; };
-		611E0E4B11FA92130077A41E /* freetype.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = freetype.xcodeproj; path = "../../../Library/freetype/Xcode-iPhoneOS/freetype.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		611E0EE511FB20610077A41E /* ammoButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ammoButton.png; path = Resources/Overlay/ammoButton.png; sourceTree = "<group>"; };
 		611E0EE611FB20610077A41E /* cornerButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cornerButton.png; path = Resources/Overlay/cornerButton.png; sourceTree = "<group>"; };
 		611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Development.plist"; sourceTree = "<group>"; };
@@ -490,6 +489,7 @@
 		618E27B612A2C30700C20EF0 /* SDL_net.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_net.xcodeproj; path = "../../../Library/SDL_net/Xcode-iPhoneOS/SDL_net.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		619598181364BCD200B429B6 /* Tremor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Tremor.xcodeproj; path = ../../misc/libtremor/Xcode/Tremor.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6195993F1364C82B00B429B6 /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../misc/liblua/Xcode/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
+		619599BA1364E65900B429B6 /* Freetype.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Freetype.xcodeproj; path = "../../misc/libfreetype/Xcode-iPhoneOS/Freetype.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		6199E81512463EA800DADF8C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		6199E81912463EC400DADF8C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		6199E836124647DE00DADF8C /* SupportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupportViewController.h; sourceTree = "<group>"; };
@@ -567,10 +567,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
+				619599C01364E66B00B429B6 /* libFreetype.a in Frameworks */,
 				619599451364C83D00B429B6 /* libLua.a in Frameworks */,
 				6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */,
-				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
-				611E0E5111FA92170077A41E /* libfreetype.a in Frameworks */,
 				61B7A61512FA13B00051E14E /* libSDL.a in Frameworks */,
 				61B7A61612FA13B00051E14E /* libSDL_image.a in Frameworks */,
 				61B7A61712FA13B00051E14E /* libSDL_mixer.a in Frameworks */,
@@ -687,9 +687,9 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				619599BA1364E65900B429B6 /* Freetype.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
 				619598181364BCD200B429B6 /* Tremor.xcodeproj */,
-				611E0E4B11FA92130077A41E /* freetype.xcodeproj */,
 				617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */,
 				6127232E117DF752005B90CF /* SDL_image.xcodeproj */,
 				6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */,
@@ -721,14 +721,6 @@
 				611D9BFA12497E9800008271 /* SavedGamesViewController.xib */,
 			);
 			name = "Other Controllers";
-			sourceTree = "<group>";
-		};
-		611E0E4C11FA92130077A41E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				611E0E5011FA92130077A41E /* libfreetype.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		6163EE4C11CC2478001C0453 /* Settings Pages */ = {
@@ -881,6 +873,14 @@
 			isa = PBXGroup;
 			children = (
 				619599441364C82B00B429B6 /* libLua.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		619599BB1364E65900B429B6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				619599BF1364E65900B429B6 /* libFreetype.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1118,8 +1118,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 611E0E4C11FA92130077A41E /* Products */;
-					ProjectRef = 611E0E4B11FA92130077A41E /* freetype.xcodeproj */;
+					ProductGroup = 619599BB1364E65900B429B6 /* Products */;
+					ProjectRef = 619599BA1364E65900B429B6 /* Freetype.xcodeproj */;
 				},
 				{
 					ProductGroup = 619599401364C82B00B429B6 /* Products */;
@@ -1160,13 +1160,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		611E0E5011FA92130077A41E /* libfreetype.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libfreetype.a;
-			remoteRef = 611E0E4F11FA92130077A41E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		6195981D1364BCD200B429B6 /* libTremor.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1179,6 +1172,13 @@
 			fileType = archive.ar;
 			path = libLua.a;
 			remoteRef = 619599431364C82B00B429B6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		619599BF1364E65900B429B6 /* libFreetype.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libFreetype.a;
+			remoteRef = 619599BE1364E65900B429B6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		61B7A54E12FA129F0051E14E /* libSDL.a */ = {
