@@ -1,11 +1,11 @@
 project(hedgewars)
 
 cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
-cmake_policy(SET CMP0003 NEW)
-
-IF(POLICY CMP0012)
-	cmake_policy(SET CMP0012 NEW)
-ENDIF()
+FOREACH(policy CMP0003 CMP0012)
+	IF(POLICY ${policy})
+		CMAKE_POLICY(SET ${policy} NEW)
+	ENDIF()
+ENDFOREACH()
 
 #detect Mercurial revision (if present)
 set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
@@ -53,6 +53,7 @@ if(APPLE)
 
 	#paths for creating the bundle
 	set(bundle_name Hedgewars.app)
+	set(frameworks_dir ${bundle_name}/Contents/Frameworks/)
 	set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/)
 	set(DATA_INSTALL_DIR "../Resources/")
 	set(target_dir ".")
@@ -61,9 +62,8 @@ if(APPLE)
 	set(minimum_macosx $ENV{MACOSX_DEPLOYMENT_TARGET})
 
 	#detect on which system are we
-	EXEC_PROGRAM("/usr/bin/sw_vers" OUTPUT_VARIABLE MACOSX_VERSION_TMP)
-	STRING(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" MACOSX_VERSION_TMP "${MACOSX_VERSION_TMP}")
-	STRING(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${MACOSX_VERSION_TMP})
+	EXEC_PROGRAM("/usr/bin/sw_vers" ARGS "-productVersion" OUTPUT_VARIABLE current_macosx_version)
+	STRING(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${current_macosx_version})
 
 	#if nothing is set, we deploy only for the current system
 	if(NOT minimum_macosx)
@@ -74,6 +74,7 @@ if(APPLE)
 		set(FATAL "Hedgewars is not supported for pre-10.4 systems")
 	endif()
 
+	#this variable needs to be set for frapascal universal binary
 	if(NOT CMAKE_OSX_ARCHITECTURES)
 		if(current_macosx_version MATCHES "10.6")
 			set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")

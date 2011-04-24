@@ -18,11 +18,14 @@
 
 include (CheckLibraryExists)
 find_path(VORBIS_INCLUDE_DIR vorbis/vorbisfile.h)
-#  [koda] (for Hedgewars) added libraries with capital names for compatibility with Mac frameworks
 
 find_library(OGG_LIBRARY NAMES ogg)
 find_library(VORBIS_LIBRARY NAMES vorbis)
 find_library(VORBISFILE_LIBRARY NAMES vorbisfile)
+if(APPLE AND NOT VORBISFILE_LIBRARY)
+#  [koda] (for Hedgewars) frameworks don't come with libvorbisfile
+   set(VORBISFILE_LIBRARY "${VORBIS_LIBRARY}")
+endif()
 
 if (OGG_LIBRARY AND VORBIS_LIBRARY AND VORBISFILE_LIBRARY)
    set(OGGVORBIS_FOUND TRUE)

@@ -127,7 +127,7 @@ if(fpc_version)
     string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
     string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
     string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
-    message(STATUS "Freepascal version detected: ${fpc_vers_major}.${fpc_vers_minor}")
+    message(STATUS "Freepascal version installed: ${fpc_vers_major}.${fpc_vers_minor}")
     math(EXPR fpc_ver "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
 
     if(fpc_ver LESS "020200")
