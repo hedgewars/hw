@@ -38,8 +38,9 @@
 #define removeInputWidget() [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview]; \
                             [[self.view viewWithTag:GRENADE_TAG] removeFromSuperview];
 
+
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, useClassicMenu, initialScreenCount, initialOrientation;
+@synthesize popoverController, popupMenu, helpPage, amvc, useClassicMenu, initialScreenCount, initialOrientation, lowerIndicator, savesIndicator;
 
 #pragma mark -
 #pragma mark rotation
@@ -90,11 +91,12 @@
 #pragma mark View Management
 -(id) initWithCoder:(NSCoder *)aDecoder {
     if ((self = [super initWithCoder:aDecoder])) {
-        objcExportsInit();
         isAttacking = NO;
         isPopoverVisible = NO;
         initialScreenCount = (IS_DUALHEAD() ? 2 : 1);
         initialOrientation = 0;
+        lowerIndicator = nil;
+        savesIndicator = nil;
     }
     return self;
 }
@@ -173,6 +175,8 @@
     [self dismissPopover];
     self.popoverController = nil;
     self.amvc = nil;
+    self.lowerIndicator = nil;
+    self.savesIndicator = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -184,6 +188,10 @@
         self.helpPage = nil;
     if (self.amvc.view.superview == nil)
         self.amvc = nil;
+    if (self.lowerIndicator.superview == nil)
+        self.lowerIndicator = nil;
+    if (self.savesIndicator.superview == nil)
+        self.savesIndicator = nil;
     if (IS_IPAD())
         if (((UIPopoverController *)self.popoverController).contentViewController.view.superview == nil)
             self.popoverController = nil;
@@ -197,6 +205,8 @@
     [helpPage release];
     [popoverController release];
     [amvc release];
+    [lowerIndicator release];
+    [savesIndicator release];
     // dimTimer is autoreleased
     [super dealloc];
 }
@@ -343,7 +353,7 @@
             if (IS_DUALHEAD() || self.useClassicMenu == NO) {
                 if (self.amvc == nil)
                     self.amvc = [[AmmoMenuViewController alloc] init];
-                setAmmoMenuInstance(amvc);
+
                 if (self.amvc.isVisible) {
                     doDim();
                     [self.amvc disappear];
@@ -353,10 +363,8 @@
                         [self.amvc appearInView:self.view];
                     }
                 }
-            } else {
-                setAmmoMenuInstance(nil);
+            } else
                 HW_ammoMenu();
-            }
             break;
         default:
             DLog(@"Nope");
@@ -506,12 +514,12 @@
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
-    CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
-
     if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
+
+    CGRect screen = [[UIScreen mainScreen] bounds];
+    CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
 
     switch ([allTouches count]) {
         case 1:
@@ -597,13 +605,13 @@
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
-    int x, y, dx, dy;
-    UITouch *touch, *first, *second;
-
     if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
+
+    CGRect screen = [[UIScreen mainScreen] bounds];
+    int x, y, dx, dy;
+    UITouch *touch, *first, *second;
 
     switch ([allTouches count]) {
         case 1:

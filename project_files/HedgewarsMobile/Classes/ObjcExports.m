@@ -20,8 +20,8 @@
 
 
 #import "ObjcExports.h"
+#import "OverlayViewController.h"
 #import "AmmoMenuViewController.h"
-#import "AudioToolbox/AudioToolbox.h"
 
 #pragma mark -
 #pragma mark internal variables
@@ -32,13 +32,14 @@ BOOL savedGame;
 // cache the grenade time
 NSInteger grenadeTime;
 // the reference to the newMenu instance
-AmmoMenuViewController *amvc_instance;
+OverlayViewController *overlay_instance;
 // the audiosession must be initialized before using properties
 BOOL gAudioSessionInited = NO;
 
 #pragma mark -
 #pragma mark functions called like oop
-void objcExportsInit() {
+void objcExportsInit(OverlayViewController* instance) {
+    overlay_instance = instance;
     gameRunning = NO;
     savedGame = NO;
     grenadeTime = 2;
@@ -60,36 +61,24 @@ void inline setGrenadeTime(NSInteger value) {
     grenadeTime = value;
 }
 
-void inline setAmmoMenuInstance(AmmoMenuViewController *instance) {
-    amvc_instance = instance;
-}
-
 #pragma mark -
 #pragma mark functions called by pascal code
-void startSpinning() {
+void startSpinningProgress() {
     gameRunning = NO;
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    indicator.tag = ACTIVITYINDICATOR_TAG;
-    int offset;
-    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft)
-        offset = -120;
-    else
-        offset = 120;
-    if (IS_DUALHEAD())
-        indicator.center = CGPointMake(theWindow.frame.size.width/2, theWindow.frame.size.height/2 + offset);
-    else
-        indicator.center = CGPointMake(theWindow.frame.size.width/2 + offset, theWindow.frame.size.height/2);
-    indicator.hidesWhenStopped = YES;
-    [indicator startAnimating];
-    [theWindow addSubview:indicator];
-    [indicator release];
+    overlay_instance.lowerIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+
+    CGPoint center = overlay_instance.view.center;
+    overlay_instance.lowerIndicator.center = (IS_DUALHEAD() ? CGPointMake(center.y, center.x)
+                                              : CGPointMake(center.y, center.x * 5/3));
+
+    [overlay_instance.lowerIndicator startAnimating];
+    [overlay_instance.view addSubview:overlay_instance.lowerIndicator];
+    [overlay_instance.lowerIndicator release];
 }
 
-void stopSpinning() {
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[theWindow viewWithTag:ACTIVITYINDICATOR_TAG];
-    [indicator stopAnimating];
+void stopSpinningProgress() {
+    [overlay_instance.lowerIndicator stopAnimating];
+    [overlay_instance.lowerIndicator removeFromSuperview];
     HW_zoomSet(1.7);
     if (savedGame == NO)
         gameRunning = YES;
@@ -115,49 +104,45 @@ void clearView() {
     grenadeTime = 2;
 }
 
-void replayBegan() {
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIView *blackView = [[UIView alloc] initWithFrame:theWindow.frame];
-    blackView.backgroundColor = [UIColor blackColor];
-    blackView.alpha = 0.6;
-    blackView.tag = REPLAYBLACKVIEW_TAG;
-    blackView.exclusiveTouch = NO;
-    blackView.multipleTouchEnabled = NO;
-    blackView.userInteractionEnabled = NO;
+void saveBeganSynching() {
+    overlay_instance.view.backgroundColor = [UIColor blackColor];
+    overlay_instance.view.alpha = 0.75;
+    overlay_instance.view.userInteractionEnabled = NO;
 
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    indicator.center = theWindow.center;
-    [indicator startAnimating];
-    [blackView addSubview:indicator];
-    [indicator release];
-    [theWindow addSubview:blackView];
-    [blackView release];
+    overlay_instance.savesIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+
+    CGPoint center = overlay_instance.view.center;
+    overlay_instance.savesIndicator.center = CGPointMake(center.y, center.x);
+    overlay_instance.savesIndicator.hidesWhenStopped = YES;
+
+    [overlay_instance.savesIndicator startAnimating];
+    [overlay_instance.view addSubview:overlay_instance.savesIndicator];
+    [overlay_instance.savesIndicator release];
 
     savedGame = YES;
-    stopSpinning();
+    stopSpinningProgress();
 }
 
-void replayFinished() {
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIView *blackView = (UIView *)[theWindow viewWithTag:REPLAYBLACKVIEW_TAG];
-
-    [UIView beginAnimations:@"removing black" context:NULL];
+void saveFinishedSynching() {
+    [UIView beginAnimations:@"fading from save synch" context:NULL];
     [UIView setAnimationDuration:1];
-    blackView.alpha = 0;
+    overlay_instance.view.backgroundColor = [UIColor clearColor];
+    overlay_instance.view.alpha = 1;
+    overlay_instance.view.userInteractionEnabled = YES;
     [UIView commitAnimations];
-    [theWindow performSelector:@selector(removeFromSuperview) withObject:blackView afterDelay:1];
+
+    [overlay_instance.savesIndicator stopAnimating];
+    [overlay_instance.savesIndicator performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 
     gameRunning = YES;
     savedGame = NO;
 }
 
 void updateVisualsNewTurn(void) {
-    [amvc_instance updateAmmoVisuals];
+    [overlay_instance.amvc updateAmmoVisuals];
 }
 
 // dummy function to prevent linkage fail
 int SDL_main(int argc, char **argv) {
     return 0;
 }
-
-

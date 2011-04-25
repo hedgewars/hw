@@ -53,12 +53,18 @@
     
     // dual head support
     NSInteger initialScreenCount;
+
+    // spinning icons low
+    UIActivityIndicatorView *lowerIndicator;
+    UIActivityIndicatorView *savesIndicator;
 }
 
 @property (nonatomic,retain) id popoverController;
 @property (nonatomic,retain) InGameMenuViewController *popupMenu;
 @property (nonatomic,retain) HelpPageViewController *helpPage;
 @property (nonatomic,retain) AmmoMenuViewController *amvc;
+@property (nonatomic,retain) UIActivityIndicatorView *lowerIndicator;
+@property (nonatomic,retain) UIActivityIndicatorView *savesIndicator;
 @property (assign) BOOL useClassicMenu;
 @property (assign) NSInteger initialOrientation;
 @property (assign) NSInteger initialScreenCount;
@@ -76,5 +82,9 @@
 -(void) dimOverlay;
 -(void) activateOverlay;
 -(void) removeOverlay;
+
+#define ANIMATION_DURATION 0.25
+#define CONFIRMATION_TAG 5959
+#define GRENADE_TAG 9595
 
 @end

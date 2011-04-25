@@ -24,6 +24,7 @@
 #import "EngineProtocolNetwork.h"
 #import "OverlayViewController.h"
 #import "StatsPageViewController.h"
+#import "ObjcExports.h"
 
 @implementation GameInterfaceBridge
 @synthesize parentController, systemSettings, savePath, overlayController, engineProtocol, ipcPort, gameType;
@@ -60,6 +61,7 @@
 
     [self.overlayController setUseClassicMenu:[[dict objectForKey:@"menu"] boolValue]];
     [self.overlayController setInitialOrientation:[[dict objectForKey:@"orientation"] intValue]];
+    objcExportsInit(self.overlayController);
 
     UIWindow *gameWindow = (IS_DUALHEAD() ? [HedgewarsAppDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow]);
     [gameWindow addSubview:self.overlayController.view];
@@ -156,7 +158,7 @@
                                     [NSNumber numberWithInt:self.parentController.interfaceOrientation],@"orientation",
                                     [self.systemSettings objectForKey:@"menu"],@"menu",
                                     nil];
-    [self performSelector:@selector(displayOverlayLater:) withObject:overlayOptions afterDelay:3];
+    [self performSelector:@selector(displayOverlayLater:) withObject:overlayOptions afterDelay:0.1];
     [overlayOptions release];
 
     // SYSTEMS ARE GO!!

@@ -30,7 +30,7 @@ program hwengine;
 {$ENDIF}
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
-     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions, uMobile,
+     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
      sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted;
 
 {$IFDEF HWLIBRARY}
@@ -256,10 +256,9 @@ begin
     ShowMainWindow();
 {$ENDIF}
 
-    AddProgress();
-
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
+    AddProgress();
 
     LoadLocale(Pathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if (Length(cLocaleFName) > 6) then cLocale := Copy(cLocaleFName,1,5)
@@ -281,10 +280,7 @@ begin
         SendIPCAndWaitReply('C');        // ask for game config
         end
     else
-        begin
         LoadRecordFromFile(recordFileName);
-        uMobile.SaveBeganSynching();
-        end;
 
     ScriptOnGameInit;
 

@@ -24,10 +24,10 @@ interface
 {$IFDEF IPHONEOS}
 (*  iOS calls written in ObjcExports.m  *)
 procedure clearView; cdecl; external;
-procedure startSpinning; cdecl; external;
-procedure stopSpinning; cdecl; external;
-procedure replayBegan; cdecl; external;
-procedure replayFinished; cdecl; external;
+procedure startSpinningProgress; cdecl; external;
+procedure stopSpinningProgress; cdecl; external;
+procedure saveBeganSynching; cdecl; external;
+procedure saveFinishedSynching; cdecl; external;
 procedure setGameRunning(arg: boolean); cdecl; external;
 procedure updateVisualsNewTurn; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
@@ -36,12 +36,12 @@ procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
 function  isPhone: Boolean; inline;
 procedure performRumble; inline;
 
-procedure AddProgress; inline;
-procedure FinishProgress; inline;
+procedure GameLoading; inline;
+procedure GameLoaded; inline;
 procedure AmmoUpdate; // don't inline
 procedure NewTurnBeginning; inline;
-procedure SaveBeganSynching; inline;
-procedure SaveFinishedSynching; inline;
+procedure SaveBegan; inline;
+procedure SaveFinished; inline;
 
 implementation
 uses uVariables;
@@ -62,17 +62,17 @@ begin
 {$ENDIF}
 end;
 
-procedure AddProgress; inline;
+procedure GameLoading; inline;
 begin
 {$IFDEF IPHONEOS}
-    startSpinning();
+    startSpinningProgress();
 {$ENDIF}
 end;
 
-procedure FinishProgress; inline;
+procedure GameLoaded; inline;
 begin
 {$IFDEF IPHONEOS}
-    stopSpinning();
+    stopSpinningProgress();
 {$ENDIF}
 end;
 
@@ -95,17 +95,17 @@ begin
     AmmoUpdate();
 end;
 
-procedure SaveBeganSynching; inline;
+procedure SaveBegan; inline;
 begin
 {$IFDEF IPHONEOS}
-    replayBegan();
+    saveBeganSynching();
 {$ENDIF}
 end;
 
-procedure SaveFinishedSynching; inline;
+procedure SaveFinished; inline;
 begin
 {$IFDEF IPHONEOS}
-    replayFinished();
+    saveFinishedSynching();
 {$ENDIF}
 end;
 

@@ -672,7 +672,7 @@ begin
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
 
-        uMobile.AddProgress();
+        uMobile.GameLoading();
     end;
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
@@ -700,7 +700,7 @@ procedure FinishProgress;
 begin
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
-    uMobile.FinishProgress();
+    uMobile.GameLoaded();
 end;
 
 function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;

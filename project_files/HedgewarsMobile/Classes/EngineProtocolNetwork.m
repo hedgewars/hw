@@ -396,6 +396,7 @@
             case 'q':
                 // game ended, can remove the savefile and the trailing overlay (when dualhead)
                 [self gameHasEndedWithStats:statsArray];
+                [statsArray release];
                 break;
             case 'Q':
                 // game exited but not completed, nothing to do (just don't save the message)
