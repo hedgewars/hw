@@ -240,21 +240,21 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 619598181364BCD200B429B6 /* Tremor.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D /* libTremor.a */;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = libTremor;
 		};
 		619599431364C82B00B429B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6195993F1364C82B00B429B6 /* Lua.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D /* libLua.a */;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = libLua;
 		};
 		619599BE1364E65900B429B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 619599BA1364E65900B429B6 /* Freetype.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D /* libFreetype.a */;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = libFreetype;
 		};
 		61B7A54D12FA129F0051E14E /* PBXContainerItemProxy */ = {

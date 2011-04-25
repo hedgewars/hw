@@ -4811,7 +4811,6 @@ end;
 procedure doStepStructure(Gear: PGear);
 var 
     x, y: LongInt;
-    dX, dY: HWFloat;
     hog: PHedgehog;
 begin
     if (Gear^.Hedgehog <> nil) and (Gear^.Tag = TotalRounds) then
