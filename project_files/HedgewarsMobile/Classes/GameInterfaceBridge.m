@@ -177,6 +177,10 @@
 
     // warn our host that it's going to be visible again
     [self.parentController viewWillAppear:YES];
+
+    // release the network manager and the savepath as they are not needed anymore
+    [self.engineProtocol release];
+    [self.savePath release];
 }
 
 // set up variables for a local game
@@ -185,8 +189,7 @@
 
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
-    NSString *newDateString = [outputFormatter stringFromDate:[NSDate date]];
-    self.savePath = [SAVES_DIRECTORY() stringByAppendingFormat:@"%@.hws", newDateString];
+    self.savePath = [[NSString alloc] initWithFormat:@"%@%@.hws",SAVES_DIRECTORY(),[outputFormatter stringFromDate:[NSDate date]]];
     [outputFormatter release];
 
     // in the rare case in which a savefile with the same name exists the older one must be removed (or it gets corrupted)

@@ -33,8 +33,7 @@ BOOL savedGame;
 NSInteger grenadeTime;
 // the reference to the newMenu instance
 OverlayViewController *overlay_instance;
-// the audiosession must be initialized before using properties
-BOOL gAudioSessionInited = NO;
+
 
 #pragma mark -
 #pragma mark functions called like oop
@@ -86,21 +85,18 @@ void stopSpinningProgress() {
 
 void clearView() {
     // don't use any engine calls here as this function is called every time the ammomenu is opened
-    UIWindow *theWindow = (IS_DUALHEAD()) ? [HedgewarsAppDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow];
-    UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
-    UISegmentedControl *theSegment = (UISegmentedControl *)[theWindow viewWithTag:GRENADE_TAG];
-
     [UIView beginAnimations:@"remove button" context:NULL];
     [UIView setAnimationDuration:ANIMATION_DURATION];
-    theButton.alpha = 0;
-    theSegment.alpha = 0;
+    overlay_instance.confirmButton.alpha = 0;
+    overlay_instance.grenadeTimeSegment.alpha = 0;
     [UIView commitAnimations];
 
-    if (theButton)
-        [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:ANIMATION_DURATION];
-    if (theSegment)
-        [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:ANIMATION_DURATION];
-
+    if (overlay_instance.confirmButton)
+        [overlay_instance.confirmButton performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
+    if (overlay_instance.grenadeTimeSegment) {
+        [overlay_instance.grenadeTimeSegment performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
+        overlay_instance.grenadeTimeSegment.tag = 0;
+    }
     grenadeTime = 2;
 }
 

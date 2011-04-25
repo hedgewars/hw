@@ -396,7 +396,6 @@
             case 'q':
                 // game ended, can remove the savefile and the trailing overlay (when dualhead)
                 [self gameHasEndedWithStats:statsArray];
-                [statsArray release];
                 break;
             case 'Q':
                 // game exited but not completed, nothing to do (just don't save the message)
@@ -408,6 +407,8 @@
     }
     DLog(@"Engine exited, ending thread");
     [self.stream close];
+    [self.stream release];
+    [statsArray release];
 
     // Close the client socket
     SDLNet_TCP_Close(csd);

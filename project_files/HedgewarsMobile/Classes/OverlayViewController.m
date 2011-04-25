@@ -35,12 +35,10 @@
 #define doDim()             [dimTimer setFireDate: (IS_DUALHEAD()) ? HIDING_TIME_NEVER : HIDING_TIME_DEFAULT]
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
-#define removeInputWidget() [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview]; \
-                            [[self.view viewWithTag:GRENADE_TAG] removeFromSuperview];
-
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, useClassicMenu, initialScreenCount, initialOrientation, lowerIndicator, savesIndicator;
+@synthesize popoverController, popupMenu, helpPage, amvc, useClassicMenu, initialScreenCount, initialOrientation,
+            lowerIndicator, savesIndicator, confirmButton, grenadeTimeSegment;
 
 #pragma mark -
 #pragma mark rotation
@@ -192,6 +190,10 @@
         self.lowerIndicator = nil;
     if (self.savesIndicator.superview == nil)
         self.savesIndicator = nil;
+    if (self.confirmButton.superview == nil)
+        self.confirmButton = nil;
+    if (self.grenadeTimeSegment.superview == nil)
+        self.grenadeTimeSegment = nil;
     if (IS_IPAD())
         if (((UIPopoverController *)self.popoverController).contentViewController.view.superview == nil)
             self.popoverController = nil;
@@ -207,6 +209,8 @@
     [amvc release];
     [lowerIndicator release];
     [savesIndicator release];
+    [confirmButton release];
+    [grenadeTimeSegment release];
     // dimTimer is autoreleased
     [super dealloc];
 }
@@ -342,13 +346,12 @@
                 doDim();
                 [self.amvc disappear];
             }
-            removeInputWidget();
+            clearView();
             [self showPopover];
             break;
         case 11:
             playSound(@"clickSound");
             clearView();
-            removeInputWidget();
             
             if (IS_DUALHEAD() || self.useClassicMenu == NO) {
                 if (self.amvc == nil)
@@ -378,7 +381,7 @@
 
 -(void) sendHWClick {
     HW_click();
-    removeInputWidget();
+    clearView();
     doDim();
 }
 
@@ -491,9 +494,6 @@
     // reset default dimming
     doDim();
 
-    // remove other widgets
-    removeInputWidget();
-
     HW_setPianoSound([allTouches count]);
 
     switch ([allTouches count]) {
@@ -535,18 +535,20 @@
                     HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
 
                     // draw the button at the last touched point (which is the current position)
-                    UIButton *tapAgain = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                    tapAgain.frame = CGRectMake(currentPosition.x - 75, currentPosition.y + 25, 150, 40);
-                    tapAgain.tag = CONFIRMATION_TAG;
-                    tapAgain.alpha = 0;
-                    [tapAgain addTarget:self action:@selector(sendHWClick) forControlEvents:UIControlEventTouchUpInside];
-                    [tapAgain setTitle:NSLocalizedString(@"Tap to set!",@"from the overlay") forState:UIControlStateNormal];
-                    [self.view addSubview:tapAgain];
+                    if (self.confirmButton == nil) {
+                        UIButton *tapAgain = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                        [tapAgain addTarget:self action:@selector(sendHWClick) forControlEvents:UIControlEventTouchUpInside];
+                        [tapAgain setTitle:NSLocalizedString(@"Set!",@"on the overlay") forState:UIControlStateNormal];
+                        self.confirmButton = tapAgain;
+                    }
+                    self.confirmButton.alpha = 0;
+                    self.confirmButton.frame = CGRectMake(currentPosition.x - 75, currentPosition.y + 25, 150, 40);
+                    [self.view addSubview:self.confirmButton];
 
                     // animation ftw!
                     [UIView beginAnimations:@"inserting button" context:NULL];
                     [UIView setAnimationDuration:ANIMATION_DURATION];
-                    [self.view viewWithTag:CONFIRMATION_TAG].alpha = 1;
+                    self.confirmButton.alpha = 1;
                     [UIView commitAnimations];
 
                     // keep the overlay active, or the button will fade
@@ -554,38 +556,38 @@
                     doNotDim();
                 } else
                     if (HW_isWeaponTimerable()) {
-                        if (isSegmentVisible) {
-                            UISegmentedControl *grenadeTime = (UISegmentedControl *)[self.view viewWithTag:GRENADE_TAG];
-
+                        if (self.grenadeTimeSegment.tag != 0) {
                             [UIView beginAnimations:@"removing segmented control" context:NULL];
                             [UIView setAnimationDuration:ANIMATION_DURATION];
-                            [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-                            grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
+                            self.grenadeTimeSegment.alpha = 0;
                             [UIView commitAnimations];
 
-                            [grenadeTime performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
+                            [self.grenadeTimeSegment performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
+                            self.grenadeTimeSegment.tag = 0;
                         } else {
-                            NSArray *items = [[NSArray alloc] initWithObjects:@"1",@"2",@"3",@"4",@"5",nil];
-                            UISegmentedControl *grenadeTime = [[UISegmentedControl alloc] initWithItems:items];
-                            [items release];
-
-                            [grenadeTime addTarget:self action:@selector(setGrenadeTime:) forControlEvents:UIControlEventValueChanged];
-                            grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
-                            grenadeTime.selectedSegmentIndex = cachedGrenadeTime();
-                            grenadeTime.tag = GRENADE_TAG;
-                            [self.view addSubview:grenadeTime];
-                            [grenadeTime release];
+                            if (self.grenadeTimeSegment == nil) {
+                                NSArray *items = [[NSArray alloc] initWithObjects:@"1",@"2",@"3",@"4",@"5",nil];
+                                UISegmentedControl *grenadeSegment = [[UISegmentedControl alloc] initWithItems:items];
+                                [items release];
+                                [grenadeSegment addTarget:self action:@selector(setGrenadeTime:) forControlEvents:UIControlEventValueChanged];
+                                self.grenadeTimeSegment = grenadeSegment;
+                                [grenadeSegment release];
+                            }
+                            self.grenadeTimeSegment.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
+                            self.grenadeTimeSegment.selectedSegmentIndex = cachedGrenadeTime();
+                            self.grenadeTimeSegment.alpha = 1;
+                            [self.view addSubview:self.grenadeTimeSegment];
 
                             [UIView beginAnimations:@"inserting segmented control" context:NULL];
                             [UIView setAnimationDuration:ANIMATION_DURATION];
                             [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-                            grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width - 100, 250, 50);
+                            self.grenadeTimeSegment.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width - 100, 250, 50);
                             [UIView commitAnimations];
 
+                            self.grenadeTimeSegment.tag++;
                             [self activateOverlay];
                             doNotDim();
                         }
-                        isSegmentVisible = !isSegmentVisible;
                     } else
                         if (HW_isWeaponSwitch())
                             HW_tab();

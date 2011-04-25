@@ -44,7 +44,6 @@
     // ths touch section
     CGFloat initialDistanceForPinching;
     CGPoint startingPoint;
-    BOOL isSegmentVisible;
     BOOL isAttacking;
     
     // stuff initialized externally
@@ -54,9 +53,11 @@
     // dual head support
     NSInteger initialScreenCount;
 
-    // spinning icons low
+    // various other widgets
     UIActivityIndicatorView *lowerIndicator;
     UIActivityIndicatorView *savesIndicator;
+    UIButton *confirmButton;
+    UISegmentedControl *grenadeTimeSegment;
 }
 
 @property (nonatomic,retain) id popoverController;
@@ -65,9 +66,13 @@
 @property (nonatomic,retain) AmmoMenuViewController *amvc;
 @property (nonatomic,retain) UIActivityIndicatorView *lowerIndicator;
 @property (nonatomic,retain) UIActivityIndicatorView *savesIndicator;
+@property (nonatomic,retain) UIButton *confirmButton;
+@property (nonatomic,retain) UISegmentedControl *grenadeTimeSegment;
+
 @property (assign) BOOL useClassicMenu;
 @property (assign) NSInteger initialOrientation;
 @property (assign) NSInteger initialScreenCount;
+
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
