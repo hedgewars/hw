@@ -1,6 +1,39 @@
-file(GLOB BritishSounds *.ogg)
+file(GLOB VoiceSounds
+Boring.ogg
+Byebye.ogg
+Comeonthen.ogg
+Coward.ogg
+Enemydown.ogg
+Firepunch*.ogg
+Flawless.ogg
+Hurry.ogg
+Illgetyou.ogg
+Incoming.ogg
+Jump*.ogg
+JustYouwait.ogg
+Kamikaze.ogg
+Laugh.ogg
+Melon.ogg
+Missed.ogg
+Nooo.ogg
+Nutter.ogg
+Ooff*.ogg
+Oops.ogg
+Ow*.ogg
+PoisonCough.ogg
+PoisonMoan.ogg
+Reinforcements.ogg
+Sameteam.ogg
+Stupid.ogg
+Takecover.ogg
+Traitor.ogg
+Uh-oh.ogg
+Victory.ogg
+Watchit.ogg
+Yessir.ogg
+Youllregretthat.ogg
+)
 
 install(FILES
-	${BritishSounds}
+	${VoiceSounds}
 	DESTINATION ${SHAREPATH}Data/Sounds/voices/British)
-
