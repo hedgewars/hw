@@ -176,7 +176,7 @@ var f: file;
     s: shortstring absolute buf;
 begin
 
-uMobile.SaveBeganSynching();
+uMobile.SaveBegan();
 
 // set RDNLY on file open
 filemode:= 0;

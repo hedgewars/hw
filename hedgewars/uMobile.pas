@@ -26,8 +26,8 @@ interface
 procedure clearView; cdecl; external;
 procedure startSpinningProgress; cdecl; external;
 procedure stopSpinningProgress; cdecl; external;
-procedure saveBeganSynching; cdecl; external;
-procedure saveFinishedSynching; cdecl; external;
+procedure saveBegan; cdecl; external;
+procedure saveFinished; cdecl; external;
 procedure setGameRunning(arg: boolean); cdecl; external;
 procedure updateVisualsNewTurn; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
