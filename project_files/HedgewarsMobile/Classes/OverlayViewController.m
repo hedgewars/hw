@@ -26,8 +26,6 @@
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "CGPointUtils.h"
-#import "SDL_config_iphoneos.h"
-#import "SDL_mouse.h"
 #import "ObjcExports.h"
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
@@ -55,8 +53,14 @@
     if (isGameRunning() == NO)
         return;
 
+    UIView *sdlView = nil;
+    for (UIView *oneView in [[[UIApplication sharedApplication] keyWindow] subviews])
+        if ([oneView isMemberOfClass:[SDL_uikitopenglview class]]) {
+            sdlView = (UIView *)oneView;
+            break;
+        }
+
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
     NSInteger angle_left = (self.initialOrientation == UIInterfaceOrientationLandscapeLeft) ? 180 : 0;
     NSInteger angle_right = (self.initialOrientation == UIInterfaceOrientationLandscapeLeft) ? 0 : 180;
 

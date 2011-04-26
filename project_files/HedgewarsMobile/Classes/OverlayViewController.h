@@ -20,7 +20,6 @@
 
 
 #import <UIKit/UIKit.h>
-#import "SDL_sysvideo.h"
 
 @class InGameMenuViewController;
 @class HelpPageViewController;

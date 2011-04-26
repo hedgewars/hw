@@ -158,7 +158,7 @@
                                     [NSNumber numberWithInt:self.parentController.interfaceOrientation],@"orientation",
                                     [self.systemSettings objectForKey:@"menu"],@"menu",
                                     nil];
-    [self performSelector:@selector(displayOverlayLater:) withObject:overlayOptions afterDelay:0.1];
+    [self performSelector:@selector(displayOverlayLater:) withObject:overlayOptions afterDelay:3];
     [overlayOptions release];
 
     // SYSTEMS ARE GO!!
