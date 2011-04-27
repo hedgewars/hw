@@ -173,7 +173,7 @@
     int result = 0;
     int mask = 0x00000004;
 
-    // pack the gameflags in a single var and send it
+    // pack the game modifiers in a single var and send it
     for (NSNumber *value in gamemodArray) {
         if ([value boolValue] == YES)
             result |= mask;
@@ -183,15 +183,12 @@
     [self sendToEngine:flags];
     [flags release];
 
-    // game modifiers
-    NSString *path = [[NSString alloc] initWithFormat:@"%@/basicFlags_en.plist",IFRONTEND_DIRECTORY()];
-    NSArray *mods = [[NSArray alloc] initWithContentsOfFile:path];
-    [path release];
-
+    // basic game flags
     result = [[basicArray objectAtIndex:0] intValue];
+    NSArray *basic = [[NSArray alloc] initWithContentsOfFile:BASICFLAGS_FILE()];
 
     for (int i = 1; i < [basicArray count]; i++) {
-        NSDictionary *dict = [mods objectAtIndex:i];
+        NSDictionary *dict = [basic objectAtIndex:i];
         NSString *command = [dict objectForKey:@"command"];
         NSInteger value = [[basicArray objectAtIndex:i] intValue];
         if ([[dict objectForKey:@"checkOverMax"] boolValue] && value >= [[dict objectForKey:@"max"] intValue])
@@ -202,7 +199,7 @@
         [self sendToEngine:strToSend];
         [strToSend release];
     }
-    [mods release];
+    [basic release];
 
     [schemeDictionary release];
     return result;

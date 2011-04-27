@@ -183,7 +183,6 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
 
 void createSchemeNamed (NSString *nameWithoutExt) {
     NSString *schemesDirectory = SCHEMES_DIRECTORY();
-    NSString *path = nil;
 
     if (![[NSFileManager defaultManager] fileExistsAtPath: schemesDirectory]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:schemesDirectory
@@ -193,15 +192,13 @@ void createSchemeNamed (NSString *nameWithoutExt) {
     }
 
     // load data to get the size of the arrays and their default values
-    path = [NSString stringWithFormat:@"%@/basicFlags_en.plist",IFRONTEND_DIRECTORY()];
-    NSArray *basicSettings = [[NSArray alloc] initWithContentsOfFile:path];
+    NSArray *basicSettings = [[NSArray alloc] initWithContentsOfFile:BASICFLAGS_FILE()];
     NSMutableArray *basicArray  = [[NSMutableArray alloc] initWithCapacity:[basicSettings count]];
     for (NSDictionary *basicDict in basicSettings)
         [basicArray addObject:[basicDict objectForKey:@"default"]];
     [basicSettings release];
 
-    path = [NSString stringWithFormat:@"%@/gameFlags_en.plist",IFRONTEND_DIRECTORY()];
-    NSArray *mods = [[NSArray alloc] initWithContentsOfFile:path];
+    NSArray *mods = [[NSArray alloc] initWithContentsOfFile:GAMEMODS_FILE()];
     NSMutableArray *gamemodArray= [[NSMutableArray alloc] initWithCapacity:[mods count]];
     for (int i = 0; i < [mods count]; i++)
         [gamemodArray addObject:[NSNumber numberWithBool:NO]];
