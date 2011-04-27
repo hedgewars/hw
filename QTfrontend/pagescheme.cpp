@@ -158,7 +158,7 @@ PageScheme::PageScheme(QWidget* parent) :
     glGMLayout->addWidget(TBW_morewind,4,2,1,1);
 
     TBW_tagteam = new ToggleButtonWidget(gbGameModes, ":/res/btnTagTeam.png");
-    TBW_tagteam->setToolTip("<b>" + ToggleButtonWidget::tr("Tag Team") + "</b>:<br />" + tr("Teams in each clan takes successive turns but have to share turn time."));
+    TBW_tagteam->setToolTip("<b>" + ToggleButtonWidget::tr("Tag Team") + "</b>:<br />" + tr("Teams in each clan take successive turns sharing their turn time."));
     glGMLayout->addWidget(TBW_tagteam,4,3,1,1);
 
     // Right
