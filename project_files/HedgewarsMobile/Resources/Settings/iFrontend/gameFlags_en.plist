@@ -186,5 +186,13 @@
 		<key>title</key>
 		<string>More Wind</string>
 	</dict>
+	<dict>
+		<key>description</key>
+		<string>Clan teams take turns sharing their time</string>
+		<key>image</key>
+		<string>TagTeam</string>
+		<key>title</key>
+		<string>Tag Team</string>
+	</dict>
 </array>
 </plist>
