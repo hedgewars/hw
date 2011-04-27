@@ -61,9 +61,9 @@ begin
 
     // Mix colors
     nAlpha := min(255, oAlpha + nAlpha);
-    nRed   := ((oRed * oAlpha) + (nRed * (255-oAlpha))) div 255;
-    nGreen := ((oGreen * oAlpha) + (nGreen * (255-oAlpha))) div 255;
-    nBlue  := ((oBlue * oAlpha) + (nBlue * (255-oAlpha))) div 255;
+    nRed   := ((oRed * oAlpha) + (nRed * Byte(255-oAlpha))) div 255;
+    nGreen := ((oGreen * oAlpha) + (nGreen * Byte(255-oAlpha))) div 255;
+    nBlue  := ((oBlue * oAlpha) + (nBlue * Byte(255-oAlpha))) div 255;
 
     addBgColor := (nAlpha shl AShift) or (nRed shl RShift) or (nGreen shl GShift) or (nBlue shl BShift);
 end;

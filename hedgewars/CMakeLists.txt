@@ -57,6 +57,7 @@ set(engine_sources
     uTextures.pas
     uTypes.pas
     uUtils.pas
+    uVariables.pas
     uVisualGears.pas
     uWorld.pas
     GSHandlers.inc

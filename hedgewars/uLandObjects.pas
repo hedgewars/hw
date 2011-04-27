@@ -368,7 +368,8 @@ end;
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
 var s, key: shortstring;
     f: textfile;
-    i, ii: LongInt;
+    i: LongInt;
+    ii: Longword;
     c1, c2: TSDL_Color;
 
     procedure CheckRect(Width, Height, x, y, w, h: LongWord);
@@ -458,7 +459,7 @@ while not eof(f) do
     else if key = 'music' then MusicFN:= Trim(s)
     else if key = 'clouds' then
         begin
-        cCloudsNumber:= StrToInt(Trim(s)) * cScreenSpace div LAND_WIDTH;
+        cCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div LAND_WIDTH;
         cSDCloudsNumber:= cCloudsNumber
         end
     else if key = 'object' then
@@ -574,7 +575,7 @@ while not eof(f) do
         SDWaterColorArray[3]:= SDWaterColorArray[2];
         end
     else if key = 'sd-water-opacity' then cSDWaterOpacity:= StrToInt(Trim(s))
-    else if key = 'sd-clouds' then cSDCloudsNumber:= StrToInt(Trim(s)) * cScreenSpace div LAND_WIDTH
+    else if key = 'sd-clouds' then cSDCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div LAND_WIDTH
     else if key = 'sd-flakes' then
         begin
         i:= Pos(',', s);

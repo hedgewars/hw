@@ -684,7 +684,7 @@ with Gear^ do
                 if tmp > round(dY) then tdY:= -1;
                 if tmp > 255 then tmp := 255;
                 if tmp < 0 then tmp := 0;
-                Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or tmp
+                Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or Longword(tmp)
                 end
             end
 end;

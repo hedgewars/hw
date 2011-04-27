@@ -597,7 +597,7 @@ procedure AddClouds;
 var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber - 1 do
-    AddVisualGear(cLeftScreenBorder + i * cScreenSpace div (cCloudsNumber + 1), LAND_HEIGHT-1184, vgtCloud)
+    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
 end;
 
 procedure ChangeToSDClouds;
@@ -615,7 +615,7 @@ while vg <> nil do
         end
     else vg:= vg^.NextGear;
 for i:= 0 to cSDCloudsNumber - 1 do
-    AddVisualGear(cLeftScreenBorder + i * cScreenSpace div (cSDCloudsNumber + 1), LAND_HEIGHT-1184, vgtCloud)
+    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
 end;
 
 procedure AddFlakes;
