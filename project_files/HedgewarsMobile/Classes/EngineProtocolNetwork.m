@@ -183,7 +183,7 @@
     [self sendToEngine:flags];
     [flags release];
 
-    /* basic game flags */
+    // game modifiers
     NSString *path = [[NSString alloc] initWithFormat:@"%@/basicFlags_en.plist",IFRONTEND_DIRECTORY()];
     NSArray *mods = [[NSArray alloc] initWithContentsOfFile:path];
     [path release];

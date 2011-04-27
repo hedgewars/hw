@@ -120,7 +120,7 @@
 		<key>min</key>
 		<integer>25</integer>
 		<key>title</key>
-		<string>Rope Length</string>
+		<string>Rope Length (%)</string>
 	</dict>
 	<dict>
 		<key>checkOverMax</key>
@@ -156,7 +156,7 @@
 		<key>min</key>
 		<integer>0</integer>
 		<key>title</key>
-		<string>Health Kit Probability</string>
+		<string>Health Kit Probability (%)</string>
 	</dict>
 	<dict>
 		<key>checkOverMax</key>
@@ -228,7 +228,7 @@
 		<key>min</key>
 		<integer>0</integer>
 		<key>title</key>
-		<string>Dud Mines Probability</string>
+		<string>Dud Mines Probability (%)</string>
 	</dict>
 	<dict>
 		<key>checkOverMax</key>
@@ -247,6 +247,24 @@
 		<integer>0</integer>
 		<key>title</key>
 		<string>Explosives</string>
+	</dict>
+	<dict>
+		<key>checkOverMax</key>
+		<false/>
+		<key>times1000</key>
+		<false/>
+		<key>command</key>
+		<string>e$getawaytime</string>
+		<key>default</key>
+		<integer>100</integer>
+		<key>image</key>
+		<string>Time</string>
+		<key>max</key>
+		<integer>999</integer>
+		<key>min</key>
+		<integer>0</integer>
+		<key>title</key>
+		<string>Get Away Time (%)</string>
 	</dict>
 </array>
 </plist>

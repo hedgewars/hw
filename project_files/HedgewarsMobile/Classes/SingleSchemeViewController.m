@@ -193,6 +193,7 @@
 
             UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
             cellLabel.text = [[self.basicSettingList objectAtIndex:row] objectForKey:@"title"];
+            cellLabel.adjustsFontSizeToFitWidth = YES;
 
             // can't use the viewWithTag method because row is dynamic
             UISlider *cellSlider = nil;
