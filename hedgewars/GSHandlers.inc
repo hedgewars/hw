@@ -615,7 +615,7 @@ else if GameTicks and $7 = 0 then
             end;
 
         inc(Health, 8);
-        if Health > vobFrameTicks then
+        if longword(Health) > vobFrameTicks then
             begin
             dec(Health, vobFrameTicks);
             inc(Timer);

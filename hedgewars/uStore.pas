@@ -510,26 +510,23 @@ procedure SetupOpenGL;
 {$IFNDEF IPHONEOS}
 var vendor: shortstring;
 {$IFDEF DARWIN}
-    one: LongInt;
+const one = 1;
 {$ENDIF}
 {$ENDIF}
 begin
 
 {$IFDEF IPHONEOS}
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0); // no double buffering
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
     SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
 {$IFNDEF SDL13}
 // this attribute is default in 1.3 and must be enabled in MacOSX
-    if (cReducedQuality and rqDesyncVBlank) <> 0 then
-        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0)
-    else
-        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, ((cReducedQuality and rqDesyncVBlank) = 0))
+
 {$IFDEF DARWIN}
 // fixes vsync in Snow Leopard
-    one:= 1;
     CGLSetParameter(CGLGetCurrentContext(), 222, @one);
 {$ENDIF}
 {$ENDIF}

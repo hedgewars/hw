@@ -486,7 +486,7 @@ with Gear^.Hedgehog^ do
 
 Gear^.Hedgehog^.SpeechGear:= Gear;
 
-Gear^.Timer:= max(Length(Gear^.Text) * 150, 3000);
+Gear^.Timer:= max(LongInt(Length(Gear^.Text)) * 150, 3000);
 
 Gear^.Tex:= RenderSpeechBubbleTex(Gear^.Text, Gear^.FrameTicks, fnt16);
 
