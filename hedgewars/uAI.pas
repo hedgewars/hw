@@ -86,11 +86,13 @@ for i:= 0 to Pred(Targets.Count) do
               begin
               BestActions:= Actions;
               inc(BestActions.Score, Score);
+         addfilelog('AI: curr score ' + inttostr(bestactions.score));
+
+              if (ap.Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
+              else if (ap.Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200, 0, 0);
 
               AddAction(BestActions, aia_Weapon, Longword(a), 300 + random(400), 0, 0);
               if (ap.Time <> 0) then AddAction(BestActions, aia_Timer, ap.Time div 1000, 400, 0, 0);
-              if (ap.Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
-              else if (ap.Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200, 0, 0);
               if (Ammoz[a].Ammo.Propz and ammoprop_NoCrosshair) = 0 then
                  begin
                  ap.Angle:= LongInt(Me^.Angle) - Abs(ap.Angle);
@@ -281,6 +283,7 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
       if (StartTicks > GameTicks - 1500) and not StopThinking then SDL_Delay(2000);
       if BestActions.Score < -1023 then
          begin
+         addfilelog('AI: best score ' + inttostr(bestactions.score));
          BestActions.Count:= 0;
          AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
          end;
@@ -311,7 +314,7 @@ Me^.Message:= 0;
 
 BestActions.Count:= 0;
 BestActions.Pos:= 0;
-BestActions.Score:= Low(integer);
+BestActions.Score:= Low(LongInt);
 
 StopThinking:= false;
 ThinkingHH:= Me;

@@ -26,6 +26,9 @@
 #define SETTINGS_FILE()         [DOCUMENTS_FOLDER() stringByAppendingString:@"/settings.plist"]
 #define DEBUG_FILE()            [DOCUMENTS_FOLDER() stringByAppendingString:@"/hw-game.log"]
 #define HEDGEHOG_FILE()         [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/Images/hedgehog.png"]
+#define BASICFLAGS_FILE()       [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/basicFlags.plist"]
+#define GAMEMODS_FILE()         [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/gameMods.plist"]
+#define CREDITS_FILE()          [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/credits.plist"]
 
 #define TEAMS_DIRECTORY()       [DOCUMENTS_FOLDER() stringByAppendingString:@"/Teams/"]
 #define WEAPONS_DIRECTORY()     [DOCUMENTS_FOLDER() stringByAppendingString:@"/Weapons/"]
@@ -44,7 +47,6 @@
 #define MAPS_DIRECTORY()        [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Maps/"]
 #define MISSIONS_DIRECTORY()    [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Maps/"]
 #define LOCALE_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Locale/"]
-#define IFRONTEND_DIRECTORY()   [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/iFrontend/"]
 
 #define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory");
 #define MSG_DIDUNLOAD()         DLog(@"unloaded");
@@ -59,6 +61,7 @@
 #define IS_IPAD()               (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define IS_NOT_POWERFUL()       ([modelType() hasPrefix:@"iPhone1"] || [modelType() hasPrefix:@"iPod1,1"] || [modelType() hasPrefix:@"iPod2,1"])
 #define IS_NOT_VERY_POWERFUL()  ([modelType() hasPrefix:@"iPad1"] || [modelType() hasPrefix:@"iPhone2"] || [modelType() hasPrefix:@"iPod3"] || [modelType() hasPrefix:@"iPod4"] )
+#define IS_VERY_POWERFUL()      (IS_NOT_POWERFUL() == NO && IS_NOT_VERY_POWERFUL() == NO)
 
 #define DEFAULT_NETGAME_PORT    46631
 

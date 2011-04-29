@@ -20,8 +20,8 @@
 
 
 #import "ObjcExports.h"
+#import "OverlayViewController.h"
 #import "AmmoMenuViewController.h"
-#import "AudioToolbox/AudioToolbox.h"
 
 #pragma mark -
 #pragma mark internal variables
@@ -32,13 +32,13 @@ BOOL savedGame;
 // cache the grenade time
 NSInteger grenadeTime;
 // the reference to the newMenu instance
-AmmoMenuViewController *amvc_instance;
-// the audiosession must be initialized before using properties
-BOOL gAudioSessionInited = NO;
+OverlayViewController *overlay_instance;
+
 
 #pragma mark -
 #pragma mark functions called like oop
-void objcExportsInit() {
+void objcExportsInit(OverlayViewController* instance) {
+    overlay_instance = instance;
     gameRunning = NO;
     savedGame = NO;
     grenadeTime = 2;
@@ -60,36 +60,24 @@ void inline setGrenadeTime(NSInteger value) {
     grenadeTime = value;
 }
 
-void inline setAmmoMenuInstance(AmmoMenuViewController *instance) {
-    amvc_instance = instance;
-}
-
 #pragma mark -
 #pragma mark functions called by pascal code
-void startSpinning() {
+void startSpinningProgress() {
     gameRunning = NO;
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    indicator.tag = ACTIVITYINDICATOR_TAG;
-    int offset;
-    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft)
-        offset = -120;
-    else
-        offset = 120;
-    if (IS_DUALHEAD())
-        indicator.center = CGPointMake(theWindow.frame.size.width/2, theWindow.frame.size.height/2 + offset);
-    else
-        indicator.center = CGPointMake(theWindow.frame.size.width/2 + offset, theWindow.frame.size.height/2);
-    indicator.hidesWhenStopped = YES;
-    [indicator startAnimating];
-    [theWindow addSubview:indicator];
-    [indicator release];
+    overlay_instance.lowerIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+
+    CGPoint center = overlay_instance.view.center;
+    overlay_instance.lowerIndicator.center = (IS_DUALHEAD() ? CGPointMake(center.y, center.x)
+                                              : CGPointMake(center.y, center.x * 5/3));
+
+    [overlay_instance.lowerIndicator startAnimating];
+    [overlay_instance.view addSubview:overlay_instance.lowerIndicator];
+    [overlay_instance.lowerIndicator release];
 }
 
-void stopSpinning() {
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[theWindow viewWithTag:ACTIVITYINDICATOR_TAG];
-    [indicator stopAnimating];
+void stopSpinningProgress() {
+    [overlay_instance.lowerIndicator stopAnimating];
+    [overlay_instance.lowerIndicator removeFromSuperview];
     HW_zoomSet(1.7);
     if (savedGame == NO)
         gameRunning = YES;
@@ -97,67 +85,60 @@ void stopSpinning() {
 
 void clearView() {
     // don't use any engine calls here as this function is called every time the ammomenu is opened
-    UIWindow *theWindow = (IS_DUALHEAD()) ? [HedgewarsAppDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow];
-    UIButton *theButton = (UIButton *)[theWindow viewWithTag:CONFIRMATION_TAG];
-    UISegmentedControl *theSegment = (UISegmentedControl *)[theWindow viewWithTag:GRENADE_TAG];
-
     [UIView beginAnimations:@"remove button" context:NULL];
     [UIView setAnimationDuration:ANIMATION_DURATION];
-    theButton.alpha = 0;
-    theSegment.alpha = 0;
+    overlay_instance.confirmButton.alpha = 0;
+    overlay_instance.grenadeTimeSegment.alpha = 0;
     [UIView commitAnimations];
 
-    if (theButton)
-        [theWindow performSelector:@selector(removeFromSuperview) withObject:theButton afterDelay:ANIMATION_DURATION];
-    if (theSegment)
-        [theWindow performSelector:@selector(removeFromSuperview) withObject:theSegment afterDelay:ANIMATION_DURATION];
-
+    if (overlay_instance.confirmButton)
+        [overlay_instance.confirmButton performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
+    if (overlay_instance.grenadeTimeSegment) {
+        [overlay_instance.grenadeTimeSegment performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
+        overlay_instance.grenadeTimeSegment.tag = 0;
+    }
     grenadeTime = 2;
 }
 
-void replayBegan() {
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIView *blackView = [[UIView alloc] initWithFrame:theWindow.frame];
-    blackView.backgroundColor = [UIColor blackColor];
-    blackView.alpha = 0.6;
-    blackView.tag = REPLAYBLACKVIEW_TAG;
-    blackView.exclusiveTouch = NO;
-    blackView.multipleTouchEnabled = NO;
-    blackView.userInteractionEnabled = NO;
+void saveBeganSynching() {
+    overlay_instance.view.backgroundColor = [UIColor blackColor];
+    overlay_instance.view.alpha = 0.75;
+    overlay_instance.view.userInteractionEnabled = NO;
 
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    indicator.center = theWindow.center;
-    [indicator startAnimating];
-    [blackView addSubview:indicator];
-    [indicator release];
-    [theWindow addSubview:blackView];
-    [blackView release];
+    overlay_instance.savesIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+
+    CGPoint center = overlay_instance.view.center;
+    overlay_instance.savesIndicator.center = CGPointMake(center.y, center.x);
+    overlay_instance.savesIndicator.hidesWhenStopped = YES;
+
+    [overlay_instance.savesIndicator startAnimating];
+    [overlay_instance.view addSubview:overlay_instance.savesIndicator];
+    [overlay_instance.savesIndicator release];
 
     savedGame = YES;
-    stopSpinning();
+    stopSpinningProgress();
 }
 
-void replayFinished() {
-    UIWindow *theWindow = [[UIApplication sharedApplication] keyWindow];
-    UIView *blackView = (UIView *)[theWindow viewWithTag:REPLAYBLACKVIEW_TAG];
-
-    [UIView beginAnimations:@"removing black" context:NULL];
+void saveFinishedSynching() {
+    [UIView beginAnimations:@"fading from save synch" context:NULL];
     [UIView setAnimationDuration:1];
-    blackView.alpha = 0;
+    overlay_instance.view.backgroundColor = [UIColor clearColor];
+    overlay_instance.view.alpha = 1;
+    overlay_instance.view.userInteractionEnabled = YES;
     [UIView commitAnimations];
-    [theWindow performSelector:@selector(removeFromSuperview) withObject:blackView afterDelay:1];
+
+    [overlay_instance.savesIndicator stopAnimating];
+    [overlay_instance.savesIndicator performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 
     gameRunning = YES;
     savedGame = NO;
 }
 
 void updateVisualsNewTurn(void) {
-    [amvc_instance updateAmmoVisuals];
+    [overlay_instance.amvc updateAmmoVisuals];
 }
 
 // dummy function to prevent linkage fail
 int SDL_main(int argc, char **argv) {
     return 0;
 }
-
-

@@ -24,7 +24,7 @@
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
 #import "HelpPageViewController.h"
-#import "StatsPageViewController.h"
+#import "GameInterfaceBridge.h"
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
 #import "PascalImports.h"
@@ -224,40 +224,13 @@
                                     self.teamConfigViewController.listOfSelectedTeams,@"teams_list",
                                     self.schemeWeaponConfigViewController.selectedScheme,@"scheme",
                                     self.schemeWeaponConfigViewController.selectedWeapon,@"weapon",
-                                    [NSNumber numberWithInt:self.interfaceOrientation],@"orientation",
                                     nil];
 
-    NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      gameDictionary,@"game_dictionary",
-                                      [NSNumber numberWithBool:NO],@"netgame",
-                                      @"",@"savefile",
-                                      nil];
+    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
 
-    // also modify SavedGamesViewController.m
-    StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
-        statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
+    [bridge startLocalGame:gameDictionary];
 
-    NSArray *stats;
-    if (IS_DUALHEAD()) {
-        stats = [[HedgewarsAppDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-        [self presentModalViewController:statsPage animated:NO];
-    } else {
-        [self performSelector:@selector(presentModalViewController:animated:) withObject:statsPage afterDelay:3];
-        stats = [[HedgewarsAppDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-    }
-
-    if ([stats count] <= 1) {
-        DLog(@"%@",stats);
-        [statsPage dismissModalViewControllerAnimated:NO];
-    } else {
-        statsPage.statsArray = stats;
-        [statsPage.tableView reloadData];
-        [statsPage viewWillAppear:YES];
-    }
-
-    [statsPage release];
+    [bridge release];
 }
 
 -(void) loadNiceHogs {

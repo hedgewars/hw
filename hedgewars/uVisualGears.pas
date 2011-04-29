@@ -183,8 +183,8 @@ with gear^ do
     vgtExplPart2: begin
                 t:= random(1024);
                 sp:= 0.001 * (random(95) + 70);
-                dx:= AngleSin(t).QWordValue/4294967296 * sp;
-                dy:= AngleCos(t).QWordValue/4294967296 * sp;
+                dx:= hwFloat2Float(AngleSin(t)) * sp;
+                dy:= hwFloat2Float(AngleCos(t)) * sp;
                 if random(2) = 0 then dx := -dx;
                 if random(2) = 0 then dy := -dy;
                 Frame:= 7 - random(3);
@@ -193,8 +193,8 @@ with gear^ do
         vgtFire: begin
                 t:= random(1024);
                 sp:= 0.001 * (random(85) + 95);
-                dx:= AngleSin(t).QWordValue/4294967296 * sp;
-                dy:= AngleCos(t).QWordValue/4294967296 * sp;
+                dx:= hwFloat2Float(AngleSin(t)) * sp;
+                dy:= hwFloat2Float(AngleCos(t)) * sp;
                 if random(2) = 0 then dx := -dx;
                 if random(2) = 0 then dy := -dy;
                 FrameTicks:= 650 + random(250);
@@ -203,8 +203,8 @@ with gear^ do
          vgtEgg: begin
                 t:= random(1024);
                 sp:= 0.001 * (random(85) + 95);
-                dx:= AngleSin(t).QWordValue/4294967296 * sp;
-                dy:= AngleCos(t).QWordValue/4294967296 * sp;
+                dx:= hwFloat2Float(AngleSin(t)) * sp;
+                dy:= hwFloat2Float(AngleCos(t)) * sp;
                 if random(2) = 0 then dx := -dx;
                 if random(2) = 0 then dy := -dy;
                 FrameTicks:= 650 + random(250);
@@ -284,8 +284,8 @@ with gear^ do
      vgtFeather: begin
                 t:= random(1024);
                 sp:= 0.001 * (random(85) + 95);
-                dx:= AngleSin(t).QWordValue/4294967296 * sp;
-                dy:= AngleCos(t).QWordValue/4294967296 * sp;
+                dx:= hwFloat2Float(AngleSin(t)) * sp;
+                dy:= hwFloat2Float(AngleCos(t)) * sp;
                 if random(2) = 0 then dx := -dx;
                 if random(2) = 0 then dy := -dy;
                 FrameTicks:= 650 + random(250);
@@ -309,8 +309,8 @@ vgtBigExplosion: begin
                 gear^.Frame:= random(4);
                 t:= random(1024);
                 sp:= 0.001 * (random(85) + 47);
-                dx:= AngleSin(t).QWordValue/4294967296 * sp;
-                dy:= AngleCos(t).QWordValue/4294967296 * sp * -2;
+                dx:= hwFloat2Float(AngleSin(t)) * sp;
+                dy:= hwFloat2Float(AngleCos(t)) * sp * -2;
                 if random(2) = 0 then dx := -dx;
                 end;
       vgtNote: begin
@@ -597,7 +597,7 @@ procedure AddClouds;
 var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber - 1 do
-    AddVisualGear(cLeftScreenBorder + i * cScreenSpace div (cCloudsNumber + 1), LAND_HEIGHT-1184, vgtCloud)
+    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
 end;
 
 procedure ChangeToSDClouds;
@@ -615,7 +615,7 @@ while vg <> nil do
         end
     else vg:= vg^.NextGear;
 for i:= 0 to cSDCloudsNumber - 1 do
-    AddVisualGear(cLeftScreenBorder + i * cScreenSpace div (cSDCloudsNumber + 1), LAND_HEIGHT-1184, vgtCloud)
+    AddVisualGear(cLeftScreenBorder + i * LongInt(cScreenSpace div (cSDCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
 end;
 
 procedure AddFlakes;

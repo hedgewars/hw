@@ -41,7 +41,7 @@ procedure NetGetNextCmd;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
+uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug, uMobile;
 
 type PCmd = ^TCmd;
      TCmd = packed record
@@ -175,6 +175,8 @@ var f: file;
     buf: array[0..255] of byte;
     s: shortstring absolute buf;
 begin
+
+uMobile.SaveBegan();
 
 // set RDNLY on file open
 filemode:= 0;

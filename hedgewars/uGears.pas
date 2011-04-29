@@ -1081,7 +1081,6 @@ begin
         end;
     end else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
         begin
-        AddFileLog('Assigning hedgehog ' + inttostr(LongInt(AttackerHog)) + ' to gear ' + inttostr(Gear^.uid));
         Gear^.Hedgehog:= AttackerHog;
         end;
     inc(Gear^.Damage, Damage);
@@ -1141,7 +1140,7 @@ begin
 end;
 
 procedure AddMiscGears;
-var i: LongInt;
+var i: Longword;
     Gear: PGear;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);

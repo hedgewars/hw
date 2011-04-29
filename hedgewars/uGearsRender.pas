@@ -576,7 +576,7 @@ begin
                 amRope: DrawRotated(sprHandRope, hx, hy, sign, aangle);
                 amShotgun: DrawRotated(sprHandShotgun, hx, hy, sign, aangle);
                 amDEagle: DrawRotated(sprHandDEagle, hx, hy, sign, aangle);
-                amSineGun: DrawRotatedF(sprHandSinegun, hx, hy, 73+(sign * (RealTicks div 73)) mod 8, sign, aangle);
+                amSineGun: DrawRotatedF(sprHandSinegun, hx, hy, 73 + (sign * LongInt(RealTicks div 73)) mod 8, sign, aangle);
                 amPortalGun: if (CurWeapon^.Timer and 2) <> 0 then // Add a new Hedgehog value instead of abusing timer?
                                 DrawRotatedF(sprPortalGun, hx, hy, 0, sign, aangle)
                         else
@@ -996,7 +996,7 @@ begin
                             else
                                 startX:= max(-LAND_WIDTH - 1024, endX - 2048);
                             startY:= endY - 256;
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + round((endX - startX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1)), startY + WorldDy + round((endY - startY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + LongInt(round((endX - startX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1))), startY + WorldDy + LongInt(round((endY - startY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2)))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                             end
                         else // Disappearing
                             begin
@@ -1007,7 +1007,7 @@ begin
                             else
                                 endX:= max(-LAND_WIDTH - 1024, startX - 2048);
                             endY:= startY + 256;
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + round((endX - startX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1))) + hwRound(Gear^.dX * Gear^.Timer), startY + WorldDy + round((endY - startY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) - (endY - startY)) + hwRound(Gear^.dY * Gear^.Timer), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + LongInt(round((endX - startX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1)))) + hwRound(Gear^.dX * Gear^.Timer), startY + WorldDy + LongInt(round((endY - startY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) - (endY - startY))) + hwRound(Gear^.dY * Gear^.Timer), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                             end;
                         end
                     else

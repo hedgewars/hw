@@ -2,7 +2,6 @@ foreach(dir
 	Art
 	Bamboo
 	Bath
-	Beach
 	Blox
 	Brick
 	Cake
@@ -12,7 +11,6 @@ foreach(dir
 	Compost
 	Deepspace
 	Desert
-	Digital
 	City
 	CrazyMission
 	EarthRise

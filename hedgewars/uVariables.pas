@@ -87,14 +87,14 @@ var
     cWaterRise       : LongInt;
     cHealthDecrease  : LongInt;
 
-    cCloudsNumber    : LongInt;
-    cSDCloudsNumber  : LongInt;
+    cCloudsNumber    : LongWord;
+    cSDCloudsNumber  : LongWord;
 
     cTagsMask        : byte;
     zoom             : GLfloat;
     ZoomValue        : GLfloat;
 
-    cWaterLine       : LongInt;
+    cWaterLine       : Word;
     cGearScrEdgesDist: LongInt;
 
     GameTicks   : LongWord;
@@ -102,15 +102,15 @@ var
     // originally from uConsts
     Pathz: array[TPathType] of shortstring;
     CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
-    LAND_WIDTH       : LongInt;
-    LAND_HEIGHT      : LongInt;
+    LAND_WIDTH       : Word;
+    LAND_HEIGHT      : Word;
     LAND_WIDTH_MASK  : LongWord;
     LAND_HEIGHT_MASK : LongWord;
     cMaxCaptions     : LongInt;
 
     cLeftScreenBorder     : LongInt;
     cRightScreenBorder    : LongInt;
-    cScreenSpace          : LongInt;
+    cScreenSpace          : Longword;
 
     cCaseFactor     : Longword;
     cLandMines      : Longword;

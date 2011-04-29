@@ -20,7 +20,7 @@
 
 
 #import "SavedGamesViewController.h"
-#import "StatsPageViewController.h"
+#import "GameInterfaceBridge.h"
 #import "CommodityFunctions.h"
 
 @implementation SavedGamesViewController
@@ -208,42 +208,14 @@
         [self updateTable];
 
     [(EditableCellView *)[self.tableView cellForRowAtIndexPath:indexPath] save:nil];
-    
-    NSString *filePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:[indexPath row]]];
-    
-    NSDictionary *allDataNecessary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      filePath,@"savefile",
-                                      [NSNumber numberWithBool:NO],@"netgame",
-                                      [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:self.interfaceOrientation] forKey:@"orientation"],@"game_dictionary",
-                                      nil];
 
-    // also modify GameConfigViewController.m
-    StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
-        statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
-    // avoid showing the stat page immediately, but wait for 3 seconds
-    [self performSelector:@selector(presentModalViewController:animated:) withObject:statsPage afterDelay:3];
+    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
 
-    NSArray *stats;
-    if (IS_DUALHEAD()) {
-        stats = [[HedgewarsAppDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-        [self presentModalViewController:statsPage animated:NO];
-    } else {
-        [self performSelector:@selector(presentModalViewController:animated:) withObject:statsPage afterDelay:3];
-        stats = [[HedgewarsAppDelegate sharedAppDelegate] startSDLgame:allDataNecessary];
-    }
+    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:[indexPath row]]];
+    [bridge startSaveGame:filePath];
+    [filePath release];
 
-    if ([stats count] <= 1) {
-        DLog(@"%@",stats);
-        [statsPage dismissModalViewControllerAnimated:NO];
-    } else {
-        statsPage.statsArray = stats;
-        [statsPage.tableView reloadData];
-        [statsPage viewWillAppear:YES];
-    }
-    // reload needed because when ending game the entry remains there
-    [self.tableView reloadData];
+    [bridge release];
 }
 
 #pragma mark -

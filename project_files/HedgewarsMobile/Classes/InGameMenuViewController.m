@@ -88,7 +88,6 @@
         [self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.35];
     }
 
-    HW_chatEnd();
     SDL_iPhoneKeyboardHide((SDL_Window *)HW_getSDLWindow());
 
     if (shouldTakeScreenshot) {
@@ -109,7 +108,6 @@
         [self performSelector:@selector(saveCurrentScreenToPhotoAlbum:) withObject:alert afterDelay:0.3];
     }
     shouldTakeScreenshot = NO;
-
 }
 
 #pragma mark -
@@ -202,12 +200,12 @@
     }
 
     if ([actionSheet cancelButtonIndex] != buttonIndex) {
-        if (IS_DUALHEAD())
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"remove overlay" object:nil];
+        SDL_iPhoneKeyboardHide((SDL_Window *)HW_getSDLWindow());
         HW_terminate(NO);
     }
 }
 
+#pragma mark -
 #pragma mark save screenshot
 //by http://www.bit-101.com/blog/?p=1861
 // callback for CGDataProviderCreateWithData

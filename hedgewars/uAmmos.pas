@@ -232,7 +232,7 @@ with Hedgehog do
                 end
             end
     end;
-perfExt_AmmoUpdate;
+uMobile.AmmoUpdate;
 end;
 
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;

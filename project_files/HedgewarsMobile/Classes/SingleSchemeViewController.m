@@ -52,17 +52,14 @@
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
-    NSString *path = nil;
 
     // title, description, image name (+btn)
-    path = [NSString stringWithFormat:@"%@/gameFlags_en.plist",IFRONTEND_DIRECTORY()];
-    NSArray *mods = [[NSArray alloc] initWithContentsOfFile:path];
+    NSArray *mods = [[NSArray alloc] initWithContentsOfFile:GAMEMODS_FILE()];
     self.gameModifierArray = mods;
     [mods release];
 
     // title, image name (+icon), default value, max value, min value
-    path = [NSString stringWithFormat:@"%@/basicFlags_en.plist",IFRONTEND_DIRECTORY()];
-    NSArray *basicSettings = [[NSArray alloc] initWithContentsOfFile:path];
+    NSArray *basicSettings = [[NSArray alloc] initWithContentsOfFile:BASICFLAGS_FILE()];
     self.basicSettingList = basicSettings;
     [basicSettings release];
 
@@ -193,6 +190,7 @@
 
             UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
             cellLabel.text = [[self.basicSettingList objectAtIndex:row] objectForKey:@"title"];
+            cellLabel.adjustsFontSizeToFitWidth = YES;
 
             // can't use the viewWithTag method because row is dynamic
             UISlider *cellSlider = nil;

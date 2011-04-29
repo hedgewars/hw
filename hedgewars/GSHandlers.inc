@@ -176,8 +176,8 @@ begin
                 particle := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
                 if particle <> nil then
                     begin
-                    particle^.dX := particle^.dX - (Gear^.dX.QWordValue / 42949672960);
-                    particle^.dY := particle^.dY - (Gear^.dY.QWordValue / 21474836480)
+                    particle^.dX := particle^.dX - hwFloat2Float(Gear^.dX);
+                    particle^.dY := particle^.dY - hwFloat2Float(Gear^.dY) / 2;
                     end
                 end
             end;
@@ -615,7 +615,7 @@ else if GameTicks and $7 = 0 then
             end;
 
         inc(Health, 8);
-        if Health > vobFrameTicks then
+        if longword(Health) > vobFrameTicks then
             begin
             dec(Health, vobFrameTicks);
             inc(Timer);
@@ -1549,7 +1549,7 @@ begin
         HHGear^.dY := HHGear^.dY * len;
         end;
 
-    haveCollision:= ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) <> 0);
+    haveCollision:= ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)]) <> 0);
 
     if not haveCollision then
         begin
@@ -1564,13 +1564,13 @@ begin
             Gear^.Y:= RopePoints.ar[0].Y;
             end;
 
-        CheckCollisionWithLand(Gear);
+        CheckCollision(Gear);
         // if we haven't found any collision yet then check the otheer side too
         if (Gear^.State and gstCollision) = 0 then
             begin
             Gear^.dX.isNegative:= not Gear^.dX.isNegative;
             Gear^.dY.isNegative:= not Gear^.dY.isNegative;
-            CheckCollisionWithLand(Gear);
+            CheckCollision(Gear);
             Gear^.dX.isNegative:= not Gear^.dX.isNegative;
             Gear^.dY.isNegative:= not Gear^.dY.isNegative;
             end;
@@ -1678,7 +1678,7 @@ begin
             end;
         end;
 
-    CheckCollisionWithLand(Gear);
+    CheckCollision(Gear);
 
     if (Gear^.State and gstCollision) <> 0 then
         if Gear^.Elasticity < _10 then
@@ -4811,7 +4811,6 @@ end;
 procedure doStepStructure(Gear: PGear);
 var 
     x, y: LongInt;
-    dX, dY: HWFloat;
     hog: PHedgehog;
 begin
     if (Gear^.Hedgehog <> nil) and (Gear^.Tag = TotalRounds) then

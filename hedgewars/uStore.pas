@@ -510,26 +510,23 @@ procedure SetupOpenGL;
 {$IFNDEF IPHONEOS}
 var vendor: shortstring;
 {$IFDEF DARWIN}
-    one: LongInt;
+const one : LongInt = 1;
 {$ENDIF}
 {$ENDIF}
 begin
 
 {$IFDEF IPHONEOS}
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0); // no double buffering
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
     SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
 {$IFNDEF SDL13}
 // this attribute is default in 1.3 and must be enabled in MacOSX
-    if (cReducedQuality and rqDesyncVBlank) <> 0 then
-        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0)
-    else
-        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, LongInt((cReducedQuality and rqDesyncVBlank) = 0));
+
 {$IFDEF DARWIN}
 // fixes vsync in Snow Leopard
-    one:= 1;
     CGLSetParameter(CGLGetCurrentContext(), 222, @one);
 {$ENDIF}
 {$ENDIF}
@@ -672,7 +669,7 @@ begin
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
 
-        perfExt_AddProgress();
+        uMobile.GameLoading();
     end;
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
@@ -700,7 +697,7 @@ procedure FinishProgress;
 begin
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
-    perfExt_FinishProgress();
+    uMobile.GameLoaded();
 end;
 
 function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
@@ -924,22 +921,32 @@ begin
     end;
 
 {$IFDEF SDL13}
-    if SDLwindow = nil then
-    begin
-        // the values in x and y make the window appear in the center
-        // on ios, make the sdl window appear on the second monitor when present
-        x:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}(SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
-        y:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}(SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
-        SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN
-                          {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS {$ENDIF});  // do not set SDL_WINDOW_RESIZABLE on iOS
-        SDLrender:= SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
-    end;
+    // these values in x and y make the window appear in the center
+    x:= SDL_WINDOWPOS_CENTERED_MASK;
+    y:= SDL_WINDOWPOS_CENTERED_MASK;
+    flags:= SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN;
 
+{$IFDEF IPHONEOS}
+    // make the sdl window appear on the second monitor when present
+    x:= x or (SDL_GetNumVideoDisplays() - 1);
+    y:= y or (SDL_GetNumVideoDisplays() - 1);
+
+    // hardcode the opengles driver as we do our own drawing
+    SDL_SetHint('SDL_RENDER_DRIVER','opengles');
+    flags:= flags or SDL_WINDOW_BORDERLESS;  // do not set SDL_WINDOW_RESIZABLE on iOS
+{$ENDIF}
+
+    SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
+    SDLTry(SDLwindow <> nil, true);
+    SDLrender:= SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
+    SDLTry(SDLrender <> nil, true);
+
+    // clean the renderer before using it
     SDL_SetRenderDrawColor(SDLrender, 0, 0, 0, 255);
     SDL_RenderClear(SDLrender);
     SDL_RenderPresent(SDLrender);
 
-    // we need to reset the gl context from the one created by SDL as we have our own drawing system
+    // reset the gl context from the one created by SDL (as we have our own drawing system)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 {$ELSE}

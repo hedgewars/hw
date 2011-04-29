@@ -1,11 +1,11 @@
 project(hedgewars)
 
 cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
-cmake_policy(SET CMP0003 NEW)
-
-IF(POLICY CMP0012)
-	cmake_policy(SET CMP0012 NEW)
-ENDIF()
+FOREACH(policy CMP0003 CMP0012)
+	IF(POLICY ${policy})
+		CMAKE_POLICY(SET ${policy} NEW)
+	ENDIF()
+ENDFOREACH()
 
 #detect Mercurial revision (if present)
 set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
@@ -35,9 +35,9 @@ ENDIF()
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
-set(CPACK_PACKAGE_VERSION_MAJOR "0")
-set(CPACK_PACKAGE_VERSION_MINOR "9")
-set(CPACK_PACKAGE_VERSION_PATCH "16${version_suffix}")
+set( CPACK_PACKAGE_VERSION_MAJOR 0 )
+set( CPACK_PACKAGE_VERSION_MINOR 9 )
+set( CPACK_PACKAGE_VERSION_PATCH 16${version_suffix} )
 
 #set some safe values
 IF(NOT WITH_SERVER)
@@ -46,6 +46,7 @@ ENDIF(NOT WITH_SERVER)
 IF(NOT BUILD_ENGINE_LIBRARY)
 	SET(BUILD_ENGINE_LIBRARY 0)
 ENDIF(NOT BUILD_ENGINE_LIBRARY)
+set(target_dir "bin")
 
 
 if(APPLE)
@@ -53,62 +54,71 @@ if(APPLE)
 
 	#paths for creating the bundle
 	set(bundle_name Hedgewars.app)
+	set(frameworks_dir ${bundle_name}/Contents/Frameworks/)
 	set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/)
 	set(DATA_INSTALL_DIR "../Resources/")
 	set(target_dir ".")
 
 	#what system are we building for
-	set(minimum_macosx $ENV{MACOSX_DEPLOYMENT_TARGET})
+	set(minimum_macosx_version $ENV{MACOSX_DEPLOYMENT_TARGET})
 
 	#detect on which system are we
-	EXEC_PROGRAM("/usr/bin/sw_vers" OUTPUT_VARIABLE MACOSX_VERSION_TMP)
-	STRING(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" MACOSX_VERSION_TMP "${MACOSX_VERSION_TMP}")
-	STRING(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${MACOSX_VERSION_TMP})
+	EXEC_PROGRAM("/usr/bin/sw_vers" ARGS "-productVersion" OUTPUT_VARIABLE current_macosx_version)
+	STRING(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${current_macosx_version})
 
 	#if nothing is set, we deploy only for the current system
-	if(NOT minimum_macosx)
-		set(minimum_macosx ${current_macosx_version})
+	if(NOT minimum_macosx_version)
+		set(minimum_macosx_version ${current_macosx_version})
 	endif()
 
-	if (minimum_macosx LESS "10.4")
-		set(FATAL "Hedgewars is not supported for pre-10.4 systems")
+	#who uses them anyway?
+	if (minimum_macosx_version LESS "10.4")
+		message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
 	endif()
 
+	#this variable needs to be set for frapascal universal binary
 	if(NOT CMAKE_OSX_ARCHITECTURES)
-		if(current_macosx_version MATCHES "10.6")
-			set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
+		if(current_macosx_version LESS "10.6")
+			if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "powerpc*")
+				set(CMAKE_OSX_ARCHITECTURES "ppc7400")
+			else()
+				set(CMAKE_OSX_ARCHITECTURES "i386")
+			endif()
 		else()
-			set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")
+			set(CMAKE_OSX_ARCHITECTURES "x86_64")
 		endif()
 	endif()
 
-	message(STATUS "Build system: Mac OS X ${current_macosx_version} - Target ${minimum_macosx} ${CMAKE_OSX_ARCHITECTURES}")
-
 	#be sure to select ppc-compatible toolchains just in case
-	if(NOT minimum_macosx MATCHES "10.6")
+	if(minimum_macosx_version LESS "10.6")
 		set(CMAKE_C_COMPILER "gcc-4.0")
 		set(CMAKE_CXX_COMPILER "g++-4.0")
 	endif()
 
-	if(minimum_macosx MATCHES "10.4")
+	if(minimum_macosx_version MATCHES "10.4")
 		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
+		#workaround for http://playcontrol.net/ewing/jibberjabber/big_behind-the-scenes_chang.html#SDL_mixer (Update 2)
 		if(current_macosx_version MATCHES "10.4")
 			find_package(SDL_mixer REQUIRED)
 			set(pascal_compiler_flags_cmn "-k-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg" "-k-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod" ${pascal_compiler_flags_cmn})
 			set(CMAKE_C_FLAGS "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg -dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
 		endif()
 	else()
-		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${minimum_macosx}.sdk/")
+		STRING(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" sdk_version ${minimum_macosx_version})
+		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
 	endif()
 
-	#1.set deployment target; 2.link with libsdlmain.a (when building an executable); 3.link with liblua.a (which requires readline)
-	set(pascal_compiler_flags_cmn "-k-macosx_version_min" "-k${minimum_macosx}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
+	#set deployment target
+	set(pascal_compiler_flags_cmn "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
+	#link with liblua.a (which requires readline)
+	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_compiler_flags_cmn})
+	#link with libsdlmain.a (when building an executable)
 	if(NOT BUILD_ENGINE_LIBRARY)
 		set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/libSDLmain.a" ${pascal_compiler_flags_cmn})
 	endif()
-	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_compiler_flags_cmn})
-else(APPLE)
-	set(target_dir "bin")
+
+	message(STATUS "Build system: Mac OS X ${current_macosx_version} with GCC:${CMAKE_C_COMPILER}")
+	message(STATUS "Target system: Mac OS X ${minimum_macosx_version} for architecture(s):${CMAKE_OSX_ARCHITECTURES}")
 endif(APPLE)
 
 
@@ -153,8 +163,8 @@ else()
 endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-set(HEDGEWARS_PROTO_VER 38)
+set( HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}" )
+set( HEDGEWARS_PROTO_VER 38 )
 
 if(WITH_SERVER)
 	find_program(ghc_executable ghc)
@@ -242,7 +252,10 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"config\\\\.inc$"
 	"hwengine\\\\.desktop$"
 	"CMakeCache\\\\.txt$"
-#   "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
+	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
+	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libfreetype"
+	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
+	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libtremor"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/project_files/HedgewarsMobile/"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/bin/[a-z]"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/tools/templates"

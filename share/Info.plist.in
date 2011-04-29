@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.strategy-games</string>
 	<key>CFBundleName</key>
 	<string>Hedgewars</string>
 	<key>CFBundleExecutable</key>
@@ -21,7 +23,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>${HEDGEWARS_VERSION}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>© 2004-2011 Hedgewars Project</string>
+	<string>Copyright © 2004-2011, Hedgewars Project</string>
 	<key>NSAppleScriptEnabled</key>
 	<false/>
 	<key>LSRequiresNativeExecution</key>
@@ -45,7 +47,5 @@
 	<string>${minimum_macosx}</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
-	<key>LSApplicationCategoryType</key>
-	<string>public.app-category.strategy-games</string>
 </dict>
 </plist>

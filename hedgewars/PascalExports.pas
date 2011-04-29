@@ -28,10 +28,11 @@ unit PascalExports;
  *           http://en.wikipedia.org/wiki/X86_calling_conventions#cdecl
  *)
 interface
-uses uTypes, uConsts, uVariables, GLunit, uKeys, uChat, uSound, uAmmos, uUtils,
+uses uTypes, uConsts, uVariables, GLunit, uKeys, uSound, uAmmos, uUtils,
      uCommands, uMobile;
 
 {$INCLUDE "config.inc"}
+procedure HW_versionInfo(netProto: PLongInt; versionStr: PPChar); cdecl; export;
 
 implementation
 {$IFDEF HWLIBRARY}
@@ -163,12 +164,6 @@ end;
 procedure HW_chat; cdecl; export;
 begin
     chatAction:= true;
-end;
-
-procedure HW_chatEnd; cdecl; export;
-begin
-    KeyPressChat(27); // esc - cleans buffer
-    KeyPressChat(13); // enter - removes chat
 end;
 
 procedure HW_screenshot; cdecl; export;

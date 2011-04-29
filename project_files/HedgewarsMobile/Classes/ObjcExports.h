@@ -19,18 +19,16 @@
  */
 
 
-#define ANIMATION_DURATION 0.25
-#define CONFIRMATION_TAG 5959
-#define GRENADE_TAG 9595
-#define REPLAYBLACKVIEW_TAG 9955
-#define ACTIVITYINDICATOR_TAG 987654
+@class OverlayViewController;
 
-@class AmmoMenuViewController;
-
-void objcExportsInit();
+void objcExportsInit(OverlayViewController *instance);
 BOOL isGameRunning();
 void setGameRunning(BOOL value);
 NSInteger cachedGrenadeTime();
 void clearView();
 void setGrenadeTime(NSInteger value);
-void setAmmoMenuInstance(AmmoMenuViewController *instance);
+
+void startSpinningProgress();
+void stopSpinningProgress();
+void saveBeganSynching();
+void saveFinishedSynching();

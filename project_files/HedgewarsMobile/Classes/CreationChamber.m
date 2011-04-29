@@ -191,53 +191,22 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                                                         error:NULL];
     }
 
-    int basicFlags[] = {100, 100, 45, 15, 47, 5, 100, 5, 35, 25, 3, 4, 0, 2};
-    BOOL gameFlags[] = {NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, YES, NO, NO, NO, NO,
-        NO, NO, NO, NO, NO, NO, NO};
+    // load data to get the size of the arrays and their default values
+    NSArray *basicSettings = [[NSArray alloc] initWithContentsOfFile:BASICFLAGS_FILE()];
+    NSMutableArray *basicArray  = [[NSMutableArray alloc] initWithCapacity:[basicSettings count]];
+    for (NSDictionary *basicDict in basicSettings)
+        [basicArray addObject:[basicDict objectForKey:@"default"]];
+    [basicSettings release];
 
-    NSMutableArray *basicArray  = [[NSMutableArray alloc] initWithObjects:
-                                   [NSNumber numberWithInt:basicFlags[0]],          //initialhealth
-                                   [NSNumber numberWithInt:basicFlags[1]],          //damagemodifier
-                                   [NSNumber numberWithInt:basicFlags[2]],          //turntime
-                                   [NSNumber numberWithInt:basicFlags[3]],          //suddendeathtimeout
-                                   [NSNumber numberWithInt:basicFlags[4]],          //waterrise
-                                   [NSNumber numberWithInt:basicFlags[5]],          //healthdecrease
-                                   [NSNumber numberWithInt:basicFlags[6]],          //ropelength
-                                   [NSNumber numberWithInt:basicFlags[7]],          //cratedrops
-                                   [NSNumber numberWithInt:basicFlags[8]],          //healthprob
-                                   [NSNumber numberWithInt:basicFlags[9]],          //healthamount
-                                   [NSNumber numberWithInt:basicFlags[10]],         //minestime
-                                   [NSNumber numberWithInt:basicFlags[11]],         //minesnumber
-                                   [NSNumber numberWithInt:basicFlags[12]],         //dudmines
-                                   [NSNumber numberWithInt:basicFlags[13]],         //explosives
-                                   nil];
+    NSArray *mods = [[NSArray alloc] initWithContentsOfFile:GAMEMODS_FILE()];
+    NSMutableArray *gamemodArray= [[NSMutableArray alloc] initWithCapacity:[mods count]];
+    for (int i = 0; i < [mods count]; i++)
+        [gamemodArray addObject:[NSNumber numberWithBool:NO]];
+    [mods release];
 
-    NSMutableArray *gamemodArray= [[NSMutableArray alloc] initWithObjects:
-                                   [NSNumber numberWithBool:gameFlags[0]],          //fortmode
-                                   [NSNumber numberWithBool:gameFlags[1]],          //divideteam
-                                   [NSNumber numberWithBool:gameFlags[2]],          //solidland
-                                   [NSNumber numberWithBool:gameFlags[3]],          //addborder
-                                   [NSNumber numberWithBool:gameFlags[4]],          //lowgravity
-                                   [NSNumber numberWithBool:gameFlags[5]],          //lasersight
-                                   [NSNumber numberWithBool:gameFlags[6]],          //invulnerable
-                                   [NSNumber numberWithBool:gameFlags[7]],          //resethealth
-                                   [NSNumber numberWithBool:gameFlags[8]],          //vampirism
-                                   [NSNumber numberWithBool:gameFlags[9]],          //karma
-                                   [NSNumber numberWithBool:gameFlags[10]],         //artillery
-                                   [NSNumber numberWithBool:gameFlags[11]],         //randomorder
-                                   [NSNumber numberWithBool:gameFlags[12]],         //king
-                                   [NSNumber numberWithBool:gameFlags[13]],         //placehedgehogs
-                                   [NSNumber numberWithBool:gameFlags[14]],         //clansharesammo
-                                   [NSNumber numberWithBool:gameFlags[15]],         //disablegirders
-                                   [NSNumber numberWithBool:gameFlags[16]],         //disablelandobjects
-                                   [NSNumber numberWithBool:gameFlags[17]],         //aisurvival
-                                   [NSNumber numberWithBool:gameFlags[18]],         //infattack
-                                   [NSNumber numberWithBool:gameFlags[19]],         //resetweaps
-                                   [NSNumber numberWithBool:gameFlags[20]],         //perhogammo
-                                   [NSNumber numberWithBool:gameFlags[21]],         //nowind
-                                   [NSNumber numberWithBool:gameFlags[22]],         //morewind
-                                   nil];
-    
+    // workaround for randomorder that has to be set to YES
+    [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+
     NSMutableDictionary *theScheme = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                       basicArray,@"basic",
                                       gamemodArray,@"gamemod",

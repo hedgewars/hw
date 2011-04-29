@@ -272,7 +272,7 @@ else
     ReadyTimeLeft:= 0
     end;
 
-perfExt_NewTurnBeginning();
+uMobile.NewTurnBeginning();
 ScriptCall('onNewTurn');
 end;
 

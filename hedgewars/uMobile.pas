@@ -24,10 +24,10 @@ interface
 {$IFDEF IPHONEOS}
 (*  iOS calls written in ObjcExports.m  *)
 procedure clearView; cdecl; external;
-procedure startSpinning; cdecl; external;
-procedure stopSpinning; cdecl; external;
-procedure replayBegan; cdecl; external;
-procedure replayFinished; cdecl; external;
+procedure startSpinningProgress; cdecl; external;
+procedure stopSpinningProgress; cdecl; external;
+procedure saveBeganSynching; cdecl; external;
+procedure saveFinishedSynching; cdecl; external;
 procedure setGameRunning(arg: boolean); cdecl; external;
 procedure updateVisualsNewTurn; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
@@ -35,17 +35,16 @@ procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
 {$ENDIF}
 function  isPhone: Boolean; inline;
 procedure performRumble; inline;
-procedure perfExt_AddProgress; inline;
-procedure perfExt_FinishProgress; inline;
-procedure perfExt_AmmoUpdate; // don't inline
-procedure perfExt_NewTurnBeginning; inline;
-procedure perfExt_SaveBeganSynching; inline;
-procedure perfExt_SaveFinishedSynching; inline;
+
+procedure GameLoading; inline;
+procedure GameLoaded; inline;
+procedure AmmoUpdate; // don't inline
+procedure NewTurnBeginning; inline;
+procedure SaveBegan; inline;
+procedure SaveFinished; inline;
 
 implementation
 uses uVariables;
-
-const kSystemSoundID_Vibrate = $00000FFF;
 
 function isPhone: Boolean; inline;
 begin
@@ -56,27 +55,28 @@ begin
 end;
 
 procedure performRumble; inline;
+const kSystemSoundID_Vibrate = $00000FFF;
 begin
 {$IFDEF IPHONEOS}
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 {$ENDIF}
 end;
 
-procedure perfExt_AddProgress; inline;
+procedure GameLoading; inline;
 begin
 {$IFDEF IPHONEOS}
-    startSpinning();
+    startSpinningProgress();
 {$ENDIF}
 end;
 
-procedure perfExt_FinishProgress; inline;
+procedure GameLoaded; inline;
 begin
 {$IFDEF IPHONEOS}
-    stopSpinning();
+    stopSpinningProgress();
 {$ENDIF}
 end;
 
-procedure perfExt_AmmoUpdate; // don't inline
+procedure AmmoUpdate; // don't inline
 begin
 {$IFDEF IPHONEOS}
     if (CurrentTeam = nil) or
@@ -87,25 +87,25 @@ begin
 {$ENDIF}
 end;
 
-procedure perfExt_NewTurnBeginning; inline;
+procedure NewTurnBeginning; inline;
 begin
 {$IFDEF IPHONEOS}
     clearView();
-    perfExt_AmmoUpdate();
+{$ENDIF}
+    AmmoUpdate();
+end;
+
+procedure SaveBegan; inline;
+begin
+{$IFDEF IPHONEOS}
+    saveBeganSynching();
 {$ENDIF}
 end;
 
-procedure perfExt_SaveBeganSynching; inline;
+procedure SaveFinished; inline;
 begin
 {$IFDEF IPHONEOS}
-    replayBegan();
-{$ENDIF}
-end;
-
-procedure perfExt_SaveFinishedSynching; inline;
-begin
-{$IFDEF IPHONEOS}
-    replayFinished();
+    saveFinishedSynching();
 {$ENDIF}
 end;
 

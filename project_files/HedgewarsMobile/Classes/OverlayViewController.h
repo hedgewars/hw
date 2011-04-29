@@ -20,7 +20,6 @@
 
 
 #import <UIKit/UIKit.h>
-#import "SDL_sysvideo.h"
 
 @class InGameMenuViewController;
 @class HelpPageViewController;
@@ -40,31 +39,39 @@
 
     // the objc ammomenu
     AmmoMenuViewController *amvc;
-    BOOL wasVisible;
     
     // ths touch section
     CGFloat initialDistanceForPinching;
     CGPoint startingPoint;
-    BOOL isSegmentVisible;
     BOOL isAttacking;
     
     // stuff initialized externally
-    BOOL isNetGame;
     BOOL useClassicMenu;
     NSInteger initialOrientation;
     
     // dual head support
     NSInteger initialScreenCount;
-    NSInteger a, b;
+
+    // various other widgets
+    UIActivityIndicatorView *lowerIndicator;
+    UIActivityIndicatorView *savesIndicator;
+    UIButton *confirmButton;
+    UISegmentedControl *grenadeTimeSegment;
 }
 
 @property (nonatomic,retain) id popoverController;
 @property (nonatomic,retain) InGameMenuViewController *popupMenu;
 @property (nonatomic,retain) HelpPageViewController *helpPage;
 @property (nonatomic,retain) AmmoMenuViewController *amvc;
-@property (assign) BOOL isNetGame;
+@property (nonatomic,retain) UIActivityIndicatorView *lowerIndicator;
+@property (nonatomic,retain) UIActivityIndicatorView *savesIndicator;
+@property (nonatomic,retain) UIButton *confirmButton;
+@property (nonatomic,retain) UISegmentedControl *grenadeTimeSegment;
+
 @property (assign) BOOL useClassicMenu;
 @property (assign) NSInteger initialOrientation;
+@property (assign) NSInteger initialScreenCount;
+
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
@@ -78,5 +85,10 @@
 -(void) dismissPopover;
 -(void) dimOverlay;
 -(void) activateOverlay;
+-(void) removeOverlay;
+
+#define ANIMATION_DURATION 0.25
+#define CONFIRMATION_TAG 5959
+#define GRENADE_TAG 9595
 
 @end

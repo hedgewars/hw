@@ -26,8 +26,6 @@
 #import "PascalImports.h"
 #import "CommodityFunctions.h"
 #import "CGPointUtils.h"
-#import "SDL_config_iphoneos.h"
-#import "SDL_mouse.h"
 #import "ObjcExports.h"
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
@@ -35,11 +33,10 @@
 #define doDim()             [dimTimer setFireDate: (IS_DUALHEAD()) ? HIDING_TIME_NEVER : HIDING_TIME_DEFAULT]
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
-#define removeInputWidget() [[self.view viewWithTag:CONFIRMATION_TAG] removeFromSuperview]; \
-                            [[self.view viewWithTag:GRENADE_TAG] removeFromSuperview];
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, isNetGame, useClassicMenu, initialOrientation;
+@synthesize popoverController, popupMenu, helpPage, amvc, useClassicMenu, initialScreenCount, initialOrientation,
+            lowerIndicator, savesIndicator, confirmButton, grenadeTimeSegment;
 
 #pragma mark -
 #pragma mark rotation
@@ -51,84 +48,57 @@
     return rotationManager(interfaceOrientation);
 }
 
-// pause the game and remove objc menus so that animation is smoother
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation) toInterfaceOrientation duration:(NSTimeInterval) duration{
-    if (isGameRunning() == NO)
-        return;
-
-    HW_pause();
-    [self dismissPopover];
-
-    if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
-        [self.amvc disappear];
-        wasVisible = YES;
-    } else
-        wasVisible = NO;
-
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-
-    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
-    switch (toInterfaceOrientation) {
-        case UIDeviceOrientationLandscapeLeft:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
-            break;
-        case UIDeviceOrientationLandscapeRight:
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
-            break;
-        default:
-            // a debug log would spam too much
-            break;
-    }
-}
-
-// now restore previous state
--(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation) fromInterfaceOrientation {
-    if (isGameRunning() == NO)
-        return;
-
-    if (wasVisible || IS_DUALHEAD())
-        [self.amvc appearInView:self.view];
-    HW_pauseToggle();
-
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-}
-
 // while in dual head the above rotation functions are not called
--(void) dualHeadRotation:(NSNotification *)notification {
+-(void) handleRotationEvent:(NSNotification *)notification {
     if (isGameRunning() == NO)
         return;
+
+    UIView *sdlView = nil;
+    for (UIView *oneView in [[[UIApplication sharedApplication] keyWindow] subviews])
+        if ([oneView isMemberOfClass:[SDL_uikitopenglview class]]) {
+            sdlView = (UIView *)oneView;
+            break;
+        }
 
     UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    UIView *sdlView = [[[UIApplication sharedApplication] keyWindow] viewWithTag:SDL_VIEW_TAG];
+    NSInteger angle_left = (self.initialOrientation == UIInterfaceOrientationLandscapeLeft) ? 180 : 0;
+    NSInteger angle_right = (self.initialOrientation == UIInterfaceOrientationLandscapeLeft) ? 0 : 180;
 
-    [UIView beginAnimations:@"rotation" context:NULL];
-    [UIView setAnimationDuration:0.7];
+    if (IS_VERY_POWERFUL()) {
+        [UIView beginAnimations:@"overlay rotation" context:NULL];
+        [UIView setAnimationDuration:0.7];
+    }
     switch (orientation) {
         case UIDeviceOrientationLandscapeLeft:
             self.view.frame = [[UIScreen mainScreen] bounds];
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(a));
+            if (IS_DUALHEAD() == NO)
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(angle_left));
             break;
         case UIDeviceOrientationLandscapeRight:
             self.view.frame = [[UIScreen mainScreen] bounds];
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-            sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(b));
+            if (IS_DUALHEAD() == NO)
+                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(angle_right));
             break;
         default:
             // a debug log would spam too much
             break;
     }
-    [UIView commitAnimations];
+    if (IS_VERY_POWERFUL())
+        [UIView commitAnimations];
 }
 
 #pragma mark -
 #pragma mark View Management
 -(id) initWithCoder:(NSCoder *)aDecoder {
     if ((self = [super initWithCoder:aDecoder])) {
-        objcExportsInit();
         isAttacking = NO;
-        wasVisible = NO;
-        isPopoverVisible = NO;    // it is called "popover" even on the iphone
+        isPopoverVisible = NO;
+        initialScreenCount = (IS_DUALHEAD() ? 2 : 1);
+        initialOrientation = 0;
+        lowerIndicator = nil;
+        savesIndicator = nil;
     }
     return self;
 }
@@ -137,41 +107,25 @@
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     self.view.frame = CGRectMake(0, 0, screenRect.size.height, screenRect.size.width);
     self.view.center = CGPointMake(self.view.frame.size.height/2, self.view.frame.size.width/2);
-    self.view.alpha = 0;
-
-    // detrmine the quanitiy and direction of the rotation
-    if (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
-        a = 180;
-        b = 0;
-    } else {
-        a = 0;
-        b = 180;
-    }
-
-    // get the number of screens to know the previous state whan a display is connected or detached
-    if ([UIScreen respondsToSelector:@selector(screens)])
-        initialScreenCount = [[UIScreen screens] count];
-    else
-        initialScreenCount = 1;
 
     // set initial orientation of the controller orientation
-        switch (self.interfaceOrientation) {
-            case UIDeviceOrientationLandscapeLeft:
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
-                break;
-            case UIDeviceOrientationLandscapeRight:
-                self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-                break;
-            default:
-                DLog(@"Nope");
-                break;
-        }
-        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(dualHeadRotation:)
-                                                     name:UIDeviceOrientationDidChangeNotification
-                                                   object:nil];
-
+    switch (self.interfaceOrientation) {
+        case UIDeviceOrientationLandscapeLeft:
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
+            break;
+        default:
+            DLog(@"Nope");
+            break;
+    }
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleRotationEvent:)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
+    
     // the timer used to dim the overlay
     dimTimer = [[NSTimer alloc] initWithFireDate:(IS_DUALHEAD()) ? HIDING_TIME_NEVER : [NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
@@ -188,12 +142,6 @@
                                                  name:@"show help ingame"
                                                object:nil];
 
-    // remove the view, required by the dual head version
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(removeOverlay:)
-                                                 name:@"remove overlay"
-                                               object:nil];
-
     // for iOS >= 3.2
     if ([UIScreen respondsToSelector:@selector(screens)]) {
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -208,14 +156,71 @@
     }
     
     // present the overlay
+    self.view.alpha = 0;
     [UIView beginAnimations:@"showing overlay" context:NULL];
     [UIView setAnimationDuration:2];
     self.view.alpha = 1;
     [UIView commitAnimations];
 }
 
+-(void) viewDidUnload {
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+    [NSObject cancelPreviousPerformRequestsWithTarget:self
+                                             selector:@selector(unsetPreciseStatus)
+                                               object:nil];
+
+    // only objects initialized in viewDidLoad should be here
+    dimTimer = nil;
+    self.helpPage = nil;
+    [self dismissPopover];
+    self.popoverController = nil;
+    self.amvc = nil;
+    self.lowerIndicator = nil;
+    self.savesIndicator = nil;
+    MSG_DIDUNLOAD();
+    [super viewDidUnload];
+}
+
+-(void) didReceiveMemoryWarning {
+    if (self.popupMenu.view.superview == nil)
+        self.popupMenu = nil;
+    if (self.helpPage.view.superview == nil)
+        self.helpPage = nil;
+    if (self.amvc.view.superview == nil)
+        self.amvc = nil;
+    if (self.lowerIndicator.superview == nil)
+        self.lowerIndicator = nil;
+    if (self.savesIndicator.superview == nil)
+        self.savesIndicator = nil;
+    if (self.confirmButton.superview == nil)
+        self.confirmButton = nil;
+    if (self.grenadeTimeSegment.superview == nil)
+        self.grenadeTimeSegment = nil;
+    if (IS_IPAD())
+        if (((UIPopoverController *)self.popoverController).contentViewController.view.superview == nil)
+            self.popoverController = nil;
+
+    MSG_MEMCLEAN();
+    [super didReceiveMemoryWarning];
+}
+
+-(void) dealloc {
+    [popupMenu release];
+    [helpPage release];
+    [popoverController release];
+    [amvc release];
+    [lowerIndicator release];
+    [savesIndicator release];
+    [confirmButton release];
+    [grenadeTimeSegment release];
+    // dimTimer is autoreleased
+    [super dealloc];
+}
+
 -(void) numberOfScreensIncreased {
-    if (initialScreenCount == 1) {
+    if (self.initialScreenCount == 1) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New display detected"
                                                         message:NSLocalizedString(@"Hedgewars supports multi-monitor configurations, but the screen has to be connected before launching the game.",@"")
                                                        delegate:nil
@@ -228,7 +233,7 @@
 }
 
 -(void) numberOfScreensDecreased {
-    if (initialScreenCount == 2) {
+    if (self.initialScreenCount == 2) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh noes! Display disconnected"
                                                         message:NSLocalizedString(@"A monitor has been disconnected while playing and this has ended the match! You need to restart the game if you wish to use the second display again.",@"")
                                                        delegate:nil
@@ -240,74 +245,8 @@
     }
 }
 
-
--(void) showHelp:(id) sender {
-    if (self.helpPage == nil) {
-        NSString *xib;
-        if (IS_IPAD())
-            xib = @"HelpPageInGameViewController-iPad";
-        else
-            xib = @"HelpPageInGameViewController-iPhone";
-        self.helpPage = [[HelpPageViewController alloc] initWithNibName:xib bundle:nil];
-    }
-    self.helpPage.view.alpha = 0;
-    [self.view addSubview:helpPage.view];
-    [UIView beginAnimations:@"helpingame" context:NULL];
-    self.helpPage.view.alpha = 1;
-    [UIView commitAnimations];
-    doNotDim();
-}
-
--(void) removeOverlay:(id) sender {
-    [self.popupMenu performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:YES];
-    [self.popoverController performSelectorOnMainThread:@selector(dismissPopoverAnimated:) withObject:nil waitUntilDone:YES];
-    [self.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
-    HW_terminate(NO);
-}
-
--(void) didReceiveMemoryWarning {
-    if (self.popupMenu.view.superview == nil)
-        self.popupMenu = nil;
-    if (self.helpPage.view.superview == nil)
-        self.helpPage = nil;
-    if (self.amvc.view.superview == nil)
-        self.amvc = nil;
-    if (IS_IPAD())
-        if (((UIPopoverController *)self.popoverController).contentViewController.view.superview == nil)
-            self.popoverController = nil;
-    
-    MSG_MEMCLEAN();
-    [super didReceiveMemoryWarning];
-}
-
--(void) viewDidUnload {
-    // only objects initialized in viewDidLoad should be here
-    if (IS_DUALHEAD())
-        [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [NSObject cancelPreviousPerformRequestsWithTarget:self
-                                             selector:@selector(unsetPreciseStatus)
-                                               object:nil];
-    dimTimer = nil;
-    self.helpPage = nil;
-    [self dismissPopover];
-    self.popoverController = nil;
-    self.amvc = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    [popupMenu release];
-    [helpPage release];
-    [popoverController release];
-    [amvc release];
-    // dimTimer is autoreleased
-    [super dealloc];
-}
-
 #pragma mark -
-#pragma mark overlay user interaction
+#pragma mark overlay appearance
 // nice transition for dimming, should be called only by the timer himself
 -(void) dimOverlay {
     if (isGameRunning()) {
@@ -324,6 +263,14 @@
     doNotDim();
 }
 
+-(void) removeOverlay {
+    [self.popupMenu performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:YES];
+    [self.popoverController performSelectorOnMainThread:@selector(dismissPopoverAnimated:) withObject:nil waitUntilDone:YES];
+    [self.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+}
+
+#pragma mark -
+#pragma mark overlay user interaction
 // dim the overlay when there's no more input for a certain amount of time
 -(IBAction) buttonReleased:(id) sender {
     if (isGameRunning() == NO)
@@ -403,18 +350,17 @@
                 doDim();
                 [self.amvc disappear];
             }
-            removeInputWidget();
+            clearView();
             [self showPopover];
             break;
         case 11:
             playSound(@"clickSound");
             clearView();
-            removeInputWidget();
             
             if (IS_DUALHEAD() || self.useClassicMenu == NO) {
                 if (self.amvc == nil)
                     self.amvc = [[AmmoMenuViewController alloc] init];
-                setAmmoMenuInstance(amvc);
+
                 if (self.amvc.isVisible) {
                     doDim();
                     [self.amvc disappear];
@@ -424,10 +370,8 @@
                         [self.amvc appearInView:self.view];
                     }
                 }
-            } else {
-                setAmmoMenuInstance(nil);
+            } else
                 HW_ammoMenu();
-            }
             break;
         default:
             DLog(@"Nope");
@@ -441,7 +385,7 @@
 
 -(void) sendHWClick {
     HW_click();
-    removeInputWidget();
+    clearView();
     doDim();
 }
 
@@ -454,7 +398,20 @@
 }
 
 #pragma mark -
-#pragma mark other menu
+#pragma mark in-game menu and help page
+-(void) showHelp:(id) sender {
+    if (self.helpPage == nil) {
+        NSString *xibName = (IS_IPAD() ? @"HelpPageInGameViewController-iPad" : @"HelpPageInGameViewController-iPhone");
+        self.helpPage = [[HelpPageViewController alloc] initWithNibName:xibName bundle:nil];
+    }
+    self.helpPage.view.alpha = 0;
+    [self.view addSubview:helpPage.view];
+    [UIView beginAnimations:@"helpingame" context:NULL];
+    self.helpPage.view.alpha = 1;
+    [UIView commitAnimations];
+    doNotDim();
+}
+
 // present a further check before closing game
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
     if ([actionSheet cancelButtonIndex] != buttonIndex)
@@ -541,9 +498,6 @@
     // reset default dimming
     doDim();
 
-    // remove other widgets
-    removeInputWidget();
-
     HW_setPianoSound([allTouches count]);
 
     switch ([allTouches count]) {
@@ -564,12 +518,12 @@
 }
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
-    CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
-
     if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
+
+    CGRect screen = [[UIScreen mainScreen] bounds];
+    CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
 
     switch ([allTouches count]) {
         case 1:
@@ -585,18 +539,20 @@
                     HW_setCursor(HWX(currentPosition.x), HWY(currentPosition.y));
 
                     // draw the button at the last touched point (which is the current position)
-                    UIButton *tapAgain = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                    tapAgain.frame = CGRectMake(currentPosition.x - 75, currentPosition.y + 25, 150, 40);
-                    tapAgain.tag = CONFIRMATION_TAG;
-                    tapAgain.alpha = 0;
-                    [tapAgain addTarget:self action:@selector(sendHWClick) forControlEvents:UIControlEventTouchUpInside];
-                    [tapAgain setTitle:NSLocalizedString(@"Tap to set!",@"from the overlay") forState:UIControlStateNormal];
-                    [self.view addSubview:tapAgain];
+                    if (self.confirmButton == nil) {
+                        UIButton *tapAgain = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                        [tapAgain addTarget:self action:@selector(sendHWClick) forControlEvents:UIControlEventTouchUpInside];
+                        [tapAgain setTitle:NSLocalizedString(@"Set!",@"on the overlay") forState:UIControlStateNormal];
+                        self.confirmButton = tapAgain;
+                    }
+                    self.confirmButton.alpha = 0;
+                    self.confirmButton.frame = CGRectMake(currentPosition.x - 75, currentPosition.y + 25, 150, 40);
+                    [self.view addSubview:self.confirmButton];
 
                     // animation ftw!
                     [UIView beginAnimations:@"inserting button" context:NULL];
                     [UIView setAnimationDuration:ANIMATION_DURATION];
-                    [self.view viewWithTag:CONFIRMATION_TAG].alpha = 1;
+                    self.confirmButton.alpha = 1;
                     [UIView commitAnimations];
 
                     // keep the overlay active, or the button will fade
@@ -604,38 +560,38 @@
                     doNotDim();
                 } else
                     if (HW_isWeaponTimerable()) {
-                        if (isSegmentVisible) {
-                            UISegmentedControl *grenadeTime = (UISegmentedControl *)[self.view viewWithTag:GRENADE_TAG];
-
+                        if (self.grenadeTimeSegment.tag != 0) {
                             [UIView beginAnimations:@"removing segmented control" context:NULL];
                             [UIView setAnimationDuration:ANIMATION_DURATION];
-                            [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-                            grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
+                            self.grenadeTimeSegment.alpha = 0;
                             [UIView commitAnimations];
 
-                            [grenadeTime performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
+                            [self.grenadeTimeSegment performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
+                            self.grenadeTimeSegment.tag = 0;
                         } else {
-                            NSArray *items = [[NSArray alloc] initWithObjects:@"1",@"2",@"3",@"4",@"5",nil];
-                            UISegmentedControl *grenadeTime = [[UISegmentedControl alloc] initWithItems:items];
-                            [items release];
-
-                            [grenadeTime addTarget:self action:@selector(setGrenadeTime:) forControlEvents:UIControlEventValueChanged];
-                            grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
-                            grenadeTime.selectedSegmentIndex = cachedGrenadeTime();
-                            grenadeTime.tag = GRENADE_TAG;
-                            [self.view addSubview:grenadeTime];
-                            [grenadeTime release];
+                            if (self.grenadeTimeSegment == nil) {
+                                NSArray *items = [[NSArray alloc] initWithObjects:@"1",@"2",@"3",@"4",@"5",nil];
+                                UISegmentedControl *grenadeSegment = [[UISegmentedControl alloc] initWithItems:items];
+                                [items release];
+                                [grenadeSegment addTarget:self action:@selector(setGrenadeTime:) forControlEvents:UIControlEventValueChanged];
+                                self.grenadeTimeSegment = grenadeSegment;
+                                [grenadeSegment release];
+                            }
+                            self.grenadeTimeSegment.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
+                            self.grenadeTimeSegment.selectedSegmentIndex = cachedGrenadeTime();
+                            self.grenadeTimeSegment.alpha = 1;
+                            [self.view addSubview:self.grenadeTimeSegment];
 
                             [UIView beginAnimations:@"inserting segmented control" context:NULL];
                             [UIView setAnimationDuration:ANIMATION_DURATION];
                             [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-                            grenadeTime.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width - 100, 250, 50);
+                            self.grenadeTimeSegment.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width - 100, 250, 50);
                             [UIView commitAnimations];
 
+                            self.grenadeTimeSegment.tag++;
                             [self activateOverlay];
                             doNotDim();
                         }
-                        isSegmentVisible = !isSegmentVisible;
                     } else
                         if (HW_isWeaponSwitch())
                             HW_tab();
@@ -655,13 +611,13 @@
 }
 
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGRect screen = [[UIScreen mainScreen] bounds];
     NSSet *allTouches = [event allTouches];
-    int x, y, dx, dy;
-    UITouch *touch, *first, *second;
-
     if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
+
+    CGRect screen = [[UIScreen mainScreen] bounds];
+    int x, y, dx, dy;
+    UITouch *touch, *first, *second;
 
     switch ([allTouches count]) {
         case 1:
