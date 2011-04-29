@@ -1042,7 +1042,6 @@ begin
     Gear^.LastDamage := AttackerHog;
 
     Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
-    uStats.HedgehogDamaged(Gear, AttackerHog);
     HHHurt(Gear^.Hedgehog, Source);
     AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, Gear^.Hedgehog^.Team^.Clan^.Color);
     tmpDmg:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
@@ -1084,6 +1083,8 @@ begin
         Gear^.Hedgehog:= AttackerHog;
         end;
     inc(Gear^.Damage, Damage);
+    
+    uStats.HedgehogDamaged(Gear, AttackerHog);    
     ScriptCall('onGearDamage', Gear^.UID, Damage);
 end;
 
