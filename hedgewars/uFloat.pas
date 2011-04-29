@@ -192,7 +192,7 @@ end;
 function hwFloat2Float (const i: hwFloat) : extended;
 begin
 hwFloat2Float:= i.QWordValue / $100000000;
-if i.isNegative then hwFloat2Float:=hwFloat2Float*-1;
+if i.isNegative then hwFloat2Float:= -hwFloat2Float;
 end;
 
 operator + (const z1, z2: hwFloat) z : hwFloat;
