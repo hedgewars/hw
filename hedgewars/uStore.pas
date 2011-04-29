@@ -510,7 +510,7 @@ procedure SetupOpenGL;
 {$IFNDEF IPHONEOS}
 var vendor: shortstring;
 {$IFDEF DARWIN}
-const one = 1;
+const one : LongInt = 1;
 {$ENDIF}
 {$ENDIF}
 begin
@@ -523,7 +523,7 @@ begin
     vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
 {$IFNDEF SDL13}
 // this attribute is default in 1.3 and must be enabled in MacOSX
-    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, ((cReducedQuality and rqDesyncVBlank) = 0))
+    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, LongInt((cReducedQuality and rqDesyncVBlank) = 0));
 
 {$IFDEF DARWIN}
 // fixes vsync in Snow Leopard
@@ -921,22 +921,32 @@ begin
     end;
 
 {$IFDEF SDL13}
-    if SDLwindow = nil then
-    begin
-        // the values in x and y make the window appear in the center
-        // on ios, make the sdl window appear on the second monitor when present
-        x:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}(SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
-        y:= (SDL_WINDOWPOS_CENTERED_MASK or {$IFDEF IPHONEOS}(SDL_GetNumVideoDisplays() - 1){$ELSE}0{$ENDIF});
-        SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN
-                          {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS {$ENDIF});  // do not set SDL_WINDOW_RESIZABLE on iOS
-        SDLrender:= SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
-    end;
+    // these values in x and y make the window appear in the center
+    x:= SDL_WINDOWPOS_CENTERED_MASK;
+    y:= SDL_WINDOWPOS_CENTERED_MASK;
+    flags:= SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN;
 
+{$IFDEF IPHONEOS}
+    // make the sdl window appear on the second monitor when present
+    x:= x or (SDL_GetNumVideoDisplays() - 1);
+    y:= y or (SDL_GetNumVideoDisplays() - 1);
+
+    // hardcode the opengles driver as we do our own drawing
+    SDL_SetHint('SDL_RENDER_DRIVER','opengles');
+    flags:= flags or SDL_WINDOW_BORDERLESS;  // do not set SDL_WINDOW_RESIZABLE on iOS
+{$ENDIF}
+
+    SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
+    SDLTry(SDLwindow <> nil, true);
+    SDLrender:= SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
+    SDLTry(SDLrender <> nil, true);
+
+    // clean the renderer before using it
     SDL_SetRenderDrawColor(SDLrender, 0, 0, 0, 255);
     SDL_RenderClear(SDLrender);
     SDL_RenderPresent(SDLrender);
 
-    // we need to reset the gl context from the one created by SDL as we have our own drawing system
+    // reset the gl context from the one created by SDL (as we have our own drawing system)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 {$ELSE}

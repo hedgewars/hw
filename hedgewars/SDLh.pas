@@ -767,16 +767,17 @@ function  SDL_CreateWindow(title: PChar; x,y,w,h, flags: LongInt): PSDL_Window; 
 function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): PSDL_Renderer; cdecl; external SDLLibName;
 function  SDL_DestroyRenderer(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
-function  SDL_GetRenderer(window: PSDL_Window): PSDL_Renderer; cdecl; external SDLLibName;
 
 procedure SDL_VideoQuit; cdecl; external SDLLibName;
 function  SDL_GetNumVideoDisplays: LongInt; cdecl; external SDLLibName;
 
 function  SDL_SetRenderDrawColor(renderer: PSDL_Renderer; r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
+function  SDL_GetRenderer(window: PSDL_Window): PSDL_Renderer; cdecl; external SDLLibName;
 function  SDL_RenderFillRect(renderer: PSDL_Renderer; rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 function  SDL_RenderClear(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
 procedure SDL_RenderPresent(renderer: PSDL_Renderer); cdecl; external SDLLibName;
 function  SDL_RenderReadPixels(renderer: PSDL_Renderer; rect: PSDL_Rect; format: LongInt; pixels: pointer; pitch: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_RenderSetViewport(window: PSDL_Window; rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 
 function  SDL_SelectMouse(index: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRelativeMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
