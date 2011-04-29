@@ -10,7 +10,6 @@ include(${CMAKE_MODULE_PATH}/FindSDL_Extras.cmake)
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
 #SOURCE AND PROGRAMS SECTION
-set(fpc_tryexe fpc)
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
 set(engine_output_name "hwengine")
 
@@ -81,16 +80,16 @@ if(BUILD_ENGINE_LIBRARY)
     endif(CMAKE_SIZEOF_VOID_P MATCHES "8")
 
     # due to compiling/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
-    if(APPLE AND current_macosx_version MATCHES "10.6")
+    if(APPLE AND current_macosx_version GREATER "10.5")
         set(pascal_compiler_flags_cmn "-k-no_order_inits" ${pascal_compiler_flags_cmn})
-    endif(APPLE AND current_macosx_version MATCHES "10.6")
+    endif()
 
     if (APPLE)
         set(engine_output_name "hwengine.dylib")
     endif (APPLE)
 endif(BUILD_ENGINE_LIBRARY)
 
-find_program(fpc_executable ${fpc_tryexe})
+find_program(fpc_executable fpc)
 
 if(fpc_executable)
     exec_program(${fpc_executable} ARGS "-iV" OUTPUT_VARIABLE fpc_output)
@@ -134,7 +133,7 @@ if(fpc_version)
     if(fpc_ver LESS "020200")
         message(FATAL_ERROR "Minimum required version of FreePascal is 2.2.0")
     elseif(APPLE AND x86_64_build AND (fpc_ver LESS "020400"))
-        message(FATAL_ERROR "Minimum required version of FreePascal is 2.4.0 for building 64 bit applications on Mac OS X!")
+        message(FATAL_ERROR "Minimum required version of FreePascal is 2.4.0 for building 64 bit applications on Mac OS X")
     endif()
 else()
     message(FATAL_ERROR "No Pascal compiler found!")

@@ -36,6 +36,10 @@ else()
     else()
         set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/share/)
     endif()
+    #only the cocoa version of qt supports building 64 bit apps
+    if(APPLE AND (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64*") AND (NOT QT_MAC_USE_COCOA))
+        message(FATAL_ERROR "Building the 64 bit version of Hedgewars *requires* the Cocoa variant of QT on Mac OS X")
+    endif()
 endif()
 
 
