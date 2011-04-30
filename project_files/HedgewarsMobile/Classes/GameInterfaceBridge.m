@@ -61,7 +61,6 @@
 
     [self.overlayController setUseClassicMenu:[[dict objectForKey:@"menu"] boolValue]];
     [self.overlayController setInitialOrientation:[[dict objectForKey:@"orientation"] intValue]];
-    objcExportsInit(self.overlayController);
 
     UIWindow *gameWindow = (IS_DUALHEAD() ? [HedgewarsAppDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow]);
     [gameWindow addSubview:self.overlayController.view];
@@ -128,6 +127,8 @@
     [rotation release];
     [localeString release];
     [ipcString release];
+
+    objcExportsInit(self.overlayController);
 
     // this is the pascal fuction that starts the game, wrapped around isInGame
     [HedgewarsAppDelegate sharedAppDelegate].isInGame = YES;

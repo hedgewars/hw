@@ -101,6 +101,9 @@ void clearView() {
 }
 
 void saveBeganSynching() {
+    savedGame = YES;
+    stopSpinningProgress();
+
     overlay_instance.view.backgroundColor = [UIColor blackColor];
     overlay_instance.view.alpha = 0.75;
     overlay_instance.view.userInteractionEnabled = NO;
@@ -114,9 +117,6 @@ void saveBeganSynching() {
     [overlay_instance.savesIndicator startAnimating];
     [overlay_instance.view addSubview:overlay_instance.savesIndicator];
     [overlay_instance.savesIndicator release];
-
-    savedGame = YES;
-    stopSpinningProgress();
 }
 
 void saveFinishedSynching() {
@@ -131,7 +131,6 @@ void saveFinishedSynching() {
     [overlay_instance.savesIndicator performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 
     gameRunning = YES;
-    savedGame = NO;
 }
 
 void updateVisualsNewTurn(void) {

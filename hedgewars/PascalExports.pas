@@ -28,8 +28,7 @@ unit PascalExports;
  *           http://en.wikipedia.org/wiki/X86_calling_conventions#cdecl
  *)
 interface
-uses uTypes, uConsts, uVariables, GLunit, uKeys, uSound, uAmmos, uUtils,
-     uCommands, uMobile;
+uses uTypes, uConsts, uVariables, GLunit, uKeys, uSound, uAmmos, uUtils, uCommands;
 
 {$INCLUDE "config.inc"}
 procedure HW_versionInfo(netProto: PLongInt; versionStr: PPChar); cdecl; export;
@@ -201,7 +200,6 @@ end;
 // equivalent to esc+y; when closeFrontend = true the game exits after memory cleanup
 procedure HW_terminate(closeFrontend: boolean); cdecl; export;
 begin
-    {$IFDEF IPHONEOS}setGameRunning(false);{$ENDIF}
     alsoShutdownFrontend:= closeFrontend;
     ParseCommand('forcequit', true);
 end;
