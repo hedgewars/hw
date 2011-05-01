@@ -67,17 +67,17 @@
     [self viewWillAppear:YES];
     [container addSubview:self.view];
 
-    if (placingPoint.x == -1 && placingPoint.y == -1)
+    if (placingPoint.x == -1 || placingPoint.y == -1)
         placingPoint = container.center;
-    if (IS_DUALHEAD() == NO)
-        self.view.center = CGPointMake(placingPoint.y, placingPoint.x);
-    else {
+    if (IS_DUALHEAD() == YES) {
         UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
         if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight)
             self.view.center = CGPointMake(placingPoint.y, placingPoint.x);
         else
             self.view.center = CGPointMake(placingPoint.x, placingPoint.y);
-    }
+    } else
+        self.view.center = CGPointMake(placingPoint.y, placingPoint.x);
+
     self.isVisible = YES;
     if (IS_IPAD() == NO)
         HW_pause();
@@ -116,7 +116,7 @@
     [self.view addSubview:self.captionLabel];
     [caption release];
 
-    UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(x+2, y+20, 415, 53)];
+    UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(x+2, self.view.frame.size.height-50, 415, 53)];
     description.backgroundColor = [UIColor clearColor];
     description.textColor = [UIColor whiteColor];
     description.text = DEFAULT_DESCRIPTION;
@@ -281,7 +281,7 @@
     if (theButton.tag > 41)
         y = 5;
     else
-        y = (HW_getNumberOfWeapons()/BTNS_PER_ROW)*44 + 18;
+        y = (HW_getNumberOfWeapons()/BTNS_PER_ROW)*40;
 
     self.nameLabel.frame = CGRectMake(x, y, 200, 20);
     self.captionLabel.frame = CGRectMake(x+200, y, 220, 20);

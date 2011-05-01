@@ -42,9 +42,6 @@
 #pragma mark rotation
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
-    // don't rotate until the game is running for performance and synchronization with the sdlview
-    if (isGameRunning() == NO)
-        return (interfaceOrientation == (UIInterfaceOrientation) self.initialOrientation);
     return rotationManager(interfaceOrientation);
 }
 
@@ -117,7 +114,6 @@
             self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
             break;
         default:
-            DLog(@"Nope");
             break;
     }
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
@@ -664,7 +660,6 @@
                 initialDistanceForPinching = currentDistanceOfPinching;
             break;
         default:
-            DLog(@"Nope");
             break;
     }
 }

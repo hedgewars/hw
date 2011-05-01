@@ -57,10 +57,8 @@
 #pragma mark -
 // overlay with controls, become visible later, with a transparency effect since the sdlwindow is not yet created
 -(void) displayOverlayLater:(id) object {
-    NSDictionary *dict = (NSDictionary *)object;
-
-    [self.overlayController setUseClassicMenu:[[dict objectForKey:@"menu"] boolValue]];
-    [self.overlayController setInitialOrientation:[[dict objectForKey:@"orientation"] intValue]];
+    [self.overlayController setUseClassicMenu:[[self.systemSettings objectForKey:@"menu"] boolValue]];
+    [self.overlayController setInitialOrientation:self.parentController.interfaceOrientation];
 
     UIWindow *gameWindow = (IS_DUALHEAD() ? [HedgewarsAppDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow]);
     [gameWindow addSubview:self.overlayController.view];
@@ -155,12 +153,7 @@
         blackView.alpha = 1;
 
     // prepare options for overlay and add it to the future sdl uiwindow
-    NSDictionary *overlayOptions = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                    [NSNumber numberWithInt:self.parentController.interfaceOrientation],@"orientation",
-                                    [self.systemSettings objectForKey:@"menu"],@"menu",
-                                    nil];
-    [self performSelector:@selector(displayOverlayLater:) withObject:overlayOptions afterDelay:3];
-    [overlayOptions release];
+    [self performSelector:@selector(displayOverlayLater:) withObject:nil afterDelay:3];
 
     // SYSTEMS ARE GO!!
     [self startGameEngine];
