@@ -4870,16 +4870,16 @@ begin
        not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
        TargetPoint.Y - SpritesData[sprHHTelepMask].Height div 2,
        sprHHTelepMask, 0, false, false) then
-    begin
+        begin
         HHGear^.Message := HHGear^.Message and not gmAttack;
         HHGear^.State := HHGear^.State and not gstAttacking;
         HHGear^.State := HHGear^.State or gstHHChooseTarget;
         DeleteGear(Gear);
         isCursorVisible := true;
         PlaySound(sndDenied)
-    end
+        end
     else
-    begin
+        begin
         DeleteCI(HHGear);
         SetAllHHToActive;
         PlaySound(sndPlaced);
@@ -4894,7 +4894,49 @@ begin
         hog^.Gear:= nil;
         Gear^.Hedgehog := hog;
         Gear^.doStep := @doStepStructure;
-    end;
+        end;
     TargetPoint.X := NoPointX;
 end;
 
+procedure doStepTardis(Gear: PGear);
+(*var 
+    i, x, y: LongInt;
+    dX, dY: hwFloat;
+    Fire: PGear;
+    vg: PVisualGear;*)
+begin
+    if (Gear^.State and gstTmpFlag) = 0 then dec(Gear^.Timer);
+    if (Gear^.Timer = 0) and (CurAmmoGear = Gear) then
+        begin
+        if (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then 
+            begin
+            DeleteGear(Gear);
+            exit
+            end;
+        if Gear = CurAmmoGear then CurAmmoGear := nil;
+        Gear^.Hedgehog:= CurrentHedgehog;
+        RemoveGearFromList(CurrentHedgehog^.Gear);
+        CurrentHedgehog^.Gear^.Z := cHHZ;
+        CurrentHedgehog^.Gear^.Active := false;
+        CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstHHDriven;
+        CurrentHedgehog^.GearHidden:= CurrentHedgehog^.Gear;
+        CurrentHedgehog^.Gear:= nil;
+        Gear^.State:= Gear^.State or gstTmpFlag;
+        Gear^.Timer:= GameTicks + GetRandom(cHedgehogTurnTime*TeamsCount)+cHedgehogTurnTime;
+        end
+    else if (((Gear^.State and gstTmpFlag) <> 0) and (Gear^.Timer = GameTicks)) or SuddenDeath then
+        begin
+        if Gear^.Hedgehog <> nil then
+            begin
+            Gear^.Hedgehog^.Gear:= Gear^.Hedgehog^.GearHidden;
+            Gear^.Hedgehog^.GearHidden:= nil;
+            FindPlace(Gear^.Hedgehog^.Gear, false, 0, LAND_WIDTH,true);
+            InsertGearToList(Gear^.Hedgehog^.Gear);
+            Gear^.Hedgehog^.Gear^.State:= (Gear^.Hedgehog^.Gear^.State or gstTmpFlag or gstAttacked) and not gstHHDriven;
+            Gear^.Hedgehog^.Gear^.Timer:= $FF;
+            Gear^.Hedgehog^.Gear^.doStep:= @doStepHedgehogReturn;
+            SetAllHHToActive;
+            end;
+            DeleteGear(Gear)
+        end
+end;

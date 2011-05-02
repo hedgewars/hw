@@ -2041,8 +2041,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
-                          ammoprop_NeedTarget or
-                          ammoprop_AttackingPut or
                           ammoprop_Utility or
                           ammoprop_DontHold;
                 Count: 2;

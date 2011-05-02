@@ -317,6 +317,7 @@ with Gear^,
                    amDrillStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 3, _0, _0, CurWeapon^.Timer);
                    //amMelonStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 4, _0, _0, 0);
                      amStructure: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtStructure, 0, _0, _0, 0);
+                        amTardis: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 5000);
                   end;
 
         // Clear FollowGear if using on a rope/parachute/saucer etc so focus stays with the hog's movement
@@ -995,4 +996,14 @@ else
         if Team^.hasGone then TeamGoneEffect(Team^);
     doStepHedgehogDriven(Gear)
     end;
+end;
+
+procedure doStepHedgehogReturn(Gear: PGear);
+begin
+if (Gear^.Timer > 0) and ((GameTicks mod 20) = 0) then dec(Gear^.Timer)
+else if (Gear^.Timer = 0) then
+    begin
+    Gear^.doStep:= @doStepHedgehog;
+    Gear^.State:= Gear^.State and not gstTmpFlag;
+    end
 end;

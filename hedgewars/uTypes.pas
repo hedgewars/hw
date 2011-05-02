@@ -97,7 +97,7 @@ type
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
-            gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun); // 61
+            gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun, gtTardis); // 62
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,

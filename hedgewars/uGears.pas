@@ -72,6 +72,7 @@ procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
 procedure HedgehogStep(Gear: PGear); forward;
 procedure doStepHedgehogMoving(Gear: PGear); forward;
+procedure doStepHedgehogReturn(Gear: PGear); forward;
 procedure HedgehogChAngle(HHGear: PGear); forward;
 procedure ShotgunShot(Gear: PGear); forward;
 procedure PickUp(HH, Gear: PGear); forward;
@@ -147,8 +148,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepSnowball,
             @doStepSnowflake,
             @doStepPlaceStructure,
-            @doStepLandGun
-            );
+            @doStepLandGun,
+            @doStepTardis);
 
 procedure InsertGearToList(Gear: PGear);
 var tmp, ptmp: PGear;

@@ -227,6 +227,13 @@ begin
         Tint($FF, $FF, $FF, $FF)
         end;
 
+    if  (CurAmmoGear <> nil) and 
+        (CurrentHedgehog^.Gear <> nil) and
+        (CurrentHedgehog^.Gear = Gear) and 
+        (CurAmmoGear^.Kind = gtTardis) then Tint($FF, $FF, $FF, CurAmmoGear^.Timer div 20)
+    // probably will need a new flag for this
+    else if (Gear^.State and gstTmpFlag <> 0) then Tint($FF, $FF, $FF, $FF-Gear^.Timer);
+
     if ((Gear^.State and gstWinner) <> 0) and
     ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtPickHammer)) then
         begin
