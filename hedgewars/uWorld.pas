@@ -50,7 +50,8 @@ uses
     uUtils,
     uTextures,
     uRender,
-    uCaptions
+    uCaptions,
+    uCursor
     ;
 
 var cWaveWidth, cWaveHeight: LongInt;
@@ -173,7 +174,7 @@ cWaveWidth:= SpritesData[sprWater].Width;
 cWaveHeight:= 32;
 
 cGearScrEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
-SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
+uCursor.init();
 prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
 WorldDx:=  - (LAND_WIDTH div 2) + cScreenWidth div 2;
@@ -211,7 +212,7 @@ if bShowAmmoMenu then
        AMxShift:= 0
    else
        if AMxShift > MENUSPEED then
-      	   dec(AMxShift, MENUSPEED)
+           dec(AMxShift, MENUSPEED)
        else
            AMxShift:= 0;
    end else
@@ -221,7 +222,6 @@ if bShowAmmoMenu then
       CursorPoint.X:= cScreenWidth shr 1;
       CursorPoint.Y:= cScreenHeight shr 1;
       prevPoint:= CursorPoint;
-      SDL_WarpMouse(CursorPoint.X  + cScreenWidth div 2, cScreenHeight - CursorPoint.Y)
       end;
    if (cReducedQuality and rqSlowMenu) <> 0 then
        AMxShift:= AMWidth
@@ -252,7 +252,7 @@ y:= AMyOffset;
 dec(y, BORDERSIZE);
 DrawSprite(sprAMCorners, x - BORDERSIZE, y, 0);
 for i:= 0 to cMaxSlotAmmoIndex do
-	DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 0);
+    DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 0);
 DrawSprite(sprAMCorners, x + AMWidth - AMxOffset, y, 1);
 inc(y, BORDERSIZE);
 
@@ -303,12 +303,12 @@ Slot:= 0;
 y:= cScreenHeight - AMyOffset;
 DrawSprite(sprAMCorners, x - BORDERSIZE, y, 2);
 for i:= 0 to cMaxSlotAmmoIndex + 1 do
-	DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 1);
+    DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 1);
 DrawSprite(sprAMCorners, x + AMWidth - AMxOffset, y, 3);
 dec(y, AMSlotSize);
 DrawSprite(sprAMBorderVertical, x - BORDERSIZE, y, 0);
 for i:= 0 to cMaxSlotAmmoIndex do
-	DrawSprite(sprAMSlot, x + i * AMSlotSize, y, 2);
+    DrawSprite(sprAMSlot, x + i * AMSlotSize, y, 2);
 DrawSprite(sprAMSlot, x + (cMaxSlotAmmoIndex + 1) * AMSlotSize, y, 1);
 DrawSprite(sprAMBorderVertical, x + AMWidth - AMxOffset, y, 1);
 
@@ -355,7 +355,7 @@ for i:= cMaxSlotIndex downto 0 do
 dec(y, BORDERSIZE);
 DrawSprite(sprAMCorners, x - BORDERSIZE, y, 0);
 for i:= 0 to cMaxSlotAmmoIndex + 1 do
-	DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 0);
+    DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 0);
 DrawSprite(sprAMCorners, x + AMWidth - AMxOffset, y, 1);
 {$ENDIF}
 
@@ -1161,11 +1161,7 @@ var EdgesDist, wdy, shs: LongInt;
 begin
 {$IFNDEF IPHONEOS}
 if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus then
-begin
-    SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
-    CursorPoint.X:= CursorPoint.X - (cScreenWidth shr 1);
-    CursorPoint.Y:= cScreenHeight - CursorPoint.Y;
-end;
+    uCursor.updatePosition();
 {$ENDIF}
 
 if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
@@ -1200,7 +1196,7 @@ begin
     if CursorPoint.Y < AMyOffset + AMSlotSize then CursorPoint.Y:= AMyOffset + AMSlotSize;
 {$ENDIF}
     prevPoint:= CursorPoint;
-    if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
+    //if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
     exit
 end;
 
@@ -1255,7 +1251,7 @@ else
 
 // this moves the camera according to CursorPoint X and Y
 prevPoint:= CursorPoint;
-if cHasFocus then SDL_WarpMouse(CursorPoint.X + (cScreenWidth shr 1), cScreenHeight - CursorPoint.Y);
+//if cHasFocus then SDL_WarpMouse(CursorPoint.X + (cScreenWidth shr 1), cScreenHeight - CursorPoint.Y);
 if WorldDy > LAND_HEIGHT + 1024 then WorldDy:= LAND_HEIGHT + 1024;
 if WorldDy < wdy then WorldDy:= wdy;
 if WorldDx < - LAND_WIDTH - 1024 then WorldDx:= - LAND_WIDTH - 1024;
