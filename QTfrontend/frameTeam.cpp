@@ -37,8 +37,8 @@ FrameTeams::FrameTeams(QWidget* parent) :
     mainLayout.setContentsMargins(4, 4, 4, 4);
 
     int i = 0;
-    while(colors[i])
-        availableColors.push_back(*colors[i++]);
+    while(colors[i] != 0)
+        availableColors.push_back(QColor(colors[i++]));
 
     resetColors();
 }

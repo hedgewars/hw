@@ -19,6 +19,7 @@
 #include <QString>
 #include <QByteArray>
 #include <QUuid>
+#include <QColor>
 
 #include "game.h"
 #include "hwconsts.h"
@@ -117,7 +118,7 @@ void HWGame::SendQuickConfig()
     HWTeam * team1;
     team1 = new HWTeam;
     team1->difficulty = 0;
-    team1->teamColor = *colors[0];
+    team1->teamColor = QColor(colors[0]);
     team1->numHedgehogs = 4;
     namegen.TeamRandomNames(team1,TRUE);
     HWProto::addStringListToBuffer(teamscfg,
@@ -126,7 +127,7 @@ void HWGame::SendQuickConfig()
     HWTeam * team2;
     team2 = new HWTeam;
     team2->difficulty = 4;
-    team2->teamColor = *colors[1];
+    team2->teamColor = QColor(colors[1]);
     team2->numHedgehogs = 4;
 	do
         namegen.TeamRandomNames(team2,TRUE);

@@ -63,8 +63,6 @@
 #define IS_NOT_VERY_POWERFUL()  ([modelType() hasPrefix:@"iPad1"] || [modelType() hasPrefix:@"iPhone2"] || [modelType() hasPrefix:@"iPod3"] || [modelType() hasPrefix:@"iPod4"] )
 #define IS_VERY_POWERFUL()      (IS_NOT_POWERFUL() == NO && IS_NOT_VERY_POWERFUL() == NO)
 
-#define DEFAULT_NETGAME_PORT    46631
-
 
 void print_free_memory (void);
 void playSound (NSString *snd);

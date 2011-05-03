@@ -24,6 +24,7 @@
 #import "CommodityFunctions.h"
 #import <SystemConfiguration/SCNetworkReachability.h>
 #import <netinet/in.h>
+#import "hwconsts.h"
 
 #define BUFFER_SIZE 256
 
@@ -105,18 +106,18 @@
     }
 
     // Resolving the host using NULL make network interface to listen
-    if (SDLNet_ResolveHost(&ip, "netserver.hedgewars.org", DEFAULT_NETGAME_PORT) < 0 && !clientQuit) {
+    if (SDLNet_ResolveHost(&ip, "netserver.hedgewars.org", NETGAME_DEFAULT_PORT) < 0 && !clientQuit) {
         DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         clientQuit = YES;
     }
 
     // Open a connection with the IP provided (listen on the host's port)
     if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), DEFAULT_NETGAME_PORT);
+        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), NETGAME_DEFAULT_PORT);
         clientQuit = YES;
     }
 
-    DLog(@"Found server on port %d", DEFAULT_NETGAME_PORT);
+    DLog(@"Found server on port %d", NETGAME_DEFAULT_PORT);
     while (!clientQuit) {
         int index = 0;
         BOOL exitBufferLoop = NO;

@@ -20,7 +20,6 @@
 #include <QString>
 #include <QDir>
 #include <QStringList>
-#include <QColor>
 #include <QPair>
 
 extern QString * cProtoVer;
@@ -46,7 +45,7 @@ extern QString * cDefaultAmmoStore;
 extern int cAmmoNumber;
 extern QList< QPair<QString, QString> > cDefaultAmmos;
 
-extern QColor *colors[];
+extern unsigned int colors[];
 
 extern QString * netHost;
 extern quint16 netPort;
@@ -91,3 +90,18 @@ extern bool isDevBuild;
 #define AMMOLINE_PORTALS_DELAY  "000000000000020550000004000700400000000020000000060000"
 #define AMMOLINE_PORTALS_CRATE  "131111031211111112311411111111111111121111110111111111"
 
+
+#define NETGAME_DEFAULT_PORT 46631
+
+
+// see http://en.wikipedia.org/wiki/List_of_colors
+#define HW_TEAMCOLOR_ARRAY  { 0xff007fff, /* azure */ \
+                              0xffdd0000, /* classic red */ \
+                              0xff3e9321, /* classic green */ \
+                              0xffa23dbb, /* classic purple */ \
+                              0xffffb347, /* pastel orange */ \
+                              0xffcfcfc4, /* pastel gray */ \
+                              0xffbff000, /* lime */ \
+                              0xffffef00, /* yellow */ \
+                              /* add new colors here */ \
+                              0 }

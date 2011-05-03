@@ -28,6 +28,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <CommonCrypto/CommonDigest.h>
 #import "PascalImports.h"
+#import "hwconsts.h"
 
 BOOL inline rotationManager (UIInterfaceOrientation interfaceOrientation) {
     return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
@@ -37,7 +38,7 @@ BOOL inline rotationManager (UIInterfaceOrientation interfaceOrientation) {
 NSInteger inline randomPort () {
     srandom(time(NULL));
     NSInteger res = (random() % 64511) + 1024;
-    return (res == DEFAULT_NETGAME_PORT) ? randomPort() : res;
+    return (res == NETGAME_DEFAULT_PORT) ? randomPort() : res;
 }
 
 void popError (const char *title, const char *message) {
@@ -107,16 +108,17 @@ void playSound (NSString *snd) {
     }
 }
 
-NSArray inline *getAvailableColors (void) {
-    return [NSArray arrayWithObjects:[NSNumber numberWithUnsignedInt:0x3376E9],     // bluette
-                                     [NSNumber numberWithUnsignedInt:0x3e9321],     // greeeen
-                                     [NSNumber numberWithUnsignedInt:0xa23dbb],     // violett
-                                     [NSNumber numberWithUnsignedInt:0xff9329],     // oranngy
-                                     [NSNumber numberWithUnsignedInt:0xdd0000],     // reddish
-                                     [NSNumber numberWithUnsignedInt:0x737373],     // graaaay
-                                     [NSNumber numberWithUnsignedInt:0x00FFFF],     // cyannnn  
-                                     [NSNumber numberWithUnsignedInt:0xFF8888],     // peachyj
-                                     nil];
+NSArray *getAvailableColors (void) {
+    unsigned int colors[] = HW_TEAMCOLOR_ARRAY;
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+
+    int i = 0;
+    while(colors[i] != 0)
+        [array addObject:[NSNumber numberWithUnsignedInt:(colors[i++] & 0x00FFFFFF)]];
+
+    NSArray *final = [NSArray arrayWithArray:array];
+    [array release];
+    return final;
 }
 
 UILabel *createBlueLabel (NSString *title, CGRect frame) {
