@@ -20,6 +20,8 @@
 
 
 #import "CreationChamber.h"
+#import "hwconsts.h"
+
 
 void createTeamNamed (NSString *nameWithoutExt) {
     NSString *teamsDirectory = TEAMS_DIRECTORY();
@@ -72,110 +74,61 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
                                                         error:NULL];
     }
 
-    NSDictionary *theWeapon = nil;
+    NSInteger ammolineSize = HW_getNumberOfWeapons();
+    NSString *qt, *prob, *delay, *crate;
     switch (type) {
         default: //default
-            theWeapon = [[NSDictionary alloc] initWithObjects:
-                         [NSArray arrayWithObjects:
-                          @"93919294221991210322351110012010000002111101010111200",
-                          @"04050405416006555465544647765766666661555101011154100",
-                          @"00000000000002055000000400070040000000002000000006000",
-                          @"13111103121111111231141111111111111112111111011111200",
-                          nil]
-                                                      forKeys: [NSArray arrayWithObjects:
-                                                                @"ammostore_initialqt",
-                                                                @"ammostore_probability",
-                                                                @"ammostore_delay",
-                                                                @"ammostore_crate", nil]];
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_DEFAULT_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_DEFAULT_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_DEFAULT_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_DEFAULT_QT length:ammolineSize encoding:NSUTF8StringEncoding];
             break;
         case 1: //crazy
-            theWeapon = [[NSDictionary alloc] initWithObjects:
-                         [NSArray arrayWithObjects:
-                          @"99999999999999999929999999999999992999999999099999900",
-                          @"11111101111111111111111111111111111111111111011111100",
-                          @"00000000000000000000000000000000000000000000000000000",
-                          @"13111103121111111231141111111111111112111101011111100",
-                          nil]
-                                                      forKeys: [NSArray arrayWithObjects:
-                                                                @"ammostore_initialqt",
-                                                                @"ammostore_probability",
-                                                                @"ammostore_delay",
-                                                                @"ammostore_crate", nil]];
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_CRAZY_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_CRAZY_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_CRAZY_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_CRAZY_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
             break;
         case 2: //pro mode
-            theWeapon = [[NSDictionary alloc] initWithObjects:
-                         [NSArray arrayWithObjects:
-                          @"90900090000000000000090000000000000000000000000000000",
-                          @"00000000000000000000000000000000000000000000000000000",
-                          @"00000000000002055000000400070040000000002000000000000",
-                          @"11111111111111111111111111111111111111111001011111100",
-                          nil]
-                                                      forKeys: [NSArray arrayWithObjects:
-                                                                @"ammostore_initialqt",
-                                                                @"ammostore_probability",
-                                                                @"ammostore_delay",
-                                                                @"ammostore_crate", nil]];
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_PROMODE_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_PROMODE_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_PROMODE_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_PROMODE_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
             break;
         case 3: //shoppa
-            theWeapon = [[NSDictionary alloc] initWithObjects:
-                         [NSArray arrayWithObjects:
-                          @"00000099000000000000000000000000000000000000000000000",
-                          @"44444100442444022101121212224220000000020004000100100",
-                          @"00000000000000000000000000000000000000000000000000000",
-                          @"11111111111111111111111111111111111111111011011111100",
-                          nil]
-                                                      forKeys: [NSArray arrayWithObjects:
-                                                                @"ammostore_initialqt",
-                                                                @"ammostore_probability",
-                                                                @"ammostore_delay",
-                                                                @"ammostore_crate", nil]];
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPA_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPA_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPA_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPA_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
             break;
         case 4: //clean slate
-            theWeapon = [[NSDictionary alloc] initWithObjects:
-                         [NSArray arrayWithObjects:
-                          @"10100090000100000110000000000000000000000000000010000",
-                          @"04050405416006555465544647765766666661555101011154100",
-                          @"00000000000000000000000000000000000000000000000000000",
-                          @"13111103121111111231141111111111111112111111011111100",
-                          nil]
-                                                      forKeys: [NSArray arrayWithObjects:
-                                                                @"ammostore_initialqt",
-                                                                @"ammostore_probability",
-                                                                @"ammostore_delay",
-                                                                @"ammostore_crate", nil]];
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_CLEAN_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_CLEAN_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_CLEAN_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_CLEAN_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
             break;
         case 5: //minefield
-            theWeapon = [[NSDictionary alloc] initWithObjects:
-                         [NSArray arrayWithObjects:
-                          @"00000099000900000003000000000000000000000000000000000",
-                          @"00000000000000000000000000000000000000000000000000000",
-                          @"00000000000002055000000400070040000000002000000006000",
-                          @"11111111111111111111111111111111111111111111011111100",
-                          nil]
-                                                      forKeys: [NSArray arrayWithObjects:
-                                                                @"ammostore_initialqt",
-                                                                @"ammostore_probability",
-                                                                @"ammostore_delay",
-                                                                @"ammostore_crate", nil]];
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_MINES_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_MINES_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_MINES_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_MINES_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
             break;
         case 6: //thinking with portals
-            theWeapon = [[NSDictionary alloc] initWithObjects:
-                         [NSArray arrayWithObjects:
-                          @"90000090020000000021000000000000001100000900000000000",
-                          @"04050405416006555465544647765766666661555101011154100",
-                          @"00000000000002055000000400070040000000002000000006000",
-                          @"13111103121111111231141111111111111112111111011111100",
-                          nil]
-                                                      forKeys: [NSArray arrayWithObjects:
-                                                                @"ammostore_initialqt",
-                                                                @"ammostore_probability",
-                                                                @"ammostore_delay",
-                                                                @"ammostore_crate", nil]];
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_PORTALS_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_PORTALS_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_PORTALS_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_PORTALS_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
             break;
     }
 
-    NSString *weaponFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", weaponsDirectory, nameWithoutExt];
+    NSDictionary *theWeapon = [[NSDictionary alloc] initWithObjectsAndKeys: qt,@"ammostore_initialqt",
+                               prob,@"ammostore_probability", delay,@"ammostore_delay", crate,@"ammostore_crate", nil];
+    [qt release];
+    [prob release];
+    [delay release];
+    [crate release];
 
+    NSString *weaponFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", weaponsDirectory, nameWithoutExt];
     [theWeapon writeToFile:weaponFile atomically:YES];
     [weaponFile release];
     [theWeapon release];
