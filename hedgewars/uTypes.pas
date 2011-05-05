@@ -292,6 +292,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 
     TTeamStats = record
         Kills : Longword;
+        Suicides: Longword;
         AIKills : Longword;
         TeamKills : Longword;
         TurnSkips : Longword;

@@ -593,13 +593,6 @@ else if Gear^.Kind = gtHedgehog then
             Gear^.Damage:= t;
             if ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cWaterOpacity < $FF))) and (hwRound(Gear^.Y) < cWaterLine + 256) then
                 spawnHealthTagForHH(Gear, t);
-
-            // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog
-            // same stand for CheckHHDamage
-            if (Gear^.LastDamage <> nil) then
-                uStats.HedgehogDamaged(Gear, Gear^.LastDamage)
-            else
-                uStats.HedgehogDamaged(Gear, CurrentHedgehog)
             end;
 
         team:= Gear^.Hedgehog^.Team;
@@ -623,6 +616,14 @@ else if Gear^.Kind = gtHedgehog then
                     TeamGoneEffect(team^.Clan^.Teams[i]^)
                     end
             end;
+
+        // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog
+        // same stand for CheckHHDamage
+        if (Gear^.LastDamage <> nil) then
+            uStats.HedgehogDamaged(Gear, Gear^.LastDamage, 0, true)
+        else
+            uStats.HedgehogDamaged(Gear, CurrentHedgehog, 0, true);
+
         inc(KilledHHs);
         RecountTeamHealth(team);
         if (CurrentHedgehog <> nil) and CurrentHedgehog^.Effects[heResurrectable] and not Gear^.Hedgehog^.Effects[heResurrectable] then
@@ -1078,6 +1079,7 @@ begin
            CurrentHedgehog^.Gear^.LastDamage := CurrentHedgehog;
            spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
            end;
+        uStats.HedgehogDamaged(Gear, AttackerHog, Damage, false);    
         end;
     end else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
         begin
@@ -1085,7 +1087,6 @@ begin
         end;
     inc(Gear^.Damage, Damage);
     
-    uStats.HedgehogDamaged(Gear, AttackerHog);    
     ScriptCall('onGearDamage', Gear^.UID, Damage);
 end;
 

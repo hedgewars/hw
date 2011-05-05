@@ -29,7 +29,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure AmmoUsed(am: TAmmoType);
-procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog);
+procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
 procedure Skipped;
 procedure TurnReaction;
 procedure SendStats;
@@ -50,7 +50,7 @@ var DamageGiven : Longword = 0;
     vpHurtSameClan: PVoicepack = nil;
     vpHurtEnemy: PVoicepack = nil;
 
-procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog);
+procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; killed: boolean);
 begin
 if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
     vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack
@@ -60,11 +60,11 @@ else
 //////////////////////////
 
 if Gear <> Attacker^.Gear then
-    inc(Attacker^.stats.StepDamageGiven, Gear^.Damage);
+    inc(Attacker^.stats.StepDamageGiven, Damage);
 
-if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(DamageClan, Gear^.Damage);
+if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(DamageClan, Damage);
 
-if Gear^.Health <= Gear^.Damage then
+if killed then
     begin
     inc(Attacker^.stats.StepKills);
     inc(Kills);
@@ -75,12 +75,13 @@ if Gear^.Health <= Gear^.Damage then
         inc(Attacker^.Team^.stats.TeamKills);
         inc(Attacker^.Team^.stats.TeamDamage, Gear^.Damage);
     end;
+    if Gear = Attacker^.Gear then inc(Attacker^.Team^.stats.Suicides);
     if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(KillsClan);
     end;
 
-inc(Gear^.Hedgehog^.stats.StepDamageRecv, Gear^.Damage);
-inc(DamageGiven, Gear^.Damage);
-inc(DamageTotal, Gear^.Damage)
+inc(Gear^.Hedgehog^.stats.StepDamageRecv, Damage);
+inc(DamageGiven, Damage);
+inc(DamageTotal, Damage)
 end;
 
 procedure Skipped;
