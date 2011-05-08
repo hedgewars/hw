@@ -37,8 +37,7 @@ procedure SendStats;
 implementation
 uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uDebug, uMisc;
 
-var DamageGiven : Longword = 0;
-    DamageClan  : Longword = 0;
+var DamageClan  : Longword = 0;
     DamageTotal : Longword = 0;
     KillsClan   : LongWord = 0;
     Kills       : LongWord = 0;
@@ -59,8 +58,9 @@ else
 
 //////////////////////////
 
-if Gear <> Attacker^.Gear then
-    inc(Attacker^.stats.StepDamageGiven, Damage);
+inc(Attacker^.stats.StepDamageGiven, Damage);
+inc(Attacker^.stats.DamageGiven, Damage);
+inc(Gear^.Hedgehog^.stats.StepDamageRecv, Damage);
 
 if CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(DamageClan, Damage);
 
@@ -79,8 +79,6 @@ if killed then
     if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(KillsClan);
     end;
 
-inc(Gear^.Hedgehog^.stats.StepDamageRecv, Damage);
-inc(DamageGiven, Damage);
 inc(DamageTotal, Damage)
 end;
 
@@ -100,14 +98,16 @@ if FinishedTurnsTotal <> 0 then
     begin
     inc(CurrentHedgehog^.stats.FinishedTurns);
 
-    if (DamageGiven = DamageTotal) and (DamageTotal > 0) then
+    if (CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (DamageTotal > 0) then
         PlaySound(sndFirstBlood, CurrentTeam^.voicepack)
 
     else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
         begin
         PlaySound(sndStupid, PreviousTeam^.voicepack);
-        if DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
+        if CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then 
+            AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
         end
+
     else if DamageClan <> 0 then
         if DamageTotal > DamageClan then
             if random(2) = 0 then
@@ -119,7 +119,8 @@ if FinishedTurnsTotal <> 0 then
                 PlaySound(sndSameTeam, vpHurtSameClan)
             else
                 PlaySound(sndTraitor, vpHurtSameClan)
-    else if DamageGiven <> 0 then
+
+    else if CurrentHedgehog^.stats.StepDamageGiven <> 0 then
         if Kills > 0 then
             PlaySound(sndEnemyDown, CurrentTeam^.voicepack)
         else
@@ -162,7 +163,6 @@ for t:= 0 to Pred(ClansCount) do
 
 Kills:= 0;
 KillsClan:= 0;
-DamageGiven:= 0;
 DamageClan:= 0;
 AmmoUsedCount:= 0;
 AmmoDamagingUsed:= false;
