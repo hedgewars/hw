@@ -16,22 +16,29 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QGridLayout>
-#include <QLabel>
 
-#include "pageconnecting.h"
+#ifndef PAGE_DRAWMAP_H
+#define PAGE_DRAWMAP_H
 
-PageConnecting::PageConnecting(QWidget* parent) :
-    AbstractPage(parent)
+#include "pages.h"
+
+class DrawMapWidget;
+
+class PageDrawMap : public AbstractPage
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    Q_OBJECT
 
-    QLabel * lblConnecting = new QLabel(this);
-    lblConnecting->setText(tr("Connecting..."));
-    pageLayout->addWidget(lblConnecting);
+public:
+    PageDrawMap(QWidget* parent = 0);
 
-    QPushButton * pbCancel = new QPushButton(this);
-    pbCancel->setText(tr("Cancel"));
-    pageLayout->addWidget(pbCancel);
-    connect(pbCancel, SIGNAL(clicked()), this, SIGNAL(cancelConnection()));
-}
+    QPushButton * BtnBack;
+
+    DrawMapWidget * drawMapWidget;
+
+private slots:
+    void load();
+    void save();
+};
+
+#endif
+

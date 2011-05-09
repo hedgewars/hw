@@ -20,7 +20,7 @@
 #include <QPushButton>
 #include <QComboBox>
 
-#include "pages.h"
+#include "pagecampaign.h"
 
 PageCampaign::PageCampaign(QWidget* parent) : AbstractPage(parent)
 {

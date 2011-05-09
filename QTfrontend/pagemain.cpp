@@ -21,7 +21,7 @@
 #include <QLabel>
 #include <QTime>
 
-#include "pages.h"
+#include "pagemain.h"
 #include "hwconsts.h"
 
 PageMain::PageMain(QWidget* parent) :

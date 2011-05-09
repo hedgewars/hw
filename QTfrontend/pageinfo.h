@@ -16,22 +16,23 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QGridLayout>
-#include <QLabel>
+#ifndef PAGE_INFO_H
+#define PAGE_INFO_H
 
-#include "pageconnecting.h"
+#include "pages.h"
 
-PageConnecting::PageConnecting(QWidget* parent) :
-    AbstractPage(parent)
+class About;
+
+class PageInfo : public AbstractPage
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    Q_OBJECT
 
-    QLabel * lblConnecting = new QLabel(this);
-    lblConnecting->setText(tr("Connecting..."));
-    pageLayout->addWidget(lblConnecting);
+public:
+    PageInfo(QWidget* parent = 0);
 
-    QPushButton * pbCancel = new QPushButton(this);
-    pbCancel->setText(tr("Cancel"));
-    pageLayout->addWidget(pbCancel);
-    connect(pbCancel, SIGNAL(clicked()), this, SIGNAL(cancelConnection()));
-}
+    QPushButton *BtnBack;
+    About *about;
+};
+
+#endif
+

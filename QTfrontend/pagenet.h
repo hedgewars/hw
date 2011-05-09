@@ -16,22 +16,38 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QGridLayout>
-#include <QLabel>
+#ifndef PAGE_NET_H
+#define PAGE_NET_H
 
-#include "pageconnecting.h"
+#include "pages.h"
 
-PageConnecting::PageConnecting(QWidget* parent) :
-    AbstractPage(parent)
+class PageNet : public AbstractPage
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    Q_OBJECT
 
-    QLabel * lblConnecting = new QLabel(this);
-    lblConnecting->setText(tr("Connecting..."));
-    pageLayout->addWidget(lblConnecting);
+public:
+    PageNet(QWidget* parent = 0);
 
-    QPushButton * pbCancel = new QPushButton(this);
-    pbCancel->setText(tr("Cancel"));
-    pageLayout->addWidget(pbCancel);
-    connect(pbCancel, SIGNAL(clicked()), this, SIGNAL(cancelConnection()));
-}
+    QPushButton* BtnUpdateSList;
+    QTableView * tvServersList;
+    QPushButton * BtnBack;
+    QPushButton * BtnNetConnect;
+    QPushButton * BtnNetSvrStart;
+    QPushButton * BtnSpecifyServer;
+
+private:
+    QGroupBox * ConnGroupBox;
+    QGridLayout * GBClayout;
+
+private slots:
+    void slotConnect();
+
+public slots:
+    void updateServersList();
+
+signals:
+    void connectClicked(const QString & host, quint16 port);
+};
+
+#endif
+

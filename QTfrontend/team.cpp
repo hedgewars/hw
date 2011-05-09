@@ -25,7 +25,7 @@
 #include <QSettings>
 #include "team.h"
 #include "hwform.h"
-#include "pages.h"
+#include "pageeditteam.h"
 #include "hwconsts.h"
 #include "hats.h"
 

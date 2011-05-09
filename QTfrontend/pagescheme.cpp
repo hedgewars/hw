@@ -27,7 +27,7 @@
 #include <QSpinBox>
 
 #include "ammoSchemeModel.h"
-#include "pages.h"
+#include "pagescheme.h"
 #include "misc.h"
 
 PageScheme::PageScheme(QWidget* parent) :

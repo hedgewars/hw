@@ -20,7 +20,7 @@
 #include <QPushButton>
 #include <QFileDialog>
 
-#include "pages.h"
+#include "pagedrawmap.h"
 #include "drawmapwidget.h"
 
 PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)

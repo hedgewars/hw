@@ -20,7 +20,7 @@
 #include <QPushButton>
 #include <QComboBox>
 
-#include "pages.h"
+#include "pagetraining.h"
 #include "hwconsts.h"
 
 PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)

@@ -16,22 +16,43 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QGridLayout>
-#include <QLabel>
+#ifndef PAGE_NETGAME_H
+#define PAGE_NETGAME_H
 
-#include "pageconnecting.h"
+#include "pages.h"
+class HWChatWidget;
 
-PageConnecting::PageConnecting(QWidget* parent) :
-    AbstractPage(parent)
+class PageNetGame : public AbstractPage
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    Q_OBJECT
 
-    QLabel * lblConnecting = new QLabel(this);
-    lblConnecting->setText(tr("Connecting..."));
-    pageLayout->addWidget(lblConnecting);
+public:
+    PageNetGame(QWidget* parent, QSettings * config, SDLInteraction * sdli);
 
-    QPushButton * pbCancel = new QPushButton(this);
-    pbCancel->setText(tr("Cancel"));
-    pageLayout->addWidget(pbCancel);
-    connect(pbCancel, SIGNAL(clicked()), this, SIGNAL(cancelConnection()));
-}
+    QPushButton *BtnBack;
+    QPushButton *BtnGo;
+    QPushButton *BtnMaster;
+    QPushButton *BtnStart;
+    QPushButton *BtnUpdate;
+
+    QLineEdit * leRoomName;
+
+    QAction * restrictJoins;
+    QAction * restrictTeamAdds;
+
+    HWChatWidget* pChatWidget;
+
+    TeamSelWidget* pNetTeamsWidget;
+    GameCFGWidget* pGameCFG;
+
+public slots:
+    void setReadyStatus(bool isReady);
+    void onUpdateClick();
+    void setMasterMode(bool isMaster);
+
+signals:
+    void SetupClicked();
+    void askForUpdateRoomName(const QString &);
+};
+
+#endif

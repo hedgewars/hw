@@ -28,7 +28,7 @@
 #include <QTableWidget>
 #include <QSlider>
 
-#include "pages.h"
+#include "pageoptions.h"
 #include "hwconsts.h"
 #include "fpsedit.h"
 #include "igbox.h"

@@ -25,7 +25,8 @@
 
 #include "gameuiconfig.h"
 #include "hwform.h"
-#include "pages.h"
+#include "pageoptions.h"
+#include "pagenetserver.h"
 #include "hwconsts.h"
 #include "fpsedit.h"
 

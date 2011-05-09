@@ -140,6 +140,26 @@ set(hwfr_moc_hdrs
     gameuiconfig.h
     gamecfgwidget.h
     pages.h
+    pagenet.h
+    pagemultiplayer.h
+    pagenetserver.h
+    pageingame.h
+    pagetraining.h
+    pageeditteam.h
+    pageoptions.h
+    pagemain.h
+    pageinfo.h
+    pagesingleplayer.h
+    pagenettype.h
+    pageconnecting.h
+    pagedrawmap.h
+    pagecampaign.h
+    pagenetgame.h
+    pageeditteam.h
+    pageroomslist.h
+    pageadmin.h
+    pagescheme.h
+    pageselectweapon.h
     SquareLabel.h
     hedgehogerWidget.h
     hwmap.h

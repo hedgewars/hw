@@ -23,7 +23,7 @@
 #include <QPushButton>
 #include <QTextBrowser>
 
-#include "pages.h"
+#include "pageadmin.h"
 #include "chatwidget.h"
 
 PageAdmin::PageAdmin(QWidget* parent) :

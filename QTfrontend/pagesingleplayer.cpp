@@ -19,7 +19,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-#include "pages.h"
+#include "pagesingleplayer.h"
 #include "gamecfgwidget.h"
 
 PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)

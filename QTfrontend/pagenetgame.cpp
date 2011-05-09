@@ -22,7 +22,7 @@
 #include <QMenu>
 #include <QMessageBox>
 
-#include "pages.h"
+#include "pagenetgame.h"
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 #include "chatwidget.h"

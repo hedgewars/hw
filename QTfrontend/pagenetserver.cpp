@@ -23,7 +23,7 @@
 #include <QLineEdit>
 #include <QSpinBox>
 
-#include "pages.h"
+#include "pagenetserver.h"
 
 PageNetServer::PageNetServer(QWidget* parent) : AbstractPage(parent)
 {

@@ -19,7 +19,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-#include "pages.h"
+#include "pageinfo.h"
 #include "about.h"
 
 PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)

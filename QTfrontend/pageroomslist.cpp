@@ -26,7 +26,7 @@
 #include <QTableWidget>
 
 #include "ammoSchemeModel.h"
-#include "pages.h"
+#include "pageroomslist.h"
 #include "hwconsts.h"
 #include "chatwidget.h"
 

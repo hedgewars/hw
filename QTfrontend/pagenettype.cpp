@@ -19,7 +19,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-#include "pages.h"
+#include "pagenettype.h"
 
 PageNetType::PageNetType(QWidget* parent) : AbstractPage(parent)
 {

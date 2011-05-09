@@ -20,7 +20,7 @@
 #include <QPushButton>
 #include <QComboBox>
 
-#include "pages.h"
+#include "pageselectweapon.h"
 #include "hwconsts.h"
 #include "selectWeapon.h"
 

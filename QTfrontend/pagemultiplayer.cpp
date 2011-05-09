@@ -19,7 +19,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-#include "pages.h"
+#include "pagemultiplayer.h"
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 

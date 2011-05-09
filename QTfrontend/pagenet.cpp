@@ -23,7 +23,7 @@
 #include <QMessageBox>
 #include <QHeaderView>
 
-#include "pages.h"
+#include "pagenet.h"
 #include "hwconsts.h"
 #include "netudpwidget.h"
 

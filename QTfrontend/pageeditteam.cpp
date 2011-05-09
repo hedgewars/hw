@@ -26,7 +26,7 @@
 #include <QToolBox>
 #include <QApplication>
 
-#include "pages.h"
+#include "pageeditteam.h"
 #include "sdlkeys.h"
 #include "hwconsts.h"
 #include "SquareLabel.h"

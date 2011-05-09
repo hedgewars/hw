@@ -18,7 +18,7 @@
 
 #include <QLabel>
 
-#include "pages.h"
+#include "pageingame.h"
 
 PageInGame::PageInGame(QWidget* parent) :
   AbstractPage(parent)
@@ -26,3 +26,4 @@ PageInGame::PageInGame(QWidget* parent) :
     QLabel * label = new QLabel(this);
     label->setText("In game...");
 }
+
