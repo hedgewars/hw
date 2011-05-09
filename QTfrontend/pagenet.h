@@ -19,7 +19,7 @@
 #ifndef PAGE_NET_H
 #define PAGE_NET_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class PageNet : public AbstractPage
 {

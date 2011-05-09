@@ -19,9 +19,10 @@
 #ifndef PAGE_OPTIONS_H
 #define PAGE_OPTIONS_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class FPSEdit;
+class IconedGroupBox;
 
 class PageOptions : public AbstractPage
 {

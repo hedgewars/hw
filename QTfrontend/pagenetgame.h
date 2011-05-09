@@ -19,8 +19,12 @@
 #ifndef PAGE_NETGAME_H
 #define PAGE_NETGAME_H
 
-#include "pages.h"
+#include "AbstractPage.h"
+#include "SDLs.h"
+
 class HWChatWidget;
+class TeamSelWidget;
+class GameCFGWidget;
 
 class PageNetGame : public AbstractPage
 {

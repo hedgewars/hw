@@ -42,8 +42,8 @@
 #include "pageselectweapon.h"
 #include "pagecampaign.h"
 #include "pagemain.h"
-#include "statsPage.h"
-#include "playrecordpage.h"
+#include "pagegamestats.h"
+#include "pageplayrecord.h"
 #include "hwconsts.h"
 
 void Ui_HWForm::setupUi(HWForm *HWForm)

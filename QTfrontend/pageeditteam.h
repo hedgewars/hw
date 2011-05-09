@@ -19,7 +19,9 @@
 #ifndef PAGE_EDITTEAM_H
 #define PAGE_EDITTEAM_H
 
-#include "pages.h"
+#include "AbstractPage.h"
+#include "binds.h"
+#include "SDLs.h"
 
 class SquareLabel;
 

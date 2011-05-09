@@ -19,7 +19,7 @@
 #ifndef PAGE_SINGLE_PLAYER_H
 #define PAGE_SINGLE_PLAYER_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class GameCFGWidget;
 

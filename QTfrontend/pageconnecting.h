@@ -19,7 +19,7 @@
 #ifndef PAGE_CONNECTING_H
 #define PAGE_CONNECTING_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class PageConnecting : public AbstractPage
 {

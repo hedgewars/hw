@@ -19,7 +19,7 @@
 #ifndef PAGE_TRAINING_H
 #define PAGE_TRAINING_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class PageTraining : public AbstractPage
 {

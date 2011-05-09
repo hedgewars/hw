@@ -19,7 +19,7 @@
 #ifndef PAGE_INFO_H
 #define PAGE_INFO_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class About;
 

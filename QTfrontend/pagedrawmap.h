@@ -16,11 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-
 #ifndef PAGE_DRAWMAP_H
 #define PAGE_DRAWMAP_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class DrawMapWidget;
 

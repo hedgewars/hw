@@ -19,7 +19,7 @@
 #ifndef PAGE_CAMPAIGN_H
 #define PAGE_CAMPAIGN_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class PageCampaign : public AbstractPage
 {

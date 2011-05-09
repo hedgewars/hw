@@ -21,7 +21,8 @@
 #include <QGraphicsScene>
 #include <QGroupBox>
 #include <QSizePolicy>
-#include "statsPage.h"
+
+#include "pagegamestats.h"
 #include "team.h"
 
 FitGraphicsView::FitGraphicsView(QWidget* parent) : QGraphicsView(parent)

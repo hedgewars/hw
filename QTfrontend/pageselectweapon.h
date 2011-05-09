@@ -19,7 +19,7 @@
 #ifndef PAGE_SELECTWEAPON_H
 #define PAGE_SELECTWEAPON_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class SelWeaponWidget;
 

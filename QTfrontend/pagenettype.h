@@ -19,8 +19,7 @@
 #ifndef PAGE_NETTYPE_H
 #define PAGE_NETTYPE_H
 
-#include "pages.h"
-
+#include "AbstractPage.h"
 
 class PageNetType : public AbstractPage
 {

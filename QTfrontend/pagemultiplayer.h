@@ -19,7 +19,7 @@
 #ifndef PAGE_MULTIPLAYER_H
 #define PAGE_MULTIPLAYER_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class GameCFGWidget;
 class TeamSelWidget;

@@ -74,6 +74,8 @@ set(hwfr_src
     pageroomslist.cpp
     pageconnecting.cpp
     pagescheme.cpp
+    pagegamestats.cpp
+    pageplayrecord.cpp
     pageadmin.cpp
     pagenettype.cpp
     pagedrawmap.cpp
@@ -95,14 +97,12 @@ set(hwfr_src
     chatwidget.cpp
     binds.cpp
     SDLs.cpp
-    playrecordpage.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
     selectWeapon.cpp
     itemNum.cpp
     input_ip.cpp
     igbox.cpp
     weaponItem.cpp
-    statsPage.cpp
     misc.cpp
     ammoSchemeModel.cpp
     togglebutton.cpp
@@ -139,7 +139,7 @@ set(hwfr_moc_hdrs
     vertScrollArea.h
     gameuiconfig.h
     gamecfgwidget.h
-    pages.h
+    AbstractPage.h
     pagenet.h
     pagemultiplayer.h
     pagenetserver.h
@@ -157,9 +157,11 @@ set(hwfr_moc_hdrs
     pagenetgame.h
     pageeditteam.h
     pageroomslist.h
+    pagegamestats.h
     pageadmin.h
     pagescheme.h
     pageselectweapon.h
+    pageplayrecord.h
     SquareLabel.h
     hedgehogerWidget.h
     hwmap.h
@@ -176,13 +178,11 @@ set(hwfr_moc_hdrs
     netserverslist.h
     chatwidget.h
     SDLs.h
-    playrecordpage.h
     selectWeapon.h
     itemNum.h
     input_ip.h
     igbox.h
     weaponItem.h
-    statsPage.h
     misc.h
     ammoSchemeModel.h
     togglebutton.h

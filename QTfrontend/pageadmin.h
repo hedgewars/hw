@@ -19,7 +19,7 @@
 #ifndef PAGE_ADMIN_H
 #define PAGE_ADMIN_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class PageAdmin : public AbstractPage
 {

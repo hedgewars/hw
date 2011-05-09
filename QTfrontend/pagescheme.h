@@ -19,7 +19,8 @@
 #ifndef PAGE_SCHEME_H
 #define PAGE_SCHEME_H
 
-#include "pages.h"
+#include "AbstractPage.h"
+#include "togglebutton.h"
 
 class FreqSpinBox;
 

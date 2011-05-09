@@ -21,7 +21,7 @@
 
 #include <QDir>
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class QPushButton;
 class QListWidget;

@@ -23,6 +23,7 @@
 
 #include "pagemain.h"
 #include "hwconsts.h"
+#include "hwform.h"
 
 PageMain::PageMain(QWidget* parent) :
   AbstractPage(parent)

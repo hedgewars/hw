@@ -22,7 +22,8 @@
 #include <QVector>
 #include <QMap>
 #include <QGraphicsView>
-#include "pages.h"
+
+#include "AbstractPage.h"
 
 class FitGraphicsView : public QGraphicsView
 {

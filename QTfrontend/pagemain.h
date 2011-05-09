@@ -19,7 +19,7 @@
 #ifndef PAGE_MAIN_H
 #define PAGE_MAIN_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class PageMain : public AbstractPage
 {

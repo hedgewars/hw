@@ -26,7 +26,7 @@
 #include <QInputDialog>
 
 #include "hwconsts.h"
-#include "playrecordpage.h"
+#include "pageplayrecord.h"
 
 PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent)
 {

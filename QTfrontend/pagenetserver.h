@@ -19,7 +19,7 @@
 #ifndef PAGE_NETSERVER_H
 #define PAGE_NETSERVER_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class PageNetServer : public AbstractPage
 {

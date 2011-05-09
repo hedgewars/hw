@@ -19,7 +19,7 @@
 #ifndef PAGE_INGAME_H
 #define PAGE_INGAME_H
 
-#include "pages.h"
+#include "AbstractPage.h"
 
 class PageInGame : public AbstractPage
 {

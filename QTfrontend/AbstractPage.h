@@ -16,19 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef PAGES_H
-#define PAGES_H
+#ifndef ABSTRACTPAGE_H
+#define ABSTRACTPAGE_H
 
 #include <QWidget>
 #include <QPushButton>
 #include <QFont>
 #include <QGridLayout>
+#include <QComboBox>
 #include <QSignalMapper>
-
-#include "binds.h"
-#include "hwform.h"
-#include "mapContainer.h"
-#include "togglebutton.h"
 
 class QPushButton;
 class QGroupBox;
@@ -123,4 +119,5 @@ class AbstractPage : public QWidget
   QFont * font14;
 };
 
-#endif // PAGES_H
+#endif
+
