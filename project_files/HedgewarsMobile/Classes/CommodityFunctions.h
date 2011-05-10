@@ -23,7 +23,6 @@
 
 #define DOCUMENTS_FOLDER()      [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
-#define SETTINGS_FILE()         [DOCUMENTS_FOLDER() stringByAppendingString:@"/settings.plist"]
 #define DEBUG_FILE()            [DOCUMENTS_FOLDER() stringByAppendingString:@"/hw-game.log"]
 #define HEDGEHOG_FILE()         [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/Images/hedgehog.png"]
 #define BASICFLAGS_FILE()       [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/basicFlags.plist"]

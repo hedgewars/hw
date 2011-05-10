@@ -23,9 +23,9 @@
 #import "EditableCellView.h"
 
 @interface GeneralSettingsViewController : UITableViewController <EditableCellViewDelegate> {
-    NSMutableDictionary *settingsDictionary;
+    NSUserDefaults *settings;
 }
 
-@property (nonatomic, retain) NSMutableDictionary *settingsDictionary;
+@property (nonatomic, retain) NSUserDefaults *settings;
 
 @end

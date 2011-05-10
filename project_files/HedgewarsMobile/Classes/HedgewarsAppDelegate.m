@@ -116,8 +116,7 @@
          device.multitaskingSupported &&
          self.isInGame) {
         // let's try to be permissive with multitasking here...
-        NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
-        if ([[settings objectForKey:@"multitasking"] boolValue])
+        if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"multitasking"] boolValue])
             HW_suspend();
         else {
             // so the game returns to the configuration view
@@ -128,7 +127,6 @@
                 [self applicationWillTerminate:application];
             }
         }
-        [settings release];
     }
 }
 

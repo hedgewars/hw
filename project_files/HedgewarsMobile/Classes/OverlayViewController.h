@@ -46,7 +46,6 @@
     BOOL isAttacking;
     
     // stuff initialized externally
-    BOOL useClassicMenu;
     NSInteger initialOrientation;
     
     // dual head support
@@ -68,7 +67,6 @@
 @property (nonatomic,retain) UIButton *confirmButton;
 @property (nonatomic,retain) UISegmentedControl *grenadeTimeSegment;
 
-@property (assign) BOOL useClassicMenu;
 @property (assign) NSInteger initialOrientation;
 @property (assign) NSInteger initialScreenCount;
 

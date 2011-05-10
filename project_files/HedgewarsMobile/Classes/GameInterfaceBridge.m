@@ -27,7 +27,7 @@
 #import "ObjcExports.h"
 
 @implementation GameInterfaceBridge
-@synthesize parentController, systemSettings, savePath, overlayController, engineProtocol, ipcPort, gameType;
+@synthesize parentController, savePath, overlayController, engineProtocol, ipcPort, gameType;
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
@@ -39,7 +39,6 @@
         self.engineProtocol = [[EngineProtocolNetwork alloc] initOnPort:self.ipcPort];
         self.engineProtocol.delegate = self;
 
-        self.systemSettings = [NSDictionary dictionaryWithContentsOfFile:SETTINGS_FILE()];
         self.overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
     }
     return self;
@@ -48,7 +47,6 @@
 -(void) dealloc {
     releaseAndNil(parentController);
     releaseAndNil(engineProtocol);
-    releaseAndNil(systemSettings);
     releaseAndNil(savePath);
     releaseAndNil(overlayController);
     [super dealloc];
@@ -57,7 +55,6 @@
 #pragma mark -
 // overlay with controls, become visible later, with a transparency effect since the sdlwindow is not yet created
 -(void) displayOverlayLater:(id) object {
-    [self.overlayController setUseClassicMenu:[[self.systemSettings objectForKey:@"menu"] boolValue]];
     [self.overlayController setInitialOrientation:self.parentController.interfaceOrientation];
 
     UIWindow *gameWindow = (IS_DUALHEAD() ? [HedgewarsAppDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow]);
@@ -70,6 +67,7 @@
     NSInteger width, height, orientation;
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.ipcPort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
     if (IS_DUALHEAD()) {
         CGRect screenBounds = [[[UIScreen screens] objectAtIndex:1] bounds];
@@ -86,7 +84,7 @@
     NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width];
     NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height];
     NSString *rotation = [[NSString alloc] initWithFormat:@"%d", orientation];
-    BOOL enhanced = [[self.systemSettings objectForKey:@"enhanced"] boolValue];
+    BOOL enhanced = [[settings objectForKey:@"enhanced"] boolValue];
 
     NSString *modelId = modelType();
     NSInteger tmpQuality;
@@ -104,7 +102,7 @@
         tmpQuality = tmpQuality | 0x00000400;
 
     // prevents using an empty nickname
-    NSString *username = [self.systemSettings objectForKey:@"username"];
+    NSString *username = [settings objectForKey:@"username"];
     if ([username length] == 0)
         username = [NSString stringWithFormat:@"MobileUser-%@",ipcString];
 
@@ -114,9 +112,9 @@
     gameArgs[ 3] = [[NSString stringWithFormat:@"%d",tmpQuality] UTF8String];                   //quality
     gameArgs[ 4] = "en.txt";//[localeString UTF8String];                                        //cLocaleFName
     gameArgs[ 5] = [username UTF8String];                                                       //UserNick
-    gameArgs[ 6] = [[[self.systemSettings objectForKey:@"sound"] stringValue] UTF8String];      //isSoundEnabled
-    gameArgs[ 7] = [[[self.systemSettings objectForKey:@"music"] stringValue] UTF8String];      //isMusicEnabled
-    gameArgs[ 8] = [[[self.systemSettings objectForKey:@"alternate"] stringValue] UTF8String];  //cAltDamage
+    gameArgs[ 6] = [[[settings objectForKey:@"sound"] stringValue] UTF8String];                 //isSoundEnabled
+    gameArgs[ 7] = [[[settings objectForKey:@"music"] stringValue] UTF8String];                 //isMusicEnabled
+    gameArgs[ 8] = [[[settings objectForKey:@"alternate"] stringValue] UTF8String];             //cAltDamage
     gameArgs[ 9] = [rotation UTF8String];                                                       //rotateQt
     gameArgs[10] = (self.gameType == gtSave) ? [self.savePath UTF8String] : NULL;               //recordFileName
 

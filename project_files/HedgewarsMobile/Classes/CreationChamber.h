@@ -21,6 +21,7 @@
 
 #import <Foundation/Foundation.h>
 
+void createSettings (void);
 void createTeamNamed (NSString *nameWithoutExt);
 void createWeaponNamed (NSString *nameWithoutExt, int type);
 void createSchemeNamed (NSString *nameWithoutExt);

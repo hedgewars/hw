@@ -23,7 +23,7 @@
 #import "CommodityFunctions.h"
 
 @implementation GeneralSettingsViewController
-@synthesize settingsDictionary;
+@synthesize settings;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -39,21 +39,14 @@
 -(void) viewWillAppear:(BOOL)animated {
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
-    self.settingsDictionary = dictionary;
-    [dictionary release];
+    self.settings = [NSUserDefaults standardUserDefaults];
 
     [super viewWillAppear:animated];
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.settingsDictionary writeToFile:SETTINGS_FILE() atomically:YES];
-
-    // we save the sound settings to respect that flag everywhere
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setObject:[NSNumber numberWithBool:[[self.settingsDictionary objectForKey:@"sound"] boolValue]] forKey:@"audio"];
-    [prefs synchronize];
+    [self.settings synchronize];
 }
 
 #pragma mark -
@@ -64,31 +57,31 @@
     switch (theSwitch.tag) {
         case 10:    //soundSwitch
             // this turn off also the switch below
-            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"sound"];
-            [self.settingsDictionary setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
+            [self.settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"sound"];
+            [self.settings setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
             theOtherSwitch = (UISwitch *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]].accessoryView;
             [theOtherSwitch setOn:NO animated:YES];
             break;
         case 20:    //musicSwitch
             // if switch above is off, never turn on
-            if (NO == [[self.settingsDictionary objectForKey:@"sound"] boolValue]) {
-                [self.settingsDictionary setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
+            if (NO == [[self.settings objectForKey:@"sound"] boolValue]) {
+                [self.settings setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
                 theOtherSwitch = (UISwitch *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]].accessoryView;
                 [theOtherSwitch setOn:NO animated:YES];
             } else
-                [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"music"];
+                [self.settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"music"];
             break;
         case 30:    //alternateSwitch
-            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];
+            [self.settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];
             break;
         case 70:    //enhanced graphics
-            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"enhanced"];
+            [self.settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"enhanced"];
             break;
         case 80:    //nomultitasking
-            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"multitasking"];
+            [self.settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"multitasking"];
             break;
         case 60:    //classic menu
-            [self.settingsDictionary setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"menu"];
+            [self.settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"classic_menu"];
             break;
         default:
             DLog(@"Wrong tag");
@@ -98,11 +91,9 @@
 
 -(void) saveTextFieldValue:(NSString *)textString withTag:(NSInteger) tagValue {
     if (tagValue == 40)
-        [self.settingsDictionary setObject:textString forKey:@"username"];
-    else {
-        [self.settingsDictionary setObject:[NSNumber numberWithInt:[textString length]] forKey:@"password_length"];
-        [self.settingsDictionary setObject:[textString MD5hash] forKey:@"password"];
-    }
+        [self.settings setObject:textString forKey:@"username"];
+    else
+        [self.settings setObject:[textString MD5hash] forKey:@"password"];
 }
 
 #pragma mark -
@@ -175,23 +166,16 @@
             if (row == 0) {
                 editableCell.titleLabel.text = NSLocalizedString(@"Nickname","from the settings table");
                 editableCell.textField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"");
-                editableCell.textField.text = [self.settingsDictionary objectForKey:@"username"];
+                editableCell.textField.text = [self.settings objectForKey:@"username"];
                 editableCell.textField.secureTextEntry = NO;
                 editableCell.tag = 40;
             } else {
-                // create a dummy password for setting some visual content for the password
-                int pwdLength = [[self.settingsDictionary objectForKey:@"password_length"] intValue];
-                char *dummyStr = (char *)malloc(sizeof(char)*pwdLength);
-                for (int i = 0; i < pwdLength; i++)
-                    dummyStr[i] = i;
-                NSString *dummy = [[NSString alloc] initWithBytes:dummyStr length:pwdLength encoding:NSASCIIStringEncoding];
-                free(dummyStr);
+                NSString *pwd = [self.settings objectForKey:@"password"];
                 editableCell.titleLabel.text = NSLocalizedString(@"Password","from the settings table");
                 editableCell.textField.placeholder = NSLocalizedString(@"Insert your password",@"");
-                editableCell.textField.text = dummy;
+                editableCell.textField.text = ([pwd length] == 0) ? @"0123456789" : pwd;
                 editableCell.textField.secureTextEntry = YES;
                 editableCell.tag = 50;
-                [dummy release];
             }
             
             editableCell.accessoryView = nil;
@@ -210,11 +194,11 @@
             switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
                 cell.textLabel.text = NSLocalizedString(@"Sound", @"");
-                switchContent.on = [[self.settingsDictionary objectForKey:@"sound"] boolValue];
+                switchContent.on = [[self.settings objectForKey:@"sound"] boolValue];
                 switchContent.tag = 10;
             } else {
                 cell.textLabel.text = NSLocalizedString(@"Music", @"");
-                switchContent.on = [[self.settingsDictionary objectForKey:@"music"] boolValue];
+                switchContent.on = [[self.settings objectForKey:@"music"] boolValue];
                 switchContent.tag = 20;
             }
             break;
@@ -233,25 +217,25 @@
                 case 0:
                     cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
                     cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit", @"");
-                    switchContent.on = [[self.settingsDictionary objectForKey:@"alternate"] boolValue];
+                    switchContent.on = [[self.settings objectForKey:@"alternate"] boolValue];
                     switchContent.tag = 30;
                     break;
                 case 1:
                     cell.textLabel.text = NSLocalizedString(@"Enanched Graphics Mode", @"");
                     cell.detailTextLabel.text = NSLocalizedString(@"The game will use more memory so it could crash!", @"");
-                    switchContent.on = [[self.settingsDictionary objectForKey:@"enhanced"] boolValue];
+                    switchContent.on = [[self.settings objectForKey:@"enhanced"] boolValue];
                     switchContent.tag = 70;
                     break;
                 case 2:
                     cell.textLabel.text = NSLocalizedString(@"Multitasking Enabled", @"");
                     cell.detailTextLabel.text = NSLocalizedString(@"Disable it in case of issues when returing in game", @"");
-                    switchContent.on = [[self.settingsDictionary objectForKey:@"multitasking"] boolValue];
+                    switchContent.on = [[self.settings objectForKey:@"multitasking"] boolValue];
                     switchContent.tag = 80;
                     break;
                 case 3:
                     cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
                     cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
-                    switchContent.on = [[self.settingsDictionary objectForKey:@"menu"] boolValue];
+                    switchContent.on = [[self.settings objectForKey:@"classic_menu"] boolValue];
                     switchContent.tag = 60;
                     break;
                 default:
@@ -287,13 +271,13 @@
 }
 
 -(void) viewDidUnload {
-    self.settingsDictionary = nil;
+    self.settings = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
 -(void) dealloc {
-    [settingsDictionary release];
+    [settings release];
     [super dealloc];
 }
 

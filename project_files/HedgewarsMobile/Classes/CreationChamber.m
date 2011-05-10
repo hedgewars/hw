@@ -22,6 +22,19 @@
 #import "CreationChamber.h"
 #import "hwconsts.h"
 
+void createSettings () {
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    [settings setObject:[NSNumber numberWithBool:NO] forKey:@"alternate"];
+    [settings setObject:[NSNumber numberWithBool:YES] forKey:@"music"];
+    [settings setObject:[NSNumber numberWithBool:YES] forKey:@"sound"];
+    [settings setObject:[NSNumber numberWithBool:NO] forKey:@"classic_menu"];
+    [settings setObject:[NSNumber numberWithBool:YES] forKey:@"enhanced"];
+    [settings setObject:[NSNumber numberWithBool:YES] forKey:@"multitasking"];
+    [settings setObject:@"" forKey:@"username"];
+    [settings setObject:@"" forKey:@"password"];
+
+    [settings synchronize];
+}
 
 void createTeamNamed (NSString *nameWithoutExt) {
     NSString *teamsDirectory = TEAMS_DIRECTORY();

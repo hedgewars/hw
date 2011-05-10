@@ -33,9 +33,7 @@
 
 -(id) init {
     if (self = [super init]) {
-        NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
-        self.systemSettings = dict;
-        [dict release];
+        self.systemSettings = nil; //nsuserdefault
     }
     return self;
 }

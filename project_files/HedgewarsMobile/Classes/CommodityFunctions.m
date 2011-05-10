@@ -92,7 +92,7 @@ NSString *modelType () {
 
 void playSound (NSString *snd) {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSNumber *audio = [prefs objectForKey:@"audio"];
+    NSNumber *audio = [prefs objectForKey:@"sound"];
 
     if (audio == nil || [audio boolValue] == YES) {
         // get the filename of the sound file:

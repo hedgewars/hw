@@ -35,7 +35,7 @@
 
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, useClassicMenu, initialScreenCount, initialOrientation,
+@synthesize popoverController, popupMenu, helpPage, amvc, initialScreenCount, initialOrientation,
             lowerIndicator, savesIndicator, confirmButton, grenadeTimeSegment;
 
 #pragma mark -
@@ -353,7 +353,7 @@
             playSound(@"clickSound");
             clearView();
             
-            if (IS_DUALHEAD() || self.useClassicMenu == NO) {
+            if (IS_DUALHEAD() || [[[NSUserDefaults standardUserDefaults] objectForKey:@"classic_menu"] boolValue] == NO) {
                 if (self.amvc == nil)
                     self.amvc = [[AmmoMenuViewController alloc] init];
 

@@ -31,7 +31,6 @@ typedef enum {gsNone, gsInGame, gsEnded, gsInterrupted} TGameStatus;
     UIViewController *parentController;
     OverlayViewController *overlayController;
 
-    NSDictionary *systemSettings;
     NSString *savePath;
     EngineProtocolNetwork *engineProtocol;
 
@@ -40,7 +39,6 @@ typedef enum {gsNone, gsInGame, gsEnded, gsInterrupted} TGameStatus;
 }
 
 @property (nonatomic,retain) UIViewController *parentController;
-@property (nonatomic,retain) NSDictionary *systemSettings;
 @property (nonatomic,retain) NSString *savePath;
 
 @property (nonatomic,retain) OverlayViewController *overlayController;

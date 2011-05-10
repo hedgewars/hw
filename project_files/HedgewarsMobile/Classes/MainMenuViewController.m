@@ -45,19 +45,8 @@
         [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
     [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY() withIntermediateDirectories:NO attributes:nil error:NULL];
     
-    // SETTINGS FILE - merge when present
-    NSString *baseSettingsFile = [[NSString alloc] initWithFormat:@"%@/Settings/settings.plist",resourcesDir];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SETTINGS_FILE()]) {
-        NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE()];
-        NSMutableDictionary *update = [[NSMutableDictionary alloc] initWithContentsOfFile:baseSettingsFile];
-        // the order of what adds what is important
-        [update addEntriesFromDictionary:settings];
-        [settings release];
-        [update writeToFile:SETTINGS_FILE() atomically:YES];
-        [update release];
-    } else 
-        [[NSFileManager defaultManager] copyItemAtPath:baseSettingsFile toPath:SETTINGS_FILE() error:NULL];
-    [baseSettingsFile release];
+    // SETTINGS - nsuserdefaults ftw
+    createSettings();
 
     // TEAMS - update exisiting teams with new format
     if ([[NSFileManager defaultManager] fileExistsAtPath:TEAMS_DIRECTORY()] == NO) {
