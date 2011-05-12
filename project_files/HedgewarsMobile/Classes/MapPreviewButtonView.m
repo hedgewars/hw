@@ -197,7 +197,7 @@
     [self setTitle:nil forState:UIControlStateNormal];
     
     // don't display preview on slower device, too slow and memory hog
-    if (IS_NOT_POWERFUL()) {
+    if (IS_NOT_POWERFUL(getModelType())) {
         [self setTitle:NSLocalizedString(@"Preview not available",@"") forState:UIControlStateNormal];
         [self turnOnWidgets];
     } else {        

@@ -30,8 +30,12 @@ void createSettings () {
     [settings setObject:[NSNumber numberWithBool:NO] forKey:@"classic_menu"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"enhanced"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"multitasking"];
-    [settings setObject:@"" forKey:@"username"];
-    [settings setObject:@"" forKey:@"password"];
+
+    // don't overwrite these two strings when present
+    if ([settings objectForKey:@"username"] == nil)
+        [settings setObject:@"" forKey:@"username"];
+    if ([settings objectForKey:@"password"] == nil)
+        [settings setObject:@"" forKey:@"password"];
 
     [settings synchronize];
 }

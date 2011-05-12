@@ -30,25 +30,11 @@
 #import "PascalImports.h"
 #import "hwconsts.h"
 
-BOOL inline rotationManager (UIInterfaceOrientation interfaceOrientation) {
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight) ||
-           (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
-}
 
 NSInteger inline randomPort () {
     srandom(time(NULL));
     NSInteger res = (random() % 64511) + 1024;
     return (res == NETGAME_DEFAULT_PORT) ? randomPort() : res;
-}
-
-void popError (const char *title, const char *message) {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithUTF8String:title]
-                                                    message:[NSString stringWithUTF8String:message]
-                                                   delegate:nil
-                                          cancelButtonTitle:@"Ok"
-                                          otherButtonTitles:nil];
-    [alert show];
-    [alert release];
 }
 
 // by http://landonf.bikemonkey.org/code/iphone/Determining_Available_Memory.20081203.html
@@ -77,7 +63,7 @@ BOOL inline isApplePhone () {
     return (IS_IPAD() == NO);
 }
 
-NSString *modelType () {
+NSString *getModelType () {
     size_t size;
     // set 'oldp' parameter to NULL to get the size of the data returned so we can allocate appropriate amount of space
     sysctlbyname("hw.machine", NULL, &size, NULL, 0);
@@ -91,10 +77,7 @@ NSString *modelType () {
 }
 
 void playSound (NSString *snd) {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSNumber *audio = [prefs objectForKey:@"sound"];
-
-    if (audio == nil || [audio boolValue] == YES) {
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"sound"] boolValue] == YES) {
         // get the filename of the sound file:
         NSString *path = [NSString stringWithFormat:@"%@/%@.wav",[[NSBundle mainBundle] resourcePath],snd];
 
@@ -109,6 +92,7 @@ void playSound (NSString *snd) {
 }
 
 NSArray *getAvailableColors (void) {
+    // by default colors are ARGB but we do computation over RGB, hence we have to "& 0x00FFFFFF" before processing
     unsigned int colors[] = HW_TEAMCOLOR_ARRAY;
     NSMutableArray *array = [[NSMutableArray alloc] init];
 

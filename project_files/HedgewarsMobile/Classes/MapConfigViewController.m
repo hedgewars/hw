@@ -74,7 +74,7 @@
 
     // perform as if user clicked on an entry
     [self tableView:self.tableView didSelectRowAtIndexPath:theIndex];
-    if (IS_NOT_POWERFUL() == NO)
+    if (IS_NOT_POWERFUL(getModelType()) == NO)
         [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
@@ -378,6 +378,8 @@
 #pragma mark -
 #pragma mark view management
 -(void) loadDataSourceArray {
+    NSString *model = getModelType();
+
     // themes.cfg contains all the user-selectable themes
     NSString *string = [[NSString alloc] initWithContentsOfFile:[THEMES_DIRECTORY() stringByAppendingString:@"/themes.cfg"]
                                                        encoding:NSUTF8StringEncoding
@@ -392,9 +394,9 @@
     NSMutableArray *mapArray = [[NSMutableArray alloc] init];
     for (NSString *str in mapArrayFull) {
         CGSize imgSize = PSPNGSizeFromMetaData([MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
-        if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
+        if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
             continue;
-        if (IS_NOT_VERY_POWERFUL() && imgSize.height > 1280.0f)
+        if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
             continue;
         [mapArray addObject:str];
     }
@@ -403,9 +405,9 @@
     NSMutableArray *missionArray = [[NSMutableArray alloc] init];
     for (NSString *str in missionArrayFull) {
         CGSize imgSize = PSPNGSizeFromMetaData([MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
-        if (IS_NOT_POWERFUL() && imgSize.height > 1024.0f)
+        if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
             continue;
-        if (IS_NOT_VERY_POWERFUL() && imgSize.height > 1280.0f)
+        if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
             continue;
         [missionArray addObject:str];
     }

@@ -23,9 +23,7 @@
 #import "EditableCellView.h"
 
 @interface GeneralSettingsViewController : UITableViewController <EditableCellViewDelegate> {
-    NSUserDefaults *settings;
-}
 
-@property (nonatomic, retain) NSUserDefaults *settings;
+}
 
 @end

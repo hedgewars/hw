@@ -86,7 +86,7 @@
     NSString *rotation = [[NSString alloc] initWithFormat:@"%d", orientation];
     BOOL enhanced = [[settings objectForKey:@"enhanced"] boolValue];
 
-    NSString *modelId = modelType();
+    NSString *modelId = getModelType();
     NSInteger tmpQuality;
     if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])     // = iPhone and iPhone 3G or iPod Touch or iPod Touch 2G
         tmpQuality = 0x00000001 | 0x00000002 | 0x00000008 | 0x00000040;                 // rqLowRes | rqBlurryLand | rqSimpleRope | rqKillFlakes

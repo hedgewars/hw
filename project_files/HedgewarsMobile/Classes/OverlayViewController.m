@@ -61,7 +61,8 @@
     NSInteger angle_left = (self.initialOrientation == UIInterfaceOrientationLandscapeLeft) ? 180 : 0;
     NSInteger angle_right = (self.initialOrientation == UIInterfaceOrientationLandscapeLeft) ? 0 : 180;
 
-    if (IS_VERY_POWERFUL()) {
+    NSString *model = getModelType();
+    if (IS_VERY_POWERFUL(model)) {
         [UIView beginAnimations:@"overlay rotation" context:NULL];
         [UIView setAnimationDuration:0.7];
     }
@@ -82,7 +83,7 @@
             // a debug log would spam too much
             break;
     }
-    if (IS_VERY_POWERFUL())
+    if (IS_VERY_POWERFUL(model))
         [UIView commitAnimations];
 }
 
