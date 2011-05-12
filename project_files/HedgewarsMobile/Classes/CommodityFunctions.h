@@ -62,7 +62,6 @@
 #define IS_NOT_VERY_POWERFUL(x) ([x hasPrefix:@"iPad1"] || [x hasPrefix:@"iPhone2"] || [x hasPrefix:@"iPod3"] || [x hasPrefix:@"iPod4"])
 #define IS_VERY_POWERFUL(x)     (IS_NOT_POWERFUL(x) == NO && IS_NOT_VERY_POWERFUL(x) == NO)
 
-#define rotationManager(x)      (x == UIInterfaceOrientationLandscapeRight) || (x == UIInterfaceOrientationLandscapeLeft)
 
 void print_free_memory (void);
 void playSound (NSString *snd);

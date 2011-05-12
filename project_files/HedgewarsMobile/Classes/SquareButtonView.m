@@ -77,8 +77,8 @@
 }
 
 -(void) dealloc {
-    [ownerDictionary release];
-    [colorArray release];
+    releaseAndNil(ownerDictionary);
+    releaseAndNil(colorArray);
     [super dealloc];
 }
 

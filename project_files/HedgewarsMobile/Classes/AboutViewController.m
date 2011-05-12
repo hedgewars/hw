@@ -136,9 +136,9 @@
 }
 
 -(void) dealloc {
-    [tableView release];
-    [segmentedControl release];
-    [people release];
+    releaseAndNil(tableView);
+    releaseAndNil(segmentedControl);
+    releaseAndNil(people);
     [super dealloc];
 }
 

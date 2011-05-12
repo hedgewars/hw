@@ -507,23 +507,23 @@
 }
 
 -(void) dealloc {
-    [seedCommand release];
-    [templateFilterCommand release];
-    [mapGenCommand release];
-    [mazeSizeCommand release];
-    [themeCommand release];
-    [staticMapCommand release];
-    [missionCommand release];
+    releaseAndNil(seedCommand);
+    releaseAndNil(templateFilterCommand);
+    releaseAndNil(mapGenCommand);
+    releaseAndNil(mazeSizeCommand);
+    releaseAndNil(themeCommand);
+    releaseAndNil(staticMapCommand);
+    releaseAndNil(missionCommand);
 
-    [previewButton release];
-    [tableView release];
-    [maxLabel release];
-    [sizeLabel release];
-    [segmentedControl release];
-    [slider release];
+    releaseAndNil(previewButton);
+    releaseAndNil(tableView);
+    releaseAndNil(maxLabel);
+    releaseAndNil(sizeLabel);
+    releaseAndNil(segmentedControl);
+    releaseAndNil(slider);
 
-    [lastIndexPath release];
-    [dataSourceArray release];
+    releaseAndNil(lastIndexPath);
+    releaseAndNil(dataSourceArray);
 
     [super dealloc];
 }

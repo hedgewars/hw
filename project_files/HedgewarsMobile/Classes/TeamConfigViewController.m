@@ -320,9 +320,9 @@
 
 
 -(void) dealloc {
-    [listOfTeams release];
-    [listOfSelectedTeams release];
-    [cachedContentsOfDir release];
+    releaseAndNil(listOfTeams);
+    releaseAndNil(listOfSelectedTeams);
+    releaseAndNil(cachedContentsOfDir);
     [super dealloc];
 }
 

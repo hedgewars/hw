@@ -205,14 +205,14 @@
 }
 
 -(void) dealloc {
-    targetController = nil;
-    [controllerNames release];
-    [lastIndexPath release];
-    [generalSettingsViewController release];
-    [teamSettingsViewController release];
-    [weaponSettingsViewController release];
-    [schemeSettingsViewController release];
-    [supportViewController release];
+    self.targetController = nil;
+    releaseAndNil(controllerNames);
+    releaseAndNil(lastIndexPath);
+    releaseAndNil(generalSettingsViewController);
+    releaseAndNil(teamSettingsViewController);
+    releaseAndNil(weaponSettingsViewController);
+    releaseAndNil(schemeSettingsViewController);
+    releaseAndNil(supportViewController);
     [super dealloc];
 }
 

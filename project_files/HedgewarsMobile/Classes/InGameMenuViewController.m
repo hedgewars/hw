@@ -61,7 +61,7 @@
 }
 
 -(void) dealloc {
-    [menuList release];
+    releaseAndNil(menuList);
     [super dealloc];
 }
 

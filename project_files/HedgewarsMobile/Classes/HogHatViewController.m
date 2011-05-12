@@ -150,10 +150,10 @@
 }
 
 -(void) dealloc {
-    [hatArray release];
-    [teamDictionary release];
-    [normalHogSprite release];
-    [lastIndexPath release];
+    releaseAndNil(hatArray);
+    releaseAndNil(teamDictionary);
+    releaseAndNil(normalHogSprite);
+    releaseAndNil(lastIndexPath);
     [super dealloc];
 }
 

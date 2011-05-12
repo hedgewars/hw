@@ -165,8 +165,8 @@
 
 
 -(void) dealloc {
-    [listOfSchemes release];
-    [childController release];
+    releaseAndNil(listOfSchemes);
+    releaseAndNil(childController);
     [super dealloc];
 }
 

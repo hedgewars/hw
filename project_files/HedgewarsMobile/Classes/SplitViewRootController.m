@@ -83,9 +83,9 @@
 }
 
 -(void) dealloc {
-    [activeController release];
-    [rightNavController release];
-    [splitViewRootController release];
+    releaseAndNil(activeController);
+    releaseAndNil(rightNavController);
+    releaseAndNil(splitViewRootController);
     [super dealloc];
 }
 

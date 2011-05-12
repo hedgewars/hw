@@ -171,8 +171,8 @@
 }
 
 -(void) dealloc {
-    [self.listOfTeams release];
-    [childController release];
+    releaseAndNil(listOfTeams);
+    releaseAndNil(childController);
     [super dealloc];
 }
 

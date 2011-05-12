@@ -345,10 +345,10 @@
 }
 
 -(void) dealloc {
-    [schemeName release];
-    [schemeDictionary release];
-    [basicSettingList release];
-    [gameModifierArray release];
+    releaseAndNil(schemeName);
+    releaseAndNil(schemeDictionary);
+    releaseAndNil(basicSettingList);
+    releaseAndNil(gameModifierArray);
     [super dealloc];
 }
 

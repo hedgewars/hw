@@ -131,9 +131,9 @@
 }
 
 -(void) dealloc {
-    [graveArray release];
-    [teamDictionary release];
-    [lastIndexPath release];
+    releaseAndNil(graveArray);
+    releaseAndNil(teamDictionary);
+    releaseAndNil(lastIndexPath);
     [super dealloc];
 }
 

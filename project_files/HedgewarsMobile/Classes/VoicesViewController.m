@@ -166,9 +166,9 @@
 }
 
 -(void) dealloc {
-    [voiceArray release];
-    [teamDictionary release];
-    [lastIndexPath release];
+    releaseAndNil(voiceArray);
+    releaseAndNil(teamDictionary);
+    releaseAndNil(lastIndexPath);
     [super dealloc];
 }
 

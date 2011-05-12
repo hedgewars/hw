@@ -239,10 +239,10 @@
 }
 
 -(void) dealloc {
-    [settingsViewController release];
-    [gameConfigViewController release];
-    [aboutViewController release];
-    [savedGamesViewController release];
+    releaseAndNil(settingsViewController);
+    releaseAndNil(gameConfigViewController);
+    releaseAndNil(aboutViewController);
+    releaseAndNil(savedGamesViewController);
     [super dealloc];
 }
 

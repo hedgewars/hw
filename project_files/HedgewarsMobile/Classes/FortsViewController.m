@@ -149,9 +149,9 @@
 
 
 -(void) dealloc {
-    [teamDictionary release];
-    [lastIndexPath release];
-    [fortArray release];
+    releaseAndNil(teamDictionary);
+    releaseAndNil(lastIndexPath);
+    releaseAndNil(fortArray);
     [super dealloc];
 }
 

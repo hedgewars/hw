@@ -387,11 +387,11 @@
 }
 
 -(void) dealloc {
-    [nameLabel release];
-    [extraLabel release];
-    [captionLabel release];
-    [imagesArray release];
-    [buttonsArray release];
+    releaseAndNil(nameLabel);
+    releaseAndNil(extraLabel);
+    releaseAndNil(captionLabel);
+    releaseAndNil(imagesArray);
+    releaseAndNil(buttonsArray);
     [super dealloc];
 }
 

@@ -286,13 +286,13 @@
 
 
 -(void) dealloc {
-    [listOfSchemes release];
-    [listOfWeapons release];
-    [lastIndexPath_sc release];
-    [lastIndexPath_we release];
-    [selectedScheme release];
-    [selectedWeapon release];
-    [syncSwitch release];
+    releaseAndNil(listOfSchemes);
+    releaseAndNil(listOfWeapons);
+    releaseAndNil(lastIndexPath_sc);
+    releaseAndNil(lastIndexPath_we);
+    releaseAndNil(selectedScheme);
+    releaseAndNil(selectedWeapon);
+    releaseAndNil(syncSwitch);
     [super dealloc];
 }
 

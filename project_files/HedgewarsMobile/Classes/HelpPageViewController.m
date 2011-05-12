@@ -53,7 +53,7 @@
 }
 
 -(void) dealloc {
-    [scrollView release];
+    releaseAndNil(scrollView);
     [super dealloc];
 }
 

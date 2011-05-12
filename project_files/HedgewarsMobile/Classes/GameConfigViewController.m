@@ -388,11 +388,11 @@
 }
 
 -(void) dealloc {
-    [imgContainer release];
-    [mapConfigViewController release];
-    [teamConfigViewController release];
-    [schemeWeaponConfigViewController release];
-    [helpPage release];
+    releaseAndNil(imgContainer);
+    releaseAndNil(mapConfigViewController);
+    releaseAndNil(teamConfigViewController);
+    releaseAndNil(schemeWeaponConfigViewController);
+    releaseAndNil(helpPage);
     [super dealloc];
 }
 

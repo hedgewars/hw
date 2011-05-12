@@ -250,8 +250,8 @@
 }
 
 -(void) dealloc {
-    [tableView release];
-    [listOfSavegames release];
+    releaseAndNil(tableView);
+    releaseAndNil(listOfSavegames);
     [super dealloc];
 }
 

@@ -182,10 +182,10 @@
 }
 
 -(void) dealloc {
-    [teamDictionary release];
-    [lastIndexPath release];
-    [flagArray release];
-    [communityArray release];
+    releaseAndNil(teamDictionary);
+    releaseAndNil(lastIndexPath);
+    releaseAndNil(flagArray);
+    releaseAndNil(communityArray);
     [super dealloc];
 }
 

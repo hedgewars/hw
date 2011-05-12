@@ -172,7 +172,7 @@
 }
 
 -(void) dealloc {
-    [self.waysToSupport release];
+    releaseAndNil(waysToSupport);
     [super dealloc];
 }
 

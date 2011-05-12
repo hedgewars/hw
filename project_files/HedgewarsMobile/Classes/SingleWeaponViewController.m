@@ -262,9 +262,9 @@
 
 
 -(void) dealloc {
-    [weaponName release];
-    [description release];
-    [ammoStoreImage release];
+    releaseAndNil(weaponName);
+    releaseAndNil(description);
+    releaseAndNil(ammoStoreImage);
     [super dealloc];
 }
 

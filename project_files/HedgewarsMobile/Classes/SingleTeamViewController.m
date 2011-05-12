@@ -395,17 +395,17 @@
 }
 
 -(void) dealloc {
-    [teamDictionary release];
-    [teamName release];
-    [normalHogSprite release];
-    [secondaryItems release];
-    [moreSecondaryItems release];
-    [hogHatViewController release];
-    [gravesViewController release];
-    [fortsViewController release];
-    [voicesViewController release];
-    [flagsViewController release];
-    [levelViewController release];
+    releaseAndNil(teamDictionary);
+    releaseAndNil(teamName);
+    releaseAndNil(normalHogSprite);
+    releaseAndNil(secondaryItems);
+    releaseAndNil(moreSecondaryItems);
+    releaseAndNil(hogHatViewController);
+    releaseAndNil(gravesViewController);
+    releaseAndNil(fortsViewController);
+    releaseAndNil(voicesViewController);
+    releaseAndNil(flagsViewController);
+    releaseAndNil(levelViewController);
     [super dealloc];
 }
 

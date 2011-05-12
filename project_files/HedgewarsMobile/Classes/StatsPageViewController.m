@@ -156,7 +156,7 @@
 }
 
 -(void) dealloc {
-    [statsArray release];
+    releaseAndNil(statsArray);
     [super dealloc];
 }
 

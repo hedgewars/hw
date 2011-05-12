@@ -165,8 +165,8 @@
 
 
 -(void) dealloc {
-    [self.listOfWeapons release];
-    [childController release];
+    releaseAndNil(listOfWeapons);
+    releaseAndNil(childController);
     [super dealloc];
 }
 

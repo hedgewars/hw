@@ -204,14 +204,14 @@
 }
 
 -(void) dealloc {
-    [popupMenu release];
-    [helpPage release];
-    [popoverController release];
-    [amvc release];
-    [lowerIndicator release];
-    [savesIndicator release];
-    [confirmButton release];
-    [grenadeTimeSegment release];
+    releaseAndNil(popupMenu);
+    releaseAndNil(helpPage);
+    releaseAndNil(popoverController);
+    releaseAndNil(amvc);
+    releaseAndNil(lowerIndicator);
+    releaseAndNil(savesIndicator);
+    releaseAndNil(confirmButton);
+    releaseAndNil(grenadeTimeSegment);
     // dimTimer is autoreleased
     [super dealloc];
 }
