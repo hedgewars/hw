@@ -475,11 +475,12 @@ processAction StatsAction = do
 
 processAction RestartServer = do
     sock <- gets (fromJust . serverSocket . serverInfo)
+    args <- gets (runArgs . serverInfo)
     io $ do
         noticeM "Core" "Closing listening socket"
         sClose sock
         noticeM "Core" "Spawning new server"
-        _ <- createProcess (proc "./hedgewars-server" [])
+        _ <- createProcess (proc "./hedgewars-server" args)
         return ()
     processAction $ ModifyServerInfo (\s -> s{shutdownPending=True})
 

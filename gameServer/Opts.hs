@@ -34,6 +34,6 @@ getOpts :: ServerInfo -> IO ServerInfo
 getOpts opts = do
     args <- getArgs
     case getOpt Permute options args of
-        (o, [], []) -> return $ foldr ($) opts o
+        (o, [], []) -> return $ foldr ($) opts{runArgs = args} o
         (_,_,errs) -> ioError (userError (concat errs ++ usageInfo header options))
     where header = "Usage: hedgewars-server [OPTION...]"

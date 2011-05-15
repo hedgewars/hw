@@ -129,6 +129,7 @@ data ServerInfo =
         dbPassword :: B.ByteString,
         bans :: [BanInfo],
         shutdownPending :: Bool,
+        runArgs :: [String],
         coreChan :: Chan CoreMessage,
         dbQueries :: Chan DBQuery,
         serverSocket :: Maybe Socket,
@@ -152,6 +153,7 @@ newServerInfo =
         ""
         []
         False
+        []
 
 data AccountInfo =
     HasAccount B.ByteString Bool
