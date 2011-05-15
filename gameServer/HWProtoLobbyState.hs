@@ -178,9 +178,9 @@ handleCmd_lobby ["CLEAR_ACCOUNTS_CACHE"] = do
     cl <- thisClient
     return [ClearAccountsCache | isAdministrator cl]
 
-handleCmd_lobby ["RESTART_SERVER", restartType] = do
+handleCmd_lobby ["RESTART_SERVER"] = do
     cl <- thisClient
-    return [RestartServer f | let f = restartType == "FORCE", isAdministrator cl]
+    return [RestartServer]
 
 
 handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]

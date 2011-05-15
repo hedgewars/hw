@@ -18,6 +18,8 @@ import Data.Unique
 import Control.Arrow
 import Control.Exception
 import OfficialServer.GameReplayStore
+import System.Process
+import Network.Socket
 -----------------------------
 import CoreTypes
 import Utils
@@ -57,7 +59,7 @@ data Action =
     | DeleteClient ClientIndex
     | PingAll
     | StatsAction
-    | RestartServer Bool
+    | RestartServer
     | AddNick2Bans B.ByteString B.ByteString UTCTime
     | AddIP2Bans B.ByteString B.ByteString UTCTime
     | CheckBanned
@@ -153,6 +155,10 @@ processAction (DeleteClient ci) = do
 
     s <- get
     put $! s{removedClients = ci `Set.delete` removedClients s}
+    
+    sp <- gets (shutdownPending . serverInfo)
+    cls <- allClientsS
+    io $ when (sp && null cls) $ throwIO ShutdownException
 
 processAction (ModifyClient f) = do
     (Just ci) <- gets clientIndex
@@ -467,11 +473,15 @@ processAction StatsAction = do
     where
           st irnc = (length $ allRooms irnc, length $ allClients irnc)
 
-processAction (RestartServer force) = do
-    if force then do
-        throw RestartException
-        else
-        processAction $ ModifyServerInfo (\s -> s{restartPending=True})
+processAction RestartServer = do
+    sock <- gets (fromJust . serverSocket . serverInfo)
+    io $ do
+        noticeM "Core" "Closing listening socket"
+        sClose sock
+        noticeM "Core" "Spawning new server"
+        _ <- createProcess (proc "./hedgewars-server" [])
+        return ()
+    processAction $ ModifyServerInfo (\s -> s{shutdownPending=True})
 
 processAction SaveReplay = do
     ri <- clientRoomA

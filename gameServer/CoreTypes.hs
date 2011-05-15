@@ -128,14 +128,15 @@ data ServerInfo =
         dbLogin :: B.ByteString,
         dbPassword :: B.ByteString,
         bans :: [BanInfo],
-        restartPending :: Bool,
+        shutdownPending :: Bool,
         coreChan :: Chan CoreMessage,
         dbQueries :: Chan DBQuery,
+        serverSocket :: Maybe Socket,
         serverConfig :: Maybe Conf
     }
 
 
-newServerInfo :: Chan CoreMessage -> Chan DBQuery -> Maybe Conf -> ServerInfo
+newServerInfo :: Chan CoreMessage -> Chan DBQuery -> Maybe Socket -> Maybe Conf -> ServerInfo
 newServerInfo =
     ServerInfo
         True
@@ -181,7 +182,6 @@ data Notice =
 
 data ShutdownException =
     ShutdownException
-    | RestartException
      deriving (Show, Typeable)
 
 instance Exception ShutdownException

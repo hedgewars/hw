@@ -10,6 +10,7 @@ import Data.Set as Set
 import qualified Data.ByteString.Char8 as B
 import Control.DeepSeq
 import Data.Unique
+import Data.Maybe
 --------------------------------------
 import CoreTypes
 import NetRoutines
@@ -65,13 +66,13 @@ mainLoop = forever $ do
                     PingAll : [StatsAction | even tick]
 
 
-startServer :: ServerInfo -> Socket -> IO ()
-startServer si serverSocket = do
-    putStrLn $ "Listening on port " ++ show (listenPort si)
+startServer :: ServerInfo -> IO ()
+startServer si = do
+    noticeM "Core" $ "Listening on port " ++ show (listenPort si)
 
     _ <- forkIO $
         acceptLoop
-            serverSocket
+            (fromJust $ serverSocket si)
             (coreChan si)
 
     return ()
