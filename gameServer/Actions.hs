@@ -466,8 +466,9 @@ processAction PingAll = do
 
 
 processAction StatsAction = do
-    rnc <- gets roomsClients
     si <- gets serverInfo
+    when (not $ shutdownPending si) $ do
+    rnc <- gets roomsClients
     (roomsNum, clientsNum) <- io $ withRoomsAndClients rnc st
     io $ writeChan (dbQueries si) $ SendStats clientsNum (roomsNum - 1)
     where
