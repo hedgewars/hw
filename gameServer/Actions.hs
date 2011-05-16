@@ -468,22 +468,24 @@ processAction PingAll = do
 processAction StatsAction = do
     si <- gets serverInfo
     when (not $ shutdownPending si) $ do
-    rnc <- gets roomsClients
-    (roomsNum, clientsNum) <- io $ withRoomsAndClients rnc st
-    io $ writeChan (dbQueries si) $ SendStats clientsNum (roomsNum - 1)
+        rnc <- gets roomsClients
+        (roomsNum, clientsNum) <- io $ withRoomsAndClients rnc st
+        io $ writeChan (dbQueries si) $ SendStats clientsNum (roomsNum - 1)
     where
           st irnc = (length $ allRooms irnc, length $ allClients irnc)
 
-processAction RestartServer = do
-    sock <- gets (fromJust . serverSocket . serverInfo)
-    args <- gets (runArgs . serverInfo)
-    io $ do
-        noticeM "Core" "Closing listening socket"
-        sClose sock
-        noticeM "Core" "Spawning new server"
-        _ <- createProcess (proc "./hedgewars-server" args)
-        return ()
-    processAction $ ModifyServerInfo (\s -> s{shutdownPending=True})
+processAction RestartServer = do 
+    sp <- gets (shutdownPending . serverInfo)
+    when (not sp) $ do
+        sock <- gets (fromJust . serverSocket . serverInfo)
+        args <- gets (runArgs . serverInfo)
+        io $ do
+            noticeM "Core" "Closing listening socket"
+            sClose sock
+            noticeM "Core" "Spawning new server"
+            _ <- createProcess (proc "./hedgewars-server" args)
+            return ()
+        processAction $ ModifyServerInfo (\s -> s{shutdownPending = True})
 
 processAction SaveReplay = do
     ri <- clientRoomA
