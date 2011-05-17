@@ -59,7 +59,7 @@ public:
     bool netSuspend;
 
  protected:
-    virtual QStringList setArguments();
+    virtual QStringList getArguments();
     virtual void onClientRead();
     virtual void onClientDisconnect();
 

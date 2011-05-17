@@ -44,7 +44,7 @@ class HWMap : public TCPBase
   void getImage(const QString & seed, int templateFilter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData);
 
  protected:
-  virtual QStringList setArguments();
+  virtual QStringList getArguments();
   virtual void onClientDisconnect();
   virtual void SendToClientFirst();
 

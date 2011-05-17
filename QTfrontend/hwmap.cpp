@@ -39,7 +39,7 @@ void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int 
     Start();
 }
 
-QStringList HWMap::setArguments()
+QStringList HWMap::getArguments()
 {
     QStringList arguments;
     arguments << cfgdir->absolutePath();

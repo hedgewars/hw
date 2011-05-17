@@ -1210,10 +1210,29 @@ void HWForm::UpdateCampaignPage(int index)
         ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
 }
 
+// used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]
+QString HWForm::getDemoArguments()
+{
+    QRect resolution = config->vid_Resolution();
+    return QString(QString::number(resolution.width()) + " "
+     + QString::number(resolution.height()) + " "
+     + QString::number(config->bitDepth()) + " " // bpp
+     + QString::number(config->volume()) + " " // sound volume
+     + (config->isMusicEnabled() ? "1" : "0") + " "
+     + (config->isSoundEnabled() ? "1" : "0") + " "
+     + config->language() + ".txt "
+     + (config->vid_Fullscreen() ? "1" : "0") + " "
+     + (config->isShowFPSEnabled() ? "1" : "0") + " "
+     + (config->isAltDamageEnabled() ? "1" : "0") + " "
+     + QString::number(config->timerInterval()) + " "
+     + QString::number(config->translateQuality()));
+}
+
 void HWForm::AssociateFiles()
 {
     bool success = true;
 #ifdef _WIN32
+    QString arguments = getDemoArguments();
     QSettings registry_hkcr("HKEY_CLASSES_ROOT", QSettings::NativeFormat);
     registry_hkcr.setValue(".hwd/Default", "Hedgewars.Demo");
     registry_hkcr.setValue(".hws/Default", "Hedgewars.Save");
@@ -1221,13 +1240,14 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Save/Default", tr("Hedgewars Save File", "File Types"));
     registry_hkcr.setValue("Hedgewars.Demo/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwdfile.ico\",0");
     registry_hkcr.setValue("Hedgewars.Save/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwsfile.ico\",0");
-    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
-    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\"");
+    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" --set-everything "+arguments);
+    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" --set-everything "+arguments);
 #elif defined __APPLE__
     success = false;
     // TODO; also enable button in pages.cpp and signal in hwform.cpp
 #else
     // this is a little silly due to all the system commands below anyway - just use mkdir -p ?  Does have the advantage of the alert I guess
+    QString arguments = getDemoArguments();
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local");
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share");
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/mime");
@@ -1243,5 +1263,7 @@ void HWForm::AssociateFiles()
 #endif
     if (success) QMessageBox::information(0, "", QMessageBox::tr("All file associations have been set."));
     else QMessageBox::information(0, "", QMessageBox::tr("File association failed."));
+//  hack to add user's settings to hwengine. might be better at this point to read in the file, append it, and write it out to its new home
+    if (success) success = system(("sed -i 's/^\\(Exec=.*\\)/\\1 --set-everything "+arguments+"/' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
 }
 

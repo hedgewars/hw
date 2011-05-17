@@ -287,7 +287,7 @@ void HWGame::onClientRead()
     }
 }
 
-QStringList HWGame::setArguments()
+QStringList HWGame::getArguments()
 {
     QStringList arguments;
     QRect resolution = config->vid_Resolution();

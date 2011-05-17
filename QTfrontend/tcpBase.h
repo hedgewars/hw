@@ -57,7 +57,7 @@ class TCPBase : public QObject
   void SendIPC(const QByteArray & buf);
   void RawSendIPC(const QByteArray & buf);
 
-  virtual QStringList setArguments()=0;
+  virtual QStringList getArguments()=0;
   virtual void onClientRead();
   virtual void onClientDisconnect();
   virtual void SendToClientFirst();
