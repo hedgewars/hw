@@ -381,7 +381,12 @@ processAction JoinLobby = do
 
 processAction (KickClient kickId) = do
     modify (\s -> s{clientIndex = Just kickId})
-    processAction $ ByeClient "Kicked"
+    clHost <- client's host
+    currentTime <- io getCurrentTime
+    mapM_ processAction [
+        AddIP2Bans clHost "60 seconds cooldown after kick" (addUTCTime 60 currentTime),
+        ByeClient "Kicked"
+        ]
 
 
 processAction (BanClient seconds reason banId) = do
