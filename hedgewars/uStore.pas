@@ -273,10 +273,11 @@ LoadGraves;
 AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
     with SpritesData[ii] do
-        // FIXME - add a sprite attribute
-        if ((cReducedQuality and rqNoBackground) = 0) or // FIXME: should check for both rqNoBackground and rqKillFlakes
-            (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR, sprFlake, sprSplash, sprDroplet, sprSDSplash, sprSDDroplet]) or
-            (((Theme = 'Snow') or (Theme = 'Christmas')) and ((ii = sprFlake) or (ii = sprSDFlake)))) then // FIXME: hack; also should checked against rqLowRes
+        // FIXME - add a sprite attribute to match on rq flags?
+        if (((cReducedQuality and (rqNoBackground or rqLowRes)) = 0) or   // why rqLowRes?
+                (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]))) and
+           (((cReducedQuality and rqPlainSplash) = 0) or ((not (ii in [sprSplash, sprDroplet, sprSDSplash, sprSDDroplet])))) and
+           (((cReducedQuality and rqKillFlakes) = 0) or (Theme = 'Snow') or (Theme = 'Christmas') or ((not (ii in [sprFlake, sprSDFlake])))) then
         begin
             if AltPath = ptNone then
                 if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR] then // FIXME: hack
@@ -547,10 +548,15 @@ begin
     AddFileLog('  \----- GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 
     if MaxTextureSize <= 0 then
-    begin
+        begin
         MaxTextureSize:= 1024;
         AddFileLog('OpenGL Warning - driver didn''t provide any valid max texture size; assuming 1024');
-    end;
+        end
+    else if (MaxTextureSize < 1024) and (MaxTextureSize >= 512) then
+        begin
+        cReducedQuality := cReducedQuality or rqNoBackground;  
+        AddFileLog('Texture size too small for backgrounds, disabling.');
+        end;
 
 {$IFDEF IPHONEOS}
     cGPUVendor:= gvApple;
