@@ -141,8 +141,11 @@ end;
 
 ///////////////////
 procedure MainLoop;
+{$WARNINGS OFF}
+// disable "Some fields weren't initialized" warning
+const event: TSDL_Event = ();
+{$WARNINGS ON}
 var PrevTime, CurrTime: Longword;
-    event: TSDL_Event;
 begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
