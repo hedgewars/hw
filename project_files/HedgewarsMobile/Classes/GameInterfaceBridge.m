@@ -153,8 +153,17 @@
     // prepare options for overlay and add it to the future sdl uiwindow
     [self performSelector:@selector(displayOverlayLater:) withObject:nil afterDelay:3];
 
+    // keep track of uncompleted games
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:self.savePath forKey:@"savedGamePath"];
+    [defaults synchronize];
+
     // SYSTEMS ARE GO!!
     [self startGameEngine];
+
+    // remove completed games notification
+    [defaults setObject:@"" forKey:@"savedGamePath"];
+    [defaults synchronize];
 
     // now we can remove the cover with a transition
     [UIView beginAnimations:@"fade in" context:NULL];

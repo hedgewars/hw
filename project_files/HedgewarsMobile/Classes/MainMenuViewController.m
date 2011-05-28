@@ -26,10 +26,11 @@
 #import "SplitViewRootController.h"
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
+#import "RestoreViewController.h"
 #import "ServerSetup.h"
 
 @implementation MainMenuViewController
-@synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController;
+@synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController, restoreViewController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -104,6 +105,19 @@
         [userDefaults setObject:version forKey:@"HedgeVersion"];
         [userDefaults synchronize];
         [self createNecessaryFiles];
+    }
+
+    NSString *saveString = [[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"];
+    if (saveString != nil && [saveString isEqualToString:@""] == NO) {
+        if (self.restoreViewController == nil) {
+            NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")]; 
+            RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
+            if ([restored respondsToSelector:@selector(setModalPresentationStyle:)])
+                restored.modalPresentationStyle = UIModalPresentationFormSheet;
+            self.restoreViewController = restored;
+            [restored release];
+        }
+        [self performSelector:@selector(presentModalViewController:animated:) withObject:self.restoreViewController afterDelay:0.35];
     }
 
     /*
@@ -209,6 +223,7 @@
     self.settingsViewController = nil;
     self.aboutViewController = nil;
     self.savedGamesViewController = nil;
+    self.restoreViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -222,6 +237,8 @@
         self.aboutViewController = nil;
     if (self.savedGamesViewController.view.superview == nil)
         self.savedGamesViewController = nil;
+    if (self.restoreViewController.view.superview == nil)
+        self.restoreViewController = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
@@ -231,6 +248,7 @@
     releaseAndNil(gameConfigViewController);
     releaseAndNil(aboutViewController);
     releaseAndNil(savedGamesViewController);
+    releaseAndNil(restoreViewController);
     [super dealloc];
 }
 
