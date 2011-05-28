@@ -45,6 +45,7 @@
 
     if (self.activeController == nil) {
         MasterViewController *rightController = [[MasterViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        rightController.rootController = self;
         rightController.targetController = nil;
         self.activeController = rightController;
         [rightController release];
@@ -53,6 +54,7 @@
 
     if (IS_IPAD()) {
         MasterViewController *leftController = [[MasterViewController alloc] initWithStyle:UITableViewStylePlain];
+        leftController.rootController = self;
         leftController.targetController = self.activeController;
         UINavigationController *leftNavController = [[UINavigationController alloc] initWithRootViewController:leftController];
         [leftController release];
@@ -72,6 +74,11 @@
     }
 
     [super viewDidLoad];
+}
+
+-(void) dismissModalViewControllerAnimated:(BOOL)animated {
+    playSound(@"backSound");
+    [self.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
 -(void) viewDidUnload {

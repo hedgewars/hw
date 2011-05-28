@@ -93,12 +93,6 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
 
-    // listen to request to remove the modalviewcontroller (needed due to the splitcontroller)
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(dismissModalViewController)
-                                                 name: @"dismissModalView"
-                                               object:nil];
-
     // get the app's version
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
 
@@ -210,13 +204,7 @@
     }
 }
 
-// must be kept for compatibility with the settings page
--(void) dismissModalViewController {
-    [self dismissModalViewControllerAnimated:YES];
-}
-
 -(void) viewDidUnload {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.gameConfigViewController = nil;
     self.settingsViewController = nil;
     self.aboutViewController = nil;

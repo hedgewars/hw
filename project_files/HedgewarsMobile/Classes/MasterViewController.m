@@ -28,7 +28,7 @@
 #import "SupportViewController.h"
 
 @implementation MasterViewController
-@synthesize targetController, controllerNames, lastIndexPath;
+@synthesize rootController, targetController, controllerNames, lastIndexPath;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -192,7 +192,8 @@
 }
 
 -(void) viewDidUnload {
-    self.targetController = nil;
+    //self.rootController = nil;
+    //self.targetController = nil;
     self.controllerNames = nil;
     self.lastIndexPath = nil;
     generalSettingsViewController = nil;
@@ -205,7 +206,8 @@
 }
 
 -(void) dealloc {
-    self.targetController = nil;
+    releaseAndNil(rootController);
+    releaseAndNil(targetController);
     releaseAndNil(controllerNames);
     releaseAndNil(lastIndexPath);
     releaseAndNil(generalSettingsViewController);
@@ -217,8 +219,7 @@
 }
 
 -(IBAction) dismissSplitView {
-    playSound(@"backSound");
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"dismissModalView" object:nil];
+    [self.rootController dismissModalViewControllerAnimated:YES];
 }
 
 @end

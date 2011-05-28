@@ -22,7 +22,7 @@
 #import <UIKit/UIKit.h>
 
 
-@class DetailViewController;
+@class SplitViewRootController;
 @class GeneralSettingsViewController;
 @class TeamSettingsViewController;
 @class WeaponSettingsViewController;
@@ -30,6 +30,7 @@
 @class SupportViewController;
 
 @interface MasterViewController : UITableViewController {
+    SplitViewRootController *rootController;
     MasterViewController *targetController;
     NSArray *controllerNames;
     NSIndexPath *lastIndexPath;
@@ -41,6 +42,7 @@
 }
 
 @property (nonatomic, retain) MasterViewController *targetController;
+@property (nonatomic, retain) SplitViewRootController *rootController;
 @property (nonatomic, retain) NSArray *controllerNames;
 @property (nonatomic, retain) NSIndexPath *lastIndexPath;
 
