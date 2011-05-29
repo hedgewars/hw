@@ -108,6 +108,8 @@ if(APPLE)
 		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
 	endif()
 
+	#add user framework directory
+	set(pascal_compiler_flags_cmn "-Ff~/Library/Frameworks" ${pascal_compiler_flags_cmn})
 	#set deployment target
 	set(pascal_compiler_flags_cmn "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
 	#link with liblua.a (which requires readline)
