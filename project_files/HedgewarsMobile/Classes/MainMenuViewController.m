@@ -107,6 +107,9 @@
         [self createNecessaryFiles];
     }
 
+    if ([[userDefaults objectForKey:@"music"] boolValue])
+        [HedgewarsAppDelegate playBackgroundMusic];
+
     NSString *saveString = [[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"];
     if (saveString != nil && [saveString isEqualToString:@""] == NO) {
         if (self.restoreViewController == nil) {

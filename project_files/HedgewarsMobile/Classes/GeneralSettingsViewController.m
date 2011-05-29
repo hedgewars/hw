@@ -41,7 +41,11 @@
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults synchronize];
+    if ([[userDefaults objectForKey:@"music"] boolValue] == NO)
+        [HedgewarsAppDelegate stopBackgroundMusic];
+
     [super viewWillDisappear:animated];
 }
 
@@ -53,20 +57,26 @@
 
     switch (theSwitch.tag) {
         case 10:    //soundSwitch
-            // this turn off also the switch below
+            // setting this off will turn off also the switch below (music)
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"sound"];
             [settings setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
             theOtherSwitch = (UISwitch *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]].accessoryView;
             [theOtherSwitch setOn:NO animated:YES];
             break;
         case 20:    //musicSwitch
-            // if switch above is off, never turn on
+            // if switch above (sound) is off, never turn on
             if (NO == [[settings objectForKey:@"sound"] boolValue]) {
                 [settings setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
                 theOtherSwitch = (UISwitch *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]].accessoryView;
                 [theOtherSwitch setOn:NO animated:YES];
             } else
                 [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"music"];
+
+            if (theSwitch.on)
+                [HedgewarsAppDelegate playBackgroundMusic];
+            else
+                [HedgewarsAppDelegate pauseBackgroundMusic];
+
             break;
         case 30:    //alternateSwitch
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];

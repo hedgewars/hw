@@ -24,6 +24,7 @@
 #import "ObjcExports.h"
 #import "CommodityFunctions.h"
 #import "MainMenuViewController.h"
+#import "AVFoundation/AVAudioPlayer.h"
 #import "Appirater.h"
 #include <unistd.h>
 
@@ -37,19 +38,50 @@
 @end
 
 @implementation HedgewarsAppDelegate
-@synthesize mainViewController, uiwindow, secondWindow, isInGame;
+@synthesize mainViewController, uiwindow, secondWindow, isInGame, backgroundMusic;
 
 // convenience method
 +(HedgewarsAppDelegate *)sharedAppDelegate {
     return (HedgewarsAppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
+#pragma mark -
+#pragma mark Music control
++(void) playBackgroundMusic {
+    if ([HedgewarsAppDelegate sharedAppDelegate].backgroundMusic == nil)
+        [HedgewarsAppDelegate loadBackgroundMusic];
+    [[HedgewarsAppDelegate sharedAppDelegate].backgroundMusic play];
+}
+
++(void) pauseBackgroundMusic {
+    [[HedgewarsAppDelegate sharedAppDelegate].backgroundMusic pause];
+}
+
++(void) stopBackgroundMusic {
+    [[HedgewarsAppDelegate sharedAppDelegate].backgroundMusic stop];
+}
+
++(void) loadBackgroundMusic {
+    NSString *musicString = [[NSBundle mainBundle] pathForResource:@"hwclassic" ofType:@"mp3"];
+    AVAudioPlayer *background = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:musicString] error:nil];
+
+    background.delegate = nil;
+    background.volume = 0.5f;
+    background.numberOfLoops = -1;
+    [background prepareToPlay];
+    [HedgewarsAppDelegate sharedAppDelegate].backgroundMusic = background;
+    [background release];
+}
+
+#pragma mark -
+#pragma mark AppDelegate methods
 -(id) init {
     if (self = [super init]){
         mainViewController = nil;
         uiwindow = nil;
         secondWindow = nil;
         isInGame = NO;
+        backgroundMusic = nil;
     }
     return self;
 }
@@ -58,6 +90,7 @@
     [mainViewController release];
     [uiwindow release];
     [secondWindow release];
+    [backgroundMusic release];
     [super dealloc];
 }
 
@@ -100,6 +133,8 @@
 
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
     // don't clean mainMenuViewController here!!!
+    [self.backgroundMusic stop];
+    self.backgroundMusic = nil;
     MSG_MEMCLEAN();
     print_free_memory();
 }

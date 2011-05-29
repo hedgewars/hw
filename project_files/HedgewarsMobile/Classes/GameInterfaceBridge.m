@@ -154,16 +154,18 @@
     [self performSelector:@selector(displayOverlayLater:) withObject:nil afterDelay:3];
 
     // keep track of uncompleted games
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:self.savePath forKey:@"savedGamePath"];
-    [defaults synchronize];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:self.savePath forKey:@"savedGamePath"];
+    [userDefaults synchronize];
+
+    [HedgewarsAppDelegate pauseBackgroundMusic];
 
     // SYSTEMS ARE GO!!
     [self startGameEngine];
-
+    
     // remove completed games notification
-    [defaults setObject:@"" forKey:@"savedGamePath"];
-    [defaults synchronize];
+    [userDefaults setObject:@"" forKey:@"savedGamePath"];
+    [userDefaults synchronize];
 
     // now we can remove the cover with a transition
     [UIView beginAnimations:@"fade in" context:NULL];
@@ -180,8 +182,12 @@
     [self.parentController viewWillAppear:YES];
 
     // release the network manager and the savepath as they are not needed anymore
-    [self.engineProtocol release];
-    [self.savePath release];
+    releaseAndNil(self.engineProtocol);
+    if (self.gameType != gtSave)
+        releaseAndNil(self.savePath);
+
+    if ([[userDefaults objectForKey:@"music"] boolValue])
+        [HedgewarsAppDelegate playBackgroundMusic];
 }
 
 // set up variables for a local game

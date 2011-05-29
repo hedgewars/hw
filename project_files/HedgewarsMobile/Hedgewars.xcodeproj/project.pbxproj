@@ -70,6 +70,8 @@
 		611F4D4B11B27A9900F9759A /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 611F4D4A11B27A9900F9759A /* uScript.pas */; };
 		61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61272338117DF778005B90CF /* MobileCoreServices.framework */; };
 		6129B9F711EFB04D0017E305 /* denied.png in Resources */ = {isa = PBXBuildFile; fileRef = 6129B9F611EFB04D0017E305 /* denied.png */; };
+		612CABAB1391CE68005E9596 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 612CABAA1391CE68005E9596 /* AVFoundation.framework */; };
+		612CABC81391D3CC005E9596 /* hwclassic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 612CABC71391D3CC005E9596 /* hwclassic.mp3 */; };
 		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
 		61399013125D19C0003C2DC0 /* uMobile.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61399012125D19C0003C2DC0 /* uMobile.pas */; };
 		6147DAD31253DCDE0010357E /* savesButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 6147DAD21253DCDE0010357E /* savesButton.png */; };
@@ -355,6 +357,8 @@
 		6127232E117DF752005B90CF /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = ../../../Library/SDL_image/Xcode_iPhone/SDL_image.xcodeproj; sourceTree = SOURCE_ROOT; };
 		61272338117DF778005B90CF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		6129B9F611EFB04D0017E305 /* denied.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = denied.png; path = Resources/denied.png; sourceTree = "<group>"; };
+		612CABAA1391CE68005E9596 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		612CABC71391D3CC005E9596 /* hwclassic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hwclassic.mp3; sourceTree = "<group>"; };
 		61370652117B1D50004EE44A /* Entitlements-Distribution.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Distribution.plist"; sourceTree = "<group>"; };
 		61399012125D19C0003C2DC0 /* uMobile.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uMobile.pas; path = ../../hedgewars/uMobile.pas; sourceTree = SOURCE_ROOT; };
 		6147DAD21253DCDE0010357E /* savesButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = savesButton.png; path = Resources/Frontend/savesButton.png; sourceTree = "<group>"; };
@@ -595,6 +599,7 @@
 				61272339117DF778005B90CF /* MobileCoreServices.framework in Frameworks */,
 				6199E81612463EA800DADF8C /* CFNetwork.framework in Frameworks */,
 				6199E81A12463EC400DADF8C /* SystemConfiguration.framework in Frameworks */,
+				612CABAB1391CE68005E9596 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,6 +679,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				612CABCA1391D3D1005E9596 /* Sounds */,
 				6199E86C12464A8E00DADF8C /* surprise.png */,
 				611EEBC0122B34A800DF6938 /* helpingame.png */,
 				611EEC30122B54D700DF6938 /* helpplain.png */,
@@ -682,9 +688,6 @@
 				611EEBC3122B355700DF6938 /* helpright.png */,
 				61842B3F122B66280096E335 /* helpleft.png */,
 				6129B9F611EFB04D0017E305 /* denied.png */,
-				611EE973122A9C4100DF6938 /* clickSound.wav */,
-				611EE9D7122AA10A00DF6938 /* backSound.wav */,
-				611EE9D8122AA10A00DF6938 /* selSound.wav */,
 				61F7A42811E2905C0040BA66 /* Icons */,
 				61F903FA11DF58680068B24D /* Frontend */,
 				6179936611501D1E00BA94A9 /* Overlay */,
@@ -698,6 +701,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				612CABAA1391CE68005E9596 /* AVFoundation.framework */,
 				619599BA1364E65900B429B6 /* Freetype.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
 				619598181364BCD200B429B6 /* Tremor.xcodeproj */,
@@ -736,6 +740,17 @@
 				611D9BFA12497E9800008271 /* SavedGamesViewController.xib */,
 			);
 			name = "Other Controllers";
+			sourceTree = "<group>";
+		};
+		612CABCA1391D3D1005E9596 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				612CABC71391D3CC005E9596 /* hwclassic.mp3 */,
+				611EE973122A9C4100DF6938 /* clickSound.wav */,
+				611EE9D7122AA10A00DF6938 /* backSound.wav */,
+				611EE9D8122AA10A00DF6938 /* selSound.wav */,
+			);
+			name = Sounds;
 			sourceTree = "<group>";
 		};
 		6163EE4C11CC2478001C0453 /* Settings Pages */ = {
@@ -1337,6 +1352,7 @@
 				6174F7C912CD62E300205D6F /* smallerTitle@2x.png in Resources */,
 				6167A6771391514600AA6D07 /* RestoreViewController-iPhone.xib in Resources */,
 				6167A72D13919E6800AA6D07 /* RestoreViewController-iPad.xib in Resources */,
+				612CABC81391D3CC005E9596 /* hwclassic.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
