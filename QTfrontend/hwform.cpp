@@ -1231,8 +1231,8 @@ QString HWForm::getDemoArguments()
 void HWForm::AssociateFiles()
 {
     bool success = true;
-#ifdef _WIN32
     QString arguments = getDemoArguments();
+#ifdef _WIN32
     QSettings registry_hkcr("HKEY_CLASSES_ROOT", QSettings::NativeFormat);
     registry_hkcr.setValue(".hwd/Default", "Hedgewars.Demo");
     registry_hkcr.setValue(".hws/Default", "Hedgewars.Save");
@@ -1247,7 +1247,6 @@ void HWForm::AssociateFiles()
     // TODO; also enable button in pages.cpp and signal in hwform.cpp
 #else
     // this is a little silly due to all the system commands below anyway - just use mkdir -p ?  Does have the advantage of the alert I guess
-    QString arguments = getDemoArguments();
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local");
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share");
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/mime");
@@ -1260,10 +1259,10 @@ void HWForm::AssociateFiles()
     if (success) success = system(("update-mime-database "+QDir::home().absolutePath()+"/.local/share/mime").toLocal8Bit().constData())==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-demo")==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-save")==0;
+    // hack to add user's settings to hwengine. might be better at this point to read in the file, append it, and write it out to its new home
+    if (success) success = system(("sed -i 's/^\\(Exec=.*\\)/\\1 --set-everything "+arguments+"/' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
 #endif
     if (success) QMessageBox::information(0, "", QMessageBox::tr("All file associations have been set."));
     else QMessageBox::information(0, "", QMessageBox::tr("File association failed."));
-//  hack to add user's settings to hwengine. might be better at this point to read in the file, append it, and write it out to its new home
-    if (success) success = system(("sed -i 's/^\\(Exec=.*\\)/\\1 --set-everything "+arguments+"/' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
 }
 
