@@ -1006,8 +1006,8 @@ procedure doStepDEagleShot(Gear: PGear);
 begin
     PlaySound(sndGun);
     // add 2 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths
-    Gear^.X := Gear^.X + _2*Gear^.dX;  
-    Gear^.Y := Gear^.Y + _2*Gear^.dY;
+    Gear^.X := Gear^.X + Gear^.dX * 2;
+    Gear^.Y := Gear^.Y + Gear^.dY * 2;
     Gear^.doStep := @doStepBulletWork
 end;
 
