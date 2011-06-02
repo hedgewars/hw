@@ -1039,6 +1039,7 @@ end;
 
 procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
+    x,y: Longword;
 begin
     WriteLnToConsole('Generating land...');
     case cMapGen of
@@ -1057,7 +1058,33 @@ begin
     AddOnLandObjects(tmpsurf);
 
     LandSurface2LandPixels(tmpsurf);
-    SDL_FreeSurface(tmpsurf);
+    if (cReducedQuality and rqBlurryLand) = 0 then
+        for x:= leftX+2 to rightX-2 do
+            for y:= topY+2 to LAND_HEIGHT-3 do
+                if (Land[y, x] = 0) and 
+                   (((Land[y, x-1] <> 0) and ((Land[y+1,x]<>0)) or (Land[y-1,x]<>0)) or
+                   ((Land[y, x+1] <> 0) and ((Land[y-1,x]<>0) or (Land[y+1,x]<>0)))) then
+                begin
+                    if Land[y, x-1] <> 0 then LandPixels[y, x]:= LandPixels[y, x-1]
+                    else if Land[y, x+1] <> 0 then LandPixels[y, x]:= LandPixels[y, x+1];
+                    LandPixels[y,x]:= (LandPixels[y,x] and not AMask) or (128 shl AShift)
+                end
+                else if (Land[y, x] = 0) and
+                        (((Land[y, x-1] <> 0) and (Land[y+1,x-1]<>0) and (Land[y+2,x]<>0)) or
+                        ((Land[y, x-1] <> 0) and (Land[y-1,x-1]<>0) and (Land[y-2,x]<>0)) or
+                        ((Land[y, x+1] <> 0) and (Land[y+1,x+1]<>0) and (Land[y+2,x]<>0)) or
+                        ((Land[y, x+1] <> 0) and (Land[y-1,x+1]<>0) and (Land[y-2,x]<>0)) or
+                        ((Land[y+1, x] <> 0) and (Land[y+1,x+1]<>0) and (Land[y,x+2]<>0)) or
+                        ((Land[y-1, x] <> 0) and (Land[y-1,x+1]<>0) and (Land[y,x+2]<>0)) or
+                        ((Land[y+1, x] <> 0) and (Land[y+1,x-1]<>0) and (Land[y,x-2]<>0)) or
+                        ((Land[y-1, x] <> 0) and (Land[y-1,x-1]<>0) and (Land[y,x-2]<>0))) then
+                begin
+                    if Land[y, x-1] <> 0 then LandPixels[y, x]:= LandPixels[y, x-1]
+                    else if Land[y, x+1] <> 0 then LandPixels[y, x]:= LandPixels[y, x+1]
+                    else if Land[y+1, x] <> 0 then LandPixels[y, x]:= LandPixels[y+1, x]
+                    else if Land[y-1, x] <> 0 then LandPixels[y, x]:= LandPixels[y-1, x];
+                    LandPixels[y,x]:= (LandPixels[y,x] and not AMask) or (64 shl AShift)
+                end;
     AddProgress();
 end;
 

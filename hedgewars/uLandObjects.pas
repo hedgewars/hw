@@ -88,11 +88,13 @@ for y:= 0 to Pred(Image^.h) do
         begin
             if (cReducedQuality and rqBlurryLand) = 0 then
             begin
-                if LandPixels[cpY + y, cpX + x] = 0 then
+                if (LandPixels[cpY + y, cpX + x] = 0) or 
+		   (((p^[x] and AMask) <> 0) and (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255)) then
                     LandPixels[cpY + y, cpX + x]:= p^[x];
             end
             else
-                if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
+                if (LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0) or 
+		   (((p^[x] and AMask) <> 0) and (((LandPixels[(cpY + y) div 2, (cpX + x) div 2] and AMask) shr AShift) < 255)) then
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
         if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then
