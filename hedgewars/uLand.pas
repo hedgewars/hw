@@ -1058,6 +1058,7 @@ begin
     AddOnLandObjects(tmpsurf);
 
     LandSurface2LandPixels(tmpsurf);
+    SDL_FreeSurface(tmpsurf);
     if (cReducedQuality and rqBlurryLand) = 0 then
         for x:= leftX+2 to rightX-2 do
             for y:= topY+2 to LAND_HEIGHT-3 do
