@@ -3272,7 +3272,7 @@ begin
         if ((Gear^.State and gstCollision) <> 0) then
         begin
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, Gear^.Hedgehog, EXPLAutoSound);
-            for i:= 0 to 32 do
+            for i:= 0 to 15 do
             begin
                 dX := AngleCos(i * 64) * _0_5 * (GetRandom + _1);
                 dY := AngleSin(i * 64) * _0_5 * (GetRandom + _1);
