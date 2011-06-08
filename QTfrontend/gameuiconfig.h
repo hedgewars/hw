@@ -49,6 +49,9 @@ public:
     quint8 timerInterval();
     quint8 bitDepth();
     QString netNick();
+    QByteArray netPasswordHash();
+    int netPasswordLength();
+    void setNetPasswordLength(int passwordLength);
     bool isReducedQuality() const;
     bool isFrontendEffects() const;
     bool isFrontendFullscreen() const;
@@ -68,6 +71,7 @@ public slots:
     void SaveOptions();
 
 private:
+    bool netPasswordIsValid();
     quint8 depth;
 };
 

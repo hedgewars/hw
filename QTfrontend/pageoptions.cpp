@@ -192,10 +192,18 @@ PageOptions::PageOptions(QWidget* parent) :
             editNetNick->setText(QLineEdit::tr("unnamed"));
             connect(editNetNick, SIGNAL(editingFinished()), this, SLOT(trimNetNick()));
             MiscLayout->addWidget(editNetNick, 0, 1);
+            
+            labelNetPassword = new QLabel(groupMisc);
+            labelNetPassword->setText(QLabel::tr("Password"));
+            MiscLayout->addWidget(labelNetPassword, 1, 0);
+            
+            editNetPassword = new QLineEdit(groupMisc);
+            editNetPassword->setEchoMode(QLineEdit::Password);
+            MiscLayout->addWidget(editNetPassword, 1, 1);
 
             QLabel *labelLanguage = new QLabel(groupMisc);
             labelLanguage->setText(QLabel::tr("Locale") + " *");
-            MiscLayout->addWidget(labelLanguage, 1, 0);
+            MiscLayout->addWidget(labelLanguage, 2, 0);
 
             CBLanguage = new QComboBox(groupMisc);
             QDir tmpdir;
@@ -210,26 +218,26 @@ PageOptions::PageOptions(QWidget* parent) :
                 CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", loc.name());
             }
 
-            MiscLayout->addWidget(CBLanguage, 1, 1);
+            MiscLayout->addWidget(CBLanguage, 2, 1);
 
             CBAltDamage = new QCheckBox(groupMisc);
             CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
-            MiscLayout->addWidget(CBAltDamage, 2, 0, 1, 2);
+            MiscLayout->addWidget(CBAltDamage, 3, 0, 1, 2);
 
             CBNameWithDate = new QCheckBox(groupMisc);
             CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
-            MiscLayout->addWidget(CBNameWithDate, 3, 0, 1, 2);
+            MiscLayout->addWidget(CBNameWithDate, 4, 0, 1, 2);
 
 #ifdef SPARKLE_ENABLED
             CBAutoUpdate = new QCheckBox(groupMisc);
             CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
-            MiscLayout->addWidget(CBAutoUpdate, 4, 0, 1, 2);
+            MiscLayout->addWidget(CBAutoUpdate, 5, 0, 1, 2);
 #endif
 #ifndef __APPLE__
             BtnAssociateFiles = new QPushButton(groupMisc);
             BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
             BtnAssociateFiles->setEnabled(!custom_data && !custom_config);
-            MiscLayout->addWidget(BtnAssociateFiles, 4, 0, 1, 2);
+            MiscLayout->addWidget(BtnAssociateFiles, 5, 0, 1, 2);
 #endif
             gbTBLayout->addWidget(groupMisc, 2, 0);
         }

@@ -22,6 +22,7 @@
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QInputDialog>
+#include <QCryptographicHash>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -66,6 +67,9 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
                 QDir::home().dirName());
 
     Form->ui.pageOptions->editNetNick->setText(netNick);
+    
+    int passLength = value("net/passwordlength", 0).toInt();
+    setNetPasswordLength(passLength);
 
     delete netHost;
     netHost = new QString(value("net/ip", "").toString());
@@ -138,6 +142,11 @@ void GameUIConfig::SaveOptions()
     setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
 
     setValue("net/nick", netNick());
+    if (netPasswordIsValid())
+    {
+        setValue("net/passwordhash", netPasswordHash());
+        setValue("net/passwordlength", netPasswordLength());
+    }
     setValue("net/ip", *netHost);
     setValue("net/port", netPort);
     setValue("net/servername", Form->ui.pageNetServer->leServerDescr->text());
@@ -145,7 +154,7 @@ void GameUIConfig::SaveOptions()
 
     setValue("fps/show", isShowFPSEnabled());
     setValue("fps/limit", Form->ui.pageOptions->fpsedit->value());
-
+    
     setValue("misc/altdamage", isAltDamageEnabled());
     setValue("misc/appendTimeToRecords", appendDateTimeToRecordName());
     setValue("misc/locale", language());
@@ -294,6 +303,33 @@ quint8 GameUIConfig::bitDepth()
 QString GameUIConfig::netNick()
 {
     return Form->ui.pageOptions->editNetNick->text();
+}
+
+QByteArray GameUIConfig::netPasswordHash()
+{
+    return QCryptographicHash::hash(Form->ui.pageOptions->editNetPassword->text().toLatin1(), QCryptographicHash::Md5).toHex();
+}
+
+int GameUIConfig::netPasswordLength()
+{
+    return Form->ui.pageOptions->editNetPassword->text().size();
+}
+
+bool GameUIConfig::netPasswordIsValid()
+{
+    return (netPasswordLength() == 0 || Form->ui.pageOptions->editNetPassword->text() != QString(netPasswordLength(), '\0'));
+}
+
+void GameUIConfig::setNetPasswordLength(int passwordLength)
+{
+    if (passwordLength > 0)
+    {
+        Form->ui.pageOptions->editNetPassword->setText(QString(passwordLength, '\0'));
+    }
+    else
+    {
+        Form->ui.pageOptions->editNetPassword->setText("");
+    }
 }
 
 quint8 GameUIConfig::volume()

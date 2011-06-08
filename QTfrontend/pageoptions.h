@@ -70,8 +70,10 @@ public:
     FPSEdit *fpsedit;
     QPushButton *BtnSaveOptions;
     QLabel *labelNN;
+    QLabel *labelNetPassword;
     QSpinBox * volumeBox;
     QLineEdit *editNetNick;
+    QLineEdit *editNetPassword;
     QSlider *SLQuality;
     QCheckBox *CBFrontendEffects;
 

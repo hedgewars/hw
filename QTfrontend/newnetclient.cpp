@@ -486,23 +486,38 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         emit AskForRunGame();
         return;
     }
+    
+    if (lst[0] == "BYE") {
+        if (lst[1] == "Authentication failed")
+        {
+            // Set the password blank if case the user tries to join and enter his password again
+            config->setValue("net/passwordlength", 0);
+            config->setNetPasswordLength(0);
+        }
+        // return early so the user won't get an unknown error message dialog (the user already gets a server connection is lost one)
+        return;
+    }
 
     if (lst[0] == "ASKPASSWORD") {
         bool ok = false;
         int passLength = config->value("net/passwordlength", 0).toInt();
         QString hash = config->value("net/passwordhash", "").toString();
-        QString password = QInputDialog::getText(0, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(mynick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'), &ok);
+        
+        // If the password is blank, ask the user to enter one in
+        if (passLength == 0)
+        {
+            QString password = QInputDialog::getText(0, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(mynick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'), &ok);
 
-        if (!ok) {
-            Disconnect();
-            emit Disconnected();
-            return;
-        }
-
-        if (!passLength || password!=QString(passLength, '\0')) {
+            if (!ok) {
+                Disconnect();
+                emit Disconnected();
+                return;
+            }
+            
             hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
             config->setValue("net/passwordhash", hash);
             config->setValue("net/passwordlength", password.size());
+            config->setNetPasswordLength(password.size());
         }
 
         RawSendNet(QString("PASSWORD%1%2").arg(delimeter).arg(hash));
