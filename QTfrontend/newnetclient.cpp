@@ -189,6 +189,7 @@ void HWNewNet::OnDisconnect()
 void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 {
     emit Disconnected();
+    m_game_connected = false;
 
     switch (socketError) {
         case QAbstractSocket::RemoteHostClosedError:
