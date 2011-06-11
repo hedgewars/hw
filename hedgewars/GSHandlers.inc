@@ -1601,7 +1601,6 @@ begin
     else
         if (Gear^.State and gsttmpFlag) = 0 then
             Gear^.State := Gear^.State or gsttmpFlag;
-
 end;
 
 procedure doStepRopeAttach(Gear: PGear);
@@ -1709,7 +1708,8 @@ begin
             Message := Message and not gmAttack
             end;
         DeleteGear(Gear)
-        end
+        end;
+    CheckGearDrowning(HHGear)
 end;
 
 procedure doStepRope(Gear: PGear);
