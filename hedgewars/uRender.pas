@@ -266,6 +266,7 @@ end;
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
 var row, col, numFramesFirstCol: LongInt;
 begin
+if SpritesData[Sprite].imageHeight = 0 then exit;
 numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
 row:= Frame mod numFramesFirstCol;
 col:= Frame div numFramesFirstCol;

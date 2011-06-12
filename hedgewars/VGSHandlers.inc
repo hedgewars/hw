@@ -649,7 +649,7 @@ Gear^.dY:= Gear^.dY + cGravityf * Steps;
 
 Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
 
-if round(Gear^.Y) > cWaterLine then
+if (round(Gear^.Y) > cWaterLine) and ((cReducedQuality and rqPlainSplash) = 0) then
     begin
     AddVisualGear(round(Gear^.X), round(Gear^.Y), vgtDroplet);
     DeleteVisualGear(Gear);
