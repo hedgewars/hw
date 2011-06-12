@@ -44,7 +44,14 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     Form->ui.pageOptions->WeaponTooltip->setChecked(value("misc/weaponTooltips", true).toBool());
 
     int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
-    Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 0 : t);
+    if (t < 0) {
+        if (Form->ui.pageOptions->CBResolution->count() > 1)
+            Form->ui.pageOptions->CBResolution->setCurrentIndex(1);
+        else 
+            Form->ui.pageOptions->CBResolution->setCurrentIndex(0);
+    }
+    else Form->ui.pageOptions->CBResolution->setCurrentIndex(t);
+    Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 1 : t);
     Form->ui.pageOptions->CBFullscreen->setChecked(value("video/fullscreen", false).toBool());
     bool ffscr=value("frontend/fullscreen", false).toBool();
     Form->ui.pageOptions->CBFrontendFullscreen->setChecked(ffscr);
