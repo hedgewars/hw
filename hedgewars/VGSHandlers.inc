@@ -46,7 +46,7 @@ with Gear^ do
         inc(Frame);
         if Frame = vobSDFramesCount then Frame:= 0
         end;
-    X:= X + (cWindSpeedf * 200 + dX + tdX) * Steps;
+    X:= X + (cWindSpeedf * 600 + dX + tdX) * Steps;
     if SuddenDeathDmg then
         Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps
     else
