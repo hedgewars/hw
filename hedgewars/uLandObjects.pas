@@ -196,7 +196,9 @@ until y > (LAND_HEIGHT-125);
 if x1 > 0 then
 begin
     bRes:= true;
-    tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Girder', ifTransparent or ifIgnoreCaps);
+    tmpsurf:= LoadImage(UserPathz[ptCurrTheme] + '/Girder', ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Girder', ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then tmpsurf:= LoadImage(UserPathz[ptGraphics] + '/Girder', ifTransparent or ifIgnoreCaps);
     if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', ifCritical or ifTransparent or ifIgnoreCaps);
 
     rr.x:= x1;
@@ -383,7 +385,8 @@ begin
 
 AddProgress;
 
-s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
+s:= UserPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
+if not FileExists(s) then s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 Assign(f, s);
 {$I-}
@@ -469,7 +472,8 @@ while not eof(f) do
         with ThemeObjects.objs[Pred(ThemeObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
+            Surf:= LoadImage(UserPathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps);
+            if Surf = nil then LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
             Delete(s, 1, i);
@@ -525,7 +529,8 @@ while not eof(f) do
         with SprayObjects.objs[Pred(SprayObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
+            Surf:= LoadImage(UserPathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps);
+            if Surf = nil then Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
             Delete(s, 1, i);

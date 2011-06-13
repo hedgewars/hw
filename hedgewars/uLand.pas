@@ -283,7 +283,8 @@ var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
     x, yd, yu: LongInt;
 begin
-    tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', ifCritical or ifIgnoreCaps);
+    tmpsurf:= LoadImage(UserPathz[ptCurrTheme] + '/LandTex', ifIgnoreCaps);
+    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', ifCritical or ifIgnoreCaps);
     r.y:= 0;
     while r.y < LAND_HEIGHT do
     begin
@@ -298,9 +299,11 @@ begin
     SDL_FreeSurface(tmpsurf);
 
     // freed in freeModule() below
-    LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
+    LandBackSurface:= LoadImage(UserPathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
+    if LandBackSurface = nil then LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
 
-    tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
+    tmpsurf:= LoadImage(UserPathz[ptCurrTheme] + '/Border', ifIgnoreCaps or ifTransparent);
+    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
     for x:= 0 to LAND_WIDTH - 1 do
     begin
         yd:= LAND_HEIGHT - 1;
@@ -1104,21 +1107,18 @@ topY:= LAND_HEIGHT - playHeight;
 
 WriteLnToConsole('Generating forts land...');
 
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadImage(UserPathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
 BlitImageAndGenerateCollisionInfo(leftX+150, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadImage(UserPathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
 BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 end;
 
-// Hi unC0Rr.
-// This is a function that Tiy assures me would not be good for gameplay.
-// It allows the setting of arbitrary portions of landscape as indestructible, or regular, or even blank.
-// He said I could add it here only when I swore it would not impact gameplay.  Which, as far as I can tell, is true.
-// I would just like to play with it with my friends if you do not mind.
-// Can allow for amusing maps.
+// Loads Land[] from an image, allowing overriding standard collision
 procedure LoadMask(mapName: shortstring);
 var tmpsurf: PSDL_Surface;
     p: PLongwordArray;
@@ -1167,11 +1167,13 @@ begin
 isMap:= true;
 WriteLnToConsole('Loading land from file...');
 AddProgress;
-tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadImage(UserPathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
 begin
     mapName:= ExtractFileName(Pathz[ptMapCurrent]);
-    tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+    tmpsurf:= LoadImage(UserPathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
 end;
 TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimensions too big!', true);
 

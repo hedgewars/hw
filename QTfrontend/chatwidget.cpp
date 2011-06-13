@@ -122,15 +122,14 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     this->sdli = sdli;
     this->notify = notify;
     if(notify && gameSettings->value("frontend/sound", true).toBool()) {
-       QDir tmpdir;
-
-       tmpdir.cd(datadir->absolutePath());
-       tmpdir.cd("Sounds/voices");
-       sdli->SDLMusicInit();
-       sound[0] = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/Classic/Hello.ogg").toLocal8Bit().constData());
-       sound[1] = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/Default/Hello.ogg").toLocal8Bit().constData());
-       sound[2] = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/Mobster/Hello.ogg").toLocal8Bit().constData());
-       sound[3] = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/Russian/Hello.ogg").toLocal8Bit().constData());
+        QFile tmpfile;
+        sdli->SDLMusicInit();
+        for(int i=0;i<4;i++) {
+            tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Sounds/voices/Classic/Hello.ogg");
+            if (tmpfile.exists()) sound[i] = Mix_LoadWAV(QFileInfo(tmpfile).absoluteFilePath().toLocal8Bit().constData());
+            else sound[i] = Mix_LoadWAV(QString(datadir->absolutePath() + 
+                "/Sounds/voices/Classic/Hello.ogg").toLocal8Bit().constData());
+        }
     }
 
     mainLayout.setSpacing(1);

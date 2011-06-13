@@ -35,10 +35,21 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     CBSelect = new QComboBox(this);
 
     QDir tmpdir;
+    tmpdir.cd(cfgdir->absolutePath());
+    tmpdir.cd("Data/Missions/Training");
+    tmpdir.setFilter(QDir::Files);
+    QStringList userlist = tmpdir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1");
+    CBSelect->addItems(userlist);
+
     tmpdir.cd(datadir->absolutePath());
     tmpdir.cd("Missions/Training");
     tmpdir.setFilter(QDir::Files);
-    CBSelect->addItems(tmpdir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1"));
+    QStringList tmplist = tmpdir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1");
+    QStringList datalist;
+    for (QStringList::Iterator it = tmplist.begin(); it != tmplist.end(); ++it)
+        if (!userlist.contains(*it,Qt::CaseInsensitive)) datalist.append(*it);
+    CBSelect->addItems(datalist);
+
     for(int i = 0; i < CBSelect->count(); i++)
     {
         CBSelect->setItemData(i, CBSelect->itemText(i));

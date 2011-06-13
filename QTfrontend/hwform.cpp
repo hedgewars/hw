@@ -1201,13 +1201,23 @@ void HWForm::UpdateCampaignPage(int index)
     ui.pageCampaign->CBSelect->clear();
 
     QDir tmpdir;
+    tmpdir.cd(cfgdir->absolutePath());
+    tmpdir.cd("Data/Missions/Campaign");
+    tmpdir.setFilter(QDir::Files);
+    QStringList userentries = tmpdir.entryList(QStringList("*#*.lua"));
+    //entries.sort();
+    for(int i = 0; (i < userentries.count()) && (i <= team.CampaignProgress); i++)
+        ui.pageCampaign->CBSelect->addItem(QString(userentries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(userentries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
+
     tmpdir.cd(datadir->absolutePath());
     tmpdir.cd("Missions/Campaign");
     tmpdir.setFilter(QDir::Files);
     QStringList entries = tmpdir.entryList(QStringList("*#*.lua"));
     //entries.sort();
-    for(int i = 0; (i < entries.count()) && (i <= team.CampaignProgress); i++)
+    for(int i = 0; (i < entries.count()) && (i <= team.CampaignProgress); i++) {
+        if (userentries.contains(entries[i])) continue; 
         ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
+    }
 }
 
 // used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]
@@ -1240,8 +1250,8 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Save/Default", tr("Hedgewars Save File", "File Types"));
     registry_hkcr.setValue("Hedgewars.Demo/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwdfile.ico\",0");
     registry_hkcr.setValue("Hedgewars.Save/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwsfile.ico\",0");
-    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" --set-everything "+arguments);
-    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" --set-everything "+arguments);
+    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + cfgdir->absolutePath().replace("/","\\") + "\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" --set-everything "+arguments);
+    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + cfgdir->absolutePath().replace("/","\\") + "\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" --set-everything "+arguments);
 #elif defined __APPLE__
     success = false;
     // TODO; also enable button in pages.cpp and signal in hwform.cpp
@@ -1259,8 +1269,8 @@ void HWForm::AssociateFiles()
     if (success) success = system(("update-mime-database "+QDir::home().absolutePath()+"/.local/share/mime").toLocal8Bit().constData())==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-demo")==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-save")==0;
-    // hack to add user's settings to hwengine. might be better at this point to read in the file, append it, and write it out to its new home
-    if (success) success = system(("sed -i 's/^\\(Exec=.*\\)/\\1 --set-everything "+arguments+"/' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
+    // hack to add user's settings to hwengine. might be better at this point to read in the file, append it, and write it out to its new home.  This assumes no spaces in the data dir path
+    if (success) success = system(("sed -i 's/^\\(Exec=.*\\) \\([^ ]* %f\\)/\\1 "+cfgdir->absolutePath().replace(" ","\\\\ ").replace("/","\\/")+" \\2 --set-everything "+arguments+"/' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
 #endif
     if (success) QMessageBox::information(0, "", QMessageBox::tr("All file associations have been set."));
     else QMessageBox::information(0, "", QMessageBox::tr("File association failed."));

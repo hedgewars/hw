@@ -34,6 +34,7 @@ end;
 procedure internalStartGameWithParameters();
 var tmp: LongInt;
 begin
+    UserPathPrefix:= ParamStr(1)+'/Data';
     val(ParamStr(2), cScreenWidth);
     val(ParamStr(3), cScreenHeight);
     val(ParamStr(4), cBits);
@@ -146,9 +147,10 @@ procedure playReplayFileWithParameters();
 var paramIndex: LongInt;
     wrongParameter: boolean;
 begin
-    PathPrefix:= ParamStr(1);
-    recordFileName:= ParamStr(2);
-    paramIndex:= 3;
+    UserPathPrefix:= ParamStr(1)+'/Data';
+    PathPrefix:= ParamStr(2);
+    recordFileName:= ParamStr(3);
+    paramIndex:= 4;
     wrongParameter:= false;
     while (paramIndex <= ParamCount) and not wrongParameter do
         begin

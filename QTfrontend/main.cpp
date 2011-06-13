@@ -384,13 +384,19 @@ int main(int argc, char *argv[]) {
     }
 
     Themes = new QStringList();
+    QFile userthemesfile(cfgdir->absolutePath() + "/Data/Themes/themes.cfg");
+    if (userthemesfile.open(QIODevice::ReadOnly)) {
+        QTextStream stream(&userthemesfile);
+        while (!stream.atEnd()) Themes->append(stream.readLine());
+        userthemesfile.close();
+    }
     QFile themesfile(datadir->absolutePath() + "/Themes/themes.cfg");
+    QString str;
     if (themesfile.open(QIODevice::ReadOnly)) {
         QTextStream stream(&themesfile);
-        QString str;
-        while (!stream.atEnd())
-        {
-            Themes->append(stream.readLine());
+        while (!stream.atEnd()) {
+            str = stream.readLine();
+            if (!Themes->contains(str)) Themes->append(str);
         }
         themesfile.close();
     } else {
@@ -398,16 +404,29 @@ int main(int argc, char *argv[]) {
     }
 
     QDir tmpdir;
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Maps");
+    tmpdir.cd(cfgdir->absolutePath());
+    tmpdir.cd("Data/Maps");
     tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
     mapList = new QStringList(tmpdir.entryList(QStringList("*")));
 
     tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Scripts/Multiplayer");
+    tmpdir.cd("Maps");
+    tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+    QStringList tmplist = QStringList(tmpdir.entryList(QStringList("*")));
+    for (QStringList::Iterator it = tmplist.begin(); it != tmplist.end(); ++it)
+        if (!mapList->contains(*it,Qt::CaseInsensitive)) mapList->append(*it);
+ 
+    tmpdir.cd(cfgdir->absolutePath());
+    tmpdir.cd("Data/Scripts/Multiplayer");
     tmpdir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
     scriptList = new QStringList(tmpdir.entryList(QStringList("*.lua")));
 
+    tmpdir.cd(datadir->absolutePath());
+    tmpdir.cd("Scripts/Multiplayer");
+    tmpdir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+    tmplist = QStringList(tmpdir.entryList(QStringList("*.lua")));
+    for (QStringList::Iterator it = tmplist.begin(); it != tmplist.end(); ++it)
+        if (!scriptList->contains(*it,Qt::CaseInsensitive)) scriptList->append(*it);
 
     QTranslator Translator;
     {
@@ -415,7 +434,10 @@ int main(int argc, char *argv[]) {
         QString cc = settings.value("misc/locale", "").toString();
         if(!cc.compare(""))
             cc = QLocale::system().name();
-        Translator.load(datadir->absolutePath() + "/Locale/hedgewars_" + cc);
+        QFile tmpfile;
+        tmpfile.setFileName(cfgdir->absolutePath() + "Data/Locale/hedgewars_" + cc);
+        if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "Locale/hedgewars_" + cc);
+        Translator.load(QFileInfo(tmpfile).absoluteFilePath());
         app.installTranslator(&Translator);
     }
 

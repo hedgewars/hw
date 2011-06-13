@@ -82,7 +82,8 @@ var t: LongInt;
     Color, i: Longword;
     s : shortstring;
 begin
-s:= Pathz[ptGraphics] + '/' + cCHFileName;
+s:= UserPathz[ptGraphics] + '/' + cCHFileName;
+if not FileExists(s+'.png') then s:= Pathz[ptGraphics] + '/' + cCHFileName;
 tmpsurf:= LoadImage(s, ifAlpha or ifCritical);
 
 for t:= 0 to Pred(TeamsCount) do
@@ -168,9 +169,10 @@ var s: shortstring;
         else if Flag = 'cpu' then
             Flag:= 'hedgewars';
 
-        flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
-        if flagsurf = nil then
-            flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
+        flagsurf:= LoadImage(UserPathz[ptFlags] + '/' + Flag, ifNone);
+        if flagsurf = nil then flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
+        if flagsurf = nil then flagsurf:= LoadImage(UserPathz[ptFlags] + '/hedgewars', ifNone);
+        if flagsurf = nil then flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
         TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
         copyToXY(flagsurf, texsurf, 2, 2);
         SDL_FreeSurface(flagsurf);
@@ -204,7 +206,8 @@ var s: shortstring;
                         end
                     end;
         end;
-    MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
+    MissionIcons:= LoadImage(UserPathz[ptGraphics] + '/missions', ifNone);
+    if MissionIcons = nil then MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
     iconsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 28, 28, 32, RMask, GMask, BMask, AMask);
     if iconsurf <> nil then
         begin
@@ -241,7 +244,9 @@ var s: shortstring;
         with TeamsArray[t]^ do
             begin
             if GraveName = '' then GraveName:= 'Statue';
-            texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifTransparent);
+            texsurf:= LoadImage(UserPathz[ptGraves] + '/' + GraveName, ifTransparent);
+            if texsurf = nil then texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifTransparent);
+            if texsurf = nil then texsurf:= LoadImage(UserPathz[ptGraves] + '/Statue', ifTransparent);
             if texsurf = nil then texsurf:= LoadImage(Pathz[ptGraves] + '/Statue', ifCritical or ifTransparent);
             GraveTex:= Surface2Tex(texsurf, false);
             SDL_FreeSurface(texsurf)
@@ -258,7 +263,8 @@ begin
 for fi:= Low(THWFont) to High(THWFont) do
     with Fontz[fi] do
         begin
-        s:= Pathz[ptFonts] + '/' + Name;
+        s:= UserPathz[ptFonts] + '/' + Name;
+        if not FileExists(s) then s:= Pathz[ptFonts] + '/' + Name;
         WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
         Handle:= TTF_OpenFont(Str2PChar(s), Height);
         SDLTry(Handle <> nil, true);
@@ -281,13 +287,20 @@ for ii:= Low(TSprite) to High(TSprite) do
         begin
             if AltPath = ptNone then
                 if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR] then // FIXME: hack
-                    tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
+                    begin
+                    tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
+                    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
+                    end
                 else
-                    tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical)
+                    begin
+                    tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
+                    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical)
+                    end
             else begin
-                tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                if tmpsurf = nil then
-                    tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent);
+                tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
+                if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
+                if tmpsurf = nil then tmpsurf:= LoadImage(UserPathz[AltPath] + '/' + FileName, ifAlpha or ifTransparent);
+                if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent);
                 end;
 
             if tmpsurf <> nil then
@@ -324,7 +337,8 @@ for ii:= Low(TSprite) to High(TSprite) do
 
 AddProgress;
 
-tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
+tmpsurf:= LoadImage(UserPathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifTransparent);
+if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
 HHTexture:= Surface2Tex(tmpsurf, false);
 SDL_FreeSurface(tmpsurf);
 
@@ -475,7 +489,8 @@ end;
 procedure LoadHedgehogHat(HHGear: PGear; newHat: shortstring);
 var texsurf: PSDL_Surface;
 begin
-    texsurf:= LoadImage(Pathz[ptHats] + '/' + newHat, ifNone);
+    texsurf:= LoadImage(UserPathz[ptHats] + '/' + newHat, ifNone);
+    if texsurf = nil then texsurf:= LoadImage(Pathz[ptHats] + '/' + newHat, ifNone);
 
     // only do something if the hat could be loaded
     if texsurf <> nil then
@@ -667,7 +682,8 @@ begin
     if Step = 0 then
     begin
         WriteToConsole(msgLoading + 'progress sprite: ');
-        texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
+        texsurf:= LoadImage(UserPathz[ptGraphics] + '/Progress', ifTransparent);
+        if texsurf = nil then texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
 
         ProgrTex:= Surface2Tex(texsurf, false);
 
@@ -906,9 +922,11 @@ begin
 {$ENDIF}
     // load engine icon
 {$IFDEF DARWIN}
-    ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
+    ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
+    if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
 {$ELSE}
-    ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+    ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+    if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
 {$ENDIF}
     if ico <> nil then
     begin

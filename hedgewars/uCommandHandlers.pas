@@ -447,6 +447,7 @@ procedure chSetMap(var s: shortstring);
 begin
 if isDeveloperMode then
 begin
+UserPathz[ptMapCurrent]:= UserPathz[ptMaps] + '/' + s;
 Pathz[ptMapCurrent]:= Pathz[ptMaps] + '/' + s;
 InitStepsFlags:= InitStepsFlags or cifMap
 end
@@ -456,6 +457,7 @@ procedure chSetTheme(var s: shortstring);
 begin
 if isDeveloperMode then
 begin
+UserPathz[ptCurrTheme]:= UserPathz[ptThemes] + '/' + s;
 Pathz[ptCurrTheme]:= Pathz[ptThemes] + '/' + s;
 Theme:= s;
 InitStepsFlags:= InitStepsFlags or cifTheme

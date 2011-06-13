@@ -37,6 +37,7 @@ var
     cInitVolume     : LongInt     = 100;
     cTimerInterval  : LongInt     = 8;
     PathPrefix      : shortstring = './';
+    UserPathPrefix  : shortstring = './';
     cShowFPS        : boolean     = false;
     cAltDamage      : boolean     = true;
     cReducedQuality : LongWord    = rqNone;
@@ -101,6 +102,7 @@ var
 
     // originally from uConsts
     Pathz: array[TPathType] of shortstring;
+    UserPathz: array[TPathType] of shortstring;
     CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
     LAND_WIDTH       : Word;
     LAND_HEIGHT      : Word;
@@ -2402,6 +2404,7 @@ begin
     cInitVolume     := 100;
     cTimerInterval  := 8;
     PathPrefix      := './';
+    UserPathPrefix  := './';
     cShowFPS        := false;
     cAltDamage      := true;
     cReducedQuality := rqNone;

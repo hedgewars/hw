@@ -106,13 +106,23 @@ i:= 0;
     if cLocale <> 'en' then
         begin
         locName:= name+'_'+cLocale;
-        path:= Pathz[ptVoices] + '/' + locName;
+        path:= UserPathz[ptVoices] + '/' + locName;
         if DirectoryExists(path) then name:= locName
-        else if Length(cLocale) > 2 then
+        else
             begin
-            locName:= name+'_'+Copy(cLocale,1,2);
             path:= Pathz[ptVoices] + '/' + locName;
             if DirectoryExists(path) then name:= locName
+            else if Length(cLocale) > 2 then
+                begin
+                locName:= name+'_'+Copy(cLocale,1,2);
+                path:= UserPathz[ptVoices] + '/' + locName;
+                if DirectoryExists(path) then name:= locName
+                else
+                    begin
+                    path:= Pathz[ptVoices] + '/' + locName;
+                    if DirectoryExists(path) then name:= locName
+                    end
+                end
             end
         end;
 
@@ -209,7 +219,8 @@ begin
                   sndMolotov, sndMortar, sndRideOfTheValkyries, sndYoohoo])
             and (Soundz[i].Path <> ptVoices) and (Soundz[i].FileName <> '') then
         begin
-            s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
+            s:= UserPathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
+            if not FileExists(s) then s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
             TryDo(defVoicepack^.chunks[i] <> nil, msgFailed, true);
@@ -247,7 +258,8 @@ begin
     begin
         if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
         begin
-            s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            s:= UserPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
             if voicepack^.chunks[snd] = nil then
@@ -261,7 +273,8 @@ begin
     begin
         if (defVoicepack^.chunks[snd] = nil) and (Soundz[snd].Path <> ptVoices) and (Soundz[snd].FileName <> '') then
         begin
-            s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
+            s:= UserPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
+            if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
             TryDo(defVoicepack^.chunks[snd] <> nil, msgFailed, true);
@@ -300,7 +313,8 @@ begin
     begin
         if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
         begin
-            s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            s:= UserPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
             if voicepack^.chunks[snd] = nil then
@@ -314,7 +328,8 @@ begin
     begin
         if (defVoicepack^.chunks[snd] = nil) and (Soundz[snd].Path <> ptVoices) and (Soundz[snd].FileName <> '') then
         begin
-            s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
+            s:= UserPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
+            if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
             TryDo(defVoicepack^.chunks[snd] <> nil, msgFailed, true);
@@ -360,7 +375,8 @@ begin
     if (not isSoundEnabled) or (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
-    s:= PathPrefix + '/Music/' + MusicFN;
+    s:= UserPathPrefix + '/Music/' + MusicFN;
+    if not FileExists(s) then s:= PathPrefix + '/Music/' + MusicFN;
     WriteToConsole(msgLoading + s + ' ');
 
     Mus:= Mix_LoadMUS(Str2PChar(s));

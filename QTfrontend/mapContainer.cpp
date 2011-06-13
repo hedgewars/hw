@@ -85,16 +85,29 @@ QComboBox::tr("generated maze..."));
 
     int missionindex = chooseMap->count();
     numMissions = 0;
+    QFile mapLuaFile;
+    QFile mapCfgFile;
     for (int i = 0; i < mapList->size(); ++i) {
         QString map = (*mapList)[i];
-        QFile mapCfgFile(
-                QString("%1/Maps/%2/map.cfg")
-                .arg(datadir->absolutePath())
+        mapCfgFile.setFileName(
+                QString("%1/Data/Maps/%2/map.cfg")
+                .arg(cfgdir->absolutePath())
                 .arg(map));
-        QFile mapLuaFile(
-                QString("%1/Maps/%2/map.lua")
-                .arg(datadir->absolutePath())
-                .arg(map));
+        if (mapCfgFile.exists()) {
+            mapLuaFile.setFileName(
+                    QString("%1/Data/Maps/%2/map.lua")
+                    .arg(cfgdir->absolutePath())
+                    .arg(map));
+        } else {
+            mapCfgFile.setFileName(
+                    QString("%1/Maps/%2/map.cfg")
+                    .arg(datadir->absolutePath())
+                    .arg(map));
+            mapLuaFile.setFileName(
+                    QString("%1/Maps/%2/map.lua")
+                    .arg(datadir->absolutePath())
+                    .arg(map));
+        }
 
         if (mapCfgFile.open(QFile::ReadOnly)) {
             QString theme;
@@ -190,10 +203,13 @@ map, mapInfo);
     lwThemes = new QListWidget(mapWidget);
     lwThemes->setMinimumHeight(30);
     lwThemes->setFixedWidth(140);
+    QFile tmpfile;
     for (int i = 0; i < Themes->size(); ++i) {
         QListWidgetItem * lwi = new QListWidgetItem();
         lwi->setText(Themes->at(i));
-        lwi->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(Themes->at(i))));
+        tmpfile.setFileName(QString("%1/Data/Themes/%2/icon.png").arg(cfgdir->absolutePath()).arg(Themes->at(i)));
+        if (tmpfile.exists()) lwi->setIcon(QIcon(QFileInfo(tmpfile).absoluteFilePath()));
+        else lwi->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(Themes->at(i))));
         //lwi->setTextAlignment(Qt::AlignHCenter);
         lwThemes->addItem(lwi);
     }
@@ -373,7 +389,10 @@ void HWMapContainer::themeSelected(int currentRow)
     chooseMap->setItemData(1, mapInfo);
     mapInfo[0] = QString("+drawn+");
     chooseMap->setItemData(2, mapInfo);
-    gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon@2x.png").arg(datadir->absolutePath()).arg(theme)));
+    QFile tmpfile;
+    tmpfile.setFileName(QString("%1/Data/Themes/%2/icon@2x.png").arg(cfgdir->absolutePath()).arg(theme));
+    if (tmpfile.exists()) gbThemes->setIcon(QIcon(QFileInfo(tmpfile).absoluteFilePath()));
+    else gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon@2x.png").arg(datadir->absolutePath()).arg(theme)));
     emit themeChanged(theme);
 }
 
@@ -632,7 +651,10 @@ void HWMapContainer::updatePreview()
     default:
         QPixmap mapImage;
         qDebug() << "Map data" << curIndex << chooseMap->currentText() << chooseMap->itemData(curIndex);
-        if(!mapImage.load(datadir->absolutePath() + "/Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png")) {
+        QFile tmpfile;
+        tmpfile.setFileName(cfgdir->absolutePath() + "/Data//Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png");
+        if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "/Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png");
+        if(!mapImage.load(QFileInfo(tmpfile).absoluteFilePath())) {
             imageButt->setIcon(QIcon());
             return;
         }

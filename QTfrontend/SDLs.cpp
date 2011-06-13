@@ -164,9 +164,12 @@ void SDLInteraction::SDLMusicInit()
 void SDLInteraction::StartMusic()
 {
     SDLMusicInit();
+    QFile tmpfile;
 
+    tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Music/main_theme.ogg");
+    if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "/Music/main_theme.ogg");
     if (music == NULL) {
-        music = Mix_LoadMUS((datadir->absolutePath() + "/Music/main_theme.ogg").toLocal8Bit().constData());
+        music = Mix_LoadMUS(QFileInfo(tmpfile).absoluteFilePath().toLocal8Bit().constData());
 
     }
     Mix_VolumeMusic(MIX_MAX_VOLUME - 28);

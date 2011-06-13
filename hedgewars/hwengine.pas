@@ -214,6 +214,7 @@ begin
     cFullScreen:= false;
     cTimerInterval:= 8;
     PathPrefix:= 'Data';
+    UserPathPrefix:= 'Data';
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     val(gameArgs[0], ipcPort);
     val(gameArgs[1], cScreenWidth);
@@ -234,8 +235,12 @@ begin
 
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
     AddFileLog('Prefix: "' + PathPrefix +'"');
+    AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
+
+    for p:= Succ(Low(TPathType)) to High(TPathType) do
+        if p <> ptMapCurrent then UserPathz[p]:= UserPathPrefix + '/' + Pathz[p];
 
     for p:= Succ(Low(TPathType)) to High(TPathType) do
         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
@@ -263,6 +268,7 @@ begin
     InitKbdKeyTable();
     AddProgress();
 
+    LoadLocale(UserPathz[ptLocale] + '/en.txt');  // Do an initial load with english
     LoadLocale(Pathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if (Length(cLocaleFName) > 6) then cLocale := Copy(cLocaleFName,1,5)
     else cLocale := Copy(cLocaleFName,1,2);
@@ -270,8 +276,12 @@ begin
         begin
         // Try two letter locale first before trying specific locale overrides
         if (Length(cLocale) > 2) and (Copy(cLocale,1,2) <> 'en') then
-            LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocale,1,2)+'.txt');
-        LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
+            begin
+            LoadLocale(UserPathz[ptLocale] + '/' + Copy(cLocale,1,2)+'.txt');
+            LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocale,1,2)+'.txt')
+            end;
+        LoadLocale(UserPathz[ptLocale] + '/' + cLocaleFName);
+        LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName)
         end
     else cLocale := 'en';
 
@@ -430,7 +440,7 @@ var i: LongInt;
 begin
     WriteLn('Wrong argument format: correct configurations is');
     WriteLn();
-    WriteLn('  hwengine <path to data folder> <path to replay file> [options]');
+    WriteLn('  hwengine <path to user hedgewars folder> <path to global data folder> <path to replay file> [options]');
     WriteLn();
     WriteLn('where [options] must be specified either as:');
     WriteLn(' --set-video [screen width] [screen height] [color dept]');
@@ -453,10 +463,10 @@ end;
 
 procedure GetParams;
 begin
-    if (ParamCount < 2) then
+    if (ParamCount < 3) then
         GameType:= gmtSyntax
     else
-        if (ParamCount = 3) then
+        if (ParamCount = 3) and ((ParamStr(3) = '--stats-only') or (ParamStr(3) = 'landpreview')) then
             internalSetGameTypeLandPreviewFromParameters()
         else
             if (ParamCount = cDefaultParamNum) then

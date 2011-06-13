@@ -88,21 +88,23 @@ void HWNamegen::RandomNameByHat(HWTeam*& team, const int HedgehogNumber)
 
 void HWNamegen::DictLoad(const QString filename, QStringList &list)
 {
-     list.clear();
+    list.clear();
 
-     QFile file(QString("%1/Names/%2.txt").arg(datadir->absolutePath()).arg(filename));
-     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-     {
+    QFile file;
+    file.setFileName(QString("%1/Data/Names/%2.txt").arg(cfgdir->absolutePath()).arg(filename));
+    if (!file.exists()) file.setFileName(QString("%1/Names/%2.txt").arg(datadir->absolutePath()).arg(filename));
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
 
-         QTextStream in(&file);
-         while (!in.atEnd()) {
-             QString line = in.readLine();
-             if(line != QString(""))
-                 {list.append(line);}
-         }
-     }
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            if(line != QString(""))
+                {list.append(line);}
+        }
+    }
 
-     if (list.size()==0)
+    if (list.size()==0)
          list.append(filename);
 
 }
@@ -110,21 +112,23 @@ void HWNamegen::DictLoad(const QString filename, QStringList &list)
 
 void HWNamegen::HatCfgLoad(const QString hatname, QStringList &list)
 {
-     list.clear();
+    list.clear();
 
-     QFile file(QString("%1/Names/%2.cfg").arg(datadir->absolutePath()).arg(hatname));
-     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-     {
+    QFile file;
+    file.setFileName(QString("%1/Data/Names/%2.cfg").arg(cfgdir->absolutePath()).arg(hatname));
+    if (!file.exists()) file.setFileName(QString("%1/Names/%2.cfg").arg(datadir->absolutePath()).arg(hatname));
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
 
-         QTextStream in(&file);
-         while (!in.atEnd()) {
-             QString line = in.readLine();
-             if(line != QString(""))
-                 {list.append(line);}
-         }
-     }
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            if(line != QString(""))
+                {list.append(line);}
+        }
+    }
 
-     if (list.size()==0)
+    if (list.size()==0)
          list.append(QString("generic"));
 
 }
@@ -132,37 +136,38 @@ void HWNamegen::HatCfgLoad(const QString hatname, QStringList &list)
 
 void HWNamegen::TypesLoad()
 {
+    QFile file;
+    file.setFileName(QString("%1/Data/Names/types.ini").arg(cfgdir->absolutePath()));
+    if (!file.exists()) file.setFileName(QString("%1/Names/types.ini").arg(datadir->absolutePath()));
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {TypesAvliable = FALSE; return;}
 
-     QFile file(QString("%1/Names/types.ini").arg(datadir->absolutePath()));
-     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-         {TypesAvliable = FALSE; return;}
+    int counter = 0; //counter starts with 0 (teamnames mode)
+    TypesTeamnames.append(QStringList());
+    TypesHatnames.append(QStringList());
 
-     int counter = 0; //counter starts with 0 (teamnames mode)
-     TypesTeamnames.append(QStringList());
-     TypesHatnames.append(QStringList());
-
-     QTextStream in(&file);
-     while (!in.atEnd()) {
-         QString line = in.readLine();
-         if (line == QString("#####")){
-             counter++; //toggle mode (teamnames || hats)
-             if ((counter%2) == 0){
-                 TypesTeamnames.append(QStringList());
-                 TypesHatnames.append(QStringList());
-             }
-         } else if ((line == QString("*****")) || (line == QString("*END*"))){
-             TypesAvliable = TRUE; return; // bye bye
-         } else {
-             if ((counter%2) == 0){ // even => teamnames mode
-                 TypesTeamnames[(counter/2)].append(line);
-             } else { // odd => hats mode
-                 TypesHatnames[((counter-1)/2)].append(line);
-             }
-         }
-//         Types.append(line);
-     }
-         TypesAvliable = TRUE;
-     return;
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        if (line == QString("#####")){
+            counter++; //toggle mode (teamnames || hats)
+            if ((counter%2) == 0){
+                TypesTeamnames.append(QStringList());
+                TypesHatnames.append(QStringList());
+            }
+        } else if ((line == QString("*****")) || (line == QString("*END*"))){
+            TypesAvliable = TRUE; return; // bye bye
+        } else {
+            if ((counter%2) == 0){ // even => teamnames mode
+                TypesTeamnames[(counter/2)].append(line);
+            } else { // odd => hats mode
+                TypesHatnames[((counter-1)/2)].append(line);
+            }
+        }
+//        Types.append(line);
+    }
+        TypesAvliable = TRUE;
+    return;
 }
 
 
@@ -173,10 +178,17 @@ QString HWNamegen::GetRandomGrave()
 
     //list all available Graves
     QDir tmpdir;
+    tmpdir.cd(cfgdir->absolutePath());
+    tmpdir.cd("Data/Graphics/Graves");
+    tmpdir.setFilter(QDir::Files);
+    Graves.append(tmpdir.entryList(QStringList("*.png")).replaceInStrings(QRegExp("^(.*)\\.png"), "\\1"));
+
     tmpdir.cd(datadir->absolutePath());
     tmpdir.cd("Graphics/Graves");
     tmpdir.setFilter(QDir::Files);
-    Graves.append(tmpdir.entryList(QStringList("*.png")).replaceInStrings(QRegExp("^(.*)\\.png"), "\\1"));
+    QStringList tmpList = tmpdir.entryList(QStringList("*.png")).replaceInStrings(QRegExp("^(.*)\\.png"), "\\1");
+    for (QStringList::Iterator it = tmpList.begin(); it != tmpList.end(); ++it) 
+        if (!Graves.contains(*it,Qt::CaseInsensitive)) Graves.append(*it);
 
     if(Graves.size()==0)
     {

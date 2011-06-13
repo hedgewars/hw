@@ -61,7 +61,9 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
         QString script = (*scriptList)[i].remove(".lua", Qt::CaseInsensitive);
         QList<QVariant> scriptInfo;
         scriptInfo.push_back(script);
-        QFile scriptCfgFile(QString("%1/Scripts/Multiplayer/%2.cfg").arg(datadir->absolutePath()).arg(script));
+        QFile scriptCfgFile;
+        scriptCfgFile.setFileName(QString("%1/Data/Scripts/Multiplayer/%2.cfg").arg(cfgdir->absolutePath()).arg(script));
+        if (!scriptCfgFile.exists()) scriptCfgFile.setFileName(QString("%1/Scripts/Multiplayer/%2.cfg").arg(datadir->absolutePath()).arg(script));
         if (scriptCfgFile.exists() && scriptCfgFile.open(QFile::ReadOnly)) {
             QString scheme;
             QString weapons;

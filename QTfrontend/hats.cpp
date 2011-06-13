@@ -26,19 +26,46 @@
 HatsModel::HatsModel(QObject* parent) :
   QAbstractListModel(parent)
 {
-    QPixmap hhpix = QPixmap(datadir->absolutePath() + "/Graphics/Hedgehog/Idle.png").copy(0, 0, 32, 32);
+    QFile hhfile;
+    hhfile.setFileName(cfgdir->absolutePath() + "/Data/Graphics/Hedgehog/Idle.png");
+    if (!hhfile.exists()) hhfile.setFileName(datadir->absolutePath() + "/Graphics/Hedgehog/Idle.png");
+    QPixmap hhpix = QPixmap(QFileInfo(hhfile).absoluteFilePath()).copy(0, 0, 32, 32);
 
     QDir tmpdir;
-    tmpdir.cd(datadir->absolutePath());
+    tmpdir.cd(cfgdir->absolutePath());
+    tmpdir.cd("Data");
     tmpdir.cd("Graphics");
     tmpdir.cd("Hats");
 
     tmpdir.setFilter(QDir::Files);
 
+    QStringList userhatsList = tmpdir.entryList(QStringList("*.png"));
+    for (QStringList::Iterator it = userhatsList.begin(); it != userhatsList.end(); ++it )
+    {
+        QString str = QString(*it).replace(QRegExp("^(.*)\\.png"), "\\1");
+        QPixmap pix(cfgdir->absolutePath() + "/Data/Graphics/Hats/" + str + ".png");
+
+        QPixmap tmppix(32, 37);
+        tmppix.fill(QColor(Qt::transparent));
+
+        QPainter painter(&tmppix);
+        painter.drawPixmap(QPoint(0, 5), hhpix);
+        painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));
+        if(pix.width() > 32)
+            painter.drawPixmap(QPoint(0, 0), pix.copy(32, 0, 32, 32));
+        painter.end();
+
+        hats.append(qMakePair(str, QIcon(tmppix)));
+    }
+
+    tmpdir.cd(datadir->absolutePath());
+    tmpdir.cd("Graphics");
+    tmpdir.cd("Hats");
 
     QStringList hatsList = tmpdir.entryList(QStringList("*.png"));
     for (QStringList::Iterator it = hatsList.begin(); it != hatsList.end(); ++it )
     {
+        if (userhatsList.contains(*it,Qt::CaseInsensitive)) continue;
         QString str = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
         QPixmap pix(datadir->absolutePath() + "/Graphics/Hats/" + str + ".png");
 

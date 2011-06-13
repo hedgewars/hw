@@ -1220,6 +1220,18 @@ begin
     lc_getdatapath:= 1
 end;
 
+function lc_getuserdatapath(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 0 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetUserDataPath!');
+        lua_pushnil(L);
+        end
+    else
+        lua_pushstring(L, str2pchar(UserPathz[ptData]));
+    lc_getuserdatapath:= 1
+end;
+
 function lc_maphasborder(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 0 then
@@ -1722,6 +1734,7 @@ lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
 lua_register(luaState, 'GetRandom', @lc_getrandom);
 lua_register(luaState, 'SetWind', @lc_setwind);
 lua_register(luaState, 'GetDataPath', @lc_getdatapath);
+lua_register(luaState, 'GetUserDataPath', @lc_getuserdatapath);
 lua_register(luaState, 'MapHasBorder', @lc_maphasborder);
 lua_register(luaState, 'GetHogHat', @lc_gethoghat);
 lua_register(luaState, 'SetHogHat', @lc_sethoghat);
