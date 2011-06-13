@@ -375,7 +375,7 @@ begin
     if (not isSoundEnabled) or (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
-    s:= UserPathPrefix + '/Music/' + MusicFN;
+    s:= UserPathPrefix + '/Data/Music/' + MusicFN;
     if not FileExists(s) then s:= PathPrefix + '/Music/' + MusicFN;
     WriteToConsole(msgLoading + s + ' ');
 

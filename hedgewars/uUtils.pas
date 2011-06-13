@@ -359,7 +359,7 @@ begin
             i:= 0;
             while(i < 7) do
             begin
-                assign(f, ParamStr(1) + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
+                assign(f, UserPathPrefix + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
                 rewrite(f);
                 if IOResult = 0 then break;
                 inc(i)

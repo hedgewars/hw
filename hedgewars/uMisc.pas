@@ -79,7 +79,7 @@ p:= GetMem(size);
 
 // update header information and file name
 
-filename:= ParamStr(1) + '/Screenshots/' + filename + '.bmp';
+filename:= UserPathPrefix + '/Screenshots/' + filename + '.bmp';
 
 head[$02]:= (size + 54) and $ff;
 head[$03]:= ((size + 54) shr 8) and $ff;

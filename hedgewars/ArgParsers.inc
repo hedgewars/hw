@@ -34,7 +34,7 @@ end;
 procedure internalStartGameWithParameters();
 var tmp: LongInt;
 begin
-    UserPathPrefix:= ParamStr(1)+'/Data';
+    UserPathPrefix:= ParamStr(1);
     val(ParamStr(2), cScreenWidth);
     val(ParamStr(3), cScreenHeight);
     val(ParamStr(4), cBits);
@@ -147,7 +147,7 @@ procedure playReplayFileWithParameters();
 var paramIndex: LongInt;
     wrongParameter: boolean;
 begin
-    UserPathPrefix:= ParamStr(1)+'/Data';
+    UserPathPrefix:= ParamStr(1);
     PathPrefix:= ParamStr(2);
     recordFileName:= ParamStr(3);
     paramIndex:= 4;
