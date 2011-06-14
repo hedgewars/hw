@@ -1178,7 +1178,8 @@ end;
 TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimensions too big!', true);
 
 // unC0Rr - should this be passed from the GUI? I am not sure which layer does what
-s:= Pathz[ptMapCurrent] + '/map.cfg';
+s:= UserPathz[ptMapCurrent] + '/map.cfg';
+if not FileExists(s) then s:= Pathz[ptMapCurrent] + '/map.cfg';
 WriteLnToConsole('Fetching map HH limit');
 {$I-}
 Assign(f, s);
