@@ -473,7 +473,7 @@ while not eof(f) do
             begin
             i:= Pos(',', s);
             Surf:= LoadImage(UserPathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps);
-            if Surf = nil then LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
+            if Surf = nil then Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
             Delete(s, 1, i);
