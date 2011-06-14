@@ -240,7 +240,9 @@ begin
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
     for p:= Succ(Low(TPathType)) to High(TPathType) do
-        if p <> ptMapCurrent then UserPathz[p]:= UserPathPrefix + '/Data/' + Pathz[p];
+        if (p <> ptMapCurrent) and (p <> ptData) then UserPathz[p]:= UserPathPrefix + '/Data/' + Pathz[p];
+
+    UserPathz[ptData]:= UserPathPrefix + '/Data';
 
     for p:= Succ(Low(TPathType)) to High(TPathType) do
         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
