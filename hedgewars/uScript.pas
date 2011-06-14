@@ -72,7 +72,8 @@ uses LuaPas in 'LuaPas.pas',
     uRenderUtils,
     uTextures,
     uLandGraphics,
-    SDLh; 
+    SDLh,
+    sysutils; 
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
@@ -1436,8 +1437,11 @@ end;
 
 procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
+      s : shortstring;
 begin
-ret:= luaL_loadfile(luaState, Str2PChar(Pathz[ptData] + '/' + name));
+s:= UserPathz[ptData] + '/' + name;
+if not FileExists(s) then s:= Pathz[ptData] + '/' + name;
+ret:= luaL_loadfile(luaState, Str2PChar(s));
 if ret <> 0 then
     begin
     LuaError('Lua: Failed to load ' + name + '(error ' + IntToStr(ret) + ')');
