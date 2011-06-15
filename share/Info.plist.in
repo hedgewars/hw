@@ -44,7 +44,7 @@
 		<string>ppc</string>
 	</array>
 	<key>LSMinimumSystemVersion</key>
-	<string>${minimum_macosx}</string>
+	<string>${minimum_macosx_version}</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 </dict>
