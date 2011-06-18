@@ -458,8 +458,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 #ifdef USE_XFIRE
     updateXfire();
 #endif
-    if(id == ID_PAGE_DRAWMAP)
-    {
+    if (id == ID_PAGE_DRAWMAP) {
         DrawMapScene * scene;
         if(lastid == ID_PAGE_MULTIPLAYER)
             scene = ui.pageMultiplayer->gameCFG->pMapContainer->getDrawMapScene();
@@ -468,9 +467,9 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 
         ui.pageDrawMap->drawMapWidget->setScene(scene);
     }
-    if(lastid == ID_PAGE_DRAWMAP)
-    {
-        if(id == ID_PAGE_MULTIPLAYER)
+
+    if (lastid == ID_PAGE_DRAWMAP) {
+        if (id == ID_PAGE_MULTIPLAYER)
             ui.pageMultiplayer->gameCFG->pMapContainer->mapDrawingFinished();
         else
             ui.pageNetGame->pGameCFG->pMapContainer->mapDrawingFinished();
@@ -485,37 +484,35 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         ui.pageOptions->CBTeamName->setVisible(false);
         ui.pageOptions->LblNoEditTeam->setVisible(true);
 
-        if(id == ID_PAGE_MULTIPLAYER) {
-          curTeamSelWidget = ui.pageMultiplayer->teamsSelect;
+        if (id == ID_PAGE_MULTIPLAYER) {
+            curTeamSelWidget = ui.pageMultiplayer->teamsSelect;
         } else {
-          curTeamSelWidget = ui.pageNetGame->pNetTeamsWidget;
+            curTeamSelWidget = ui.pageNetGame->pNetTeamsWidget;
         }
 
         QList<HWTeam> teamsList;
-        for(QStringList::iterator it = tmNames.begin(); it != tmNames.end(); it++) {
-          HWTeam team(*it);
-          team.LoadFromFile();
-          teamsList.push_back(team);
+        for (QStringList::iterator it = tmNames.begin(); it != tmNames.end(); it++) {
+            HWTeam team(*it);
+            team.LoadFromFile();
+            teamsList.push_back(team);
         }
 
-        if(lastid == ID_PAGE_SETUP || lastid == ID_PAGE_DRAWMAP) { // _TEAM
-          if (editedTeam) {
-            curTeamSelWidget->addTeam(*editedTeam);
-          }
-        } else if(lastid != ID_PAGE_GAMESTATS
+        if (lastid == ID_PAGE_SETUP || lastid == ID_PAGE_DRAWMAP) { // _TEAM
+            if (editedTeam) {
+                curTeamSelWidget->addTeam(*editedTeam);
+            }
+        } else if (lastid != ID_PAGE_GAMESTATS
                 && lastid != ID_PAGE_INGAME
                 && lastid != ID_PAGE_SCHEME
                 && lastid != ID_PAGE_SELECTWEAPON) {
             curTeamSelWidget->resetPlayingTeams(teamsList);
         }
     } else
-    if (id == ID_PAGE_GAMESTATS)
-    {
-        ui.pageGameStats->renderStats();
-    }
+        if (id == ID_PAGE_GAMESTATS) {
+            ui.pageGameStats->renderStats();
+        }
 
-    if(id == ID_PAGE_MAIN)
-    {
+    if (id == ID_PAGE_MAIN) {
         ui.pageOptions->BtnNewTeam->setVisible(true);
         ui.pageOptions->BtnEditTeam->setVisible(true);
         ui.pageOptions->BtnDeleteTeam->setVisible(true);
@@ -524,16 +521,16 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     }
 
     // load and save ignore/friends lists
-    if(lastid == ID_PAGE_NETGAME) // leaving a room
+    if (lastid == ID_PAGE_NETGAME) // leaving a room
         ui.pageNetGame->pChatWidget->saveLists(ui.pageOptions->editNetNick->text());
     else if(lastid == ID_PAGE_ROOMSLIST) // leaving the lobby
         ui.pageRoomsList->chatWidget->saveLists(ui.pageOptions->editNetNick->text());
 
-    if(id == ID_PAGE_NETGAME) // joining a room
+    if (id == ID_PAGE_NETGAME) // joining a room
         ui.pageNetGame->pChatWidget->loadLists(ui.pageOptions->editNetNick->text());
 // joining the lobby 
-    else if(id == ID_PAGE_ROOMSLIST) {
-        if ( hwnet && game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
+    else if (id == ID_PAGE_ROOMSLIST) {
+        if (hwnet && game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
             game->netSuspend = true;
             game->KillAllTeams();
         }
@@ -719,6 +716,9 @@ void HWForm::PlayDemo()
 
 void HWForm::PlayDemoQuick(const QString & demofilename)
 {
+    if (game && game->gameState == gsStarted) return;
+    GoBack(); //needed to cleanly disconnect from netgame
+    GoToPage(ID_PAGE_MAIN);
     CreateGame(0, 0, 0);
     game->PlayDemo(demofilename);
 }

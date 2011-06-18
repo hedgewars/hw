@@ -29,11 +29,11 @@ HWApplication::HWApplication(int argc,  char **argv):
 
 bool HWApplication::event(QEvent *event) {
     QFileOpenEvent *openEvent;
+
     switch (event->type()) {
         case QEvent::FileOpen:
             openEvent = (QFileOpenEvent *)event;
-            form->PlayDemoQuick(openEvent->file());
-
+            if (form) form->PlayDemoQuick(openEvent->file());
             return true;
             break;
         default:
