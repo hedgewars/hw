@@ -16,7 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QApplication>
+#include "HWApplication.h"
+
 #include <QTranslator>
 #include <QLocale>
 #include <QMessageBox>
@@ -51,11 +52,14 @@ bool checkForDir(const QString & dir)
 }
 
 int main(int argc, char *argv[]) {
-    QApplication app(argc, argv);
+    HWApplication app(argc, argv);
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
     QStringList arguments = app.arguments();
     QMap<QString, QString> parsedArgs;
+#ifndef __APPLE__
+//HACK: it's difficult/rarely done to use command line args on macs anyways
+//      but why does this section of code make the app crash when opening a file?
     {
         QList<QString>::iterator i = arguments.begin();
         while(i != arguments.end()) {
@@ -70,6 +74,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+#endif
 
     if(parsedArgs.contains("data-dir")) {
         QFileInfo f(parsedArgs["data-dir"]);
@@ -455,8 +460,8 @@ int main(int argc, char *argv[]) {
     CocoaInitializer initializer;
 #endif
 
-    HWForm *Form = new HWForm();
+    app.form = new HWForm();
 
-    Form->show();
+    app.form->show();
     return app.exec();
 }

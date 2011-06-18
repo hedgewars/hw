@@ -75,5 +75,81 @@
 		<string>zh_CN</string>
 		<string>zh_TW</string>
 	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.hedgewars.desktop.hws</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.hedgewars.org/demos/</string>
+			<key>UTTypeDescription</key>
+			<string>Hedgewars Save Game</string>
+			<key>UTTypeIconFile</key>
+			<string>public.text.icns</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>hws</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/x-hedgewars-save</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.hedgewars.desktop.hwd</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://www.hedgewars.org/demos/</string>
+			<key>UTTypeIconFile</key>
+			<string>public.text.icns</string>
+			<key>UTTypeDescription</key>
+			<string>Hedgewars Demo Game</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>hwd</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/x-hedgewars-demo</string>
+			</dict>
+		</dict>
+	</array>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>hwico.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Hedgewars Savefile</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.hedgewars.desktop.hws</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>hwico.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Hedgewars Demofile</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.hedgewars.desktop.hwd</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+	</array>
 </dict>
 </plist>

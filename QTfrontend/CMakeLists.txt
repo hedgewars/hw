@@ -46,6 +46,7 @@ endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 
 set(hwfr_src
+    HWApplication.cpp
     game.cpp
     main.cpp
     hwform.cpp
@@ -130,6 +131,7 @@ else(MINGW)
 endif(MINGW)
 
 set(hwfr_moc_hdrs
+    HWApplication.h
     game.h
     hats.h
     hwform.h

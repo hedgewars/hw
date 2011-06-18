@@ -58,6 +58,7 @@ public:
     GameUIConfig * config;
     QSettings * gameSettings; // Same file GameUIConfig points to but without the baggage.  Needs sync() calls if you want to get GameUIConfig changes though
     void updateXfire();
+    void PlayDemoQuick(const QString & demofilename);
 
 private slots:
     void GoToSaves();
@@ -161,7 +162,7 @@ private:
     QSignalMapper * pageSwitchMapper;
 
 #ifdef __APPLE__
-        InstallController * panel;
+    InstallController * panel;
 #endif
 
     void OnPageShown(quint8 id, quint8 lastid=0);

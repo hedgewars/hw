@@ -24,13 +24,13 @@
 #include <QTabWidget>
 #include <QGroupBox>
 #include <QToolBox>
-#include <QApplication>
 
 #include "pageeditteam.h"
 #include "sdlkeys.h"
 #include "hwconsts.h"
 #include "SquareLabel.h"
 #include "hats.h"
+#include "HWApplication.h"
 
 PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
   AbstractPage(parent)
@@ -315,24 +315,24 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
                 pagelayout->addWidget(l, num++, 0, 1, 2);
             }
             curW = new QWidget(this);
-            BindsBox->addItem(curW, QApplication::translate("binds (categories)", cbinds[i].category));
+            BindsBox->addItem(curW, HWApplication::translate("binds (categories)", cbinds[i].category));
             pagelayout = new QGridLayout(curW);
             num = 0;
         }
         if(cbinds[i].description != NULL)
         {
             l = new QLabel(curW);
-            l->setText((num > 0 ? QString("\n") : QString("")) + QApplication::translate("binds (descriptions)", cbinds[i].description));
+            l->setText((num > 0 ? QString("\n") : QString("")) + HWApplication::translate("binds (descriptions)", cbinds[i].description));
             pagelayout->addWidget(l, num++, 0, 1, 2);
         }
 
         l = new QLabel(curW);
-        l->setText(QApplication::translate("binds", cbinds[i].name));
+        l->setText(HWApplication::translate("binds", cbinds[i].name));
         l->setAlignment(Qt::AlignRight);
         pagelayout->addWidget(l, num, 0);
         CBBind[i] = new QComboBox(curW);
         for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
-            CBBind[i]->addItem(QApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? QApplication::translate("binds (keys)", sdlkeys[j][1]) : QApplication::translate("binds (keys)", "Keyboard") + QString(": ") + QApplication::translate("binds (keys)", sdlkeys[j][1]), sdlkeys[j][0]);
+            CBBind[i]->addItem(HWApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? HWApplication::translate("binds (keys)", sdlkeys[j][1]) : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + HWApplication::translate("binds (keys)", sdlkeys[j][1]), sdlkeys[j][0]);
         pagelayout->addWidget(CBBind[i++], num++, 1);
     }
 }

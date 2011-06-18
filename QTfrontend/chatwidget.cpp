@@ -21,7 +21,6 @@
 #include <QTextBrowser>
 #include <QLineEdit>
 #include <QAction>
-#include <QApplication>
 #include <QTextDocument>
 #include <QDir>
 #include <QSettings>

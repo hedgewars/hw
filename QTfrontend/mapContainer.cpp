@@ -24,7 +24,6 @@
 #include <QLinearGradient>
 #include <QColor>
 #include <QTextStream>
-#include <QApplication>
 #include <QLabel>
 #include <QListWidget>
 #include <QVBoxLayout>
@@ -35,6 +34,7 @@
 #include "hwconsts.h"
 #include "mapContainer.h"
 #include "igbox.h"
+#include "HWApplication.h"
 
 HWMapContainer::HWMapContainer(QWidget * parent) :
     QWidget(parent),
@@ -46,10 +46,10 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     hhLimit = 18;
     templateFilter = 0;
 
-    mainLayout.setContentsMargins(QApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
+    mainLayout.setContentsMargins(HWApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
         1,
-        QApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin),
-        QApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
+        HWApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+        HWApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
 
     QWidget* mapWidget = new QWidget(this);
     mainLayout.addWidget(mapWidget, 0, 0, Qt::AlignHCenter);

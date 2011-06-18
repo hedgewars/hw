@@ -20,6 +20,8 @@ IF(APPLE)
 		DESTINATION ../)
 	install(PROGRAMS "${hedgewars_SOURCE_DIR}/share/Icon.icns"
 		DESTINATION ../Resources/)
+	install(PROGRAMS "${hedgewars_SOURCE_DIR}/share/hwico.icns"
+		DESTINATION ../Resources/)
 	install(PROGRAMS "${hedgewars_SOURCE_DIR}/share/dsa_pub.pem"
 		DESTINATION ../Resources/)
 ENDIF(APPLE)

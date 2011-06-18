@@ -20,7 +20,6 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QDesktopWidget>
-#include <QApplication>
 #include <QInputDialog>
 #include <QCryptographicHash>
 
@@ -30,6 +29,7 @@
 #include "pagenetserver.h"
 #include "hwconsts.h"
 #include "fpsedit.h"
+#include "HWApplication.h"
 
 GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     : QSettings(fileName, QSettings::IniFormat)
@@ -97,7 +97,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
     Form->ui.pageOptions->CBLanguage->setCurrentIndex(Form->ui.pageOptions->CBLanguage->findData(value("misc/locale", "").toString()));
 
-    depth = QApplication::desktop()->depth();
+    depth = HWApplication::desktop()->depth();
     if (depth < 16) depth = 16;
     else if (depth > 16) depth = 32;
 }

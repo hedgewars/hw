@@ -239,16 +239,15 @@ PageOptions::PageOptions(QWidget* parent) :
             CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
             MiscLayout->addWidget(CBNameWithDate, 4, 0, 1, 2);
 
-#ifdef SPARKLE_ENABLED
-            CBAutoUpdate = new QCheckBox(groupMisc);
-            CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
-            MiscLayout->addWidget(CBAutoUpdate, 5, 0, 1, 2);
-#endif
-#ifndef __APPLE__
             BtnAssociateFiles = new QPushButton(groupMisc);
             BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
             BtnAssociateFiles->setEnabled(!custom_data && !custom_config);
             MiscLayout->addWidget(BtnAssociateFiles, 5, 0, 1, 2);
+
+#ifdef __APPLE__ && SPARKLE_ENABLED
+            CBAutoUpdate = new QCheckBox(groupMisc);
+            CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
+            MiscLayout->addWidget(CBAutoUpdate, 6, 0, 1, 3);
 #endif
             gbTBLayout->addWidget(groupMisc, 2, 0);
         }
