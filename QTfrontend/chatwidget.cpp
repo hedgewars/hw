@@ -30,7 +30,6 @@
 #include <QCursor>
 #include <QScrollBar>
 #include <QItemSelectionModel>
-#include <QLabel>
 
 #include "hwconsts.h"
 #include "SDLs.h"
@@ -164,12 +163,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     connect(chatNicks, SIGNAL(currentRowChanged(int)),
         this, SLOT(chatNickSelected(int)));
 
-    mainLayout.addWidget(chatNicks, 1, 1, 2, 1);
-
-    lblCount = new QLabel(this);
-    mainLayout.addWidget(lblCount, 0, 1);
-    lblCount->setText("0");
-    lblCount->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+    mainLayout.addWidget(chatNicks, 0, 1, 3, 1);
 
     acInfo = new QAction(QAction::tr("Info"), chatNicks);
     acInfo->setIcon(QIcon(":/res/info.png"));
@@ -397,7 +391,7 @@ void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
     updateNickItem(item);
     chatNicks->addItem(item);
 
-    lblCount->setText(QString::number(chatNicks->count()));
+    emit nickCountUpdate(chatNicks->count());
 
     if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool()) {
        Mix_PlayChannel(-1, sound[rand()%4], 0);
@@ -410,7 +404,7 @@ void HWChatWidget::nickRemoved(const QString& nick)
     QListIterator<QListWidgetItem *> it(items);
     while(it.hasNext()) chatNicks->takeItem(chatNicks->row(it.next()));
 
-    lblCount->setText(QString::number(chatNicks->count()));
+    emit nickCountUpdate(chatNicks->count());
 }
 
 void HWChatWidget::clear()

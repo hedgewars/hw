@@ -45,6 +45,7 @@ public:
     QComboBox * CBRules;
     QComboBox * CBWeapons;
     HWChatWidget * chatWidget;
+    QLabel * lblCount;
 
 private:
     bool gameInLobby;
@@ -55,6 +56,7 @@ private:
 public slots:
     void setRoomsList(const QStringList & list);
     void setAdmin(bool);
+    void updateNickCounter(int cnt);
 
 private slots:
     void onCreateClick();
