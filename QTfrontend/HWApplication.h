@@ -29,11 +29,10 @@ class HWApplication : public QApplication
 {
     Q_OBJECT
 public:
-    HWApplication(int argc, char **argv);
+    HWApplication(int &argc, char **argv);
     ~HWApplication() {};
 
     HWForm *form;
-    QString *fileToLoad;
 protected:
     bool event(QEvent *);
 };

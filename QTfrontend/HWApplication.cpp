@@ -21,8 +21,8 @@
 
 #include "hwform.h"
 
-HWApplication::HWApplication(int argc,  char **argv):
-     QApplication(argc,argv)
+HWApplication::HWApplication(int &argc,  char **argv):
+     QApplication(argc, argv)
 {
 
 }

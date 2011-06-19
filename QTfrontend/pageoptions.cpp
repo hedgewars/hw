@@ -244,10 +244,12 @@ PageOptions::PageOptions(QWidget* parent) :
             BtnAssociateFiles->setEnabled(!custom_data && !custom_config);
             MiscLayout->addWidget(BtnAssociateFiles, 5, 0, 1, 2);
 
-#ifdef __APPLE__ && SPARKLE_ENABLED
+#ifdef __APPLE__
+#ifdef SPARKLE_ENABLED
             CBAutoUpdate = new QCheckBox(groupMisc);
             CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
             MiscLayout->addWidget(CBAutoUpdate, 6, 0, 1, 3);
+#endif
 #endif
             gbTBLayout->addWidget(groupMisc, 2, 0);
         }

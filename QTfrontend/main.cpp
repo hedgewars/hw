@@ -57,9 +57,6 @@ int main(int argc, char *argv[]) {
 
     QStringList arguments = app.arguments();
     QMap<QString, QString> parsedArgs;
-#ifndef __APPLE__
-//HACK: it's difficult/rarely done to use command line args on macs anyways
-//      but why does this section of code make the app crash when opening a file?
     {
         QList<QString>::iterator i = arguments.begin();
         while(i != arguments.end()) {
@@ -74,7 +71,6 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-#endif
 
     if(parsedArgs.contains("data-dir")) {
         QFileInfo f(parsedArgs["data-dir"]);
