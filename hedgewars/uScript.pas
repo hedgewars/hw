@@ -854,16 +854,14 @@ end;
 function lc_addammo(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if lua_gettop(L) <> 2 then
-        begin
-        LuaError('Lua: Wrong number of parameters passed to AddAmmo!');
-        end
-    else
+    if (lua_gettop(L) = 3) or (lua_gettop(L) = 2) then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Hedgehog <> nil) then
-            AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)));
-        end;
+            if lua_gettop(L) = 2 then AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)))
+            else AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)), lua_tointeger(L, 3))
+        end
+    else LuaError('Lua: Wrong number of parameters passed to AddAmmo!');
     lc_addammo:= 0
 end;
 

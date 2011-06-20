@@ -32,6 +32,7 @@ procedure SetAmmoDelay(s: shortstring);
 procedure SetAmmoReinforcement(s: shortstring);
 procedure AssignStores;
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
+procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
@@ -43,6 +44,7 @@ procedure DisableSomeWeapons;
 procedure ResetWeapons;
 function  GetAmmoByNum(num: Longword): PHHAmmo;
 function  GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
+function  GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
 
 var StoreCnt: Longword;
 
@@ -139,13 +141,18 @@ exit(StoresList[num])
 end;
 
 function GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
+begin
+GetAmmoEntry:= GetAmmoEntry(Hedgehog, Hedgehog.CurAmmoType)
+end;
+
+function GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
 var ammoidx, slot: LongWord;
 begin
 with Hedgehog do
     begin
-    slot:= Ammoz[CurAmmoType].Slot;
+    slot:= Ammoz[am].Slot;
     ammoidx:= 0;
-    while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do inc(ammoidx);
+    while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> am) do inc(ammoidx);
     GetAmmoEntry:= @Ammo^[slot, ammoidx];
     end
 end;
@@ -170,6 +177,12 @@ for t:= 0 to Pred(TeamsCount) do
 end;
 
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
+begin
+if GetAmmoEntry(Hedgehog, ammo)^.Count <> AMMO_INFINITE then
+    AddAmmo(Hedgehog, ammo, Ammoz[ammo].NumberInCase);
+end;
+
+procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
 var ammos: TAmmoCounts;
     slot, ami: LongInt;
     hhammo: PHHAmmo;
@@ -184,11 +197,8 @@ for slot:= 0 to cMaxSlotIndex do
         if hhammo^[slot, ami].Count > 0 then
            ammos[hhammo^[slot, ami].AmmoType]:= hhammo^[slot, ami].Count;
 
-if ammos[ammo] <> AMMO_INFINITE then
-   begin
-   inc(ammos[ammo], Ammoz[ammo].NumberInCase);
-   if ammos[ammo] > AMMO_INFINITE then ammos[ammo]:= AMMO_INFINITE
-   end;
+ammos[ammo]:= cnt;
+if ammos[ammo] > AMMO_INFINITE then ammos[ammo]:= AMMO_INFINITE;
 
 FillAmmoStore(hhammo, ammos)
 end;
