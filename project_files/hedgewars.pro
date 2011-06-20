@@ -3,6 +3,7 @@ TARGET = hedgewars
 DEPENDPATH += ../QTfrontend/
 INCLUDEPATH += ../QTfrontend/
 INCLUDEPATH += /usr/local/include/SDL
+INCLUDEPATH += /usr/include/SDL
 
 DESTDIR = .
 
@@ -11,6 +12,7 @@ win32 {
 }
 
 QT += network
+QT += webkit
 
 HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h \
 	../QTfrontend/SquareLabel.h ../QTfrontend/about.h \
@@ -24,13 +26,12 @@ HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h \
 	../QTfrontend/igbox.h ../QTfrontend/input_ip.h \
 	../QTfrontend/itemNum.h ../QTfrontend/mapContainer.h \
 	../QTfrontend/misc.h ../QTfrontend/namegen.h \
-        ../QTfrontend/netregister.h ../QTfrontend/netserver.h \
+    ../QTfrontend/netregister.h ../QTfrontend/netserver.h \
 	../QTfrontend/netserverslist.h ../QTfrontend/netudpserver.h \
 	../QTfrontend/netudpwidget.h ../QTfrontend/newnetclient.h \
-	../QTfrontend/pages.h ../QTfrontend/playrecordpage.h \
-        ../QTfrontend/proto.h \
+    ../QTfrontend/proto.h \
 	../QTfrontend/sdlkeys.h ../QTfrontend/selectWeapon.h \
-	../QTfrontend/statsPage.h ../QTfrontend/tcpBase.h \
+	../QTfrontend/tcpBase.h \
 	../QTfrontend/team.h ../QTfrontend/teamselect.h \
 	../QTfrontend/teamselhelper.h ../QTfrontend/togglebutton.h \
 	../QTfrontend/ui_hwform.h ../QTfrontend/vertScrollArea.h \
@@ -38,7 +39,27 @@ HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h \
 	../QTfrontend/achievements.h \
     ../QTfrontend/drawmapwidget.h \
     ../QTfrontend/drawmapscene.h \
-    ../QTfrontend/qaspectratiolayout.h
+    ../QTfrontend/qaspectratiolayout.h \
+    ../QTfrontend/pagetraining.h \
+    ../QTfrontend/pagesingleplayer.h \
+    ../QTfrontend/pageselectweapon.h \
+    ../QTfrontend/pagescheme.h \
+    ../QTfrontend/pageroomslist.h \
+    ../QTfrontend/pageoptions.h \
+    ../QTfrontend/pagenettype.h \
+    ../QTfrontend/pagenetserver.h \
+    ../QTfrontend/pagenetgame.h \
+    ../QTfrontend/pagenet.h \
+    ../QTfrontend/pagemultiplayer.h \
+    ../QTfrontend/pagemain.h \
+    ../QTfrontend/pageingame.h \
+    ../QTfrontend/pageinfo.h \
+    ../QTfrontend/pagedata.h \
+    ../QTfrontend/pageeditteam.h \
+    ../QTfrontend/pagedrawmap.h \
+    ../QTfrontend/pageconnecting.h \
+    ../QTfrontend/pagecampaign.h \
+    ../QTfrontend/pageadmin.h
 
 SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/about.cpp ../QTfrontend/ammoSchemeModel.cpp \
@@ -54,9 +75,9 @@ SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/namegen.cpp ../QTfrontend/netregister.cpp \
 	../QTfrontend/netserver.cpp ../QTfrontend/netserverslist.cpp \
 	../QTfrontend/netudpserver.cpp ../QTfrontend/netudpwidget.cpp \
-        ../QTfrontend/newnetclient.cpp \
-	../QTfrontend/playrecordpage.cpp ../QTfrontend/proto.cpp \
-	../QTfrontend/selectWeapon.cpp ../QTfrontend/statsPage.cpp \
+    ../QTfrontend/newnetclient.cpp \
+	../QTfrontend/proto.cpp \
+	../QTfrontend/selectWeapon.cpp \
 	../QTfrontend/tcpBase.cpp ../QTfrontend/team.cpp \
 	../QTfrontend/teamselect.cpp ../QTfrontend/teamselhelper.cpp \
 	../QTfrontend/togglebutton.cpp ../QTfrontend/ui_hwform.cpp \
@@ -80,6 +101,7 @@ SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
     ../QTfrontend/pagemain.cpp \
     ../QTfrontend/pageingame.cpp \
     ../QTfrontend/pageinfo.cpp \
+    ../QTfrontend/pagedata.cpp \
     ../QTfrontend/pageeditteam.cpp \
     ../QTfrontend/pagedrawmap.cpp \
     ../QTfrontend/pageconnecting.cpp \

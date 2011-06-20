@@ -18,6 +18,7 @@
 
 #include <QFile>
 #include <QMessageBox>
+#include <QEvent>
 
 #include "drawmapwidget.h"
 

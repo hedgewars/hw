@@ -19,7 +19,6 @@
 
 #include <QFile>
 #include <QTextStream>
-#include <QApplication>
 #include <QStringList>
 #include <QLineEdit>
 #include "namegen.h"

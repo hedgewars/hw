@@ -16,7 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QApplication>
+#include "HWApplication.h"
+
 #include <QTranslator>
 #include <QLocale>
 #include <QMessageBox>
@@ -51,7 +52,7 @@ bool checkForDir(const QString & dir)
 }
 
 int main(int argc, char *argv[]) {
-    QApplication app(argc, argv);
+    HWApplication app(argc, argv);
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
     QStringList arguments = app.arguments();
@@ -455,8 +456,8 @@ int main(int argc, char *argv[]) {
     CocoaInitializer initializer;
 #endif
 
-    HWForm *Form = new HWForm();
+    app.form = new HWForm();
 
-    Form->show();
+    app.form->show();
     return app.exec();
 }

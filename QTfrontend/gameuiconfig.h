@@ -22,6 +22,7 @@
 #include <QSettings>
 #include <QStringList>
 #include <QRect>
+#include <QEvent>
 
 class HWForm;
 class QSettings;
@@ -69,9 +70,9 @@ public:
 
 public slots:
     void SaveOptions();
-
 private:
     bool netPasswordIsValid();
+    bool eventFilter(QObject *object, QEvent *event);
     quint8 depth;
 };
 

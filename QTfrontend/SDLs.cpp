@@ -21,8 +21,7 @@
 #include "SDL.h"
 #include "SDL_mixer.h"
 #include "hwconsts.h"
-
-#include <QApplication>
+#include "HWApplication.h"
 
 
 extern char sdlkeys[1024][2][128];
@@ -101,38 +100,38 @@ void SDLInteraction::addGameControllerKeys() const
         for(int aid = 0; aid < SDL_JoystickNumAxes(joy) && i < 1021; aid++)
         {
             // Again store the part of the string not changing for multiple uses
-            QString axis = prefix + QApplication::translate("binds (keys)", "Axis") + QString(" %1 ").arg(aid + 1);
+            QString axis = prefix + HWApplication::translate("binds (keys)", "Axis") + QString(" %1 ").arg(aid + 1);
 
             // Entry for "Axis Up"
             sprintf(sdlkeys[i][0], "j%da%du", jid, aid);
-            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + QApplication::translate("binds (keys)", xbox360axes[aid * 2])) : axis + QApplication::translate("binds (keys)", "(Up)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + HWApplication::translate("binds (keys)", xbox360axes[aid * 2])) : axis + HWApplication::translate("binds (keys)", "(Up)")).toStdString().c_str());
 
             // Entry for "Axis Down"
             sprintf(sdlkeys[i][0], "j%da%dd", jid, aid);
-            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + QApplication::translate("binds (keys)", xbox360axes[aid * 2 + 1])) : axis + QApplication::translate("binds (keys)", "(Down)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + HWApplication::translate("binds (keys)", xbox360axes[aid * 2 + 1])) : axis + HWApplication::translate("binds (keys)", "(Down)")).toStdString().c_str());
         }
 
         // Register entries for all coolie hats of this joystick/gamepad
         for(int hid = 0; hid < SDL_JoystickNumHats(joy) && i < 1019; hid++)
         {
             // Again store the part of the string not changing for multiple uses
-            QString hat = prefix + (isxb ? (QApplication::translate("binds (keys)", xb360dpad) + QString(" ")) : QApplication::translate("binds (keys)", "Hat") + QString(" %1 ").arg(hid + 1));
+            QString hat = prefix + (isxb ? (HWApplication::translate("binds (keys)", xb360dpad) + QString(" ")) : HWApplication::translate("binds (keys)", "Hat") + QString(" %1 ").arg(hid + 1));
 
             // Entry for "Hat Up"
             sprintf(sdlkeys[i][0], "j%dh%du", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + QApplication::translate("binds (keys)", "(Up)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Up)")).toStdString().c_str());
 
             // Entry for "Hat Down"
             sprintf(sdlkeys[i][0], "j%dh%dd", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + QApplication::translate("binds (keys)", "(Down)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Down)")).toStdString().c_str());
 
             // Entry for "Hat Left"
             sprintf(sdlkeys[i][0], "j%dh%dl", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + QApplication::translate("binds (keys)", "(Left)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Left)")).toStdString().c_str());
 
             // Entry for "Hat Right"
             sprintf(sdlkeys[i][0], "j%dh%dr", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + QApplication::translate("binds (keys)", "(Right)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Right)")).toStdString().c_str());
         }
 
         // Register entries for all buttons of this joystick/gamepad
@@ -140,7 +139,7 @@ void SDLInteraction::addGameControllerKeys() const
         {
             // Buttons
             sprintf(sdlkeys[i][0], "j%db%d", jid, bid);
-            sprintf(sdlkeys[i++][1], "%s", (prefix + ((isxb && bid < 10) ? (QApplication::translate("binds (keys)", xb360buttons[bid]) + QString(" ")) : QApplication::translate("binds (keys)", "Button") + QString(" %1").arg(bid + 1))).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", (prefix + ((isxb && bid < 10) ? (HWApplication::translate("binds (keys)", xb360buttons[bid]) + QString(" ")) : HWApplication::translate("binds (keys)", "Button") + QString(" %1").arg(bid + 1))).toStdString().c_str());
         }
         // Close the game controller as we no longer need it
         SDL_JoystickClose(joy);
