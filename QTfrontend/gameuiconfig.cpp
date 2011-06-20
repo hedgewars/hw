@@ -22,7 +22,6 @@
 #include <QDesktopWidget>
 #include <QInputDialog>
 #include <QCryptographicHash>
-#include <QFocusEvent>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
