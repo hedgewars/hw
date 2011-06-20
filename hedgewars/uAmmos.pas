@@ -177,9 +177,14 @@ for t:= 0 to Pred(TeamsCount) do
 end;
 
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
+var cnt: LongWord;
 begin
-if GetAmmoEntry(Hedgehog, ammo)^.Count <> AMMO_INFINITE then
-    AddAmmo(Hedgehog, ammo, Ammoz[ammo].NumberInCase);
+cnt:= GetAmmoEntry(Hedgehog, ammo)^.Count;
+if cnt <> AMMO_INFINITE then
+    begin
+    inc(cnt, Ammoz[ammo].NumberInCase);
+    AddAmmo(Hedgehog, ammo, cnt)
+    end
 end;
 
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
