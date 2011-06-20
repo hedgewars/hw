@@ -30,6 +30,7 @@ type PRangeArray = ^TRangeArray;
 function  addBgColor(OldColor, NewColor: LongWord): LongWord;
 function  SweepDirty: boolean;
 function  Despeckle(X, Y: LongInt): boolean;
+procedure Smooth(X, Y: LongInt);
 function  CheckLandValue(X, Y: LongInt; LandFlag: Word): boolean;
 function  DrawExplosion(X, Y, Radius: LongInt): Longword;
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
@@ -748,6 +749,11 @@ if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0
         if not pixelsweep then exit(true);
         end;
     end;
+Despeckle:= false
+end;
+
+procedure Smooth(X, Y: LongInt);
+begin
 // a bit of AA for explosions
 if ((cReducedQuality and rqBlurryLand) = 0) and (Land[Y, X] = 0) and (Y > topY+1) and 
    (Y < LAND_HEIGHT-2) and (X>leftX+1) and (X<rightX-1) then
@@ -780,13 +786,12 @@ if ((cReducedQuality and rqBlurryLand) = 0) and (Land[Y, X] = 0) and (Y > topY+1
                             (((((LandPixels[y,x] and BMask shr BShift) * 3 div 4)+((cExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift);
         Land[y,x]:= lfBasic
         end
-    end;
-Despeckle:= false
+    end
 end;
 
 function SweepDirty: boolean;
 var x, y, xx, yy, ty, tx: LongInt;
-    bRes, updateBlock, resweep, recheck: boolean;
+    bRes, updateBlock, resweep, recheck, firstpass: boolean;
 begin
 bRes:= false;
 reCheck:= true;
@@ -802,6 +807,7 @@ while recheck do
                 begin
                 updateBlock:= false;
                 resweep:= true;
+                firstpass:= true;
                 ty:= y * 32;
                 tx:= x * 32;
                 while(resweep) do
@@ -809,6 +815,7 @@ while recheck do
                     resweep:= false;
                     for yy:= ty to ty + 31 do
                         for xx:= tx to tx + 31 do
+                            begin
                             if Despeckle(xx, yy) then
                                 begin
                                 bRes:= true;
@@ -835,6 +842,9 @@ while recheck do
                                     recheck:= true;
                                     end
                                 end;
+                            if firstpass then Smooth(xx,yy);
+                            end;
+                    firstpass:= false
                     end;
                 if updateBlock then UpdateLandTexture(tx, 32, ty, 32);
                 LandDirty[y, x]:= 0;
