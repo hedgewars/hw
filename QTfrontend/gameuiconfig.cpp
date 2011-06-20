@@ -22,6 +22,7 @@
 #include <QDesktopWidget>
 #include <QInputDialog>
 #include <QCryptographicHash>
+#include <QFocusEvent>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -74,6 +75,8 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
                 QDir::home().dirName());
 
     Form->ui.pageOptions->editNetNick->setText(netNick);
+    
+    Form->ui.pageOptions->editNetPassword->installEventFilter(this);
     
     int passLength = value("net/passwordlength", 0).toInt();
     setNetPasswordLength(passLength);
@@ -325,6 +328,24 @@ int GameUIConfig::netPasswordLength()
 bool GameUIConfig::netPasswordIsValid()
 {
     return (netPasswordLength() == 0 || Form->ui.pageOptions->editNetPassword->text() != QString(netPasswordLength(), '\0'));
+}
+
+// When hedgewars launches, the password field is set with null characters. If the user tries to edit the field and there are such characters, then clear the field
+bool GameUIConfig::eventFilter(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::FocusIn)
+    {
+        if ((QLineEdit *)object == Form->ui.pageOptions->editNetPassword)
+        {
+            if (!netPasswordIsValid())
+            {
+                Form->ui.pageOptions->editNetPassword->clear();
+            }
+        }
+    }
+    
+    // Don't filter anything
+    return false;
 }
 
 void GameUIConfig::setNetPasswordLength(int passwordLength)
