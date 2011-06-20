@@ -29,6 +29,7 @@ class PageNetServer;
 class PageNetChat;
 class PageNetGame;
 class PageInfo;
+class PageDataDownload;
 class PageGameStats;
 class PageSinglePlayer;
 class PageTraining;
@@ -62,6 +63,7 @@ public:
     PageNetChat *pageNetChat;
     PageNetGame *pageNetGame;
     PageInfo *pageInfo;
+    PageDataDownload *pageDataDownload;
     PageGameStats *pageGameStats;
     PageSinglePlayer *pageSinglePlayer;
     PageTraining *pageTraining;

@@ -4,6 +4,7 @@ set(QT_MIN_VERSION "4.5.0")
 set(QT_USE_QTCORE TRUE)
 set(QT_USE_QTGUI TRUE)
 set(QT_USE_QTNETWORK TRUE)
+set(QT_USE_QTWEBKIT TRUE)
 set(QT_USE_QTSVG FALSE)
 set(QT_USE_QTXML FALSE)
 set(QT_USE_QTOPENGL FALSE)
@@ -67,6 +68,7 @@ set(hwfr_src
     pagenetserver.cpp
     pagenetgame.cpp
     pageinfo.cpp
+    pagedata.cpp
     pagesingleplayer.cpp
     pagetraining.cpp
     pagecampaign.cpp
@@ -151,6 +153,7 @@ set(hwfr_moc_hdrs
     pageoptions.h
     pagemain.h
     pageinfo.h
+    pagedata.h
     pagesingleplayer.h
     pagenettype.h
     pageconnecting.h
