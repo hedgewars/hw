@@ -1,7 +1,7 @@
---------------------------------
--- CAPTURE_THE_FLAG_CUSTOM 0.3
+---------------------------------------
+-- CAPTURE_THE_FLAG GAMEPLAY MODE 0.4
 -- by mikade
---------------------------------
+---------------------------------------
 
 -- Version History
 ---------
@@ -49,6 +49,17 @@
 -- added nill checks to make sure the player doesn't generate errors by producing a nil value in hhs[] when he uses kamikaze
 -- added a check to make sure the player doesn't kamikaze straight down and make the flag's starting point underwater
 -- added a check to make sure the player drops the flag if he has it and he uses kamikaze
+
+--------
+-- 0.4
+--------
+
+-- remove user-branding and version numbers
+-- removed some stuff that wasn't needed
+-- fix piano strike exploit
+-- changed delay to allow for better portals
+-- changed starting feedback a little
+-- increased the radius around the circle indicating the flag thief so that it doesn't obscure his health
 
 -----------------
 --SCRIPT BEGINS
@@ -188,10 +199,6 @@ function DoFlagStuff(gear)
 		end
 		AddCaption(loc("Flag captured!"))
 
-	--below line doesnt usually get called
-	--else 
-		-- now gets called if you go over your own flag, presumably		
-		--AddCaption("Hmm... that wasn't supposed to happen...")
 	end
 	
 end
@@ -227,7 +234,7 @@ function HandleRespawns()
 			fGear[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
 			fGearX[i] = fSpawnX[i]
 			fGearY[i] = fSpawnY[i]			
-			--fGear[i] = SpawnAmmoCrate(fSpawnX[i],fSpawnY[i],amSkip)
+
 			fNeedsRespawn[i] = false
 			fIsMissing[i] = false -- new, this should solve problems of a respawned flag being "returned" when a player tries to score
 			AddCaption(loc("Flag respawned!"))
@@ -255,12 +262,10 @@ function FlagThiefDead(gear)
 			fIsMissing[wtf] = true
 			fNeedsRespawn[wtf] = true
 			HandleRespawns()
-			--AddCaption("hah??")
 		else	--normally	
 			fGearX[wtf]  =  fThiefX[wtf]
 			fGearY[wtf]  =  fThiefY[wtf]	
 			fGear[wtf] = AddVisualGear(fGearX[wtf],fGearY[wtf],vgtCircle,0,true)		
-			--fGear[wtf] = AddVisualGear(fThiefX[wtf],fThiefY[wtf],vgtCircle,0,true)
 		end
 
 		AddVisualGear(fThiefX[wtf], fThiefY[wtf], vgtBigExplosion, 0, false)
@@ -290,8 +295,8 @@ function HandleCircles()
 				SetVisualGearValues(fGear[i], fSpawnX[i],fSpawnY[i], 20, 200, 0, 0, 100, fGearRad, 2, fCol[i])
 			end
 		elseif (fIsMissing[i] == true) and (fNeedsRespawn[i] == false) then
-			if fThief[i] ~= nil then -- draw circle round flag carrier
-				SetVisualGearValues(fCirc[i], fThiefX[i], fThiefY[i], 20, 200, 0, 0, 100, 33, 3, fCol[i])
+			if fThief[i] ~= nil then -- draw circle round flag carrier			-- 33
+				SetVisualGearValues(fCirc[i], fThiefX[i], fThiefY[i], 20, 200, 0, 0, 100, 50, 3, fCol[i])
 				--AddCaption("circle marking carrier")
 			elseif fThief[i] == nil then -- draw cirle round dropped flag
 				--g1X,g1Y,g4,g5,g6,g7,g8,g9,g10,g11 =  GetVisualGearValues(fGear[i])				
@@ -419,8 +424,6 @@ function StartTheGame()
 		--SetVisualGearValues(zxc, 1000,1000, 20, 100, 0,    10,                     1,         100,        5,      GetClanColor(0))		
 		
 		SetVisualGearValues(fSpawnC[i], fSpawnX[i],fSpawnY[i], 20, 100, 0, 10, 0, 75, 5, fCol[i])
-		--SetVisualGearValues(fCirc[i], fSpawnX[i],fSpawnY[i], 20, 20, 0, 10, 0, 33, 3, fCol[i])
-
 				
 	end
 
@@ -432,12 +435,9 @@ end
 
 function onGameInit()
 
-	-- Things we don't modify here will use their default values.
-	
 	GameFlags = band(bor(GameFlags, gfDivideTeams), bnot(gfKing + gfForts))
-	SuddenDeathTurns = 99 -- suddendeath is off, effectively
-	--TurnTime = 30000 -- (was 30) The time the player has to move each round (in ms)
-	--Delay = 10 -- The delay between each round
+	SuddenDeathTurns = 999 -- suddendeath is off, effectively
+	Delay = 10 
 
 end
 
@@ -445,7 +445,7 @@ end
 function onGameStart()
 
 	--ShowMission(loc(caption), loc(subcaption), loc(goal), 0, 0)
-	ShowMission(loc("CAPTURE THE FLAG"), loc("by mikade"), loc("CUSTOM BUILD 0.2"), 0, 0)
+	ShowMission(loc("CAPTURE THE FLAG"), loc("Flags, and their home base will be placed where each team ends their first turn."), "", 0, 0)
 
 	RebuildTeamInfo()
 	
@@ -484,7 +484,7 @@ function onNewTurn()
 		HandleRespawns()
 	--new method of placing starting flags	
 	elseif gameTurns == 1 then
-		ShowMission(loc("CAPTURE THE FLAG"), loc("Flags will be placed where each team ends their turn."), "", 0, 0)
+		ShowMission(loc("CAPTURE THE FLAG"), loc("Flags, and their home base will be placed where each team ends their first turn."), "", 0, 0)
 	elseif gameTurns == 2 then
 		fPlaced[0] = true
 		ShowMission(loc("CAPTURE THE FLAG"), loc("RULES OF THE GAME [Press ESC to view]"), loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
@@ -562,16 +562,21 @@ function onGearResurrect(gear)
 
 end
 
-function onGearDamage(gear, damage)
---
-end
-
 function onGearAdd(gear)
 
 	if GetGearType(gear) == gtHedgehog then
 		hhs[numhhs] = gear
 		numhhs = numhhs + 1
 		SetEffect(gear, heResurrectable, true)
+	
+	elseif GetGearType(gear) == gtPiano then
+
+		for i = 0, 1 do
+			if CurrentHedgehog == fThief[i] then
+				FlagThiefDead(gear)			
+			end
+		end
+
 	end
 
 end
@@ -579,7 +584,6 @@ end
 function onGearDelete(gear)
 
 	if GetGearType(gear) == gtHedgehog then
-	--AddCaption("gear deleted!")
 		for i = 0, (numhhs-1) do
 			if gear == hhs[i] then
 				
@@ -588,8 +592,7 @@ function onGearDelete(gear)
 						FlagThiefDead(gear)
 					end
 				end				
-				hhs[i] = nil
-				--AddCaption("for real")	
+				hhs[i] = nil	
 			end		
 		end
 	end
