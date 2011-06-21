@@ -1292,7 +1292,7 @@ if (Mask and EXPLDontDraw) = 0 then
     if (GameFlags and gfSolidLand) = 0 then
         begin
         cnt:= DrawExplosion(X, Y, Radius) div 1608; // approx 2 16x16 circles to erase per chunk
-        if cnt > 0 then
+        if (cnt > 0) and (SpritesData[sprChunk].Texture <> nil) then
             for i:= 0 to cnt do
                 AddVisualGear(X, Y, vgtChunk)
         end;

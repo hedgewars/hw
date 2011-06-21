@@ -286,7 +286,7 @@ for ii:= Low(TSprite) to High(TSprite) do
            (((cReducedQuality and rqKillFlakes) = 0) or (Theme = 'Snow') or (Theme = 'Christmas') or ((not (ii in [sprFlake, sprSDFlake])))) then
         begin
             if AltPath = ptNone then
-                if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR] then // FIXME: hack
+                if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR, sprChunk] then // FIXME: hack
                     begin
                     tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
                     if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
@@ -306,7 +306,7 @@ for ii:= Low(TSprite) to High(TSprite) do
             if tmpsurf <> nil then
             begin
                 if getImageDimensions then
-                begin
+		begin
                     imageWidth:= tmpsurf^.w;
                     imageHeight:= tmpsurf^.h
                 end;
