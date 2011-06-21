@@ -384,24 +384,26 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    Themes = new QStringList();
-    QFile userthemesfile(cfgdir->absolutePath() + "/Data/Themes/themes.cfg");
-    if (userthemesfile.open(QIODevice::ReadOnly)) {
-        QTextStream stream(&userthemesfile);
-        while (!stream.atEnd()) Themes->append(stream.readLine());
-        userthemesfile.close();
-    }
-    QFile themesfile(datadir->absolutePath() + "/Themes/themes.cfg");
-    QString str;
-    if (themesfile.open(QIODevice::ReadOnly)) {
-        QTextStream stream(&themesfile);
-        while (!stream.atEnd()) {
-            str = stream.readLine();
-            if (!Themes->contains(str)) Themes->append(str);
+    {
+        QDir dir;
+        dir.setPath(cfgdir->absolutePath() + "/Data/Themes");
+        Themes = new QStringList();
+        Themes->append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
+
+        dir.setPath(datadir->absolutePath() + "/Themes");
+        Themes->append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
+qDebug() << *Themes;
+        for(int i = Themes->size() - 1; i >= 0; --i)
+        {
+            QFile tmpfile;
+            tmpfile.setFileName(QString("%1/Data/Themes/%2/icon.png").arg(cfgdir->absolutePath()).arg(Themes->at(i)));
+            if (!tmpfile.exists())
+            {
+                tmpfile.setFileName(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(Themes->at(i)));
+                if(!tmpfile.exists())
+                    Themes->removeAt(i);
+            }
         }
-        themesfile.close();
-    } else {
-        QMessageBox::critical(0, "Error", "Cannot access themes.cfg", "OK");
     }
 
     QDir tmpdir;
