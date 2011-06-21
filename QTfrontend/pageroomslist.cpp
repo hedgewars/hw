@@ -135,7 +135,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
 
 void PageRoomsList::setAdmin(bool flag)
 {
-    BtnAdmin->setVisible(flag);
+    //BtnAdmin->setVisible(flag);
 }
 
 void PageRoomsList::setRoomsList(const QStringList & list)
@@ -152,7 +152,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
     if(QTableWidgetItem *item = roomsList->item(roomsList->currentRow(), 0))
         selection = item->text();
     
-    roomsList->clear();
+    //roomsList->clear();
     roomsList->setColumnCount(7);
     roomsList->setHorizontalHeaderLabels(
             QStringList() <<
