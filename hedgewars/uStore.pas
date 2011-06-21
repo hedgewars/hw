@@ -283,10 +283,12 @@ for ii:= Low(TSprite) to High(TSprite) do
         if (((cReducedQuality and (rqNoBackground or rqLowRes)) = 0) or   // why rqLowRes?
                 (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]))) and
            (((cReducedQuality and rqPlainSplash) = 0) or ((not (ii in [sprSplash, sprDroplet, sprSDSplash, sprSDDroplet])))) and
-           (((cReducedQuality and rqKillFlakes) = 0) or (Theme = 'Snow') or (Theme = 'Christmas') or ((not (ii in [sprFlake, sprSDFlake])))) then
+           (((cReducedQuality and rqKillFlakes) = 0) or (Theme = 'Snow') or (Theme = 'Christmas') or ((not (ii in [sprFlake, sprSDFlake])))) and
+           ((cCloudsNumber > 0) or (ii <> sprCloud)) and
+           ((vobCount > 0) or (ii <> sprFlake)) then
         begin
             if AltPath = ptNone then
-                if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR, sprChunk] then // FIXME: hack
+                if ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk] then // FIXME: hack
                     begin
                     tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
                     if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
