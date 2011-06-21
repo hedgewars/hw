@@ -62,6 +62,7 @@ var
     isFirstFrame    : boolean;
 
     fastUntilLag    : boolean;
+    autoCameraOn    : boolean;
 
     GameState       : TGameState;
     GameType        : TGameType;
@@ -2356,6 +2357,7 @@ begin
     fastUntilLag    := false;
     isFirstFrame    := true;
     isSEBackup      := true;
+    autoCameraOn    := true;
     cSeed           := '';
     cVolumeDelta    := 0;
     cHasFocus       := true;
