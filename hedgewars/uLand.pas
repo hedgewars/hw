@@ -1358,7 +1358,7 @@ begin
     if digest = '' then
         digest:= s
     else
-        TryDo(s = digest, 'Different maps generated, sorry', true);
+//        TryDo(s = digest, 'Different maps generated, sorry', true);
 end;
 
 procedure chSendLandDigest(var s: shortstring);

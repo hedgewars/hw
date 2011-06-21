@@ -21,7 +21,7 @@
 unit uUtils;
 
 interface
-uses uTypes, uFloat, GLunit;
+uses uTypes, uFloat, GLunit, uConsole;
 
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: ansistring; c: char);
@@ -261,9 +261,14 @@ end;
 procedure AddFileLog(s: shortstring);
 begin
 s:= s;
+WriteToConsole(s);
 {$IFDEF DEBUGFILE}
+{$IFDEF ANDROID}
+ WriteToConsole(s);
+{$ELSE}
 writeln(f, GameTicks: 6, ': ', s);
 flush(f)
+{$ENDIF}
 {$ENDIF}
 end;
 

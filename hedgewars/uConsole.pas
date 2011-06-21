@@ -26,9 +26,10 @@ procedure freeModule;
 procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
 function  GetLastConsoleLine: shortstring;
+function ShortStringAsPChar(var s: shortstring): PChar;
 
 implementation
-uses Types, uVariables, uUtils;
+uses Types, uVariables, uUtils {$IFDEF ANDROID}, log in 'log.pas'{$ENDIF};
 
 const cLineWidth: LongInt = 0;
       cLinesCount = 8;
@@ -52,6 +53,9 @@ var Len: LongInt;
     done: boolean;
 begin
 {$IFNDEF NOCONSOLE}
+ {$IFDEF ANDROID}
+  Log.__android_log_write(Log.Android_LOG_DEBUG, 'HW_Engine', ShortStringAsPChar(s));
+{$ELSE}
 AddFileLog('[Con] ' + s);
 Write(stderr, s);
 done:= false;
@@ -70,17 +74,20 @@ while not done do
     done:= (Length(s) = 0);
     end;
 {$ENDIF}
+{$ENDIF}
 end;
 
 procedure WriteLnToConsole(s: shortstring);
 begin
 {$IFNDEF NOCONSOLE}
 WriteToConsole(s);
+{$IFNDEF ANDROID}
 WriteLn(stderr);
 inc(CurrLine);
 if CurrLine = cLinesCount then
     CurrLine:= 0;
 PByte(@ConsoleLines[CurrLine].s)^:= 0
+{$ENDIF}
 {$ENDIF}
 end;
 
@@ -117,5 +124,13 @@ procedure freeModule;
 begin
 
 end;
+
+Function ShortStringAsPChar(var S: ShortString) : PChar;
+Var NewString : String;
+Begin
+if Length(S) = High(S) then Dec(S[0]);
+s[Ord(Length(s))+1] := #0;
+Result := @S[1];
+End;
 
 end.
