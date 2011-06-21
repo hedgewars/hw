@@ -2036,7 +2036,7 @@ const
             ejectX: 0; 
             ejectY: 0),
 
-// Tardis (just a copy of teleport til nemo arives)
+// Tardis
             (NameId: sidTardis;
             NameTex: nil;
             Probability: 200;
@@ -2062,15 +2062,13 @@ const
             ejectX: 0;
             ejectY: 0),
 
-// Structure
+// Structure      
             (NameId: sidStructure;
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
-                          ammoprop_NeedTarget or
-                          ammoprop_AttackingPut or
                           ammoprop_Utility or
                           ammoprop_DontHold;
                 Count: 1;
@@ -2085,10 +2083,11 @@ const
             maxAngle: 0;
             isDamaging: false;
             SkipTurns: 0;
-            PosCount: 2;
-            PosSprite: sprAmTeleport;
+            PosCount: 1;
+            PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
+            
 // Land Gun
             (NameId: sidLandGun;
             NameTex: nil;

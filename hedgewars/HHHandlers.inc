@@ -316,7 +316,7 @@ with Gear^,
                     end;
                    amDrillStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 3, _0, _0, CurWeapon^.Timer);
                    //amMelonStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 4, _0, _0, 0);
-                     amStructure: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtStructure, 0, _0, _0, 0);
+                     amStructure: CurAmmoGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtStructure, gstWait, SignAs(_0_02, dX), _0, 3000);
                         amTardis: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 5000);
                   end;
 

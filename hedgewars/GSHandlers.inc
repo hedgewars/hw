@@ -4813,89 +4813,52 @@ var
     x, y: LongInt;
     hog: PHedgehog;
 begin
-    if (Gear^.Hedgehog <> nil) and (Gear^.Tag = TotalRounds) then
+    if CurAmmoGear = Gear then
         begin
-            hog:= Gear^.Hedgehog;
-            hog^.Gear:= hog^.GearHidden;
-            hog^.Gear^.X:= Gear^.X;
-            hog^.Gear^.Y:= Gear^.Y - Int2hwFloat(Gear^.Radius);
-            hog^.Gear^.Active:= false;
-            hog^.Gear^.State:= hog^.Gear^.State And not gstHHdriven;
-            InsertGearToList(hog^.Gear);
-            hog^.GearHidden:= nil;
-            Gear^.Hedgehog:= nil;
+        if (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then 
+            begin
+            DeleteGear(Gear);
+            exit
+            end;
+        if Gear = CurAmmoGear then CurAmmoGear := nil;
+        Gear^.Hedgehog:= CurrentHedgehog;
+        RemoveGearFromList(CurrentHedgehog^.Gear);
+        CurrentHedgehog^.Gear^.Z := cHHZ;
+        CurrentHedgehog^.Gear^.Active := false;
+        CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstHHDriven;
+        CurrentHedgehog^.GearHidden:= CurrentHedgehog^.Gear;
+        CurrentHedgehog^.Gear:= nil;
+        Gear^.Tag:= TotalRounds + Gear^.Tag;
+        AddGearCI(Gear);
         end;
 
     dec(Gear^.Health, Gear^.Damage);
     Gear^.Damage := 0;
-
-    if Gear^.Health <= 0 then
-    begin
-        if Gear^.Hedgehog <> nil then
+        
+    if (Gear^.Tag = TotalRounds) or (Gear^.Health <= 0) then
         begin
-            hog:= Gear^.Hedgehog;
-            hog^.Gear:= hog^.GearHidden;
-            hog^.Gear^.X:= Gear^.X;
-            hog^.Gear^.Y:= Gear^.Y;
-            InsertGearToList(hog^.Gear);
-            hog^.GearHidden:= nil;
+        if Gear^.Hedgehog <> nil then
+            begin
+            Gear^.Hedgehog^.Gear:= Gear^.Hedgehog^.GearHidden;
+            Gear^.Hedgehog^.GearHidden:= nil;
+            Gear^.Hedgehog^.Gear^.X:= Gear^.X;
+            Gear^.Hedgehog^.Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Radius + cHHRadius);
+            InsertGearToList(Gear^.Hedgehog^.Gear);
             Gear^.Hedgehog:= nil;
+            SetAllHHToActive;
+            end;
         end;
-
+        
+    if Gear^.Health <= 0 then
+        begin
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
 
+        DeleteCI(Gear);
         DeleteGear(Gear);
 
         doMakeExplosion(x, y, 50, CurrentHedgehog, EXPLAutoSound);
-    end;
-end;
-
-procedure doStepPlaceStructure(Gear: PGear);
-var 
-    hog: PHedgehog;
-    HHGear: PGear;
-    x, y, tx, ty: hwFloat;
-begin
-    AllInactive := false;
-
-    HHGear := Gear^.Hedgehog^.Gear;
-    tx := int2hwFloat(TargetPoint.X);
-    ty := int2hwFloat(TargetPoint.Y);
-    x := HHGear^.X;
-    y := HHGear^.Y;
-
-    HHGear := Gear^.Hedgehog^.Gear;
-    if (Distance(tx - x, ty - y) > _256) or
-       not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
-       TargetPoint.Y - SpritesData[sprHHTelepMask].Height div 2,
-       sprHHTelepMask, 0, false, false) then
-        begin
-        HHGear^.Message := HHGear^.Message and not gmAttack;
-        HHGear^.State := HHGear^.State and not gstAttacking;
-        HHGear^.State := HHGear^.State or gstHHChooseTarget;
-        DeleteGear(Gear);
-        isCursorVisible := true;
-        PlaySound(sndDenied)
-        end
-    else
-        begin
-        DeleteCI(HHGear);
-        SetAllHHToActive;
-        PlaySound(sndPlaced);
-        CurAmmoGear:= nil;
-        AfterAttack;
-        Gear^.X := tx;
-        Gear^.Y := ty;
-        Gear^.Tag := TotalRounds + Gear^.Tag;
-        hog:= CurrentHedgehog;
-        hog^.GearHidden:= hog^.Gear;
-        RemoveGearFromList(hog^.Gear);
-        hog^.Gear:= nil;
-        Gear^.Hedgehog := hog;
-        Gear^.doStep := @doStepStructure;
         end;
-    TargetPoint.X := NoPointX;
 end;
 
 procedure doStepTardis(Gear: PGear);

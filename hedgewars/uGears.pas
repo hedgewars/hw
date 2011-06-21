@@ -147,7 +147,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepNapalmBomb,
             @doStepSnowball,
             @doStepSnowflake,
-            @doStepPlaceStructure,
+            @doStepStructure,
             @doStepLandGun,
             @doStepTardis);
 
