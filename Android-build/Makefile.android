@@ -2,10 +2,10 @@
 FPC_DIR=/home/richard/SoftDev/fpc-2.4.4
 ANDROID_NDK=/home/richard/SoftDev/android/android-ndk-r5b
 ANDROID_SDK=/home/richard/SoftDev/android/android-sdk-linux_86
-SDL_ANDROID_DIR=/home/richard/SoftDev/SDL-android-project
-ANDROID_API_LVL=8
-#	-FD/media/Storage2/CodeSourcery/bin \
+#END USER DEFINED
 
+SDL_ANDROID_DIR=./SDL-android-project
+ANDROID_API_LVL=5
 
 PPCROSSARM=$(FPC_DIR)/compiler/ppcrossarm
 PPCROSSARM_FLAGS= -Xd -O- -Tlinux -XParm-linux-androideabi- -vwnh -XS  
@@ -15,16 +15,12 @@ PPCROSSARM_INCLUDES= \
 	-Fl$(ANDROID_NDK)/platforms/android-$(ANDROID_API_LVL)/arch-arm/usr/lib \
 	-Fl$(SDL_ANDROID_DIR)/libs/armeabi \
 	-Fl$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/lib/gcc/arm-linux/arm-linux-androideabi/4.4.3/ \
-	-Xr/media/Storage2/LG-Libs \
 #LINKERFLAGS= -k"--static"
 FPC_DEFINES=-dandroid -darm
 
 
 all:
-	-mkdir out
-#	$(ANDROID_NDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-as -o libandroidprt0.so androidprt0.as
 	$(PPCROSSARM) $(LINKERFLAGS) $(PPCROSSARM_FLAGS) $(PPCROSSARM_INCLUDES) $(FPC_DEFINES) -oout/libhwengine.so ../hedgewars/hwLibrary.pas
-	cp out/libhwengine.so /home/richard/SoftDev/SDL-android-project/libs/armeabi/libhwengine.so
 
 clean:  
 	rm out/*
