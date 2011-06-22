@@ -22,7 +22,7 @@ unit uCollisions;
 interface
 uses uFloat, uTypes;
 
-const cMaxGearArrayInd = 255;
+const cMaxGearArrayInd = 1023;
 
 type PGearArray = ^TGearArray;
     TGearArray = record
