@@ -76,7 +76,7 @@ const
     SDL_ImageLibName = 'SDL_image.dll';
     SDL_NetLibName = 'SDL_net.dll';
 {$ELSE}
-  {$IFDEF DARWINN}
+  {$IFDEF DARWIN}
     SDLLibName = 'SDL';
     SDL_TTFLibName = 'SDL_ttf';
     SDL_MixerLibName = 'SDL_mixer';
@@ -866,11 +866,6 @@ function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; out w, h: LongInt): L
 function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
-(*
-function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; 
-function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface;
-function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: TSDL_Color): PSDL_Surface; 
-*)
 function  TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
 
@@ -1001,17 +996,4 @@ begin
                   (PByteArray(buf)^[1] shl 16) or
                   (PByteArray(buf)^[0] shl 24)
 end;
-(*
-function TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface;
-begin
-TTF_RenderUTF8_Solid:= SDL_CreateRGBSurface(SDL_SWSURFACE, 1, 1, 32, RMask, GMask, BMask, AMask);
-end;
-function TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface;
-begin
-TTF_RenderUTF8_Blended:= SDL_CreateRGBSurface(SDL_SWSURFACE, 1, 1, 32, RMask, GMask, BMask, AMask);
-end;
-function TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: TSDL_Color): PSDL_Surface;
-begin
-TTF_RenderUTF8_Shaded:= SDL_CreateRGBSurface(SDL_SWSURFACE, 1, 1, 32, RMask, GMask, BMask, AMask);
-end;*)
 end.
