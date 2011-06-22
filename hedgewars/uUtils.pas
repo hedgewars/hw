@@ -261,7 +261,6 @@ end;
 procedure AddFileLog(s: shortstring);
 begin
 s:= s;
-WriteToConsole(s);
 {$IFDEF DEBUGFILE}
 {$IFDEF ANDROID}
  WriteToConsole(s);
