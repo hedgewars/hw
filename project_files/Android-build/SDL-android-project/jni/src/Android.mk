@@ -15,7 +15,3 @@ LOCAL_LDLIBS := -llog -lGLESv1_CM
 
 include $(BUILD_SHARED_LIBRARY)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := hwengine
-LOCAL_SRC_FILES := $(LOCAL_DIR)../../../out/libhwengine.so
-include $(PREBUILT_SHARED_LIBRARY)
