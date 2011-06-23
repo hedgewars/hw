@@ -902,7 +902,7 @@ case step of
 else if ((GameFlags and gfInfAttack) <> 0) then
     begin
     if delay2 = 0 then
-        delay2:= cInactDelay * 4
+        delay2:= cInactDelay * 50
     else
         begin
         dec(delay2);

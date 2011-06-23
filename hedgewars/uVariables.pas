@@ -2360,7 +2360,7 @@ begin
     cSeed           := '';
     cVolumeDelta    := 0;
     cHasFocus       := true;
-    cInactDelay     := 1250;
+    cInactDelay     := 100;
     ReadyTimeLeft   := 0;
     
     disableLandBack := false;
