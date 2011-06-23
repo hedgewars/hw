@@ -1,4 +1,4 @@
-package org.libsdl.app;
+package org.hedgewars;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -105,7 +105,7 @@ public class SDLActivity extends Activity {
 	}
 
 	// C functions we call
-	public static native void nativeInit();
+	public static native void nativeInit(String[] argv);
 	public static native void nativeQuit();
 	public static native void onNativeResize(int x, int y, int format);
 	public static native void onNativeKeyDown(int keycode);
@@ -235,7 +235,7 @@ public class SDLActivity extends Activity {
 class SDLMain implements Runnable {
 	public void run() {
 		// Runs SDL_main()
-		SDLActivity.nativeInit();
+		SDLActivity.nativeInit(new String[]{ "480"});
 
 		//Log.v("SDL", "SDL thread terminated");
 	}
