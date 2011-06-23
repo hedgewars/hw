@@ -25,6 +25,7 @@
 #include <QRegExp>
 #include <QMap>
 #include <QSettings>
+#include <QStringListModel>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -387,22 +388,48 @@ int main(int argc, char *argv[]) {
     {
         QDir dir;
         dir.setPath(cfgdir->absolutePath() + "/Data/Themes");
-        Themes = new QStringList();
-        Themes->append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
+
+        QStringList themes;
+        themes.append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
 
         dir.setPath(datadir->absolutePath() + "/Themes");
-        Themes->append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
-qDebug() << *Themes;
-        for(int i = Themes->size() - 1; i >= 0; --i)
+        themes.append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
+
+        QList<QPair<QIcon, QIcon> > icons;
+
+        for(int i = themes.size() - 1; i >= 0; --i)
         {
             QFile tmpfile;
-            tmpfile.setFileName(QString("%1/Data/Themes/%2/icon.png").arg(cfgdir->absolutePath()).arg(Themes->at(i)));
+            tmpfile.setFileName(QString("%1/Data/Themes/%2/icon.png").arg(cfgdir->absolutePath()).arg(themes.at(i)));
             if (!tmpfile.exists())
             {
-                tmpfile.setFileName(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(Themes->at(i)));
-                if(!tmpfile.exists())
-                    Themes->removeAt(i);
+                tmpfile.setFileName(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(themes.at(i)));
+                if(tmpfile.exists())
+                { // load icon
+                    QPair<QIcon, QIcon> ic;
+                    ic.first = QIcon(QFileInfo(tmpfile).absoluteFilePath());
+
+                    QFile previewIconFile;
+                    previewIconFile.setFileName(QString("%1/Data/Themes/%2/icon@2x.png").arg(cfgdir->absolutePath()).arg(themes.at(i)));
+                    if (previewIconFile.exists()) ic.second = QIcon(QFileInfo(previewIconFile).absoluteFilePath());
+                    else ic.second = QIcon(QString("%1/Themes/%2/icon@2x.png").arg(datadir->absolutePath()).arg(themes.at(i)));
+
+                    icons.prepend(ic);
+                }
+                else
+                {
+                    themes.removeAt(i);
+                }
             }
+        }
+
+        themesModel = new ThemesModel(themes);
+        for(int i = 0; i < icons.size(); ++i)
+        {
+            themesModel->setData(themesModel->index(i), icons[i].first, Qt::DecorationRole);
+            themesModel->setData(themesModel->index(i), icons[i].second, Qt::UserRole);
+
+            qDebug() << "icon test" << themesModel->index(i).data(Qt::UserRole).toString();
         }
     }
 
@@ -434,8 +461,8 @@ qDebug() << *Themes;
     QTranslator Translator;
     {
         QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
-        QString cc = settings.value("misc/locale", "").toString();
-        if(!cc.compare(""))
+        QString cc = settings.value("misc/locale", QString()).toString();
+        if(cc.isEmpty())
             cc = QLocale::system().name();
         QFile tmpfile;
         tmpfile.setFileName(cfgdir->absolutePath() + "Data/Locale/hedgewars_" + cc);

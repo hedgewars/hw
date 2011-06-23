@@ -20,6 +20,7 @@
 #include <QByteArray>
 #include <QUuid>
 #include <QColor>
+#include <QStringListModel>
 
 #include "game.h"
 #include "hwconsts.h"
@@ -110,7 +111,7 @@ void HWGame::SendQuickConfig()
 
     HWProto::addStringToBuffer(teamscfg, "TL");
     HWProto::addStringToBuffer(teamscfg, QString("etheme %1")
-            .arg((Themes->size() > 0) ? Themes->at(rand() % Themes->size()) : "steel"));
+            .arg((themesModel->rowCount() > 0) ? themesModel->index(rand() % themesModel->rowCount()).data().toString() : "steel"));
     HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
 
     HWNamegen namegen;

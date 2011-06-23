@@ -114,6 +114,7 @@ set(hwfr_src
     qaspectratiolayout.cpp
     drawmapwidget.cpp
     drawmapscene.cpp
+    themesmodel.cpp
     )
 
 #xfire integration
@@ -195,6 +196,7 @@ set(hwfr_moc_hdrs
     qaspectratiolayout.h
     drawmapwidget.h
     drawmapscene.h
+    themesmodel.h
     )
 
 set(hwfr_hdrs
