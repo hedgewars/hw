@@ -20,7 +20,7 @@ FPC_DEFINES=-dandroid -darm
 
 
 all:
-	$(PPCROSSARM) $(LINKERFLAGS) $(PPCROSSARM_FLAGS) $(PPCROSSARM_INCLUDES) $(FPC_DEFINES) -oout/libhwengine.so ../hedgewars/hwLibrary.pas
+	$(PPCROSSARM) $(LINKERFLAGS) $(PPCROSSARM_FLAGS) $(PPCROSSARM_INCLUDES) $(FPC_DEFINES) -oout/libhwengine.so ../../hedgewars/hwLibrary.pas
 
 clean:  
 	rm out/*
