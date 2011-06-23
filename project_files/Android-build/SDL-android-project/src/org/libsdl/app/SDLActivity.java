@@ -308,7 +308,7 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 	// Called when the surface is resized
 	public void surfaceChanged(SurfaceHolder holder,
 			int format, int width, int height) {
-		//Log.v("SDL", "surfaceChanged()");
+		Log.d("SDL", "surfaceChanged()"+ width + " + " + height);
 
 		int sdlFormat = 0x85151002; // SDL_PIXELFORMAT_RGB565 by default
 		switch (format) {
