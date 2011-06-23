@@ -4,6 +4,7 @@ set(QT_MIN_VERSION "4.5.0")
 set(QT_USE_QTCORE TRUE)
 set(QT_USE_QTGUI TRUE)
 set(QT_USE_QTNETWORK TRUE)
+set(QT_USE_QTWEBKIT TRUE)
 set(QT_USE_QTSVG FALSE)
 set(QT_USE_QTXML FALSE)
 set(QT_USE_QTOPENGL FALSE)
@@ -46,6 +47,7 @@ endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 
 set(hwfr_src
+    HWApplication.cpp
     game.cpp
     main.cpp
     hwform.cpp
@@ -66,6 +68,7 @@ set(hwfr_src
     pagenetserver.cpp
     pagenetgame.cpp
     pageinfo.cpp
+    pagedata.cpp
     pagesingleplayer.cpp
     pagetraining.cpp
     pagecampaign.cpp
@@ -111,6 +114,7 @@ set(hwfr_src
     qaspectratiolayout.cpp
     drawmapwidget.cpp
     drawmapscene.cpp
+    themesmodel.cpp
     )
 
 #xfire integration
@@ -130,6 +134,7 @@ else(MINGW)
 endif(MINGW)
 
 set(hwfr_moc_hdrs
+    HWApplication.h
     game.h
     hats.h
     hwform.h
@@ -149,6 +154,7 @@ set(hwfr_moc_hdrs
     pageoptions.h
     pagemain.h
     pageinfo.h
+    pagedata.h
     pagesingleplayer.h
     pagenettype.h
     pageconnecting.h
@@ -190,6 +196,7 @@ set(hwfr_moc_hdrs
     qaspectratiolayout.h
     drawmapwidget.h
     drawmapscene.h
+    themesmodel.h
     )
 
 set(hwfr_hdrs

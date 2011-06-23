@@ -23,7 +23,6 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QGraphicsView>
-#include <QApplication>
 
 #include "qaspectratiolayout.h"
 #include "drawmapscene.h"

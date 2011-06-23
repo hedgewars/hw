@@ -34,7 +34,6 @@ class QLineEdit;
 class QListWidget;
 class QSettings;
 class SDLInteraction;
-class QLabel;
 
 // this class is for custom nick sorting
 class ListWidgetNickItem : public QListWidgetItem
@@ -88,6 +87,7 @@ private:
   void ban(const QString & str);
   void info(const QString & str);
   void follow(const QString &);
+  void nickCountUpdate(int cnt);
 
  private:
   QGridLayout mainLayout;
@@ -102,7 +102,6 @@ private:
   QAction * acIgnore;
   QAction * acFriend;
   QSettings * gameSettings;
-  QLabel * lblCount;
   SDLInteraction * sdli;
   Mix_Chunk *sound[4];
   bool notify;

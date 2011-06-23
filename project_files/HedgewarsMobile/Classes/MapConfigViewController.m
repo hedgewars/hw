@@ -380,14 +380,14 @@
 -(void) loadDataSourceArray {
     NSString *model = getModelType();
 
-    // themes.cfg contains all the user-selectable themes
-    NSString *string = [[NSString alloc] initWithContentsOfFile:[THEMES_DIRECTORY() stringByAppendingString:@"/themes.cfg"]
-                                                       encoding:NSUTF8StringEncoding
-                                                          error:NULL];
-    NSMutableArray *themeArray = [[NSMutableArray alloc] initWithArray:[string componentsSeparatedByString:@"\n"]];
-    [string release];
-    // remove a trailing "" element
-    [themeArray removeLastObject];
+    // only folders containing icon.png are a valid theme
+    NSArray *themeArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:THEMES_DIRECTORY() error:NULL];
+    NSMutableArray *themeArray = [[NSMutableArray alloc] init];
+    for (NSString *themeName in themeArrayFull) {
+        NSString *checkPath = [[NSString alloc] initWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),themeName];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:checkPath])
+            [themeArray addObject:themeName];
+    }
 
     // remove images that are too big for certain devices without loading the whole image
     NSArray *mapArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];

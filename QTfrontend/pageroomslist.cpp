@@ -42,7 +42,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     roomName->setMaxLength(60);
     newRoomLayout->addWidget(roomNameLabel);
     newRoomLayout->addWidget(roomName);
-    pageLayout->addLayout(newRoomLayout, 0, 0);
+    pageLayout->addLayout(newRoomLayout, 0, 0, 1, 2);
 
     roomsList = new QTableWidget(this);
     roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -51,7 +51,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     roomsList->setAlternatingRowColors(true);
     roomsList->setShowGrid(false);
     roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
-    pageLayout->addWidget(roomsList, 1, 0, 3, 1);
+    pageLayout->addWidget(roomsList, 1, 0, 3, 2);
     pageLayout->setRowStretch(2, 100);
     
     QHBoxLayout * filterLayout = new QHBoxLayout();
@@ -97,19 +97,27 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     filterLayout->addWidget(searchLabel);
     filterLayout->addWidget(searchText);
 
-    pageLayout->addLayout(filterLayout, 4, 0);
+    pageLayout->addLayout(filterLayout, 4, 0, 1, 2);
 
     chatWidget = new HWChatWidget(this, gameSettings, sdli, false);
-    pageLayout->addWidget(chatWidget, 5, 0, 1, 2);
+    pageLayout->addWidget(chatWidget, 5, 0, 1, 3);
     pageLayout->setRowStretch(5, 350);
 
-    BtnCreate = addButton(tr("Create"), pageLayout, 0, 1);
-    BtnJoin = addButton(tr("Join"), pageLayout, 1, 1);
-    BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 1);
-    BtnClear = addButton(tr("Clear"), pageLayout, 4, 1);
+    BtnCreate = addButton(tr("Create"), pageLayout, 0, 2);
+    BtnJoin = addButton(tr("Join"), pageLayout, 1, 2);
+    BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 2);
+    BtnClear = addButton(tr("Clear"), pageLayout, 4, 2);
 
     BtnBack = addButton(":/res/Exit.png", pageLayout, 6, 0, true);
-    BtnAdmin = addButton(tr("Admin features"), pageLayout, 6, 1);
+
+    lblCount = new QLabel(this);
+    pageLayout->addWidget(lblCount, 6, 1, Qt::AlignHCenter);
+    lblCount->setText("?");
+    lblCount->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
+    connect(chatWidget, SIGNAL(nickCountUpdate(const int)), this, SLOT(updateNickCounter(const int)));
+
+    BtnAdmin = addButton(tr("Admin features"), pageLayout, 6, 2);
 
     connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
     connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
@@ -380,3 +388,9 @@ void PageRoomsList::onJoinConfirmation(const QString & room)
         emit askForJoinRoom(room);
     }
 }
+
+void PageRoomsList::updateNickCounter(int cnt)
+{
+    lblCount->setText(tr("%1 players online").arg(cnt));
+}
+

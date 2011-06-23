@@ -182,9 +182,7 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageOptions->BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(DeleteTeam()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), config, SLOT(SaveOptions()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), this, SLOT(GoBack()));
-#ifndef __APPLE__
     connect(ui.pageOptions->BtnAssociateFiles, SIGNAL(clicked()), this, SLOT(AssociateFiles()));
-#endif
 
     connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
     connect(ui.pageOptions->WeaponNew, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
@@ -460,8 +458,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 #ifdef USE_XFIRE
     updateXfire();
 #endif
-    if(id == ID_PAGE_DRAWMAP)
-    {
+    if (id == ID_PAGE_DRAWMAP) {
         DrawMapScene * scene;
         if(lastid == ID_PAGE_MULTIPLAYER)
             scene = ui.pageMultiplayer->gameCFG->pMapContainer->getDrawMapScene();
@@ -470,9 +467,9 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 
         ui.pageDrawMap->drawMapWidget->setScene(scene);
     }
-    if(lastid == ID_PAGE_DRAWMAP)
-    {
-        if(id == ID_PAGE_MULTIPLAYER)
+
+    if (lastid == ID_PAGE_DRAWMAP) {
+        if (id == ID_PAGE_MULTIPLAYER)
             ui.pageMultiplayer->gameCFG->pMapContainer->mapDrawingFinished();
         else
             ui.pageNetGame->pGameCFG->pMapContainer->mapDrawingFinished();
@@ -487,37 +484,35 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         ui.pageOptions->CBTeamName->setVisible(false);
         ui.pageOptions->LblNoEditTeam->setVisible(true);
 
-        if(id == ID_PAGE_MULTIPLAYER) {
-          curTeamSelWidget = ui.pageMultiplayer->teamsSelect;
+        if (id == ID_PAGE_MULTIPLAYER) {
+            curTeamSelWidget = ui.pageMultiplayer->teamsSelect;
         } else {
-          curTeamSelWidget = ui.pageNetGame->pNetTeamsWidget;
+            curTeamSelWidget = ui.pageNetGame->pNetTeamsWidget;
         }
 
         QList<HWTeam> teamsList;
-        for(QStringList::iterator it = tmNames.begin(); it != tmNames.end(); it++) {
-          HWTeam team(*it);
-          team.LoadFromFile();
-          teamsList.push_back(team);
+        for (QStringList::iterator it = tmNames.begin(); it != tmNames.end(); it++) {
+            HWTeam team(*it);
+            team.LoadFromFile();
+            teamsList.push_back(team);
         }
 
-        if(lastid == ID_PAGE_SETUP || lastid == ID_PAGE_DRAWMAP) { // _TEAM
-          if (editedTeam) {
-            curTeamSelWidget->addTeam(*editedTeam);
-          }
-        } else if(lastid != ID_PAGE_GAMESTATS
+        if (lastid == ID_PAGE_SETUP || lastid == ID_PAGE_DRAWMAP) { // _TEAM
+            if (editedTeam) {
+                curTeamSelWidget->addTeam(*editedTeam);
+            }
+        } else if (lastid != ID_PAGE_GAMESTATS
                 && lastid != ID_PAGE_INGAME
                 && lastid != ID_PAGE_SCHEME
                 && lastid != ID_PAGE_SELECTWEAPON) {
             curTeamSelWidget->resetPlayingTeams(teamsList);
         }
     } else
-    if (id == ID_PAGE_GAMESTATS)
-    {
-        ui.pageGameStats->renderStats();
-    }
+        if (id == ID_PAGE_GAMESTATS) {
+            ui.pageGameStats->renderStats();
+        }
 
-    if(id == ID_PAGE_MAIN)
-    {
+    if (id == ID_PAGE_MAIN) {
         ui.pageOptions->BtnNewTeam->setVisible(true);
         ui.pageOptions->BtnEditTeam->setVisible(true);
         ui.pageOptions->BtnDeleteTeam->setVisible(true);
@@ -526,16 +521,16 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     }
 
     // load and save ignore/friends lists
-    if(lastid == ID_PAGE_NETGAME) // leaving a room
+    if (lastid == ID_PAGE_NETGAME) // leaving a room
         ui.pageNetGame->pChatWidget->saveLists(ui.pageOptions->editNetNick->text());
     else if(lastid == ID_PAGE_ROOMSLIST) // leaving the lobby
         ui.pageRoomsList->chatWidget->saveLists(ui.pageOptions->editNetNick->text());
 
-    if(id == ID_PAGE_NETGAME) // joining a room
+    if (id == ID_PAGE_NETGAME) // joining a room
         ui.pageNetGame->pChatWidget->loadLists(ui.pageOptions->editNetNick->text());
 // joining the lobby 
-    else if(id == ID_PAGE_ROOMSLIST) {
-        if ( hwnet && game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
+    else if (id == ID_PAGE_ROOMSLIST) {
+        if (hwnet && game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
             game->netSuspend = true;
             game->KillAllTeams();
         }
@@ -713,10 +708,19 @@ void HWForm::PlayDemo()
                 tr("Error"),
                 tr("Please select record from the list above"),
                 tr("OK"));
-        return ;
+        return;
     }
     CreateGame(0, 0, 0);
     game->PlayDemo(curritem->data(Qt::UserRole).toString());
+}
+
+void HWForm::PlayDemoQuick(const QString & demofilename)
+{
+    if (game && game->gameState == gsStarted) return;
+    GoBack(); //needed to cleanly disconnect from netgame
+    GoToPage(ID_PAGE_MAIN);
+    CreateGame(0, 0, 0);
+    game->PlayDemo(demofilename);
 }
 
 void HWForm::NetConnectServer(const QString & host, quint16 port)
@@ -1253,8 +1257,10 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + cfgdir->absolutePath().replace("/","\\") + "\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" --set-everything "+arguments);
     registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + cfgdir->absolutePath().replace("/","\\") + "\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" --set-everything "+arguments);
 #elif defined __APPLE__
-    success = false;
-    // TODO; also enable button in pages.cpp and signal in hwform.cpp
+    // only useful when other apps have taken precedence over our file extensions and you want to reset it
+    system("defaults write com.apple.LaunchServices LSHandlers -array-add '<dict><key>LSHandlerContentTag</key><string>hwd</string><key>LSHandlerContentTagClass</key><string>public.filename-extension</string><key>LSHandlerRoleAll</key><string>org.hedgewars.desktop</string></dict>'");
+    system("defaults write com.apple.LaunchServices LSHandlers -array-add '<dict><key>LSHandlerContentTag</key><string>hws</string><key>LSHandlerContentTagClass</key><string>public.filename-extension</string><key>LSHandlerRoleAll</key><string>org.hedgewars.desktop</string></dict>'");
+    system("/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -domain local -domain system -domain user");
 #else
     // this is a little silly due to all the system commands below anyway - just use mkdir -p ?  Does have the advantage of the alert I guess
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local");

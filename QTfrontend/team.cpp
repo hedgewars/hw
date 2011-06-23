@@ -18,11 +18,11 @@
 
 #include <QFile>
 #include <QTextStream>
-#include <QApplication>
 #include <QStringList>
 #include <QLineEdit>
 #include <QCryptographicHash>
 #include <QSettings>
+
 #include "team.h"
 #include "hwform.h"
 #include "pageeditteam.h"

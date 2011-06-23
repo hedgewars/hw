@@ -1,6 +1,6 @@
-(*
+/*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004, 2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,28 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- *)
+ */
 
-{$IFDEF FPC}
-  {$J+}
-{$ELSE}
-  {$ERROR Only Free Pascal supported!}
-{$ENDIF}
+#include <QGridLayout>
+#include <QPushButton>
 
-{$MODE OBJFPC}
-{$MACRO ON}
+#include "pagedata.h"
 
-{$DEFINE GLunit:=GL}
+PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
+{
+    QGridLayout * pageLayout = new QGridLayout(this);
+    pageLayout->setColumnStretch(0, 1);
+    pageLayout->setColumnStretch(1, 1);
+    pageLayout->setColumnStretch(2, 1);
 
-{$IFDEF IPHONEOS}
-  {$DEFINE SDL13}
-  {$DEFINE HWLIBRARY}
-  {$DEFINE S3D_DISABLED}
-  {$DEFINE GLunit:=gles11}
-{$ENDIF}
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 
-{$DEFINE DEBUGFILE}
-//{$DEFINE TRACEAIACTIONS}
-//{$DEFINE COUNTTICKS}
-
-//also available LUA_DISABLED
+    web = new QWebView(this);
+    web->load(QUrl("http://m8y.org/hw/"));
+    pageLayout->addWidget(web, 0, 0, 1, 3);
+}

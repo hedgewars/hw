@@ -657,6 +657,30 @@ begin
     lc_gethogname:= 1
 end;
 
+function lc_sethogname(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+  hogName: ShortString;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to SetHogName!');
+        lua_pushnil(L)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+
+	    hogName:= lua_tostring(L, 2);
+            gear^.Hedgehog^.Name:= hogName;
+
+	    FreeTexture(gear^.Hedgehog^.NameTagTex);
+            gear^.Hedgehog^.NameTagTex:= RenderStringTex(gear^.Hedgehog^.Name, gear^.Hedgehog^.Team^.Clan^.Color, fnt16);
+
+        end;
+    lc_sethogname:= 0;
+end;
+
 function lc_gettimer(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -827,19 +851,42 @@ begin
     lc_switchhog:= 0
 end;
 
+{function lc_addammo(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+
+    if lua_gettop(L) = 3 then
+    begin
+	gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Hedgehog <> nil) then
+            AddAmmoAmount(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)), lua_tointeger(L,3) );
+    end else
+    
+    if lua_gettop(L) = 2 then
+    begin
+	gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Hedgehog <> nil) then
+            AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)));
+    end else
+    begin
+    	LuaError('Lua: Wrong number of parameters passed to AddAmmo!');
+    end;
+
+    lc_addammo:= 0;
+
+end;}
+
 function lc_addammo(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if lua_gettop(L) <> 2 then
-        begin
-        LuaError('Lua: Wrong number of parameters passed to AddAmmo!');
-        end
-    else
+    if (lua_gettop(L) = 3) or (lua_gettop(L) = 2) then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Hedgehog <> nil) then
-            AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)));
-        end;
+            if lua_gettop(L) = 2 then AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)))
+            else AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)), lua_tointeger(L, 3))
+        end
+    else LuaError('Lua: Wrong number of parameters passed to AddAmmo!');
     lc_addammo:= 0
 end;
 
@@ -856,6 +903,12 @@ begin
         if gear <> nil then
             begin
             gear^.Health:= lua_tointeger(L, 2);
+
+	    if (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            begin  
+		RenderHealth(gear^.Hedgehog^);
+            end;
+
             SetAllToActive;
             end
         end;
@@ -1712,6 +1765,7 @@ lua_register(luaState, 'GetClanColor', @lc_getclancolor);
 lua_register(luaState, 'SetClanColor', @lc_setclancolor);
 lua_register(luaState, 'GetHogTeamName', @lc_gethogteamname);
 lua_register(luaState, 'GetHogName', @lc_gethogname);
+lua_register(luaState, 'SetHogName', @lc_sethogname);
 lua_register(luaState, 'GetHogLevel', @lc_gethoglevel);
 lua_register(luaState, 'SetHogLevel', @lc_sethoglevel);
 lua_register(luaState, 'GetX', @lc_getx);

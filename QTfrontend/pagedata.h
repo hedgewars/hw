@@ -1,6 +1,6 @@
-(*
+/*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004, 2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,28 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- *)
+ */
 
-{$IFDEF FPC}
-  {$J+}
-{$ELSE}
-  {$ERROR Only Free Pascal supported!}
-{$ENDIF}
+#ifndef PAGE_DATA_H
+#define PAGE_DATA_H
+#include <QWebView>
+#include "AbstractPage.h"
 
-{$MODE OBJFPC}
-{$MACRO ON}
+class PageDataDownload : public AbstractPage
+{
+    Q_OBJECT
 
-{$DEFINE GLunit:=GL}
+public:
+    PageDataDownload(QWidget* parent = 0);
 
-{$IFDEF IPHONEOS}
-  {$DEFINE SDL13}
-  {$DEFINE HWLIBRARY}
-  {$DEFINE S3D_DISABLED}
-  {$DEFINE GLunit:=gles11}
-{$ENDIF}
+    QPushButton *BtnBack;
+    QWebView *web;
+};
 
-{$DEFINE DEBUGFILE}
-//{$DEFINE TRACEAIACTIONS}
-//{$DEFINE COUNTTICKS}
-
-//also available LUA_DISABLED
+#endif

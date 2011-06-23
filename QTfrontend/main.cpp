@@ -16,7 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QApplication>
+#include "HWApplication.h"
+
 #include <QTranslator>
 #include <QLocale>
 #include <QMessageBox>
@@ -24,6 +25,7 @@
 #include <QRegExp>
 #include <QMap>
 #include <QSettings>
+#include <QStringListModel>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -51,7 +53,7 @@ bool checkForDir(const QString & dir)
 }
 
 int main(int argc, char *argv[]) {
-    QApplication app(argc, argv);
+    HWApplication app(argc, argv);
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
     QStringList arguments = app.arguments();
@@ -383,24 +385,52 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    Themes = new QStringList();
-    QFile userthemesfile(cfgdir->absolutePath() + "/Data/Themes/themes.cfg");
-    if (userthemesfile.open(QIODevice::ReadOnly)) {
-        QTextStream stream(&userthemesfile);
-        while (!stream.atEnd()) Themes->append(stream.readLine());
-        userthemesfile.close();
-    }
-    QFile themesfile(datadir->absolutePath() + "/Themes/themes.cfg");
-    QString str;
-    if (themesfile.open(QIODevice::ReadOnly)) {
-        QTextStream stream(&themesfile);
-        while (!stream.atEnd()) {
-            str = stream.readLine();
-            if (!Themes->contains(str)) Themes->append(str);
+    {
+        QDir dir;
+        dir.setPath(cfgdir->absolutePath() + "/Data/Themes");
+
+        QStringList themes;
+        themes.append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
+
+        dir.setPath(datadir->absolutePath() + "/Themes");
+        themes.append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
+
+        QList<QPair<QIcon, QIcon> > icons;
+
+        for(int i = themes.size() - 1; i >= 0; --i)
+        {
+            QFile tmpfile;
+            tmpfile.setFileName(QString("%1/Data/Themes/%2/icon.png").arg(cfgdir->absolutePath()).arg(themes.at(i)));
+            if (!tmpfile.exists())
+            {
+                tmpfile.setFileName(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(themes.at(i)));
+                if(tmpfile.exists())
+                { // load icon
+                    QPair<QIcon, QIcon> ic;
+                    ic.first = QIcon(QFileInfo(tmpfile).absoluteFilePath());
+
+                    QFile previewIconFile;
+                    previewIconFile.setFileName(QString("%1/Data/Themes/%2/icon@2x.png").arg(cfgdir->absolutePath()).arg(themes.at(i)));
+                    if (previewIconFile.exists()) ic.second = QIcon(QFileInfo(previewIconFile).absoluteFilePath());
+                    else ic.second = QIcon(QString("%1/Themes/%2/icon@2x.png").arg(datadir->absolutePath()).arg(themes.at(i)));
+
+                    icons.prepend(ic);
+                }
+                else
+                {
+                    themes.removeAt(i);
+                }
+            }
         }
-        themesfile.close();
-    } else {
-        QMessageBox::critical(0, "Error", "Cannot access themes.cfg", "OK");
+
+        themesModel = new ThemesModel(themes);
+        for(int i = 0; i < icons.size(); ++i)
+        {
+            themesModel->setData(themesModel->index(i), icons[i].first, Qt::DecorationRole);
+            themesModel->setData(themesModel->index(i), icons[i].second, Qt::UserRole);
+
+            qDebug() << "icon test" << themesModel->index(i).data(Qt::UserRole).toString();
+        }
     }
 
     QDir tmpdir;
@@ -431,8 +461,8 @@ int main(int argc, char *argv[]) {
     QTranslator Translator;
     {
         QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
-        QString cc = settings.value("misc/locale", "").toString();
-        if(!cc.compare(""))
+        QString cc = settings.value("misc/locale", QString()).toString();
+        if(cc.isEmpty())
             cc = QLocale::system().name();
         QFile tmpfile;
         tmpfile.setFileName(cfgdir->absolutePath() + "Data/Locale/hedgewars_" + cc);
@@ -455,8 +485,8 @@ int main(int argc, char *argv[]) {
     CocoaInitializer initializer;
 #endif
 
-    HWForm *Form = new HWForm();
+    app.form = new HWForm();
 
-    Form->show();
+    app.form->show();
     return app.exec();
 }
