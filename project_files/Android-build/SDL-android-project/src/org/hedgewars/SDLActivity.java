@@ -1,9 +1,5 @@
 package org.hedgewars;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map.Entry;
-
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
@@ -39,7 +35,7 @@ public class SDLActivity extends Activity {
 
 	// Main components
 	private static SDLActivity mSingleton;
-	private static SDLSurface mSurface;
+	public static SDLSurface mSurface;
 
 	// Audio
 	private static Thread mAudioThread;
@@ -233,9 +229,15 @@ public class SDLActivity extends Activity {
     Simple nativeInit() runnable
  */
 class SDLMain implements Runnable {
+	private int surfaceWidth, surfaceHeight;
+	public SDLMain(int width, int height){
+		surfaceWidth = width;
+		surfaceHeight = height;
+	}
 	public void run() {
 		// Runs SDL_main()
-		SDLActivity.nativeInit(new String[]{ "0", "533", "300", "0", "null", "xeli", "1", "1", "1", "0", "/sdcard/bla.hwd"});
+		
+		SDLActivity.nativeInit(new String[]{ "0", String.valueOf(surfaceWidth), String.valueOf(surfaceHeight), "0", "null", "xeli", "1", "1", "1", "0", "/sdcard/bla.hwd"});
 
 		//Log.v("SDL", "SDL thread terminated");
 	}
@@ -358,7 +360,7 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 
 		// Now start up the C app thread
 		if (mSDLThread == null) {
-			mSDLThread = new Thread(new SDLMain(), "SDLThread"); 
+			mSDLThread = new Thread(new SDLMain(width, height), "SDLThread"); 
 			mSDLThread.start();       
 		}
 	}
