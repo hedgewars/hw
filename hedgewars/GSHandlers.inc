@@ -4811,7 +4811,6 @@ end;
 procedure doStepStructure(Gear: PGear);
 var 
     x, y: LongInt;
-    hog: PHedgehog;
 begin
     if CurAmmoGear = Gear then
         begin
