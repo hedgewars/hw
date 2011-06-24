@@ -235,7 +235,7 @@ public class SDLActivity extends Activity {
 class SDLMain implements Runnable {
 	public void run() {
 		// Runs SDL_main()
-		SDLActivity.nativeInit(new String[]{ "480"});
+		SDLActivity.nativeInit(new String[]{ "0", "533", "300", "0", "null", "xeli", "1", "1", "1", "0", "/sdcard/bla.hwd"});
 
 		//Log.v("SDL", "SDL thread terminated");
 	}
