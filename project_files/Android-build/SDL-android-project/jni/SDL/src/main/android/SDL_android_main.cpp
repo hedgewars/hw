@@ -24,12 +24,14 @@ extern "C" void Java_org_hedgewars_SDLActivity_nativeInit(JNIEnv* env, jclass cl
 
     //Get the String array from java
     int argc = env->GetArrayLength(strArray);
-    char* argv[argc];
+    char *argv[argc];
     jstring jstringArgv[argc];
     for(int i = 0; i < argc; i++){
         jstringArgv[i] = (jstring)env->GetObjectArrayElement(strArray, i);  //get the element
+	argv[i] = (char*)malloc(sizeof(char) * env->GetStringLength(jstringArgv[i]));
 	strcpy(argv[i], env->GetStringUTFChars(jstringArgv[i], JNI_FALSE)); //copy it to a mutable location
-        env->ReleaseStringChars(jstringArgv[i], (jchar*)argv[i]);           //release mem
+	//Don't release memory the JAVA GC will take care of it
+        //env->ReleaseStringChars(jstringArgv[i], (jchar*)argv[i]);           
     }
     
     /* Run the application code! */
