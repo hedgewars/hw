@@ -31,12 +31,12 @@ program hwengine;
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
-     sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted {$IFDEF ANDROID}, log in 'log.pas', GLUnit{$ENDIF};
+     sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted;
 
 {$IFDEF HWLIBRARY}
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
-procedure Game(); cdecl; export;
+procedure Game(gameArgs: PPChar); cdecl; export;
 
 implementation
 {$ELSE}
@@ -141,8 +141,11 @@ end;
 
 ///////////////////
 procedure MainLoop;
+{$WARNINGS OFF}
+// disable "Some fields weren't initialized" warning
+const event: TSDL_Event = ();
+{$WARNINGS ON}
 var PrevTime, CurrTime: Longword;
-    event: TSDL_Event;
 begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
@@ -154,12 +157,12 @@ begin
 	while SDL_PollEvent(@event) <> 0 do
 {$ENDIF}
         begin
-           case event.type_ of
+            case event.type_ of
                 SDL_KEYDOWN: if GameState = gsChat then
 {$IFDEF SDL13}
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                     KeyPressChat(event.key.keysym.sym);
-                SDL_WINDOWEVENT:	
+                SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then
                         cHasFocus:= true;
 {$ELSE}
@@ -202,7 +205,7 @@ end;
 
 ///////////////
 {$IFDEF HWLIBRARY}
-procedure Game(); cdecl; export;
+procedure Game(gameArgs: PPChar); cdecl; export;
 {$ELSE}
 procedure Game;
 {$ENDIF}
@@ -214,20 +217,20 @@ begin
     cBits:= 32;
     cFullScreen:= false;
     cTimerInterval:= 8;
-    PathPrefix:= '/sdcard/Data';
+    PathPrefix:= 'Data';
+    UserPathPrefix:= '.';
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
-    val('0', ipcPort);
-    val('800', cScreenWidth);
-    val('480', cScreenHeight);
-    //val('1', cReducedQuality);
-    cReducedQuality := $00000000;
-    cLocaleFName:= 'null';
-    UserNick:= 'xeli';
-    isSoundEnabled:= '0' = '1';
-    isMusicEnabled:= '0' = '1';
-    cAltDamage:= '1' = '1';
-    val('0', rotationQt);
-    recordFileName:= '/sdcard/bla.hwd';
+    val(gameArgs[0], ipcPort);
+    val(gameArgs[1], cScreenWidth);
+    val(gameArgs[2], cScreenHeight);
+    val(gameArgs[3], cReducedQuality);
+    cLocaleFName:= gameArgs[4];
+    UserNick:= gameArgs[5];
+    isSoundEnabled:= gameArgs[6] = '1';
+    isMusicEnabled:= gameArgs[7] = '1';
+    cAltDamage:= gameArgs[8] = '1';
+    val(gameArgs[9], rotationQt);
+    recordFileName:= gameArgs[10];
     cStereoMode:= smNone;
 {$ENDIF}
 
@@ -236,8 +239,14 @@ begin
 
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
     AddFileLog('Prefix: "' + PathPrefix +'"');
+    AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
+
+    for p:= Succ(Low(TPathType)) to High(TPathType) do
+        if (p <> ptMapCurrent) and (p <> ptData) then UserPathz[p]:= UserPathPrefix + '/Data/' + Pathz[p];
+
+    UserPathz[ptData]:= UserPathPrefix + '/Data';
 
     for p:= Succ(Low(TPathType)) to High(TPathType) do
         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
@@ -265,6 +274,7 @@ begin
     InitKbdKeyTable();
     AddProgress();
 
+    LoadLocale(UserPathz[ptLocale] + '/en.txt');  // Do an initial load with english
     LoadLocale(Pathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if (Length(cLocaleFName) > 6) then cLocale := Copy(cLocaleFName,1,5)
     else cLocale := Copy(cLocaleFName,1,2);
@@ -272,8 +282,12 @@ begin
         begin
         // Try two letter locale first before trying specific locale overrides
         if (Length(cLocale) > 2) and (Copy(cLocale,1,2) <> 'en') then
-            LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocale,1,2)+'.txt');
-        LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
+            begin
+            LoadLocale(UserPathz[ptLocale] + '/' + Copy(cLocale,1,2)+'.txt');
+            LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocale,1,2)+'.txt')
+            end;
+        LoadLocale(UserPathz[ptLocale] + '/' + cLocaleFName);
+        LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName)
         end
     else cLocale := 'en';
 
@@ -435,7 +449,7 @@ var i: LongInt;
 begin
     WriteLn('Wrong argument format: correct configurations is');
     WriteLn();
-    WriteLn('  hwengine <path to data folder> <path to replay file> [options]');
+    WriteLn('  hwengine <path to user hedgewars folder> <path to global data folder> <path to replay file> [options]');
     WriteLn();
     WriteLn('where [options] must be specified either as:');
     WriteLn(' --set-video [screen width] [screen height] [color dept]');
@@ -458,10 +472,10 @@ end;
 
 procedure GetParams;
 begin
-    if (ParamCount < 2) then
+    if (ParamCount < 3) then
         GameType:= gmtSyntax
     else
-        if (ParamCount = 3) then
+        if (ParamCount = 3) and ((ParamStr(3) = '--stats-only') or (ParamStr(3) = 'landpreview')) then
             internalSetGameTypeLandPreviewFromParameters()
         else
             if (ParamCount = cDefaultParamNum) then
