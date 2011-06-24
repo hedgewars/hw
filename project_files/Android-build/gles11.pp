@@ -777,7 +777,7 @@ interface
 implementation
 
   uses
-    SysUtils, dynlibs, uConsole;
+    SysUtils, dynlibs;
 
   var
     hlib : tlibhandle;
@@ -937,14 +937,11 @@ implementation
   procedure Loadgles11(lib : pchar);
     begin
       Freegles11;
-      WriteToConsole('loading lib');
       hlib:=LoadLibrary(lib);
       if hlib=0 then
 	begin
-         WriteToConsole('crash');
          raise Exception.Create(format('Could not load library: %s',[lib]));
 	end;
-      WriteToConsole('succeeded');
       pointer(glAlphaFunc):=GetProcAddress(hlib,'glAlphaFunc');
       pointer(glClearColor):=GetProcAddress(hlib,'glClearColor');
       pointer(glClearDepthf):=GetProcAddress(hlib,'glClearDepthf');
@@ -1094,7 +1091,6 @@ implementation
 
 procedure init;
 begin
-  WriteToConsole('init');
     Loadgles11('libGLESv1_CM.so');
 end;
 
