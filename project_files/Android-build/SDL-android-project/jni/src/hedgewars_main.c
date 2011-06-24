@@ -6,7 +6,7 @@
 
 #define TAG "HWEngine Loader"
 
-typedef  (*HWEngine_Game)(int);
+typedef  (*HWEngine_Game)(char**);
 
 main(int argc, char *argv[]){
 	void *handle;
@@ -33,7 +33,7 @@ main(int argc, char *argv[]){
 		exit(EXIT_FAILURE);
 	}
 	__android_log_print(ANDROID_LOG_INFO, "foo", "dlsym succeeded");
-	Game(1);
+	Game(argv);
 	__android_log_print(ANDROID_LOG_INFO, "foo", "Game() succeeded");
 
 	dlclose(handle);
