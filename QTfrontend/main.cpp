@@ -465,8 +465,8 @@ int main(int argc, char *argv[]) {
         if(cc.isEmpty())
             cc = QLocale::system().name();
         QFile tmpfile;
-        tmpfile.setFileName(cfgdir->absolutePath() + "Data/Locale/hedgewars_" + cc);
-        if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "Locale/hedgewars_" + cc);
+        tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Locale/hedgewars_" + cc);
+        if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "/Locale/hedgewars_" + cc);
         Translator.load(QFileInfo(tmpfile).absoluteFilePath());
         app.installTranslator(&Translator);
     }
