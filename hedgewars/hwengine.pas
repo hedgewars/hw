@@ -31,7 +31,7 @@ program hwengine;
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
-     sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted;
+     sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted {$IFDEF ANDROID}, GLUnit {$ENDIF};
 
 {$IFDEF HWLIBRARY}
 procedure initEverything(complete:boolean);
@@ -217,7 +217,7 @@ begin
     cBits:= 32;
     cFullScreen:= false;
     cTimerInterval:= 8;
-    PathPrefix:= 'Data';
+    PathPrefix:= '/sdcard/Data';
     UserPathPrefix:= '.';
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     val(gameArgs[0], ipcPort);
@@ -345,9 +345,9 @@ begin
 
     if complete then
     begin
-        {$IFDEF ANDROID}
+{$IFDEF ANDROID}
 	GLUnit.init;
-	{$ENDIF}
+{$ENDIF}
 	uAI.initModule;
         //uAIActions does not need initialization
         //uAIAmmoTests does not need initialization
