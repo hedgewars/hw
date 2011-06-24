@@ -84,8 +84,8 @@ if isDeveloperMode then
 begin
 val(s, i, c);
 if (c <> 0) or (i = 0) then exit;
-TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old', true);
-TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new', true)
+//TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old', true);
+//TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new', true)
 end
 end;
 
