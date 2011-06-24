@@ -380,7 +380,7 @@ with CurrentHedgehog^.Gear^,
         else
             begin
             OnUsedAmmo(CurrentHedgehog^);
-            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and ((GameFlags and gfInfAttack) = 0) then
+            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and (((GameFlags and gfInfAttack) = 0) or PlacingHogs) then
                 begin
                 if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
                 TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;

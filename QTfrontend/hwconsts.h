@@ -22,6 +22,8 @@
 #include <QStringList>
 #include <QPair>
 
+#include "themesmodel.h"
+
 extern QString * cProtoVer;
 extern QString * cVersionString;
 extern QString * cDataDir;
@@ -37,7 +39,9 @@ extern bool custom_data;
 extern int cMaxTeams;
 extern int cMinServerVersion;
 
-extern QStringList * Themes;
+class QStringListModel;
+
+extern ThemesModel * themesModel;
 extern QStringList * mapList;
 extern QStringList * scriptList;
 

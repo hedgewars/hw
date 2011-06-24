@@ -59,7 +59,12 @@ HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h \
     ../QTfrontend/pagedrawmap.h \
     ../QTfrontend/pageconnecting.h \
     ../QTfrontend/pagecampaign.h \
-    ../QTfrontend/pageadmin.h
+    ../QTfrontend/pageadmin.h \
+    ../QTfrontend/pageplayrecord.h \
+    ../QTfrontend/pagegamestats.h \
+    ../QTfrontend/HWApplication.h \
+    ../QTfrontend/AbstractPage.h \
+    ../QTfrontend/themesmodel.h
 
 SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/about.cpp ../QTfrontend/ammoSchemeModel.cpp \
@@ -106,7 +111,11 @@ SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
     ../QTfrontend/pagedrawmap.cpp \
     ../QTfrontend/pageconnecting.cpp \
     ../QTfrontend/pagecampaign.cpp \
-    ../QTfrontend/pageadmin.cpp
+    ../QTfrontend/pageadmin.cpp \
+    ../QTfrontend/pagegamestats.cpp \
+    ../QTfrontend/pageplayrecord.cpp \
+    ../QTfrontend/HWApplication.cpp \
+    ../QTfrontend/themesmodel.cpp
 
 win32 {
 	SOURCES += ../QTfrontend/xfire.cpp

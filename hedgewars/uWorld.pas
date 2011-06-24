@@ -1165,7 +1165,7 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and 
 {$ENDIF}
 
 if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
-    if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
+    if (not autoCameraOn) or (abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4) then
     begin
         FollowGear:= nil;
         prevPoint:= CursorPoint;

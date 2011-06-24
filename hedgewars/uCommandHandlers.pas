@@ -26,7 +26,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom;
+uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions;
 
 procedure chGenCmd(var s: shortstring);
 begin
@@ -331,7 +331,7 @@ with CurrentHedgehog^.Gear^ do
         FollowGear:= CurrentHedgehog^.Gear;
         if not CurrentTeam^.ExtDriven then SendIPC('A');
         Message:= Message or (gmAttack and InputMask);
-	ScriptCall('onAttack');
+        ScriptCall('onAttack');
         end
     end
 end;
@@ -411,7 +411,7 @@ begin
     begin
         Message:= Message or (gmWeapon and InputMask);
         MsgParam:= byte(s[1]);
-	ScriptCall('onSetWeapon');
+    ScriptCall('onSetWeapon');
     end;
 end;
 
@@ -510,8 +510,18 @@ procedure chFindhh(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then exit;
-bShowFinger:= true;
-FollowGear:= CurrentHedgehog^.Gear
+
+if FollowGear <> nil then
+    begin
+    AddCaption('Auto Camera Off', $CCCCCC, capgrpVolume);
+    autoCameraOn:= false
+    end
+    else begin
+    AddCaption('Auto Camera On', $CCCCCC, capgrpVolume);
+    bShowFinger:= true;
+    FollowGear:= CurrentHedgehog^.Gear;
+    autoCameraOn:= true
+    end
 end;
 
 procedure chPause(var s: shortstring);

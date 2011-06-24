@@ -32,7 +32,7 @@
 
 class QPushButton;
 class IconedGroupBox;
-class QListWidget;
+class QListView;
 
 class MapFileErrorException
 {
@@ -89,7 +89,7 @@ class HWMapContainer : public QWidget
   void setRandomMap();
   void setRandomStatic();
   void setRandomMission();
-  void themeSelected(int currentRow);
+  void themeSelected(const QModelIndex & current, const QModelIndex &);
   void addInfoToPreview(QPixmap image);
   void seedEdited();
 
@@ -101,7 +101,7 @@ class HWMapContainer : public QWidget
   QPushButton* imageButt;
   QComboBox* chooseMap;
   IconedGroupBox* gbThemes;
-  QListWidget* lwThemes;
+  QListView* lvThemes;
   HWMap* pMap;
   QString m_seed;
   QPushButton* seedSet;

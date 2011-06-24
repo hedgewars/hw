@@ -27,7 +27,7 @@ QDir * bindir = new QDir("${HEDGEWARS_BINDIR}");
 QDir * cfgdir = new QDir();
 QDir * datadir = new QDir();
 
-QStringList * Themes;
+ThemesModel * themesModel;
 QStringList * mapList;
 QStringList * scriptList;
 

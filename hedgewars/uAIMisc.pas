@@ -134,7 +134,7 @@ MyClan:= ThinkingHH^.Hedgehog^.Team^.Clan;
 Gear:= GearsList;
 while Gear <> nil do
     begin
-	if (filter = []) or (Gear^.Kind in filter) then
+    if (filter = []) or (Gear^.Kind in filter) then
       case Gear^.Kind of
           gtCase: AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 33, 25);
           gtFlame: if (Gear^.State and gsttmpFlag) <> 0 then
@@ -152,7 +152,7 @@ while Gear <> nil do
                           AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
                       else
                           if isAfterAttack and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog) then
-                              if (MyClan = Gear^.Hedgehog^.Team^.Clan) then
+                              if (ClansCount > 2) or (MyClan = Gear^.Hedgehog^.Team^.Clan) then
                                   AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -3) // hedgehog-friend
                               else
                                   AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, 3)

@@ -25,11 +25,12 @@
 #include <QColor>
 #include <QTextStream>
 #include <QLabel>
-#include <QListWidget>
+#include <QListView>
 #include <QVBoxLayout>
 #include <QIcon>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QStringListModel>
 
 #include "hwconsts.h"
 #include "mapContainer.h"
@@ -200,24 +201,18 @@ map, mapInfo);
     QVBoxLayout * gbTLayout = new QVBoxLayout(gbThemes);
     gbTLayout->setContentsMargins(0, 0, 0 ,0);
     gbTLayout->setSpacing(0);
-    lwThemes = new QListWidget(mapWidget);
-    lwThemes->setMinimumHeight(30);
-    lwThemes->setFixedWidth(140);
-    QFile tmpfile;
-    for (int i = 0; i < Themes->size(); ++i) {
-        QListWidgetItem * lwi = new QListWidgetItem();
-        lwi->setText(Themes->at(i));
-        tmpfile.setFileName(QString("%1/Data/Themes/%2/icon.png").arg(cfgdir->absolutePath()).arg(Themes->at(i)));
-        if (tmpfile.exists()) lwi->setIcon(QIcon(QFileInfo(tmpfile).absoluteFilePath()));
-        else lwi->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(Themes->at(i))));
-        //lwi->setTextAlignment(Qt::AlignHCenter);
-        lwThemes->addItem(lwi);
-    }
-    connect(lwThemes, SIGNAL(currentRowChanged(int)), this, SLOT(themeSelected(int)));
+    lvThemes = new QListView(mapWidget);
+    lvThemes->setMinimumHeight(30);
+    lvThemes->setFixedWidth(140);
+    lvThemes->setModel(themesModel);
+    lvThemes->setIconSize(QSize(16, 16));
+    lvThemes->setEditTriggers(QListView::NoEditTriggers);
+
+    connect(lvThemes->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex &, const QModelIndex &)), this, SLOT(themeSelected( const QModelIndex &, const QModelIndex &)));
 
     // override default style to tighten up theme scroller
-    lwThemes->setStyleSheet(QString(
-        "QListWidget{"
+    lvThemes->setStyleSheet(QString(
+        "QListView{"
             "border: solid;"
             "border-width: 0px;"
             "border-radius: 0px;"
@@ -229,8 +224,8 @@ map, mapInfo);
         )
     );
 
-    gbTLayout->addWidget(lwThemes);
-    lwThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
+    gbTLayout->addWidget(lvThemes);
+    lvThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
 
     mapLayout->setSizeConstraint(QLayout::SetFixedSize);
 
@@ -376,9 +371,9 @@ void HWMapContainer::askForGeneratedPreview()
             );
 }
 
-void HWMapContainer::themeSelected(int currentRow)
+void HWMapContainer::themeSelected(const QModelIndex & current, const QModelIndex &)
 {
-    QString theme = Themes->at(currentRow);
+    QString theme = current.data().toString();
     QList<QVariant> mapInfo;
     mapInfo.push_back(QString("+rnd+"));
     mapInfo.push_back(theme);
@@ -389,10 +384,8 @@ void HWMapContainer::themeSelected(int currentRow)
     chooseMap->setItemData(1, mapInfo);
     mapInfo[0] = QString("+drawn+");
     chooseMap->setItemData(2, mapInfo);
-    QFile tmpfile;
-    tmpfile.setFileName(QString("%1/Data/Themes/%2/icon@2x.png").arg(cfgdir->absolutePath()).arg(theme));
-    if (tmpfile.exists()) gbThemes->setIcon(QIcon(QFileInfo(tmpfile).absoluteFilePath()));
-    else gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon@2x.png").arg(datadir->absolutePath()).arg(theme)));
+
+    gbThemes->setIcon(qVariantValue<QIcon>(current.data(Qt::UserRole)));
     emit themeChanged(theme);
 }
 
@@ -487,9 +480,10 @@ void HWMapContainer::setMap(const QString &map)
 
 void HWMapContainer::setTheme(const QString & theme)
 {
-    QList<QListWidgetItem *> items = lwThemes->findItems(theme, Qt::MatchExactly);
-    if(items.size())
-        lwThemes->setCurrentItem(items.at(0));
+    QModelIndexList mdl = themesModel->match(themesModel->index(0), Qt::DisplayRole, theme);
+
+    if(mdl.size())
+        lvThemes->setCurrentIndex(mdl.at(0));
 }
 
 void HWMapContainer::setRandomMap()
@@ -539,9 +533,9 @@ void HWMapContainer::setRandomSeed()
 
 void HWMapContainer::setRandomTheme()
 {
-    if(!Themes->size()) return;
-    quint32 themeNum = rand() % Themes->size();
-    lwThemes->setCurrentRow(themeNum);
+    if(!themesModel->rowCount()) return;
+    quint32 themeNum = rand() % themesModel->rowCount();
+    lvThemes->setCurrentIndex(themesModel->index(themeNum));
 }
 
 void HWMapContainer::intSetTemplateFilter(int filter)
