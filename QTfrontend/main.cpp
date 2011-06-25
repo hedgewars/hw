@@ -397,39 +397,38 @@ int main(int argc, char *argv[]) {
 
         QList<QPair<QIcon, QIcon> > icons;
 
+        themes.sort();
         for(int i = themes.size() - 1; i >= 0; --i)
         {
             QFile tmpfile;
             tmpfile.setFileName(QString("%1/Data/Themes/%2/icon.png").arg(cfgdir->absolutePath()).arg(themes.at(i)));
             if (!tmpfile.exists())
-            {
                 tmpfile.setFileName(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(themes.at(i)));
-                if(tmpfile.exists())
-                { // load icon
-                    QPair<QIcon, QIcon> ic;
-                    ic.first = QIcon(QFileInfo(tmpfile).absoluteFilePath());
 
-                    QFile previewIconFile;
-                    previewIconFile.setFileName(QString("%1/Data/Themes/%2/icon@2x.png").arg(cfgdir->absolutePath()).arg(themes.at(i)));
-                    if (previewIconFile.exists()) ic.second = QIcon(QFileInfo(previewIconFile).absoluteFilePath());
-                    else ic.second = QIcon(QString("%1/Themes/%2/icon@2x.png").arg(datadir->absolutePath()).arg(themes.at(i)));
+            if(tmpfile.exists())
+            { // load icon
+                QPair<QIcon, QIcon> ic;
+                ic.first = QIcon(QFileInfo(tmpfile).absoluteFilePath());
 
-                    icons.prepend(ic);
-                }
-                else
-                {
-                    themes.removeAt(i);
-                }
+                QFile previewIconFile;
+                previewIconFile.setFileName(QString("%1/Data/Themes/%2/icon@2x.png").arg(cfgdir->absolutePath()).arg(themes.at(i)));
+                if (previewIconFile.exists()) ic.second = QIcon(QFileInfo(previewIconFile).absoluteFilePath());
+                else ic.second = QIcon(QString("%1/Themes/%2/icon@2x.png").arg(datadir->absolutePath()).arg(themes.at(i)));
+
+                icons.prepend(ic);
+            }
+            else
+            {
+                themes.removeAt(i);
             }
         }
 
         themesModel = new ThemesModel(themes);
+        Q_ASSERT(themes.size() == icons.size());
         for(int i = 0; i < icons.size(); ++i)
         {
             themesModel->setData(themesModel->index(i), icons[i].first, Qt::DecorationRole);
             themesModel->setData(themesModel->index(i), icons[i].second, Qt::UserRole);
-
-            qDebug() << "icon test" << themesModel->index(i).data(Qt::UserRole).toString();
         }
     }
 
