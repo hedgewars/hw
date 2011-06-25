@@ -1227,14 +1227,14 @@ begin
             CursorPoint.X:= cScreenWidth div 2 - EdgesDist
         end;
 
-    shs:= cScreenHeight div 2 - trunc(cScreenHeight / cScaleFactor) + EdgesDist;
+    shs:= min(cScreenHeight div 2 - trunc(cScreenHeight / cScaleFactor) + EdgesDist, cScreenHeight - EdgesDist);
     if CursorPoint.Y < shs then
     begin
         WorldDy:= WorldDy + CursorPoint.Y - shs;
         CursorPoint.Y:= shs;
     end
     else
-        if CursorPoint.Y > cScreenHeight - EdgesDist then
+        if (CursorPoint.Y > cScreenHeight - EdgesDist) then
         begin
            WorldDy:= WorldDy + CursorPoint.Y - cScreenHeight + EdgesDist;
            CursorPoint.Y:= cScreenHeight - EdgesDist
