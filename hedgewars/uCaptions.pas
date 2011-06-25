@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
+ 
+{$INCLUDE "options.inc"}
 
 unit uCaptions;
 
@@ -58,7 +60,7 @@ var
     offset: LongInt;
 begin
 {$IFDEF IPHONEOS}
-    offset:= 40;
+    offset:= 48;
 {$ELSE}
     offset:= 8;
 {$ENDIF}
