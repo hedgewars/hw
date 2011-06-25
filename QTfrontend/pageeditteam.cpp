@@ -145,10 +145,13 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
         CBVoicepack = new QComboBox(GBoxTeam);
         {
             QDir tmpdir;
+            QStringList list;
             tmpdir.cd(cfgdir->absolutePath());
-            tmpdir.cd("Data/Sounds/voices");
-            QStringList list = tmpdir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
-            CBVoicepack->addItems(list);
+            if (tmpdir.cd("Data/Sounds/voices")) 
+            {
+                list = tmpdir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
+                CBVoicepack->addItems(list);
+            }
 
             tmpdir.cd(datadir->absolutePath());
             tmpdir.cd("Sounds/voices");
@@ -182,12 +185,14 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     vbox2->addWidget(GBoxFort);
 
     QDir tmpdir;
+    QStringList userforts;
     tmpdir.cd(cfgdir->absolutePath());
-    tmpdir.cd("Data/Forts");
-    tmpdir.setFilter(QDir::Files);
-
-    QStringList userforts = tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1");
-    CBFort->addItems(userforts);
+    if (tmpdir.cd("Data/Forts"))
+    {
+        tmpdir.setFilter(QDir::Files);
+        userforts = tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1");
+        CBFort->addItems(userforts);
+    }
 
     tmpdir.cd("../Graphics/Graves");
     QStringList userlist = tmpdir.entryList(QStringList("*.png"));
@@ -207,7 +212,7 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     for (QStringList::Iterator it = tmplist.begin(); it != tmplist.end(); ++it)
         if (!userforts.contains(*it,Qt::CaseInsensitive)) dataforts.append(*it);
 
-    CBVoicepack->addItems(dataforts);
+    CBFort->addItems(dataforts);
     connect(CBFort, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(CBFort_activated(const QString &)));
 
     tmpdir.cd("../Graphics/Graves");
