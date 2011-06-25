@@ -46,7 +46,7 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
-        <translation>Quand cette option est active choisir des paramètres de jeu sélectionnera les armes</translation>
+        <translation>Une fois cette option activée, choisir les paramètres de jeu sélectionne automatiquement les armes correspondantes</translation>
     </message>
 </context>
 <context>
@@ -421,7 +421,7 @@ ou choisir un nouveau pseudo :</translation>
     <message numerus="yes">
         <source>(%1 kill)</source>
         <translation type="unfinished">
-            <numerusform>(%1 Tue)</numerusform>
+            <numerusform>(%1 tue)</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -540,7 +540,7 @@ ou choisir un nouveau pseudo :</translation>
     <message>
         <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
         <comment>Tips</comment>
-        <translation>Particulièrement quand vous jouez en ligne soyez polis et pensez que certains joueurs avec vous peuvent être mineurs.</translation>
+        <translation>Particulièrement quand vous jouez en ligne soyez polis et n'oubliez pas que certains joueurs peuvent être mineurs.</translation>
     </message>
     <message>
         <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
@@ -610,12 +610,12 @@ ou choisir un nouveau pseudo :</translation>
     <message>
         <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Le Old Limbuger cause seulement une petite explosion. En revanche le vent affecte le petit nuage empoisonné qui peut contaminer de nombreux hérissons à la fois.</translation>
+        <translation type="unfinished">Le vieux Limburger cause seulement une petite explosion. En revanche le vent affecte le petit nuage empoisonné qui peut contaminer de nombreux hérissons à la fois.</translation>
     </message>
     <message>
         <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">L&apos;attaque du Piano est la plus dévastatrice des attaques aériennes. Vous perdrez le hérisson qui la lance, donc il y a une contrepartie énorme.</translation>
+        <translation type="unfinished">L&apos;attaque du Piano est la plus dévastatrice des attaques aériennes. Mais la contrepartie est grande puisque vous perdrez le hérisson qui la lance.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
@@ -705,17 +705,17 @@ ou choisir un nouveau pseudo :</translation>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La version Windows de Hedgewars supporte Xfire. Ajoutez Hedgewars à la liste des jeux pour que vos amis puissent vous voir jouer</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">L'Abeille Missile peut être délicate à utiliser. Sa courbe de lancer dépend de sa vitesse, pour plus de précision ne l'envoyez pas à pleine puissance. </translation>
     </message>
     <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> Utilisez le Lance-Flammes ou le Cocktail Molotov pour empêcher temporairement les hérissons de circuler dans les tunnels ou sur les plateformes.</translation>
     </message>
 </context>
 <context>
@@ -1030,7 +1030,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation type="unfinished">Désactiver les objets de terrain en générant des cartes aléatoires.</translation>
+        <translation type="unfinished">Désactiver les objets de terrain lorsque des cartes aléatoires sont générées.</translation>
     </message>
     <message>
         <source>AI respawns on death.</source>
@@ -1198,7 +1198,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished">Montrer le menu d&apos;aide des munitions.</translation>
+        <translation type="unfinished">Montrer les astuces du menu des armes.</translation>
     </message>
     <message>
         <source>Enable frontend sounds</source>
@@ -1245,11 +1245,11 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Any</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aucun</translation>
     </message>
     <message>
         <source>In lobby</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">En attente</translation>
     </message>
     <message>
         <source>In progress</source>
@@ -1269,27 +1269,27 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Red/Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rouge/Cyan</translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cyan/Rouge</translation>
     </message>
     <message>
         <source>Red/Blue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rouge/Bleu</translation>
     </message>
     <message>
         <source>Blue/Red</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bleu/Rouge</translation>
     </message>
     <message>
         <source>Red/Green</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rouge/Vert</translation>
     </message>
     <message>
         <source>Green/Red</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vert/Rouge</translation>
     </message>
     <message>
         <source>Side-by-side</source>
@@ -1531,11 +1531,11 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Gameplay</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mode de jeu</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rendu stéréo</translation>
     </message>
 </context>
 <context>
