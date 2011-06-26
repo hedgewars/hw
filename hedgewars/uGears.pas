@@ -602,18 +602,6 @@ gtFlamethrower: begin
                 end;
     end;
 
-if ((Ammoz[gear^.AmmoType].Ammo.Propz and ammoprop_SetBounce) <> 0) and (CurrentHedgehog <> nil) then 
-    if CurrentHedgehog^.Bounce < _1 then 
-        begin
-        gear^.Elasticity:= gear^.Elasticity * CurrentHedgehog^.Bounce;
-        gear^.Friction:= gear^.Friction * CurrentHedgehog^.Bounce
-        end
-    else 
-        begin
-        gear^.Elasticity:= _1 - ((_1-gear^.Elasticity) / CurrentHedgehog^.Bounce);
-        gear^.Friction:= _1 - ((_1-gear^.Friction) / CurrentHedgehog^.Bounce);
-        end;
-
 InsertGearToList(gear);
 AddGear:= gear;
 

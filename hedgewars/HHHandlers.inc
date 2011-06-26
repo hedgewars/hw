@@ -136,23 +136,23 @@ with Gear^.Hedgehog^ do
         case Gear^.MsgParam of
             1: begin
                AddCaption(format(trmsg[sidBounce], trmsg[sidBounce1]), color, capgrpAmmostate);
-               Gear^.Hedgehog^.Bounce:= _0_3
+               CurWeapon^.Bounciness:= 350;
                end;
             2: begin
                AddCaption(format(trmsg[sidBounce], trmsg[sidBounce2]), color, capgrpAmmostate);
-               Gear^.Hedgehog^.Bounce:= _0_7
+               CurWeapon^.Bounciness:= 700;
                end;
             3: begin
                AddCaption(format(trmsg[sidBounce], trmsg[sidBounce3]), color, capgrpAmmostate);
-               Gear^.Hedgehog^.Bounce:= _1
+               CurWeapon^.Bounciness:= 1000;
                end;
             4: begin
                AddCaption(format(trmsg[sidBounce], trmsg[sidBounce4]), color, capgrpAmmostate);
-               Gear^.Hedgehog^.Bounce:= _2
+               CurWeapon^.Bounciness:= 2000;
                end;
             5: begin
                AddCaption(format(trmsg[sidBounce], trmsg[sidBounce5]), color, capgrpAmmostate);
-               Gear^.Hedgehog^.Bounce:= _4
+               CurWeapon^.Bounciness:= 4000;
                end
             end
         end
@@ -171,6 +171,7 @@ var xx, yy, newDx, newDy, lx, ly: hwFloat;
     newGear:  PGear;
     CurWeapon: PAmmo;
     altUse: boolean;
+    elastic: hwFloat;
 begin
 bShowFinger:= false;
 CurWeapon:= GetAmmoEntry(Gear^.Hedgehog^);
@@ -374,6 +375,19 @@ with Gear^,
 
         // Clear FollowGear if using on a rope/parachute/saucer etc so focus stays with the hog's movement
         if altUse then FollowGear:= nil;
+
+        if ((Ammoz[newGear^.AmmoType].Ammo.Propz and ammoprop_SetBounce) <> 0) and (newGear <> nil) then
+            begin
+            elastic:=  int2hwfloat(CurWeapon^.Bounciness) / _1000;
+
+            if elastic < _1 then newGear^.Elasticity:= newGear^.Elasticity * elastic
+            else if elastic > _1 then newGear^.Elasticity:= _1 - ((_1-newGear^.Elasticity) / elastic);
+(* Experimented with friction modifier. Didn't seem helpful 
+            fric:= int2hwfloat(CurWeapon^.Bounciness) / _250;
+            if fric < _1 then newGear^.Friction:= newGear^.Friction * fric
+            else if fric > _1 then newGear^.Friction:= _1 - ((_1-newGear^.Friction) / fric)*)
+            end;
+
 
         uStats.AmmoUsed(CurAmmoType);
 

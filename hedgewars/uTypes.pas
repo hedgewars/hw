@@ -183,6 +183,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Pos: LongWord;
             AmmoType: TAmmoType;
             AttackVoice: TSound;
+            Bounciness: LongWord;
             end;
 
     TVertex2f = record
@@ -333,7 +334,6 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
             Timer: Longword;
-            Bounce: hwFloat;
             Effects: Array[THogEffect] of boolean;
             end;
 

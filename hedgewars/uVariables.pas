@@ -761,7 +761,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amNothing;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 0;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -784,7 +785,8 @@ const
                 Timer: 3000;
                 Pos: 0;
                 AmmoType: amGrenade;
-                AttackVoice: sndCover);
+                AttackVoice: sndCover;
+                Bounciness: 1000);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -807,7 +809,8 @@ const
                 Timer: 3000;
                 Pos: 0;
                 AmmoType: amClusterBomb;
-                AttackVoice: sndCover);
+                AttackVoice: sndCover;
+                Bounciness: 1000);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -830,7 +833,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amBazooka;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -853,7 +857,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amBee;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -876,7 +881,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amShotgun;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 2;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -899,7 +905,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amPickHammer;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -922,7 +929,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amSkip;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -949,7 +957,8 @@ const
                     Timer: 0;
                     Pos: 0;
                     AmmoType: amRope;
-                    AttackVoice: sndNone);
+                    AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 7;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -972,7 +981,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amMine;
-                AttackVoice: sndLaugh);
+                AttackVoice: sndLaugh;
+                Bounciness: 1000);
             Slot: 4;
             TimeAfterTurn: 5000;
             minAngle: 0;
@@ -995,7 +1005,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amDEagle;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 2;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1018,7 +1029,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amDynamite;
-                AttackVoice: sndLaugh);
+                AttackVoice: sndLaugh;
+                Bounciness: 1000);
             Slot: 4;
             TimeAfterTurn: 5000;
             minAngle: 0;
@@ -1041,7 +1053,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amFirePunch;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 3000;
             MinAngle: 0;
@@ -1064,7 +1077,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amWhip;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 3000;
             MinAngle: 0;
@@ -1087,7 +1101,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amBaseballBat;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 5000;
             minAngle: 0;
@@ -1116,7 +1131,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amParachute;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 7;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1143,7 +1159,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amAirAttack;
-                AttackVoice: sndIncoming);
+                AttackVoice: sndIncoming;
+                Bounciness: 1000);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1171,7 +1188,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amMineStrike;
-                AttackVoice: sndIncoming);
+                AttackVoice: sndIncoming;
+                Bounciness: 1000);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1194,7 +1212,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amBlowTorch;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 6;
             TimeAfterTurn: 3000;
             minAngle: 768;
@@ -1221,7 +1240,8 @@ const
                     Timer: 0;
                     Pos: 0;
                     AmmoType: amGirder;
-                    AttackVoice: sndNone);
+                    AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 6;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1249,7 +1269,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amTeleport;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 7;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1276,7 +1297,8 @@ const
                     Timer: 0;
                     Pos: 0;
                     AmmoType: amSwitch;
-                    AttackVoice: sndNone);
+                    AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1299,7 +1321,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amMortar;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1322,7 +1345,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amKamikaze;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1345,7 +1369,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amCake;
-                AttackVoice: sndLaugh);
+                AttackVoice: sndLaugh;
+                Bounciness: 1000);
             Slot: 4;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1368,7 +1393,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amSeduction;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1391,7 +1417,8 @@ const
                 Timer: 3000;
                 Pos: 0;
                 AmmoType: amWatermelon;
-                AttackVoice: sndMelon);
+                AttackVoice: sndMelon;
+                Bounciness: 1000);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1414,7 +1441,8 @@ const
                 Timer: 5000;
                 Pos: 0;
                 AmmoType: amHellishBomb;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1441,7 +1469,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amNapalm;
-                AttackVoice: sndIncoming);
+                AttackVoice: sndIncoming;
+                Bounciness: 1000);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1464,7 +1493,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amDrill;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1487,7 +1517,8 @@ const
                 Timer: 5001;
                 Pos: 0;
                 AmmoType: amBallgun;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 4;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1512,7 +1543,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amRCPlane;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 4;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1540,7 +1572,8 @@ const
                     Timer: 0;
                     Pos: 0;
                     AmmoType: amLowGravity;
-                    AttackVoice: sndNone);
+                    AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1568,7 +1601,8 @@ const
                     Timer: 0;
                     Pos: 0;
                     AmmoType: amExtraDamage;
-                    AttackVoice: sndNone);
+                    AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1596,7 +1630,8 @@ const
                     Timer: 0;
                     Pos: 0;
                     AmmoType: amInvulnerable;
-                    AttackVoice: sndNone);
+                    AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1624,7 +1659,8 @@ const
                     Timer: 0;
                     Pos: 0;
                     AmmoType: amExtraTime;
-                    AttackVoice: sndNone);
+                    AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1652,7 +1688,8 @@ const
                     Timer: 0;
                     Pos: 0;
                     AmmoType: amLaserSight;
-                    AttackVoice: sndNone);
+                    AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1680,7 +1717,8 @@ const
                     Timer: 0;
                     Pos: 0;
                     AmmoType: amVampiric;
-                    AttackVoice: sndNone);
+                    AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1703,7 +1741,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amSniperRifle;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 2;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1732,7 +1771,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amJetpack;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 7;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1755,7 +1795,8 @@ const
                 Timer: 3000;
                 Pos: 0;
                 AmmoType: amMolotov;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1780,7 +1821,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amBirdy;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 7;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1806,7 +1848,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amPortalGun;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1833,7 +1876,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amPiano;
-                AttackVoice: sndIncoming);
+                AttackVoice: sndIncoming;
+                Bounciness: 1000);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1856,7 +1900,8 @@ const
                 Timer: 3000;
                 Pos: 0;
                 AmmoType: amGasBomb;
-                AttackVoice: sndCover);
+                AttackVoice: sndCover;
+                Bounciness: 1000);
             Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -1879,7 +1924,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amSineGun;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 2;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1902,7 +1948,8 @@ const
                 Timer: 5001;
                 Pos: 0;
                 AmmoType: amFlamethrower;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 2;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -1925,7 +1972,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amSMine;
-                AttackVoice: sndLaugh);
+                AttackVoice: sndLaugh;
+                Bounciness: 1000);
             Slot: 4;
             TimeAfterTurn: 5000;
             minAngle: 0;
@@ -1948,7 +1996,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amHammer;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 1000;
             MinAngle: 0;
@@ -1973,7 +2022,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amResurrector;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 8;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -2001,7 +2051,8 @@ const
                 Timer: 5000;
                 Pos: 0;
                 AmmoType: amDrillStrike;
-                AttackVoice: sndIncoming);
+                AttackVoice: sndIncoming;
+                Bounciness: 1000);
             Slot: 5;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -2026,7 +2077,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amSnowball;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
@@ -2052,7 +2104,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amTardis;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 7;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -2078,7 +2131,8 @@ const
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amStructure;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
@@ -2102,7 +2156,8 @@ const
                 Timer: 5001;
                 Pos: 0;
                 AmmoType: amLandGun;
-                AttackVoice: sndNone);
+                AttackVoice: sndNone;
+                Bounciness: 1000);
             Slot: 2;
             TimeAfterTurn: 0;
             minAngle: 0;
