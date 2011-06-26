@@ -223,16 +223,64 @@ begin
     lc_campaignunlock:= 0;
 end;
 
-function lc_spawnhealthcrate(L: Plua_State) : LongInt; Cdecl;
+function lc_spawnfakehealthcrate(L: Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if lua_gettop(L) <> 2 then begin
+    if lua_gettop(L) <> 3 then begin
+        LuaError('Lua: Wrong number of parameters passed to SpawnFakeHealthCrate!');
+        lua_pushnil(L);
+    end
+    else begin
+        gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
+            HealthCrate, lua_toboolean(L, 3));
+        lua_pushinteger(L, gear^.uid);
+    end;
+    lc_spawnfakehealthcrate := 1;        
+end;
+
+function lc_spawnfakeammocrate(L: PLua_State): LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 3 then begin
+        LuaError('Lua: Wrong number of parameters passed to SpawnFakeAmmoCrate!');
+        lua_pushnil(L);
+    end
+    else begin
+        gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
+            AmmoCrate, lua_toboolean(L, 3));
+        lua_pushinteger(L, gear^.uid);
+    end;
+    lc_spawnfakeammocrate := 1;
+end;
+
+function lc_spawnfakeutilitycrate(L: PLua_State): LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 3 then begin
+        LuaError('Lua: Wrong number of parameters passed to SpawnFakeUtilityCrate!');
+        lua_pushnil(L);
+    end
+    else begin  
+        gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
+            UtilityCrate, lua_toboolean(L, 3));
+        lua_pushinteger(L, gear^.uid);
+    end;
+    lc_spawnfakeutilitycrate := 1;
+end;
+
+function lc_spawnhealthcrate(L: Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+var health: LongInt;
+begin
+    if (lua_gettop(L) < 2) or (lua_gettop(L) > 3) then begin
         LuaError('Lua: Wrong number of parameters passed to SpawnHealthCrate!');
         lua_pushnil(L);
     end
     else begin
+        if lua_gettop(L) = 3 then health:= lua_tointeger(L, 3)
+        else health:= cHealthCaseAmount;
         gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
-            HealthCrate, 0);
+            HealthCrate, health);
         lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnhealthcrate := 1;        
@@ -1740,6 +1788,9 @@ lua_register(luaState, 'SetVisualGearValues', @lc_setvisualgearvalues);
 lua_register(luaState, 'SpawnHealthCrate', @lc_spawnhealthcrate);
 lua_register(luaState, 'SpawnAmmoCrate', @lc_spawnammocrate);
 lua_register(luaState, 'SpawnUtilityCrate', @lc_spawnutilitycrate);
+lua_register(luaState, 'SpawnFakeHealthCrate', @lc_spawnfakehealthcrate);
+lua_register(luaState, 'SpawnFakeAmmoCrate', @lc_spawnfakeammocrate);
+lua_register(luaState, 'SpawnFakeUtilityCrate', @lc_spawnfakeutilitycrate);
 lua_register(luaState, 'WriteLnToConsole', @lc_writelntoconsole);
 lua_register(luaState, 'GetGearType', @lc_getgeartype);
 lua_register(luaState, 'EndGame', @lc_endgame);

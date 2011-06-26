@@ -102,6 +102,7 @@ begin
         gi := gi^.NextGear
         end;
 end;
+
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDrowningGear(Gear: PGear);
 forward;
@@ -235,7 +236,6 @@ begin
     end
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 procedure CalcRotationDirAngle(Gear: PGear);
 var 
@@ -477,6 +477,7 @@ begin
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEvilTrace);
 end;
 end;
+
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMolotov(Gear: PGear);
 var 
@@ -513,11 +514,7 @@ begin
     end;
 end;
 
-procedure doStepWatermelon(Gear: PGear);
-begin
-    AllInactive := false;
-    Gear^.doStep := @doStepBomb
-end;
+////////////////////////////////////////////////////////////////////////////////
 
 procedure doStepCluster(Gear: PGear);
 begin
@@ -582,6 +579,7 @@ begin
         end
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepSnowflake(Gear: PGear);
 var xx, yy, px, py: LongInt;
     move, draw, allpx, gun: Boolean;
@@ -2074,6 +2072,7 @@ begin
     end
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepShover(Gear: PGear);
 var 
     HHGear: PGear;
@@ -3308,6 +3307,7 @@ begin
     Gear^.doStep := @doStepRCPlaneWork
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepJetpackWork(Gear: PGear);
 var 
     HHGear: PGear;
@@ -3435,7 +3435,6 @@ begin
         end
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepJetpack(Gear: PGear);
 var 
     HHGear: PGear;
@@ -3471,7 +3470,6 @@ begin
     end;
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepBirdyFly(Gear: PGear);
 var 
     HHGear: PGear;
@@ -3565,7 +3563,6 @@ begin
         end
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepBirdyDescend(Gear: PGear);
 var 
     HHGear: PGear;
@@ -3607,7 +3604,6 @@ begin
     end
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepBirdy(Gear: PGear);
 var 
     HHGear: PGear;
@@ -4145,6 +4141,7 @@ begin
     newPortal^.doStep := @doStepMovingPortal;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepPiano(Gear: PGear);
 var 
     r0, r1: LongInt;
@@ -4444,6 +4441,7 @@ begin
     Gear^.doStep := @doStepFlamethrowerWork
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepLandGunWork(Gear: PGear);
 var 
     HHGear: PGear;
@@ -4519,6 +4517,7 @@ begin
     Gear^.doStep := @doStepLandGunWork
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepPoisonCloud(Gear: PGear);
 begin
     if Gear^.Timer = 0 then
@@ -4576,7 +4575,6 @@ Gear^.Timer:= 250;
 Gear^.doStep:= @doStepIdle
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepHammerHitWork(Gear: PGear);
 var 
     i, ei: LongInt;
@@ -4812,6 +4810,14 @@ procedure doStepStructure(Gear: PGear);
 var 
     x, y: LongInt;
 begin
+    if (Gear^.State and gstMoving) <> 0 then
+        begin
+        AddGearCI(Gear);
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.State:= Gear^.State and not gstMoving;
+        end;
+
     if CurAmmoGear = Gear then
         begin
         if (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then 
@@ -4860,6 +4866,7 @@ begin
         end;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepTardis(Gear: PGear);
 (*var 
     i, x, y: LongInt;
@@ -4902,3 +4909,6 @@ begin
             DeleteGear(Gear)
         end
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+

@@ -39,6 +39,7 @@ procedure initModule;
 procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 function  SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword ): PGear;
+function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; trap: boolean ): PGear;
 procedure ResurrectHedgehog(gear: PGear);
 procedure ProcessGears;
 procedure EndTurnCleanup;
@@ -120,7 +121,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepKamikaze,
             @doStepCake,
             @doStepSeduction,
-            @doStepWatermelon,
+            @doStepBomb,
             @doStepCluster,
             @doStepBomb,
             @doStepWaterUp,
@@ -540,11 +541,11 @@ gtFlamethrower: begin
                 gear^.Density:= _1_5;
                 end;
    gtStructure: begin
-                gear^.ImpactSound:= sndGrenadeImpact;
-                gear^.nImpactSounds:= 1;
+                gear^.Elasticity:= _0_55;
+                gear^.Friction:= _0_995;
+                gear^.Density:= _0_9;
                 gear^.Radius:= 13;
-                gear^.Elasticity:= _0_3;
-                gear^.Health:= 50;
+                gear^.Health:= 200;
                 gear^.Tag:= 3;
                 end;
     end;
@@ -1607,12 +1608,12 @@ begin
     FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
     cCaseFactor := 0;
 
-    if (content > ord(High(TAmmoType))) then content := ord(High(TAmmoType));
+    if (crate <> HealthCrate) and (content > ord(High(TAmmoType))) then content := ord(High(TAmmoType));
 
     case crate of
         HealthCrate: begin
-            FollowGear^.Health := cHealthCaseAmount;
             FollowGear^.Pos := posCaseHealth;
+            FollowGear^.Health := content;
             AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
             end;
         AmmoCrate: begin
@@ -1630,6 +1631,34 @@ begin
     if ( (x = 0) and (y = 0) ) then FindPlace(FollowGear, true, 0, LAND_WIDTH);
 
     SpawnCustomCrateAt := FollowGear;
+end;
+
+function SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; trap: boolean): PGear;
+begin
+    FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
+    cCaseFactor := 0;
+    
+    if trap then FollowGear^.Pos := posCaseTrap
+    else FollowGear^.Pos := posCaseDummy;
+
+    case crate of
+        HealthCrate: begin
+            FollowGear^.Pos := FollowGear^.Pos + posCaseHealth;
+            AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
+            end;
+        AmmoCrate: begin
+            FollowGear^.Pos := FollowGear^.Pos + posCaseAmmo;
+            AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
+            end;
+        UtilityCrate: begin
+            FollowGear^.Pos := FollowGear^.Pos + posCaseUtility;
+            AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
+            end;
+    end;
+
+    if ( (x = 0) and (y = 0) ) then FindPlace(FollowGear, true, 0, LAND_WIDTH);
+
+    SpawnFakeCrateAt := FollowGear;
 end;
 
 procedure SpawnBoxOfSmth;

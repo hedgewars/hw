@@ -928,24 +928,25 @@ begin
                            DrawRotated(sprSMineOff, x, y, 0, Gear^.DirAngle)
                        else if Gear^.Health <> 0 then DrawRotated(sprSMineOn, x, y, 0, Gear^.DirAngle)
                        else DrawRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
-            gtCase: case Gear^.Pos of
-                         posCaseAmmo  : begin
-                                        i:= (GameTicks shr 6) mod 64;
-                                        if i > 18 then i:= 0;
-                                        DrawSprite(sprCase, x - 24, y - 24, i);
-                                        end;
-                         posCaseHealth: begin
-                                        i:= ((GameTicks shr 6) + 38) mod 64;
-                                        if i > 13 then i:= 0;
-                                        DrawSprite(sprFAid, x - 24, y - 24, i);
-                                        end;
-                         posCaseUtility: begin
-                                        i:= (GameTicks shr 6) mod 70;
-                                        if i > 23 then i:= 0;
-                                        i:= i mod 12;
-                                        DrawSprite(sprUtility, x - 24, y - 24, i);
-                                        end;
-                         end;
+            gtCase: if ((Gear^.Pos and posCaseAmmo) <> 0) then
+                        begin
+                        i:= (GameTicks shr 6) mod 64;
+                        if i > 18 then i:= 0;
+                        DrawSprite(sprCase, x - 24, y - 24, i);
+                        end
+                    else if ((Gear^.Pos and posCaseHealth) <> 0) then
+                        begin
+                        i:= ((GameTicks shr 6) + 38) mod 64;
+                        if i > 13 then i:= 0;
+                        DrawSprite(sprFAid, x - 24, y - 24, i);
+                        end
+                    else if ((Gear^.Pos and posCaseUtility) <> 0) then
+                        begin
+                        i:= (GameTicks shr 6) mod 70;
+                        if i > 23 then i:= 0;
+                        i:= i mod 12;
+                        DrawSprite(sprUtility, x - 24, y - 24, i);
+                        end;
       gtExplosives: begin
                     if ((Gear^.State and gstDrowning) <> 0) then
                         DrawSprite(sprExplosivesRoll, x - 24, y - 24, 0)
