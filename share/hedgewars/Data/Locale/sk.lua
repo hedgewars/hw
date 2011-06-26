@@ -27,7 +27,6 @@ locale = {
         ["Congratulations!"] = "Gratulujem!",
 	["Congratulations! You've eliminated all targets|within the allowed time frame."] = "Gratulujem! Zneškodnili ste všetky ciele|v stanovenom čase.", --Bazooka, Shotgun, SniperRifle
         ["Control pillars to score points."] = "Ovládnite piliere, aby ste skórovali",
-        ["CTF_BLIZZARD"] = "CTF_METELICA",
         ["Cybernetic Empire"] = "Kybertnetické impérium",
         ["DAMMIT, ROOKIE! GET OFF MY HEAD!"] = "Do kelu s tebou, zelenáč! Okamžite mi zlez z hlavy!",
         ["DAMMIT, ROOKIE!"] = "Prekliaty zelenáč!",

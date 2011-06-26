@@ -27,7 +27,6 @@ locale = {
     ["Congratulations!"] = "Gratulacje",
     ["Congratulations! You've eliminated all targets|within the allowed time frame."] = "Gratulacje! Zniszczyłeś wszystkie cele przed upłynięciem czasu.",  
     ["Control pillars to score points."] = "Kontroluj filary by zdobyć punkty",
-    ["CTF_BLIZZARD"] = "Śnieżyca",
     ["Cybernetic Empire"] = "Cybernetyczne Imperium",
     ["DAMMIT, ROOKIE! GET OFF MY HEAD!"] = "Młody!!! Złaź z mojej głowy!!!",
     ["DAMMIT, ROOKIE!"] = "Żółtodziobie!",

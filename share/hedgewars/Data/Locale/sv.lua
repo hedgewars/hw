@@ -27,7 +27,6 @@ locale = {
 	["Congratulations!"] = "Grattis!",
 	["Congratulations! You've eliminated all targets|within the allowed time frame."] = "Grattis! Du har förstört alla målen inom den|tillåtna tidsramen.", --Bazooka, Shotgun, SniperRifle
 	["Control pillars to score points."] = "Kontrollera pelare för att ta poäng",
-    ["CTF_BLIZZARD"] = "CTF_BLIZZARD",
 	["Cybernetic Empire"] = "Robotriket",
 	["DAMMIT, ROOKIE! GET OFF MY HEAD!"] = "SATAN, GRÖNGÖLING! SLUTA TJATA!",
 	["DAMMIT, ROOKIE!"] = "SATAN, GRÖNGÖLING!",

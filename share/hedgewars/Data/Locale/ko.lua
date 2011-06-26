@@ -27,7 +27,6 @@ locale = {
 --      ["Congratulations!"] = "",
 --      ["Congratulations! You've eliminated all targets|within the allowed time frame."] = "", --Bazooka, Shotgun, SniperRifle
 --      ["Control pillars to score points."] = "",
---      ["CTF_BLIZZARD"] = "",
 --      ["Cybernetic Empire"] = "",
 --      ["DAMMIT, ROOKIE!"] = "",
 --      ["DAMMIT, ROOKIE! GET OFF MY HEAD!"] = "",

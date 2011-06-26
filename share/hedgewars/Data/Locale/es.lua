@@ -27,7 +27,6 @@ locale = {
 	["Congratulations!"] = "¡Felicidades!",
 	["Congratulations! You've eliminated all targets|within the allowed time frame."] = "¡Felicidades! Has destruido todos los objectivos|dentro del tiempo establecido.", --Bazooka, Shotgun, SniperRifle
 	["Control pillars to score points."] = "Controla los pilares para anotar puntos.",
---      ["CTF_BLIZZARD"] = "",
 	["Cybernetic Empire"] = "Imperio cibernético",
 	["DAMMIT, ROOKIE! GET OFF MY HEAD!"] = "¡MALDITA SEA, RECLUTA! ¡FUERA DE MI CABEZA!",
 	["DAMMIT, ROOKIE!"] = "¡MALDITA SEA, RECLUTA!",

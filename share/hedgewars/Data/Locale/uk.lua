@@ -26,7 +26,6 @@ locale = {
         ["Congratulations! You've eliminated all targets|within the allowed time frame."] = "Вітаємо! Ви знищили всі цілі|в межах дозволеного часу.", --Bazooka, Shotgun, SniperRifle
         ["Congratulations!"] = "Вітаємо!",
         ["Control pillars to score points."] = "Контрольюй стовпи щоб набрати очки.",
-        ["CTF_BLIZZARD"] = "ЗАХОПЛЕННЯ ПРАПОРА - ОПЕРАЦІЯ ХУРТОВИНА",
         ["Cybernetic Empire"] = "Кібернетична Імперія",
         ["DAMMIT, ROOKIE! GET OFF MY HEAD!"] = "ЧОРТ ЗАБИРАЙ, САЛАГА! ЗЛІЗЬ З МОЄЇ ГОЛОВИ!",
         ["DAMMIT, ROOKIE!"] = "ЧОРТ ЗАБИРАЙ, САЛАГА!",
