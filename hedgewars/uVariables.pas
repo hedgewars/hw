@@ -778,7 +778,7 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -801,7 +801,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 3;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
                 Count: 5;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -966,7 +966,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse or ammoprop_SetBounce;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1164,7 +1164,8 @@ const
                             ammoprop_NeedTarget or
                             ammoprop_AttackingPut or
                             ammoprop_DontHold or
-                            ammoprop_NotBorder;
+                            ammoprop_NotBorder or
+                            ammoprop_SetBounce;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1849,7 +1850,7 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
