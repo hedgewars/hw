@@ -9,7 +9,7 @@ function onGameInit()
 end
 
 --function onGameStart()
---	ShowMission(loc("NO JUMPING"), loc("- Jumping is disabled"), loc("Good luck out there!"), 0, 0)
+--	ShowMission(LOC_NOT("NO JUMPING"), LOC_NOT("- Jumping is disabled"), LOC_NOT("Good luck out there!"), 0, 0)
 --end
 
 function onNewTurn()

@@ -43,7 +43,7 @@ end
 
 
 function onGameStart()
-	ShowMission(loc("TUMBLER"), "a Hedgewars mini-game", "- Use the arrow keys to move|- Use [enter] and [backspace] to fire", 4, 4000)
+	ShowMission("TUMBLER", "a Hedgewars mini-game", "- Use the arrow keys to move|- Use [enter] and [backspace] to fire", 4, 4000)
 end
 
 function onHJump()
@@ -164,7 +164,7 @@ function onGameTick()
 
 	if (CurrentHedgehog ~= nil) and (tumbleStarted == true) then
 
-		--AddCaption(loc("Speed: ") .. GetSpeed())
+		--AddCaption(LOC_NOT("Speed: ") .. GetSpeed())
 
 		-- Calculate and display turn time
 		TimeLeftCounter = TimeLeftCounter + 1
@@ -181,10 +181,10 @@ function onGameTick()
 
 		--if TimeLeft >= 0 then
 		--	--TurnTimeLeft = TimeLeft
-		--	AddCaption(loc("Time Left: ") .. TimeLeft)
+		--	AddCaption(LOC_NOT("Time Left: ") .. TimeLeft)
 		--end
 
-		--ShowMission(loc("TUMBLER"), loc("v0.2"), loc("Speed: ") .. GetSpeed() .. "|" .. loc("Ammo: ") .. shotsLeft, 4, 0)
+		--ShowMission("TUMBLER", "v0.2", LOC_NOT("Speed: ") .. GetSpeed() .. "|" .. LOC_NOT("Ammo: ") .. shotsLeft, 4, 0)
 
 		if TimeLeft == 0 then
 			stopMovement = true

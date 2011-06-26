@@ -114,50 +114,50 @@ capgrpGameState
 -----------------
 capgrpAmmostate
 -----------------
-AddCaption( chainLength .. loc("-chain! +") .. chainLength*2 .. loc(" points!"),0xffba00ff,capgrpAmmostate)
-AddCaption(loc("Multi-shot! +5 points!"),0xffba00ff,capgrpAmmostate) 
+AddCaption( chainLength .. LOC_NOT("-chain! +") .. chainLength*2 .. LOC_NOT(" points!"),0xffba00ff,capgrpAmmostate)
+AddCaption(LOC_NOT("Multi-shot! +5 points!"),0xffba00ff,capgrpAmmostate) 
 
 -----------------
 capgrpAmmoinfo
 -----------------
-AddCaption(loc("Shield Miser! +20 points!"),0xffba00ff,capgrpAmmoinfo)
-AddCaption(loc("Shield Master! +10 points!"),0xffba00ff,capgrpAmmoinfo)
+AddCaption(LOC_NOT("Shield Miser! +20 points!"),0xffba00ff,capgrpAmmoinfo)
+AddCaption(LOC_NOT("Shield Master! +10 points!"),0xffba00ff,capgrpAmmoinfo)
 
 -----------------
 capgrpVolume
 -----------------
-AddCaption(loc("Boom! +25 points!"),0xffba00ff,capgrpVolume)
-AddCaption(loc("BOOM! +50 points!"),0xffba00ff,capgrpVolume)
-AddCaption(loc("BOOM! BOOM! BOOM! +100 points!"),0xffba00ff,capgrpVolume)
-AddCaption(loc("Accuracy Bonus! +15 points!"),0xffba00ff,capgrpVolume)
+AddCaption(LOC_NOT("Boom! +25 points!"),0xffba00ff,capgrpVolume)
+AddCaption(LOC_NOT("BOOM! +50 points!"),0xffba00ff,capgrpVolume)
+AddCaption(LOC_NOT("BOOM! BOOM! BOOM! +100 points!"),0xffba00ff,capgrpVolume)
+AddCaption(LOC_NOT("Accuracy Bonus! +15 points!"),0xffba00ff,capgrpVolume)
 
 -----------------
 capgrpMessage 
 -----------------
-AddCaption(loc("Ammo Depleted!"),0xff0000ff,capgrpMessage)
-AddCaption(loc("Ammo: ") .. primShotsLeft)
+AddCaption(LOC_NOT("Ammo Depleted!"),0xff0000ff,capgrpMessage)
+AddCaption(LOC_NOT("Ammo: ") .. primShotsLeft)
 AddCaption("Shield Depleted",0xff0000ff,capgrpMessage)
-AddCaption( loc("Shield ON:") .. " " .. shieldHealth - 80 .. " " .. loc("Power Remaining") )
-AddCaption(loc("Shield OFF:") .. " " .. shieldHealth - 80 .. " " .. loc("Power Remaining") )
+AddCaption( LOC_NOT("Shield ON:") .. " " .. shieldHealth - 80 .. " " .. LOC_NOT("Power Remaining") )
+AddCaption(LOC_NOT("Shield OFF:") .. " " .. shieldHealth - 80 .. " " .. LOC_NOT("Power Remaining") )
 
-AddCaption(loc("Time Extended!") .. "+" .. 4 .. loc("s"), 0xff0000ff,capgrpMessage )
-AddCaption("+" .. 3 .. " " .. loc("Ammo"), 0x00ff00ff,capgrpMessage)
-AddCaption(loc("Shield boosted! +30 power"), 0xff00ffff,capgrpMessage)
-AddCaption(loc("Shield is fully recharged!"), 0xffae00ff,capgrpMessage)
-AddCaption(loc("Boss defeated! +50 points!"), 0x0050ffff,capgrpMessage)
+AddCaption(LOC_NOT("Time Extended!") .. "+" .. 4 .. LOC_NOT("s"), 0xff0000ff,capgrpMessage )
+AddCaption("+" .. 3 .. " " .. LOC_NOT("Ammo"), 0x00ff00ff,capgrpMessage)
+AddCaption(LOC_NOT("Shield boosted! +30 power"), 0xff00ffff,capgrpMessage)
+AddCaption(LOC_NOT("Shield is fully recharged!"), 0xffae00ff,capgrpMessage)
+AddCaption(LOC_NOT("Boss defeated! +50 points!"), 0x0050ffff,capgrpMessage)
 
-AddCaption(loc("GOTCHA!"))
-AddCaption(loc("Kamikaze Expert! +15 points!"),0xffba00ff,capgrpMessage)
-AddCaption(loc("Depleted Kamikaze! +5 points!"),0xffba00ff,capgrpMessage)
-AddCaption(loc("Timed Kamikaze! +10 points!"),0xffba00ff,capgrpMessage)
+AddCaption(LOC_NOT("GOTCHA!"))
+AddCaption(LOC_NOT("Kamikaze Expert! +15 points!"),0xffba00ff,capgrpMessage)
+AddCaption(LOC_NOT("Depleted Kamikaze! +5 points!"),0xffba00ff,capgrpMessage)
+AddCaption(LOC_NOT("Timed Kamikaze! +10 points!"),0xffba00ff,capgrpMessage)
 
 -----------------
 capgrpMessage2 
 -----------------
-AddCaption(loc("Drone Hunter! +10 points!"),0xffba00ff,capgrpMessage2)
-AddCaption(loc("Ammo Maniac! +5 points!"),0xffba00ff,capgrpMessage2)
-AddCaption(loc("Shield Seeker! +10 points!"),0xffba00ff,capgrpMessage2)
-AddCaption(loc("Boss Slayer! +25 points!"),0xffba00ff,capgrpMessage2)
+AddCaption(LOC_NOT("Drone Hunter! +10 points!"),0xffba00ff,capgrpMessage2)
+AddCaption(LOC_NOT("Ammo Maniac! +5 points!"),0xffba00ff,capgrpMessage2)
+AddCaption(LOC_NOT("Shield Seeker! +10 points!"),0xffba00ff,capgrpMessage2)
+AddCaption(LOC_NOT("Boss Slayer! +25 points!"),0xffba00ff,capgrpMessage2)
 ]]
 
 ----------------------------------
@@ -366,13 +366,13 @@ function AwardKills(t)
 			teamCircsKilled[i] = teamCircsKilled[i] + 1
 
 			if teamCircsKilled[i] == 10 then
-				AddCaption(loc("Boom! +25 points!"),0xffba00ff,capgrpVolume)
+				AddCaption(loc("Boom!") .. " +25 " .. loc("points").."!",0xffba00ff,capgrpVolume)
 				AwardPoints(25)
 			elseif teamCircsKilled[i] == 25 then
-				AddCaption(loc("BOOM! +50 points!"),0xffba00ff,capgrpVolume)
+				AddCaption(loc("BOOM!") .. " +50 " .. loc("points") .. "!",0xffba00ff,capgrpVolume)
 				AwardPoints(50)
 			elseif teamCircsKilled[i] == 50 then
-				AddCaption(loc("BOOM! BOOM! BOOM! +100 points!"),0xffba00ff,capgrpVolume)
+				AddCaption(loc("BOOM!") .. loc("BOOM!") .. loc("BOOM!") .. " +100 " .. loc("points") .. "!",0xffba00ff,capgrpVolume)
 				AwardPoints(100)
 			end
 
@@ -431,8 +431,8 @@ function CommentOnScore()
 	for i = 0,(TeamsCount-1) do
 		if sdName[i] ~= " " then
 			teamComment[i] = sdName[i] .. " |" ..
-			loc("SCORE: ") .. sdScore[i] .. loc (" points|") ..
-			loc("KILLS: ") .. sdKills[i] .. loc (" invaders destroyed|") ..
+			loc("SCORE") .. ": " .. sdScore[i] .. " " .. loc("points") .. "|" ..
+			loc("KILLS") .. ": " .. sdKills[i] .. " " .. loc("invaders destroyed") .. "|" ..
 			" " .. "|"
 		elseif sdName[i] == " " then
 			teamComment[i] = "|"
@@ -444,7 +444,7 @@ function CommentOnScore()
 		entireC = entireC .. teamComment[i]
 	end
 
-	ShowMission(loc("SPACE INVASION"), loc("STATUS UPDATE"), loc("Rounds Complete: ") .. roundNumber .. "/" .. roundLimit .. "|" .. " " .. "|" .. loc("Team Scores: ") .. "|" ..entireC, 4, 1)
+	ShowMission("SPACE INVASION", loc("STATUS UPDATE"), loc("Rounds Complete") .. ": " .. roundNumber .. "/" .. roundLimit .. "| " .. "|" .. loc("Team Scores") .. ": |" ..entireC, 4, 1)
 
 end
 
@@ -595,7 +595,7 @@ function onPrecise()
 			PlaySound(sndSuddenDeath)
 			AddCaption(loc("Ammo Depleted!"),0xff0000ff,capgrpMessage)
 		else
-			AddCaption(loc("Ammo: ") .. primShotsLeft)
+			AddCaption(loc("Ammo") .. ": " .. primShotsLeft)
 		end
 
 		CopyPV(CurrentHedgehog, morte) -- new addition
@@ -700,26 +700,26 @@ function onGameStart()
 	end
 
 	ShowMission	(
-				loc("SPACE INVASION"),
+				"SPACE INVASION",
 				loc("a Hedgewars mini-game"),
 
 				loc("Destroy invaders to score points.") .. "|" ..
 				" " .. "|" ..
 
-				loc("Round Limit:") .. " " .. roundLimit .. "|" ..
-				loc("Turn Time:") .. " " .. (TurnTime/1000) .. loc("s") .. "|" ..
+				loc("Round Limit") .. ": " .. roundLimit .. "|" ..
+				loc("Turn Time") .. ": " .. (TurnTime/1000) .. loc("s") .. "|" ..
 				" " .. "|" ..
 
 				loc("Movement: [Up], [Down], [Left], [Right]") .. "|" ..
-				loc("Fire:") .. " " .. loc("[Left Shift]") .. "|" ..
-				loc("Toggle Shield:") .. " " .. loc("[Enter]") .. "|" ..
+				loc("Fire") .. ": " .. loc("[Left Shift]") .. "|" ..
+				loc("Toggle Shield") .. ": " .. loc("[Enter]") .. "|" ..
 
 				--" " .. "|" ..
-				--loc("Invaders List: ") .. "|" ..
-				--loc("Blue Jabberwock: (50 points)") .. "|" ..
-				--loc("Red Warbler: (10 points)") .. "|" ..
-				--loc("Orange Gob: (5 points)") .. "|" ..
-				--loc("Green Wrangler: (3 points)") .. "|" ..
+				--LOC_NOT("Invaders List: ") .. "|" ..
+				--LOC_NOT("Blue Jabberwock: (50 points)") .. "|" ..
+				--LOC_NOT("Red Warbler: (10 points)") .. "|" ..
+				--LOC_NOT("Orange Gob: (5 points)") .. "|" ..
+				--LOC_NOT("Green Wrangler: (3 points)") .. "|" ..
 
 
 				"", 4, 4000
@@ -845,7 +845,7 @@ function onGameTick()
 	-- start the player tumbling with a boom once their turn has actually begun
 	if (tumbleStarted == false) and (gameOver == false) then
 		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) then
-			--AddCaption(loc("Good to go!"))
+			--AddCaption(LOC_NOT("Good to go!"))
 			tumbleStarted = true
 			TimeLeft = (TurnTime/1000)	--45
 			FadeAlpha = 0
@@ -867,7 +867,7 @@ function onGameTick()
 			TimeLeft = TimeLeft - 1
 
 			if TimeLeft >= 0 then
-				--AddCaption(loc("Time Left: ") .. TimeLeft)
+				--AddCaption(LOC_NOT("Time Left: ") .. TimeLeft)
 			end
 
 		end
@@ -896,12 +896,12 @@ function onGameTick()
 				--nw WriteLnToConsole("Player is out of luck")
 
 				if shieldMiser == true then
-					AddCaption(loc("Shield Miser! +20 points!"),0xffba00ff,capgrpAmmoinfo)
+					AddCaption(loc("Shield Miser!") .. " +20 " .. loc("points") .. "!",0xffba00ff,capgrpAmmoinfo)
 					AwardPoints(20)
 				end
 
 				if ((shotsHit / shotsFired * 100) >= 80) and (shotsFired > 4) then
-					AddCaption(loc("Accuracy Bonus! +15 points!"),0xffba00ff,capgrpVolume)
+					AddCaption(loc("Accuracy Bonus!") .. " +15 " .. loc("points") .. "!",0xffba00ff,capgrpVolume)
 					AwardPoints(15)
 				end
 
@@ -1213,7 +1213,7 @@ function CircleDamaged(i)
 			RK = RK + 1
 			if RK == 5 then
 				RK = 0
-				AddCaption(loc("Drone Hunter! +10 points!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Drone Hunter!") .. " +10 " .. loc("points") .. "!",0xffba00ff,capgrpMessage2)
 				AwardPoints(10)
 			end
 
@@ -1227,7 +1227,7 @@ function CircleDamaged(i)
 			GK = GK + 1
 			if GK == 3 then
 				GK = 0
-				AddCaption(loc("Ammo Maniac! +5 points!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Ammo Maniac!") .. " +5 " .. loc("points") .. "!",0xffba00ff,capgrpMessage2)
 				AwardPoints(5)
 			end
 
@@ -1256,13 +1256,13 @@ function CircleDamaged(i)
 			OK = OK + 1
 			if OK == 3 then
 				OK = 0
-				AddCaption(loc("Shield Seeker! + 10 points!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Shield Seeker!") .. " + 10 " .. loc("points") .. "!",0xffba00ff,capgrpMessage2)
 				AwardPoints(10)
 			end
 
 		elseif (vType[i] == "blueboss") then
 			PlaySound(sndHellishImpact3)
-			AddCaption(loc("Boss defeated! +50 points!"), 0x0050ffff,capgrpMessage)
+			AddCaption(loc("Boss defeated!") .. " +50 " .. loc("points") .. "!", 0x0050ffff,capgrpMessage)
 
 			morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
 			SetHealth(morte, 0)
@@ -1270,7 +1270,7 @@ function CircleDamaged(i)
 			BK = BK + 1
 			if BK == 2 then
 				BK = 0
-				AddCaption(loc("Boss Slayer! +25 points!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Boss Slayer!") .. " +25 " .. loc("points") .. "!"),0xffba00ff,capgrpMessage2)
 				AwardPoints(25)
 			end
 
@@ -1284,7 +1284,7 @@ function CircleDamaged(i)
 		chainCounter = 3000
 		chainLength = chainLength + 1
 		if chainLength > 1 then
-			AddCaption( chainLength .. loc("-Hit Combo! +") .. chainLength*2 .. loc(" points!"),0xffba00ff,capgrpAmmostate)
+			AddCaption( chainLength .. "-" .. loc("Hit Combo!") .. " +"  chainLength*2 .. " " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate)
 			AwardPoints(chainLength*2)
 		end
 
@@ -1487,7 +1487,7 @@ function CheckVarious(gear)
 
 					circsHit = circsHit + 1
 					if circsHit > 1 then
-						AddCaption(loc("Multi-shot! +5 points!"),0xffba00ff,capgrpAmmostate) 
+						AddCaption(loc("Multi-shot!") .. " +5 " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate) 
 					end
 
 					shotsHit = shotsHit + 1
@@ -1515,7 +1515,7 @@ function CheckVarious(gear)
 				SK = SK + 1
 				if SK == 5 then
 					SK = 0
-					AddCaption(loc("Shield Master! +10 points!"),0xffba00ff,capgrpAmmoinfo)
+					AddCaption(loc("Shield Master!") .. " +10 " .. loc("points") .. "!",0xffba00ff,capgrpAmmoinfo)
 					AwardPoints(10)
 				end
 			end
@@ -1586,13 +1586,13 @@ function CheckDistances()
 
 				if ss == "fatal" then
 					if (primShotsLeft == 0) and (TimeLeft <= 9) then
-						AddCaption(loc("Kamikaze Expert! +15 points!"),0xffba00ff,capgrpMessage)
+						AddCaption(loc("Kamikaze Expert!") .. " +15 " .. loc("points") .. "!",0xffba00ff,capgrpMessage)
 						AwardPoints(15)
 					elseif (primShotsLeft == 0) then
-						AddCaption(loc("Depleted Kamikaze! +5 points!"),0xffba00ff,capgrpMessage)
+						AddCaption(loc("Depleted Kamikaze!") .. " +5 " .. loc("points") .. "!",0xffba00ff,capgrpMessage)
 						AwardPoints(5)
 					elseif TimeLeft <= 9 then
-						AddCaption(loc("Timed Kamikaze! +10 points!"),0xffba00ff,capgrpMessage)
+						AddCaption(loc("Timed Kamikaze!") .. " +10 " .. loc("points") .. "!",0xffba00ff,capgrpMessage)
 						AwardPoints(10)
 					end
 				end
