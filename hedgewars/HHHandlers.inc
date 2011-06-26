@@ -173,6 +173,7 @@ var xx, yy, newDx, newDy, lx, ly: hwFloat;
     altUse: boolean;
     elastic: hwFloat;
 begin
+newGear:= nil;
 bShowFinger:= false;
 CurWeapon:= GetAmmoEntry(Gear^.Hedgehog^);
 with Gear^,
@@ -376,7 +377,7 @@ with Gear^,
         // Clear FollowGear if using on a rope/parachute/saucer etc so focus stays with the hog's movement
         if altUse then FollowGear:= nil;
 
-        if ((Ammoz[newGear^.AmmoType].Ammo.Propz and ammoprop_SetBounce) <> 0) and (newGear <> nil) then
+        if (newGear <> nil) and ((Ammoz[newGear^.AmmoType].Ammo.Propz and ammoprop_SetBounce) <> 0) then
             begin
             elastic:=  int2hwfloat(CurWeapon^.Bounciness) / _1000;
 
