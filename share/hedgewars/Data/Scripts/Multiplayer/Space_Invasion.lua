@@ -1270,7 +1270,7 @@ function CircleDamaged(i)
 			BK = BK + 1
 			if BK == 2 then
 				BK = 0
-				AddCaption(loc("Boss Slayer!") .. " +25 " .. loc("points") .. "!"),0xffba00ff,capgrpMessage2)
+				AddCaption(loc("Boss Slayer!") .. " +25 " .. loc("points") .. "!",0xffba00ff,capgrpMessage2)
 				AwardPoints(25)
 			end
 
@@ -1284,7 +1284,7 @@ function CircleDamaged(i)
 		chainCounter = 3000
 		chainLength = chainLength + 1
 		if chainLength > 1 then
-			AddCaption( chainLength .. "-" .. loc("Hit Combo!") .. " +"  chainLength*2 .. " " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate)
+			AddCaption( chainLength .. "-" .. loc("Hit Combo!") .. " +" .. chainLength*2 .. " " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate)
 			AwardPoints(chainLength*2)
 		end
 
