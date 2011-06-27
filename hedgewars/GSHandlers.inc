@@ -110,17 +110,22 @@ forward;
 function CheckGearDrowning(Gear: PGear): boolean;
 var 
     skipSpeed, skipAngle, skipDecay: hwFloat;
-    i, maxDrops: LongInt;
+    i, maxDrops, X, Y: LongInt;
+    vdX, vdY: real;
     particle: PVisualGear;
     isSubmersible: boolean;
 begin
     isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);
     // probably needs tweaking. might need to be in a case statement based upon gear type
-    if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
+    Y:= hwRound(Gear^.Y);
+    if cWaterLine < Y + Gear^.Radius then
         begin
         skipSpeed := _0_25;
         skipAngle := _1_9;
         skipDecay := _0_87;
+        X:= hwRound(Gear^.X);
+        vdX:= hwFloat2Float(Gear^.dX);
+        vdY:= hwFloat2Float(Gear^.dY);
         // this could perhaps be a tiny bit higher.
         if  (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed) and
            (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)) then
@@ -157,33 +162,32 @@ begin
                         exit
                         end
                     else Gear^.doStep := @doStepDrowningGear
-            end;
-            if ((not isSubmersible) and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius)) or
-               (isSubmersible and (hwRound(Gear^.Y) < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01))) then
+                end;
+            if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
+               (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01))) then
                 // don't play splash if they are already way past the surface
                 PlaySound(sndSplash)
-        end;
+            end;
 
         if ((cReducedQuality and rqPlainSplash) = 0) and 
-           (((not isSubmersible) and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius)) or
-             (isSubmersible and (hwRound(Gear^.Y) < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01)))) then
+           (((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
+             (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01)))) then
             begin
-            AddVisualGear(hwRound(Gear^.X), cWaterLine, vgtSplash);
+            AddVisualGear(X, cWaterLine, vgtSplash);
 
-            maxDrops := (Gear^.Radius div 2) + hwRound(Gear^.dX * Gear^.Radius * 2) + hwRound(Gear^.
-                        dY * Gear^.Radius * 2);
+            maxDrops := (Gear^.Radius div 2) + round(vdX * Gear^.Radius * 2) + round(vdY * Gear^.Radius * 2);
             for i:= max(maxDrops div 3, min(32, Random(maxDrops))) downto 0 do
                 begin
-                particle := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
+                particle := AddVisualGear(X - 3 + Random(6), cWaterLine, vgtDroplet);
                 if particle <> nil then
                     begin
-                    particle^.dX := particle^.dX - hwFloat2Float(Gear^.dX) / 10;
-                    particle^.dY := particle^.dY - hwFloat2Float(Gear^.dY) / 5;
+                    particle^.dX := particle^.dX - vdX / 10;
+                    particle^.dY := particle^.dY - vdY / 5;
                     end
                 end
             end;
         if isSubmersible and (CurAmmoGear^.Pos = 0) then CurAmmoGear^.Pos := 1000
-    end
+        end
     else
         CheckGearDrowning := false;
 end;
