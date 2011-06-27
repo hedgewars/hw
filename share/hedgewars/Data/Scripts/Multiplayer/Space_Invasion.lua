@@ -707,7 +707,7 @@ function onGameStart()
 				" " .. "|" ..
 
 				loc("Round Limit") .. ": " .. roundLimit .. "|" ..
-				loc("Turn Time") .. ": " .. (TurnTime/1000) .. loc("s") .. "|" ..
+				loc("Turn Time") .. ": " .. (TurnTime/1000) .. loc("sec") .. "|" ..
 				" " .. "|" ..
 
 				loc("Movement: [Up], [Down], [Left], [Right]") .. "|" ..
@@ -1205,7 +1205,7 @@ function CircleDamaged(i)
 		if (vType[i] == "drone") then
 			PlaySound(sndHellishImpact4)
 			TimeLeft = TimeLeft + 4
-			AddCaption(loc("Time Extended!") .. "+" .. 4 .. loc("s"), 0xff0000ff,capgrpMessage )
+			AddCaption(loc("Time Extended!") .. "+" .. 4 .. loc("sec"), 0xff0000ff,capgrpMessage )
 
 			morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
 			SetHealth(morte, 0)
