@@ -4,7 +4,9 @@
 ThemesModel::ThemesModel(QStringList themes, QObject *parent) :
     QAbstractListModel(parent)
 {
+/* Not Qt 4.6 compatible - needs an IFDEF
     m_data.reserve(themes.size());
+*/
 
     foreach(QString theme, themes)
     {
