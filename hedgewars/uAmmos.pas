@@ -191,6 +191,7 @@ procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
 var ammos: TAmmoCounts;
     slot, ami: LongInt;
     hhammo: PHHAmmo;
+    CurWeapon: PAmmo;
 begin
 {$HINTS OFF}
 FillChar(ammos, sizeof(ammos), 0);
@@ -205,7 +206,17 @@ for slot:= 0 to cMaxSlotIndex do
 ammos[ammo]:= cnt;
 if ammos[ammo] > AMMO_INFINITE then ammos[ammo]:= AMMO_INFINITE;
 
-FillAmmoStore(hhammo, ammos)
+FillAmmoStore(hhammo, ammos);
+CurWeapon:= GetAmmoEntry(Hedgehog);
+with Hedgehog do
+    begin
+    with CurWeapon^ do
+        if Count = 0 then
+            begin
+            PackAmmo(Ammo, Ammoz[AmmoType].Slot);
+            CurAmmoType:= amNothing
+            end
+    end
 end;
 
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);

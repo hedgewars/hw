@@ -285,7 +285,7 @@ function FlagDeleted(gear)
 				fNeedsRespawn[bbq] = true
 				fCaptures[wtf] = fCaptures[wtf] +1					--fCaptures[wtf]
 
-				--ShowMission(loc("You have SCORED!!"), "Red Team: " .. fCaptures[0], "Blue Team: " .. fCaptures[1], -amBazooka, 0)
+				--ShowMission(LOC_NOT("You have SCORED!!"), "Red Team: " .. fCaptures[0], "Blue Team: " .. fCaptures[1], -amBazooka, 0)
 				ShowMission(loc("You have SCORED!!"), GetHogTeamName(CurrentHedgehog) .. ": " .. fCaptures[wtf], loc("Opposing Team: ") .. fCaptures[bbq], 0, 0)
 
 				PlaySound(sndVictory)
@@ -575,8 +575,7 @@ end
 
 function onGameStart()
 
-	--ShowMission(loc(caption), loc(subcaption), loc(goal), 0, 0)
-	ShowMission(loc("CTF_BLIZZARD"), "", loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
+	ShowMission("CTF_BLIZZARD", "", loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
 
 
 	-- initialize teleporters

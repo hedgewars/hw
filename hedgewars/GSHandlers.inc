@@ -102,6 +102,7 @@ begin
         gi := gi^.NextGear
         end;
 end;
+
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDrowningGear(Gear: PGear);
 forward;
@@ -109,17 +110,22 @@ forward;
 function CheckGearDrowning(Gear: PGear): boolean;
 var 
     skipSpeed, skipAngle, skipDecay: hwFloat;
-    i, maxDrops: LongInt;
+    i, maxDrops, X, Y: LongInt;
+    vdX, vdY: real;
     particle: PVisualGear;
     isSubmersible: boolean;
 begin
     isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);
     // probably needs tweaking. might need to be in a case statement based upon gear type
-    if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
+    Y:= hwRound(Gear^.Y);
+    if cWaterLine < Y + Gear^.Radius then
         begin
         skipSpeed := _0_25;
         skipAngle := _1_9;
         skipDecay := _0_87;
+        X:= hwRound(Gear^.X);
+        vdX:= hwFloat2Float(Gear^.dX);
+        vdY:= hwFloat2Float(Gear^.dY);
         // this could perhaps be a tiny bit higher.
         if  (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed) and
            (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)) then
@@ -156,33 +162,32 @@ begin
                         exit
                         end
                     else Gear^.doStep := @doStepDrowningGear
-            end;
-            if ((not isSubmersible) and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius)) or
-               (isSubmersible and (hwRound(Gear^.Y) < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01))) then
+                end;
+            if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
+               (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01))) then
                 // don't play splash if they are already way past the surface
                 PlaySound(sndSplash)
-        end;
+            end;
 
         if ((cReducedQuality and rqPlainSplash) = 0) and 
-           (((not isSubmersible) and (hwRound(Gear^.Y) < cWaterLine + 64 + Gear^.Radius)) or
-             (isSubmersible and (hwRound(Gear^.Y) < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01)))) then
+           (((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
+             (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01)))) then
             begin
-            AddVisualGear(hwRound(Gear^.X), cWaterLine, vgtSplash);
+            AddVisualGear(X, cWaterLine, vgtSplash);
 
-            maxDrops := (Gear^.Radius div 2) + hwRound(Gear^.dX * Gear^.Radius * 2) + hwRound(Gear^.
-                        dY * Gear^.Radius * 2);
+            maxDrops := (Gear^.Radius div 2) + round(vdX * Gear^.Radius * 2) + round(vdY * Gear^.Radius * 2);
             for i:= max(maxDrops div 3, min(32, Random(maxDrops))) downto 0 do
                 begin
-                particle := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
+                particle := AddVisualGear(X - 3 + Random(6), cWaterLine, vgtDroplet);
                 if particle <> nil then
                     begin
-                    particle^.dX := particle^.dX - hwFloat2Float(Gear^.dX) / 10;
-                    particle^.dY := particle^.dY - hwFloat2Float(Gear^.dY) / 5;
+                    particle^.dX := particle^.dX - vdX / 10;
+                    particle^.dY := particle^.dY - vdY / 5;
                     end
                 end
             end;
         if isSubmersible and (CurAmmoGear^.Pos = 0) then CurAmmoGear^.Pos := 1000
-    end
+        end
     else
         CheckGearDrowning := false;
 end;
@@ -235,7 +240,6 @@ begin
     end
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 procedure CalcRotationDirAngle(Gear: PGear);
 var 
@@ -477,6 +481,7 @@ begin
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEvilTrace);
 end;
 end;
+
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMolotov(Gear: PGear);
 var 
@@ -513,11 +518,7 @@ begin
     end;
 end;
 
-procedure doStepWatermelon(Gear: PGear);
-begin
-    AllInactive := false;
-    Gear^.doStep := @doStepBomb
-end;
+////////////////////////////////////////////////////////////////////////////////
 
 procedure doStepCluster(Gear: PGear);
 begin
@@ -582,6 +583,7 @@ begin
         end
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepSnowflake(Gear: PGear);
 var xx, yy, px, py: LongInt;
     move, draw, allpx, gun: Boolean;
@@ -2074,6 +2076,7 @@ begin
     end
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepShover(Gear: PGear);
 var 
     HHGear: PGear;
@@ -3308,6 +3311,7 @@ begin
     Gear^.doStep := @doStepRCPlaneWork
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepJetpackWork(Gear: PGear);
 var 
     HHGear: PGear;
@@ -3435,7 +3439,6 @@ begin
         end
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepJetpack(Gear: PGear);
 var 
     HHGear: PGear;
@@ -3471,7 +3474,6 @@ begin
     end;
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepBirdyFly(Gear: PGear);
 var 
     HHGear: PGear;
@@ -3565,7 +3567,6 @@ begin
         end
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepBirdyDescend(Gear: PGear);
 var 
     HHGear: PGear;
@@ -3607,7 +3608,6 @@ begin
     end
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepBirdy(Gear: PGear);
 var 
     HHGear: PGear;
@@ -4145,6 +4145,7 @@ begin
     newPortal^.doStep := @doStepMovingPortal;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepPiano(Gear: PGear);
 var 
     r0, r1: LongInt;
@@ -4444,6 +4445,7 @@ begin
     Gear^.doStep := @doStepFlamethrowerWork
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepLandGunWork(Gear: PGear);
 var 
     HHGear: PGear;
@@ -4519,6 +4521,7 @@ begin
     Gear^.doStep := @doStepLandGunWork
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepPoisonCloud(Gear: PGear);
 begin
     if Gear^.Timer = 0 then
@@ -4576,7 +4579,6 @@ Gear^.Timer:= 250;
 Gear^.doStep:= @doStepIdle
 end;
 
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepHammerHitWork(Gear: PGear);
 var 
     i, ei: LongInt;
@@ -4811,8 +4813,15 @@ end;
 procedure doStepStructure(Gear: PGear);
 var 
     x, y: LongInt;
-    hog: PHedgehog;
 begin
+    if (Gear^.State and gstMoving) <> 0 then
+        begin
+        AddGearCI(Gear);
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.State:= Gear^.State and not gstMoving;
+        end;
+
     if CurAmmoGear = Gear then
         begin
         if (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then 
@@ -4861,6 +4870,7 @@ begin
         end;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepTardis(Gear: PGear);
 (*var 
     i, x, y: LongInt;
@@ -4903,3 +4913,6 @@ begin
             DeleteGear(Gear)
         end
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+

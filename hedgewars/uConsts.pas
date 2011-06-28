@@ -242,6 +242,7 @@ const
     ammoprop_NotBorder    = $00000800;
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
+    ammoprop_SetBounce    = $00004000;
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;
@@ -258,6 +259,8 @@ const
     posCaseAmmo    = $00000001;
     posCaseHealth  = $00000002;
     posCaseUtility = $00000004;
+    posCaseDummy   = $00000008;
+    posCaseTrap    = $00000010;
 
     NoPointX = Low(LongInt);
     cTargetPointRef : TPoint = (X: NoPointX; Y: 0);

@@ -72,6 +72,12 @@
 01:12=Last round till Sudden Death!
 01:13=%1 rounds till Sudden Death!
 01:14=Get ready, %1!
+01:15=Slight
+01:16=Low
+01:17=Normal
+01:18=High
+01:19=Extreme
+01:20=%1 Bounce
 
 ; Event messages
 ; Hog (%1) died

@@ -480,9 +480,12 @@ end;
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 var nx, ny, dX8, dY8: hwFloat;
     i, t, tx, ty, stX, stY, ddy, ddx: Longint;
+    despeckle : Boolean;
 begin  // (-dY, dX) is (dX, dY) rotated by PI/2
 stY:= hwRound(Y);
 stX:= hwRound(X);
+
+despeckle:= HalfWidth > 1;
 
 nx:= X + dY * (HalfWidth + 8);
 ny:= Y - dX * (HalfWidth + 8);
@@ -505,10 +508,10 @@ for i:= 0 to 7 do
        ((Land[ty, tx] and lfObject) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or lfDamaged;
-            if (cReducedQuality and rqBlurryLand) = 0 then
+        if despeckle then LandDirty[ty div 32, tx div 32]:= 1;
+        if (cReducedQuality and rqBlurryLand) = 0 then
             LandPixels[ty, tx]:= cExplosionBorderColor
-            else
-            LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+        else LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
         end
     end;
     nx:= nx - dY;
@@ -531,11 +534,10 @@ for i:= -HalfWidth to HalfWidth do
        ((Land[ty, tx] and lfObject) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or lfDamaged;
-            if (cReducedQuality and rqBlurryLand) = 0 then
-        LandPixels[ty, tx]:= cExplosionBorderColor
-            else
-        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
-
+        if despeckle then LandDirty[ty div 32, tx div 32]:= 1;
+        if (cReducedQuality and rqBlurryLand) = 0 then
+            LandPixels[ty, tx]:= cExplosionBorderColor
+        else LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
         end
     end;
     X:= nx;
@@ -575,11 +577,10 @@ for i:= -HalfWidth to HalfWidth do
        ((Land[ty, tx] and lfObject) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or lfDamaged;
+        if despeckle then LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
-        LandPixels[ty, tx]:= cExplosionBorderColor
-        else
-        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
-
+            LandPixels[ty, tx]:= cExplosionBorderColor
+        else LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
         end
     end;
     nx:= nx - dY;
@@ -602,10 +603,10 @@ for i:= 0 to 7 do
        ((Land[ty, tx] and lfObject) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or lfDamaged;
+        if despeckle then LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
-        LandPixels[ty, tx]:= cExplosionBorderColor
-        else
-        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+            LandPixels[ty, tx]:= cExplosionBorderColor
+        else LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
         end
     end;
     nx:= nx - dY;
@@ -746,7 +747,7 @@ if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0
             LandPixels[yy, xx]:= 0;
 
         Land[Y, X]:= 0;
-        if not pixelsweep then exit(true);
+        exit(true);
         end;
     end;
 Despeckle:= false

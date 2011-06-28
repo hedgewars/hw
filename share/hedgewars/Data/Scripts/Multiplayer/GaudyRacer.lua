@@ -305,12 +305,12 @@ function AdjustScores()
 
 	if newScore == true then
 		if trackTime == bestTime then -- best time of the race
-			ShowMission(loc("RACER"), loc("TRACK COMPLETED"), loc("NEW RACE RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" .. loc("WINNING TIME: ") .. bestTimeComment, 0, 4000)
+			ShowMission("RACER", loc("TRACK COMPLETED"), loc("NEW RACE RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" .. loc("WINNING TIME: ") .. bestTimeComment, 0, 4000)
 		else	-- best time for the clan
-			ShowMission(loc("RACER"), loc("TRACK COMPLETED"), loc("NEW CLAN RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" .. loc("WINNING TIME: ") .. bestTimeComment, 4, 4000)
+			ShowMission("RACER", loc("TRACK COMPLETED"), loc("NEW CLAN RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" .. loc("WINNING TIME: ") .. bestTimeComment, 4, 4000)
 		end
 	else -- not any kind of new score
-		ShowMission(loc("RACER"), loc("TRACK COMPLETED"), loc("TIME: ") .. (trackTime/1000) ..loc("s") .. "|" .. loc("WINNING TIME: ") .. bestTimeComment, -amSkip, 4000)
+		ShowMission("RACER", loc("TRACK COMPLETED"), loc("TIME: ") .. (trackTime/1000) ..loc("s") .. "|" .. loc("WINNING TIME: ") .. bestTimeComment, -amSkip, 4000)
 	end
 
 end
@@ -328,7 +328,7 @@ function CheckForNewRound()
 					teamComment[i] = "|"
 				end
 		end
-		ShowMission(loc("RACER"), loc("STATUS UPDATE"), loc("Rounds Complete: ") .. roundNumber .. "/" .. roundLimit .. "|" .. " " .. "|" .. loc("Best Team Times: ") .. "|" .. teamComment[0] .. teamComment[1] .. teamComment[2] .. teamComment[3] .. teamComment[4] .. teamComment[5] .. teamComment[6] .. teamComment[7], 0, 1600)
+		ShowMission("RACER", loc("STATUS UPDATE"), loc("Rounds Complete") .. ": " .. roundNumber .. "/" .. roundLimit .. "|" .. " " .. "|" .. loc("Best Team Times: ") .. "|" .. teamComment[0] .. teamComment[1] .. teamComment[2] .. teamComment[3] .. teamComment[4] .. teamComment[5] .. teamComment[6] .. teamComment[7], 0, 1600)
 
 		-- end game if its at round limit
 		if roundNumber == roundLimit then
@@ -368,7 +368,7 @@ end
 
 function onGameStart()
 	RebuildTeamInfo()
-	ShowMission(loc("RACER"), "", "", 4, 4000)
+	ShowMission("RACER", "", "", 4, 4000)
 end
 
 function onHJump()
@@ -518,9 +518,9 @@ function onNewTurn()
 			racerActive = true
 			roundNumber = 0 -- 0
 			firstClan = GetHogClan(CurrentHedgehog)
-			ShowMission(loc("RACER"), loc("GAME BEGUN!!!"), loc("Complete the track as fast as you can!"), 2, 4000)
+			ShowMission("RACER", loc("GAME BEGUN!!!"), loc("Complete the track as fast as you can!"), 2, 4000)
 		else
-			ShowMission(loc("RACER"), loc("NOT ENOUGH WAYPOINTS"), loc("Place more waypoints using [ENTER]"), 2, 4000)
+			ShowMission("RACER", loc("NOT ENOUGH WAYPOINTS"), loc("Place more waypoints using [ENTER]"), 2, 4000)
 		end
 	end
 
@@ -559,7 +559,7 @@ function onGameTick()
 	-- has the player started his tumbling spree?
 	if (CurrentHedgehog ~= nil) and (tumbleStarted == true) then
 
-		--AddCaption(loc("Speed: ") .. GetSpeed())
+		--AddCaption(LOC_NOT("Speed: ") .. GetSpeed())
 
 		-- if the RACE has started, show tracktimes and keep tabs on waypoints
 		if (racerActive == true) and (gameBegun == true) then
@@ -601,7 +601,7 @@ function onGameTick()
 
 			if TimeLeft >= 0 then
 				--TurnTimeLeft = TimeLeft
-				--AddCaption(loc("Time Left: ") .. TimeLeft)
+				--AddCaption(LOC_NOT("Time Left: ") .. TimeLeft)
 			end
 
 		end

@@ -352,7 +352,7 @@ function onGameStart()
 		--AddCaption(zz) -- number of times it took to work
 	end
 
-	ShowMission(loc("CONTROL v0.3"), loc(""), loc("Control pillars to score points.") .. "|" .. loc("Goal:") .. " " .. pointLimit .. " " .. loc("points"), 0, 0)
+	ShowMission("CONTROL v0.3", "", loc("Control pillars to score points.") .. "|" .. loc("Goal") .. ": " .. pointLimit .. " " .. loc("points"), 0, 0)
 
 
 end
@@ -390,12 +390,12 @@ function onNewTurn()
 
 		for i = 0,5 do
 				if teamNameArr[i] ~= " " then				-- i
-					teamComment[i] = teamNameArr[i] .. ": " .. teamScore[teamClan[i]] .. loc (" points|")
+					teamComment[i] = teamNameArr[i] .. ": " .. teamScore[teamClan[i]] .. " " .. loc("points") .. "|"
 				elseif teamNameArr[i] == " " then
 					teamComment[i] = "|"
 				end
 			end
-			ShowMission(loc("CONTROL"), loc("Team Scores:"), teamComment[0] .. teamComment[1] .. teamComment[2] .. teamComment[3] .. teamComment[4] .. teamComment[5], 0, 1600)
+			ShowMission("CONTROL", loc("Team Scores") .. ":", teamComment[0] .. teamComment[1] .. teamComment[2] .. teamComment[3] .. teamComment[4] .. teamComment[5], 0, 1600)
 	
 	end
 

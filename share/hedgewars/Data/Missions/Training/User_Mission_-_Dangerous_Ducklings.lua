@@ -66,7 +66,7 @@ function onGameStart()
 	-- A negative icon parameter (-n) represents the n-th weapon icon
 	-- A positive icon paramter (n) represents the (n+1)-th mission icon
 	-- A timeframe of 0 is replaced with the default time to show.
-	ShowMission(loc("Dangerous Ducklings"), loc("by mikade"), loc("Eliminate the Blue Team"), -amRope, 1);
+	ShowMission(loc("Dangerous Ducklings"), "", loc("Eliminate the Blue Team"), -amRope, 1);
 
 end
 

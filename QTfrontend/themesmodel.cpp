@@ -4,7 +4,9 @@
 ThemesModel::ThemesModel(QStringList themes, QObject *parent) :
     QAbstractListModel(parent)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
     m_data.reserve(themes.size());
+#endif
 
     foreach(QString theme, themes)
     {
