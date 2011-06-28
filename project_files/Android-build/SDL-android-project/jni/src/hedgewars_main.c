@@ -15,7 +15,7 @@ main(int argc, char *argv[]){
 	
 
         __android_log_print(ANDROID_LOG_INFO, TAG, "HWEngine being loaded");
-	handle = dlopen("/data/data/org.hedgewars/lib/libhwengine.so", RTLD_NOW|RTLD_GLOBAL);
+	handle = dlopen("libhwengine.so", RTLD_NOW|RTLD_GLOBAL);
 	if(!handle){
 		__android_log_print(ANDROID_LOG_INFO, "foo", dlerror());
 		__android_log_print(ANDROID_LOG_INFO, "foo", "error dlopen");
