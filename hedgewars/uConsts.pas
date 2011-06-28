@@ -260,7 +260,8 @@ const
     posCaseHealth  = $00000002;
     posCaseUtility = $00000004;
     posCaseDummy   = $00000008;
-    posCaseTrap    = $00000010;
+    posCaseExplode = $00000010;
+    posCasePoison  = $00000020;
 
     NoPointX = Low(LongInt);
     cTargetPointRef : TPoint = (X: NoPointX; Y: 0);

@@ -39,7 +39,7 @@ procedure initModule;
 procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 function  SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword ): PGear;
-function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; trap: boolean ): PGear;
+function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; poison: boolean ): PGear;
 procedure ResurrectHedgehog(gear: PGear);
 procedure ProcessGears;
 procedure EndTurnCleanup;
@@ -1685,13 +1685,14 @@ begin
     SpawnCustomCrateAt := FollowGear;
 end;
 
-function SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; trap: boolean): PGear;
+function SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; poison: boolean): PGear;
 begin
     FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
     cCaseFactor := 0;
+    FollowGear^.Pos := posCaseDummy;
     
-    if trap then FollowGear^.Pos := posCaseTrap
-    else FollowGear^.Pos := posCaseDummy;
+    if explode then FollowGear^.Pos := FollowGear^.Pos + posCaseExplode;
+    if poison then FollowGear^.Pos := FollowGear^.Pos + posCasePoison;
 
     case crate of
         HealthCrate: begin

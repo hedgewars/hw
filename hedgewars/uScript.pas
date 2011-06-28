@@ -226,13 +226,13 @@ end;
 function lc_spawnfakehealthcrate(L: Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if lua_gettop(L) <> 3 then begin
+    if lua_gettop(L) <> 4 then begin
         LuaError('Lua: Wrong number of parameters passed to SpawnFakeHealthCrate!');
         lua_pushnil(L);
     end
     else begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
-            HealthCrate, lua_toboolean(L, 3));
+            HealthCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
         lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnfakehealthcrate := 1;        
@@ -241,13 +241,13 @@ end;
 function lc_spawnfakeammocrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
 begin
-    if lua_gettop(L) <> 3 then begin
+    if lua_gettop(L) <> 4 then begin
         LuaError('Lua: Wrong number of parameters passed to SpawnFakeAmmoCrate!');
         lua_pushnil(L);
     end
     else begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
-            AmmoCrate, lua_toboolean(L, 3));
+            AmmoCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
         lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnfakeammocrate := 1;
@@ -256,13 +256,13 @@ end;
 function lc_spawnfakeutilitycrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
 begin
-    if lua_gettop(L) <> 3 then begin
+    if lua_gettop(L) <> 4 then begin
         LuaError('Lua: Wrong number of parameters passed to SpawnFakeUtilityCrate!');
         lua_pushnil(L);
     end
     else begin  
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
-            UtilityCrate, lua_toboolean(L, 3));
+            UtilityCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
         lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnfakeutilitycrate := 1;

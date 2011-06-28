@@ -533,7 +533,13 @@ var s: shortstring;
 begin
 Gear^.Message:= gmDestroy;
 PlaySound(sndShotgunReload);
-if (Gear^.Pos and posCaseTrap) <> 0 then doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, HH^.Hedgehog, EXPLAutoSound)
+if (Gear^.Pos and posCaseExplode) <> 0 then
+    if (Gear^.Pos and posCasePoison) <> 0 then
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, HH^.Hedgehog, EXPLAutoSound + EXPLPoisoned)
+    else
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, HH^.Hedgehog, EXPLAutoSound)
+else if (Gear^.Pos and posCasePoison) <> 0 then
+    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, HH^.Hedgehog, EXPLAutoSound + EXPLPoisoned + EXPLNoDamage)
 else
 case Gear^.Pos of
        posCaseUtility,
