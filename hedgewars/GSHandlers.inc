@@ -625,7 +625,7 @@ else if GameTicks and $7 = 0 then
             end;
     // move back to cloud layer
         if yy > cWaterLine then move:= true
-        else if ((yy and LAND_HEIGHT_MASK) <> 0) or ((xx and LAND_WIDTH_MASK) <> 0) then move:=true
+        else if ((yy and LAND_HEIGHT_MASK) <> 0) or (xx > LAND_WIDTH + 512) or (xx < -512) then move:=true
         // Solid pixel encountered
         else if (Land[yy, xx] <> 0) then
             begin
@@ -4534,7 +4534,7 @@ begin
     Gear^.Y:= Gear^.Y + Gear^.dY;
     Gear^.dX := Gear^.dX + cWindSpeed / 4;
     Gear^.dY := Gear^.dY + cGravity / 100;
-    if (GameTicks mod 250) = 0 then
+    if (GameTicks and $FF) = 0 then
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLDontDraw or EXPLNoGfx or EXPLNoDamage or EXPLDoNotTouchAny or EXPLPoisoned);
     AllInactive:= false;
 end;
