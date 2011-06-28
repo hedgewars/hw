@@ -215,9 +215,14 @@ var p: TPathType;
 begin
 {$IFDEF HWLIBRARY}
     cBits:= 32;
-    cFullScreen:= false;
     cTimerInterval:= 8;
-    PathPrefix:= '/sdcard/Data';
+{$IFDEF ANDROID}
+    PathPrefix:= gameArgs[11];
+    cFullScreen:= true;
+{$ELSE}
+    PathPrefix:= 'Data';
+    cFullScreen:= false;
+{$ENDIF}
     UserPathPrefix:= '.';
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     val(gameArgs[0], ipcPort);
