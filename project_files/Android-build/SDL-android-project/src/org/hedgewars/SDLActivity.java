@@ -50,7 +50,7 @@ public class SDLActivity extends Activity {
 		System.loadLibrary("SDL_net");
 		System.loadLibrary("SDL_mixer");
 		System.loadLibrary("SDL_ttf");
-
+		System.loadLibrary("hwengine");
 		System.loadLibrary("main");
 	}
 
@@ -237,7 +237,7 @@ class SDLMain implements Runnable {
 	public void run() {
 		// Runs SDL_main()
 		
-		SDLActivity.nativeInit(new String[]{ "0", String.valueOf(surfaceWidth), String.valueOf(surfaceHeight), "0", "null", "xeli", "1", "1", "1", "0", "/sdcard/bla.hwd"});
+		SDLActivity.nativeInit(new String[]{ "0", String.valueOf(surfaceWidth), String.valueOf(surfaceHeight), "0", "null", "xeli", "1", "1", "1", "0", "/sdcard/bla.hwd", "/sdcard/Data"});
 
 		//Log.v("SDL", "SDL thread terminated");
 	}
