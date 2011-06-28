@@ -161,7 +161,6 @@ set(hwfr_moc_hdrs
     pagedrawmap.h
     pagecampaign.h
     pagenetgame.h
-    pageeditteam.h
     pageroomslist.h
     pagegamestats.h
     pageadmin.h
