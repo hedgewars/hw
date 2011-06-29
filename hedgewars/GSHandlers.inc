@@ -627,7 +627,7 @@ else if GameTicks and $7 = 0 then
         if yy > cWaterLine then move:= true
         else if ((yy and LAND_HEIGHT_MASK) <> 0) or (xx > LAND_WIDTH + 512) or (xx < -512) then move:=true
         // Solid pixel encountered
-        else if (Land[yy, xx] <> 0) then
+        else if ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
             begin
             // If there's room below keep falling
             if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (Land[yy-1, xx] = 0) then
