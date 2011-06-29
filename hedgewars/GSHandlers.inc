@@ -605,7 +605,7 @@ else if GameTicks and $7 = 0 then
     begin
     with Gear^ do
         begin
-        X:= X + cWindSpeed * 1600 + dX;
+        X:= X + cWindSpeed * 3200 + dX;
         Y:= Y + dY + cGravity * vobFallSpeed * 8;  // using same value as flakes to try and get similar results
         xx:= hwRound(X);
         yy:= hwRound(Y);
