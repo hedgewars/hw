@@ -123,13 +123,13 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         if ((GameFlags and gfPlaceHog) <> 0) and
             (a <> amTeleport) and (a <> amSkip) and
             (Ammoz[a].SkipTurns < 10000) then inc(Ammoz[a].SkipTurns,10000);
-	if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then ammos[a]:= AMMO_INFINITE
+    if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then ammos[a]:= AMMO_INFINITE
         end 
     else ammos[a]:= AMMO_INFINITE;
     if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
-    	InitialCounts[Pred(StoreCnt)][a]:= cnt
+        InitialCounts[Pred(StoreCnt)][a]:= cnt
     else
-    	InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
+        InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
     end;
 FillAmmoStore(StoresList[Pred(StoreCnt)], ammos)
 end;
@@ -208,15 +208,12 @@ if ammos[ammo] > AMMO_INFINITE then ammos[ammo]:= AMMO_INFINITE;
 
 FillAmmoStore(hhammo, ammos);
 CurWeapon:= GetAmmoEntry(Hedgehog);
-with Hedgehog do
-    begin
-    with CurWeapon^ do
+with Hedgehog, CurWeapon^ do
         if Count = 0 then
             begin
             PackAmmo(Ammo, Ammoz[AmmoType].Slot);
             CurAmmoType:= amNothing
             end
-    end
 end;
 
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
