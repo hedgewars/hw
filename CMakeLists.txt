@@ -185,6 +185,9 @@ endif(WITH_SERVER)
 add_subdirectory(misc/liblua)
 add_subdirectory(hedgewars)
 
+#Xeli: Should if/endif this one too?
+add_subdirectory(project_files/Android-build)
+
 if(NOT BUILD_ENGINE_LIBRARY)
 	add_subdirectory(bin)
 	add_subdirectory(QTfrontend)

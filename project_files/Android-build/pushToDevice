@@ -1,5 +1,0 @@
-#!/bin/bash
-
-adb push ./out/libhwengine.so /sdcard/libhwengine.so
-adb shell "su -c \"cat /sdcard/libhwengine.so > /data/data/org.hedgewars/lib/libhwengine.so \""
-

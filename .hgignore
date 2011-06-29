@@ -48,4 +48,4 @@ glob:project_files/Android-build/SDL-android-project/libs
 glob:project_files/Android-build/SDL-android-project/bin
 glob:project_files/Android-build/SDL-android-project/gen
 glob:project_files/Android-build/out
-glob:project_files/Android-build/DataPackage
+glob:project_files/Android-build/DataPackage/assets/Data/*

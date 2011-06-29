@@ -1,24 +1,22 @@
-#! /bin/bash
+#! /bin/sh
 
-#USER DEFINES
-ANDROID_NDK=/home/richard/SoftDev/android/android-ndk-r5b
-
-#END USER DEFINES
 
 cd SDL-android-project
-$ANDROID_NDK/ndk-build
+${ANDROID_NDK}/ndk-build
 if [ $? -ne 0 ] 
 then 
-  echo "Failed to execute $ANDROID_NDK/ndk-build"
+  echo "Failed to execute ${ANDROID_NDK}/ndk-build"
   exit 1
 fi
+
 cd ..
 make -f Makefile.android
 if [ $? -ne 0 ] 
 then 
-  echo "Failed to execute make -f Makefile.android"
+  echo "Failed to execute make"
   exit 1
 fi
+
 cd SDL-android-project
 ant install
 if [ $? -ne 0 ] 
