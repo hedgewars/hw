@@ -2565,7 +2565,6 @@ begin
         HHGear := Gear^.Hedgehog^.Gear;
         Msg := Gear^.Message and not gmSwitch;
         DeleteGear(Gear);
-        OnUsedAmmo(HHGear^.Hedgehog^);
         ApplyAmmoChanges(HHGear^.Hedgehog^);
 
         HHGear := CurrentHedgehog^.Gear;
@@ -2614,6 +2613,7 @@ begin
     Gear^.doStep := @doStepSwitcherWork;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    OnUsedAmmo(HHGear^.Hedgehog^);
     with HHGear^ do
     begin
         State := State and not gstAttacking;
