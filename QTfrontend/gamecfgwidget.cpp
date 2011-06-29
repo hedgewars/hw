@@ -229,6 +229,20 @@ QByteArray GameCFGWidget::getFullConfig() const
     QList<QByteArray> bcfg;
     int mapgen = pMapContainer->get_mapgen();
 
+    QString currentMap = pMapContainer->getCurrentMap();
+    if (currentMap.size() > 0)
+    {
+        bcfg << QString("emap " + currentMap).toUtf8();
+        if(pMapContainer->getCurrentIsMission())
+            bcfg << QString("escript Maps/%1/map.lua").arg(currentMap).toUtf8();
+    }
+    bcfg << QString("etheme " + pMapContainer->getCurrentTheme()).toUtf8();
+
+    if (Scripts->currentIndex() > 0)
+    {
+        bcfg << QString("escript Scripts/Multiplayer/%1.lua").arg(Scripts->itemData(Scripts->currentIndex()).toList()[0].toString()).toUtf8();
+    }
+
     bcfg << QString("eseed " + pMapContainer->getCurrentSeed()).toUtf8();
     bcfg << QString("e$gmflags %1").arg(getGameFlags()).toUtf8();
     bcfg << QString("e$damagepct %1").arg(schemeData(25).toInt()).toUtf8();
@@ -268,20 +282,6 @@ QByteArray GameCFGWidget::getFullConfig() const
             break;
         }
         default: ;
-    }
-
-    QString currentMap = pMapContainer->getCurrentMap();
-    if (currentMap.size() > 0)
-    {
-        bcfg << QString("emap " + currentMap).toUtf8();
-        if(pMapContainer->getCurrentIsMission())
-            bcfg << QString("escript Maps/%1/map.lua").arg(currentMap).toUtf8();
-    }
-    bcfg << QString("etheme " + pMapContainer->getCurrentTheme()).toUtf8();
-
-    if (Scripts->currentIndex() > 0)
-    {
-        bcfg << QString("escript Scripts/Multiplayer/%1.lua").arg(Scripts->itemData(Scripts->currentIndex()).toList()[0].toString()).toUtf8();
     }
 
     QByteArray result;

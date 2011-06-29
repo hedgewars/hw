@@ -43,6 +43,7 @@ function ScriptCall(fname : shortstring; par1, par2: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 function ScriptExists(fname : shortstring) : boolean;
+function ParseCommandOverride(key, value : shortstring) : shortstring;
 
 procedure initModule;
 procedure freeModule;
@@ -1588,6 +1589,25 @@ if lua_pcall(luaState, 0, 0, 0) <> 0 then
 GetGlobals;
 end;
 
+function ParseCommandOverride(key, value : shortstring) : shortstring;
+begin
+ParseCommandOverride:= value;
+if not ScriptExists('ParseCommandOverride') then exit;
+lua_getglobal(luaState, Str2PChar('ParseCommandOverride'));
+lua_pushstring(luaState, Str2PChar(key));
+lua_pushstring(luaState, Str2PChar(value));
+if lua_pcall(luaState, 2, 1, 0) <> 0 then
+    begin
+    LuaError('Lua: Error while calling ParseCommandOverride: ' + lua_tostring(luaState, -1));
+    lua_pop(luaState, 1)
+    end
+else
+    begin
+    ParseCommandOverride:= lua_tostring(luaState, -1);
+    lua_pop(luaState, 1)
+    end;
+end;
+
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
 begin
 ScriptCall:= ScriptCall(fname, par1, 0, 0, 0)
@@ -1669,14 +1689,23 @@ ScriptAmmoReinforcement[ord(ammo)]:= inttostr(reinforcement)[1];
 end;
 
 procedure ScriptApplyAmmoStore;
-var i : LongInt;
+var i, j : LongInt;
 begin
 SetAmmoLoadout(ScriptAmmoLoadout);
 SetAmmoProbability(ScriptAmmoProbability);
 SetAmmoDelay(ScriptAmmoDelay);
 SetAmmoReinforcement(ScriptAmmoReinforcement);
-for i:= 0 to Pred(TeamsCount) do
-    AddAmmoStore;
+
+if (GameFlags and gfSharedAmmo) <> 0 then
+    for i:= 0 to Pred(ClansCount) do
+        AddAmmoStore
+else if (GameFlags and gfPerHogAmmo) <> 0 then
+    for i:= 0 to Pred(TeamsCount) do
+        for j:= 0 to Pred(TeamsArray[i]^.HedgehogsNumber) do
+            AddAmmoStore
+else 
+    for i:= 0 to Pred(TeamsCount) do
+        AddAmmoStore
 end;
 
 procedure initModule;
