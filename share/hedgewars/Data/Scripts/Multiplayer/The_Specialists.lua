@@ -1,5 +1,5 @@
 ----------------------------------
--- THE SPECIALISTS MODE 0.2
+-- THE SPECIALISTS MODE 0.3
 -- by mikade
 ----------------------------------
 
@@ -16,13 +16,19 @@
 -- removed some deprecated variables/methods
 -- fixed lack of portal reset
 
+----------------
+-- version 0.3
+----------------
+-- added switching on start
+-- removed switch from engineer weaponset
+
 --------------------
 --TO DO
 --------------------
 
 -- add proper gameflag checking, maybe
 -- set crate drops etc.
--- assuming place hog mode + gfinfattack doesn't get the fix: somehow end turn after teleport
+-- add alternative switch
 
 loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 
@@ -31,6 +37,8 @@ local hhs = {}
 
 local currName 
 local lastName
+local started = false
+local switchStage = 0
 
 function CreateTeam()
 
@@ -155,7 +163,7 @@ function AssignAmmo()
 		AddAmmo(CurrentHedgehog, amGirder, 2)
 		AddAmmo(CurrentHedgehog, amBlowTorch, 1)
 		AddAmmo(CurrentHedgehog, amPickHammer, 1)	
-		AddAmmo(CurrentHedgehog, amSwitch, 2)	
+		--AddAmmo(CurrentHedgehog, amSwitch, 2)	
 	elseif n == "Ninja" then
 		AddAmmo(CurrentHedgehog, amRope, 100)
 		AddAmmo(CurrentHedgehog, amParachute, 100)
@@ -215,7 +223,13 @@ function onNewTurn()
 	currName = GetHogName(CurrentHedgehog)
 	lastName = GetHogName(CurrentHedgehog)
 	AssignAmmo()
-	AddAmmo(CurrentHedgehog, amSwitch, 1)
+	
+	--AddAmmo(CurrentHedgehog, amSwitch, 1)
+	---------------
+	--switch	
+	started = false
+	switchStage = 0
+	---------------
 end
 
 function onGameTick()
@@ -228,6 +242,22 @@ function onGameTick()
 			AddCaption(loc("Switched to ") .. currName .. "!")
 			AssignAmmo()		
 		end
+
+		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and (switchStage < 100) then			
+			
+			switchStage = switchStage + 1	
+			
+			if switchStage == 10 then
+				AddAmmo(CurrentHedgehog, amSwitch, 1)
+			elseif switchStage == 20 then
+				ParseCommand("setweap " .. string.char(amSwitch))
+			elseif switchStage == 30 then
+				SetGearMessage(CurrentHedgehog,gmAttack) 
+				switchStage = 110
+			end
+		end		
+		
+		--------------------------------------------------------------------------------------
 
 		lastName = currName
 
@@ -249,7 +279,7 @@ function onGearDelete(gear)
 end
 
 function onAmmoStoreInit()
-
+--
 end
 
 
