@@ -222,65 +222,15 @@ gear^.uid:= Counter;
 gear^.SoundChannel:= -1;
 gear^.ImpactSound:= sndNone;
 gear^.nImpactSounds:= 0;
-gear^.AmmoType:= amNothing;
+// Define ammo association, if any.
+gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 
 if CurrentHedgehog <> nil then
     begin
     gear^.Hedgehog:= CurrentHedgehog;
     gear^.IntersectGear:= CurrentHedgehog^.Gear
     end;
-// Define ammo association, if any.
-case Kind of
-        gtGrenade: gear^.AmmoType:= amGrenade;
-          gtShell: gear^.AmmoType:= amBazooka;
-            gtBee: gear^.AmmoType:= amBee;
-    gtShotgunShot: gear^.AmmoType:= amShotgun;
-     gtPickHammer: gear^.AmmoType:= amPickHammer;
-           gtRope: gear^.AmmoType:= amRope;
-     gtDEagleShot: gear^.AmmoType:= amDEagle;
-       gtDynamite: gear^.AmmoType:= amDynamite;
-    gtClusterBomb, 
-        gtCluster: gear^.AmmoType:= amClusterBomb;
-         gtShover: gear^.AmmoType:= amBaseballBat;  // Shover is only used for baseball bat right now
-      gtFirePunch: gear^.AmmoType:= amFirePunch;
-      gtParachute: gear^.AmmoType:= amParachute;
-        gtAirBomb: gear^.AmmoType:= amAirAttack;
-      gtBlowTorch: gear^.AmmoType:= amBlowTorch;
-         gtGirder: gear^.AmmoType:= amGirder;
-       gtTeleport: gear^.AmmoType:= amTeleport;
-       gtSwitcher: gear^.AmmoType:= amSwitch;
-         gtMortar: gear^.AmmoType:= amMortar;
-           gtWhip: gear^.AmmoType:= amWhip;
-       gtKamikaze: gear^.AmmoType:= amKamikaze;
-           gtCake: gear^.AmmoType:= amCake;
-      gtSeduction: gear^.AmmoType:= amSeduction;
-     gtWatermelon,
-     gtMelonPiece: gear^.AmmoType:= amWatermelon;
-    gtHellishBomb: gear^.AmmoType:= amHellishBomb;
-          gtDrill: gear^.AmmoType:= amDrill;
-        gtBallGun,
-           gtBall: gear^.AmmoType:= amBallgun;
-        gtRCPlane: gear^.AmmoType:= amRCPlane;
-gtSniperRifleShot: gear^.AmmoType:= amSniperRifle;
-        gtJetpack: gear^.AmmoType:= amJetpack;
-        gtMolotov: gear^.AmmoType:= amMolotov;
-          gtBirdy, 
-            gtEgg: gear^.AmmoType:= amBirdy;
-         gtPortal: gear^.AmmoType:= amPortalGun;
-          gtPiano: gear^.AmmoType:= amPiano;
-        gtGasBomb: gear^.AmmoType:= amGasBomb;
-    gtSineGunShot: gear^.AmmoType:= amSineGun;
-   gtFlamethrower: gear^.AmmoType:= amFlamethrower;
-          gtSMine: gear^.AmmoType:= amSMine;
-         gtHammer, 
-      gtHammerHit: gear^.AmmoType:= amHammer;
-    gtResurrector: gear^.AmmoType:= amResurrector;
-       gtSnowball: gear^.AmmoType:= amSnowball;
-      gtStructure: gear^.AmmoType:= amStructure;  // TODO - This will undoubtedly change once there is more than one structure
-        gtLandGun: gear^.AmmoType:= amLandGun;
-         gtTardis: gear^.AmmoType:= amTardis;
-end;
-
+    
 case Kind of
      gtGrenade,
      gtClusterBomb,
