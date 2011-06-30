@@ -108,7 +108,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepNote,
             @doStepLineTrail,
             @doStepBulletHit,
-            @doStepCircle
+            @doStepCircle,
+            @doStepSmoothWindBar
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0; Critical: Boolean = false): PVisualGear;
@@ -134,7 +135,8 @@ if ((cReducedQuality and rqAntiBoom) <> 0) and
     vgtExplosion,
     vgtSmokeTrace,
     vgtEvilTrace,
-    vgtNote]) then
+    vgtNote,
+    vgtSmoothWindBar]) then
     begin
       AddVisualGear:= nil;
       exit
@@ -327,6 +329,7 @@ vgtBigExplosion: begin
                 Frame:= 7;
                 Angle := 0;
                 end;
+vgtSmoothWindBar: Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
         end;
 
 if State <> 0 then gear^.State:= State;

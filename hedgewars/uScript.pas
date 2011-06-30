@@ -1305,7 +1305,7 @@ begin
         cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
         if cWindSpeed.isNegative then
             CWindSpeedf := -cWindSpeedf;
-        AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1)^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+        AddVisualGear(0, 0, vgtSmoothWindBar);
         end;
     lc_setwind:= 0
 end;

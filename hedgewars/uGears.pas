@@ -107,7 +107,6 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepFirePunch,
             @doStepActionTimer,
             @doStepActionTimer,
-            @doStepActionTimer,
             @doStepParachute,
             @doStepAirAttack,
             @doStepAirBomb,

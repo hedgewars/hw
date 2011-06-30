@@ -2189,7 +2189,6 @@ const
 (*          gtFlame *) , amNothing
 (*      gtFirePunch *) , amFirePunch
 (*    gtATStartGame *) , amNothing
-(* gtATSmoothWindCh *) , amNothing
 (*   gtATFinishGame *) , amNothing
 (*      gtParachute *) , amParachute
 (*      gtAirAttack *) , amAirAttack
