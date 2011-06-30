@@ -341,6 +341,7 @@ case Kind of
                     dx.QWordValue:= GetRandom(100000000);
                     dy.isNegative:= false;
                     dy.QWordValue:= GetRandom(70000000);
+                    State:= State or gstInvisible;
                     if GetRandom(2) = 0 then dx := -dx;
                     Health:= random(vobFrameTicks);
                     Timer:= random(vobFramesCount);
@@ -1175,9 +1176,12 @@ begin
 Gear:= GearsList;
 while Gear <> nil do
     begin
-    x:= hwRound(Gear^.X) + WorldDx;
-    y:= hwRound(Gear^.Y) + WorldDy;
-    RenderGear(Gear, x, y);
+    if Gear^.State and gstInvisible = 0 then
+        begin
+        x:= hwRound(Gear^.X) + WorldDx;
+        y:= hwRound(Gear^.Y) + WorldDy;
+        RenderGear(Gear, x, y);
+        end;
     Gear:= Gear^.NextGear
     end;
 end;

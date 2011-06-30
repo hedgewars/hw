@@ -209,6 +209,7 @@ const
     gstNotKickable    = $00040000;
     gstLoser          = $00080000;
     gstHHGone         = $00100000;
+    gstInvisible      = $00200000;
 
     gmLeft   = $00000001;
     gmRight  = $00000002;

@@ -605,6 +605,7 @@ else if GameTicks and $7 = 0 then
     begin
     with Gear^ do
         begin
+        State:= State and not gstInvisible;
         X:= X + cWindSpeed * 1600 + dX;
         Y:= Y + dY + cGravity * vobFallSpeed * 8;  // using same value as flakes to try and get similar results
         xx:= hwRound(X);
@@ -725,15 +726,14 @@ if draw then
         end;
 
 if move then
-    begin
     if gun then
+        DeleteGear(Gear)
+    else
         begin
-        DeleteGear(Gear);
-        exit
-        end;
-    Gear^.X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
-    Gear^.Y:= int2hwFloat(750+(GetRandom(50)-25))
-    end
+        Gear^.X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
+        Gear^.Y:= int2hwFloat(750+(GetRandom(50)-25));
+        Gear^.State:= Gear^.State or gstInvisible;
+        end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
