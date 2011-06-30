@@ -715,9 +715,7 @@ else
    yy:= Y div 2;
    end;
 pixelsweep:= ((Land[Y, X] and $FF00) = 0) and (LandPixels[yy, xx] <> 0);
-if ((((Land[Y, X] and lfDamaged) <> 0) or 
-    (((Land[Y, X] and lfBasic) <> 0) and (LandPixels[yy,xx] <> 0) and ((LandPixels[yy,xx] and AMask) shl AShift < 255)))
-    and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
+if ((Land[Y, X] > 255) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
     begin
     c:= 0;
     for i:= -1 to 1 do
@@ -740,8 +738,8 @@ if ((((Land[Y, X] and lfDamaged) <> 0) or
                     else if Land[ny, nx] > 255 then inc(c);
                     end
                 end;
-
-    if c < 4 then // 0-3 neighbours
+    if (c < 2) or
+       ((c < 4) and (((Land[Y, X] and lfDamaged) <> 0) or pixelsweep)) then
         begin
         if ((Land[Y, X] and lfBasic) <> 0) and not disableLandBack then
             LandPixels[yy, xx]:= LandBackPixel(X, Y)
