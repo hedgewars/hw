@@ -2170,6 +2170,71 @@ const
             ejectY: -3)
         );
 
+    GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (    
+(*        gtGrenade *)   amGrenade
+(*       gtHedgehog *) , amNothing
+(*          gtShell *) , amBazooka
+(*          gtGrave *) , amNothing
+(*            gtBee *) , amBee
+(*    gtShotgunShot *) , amShotgun
+(*     gtPickHammer *) , amPickHammer
+(*           gtRope *) , amRope
+(*           gtMine *) , amNothing
+(*           gtCase *) , amNothing
+(*     gtDEagleShot *) , amDEagle
+(*       gtDynamite *) , amDynamite
+(*    gtClusterBomb *) , amClusterBomb
+(*        gtCluster *) , amClusterBomb
+(*         gtShover *) , amBaseballBat  // Shover is only used for baseball bat right now
+(*          gtFlame *) , amNothing
+(*      gtFirePunch *) , amFirePunch
+(*    gtATStartGame *) , amNothing
+(*   gtATFinishGame *) , amNothing
+(*      gtParachute *) , amParachute
+(*      gtAirAttack *) , amAirAttack
+(*        gtAirBomb *) , amAirAttack
+(*      gtBlowTorch *) , amBlowTorch
+(*         gtGirder *) , amGirder
+(*       gtTeleport *) , amTeleport
+(*       gtSwitcher *) , amSwitch
+(*         gtTarget *) , amNothing
+(*         gtMortar *) , amMortar
+(*           gtWhip *) , amWhip
+(*       gtKamikaze *) , amKamikaze
+(*           gtCake *) , amCake
+(*      gtSeduction *) , amSeduction
+(*     gtWatermelon *) , amWatermelon
+(*     gtMelonPiece *) , amWatermelon
+(*    gtHellishBomb *) , amHellishBomb
+(*        gtWaterUp *) , amNothing
+(*          gtDrill *) , amDrill
+(*        gtBallGun *) , amBallgun
+(*           gtBall *) , amBallgun
+(*        gtRCPlane *) , amRCPlane
+(*gtSniperRifleShot *) , amSniperRifle
+(*        gtJetpack *) , amJetpack
+(*        gtMolotov *) , amMolotov
+(*     gtExplosives *) , amNothing
+(*          gtBirdy *) , amBirdy
+(*            gtEgg *) , amBirdy
+(*         gtPortal *) , amPortalGun
+(*          gtPiano *) , amPiano
+(*        gtGasBomb *) , amGasBomb
+(*    gtSineGunShot *) , amSineGun
+(*   gtFlamethrower *) , amFlamethrower
+(*          gtSMine *) , amSMine
+(*    gtPoisonCloud *) , amNothing
+(*         gtHammer *) , amHammer
+(*      gtHammerHit *) , amHammer
+(*    gtResurrector *) , amResurrector
+(*    gtPoisonCloud *) , amNothing
+(*       gtSnowball *) , amSnowball
+(*          gtFlake *) , amNothing
+(*      gtStructure *) , amStructure  // TODO - This will undoubtedly change once there is more than one structure
+(*        gtLandGun *) , amLandGun
+(*         gtTardis *) , amTardis
+    );
+
 var
     Land: TCollisionArray;
     LandPixels: TLandArray;

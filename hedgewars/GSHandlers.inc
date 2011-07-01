@@ -605,7 +605,8 @@ else if GameTicks and $7 = 0 then
     begin
     with Gear^ do
         begin
-        X:= X + cWindSpeed * 1600 + dX;
+        State:= State and not gstInvisible;
+        X:= X + cWindSpeed * 3200 + dX;
         Y:= Y + dY + cGravity * vobFallSpeed * 8;  // using same value as flakes to try and get similar results
         xx:= hwRound(X);
         yy:= hwRound(Y);
@@ -625,9 +626,9 @@ else if GameTicks and $7 = 0 then
             end;
     // move back to cloud layer
         if yy > cWaterLine then move:= true
-        else if ((yy and LAND_HEIGHT_MASK) <> 0) or ((xx and LAND_WIDTH_MASK) <> 0) then move:=true
+        else if ((yy and LAND_HEIGHT_MASK) <> 0) or (xx > LAND_WIDTH + 512) or (xx < -512) then move:=true
         // Solid pixel encountered
-        else if (Land[yy, xx] <> 0) then
+        else if ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
             begin
             // If there's room below keep falling
             if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (Land[yy-1, xx] = 0) then
@@ -2565,7 +2566,6 @@ begin
         HHGear := Gear^.Hedgehog^.Gear;
         Msg := Gear^.Message and not gmSwitch;
         DeleteGear(Gear);
-        OnUsedAmmo(HHGear^.Hedgehog^);
         ApplyAmmoChanges(HHGear^.Hedgehog^);
 
         HHGear := CurrentHedgehog^.Gear;
@@ -2614,6 +2614,7 @@ begin
     Gear^.doStep := @doStepSwitcherWork;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    OnUsedAmmo(HHGear^.Hedgehog^);
     with HHGear^ do
     begin
         State := State and not gstAttacking;
@@ -4534,7 +4535,7 @@ begin
     Gear^.Y:= Gear^.Y + Gear^.dY;
     Gear^.dX := Gear^.dX + cWindSpeed / 4;
     Gear^.dY := Gear^.dY + cGravity / 100;
-    if (GameTicks mod 250) = 0 then
+    if (GameTicks and $FF) = 0 then
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLDontDraw or EXPLNoGfx or EXPLNoDamage or EXPLDoNotTouchAny or EXPLPoisoned);
     AllInactive:= false;
 end;

@@ -39,7 +39,7 @@ procedure initModule;
 procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 function  SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword ): PGear;
-function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; trap: boolean ): PGear;
+function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; poison: boolean ): PGear;
 procedure ResurrectHedgehog(gear: PGear);
 procedure ProcessGears;
 procedure EndTurnCleanup;
@@ -105,7 +105,6 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepShover,
             @doStepFlame,
             @doStepFirePunch,
-            @doStepActionTimer,
             @doStepActionTimer,
             @doStepActionTimer,
             @doStepParachute,
@@ -222,65 +221,15 @@ gear^.uid:= Counter;
 gear^.SoundChannel:= -1;
 gear^.ImpactSound:= sndNone;
 gear^.nImpactSounds:= 0;
-gear^.AmmoType:= amNothing;
+// Define ammo association, if any.
+gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 
 if CurrentHedgehog <> nil then
     begin
     gear^.Hedgehog:= CurrentHedgehog;
     gear^.IntersectGear:= CurrentHedgehog^.Gear
     end;
-// Define ammo association, if any.
-case Kind of
-        gtGrenade: gear^.AmmoType:= amGrenade;
-          gtShell: gear^.AmmoType:= amBazooka;
-            gtBee: gear^.AmmoType:= amBee;
-    gtShotgunShot: gear^.AmmoType:= amShotgun;
-     gtPickHammer: gear^.AmmoType:= amPickHammer;
-           gtRope: gear^.AmmoType:= amRope;
-     gtDEagleShot: gear^.AmmoType:= amDEagle;
-       gtDynamite: gear^.AmmoType:= amDynamite;
-    gtClusterBomb, 
-        gtCluster: gear^.AmmoType:= amClusterBomb;
-         gtShover: gear^.AmmoType:= amBaseballBat;  // Shover is only used for baseball bat right now
-      gtFirePunch: gear^.AmmoType:= amFirePunch;
-      gtParachute: gear^.AmmoType:= amParachute;
-        gtAirBomb: gear^.AmmoType:= amAirAttack;
-      gtBlowTorch: gear^.AmmoType:= amBlowTorch;
-         gtGirder: gear^.AmmoType:= amGirder;
-       gtTeleport: gear^.AmmoType:= amTeleport;
-       gtSwitcher: gear^.AmmoType:= amSwitch;
-         gtMortar: gear^.AmmoType:= amMortar;
-           gtWhip: gear^.AmmoType:= amWhip;
-       gtKamikaze: gear^.AmmoType:= amKamikaze;
-           gtCake: gear^.AmmoType:= amCake;
-      gtSeduction: gear^.AmmoType:= amSeduction;
-     gtWatermelon,
-     gtMelonPiece: gear^.AmmoType:= amWatermelon;
-    gtHellishBomb: gear^.AmmoType:= amHellishBomb;
-          gtDrill: gear^.AmmoType:= amDrill;
-        gtBallGun,
-           gtBall: gear^.AmmoType:= amBallgun;
-        gtRCPlane: gear^.AmmoType:= amRCPlane;
-gtSniperRifleShot: gear^.AmmoType:= amSniperRifle;
-        gtJetpack: gear^.AmmoType:= amJetpack;
-        gtMolotov: gear^.AmmoType:= amMolotov;
-          gtBirdy, 
-            gtEgg: gear^.AmmoType:= amBirdy;
-         gtPortal: gear^.AmmoType:= amPortalGun;
-          gtPiano: gear^.AmmoType:= amPiano;
-        gtGasBomb: gear^.AmmoType:= amGasBomb;
-    gtSineGunShot: gear^.AmmoType:= amSineGun;
-   gtFlamethrower: gear^.AmmoType:= amFlamethrower;
-          gtSMine: gear^.AmmoType:= amSMine;
-         gtHammer, 
-      gtHammerHit: gear^.AmmoType:= amHammer;
-    gtResurrector: gear^.AmmoType:= amResurrector;
-       gtSnowball: gear^.AmmoType:= amSnowball;
-      gtStructure: gear^.AmmoType:= amStructure;  // TODO - This will undoubtedly change once there is more than one structure
-        gtLandGun: gear^.AmmoType:= amLandGun;
-         gtTardis: gear^.AmmoType:= amTardis;
-end;
-
+    
 case Kind of
      gtGrenade,
      gtClusterBomb,
@@ -341,6 +290,7 @@ case Kind of
                     dx.QWordValue:= GetRandom(100000000);
                     dy.isNegative:= false;
                     dy.QWordValue:= GetRandom(70000000);
+                    State:= State or gstInvisible;
                     if GetRandom(2) = 0 then dx := -dx;
                     Health:= random(vobFrameTicks);
                     Timer:= random(vobFramesCount);
@@ -1175,9 +1125,12 @@ begin
 Gear:= GearsList;
 while Gear <> nil do
     begin
-    x:= hwRound(Gear^.X) + WorldDx;
-    y:= hwRound(Gear^.Y) + WorldDy;
-    RenderGear(Gear, x, y);
+    if Gear^.State and gstInvisible = 0 then
+        begin
+        x:= hwRound(Gear^.X) + WorldDx;
+        y:= hwRound(Gear^.Y) + WorldDy;
+        RenderGear(Gear, x, y);
+        end;
     Gear:= Gear^.NextGear
     end;
 end;
@@ -1685,13 +1638,14 @@ begin
     SpawnCustomCrateAt := FollowGear;
 end;
 
-function SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; trap: boolean): PGear;
+function SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; poison: boolean): PGear;
 begin
     FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
     cCaseFactor := 0;
+    FollowGear^.Pos := posCaseDummy;
     
-    if trap then FollowGear^.Pos := posCaseTrap
-    else FollowGear^.Pos := posCaseDummy;
+    if explode then FollowGear^.Pos := FollowGear^.Pos + posCaseExplode;
+    if poison then FollowGear^.Pos := FollowGear^.Pos + posCasePoison;
 
     case crate of
         HealthCrate: begin

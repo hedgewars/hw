@@ -75,6 +75,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         if isSoundEnabled then playMusic;
                         GameType:= gmtLocal;
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
+                        AddVisualGear(0, 0, vgtSmoothWindBar);
                         {$IFDEF IPHONEOS}InitIPC;{$ENDIF}
                         uMobile.SaveFinished();
                         end;

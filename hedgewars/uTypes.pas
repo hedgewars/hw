@@ -89,15 +89,15 @@ type
     TGearType = (gtGrenade, gtHedgehog, gtShell, gtGrave, gtBee, // 4
             gtShotgunShot, gtPickHammer, gtRope, gtMine, gtCase, // 9
             gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 14
-            gtFlame, gtFirePunch, gtATStartGame, gtATSmoothWindCh, // 18
-            gtATFinishGame, gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, // 23
-            gtGirder, gtTeleport, gtSwitcher, gtTarget, gtMortar, // 28
-            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 34
-            gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
-            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 45
-            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
-            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
-            gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun, gtTardis); // 62
+            gtFlame, gtFirePunch, gtATStartGame, // 17
+            gtATFinishGame, gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, // 22
+            gtGirder, gtTeleport, gtSwitcher, gtTarget, gtMortar, // 27
+            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 33
+            gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 39
+            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 44
+            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 50
+            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 55
+            gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun, gtTardis); // 61
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -105,7 +105,8 @@ type
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
-            vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail, vgtBulletHit, vgtCircle);
+            vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail, vgtBulletHit, vgtCircle,
+            vgtSmoothWindBar);
 
     TGearsType = set of TGearType;
 
@@ -274,6 +275,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         Tex: PTexture;
         alpha, scale: GLfloat;
         Hedgehog: PHedgehog;
+        Tag: LongInt;
         Text: shortstring;
         Tint: Longword;
         uid: Longword;

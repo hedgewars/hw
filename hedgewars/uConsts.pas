@@ -209,6 +209,7 @@ const
     gstNotKickable    = $00040000;
     gstLoser          = $00080000;
     gstHHGone         = $00100000;
+    gstInvisible      = $00200000;
 
     gmLeft   = $00000001;
     gmRight  = $00000002;
@@ -260,7 +261,8 @@ const
     posCaseHealth  = $00000002;
     posCaseUtility = $00000004;
     posCaseDummy   = $00000008;
-    posCaseTrap    = $00000010;
+    posCaseExplode = $00000010;
+    posCasePoison  = $00000020;
 
     NoPointX = Low(LongInt);
     cTargetPointRef : TPoint = (X: NoPointX; Y: 0);

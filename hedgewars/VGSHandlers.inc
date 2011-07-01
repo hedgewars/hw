@@ -46,7 +46,7 @@ with Gear^ do
         inc(Frame);
         if Frame = vobSDFramesCount then Frame:= 0
         end;
-    X:= X + (cWindSpeedf * 600 + dX + tdX) * Steps;
+    X:= X + (cWindSpeedf * 400 + dX + tdX) * Steps;
     if SuddenDeathDmg then
         Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps
     else
@@ -607,6 +607,9 @@ inc(Gear^.Timer, Steps);
 (*
 FIXME - This block desyncs due to the way WorldDx is important for various things network related.
 One possible solution is, instead of using WorldDx, to use straight gl/SDL calls to jitter the screen a bit.
+
+// a comment by unC0Rr: instead of changing WorldDx shake cursor coordinates, that should be safe
+
 if (Gear^.Timer and 5) = 0 then
     begin
     maxMovement := max(1, 13 - ((Gear^.Timer * 15) div 250));
@@ -688,3 +691,20 @@ with Gear^ do
                 end
             end
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepSmoothWindBar(Gear: PVisualGear; Steps: Longword);
+begin
+    inc(Gear^.Timer, Steps);
+    
+    while Gear^.Timer >= 10 do
+        begin
+        dec(Gear^.Timer, 10);
+        if WindBarWidth < Gear^.Tag then inc(WindBarWidth)
+        else if WindBarWidth > Gear^.Tag then dec(WindBarWidth);
+        end;
+        
+if WindBarWidth = Gear^.Tag then 
+    DeleteVisualGear(Gear)
+end;
+

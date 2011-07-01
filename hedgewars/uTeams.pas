@@ -179,8 +179,7 @@ CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
 end;
 
 procedure AfterSwitchHedgehog;
-var g: PGear;
-    i, t: LongInt;
+var i, t: LongInt;
     CurWeapon: PAmmo;
 
 begin
@@ -229,8 +228,7 @@ if (GameFlags and gfDisableWind) = 0 then
     cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
     if cWindSpeed.isNegative then
         CWindSpeedf := -cWindSpeedf;
-    g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);
-    g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+    AddVisualGear(0, 0, vgtSmoothWindBar);
     AddFileLog('Wind = '+FloatToStr(cWindSpeed));
     end;
 
