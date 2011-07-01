@@ -43,6 +43,7 @@ function ScriptCall(fname : shortstring; par1, par2: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 function ScriptExists(fname : shortstring) : boolean;
+function ParseCommandOverride(key, value : shortstring) : shortstring;
 
 procedure initModule;
 procedure freeModule;
@@ -226,13 +227,13 @@ end;
 function lc_spawnfakehealthcrate(L: Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if lua_gettop(L) <> 3 then begin
+    if lua_gettop(L) <> 4 then begin
         LuaError('Lua: Wrong number of parameters passed to SpawnFakeHealthCrate!');
         lua_pushnil(L);
     end
     else begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
-            HealthCrate, lua_toboolean(L, 3));
+            HealthCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
         lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnfakehealthcrate := 1;        
@@ -241,13 +242,13 @@ end;
 function lc_spawnfakeammocrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
 begin
-    if lua_gettop(L) <> 3 then begin
+    if lua_gettop(L) <> 4 then begin
         LuaError('Lua: Wrong number of parameters passed to SpawnFakeAmmoCrate!');
         lua_pushnil(L);
     end
     else begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
-            AmmoCrate, lua_toboolean(L, 3));
+            AmmoCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
         lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnfakeammocrate := 1;
@@ -256,13 +257,13 @@ end;
 function lc_spawnfakeutilitycrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
 begin
-    if lua_gettop(L) <> 3 then begin
+    if lua_gettop(L) <> 4 then begin
         LuaError('Lua: Wrong number of parameters passed to SpawnFakeUtilityCrate!');
         lua_pushnil(L);
     end
     else begin  
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
-            UtilityCrate, lua_toboolean(L, 3));
+            UtilityCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
         lua_pushinteger(L, gear^.uid);
     end;
     lc_spawnfakeutilitycrate := 1;
@@ -1588,6 +1589,25 @@ if lua_pcall(luaState, 0, 0, 0) <> 0 then
 GetGlobals;
 end;
 
+function ParseCommandOverride(key, value : shortstring) : shortstring;
+begin
+ParseCommandOverride:= value;
+if not ScriptExists('ParseCommandOverride') then exit;
+lua_getglobal(luaState, Str2PChar('ParseCommandOverride'));
+lua_pushstring(luaState, Str2PChar(key));
+lua_pushstring(luaState, Str2PChar(value));
+if lua_pcall(luaState, 2, 1, 0) <> 0 then
+    begin
+    LuaError('Lua: Error while calling ParseCommandOverride: ' + lua_tostring(luaState, -1));
+    lua_pop(luaState, 1)
+    end
+else
+    begin
+    ParseCommandOverride:= lua_tostring(luaState, -1);
+    lua_pop(luaState, 1)
+    end;
+end;
+
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
 begin
 ScriptCall:= ScriptCall(fname, par1, 0, 0, 0)
@@ -1669,14 +1689,23 @@ ScriptAmmoReinforcement[ord(ammo)]:= inttostr(reinforcement)[1];
 end;
 
 procedure ScriptApplyAmmoStore;
-var i : LongInt;
+var i, j : LongInt;
 begin
 SetAmmoLoadout(ScriptAmmoLoadout);
 SetAmmoProbability(ScriptAmmoProbability);
 SetAmmoDelay(ScriptAmmoDelay);
 SetAmmoReinforcement(ScriptAmmoReinforcement);
-for i:= 0 to Pred(TeamsCount) do
-    AddAmmoStore;
+
+if (GameFlags and gfSharedAmmo) <> 0 then
+    for i:= 0 to Pred(ClansCount) do
+        AddAmmoStore
+else if (GameFlags and gfPerHogAmmo) <> 0 then
+    for i:= 0 to Pred(TeamsCount) do
+        for j:= 0 to Pred(TeamsArray[i]^.HedgehogsNumber) do
+            AddAmmoStore
+else 
+    for i:= 0 to Pred(TeamsCount) do
+        AddAmmoStore
 end;
 
 procedure initModule;

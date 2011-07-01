@@ -606,7 +606,7 @@ else if GameTicks and $7 = 0 then
     with Gear^ do
         begin
         State:= State and not gstInvisible;
-        X:= X + cWindSpeed * 1600 + dX;
+        X:= X + cWindSpeed * 3200 + dX;
         Y:= Y + dY + cGravity * vobFallSpeed * 8;  // using same value as flakes to try and get similar results
         xx:= hwRound(X);
         yy:= hwRound(Y);
@@ -726,14 +726,15 @@ if draw then
         end;
 
 if move then
+    begin
     if gun then
-        DeleteGear(Gear)
-    else
         begin
-        Gear^.X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
-        Gear^.Y:= int2hwFloat(750+(GetRandom(50)-25));
-        Gear^.State:= Gear^.State or gstInvisible;
-        end
+        DeleteGear(Gear);
+        exit
+        end;
+    Gear^.X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
+    Gear^.Y:= int2hwFloat(750+(GetRandom(50)-25))
+    end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1072,30 +1073,39 @@ begin
     dec(Gear^.Timer);
     case Gear^.Kind of 
         gtATStartGame: 
-        begin
+    begin
         AllInactive := false;
         if Gear^.Timer = 0 then
-            begin
-            AddCaption(trmsg[sidStartFight], cWhiteColor, capgrpGameState);
-            end
-        end;
-    gtATFinishGame: 
         begin
-            AllInactive := false;
-            if Gear^.Timer = 1000 then
-                begin
-                ScreenFade := sfToBlack;
-                ScreenFadeValue := 0;
-                ScreenFadeSpeed := 1;
-                end;
-            if Gear^.Timer = 0 then
-                begin
-                SendIPC('N');
-                SendIPC('q');
-                GameState := gsExit
-                end
-        end;
+            AddCaption(trmsg[sidStartFight], cWhiteColor, capgrpGameState);
+        end
     end;
+    gtATSmoothWindCh: 
+begin
+    if Gear^.Timer = 0 then
+    begin
+        if WindBarWidth < Gear^.Tag then inc(WindBarWidth)
+        else if WindBarWidth > Gear^.Tag then dec(WindBarWidth);
+        if WindBarWidth <> Gear^.Tag then Gear^.Timer := 10;
+    end
+end;
+gtATFinishGame: 
+begin
+    AllInactive := false;
+    if Gear^.Timer = 1000 then
+    begin
+        ScreenFade := sfToBlack;
+        ScreenFadeValue := 0;
+        ScreenFadeSpeed := 1;
+    end;
+    if Gear^.Timer = 0 then
+    begin
+        SendIPC('N');
+        SendIPC('q');
+        GameState := gsExit
+    end
+end;
+end;
 if Gear^.Timer = 0 then DeleteGear(Gear)
 end;
 
@@ -2556,7 +2566,6 @@ begin
         HHGear := Gear^.Hedgehog^.Gear;
         Msg := Gear^.Message and not gmSwitch;
         DeleteGear(Gear);
-        OnUsedAmmo(HHGear^.Hedgehog^);
         ApplyAmmoChanges(HHGear^.Hedgehog^);
 
         HHGear := CurrentHedgehog^.Gear;
@@ -2605,6 +2614,7 @@ begin
     Gear^.doStep := @doStepSwitcherWork;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    OnUsedAmmo(HHGear^.Hedgehog^);
     with HHGear^ do
     begin
         State := State and not gstAttacking;
