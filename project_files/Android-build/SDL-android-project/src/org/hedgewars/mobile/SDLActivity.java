@@ -1,4 +1,4 @@
-package org.hedgewars;
+package org.hedgewars.mobile;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
