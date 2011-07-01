@@ -237,7 +237,7 @@ class SDLMain implements Runnable {
 	public void run() {
 		// Runs SDL_main()
 		
-		SDLActivity.nativeInit(new String[]{ "0", String.valueOf(surfaceWidth), String.valueOf(surfaceHeight), "0", "null", "xeli", "1", "1", "1", "0", "/sdcard/bla.hwd", "/sdcard/Data"});
+		SDLActivity.nativeInit(new String[]{ "0", String.valueOf(surfaceWidth), String.valueOf(surfaceHeight), "0", "null", "xeli", "1", "1", "1", "0", "/sdcard/Android/data/org.xeli.dataapk/files/Data", "/sdcard/Data"});
 
 		//Log.v("SDL", "SDL thread terminated");
 	}
