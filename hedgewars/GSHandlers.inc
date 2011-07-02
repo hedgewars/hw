@@ -1080,31 +1080,22 @@ begin
             AddCaption(trmsg[sidStartFight], cWhiteColor, capgrpGameState);
         end
     end;
-    gtATSmoothWindCh: 
-begin
-    if Gear^.Timer = 0 then
+    gtATFinishGame: 
     begin
-        if WindBarWidth < Gear^.Tag then inc(WindBarWidth)
-        else if WindBarWidth > Gear^.Tag then dec(WindBarWidth);
-        if WindBarWidth <> Gear^.Tag then Gear^.Timer := 10;
-    end
-end;
-gtATFinishGame: 
-begin
-    AllInactive := false;
-    if Gear^.Timer = 1000 then
-    begin
-        ScreenFade := sfToBlack;
-        ScreenFadeValue := 0;
-        ScreenFadeSpeed := 1;
+        AllInactive := false;
+        if Gear^.Timer = 1000 then
+        begin
+            ScreenFade := sfToBlack;
+            ScreenFadeValue := 0;
+            ScreenFadeSpeed := 1;
+        end;
+        if Gear^.Timer = 0 then
+        begin
+            SendIPC('N');
+            SendIPC('q');
+            GameState := gsExit
+        end
     end;
-    if Gear^.Timer = 0 then
-    begin
-        SendIPC('N');
-        SendIPC('q');
-        GameState := gsExit
-    end
-end;
 end;
 if Gear^.Timer = 0 then DeleteGear(Gear)
 end;
