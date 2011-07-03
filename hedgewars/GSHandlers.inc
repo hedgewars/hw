@@ -2407,7 +2407,7 @@ begin
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
     if (Gear^.State = 2) then
-        Gear^.dX := Gear^.dX - cBombsSpeed * Gear^.Tag * 1000 // ^.Timer of gtNapalmBomb, make it a constant var if you prefer that :P
+        Gear^.dX := Gear^.dX - cBombsSpeed * Gear^.Tag * 900 
     // calcs for regular falling gears
     else if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then
             Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /

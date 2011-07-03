@@ -865,11 +865,11 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     begin
     with PHedgehog(CurrentHedgehog)^ do
         begin
-        if (CurAmmoType = amBee) then
+        if CurAmmoType = amBee then
             DrawRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
         else
-            DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
-        end;
+            DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+        end
     end;
 {$WARNINGS ON}
 
@@ -1144,6 +1144,8 @@ if isCursorVisible then
      with CurrentHedgehog^ do
        if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
          begin
+         if CurAmmoType = amNapalm then
+           DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
          i:= GetAmmoEntry(CurrentHedgehog^)^.Pos;
          with Ammoz[CurAmmoType] do
            if PosCount > 1 then
