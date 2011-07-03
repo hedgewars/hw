@@ -1,5 +1,5 @@
 ----------------------------------
--- THE SPECIALISTS MODE 0.3
+-- THE SPECIALISTS MODE 0.4
 -- by mikade
 ----------------------------------
 
@@ -22,6 +22,13 @@
 -- added switching on start
 -- removed switch from engineer weaponset
 
+----------------
+-- version 0.4
+----------------
+-- Attempted to:
+-- fix potential switch explit
+-- improve user feedback on start
+
 --------------------
 --TO DO
 --------------------
@@ -32,204 +39,204 @@
 
 loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 
-local numhhs = 0 
-local hhs = {} 
+local numhhs = 0
+local hhs = {}
 
-local currName 
+local currName
 local lastName
 local started = false
 local switchStage = 0
 
 function CreateTeam()
 
-	currTeam = ""
-	lastTeam = ""
-	z = 0
+        currTeam = ""
+        lastTeam = ""
+        z = 0
 
-	for i = 0, (numhhs-1) do
+        for i = 0, (numhhs-1) do
 
-		currTeam = GetHogTeamName(hhs[i])
+                currTeam = GetHogTeamName(hhs[i])
 
-		if currTeam == lastTeam then
-			z = z + 1
-		else
-			z = 1		
-		end
+                if currTeam == lastTeam then
+                        z = z + 1
+                else
+                        z = 1
+                end
 
-		if z == 1 then
+                if z == 1 then
 
-			SetHogName(hhs[i],"Soldier")
-			SetHogHat(hhs[i], "Vega")
-			SetHealth(hhs[i],200)
+                        SetHogName(hhs[i],"Soldier")
+                        SetHogHat(hhs[i], "Vega")
+                        SetHealth(hhs[i],200)
 
-		elseif z == 2 then
+                elseif z == 2 then
 
-			SetHogHat(hhs[i], "Glasses")
-			SetHogName(hhs[i],"Engineer")
+                        SetHogHat(hhs[i], "Glasses")
+                        SetHogName(hhs[i],"Engineer")
 
-		elseif z == 3 then
+                elseif z == 3 then
 
-			SetHogName(hhs[i],"Ninja")			
-			SetHogHat(hhs[i], "NinjaFull")
-			SetHealth(hhs[i],80)
+                        SetHogName(hhs[i],"Ninja")
+                        SetHogHat(hhs[i], "NinjaFull")
+                        SetHealth(hhs[i],80)
 
-		elseif z == 4 then
+                elseif z == 4 then
 
-			SetHogName(hhs[i],"Demo")			
-			SetHogHat(hhs[i], "Skull")
-			SetHealth(hhs[i],200)
+                        SetHogName(hhs[i],"Demo")
+                        SetHogHat(hhs[i], "Skull")
+                        SetHealth(hhs[i],200)
 
-		elseif z == 5 then
+                elseif z == 5 then
 
-			SetHogName(hhs[i],"Sniper")			
-			SetHogHat(hhs[i], "Sniper")
-			SetHealth(hhs[i],120)
+                        SetHogName(hhs[i],"Sniper")
+                        SetHogHat(hhs[i], "Sniper")
+                        SetHealth(hhs[i],120)
 
-		elseif z == 6 then
+                elseif z == 6 then
 
-			SetHogName(hhs[i],"Saint")			
-			SetHogHat(hhs[i], "angel")
-			SetHealth(hhs[i],300)
+                        SetHogName(hhs[i],"Saint")
+                        SetHogHat(hhs[i], "angel")
+                        SetHealth(hhs[i],300)
 
-		elseif z == 7 then
+                elseif z == 7 then
 
-			SetHogName(hhs[i],"Pyro")			
-			SetHogHat(hhs[i], "Gasmask")
-			SetHealth(hhs[i],150)
-		
-		elseif z == 8 then
-		
-			SetHogName(hhs[i],"Loon")			
-			SetHogHat(hhs[i], "clown")
-			SetHealth(hhs[i],100)
+                        SetHogName(hhs[i],"Pyro")
+                        SetHogHat(hhs[i], "Gasmask")
+                        SetHealth(hhs[i],150)
 
-		end
+                elseif z == 8 then
 
-		lastTeam = GetHogTeamName(hhs[i])
+                        SetHogName(hhs[i],"Loon")
+                        SetHogHat(hhs[i], "clown")
+                        SetHealth(hhs[i],100)
 
-	end	
+                end
+
+                lastTeam = GetHogTeamName(hhs[i])
+
+        end
 
 end
 
 function ResetAllAmmo()
 
-	AddAmmo(CurrentHedgehog, amBazooka, 0)
-	AddAmmo(CurrentHedgehog, amGrenade, 0)
-	AddAmmo(CurrentHedgehog, amShotgun, 0)
-	
-	AddAmmo(CurrentHedgehog, amGirder, 0)
-	AddAmmo(CurrentHedgehog, amBlowTorch, 0)
-	AddAmmo(CurrentHedgehog, amPickHammer, 0)
-	AddAmmo(CurrentHedgehog, amSwitch, 0)
+        AddAmmo(CurrentHedgehog, amBazooka, 0)
+        AddAmmo(CurrentHedgehog, amGrenade, 0)
+        AddAmmo(CurrentHedgehog, amShotgun, 0)
 
-	AddAmmo(CurrentHedgehog, amRope, 0)
-	AddAmmo(CurrentHedgehog, amParachute, 0)
-	AddAmmo(CurrentHedgehog, amFirePunch, 0)
+        AddAmmo(CurrentHedgehog, amGirder, 0)
+        AddAmmo(CurrentHedgehog, amBlowTorch, 0)
+        AddAmmo(CurrentHedgehog, amPickHammer, 0)
+        AddAmmo(CurrentHedgehog, amSwitch, 0)
 
-	AddAmmo(CurrentHedgehog, amDynamite, 0)
-	AddAmmo(CurrentHedgehog, amDrill, 0)
-	AddAmmo(CurrentHedgehog, amMine, 0)
+        AddAmmo(CurrentHedgehog, amRope, 0)
+        AddAmmo(CurrentHedgehog, amParachute, 0)
+        AddAmmo(CurrentHedgehog, amFirePunch, 0)
 
-	AddAmmo(CurrentHedgehog, amSniperRifle, 0)
-	AddAmmo(CurrentHedgehog, amDEagle, 0)
-	AddAmmo(CurrentHedgehog, amPortalGun, 0)
+        AddAmmo(CurrentHedgehog, amDynamite, 0)
+        AddAmmo(CurrentHedgehog, amDrill, 0)
+        AddAmmo(CurrentHedgehog, amMine, 0)
 
-	AddAmmo(CurrentHedgehog, amSeduction, 0)
-	AddAmmo(CurrentHedgehog, amResurrector, 0)
-	AddAmmo(CurrentHedgehog, amInvulnerable, 0)
-	
-	AddAmmo(CurrentHedgehog, amFlamethrower, 0)
-	AddAmmo(CurrentHedgehog, amMolotov, 0)
-	AddAmmo(CurrentHedgehog, amNapalm, 0)
-	
-	AddAmmo(CurrentHedgehog, amBaseballBat, 0)
-	AddAmmo(CurrentHedgehog, amGasBomb, 0)
-	AddAmmo(CurrentHedgehog, amKamikaze, 0)
+        AddAmmo(CurrentHedgehog, amSniperRifle, 0)
+        AddAmmo(CurrentHedgehog, amDEagle, 0)
+        AddAmmo(CurrentHedgehog, amPortalGun, 0)
+
+        AddAmmo(CurrentHedgehog, amSeduction, 0)
+        AddAmmo(CurrentHedgehog, amResurrector, 0)
+        AddAmmo(CurrentHedgehog, amInvulnerable, 0)
+
+        AddAmmo(CurrentHedgehog, amFlamethrower, 0)
+        AddAmmo(CurrentHedgehog, amMolotov, 0)
+        AddAmmo(CurrentHedgehog, amNapalm, 0)
+
+        AddAmmo(CurrentHedgehog, amBaseballBat, 0)
+        AddAmmo(CurrentHedgehog, amGasBomb, 0)
+        AddAmmo(CurrentHedgehog, amKamikaze, 0)
 
 end
 
 function AssignAmmo()
 
-	ResetAllAmmo()	
-	n = GetHogName(CurrentHedgehog)
+        ResetAllAmmo()
+        n = GetHogName(CurrentHedgehog)
 
-	AddAmmo(CurrentHedgehog, amSkip,100)
+        AddAmmo(CurrentHedgehog, amSkip,100)
 
-	if n == "Soldier" then 
-		AddAmmo(CurrentHedgehog, amBazooka,1)
-		AddAmmo(CurrentHedgehog, amGrenade,1)
-		AddAmmo(CurrentHedgehog, amShotgun,1)
-	elseif n == "Engineer" then
-		AddAmmo(CurrentHedgehog, amGirder, 2)
-		AddAmmo(CurrentHedgehog, amBlowTorch, 1)
-		AddAmmo(CurrentHedgehog, amPickHammer, 1)	
-		--AddAmmo(CurrentHedgehog, amSwitch, 2)	
-	elseif n == "Ninja" then
-		AddAmmo(CurrentHedgehog, amRope, 100)
-		AddAmmo(CurrentHedgehog, amParachute, 100)
-		AddAmmo(CurrentHedgehog, amFirePunch, 1)
-	elseif n == "Demo" then
-		AddAmmo(CurrentHedgehog, amDynamite, 1)
-		AddAmmo(CurrentHedgehog, amMine, 1)
-		AddAmmo(CurrentHedgehog, amDrill, 1)
-	elseif n == "Sniper" then
-		AddAmmo(CurrentHedgehog, amSniperRifle, 1)
-		AddAmmo(CurrentHedgehog, amDEagle, 1)
-		AddAmmo(CurrentHedgehog, amPortalGun, 2)
-	elseif n == "Saint" then
-		AddAmmo(CurrentHedgehog, amSeduction, 100)
-		AddAmmo(CurrentHedgehog, amResurrector, 1)
-		AddAmmo(CurrentHedgehog, amInvulnerable, 1)
-	elseif n == "Pyro" then
-		AddAmmo(CurrentHedgehog, amFlamethrower, 1)
-		AddAmmo(CurrentHedgehog, amMolotov, 1)
-		AddAmmo(CurrentHedgehog, amNapalm, 1)
-	elseif n == "Loon" then
-		AddAmmo(CurrentHedgehog, amBaseballBat, 1)
-		AddAmmo(CurrentHedgehog, amGasBomb, 1)
-		AddAmmo(CurrentHedgehog, amKamikaze, 1)
-	end
+        if n == "Soldier" then
+                AddAmmo(CurrentHedgehog, amBazooka,1)
+                AddAmmo(CurrentHedgehog, amGrenade,1)
+                AddAmmo(CurrentHedgehog, amShotgun,1)
+        elseif n == "Engineer" then
+                AddAmmo(CurrentHedgehog, amGirder, 2)
+                AddAmmo(CurrentHedgehog, amBlowTorch, 1)
+                AddAmmo(CurrentHedgehog, amPickHammer, 1)
+        elseif n == "Ninja" then
+                AddAmmo(CurrentHedgehog, amRope, 100)
+                AddAmmo(CurrentHedgehog, amParachute, 100)
+                AddAmmo(CurrentHedgehog, amFirePunch, 1)
+        elseif n == "Demo" then
+                AddAmmo(CurrentHedgehog, amDynamite, 1)
+                AddAmmo(CurrentHedgehog, amMine, 1)
+                AddAmmo(CurrentHedgehog, amDrill, 1)
+        elseif n == "Sniper" then
+                AddAmmo(CurrentHedgehog, amSniperRifle, 1)
+                AddAmmo(CurrentHedgehog, amDEagle, 1)
+                AddAmmo(CurrentHedgehog, amPortalGun, 2)
+        elseif n == "Saint" then
+                AddAmmo(CurrentHedgehog, amSeduction, 100)
+                AddAmmo(CurrentHedgehog, amResurrector, 1)
+                AddAmmo(CurrentHedgehog, amInvulnerable, 1)
+        elseif n == "Pyro" then
+                AddAmmo(CurrentHedgehog, amFlamethrower, 1)
+                AddAmmo(CurrentHedgehog, amMolotov, 1)
+                AddAmmo(CurrentHedgehog, amNapalm, 1)
+        elseif n == "Loon" then
+                AddAmmo(CurrentHedgehog, amBaseballBat, 1)
+                AddAmmo(CurrentHedgehog, amGasBomb, 1)
+                AddAmmo(CurrentHedgehog, amKamikaze, 1)
+        end
 
 end
 
 function onGameInit()
-	GameFlags = gfRandomOrder + gfResetWeps + gfInfAttack + gfPlaceHog
-	Delay = 10
+        GameFlags = gfRandomOrder + gfResetWeps + gfInfAttack + gfPlaceHog
+        Delay = 10
 end
 
 function onGameStart()
-   	
-	CreateTeam()
 
-	ShowMission	(
-				loc("THE SPECIALISTS"),
-				loc("a Hedgewars mini-game"),
+        CreateTeam()
 
-				loc("Eliminate the enemy specialists.") .. "|" ..
-				" " .. "|" ..
+        ShowMission     (
+                                loc("THE SPECIALISTS"),
+                                loc("a Hedgewars mini-game"),
 
-				loc("Game Modifiers: ") .. "|" ..
-				loc("Per-Hog Ammo") .. "|" ..				
-				loc("Weapons Reset") .. "|" ..				
-				loc("Unlimited Attacks") .. "|" ..
+                                loc("Eliminate the enemy specialists.") .. "|" ..
+                                " " .. "|" ..
 
-				"", 4, 4000
-				)
+                                loc("Game Modifiers: ") .. "|" ..
+                                loc("Per-Hog Ammo") .. "|" ..
+                                loc("Weapons Reset") .. "|" ..
+                                loc("Unlimited Attacks") .. "|" ..
+
+                                "", 4, 4000
+                                )
 
 end
 
 
 function onNewTurn()
-	currName = GetHogName(CurrentHedgehog)
-	lastName = GetHogName(CurrentHedgehog)
-	AssignAmmo()
-	
-	--AddAmmo(CurrentHedgehog, amSwitch, 1)
+        currName = GetHogName(CurrentHedgehog)
+        lastName = GetHogName(CurrentHedgehog)
+        AssignAmmo()
+
+        ---------------
+        --switch
+        started = false
+        switchStage = 0
+        --AddAmmo(CurrentHedgehog, amSwitch, 1)
 	---------------
-	--switch	
-	started = false
-	switchStage = 0
-	---------------
+
 end
 
 function onGameTick()
@@ -238,27 +245,30 @@ function onGameTick()
 
 		currName = GetHogName(CurrentHedgehog)
 		
-		if currName ~= lastName then
+		if (currName ~= lastName) and (switchStage > 100) then
 			AddCaption(loc("Switched to ") .. currName .. "!")
 			AssignAmmo()		
 		end
 
 		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and (switchStage < 100) then			
 			
+			AddCaption(loc("Prepare yourself") .. ", " .. currName .. "!") 
+
 			switchStage = switchStage + 1	
 			
-			if switchStage == 10 then
+			if switchStage == 1 then
 				AddAmmo(CurrentHedgehog, amSwitch, 1)
-			elseif switchStage == 20 then
+				
+			elseif switchStage == 2 then
 				ParseCommand("setweap " .. string.char(amSwitch))
-			elseif switchStage == 30 then
+			elseif switchStage == 3 then
 				SetGearMessage(CurrentHedgehog,gmAttack) 
+			elseif switchStage == 4 then
 				switchStage = 110
+				AddAmmo(CurrentHedgehog, amSwitch, 0)
 			end
 		end		
 		
-		--------------------------------------------------------------------------------------
-
 		lastName = currName
 
 	end
@@ -266,11 +276,11 @@ function onGameTick()
 end
 
 function onGearAdd(gear)
-    
-	if GetGearType(gear) == gtHedgehog then
-		hhs[numhhs] = gear
-		numhhs = numhhs + 1
-	end
+
+        if GetGearType(gear) == gtHedgehog then
+                hhs[numhhs] = gear
+                numhhs = numhhs + 1
+        end
 
 end
 
@@ -281,6 +291,4 @@ end
 function onAmmoStoreInit()
 --
 end
-
-
 
