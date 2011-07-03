@@ -285,6 +285,11 @@
                 NSString *saveHeader = @"TS";
                 [self dumpRawData:[saveHeader UTF8String] ofSize:[saveHeader length]];
 
+                // lua script (if set)
+                NSString *script = [gameConfig objectForKey:@"mission_command"];
+                if ([script length] != 0)
+                    [self sendToEngine:script];
+
                 // seed info
                 [self sendToEngine:[gameConfig objectForKey:@"seed_command"]];
 
@@ -297,11 +302,6 @@
                 NSString *staticMap = [gameConfig objectForKey:@"staticmap_command"];
                 if ([staticMap length] != 0)
                     [self sendToEngine:staticMap];
-
-                // lua script (if set)
-                NSString *script = [gameConfig objectForKey:@"mission_command"];
-                if ([script length] != 0)
-                    [self sendToEngine:script];
 
                 // theme info
                 [self sendToEngine:[gameConfig objectForKey:@"theme_command"]];

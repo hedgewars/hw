@@ -183,8 +183,7 @@
 
     // release the network manager and the savepath as they are not needed anymore
     releaseAndNil(self.engineProtocol);
-    if (self.gameType != gtSave)
-        releaseAndNil(self.savePath);
+    releaseAndNil(self.savePath);
 
     if ([[userDefaults objectForKey:@"music"] boolValue])
         [HedgewarsAppDelegate playBackgroundMusic];
@@ -210,7 +209,7 @@
 // set up variables for a save game
 -(void) startSaveGame:(NSString *)atPath {
     self.gameType = gtSave;
-    self.savePath = atPath;
+    self.savePath = [atPath retain];
 
     [self.engineProtocol spawnThread:self.savePath];
     [self prepareEngineLaunch];
