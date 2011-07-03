@@ -1868,7 +1868,7 @@ var
     i: LongInt;
     particle: PVisualGear;
 begin
-    if not TestCollisionYwithGear(Gear, 1) and (Gear^.dY.QWordValue = 0) then SetLittle(Gear^.dY);
+    if (Gear^.dY.QWordValue = 0) and (Gear^.dY.QWordValue = 0) and not TestCollisionYwithGear(Gear, 1) then SetLittle(Gear^.dY);
     Gear^.State := Gear^.State or gstAnimation;
     if ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
     begin
