@@ -96,9 +96,9 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
     switch (type) {
         default: //default
             qt = [[NSString alloc] initWithBytes:AMMOLINE_DEFAULT_QT length:ammolineSize encoding:NSUTF8StringEncoding];
-            prob = [[NSString alloc] initWithBytes:AMMOLINE_DEFAULT_QT length:ammolineSize encoding:NSUTF8StringEncoding];
-            delay = [[NSString alloc] initWithBytes:AMMOLINE_DEFAULT_QT length:ammolineSize encoding:NSUTF8StringEncoding];
-            crate = [[NSString alloc] initWithBytes:AMMOLINE_DEFAULT_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_DEFAULT_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_DEFAULT_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_DEFAULT_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
             break;
         case 1: //crazy
             qt = [[NSString alloc] initWithBytes:AMMOLINE_CRAZY_QT length:ammolineSize encoding:NSUTF8StringEncoding];
