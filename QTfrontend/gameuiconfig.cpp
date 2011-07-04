@@ -66,13 +66,6 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
 
     QString netNick = value("net/nick", "").toString();
-    if (netNick.isEmpty())
-        netNick = QInputDialog::getText(Form,
-                QObject::tr("Nickname"),
-                QObject::tr("Please enter your nickname"),
-                QLineEdit::Normal,
-                QDir::home().dirName());
-
     Form->ui.pageOptions->editNetNick->setText(netNick);
     
     Form->ui.pageOptions->editNetPassword->installEventFilter(this);
@@ -312,6 +305,11 @@ quint8 GameUIConfig::bitDepth()
 QString GameUIConfig::netNick()
 {
     return Form->ui.pageOptions->editNetNick->text();
+}
+
+void GameUIConfig::updNetNick()
+{
+    Form->ui.pageOptions->editNetNick->setText(value("net/nick", "").toString());
 }
 
 QByteArray GameUIConfig::netPasswordHash()
