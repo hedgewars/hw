@@ -835,7 +835,7 @@ while recheck do
                                 updateBlock:= true;
                                 if d = 1 then resweepCol:= true
                                 else resweepGfx:= true;
-                                if not resweepGfx then
+                                if d = 1 then
                                     if (yy = ty) and (y > 0) then
                                         begin
                                         LandDirty[y-1, x]:= 1;
