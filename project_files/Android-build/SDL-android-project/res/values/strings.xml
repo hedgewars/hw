@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SDL App</string>
+    <string name="app_name">Hedgewars</string>
+    
+    <!-- SDCARD -->
+    <string name="sdcard_not_mounted">There\'s been an error when accessing the sdcard, is it connected to another computer?</string>
+        
+    <!-- Notification -->
+    <string name="notification_title">Downloading hedgewars files...</string>
+    <string name="notification_done">Success - Download complete</string>
+    
+    <!-- Download Activity -->
+    <string name="download_background">Continue in background</string>
+    <string name="download_cancel">Cancel</string>
+    <string name="download_done">Done</string>
+    <string name="download_back">Back to main menu</string>
+    
 </resources>

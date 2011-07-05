@@ -9,5 +9,18 @@
     android:layout_height="wrap_content" 
     android:text="Hello World, SDLActivity"
     />
+    
+    <Button
+    	android:id="@+id/downloader"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:text="downloader"/>
+    	
+    <Button
+    	android:id="@+id/startGame"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:text="startgame"/>
+    	
 </LinearLayout>
 

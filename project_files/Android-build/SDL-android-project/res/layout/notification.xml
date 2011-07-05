@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="3dp">
+	<ImageView
+		android:id="@+id/icon"
+    	android:layout_width="wrap_content" 
+    	android:layout_height="fill_parent"
+    	android:scaleType="centerInside"
+    	android:src="@drawable/icon"/>
+    
+    <TextView
+    	android:id="@+id/title"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_toRightOf="@id/icon"
+    	android:text="@string/notification_title"
+    	android:textColor="#000"
+    	android:textSize="17dp"
+    	android:textStyle="bold"/>
+    			
+	<TextView
+    	android:id="@+id/progressbar_sub"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_toRightOf="@id/icon"
+    	android:layout_alignParentBottom="true"
+    	android:text="@string/notification_title"
+    	android:textColor="#000"
+    	android:textSize="10dp"/> 	
+	<ProgressBar
+		android:id="@+id/notification_progress"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/icon"
+		android:layout_below="@id/title"
+		android:layout_above="@id/progressbar_sub"
+		android:progressDrawable="@android:drawable/progress_horizontal"
+		android:indeterminate="false" android:indeterminateOnly="false"
+		android:paddingRight="5dp"
+		android:paddingTop="5dp"/>   
+
+</RelativeLayout>
+
