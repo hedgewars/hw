@@ -162,7 +162,7 @@ public class DownloadService extends Service {
 	public static String getDownloadPath(Context c){
 		File f =  c.getExternalCacheDir();
 		if(f != null){
-			return f.getAbsolutePath();
+			return f.getAbsolutePath() + '/';
 		}else{
 			Toast.makeText(c, R.string.sdcard_not_mounted, Toast.LENGTH_LONG);
 			return null;
