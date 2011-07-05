@@ -62,6 +62,9 @@
             [settings setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
             theOtherSwitch = (UISwitch *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]].accessoryView;
             [theOtherSwitch setOn:NO animated:YES];
+
+            if (theOtherSwitch.on)
+                [HedgewarsAppDelegate pauseBackgroundMusic];
             break;
         case 20:    //musicSwitch
             // if switch above (sound) is off, never turn on

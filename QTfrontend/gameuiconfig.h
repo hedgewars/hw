@@ -70,6 +70,7 @@ public:
 
 public slots:
     void SaveOptions();
+    void updNetNick();
 private:
     bool netPasswordIsValid();
     bool eventFilter(QObject *object, QEvent *event);

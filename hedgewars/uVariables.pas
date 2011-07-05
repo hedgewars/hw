@@ -865,8 +865,8 @@ const
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
-            PosCount: 1;
-            PosSprite: sprWater;
+            PosCount: 2;
+            PosSprite: sprTargetBee;
             ejectX: 0; //16;
             ejectY: 0),
 

@@ -749,7 +749,7 @@ var i, t: LongInt;
     tdx, tdy: Double;
     s: string[15];
     highlight: Boolean;
-    offsetX, offsetY, screenBottom: LongInt;
+    smallScreenOffset, offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
     if (cReducedQuality and rqNoBackground) = 0 then
@@ -865,11 +865,11 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     begin
     with PHedgehog(CurrentHedgehog)^ do
         begin
-        if (CurAmmoType = amBee) then
+        if CurAmmoType = amBee then
             DrawRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
         else
-            DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
-        end;
+            DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+        end
     end;
 {$WARNINGS ON}
 
@@ -907,6 +907,13 @@ if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) th
 DrawCaptions;
 
 // Teams Healths
+if TeamsCount * 20 > cScreenHeight div 7 then  // take up less screen on small displays
+    begin
+    SetScale(1.5);
+    smallScreenOffset:= cScreenHeight div 6;
+    if TeamsCount * 20 > cScreenHeight div 5 then Tint($FF,$FF,$FF,$80);
+    end
+else smallScreenOffset:= 0;
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
@@ -916,26 +923,26 @@ for t:= 0 to Pred(TeamsCount) do
          Tint(Clan^.Color shl 8 or $FF);
 
       // draw name
-      DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY, NameTagTex);
+      DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY + smallScreenOffset, NameTagTex);
 
       // draw flag
-      DrawTexture(-14, cScreenHeight + DrawHealthY, FlagTex);
+      DrawTexture(-14, cScreenHeight + DrawHealthY + smallScreenOffset, FlagTex);
 
       // draw health bar
       r.x:= 0;
       r.y:= 0;
       r.w:= 2 + TeamHealthBarWidth;
       r.h:= HealthTex^.h;
-      DrawFromRect(14, cScreenHeight + DrawHealthY, @r, HealthTex);
+      DrawFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
 
       // draw health bars right border
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
-      DrawFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY, @r, HealthTex);
+      DrawFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
 
       // draw ai kill counter for gfAISurvival
       if (GameFlags and gfAISurvival) <> 0 then begin
-          DrawTexture(TeamHealthBarWidth + 22, cScreenHeight + DrawHealthY,
+          DrawTexture(TeamHealthBarWidth + 22, cScreenHeight + DrawHealthY + smallScreenOffset,
               AIKillsTex);
       end;
 
@@ -943,24 +950,30 @@ for t:= 0 to Pred(TeamsCount) do
       // this approach should be faster than drawing all borders one by one tinted or not
       if highlight then
          begin
-         Tint($FF, $FF, $FF, $FF);
+         if TeamsCount * 20 > cScreenHeight div 5 then Tint($FF,$FF,$FF,$80)
+         else Tint($FF, $FF, $FF, $FF);
 
          // draw name
          r.x:= 2;
          r.y:= 2;
          r.w:= NameTagTex^.w - 4;
          r.h:= NameTagTex^.h - 4;
-         DrawFromRect(-NameTagTex^.w - 14, cScreenHeight + DrawHealthY + 2, @r, NameTagTex);
+         DrawFromRect(-NameTagTex^.w - 14, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, NameTagTex);
          // draw flag
          r.w:= 22;
          r.h:= 15;
-         DrawFromRect(-12, cScreenHeight + DrawHealthY + 2, @r, FlagTex);
+         DrawFromRect(-12, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, FlagTex);
          // draw health bar
          r.w:= TeamHealthBarWidth + 1;
          r.h:= HealthTex^.h - 4;
-         DrawFromRect(16, cScreenHeight + DrawHealthY + 2, @r, HealthTex);
+         DrawFromRect(16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, HealthTex);
          end;
       end;
+if smallScreenOffset <> 0 then
+    begin
+    SetScale(zoom);
+    if TeamsCount * 20 > cScreenHeight div 5 then Tint($FF,$FF,$FF,$FF);
+    end;
 
 // Lag alert
 if isInLag then DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
@@ -1144,6 +1157,8 @@ if isCursorVisible then
      with CurrentHedgehog^ do
        if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
          begin
+         if CurAmmoType = amNapalm then
+           DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
          i:= GetAmmoEntry(CurrentHedgehog^)^.Pos;
          with Ammoz[CurAmmoType] do
            if PosCount > 1 then

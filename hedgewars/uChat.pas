@@ -51,12 +51,13 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     ChatReady: boolean;
     showAll: boolean;
 
-const colors: array[#1..#5] of TSDL_Color = (
+const colors: array[#1..#6] of TSDL_Color = (
     (r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
     (r:$FF; g:$00; b:$FF; unused:$FF), // action message [Purple]
     (r:$90; g:$FF; b:$90; unused:$FF), // join/leave message [Lime]
     (r:$FF; g:$FF; b:$A0; unused:$FF), // team message [Light Yellow]
-    (r:$FF; g:$00; b:$00; unused:$ff)  // error messages [Red]
+    (r:$FF; g:$00; b:$00; unused:$FF), // error messages [Red]
+    (r:$00; g:$FF; b:$FF; unused:$FF)  // input line [Light Blue]
     );
 
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
@@ -72,11 +73,7 @@ cl.s:= str;
 
 if isInput then
 begin
-    // [Light Blue]
-    color.r:= $00;
-    color.g:= $FF;
-    color.b:= $FF;
-    color.unused:= $FF;
+    color:= colors[#6];
     str:= UserNick + '> ' + str + '_'
 end
 else
@@ -153,14 +150,9 @@ if (GameState = gsChat)
 
 dec(r.y, 16);
 
-while
-    (
-            ((t < 7) and (Strs[i].Time > RealTicks))
-        or
-            ((t < MaxStrIndex) and showAll)
-    )
-    and
-        (Strs[i].Tex <> nil) do
+while (((t < 7) and (Strs[i].Time > RealTicks)) or
+       ((t < MaxStrIndex) and showAll)) and
+      (Strs[i].Tex <> nil) do
     begin
     r.w:= Strs[i].Width;
     DrawFillRect(r);

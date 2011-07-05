@@ -701,7 +701,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				612CABAA1391CE68005E9596 /* AVFoundation.framework */,
 				619599BA1364E65900B429B6 /* Freetype.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
 				619598181364BCD200B429B6 /* Tremor.xcodeproj */,
@@ -711,6 +710,7 @@
 				618E27B612A2C30700C20EF0 /* SDL_net.xcodeproj */,
 				61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */,
 				61798934114AB25F00BA94A9 /* AudioToolbox.framework */,
+				612CABAA1391CE68005E9596 /* AVFoundation.framework */,
 				61A117FE1168322700359010 /* CoreGraphics.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,

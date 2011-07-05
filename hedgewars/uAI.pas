@@ -86,7 +86,6 @@ for i:= 0 to Pred(Targets.Count) do
               begin
               BestActions:= Actions;
               inc(BestActions.Score, Score);
-         addfilelog('AI: curr score ' + inttostr(bestactions.score));
 
               if (ap.Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
               else if (ap.Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200, 0, 0);

@@ -70,7 +70,16 @@ HWNewNet::~HWNewNet()
 
 void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & nick)
 {
-    mynick = nick.isEmpty() ? QLineEdit::tr("unnamed") : nick;
+    mynick = nick;
+    while (mynick.isEmpty()) {
+        mynick = QInputDialog::getText(m_pGameCFGWidget,
+                 QObject::tr("Nickname"),
+                 QObject::tr("Please enter your nickname"),
+                 QLineEdit::Normal,
+                 QDir::home().dirName());
+        config->setValue("net/nick",mynick);
+        config->updNetNick();
+    }
     myhost = hostName + QString(":%1").arg(port);
     NetSocket.connectToHost(hostName, port);
 }
@@ -507,7 +516,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         // If the password is blank, ask the user to enter one in
         if (passLength == 0)
         {
-            QString password = QInputDialog::getText(0, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(mynick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'), &ok);
+            QString password = QInputDialog::getText(m_pGameCFGWidget, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(mynick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'), &ok);
 
             if (!ok) {
                 Disconnect();
@@ -831,6 +840,7 @@ void HWNewNet::handleNotice(int n)
             }
 
             config->setValue("net/nick", newNick);
+            config->updNetNick();
             mynick = newNick;
 
             RawSendNet(QString("NICK%1%2").arg(delimeter).arg(newNick));

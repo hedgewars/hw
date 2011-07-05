@@ -1080,31 +1080,22 @@ begin
             AddCaption(trmsg[sidStartFight], cWhiteColor, capgrpGameState);
         end
     end;
-    gtATSmoothWindCh: 
-begin
-    if Gear^.Timer = 0 then
+    gtATFinishGame: 
     begin
-        if WindBarWidth < Gear^.Tag then inc(WindBarWidth)
-        else if WindBarWidth > Gear^.Tag then dec(WindBarWidth);
-        if WindBarWidth <> Gear^.Tag then Gear^.Timer := 10;
-    end
-end;
-gtATFinishGame: 
-begin
-    AllInactive := false;
-    if Gear^.Timer = 1000 then
-    begin
-        ScreenFade := sfToBlack;
-        ScreenFadeValue := 0;
-        ScreenFadeSpeed := 1;
+        AllInactive := false;
+        if Gear^.Timer = 1000 then
+        begin
+            ScreenFade := sfToBlack;
+            ScreenFadeValue := 0;
+            ScreenFadeSpeed := 1;
+        end;
+        if Gear^.Timer = 0 then
+        begin
+            SendIPC('N');
+            SendIPC('q');
+            GameState := gsExit
+        end
     end;
-    if Gear^.Timer = 0 then
-    begin
-        SendIPC('N');
-        SendIPC('q');
-        GameState := gsExit
-    end
-end;
 end;
 if Gear^.Timer = 0 then DeleteGear(Gear)
 end;
@@ -1877,6 +1868,7 @@ var
     i: LongInt;
     particle: PVisualGear;
 begin
+    if (Gear^.dY.QWordValue = 0) and (Gear^.dY.QWordValue = 0) and not TestCollisionYwithGear(Gear, 1) then SetLittle(Gear^.dY);
     Gear^.State := Gear^.State or gstAnimation;
     if ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
     begin
@@ -2416,7 +2408,7 @@ begin
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
     if (Gear^.State = 2) then
-        Gear^.dX := Gear^.dX - cBombsSpeed * Gear^.Tag * 1000 // ^.Timer of gtNapalmBomb, make it a constant var if you prefer that :P
+        Gear^.dX := Gear^.dX - cBombsSpeed * Gear^.Tag * 900 
     // calcs for regular falling gears
     else if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then
             Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /
