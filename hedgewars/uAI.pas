@@ -262,6 +262,8 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
           Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
        end;
 
+    ThreadSwitch();
+
     if BestRate > BaseRate then exit
     end
 end;
@@ -279,7 +281,7 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
       begin
       WalkMe:= BackMe;
       Walk(@WalkMe);
-      if (StartTicks > GameTicks - 1500) and not StopThinking then SDL_Delay(2000);
+      if (StartTicks > GameTicks - 1500) and not StopThinking then SDL_Delay(1000);
       if BestActions.Score < -1023 then
          begin
          addfilelog('AI: best score ' + inttostr(bestactions.score));
