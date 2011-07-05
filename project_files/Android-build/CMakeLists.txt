@@ -7,8 +7,6 @@ set(ANDROID_NDK_API_LVL 5)
 configure_file(Templates/complete_build.sh .)
 configure_file(Templates/default.properties SDL-android-project/)
 configure_file(Templates/local.properties SDL-android-project/)
-configure_file(Templates/default.properties DataPackage/)
-configure_file(Templates/local.properties DataPackage/)
 configure_file(Templates/Makefile.android .)
 configure_file(Templates/pushToDevice.sh .)
 
