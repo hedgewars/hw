@@ -50,5 +50,8 @@ glob:project_files/Android-build/SDL-android-project/gen
 glob:project_files/Android-build/SDL-android-project/local.properties
 glob:project_files/Android-build/SDL-android-project/default.properties
 glob:project_files/Android-build/SDL-android-project/.*
+glob:project_files/Android-build/complete_build.sh
+glob:project_files/Android-build/pushToDevice.sh
+glob:project_files/Android-build/Makefile.android
 glob:project_files/Android-build/out
 
