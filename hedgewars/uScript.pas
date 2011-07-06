@@ -30,7 +30,6 @@ unit uScript;
  *       unnoticed and render the parameter useless!)
  *)
 interface
-
 procedure ScriptPrintStack;
 procedure ScriptClearStack;
 
@@ -43,8 +42,9 @@ function ScriptCall(fname : shortstring; par1, par2: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 function ScriptExists(fname : shortstring) : boolean;
-function ParseCommandOverride(key, value : shortstring) : shortstring;
 
+
+function ParseCommandOverride(key, value : shortstring) : shortstring;
 procedure initModule;
 procedure freeModule;
 
@@ -1933,6 +1933,11 @@ end;
 function ScriptExists(fname : shortstring) : boolean;
 begin
 ScriptExists:= false
+end;
+
+function ParseCommandOverride(key, value : shortstring) : shortstring;
+begin
+ParseCommandOverride:= value
 end;
 
 procedure initModule;
