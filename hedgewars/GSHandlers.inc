@@ -3756,13 +3756,19 @@ begin
            or (iterator^.Y < Gear^.Y - r)
            or (iterator^.Y > Gear^.Y + r) then
             continue;
-
+(*
+Square check causes fail on many innocent cases. the 3/4s and 1.5 fudge factors... help.
+Might still need to remove this section
+*)
         //Will if fit through?
         //set r to be portal distance
-        r := Int2hwFloat(Gear^.Radius +1);
+        r := Int2hwFloat(Gear^.Radius * 3 div 4);
+        o_x := hwRound(conPortal^.X + (conPortal^.dX*_1_5));
+        o_y := hwRound(conPortal^.Y + (conPortal^.dY*_1_5));
+        //r := Int2hwFloat(Gear^.Radius +1);
 
-        o_x := hwRound(conPortal^.X + conPortal^.dX);
-        o_y := hwRound(conPortal^.Y + conPortal^.dY);
+        //o_x := hwRound(conPortal^.X + conPortal^.dX);
+        //o_y := hwRound(conPortal^.Y + conPortal^.dY);
         r_x := hwRound(conPortal^.X+r*conPortal^.dX);
         r_y := hwRound(conPortal^.Y+r*conPortal^.dY);
         rr_x := hwRound(conPortal^.X+r*conPortal^.dX*2);
