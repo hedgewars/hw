@@ -55,6 +55,7 @@
 00:52=Žiadna zbraň nie je vybraná
 00:53=TARDIS
 00:54=Budova
+00:55=Postrek zeme
 
 01:00=Do boja!
 01:01=Remíza
@@ -71,6 +72,12 @@
 01:12=Posledné kolo pred Rýchlou smrťou!
 01:13=Ešte %1 kolá do Rýchlej smrti!
 01:14=Priprav sa, %1!
+01:15=Nepatrný
+01:16=Nízky
+01:17=Normálny
+01:18=Vysoký
+01:19=Extrémny
+01:20=%1 odskok
 
 ; Správy o udalostiach
 ; Ježko (%1) zomrel
@@ -99,6 +106,7 @@
 02:00=%1 odišiel za lepším
 02:00=%1 už nespotrebováva pamäť tohto počítača
 02:00=%1 odišiel a už sa nevrátil
+02:00=Je tu niekde doktor?
 ; Ježko (%1) sa utopil
 02:01=%1 sa hrá na ponorku!
 02:01=%1 napodobnil Titanik!
@@ -132,6 +140,10 @@
 02:02=Dajme im na frak!
 02:02=Nikdy sa nevzdávaj
 02:02=Bojuj čestne!
+; Kolo končí (výhra, momentálne nepoužívané)
+02:03=...
+; Kolo končí (remíza, momentálne nepoužívané)
+02:04=...
 ; Nová krabica so zdravím
 02:05=Doktora!
 02:05=Prvá pomoc z nebies!
@@ -191,7 +203,7 @@
 02:09=Išlo o jasné zlyhanie techniky!
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
-02:10=Vták, lietadlo, ...
+02:10=Letí, letí, všetko letí...
 02:10=A je z kola von!
 
 ; Ježko (%1) musí odísť (team skončil)
@@ -331,3 +343,4 @@
 05:18=Neobmedzené útoky
 05:19=Zbrane sú na konci ťahu resetované
 05:20=Zbrane nie sú zdieľané ježkami
+05:21=Tag tím: Teamy v spoločnom klane sa postupne striedajú v ťahaní|Zdieľaný čas: Tímy v rámci klanu zdieľajú čas na ťah
