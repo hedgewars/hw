@@ -1,11 +1,14 @@
 project(hedgewars)
 
+#initalise cmake environment
 cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
 FOREACH(policy CMP0003 CMP0012)
 	IF(POLICY ${policy})
 		CMAKE_POLICY(SET ${policy} NEW)
 	ENDIF()
 ENDFOREACH()
+set( CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules )
+
 
 #detect Mercurial revision (if present)
 set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
@@ -33,11 +36,14 @@ ELSE()
 	set(HW_DEV false)
 ENDIF()
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
+#versioning
 set( CPACK_PACKAGE_VERSION_MAJOR 0 )
 set( CPACK_PACKAGE_VERSION_MINOR 9 )
 set( CPACK_PACKAGE_VERSION_PATCH 16${version_suffix} )
+set( HEDGEWARS_PROTO_VER 38 )
+set( HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}" )
+
 
 #set some safe values
 IF(NOT WITH_SERVER)
@@ -49,6 +55,7 @@ ENDIF(NOT BUILD_ENGINE_LIBRARY)
 set(target_dir "bin")
 
 
+#bundle .app setup
 if(APPLE)
 	set(CMAKE_FIND_FRAMEWORK "FIRST")
 
@@ -165,8 +172,6 @@ else()
 endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-set( HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}" )
-set( HEDGEWARS_PROTO_VER 38 )
 
 if(WITH_SERVER)
 	find_program(ghc_executable ghc)
@@ -192,8 +197,8 @@ if(NOT BUILD_ENGINE_LIBRARY)
 	add_subdirectory(tools)
 endif()
 
-# CPack vars
 
+# CPack variables
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Hedgewars, a free turn-based strategy")
 set(CPACK_PACKAGE_VENDOR "Hedgewars Project")
 set(CPACK_PACKAGE_FILE_NAME "hedgewars-${HEDGEWARS_VERSION}")
