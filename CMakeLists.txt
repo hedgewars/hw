@@ -1,13 +1,14 @@
 project(hedgewars)
 
-#initalise cmake environment
+
+#initialise cmake environment
 cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
 FOREACH(policy CMP0003 CMP0012)
 	IF(POLICY ${policy})
 		CMAKE_POLICY(SET ${policy} NEW)
 	ENDIF()
 ENDFOREACH()
-set( CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules )
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
 
 #detect Mercurial revision (if present)
@@ -38,11 +39,11 @@ ENDIF()
 
 
 #versioning
-set( CPACK_PACKAGE_VERSION_MAJOR 0 )
-set( CPACK_PACKAGE_VERSION_MINOR 9 )
-set( CPACK_PACKAGE_VERSION_PATCH 16${version_suffix} )
-set( HEDGEWARS_PROTO_VER 38 )
-set( HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}" )
+set(CPACK_PACKAGE_VERSION_MAJOR 0)
+set(CPACK_PACKAGE_VERSION_MINOR 9)
+set(CPACK_PACKAGE_VERSION_PATCH 16${version_suffix})
+set(HEDGEWARS_PROTO_VER 38)
+set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 
 #set some safe values
@@ -280,3 +281,4 @@ set(CPACK_SOURCE_IGNORE_FILES
 )
 
 include(CPack)
+
