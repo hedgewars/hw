@@ -91,7 +91,7 @@ PageMain::PageMain(QWidget* parent) :
         Tips << tr("Most weapons won't work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.", "Tips");
         Tips << tr("The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.", "Tips");
         Tips << tr("The Piano Strike is the most damaging air strike. You'll lose the hedgehog performing it, so there's a huge downside as well.", "Tips");
-        Tips << tr("The Homing Bee can be tricky to use. Its turn radius depends on it's velocity, so try to not use full power.", "Tips");
+        Tips << tr("The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.", "Tips");
         Tips << tr("Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.", "Tips");
         Tips << tr("The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.", "Tips");
         Tips << tr("If you're stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.", "Tips");
