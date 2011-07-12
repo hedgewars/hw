@@ -733,7 +733,8 @@ if move then
         exit
         end;
     Gear^.X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
-    Gear^.Y:= int2hwFloat(750+(GetRandom(50)-25))
+    Gear^.Y:= int2hwFloat(750+(GetRandom(50)-25));
+    Gear^.State:= Gear^.State or gstInvisible;
     end
 end;
 
