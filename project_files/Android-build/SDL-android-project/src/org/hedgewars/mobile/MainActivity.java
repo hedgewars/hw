@@ -1,5 +1,7 @@
 package org.hedgewars.mobile;
 
+import org.hedgewars.mobile.Downloader.DownloadActivity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +34,7 @@ public class MainActivity extends Activity {
 
 	private OnClickListener startGameClicker = new OnClickListener(){
 		public void onClick(View v){
-			startActivity(new Intent(getApplicationContext(), SDLActivity.class));
+			startActivity(new Intent(getApplicationContext(), StartGameActivity.class));
 		}
 	};
 	

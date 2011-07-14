@@ -237,9 +237,11 @@ class SDLMain implements Runnable {
 	public void run() {
 		// Runs SDL_main()
 
-		String path = DownloadService.getDownloadPath(SDLActivity.mSingleton) + "Data";
+		EngineProtocolNetwork ipc = new EngineProtocolNetwork(EngineProtocolNetwork.MODE_GAME);
 		
-		SDLActivity.nativeInit(new String[]{ "0", String.valueOf(surfaceWidth), String.valueOf(surfaceHeight), "0", "null", "xeli", "1", "1", "1", "0", "/sdcard/bla.hwd", path});
+		String path = Utils.getDownloadPath(SDLActivity.mSingleton) + "Data";
+		
+		SDLActivity.nativeInit(new String[]{ String.valueOf(ipc.port), String.valueOf(surfaceWidth), String.valueOf(surfaceHeight), "0", "null", "xeli", "1", "1", "1", "0", "", path});
 
 		//Log.v("SDL", "SDL thread terminated");
 	}
