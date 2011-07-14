@@ -68,7 +68,7 @@ public class Utils {
 			}
 			return false;
 		}else{
-			throw new IllegalArgumentException("Not a directory.. f = " + f.getAbsolutePath());
+			return false;
 		}
 	}
 	
