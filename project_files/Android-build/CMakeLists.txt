@@ -1,8 +1,25 @@
+###################################################################################
+# Uncomment (remove the leading '#') and change the paths accordingly to your own 
+# build environment, please do specify an absolute path (/home/richard/SoftDev    
+# rather than ~/SoftDev).
+# You only need to change the three lines below, after that you can run 'cmake .'
+# from the hedgewars root directory
+# 
+# optionally you can specify SDL_DIR this will move the required SDL libraries to
+# the correct place
+##################################################################################
+
 set(ANDROID_NDK /home/richard/SoftDev/android/android-ndk-r5b)
 set(ANDROID_SDK /home/richard/SoftDev/android/android-sdk-linux_86)
 set(FPC_DIR /home/richard/SoftDev/fpc-2.4.4)
+set(SDL_DIR /home/richard/Downloads/android-project)
+
+if(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
+
 set(ANDROID_SDK_API_LVL 8)
 set(ANDROID_NDK_API_LVL 5)
+
+MESSAGE("Creating android scripts and configuration files")
 
 configure_file(Templates/complete_build.sh .)
 configure_file(Templates/default.properties SDL-android-project/)
@@ -10,49 +27,41 @@ configure_file(Templates/local.properties SDL-android-project/)
 configure_file(Templates/Makefile.android .)
 configure_file(Templates/pushToDevice.sh .)
 
-set(PREFERED_DIRS 
-    Sounds
-    Music
-)
-set(DIRS
-    Fonts
-    Forts
-    Graphics
-    Locale
-    Maps
-    misc
-    Missions
-    Names
-    Scripts
-    Themes
-)
-set(PREFERED_DIRS_PREFIX ../../../../Data)
-set(DIRS_PREFIX ../../../../../share/hedgewars/Data)
+if(SDL_DIR)
 
-if(CMAKE_HOST_WIN32) #Copy the asset files to the proper folder when using windows
-    set(OPERATION copy_directory)
-else(CMAKE_HOST_WIN32)#If it isn't windows we can assume it's unix/darwin which supports symlinks
-    set(OPERATION create_symlink)
-endif(CMAKE_HOST_WIN32)#We can make the above assumption because the android ndk/sdk only support Linux/Windows/Mac
+    MESSAGE("Moving Android port of SDL to the proper directories")
 
-#Copy or symlink the smaller sized resources first
-foreach(DIR ${PREFERED_DIRS})
-        EXECUTE_PROCESS(COMMAND "${CMAKE_COMMAND}"
-            -E 
-            ${OPERATION}
-            ${PREFERED_DIRS_PREFIX}/${DIR}
-            DataPackage/assets/Data/${DIR} 
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        )
-endforeach(DIR)
+    set(DirsToCopy
+        SDL
+	SDL_image
+	SDL_mixer
+	SDL_ttf
+	jpeg
+	png
+	mikmod
+	tremor
+	freetype
+    )
+    foreach(DIR ${DirsToCopy})
+        EXECUTE_PROCESS( 
+	    COMMAND ${CMAKE_COMMAND} 
+	    -E copy_directory 
+	    ${SDL_DIR}/jni/${DIR}
+	    ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/${DIR}
+	)
+    endforeach(DIR)
+    exec_program(${HGCOMMAND}
+		ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
+		)
+    exec_program(${HGCOMMAND}
+		ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
+		)
+else(SDL_DIR)
+   MESSAGE("Android port of SDL not moved..")
+endif(SDL_DIR)
 
-#Use the global resources second
-foreach(DIR ${DIRS})
-         EXECUTE_PROCESS(COMMAND "${CMAKE_COMMAND}"
-            -E 
-            ${OPERATION} 
-            ${DIRS_PREFIX}/${DIR}
-            DataPackage/assets/Data/${DIR} 
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-         )
-endforeach(DIR)
+else(ANDROID_AND AND ANDROID_SDK AND FPC_DIR)
+    MESSAGE("Android port files not created, edit top of ${CMAKE_CURRENT_SOURCE_DIR}/CMakeList.txt to created android specific files")
+endif(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
+
+
