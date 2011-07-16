@@ -4415,18 +4415,18 @@ begin
     if Gear^.Timer = 0 then
         begin
         dec(Gear^.Health);
-        if (Gear^.Health mod 10) = 0 then
+        if (Gear^.Health mod 5) = 0 then
             begin
             rx := rndSign(getRandom * _0_1);
             ry := rndSign(getRandom * _0_1);
-            speed := _0_8 * (_10 / Gear^.Tag);
+            speed := _0_5 * (_10 / Gear^.Tag);
     
             Fire := AddGear(gx, gy, gtFlame, 0,
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                 AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
             Fire^.State := Fire^.State or gsttmpFlag;
             
-            if (Gear^.Health mod 20) = 0 then 
+            if (Gear^.Health mod 30) = 0 then 
                 Fire := AddGear(gx, gy, gtFlame, 0,
                             SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
