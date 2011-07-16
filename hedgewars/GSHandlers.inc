@@ -500,9 +500,9 @@ begin
         gX := hwRound(Gear^.X);
         gY := hwRound(Gear^.Y);
         //doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5, EXPLAutoSound);
-        for i:= 0 to 20 do
+        for i:= 0 to 24 do
         begin
-            dX := AngleCos(i * 2) * ((_0_1*(i div 5))) * (GetRandom + _1);
+            dX := AngleCos(i * 2) * ((_0_15*(i div 5))) * (GetRandom + _1);
             dY := AngleSin(i * 8) * _0_5 * (GetRandom + _1);
             Fire := AddGear(gX, gY, gtFlame, 0, dX, dY, 0);
             Fire^.State := Fire^.State or gsttmpFlag;
@@ -2114,6 +2114,7 @@ var
     gX,gY,i: LongInt;
     sticky: Boolean;
     vgt: PVisualGear;
+    tdX,tdY: HWFloat;
 begin
     sticky:= (Gear^.State and gsttmpFlag) <> 0;
     if not sticky then AllInactive := false;
@@ -2159,7 +2160,15 @@ begin
         if sticky then
             begin
             Gear^.Radius := 7;
-            AmmoShove(Gear, 2, 30);
+            tdX:= Gear^.dX;
+            tdY:= Gear^.dY;
+            Gear^.dX.QWordValue:= 214748365;
+            Gear^.dY.QWordValue:= 429496730;
+            Gear^.dX.isNegative:= getrandom(2)<>1;
+            Gear^.dY.isNegative:= true;
+            AmmoShove(Gear, 2, 125);
+            Gear^.dX:= tdX;
+            Gear^.dY:= tdY;
             Gear^.Radius := 1
             end;
         if Gear^.Timer > 0 then
@@ -2177,10 +2186,18 @@ begin
                 if ((GameTicks and $1) = 0) then
                     begin
                     Gear^.Radius := 7;
-                    AmmoShove(Gear, 4, 150);
+                    tdX:= Gear^.dX;
+                    tdY:= Gear^.dY;
+                    Gear^.dX.QWordValue:= 214748365;
+                    Gear^.dY.QWordValue:= 429496730;
+                    Gear^.dX.isNegative:= getrandom(2)<>1;
+                    Gear^.dY.isNegative:= true;
+                    AmmoShove(Gear, 6, 100);
+                    Gear^.dX:= tdX;
+                    Gear^.dY:= tdY;
                     Gear^.Radius := 1;
                     end
-                else if ((GameTicks and $3) = 3) then doMakeExplosion(gX, gY, 6, Gear^.Hedgehog, 0);//, EXPLNoDamage); 
+                else if ((GameTicks and $3) = 3) then doMakeExplosion(gX, gY, 8, Gear^.Hedgehog, 0);//, EXPLNoDamage); 
                 //DrawExplosion(gX, gY, 4);
                 if ((GameTicks and $7) = 0) and (Random(2) = 0) then
                     for i:= 1 to Random(2)+1 do
