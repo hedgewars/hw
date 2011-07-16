@@ -56,6 +56,12 @@ if(SDL_DIR)
     exec_program(${HGCOMMAND}
 		ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
 		)
+    exec_program(${HGCOMMAND}
+		ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4/llex.c
+		)
+else(SDL_DIR)
+   MESSAGE("Android port of SDL not moved..")
+
 else(SDL_DIR)
    MESSAGE("Android port of SDL not moved..")
 endif(SDL_DIR)
