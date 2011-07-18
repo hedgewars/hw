@@ -13,58 +13,71 @@ set(ANDROID_NDK /home/richard/SoftDev/android/android-ndk-r5b)
 set(ANDROID_SDK /home/richard/SoftDev/android/android-sdk-linux_86)
 set(FPC_DIR /home/richard/SoftDev/fpc-2.4.4)
 set(SDL_DIR /home/richard/Downloads/android-project)
+set(LUA_DIR /home/richard/Downloads/lua.5.1.4)
 
 if(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
 
-set(ANDROID_SDK_API_LVL 8)
-set(ANDROID_NDK_API_LVL 5)
+    set(ANDROID_SDK_API_LVL 8)
+    set(ANDROID_NDK_API_LVL 5)
 
-MESSAGE("Creating android scripts and configuration files")
+    MESSAGE("Creating android scripts and configuration files")
 
-configure_file(Templates/complete_build.sh .)
-configure_file(Templates/default.properties SDL-android-project/)
-configure_file(Templates/local.properties SDL-android-project/)
-configure_file(Templates/Makefile.android .)
-configure_file(Templates/pushToDevice.sh .)
+    configure_file(Templates/complete_build.sh .)
+    configure_file(Templates/default.properties SDL-android-project/)
+    configure_file(Templates/local.properties SDL-android-project/)
+    configure_file(Templates/Makefile.android .)
+    configure_file(Templates/pushToDevice.sh .)
 
-if(SDL_DIR)
+    if(SDL_DIR)
 
-    MESSAGE("Moving Android port of SDL to the proper directories")
+        MESSAGE("Moving Android port of SDL to the proper directories")
 
-    set(DirsToCopy
-        SDL
-	SDL_image
-	SDL_mixer
-	SDL_ttf
-	jpeg
-	png
-	mikmod
-	tremor
-	freetype
-    )
-    foreach(DIR ${DirsToCopy})
-        EXECUTE_PROCESS( 
-	    COMMAND ${CMAKE_COMMAND} 
-	    -E copy_directory 
-	    ${SDL_DIR}/jni/${DIR}
-	    ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/${DIR}
-	)
-    endforeach(DIR)
-    exec_program(${HGCOMMAND}
-		ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
-		)
-    exec_program(${HGCOMMAND}
-		ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
-		)
-    exec_program(${HGCOMMAND}
-		ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4/llex.c
-		)
-else(SDL_DIR)
-   MESSAGE("Android port of SDL not moved..")
+        set(DirsToCopy
+            SDL
+	    SDL_image
+            SDL_mixer
+            SDL_ttf
+	    jpeg
+	    png
+            mikmod
+            tremor
+            freetype
+           ) 
+         foreach(DIR ${DirsToCopy})
+             EXECUTE_PROCESS( 
+	        COMMAND ${CMAKE_COMMAND} 
+                -E copy_directory 
+	        ${SDL_DIR}/jni/${DIR}
+	        ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/${DIR}
+        	)
+         endforeach(DIR)
+        exec_program(${HGCOMMAND}
+	            ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
+		    )
+        exec_program(${HGCOMMAND}
+		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
+		    )
+    else(SDL_DIR)
+        MESSAGE("Android port of SDL not moved..")
+    endif(SDL_DIR)
 
-else(SDL_DIR)
-   MESSAGE("Android port of SDL not moved..")
-endif(SDL_DIR)
+    if(LUA_DIR)
+        EXECUTE_PROCESS(
+                        ${CMAKE_COMMAND}
+                        -E copy_directory
+                        ${LUA_DIR}/src
+                        ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4
+                       )
+        exec_program(${HGCOMMAND}
+		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4/Android.mk
+		    )
+        exec_program(${HGCOMMAND}
+		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4/llex.c
+		    )
+        MESSAGE("Lua has been moved.")
+    else(LUA_DIR)
+        MESSAGE("Lua hasn't been moved..")
+    endif(LUA_DIR)
 
 else(ANDROID_AND AND ANDROID_SDK AND FPC_DIR)
     MESSAGE("Android port files not created, edit top of ${CMAKE_CURRENT_SOURCE_DIR}/CMakeList.txt to created android specific files")
