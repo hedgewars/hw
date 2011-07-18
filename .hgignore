@@ -36,13 +36,7 @@ glob:*.patch
 glob:*.orig
 glob:*.bak
 glob:*.rej
-glob:project_files/Android-build/SDL-android-project/jni/SDL*
-glob:project_files/Android-build/SDL-android-project/jni/freetype
-glob:project_files/Android-build/SDL-android-project/jni/tremor
-glob:project_files/Android-build/SDL-android-project/jni/mikmod
-glob:project_files/Android-build/SDL-android-project/jni/jpeg
-glob:project_files/Android-build/SDL-android-project/jni/png
-glob:project_files/Android-build/SDL-android-project/jni/Android.mk
+glob:project_files/Android-build/SDL-android-project/jni/**
 glob:project_files/Android-build/SDL-android-project/obj
 glob:project_files/Android-build/SDL-android-project/libs
 glob:project_files/Android-build/SDL-android-project/bin
@@ -54,4 +48,3 @@ glob:project_files/Android-build/complete_build.sh
 glob:project_files/Android-build/pushToDevice.sh
 glob:project_files/Android-build/Makefile.android
 glob:project_files/Android-build/out
-
