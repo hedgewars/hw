@@ -49,7 +49,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
         QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty))
         : QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty));
 
-    butt = new QPushButton(difficultyIcon, team.TeamName, this);
+    butt = new QPushButton(difficultyIcon, team.TeamName.replace("&","&&"), this);
     butt->setFlat(true);
     butt->setToolTip(team.Owner);
     mainLayout.addWidget(butt);
