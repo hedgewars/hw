@@ -175,7 +175,7 @@ map, mapInfo);
     connect(cbTemplateFilter, SIGNAL(activated(int)), this, SLOT(setTemplateFilter(int)));
 
     maze_size_label = new QLabel(tr("Type"), mapWidget);
-    mainLayout.addWidget(maze_size_label, 2, 0);
+    mapLayout->addWidget(maze_size_label, 2, 0);
     maze_size_label->hide();
     cbMazeSize = new QComboBox(mapWidget);
     cbMazeSize->addItem(tr("Small tunnels"), 0);
