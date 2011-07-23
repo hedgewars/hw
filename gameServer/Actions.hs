@@ -45,6 +45,8 @@ data Action =
     | KickClient ClientIndex
     | KickRoomClient ClientIndex
     | BanClient NominalDiffTime B.ByteString ClientIndex
+    | BanIP B.ByteString NominalDiffTime B.ByteString
+    | BanList
     | ChangeMaster
     | RemoveClientTeams ClientIndex
     | ModifyClient (ClientInfo -> ClientInfo)
@@ -393,11 +395,24 @@ processAction (BanClient seconds reason banId) = do
     modify (\s -> s{clientIndex = Just banId})
     clHost <- client's host
     currentTime <- io getCurrentTime
-    let msg = B.concat ["Ban for ", B.pack . show $ seconds, "seconds (", reason, ")"]
+    let msg = B.concat ["Ban for ", B.pack . show $ seconds, " (", reason, ")"]
     mapM_ processAction [
         AddIP2Bans clHost msg (addUTCTime seconds currentTime)
         , KickClient banId
         ]
+
+processAction (BanIP ip seconds reason) = do
+    currentTime <- io getCurrentTime
+    let msg = B.concat ["Ban for ", B.pack . show $ seconds, " (", reason, ")"]
+    processAction $
+        AddIP2Bans ip msg (addUTCTime seconds currentTime)
+
+processAction BanList = do
+    ch <- client's sendChan
+    bans <- gets (bans . serverInfo)
+    processAction $
+        AnswerClients [ch] ["BANLIST", B.pack $ show bans]
+    
 
 
 processAction (KickRoomClient kickId) = do
@@ -442,15 +457,13 @@ processAction CheckBanned = do
     si <- gets serverInfo
     let validBans = filter (checkNotExpired clTime) $ bans si
     let ban = L.find (checkBan clHost clNick) $ validBans
-    when (isJust ban) $
-        mapM_ processAction [
+    mapM_ processAction $
         ModifyServerInfo (\s -> s{bans = validBans})
-        , ByeClient (getBanReason $ fromJust ban)
-        ]
+        : [ByeClient (getBanReason $ fromJust ban) | isJust ban]
     where
         checkNotExpired testTime (BanByIP _ _ time) = testTime `diffUTCTime` time <= 0
         checkNotExpired testTime (BanByNick _ _ time) = testTime `diffUTCTime` time <= 0
-        checkBan ip _ (BanByIP bip _ _) = bip == ip
+        checkBan ip _ (BanByIP bip _ _) = bip `B.isPrefixOf` ip
         checkBan _ n (BanByNick bn _ _) = bn == n
         getBanReason (BanByIP _ msg _) = msg
         getBanReason (BanByNick _ msg _) = msg
