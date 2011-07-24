@@ -25,7 +25,7 @@
 #define LABEL_TAG 57423
 
 @implementation SchemeWeaponConfigViewController
-@synthesize listOfSchemes, listOfWeapons, lastIndexPath_sc, lastIndexPath_we, selectedScheme, selectedWeapon, syncSwitch;
+@synthesize listOfSchemes, listOfWeapons, lastIndexPath_sc, lastIndexPath_we, selectedScheme, selectedWeapon;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -85,16 +85,14 @@
     if (hideSections)
         return 0;
     else
-        return 3;
+        return 2;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
         return [self.listOfSchemes count];
-    else if (section == 1)
-        return [self.listOfWeapons count];
     else
-        return 1;
+        return [self.listOfWeapons count];
 }
 
 // Customize the appearance of table view cells.
@@ -120,7 +118,7 @@
             [checkbox release];
             self.lastIndexPath_sc = indexPath;
         }
-    } else if (1 == section) {
+    } else {
         cell.textLabel.text = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension];
         NSString *str = [NSString stringWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),[self.listOfWeapons objectAtIndex:row]];
         NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
@@ -132,17 +130,6 @@
             [checkbox release];
             self.lastIndexPath_we = indexPath;
         }
-    } else {
-        if (self.syncSwitch == nil) {
-            UISwitch *theSwitch = [[UISwitch alloc] init];
-            [theSwitch setOn:YES];
-            self.syncSwitch = theSwitch;
-            [theSwitch release];
-        }
-        cell.textLabel.text = IS_IPAD() ? NSLocalizedString(@"Sync Schemes",@"") : NSLocalizedString(@"Sync Schemes and Weapons",@"");
-        cell.detailTextLabel.text = IS_IPAD() ? nil : NSLocalizedString(@"Choosing a Scheme will select its associated Weapon",@"");
-        cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-        cell.accessoryView = self.syncSwitch;
     }
 
     cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
@@ -160,10 +147,8 @@
     NSString *text;
     if (section == 0) 
         text = NSLocalizedString(@"Schemes",@"");
-    else if (section == 1)
-        text = NSLocalizedString(@"Weapons",@"");
     else
-        text = NSLocalizedString(@"Options",@"");
+        text = NSLocalizedString(@"Weapons",@"");
 
     UILabel *theLabel = createBlueLabel(text, frame);
     theLabel.center = CGPointMake(self.view.frame.size.width/2, 20);
@@ -198,7 +183,9 @@
         if ([indexPath section] == 0) {
             self.lastIndexPath_sc = indexPath;
             self.selectedScheme = [self.listOfSchemes objectAtIndex:newRow];
-            if (self.syncSwitch.on) {
+
+            NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+            if ([[settings objectForKey:@"sync_ws"] boolValue]) {
                 for (NSString *str in self.listOfWeapons) {
                     if ([str isEqualToString:self.selectedScheme]) {
                         int index = [self.listOfSchemes indexOfObject:str];
@@ -224,7 +211,7 @@
         hideSections = NO;
         NSRange range;
         range.location = 0;
-        range.length = 3;
+        range.length = 2;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
         [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
         self.selectedScheme = @"Default.plist";
@@ -240,7 +227,7 @@
     hideSections = YES;
     NSRange range;
     range.location = 0;
-    range.length = 3;
+    range.length = 2;
     NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
     [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
     self.selectedScheme = @"Default.plist";
@@ -266,7 +253,6 @@
         self.lastIndexPath_we = nil;
         self.listOfSchemes = nil;
         self.listOfWeapons = nil;
-        self.syncSwitch = nil;
         MSG_MEMCLEAN();
     }
     [super didReceiveMemoryWarning];
@@ -279,7 +265,6 @@
     self.lastIndexPath_we = nil;
     self.selectedScheme = nil;
     self.selectedWeapon = nil;
-    self.syncSwitch = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -292,7 +277,6 @@
     releaseAndNil(lastIndexPath_we);
     releaseAndNil(selectedScheme);
     releaseAndNil(selectedWeapon);
-    releaseAndNil(syncSwitch);
     [super dealloc];
 }
 

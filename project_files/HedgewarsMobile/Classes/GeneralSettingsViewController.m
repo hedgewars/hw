@@ -84,6 +84,9 @@
         case 30:    //alternateSwitch
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];
             break;
+        case 90:    //synched weapons/scheme
+            [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"sync_ws"];
+            break;
         case 70:    //enhanced graphics
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"enhanced"];
             break;
@@ -117,16 +120,13 @@
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger )section {
     switch (section) {
         case 0:     // user and pass
-            return 1;   // set 2 here for the password field
+            return 1;   // set 2 here to show the password field
             break;
         case 1:     // audio
             return 2;
             break;
-        case 2:     // other stuff
-            if (IS_IPAD() == YES)
-                return 4;
-            else
-                return 3;
+        case 2:     // other options
+            return 5;
             break;
         default:
             DLog(@"Nope");
@@ -225,6 +225,7 @@
             }
             
             switchContent = (UISwitch *)cell.accessoryView;
+            cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
             switch (row) {
                 case 0:
                     cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
@@ -233,22 +234,34 @@
                     switchContent.tag = 30;
                     break;
                 case 1:
-                    cell.textLabel.text = NSLocalizedString(@"Enanched Graphics Mode", @"");
-                    cell.detailTextLabel.text = NSLocalizedString(@"The game will use more memory so it could crash!", @"");
-                    switchContent.on = [[settings objectForKey:@"enhanced"] boolValue];
-                    switchContent.tag = 70;
+                    cell.textLabel.text = NSLocalizedString(@"Sync Schemes and Weapons", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Choosing a Scheme will select its associated Weapon", @"");
+                    switchContent.on = [[settings objectForKey:@"sync_ws"] boolValue];
+                    switchContent.tag = 90;
                     break;
                 case 2:
-                    cell.textLabel.text = NSLocalizedString(@"Multitasking Enabled", @"");
+                    cell.textLabel.text = NSLocalizedString(@"Multitasking", @"");
                     cell.detailTextLabel.text = NSLocalizedString(@"Disable it in case of issues when returing in game", @"");
                     switchContent.on = [[settings objectForKey:@"multitasking"] boolValue];
                     switchContent.tag = 80;
                     break;
                 case 3:
+                    cell.textLabel.text = NSLocalizedString(@"Enanched Graphics", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Beware that the game will consume more memory", @"");
+                    switchContent.on = [[settings objectForKey:@"enhanced"] boolValue];
+                    switchContent.tag = 70;
+                    // prevent the oldest devices to even think about enabling it
+                    if (IS_NOT_POWERFUL(getModelType()))
+                        switchContent.enabled = NO;
+                    break;
+                case 4:
                     cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
                     cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
                     switchContent.on = [[settings objectForKey:@"classic_menu"] boolValue];
                     switchContent.tag = 60;
+                    // remove this when classic ammomenu works on iphone as well
+                    if (IS_IPAD() == NO)
+                        switchContent.enabled = NO;
                     break;
                 default:
                     DLog(@"Nope");
