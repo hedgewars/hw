@@ -25,22 +25,33 @@
 @interface SchemeWeaponConfigViewController : UITableViewController {
     NSArray *listOfSchemes;
     NSArray *listOfWeapons;
+    NSArray *listOfScripts;
 
     NSIndexPath *lastIndexPath_sc;
     NSIndexPath *lastIndexPath_we;
+    NSIndexPath *lastIndexPath_lu;
 
     NSString *selectedScheme;
     NSString *selectedWeapon;
+    NSString *selectedScript;
+    NSString *scriptCommand;
 
+    UISegmentedControl *topControl;
     BOOL hideSections;
 }
 
 @property (nonatomic,retain) NSArray *listOfSchemes;
 @property (nonatomic,retain) NSArray *listOfWeapons;
+@property (nonatomic,retain) NSArray *listOfScripts;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath_sc;
 @property (nonatomic,retain) NSIndexPath *lastIndexPath_we;
+@property (nonatomic,retain) NSIndexPath *lastIndexPath_lu;
 @property (nonatomic,retain) NSString *selectedScheme;
 @property (nonatomic,retain) NSString *selectedWeapon;
+@property (nonatomic,retain) NSString *selectedScript;
+@property (nonatomic,retain) NSString *scriptCommand;
+@property (nonatomic,retain) UISegmentedControl *topControl;
+@property (assign) BOOL hideSections;
 
 -(void) fillSections;
 -(void) emptySections;

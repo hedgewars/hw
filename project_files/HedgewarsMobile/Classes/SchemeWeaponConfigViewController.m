@@ -25,7 +25,8 @@
 #define LABEL_TAG 57423
 
 @implementation SchemeWeaponConfigViewController
-@synthesize listOfSchemes, listOfWeapons, lastIndexPath_sc, lastIndexPath_we, selectedScheme, selectedWeapon;
+@synthesize listOfSchemes, listOfWeapons, listOfScripts, lastIndexPath_sc, lastIndexPath_we, lastIndexPath_lu,
+            selectedScheme, selectedWeapon, selectedScript, scriptCommand, topControl, hideSections;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -41,6 +42,8 @@
 
     self.selectedScheme = nil;
     self.selectedWeapon = nil;
+    self.selectedScript = nil;
+    self.scriptCommand = nil;
 
     if ([self.tableView respondsToSelector:@selector(setBackgroundView:)]) {
         if (IS_IPAD())
@@ -74,7 +77,12 @@
     
     if (self.selectedWeapon == nil && [listOfWeapons containsObject:@"Default.plist"])
         self.selectedWeapon = @"Default.plist";
-    
+
+    contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCRIPTS_DIRECTORY() error:NULL];
+    self.listOfScripts = contentsOfDir;
+    self.selectedScript = @"Normal.plist";
+    self.scriptCommand = @"";
+
     [self.tableView reloadData];
 }
 
@@ -85,28 +93,30 @@
     if (hideSections)
         return 0;
     else
-        return 2;
+        return 1;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0)
+    if (self.topControl.selectedSegmentIndex == 0)
         return [self.listOfSchemes count];
-    else
+    else if (self.topControl.selectedSegmentIndex == 1)
         return [self.listOfWeapons count];
+    else
+        return [self.listOfScripts count];
 }
 
 // Customize the appearance of table view cells.
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
+    NSInteger index = self.topControl.selectedSegmentIndex;
     NSInteger row = [indexPath row];
-    NSInteger section = [indexPath section];
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
 
     cell.accessoryView = nil;
-    if (0 == section) {
+    if (0 == index) {
         cell.textLabel.text = [[self.listOfSchemes objectAtIndex:row] stringByDeletingPathExtension];
         NSString *str = [NSString stringWithFormat:@"%@/%@",SCHEMES_DIRECTORY(),[self.listOfSchemes objectAtIndex:row]];
         NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
@@ -118,7 +128,7 @@
             [checkbox release];
             self.lastIndexPath_sc = indexPath;
         }
-    } else {
+    } else if (1 == index) {
         cell.textLabel.text = [[self.listOfWeapons objectAtIndex:row] stringByDeletingPathExtension];
         NSString *str = [NSString stringWithFormat:@"%@/%@",WEAPONS_DIRECTORY(),[self.listOfWeapons objectAtIndex:row]];
         NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
@@ -130,32 +140,48 @@
             [checkbox release];
             self.lastIndexPath_we = indexPath;
         }
+    } else {
+        cell.textLabel.text = [[self.listOfScripts objectAtIndex:row] stringByDeletingPathExtension];
+        NSString *str = [NSString stringWithFormat:@"%@/%@",SCRIPTS_DIRECTORY(),[self.listOfScripts objectAtIndex:row]];
+        NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
+        cell.detailTextLabel.text = [dict objectForKey:@"description"];
+        [dict release];
+        if ([[self.listOfScripts objectAtIndex:row] isEqualToString:self.selectedScript]) {
+            UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
+            cell.accessoryView = checkbox;
+            [checkbox release];
+            self.lastIndexPath_lu = indexPath;
+        }
     }
 
     cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
     cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
     cell.detailTextLabel.textColor = [UIColor whiteColor];
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
+    cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
     return cell;
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 40.0;
+    return 50.0;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
-    NSString *text;
-    if (section == 0) 
-        text = NSLocalizedString(@"Schemes",@"");
-    else
-        text = NSLocalizedString(@"Weapons",@"");
-
-    UILabel *theLabel = createBlueLabel(text, frame);
-    theLabel.center = CGPointMake(self.view.frame.size.width/2, 20);
+    if (self.topControl == nil) {
+        NSArray *array = [[NSArray alloc] initWithObjects:NSLocalizedString(@"Scheme",@""),NSLocalizedString(@"Weapon",@""),
+                          NSLocalizedString(@"Style",@""),nil];
+        self.topControl = [[UISegmentedControl alloc] initWithItems:array];
+        [array release];
+        [self.topControl addTarget:self.tableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
+        self.topControl.segmentedControlStyle = UISegmentedControlStyleBar;
+        self.topControl.frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
+        self.topControl.center = CGPointMake(self.view.frame.size.width/2, 24);
+        self.topControl.tintColor = [UIColor lightGrayColor];
+        self.topControl.selectedSegmentIndex = 0;
+    }
 
     UIView *theView = [[[UIView alloc] init] autorelease];
-    [theView addSubview:theLabel];
-    [theLabel release];
+    [theView addSubview:self.topControl];
     return theView;
 }
 
@@ -163,10 +189,13 @@
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSIndexPath *lastIndexPath;
-    if ([indexPath section] == 0)
+    NSInteger index = self.topControl.selectedSegmentIndex;
+    if (index == 0)
         lastIndexPath = self.lastIndexPath_sc;
-    else
+    else if (index == 1)
         lastIndexPath = self.lastIndexPath_we;
+    else
+        lastIndexPath = self.lastIndexPath_lu;
 
     int newRow = [indexPath row];
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
@@ -180,7 +209,7 @@
         UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
         oldCell.accessoryView = nil;
 
-        if ([indexPath section] == 0) {
+        if (index == 0) {
             self.lastIndexPath_sc = indexPath;
             self.selectedScheme = [self.listOfSchemes objectAtIndex:newRow];
 
@@ -196,9 +225,36 @@
                     }
                 }
             }
-        } else {
+        } else if (index == 1) {
             self.lastIndexPath_we = indexPath;
             self.selectedWeapon = [self.listOfWeapons objectAtIndex:newRow];
+        } else {
+            self.lastIndexPath_lu = indexPath;
+            self.selectedScript = [self.listOfScripts objectAtIndex:newRow];
+
+            NSString *path = [[NSString alloc] initWithFormat:@"%@/%@",SCRIPTS_DIRECTORY(),selectedScript];
+            NSDictionary *scriptDict = [[NSDictionary alloc] initWithContentsOfFile:path];
+            [path release];
+            self.scriptCommand = [scriptDict objectForKey:@"command"];
+            NSString *scheme = [scriptDict objectForKey:@"scheme"];
+            if ([scheme isEqualToString:@""]) {
+                self.selectedScheme = @"Default.plist";
+                [self.topControl setEnabled:NO forSegmentAtIndex:0];
+            } else {
+                self.selectedScheme = scheme;
+                [self.topControl setEnabled:YES forSegmentAtIndex:0];
+            }
+
+            NSString *weapon = [scriptDict objectForKey:@"weapon"];
+            if ([weapon isEqualToString:@""]) {
+                self.selectedWeapon = @"Default.plist";
+                [self.topControl setEnabled:NO forSegmentAtIndex:1];
+            } else {
+                self.selectedWeapon = weapon;
+                [self.topControl setEnabled:YES forSegmentAtIndex:1];
+            }
+
+            [scriptDict release];
         }
 
         [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
@@ -211,11 +267,12 @@
         hideSections = NO;
         NSRange range;
         range.location = 0;
-        range.length = 2;
+        range.length = 1;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
         [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
         self.selectedScheme = @"Default.plist";
         self.selectedWeapon = @"Default.plist";
+        self.selectedScript = @"Normal.plist";
 
         self.tableView.scrollEnabled = YES;
 
@@ -227,11 +284,12 @@
     hideSections = YES;
     NSRange range;
     range.location = 0;
-    range.length = 2;
+    range.length = 1;
     NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
     [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
     self.selectedScheme = @"Default.plist";
     self.selectedWeapon = @"Default.plist";
+    self.selectedScript = @"Normal.plist";
 
     self.tableView.scrollEnabled = NO;
 
@@ -251,8 +309,11 @@
     if ([[HedgewarsAppDelegate sharedAppDelegate] isInGame]) {
         self.lastIndexPath_sc = nil;
         self.lastIndexPath_we = nil;
+        self.lastIndexPath_lu = nil;
         self.listOfSchemes = nil;
         self.listOfWeapons = nil;
+        self.listOfScripts = nil;
+        self.topControl = nil;
         MSG_MEMCLEAN();
     }
     [super didReceiveMemoryWarning];
@@ -261,10 +322,15 @@
 -(void) viewDidUnload {
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
+    self.listOfScripts = nil;
     self.lastIndexPath_sc = nil;
     self.lastIndexPath_we = nil;
+    self.lastIndexPath_lu = nil;
     self.selectedScheme = nil;
     self.selectedWeapon = nil;
+    self.selectedScript = nil;
+    self.scriptCommand = nil;
+    self.topControl = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -273,10 +339,15 @@
 -(void) dealloc {
     releaseAndNil(listOfSchemes);
     releaseAndNil(listOfWeapons);
+    releaseAndNil(listOfScripts);
     releaseAndNil(lastIndexPath_sc);
     releaseAndNil(lastIndexPath_we);
+    releaseAndNil(lastIndexPath_lu);
     releaseAndNil(selectedScheme);
     releaseAndNil(selectedWeapon);
+    releaseAndNil(selectedScript);
+    releaseAndNil(scriptCommand);
+    releaseAndNil(topControl);
     [super dealloc];
 }
 
