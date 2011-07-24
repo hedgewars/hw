@@ -328,6 +328,12 @@ PageOptions::PageOptions(QWidget* parent) :
             CBStereoMode->addItem(QComboBox::tr("Side-by-side"));
             CBStereoMode->addItem(QComboBox::tr("Top-Bottom"));
             CBStereoMode->addItem(QComboBox::tr("Wiggle"));
+            CBStereoMode->addItem(QComboBox::tr("Red/Cyan grayscale"));
+            CBStereoMode->addItem(QComboBox::tr("Cyan/Red grayscale"));
+            CBStereoMode->addItem(QComboBox::tr("Red/Blue grayscale"));
+            CBStereoMode->addItem(QComboBox::tr("Blue/Red grayscale"));
+            CBStereoMode->addItem(QComboBox::tr("Red/Green grayscale"));
+            CBStereoMode->addItem(QComboBox::tr("Green/Red grayscale"));
             connect(CBStereoMode, SIGNAL(currentIndexChanged(int)), this, SLOT(forceFullscreen(int)));
 
             GBAstereolayout->addWidget(CBStereoMode);
