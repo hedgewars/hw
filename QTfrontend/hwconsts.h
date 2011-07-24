@@ -111,7 +111,7 @@ extern bool isDevBuild;
                               0 }*/
 #define HW_TEAMCOLOR_ARRAY  { 0xffd12b42, /* red    */ \
                               0xff4980c1, /* blue   */ \
-                              0xff6ae530, /* green  */ \
+                              0xff6ab530, /* green  */ \
                               0xffbc64c4, /* purple */ \
                               0xffe76d14, /* orange */ \
                               0xff3fb6e6, /* cyan   */ \
