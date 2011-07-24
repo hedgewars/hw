@@ -117,6 +117,6 @@ extern bool isDevBuild;
                               0xff3fb6e6, /* cyan   */ \
                               0xffe3e90c, /* yellow */ \
                               0xff61d4ac, /* mint   */ \
-                              0xff61d4ac, /* pink   */ \
+                              0xfff1c3e1, /* pink   */ \
                               /* add new colors here */ \
                               0 }
