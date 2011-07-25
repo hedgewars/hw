@@ -1,5 +1,5 @@
 ----------------------------------
--- THE SPECIALISTS MODE 0.4
+-- THE SPECIALISTS MODE 0.5
 -- by mikade
 ----------------------------------
 
@@ -29,15 +29,22 @@
 -- fix potential switch explit
 -- improve user feedback on start
 
+----------------
+-- version 0.5
+----------------
+-- provision for variable minetimer / demo mines set to 5000ms
+-- don't autoswitch if player only has 1 hog on his team
+
 --------------------
 --TO DO
 --------------------
 
--- add proper gameflag checking, maybe
--- set crate drops etc.
--- add alternative switch
+-- balance hog health, maybe
+-- add proper gameflag checking, maybe (so that we can throw in a .cfg and let the users break everything)
+-- set crate drops etc. (super crate for each class? or will this ruin the mode's simplicity?)
 
 loadfile(GetDataPath() .. "Scripts/Locale.lua")()
+loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 
 local numhhs = 0
 local hhs = {}
@@ -46,6 +53,12 @@ local currName
 local lastName
 local started = false
 local switchStage = 0
+
+local hogCounter
+
+function CountHog(gear)
+	hogCounter = hogCounter +1
+end
 
 function CreateTeam()
 
@@ -222,6 +235,8 @@ function onGameStart()
                                 "", 4, 4000
                                 )
 
+	trackTeams()
+
 end
 
 
@@ -229,14 +244,8 @@ function onNewTurn()
         currName = GetHogName(CurrentHedgehog)
         lastName = GetHogName(CurrentHedgehog)
         AssignAmmo()
-
-        ---------------
-        --switch
-        started = false
+        started = true
         switchStage = 0
-        --AddAmmo(CurrentHedgehog, amSwitch, 1)
-	---------------
-
 end
 
 function onGameTick()
@@ -254,19 +263,30 @@ function onGameTick()
 			
 			AddCaption(loc("Prepare yourself") .. ", " .. currName .. "!") 
 
-			switchStage = switchStage + 1	
+			hogCounter = 0
+			runOnHogsInTeam(CountHog, GetHogTeamName(CurrentHedgehog) )
+
+			if hogCounter > 1 then
+
+				switchStage = switchStage + 1	
 			
-			if switchStage == 1 then
-				AddAmmo(CurrentHedgehog, amSwitch, 1)
+				if switchStage == 1 then
+					AddAmmo(CurrentHedgehog, amSwitch, 1)
 				
-			elseif switchStage == 2 then
-				ParseCommand("setweap " .. string.char(amSwitch))
-			elseif switchStage == 3 then
-				SetGearMessage(CurrentHedgehog,gmAttack) 
-			elseif switchStage == 4 then
+				elseif switchStage == 2 then
+					ParseCommand("setweap " .. string.char(amSwitch))
+				elseif switchStage == 3 then
+					SetGearMessage(CurrentHedgehog,gmAttack) 
+				elseif switchStage == 4 then
+					switchStage = 110
+					AddAmmo(CurrentHedgehog, amSwitch, 0)
+				end
+			
+			else
 				switchStage = 110
-				AddAmmo(CurrentHedgehog, amSwitch, 0)
 			end
+
+
 		end		
 		
 		lastName = currName
@@ -280,12 +300,21 @@ function onGearAdd(gear)
         if GetGearType(gear) == gtHedgehog then
                 hhs[numhhs] = gear
                 numhhs = numhhs + 1
-        end
+        elseif (GetGearType(gear) == gtMine) and (started == true) then
+		SetTimer(gear,5000)	
+	end
+	
+	if (GetGearType(gear) == gtHedgehog) or (GetGearType(gear) == gtResurrector) then
+		trackGear(gear)
+	end 
+
 
 end
 
 function onGearDelete(gear)
---
+	if (GetGearType(gear) == gtHedgehog) or (GetGearType(gear) == gtResurrector) then
+		trackDeletion(gear)
+	end 
 end
 
 function onAmmoStoreInit()
