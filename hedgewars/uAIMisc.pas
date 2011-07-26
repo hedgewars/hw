@@ -302,7 +302,6 @@ var bX, bY: LongInt;
 begin
 bRes:= false;
 GoInfo.Ticks:= 0;
-GoInfo.FallPix:= 0;
 GoInfo.JumpType:= jmpNone;
 bX:= hwRound(Gear^.X);
 bY:= hwRound(Gear^.Y);
