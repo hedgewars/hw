@@ -156,7 +156,8 @@ begin
                             AddCaption(Format(GetEventString(eidDrowned), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
                             end
                         end
-                    else Gear^.doStep := @doStepDrowningGear
+                    else Gear^.doStep := @doStepDrowningGear;
+                    if Gear^.Kind = gtFlake then exit // skip splashes 
                 end;
             if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
                (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01))) then
