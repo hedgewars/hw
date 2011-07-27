@@ -356,7 +356,7 @@ begin
     else
         Gear^.State := Gear^.State or      gstMoving;
 
-    if (Gear^.nImpactSounds > 0) and (Gear^.ImpactSound <> sndNone) and
+    if (Gear^.nImpactSounds > 0) and 
        ((Gear^.Damage <> 0) or 
           ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving))) and
        ((Gear^.dX.QWordValue > _0_1.QWordValue) or 
