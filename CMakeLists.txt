@@ -24,7 +24,7 @@ IF(version_suffix MATCHES "-dev")
 				     OUTPUT_VARIABLE version_suffix
 				     )
 			STRING(REGEX REPLACE "[^+]" "" HGCHANGED ${version_suffix})
-			STRING(REGEX REPLACE "([0-9a-zA-Z]+)(.*) ([0-9]+)(.*)" "\\3:\\1" version_suffix ${version_suffix})
+			STRING(REGEX REPLACE "([0-9a-zA-Z]+)(.*) ([0-9]+)(.*)" "\\3-\\1" version_suffix ${version_suffix})
 			IF (HGCHANGED)
 				MESSAGE(STATUS "Building revision ${version_suffix} (SOURCE CODE MODIFIED)")
 			ELSE()
