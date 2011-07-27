@@ -1,6 +1,46 @@
 + features
 * bugfixes
 
+0.9.15 -> ???:
+ + New modes: The Specialists, Space Invasion
+ + Installing content (anything under Data/ - maps, sounds, and any such stuff) to user profile allows custom adding/overriding of any Data/ content
+ + Sudden Death art
+ + New Weapon/Utility: Land Spray Gun
+ + New Game mode: Tag team
+ + Allow up to 8 teams in a game
+ + Shoppa scheme by default resets ammo
+ + Shots are on a tenth of a second delay instead of a 1 and a quarter second delay (fast deagle/portal fire)
+ + Defective mines explode if they take enough damage
+ + Rope head can attach to hogs/crates/barrels again (rope still passes through them)
+ + Control of grenade bounce
+ + Drill Strike bombs don't explode when leaving ground, but after a (customizable!) timer
+ + Ukranian localization of Default voice. support for localized voices
+ + Theme cleanup, including the new theme config file change
+ + Improvements in scoring and tracking damage
+ + Camera tracking now toggleable
+ + Mudball does not end turn
+ + Indicator for height of plane when using napalm
+ + Land smoothing (looks less pixelated on generation and damage)
+ + Improved lua script support (e.g. possibility to change hats)
+ * Prevent portaling to impossible locations better
+ * Snow accumulates more smoothly
+ * Rope should be less sticky now
+ * Fix for last portal shot always being yellow
+ * More accurate napalm strike drop location
+ * AI fixes
+ * Fixed locales, such as korean
+ * Code refactoring
+ * Various bug/leak fixes
+
+Frontend/Menu and Netgame:
+ + Drawing straight lines in drawn map mode
+ + Autokick ignored players joining your room
+ + Improved nick sorting in lobby and rooms. (not case-sensitive, letters first, friend @ top, ignored @ bottom)
+ + Display player count in lobby
+ + Lobby: Player names of online players can be clicked in chat directly so that you don't have to find them in the player list
+ * Fix invisible icons in popup menus
+ * Various fixes and adjustments
+
 0.9.14 -> 0.9.15:
  + Ability to create, save and load hand drawn maps
  + New maps: Capture the Flag (Blizzard) Map

@@ -154,6 +154,16 @@ handleCmd_lobby ["BAN", banNick, reason] = do
     cl <- thisClient
     banId <- clientByNick banNick
     return [BanClient 60 reason (fromJust banId) | isAdministrator cl && isJust banId && fromJust banId /= ci]
+    
+handleCmd_lobby ["BANIP", ip, reason, duration] = do
+    (ci, _) <- ask
+    cl <- thisClient
+    return [BanIP ip (readInt_ duration) reason | isAdministrator cl]
+    
+handleCmd_lobby ["BANLIST"] = do
+    (ci, _) <- ask
+    cl <- thisClient
+    return [BanList | isAdministrator cl]
 
 
 handleCmd_lobby ["SET_SERVER_VAR", "MOTD_NEW", newMessage] = do
