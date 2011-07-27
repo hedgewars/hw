@@ -156,11 +156,6 @@ begin
                             AddCaption(Format(GetEventString(eidDrowned), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
                             end
                         end
-                    else if Gear^.Kind = gtFlake then
-                        begin
-                        DeleteGear(Gear);
-                        exit
-                        end
                     else Gear^.doStep := @doStepDrowningGear
                 end;
             if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
@@ -361,12 +356,12 @@ begin
     else
         Gear^.State := Gear^.State or      gstMoving;
 
-    if (Gear^.nImpactSounds > 0) then
-        if ((Gear^.Damage <> 0) or ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or
-           gstMoving))) and
-           ((Gear^.dX.QWordValue > _0_1.QWordValue) or (Gear^.dY.QWordValue > _0_1.QWordValue)) then
-            PlaySound(TSound(ord(Gear^.ImpactSound) + LongInt(GetRandom(Gear^.nImpactSounds))), true
-            );
+    if (Gear^.nImpactSounds > 0) and (Gear^.ImpactSound <> sndNone) and
+       ((Gear^.Damage <> 0) or 
+          ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving))) and
+       ((Gear^.dX.QWordValue > _0_1.QWordValue) or 
+          (Gear^.dY.QWordValue > _0_1.QWordValue)) then
+        PlaySound(TSound(ord(Gear^.ImpactSound) + LongInt(GetRandom(Gear^.nImpactSounds))), true);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -595,6 +590,7 @@ move:= false;
 draw:= false;
 if gun then
     begin
+    Gear^.State:= Gear^.State and not gstInvisible;
     doStepFallingGear(Gear);
     CheckCollision(Gear);
     if ((Gear^.State and gstCollision) <> 0) or ((Gear^.State and gstMoving) = 0) then draw:= true;
@@ -4494,7 +4490,7 @@ begin
     if Gear^.Timer = 0 then
         begin
         dec(Gear^.Health);
-        if (Gear^.Health mod 5) = 0 then
+        if (Gear^.Health mod 3) = 0 then
             begin
             rx := rndSign(getRandom * _0_1);
             ry := rndSign(getRandom * _0_1);
