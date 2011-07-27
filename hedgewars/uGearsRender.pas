@@ -1056,9 +1056,9 @@ begin
                              (cExplosionBorderColor shr BShift) and $FF, 
                              $FF);
                         // Needs a nicer white texture to tint
-                        //DrawRotatedTextureF(SpritesData[sprSnowDust].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle);
+                        DrawRotatedTextureF(SpritesData[sprSnowDust].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle);
                         //DrawRotated(sprSnowDust, x, y, 0, Gear^.DirAngle);
-                        DrawTexture(x, y, SpritesData[sprVampiric].Texture, 0.1);
+                        //DrawTexture(x, y, SpritesData[sprVampiric].Texture, 0.1);
                         Tint($FF, $FF, $FF, $FF);
                         end
                     else if not isInLag then
