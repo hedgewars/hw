@@ -4491,18 +4491,16 @@ begin
     if Gear^.Timer = 0 then
         begin
         dec(Gear^.Health);
-        if (Gear^.Health mod 3) = 0 then
-            begin
-            rx := rndSign(getRandom * _0_1);
-            ry := rndSign(getRandom * _0_1);
-            speed := (_3 / Gear^.Tag);
-    
-            Flake := AddGear(gx, gy, gtFlake, 0, _0, _0, 0);
-            Flake^.dX:= SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx;
-            Flake^.dY:= AngleCos(HHGear^.Angle) * ( - speed) + ry;
-            Flake^.State := Flake^.State or gsttmpFlag;
+
+        rx := rndSign(getRandom * _0_1);
+        ry := rndSign(getRandom * _0_1);
+        speed := (_3 / Gear^.Tag);
+
+        Flake := AddGear(gx, gy, gtFlake, 0, _0, _0, 0);
+        Flake^.dX:= SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx;
+        Flake^.dY:= AngleCos(HHGear^.Angle) * ( - speed) + ry;
+        Flake^.State := Flake^.State or gsttmpFlag;
             
-            end;
         Gear^.Timer:= Gear^.Tag
         end;
 
