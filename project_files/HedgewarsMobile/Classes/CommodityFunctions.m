@@ -27,6 +27,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <CommonCrypto/CommonDigest.h>
+#import <SystemConfiguration/SCNetworkReachability.h>
+#import <netinet/in.h>
 #import "PascalImports.h"
 #import "hwconsts.h"
 
@@ -126,6 +128,40 @@ UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWid
     [theLabel.layer setMasksToBounds:YES];
     
     return theLabel;
+}
+
+BOOL isNetworkReachable (void) {
+    // Create zero addy
+    struct sockaddr_in zeroAddress;
+    bzero(&zeroAddress, sizeof(zeroAddress));
+    zeroAddress.sin_len = sizeof(zeroAddress);
+    zeroAddress.sin_family = AF_INET;
+
+    // Recover reachability flags
+    SCNetworkReachabilityRef defaultRouteReachability = SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *)&zeroAddress);
+    SCNetworkReachabilityFlags flags;
+
+    BOOL didRetrieveFlags = SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags);
+    CFRelease(defaultRouteReachability);
+
+    if (!didRetrieveFlags) {
+        NSLog(@"Error. Could not recover network reachability flags");
+        return NO;
+    }
+
+    BOOL isReachable = flags & kSCNetworkFlagsReachable;
+    BOOL needsConnection = flags & kSCNetworkFlagsConnectionRequired;
+    BOOL nonWiFi = flags & kSCNetworkReachabilityFlagsTransientConnection;
+
+    NSURL *testURL = [NSURL URLWithString:@"http://www.apple.com/"];
+    NSURLRequest *testRequest = [NSURLRequest requestWithURL:testURL
+                                                 cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                             timeoutInterval:20.0];
+    NSURLConnection *testConnection = [[NSURLConnection alloc] initWithRequest:testRequest delegate:nil];
+    BOOL testResult = testConnection ? YES : NO;
+    [testConnection release];
+
+    return ((isReachable && !needsConnection) || nonWiFi) ? testResult : NO;
 }
 
 // this routine checks for the PNG size without loading it in memory

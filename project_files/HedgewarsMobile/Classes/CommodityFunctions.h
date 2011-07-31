@@ -76,6 +76,7 @@ UILabel *createBlueLabel (NSString *title, CGRect frame);
 UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWidth, UIColor *borderColor, UIColor *backgroundColor);
 
 CGSize PSPNGSizeFromMetaData (NSString *aFileName);
+BOOL isNetworkReachable (void);
 
 @interface NSString (extra)
 

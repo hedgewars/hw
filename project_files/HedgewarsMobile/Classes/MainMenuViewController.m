@@ -27,6 +27,7 @@
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
 #import "RestoreViewController.h"
+#import "Appirater.h"
 #import "ServerSetup.h"
 
 @implementation MainMenuViewController
@@ -72,7 +73,7 @@
         [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
     NSString *baseSchemesDir = [[NSString alloc] initWithFormat:@"%@/Settings/Schemes/",resourcesDir];
     [[NSFileManager defaultManager] copyItemAtPath:baseSchemesDir toPath:SCHEMES_DIRECTORY() error:NULL];
-    
+    [baseSchemesDir release];
 
     // WEAPONS - always overwrite
     if ([[NSFileManager defaultManager] fileExistsAtPath:WEAPONS_DIRECTORY()] == NO)
@@ -121,11 +122,15 @@
             [restored release];
         }
         [self performSelector:@selector(presentModalViewController:animated:) withObject:self.restoreViewController afterDelay:0.35];
+    } else {
+        // let's not prompt for rating when app crashed >_>
+        [Appirater appLaunched];
     }
+
 
     /*
     ServerSetup *setup = [[ServerSetup alloc] init];
-    if ([setup isNetworkReachable]) {
+    if (isNetworkReachable()) {
         DLog(@"network is reachable");
         [NSThread detachNewThreadSelector:@selector(serverProtocol)
                                  toTarget:setup

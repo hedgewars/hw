@@ -257,7 +257,8 @@ void releaseData(void *info, const void *data, size_t dataSize) {
         image = [[UIImage alloc] initWithCGImage:imageRef];
     CGImageRelease(imageRef);
 
-    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), (void *)alert); // add callback for finish saving
+    // add callback for cleaning memory and removing alert
+    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), (void *)alert);
 }
 
 
