@@ -287,6 +287,7 @@ type
     PSDL_Window   = Pointer;
     PSDL_Renderer = Pointer;
     PSDL_Texture  = Pointer;
+    PSDL_GLContext= Pointer;
 {$ENDIF}
 
     PSDL_Rect = ^TSDL_Rect;
@@ -765,11 +766,16 @@ function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongIn
 {$IFDEF SDL13}
 function  SDL_CreateWindow(title: PChar; x,y,w,h, flags: LongInt): PSDL_Window; cdecl; external SDLLibName;
 function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): PSDL_Renderer; cdecl; external SDLLibName;
-function  SDL_DestroyRenderer(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
+function  SDL_DestroyRenderer(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
+
+function  SDL_GL_CreateContext(window: PSDL_Window): PSDL_GLContext; cdecl; external SDLLibName;
+procedure SDL_GL_DeleteContext(context: PSDL_GLContext); cdecl; external SDLLibName;
+function  SDL_GL_SwapWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
 
 procedure SDL_VideoQuit; cdecl; external SDLLibName;
 function  SDL_GetNumVideoDisplays: LongInt; cdecl; external SDLLibName;
+procedure SDL_ShowWindow(window: PSDL_Window); cdecl; external SDLLibName;
 
 function  SDL_SetRenderDrawColor(renderer: PSDL_Renderer; r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRenderer(window: PSDL_Window): PSDL_Renderer; cdecl; external SDLLibName;
