@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1056</int>
-		<string key="IBDocument.SystemVersion">10H574</string>
+		<string key="IBDocument.SystemVersion">10K540</string>
 		<string key="IBDocument.InterfaceBuilderVersion">823</string>
-		<string key="IBDocument.AppKitVersion">1038.35</string>
+		<string key="IBDocument.AppKitVersion">1038.36</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -50,7 +50,7 @@
 							<object class="IBUISegmentedControl" id="563596142">
 								<reference key="NSNextResponder" ref="836721772"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{96, 8}, {269, 30}}</string>
+								<string key="NSFrame">{{96, 8}, {270, 30}}</string>
 								<reference key="NSSuperview" ref="836721772"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUITag">12345</int>
@@ -94,8 +94,8 @@
 									<reference ref="4"/>
 								</object>
 								<object class="NSColor" key="IBTintColor">
-									<int key="NSColorSpace">2</int>
-									<bytes key="NSRGB">MC4yMzEzNzI1NjUgMCAwLjQ2Mjc0NTEzMDEAA</bytes>
+									<int key="NSColorSpace">1</int>
+									<bytes key="NSRGB">MC42IDAuNiAwLjYAA</bytes>
 								</object>
 							</object>
 						</object>

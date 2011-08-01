@@ -30,6 +30,4 @@
 
 @property (nonatomic, retain) NSDictionary *systemSettings;
 
--(BOOL) isNetworkReachable;
-
 @end

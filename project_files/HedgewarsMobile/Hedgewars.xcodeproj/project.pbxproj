@@ -1370,7 +1370,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\n\n#create config.inc\necho \"Updating config file...\"\nPROTO=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep HEDGEWARS_PROTO_VER | cut -d ' ' -f 3`\nMAJN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MAJOR | xargs | cut -d ' ' -f 3`\nMINN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MINOR | xargs | cut -d ' ' -f 3`\nPATN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_PATCH | xargs | cut -d ' ' -f 3 | cut -d '$' -f 1`\nREVN=-`/usr/local/bin/hg id -n ${PROJECT_DIR}/../../`\necho \"const cNetProtoVersion = $PROTO; const cVersionString = '${MAJN}.${MINN}.${PATN}${REVN}'; const cLuaLibrary = '';\" > ${PROJECT_DIR}/../../hedgewars/config.inc\n\necho \"Copying Data...\"\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\necho \"Fetching additional graphics from QTfrontend/res...\"\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp    ${PROJECT_DIR}/../../QTfrontend/res/btn*.png        ${PROJECT_DIR}/Data/Graphics/Btn/\ncp    ${PROJECT_DIR}/../../QTfrontend/res/icon*.png       ${PROJECT_DIR}/Data/Graphics/Btn/\ncp    ${PROJECT_DIR}/../../QTfrontend/res/StatsMedal*.png ${PROJECT_DIR}/Data/Graphics/Btn/\ncp    ${PROJECT_DIR}/../../QTfrontend/res/StatsR.png      ${PROJECT_DIR}/Data/Graphics/Btn/StatsStar.png\ncp    ${PROJECT_DIR}/../../QTfrontend/res/ammopic.png     ${PROJECT_DIR}/Data/Graphics/Btn/iconAmmo.png\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels       ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels/\n\necho \"Removing text and dummy files...\"\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.svgz -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\nfind ${PROJECT_DIR}/Data -name *.orig -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps and hats, misc stuff\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,Ruler}\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/{TeamCap,TeamHeadband,TeamHair}\nrm -rf ${PROJECT_DIR}/Data/misc/\n\n#delete forbidden maps\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\n\n#delete useless fonts\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\n#delete all names, reserved hats\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\n\necho \"Handling audio files...\"\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n#delete the main theme file\nrm -rf ${PROJECT_DIR}/Data/Music/main_theme.ogg\n#copy mono audio\ncp -R ${PROJECT_DIR}/Audio/* ${PROJECT_DIR}/Data/\n#remove unused voices\nfor i in {Amazing,Brilliant,Bugger,Bungee,Cutitout,Drat,Excellent,Fire,FlawlessPossibility,Gonnagetyou,Grenade,Hmm,Justyouwait,Leavemealone,Ohdear,Ouch,Perfect,Revenge,Runaway,Solong,Thisoneismine,VictoryPossibility,Watchthis,Whatthe,Whoopsee}; do find Data/Sounds/voices/ -name $i.ogg -delete; done\n\necho \"Tweaking Data contents...\"\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nmv ${PROJECT_DIR}/Data/Maps/{Basketball,Knockball,TrophyRace,CTF_Blizzard,Control} ${PROJECT_DIR}/Data/Missions/Maps/\n#workaround for missing map in CTF_Blizzard\nln -s ../../../Maps/Blizzard/map.png ${PROJECT_DIR}/Data/Missions/Maps/CTF_Blizzard/map.png\n\n#reduce the number of flakes for City\nawk '{if ($1 == 1500) $1=40; print $0}' < ${PROJECT_DIR}/Data/Themes/City/theme.cfg > /tmp/tempfile\nmv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\n#remove WIP themes (check they are not used in Maps)\nrm -rf ${PROJECT_DIR}/Data/Themes/{Beach,Digital}\n\necho \"Done\"";
+			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\n\n#create config.inc\necho \"Updating config file...\"\nPROTO=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep HEDGEWARS_PROTO_VER | cut -d ' ' -f 2 | cut -d ')' -f 1`\nMAJN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MAJOR | xargs | cut -d ' ' -f 2 |cut -d ')' -f 1`\nMINN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MINOR | xargs | cut -d ' ' -f 2 |cut -d ')' -f 1`\nPATN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_PATCH | xargs | cut -d ' ' -f 2 | cut -d '$' -f 1`\nREVN=-`/usr/local/bin/hg id -n ${PROJECT_DIR}/../../`\necho \"const cNetProtoVersion = $PROTO; const cVersionString = '${MAJN}.${MINN}.${PATN}${REVN}'; const cLuaLibrary = '';\" > ${PROJECT_DIR}/../../hedgewars/config.inc\n\necho \"Copying Data...\"\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\necho \"Fetching additional graphics from QTfrontend/res...\"\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp    ${PROJECT_DIR}/../../QTfrontend/res/btn*.png        ${PROJECT_DIR}/Data/Graphics/Btn/\ncp    ${PROJECT_DIR}/../../QTfrontend/res/icon*.png       ${PROJECT_DIR}/Data/Graphics/Btn/\ncp    ${PROJECT_DIR}/../../QTfrontend/res/StatsMedal*.png ${PROJECT_DIR}/Data/Graphics/Btn/\ncp    ${PROJECT_DIR}/../../QTfrontend/res/StatsR.png      ${PROJECT_DIR}/Data/Graphics/Btn/StatsStar.png\ncp    ${PROJECT_DIR}/../../QTfrontend/res/ammopic.png     ${PROJECT_DIR}/Data/Graphics/Btn/iconAmmo.png\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels       ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels/\n\necho \"Removing text and dummy files...\"\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.svgz -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\nfind ${PROJECT_DIR}/Data -name *.orig -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps and hats, misc stuff\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,Ruler}\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/{TeamCap,TeamHeadband,TeamHair}\nrm -rf ${PROJECT_DIR}/Data/misc/\n\n#delete forbidden maps and WIP themes (remember to check that no Map uses them)\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\nrm -rf ${PROJECT_DIR}/Data/Themes/{Beach,Digital}\n\n#delete unused fonts\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\n#delete all names, reserved hats\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\n\necho \"Handling audio files...\"\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n#delete the main theme file\nrm -rf ${PROJECT_DIR}/Data/Music/main_theme.ogg\n#copy mono audio\ncp -R ${PROJECT_DIR}/Audio/* ${PROJECT_DIR}/Data/\n#remove unused voices\nfor i in {Amazing,Brilliant,Bugger,Bungee,Cutitout,Drat,Excellent,Fire,FlawlessPossibility,Gonnagetyou,Grenade,Hmm,Justyouwait,Leavemealone,Ohdear,Ouch,Perfect,Revenge,Runaway,Solong,Thisoneismine,VictoryPossibility,Watchthis,Whatthe,Whoopsee}; do find Data/Sounds/voices/ -name $i.ogg -delete; done\n\necho \"Tweaking Data contents...\"\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nmv ${PROJECT_DIR}/Data/Maps/{Basketball,Knockball,TrophyRace,CTF_Blizzard,Control} ${PROJECT_DIR}/Data/Missions/Maps/\n#workaround for missing map in CTF_Blizzard\nln -s ../../../Maps/Blizzard/map.png ${PROJECT_DIR}/Data/Missions/Maps/CTF_Blizzard/map.png\n#remove cfg files since we have plists\nfind ${PROJECT_DIR}/Data/Scripts -name *.cfg -delete\n\n#reduce the number of flakes for City\nawk '{if ($1 == 1500) $1=40; print $0}' < ${PROJECT_DIR}/Data/Themes/City/theme.cfg > /tmp/tempfile\nmv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\necho \"Done\"";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -1522,49 +1522,24 @@
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
-				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-lgcov",
-				);
 				PRODUCT_NAME = Hedgewars;
-				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = Debug;
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_ENTITLEMENTS = "Entitlements-Development.plist";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
 				PRODUCT_NAME = Hedgewars;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = Release;
 		};
@@ -1584,7 +1559,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_FAST_MATH = YES;
-				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
@@ -1599,6 +1574,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL_mixer/\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				LLVM_LTO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_LDFLAGS = (
@@ -1618,30 +1594,17 @@
 		61022D7D12305A2800B08935 /* Distro AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
 				PRODUCT_NAME = Hedgewars;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = "Distro AppStore";
 		};
 		61022D7E12305A2800B08935 /* Distro AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -1674,12 +1637,12 @@
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -Ci- -Cr- -Co- -O-2 -Xs  -Cfvfpv2";
+				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -O- -g -gl -gw2 -gt -ghttt -Xs- -Cfvfpv2";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_DEBUGGING_SYMBOLS = full;
 				GCC_FAST_MATH = YES;
-				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
@@ -1712,28 +1675,17 @@
 		6137064C117B1CB3004EE44A /* Distro Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
-				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
 				PRODUCT_NAME = Hedgewars;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = "$(inherited)";
 			};
 			name = "Distro Adhoc";
 		};
 		6137064D117B1CB3004EE44A /* Distro Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -1778,7 +1730,6 @@
 		928301180F10CAFD00CC5A3C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1790,7 +1741,6 @@
 		928301190F10CAFD00CC5A3C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -1816,7 +1766,7 @@
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_FAST_MATH = NO;
+				GCC_FAST_MATH = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
@@ -1863,7 +1813,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_FAST_MATH = YES;
-				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_STRICT_ALIASING = YES;
 				GCC_THUMB_SUPPORT = NO;
@@ -1878,6 +1828,7 @@
 					"\"$(SRCROOT)/../../../Library/SDL_mixer/\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				LLVM_LTO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lz",

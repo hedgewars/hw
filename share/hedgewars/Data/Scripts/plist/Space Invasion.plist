@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>escript Scripts/Multiplayer/Space_Invasion.lua</string>
+	<key>description</key>
+	<string></string>
+	<key>scheme</key>
+	<string>Default.plist</string>
+	<key>weapon</key>
+	<string>Default.plist</string>
+</dict>
+</plist>

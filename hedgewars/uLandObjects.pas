@@ -372,7 +372,7 @@ procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSpra
 var s, key: shortstring;
     f: textfile;
     i: LongInt;
-    ii: Longword;
+    ii, t: Longword;
     c1, c2: TSDL_Color;
 
     procedure CheckRect(Width, Height, x, y, w, h: LongWord);
@@ -415,6 +415,14 @@ while not eof(f) do
         c1.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         c1.b:= StrToInt(Trim(s));
+        if cGrayScale then
+            begin
+            t:= round(c1.r * RGB_LUMINANCE_RED + c1.g * RGB_LUMINANCE_GREEN + c1.b * RGB_LUMINANCE_BLUE);
+            if t > 255 then t:= 255;
+            c1.r:= t;
+            c1.g:= t;
+            c1.b:= t
+            end;
         glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99);
         SDSkyColor.r:= byte(c1.r * SDTint div 255);
         SDSkyColor.g:= byte(c1.g * SDTint div 255);
@@ -441,6 +449,14 @@ while not eof(f) do
         Delete(s, 1, i);
         WaterColorArray[0].b:= StrToInt(Trim(s));
         WaterColorArray[0].a := 255;
+        if cGrayScale then
+            begin
+            t:= round(WaterColorArray[0].r * RGB_LUMINANCE_RED + WaterColorArray[0].g * RGB_LUMINANCE_GREEN + WaterColorArray[0].b * RGB_LUMINANCE_BLUE);
+            if t > 255 then t:= 255;
+            WaterColorArray[0].r:= t;
+            WaterColorArray[0].g:= t;
+            WaterColorArray[0].b:= t
+            end;
         WaterColorArray[1]:= WaterColorArray[0];
         end
     else if key = 'water-bottom' then
@@ -453,6 +469,14 @@ while not eof(f) do
         Delete(s, 1, i);
         WaterColorArray[2].b:= StrToInt(Trim(s));
         WaterColorArray[2].a := 255;
+        if cGrayScale then
+            begin
+            t:= round(WaterColorArray[2].r * RGB_LUMINANCE_RED + WaterColorArray[2].g * RGB_LUMINANCE_GREEN + WaterColorArray[2].b * RGB_LUMINANCE_BLUE);
+            if t > 255 then t:= 255;
+            WaterColorArray[2].r:= t;
+            WaterColorArray[2].g:= t;
+            WaterColorArray[2].b:= t
+            end;
         WaterColorArray[3]:= WaterColorArray[2];
         end
     else if key = 'water-opacity' then
@@ -566,6 +590,14 @@ while not eof(f) do
         Delete(s, 1, i);
         SDWaterColorArray[0].b:= StrToInt(Trim(s));
         SDWaterColorArray[0].a := 255;
+        if cGrayScale then
+            begin
+            t:= round(SDWaterColorArray[0].r * RGB_LUMINANCE_RED + SDWaterColorArray[0].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[0].b * RGB_LUMINANCE_BLUE);
+            if t > 255 then t:= 255;
+            SDWaterColorArray[0].r:= t;
+            SDWaterColorArray[0].g:= t;
+            SDWaterColorArray[0].b:= t
+            end;
         SDWaterColorArray[1]:= SDWaterColorArray[0];
         end
     else if key = 'sd-water-bottom' then
@@ -578,6 +610,14 @@ while not eof(f) do
         Delete(s, 1, i);
         SDWaterColorArray[2].b:= StrToInt(Trim(s));
         SDWaterColorArray[2].a := 255;
+        if cGrayScale then
+            begin
+            t:= round(SDWaterColorArray[2].r * RGB_LUMINANCE_RED + SDWaterColorArray[2].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[2].b * RGB_LUMINANCE_BLUE);
+            if t > 255 then t:= 255;
+            SDWaterColorArray[2].r:= t;
+            SDWaterColorArray[2].g:= t;
+            SDWaterColorArray[2].b:= t
+            end;
         SDWaterColorArray[3]:= SDWaterColorArray[2];
         end
     else if key = 'sd-water-opacity' then cSDWaterOpacity:= StrToInt(Trim(s))
@@ -612,6 +652,14 @@ while not eof(f) do
             c1.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             c1.b:= StrToInt(Trim(s));
+            if cGrayScale then
+                begin
+                t:= round(c1.r * RGB_LUMINANCE_RED + c1.g * RGB_LUMINANCE_GREEN + c1.b * RGB_LUMINANCE_BLUE);
+                if t > 255 then t:= 255;
+                c1.r:= t;
+                c1.g:= t;
+                c1.b:= t
+                end;
             glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99);
             SDSkyColor.r:= byte(c1.r * SDTint div 255);
             SDSkyColor.g:= byte(c1.g * SDTint div 255);

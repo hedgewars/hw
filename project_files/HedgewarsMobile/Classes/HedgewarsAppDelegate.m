@@ -25,7 +25,6 @@
 #import "CommodityFunctions.h"
 #import "MainMenuViewController.h"
 #import "AVFoundation/AVAudioPlayer.h"
-#import "Appirater.h"
 #include <unistd.h>
 
 
@@ -97,7 +96,6 @@
 // override the direct execution of SDL_main to allow us to implement our own frontend
 -(void) postFinishLaunch {
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
-    [Appirater appLaunched];
 
     self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 

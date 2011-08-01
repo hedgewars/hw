@@ -99,13 +99,24 @@ extern bool isDevBuild;
 
 
 // see http://en.wikipedia.org/wiki/List_of_colors
-#define HW_TEAMCOLOR_ARRAY  { 0xff007fff, /* azure */ \
-                              0xffdd0000, /* classic red */ \
-                              0xff3e9321, /* classic green */ \
-                              0xffa23dbb, /* classic purple */ \
-                              0xffffb347, /* pastel orange */ \
-                              0xffcfcfc4, /* pastel gray */ \
-                              0xffbff000, /* lime */ \
-                              0xffffef00, /* yellow */ \
+/*define HW_TEAMCOLOR_ARRAY  {0xff007fff, /. azure          ./ \
+                              0xffdd0000, /. classic red    ./ \
+                              0xff3e9321, /. classic green  ./ \
+                              0xffa23dbb, /. classic purple ./ \
+                              0xffffb347, /. pastel orange  ./ \
+                              0xffcfcfc4, /. pastel gray    ./ \
+                              0xffbff000, /. lime           ./ \
+                              0xffffef00, /. yellow         ./ \
+                              // add new colors here 
+                              0 }*/
+#define HW_TEAMCOLOR_ARRAY  { 0xffd12b42, /* red    */ \
+                              0xff4980c1, /* blue   */ \
+                              0xff6ab530, /* green  */ \
+                              0xffbc64c4, /* purple */ \
+                              0xffe76d14, /* orange */ \
+                              0xff3fb6e6, /* cyan   */ \
+                              0xffe3e90c, /* yellow */ \
+                              0xff61d4ac, /* mint   */ \
+                              0xfff1c3e1, /* pink   */ \
                               /* add new colors here */ \
                               0 }

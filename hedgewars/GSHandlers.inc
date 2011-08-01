@@ -156,12 +156,8 @@ begin
                             AddCaption(Format(GetEventString(eidDrowned), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
                             end
                         end
-                    else if Gear^.Kind = gtFlake then
-                        begin
-                        DeleteGear(Gear);
-                        exit
-                        end
-                    else Gear^.doStep := @doStepDrowningGear
+                    else Gear^.doStep := @doStepDrowningGear;
+                    if Gear^.Kind = gtFlake then exit // skip splashes 
                 end;
             if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
                (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01))) then
@@ -361,12 +357,12 @@ begin
     else
         Gear^.State := Gear^.State or      gstMoving;
 
-    if (Gear^.nImpactSounds > 0) then
-        if ((Gear^.Damage <> 0) or ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or
-           gstMoving))) and
-           ((Gear^.dX.QWordValue > _0_1.QWordValue) or (Gear^.dY.QWordValue > _0_1.QWordValue)) then
-            PlaySound(TSound(ord(Gear^.ImpactSound) + LongInt(GetRandom(Gear^.nImpactSounds))), true
-            );
+    if (Gear^.nImpactSounds > 0) and 
+       ((Gear^.Damage <> 0) or 
+          ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving))) and
+       ((Gear^.dX.QWordValue > _0_1.QWordValue) or 
+          (Gear^.dY.QWordValue > _0_1.QWordValue)) then
+        PlaySound(TSound(ord(Gear^.ImpactSound) + LongInt(GetRandom(Gear^.nImpactSounds))), true);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -595,6 +591,7 @@ move:= false;
 draw:= false;
 if gun then
     begin
+    Gear^.State:= Gear^.State and not gstInvisible;
     doStepFallingGear(Gear);
     CheckCollision(Gear);
     if ((Gear^.State and gstCollision) <> 0) or ((Gear^.State and gstMoving) = 0) then draw:= true;
@@ -4494,18 +4491,16 @@ begin
     if Gear^.Timer = 0 then
         begin
         dec(Gear^.Health);
-        if (Gear^.Health mod 5) = 0 then
-            begin
-            rx := rndSign(getRandom * _0_1);
-            ry := rndSign(getRandom * _0_1);
-            speed := (_3 / Gear^.Tag);
-    
-            Flake := AddGear(gx, gy, gtFlake, 0, _0, _0, 0);
-            Flake^.dX:= SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx;
-            Flake^.dY:= AngleCos(HHGear^.Angle) * ( - speed) + ry;
-            Flake^.State := Flake^.State or gsttmpFlag;
+
+        rx := rndSign(getRandom * _0_1);
+        ry := rndSign(getRandom * _0_1);
+        speed := (_3 / Gear^.Tag);
+
+        Flake := AddGear(gx, gy, gtFlake, 0, _0, _0, 0);
+        Flake^.dX:= SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx;
+        Flake^.dY:= AngleCos(HHGear^.Angle) * ( - speed) + ry;
+        Flake^.State := Flake^.State or gsttmpFlag;
             
-            end;
         Gear^.Timer:= Gear^.Tag
         end;
 

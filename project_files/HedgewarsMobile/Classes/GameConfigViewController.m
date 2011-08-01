@@ -212,6 +212,10 @@
     if ([self isEverythingSet] == NO)
         return;
 
+    NSString *script = self.mapConfigViewController.missionCommand;
+    if ([script isEqualToString:@""])
+        script = self.schemeWeaponConfigViewController.scriptCommand;
+
     // create the configuration file that is going to be sent to engine
     NSDictionary *gameDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                     self.mapConfigViewController.seedCommand,@"seed_command",
@@ -220,10 +224,10 @@
                                     self.mapConfigViewController.mazeSizeCommand,@"mazesize_command",
                                     self.mapConfigViewController.themeCommand,@"theme_command",
                                     self.mapConfigViewController.staticMapCommand,@"staticmap_command",
-                                    self.mapConfigViewController.missionCommand,@"mission_command",
                                     self.teamConfigViewController.listOfSelectedTeams,@"teams_list",
                                     self.schemeWeaponConfigViewController.selectedScheme,@"scheme",
                                     self.schemeWeaponConfigViewController.selectedWeapon,@"weapon",
+                                    script,@"mission_command",
                                     nil];
 
     GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];

@@ -387,6 +387,7 @@
         NSString *checkPath = [[NSString alloc] initWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),themeName];
         if ([[NSFileManager defaultManager] fileExistsAtPath:checkPath])
             [themeArray addObject:themeName];
+        [checkPath release];
     }
 
     // remove images that are too big for certain devices without loading the whole image
