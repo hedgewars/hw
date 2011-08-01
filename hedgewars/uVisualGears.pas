@@ -433,7 +433,7 @@ case Layer of
     // this layer is on the land level (which is close but behind the screen plane) when stereo
     1: while Gear <> nil do
         begin
-        tinted:= false;
+        //tinted:= false;
         if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
         case Gear^.Kind of
             vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
@@ -462,7 +462,8 @@ case Layer of
                                 DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                 vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
             end;
-        if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
+        //if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
+        if (Gear^.Tint <> $FFFFFFFF) then Tint($FF,$FF,$FF,$FF);
         Gear:= Gear^.NextGear
        end;
     // this layer is on the screen plane (depth = 0) when stereo

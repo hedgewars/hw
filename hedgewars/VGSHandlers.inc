@@ -258,7 +258,11 @@ Gear^.Y:= Gear^.Y - Gear^.dY * Steps;
 if Gear^.FrameTicks <= Steps then
     DeleteVisualGear(Gear)
 else
+    begin
     dec(Gear^.FrameTicks, Steps);
+    if (Gear^.FrameTicks < 501) and (Gear^.FrameTicks mod 5 = 0) then 
+        Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or (((Gear^.Tint and $000000FF) * Gear^.FrameTicks) div 500)
+    end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
