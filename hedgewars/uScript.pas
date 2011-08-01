@@ -986,10 +986,27 @@ begin
         LuaError('Lua: Wrong number of parameters passed to SetEffect!')
     else begin
         gear := GearByUID(lua_tointeger(L, 1));
-        if gear <> nil then
+        if (gear <> nil) and (gear^.Hedgehog <> nil) then
             gear^.Hedgehog^.Effects[THogEffect(lua_tointeger(L, 2))]:= lua_toboolean(L, 3);
     end;
     lc_seteffect := 0;
+end;
+function lc_geteffect(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetEffect!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Hedgehog <> nil) then
+            lua_pushboolean(L, gear^.Hedgehog^.Effects[THogEffect(lua_tointeger(L, 2))])
+        else
+            lua_pushboolean(L, false)
+        end;
+    lc_geteffect:= 1
 end;
 
 function lc_setstate(L : Plua_State) : LongInt; Cdecl;
@@ -1840,6 +1857,7 @@ lua_register(luaState, 'AddAmmo', @lc_addammo);
 lua_register(luaState, 'SetHealth', @lc_sethealth);
 lua_register(luaState, 'GetHealth', @lc_gethealth);
 lua_register(luaState, 'SetEffect', @lc_seteffect);
+lua_register(luaState, 'GetEffect', @lc_geteffect);
 lua_register(luaState, 'GetHogClan', @lc_gethogclan);
 lua_register(luaState, 'GetClanColor', @lc_getclancolor);
 lua_register(luaState, 'SetClanColor', @lc_setclancolor);
