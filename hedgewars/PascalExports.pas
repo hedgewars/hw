@@ -77,7 +77,6 @@ end;
 procedure HW_zoomReset; cdecl; export;
 begin
     ZoomValue:= cZoomVal;
-    //middleClick:= true;
     // center the camera at current hog
     if CurrentHedgehog <> nil then
         followGear:= CurrentHedgehog^.Gear;
@@ -234,8 +233,8 @@ end;
 
 function HW_isAmmoMenuNotAllowed: boolean; cdecl; export;
 begin;
-    exit ( (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or
-           ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) );
+    exit( (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or
+          ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) );
 end;
 
 function HW_isWeaponRequiringClick: boolean; cdecl; export;
@@ -265,7 +264,7 @@ end;
 function HW_isWeaponRope: boolean cdecl; export;
 begin
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0) then
-        exit (CurrentHedgehog^.CurAmmoType = amRope)
+        exit(CurrentHedgehog^.CurAmmoType = amRope)
     else
         exit(false);
 end;
@@ -295,17 +294,17 @@ end;
 
 function HW_getWeaponNameByIndex(whichone: LongInt): PChar; cdecl; export;
 begin
-    exit (str2pchar(trammo[Ammoz[TAmmoType(whichone+1)].NameId]));
+    exit(str2pchar(trammo[Ammoz[TAmmoType(whichone+1)].NameId]));
 end;
 
 function HW_getWeaponCaptionByIndex(whichone: LongInt): PChar; cdecl; export;
 begin
-    exit (str2pchar(trammoc[Ammoz[TAmmoType(whichone+1)].NameId]));
+    exit(str2pchar(trammoc[Ammoz[TAmmoType(whichone+1)].NameId]));
 end;
 
 function HW_getWeaponDescriptionByIndex(whichone: LongInt): PChar; cdecl; export;
 begin
-    exit (str2pchar(trammod[Ammoz[TAmmoType(whichone+1)].NameId]));
+    exit(str2pchar(trammod[Ammoz[TAmmoType(whichone+1)].NameId]));
 end;
 
 function HW_getNumberOfWeapons:LongInt; cdecl; export;
@@ -315,6 +314,7 @@ end;
 
 procedure HW_setWeapon(whichone: LongInt); cdecl; export;
 begin
+    if (CurrentTeam = nil) then exit;
     if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
         SetWeapon(TAmmoType(whichone+1));
 end;
@@ -328,11 +328,12 @@ function HW_getAmmoCounts(counts: PLongInt): LongInt; cdecl; export;
 var a : PHHAmmo;
     slot, index: LongInt;
 begin
-    if (CurrentTeam = nil) or
-       (CurrentHedgehog = nil) or
-       (CurrentTeam^.ExtDriven) or
-       (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
+    // nil check
+    if (CurrentHedgehog = nil) or (CurrentHedgehog^.Ammo = nil) or (CurrentTeam = nil) then
         exit(-1);
+    // hog controlled by opponent (net or ai)
+    if (CurrentTeam^.ExtDriven) or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
+        exit(1);
 
     a:= CurrentHedgehog^.Ammo;
     for slot:= 0 to cMaxSlotIndex do
@@ -351,7 +352,10 @@ end;
 
 function HW_getTurnsForCurrentTeam: LongInt; cdecl; export;
 begin
-    exit(CurrentTeam^.Clan^.TurnNumber);
+    if (CurrentTeam <> nil) and (CurrentTeam^.Clan <> nil) then
+        exit(CurrentTeam^.Clan^.TurnNumber)
+    else
+        exit(0);
 end;
 
 function HW_getMaxNumberOfHogs: LongInt; cdecl; export;
