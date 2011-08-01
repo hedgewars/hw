@@ -245,6 +245,7 @@ with gear^ do
     vgtHealth: begin
                 dx:= 0.001 * random(45);
                 dy:= 0.001 * (random(20) + 25);
+                Tint:= $00FF00FF; // default to green
                 if random(2) = 0 then dx := -dx;
                 Frame:= 0;
                 FrameTicks:= random(750) + 1250;
@@ -482,14 +483,7 @@ case Layer of
                              end;
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtHealth: begin
-                       tinted:= true;
-                       case Gear^.Frame div 10 of
-                           0:Tint(0, $FF, 0, round(Gear^.FrameTicks * $FF / 1000));
-                           1:Tint($FF, 0, 0, round(Gear^.FrameTicks * $FF / 1000));
-                       end;
-                       DrawSprite(sprHealth, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, 0);
-                       end;
+            vgtHealth: DrawSprite(sprHealth, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, 0);
         end;
         if (cReducedQuality and rqAntiBoom) = 0 then
             case Gear^.Kind of

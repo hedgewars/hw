@@ -1069,7 +1069,7 @@ begin
                 while i < vampDmg do
                     begin
                     vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtHealth);
-                    if vg <> nil then vg^.Frame:= 10;
+                    if vg <> nil then vg^.Tint:= $FF0000FF;
                     inc(i, 5);
                     end;
                 end
