@@ -37,6 +37,7 @@ uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears,
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
 procedure Game(gameArgs: PPChar); cdecl; export;
+procedure GenLandPreview(port: Longint); cdecl; export;
 
 implementation
 {$ELSE}
