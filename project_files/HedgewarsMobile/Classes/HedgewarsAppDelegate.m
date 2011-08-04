@@ -144,10 +144,9 @@
 -(void) applicationWillResignActive:(UIApplication *)application {
     //[super applicationWillResignActive:application];
 
-    UIDevice* device = [UIDevice currentDevice];
+    UIDevice *device = [UIDevice currentDevice];
     if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
-         device.multitaskingSupported &&
-         self.isInGame) {
+         [device isMultitaskingSupported] && self.isInGame) {
         // let's try to be permissive with multitasking here...
         if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"multitasking"] boolValue])
             HW_suspend();
@@ -166,10 +165,9 @@
 -(void) applicationDidBecomeActive:(UIApplication *)application {
     //[super applicationDidBecomeActive:application];
 
-    UIDevice* device = [UIDevice currentDevice];
+    UIDevice *device = [UIDevice currentDevice];
     if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
-         device.multitaskingSupported &&
-         self.isInGame) {
+         [device isMultitaskingSupported] && self.isInGame) {
         HW_resume();
     }
 }

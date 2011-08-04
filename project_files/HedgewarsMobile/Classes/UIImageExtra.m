@@ -25,17 +25,17 @@
 @implementation UIImage (extra)
 
 CGFloat getScreenScale(void) {
+    float scale = 1.0f;
     if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
-        return [UIScreen mainScreen].scale;
-    else
-        return 1.0f;
+        scale = [[UIScreen mainScreen] scale];
+    return scale;
 }
 
 -(UIImage *)scaleToSize:(CGSize) size {
     DLog(@"warning - this is a very expensive operation, you should avoid using it");
 
     // Create a bitmap graphics context; this will also set it as the current context
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+    if (UIGraphicsBeginImageContextWithOptions != NULL)
         UIGraphicsBeginImageContextWithOptions(size, NO, getScreenScale());
     else
         UIGraphicsBeginImageContext(size);
