@@ -2,6 +2,10 @@
 <resources>
     <string name="app_name">Hedgewars</string>
     
+    <string name="select">Select</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    
     <!-- SDCARD -->
     <string name="sdcard_not_mounted">There\'s been an error when accessing the sdcard, is it connected to another computer?</string>
         
@@ -23,5 +27,22 @@
     <string name="start_map">Map</string>
     <string name="start_filter">Filter</string>
     <string name="start_themes">Themes</string>
+    
+    <!-- Settings -->
+    <string name="name">Name</string>
+    <string name="name_default">Unnamed</string>
+    <string name="type">Type</string>
+    <string name="grave">Grave</string>
+    <string name="flag">Flag</string>
+    <string name="voice">Voice</string>
+    <string name="fort">Fort</string>
+    
+    <!-- Difficulty levels -->
+    <string name="human">Human</string>
+    <string name="bot5">Level 5</string>
+    <string name="bot4">Level 4</string>
+    <string name="bot3">Level 3</string>
+    <string name="bot2">Level 2</string>
+    <string name="bot1">Level 1</string>
     
 </resources>

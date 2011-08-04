@@ -11,7 +11,7 @@
     	android:layout_height="128dip"
     	android:layout_margin="5dip"
     	android:scaleType="fitXY"
-    	android:background="@android:color/transparent"
+    	android:background="@drawable/box"
     	android:src="@drawable/backbutton"/>
     
     <Spinner 
@@ -116,21 +116,18 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content" 
         android:layout_toRightOf="@+id/imgTheme"
-        android:layout_alignParentRight="true" 
-        android:layout_above="@+id/btnStart"
+        android:layout_alignParentRight="true"
        	android:layout_below="@id/gameOptions"/>
         
+	<include layout="@layout/backbutton"/>
     <ImageButton
-    	android:id="@+id/btnBack"
+    	android:id="@+id/btnTeams"
     	android:layout_width="wrap_content"
     	android:layout_height="50dip"
     	android:layout_alignParentBottom="true"
-    	android:layout_alignParentLeft="true"
+    	android:layout_centerHorizontal="true"
     	android:adjustViewBounds="true"
-    	android:scaleType="centerInside"
-    	android:background="@android:color/transparent"
-    	android:src="@drawable/backbutton"/>
-    	
+    	android:scaleType="centerInside"/>
     <ImageButton
     	android:id="@+id/btnStart"
     	android:layout_width="wrap_content"
