@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -43,7 +44,7 @@ public class Utils {
 	}
 	
 	/**
-	 * Return a File array if all the files from dirName
+	 * Return a File array with all the files from dirName
 	 * @param c
 	 * @param dirName
 	 * @return
@@ -57,7 +58,7 @@ public class Utils {
 	}
 	
 	/**
-	 * Checks if this directory has a lua file
+	 * Checks if this directory has a file with suffix suffix
 	 * @param f - directory
 	 * @return
 	 */
@@ -72,6 +73,13 @@ public class Utils {
 		}
 	}
 	
+	/**
+	 * Gives back all dirs which contain a file with suffix fileSuffix
+	 * @param c
+	 * @param path
+	 * @param fileSuffix
+	 * @return
+	 */
 	public static String[] getDirsWithFileSuffix(Context c, String path, String fileSuffix){
 		File[] files = getFilesFromRelativeDir(c,path);
 		String[] validFiles = new String[files.length];
@@ -82,6 +90,26 @@ public class Utils {
 		}
 		String[] ret = new String[validCounter];
 		System.arraycopy(validFiles, 0, ret, 0, validCounter);
+		return ret;
+	}
+	
+	/**
+	 * Get all files from directory dir which have the given suffix
+	 * @param c
+	 * @param dir
+	 * @param suffix
+	 * @param removeSuffix
+	 * @return
+	 */
+	public static ArrayList<String> getFilesFromDirWithSuffix(Context c, String dir, String suffix, boolean removeSuffix){
+		String[] files = Utils.getFileNamesFromRelativeDir(c, dir);
+		ArrayList<String> ret = new ArrayList<String>();
+		for(String s : files){
+			if(s.endsWith(suffix)){
+				if(removeSuffix) ret.add(s.substring(0, s.length()-suffix.length()));
+				else ret.add(s);
+			}
+		}
 		return ret;
 	}
 	
