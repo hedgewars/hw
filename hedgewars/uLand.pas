@@ -1096,6 +1096,7 @@ begin
                     end;
                 Land[y,x]:= lfObject
             end;
+
     AddProgress();
 end;
 
@@ -1313,6 +1314,32 @@ if ((GameFlags and gfForts) = 0)
 else AddProgress();
 
 FreeLandObjects;
+
+if cGrayScale then
+    begin
+    if (cReducedQuality and rqBlurryLand) = 0 then
+        for x:= leftX to rightX do
+            for y:= topY to LAND_HEIGHT-1 do
+                begin
+                w:= LandPixels[y,x];
+                w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
+                      (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
+                      (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
+                if w > 255 then w:= 255;
+                w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixels[y,x] and AMask);
+                LandPixels[y,x]:= w or (LandPixels[y, x] and AMask)
+                end
+    else
+        for x:= leftX div 2 to rightX div 2 do
+            for y:= topY div 2 to LAND_HEIGHT-1 div 2 do
+                begin
+                w:= LandPixels[y div 2,x div 2];
+                w:= ((w shr RShift and $FF) +  (w shr BShift and $FF) + (w shr GShift and $FF)) div 3;
+                if w > 255 then w:= 255;
+               w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixels[y div 2,x div 2] and AMask);
+                LandPixels[y,x]:= w or (LandPixels[y div 2, x div 2] and AMask)
+                end
+    end;
 
 UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT);
 end;

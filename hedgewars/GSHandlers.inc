@@ -156,12 +156,8 @@ begin
                             AddCaption(Format(GetEventString(eidDrowned), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
                             end
                         end
-                    else if Gear^.Kind = gtFlake then
-                        begin
-                        DeleteGear(Gear);
-                        exit
-                        end
-                    else Gear^.doStep := @doStepDrowningGear
+                    else Gear^.doStep := @doStepDrowningGear;
+                    if Gear^.Kind = gtFlake then exit // skip splashes 
                 end;
             if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
                (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01))) then
@@ -361,12 +357,12 @@ begin
     else
         Gear^.State := Gear^.State or      gstMoving;
 
-    if (Gear^.nImpactSounds > 0) then
-        if ((Gear^.Damage <> 0) or ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or
-           gstMoving))) and
-           ((Gear^.dX.QWordValue > _0_1.QWordValue) or (Gear^.dY.QWordValue > _0_1.QWordValue)) then
-            PlaySound(TSound(ord(Gear^.ImpactSound) + LongInt(GetRandom(Gear^.nImpactSounds))), true
-            );
+    if (Gear^.nImpactSounds > 0) and 
+       ((Gear^.Damage <> 0) or 
+          ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving))) and
+       ((Gear^.dX.QWordValue > _0_1.QWordValue) or 
+          (Gear^.dY.QWordValue > _0_1.QWordValue)) then
+        PlaySound(TSound(ord(Gear^.ImpactSound) + LongInt(GetRandom(Gear^.nImpactSounds))), true);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -500,9 +496,9 @@ begin
         gX := hwRound(Gear^.X);
         gY := hwRound(Gear^.Y);
         //doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5, EXPLAutoSound);
-        for i:= 0 to 20 do
+        for i:= 0 to 24 do
         begin
-            dX := AngleCos(i * 2) * ((_0_1*(i div 5))) * (GetRandom + _1);
+            dX := AngleCos(i * 2) * ((_0_15*(i div 5))) * (GetRandom + _1);
             dY := AngleSin(i * 8) * _0_5 * (GetRandom + _1);
             Fire := AddGear(gX, gY, gtFlame, 0, dX, dY, 0);
             Fire^.State := Fire^.State or gsttmpFlag;
@@ -595,6 +591,7 @@ move:= false;
 draw:= false;
 if gun then
     begin
+    Gear^.State:= Gear^.State and not gstInvisible;
     doStepFallingGear(Gear);
     CheckCollision(Gear);
     if ((Gear^.State and gstCollision) <> 0) or ((Gear^.State and gstMoving) = 0) then draw:= true;
@@ -733,7 +730,8 @@ if move then
         exit
         end;
     Gear^.X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
-    Gear^.Y:= int2hwFloat(750+(GetRandom(50)-25))
+    Gear^.Y:= int2hwFloat(750+(GetRandom(50)-25));
+    Gear^.State:= Gear^.State or gstInvisible;
     end
 end;
 
@@ -2113,6 +2111,7 @@ var
     gX,gY,i: LongInt;
     sticky: Boolean;
     vgt: PVisualGear;
+    tdX,tdY: HWFloat;
 begin
     sticky:= (Gear^.State and gsttmpFlag) <> 0;
     if not sticky then AllInactive := false;
@@ -2158,7 +2157,15 @@ begin
         if sticky then
             begin
             Gear^.Radius := 7;
-            AmmoShove(Gear, 2, 30);
+            tdX:= Gear^.dX;
+            tdY:= Gear^.dY;
+            Gear^.dX.QWordValue:= 214748365;
+            Gear^.dY.QWordValue:= 429496730;
+            Gear^.dX.isNegative:= getrandom(2)<>1;
+            Gear^.dY.isNegative:= true;
+            AmmoShove(Gear, 2, 125);
+            Gear^.dX:= tdX;
+            Gear^.dY:= tdY;
             Gear^.Radius := 1
             end;
         if Gear^.Timer > 0 then
@@ -2176,10 +2183,18 @@ begin
                 if ((GameTicks and $1) = 0) then
                     begin
                     Gear^.Radius := 7;
-                    AmmoShove(Gear, 4, 150);
+                    tdX:= Gear^.dX;
+                    tdY:= Gear^.dY;
+                    Gear^.dX.QWordValue:= 214748365;
+                    Gear^.dY.QWordValue:= 429496730;
+                    Gear^.dX.isNegative:= getrandom(2)<>1;
+                    Gear^.dY.isNegative:= true;
+                    AmmoShove(Gear, 6, 100);
+                    Gear^.dX:= tdX;
+                    Gear^.dY:= tdY;
                     Gear^.Radius := 1;
                     end
-                else if ((GameTicks and $3) = 3) then doMakeExplosion(gX, gY, 6, Gear^.Hedgehog, 0);//, EXPLNoDamage); 
+                else if ((GameTicks and $3) = 3) then doMakeExplosion(gX, gY, 8, Gear^.Hedgehog, 0);//, EXPLNoDamage); 
                 //DrawExplosion(gX, gY, 4);
                 if ((GameTicks and $7) = 0) and (Random(2) = 0) then
                     for i:= 1 to Random(2)+1 do
@@ -3756,13 +3771,19 @@ begin
            or (iterator^.Y < Gear^.Y - r)
            or (iterator^.Y > Gear^.Y + r) then
             continue;
-
+(*
+Square check causes fail on many innocent cases. the 3/4s and 1.5 fudge factors... help.
+Might still need to remove this section
+*)
         //Will if fit through?
         //set r to be portal distance
-        r := Int2hwFloat(Gear^.Radius +1);
+        r := Int2hwFloat(Gear^.Radius * 3 div 4);
+        o_x := hwRound(conPortal^.X + (conPortal^.dX*_1_5));
+        o_y := hwRound(conPortal^.Y + (conPortal^.dY*_1_5));
+        //r := Int2hwFloat(Gear^.Radius +1);
 
-        o_x := hwRound(conPortal^.X + conPortal^.dX);
-        o_y := hwRound(conPortal^.Y + conPortal^.dY);
+        //o_x := hwRound(conPortal^.X + conPortal^.dX);
+        //o_y := hwRound(conPortal^.Y + conPortal^.dY);
         r_x := hwRound(conPortal^.X+r*conPortal^.dX);
         r_y := hwRound(conPortal^.Y+r*conPortal^.dY);
         rr_x := hwRound(conPortal^.X+r*conPortal^.dX*2);
@@ -4391,18 +4412,18 @@ begin
     if Gear^.Timer = 0 then
         begin
         dec(Gear^.Health);
-        if (Gear^.Health mod 10) = 0 then
+        if (Gear^.Health mod 5) = 0 then
             begin
             rx := rndSign(getRandom * _0_1);
             ry := rndSign(getRandom * _0_1);
-            speed := _0_8 * (_10 / Gear^.Tag);
+            speed := _0_5 * (_10 / Gear^.Tag);
     
             Fire := AddGear(gx, gy, gtFlame, 0,
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                 AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
             Fire^.State := Fire^.State or gsttmpFlag;
             
-            if (Gear^.Health mod 20) = 0 then 
+            if (Gear^.Health mod 30) = 0 then 
                 Fire := AddGear(gx, gy, gtFlame, 0,
                             SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
@@ -4470,18 +4491,16 @@ begin
     if Gear^.Timer = 0 then
         begin
         dec(Gear^.Health);
-        if (Gear^.Health mod 5) = 0 then
-            begin
-            rx := rndSign(getRandom * _0_1);
-            ry := rndSign(getRandom * _0_1);
-            speed := (_3 / Gear^.Tag);
-    
-            Flake := AddGear(gx, gy, gtFlake, 0, _0, _0, 0);
-            Flake^.dX:= SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx;
-            Flake^.dY:= AngleCos(HHGear^.Angle) * ( - speed) + ry;
-            Flake^.State := Flake^.State or gsttmpFlag;
+
+        rx := rndSign(getRandom * _0_1);
+        ry := rndSign(getRandom * _0_1);
+        speed := (_3 / Gear^.Tag);
+
+        Flake := AddGear(gx, gy, gtFlake, 0, _0, _0, 0);
+        Flake^.dX:= SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx;
+        Flake^.dY:= AngleCos(HHGear^.Angle) * ( - speed) + ry;
+        Flake^.State := Flake^.State or gsttmpFlag;
             
-            end;
         Gear^.Timer:= Gear^.Tag
         end;
 

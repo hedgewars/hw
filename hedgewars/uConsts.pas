@@ -120,6 +120,16 @@ const
     cifAllInited = cifRandomize or cifTheme or cifMap;
 
     cTransparentColor: Longword = $00000000;
+    cGrayScale: Boolean = false;
+
+    RGB_LUMINANCE_RED    = 0.212671;
+    RGB_LUMINANCE_GREEN  = 0.715160;
+    RGB_LUMINANCE_BLUE   = 0.072169;
+(*
+    RGB_LUMINANCE_RED    = 0.3333333333;
+    RGB_LUMINANCE_GREEN  = 0.3333333333;
+    RGB_LUMINANCE_BLUE   = 0.3333333333;
+*)
 
     cMaxTeams        = 8;
     cMaxHHIndex      = 7;

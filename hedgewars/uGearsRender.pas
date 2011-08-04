@@ -1050,15 +1050,15 @@ begin
                     end;
       gtNapalmBomb: DrawRotated(sprNapalmBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
            gtFlake: if (Gear^.State and gstTmpFlag) <> 0 then
-                        //DrawRotatedTextureF(SpritesData[sprSnowBall].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle)
                         begin
                         Tint((cExplosionBorderColor shr RShift) and $FF, 
                              (cExplosionBorderColor shr GShift) and $FF, 
                              (cExplosionBorderColor shr BShift) and $FF, 
-                             (cExplosionBorderColor shr AShift) and $FF);
-                        //DrawRotated(sprSnow, x, y, 0, Gear^.DirAngle);
+                             $FF);
                         // Needs a nicer white texture to tint
-                        DrawTexture(x, y, SpritesData[sprVampiric].Texture, 0.1);
+                        DrawRotatedTextureF(SpritesData[sprSnowDust].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle);
+                        //DrawRotated(sprSnowDust, x, y, 0, Gear^.DirAngle);
+                        //DrawTexture(x, y, SpritesData[sprVampiric].Texture, 0.1);
                         Tint($FF, $FF, $FF, $FF);
                         end
                     else if not isInLag then

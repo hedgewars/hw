@@ -37,6 +37,7 @@
 #import "Appirater.h"
 #import <SystemConfiguration/SCNetworkReachability.h>
 #import <netinet/in.h>
+#import "CommodityFunctions.h"
 
 NSString *const kAppiraterLaunchDate            = @"kAppiraterLaunchDate";
 NSString *const kAppiraterLaunchCount           = @"kAppiraterLaunchCount";
@@ -45,47 +46,6 @@ NSString *const kAppiraterRatedCurrentVersion   = @"kAppiraterRatedCurrentVersio
 NSString *const kAppiraterDeclinedToRate        = @"kAppiraterDeclinedToRate";
 
 NSString *templateReviewURL = @"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=APP_ID&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software";
-
-@interface Appirater (hidden)
-
--(BOOL) connectedToNetwork;
-
-@end
-
-@implementation Appirater (hidden)
-
--(BOOL) connectedToNetwork {
-    // Create zero addy
-    struct sockaddr_in zeroAddress;
-    bzero(&zeroAddress, sizeof(zeroAddress));
-    zeroAddress.sin_len = sizeof(zeroAddress);
-    zeroAddress.sin_family = AF_INET;
-    
-    // Recover reachability flags
-    SCNetworkReachabilityRef defaultRouteReachability = SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *)&zeroAddress);
-    SCNetworkReachabilityFlags flags;
-    
-    BOOL didRetrieveFlags = SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags);
-    CFRelease(defaultRouteReachability);
-    
-    if (!didRetrieveFlags) {
-        NSLog(@"Error. Could not recover network reachability flags");
-        return NO;
-    }
-    
-    BOOL isReachable = flags & kSCNetworkFlagsReachable;
-    BOOL needsConnection = flags & kSCNetworkFlagsConnectionRequired;
-    BOOL nonWiFi = flags & kSCNetworkReachabilityFlagsTransientConnection;
-    
-    NSURL *testURL = [NSURL URLWithString:@"http://www.apple.com/"];
-    NSURLRequest *testRequest = [NSURLRequest requestWithURL:testURL  cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:20.0];
-    NSURLConnection *testConnection = [[NSURLConnection alloc] initWithRequest:testRequest delegate:self];
-    
-    return ((isReachable && !needsConnection) || nonWiFi) ? (testConnection ? YES : NO) : NO;
-}
-
-@end
-
 
 @implementation Appirater
 
@@ -146,7 +106,7 @@ NSString *templateReviewURL = @"itms-apps://itunes.apple.com/WebObjects/MZStore.
              launchCount > LAUNCHES_UNTIL_PROMPT &&
              !declinedToRate &&
              !ratedApp) {
-            if ([self connectedToNetwork]) {	// check if they can reach the app store
+            if (isNetworkReachable()) {	// check if they can reach the app store
                 willShowPrompt = YES;
                 [self performSelectorOnMainThread:@selector(showPrompt) withObject:nil waitUntilDone:NO];
             }

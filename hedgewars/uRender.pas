@@ -22,7 +22,7 @@ unit uRender;
 
 interface
 
-uses SDLh, uTypes, GLunit;
+uses SDLh, uTypes, GLunit, uConsts;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
 procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
@@ -453,11 +453,20 @@ end;
 
 
 procedure Tint(r, g, b, a: Byte); inline;
-var nc: Longword;
+var nc, tw: Longword;
 begin
 nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
 if nc = lastTint then
     exit;
+if cGrayScale then
+    begin
+    tw:= round(r * RGB_LUMINANCE_RED + g * RGB_LUMINANCE_GREEN + b * RGB_LUMINANCE_BLUE);
+    if tw > 255 then tw:= 255;
+    r:= tw;
+    g:= tw;
+    b:= tw
+    end;
+
 glColor4ub(r, g, b, a);
 lastTint:= nc;
 end;

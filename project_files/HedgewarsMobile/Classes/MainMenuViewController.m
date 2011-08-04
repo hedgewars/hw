@@ -27,6 +27,7 @@
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
 #import "RestoreViewController.h"
+#import "Appirater.h"
 #import "ServerSetup.h"
 
 @implementation MainMenuViewController
@@ -72,7 +73,7 @@
         [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
     NSString *baseSchemesDir = [[NSString alloc] initWithFormat:@"%@/Settings/Schemes/",resourcesDir];
     [[NSFileManager defaultManager] copyItemAtPath:baseSchemesDir toPath:SCHEMES_DIRECTORY() error:NULL];
-    
+    [baseSchemesDir release];
 
     // WEAPONS - always overwrite
     if ([[NSFileManager defaultManager] fileExistsAtPath:WEAPONS_DIRECTORY()] == NO)
@@ -101,31 +102,40 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *trackingVersion = [userDefaults stringForKey:@"HedgeVersion"];
 
+    if ([[userDefaults objectForKey:@"music"] boolValue])
+        [HedgewarsAppDelegate playBackgroundMusic];
+
     if (trackingVersion == nil || [trackingVersion isEqualToString:version] == NO) {
+        // remove any reminder of previous games as saves are going to be wiped out
+        [userDefaults setObject:@"" forKey:@"savedGamePath"];
+        // update the tracking version with the new one
         [userDefaults setObject:version forKey:@"HedgeVersion"];
+
         [userDefaults synchronize];
         [self createNecessaryFiles];
     }
 
-    if ([[userDefaults objectForKey:@"music"] boolValue])
-        [HedgewarsAppDelegate playBackgroundMusic];
-
-    NSString *saveString = [[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"];
+    // prompt for restoring any previous game
+    NSString *saveString = [userDefaults objectForKey:@"savedGamePath"];
     if (saveString != nil && [saveString isEqualToString:@""] == NO) {
         if (self.restoreViewController == nil) {
-            NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")]; 
+            NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
             RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
             if ([restored respondsToSelector:@selector(setModalPresentationStyle:)])
                 restored.modalPresentationStyle = UIModalPresentationFormSheet;
             self.restoreViewController = restored;
             [restored release];
         }
-        [self performSelector:@selector(presentModalViewController:animated:) withObject:self.restoreViewController afterDelay:0.35];
+        [self performSelector:@selector(presentModalViewController:animated:) withObject:self.restoreViewController afterDelay:0.3];
+    } else {
+        // let's not prompt for rating when app crashed >_>
+        [Appirater appLaunched];
     }
+
 
     /*
     ServerSetup *setup = [[ServerSetup alloc] init];
-    if ([setup isNetworkReachable]) {
+    if (isNetworkReachable()) {
         DLog(@"network is reachable");
         [NSThread detachNewThreadSelector:@selector(serverProtocol)
                                  toTarget:setup
@@ -147,11 +157,8 @@
     switch (button.tag) {
         case 0:
             if (nil == self.gameConfigViewController) {
-                if (IS_IPAD())
-                    xib = nil;
-                else
-                    xib = @"GameConfigViewController";
-                
+                xib = IS_IPAD() ? nil : @"GameConfigViewController";
+
                 GameConfigViewController *gcvc = [[GameConfigViewController alloc] initWithNibName:xib bundle:nil];
                 gcvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
                 self.gameConfigViewController = gcvc;
@@ -172,7 +179,10 @@
             break;
         case 3:
 #ifdef DEBUG
-            debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:DEBUG_FILE()])
+                debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
+            else
+                debugStr = [[NSString alloc] initWithString:@"Here be log"];
             UITextView *scroll = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
             scroll.text = debugStr;
             [debugStr release];
@@ -186,6 +196,7 @@
             [self.view addSubview:scroll];
             [scroll release];
 #else
+            debugStr = debugStr; // prevent compiler warning
             if (nil == self.aboutViewController) {
                 AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
                 about.modalTransitionStyle = UIModalTransitionStyleCoverVertical;

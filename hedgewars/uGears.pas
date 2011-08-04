@@ -914,7 +914,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
             CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstAttacked;
         if delay2 = 0 then
             begin
-            SweepDirty;
+            if (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.State and gstAttacked = 0) then SweepDirty;
             CheckNoDamage;
             AliveCount:= 0; // shorter version of check for win to allow typical step activity to proceed
             for i:= 0 to Pred(ClansCount) do
@@ -1069,7 +1069,7 @@ begin
                 while i < vampDmg do
                     begin
                     vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtHealth);
-                    if vg <> nil then vg^.Frame:= 10;
+                    if vg <> nil then vg^.Tint:= $FF0000FF;
                     inc(i, 5);
                     end;
                 end

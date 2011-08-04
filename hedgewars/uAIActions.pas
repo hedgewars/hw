@@ -158,7 +158,7 @@ with Actions.actions[Actions.Pos] do
                           end
                           else if hwRound(Me^.X) < Param then
                                begin
-                               OutError('AI: WaitXL assert (' + IntToStr(hwRound(Me^.X)) + ' < ' + IntToStr(Param) + ')', false);
+                               //OutError('AI: WaitXL assert (' + IntToStr(hwRound(Me^.X)) + ' < ' + IntToStr(Param) + ')', false);
                                FreeActionsList;
                                exit
                                end
@@ -171,7 +171,7 @@ with Actions.actions[Actions.Pos] do
                           end
                           else if hwRound(Me^.X) > Param then
                                begin
-                               OutError('AI: WaitXR assert (' + IntToStr(hwRound(Me^.X)) + ' > ' + IntToStr(Param) + ')', false);
+                               //OutError('AI: WaitXR assert (' + IntToStr(hwRound(Me^.X)) + ' > ' + IntToStr(Param) + ')', false);
                                FreeActionsList;
                                exit
                                end

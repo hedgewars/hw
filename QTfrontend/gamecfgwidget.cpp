@@ -49,10 +49,13 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
 
     QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
 
-    GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Gameplay"), GBoxOptions), 0, 0);
+    QLabel *titleLabel = new QLabel(QLabel::tr("Game Options"), GBoxOptions);
+    titleLabel->setMargin(7);    // TODO: make the text larger/richer!!!!
+    GBoxOptionsLayout->addWidget(titleLabel, 0, 0, 1, 0, Qt::AlignHCenter);
+    GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Style"), GBoxOptions), 1, 0);
 
     Scripts = new QComboBox(GBoxOptions);
-    GBoxOptionsLayout->addWidget(Scripts, 0, 1);
+    GBoxOptionsLayout->addWidget(Scripts, 1, 1);
 
     Scripts->addItem("Normal");
     Scripts->insertSeparator(1);
@@ -91,7 +94,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     connect(Scripts, SIGNAL(currentIndexChanged(int)), this, SLOT(scriptChanged(int)));
 
     QWidget *SchemeWidget = new QWidget(GBoxOptions);
-    GBoxOptionsLayout->addWidget(SchemeWidget, 1, 0, 1, 2);
+    GBoxOptionsLayout->addWidget(SchemeWidget, 2, 0, 1, 2);
 
     QGridLayout *SchemeWidgetLayout = new QGridLayout(SchemeWidget);
     SchemeWidgetLayout->setMargin(0);
@@ -100,7 +103,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     SchemeWidgetLayout->addWidget(GameSchemes, 0, 2);
     connect(GameSchemes, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeChanged(int)));
 
-    SchemeWidgetLayout->addWidget(new QLabel(QLabel::tr("Game scheme"), SchemeWidget), 0, 0);
+    SchemeWidgetLayout->addWidget(new QLabel(QLabel::tr("Scheme"), SchemeWidget), 0, 0);
 
     QPixmap pmEdit(":/res/edit.png");
     
@@ -127,8 +130,6 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     SchemeWidgetLayout->addWidget(goToWeaponPage, 1, 3);
     connect(goToWeaponPage, SIGNAL(clicked()), this, SLOT(jumpToWeapons()));
 
-    //GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Bind schemes with weapons"), GBoxOptions), 2, 0);
-
     bindEntries = new QCheckBox(SchemeWidget);
     bindEntries->setToolTip(tr("When this option is enabled selecting a game scheme will auto-select a weapon"));
     bindEntries->setChecked(true);
@@ -136,7 +137,6 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     bindEntries->setStyleSheet( "QCheckBox::indicator:checked   { image: url(\":/res/lock.png\"); }"
                                 "QCheckBox::indicator:unchecked { image: url(\":/res/unlock.png\");   }" );
     SchemeWidgetLayout->addWidget(bindEntries, 0, 1, 0, 1, Qt::AlignVCenter);
-    //GBoxOptionsLayout->addWidget(bindEntries, 2, 2);
 
     connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));
     connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));

@@ -210,81 +210,93 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 end;
 
 function FillLandCircleLinesBG(x, y, dx, dy: LongInt): Longword;
-var i, t: LongInt;
+var i, t, by, bx: LongInt;
     cnt: Longword;
 begin
 cnt:= 0;
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) and not disableLandBack then
+       begin
+       if (cReducedQuality and rqBlurryLand) = 0 then
            begin
-           inc(cnt);
-           if (cReducedQuality and rqBlurryLand) = 0 then
-               LandPixels[t, i]:= LandBackPixel(i, t)
-           else
-               LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
+           by:= t; bx:= i;
            end
        else
-           if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) then
-               if (cReducedQuality and rqBlurryLand) = 0 then
-                   LandPixels[t, i]:= 0
-               else
-                   LandPixels[t div 2, i div 2]:= 0;
+           begin
+           by:= t div 2; bx:= i div 2;
+           end;
+       if ((Land[t, i] and lfBasic) <> 0) and ((LandPixels[by,bx] and AMask) shr AShift = 255) and not disableLandBack then
+           begin
+           inc(cnt);
+           LandPixels[by, bx]:= LandBackPixel(i, t)
+           end
+       else
+           if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) or ((LandPixels[by,bx] and AMask) shr AShift < 255) then
+              LandPixels[by, bx]:= 0
+       end;
 
 t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) and not disableLandBack then
+       begin
+       if (cReducedQuality and rqBlurryLand) = 0 then
            begin
-           inc(cnt);
-           if (cReducedQuality and rqBlurryLand) = 0 then
-               LandPixels[t, i]:= LandBackPixel(i, t)
-           else
-               LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
+           by:= t; bx:= i;
            end
        else
-           if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) then
-               if (cReducedQuality and rqBlurryLand) = 0 then
-                   LandPixels[t, i]:= 0
-               else
-                   LandPixels[t div 2, i div 2]:= 0;
+           begin
+           by:= t div 2; bx:= i div 2;
+           end;
+       if ((Land[t, i] and lfBasic) <> 0) and ((LandPixels[by,bx] and AMask) shr AShift = 255) and not disableLandBack then
+           begin
+           inc(cnt);
+           LandPixels[by, bx]:= LandBackPixel(i, t)
+           end
+       else if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) or ((LandPixels[by,bx] and AMask) shr AShift < 255) then
+              LandPixels[by, bx]:= 0
+       end;
 
 t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) and not disableLandBack then
+       begin
+       if (cReducedQuality and rqBlurryLand) = 0 then
            begin
-           inc(cnt);
-           if (cReducedQuality and rqBlurryLand) = 0 then
-               LandPixels[t, i]:= LandBackPixel(i, t)
-           else
-               LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
+           by:= t; bx:= i;
            end
        else
-           if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) then
-               if (cReducedQuality and rqBlurryLand) = 0 then
-                   LandPixels[t, i]:= 0
-               else
-                   LandPixels[t div 2, i div 2]:= 0;
-
+           begin
+           by:= t div 2; bx:= i div 2;
+           end;
+       if ((Land[t, i] and lfBasic) <> 0) and ((LandPixels[by,bx] and AMask) shr AShift = 255) and not disableLandBack then
+           begin
+           inc(cnt);
+           LandPixels[by, bx]:= LandBackPixel(i, t)
+           end
+       else if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) or ((LandPixels[by,bx] and AMask) shr AShift < 255) then
+           LandPixels[by, bx]:= 0
+       end;
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) and not disableLandBack then
+       begin
+       if (cReducedQuality and rqBlurryLand) = 0 then
            begin
-           inc(cnt);
-           if (cReducedQuality and rqBlurryLand) = 0 then
-               LandPixels[t, i]:= LandBackPixel(i, t)
-           else
-               LandPixels[t div 2, i div 2]:= LandBackPixel(i, t)
+           by:= t; bx:= i;
            end
        else
-           if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) then
-              if (cReducedQuality and rqBlurryLand) = 0 then
-                  LandPixels[t, i]:= 0
-              else
-                  LandPixels[t div 2, i div 2]:= 0;
+           begin
+           by:= t div 2; bx:= i div 2;
+           end;
+       if ((Land[t, i] and lfBasic) <> 0) and ((LandPixels[by,bx] and AMask) shr AShift = 255) and not disableLandBack then
+           begin
+           inc(cnt);
+           LandPixels[by, bx]:= LandBackPixel(i, t)
+           end
+       else if ((Land[t, i] and lfObject) <> 0) or (disableLandBack and ((Land[t, i] and lfIndestructible) = 0)) or ((LandPixels[by,bx] and AMask) shr AShift < 255) then
+           LandPixels[by, bx]:= 0
+       end;
 FillLandCircleLinesBG:= cnt;
 end;
 
@@ -430,23 +442,26 @@ DrawExplosion:= cnt
 end;
 
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
-var tx, ty, i: LongInt;
+var tx, ty, by, bx,  i: LongInt;
 begin
 for i:= 0 to Pred(Count) do
     begin
     for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
         for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
-            if ((Land[ty, tx] and lfBasic) <> 0) and not disableLandBack then
-                if (cReducedQuality and rqBlurryLand) = 0 then
-                    LandPixels[ty, tx]:= LandBackPixel(tx, ty)
-                else
-                    LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
+            begin
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                begin
+                by:= ty; bx:= tx;
+                end
             else
-                if ((Land[ty, tx] and lfObject) <> 0) or (disableLandBack and ((Land[ty, tx] and lfIndestructible) = 0)) then
-                    if (cReducedQuality and rqBlurryLand) = 0 then
-                        LandPixels[ty, tx]:= 0
-                    else
-                        LandPixels[ty div 2, tx div 2]:= 0;
+                begin
+                by:= ty div 2; bx:= tx div 2;
+                end;
+            if ((Land[ty, tx] and lfBasic) <> 0) and ((LandPixels[by,bx] and AMask) shr AShift = 255) and not disableLandBack then 
+                LandPixels[by, bx]:= LandBackPixel(tx, ty)
+            else if ((Land[ty, tx] and lfObject) <> 0) or (disableLandBack and ((Land[ty, tx] and lfIndestructible) = 0)) or ((LandPixels[by,bx] and AMask) shr AShift < 255) then 
+                LandPixels[by, bx]:= 0
+            end;
     inc(y, dY)
     end;
 
@@ -479,7 +494,7 @@ end;
 //
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 var nx, ny, dX8, dY8: hwFloat;
-    i, t, tx, ty, stX, stY, ddy, ddx: Longint;
+    i, t, tx, ty, by, bx, stX, stY, ddy, ddx: Longint;
     despeckle : Boolean;
 begin  // (-dY, dX) is (dX, dY) rotated by PI/2
 stY:= hwRound(Y);
@@ -550,17 +565,18 @@ for i:= -HalfWidth to HalfWidth do
         ty:= hwRound(Y);
         if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and ((Land[ty, tx] and lfIndestructible) = 0) then
             begin
-            if ((Land[ty, tx] and lfBasic) <> 0) and not disableLandBack then
-                if (cReducedQuality and rqBlurryLand) = 0 then
-                    LandPixels[ty, tx]:= LandBackPixel(tx, ty)
-                else
-                    LandPixels[ty div 2, tx div 2]:= LandBackPixel(tx, ty)
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                begin
+                by:= ty; bx:= tx;
+                end
             else
-              if ((Land[ty, tx] and lfObject) <> 0) or (disableLandBack and ((Land[ty, tx] and lfIndestructible) = 0)) then
-                if (cReducedQuality and rqBlurryLand) = 0 then
-                LandPixels[ty, tx]:= 0
-                else
-                LandPixels[ty div 2, tx div 2]:= 0;
+                begin
+                by:= ty div 2; bx:= tx div 2;
+                end;
+            if ((Land[ty, tx] and lfBasic) <> 0) and ((LandPixels[by,bx] and AMask) shr AShift = 255) and not disableLandBack then
+                    LandPixels[by, bx]:= LandBackPixel(tx, ty)
+            else if ((Land[ty, tx] and lfObject) <> 0) or (disableLandBack and ((Land[ty, tx] and lfIndestructible) = 0)) or ((LandPixels[by,bx] and AMask) shr AShift < 255) then
+                LandPixels[by, bx]:= 0;
 
             Land[ty, tx]:= 0;
             end
@@ -748,7 +764,7 @@ if ((Land[Y, X] > 255) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelswee
             LandPixels[yy, xx]:= 0;
 
         Land[Y, X]:= 0;
-        if not pixelsweep then exit(1)  // cannot exit true on pixel sweep, or risk desyncs due to inconsistent resweeps
+        if not pixelsweep then exit(1)
         else exit(2)
         end;
     end;

@@ -50,7 +50,14 @@ begin
     UserNick:= DecodeBase64(ParamStr(14));
     val(ParamStr(15), cReducedQuality);
     val(ParamStr(16), tmp);
-    cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp)));
+    cGrayScale:= false;
+    if (tmp > 9) and (tmp < 16) then 
+        begin
+        cGrayScale:= true;
+        cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-9)))
+        end
+    else if tmp <= 9 then cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp)))
+    else cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-6)));
     cLocaleFName:= ParamStr(17);
 end;
 

@@ -302,7 +302,6 @@ var bX, bY: LongInt;
 begin
 bRes:= false;
 GoInfo.Ticks:= 0;
-GoInfo.FallPix:= 0;
 GoInfo.JumpType:= jmpNone;
 bX:= hwRound(Gear^.X);
 bY:= hwRound(Gear^.Y);
@@ -371,9 +370,7 @@ end;
 
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 var pX, pY: LongInt;
-    bRes: boolean;
 begin
-bRes:= false;
 AltGear^:= Gear^;
 
 GoInfo.Ticks:= 0;
@@ -391,7 +388,7 @@ if (Gear^.State and gstMoving) <> 0 then
       begin
       Goinfo.FallPix:= 0;
       HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall with damage
-      exit(bRes)
+      exit(false)
       end;
    Gear^.Y:= Gear^.Y + Gear^.dY;
    if hwRound(Gear^.Y) > pY then inc(GoInfo.FallPix);
@@ -400,14 +397,13 @@ if (Gear^.State and gstMoving) <> 0 then
       inc(GoInfo.Ticks, 410);
       Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
       Gear^.dY:= _0;
-      bRes:= true;
       HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall
-      exit(bRes)
+      exit(true)
       end;
    continue
    end;
    if (Gear^.Message and gmLeft  )<>0 then Gear^.dX:= -cLittle else
-   if (Gear^.Message and gmRight )<>0 then Gear^.dX:=  cLittle else exit(bRes);
+   if (Gear^.Message and gmRight )<>0 then Gear^.dX:=  cLittle else exit(false);
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
       begin
       if not (TestCollisionXwithXYShift(Gear, _0, -6, hwSign(Gear^.dX))
@@ -463,7 +459,7 @@ if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstMoving) = 0) then
    exit(true);
 until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and gstMoving) = 0);
 HHJump(AltGear, jmpHJump, GoInfo);
-HHGo:= bRes;
+HHGo:= false;
 end;
 
 function AIrndSign(num: LongInt): LongInt;

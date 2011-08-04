@@ -77,7 +77,7 @@ with HHGear^.Hedgehog^ do
             ammoidx:= -1;
             //TryDo(i < 2, 'Engine bug: no ammo in current slot', true)
             end;
-        until ((Ammo^[slot, ammoidx].Count > 0) and (Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns)) or (i = 1)
+        until (i = 1) or ((Ammo^[slot, ammoidx].Count > 0) and (Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns))
         end 
     else
         begin

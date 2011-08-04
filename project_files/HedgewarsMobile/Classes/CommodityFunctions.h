@@ -46,6 +46,7 @@
 #define MAPS_DIRECTORY()        [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Maps/"]
 #define MISSIONS_DIRECTORY()    [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Maps/"]
 #define LOCALE_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Locale/"]
+#define SCRIPTS_DIRECTORY()     [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Scripts/plist/"]
 
 #define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory");
 #define MSG_DIDUNLOAD()         DLog(@"unloaded");
@@ -75,6 +76,7 @@ UILabel *createBlueLabel (NSString *title, CGRect frame);
 UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWidth, UIColor *borderColor, UIColor *backgroundColor);
 
 CGSize PSPNGSizeFromMetaData (NSString *aFileName);
+BOOL isNetworkReachable (void);
 
 @interface NSString (extra)
 

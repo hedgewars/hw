@@ -971,7 +971,7 @@ for t:= 0 to Pred(TeamsCount) do
       end;
 if smallScreenOffset <> 0 then
     begin
-    SetScale(zoom);
+    SetScale(cDefaultZoomLevel);
     if TeamsCount * 20 > cScreenHeight div 5 then Tint($FF,$FF,$FF,$FF);
     end;
 
