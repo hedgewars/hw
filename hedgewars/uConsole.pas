@@ -26,7 +26,7 @@ procedure freeModule;
 procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
 function  GetLastConsoleLine: shortstring;
-function ShortStringAsPChar(var s: shortstring): PChar;
+function ShortStringAsPChar(s: shortstring): PChar;
 
 implementation
 uses Types, uVariables, uUtils {$IFDEF ANDROID}, log in 'log.pas'{$ENDIF};
@@ -54,7 +54,7 @@ var Len: LongInt;
 begin
 {$IFNDEF NOCONSOLE}
  {$IFDEF ANDROID}
-  Log.__android_log_write(Log.Android_LOG_DEBUG, 'HW_Engine', ShortStringAsPChar(s));
+  Log.__android_log_write(Log.Android_LOG_DEBUG, 'HW_Engine', ShortStringAsPChar('[Con]' + s));
 {$ELSE}
 AddFileLog('[Con] ' + s);
 Write(stderr, s);
@@ -125,7 +125,7 @@ begin
 
 end;
 
-Function ShortStringAsPChar(var S: ShortString) : PChar;
+Function ShortStringAsPChar(S: ShortString) : PChar;
 Var NewString : String;
 Begin
 if Length(S) = High(S) then Dec(S[0]);
