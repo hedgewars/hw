@@ -18,14 +18,45 @@
 
 Library hwLibrary;
 
+{$IFDEF fpc}
+{$MODE delphi}
+{$ENDIF}
+
+{$IFDEF ANDROID}
+    {$MACRO ON}
+    {$DEFINE Java_Prefix := 'Java_org_hedgewars_mobile_EngineProtocol_PascalExports_'}
+{$ENDIF}
+
 // Add all your Pascal units to the "uses" clause below to add them to the program.
 // Mark all Pascal procedures/functions that you wish to call from C/C++/Objective-C code using
 // "cdecl; export;" (see the fpclogo.pas unit for an example), and then add C-declarations for
 // these procedures/functions to the PascalImports.h file (also in the "Pascal Sources" group)
 // to make these functions available in the C/C++/Objective-C source files
 // (add "#include PascalImports.h" near the top of these files if it's not there yet)
-uses PascalExports, hwengine;
-exports Game, HW_versionInfo;
+uses PascalExports, hwengine{$IFDEF ANDROID},jni{$ENDIF};
+exports Game{$IFNDEF ANDROID}, HW_versionInfo{$ENDIF};
+
+function JNI_HW_versionInfoNet(env: PJNIEnv; obj: JObject):JInt;cdecl;
+begin
+    JNI_HW_versionInfoNet := cNetProtoVersion;
+end;
+
+function JNI_HW_versionInfoVersion(env: PJNIEnv; obj: JObject):JString; cdecl;
+begin
+    JNI_HW_versionInfoVersion := env^.NewStringUTF(env, PChar(cVersionString));
+end;
+
+
+{$IFDEF ANDROID}
+    exports
+    JNI_HW_versionInfoNet name Java_Prefix+'HWversionInfoNetProto', 
+    JNI_HW_versionInfoVersion name Java_Prefix+'HWversionInfoVersion', 
+    GenLandPreview name Java_Prefix + 'GenLandPreview',
+    HW_getNumberOfweapons name Java_Prefix + 'HWgetNumberOfWeapons',
+    HW_getMaxNumberOfHogs name Java_Prefix + 'HWgetMaxNumberOfHogs',
+    HW_getMaxNumberOfTeams name Java_Prefix + 'HWgetMaxNumberOfTeams';
+{$ENDIF}
+
 begin
 
 end.
