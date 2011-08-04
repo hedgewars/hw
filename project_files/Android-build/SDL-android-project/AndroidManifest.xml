@@ -9,7 +9,7 @@
     <application android:label="@string/app_name" android:icon="@drawable/icon">
         <activity android:name=".MainActivity"
                   android:label="@string/app_name"
- 		  		  android:theme="@android:style/Theme"
+ 		  		  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
  		  		  android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +30,17 @@
         
         <activity android:name="StartGameActivity"
                   android:label="@string/app_name"
-				  android:theme="@android:style/Theme"
+				  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+				  android:screenOrientation='landscape'>
+        </activity>
+        <activity android:name="TeamSelectionActivity"
+                  android:label="@string/app_name"
+				  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+				  android:screenOrientation='landscape'>
+        </activity>
+                <activity android:name="TeamCreatorActivity"
+                  android:label="@string/app_name"
+				  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
 				  android:screenOrientation='landscape'>
         </activity>
         
