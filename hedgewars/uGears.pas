@@ -275,6 +275,8 @@ case Kind of
                 gear^.Density:= _1;
                 end;
        gtSnowball: begin
+                gear^.ImpactSound:= sndMudballImpact;
+                gear^.nImpactSounds:= 1;
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _1;
                 gear^.Friction:= _1;
@@ -328,6 +330,8 @@ case Kind of
                 RopePoints.Count:= 0;
                 end;
         gtMine: begin
+                gear^.ImpactSound:= sndMineImpact;
+                gear^.nImpactSounds:= 1;
                 gear^.Health:= 10;
                 gear^.State:= gear^.State or gstMoving;
                 gear^.Radius:= 2;
