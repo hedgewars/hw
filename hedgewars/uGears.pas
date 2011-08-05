@@ -910,7 +910,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
         begin
         dec(delay2);
 
-        if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then 
+        if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
             CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstAttacked;
         if delay2 = 0 then
             begin
@@ -1587,7 +1587,6 @@ var tempTeam : PTeam;
 begin
     gear^.dX := _0;
     gear^.dY := _0;
-    gear^.State := gstWait;
     gear^.Damage := 0;
     gear^.Health := gear^.Hedgehog^.InitialHealth;
     gear^.Hedgehog^.Effects[hePoisoned] := false;
@@ -1604,6 +1603,7 @@ begin
     if gear <> nil then begin
         RenderHealth(gear^.Hedgehog^);
         ScriptCall('onGearResurrect', gear^.uid);
+        gear^.State := gstWait;
     end;
     RecountTeamHealth(tempTeam);
 end;
