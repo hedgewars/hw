@@ -772,6 +772,7 @@ function  SDL_DestroyRenderer(renderer: PSDL_Renderer): LongInt; cdecl; external
 function  SDL_GL_CreateContext(window: PSDL_Window): PSDL_GLContext; cdecl; external SDLLibName;
 procedure SDL_GL_DeleteContext(context: PSDL_GLContext); cdecl; external SDLLibName;
 function  SDL_GL_SwapWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
+function  SDL_GL_SetSwapInterval(interval: LongInt): LongInt; cdecl; external SDLLibName;
 
 procedure SDL_VideoQuit; cdecl; external SDLLibName;
 function  SDL_GetNumVideoDisplays: LongInt; cdecl; external SDLLibName;
