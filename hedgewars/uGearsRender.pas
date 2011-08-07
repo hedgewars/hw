@@ -1055,7 +1055,7 @@ begin
                     Tint($FF, $FF, $FF, $FF);
                     end;
       gtNapalmBomb: DrawRotated(sprNapalmBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
-           gtFlake: if (Gear^.State and gstTmpFlag) <> 0 then
+           gtFlake: if Gear^.State and (gstDrowning or gstTmpFlag) <> 0  then
                         begin
                         Tint((cExplosionBorderColor shr RShift) and $FF, 
                              (cExplosionBorderColor shr GShift) and $FF, 
