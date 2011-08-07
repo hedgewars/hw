@@ -313,6 +313,9 @@ case Kind of
                 gear^.Elasticity:= _0_9;
                 gear^.Tag:= getRandom(32);
                 end;
+   gtSeduction: begin
+                gear^.Radius:= 250;
+                end;
  gtShotgunShot: begin
                 gear^.Timer:= 900;
                 gear^.Radius:= 2

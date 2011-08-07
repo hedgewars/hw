@@ -2942,10 +2942,26 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSeductionWork(Gear: PGear);
 var 
-    x, y: LongInt;
+    x, y, i: LongInt;
+    hogs: TPGearArray;
+    d: hwFloat;
 begin
     AllInactive := false;
-
+    hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
+    if Length(hogs) > 0 then
+        begin
+        for i:= 0 to High(hogs) do
+            begin
+            //d:= Distance(Gear^.X - hogs[i]^.X, Gear^.Y - hogs[i]^.Y);
+            hogs[i]^.dX:= _0_25 * (Gear^.X - hogs[i]^.X) / _250;
+            //if Gear^.X < hogs[i]^.X then hogs[i]^.dX.isNegative:= true;
+            hogs[i]^.dY:= -_0_25;
+            hogs[i]^.Active:= true;
+            end;
+        end ;
+        AfterAttack;
+        DeleteGear(Gear);
+(*
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
     x := hwRound(Gear^.X);
@@ -2967,7 +2983,7 @@ begin
         begin
         AfterAttack;
         DeleteGear(Gear)
-        end
+        end*)
 end;
 
 procedure doStepSeductionWear(Gear: PGear);
@@ -2989,7 +3005,7 @@ end;
 procedure doStepSeduction(Gear: PGear);
 begin
     AllInactive := false;
-    DeleteCI(Gear^.Hedgehog^.Gear);
+    //DeleteCI(Gear^.Hedgehog^.Gear);
     Gear^.doStep := @doStepSeductionWear
 end;
 

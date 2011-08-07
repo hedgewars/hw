@@ -600,7 +600,10 @@ begin
                 amGasBomb: DrawRotated(sprHandCheese, hx, hy, sign, aangle);
                 amMine: DrawRotated(sprHandMine, hx, hy, sign, aangle);
                 amSMine: DrawRotated(sprHandSMine, hx, hy, sign, aangle);
-                amSeduction: DrawRotated(sprHandSeduction, hx, hy, sign, aangle);
+                amSeduction: begin
+                             DrawRotated(sprHandSeduction, hx, hy, sign, aangle);
+                             DrawCircle(ox, oy, 240, 4, $FF, $00, $00, $AA); 
+                             end;
                 amVampiric: DrawRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amRCPlane: begin
                     DrawRotated(sprHandPlane, hx, hy, sign, 0);
