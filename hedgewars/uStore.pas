@@ -821,7 +821,7 @@ while tmpdesc <> '' do
         begin
         r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
 
-        // render highlighted caption (if there's a ':')
+        // render highlighted caption (if there is a ':')
         tmpline2:= '';
         SplitByChar(tmpline, tmpline2, ':');
         if tmpline2 <> '' then
@@ -875,7 +875,7 @@ if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNu
     extra:= trmsg[sidNotYetAvailable];
     extracolor:= LongInt($ffc77070);
     end
-else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then // weapon or utility won't end your turn
+else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then // weapon or utility will not end your turn
     begin
     extra:= trmsg[sidNoEndTurn];
     extracolor:= LongInt($ff70c770);
@@ -964,7 +964,7 @@ begin
     x:= x or (SDL_GetNumVideoDisplays() - 1);
     y:= y or (SDL_GetNumVideoDisplays() - 1);
 
-    flags:= flags or SDL_WINDOW_BORDERLESS or SDL_WINDOW_RESIZABLE;
+    flags:= flags or SDL_WINDOW_BORDERLESS; // do not use SDL_WINDOW_RESIZABLE on ios (yet)
 {$ENDIF}
 
     SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
