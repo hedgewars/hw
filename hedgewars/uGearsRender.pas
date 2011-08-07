@@ -602,7 +602,7 @@ begin
                 amSMine: DrawRotated(sprHandSMine, hx, hy, sign, aangle);
                 amSeduction: begin
                              DrawRotated(sprHandSeduction, hx, hy, sign, aangle);
-                             DrawCircle(ox, oy, 240, 4, $FF, $00, $00, $AA); 
+                             DrawCircle(ox, oy, 248, 4, $FF, $00, $00, $AA); 
                              end;
                 amVampiric: DrawRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amRCPlane: begin
