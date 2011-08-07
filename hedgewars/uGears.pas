@@ -915,7 +915,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
         begin
         dec(delay2);
 
-        if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
+        if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and not CurrentHedgehog^.Unplaced then
             begin
             if (CurrentHedgehog^.Gear^.State and gstAttacked <> 0) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
                 begin
