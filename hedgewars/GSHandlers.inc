@@ -794,8 +794,8 @@ begin
     begin
         if (GameTicks and $30) = 0 then
             AddVisualGear(gX, gY, vgtBeeTrace);
-        Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (TargetPoint.X - gX));
-        Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (TargetPoint.Y - gY));
+        Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.TargetX - gX));
+        Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.TargetY - gY));
         // make sure new speed isn't higher than original one (which we stored in Friction variable)
         t := Gear^.Friction / Distance(Gear^.dX, Gear^.dY);
         Gear^.dX := Gear^.dX * t;
@@ -2417,14 +2417,14 @@ begin
     end;
 
     Gear^.Y := int2hwFloat(topY-300);
-    Gear^.dX := int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
+    Gear^.dX := int2hwFloat(Gear^.TargetX - 5 * Gear^.Tag * 15);
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
     if (Gear^.State = 2) then
         Gear^.dX := Gear^.dX - cBombsSpeed * Gear^.Tag * 900 
     // calcs for regular falling gears
-    else if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then
-            Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /
+    else if (int2hwFloat(Gear^.TargetY) - Gear^.Y > _0) then
+            Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(Gear^.TargetY) - Gear^.Y) * 2 /
                 cGravity) * Gear^.Tag;
 
     Gear^.Health := 6;
@@ -2460,14 +2460,14 @@ begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
-    tx := int2hwFloat(TargetPoint.X);
-    ty := int2hwFloat(TargetPoint.Y);
+    tx := int2hwFloat(Gear^.TargetX);
+    ty := int2hwFloat(Gear^.TargetY);
     x := HHGear^.X;
     y := HHGear^.Y;
 
     if (Distance(tx - x, ty - y) > _256) or
-       not TryPlaceOnLand(TargetPoint.X - SpritesData[sprAmGirder].Width div 2,
-       TargetPoint.Y - SpritesData[sprAmGirder].Height div 2,
+       not TryPlaceOnLand(Gear^.TargetX - SpritesData[sprAmGirder].Width div 2,
+       Gear^.TargetY - SpritesData[sprAmGirder].Height div 2,
        sprAmGirder, Gear^.State, true, false) then
     begin
         PlaySound(sndDenied);
@@ -2486,7 +2486,6 @@ begin
 
     HHGear^.State := HHGear^.State and not (gstAttacking or gstAttacked);
     HHGear^.Message := HHGear^.Message and not gmAttack;
-    TargetPoint.X := NoPointX
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2527,8 +2526,8 @@ begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
-    if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
-       TargetPoint.Y - SpritesData[sprHHTelepMask].Height div 2,
+    if not TryPlaceOnLand(Gear^.TargetX - SpritesData[sprHHTelepMask].Width div 2,
+       Gear^.TargetY - SpritesData[sprHHTelepMask].Height div 2,
        sprHHTelepMask, 0, false, false) then
     begin
         HHGear^.Message := HHGear^.Message and not gmAttack;
@@ -2550,12 +2549,12 @@ begin
         HHGear^.dX.isNegative := (Gear^.X.QWordValue <> 0);
         Gear^.X := HHGear^.X;
         Gear^.Y := HHGear^.Y;
-        HHGear^.X := int2hwFloat(TargetPoint.X);
-        HHGear^.Y := int2hwFloat(TargetPoint.Y);
+        HHGear^.X := int2hwFloat(Gear^.TargetX);
+        HHGear^.Y := int2hwFloat(Gear^.TargetY);
         HHGear^.State := HHGear^.State or gstMoving;
         playSound(sndWarp)
     end;
-    TargetPoint.X := NoPointX;
+    Gear^.TargetX:= NoPointX
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

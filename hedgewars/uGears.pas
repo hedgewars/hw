@@ -207,6 +207,7 @@ New(gear);
 FillChar(gear^, sizeof(TGear), 0);
 gear^.X:= int2hwFloat(X);
 gear^.Y:= int2hwFloat(Y);
+gear^.TargetX:= NoPointX;
 gear^.Kind := Kind;
 gear^.State:= State;
 gear^.Active:= true;
@@ -915,7 +916,14 @@ else if ((GameFlags and gfInfAttack) <> 0) then
         dec(delay2);
 
         if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
+            begin
+            if (CurrentHedgehog^.Gear^.State and gstAttacked <> 0) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
+                begin
+                CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstHHChooseTarget;
+                isCursorVisible := true
+                end;
             CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstAttacked;
+            end;
         if delay2 = 0 then
             begin
             if (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.State and gstAttacked = 0) then SweepDirty;
@@ -1214,7 +1222,6 @@ var Gear: PGear;
     vg: PVisualGear;
     i, cnt: LongInt;
 begin
-TargetPoint.X:= NoPointX;
 if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');
 if Radius > 25 then KickFlakes(Radius, X, Y);
 

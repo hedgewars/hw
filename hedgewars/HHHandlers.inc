@@ -373,6 +373,12 @@ with Gear^,
                   amResurrector, amStructure,
                        amTardis: CurAmmoGear:= newGear;
                   end;
+        if Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then
+            begin
+            newGear^.TargetX:= TargetPoint.X;
+            newGear^.TargetY:= TargetPoint.Y;
+            TargetPoint.X := NoPointX
+            end;
 
         // Clear FollowGear if using on a rope/parachute/saucer etc so focus stays with the hog's movement
         if altUse then FollowGear:= nil;

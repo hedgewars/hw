@@ -877,6 +877,12 @@ var
     i: Longword;
     startX, endX, startY, endY: LongInt;
 begin
+    if Gear^.TargetX <> NoPointX then
+        if Gear^.AmmoType = amBee then
+            DrawRotatedF(sprTargetBee, Gear^.TargetX + WorldDx, Gear^.TargetY + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+        else
+            DrawRotatedF(sprTargetP, Gear^.TargetX + WorldDx, Gear^.TargetY + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+
     case Gear^.Kind of
           gtGrenade: DrawRotated(sprBomb, x, y, 0, Gear^.DirAngle);
       gtSnowball: DrawRotated(sprSnowball, x, y, 0, Gear^.DirAngle);
