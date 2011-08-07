@@ -1177,7 +1177,7 @@ var EdgesDist, wdy, shs: LongInt;
     PrevSentPointTime: LongWord = 0;
 begin
 {$IFNDEF IPHONEOS}
-if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus then
+if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus and (GameState <> gsConfirm) then
     uCursor.updatePosition();
 {$ENDIF}
 
