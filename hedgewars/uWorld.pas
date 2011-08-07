@@ -1318,7 +1318,7 @@ end;
 procedure onFocusStateChanged;
 begin
 if (not cHasFocus) and (GameState <> gsConfirm) then
-    ParseCommand('quit', true)
+    ParseCommand('quit', true);
 end;
 
 

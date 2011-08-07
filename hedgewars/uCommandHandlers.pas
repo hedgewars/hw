@@ -46,9 +46,13 @@ begin
     if GameState <> gsConfirm then
     begin
         prevGState:= GameState;
-        GameState:= gsConfirm
+        GameState:= gsConfirm;
+        SDL_ShowCursor(1)
     end else
-    GameState:= prevGState
+    begin
+        GameState:= prevGState;
+        SDL_ShowCursor(0)
+    end
 end;
 
 procedure chForceQuit(var s: shortstring);
