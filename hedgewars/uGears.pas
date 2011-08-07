@@ -917,11 +917,12 @@ else if ((GameFlags and gfInfAttack) <> 0) then
 
         if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and not CurrentHedgehog^.Unplaced then
             begin
-            if (CurrentHedgehog^.Gear^.State and gstAttacked <> 0) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
+            if (CurrentHedgehog^.Gear^.State and (gstAttacked or gstMoving) = gstAttacked) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
                 begin
                 CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstHHChooseTarget;
                 isCursorVisible := true
                 end;
+            if (CurrentHedgehog^.Gear^.State and gstMoving = 0) or (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget = 0) then
             CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstAttacked;
             end;
         if delay2 = 0 then
