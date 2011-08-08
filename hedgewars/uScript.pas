@@ -1857,6 +1857,27 @@ for he:= Low(THogEffect) to High(THogEffect) do
 for cg:= Low(TCapGroup) to High(TCapGroup) do
     ScriptSetInteger(EnumToStr(cg), ord(cg));
 
+ScriptSetInteger('gstDrowning'       ,$00000001);
+ScriptSetInteger('gstHHDriven'       ,$00000002);
+ScriptSetInteger('gstMoving'         ,$00000004);
+ScriptSetInteger('gstAttacked'       ,$00000008);
+ScriptSetInteger('gstAttacking'      ,$00000010);
+ScriptSetInteger('gstCollision'      ,$00000020);
+ScriptSetInteger('gstHHChooseTarget' ,$00000040);
+ScriptSetInteger('gstHHJumping'      ,$00000100);
+ScriptSetInteger('gsttmpFlag'        ,$00000200);
+ScriptSetInteger('gstHHThinking'     ,$00000800);
+ScriptSetInteger('gstNoDamage'       ,$00001000);
+ScriptSetInteger('gstHHHJump'        ,$00002000);
+ScriptSetInteger('gstAnimation'      ,$00004000);
+ScriptSetInteger('gstHHDeath'        ,$00008000);
+ScriptSetInteger('gstWinner'         ,$00010000);
+ScriptSetInteger('gstWait'           ,$00020000);
+ScriptSetInteger('gstNotKickable'    ,$00040000);
+ScriptSetInteger('gstLoser'          ,$00080000);
+ScriptSetInteger('gstHHGone'         ,$00100000);
+ScriptSetInteger('gstInvisible'      ,$00200000);
+
 // register functions
 lua_register(luaState, 'band', @lc_band);
 lua_register(luaState, 'bor', @lc_bor);
