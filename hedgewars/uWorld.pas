@@ -1174,7 +1174,7 @@ procedure MoveCamera;
 var EdgesDist, wdy, shs: LongInt;
     PrevSentPointTime: LongWord = 0;
 begin
-{$IFNDEF IPHONEOS}
+{$IFNDEF MOBILE}
 if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus then
     uCursor.updatePosition();
 {$ENDIF}
@@ -1199,7 +1199,7 @@ if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then exit;
 
 if AMxShift < AMWidth then
 begin
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
     if CursorPoint.X < cScreenWidth div 2 + AMxShift - AMWidth then CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMWidth;
     if CursorPoint.X > cScreenWidth div 2 + AMxShift - AMxOffset then CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMxOffset;
     if CursorPoint.Y < cScreenHeight - AMyOffset - SlotsNum * AMSlotSize then CursorPoint.Y:= cScreenHeight - AMyOffset - SlotsNum * AMSlotSize;
