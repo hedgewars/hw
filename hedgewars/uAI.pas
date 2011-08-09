@@ -31,12 +31,12 @@ procedure FreeActionsList;
 implementation
 uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
      uAmmos, SysUtils{$IFDEF UNIX}{$IFNDEF ANDROID}, cthreads{$ENDIF}{$ENDIF}, uTypes,
-     uVariables, uCommands, uUtils, uDebug;
+     uVariables, uCommands, uUtils, uDebug, uConsole;
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
     StopThinking: boolean;
-    ThinkThread: TThreadID;
+    ThinkThread: PSDL_Thread = nil;
     hasThread: LongInt;
 
 procedure FreeActionsList;
@@ -66,6 +66,7 @@ var BotLevel: Byte;
     Score, i: LongInt;
     a, aa: TAmmoType;
 begin
+WriteToConsole('testing ammo');
 BotLevel:= Me^.Hedgehog^.BotLevel;
 
 for i:= 0 to Pred(Targets.Count) do
@@ -74,8 +75,10 @@ for i:= 0 to Pred(Targets.Count) do
        with CurrentHedgehog^ do
             a:= CurAmmoType;
        aa:= a;
-       
-       ThreadSwitch();
+WriteToConsole('start walking');
+SDL_delay(0);
+//       ThreadSwitch();
+WriteToConsole('start walking');
        
        repeat
         if (CanUseAmmo[a]) and
@@ -204,19 +207,25 @@ BotLevel:= Me^.Hedgehog^.BotLevel;
 tmp:= random(2) + 1;
 Push(0, Actions, Me^, tmp);
 Push(0, Actions, Me^, tmp xor 3);
+WriteToConsole('start walking');
 
 if (Me^.State and gstAttacked) = 0 then maxticks:= Max(0, TurnTimeLeft - 5000 - LongWord(4000 * BotLevel))
                                    else maxticks:= TurnTimeLeft;
+WriteToConsole('start walking');
 
 if (Me^.State and gstAttacked) = 0 then TestAmmos(Actions, Me, false);
+WriteToConsole('start walking');
 BestRate:= RatePlace(Me);
 BaseRate:= Max(BestRate, 0);
+WriteToConsole('start walking');
 
 if (Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
     AddAction(Actions, aia_Weapon, Longword(amNothing), 100 + random(200), 0, 0);
+WriteToConsole('start walking');
 
 while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 0) do
     begin
+WriteToConsole('start walking');
     Pop(ticks, Actions, Me^);
 
     AddAction(Actions, Me^.Message, aim_push, 250, 0, 0);
@@ -231,6 +240,7 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
 {$HINTS ON}
        inc(ticks, GoInfo.Ticks);
        if ticks > maxticks then break;
+WriteToConsole('start walking');
 
        if (BotLevel < 5) and (GoInfo.JumpType = jmpHJump) then // hjump support
           if Push(ticks, Actions, AltMe, Me^.Message) then
@@ -252,6 +262,7 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
        inc(steps);
        Actions.actions[Pred(Actions.Count)].Param:= hwRound(Me^.X);
        Rate:= RatePlace(Me);
+WriteToConsole('start walking');
        if Rate > BestRate then
           begin
           BestActions:= Actions;
@@ -259,8 +270,10 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
           Me^.State:= Me^.State or gstAttacked // we have better place, go there and do not use ammo
           end
        else if Rate < BestRate then break;
+WriteToConsole('start walking');
        if ((Me^.State and gstAttacked) = 0)
            and ((steps mod 4) = 0) then TestAmmos(Actions, Me, true);
+WriteToConsole('start walking');
        if GoInfo.FallPix >= FallPixForBranching then
           Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
        end;
@@ -273,25 +286,38 @@ function Think(Me: Pointer): ptrint;
 var BackMe, WalkMe: TGear;
     StartTicks: Longword;
 begin
+WriteToConsole('starting to think');
 InterlockedIncrement(hasThread);
+WriteToConsole('bla');
 StartTicks:= GameTicks;
+WriteToConsole('bla');
 BackMe:= PGear(Me)^;
+WriteToConsole('bla');
 
 if (PGear(Me)^.State and gstAttacked) = 0 then
    if Targets.Count > 0 then
       begin
+WriteToConsole('blaaa');
+
       WalkMe:= BackMe;
+WriteToConsole('blaa');
       Walk(@WalkMe);
+WriteToConsole('blaa');
       if (StartTicks > GameTicks - 1500) and not StopThinking then SDL_Delay(1000);
+	 WriteToConsole('bla');
+
       if BestActions.Score < -1023 then
          begin
+	 WriteToConsole('bla');
          BestActions.Count:= 0;
          AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
+	 WriteToConsole('bla');
          end;
       end else
 else begin
       while (not StopThinking) and (BestActions.Count = 0) do
             begin
+WriteToConsole('bla loop');
             FillBonuses(true);
             WalkMe:= BackMe;
             Walk(@WalkMe);
@@ -300,7 +326,11 @@ else begin
       end;
 PGear(Me)^.State:= PGear(Me)^.State and not gstHHThinking;
 Think:= 0;
-InterlockedDecrement(hasThread)
+WriteToConsole('bla');
+
+InterlockedDecrement(hasThread);
+WriteToConsole('bla end');
+
 end;
 
 procedure StartThink(Me: PGear);
@@ -331,7 +361,9 @@ FillBonuses((Me^.State and gstAttacked) <> 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
     CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(Me^.Hedgehog^, a);
 AddFileLog('Enter Think Thread');
-BeginThread(@Think, Me, ThinkThread)
+//BeginThread(@Think, Me, ThinkThread)
+ThinkThread := SDL_CreateThread(@Think, Me);
+AddFileLog('Thread started');
 end;
 
 procedure ProcessBot;
