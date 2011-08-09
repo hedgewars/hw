@@ -600,7 +600,10 @@ begin
                 amGasBomb: DrawRotated(sprHandCheese, hx, hy, sign, aangle);
                 amMine: DrawRotated(sprHandMine, hx, hy, sign, aangle);
                 amSMine: DrawRotated(sprHandSMine, hx, hy, sign, aangle);
-                amSeduction: DrawRotated(sprHandSeduction, hx, hy, sign, aangle);
+                amSeduction: begin
+                             DrawRotated(sprHandSeduction, hx, hy, sign, aangle);
+                             DrawCircle(ox, oy, 248, 4, $FF, $00, $00, $AA); 
+                             end;
                 amVampiric: DrawRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amRCPlane: begin
                     DrawRotated(sprHandPlane, hx, hy, sign, 0);
@@ -877,6 +880,12 @@ var
     i: Longword;
     startX, endX, startY, endY: LongInt;
 begin
+    if Gear^.TargetX <> NoPointX then
+        if Gear^.AmmoType = amBee then
+            DrawRotatedF(sprTargetBee, Gear^.TargetX + WorldDx, Gear^.TargetY + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+        else
+            DrawRotatedF(sprTargetP, Gear^.TargetX + WorldDx, Gear^.TargetY + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+
     case Gear^.Kind of
           gtGrenade: DrawRotated(sprBomb, x, y, 0, Gear^.DirAngle);
       gtSnowball: DrawRotated(sprSnowball, x, y, 0, Gear^.DirAngle);
@@ -1019,7 +1028,12 @@ begin
                             end;
                         end
                     else
-                        DrawTextureF(SpritesData[sprBirdy].Texture, 1, x, y, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                        begin
+                        if Gear^.Health < 250 then
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, x, y, ((Gear^.Pos shr 6) or (RealTicks shr 7)) mod 2, Gear^.Tag, 75, 75)
+                        else
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, x, y, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                        end;
                     end;
              gtEgg: DrawRotatedTextureF(SpritesData[sprEgg].Texture, 1, 0, 0, x, y, 0, 1, 16, 16, Gear^.DirAngle);
            gtPiano: begin
@@ -1049,7 +1063,7 @@ begin
                     Tint($FF, $FF, $FF, $FF);
                     end;
       gtNapalmBomb: DrawRotated(sprNapalmBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
-           gtFlake: if (Gear^.State and gstTmpFlag) <> 0 then
+           gtFlake: if Gear^.State and (gstDrowning or gstTmpFlag) <> 0  then
                         begin
                         Tint((cExplosionBorderColor shr RShift) and $FF, 
                              (cExplosionBorderColor shr GShift) and $FF, 

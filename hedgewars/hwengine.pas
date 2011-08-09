@@ -105,7 +105,7 @@ begin
         end;
 
 {$IFDEF SDL13}
-    SDL_RenderPresent(SDLrender);
+    SDL_GL_SwapWindow(SDLwindow);
 {$ELSE}
     SDL_GL_SwapBuffers();
 {$ENDIF}
@@ -130,10 +130,9 @@ begin
     CloseIPC();
     TTF_Quit();
 {$IFDEF SDL13}
-    SDL_RenderClear(SDLrender);
-    SDL_DestroyRenderer(SDLrender);
+    SDL_GL_DeleteContext(SDLGLcontext);
     SDL_DestroyWindow(SDLwindow);
-    SDLrender:= nil;
+    SDLGLcontext:= nil;
     SDLwindow:= nil;
 {$ENDIF}
     SDL_Quit();
@@ -147,6 +146,7 @@ procedure MainLoop;
 const event: TSDL_Event = ();
 {$WARNINGS ON}
 var PrevTime, CurrTime: Longword;
+    prevFocusState: boolean;
 begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
@@ -165,14 +165,22 @@ begin
                     KeyPressChat(event.key.keysym.sym);
                 SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then
+                        begin
                         cHasFocus:= true;
+                        onFocusStateChanged()
+                        end;
 {$ELSE}
                     KeyPressChat(event.key.keysym.unicode);
                 SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then wheelDown:= true;
                 SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then wheelUp:= true;
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
+                        begin
+                        prevFocusState:= cHasFocus;
                         cHasFocus:= event.active.gain = 1;
+                        if prevFocusState xor cHasFocus then
+                            onFocusStateChanged()
+                        end;
 {$ENDIF}
                 SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
                 SDL_JOYHATMOTION: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);

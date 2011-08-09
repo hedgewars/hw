@@ -46,9 +46,13 @@ begin
     if GameState <> gsConfirm then
     begin
         prevGState:= GameState;
-        GameState:= gsConfirm
+        GameState:= gsConfirm;
+        SDL_ShowCursor(1)
     end else
-    GameState:= prevGState
+    begin
+        GameState:= prevGState;
+        SDL_ShowCursor(ord(isPaused))
+    end
 end;
 
 procedure chForceQuit(var s: shortstring);
@@ -529,7 +533,11 @@ begin
 s:= s; // avoid compiler hint
 if gameType <> gmtNet then
     isPaused:= not isPaused;
-SDL_ShowCursor(ord(isPaused))
+
+if isPaused then
+    SDL_ShowCursor(1)
+    else
+    SDL_ShowCursor(ord(GameState = gsConfirm))
 end;
 
 procedure chRotateMask(var s: shortstring);

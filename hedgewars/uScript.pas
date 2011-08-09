@@ -1214,6 +1214,44 @@ begin
     lc_setgearposition:= 0
 end;
 
+function lc_getgeartarget(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetGearTarget!');
+        lua_pushnil(L);
+        lua_pushnil(L)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            begin
+            lua_pushinteger(L, gear^.TargetX);
+            lua_pushinteger(L, gear^.TargetY)
+            end
+        end;
+    lc_getgeartarget:= 2;
+end;
+
+function lc_setgeartarget(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 3 then
+        LuaError('Lua: Wrong number of parameters passed to SetGearTarget!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            begin
+            gear^.TargetX:= lua_tointeger(L, 2);
+            gear^.TargetY:= lua_tointeger(L, 3)
+            end
+        end;
+    lc_setgeartarget:= 0
+end;
+
 function lc_getgearvelocity(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
@@ -1819,6 +1857,27 @@ for he:= Low(THogEffect) to High(THogEffect) do
 for cg:= Low(TCapGroup) to High(TCapGroup) do
     ScriptSetInteger(EnumToStr(cg), ord(cg));
 
+ScriptSetInteger('gstDrowning'       ,$00000001);
+ScriptSetInteger('gstHHDriven'       ,$00000002);
+ScriptSetInteger('gstMoving'         ,$00000004);
+ScriptSetInteger('gstAttacked'       ,$00000008);
+ScriptSetInteger('gstAttacking'      ,$00000010);
+ScriptSetInteger('gstCollision'      ,$00000020);
+ScriptSetInteger('gstHHChooseTarget' ,$00000040);
+ScriptSetInteger('gstHHJumping'      ,$00000100);
+ScriptSetInteger('gsttmpFlag'        ,$00000200);
+ScriptSetInteger('gstHHThinking'     ,$00000800);
+ScriptSetInteger('gstNoDamage'       ,$00001000);
+ScriptSetInteger('gstHHHJump'        ,$00002000);
+ScriptSetInteger('gstAnimation'      ,$00004000);
+ScriptSetInteger('gstHHDeath'        ,$00008000);
+ScriptSetInteger('gstWinner'         ,$00010000);
+ScriptSetInteger('gstWait'           ,$00020000);
+ScriptSetInteger('gstNotKickable'    ,$00040000);
+ScriptSetInteger('gstLoser'          ,$00080000);
+ScriptSetInteger('gstHHGone'         ,$00100000);
+ScriptSetInteger('gstInvisible'      ,$00200000);
+
 // register functions
 lua_register(luaState, 'band', @lc_band);
 lua_register(luaState, 'bor', @lc_bor);
@@ -1843,6 +1902,8 @@ lua_register(luaState, 'EndGame', @lc_endgame);
 lua_register(luaState, 'FindPlace', @lc_findplace);
 lua_register(luaState, 'SetGearPosition', @lc_setgearposition);
 lua_register(luaState, 'GetGearPosition', @lc_getgearposition);
+lua_register(luaState, 'SetGearTarget', @lc_setgeartarget);
+lua_register(luaState, 'GetGearTarget', @lc_getgeartarget);
 lua_register(luaState, 'SetGearVelocity', @lc_setgearvelocity);
 lua_register(luaState, 'GetGearVelocity', @lc_getgearvelocity);
 lua_register(luaState, 'ParseCommand', @lc_parsecommand);

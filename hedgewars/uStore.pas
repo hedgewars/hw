@@ -525,17 +525,24 @@ begin
 end;
 
 procedure SetupOpenGL;
-{$IFNDEF IPHONEOS}
-var vendor: shortstring;
+var vendor: shortstring = '';
 {$IFDEF DARWIN}
 const one : LongInt = 1;
 {$ENDIF}
-{$ENDIF}
 begin
+{$IFDEF SDL13}
+    // this function creates an opengles1.1 context by default on mobile devices
+    // use SDL_GL_SetAttribute to change this behaviour
+    SDLGLcontext:=SDL_GL_CreateContext(SDLwindow);
+    SDLTry(SDLGLcontext <> nil, true);
+    SDL_GL_SetSwapInterval(1);
+{$ENDIF}
 
-{$IFDEF MOBILE}
+{$IFDEF IHPONE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
     SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
+    vendor:= vendor; // avoid hint
+    one:= one; // avoid hint
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
@@ -709,7 +716,7 @@ begin
     DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
 
 {$IFDEF SDL13}
-    SDL_RenderPresent(SDLrender);
+    SDL_GL_SwapWindow(SDLwindow);
 {$ELSE}
     SDL_GL_SwapBuffers();
 {$ENDIF}
@@ -814,7 +821,7 @@ while tmpdesc <> '' do
         begin
         r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
 
-        // render highlighted caption (if there's a ':')
+        // render highlighted caption (if there is a ':')
         tmpline2:= '';
         SplitByChar(tmpline, tmpline2, ':');
         if tmpline2 <> '' then
@@ -868,7 +875,7 @@ if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNu
     extra:= trmsg[sidNotYetAvailable];
     extracolor:= LongInt($ffc77070);
     end
-else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then // weapon or utility won't end your turn
+else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then // weapon or utility will not end your turn
     begin
     extra:= trmsg[sidNoEndTurn];
     extracolor:= LongInt($ff70c770);
@@ -957,24 +964,11 @@ begin
     x:= x or (SDL_GetNumVideoDisplays() - 1);
     y:= y or (SDL_GetNumVideoDisplays() - 1);
 
-    // hardcode the opengles driver as we do our own drawing
-    SDL_SetHint('SDL_RENDER_DRIVER','opengles');
-    flags:= flags or SDL_WINDOW_BORDERLESS;  // do not set SDL_WINDOW_RESIZABLE on iOS
+    flags:= flags or SDL_WINDOW_BORDERLESS; // do not use SDL_WINDOW_RESIZABLE on ios (yet)
 {$ENDIF}
 
     SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
     SDLTry(SDLwindow <> nil, true);
-    SDLrender:= SDL_CreateRenderer(SDLwindow, -1, SDL_RENDERER_ACCELERATED or SDL_RENDERER_PRESENTVSYNC);
-    SDLTry(SDLrender <> nil, true);
-
-    // clean the renderer before using it
-    SDL_SetRenderDrawColor(SDLrender, 0, 0, 0, 255);
-    SDL_RenderClear(SDLrender);
-    SDL_RenderPresent(SDLrender);
-
-    // reset the gl context from the one created by SDL (as we have our own drawing system)
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
 {$ELSE}
     if not cOnlyStats then
         begin

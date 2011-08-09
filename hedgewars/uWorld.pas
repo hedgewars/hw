@@ -33,6 +33,7 @@ procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongIn
 procedure HideMission;
 procedure ShakeCamera(amount: LongWord);
 procedure MoveCamera;
+procedure onFocusStateChanged;
 
 implementation
 uses
@@ -51,7 +52,8 @@ uses
     uTextures,
     uRender,
     uCaptions,
-    uCursor
+    uCursor,
+    uCommands
     ;
 
 var cWaveWidth, cWaveHeight: LongInt;
@@ -1175,7 +1177,7 @@ var EdgesDist, wdy, shs: LongInt;
     PrevSentPointTime: LongWord = 0;
 begin
 {$IFNDEF MOBILE}
-if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus then
+if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus and (GameState <> gsConfirm) then
     uCursor.updatePosition();
 {$ENDIF}
 
@@ -1311,6 +1313,14 @@ begin
     WorldDx:= WorldDx - amount + LongInt(getRandom(1 + amount * 2));
     WorldDy:= WorldDy - amount + LongInt(getRandom(1 + amount * 2));
 end;
+
+
+procedure onFocusStateChanged;
+begin
+if (not cHasFocus) and (GameState <> gsConfirm) then
+    ParseCommand('quit', true);
+end;
+
 
 procedure initModule;
 begin

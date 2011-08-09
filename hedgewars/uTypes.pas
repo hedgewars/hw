@@ -117,7 +117,8 @@ type
     TSound = (sndNone,
             sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,
             sndSplash, sndShotgunReload, sndShotgunFire, sndGraveImpact,
-            sndMineTick, sndPickhammer, sndGun, sndBee, sndJump1, sndJump2,
+            sndMineImpact, sndMineTick, sndMudballImpact,
+            sndPickhammer, sndGun, sndBee, sndJump1, sndJump2,
             sndJump3, sndYesSir, sndLaugh, sndIllGetYou, sndIncoming,
             sndMissed, sndStupid, sndFirstBlood, sndBoring, sndByeBye,
             sndSameTeam, sndNutter, sndReinforce, sndTraitor, sndRegret,
@@ -227,6 +228,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Y : hwFloat;
             dX: hwFloat;
             dY: hwFloat;
+            TargetX : LongInt;
+            TargetY : LongInt;
             Kind: TGearType;
             Pos: Longword;
             doStep: TGearStepProcedure;

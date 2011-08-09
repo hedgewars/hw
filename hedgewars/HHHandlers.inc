@@ -182,6 +182,7 @@ with Gear^,
      if ((State and gstHHDriven) <> 0)and
         ((State and (gstAttacked or gstHHChooseTarget)) = 0) and
         (((State and gstMoving) = 0) or
+            (CurAmmoType = amTeleport) or 
             // Allow attacks while moving on ammo with AltAttack
             ((CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0)) or
             ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackInMove) <> 0)) and
@@ -301,7 +302,7 @@ with Gear^,
                                  end;
                        amKamikaze: newGear:= AddGear(hwRound(lx), hwRound(ly), gtKamikaze, 0, xx * _0_5, yy * _0_5, 0);
                          amCake: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 3, hwRound(ly), gtCake, 0, xx, _0, 0);
-                    amSeduction: newGear:= AddGear(hwRound(lx + xx * cHHRadius * 2), hwRound(ly + yy * cHHRadius * 2), gtSeduction, 0, xx * _0_4, yy * _0_4, 0);
+                    amSeduction: newGear:= AddGear(hwRound(lx), hwRound(ly), gtSeduction, 0, _0, _0, 0);
                    amWatermelon: newGear:= AddGear(hwRound(lx), hwRound(ly), gtWatermelon,  0, newDx, newDy, CurWeapon^.Timer);
                   amHellishBomb: newGear:= AddGear(hwRound(lx), hwRound(ly), gtHellishBomb,    0, newDx, newDy, 0);
                         amDrill: newGear:= AddGear(hwRound(lx), hwRound(ly), gtDrill, 0, newDx, newDy, 0);
@@ -373,6 +374,11 @@ with Gear^,
                   amResurrector, amStructure,
                        amTardis: CurAmmoGear:= newGear;
                   end;
+        if Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then
+            begin
+            newGear^.TargetX:= TargetPoint.X;
+            newGear^.TargetY:= TargetPoint.Y
+            end;
 
         // Clear FollowGear if using on a rope/parachute/saucer etc so focus stays with the hog's movement
         if altUse then FollowGear:= nil;
@@ -416,7 +422,8 @@ with Gear^,
            AfterAttack;
            end
         end else Message:= Message and not gmAttack;
-     end
+     end;
+     TargetPoint.X := NoPointX
 end;
 
 procedure AfterAttack;

@@ -257,16 +257,14 @@ begin
     AllInactive := false;
     Gear^.Y := Gear^.Y + cDrownSpeed;
     Gear^.X := Gear^.X + Gear^.dX * cDrownSpeed;
-    if (not SuddenDeathDmg and (cWaterOpacity > $FE)) or (SuddenDeathDmg and (cSDWaterOpacity > $FE)) or (hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater) then
-        DeleteGear(Gear);
     // Create some bubbles (0.5% might be better but causes too few bubbles sometimes)
     if ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cSDWaterOpacity < $FF))) and ((GameTicks and $1F) = 0) then
         if (Gear^.Kind = gtHedgehog) and (Random(4) = 0) then
-            AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius,
-            vgtBubble)
+            AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble)
     else if Random(12) = 0 then
-             AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius,
-             vgtBubble)
+             AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble);
+    if (not SuddenDeathDmg and (cWaterOpacity > $FE)) or (SuddenDeathDmg and (cSDWaterOpacity > $FE)) or (hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater) then
+        DeleteGear(Gear);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -796,8 +794,8 @@ begin
     begin
         if (GameTicks and $30) = 0 then
             AddVisualGear(gX, gY, vgtBeeTrace);
-        Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (TargetPoint.X - gX));
-        Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (TargetPoint.Y - gY));
+        Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.TargetX - gX));
+        Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.TargetY - gY));
         // make sure new speed isn't higher than original one (which we stored in Friction variable)
         t := Gear^.Friction / Distance(Gear^.dX, Gear^.dY);
         Gear^.dX := Gear^.dX * t;
@@ -1368,7 +1366,7 @@ begin
     DeleteGear(Gear)
 end;
 
-procedure WaitCollision;
+(*procedure WaitCollision;
 begin
     with HHGear^ do
     begin
@@ -1378,7 +1376,7 @@ begin
     RopePoints.Count := 0;
     Gear^.Elasticity := _0;
     Gear^.doStep := @doStepRopeAfterAttack
-end;
+end;*)
 
 begin
     HHGear := Gear^.Hedgehog^.Gear;
@@ -1584,9 +1582,9 @@ begin
             with Gear^.Hedgehog^ do
                 begin
                 PlaySound(sndRopeRelease);
-                if CurAmmoType <> amParachute then
-                    WaitCollision
-                else
+                //if CurAmmoType <> amParachute then
+                //    WaitCollision
+                //else
                     DeleteMe
                 end
         end
@@ -2419,14 +2417,14 @@ begin
     end;
 
     Gear^.Y := int2hwFloat(topY-300);
-    Gear^.dX := int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
+    Gear^.dX := int2hwFloat(Gear^.TargetX - 5 * Gear^.Tag * 15);
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
     if (Gear^.State = 2) then
         Gear^.dX := Gear^.dX - cBombsSpeed * Gear^.Tag * 900 
     // calcs for regular falling gears
-    else if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) then
-            Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 /
+    else if (int2hwFloat(Gear^.TargetY) - Gear^.Y > _0) then
+            Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(Gear^.TargetY) - Gear^.Y) * 2 /
                 cGravity) * Gear^.Tag;
 
     Gear^.Health := 6;
@@ -2462,14 +2460,14 @@ begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
-    tx := int2hwFloat(TargetPoint.X);
-    ty := int2hwFloat(TargetPoint.Y);
+    tx := int2hwFloat(Gear^.TargetX);
+    ty := int2hwFloat(Gear^.TargetY);
     x := HHGear^.X;
     y := HHGear^.Y;
 
     if (Distance(tx - x, ty - y) > _256) or
-       not TryPlaceOnLand(TargetPoint.X - SpritesData[sprAmGirder].Width div 2,
-       TargetPoint.Y - SpritesData[sprAmGirder].Height div 2,
+       not TryPlaceOnLand(Gear^.TargetX - SpritesData[sprAmGirder].Width div 2,
+       Gear^.TargetY - SpritesData[sprAmGirder].Height div 2,
        sprAmGirder, Gear^.State, true, false) then
     begin
         PlaySound(sndDenied);
@@ -2488,7 +2486,6 @@ begin
 
     HHGear^.State := HHGear^.State and not (gstAttacking or gstAttacked);
     HHGear^.Message := HHGear^.Message and not gmAttack;
-    TargetPoint.X := NoPointX
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2529,8 +2526,8 @@ begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
-    if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
-       TargetPoint.Y - SpritesData[sprHHTelepMask].Height div 2,
+    if not TryPlaceOnLand(Gear^.TargetX - SpritesData[sprHHTelepMask].Width div 2,
+       Gear^.TargetY - SpritesData[sprHHTelepMask].Height div 2,
        sprHHTelepMask, 0, false, false) then
     begin
         HHGear^.Message := HHGear^.Message and not gmAttack;
@@ -2552,12 +2549,12 @@ begin
         HHGear^.dX.isNegative := (Gear^.X.QWordValue <> 0);
         Gear^.X := HHGear^.X;
         Gear^.Y := HHGear^.Y;
-        HHGear^.X := int2hwFloat(TargetPoint.X);
-        HHGear^.Y := int2hwFloat(TargetPoint.Y);
+        HHGear^.X := int2hwFloat(Gear^.TargetX);
+        HHGear^.Y := int2hwFloat(Gear^.TargetY);
         HHGear^.State := HHGear^.State or gstMoving;
         playSound(sndWarp)
     end;
-    TargetPoint.X := NoPointX;
+    Gear^.TargetX:= NoPointX
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2945,10 +2942,26 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSeductionWork(Gear: PGear);
 var 
-    x, y: LongInt;
+    x, y, i: LongInt;
+    hogs: TPGearArray;
+    d: hwFloat;
 begin
     AllInactive := false;
-
+    hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
+    if Length(hogs) > 0 then
+        begin
+        for i:= 0 to High(hogs) do
+            begin
+            //d:= Distance(Gear^.X - hogs[i]^.X, Gear^.Y - hogs[i]^.Y);
+            hogs[i]^.dX:= _0_25 * (Gear^.X - hogs[i]^.X) / _250;
+            //if Gear^.X < hogs[i]^.X then hogs[i]^.dX.isNegative:= true;
+            hogs[i]^.dY:= -_0_25;
+            hogs[i]^.Active:= true;
+            end;
+        end ;
+        AfterAttack;
+        DeleteGear(Gear);
+(*
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
     x := hwRound(Gear^.X);
@@ -2970,7 +2983,7 @@ begin
         begin
         AfterAttack;
         DeleteGear(Gear)
-        end
+        end*)
 end;
 
 procedure doStepSeductionWear(Gear: PGear);
@@ -2992,7 +3005,7 @@ end;
 procedure doStepSeduction(Gear: PGear);
 begin
     AllInactive := false;
-    DeleteCI(Gear^.Hedgehog^.Gear);
+    //DeleteCI(Gear^.Hedgehog^.Gear);
     Gear^.doStep := @doStepSeductionWear
 end;
 
