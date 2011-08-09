@@ -153,7 +153,7 @@ public class FrontendDataUtils {
 
 		File teamsDir = new File(c.getFilesDir().getAbsolutePath() + '/' + Team.DIRECTORY_TEAMS);
 		File[] teamFileNames = teamsDir.listFiles();
-		if(teamsDir != null){
+		if(teamFileNames != null){
 			for(File s : teamFileNames){
 				Team t = Team.getTeamFromXml(s.getAbsolutePath());
 				if(t != null){
